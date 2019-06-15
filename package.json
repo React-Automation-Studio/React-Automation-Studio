@@ -1,0 +1,52 @@
+{
+  "name": "automation-studio",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@material-ui/core": "^4.0.2",
+    "@material-ui/icons": "^3.0.2",
+    "@material-ui/lab": "^3.0.0-alpha.30",
+    "dotenv": "^8.0.0",
+    "express": "^4.17.1",
+    "lodash.debounce": "^4.0.8",
+    "mdi-material-ui": "^5.10.0",
+    "node-sass": "^4.11.0",
+    "raw-loader": "^2.0.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-loadable": "^5.5.0",
+    "react-router-dom": "^5.0.0",
+    "react-scripts": "3.0.1",
+    "react-vis": "^1.11.6",
+    "socket.io": "^2.2.0",
+    "three": "^0.101.1",
+    "three-gltf-loader": "^1.101.0",
+    "typeface-roboto": "0.0.54",
+    "uuid": "^3.3.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "styleguide": "styleguidist server",
+    "styleguide:build": "styleguidist build",
+    "styleguidebuild": "cross-env NODE_ENV=production styleguidist build"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "homepage": ".",
+  "devDependencies": {
+    "cross-env": "^5.2.0",
+    "link-module-alias": "^1.2.0",
+    "react-styleable": "^3.3.1",
+    "react-styleguidist": "^9.1.4"
+  }
+}

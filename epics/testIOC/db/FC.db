@@ -1,0 +1,13 @@
+
+
+
+
+record(bo, "$(device):InOut")
+{
+        field(DTYP,"Soft Channel")
+        field(DESC, "FC $(device) InOut")
+        field(ZNAM, "Out")
+        field(ONAM, "In")
+        field(VAL,"0")
+        field(PINI, "YES")
+}

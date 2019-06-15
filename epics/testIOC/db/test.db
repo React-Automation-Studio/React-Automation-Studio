@@ -1,0 +1,172 @@
+
+record(ao, "$(device):test1")
+{       field(DTYP,"Soft Channel")
+        field(DESC, "Test1: Analog input")
+        field(EGU, "V")
+        field(HOPR, "10000")
+        field(LOPR, "0")
+        field(HIHI, "8000")
+        field(HIGH, "6000")
+        field(LOW, "4000")
+        field(LOLO, "2000")
+        field(HHSV, "MAJOR")
+        field(HSV, "MINOR")
+        field(LSV, "MINOR")
+        field(LLSV, "MAJOR")
+        field(VAL,"5000")
+        field(PREC,"3")
+
+}
+
+record(calcout, "$(device):calc_test1")
+{
+        field(SCAN, "5 second")
+        field(INPA, "$(device):test1")
+        field(CALC, "A<10000?A+1:0")
+        field(OUT,"$(device):test1 PP")
+}
+
+
+record(ao, "$(device):test2")
+{       field(DTYP,"Soft Channel")
+        field(DESC, "Test2: Analog input")
+        field(EGU, "V")
+        field(HOPR, "10000")
+        field(LOPR, "0")
+        field(HIHI, "8000")
+        field(HIGH, "6000")
+        field(LOW, "4000")
+        field(LOLO, "2000")
+        field(HHSV, "MAJOR")
+        field(HSV, "MINOR")
+        field(LSV, "MINOR")
+        field(LLSV, "MAJOR")
+        field(VAL,"5000")
+}
+record(ao, "$(device):amplitude")
+{       field(DTYP,"Soft Channel")
+        field(DESC, "Amplitude of Sine wave")
+        field(EGU, "V")
+        field(HOPR, "10000")
+        field(DRVH, "10000")
+        field(DRVL, "0")
+        field(LOPR, "0")
+        field(HIHI, "8000")
+        field(HIGH, "6000")
+        field(LOW, "4000")
+        field(LOLO, "2000")
+        field(HHSV, "MAJOR")
+        field(HSV, "MINOR")
+        field(LSV, "MINOR")
+        field(LLSV, "MAJOR")
+        field(VAL,"5000")
+        field(FLNK,"$(device):test5")
+}
+
+record(ao, "$(device):frequency")
+{       field(DTYP,"Soft Channel")
+        field(DESC, "Frequency of Sine wave")
+        field(EGU, "Hz")
+        field(HOPR, "1")
+        field(LOPR, "0")
+        field(HIHI, "0.8")
+        field(HIGH, "0.6")
+        field(LOW, "0.4")
+        field(LOLO, "0.2")
+        field(HHSV, "MAJOR")
+        field(HSV, "MINOR")
+        field(LSV, "MINOR")
+        field(LLSV, "MAJOR")
+        field(VAL,"0.1")
+}
+
+record(ao, "$(device):time")
+{
+        field(DTYP,"Soft Channel")
+        field(DESC, "Analog input")
+        field(EGU, "Seconds")
+        field(HOPR, "10000")
+        field(LOPR, "0")
+        field(VAL,"0")
+        field(PINI, "YES")
+	field(PREC, "1")
+	field(FLNK,"$(device):test3")
+}
+
+record(bo, "$(device):BO1")
+{
+        field(DTYP,"Soft Channel")
+        field(DESC, "BO 1")
+        field(ZNAM, "Off")
+        field(ONAM, "On")
+        field(VAL,"0")
+        field(PINI, "YES")
+}
+
+record(bo, "$(device):BO2")
+{
+        field(DTYP,"Soft Channel")
+        field(DESC, "BO 2")
+        field(ZNAM, "Off")
+        field(ONAM, "On")
+        field(HIGH,"2")
+        field(VAL,"0")
+        field(PINI, "YES")
+}
+
+record(calc, "$(device):test3")
+{       field(DESC, "Instantaneous value")
+        field(PREC, "4")
+        field(INPA, "$(device):time")
+        field(INPB, "$(device):frequency PP")
+        field(INPC,"$(device):amplitude PP")
+        field(CALC, "C*SIN(2*PI*A*B)")
+	field(FLNK,"$(device):test4")
+}
+
+record(calcout, "$(device):calc_time")
+{
+        field(SCAN, ".1 second")
+        field(INPA, "$(device):time")
+        field(CALC, "A<10000?A+0.1:0")
+        field(OUT,"$(device):time PP")
+}
+
+record(compress,"$(device):test4")
+{
+	field(DESC, "Circular buffer")
+	field(INP,"$(device):test3")
+	field(ALG,"Circular Buffer")
+	field(NSAM,"1000")
+     #   field(FLNK,"$(device):test4_wav")
+}
+
+record(compress,"$(device):test5")
+{
+	field(DESC, "Circular buffer")
+	field(INP,"$(device):amplitude")
+	field(ALG,"Circular Buffer")
+	field(NSAM,"1000")
+      #  field(FLNK,"$(device):test4_wav")
+}
+
+record(mbbo,"$(device):mbboTest1") {
+    field(PINI,"YES")
+    field(DTYP,"Soft Channel")
+    field(DESC, "mbboTest1")
+
+    field(NOBT,"5")
+    field(SHFT,"0")
+    field(ZRST,"text 0")
+    field(ONST,"text 1")
+    field(TWST,"text 2")
+    field(THST,"text 3")
+    field(FRST,"text 4")
+    field(ZRVL,"0")
+    field(ONVL,"1")
+    field(TWVL,"2")
+    field(THVL,"3")
+    field(FRVL,"4")
+    field(VAL,"0")
+
+}

@@ -1,0 +1,25 @@
+
+
+
+
+
+
+record(bo, "$(device):InUse")
+{
+        field(DTYP,"Soft Channel")
+        field(DESC, "Beamline $(device) InUse")
+        field(ZNAM, "No")
+        field(ONAM, "Yes")
+        field(VAL,"0")
+        field(PINI, "YES")
+}
+
+record(bo, "$(device):BeamOn")
+{
+        field(DTYP,"Soft Channel")
+        field(DESC, "Beamline $(device) BeamOn")
+        field(ZNAM, "Off")
+        field(ONAM, "On")
+        field(VAL,"0")
+        field(PINI, "YES")
+}

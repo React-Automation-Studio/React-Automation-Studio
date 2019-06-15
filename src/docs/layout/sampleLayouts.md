@@ -1,0 +1,1 @@
+The examples below are meant to be a primer into the use of grids and not to be taken as an exhaustive nor the only way to design layouts on the web. For a more comprehensive look at layouts and grids, and advanced layout strategies such as using breakpoints, please see: https://material-ui.com/layout/basics .

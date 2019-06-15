@@ -1,0 +1,156 @@
+
+record(stringout, "$(device):DisplayName")
+{       field(DTYP,"Soft Channel")
+        field(DESC, "PS $(device) Name")
+        field(VAL,  "Power Supply: $(device)")
+}
+
+record(ao, "$(device):Setpoint")
+{       field(DTYP,"Soft Channel")
+        field(DESC, "PS $(device) Setpoint")
+        field(EGU, "A")
+        field(HOPR, "10000")
+        field(DRVH, "10000")
+        field(DRVL, "0")
+        field(LOPR, "0")
+        field(HIHI, "8000")
+        field(HIGH, "6000")
+        field(LOW, "4000")
+        field(LOLO, "2000")
+        field(HHSV, "MAJOR")
+        field(HSV, "MINOR")
+        field(LSV, "MINOR")
+        field(LLSV, "MAJOR")
+        field(VAL,"5000")
+}
+
+
+
+record(ao, "$(device):SimReadback")
+
+{
+        field(DTYP,"Soft Channel")
+        field(SCAN, ".1 second")
+        field(DESC, "PS $(device) Readback")
+        field(EGU, "A")
+        field(HOPR, "10000")
+        field(DRVH, "10000")
+        field(DRVL, "0")
+        field(LOPR, "0")
+        field(HIHI, "8000")
+        field(HIGH, "6000")
+        field(LOW, "4000")
+        field(LOLO, "2000")
+        field(HHSV, "MAJOR")
+        field(HSV, "MINOR")
+        field(LSV, "MINOR")
+        field(LLSV, "MAJOR")
+        field(OROC, "0")
+        field(VAL,"0")
+        field(FLNK,"$(device):ReadSimReadback")
+
+}
+
+record(calcout, "$(device):ReadSimReadback")
+{       field(INPA, "$(device):SimReadback.OVAL")
+        field(CALC, "A")
+        field(OUT,"$(device):Readback PP")
+
+}
+
+record(ao, "$(device):Readback")
+
+{
+        field(DTYP,"Soft Channel")
+        field(DESC, "PS $(device) Readback")
+        field(EGU, "A")
+        field(HOPR, "10000")
+        field(DRVH, "10000")
+        field(DRVL, "0")
+        field(LOPR, "0")
+        field(HIHI, "8000")
+        field(HIGH, "6000")
+        field(LOW, "4000")
+        field(LOLO, "2000")
+        field(HHSV, "MAJOR")
+        field(HSV, "MINOR")
+        field(LSV, "MINOR")
+        field(LLSV, "MAJOR")
+        field(OROC, "0")
+        field(VAL,"0")
+        field(FLNK,"$(device):Readback:History")
+
+}
+
+record(compress,"$(device):Readback:History")
+{
+	field(DESC, "Circular buffer")
+	field(INP,"$(device):Readback")
+	field(ALG,"Circular Buffer")
+	field(NSAM,"1000")
+
+}
+
+record(calcout, "$(device):OnOff")
+{       field(SCAN, ".1 second")
+        field(INPA, "$(device):On")
+        field(INPB, "$(device):Setpoint")
+        field(CALC, "A==1?B:0")
+        field(OUT,"$(device):SimReadback PP")
+
+}
+
+
+
+record(bo, "$(device):On")
+{
+        field(DTYP,"Soft Channel")
+        field(DESC, "PS $(device) OnOff")
+        field(ZNAM, "Off")
+        field(ONAM, "On")
+        field(VAL,"0")
+        field(PINI, "YES")
+}
+
+
+
+
+
+record(mbbo,"$(device):RampRate") {
+
+    field(DTYP,"Soft Channel")
+    field(DESC, "$(device):RampRate")
+
+    field(NOBT,16)
+    field(SHFT,"0")
+    field(ZRST,"0")
+    field(ONST,"1")
+    field(TWST,"10")
+    field(THST,"100")
+    field(ZRVL,0)
+    field(ONVL,1)
+    field(TWVL,10)
+    field(THVL,100)
+    field(FLNK,"$(device):RampRateSel PP")
+    field(VAL,"0")
+    }
+
+record(sel,"$(device):RampRateSel") {
+
+
+    field(DESC, "mbboTest1")
+    field(SELM,"Specified")
+    field(NVL,"$(device):RampRate.VAL ")
+    field(INPA,"0")
+    field(INPB,"1")
+    field(INPC,"10")
+    field(INPD,"100")
+    field(FLNK,"$(device):writeReadbackOROC ")
+    }
+
+record(calcout, "$(device):writeReadbackOROC")
+{       field(INPA, "$(device):RampRateSel")
+        field(CALC, "A")
+        field(OUT,"$(device):SimReadback.OROC PP")
+
+}

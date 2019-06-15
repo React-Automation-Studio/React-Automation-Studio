@@ -1,0 +1,45 @@
+version: '3.2'
+services:
+  frontendserver:
+    build:
+      context: ./
+      args: # Environment variables available at build-time
+                - http_proxy
+                - https_proxy
+                - no_proxy
+      dockerfile: docker/frontendserver/Dockerfile
+    restart: always
+    ports:
+      - "9000:9000"
+    #network_mode: host
+  pvserver:
+    build:
+      context: ./
+      args: # Environment variables available at build-time
+                - http_proxy
+                - https_proxy
+                - no_proxy
+      dockerfile: docker/pvserver/Dockerfile
+    restart: always
+    network_mode: host
+  demoioc:
+    build:
+      context: ./
+      args: # Environment variables available at build-time
+                - http_proxy
+                - https_proxy
+                - no_proxy
+      dockerfile: docker/demoioc/Dockerfile
+    tty: true
+    restart: always
+    network_mode: host
+  styleguideserver:
+    build:
+      context: ./
+      args: # Environment variables available at build-time
+                - http_proxy
+                - https_proxy
+                - no_proxy
+      dockerfile: docker/styleguideserver/Dockerfile
+    restart: always
+    network_mode: host

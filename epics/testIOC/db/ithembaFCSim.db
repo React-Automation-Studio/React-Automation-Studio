@@ -1,0 +1,299 @@
+record(ai, "$(fcup):put-outIn") {
+  field(DESC,"$(desc)")
+  field(DTYP, "Soft Channel")
+  field(FLNK, "$(fcup):seqSTAT")
+  field(PREC, "0")
+  field(PINI,"YES")
+}
+
+record(calcout, "$(fcup):setSTAT")
+ {
+   field(INPA, "$(fcup):put-outIn.VAL NPP NMS")
+   field(INPB, "128")
+   field(INPC, "64")
+   field(CALC, "A=0?B:C")
+   field(DOPT, "Use CALC")
+   field(OOPT, "Every Time")
+   field(OUT, "$(fcup):get-status PP")
+ }
+
+record(seq, "$(fcup):seqSTAT") {
+  field(DLY1,"0.25")
+  field(LNK1,"$(fcup):setIODELAY PP")
+  field(DLY2,"1")
+  field(LNK2,"$(fcup):setSTAT PP")
+}
+record(calcout, "$(fcup):setIODELAY")
+ {
+   field(INPA, "$(fcup):put-outIn.VAL ")
+   field(INPB, "96")
+   field(INPC, "160")
+   field(CALC, "A=0?B:C")
+   field(DOPT, "Use CALC")
+   field(OOPT, "Every Time")
+   field(OUT, "$(fcup):get-status PP")
+ }
+record(mbbiDirect,"$(fcup):get-status") {
+  field(DTYP, "Soft Channel")
+  field(FLNK,"$(fcup):get-statusB0 PP")
+}
+record(bi,"$(fcup):get-statusB0")
+{
+ field(DESC,"Read Status Lo bit0")
+ field(DTYP,"Raw Soft Channel")
+ field(INP,"$(fcup):get-status.B0")
+#field(ZNAM,"12345678901234567890")  # max 20 chars
+ field(ZNAM,"")
+ field(ONAM,"Safty Alarm")
+ field(FLNK,"$(fcup):get-statusB1 PP")
+}
+record(bi,"$(fcup):get-statusB1")
+{
+ field(DESC,"Read Status Lo bit1")
+ field(DTYP,"Raw Soft Channel")
+ field(INP,"$(fcup):get-status.B1")
+ field(ZNAM,"")
+ field(ONAM,"Safety OK")
+ field(FLNK,"$(fcup):get-statusB2 PP")
+}
+record(bi,"$(fcup):get-statusB2")
+{
+ field(DESC,"Read Status Lo bit2")
+ field(DTYP,"Raw Soft Channel")
+ field(INP,"$(fcup):get-status.B2")
+ field(ZNAM,"")
+ field(ONAM,"Air Pressure")
+ field(FLNK,"$(fcup):get-statusB3 PP")
+}
+record(bi,"$(fcup):get-statusB3")
+{
+ field(DESC,"Read Status Lo bit3")
+ field(DTYP,"Raw Soft Channel")
+ field(INP,"$(fcup):get-status.B3")
+ field(ZNAM,"")
+ field(ONAM,"Opp Act In")
+ field(FLNK,"$(fcup):get-statusB4 PP")
+}
+record(bi,"$(fcup):get-statusB4")
+{
+ field(DESC,"Read Status Lo bit4")
+ field(DTYP,"Raw Soft Channel")
+ field(INP,"$(fcup):get-status.B4")
+ field(ZNAM,"")
+ field(ONAM,"Harp Temp/FC Bias")
+ field(FLNK,"$(fcup):get-statusB5 PP")
+}
+record(bi,"$(fcup):get-statusB5")
+{
+ field(DESC,"Read Status Lo bit5")
+ field(DTYP,"Raw Soft Channel")
+ field(INP,"$(fcup):get-status.B5")
+ field(ZNAM,"")
+ field(ONAM,"I/O Delay")
+ field(FLNK,"$(fcup):get-statusB6 PP")
+}
+record(bi,"$(fcup):get-statusB6")
+{
+ field(DESC,"Read Status Lo bit6")
+ field(DTYP,"Raw Soft Channel")
+ field(INP,"$(fcup):get-status.B6")
+ field(ZNAM,"")
+ field(ONAM,"Act In")
+ field(FLNK,"$(fcup):get-statusB7 PP")
+}
+record(bi,"$(fcup):get-statusB7")
+{
+ field(DESC,"Read Status Lo bit7")
+ field(DTYP,"Raw Soft Channel")
+ field(INP,"$(fcup):get-status.B7")
+ field(ZNAM,"")
+ field(ONAM,"Act Out")
+ field(FLNK,"$(fcup):check-fault PP")
+}
+
+##########################################################
+#                 status Text
+##########################################
+
+
+record(calcout, "$(fcup):setSTAT")
+ {
+   field(INPA, "$(fcup):put-outIn.VAL NPP NMS")
+   field(INPB, "128")
+   field(INPC, "64")
+   field(CALC, "A=0?B:C")
+   field(DOPT, "Use CALC")
+   field(OOPT, "Every Time")
+   field(OUT, "$(fcup):get-status PP")
+ }
+
+
+record(calcout, "$(fcup):setIODELAY")
+ {
+   field(INPA, "$(fcup):put-outIn.VAL NPP NMS")
+   field(INPB, "96")
+   field(INPC, "160")
+   field(CALC, "A=0?B:C")
+   field(DOPT, "Use CALC")
+   field(OOPT, "Every Time")
+   field(OUT, "$(fcup):get-status PP")
+ }
+record(mbbiDirect,"$(fcup):get-status") {
+  field(DTYP, "Soft Channel")
+  field(FLNK,"$(fcup):get-statusB0 PP")
+}
+record(bi,"$(fcup):get-statusB0")
+{
+ field(DESC,"Read Status Lo bit0")
+ field(DTYP,"Raw Soft Channel")
+ field(INP,"$(fcup):get-status.B0")
+#field(ZNAM,"12345678901234567890")  # max 20 chars
+ field(ZNAM,"")
+ field(ONAM,"Safty Alarm")
+ field(FLNK,"$(fcup):get-statusB1 PP")
+}
+record(bi,"$(fcup):get-statusB1")
+{
+ field(DESC,"Read Status Lo bit1")
+ field(DTYP,"Raw Soft Channel")
+ field(INP,"$(fcup):get-status.B1")
+ field(ZNAM,"")
+ field(ONAM,"Safety OK")
+ field(FLNK,"$(fcup):get-statusB2 PP")
+}
+record(bi,"$(fcup):get-statusB2")
+{
+ field(DESC,"Read Status Lo bit2")
+ field(DTYP,"Raw Soft Channel")
+ field(INP,"$(fcup):get-status.B2")
+ field(ZNAM,"")
+ field(ONAM,"Air Pressure")
+ field(FLNK,"$(fcup):get-statusB3 PP")
+}
+record(bi,"$(fcup):get-statusB3")
+{
+ field(DESC,"Read Status Lo bit3")
+ field(DTYP,"Raw Soft Channel")
+ field(INP,"$(fcup):get-status.B3")
+ field(ZNAM,"")
+ field(ONAM,"Opp Act In")
+ field(FLNK,"$(fcup):get-statusB4 PP")
+}
+record(bi,"$(fcup):get-statusB4")
+{
+ field(DESC,"Read Status Lo bit4")
+ field(DTYP,"Raw Soft Channel")
+ field(INP,"$(fcup):get-status.B4")
+ field(ZNAM,"")
+ field(ONAM,"Harp Temp/FC Bias")
+ field(FLNK,"$(fcup):get-statusB5 PP")
+}
+record(bi,"$(fcup):get-statusB5")
+{
+ field(DESC,"Read Status Lo bit5")
+ field(DTYP,"Raw Soft Channel")
+ field(INP,"$(fcup):get-status.B5")
+ field(ZNAM,"")
+ field(ONAM,"I/O Delay")
+ field(FLNK,"$(fcup):get-statusB6 PP")
+}
+record(bi,"$(fcup):get-statusB6")
+{
+ field(DESC,"Read Status Lo bit6")
+ field(DTYP,"Raw Soft Channel")
+ field(INP,"$(fcup):get-status.B6")
+ field(ZNAM,"")
+ field(ONAM,"Act In")
+ field(FLNK,"$(fcup):get-statusB7 PP")
+}
+record(bi,"$(fcup):get-statusB7")
+{
+ field(DESC,"Read Status Lo bit7")
+ field(DTYP,"Raw Soft Channel")
+ field(INP,"$(fcup):get-status.B7")
+ field(ZNAM,"")
+ field(ONAM,"Act Out")
+ field(FLNK,"$(fcup):check-fault PP")
+}
+
+##########################################################
+#                 status Text
+##########################################################
+record(stringout, "$(fcup):get-statusText"){
+ field(DESC, "Display prioritized Status text")
+ field(DTYP,"Soft Channel")
+}
+
+
+
+record(ai, "$(fcup):TextNo") {
+ field(DTYP,"Soft Channel")
+ field(FLNK, "$(fcup):put-Text PP")
+}
+record(scalcout, "$(fcup):put-Text") {
+ field(DTYP,"Soft Channel")
+ field(INPA,"$(fcup):TextNo")
+#          "1234567890123456789012345"  max 25 chars
+ field(AA, "Invalid")       #0
+ field(BB, "DangerOut")     #1
+ field(CC, "DangerIn")      #2
+ field(DD, "FaultOut")      #3
+ field(EE, "FaultIn")       #4
+ field(FF, "Moving")        #5
+ field(GG, "In")            #6
+ field(HH, "Out")           #7
+ field(CALC, "A>7?AA:@@A")
+ field(OUT, "$(fcup):get-statusText PP")
+}
+
+################
+record(stringout, "$(fcup):get-statusText"){
+ field(DESC, "Display prioritized Status text")
+ field(DTYP,"Soft Channel")
+}
+record(calc, "$(fcup):check-fault"){
+  field(DESC, "Test fault")
+  field(INPA, "$(fcup):get-status.B0 NPP NMS") #B0-Safety Alarm    - 1            (Comes on when no air pressure)
+  field(INPB, "$(fcup):get-status.B2 NPP NMS") #B2-Air pres        - 3
+  field(INPC, "$(fcup):get-status.B3 NPP NMS") #B3-Opp Act in      -
+  field(INPD, "$(fcup):get-status.B4 NPP NMS") #B4-Temp/Bias       -
+  field(CALC, "A|C|D|E?1:0" )
+  field(FLNK,  "$(fcup):sel-TextNo PP")
+}
+
+record(calcout, "$(fcup):sel-TextNo"){
+  field(DESC, "Status Test")
+  field(INPA, "$(fcup):check-fault")           #Fault    - 1            (Comes on when no air pressure)
+  field(INPB, "$(fcup):get-status.B1 ") #B1-Safety Ok       - 2
+  field(INPC, "$(fcup):get-status.B5 ") #B5-Moving
+  field(INPD, "$(fcup):get-status.B6 ") #B6-In
+  field(INPE, "$(fcup):get-status.B7 ") #B7-Out
+#              123456789 123456789 123456789 123456789
+#           Out Fault  Dngr     In Flt  Dngr   Mov
+  field(CALC, "E?(A?3:(B?1:7)):(D?(A?4:(B?2:6)):5)" )
+# field(CALC, "E?(A?3:(B?1:7)):(D?(A?4:(B?2:6)):(C?5:8))" )
+  field(OOPT, "When Non-zero")
+  field(DOPT, "Use CALC")
+  field(OUT,  "$(fcup):TextNo PP")
+# field(FLNK,  "$(fcup):calc-mm PP")    # SCAN next record
+}
+
+record(ai, "$(fcup):TextNo") {
+ field(DTYP,"Soft Channel")
+ field(FLNK, "$(fcup):put-Text PP")
+}
+record(scalcout, "$(fcup):put-Text") {
+ field(DTYP,"Soft Channel")
+ field(INPA,"$(fcup):TextNo")
+#          "1234567890123456789012345"  max 25 chars
+ field(AA, "Invalid")       #0
+ field(BB, "DangerOut")     #1
+ field(CC, "DangerIn")      #2
+ field(DD, "FaultOut")      #3
+ field(EE, "FaultIn")       #4
+ field(FF, "Moving")        #5
+ field(GG, "In")            #6
+ field(HH, "Out")           #7
+ field(CALC, "A>7?AA:@@A")
+ field(OUT, "$(fcup):get-statusText PP")
+}

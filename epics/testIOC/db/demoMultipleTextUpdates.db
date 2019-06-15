@@ -1,0 +1,173 @@
+
+
+
+
+
+
+
+
+
+
+record(ao, "$(device):A1")
+{       field(DTYP,"Soft Channel")
+        field(DESC, "Amplitude of Sine wave")
+        field(EGU, "V")
+        field(HOPR, "10000")
+        field(DRVH, "10000")
+        field(DRVL, "0")
+        field(LOPR, "0")
+        field(HIHI, "8000")
+        field(HIGH, "6000")
+        field(LOW, "4000")
+        field(LOLO, "2000")
+        field(HHSV, "MAJOR")
+        field(HSV, "MINOR")
+        field(LSV, "MINOR")
+        field(LLSV, "MAJOR")
+        field(VAL,"5000")
+        field(FLNK,"$(device):test5")
+}
+
+record(ao, "$(device):f1")
+{       field(DTYP,"Soft Channel")
+        field(DESC, "Frequency of Sine wave")
+        field(EGU, "Hz")
+        field(HOPR, "1")
+        field(LOPR, "0")
+        field(HIHI, "0.8")
+        field(HIGH, "0.6")
+        field(LOW, "0.4")
+        field(LOLO, "0.2")
+        field(HHSV, "MAJOR")
+        field(HSV, "MINOR")
+        field(LSV, "MINOR")
+        field(LLSV, "MAJOR")
+        field(VAL,"0.1")
+}
+
+record(ao, "$(device):time1")
+{
+        field(DTYP,"Soft Channel")
+        field(DESC, "Analog input")
+        field(EGU, "Seconds")
+        field(HOPR, "10000")
+        field(LOPR, "0")
+        field(VAL,"0")
+        field(PINI, "YES")
+	field(PREC, "1")
+	field(FLNK,"$(device):calcMTextUpdate1")
+}
+
+
+record(calcout, "$(device):calcMTextUpdate1")
+{       field(DESC, "10Sin(2pi*0.1*t)")
+        field(PREC, "4")
+        field(INPA, "$(device):time1")
+        field(INPB, "$(device):f1 PP")
+        field(INPC,"$(device):A1 PP")
+        field(CALC, "C*SIN(2*PI*A*B)")
+	      field(OUT,"$(device):MTextUpdate1 PP")
+        field(FLNK,"$(device):calcMTextUpdate2")
+}
+
+record(calcout, "$(device):calcMTextUpdate2")
+{       field(DESC, "10Sin(2pi*0.1*t)")
+        field(PREC, "4")
+        field(INPA, "$(device):time1")
+        field(INPB, "$(device):frequency PP")
+        field(INPC,"$(device):amplitude PP")
+        field(CALC, "C*SIN(2*PI*A*B+0.3)")
+	      field(OUT,"$(device):MTextUpdate2 PP")
+        field(FLNK,"$(device):calcMTextUpdate3")
+}
+record(calcout, "$(device):calcMTextUpdate3")
+{       field(DESC, "10Sin(2pi*0.1*t)")
+        field(PREC, "4")
+        field(INPA, "$(device):time1")
+        field(INPB, "$(device):frequency PP")
+        field(INPC,"$(device):amplitude PP")
+        field(CALC, "C*SIN(2*PI*A*B+0.45)")
+	      field(OUT,"$(device):MTextUpdate3 PP")
+        field(FLNK,"$(device):calcMTextUpdate4")
+}
+
+record(calcout, "$(device):calcMTextUpdate4")
+{       field(DESC, "10Sin(2pi*0.1*t)")
+        field(PREC, "4")
+        field(INPA, "$(device):time1")
+        field(INPB, "$(device):frequency PP")
+        field(INPC,"$(device):amplitude PP")
+        field(CALC, "C*SIN(2*PI*A*B+0.65)")
+	      field(OUT,"$(device):MTextUpdate4 PP")
+        field(FLNK,"$(device):calcMTextUpdate5")
+}
+
+record(calcout, "$(device):calcMTextUpdate5")
+{       field(DESC, "10Sin(2pi*0.1*t)")
+        field(PREC, "4")
+        field(INPA, "$(device):time1")
+        field(INPB, "$(device):frequency PP")
+        field(INPC,"$(device):amplitude PP")
+        field(CALC, "C*SIN(2*PI*A*B+0.65)")
+	      field(OUT,"$(device):MTextUpdate5 PP")
+}
+
+
+
+record(ao, "$(device):MTextUpdate1")
+{
+        field(DTYP,"Soft Channel")
+        field(DESC, "Multiple Text Update 1")
+          field(VAL,"0")
+        field(PINI, "YES")
+	field(PREC, "3")
+
+}
+
+record(ao, "$(device):MTextUpdate2")
+{
+        field(DTYP,"Soft Channel")
+        field(DESC, "Multiple Text Update 2")
+          field(VAL,"0")
+        field(PINI, "YES")
+	field(PREC, "3")
+
+}
+
+record(ao, "$(device):MTextUpdate3")
+{
+        field(DTYP,"Soft Channel")
+        field(DESC, "Multiple Text Update 3")
+          field(VAL,"0")
+        field(PINI, "YES")
+	field(PREC, "3")
+
+}
+
+record(ao, "$(device):MTextUpdate4")
+{
+        field(DTYP,"Soft Channel")
+        field(DESC, "Multiple Text Update 4")
+          field(VAL,"0")
+        field(PINI, "YES")
+	field(PREC, "3")
+
+}
+
+record(ao, "$(device):MTextUpdate5")
+{
+        field(DTYP,"Soft Channel")
+        field(DESC, "Multiple Text Update 5")
+          field(VAL,"0")
+        field(PINI, "YES")
+	field(PREC, "3")
+
+}
+
+record(calcout, "$(device):calc_time1")
+{
+        field(SCAN, "1 second")
+        field(INPA, "$(device):time1")
+        field(CALC, "A<10000?A+0.1:0")
+        field(OUT,"$(device):time1 PP")
+}

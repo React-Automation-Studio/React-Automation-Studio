@@ -1,0 +1,30 @@
+
+
+
+
+record(ao, "$(device):xRotation")
+{       field(DTYP,"Soft Channel")
+        field(DESC, "$(device) :xRotaion")
+        field(EGU, "Deg")
+        field(HOPR, "3.14159")
+        field(DRVH, "3.14159")
+        field(DRVL, "-3.14159")
+        field(LOPR, "-3.14159")
+        field(PINI, "YES")
+        field(VAL,"0")
+
+}
+
+
+record(ao, "$(device):yRotation")
+{       field(DTYP,"Soft Channel")
+        field(DESC, "$(device) :yRotaion")
+        field(EGU, "Deg")
+        field(HOPR, "3.14159")
+        field(DRVH, "3.14159")
+        field(DRVL, "-3.14159")
+        field(LOPR, "-3.14159")
+        field(PINI, "YES")
+        field(VAL,"0")
+
+}

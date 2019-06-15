@@ -1,0 +1,33 @@
+
+record(calcout, "$(device):BeamlineB:BeamOnOffCalc")
+{       field(SCAN, ".1 second")
+        field(INPA, "$(device):BeamlineA:BeamOn")
+        field(INPB, "$(device):FC1:InOut")
+        field(CALC, "B==0?A:0")
+        field(OUT,"$(device):BeamlineB:BeamOn PP")
+        field(FLNK,"$(device):BeamlineC:BeamOnOffCalc")
+}
+record(calcout, "$(device):BeamlineC:BeamOnOffCalc")
+{
+        field(INPA, "$(device):BeamlineB:BeamOn")
+        field(INPB, "$(device):FC2:InOut")
+        field(CALC, "B==0?A:0")
+        field(OUT,"$(device):BeamlineC:BeamOn PP")
+        field(FLNK,"$(device):BeamlineD:BeamOnOffCalc")
+}
+record(calcout, "$(device):BeamlineD:BeamOnOffCalc")
+{
+        field(INPA, "$(device):BeamlineC:BeamOn")
+        field(INPB, "$(device):FC3:InOut")
+        field(CALC, "B==0?A:0")
+        field(OUT,"$(device):BeamlineD:BeamOn PP")
+        field(FLNK,"$(device):BeamlineE:BeamOnOffCalc")
+}
+record(calcout, "$(device):BeamlineE:BeamOnOffCalc")
+{
+        field(INPA, "$(device):BeamlineD:BeamOn")
+        field(INPB, "$(device):FC4:InOut")
+        field(CALC, "B==0?A:0")
+        field(OUT,"$(device):BeamlineE:BeamOn PP")
+        
+}

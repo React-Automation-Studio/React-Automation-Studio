@@ -13,7 +13,7 @@ app.get('/*', function (req, res) {
  });
 
 console.log(process.env.REACT_APP_PyEpicsServerURL);
-
+console.log(process.env.TEST1);
  if(typeof process.env.REACT_APP_PyEpicsServerURL==='undefined'){
 
    app.listen(9000);

@@ -1,6 +1,8 @@
 version: '3.2'
 services:
   frontendserver:
+  #  environment:
+  #      - REACT_APP_PyEpicsServerURL= http://192.168.8.106:5001/test
     build:
       context: ./
       args: # Environment variables available at build-time
@@ -13,6 +15,8 @@ services:
       - "9000:9000"
     #network_mode: host
   pvserver:
+  #  environment:
+  #        - REACT_APP_PyEpicsServerURL= http://192.168.8.106:5001/test
     build:
       context: ./
       args: # Environment variables available at build-time

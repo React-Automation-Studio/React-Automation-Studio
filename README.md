@@ -56,6 +56,7 @@ In Automation Studio installation folder
 npm install
 npm run build
 npm run styleguidebuild
+docker-compose build
 docker-compose up
 ```
 

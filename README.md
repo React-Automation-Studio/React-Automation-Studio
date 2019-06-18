@@ -48,10 +48,14 @@ In future boiler plate repositories will be created that pull in the packages fr
 
 1st clone the repo
 
+
+2nd setup enviroment variables as in 7.1 and 7.2
+
 In Automation Studio installation folder
 ```bash
 npm install
 npm run build
+npm run styleguidebuild
 docker-compose up
 ```
 

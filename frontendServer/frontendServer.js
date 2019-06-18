@@ -12,6 +12,7 @@ app.get('/*', function (req, res) {
    res.sendFile(path.join(__dirname, '../build', 'index.html'));
  });
 
+console.log(process.env.REACT_APP_PyEpicsServerURL);
 
  if(typeof process.env.REACT_APP_PyEpicsServerURL==='undefined'){
 

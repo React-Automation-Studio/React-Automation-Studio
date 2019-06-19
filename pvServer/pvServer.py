@@ -411,6 +411,8 @@ def test_disconnect():
 if __name__ == '__main__':
     REACT_APP_PyEpicsServerURL=os.getenv('REACT_APP_PyEpicsServerBASEURL')
     REACT_APP_PyEpicsServerPORT=os.getenv('REACT_APP_PyEpicsServerPORT')
+    if (REACT_APP_PyEpicsServerPORT is None):
+        REACT_APP_PyEpicsServerPORT='5000'
     REACT_APP_PyEpicsServerNamespace=os.getenv('REACT_APP_PyEpicsServerNamespace')
     REACT_APP_PyEpicsServerURL=REACT_APP_PyEpicsServerURL+':'+REACT_APP_PyEpicsServerPORT+'/'+REACT_APP_PyEpicsServerNamespace
     print("pvServer URL: ",REACT_APP_PyEpicsServerURL)
@@ -419,6 +421,6 @@ if __name__ == '__main__':
         if 'https' in REACT_APP_PyEpicsServerURL:
             socketio.run(app, host='0.0.0.0', debug=True, port=int(REACT_APP_PyEpicsServerPORT,10), keyfile='../server.key', certfile='../server.cer')
         else:
-            socketio.run(app,host='0.0.0.0',  debug=True)
+            socketio.run(app,host='0.0.0.0',port=int(REACT_APP_PyEpicsServerPORT,10),  debug=True)
     else:
         socketio.run(app,host='127.0.0.1',  debug=True)

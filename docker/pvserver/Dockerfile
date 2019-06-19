@@ -52,4 +52,4 @@ ENTRYPOINT ["python"]
 
 CMD ["-u","pvServer.py"]
 #CMD ["/epics/base/bin/linux-x86_64/caget","RFPA:IPA_TUNE_MOT:display_ENG"]
-EXPOSE $REACT_APP_PyEpicsServerPORT 5064 5065 8001
+EXPOSE  5000 5001 5064 5065 8001

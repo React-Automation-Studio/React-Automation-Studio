@@ -42,11 +42,15 @@ let port;
 
 let PyEpicsServerURL=pvServerBASEURL+":"+port+"/"+pvServerNamespace;
 
+console.log('PyEpicsServerURL: ',PyEpicsServerURL)
 
+if(typeof window.socket==='undefined'){
+  window.socket = io(PyEpicsServerURL,{
+        transports: ['websocket'],
+      })
 
-let socket = io(PyEpicsServerURL,{
-      transports: ['websocket'],
-    })
+}
+
 
 
 /*
@@ -104,7 +108,7 @@ class Wrapper extends Component {
     };
 
     let localVariables={};
-    let system={socket:socket,
+    let system={socket:window.socket,
                 localVariables:localVariables,
                 updateLocalVariable:this.updateLocalVariable,
                 enableProbe:false,

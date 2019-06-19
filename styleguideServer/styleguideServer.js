@@ -27,7 +27,7 @@ app.get('/*', function (req, res) {
    URL=process.env.REACT_APP_PyEpicsServerBASEURL;
   }
 
- console.log("FrontendServer serving at: "+ URL+":"+port);
+ console.log("StyleguideServer serving at: "+ URL+":"+port);
 
 
     if(URL.includes('https')){

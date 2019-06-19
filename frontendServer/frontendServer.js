@@ -11,23 +11,31 @@ app.use(express.static(path.join(__dirname, '../build')));
 app.get('/*', function (req, res) {
    res.sendFile(path.join(__dirname, '../build', 'index.html'));
  });
-
-console.log(process.env.REACT_APP_PyEpicsServerURL);
-console.log(process.env.TEST1);
- if(typeof process.env.REACT_APP_PyEpicsServerURL==='undefined'){
-
-   app.listen(9000);
+let port;
+ if(typeof process.env.REACT_APP_FrontendServerPORT==='undefined'){
+  port= 9000;
  }
  else{
-   if(process.env.REACT_APP_PyEpicsServerURL.includes('https')){
+  port=process.env.REACT_APP_FrontendServerPORT;
+ }
+
+console.log("FrontendServer serving at: "+ process.env.REACT_APP_PyEpicsServerBASEURL+":"+port);
+
+ if(typeof process.env.REACT_APP_PyEpicsServerBASEURL==='undefined'){
+
+     app.listen(port);
+
+ }
+ else{
+   if(process.env.REACT_APP_PyEpicsServerBASEURL.includes('https')){
      https.createServer({
           key: fs.readFileSync('../server.key'),
           cert: fs.readFileSync('../server.cer'),
 
-     }, app).listen(9000);
+     }, app).listen(port);
 
    }
    else{
-     app.listen(9000);
+     app.listen(port);
    }
  }

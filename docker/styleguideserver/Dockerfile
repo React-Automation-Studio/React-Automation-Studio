@@ -4,7 +4,9 @@ FROM node:10.15.0
 
 ADD ./styleguideServer/ /styleguideServer
 WORKDIR /styleguideServer
-
+ENV PATH /styleguideServer/node_modules/.bin:$PATH
+RUN npm set registry http://registry.npmjs.org/
+RUN npm install
 RUN npm install
 
 #RUN test

@@ -10,13 +10,36 @@ services:
                 - https_proxy
                 - no_proxy
       dockerfile: docker/frontendserver/Dockerfile
+    volumes:
+      - /frontendServer/node_modules
     restart: always
-    ports:
-      - "9000:9000"
-    #network_mode: host
+    environment:
+          - REACT_APP_PyEpicsServerBASEURL=https://j50ubuntudev.tlabs.ac.za
+          - REACT_APP_FrontendServerPORT=9002
+          - REACT_APP_PyEpicsServerNamespace=test
+    network_mode: host
   pvserver:
-  #  environment:
-  #        - REACT_APP_PyEpicsServerURL= http://192.168.8.106:5001/test
+    environment:
+          - REACT_APP_PyEpicsServerBASEURL=https://j50ubuntudev.tlabs.ac.za
+          - REACT_APP_PyEpicsServerPORT=5002
+          - REACT_APP_PyEpicsServerNamespace=test
+          - REACT_APP_EnableLogin=true
+    build:
+      context: ./
+      args: # Environment variables available at build-time
+                - http_proxy
+                - https_proxy
+                - no_proxy
+      dockerfile: docker/pvserver/Dockerfile
+    restart: always
+    network_mode: host
+  unsecurestylguidepvserver:
+    environment:
+          - REACT_APP_PyEpicsServerBASEURL=https://j50ubuntudev.tlabs.ac.za
+          - REACT_APP_PyEpicsServerPORT=5001
+          - REACT_APP_PyEpicsServerNamespace=test
+          - REACT_APP_EnableLogin=false
+
     build:
       context: ./
       args: # Environment variables available at build-time
@@ -45,5 +68,7 @@ services:
                 - https_proxy
                 - no_proxy
       dockerfile: docker/styleguideserver/Dockerfile
+    volumes:
+      - /styleguideServer/node_modules
     restart: always
     network_mode: host

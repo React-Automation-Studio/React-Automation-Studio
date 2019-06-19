@@ -32,6 +32,10 @@ print("")
 print('PYEPICS_LIBCA: '+ str(os.environ['PYEPICS_LIBCA']))
 print('EPICS_BASE: '+ str(os.environ['EPICS_BASE']))
 print('EPICS_CA_ADDR_LIST: '+ str(os.environ['EPICS_CA_ADDR_LIST']))
+print('REACT_APP_PyEpicsServerBASEURL: '+ str(os.environ['REACT_APP_PyEpicsServerBASEURL']))
+print('REACT_APP_PyEpicsServerPORT: '+ str(os.environ['REACT_APP_PyEpicsServerPORT']))
+print('REACT_APP_PyEpicsServerNamespace: '+ str(os.environ['REACT_APP_PyEpicsServerNamespace']))
+print('REACT_APP_EnableLogin: '+ str(os.environ['REACT_APP_EnableLogin']))
 print("")
 app = Flask(__name__, static_folder="../build/static", template_folder="../build")
 
@@ -405,13 +409,15 @@ def test_disconnect():
 
 
 if __name__ == '__main__':
-    REACT_APP_PyEpicsServerURL=os.getenv('REACT_APP_PyEpicsServerURL')
-
+    REACT_APP_PyEpicsServerURL=os.getenv('REACT_APP_PyEpicsServerBASEURL')
+    REACT_APP_PyEpicsServerPORT=os.getenv('REACT_APP_PyEpicsServerPORT')
+    REACT_APP_PyEpicsServerNamespace=os.getenv('REACT_APP_PyEpicsServerNamespace')
+    REACT_APP_PyEpicsServerURL=REACT_APP_PyEpicsServerURL+':'+REACT_APP_PyEpicsServerPORT+'/'+REACT_APP_PyEpicsServerNamespace
     print("pvServer URL: ",REACT_APP_PyEpicsServerURL)
     print("")
     if not (REACT_APP_PyEpicsServerURL is None):
         if 'https' in REACT_APP_PyEpicsServerURL:
-            socketio.run(app, host='0.0.0.0', debug=True, keyfile='../server.key', certfile='../server.cer')
+            socketio.run(app, host='0.0.0.0', debug=True, port=int(REACT_APP_PyEpicsServerPORT,10), keyfile='../server.key', certfile='../server.cer')
         else:
             socketio.run(app,host='0.0.0.0',  debug=True)
     else:

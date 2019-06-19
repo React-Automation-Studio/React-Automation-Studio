@@ -1,13 +1,26 @@
 FROM node:10.15.0
 
+ADD ./package.json /app/package.json
 
+WORKDIR /app
+ENV PATH /app/node_modules/.bin:$PATH
+
+RUN npm set registry http://registry.npmjs.org/
+RUN npm install
+ADD ./public /app/public
+
+ADD version ./.env* /app/
+ADD ./src /app/src
+ADD ./styleguide.config.js /app/styleguide.config.js
+RUN npm run styleguidebuild
+RUN cp -R /app/styleguide/ /styleguide/
 
 ADD ./styleguideServer/ /styleguideServer
 WORKDIR /styleguideServer
 ENV PATH /styleguideServer/node_modules/.bin:$PATH
 RUN npm set registry http://registry.npmjs.org/
 RUN npm install
-RUN npm install
+
 
 #RUN test
 
@@ -19,7 +32,7 @@ WORKDIR /
 COPY version ./.env* /
 ADD version ./server.key* /
 ADD version ./server.cer* /
-ADD ./styleguide /styleguide
+#ADD ./styleguide /styleguide
 
 WORKDIR /styleguideServer
 

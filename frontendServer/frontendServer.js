@@ -5,7 +5,7 @@ const https = require('https');
 const fs = require('fs');
 
 const app = express();
-
+console.log("FrontendServer: ",process.env)
 app.use(express.static(path.join(__dirname, '../build')));
 
 app.get('/*', function (req, res) {
@@ -19,15 +19,18 @@ let port;
   port=process.env.REACT_APP_FrontendServerPORT;
  }
 
-console.log("FrontendServer serving at: "+ process.env.REACT_APP_PyEpicsServerBASEURL+":"+port);
-
+let URL;
  if(typeof process.env.REACT_APP_PyEpicsServerBASEURL==='undefined'){
-
-     app.listen(port);
-
+  URL= "http://127.0.0.1";
  }
  else{
-   if(process.env.REACT_APP_PyEpicsServerBASEURL.includes('https')){
+  URL=process.env.REACT_APP_PyEpicsServerBASEURL;
+ }
+
+console.log("FrontendServer serving at: "+ URL+":"+port);
+
+
+   if(URL.includes('https')){
      https.createServer({
           key: fs.readFileSync('../server.key'),
           cert: fs.readFileSync('../server.cer'),
@@ -38,4 +41,3 @@ console.log("FrontendServer serving at: "+ process.env.REACT_APP_PyEpicsServerBA
    else{
      app.listen(port);
    }
- }

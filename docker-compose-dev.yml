@@ -1,0 +1,73 @@
+version: '3.2'
+services:
+  frontendserverdev:
+    env_file: .env
+    build:
+      context: ./
+      args: # Environment variables available at build-time
+                - http_proxy
+                - https_proxy
+                - no_proxy
+      dockerfile: docker/frontendserverDev/Dockerfile
+    volumes:
+      - /frontendserverAppDev/node_modules
+      - ${PWD}:/frontendserverAppDev
+    restart: always
+    network_mode: host
+  pvserver:
+    env_file: .env
+    build:
+      context: ./
+      args: # Environment variables available at build-time
+                - http_proxy
+                - https_proxy
+                - no_proxy
+      dockerfile: docker/pvserver/Dockerfile
+    restart: always
+    network_mode: host
+  unsecurestylguidepvserver:
+    env_file: .env
+    environment:
+          - REACT_APP_PyEpicsServerPORT=5001
+          - REACT_APP_EnableLogin=false
+
+    build:
+      context: ./
+      args: # Environment variables available at build-time
+                - http_proxy
+                - https_proxy
+                - no_proxy
+      dockerfile: docker/pvserver/Dockerfile
+    restart: always
+    network_mode: host
+  demoioc:
+    build:
+      context: ./
+      args: # Environment variables available at build-time
+                - http_proxy
+                - https_proxy
+                - no_proxy
+      dockerfile: docker/demoioc/Dockerfile
+    tty: true
+    stdin_open: true
+    restart: always
+    network_mode: host
+  styleguideserver:
+    env_file: .env
+    environment:
+            - REACT_APP_PyEpicsServerPORT=5001
+            - REACT_APP_EnableLogin=false
+
+    build:
+      context: ./
+      args: # Environment variables available at build-time
+                - http_proxy
+                - https_proxy
+                - no_proxy
+      dockerfile: docker/styleguideserver/Dockerfile
+    volumes:
+      - /app/styleguide
+      - /app/node_modules
+      - /styleguideServer/node_modules
+    restart: always
+    network_mode: host

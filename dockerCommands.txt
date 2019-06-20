@@ -1,0 +1,30 @@
+
+
+#
+
+# to run the  docker compose file for production
+docker-compose up -d
+##
+
+# to build and run the  docker compose file for production in detached mode
+docker-compose up  -d --build
+##
+
+# to build the  docker compose file for production in detached mode
+docker-compose build
+##
+
+# to run the  docker compose file for development
+docker-compose -f docker-compose-dev.yml up
+##
+
+# to run the  docker compose file to build development
+docker-compose -f docker-compose-dev.yml build
+###
+
+#To run the development frontend Docker file
+
+docker build -t dev1 -f docker/frontendserverDev/Dockerfile .
+
+docker run -it -v ${PWD}:/frontendserverAppDev -v /frontendserverAppDev/node_modules -P dev1
+

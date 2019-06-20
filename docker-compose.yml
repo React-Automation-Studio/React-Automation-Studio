@@ -50,6 +50,7 @@ services:
                 - no_proxy
       dockerfile: docker/demoioc/Dockerfile
     tty: true
+    stdin_open: true
     restart: always
     network_mode: host
   styleguideserver:

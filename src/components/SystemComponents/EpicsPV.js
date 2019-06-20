@@ -91,7 +91,7 @@ class EpicsPV extends React.Component {
         else {
           this.setState(
             {'pv':{pvname:msg.pvname,value: msg.value,char_value: msg.char_value,alarmColor:"",enum_strs:msg.enum_strs,lower_disp_limit: msg.lower_disp_limit,upper_disp_limit: msg.upper_disp_limit,
-            lower_warning_limit:msg.lower_warning_limit,upper_warning_limit: msg.upper_warning_limit,lower_ctrl_limit:msg.lower_ctrl_limit,upper_ctrl_limit:msg.upper_ctrl_limit,units: msg.units,precision: parseInt(msg.precision),severity:msg.severity, write_access:msg.write_access,read_access:msg.read_access},
+            lower_warning_limit:msg.lower_warning_limit,upper_warning_limit: msg.upper_warning_limit,lower_ctrl_limit:msg.lower_ctrl_limit,upper_ctrl_limit:msg.upper_ctrl_limit,units: msg.units,precision: parseInt(msg.precision),severity:msg.severity, write_access:msg.write_access,read_access:msg.read_access, host:msg.host},
             ['internalValue']: this.props.useStringValue===true? msg.char_value:msg.value,
             ['initialized']:true ,
             ['severity']: msg.severity,

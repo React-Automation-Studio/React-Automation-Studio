@@ -284,6 +284,9 @@ render() {
   }else {
 
     value=this.state.metadata[this.props.displayMetaData];
+    if (this.props.debug){
+      console.log('metadata:',this.state.metadata)
+    }
   }
     if(this.props.usePvUnits===true){
       if (typeof this.state.metadata !== 'undefined'){

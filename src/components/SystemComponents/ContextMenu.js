@@ -140,7 +140,7 @@ render() {
 
 
           <ClickAwayListener onClickAway={this.props.handleClose}>
-          <React.Fragment>
+          <div>
             {pvs.length===1&&            <MenuList>
               <MenuItem>
                 <ListItemIcon>
@@ -225,7 +225,7 @@ render() {
                 </MenuItem>
 
               </MenuList>}
-              </React.Fragment>
+              </div>
           </ClickAwayListener>
         </Paper>
 

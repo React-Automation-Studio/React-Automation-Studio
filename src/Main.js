@@ -35,9 +35,25 @@ const styles = theme => ({
 
 });
 
-let AutomationStudioStyleGuideBuildURL;
 
 
+let pvServerBASEURL;
+ if(typeof process.env.REACT_APP_PyEpicsServerBASEURL==='undefined'){
+  pvServerBASEURL= "http://127.0.0.1";
+ }
+ else{
+  pvServerBASEURL=process.env.REACT_APP_PyEpicsServerBASEURL;
+ }
+
+ let port;
+  if(typeof process.env.REACT_APP_StyleguideServerPORT==='undefined'){
+   port= 6060;
+  }
+  else{
+   port=process.env.REACT_APP_StyleguideServerPORT;
+  }
+
+let AutomationStudioStyleGuideBuildURL=pvServerBASEURL+":"+port;
 
 class Main extends Component {
   constructor(props) {

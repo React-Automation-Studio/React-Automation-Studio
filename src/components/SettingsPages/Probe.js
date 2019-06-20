@@ -74,6 +74,9 @@ class SettingsSinglePS extends React.Component {
             <Grid item xs={12}  >
               <TextOutput  pv='$(device)'       macros={{'$(device)':pv.pvname}}  label={'EPICS PV Timestamp:'} displayTimeStamp />
             </Grid>
+            <Grid item xs={12} >
+              <TextOutput  pv='$(device)'       macros={{'$(device)':pv.pvname}}  label={'EPICS PV Host:'} displayMetaData={'host'} />
+            </Grid>
             <Grid item xs={12}  >
               <TextInput   pv='$(device)'       macros={{'$(device)':pv.pvname}}  label={'EPICS PV Setpoint:'} alarmSensitive={true}/>
             </Grid>

@@ -25,7 +25,7 @@ record(ao, "$(device):A1")
         field(LSV, "MINOR")
         field(LLSV, "MAJOR")
         field(VAL,"5000")
-        field(FLNK,"$(device):test5")
+    
 }
 
 record(ao, "$(device):f1")

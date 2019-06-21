@@ -5,28 +5,28 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
-import EpicsBinaryOutDebug from '../GroupedComponents/EpicsBinaryOutDebug';
-import EpicsAnalogOutDebug from '../GroupedComponents/EpicsAnalogOutDebug';
-import EpicsMbboDebug from '../GroupedComponents/EpicsMbboDebug';
-import TextUpdate from '../BaseComponents/TextUpdate';
-import TextInput from '../BaseComponents/TextInput';
-import TextOutput from '../BaseComponents/TextOutput';
-import SimpleSlider from '../BaseComponents/SimpleSlider';
-import GraphMultiplePVs from '../BaseComponents/GraphMultiplePVs';
+import EpicsBinaryOutDebug from '../../GroupedComponents/EpicsBinaryOutDebug';
+import EpicsAnalogOutDebug from '../../GroupedComponents/EpicsAnalogOutDebug';
+import EpicsMbboDebug from '../../GroupedComponents/EpicsMbboDebug';
+import TextUpdate from '../../BaseComponents/TextUpdate';
+import TextInput from '../../BaseComponents/TextInput';
+import TextOutput from '../../BaseComponents/TextOutput';
+import SimpleSlider from '../../BaseComponents/SimpleSlider';
+import GraphMultiplePVs from '../../BaseComponents/GraphMultiplePVs';
 
 import Grid from '@material-ui/core/Grid';
-import DataConnection from '../SystemComponents/DataConnection';
-import SwitchComponent from '../BaseComponents/SwitchComponent';
-import SelectionInput from '../BaseComponents/SelectionInput';
-import SelectionList from '../BaseComponents/SelectionList';
-import ToggleButton from '../BaseComponents/ToggleButton';
-import ActionButton from '../BaseComponents/ActionButton';
-import ArrowButton from '../BaseComponents/ArrowButton';
-import ThumbWheel from '../BaseComponents/ThumbWheel';
-import Gauge from '../BaseComponents/Gauge';
-import StyledIconIndicator from '../BaseComponents/StyledIconIndicator';
-
-import SideBar from '../SystemComponents/SideBar';
+import DataConnection from '../../SystemComponents/DataConnection';
+import SwitchComponent from '../../BaseComponents/SwitchComponent';
+import SelectionInput from '../../BaseComponents/SelectionInput';
+import SelectionList from '../../BaseComponents/SelectionList';
+import ToggleButton from '../../BaseComponents/ToggleButton';
+import ActionButton from '../../BaseComponents/ActionButton';
+import ArrowButton from '../../BaseComponents/ArrowButton';
+import ThumbWheel from '../../BaseComponents/ThumbWheel';
+import Gauge from '../../BaseComponents/Gauge';
+import StyledIconIndicator from '../../BaseComponents/StyledIconIndicator';
+import lime from '@material-ui/core/colors/lime';
+import SideBar from '../../SystemComponents/SideBar';
 const styles = theme => ({
   root: {
     flexGrow: 1,
@@ -38,7 +38,7 @@ const styles = theme => ({
     color: theme.palette.text.secondary,
   },
 });
-class MobileTest extends React.Component {
+class MobileDemo2 extends React.Component {
 
 
   render() {
@@ -48,23 +48,13 @@ class MobileTest extends React.Component {
 
 
       <div style={{"overflowX": "hidden"}} >
-        <SideBar/>
+        {typeof this.props.nosidebar==='undefined' &&<SideBar/>}
         <div style={{ padding: 24}}>
           <div >
             <Grid container spacing={2}>
               <Grid item xs={12} lg={6}>
                 <div style={{height:'25vh'}}>
-                  <GraphMultiplePVs
-                    pvs={[
-                      'pva://testIOC:test4',
-
-
-
-                    ]}
-                    maxLength={1000}
-                    lineColor={[this.props.theme.palette.secondary.main]}
-                  />
-
+                  <GraphMultiplePVs  pvs={['pva://testIOC:test4','pva://testIOC:test5'] } legend={['Sine Wave Circular Buffer','Amplitude of Sine Wave Circular Buffer']} lineColor={[this.props.theme.palette.secondary.main,lime['400']]}/>
                 </div>
               </Grid>
               <Grid item xs={12} lg={6}>
@@ -76,8 +66,10 @@ class MobileTest extends React.Component {
 
 
                     ]}
+                    legend={['Instantaneous Amplitude of Sine Wave']}
                     maxLength={1000}
-                    lineColor={[this.props.theme.palette.secondary.main]}
+
+                    lineColor={[lime['400']]}
                   />
                 </div>
               </Grid>
@@ -111,7 +103,7 @@ class MobileTest extends React.Component {
             <Grid item xs={12} sm={6} lg={2}>
               <Gauge  pv='pva://$(device):test3' macros={{'$(device)':'testIOC'}}   usePvLabel={true} usePrecision={true} prec={3} min={-10000} max={10000} />
             </Grid>
-            
+
             <Grid item xs={6} lg={3}>
               <SelectionInput   pv='pva://$(device)'  macros={{'$(device)':'testIOC:BO1'}} usePvLabel={true}/>
             </Grid>
@@ -167,9 +159,9 @@ class MobileTest extends React.Component {
   }
 }
 
-MobileTest.propTypes = {
+MobileDemo2.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles,{withTheme:true})(MobileTest);
-//export default MobileTest;
+export default withStyles(styles,{withTheme:true})(MobileDemo2);
+//export default MobileDemo2;

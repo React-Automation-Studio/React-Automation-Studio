@@ -461,7 +461,7 @@ class GraphMultiplePVs extends React.Component {
     let ymin=1000000000000000000;
     for (pv in pvs){
       if(typeof this.props.lineColor !=='undefined'){
-        legendColor[i]=this.props.lineColor;
+        legendColor=this.props.lineColor;
       }
       else{
         if(theme.palette.type==='dark'){
@@ -503,11 +503,13 @@ class GraphMultiplePVs extends React.Component {
 
 
     if (typeof this.props.legend !=='undefined'){
+      let i=0;
       for(legendItem in this.props.legend){
 
 
-        legendItems.push({title:this.props.legend[legendItem].toString() ,color:legendColor[legendItem], stroke:theme.palette.type=='dark'?'#80deea':'#dbdbe0'});
-
+        legendItems.push({title:this.props.legend[legendItem].toString() ,color:legendColor[i], stroke:theme.palette.type=='dark'?'#80deea':'#dbdbe0'});
+        
+        i++
       }
     }
     //   console.log('ymax: ',this.state.ymax)

@@ -3,12 +3,13 @@ import React from 'react'
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 import TextInput from '../BaseComponents/TextInput';
 import TextOutput from '../BaseComponents/TextOutput';
+import TextUpdate from '../BaseComponents/TextUpdate';
 import Grid from '@material-ui/core/Grid';
 //import MenuItem from '@material-ui/core/MenuItem';
 
 
 
-class EpicsAnalogOutDebug extends React.Component {
+class EpicsStringOutDebug extends React.Component {
   constructor(props) {
     super(props);
     this.state={}
@@ -28,16 +29,10 @@ class EpicsAnalogOutDebug extends React.Component {
       <TextOutput  pv='pva://$(device).NAME' macros={this.props['macros']}  label={'EPICS PV Name:'}/>
       </Grid>
         <Grid item  xs={12}>
-            <TextOutput  pv='pva://$(device)'      macros={this.props['macros']}  label={'EPICS PV Value:'} alarmSensitive={true}/>
+            <TextOutput  pv='pva://$(device)'      macros={this.props['macros']}  label={'EPICS PV Value:'} />
       </Grid>
         <Grid item  xs={12}>
-      <TextInput   pv='pva://$(device)'      macros={this.props['macros']}  label={'EPICS PV Setpoint:'} alarmSensitive={true}/>
-      </Grid>
-        <Grid item  xs={12}>
-            <TextOutput  pv='pva://$(device).DRVH'      macros={this.props['macros']}  label={'EPICS PV DRVH:'}/>
-      </Grid>
-        <Grid item  xs={12}>
-      <TextOutput  pv='pva://$(device).DRVL'      macros={this.props['macros']}  label={'EPICS PV DRVL:'}/>
+      <TextInput   pv='pva://$(device)'      macros={this.props['macros']}  label={'Type here to change:'}/>
       </Grid>
       <Grid item xs={12}  >
         <TextOutput  pv='pva://$(device)'      macros={this.props['macros']}  label={'EPICS PV Timestamp:'} displayTimeStamp />
@@ -45,7 +40,9 @@ class EpicsAnalogOutDebug extends React.Component {
       <Grid item xs={12} >
         <TextOutput  pv='pva://$(device)'      macros={this.props['macros']}  label={'EPICS PV Host:'} displayMetaData={'host'} />
       </Grid>
-
+      <Grid item  xs={12}>
+          <TextUpdate  pv='pva://$(device)'      macros={this.props['macros']}  label={'Text Update: '} />
+    </Grid>
       </Grid>
 
 
@@ -59,5 +56,5 @@ class EpicsAnalogOutDebug extends React.Component {
   }
 }
 
-EpicsAnalogOutDebug.contextType=AutomationStudioContext;
-export default EpicsAnalogOutDebug
+EpicsStringOutDebug.contextType=AutomationStudioContext;
+export default EpicsStringOutDebug

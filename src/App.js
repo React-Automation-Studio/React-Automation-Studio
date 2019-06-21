@@ -7,7 +7,7 @@ import React, { Component } from 'react';
 //import './App.css';
 //import io from 'socket.io-client';
 import Routes from './routes'
-import LimitedRoutes from './limitedRoutes'
+
 import 'typeface-roboto';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';

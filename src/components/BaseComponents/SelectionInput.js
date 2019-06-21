@@ -275,7 +275,7 @@ render() {
       {initialized===true &&
         <TextField
           disabled={write_access===false?true:false}
-
+          key={this.state.pvname+' connected'+ this.state['label']+this.props.label}
           select
           className={classes.TextField}
           value={value}
@@ -305,7 +305,7 @@ render() {
 
         <TextField
           disabled={true}
-
+          key={this.state.pvname+' disconnected'+ this.state['label']+this.props.label}
           select
           className={classes.TextField}
           value={this.state['pvname']}

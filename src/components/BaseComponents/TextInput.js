@@ -367,7 +367,7 @@ render() {
 
       {initialized===true &&
         <TextField
-        key={this.state.pvname+' connected'}
+        key={this.state.pvname+' connected'+ this.state['label']+this.props.label}
 
         inputRef={node => {
             this.anchorEl = node;
@@ -382,6 +382,7 @@ render() {
           onBlur={event=>this.handleOnBlur(event)}
           onChange={this.handleChange('value')}
           label={usePvLabel===true? this.state['label']:this.props.label}
+
           fullWidth={true}
           margin="none"
           variant="outlined"
@@ -396,7 +397,7 @@ render() {
 
       {(initialized===false||initialized==='undefined') &&
       <TextField
-        key={this.state.pvname+' disconnected'}
+        key={this.state.pvname+' disconnected' + this.state['label']+this.props.label}
         inputRef={node => {
           this.anchorEl = node;
         }}

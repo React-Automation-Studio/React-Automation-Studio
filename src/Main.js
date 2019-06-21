@@ -8,6 +8,8 @@ import {Link} from 'react-router-dom'
 import Button from '@material-ui/core/Button';
 import RedirectToLogIn from './components/SystemComponents/RedirectToLogin.js';
 import SideBar from './components/SystemComponents/SideBar';
+import ToggleButton from './components/BaseComponents/ToggleButton';
+import Grid from '@material-ui/core/Grid';
 // Styles
 
 
@@ -28,30 +30,40 @@ const styles = theme => ({
     height:'50%'
 
   },
-  button:{
-    marginTop:'10px',
-    paddingTop:'10px'
-  }
+  Button: {
+    width:'100%',
+    height:'100%',
+    marginTop:'auto',
+    marginBottom:'auto',
+    marginLeft:'auto',
+    marginRight:'auto',
+    //  width:'100%',
+    //    marginTop:'auto',
+    //    marginLeft:'auto',
+    //    marginRight:'auto',
+    //    marginBottom:'auto',
+
+  },
 
 });
 
 
 
 let pvServerBASEURL;
- if(typeof process.env.REACT_APP_PyEpicsServerBASEURL==='undefined'){
+if(typeof process.env.REACT_APP_PyEpicsServerBASEURL==='undefined'){
   pvServerBASEURL= "http://127.0.0.1";
- }
- else{
+}
+else{
   pvServerBASEURL=process.env.REACT_APP_PyEpicsServerBASEURL;
- }
+}
 
- let port;
-  if(typeof process.env.REACT_APP_StyleguideServerPORT==='undefined'){
-   port= 6060;
-  }
-  else{
-   port=process.env.REACT_APP_StyleguideServerPORT;
-  }
+let port;
+if(typeof process.env.REACT_APP_StyleguideServerPORT==='undefined'){
+  port= 6060;
+}
+else{
+  port=process.env.REACT_APP_StyleguideServerPORT;
+}
 
 let AutomationStudioStyleGuideBuildURL=pvServerBASEURL+":"+port;
 
@@ -76,46 +88,81 @@ class Main extends Component {
 
     return (
       <React.Fragment>
-        <SideBar/>
-        <div id="test" className={classes.center}>
+        <Grid container direction="row" item justify="center" spacing={1} alignItems="center">
+          <Grid item lg={4} sm={4} xs={2}>
+            <SideBar/>
+          </Grid>
+
+          <Grid  item lg={2} sm={4}  xs={8}>
+
+            <div style={{textAlign: 'center'}} className={classes.body1}>Automation Studio V1.00</div>
+
+          </Grid>
+          <Grid item lg={4} sm={4} xs={2}>
+
+          </Grid>
+        </Grid>
+        <Grid container direction="row" item justify="center" spacing={1} alignItems="center">
+          <Grid item lg={4} sm={4} xs={2}>
+
+          </Grid>
+          <Grid item lg={2} sm={4}  xs={8}>
+            <Grid container direction="row" justify="center" spacing={3} alignItems="stretch">
+              <Grid item xs={12}  >
+                <Button  fullWidth= {true}  fullWidth= {true} className= {classes.button} component={Link} to="/MobileDemo1" color="primary" variant='contained'>  Mobile Demo 1 </Button>
+              </Grid>
+              <Grid item xs={12}  >
+                <Button  fullWidth= {true} className= {classes.button} component={Link} to="/MobileDemo2" color="primary" variant='contained'>  Mobile Demo 2 </Button>
+              </Grid>
+              <Grid item xs={12}  >
+                <Button  fullWidth= {true} className= {classes.button} component={Link} to="/ControlTest1" color="primary" variant='contained'>  Control Test 1 </Button>
+              </Grid>
 
 
+              <Grid item xs={12}  >
+                <Button  fullWidth= {true}  className= {classes.button} component={Link} to="/EpicsDemos" color="primary" variant='contained'>  Epics Demos </Button>
+              </Grid>
+
+              <Grid item xs={12}  >
+                <Button  fullWidth= {true} fullwidth className= {classes.button} component={Link} to="/Staging" color="primary" variant='contained'>  Staging </Button>
+              </Grid>
+
+              <Grid item xs={12}  >
+                <Button  fullWidth= {true} className= {classes.button} component={Link} to="/ControlTest3D" color="primary" variant='contained'>  3D Demos </Button>
+
+              </Grid>
+
+              <Grid item xs={12}  >
+                <Button  fullWidth= {true} className= {classes.button} component={Link} to="/ControlTestHarp1" color="primary" variant='contained'>  Control Test Harp1 </Button>
+              </Grid>
 
 
+              <Grid item xs={12}  >
+                <Button  fullWidth= {true} className= {classes.button} component={Link} to="/ControlTestTable" color="primary" variant='contained'>  Control Test Table </Button>
+              </Grid>
+              <Grid item xs={12}  >
+                <Button  fullWidth= {true} className= {classes.button} component={Link} to="/IvanControlTable" color="primary" variant='contained'>  Ivan Control Table </Button>
+              </Grid>
+              <Grid item xs={12}  >
+                <Button  fullWidth= {true} className= {classes.button} component={Link} to="/Help" color="secondary" variant='contained'>  Help </Button>
+              </Grid>
+              <Grid item xs={12}  >
+                <Button  fullWidth= {true} className= {classes.button} target="_blank" href={AutomationStudioStyleGuideBuildURL} color="secondary" variant='contained'>  Style Guide </Button>
+              </Grid>
 
-          <Button className= {classes.button} component={Link} to="/rfoverlay" color="primary" variant='contained'>  rfoverlay </Button>
-          <br/>
-          <Button className= {classes.button} component={Link} to="/MobileTest" color="primary" variant='contained'>  MobileTest </Button>
-          <br/>
+            </Grid>
+          </Grid>
 
-          <Button className= {classes.button} component={Link} to="/ControlTest1" color="primary" variant='contained'>  ControlTest1 </Button>
-          <br/>
-          <Button className= {classes.button} component={Link} to="/Demos" color="primary" variant='contained'>  Demos </Button>
-          <br/>
-          <Button className= {classes.button} component={Link} to="/Staging" color="primary" variant='contained'>  Staging </Button>
-          <br/>
-          <Button className= {classes.button} component={Link} to="/ControlTest3D" color="primary" variant='contained'>  ControlTest3D </Button>
-          <br/>
-          <Button className= {classes.button} component={Link} to="/ComponentsWithMultiplePVs" color="primary" variant='contained'>  ComponentsWithMultiplePVs </Button>
-          <br/>
-          <Button className= {classes.button} component={Link} to="/ControlTestHarp1" color="primary" variant='contained'>  ControlTestHarp1 </Button>
-          <br/>
-          <Button className= {classes.button} component={Link} to="/ControlTestTable" color="primary" variant='contained'>  ControlTestTable </Button>
-          <br/>
-          <Button className= {classes.button} component={Link} to="/IvanControlTable" color="primary" variant='contained'>  IvanControlTable </Button>
-          <br/>
-          <Button className= {classes.button} component={Link} to="/Help" color="secondary" variant='contained'>  Help </Button>
-          <br/>
-          <Button className= {classes.button} target="_blank" href={AutomationStudioStyleGuideBuildURL} color="secondary" variant='contained'>  StyleGuide </Button>
+          <Grid item lg={4} sm={4} xs={2}>
+
+
+            </Grid>
+          </Grid>
+
           <RedirectToLogIn/>
+        </React.Fragment>
+        )
+        }
+        }
 
-
-
-
-        </div>
-      </React.Fragment>
-  )
-}
-}
-
-export default withRouter(withStyles(styles)(Main));
+        export default withRouter(withStyles(styles)(Main));

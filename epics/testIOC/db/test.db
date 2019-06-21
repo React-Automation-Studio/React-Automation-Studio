@@ -1,4 +1,20 @@
 
+record(stringout, "$(device):stringtest1")
+{       field(DTYP,"Soft Channel")
+        field(DESC, "String Test1")
+        field(VAL,"Hello World 1")
+        field(PINI,"YES")
+}
+
+record(stringout, "$(device):stringtest2")
+{       field(DTYP,"Soft Channel")
+        field(DESC, "String Test2")
+        field(VAL,"Hello World 2")
+        field(PINI,"YES")
+}
+
+
+
 record(ao, "$(device):test1")
 {       field(DTYP,"Soft Channel")
         field(DESC, "Test1: Analog input")
@@ -17,6 +33,9 @@ record(ao, "$(device):test1")
         field(PREC,"3")
 
 }
+
+
+
 
 record(calcout, "$(device):calc_test1")
 {
@@ -60,7 +79,7 @@ record(ao, "$(device):amplitude")
         field(LSV, "MINOR")
         field(LLSV, "MAJOR")
         field(VAL,"5000")
-        field(FLNK,"$(device):test5")
+#        field(FLNK,"$(device):test5")
 }
 
 record(ao, "$(device):frequency")
@@ -106,7 +125,7 @@ record(bo, "$(device):BO1")
 record(bo, "$(device):BO2")
 {
         field(DTYP,"Soft Channel")
-        field(DESC, "BO 2")
+        field(DESC, "BO2: will reset after 2 seconds")
         field(ZNAM, "Off")
         field(ONAM, "On")
         field(HIGH,"2")
@@ -118,8 +137,8 @@ record(calc, "$(device):test3")
 {       field(DESC, "Instantaneous value")
         field(PREC, "4")
         field(INPA, "$(device):time")
-        field(INPB, "$(device):frequency PP")
-        field(INPC,"$(device):amplitude PP")
+        field(INPB, "$(device):frequency")
+        field(INPC,"$(device):amplitude")
         field(CALC, "C*SIN(2*PI*A*B)")
 	field(FLNK,"$(device):test4")
 }
@@ -134,16 +153,16 @@ record(calcout, "$(device):calc_time")
 
 record(compress,"$(device):test4")
 {
-	field(DESC, "Circular buffer")
+	field(DESC, "Sine Wave Circular buffer")
 	field(INP,"$(device):test3")
 	field(ALG,"Circular Buffer")
 	field(NSAM,"1000")
-     #   field(FLNK,"$(device):test4_wav")
+  field(FLNK,"$(device):test5")
 }
 
 record(compress,"$(device):test5")
 {
-	field(DESC, "Circular buffer")
+	field(DESC, "Amplitude of Sine Wave Circular buffer")
 	field(INP,"$(device):amplitude")
 	field(ALG,"Circular Buffer")
 	field(NSAM,"1000")

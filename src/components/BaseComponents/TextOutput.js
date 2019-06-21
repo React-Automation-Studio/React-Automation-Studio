@@ -396,7 +396,7 @@ render() {
       {initialized===true &&
 
         <TextField
-          key={this.state.pvname+' connected'}
+          key={this.state.pvname+' connected'+ this.state['label']+this.props.label}
           inputRef={node => {
               this.anchorEl = node;
           }}
@@ -437,7 +437,7 @@ render() {
 
       {((initialized===false)) &&
         <TextField
-          key={this.state.pvname+' connected'}
+          key={this.state.pvname+' disconnected' }
           inputRef={node => {
               this.anchorEl = node;
           }}
@@ -447,7 +447,7 @@ render() {
           color='secondary'
           className={textFieldClassName}
           value={this.state.pvname}
-          label={"Connecting to: "}
+          label={"Connecting to:"}
           fullWidth={true}
           onFocus={event=>this.handleOnFocus(event)}
           onBlur={event=>this.handleOnBlur(event)}

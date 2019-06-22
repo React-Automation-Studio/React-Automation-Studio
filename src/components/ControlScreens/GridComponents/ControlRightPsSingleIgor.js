@@ -10,7 +10,7 @@ import Grid from '@material-ui/core/Grid';
 import SwitchComponent from '../../BaseComponents/SwitchComponent';
 import ToggleButton from '../../BaseComponents/ToggleButton';
 import ActionButton from '../../BaseComponents/ActionButton';
-import ArrowButton from '../../BaseComponents/ArrowButton';
+
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -19,6 +19,7 @@ import Button from '@material-ui/core/Button';
 import {Link} from 'react-router-dom'
 import MyWindowPortal from '../../SettingsPages/MyWindowPortal';
 import SettingsSteererXY from '../../SettingsPages/SettingsSteererXY';
+import ThumbWheel from '../../BaseComponents/ThumbWheel';
 //import MenuItem from '@material-ui/core/MenuItem';
 
 const styles = theme => ({
@@ -128,58 +129,13 @@ class ControlRightPsSingleIgor extends React.Component {
             <Grid item xs={12}  >
               <Grid   container  justify="flex-start" direction="row"    alignItems="center" spacing={1}>
                 <Grid item xs={12} sm={12} >
-                  <Grid   container  justify="flex-start" direction="row"    alignItems="center" spacing={1}>
-                    <Grid item  sm={2}>
+                <ThumbWheel
+                  pv={'pva://'+system.devices.device.deviceName+":"+system.devices.device.setpoint}
+                  macros={this.props['macros']}
+                  prec_integer={2}
+                  prec_decimal={2}
+                  />
 
-
-                      <div >
-                        <ArrowButton pv={'pva://'+system.devices.device.deviceName+":"+system.devices.device.setpoint} macros={this.props['macros']} label={"100"} labelPlacement={"bottom"}
-                          actionValue={+100} usePvMinMax={true}/>
-                        <ArrowButton pv={'pva://'+system.devices.device.deviceName+":"+system.devices.device.setpoint} macros={this.props['macros']}
-                          actionValue={-100} usePvMinMax={true}/>
-                      </div>
-                    </Grid>
-                    <Grid item xs={3} sm={2} >
-                      <div >
-                        <ArrowButton pv={'pva://'+system.devices.device.deviceName+":"+system.devices.device.setpoint} macros={this.props['macros']} label={"10"} labelPlacement={"bottom"}
-                          actionValue={+10} usePvMinMax={true}/>
-                        <ArrowButton pv={'pva://'+system.devices.device.deviceName+":"+system.devices.device.setpoint} macros={this.props['macros']}
-                          actionValue={-10} usePvMinMax={true}/>
-                      </div>
-                    </Grid>
-                    <Grid item xs={3} sm={2}>
-                      <div >
-                        <ArrowButton pv={'pva://'+system.devices.device.deviceName+":"+system.devices.device.setpoint} macros={this.props['macros']} label={"1"} labelPlacement={"bottom"}
-                          actionValue={+1} usePvMinMax={true}/>
-                        <ArrowButton pv={'pva://'+system.devices.device.deviceName+":"+system.devices.device.setpoint} macros={this.props['macros']}
-                          actionValue={-1} usePvMinMax={true}/>
-                      </div>
-                    </Grid>
-                    <Grid item xs={3} sm={2}>
-                      <div >
-                        <ArrowButton pv={'pva://'+system.devices.device.deviceName+":"+system.devices.device.setpoint} macros={this.props['macros']} label={"0.1"} labelPlacement={"bottom"}
-                          actionValue={+0.1} usePvMinMax={true}/>
-                        <ArrowButton pv={'pva://'+system.devices.device.deviceName+":"+system.devices.device.setpoint} macros={this.props['macros']}
-                          actionValue={-0.1} usePvMinMax={true} />
-                      </div>
-                    </Grid>
-                    <Grid item xs={3} sm={2}>
-                      <div >
-                        <ArrowButton pv={'pva://'+system.devices.device.deviceName+":"+system.devices.device.setpoint} macros={this.props['macros']} label={"0.01"} labelPlacement={"bottom"}
-                          actionValue={+0.01} usePvMinMax={true}/>
-                        <ArrowButton pv={'pva://'+system.devices.device.deviceName+":"+system.devices.device.setpoint} macros={this.props['macros']}
-                          actionValue={-0.01} usePvMinMax={true}/>
-                      </div>
-                    </Grid>
-                    <Grid item xs={3} sm={2}>
-                      <div >
-                        <ArrowButton pv={'pva://'+system.devices.device.deviceName+":"+system.devices.device.setpoint} macros={this.props['macros']} label={"0.001"} labelPlacement={"bottom"}
-                          actionValue={+0.001} usePvMinMax={true}/>
-                        <ArrowButton pv={'pva://'+system.devices.device.deviceName+":"+system.devices.device.setpoint} macros={this.props['macros']}
-                          actionValue={-0.001} usePvMinMax={true}/>
-                      </div>
-                    </Grid>
-                  </Grid>
                 </Grid>
               </Grid>
             </Grid>

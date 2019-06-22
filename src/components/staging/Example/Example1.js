@@ -22,7 +22,7 @@ import Meter from '../../../components/BaseComponents/Gauge';
 import SimpleSlider from '../../../components/BaseComponents/SimpleSlider';
 import GraphMultiplePVs from '../../../components/BaseComponents/GraphMultiplePVs';
 import SelectionList from '../../../components/BaseComponents/SelectionList';
-import ThumbWheel from '../../../components/BaseComponents/ThumbWheel';
+
 
 
 import DataConnection from '../../../components/SystemComponents/DataConnection';
@@ -31,7 +31,7 @@ import SwitchComponent from '../../../components/BaseComponents/SwitchComponent'
 import SelectionInput from '../../../components/BaseComponents/SelectionInput';
 import ToggleButton from '../../../components/BaseComponents/ToggleButton';
 import ActionButton from '../../../components/BaseComponents/ActionButton';
-import ArrowButton from '../../../components/BaseComponents/ArrowButton';
+import ThumbWheel from '../../../components/BaseComponents/ThumbWheel';
 import ControlRightEx1 from '../../../components/ControlScreens/GridComponents/ControlRightEx1'
 import ControlTopEx1 from '../../../components/ControlScreens/GridComponents/ControlTopEx1'
 import ControlBottomEx1 from '../../../components/ControlScreens/GridComponents/ControlBottomEx1'
@@ -194,7 +194,7 @@ return (
 
                   ]}
 
-                
+
                   lineColor={[this.props.theme.palette.secondary.main,]}
                 />
               </div>

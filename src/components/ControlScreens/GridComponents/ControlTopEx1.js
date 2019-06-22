@@ -10,7 +10,7 @@ import Grid from '@material-ui/core/Grid';
 import SwitchComponent from '../../BaseComponents/SwitchComponent';
 import ToggleButton from '../../BaseComponents/ToggleButton';
 import ActionButton from '../../BaseComponents/ActionButton';
-import ArrowButton from '../../BaseComponents/ArrowButton';
+
 import QuadrapoleMagnet from '../../SvgComponents/QuadrapoleMagnet';
 import Harp from '../../SvgComponents/Harp';
 import FC from '../../SvgComponents/FC';

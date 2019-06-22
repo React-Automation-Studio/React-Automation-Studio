@@ -10,7 +10,7 @@ import Grid from '@material-ui/core/Grid';
 import SwitchComponent from '../BaseComponents/SwitchComponent';
 import ToggleButton from '../BaseComponents/ToggleButton';
 import ActionButton from '../BaseComponents/ActionButton';
-import ArrowButton from '../BaseComponents/ArrowButton';
+import ThumbWheel from '../BaseComponents/ThumbWheel';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';

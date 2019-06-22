@@ -23,7 +23,7 @@ import HarpRangeSelection from '../../SiteSpecificComponents/iThembaLABS/Compoun
 import ToggleButton from '../../BaseComponents/ToggleButton';
 import ActionButton from '../../BaseComponents/ActionButton';
 import ActionFanoutButton from '../../BaseComponents/ActionFanoutButton';
-import ArrowButton from '../../BaseComponents/ArrowButton';
+
 import ControlRightEx1 from '../../ControlScreens/GridComponents/ControlRightEx1'
 import ControlRightSteererXY from '../../ControlScreens/GridComponents/ControlRightSteererXY'
 import ControlRightSinglePS from '../../ControlScreens/GridComponents/ControlRightSinglePS'

@@ -2,10 +2,11 @@ FROM node:10.15.0
 
 
 
-ADD ./package.json /frontendserverApp/package.json
+
 
 WORKDIR /frontendserverApp
 ENV PATH /frontendserverApp/node_modules/.bin:$PATH
+ADD ./package.json /frontendserverApp/package.json
 RUN npm set registry http://registry.npmjs.org/
 RUN npm install
 ADD ./public /frontendserverApp/public

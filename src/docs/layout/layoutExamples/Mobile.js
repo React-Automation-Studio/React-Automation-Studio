@@ -45,28 +45,27 @@ class Mobile extends React.Component {
               <Grid item>    {/* TOP ROW */}
                 <div style={{height:'15vh'}}>
                   <GraphMultiplePVs
-                    pvs={['loc://testVariable1',]}
-                    legend={['loc://testVariable1',]}
-                    maxLength={100}
+                   pvs={['pva://testIOC:test4','pva://testIOC:test5'] }
+                   legend={['Sine Wave ','Amplitude ']}
                   />
                 </div>
               </Grid>
               <Grid item >   {/* SECOND ROW */}
                 <Grid container direction="row" justify="center" spacing={2} alignItems="stretch">
                   <Grid item xs={6}>
-                    <ToggleButton  pv='loc://testVariable'  custom_selection_strings={["OFF","ON"]} />
+                    <ToggleButton  pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}}  custom_selection_strings={["OFF","ON"]} />
                   </Grid>
                   <Grid item xs={1}>
                   </Grid>
                   <Grid item xs={1}>
-                    <StyledIconIndicator  pv='loc://testVariable'  onColor='lime' offColor='grey'>
+                    <StyledIconIndicator  pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}}  onColor='lime' offColor='grey'>
                       <CheckCircle/>
                     </StyledIconIndicator>
                   </Grid>
                   <Grid item xs={1}>
                   </Grid>
                   <Grid item xs={1}>
-                    <StyledIconIndicator  pv='loc://testVariable'  onColor='grey' offColor='red'>
+                    <StyledIconIndicator  pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}}  onColor='grey' offColor='red'>
                       <Cancel/>
                     </StyledIconIndicator>
                   </Grid>
@@ -78,25 +77,34 @@ class Mobile extends React.Component {
               <Grid item>   {/* THIRD ROW */}
                 <Grid container direction="row" justify="center" spacing={2} alignItems="stretch">
                   <Grid item xs={6}>
-                    <TextOutput  pv='loc://testVariable3'   label='Mode' intialLocalVariableValue='Mode 1'/>
+                    <TextOutput   pv='pva://$(device)'  macros={{'$(device)':'testIOC:mbboTest1'}}/>
                   </Grid>
                   <Grid item xs={6}>
-                    <SelectionInput  pv='loc://testVariable3'   label='Mode Selection'  custom_selection_strings={['Mode 1','Mode 2']}/>
+                    <SelectionInput  pv='pva://$(device)'  macros={{'$(device)':'testIOC:mbboTest1'}}  />
                   </Grid>
                 </Grid>
               </Grid>
               <Grid item> {/* FOURTH ROW */}
                 <Grid container direction="row" justify="center" spacing={2} alignItems="stretch">
                   <Grid item xs={8}>
-                    <Gauge  pv='loc://testVariable1'/>
+                    <Gauge
+                      pv='pva://$(device)'
+                      macros={{'$(device)':'testIOC:amplitude'}}
+                      usePvMinMax={true}/>
                   </Grid>
                 </Grid>
               </Grid>
               <Grid item>   {/* FIFTH ROW */}
-                <ThumbWheel  pv='loc://testVariable1' prec_integer={2} prec_decimal={3}  min={0} max={100}/>
+              <ThumbWheel
+                pv='pva://$(device)'
+                macros={{'$(device)':'testIOC:amplitude'}}
+                prec_integer={3}
+                prec_decimal={1}
+                usePvMinMax={true}
+              />
               </Grid>
               <Grid item>  {/* SIXTH ROW */}
-                <SimpleSlider pv='loc://testVariable1' min={0} max={100} label="loc://testVariable1:"/>
+              <SimpleSlider pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}} usePvMinMax={true}  usePvLabel={true}  />
               </Grid>
             </Grid>
           </Grid>

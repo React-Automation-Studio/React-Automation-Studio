@@ -1,8 +1,4 @@
-TextOutput local variable example:
 
-```js
-  <TextOutput  pv='loc://testVariable'   label='loc://testVariable'/>
-```
 TextOutput example connection to an SoftChannel EPICS AI pv:
 
 ```js

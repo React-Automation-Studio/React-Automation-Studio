@@ -1,22 +1,4 @@
-SwitchComponent local variable example with custom label:
 
-```js
-{/*The TextOuput code is included for demonstration purposes only*/}  
-{/*Only the the JSX code between the hashes  is required to instantiate the SwitchComponent */}  
-  import TextOutput from './TextOutput';
-  <React.Fragment>
-  <div style={{marginBottom:8}}>
-    <TextOutput  pv='loc://testVariable'   label='loc://testVariable'/>
-  </div>
-
-
-{/*###############*/}  
-
-  <SwitchComponent  pv='loc://testVariable'   label='My custom label'/>
-
-{/*###############*/}  
-  </React.Fragment>
-```
 
 SwitchComponent example connection to a SoftChannel EPICS AI pv with use of EPICS label and a custom label position:
 

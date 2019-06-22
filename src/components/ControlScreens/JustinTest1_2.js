@@ -22,7 +22,7 @@ import SwitchComponent from '../BaseComponents/SwitchComponent';
 import SelectionInput from '../BaseComponents/SelectionInput';
 import ToggleButton from '../BaseComponents/ToggleButton';
 import ActionButton from '../BaseComponents/ActionButton';
-import ArrowButton from '../BaseComponents/ArrowButton';
+import ThumbWheel from '../BaseComponents/ThumbWheel';
 import ControlRightEx1 from '../ControlScreens/GridComponents/ControlRightEx1'
 import ControlTopEx1 from '../ControlScreens/GridComponents/ControlTopEx1'
 import ControlBottomEx1 from '../ControlScreens/GridComponents/ControlBottomEx1'

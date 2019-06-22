@@ -31,29 +31,7 @@ import SimpleSlider from './SimpleSlider';
 
 ```
 
-GraphMultiplePVs EPICS local variable example:
-```js
 
-import SimpleSlider from './SimpleSlider';
-<div>
-<div style={{height:'25vh'}}>
-  <GraphMultiplePVs  
-    pvs={['loc://test1',]}  
-    legend={['loc://test1',]}
-    maxLength={100}
-    yUnits={" V"}
-    xUnits={" s"}
-
-  />
-
-
-</div>
-  <SimpleSlider  pv='loc://test1'   label='loc://test1' min={-100} max={100}/>
-  </div>
-
-
-
-```
 
 
 

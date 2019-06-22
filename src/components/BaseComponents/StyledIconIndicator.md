@@ -6,7 +6,7 @@ StyledIconIndicator local variable example:
   import ToggleButton from './ToggleButton';
   <div style={{textAlign:'center'}}>
   <ToggleButton
-  pv='loc://testVariable'
+  pv='pva://$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}}
   label={"write '1' or '0'"}
   labelPlacement={"top"}
   custom_selection_strings={["OFF","ON"]}
@@ -14,7 +14,7 @@ StyledIconIndicator local variable example:
   <br/><br/>
   {/*###############*/}  
 
-  <StyledIconIndicator  pv='loc://testVariable' label='Test Label' onColor='lime' offColor='red'/>
+  <StyledIconIndicator pv='pva://$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}} label='Test Label' onColor='lime' offColor='red'/>
 
   {/*###############*/}
 
@@ -30,7 +30,7 @@ StyledIconIndicator with custom icon local variable example:
   import Face from '@material-ui/icons/Face';
   <div style={{textAlign:'center'}}>
   <ToggleButton
-  pv='loc://testVariable'
+  pv='pva://$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}}
   label={"write '1' or '0'"}
   labelPlacement={"top"}
   custom_selection_strings={["OFF","ON"]}
@@ -38,7 +38,7 @@ StyledIconIndicator with custom icon local variable example:
   <br/><br/>
   {/*###############*/}  
 
-  <StyledIconIndicator  pv='loc://testVariable' label='Test Label' onColor='lime' offColor='red'>
+  <StyledIconIndicator  pv='pva://$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}} label='Test Label' onColor='lime' offColor='red'>
   <Face/>
   </StyledIconIndicator>
 

@@ -1,4 +1,5 @@
-StyledIconButton local variable example:
+
+StyledIconButton example connection to a SoftChannel EPICS AI pv with example of usePvLabel
 
 ```js
 {/*The TextOutput code is included for demonstration purposes only*/}  
@@ -7,31 +8,11 @@ StyledIconButton local variable example:
   import Face from '@material-ui/icons/Face';
   <div style={{textAlign:'center'}}>
   <div style={{marginBottom:8}}>
-    <TextOutput  pv='loc://testVariable'   label='loc://testVariable'/>
+    <TextOutput  pv='pva://$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}} usePvLabel={true} usePrecision={true} prec={0}/>
   </div>
   {/*###############*/}  
 
-  <StyledIconButton  pv='loc://testVariable' label='Test Label'/>
-
-
-  {/*###############*/}
-
-  </div>
-```
-StyledIconButton with custom icon local variable example:
-
-```js
-{/*The TextOutput code is included for demonstration purposes only*/}  
-{/*Only the the JSX code between the hashes  is required to instantiate the StyledIconButton */}  
-  import TextOutput from './TextOutput';
-  import Face from '@material-ui/icons/Face';
-  <div style={{textAlign:'center'}}>
-  <div style={{marginBottom:8}}>
-    <TextOutput  pv='loc://testVariable'   label='loc://testVariable'/>
-  </div>
-  {/*###############*/}  
-
-  <StyledIconButton  pv='loc://testVariable' label='Test Label'>
+  <StyledIconButton  pv='pva://$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}} usePvLabel={true}>
     <Face/>
   </StyledIconButton>
 

@@ -19,7 +19,7 @@ import ArrowDropUp from '@material-ui/icons/ArrowDropUp';
 import IconButton from '@material-ui/core/IconButton';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-import ArrowButton from '../BaseComponents/ArrowButton';
+
 const styles = theme => ({
   root: {
 
@@ -267,15 +267,6 @@ render() {
 
   const num_array = Array(prec_integer+prec_decimal).fill(1);
 
-  // const buttons = num_array.map(function(item,index,handleButtonClick=this.handleButtonClick){
-  //   return(
-  //
-  //     // <ArrowButton pv={pv}  macros={macros} actionValue={(10**index)/(10**prec_decimal_div)} />
-  //     <Button disabled={write_access===false?true:false} size='small' variant="contained" color={"primary"} className={classes.Button} onClick={handleButtonClick(1)}>
-  //       {((10**index)/(10**prec_decimal_div)) >=0?<ExpandLess  />:<ExpandMore  />}
-  //     </Button>
-  //   );
-  // });
 
   return (
 

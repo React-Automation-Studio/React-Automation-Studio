@@ -1,8 +1,4 @@
-TextInput local variable example:
 
-```js
-  <TextInput  pv='loc://testVariable'   label='loc://testVariable'/>
-```
 TextInput example connection to an SoftChannel EPICS AI pv:
 
 ```js

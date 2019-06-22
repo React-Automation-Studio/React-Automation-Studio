@@ -78,7 +78,7 @@ handleInputValue=(inputValue,pvname,initialized,severity)=>{
     dataPVs[pvname].inputValue=inputValue;
     dataPVs[pvname].initialized=initialized;
     dataPVs[pvname].severity=severity;
-    this.setState({dataPVs:dataPVs,value:inputValue});
+    this.setState({dataPVs:dataPVs});
   }
   else {
      let dataPVs=this.state.dataPVs;

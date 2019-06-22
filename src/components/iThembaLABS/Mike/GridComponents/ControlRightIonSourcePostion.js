@@ -10,7 +10,7 @@ import Grid from '@material-ui/core/Grid';
 import SwitchComponent from '../../../BaseComponents/SwitchComponent';
 import ToggleButton from '../../../BaseComponents/ToggleButton';
 import ActionButton from '../../../BaseComponents/ActionButton';
-import ArrowButton from '../../../BaseComponents/ArrowButton';
+import ThumbWheel from '../../../BaseComponents/ThumbWheel';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -106,53 +106,13 @@ class ControlRightIonSourcePostion extends React.Component {
             <Grid item xs={12}  >
               <Grid   container  justify="flex-start" direction="row"    alignItems="center" spacing={8}>
                 <Grid item xs={12} sm={12} >
-                  <Grid   container  justify="flex-start" direction="row"    alignItems="center" spacing={8}>
-                    <Grid item  sm={2}>
+                <ThumbWheel
+                  pv={'pva://'+system.devices.device.deviceName+":"+system.devices.device.setpoint}
+                  macros={this.props['macros']}
+                  prec_integer={2}
+                  prec_decimal={2}
+                  />
 
-
-                      <div >
-                        <ArrowButton pv={'pva://'+system.devices.device.deviceName+":"+system.devices.device.setpoint} macros={this.props['macros']} label={"100"} labelPlacement={"bottom"}
-                          actionValue={+100} useEpicsMinMax={true}/>
-                        <ArrowButton pv={'pva://'+system.devices.device.deviceName+":"+system.devices.device.setpoint} macros={this.props['macros']}
-                          actionValue={-100} useEpicsMinMax={true}/>
-                      </div>
-                    </Grid>
-                    <Grid item xs={3} sm={2} >
-                      <div >
-                        <ArrowButton pv={'pva://'+system.devices.device.deviceName+":"+system.devices.device.setpoint} macros={this.props['macros']} label={"10"} labelPlacement={"bottom"}
-                          actionValue={+10} useEpicsMinMax={true}/>
-                        <ArrowButton pv={'pva://'+system.devices.device.deviceName+":"+system.devices.device.setpoint} macros={this.props['macros']}
-                          actionValue={-10} useEpicsMinMax={true}/>
-                      </div>
-                    </Grid>
-                    <Grid item xs={3} sm={2}>
-                      <div >
-                        <ArrowButton pv={'pva://'+system.devices.device.deviceName+":"+system.devices.device.setpoint} macros={this.props['macros']} label={"1"} labelPlacement={"bottom"}
-                          actionValue={+1} useEpicsMinMax={true}/>
-                        <ArrowButton pv={'pva://'+system.devices.device.deviceName+":"+system.devices.device.setpoint} macros={this.props['macros']}
-                          actionValue={-1} useEpicsMinMax={true}/>
-                      </div>
-                    </Grid>
-                    <Grid item xs={3} sm={2}>
-                      <div >
-                        <ArrowButton pv={'pva://'+system.devices.device.deviceName+":"+system.devices.device.setpoint} macros={this.props['macros']} label={"0.1"} labelPlacement={"bottom"}
-                          actionValue={+0.1} useEpicsMinMax={true}/>
-                        <ArrowButton pv={'pva://'+system.devices.device.deviceName+":"+system.devices.device.setpoint} macros={this.props['macros']}
-                          actionValue={-0.1} useEpicsMinMax={true} />
-                      </div>
-                    </Grid>
-                    <Grid item xs={3} sm={2}>
-                      <div >
-                        <ArrowButton pv={'pva://'+system.devices.device.deviceName+":"+system.devices.device.setpoint} macros={this.props['macros']} label={"0.01"} labelPlacement={"bottom"}
-                          actionValue={+0.01} useEpicsMinMax={true}/>
-                        <ArrowButton pv={'pva://'+system.devices.device.deviceName+":"+system.devices.device.setpoint} macros={this.props['macros']}
-                          actionValue={-0.01} useEpicsMinMax={true}/>
-                      </div>
-                    </Grid>
-                    <Grid item xs={3} sm={2}>
-
-                    </Grid>
-                  </Grid>
                 </Grid>
               </Grid>
             </Grid>

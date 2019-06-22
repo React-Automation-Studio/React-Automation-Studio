@@ -278,7 +278,7 @@ render() {
   //console.log('max',max)
   //console.log('min',min)
   //console.log('metadata',this.state.metadata)
-  console.log('this.state.outputValue',this.state.outputValue)
+//  console.log('this.state.outputValue',this.state.outputValue)
   return (
 
     <div>

@@ -1,7 +1,6 @@
 version: '3.2'
 services:
   frontendserver:
-    env_file: .env
     build:
       context: ./
       args: # Environment variables available at build-time
@@ -15,8 +14,8 @@ services:
       - /frontendServer/node_modules
     restart: always
     network_mode: host
+    env_file: .env  
   pvserver:
-    env_file: .env
     build:
       context: ./
       args: # Environment variables available at build-time
@@ -26,21 +25,22 @@ services:
       dockerfile: docker/pvserver/Dockerfile
     restart: always
     network_mode: host
+    env_file: .env  
   unsecurestylguidepvserver:
+    build:
+      context: ./
+      args: # Environment variables available at build-time
+                - http_proxy
+                - https_proxy
+                - no_proxy
+      dockerfile: docker/pvserver/Dockerfile
+    restart: always
+    network_mode: host
     env_file: .env
     environment:
-          - REACT_APP_PyEpicsServerPORT=5000
+          - REACT_APP_PyEpicsServerPORT=5001
           - REACT_APP_EnableLogin=false
 
-    build:
-      context: ./
-      args: # Environment variables available at build-time
-                - http_proxy
-                - https_proxy
-                - no_proxy
-      dockerfile: docker/pvserver/Dockerfile
-    restart: always
-    network_mode: host
   demoioc:
     build:
       context: ./
@@ -54,11 +54,6 @@ services:
     restart: always
     network_mode: host
   styleguideserver:
-    env_file: .env
-    environment:
-            - REACT_APP_PyEpicsServerPORT=5001
-            - REACT_APP_EnableLogin=false
-
     build:
       context: ./
       args: # Environment variables available at build-time
@@ -72,3 +67,8 @@ services:
       - /styleguideServer/node_modules
     restart: always
     network_mode: host
+    env_file: .env
+    environment:
+            - REACT_APP_PyEpicsServerPORT=5001
+            - REACT_APP_EnableLogin=false
+

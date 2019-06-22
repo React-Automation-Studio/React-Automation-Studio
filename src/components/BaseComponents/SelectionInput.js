@@ -34,7 +34,7 @@ const styles = theme => ({
 
     fontWeight: 500,
     borderRadius: 4,
-    background:theme.palette.background.default
+  //  background:theme.palette.background.default
   }
 
 });

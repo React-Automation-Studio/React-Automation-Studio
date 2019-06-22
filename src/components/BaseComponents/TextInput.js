@@ -9,7 +9,8 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
 import ContextMenu from '../SystemComponents/ContextMenu';
-
+import red from '@material-ui/core/colors/red';
+import deepOrange from '@material-ui/core/colors/deepOrange';
 
 
 
@@ -41,7 +42,8 @@ const styles = theme => ({
     fontWeight: 500,
     borderRadius: 4,
     //backgroundColor:'linear-gradient(45deg, #FFFFFF 1%, #FF8E53 99%)'
-    background:'linear-gradient(45deg, '+ theme.palette.background.default+ ' 1%, #FF8E53 99%)'//'green'
+  //  background:'linear-gradient(45deg, '+ theme.palette.background.default+ ' 1%, #FF8E53 99%)'//'green'
+    background:'linear-gradient(45deg, '+ theme.palette.background.default+ ' 1%, '+deepOrange['400'] +' 99%)'
   },
   TextFieldSeverity2: {
     width: '100%',
@@ -52,7 +54,7 @@ const styles = theme => ({
     fontWeight: 500,
     borderRadius: 4,
     //backgroundColor:'linear-gradient(45deg, #FFFFFF 1%, #FF8E53 99%)'
-    background:'linear-gradient(45deg, '+ theme.palette.background.default+ ' 1%, #E20101 99%)'//'green'
+    background:'linear-gradient(45deg, '+ theme.palette.background.default+ ' 1%, '+red['800'] +' 99%)'
   }
 });
 /**

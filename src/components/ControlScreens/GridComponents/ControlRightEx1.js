@@ -12,6 +12,8 @@ import ToggleButton from '../../BaseComponents/ToggleButton';
 import ActionButton from '../../BaseComponents/ActionButton';
 import ArrowButton from '../../BaseComponents/ArrowButton';
 import ThumbWheel from '../../BaseComponents/ThumbWheel';
+import Card from '@material-ui/core/Card';
+import Close from '@material-ui/icons/Close';
 //import MenuItem from '@material-ui/core/MenuItem';
 
 
@@ -30,14 +32,25 @@ class ControlRightEx1 extends React.Component {
 
 
     return (
+      <div>
 
-      <div style={{ padding: 24}}>
-        <div style={{ "overflowX": "hidden"}}>
-          <h3>
+      <Grid style={{ paddingLeft: 12,paddingRight: 24,}} container spacing={2}>
+        <Grid item xs={11}>
 
             <TextUpdate  pv='pva://$(device):Setpoint.NAME' macros={this.props['macros']}  />
 
-          </h3>
+        </Grid>
+        <Grid item xs={1}>
+
+
+            <Close  fontSize="small" onClick= {this.props.handleCloseEditor}/>
+
+        </Grid>
+      </Grid>
+
+      <Card style={{ paddingLeft: 12,paddingTop: 12,paddingRight: 12, marginRight:12}}>
+        <div style={{ "overflowX": "hidden", paddingTop:6}}>
+
           <Grid container spacing={2}>
 
             <Grid item xs={6}>
@@ -86,8 +99,8 @@ class ControlRightEx1 extends React.Component {
           </Grid>
         <br/>
         </div>
-      </div>
-
+      </Card>
+ </div>
     );
   }
 }

@@ -128,7 +128,7 @@ class ControlTopHarpEx1 extends React.Component {
       alarmSensitive={true}
       componentGradient={true}
       componentShadow={true}
-      label='FC1sim'
+      label='FC1'
       />
       <QuadrapoleMagnet
       handleOnClick={this.handleOnClick}
@@ -148,10 +148,10 @@ class ControlTopHarpEx1 extends React.Component {
       maxHarpsReached={this.props.maxHarpsReached}
       cx={200}
       cy={100}
-      systemName={'harp5p'}
+      systemName={'testIOC:Harp1'}
       usePvLabel={false}
       alarmSensitive={true}
-      label='Harp 5P'
+      label='Harp 1'
 
       textShadow={false}
       componentGradient={true}
@@ -168,7 +168,7 @@ class ControlTopHarpEx1 extends React.Component {
       alarmSensitive={true}
       componentGradient={true}
       componentShadow={true}
-      label='FC2sim'
+      label='FC2'
       />
         <QuadrapoleMagnet
         handleOnClick={this.handleOnClick}
@@ -187,10 +187,10 @@ class ControlTopHarpEx1 extends React.Component {
         maxHarpsReached={this.props.maxHarpsReached}
         cx={350}
         cy={100}
-        systemName={'harp6p'}
+        systemName={'testIOC:Harp2'}
         usePvLabel={false}
         alarmSensitive={true}
-        label='Harp 6P'
+        label='Harp 2'
 
         textShadow={false}
         componentGradient={true}
@@ -207,7 +207,7 @@ class ControlTopHarpEx1 extends React.Component {
         alarmSensitive={true}
         componentGradient={true}
         componentShadow={true}
-        label='FC3sim'
+        label='FC3'
         />
           <QuadrapoleMagnet
           handleOnClick={this.handleOnClick}
@@ -243,10 +243,10 @@ class ControlTopHarpEx1 extends React.Component {
             maxHarpsReached={this.props.maxHarpsReached}
             cx={500}
             cy={100}
-            systemName={'harp8p'}
+            systemName={'testIOC:Harp3'}
             usePvLabel={false}
             alarmSensitive={true}
-            label='Harp 8P'
+            label='Harp 3'
 
             textShadow={false}
             componentGradient={true}
@@ -492,10 +492,10 @@ class ControlTopHarpEx1 extends React.Component {
             maxHarpsReached={this.props.maxHarpsReached}
             cx={1150}
             cy={100}
-            systemName={'harp9p'}
+            systemName={'testIOC:Harp4'}
             usePvLabel={false}
             alarmSensitive={true}
-            label='Harp 9P'
+            label='Harp 4'
 
             textShadow={false}
             componentGradient={true}

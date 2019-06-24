@@ -1,0 +1,432 @@
+  ##########################################################################
+  ##   ONLY 6 Ranges used                                                ###
+  #    1.  20 -  200 uA - Integration time -   2us                       ###
+  #    2.   2 -   20 uA - Integration time -  20us                       ###
+  #    3. 200 - 2000 nA - Integration time - 200us                       ###
+  #    4.  20 -  200 nA - Integration time -   2ms                       ###
+  #    5.   2 -   20 nA - Integration time -  20ms                       ###
+  #    6. 200 - 2000 pa - Integration time - 200ms                       ###
+  ##########################################################################
+
+
+
+
+  #######  Leave these 2 - it is a BEAGLE setting ##########################
+  #record(waveform,   "$(device):$(axis)channelmap") {
+  #     field(DTYP,   "asynInt32ArrayOut")
+  #     field(INP,    "@asyn(int32, 0, 100)")
+  #     field(NELM,   "48")
+  #     field(FTVL,   "LONG")
+  #     field(PINI,   "YES")
+  #}
+  ######################################################################
+	#record(waveform,   "$(device):$(axis)channelspacing")  {
+	#	   field(DTYP,   "Soft Channel")
+	#	   field(NELM,   "48")
+	#	   field(FTVL,   "FLOAT")
+	#}
+  ##########################################################################
+  #record(ao,          "$(device):$(axis)asyndevSetRateInt32") {
+  #     field(DTYP,   "asynFloat64")
+  #     field(OUT,    "@asyn(int32,0,1.0) reason(1)")
+  #     field(PREC,   "1")
+  #}
+  #########################################################################
+  record(ao,         "$(device):$(axis)range")          {
+       field(PINI, "YES")
+       field(DTYP,   "Soft Channel")
+       #field(OUT,    "@asyn(int32 $(mux))")
+       field(VAL,"4")
+       field(FLNK,   "$(device):$(axis)_clear_offset")
+  }
+
+
+
+  ##############################################################################
+
+  record(waveform,   "$(device):$(axis)raw")            {
+		   #field(SCAN,   ".1 second")
+		   field(DTYP,   "Soft Channel")
+    #   field(INP,    "@asyn(int32 $(mux) 100)")
+		   field(NELM,   "48")
+		   field(FTVL,   "LONG")
+       field(FLNK,   "$(device):$(axis)_coef")
+  }
+
+  record(sel,         "$(device):$(axis)_coef")          {
+       field(SELM,    "Specified")
+       field(NVL,   "$(device):$(axis)range")
+       field(INPB,   "280")
+       field(INPC,   "22")
+       field(INPD,   "2000")
+       field(INPE,   "200")
+       field(INPF,   "20")
+       field(INPG,   "2000")
+       field(FLNK,   "$(device):$(axis)_raw_cur")
+
+  }
+
+
+record(acalcout, "$(device):$(axis)_raw_cur")  {
+ field(DTYP,  "Soft Channel")
+ field(NELM,  "48")
+ field(INAA,  "$(device):$(axis)raw")
+ field(INPA,  "$(device):$(axis)_coef")
+ field(OOPT,  "Every Time")
+ field(DOPT,  "Use CALC")
+ field(CALC,  "AA*A/32767")
+ field(FLNK, "$(device):$(axis)_cur" )
+
+ }
+
+  #########################################################################
+  record(bo,         "$(device):$(axis)_store_offset")          {
+       field(PINI,"YES")
+       field(DTYP,   "Soft Channel")
+       field(VAL,"0")
+       field(FLNK, "$(device):$(axis)_offset" )
+  }
+
+  record(bo,         "$(device):$(axis)_clear_offset")          {
+       field(DTYP,   "Soft Channel")
+       field(VAL,"0")
+       field(OUT,"$(device):$(axis)_store_offset")
+       field(FLNK, "$(device):$(axis)_store_offset")
+  }
+
+
+
+
+record(acalcout, "$(device):$(axis)_offset")  {
+ field(PINI,"YES")
+ field(DTYP,  "Soft Channel")
+ field(NELM,  "48")
+ field(INAA,  "$(device):$(axis)_raw_cur.AVAL")
+ field(INPA,  "$(device):$(axis)_store_offset")
+ field(OOPT,  "Every Time")
+ field(DOPT,  "Use CALC")
+ field(CALC,  "A=1?AA:0*AA")
+ }
+
+ record(acalcout, "$(device):$(axis)_cur")  {
+ field(DTYP,  "Soft Channel")
+ field(NELM,  "48")
+ field(INAA,  "$(device):$(axis)_raw_cur.AVAL")
+ field(INBB,  "$(device):$(axis)_offset.AVAL")
+ field(OOPT,  "Every Time")
+ field(DOPT,  "Use CALC")
+ field(CALC,  "AA-BB")
+ field(FLNK,"$(device):$(axis)cur")
+
+ }
+
+####################################################################
+	record(waveform,   "$(device):$(axis)cur")  {
+                   field(INP,"$(device):$(axis)_cur.AVAL")
+		   field(DTYP,   "Soft Channel")
+		   field(NELM,   "48")
+                   field(FTVL, "FLOAT")
+	}
+
+
+###################copied from F-cup sim
+
+	record(ai, "$(device):put-outIn") {
+	  field(DESC,"$(desc)")
+	  field(DTYP, "Soft Channel")
+	  field(FLNK, "$(device):seqSTAT")
+	  field(PREC, "0")
+	  field(PINI,"YES")
+	}
+
+	record(calcout, "$(device):setSTAT")
+	 {
+	   field(INPA, "$(device):put-outIn.VAL NPP NMS")
+	   field(INPB, "128")
+	   field(INPC, "64")
+	   field(CALC, "A=0?B:C")
+	   field(DOPT, "Use CALC")
+	   field(OOPT, "Every Time")
+	   field(OUT, "$(device):get-status PP")
+	 }
+
+	record(seq, "$(device):seqSTAT") {
+	  field(DLY1,"0.25")
+	  field(LNK1,"$(device):setIODELAY PP")
+	  field(DLY2,"1")
+	  field(LNK2,"$(device):setSTAT PP")
+	}
+	record(calcout, "$(device):setIODELAY")
+	 {
+	   field(INPA, "$(device):put-outIn.VAL ")
+	   field(INPB, "96")
+	   field(INPC, "160")
+	   field(CALC, "A=0?B:C")
+	   field(DOPT, "Use CALC")
+	   field(OOPT, "Every Time")
+	   field(OUT, "$(device):get-status PP")
+	 }
+	record(mbbiDirect,"$(device):get-status") {
+	  field(DTYP, "Soft Channel")
+	  field(FLNK,"$(device):get-statusB0 PP")
+	}
+	record(bi,"$(device):get-statusB0")
+	{
+	 field(DESC,"Read Status Lo bit0")
+	 field(DTYP,"Raw Soft Channel")
+	 field(INP,"$(device):get-status.B0")
+	#field(ZNAM,"12345678901234567890")  # max 20 chars
+	 field(ZNAM,"")
+	 field(ONAM,"Safty Alarm")
+	 field(FLNK,"$(device):get-statusB1 PP")
+	}
+	record(bi,"$(device):get-statusB1")
+	{
+	 field(DESC,"Read Status Lo bit1")
+	 field(DTYP,"Raw Soft Channel")
+	 field(INP,"$(device):get-status.B1")
+	 field(ZNAM,"")
+	 field(ONAM,"Safety OK")
+	 field(FLNK,"$(device):get-statusB2 PP")
+	}
+	record(bi,"$(device):get-statusB2")
+	{
+	 field(DESC,"Read Status Lo bit2")
+	 field(DTYP,"Raw Soft Channel")
+	 field(INP,"$(device):get-status.B2")
+	 field(ZNAM,"")
+	 field(ONAM,"Air Pressure")
+	 field(FLNK,"$(device):get-statusB3 PP")
+	}
+	record(bi,"$(device):get-statusB3")
+	{
+	 field(DESC,"Read Status Lo bit3")
+	 field(DTYP,"Raw Soft Channel")
+	 field(INP,"$(device):get-status.B3")
+	 field(ZNAM,"")
+	 field(ONAM,"Opp Act In")
+	 field(FLNK,"$(device):get-statusB4 PP")
+	}
+	record(bi,"$(device):get-statusB4")
+	{
+	 field(DESC,"Read Status Lo bit4")
+	 field(DTYP,"Raw Soft Channel")
+	 field(INP,"$(device):get-status.B4")
+	 field(ZNAM,"")
+	 field(ONAM,"Harp Temp/FC Bias")
+	 field(FLNK,"$(device):get-statusB5 PP")
+	}
+	record(bi,"$(device):get-statusB5")
+	{
+	 field(DESC,"Read Status Lo bit5")
+	 field(DTYP,"Raw Soft Channel")
+	 field(INP,"$(device):get-status.B5")
+	 field(ZNAM,"")
+	 field(ONAM,"I/O Delay")
+	 field(FLNK,"$(device):get-statusB6 PP")
+	}
+	record(bi,"$(device):get-statusB6")
+	{
+	 field(DESC,"Read Status Lo bit6")
+	 field(DTYP,"Raw Soft Channel")
+	 field(INP,"$(device):get-status.B6")
+	 field(ZNAM,"")
+	 field(ONAM,"Act In")
+	 field(FLNK,"$(device):get-statusB7 PP")
+	}
+	record(bi,"$(device):get-statusB7")
+	{
+	 field(DESC,"Read Status Lo bit7")
+	 field(DTYP,"Raw Soft Channel")
+	 field(INP,"$(device):get-status.B7")
+	 field(ZNAM,"")
+	 field(ONAM,"Act Out")
+	 field(FLNK,"$(device):check-fault PP")
+	}
+
+	##########################################################
+	#                 status Text
+	##########################################
+
+
+	record(calcout, "$(device):setSTAT")
+	 {
+	   field(INPA, "$(device):put-outIn.VAL NPP NMS")
+	   field(INPB, "128")
+	   field(INPC, "64")
+	   field(CALC, "A=0?B:C")
+	   field(DOPT, "Use CALC")
+	   field(OOPT, "Every Time")
+	   field(OUT, "$(device):get-status PP")
+	 }
+
+
+	record(calcout, "$(device):setIODELAY")
+	 {
+	   field(INPA, "$(device):put-outIn.VAL NPP NMS")
+	   field(INPB, "96")
+	   field(INPC, "160")
+	   field(CALC, "A=0?B:C")
+	   field(DOPT, "Use CALC")
+	   field(OOPT, "Every Time")
+	   field(OUT, "$(device):get-status PP")
+	 }
+	record(mbbiDirect,"$(device):get-status") {
+	  field(DTYP, "Soft Channel")
+	  field(FLNK,"$(device):get-statusB0 PP")
+	}
+	record(bi,"$(device):get-statusB0")
+	{
+	 field(DESC,"Read Status Lo bit0")
+	 field(DTYP,"Raw Soft Channel")
+	 field(INP,"$(device):get-status.B0")
+	#field(ZNAM,"12345678901234567890")  # max 20 chars
+	 field(ZNAM,"")
+	 field(ONAM,"Safty Alarm")
+	 field(FLNK,"$(device):get-statusB1 PP")
+	}
+	record(bi,"$(device):get-statusB1")
+	{
+	 field(DESC,"Read Status Lo bit1")
+	 field(DTYP,"Raw Soft Channel")
+	 field(INP,"$(device):get-status.B1")
+	 field(ZNAM,"")
+	 field(ONAM,"Safety OK")
+	 field(FLNK,"$(device):get-statusB2 PP")
+	}
+	record(bi,"$(device):get-statusB2")
+	{
+	 field(DESC,"Read Status Lo bit2")
+	 field(DTYP,"Raw Soft Channel")
+	 field(INP,"$(device):get-status.B2")
+	 field(ZNAM,"")
+	 field(ONAM,"Air Pressure")
+	 field(FLNK,"$(device):get-statusB3 PP")
+	}
+	record(bi,"$(device):get-statusB3")
+	{
+	 field(DESC,"Read Status Lo bit3")
+	 field(DTYP,"Raw Soft Channel")
+	 field(INP,"$(device):get-status.B3")
+	 field(ZNAM,"")
+	 field(ONAM,"Opp Act In")
+	 field(FLNK,"$(device):get-statusB4 PP")
+	}
+	record(bi,"$(device):get-statusB4")
+	{
+	 field(DESC,"Read Status Lo bit4")
+	 field(DTYP,"Raw Soft Channel")
+	 field(INP,"$(device):get-status.B4")
+	 field(ZNAM,"")
+	 field(ONAM,"Harp Temp/FC Bias")
+	 field(FLNK,"$(device):get-statusB5 PP")
+	}
+	record(bi,"$(device):get-statusB5")
+	{
+	 field(DESC,"Read Status Lo bit5")
+	 field(DTYP,"Raw Soft Channel")
+	 field(INP,"$(device):get-status.B5")
+	 field(ZNAM,"")
+	 field(ONAM,"I/O Delay")
+	 field(FLNK,"$(device):get-statusB6 PP")
+	}
+	record(bi,"$(device):get-statusB6")
+	{
+	 field(DESC,"Read Status Lo bit6")
+	 field(DTYP,"Raw Soft Channel")
+	 field(INP,"$(device):get-status.B6")
+	 field(ZNAM,"")
+	 field(ONAM,"Act In")
+	 field(FLNK,"$(device):get-statusB7 PP")
+	}
+	record(bi,"$(device):get-statusB7")
+	{
+	 field(DESC,"Read Status Lo bit7")
+	 field(DTYP,"Raw Soft Channel")
+	 field(INP,"$(device):get-status.B7")
+	 field(ZNAM,"")
+	 field(ONAM,"Act Out")
+	 field(FLNK,"$(device):check-fault PP")
+	}
+
+	##########################################################
+	#                 status Text
+	##########################################################
+	record(stringout, "$(device):get-statusText"){
+	 field(DESC, "Display prioritized Status text")
+	 field(DTYP,"Soft Channel")
+	}
+
+
+
+	record(ai, "$(device):TextNo") {
+	 field(DTYP,"Soft Channel")
+	 field(FLNK, "$(device):put-Text PP")
+	}
+	record(scalcout, "$(device):put-Text") {
+	 field(DTYP,"Soft Channel")
+	 field(INPA,"$(device):TextNo")
+	#          "1234567890123456789012345"  max 25 chars
+	 field(AA, "Invalid")       #0
+	 field(BB, "DangerOut")     #1
+	 field(CC, "DangerIn")      #2
+	 field(DD, "FaultOut")      #3
+	 field(EE, "FaultIn")       #4
+	 field(FF, "Moving")        #5
+	 field(GG, "In")            #6
+	 field(HH, "Out")           #7
+	 field(CALC, "A>7?AA:@@A")
+	 field(OUT, "$(device):get-statusText PP")
+	}
+
+	################
+	record(stringout, "$(device):get-statusText"){
+	 field(DESC, "Display prioritized Status text")
+	 field(DTYP,"Soft Channel")
+	}
+	record(calc, "$(device):check-fault"){
+	  field(DESC, "Test fault")
+	  field(INPA, "$(device):get-status.B0 NPP NMS") #B0-Safety Alarm    - 1            (Comes on when no air pressure)
+	  field(INPB, "$(device):get-status.B2 NPP NMS") #B2-Air pres        - 3
+	  field(INPC, "$(device):get-status.B3 NPP NMS") #B3-Opp Act in      -
+	  field(INPD, "$(device):get-status.B4 NPP NMS") #B4-Temp/Bias       -
+	  field(CALC, "A|C|D|E?1:0" )
+	  field(FLNK,  "$(device):sel-TextNo PP")
+	}
+
+	record(calcout, "$(device):sel-TextNo"){
+	  field(DESC, "Status Test")
+	  field(INPA, "$(device):check-fault")           #Fault    - 1            (Comes on when no air pressure)
+	  field(INPB, "$(device):get-status.B1 ") #B1-Safety Ok       - 2
+	  field(INPC, "$(device):get-status.B5 ") #B5-Moving
+	  field(INPD, "$(device):get-status.B6 ") #B6-In
+	  field(INPE, "$(device):get-status.B7 ") #B7-Out
+	#              123456789 123456789 123456789 123456789
+	#           Out Fault  Dngr     In Flt  Dngr   Mov
+	  field(CALC, "E?(A?3:(B?1:7)):(D?(A?4:(B?2:6)):5)" )
+	# field(CALC, "E?(A?3:(B?1:7)):(D?(A?4:(B?2:6)):(C?5:8))" )
+	  field(OOPT, "When Non-zero")
+	  field(DOPT, "Use CALC")
+	  field(OUT,  "$(device):TextNo PP")
+	# field(FLNK,  "$(device):calc-mm PP")    # SCAN next record
+	}
+
+	record(ai, "$(device):TextNo") {
+	 field(DTYP,"Soft Channel")
+	 field(FLNK, "$(device):put-Text PP")
+	}
+	record(scalcout, "$(device):put-Text") {
+	 field(DTYP,"Soft Channel")
+	 field(INPA,"$(device):TextNo")
+	#          "1234567890123456789012345"  max 25 chars
+	 field(AA, "Invalid")       #0
+	 field(BB, "DangerOut")     #1
+	 field(CC, "DangerIn")      #2
+	 field(DD, "FaultOut")      #3
+	 field(EE, "FaultIn")       #4
+	 field(FF, "Moving")        #5
+	 field(GG, "In")            #6
+	 field(HH, "Out")           #7
+	 field(CALC, "A>7?AA:@@A")
+	 field(OUT, "$(device):get-statusText PP")
+	}

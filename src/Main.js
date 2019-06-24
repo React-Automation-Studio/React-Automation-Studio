@@ -133,12 +133,12 @@ class Main extends Component {
               </Grid>
 
               <Grid item xs={12}  >
-                <Button  fullWidth= {true} className= {classes.button} component={Link} to="/ControlTestHarp1" color="primary" variant='contained'>  Control Test Harp1 </Button>
+                <Button  fullWidth= {true} className= {classes.button} component={Link} to="/ControlTestHarp1" color="primary" variant='contained'>  Control Beam Line Demo </Button>
               </Grid>
 
 
               <Grid item xs={12}  >
-                <Button  fullWidth= {true} className= {classes.button} component={Link} to="/ControlTestTable" color="primary" variant='contained'>  Control Test Table </Button>
+                <Button  fullWidth= {true} className= {classes.button} component={Link} to="/ControlTestTable" color="primary" variant='contained'>  Control Table Demo </Button>
               </Grid>
               <Grid item xs={12}  >
                 <Button  fullWidth= {true} className= {classes.button} component={Link} to="/IvanControlTable" color="primary" variant='contained'>  Ivan Control Table </Button>

@@ -85,6 +85,7 @@ class HarpGraph extends React.Component {
     state['rangeUnits']="";
     state['ymax']="";
     state['ymax']=2000;
+    state['rangeYmax']=2000;
     state['ymin']=0;
     state['dataPVs']=dataPVs;
     this.state=state;
@@ -111,23 +112,23 @@ class HarpGraph extends React.Component {
     if (initialized===true){
       switch(parseInt(inputValue)) {
         case 1:
-        this.setState({'rangeUnits':'uA','ymax':200});
+        this.setState({'rangeUnits':'uA','ymax':200,'rangeYmax':200});
 
         break;
         case 2:
-        this.setState({'rangeUnits':'uA','ymax':20});
+        this.setState({'rangeUnits':'uA','ymax':20,'rangeYmax':20});
         break;
         case 3:
-        this.setState({'rangeUnits':'nA','ymax':2000});
+        this.setState({'rangeUnits':'nA','ymax':2000,'rangeYmax':2000});
         break;
         case 4:
-        this.setState({'rangeUnits':'nA','ymax':200});
+        this.setState({'rangeUnits':'nA','ymax':200,'rangeYmax':200});
         break;
         case 5:
-        this.setState({'rangeUnits':'nA','ymax':20});
+        this.setState({'rangeUnits':'nA','ymax':20,'rangeYmax':20});
         break;
         case 6:
-        this.setState({rangeUnits:'pA','ymax':2000});
+        this.setState({rangeUnits:'pA','ymax':2000,'rangeYmax':2000});
         break;
 
 
@@ -308,7 +309,7 @@ class HarpGraph extends React.Component {
       let  ymax=this.props.ymax;
 
 
-      this.setState({ymax:ymax})
+      this.setState({ymax:this.state.rangeYmax})
     }
 
   };

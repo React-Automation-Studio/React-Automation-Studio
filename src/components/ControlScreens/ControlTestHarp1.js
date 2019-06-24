@@ -52,11 +52,11 @@ class ControlTestHarp1 extends React.Component {
     'editorMacros':{'$(device)':""},
     'editorSystem':{},
     'displayHarps':[
-      {systemName:'harp5p' ,displayName:'Harp 5P',inserted:false},
-      {systemName:'harp6p' ,displayName:'Harp 6P',inserted:false},
-      {systemName:'harp7p' ,displayName:'Harp 7P',inserted:false},
-      {systemName:'harp8p' ,displayName: 'Harp 8P',inserted:false},
-      {systemName:'harp9p' ,displayName: 'Harp 9P',inserted:false}  ],
+      {systemName:'testIOC:Harp1' ,displayName:'Harp 1',inserted:false},
+      {systemName:'testIOC:Harp2' ,displayName:'Harp 2',inserted:false},
+      {systemName:'testIOC:Harp3' ,displayName:'Harp 3',inserted:false},
+      {systemName:'testIOC:Harp4' ,displayName: 'Harp 4',inserted:false},
+    ],
       'maxHarpsReached':false,
 
       'x0GraphPVs':[],

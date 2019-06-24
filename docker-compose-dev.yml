@@ -10,7 +10,7 @@ services:
                 - no_proxy
       dockerfile: docker/frontendserverDev/Dockerfile
     volumes:
-      - /frontendserverAppDev/node_modules
+      - AsNodeModules:/frontendserverAppDev/node_modules
       - ${PWD}:/frontendserverAppDev
     restart: always
     network_mode: host
@@ -67,7 +67,11 @@ services:
       dockerfile: docker/styleguideserver/Dockerfile
     volumes:
       - /app/styleguide
-      - /app/node_modules
-      - /styleguideServer/node_modules
+      - AsNodeModules:/app/node_modules
+      - AsSgNodeModules:/styleguideServer/node_modules
     restart: always
     network_mode: host
+volumes:
+    AsNodeModules:
+
+    AsSgNodeModules:

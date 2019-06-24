@@ -11,7 +11,7 @@
 /coverage
 
 # production
-/build
+/build/*
 
 /venv
 /epics/base

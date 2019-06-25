@@ -76,7 +76,15 @@ class ControlTestHarp1 extends React.Component {
     this.handleOnSystemClick= this.handleOnSystemClick.bind(this);
     this.handleHarpInserted= this.handleHarpInserted.bind(this);
     this.handleHarpRemoved= this.handleHarpRemoved.bind(this);
+
+    this.changeTopYgraphYmax= this.changeTopYgraphYmax.bind(this);
+    this.changeTopXgraphYmax= this.changeTopXgraphYmax.bind(this);
+    this.changeBottomYgraphYmax= this.changeBottomYgraphYmax.bind(this);
+    this.changeBottomXgraphYmax= this.changeBottomXgraphYmax.bind(this);
+
   }
+
+
 
   handlePsOnClick(name){
 
@@ -87,6 +95,25 @@ class ControlTestHarp1 extends React.Component {
 
     //  this.setState({ ['clicked']: 1});
   }
+
+  changeTopYgraphYmax=(ymax)=>{
+    this.setState({TopYgraphYmax:ymax})
+//    console.log('changeTopYgraphYmax',ymax)
+  }
+  changeTopXgraphYmax=(ymax)=>{
+    this.setState({TopXgraphYmax:ymax})
+//    console.log('changeTopXgraphYmax',ymax)
+  }
+  changeBottomYgraphYmax=(ymax)=>{
+    this.setState({BottomYgraphYmax:ymax})
+//    console.log('changeBottomYgraphYmax',ymax)
+  }
+  changeBottomXgraphYmax=(ymax)=>{
+    this.setState({BottomXgraphYmax:ymax})
+//    console.log('changeBottomXgraphYmax',ymax)
+  }
+
+
   handleOnSystemClick=(system)=>{
 //  console.log(system)
   this.setState({['editorType']:system.editorType,
@@ -315,6 +342,8 @@ class ControlTestHarp1 extends React.Component {
                             dataPVs={this.state.x0GraphPVs}
                             rangePV={this.state.x0RangePV}
                             legend = {this.state.x0legend}
+                            changeOtherGraphYmax={this.changeTopYgraphYmax}
+                            ymaxFromOtherGraph={this.state.TopXgraphYmax}
                             ylabel="X Axis"
                           />
 
@@ -331,6 +360,8 @@ class ControlTestHarp1 extends React.Component {
                             dataPVs={this.state.y0GraphPVs}
                             rangePV={this.state.y0RangePV}
                             legend = {this.state.y0legend}
+                            changeOtherGraphYmax={this.changeTopXgraphYmax}
+                            ymaxFromOtherGraph={this.state.TopYgraphYmax}
                             ylabel="Y Axis"
 
                           />
@@ -388,6 +419,8 @@ class ControlTestHarp1 extends React.Component {
                                 rangePV={this.state.x1RangePV}
                                 legend = {this.state.x1legend}
                                 ylabel="X Axis"
+                                changeOtherGraphYmax={this.changeBottomYgraphYmax}
+                                ymaxFromOtherGraph={this.state.BottomXgraphYmax}
                               />
 
                               {/*}<GraphTest style pv='pva://testIOC:test4'  />*/}
@@ -404,6 +437,8 @@ class ControlTestHarp1 extends React.Component {
                                 rangePV={this.state.y1RangePV}
                                 legend = {this.state.y1legend}
                                 ylabel="Y Axis"
+                                changeOtherGraphYmax={this.changeBottomXgraphYmax}
+                                ymaxFromOtherGraph={this.state.BottomYgraphYmax}
                               />
                               {/*  <GraphTest style pv='pva://testIOC:PS1:Readback:History'  />*/}
                             </div>

@@ -101,6 +101,8 @@ class HarpGraph extends React.Component {
     this.multipleDataConnections=this.multipleDataConnections.bind(this);
     this.test=this.test.bind(this);
     this.multipleLineData=this.multipleLineData.bind(this);
+    this.changeOtherGraphYmax=this.changeOtherGraphYmax.bind(this);
+    this.changeThisGraphYmax=this.changeThisGraphYmax.bind(this);
   }
 
 
@@ -299,6 +301,19 @@ class HarpGraph extends React.Component {
 //    }
     this.setState({ymax:ymax})
 
+    this.changeOtherGraphYmax(ymax);
+  };
+
+  changeOtherGraphYmax = (ymax) => {
+
+//  console.log('changeOtherGraphYmax',ymax)
+  this.props.changeOtherGraphYmax(ymax);
+
+  };
+  changeThisGraphYmax = (ymax) => {
+
+//  console.log('changeThisGraphYmax',ymax)
+
 
   };
 
@@ -306,10 +321,11 @@ class HarpGraph extends React.Component {
 
     //console.log("click",event.nativeEvent.which)
     if (event.nativeEvent.which===1){
-      let  ymax=this.props.ymax;
+
 
 
       this.setState({ymax:this.state.rangeYmax})
+        this.changeOtherGraphYmax(this.state.rangeYmax);
     }
 
   };
@@ -404,7 +420,16 @@ class HarpGraph extends React.Component {
     return lines;
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.ymaxFromOtherGraph!=='undefined')
+    {
+      if (prevProps.ymaxFromOtherGraph!=this.props.ymaxFromOtherGraph)
+      {
+        this.setState({ymax:this.props.ymaxFromOtherGraph});
+      }
 
+    }
+  }
 
   render() {
 

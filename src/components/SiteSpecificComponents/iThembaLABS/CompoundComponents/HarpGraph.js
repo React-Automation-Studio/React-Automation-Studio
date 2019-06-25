@@ -285,7 +285,7 @@ class HarpGraph extends React.Component {
 
   handleWheel = (event) => {
 
-    const adjust=50;
+    const adjust=this.state.ymax/5;
     let ymax=this.state.ymax;
     if (event.deltaY<0){
       ymax=this.state.ymax-adjust;
@@ -294,9 +294,9 @@ class HarpGraph extends React.Component {
     else{
       ymax=this.state.ymax+adjust;
     }
-    if (ymax<10){
-      ymax=10;
-    }
+  //  if (ymax<10){
+  //    ymax=10;
+//    }
     this.setState({ymax:ymax})
 
 

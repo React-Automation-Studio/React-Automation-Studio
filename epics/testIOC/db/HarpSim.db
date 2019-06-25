@@ -35,33 +35,85 @@
   record(ao,         "$(device):$(axis)range")          {
        field(PINI, "YES")
        field(DTYP,   "Soft Channel")
-       #field(OUT,    "@asyn(int32 $(mux))")
+
        field(VAL,"4")
        field(FLNK,   "$(device):$(axis)_clear_offset")
   }
 
+	record(ao, "$(device):$(axis)time")
+	{
+	        field(DTYP,"Soft Channel")
+	        field(DESC, "Analog input")
+	        field(EGU, "Seconds")
+	        field(HOPR, "10000")
+	        field(LOPR, "0")
+	        field(VAL,"0")
+	        field(PINI, "YES")
+		field(PREC, "1")
+	}
+	record(calcout, "$(device):$(axis)calc_max")
+	{
+	        field(SCAN, ".1 second")
+	        field(INPA, "$(device):$(axis)time")
+	        field(CALC, "A<1?A+0.1:0")
+	        field(OUT,"$(device):$(axis)time PP")
+					field(FLNK,   "$(device):$(axis)_hist_CMD")
+	}
 
+	record(scalcout, "$(device):$(axis)_hist_CMD") {
+	 field(DTYP,"Soft Channel")
+	 field(INPA,"$(device):$(axis)time")
+	#          "1234567890123456789012345"  max 25 chars
+	 field(AA, "Read")       #0
+	 field(BB, "Clear")     #1
+	 field(CC, "Stop")      #2
+	 field(DD, "Setup")      #3
+	 field(EE, "Start")      #3
+	 field(CALC, "A==0")
+   field(OOPT,"When Non-zero")
+   field(DOPT,"Use OCAL")
+	 field(OCAL, "BB")
+	 field(OUT, "$(device):$(axis)raw.CMD")
+	}
 
-  ##############################################################################
+	record(calc, "$(device):$(axis)raw_sim")
+	{
+	        field(SCAN, ".1 second")
+	        field(INPA, "24")
+	        field(CALC, "A+2*(RNDM-0.5)")
+          field(FLNK,   "$(device):$(axis)raw")
+	}
 
-  record(waveform,   "$(device):$(axis)raw")            {
+	record(histogram,   "$(device):$(axis)raw")            {
 		   #field(SCAN,   ".1 second")
 		   field(DTYP,   "Soft Channel")
-    #   field(INP,    "@asyn(int32 $(mux) 100)")
+       field(SVL,    "$(device):$(axis)raw_sim")
 		   field(NELM,   "48")
-		   field(FTVL,   "LONG")
-       field(FLNK,   "$(device):$(axis)_coef")
+		   field(LLIM,   "1")
+			 field(ULIM,   "48")
+       field(FLNK,   "$(device):$(axis)_raw1")
   }
+	record(acalcout, "$(device):$(axis)_raw1")  {
+	 field(DTYP,  "Soft Channel")
+	 field(NELM,  "48")
+	 field(INAA,  "$(device):$(axis)raw")
+	 field(INPA,  "$(device):$(axis)_coef")
+	 field(OOPT,  "Every Time")
+	 field(DOPT,  "Use CALC")
+	 field(CALC,  "32767*0.8*AA/AMAX(AA)")
+	 field(FLNK, "$(device):$(axis)_coef" )
+
+	 }
 
   record(sel,         "$(device):$(axis)_coef")          {
        field(SELM,    "Specified")
        field(NVL,   "$(device):$(axis)range")
-       field(INPB,   "280")
-       field(INPC,   "22")
-       field(INPD,   "2000")
-       field(INPE,   "200")
-       field(INPF,   "20")
-       field(INPG,   "2000")
+       field(INPB,   "0.002")   #200000000 pA 200 uA
+       field(INPC,   "0.002")    #20000000 pA 20 uA
+       field(INPD,   "2")  #2000000 pA 2000nA
+       field(INPE,   "2")     #200000 pA  200nA
+			 field(INPF,   "2")  #20000 pA 20nA
+       field(INPG,   "2000")  #2000 pA
        field(FLNK,   "$(device):$(axis)_raw_cur")
 
   }
@@ -70,7 +122,7 @@
 record(acalcout, "$(device):$(axis)_raw_cur")  {
  field(DTYP,  "Soft Channel")
  field(NELM,  "48")
- field(INAA,  "$(device):$(axis)raw")
+ field(INAA,  "$(device):$(axis)_raw1.AVAL")
  field(INPA,  "$(device):$(axis)_coef")
  field(OOPT,  "Every Time")
  field(DOPT,  "Use CALC")

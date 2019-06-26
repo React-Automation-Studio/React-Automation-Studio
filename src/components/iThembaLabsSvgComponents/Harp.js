@@ -20,6 +20,10 @@ const styles = theme => ({
   textHarp: {
     fill:theme.palette.text.primary
 
+  },
+  textHarpOff: {
+    fill:'grey'
+
   }
 
 });
@@ -455,29 +459,13 @@ handleOnClick =device=> (event) => {
                       </g>
                     </g>
 
-                    <text
+                    <text className={classes.textHarpOff}
                       x={0}
-                      y={10}
+                      y={+yoffset-40}
                       textAnchor='middle'
-
+                      filter={this.props.textShadow===true?"url(#"+this.props.systemName+"HarpShadow)":"" }
                     >
-                      {"Connecting"}
-                    </text>
-                    <text
-                      x={0}
-                      y={25}
-                      textAnchor='middle'
-
-                    >
-                      {"to:"}
-                    </text>
-                    <text
-                      x={0}
-                      y={40}
-                      textAnchor='middle'
-
-                    >
-                      {this.state['pvname']}
+                      {this.props.usePvLabel===true? this.state['label']:this.props.label}
                     </text>
                   </g>
                 }

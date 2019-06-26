@@ -69,11 +69,12 @@ class LogIn extends React.Component {
 
   };
     this.handleChange=this.handleChange.bind(this);
+    this.catchReturn=this.catchReturn.bind(this);
     this.handleAuthorization=this.handleAuthorization.bind(this);
     this.handleAuthentication=this.handleAuthentication.bind(this);
     this.handleUnauthorisedDialogClick=this.handleUnauthorisedDialogClick.bind(this);
     this.handleAuthenticationFailedDialogClick=this.handleAuthenticationFailedDialogClick.bind(this);
-    this.login=this.login.bind(this);
+
     this.handleResponse=this.handleResponse.bind(this);
   }
 
@@ -83,6 +84,16 @@ class LogIn extends React.Component {
     this.setState({
       [name]: value,
     });
+  };
+
+  catchReturn = name => event => {
+    if(event.key === 'Enter'){
+    let value=event.target.value;
+
+    this.setState({
+      [name]: value,
+    },this.handleSubmitClick());
+  }
   };
   handleSubmitClick=()=>{
   //  console.log('button clicked')
@@ -114,45 +125,7 @@ class LogIn extends React.Component {
         return data;
     });
 }
-  login=()=> {
-      var headers = new Headers();
-      let username=this.state.emailAddress;
-      let password=this.state.password;
-      let url;
-      if(typeof process.env.REACT_APP_PyEpicsServerAuthoriseURL==='undefined'){
-        console.log('process.env',process.env)
-        console.log('process.env.REACT_APP_PyEpicsServerURL!==undefined')
-         url= '127.0.0.1:5000'
-      }
-      else {
-        url = process.env.REACT_APP_PyEpicsServerAuthoriseURL;
-      }
-      const requestOptions = {
-          method: 'POST',
-          headers: {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin':'*',
-                      },
-          mode:'no-cors',
-          body: JSON.stringify({username, password }),
 
-      };
-
-      return fetch(url+'users/authenticate', requestOptions)
-          .then(this.handleResponse)
-          .then((user) => {
-              console.log('user details:',user)
-              // login successful if there's a user in the response
-              // if (user) {
-              //     // store user details and basic auth credentials in local storage
-              //     // to keep user logged in between page refreshes
-              //     user.authdata = window.btoa(username + ':' + password);
-              //     localStorage.setItem('user', JSON.stringify(user));
-              // }
-              //
-              // return user;
-          });
-  }
 
   handleAuthorization(msg){
   //  console.log('authorised',msg)
@@ -270,16 +243,17 @@ class LogIn extends React.Component {
           <form className={classes.form}>
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="email">Email Address</InputLabel>
-              <Input id="email" name="email" autoComplete="email" autoFocus onChange={this.handleChange('emailAddress')} />
+              <Input id="email" name="email" autoComplete="email" autoFocus onChange={this.handleChange('emailAddress')} onKeyPress={this.catchReturn('password')}/>
             </FormControl>
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="password">Password</InputLabel>
-              <Input name="password" type="password" id="password" autoComplete="current-password" onChange={this.handleChange('password')}/>
+              <Input name="password" type="password" id="password" autoComplete="current-password" onChange={this.handleChange('password')} onKeyPress={this.catchReturn('password')}/>
+
             </FormControl>
-            <FormControlLabel
+            {/* <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
-            />
+            /> */}
             <Button
 
               fullWidth

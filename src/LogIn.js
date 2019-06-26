@@ -234,6 +234,12 @@ class LogIn extends React.Component {
       <main className={classes.main}>
 
         <Paper className={classes.paper}>
+          <Typography component="h1" variant="h3">
+            Automation
+          </Typography>
+          <Typography component="h1" variant="h3">
+            Studio
+          </Typography>
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
           </Avatar>

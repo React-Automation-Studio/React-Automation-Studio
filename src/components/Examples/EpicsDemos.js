@@ -27,7 +27,7 @@ import lime from '@material-ui/core/colors/lime';
 import {Link} from 'react-router-dom'
 function TabContainer(props) {
   return (
-    <Typography component="div" style={{ padding: 8 * 3 }}>
+    <Typography component="div" style={{ padding: 8 * 1 }}>
       {props.children}
     </Typography>
   );
@@ -103,10 +103,9 @@ class EpicsDemos extends React.Component {
           </AppBar>
 
           {value === 0 &&
-            <TabContainer key='TabContainer0' >
 
               <MobileDemo2 nosidebar/>
-            </TabContainer >
+          
           }
 
           {value === 1 && <TabContainer key='TabContainer1'>
@@ -182,13 +181,13 @@ class EpicsDemos extends React.Component {
       <Grid container spacing={3}>
         <Grid item xs={12} sm={12} >
           <div style={{height:'25vh'}}>
-            <GraphMultiplePVs  pvs={['pva://testIOC:test4','pva://testIOC:test5'] } legend={['Sine Wave Circular Buffer','Amplitude of Sine Wave Circular Buffer']} lineColor={[this.props.theme.palette.secondary.main,lime['400']]}/>
+            <GraphMultiplePVs  pvs={['pva://testIOC:test4','pva://testIOC:test5'] } legend={['Sine Wave ','Amplitude r']} lineColor={[this.props.theme.palette.secondary.main,lime['400']]}/>
           </div>
 
         </Grid>
         <Grid item xs={12} sm={6} >
           <div style={{height:'25vh'}}>
-            <GraphMultiplePVs  pvs={['pva://testIOC:test4'] } legend={['Sine Wave Circular Buffer']} lineColor={[this.props.theme.palette.secondary.main]}/>
+            <GraphMultiplePVs  pvs={['pva://testIOC:test4'] } legend={['Sine Wave']} lineColor={[this.props.theme.palette.secondary.main]}/>
           </div>
 
         </Grid>

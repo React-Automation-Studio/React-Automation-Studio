@@ -54,7 +54,7 @@ class MobileDemo2 extends React.Component {
             <Grid container spacing={2}>
               <Grid item xs={12} lg={6}>
                 <div style={{height:'25vh'}}>
-                  <GraphMultiplePVs  pvs={['pva://testIOC:test4','pva://testIOC:test5'] } legend={['Sine Wave Circular Buffer','Amplitude of Sine Wave Circular Buffer']} lineColor={[this.props.theme.palette.secondary.main,lime['400']]}/>
+                  <GraphMultiplePVs  pvs={['pva://testIOC:test4','pva://testIOC:test5'] } legend={['Sine Wave ','Amplitude']} lineColor={[this.props.theme.palette.secondary.main,lime['400']]}/>
                 </div>
               </Grid>
               <Grid item xs={12} lg={6}>
@@ -66,7 +66,7 @@ class MobileDemo2 extends React.Component {
 
 
                     ]}
-                    legend={['Instantaneous Amplitude of Sine Wave']}
+                    legend={['Instantaneous Amplitude']}
                     maxLength={1000}
 
                     lineColor={[lime['400']]}

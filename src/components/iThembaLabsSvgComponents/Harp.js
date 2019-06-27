@@ -9,6 +9,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 import { withStyles } from '@material-ui/core/styles';
+import ContextMenu from '../SystemComponents/ContextMenu';
 
 
 function Transition(props) {
@@ -70,8 +71,14 @@ class Harp extends React.Component {
     pvs['movingPV']={initialized: false,pvname:movingPV,value:"",char_value:""}
     pvs['inPV']={initialized: false,pvname:inPV,value:"",char_value:""}
     pvs['outPV']={initialized: false,pvname:outPV,value:"",char_value:""}
+    let contextPVs=[];
+    for (let item in pvs){
+      contextPVs.push(pvs[item]);
+    }
     this.state={pvs,newCommandTrigger:0,
-      'open':false
+      'open':false,
+      openContextMenu: false,
+      contextPVs:contextPVs
     }
     this.handleOnClick= this.handleOnClick.bind(this);
     this.handleInputValue= this.handleInputValue.bind(this);
@@ -157,6 +164,21 @@ handleInputValueLabel(inputValue){
 
   this.setState({['label']:inputValue});
 
+}
+
+handleContextMenuClose = event => {
+
+
+  this.setState({ openContextMenu: false });
+};
+
+handleToggleContextMenu = (event) => {
+  //   console.log(event.type)
+
+  this.setState(state => ({ openContextMenu: !state.openContextMenu }));
+
+
+  event.preventDefault();
 }
 
 
@@ -293,6 +315,23 @@ handleOnClick =device=> (event) => {
 
           return (
             <g>
+              <ContextMenu
+                disableProbe={this.props.disableProbe}
+                open={this.state.openContextMenu}
+                anchorReference="anchorPosition"
+                anchorPosition={{ top: this.props.cy, left: this.props.cx }}
+                probeType={'simple'}
+                pvs={this.state.contextPVs}
+                handleClose={this.handleContextMenuClose}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'center',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'center',
+                }}
+              />
               {(this.props.maxHarpsReached===false) && <Dialog
                 open={this.state.open}
                 TransitionComponent={Transition}
@@ -345,7 +384,9 @@ handleOnClick =device=> (event) => {
               </Dialog>
               }
 
-              <g  onClick={this.handleOnClick(this.props.systemName)}>
+              <g  onClick={this.handleOnClick(this.props.systemName)}   onContextMenu={this.handleToggleContextMenu}
+
+              >
                 <DataConnection
                   pv={this.state.pvs['commandPV'].pvname}
 
@@ -369,9 +410,9 @@ handleOnClick =device=> (event) => {
 
                 {/*  { this.props.usePvLabel===true && <DataConnection
 
-                  pv={pv.toString()+".DESC"}
-                  macros={macros}
-                  handleInputValue={this.handleInputValueLabel}
+                    pv={pv.toString()+".DESC"}
+                    macros={macros}
+                    handleInputValue={this.handleInputValueLabel}
 
                   />    }
                 */}
@@ -490,9 +531,9 @@ handleOnClick =device=> (event) => {
 
 
 
-                          );
-                        }
+                        );
                       }
+                    }
 
-                      Harp.contextType=AutomationStudioContext;
-                      export default withStyles(styles)( Harp)
+                    Harp.contextType=AutomationStudioContext;
+                    export default withStyles(styles)( Harp)

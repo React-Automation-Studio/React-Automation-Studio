@@ -187,7 +187,7 @@ return (
 
             <Grid item >
               <div style={{ height: graphVH, width:'96vw',}}>
-              <GraphMultiplePVs  pvs={['pva://testIOC:test4','pva://testIOC:test5'] } legend={['Sine Wave Circular Buffer','Amplitude of Sine Wave Circular Buffer']} lineColor={[this.props.theme.palette.secondary.main,lime['400']]}/>
+              <GraphMultiplePVs  pvs={['pva://testIOC:test4','pva://testIOC:test5'] } legend={['Sine Wave','Amplitude']} lineColor={[this.props.theme.palette.secondary.main,lime['400']]}/>
               </div>
             </Grid>
             <Grid item >

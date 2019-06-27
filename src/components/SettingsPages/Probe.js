@@ -20,15 +20,22 @@ import {Link} from 'react-router-dom'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import GraphMultiplePVs from '../BaseComponents/GraphMultiplePVs';
+import TextField from '@material-ui/core/TextField';
 //import MenuItem from '@material-ui/core/MenuItem';
 
 const styles = theme => ({
   body1: theme.typography.body1,
+  TextField: {
+    width: '100%',
 
+    fontWeight: 500,
+    borderRadius: 4,
+    //marginTop:theme.spacing(1),
+  },
 
 });
 
-class SettingsSinglePS extends React.Component {
+class Probe extends React.Component {
   constructor(props) {
     super(props);
 
@@ -39,13 +46,25 @@ class SettingsSinglePS extends React.Component {
 
   render() {
     const {classes}= this.props;
-    const pv=JSON.parse(decodeURIComponent(this.props.location.search.substr(1))) ;
-    return (
-      <Grid   container
-        direction="column"
-        justify="stretch"
-        spacing={2}>
-        <Grid item xs={12} sm ={6} lg={4} >
+    const probeObject=JSON.parse(decodeURIComponent(this.props.location.search.substr(1))) ;
+    let probetype;
+    console.log(probeObject)
+    if (typeof probeObject.probeType==='undefined'){
+      probetype='normal';
+    }
+    else{
+      probetype=probeObject.probeType;
+    }
+
+  return (
+
+
+<React.Fragment>
+  {probetype=='normal'&&<Grid   container
+    direction="column"
+    justify="stretch"
+    spacing={2}>
+    <Grid item xs={12} sm ={6} lg={4} >
       <div style={{"overflowX": "hidden"}} >
         <div style={{ padding: 24}}>
           <Grid   container
@@ -53,15 +72,15 @@ class SettingsSinglePS extends React.Component {
             justify="space-evenly"
             spacing={2}>
             <Grid item xs={12}  >
-              <TextOutput  pv='$(device).NAME' macros={{'$(device)':pv.pvname}}  label={'EPICS PV Name:'}/>
+              <TextOutput  pv='$(device).NAME' macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV Name:'}/>
             </Grid>
             <Grid item xs={12}  >
-              <TextOutput  pv='$(device).DESC'  macros={{'$(device)':pv.pvname}}  label={'EPICS PV DESC:'}/>
+              <TextOutput  pv='$(device).DESC'  macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV DESC:'}/>
             </Grid>
             <Grid item xs={12}  >
               <div style={{height:'25vh'}}>
                 <GraphMultiplePVs
-                  pvs={['$(device)']}  macros={{'$(device)':pv.pvname}}
+                  pvs={['$(device)']}  macros={{'$(device)':probeObject.pvname}}
                   maxLength={1000}
                   triggerOnSingleValueChange
 
@@ -69,45 +88,114 @@ class SettingsSinglePS extends React.Component {
               </div>
             </Grid>
             <Grid item xs={12}  >
-              <TextOutput  pv='$(device)'       macros={{'$(device)':pv.pvname}}  label={'EPICS PV Value:'} alarmSensitive={true}/>
+              <TextOutput  pv='$(device)'       macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV Value:'} alarmSensitive={true}/>
             </Grid>
             <Grid item xs={12}  >
-              <TextOutput  pv='$(device)'       macros={{'$(device)':pv.pvname}}  label={'EPICS PV Timestamp:'} displayTimeStamp />
+              <TextOutput  pv='$(device)'       macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV Timestamp:'} displayTimeStamp />
             </Grid>
             <Grid item xs={12} >
-              <TextOutput  pv='$(device)'       macros={{'$(device)':pv.pvname}}  label={'EPICS PV Host:'} displayMetaData={'host'} />
+              <TextOutput  pv='$(device)'       macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV Host:'} displayMetaData={'host'} />
             </Grid>
             <Grid item xs={12}  >
-              <TextInput   pv='$(device)'       macros={{'$(device)':pv.pvname}}  label={'EPICS PV Setpoint:'} alarmSensitive={true}/>
+              <TextInput   pv='$(device)'       macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV Setpoint:'} alarmSensitive={true}/>
             </Grid>
             <Grid item xs={12}  >
-              <SimpleSlider pv='pva://$(device)'  macros={{'$(device)':pv.pvname}} usePvMinMax={true}  label="EPICS PV Setpoint:"  />
+              <SimpleSlider pv='pva://$(device)'  macros={{'$(device)':probeObject.pvname}} usePvMinMax={true}  label="EPICS PV Setpoint:"  />
             </Grid>
             <Grid item xs={6} >
-              <TextOutput  pv='$(device).DRVH'       macros={{'$(device)':pv.pvname}}  label={'EPICS PV DRVH:'}/>
+              <TextOutput  pv='$(device).DRVH'       macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV DRVH:'}/>
             </Grid>
             <Grid item xs={6} >
-              <TextOutput  pv='$(device).DRVL'      macros={{'$(device)':pv.pvname}}  label={'EPICS PV DRVL:'}/>
+              <TextOutput  pv='$(device).DRVL'      macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV DRVL:'}/>
             </Grid>
             <Grid item xs={6} >
-              <TextOutput  pv='$(device).HOPR'       macros={{'$(device)':pv.pvname}}  label={'EPICS PV HOPR:'}/>
+              <TextOutput  pv='$(device).HOPR'       macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV HOPR:'}/>
             </Grid>
             <Grid item xs={6}  >
-              <TextOutput  pv='$(device).LOPR'      macros={{'$(device)':pv.pvname}}  label={'EPICS PV LOPR:'}/>
+              <TextOutput  pv='$(device).LOPR'      macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV LOPR:'}/>
             </Grid>
           </Grid>
         </div>
       </div>
-      </Grid>
-      </Grid>
-
-
-
-
-
-    );
+    </Grid>
+  </Grid>
   }
-}
+  {probetype=='simple'&&<Grid   container
+    direction="column"
+    justify="stretch"
+    spacing={2}>
+    <Grid item xs={12} sm ={6} lg={4} >
+      <div style={{"overflowX": "hidden"}} >
+        <div style={{ padding: 24}}>
+          <Grid   container
+            direction="row"
+            justify="space-evenly"
+            spacing={2}>
+            <Grid item xs={12}>
+              <TextField
 
-SettingsSinglePS.contextType=AutomationStudioContext;
-export default withStyles(styles,{withTheme:true})(SettingsSinglePS)
+                color='secondary'
+                className={classes.textField}
+                value={probeObject.pvname}
+                label={"PV Name:"}
+                fullWidth={true}
+
+                disabled
+                margin='none'
+                variant="outlined"
+                InputLabelProps={{
+                  classes: {
+                    root: classes.cssLabel,
+                    focused: classes.cssFocused,
+                  },
+                }}
+                InputProps={{
+                  classes: {
+                    root: classes.cssOutlinedInput,
+                    focused: classes.cssFocused,
+                    input:classes.input,
+                    notchedOutline: classes.notchedOutline,
+                  },
+                    readOnly: true,
+
+
+                }}
+              />
+            </Grid>
+            <Grid item xs={12}  >
+              <TextOutput  pv='$(device).NAME' macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV Name:'}/>
+            </Grid>
+            <Grid item xs={12}  >
+              <TextOutput  pv='$(device).DESC'  macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV DESC:'}/>
+            </Grid>
+
+            <Grid item xs={12}  >
+              <TextOutput  pv='$(device)'       macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV Value:'} value alarmSensitive={true}/>
+            </Grid>
+            <Grid item xs={12}  >
+              <TextOutput  pv='$(device)'       macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV Timestamp:'} displayTimeStamp />
+            </Grid>
+            <Grid item xs={12} >
+              <TextOutput  pv='$(device)'       macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV Host:'} displayMetaData={'host'} />
+            </Grid>
+            <Grid item xs={12}  >
+              <TextInput   pv='$(device)'       macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV Setpoint:'} alarmSensitive={true}/>
+            </Grid>
+
+          </Grid>
+        </div>
+      </div>
+    </Grid>
+  </Grid>
+  }
+</React.Fragment>
+
+
+
+
+  );
+  }
+  }
+
+  Probe.contextType=AutomationStudioContext;
+export default withStyles(styles,{withTheme:true})(Probe)

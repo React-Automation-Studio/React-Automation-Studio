@@ -488,7 +488,7 @@ class HarpGraph extends React.Component {
             color='#e89b02'
             style={{position: 'absolute', right: '50px', top: '10px',
               color:theme.palette.type==='dark'?'#ccccce':'#dbdbe0',strokeWidth:0.2}}
-            orientation="horizontal" items={[{title:legendTitle,color:theme.palette.type==='dark'?'#e89b02':'#80deea',stroke:theme.palette.type==='dark'?'#80deea':'#dbdbe0',}]} />}
+            orientation="horizontal" items={[{title:legendTitle,color:theme.palette.type==='dark'?'#e89b02':'#80deea',stroke:theme.palette.type==='dark'?'#80deea':'#dbdbe0',fontSize:16}]} />}
         </FlexibleXYPlot>
 
       </React.Fragment>

@@ -9,6 +9,8 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 import Tooltip from '@material-ui/core/Tooltip';
+import ContextMenu from '../SystemComponents/ContextMenu';
+
 
 import { withStyles } from '@material-ui/core/styles';
 
@@ -62,8 +64,12 @@ class FC extends React.Component {
 
     pvs['statusPV']={initialized: false,pvname:statusPV,value:"",char_value:""}
     pvs['commandPV']={initialized: false,pvname:commandPV,value:"",char_value:""}
+    let contextPVs=[];
+    for (let item in pvs){
+      contextPVs.push(pvs[item]);
+    }
     this.state={pvs,
-      newCommandTrigger:0,
+      newCommandTrigger:0,contextPVs:contextPVs,openContextMenu: false,
       'open':false
     }
     this.handleOnClick= this.handleOnClick.bind(this);
@@ -199,6 +205,21 @@ handleOnClick =device=> (event) => {
 
 
         };
+
+        handleContextMenuClose = event => {
+
+
+          this.setState({ openContextMenu: false });
+        };
+
+        handleToggleContextMenu = (event) => {
+          //   console.log(event.type)
+
+          this.setState(state => ({ openContextMenu: !state.openContextMenu }));
+
+
+          event.preventDefault();
+        }
         render() {
           const pvs=this.state.pvs;
           const {classes}= this.props;
@@ -278,6 +299,23 @@ handleOnClick =device=> (event) => {
 
           return (
             <g>
+              <ContextMenu
+                disableProbe={this.props.disableProbe}
+                open={this.state.openContextMenu}
+                anchorReference="anchorPosition"
+                anchorPosition={{ top: this.props.cy, left: this.props.cx }}
+                probeType={'simple'}
+                pvs={this.state.contextPVs}
+                handleClose={this.handleContextMenuClose}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'center',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'center',
+                }}
+              />
               <Dialog
                 open={this.state.open}
                 TransitionComponent={Transition}
@@ -304,7 +342,8 @@ handleOnClick =device=> (event) => {
               </Dialog>
 
               <Tooltip disableHoverListener={!fcFault} title={fcFaultString}>
-                <g  onClick={this.handleOnClick(this.props.systemName)}>
+                <g  onClick={this.handleOnClick(this.props.systemName)}  onContextMenu={this.handleToggleContextMenu}>
+
                   <DataConnection
                     pv={this.state.pvs['commandPV'].pvname}
 

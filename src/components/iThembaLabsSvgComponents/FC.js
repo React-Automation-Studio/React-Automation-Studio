@@ -63,6 +63,7 @@ class FC extends React.Component {
     pvs['statusPV']={initialized: false,pvname:statusPV,value:"",char_value:""}
     pvs['commandPV']={initialized: false,pvname:commandPV,value:"",char_value:""}
     this.state={pvs,
+      newCommandTrigger:0,
       'open':false
     }
     this.handleOnClick= this.handleOnClick.bind(this);
@@ -145,13 +146,13 @@ handleOnClick =device=> (event) => {
   console.log("In FC: clicked "+device.toString());
   //this.props.handleOnClick(device);
   let pvs=this.state.pvs;
-  if (pvs['commandPV'].value==1){
+  if ((pvs['inPV'].value==1)){
     const status= pvs['statusPV'].value;
     if(status==='In') {
       pvs['commandPV'].value=0;
       //    pvs['xrawScanPV'].value=0;
       //    pvs['yrawScanPV'].value=0;
-      this.setState({pvs:pvs});
+      this.setState({pvs:pvs,newCommandTrigger:this.state.newCommandTrigger+1,});
     }
     else{
       this.setState({
@@ -163,7 +164,7 @@ handleOnClick =device=> (event) => {
       pvs['commandPV'].value=1;
       //    pvs['xrawScanPV'].value=0;
       //    pvs['yrawScanPV'].value=0;
-      this.setState({pvs:pvs});
+      this.setState({pvs:pvs,newCommandTrigger:this.state.newCommandTrigger+1,});
     }
 
   };
@@ -175,7 +176,7 @@ handleOnClick =device=> (event) => {
     //  pvs['xrawScanPV'].value=9;
     //  pvs['yrawScanPV'].value=9;
 
-    this.setState({ pvs:pvs,
+    this.setState({ pvs:pvs,newCommandTrigger:this.state.newCommandTrigger+1,
       open:false});
       //  this.props.handleFCInserted(this.props.systemName);
 
@@ -193,7 +194,7 @@ handleOnClick =device=> (event) => {
       handleNo = () => {
         let pvs=this.state.pvs;
         pvs['commandPV'].value=0;
-        this.setState({ pvs:pvs,
+        this.setState({ pvs:pvs,newCommandTrigger:this.state.newCommandTrigger+1,
           open:false});
 
 
@@ -308,7 +309,7 @@ handleOnClick =device=> (event) => {
                     pv={this.state.pvs['commandPV'].pvname}
 
 
-
+                    newValueTrigger={this.state.newCommandTrigger}
                     handleInputValue={this.handleInputValue('commandPV')}
                     outputValue=  {this.state.pvs['commandPV'].value}
 

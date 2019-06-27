@@ -433,6 +433,7 @@ class HarpGraph extends React.Component {
 
   render() {
 
+    //console.log('HarpGRaph',  this.props.dataPVs)
 
     const {classes}= this.props;
     const theme=this.props.theme;

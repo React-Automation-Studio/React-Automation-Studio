@@ -160,8 +160,23 @@ this.setState({xrange:xRangePV,
 render() {
 //   console.log(this.state)
 //   console.log(this.props.systemName)
-   const xrangePV='pva://'+this.props.systemName+':xrange';
-   const yrangePV='pva://'+this.props.systemName+':yrange';
+//   const xrangePV='pva://'+this.props.systemName+':xrange';
+   let yrangePV;
+   if (this.props.onlyX===true){
+      yrangePV='pva://'+this.props.systemName+':xrange';
+   }
+   else{
+     yrangePV='pva://'+this.props.systemName+':yrange';
+   }
+
+   let xrangePV;
+   if (this.props.onlyY===true){
+      xrangePV='pva://'+this.props.systemName+':yrange';
+   }
+   else{
+     xrangePV='pva://'+this.props.systemName+':xrange';
+   }
+
 //   console.log(xrangePV)
   const {classes}= this.props;
 

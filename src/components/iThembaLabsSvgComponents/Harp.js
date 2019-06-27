@@ -31,9 +31,21 @@ const styles = theme => ({
 class Harp extends React.Component {
   constructor(props) {
     super(props);
+    let xrawScanPV;
+    if(typeof this.props.onlyY==='undefined'){
+      xrawScanPV='pva://'+this.props.systemName+':xraw.SCAN';
+    }
+    else{
+      xrawScanPV='pva://'+this.props.systemName+':yraw.SCAN';
+    }
+    let yrawScanPV;
+    if(typeof this.props.onlyX==='undefined'){
+      yrawScanPV='pva://'+this.props.systemName+':yraw.SCAN';
+    }
+    else{
+      yrawScanPV='pva://'+this.props.systemName+':xraw.SCAN';
+    }
 
-    const  xrawScanPV='pva://'+this.props.systemName+':xraw.SCAN';
-    const yrawScanPV='pva://'+this.props.systemName+':yraw.SCAN';
     const statusPV='pva://'+this.props.systemName+':get-statusText';
     const commandPV='pva://'+this.props.systemName+':put-outIn';
     const safetyOkPV='pva://'+this.props.systemName+':get-status.B1';
@@ -58,7 +70,7 @@ class Harp extends React.Component {
     pvs['movingPV']={initialized: false,pvname:movingPV,value:"",char_value:""}
     pvs['inPV']={initialized: false,pvname:inPV,value:"",char_value:""}
     pvs['outPV']={initialized: false,pvname:outPV,value:"",char_value:""}
-    this.state={pvs,
+    this.state={pvs,newCommandTrigger:0,
       'open':false
     }
     this.handleOnClick= this.handleOnClick.bind(this);
@@ -99,14 +111,15 @@ class Harp extends React.Component {
     //  console.log("pvname:", pvname);
     //  console.log("inputValue:", inputValue);
     //  console.log("initialized:", initialized);
+
     let pvs=this.state.pvs;
     if(name==='statusPV'){
       if(initialized==true)
       { if (inputValue==='In'){
-        this.props.handleHarpInserted(this.props.systemName);
+        this.props.handleHarpInsertedOrRemoved(true,this.props.systemName);
       }
       else{
-        this.props.handleHarpRemoved(this.props.systemName);
+        this.props.handleHarpInsertedOrRemoved(false,this.props.systemName);
       }
       //console.log(this.state.pvs['statusPV'].pvname+" has initialized")
     }
@@ -151,13 +164,14 @@ handleOnClick =device=> (event) => {
   //  console.log("In Harp: clicked "+device.toString());
   //this.props.handleOnClick(device);
   let pvs=this.state.pvs;
-  if (pvs['commandPV'].value==1){
+  if (pvs['inPV'].value==1){
     pvs['commandPV'].value=0;
     pvs['xrawScanPV'].value=0;
     pvs['yrawScanPV'].value=0;
     this.setState({pvs:pvs,
+      newCommandTrigger:this.state.newCommandTrigger+1,
       open:false});
-      this.props.handleHarpRemoved(this.props.systemName);
+      this.props.handleHarpInsertedOrRemoved(false,this.props.systemName);
     }
     else {
       this.setState({ open:true});
@@ -173,8 +187,9 @@ handleOnClick =device=> (event) => {
     pvs['yrawScanPV'].value=9;
 
     this.setState({ pvs:pvs,
+      newCommandTrigger:this.state.newCommandTrigger+1,
       open:false});
-      this.props.handleHarpInserted(this.props.systemName);
+      this.props.handleHarpInsertedOrRemoved(true,this.props.systemName);
 
     };
 
@@ -193,6 +208,7 @@ handleOnClick =device=> (event) => {
         pvs['xrawScanPV'].value=0;
         pvs['yrawScanPV'].value=0;
         this.setState({ pvs:pvs,
+          newCommandTrigger:this.state.newCommandTrigger+1,
           open:false});
 
 
@@ -334,7 +350,7 @@ handleOnClick =device=> (event) => {
                   pv={this.state.pvs['commandPV'].pvname}
 
 
-
+                  newValueTrigger={this.state.newCommandTrigger}
                   handleInputValue={this.handleInputValue('commandPV')}
                   outputValue=  {this.state.pvs['commandPV'].value}
 

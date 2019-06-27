@@ -155,8 +155,8 @@ class ControlTopHarpEx1 extends React.Component {
 
       textShadow={false}
       componentGradient={true}
-      handleHarpInserted={this.handleHarpInserted}
-      handleHarpRemoved={this.handleHarpRemoved}
+      handleHarpInsertedOrRemoved={this.props.handleHarpInsertedOrRemoved}
+
       />
       <FC
 
@@ -194,8 +194,8 @@ class ControlTopHarpEx1 extends React.Component {
 
         textShadow={false}
         componentGradient={true}
-        handleHarpInserted={this.handleHarpInserted}
-        handleHarpRemoved={this.handleHarpRemoved}
+        handleHarpInsertedOrRemoved={this.props.handleHarpInsertedOrRemoved}
+
         />
         <FC
 
@@ -250,8 +250,8 @@ class ControlTopHarpEx1 extends React.Component {
 
             textShadow={false}
             componentGradient={true}
-            handleHarpInserted={this.handleHarpInserted}
-            handleHarpRemoved={this.handleHarpRemoved}
+            handleHarpInsertedOrRemoved={this.props.handleHarpInsertedOrRemoved}
+
             />
         {/*    <SteererXYMagnet
             handleOnClick={this.handleOnClick}
@@ -499,8 +499,8 @@ class ControlTopHarpEx1 extends React.Component {
 
             textShadow={false}
             componentGradient={true}
-            handleHarpInserted={this.handleHarpInserted}
-            handleHarpRemoved={this.handleHarpRemoved}
+            handleHarpInsertedOrRemoved={this.props.handleHarpInsertedOrRemoved}
+
             />
             {/*}  <SvgElementTest
             handleOnClick={this.handleOnClick}

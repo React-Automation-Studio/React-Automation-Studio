@@ -10,7 +10,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 import { withStyles } from '@material-ui/core/styles';
 import ContextMenu from '../SystemComponents/ContextMenu';
-
+import Tooltip from '@material-ui/core/Tooltip';
 
 function Transition(props) {
   return <Slide direction="up" {...props} />;
@@ -261,8 +261,8 @@ handleOnClick =device=> (event) => {
 
 
           let yoffset=0;
-          let fcFault=false;
-          let fcFaultString="Faults:"
+          let harpFault=false;
+          let harpFaultString="Faults:"
           let alarmColor='#133C99';
           //      console.log("pvs['statusPV'].value",pvs['statusPV'].value)
           //      console.log("pvs['movingPV'].value",pvs['movingPV'].value)
@@ -287,25 +287,25 @@ handleOnClick =device=> (event) => {
 
           if (pvs['airPressurePV'].value==1){
             alarmColor='#FF8E53';
-            fcFault=true;
-            fcFaultString+=" [Air pressure]"
+            harpFault=true;
+            harpFaultString+=" [Air pressure]"
           }
           if (pvs['HvPV'].value==1){
             alarmColor='#FF8E53';
-            fcFault=true;
-            fcFaultString+=" [HV Bias]"
+            harpFault=true;
+            harpFaultString+=" [HV Bias]"
           }
 
           if (pvs['safetyAlarmPV'].value==1){
             alarmColor='#E20101';
-            fcFault=true;
-            fcFaultString+=" [Safety Alarm]"
+            harpFault=true;
+            harpFaultString+=" [Safety Alarm]"
 
           }
           if (pvs['safetyOkPV'].value==1){
             alarmColor='#E20101';
-            fcFault=true;
-            fcFaultString+=" [Safety Ok]"
+            harpFault=true;
+            harpFaultString+=" [Safety Ok]"
 
           }
 
@@ -383,106 +383,140 @@ handleOnClick =device=> (event) => {
                 </DialogActions>
               </Dialog>
               }
+              <Tooltip disableHoverListener={!harpFault} title={harpFaultString}>
+                <g  onClick={this.handleOnClick(this.props.systemName)}   onContextMenu={this.handleToggleContextMenu}
 
-              <g  onClick={this.handleOnClick(this.props.systemName)}   onContextMenu={this.handleToggleContextMenu}
-
-              >
-                <DataConnection
-                  pv={this.state.pvs['commandPV'].pvname}
+                >
+                  <DataConnection
+                    pv={this.state.pvs['commandPV'].pvname}
 
 
-                  newValueTrigger={this.state.newCommandTrigger}
-                  handleInputValue={this.handleInputValue('commandPV')}
-                  outputValue=  {this.state.pvs['commandPV'].value}
+                    newValueTrigger={this.state.newCommandTrigger}
+                    handleInputValue={this.handleInputValue('commandPV')}
+                    outputValue=  {this.state.pvs['commandPV'].value}
 
-                />
-                <DataConnection pv={this.state.pvs['statusPV'].pvname} handleInputValue={this.handleInputValue('statusPV')} />
-                <DataConnection pv={this.state.pvs['xrawScanPV'].pvname} handleInputValue={this.handleInputValue('xrawScanPV')} outputValue=  {this.state.pvs['xrawScanPV'].value} />
-                <DataConnection pv={this.state.pvs['yrawScanPV'].pvname} handleInputValue={this.handleInputValue('yrawScanPV')} outputValue=  {this.state.pvs['yrawScanPV'].value}/>
-                <DataConnection pv={this.state.pvs['safetyOkPV'].pvname} handleInputValue={this.handleInputValue('safetyOkPV')} />
-                <DataConnection pv={this.state.pvs['safetyAlarmPV'].pvname} handleInputValue={this.handleInputValue('safetyAlarmPV')} />
-                <DataConnection pv={this.state.pvs['airPressurePV'].pvname} handleInputValue={this.handleInputValue('airPressurePV')} />
-                <DataConnection pv={this.state.pvs['opActInPV'].pvname} handleInputValue={this.handleInputValue('opActInPV')} />
-                <DataConnection pv={this.state.pvs['HvPV'].pvname} handleInputValue={this.handleInputValue('HvPV')} />
-                <DataConnection pv={this.state.pvs['movingPV'].pvname} handleInputValue={this.handleInputValue('movingPV')} useStringValue={false} />
-                <DataConnection pv={this.state.pvs['inPV'].pvname} handleInputValue={this.handleInputValue('inPV')} />
-                <DataConnection pv={this.state.pvs['outPV'].pvname} handleInputValue={this.handleInputValue('outPV')} />
+                  />
+                  <DataConnection pv={this.state.pvs['statusPV'].pvname} handleInputValue={this.handleInputValue('statusPV')} />
+                  <DataConnection pv={this.state.pvs['xrawScanPV'].pvname} handleInputValue={this.handleInputValue('xrawScanPV')} outputValue=  {this.state.pvs['xrawScanPV'].value} />
+                  <DataConnection pv={this.state.pvs['yrawScanPV'].pvname} handleInputValue={this.handleInputValue('yrawScanPV')} outputValue=  {this.state.pvs['yrawScanPV'].value}/>
+                  <DataConnection pv={this.state.pvs['safetyOkPV'].pvname} handleInputValue={this.handleInputValue('safetyOkPV')} />
+                  <DataConnection pv={this.state.pvs['safetyAlarmPV'].pvname} handleInputValue={this.handleInputValue('safetyAlarmPV')} />
+                  <DataConnection pv={this.state.pvs['airPressurePV'].pvname} handleInputValue={this.handleInputValue('airPressurePV')} />
+                  <DataConnection pv={this.state.pvs['opActInPV'].pvname} handleInputValue={this.handleInputValue('opActInPV')} />
+                  <DataConnection pv={this.state.pvs['HvPV'].pvname} handleInputValue={this.handleInputValue('HvPV')} />
+                  <DataConnection pv={this.state.pvs['movingPV'].pvname} handleInputValue={this.handleInputValue('movingPV')} useStringValue={false} />
+                  <DataConnection pv={this.state.pvs['inPV'].pvname} handleInputValue={this.handleInputValue('inPV')} />
+                  <DataConnection pv={this.state.pvs['outPV'].pvname} handleInputValue={this.handleInputValue('outPV')} />
 
-                {/*  { this.props.usePvLabel===true && <DataConnection
+                  {/*  { this.props.usePvLabel===true && <DataConnection
 
                     pv={pv.toString()+".DESC"}
                     macros={macros}
                     handleInputValue={this.handleInputValueLabel}
 
-                  />    }
-                */}
-                {initialized===true &&
+                    />    }
+                  */}
+                  {initialized===true &&
 
-                  <g>
-
-
+                    <g>
 
 
-                    <linearGradient id={this.props.systemName+'Harp-gradient'} gradientTransform="rotate(0)">
-                      <stop offset="0%" stopColor='grey' />
-                      <stop offset="100%" stopColor={alarmColor} />
-                    </linearGradient>
-                    <defs>
-                      <filter id={this.props.systemName+"HarpShadow"} x="0" y="0" width="600%" height="500%">
-                        <feOffset result="offOut" in="SourceGraphic" dx="2" dy="2" />
-                        <feColorMatrix result="matrixOut" in="offOut" type="matrix"
-                        values="0.2 0 0 0 0 0 0.2 0 0 0 0 0 0.2 0 0 0 0 0 1 0" />
-                        <feGaussianBlur result="blurOut" in="matrixOut" stdDeviation="1" />
-                        <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
-                      </filter>
-                    </defs>
-                    <g transform={'translate('+this.props.cx+','+this.props.cy+')'}
 
 
-                    >
-                      {yoffset!==0&&
-                        <g  transform='scale (0.3996 1.25)'>
-                          <rect width='36' height='36' fill={alarmColor} x={-18} y={ +yoffset-17.5} transform='rotate(15,0,0) ' fillOpacity="0"/>
-                          <g
-                            fill={this.props.componentGradient===true?'url(#'+this.props.systemName+'Harp-gradient)':alarmColor}
-                            filter={this.props.componentShadow===true?"url(#"+this.props.systemName+"HarpShadow)":"" }
-                            transform='rotate(15,0,0) '
-                          >
-                            <rect width="3" height="36" x={-9}  y={ +yoffset-17.5} />"
-                            <rect width="3" height="36" x={-3}  y={ +yoffset-17.5} />"
-                            <rect width="3" height="36" x={+3}  y={ +yoffset-17.5} />"
-                            <rect width="3" height="36" x={9}   y={ +yoffset-17.5} />"
-                            <rect width="36" height="3" x={-18}  y={ +yoffset+9} />"
-                            <rect width="36" height="3" x={-18}  y={ +yoffset-9} />"
-                            <rect width="36" height="3" x={-18}  y={ +yoffset-3} />"
-                            <rect width="36" height="3" x={-18}  y={ +yoffset+3} />"
+                      <linearGradient id={this.props.systemName+'Harp-gradient'} gradientTransform="rotate(0)">
+                        <stop offset="0%" stopColor='grey' />
+                        <stop offset="100%" stopColor={alarmColor} />
+                      </linearGradient>
+                      <defs>
+                        <filter id={this.props.systemName+"HarpShadow"} x="0" y="0" width="600%" height="500%">
+                          <feOffset result="offOut" in="SourceGraphic" dx="2" dy="2" />
+                          <feColorMatrix result="matrixOut" in="offOut" type="matrix"
+                          values="0.2 0 0 0 0 0 0.2 0 0 0 0 0 0.2 0 0 0 0 0 1 0" />
+                          <feGaussianBlur result="blurOut" in="matrixOut" stdDeviation="1" />
+                          <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+                        </filter>
+                      </defs>
+                      <g transform={'translate('+this.props.cx+','+this.props.cy+')'}
+
+
+                      >
+                        {yoffset!==0&&
+                          <g  transform='scale (0.3996 1.25)'>
+                            <rect width='36' height='36' fill={alarmColor} x={-18} y={ +yoffset-17.5} transform='rotate(15,0,0) ' fillOpacity="0"/>
+                            <g
+                              fill={this.props.componentGradient===true?'url(#'+this.props.systemName+'Harp-gradient)':alarmColor}
+                              filter={this.props.componentShadow===true?"url(#"+this.props.systemName+"HarpShadow)":"" }
+                              transform='rotate(15,0,0) '
+                            >
+                              <rect width="3" height="36" x={-9}  y={ +yoffset-17.5} />"
+                              <rect width="3" height="36" x={-3}  y={ +yoffset-17.5} />"
+                              <rect width="3" height="36" x={+3}  y={ +yoffset-17.5} />"
+                              <rect width="3" height="36" x={9}   y={ +yoffset-17.5} />"
+                              <rect width="36" height="3" x={-18}  y={ +yoffset+9} />"
+                              <rect width="36" height="3" x={-18}  y={ +yoffset-9} />"
+                              <rect width="36" height="3" x={-18}  y={ +yoffset-3} />"
+                              <rect width="36" height="3" x={-18}  y={ +yoffset+3} />"
+                            </g>
                           </g>
-                        </g>
-                      }
-                      {yoffset===0&&
-                        <g  transform='scale (0.3996 1.25)'>
-                          <rect width='36' height='36' fill={alarmColor} x={-18} y={ +yoffset-17.5} transform='rotate(15,0,0) ' fillOpacity="0"/>
-                          <g
-                            fill={this.props.componentGradient===true?'url(#'+this.props.systemName+'Harp-gradient)':alarmColor}
-                            filter={this.props.componentShadow===true?"url(#"+this.props.systemName+"HarpShadow)":"" }
-                            transform='rotate(15,0,0) '
-                          >
-                            <rect width="3" height="12" x={-9}  y={ +yoffset+6.5} />"
-                            <rect width="3" height="14" x={-3}  y={ +yoffset+4.5} />"
-                            <rect width="3" height="16" x={+3}  y={ +yoffset+2.5} />"
-                            <rect width="3" height="16" x={-9}  y={ +yoffset-17.5} />"
-                            <rect width="3" height="14" x={-3}  y={ +yoffset-17.5} />"
-                            <rect width="3" height="16" x={+3}  y={ +yoffset-17.5} />"
-                            <rect width="3" height="36" x={9}   y={ +yoffset-17.5} />"
-                            <rect width="36" height="3" x={-18}  y={ +yoffset+9} />"
-                            <rect width="36" height="3" x={-18}  y={ +yoffset-9} />"
-                            <rect width="18" height="3" x={0}  y={ +yoffset-3} />"
-                            <rect width="18" height="3" x={0}  y={ +yoffset+3} />"
+                        }
+                        {yoffset===0&&
+                          <g  transform='scale (0.3996 1.25)'>
+                            <rect width='36' height='36' fill={alarmColor} x={-18} y={ +yoffset-17.5} transform='rotate(15,0,0) ' fillOpacity="0"/>
+                            <g
+                              fill={this.props.componentGradient===true?'url(#'+this.props.systemName+'Harp-gradient)':alarmColor}
+                              filter={this.props.componentShadow===true?"url(#"+this.props.systemName+"HarpShadow)":"" }
+                              transform='rotate(15,0,0) '
+                            >
+                              <rect width="3" height="12" x={-9}  y={ +yoffset+6.5} />"
+                              <rect width="3" height="14" x={-3}  y={ +yoffset+4.5} />"
+                              <rect width="3" height="16" x={+3}  y={ +yoffset+2.5} />"
+                              <rect width="3" height="16" x={-9}  y={ +yoffset-17.5} />"
+                              <rect width="3" height="14" x={-3}  y={ +yoffset-17.5} />"
+                              <rect width="3" height="16" x={+3}  y={ +yoffset-17.5} />"
+                              <rect width="3" height="36" x={9}   y={ +yoffset-17.5} />"
+                              <rect width="36" height="3" x={-18}  y={ +yoffset+9} />"
+                              <rect width="36" height="3" x={-18}  y={ +yoffset-9} />"
+                              <rect width="18" height="3" x={0}  y={ +yoffset-3} />"
+                              <rect width="18" height="3" x={0}  y={ +yoffset+3} />"
+                            </g>
                           </g>
-                        </g>
-                      }
+                        }
 
-                      <text className={classes.textHarp}
+                        <text className={classes.textHarp}
+                          x={0}
+                          y={+yoffset-40}
+                          textAnchor='middle'
+                          filter={this.props.textShadow===true?"url(#"+this.props.systemName+"HarpShadow)":"" }
+                        >
+                          {this.props.usePvLabel===true? this.state['label']:this.props.label}
+                        </text>
+                      </g>
+                    </g>
+                  }
+                  {(initialized===false||initialized==='undefined') &&
+                    <g transform={'translate('+this.props.cx+','+this.props.cy+')'}>
+                      <linearGradient id={this.props.systemName+'Harp-gradient'} gradientTransform="rotate(0)">
+                        <stop offset="0%" stopOpacity="0" />
+                        <stop offset="90%" stopColor={'grey'} />
+                      </linearGradient>
+                      <g  transform='scale (0.3996 1.25)'>
+                        <g
+                          fill={'grey'}
+                          filter={this.props.componentShadow===true?"url(#"+this.props.systemName+"HarpShadow)":"" }
+                          transform='rotate(15,0,0) '
+                        >
+                          <rect width="3" height="36" x={-9}  y={ +yoffset-17.5} />"
+                          <rect width="3" height="36" x={-3}  y={ +yoffset-17.5} />"
+                          <rect width="3" height="36" x={+3}  y={ +yoffset-17.5} />"
+                          <rect width="3" height="36" x={9}   y={ +yoffset-17.5} />"
+                          <rect width="36" height="3" x={-18}  y={ +yoffset+9} />"
+                          <rect width="36" height="3" x={-18}  y={ +yoffset-9} />"
+                          <rect width="36" height="3" x={-18}  y={ +yoffset-3} />"
+                          <rect width="36" height="3" x={-18}  y={ +yoffset+3} />"
+                        </g>
+                      </g>
+
+                      <text className={classes.textHarpOff}
                         x={0}
                         y={+yoffset-40}
                         textAnchor='middle'
@@ -491,43 +525,10 @@ handleOnClick =device=> (event) => {
                         {this.props.usePvLabel===true? this.state['label']:this.props.label}
                       </text>
                     </g>
-                  </g>
-                }
-                {(initialized===false||initialized==='undefined') &&
-                  <g transform={'translate('+this.props.cx+','+this.props.cy+')'}>
-                    <linearGradient id={this.props.systemName+'Harp-gradient'} gradientTransform="rotate(0)">
-                      <stop offset="0%" stopOpacity="0" />
-                      <stop offset="90%" stopColor={'grey'} />
-                    </linearGradient>
-                    <g  transform='scale (0.3996 1.25)'>
-                      <g
-                        fill={'grey'}
-                        filter={this.props.componentShadow===true?"url(#"+this.props.systemName+"HarpShadow)":"" }
-                        transform='rotate(15,0,0) '
-                      >
-                        <rect width="3" height="36" x={-9}  y={ +yoffset-17.5} />"
-                        <rect width="3" height="36" x={-3}  y={ +yoffset-17.5} />"
-                        <rect width="3" height="36" x={+3}  y={ +yoffset-17.5} />"
-                        <rect width="3" height="36" x={9}   y={ +yoffset-17.5} />"
-                        <rect width="36" height="3" x={-18}  y={ +yoffset+9} />"
-                        <rect width="36" height="3" x={-18}  y={ +yoffset-9} />"
-                        <rect width="36" height="3" x={-18}  y={ +yoffset-3} />"
-                        <rect width="36" height="3" x={-18}  y={ +yoffset+3} />"
-                      </g>
-                    </g>
-
-                    <text className={classes.textHarpOff}
-                      x={0}
-                      y={+yoffset-40}
-                      textAnchor='middle'
-                      filter={this.props.textShadow===true?"url(#"+this.props.systemName+"HarpShadow)":"" }
-                    >
-                      {this.props.usePvLabel===true? this.state['label']:this.props.label}
-                    </text>
-                  </g>
-                }
+                  }
+                </g>
+              </Tooltip>
               </g>
-            </g>
 
 
 

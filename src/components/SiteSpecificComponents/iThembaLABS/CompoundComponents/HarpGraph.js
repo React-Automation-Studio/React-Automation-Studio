@@ -463,7 +463,9 @@ class HarpGraph extends React.Component {
         <FlexibleXYPlot  yDomain={[0, ymax]}margin={{left: 60}} onWheel={this.handleWheel} onClick={this.handleOnClick}>
 
           <HorizontalGridLines style={{stroke: theme.palette.type==='dark'?'#0097a7':'#B7E9ED'}} />
+
           <VerticalGridLines tickValues={wireSpacing} style={{stroke: theme.palette.type==='dark'?'#0097a7':'#B7E9ED'}} />
+          <VerticalGridLines tickValues={[0]} style={{stroke: theme.palette.type==='dark'?'white':'grey'}} />
           <XAxis
             title="mm"
             color="white"
@@ -488,7 +490,7 @@ class HarpGraph extends React.Component {
             color='#e89b02'
             style={{position: 'absolute', right: '50px', top: '10px',
               color:theme.palette.type==='dark'?'#ccccce':'#dbdbe0',strokeWidth:0.2}}
-            orientation="horizontal" items={[{title:legendTitle,color:theme.palette.type==='dark'?'#e89b02':'#80deea',stroke:theme.palette.type==='dark'?'#80deea':'#dbdbe0',fontSize:16}]} />}
+            orientation="horizontal" items={[{title:legendTitle,color:theme.palette.type==='dark'?'#e89b02':'#80deea',stroke:theme.palette.type==='dark'?'#80deea':'#dbdbe0',fontSize:24}]} />}
         </FlexibleXYPlot>
 
       </React.Fragment>

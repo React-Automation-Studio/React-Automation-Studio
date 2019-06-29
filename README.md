@@ -44,23 +44,53 @@ In future boiler plate repositories will be created that pull in the packages fr
 
 
 
-# 0 Automated installation of Automation Studio
+# 1 Automated installation of Automation Studio
+The development and production versions of Automation Studio have been containerized with Docker. 
 
-1st clone the repo
+It is advised to only use the containerized version although a manual no docker install is also explained below.
 
 
-2nd setup enviroment variables as in 7.1 and 7.2
 
-In Automation Studio installation folder
+Prerequisites: git , latest version of docker-ce and docker compose
+
+To install docker-ce follow:
+
+https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04
+
+And docker-compose:
+
+https://docs.docker.com/compose/install/
+
+
+1st clone this repo
+
+
+To install the efficient production version:
+
+In Automation Studio installation folder run:
 ```bash
-npm install
-npm run build
-npm run styleguidebuild
-docker-compose build
+touch .env
 docker-compose up
 ```
+This installation process of all the docker images may take awhile (20-30min) the first time. There after it is fast as all the repeated build and up commands uses cahced installations. The longest process is the installation of the node modules. Do not be detered by the red warnings.
+
+This default installation will serve the  app at http://127.0.0.1:9000 and the styleguide at http://127.0.0.1:6060.
 
 
+To launch the development enviroment make sure the production version is stopped,and the run :
+```bash
+docker-compose -f docker-compose-dev.yml up
+```
+This will launch the pvserver, demo IOC ,styleguide and the React Development enviroment. As with the production version the first run may take awhile. There after it is fast as all the repeated build and up commands uses cahced installations. 
+
+The react development environment app will be serverd on http://127.0.0.1:3000 and the styleguide at http://127.0.0.1:6060.
+
+The source can then be edited using your favourite editor like Atom, when the file is saved the project automaically recompiles and the webpage is refreshed. It is recommended to only wrok in the
+/automation-studio/src/components/staging/Example folder.
+
+Bug fixes and contributions can be submitted via pull requests.
+
+To change the URL, ports, and enable user authentication See section 7.1 and 7.2
 
 # 1 Semi Automated installation of Automation Studio
 
@@ -517,19 +547,24 @@ Inside the Automation Studio installation folder:
 ```bash
 ls .env
 ```
-If it exist edit .env file otherwise copy example.env to .env and set
+If it exists edit the .env file, otherwise copy example.env to .env and set
 
 ```bash
 
-REACT_APP_PyEpicsServerURL= https://example.com:5000/test
+REACT_APP_PyEpicsServerBASEURL=https://customURL
+REACT_APP_PyEpicsServerAuthoriseURL=https://customURL:5000/
+REACT_APP_AutomationStudioStyleGuideBuildURL=http://customURL:6060
+REACT_APP_EnableLogin=false
+REACT_APP_FrontendServerPORT=9000
+REACT_APP_PyEpicsServerPORT=5000
+REACT_APP_PyEpicsServerStyleguidePORT=5001
+REACT_APP_StyleguideServerPORT=6060
+REACT_APP_EnableLoginStyleguide=false
+REACT_APP_PyEpicsServerNamespace=test
 ```
 to https and the correct hostname
 
-Then set :
-```bash
 
-REACT_APP_AutomationStudioStyleGuideBuildURL=https://example.com:6060
-```
 
 The certificates neeed to be placed in the the Automation Studio installation folder.
 
@@ -542,4 +577,4 @@ The pvServer and node development environment, will need to be restarted, and th
 
 Both the pvServer and the node clientserver will automatically detect the change.
 
-The built client will be then served https://example.com:5000/ or https://example.com:9000/ and the dev client at https://example.com:3000/
+The built client will be then served https://customURL:5000/ or https://customURL:9000/ and the dev client at http://127.0.0.1:3000/ or http://hostip:3000/

@@ -4,9 +4,7 @@ ENV EPICS_BASE=/epics/base/
 
 WORKDIR /epics
 
-RUN apt-get update
-
-RUN apt-get install -y wget autoconf libtool check patch build-essential libreadline-gplv2-dev re2c libxml2-dev tmux
+RUN apt-get update && apt-get install -y wget autoconf libtool check patch build-essential libreadline-gplv2-dev re2c libxml2-dev tmux
 
 RUN wget https://epics.anl.gov/download/base/base-3.15.6.tar.gz
 RUN tar -xvf base-3.15.6.tar.gz

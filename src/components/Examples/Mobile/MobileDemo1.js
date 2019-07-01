@@ -202,13 +202,13 @@ return (
             </Grid>
             <Grid item>
               <Grid container direction="row" item justify="space-evenly" spacing={2} alignItems="stretch">
-                <Grid item xs={6} sm={4} lg={4} >
+                <Grid item xs={6} sm={4} lg={3} >
 
                   <Gauge  pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}   usePvLabel={true} usePrecision={true} prec={3} usePvMinMax={true} />
 
                 </Grid>
 
-                <Grid item xs={2} sm={4}  lg={4} >
+                <Grid item xs={2} sm={4}  lg={5} >
                   <Grid container direction="column" item justify="space-evenly" spacing={2} alignItems="stretch">
                     <Grid item>
                       <StyledIconIndicator  pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}} onColor='primary' offColor='default' label={'On'} labelPlacement={'end'}/>

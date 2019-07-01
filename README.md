@@ -44,39 +44,71 @@ In future boiler plate repositories will be created that pull in the packages fr
 
 
 
-# 0 Automated installation of Automation Studio
+# 1 Automated installation of Automation Studio
+The development and production versions of Automation Studio have been containerized with Docker. 
 
-1st clone the repo
+It is advised to only use the containerized version although a manual no docker install is also explained below.
 
 
-2nd setup enviroment variables as in 7.1 and 7.2
 
-In Automation Studio installation folder
+Prerequisites: git , latest version of docker-ce and docker compose
+
+To install docker-ce follow:
+
+https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04
+
+And docker-compose:
+
+https://docs.docker.com/compose/install/
+
+
+1st clone this repo
+
+
+To install the efficient production version:
+
+In Automation Studio installation folder run:
 ```bash
-npm install
-npm run build
-npm run styleguidebuild
-docker-compose build
+touch .env
 docker-compose up
 ```
+This installation process of all the docker images may take awhile (20-30min) the first time. There after it is fast as all the repeated build and up commands uses cahced installations. The longest process is the installation of the node modules. Do not be detered by the red warnings.
+
+This default installation will serve the  app at http://127.0.0.1:9000 and the styleguide at http://127.0.0.1:6060.
 
 
+To launch the development enviroment make sure the production version is stopped,and the run :
+```bash
+docker-compose -f docker-compose-dev.yml up
+```
+This will launch the pvserver, demo IOC ,styleguide and the React Development enviroment. As with the production version the first run may take awhile. There after it is fast as all the repeated build and up commands uses cahced installations. 
 
-# 1 Semi Automated installation of Automation Studio
+The react development environment app will be serverd on http://127.0.0.1:3000 and the styleguide at http://127.0.0.1:6060.
 
-This is still in testing mode. use manual installation for now
+The source can then be edited using your favourite editor like Atom, when the file is saved the project automaically recompiles and the webpage is refreshed. It is recommended to only wrok in the
+/automation-studio/src/components/staging/Example folder.
+
+Bug fixes and contributions can be submitted via pull requests.
+
+To change the URL, ports, and enable user authentication See section 6.1 and 6.2
+
+# 2 Semi Automated installation of Automation Studio
+
+This only uses the dockerimages and nothe docker-compose file.
+
 
 1st clone the repo
 
-## 1.1 Install npm modules
+## 2.1 Install npm modules
 
 In Automation Studio installation folder
 ```bash
+touch .env
 npm install
 npm run build
 ```
 
-## 1.2 pvServer Installation
+## 2.2 pvServer Installation
 
 Make sure docker is installed:
 
@@ -97,7 +129,7 @@ To run:
 ```
 
 
-## 1.3 demoIOC Installation
+## 2.3 demoIOC Installation
 
 Make sure docker is installed:
 
@@ -126,7 +158,7 @@ Or in foreground:
 ```
 
 
-## 1.4 production frontend Installation
+## 2.4 production frontend Installation
 
 Make sure docker is installed:
 
@@ -147,7 +179,7 @@ To run:
 ```
 
 
-## 1.5 production Styleguide Installation
+## 2.5 production Styleguide Installation
 
 Make sure docker is installed:
 
@@ -170,21 +202,11 @@ To run:
 
 
 
-Still to come...
-
-# 2 Automated Dev environment
-
-Still to come...
-
-# 3 Automated Production deployment
-
-Still to come...
-
-# 4 Manual Installation
+# 3 Manual Installation
 
 Clone this repo.
 
-##4.1 Manual Installation of EPICS
+##3.1 Manual Installation of EPICS
 
 The system comes with an EPICS demo IOC which runs on a custom port 8001, so as not to interfere with the normal EPICS network,
 
@@ -192,7 +214,7 @@ If the demo IOC is not required then at least EPICS base installation needs to e
 
 If you wish to customize the location of EPICS installation then the following lines need to be edited to pointed to your install location, otherwise add as so to the end of your to your **~/.bashrc**
 
-### 4.1.1 Setup the EPICS environment variables
+### 3.1.1 Setup the EPICS environment variables
 
 ```bash
 
@@ -214,7 +236,7 @@ The default is to place the EPICS installation inside the epics subfolder for th
 
 It is also necessary then to create a symbolic link to /epics , otherwise the configure RELEASE files need to be updated manualy
 
-### 4.2.2.1 Install dependencies
+### 3.1.1.1 Install dependencies
 
 Run:
 
@@ -222,7 +244,7 @@ Run:
 sudo apt-get install autoconf libtool check patch build-essential libreadline-gplv2-dev re2c libxml2-dev  tmux curl
 ```
 
-### 4.2.2.2 Download and install EPICS base
+### 3.1.1.2 Download and install EPICS base
 
 Inside the epics subfolder, run:  
 
@@ -253,7 +275,7 @@ check to see if your epics files exist
 cd back to Automation Studio install path and cd to epics/
 
 
-### 4.2.2.3 Download and install Synapps
+### 3.1.1.3 Download and install Synapps
 
 If you are installing the demo IOC the n you must install Synapps
 
@@ -289,7 +311,7 @@ make
 
 ---
 
-## 4.2 Install node V10.15.0
+## 3.2 Install node V10.15.0
 ```bash
  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
  source ~/.bashrc
@@ -298,7 +320,7 @@ make
  node --version
 ```
 
-## 4.3 Install reactJS node modules
+## 3.3 Install reactJS node modules
 
 cd to automation studio install directory
 
@@ -311,7 +333,7 @@ npm install
 This may take a while depending on you internet connection speed
 
 
-## 4.4 Install Python 3.7.3
+## 3.4 Install Python 3.7.3
 
 Install dependencies:
 
@@ -364,13 +386,13 @@ On beagle bone with debian jessie, need to install a newer openssl:
 https://help.dreamhost.com/hc/en-us/articles/360001435926-Installing-OpenSSL-locally-under-your-username
 
 
-# 5 Manual Dev environment
+# 4 Manual Dev environment
 
 Open up the terminal.
 
 cd to automation studio install location.
 
-## 5.1 Launch the pvServer
+## 4.1 Launch the pvServer
 
 Initially:
 ```bash
@@ -381,7 +403,7 @@ Then
 ```bash
 python3 pvServer
 ```
-## 5.2 Launch the demo IOC
+## 4.2 Launch the demo IOC
 
 In a new terminal:
 
@@ -393,7 +415,7 @@ cd epics/testIOC/iocBoot/ioctestIOC/
 ./st.cmd
 ```
 
-## 5.3 Launch the dev ReactJS Environment
+## 4.3 Launch the dev ReactJS Environment
 
 In a new terminal:
 
@@ -406,7 +428,7 @@ npm start
 open at http://locahost:3000
 
 
-## 5.4 Optionally launch the dev styleguide
+## 4.4 Optionally launch the dev styleguide
 
 In a new terminal:
 
@@ -422,7 +444,7 @@ Note: if login ability has been enable as in 7.1, then the styleguide cannot con
 A work around will exist in future.
 
 
-## 5.5 Or launch the production styleguide
+## 4.5 Or launch the production styleguide
 
 In a new terminal:
 
@@ -439,10 +461,10 @@ Note: if login ability has been enable as in 7.1, then the styleguide cannot con
 A work around will exist in future.
 
 
-# 6 Manual Production deployment
-6.1,6.2 and 6.5 are the same as 5.1,5.2 and 5.5 except for 5.3.and 5.4
+# 5 Manual Production deployment
+5.1,5.2 and 5.5 are the same as 4.1,4.2 and 4.5 except for 4.3.and 4.4
 
-## 6.3 Launch the dev ReactJS Environment
+## 5.3 Launch the dev ReactJS Environment
 
 In a new terminal:
 
@@ -465,7 +487,7 @@ Open at http://locahost:9000 or replace localhost with host's hostname or ip
 Currently the node express is the preferred installation as the PWA installs correctly.
 
 
-#7 Enabling user login, authentication and https
+#6 Enabling user login, authentication and https
 
 The system has ability to enable regular user authentication and login ability.
 With this release the login authorisation feature is quite open for customization. The authorisation is handled in python backend and the authorisation procedure can easliy be modifed to use another authisation procedure.
@@ -473,7 +495,7 @@ With this release the login authorisation feature is quite open for customizatio
 The login procedure is as follows: Fisrtly the username and password needs to manuallly declared in the  pvServer/userAuthentication/USERS file. Then from the login page the user enters the email and password on the client and then the authorisation procedure compares the login details with that declared in the pvServer/userAuthentication/USERS file.
 If authorisation is confirmed then the an encrypted JWT token is returned, which will keep the user logged in until they log out or the server invalidates the JWT. In this case the user will redirected to the login page
 
-##7.1 Enabling login and authentication
+##6.1 Enabling login and authentication
 
 First cd to Automation Studio installation directory
 
@@ -507,7 +529,7 @@ REACT_APP_EnableLogin=true
 Make sure that the other parameters in the file are correct. Or see 7.2:
 
 
-##7.2 Enabling https
+##6.2 Enabling https
 Firstly the system is by default configured to serve the socket connections and client webserver over http on locahost or on the hostanmes ip.
 
 To enable secure login and installation as a PWA, a certificate and key needs to be installed that is bound to your hostname and the .env environment variables need to be edited to serve overs https and via the correct hostname.
@@ -517,19 +539,24 @@ Inside the Automation Studio installation folder:
 ```bash
 ls .env
 ```
-If it exist edit .env file otherwise copy example.env to .env and set
+If it exists edit the .env file, otherwise copy example.env to .env and set
 
 ```bash
 
-REACT_APP_PyEpicsServerURL= https://example.com:5000/test
+REACT_APP_PyEpicsServerBASEURL=https://customURL
+REACT_APP_PyEpicsServerAuthoriseURL=https://customURL:5000/
+REACT_APP_AutomationStudioStyleGuideBuildURL=http://customURL:6060
+REACT_APP_EnableLogin=false
+REACT_APP_FrontendServerPORT=9000
+REACT_APP_PyEpicsServerPORT=5000
+REACT_APP_PyEpicsServerStyleguidePORT=5001
+REACT_APP_StyleguideServerPORT=6060
+REACT_APP_EnableLoginStyleguide=false
+REACT_APP_PyEpicsServerNamespace=test
 ```
 to https and the correct hostname
 
-Then set :
-```bash
 
-REACT_APP_AutomationStudioStyleGuideBuildURL=https://example.com:6060
-```
 
 The certificates neeed to be placed in the the Automation Studio installation folder.
 
@@ -542,4 +569,4 @@ The pvServer and node development environment, will need to be restarted, and th
 
 Both the pvServer and the node clientserver will automatically detect the change.
 
-The built client will be then served https://example.com:5000/ or https://example.com:9000/ and the dev client at https://example.com:3000/
+The built client will be then served https://customURL:5000/ or https://customURL:9000/ and the dev client at http://127.0.0.1:3000/ or http://hostip:3000/

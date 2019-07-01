@@ -11,6 +11,7 @@
 /coverage
 
 # production
+!/build/.gitkeep
 /build/*
 
 /venv
@@ -85,8 +86,12 @@ epics/testIOC/bin/
 epics/*.gz
 
 __pycache__/
-/styleguide/build/
-/styleguide/
+
+!/styleguide
+/styleguide/*
+
+!/styleguide/build/
+/styleguide/build/*
 
 .env
 pvServer/userAuthentication/SECRET_PWD_KEY

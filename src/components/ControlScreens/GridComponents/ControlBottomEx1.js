@@ -44,13 +44,13 @@ class ControlBottomEx1 extends React.Component {
 
 
           <div style={{height:'60px','width':'100px'}}>
-            <ToggleButton pv='pva://testIOC:Harp1:InOut'   label={"Harp1"} labelPlacement={"top"}/>
+            <ToggleButton pv='pva://testIOC:Harp1old:InOut'   label={"Harp1"} labelPlacement={"top"}/>
           </div>
           <div style={{height:'60px','width':'100px'}}>
-            <ToggleButton pv='pva://testIOC:Harp2:InOut'  label={"Harp2"} labelPlacement={"top"}/>
+            <ToggleButton pv='pva://testIOC:Harp2old:InOut'  label={"Harp2"} labelPlacement={"top"}/>
           </div>
           <div style={{height:'60px','width':'100px'}}>
-            <ToggleButton pv='pva://testIOC:Harp3:InOut'  label={"Harp3"} labelPlacement={"top"}/>
+            <ToggleButton pv='pva://testIOC:Harp3old:InOut'  label={"Harp3"} labelPlacement={"top"}/>
           </div>
         </Grid>
         <Grid item xs={3} sm={2}>
@@ -66,7 +66,7 @@ class ControlBottomEx1 extends React.Component {
             <ToggleButton pv='pva://testIOC:FC3:InOut'  label={"FC3"} labelPlacement={"top"}/>
           </div>
         </Grid>
-        
+
         <Grid item xs={3} sm={2}>
 
 

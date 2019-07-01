@@ -1,4 +1,4 @@
-version: '3.2'
+version: '3.4'
 services:
   frontendserver:
     build:
@@ -8,6 +8,7 @@ services:
                 - https_proxy
                 - no_proxy
       dockerfile: docker/frontendserver/Dockerfile
+      network: host
     volumes:
       - /frontendserverApp/build
       - AsNodeModules:/frontendserverApp/node_modules

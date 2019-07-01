@@ -120,7 +120,7 @@ class ControlToptEx1 extends React.Component {
             cx={200}
             cy={100}
             pv={'pva://$(device):$(pv_suffix)'}
-            macros={{'$(device)':'testIOC:Harp1','$(pv_suffix)':'InOut'}}
+            macros={{'$(device)':'testIOC:Harp1old','$(pv_suffix)':'InOut'}}
             usePvUnits={true}
             usePvLabel={false}
             alarmSensitive={true}
@@ -162,7 +162,7 @@ class ControlToptEx1 extends React.Component {
             cx={350}
             cy={100}
             pv={'pva://$(device):$(pv_suffix)'}
-            macros={{'$(device)':'testIOC:Harp2','$(pv_suffix)':'InOut'}}
+            macros={{'$(device)':'testIOC:Harp2old','$(pv_suffix)':'InOut'}}
             usePvUnits={true}
             usePvLabel={false}
             alarmSensitive={true}
@@ -219,7 +219,7 @@ class ControlToptEx1 extends React.Component {
             cx={500}
             cy={100}
             pv={'pva://$(device):$(pv_suffix)'}
-            macros={{'$(device)':'testIOC:Harp3','$(pv_suffix)':'InOut'}}
+            macros={{'$(device)':'testIOC:Harp3old','$(pv_suffix)':'InOut'}}
             usePvUnits={true}
             usePvLabel={false}
             alarmSensitive={true}

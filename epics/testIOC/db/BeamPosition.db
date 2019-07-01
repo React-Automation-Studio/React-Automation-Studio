@@ -29,5 +29,5 @@ record(calcout, "$(device):BeamlineE:BeamOnOffCalc")
         field(INPB, "$(device):FC4:InOut")
         field(CALC, "B==0?A:0")
         field(OUT,"$(device):BeamlineE:BeamOn PP")
-        
+
 }

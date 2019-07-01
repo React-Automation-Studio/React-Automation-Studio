@@ -105,7 +105,7 @@ class EpicsDemos extends React.Component {
           {value === 0 &&
 
               <MobileDemo2 nosidebar/>
-          
+
           }
 
           {value === 1 && <TabContainer key='TabContainer1'>
@@ -181,7 +181,7 @@ class EpicsDemos extends React.Component {
       <Grid container spacing={3}>
         <Grid item xs={12} sm={12} >
           <div style={{height:'25vh'}}>
-            <GraphMultiplePVs  pvs={['pva://testIOC:test4','pva://testIOC:test5'] } legend={['Sine Wave ','Amplitude r']} lineColor={[this.props.theme.palette.secondary.main,lime['400']]}/>
+            <GraphMultiplePVs  pvs={['pva://testIOC:test4','pva://testIOC:test5'] } legend={['Sine Wave ','Amplitude']} lineColor={[this.props.theme.palette.secondary.main,lime['400']]}/>
           </div>
 
         </Grid>

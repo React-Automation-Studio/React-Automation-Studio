@@ -129,7 +129,7 @@ class ContextMenu extends React.Component {
         listItems.push(
 
 
-          <React.Fragment key={pvs[i].pvname.toString()}>
+          <React.Fragment key={pvs[i].pvname.toString()+i}>
             <MenuItem onClick={(event)=>this.handleMenuItemSelect(event,index)} selected={index === this.state.menuSelectedIndex} >
               <ListItemIcon>
                 <React.Fragment>

@@ -47,17 +47,26 @@ class Harp extends React.Component {
     else{
       yrawScanPV='pva://'+this.props.systemName+':xraw.SCAN';
     }
+    let actuatorName;
+    if (typeof this.props.actuatorName==='undefined'){
+      actuatorName=this.props.systemName;
 
-    const statusPV='pva://'+this.props.systemName+':get-statusText';
-    const commandPV='pva://'+this.props.systemName+':put-outIn';
-    const safetyOkPV='pva://'+this.props.systemName+':get-status.B1';
-    const safetyAlarmPV='pva://'+this.props.systemName+':get-status.B0';
-    const airPressurePV='pva://'+this.props.systemName+':get-status.B2';
-    const HvPV='pva://'+this.props.systemName+':get-status.B3';
-    const opActInPV='pva://'+this.props.systemName+':get-status.B4';
-    const movingPV='pva://'+this.props.systemName+':get-status.B5';
-    const inPV='pva://'+this.props.systemName+':get-status.B6';
-    const outPV='pva://'+this.props.systemName+':get-status.B7';
+    }
+    else{
+      actuatorName=this.props.actuatorName;
+    }
+
+    //console.log(actuatorName)
+    const statusPV='pva://'+actuatorName+':get-statusText';
+    const commandPV='pva://'+actuatorName+':put-outIn';
+    const safetyOkPV='pva://'+actuatorName+':get-status.B1';
+    const safetyAlarmPV='pva://'+actuatorName+':get-status.B0';
+    const airPressurePV='pva://'+actuatorName+':get-status.B2';
+    const HvPV='pva://'+actuatorName+':get-status.B3';
+    const opActInPV='pva://'+actuatorName+':get-status.B4';
+    const movingPV='pva://'+actuatorName+':get-status.B5';
+    const inPV='pva://'+actuatorName+':get-status.B6';
+    const outPV='pva://'+actuatorName+':get-status.B7';
     let pvs={};
     pvs['xrawScanPV']={initialized: false,pvname:xrawScanPV,value:"",char_value:""}
     pvs['yrawScanPV']={initialized: false,pvname:yrawScanPV,value:"",char_value:""}

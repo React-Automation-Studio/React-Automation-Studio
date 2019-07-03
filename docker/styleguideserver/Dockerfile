@@ -22,7 +22,6 @@ RUN npm set registry http://registry.npmjs.org/
 RUN npm install
 
 
-#RUN test
 
 WORKDIR /
 
@@ -30,9 +29,6 @@ WORKDIR /
 
 
 COPY version ./.env* /
-ADD version ./server.key* /
-ADD version ./server.cer* /
-#ADD ./styleguide /styleguide
 
 WORKDIR /styleguideServer
 

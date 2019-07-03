@@ -34,7 +34,7 @@ let port;
 
   let pvServerNamespace;
    if(typeof process.env.REACT_APP_PyEpicsServerNamespace==='undefined'){
-    pvServerNamespace= "test";
+    pvServerNamespace= "pvServer";
    }
    else{
     pvServerNamespace=process.env.REACT_APP_PyEpicsServerNamespace;

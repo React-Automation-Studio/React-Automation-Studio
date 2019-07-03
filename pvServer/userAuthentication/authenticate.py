@@ -4,7 +4,7 @@ import jwt
 
 import random
 import string
-
+import os
 
 
 def randomString(stringLength=10):
@@ -39,8 +39,13 @@ def loadFileUsers():
         print("Error Cant load file USERS")
         return None
 
+REACT_APP_DisableLogin=not(os.getenv('REACT_APP_EnableLogin')=='true')
+if (not REACT_APP_DisableLogin) :
+    knownUsers=loadFileUsers()
 
-knownUsers=loadFileUsers()
+
+
+
 #print(knownUsers)
 
 def authenticateUser(JWT):

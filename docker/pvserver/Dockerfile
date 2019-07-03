@@ -42,8 +42,8 @@ RUN echo $REACT_APP_PyEpicsServerNamespace
 #RUN ls /epics/base/lib/linux-x86_64/
 
 #ADD version ./.env* /
-ADD version ./server.key* /
-ADD version ./server.cer* /
+#ADD version ./server.key* /
+#ADD version ./server.cer* /
 ADD ./build /build
 
 

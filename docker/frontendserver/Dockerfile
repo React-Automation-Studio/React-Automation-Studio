@@ -33,11 +33,6 @@ WORKDIR /
 
 
 
-
-ADD version ./server.key* /
-ADD version ./server.cer* /
-
-
 WORKDIR /frontendServer
 
 

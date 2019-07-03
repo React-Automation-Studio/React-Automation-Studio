@@ -12,7 +12,8 @@ services:
     volumes:
       - /frontendserverApp/build
       - AsNodeModules:/frontendserverApp/node_modules
-      - AsFsNodeModules:/frontendServer/node_modules
+      - AsFsNodeModules:/frontendServer/node_module
+      - ./certificates:/certificates/
     restart: always
     network_mode: host
     env_file: .env
@@ -27,6 +28,8 @@ services:
     restart: always
     network_mode: host
     env_file: .env
+    volumes:
+      - ./certificates:/certificates/
   unsecurestylguidepvserver:
     build:
       context: ./
@@ -41,6 +44,8 @@ services:
     environment:
           - REACT_APP_PyEpicsServerPORT=5001
           - REACT_APP_EnableLogin=false
+    volumes:
+          - ./certificates:/certificates/
 
   demoioc:
     build:
@@ -66,6 +71,7 @@ services:
       - /app/styleguide
       - AsNodeModules:/app/node_modules
       - AsSgNodeModules:/styleguideServer/node_modules
+      - ./certificates:/certificates/
     restart: always
     network_mode: host
     env_file: .env

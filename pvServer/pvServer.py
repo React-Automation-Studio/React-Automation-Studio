@@ -37,13 +37,13 @@ print('REACT_APP_PyEpicsServerPORT: '+ str(os.environ['REACT_APP_PyEpicsServerPO
 print('REACT_APP_PyEpicsServerNamespace: '+ str(os.environ['REACT_APP_PyEpicsServerNamespace']))
 print('REACT_APP_EnableLogin: '+ str(os.environ['REACT_APP_EnableLogin']))
 print("")
-app = Flask(__name__, static_folder="../build/static", template_folder="../build")
+#app = Flask(__name__, static_folder="../build/static", template_folder="../build")
+app = Flask(__name__)
+#@app.route('/', defaults={'path': ''})
+#@app.route('/<path:path>')
+#def index(path):
 
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
-def index(path):
-
-    return render_template('index.html', async_mode=socketio.async_mode)
+#    return render_template('index.html', async_mode=socketio.async_mode)
 
 
 
@@ -93,14 +93,14 @@ def check_pv_initialized_after_disconnect():
                       d['severity']=clientPVlist[pvname]['pv'].severity
                       d['emitter']="function:d['severity']=clientPVlist[pvname]['pv'].severity: try"
                       clientPVlist[pvname]['initialized']=True
-                      socketio.emit(pvname,d,room=str(pvname),namespace='/test')
+                      socketio.emit(pvname,d,room=str(pvname),namespace='/pvServer')
 
               else:
                   d={}
                   d['pvname']= pvname
                   d['connected']= '0'
                   d['emitter']="function:d['severity']=clientPVlist[pvname]['pv'].severity: else: not connected"
-                  socketio.emit(pvname,d,room=str(pvname),namespace='/test')
+                  socketio.emit(pvname,d,room=str(pvname),namespace='/pvServer')
 
        time.sleep(1)
 
@@ -113,10 +113,10 @@ def onValueChanges(pvname=None,count=None,char_value=None,severity=None,status=N
         if (float(count)== 1):
            socketio.emit(pvname1,
               {'pvname': pvname1,'newmetadata': 'False','value': str(value),'char_value': str(char_value),'count':count, 'connected':'1', 'severity': severity,'timestamp':timestamp
-              },room='pva://'+str(pvname),namespace='/test')
+              },room='pva://'+str(pvname),namespace='/pvServer')
         else:
            d={'pvname': pvname1,'newmetadata': 'False','value': list((value)),'count':count, 'connected':'1', 'severity': severity,'timestamp':timestamp}
-           socketio.emit(pvname1,d,room='pva://'+str(pvname),namespace='/test')
+           socketio.emit(pvname1,d,room='pva://'+str(pvname),namespace='/pvServer')
 
 
 def onConnectionChange(pvname=None, conn= None, value=None, **kws):
@@ -137,18 +137,18 @@ def onConnectionChange(pvname=None, conn= None, value=None, **kws):
         d={}
         d['pvname']= pvname
         d['connected']= '0'
-        d['emitter']="onConnectionChange: disconneted"
+        d['emitter']="onConnectionChange: disconnected"
         try:
             clientPVlist[pvname1]['isConnected']=False
             clientPVlist[pvname1]['initialized']=False
-            socketio.emit(pvname1,d,room=str(pvname),namespace='/test')
+            socketio.emit(pvname1,d,room=str(pvname),namespace='/pvServer')
         except:
             error=2
 
 
 
 def background_thread():
-    """Example of how to send server generated events to clients."""
+
     count = 0
     threading.Thread(target=check_pv_initialized_after_disconnect).start()
 
@@ -159,7 +159,7 @@ def background_thread():
 
 
 
-@socketio.on('write_to_pv', namespace='/test')
+@socketio.on('write_to_pv', namespace='/pvServer')
 def test_write(message):
     global clientPVlist,thread_lock2,REACT_APP_DisableLogin
     authenticated=False
@@ -206,7 +206,7 @@ def test_write(message):
                   d['pvname']= pvname2
                   d['connected']= '0'
                   d['emitter']="write_to_pv: pv not in list"
-                  socketio.emit(pvname1,d,namespace='/test')
+                  socketio.emit(pvname1,d,namespace='/pvServer')
 
 
             else: print("Unknown PV type")
@@ -229,14 +229,14 @@ def test_write(message):
             else: print("Unknown PV type")
 
     else:
-        socketio.emit('redirectToLogIn',room=request.sid,namespace='/test')
+        socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
 
 
 
 
 
 
-@socketio.on('request_pv_info', namespace='/test')
+@socketio.on('request_pv_info', namespace='/pvServer')
 def test_message(message):
     global clientPVlist,REACT_APP_DisableLogin
     pvname1= str(message['data'])
@@ -281,7 +281,7 @@ def test_message(message):
                     d['emitter']="request_pv_info: pv not in list"
                     d['chid']=str(d['chid'])
                     try:
-                        socketio.emit(pvname1,d,room=str(pvname1),namespace='/test')
+                        socketio.emit(pvname1,d,room=str(pvname1),namespace='/pvServer')
                         clientPVlist[pvname1]['isConnected']=True
                         clientPVlist[pvname1]['initialized']=True
 
@@ -296,7 +296,7 @@ def test_message(message):
                         d={}
                         d['pvname']= pvname2
                         d['connected']= '0'
-                        socketio.emit(pvname1,d,room=str(pvname1),namespace='/test')
+                        socketio.emit(pvname1,d,room=str(pvname1),namespace='/pvServer')
                     except:
                         print("Unexpected error:", sys.exc_info()[0])
                         raise
@@ -310,7 +310,7 @@ def test_message(message):
                     d={}
                     d['pvname']= pvname2
                     d['connected']= '0'
-                    socketio.emit(pvname1,d,room=str(pvname1),namespace='/test')
+                    socketio.emit(pvname1,d,room=str(pvname1),namespace='/pvServer')
 
 
 
@@ -338,7 +338,7 @@ def test_message(message):
                     d['chid']=str(d['chid'])
 
                     try:
-                        socketio.emit(pvname1,d,room=str(pvname1),namespace='/test')
+                        socketio.emit(pvname1,d,room=str(pvname1),namespace='/pvServer')
                         clientPVlist[pvname1]['isConnected']=True
                         clientPVlist[pvname1]['initialized']=True
 
@@ -352,7 +352,7 @@ def test_message(message):
                         d={}
                         d['pvname']= pvname2
                         d['connected']= '0'
-                        socketio.emit(pvname1,d,room=str(pvname1),namespace='/test')
+                        socketio.emit(pvname1,d,room=str(pvname1),namespace='/pvServer')
                     except:
                         print("Unexpected error:", sys.exc_info()[0])
                         raise
@@ -361,39 +361,39 @@ def test_message(message):
 
             else: print("Unknown PV type")
     else:
-        socketio.emit('redirectToLogIn',room=request.sid,namespace='/test')
+        socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
 
 
-@socketio.on('Authorise', namespace='/test')
+@socketio.on('Authorise', namespace='/pvServer')
 def test_authorise(message):
     global REACT_APP_DisableLogin
 
     if (not REACT_APP_DisableLogin ):
         jwt=authoriseUser(message['user'])
         if not (jwt is None) :
-            emit('authorised', {'successful': True, 'jwt':jwt},room=request.sid,namespace='/test')
+            emit('authorised', {'successful': True, 'jwt':jwt},room=request.sid,namespace='/pvServer')
         else:
-            emit('authorised', {'successful': False},room=request.sid,namespace='/test')
-            socketio.emit('redirectToLogIn',room=request.sid,namespace='/test')
+            emit('authorised', {'successful': False},room=request.sid,namespace='/pvServer')
+            socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
     else:
-        emit('authorised', {'successful': True, 'jwt':'anonomous'},room=request.sid,namespace='/test')
+        emit('authorised', {'successful': True, 'jwt':'anonomous'},room=request.sid,namespace='/pvServer')
 
-@socketio.on('Authenticate', namespace='/test')
+@socketio.on('Authenticate', namespace='/pvServer')
 def test_authenticate(message):
     global REACT_APP_DisableLogin
 
     if (not REACT_APP_DisableLogin ):
         if authenticateUser(message):
-            emit('authentication', {'successful': True},room=request.sid,namespace='/test')
+            emit('authentication', {'successful': True},room=request.sid,namespace='/pvServer')
         else:
-            emit('authentication', {'successful': False},room=request.sid,namespace='/test')
-            socketio.emit('redirectToLogIn',room=request.sid,namespace='/test')
+            emit('authentication', {'successful': False},room=request.sid,namespace='/pvServer')
+            socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
     else:
-        emit('authentication', {'successful': True},room=request.sid,namespace='/test')
+        emit('authentication', {'successful': True},room=request.sid,namespace='/pvServer')
 
 
 
-@socketio.on('connect', namespace='/test')
+@socketio.on('connect', namespace='/pvServer')
 def test_connect():
     global thread
     print("Client Connected: " +request.sid)
@@ -403,7 +403,7 @@ def test_connect():
     emit('my_response', {'data': 'Connected', 'count': 0})
 
 
-@socketio.on('disconnect', namespace='/test')
+@socketio.on('disconnect', namespace='/pvServer')
 def test_disconnect():
     print('Client disconnected', request.sid)
 
@@ -413,13 +413,13 @@ if __name__ == '__main__':
     REACT_APP_PyEpicsServerPORT=os.getenv('REACT_APP_PyEpicsServerPORT')
     if (REACT_APP_PyEpicsServerPORT is None):
         REACT_APP_PyEpicsServerPORT='5000'
-    REACT_APP_PyEpicsServerNamespace=os.getenv('REACT_APP_PyEpicsServerNamespace')
-    REACT_APP_PyEpicsServerURL=REACT_APP_PyEpicsServerURL+':'+REACT_APP_PyEpicsServerPORT+'/'+REACT_APP_PyEpicsServerNamespace
+
+    REACT_APP_PyEpicsServerURL=REACT_APP_PyEpicsServerURL+':'+REACT_APP_PyEpicsServerPORT+'/'+'pvServer'
     print("pvServer URL: ",REACT_APP_PyEpicsServerURL)
     print("")
     if not (REACT_APP_PyEpicsServerURL is None):
         if 'https' in REACT_APP_PyEpicsServerURL:
-            socketio.run(app, host='0.0.0.0', debug=True, port=int(REACT_APP_PyEpicsServerPORT,10), keyfile='../server.key', certfile='../server.cer')
+            socketio.run(app, host='0.0.0.0', debug=True, port=int(REACT_APP_PyEpicsServerPORT,10), keyfile='../certificates/server.key', certfile='../certificates/server.cer')
         else:
             socketio.run(app,host='0.0.0.0',port=int(REACT_APP_PyEpicsServerPORT,10),  debug=True)
     else:

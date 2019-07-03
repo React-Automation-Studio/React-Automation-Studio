@@ -32,8 +32,8 @@ app.get('/*', function (req, res) {
 
     if(URL.includes('https')){
       https.createServer({
-           key: fs.readFileSync('../server.key'),
-           cert: fs.readFileSync('../server.cer'),
+           key: fs.readFileSync('../certificates/server.key'),
+           cert: fs.readFileSync('../certificates/server.cer'),
 
       }, app).listen(port);
 

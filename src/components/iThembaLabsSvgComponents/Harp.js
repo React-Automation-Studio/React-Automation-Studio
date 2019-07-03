@@ -12,9 +12,10 @@ import { withStyles } from '@material-ui/core/styles';
 import ContextMenu from '../SystemComponents/ContextMenu';
 import Tooltip from '@material-ui/core/Tooltip';
 
-function Transition(props) {
-  return <Slide direction="up" {...props} />;
-}
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
 const styles = theme => ({
 
 

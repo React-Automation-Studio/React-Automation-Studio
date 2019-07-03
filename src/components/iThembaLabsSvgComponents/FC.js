@@ -15,9 +15,10 @@ import ContextMenu from '../SystemComponents/ContextMenu';
 import { withStyles } from '@material-ui/core/styles';
 
 
-function Transition(props) {
-  return <Slide direction="up" {...props} />;
-}
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
 const styles = theme => ({
 
 
@@ -321,14 +322,14 @@ handleOnClick =device=> (event) => {
                 TransitionComponent={Transition}
                 keepMounted
                 onClose={this.handleClose}
-                aria-labelledby="alert-dialog-slide-title"
-                aria-describedby="alert-dialog-slide-description"
+                aria-labelledby={"alert-dialog-slide-title"+this.props.systemName}
+                aria-describedby={"alert-dialog-slide-description"+this.props.systemName}
               >
-                <DialogTitle id="alert-dialog-slide-title">
-                  {"Error!"}
+                <DialogTitle id={"alert-dialog-slide-title"+this.props.systemName}>
+                  "Error!"
                 </DialogTitle>
                 <DialogContent>
-                  <DialogContentText id="alert-dialog-slide-description">
+                  <DialogContentText id={"alert-dialog-slide-description"+this.props.systemName}>
                     Faraday cup {this.props.systemName} is interlocked! {fcFaultString}
 
                   </DialogContentText>

@@ -544,25 +544,23 @@ If it exists edit the .env file, otherwise copy example.env to .env and set
 ```bash
 
 REACT_APP_PyEpicsServerBASEURL=https://customURL
-REACT_APP_PyEpicsServerAuthoriseURL=https://customURL:5000/
-REACT_APP_AutomationStudioStyleGuideBuildURL=http://customURL:6060
 REACT_APP_EnableLogin=false
 REACT_APP_FrontendServerPORT=9000
 REACT_APP_PyEpicsServerPORT=5000
 REACT_APP_PyEpicsServerStyleguidePORT=5001
 REACT_APP_StyleguideServerPORT=6060
 REACT_APP_EnableLoginStyleguide=false
-REACT_APP_PyEpicsServerNamespace=test
+
 ```
 to https and the correct hostname
 
 
 
-The certificates neeed to be placed in the the Automation Studio installation folder.
+The certificates neeed to be placed in the the Automation Studio installation folder under the certifcates folder.
 
 The certificate needs to be called: server.cer
 And the key needs to be called: server.key
-
+The .gitignore will prevent them from being copied to the repository
 
 
 The pvServer and node development environment, will need to be restarted, and the production environments will need to be rebuilt.

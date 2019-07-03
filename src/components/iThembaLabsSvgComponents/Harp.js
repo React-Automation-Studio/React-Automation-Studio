@@ -79,7 +79,8 @@ class Harp extends React.Component {
     this.state={pvs,newCommandTrigger:0,
       'open':false,
       openContextMenu: false,
-      contextPVs:contextPVs
+      contextPVs:contextPVs,
+      x0:0,y0:0
     }
     this.handleOnClick= this.handleOnClick.bind(this);
     this.handleInputValue= this.handleInputValue.bind(this);
@@ -176,8 +177,8 @@ handleContextMenuClose = event => {
 handleToggleContextMenu = (event) => {
   //   console.log(event.type)
 
-  this.setState(state => ({ openContextMenu: !state.openContextMenu }));
-
+  event.persist()
+  this.setState(state => ({ openContextMenu: !state.openContextMenu,x0:event.pageX,y0:event.pageY }));
 
   event.preventDefault();
 }
@@ -320,17 +321,13 @@ handleOnClick =device=> (event) => {
                 disableProbe={this.props.disableProbe}
                 open={this.state.openContextMenu}
                 anchorReference="anchorPosition"
-                anchorPosition={{ top: this.props.cy, left: this.props.cx }}
+                anchorPosition={{ top: +this.state.y0, left: +this.state.x0 }}
                 probeType={'simple'}
                 pvs={this.state.contextPVs}
                 handleClose={this.handleContextMenuClose}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'center',
-                }}
                 transformOrigin={{
                   vertical: 'top',
-                  horizontal: 'center',
+                  horizontal: 'left',
                 }}
               />
               {(this.props.maxHarpsReached===false) && <Dialog

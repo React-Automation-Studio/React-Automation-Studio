@@ -133,7 +133,7 @@ class Harp extends React.Component {
     let pvs=this.state.pvs;
     if(name==='statusPV'){
       if(initialized==true)
-      { if (inputValue==='In'){
+      { if (pvs['inPV'].value==1){
         this.props.handleHarpInsertedOrRemoved(true,this.props.systemName);
       }
       else{
@@ -237,11 +237,12 @@ handleOnClick =device=> (event) => {
 
       handleNo = () => {
         let pvs=this.state.pvs;
-        pvs['commandPV'].value=0;
-        pvs['xrawScanPV'].value=0;
-        pvs['yrawScanPV'].value=0;
-        this.setState({ pvs:pvs,
-          newCommandTrigger:this.state.newCommandTrigger+1,
+        //pvs['commandPV'].value=0;
+        //pvs['xrawScanPV'].value=0;
+        //pvs['yrawScanPV'].value=0;
+        this.setState({
+          //pvs:pvs,
+        //  newCommandTrigger:this.state.newCommandTrigger+1,
           open:false});
 
 
@@ -273,7 +274,7 @@ handleOnClick =device=> (event) => {
 
           let yoffset=0;
           let harpFault=false;
-          let harpFaultString="Faults:"
+          let harpFaultString=""
           let alarmColor='#133C99';
           //      console.log("pvs['statusPV'].value",pvs['statusPV'].value)
           //      console.log("pvs['movingPV'].value",pvs['movingPV'].value)
@@ -319,7 +320,9 @@ handleOnClick =device=> (event) => {
             harpFaultString+=" [Safety Ok]"
 
           }
-
+          if(harpFaultString.length>0){
+            harpFaultString="Faults: " + harpFaultString;
+          }
 
 
 

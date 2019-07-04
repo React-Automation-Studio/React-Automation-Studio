@@ -209,8 +209,10 @@ handleOnClick =device=> (event) => {
 
       handleNo = () => {
         let pvs=this.state.pvs;
-        pvs['commandPV'].value=0;
-        this.setState({ pvs:pvs,newCommandTrigger:this.state.newCommandTrigger+1,
+        //pvs['commandPV'].value=0;
+        this.setState({
+          //pvs:pvs,
+          //newCommandTrigger:this.state.newCommandTrigger+1,
           open:false});
 
 
@@ -260,7 +262,7 @@ handleOnClick =device=> (event) => {
 
           let yoffset=0;
           let fcFault=false;
-          let fcFaultString="Faults:"
+          let fcFaultString=""
           let alarmColor='#133C99';
           if (pvs['inPV'].value==1){
             yoffset=0;
@@ -300,6 +302,9 @@ handleOnClick =device=> (event) => {
             fcFault=true;
             fcFaultString+=" [Safety Ok]"
 
+          }
+          if(fcFaultString.length>0){
+            fcFaultString="Faults: " + fcFaultString;
           }
 
 

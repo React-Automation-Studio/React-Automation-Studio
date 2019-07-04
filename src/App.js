@@ -63,14 +63,15 @@ let socket = io(PyEpicsServerURL,{
 const socket = io('127.0.0.1:5000/test',{
 transports: ['websocket']
 })*/
+let themeStyle='dark';
 class App extends Component {
   constructor(props) {
     super(props);
 
     let theme = createMuiTheme({
       palette: {
-        type:'dark',
-        primary: cyan,
+        type:themeStyle,
+        primary: themeStyle=='dark'?cyan:indigo,
         secondary:pink,
         error: pink,
         action:green,

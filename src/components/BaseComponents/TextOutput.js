@@ -274,7 +274,19 @@ render() {
     let min = mydate.getMinutes();
     let sec = mydate.getSeconds();
     let ms = mydate.getMilliseconds()
-    value= date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec +':' + ms;
+
+
+    if( min<10){
+      min='0'+min;
+
+    }
+
+    if( sec<10){
+      sec='0'+sec;
+
+    }
+      value=date + ' ' + month + ' ' + year + ' ' +hour + ':' + min + ':' + sec ;
+
 
 
       }

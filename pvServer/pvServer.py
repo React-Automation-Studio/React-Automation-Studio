@@ -25,7 +25,7 @@ load_dotenv()
 async_mode = 'gevent'
 print("")
 print('**************************************')
-print("Automation Studio: pvServer Ver 1.000")
+print("Automation Studio: pvServer Ver 1.001")
 print("")
 print("Environment Variables:")
 print("")
@@ -170,6 +170,7 @@ def background_thread():
 @socketio.on('write_to_pv', namespace='/pvServer')
 def test_write(message):
     global clientPVlist,thread_lock2,REACT_APP_DisableLogin
+    #print("Test")
     authenticated=False
     if REACT_APP_DisableLogin:
         authenticated=True
@@ -178,7 +179,8 @@ def test_write(message):
 
     if authenticated :
         pvname1= str(message['pvname'])
-
+    ##    print("PV name: "+ str(pvname1))
+    ##    print("Value to put : "+str(message['data']))
         if not (pvname1 in	clientPVlist):
 
             if "pva://" in pvname1:
@@ -205,6 +207,7 @@ def test_write(message):
                        pvname2=pvname1.replace("pva://","")
                        try:
                            clientPVlist[pvname1]['pv'].put(message['data']);
+
                        except:
                            print("***EPICS PV put error: ")
                            print("PV name: "+ str(pvname2))

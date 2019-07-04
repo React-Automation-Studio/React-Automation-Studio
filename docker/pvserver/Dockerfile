@@ -48,8 +48,9 @@ ADD ./build /build
 
 
 
-ENTRYPOINT ["python"]
+#ENTRYPOINT ["python"]
 
-CMD ["-u","pvServer.py"]
+#CMD ["-u","pvServer.py"]
 #CMD ["/epics/base/bin/linux-x86_64/caget","RFPA:IPA_TUNE_MOT:display_ENG"]
+CMD python pvServer.py
 EXPOSE  5000 5001 5064 5065 8001

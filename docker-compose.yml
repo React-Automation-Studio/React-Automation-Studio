@@ -27,6 +27,8 @@ services:
       dockerfile: docker/pvserver/Dockerfile
     restart: always
     network_mode: host
+    tty: true
+    stdin_open: true
     env_file: .env
     volumes:
       - ./certificates:/certificates/

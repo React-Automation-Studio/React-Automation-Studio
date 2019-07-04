@@ -12,6 +12,7 @@ services:
     volumes:
       - AsNodeModules:/frontendserverAppDev/node_modules
       - ${PWD}:/frontendserverAppDev
+      - ./certificates:/certificates/
     restart: always
     network_mode: host
   pvserver:
@@ -25,6 +26,8 @@ services:
       dockerfile: docker/pvserver/Dockerfile
     restart: always
     network_mode: host
+    volumes:
+      - ./certificates:/certificates/
   unsecurestylguidepvserver:
     env_file: .env
     environment:
@@ -40,6 +43,8 @@ services:
       dockerfile: docker/pvserver/Dockerfile
     restart: always
     network_mode: host
+    volumes:
+      - ./certificates:/certificates/
   demoioc:
     build:
       context: ./
@@ -71,6 +76,8 @@ services:
       - AsSgNodeModules:/styleguideServer/node_modules
     restart: always
     network_mode: host
+    volumes:
+      - ./certificates:/certificates/
 volumes:
     AsNodeModules:
 

@@ -108,37 +108,48 @@ class HarpGraph extends React.Component {
 
   handleRangeInputValue = (inputValue,pvname,initialized,severity)=>{
     //  console.log("test");
-  //  console.log("value: ",inputValue);
-  //  console.log("pvname:", pvname);
-//    console.log("initialized:",initialized)
+    //  console.log("value: ",inputValue);
+    //  console.log("pvname:", pvname);
+    //    console.log("initialized:",initialized)
     if (initialized===true){
       switch(parseInt(inputValue)) {
         case 1:
-        this.setState({'rangeUnits':'uA','ymax':200,'rangeYmax':200});
-
+        if (!((this.state.rangeUnits=='uA')&&(this.state.rangeYmax==200))){
+          this.setState({'rangeUnits':'uA','ymax':200,'rangeYmax':200});
+        }
         break;
         case 2:
-        this.setState({'rangeUnits':'uA','ymax':20,'rangeYmax':20});
+        if (!((this.state.rangeUnits=='uA')&&(this.state.rangeYmax==20))){
+          this.setState({'rangeUnits':'uA','ymax':20,'rangeYmax':20});
+        }
         break;
         case 3:
-        this.setState({'rangeUnits':'nA','ymax':2000,'rangeYmax':2000});
+        if (!((this.state.rangeUnits=='nA')&&(this.state.rangeYmax==2000))){
+          this.setState({'rangeUnits':'nA','ymax':2000,'rangeYmax':2000});
+        }
         break;
         case 4:
-        this.setState({'rangeUnits':'nA','ymax':200,'rangeYmax':200});
+        if (!((this.state.rangeUnits=='nA')&&(this.state.rangeYmax==200))){
+          this.setState({'rangeUnits':'nA','ymax':200,'rangeYmax':200});
+        }
         break;
         case 5:
-        this.setState({'rangeUnits':'nA','ymax':20,'rangeYmax':20});
+        if (!((this.state.rangeUnits=='nA')&&(this.state.rangeYmax==20))){
+          this.setState({'rangeUnits':'nA','ymax':20,'rangeYmax':20});
+        }
         break;
         case 6:
-        this.setState({rangeUnits:'pA','ymax':2000,'rangeYmax':2000});
+        if (!((this.state.rangeUnits=='pA')&&(this.state.rangeYmax==2000))){
+          this.setState({rangeUnits:'pA','ymax':2000,'rangeYmax':2000});
+        }
         break;
 
 
         // code block
       }
     }
-  //  console.log('this.state.rangeUnits',this.state.rangeUnits);
-  //  console.log('this.state.ymax',this.state.ymax);
+    //  console.log('this.state.rangeUnits',this.state.rangeUnits);
+    //  console.log('this.state.ymax',this.state.ymax);
   }
 
 
@@ -185,11 +196,11 @@ class HarpGraph extends React.Component {
       for(n in newArray){
         // console.log("value: ",this.state[this.props.pv].value[i]);
         if (newArray[n]>0){
-        sample={x:wireSpacing[i],y:newArray[n]}
-      }
-      else{
-        sample={x:wireSpacing[i],y:this.state.ymin}
-      }
+          sample={x:wireSpacing[i],y:newArray[n]}
+        }
+        else{
+          sample={x:wireSpacing[i],y:this.state.ymin}
+        }
 
         // console.log("sample: ",sample)
 
@@ -251,7 +262,7 @@ class HarpGraph extends React.Component {
 
   }
   componentDidUpdate(){
-//    console.log(this.testRef)
+    //    console.log(this.testRef)
   }
 
 
@@ -296,9 +307,9 @@ class HarpGraph extends React.Component {
     else{
       ymax=this.state.ymax+adjust;
     }
-  //  if (ymax<10){
-  //    ymax=10;
-//    }
+    //  if (ymax<10){
+    //    ymax=10;
+    //    }
     this.setState({ymax:ymax})
 
     this.changeOtherGraphYmax(ymax);
@@ -306,13 +317,13 @@ class HarpGraph extends React.Component {
 
   changeOtherGraphYmax = (ymax) => {
 
-//  console.log('changeOtherGraphYmax',ymax)
-  this.props.changeOtherGraphYmax(ymax);
+    //  console.log('changeOtherGraphYmax',ymax)
+    this.props.changeOtherGraphYmax(ymax);
 
   };
   changeThisGraphYmax = (ymax) => {
 
-//  console.log('changeThisGraphYmax',ymax)
+    //  console.log('changeThisGraphYmax',ymax)
 
 
   };
@@ -325,7 +336,7 @@ class HarpGraph extends React.Component {
 
 
       this.setState({ymax:this.state.rangeYmax})
-        this.changeOtherGraphYmax(this.state.rangeYmax);
+      this.changeOtherGraphYmax(this.state.rangeYmax);
     }
 
   };
@@ -361,7 +372,7 @@ class HarpGraph extends React.Component {
 
             handleInputValue={this.handleInputValueLabel(this.state.dataPVs[pv].pvname)}
 
-                                                 />    }
+                                            />    }
           {this.props.usePvLabel===true?this.state.dataPVs[pv].label+': ':""}
           {/*this.state.pvs[pv].value*/}
         </div>
@@ -437,7 +448,7 @@ class HarpGraph extends React.Component {
 
     const {classes}= this.props;
     const theme=this.props.theme;
-  //  console.log(this.props.theme);
+    //  console.log(this.props.theme);
     //console.log(this.state.ymax)
     //  console.log(this.state.rangeUnits)
     const ymax=this.state.ymax;
@@ -497,8 +508,8 @@ class HarpGraph extends React.Component {
 
 
 
-  )
-}
+    )
+  }
 
 }
 HarpGraph.propTypes = {

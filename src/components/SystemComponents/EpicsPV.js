@@ -170,8 +170,8 @@ class EpicsPV extends React.Component {
         jwt='unauthenticated'
       }
       socket.emit('request_pv_info', {data: this.state['pvname'],authentication:jwt});
-      this.handleInitialConnection();
-      //this.timeout=setTimeout(this.handleInitialConnection, 2000);
+    //  this.handleInitialConnection();
+      this.timeout=setTimeout(this.handleInitialConnection, 3000);
       //    console.log("this.state['pvname']",this.state['pvname']);
 
       socket.on(this.state['pvname'],this.updatePVData);

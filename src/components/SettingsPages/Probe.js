@@ -100,7 +100,7 @@ class Probe extends React.Component {
               <TextInput   pv='$(device)'       macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV Setpoint:'} alarmSensitive={true}/>
             </Grid>
             <Grid item xs={12}  >
-              <SimpleSlider pv='pva://$(device)'  macros={{'$(device)':probeObject.pvname}} usePvMinMax={true}  label="EPICS PV Setpoint:"  />
+              <SimpleSlider pv='$(device)'  macros={{'$(device)':probeObject.pvname}} usePvMinMax={true}  label="EPICS PV Setpoint:"  />
             </Grid>
             <Grid item xs={6} >
               <TextOutput  pv='$(device).DRVH'       macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV DRVH:'}/>

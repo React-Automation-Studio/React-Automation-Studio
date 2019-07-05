@@ -56,11 +56,16 @@ function calcTimeFormat(timestamp) {
   //let value= hour + ':' + min + ':' + sec +':' + ms;
   let value;
   if( min<10){
-  value=  hour + ':' +'0'+min + ':' + sec ;
+    min='0'+min;
+
   }
-  else{
-    value=hour + ':' + min + ':' + sec ;
+
+  if( sec<10){
+    sec='0'+sec;
+
   }
+  value=hour + ':' + min + ':' + sec ;
+
   return value;
 }
 
@@ -508,7 +513,7 @@ class GraphMultiplePVs extends React.Component {
 
 
         legendItems.push({title:this.props.legend[legendItem].toString() ,color:legendColor[i], stroke:theme.palette.type=='dark'?'#80deea':'#dbdbe0'});
-        
+
         i++
       }
     }

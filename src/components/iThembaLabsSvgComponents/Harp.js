@@ -131,9 +131,9 @@ class Harp extends React.Component {
     //  console.log("initialized:", initialized);
 
     let pvs=this.state.pvs;
-    if(name==='statusPV'){
+    if(name=='inPV'){
       if(initialized==true)
-      { if (pvs['inPV'].value==1){
+      { if (inputValue==1){
         this.props.handleHarpInsertedOrRemoved(true,this.props.systemName);
       }
       else{

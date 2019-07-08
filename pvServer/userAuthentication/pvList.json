@@ -1,0 +1,7 @@
+{
+  "UAG1": [
+            { "rule":"^pva://testIOC:Harp", "read":true,"write":false },
+            { "rule":"^pva://testIOC:FC", "read":true,"write":true }
+
+    ]
+}

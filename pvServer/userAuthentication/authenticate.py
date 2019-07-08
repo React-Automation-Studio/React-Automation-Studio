@@ -1,7 +1,6 @@
 import jwt
-
-
-
+import json
+import re
 import random
 import string
 import os
@@ -39,14 +38,57 @@ def loadFileUsers():
         print("Error Cant load file USERS")
         return None
 
+def loadPvAccessList():
+    try:
+        print("loadPvAccessList")
+        with open('userAuthentication/pvList.json') as json_file:
+            data = json.load(json_file)
+            return data
+    except:
+        print("Error Cant load file pvAccessList")
+        return None
+
+
 REACT_APP_DisableLogin=not(os.getenv('REACT_APP_EnableLogin')=='true')
 if (not REACT_APP_DisableLogin) :
     knownUsers=loadFileUsers()
+    UAGS=loadPvAccessList()
 
 
+def checkPermissions(pvname):
+    #print("Checking permissions")
+    global UAGS
+    for rules in UAGS['UAG1']:
+        match=re.search(str(rules['rule']),str(pvname))
+        if (match):
+            #print(str(pvname)+" :"+str(rules['rule'])+" : "+ str(True))
+            return {'read':rules['read'],'write':rules['write']}
+    return {'read':False,'write':False}
+            #print(str(pvname)+" :"+str(rules['rule'])+" : "+ str(False))
 
 
 #print(knownUsers)
+
+def authenticateUserAndPermissions(message):
+    global knownUsers
+    JWT=message['authentication']
+#    print('authenticateUser: ',JWT)
+    try:
+        decoded_jwt=jwt.decode(str(JWT), SECRET_KEY, algorithms=['HS256'])
+        #print(decoded_jwt)
+        if decoded_jwt['user-id'] in knownUsers:
+#            print("match")
+            permissions=checkPermissions(message['data'])
+            #print(message['data']+" :"+ str(permissions)
+            d={'authenticated':True,'permissions':permissions}
+            return d
+        else:
+#            print("no match")
+            return {'authenticated':False}
+    except:
+        return {'authenticated':False}
+    #print(user)
+
 
 def authenticateUser(JWT):
     global knownUsers

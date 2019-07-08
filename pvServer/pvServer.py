@@ -16,7 +16,7 @@ import sys
 sys.path.insert(0, '../')
 sys.path.insert(0, 'userAuthentication/')
 
-from authenticate import authenticateUser, authoriseUser
+from authenticate import authenticateUser,authenticateUserAndPermissions, authoriseUser
 from dotenv import load_dotenv
 load_dotenv()
 # Set this variable to "threading", "eventlet" or "gevent" to test the
@@ -87,6 +87,7 @@ def check_pv_initialized_after_disconnect():
                       d['newmetadata']= 'True'
                       d['connected']= '1'
                       d['emitter']="request_pv_info: pv not in list"
+                      d['write_access']=True
                       d['chid']=str(d['chid'])
                       try:
                           socketio.emit(pvname,d,room=str(pvname),namespace='/pvServer')
@@ -175,7 +176,8 @@ def test_write(message):
     if REACT_APP_DisableLogin:
         authenticated=True
     else :
-        authenticated=authenticateUser(message['authentication'])
+        accessControl=authenticateUserAndPermissions(message)
+        authenticated=accessControl['authenticated']
 
     if authenticated :
         pvname1= str(message['pvname'])
@@ -255,7 +257,8 @@ def test_message(message):
     if REACT_APP_DisableLogin:
         authenticated=True
     else :
-        authenticated=authenticateUser(message['authentication'])
+        accessControl=authenticateUserAndPermissions(message)
+        authenticated=accessControl['authenticated']
 
     if authenticated :
 

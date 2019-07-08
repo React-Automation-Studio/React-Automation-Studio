@@ -115,10 +115,11 @@ class Harp extends React.Component {
 
 
 
-  handleMetadata(metadata){
+  handleMetadata=name=>(metadata)=>{
 
-
-    this.setState({'metadata'	 :metadata});
+    let pvs=this.state.pvs;
+    pvs[name]['metadata']=metadata;
+    this.setState({pvs	 :pvs});
 
 
   }
@@ -197,6 +198,7 @@ handleOnClick =device=> (event) => {
   //  console.log("In Harp: clicked "+device.toString());
   //this.props.handleOnClick(device);
   let pvs=this.state.pvs;
+  if((pvs['commandPV']['metadata']['write_access']===true)){
   if (pvs['inPV'].value==1){
     pvs['commandPV'].value=0;
     pvs['xrawScanPV'].value=0;
@@ -209,7 +211,7 @@ handleOnClick =device=> (event) => {
     else {
       this.setState({ open:true});
     }
-
+  }
   };
 
 
@@ -403,6 +405,7 @@ handleOnClick =device=> (event) => {
 
                     newValueTrigger={this.state.newCommandTrigger}
                     handleInputValue={this.handleInputValue('commandPV')}
+                    handleMetadata={this.handleMetadata('commandPV')}
                     outputValue=  {this.state.pvs['commandPV'].value}
 
                   />

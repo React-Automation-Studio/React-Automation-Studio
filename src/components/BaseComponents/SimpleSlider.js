@@ -279,6 +279,7 @@ render() {
   //console.log('min',min)
   //console.log('metadata',this.state.metadata)
 //  console.log('this.state.outputValue',this.state.outputValue)
+  let disabled=write_access===false?true:false;
   return (
 
     <div>
@@ -303,7 +304,7 @@ render() {
 
           <Slider
             className={classes.slider}
-
+            disabled={disabled}
             value={this.state.outputValue}
             aria-labelledby="label"
             onChange={this.handleChange}

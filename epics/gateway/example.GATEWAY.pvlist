@@ -1,0 +1,10 @@
+EVALUATION ORDER ALLOW, DENY
+
+# Remember that .* means every following character
+
+
+[0-9].*		 ALLOW
+[a-z].*		 ALLOW
+[A-Z].* 	 ALLOW
+
+.* ALLOW FULLACCESSGROUP 1

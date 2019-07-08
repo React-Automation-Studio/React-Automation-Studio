@@ -1,0 +1,34 @@
+# User access groups - good idea to have GatewayAdmin - can see internal variables
+UAG(GatewayAdmin) {maria,charchiver,mike}
+#UAG(fullaccessusers) {amien,jabrahamuser}
+
+# Host access groups
+HAG(campushost) {epicscon2,epicscon4}
+HAG(fullaccesshosts) {william-j50-linux,duckitt01,johanvn4,jabrahams-hp,rf-eng-tearoom,fhumulani-hp,amien-vm,amien-vm2,epicscon2,epicscon2s,mike3,mike5,ubuntu-test-ethercat}
+
+
+# Access Security groups
+ASG(DEFAULT){
+ RULE(1,READ)
+ RULE(1,WRITE){
+  HAG(campushost)
+ }
+}
+
+
+ASG(GATEWAYADMIN){
+ RULE(1,READ)
+ RULE(1,WRITE){
+  UAG(GatewayAdmin)
+ }
+}
+
+
+
+# Allow some computers and users full access
+ASG(FULLACCESSGROUP){
+    RULE(1,READ)
+    RULE(1,WRITE){
+        HAG(fullaccesshosts)
+    }
+}

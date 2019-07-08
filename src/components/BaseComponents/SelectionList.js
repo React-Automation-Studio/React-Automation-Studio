@@ -239,7 +239,7 @@ handleListItemClick=(event, item)=>{
 
 
 
-getListItems = (enum_strs, classes) => {
+getListItems = (enum_strs, classes, disabled) => {
   //this.test("test1");
   //this.handleInputValue();
 
@@ -258,7 +258,7 @@ getListItems = (enum_strs, classes) => {
       listItems.push(
 
         <React.Fragment key={i.toString()}>
-          <ListItem className={this.props.horizontal==true? classes.buttonFirstHorizontal:classes.buttonFirstVertical}  button  key={item.toString()} value={item} selected={this.state.value==item} onClick={event => this.handleListItemClick(event, item)}> <ListItemText primary= {item}/> </ListItem>
+          <ListItem disabled={disabled} className={this.props.horizontal==true? classes.buttonFirstHorizontal:classes.buttonFirstVertical}  button  key={item.toString()} value={item} selected={this.state.value==item} onClick={event => this.handleListItemClick(event, item)}> <ListItemText primary= {item}/> </ListItem>
 
 
         </React.Fragment>
@@ -267,7 +267,7 @@ getListItems = (enum_strs, classes) => {
       listItems.push(
 
         <React.Fragment key={i.toString()}>
-          <ListItem className={this.props.horizontal==true? classes.buttonLastHorizontal:classes.buttonLastVertical}  button  key={item.toString()} value={item} selected={this.state.value==item} onClick={event => this.handleListItemClick(event, item)}> <ListItemText primary= {item}/> </ListItem>
+          <ListItem disabled={disabled} className={this.props.horizontal==true? classes.buttonLastHorizontal:classes.buttonLastVertical}  button  key={item.toString()} value={item} selected={this.state.value==item} onClick={event => this.handleListItemClick(event, item)}> <ListItemText primary= {item}/> </ListItem>
 
 
         </React.Fragment>
@@ -276,7 +276,7 @@ getListItems = (enum_strs, classes) => {
       listItems.push(
 
         <React.Fragment key={i.toString()}>
-          <ListItem className={this.props.horizontal==true? classes.buttonMiddleHorizontal:classes.buttonMiddleVertical}  button  key={item.toString()} value={item} selected={this.state.value==item} onClick={event => this.handleListItemClick(event, item)}> <ListItemText primary= {item}/> </ListItem>
+          <ListItem disabled={disabled} className={this.props.horizontal==true? classes.buttonMiddleHorizontal:classes.buttonMiddleVertical}  button  key={item.toString()} value={item} selected={this.state.value==item} onClick={event => this.handleListItemClick(event, item)}> <ListItemText primary= {item}/> </ListItem>
 
 
         </React.Fragment>
@@ -395,6 +395,7 @@ render() {
       }
     }
   }
+  let disabled=write_access===false?true:false;
   return (
 
     <React.Fragment>
@@ -415,7 +416,7 @@ render() {
       {initialized===true &&
 
         <FormControlLabel className={classes.FormControl}
-        
+
           control={
             <List
               //style={{borderRadius:4, border:1}}
@@ -428,7 +429,7 @@ render() {
 
             >
 
-              {this.getListItems(enum_strings, classes)}
+              {this.getListItems(enum_strings, classes, disabled)}
 
             </List>
 

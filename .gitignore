@@ -97,3 +97,7 @@ __pycache__/
 pvServer/userAuthentication/SECRET_PWD_KEY
 pvServer/userAuthentication/SECRET_KEY
 pvServer/userAuthentication/USERS
+
+epics/gateway/GATEWAY.access
+epics/gateway/GATEWAY.command
+epics/gateway/GATEWAY.pvlist

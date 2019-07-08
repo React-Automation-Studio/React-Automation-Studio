@@ -90,12 +90,16 @@ class Probe extends React.Component {
             <Grid item xs={12}  >
               <TextOutput  pv='$(device)'       macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV Value:'} alarmSensitive={true}/>
             </Grid>
-            <Grid item xs={12}  >
+            <Grid item xs={6}  >
               <TextOutput  pv='$(device)'       macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV Timestamp:'} displayTimeStamp />
+            </Grid>
+            <Grid item xs={6} >
+                <TextOutput  pv='$(device)'       macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV Write Access:'} displayMetaData={'write_access'} />
             </Grid>
             <Grid item xs={12} >
               <TextOutput  pv='$(device)'       macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV Host:'} displayMetaData={'host'} />
-            </Grid>
+              </Grid>
+
             <Grid item xs={12}  >
               <TextInput   pv='$(device)'       macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV Setpoint:'} alarmSensitive={true}/>
             </Grid>
@@ -172,8 +176,11 @@ class Probe extends React.Component {
             <Grid item xs={12}  >
               <TextOutput  pv='$(device)'       macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV Value:'} value alarmSensitive={true}/>
             </Grid>
-            <Grid item xs={12}  >
+            <Grid item xs={6}  >
               <TextOutput  pv='$(device)'       macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV Timestamp:'} displayTimeStamp />
+            </Grid>
+            <Grid item xs={6} >
+                <TextOutput  pv='$(device)'       macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV Write Access:'} displayMetaData={'write_access'} />
             </Grid>
             <Grid item xs={12} >
               <TextOutput  pv='$(device)'       macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV Host:'} displayMetaData={'host'} />

@@ -1,12 +1,25 @@
 {
-  "UAG1": [
+  "users":[
+            {"username":"user1","password":"test1"},
+            {"username":"user2","password":"test2"}
+          ],
 
-            { "rule":"[0-9].*", "read":true,"write":true },
-            { "rule":"[a-z].*", "read":true,"write":true },
-            { "rule":"[A-Z].*", "read":true,"write":true },
-            { "rule":"^pva://testIOC:Harp1", "read":true,"write":false },
-            { "rule":"^pva://testIOC:FC2", "read":true,"write":false },
-            { "rule":"^pva://testIOC:amplitude", "read":true,"write":true }
 
-    ]
+  "userGroups":
+  {
+    "UAG1":
+    {
+      "usernames":["*"],
+      "rules":
+      [
+        { "rule":"[0-9].*",                   "read":true,  "write":true },
+        { "rule":"[a-z].*",                   "read":true,  "write":true },
+        { "rule":"[A-Z].*",                   "read":true,  "write":true },
+        { "rule":"^pva://testIOC:Harp1",      "read":false, "write":false },
+        { "rule":"^pva://testIOC:FC2",        "read":true,  "write":false },
+        { "rule":"^pva://testIOC:amplitude",  "read":true,  "write":true }
+
+      ]
+    }
+  }
 }

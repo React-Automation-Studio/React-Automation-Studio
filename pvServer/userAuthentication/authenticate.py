@@ -74,8 +74,8 @@ if (not REACT_APP_DisableLogin) :
     UAGS=loadUsersAndGroups()
     knownUsers=createJTWUserIDs(UAGS)
     #knownUsers=loadFileUsers()
-    print(knownUsers)
-    print(UAGS)
+    #print(knownUsers)
+    #print(UAGS)
 
 
 def checkPermissions(pvname,username):
@@ -83,11 +83,15 @@ def checkPermissions(pvname,username):
     global UAGS
     d={'read':False,'write':False}
     for uag in list(UAGS['userGroups'].keys()):
-        for rules in UAGS['userGroups'][uag]['rules']:
-            match=re.search(str(rules['rule']),str(pvname))
-            if (match):
-                #print(str(pvname)+" :"+str(rules['rule'])+" : "+ str(True))
-                d= {'read':rules['read'],'write':rules['write']}
+        for usernames in UAGS['userGroups'][uag]['usernames']:
+            #print(usernames)
+            if ((username==usernames)or (usernames=="*")) :
+
+                for rules in UAGS['userGroups'][uag]['rules']:
+                    match=re.search(str(rules['rule']),str(pvname))
+                    if (match):
+                        #print(str(pvname)+" :"+str(rules['rule'])+" : "+ str(True))
+                        d= {'read':rules['read'],'write':rules['write']}
     return d
             #print(str(pvname)+" :"+str(rules['rule'])+" : "+ str(False))
 
@@ -136,14 +140,14 @@ def authoriseUser(user):
     global knownUsers
     if knownUsers!= None:
         JWTUsernameAndPw=str(jwt.encode({'username':str(user['email']),'password':str(user['password'])}, SECRET_PWD_KEY, algorithm='HS256').decode('utf-8'))
-        print("JWTUsernameAndPw: "+str(JWTUsernameAndPw))
+        #print("JWTUsernameAndPw: "+str(JWTUsernameAndPw))
         keys=list(knownUsers.keys())
-        print("keys", keys)
+        #print("keys", keys)
         for JWT in knownUsers:
-            print("JWT", JWT)
+            #print("JWT", JWT)
             if JWTUsernameAndPw==knownUsers[JWT]['JWTUsernameAndPw']:
                 return JWT
-            
+
         else:
             print('Uknown user:' + str(user['email']))
             return None

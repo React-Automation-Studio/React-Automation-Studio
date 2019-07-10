@@ -70,10 +70,10 @@ class LogIn extends React.Component {
   };
     this.handleChange=this.handleChange.bind(this);
     this.catchReturn=this.catchReturn.bind(this);
-    this.handleAuthorization=this.handleAuthorization.bind(this);
     this.handleAuthentication=this.handleAuthentication.bind(this);
+    this.handleAuthorisation=this.handleAuthorisation.bind(this);
     this.handleUnauthorisedDialogClick=this.handleUnauthorisedDialogClick.bind(this);
-    this.handleAuthenticationFailedDialogClick=this.handleAuthenticationFailedDialogClick.bind(this);
+    this.handleAuthorisationFailedDialogClick=this.handleAuthorisationFailedDialogClick.bind(this);
 
     this.handleResponse=this.handleResponse.bind(this);
   }
@@ -102,7 +102,7 @@ class LogIn extends React.Component {
     let socket=this.context.socket;
     let user={email:this.state.emailAddress,password:this.state.password}
 
-    socket.emit('Authorise', {user:{email: this.state.emailAddress,password:this.state.password}});
+    socket.emit('AuthenticateClient', {user:{email: this.state.emailAddress,password:this.state.password}});
     //this.login();
 
   }
@@ -127,8 +127,8 @@ class LogIn extends React.Component {
 }
 
 
-  handleAuthorization(msg){
-  //  console.log('authorised',msg)
+  handleAuthentication(msg){
+  //  console.log('clientAuthenticated',msg)
     if (typeof msg.jwt !== 'undefined'){
     localStorage.setItem('jwt', JSON.stringify(msg.jwt));
    }
@@ -141,7 +141,7 @@ class LogIn extends React.Component {
     //  console.log('jwt',jwt);
 
         let socket=this.context.socket;
-      socket.emit('Authenticate', jwt);
+      socket.emit('AuthoriseClient', jwt);
 
     }
 
@@ -151,12 +151,12 @@ class LogIn extends React.Component {
 
   }
 
-  handleAuthenticationFailedDialogClick()
+  handleAuthorisationFailedDialogClick()
   {
     this.setState({'AuthenticationFailed':false});
 
   }
-  handleAuthentication(msg){
+  handleAuthorisation(msg){
 
     this.setState({'Authenticated':msg.successful,'AuthenticationFailed':msg.successful!==true});
 
@@ -164,13 +164,13 @@ class LogIn extends React.Component {
   }
   componentDidMount() {
     let socket=this.context.socket;
-    socket.on('authorised',this.handleAuthorization);
-    socket.on('authentication',this.handleAuthentication);
+    socket.on('clientAuthenticated',this.handleAuthentication);
+    socket.on('clientAuthorisation',this.handleAuthorisation);
   }
   componentWillUnmount(){
       let socket=this.context.socket;
-      socket.removeListener('authorised', this.handleAuthorization);
-      socket.removeListener('authentication',this.handleAuthentication);
+      socket.removeListener('clientAuthenticated', this.handleAuthentication);
+      socket.removeListener('clientAuthorisation',this.handleAuthorisation);
   }
 
   render(){
@@ -222,7 +222,7 @@ class LogIn extends React.Component {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.handleAuthenticationFailedDialogClick} color="primary">
+          <Button onClick={this.handleAuthorisationFailedDialogClick} color="primary">
             Ok
           </Button>
 

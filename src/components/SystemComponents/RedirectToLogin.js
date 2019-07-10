@@ -31,7 +31,7 @@ componentDidMount() {
   socket.on('redirectToLogIn', this.handleRedirectToLogIn);
 //  let jwt = JSON.parse(localStorage.getItem('jwt'));
 //  console.log('jwt',jwt);
-//  socket.emit('Authenticate', jwt);
+//  socket.emit('AuthoriseClient', jwt);
 }
 componentWillUnmount() {
   let socket=this.context.socket;

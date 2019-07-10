@@ -127,7 +127,7 @@ class App extends Component {
     }
   this.handleConnect=this.handleConnect.bind(this);
   this.handleRedirectToLogIn=this.handleRedirectToLogIn.bind(this);
-    this.handleAuthentication=this.handleAuthentication.bind(this);
+    this.handleClientAuthorisation=this.handleClientAuthorisation.bind(this);
   }
   handleRedirectToLogIn(){
     console.log('redirectToLogIn')
@@ -142,13 +142,13 @@ class App extends Component {
       console.log('jwt',jwt);
 
       let socket=this.state.system.socket;
-      socket.emit('Authenticate', jwt);
+      socket.emit('AuthoriseClient', jwt);
 
 
   }
-  handleAuthentication(msg){
+  handleClientAuthorisation(msg){
 
-    this.setState({'Authenticated':msg.successful,'AuthenticationFailed':msg.successful!==true});
+    this.setState({'Authorised':msg.successful,'AuthorisationFailed':msg.successful!==true});
 
 
   }
@@ -157,14 +157,14 @@ class App extends Component {
     let socket=this.state.system.socket;
     socket.on('connect',this.handleConnect);
     //socket.on('redirectToLogIn', this.handleRedirectToLogIn);
-    socket.on('authentication',this.handleAuthentication);
+    socket.on('clientAuthorisation',this.handleClientAuthorisation);
   }
   componentWillUnmount(){
     console.log('unmounted')
       let socket=this.state.system.socket;
       socket.removeListener('connect',this.handleConnect);
     //  socket.removeListener('redirectToLogIn', this.handleRedirectToLogIn);
-      socket.removeListener('authentication',this.handleAuthentication);
+      socket.removeListener('clientAuthorisation',this.handleClientAuthorisation);
   }
   render() {
   //  console.log('node env',process.env.NODE_ENV)

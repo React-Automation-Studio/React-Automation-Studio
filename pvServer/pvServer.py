@@ -16,7 +16,7 @@ import sys
 sys.path.insert(0, '../')
 sys.path.insert(0, 'userAuthentication/')
 
-from authenticate import authenticateUser,authenticateUserAndPermissions, authoriseUser
+from authenticate import  AuthoriseUser,AutheriseUserAndPermissions, AuthenticateUser
 from dotenv import load_dotenv
 load_dotenv()
 # Set this variable to "threading", "eventlet" or "gevent" to test the
@@ -178,12 +178,12 @@ def test_write(message):
     authenticated=False
     if REACT_APP_DisableLogin:
 
-        accessControl={'authenticated':True,'permissions':{'read':True,'write':True}}
+        accessControl={'userAuthorised':True,'permissions':{'read':True,'write':True}}
     else :
-        accessControl=authenticateUserAndPermissions(message['authentication'],message['pvname'])
-        authenticated=accessControl['authenticated']
+        accessControl=AutheriseUserAndPermissions(message['clientAuthorisation'],message['pvname'])
+        authenticated=accessControl['userAuthorised']
 
-    if accessControl['authenticated']:
+    if accessControl['userAuthorised']:
         if accessControl['permissions']['write']:
             pvname1= str(message['pvname'])
             if "pva://" in pvname1:
@@ -217,12 +217,12 @@ def test_message(message):
     authenticated=False
     if REACT_APP_DisableLogin:
         authenticated=True
-        accessControl={'authenticated':True,'permissions':{'read':True,'write':True}}
+        accessControl={'userAuthorised':True,'permissions':{'read':True,'write':True}}
     else :
-        accessControl=authenticateUserAndPermissions(message['authentication'],pvname1)
-        authenticated=accessControl['authenticated']
+        accessControl=AutheriseUserAndPermissions(message['clientAuthorisation'],pvname1)
+        authenticated=accessControl['userAuthorised']
 
-    if accessControl['authenticated'] :
+    if accessControl['userAuthorised'] :
 
 
         if not (pvname1 in	clientPVlist):
@@ -266,32 +266,32 @@ def test_message(message):
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
 
 
-@socketio.on('Authorise', namespace='/pvServer')
+@socketio.on('AuthenticateClient', namespace='/pvServer')
 def test_authorise(message):
     global REACT_APP_DisableLogin
 
     if (not REACT_APP_DisableLogin ):
-        jwt=authoriseUser(message['user'])
+        jwt=AuthenticateUser(message['user'])
         if not (jwt is None) :
-            emit('authorised', {'successful': True, 'jwt':jwt},room=request.sid,namespace='/pvServer')
+            emit('clientAuthenticated', {'successful': True, 'jwt':jwt},room=request.sid,namespace='/pvServer')
         else:
-            emit('authorised', {'successful': False},room=request.sid,namespace='/pvServer')
+            emit('clientAuthenticated', {'successful': False},room=request.sid,namespace='/pvServer')
             socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
     else:
-        emit('authorised', {'successful': True, 'jwt':'anonomous'},room=request.sid,namespace='/pvServer')
+        emit('clientAuthenticated', {'successful': True, 'jwt':'anonomous'},room=request.sid,namespace='/pvServer')
 
-@socketio.on('Authenticate', namespace='/pvServer')
+@socketio.on('AuthoriseClient', namespace='/pvServer')
 def test_authenticate(message):
     global REACT_APP_DisableLogin
 
     if (not REACT_APP_DisableLogin ):
-        if authenticateUser(message):
-            emit('authentication', {'successful': True},room=request.sid,namespace='/pvServer')
+        if  AuthoriseUser(message):
+            emit('clientAuthorisation', {'successful': True},room=request.sid,namespace='/pvServer')
         else:
-            emit('authentication', {'successful': False},room=request.sid,namespace='/pvServer')
+            emit('clientAuthorisation', {'successful': False},room=request.sid,namespace='/pvServer')
             socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
     else:
-        emit('authentication', {'successful': True},room=request.sid,namespace='/pvServer')
+        emit('clientAuthorisation', {'successful': True},room=request.sid,namespace='/pvServer')
 
 
 

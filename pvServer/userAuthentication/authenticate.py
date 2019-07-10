@@ -98,10 +98,10 @@ def checkPermissions(pvname,username):
 
 #print(knownUsers)
 
-def authenticateUserAndPermissions(JWT,pvname):
+def AutheriseUserAndPermissions(JWT,pvname):
     global knownUsers
-    #JWT=message['authentication']
-#    print('authenticateUser: ',JWT)
+    #JWT=message['clientAuthorisation']
+#    print(' AuthoriseUser: ',JWT)
     try:
 
         #print(decoded_jwt)
@@ -110,19 +110,19 @@ def authenticateUserAndPermissions(JWT,pvname):
 #            print("match")
             permissions=checkPermissions(pvname,username)
             #print(pvname+" :"+ str(permissions))
-            d={'authenticated':True,'permissions':permissions}
+            d={'userAuthorised':True,'permissions':permissions}
             return d
         else:
 #            print("no match")
-            return {'authenticated':False}
+            return {'userAuthorised':False}
     except:
-        return {'authenticated':False}
+        return {'userAuthorised':False}
     #print(user)
 
 
-def authenticateUser(JWT):
+def  AuthoriseUser(JWT):
     global knownUsers
-#    print('authenticateUser: ',JWT)
+#    print(' AuthoriseUser: ',JWT)
     try:
         #print(decoded_jwt)
         if JWT in knownUsers:
@@ -136,7 +136,7 @@ def authenticateUser(JWT):
     #print(user)
 
 
-def authoriseUser(user):
+def AuthenticateUser(user):
     global knownUsers
     if knownUsers!= None:
         JWTUsernameAndPw=str(jwt.encode({'username':str(user['email']),'password':str(user['password'])}, SECRET_PWD_KEY, algorithm='HS256').decode('utf-8'))

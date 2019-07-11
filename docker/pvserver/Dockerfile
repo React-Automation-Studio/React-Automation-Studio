@@ -45,7 +45,7 @@ RUN echo $REACT_APP_PyEpicsServerNamespace
 #ADD version ./server.key* /
 #ADD version ./server.cer* /
 ADD ./build /build
-
+VOLUME /pvServer/userAuthentication/users
 
 
 #ENTRYPOINT ["python"]

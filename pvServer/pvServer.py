@@ -290,6 +290,7 @@ def test_authenticate(message):
         else:
             emit('clientAuthorisation', {'successful': False},room=request.sid,namespace='/pvServer')
             socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
+            disconnect(request.sid,namespace='/pvServer')
     else:
         emit('clientAuthorisation', {'successful': True},room=request.sid,namespace='/pvServer')
 
@@ -308,6 +309,7 @@ def test_connect():
 @socketio.on('disconnect', namespace='/pvServer')
 def test_disconnect():
     print('Client disconnected', request.sid)
+    disconnect(request.sid,namespace='/pvServer')
 
 
 if __name__ == '__main__':

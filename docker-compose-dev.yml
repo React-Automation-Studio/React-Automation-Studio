@@ -30,6 +30,7 @@ services:
     stdin_open: true
     volumes:
       - ./certificates:/certificates/
+      - ./users:/pvServer/userAuthentication/users
   unsecurestylguidepvserver:
     env_file: .env
     environment:

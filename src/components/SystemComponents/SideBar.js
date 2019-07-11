@@ -14,6 +14,7 @@ import MailIcon from '@material-ui/icons/Mail';
 import Menu from '@material-ui/icons/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import {Link} from 'react-router-dom'
+import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 const styles = {
   list: {
     width: 250,
@@ -24,19 +25,26 @@ const styles = {
 };
 
 class SideBar extends React.Component {
-  state = {
+  constructor(props) {
+    super(props);
+
+  this.state = {
     top: false,
     left: false,
     bottom: false,
     right: false,
   };
-
+  this.logout=this.logout.bind(this);
+}
   toggleDrawer = (side, open) => () => {
     this.setState({
       [side]: open,
     });
   };
   logout(){
+    let socket=this.context.socket;
+    socket.emit('disconnect', {"goodebye":"see you later"});
+    socket.close()
     localStorage.removeItem('jwt');
 
   }
@@ -143,5 +151,5 @@ class SideBar extends React.Component {
 SideBar.propTypes = {
   classes: PropTypes.object.isRequired,
 };
-
+SideBar.contextType=AutomationStudioContext;
 export default withStyles(styles)(SideBar);

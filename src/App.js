@@ -140,10 +140,10 @@ class App extends Component {
       let jwt = JSON.parse(localStorage.getItem('jwt'));
 
       console.log('jwt',jwt);
-
+       if(jwt){
       let socket=this.state.system.socket;
       socket.emit('AuthoriseClient', jwt);
-
+}
 
   }
   handleClientAuthorisation(msg){

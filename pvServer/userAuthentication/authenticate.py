@@ -4,7 +4,7 @@ import re
 import random
 import string
 import os
-
+import bcrypt
 
 def randomString(stringLength=10):
     """Generate a random string of fixed length """
@@ -19,24 +19,12 @@ def loadFileSecretKey(filename):
         return line
     except:
         return randomString(16)
-SECRET_KEY = loadFileSecretKey('userAuthentication/SECRET_KEY')
-SECRET_PWD_KEY = loadFileSecretKey('userAuthentication/SECRET_PWD_KEY')
+#SECRET_KEY = loadFileSecretKey('userAuthentication/SECRET_KEY')
+SECRET_PWD_KEY = loadFileSecretKey('userAuthentication/users/SECRET_PWD_KEY')
 #print('SECRET_KEY: ',SECRET_KEY)
 #print('SECRET_PWD_KEY: ',SECRET_PWD_KEY)
 
-def loadFileUsers():
-    try:
-        users={}
-        with open('userAuthentication/USERS', 'r') as f:
-            for line in f:
-                userId,email, pwd = line.strip().split(':')
-                JWT=str(jwt.encode({'email':email,'password':pwd}, SECRET_PWD_KEY, algorithm='HS256').decode('utf-8'))
-                users[JWT]={'email':email,'user-id':userId,'password':pwd}
-#                print('user-id: '+userId +' email: '+email+' PW:'+pwd)
-        return users
-    except:
-        print("Error Cant load file USERS")
-        return None
+
 def createJTWUserIDs(UAGS):
     try:
         users=UAGS['users']
@@ -47,8 +35,7 @@ def createJTWUserIDs(UAGS):
 
                 JWTid=str(jwt.encode({'id':str(userid)+str(timestamp)}, SECRET_PWD_KEY, algorithm='HS256').decode('utf-8'))
                 #print(str(userid) +" :" +str(JWTid))
-                JWTUsernameAndPw=str(jwt.encode({'username':str(userid['username']),'password':str(userid['password'])}, SECRET_PWD_KEY, algorithm='HS256').decode('utf-8'))
-                knownUsers[JWTid]={'JWTUsernameAndPw':JWTUsernameAndPw,'username':userid['username']}
+                knownUsers[JWTid]={'username':userid['username'],'password':userid['password']}
 #                print('user-id: '+userId +' email: '+email+' PW:'+pwd)
         #print("createJTWUserIDs users: " +str(knownUsers))
         return knownUsers
@@ -56,22 +43,43 @@ def createJTWUserIDs(UAGS):
         print("Error Cant load file USERS")
         return None
 
-def loadUsersAndGroups():
+
+
+
+def loadPvAccess():
     try:
-        path='userAuthentication/pvList.json'
+        path='userAuthentication/users/pvAccess.json'
         timestamp=os.path.getmtime(path)
         with open(path) as json_file:
             data = json.load(json_file)
             data['timestamp']=str(timestamp)
             return data
     except:
-        print("Error Cant load file pvAccessList")
+        print("Error Cant load file pvAccess.json")
         return None
 
 
+def loadUsers():
+    try:
+        path='userAuthentication/users/users.json'
+        timestamp=os.path.getmtime(path)
+        with open(path) as json_file:
+            data = json.load(json_file)
+            data['timestamp']=str(timestamp)
+            return data
+    except:
+        print("Error Cant load file users.json")
+        return None
+
 REACT_APP_DisableLogin=not(os.getenv('REACT_APP_EnableLogin')=='true')
 if (not REACT_APP_DisableLogin) :
-    UAGS=loadUsersAndGroups()
+    users=loadUsers()
+    access=loadPvAccess()
+    #UAGS=loadUsersAndGroups()
+    UAGS={}
+    UAGS['users']=users['users']
+    UAGS['userGroups']=access['userGroups']
+    UAGS['timestamp']=str(users['timestamp'])+str(access['timestamp'])
     knownUsers=createJTWUserIDs(UAGS)
     #knownUsers=loadFileUsers()
     #print(knownUsers)
@@ -145,8 +153,9 @@ def AuthenticateUser(user):
         #print("keys", keys)
         for JWT in knownUsers:
             #print("JWT", JWT)
-            if JWTUsernameAndPw==knownUsers[JWT]['JWTUsernameAndPw']:
-                return JWT
+            if user['email']==knownUsers[JWT]['username']:
+                if bcrypt.checkpw( user['password'].encode('utf-8'), knownUsers[JWT]['password'].encode('utf-8')):
+                    return JWT
 
         else:
             print('Uknown user:' + str(user['email']))

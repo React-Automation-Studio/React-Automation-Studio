@@ -32,6 +32,8 @@ services:
     env_file: .env
     volumes:
       - ./certificates:/certificates/
+      - ./users:/pvServer/userAuthentication/users
+
   unsecurestylguidepvserver:
     build:
       context: ./

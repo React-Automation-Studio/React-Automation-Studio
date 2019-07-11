@@ -68,117 +68,123 @@ class LogIn extends React.Component {
     'AuthenticationFailed':false,
 
   };
-    this.handleChange=this.handleChange.bind(this);
-    this.catchReturn=this.catchReturn.bind(this);
-    this.handleAuthentication=this.handleAuthentication.bind(this);
-    this.handleAuthorisation=this.handleAuthorisation.bind(this);
-    this.handleUnauthorisedDialogClick=this.handleUnauthorisedDialogClick.bind(this);
-    this.handleAuthorisationFailedDialogClick=this.handleAuthorisationFailedDialogClick.bind(this);
+  this.handleChange=this.handleChange.bind(this);
+  this.catchReturn=this.catchReturn.bind(this);
+  this.handleAuthentication=this.handleAuthentication.bind(this);
+  this.handleAuthorisation=this.handleAuthorisation.bind(this);
+  this.handleUnauthorisedDialogClick=this.handleUnauthorisedDialogClick.bind(this);
+  this.handleAuthorisationFailedDialogClick=this.handleAuthorisationFailedDialogClick.bind(this);
 
-    this.handleResponse=this.handleResponse.bind(this);
-  }
+  this.handleResponse=this.handleResponse.bind(this);
+}
 
-  handleChange = name => event => {
-    let value=event.target.value;
+handleChange = name => event => {
+  let value=event.target.value;
 
-    this.setState({
-      [name]: value,
-    });
-  };
+  this.setState({
+    [name]: value,
+  });
+};
 
-  catchReturn = name => event => {
-    if(event.key === 'Enter'){
+catchReturn = name => event => {
+  if(event.key === 'Enter'){
     let value=event.target.value;
 
     this.setState({
       [name]: value,
     },this.handleSubmitClick());
   }
-  };
-  handleSubmitClick=()=>{
+};
+handleSubmitClick=()=>{
   //  console.log('button clicked')
   //  console.log('email: ',this.state.emailAddress)
   //  console.log('password: ',this.state.password)
-    let socket=this.context.socket;
-    let user={email:this.state.emailAddress,password:this.state.password}
-
+  let socket=this.context.socket;
+  let user={email:this.state.emailAddress,password:this.state.password}
+  if (socket.disconnected){
+    socket.open()
     socket.emit('AuthenticateClient', {user:{email: this.state.emailAddress,password:this.state.password}});
-    //this.login();
-
   }
+  else{
+    socket.emit('AuthenticateClient', {user:{email: this.state.emailAddress,password:this.state.password}});
+  }
+  //this.login();
 
-  handleResponse=(response) =>{
-    console.log(response)
-    return response.text().then(text => {
-        const data = text && JSON.parse(text);
-        if (!response.ok) {
-            if (response.status === 401) {
-                // auto logout if 401 response returned from api
-                //logout();
-                //location.reload(true);
-            }
+}
 
-            const error = (data && data.message) || response.statusText;
-            return Promise.reject(error);
-        }
+handleResponse=(response) =>{
+  console.log(response)
+  return response.text().then(text => {
+    const data = text && JSON.parse(text);
+    if (!response.ok) {
+      if (response.status === 401) {
+        // auto logout if 401 response returned from api
+        //logout();
+        //location.reload(true);
+      }
 
-        return data;
-    });
+      const error = (data && data.message) || response.statusText;
+      return Promise.reject(error);
+    }
+
+    return data;
+  });
 }
 
 
-  handleAuthentication(msg){
+handleAuthentication(msg){
   //  console.log('clientAuthenticated',msg)
-    if (typeof msg.jwt !== 'undefined'){
+  if (typeof msg.jwt !== 'undefined'){
     localStorage.setItem('jwt', JSON.stringify(msg.jwt));
-   }
-   else {
-     localStorage.setItem('jwt', JSON.stringify(null));
-   }
-    this.setState({'AuthorisationFailed':msg.successful!==true});
-    if(msg.successful){
-      let jwt = JSON.parse(localStorage.getItem('jwt'));
+  }
+  else {
+    localStorage.setItem('jwt', JSON.stringify(null));
+  }
+  this.setState({'AuthorisationFailed':msg.successful!==true});
+  if(msg.successful){
+    let jwt = JSON.parse(localStorage.getItem('jwt'));
     //  console.log('jwt',jwt);
 
-        let socket=this.context.socket;
-      socket.emit('AuthoriseClient', jwt);
-
-    }
-
-  }
-  handleUnauthorisedDialogClick()
-  {this.setState({'AuthorisationFailed':false});
-
-  }
-
-  handleAuthorisationFailedDialogClick()
-  {
-    this.setState({'AuthenticationFailed':false});
-
-  }
-  handleAuthorisation(msg){
-
-    this.setState({'Authenticated':msg.successful,'AuthenticationFailed':msg.successful!==true});
-
-
-  }
-  componentDidMount() {
     let socket=this.context.socket;
-    socket.on('clientAuthenticated',this.handleAuthentication);
-    socket.on('clientAuthorisation',this.handleAuthorisation);
-  }
-  componentWillUnmount(){
-      let socket=this.context.socket;
-      socket.removeListener('clientAuthenticated', this.handleAuthentication);
-      socket.removeListener('clientAuthorisation',this.handleAuthorisation);
+    socket.emit('AuthoriseClient', jwt);
+
   }
 
-  render(){
+}
+handleUnauthorisedDialogClick()
+{this.setState({'AuthorisationFailed':false});
+
+}
+
+handleAuthorisationFailedDialogClick()
+{
+  this.setState({'AuthenticationFailed':false});
+
+}
+handleAuthorisation(msg){
+
+  this.setState({'Authenticated':msg.successful,'AuthenticationFailed':msg.successful!==true});
+  
+
+}
+componentDidMount() {
+  let socket=this.context.socket;
+  localStorage.removeItem('jwt');
+  socket.on('clientAuthenticated',this.handleAuthentication);
+  socket.on('clientAuthorisation',this.handleAuthorisation);
+}
+componentWillUnmount(){
+  let socket=this.context.socket;
+  socket.removeListener('clientAuthenticated', this.handleAuthentication);
+  socket.removeListener('clientAuthorisation',this.handleAuthorisation);
+}
+
+render(){
   const { classes } = this.props;
   let user = JSON.parse(localStorage.getItem('user'));
   let socket=this.context.socket;
   //console.log(socket)
-//  console.log(user)
+  //  console.log(user)
   return (
     <React.Fragment>
 
@@ -275,12 +281,12 @@ class LogIn extends React.Component {
       </main>
       {this.state.Authenticated&&<Redirect to='/' />}
     </React.Fragment>
-      );
+        );
       }
-      }
+    }
 
-      LogIn.propTypes = {
-        classes: PropTypes.object.isRequired,
-      };
-      LogIn.contextType=AutomationStudioContext;
-      export default withStyles(styles)(LogIn);
+    LogIn.propTypes = {
+      classes: PropTypes.object.isRequired,
+    };
+    LogIn.contextType=AutomationStudioContext;
+    export default withStyles(styles)(LogIn);

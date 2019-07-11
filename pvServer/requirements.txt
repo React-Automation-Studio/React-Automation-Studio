@@ -14,3 +14,4 @@ gevent
 gevent-websocket
 python-dotenv
 PyJWT
+bcrypt

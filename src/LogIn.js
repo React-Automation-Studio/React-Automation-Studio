@@ -22,9 +22,9 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 
-function Transition(props) {
-  return <Slide direction="up" {...props} />;
-}
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 const styles = theme => ({
   main: {
     width: 'auto',
@@ -164,7 +164,7 @@ handleAuthorisationFailedDialogClick()
 handleAuthorisation(msg){
 
   this.setState({'Authenticated':msg.successful,'AuthenticationFailed':msg.successful!==true});
-  
+
 
 }
 componentDidMount() {
@@ -193,15 +193,15 @@ render(){
         TransitionComponent={Transition}
         keepMounted
 
-        aria-labelledby="alert-dialog-slide-title"
-        aria-describedby="alert-dialog-slide-description"
+        aria-labelledby="alert-login-title1"
+        aria-describedby="alert-login-slide-description1"
       >
-        <DialogTitle id="alert-dialog-slide-title">
-          {"Error!"}
+        <DialogTitle id="alert-login-title1">
+          Error!
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description">
-            Invalid email address or password!
+          <DialogContentText id="alert-login-slide-description1">
+            Invalid username or password!
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -216,14 +216,14 @@ render(){
         TransitionComponent={Transition}
         keepMounted
 
-        aria-labelledby="alert-dialog-slide-title"
-        aria-describedby="alert-dialog-slide-description"
+        aria-labelledby="alert-login-title2"
+        aria-describedby="alert-login-slide-description2"
       >
-        <DialogTitle id="alert-dialog-slide-title">
+        <DialogTitle id="alert-login-title2">
           {"Error!"}
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description">
+          <DialogContentText id="alert-login-slide-description2">
             Authentication Failed!
           </DialogContentText>
         </DialogContent>
@@ -254,7 +254,7 @@ render(){
           </Typography>
           <form className={classes.form}>
             <FormControl margin="normal" required fullWidth>
-              <InputLabel htmlFor="email">Email Address</InputLabel>
+              <InputLabel htmlFor="email">Username or Email Address</InputLabel>
               <Input id="email" name="email" autoComplete="email" autoFocus onChange={this.handleChange('emailAddress')} onKeyPress={this.catchReturn('password')}/>
             </FormControl>
             <FormControl margin="normal" required fullWidth>

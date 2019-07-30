@@ -81,7 +81,7 @@ class Main extends Component {
   }
   componentDidMount()
   {
-    console.log('main mounted')
+  //  console.log('main mounted')
   }
   render() {
 
@@ -90,7 +90,7 @@ class Main extends Component {
 
     return (
       <React.Fragment>
-        {this.context.styleGuideRedirect&&<RedirectToLogIn/>}
+      
         <Grid container direction="row" item justify="center" spacing={1} alignItems="center">
           <Grid item lg={4} sm={4} xs={2}>
             <SideBar/>

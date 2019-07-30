@@ -58,7 +58,7 @@ class RedirectToLogIn extends Component {
 
   render() {
 
-console.log("redirectToLogIn",this.state.redirectToLoginPage)
+//console.log("redirectToLogIn",this.state.redirectToLoginPage)
     const { classes } = this.props;
 
     return (

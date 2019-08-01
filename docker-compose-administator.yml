@@ -1,0 +1,17 @@
+version: '3.4'
+services:
+  administrator:
+    build:
+      context: ./
+      args: # Environment variables available at build-time
+                  - http_proxy
+                  - https_proxy
+                  - no_proxy
+      dockerfile: docker/administrator/Dockerfile
+    network_mode: host
+    tty: true
+    stdin_open: true
+    entrypoint:
+      - /bin/bash
+    volumes:
+      - ./users:/users

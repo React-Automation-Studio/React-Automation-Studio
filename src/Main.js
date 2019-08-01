@@ -10,6 +10,7 @@ import RedirectToLogIn from './components/SystemComponents/RedirectToLogin.js';
 import SideBar from './components/SystemComponents/SideBar';
 import ToggleButton from './components/BaseComponents/ToggleButton';
 import Grid from '@material-ui/core/Grid';
+import { Redirect } from 'react-router-dom'
 // Styles
 
 
@@ -71,6 +72,7 @@ class Main extends Component {
   constructor(props) {
     super(props);
     this.logout=this.logout.bind(this);
+    this.state={redirectToLoginPage:false}
   }
 
   logout(){
@@ -79,7 +81,7 @@ class Main extends Component {
   }
   componentDidMount()
   {
-    console.log('main mounted')
+  //  console.log('main mounted')
   }
   render() {
 
@@ -88,6 +90,7 @@ class Main extends Component {
 
     return (
       <React.Fragment>
+      
         <Grid container direction="row" item justify="center" spacing={1} alignItems="center">
           <Grid item lg={4} sm={4} xs={2}>
             <SideBar/>
@@ -109,45 +112,45 @@ class Main extends Component {
           <Grid item lg={2} sm={4}  xs={8}>
             <Grid container direction="row" justify="center" spacing={3} alignItems="stretch">
               <Grid item xs={12}  >
-                <Button  fullWidth= {true}  fullWidth= {true} className= {classes.button} component={Link} to="/MobileDemo1" color="primary" variant='contained'>  Mobile Demo 1 </Button>
+                <Button  fullWidth  fullWidth className= {classes.button} component={Link} to="/MobileDemo1" color="primary" variant='contained'>  Mobile Demo 1 </Button>
               </Grid>
               <Grid item xs={12}  >
-                <Button  fullWidth= {true} className= {classes.button} component={Link} to="/MobileDemo2" color="primary" variant='contained'>  Mobile Demo 2 </Button>
+                <Button  fullWidth className= {classes.button} component={Link} to="/MobileDemo2" color="primary" variant='contained'>  Mobile Demo 2 </Button>
               </Grid>
               <Grid item xs={12}  >
-                <Button  fullWidth= {true} className= {classes.button} component={Link} to="/ControlTest1" color="primary" variant='contained'>  Control Test 1 </Button>
-              </Grid>
-
-
-              <Grid item xs={12}  >
-                <Button  fullWidth= {true}  className= {classes.button} component={Link} to="/EpicsDemos" color="primary" variant='contained'>  Epics Demos </Button>
-              </Grid>
-
-              <Grid item xs={12}  >
-                <Button  fullWidth= {true} fullwidth className= {classes.button} component={Link} to="/Staging" color="primary" variant='contained'>  Staging </Button>
-              </Grid>
-
-              <Grid item xs={12}  >
-                <Button  fullWidth= {true} className= {classes.button} component={Link} to="/ControlTest3D" color="primary" variant='contained'>  3D Demos </Button>
-
-              </Grid>
-
-              <Grid item xs={12}  >
-                <Button  fullWidth= {true} className= {classes.button} component={Link} to="/ControlTestHarp1" color="primary" variant='contained'>  Control Beam Line Demo </Button>
+                <Button  fullWidth className= {classes.button} component={Link} to="/ControlTest1" color="primary" variant='contained'>  Control Test 1 </Button>
               </Grid>
 
 
               <Grid item xs={12}  >
-                <Button  fullWidth= {true} className= {classes.button} component={Link} to="/ControlTestTable" color="primary" variant='contained'>  Control Table Demo </Button>
+                <Button  fullWidth  className= {classes.button} component={Link} to="/EpicsDemos" color="primary" variant='contained'>  Epics Demos </Button>
+              </Grid>
+
+              <Grid item xs={12}  >
+                <Button  fullWidth  className= {classes.button} component={Link} to="/Staging" color="primary" variant='contained'>  Staging </Button>
+              </Grid>
+
+              <Grid item xs={12}  >
+                <Button  fullWidth className= {classes.button} component={Link} to="/ControlTest3D" color="primary" variant='contained'>  3D Demos </Button>
+
+              </Grid>
+
+              <Grid item xs={12}  >
+                <Button  fullWidth className= {classes.button} component={Link} to="/ControlTestHarp1" color="primary" variant='contained'>  Control Beam Line Demo </Button>
+              </Grid>
+
+
+              <Grid item xs={12}  >
+                <Button  fullWidth className= {classes.button} component={Link} to="/ControlTestTable" color="primary" variant='contained'>  Control Table Demo </Button>
               </Grid>
               <Grid item xs={12}  >
-                <Button  fullWidth= {true} className= {classes.button} component={Link} to="/IvanControlTable" color="primary" variant='contained'>  Ivan Control Table </Button>
+                <Button  fullWidth className= {classes.button} component={Link} to="/IvanControlTable" color="primary" variant='contained'>  Ivan Control Table </Button>
               </Grid>
               <Grid item xs={12}  >
-                <Button  fullWidth= {true} className= {classes.button} component={Link} to="/Help" color="secondary" variant='contained'>  Help </Button>
+                <Button  fullWidth className= {classes.button} component={Link} to="/Help" color="secondary" variant='contained'>  Help </Button>
               </Grid>
               <Grid item xs={12}  >
-                <Button  fullWidth= {true} className= {classes.button} target="_blank" href={AutomationStudioStyleGuideBuildURL} color="secondary" variant='contained'>  Style Guide </Button>
+                <Button  fullWidth className= {classes.button} target="_blank" href={AutomationStudioStyleGuideBuildURL} color="secondary" variant='contained'>  Style Guide </Button>
               </Grid>
 
             </Grid>

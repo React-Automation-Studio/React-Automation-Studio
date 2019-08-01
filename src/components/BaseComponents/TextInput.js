@@ -345,7 +345,8 @@ render() {
 
   const pvs=[{pvname:this.state.pvname,
              initialized:this.state.initialized,
-             value:value}]
+             value:value,
+             metadata:this.state.metadata}]
              if(this.props.debug){
              console.log('textinput pvs',pvs)
              console.log(this.state.metadata)

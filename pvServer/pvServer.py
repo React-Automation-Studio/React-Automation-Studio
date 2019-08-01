@@ -16,7 +16,7 @@ import sys
 sys.path.insert(0, '../')
 sys.path.insert(0, 'userAuthentication/')
 
-from authenticate import authenticateUser, authoriseUser
+from authenticate import  AuthoriseUser,AutheriseUserAndPermissions, AuthenticateUser
 from dotenv import load_dotenv
 load_dotenv()
 # Set this variable to "threading", "eventlet" or "gevent" to test the
@@ -89,7 +89,11 @@ def check_pv_initialized_after_disconnect():
                       d['emitter']="request_pv_info: pv not in list"
                       d['chid']=str(d['chid'])
                       try:
-                          socketio.emit(pvname,d,room=str(pvname),namespace='/pvServer')
+                          rw_room=str(pvname)+'rw'
+                          socketio.emit(pvname,d,room=rw_room,namespace='/pvServer')
+                          d['write_access']=False
+                          ro_room=str(pvname)+'ro'
+                          socketio.emit(pvname,d,room=ro_room,namespace='/pvServer')
                           clientPVlist[pvname]['isConnected']=True
                           clientPVlist[pvname]['initialized']=True
 
@@ -173,72 +177,31 @@ def test_write(message):
     #print("Test")
     authenticated=False
     if REACT_APP_DisableLogin:
-        authenticated=True
+
+        accessControl={'userAuthorised':True,'permissions':{'read':True,'write':True}}
     else :
-        authenticated=authenticateUser(message['authentication'])
+        accessControl=AutheriseUserAndPermissions(message['clientAuthorisation'],message['pvname'])
+        authenticated=accessControl['userAuthorised']
 
-    if authenticated :
-        pvname1= str(message['pvname'])
-    ##    print("PV name: "+ str(pvname1))
-    ##    print("Value to put : "+str(message['data']))
-        if not (pvname1 in	clientPVlist):
-
+    if accessControl['userAuthorised']:
+        if accessControl['permissions']['write']:
+            pvname1= str(message['pvname'])
             if "pva://" in pvname1:
-               pvname2=pvname1.replace("pva://","")
-               pv=PV(pvname2,auto_monitor=True,connection_timeout=0.2,callback= onValueChanges,connection_callback= onConnectionChange)
-               pvlist={}
-               pvlist['pv']=pv
-               pvlist['isConnected']=False
-               pvlist['initialized']=False
-               clientPVlist[pvname1]=pvlist
-               d=(clientPVlist[pvname1]['pv'].get_with_metadata(with_ctrlvars=True,use_monitor=False))
+                pvname2=pvname1.replace("pva://","")
+                try:
+                    clientPVlist[pvname1]['pv'].put(message['data']);
+                except:
+                    print("***EPICS PV put error: ")
+                    print("PV name: "+ str(pvname2))
+                    print("Value to put : "+str(message['data']))
 
-               if  (clientPVlist[pvname1]['isConnected']):
-                   if( not clientPVlist[pvname1]['initialized']):
-                       if  (clientPVlist[pvname1]['pv'].value)!=None :
-                           d=(clientPVlist[pvname1]['pv'].get_with_metadata(with_ctrlvars=True,use_monitor=False))
-                       if(clientPVlist[pvname1]['pv'].count >1):
-                           d['value']=list(d['value'])
-                       d['pvname']= pvname1
-                       d['newmetadata']= 'True'
-                       d['connected']= '1'
-
-                       clientPVlist[pvname1]['initialized']=True
-                       pvname2=pvname1.replace("pva://","")
-                       try:
-                           clientPVlist[pvname1]['pv'].put(message['data']);
-
-                       except:
-                           print("***EPICS PV put error: ")
-                           print("PV name: "+ str(pvname2))
-                           print("Value to put : "+str(message['data']))
-               else:
-                  d={}
-                  d['pvname']= pvname2
-                  d['connected']= '0'
-                  d['emitter']="write_to_pv: pv not in list"
-                  socketio.emit(pvname1,d,namespace='/pvServer')
 
 
             else: print("Unknown PV type")
         else:
-
-            if "pva://" in pvname1:
-
-               pvname2=pvname1.replace("pva://","")
-
-
-               try:
-                   clientPVlist[pvname1]['pv'].put(message['data']);
-               except:
-                   print("***EPICS PV put error: ")
-                   print("PV name: "+ str(pvname2))
-                   print("Value to put : "+str(message['data']))
-
-
-
-            else: print("Unknown PV type")
-
+            print("***PV put error: write access denied ")
+            print("PV name: "+ str(message['pvname']))
+            print("Value to put : "+str(message['data']))
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
 
@@ -254,37 +217,48 @@ def test_message(message):
     authenticated=False
     if REACT_APP_DisableLogin:
         authenticated=True
+        accessControl={'userAuthorised':True,'permissions':{'read':True,'write':True}}
     else :
-        authenticated=authenticateUser(message['authentication'])
+        accessControl=AutheriseUserAndPermissions(message['clientAuthorisation'],pvname1)
+        authenticated=accessControl['userAuthorised']
 
-    if authenticated :
+    if accessControl['userAuthorised'] :
+
 
         if not (pvname1 in	clientPVlist):
 
             if "pva://" in pvname1:
 
-                join_room(str(pvname1))
-                pvname2=pvname1.replace("pva://","")
 
-                pv= PV(pvname2,connection_timeout=0.002,connection_callback= onConnectionChange)
-
-                pvlist={}
-                pvlist['pv']=pv
-                pvlist['isConnected']=False
-                pvlist['initialized']=False
-                clientPVlist[pvname1]=pvlist
-
-
-
-                clientPVlist[pvname1]['pv'].add_callback(onValueChanges,index=0)
+                if(accessControl['permissions']['read']):
+                    if(accessControl['permissions']['write']):
+                        join_room(str(pvname1)+'rw')
+                        join_room(str(pvname1))
+                    else:
+                        join_room(str(pvname1)+'ro')
+                        join_room(str(pvname1))
+                    pvname2=pvname1.replace("pva://","")
+                    pv= PV(pvname2,connection_timeout=0.002,connection_callback= onConnectionChange)
+                    pvlist={}
+                    pvlist['pv']=pv
+                    pvlist['isConnected']=False
+                    pvlist['initialized']=False
+                    clientPVlist[pvname1]=pvlist
+                    clientPVlist[pvname1]['pv'].add_callback(onValueChanges,index=0)
 
 
         else:
 
             if "pva://" in pvname1:
-                join_room(str(pvname1))
-                pvname2=pvname1.replace("pva://","")
-                clientPVlist[pvname1]['initialized']=False
+                if(accessControl['permissions']['read']):
+                    if(accessControl['permissions']['write']):
+                        join_room(str(pvname1)+'rw')
+                        join_room(str(pvname1))
+                    else:
+                        join_room(str(pvname1)+'ro')
+                        join_room(str(pvname1))
+                    pvname2=pvname1.replace("pva://","")
+                    clientPVlist[pvname1]['initialized']=False
 
 
             else: print("Unknown PV type")
@@ -292,32 +266,33 @@ def test_message(message):
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
 
 
-@socketio.on('Authorise', namespace='/pvServer')
+@socketio.on('AuthenticateClient', namespace='/pvServer')
 def test_authorise(message):
     global REACT_APP_DisableLogin
 
     if (not REACT_APP_DisableLogin ):
-        jwt=authoriseUser(message['user'])
+        jwt=AuthenticateUser(message['user'])
         if not (jwt is None) :
-            emit('authorised', {'successful': True, 'jwt':jwt},room=request.sid,namespace='/pvServer')
+            emit('clientAuthenticated', {'successful': True, 'jwt':jwt},room=request.sid,namespace='/pvServer')
         else:
-            emit('authorised', {'successful': False},room=request.sid,namespace='/pvServer')
+            emit('clientAuthenticated', {'successful': False},room=request.sid,namespace='/pvServer')
             socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
     else:
-        emit('authorised', {'successful': True, 'jwt':'anonomous'},room=request.sid,namespace='/pvServer')
+        emit('clientAuthenticated', {'successful': True, 'jwt':'anonomous'},room=request.sid,namespace='/pvServer')
 
-@socketio.on('Authenticate', namespace='/pvServer')
+@socketio.on('AuthoriseClient', namespace='/pvServer')
 def test_authenticate(message):
     global REACT_APP_DisableLogin
 
     if (not REACT_APP_DisableLogin ):
-        if authenticateUser(message):
-            emit('authentication', {'successful': True},room=request.sid,namespace='/pvServer')
+        if  AuthoriseUser(message):
+            emit('clientAuthorisation', {'successful': True},room=request.sid,namespace='/pvServer')
         else:
-            emit('authentication', {'successful': False},room=request.sid,namespace='/pvServer')
+            emit('clientAuthorisation', {'successful': False},room=request.sid,namespace='/pvServer')
             socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
+            disconnect(request.sid,namespace='/pvServer')
     else:
-        emit('authentication', {'successful': True},room=request.sid,namespace='/pvServer')
+        emit('clientAuthorisation', {'successful': True},room=request.sid,namespace='/pvServer')
 
 
 
@@ -334,6 +309,7 @@ def test_connect():
 @socketio.on('disconnect', namespace='/pvServer')
 def test_disconnect():
     print('Client disconnected', request.sid)
+    disconnect(request.sid,namespace='/pvServer')
 
 
 if __name__ == '__main__':

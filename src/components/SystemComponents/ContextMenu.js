@@ -22,6 +22,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ViewList from '@material-ui/icons/ViewList';
 import Typography from '@material-ui/core/Typography';
 import DraftsIcon from '@material-ui/icons/Drafts';
+import Lock from '@material-ui/icons/Lock';
 import Apps from '@material-ui/icons/Apps';
 import { Coffee,LanConnect,LanDisconnect,ContentCopy } from 'mdi-material-ui/'
 const styles = theme => ({
@@ -125,7 +126,25 @@ class ContextMenu extends React.Component {
     for (i=0 ; i<(pvs.length);i++){
     //  console.log("pvs: ",i, pvs[i]);
       const index=i;
+      let icon='disconnected';
+      if (pvs[i].initialized===true){
+        if(pvs[i].metadata){
+        if (pvs[i].metadata.write_access===false){
+            icon='locked';
+        }
+        else{
+          icon='connected';
+        }
+      }
+      else{
+        icon='connected';
+      }
+      }
+      else{
+        icon='disconnected';
+      }
       if(i<(pvs.length-1)){
+
         listItems.push(
 
 
@@ -133,8 +152,9 @@ class ContextMenu extends React.Component {
             <MenuItem onClick={(event)=>this.handleMenuItemSelect(event,index)} selected={index === this.state.menuSelectedIndex} >
               <ListItemIcon>
                 <React.Fragment>
-                  {(pvs[i].initialized===true)&&<LanConnect style={{color:this.props.theme.palette.primary.main}} />}
-                  {(pvs[i].initialized===false)&&<LanDisconnect style={{color:this.props.theme.palette.error.main}} />}
+                  {(icon=='connected')&&<LanConnect style={{color:this.props.theme.palette.primary.main}} />}
+                  {(icon=='disconnected')&&<LanDisconnect style={{color:this.props.theme.palette.error.main}} />}
+                  {(icon=='locked')&&<Lock style={{color:this.props.theme.palette.error.main}} />}
                 </React.Fragment>
               </ListItemIcon>
               <Typography variant="inherit">  {pvs[i].pvname}</Typography>
@@ -153,8 +173,9 @@ class ContextMenu extends React.Component {
             <MenuItem onClick={(event)=>this.handleMenuItemSelect(event,index)} selected={index === this.state.menuSelectedIndex}>
               <ListItemIcon>
                 <React.Fragment>
-                  {pvs[i].initialized&&<LanConnect style={{color:this.props.theme.palette.primary.main}} />}
-                  {(pvs[i].initialized===false)&&<LanDisconnect style={{color:this.props.theme.palette.error.main}} />}
+                {(icon=='connected')&&<LanConnect style={{color:this.props.theme.palette.primary.main}} />}
+                {(icon=='disconnected')&&<LanDisconnect style={{color:this.props.theme.palette.error.main}} />}
+                {(icon=='locked')&&<Lock style={{color:this.props.theme.palette.error.main}} />}
                 </React.Fragment>
                 </ListItemIcon>
               <Typography variant="inherit">  {pvs[i].pvname}</Typography>
@@ -202,6 +223,26 @@ class ContextMenu extends React.Component {
     // }
     const enableProbe=typeof (this.props.disableProbe)!=='undefined'?false: this.context.enableProbe;
     //console.log('this.context.enableProbe',this.context.enableProbe)
+    let icon='disconnected';
+    if (pvs.length===1){
+
+      if (pvs[0].initialized===true){
+        if(pvs[0].metadata){
+        if (pvs[0].metadata.write_access===false){
+            icon='locked';
+        }
+        else{
+          icon='connected';
+        }
+      }
+      else{
+        icon='connected';
+      }
+      }
+      else{
+        icon='disconnected';
+      }
+    }
     return (
 
 
@@ -224,8 +265,9 @@ class ContextMenu extends React.Component {
                 <MenuItem>
                   <ListItemIcon>
                     <React.Fragment>
-                      {initialized&&<LanConnect style={{color:this.props.theme.palette.primary.main}} />}
-                      {(initialized===false)&&<LanDisconnect style={{color:this.props.theme.palette.error.main}} />}
+                    {(icon=='connected')&&<LanConnect style={{color:this.props.theme.palette.primary.main}} />}
+                    {(icon=='disconnected')&&<LanDisconnect style={{color:this.props.theme.palette.error.main}} />}
+                    {(icon=='locked')&&<Lock style={{color:this.props.theme.palette.error.main}} />}
                     </React.Fragment>
                   </ListItemIcon>
                   <Typography variant="inherit">  {pvs[0].pvname}</Typography>

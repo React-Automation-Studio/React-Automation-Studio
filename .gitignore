@@ -101,3 +101,8 @@ pvServer/userAuthentication/USERS
 epics/gateway/GATEWAY.access
 epics/gateway/GATEWAY.command
 epics/gateway/GATEWAY.pvlist
+
+users/users.json
+users/pvAccess.json
+users/SECRET_PWD_KEY
+

@@ -105,11 +105,11 @@ class FC extends React.Component {
   }
 
 
+  handleMetadata=name=>(metadata)=>{
 
-  handleMetadata(metadata){
-
-
-    this.setState({'metadata'	 :metadata});
+    let pvs=this.state.pvs;
+    pvs[name]['metadata']=metadata;
+    this.setState({pvs	 :pvs});
 
 
   }
@@ -361,26 +361,27 @@ handleOnClick =device=> (event) => {
               <Tooltip disableHoverListener={!fcFault} title={fcFaultString}>
                 <g  onClick={this.handleOnClick(this.props.systemName)}  onContextMenu={this.handleToggleContextMenu}>
 
-                  <DataConnection
-                    pv={this.state.pvs['commandPV'].pvname}
+                <DataConnection
+                  pv={this.state.pvs['commandPV'].pvname}
 
 
-                    newValueTrigger={this.state.newCommandTrigger}
-                    handleInputValue={this.handleInputValue('commandPV')}
-                    outputValue=  {this.state.pvs['commandPV'].value}
+                  newValueTrigger={this.state.newCommandTrigger}
+                  handleInputValue={this.handleInputValue('commandPV')}
+                  handleMetadata={this.handleMetadata('commandPV')}
+                  outputValue=  {this.state.pvs['commandPV'].value}
 
-                  />
-                  <DataConnection pv={this.state.pvs['safetyOkPV'].pvname} handleInputValue={this.handleInputValue('safetyOkPV')} />
-                  <DataConnection pv={this.state.pvs['safetyAlarmPV'].pvname} handleInputValue={this.handleInputValue('safetyAlarmPV')} />
-                  <DataConnection pv={this.state.pvs['airPressurePV'].pvname} handleInputValue={this.handleInputValue('airPressurePV')} />
-                  <DataConnection pv={this.state.pvs['opActInPV'].pvname} handleInputValue={this.handleInputValue('opActInPV')} />
-                  <DataConnection pv={this.state.pvs['HvPV'].pvname} handleInputValue={this.handleInputValue('HvPV')} />
-                  <DataConnection pv={this.state.pvs['movingPV'].pvname} handleInputValue={this.handleInputValue('movingPV')} useStringValue={false} />
-                  <DataConnection pv={this.state.pvs['inPV'].pvname} handleInputValue={this.handleInputValue('inPV')} />
-                  <DataConnection pv={this.state.pvs['outPV'].pvname} handleInputValue={this.handleInputValue('outPV')} />
+                />
+                <DataConnection pv={this.state.pvs['statusPV'].pvname} handleInputValue={this.handleInputValue('statusPV')} handleMetadata={this.handleMetadata('statusPV')} />
+                <DataConnection pv={this.state.pvs['safetyOkPV'].pvname} handleInputValue={this.handleInputValue('safetyOkPV')} handleMetadata={this.handleMetadata('safetyOkPV')}/>
+                  <DataConnection pv={this.state.pvs['safetyAlarmPV'].pvname} handleInputValue={this.handleInputValue('safetyAlarmPV')} handleMetadata={this.handleMetadata('safetyAlarmPV')}/>
+                  <DataConnection pv={this.state.pvs['airPressurePV'].pvname} handleInputValue={this.handleInputValue('airPressurePV')} handleMetadata={this.handleMetadata('airPressurePV')}/>
+                  <DataConnection pv={this.state.pvs['opActInPV'].pvname} handleInputValue={this.handleInputValue('opActInPV')} handleMetadata={this.handleMetadata('opActInPV')}/>
+                  <DataConnection pv={this.state.pvs['HvPV'].pvname} handleInputValue={this.handleInputValue('HvPV')} handleMetadata={this.handleMetadata('HvPV')}/>
+                  <DataConnection pv={this.state.pvs['movingPV'].pvname} handleInputValue={this.handleInputValue('movingPV')} useStringValue={false} handleMetadata={this.handleMetadata('movingPV')}/>
+                  <DataConnection pv={this.state.pvs['inPV'].pvname} handleInputValue={this.handleInputValue('inPV')} handleMetadata={this.handleMetadata('inPV')} />
+                  <DataConnection pv={this.state.pvs['outPV'].pvname} handleInputValue={this.handleInputValue('outPV')} handleMetadata={this.handleMetadata('outPV')} />
 
 
-                  <DataConnection pv={this.state.pvs['statusPV'].pvname} handleInputValue={this.handleInputValue('statusPV')} />
 
                   {initialized===true &&
                     <g>

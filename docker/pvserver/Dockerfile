@@ -27,7 +27,7 @@ WORKDIR /pvServer
 
 ENV REACT_APP_PyEpicsServerBASEURL=http://127.0.0.1
 ENV REACT_APP_PyEpicsServerPORT=5000
-ENV REACT_APP_PyEpicsServerNamespace=test
+ENV REACT_APP_PyEpicsServerNamespace=pvServer
 ENV REACT_APP_EnableLogin=false
 
 ENV EPICS_CA_ADDR_LIST="0.0.0.0:8001"
@@ -45,7 +45,7 @@ RUN echo $REACT_APP_PyEpicsServerNamespace
 #ADD version ./server.key* /
 #ADD version ./server.cer* /
 ADD ./build /build
-
+VOLUME /pvServer/userAuthentication/users
 
 
 #ENTRYPOINT ["python"]

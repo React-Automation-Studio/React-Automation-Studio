@@ -150,7 +150,7 @@ class EpicsPV extends React.Component {
       if (jwt===null){
         jwt='unauthenticated'
       }
-      socket.emit('request_pv_info', {data: this.state['pvname'],authentication:jwt});
+      socket.emit('request_pv_info', {data: this.state['pvname'],'clientAuthorisation':jwt});
     }
     handleInitialConnection(){
 
@@ -169,7 +169,7 @@ class EpicsPV extends React.Component {
       if (jwt===null){
         jwt='unauthenticated'
       }
-      socket.emit('request_pv_info', {data: this.state['pvname'],authentication:jwt});
+      socket.emit('request_pv_info', {data: this.state['pvname'],'clientAuthorisation':jwt});
     //  this.handleInitialConnection();
       this.timeout=setTimeout(this.handleInitialConnection, 3000);
       //    console.log("this.state['pvname']",this.state['pvname']);
@@ -242,7 +242,7 @@ class EpicsPV extends React.Component {
               jwt='unauthenticated'
             }
             if(! this.state.redirectToLogInPage){
-            socket.emit('write_to_pv', {pvname:pvname, data: this.props.outputValue,authentication:jwt});
+            socket.emit('write_to_pv', {pvname:pvname, data: this.props.outputValue,'clientAuthorisation':jwt});
           }
           }
           else{
@@ -259,7 +259,7 @@ class EpicsPV extends React.Component {
                   jwt='unauthenticated'
                 }
                 if(! this.state.redirectToLogInPage){
-                socket.emit('write_to_pv', {pvname:pvname, data: this.props.outputValue,authentication:jwt});
+                socket.emit('write_to_pv', {pvname:pvname, data: this.props.outputValue,'clientAuthorisation':jwt});
               }
               }
               //   	console.log('parent value and internal value are the same')

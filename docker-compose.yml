@@ -10,9 +10,6 @@ services:
       dockerfile: docker/frontendserver/Dockerfile
       network: host
     volumes:
-      - /frontendserverApp/build
-      - AsNodeModules:/frontendserverApp/node_modules
-      - AsFsNodeModules:/frontendServer/node_module
       - ./certificates:/certificates/
     restart: always
     network_mode: host
@@ -72,9 +69,6 @@ services:
                 - no_proxy
       dockerfile: docker/styleguideserver/Dockerfile
     volumes:
-      - /app/styleguide
-      - AsNodeModules:/app/node_modules
-      - AsSgNodeModules:/styleguideServer/node_modules
       - ./certificates:/certificates/
     restart: always
     network_mode: host
@@ -82,9 +76,3 @@ services:
     environment:
             - REACT_APP_PyEpicsServerPORT=5001
             - REACT_APP_EnableLogin=false
-volumes:
-    AsNodeModules:
-
-    AsSgNodeModules:
-
-    AsFsNodeModules:

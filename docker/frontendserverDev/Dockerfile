@@ -23,5 +23,6 @@ WORKDIR /frontendserverAppDev
 
 
 CMD npm start
+#CMD ls node_modules/
 
 EXPOSE 3001 3000

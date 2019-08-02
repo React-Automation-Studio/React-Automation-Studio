@@ -87,7 +87,7 @@ class MobileDemo2 extends React.Component {
               <TextInput  pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}   usePvLabel={true} usePrecision={true} prec={3} alarmSensitive={true}/>
             </Grid>
             <Grid item xs={12} lg={2}>
-              <TextOutput  pv='pva://$(device):test3' macros={{'$(device)':'testIOC'}}   usePvLabel={true} usePrecision={true} prec={3} alarmSensitive={true}/>
+              <TextUpdate  pv='pva://$(device):test3' macros={{'$(device)':'testIOC'}}  numberFormat={{notation: 'engineering',precision: 3}} usePvLabel={true} usePrecision={true} prec={3} alarmSensitive={true}/>
             </Grid>
             <Grid item xs={12} sm={6} lg={2}>
               <Gauge  pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}   usePvLabel={true} usePrecision={true} prec={3} usePvMinMax={true} />

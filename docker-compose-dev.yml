@@ -10,8 +10,8 @@ services:
                 - no_proxy
       dockerfile: docker/frontendserverDev/Dockerfile
     volumes:
-      - AsNodeModules:/frontendserverAppDev/node_modules
       - ${PWD}:/frontendserverAppDev
+      - AsNodeModules:/frontendserverAppDev/node_modules
       - ./certificates:/certificates/
     restart: always
     network_mode: host

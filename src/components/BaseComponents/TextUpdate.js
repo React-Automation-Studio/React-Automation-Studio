@@ -9,7 +9,9 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
 import Switch from '@material-ui/core/Switch';
-
+import { create, all } from 'mathjs';
+const config = { }
+const math = create(all, config)
 
 
 
@@ -202,6 +204,11 @@ render() {
 
     }
 
+    if (typeof this.props.numberFormat !== 'undefined'){
+      value=math.format(parseFloat(value),this.props.numberFormat)
+
+    }
+
   }
 
 
@@ -295,6 +302,8 @@ TextUpdate.propTypes = {
   label: PropTypes.string,
   /** If defined, then the DataConnection debugging information will be displayed*/
   debug:PropTypes.bool,
+  /** If defined, then the string representaion of the number can be formatted using the mathjs format function eg.  numberFormat={{notation: 'engineering',precision: 3}}. See https://mathjs.org/docs/reference/functions/format.html for more examples*/
+  numberFormat:PropTypes.object,
 
 };
 

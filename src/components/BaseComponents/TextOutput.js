@@ -1,3 +1,4 @@
+
 import React from 'react'
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 import DataConnection from '../SystemComponents/DataConnection';
@@ -17,6 +18,9 @@ import purple from '@material-ui/core/colors/purple';
 import green from '@material-ui/core/colors/green';
 import red from '@material-ui/core/colors/red';
 import deepOrange from '@material-ui/core/colors/deepOrange';
+import { create, all } from 'mathjs';
+const config = { }
+const math = create(all, config)
 const styles = theme => ({
 
   root: {
@@ -100,7 +104,7 @@ const styles = theme => ({
     fontWeight: 500,
     borderRadius: 4,
     //backgroundColor:'linear-gradient(45deg, #FFFFFF 1%, #FF8E53 99%)'
-      background:'linear-gradient(45deg, '+ theme.palette.background.default+ ' 1%, '+deepOrange['400'] +' 99%)'
+    background:'linear-gradient(45deg, '+ theme.palette.background.default+ ' 1%, '+deepOrange['400'] +' 99%)'
   },
   TextFieldSeverity2: {
     width: '100%',
@@ -110,19 +114,19 @@ const styles = theme => ({
     fontWeight: 500,
     borderRadius: 4,
     //backgroundColor:'linear-gradient(45deg, #FFFFFF 1%, #FF8E53 99%)'
-  background:'linear-gradient(45deg, '+ theme.palette.background.default+ ' 1%, '+red['800'] +' 99%)'
+    background:'linear-gradient(45deg, '+ theme.palette.background.default+ ' 1%, '+red['800'] +' 99%)'
   }
 
 });
 /**
- * The TextOutput Component is a wrapper on the Material-UI contained TextField component in read-only mode. The TextField component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
- * The margins and spacing must be controlled from the parent component.<br/><br/>
- * Material-UI TextField Demos:
- * https://material-ui.com/demos/text-fields<br/><br/>
- * Material-UI TextField API:
- * https://material-ui.com/api/text-field
+* The TextOutput Component is a wrapper on the Material-UI contained TextField component in read-only mode. The TextField component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
+* The margins and spacing must be controlled from the parent component.<br/><br/>
+* Material-UI TextField Demos:
+* https://material-ui.com/demos/text-fields<br/><br/>
+* Material-UI TextField API:
+* https://material-ui.com/api/text-field
 
- */
+*/
 class TextOutput extends React.Component {
   constructor(props) {
     super(props);
@@ -235,17 +239,17 @@ test(){
 handleContextMenuClose = event => {
 
 
-   this.setState({ openContextMenu: false });
- };
+  this.setState({ openContextMenu: false });
+};
 
- handleToggleContextMenu = (event) => {
-//   console.log(event.type)
+handleToggleContextMenu = (event) => {
+  //   console.log(event.type)
 
-     this.setState(state => ({ openContextMenu: !state.openContextMenu }));
+  this.setState(state => ({ openContextMenu: !state.openContextMenu }));
 
 
-   event.preventDefault();
- }
+  event.preventDefault();
+}
 
 
 render() {
@@ -259,33 +263,33 @@ render() {
   let severity=this.state.severity;
   let units="";
   const initialized=this.state.initialized;
-    let value;
+  let value;
 
   if(initialized){
-//    console.log('this.state.timestamp',this.state.timestamp)
+    //    console.log('this.state.timestamp',this.state.timestamp)
     if(typeof this.props.displayMetaData==='undefined'){
       if(typeof this.props.displayTimeStamp!=='undefined'){
         let mydate = new Date(this.state.timestamp * 1000);
         let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
         let year = mydate.getFullYear();
-       let month = months[mydate.getMonth()];
-    let date = mydate.getDate();
-    let hour = mydate.getHours();
-    let min = mydate.getMinutes();
-    let sec = mydate.getSeconds();
-    let ms = mydate.getMilliseconds()
+        let month = months[mydate.getMonth()];
+        let date = mydate.getDate();
+        let hour = mydate.getHours();
+        let min = mydate.getMinutes();
+        let sec = mydate.getSeconds();
+        let ms = mydate.getMilliseconds()
 
 
-    if( min<10){
-      min='0'+min;
+        if( min<10){
+          min='0'+min;
 
-    }
+        }
 
-    if( sec<10){
-      sec='0'+sec;
+        if( sec<10){
+          sec='0'+sec;
 
-    }
-      value=date + ' ' + month + ' ' + year + ' ' +hour + ':' + min + ':' + sec ;
+        }
+        value=date + ' ' + month + ' ' + year + ' ' +hour + ':' + min + ':' + sec ;
 
 
 
@@ -293,13 +297,13 @@ render() {
       else{
         value=this.state.value;
       }
-  }else {
+    }else {
 
-    value=this.state.metadata[this.props.displayMetaData];
-    if (this.props.debug){
-      console.log('metadata:',this.state.metadata)
+      value=this.state.metadata[this.props.displayMetaData];
+      if (this.props.debug){
+        console.log('metadata:',this.state.metadata)
+      }
     }
-  }
     if(this.props.usePvUnits===true){
       if (typeof this.state.metadata !== 'undefined'){
         if (typeof this.state.metadata.units !== 'undefined'){
@@ -330,6 +334,10 @@ render() {
       }
 
     }
+    if (typeof this.props.numberFormat !== 'undefined'){
+      value=math.format(parseFloat(value),this.props.numberFormat)
+
+    }
 
   }
 
@@ -339,7 +347,7 @@ render() {
       if (typeof this.props.StringSeverity !== 'undefined'){
         let string;
         for (string in this.props.StringSeverity){
-    //      console.log(this.props.StringSeverity[string].stringMatch)
+          //      console.log(this.props.StringSeverity[string].stringMatch)
           if (value==this.props.StringSeverity[string].stringMatch){
             severity=this.props.StringSeverity[string].severity;
             break;
@@ -383,168 +391,171 @@ render() {
 
   };
   //console.log(units)
-   const  openContextMenu  = this.state.openContextMenu;
-   const pvs=[{pvname:this.state.pvname,
-              initialized:this.state.initialized,
-            value:value,
-          metadata:this.state.metadata}]
-            //  console.log(this.props.theme)
-  return (
+  const  openContextMenu  = this.state.openContextMenu;
+  const pvs=[{pvname:this.state.pvname,
+    initialized:this.state.initialized,
+    value:value,
+    metadata:this.state.metadata}]
+    //  console.log(this.props.theme)
+    return (
 
-    <React.Fragment>
-      <DataConnection
-        pv={pv}
-        macros={macros}
-        usePvLabel={usePvLabel}
-        usePrecision={usePrecision}
-        intialLocalVariableValue={this.props.intialLocalVariableValue}
-        handleInputValue={this.handleInputValue}
-        handleMetadata={this.handleMetadata}
-        outputValue=  {this.state.outputValue}
-        useStringValue={useStringValue}
-        debug={this.props.debug}
-        handleInputValueLabel={this.handleInputValueLabel}
-      />
+      <React.Fragment>
+        <DataConnection
+          pv={pv}
+          macros={macros}
+          usePvLabel={usePvLabel}
+          usePrecision={usePrecision}
+          intialLocalVariableValue={this.props.intialLocalVariableValue}
+          handleInputValue={this.handleInputValue}
+          handleMetadata={this.handleMetadata}
+          outputValue=  {this.state.outputValue}
+          useStringValue={useStringValue}
+          debug={this.props.debug}
+          handleInputValueLabel={this.handleInputValueLabel}
+        />
 
-      {initialized===true &&
+        {initialized===true &&
 
-        <TextField
-          key={this.state.pvname+' connected'+ this.state['label']+this.props.label}
-          inputRef={node => {
+          <TextField
+            key={this.state.pvname+' connected'+ this.state['label']+this.props.label}
+            inputRef={node => {
               this.anchorEl = node;
-          }}
-          aria-owns={openContextMenu ? 'menu-list-grow' : undefined}
-          aria-haspopup="true"
-          onContextMenu={this.handleToggleContextMenu}
-          color='secondary'
-          className={textFieldClassName}
-          value={value}
-          fullWidth={true}
-          onFocus={event=>this.handleOnFocus(event)}
-          onBlur={event=>this.handleOnBlur(event)}
-          onChange={this.handleChange('value')}
-          label={usePvLabel===true? this.state['label']:this.props.label}
-          margin='none'
-          variant="outlined"
-          InputLabelProps={{
-                    classes: {
-                      root: classes.cssLabel,
-                      focused: classes.cssFocused,
-                    },
-                  }}
-          InputProps={{
-            classes: {
-           root: classes.cssOutlinedInput,
-           focused: classes.cssFocused,
-           input:classes.input,
-           notchedOutline: classes.notchedOutline,
-         },
+            }}
+            aria-owns={openContextMenu ? 'menu-list-grow' : undefined}
+            aria-haspopup="true"
+            onContextMenu={this.handleToggleContextMenu}
+            color='secondary'
+            className={textFieldClassName}
+            value={value}
+            fullWidth={true}
+            onFocus={event=>this.handleOnFocus(event)}
+            onBlur={event=>this.handleOnBlur(event)}
+            onChange={this.handleChange('value')}
+            label={usePvLabel===true? this.state['label']:this.props.label}
+            margin='none'
+            variant="outlined"
+            InputLabelProps={{
+              classes: {
+                root: classes.cssLabel,
+                focused: classes.cssFocused,
+              },
+            }}
+            InputProps={{
+              classes: {
+                root: classes.cssOutlinedInput,
+                focused: classes.cssFocused,
+                input:classes.input,
+                notchedOutline: classes.notchedOutline,
+              },
               readOnly: true,
-            endAdornment: <InputAdornment position="end">{units} {this.props.children} </InputAdornment>,
+              endAdornment: <InputAdornment position="end">{units} {this.props.children} </InputAdornment>,
 
+            }}
+          />
+
+
+        }
+
+        {((initialized===false)) &&
+          <TextField
+            key={this.state.pvname+' disconnected' }
+            inputRef={node => {
+              this.anchorEl = node;
+            }}
+            aria-owns={openContextMenu ? 'menu-list-grow' : undefined}
+            aria-haspopup="true"
+            onContextMenu={this.handleToggleContextMenu}
+            color='secondary'
+            className={textFieldClassName}
+            value={this.state.pvname}
+            label={"Connecting to:"}
+            fullWidth={true}
+            onFocus={event=>this.handleOnFocus(event)}
+            onBlur={event=>this.handleOnBlur(event)}
+            onChange={this.handleChange('value')}
+            disabled
+            margin='none'
+            variant="outlined"
+            InputLabelProps={{
+              classes: {
+                root: classes.cssLabel,
+                focused: classes.cssFocused,
+              },
+            }}
+            InputProps={{
+              classes: {
+                root: classes.cssOutlinedInput,
+                focused: classes.cssFocused,
+                input:classes.input,
+                notchedOutline: classes.notchedOutline,
+              },
+              readOnly: true,
+              endAdornment: <InputAdornment position="end">{units} {this.props.children} </InputAdornment>,
+
+            }}
+          />}
+
+
+        <ContextMenu
+          open={openContextMenu}
+          anchorEl={this.anchorEl}
+          pvs={pvs}
+          handleClose={this.handleContextMenuClose}
+          anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'center',
+          }}
+          transformOrigin={{
+              vertical: 'top',
+              horizontal: 'center',
           }}
         />
 
+      </React.Fragment>
 
-      }
+      )
+    }
+  }
 
-      {((initialized===false)) &&
-        <TextField
-          key={this.state.pvname+' disconnected' }
-          inputRef={node => {
-              this.anchorEl = node;
-          }}
-          aria-owns={openContextMenu ? 'menu-list-grow' : undefined}
-          aria-haspopup="true"
-          onContextMenu={this.handleToggleContextMenu}
-          color='secondary'
-          className={textFieldClassName}
-          value={this.state.pvname}
-          label={"Connecting to:"}
-          fullWidth={true}
-          onFocus={event=>this.handleOnFocus(event)}
-          onBlur={event=>this.handleOnBlur(event)}
-          onChange={this.handleChange('value')}
-          disabled
-          margin='none'
-          variant="outlined"
-          InputLabelProps={{
-                    classes: {
-                      root: classes.cssLabel,
-                      focused: classes.cssFocused,
-                    },
-                  }}
-          InputProps={{
-            classes: {
-           root: classes.cssOutlinedInput,
-           focused: classes.cssFocused,
-           input:classes.input,
-           notchedOutline: classes.notchedOutline,
-         },
-              readOnly: true,
-            endAdornment: <InputAdornment position="end">{units} {this.props.children} </InputAdornment>,
-
-          }}
-        />}
-
-
-      <ContextMenu
-        open={openContextMenu}
-        anchorEl={this.anchorEl}
-        pvs={pvs}
-        handleClose={this.handleContextMenuClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
-        }}
-        transformOrigin={{
-            vertical: 'top',
-            horizontal: 'center',
-        }}
-      />
-
-    </React.Fragment>
-
-  )
-}
-}
-
-TextOutput.propTypes = {
-  /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
-  pv: PropTypes.string.isRequired,
-  /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
-  macros:PropTypes.object,
-  /** Directive to fill the label with the value contained in the  EPICS pv's DESC field. */
-  usePvLabel:PropTypes.bool,
-  /** Directive to use the units contained in the  EPICS pv's EGU field. */
-  usePvUnits: PropTypes.bool,
-  /** Directive to round the value. */
-  usePrecision:PropTypes.bool,
-  /** Custom precision to round the value too, if not defined then the EPICS PREC field will be used, if `usePrecision` is defined. */
-  prec:PropTypes.number,
-  /** Custom units to be used, if `usePvUnits` is not defined. */
-  units:PropTypes.string,
-  /** Directive to use the HOPR and LOPR EPICS fields to limit the maximum and minimum values that can be contained in the value. */
-  usePvMinMax:PropTypes.bool,
-  /** Directive to use the EPICS alarm severity status to alter the fields backgorund color  */
-  alarmSensitive:PropTypes.bool,
-  /** Custom label to be used, if  `usePvLabel` is not defined. */
-  label: PropTypes.string,
-  /** Custom minimum to be used, if `usePvMinMax` is not defined. */
-  min:PropTypes.number,
-  /** Custom maximum to be used, if `usePvMinMax` is not defined. */
-  max:PropTypes.number,
-  /** If defined, then the string value of the EPICS enumerator type will be forced to be used, if not defined the the enumerator index is used */
-  useStringValue:PropTypes.bool,
-  /** If defined, then the DataConnection debugging information will be displayed*/
-  debug:PropTypes.bool,
-  /** If defined, then the timestamp of the PV will be displayed instead of its value*/
-  displayTimeStamp:PropTypes.bool,
-  /** If defined, then the Metadata property of the PV will be displayed instead of its value as defined by the input string eg. displayMetaData={'lower_disp_limit'} */
-  displayMetaData:PropTypes.string,
+  TextOutput.propTypes = {
+    /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+    pv: PropTypes.string.isRequired,
+    /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
+    macros:PropTypes.object,
+    /** Directive to fill the label with the value contained in the  EPICS pv's DESC field. */
+    usePvLabel:PropTypes.bool,
+    /** Directive to use the units contained in the  EPICS pv's EGU field. */
+    usePvUnits: PropTypes.bool,
+    /** Directive to round the value. */
+    usePrecision:PropTypes.bool,
+    /** Custom precision to round the value too, if not defined then the EPICS PREC field will be used, if `usePrecision` is defined. */
+    prec:PropTypes.number,
+    /** Custom units to be used, if `usePvUnits` is not defined. */
+    units:PropTypes.string,
+    /** Directive to use the HOPR and LOPR EPICS fields to limit the maximum and minimum values that can be contained in the value. */
+    usePvMinMax:PropTypes.bool,
+    /** Directive to use the EPICS alarm severity status to alter the fields backgorund color  */
+    alarmSensitive:PropTypes.bool,
+    /** Custom label to be used, if  `usePvLabel` is not defined. */
+    label: PropTypes.string,
+    /** Custom minimum to be used, if `usePvMinMax` is not defined. */
+    min:PropTypes.number,
+    /** Custom maximum to be used, if `usePvMinMax` is not defined. */
+    max:PropTypes.number,
+    /** If defined, then the string value of the EPICS enumerator type will be forced to be used, if not defined the the enumerator index is used */
+    useStringValue:PropTypes.bool,
+    /** If defined, then the DataConnection debugging information will be displayed*/
+    debug:PropTypes.bool,
+    /** If defined, then the timestamp of the PV will be displayed instead of its value*/
+    displayTimeStamp:PropTypes.bool,
+    /** If defined, then the Metadata property of the PV will be displayed instead of its value as defined by the input string eg. displayMetaData={'lower_disp_limit'} */
+    displayMetaData:PropTypes.string,
+    /** If defined, then the string representaion of the number can be formatted using the mathjs format function eg.  numberFormat={{notation: 'engineering',precision: 3}}. See https://mathjs.org/docs/reference/functions/format.html for more examples*/
+    numberFormat:PropTypes.object,
 
 
-};
 
-TextOutput.contextType=AutomationStudioContext;
-export default withStyles(styles,{withTheme:true})(TextOutput)
+  };
+
+  TextOutput.contextType=AutomationStudioContext;
+  export default withStyles(styles,{withTheme:true})(TextOutput)

@@ -32,6 +32,8 @@ import ControlBottomHarp1 from '../ControlScreens/GridComponents/ControlBottomHa
 import HarpGraph from '../SiteSpecificComponents/iThembaLABS/CompoundComponents/HarpGraph';
 import SideBar from '../SystemComponents/SideBar';
 import AppBar from '@material-ui/core/AppBar';
+import Paper from '@material-ui/core/Paper';
+import GraphMultiplePVs from '../BaseComponents/GraphMultiplePVs';
 
 const styles = theme => ({
   root: {
@@ -44,10 +46,25 @@ const styles = theme => ({
     color: theme.palette.text.secondary,
   },
 });
+
+
+function TabContainer(props) {
+  return (
+    <Typography component="div" style={{ padding: 8 * 1 }}>
+      {props.children}
+    </Typography>
+  );
+}
+
+TabContainer.propTypes = {
+  children: PropTypes.node.isRequired,
+};
 class ControlTestHarp1 extends React.Component {
   constructor(props) {
     super(props);
-    this.state={'editorType':'PS',
+    this.state={
+    'tabValue':0,
+    'editorType':'PS',
     'displayEditor':false,
     'editorMacros':{'$(device)':""},
     'editorSystem':{},
@@ -89,10 +106,17 @@ class ControlTestHarp1 extends React.Component {
       this.changeTopXgraphYmax= this.changeTopXgraphYmax.bind(this);
       this.changeBottomYgraphYmax= this.changeBottomYgraphYmax.bind(this);
       this.changeBottomXgraphYmax= this.changeBottomXgraphYmax.bind(this);
+        this.handleCloseEditor= this.handleCloseEditor.bind(this);
 
     }
 
+    handleCloseEditor(){
+      this.setState({
+        ['displayEditor']:false,}
+      );
 
+      //  this.setState({ ['clicked']: 1});
+    }
 
     handlePsOnClick(name){
 
@@ -120,6 +144,9 @@ class ControlTestHarp1 extends React.Component {
       this.setState({BottomXgraphYmax:ymax})
       //    console.log('changeBottomXgraphYmax',ymax)
     }
+    handleTabChange = (event, value) => {
+      this.setState({ tabValue:value });
+    };
 
 
     handleOnSystemClick=(system)=>{
@@ -257,225 +284,352 @@ class ControlTestHarp1 extends React.Component {
     //      console.log('this.state.onlyY1',this.state.onlyY1)
 
           const { classes } = this.props;
+          const { tabValue } = this.state;
           return (
             <div style={{"overflowX": "hidden",'overflowY':'hidden'}}>
-
+              <SideBar/>
               <Grid container spacing={3}>
-                <Grid item sm={1}>
-                  <SideBar/>
-                </Grid>
-                <Grid item sm={11}>
-                  <div style={{height:'25vh'}}>
+
+                <Grid item sm={9}>
+                  <Grid container spacing={3}>
+
+                    <Grid item sm={12}>
+
+                      <div style={{height:'20vh'}}>
 
 
 
-                    <ControlTopHarpEx1
+                        <ControlTopHarpEx1
 
-                      handleOnSystemClick={this.handleOnSystemClick}
-                      handleHarpInsertedOrRemoved={this.handleHarpInsertedOrRemoved}
-                      handlePsOnClick={this.handlePsOnClick}
-                      maxHarpsReached={this.state.maxHarpsReached}
-                    />
-
-
-                  </div>
-                </Grid>
-                <Grid item sm={10}>
-
-                  <Grid
-                    container
-                    direction="row"
-                    justify="center"
-                    alignItems="center"
-
-                  >
-                    <Grid item sm={2} >
-
-                      <div style={{height:'30vh',marginLeft:10,marginRight:10,marginTop:20}}>
-
-                        { (typeof this.state.x0SystemName !=='undefined')&& <React.Fragment>
-
-
-                          <HarpRangeSelection onlyX={this.state.onlyX0} onlyY={this.state.onlyY0} key={'harpRangeSelectionx0'+this.state.x0SystemName} systemName={this.state.x0SystemName} label={'Range'}/>
-                          <div style={{marginBottom:8}}>
-                            {((this.state.onlyY0===false)&&(this.state.onlyX0===false))&&
-                              <ActionFanoutButton  key={'storex0'+this.state.x0SystemName} dataPVs={['pva://$(device):x_store_offset','pva://$(device):y_store_offset']}  macros={{'$(device)':this.state.x0SystemName}}     actionValue={"1"} actionString={"Store Offset"}/>
-                            }
-                            {((this.state.onlyY0===true)&&(this.state.onlyX0===false))&&
-                              <ActionFanoutButton  key={'storex0'+this.state.x0SystemName} dataPVs={['pva://$(device):y_store_offset']}  macros={{'$(device)':this.state.x0SystemName}}     actionValue={"1"} actionString={"Store Offset"}/>
-                            }
-                            {((this.state.onlyY0===false)&&(this.state.onlyX0===true))&&
-                              <ActionFanoutButton  key={'storex0'+this.state.x0SystemName} dataPVs={['pva://$(device):x_store_offset']}  macros={{'$(device)':this.state.x0SystemName}}     actionValue={"1"} actionString={"Store Offset"}/>
-                            }
-                          </div>
-                          {((this.state.onlyY0===false)&&(this.state.onlyX0===false))&&
-                            <ActionFanoutButton key={'clearx0'+this.state.x0SystemName}  dataPVs={['pva://$(device):x_store_offset','pva://$(device):y_store_offset']}  macros={{'$(device)':this.state.x0SystemName}}     actionValue={"0"} actionString={"Clear Offset"}/>
-                          }
-                          {((this.state.onlyY0===true)&&(this.state.onlyX0===false))&&
-                            <ActionFanoutButton key={'clearx0'+this.state.x0SystemName}  dataPVs={['pva://$(device):y_store_offset']}  macros={{'$(device)':this.state.x0SystemName}}     actionValue={"0"} actionString={"Clear Offset"}/>
-                          }
-                          {((this.state.onlyY0===false)&&(this.state.onlyX0===true))&&
-                            <ActionFanoutButton key={'clearx0'+this.state.x0SystemName}  dataPVs={['pva://$(device):x_store_offset']}  macros={{'$(device)':this.state.x0SystemName}}     actionValue={"0"} actionString={"Clear Offset"}/>
-                          }
-
-                        </React.Fragment>}
+                          handleOnSystemClick={this.handleOnSystemClick}
+                          handleHarpInsertedOrRemoved={this.handleHarpInsertedOrRemoved}
+                          handlePsOnClick={this.handlePsOnClick}
+                          maxHarpsReached={this.state.maxHarpsReached}
+                        />
 
 
                       </div>
                     </Grid>
-                    <Grid item sm={10}>
-                      <Grid
-                        container
-                        direction="row"
-                        justify="flex-start"
-                        alignItems="center"
-                      >
-                        <Grid item sm={6}>
-                          <div style={{height:'32.5vh'}}>
 
-                            {((this.state.onlyY0===false)&&this.state.x0GraphPVs.length>0)&&<HarpGraph
-                              ymax={2000}
-                              units={'pA'}
-                              key={this.state.x0GraphKey}
-                              dataPVs={this.state.x0GraphPVs}
-                              rangePV={this.state.x0RangePV}
-                              legend = {this.state.x0legend}
-                              changeOtherGraphYmax={this.changeTopYgraphYmax}
-                              ymaxFromOtherGraph={this.state.TopXgraphYmax}
-                              ylabel="X Axis"
-                                                                                            />}
+                    <Grid item sm={12}>
+                      <AppBar position="static" color='inherit' indicatorColor="secondary">
+                        <Tabs
+                          value={tabValue}
+                          onChange={this.handleTabChange}
+                          variant="scrollable"
+                          scrollButtons="on"
+                          indicatorColor="primary"
+                          textColor="primary"
 
-                            {/*}<GraphTest style pv='pva://testIOC:test4'  />*/}
-                          </div>
-                        </Grid>
-                        <Grid item sm={6}>
-                          <div style={{height:'32.5vh'}}>
 
-                            {((this.state.onlyX0===false)&&this.state.y0GraphPVs.length>0)&&<HarpGraph
-                              ymax={2000}
-                              units={'pA'}
-                              key={this.state.y0GraphKey}
-                              dataPVs={this.state.y0GraphPVs}
-                              rangePV={this.state.y0RangePV}
-                              legend = {this.state.y0legend}
-                              changeOtherGraphYmax={this.changeTopXgraphYmax}
-                              ymaxFromOtherGraph={this.state.TopYgraphYmax}
-                              ylabel="Y Axis"
+                        >
+                          <Tab label="Power Supplies Diagnostics" />
 
-                                                                                            />}
-                            {/*  <GraphTest style pv='pva://testIOC:PS1:Readback:History'  />*/}
-                          </div>
-                        </Grid>
-                      </Grid>
+                          <Tab label="Beam Diagnostics" />
+                          <Tab label="Ion Source" />
+                          <Tab label="Accelerator" />
+                          <Tab label="Target " />
+                        </Tabs>
+                      </AppBar>
                     </Grid>
-                  </Grid>
 
-                  <div style={{height:'32.5vh'}}>
-                    <Grid
-                      container
-                      direction="row"
-                      justify="flex-start"
-                      alignItems="center"
-                    >
-                      <Grid item sm={2}>
-                        <div style={{height:'32.5vh',marginLeft:10,marginRight:10,marginTop:20}}>
+                    {tabValue===1&&
+                      <React.Fragment>
+                        <Grid item sm={12}>
 
-                          { (typeof this.state.x1SystemName !=='undefined')&& <React.Fragment>
+                          <Grid
+                            container
+                            direction="row"
+                            justify="center"
+                            alignItems="center"
 
+                          >
+                            <Grid item sm={2} >
 
-                            <HarpRangeSelection onlyX={this.state.onlyX1} onlyY={this.state.onlyY1} key={'harpRangeSelectionx1'+this.state.x1SystemName} systemName={this.state.x1SystemName} label={'Range'}/>
-                            <div style={{marginBottom:8}}>
-                              {((this.state.onlyY1===false)&&(this.state.onlyX1===false))&&
-                                <ActionFanoutButton  key={'storex1'+this.state.x1SystemName} dataPVs={['pva://$(device):x_store_offset','pva://$(device):y_store_offset']}  macros={{'$(device)':this.state.x1SystemName}}     actionValue={"1"} actionString={"Store Offset"}/>
-                              }
-                              {((this.state.onlyY1===true)&&(this.state.onlyX1===false))&&
-                                <ActionFanoutButton  key={'storex1'+this.state.x1SystemName} dataPVs={['pva://$(device):y_store_offset']}  macros={{'$(device)':this.state.x1SystemName}}     actionValue={"1"} actionString={"Store Offset"}/>
-                              }
-                              {((this.state.onlyY1===false)&&(this.state.onlyX1===true))&&
-                                <ActionFanoutButton  key={'storex1'+this.state.x1SystemName} dataPVs={['pva://$(device):x_store_offset']}  macros={{'$(device)':this.state.x1SystemName}}     actionValue={"1"} actionString={"Store Offset"}/>
-                              }
-                            </div>
-                            {((this.state.onlyY1===false)&&(this.state.onlyX1===false))&&
-                              <ActionFanoutButton key={'clearx1'+this.state.x1SystemName}  dataPVs={['pva://$(device):x_store_offset','pva://$(device):y_store_offset']}  macros={{'$(device)':this.state.x1SystemName}}     actionValue={"0"} actionString={"Clear Offset"}/>
-                            }
-                            {((this.state.onlyY1===true)&&(this.state.onlyX1===false))&&
-                              <ActionFanoutButton key={'clearx1'+this.state.x1SystemName}  dataPVs={['pva://$(device):y_store_offset']}  macros={{'$(device)':this.state.x1SystemName}}     actionValue={"0"} actionString={"Clear Offset"}/>
-                            }
-                            {((this.state.onlyY1===false)&&(this.state.onlyX1===true))&&
-                              <ActionFanoutButton key={'clearx1'+this.state.x1SystemName}  dataPVs={['pva://$(device):x_store_offset']}  macros={{'$(device)':this.state.x1SystemName}}     actionValue={"0"} actionString={"Clear Offset"}/>
-                            }
-                          </React.Fragment>}
+                              <div style={{height:'30vh',marginLeft:10,marginRight:10,marginTop:20}}>
+
+                                { (typeof this.state.x0SystemName !=='undefined')&& <React.Fragment>
 
 
-                        </div>
-                      </Grid>
-                      <Grid item sm={10}>
+                                  <HarpRangeSelection onlyX={this.state.onlyX0} onlyY={this.state.onlyY0} key={'harpRangeSelectionx0'+this.state.x0SystemName} systemName={this.state.x0SystemName} label={'Range'}/>
+                                  <div style={{marginBottom:8}}>
+                                    {((this.state.onlyY0===false)&&(this.state.onlyX0===false))&&
+                                      <ActionFanoutButton  key={'storex0'+this.state.x0SystemName} dataPVs={['pva://$(device):x_store_offset','pva://$(device):y_store_offset']}  macros={{'$(device)':this.state.x0SystemName}}     actionValue={"1"} actionString={"Store Offset"}/>
+                                    }
+                                    {((this.state.onlyY0===true)&&(this.state.onlyX0===false))&&
+                                      <ActionFanoutButton  key={'storex0'+this.state.x0SystemName} dataPVs={['pva://$(device):y_store_offset']}  macros={{'$(device)':this.state.x0SystemName}}     actionValue={"1"} actionString={"Store Offset"}/>
+                                    }
+                                    {((this.state.onlyY0===false)&&(this.state.onlyX0===true))&&
+                                      <ActionFanoutButton  key={'storex0'+this.state.x0SystemName} dataPVs={['pva://$(device):x_store_offset']}  macros={{'$(device)':this.state.x0SystemName}}     actionValue={"1"} actionString={"Store Offset"}/>
+                                    }
+                                  </div>
+                                  {((this.state.onlyY0===false)&&(this.state.onlyX0===false))&&
+                                    <ActionFanoutButton key={'clearx0'+this.state.x0SystemName}  dataPVs={['pva://$(device):x_store_offset','pva://$(device):y_store_offset']}  macros={{'$(device)':this.state.x0SystemName}}     actionValue={"0"} actionString={"Clear Offset"}/>
+                                  }
+                                  {((this.state.onlyY0===true)&&(this.state.onlyX0===false))&&
+                                    <ActionFanoutButton key={'clearx0'+this.state.x0SystemName}  dataPVs={['pva://$(device):y_store_offset']}  macros={{'$(device)':this.state.x0SystemName}}     actionValue={"0"} actionString={"Clear Offset"}/>
+                                  }
+                                  {((this.state.onlyY0===false)&&(this.state.onlyX0===true))&&
+                                    <ActionFanoutButton key={'clearx0'+this.state.x0SystemName}  dataPVs={['pva://$(device):x_store_offset']}  macros={{'$(device)':this.state.x0SystemName}}     actionValue={"0"} actionString={"Clear Offset"}/>
+                                  }
+
+                                </React.Fragment>}
+
+
+                              </div>
+                            </Grid>
+
+                            <Grid item sm={10}>
+                              <Grid
+                                container
+                                direction="row"
+                                justify="flex-start"
+                                alignItems="center"
+                              >
+                                <Grid item sm={6}>
+                                  <div style={{height:'32.5vh'}}>
+
+                                    {((this.state.onlyY0===false)&&this.state.x0GraphPVs.length>0)&&<HarpGraph
+                                      ymax={2000}
+                                      units={'pA'}
+                                      key={this.state.x0GraphKey}
+                                      dataPVs={this.state.x0GraphPVs}
+                                      rangePV={this.state.x0RangePV}
+                                      legend = {this.state.x0legend}
+                                      changeOtherGraphYmax={this.changeTopYgraphYmax}
+                                      ymaxFromOtherGraph={this.state.TopXgraphYmax}
+                                      ylabel="X Axis"
+                                                                                                    />}
+
+                                    {/*}<GraphTest style pv='pva://testIOC:test4'  />*/}
+                                  </div>
+                                </Grid>
+                                <Grid item sm={6}>
+                                  <div style={{height:'32.5vh'}}>
+
+                                    {((this.state.onlyX0===false)&&this.state.y0GraphPVs.length>0)&&<HarpGraph
+                                      ymax={2000}
+                                      units={'pA'}
+                                      key={this.state.y0GraphKey}
+                                      dataPVs={this.state.y0GraphPVs}
+                                      rangePV={this.state.y0RangePV}
+                                      legend = {this.state.y0legend}
+                                      changeOtherGraphYmax={this.changeTopXgraphYmax}
+                                      ymaxFromOtherGraph={this.state.TopYgraphYmax}
+                                      ylabel="Y Axis"
+
+                                                                                                    />}
+                                    {/*  <GraphTest style pv='pva://testIOC:PS1:Readback:History'  />*/}
+                                  </div>
+                                </Grid>
+                              </Grid>
+                            </Grid>
+                          </Grid>
+                        </Grid>
+                        <Grid item sm={12}>
+                          <div style={{height:'32.5vh'}}>
+                            <Grid
+                              container
+                              direction="row"
+                              justify="flex-start"
+                              alignItems="center"
+                            >
+                              <Grid item sm={2}>
+                                <div style={{height:'32.5vh',marginLeft:10,marginRight:10,marginTop:20}}>
+
+                                  { (typeof this.state.x1SystemName !=='undefined')&& <React.Fragment>
+
+
+                                    <HarpRangeSelection onlyX={this.state.onlyX1} onlyY={this.state.onlyY1} key={'harpRangeSelectionx1'+this.state.x1SystemName} systemName={this.state.x1SystemName} label={'Range'}/>
+                                    <div style={{marginBottom:8}}>
+                                      {((this.state.onlyY1===false)&&(this.state.onlyX1===false))&&
+                                        <ActionFanoutButton  key={'storex1'+this.state.x1SystemName} dataPVs={['pva://$(device):x_store_offset','pva://$(device):y_store_offset']}  macros={{'$(device)':this.state.x1SystemName}}     actionValue={"1"} actionString={"Store Offset"}/>
+                                      }
+                                      {((this.state.onlyY1===true)&&(this.state.onlyX1===false))&&
+                                        <ActionFanoutButton  key={'storex1'+this.state.x1SystemName} dataPVs={['pva://$(device):y_store_offset']}  macros={{'$(device)':this.state.x1SystemName}}     actionValue={"1"} actionString={"Store Offset"}/>
+                                      }
+                                      {((this.state.onlyY1===false)&&(this.state.onlyX1===true))&&
+                                        <ActionFanoutButton  key={'storex1'+this.state.x1SystemName} dataPVs={['pva://$(device):x_store_offset']}  macros={{'$(device)':this.state.x1SystemName}}     actionValue={"1"} actionString={"Store Offset"}/>
+                                      }
+                                    </div>
+                                    {((this.state.onlyY1===false)&&(this.state.onlyX1===false))&&
+                                      <ActionFanoutButton key={'clearx1'+this.state.x1SystemName}  dataPVs={['pva://$(device):x_store_offset','pva://$(device):y_store_offset']}  macros={{'$(device)':this.state.x1SystemName}}     actionValue={"0"} actionString={"Clear Offset"}/>
+                                    }
+                                    {((this.state.onlyY1===true)&&(this.state.onlyX1===false))&&
+                                      <ActionFanoutButton key={'clearx1'+this.state.x1SystemName}  dataPVs={['pva://$(device):y_store_offset']}  macros={{'$(device)':this.state.x1SystemName}}     actionValue={"0"} actionString={"Clear Offset"}/>
+                                    }
+                                    {((this.state.onlyY1===false)&&(this.state.onlyX1===true))&&
+                                      <ActionFanoutButton key={'clearx1'+this.state.x1SystemName}  dataPVs={['pva://$(device):x_store_offset']}  macros={{'$(device)':this.state.x1SystemName}}     actionValue={"0"} actionString={"Clear Offset"}/>
+                                    }
+                                  </React.Fragment>}
+
+
+                                </div>
+                              </Grid>
+                              <Grid item sm={10}>
+                                <Grid
+                                  container
+                                  direction="row"
+                                  justify="flex-start"
+                                  alignItems="center"
+                                >
+                                  <Grid
+                                    container
+                                    direction="row"
+                                    justify="flex-start"
+                                    alignItems="center"
+                                  >
+                                    <Grid item sm={6}>
+                                      <div style={{height:'32.5vh'}}>
+
+                                        {((this.state.onlyY1===false)&&this.state.x1GraphPVs.length>0)&&<HarpGraph
+                                          ymax={2000}
+                                          units={'pA'}
+                                          key={this.state.x1GraphKey}
+                                          dataPVs={this.state.x1GraphPVs}
+                                          rangePV={this.state.x1RangePV}
+                                          legend = {this.state.x1legend}
+                                          ylabel="X Axis"
+                                          changeOtherGraphYmax={this.changeBottomYgraphYmax}
+                                          ymaxFromOtherGraph={this.state.BottomXgraphYmax}
+                                                                                                        />}
+
+                                        {/*}<GraphTest style pv='pva://testIOC:test4'  />*/}
+                                      </div>
+                                    </Grid>
+                                    <Grid item sm={6}>
+                                      <div style={{height:'32.5vh'}}>
+
+                                        {((this.state.onlyX1===false)&&this.state.y1GraphPVs.length>0)&&<HarpGraph
+                                          ymax={2000}
+                                          units={'pA'}
+                                          key={this.state.y1GraphKey}
+                                          dataPVs={this.state.y1GraphPVs}
+                                          rangePV={this.state.y1RangePV}
+                                          legend = {this.state.y1legend}
+                                          ylabel="Y Axis"
+                                          changeOtherGraphYmax={this.changeBottomXgraphYmax}
+                                          ymaxFromOtherGraph={this.state.BottomYgraphYmax}
+                                                                                                        />}
+                                        {/*  <GraphTest style pv='pva://testIOC:PS1:Readback:History'  />*/}
+                                      </div>
+                                    </Grid>
+                                  </Grid>
+                                </Grid>
+                              </Grid>
+                            </Grid>
+                          </div>
+                        </Grid>
+                      </React.Fragment>}
+                    {tabValue===0&&
+                      <React.Fragment>
                         <Grid
                           container
                           direction="row"
                           justify="flex-start"
                           alignItems="center"
                         >
+                          <Grid item sm={6}>
+                            <div style={{height:'50vh',marginLeft:10,marginRight:10,marginTop:20}}>
+                              <GraphMultiplePVs
+                                pvs={['pva://testIOC:PS1:Readback','pva://testIOC:PS2:Readback','pva://testIOC:PS3:Readback'  ]}
+                                maxLength={600}
+                                legend = {[
+                                    'Q1 readback',
+                                    'Q2 readback',
+                                    'Q3 readback',
+                                ]}
+                                yUnits={' A'}
+                                useTimeStamp={true}
+                                usePolling={true}
+                                pollingRate={100}
+                              />
+                              {/*}<GraphTest style pv='pva://testIOC:test4'  />*/}
+                            </div>
+                          </Grid>
+                          <Grid item sm={6}>
+                            <div style={{height:'50vh',marginLeft:10,marginRight:10,marginTop:20}}>
+                              {/*}  <GraphMultiplePVs
+                                pvs={[
+                                'pva://testIOC:PS1:Readback:History',
+                                'pva://testIOC:PS2:Readback:History',
+                                'pva://testIOC:PS3:Readback:History',
+                                'pva://testIOC:PS4:Readback:History',
+                                'pva://testIOC:STR1:X:Readback:History'
+
+                                ]}
+
+                                legend = {[
+                                'PS1',
+                                'PS2',
+                                'PS3',
+                                'PS4',
+                                'STR1:X',
+
+                                ]}
+
+                              />*/}
+                              <GraphMultiplePVs
+                                pvs={[
+                                  'pva://testIOC:PS1:Setpoint',
+                                  'pva://testIOC:PS2:Setpoint',
+                                  'pva://testIOC:PS3:Setpoint',
+
+                                ]}
+
+                                maxLength={600}
+                                usePolling={true}
+                                pollingRate={100}
+                                legend = {[
+                                  'Q1 setpoint',
+                                  'Q2 setpoint',
+                                  'Q3 setpoint',
+
+
+                                ]}
+                                yUnits={' A'}
+                                useTimeStamp={true}
+
+                              />
+                              {/*  <GraphTest style pv='pva://testIOC:PS1:Readback:History'  />*/}
+                            </div>
+                          </Grid>
+                        </Grid>
+                      </React.Fragment>}
+
+                    {tabValue===2&&
+                      <React.Fragment>
+                        <Grid item sm={12}>
+
                           <Grid
                             container
                             direction="row"
-                            justify="flex-start"
+                            justify="start"
                             alignItems="center"
+
                           >
-                            <Grid item sm={6}>
-                              <div style={{height:'32.5vh'}}>
-
-                                {((this.state.onlyY1===false)&&this.state.x1GraphPVs.length>0)&&<HarpGraph
-                                  ymax={2000}
-                                  units={'pA'}
-                                  key={this.state.x1GraphKey}
-                                  dataPVs={this.state.x1GraphPVs}
-                                  rangePV={this.state.x1RangePV}
-                                  legend = {this.state.x1legend}
-                                  ylabel="X Axis"
-                                  changeOtherGraphYmax={this.changeBottomYgraphYmax}
-                                  ymaxFromOtherGraph={this.state.BottomXgraphYmax}
-                                                                                                />}
-
-                                {/*}<GraphTest style pv='pva://testIOC:test4'  />*/}
-                              </div>
-                            </Grid>
-                            <Grid item sm={6}>
-                              <div style={{height:'32.5vh'}}>
-
-                                {((this.state.onlyX1===false)&&this.state.y1GraphPVs.length>0)&&<HarpGraph
-                                  ymax={2000}
-                                  units={'pA'}
-                                  key={this.state.y1GraphKey}
-                                  dataPVs={this.state.y1GraphPVs}
-                                  rangePV={this.state.y1RangePV}
-                                  legend = {this.state.y1legend}
-                                  ylabel="Y Axis"
-                                  changeOtherGraphYmax={this.changeBottomXgraphYmax}
-                                  ymaxFromOtherGraph={this.state.BottomYgraphYmax}
-                                                                                                />}
-                                {/*  <GraphTest style pv='pva://testIOC:PS1:Readback:History'  />*/}
-                              </div>
+                            <Grid item sm={2} >
+                              <ToggleButton pv='pva://testIOC:BeamlineA:BeamOn'  label={"Beam On"} labelPlacement={"top"}/>
                             </Grid>
                           </Grid>
                         </Grid>
-                      </Grid>
-                    </Grid>
-                  </div>
 
-                  {/* <Grid item sm={3} >
-                    {((this.state['displayEditor']===true) &&(this.state['editorMacros']['$(device)']==='testIOC:PS1'))&&<ControlRightEx1 macros={this.state['editorMacros']}/>}
-                    {((this.state['displayEditor']===true) &&(this.state['editorMacros']['$(device)']==='testIOC:PS2'))&&<ControlRightEx1 macros={this.state['editorMacros']}/>}
-                    {((this.state['displayEditor']===true) &&(this.state['editorMacros']['$(device)']==='testIOC:PS3'))&&<ControlRightEx1 macros={this.state['editorMacros']}/>}
-                    {((this.state['displayEditor']===true) &&(this.state['editorMacros']['$(device)']==='testIOC:PS4'))&&<ControlRightEx1 macros={this.state['editorMacros']}/>}
-                    {((this.state['displayEditor']===true) &&(this.state['editorMacros']['$(device)']==='testIOC:STR1:X'))&&<ControlRightEx1 macros={this.state['editorMacros']}/>}
-                    {((this.state['displayEditor']===true) &&(this.state['editorType']==='steererXY'))&&<ControlRightSteererXY key={'editor-key'+this.state.editorSystem.systemName} system={this.state.editorSystem}/>}
-                    {((this.state['displayEditor']===true) &&(this.state['editorType']==='singlePS'))&&<ControlRightSinglePS key={'editor-key'+this.state.editorSystem.systemName} system={this.state.editorSystem}/>}
-                  </Grid> */}
+
+                    </React.Fragment>}
 
 
 
+                  </Grid>
 
+                </Grid>
+                <Grid item sm={3} >
+                  {((this.state['displayEditor']===true) &&(this.state['editorMacros']['$(device)']==='testIOC:PS1'))&&<ControlRightEx1 macros={this.state['editorMacros']} handleCloseEditor={this.handleCloseEditor}/>}
+                  {((this.state['displayEditor']===true) &&(this.state['editorMacros']['$(device)']==='testIOC:PS2'))&&<ControlRightEx1 macros={this.state['editorMacros']} handleCloseEditor={this.handleCloseEditor}/>}
+                  {((this.state['displayEditor']===true) &&(this.state['editorMacros']['$(device)']==='testIOC:PS3'))&&<ControlRightEx1 macros={this.state['editorMacros']}  handleCloseEditor={this.handleCloseEditor}/>}
+                  {((this.state['displayEditor']===true) &&(this.state['editorMacros']['$(device)']==='testIOC:PS4'))&&<ControlRightEx1 macros={this.state['editorMacros']} handleCloseEditor={this.handleCloseEditor} />}
+                  {((this.state['displayEditor']===true) &&(this.state['editorMacros']['$(device)']==='testIOC:STR1:X'))&&<ControlRightEx1 macros={this.state['editorMacros']}  handleCloseEditor={this.handleCloseEditor}/>}
+                  {((this.state['displayEditor']===true) &&(this.state['editorType']==='steererXY'))&&<ControlRightSteererXY key={'editor-key'+this.state.editorSystem.systemName} system={this.state.editorSystem}/>}
+                  {((this.state['displayEditor']===true) &&(this.state['editorType']==='singlePS'))&&<ControlRightSinglePS key={'editor-key'+this.state.editorSystem.systemName} system={this.state.editorSystem}/>}
                 </Grid>
               </Grid>
               </div>

@@ -222,6 +222,18 @@ class ControlTopHarpEx1 extends React.Component {
           textShadow={false}
           componentGradient={true}
           />
+          <FC
+
+          cx={550}
+          cy={100}
+          systemName={'testIOC:FC4sim'}
+          usePvUnits={true}
+          usePvLabel={false}
+          alarmSensitive={true}
+          componentGradient={true}
+          componentShadow={true}
+          label='FC4'
+          />
 
           {/*<FC
 

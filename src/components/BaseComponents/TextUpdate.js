@@ -209,9 +209,7 @@ render() {
 
     }
 
-    if (typeof value === 'string'){
-      value = value.replace(' NPP NMS', '')
-    }
+  
 
 
   }

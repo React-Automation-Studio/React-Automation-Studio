@@ -34,6 +34,30 @@ import SideBar from '../SystemComponents/SideBar';
 import AppBar from '@material-ui/core/AppBar';
 import Paper from '@material-ui/core/Paper';
 import GraphMultiplePVs from '../BaseComponents/GraphMultiplePVs';
+import ControlCenterTable from '../ControlScreens/GridComponents/ControlCenterTable'
+
+
+const systems={
+
+  'BeamLine':{
+    'Components':[
+      {systemName:'testIOC:PS1'     , displayName:'Q1'        ,editorType:'oldPS',devices:{device:{deviceName:'testIOC:PS1'     ,readback:'Readback',setpoint:'Setpoint',statusText:'On'}},props:{usePrecision:true,prec:3,units:"A",useStatus:true}},
+      {systemName:'testIOC:PS2'     , displayName:'Q2'        ,editorType:'oldPS',devices:{device:{deviceName:'testIOC:PS2'     ,readback:'Readback',setpoint:'Setpoint',statusText:'On'}},props:{usePrecision:true,prec:3,units:"A",useStatus:true}},
+      {systemName:'testIOC:PS3'     , displayName:'Q3'        ,editorType:'oldPS',devices:{device:{deviceName:'testIOC:PS3'     ,readback:'Readback',setpoint:'Setpoint',statusText:'On'}},props:{usePrecision:true,prec:3,units:"A",useStatus:true}},
+      {systemName:'testIOC:PS4'     , displayName:'BM1'       ,editorType:'oldPS',devices:{device:{deviceName:'testIOC:PS4'     ,readback:'Readback',setpoint:'Setpoint',statusText:'On'}},props:{usePrecision:true,prec:3,units:"A",useStatus:true}},
+      {systemName:'testIOC:STR1:X'  , displayName:'STR1XY:X'  ,editorType:'singlePS',devices:{device:{deviceName:'testIOC:STR1:X'     ,readback:'Readback',setpoint:'Setpoint',statusText:'On'}},props:{usePrecision:true,prec:3,units:"A",useStatus:true}},
+      {systemName:'testIOC:STR1:Y'  , displayName:'STR1XY:Y'  ,editorType:'singlePS',devices:{device:{deviceName:'testIOC:STR1:Y'     ,readback:'Readback',setpoint:'Setpoint',statusText:'On'}},props:{usePrecision:true,prec:3,units:"A",useStatus:true}},
+
+      {systemName:'testIOC:STR2:X'  , displayName:'STR2XY:X'  ,editorType:'singlePS',devices:{device:{deviceName:'testIOC:STR2:X'     ,readback:'Readback',setpoint:'Setpoint',statusText:'On'}},props:{usePrecision:true,prec:3,units:"A",useStatus:true}},
+      {systemName:'testIOC:STR2:Y'  , displayName:'STR2XY:Y'  ,editorType:'singlePS',devices:{device:{deviceName:'testIOC:STR2:Y'     ,readback:'Readback',setpoint:'Setpoint',statusText:'On'}},props:{usePrecision:true,prec:3,units:"A",useStatus:true}},
+
+      {systemName:'testIOC:STR3:Y'  , displayName:'STR3:Y'  ,editorType:'singlePS',devices:{device:{deviceName:'testIOC:STR3:Y'     ,readback:'Readback',setpoint:'Setpoint',statusText:'On'}},props:{usePrecision:true,prec:3,units:"A",useStatus:true}},
+      {systemName:'testIOC:STR4:X'  , displayName:'STR4:X'  ,editorType:'singlePS',devices:{device:{deviceName:'testIOC:STR4:X'     ,readback:'Readback',setpoint:'Setpoint',statusText:'On'}},props:{usePrecision:true,prec:3,units:"A",useStatus:true}},
+
+    ]
+  },
+
+}
 
 const styles = theme => ({
   root: {
@@ -327,8 +351,8 @@ class ControlTestHarp1 extends React.Component {
                           <Tab label="Beam Diagnostics" />
                           <Tab label="Power Supplies Diagnostics" />
                           <Tab label="Ion Source" />
-                          <Tab label="Accelerator" />
-                          <Tab label="Target " />
+                          <Tab label="Table" />
+
                         </Tabs>
                       </AppBar>
                     </Grid>
@@ -616,7 +640,10 @@ class ControlTestHarp1 extends React.Component {
 
 
                     </React.Fragment>}
-
+                        {tabValue===3  &&
+                            <Grid item sm={12}>
+                              <TabContainer > <ControlCenterTable handleOnSystemClick={this.handleOnSystemClick} systems={systems['BeamLine']['Components']}         /> </TabContainer>
+                            </Grid>}
 
 
                   </Grid>
@@ -628,6 +655,7 @@ class ControlTestHarp1 extends React.Component {
                   {((this.state['displayEditor']===true) &&(this.state['editorMacros']['$(device)']==='testIOC:PS3'))&&<ControlRightEx1 macros={this.state['editorMacros']}  handleCloseEditor={this.handleCloseEditor}/>}
                   {((this.state['displayEditor']===true) &&(this.state['editorMacros']['$(device)']==='testIOC:PS4'))&&<ControlRightEx1 macros={this.state['editorMacros']} handleCloseEditor={this.handleCloseEditor} />}
                   {((this.state['displayEditor']===true) &&(this.state['editorMacros']['$(device)']==='testIOC:STR1:X'))&&<ControlRightEx1 macros={this.state['editorMacros']}  handleCloseEditor={this.handleCloseEditor}/>}
+                  {((this.state['displayEditor']===true) &&(this.state['editorType']==='oldPS'))&&<ControlRightEx1  key={'editor-key'+this.state.editorSystem.systemName} macros={{'$(device)':this.state.editorSystem.systemName}} handleCloseEditor={this.handleCloseEditor}/>}
                   {((this.state['displayEditor']===true) &&(this.state['editorType']==='steererXY'))&&<ControlRightSteererXY key={'editor-key'+this.state.editorSystem.systemName} system={this.state.editorSystem}  handleCloseEditor={this.handleCloseEditor}/>}
                   {((this.state['displayEditor']===true) &&(this.state['editorType']==='singlePS'))&&<ControlRightSinglePS key={'editor-key'+this.state.editorSystem.systemName} system={this.state.editorSystem} handleCloseEditor={this.handleCloseEditor}/>}
                 </Grid>

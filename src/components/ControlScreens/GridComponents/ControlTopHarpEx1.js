@@ -380,7 +380,7 @@ class ControlTopHarpEx1 extends React.Component {
             handleOnClick={this.handleOnSystemClick}
             system={{
                      systemName:'testIOC:STR4',
-                     displayName:'STR3X',
+                     displayName:'STR4X',
                      editorType:'singlePS',
                      devices:
                     {

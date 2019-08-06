@@ -7,7 +7,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import EpicsPV from '../../SystemComponents/EpicsPV';
+import DataConnection from '../../SystemComponents/DataConnection';
 import TextUpdate from '../../BaseComponents/TextUpdate';
 import TextInput from '../../BaseComponents/TextInput';
 
@@ -31,7 +31,7 @@ class ControlCenterTable extends React.Component {
     super(props);
 
     let pv;
-    let EpicsPVs=[];
+    let DataConnections=[];
     let sys;
     let rowPVs=[];
     let id=0;
@@ -65,7 +65,7 @@ class ControlCenterTable extends React.Component {
 
 
 
-    this.SystemsEpicsPVs= this.SystemsEpicsPVs.bind(this);
+    this.SystemsDataConnections= this.SystemsDataConnections.bind(this);
     this.handleInputValue= this.handleInputValue.bind(this);
     this.handleMetadata= this.handleMetadata.bind(this);
     this.handleOnClick= this.handleOnClick.bind(this);
@@ -99,11 +99,11 @@ MultiplePVs
   //  console.log('row id clicked',this.props.systems[id]);
     this.props.handleOnSystemClick(this.props.systems[id]);
   }
-  SystemsEpicsPVs = () => {
+  SystemsDataConnections = () => {
     //this.test("test1");
     //this.handleInputValue();
     let pv;
-    let EpicsPVs=[];
+    let DataConnections=[];
     let sys;
     let rowPVs=this.state.rowPVs;
     let id=0;
@@ -127,9 +127,9 @@ MultiplePVs
     else{
       useStatus=false;
     }
-      EpicsPVs.push(
+      DataConnections.push(
 
-        <EpicsPV
+        <DataConnection
           key= {rowPVs[row].setpointPV.pvname.toString()}
           pv={rowPVs[row].setpointPV.pvname}
           handleInputValue={this.handleInputValue(id,'setpointPV')}
@@ -139,9 +139,9 @@ MultiplePVs
 
       );
 
-      EpicsPVs.push(
+      DataConnections.push(
 
-        <EpicsPV
+        <DataConnection
           key= {rowPVs[row].readbackPV.pvname.toString()}
           pv={rowPVs[row].readbackPV.pvname}
           handleInputValue={this.handleInputValue(id,'readbackPV')}
@@ -151,13 +151,14 @@ MultiplePVs
 
       );
       if (useStatus){
-      EpicsPVs.push(
+      DataConnections.push(
 
-        <EpicsPV
+        <DataConnection
           key= {rowPVs[row].statusPV.pvname.toString()}
           pv={rowPVs[row].statusPV.pvname}
           handleInputValue={this.handleInputValue(id,'statusPV')}
           handleMetadata={this.handleMetadata(id,'statusPV')}
+          useStringValue={true}
 
         />
 
@@ -167,10 +168,10 @@ MultiplePVs
 
       id++;
     }
-    //console.log(EpicsPVs[0]);
+    //console.log(DataConnections[0]);
 
     //  this.setState({rows:rows});
-    return EpicsPVs;
+    return DataConnections;
   }
 
 
@@ -183,7 +184,7 @@ MultiplePVs
   //  console.log("render rowPVs",rowPVs)
     return (
       <React.Fragment>
-        {this.SystemsEpicsPVs()}
+        {this.SystemsDataConnections()}
         <Paper className={classes.root}>
           <Table className={classes.table}>
             <TableHead>

@@ -90,7 +90,7 @@ class Main extends Component {
 
     return (
       <React.Fragment>
-      
+
         <Grid container direction="row" item justify="center" spacing={1} alignItems="center">
           <Grid item lg={4} sm={4} xs={2}>
             <SideBar/>
@@ -98,7 +98,7 @@ class Main extends Component {
 
           <Grid  item lg={2} sm={4}  xs={8}>
 
-            <div style={{textAlign: 'center'}} className={classes.body1}>Automation Studio V1.00</div>
+            <div style={{textAlign: 'center'}} className={classes.body1}>React Automation Studio V1.00</div>
 
           </Grid>
           <Grid item lg={4} sm={4} xs={2}>

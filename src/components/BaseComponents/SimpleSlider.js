@@ -11,7 +11,7 @@ import TextField from '@material-ui/core/TextField';
 import Switch from '@material-ui/core/Switch';
 import debounce from 'lodash.debounce';
 import Typography from '@material-ui/core/Typography';
-import Slider from '@material-ui/lab/Slider';
+import { Slider } from '@material-ui/core'
 
 
 

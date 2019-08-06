@@ -19,6 +19,12 @@ dbLoadRecords "db/PowerSupply.db", "device=testIOC:PS3"
 dbLoadRecords "db/PowerSupply.db", "device=testIOC:PS4"
 dbLoadRecords "db/PowerSupply.db", "device=testIOC:STR1:X"
 dbLoadRecords "db/PowerSupply.db", "device=testIOC:STR1:Y"
+dbLoadRecords "db/PowerSupply.db", "device=testIOC:STR2:X"
+dbLoadRecords "db/PowerSupply.db", "device=testIOC:STR2:Y"
+dbLoadRecords "db/PowerSupply.db", "device=testIOC:STR3:Y"
+dbLoadRecords "db/PowerSupply.db", "device=testIOC:STR4:X"
+
+
 
 dbLoadRecords "db/Harp.db", "device=testIOC:Harp1old"
 dbLoadRecords "db/HarpSim.db", "device=testIOC:Harp1, axis=x, desc=Harp 1"
@@ -56,6 +62,10 @@ dbLoadRecords "db/demoMultipleTextUpdates.db", "device=testIOC"
 
 cd "${TOP}/iocBoot/${IOC}"
 iocInit
+dbpf testIOC:Harp1:put-outIn 1
+dbpf testIOC:Harp2:put-outIn 1
+dbpf testIOC:FC1sim:put-outIn 1
+dbpf testIOC:BeamlineA:BeamOn 1
 
 ## Start any sequence programs
 #seq sncExample, "user=william"

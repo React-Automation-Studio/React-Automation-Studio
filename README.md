@@ -1,6 +1,6 @@
 #Introduction
 
-Automation Studio is a new software platform to enable the control of large scientific equipment through EPICS.
+React Automation Studio is a new software platform to enable the control of large scientific equipment through EPICS.
 
 The system implements a modern tool chain with a React frontend with integrated Material-UI and ReactVis components and real time Socket-IO data transfer to a Python based PyEpics backend.
 Installation occurs as a progressive web application. This enables efficient and responsive cross platform and cross device operation.
@@ -10,7 +10,7 @@ The current software stack is show in Fig1.
 ![picture](img/softwareStack.png)
 *Fig 1. The current software stack*
 
-This repository is the code source for Automation Studio. The repository is built in 4 components:
+This repository is the code source for React Automation Studio. The repository is built in 4 components:
 
 *1. pvServer*
 
@@ -44,8 +44,8 @@ In future boiler plate repositories will be created that pull in the packages fr
 
 
 
-# 1 Automated installation of Automation Studio
-The development and production versions of Automation Studio have been containerized with Docker. 
+# 1 Automated installation of React Automation Studio
+The development and production versions of React Automation Studio have been containerized with Docker.
 
 It is advised to only use the containerized version although a manual no docker install is also explained below.
 
@@ -67,7 +67,7 @@ https://docs.docker.com/compose/install/
 
 To install the efficient production version:
 
-In Automation Studio installation folder run:
+In React Automation Studio installation folder run:
 ```bash
 touch .env
 docker-compose up
@@ -81,7 +81,7 @@ To launch the development enviroment make sure the production version is stopped
 ```bash
 docker-compose -f docker-compose-dev.yml up
 ```
-This will launch the pvserver, demo IOC ,styleguide and the React Development enviroment. As with the production version the first run may take awhile. There after it is fast as all the repeated build and up commands uses cahced installations. 
+This will launch the pvserver, demo IOC ,styleguide and the React Development enviroment. As with the production version the first run may take awhile. There after it is fast as all the repeated build and up commands uses cahced installations.
 
 The react development environment app will be serverd on http://127.0.0.1:3000 and the styleguide at http://127.0.0.1:6060.
 
@@ -92,7 +92,7 @@ Bug fixes and contributions can be submitted via pull requests.
 
 To change the URL, ports, and enable user authentication See section 6.1 and 6.2
 
-# 2 Semi Automated installation of Automation Studio
+# 2 Semi Automated installation of React Automation Studio
 
 This only uses the dockerimages and nothe docker-compose file.
 
@@ -101,7 +101,7 @@ This only uses the dockerimages and nothe docker-compose file.
 
 ## 2.1 Install npm modules
 
-In Automation Studio installation folder
+In React Automation Studio installation folder
 ```bash
 touch .env
 npm install
@@ -114,7 +114,7 @@ Make sure docker is installed:
 
 https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04
 
-In Automation Studio installation folder:
+In React Automation Studio installation folder:
 To build:
 
 ```bash
@@ -135,7 +135,7 @@ Make sure docker is installed:
 
 https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04
 
-In Automation Studio installation folder:
+In React Automation Studio installation folder:
 To build:
 
 ```bash
@@ -164,7 +164,7 @@ Make sure docker is installed:
 
 https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04
 
-In Automation Studio installation folder:
+In React Automation Studio installation folder:
 To build:
 
 ```bash
@@ -185,7 +185,7 @@ Make sure docker is installed:
 
 https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04
 
-In Automation Studio installation folder:
+In React Automation Studio installation folder:
 To build:
 
 ```bash
@@ -232,7 +232,7 @@ export EPICS_CA_ADDR_LIST="127.0.0.1:8001"
 
 ```
 
-The default is to place the EPICS installation inside the epics subfolder for the installation folder Automation Studio's.
+The default is to place the EPICS installation inside the epics subfolder for the installation folder React Automation Studio's.
 
 It is also necessary then to create a symbolic link to /epics , otherwise the configure RELEASE files need to be updated manualy
 
@@ -272,7 +272,7 @@ ls
 ```
 check to see if your epics files exist
 
-cd back to Automation Studio install path and cd to epics/
+cd back to React Automation Studio install path and cd to epics/
 
 
 ### 3.1.1.3 Download and install Synapps
@@ -497,7 +497,7 @@ If authorisation is confirmed then the an encrypted JWT token is returned, which
 
 ##6.1 Enabling login and authentication
 
-First cd to Automation Studio installation directory
+First cd to React Automation Studio installation directory
 
 ```bash
 cd pvServer/userAuthentication/
@@ -534,7 +534,7 @@ Firstly the system is by default configured to serve the socket connections and 
 
 To enable secure login and installation as a PWA, a certificate and key needs to be installed that is bound to your hostname and the .env environment variables need to be edited to serve overs https and via the correct hostname.
 
-Inside the Automation Studio installation folder:
+Inside the React Automation Studio installation folder:
 
 ```bash
 ls .env

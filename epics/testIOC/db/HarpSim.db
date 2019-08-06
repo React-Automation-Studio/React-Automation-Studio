@@ -36,7 +36,7 @@
        field(PINI, "YES")
        field(DTYP,   "Soft Channel")
 
-       field(VAL,"4")
+       field(VAL,"5")
        field(FLNK,   "$(device):$(axis)_clear_offset")
   }
 

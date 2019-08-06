@@ -20,6 +20,7 @@ import {Link} from 'react-router-dom'
 import MyWindowPortal from '../../SettingsPages/MyWindowPortal';
 import SettingsSteererXY from '../../SettingsPages/SettingsSteererXY';
 import ThumbWheel from '../../BaseComponents/ThumbWheel';
+import Close from '@material-ui/icons/Close';
 //import MenuItem from '@material-ui/core/MenuItem';
 
 const styles = theme => ({
@@ -46,13 +47,23 @@ class ControlRightSinglePS extends React.Component {
     const {classes}= this.props;
 
     return (
-
       <div className={classes.body1} style={{ paddingRight: 12}}>
 
-          {system.displayName}
+
           {/*<TextUpdate  pv='pva://$(device):Setpoint.NAME' macros={this.props['macros']}  />*/}
+          <Grid style={{ paddingLeft: 12,paddingRight: 24,}} container spacing={2}>
+            <Grid item xs={11}>
+
+              {system.displayName+": Steerer"}
+
+            </Grid>
+            <Grid item xs={1}>
 
 
+                <Close  fontSize="small" onClick= {this.props.handleCloseEditor}/>
+
+            </Grid>
+          </Grid>
 
         <Card style={{ padding: 12}} >
 
@@ -63,49 +74,26 @@ class ControlRightSinglePS extends React.Component {
             justify="flex-start"
             alignItems="center" spacing={1}>
             <Grid item xs={6}  >
-              <TextInput   pv={'pva://'+system.devices.device.deviceName+":"+system.devices.device.setpoint}     usePrecision={true} prec={3}  label={'Setpoint:'} alarmSensitive={true}  usePvUnits={true} usePvMinMax={true}/>
+              <TextInput   pv={'pva://'+system.devices.device.deviceName+":"+system.devices.device.setpoint}     usePrecision={true} prec={3}  label={'X Setpoint:'} alarmSensitive={true}  usePvUnits={true} usePvMinMax={true}/>
 
             </Grid>
             <Grid item xs={6}  >
-              <TextOutput style={{marginRight:10}} pv={'pva://'+system.devices.device.deviceName+":"+system.devices.device.readback}        usePrecision={true} prec={3} usePvUnits={true} alarmSensitive={true} label={'Readback'}/>
+              <TextOutput style={{marginRight:10}} pv={'pva://'+system.devices.device.deviceName+":"+system.devices.device.readback}        usePrecision={true} prec={3} usePvUnits={true} alarmSensitive={true} label={'X Readback'}/>
 
 
             </Grid>
 
-            <Grid item xs={6}  >
+            <Grid item xs={12}  >
 
-              <TextOutput  pv={'pva://'+system.devices.device.deviceName+":get-localRemote"}        usePvUnits={true} useStringValue={true} alarmSensitive={true} label={'Loc/Rem'} useStringSeverityMatch={true} StringSeverity={[{'stringMatch':'Local','severity':1}]}/>
+              <SimpleSlider   pv={'pva://'+system.devices.device.deviceName+":"+system.devices.device.setpoint}     usePrecision={true} prec={3}  label={'X Setpoint:'} alarmSensitive={true}  usePvUnits={true} usePvMinMax={true}/>
             </Grid>
             <Grid item xs={6}  >
-              <TextOutput  pv={'pva://'+system.devices.device.deviceName+":get-statusText"}        useStringValue={true} alarmSensitive={true} label={'Status'}  useStringSeverityMatch={true} StringSeverity={[{'stringMatch':'Fault','severity':2}]}/>
+
             </Grid>
             <Grid item xs={12}  >
 
             </Grid>
-            <Grid item xs={4}  >
 
-              <ToggleButton pv={'pva://'+system.devices.device.deviceName+":put-offOn"}  label={' On/Off'} labelPlacement={"end"} custom_selection_strings={["Off","On"]}/>
-
-
-
-            </Grid>
-            <Grid item xs={4}  >
-
-
-
-
-
-            </Grid>
-            <Grid item xs={4}  >
-
-              <Button component={Link} to={{
-                pathname: "/SettingsSinglePS",
-                search:JSON.stringify(system),
-                state: ["sdas"],
-                data:"hello2"
-              }} target="_blank" color="primary" variant='contained'>  Settings </Button>
-
-            </Grid>
 
 
 
@@ -124,13 +112,32 @@ class ControlRightSinglePS extends React.Component {
                 </Grid>
               </Grid>
             </Grid>
-            <Grid item xs={6} >
-              <SelectionInput  pv={'pva://'+system.devices.device.deviceName+':put-S&EImmed'} label={'Mode'} useStringValue={true}/>
+            <Grid item xs={4}  >
+            <ToggleButton pv={'pva://'+system.devices.device.deviceName+':On'} macros={this.props['macros']}  labelPlacement={"top"}  />
+
+
+
+
+
             </Grid>
-            <Grid item xs={6}  >
-              <ActionButton pv={'pva://'+system.devices.device.deviceName+":put-enter"} macros={this.props['macros']}   actionValue={"1"}
-                actionString={"Enter"}/>
+            <Grid item xs={4}  >
+
+
+
+
+
             </Grid>
+            <Grid item xs={4}  >
+
+              <Button component={Link} to={{
+                pathname: "/SettingsSteererXY",
+                search:JSON.stringify(system),
+                state: ["sdas"],
+                data:"hello2"
+              }} target="_blank" color="primary" style={{width:"100%"}} variant='contained'>  Settings </Button>
+
+            </Grid>
+
 
           </Grid>
 
@@ -138,7 +145,6 @@ class ControlRightSinglePS extends React.Component {
 
 
       </div>
-
 
     );
   }

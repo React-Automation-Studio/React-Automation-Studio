@@ -42,196 +42,192 @@ class SettingsSteererXY extends React.Component {
     return (
 
 
-          <Grid   container
-            direction="row"
-            justify="flex-start"
-            alignItems="center" spacing={1}>
-            <Grid item xs={3}  >
-              <div style={{ paddingRight: 12}}>
-                <body1 className={classes.body1}>
-                  {system.displayName+": X-Steerer"}
+      <Grid   container
+        direction="row"
+        justify="flex-start"
+        alignItems="center" spacing={1}>
+        <Grid item xs={3}  >
+          <div className={classes.body1} >
 
 
-                </body1>
+            <Grid style={{ paddingLeft: 12,paddingRight: 24,}} container spacing={2}>
+              <Grid item xs={11}>
 
-                <Card style={{ padding: 12}} >
+                {system.displayName+": X-Steerer"}
 
-
-
-                  <Grid   container
-                    direction="row"
-                    justify="flex-start"
-                    alignItems="center" spacing={1}>
-                    <Grid item xs={6}  >
-                      <TextInput   pv={'pva://'+system.devices.xDevice.deviceName+":"+system.devices.xDevice.setpoint}     usePrecision={true} prec={3}  label={'X Setpoint:'} alarmSensitive={true}  usePvUnits={true} usePvMinMax={true}/>
-
-                    </Grid>
-                    <Grid item xs={6}  >
-                      <TextOutput style={{marginRight:10}} pv={'pva://'+system.devices.xDevice.deviceName+":"+system.devices.xDevice.readback}        usePrecision={true} prec={3} usePvUnits={true} alarmSensitive={true} label={'X Readback'}/>
-
-
-                    </Grid>
-
-                    <Grid item xs={6}  >
-
-                      <TextOutput  pv={'pva://'+system.devices.xDevice.deviceName+":get-localRemote"}        usePvUnits={true} useStringValue={true} alarmSensitive={true} label={'X Loc/Rem'} useStringSeverityMatch={true} StringSeverity={[{'stringMatch':'Local','severity':1}]}/>
-                    </Grid>
-                    <Grid item xs={6}  >
-                      <TextOutput  pv={'pva://'+system.devices.xDevice.deviceName+":get-statusText"}        useStringValue={true} alarmSensitive={true} label={'X Status'}  useStringSeverityMatch={true} StringSeverity={[{'stringMatch':'Fault','severity':2}]}/>
-                    </Grid>
-                    <Grid item xs={12}  >
-
-                    </Grid>
-                    <Grid item xs={4}  >
-
-                      <ToggleButton pv={'pva://'+system.devices.xDevice.deviceName+":put-offOn"}  label={' On/Off'} labelPlacement={"End"} custom_selection_strings={["Off","On"]}/>
+              </Grid>
+              <Grid item xs={1}>
 
 
 
-                    </Grid>
-                    <Grid item xs={4}  >
-
-
-
-
-
-                    </Grid>
-                    <Grid item xs={4}  >
-
-                      <Button component={Link} to={{
-                        pathname: "/SettingsSteererXY",
-                        search:JSON.stringify(system),
-                        state: ["sdas"],
-                        data:"hello2"
-                      }} target="_blank" color="primary" variant='contained'>  Settings </Button>
-
-                    </Grid>
-
-
-
-
-
-                    <Grid item xs={12}  >
-                      <Grid   container  justify="flex-start" direction="row"    alignItems="center" spacing={4}>
-                        <Grid item xs={12} sm={12} >
-                        <ThumbWheel
-                          pv={'pva://'+system.devices.xDevice.deviceName+":"+system.devices.xDevice.setpoint}
-                          macros={this.props['macros']}
-                          prec_integer={2}
-                          prec_decimal={2}
-                          />
-
-                        </Grid>
-                      </Grid>
-                    </Grid>
-                    <Grid item xs={6} >
-                      <SelectionInput  pv={'pva://'+system.devices.xDevice.deviceName+':put-S&EImmed'} label={'Mode'} useStringValue={true}/>
-                    </Grid>
-                    <Grid item xs={6}  >
-                      <ActionButton pv={'pva://'+system.devices.xDevice.deviceName+":put-enter"} macros={this.props['macros']}   actionValue={"1"}
-                        actionString={"Enter"}/>
-                    </Grid>
-
-                  </Grid>
-
-                </Card>
-                <div style={{marginTop:12}}>
-                  <body1 className={classes.body1} >
-                    {system.displayName+": Y-Steerer"}
-                    {/*<TextUpdate  pv='pva://$(device):Setpoint.NAME' macros={this.props['macros']}  />*/}
-
-                  </body1>
-                  <Card style={{ padding: 12}} >
-
-
-
-                    <Grid   container
-                      direction="row"
-                      justify="flex-start"
-                      alignItems="center" spacing={1}>
-                      <Grid item xs={6}  >
-                        <TextInput   pv={'pva://'+system.devices.yDevice.deviceName+":"+system.devices.yDevice.setpoint}     usePrecision={true} prec={3}  label={'Y Setpoint:'} alarmSensitive={true}  usePvUnits={true} usePvMinMax={true}/>
-
-                      </Grid>
-                      <Grid item xs={6}  >
-                        <TextOutput style={{marginRight:10}} pv={'pva://'+system.devices.yDevice.deviceName+":"+system.devices.yDevice.readback}        usePrecision={true} prec={3} usePvUnits={true} alarmSensitive={true} label={'Y Readback'}/>
-
-
-                      </Grid>
-
-                      <Grid item xs={6}  >
-
-                        <TextOutput  pv={'pva://'+system.devices.yDevice.deviceName+":get-localRemote"}        usePvUnits={true} useStringValue={true} alarmSensitive={true} label={'Y Loc/Rem'} useStringSeverityMatch={true} StringSeverity={[{'stringMatch':'Local','severity':1}]}/>
-                      </Grid>
-                      <Grid item xs={6}  >
-                        <TextOutput  pv={'pva://'+system.devices.yDevice.deviceName+":get-statusText"}        useStringValue={true} alarmSensitive={true} label={'Y Status'}  useStringSeverityMatch={true} StringSeverity={[{'stringMatch':'Fault','severity':2}]}/>
-                      </Grid>
-                      <Grid item xs={4}  >
-
-                        <ToggleButton pv={'pva://'+system.devices.yDevice.deviceName+":put-offOn"}  label={' On/Off'} labelPlacement={"End"} custom_selection_strings={["Off","On"]}/>
-
-
-
-                      </Grid>
-                      <Grid item xs={4}  >
-
-
-
-
-                      </Grid>
-
-                      <Grid item xs={4}  >
-                        {/*              <Button color="primary" variant='contained' onClick={this.handleSettingsButtonClick}>  Settings </Button>*/}
-                        <Button component={Link} to={{
-                          pathname: "/SettingsSteererXY",
-                          search:JSON.stringify(system),
-                          state: ["sdas"],
-                          data:"hello2"
-                        }} target="_blank" color="primary" variant='contained'>  Settings </Button>
-
-
-                      </Grid>
-
-
-
-
-
-                      <Grid item xs={12}  >
-                        <Grid   container  justify="flex-start" direction="row"    alignItems="center" spacing={4}>
-                          <Grid item xs={12} sm={12} >
-                          <ThumbWheel
-                            pv={'pva://'+system.devices.yDevice.deviceName+":"+system.devices.yDevice.setpoint}
-                            macros={this.props['macros']}
-                            prec_integer={2}
-                            prec_decimal={2}
-                            />
-                  
-                          </Grid>
-                        </Grid>
-                      </Grid>
-                      <Grid item xs={6} >
-                        <SelectionInput  pv={'pva://'+system.devices.yDevice.deviceName+':put-S&EImmed'} label={'Mode'} useStringValue={true}/>
-                      </Grid>
-                      <Grid item xs={6}  >
-                        <ActionButton pv={'pva://'+system.devices.yDevice.deviceName+":put-enter"} macros={this.props['macros']}   actionValue={"1"}
-                          actionString={"Enter"}/>
-                      </Grid>
-
-                    </Grid>
-
-                  </Card>
-                </div>
-              </div>
-
-
+              </Grid>
             </Grid>
-          </Grid>
+
+            <Card style={{ padding: 12}} >
 
 
 
-            );
-            }
-            }
+              <Grid   container
+                direction="row"
+                justify="flex-start"
+                alignItems="center" spacing={1}>
+                <Grid item xs={6}  >
+                  <TextInput   pv={'pva://'+system.devices.xDevice.deviceName+":"+system.devices.xDevice.setpoint}     usePrecision={true} prec={3}  label={'X Setpoint:'} alarmSensitive={true}  usePvUnits={true} usePvMinMax={true}/>
 
-            SettingsSteererXY.contextType=AutomationStudioContext;
-            export default withStyles(styles,{withTheme:true})(SettingsSteererXY)
+                </Grid>
+                <Grid item xs={6}  >
+                  <TextOutput style={{marginRight:10}} pv={'pva://'+system.devices.xDevice.deviceName+":"+system.devices.xDevice.readback}        usePrecision={true} prec={3} usePvUnits={true} alarmSensitive={true} label={'X Readback'}/>
+
+
+                </Grid>
+
+                <Grid item xs={12}  >
+
+                  <SimpleSlider   pv={'pva://'+system.devices.xDevice.deviceName+":"+system.devices.xDevice.setpoint}     usePrecision={true} prec={3}  label={'X Setpoint:'} alarmSensitive={true}  usePvUnits={true} usePvMinMax={true}/>
+                </Grid>
+
+
+
+
+
+
+
+                <Grid item xs={12}  >
+                  <Grid   container  justify="flex-start" direction="row"    alignItems="center" spacing={1}>
+                    <Grid item xs={12} sm={12} >
+                      <ThumbWheel
+                        pv={'pva://'+system.devices.xDevice.deviceName+":"+system.devices.xDevice.setpoint}
+                        macros={this.props['macros']}
+                        prec_integer={2}
+                        prec_decimal={2}
+                      />
+
+                    </Grid>
+                  </Grid>
+                </Grid>
+                <Grid item xs={4}  >
+                  <ToggleButton pv={'pva://'+system.devices.xDevice.deviceName+':On'} macros={this.props['macros']}  labelPlacement={"top"}  />
+
+
+
+
+
+                </Grid>
+                <Grid item xs={4}  >
+
+
+
+
+
+                </Grid>
+                <Grid item xs={4}  >
+
+
+
+                </Grid>
+
+
+              </Grid>
+
+            </Card>
+          </div>
+        </Grid>
+        <Grid item xs={3}  >
+          <div className={classes.body1} >
+
+
+            <Grid style={{ paddingLeft: 12,paddingRight: 24,}} container spacing={2}>
+              <Grid item xs={11}>
+
+                {system.displayName+": Y-Steerer"}
+
+              </Grid>
+              <Grid item xs={1}>
+
+
+
+              </Grid>
+            </Grid>
+
+            <Card style={{ padding: 12}} >
+
+
+
+              <Grid   container
+                direction="row"
+                justify="flex-start"
+                alignItems="center" spacing={1}>
+                <Grid item xs={6}  >
+                  <TextInput   pv={'pva://'+system.devices.yDevice.deviceName+":"+system.devices.yDevice.setpoint}     usePrecision={true} prec={3}  label={'X Setpoint:'} alarmSensitive={true}  usePvUnits={true} usePvMinMax={true}/>
+
+                </Grid>
+                <Grid item xs={6}  >
+                  <TextOutput style={{marginRight:10}} pv={'pva://'+system.devices.yDevice.deviceName+":"+system.devices.yDevice.readback}        usePrecision={true} prec={3} usePvUnits={true} alarmSensitive={true} label={'X Readback'}/>
+
+
+                </Grid>
+
+                <Grid item xs={12}  >
+
+                  <SimpleSlider   pv={'pva://'+system.devices.yDevice.deviceName+":"+system.devices.yDevice.setpoint}     usePrecision={true} prec={3}  label={'X Setpoint:'} alarmSensitive={true}  usePvUnits={true} usePvMinMax={true}/>
+                </Grid>
+
+
+
+
+
+
+
+                <Grid item xs={12}  >
+                  <Grid   container  justify="flex-start" direction="row"    alignItems="center" spacing={1}>
+                    <Grid item xs={12} sm={12} >
+                      <ThumbWheel
+                        pv={'pva://'+system.devices.yDevice.deviceName+":"+system.devices.yDevice.setpoint}
+                        macros={this.props['macros']}
+                        prec_integer={2}
+                        prec_decimal={2}
+                      />
+
+                    </Grid>
+                  </Grid>
+                </Grid>
+                <Grid item xs={4}  >
+                  <ToggleButton pv={'pva://'+system.devices.yDevice.deviceName+':On'} macros={this.props['macros']}  labelPlacement={"top"}  />
+
+
+
+
+
+                </Grid>
+                <Grid item xs={4}  >
+
+
+
+
+
+                </Grid>
+                <Grid item xs={4}  >
+
+
+
+                </Grid>
+
+
+              </Grid>
+
+            </Card>
+          </div>
+
+
+
+        </Grid>
+      </Grid>
+
+
+
+    );
+  }
+}
+
+SettingsSteererXY.contextType=AutomationStudioContext;
+export default withStyles(styles,{withTheme:true})(SettingsSteererXY)

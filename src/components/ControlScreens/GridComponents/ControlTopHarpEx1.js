@@ -283,16 +283,19 @@ class ControlTopHarpEx1 extends React.Component {
             textShadow={false}
             componentGradient={true}
             />*/}
+
+
             <SteererXYMagnet
+
             handleOnClick={this.handleOnSystemClick}
             system={{
-                     systemName:'testPSC',
-                     displayName:'testPSC XY',
+                     systemName:'testIOC:STR1',
+                     displayName:'STR1XY',
                      editorType:'steererXY',
                      devices:
                     {
-                      xDevice:{deviceName:'testPSC0',readback:'get-I',setpoint:'put-I'},
-                      yDevice:{deviceName:'testPSC1',readback:'get-I',setpoint:'put-I'}
+                      xDevice:{deviceName:'testIOC:STR1:X',readback:'Readback',setpoint:'Setpoint'},
+                      yDevice:{deviceName:'testIOC:STR1:Y',readback:'Readback',setpoint:'Setpoint'}
                     }
                   }}
 
@@ -315,13 +318,13 @@ class ControlTopHarpEx1 extends React.Component {
             <SteererXYMagnet
             handleOnClick={this.handleOnSystemClick}
             system={{
-                     systemName:'testPSC',
-                     displayName:'testPSC XY',
+                     systemName:'testIOC:STR2',
+                     displayName:'STR2XY',
                      editorType:'steererXY',
                      devices:
                     {
-                      xDevice:{deviceName:'testPSC0',readback:'get-I',setpoint:'put-I'},
-                      yDevice:{deviceName:'testPSC1',readback:'get-I',setpoint:'put-I'}
+                      xDevice:{deviceName:'testIOC:STR2:X',readback:'Readback',setpoint:'Setpoint'},
+                      yDevice:{deviceName:'testIOC:STR2:Y',readback:'Readback',setpoint:'Setpoint'}
                     }
                   }}
 
@@ -344,16 +347,18 @@ class ControlTopHarpEx1 extends React.Component {
 
             <SteererYMagnet
             handleOnClick={this.handleOnSystemClick}
-            system={{
-                     systemName:'testPSC-Y',
-                     displayName:'testPSC Y-Steerer',
-                     editorType:'singlePS',
-                     devices:
-                    {
-                      device:{deviceName:'testPSC0',readback:'get-I',setpoint:'put-I'},
 
-                    }
-                  }}
+                  system={{
+                           systemName:'testIOC:STR3',
+                           displayName:'STR3Y',
+                           editorType:'singlePS',
+                           devices:
+                          {
+                            device:{deviceName:'testIOC:STR3:Y',readback:'Readback',setpoint:'Setpoint'}
+
+                        }
+                      }}
+
 
             cx={1100}
             cy={100}
@@ -373,8 +378,16 @@ class ControlTopHarpEx1 extends React.Component {
 
             <SteererYMagnet
             handleOnClick={this.handleOnSystemClick}
-            system={{systemName:'testPSC-X', displayName:'testPSC X-Steerer',editorType:'singlePS',devices:{device:{deviceName:'testPSC1',readback:'get-I',setpoint:'put-I'}} }}
+            system={{
+                     systemName:'testIOC:STR4',
+                     displayName:'STR3X',
+                     editorType:'singlePS',
+                     devices:
+                    {
+                      device:{deviceName:'testIOC:STR4:X',readback:'Readback',setpoint:'Setpoint'}
 
+                  }
+                }}
             cx={1250}
             cy={100}
             xUnits={'A'}

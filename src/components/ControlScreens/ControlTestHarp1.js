@@ -323,9 +323,9 @@ class ControlTestHarp1 extends React.Component {
 
 
                         >
-                          <Tab label="Power Supplies Diagnostics" />
 
                           <Tab label="Beam Diagnostics" />
+                          <Tab label="Power Supplies Diagnostics" />
                           <Tab label="Ion Source" />
                           <Tab label="Accelerator" />
                           <Tab label="Target " />
@@ -333,7 +333,7 @@ class ControlTestHarp1 extends React.Component {
                       </AppBar>
                     </Grid>
 
-                    {tabValue===1&&
+                    {tabValue===0&&
                       <React.Fragment>
                         <Grid item sm={12}>
 
@@ -521,7 +521,7 @@ class ControlTestHarp1 extends React.Component {
                           </div>
                         </Grid>
                       </React.Fragment>}
-                    {tabValue===0&&
+                    {tabValue===1&&
                       <React.Fragment>
                         <Grid
                           container
@@ -608,7 +608,7 @@ class ControlTestHarp1 extends React.Component {
                             alignItems="center"
 
                           >
-                            <Grid item sm={2} >
+                            <Grid item sm={2} style={{marginLeft:10}}>
                               <ToggleButton pv='pva://testIOC:BeamlineA:BeamOn'  label={"Beam On"} labelPlacement={"top"}/>
                             </Grid>
                           </Grid>
@@ -628,8 +628,8 @@ class ControlTestHarp1 extends React.Component {
                   {((this.state['displayEditor']===true) &&(this.state['editorMacros']['$(device)']==='testIOC:PS3'))&&<ControlRightEx1 macros={this.state['editorMacros']}  handleCloseEditor={this.handleCloseEditor}/>}
                   {((this.state['displayEditor']===true) &&(this.state['editorMacros']['$(device)']==='testIOC:PS4'))&&<ControlRightEx1 macros={this.state['editorMacros']} handleCloseEditor={this.handleCloseEditor} />}
                   {((this.state['displayEditor']===true) &&(this.state['editorMacros']['$(device)']==='testIOC:STR1:X'))&&<ControlRightEx1 macros={this.state['editorMacros']}  handleCloseEditor={this.handleCloseEditor}/>}
-                  {((this.state['displayEditor']===true) &&(this.state['editorType']==='steererXY'))&&<ControlRightSteererXY key={'editor-key'+this.state.editorSystem.systemName} system={this.state.editorSystem}/>}
-                  {((this.state['displayEditor']===true) &&(this.state['editorType']==='singlePS'))&&<ControlRightSinglePS key={'editor-key'+this.state.editorSystem.systemName} system={this.state.editorSystem}/>}
+                  {((this.state['displayEditor']===true) &&(this.state['editorType']==='steererXY'))&&<ControlRightSteererXY key={'editor-key'+this.state.editorSystem.systemName} system={this.state.editorSystem}  handleCloseEditor={this.handleCloseEditor}/>}
+                  {((this.state['displayEditor']===true) &&(this.state['editorType']==='singlePS'))&&<ControlRightSinglePS key={'editor-key'+this.state.editorSystem.systemName} system={this.state.editorSystem} handleCloseEditor={this.handleCloseEditor}/>}
                 </Grid>
               </Grid>
               </div>

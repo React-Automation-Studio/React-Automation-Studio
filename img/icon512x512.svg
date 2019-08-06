@@ -11,9 +11,9 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="192"
-   height="192"
-   viewBox="0 0 192 192"
+   width="512"
+   height="512"
+   viewBox="0 0 512 512"
    version="1.1"
    id="svg8"
    inkscape:version="0.92.3 (2405546, 2018-03-11)"
@@ -70,11 +70,11 @@
        inkscape:collect="always"
        xlink:href="#linearGradient6620"
        id="radialGradient6622"
-       cx="95.224522"
-       cy="340.82649"
-       fx="95.224522"
-       fy="340.82649"
-       r="72.574824"
+       cx="95.224525"
+       cy="340.82648"
+       fx="95.224525"
+       fy="340.82648"
+       r="72.574821"
        gradientTransform="matrix(1.306213,0,0,0.78728556,-30.169141,73.107538)"
        gradientUnits="userSpaceOnUse" />
   </defs>
@@ -86,7 +86,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.98994949"
-     inkscape:cx="85.088333"
+     inkscape:cx="75.926257"
      inkscape:cy="172.98735"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -94,7 +94,7 @@
      units="px"
      width="192px"
      inkscape:window-width="1853"
-     inkscape:window-height="920"
+     inkscape:window-height="1145"
      inkscape:window-x="67"
      inkscape:window-y="27"
      inkscape:window-maximized="1" />
@@ -114,7 +114,7 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(0,-246.19999)">
+     transform="translate(0,73.80001)">
     <rect
        id="rect14"
        width="509.34714"
@@ -124,15 +124,15 @@
        style="opacity:1;fill:#212121;fill-opacity:1;stroke:url(#radialGradient6036);stroke-width:2.6528492" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:402.2880249px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#00bcd4;fill-opacity:1;stroke:none;stroke-width:10.05720139"
-       x="0.90389735"
-       y="326.32483"
+       style="font-style:normal;font-weight:normal;font-size:282.60519409px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#00bcd4;fill-opacity:1;stroke:none;stroke-width:7.06513023"
+       x="-23.700697"
+       y="258.81918"
        id="text12"
-       transform="scale(0.99847722,1.0015251)"><tspan
+       transform="scale(0.98112206,1.0192412)"><tspan
          sodipodi:role="line"
          id="tspan10"
-         x="0.90389735"
-         y="326.32483"
-         style="fill:#00bcd4;fill-opacity:1;stroke-width:10.05720139">AS</tspan></text>
+         x="-23.700697"
+         y="258.81918"
+         style="fill:#00bcd4;fill-opacity:1;stroke-width:7.06513023">RAS</tspan></text>
   </g>
 </svg>

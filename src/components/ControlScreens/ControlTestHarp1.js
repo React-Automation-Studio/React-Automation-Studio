@@ -412,7 +412,7 @@ class ControlTestHarp1 extends React.Component {
                                 alignItems="center"
                               >
                                 <Grid item sm={6}>
-                                  <div style={{height:'32.5vh'}}>
+                                  <div style={{height:'30vh'}}>
 
                                     {((this.state.onlyY0===false)&&this.state.x0GraphPVs.length>0)&&<HarpGraph
                                       ymax={2000}
@@ -430,7 +430,7 @@ class ControlTestHarp1 extends React.Component {
                                   </div>
                                 </Grid>
                                 <Grid item sm={6}>
-                                  <div style={{height:'32.5vh'}}>
+                                  <div style={{height:'30vh'}}>
 
                                     {((this.state.onlyX0===false)&&this.state.y0GraphPVs.length>0)&&<HarpGraph
                                       ymax={2000}
@@ -452,7 +452,7 @@ class ControlTestHarp1 extends React.Component {
                           </Grid>
                         </Grid>
                         <Grid item sm={12}>
-                          <div style={{height:'32.5vh'}}>
+                          <div style={{height:'30vh'}}>
                             <Grid
                               container
                               direction="row"
@@ -460,7 +460,7 @@ class ControlTestHarp1 extends React.Component {
                               alignItems="center"
                             >
                               <Grid item sm={2}>
-                                <div style={{height:'32.5vh',marginLeft:10,marginRight:10,marginTop:20}}>
+                                <div style={{height:'30vh',marginLeft:10,marginRight:10,marginTop:20}}>
 
                                   { (typeof this.state.x1SystemName !=='undefined')&& <React.Fragment>
 
@@ -505,7 +505,7 @@ class ControlTestHarp1 extends React.Component {
                                     alignItems="center"
                                   >
                                     <Grid item sm={6}>
-                                      <div style={{height:'32.5vh'}}>
+                                      <div style={{height:'30vh'}}>
 
                                         {((this.state.onlyY1===false)&&this.state.x1GraphPVs.length>0)&&<HarpGraph
                                           ymax={2000}
@@ -523,7 +523,7 @@ class ControlTestHarp1 extends React.Component {
                                       </div>
                                     </Grid>
                                     <Grid item sm={6}>
-                                      <div style={{height:'32.5vh'}}>
+                                      <div style={{height:'30vh'}}>
 
                                         {((this.state.onlyX1===false)&&this.state.y1GraphPVs.length>0)&&<HarpGraph
                                           ymax={2000}

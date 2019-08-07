@@ -23,8 +23,14 @@ dbLoadRecords "db/PowerSupply.db", "device=testIOC:STR2:X"
 dbLoadRecords "db/PowerSupply.db", "device=testIOC:STR2:Y"
 dbLoadRecords "db/PowerSupply.db", "device=testIOC:STR3:Y"
 dbLoadRecords "db/PowerSupply.db", "device=testIOC:STR4:X"
+
 dbLoadRecords "db/SlitSim.db", "device=testIOC:SLITXY1:X"
 dbLoadRecords "db/SlitSim.db", "device=testIOC:SLITXY1:Y"
+dbLoadRecords "db/SlitSim.db", "device=testIOC:SLITXY2:X"
+dbLoadRecords "db/SlitSim.db", "device=testIOC:SLITXY2:Y"
+dbLoadRecords "db/SlitSim.db", "device=testIOC:SLITXY3:X"
+dbLoadRecords "db/SlitSim.db", "device=testIOC:SLITXY3:Y"
+
 
 dbLoadRecords "db/Harp.db", "device=testIOC:Harp1old"
 dbLoadRecords "db/HarpSim.db", "device=testIOC:Harp1, axis=x, desc=Harp 1"

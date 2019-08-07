@@ -109,3 +109,104 @@ record(bo, "$(device):Drive:On")
         field(VAL,"0")
         field(PINI, "YES")
 }
+
+
+
+record(stringout, "$(device):Offset:DisplayName")
+{       field(DTYP,"Soft Channel")
+        field(DESC, "Slit $(device) Name")
+        field(VAL,  "Power Supply: $(device)")
+}
+
+record(ao, "$(device):Offset:Setpoint")
+{       field(DTYP,"Soft Channel")
+        field(DESC, "Slit $(device) Setpoint")
+        field(EGU, "mm")
+        field(HOPR, "5")
+        field(DRVH, "5")
+        field(DRVL, "-5")
+        field(LOPR, "-5")
+        field(HIHI, "5")
+        field(HIGH, "4")
+        field(LOW, "-4")
+        field(LOLO, "-5")
+        field(HHSV, "MAJOR")
+        field(HSV, "MINOR")
+        field(LSV, "MINOR")
+        field(LLSV, "MAJOR")
+        field(VAL,"1")
+}
+
+
+
+record(ao, "$(device):Offset:SimReadback")
+
+{
+        field(DTYP,"Soft Channel")
+        field(SCAN, ".1 second")
+        field(DESC, "Slit $(device) Readback")
+        field(EGU, "mm")
+        field(HOPR, "5")
+        field(DRVH, "5")
+        field(DRVL, "-5")
+        field(LOPR, "-5")
+        field(HIHI, "5")
+        field(HIGH, "4")
+        field(LOW, "-4")
+        field(LOLO, "-5")
+        field(HHSV, "MAJOR")
+        field(HSV, "MINOR")
+        field(LSV, "MINOR")
+        field(LLSV, "MAJOR")
+        field(FLNK,"$(device):Offset:ReadSimReadback")
+        field(OROC,"0.025")
+
+}
+
+record(calcout, "$(device):Offset:ReadSimReadback")
+{       field(INPA, "$(device):Offset:SimReadback.OVAL")
+        field(CALC, "A")
+        field(OUT,"$(device):Offset:Readback PP")
+
+}
+
+record(ao, "$(device):Offset:Readback")
+
+{
+        field(DTYP,"Soft Channel")
+        field(DESC, "Slit $(device) Readback")
+        field(EGU, "mm")
+        field(HOPR, "5")
+        field(DRVH, "5")
+        field(DRVL, "-5")
+        field(LOPR, "-5")
+        field(HIHI, "5")
+        field(HIGH, "4")
+        field(LOW, "-4")
+        field(LOLO, "-5")
+        field(HHSV, "MAJOR")
+        field(HSV, "MINOR")
+        field(LSV, "MINOR")
+        field(LLSV, "MAJOR")
+        field(FLNK,"$(device):Offset:Readback:History")
+
+}
+
+record(compress,"$(device):Offset:Readback:History")
+{
+	field(DESC, "Circular buffer")
+	field(INP,"$(device):Offset:Readback")
+	field(ALG,"Circular Buffer")
+	field(NSAM,"1000")
+
+}
+
+record(calcout, "$(device):Offset:OnOff")
+{       field(SCAN, ".1 second")
+        field(INPA, "$(device):Drive:On")
+        field(INPB, "$(device):Offset:Setpoint")
+        field(INPC, "$(device):Offset:Readback")
+        field(CALC, "A==1?B:C")
+        field(OUT,"$(device):Offset:SimReadback PP")
+
+}

@@ -116,10 +116,10 @@ class SteererXYMagnet extends React.Component {
             xReadbackValue=parseFloat(xReadbackValue).toFixed(this.props.prec);
             yReadbackValue=parseFloat(yReadbackValue).toFixed(this.props.prec);
           }
-          else
+          else{
           xReadbackValue=parseFloat(xReadbackValue).toFixed(parseInt(pvs.xReadback.metadata.precision));
           yReadbackValue=parseFloat(yReadbackValue).toFixed(parseInt(pvs.yReadback.metadata.precision));
-
+}
 
         }
 

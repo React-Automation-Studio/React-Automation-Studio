@@ -26,6 +26,7 @@ import ActionFanoutButton from '../BaseComponents/ActionFanoutButton';
 import ThumbWheel from '../BaseComponents/ThumbWheel';
 import ControlRightEx1 from '../ControlScreens/GridComponents/ControlRightEx1'
 import ControlRightSteererXY from '../ControlScreens/GridComponents/ControlRightSteererXY'
+import ControlRightSlitXY from '../ControlScreens/GridComponents/ControlRightSlitXY'
 import ControlRightSinglePS from '../ControlScreens/GridComponents/ControlRightSinglePS'
 import ControlTopHarpEx1 from '../ControlScreens/GridComponents/ControlTopHarpEx1'
 import ControlBottomHarp1 from '../ControlScreens/GridComponents/ControlBottomHarp1'
@@ -658,6 +659,7 @@ class ControlTestHarp1 extends React.Component {
                   {((this.state['displayEditor']===true) &&(this.state['editorType']==='oldPS'))&&<ControlRightEx1  key={'editor-key'+this.state.editorSystem.systemName} macros={{'$(device)':this.state.editorSystem.systemName}} handleCloseEditor={this.handleCloseEditor}/>}
                   {((this.state['displayEditor']===true) &&(this.state['editorType']==='steererXY'))&&<ControlRightSteererXY key={'editor-key'+this.state.editorSystem.systemName} system={this.state.editorSystem}  handleCloseEditor={this.handleCloseEditor}/>}
                   {((this.state['displayEditor']===true) &&(this.state['editorType']==='singlePS'))&&<ControlRightSinglePS key={'editor-key'+this.state.editorSystem.systemName} system={this.state.editorSystem} handleCloseEditor={this.handleCloseEditor}/>}
+                  {((this.state['displayEditor']===true) &&(this.state['editorType']==='slitxy'))&&<ControlRightSlitXY key={'editor-key'+this.state.editorSystem.systemName} system={this.state.editorSystem} handleCloseEditor={this.handleCloseEditor}/>}
                 </Grid>
               </Grid>
               </div>

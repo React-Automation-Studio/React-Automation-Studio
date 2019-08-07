@@ -155,7 +155,9 @@ handleButtonClick =increment_value=>(event)=> {
 
 
     this.setState({ ['value']: new_value.toFixed(this.props.prec_decimal)});
+    window.navigator.vibrate(1);
   }
+
 }
 
 handleToggleContextMenu = (event) => {

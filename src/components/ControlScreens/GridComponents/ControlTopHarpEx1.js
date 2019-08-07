@@ -17,7 +17,7 @@ import FC from '../../iThembaLabsSvgComponents/FC';
 import BendingMagnet from '../../SvgComponents/BendingMagnet';
 import SteererYMagnet from '../../iThembaLabsSvgComponents/SteererYMagnet';
 import SteererXYMagnet from '../../iThembaLabsSvgComponents/SteererXYMagnet';
-import SlitXY from '../../SvgComponents/SlitXY';
+import SlitXY from '../../iThembaLabsSvgComponents/SlitXY';
 import SvgElementTest from '../../SvgComponents/SvgElementTest';
 //import MenuItem from '@material-ui/core/MenuItem';
 import HorizontalBeamline from '../../SvgComponents/HorizontalBeamline';
@@ -475,11 +475,21 @@ class ControlTopHarpEx1 extends React.Component {
             />
 */}
             <SlitXY
-            handleOnClick={this.handleOnClick}
+          handleOnClick={this.handleOnSystemClick}
+            system={{
+                     systemName:'testIOC:SLITXY1',
+                     displayName:'SLITXY1',
+                     editorType:'slitxy',
+                     devices:
+                    {
+                      xDevice:{deviceName:'testIOC:SLITXY1:X:Gap',readback:'Readback',setpoint:'Setpoint'},
+                      yDevice:{deviceName:'testIOC:SLITXY1:X:Gap',readback:'Readback',setpoint:'Setpoint'}
+                    }
+                  }}
             cx={900}
             cy={100}
-            pv={'pva://$(device):$(pv_suffix)'}
-            macros={{'$(device)':'testIOC:STR1:X','$(pv_suffix)':'Readback'}}
+            prec={3}
+            usePrecision={true}
             usePvUnits={true}
             usePvLabel={false}
             alarmSensitive={true}
@@ -493,24 +503,6 @@ class ControlTopHarpEx1 extends React.Component {
             componentGradient={true}
             />
 
-            <SlitXY
-            handleOnClick={this.handleOnClick}
-            cx={1000}
-            cy={100}
-            pv={'pva://$(device):$(pv_suffix)'}
-            macros={{'$(device)':'testIOC:STR1:X','$(pv_suffix)':'Readback'}}
-            usePvUnits={true}
-            usePvLabel={false}
-            alarmSensitive={true}
-            label='SlitXY 1'
-            labelOffsetY={-14}
-            labelOffsetX={0}
-            valueOffsetY={18}
-            valueOffsetX={0}
-            componentShadow={true}
-            textShadow={false}
-            componentGradient={true}
-            />
 
 
             <Harp

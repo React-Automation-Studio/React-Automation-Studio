@@ -1,0 +1,111 @@
+
+record(stringout, "$(device):Gap:DisplayName")
+{       field(DTYP,"Soft Channel")
+        field(DESC, "Slit $(device) Name")
+        field(VAL,  "Power Supply: $(device)")
+}
+
+record(ao, "$(device):Gap:Setpoint")
+{       field(DTYP,"Soft Channel")
+        field(DESC, "Slit $(device) Setpoint")
+        field(EGU, "mm")
+        field(HOPR, "5")
+        field(DRVH, "5")
+        field(DRVL, "-5")
+        field(LOPR, "-5")
+        field(HIHI, "5")
+        field(HIGH, "4")
+        field(LOW, "-4")
+        field(LOLO, "-5")
+        field(HHSV, "MAJOR")
+        field(HSV, "MINOR")
+        field(LSV, "MINOR")
+        field(LLSV, "MAJOR")
+        field(VAL,"1")
+}
+
+
+
+record(ao, "$(device):Gap:SimReadback")
+
+{
+        field(DTYP,"Soft Channel")
+        field(SCAN, ".1 second")
+        field(DESC, "Slit $(device) Readback")
+        field(EGU, "mm")
+        field(HOPR, "5")
+        field(DRVH, "5")
+        field(DRVL, "-5")
+        field(LOPR, "-5")
+        field(HIHI, "5")
+        field(HIGH, "4")
+        field(LOW, "-4")
+        field(LOLO, "-5")
+        field(HHSV, "MAJOR")
+        field(HSV, "MINOR")
+        field(LSV, "MINOR")
+        field(LLSV, "MAJOR")
+        field(FLNK,"$(device):Gap:ReadSimReadback")
+        field(OROC,"0.025")
+
+}
+
+record(calcout, "$(device):Gap:ReadSimReadback")
+{       field(INPA, "$(device):Gap:SimReadback.OVAL")
+        field(CALC, "A")
+        field(OUT,"$(device):Gap:Readback PP")
+
+}
+
+record(ao, "$(device):Gap:Readback")
+
+{
+        field(DTYP,"Soft Channel")
+        field(DESC, "Slit $(device) Readback")
+        field(EGU, "mm")
+        field(HOPR, "5")
+        field(DRVH, "5")
+        field(DRVL, "-5")
+        field(LOPR, "-5")
+        field(HIHI, "5")
+        field(HIGH, "4")
+        field(LOW, "-4")
+        field(LOLO, "-5")
+        field(HHSV, "MAJOR")
+        field(HSV, "MINOR")
+        field(LSV, "MINOR")
+        field(LLSV, "MAJOR")
+        field(FLNK,"$(device):Gap:Readback:History")
+
+}
+
+record(compress,"$(device):Gap:Readback:History")
+{
+	field(DESC, "Circular buffer")
+	field(INP,"$(device):Gap:Readback")
+	field(ALG,"Circular Buffer")
+	field(NSAM,"1000")
+
+}
+
+record(calcout, "$(device):Gap:OnOff")
+{       field(SCAN, ".1 second")
+        field(INPA, "$(device):Drive:On")
+        field(INPB, "$(device):Gap:Setpoint")
+        field(INPC, "$(device):Gap:Readback")
+        field(CALC, "A==1?B:C")
+        field(OUT,"$(device):Gap:SimReadback PP")
+
+}
+
+
+
+record(bo, "$(device):Drive:On")
+{
+        field(DTYP,"Soft Channel")
+        field(DESC, "Slit $(device) OnOff")
+        field(ZNAM, "Off")
+        field(ONAM, "On")
+        field(VAL,"0")
+        field(PINI, "YES")
+}

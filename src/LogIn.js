@@ -240,6 +240,9 @@ render(){
       <main className={classes.main}>
 
         <Paper className={classes.paper}>
+        <Typography component="h1" variant="h3">
+          React
+        </Typography>
           <Typography component="h1" variant="h3">
             Automation
           </Typography>

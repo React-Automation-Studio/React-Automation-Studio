@@ -140,6 +140,7 @@ handleButtonClick = event => {
   //console.log(event)
 
   this.setState({ ['value']: this.state['value']==0?1:0});
+  window.navigator.vibrate(1);
 };
 
 turnOff=()=>{

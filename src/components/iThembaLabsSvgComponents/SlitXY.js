@@ -1,23 +1,32 @@
 import React from 'react'
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 import DataConnection from '../SystemComponents/DataConnection';
-//import MenuItem from '@material-ui/core/MenuItem';
+import { withStyles } from '@material-ui/core/styles';
+
+const styles = theme => ({
+
+
+  textSlitXYLabel: {
+    fill:theme.palette.text.primary
+
+  },
+  textSlitXYValue: {
+    fill:theme.palette.text.primary
+
+  }
+});
 
 
 
 class SlitXY extends React.Component {
   constructor(props) {
     super(props);
-    this.state={'value' : "",
-    'inputValue' : "",
-    'outputValue' : "",
-    'hasFocus':false,
-    'label':"Undefined",
-    'pvname':"Undefined",
-    'intialized':false,
-    'metadata':{},
-    'severity':''
-  }
+    let pvs={};
+    pvs['xGapReadback']={initialized: false, pvname:'pva://'+props.system.devices.xDevice.deviceName+":"+props.system.devices.xDevice.readback,value:"",char_value:"",metadata:{}};
+    pvs['yGapReadback']={initialized: false, pvname:'pva://'+props.system.devices.yDevice.deviceName+":"+props.system.devices.yDevice.readback,value:"",char_value:"",metadata:{}};
+    this.state={
+      pvs:pvs
+    }
   this.handleOnClick= this.handleOnClick.bind(this);
   this.handleInputValue= this.handleInputValue.bind(this);
   this.handleInputValueLabel= this.handleInputValueLabel.bind(this);
@@ -38,23 +47,25 @@ componentWillUnmount() {
 
 
 
-handleMetadata(metadata){
+
+  handleMetadata= readback => (metadata) => {
+
+    let pvs=this.state.pvs;
+    pvs[readback].metadata=metadata;
+    this.setState({pvs	 :pvs});
 
 
-  this.setState({['metadata']	 :metadata});
+  }
 
 
-}
+  handleInputValue= readback => (inputValue,pvname,initialized,severity)=>{
+    let pvs=this.state.pvs;
+    pvs[readback].value=inputValue;
+    pvs[readback].initialized=initialized;
+    pvs[readback].severity=severity;
 
-
-handleInputValue(inputValue,pvname,initialized,severity){
-
-  this.setState({['value']	 :inputValue,
-  ['pvname']:pvname,
-  ['initialized']:initialized,
-  ['severity']:severity});
-
-}
+    this.setState({pvs:pvs});
+  }
 
 
 handleInputValueLabel(inputValue){
@@ -63,135 +74,130 @@ handleInputValueLabel(inputValue){
 
 }
 
-
-handleOnClick = device => event => {
+handleOnClick = system => event => {
   //console.log("In quad: clicked "+device.toString());
-  this.props.handleOnClick(device);
+  this.props.handleOnClick(system);
   //  this.setState({ ['clicked']: 1});
 };
 
 render() {
-  const {classes}= this.props;
-  const pv = this.props.pv;
-  const macros=  this.props.macros;
-  const usePvLabel= this.props.usePvLabel;
-  const mylabel= this.props.label;
-  const usePrecision= this.props.prec;
-  const useStringValue=this.props.useStringValue;
-  const severity=this.state.severity;
-  let units="";
-  const initialized=this.state.initialized;
-  let value=this.state.value;
-  if(initialized){
-    if(this.props.usePvUnits===true){
-      if (typeof this.state.metadata !== 'undefined'){
-        if (typeof this.state.metadata.units !== 'undefined'){
-          units=this.state.metadata.units;
+
+      const {classes}= this.props;
+      const pvs=this.state.pvs;
+      //  const pv = this.props.pv;
+      //  const macros=  this.props.macros;
+      //  const usePvLabel= this.props.usePvLabel;
+      const mylabel= this.props.label;
+      const usePrecision= this.props.prec;
+
+      const useStringValue=this.props.useStringValue;
+
+      let xUnits="";
+      let yUnits="";
+      const initialized=pvs.xGapReadback.initialized&&pvs.yGapReadback.initialized;
+      let xGapReadbackValue=pvs.xGapReadback.value;
+      let yGapReadbackValue=pvs.yGapReadback.value;
+        let severity=0;
+      if(initialized){
+        if(this.props.usePvUnits===true){
+
+          xUnits=pvs.xGapReadback.metadata.units;
+          yUnits=pvs.yGapReadback.metadata.units;
         }
-        else{
-          units="";
+
+
+
+
+
+        else {
+          xUnits=this.props.xUnits;
+          yUnits=this.props.yUnits;
+        }
+
+
+        if (typeof this.props.usePrecision !== 'undefined'){
+          if (this.props.usePrecision==true){
+            if (typeof this.props.prec !== 'undefined'){
+              xGapReadbackValue=parseFloat(xGapReadbackValue).toFixed(this.props.prec);
+              yGapReadbackValue=parseFloat(yGapReadbackValue).toFixed(this.props.prec);
+            }
+            else
+            xGapReadbackValue=parseFloat(xGapReadbackValue).toFixed(parseInt(pvs.xGapReadback.metadata.precision));
+            yGapReadbackValue=parseFloat(yGapReadbackValue).toFixed(parseInt(pvs.yGapReadback.metadata.precision));
+
+
+          }
+
+        }
+
+
+
+
+
+
+
+        if((pvs.xGapReadback.severity==2)||(pvs.yGapReadback.severity==2)){
+
+          severity=2;
+        }
+        else   if((pvs.xGapReadback.severity==1)||(pvs.yGapReadback.severity==1)){
+          severity=1;
         }
       }
-      else {
-        units="";
-      }
-
-    }
-    else {
-      units=this.props.units;
-    }
 
 
-    if (typeof this.props.usePrecision !== 'undefined'){
-      if (this.props.usePrecision==true){
-        if (typeof this.props.prec !== 'undefined'){
-          value=parseFloat(value).toFixed(this.props.prec);
+      let color_side='';
+      let color_face='';
+      let color_top='';
+      if (typeof this.props.alarmSensitive !== 'undefined'){
+        if (this.props.alarmSensitive==true){
+          if (severity==1){
+            color_side='#FF8E53';
+            color_face='#FF8E43';
+            color_top='#FF8E63';
+          }
+          else if(severity==2){
+            color_side='#E20101';
+            color_face='#E20901';
+            color_top='#E20111';
+          }
+          // else {
+          //   if((pvs.xOffOn.value==1)||(pvs.yOffOn.value==1)){
+          //     color_side='#2e7d32';
+          //     color_face='#2e7d32';
+          //     color_top='#2e7d32';
+          //   }
+            else{
+              color_side='#133CA9';
+              color_face='#133C99';
+              color_top='#133CA3';
+
+            }
+          // }
+
         }
-        else
-        value=parseFloat(value).toFixed(parseInt(this.state.metadata.precision));
 
       }
 
-    }
-
-  }
 
 
 
-  let background_color='';
-  if (typeof this.props.alarmSensitive !== 'undefined'){
-    if (this.props.alarmSensitive==true){
-      if (severity==1){
-        background_color='linear-gradient(45deg, #FFFFFF 1%, #FF8E53 99%)';
-      }
-      else if(severity==2){
-        background_color='linear-gradient(45deg, #FFFFFF 1%, #E20101 99%)';
-      }
-      else background_color='white';
-    }
-
-  }
-
-  let color_side='';
-  let color_face='';
-  let color_top='';
-  if (typeof this.props.alarmSensitive !== 'undefined'){
-    if (this.props.alarmSensitive==true){
-      if (severity==1){
-        color_side='#FF8E53';
-        color_face='#FF8E43';
-        color_top='#FF8E63';
-      }
-      else if(severity==2){
-        color_side='#E20101';
-        color_face='#E20901';
-        color_top='#E20111';
-      }
-      else {
-        color_side='#133CA9';
-        color_face='#133C99';
-        color_top='#133CA3';
-      }
-
-    }
-
-  }
-
-
-
-
-
-
-
-
-
-  const style = {
-    background: background_color,
-    borderRadius: 4,
-
-  };
 
 
   return (
-    <g  onClick={this.handleOnClick(this.props.macros['$(device)'])}>
-      <DataConnection
-        pv={pv}
-        macros={macros}
-        usePvLabel={usePvLabel}
-        usePrecision={usePrecision}
-        handleInputValue={this.handleInputValue}
-        handleMetadata={this.handleMetadata}
-        outputValue=  {this.state.outputValue}
-        useStringValue={useStringValue}
-      />
-
-      { usePvLabel===true && <DataConnection
-
-        pv={pv.toString()+".DESC"}
-        macros={macros}
-        handleInputValue={this.handleInputValueLabel}
-
-                                  />    }
+    <g  onClick={this.handleOnClick(this.props.system)}>
+    <DataConnection
+    pv={this.state.pvs['xGapReadback'].pvname}
+    usePrecision={usePrecision}
+    handleInputValue={this.handleInputValue('xGapReadback')}
+    handleMetadata={this.handleMetadata('xGapReadback')}
+    />
+    <DataConnection
+    pv={this.state.pvs['yGapReadback'].pvname}
+    usePrecision={usePrecision}
+    handleInputValue={this.handleInputValue('yGapReadback')}
+    handleMetadata={this.handleMetadata('yGapReadback')}
+    />
 
       {initialized===true &&
         <g transform={'translate('+this.props.cx+','+this.props.cy+')'}>
@@ -240,26 +246,26 @@ render() {
             </g>
           </g>
 
-          <text
+          <text className={classes.textSlitXYValue}
             x={typeof this.props.valueOffsetX!=='undefined'?this.props.valueOffsetX+7.5:7.5}
             y={typeof this.props.valueOffsetY!=='undefined'?this.props.valueOffsetY+57.5:57.5}
             textAnchor='middle'
             filter={this.props.textShadow===true?"url(#"+this.state.pvname+"elipseShadow)":"" }
           >
-            {this.props.usePvUnits===true? value+" "+this.state['metadata'].units: value+" "+this.props.units}
+            {this.props.usePvUnits===true? xGapReadbackValue+" "+this.state.pvs.xGapReadback.metadata.units: xGapReadbackValue+" "+this.props.units}
 
           </text>
-          <text
+          <text className={classes.textSlitXYLabel}
             x={typeof this.props.labelOffsetX!=='undefined'?this.props.labelOffsetX+7.5:7.5}
             y={typeof this.props.labelOffsetY!=='undefined'?this.props.labelOffsetY-40:-40}
             textAnchor='middle'
             filter={this.props.textShadow===true?"url(#"+this.state.pvname+"elipseShadow)":"" }
           >
-            {usePvLabel===true? this.state['label']:this.props.label}
+            {this.props.label}
           </text>
         </g>
       }
-      {(initialized===false||initialized==='undefined') &&
+      {(initialized===false) &&
         <g transform={'translate('+this.props.cx+','+this.props.cy+')'}>
           <linearGradient id={this.state.pvname+'elipse-gradient'} gradientTransform="rotate(0)">
             <stop offset="0%" stopOpacity="30" stopColor={'silver'} />
@@ -300,40 +306,40 @@ render() {
                   d="m 5.7589222,1101.1294 6.6301368,5.3958 -0.203451,2.3061 -1.92324,-1.5652 -1.3407868,15.1979 -2.783656,-2.2654 1.340787,-15.1979 -1.92324,-1.5651 z"
 
                 />
-                </g>
+              </g>
             </g>
 
           </g>
 
 
 
-            <text
-                x={7.5}
-                y={57.5}
-                              textAnchor='middle'
-                              filter={this.props.textShadow===true?"url(#"+this.state.pvname+"elipseShadow)":"" }
-                              >
-                                {this.props.usePvUnits===true? value+" "+this.state['metadata'].units: value+" "+this.props.units}
+          <text
+            x={7.5}
+            y={57.5}
+            textAnchor='middle'
+            filter={this.props.textShadow===true?"url(#"+this.state.pvname+"elipseShadow)":"" }
+          >
+            {"Connecting"}
 
-                              </text>
-                              <text
-                                x={7.5}
-                                y={-40}
-                                textAnchor='middle'
-                                filter={this.props.textShadow===true?"url(#"+this.state.pvname+"elipseShadow)":"" }
-                                >
-                                  {usePvLabel===true? this.state['label']:this.props.label}
-                                </text>
-                              </g>
-                            }
-                          </g>
-
-
+          </text>
+          <text
+            x={7.5}
+            y={-40}
+            textAnchor='middle'
+            filter={this.props.textShadow===true?"url(#"+this.state.pvname+"elipseShadow)":"" }
+          >
+            {this.props.label}
+          </text>
+        </g>
+      }
+    </g>
 
 
-                        );
-                      }
-                    }
 
-                    SlitXY.contextType=AutomationStudioContext;
-                    export default SlitXY
+
+                    );
+                  }
+                }
+
+                SlitXY.contextType=AutomationStudioContext;
+                export default withStyles(styles)(SlitXY)

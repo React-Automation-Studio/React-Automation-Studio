@@ -43,7 +43,9 @@ class QuadrapoleMagnet extends React.Component {
     'pvname':pvname,
     'intialized':false,
     'metadata':{},
-    'severity':''
+    'severity':'',
+    openContextMenu: false,
+    'open':false,x0:0,y0:0
   }
   this.handleOnClick= this.handleOnClick.bind(this);
   this.handleInputValue= this.handleInputValue.bind(this);
@@ -63,10 +65,11 @@ componentWillUnmount() {
 
 
 
-handleContextMenuClose = event => {
+handleContextMenuClose = (event) => {
 
 
   this.setState({ openContextMenu: false });
+
 };
 
 handleToggleContextMenu = (event) => {
@@ -103,9 +106,9 @@ handleInputValueLabel(inputValue){
 }
 
 
-handleOnClick = device => event => {
+handleOnClick = ()=>{
   //console.log("In quad: clicked "+device.toString());
-  this.props.handleOnClick(device);
+  this.props.handleOnClick(this.props.macros['$(device)']);
   //  this.setState({ ['clicked']: 1});
 };
 
@@ -201,7 +204,7 @@ render() {
 
 
   return (
-    <g  onClick={this.handleOnClick(this.props.macros['$(device)'])}>
+    <g    onContextMenu={this.handleToggleContextMenu}>
     <ContextMenu
       disableProbe={this.props.disableProbe}
       open={this.state.openContextMenu}
@@ -236,7 +239,7 @@ render() {
                                   />    }
 
       {initialized===true &&
-        <g  onContextMenu={this.handleToggleContextMenu}>
+        <g onClick={this.handleOnClick} >
           <linearGradient id={this.state.pvname+'elipse-gradient'} gradientTransform="rotate(0)">
             <stop offset="0%" stopOpacity="0.5" stopColor='silver' />
             <stop offset="65%" stopColor={color} />
@@ -289,7 +292,7 @@ filter={this.props.componentShadow===true?"url(#"+this.state.pvname+"elipseShado
         </g>
       }
       {(initialized===false||initialized==='undefined') &&
-        <g  onContextMenu={this.handleToggleContextMenu}>
+        <g  >
           <linearGradient id="elipse-gradient">
             <stop offset="0%" stopOpacity="0" />
 
@@ -329,30 +332,7 @@ filter={this.props.componentShadow===true?"url(#"+this.state.pvname+"elipseShado
             ry="30"
             filter={"url(#"+this.state.pvname+"elipseShadow)" }
           />
-          <text className={classes.textQuadrapoleLabel}
-            x={this.props.cx+7.5}
-            y={this.props.cy+60}
-            textAnchor='middle'
-            filter={"url(#"+this.state.pvname+"elipseShadow)" }
-          >
-            {"Connecting"}
-          </text>
-          <text className={classes.textQuadrapoleLabel}
-            x={this.props.cx+7.5}
-            y={this.props.cy+75}
-            textAnchor='middle'
-            filter={"url(#"+this.state.pvname+"elipseShadow)" }
-          >
-            {"to:"}
-          </text>
-          <text className={classes.textQuadrapoleLabel}
-            x={this.props.cx+7.5}
-            y={this.props.cy+90}
-            textAnchor='middle'
-            filter={"url(#"+this.state.pvname+"elipseShadow)" }
-          >
-            {this.state['pvname']}
-          </text>
+
           </g>
         }
       </g>

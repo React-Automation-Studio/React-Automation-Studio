@@ -1,8 +1,24 @@
 import React from 'react'
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 import DataConnection from '../SystemComponents/DataConnection';
+import { withStyles } from '@material-ui/core/styles';
 //import MenuItem from '@material-ui/core/MenuItem';
+const styles = theme => ({
 
+
+  textBMLabel: {
+    fill:theme.palette.text.primary
+
+  },
+  textBMValue: {
+    fill:theme.palette.text.primary
+
+  },
+  textBMLabelDisconneted: {
+    fill:'dimgrey'
+
+  },
+});
 
 
 class BendingMagnet extends React.Component {
@@ -239,7 +255,7 @@ render() {
           </g>
 
 
-          <text
+          <text className={classes.textBMValue}
             x={7.5}
             y={57.5}
             textAnchor='middle'
@@ -248,7 +264,7 @@ render() {
             {this.props.usePvUnits===true? value+" "+this.state['metadata'].units: value+" "+this.props.units}
 
           </text>
-          <text
+          <text className={classes.textBMLabel}
             x={7.5}
             y={-40}
             textAnchor='middle'
@@ -303,16 +319,8 @@ render() {
           </g>
 
 
-          <text
-            x={7.5}
-            y={57.5}
-            textAnchor='middle'
-            filter={this.props.textShadow===true?"url(#"+this.state.pvname+"elipseShadow)":"" }
-          >
-            {this.props.usePvUnits===true? value+" "+this.state['metadata'].units: value+" "+this.props.units}
 
-          </text>
-          <text
+          <text className={classes.textBMLabelDisconneted}
             x={7.5}
             y={-40}
             textAnchor='middle'
@@ -332,4 +340,4 @@ render() {
 }
 
 BendingMagnet.contextType=AutomationStudioContext;
-export default BendingMagnet
+export default withStyles(styles)(BendingMagnet)

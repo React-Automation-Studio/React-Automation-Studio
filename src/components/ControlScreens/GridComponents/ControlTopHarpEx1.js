@@ -14,7 +14,7 @@ import ActionButton from '../../BaseComponents/ActionButton';
 import QuadrapoleMagnet from '../../iThembaLabsSvgComponents/QuadrapoleMagnet';
 import Harp from '../../iThembaLabsSvgComponents/Harp';
 import FC from '../../iThembaLabsSvgComponents/FC';
-import BendingMagnet from '../../SvgComponents/BendingMagnet';
+import BendingMagnet from '../../iThembaLabsSvgComponents/BendingMagnet';
 import SteererYMagnet from '../../iThembaLabsSvgComponents/SteererYMagnet';
 import SteererXYMagnet from '../../iThembaLabsSvgComponents/SteererXYMagnet';
 import SlitXY from '../../iThembaLabsSvgComponents/SlitXY';
@@ -286,16 +286,15 @@ class ControlTopHarpEx1 extends React.Component {
 
 
         <SteererXYMagnet
-
           handleOnClick={this.handleOnSystemClick}
           system={{
-            systemName:'testIOC:STR1',
-            displayName:'STR1XY',
+            systemName:'testIOC:STR2',
+            displayName:'STR2XY',
             editorType:'steererXY',
             devices:
             {
-              xDevice:{deviceName:'testIOC:STR1:X',readback:'Readback',setpoint:'Setpoint'},
-              yDevice:{deviceName:'testIOC:STR1:Y',readback:'Readback',setpoint:'Setpoint'}
+              xDevice:{deviceName:'testIOC:STR2:X',readback:'Readback',setpoint:'Setpoint'},
+              yDevice:{deviceName:'testIOC:STR2:Y',readback:'Readback',setpoint:'Setpoint'}
             }
           }}
 
@@ -315,35 +314,37 @@ class ControlTopHarpEx1 extends React.Component {
           componentGradient={true}
         />
 
-        <SteererXYMagnet
-          handleOnClick={this.handleOnSystemClick}
-          system={{
-            systemName:'testIOC:STR2',
-            displayName:'STR2XY',
-            editorType:'steererXY',
-            devices:
-            {
-              xDevice:{deviceName:'testIOC:STR2:X',readback:'Readback',setpoint:'Setpoint'},
-              yDevice:{deviceName:'testIOC:STR2:Y',readback:'Readback',setpoint:'Setpoint'}
-            }
-          }}
 
-          cx={785}
-          cy={100}
-          xUnits={'A'}
-          yUnits={'A'}
-          prec={3}
-          usePrecision={true}
-          alarmSensitive={true}
-          labelOffsetY={5}
-          labelOffsetX={0}
-          valueOffsetY={5}
-          valueOffsetX={0}
-          componentShadow={true}
-          textShadow={false}
-          componentGradient={true}
-        />
+                <SteererXYMagnet
 
+                  handleOnClick={this.handleOnSystemClick}
+                  system={{
+                    systemName:'testIOC:STR1',
+                    displayName:'STR1XY',
+                    editorType:'steererXY',
+                    devices:
+                    {
+                      xDevice:{deviceName:'testIOC:STR1:X',readback:'Readback',setpoint:'Setpoint'},
+                      yDevice:{deviceName:'testIOC:STR1:Y',readback:'Readback',setpoint:'Setpoint'}
+                    }
+                  }}
+                  cx={785}
+                  cy={100}
+
+                  xUnits={'A'}
+                  yUnits={'A'}
+                  prec={3}
+                  usePrecision={true}
+                  alarmSensitive={true}
+
+                  labelOffsetY={5}
+                  labelOffsetX={0}
+                  valueOffsetY={5}
+                  valueOffsetX={0}
+                  componentShadow={true}
+                  textShadow={false}
+                  componentGradient={true}
+                />
 
         <SteererYMagnet
           handleOnClick={this.handleOnSystemClick}
@@ -369,7 +370,7 @@ class ControlTopHarpEx1 extends React.Component {
           alarmSensitive={true}
           labelOffsetY={-27}
           labelOffsetX={0}
-          valueOffsetY={35}
+          valueOffsetY={0}
           valueOffsetX={0}
           componentShadow={true}
           textShadow={false}
@@ -397,7 +398,7 @@ class ControlTopHarpEx1 extends React.Component {
           alarmSensitive={true}
           labelOffsetY={-27}
           labelOffsetX={0}
-          valueOffsetY={35}
+          valueOffsetY={0}
           valueOffsetX={0}
           componentShadow={true}
           textShadow={false}

@@ -513,7 +513,7 @@ class IvanControlTable extends React.Component {
     handleSideTabChange = (event, value) => {
       this.setState({ sideTabValue:value,displayEditor:false });
     };
-    s
+
     handleHarpRemoved=(name)=>{
       let displayHarps=this.state.displayHarps;
       let harp;

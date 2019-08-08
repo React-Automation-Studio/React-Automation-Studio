@@ -9,6 +9,9 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
 import Switch from '@material-ui/core/Switch';
+import red from '@material-ui/core/colors/red';
+import deepOrange from '@material-ui/core/colors/deepOrange';
+
 import { create, all } from 'mathjs';
 const config = { }
 const math = create(all, config)
@@ -37,9 +40,32 @@ const styles = theme => ({
     marginTop: 0,
     fontWeight: 500,
     borderRadius: 4
-  }
+  },
+
+
+
+    TextFieldSeverity0: {
+
+
+    },
+    TextFieldSeverity1: {
+        borderRadius: 2,
+       padding:1,
+        background:deepOrange['400']
+    //  background:'linear-gradient(45deg, '+ theme.palette.background.default+ ' 1%, '+deepOrange['400'] +' 99%)'
+    },
+    TextFieldSeverity2: {
+        borderRadius: 2,
+        padding:1,
+         background:red['800']
+    //  backgroundColor:'linear-gradient(45deg, #FFFFFF 1%, #FF8E53 99%)'
+    //  background:'linear-gradient(45deg, '+ theme.palette.background.default+ ' 1%, '+red['800'] +' 99%)'
+    }
+
 
 });
+
+
 
 /**
  * The TextUpdate Component is a wrapper on the JavaScript <b>div</b> container tag. The component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
@@ -209,12 +235,12 @@ render() {
 
     }
 
-  
+
 
 
   }
 
-
+  let textFieldClassName;
 
   let background_color='';
   if (typeof this.props.alarmSensitive !== 'undefined'){
@@ -226,6 +252,21 @@ render() {
         background_color='linear-gradient(45deg, #FFFFFF 1%, #E20101 99%)';
       }
       else background_color='white';
+    }
+
+    if (this.props.alarmSensitive==true){
+      if (severity==1){
+        textFieldClassName=classes.TextFieldSeverity1;
+        //  background_color='linear-gradient(45deg, #FFFFFF 1%, #FF8E53 99%)';
+      }
+      else if(severity==2){
+        textFieldClassName=classes.TextFieldSeverity2;
+        //  background_color='linear-gradient(45deg, #FFFFFF 1%, #E20101 99%)';
+      }
+      else {
+        textFieldClassName=classes.TextFieldSeverity0;
+        //  background_color='white';
+      }
     }
 
   }
@@ -259,10 +300,10 @@ render() {
       />
 
       {initialized===true &&
-        <div className={classes.body1}>
+        <span className={textFieldClassName} >
           {usePvLabel===true? this.state['label']+': ':this.props.label}
           {value} {units}
-        </div>
+        </span>
 
       }
 

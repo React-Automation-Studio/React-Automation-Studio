@@ -20,6 +20,9 @@ const styles = theme => ({
   table: {
     minWidth: 700,
   },
+  tableCell:{
+     width:"20%"
+  }
 });
 
 
@@ -186,7 +189,7 @@ MultiplePVs
       <React.Fragment>
         {this.SystemsDataConnections()}
         <Paper className={classes.root}>
-          <Table className={classes.table}>
+          <Table className={classes.table} size={'small'}>
             <TableHead>
               <TableRow>
                 <TableCell>Device Description</TableCell>
@@ -200,30 +203,32 @@ MultiplePVs
               {rowPVs.map(row => (
                 <TableRow key={row.id} onClick={this.handleOnClick(row.id)} >
 
-                  <TableCell component="th" scope="row" >
+                  <TableCell className={classes.tableCell} component="th" scope="row" >
                     {row.displayName}
                   </TableCell>
-                  <TableCell align="right">
+                  <TableCell className={classes.tableCell} align="right">
                     <TextUpdate
                       pv={row.setpointPV.pvname}
                       usePrecision={(typeof row.rowProps)==='undefined'?undefined:(typeof row.rowProps.usePrecision)==='undefined'?undefined:row.rowProps.usePrecision}
                       prec={(typeof row.rowProps)==='undefined'?undefined:(typeof row.rowProps.prec)==='undefined'?undefined:row.rowProps.prec}
                       usePvUnits={(typeof row.rowProps)==='undefined'?undefined:(typeof row.rowProps.usePvUnits)==='undefined'?undefined:row.rowProps.usePvUnits}
                       units={(typeof row.rowProps)==='undefined'?undefined:(typeof row.rowProps.units)==='undefined'?'undefined':row.rowProps.units}
+                      alarmSensitive={true}
                     />
 
                   </TableCell>
-                  <TableCell align="right">
+                  <TableCell className={classes.tableCell} align="right">
                     <TextUpdate
                       pv={row.readbackPV.pvname}
                       usePrecision={(typeof row.rowProps)==='undefined'?undefined:(typeof row.rowProps.usePrecision)==='undefined'?undefined:row.rowProps.usePrecision}
                       prec={(typeof row.rowProps)==='undefined'?undefined:(typeof row.rowProps.prec)==='undefined'?undefined:row.rowProps.prec}
                       usePvUnits={(typeof row.rowProps)==='undefined'?undefined:(typeof row.rowProps.usePvUnits)==='undefined'?undefined:row.rowProps.usePvUnits}
                       units={(typeof row.rowProps)==='undefined'?undefined:(typeof row.rowProps.units)==='undefined'?'undefined':row.rowProps.units}
+                      alarmSensitive={true}
                     />
                   </TableCell>
-                  <TableCell align="right">{"N/A"}</TableCell>
-                  <TableCell align="right">
+                  <TableCell  className={classes.tableCell} align="right">{"N/A"}</TableCell>
+                  <TableCell  className={classes.tableCell} align="right">
                     {(typeof row.rowProps)==='undefined'?undefined:(typeof row.rowProps.useStatus)==='undefined'?'-':row.rowProps.useStatus===true?row.statusPV.value:'-'}
                   </TableCell>
                 </TableRow>

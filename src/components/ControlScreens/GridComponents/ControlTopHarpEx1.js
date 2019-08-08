@@ -11,7 +11,7 @@ import SwitchComponent from '../../BaseComponents/SwitchComponent';
 import ToggleButton from '../../BaseComponents/ToggleButton';
 import ActionButton from '../../BaseComponents/ActionButton';
 
-import QuadrapoleMagnet from '../../SvgComponents/QuadrapoleMagnet';
+import QuadrapoleMagnet from '../../iThembaLabsSvgComponents/QuadrapoleMagnet';
 import Harp from '../../iThembaLabsSvgComponents/Harp';
 import FC from '../../iThembaLabsSvgComponents/FC';
 import BendingMagnet from '../../SvgComponents/BendingMagnet';

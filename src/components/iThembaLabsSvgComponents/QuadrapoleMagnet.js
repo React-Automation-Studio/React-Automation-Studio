@@ -1,19 +1,46 @@
 import React from 'react'
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 import DataConnection from '../SystemComponents/DataConnection';
+import { withStyles } from '@material-ui/core/styles';
+import ContextMenu from '../SystemComponents/ContextMenu';
 //import MenuItem from '@material-ui/core/MenuItem';
 
+const styles = theme => ({
 
+
+  textQuadrapoleLabel: {
+    fill:theme.palette.text.primary
+
+  },
+  textQuadrapoleValue: {
+    fill:theme.palette.text.primary
+
+  }
+});
 
 class QuadrapoleMagnet extends React.Component {
   constructor(props) {
     super(props);
+
+    let pvname;
+    if (typeof this.props.macros !== 'undefined'){
+      let macro;
+      pvname=this.props.pv;
+      for (macro in this.props.macros){
+        pvname=pvname.replace(macro.toString(),this.props.macros[macro].toString());
+      }
+    }
+    else{
+      pvname=this.props.pv;
+
+    }
+
     this.state={'value' : "",
     'inputValue' : "",
   'outputValue' : "",
     'hasFocus':false,
     'label':"Undefined",
-    'pvname':"Undefined",
+    'pvname':pvname,
     'intialized':false,
     'metadata':{},
     'severity':''
@@ -36,7 +63,19 @@ componentWillUnmount() {
 
 
 
+handleContextMenuClose = event => {
 
+
+  this.setState({ openContextMenu: false });
+};
+
+handleToggleContextMenu = (event) => {
+  //   console.log(event.type)
+  event.persist()
+  this.setState(state => ({ openContextMenu: !state.openContextMenu,x0:event.pageX,y0:event.pageY }));
+
+  event.preventDefault();
+}
 
 handleMetadata(metadata){
 
@@ -163,6 +202,20 @@ render() {
 
   return (
     <g  onClick={this.handleOnClick(this.props.macros['$(device)'])}>
+    <ContextMenu
+      disableProbe={this.props.disableProbe}
+      open={this.state.openContextMenu}
+      anchorReference="anchorPosition"
+      anchorPosition={{ top: +this.state.y0, left: +this.state.x0 }}
+      probeType={'simple'}
+      pvs={[{pvname:this.state.pvname,initialized:initialized}]}
+      handleClose={this.handleContextMenuClose}
+
+      transformOrigin={{
+        vertical: 'top',
+        horizontal: 'left',
+      }}
+    />
       <DataConnection
         pv={pv}
         macros={macros}
@@ -183,9 +236,9 @@ render() {
                                   />    }
 
       {initialized===true &&
-        <g>
+        <g  onContextMenu={this.handleToggleContextMenu}>
           <linearGradient id={this.state.pvname+'elipse-gradient'} gradientTransform="rotate(0)">
-            <stop offset="0%" stopOpacity="0" />
+            <stop offset="0%" stopOpacity="0.5" stopColor='silver' />
             <stop offset="65%" stopColor={color} />
           </linearGradient>
           <defs>
@@ -197,15 +250,6 @@ render() {
               <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
             </filter>
           </defs>
-
-          <ellipse
-            fill={this.props.componentGradient===true?'url(#'+this.state.pvname+'elipse-gradient)':color}
-            cx={this.props.cx}
-            cy={this.props.cy}
-            rx="10"
-            ry="30"
-filter={this.props.componentShadow===true?"url(#"+this.state.pvname+"elipseShadow)":"" }
-          />
           <ellipse
             fill={this.props.componentGradient===true?'url(#'+this.state.pvname+'elipse-gradient)':color}
 
@@ -216,7 +260,16 @@ filter={this.props.componentShadow===true?"url(#"+this.state.pvname+"elipseShado
             ry="30"
             filter={this.props.componentShadow===true?"url(#"+this.state.pvname+"elipseShadow)":"" }
           />
-          <text
+          <ellipse
+            fill={this.props.componentGradient===true?'url(#'+this.state.pvname+'elipse-gradient)':color}
+            cx={this.props.cx}
+            cy={this.props.cy}
+            rx="10"
+            ry="30"
+filter={this.props.componentShadow===true?"url(#"+this.state.pvname+"elipseShadow)":"" }
+          />
+
+          <text className={classes.textQuadrapoleValue}
             x={this.props.cx+7.5}
             y={this.props.cy+57.5}
             textAnchor='middle'
@@ -225,7 +278,7 @@ filter={this.props.componentShadow===true?"url(#"+this.state.pvname+"elipseShado
             {this.props.usePvUnits===true? value+" "+this.state['metadata'].units: value+" "+this.props.units}
 
           </text>
-          <text
+          <text className={classes.textQuadrapoleLabel}
             x={this.props.cx+7.5}
             y={this.props.cy-40}
             textAnchor='middle'
@@ -236,7 +289,7 @@ filter={this.props.componentShadow===true?"url(#"+this.state.pvname+"elipseShado
         </g>
       }
       {(initialized===false||initialized==='undefined') &&
-        <g>
+        <g  onContextMenu={this.handleToggleContextMenu}>
           <linearGradient id="elipse-gradient">
             <stop offset="0%" stopOpacity="0" />
 
@@ -246,7 +299,7 @@ filter={this.props.componentShadow===true?"url(#"+this.state.pvname+"elipseShado
           </linearGradient>
           <linearGradient id={this.state.pvname+'elipse-gradient'} gradientTransform="rotate(0)">
             <stop offset="0%" stopOpacity="0" />
-            <stop offset="65%" stopColor={'grey'} />
+            <stop offset="65%" stopColor={'silver'} />
           </linearGradient>
           <defs>
             <filter id={this.state.pvname+"elipseShadow"} x="0" y="0" width="600%" height="500%">
@@ -276,7 +329,7 @@ filter={this.props.componentShadow===true?"url(#"+this.state.pvname+"elipseShado
             ry="30"
             filter={"url(#"+this.state.pvname+"elipseShadow)" }
           />
-          <text
+          <text className={classes.textQuadrapoleLabel}
             x={this.props.cx+7.5}
             y={this.props.cy+60}
             textAnchor='middle'
@@ -284,7 +337,7 @@ filter={this.props.componentShadow===true?"url(#"+this.state.pvname+"elipseShado
           >
             {"Connecting"}
           </text>
-          <text
+          <text className={classes.textQuadrapoleLabel}
             x={this.props.cx+7.5}
             y={this.props.cy+75}
             textAnchor='middle'
@@ -292,7 +345,7 @@ filter={this.props.componentShadow===true?"url(#"+this.state.pvname+"elipseShado
           >
             {"to:"}
           </text>
-          <text
+          <text className={classes.textQuadrapoleLabel}
             x={this.props.cx+7.5}
             y={this.props.cy+90}
             textAnchor='middle'
@@ -312,4 +365,4 @@ filter={this.props.componentShadow===true?"url(#"+this.state.pvname+"elipseShado
 }
 
 QuadrapoleMagnet.contextType=AutomationStudioContext;
-export default QuadrapoleMagnet
+export default withStyles(styles)(QuadrapoleMagnet)

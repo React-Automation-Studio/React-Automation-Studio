@@ -78,7 +78,7 @@ class ControlTopHarpEx1 extends React.Component {
       <div style={{ padding: 12} }>
 
 
-        <svg width="100%" height="400px">
+        <svg width="100%" height="100%" viewBox="0 0 1411 400" preserveAspectRatio="meet">
           {/*  <linearGradient id={'rect-gradient'} gradientTransform="rotate(90)">
 
           <stop offset="0%" stopOpacity="0" />

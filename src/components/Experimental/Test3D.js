@@ -28,6 +28,7 @@ import ControlBottomEx1 from '../ControlScreens/GridComponents/ControlBottomEx1'
 import SideBar from '../SystemComponents/SideBar';
 import ThreeScene from '../Experimental/ThreeScene';
 import AppBar from '@material-ui/core/AppBar';
+import Card from '@material-ui/core/Card';
 import {
 
   makeVisFlexible,
@@ -91,30 +92,49 @@ render() {
 
         </Grid>
 
-        <Grid item sm={3} >
+        <Grid item sm={3}  style={{paddingRight:'25px'}}>
+          <Card style={{ padding: 12}} >
+            <Grid
+              container
+              direction="row"
+              justify="flex-start"
+              alignItems="center"
+              spacing={2}
+            >  <Grid item xs={12}  >
+              <TextInput   pv='pva://testIOC:Cube1:xRotation'      macros={this.props['macros']} usePvMinMax={true} label="xRotation" usePrecision={true} step={0.01} prec={3}  />
 
-            <SimpleSlider  pv='pva://testIOC:Cube1:xRotation'      macros={this.props['macros']} usePvMinMax={true} min={1000} max={500} usePvLabel={true} usePrecision={true} step={0.01} prec={3} />
-            <SimpleSlider  pv='pva://testIOC:Cube1:yRotation'      macros={this.props['macros']} usePvMinMax={true} min={1000} max={500} usePvLabel={true} usePrecision={true} step={0.01} prec={3} />
+            </Grid>
+              <Grid item sm={12} >
+                <SimpleSlider  pv='pva://testIOC:Cube1:xRotation'      macros={this.props['macros']} usePvMinMax={true} label="xRotation" usePrecision={true} step={0.01} prec={3} />
+              </Grid>
+              <Grid item xs={12}  >
+                <TextInput   pv='pva://testIOC:Cube1:yRotation'      macros={this.props['macros']} usePvMinMax={true} label="yRotation" usePrecision={true} step={0.01} prec={3}  />
 
+              </Grid>
+              <Grid item sm={12} >
+                <SimpleSlider  pv='pva://testIOC:Cube1:yRotation'      macros={this.props['macros']} usePvMinMax={true}label="yRotation"  usePrecision={true} step={0.01} prec={3} />
+              </Grid>
+            </Grid>
+          </Card>
+          </Grid>
         </Grid>
-      </Grid>
 
 
 
 
-    </div>
+      </div>
 
 
 
 
 
-        );
-        }
-        }
+      );
+      }
+      }
 
-        Test3D.propTypes = {
-          classes: PropTypes.object.isRequired,
-        };
+      Test3D.propTypes = {
+        classes: PropTypes.object.isRequired,
+      };
 
-        export default withStyles(styles)(Test3D);
-        //export default Test3D;
+      export default withStyles(styles)(Test3D);
+      //export default Test3D;

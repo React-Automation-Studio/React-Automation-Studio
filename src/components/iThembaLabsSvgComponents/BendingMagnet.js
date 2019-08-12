@@ -2,6 +2,7 @@ import React from 'react'
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 import DataConnection from '../SystemComponents/DataConnection';
 import { withStyles } from '@material-ui/core/styles';
+import ContextMenu from '../SystemComponents/ContextMenu';
 //import MenuItem from '@material-ui/core/MenuItem';
 const styles = theme => ({
 
@@ -24,15 +25,29 @@ const styles = theme => ({
 class BendingMagnet extends React.Component {
   constructor(props) {
     super(props);
+    let pvname;
+    if (typeof this.props.macros !== 'undefined'){
+      let macro;
+      pvname=this.props.pv;
+      for (macro in this.props.macros){
+        pvname=pvname.replace(macro.toString(),this.props.macros[macro].toString());
+      }
+    }
+    else{
+      pvname=this.props.pv;
+
+    }
     this.state={'value' : "",
     'inputValue' : "",
     'outputValue' : "",
     'hasFocus':false,
     'label':"Undefined",
-    'pvname':"Undefined",
+    'pvname':pvname,
     'intialized':false,
     'metadata':{},
-    'severity':''
+    'severity':'',
+    openContextMenu: false,
+    'open':false,x0:0,y0:0
   }
   this.handleOnClick= this.handleOnClick.bind(this);
   this.handleInputValue= this.handleInputValue.bind(this);
@@ -50,6 +65,20 @@ componentWillUnmount() {
 
 }
 
+handleContextMenuClose = (event) => {
+
+
+  this.setState({ openContextMenu: false });
+
+};
+
+handleToggleContextMenu = (event) => {
+  //   console.log(event.type)
+  event.persist()
+  this.setState(state => ({ openContextMenu: !state.openContextMenu,x0:event.pageX,y0:event.pageY }));
+
+  event.preventDefault();
+}
 
 
 
@@ -189,7 +218,21 @@ render() {
 
 
   return (
-    <g  onClick={this.handleOnClick(this.props.macros['$(device)'])}>
+    <g  onContextMenu={this.handleToggleContextMenu}>
+    <ContextMenu
+      disableProbe={this.props.disableProbe}
+      open={this.state.openContextMenu}
+      anchorReference="anchorPosition"
+      anchorPosition={{ top: +this.state.y0, left: +this.state.x0 }}
+      probeType={'simple'}
+      pvs={[{pvname:this.state.pvname,initialized:initialized}]}
+      handleClose={this.handleContextMenuClose}
+
+      transformOrigin={{
+        vertical: 'top',
+        horizontal: 'left',
+      }}
+    />
       <DataConnection
         pv={pv}
         macros={macros}
@@ -210,7 +253,7 @@ render() {
                                   />    }
 
       {initialized===true &&
-        <g transform={'translate('+this.props.cx+','+this.props.cy+')'}>
+        <g transform={'translate('+this.props.cx+','+this.props.cy+')'}  onClick={this.handleOnClick(this.props.macros['$(device)'])}>
           <linearGradient id={this.state.pvname+'elipse-gradient'} gradientTransform="rotate(0)">
             <stop offset="0%" stopOpacity="30" stopColor={'silver'} />
             <stop offset="75%" stopColor={color_side} />

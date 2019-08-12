@@ -2,7 +2,7 @@ import React from 'react'
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 import DataConnection from '../SystemComponents/DataConnection';
 import { withStyles } from '@material-ui/core/styles';
-
+import ContextMenu from '../SystemComponents/ContextMenu';
 const styles = theme => ({
 
 
@@ -13,7 +13,11 @@ const styles = theme => ({
   textSteererYMagnetValue: {
     fill:theme.palette.text.primary
 
-  }
+  },
+  textSteererYMagnetDisconneted: {
+    fill:'dimgrey'
+
+  },
 });
 
 
@@ -24,11 +28,15 @@ class SteererYMagnet extends React.Component {
 
     pvs['readback']={initialized: false, pvname:'pva://'+props.system.devices.device.deviceName+":"+props.system.devices.device.readback,value:"",char_value:"",metadata:{}};
 
-
-    this.state={
-      pvs:pvs
+    let contextPVs=[];
+    for (let item in pvs){
+      contextPVs.push(pvs[item]);
     }
-    console.log(pvs);
+    this.state={
+      pvs:pvs,contextPVs:contextPVs,  openContextMenu: false,
+      'open':false,x0:0,y0:0
+    }
+    //console.log(pvs);
     this.handleOnClick= this.handleOnClick.bind(this);
     this.handleInputValue= this.handleInputValue.bind(this);
 
@@ -46,7 +54,20 @@ class SteererYMagnet extends React.Component {
   }
 
 
+  handleContextMenuClose = (event) => {
 
+
+    this.setState({ openContextMenu: false });
+
+  };
+
+  handleToggleContextMenu = (event) => {
+    console.log(event.type)
+    event.persist()
+    this.setState(state => ({ openContextMenu: !state.openContextMenu,x0:event.pageX,y0:event.pageY }));
+
+    event.preventDefault();
+  }
 
 
   handleMetadata= readback => (metadata) => {
@@ -157,7 +178,7 @@ if (typeof this.props.alarmSensitive !== 'undefined'){
         color_face='#133C99';
         color_top='#133CA3';
 
-    
+
     }
 
   }
@@ -178,7 +199,21 @@ if (typeof this.props.alarmSensitive !== 'undefined'){
 //  console.log(readbackValue);
 
 return (
-  <g  onClick={this.handleOnClick(this.props.system)}>
+  <g  onContextMenu={this.handleToggleContextMenu} >
+  <ContextMenu
+    disableProbe={this.props.disableProbe}
+    open={this.state.openContextMenu}
+    anchorReference="anchorPosition"
+    anchorPosition={{ top: +this.state.y0, left: +this.state.x0 }}
+    probeType={'simple'}
+    pvs={this.state.contextPVs}
+    handleClose={this.handleContextMenuClose}
+
+    transformOrigin={{
+      vertical: 'top',
+      horizontal: 'left',
+    }}
+  />
     <DataConnection
       pv={this.state.pvs['readback'].pvname}
       usePrecision={usePrecision}
@@ -189,7 +224,7 @@ return (
 
 
     {initialized===true &&
-      <g transform={'translate('+this.props.cx+','+this.props.cy+')'}>
+      <g transform={'translate('+this.props.cx+','+this.props.cy+')'} onClick={this.handleOnClick(this.props.system)}>
         <linearGradient id={this.props.system.systemName+'elipse-gradient'} gradientTransform="rotate(0)">
           <stop offset="0%" stopOpacity="30" stopColor={'silver'} />
           <stop offset="75%" stopColor={color_side} />
@@ -759,24 +794,16 @@ return (
                                   </g>
 
 
-
-                                  <text
-                                    x={7.5}
-                                    y={57.5}
+                                  <text className={classes.textSteererYMagnetDisconneted}
+                                    x={typeof this.props.labelOffsetX!=='undefined'?this.props.labelOffsetX:0}
+                                    y={typeof this.props.labelOffsetY!=='undefined'?this.props.labelOffsetY-40:-40}
                                     textAnchor='middle'
                                     filter={this.props.textShadow===true?"url(#"+this.props.system.systemName+"elipseShadow)":"" }
                                     >
-                                      {this.props.usePvUnits===true? readbackValue+" "+pvs.readback.metadata.units:'X: '+ readbackValue+" "+this.props.units}
-
+                                      {this.props.system.displayName}
                                     </text>
-                                    <text
-                                      x={7.5}
-                                      y={-40}
-                                      textAnchor='middle'
-                                      filter={this.props.textShadow===true?"url(#"+this.props.system.systemName+"elipseShadow)":"" }
-                                      >
-                                        {this.props.system.displayName}
-                                      </text>
+
+
                                     </g>
                                   }*/}
                                 </g>

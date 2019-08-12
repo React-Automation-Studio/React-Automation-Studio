@@ -457,7 +457,7 @@ class ControlTestHarp1 extends React.Component {
                 </Grid>
 
                 <Grid item sm={12}>
-                  <AppBar position="static" color='inherit' indicatorColor="secondary">
+                  <AppBar position="static" color='inherit' indicatorcolor="secondary">
                     <Tabs
                       value={tabValue}
                       onChange={this.handleTabChange}
@@ -749,7 +749,7 @@ class ControlTestHarp1 extends React.Component {
                       <Grid
                         container
                         direction="row"
-                        justify="start"
+                        justify="flex-start"
                         alignItems="center"
 
                       >

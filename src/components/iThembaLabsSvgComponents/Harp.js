@@ -513,6 +513,7 @@ handleOnClick =device=> (event) => {
                         <stop offset="90%" stopColor={'grey'} />
                       </linearGradient>
                       <g  transform='scale (0.3996 1.25)'>
+                        <rect width='36' height='36' fill={alarmColor} x={-18} y={ +yoffset-17.5} transform='rotate(15,0,0) ' fillOpacity="0"/>
                         <g
                           fill={'grey'}
                           filter={this.props.componentShadow===true?"url(#"+this.props.systemName+"HarpShadow)":"" }

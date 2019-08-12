@@ -117,9 +117,7 @@ class Main extends Component {
               <Grid item xs={12}  >
                 <Button  fullWidth className= {classes.button} component={Link} to="/MobileDemo2" color="primary" variant='contained'>  Mobile Demo 2 </Button>
               </Grid>
-              <Grid item xs={12}  >
-                <Button  fullWidth className= {classes.button} component={Link} to="/ControlTest1" color="primary" variant='contained'>  Control Test 1 </Button>
-              </Grid>
+
 
 
               <Grid item xs={12}  >
@@ -131,7 +129,7 @@ class Main extends Component {
               </Grid>
 
               <Grid item xs={12}  >
-                <Button  fullWidth className= {classes.button} component={Link} to="/ControlTest3D" color="primary" variant='contained'>  3D Demos </Button>
+                <Button  fullWidth className= {classes.button} component={Link} to="/Test3D" color="primary" variant='contained'>  3D Demos </Button>
 
               </Grid>
 
@@ -140,11 +138,9 @@ class Main extends Component {
               </Grid>
 
 
+
               <Grid item xs={12}  >
-                <Button  fullWidth className= {classes.button} component={Link} to="/ControlTestTable" color="primary" variant='contained'>  Control Table Demo </Button>
-              </Grid>
-              <Grid item xs={12}  >
-                <Button  fullWidth className= {classes.button} component={Link} to="/IvanControlTable" color="primary" variant='contained'>  Ivan Control Table </Button>
+                <Button  fullWidth className= {classes.button} component={Link} to="/ControlTableExample" color="primary" variant='contained'> Control Table Example</Button>
               </Grid>
               <Grid item xs={12}  >
                 <Button  fullWidth className= {classes.button} component={Link} to="/Help" color="secondary" variant='contained'>  Help </Button>

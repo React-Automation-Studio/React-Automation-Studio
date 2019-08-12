@@ -38,14 +38,14 @@ const styles = theme => ({
 
 });
 /**
- * The ThumbWheel component is a wrapper on an array of Material-UI Button components. The Button component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
- * The margins and spacing must be controlled from the parent component.<br/><br/>
- * Material-UI Button Demos:
- * https://material-ui.com/demos/buttons/<br/><br/>
- * Material-UI Button API:
- * https://material-ui.com/api/button/
+* The ThumbWheel component is a wrapper on an array of Material-UI Button components. The Button component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
+* The margins and spacing must be controlled from the parent component.<br/><br/>
+* Material-UI Button Demos:
+* https://material-ui.com/demos/buttons/<br/><br/>
+* Material-UI Button API:
+* https://material-ui.com/api/button/
 
- */
+*/
 class ThumbWheel extends React.Component {
   constructor(props) {
     super(props);
@@ -161,7 +161,7 @@ handleButtonClick =increment_value=>(event)=> {
 }
 
 handleToggleContextMenu = (event) => {
-//   console.log(event.type)
+  //   console.log(event.type)
 
 
 
@@ -290,74 +290,76 @@ render() {
 
         <FormControlLabel className={classes.Button}
           control={
-          <div style={{display:'flex', flexDirection:'row-reverse',}}>
-            {num_array.map((item, index) =>
-              <div key={'toprowbuttons' + index+'div1'} style={{paddingRight:this.props.theme.spacing(1),paddingLeft:this.props.theme.spacing(1)}}>
-              <div style={{display:'flex', flexDirection:'column'}}>
-              <FormControlLabel className={classes.Button}
-                control={
-                  <Button key={'toprowbuttons' + index} disabled={write_access===false?true:false} size={typeof(this.props.buttonSize)!=='undefined'?this.props.buttonSize:'small'} variant="contained" color={"primary"} className={classes.Button} onClick={this.handleButtonClick(((10**index)/(10**prec_decimal_div)) )} onContextMenu={this.handleToggleContextMenu}>
-                  {((10**index)/(10**prec_decimal_div)) >=0?<ExpandLess  />:<ExpandMore  />}
-                  </Button>
-                }
-                label={((10**index)/(10**prec_decimal_div)) }
-                labelPlacement={"bottom"}
-              />
+            <div style={{display:'flex', flexDirection:'row-reverse',}}>
+              {num_array.map((item, index) =>
+                <div key={'toprowbuttons' + index+'div1'} style={{paddingRight:this.props.theme.spacing(1),paddingLeft:this.props.theme.spacing(1)}}>
+                  <div style={{display:'flex', flexDirection:'column'}}>
+                    <FormControlLabel className={classes.Button}
+                      control={
+                        <Button
+                          key={'toprowbuttons' + index} disabled={write_access===false?true:false} size={typeof(this.props.buttonSize)!=='undefined'?this.props.buttonSize:'small'} variant="contained" color={"primary"} className={classes.Button} onClick={this.handleButtonClick(((10**index)/(10**prec_decimal_div)) )} onContextMenu={this.handleToggleContextMenu}>
+                          {((10**index)/(10**prec_decimal_div)) >=0?<ExpandLess  />:<ExpandMore  />}
+                          </Button>
+                        }
+                        label={((10**index)/(10**prec_decimal_div)) }
+                        labelPlacement={"bottom"}
+                              />
 
-              <Button key={'bottomrowbuttons' + index} disabled={write_access===false?true:false} size={typeof(this.props.buttonSize)!=='undefined'?this.props.buttonSize:'small'} variant="contained" color={"primary"} className={classes.Button} onClick={this.handleButtonClick((-(10**index)/(10**prec_decimal_div)) )} onContextMenu={this.handleToggleContextMenu}>
-              {(-(10**index)/(10**prec_decimal_div)) >=0?<ExpandLess  />:<ExpandMore  />}
-              </Button>
+                      <Button
+                        key={'bottomrowbuttons' + index} disabled={write_access===false?true:false} size={typeof(this.props.buttonSize)!=='undefined'?this.props.buttonSize:'small'} variant="contained" color={"primary"} className={classes.Button} onClick={this.handleButtonClick((-(10**index)/(10**prec_decimal_div)) )} onContextMenu={this.handleToggleContextMenu}>
+                        {(-(10**index)/(10**prec_decimal_div)) >=0?<ExpandLess  />:<ExpandMore  />}
+                        </Button>
+                      </div>
+                    </div>
+                  )}
               </div>
-              </div>
-            )}
-        </div>
-      }
-        />
-
-
-
-      }
-
-      {(initialized===false||initialized==='undefined') &&
-      <FormControlLabel className={classes.Button}
-        control={
-      <FormControlLabel className={classes.Button}
-        control={
-        <div style={{display:'flex', flexDirection:'row-reverse',}}>
-          {num_array.map((item, index) =>
-            <div key={'toprowbuttons' + index+'div1'} style={{paddingRight:this.props.theme.spacing(1),paddingLeft:this.props.theme.spacing(1)}}>
-            <div style={{display:'flex', flexDirection:'column'}}>
-            <FormControlLabel className={classes.Button}
-              control={
-                <Button key={'toprowbuttons' + index} disabled={true} size={typeof(this.props.buttonSize)!=='undefined'?this.props.buttonSize:'small'} variant="contained" color={"primary"} className={classes.Button} onClick={this.handleButtonClick(((10**index)/(10**prec_decimal_div)) )} onContextMenu={this.handleToggleContextMenu}>
-                {((10**index)/(10**prec_decimal_div)) >=0?<ExpandLess  />:<ExpandMore  />}
-                </Button>
               }
-              label={((10**index)/(10**prec_decimal_div)) }
-              labelPlacement={"bottom"}
             />
 
-            <Button key={'bottomrowbuttons' + index} disabled={true} size={typeof(this.props.buttonSize)!=='undefined'?this.props.buttonSize:'small'} variant="contained" color={"primary"} className={classes.Button} onClick={this.handleButtonClick((-(10**index)/(10**prec_decimal_div)) )} onContextMenu={this.handleToggleContextMenu}>
-            {(-(10**index)/(10**prec_decimal_div)) >=0?<ExpandLess  />:<ExpandMore  />}
-            </Button>
-            </div>
-            </div>
-          )}
-      </div>
-    }
-
-      />
-    }
-    label={"Connecting to: "+this.state.pvname}
-    labelPlacement={"bottom"}
-
-    />
 
 
-    }
+          }
+
+          {(initialized===false||initialized==='undefined') &&
+            <FormControlLabel className={classes.Button}
+              control={
+                <FormControlLabel className={classes.Button}
+                  control={
+                    <div style={{display:'flex', flexDirection:'row-reverse',}}>
+                      {num_array.map((item, index) =>
+                        <div key={'toprowbuttons' + index+'div1'} style={{paddingRight:this.props.theme.spacing(1),paddingLeft:this.props.theme.spacing(1)}}>
+                          <div style={{display:'flex', flexDirection:'column'}}>
+                            <FormControlLabel className={classes.Button}
+                              control={
+                                <Button key={'toprowbuttons' + index} disabled={true} size={typeof(this.props.buttonSize)!=='undefined'?this.props.buttonSize:'small'} variant="contained" color={"primary"} className={classes.Button} onClick={this.handleButtonClick(((10**index)/(10**prec_decimal_div)) )} onContextMenu={this.handleToggleContextMenu}>
+                                  {((10**index)/(10**prec_decimal_div)) >=0?<ExpandLess  />:<ExpandMore  />}
+                                  </Button>
+                                }
+                                  label={((10**index)/(10**prec_decimal_div)) }
+                                  labelPlacement={"bottom"}
+                                />
+
+                                <Button key={'bottomrowbuttons' + index} disabled={true} size={typeof(this.props.buttonSize)!=='undefined'?this.props.buttonSize:'small'} variant="contained" color={"primary"} className={classes.Button} onClick={this.handleButtonClick((-(10**index)/(10**prec_decimal_div)) )} onContextMenu={this.handleToggleContextMenu}>
+                                  {(-(10**index)/(10**prec_decimal_div)) >=0?<ExpandLess  />:<ExpandMore  />}
+                                </Button>
+                                </div>
+                                </div>
+                              )}
+                          </div>
+                        }
+
+                                    />
+                      }
+                      label={"Connecting to: "+this.state.pvname}
+                      labelPlacement={"bottom"}
+
+                    />
 
 
-  </div>
+                  }
+
+
+                </div>
 
 )
 }
@@ -385,11 +387,11 @@ ThumbWheel.propTypes = {
 
 };
 ThumbWheel.defaultProps = {
-    prec_integer: 4,
-    prec_decimal: 3,
-    usePvMinMax:false,
-    debug:false,
-    alarmSensitive:false,
+  prec_integer: 4,
+  prec_decimal: 3,
+  usePvMinMax:false,
+  debug:false,
+  alarmSensitive:false,
 };
 
 ThumbWheel.contextType=AutomationStudioContext;

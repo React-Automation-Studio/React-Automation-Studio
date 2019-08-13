@@ -66,7 +66,15 @@ else{
   port=process.env.REACT_APP_StyleguideServerPORT;
 }
 
-let AutomationStudioStyleGuideBuildURL=pvServerBASEURL+":"+port;
+
+let AutomationStudioStyleGuideBuildURL;
+
+if(typeof process.env.REACT_APP_StyleguideServerURL==='undefined'){
+  AutomationStudioStyleGuideBuildURL=pvServerBASEURL+":"+port;
+}
+else{
+  AutomationStudioStyleGuideBuildURL=process.env.REACT_APP_StyleguideServerURL+":"+port;
+}
 
 class Main extends Component {
   constructor(props) {
@@ -146,7 +154,7 @@ class Main extends Component {
                 <Button  fullWidth className= {classes.button} component={Link} to="/Help" color="secondary" variant='contained'>  Help </Button>
               </Grid>
               <Grid item xs={12}  >
-                <Button  fullWidth className= {classes.button} target="_blank" href={AutomationStudioStyleGuideBuildURL} color="secondary" variant='contained'>  Style Guide </Button>
+                <Button  fullWidth className= {classes.button} target="_blank" href={AutomationStudioStyleGuideBuildURL} color="secondary" variant='contained'> Help and Style Guide </Button>
               </Grid>
 
             </Grid>

@@ -16,7 +16,7 @@ This React Automation Studio is built in 4 components:
 
 This is the python process variable server. Process variable requests are made from the multiple connected clients, the pvServer makes a connection to the EPICS process variable and serves the process variable meta data and live values to clients through socket-IO events.
 
-The pvServer support user login and authentication and can be enabledby altering the environment variables.
+The pvServer supports user login and authentication and can be enabled by altering the environment variables.
 
 *2. React frontend*
 

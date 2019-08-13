@@ -12,9 +12,10 @@ ADD ./public /app/public
 ADD version ./.env* /app/
 ADD ./src /app/src
 ADD ./styleguide.config.js /app/styleguide.config.js
+ADD ./img /app/img
 RUN npm run styleguidebuild
 RUN cp -R /app/styleguide/ /styleguide/
-
+ADD ./img /styleguide/img
 ADD ./styleguideServer/ /styleguideServer
 WORKDIR /styleguideServer
 ENV PATH /styleguideServer/node_modules/.bin:$PATH

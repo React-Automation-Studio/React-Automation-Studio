@@ -1,0 +1,83 @@
+version: '3.2'
+services:
+  frontendserverdev:
+    env_file: .env
+    build:
+      context: ./
+      args: # Environment variables available at build-time
+                - http_proxy
+                - https_proxy
+                - no_proxy
+      dockerfile: docker/frontendserverDev/Dockerfile
+    volumes:
+      - ./certificates:/certificates/
+      - ./package.json:/frontendserverAppDev/package.json
+      - ./src:/frontendserverAppDev/src
+      - ./public:/frontendserverAppDev/public
+    environment:
+          - ENV REACT_APP_StyleguideServerPORT=6060
+          - REACT_APP_StyleguideServerURL=http://127.0.0.1
+    restart: always
+    network_mode: host
+  pvserver:
+    env_file: .env
+    build:
+      context: ./
+      args: # Environment variables available at build-time
+                - http_proxy
+                - https_proxy
+                - no_proxy
+      dockerfile: docker/pvserver/Dockerfile
+    restart: always
+    network_mode: host
+    tty: true
+    stdin_open: true
+    volumes:
+      - ./certificates:/certificates/
+      - ./users:/pvServer/userAuthentication/users
+  unsecurestylguidepvserver:
+    env_file: .env
+    environment:
+          - REACT_APP_PyEpicsServerPORT=5001
+          - REACT_APP_EnableLogin=false
+
+    build:
+      context: ./
+      args: # Environment variables available at build-time
+                - http_proxy
+                - https_proxy
+                - no_proxy
+      dockerfile: docker/pvserver/Dockerfile
+    restart: always
+    network_mode: host
+    volumes:
+      - ./certificates:/certificates/
+  demoioc:
+    build:
+      context: ./
+      args: # Environment variables available at build-time
+                - http_proxy
+                - https_proxy
+                - no_proxy
+      dockerfile: docker/demoioc/Dockerfile
+    tty: true
+    stdin_open: true
+    restart: always
+    network_mode: host
+  styleguideserverdev:
+    env_file: .env
+    build:
+      context: ./
+      args: # Environment variables available at build-time
+                - http_proxy
+                - https_proxy
+                - no_proxy
+      dockerfile: docker/styleguideServerDev/Dockerfile
+    volumes:
+      - ./certificates:/certificates/
+      - ./package.json:/frontendserverAppDev/package.json
+      - ./src:/frontendserverAppDev/src
+      - ./public:/frontendserverAppDev/public
+      - ./styleguide.config.js:/frontendserverAppDev/styleguide.config.js
+    restart: always
+    network_mode: host

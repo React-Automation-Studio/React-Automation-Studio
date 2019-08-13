@@ -22,13 +22,12 @@ import SelectionInput from '../BaseComponents/SelectionInput';
 import ToggleButton from '../BaseComponents/ToggleButton';
 import ActionButton from '../BaseComponents/ActionButton';
 import ThumbWheel from '../BaseComponents/ThumbWheel';
-import ControlRightEx1 from '../ControlScreens/GridComponents/ControlRightEx1'
-import ControlTopEx1 from '../ControlScreens/GridComponents/ControlTopEx1'
-import ControlBottomEx1 from '../ControlScreens/GridComponents/ControlBottomEx1'
+
 import SideBar from '../SystemComponents/SideBar';
 import ThreeScene from '../Experimental/ThreeScene';
 import AppBar from '@material-ui/core/AppBar';
 import Card from '@material-ui/core/Card';
+
 import {
 
   makeVisFlexible,
@@ -70,29 +69,35 @@ render() {
   const { classes } = this.props;
   return (
     <div>
-      <SideBar/>
-      <Grid container spacing={3}>
 
-        <Grid item sm={9}>
+      <Grid
+        container
+        direction="row"
+        justify="flex-start"
+        alignItems="center"
+        spacing={1}
+      >
+        <Grid item xs={1} >
+          <SideBar/>
+        </Grid>
+        <Grid item xs={10} >
+          <div style={{textAlign: 'center'}}>
+            Epics Control of a 3D Object
+            </div>
+        </Grid>
+        <Grid item xs={1} >
 
-          <Grid
-            container
-            direction="row"
-            justify="flex-start"
-            alignItems="center"
-          >
-            <Grid item sm={12}>
-              <div style={{height:'90vh',marginLeft:'25px'}}>
+        </Grid>
+        <Grid item xs={12} sm={12} md={12} lg={12} style={{width: '100%', height: '100%' }} >
 
-                <FlexibleThreeScene/>
-              </div>
-            </Grid>
 
-          </Grid>
+
+
+          <FlexibleThreeScene />
 
         </Grid>
 
-        <Grid item sm={3}  style={{paddingRight:'25px'}}>
+        <Grid item xs={12} sm={12} md={12} lg={12} >
           <Card style={{ padding: 12}} >
             <Grid
               container
@@ -100,18 +105,19 @@ render() {
               justify="flex-start"
               alignItems="center"
               spacing={2}
-            >  <Grid item xs={12}  >
+            >  <Grid item xs={6}  >
               <TextInput   pv='pva://testIOC:Cube1:xRotation'      macros={this.props['macros']} usePvMinMax={true} label="xRotation" usePrecision={true} step={0.01} prec={3}  />
 
             </Grid>
-              <Grid item sm={12} >
-                <SimpleSlider  pv='pva://testIOC:Cube1:xRotation'      macros={this.props['macros']} usePvMinMax={true} label="xRotation" usePrecision={true} step={0.01} prec={3} />
-              </Grid>
-              <Grid item xs={12}  >
+              <Grid item xs={6}  >
                 <TextInput   pv='pva://testIOC:Cube1:yRotation'      macros={this.props['macros']} usePvMinMax={true} label="yRotation" usePrecision={true} step={0.01} prec={3}  />
 
               </Grid>
-              <Grid item sm={12} >
+              <Grid item xs={6} >
+                <SimpleSlider  pv='pva://testIOC:Cube1:xRotation'      macros={this.props['macros']} usePvMinMax={true} label="xRotation" usePrecision={true} step={0.01} prec={3} />
+              </Grid>
+
+              <Grid item xs={6} >
                 <SimpleSlider  pv='pva://testIOC:Cube1:yRotation'      macros={this.props['macros']} usePvMinMax={true}label="yRotation"  usePrecision={true} step={0.01} prec={3} />
               </Grid>
             </Grid>

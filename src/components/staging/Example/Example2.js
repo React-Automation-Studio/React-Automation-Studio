@@ -26,9 +26,7 @@ import ToggleButton from '../../../components/BaseComponents/ToggleButton';
 import ActionButton from '../../../components/BaseComponents/ActionButton';
 import ThumbWheel from '../../../components/BaseComponents/ThumbWheel';
 
-import ControlRightEx1 from '../../../components/ControlScreens/GridComponents/ControlRightEx1'
-import ControlTopEx1 from '../../../components/ControlScreens/GridComponents/ControlTopEx1'
-import ControlBottomEx1 from '../../../components/ControlScreens/GridComponents/ControlBottomEx1'
+
 import Card from '@material-ui/core/Card';
 import SideBar from '../../../components/SystemComponents/SideBar';
 import AppBar from '@material-ui/core/AppBar';

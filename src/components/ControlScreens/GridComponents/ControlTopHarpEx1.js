@@ -10,7 +10,6 @@ import Grid from '@material-ui/core/Grid';
 import SwitchComponent from '../../BaseComponents/SwitchComponent';
 import ToggleButton from '../../BaseComponents/ToggleButton';
 import ActionButton from '../../BaseComponents/ActionButton';
-
 import QuadrapoleMagnet from '../../iThembaLabsSvgComponents/QuadrapoleMagnet';
 import Harp from '../../iThembaLabsSvgComponents/Harp';
 import FC from '../../iThembaLabsSvgComponents/FC';
@@ -18,9 +17,7 @@ import BendingMagnet from '../../iThembaLabsSvgComponents/BendingMagnet';
 import SteererYMagnet from '../../iThembaLabsSvgComponents/SteererYMagnet';
 import SteererXYMagnet from '../../iThembaLabsSvgComponents/SteererXYMagnet';
 import SlitXY from '../../iThembaLabsSvgComponents/SlitXY';
-import SvgElementTest from '../../SvgComponents/SvgElementTest';
-//import MenuItem from '@material-ui/core/MenuItem';
-import HorizontalBeamline from '../../SvgComponents/HorizontalBeamline';
+import HorizontalBeamline from '../../iThembaLabsSvgComponents/HorizontalBeamline';
 
 
 class ControlTopHarpEx1 extends React.Component {
@@ -35,37 +32,28 @@ class ControlTopHarpEx1 extends React.Component {
   }
 
   handleOnSystemClick(system){
-    //  console.log(system);
+
     this.props.handleOnSystemClick(system);
   }
 
   handleOnClick(device){
-    //  console.log("in control top clicked "+device.toString());
+
     this.props.handlePsOnClick(device);
-    //this.props.handlePsOnClick(device);
-    //  this.setState({ ['clicked']: 1});
+
   };
 
   handleHarpInserted=(name)=>{
 
-    //    console.log("in control test1 Harp top inserted "+name.toString());
-    this.props.handleHarpInserted(name);
-    //this.setState({['editorType']:'PS',
-    //['displayEditor']:true,
-    //['editorMacros']:{'$(device)':name}});
 
-    //  this.setState({ ['clicked']: 1});
+    this.props.handleHarpInserted(name);
+
   }
 
   handleHarpRemoved=(name)=>{
 
-    //    console.log("in control test1 Harp top removed "+name.toString());
-    this.props.handleHarpRemoved(name);
-    //this.setState({['editorType']:'PS',
-    //['displayEditor']:true,
-    //['editorMacros']:{'$(device)':name}});
 
-    //  this.setState({ ['clicked']: 1});
+    this.props.handleHarpRemoved(name);
+
   }
 
 
@@ -79,19 +67,7 @@ class ControlTopHarpEx1 extends React.Component {
 
 
         <svg width="100%" height="100%" viewBox="0 0 1411 400" preserveAspectRatio="xMidYMid meet">
-          {/*  <linearGradient id={'rect-gradient'} gradientTransform="rotate(90)">
 
-          <stop offset="0%" stopOpacity="0" />
-          <stop offset="75%" stopColor={'grey'} />
-        </linearGradient>
-        <rect
-        fill='url(#rect-gradient)'
-
-        width="100%"
-        height="10"
-        x="0"
-        y="45" />
-        */}
         <HorizontalBeamline cx={0}
           cy={99}
           pv={'pva://testIOC:BeamlineA:BeamOn'}
@@ -235,22 +211,6 @@ class ControlTopHarpEx1 extends React.Component {
           label='FC4'
         />
 
-        {/*<FC
-
-          cx={550}
-          cy={100}
-          pv={'pva://$(device):$(pv_suffix)'}
-          macros={{'$(device)':'testIOC:FC4','$(pv_suffix)':'InOut'}}
-          usePvUnits={true}
-          usePvLabel={false}
-          alarmSensitive={true}
-          componentShadow={true}
-          componentGradient={true}
-          label='FC4'
-          labelOffsetY={0}
-          labelOffsetX={0}
-        />*/}
-
         <Harp
           maxHarpsReached={this.props.maxHarpsReached}
           cx={500}
@@ -265,24 +225,7 @@ class ControlTopHarpEx1 extends React.Component {
           handleHarpInsertedOrRemoved={this.props.handleHarpInsertedOrRemoved}
 
         />
-        {/*    <SteererXYMagnet
-          handleOnClick={this.handleOnClick}
-          cx={650}
-          cy={100}
-          pv={'pva://$(device):$(pv_suffix)'}
-          macros={{'$(device)':'testIOC:STR1:X','$(pv_suffix)':'Readback'}}
-          usePvUnits={true}
-          usePvLabel={false}
-          alarmSensitive={true}
-          label='STR2 XY'
-          labelOffsetY={-27}
-          labelOffsetX={0}
-          valueOffsetY={35}
-          valueOffsetX={0}
-          componentShadow={true}
-          textShadow={false}
-          componentGradient={true}
-        />*/}
+
 
 
         <SteererXYMagnet
@@ -404,24 +347,7 @@ class ControlTopHarpEx1 extends React.Component {
           textShadow={false}
           componentGradient={true}
         />
-        {/*}<SteererXMagnet
-        handleOnClick={this.handleOnClick}
-        cx={630}
-        cy={100}
-        pv={'pva://$(device):$(pv_suffix)'}
-        macros={{'$(device)':'testIOC:STR1:X','$(pv_suffix)':'Readback'}}
-        usePvUnits={true}
-        usePvLabel={false}
-        alarmSensitive={true}
-        label='STR1 X'
-        labelOffsetY={-20}
-        labelOffsetX={0}
-        valueOffsetY={+20}
-        valueOffsetX={0}
-        componentShadow={true}
-        textShadow={false}
-        componentGradient={true}
-      />*/}
+
       <BendingMagnet
         handleOnClick={this.handleOnClick}
         cx={600}
@@ -438,43 +364,6 @@ class ControlTopHarpEx1 extends React.Component {
       />
 
 
-      {/*  <SteererXYMagnet
-        handleOnClick={this.handleOnClick}
-        cx={590}
-        cy={100}
-        pv={'pva://$(device):$(pv_suffix)'}
-        macros={{'$(device)':'testIOC:STR1:X','$(pv_suffix)':'Readback'}}
-        usePvUnits={true}
-        usePvLabel={false}
-        alarmSensitive={true}
-        label='STR1 XY'
-        labelOffsetY={-14}
-        labelOffsetX={0}
-        valueOffsetY={18}
-        valueOffsetX={0}
-        componentShadow={true}
-        textShadow={false}
-        componentGradient={true}
-      />
-      <SteererXYMagnet
-      handleOnClick={this.handleOnClick}
-      cx={700}
-      cy={100}
-      pv={'pva://$(device):$(pv_suffix)'}
-      macros={{'$(device)':'testIOC:STR1:X','$(pv_suffix)':'Readback'}}
-      usePvUnits={true}
-      usePvLabel={false}
-      alarmSensitive={true}
-      label='STR3 XY'
-      labelOffsetY={-14}
-      labelOffsetX={0}
-      valueOffsetY={18}
-      valueOffsetX={0}
-      componentShadow={true}
-      textShadow={false}
-      componentGradient={true}
-    />
-    */}
     <SlitXY
       handleOnClick={this.handleOnSystemClick}
       system={{
@@ -551,92 +440,9 @@ class ControlTopHarpEx1 extends React.Component {
       handleHarpInsertedOrRemoved={this.props.handleHarpInsertedOrRemoved}
 
     />
-    {/*}  <SvgElementTest
-    handleOnClick={this.handleOnClick}
-    cx={600}
-    cy={50}
-    pv={'pva://$(device):$(pv_suffix)'}
-    macros={{'$(device)':'testIOC:PS3','$(pv_suffix)':'Readback'}}
-    usePvUnits={true}
-    alarmSensitive={true}
-    label='test'
-  />
-  */}
-  {/*}
-  <SvgElementTest
 
-  cx={700}
-  cy={100}
-  pv={'pva://$(device):$(pv_suffix)'}
-  macros={{'$(device)':'testIOC:Harp3','$(pv_suffix)':'InOut'}}
-  usePvUnits={true}
-  usePvLabel={false}
-  alarmSensitive={true}
-  label='Harp3'
-  componentShadow={false}
-  textShadow={false}
-  componentGradient={true}
-/>
-<SvgElementTest
-
-cx={800}
-cy={100}
-pv={'pva://$(device):$(pv_suffix)'}
-macros={{'$(device)':'testIOC:Harp3','$(pv_suffix)':'InOut'}}
-usePvUnits={true}
-usePvLabel={false}
-alarmSensitive={true}
-label='Harp3'
-componentShadow={true}
-textShadow={false}
-componentGradient={true}
-/>
-<SvgElementTest
-
-cx={900}
-cy={100}
-pv={'pva://$(device):$(pv_suffix)'}
-macros={{'$(device)':'testIOC:Harp2','$(pv_suffix)':'InOut'}}
-usePvUnits={true}
-usePvLabel={false}
-alarmSensitive={true}
-label='Harp2'
-componentShadow={false}
-textShadow={false}
-componentGradient={true}
-/>
-*/}
 </svg>
 
-{/* <Grid
-  container
-  direction="row"
-  justify="flex-start"
-  alignItems="center"
-  spacing={3}
-  >
-  <Grid item sm={3} >
-  <div onClick={this.props.handlePsOnClick('testIOC:PS1')}>
-  <TextOutput  pv='pva://testIOC:PS1:Readback' usePrecision={true} prec={3} usePvUnits={true} alarmSensitive={true} usePvLabel={true}/>
-</div>
-</Grid>
-<Grid item sm={3}>
-<div onClick={this.props.handlePsOnClick('testIOC:PS2')}>
-<TextOutput  pv='pva://testIOC:PS2:Readback'  usePrecision={true} prec={3} usePvUnits={true} alarmSensitive={true} usePvLabel={true}/>
-</div>
-
-</Grid>
-
-<Grid item sm={3}>
-<div onClick={this.props.handlePsOnClick('testIOC:PS3')}>
-<TextOutput  pv='pva://testIOC:PS3:Readback'  usePrecision={true} prec={3} usePvUnits={true} alarmSensitive={true} usePvLabel={true}/>
-</div>
-</Grid>
-
-
-
-</Grid>
-*/}
 
 </div>
 );

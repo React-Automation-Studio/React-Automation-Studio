@@ -261,13 +261,13 @@ class SlitXY extends React.Component {
           handleMetadata={this.handleMetadata('yOffsetReadback')}
         />
         {initialized===true &&
-          <g transform={'translate('+this.props.cx+','+this.props.cy+')'} onClick={this.handleOnClick(this.props.system)}>
-            <linearGradient id={this.state.pvname+'elipse-gradient'} gradientTransform="rotate(0)">
+          <g  id={pvs.xGapReadback.pvname+'slitxy'}transform={'translate('+this.props.cx+','+this.props.cy+')'} onClick={this.handleOnClick(this.props.system)}>
+            <linearGradient id={pvs.xGapReadback.pvname+'elipse-gradient'} gradientTransform="rotate(0)">
               <stop offset="0%" stopOpacity="30" stopColor={'silver'} />
               <stop offset="75%" stopColor={color_side} />
             </linearGradient>
             <defs>
-              <filter id={this.state.pvname+"elipseShadow"} x="0" y="0" width="600%" height="500%">
+              <filter id={pvs.xGapReadback.pvname+"elipseShadow"} x="0" y="0" width="600%" height="500%">
                 <feOffset result="offOut" in="SourceGraphic" dx="2.5" dy="2.5" />
                 <feColorMatrix result="matrixOut" in="offOut" type="matrix"
                 values="0.2 0 0 0 0 0 0.2 0 0 0 0 0 0.2 0 0 0 0 0 1 0" />
@@ -275,12 +275,12 @@ class SlitXY extends React.Component {
                 <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
               </filter>
             </defs>
-            <g filter={this.props.componentShadow===true?"url(#"+this.state.pvname+"elipseShadow)":"" }
+            <g filter={this.props.componentShadow===true?"url(#"+pvs.xGapReadback.pvname+"elipseShadow)":"" }
             >
               <g>
 
                 <g transform="translate(-10,-1092.5)"
-                  fill={this.props.componentGradient===true?'url(#'+this.state.pvname+'elipse-gradient)':color_side}
+                  fill={this.props.componentGradient===true?'url(#'+pvs.xGapReadback.pvname+'elipse-gradient)':color_side}
                   style={{'strokeWidth':'0.3',
                   'stroke':'black'}}
                 >
@@ -288,7 +288,7 @@ class SlitXY extends React.Component {
                   <g>
                     <path
                       d="m 15.05893,1085.0254 -1.776617,20.1381 0.759263,0.6179 0.51536,-5.8416 5.003912,4.0722 0.745906,-8.4549 -5.003912,-4.0722 0.515351,-5.8416 z"
-                      id="rect6403"
+
                     />
                     <path
                       d="m 7.9498012,1076.2957 6.6301368,5.3958 0.203442,-2.3062 -1.923241,-1.565 1.340787,-15.198 -2.783656,-2.2654 -1.340787,15.1979 -1.9232398,-1.5651 z"
@@ -355,12 +355,12 @@ class SlitXY extends React.Component {
         }
         {(initialized===false) &&
           <g transform={'translate('+this.props.cx+','+this.props.cy+')'}>
-            <linearGradient id={this.state.pvname+'elipse-gradient'} gradientTransform="rotate(0)">
+            <linearGradient id={pvs.xGapReadback.pvname+'elipse-gradient'} gradientTransform="rotate(0)">
               <stop offset="0%" stopOpacity="30" stopColor={'silver'} />
               <stop offset="75%" stopColor={'grey'} />
             </linearGradient>
             <defs>
-              <filter id={this.state.pvname+"elipseShadow"} x="0" y="0" width="600%" height="500%">
+              <filter id={pvs.xGapReadback.pvname+"elipseShadow"} x="0" y="0" width="600%" height="500%">
                 <feOffset result="offOut" in="SourceGraphic" dx="2.5" dy="2.5" />
                 <feColorMatrix result="matrixOut" in="offOut" type="matrix"
                 values="0.2 0 0 0 0 0 0.2 0 0 0 0 0 0.2 0 0 0 0 0 1 0" />
@@ -368,12 +368,12 @@ class SlitXY extends React.Component {
                 <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
               </filter>
             </defs>
-            <g filter={this.props.componentShadow===true?"url(#"+this.state.pvname+"elipseShadow)":"" }
+            <g filter={this.props.componentShadow===true?"url(#"+pvs.xGapReadback.pvname+"elipseShadow)":"" }
             >
 
 
               <g transform="translate(-10,-1092.5)"
-                fill={this.props.componentGradient===true?'url(#'+this.state.pvname+'elipse-gradient)':color_side}
+                fill={this.props.componentGradient===true?'url(#'+pvs.xGapReadback.pvname+'elipse-gradient)':color_side}
                 style={{'strokeWidth':'0.3',
                 'stroke':'black'}}
               >

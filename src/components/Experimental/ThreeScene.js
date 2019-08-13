@@ -4,7 +4,7 @@ import DataConnection from '../SystemComponents/DataConnection';
 import GLTFLoader from 'three-gltf-loader';
 import { pink} from '@material-ui/core/colors';
 import { withStyles } from '@material-ui/core/styles';
-
+import withWidth from '@material-ui/core/withWidth';
 const pv1='pva://testIOC:Cube1:xRotation';
 const pv2='pva://testIOC:Cube1:yRotation';
 const styles = theme => ({
@@ -58,8 +58,9 @@ componentDidUpdate(prevProps){
 }
 
 componentDidMount(){
-  const width = this.props.width;
-  const height = this.props.height;
+
+  let width = this.props.width;
+  let height = this.props.height;
 
   //ADD SCENE
   this.scene = new THREE.Scene()
@@ -190,12 +191,12 @@ renderScene = () => {
 
 
 render(){
-  console.log(this.props.width)
-  console.log(this.props.height)
+//  console.log(this.props.width)
+//  console.log(this.props.height)
   return(
 
     <div
-      style={{ width: '100%', height: '100%' }}
+      style={{  width: '100%', height: '40vh' }}
       ref={(mount) => { this.mount = mount }}
 
     >

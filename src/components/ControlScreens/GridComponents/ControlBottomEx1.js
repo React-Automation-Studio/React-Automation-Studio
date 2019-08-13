@@ -11,13 +11,6 @@ import SwitchComponent from '../../BaseComponents/SwitchComponent';
 import ToggleButton from '../../BaseComponents/ToggleButton';
 import ActionButton from '../../BaseComponents/ActionButton';
 
-import QuadrapoleMagnet from '../../SvgComponents/QuadrapoleMagnet';
-import Harp from '../../SvgComponents/Harp';
-import FC from '../../SvgComponents/FC';
-import SvgElementTest from '../../SvgComponents/SvgElementTest';
-//import MenuItem from '@material-ui/core/MenuItem';
-import HorizontalBeamline from '../../SvgComponents/HorizontalBeamline';
-
 
 class ControlBottomEx1 extends React.Component {
   constructor(props) {

@@ -195,6 +195,22 @@ render() {
             <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
           </filter>
           <rect
+            fill={'white'}
+
+            width={this.props.width}
+            height="5"
+            x={this.props.cx}
+            y={this.props.cy-3} />
+            <rect
+              fill={'white'}
+
+              width={this.props.width}
+              height="5"
+              x={this.props.cx}
+              y={this.props.cy+2} />
+
+
+          <rect
             fill={'url(#'+this.state.pvname+'Beamline-gradient2)'}
 
             width={this.props.width}

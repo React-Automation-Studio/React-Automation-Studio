@@ -134,7 +134,7 @@ class Main extends Component {
               </Grid>
 
               <Grid item xs={12}  >
-                <Button  fullWidth className= {classes.button} component={Link} to="/ControlTestHarp1" color="primary" variant='contained'>  Control Beam Line Demo </Button>
+                <Button  fullWidth className= {classes.button} component={Link} to="/ControlTestHarp1" color="primary" variant='contained'> Beam Line Control Demo </Button>
               </Grid>
 
 

@@ -32,9 +32,7 @@ import SelectionInput from '../../BaseComponents/SelectionInput';
 import ToggleButton from '../../BaseComponents/ToggleButton';
 import ActionButton from '../../BaseComponents/ActionButton';
 
-import ControlRightEx1 from '../../ControlScreens/GridComponents/ControlRightEx1'
-import ControlTopEx1 from '../../ControlScreens/GridComponents/ControlTopEx1'
-import ControlBottomEx1 from '../../ControlScreens/GridComponents/ControlBottomEx1'
+
 import Gauge from '../../BaseComponents/Gauge';
 import Card from '@material-ui/core/Card';
 import SideBar from '../../SystemComponents/SideBar';

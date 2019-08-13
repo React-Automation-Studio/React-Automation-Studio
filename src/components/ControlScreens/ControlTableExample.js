@@ -200,24 +200,7 @@ class ControlTableExample extends React.Component {
     'displayEditor':false,
     'editorMacros':{'$(device)':""},
     'editorSystem':{},
-    'displayHarps':[
-      {systemName:'harp5p' ,displayName:'Harp 5P',inserted:false},
-      {systemName:'harp6p' ,displayName:'Harp 6P',inserted:false},
-      {systemName:'harp7p' ,displayName:'Harp 7P',inserted:false},
-      {systemName:'harp8p' ,displayName: 'Harp 8P',inserted:false},
-      {systemName:'harp9p' ,displayName: 'Harp 9P',inserted:false}  ],
-      'maxHarpsReached':false,
 
-      'x0GraphPVs':[],
-      'y0GraphPVs':[],
-      'x0legend':[],
-      'y0legend':[],
-      'x0GraphKey':"",
-      'x1GraphPVs':[],
-      'y1GraphPVs':[],
-      'x1legend':[],
-      'y1legend':[],
-      'x1GraphKey':"",
       topTabValue:0,
       sideTabValue:0
 
@@ -225,8 +208,7 @@ class ControlTableExample extends React.Component {
     }
     this.handlePsOnClick= this.handlePsOnClick.bind(this);
     this.handleOnSystemClick= this.handleOnSystemClick.bind(this);
-    this.handleHarpInserted= this.handleHarpInserted.bind(this);
-    this.handleHarpRemoved= this.handleHarpRemoved.bind(this);
+    
   }
 
   handlePsOnClick(name){
@@ -251,82 +233,8 @@ class ControlTableExample extends React.Component {
 
     //  this.setState({ ['clicked']: 1});
   }
-  handleHarpInserted=(name)=>{
-    let displayHarps=this.state.displayHarps;
-    let harp;
-    let x0GraphPVs=[];
-    let y0GraphPVs=[];
-    let x0legend=[];
-    let y0legend=[];
-    let x0GraphKey="x0Graph";
-    let y0GraphKey="y0Graph";
-    let x0RangePV;
-    let y0RangePV;
-    let x1RangePV;
-    let x0SystemName;
-    let x1SystemName;
-    let y1RangePV;
-    let x1GraphPVs=[];
-    let y1GraphPVs=[];
-    let x1legend=[];
-    let y1legend=[];
-    let x1GraphKey="x1Graph";
-    let y1GraphKey="y1Graph";
-    let numberOfInsertedGraphs=0;
-    let maxHarpsReached=false;
-    for (harp in displayHarps){
-      if (displayHarps[harp].systemName===name){
-        displayHarps[harp].inserted=true;
-      }
-      if (displayHarps[harp].inserted===true){
-        if(numberOfInsertedGraphs===0){
-          x0GraphPVs.push('pva://'+displayHarps[harp].systemName+':xcur');
-          x0RangePV='pva://'+displayHarps[harp].systemName+':xrange';
-          y0GraphPVs.push('pva://'+displayHarps[harp].systemName+':ycur');
-          y0RangePV='pva://'+displayHarps[harp].systemName+':yrange';
-          x0legend.push(displayHarps[harp].displayName);
-          y0legend.push(displayHarps[harp].displayName);
-          x0GraphKey=x0GraphKey+displayHarps[harp].systemName;
-          y0GraphKey=y0GraphKey+displayHarps[harp].systemName;
-          numberOfInsertedGraphs++;
-          x0SystemName=displayHarps[harp].systemName;
-        }else{
-          x1GraphPVs.push('pva://'+displayHarps[harp].systemName+':xcur');
-          x1RangePV='pva://'+displayHarps[harp].systemName+':xrange';
-          y1GraphPVs.push('pva://'+displayHarps[harp].systemName+':ycur');
-          y1RangePV='pva://'+displayHarps[harp].systemName+':yrange';
 
-          x1legend.push(displayHarps[harp].displayName);
-          y1legend.push(displayHarps[harp].displayName);
-          x1GraphKey=x1GraphKey+displayHarps[harp].systemName;
-          y1GraphKey=y1GraphKey+displayHarps[harp].systemName;
-          x1SystemName=displayHarps[harp].systemName;
-          numberOfInsertedGraphs++;
 
-        }
-
-      }
-
-    }
-    if  (numberOfInsertedGraphs>=2){
-      maxHarpsReached=true;
-    }
-
-    this.setState({displayHarps:displayHarps,maxHarpsReached:maxHarpsReached,
-      x0GraphPVs:x0GraphPVs,y0GraphPVs:y0GraphPVs,x0legend:x0legend,y0legend:y0legend,x0GraphKey:x0GraphKey,y0GraphKey:y0GraphKey,
-      x1GraphPVs:x1GraphPVs,y1GraphPVs:y1GraphPVs,x1legend:x1legend,y1legend:y1legend,x1GraphKey:x1GraphKey,y1GraphKey:y1GraphKey,
-      x0RangePV:x0RangePV,x1RangePV:x1RangePV,y0RangePV:y0RangePV,y1RangePV:y1RangePV,x0SystemName:x0SystemName,x1SystemName:x1SystemName})
-      //      console.log("in control test1 Harp inserted "+name.toString());
-      //this.setState({['editorType']:'PS',
-      //['displayEditor']:true,
-      //['editorMacros']:{'$(device)':name}});
-
-      //  this.setState({ ['clicked']: 1});
-    }
-
-    handleTopTabChange = (event, value) => {
-      this.setState({ topTabValue:value,displayEditor:false });
-    };
     handleSideTabChange = (event, value) => {
       this.setState({ sideTabValue:value,displayEditor:false });
     };
@@ -337,73 +245,7 @@ class ControlTableExample extends React.Component {
 
       //  this.setState({ ['clicked']: 1});
     }
-    handleHarpRemoved=(name)=>{
-      let displayHarps=this.state.displayHarps;
-      let harp;
-      let x0GraphPVs=[];
-      let y0GraphPVs=[];
-      let x0legend=[];
-      let y0legend=[];
-      let x0GraphKey="x0Graph";
-      let y0GraphKey="y0Graph";
-      let x1GraphPVs=[];
-      let y1GraphPVs=[];
-      let x0SystemName;
-      let x1SystemName;
-      let x0RangePV;
-      let y0RangePV;
-      let x1RangePV;
-      let y1RangePV;
-      let x1legend=[];
-      let y1legend=[];
-      let x1GraphKey="x1Graph";
-      let y1GraphKey="y1Graph";
-      let numberOfInsertedGraphs=0;
-      let maxHarpsReached=false;
-      for (harp in displayHarps){
-        if (displayHarps[harp].systemName===name){
-          displayHarps[harp].inserted=false;
-        }
-        if (displayHarps[harp].inserted===true){
-          if(numberOfInsertedGraphs===0){
-            x0GraphPVs.push('pva://'+displayHarps[harp].systemName+':xcur');
-            x0RangePV='pva://'+displayHarps[harp].systemName+':xrange';
-            y0GraphPVs.push('pva://'+displayHarps[harp].systemName+':ycur');
-            y0RangePV='pva://'+displayHarps[harp].systemName+':yrange';
-            x0legend.push(displayHarps[harp].displayName);
-            y0legend.push(displayHarps[harp].displayName);
-            x0GraphKey=x0GraphKey+displayHarps[harp].systemName;
-            y0GraphKey=y0GraphKey+displayHarps[harp].systemName;
-            x0SystemName=displayHarps[harp].systemName;
-            numberOfInsertedGraphs++;
-          }else{
-            x1GraphPVs.push('pva://'+displayHarps[harp].systemName+':xcur');
-            x1RangePV='pva://'+displayHarps[harp].systemName+':xrange';
-            y1GraphPVs.push('pva://'+displayHarps[harp].systemName+':ycur');
-            y1RangePV='pva://'+displayHarps[harp].systemName+':yrange';
 
-            x1legend.push(displayHarps[harp].displayName);
-            y1legend.push(displayHarps[harp].displayName);
-            x1GraphKey=x1GraphKey+displayHarps[harp].systemName;
-            y1GraphKey=y1GraphKey+displayHarps[harp].systemName;
-            x1SystemName=displayHarps[harp].systemName;
-            numberOfInsertedGraphs++;
-
-          }
-
-        }
-
-      }
-      if  (numberOfInsertedGraphs>=2){
-        maxHarpsReached=true;
-      }
-
-      this.setState({displayHarps:displayHarps,maxHarpsReached:maxHarpsReached,
-        x0GraphPVs:x0GraphPVs,y0GraphPVs:y0GraphPVs,x0legend:x0legend,y0legend:y0legend,x0GraphKey:x0GraphKey,y0GraphKey:y0GraphKey,
-        x1GraphPVs:x1GraphPVs,y1GraphPVs:y1GraphPVs,x1legend:x1legend,y1legend:y1legend,x1GraphKey:x1GraphKey,y1GraphKey:y1GraphKey,
-        x0RangePV:x0RangePV,x1RangePV:x1RangePV,y0RangePV:y0RangePV,y1RangePV:y1RangePV,x0SystemName:x0SystemName,x1SystemName:x1SystemName})
-
-      }
       render() {
         //      console.log("state: ",this.state);
         //console.log('displayHarps',this.state.displayHarps)
@@ -422,7 +264,7 @@ class ControlTableExample extends React.Component {
               alignItems="start"
               spacing={0}
             >
-              <Grid item sm={2} style={{paddingTop:24}}>
+              <Grid item xs={12} sm={2} md={2} lg={2}style={{paddingTop:24}}>
                 <AppBar position="static" color="inherhit" >
                   <VerticalTabs
                     value={sideTabValue}
@@ -442,12 +284,12 @@ class ControlTableExample extends React.Component {
 
                 </AppBar>
               </Grid>
-              <Grid item sm={7} style={{paddingTop:24,paddingRight:16}}>
+              <Grid item xs={12} sm={6} md={6} lg={7} style={{paddingTop:24,paddingRight:16}}>
                 {sideTabValue==0&&<TabContainer > <ControlCenterTable handleOnSystemClick={this.handleOnSystemClick} systems={systems['BeamLine']['PowerSupplies']}         /> </TabContainer>}
                 {sideTabValue==1&&<TabContainer > <ControlCenterTable handleOnSystemClick={this.handleOnSystemClick} systems={systems['BeamLine']['Slits']}         /> </TabContainer>}
               </Grid>
 
-              <Grid item sm={3} >
+              <Grid item xs={12} sm={4} md={4} lg={3}>
                 {((this.state['displayEditor']===true) &&(this.state['editorMacros']['$(device)']==='testIOC:PS1'))&&<ControlRightEx1 macros={this.state['editorMacros']} handleCloseEditor={this.handleCloseEditor}/>}
                 {((this.state['displayEditor']===true) &&(this.state['editorMacros']['$(device)']==='testIOC:PS2'))&&<ControlRightEx1 macros={this.state['editorMacros']} handleCloseEditor={this.handleCloseEditor}/>}
                 {((this.state['displayEditor']===true) &&(this.state['editorMacros']['$(device)']==='testIOC:PS3'))&&<ControlRightEx1 macros={this.state['editorMacros']}  handleCloseEditor={this.handleCloseEditor}/>}

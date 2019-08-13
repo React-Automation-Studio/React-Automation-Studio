@@ -39,12 +39,23 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "browserslist": [],
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
   "homepage": ".",
   "devDependencies": {
     "cross-env": "^5.2.0",
     "link-module-alias": "^1.2.0",
     "react-styleable": "^3.3.1",
-    "react-styleguidist": "^9.1.9"
+    "react-styleguidist": "^9.1.14"
   }
 }

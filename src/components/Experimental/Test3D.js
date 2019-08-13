@@ -33,7 +33,7 @@ import {
   makeVisFlexible,
 
 } from 'react-vis';
-const FlexibleThreeScene = makeVisFlexible(withStyles(styles,{withTheme:true})(ThreeScene));
+const FlexibleThreeScene = makeVisFlexible(ThreeScene);
 const styles = theme => ({
   root: {
     flexGrow: 1,

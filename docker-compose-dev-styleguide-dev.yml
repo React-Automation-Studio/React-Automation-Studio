@@ -15,7 +15,7 @@ services:
       - ./src:/frontendserverAppDev/src
       - ./public:/frontendserverAppDev/public
     environment:
-          - ENV REACT_APP_StyleguideServerPORT=6060
+          - REACT_APP_StyleguideServerPORT=6060
           - REACT_APP_StyleguideServerURL=http://127.0.0.1
     restart: always
     network_mode: host

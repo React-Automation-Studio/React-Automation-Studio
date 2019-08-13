@@ -21,8 +21,8 @@ WORKDIR /
 
 WORKDIR /frontendserverAppDev
 ADD ./img /frontendserverAppDev/img
-ENV REACT_APP_StyleguideServerPORT 6060
-ENV REACT_APP_StyleguideServerURL http://127.0.0.1
+ENV REACT_APP_StyleguideServerPORT=6060
+ENV REACT_APP_StyleguideServerURL=http://127.0.0.1
 CMD npm run styleguide
 #CMD ls node_modules/
 

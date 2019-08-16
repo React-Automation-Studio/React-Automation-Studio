@@ -258,26 +258,37 @@ class GraphMultiplePVs extends React.Component {
       //	console.log("pv.value: ",this.state[this.props.pv].value);
       let ymax=-1000000000000000000;
       let ymin=1000000000000000000;
+
       for(n in yDataArray){
-        // console.log("value: ",this.state[this.props.pv].value[i]);
-        //console.log('n: ',n,' this.state.ymax: ',this.state.ymax,)
-        if(parseFloat(yDataArray[n])>ymax){
-
-
-
-          ymax=parseFloat(yDataArray[n]);
-          //console.log('new Ymax',ymax)
-        }
-        if(parseFloat(yDataArray[n])<ymin){
-          ymin=parseFloat(yDataArray[n]);
-        }
-        if (this.props.useTimeStamp){
-          sample={x:yTimeStampArray[n],y:yDataArray[n]}
+        let val;
+        if (this.props.yScaleLog10===true){
+          val=Math.log10(parseFloat(yDataArray[n]))
         }
         else{
-          sample={x:i,y:yDataArray[n]}
+          val=yDataArray[n];
+        }
+        // console.log("value: ",this.state[this.props.pv].value[i]);
+        //console.log('n: ',n,' this.state.ymax: ',this.state.ymax,)
+        if(parseFloat(val)>ymax){
+
+
+
+          ymax=parseFloat(val);
+          //console.log('new Ymax',ymax)
+        }
+        if(parseFloat(val)<ymin){
+          ymin=parseFloat(val);
+        }
+
+
+        if (this.props.useTimeStamp){
+          sample={x:yTimeStampArray[n],y:val}
+        }
+        else{
+          sample={x:i,y:val}
         }
         // console.log("sample: ",sample)
+
         data[i]=sample;
         i++;
 
@@ -562,7 +573,7 @@ class GraphMultiplePVs extends React.Component {
 
         <YAxis
           title={(typeof this.props.yAxisTitle !== 'undefined')?this.props.yAxisTitle:"Y Axis"}
-          left={9} tickFormat={v => (v)+ this.props.yUnits} tickSize={20}  tickPadding={2}
+          left={9} tickFormat={this.props.yScaleLog10===true?v => "10E"+(v)+ " "+this.props.yUnits :v => (v)+ " "+this.props.yUnits} tickSize={20}  tickPadding={2}
           style={{
             title:{stroke:theme.palette.type==='dark'?'#ccccce':'#dbdbe0',strokeWidth:0.2},
             text: {stroke: 'none', fill: theme.palette.type==='dark'?'#a9a9b2':'#6b6b76', fontWeight: 600}
@@ -616,6 +627,8 @@ class GraphMultiplePVs extends React.Component {
     xUnits:PropTypes.string,
     /** Directive to sample the PV value, on the client side at the polling rate*/
     usePolling:PropTypes.bool,
+    /** Directive to scale the y-axis as a log base 10 value*/
+    yScaleLog10:PropTypes.bool,
     /** Polling interval in ms used in polling mode*/
     pollingRate:PropTypes.number,
     /** If defined then the graph will only update on a value change*/

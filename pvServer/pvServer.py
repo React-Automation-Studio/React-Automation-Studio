@@ -81,8 +81,13 @@ def check_pv_initialized_after_disconnect():
                       for keys in d:
                           if(str(d[keys])=='nan'):
                               d[keys]=None
+
                       if(clientPVlist[pvname]['pv'].count >1):
                           d['value']=list(d['value'])
+                      if(clientPVlist[pvname]['pv'].count ==0):  #work around for unitilized float array
+                          if ('epics.dbr.c_float_Array_0' in str(type(d['value']))):
+                              print("type is epics.dbr.c_float_Array_0")
+                              d['value']=[]
                       d['pvname']= pvname
                       d['newmetadata']= 'True'
                       d['connected']= '1'
@@ -96,7 +101,7 @@ def check_pv_initialized_after_disconnect():
                           socketio.emit(pvname,d,room=ro_room,namespace='/pvServer')
                           clientPVlist[pvname]['isConnected']=True
                           clientPVlist[pvname]['initialized']=True
-
+                      #
                       except TypeError:
                         #"A type error exists in metadata dictionary and can't be converted into JSON format, previously this was caused by in CHID of type c_long(), a work arround exits, if CHID is not a c_long then try debugging")
                           print("***EPICS PV info initial request info error: ")
@@ -105,9 +110,13 @@ def check_pv_initialized_after_disconnect():
                           print("A type error exists in metadata dictionary and can't be converted into JSON format, previously this was caused by in CHID of type c_long(), a work arround exits, if CHID is not a c_long then try debugging")
                           clientPVlist[pvname]['isConnected']=True
                           clientPVlist[pvname]['initialized']=False
+                          print(type(d['value']))
+                          if ('epics.dbr.c_float_Array_0' in str(type(d['value']))):
+                              print("type is epics.dbr.c_float_Array_0")
                           d={}
                           d['pvname']= pvname
                           d['connected']= '0'
+
                           socketio.emit(pvname,d,room=str(pvname),namespace='/pvServer')
                       except:
                           print("Unexpected error:", sys.exc_info()[0])

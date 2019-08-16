@@ -167,10 +167,10 @@ import AppBar from '@material-ui/core/AppBar';
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    padding: theme.spacing.unit * 2
+    padding: theme.spacing(2)
   },
   paper: {
-    padding: theme.spacing.unit * 2,
+    padding: theme.spacing(2),
     textAlign: 'center',
     color: theme.palette.text.secondary,
   },
@@ -208,7 +208,7 @@ class ControlTableExample extends React.Component {
     }
     this.handlePsOnClick= this.handlePsOnClick.bind(this);
     this.handleOnSystemClick= this.handleOnSystemClick.bind(this);
-    
+
   }
 
   handlePsOnClick(name){
@@ -260,19 +260,19 @@ class ControlTableExample extends React.Component {
             <Grid
               container
               direction="row"
-              justify="start"
-              alignItems="start"
+              justify="flex-start"
+              alignItems="flex-start"
               spacing={0}
             >
               <Grid item xs={12} sm={2} md={2} lg={2}style={{paddingTop:24}}>
-                <AppBar position="static" color="inherhit" >
+                <AppBar position="static" color="inherit" >
                   <VerticalTabs
                     value={sideTabValue}
                     onChange={this.handleSideTabChange}
 
                     indicatorColor="primary"
                     textColor="primary"
-                    classes={{flexContainer: {  flexDirection: 'column'  }}}
+
 
 
                   >

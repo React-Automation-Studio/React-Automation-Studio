@@ -114,6 +114,7 @@ MultiplePVs
     let useStatus;
 
   //  console.log(rowPVs)
+    let index=0;
     for (row in rowPVs){
 
       //console.log("linedata: ", this.state.pvs[pv].linedata);
@@ -133,7 +134,7 @@ MultiplePVs
       DataConnections.push(
 
         <DataConnection
-          key= {rowPVs[row].setpointPV.pvname.toString()}
+          key={id.toString() +rowPVs[row].setpointPV.pvname}
           pv={rowPVs[row].setpointPV.pvname}
           handleInputValue={this.handleInputValue(id,'setpointPV')}
           handleMetadata={this.handleMetadata(id,'setpointPV')}
@@ -145,7 +146,7 @@ MultiplePVs
       DataConnections.push(
 
         <DataConnection
-          key= {rowPVs[row].readbackPV.pvname.toString()}
+          key={id.toString()+ rowPVs[row].readbackPV.pvname }
           pv={rowPVs[row].readbackPV.pvname}
           handleInputValue={this.handleInputValue(id,'readbackPV')}
           handleMetadata={this.handleMetadata(id,'readbackPV')}
@@ -157,7 +158,7 @@ MultiplePVs
       DataConnections.push(
 
         <DataConnection
-          key= {rowPVs[row].statusPV.pvname.toString()}
+          key={id.toString()+ rowPVs[row].statusPV.pvname}
           pv={rowPVs[row].statusPV.pvname}
           handleInputValue={this.handleInputValue(id,'statusPV')}
           handleMetadata={this.handleMetadata(id,'statusPV')}

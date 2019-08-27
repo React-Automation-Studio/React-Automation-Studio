@@ -9,13 +9,13 @@ Each of the Docker containers are deployed as micro services and environment var
 The software stack for React Automation Studio is shown in Fig. 1 and an overview of the system components are give below:
 
 ![picture](img/softwareStack.png)
-*Fig 1. The current software stack*
+*Fig 1. The current software stack and an example mobile layout.*
 
-an overview of the system components are give below:
+An overview of the system components are give below:
 
 *1. pvServer*
 
-This is the python process variable server. It is layered on the Flask\cite{Flask} and  Flask-Socket-IO web application frameworks to serve the EPICS process variables to clients.
+This is the python process variable server. It is layered on the Flask and  Flask-Socket-IO web application frameworks to serve the EPICS process variables to clients.
 
 Communication between clients and the pvServer occurs between the data connection wrapper in the client components and the pvServer as follows:
 
@@ -53,7 +53,6 @@ In this release, and with authentication enabled, the user name and password are
 
 Access rights can be controlled though a JSON file which contains user access groups and rules for defining PV access using regular expressions in the same way that the EPICS Gatewayaccess is defined. All of the components in React Automation studio currently indicate access rights to the PV.
 
-*5.
 
 
 # 1 Installation

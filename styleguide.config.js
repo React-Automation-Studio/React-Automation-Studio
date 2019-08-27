@@ -26,10 +26,43 @@ module.exports = {
        name: 'Documentation',
        content: 'src/docs/documentation.md'
     },
+    {
+      name: 'Installation Guide',
+      content: 'src/docs/installationGuide.md',
+      sections: [
+        {
+          name: 'Installation',
+          content: 'src/docs/installation/installation.md',
+        },
+        {
+          name: 'Launching the Docker compose files',
+          content: 'src/docs/installation/launching.md',
+        },
+        {
+          name: 'Configuring Enviroment Variables',
+          content: 'src/docs/installation/userloginOverview.md',
+          sections: [
+            {
+              name: ' Enabling login and authentication',
+              content: 'src/docs/installation/userlogin.md',
+            },
+            {
+              name: ' Enabling user access rights',
+              content: 'src/docs/installation/userAccessRights.md',
+            },
+            {
+              name: ' Enabling HTTPS',
+              content: 'src/docs/installation/https.md',
+            },
+          ]
+        },
 
+
+      ]
+      },
   {
-    name: 'Layout',
-    content: 'src/docs/layout.md',
+    name: 'Style Guide',
+    content: 'src/docs/styleguide.md',
     sections: [
       {
         name: 'How It Works',
@@ -41,6 +74,13 @@ module.exports = {
         components: 'src/docs/layout/layoutExamples/*.js',
         exampleMode: 'hide', // 'hide' | 'collapse' | 'expand'
         usageMode: 'hide' // 'hide' | 'collapse' | 'expand'
+      },
+      {
+        name: 'Base Components',
+       // content: 'docs/ui.md',
+        components: 'src/components/BaseComponents/*.js',
+        exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
+        usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
       },
     ]
   },
@@ -63,13 +103,7 @@ module.exports = {
    //     }
    //   ]
    // },
-   {
-     name: 'Base Components',
-    // content: 'docs/ui.md',
-     components: 'src/components/BaseComponents/*.js',
-     exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
-     usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
-   },
+
 
  ]
 }

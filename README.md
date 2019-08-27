@@ -7,11 +7,10 @@ The system has been containerised with Docker and version controlled as a mono-r
 Each of the Docker containers are deployed as micro services and environment variables can be configured to deploy the system on different ports, or to enable user authentication and authorisation or to serve the application on a unique URL or on the localhost. Separate Docker commands exist to load the development and production version. These containerised environments allows for precise versioning of packages used and prevents deployment dependency issues.
 
 The software stack for React Automation Studio is shown in Fig. 1 and an overview of the system components are give below:
-<div>
-<img src="img/softwareStack.png"  width="75%">
-</div>
 
-*Fig 1. The current software stack and an example mobile layout.*
+![picture](img/softwareStack.png)
+
+*Fig 1. The current software stack and an example mobile layout*
 
 An overview of the system components are give below:
 

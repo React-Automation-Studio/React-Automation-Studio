@@ -127,7 +127,7 @@ function getTickValues(props,min,max,numberOfTicks,x0,x1,y1,xOffset,radialTextOf
       const max=props.max;
 
       const ringWidth=typeof props.ringWidth!=='undefined'?props.ringWidth:0.16667*props.width;
-      const xOffset=20;
+      const xOffset=24;
       const radialTextOffset=8;
       const yOffset=20;
       const radius=(props.width-2*xOffset-ringWidth)/2;

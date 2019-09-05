@@ -12,7 +12,7 @@ import TextUpdate from '../BaseComponents/TextUpdate';
 import TextInput from '../BaseComponents/TextInput';
 import TextOutput from '../BaseComponents/TextOutput';
 import SimpleSlider from '../BaseComponents/SimpleSlider';
-import GraphTest from '../william/GraphTest';
+
 
 import Grid from '@material-ui/core/Grid';
 import EpicsPV from '../SystemComponents/EpicsPV';
@@ -106,19 +106,19 @@ render() {
               alignItems="center"
               spacing={2}
             >  <Grid item xs={6}  >
-              <TextInput   pv='pva://testIOC:Cube1:xRotation'      macros={this.props['macros']} usePvMinMax={true} label="xRotation" usePrecision={true} step={0.01} prec={3}  />
+              <TextInput   pv='pva://testIOC:Cube1:xRotation'      macros={this.props['macros']} usePvMinMax={true} label="xRotation" usePrecision={true} step={0.01} prec={3}  units={'rad'}/>
 
             </Grid>
               <Grid item xs={6}  >
-                <TextInput   pv='pva://testIOC:Cube1:yRotation'      macros={this.props['macros']} usePvMinMax={true} label="yRotation" usePrecision={true} step={0.01} prec={3}  />
+                <TextInput   pv='pva://testIOC:Cube1:yRotation'      macros={this.props['macros']} usePvMinMax={true} label="yRotation" usePrecision={true} step={0.01} prec={3}  units={'rad'}/>
 
               </Grid>
               <Grid item xs={6} >
-                <SimpleSlider  pv='pva://testIOC:Cube1:xRotation'      macros={this.props['macros']} usePvMinMax={true} label="xRotation" usePrecision={true} step={0.01} prec={3} />
+                <SimpleSlider  pv='pva://testIOC:Cube1:xRotation'      macros={this.props['macros']} usePvMinMax={true} label="xRotation:" usePrecision={true} step={0.01} prec={3} />
               </Grid>
 
               <Grid item xs={6} >
-                <SimpleSlider  pv='pva://testIOC:Cube1:yRotation'      macros={this.props['macros']} usePvMinMax={true}label="yRotation"  usePrecision={true} step={0.01} prec={3} />
+                <SimpleSlider  pv='pva://testIOC:Cube1:yRotation'      macros={this.props['macros']} usePvMinMax={true}label="yRotation:"  usePrecision={true} step={0.01} prec={3}  />
               </Grid>
             </Grid>
           </Card>

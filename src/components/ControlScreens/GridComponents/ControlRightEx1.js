@@ -63,7 +63,7 @@ class ControlRightEx1 extends React.Component {
               <SelectionInput  pv='pva://$(device):SimReadback.SCAN' macros={this.props['macros']}  label={'Scan rate'} useStringValue={true}/>
             </Grid>
             <Grid item xs={6}>
-              <TextOutput  pv='pva://$(device):SimReadback.OROC' macros={this.props['macros']}  units={"Hz"} label={'Ramp rate'}/>
+              <TextOutput  pv='pva://$(device):SimReadback.OROC' macros={this.props['macros']} usePrecision={true}   label={'OROC'}/>
             </Grid>
 
             <Grid item xs={12}>
@@ -91,7 +91,7 @@ class ControlRightEx1 extends React.Component {
             </Grid>
 
           <Grid item xs={12}>
-          <SelectionInput   pv='pva://$(device):RampRate'  macros={this.props['macros']} usePvLabel={true}  units={"Hz"}/>
+          <SelectionInput   pv='pva://$(device):RampRate'  macros={this.props['macros']} label={'OROC'} />
           </Grid>
           <Grid item xs={12}>
             <TextOutput  pv='pva://$(device):Setpoint'      macros={this.props['macros']}  displayTimeStamp label={'Setpoint timestamp'}/>

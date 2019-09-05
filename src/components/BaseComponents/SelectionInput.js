@@ -160,6 +160,7 @@ handleChange = name => event => {
 
 render() {
   const {classes}= this.props;
+  const {theme}= this.props;
   const pv = this.props.pv;
   const macros=  this.props.macros;
   const usePvLabel= this.props.usePvLabel;
@@ -288,7 +289,7 @@ render() {
           variant="outlined"
           InputProps={{
 
-            endAdornment: <InputAdornment position="end">{units} {this.props.children} </InputAdornment>,
+            endAdornment: <InputAdornment style={{marginRight:theme.spacing(1)}} position="end">{typeof units==='undefined'?units:units.toString() +" "} {this.props.children} </InputAdornment>,
 
           }}>
 
@@ -362,4 +363,4 @@ SelectionInput.defaultProps = {
 };
 
 SelectionInput.contextType=AutomationStudioContext;
-export default withStyles(styles)(SelectionInput)
+export default withStyles(styles,{withTheme:true})(SelectionInput)

@@ -181,7 +181,7 @@ class MobileDemo1 extends React.Component {
                 container
                 spacing={2}
                 alignItems={'stretch'}
-                direction={'column'}
+                direction={'row'}
                 justify={'flex-start'}
               >
 
@@ -201,31 +201,29 @@ class MobileDemo1 extends React.Component {
                     </Grid>
                   </Grid>
                 </Grid>
-                <Grid item xs={12}>
-                  <Grid container direction="row" item justify="space-evenly" spacing={2} alignItems="stretch">
-                    <Grid item xs={6} sm={4} lg={3} >
 
-                      <Gauge  pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}   usePvLabel={true} usePrecision={true} prec={3} usePvMinMax={true} />
+                <Grid item xs={6} sm={4} lg={3} >
+
+                  <Gauge  pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}   usePvLabel={true} usePrecision={true} prec={3} usePvMinMax={true} />
+
+                </Grid>
+
+                <Grid item xs={2} sm={4}  lg={5} >
+                  <Grid container direction="column" justify="space-evenly" spacing={2} alignItems="stretch">
+                    <Grid item>
+                      <StyledIconIndicator  pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}} onColor='primary' offColor='default' label={'On'} labelPlacement={'end'}/>
 
                     </Grid>
-
-                    <Grid item xs={2} sm={4}  lg={5} >
-                      <Grid container direction="column" item justify="space-evenly" spacing={2} alignItems="stretch">
-                        <Grid item>
-                          <StyledIconIndicator  pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}} onColor='primary' offColor='default' label={'On'} labelPlacement={'end'}/>
-
-                        </Grid>
-                        <Grid item>
-                          <StyledIconIndicator  pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}} onColor='default' offColor='secondary' label={'Off'} labelPlacement={'end'}/>
-                        </Grid>
-                      </Grid>
-                    </Grid>
-                    <Grid item xs={4} sm={4} lg={4} >
-
-                      <ToggleButton  pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}}  custom_selection_strings={["OFF","ON"]}  />
+                    <Grid item>
+                      <StyledIconIndicator  pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}} onColor='default' offColor='secondary' label={'Off'} labelPlacement={'end'}/>
                     </Grid>
                   </Grid>
                 </Grid>
+                <Grid item xs={4} sm={4} lg={4} >
+
+                  <ToggleButton  pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}}  custom_selection_strings={["OFF","ON"]}  />
+                </Grid>
+                
 
 
                 <Grid item xs={12} sm={12} md={12}  lg={12}>

@@ -126,7 +126,7 @@ class App extends Component {
 
     }
     this.handleConnect=this.handleConnect.bind(this);
-    
+
     this.handleClientAuthorisation=this.handleClientAuthorisation.bind(this);
   }
 
@@ -178,7 +178,7 @@ class App extends Component {
     //  console.log('node env',process.env.NODE_ENV)
     //  console.log(this.state.theme)
 
-    console.log(this.state)
+  //  console.log(this.state)
     return (
 
       <AutomationStudioContext.Provider value={this.state.system}>

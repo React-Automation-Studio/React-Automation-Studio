@@ -12,29 +12,30 @@ import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
-import EpicsBinaryOutDebug from '../../../components/GroupedComponents/EpicsBinaryOutDebug';
-import EpicsAnalogOutDebug from '../../../components/GroupedComponents/EpicsAnalogOutDebug';
-import EpicsMbboDebug from '../../../components/GroupedComponents/EpicsMbboDebug';
-import TextUpdate from '../../../components/BaseComponents/TextUpdate';
-import TextInput from '../../../components/BaseComponents/TextInput';
-import TextOutput from '../../../components/BaseComponents/TextOutput';
-import Meter from '../../../components/BaseComponents/Gauge';
-import SimpleSlider from '../../../components/BaseComponents/SimpleSlider';
-import GraphMultiplePVs from '../../../components/BaseComponents/GraphMultiplePVs';
-import SelectionList from '../../../components/BaseComponents/SelectionList';
+import EpicsBinaryOutDebug from '../../GroupedComponents/EpicsBinaryOutDebug';
+import EpicsAnalogOutDebug from '../../GroupedComponents/EpicsAnalogOutDebug';
+import EpicsMbboDebug from '../../GroupedComponents/EpicsMbboDebug';
+import TextUpdate from '../../BaseComponents/TextUpdate';
+import TextInput from '../../BaseComponents/TextInput';
+import TextOutput from '../../BaseComponents/TextOutput';
+import Meter from '../../BaseComponents/Gauge';
+import SimpleSlider from '../../BaseComponents/SimpleSlider';
+import GraphMultiplePVs from '../../BaseComponents/GraphMultiplePVs';
+import SelectionList from '../../BaseComponents/SelectionList';
+import ThumbWheel from '../../BaseComponents/ThumbWheel';
 
 
+import DataConnection from '../../SystemComponents/DataConnection';
 
-import DataConnection from '../../../components/SystemComponents/DataConnection';
+import SwitchComponent from '../../BaseComponents/SwitchComponent';
+import SelectionInput from '../../BaseComponents/SelectionInput';
+import ToggleButton from '../../BaseComponents/ToggleButton';
+import ActionButton from '../../BaseComponents/ActionButton';
 
-import SwitchComponent from '../../../components/BaseComponents/SwitchComponent';
-import SelectionInput from '../../../components/BaseComponents/SelectionInput';
-import ToggleButton from '../../../components/BaseComponents/ToggleButton';
-import ActionButton from '../../../components/BaseComponents/ActionButton';
-import ThumbWheel from '../../../components/BaseComponents/ThumbWheel';
-import Gauge from '../../../components/BaseComponents/Gauge';
+
+import Gauge from '../../BaseComponents/Gauge';
 import Card from '@material-ui/core/Card';
-import SideBar from '../../../components/SystemComponents/SideBar';
+import SideBar from '../../SystemComponents/SideBar';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/icons/Menu';
@@ -63,9 +64,9 @@ import ExploreIcon from '@material-ui/icons/Explore';
 import withWidth from '@material-ui/core/withWidth';
 
 import {Link} from 'react-router-dom'
-import StyledIconIndicator from '../../../components/BaseComponents/StyledIconIndicator';
+import StyledIconIndicator from '../../BaseComponents/StyledIconIndicator';
 import Home from '@material-ui/icons/Home';
-
+import lime from '@material-ui/core/colors/lime';
 function TabContainer(props) {
   return (
     <Typography component="div" style={{ padding: 0, flexGrow:1 }}>
@@ -120,7 +121,7 @@ class Example1 extends React.Component {
 
 
   handleStateChange(stateValue){
-    // console.log(stateValue)
+    //console.log(stateValue)
     this.setState({ stateValue })
   };
 
@@ -141,198 +142,182 @@ class Example1 extends React.Component {
 
     //console.log(softLim);
 
-let graphVH;
+    let graphVH;
 
 
-if(width=='xs'){
-  graphVH='25vh';
-}else if(width=='sm'){
-  graphVH='30vh'
-}else{
-  graphVH='30vh'
-}
+    if(width=='xs'){
+      graphVH='25vh';
+    }else if(width=='sm'){
+      graphVH='30vh'
+    }else{
+      graphVH='30vh'
+    }
 
 
 
-//console.log('window.innerHeight',window.innerHeight)
-return (
+    //console.log('window.innerHeight',window.innerHeight)
+    return (
 
-  <React.Fragment>
-    <AppBar style={{position:'fixed',bottom:'auto',top:'0'}} color='inherit' >
-      <Grid container direction="row" item justify="center" spacing={2} alignItems="center">
-        <Grid item xs={2}  >
+      <React.Fragment>
+        <AppBar style={{position:'fixed',bottom:'auto',top:'0'}} color='inherit' >
+          <Grid container direction="row" item justify="center" spacing={2} alignItems="center">
+            <Grid item xs={2}  >
 
-          <SideBar/>
-        </Grid>
-        <Grid item xs={10} >
-          <div className={classes.body1}>Example System Layout</div>
-        </Grid>
-      </Grid>
-    </AppBar>
-
-    {value === 0 && <TabContainer key={'tabContainer0'}>
-      <Grid   container className={classes.root}>
-        <Grid item xs={12}>
-          <Grid
-            container
-            spacing={2}
-            alignItems={'stretch'}
-            direction={'column'}
-            justify={'flex-start'}
-          >
-
-
-            <Grid item >
-              <div style={{ height: graphVH, width:'96vw',}}>
-                <GraphMultiplePVs
-                  pvs={[
-                    'pva://testIOC:test4',
-
-
-                  ]}
-
-
-                  lineColor={[this.props.theme.palette.secondary.main,]}
-                />
-              </div>
+              <SideBar/>
             </Grid>
-            <Grid item >
-              <Grid container direction="row" item justify="center" spacing={2} alignItems="stretch">
-                <Grid item xs={6}  >
-                  <TextInput  pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}   usePvLabel={true} usePrecision={true} prec={3} alarmSensitive={true}/>
-                </Grid>
-                <Grid item  xs={6}>
-                  <TextOutput  pv='pva://$(device):test3' macros={{'$(device)':'testIOC'}}   usePvLabel={true} usePrecision={true} prec={3} alarmSensitive={true}/>
-                </Grid>
-              </Grid>
-            </Grid>
-            <Grid item>
-              <Grid container direction="row" item justify="space-evenly" spacing={2} alignItems="stretch">
-                <Grid item xs={6} sm={4} lg={4} >
-
-                  <Gauge  pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}   usePvLabel={true} usePrecision={true} prec={3} usePvMinMax={true} />
-
-                </Grid>
-
-                <Grid item xs={2} sm={4}  lg={4} >
-                  <Grid container direction="column" item justify="space-evenly" spacing={2} alignItems="stretch">
-                    <Grid item>
-                      <StyledIconIndicator  pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}} onColor='primary' offColor='default' label={'On'} labelPlacement={'end'}/>
-
-                    </Grid>
-                    <Grid item>
-                      <StyledIconIndicator  pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}} onColor='default' offColor='secondary' label={'Off'} labelPlacement={'end'}/>
-                    </Grid>
-                  </Grid>
-                </Grid>
-                <Grid item xs={4} sm={4} lg={4} >
-
-                  <ToggleButton  pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}}  custom_selection_strings={["OFF","ON"]}  />
-                </Grid>
-              </Grid>
-            </Grid>
-
-
-            <Grid item>
-              <Grid container direction="row" item justify="center" spacing={0} alignItems="stretch">
-                <Grid item xs={12}  >
-
-
-                  <SelectionList horizontal pv='loc://editorType'    useStringValue={true} custom_selection_strings={['ThumbWheel','Slider']} intialLocalVariableValue='ThumbWheel' />
-
-
-
-
-                </Grid>
-                <Grid item xs={12}  >
-
-                  <DataConnection
-                    pv='loc://editorType'
-
-                    useStringValue={true}
-                    handleInputValue={this.handleStateChange}
-                  />
-
-
-
-                </Grid>
-              </Grid>
-            </Grid>
-            <Grid item>
-              {stateValue == 'None'&&
-                <Grid container direction="row" item xs={12} spacing={2}>
-                  <Grid item xs={12} >
-                  </Grid>
-                </Grid>}
-              {stateValue == 'ThumbWheel'&&
-                <Grid container direction="row" item xs={12} >
-                  <Grid item xs={12}>
-                    <div style={{textAlign:'center',marginTop:'16px',}}>
-                      <ThumbWheel
-                        pv='pva://$(device)'
-                        macros={{'$(device)':'testIOC:amplitude'}}
-                        prec_integer={3}
-                        prec_decimal={1}
-                      />
-                    </div>
-                  </Grid>
-                </Grid>}
-              {stateValue == 'Slider'&&
-                <div style={{marginTop:'16px'}}>
-                  <Grid container direction="row" item xs={12} spacing={2}>
-                    <Grid item xs={12}  >
-                      <SimpleSlider pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}} usePvMinMax={true} min={1000} max={500} usePvLabel={true}  />
-                    </Grid>
-                  </Grid>
-                </div>}
+            <Grid item xs={10} >
+              <div className={classes.body1}>Example System Layout</div>
             </Grid>
           </Grid>
-        </Grid>
-
-      </Grid>
-    </TabContainer>}
-    {value === 1 && <TabContainer key={'tabContainer1'}>
-      <Grid   container className={classes.root}>
-        <Grid item xs={12}>
-          <Grid container spacing={2} alignItems={'stretch'} direction={'column'} justify={'flex-start'}>
+        </AppBar>
 
 
-            <Grid item >
-              <div style={{marginBottom:8}}>Settings</div>
-              <Grid container spacing={2} alignItems={'stretch'} direction={'row'} justify={'flex-start'}>
-                <Grid item xs={12} lg={4}>
-                  <TextInput   pv='pva://$(device):frequency' macros={{'$(device)':'testIOC'}}   prec={1} usePvUnits={true} usePrecision={true} usePvLabel={true}/>
+
+
+        {value === 0 && <TabContainer key={'tabContainer0'}>
+          <Grid   container className={classes.root}>
+            <Grid item xs={12}>
+              <Grid
+                container
+                spacing={2}
+                alignItems={'stretch'}
+                direction={'column'}
+                justify={'flex-start'}
+              >
+
+
+                <Grid item xs={12} >
+                  <div style={{ height: graphVH, width:'96vw',}}>
+                    <GraphMultiplePVs  pvs={['pva://testIOC:test4','pva://testIOC:test5'] } legend={['Sine Wave','Amplitude']} lineColor={[this.props.theme.palette.secondary.main,lime['400']]}/>
+                  </div>
                 </Grid>
-                <Grid item xs={12} lg={4}>
-                  <TextInput   pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}    usePvUnits={true} usePrecision={true} usePvLabel={true}/>
+                <Grid item xs={12}>
+                  <Grid container direction="row" item justify="center" spacing={2} alignItems="stretch">
+                    <Grid item xs={6}  >
+                      <TextInput  pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}   usePvLabel={true} usePrecision={true} prec={3} alarmSensitive={true}/>
+                    </Grid>
+                    <Grid item  xs={6}>
+                      <TextOutput  pv='pva://$(device):test3' macros={{'$(device)':'testIOC'}}   usePvLabel={true} usePrecision={true} prec={3} alarmSensitive={true}/>
+                    </Grid>
+                  </Grid>
+                </Grid>
+                <Grid item xs={12}>
+                  <Grid container direction="row" item justify="space-evenly" spacing={2} alignItems="stretch">
+                    <Grid item xs={6} sm={4} lg={3} >
+
+                      <Gauge  pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}   usePvLabel={true} usePrecision={true} prec={3} usePvMinMax={true} />
+
+                    </Grid>
+
+                    <Grid item xs={2} sm={4}  lg={5} >
+                      <Grid container direction="column" item justify="space-evenly" spacing={2} alignItems="stretch">
+                        <Grid item>
+                          <StyledIconIndicator  pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}} onColor='primary' offColor='default' label={'On'} labelPlacement={'end'}/>
+
+                        </Grid>
+                        <Grid item>
+                          <StyledIconIndicator  pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}} onColor='default' offColor='secondary' label={'Off'} labelPlacement={'end'}/>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                    <Grid item xs={4} sm={4} lg={4} >
+
+                      <ToggleButton  pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}}  custom_selection_strings={["OFF","ON"]}  />
+                    </Grid>
+                  </Grid>
+                </Grid>
+
+
+                <Grid item xs={12} sm={12} md={12}  lg={12}>
+
+
+                  <SelectionList horizontal={true} pv='loc://editorType'    useStringValue={true} custom_selection_strings={['ThumbWheel','Slider']} intialLocalVariableValue='ThumbWheel' />
+
+
+
+
+
+                </Grid>
+                <Grid item  xs={12}>
+                  {stateValue == 'None'&&
+                    <Grid container direction="row" item xs={12} spacing={2}>
+                      <Grid item xs={12} >
+                      </Grid>
+                    </Grid>}
+                  {stateValue == 'ThumbWheel'&&
+                    <Grid container direction="row" item xs={12} >
+                      <Grid item xs={12}>
+                        <div style={{textAlign:'center',marginTop:'16px',}}>
+                          <ThumbWheel
+                            pv='pva://$(device)'
+                            macros={{'$(device)':'testIOC:amplitude'}}
+                            prec_integer={3}
+                            prec_decimal={1}
+                          />
+                        </div>
+                      </Grid>
+                    </Grid>}
+                  {stateValue == 'Slider'&&
+                    <div style={{marginTop:'16px'}}>
+                      <Grid container direction="row" item xs={12} spacing={2}>
+                        <Grid item xs={12}  >
+                          <SimpleSlider pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}} usePvMinMax={true} min={1000} max={500} usePvLabel={true}  />
+                        </Grid>
+                      </Grid>
+                    </div>}
                 </Grid>
               </Grid>
-
-
             </Grid>
-            <Grid item ><Divider/></Grid>
+
           </Grid>
-        </Grid>
-      </Grid>
-    </TabContainer>}
+        </TabContainer>}
+        {value === 1 && <TabContainer key={'tabContainer1'}>
+          <Grid   container className={classes.root}>
+            <Grid item xs={12}>
+              <Grid container spacing={2} alignItems={'stretch'} direction={'column'} justify={'flex-start'}>
 
 
-    <AppBar className={classes.body1} style={{position:'fixed',bottom:0,top:'auto'}} color='inherit'>
-      <Tabs value={value} onChange={this.handleChange} variant="fullWidth" scrollButtons="off">
-        {/* <Tab icon={<SupervisorAccount />} /> */}
-        <Tab icon={<AccountCircle />} />
-        <Tab icon={<Settings />} />
-      </Tabs>
-    </AppBar>
+                <Grid item >
+                  <div style={{marginBottom:8}}>Settings</div>
+                  <Grid container spacing={2} alignItems={'stretch'} direction={'row'} justify={'flex-start'}>
+                    <Grid item xs={12} lg={4}>
+                      <TextInput   pv='pva://$(device):frequency' macros={{'$(device)':'testIOC'}}    usePvUnits={true} usePrecision={true} prec={1} usePvLabel={true}/>
+                    </Grid>
+                    <Grid item xs={12} lg={4}>
+                      <TextInput   pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}    usePvUnits={true} usePrecision={true} usePvLabel={true}/>
+                    </Grid>
+                  </Grid>
 
-  </React.Fragment>
 
-          );
-        }
-      }
+                </Grid>
+                <Grid item ><Divider/></Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+        </TabContainer>}
 
-      Example1.propTypes = {
-        classes: PropTypes.object.isRequired,
-      };
 
-      export default withWidth()(withStyles(styles,{withTheme:true})(Example1));
+        <AppBar className={classes.body1} style={{position:'fixed',bottom:0,top:'auto'}} color='inherit'>
+          <Tabs value={value} onChange={this.handleChange} variant="fullWidth" scrollButtons="off">
+            {/* <Tab icon={<SupervisorAccount />} /> */}
+            <Tab icon={<AccountCircle />} />
+            <Tab icon={<Settings />} />
+          </Tabs>
+        </AppBar>
+        <DataConnection
+          pv='loc://editorType'
+
+          useStringValue={true}
+          handleInputValue={this.handleStateChange}
+        />
+      </React.Fragment>
+
+      );
+    }
+  }
+
+  Example1.propTypes = {
+    classes: PropTypes.object.isRequired,
+  };
+
+  export default withWidth()(withStyles(styles,{withTheme:true})(Example1));

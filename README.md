@@ -82,22 +82,25 @@ Then in React Automation Studio installation folder run:
 touch .env
 ```
 # 2 Launching the Docker compose files
-The systems uses Docker to create isolated production and development environments. There are three docker-compose configuration files.
+The systems uses Docker to create isolated production and development environments. There are several docker-compose configuration files.
+
 
 ```bash
 docker-compose  up
 ```
 or
 ```bash
-docker-compose -f docker-compose.yaml up
+docker-compose -f docker-compose.yml up
 ```
-Will launch the compiled production version without the demoIOC's and styleguide
+Will launch the compiled production version with the demoIOC's and styleguide
+
 
 
 ```bash
 docker-compose -f docker-compose-dev.yml up
 ```
 Will launch the development version with the demoIOC's and styleguide.
+
 And:
 
 ```bash

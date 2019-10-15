@@ -11,9 +11,9 @@ services:
       dockerfile: docker/frontendserverDev/Dockerfile
     volumes:
       - ./certificates:/certificates/
-      - ./package.json:/frontendserverAppDev/package.json
-      - ./src:/frontendserverAppDev/src
-      - ./public:/frontendserverAppDev/public
+      - ./ReactApp/package.json:/frontendserverAppDev/package.json
+      - ./ReactApp/src:/frontendserverAppDev/src
+      - ./ReactApp/public:/frontendserverAppDev/public
     environment:
           - REACT_APP_StyleguideServerPORT=6060
           - REACT_APP_StyleguideServerURL=http://127.0.0.1
@@ -75,9 +75,9 @@ services:
       dockerfile: docker/styleguideServerDev/Dockerfile
     volumes:
       - ./certificates:/certificates/
-      - ./package.json:/frontendserverAppDev/package.json
-      - ./src:/frontendserverAppDev/src
-      - ./public:/frontendserverAppDev/public
-      - ./styleguide.config.js:/frontendserverAppDev/styleguide.config.js
+      - ./ReactApp/package.json:/frontendserverAppDev/package.json
+      - ./ReactApp/src:/frontendserverAppDev/src
+      - ./ReactApp/public:/frontendserverAppDev/public
+      - ./ReactApp/styleguide.config.js:/frontendserverAppDev/styleguide.config.js
     restart: always
     network_mode: host

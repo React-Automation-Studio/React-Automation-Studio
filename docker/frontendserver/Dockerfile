@@ -6,17 +6,13 @@ FROM node:10.16.3
 
 WORKDIR /frontendserverApp
 ENV PATH /frontendserverApp/node_modules/.bin:$PATH
-ADD ./package.json /frontendserverApp/package.json
+ADD ./ReactApp/package.json /frontendserverApp/package.json
 RUN npm set registry http://registry.npmjs.org/
 RUN npm install
-ADD ./public /frontendserverApp/public
-ADD ./src /frontendserverApp/src
-ADD version ./.env* /frontendserverApp/
-#ENV REACT_APP_PyEpicsServerBASEURL http://127.0.0.1
-#ENV REACT_APP_FrontendServerPORT 9003
-#ENV REACT_APP_PyEpicsServerPORT 5003
-#ENV REACT_APP_PyEpicsServerNamespace=test
-#ENV REACT_APP_EnableLogin=false
+ADD ./ReactApp/public /frontendserverApp/public
+ADD ./ReactApp/src /frontendserverApp/src
+ADD  ./.env /frontendserverApp/
+
 RUN npm run build
 RUN cp -R /frontendserverApp/build/ /build/
 ADD ./frontendServer/ /frontendServer

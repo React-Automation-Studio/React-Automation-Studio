@@ -8,10 +8,6 @@ module.exports = {
   },
   styleguideComponents: {
     Wrapper: path.join(__dirname, './src/styleguide/Wrapper'),
-    //LogoRenderer: path.join(__dirname, './src/styleguide/components/Logo'),
-//    StyleGuide: path.join(__dirname, './src/styleguide/components/StyleGuide'),
-	//	StyleGuideRenderer: path.join(__dirname, './src/styleguide/components/StyleGuideRenderer'),
-	//	SectionsRenderer: path.join(__dirname, './src/styleguide/components/SectionsRenderer'),
 
 
 

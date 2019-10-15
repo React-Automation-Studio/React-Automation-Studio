@@ -11,9 +11,9 @@ services:
       dockerfile: docker/frontendserverDev/Dockerfile
     volumes:
       - ./certificates:/certificates/
-      - ./package.json:/frontendserverAppDev/package.json
-      - ./src:/frontendserverAppDev/src
-      - ./public:/frontendserverAppDev/public
+      - ./ReactApp/package.json:/frontendserverAppDev/package.json
+      - ./ReactApp/src:/frontendserverAppDev/src
+      - ./ReactApp/public:/frontendserverAppDev/public
     restart: always
     network_mode: host
   pvserver:

@@ -8,7 +8,7 @@ Each of the Docker containers are deployed as micro services and environment var
 
 The software stack for React Automation Studio is shown in Fig. 1 and an overview of the system components are give below:
 
-![picture](img/softwareStack.png)
+![picture](./ReactApp/img/softwareStack.png)
 
 *Fig 1. The current software stack and an example mobile layout*
 

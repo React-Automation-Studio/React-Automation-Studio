@@ -404,6 +404,7 @@ render() {
       SimpleSlider.defaultProps = {
 
           debug:false,
+          steps:0.1,
 
 
       };

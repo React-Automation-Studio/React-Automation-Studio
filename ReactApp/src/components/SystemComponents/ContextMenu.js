@@ -320,7 +320,7 @@ class ContextMenu extends React.Component {
                   {this.getListItems(pvs)              }
                   <Divider/>
 
-                  <MenuItem
+                  {enableProbe&&<MenuItem
 
                     onClick={this.props.handleClose}
                     component={Link} to={{
@@ -338,7 +338,7 @@ class ContextMenu extends React.Component {
                     </ListItemIcon>
                     <Typography variant="inherit">Probe Selected PV</Typography>
 
-                  </MenuItem>
+                  </MenuItem>}
                   <Divider/>
                   <MenuItem onClick={this.copyAllPvNamesClipboard}>
                     <ListItemIcon>

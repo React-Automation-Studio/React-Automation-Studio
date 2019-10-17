@@ -9,7 +9,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
 import Switch from '@material-ui/core/Switch';
-
+import ContextMenu from '../SystemComponents/ContextMenu';
 import uuid from 'uuid';
 import {
 
@@ -216,7 +216,9 @@ function getTickValues(props,min,max,numberOfTicks,x0,x1,y1,xOffset,radialTextOf
               ['pvname']:"Undefined",
               ['intialized']:false,
               ['metadata']:{},
-              ['severity']:''
+              ['severity']:'',
+              openContextMenu: false,
+              'open':false,x0:0,y0:0
             }
             this.handleInputValue= this.handleInputValue.bind(this);
             this.handleInputValueLabel= this.handleInputValueLabel.bind(this);
@@ -267,7 +269,20 @@ function getTickValues(props,min,max,numberOfTicks,x0,x1,y1,xOffset,radialTextOf
       }
 
 
+      handleContextMenuClose = (event) => {
 
+
+        this.setState({ openContextMenu: false });
+
+      };
+
+      handleToggleContextMenu = (event) => {
+        //   console.log(event.type)
+        event.persist()
+        this.setState(state => ({ openContextMenu: !state.openContextMenu,x0:event.pageX,y0:event.pageY }));
+
+        event.preventDefault();
+      }
 
 
 
@@ -483,7 +498,7 @@ function getTickValues(props,min,max,numberOfTicks,x0,x1,y1,xOffset,radialTextOf
         //console.log(units)
         return (
 
-          <React.Fragment>
+          <div style={{width:'100%',height:'100%'}} onContextMenu={this.handleToggleContextMenu}>
             <DataConnection
               pv={pv}
               macros={macros}
@@ -495,7 +510,20 @@ function getTickValues(props,min,max,numberOfTicks,x0,x1,y1,xOffset,radialTextOf
               useStringValue={useStringValue}
               handleInputValueLabel={this.handleInputValueLabel}
             />
+            <ContextMenu
+              disableProbe={this.props.disableProbe}
+              open={this.state.openContextMenu}
+              anchorReference="anchorPosition"
+              anchorPosition={{ top: +this.state.y0, left: +this.state.x0 }}
+              probeType={'readOnly'}
+              pvs={[{pvname:this.state.pvname,initialized:initialized}]}
+              handleClose={this.handleContextMenuClose}
 
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+            />
             {initialized===true &&
               <React.Fragment>
                 <FlexibleGaugeComponent
@@ -506,6 +534,7 @@ function getTickValues(props,min,max,numberOfTicks,x0,x1,y1,xOffset,radialTextOf
                   ringWidth={this.props.ringWidth}
                   pv={this.state.pvname}
                 />
+
                 {/* <svg  width={this.props.width} height={this.props.height}>
                   <text
                   x={(x0+x1)/2}
@@ -575,7 +604,7 @@ function getTickValues(props,min,max,numberOfTicks,x0,x1,y1,xOffset,radialTextOf
 
 
     }
-  </React.Fragment>
+  </div>
 
 )
 }

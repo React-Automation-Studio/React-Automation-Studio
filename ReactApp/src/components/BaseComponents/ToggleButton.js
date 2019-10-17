@@ -26,41 +26,41 @@ const styles = theme => ({
   },
   FormControl: {
     width:'100%',
-height:'100%',
-     marginTop:'auto',
-     marginBottom:'auto',
-      marginLeft:'auto',
-     marginRight:'auto',
+    height:'100%',
+    marginTop:'auto',
+    marginBottom:'auto',
+    marginLeft:'auto',
+    marginRight:'auto',
 
 
   },
   Button: {
     width:'100%',
-   height:'100%',
-   marginTop:'auto',
-   marginBottom:'auto',
+    height:'100%',
+    marginTop:'auto',
+    marginBottom:'auto',
     marginLeft:'auto',
-   marginRight:'auto',
-  //  width:'100%',
-//    marginTop:'auto',
-//    marginLeft:'auto',
-//    marginRight:'auto',
-//    marginBottom:'auto',
+    marginRight:'auto',
+    //  width:'100%',
+    //    marginTop:'auto',
+    //    marginLeft:'auto',
+    //    marginRight:'auto',
+    //    marginBottom:'auto',
 
   },
 });
 /**
- * The ToggleButton Component is a wrapper on the Material-UI Button component. The ToggleButton will ouput a value of
- *'1' or '0' to the process variable when pressed. A '1' by default represents an 'ON' or 'true' state and a '0' an 'Off' or 'false' state.
- * If the `momentary` property is define then a '1' will be output for 100 ms before returning to '0'. <br/><br/>
-  *The ToggleButton component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
- * The margins and spacing must be controlled from the parent component.<br/><br/>
- * Material-UI Button Demos:
- * https://material-ui.com/demos/buttons/<br/><br/>
- * Material-UI Button API:
- * https://material-ui.com/api/button/
+* The ToggleButton Component is a wrapper on the Material-UI Button component. The ToggleButton will ouput a value of
+*'1' or '0' to the process variable when pressed. A '1' by default represents an 'ON' or 'true' state and a '0' an 'Off' or 'false' state.
+* If the `momentary` property is define then a '1' will be output for 100 ms before returning to '0'. <br/><br/>
+*The ToggleButton component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
+* The margins and spacing must be controlled from the parent component.<br/><br/>
+* Material-UI Button Demos:
+* https://material-ui.com/demos/buttons/<br/><br/>
+* Material-UI Button API:
+* https://material-ui.com/api/button/
 
- */
+*/
 class ToggleButton extends React.Component {
   constructor(props) {
     super(props);
@@ -74,7 +74,7 @@ class ToggleButton extends React.Component {
   this.handleInputValue= this.handleInputValue.bind(this);
   this.handleInputValueLabel= this.handleInputValueLabel.bind(this);
   this.handleMetadata= this.handleMetadata.bind(this);
-    this.turnOff= this.turnOff.bind(this);
+  this.turnOff= this.turnOff.bind(this);
 
 }
 
@@ -82,11 +82,13 @@ class ToggleButton extends React.Component {
 handleInputValue(inputValue,pvname,initialized,severity){
   // console.log("severity: ",severity);
 
-  this.setState({    ['value']	 :inputValue,
-
-  ['pvname']:pvname,
-  ['initialized']:initialized,
-  ['severity']:severity});
+  this.setState({
+    ['value']	 :inputValue,
+    ['pvname']:pvname,
+    ['initialized']:initialized,
+    ['severity']:severity,
+    ['clicked']:false,
+  } );
 
 
 }
@@ -145,20 +147,28 @@ handleButtonClick = event => {
 
 turnOff=()=>{
   console.log("turnoff")
-  this.setState({ ['value']: 0});
+  this.setState({ ['value']: 0,'clicked':false});
 }
 handleMouseDown = (event) => {
   console.log('mouseDown',event)
 
-  this.setState({ ['value']: 1});
+  this.setState({ 'value': 1,'clicked':true});
+};
+handlePointerLeave = (event) => {
+  //console.log(event)
+  //  console.log('mouseUp',event)
+  if (this.state.clicked==true){
+    setTimeout(this.turnOff, 100);
+
+}
 };
 handleMouseUp = (event) => {
   //console.log(event)
-//  console.log('mouseUp',event)
-   setTimeout(this.turnOff, 100);
+  //  console.log('mouseUp',event)
+
+    setTimeout(this.turnOff, 100);
 
 };
-
 handleTouchStart = (event) => {
   console.log('TouchStart',event)
 
@@ -193,7 +203,7 @@ handleOnFocus =  (event) => {
 };
 
 handleToggleContextMenu = (event) => {
-//   console.log(event.type)
+  //   console.log(event.type)
 
 
 
@@ -281,7 +291,7 @@ render() {
       {initialized===true &&
         <React.Fragment>
 
-        {  (momentary===false)&&<FormControlLabel className={classes.FormControl}
+          {  (momentary===false)&&<FormControlLabel className={classes.FormControl}
             control={
               <Button disabled={write_access===false?true:false} fullWidth= {true} variant="contained" color={this.state['value']==1?"primary":"default" }className={classes.Button} onClick={this.handleButtonClick } onFocus={this.handleOnFocus} onContextMenu={this.handleToggleContextMenu}>
 
@@ -293,41 +303,41 @@ render() {
             }
             label={usePvLabel===true? this.state['label']:this.props.label}
             labelPlacement={typeof this.props.labelPlacement !== 'undefined'? this.props.labelPlacement:"top"}
-          />}
+                                  />}
 
           {  (momentary===true)&&<FormControlLabel className={classes.FormControl}
-              control={
-                <Button disabled={write_access===false?true:false} fullWidth= {true} variant="contained" color={this.state['value']==1?"primary":"default" }className={classes.Button} onPointerUp={this.handleMouseUp} onPointerDown={this.handleMouseDown} onClick={this.handleNothing} onDoubleClick={this.handleNothing} onPointerLeave={this.handleMouseUp} onContextMenu={this.handleToggleContextMenu}>
+            control={
+              <Button disabled={write_access===false?true:false} fullWidth= {true} variant="contained" color={this.state['value']==1?"primary":"default" }className={classes.Button} onPointerUp={this.handleMouseUp} onPointerDown={this.handleMouseDown} onClick={this.handleNothing} onDoubleClick={this.handleNothing} onPointerLeave={this.handlePointerLeave} onContextMenu={this.handleToggleContextMenu}>
 
 
-                  {this.state['value']==0?enum_strings[0]:enum_strings[1]}
+                {this.state['value']==0?enum_strings[0]:enum_strings[1]}
 
                 </Button>
 
               }
               label={usePvLabel===true? this.state['label']:this.props.label}
               labelPlacement={typeof this.props.labelPlacement !== 'undefined'? this.props.labelPlacement:"top"}
-            />}
+                    />}
 
 
-      </React.Fragment>
-      }
+          </React.Fragment>
+        }
 
-      {(initialized===false||initialized==='undefined') &&
-      <FormControlLabel className={classes.FormControl}
-          control={
-            <Button disabled={true} fullWidth= {true} variant="contained" color={this.state['value']==1?"primary":"default" }className={classes.Button} onClick={this.handleButtonClick } onFocus={this.handleOnFocus} onContextMenu={this.handleToggleContextMenu}>
+        {(initialized===false||initialized==='undefined') &&
+          <FormControlLabel className={classes.FormControl}
+            control={
+              <Button disabled={true} fullWidth= {true} variant="contained" color={this.state['value']==1?"primary":"default" }className={classes.Button} onClick={this.handleButtonClick } onFocus={this.handleOnFocus} onContextMenu={this.handleToggleContextMenu}>
 
 
-              {this.state.pvname}
+                {this.state.pvname}
 
-            </Button>
+              </Button>
 
-          }
-          label={'Connecting to: '}
-          labelPlacement={typeof this.props.labelPlacement !== 'undefined'? this.props.labelPlacement:"top"}
-        />
-      }
+            }
+            label={'Connecting to: '}
+            labelPlacement={typeof this.props.labelPlacement !== 'undefined'? this.props.labelPlacement:"top"}
+          />
+        }
 
 
       </React.Fragment>
@@ -361,11 +371,11 @@ ToggleButton.propTypes = {
 };
 
 ToggleButton.defaultProps = {
-    alarmSensitive:false,
-    debug: false,
-    color: 'primary',
+  alarmSensitive:false,
+  debug: false,
+  color: 'primary',
 
-    usePvLabel: false
+  usePvLabel: false
 };
 
 export default withStyles(styles)(ToggleButton)

@@ -11,7 +11,7 @@ import TextField from '@material-ui/core/TextField';
 import Switch from '@material-ui/core/Switch';
 import red from '@material-ui/core/colors/red';
 import deepOrange from '@material-ui/core/colors/deepOrange';
-
+import ContextMenu from '../SystemComponents/ContextMenu';
 import { create, all } from 'mathjs';
 const config = { }
 const math = create(all, config)
@@ -20,7 +20,7 @@ const math = create(all, config)
 
 const styles = theme => ({
 
-    body1: theme.typography.body1,
+  body1: theme.typography.body1,
 
 
 
@@ -44,23 +44,23 @@ const styles = theme => ({
 
 
 
-    TextFieldSeverity0: {
+  TextFieldSeverity0: {
 
 
-    },
-    TextFieldSeverity1: {
-        borderRadius: 2,
-       padding:1,
-        background:deepOrange['400']
+  },
+  TextFieldSeverity1: {
+    borderRadius: 2,
+    padding:1,
+    background:deepOrange['400']
     //  background:'linear-gradient(45deg, '+ theme.palette.background.default+ ' 1%, '+deepOrange['400'] +' 99%)'
-    },
-    TextFieldSeverity2: {
-        borderRadius: 2,
-        padding:1,
-         background:red['800']
+  },
+  TextFieldSeverity2: {
+    borderRadius: 2,
+    padding:1,
+    background:red['800']
     //  backgroundColor:'linear-gradient(45deg, #FFFFFF 1%, #FF8E53 99%)'
     //  background:'linear-gradient(45deg, '+ theme.palette.background.default+ ' 1%, '+red['800'] +' 99%)'
-    }
+  }
 
 
 });
@@ -68,12 +68,12 @@ const styles = theme => ({
 
 
 /**
- * The TextUpdate Component is a wrapper on the JavaScript <b>div</b> container tag. The component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
- * The margins and spacing must be controlled from the parent component.<br/><br/>
- * More information on JavaScript <b>div</b> tag:
- * https://www.w3schools.com/tags/tag_div.asp<br/><br/>
+* The TextUpdate Component is a wrapper on the JavaScript <b>div</b> container tag. The component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
+* The margins and spacing must be controlled from the parent component.<br/><br/>
+* More information on JavaScript <b>div</b> tag:
+* https://www.w3schools.com/tags/tag_div.asp<br/><br/>
 
- */
+*/
 class TextUpdate extends React.Component {
   constructor(props) {
     super(props);
@@ -85,7 +85,9 @@ class TextUpdate extends React.Component {
     ['pvname']:"Undefined",
     ['intialized']:false,
     ['metadata']:{},
-    ['severity']:''
+    ['severity']:'',
+    openContextMenu: false,
+    'open':false,x0:0,y0:0
   }
   this.handleInputValue= this.handleInputValue.bind(this);
   this.handleInputValueLabel= this.handleInputValueLabel.bind(this);
@@ -146,7 +148,20 @@ componentWillUnmount() {
 
 
 
+handleContextMenuClose = (event) => {
 
+
+  this.setState({ openContextMenu: false });
+
+};
+
+handleToggleContextMenu = (event) => {
+  //   console.log(event.type)
+  event.persist()
+  this.setState(state => ({ openContextMenu: !state.openContextMenu,x0:event.pageX,y0:event.pageY }));
+
+  event.preventDefault();
+}
 
 
 handleOnFocus= event =>{
@@ -212,9 +227,9 @@ render() {
       if (typeof this.props.units !== 'undefined'){
         units=" "+this.props.units;
 
-    }else {
-      units="";
-    }
+      }else {
+        units="";
+      }
     }
 
 
@@ -285,7 +300,7 @@ render() {
 
   return (
 
-    <div>
+    <div onContextMenu={this.handleToggleContextMenu}>
       <DataConnection
         pv={pv}
         macros={macros}
@@ -298,16 +313,30 @@ render() {
         debug={this.props.debug}
         handleInputValueLabel={this.handleInputValueLabel}
       />
+      <React.Fragment>
+        <ContextMenu
+          disableProbe={this.props.disableProbe}
+          open={this.state.openContextMenu}
+          anchorReference="anchorPosition"
+          anchorPosition={{ top: +this.state.y0, left: +this.state.x0 }}
+          probeType={'readOnly'}
+          pvs={[{pvname:this.state.pvname,initialized:initialized}]}
+          handleClose={this.handleContextMenuClose}
 
-      {initialized===true &&
-        <span className={textFieldClassName} >
-          {usePvLabel===true? this.state['label']+': ':this.props.label}
-          {value} {units}
-        </span>
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
+          }}
+        />
+        {initialized===true &&
+          <span className={textFieldClassName} >
+            {usePvLabel===true? this.state['label']+': ':this.props.label}
+            {value} {units}
+          </span>
 
-      }
+        }
 
-      {((initialized===false)||(initialized==='undefined')) &&
+        {((initialized===false)||(initialized==='undefined')) &&
         <div className={classes.body1}>
           {"Connecting to:"+this.state['pvname']}
 
@@ -320,8 +349,8 @@ render() {
 
 
       }
-
-    </div>
+    </React.Fragment>
+  </div>
 )
 }
 }
@@ -352,11 +381,11 @@ TextUpdate.propTypes = {
 };
 
 TextUpdate.defaultProps = {
-    debug:false,
-    alarmSensitive:false,
-    usePrecision:false,
-    usePvLabel:false,
-    usePvUnits:false,
+  debug:false,
+  alarmSensitive:false,
+  usePrecision:false,
+  usePvLabel:false,
+  usePvUnits:false,
 };
 
 TextUpdate.contextType=AutomationStudioContext;

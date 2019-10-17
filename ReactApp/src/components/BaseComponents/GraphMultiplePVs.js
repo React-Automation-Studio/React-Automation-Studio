@@ -449,6 +449,31 @@ class GraphMultiplePVs extends React.Component {
 
         )
       }
+      else{
+        //const data=this.state.pvs[this.state.pvs[pv].pvname].linedata;
+        const sample={x:0,y:0}
+        const data=[];
+        data[0]=sample;
+        console.log(data)
+        lines.push(
+
+          <LineSeries
+
+            key={pv.toString()}
+            color={lineColor[i]}
+
+            data={data}
+            style={{
+              strokeLinejoin: 'round',
+              strokeWidth: 2
+
+            }}
+          />
+
+        )
+
+      }
+
       i++;
     }
     //console.log(DataConnections[0]);

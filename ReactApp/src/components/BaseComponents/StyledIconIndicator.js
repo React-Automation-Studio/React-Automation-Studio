@@ -19,6 +19,7 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import Lens from '@material-ui/icons/Lens';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
+import ContextMenu from '../SystemComponents/ContextMenu';
 const styles = theme => ({
   root: {
 
@@ -55,7 +56,9 @@ class StyledIconIndicator extends React.Component {
     ['pvname']:"Undefined",
     ['intialized']:false,
     ['metadata']:{},
-    ['severity']:''
+    ['severity']:'',
+    openContextMenu: false,
+    'open':false,x0:0,y0:0
   }
   this.handleInputValue= this.handleInputValue.bind(this);
   this.handleInputValueLabel= this.handleInputValueLabel.bind(this);
@@ -104,6 +107,21 @@ componentWillUnmount() {
 }
 
 
+
+handleContextMenuClose = (event) => {
+
+
+  this.setState({ openContextMenu: false });
+
+};
+
+handleToggleContextMenu = (event) => {
+  //   console.log(event.type)
+  event.persist()
+  this.setState(state => ({ openContextMenu: !state.openContextMenu,x0:event.pageX,y0:event.pageY }));
+
+  event.preventDefault();
+}
 
 
 
@@ -248,13 +266,26 @@ render() {
         debug={this.props.debug}
         handleInputValueLabel={this.handleInputValueLabel}
       />
+      <ContextMenu
+        disableProbe={this.props.disableProbe}
+        open={this.state.openContextMenu}
+        anchorReference="anchorPosition"
+        anchorPosition={{ top: +this.state.y0, left: +this.state.x0 }}
+        probeType={'readOnly'}
+        pvs={[{pvname:this.state.pvname,initialized:initialized}]}
+        handleClose={this.handleContextMenuClose}
 
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+      />
       {initialized===true &&
 
 
         <FormControlLabel style={{margin:0}}
           control={
-            <SvgIcon    size='small' style={iconStyle} style={{color:this.state['value']==1? onColor:offColor}}  >
+            <SvgIcon    size='small' style={iconStyle} style={{color:this.state['value']==1? onColor:offColor}}   onContextMenu={this.handleToggleContextMenu}>
 
 
               {typeof this.props.children==='undefined'&&<Lens  />}
@@ -276,7 +307,7 @@ render() {
       <FormControlLabel
 
         control={
-          <SvgIcon   disabled={true} size='small'  style={{color:'default'}}  >
+          <SvgIcon   disabled={true} size='small'  style={{color:'default'}}  onContextMenu={this.handleToggleContextMenu} >
 
 
             {typeof this.props.children==='undefined'&&<Lens  />}

@@ -124,6 +124,60 @@ class Probe extends React.Component {
     </Grid>
   </Grid>
   }
+  {probetype=='readOnly'&&<Grid   container
+    direction="column"
+    justify="stretch"
+    spacing={2}>
+    <Grid item xs={12} sm ={6} lg={4} >
+      <div style={{"overflowX": "hidden"}} >
+        <div style={{ padding: 24}}>
+          <Grid   container
+            direction="row"
+            justify="space-evenly"
+            spacing={2}>
+            <Grid item xs={12}  >
+              <TextOutput  pv='$(device).NAME' macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV Name:'}/>
+            </Grid>
+            <Grid item xs={12}  >
+              <TextOutput  pv='$(device).DESC'  macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV DESC:'}/>
+            </Grid>
+            <Grid item xs={12}  >
+              <div style={{height:'25vh'}}>
+                <GraphMultiplePVs
+                  pvs={['$(device)']}  macros={{'$(device)':probeObject.pvname}}
+                  maxLength={1000}
+                  triggerOnSingleValueChange
+
+                />
+              </div>
+            </Grid>
+            <Grid item xs={12}  >
+              <TextOutput  pv='$(device)'       macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV Value:'} alarmSensitive={true}/>
+            </Grid>
+            <Grid item xs={6}  >
+              <TextOutput  pv='$(device)'       macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV Timestamp:'} displayTimeStamp />
+            </Grid>
+            <Grid item xs={6} >
+                <TextOutput  pv='$(device)'       macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV Write Access:'} displayMetaData={'write_access'} />
+            </Grid>
+            <Grid item xs={12} >
+              <TextOutput  pv='$(device)'       macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV Host:'} displayMetaData={'host'} />
+              </Grid>
+
+
+          
+            <Grid item xs={6} >
+              <TextOutput  pv='$(device).HOPR'       macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV HOPR:'}/>
+            </Grid>
+            <Grid item xs={6}  >
+              <TextOutput  pv='$(device).LOPR'      macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV LOPR:'}/>
+            </Grid>
+          </Grid>
+        </div>
+      </div>
+    </Grid>
+  </Grid>
+  }
   {probetype=='simple'&&<Grid   container
     direction="column"
     justify="stretch"

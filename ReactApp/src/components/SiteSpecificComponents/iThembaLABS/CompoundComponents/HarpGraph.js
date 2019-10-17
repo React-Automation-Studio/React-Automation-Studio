@@ -14,7 +14,7 @@ import Switch from '@material-ui/core/Switch';
 //import ReactVisLightCompoment from '../../CSS/ReactVisLightCompoment';
 import ReactVisDarkCompoment from '../../../../CSS/ReactVisDarkCompoment';
 import Loadable from 'react-loadable';
-
+import ContextMenu from '../../../SystemComponents/ContextMenu';
 
 
 //import HarpGraphOverrideCSS from '../../CSS/HarpGraphOverrideCSS.css';
@@ -88,6 +88,15 @@ class HarpGraph extends React.Component {
     state['rangeYmax']=2000;
     state['ymin']=0;
     state['dataPVs']=dataPVs;
+    state['openContextMenu']= false;
+      state['x0']=0;
+      state['y0']=0;
+      const contextPVs=[];
+      for (const item in dataPVs){
+        contextPVs.push(dataPVs[item]);
+      }
+      state['contextPVs']=contextPVs;
+
     this.state=state;
 
     this.testRef = React.createRef()
@@ -229,6 +238,40 @@ class HarpGraph extends React.Component {
 
       //this.setState(pvData);
     }
+    else {
+      let dataPVs=this.state.dataPVs;
+      dataPVs[pvname].initialized=false;
+
+
+      let i;
+      let sample;
+      let data=[];
+      //let n;
+      //	console.log("pv.value: ",this.state[this.props.pv].value);
+      for(i in wireSpacing){
+        // console.log("value: ",this.state[this.props.pv].value[i]);
+
+        sample={x:wireSpacing[i],y:0}
+
+
+
+
+      //  console.log("sample: ",sample)
+
+        data[i]=sample;
+
+
+
+      }
+      //    console.log('data', data);
+
+
+      dataPVs[pvname].linedata=data;
+
+
+
+      this.setState({dataPVs:dataPVs});
+    }
   }
 
 
@@ -270,6 +313,20 @@ class HarpGraph extends React.Component {
 
 
 
+  handleContextMenuClose = event => {
+
+
+    this.setState({ openContextMenu: false });
+  };
+
+  handleToggleContextMenu = (event) => {
+  //     console.log(event.type)
+
+    event.persist()
+    this.setState(state => ({ openContextMenu: !state.openContextMenu,x0:event.pageX,y0:event.pageY }));
+
+    event.preventDefault();
+  }
 
 
 
@@ -357,7 +414,7 @@ class HarpGraph extends React.Component {
     let pv;
     let DataConnections=[];
     for (pv in this.state.dataPVs){
-      //console.log("linedata: ", this.state.pvs[pv].linedata);
+    //  console.log(pv.toString());
       DataConnections.push(
         <div key= {pv.toString()}>
           <DataConnection
@@ -390,14 +447,14 @@ class HarpGraph extends React.Component {
     let lines=[];
     for (pv in this.state.dataPVs){
       //console.log("linedata: ", this.state.pvs[pv].linedata);
-      if (this.state.dataPVs[pv].initialized===true){
+  //    if (this.state.dataPVs[pv].initialized===true){
         if(theme.palette.type==='dark'){
           lines.push(
 
             <LineSeries
               key= {pv.toString()}
 
-              color='#e89b02'
+              color={this.state.dataPVs[pv].initialized===true?'#e89b02':'grey'}
               data={this.state.dataPVs[this.state.dataPVs[pv].pvname].linedata}
               style={{
 
@@ -425,7 +482,8 @@ class HarpGraph extends React.Component {
             />
           )
         }
-      }
+//      }
+
     }
     //console.log(DataConnections[0]);
     return lines;
@@ -470,40 +528,52 @@ class HarpGraph extends React.Component {
                                                       />
         }
         {this.multipleDataConnections()}
+        <div style={{width:'100%',height:'100%'}} onContextMenu={this.handleToggleContextMenu}>
+          <FlexibleXYPlot  yDomain={[0, ymax]}margin={{left: 60}} onWheel={this.handleWheel} onClick={this.handleOnClick}>
+            <ContextMenu
+              disableProbe={this.props.disableProbe}
+              open={this.state.openContextMenu}
+              anchorReference="anchorPosition"
+              anchorPosition={{ top: +this.state.y0, left: +this.state.x0 }}
+              probeType={'readOnly'}
+              pvs={this.state.contextPVs}
+              handleClose={this.handleContextMenuClose}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+            />
+            <HorizontalGridLines style={{stroke: theme.palette.type==='dark'?'#0097a7':'#B7E9ED'}} />
 
-        <FlexibleXYPlot  yDomain={[0, ymax]}margin={{left: 60}} onWheel={this.handleWheel} onClick={this.handleOnClick}>
+            <VerticalGridLines tickValues={wireSpacing} style={{stroke: theme.palette.type==='dark'?'#0097a7':'#B7E9ED'}} />
+            <VerticalGridLines tickValues={[0]} style={{stroke: theme.palette.type==='dark'?'white':'grey'}} />
+            <XAxis
+              title="mm"
+              color="white"
+              style={{
+                title:{stroke:theme.palette.type==='dark'?'#dbdbe0':'#6b6b76',strokeWidth:0.2},
+                line: {stroke: '#ADDDE1'},
+                ticks: {stroke: '#ADDDE1'},
+                text: {stroke: 'none', fill: theme.palette.type==='dark'?'#a9a9b2':'#6b6b76', fontWeight: 600}
+              }}
+            />
 
-          <HorizontalGridLines style={{stroke: theme.palette.type==='dark'?'#0097a7':'#B7E9ED'}} />
+            <YAxis title={this.props.ylabel} left={9} tickFormat={v => (v+' '+this.state.rangeUnits)} tickSize={20}  tickPadding={2}
+              style={{
+                title:{stroke:theme.palette.type==='dark'?'#ccccce':'#dbdbe0',strokeWidth:0.2},
+                text: {stroke: 'none', fill: theme.palette.type==='dark'?'#a9a9b2':'#6b6b76', fontWeight: 600}
+              }}
+            />
 
-          <VerticalGridLines tickValues={wireSpacing} style={{stroke: theme.palette.type==='dark'?'#0097a7':'#B7E9ED'}} />
-          <VerticalGridLines tickValues={[0]} style={{stroke: theme.palette.type==='dark'?'white':'grey'}} />
-          <XAxis
-            title="mm"
-            color="white"
-            style={{
-              title:{stroke:theme.palette.type==='dark'?'#dbdbe0':'#6b6b76',strokeWidth:0.2},
-              line: {stroke: '#ADDDE1'},
-              ticks: {stroke: '#ADDDE1'},
-              text: {stroke: 'none', fill: theme.palette.type==='dark'?'#a9a9b2':'#6b6b76', fontWeight: 600}
-            }}
-          />
+            {this.multipleLineData()}
 
-          <YAxis title={this.props.ylabel} left={9} tickFormat={v => (v+' '+this.state.rangeUnits)} tickSize={20}  tickPadding={2}
-            style={{
-              title:{stroke:theme.palette.type==='dark'?'#ccccce':'#dbdbe0',strokeWidth:0.2},
-              text: {stroke: 'none', fill: theme.palette.type==='dark'?'#a9a9b2':'#6b6b76', fontWeight: 600}
-            }}
-          />
-
-          {this.multipleLineData()}
-
-          {(typeof this.props.legend !== 'undefined')&&<DiscreteColorLegend
-            color='#e89b02'
-            style={{position: 'absolute', right: '50px', top: '10px',
-              color:theme.palette.type==='dark'?'#ccccce':'#dbdbe0',strokeWidth:0.2}}
-            orientation="horizontal" items={[{title:legendTitle,color:theme.palette.type==='dark'?'#e89b02':'#80deea',stroke:theme.palette.type==='dark'?'#80deea':'#dbdbe0',fontSize:24}]} />}
-        </FlexibleXYPlot>
-
+            {(typeof this.props.legend !== 'undefined')&&<DiscreteColorLegend
+              color='#e89b02'
+              style={{position: 'absolute', right: '50px', top: '10px',
+                color:theme.palette.type==='dark'?'#ccccce':'#dbdbe0',strokeWidth:0.2}}
+              orientation="horizontal" items={[{title:legendTitle,color:theme.palette.type==='dark'?'#e89b02':'#80deea',stroke:theme.palette.type==='dark'?'#80deea':'#dbdbe0',fontSize:24}]} />}
+          </FlexibleXYPlot>
+        </div>
       </React.Fragment>
 
 

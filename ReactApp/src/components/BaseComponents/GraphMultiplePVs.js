@@ -10,7 +10,7 @@ import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
 import Switch from '@material-ui/core/Switch';
 import Loadable from 'react-loadable';
-
+import ContextMenu from '../SystemComponents/ContextMenu';
 
 
 
@@ -117,6 +117,15 @@ class GraphMultiplePVs extends React.Component {
   //  state['ymin']=1000000000000000000;
   //  state['ymax']=-1000000000000000000;
     state['PollingTimerEnabled']=false;
+    state['openContextMenu']= false;
+      state['x0']=0;
+      state['y0']=0;
+      const contextPVs=[];
+      for (const item in pvs){
+        contextPVs.push(pvs[item]);
+      }
+      state['contextPVs']=contextPVs;
+
     this.state=state;
 
 
@@ -130,10 +139,11 @@ class GraphMultiplePVs extends React.Component {
     this.handleInputValueLabel= this.handleInputValueLabel.bind(this);
     this.handleMetadata= this.handleMetadata.bind(this);
     this.multipleDataConnections=this.multipleDataConnections.bind(this);
-
+    this.handleToggleContextMenu=this.handleToggleContextMenu.bind(this);
     this.multipleLineData=this.multipleLineData.bind(this);
   }
   handleInputValue = (inputValue,pvname,initialized,severity,timestamp)=>{
+
     if(this.props.usePolling){
       let pvs=this.state.pvs;
       pvs[pvname].initialized=initialized;
@@ -142,6 +152,9 @@ class GraphMultiplePVs extends React.Component {
       this.setState({pvs:pvs});
     }
     else{
+      let pvs=this.state.pvs;
+      pvs[pvname].initialized=initialized;
+      this.setState({pvs:pvs});
       this.handleInputValueUnpolled(inputValue,pvname,initialized,severity,timestamp);
     }
 
@@ -454,15 +467,15 @@ class GraphMultiplePVs extends React.Component {
         const sample={x:0,y:0}
         const data=[];
         data[0]=sample;
-        console.log(data)
+        //console.log(data)
         lines.push(
 
           <LineSeries
 
             key={pv.toString()}
-            color={lineColor[i]}
+            color={'grey'}
 
-            data={data}
+            data={typeof this.state.pvs[this.state.pvs[pv].pvname].linedata==='undefined'?data:this.state.pvs[this.state.pvs[pv].pvname].linedata}
             style={{
               strokeLinejoin: 'round',
               strokeWidth: 2
@@ -480,6 +493,20 @@ class GraphMultiplePVs extends React.Component {
     return lines;
   }
 
+  handleContextMenuClose = event => {
+
+
+    this.setState({ openContextMenu: false });
+  };
+
+  handleToggleContextMenu = (event) => {
+       console.log(event.type)
+
+    event.persist()
+    this.setState(state => ({ openContextMenu: !state.openContextMenu,x0:event.pageX,y0:event.pageY }));
+
+    event.preventDefault();
+  }
 
 
 
@@ -574,13 +601,25 @@ class GraphMultiplePVs extends React.Component {
   //   console.log('ymin',ymin)
   return (
 
-    <React.Fragment>
+    <React.Fragment >
       {theme.palette.type==='dark'&& <LoadableReactVisDarkCompoment/>}
       {theme.palette.type==='light'&& <LoadableReactVisLightCompoment/>}
       {this.multipleDataConnections()}
-
+      <div style={{width:'100%',height:'100%'}} onContextMenu={this.handleToggleContextMenu}>
       <FlexibleXYPlot yDomain={yDomain} margin={{left: 60}} >
-
+      <ContextMenu
+        disableProbe={this.props.disableProbe}
+        open={this.state.openContextMenu}
+        anchorReference="anchorPosition"
+        anchorPosition={{ top: +this.state.y0, left: +this.state.x0 }}
+        probeType={'readOnly'}
+        pvs={this.state.contextPVs}
+        handleClose={this.handleContextMenuClose}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+      />
         <HorizontalGridLines style={{stroke: theme.palette.type==='dark'?'#0097a7':'#B7E9ED'}} />
         <VerticalGridLines  style={{stroke: theme.palette.type==='dark'?'#0097a7':'#B7E9ED'}} />
         <XAxis
@@ -611,8 +650,9 @@ class GraphMultiplePVs extends React.Component {
           style={{position: 'absolute', right: '50px', top: '10px',
             color:theme.palette.type==='dark'?'#ccccce':'#dbdbe0',strokeWidth:0.2}}
           orientation="horizontal" items= {legendItems}/>}
-      </FlexibleXYPlot>
 
+      </FlexibleXYPlot>
+</div>
     </React.Fragment>
 
 

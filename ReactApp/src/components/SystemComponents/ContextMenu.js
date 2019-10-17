@@ -98,13 +98,17 @@ class ContextMenu extends React.Component {
 
   copyPvNameClipboard = ()=> {
     //   console.log('hello');
+    if (typeof navigator.clipboard !=='undefined' ){
     navigator.clipboard.writeText(this.props.pvs[this.state.menuSelectedIndex].pvname);
+  }
     this.props.handleClose();
   }
 
   copyPvValueClipboard = ()=> {
     //   console.log('hello');
+      if (typeof navigator.clipboard !=='undefined' ){
     navigator.clipboard.writeText(this.props.pvs[this.state.menuSelectedIndex].value);
+  }
     this.props.handleClose();
   }
 
@@ -277,7 +281,7 @@ class ContextMenu extends React.Component {
                   onClick={this.props.handleClose}
                   component={Link} to={{
                       pathname: "/Probe",
-                    search:JSON.stringify({pvname:pvname}),
+                    search:JSON.stringify({pvname:pvname,probeType:this.props.probeType}),
                       state: ["sdas"],
                       data:"hello2"
                   }}
@@ -291,18 +295,18 @@ class ContextMenu extends React.Component {
 
                 </MenuItem>}
                 <Divider/>
-                <MenuItem onClick={this.copyPvNameClipboard}>
+                  {typeof navigator.clipboard !=='undefined'&&<MenuItem onClick={this.copyPvNameClipboard}>
                   <ListItemIcon>
                     <ContentCopy />
                   </ListItemIcon>
                   <Typography variant="inherit">Copy PV Name to Clipboard</Typography>
-                </MenuItem>
-                <MenuItem onClick={this.copyPvValueClipboard}>
+                </MenuItem>}
+                  {typeof navigator.clipboard !=='undefined'&&<MenuItem onClick={this.copyPvValueClipboard}>
                   <ListItemIcon>
                     <ContentCopy />
                   </ListItemIcon>
                   <Typography variant="inherit">Copy PV Value to Clipboard</Typography>
-                </MenuItem>
+                </MenuItem>}
 
               </MenuList>}
 
@@ -340,24 +344,25 @@ class ContextMenu extends React.Component {
 
                   </MenuItem>}
                   <Divider/>
-                  <MenuItem onClick={this.copyAllPvNamesClipboard}>
+                  {typeof navigator.clipboard !=='undefined'&&<MenuItem onClick={this.copyAllPvNamesClipboard}>
                     <ListItemIcon>
                       <ContentCopy />
                     </ListItemIcon>
                     <Typography variant="inherit">Copy All PV  Names to Clipboard</Typography>
-                  </MenuItem>
-                  <MenuItem onClick={this.copyPvNameClipboard}>
+
+                  </MenuItem>}
+                    {typeof navigator.clipboard !=='undefined'&&<MenuItem onClick={this.copyPvNameClipboard}>
                     <ListItemIcon>
                       <ContentCopy />
                     </ListItemIcon>
                     <Typography variant="inherit">Copy Selected PV  Name to Clipboard</Typography>
-                  </MenuItem>
-                  <MenuItem onClick={this.copyPvValueClipboard}>
+                  </MenuItem>}
+                  {typeof navigator.clipboard !=='undefined'&&  <MenuItem onClick={this.copyPvValueClipboard}>
                     <ListItemIcon>
                       <ContentCopy />
                     </ListItemIcon>
                     <Typography variant="inherit">Copy Selected PV Value to Clipboard</Typography>
-                  </MenuItem>
+                  </MenuItem>}
 
                 </MenuList>}
             </div>

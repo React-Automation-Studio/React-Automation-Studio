@@ -242,6 +242,7 @@ render() {
 
       {(initialized===false||initialized==='undefined') &&
         <FormControlLabel
+          disabled
           control={
             <Switch
               onChange={this.handleButtonChange('value')}

@@ -24,16 +24,16 @@ const styles = theme => ({
 
 
   },
-  TextField: {
-    width: '100%',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    paddingBottom: 0,
-    marginTop: 0,
-    fontWeight: 500,
-    borderRadius: 4
-  }
+  FormControl: {
+    width:'100%',
+    height:'100%',
+    marginTop:'auto',
+    marginBottom:'auto',
+    marginLeft:'auto',
+    marginRight:'auto',
 
+
+  },
 });
 
 /**
@@ -208,7 +208,7 @@ render() {
   }
   return (
 
-    <div>
+    <React.Fragment>
       <DataConnection
         pv={pv}
         macros={macros}
@@ -222,7 +222,7 @@ render() {
       />
 
       {initialized===true &&
-        <div>
+
 
           <FormControlLabel
             control={
@@ -230,14 +230,14 @@ render() {
                 onChange={this.handleButtonChange('value')}
                 checked={value == 1}
                 color="primary"
-                value="dynamic-class-name"
+
                 disabled={write_access===false?true:false}
               />
             }
             label={usePvLabel===true? this.state['label']:this.props.label}
             labelPlacement={labelPosition}
           />
-        </div>
+
       }
 
       {(initialized===false||initialized==='undefined') &&
@@ -248,7 +248,7 @@ render() {
               onChange={this.handleButtonChange('value')}
               checked={value == 1}
               color="primary"
-              value="dynamic-class-name"
+
             />
           }
           label={"Connecting to:"+this.state['pvname']}
@@ -257,7 +257,7 @@ render() {
       }
 
 
-    </div>
+    </React.Fragment>
 
 )
 }

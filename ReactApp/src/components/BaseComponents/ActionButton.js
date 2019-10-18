@@ -24,15 +24,30 @@ const styles = theme => ({
 
 
   },
+  FormControl: {
+    width:'100%',
+    height:'100%',
+    marginTop:'auto',
+    marginBottom:'auto',
+    marginLeft:'auto',
+    marginRight:'auto',
+
+
+  },
   Button: {
-    width: '100%',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    marginTop: 'auto',
-    marginBottom: 'auto',
+    width:'100%',
+    height:'100%',
+    marginTop:'auto',
+    marginBottom:'auto',
+    marginLeft:'auto',
+    marginRight:'auto',
+    //  width:'100%',
+    //    marginTop:'auto',
+    //    marginLeft:'auto',
+    //    marginRight:'auto',
+    //    marginBottom:'auto',
 
-  }
-
+  },
 });
 /**
  * The ActionButton Component is a wrapper on the Material-UI Button component. The ActionButton will ouput the `actionValue` to the process variable when pressed. The ActionButton component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
@@ -182,9 +197,9 @@ render() {
       {initialized===true &&
         <div>
 
-          <FormControlLabel className={classes.Button}
+          <FormControlLabel className={classes.FormControl}
             control={
-              <Button disabled={write_access===false?true:false} size={"small"} variant="contained" color={typeof this.props.color==='undefined'?"primary":this.props.color} className={classes.Button}  onClick={this.handleButtonClick('value')}>
+              <Button disabled={write_access===false?true:false}  variant="contained" color={typeof this.props.color==='undefined'?"primary":this.props.color} className={classes.Button}  onClick={this.handleButtonClick('value')}>
 
 
                 {this.props.actionString}
@@ -202,9 +217,9 @@ render() {
       {(initialized===false||initialized==='undefined') &&
       <div>
 
-        <FormControlLabel className={classes.Button}
+        <FormControlLabel className={classes.FormControl}
           control={
-            <Button disabled={true} size={"small"} variant="contained" color={typeof this.props.color==='undefined'?"primary":this.props.color} className={classes.Button}  onClick={this.handleButtonClick('value')}>
+            <Button disabled={true}  variant="contained" color={typeof this.props.color==='undefined'?"primary":this.props.color} className={classes.Button}  onClick={this.handleButtonClick('value')}>
 
             {this.state.pvname}
 

@@ -416,7 +416,7 @@ render() {
       {initialized===true &&
         <FormControl component="fieldset" className={classes.formControl}>
           <FormLabel component="legend">{usePvLabel===true? this.state['label']:this.props.label}</FormLabel>
-          <RadioGroup aria-label="gender" name="gender2" value={value} onChange={this.handleChange}>
+          <RadioGroup  value={value} onChange={this.handleChange}>
             {this.getRadioButtonItems(enum_strings, classes, disabled)}
           </RadioGroup>
 

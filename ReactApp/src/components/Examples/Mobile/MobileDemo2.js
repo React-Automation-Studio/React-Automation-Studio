@@ -21,7 +21,9 @@ import SelectionInput from '../../BaseComponents/SelectionInput';
 import SelectionList from '../../BaseComponents/SelectionList';
 import ToggleButton from '../../BaseComponents/ToggleButton';
 import ActionButton from '../../BaseComponents/ActionButton';
-
+import RadioButtonGroup from '../../BaseComponents/RadioButtonGroup';
+import RadioButton from '../../BaseComponents/RadioButton';
+import CheckBox from '../../BaseComponents/CheckBox';
 import ThumbWheel from '../../BaseComponents/ThumbWheel';
 import Gauge from '../../BaseComponents/Gauge';
 import StyledIconIndicator from '../../BaseComponents/StyledIconIndicator';
@@ -104,41 +106,52 @@ class MobileDemo2 extends React.Component {
               <Gauge  pv='pva://$(device):test3' macros={{'$(device)':'testIOC'}}   usePvLabel={true} usePrecision={true} prec={3} min={-10000} max={10000} />
             </Grid>
 
-            <Grid item xs={6} lg={3}>
+            <Grid item xs={6} lg={2}>
               <SelectionInput   pv='pva://$(device)'  macros={{'$(device)':'testIOC:BO1'}} usePvLabel={true}/>
             </Grid>
-            <Grid item xs={6} lg={3}>
+            <Grid item xs={6} lg={2}>
               <TextOutput pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}} usePvLabel={true}/>
             </Grid>
-            <Grid item xs={6} lg={3}>
+            <Grid item xs={6} lg={2}>
 
               <SwitchComponent pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}} usePvLabel={true}/>
             </Grid>
-            <Grid item xs={6} lg={3}>
+            <Grid item xs={6} lg={2}>
+
+              <CheckBox pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}} usePvLabel={true}/>
+            </Grid>
+            <Grid item xs={6} lg={2}>
+
+              <RadioButton pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}} usePvLabel={true}/>
+            </Grid>
+            <Grid item xs={6} lg={2}>
               <StyledIconIndicator  pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}} onColor='primary' offColor='secondary' usePvLabel={true} labelPlacement={'end'}/>
             </Grid>
 
-            <Grid item xs={6} lg={3}>
+            <Grid item xs={6} lg={2}>
               <ToggleButton pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}} usePvLabel={true} labelPlacement={"top"}/>
             </Grid>
-            <Grid item xs={6} lg={3}>
+            <Grid item xs={6} lg={2}>
               <ToggleButton pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}} label={"Custom Label"} labelPlacement={"top"}/>
             </Grid>
-            <Grid item xs={6} lg={3}>
+            <Grid item xs={6} lg={2}>
               <ActionButton pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}} label={"Action Button1"} labelPlacement={"top"} actionValue={"1"}
                 actionString={"Switch  On"}/>
             </Grid>
-            <Grid item xs={6} lg={3}>
+            <Grid item xs={6} lg={2}>
               <ActionButton pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}} label={"Action Button2"} labelPlacement={"top"} actionValue={"0"}
                 actionString={"Switch Off"}/>
             </Grid>
-            <Grid item xs={6} lg={3}>
+            <Grid item xs={6} lg={2}>
               <TextOutput pv='pva://$(device)' macros={{'$(device)':'testIOC:mbboTest1'}} usePvLabel={true}/>
             </Grid>
-            <Grid item xs={6} lg={3}>
+            <Grid item xs={6} lg={2}>
               <SelectionInput   pv='pva://$(device)'  macros={{'$(device)':'testIOC:mbboTest1'}} usePvLabel={true}/>
             </Grid>
-            <Grid item xs={12} lg={3}>
+            <Grid item xs={6} lg={2}>
+              <RadioButtonGroup   pv='pva://$(device)'  macros={{'$(device)':'testIOC:mbboTest1'}} usePvLabel={true}/>
+            </Grid>
+            <Grid item xs={12} lg={2}>
               <SelectionList   pv='pva://$(device)'  macros={{'$(device)':'testIOC:mbboTest1'}} usePvLabel={true}/>
             </Grid>
             <Grid item xs={12} lg={3}>

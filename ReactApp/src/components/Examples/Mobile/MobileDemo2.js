@@ -83,7 +83,7 @@ class MobileDemo2 extends React.Component {
           </div>
         </div>
         <div className={classes.root}>
-          <Grid container spacing={2}>
+          <Grid container spacing={2}  direction="row"  justify="flex-start"  alignItems="center">
 
             <Grid item xs={12} lg={2}>
               <TextInput  pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}   usePvLabel={true} usePrecision={true} prec={3} alarmSensitive={true}/>
@@ -112,33 +112,33 @@ class MobileDemo2 extends React.Component {
             <Grid item xs={6} lg={2}>
               <TextOutput pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}} usePvLabel={true}/>
             </Grid>
-            <Grid item xs={6} lg={2}>
+            <Grid item xs={6} lg={1}>
 
               <SwitchComponent pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}} usePvLabel={true}/>
             </Grid>
-            <Grid item xs={6} lg={2}>
+            <Grid item xs={6} lg={1}>
 
               <CheckBox pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}} usePvLabel={true}/>
             </Grid>
-            <Grid item xs={6} lg={2}>
+            <Grid item xs={6} lg={1}>
 
               <RadioButton pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}} usePvLabel={true}/>
             </Grid>
-            <Grid item xs={6} lg={2}>
-              <StyledIconIndicator  pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}} onColor='primary' offColor='secondary' usePvLabel={true} labelPlacement={'end'}/>
+            <Grid item xs={6} lg={1}>
+              <StyledIconIndicator  pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}} onColor='primary' offColor='secondary' usePvLabel={true} labelPlacement={'start'}/>
             </Grid>
 
-            <Grid item xs={6} lg={2}>
+            <Grid item xs={6} lg={1}>
               <ToggleButton pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}} usePvLabel={true} labelPlacement={"top"}/>
             </Grid>
-            <Grid item xs={6} lg={2}>
+            <Grid item xs={6} lg={1}>
               <ToggleButton pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}} label={"Custom Label"} labelPlacement={"top"}/>
             </Grid>
-            <Grid item xs={6} lg={2}>
+            <Grid item xs={6} lg={1}>
               <ActionButton pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}} label={"Action Button1"} labelPlacement={"top"} actionValue={"1"}
                 actionString={"Switch  On"}/>
             </Grid>
-            <Grid item xs={6} lg={2}>
+            <Grid item xs={6} lg={1}>
               <ActionButton pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}} label={"Action Button2"} labelPlacement={"top"} actionValue={"0"}
                 actionString={"Switch Off"}/>
             </Grid>
@@ -154,7 +154,7 @@ class MobileDemo2 extends React.Component {
             <Grid item xs={12} lg={2}>
               <SelectionList   pv='pva://$(device)'  macros={{'$(device)':'testIOC:mbboTest1'}} usePvLabel={true}/>
             </Grid>
-            <Grid item xs={12} lg={3}>
+            <Grid item xs={12} lg={4}>
               <SelectionList   pv='pva://$(device)'  macros={{'$(device)':'testIOC:mbboTest1'}} usePvLabel={true} horizontal={true} />
             </Grid>
 

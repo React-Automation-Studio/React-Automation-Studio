@@ -28,14 +28,16 @@ const styles = theme => ({
 
 
   },
-  Button: {
+  FormControl: {
+    width:'100%',
+    height:'100%',
+    marginTop:'auto',
+    marginBottom:'auto',
+    marginLeft:'auto',
+    marginRight:'auto',
 
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    marginTop: 'auto',
-    marginBottom: 'auto',
 
-  }
+  },
 
 });
 
@@ -283,7 +285,8 @@ render() {
       {initialized===true &&
 
 
-        <FormControlLabel style={{margin:0}}
+        <FormControlLabel
+          className={classes.FormControl}
           control={
             <SvgIcon    size='small' style={iconStyle} style={{color:this.state['value']==1? onColor:offColor}}   onContextMenu={this.handleToggleContextMenu}>
 
@@ -305,7 +308,7 @@ render() {
 
       {(initialized===false||initialized==='undefined') &&
       <FormControlLabel
-
+        className={classes.FormControl}
         control={
           <SvgIcon   disabled={true} size='small'  style={{color:'default'}}  onContextMenu={this.handleToggleContextMenu} >
 

@@ -24,15 +24,16 @@ const styles = theme => ({
 
 
   },
-  TextField: {
-    width: '100%',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    paddingBottom: 0,
-    marginTop: 0,
-    fontWeight: 500,
-    borderRadius: 4
-  }
+  FormControl: {
+    width:'100%',
+    height:'100%',
+    marginTop:'auto',
+    marginBottom:'auto',
+    marginLeft:'auto',
+    marginRight:'auto',
+
+
+  },
 
 });
 
@@ -221,12 +222,13 @@ render() {
         <div>
 
           <FormControlLabel
+            className={classes.FormControl}
             control={
               <MuiRadioButton
                 onClick={this.handleOnClick}
                 checked={value == 1}
                 color="primary"
-                value="dynamic-class-name"
+
                 disabled={write_access===false?true:false}
               />
             }
@@ -238,13 +240,14 @@ render() {
 
       {(initialized===false||initialized==='undefined') &&
         <FormControlLabel
+        className={classes.FormControl}
          disabled
           control={
             <MuiRadioButton
               onChange={this.handleOnClick}
               checked={value == 1}
               color="primary"
-              value="dynamic-class-name"
+
             />
           }
           label={"Connecting to:"+this.state['pvname']}

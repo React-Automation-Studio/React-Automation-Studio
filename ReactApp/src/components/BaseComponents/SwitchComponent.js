@@ -225,6 +225,7 @@ render() {
 
 
           <FormControlLabel
+            className={classes.FormControl}
             control={
               <Switch
                 onChange={this.handleButtonChange('value')}
@@ -232,6 +233,7 @@ render() {
                 color="primary"
 
                 disabled={write_access===false?true:false}
+
               />
             }
             label={usePvLabel===true? this.state['label']:this.props.label}
@@ -242,6 +244,7 @@ render() {
 
       {(initialized===false||initialized==='undefined') &&
         <FormControlLabel
+          className={classes.FormControl}
           disabled
           control={
             <Switch

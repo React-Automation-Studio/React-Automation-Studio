@@ -9,6 +9,8 @@ import StyledIconIndicator from '../BaseComponents/StyledIconIndicator';
 import SelectionInput from '../BaseComponents/SelectionInput';
 import Grid from '@material-ui/core/Grid';
 import ToggleButton from '../BaseComponents/ToggleButton';
+import RadioButton from '../BaseComponents/RadioButton';
+import CheckBox from '../BaseComponents/CheckBox';
 //import MenuItem from '@material-ui/core/MenuItem';
 
 
@@ -28,7 +30,7 @@ class EpicsBinaryOutDebug extends React.Component {
 
     return (
 
-      <Grid container direction='row' spacing={2}>
+      <Grid spacing={2} container direction="row"  justify="flex-start"  alignItems="center" >
         <Grid item  xs={12}>
           <TextOutput  pv='pva://$(device).NAME' macros={this.props['macros']}  label={'EPICS PV Name:'}/>
         </Grid>
@@ -53,23 +55,34 @@ class EpicsBinaryOutDebug extends React.Component {
         <Grid item xs={12} >
           <TextOutput  pv='pva://$(device)'      macros={this.props['macros']}  label={'EPICS PV Host:'} displayMetaData={'host'} />
         </Grid>
-        <Grid item  xs={12}>
+        <Grid item  xs={6}>
 
           <SwitchComponent pv='pva://$(device)' macros={this.props['macros']} label={'Toggle Switch:'}/>
+
         </Grid>
-        <Grid item  xs={12}>
+        <Grid item  xs={6}>
+
+          <CheckBox pv='pva://$(device)' macros={this.props['macros']} label={'Check Box:'}/>
+        </Grid>
+        <Grid item  xs={6}>
+
+          <RadioButton pv='pva://$(device)' macros={this.props['macros']} label={'Radio Button:'} />
+        </Grid>
+
+        <Grid item  xs={6}>
+          <StyledIconButton  pv='pva://$(device)'macros={this.props['macros']} label={'Indicator button'} labelPlacement={'start'}/>
+        </Grid>
+        <Grid item  xs={6}>
           <SelectionInput   pv='pva://$(device)'      macros={this.props['macros']}    usePvLabel={true} useStringValue={true}/>
         </Grid>
-        <Grid item  xs={12}>
-          <StyledIconButton  pv='pva://$(device)'macros={this.props['macros']} label={'Indicator button'} labelPlacement={'end'}/>
+        <Grid item  xs={6}>
+          <ToggleButton  pv='pva://$(device)'macros={this.props['macros']}  labelPlacement={'end'} />
         </Grid>
         <Grid item  xs={12}>
           <StyledIconIndicator  pv='pva://$(device)'macros={this.props['macros']} label={'Indicator'} labelPlacement={'end'} onColor='green' offColor='red'/>
         </Grid>
 
-        <Grid item  xs={12}>
-          <ToggleButton  pv='pva://$(device)'macros={this.props['macros']}  labelPlacement={'end'} />
-        </Grid>
+
 
         <Grid item  xs={12}>
           <StyledIconIndicator  pv='pva://$(device)'macros={this.props['macros']} label={'Indicator'} labelPlacement={'end'} onColor='primary' offColor='secondary'/>

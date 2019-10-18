@@ -27,14 +27,16 @@ const styles = theme => ({
 
 
   },
-  Button: {
+  FormControl: {
+    width:'100%',
+    height:'100%',
+    marginTop:'auto',
+    marginBottom:'auto',
+    marginLeft:'auto',
+    marginRight:'auto',
 
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    marginTop: 'auto',
-    marginBottom: 'auto',
 
-  }
+  },
 
 });
 
@@ -225,9 +227,9 @@ render() {
       {initialized===true &&
 
 
-        <FormControlLabel className={classes.Button}
+        <FormControlLabel   className={classes.FormControl}
           control={
-            <IconButton  size="large" disabled={((write_access===false)||this.props.disabled===true)?true:false} size='small' color={this.state['value']==1?"primary":"default" } className={classes.Button} onClick={this.handleButtonClick('value')}>
+            <IconButton  disabled={((write_access===false)||this.props.disabled===true)?true:false} size='small' color={this.state['value']==1?"primary":"default" } onClick={this.handleButtonClick('value')}>
 
               {typeof this.props.children==='undefined'&&<Lens  />}
               {typeof this.props.children!=='undefined'&& this.props.children}
@@ -245,9 +247,9 @@ render() {
 
       {(initialized===false||initialized==='undefined') &&
 
-        <FormControlLabel className={classes.Button}
+        <FormControlLabel   className={classes.FormControl}
           control={
-            <IconButton  size="large" disabled={true} size='small' color={this.state['value']==1?"primary":"default" } className={classes.Button} onClick={this.handleButtonClick('value')}>
+            <IconButton  disabled={true} size='small' color={this.state['value']==1?"primary":"default" } className={classes.Button} onClick={this.handleButtonClick('value')}>
 
             {typeof this.props.children==='undefined'&&<Lens  />}
             {typeof this.props.children!=='undefined'&& this.props.children}

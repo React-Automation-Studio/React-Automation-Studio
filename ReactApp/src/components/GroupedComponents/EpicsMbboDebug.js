@@ -7,6 +7,7 @@ import SelectionList from '../BaseComponents/SelectionList';
 import TextOutput from '../BaseComponents/TextOutput';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
+import RadioButtonGroup from '../BaseComponents/RadioButtonGroup';
 //import MenuItem from '@material-ui/core/MenuItem';
 
 
@@ -38,7 +39,7 @@ class EpicsMbboDebug extends React.Component {
 
 const {classes}= this.props;
     return (
-      <Grid container direction='row' spacing={2}>
+      <Grid container   spacing={2}       direction="row"  justify="flex-start"  alignItems="center"       >
 
         <Grid item  xs={12}>
         <TextOutput  pv='pva://$(device).NAME' macros={this.props['macros']}  label={'EPICS PV Name:'}/>
@@ -67,8 +68,11 @@ const {classes}= this.props;
         <Grid item  xs={12}>
         <TextOutput  pv='pva://$(device).ONST'      macros={this.props['macros']}  label={'EPICS PV ONST:'}/>
         </Grid>
-        <Grid item  xs={12}>
+        <Grid item  xs={6}>
         <SelectionList   pv='pva://$(device)'      macros={this.props['macros']}    usePvLabel={true} useStringValue={true} custom_selection_strings={this.props.custom_selection_strings}/>
+        </Grid>
+        <Grid item  xs={6}>
+        <RadioButtonGroup   pv='pva://$(device)'      macros={this.props['macros']}    usePvLabel={true} useStringValue={true} custom_selection_strings={this.props.custom_selection_strings}/>
         </Grid>
         <Grid item  xs={12}>
         <SelectionList horizontal  pv='pva://$(device)'     classes={{list:classes.list}} macros={this.props['macros']}    usePvLabel={true} useStringValue={true} custom_selection_strings={this.props.custom_selection_strings}/>

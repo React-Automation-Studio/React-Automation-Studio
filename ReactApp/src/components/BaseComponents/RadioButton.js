@@ -238,6 +238,7 @@ render() {
 
       {(initialized===false||initialized==='undefined') &&
         <FormControlLabel
+         disabled
           control={
             <MuiRadioButton
               onChange={this.handleOnClick}

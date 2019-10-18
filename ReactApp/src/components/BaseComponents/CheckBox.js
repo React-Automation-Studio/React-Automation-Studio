@@ -37,12 +37,8 @@ const styles = theme => ({
 });
 
 /**
- * The CheckBox component is a wrapper on a Material-UI CheckBox component. The Selection Control component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
- * The margins and spacing must be controlled from the parent component.<br/><br/>
- * Material-UI Selection Control Demos:
- * https://material-ui.com/demos/selection-controls/<br/><br/>
- * Material-UI Switch API:
- * https://material-ui.com/api/switch/
+ * The CheckBox component is a wrapper on a Material-UI CheckBox component.
+ https://material-ui.com/api/checkbox/
 
  */
 class CheckBox extends React.Component {
@@ -269,8 +265,7 @@ CheckBox.propTypes = {
   macros:PropTypes.object,
   /** Directive to fill the label with the value contained in the  EPICS pv's DESC field. */
   usePvLabel:PropTypes.bool,
-  /** Directive to use the EPICS alarm severity status to alter the fields backgorund color  */
-  alarmSensitive:PropTypes.bool,
+
   /** Custom label to be used, if  `usePvLabel` is not defined. */
   label: PropTypes.string,
   /** If defined, then the DataConnection debugging information will be displayed*/

@@ -37,9 +37,9 @@ const styles  = theme =>({
  * The SimpleSlider Component is a wrapper on the Material-UI contained Slider component. The SimpleSlider component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
  * The margins and spacing must be controlled from the parent component.<br/><br/>
  * Material-UI Slider Demos:
- * https://material-ui.com/lab/slider/<br/><br/>
+ * https://material-ui.com/slider/<br/><br/>
  * Material-UI Slider API:
- * https://material-ui.com/lab/api/slider/
+ * https://material-ui.com/api/slider/
 
  */
 class SimpleSlider extends React.Component {

@@ -238,6 +238,7 @@ render() {
 
       {(initialized===false||initialized==='undefined') &&
         <FormControlLabel
+          disabled
           control={
             <MuiCheckbox
               onChange={this.handleButtonChange('value')}

@@ -68,7 +68,7 @@ Access rights can be controlled though a JSON file which contains user access gr
 
 
 
-**This repository is the master repository which  contains the codebase and demos for each the component and interactive UI's that depend on the demo IOC micro service. The repository can be checked out and the demos can be exlpored. Contributors can also add components and add in features. If you wish to customize the project and create user interfaces for your EPICS control system then you should clone the boilier plate repository at https://github.com/wduckitt/React-Automation-Studio-Example-Project-1 which pulls in this code base as a Git submodule.**
+**This repository is the master repository which  contains the code base and demos for each the component and interactive UI's that depend on the demo IOC micro service. The repository can be checked out and the demos can be explored. Contributors can also add components and add in features. If you wish to customize the project and create user interfaces for your EPICS control system then you should clone the boiler plate repository at https://github.com/wduckitt/React-Automation-Studio-Example-Project-1 which pulls in this code base as a Git submodule.**
 
 
 # 1 Installation

@@ -78,7 +78,7 @@ const styles = theme => ({
 
 });
 
-function getTickValues(props,min,max,numberOfTicks,x0,x1,y1,xOffset,radialTextOffset){
+function getTickValues(props,min,max,numberOfTicks,x0,y0,x1,x2,y1,y2,xOffset,yOffset,value){
   const {classes}= props;
   //this.test("test1");
   //this.handleInputValue();
@@ -86,30 +86,61 @@ function getTickValues(props,min,max,numberOfTicks,x0,x1,y1,xOffset,radialTextOf
   let ticks=[];
 
   let i=0;
-
-
+   if(typeof props.disabled==='undefined'){
+    if (props.showTicks===true){
   for (i=0 ; i<(numberOfTicks);i++){
-    const rotation=i*180/(numberOfTicks-1);
-    const value=i*(max-min)/(numberOfTicks-1)+min;
+    const rotation=0;
+    const tickValue=i*(max-min)/(numberOfTicks-1)+min;
     ticks.push(
       <g key={i}
-        transform={'rotate('+ rotation+" "+(x0+x1)/2 +' ' +y1+ ')'}
       >
         <text
           className={classes.textTicks}
-          x={xOffset-radialTextOffset}
-          y={y1}
-          textAnchor='middle'
-          transform={'rotate('+ 270+','+(xOffset-radialTextOffset)+','+(y1)+')'}
+          x={xOffset-3}
+          y={y2-i*(y2-y0 -yOffset)/(numberOfTicks-1)  -3}
+          textAnchor={'end'}
         >
-          {parseFloat(value).toFixed(0)}
+          {parseFloat(tickValue).toFixed(0)+props.units}
         </text>
       </g>
 
         )
       }
+    }
 
+  }
+  else{
+    ticks.push(
+      <g key={i}
+      >
+        <text
+          className={classes.textTicks}
+          x={xOffset}
+          y={y2+yOffset-3}
+          textAnchor={'start'}
+        >
+          {props.pvname}
+        </text>
+      </g>
 
+        )
+  }
+      if (props.showValue===true)
+      {ticks.push(
+        <g key={i}
+        >
+          <text
+            className={classes.textTicks}
+            x={x0+(x2-x0)/2}
+            y={yOffset-4}
+            textAnchor={'middle'}
+          >
+            {typeof props.disabled==='undefined'?parseFloat(value).toFixed(0)+props.units:'Connecting to: '}{}
+          </text>
+        </g>
+
+          )
+}
 
 
 
@@ -127,16 +158,19 @@ function getTickValues(props,min,max,numberOfTicks,x0,x1,y1,xOffset,radialTextOf
       const value=props.value;
       const min=props.min;
       const max=props.max;
-
+      const xOffset=80;
+      const yOffset=16;
+      const radialTextOffset=0;
       const width=props.width;
-      const height=props.width/2;
-      const y0=0;
-      const y1=height/2;
-      const y2=height;
-      const x0=0;
-      const x1=width/2;
-      const x2=width;
-      const level=x2*(value-min)/(max-min);
+      const height=props.width;;
+      const y0=yOffset;
+      const y2=(height-yOffset);
+      const y1=yOffset+(y2-y0)/2;
+      const x0=xOffset;
+      const x2=(width-xOffset*0);
+      const x1=(x2-x0)/2+x0;
+
+      const level=(y2-y0)*(value-min)/(max-min);
 
       const color=props.color;
       return (
@@ -144,64 +178,64 @@ function getTickValues(props,min,max,numberOfTicks,x0,x1,y1,xOffset,radialTextOf
         <svg  width={width} height={height}>
 
 
-        <linearGradient id={gradientId+'baseBottom1'} gradientTransform="rotate(90)" >
+          <linearGradient id={gradientId+'baseleft1'}  >
             <stop offset="0%" stopColor={props.theme.palette.type==='dark'?props.theme.palette.grey['300']:props.theme.palette.grey['200']} />
-          <stop offset="100%"  stopColor={typeof props.disabled==='undefined'?props.theme.palette.grey['200']:'default'} />
+            <stop offset="100%"  stopColor={typeof props.disabled==='undefined'?props.theme.palette.grey['200']:'default'} />
 
-        </linearGradient>
-          <linearGradient id={gradientId+'baseTop1'} gradientTransform="rotate(90)" >
+          </linearGradient>
+          <linearGradient id={gradientId+'baseright1'}  >
 
             <stop offset="0%"  stopColor={typeof props.disabled==='undefined'?props.theme.palette.grey['200']:'default'} />
-              <stop offset="100%" stopColor={props.theme.palette.type==='dark'?props.theme.palette.grey['300']:props.theme.palette.grey['200']} />
+            <stop offset="100%" stopColor={props.theme.palette.type==='dark'?props.theme.palette.grey['300']:props.theme.palette.grey['200']} />
           </linearGradient>
 
-        <linearGradient id={gradientId+'bottom1'} gradientTransform="rotate(90)" >
+          <linearGradient id={gradientId+'right1'} >
             <stop offset="0%" stopColor={props.theme.palette.type==='dark'?props.theme.palette.grey['300']:props.theme.palette.grey['200']} />
-          <stop offset="100%"  stopColor={typeof props.disabled==='undefined'?color:'default'} />
+            <stop offset="100%"  stopColor={typeof props.disabled==='undefined'?color:'default'} />
 
-        </linearGradient>
-          <linearGradient id={gradientId+'top1'} gradientTransform="rotate(90)" >
+          </linearGradient>
+          <linearGradient id={gradientId+'left1'}  >
 
             <stop offset="0%"  stopColor={typeof props.disabled==='undefined'?color:'default'} />
-              <stop offset="100%" stopColor={props.theme.palette.type==='dark'?props.theme.palette.grey['300']:props.theme.palette.grey['200']} />
+            <stop offset="100%" stopColor={props.theme.palette.type==='dark'?props.theme.palette.grey['300']:props.theme.palette.grey['200']} />
           </linearGradient>
 
+          <g >
+            <rect x={x1-1} y={y0} width={x2-x1} height={y2-y0}
+              style={{
+                opacity:1,
+                strokeWidth:"0",
+                fill:'url(#'+gradientId+'baseright1)',
+              }}
+            />
+            <rect x={x0} y={y0} width={x2-x1} height={y2-y0}
+              style={{opacity:1,
+                strokeWidth:"0",
+                fill:'url(#'+gradientId+'baseleft1)',
+              }}
 
-          <rect y={0} width={x2} height={y1}
-          style={{
-            opacity:1,
-            strokeWidth:"0",
-            fill:'url(#'+gradientId+'baseTop1)',
-          }}
-          />
-          <rect y={y1-1} width={x2} height={y1-1}
-          style={{opacity:1,
-            strokeWidth:"0",
-            fill:'url(#'+gradientId+'baseBottom1)',
-          }}
-
-          />
-
-
-          <rect y={0} width={level-1} height={y1}
-          style={{opacity:1,
-            strokeWidth:"0",
-            fill:'url(#'+gradientId+'top1)',
-          }}
-          />
-          <rect y={y1-1} width={level-1} height={y1-1}
-          style={{opacity:1,
-            strokeWidth:"0",
-            fill:'url(#'+gradientId+'bottom1)',
-          }}
-
-          />
+            />
 
 
+            <rect x={x0} y={y2-level} width={x1-x0} height={level}
+              style={{opacity:1,
+                strokeWidth:"0",
+                fill:'url(#'+gradientId+'left1)',
+              }}
+            />
+            <rect x={x1-1} y={y2-level} width={x2-x1} height={level}
+              style={{opacity:1,
+                strokeWidth:"0",
+                fill:'url(#'+gradientId+'right1)',
+              }}
 
-              </svg>
+            />
 
-            );
+            {getTickValues(props,min,max, 3,x0,y0,x1,x2,y1,y2,xOffset,yOffset,value)}
+          </g>
+          </svg>
+
+          );
           }
 
           TankComponent.propTypes={
@@ -210,151 +244,277 @@ function getTickValues(props,min,max,numberOfTicks,x0,x1,y1,xOffset,radialTextOf
           }
           const FlexibleTankComponent = makeVisFlexible(withStyles(styles,{withTheme:true})(TankComponent));
 
-          /**
-          * The Tank Component is an Automation-studio component.
-          */
+    /**
+    * The Tank Component is an Automation-studio component.
+    */
 
-          class Tank extends React.Component {
-            constructor(props) {
-              super(props);
-              this.state={['value'] : "",
-              ['inputValue'] : "",
-              ['outputValue'] : "",
-              ['hasFocus']:false,
-              ['label']:"Undefined",
-              ['pvname']:"Undefined",
-              ['intialized']:false,
-              ['metadata']:{},
-              ['severity']:1,
-              openContextMenu: false,
-              'open':false,x0:0,y0:0
+    class Tank extends React.Component {
+      constructor(props) {
+        super(props);
+        this.state={['value'] : "",
+        ['inputValue'] : "",
+        ['outputValue'] : "",
+        ['hasFocus']:false,
+        ['label']:"Undefined",
+        ['pvname']:"Undefined",
+        ['intialized']:false,
+        ['metadata']:{},
+        ['severity']:1,
+        openContextMenu: false,
+        'open':false,x0:0,y0:0
+      }
+      this.handleInputValue= this.handleInputValue.bind(this);
+      this.handleInputValueLabel= this.handleInputValueLabel.bind(this);
+      this.handleMetadata= this.handleMetadata.bind(this);
+
+
+    }
+
+
+    handleInputValue(inputValue,pvname,initialized,severity){
+      console.log("severity: ",severity);
+
+
+      this.setState({['value']	 :inputValue,
+      ['inputValue']:inputValue,
+      ['pvname']:pvname,
+      ['initialized']:initialized,
+      ['severity']:severity});
+
+    }
+
+
+    handleMetadata(metadata){
+
+
+      this.setState({['metadata']	 :metadata,
+      ['newMetadata']:metadata});
+
+    }
+
+
+
+    handleInputValueLabel(inputValue){
+
+      this.setState({['label']:inputValue});
+
+    }
+
+
+
+    componentDidMount() {
+
+    }
+
+
+    componentWillUnmount() {
+
+    }
+
+
+    handleContextMenuClose = (event) => {
+
+
+      this.setState({ openContextMenu: false });
+
+    };
+
+    handleToggleContextMenu = (event) => {
+      //   console.log(event.type)
+      event.persist()
+      this.setState(state => ({ openContextMenu: !state.openContextMenu,x0:event.pageX,y0:event.pageY }));
+
+      event.preventDefault();
+    }
+
+
+
+
+
+
+    handleOnFocus= event =>{
+      this.setState({['hasFocus']:true});
+    }
+
+    catchReturn= stateVar => event =>{
+      if (event.key === 'Enter') {
+        this.setState({['outputValue']:this.state['value']});
+      }
+    }
+
+
+    handleOnBlur= event =>{
+      this.setState({['hasFocus']:false,
+      ['value']:this.state['inputValue'],
+      ['metadata'] :this.state['newMetadata'] });
+    }
+
+    handleChange = name => event => {
+      this.setState({
+        [name]: event.target.value,
+      });
+    };
+
+
+
+
+    render() {
+      const {classes}= this.props;
+      const pv = this.props.pv;
+      const macros=  this.props.macros;
+      const usePvLabel= this.props.usePvLabel;
+      const mylabel= this.props.label;
+      const usePrecision= this.props.prec;
+      const useStringValue=this.props.useStringValue;
+      let severity=this.state.severity;
+      let units="";
+      const initialized=this.state.initialized;
+      let value=this.state.value;
+      if(initialized){
+        if(this.props.usePvUnits===true){
+          if (typeof this.state.metadata !== 'undefined'){
+            if (typeof this.state.metadata.units !== 'undefined'){
+              units=this.state.metadata.units;
             }
-            this.handleInputValue= this.handleInputValue.bind(this);
-            this.handleInputValueLabel= this.handleInputValueLabel.bind(this);
-            this.handleMetadata= this.handleMetadata.bind(this);
-
-
-          }
-
-
-          handleInputValue(inputValue,pvname,initialized,severity){
-            console.log("severity: ",severity);
-
-
-              this.setState({['value']	 :inputValue,
-              ['inputValue']:inputValue,
-              ['pvname']:pvname,
-              ['initialized']:initialized,
-              ['severity']:severity});
-
-        }
-
-
-        handleMetadata(metadata){
-
-
-            this.setState({['metadata']	 :metadata,
-            ['newMetadata']:metadata});
-
-      }
-
-
-
-      handleInputValueLabel(inputValue){
-
-        this.setState({['label']:inputValue});
-
-      }
-
-
-
-      componentDidMount() {
-
-      }
-
-
-      componentWillUnmount() {
-
-      }
-
-
-      handleContextMenuClose = (event) => {
-
-
-        this.setState({ openContextMenu: false });
-
-      };
-
-      handleToggleContextMenu = (event) => {
-        //   console.log(event.type)
-        event.persist()
-        this.setState(state => ({ openContextMenu: !state.openContextMenu,x0:event.pageX,y0:event.pageY }));
-
-        event.preventDefault();
-      }
-
-
-
-
-
-
-      handleOnFocus= event =>{
-        this.setState({['hasFocus']:true});
-      }
-
-      catchReturn= stateVar => event =>{
-        if (event.key === 'Enter') {
-          this.setState({['outputValue']:this.state['value']});
-        }
-      }
-
-
-      handleOnBlur= event =>{
-        this.setState({['hasFocus']:false,
-        ['value']:this.state['inputValue'],
-        ['metadata'] :this.state['newMetadata'] });
-      }
-
-      handleChange = name => event => {
-        this.setState({
-          [name]: event.target.value,
-        });
-      };
-
-
-
-
-      render() {
-        const {classes}= this.props;
-        const pv = this.props.pv;
-        const macros=  this.props.macros;
-        const usePvLabel= this.props.usePvLabel;
-        const mylabel= this.props.label;
-        const usePrecision= this.props.prec;
-        const useStringValue=this.props.useStringValue;
-        let severity=this.state.severity;
-        let units="";
-        const initialized=this.state.initialized;
-        let value=this.state.value;
-        if(initialized){
-          if(this.props.usePvUnits===true){
-            if (typeof this.state.metadata !== 'undefined'){
-              if (typeof this.state.metadata.units !== 'undefined'){
-                units=this.state.metadata.units;
-              }
-              else{
-                units="";
-              }
-            }
-            else {
+            else{
               units="";
             }
-
           }
           else {
-            units=this.props.units;
+            units="";
           }
 
+        }
+        else {
+          units=this.props.units;
+        }
+
+
+        if (typeof this.props.usePrecision !== 'undefined'){
+          if (this.props.usePrecision==true){
+            if (typeof this.props.prec !== 'undefined'){
+              value=parseFloat(value).toFixed(this.props.prec);
+            }
+            else
+            value=parseFloat(value).toFixed(parseInt(this.state.metadata.precision));
+
+          }
+
+        }
+
+      }
+
+      if (typeof this.props.useStringSeverityMatch !== 'undefined'){
+        if (this.props.useStringSeverityMatch==true){
+
+          if (typeof this.props.StringSeverity !== 'undefined'){
+            let string;
+            for (string in this.props.StringSeverity){
+              //      console.log(this.props.StringSeverity[string].stringMatch)
+              if (value==this.props.StringSeverity[string].stringMatch){
+                severity=this.props.StringSeverity[string].severity;
+                break;
+              }
+
+            }
+
+          }
+        }
+      }
+
+
+
+
+
+
+
+
+
+
+      let write_access=false;
+      let read_access=false;
+      let min=0;
+      let max=100;
+      let color=this.props.theme.palette.primary.main;;
+      if(initialized){
+
+        if (typeof this.state.metadata !== 'undefined'){
+          if (typeof this.state.metadata.write_access !== 'undefined'){
+            write_access=this.state.metadata.write_access;
+          }
+          if (typeof this.state.metadata.read_access !== 'undefined'){
+            read_access=this.state.metadata.read_access;
+          }
+        }
+
+
+        if (typeof this.props.usePvMinMax === 'undefined'){
+          if (typeof this.props.min !== 'undefined'){
+            min=this.props.min;
+          }
+          if (typeof this.props.max !== 'undefined'){
+            max=this.props.max;
+          }
+        }else{
+          if(this.props.usePvMinMax == false)
+          {
+            if (typeof this.props.min !== 'undefined'){
+              min=this.props.min;
+            }
+            if (typeof this.props.max !== 'undefined'){
+              max=this.props.max;
+            }
+          }
+          else {
+            max=this.state.metadata.upper_disp_limit;
+            min=this.state.metadata.lower_disp_limit;
+          }
+        }
+
+
+
+
+        if (typeof this.props.alarmSensitive !== 'undefined'){
+          if (this.props.alarmSensitive==true){
+            if (severity==1){
+
+              color=deepOrange['400'];
+            }
+            else if(severity==2){
+              color=  red['800'];
+            }
+            else {
+              color=this.props.theme.palette.primary.main;
+              //  background_color='white';
+            }
+          }
+
+        }
+
+      }
+
+
+
+      if(initialized){
+        if(this.props.usePvUnits===true){
+          if (typeof this.state.metadata !== 'undefined'){
+            if (typeof this.state.metadata.units !== 'undefined'){
+              units=" "+this.state.metadata.units;
+            }
+            else{
+              units="";
+            }
+          }
+          else {
+            units="";
+          }
+
+        }
+        else {
+          units=typeof this.props.units!=='undefined'?" "+this.props.units:"";
+        }
+
+        if (value!==""){
 
           if (typeof this.props.usePrecision !== 'undefined'){
             if (this.props.usePrecision==true){
@@ -370,249 +530,127 @@ function getTickValues(props,min,max,numberOfTicks,x0,x1,y1,xOffset,radialTextOf
 
         }
 
-        if (typeof this.props.useStringSeverityMatch !== 'undefined'){
-          if (this.props.useStringSeverityMatch==true){
-
-            if (typeof this.props.StringSeverity !== 'undefined'){
-              let string;
-              for (string in this.props.StringSeverity){
-                //      console.log(this.props.StringSeverity[string].stringMatch)
-                if (value==this.props.StringSeverity[string].stringMatch){
-                  severity=this.props.StringSeverity[string].severity;
-                  break;
-                }
-
-              }
-
-            }
-          }
-        }
-
-
-
-
-
-
-
-
-
-
-        let write_access=false;
-        let read_access=false;
-        let min=0;
-        let max=100;
-          let color=this.props.theme.palette.primary.main;;
-        if(initialized){
-
-          if (typeof this.state.metadata !== 'undefined'){
-            if (typeof this.state.metadata.write_access !== 'undefined'){
-              write_access=this.state.metadata.write_access;
-            }
-            if (typeof this.state.metadata.read_access !== 'undefined'){
-              read_access=this.state.metadata.read_access;
-            }
-          }
-
-
-          if (typeof this.props.usePvMinMax === 'undefined'){
-            if (typeof this.props.min !== 'undefined'){
-              min=this.props.min;
-            }
-            if (typeof this.props.max !== 'undefined'){
-              max=this.props.max;
-            }
-          }else{
-            if(this.props.usePvMinMax == false)
-            {
-              if (typeof this.props.min !== 'undefined'){
-                min=this.props.min;
-              }
-              if (typeof this.props.max !== 'undefined'){
-                max=this.props.max;
-              }
-            }
-            else {
-              max=this.state.metadata.upper_disp_limit;
-              min=this.state.metadata.lower_disp_limit;
-            }
-          }
-
-
-
-
-          if (typeof this.props.alarmSensitive !== 'undefined'){
-            if (this.props.alarmSensitive==true){
-              if (severity==1){
-
-                color=deepOrange['400'];
-              }
-              else if(severity==2){
-                color=  red['800'];
-              }
-              else {
-                color=this.props.theme.palette.primary.main;
-                //  background_color='white';
-              }
-            }
-
-          }
-
-        }
-
-
-
-        if(initialized){
-          if(this.props.usePvUnits===true){
-            if (typeof this.state.metadata !== 'undefined'){
-              if (typeof this.state.metadata.units !== 'undefined'){
-                units=" "+this.state.metadata.units;
-              }
-              else{
-                units="";
-              }
-            }
-            else {
-              units="";
-            }
-
-          }
-          else {
-            units=typeof this.props.units!=='undefined'?" "+this.props.units:"";
-          }
-
-          if (value!==""){
-
-            if (typeof this.props.usePrecision !== 'undefined'){
-              if (this.props.usePrecision==true){
-                if (typeof this.props.prec !== 'undefined'){
-                  value=parseFloat(value).toFixed(this.props.prec);
-                }
-                else
-                value=parseFloat(value).toFixed(parseInt(this.state.metadata.precision));
-
-              }
-
-            }
-
-          }
-
-        }
-
-
-
-
-
-        //console.log(units)
-        return (
-
-          <div style={{width:'100%',height:'100%'}} onContextMenu={this.handleToggleContextMenu}>
-            <DataConnection
-              pv={pv}
-              macros={macros}
-              usePvLabel={usePvLabel}
-              usePrecision={usePrecision}
-              handleInputValue={this.handleInputValue}
-              handleMetadata={this.handleMetadata}
-              outputValue=  {this.state.outputValue}
-              useStringValue={useStringValue}
-              handleInputValueLabel={this.handleInputValueLabel}
-            />
-            <ContextMenu
-              disableProbe={this.props.disableProbe}
-              open={this.state.openContextMenu}
-              anchorReference="anchorPosition"
-              anchorPosition={{ top: +this.state.y0, left: +this.state.x0 }}
-              probeType={'readOnly'}
-              pvs={[{pvname:this.state.pvname,initialized:initialized}]}
-              handleClose={this.handleContextMenuClose}
-
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-            />
-            {initialized===true &&
-              <React.Fragment>
-                <FlexibleTankComponent
-                  min={min}
-                  max={max}
-                  units={units}
-                  value={value}
-                  ringWidth={this.props.ringWidth}
-                  pv={this.state.pvname}
-                  color={color}
-                />
-
-                {/* <svg  width={this.props.width} height={this.props.height}>
-                  <text
-                  x={(x0+x1)/2}
-                  y={y1+valueOffsetY}
-                  textAnchor='middle'
-                  className={classes.textValue}
-                  >
-
-                  {value+units}
-                  </text>
-
-
-                  <linearGradient id={'rect-gradient'} >
-
-                  <stop offset="0%"  stopColor={this.props.theme.palette.primary.main} />
-                  <stop offset="100%" stopColor={this.props.theme.palette.type==='dark'?this.props.theme.palette.grey['300']:this.props.theme.palette.grey['200']} />
-                  </linearGradient>
-
-                  <path
-                  style={{opacity:1,
-                  fill:'none',
-                  fillOpacity:1,
-                  stroke:'url(#rect-gradient)',
-                  strokeWidth:ringWidth,
-                  strokeMiterlimit:4,
-                  strokeDasharray:'none',
-                  strokeOpacity:1}}
-
-
-
-                  d={"M "+x0+" "+y0+ " A "+radius+" "+radius+" 0 0 1 "+x1+" "+y1 }/>
-
-
-
-                  <path
-                  fill={this.props.theme.palette.secondary.main}
-
-
-
-                  transform={'rotate('+ needleRotation +" "+(x0+x1)/2 +' ' +y1+ ')' }
-
-                  d={"M "+(xOffset-6)+" "+(y0-1)+" "+ (xOffset +y1-yOffset)+ " "+(y0-4) +" "+ (xOffset +y1-yOffset)+ " "+(y0+4)+" " +(xOffset-6)+" "+(y0+1)
-                  +" " + (xOffset-6)+" "+(y0-1)}/>
-
-
-
-
-                  {this.getTickValues(min,max, 6,x0,x1,y1,xOffset,radialTextOffset)}
-                </svg> */}
-
-
-              </React.Fragment>
-            }
-
-            {(initialized===false||initialized==='undefined') &&
-
+      }
+
+
+
+
+
+      //console.log(units)
+      return (
+
+        <div style={{width:'100%',height:'100%'}} onContextMenu={this.handleToggleContextMenu}>
+          <DataConnection
+            pv={pv}
+            macros={macros}
+            usePvLabel={usePvLabel}
+            usePrecision={usePrecision}
+            handleInputValue={this.handleInputValue}
+            handleMetadata={this.handleMetadata}
+            outputValue=  {this.state.outputValue}
+            useStringValue={useStringValue}
+            handleInputValueLabel={this.handleInputValueLabel}
+          />
+          <ContextMenu
+            disableProbe={this.props.disableProbe}
+            open={this.state.openContextMenu}
+            anchorReference="anchorPosition"
+            anchorPosition={{ top: +this.state.y0, left: +this.state.x0 }}
+            probeType={'readOnly'}
+            pvs={[{pvname:this.state.pvname,initialized:initialized}]}
+            handleClose={this.handleContextMenuClose}
+
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'left',
+            }}
+          />
+          {initialized===true &&
+            <React.Fragment>
               <FlexibleTankComponent
-                min={0}
-                max={100}
-                units={''}
-                value={0}
-                ringWidth={this.props.ringWidth}
-                pvname={this.state.pvname}
-                disabled
-      />
+                min={min}
+                max={max}
+                units={units}
+                value={value}
+
+                pv={this.state.pvname}
+                color={color}
+                showValue={this.props.showValue}
+                showTicks={this.props.showTicks}
+              />
+
+              {/* <svg  width={this.props.width} height={this.props.height}>
+                <text
+                x={(x0+x1)/2}
+                y={y1+valueOffsetY}
+                textAnchor='middle'
+                className={classes.textValue}
+                >
+
+                {value+units}
+                </text>
+
+
+                <linearGradient id={'rect-gradient'} >
+
+                <stop offset="0%"  stopColor={this.props.theme.palette.primary.main} />
+                <stop offset="100%" stopColor={this.props.theme.palette.type==='dark'?this.props.theme.palette.grey['300']:this.props.theme.palette.grey['200']} />
+                </linearGradient>
+
+                <path
+                style={{opacity:1,
+                fill:'none',
+                fillOpacity:1,
+                stroke:'url(#rect-gradient)',
+                strokeWidth:ringWidth,
+                strokeMiterlimit:4,
+                strokeDasharray:'none',
+                strokeOpacity:1}}
 
 
 
-    }
-  </div>
+                d={"M "+x0+" "+y0+ " A "+radius+" "+radius+" 0 0 1 "+x1+" "+y1 }/>
+
+
+
+                <path
+                fill={this.props.theme.palette.secondary.main}
+
+
+
+                transform={'rotate('+ needleRotation +" "+(x0+x1)/2 +' ' +y1+ ')' }
+
+                d={"M "+(xOffset-6)+" "+(y0-1)+" "+ (xOffset +y1-yOffset)+ " "+(y0-4) +" "+ (xOffset +y1-yOffset)+ " "+(y0+4)+" " +(xOffset-6)+" "+(y0+1)
+                +" " + (xOffset-6)+" "+(y0-1)}/>
+
+
+
+
+                {this.getTickValues(min,max, 6,x0,x1,y1,xOffset,radialTextOffset)}
+              </svg> */}
+
+
+            </React.Fragment>
+          }
+
+          {(initialized===false||initialized==='undefined') &&
+
+            <FlexibleTankComponent
+              min={0}
+              max={100}
+              units={''}
+              value={0}
+
+              pvname={this.state.pvname}
+              disabled
+              showValue={this.props.showValue}
+              showTicks={this.props.showTicks}
+            />
+
+
+
+          }
+        </div>
 
 )
 }
@@ -641,16 +679,22 @@ Tank.propTypes = {
   units:PropTypes.string,
   /** Directive to fill the label with the value contained in the  EPICS pv's DESC field. */
   usePvLabel:PropTypes.bool,
-  /** Custom Tank ring withd to be used */
-  ringWidth:PropTypes.number,
+  /** Directive to show the istantaneous value */
+  showValue:PropTypes.bool,
+  /** Directive to show the tick values */
+  showTicks:PropTypes.bool,
+
 };
 
 Tank.defaultProps = {
+
   debug:false,
   alarmSensitive:false,
   min:0,
   max:100,
   usePrecision:false,
+  showValue:true,
+  showTicks:true
 
 };
 

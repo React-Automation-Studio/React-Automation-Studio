@@ -417,11 +417,14 @@ On a desktop running Chrome, whilst viewing the website, click on the 3 dots at 
 
 **Note**: Unless HTTPS is enabled then when viewing the PWA, a banner at the top stating that the webapp is unsecure will appear,
 
-# 6 Contributing
+# 6 Theme and color scheme
+The theme and color scheme is currently hard coded but can be edited in `ReactApp/src/App.js` on line 66.
+
+# 7 Contributing
 
 Site specific components and app screens should be kept in your repository. If you wish to contribute to the main repository for bug fixes then this must be done in  the main repository at https://github.com/wduckitt/React-Automation-Studio. If you wish to add in new components then please create them in the staging folder. If the new component requires custom EPICS code then please add it to the demo IOC.
 
-# 7 Contact
+# 8 Contact
 
 Contact us at rasadmin@tlabs.ac.za
 

@@ -7,11 +7,13 @@ The system has been containerised with Docker and version controlled as a mono-r
 
 This repository is the master repository which  contains the code base and demos for each the component and interactive UI's that depend on the demo IOC micro service.
 
+
+
+The repository can be checked out and the demos can be explored. Contributors can also add components and add in features. The master repository is available at:
+
 **Master repository:**
 
 https://github.com/wduckitt/React-Automation-Studio
-
-The repository can be checked out and the demos can be explored. Contributors can also add components and add in features. The master repository is available at:
 
 
 If you wish to customize the project and create user interfaces for your EPICS control system then you should clone the boiler plate repository at which pulls in this code base as a Git submodule:

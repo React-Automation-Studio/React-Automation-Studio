@@ -39,6 +39,18 @@ We have integrated selected components from the Material-UI React component fram
 Some components can handle multiple PVs such as the graph or single PVs such as text inputs. For each of the components the PVs name can be declared using macros. The macros are replaced at component instantiation. This allows the  design of complex user interfaces that can be reused by simply grouping the components and changing the global macro to point to another system.
 
 
+![picture](./ReactApp/img/contextMenu.png)
+
+*Fig 2. An example of a context menu and a diagnostic probe user interface*
+
+Many of the components such as TextInputs and TextOutputs have embedded diagnostic features such as a context menu and diagnostic probe as shown in figure 2.
+
+![picture](./ReactApp/img/beamline.png)
+
+*Fig 3. An example of a desktop beamline control system ui*
+
+Apart form mobile UIs complex UIs suitable for desktop systems can also be created as is shown in figure 3.
+
 
 *3. Styleguide*
 
@@ -54,6 +66,9 @@ In this release, and with authentication enabled, the user name and password are
 
 Access rights can be controlled though a JSON file which contains user access groups and rules for defining PV access using regular expressions in the same way that the EPICS Gatewayaccess is defined. All of the components in React Automation studio currently indicate access rights to the PV.
 
+
+
+**This repository is the master repository which  contains the codebase and demos for each the component and interactive UI's that depend on the demo IOC micro service. The repository can be checked out and the demos can be exlpored. Contributors can also add components and add in features. If you wish to customize the project and create user interfaces for your EPICS control system then you should clone the boilier plate repository at https://github.com/wduckitt/React-Automation-Studio-Example-Project-1 which pulls in this code base as a Git submodule.**
 
 
 # 1 Installation
@@ -74,8 +89,12 @@ And docker-compose:
 https://docs.docker.com/compose/install/
 
 
-1st clone this repo
+1st clone this repo:
 
+```bash
+git  clone https://github.com/wduckitt/React-Automation-Studio.git
+
+```
 
 Then in React Automation Studio installation folder run:
 ```bash
@@ -101,14 +120,30 @@ docker-compose -f docker-compose-dev.yml up
 ```
 Will launch the development version with the demoIOC's and styleguide.
 
-And:
+
 
 ```bash
 docker-compose -f docker-compose-administator.yml run administrator
+
 ```
 will launch the username, login and password administration functions environment.
 
-Initially to check that everything is working only bring up the production version by running
+
+And:
+
+```bash
+docker-compose -f docker-compose-dev-styleguide-dev.yml up
+```
+Will launch the development version of the styleguide.
+
+**Note**: Any of the above containers can be rebuilt by add **--build** at the end of the command.
+
+
+
+
+
+
+**Initially to check that everything is working only bring up the production version by running**
 
 ```bash
 docker-compose  up
@@ -343,3 +378,51 @@ The pvServer and node development environment, will need to be restarted, and th
 Both the pvServer and the node clientserver will automatically detect the change.
 
 The built client will be then served  https://customURL:9000/, the styleguide at https://customURL:6060/ and the dev client at http://127.0.0.1:3000/ or http://hostip:3000/
+
+
+# 4 Folder structure
+This section has some notes on  systems folder structure:
+
+The installation folder is referenced below  as:
+```bash
+./
+```
+`./administrator`contains the source files for the user administration utility
+
+Inside: `./certificates`the certificates according to 3.3 are placed.
+
+Inside: `./docker`the docker files that build the conatiners that are used by the docker-compose files are placed.
+
+Inside: `./epics`the demo  IOC that interacts with the Demo react screens is located.
+
+`./frontendServer`contains the source files for Node Express serves that serves the client UIs.
+
+`./pvServer`contains the source files for EPCIS process variable server.
+
+
+
+`./ReactApp`contains the source files for the web app. They can be edited as is described in Section 2.
+
+`./styleguideServer`contains the source files for Node Express serves that serves the style guide.
+
+`./users` contains the user access configuration files as per section 3.
+
+# 5 Running the web app as PWA
+
+The automatic PWA installation notification is currently disabled. Installation can still occur manually.
+
+On a mobile running Chrome, whilst viewing the website, click on the 3 dots at the top right and then click add to home. Follow the onscreen instructions to install.
+
+On a desktop running Chrome, whilst viewing the website, click on the 3 dots at the top right and the click more tools and then create shortcut. Tick open as window and then create and the PWA will be installed on your desktop.
+
+**Note**: Unless HTTPS is enabled then when viewing the PWA, a banner at the top stating that the webapp is unsecure will appear,
+
+# 6 Contributing
+
+Site specific components and app screens should be kept in your repository. If you wish to contribute to the main repository for bug fixes then this must be done in  the main repository at https://github.com/wduckitt/React-Automation-Studio. If you wish to add in new components then please create them in the staging folder. If the new component requires custom EPICS code then please add it to the demo IOC.
+
+# 7 Contact
+
+Contact us at rasadmin@tlabs.ac.za
+
+# Changelog

@@ -27,6 +27,7 @@ import CheckBox from '../../BaseComponents/CheckBox';
 import ThumbWheel from '../../BaseComponents/ThumbWheel';
 import Gauge from '../../BaseComponents/Gauge';
 import Tank from '../../BaseComponents/Tank';
+import ProgressBar from '../../BaseComponents/ProgressBar';
 import StyledIconIndicator from '../../BaseComponents/StyledIconIndicator';
 import lime from '@material-ui/core/colors/lime';
 import SideBar from '../../SystemComponents/SideBar';
@@ -103,13 +104,19 @@ class MobileDemo2 extends React.Component {
                 prec_decimal={1}
               />
             </Grid>
-            <Grid item xs={12} sm={6} lg={2}>
+            <Grid item xs={12} sm={3} lg={2}>
               <Gauge  pv='pva://$(device):test3' macros={{'$(device)':'testIOC'}}   usePvLabel={true} usePrecision={true} prec={3} min={-10000} max={10000} />
             </Grid>
-            <Grid item xs={12} sm={6} lg={1}>
-              <Tank  pv='pva://$(device):test3' macros={{'$(device)':'testIOC'}}   usePvLabel={true} usePrecision={true} prec={3} min={-10000} max={10000} />
+            <Grid item xs={6} sm={3}  md= {3} lg={2} xl={1}>
+              <ProgressBar  pv='pva://$(device):test3' macros={{'$(device)':'testIOC'}} units={'V'}  usePvLabel={true} usePrecision={true} prec={3} min={-10000} max={10000} />
             </Grid>
-            <Grid item xs={12} sm={6} lg={1}>
+            <Grid item xs={6} sm={3}  md= {3} lg={2} xl={1}>
+                <ProgressBar  pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}   usePvLabel={true} usePrecision={true} prec={3} usePvMinMax={true} alarmSensitive={true}/>
+            </Grid>
+            <Grid item xs={6} sm={3}  md= {3} lg={2} xl={1}>
+              <Tank  pv='pva://$(device):test3' macros={{'$(device)':'testIOC'}} units={'V'}  usePvLabel={true} usePrecision={true} prec={3} min={-10000} max={10000} />
+            </Grid>
+            <Grid item xs={6} sm={3}  md= {3} lg={2} xl={1}>
                 <Tank  pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}   usePvLabel={true} usePrecision={true} prec={3} usePvMinMax={true} alarmSensitive={true}/>
             </Grid>
 

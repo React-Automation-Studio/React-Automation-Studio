@@ -4,6 +4,25 @@ React Automation Studio is a new software platform to enable the control of larg
 
 The system has been containerised with Docker and version controlled as a mono-repository using Git.
 
+
+This repository is the master repository which  contains the code base and demos for each the component and interactive UI's that depend on the demo IOC micro service.
+
+**Master repository:**
+
+https://github.com/wduckitt/React-Automation-Studio
+
+The repository can be checked out and the demos can be explored. Contributors can also add components and add in features. The master repository is available at:
+
+
+If you wish to customize the project and create user interfaces for your EPICS control system then you should clone the boiler plate repository at which pulls in this code base as a Git submodule:
+
+**Boiler plate repository:**
+
+ https://github.com/wduckitt/React-Automation-Studio-Example-Project-1
+
+
+
+
 Each of the Docker containers are deployed as micro services and environment variables can be configured to deploy the system on different ports, or to enable user authentication and authorisation or to serve the application on a unique URL or on the localhost. Separate Docker commands exist to load the development and production version. These containerised environments allows for precise versioning of packages used and prevents deployment dependency issues.
 
 The software stack for React Automation Studio is shown in Fig. 1 and an overview of the system components are give below:
@@ -68,7 +87,6 @@ Access rights can be controlled though a JSON file which contains user access gr
 
 
 
-**This repository is the master repository which  contains the code base and demos for each the component and interactive UI's that depend on the demo IOC micro service. The repository can be checked out and the demos can be explored. Contributors can also add components and add in features. If you wish to customize the project and create user interfaces for your EPICS control system then you should clone the boiler plate repository at https://github.com/wduckitt/React-Automation-Studio-Example-Project-1 which pulls in this code base as a Git submodule.**
 
 
 # 1 Installation

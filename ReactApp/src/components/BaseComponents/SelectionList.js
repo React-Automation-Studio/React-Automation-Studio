@@ -145,6 +145,7 @@ class SelectionList extends React.Component {
     ['metadata']:{},
     ['severity']:'',
     ['selectedIndex']: -1,
+    ['newValueTrigger']:0,
   }
   this.handleInputValue= this.handleInputValue.bind(this);
   this.handleInputValueLabel= this.handleInputValueLabel.bind(this);
@@ -232,7 +233,8 @@ handleListItemClick=(event, item)=>{
   // console.log(item)
   this.setState({
     ['value']: item,
-    ['outputValue']: item
+    ['outputValue']: item,
+    ['newValueTrigger']:this.state.newValueTrigger+1
   });
 };
 
@@ -411,6 +413,7 @@ render() {
         debug={this.props.debug}
         handleInputValueLabel={this.handleInputValueLabel}
         intialLocalVariableValue={this.props.intialLocalVariableValue}
+        newValueTrigger={this.state.newValueTrigger}
       />
 
       {initialized===true &&
@@ -492,6 +495,8 @@ SelectionList.propTypes = {
   horizontal: PropTypes.bool,
   /** If defined, this array of strings overides the default EPICS MBBI/O pv strings and are displayed as the choices in the SelectionList component*/
   custom_selection_strings: PropTypes.array,
+  /** local variable intialization value*/
+  intialLocalVariableValue:PropTypes.string
 
 };
 

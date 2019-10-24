@@ -147,11 +147,12 @@ class RadioButtonGroup extends React.Component {
     ['metadata']:{},
     ['severity']:'',
     ['selectedIndex']: -1,
+    ['newValueTrigger']:0,
   }
   this.handleInputValue= this.handleInputValue.bind(this);
   this.handleInputValueLabel= this.handleInputValueLabel.bind(this);
   this.handleMetadata= this.handleMetadata.bind(this);
-  this.handleListItemClick= this.handleListItemClick.bind(this);
+  // this.handleListItemClick= this.handleListItemClick.bind(this);
   this.getRadioButtonItems= this.getRadioButtonItems.bind(this);
   this.handleChange=this.handleChange.bind(this);
 }
@@ -229,20 +230,21 @@ handleOnBlur= event =>{
   ['value']:this.state['inputValue'],
   ['metadata'] :this.state['newMetadata'] });
 }
-
-handleListItemClick=(event, item)=>{
-  // console.log(item)
-  this.setState({
-    ['value']: item,
-    ['outputValue']: item
-  });
-};
+//
+// handleListItemClick=(event, item)=>{
+//   // console.log(item)
+//   this.setState({
+//     ['value']: item,
+//     ['outputValue']: item
+//   });
+// };
 
 
 handleChange =(event) => {
   this.setState({
     ['value']: event.target.value,
-    ['outputValue']: event.target.value
+    ['outputValue']: event.target.value,
+    ['newValueTrigger']:this.state.newValueTrigger+1
   });
 
 };
@@ -407,6 +409,7 @@ render() {
         handleInputValue={this.handleInputValue}
         handleMetadata={this.handleMetadata}
         outputValue=  {this.state.outputValue}
+        newValueTrigger={this.state.newValueTrigger}
         useStringValue={true}
         debug={this.props.debug}
         handleInputValueLabel={this.handleInputValueLabel}
@@ -467,6 +470,8 @@ render() {
         horizontal: PropTypes.bool,
         /** If defined, this array of strings overides the default EPICS MBBI/O pv strings and are displayed as the choices in the RadioButtonGroup component*/
         custom_selection_strings: PropTypes.array,
+        /** local variable intialization value*/
+        intialLocalVariableValue:PropTypes.string
 
       };
 

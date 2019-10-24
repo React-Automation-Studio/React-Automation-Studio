@@ -271,6 +271,7 @@ render() {
         newValueTrigger={this.state.newValueTrigger}
         debug={this.props.debug}
         handleInputValueLabel={this.handleInputValueLabel}
+        intialLocalVariableValue={this.props.intialLocalVariableValue}
       />
 
       {initialized===true &&
@@ -352,6 +353,8 @@ SelectionInput.propTypes = {
   usePvUnits: PropTypes.bool,
   /** Custom units to be used, if `usePvUnits` is not defined. */
   units:PropTypes.string,
+  /** local variable intialization value*/
+  intialLocalVariableValue:PropTypes.string
 
 };
 

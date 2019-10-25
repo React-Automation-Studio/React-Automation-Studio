@@ -1,6 +1,6 @@
 {
   "name": "react-automation-studio",
-  "version": "1.01",
+  "version": "1.0.1",
   "private": true,
   "dependencies": {
     "@material-ui/core": "4.3.2",

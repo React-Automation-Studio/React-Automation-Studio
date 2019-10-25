@@ -72,6 +72,10 @@ module.exports = {
         usageMode: 'hide' // 'hide' | 'collapse' | 'expand'
       },
       {
+        name: 'Working with Components',
+        content: 'src/docs/WorkingWithComponents.md',
+      },
+      {
         name: 'Base Components',
        // content: 'docs/ui.md',
         components: 'src/components/BaseComponents/*.js',

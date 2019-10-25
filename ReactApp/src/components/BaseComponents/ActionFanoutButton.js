@@ -160,6 +160,7 @@ multipleDataConnections = () => {
           handleMetadata={this.handleMetadata(this.state.dataPVs[pv].pvname)}
           outputValue={this.state.value}
           newValueTrigger={this.state.newValueTrigger}
+          intialLocalVariableValue={this.props.intialLocalVariableValue}
         />
 
 
@@ -310,6 +311,9 @@ ActionFanoutButton.propTypes = {
   useStringValue:PropTypes.bool,
   /** If defined, then the DataConnection debugging information will be displayed*/
   debug:PropTypes.bool,
+  /** local variable intialization value*/
+  intialLocalVariableValue:PropTypes.string
+
 
 };
 

@@ -312,6 +312,7 @@ render() {
         useStringValue={useStringValue}
         debug={this.props.debug}
         handleInputValueLabel={this.handleInputValueLabel}
+        intialLocalVariableValue={this.props.intialLocalVariableValue}
       />
       <React.Fragment>
         <ContextMenu
@@ -377,6 +378,8 @@ TextUpdate.propTypes = {
   debug:PropTypes.bool,
   /** If defined, then the string representaion of the number can be formatted using the mathjs format function eg.  numberFormat={{notation: 'engineering',precision: 3}}. See https://mathjs.org/docs/reference/functions/format.html for more examples*/
   numberFormat:PropTypes.object,
+  /** local variable intialization value*/
+  intialLocalVariableValue:PropTypes.string
 
 };
 

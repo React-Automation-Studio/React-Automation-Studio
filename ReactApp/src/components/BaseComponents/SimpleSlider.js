@@ -294,6 +294,7 @@ render() {
         useStringValue={useStringValue}
 
         handleInputValueLabel={this.handleInputValueLabel}
+        intialLocalVariableValue={this.props.intialLocalVariableValue}
       />
 
       {initialized===true &&
@@ -397,6 +398,8 @@ render() {
         debug:PropTypes.bool,
         /** If defined, the value will be increment or decremented in the define step intervals*/
         steps:PropTypes.number,
+        /** local variable intialization value*/
+        intialLocalVariableValue:PropTypes.string
 
 
       };

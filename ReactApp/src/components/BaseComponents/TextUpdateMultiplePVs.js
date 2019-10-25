@@ -225,7 +225,7 @@ render() {
         macros:PropTypes.object,
         /** Directive to fill the label with the value contained in the  EPICS pv's DESC field. */
         usePvLabel:PropTypes.bool,
-        /** Directive to use the units contained in the  EPICS pv's EGU field. */
+    
       };
 
       TextUpdateMultiplePVs.contextType=AutomationStudioContext;

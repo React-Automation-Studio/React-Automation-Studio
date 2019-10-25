@@ -50,14 +50,14 @@ const styles = theme => ({
   },
 });
 /**
- * The ActionButton Component is a wrapper on the Material-UI Button component. The ActionButton will ouput the `actionValue` to the process variable when pressed. The ActionButton component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
- * The margins and spacing must be controlled from the parent component.<br/><br/>
- * Material-UI Button Demos:
- * https://material-ui.com/demos/buttons/<br/><br/>
- * Material-UI Button API:
- * https://material-ui.com/api/button/
+* The ActionButton Component is a wrapper on the Material-UI Button component. The ActionButton will ouput the `actionValue` to the process variable when pressed. The ActionButton component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
+* The margins and spacing must be controlled from the parent component.<br/><br/>
+* Material-UI Button Demos:
+* https://material-ui.com/demos/buttons/<br/><br/>
+* Material-UI Button API:
+* https://material-ui.com/api/button/
 
- */
+*/
 class ActionButton extends React.Component {
   constructor(props) {
     super(props);
@@ -134,7 +134,7 @@ handleButtonClick = name => event => {
   //console.log(event.target.checked)
 
   this.setState({ ['value']: this.props.actionValue,
-                  ['newValueTrigger']:this.state.newValueTrigger+1});
+  ['newValueTrigger']:this.state.newValueTrigger+1});
 };
 
 
@@ -188,11 +188,11 @@ render() {
         handleMetadata={this.handleMetadata}
         outputValue=  {this.state.value}
         useStringValue={useStringValue}
-          newValueTrigger={this.state.newValueTrigger}
-
-          handleInputValueLabel={this.handleInputValueLabel}
-          debug={this.props.debug}
-        />
+        newValueTrigger={this.state.newValueTrigger}
+        intialLocalVariableValue={this.props.intialLocalVariableValue}
+        handleInputValueLabel={this.handleInputValueLabel}
+        debug={this.props.debug}
+      />
 
       {initialized===true &&
         <div>
@@ -215,23 +215,23 @@ render() {
       }
 
       {(initialized===false||initialized==='undefined') &&
-      <div>
+        <div>
 
-        <FormControlLabel className={classes.FormControl}
-          control={
-            <Button disabled={true}  variant="contained" color={typeof this.props.color==='undefined'?"primary":this.props.color} className={classes.Button}  onClick={this.handleButtonClick('value')}>
+          <FormControlLabel className={classes.FormControl}
+            control={
+              <Button disabled={true}  variant="contained" color={typeof this.props.color==='undefined'?"primary":this.props.color} className={classes.Button}  onClick={this.handleButtonClick('value')}>
 
-            {this.state.pvname}
+                {this.state.pvname}
 
 
-            </Button>
-          }
+              </Button>
+            }
             label={"Connecting to: "}
-          labelPlacement={typeof this.props.labelPlacement !== 'undefined'? this.props.labelPlacement:"top"}
-        />
+            labelPlacement={typeof this.props.labelPlacement !== 'undefined'? this.props.labelPlacement:"top"}
+          />
 
 
-      </div>
+        </div>
       }
 
 
@@ -262,14 +262,16 @@ ActionButton.propTypes = {
   useStringValue:PropTypes.bool,
   /** If defined, then the DataConnection debugging information will be displayed*/
   debug:PropTypes.bool,
+  /** local variable intialization value*/
+  intialLocalVariableValue:PropTypes.string
 
 };
 
 ActionButton.defaultProps = {
-    debug: false,
-    color: 'primary',
-    useStringValue: false,
-    usePvLabel: false
+  debug: false,
+  color: 'primary',
+  useStringValue: false,
+  usePvLabel: false
 };
 
 ActionButton.contextType=AutomationStudioContext;

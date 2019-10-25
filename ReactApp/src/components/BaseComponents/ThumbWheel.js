@@ -283,6 +283,7 @@ render() {
         outputValue=  {this.state.value}
         useStringValue={useStringValue}
         handleInputValueLabel={this.handleInputValueLabel}
+        intialLocalVariableValue={this.props.intialLocalVariableValue}
       />
 
       {initialized===true &&
@@ -384,6 +385,8 @@ ThumbWheel.propTypes = {
   prec_integer:PropTypes.number,
   /** If defined this sets the precision of the decimal values of the widget*/
   prec_decimal:PropTypes.number,
+  /** local variable intialization value*/
+  intialLocalVariableValue:PropTypes.string
 
 };
 ThumbWheel.defaultProps = {

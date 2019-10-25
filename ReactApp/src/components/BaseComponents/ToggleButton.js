@@ -285,6 +285,7 @@ render() {
         outputValue=  {this.state.value}
         useStringValue={false}
         handleInputValueLabel={this.handleInputValueLabel}
+        intialLocalVariableValue={this.props.intialLocalVariableValue}
       />
 
 
@@ -368,6 +369,8 @@ ToggleButton.propTypes = {
   momentary:PropTypes.bool,
   /** An array of custom strings to be displayed on the button for a value of 0 or 1  i.e. ['Off','On'], If not defined then EPICS enum_strs will be used*/
   custom_selection_strings:PropTypes.array,
+  /** local variable intialization value*/
+  intialLocalVariableValue:PropTypes.string
 };
 
 ToggleButton.defaultProps = {

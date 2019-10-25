@@ -550,6 +550,7 @@ function getTickValues(props,min,max,numberOfTicks,x0,y0,x1,x2,y1,y2,xOffset,yOf
             outputValue=  {this.state.outputValue}
             useStringValue={useStringValue}
             handleInputValueLabel={this.handleInputValueLabel}
+            intialLocalVariableValue={this.props.intialLocalVariableValue}
           />
           <ContextMenu
             disableProbe={this.props.disableProbe}
@@ -577,6 +578,7 @@ function getTickValues(props,min,max,numberOfTicks,x0,y0,x1,x2,y1,y2,xOffset,yOf
                 color={color}
                 showValue={this.props.showValue}
                 showTicks={this.props.showTicks}
+
               />
 
               {/* <svg  width={this.props.width} height={this.props.height}>
@@ -683,6 +685,8 @@ Tank.propTypes = {
   showValue:PropTypes.bool,
   /** Directive to show the tick values */
   showTicks:PropTypes.bool,
+  /** local variable intialization value*/
+  intialLocalVariableValue:PropTypes.string
 
 };
 

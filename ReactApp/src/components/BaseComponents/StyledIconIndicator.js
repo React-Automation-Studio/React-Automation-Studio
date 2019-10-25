@@ -267,6 +267,7 @@ render() {
         useStringValue={useStringValue}
         debug={this.props.debug}
         handleInputValueLabel={this.handleInputValueLabel}
+        intialLocalVariableValue={this.props.intialLocalVariableValue}
       />
       <ContextMenu
         disableProbe={this.props.disableProbe}
@@ -351,6 +352,8 @@ StyledIconIndicator.propTypes = {
   offColor: PropTypes.string,
   /** If defined, the position of the label relative to the widget*/
   labelPlacement: PropTypes.oneOf(['start', 'end', 'top', 'bottom']),
+  /** local variable intialization value*/
+  intialLocalVariableValue:PropTypes.string
 
 };
 

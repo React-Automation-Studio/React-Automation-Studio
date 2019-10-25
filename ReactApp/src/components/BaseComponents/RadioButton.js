@@ -216,6 +216,7 @@ render() {
         outputValue=  {this.state.value}
         useStringValue={useStringValue}
         handleInputValueLabel={this.handleInputValueLabel}
+        intialLocalVariableValue={this.props.intialLocalVariableValue}
       />
 
       {initialized===true &&
@@ -276,6 +277,8 @@ RadioButton.propTypes = {
   debug:PropTypes.bool,
   /** If defined, the label will be placed at this position*/
   labelPosition: PropTypes.oneOf(['start', 'end', 'top', 'bottom']),
+  /** local variable intialization value*/
+  intialLocalVariableValue:PropTypes.string
 
 };
 

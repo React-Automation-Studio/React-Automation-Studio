@@ -549,6 +549,7 @@ function getTickValues(props,min,max,numberOfTicks,x0,x1,x2,y1,y2,xOffset,yOffse
             outputValue=  {this.state.outputValue}
             useStringValue={useStringValue}
             handleInputValueLabel={this.handleInputValueLabel}
+            intialLocalVariableValue={this.props.intialLocalVariableValue}
           />
           <ContextMenu
             disableProbe={this.props.disableProbe}
@@ -681,6 +682,8 @@ ProgressBar.propTypes = {
   showValue:PropTypes.bool,
   /** Directive to show the tick values */
   showTicks:PropTypes.bool,
+  /** local variable intialization value*/
+  intialLocalVariableValue:PropTypes.string
 
 };
 

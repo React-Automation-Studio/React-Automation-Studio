@@ -509,6 +509,7 @@ function getTickValues(props,min,max,numberOfTicks,x0,x1,y1,xOffset,radialTextOf
               outputValue=  {this.state.outputValue}
               useStringValue={useStringValue}
               handleInputValueLabel={this.handleInputValueLabel}
+              intialLocalVariableValue={this.props.intialLocalVariableValue}
             />
             <ContextMenu
               disableProbe={this.props.disableProbe}
@@ -635,6 +636,9 @@ Gauge.propTypes = {
   usePvLabel:PropTypes.bool,
   /** Custom gauge ring withd to be used */
   ringWidth:PropTypes.number,
+  /** local variable intialization value*/
+  intialLocalVariableValue:PropTypes.string
+
 };
 
 Gauge.defaultProps = {

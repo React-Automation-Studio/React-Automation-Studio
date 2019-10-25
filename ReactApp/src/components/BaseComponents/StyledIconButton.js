@@ -222,6 +222,7 @@ render() {
         outputValue=  {this.state.value}
         useStringValue={useStringValue}
         handleInputValueLabel={this.handleInputValueLabel}
+        intialLocalVariableValue={this.props.intialLocalVariableValue}
       />
 
       {initialized===true &&
@@ -285,6 +286,8 @@ StyledIconButton.propTypes = {
   debug:PropTypes.bool,
   /** If defined, the position of the label relative to the widget*/
   labelPlacement: PropTypes.oneOf(['start', 'end', 'top', 'bottom']),
+  /** local variable intialization value*/
+  intialLocalVariableValue:PropTypes.string
 
 
 };

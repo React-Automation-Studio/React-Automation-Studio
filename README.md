@@ -449,3 +449,12 @@ Site specific components and app screens should be kept in your repository. If y
 Contact us at rasadmin@tlabs.ac.za
 
 # Changelog
+
+**V1.01 Friday 25 October 2019**
+
+Minor bug fix to Selection List and Radio Button Group components
+
+Updates to documentation, explanations of initial local variable value properties that were missing from some components.
+
+**V1.00 Monday 21 October 2019**
+Initial Public Release

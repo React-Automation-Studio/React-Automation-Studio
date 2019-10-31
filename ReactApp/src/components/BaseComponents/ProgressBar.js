@@ -271,7 +271,7 @@ function getTickValues(props,min,max,numberOfTicks,x0,x1,x2,y1,y2,xOffset,yOffse
 
 
     handleInputValue(inputValue,pvname,initialized,severity){
-      console.log("severity: ",severity);
+  //    console.log("severity: ",severity);
 
 
       this.setState({['value']	 :inputValue,

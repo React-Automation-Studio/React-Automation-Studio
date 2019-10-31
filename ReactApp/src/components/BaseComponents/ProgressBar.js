@@ -159,7 +159,16 @@ function getTickValues(props,min,max,numberOfTicks,x0,x1,x2,y1,y2,xOffset,yOffse
       const min=props.min;
       const max=props.max;
       const xOffset=0;
-      const yOffset=16;
+      let yOffset;
+      if (props.width >16){
+        yOffset=16;
+
+      }
+      else{
+       yOffset=0;  
+      }
+
+
       const radialTextOffset=0;
       const width=props.width;
       const height=props.width/2;

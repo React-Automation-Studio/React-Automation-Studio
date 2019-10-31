@@ -768,19 +768,19 @@ class ControlTestHarp1 extends React.Component {
                     <Grid
                       container
                       direction="row"
-                      justify="start"
-                      alignItems="start"
+                      justify="flex-start"
+                      alignItems="flex-start"
 
                     >
                       <Grid item sm={2}>
-                        <AppBar position="static" color="inherhit" >
+                        <AppBar position="static" color="inherit" >
                           <VerticalTabs
                             value={sideTabValue}
                             onChange={this.handleSideTabChange}
 
                             indicatorColor="primary"
                             textColor="primary"
-                            classes={{flexContainer: {  flexDirection: 'column'  }}}
+                          
 
 
                           >

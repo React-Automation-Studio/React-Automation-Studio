@@ -111,7 +111,7 @@ function getTickValues(props,min,max,numberOfTicks,x0,x1,x2,y1,y2,xOffset,yOffse
   }
   else{
     ticks.push(
-      <g key={i}
+      <g key={i=i+1}
       >
         <text
           className={classes.textTicks}
@@ -127,7 +127,7 @@ function getTickValues(props,min,max,numberOfTicks,x0,x1,x2,y1,y2,xOffset,yOffse
   }
       if (props.showValue===true)
       {ticks.push(
-        <g key={i}
+        <g key={i=i+1}
         >
           <text
             className={classes.textTicks}
@@ -165,7 +165,7 @@ function getTickValues(props,min,max,numberOfTicks,x0,x1,x2,y1,y2,xOffset,yOffse
 
       }
       else{
-       yOffset=0;  
+       yOffset=0;
       }
 
 

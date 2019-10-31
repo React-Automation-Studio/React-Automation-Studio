@@ -42,40 +42,40 @@ const {classes}= this.props;
       <Grid container   spacing={2}       direction="row"  justify="flex-start"  alignItems="center"       >
 
         <Grid item  xs={12}>
-        <TextOutput  pv='pva://$(device).NAME' macros={this.props['macros']}  label={'EPICS PV Name:'}/>
+          <TextOutput  pv='pva://$(device).NAME' macros={this.props['macros']}  label={'EPICS PV Name:'}/>
         </Grid>
         <Grid item  xs={12}>
-        <TextOutput  pv='pva://$(device).DESC' macros={this.props['macros']}  label={'EPICS PV DESC:'}/>
+          <TextOutput  pv='pva://$(device).DESC' macros={this.props['macros']}  label={'EPICS PV DESC:'}/>
         </Grid>
         <Grid item  xs={12}>
-        <TextOutput  pv='pva://$(device)'      macros={this.props['macros']}  useStringValue={true} label={'EPICS PV String Value:'} />
+          <TextOutput  pv='pva://$(device)'      macros={this.props['macros']}  useStringValue={true} label={'EPICS PV String Value:'} />
         </Grid>
         <Grid item  xs={12}>
-        <TextOutput  pv='pva://$(device)'      macros={this.props['macros']}  label={'EPICS PV Numerical Value:'}/>
+          <TextOutput  pv='pva://$(device)'      macros={this.props['macros']}  label={'EPICS PV Numerical Value:'}/>
         </Grid>
         <Grid item  xs={12}>
-        <TextInput   pv='pva://$(device)'      macros={this.props['macros']}  label={'EPICS PV Numerical Setpoint:'}/>
+          <TextInput   pv='pva://$(device)'      macros={this.props['macros']}  label={'EPICS PV Numerical Setpoint:'}/>
         </Grid>
         <Grid item  xs={12}>
-        <TextInput   pv='pva://$(device)'      macros={this.props['macros']}  useStringValue={true}  label={'EPICS PV String Setpoint:'}/>
+          <TextInput   pv='pva://$(device)'      macros={this.props['macros']}  useStringValue={true}  label={'EPICS PV String Setpoint:'}/>
         </Grid>
         <Grid item  xs={12}>
-        <SelectionInput   pv='pva://$(device)'      macros={this.props['macros']}    usePvLabel={true} useStringValue={true} custom_selection_strings={this.props.custom_selection_strings}/>
+          <SelectionInput   pv='pva://$(device)'      macros={this.props['macros']}    usePvLabel={true} useStringValue={true} custom_selection_strings={this.props.custom_selection_strings}/>
         </Grid>
         <Grid item  xs={12}>
-        <TextOutput  pv='pva://$(device).ZRST'      macros={this.props['macros']}  label={'EPICS PV ZRST:'}/>
+          <TextOutput  pv='pva://$(device).ZRST'      macros={this.props['macros']}  label={'EPICS PV ZRST:'}/>
         </Grid>
         <Grid item  xs={12}>
-        <TextOutput  pv='pva://$(device).ONST'      macros={this.props['macros']}  label={'EPICS PV ONST:'}/>
+          <TextOutput  pv='pva://$(device).ONST'      macros={this.props['macros']}  label={'EPICS PV ONST:'}/>
         </Grid>
         <Grid item  xs={6}>
-        <SelectionList   pv='pva://$(device)'      macros={this.props['macros']}    usePvLabel={true} useStringValue={true} custom_selection_strings={this.props.custom_selection_strings}/>
+          <SelectionList   pv='pva://$(device)'      macros={this.props['macros']}    usePvLabel={true} useStringValue={true} custom_selection_strings={this.props.custom_selection_strings}/>
         </Grid>
         <Grid item  xs={6}>
-        <RadioButtonGroup   pv='pva://$(device)'      macros={this.props['macros']}    usePvLabel={true} useStringValue={true} custom_selection_strings={this.props.custom_selection_strings}/>
+          <RadioButtonGroup   pv='pva://$(device)'      macros={this.props['macros']}    usePvLabel={true} useStringValue={true} custom_selection_strings={this.props.custom_selection_strings}/>
         </Grid>
         <Grid item  xs={12}>
-        <SelectionList horizontal  pv='pva://$(device)'     classes={{list:classes.list}} macros={this.props['macros']}    usePvLabel={true} useStringValue={true} custom_selection_strings={this.props.custom_selection_strings}/>
+          <SelectionList horizontal  pv='pva://$(device)'      macros={this.props['macros']}    usePvLabel={true} useStringValue={true} custom_selection_strings={this.props.custom_selection_strings}/>
         </Grid>
         </Grid>
 

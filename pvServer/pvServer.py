@@ -2,12 +2,15 @@
 import gevent
 from gevent import monkey; monkey.patch_all()
 import time
+import pymongo
 
 import threading
 
 from flask import Flask, render_template, session, request, jsonify
 from flask_socketio import SocketIO, emit, join_room, leave_room, \
     close_room, rooms, disconnect
+
+from bson.json_util import dumps
 
 from epics import PV
 import logging
@@ -36,6 +39,8 @@ print('REACT_APP_PyEpicsServerBASEURL: '+ str(os.environ['REACT_APP_PyEpicsServe
 print('REACT_APP_PyEpicsServerPORT: '+ str(os.environ['REACT_APP_PyEpicsServerPORT']))
 print('REACT_APP_PyEpicsServerNamespace: '+ str(os.environ['REACT_APP_PyEpicsServerNamespace']))
 print('REACT_APP_EnableLogin: '+ str(os.environ['REACT_APP_EnableLogin']))
+print('ENABLE_DATABASE: '+ str(os.environ['ENABLE_DATABASE']))
+print('DATABASE1: '+ str(os.environ['DATABASE1']))
 print("")
 #app = Flask(__name__, static_folder="../build/static", template_folder="../build")
 app = Flask(__name__)
@@ -254,6 +259,32 @@ def test_message(message):
                     pvlist['initialized']=False
                     clientPVlist[pvname1]=pvlist
                     clientPVlist[pvname1]['pv'].add_callback(onValueChanges,index=0)
+            elif "mongodb://" in pvname1:
+
+                print("mongodb database connection request: ",pvname1)
+                if(accessControl['permissions']['read']):
+                    if(accessControl['permissions']['write']):
+                        join_room(str(pvname1)+'rw')
+                        join_room(str(pvname1))
+                    else:
+                        join_room(str(pvname1)+'ro')
+                        join_room(str(pvname1))
+                myclient = pymongo.MongoClient("mongodb://"+ str(os.environ['DATABASE1'])+"/")
+                print("connecting: "+pvname1)
+                mydb = myclient["rfSystems"]
+                mycol=mydb["RF_K_LINE_DATA"]
+                X=mycol.find()
+                #for x in X:
+                    #print(x)
+                print("done: "+pvname1)
+                #print(dumps(X))
+                data=dumps(X)
+                d={'pvname': pvname1,'newmetadata': 'True','data': data}
+                socketio.emit(pvname1,d,room=pvname1,namespace='/pvServer')
+
+
+            else:
+                print("Unknown PV type")
 
 
         else:

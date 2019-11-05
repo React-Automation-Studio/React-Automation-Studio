@@ -48,4 +48,4 @@ VOLUME /pvServer/userAuthentication/users
 
 
 CMD python pvServer.py
-EXPOSE  5000 5001 5064 5065 8001
+EXPOSE  5000 5001 5064 5065 8001 27017

@@ -259,28 +259,7 @@ def test_message(message):
                     pvlist['initialized']=False
                     clientPVlist[pvname1]=pvlist
                     clientPVlist[pvname1]['pv'].add_callback(onValueChanges,index=0)
-            elif "mongodb://" in pvname1:
 
-                print("mongodb database connection request: ",pvname1)
-                if(accessControl['permissions']['read']):
-                    if(accessControl['permissions']['write']):
-                        join_room(str(pvname1)+'rw')
-                        join_room(str(pvname1))
-                    else:
-                        join_room(str(pvname1)+'ro')
-                        join_room(str(pvname1))
-                myclient = pymongo.MongoClient("mongodb://"+ str(os.environ['DATABASE1'])+"/")
-                print("connecting: "+pvname1)
-                mydb = myclient["rfSystems"]
-                mycol=mydb["RF_K_LINE_DATA"]
-                X=mycol.find()
-                #for x in X:
-                    #print(x)
-                print("done: "+pvname1)
-                #print(dumps(X))
-                data=dumps(X)
-                d={'pvname': pvname1,'newmetadata': 'True','data': data}
-                socketio.emit(pvname1,d,room=pvname1,namespace='/pvServer')
 
 
             else:
@@ -304,6 +283,96 @@ def test_message(message):
             else: print("Unknown PV type")
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
+
+
+@socketio.on('databaseRead', namespace='/pvServer')
+def databaseRead(message):
+    global clientPVlist,REACT_APP_DisableLogin
+    dbURL= str(message['dbURL'])
+
+    print("databaseRead: SSID: ",request.sid,' dbURL: ', dbURL)
+    print("message:",str(message))
+    authenticated=False
+    if REACT_APP_DisableLogin:
+        authenticated=True
+        accessControl={'userAuthorised':True,'permissions':{'read':True,'write':True}}
+    else :
+        accessControl=AutheriseUserAndPermissions(message['clientAuthorisation'],dbURL)
+        authenticated=accessControl['userAuthorised']
+
+    if accessControl['userAuthorised'] :
+        if "mongodb://" in dbURL:
+
+            print("mongodb database connection request: ",dbURL)
+            str1=dbURL.replace("mongodb://","")
+            strings=  str1.split(':')
+            if(len(strings)==3):
+                database= strings[0];
+                dbName=   strings[1];
+                colName=  strings[2];
+                print("database: ", database, "length: ", len(database))
+                print("dbName: "  ,   dbName, "length: ", len(dbName))
+                print("colName: " ,  colName, "length: ", len(colName))
+                ### must insert a better error detection here
+
+                if ((len(database)>0) and (len(dbName)>0) and (len(colName)>0)):
+                    if(accessControl['permissions']['read']):
+                        if(accessControl['permissions']['write']):
+                            join_room(str(dbURL)+'rw')
+                            join_room(str(dbURL))
+                        else:
+                            join_room(str(dbURL)+'ro')
+                            join_room(str(dbURL))
+                        try:
+                            print("connecting: "+dbURL)
+                            try:
+                                myclient = pymongo.MongoClient("mongodb://"+ str(os.environ[database])+"/")
+                            except:
+                                print("Unknown database ID:",database)
+                                raise Exception("Unknown database ID:",database)
+
+                            mydb = myclient[dbName]
+
+                            mycol=mydb[colName]
+                            try:
+                                query=message['query']
+                                print("using query:",query)
+                                X=mycol.find(query)
+                            except:
+                                X=mycol.find()
+
+
+                            #for x in X:
+                                #print(x)
+                            print("done: "+dbURL)
+                            #print(dumps(X))
+                            try:
+                                responseID=message['responseID']
+                            except:
+                                responseID="";
+
+                            data=dumps(X)
+                            d={'pvname': dbURL,'newmetadata': 'True','data': data}
+                            print("responseID",responseID)
+                            eventName='databaseData:'+dbURL+':responseID:' + str(responseID);
+                            print("eventName",eventName)
+                            socketio.emit(eventName,d,room=request.sid,namespace='/pvServer')
+                        except:
+                            print("could not connect to MongoDB: ",dbURL)
+                else:
+                    print("Malformed database URL, must be in format: mongodb://databaseID:database:collection")
+            else:
+                print("Malformed database URL, must be in format: mongodb://databaseID:database:collection")
+
+
+
+
+
+        else:
+            print("Unknown PV type")
+    else:
+        socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
+
 
 
 @socketio.on('AuthenticateClient', namespace='/pvServer')

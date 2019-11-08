@@ -16,6 +16,8 @@ from epics import PV
 import logging
 import os
 import sys
+import json
+from bson.objectid import ObjectId
 sys.path.insert(0, '../')
 sys.path.insert(0, 'userAuthentication/')
 
@@ -306,7 +308,14 @@ def databaseRead(message):
             print("mongodb database connection request: ",dbURL)
             str1=dbURL.replace("mongodb://","")
             strings=  str1.split(':')
-            if(len(strings)==3):
+            try:
+                Parametersstr=str1.split("Parameters:")[1]
+                parameters=json.loads(Parametersstr)
+            except:
+                raise Exception("Parameters are not defined")
+
+            print("Parameters:",str(parameters))
+            if(len(strings)>=3):
                 database= strings[0];
                 dbName=   strings[1];
                 colName=  strings[2];
@@ -335,7 +344,7 @@ def databaseRead(message):
 
                             mycol=mydb[colName]
                             try:
-                                query=message['query']
+                                query=parameters['query']
                                 print("using query:",query)
                                 X=mycol.find(query)
                             except:
@@ -372,6 +381,99 @@ def databaseRead(message):
             print("Unknown PV type")
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
+
+@socketio.on('databaseUpdateOne', namespace='/pvServer')
+def databaseRead(message):
+    global clientPVlist,REACT_APP_DisableLogin
+    dbURL= str(message['dbURL'])
+
+    print("databaseUpdate: SSID: ",request.sid,' dbURL: ', dbURL)
+    print("message:",str(message))
+    authenticated=False
+    if REACT_APP_DisableLogin:
+        authenticated=True
+        accessControl={'userAuthorised':True,'permissions':{'read':True,'write':True}}
+    else :
+        accessControl=AutheriseUserAndPermissions(message['clientAuthorisation'],dbURL)
+        authenticated=accessControl['userAuthorised']
+
+    if accessControl['userAuthorised'] :
+        if "mongodb://" in dbURL:
+
+            print("mongodb database connection request: ",dbURL)
+            str1=dbURL.replace("mongodb://","")
+            strings=  str1.split(':')
+            if(len(strings)==3):
+                database= strings[0];
+                dbName=   strings[1];
+                colName=  strings[2];
+                print("database: ", database, "length: ", len(database))
+                print("dbName: "  ,   dbName, "length: ", len(dbName))
+                print("colName: " ,  colName, "length: ", len(colName))
+                ### must insert a better error detection here
+
+                if ((len(database)>0) and (len(dbName)>0) and (len(colName)>0)):
+                    if(accessControl['permissions']['read']):
+                        if(accessControl['permissions']['write']):
+                            join_room(str(dbURL)+'rw')
+                            join_room(str(dbURL))
+                        else:
+                            join_room(str(dbURL)+'ro')
+                            join_room(str(dbURL))
+                        try:
+                            print("connecting: "+dbURL)
+                            try:
+                                myclient = pymongo.MongoClient("mongodb://"+ str(os.environ[database])+"/")
+                            except:
+                                print("Unknown database ID:",database)
+                                raise Exception("Unknown database ID:",database)
+
+                            mydb = myclient[dbName]
+
+                            mycol=mydb[colName]
+                            id=message['id']
+                            newvalues=message['newvalues']
+                            try:
+                                print("add newvalues")
+                                print("dbName:",dbName)
+                                print("colName:",colName)
+                                print("id:",str(id))
+                                print("newvalues message:",str(newvalues))
+                                mydb[colName].update_one({'_id':ObjectId(str(id))},newvalues)
+
+                            except Exception as e: print(e)
+
+
+
+                            print("done: "+dbURL)
+
+                            try:
+                                responseID=message['responseID']
+                            except:
+                                responseID="";
+
+            #                data=dumps(X)
+            #                d={'pvname': dbURL,'newmetadata': 'True','data': data}
+            #                print("responseID",responseID)
+            #                eventName='databaseData:'+dbURL+':responseID:' + str(responseID);
+            #                print("eventName",eventName)
+            #                socketio.emit(eventName,d,room=request.sid,namespace='/pvServer')
+                        except:
+                            print("could not connect to MongoDB: ",dbURL)
+                else:
+                    print("Malformed database URL, must be in format: mongodb://databaseID:database:collection")
+            else:
+                print("Malformed database URL, must be in format: mongodb://databaseID:database:collection")
+
+
+
+
+
+        else:
+            print("Unknown PV type")
+    else:
+        socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
+
 
 
 

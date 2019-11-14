@@ -559,6 +559,82 @@ def databaseRead(message):
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
 
 
+@socketio.on('databaseInsertOne', namespace='/pvServer')
+def databaseInsertOne(message):
+    global clientPVlist,REACT_APP_DisableLogin
+    print("databaseInsertOne")
+    dbURL= str(message['dbURL'])
+
+    print("databaseInsertOne: SSID: ",request.sid,' dbURL: ', dbURL)
+    print("message:",str(message))
+    authenticated=False
+    if REACT_APP_DisableLogin:
+        authenticated=True
+        accessControl={'userAuthorised':True,'permissions':{'read':True,'write':True}}
+    else :
+        accessControl=AutheriseUserAndPermissions(message['clientAuthorisation'],dbURL)
+        authenticated=accessControl['userAuthorised']
+
+    if accessControl['userAuthorised'] :
+        if accessControl['permissions']['write']:
+            if "mongodb://" in dbURL:
+
+                print("mongodb database connection request: ",dbURL)
+                str1=dbURL.replace("mongodb://","")
+                strings=  str1.split(':')
+                if(len(strings)==3):
+                    database= strings[0];
+                    dbName=   strings[1];
+                    colName=  strings[2];
+                    print("database: ", database, "length: ", len(database))
+                    print("dbName: "  ,   dbName, "length: ", len(dbName))
+                    print("colName: " ,  colName, "length: ", len(colName))
+                    ### must insert a better error detection here
+
+                    if ((len(database)>0) and (len(dbName)>0) and (len(colName)>0)):
+
+
+                        try:
+                            print("connecting: "+dbURL)
+                            try:
+                                myclient = pymongo.MongoClient("mongodb://"+ str(os.environ[database])+"/")
+                            except:
+                                print("Unknown database ID:",database)
+                                raise Exception("Unknown database ID:",database)
+
+                            mydb = myclient[dbName]
+
+                            mycol=mydb[colName]
+
+                            # id=message['id']
+                            newEntry=message['newEntry']
+
+                            print("newEntry",str(newEntry))
+                            try:
+                                 print("add newEntry")
+                                 print("dbName:",dbName)
+                                 print("colName:",colName)
+
+                                 mydb[colName].insert_one(newEntry)
+                            #
+                            except Exception as e: print(e)
+                            print("done: "+dbURL)
+
+
+                        except:
+                            print("could not connect to MongoDB: ",dbURL)
+
+                else:
+                    print("Malformed database URL, must be in format: mongodb://databaseID:database:collection")
+            else:
+                print("Unknown db type type: ",dbURL)
+        else:
+            print("write access denied to database URL: ", dbURL)
+
+    else:
+        socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
+
+
 
 
 @socketio.on('AuthenticateClient', namespace='/pvServer')

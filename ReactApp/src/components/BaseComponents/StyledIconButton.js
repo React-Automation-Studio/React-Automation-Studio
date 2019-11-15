@@ -19,6 +19,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Lens from '@material-ui/icons/Lens';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
+import {LanDisconnect} from 'mdi-material-ui/';
 const styles = theme => ({
   root: {
 
@@ -259,7 +260,7 @@ render() {
 
             </IconButton>
           }
-          label={'Connecting to: '+this.state.pvname}
+          label={<span> <LanDisconnect style={{color:this.props.theme.palette.error.main,verticalAlign: "middle"}} fontSize='small'/> {this.state['pvname']} </span>}
           labelPlacement={typeof this.props.labelPlacement !== 'undefined'? this.props.labelPlacement:"top"}
         />
       }
@@ -300,4 +301,4 @@ StyledIconButton.defaultProps = {
 };
 
 StyledIconButton.contextType=AutomationStudioContext;
-export default withStyles(styles)(StyledIconButton)
+export default withStyles(styles,{withTheme:true})(StyledIconButton)

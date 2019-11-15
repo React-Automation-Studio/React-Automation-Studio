@@ -26,7 +26,9 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';const styles = theme => ({
+import {LanDisconnect} from 'mdi-material-ui/';
+import FormLabel from '@material-ui/core/FormLabel';
+const styles = theme => ({
   root: {
 
     backgroundColor: theme.palette.background.paper,
@@ -345,7 +347,7 @@ render() {
     }
 
   }else{
-      enum_strings=['Connecting to']
+    enum_strings=['Connecting to']
   }
   //   console.log("this.state.metadata.enum_strs",this.state.metadata.enum_strs)
   //   console.log("enum_strings",enum_strings)
@@ -436,7 +438,9 @@ render() {
       {(initialized===false||initialized==='undefined') &&
 
         <FormControl  disabled component="fieldset" className={classes.formControl}>
-          <FormLabel component="legend">"Connecting to:"</FormLabel>
+          <FormLabel component="legend">
+            <LanDisconnect style={{color:this.props.theme.palette.error.main,verticalAlign: "middle"}} fontSize='small'/>
+          </FormLabel>
           <RadioGroup  aria-label="gender" name="gender2" value={value} onChange={this.handleChange}>
             {this.getRadioButtonItems([this.state.pvname], classes, disabled)}
           </RadioGroup>
@@ -448,39 +452,39 @@ render() {
 
       }
     </React.Fragment>
-      )
-      }
-      }
+)
+}
+}
 
 
-      RadioButtonGroup.propTypes = {
-        /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
-        pv: PropTypes.string.isRequired,
-        /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
-        macros:PropTypes.object,
-        /** Directive to fill the label with the value contained in the  EPICS pv's DESC field. */
-        usePvLabel:PropTypes.bool,
-        /** Directive to use the EPICS alarm severity status to alter the fields backgorund color  */
-        alarmSensitive:PropTypes.bool,
-        /** Custom label to be used, if  `usePvLabel` is not defined. */
-        label: PropTypes.string,
-        /** If defined, then the DataConnection debugging information will be displayed*/
-        debug:PropTypes.bool,
-        /** If defined, sets the selection list to be in a horizontal orientation*/
-        horizontal: PropTypes.bool,
-        /** If defined, this array of strings overides the default EPICS MBBI/O pv strings and are displayed as the choices in the RadioButtonGroup component*/
-        custom_selection_strings: PropTypes.array,
-        /** local variable intialization value*/
-        intialLocalVariableValue:PropTypes.string
+RadioButtonGroup.propTypes = {
+  /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+  pv: PropTypes.string.isRequired,
+  /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
+  macros:PropTypes.object,
+  /** Directive to fill the label with the value contained in the  EPICS pv's DESC field. */
+  usePvLabel:PropTypes.bool,
+  /** Directive to use the EPICS alarm severity status to alter the fields backgorund color  */
+  alarmSensitive:PropTypes.bool,
+  /** Custom label to be used, if  `usePvLabel` is not defined. */
+  label: PropTypes.string,
+  /** If defined, then the DataConnection debugging information will be displayed*/
+  debug:PropTypes.bool,
+  /** If defined, sets the selection list to be in a horizontal orientation*/
+  horizontal: PropTypes.bool,
+  /** If defined, this array of strings overides the default EPICS MBBI/O pv strings and are displayed as the choices in the RadioButtonGroup component*/
+  custom_selection_strings: PropTypes.array,
+  /** local variable intialization value*/
+  intialLocalVariableValue:PropTypes.string
 
-      };
+};
 
-      RadioButtonGroup.defaultProps = {
-        debug:false,
-        alarmSensitive:false,
-        usePvLabel:false,
-        horizontal:false,
-      };
+RadioButtonGroup.defaultProps = {
+  debug:false,
+  alarmSensitive:false,
+  usePvLabel:false,
+  horizontal:false,
+};
 
 
-      export default withStyles(styles)(RadioButtonGroup)
+export default withStyles(styles,{withTheme:true})(RadioButtonGroup)

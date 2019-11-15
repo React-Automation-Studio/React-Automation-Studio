@@ -20,6 +20,8 @@ import Lens from '@material-ui/icons/Lens';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import ContextMenu from '../SystemComponents/ContextMenu';
+import {LanDisconnect} from 'mdi-material-ui/';
+
 const styles = theme => ({
   root: {
 
@@ -320,7 +322,7 @@ render() {
 
           </SvgIcon>
         }
-        label={"Connecting to:"+this.state['pvname']}
+        label={<span> <LanDisconnect style={{color:this.props.theme.palette.error.main,verticalAlign: "middle"}} fontSize='small'/> {this.state['pvname']} </span>}
         labelPlacement={typeof this.props.labelPlacement !== 'undefined'? this.props.labelPlacement:"top"}
       />
 

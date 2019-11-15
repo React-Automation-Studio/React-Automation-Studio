@@ -19,7 +19,7 @@ import ArrowDropUp from '@material-ui/icons/ArrowDropUp';
 import IconButton from '@material-ui/core/IconButton';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-
+import {LanDisconnect} from 'mdi-material-ui/';
 const styles = theme => ({
   root: {
 
@@ -351,7 +351,7 @@ render() {
 
                                     />
                       }
-                      label={"Connecting to: "+this.state.pvname}
+                      label={<span> <LanDisconnect style={{color:this.props.theme.palette.error.main,verticalAlign: "middle"}} fontSize='small'/> {this.state['pvname']} </span>}
                       labelPlacement={"bottom"}
 
                     />

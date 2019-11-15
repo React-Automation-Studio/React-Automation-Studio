@@ -14,7 +14,7 @@ import Input from '@material-ui/core/Input';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import FilledInput from '@material-ui/core/FilledInput';
 import InputLabel from '@material-ui/core/InputLabel';
-
+import {LanDisconnect} from 'mdi-material-ui/';
 
 import Select from '@material-ui/core/Select';
 
@@ -312,7 +312,7 @@ render() {
           className={classes.TextField}
           value={this.state['pvname']}
 
-          label={'Connecting to:'}
+          label={<LanDisconnect style={{color:this.props.theme.palette.error.main,verticalAlign: "middle"}} fontSize='small'/>}
           margin="none"
           variant="outlined"
           InputProps={{

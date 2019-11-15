@@ -114,17 +114,17 @@ class GraphMultiplePVs extends React.Component {
     }
     state['pvnames']=pvnames;
     state['pvs']=pvs;
-  //  state['ymin']=1000000000000000000;
-  //  state['ymax']=-1000000000000000000;
+    //  state['ymin']=1000000000000000000;
+    //  state['ymax']=-1000000000000000000;
     state['PollingTimerEnabled']=false;
     state['openContextMenu']= false;
-      state['x0']=0;
-      state['y0']=0;
-      const contextPVs=[];
-      for (const item in pvs){
-        contextPVs.push(pvs[item]);
-      }
-      state['contextPVs']=contextPVs;
+    state['x0']=0;
+    state['y0']=0;
+    const contextPVs=[];
+    for (const item in pvs){
+      contextPVs.push(pvs[item]);
+    }
+    state['contextPVs']=contextPVs;
 
     this.state=state;
 
@@ -190,7 +190,7 @@ class GraphMultiplePVs extends React.Component {
     let yDataArray=[];
     let yTimeStampArray=[];
     //let ymax=parseFloat(this.state.ymax);
-  //  let ymin=parseFloat(this.state.ymin);
+    //  let ymin=parseFloat(this.state.ymin);
     //  console.log('ymax init',this.state.ymax)
     // console.log('ymin init',this.state.ymin)
 
@@ -319,307 +319,307 @@ class GraphMultiplePVs extends React.Component {
 
 
 
-    /*  if ((typeof this.props.ymax) !=='undefined'){
-        ymax=this.props.ymax;
-
-      }
-
-      if ((typeof this.props.ymin)!=='undefined'){
-        ymin=this.props.ymin;
-
-      }
-*/
-      //   console.log('ymax end',ymax)
-      //   console.log('ymin end',ymin)
-
-      this.setState({pvs:pvs});//,ymax:ymax,ymin:ymin});
-
-
-      //state.pvs[pvname].inputValue=inputValue;
-      //pvData.pvs[pvname].initialized=initialized;
-      //pvData.pvs[pvname].severity=severity;
-
-      //console.log("pvData:",pvData)
-
-      //this.setState(pvData);
-    }
-  }
-
-
-  handleMetadata =  pvname=>(metadata) =>{
-
-    let pvs=this.state.pvs;
-    pvs[pvname].metadata=metadata;
-    this.setState({pvs:pvs});
-    //  console.log("metadata",metadata)
-
-  }
-
-
-
-  handleInputValueLabel=pvname=>(inputValue)=>{
-
-    let pvs=this.state.pvs;
-    pvs[pvname].label=inputValue;
-    this.setState({pvs:pvs});
-
-  }
-
-
-
-  componentDidMount() {
-    if (this.props.usePolling){
-      let intervalId = setInterval(this.handleInputValuePolled, this.props.pollingRate);
-      // store intervalId in the state so it can be accessed later:
-      this.setState({'intervalId': intervalId});
-    }
-  }
-
-
-  componentWillUnmount() {
-    if (this.props.usePolling){
-      clearInterval(this.state.intervalId);
-    }
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-
-  multipleDataConnections = () => {
-    //this.test("test1");
-    //this.handleInputValue();
-    let pv;
-    let DataConnections=[];
-    for (pv in this.state.pvs){
-      //console.log("linedata: ", this.state.pvs[pv].linedata);
-      DataConnections.push(
-        <div key= {pv.toString()}>
-          <DataConnection
-            pv={this.state.pvs[pv].pvname}
-            handleInputValue={this.handleInputValue}
-            handleMetadata={this.handleMetadata(this.state.pvs[pv].pvname)}
-            handleInputValueLabel={this.handleInputValueLabel(this.state.pvs[pv].pvname)}
-            usePvLabel={this.props.usePvLabel}
-            debug={this.props.debug}
-          />
-
-          {this.props.usePvLabel===true?this.state.pvs[pv].label+': ':""}
-          {/*this.state.pvs[pv].value*/}
-        </div>
-      )
-    }
-    //console.log(DataConnections[0]);
-    return DataConnections;
-  }
-
-  multipleLineData = () => {
-    //this.test("test1");
-    //this.handleInputValue();
-    let pv;
-    let lines=[];
-    let i=0;
-    let lineColor;
-    let theme=this.props.theme;
-    //    console.log(theme);
-    for (pv in this.state.pvs){
-      if(typeof this.props.lineColor !=='undefined'){
-        lineColor=this.props.lineColor;
-      }
-      else{
-        if(theme.palette.type==='dark'){
-          lineColor=theme.darkLineColors;
-        }
-        else{
-          lineColor=theme.lightLineColors;
-        }
-
-      }
-      //console.log("linedata: ", this.state.pvs[pv].linedata);
-      if (this.state.pvs[pv].initialized===true){
-        lines.push(
-
-          <LineSeries
-
-            key={pv.toString()}
-            color={lineColor[i]}
-
-            data={this.state.pvs[this.state.pvs[pv].pvname].linedata}
-            style={{
-              strokeLinejoin: 'round',
-              strokeWidth: 2
-
-            }}
-          />
-
-        )
-      }
-      else{
-        //const data=this.state.pvs[this.state.pvs[pv].pvname].linedata;
-        const sample={x:0,y:0}
-        const data=[];
-        data[0]=sample;
-        //console.log(data)
-        lines.push(
-
-          <LineSeries
-
-            key={pv.toString()}
-            color={'grey'}
-
-            data={typeof this.state.pvs[this.state.pvs[pv].pvname].linedata==='undefined'?data:this.state.pvs[this.state.pvs[pv].pvname].linedata}
-            style={{
-              strokeLinejoin: 'round',
-              strokeWidth: 2
-
-            }}
-          />
-
-        )
-
-      }
-
-      i++;
-    }
-    //console.log(DataConnections[0]);
-    return lines;
-  }
-
-  handleContextMenuClose = event => {
-
-
-    this.setState({ openContextMenu: false });
-  };
-
-  handleToggleContextMenu = (event) => {
-       console.log(event.type)
-
-    event.persist()
-    this.setState(state => ({ openContextMenu: !state.openContextMenu,x0:event.pageX,y0:event.pageY }));
-
-    event.preventDefault();
-  }
-
-
-
-  render() {
-    const {classes}= this.props;
-    const theme=this.props.theme;
-    //  console.log(this.props.theme);
-    //  console.log(this.state.ymax)
-    //  console.log(this.state.ymin)
-    //  console.log(this.state.rangeUnits)
-
-    let legendTitle="";
-    let legendItem;
-    let legendItems=[];
-    let legendColor=[];
-    let pv;
-    let i=0;
-    let pvs=this.state.pvs;
-    let ymax=-1000000000000000000;
-    let ymin=1000000000000000000;
-    for (pv in pvs){
-      if(typeof this.props.lineColor !=='undefined'){
-        legendColor=this.props.lineColor;
-      }
-      else{
-        if(theme.palette.type==='dark'){
-          legendColor=theme.darkLineColors;
-        }
-        else{
-          legendColor=theme.lightLineColors;
-        }
-
-      }
-      //console.log("linedata: ", this.state.pvs[pv].linedata);
-
-      i++;
-
-      if(pvs[pv].ymin<ymin){
-        ymin=pvs[pv].ymin;
-      }
-      if(pvs[pv].ymax>ymax){
-        ymax=pvs[pv].ymax
-      }
+      /*  if ((typeof this.props.ymax) !=='undefined'){
+      ymax=this.props.ymax;
 
     }
 
-  /*  if (ymin>0){
-      ymin=0.99*ymin;
+    if ((typeof this.props.ymin)!=='undefined'){
+    ymin=this.props.ymin;
+
+  }
+  */
+  //   console.log('ymax end',ymax)
+  //   console.log('ymin end',ymin)
+
+  this.setState({pvs:pvs});//,ymax:ymax,ymin:ymin});
+
+
+  //state.pvs[pvname].inputValue=inputValue;
+  //pvData.pvs[pvname].initialized=initialized;
+  //pvData.pvs[pvname].severity=severity;
+
+  //console.log("pvData:",pvData)
+
+  //this.setState(pvData);
+}
+}
+
+
+handleMetadata =  pvname=>(metadata) =>{
+
+  let pvs=this.state.pvs;
+  pvs[pvname].metadata=metadata;
+  this.setState({pvs:pvs});
+  //  console.log("metadata",metadata)
+
+}
+
+
+
+handleInputValueLabel=pvname=>(inputValue)=>{
+
+  let pvs=this.state.pvs;
+  pvs[pvname].label=inputValue;
+  this.setState({pvs:pvs});
+
+}
+
+
+
+componentDidMount() {
+  if (this.props.usePolling){
+    let intervalId = setInterval(this.handleInputValuePolled, this.props.pollingRate);
+    // store intervalId in the state so it can be accessed later:
+    this.setState({'intervalId': intervalId});
+  }
+}
+
+
+componentWillUnmount() {
+  if (this.props.usePolling){
+    clearInterval(this.state.intervalId);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+multipleDataConnections = () => {
+  //this.test("test1");
+  //this.handleInputValue();
+  let pv;
+  let DataConnections=[];
+  for (pv in this.state.pvs){
+    //console.log("linedata: ", this.state.pvs[pv].linedata);
+    DataConnections.push(
+      <div key= {pv.toString()}>
+        <DataConnection
+          pv={this.state.pvs[pv].pvname}
+          handleInputValue={this.handleInputValue}
+          handleMetadata={this.handleMetadata(this.state.pvs[pv].pvname)}
+          handleInputValueLabel={this.handleInputValueLabel(this.state.pvs[pv].pvname)}
+          usePvLabel={this.props.usePvLabel}
+          debug={this.props.debug}
+        />
+
+        {this.props.usePvLabel===true?this.state.pvs[pv].label+': ':""}
+        {/*this.state.pvs[pv].value*/}
+      </div>
+    )
+  }
+  //console.log(DataConnections[0]);
+  return DataConnections;
+}
+
+multipleLineData = () => {
+  //this.test("test1");
+  //this.handleInputValue();
+  let pv;
+  let lines=[];
+  let i=0;
+  let lineColor;
+  let theme=this.props.theme;
+  //    console.log(theme);
+  for (pv in this.state.pvs){
+    if(typeof this.props.lineColor !=='undefined'){
+      lineColor=this.props.lineColor;
     }
     else{
-      ymin=1.01*ymin;
+      if(theme.palette.type==='dark'){
+        lineColor=theme.darkLineColors;
+      }
+      else{
+        lineColor=theme.lightLineColors;
+      }
+
     }
-    if(ymax>0){
-    ymax=1.01*ymax;
+    //console.log("linedata: ", this.state.pvs[pv].linedata);
+    if (this.state.pvs[pv].initialized===true){
+      lines.push(
+
+        <LineSeries
+
+          key={pv.toString()}
+          color={lineColor[i]}
+
+          data={this.state.pvs[this.state.pvs[pv].pvname].linedata}
+          style={{
+            strokeLinejoin: 'round',
+            strokeWidth: 2
+
+          }}
+        />
+
+      )
+    }
+    else{
+      //const data=this.state.pvs[this.state.pvs[pv].pvname].linedata;
+      const sample={x:0,y:0}
+      const data=[];
+      data[0]=sample;
+      //console.log(data)
+      lines.push(
+
+        <LineSeries
+
+          key={pv.toString()}
+          color={'grey'}
+
+          data={typeof this.state.pvs[this.state.pvs[pv].pvname].linedata==='undefined'?data:this.state.pvs[this.state.pvs[pv].pvname].linedata}
+          style={{
+            strokeLinejoin: 'round',
+            strokeWidth: 2
+
+          }}
+        />
+
+      )
+
+    }
+
+    i++;
+  }
+  //console.log(DataConnections[0]);
+  return lines;
+}
+
+handleContextMenuClose = event => {
+
+
+  this.setState({ openContextMenu: false });
+};
+
+handleToggleContextMenu = (event) => {
+  console.log(event.type)
+
+  event.persist()
+  this.setState(state => ({ openContextMenu: !state.openContextMenu,x0:event.pageX,y0:event.pageY }));
+
+  event.preventDefault();
+}
+
+
+
+render() {
+  const {classes}= this.props;
+  const theme=this.props.theme;
+  //  console.log(this.props.theme);
+  //  console.log(this.state.ymax)
+  //  console.log(this.state.ymin)
+  //  console.log(this.state.rangeUnits)
+
+  let legendTitle="";
+  let legendItem;
+  let legendItems=[];
+  let legendColor=[];
+  let pv;
+  let i=0;
+  let pvs=this.state.pvs;
+  let ymax=-1000000000000000000;
+  let ymin=1000000000000000000;
+  for (pv in pvs){
+    if(typeof this.props.lineColor !=='undefined'){
+      legendColor=this.props.lineColor;
+    }
+    else{
+      if(theme.palette.type==='dark'){
+        legendColor=theme.darkLineColors;
+      }
+      else{
+        legendColor=theme.lightLineColors;
+      }
+
+    }
+    //console.log("linedata: ", this.state.pvs[pv].linedata);
+
+    i++;
+
+    if(pvs[pv].ymin<ymin){
+      ymin=pvs[pv].ymin;
+    }
+    if(pvs[pv].ymax>ymax){
+      ymax=pvs[pv].ymax
+    }
 
   }
-  else{
-    ymax=0.99*ymax;
-  }*/
+
+  /*  if (ymin>0){
+  ymin=0.99*ymin;
+}
+else{
+ymin=1.01*ymin;
+}
+if(ymax>0){
+ymax=1.01*ymax;
+
+}
+else{
+ymax=0.99*ymax;
+}*/
 
 
 
 
-    if (typeof this.props.legend !=='undefined'){
-      let i=0;
-      for(legendItem in this.props.legend){
+if (typeof this.props.legend !=='undefined'){
+  let i=0;
+  for(legendItem in this.props.legend){
 
 
-        legendItems.push({title:this.props.legend[legendItem].toString() ,color:legendColor[i], stroke:theme.palette.type=='dark'?'#80deea':'#dbdbe0'});
+    legendItems.push({title:this.props.legend[legendItem].toString() ,color:legendColor[i], stroke:theme.palette.type=='dark'?'#80deea':'#dbdbe0'});
 
-        i++
-      }
-    }
-    //   console.log('ymax: ',this.state.ymax)
-    //     console.log('ymin: ',this.state.ymin)
-    let yDomain;
-    if ((typeof this.props.ymax) !=='undefined'){
+    i++
+  }
+}
+//   console.log('ymax: ',this.state.ymax)
+//     console.log('ymin: ',this.state.ymin)
+let yDomain;
+if ((typeof this.props.ymax) !=='undefined'){
 
 
-      if ((typeof this.props.ymin)!=='undefined'){
+  if ((typeof this.props.ymin)!=='undefined'){
 
-        yDomain=[this.props.ymin, this.props.ymax]
-      }
-      else {
-        yDomain=[ymin, ymax];
-      }
-    }
-    else {
-        yDomain=[ymin, ymax];
-    }
-    // console.log('ymax',ymax)
-  //   console.log('ymin',ymin)
-  return (
+    yDomain=[this.props.ymin, this.props.ymax]
+  }
+  else {
+    yDomain=[ymin, ymax];
+  }
+}
+else {
+  yDomain=[ymin, ymax];
+}
+// console.log('ymax',ymax)
+//   console.log('ymin',ymin)
+return (
 
-    <React.Fragment >
-      {theme.palette.type==='dark'&& <LoadableReactVisDarkCompoment/>}
-      {theme.palette.type==='light'&& <LoadableReactVisLightCompoment/>}
-      {this.multipleDataConnections()}
-      <div style={{width:'100%',height:'100%'}} onContextMenu={this.handleToggleContextMenu}>
+  <React.Fragment >
+    {theme.palette.type==='dark'&& <LoadableReactVisDarkCompoment/>}
+    {theme.palette.type==='light'&& <LoadableReactVisLightCompoment/>}
+    {this.multipleDataConnections()}
+    <div style={{width:'100%',height:'100%'}} onContextMenu={this.handleToggleContextMenu}>
       <FlexibleXYPlot yDomain={yDomain} margin={{left: 60}} >
-      <ContextMenu
-        disableProbe={this.props.disableProbe}
-        open={this.state.openContextMenu}
-        anchorReference="anchorPosition"
-        anchorPosition={{ top: +this.state.y0, left: +this.state.x0 }}
-        probeType={'readOnly'}
-        pvs={this.state.contextPVs}
-        handleClose={this.handleContextMenuClose}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-      />
+        <ContextMenu
+          disableProbe={this.props.disableProbe}
+          open={this.state.openContextMenu}
+          anchorReference="anchorPosition"
+          anchorPosition={{ top: +this.state.y0, left: +this.state.x0 }}
+          probeType={'readOnly'}
+          pvs={this.state.contextPVs}
+          handleClose={this.handleContextMenuClose}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
+          }}
+        />
         <HorizontalGridLines style={{stroke: theme.palette.type==='dark'?'#0097a7':'#B7E9ED'}} />
         <VerticalGridLines  style={{stroke: theme.palette.type==='dark'?'#0097a7':'#B7E9ED'}} />
         <XAxis
@@ -652,67 +652,67 @@ class GraphMultiplePVs extends React.Component {
           orientation="horizontal" items= {legendItems}/>}
 
       </FlexibleXYPlot>
-</div>
-    </React.Fragment>
+    </div>
+  </React.Fragment>
 
 
 
-      )
-    }
-
+    )
   }
-  GraphMultiplePVs.propTypes = {
 
-    /** Array of the process variables, NB must contain correct prefix ie: pva://  eg. ['pva://$(device):test$(id0)','pva://$(device):test$(id1)']*/
-    pvs: PropTypes.array.isRequired,
-    /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id0)':'1','$(id1)':'2'}}*/
-    macros:PropTypes.object,
-    /** Y axis title. */
-    yAxisTitle:PropTypes.string,
-    /** X axis title. */
-    xAxisTitle:PropTypes.string,
+}
+GraphMultiplePVs.propTypes = {
 
-
-    /** Custom y axis minimum to be used,if not defined the graph will auto-scale */
-    ymin:PropTypes.number,
-    /** Custom y axis maximum to be used,if not defined the graph will auto-scale */
-    ymax:PropTypes.number,
-
-    /** If defined, then the DataConnection debugging information will be displayed*/
-    debug:PropTypes.bool,
-    /** If defined, then a legend will be displayed,using the string items defined in the array*/
-    legend:PropTypes.array,
-    /** If defined, then the default React-Vis line colors will overided using the string items defined in the array*/
-    lineColor:PropTypes.array,
-    /** If defined then the length of the line graphs will grow up until the value defined*/
-    maxLength:PropTypes.number,
-    /** Custom y axis units to be used*/
-    yUnits:PropTypes.string,
-    /** Custom x axis units to be used*/
-    xUnits:PropTypes.string,
-    /** Directive to sample the PV value, on the client side at the polling rate*/
-    usePolling:PropTypes.bool,
-    /** Directive to scale the y-axis as a log base 10 value*/
-    yScaleLog10:PropTypes.bool,
-    /** Polling interval in ms used in polling mode*/
-    pollingRate:PropTypes.number,
-    /** If defined then the graph will only update on a value change*/
-    triggerOnSingleValueChange:PropTypes.bool,
-
-  };
-
-  GraphMultiplePVs.defaultProps = {
-
-    debug:false,
-    yAxisTitle:'Y-axis',
-    xAxisTitle:'X-axis',
-    yUnits:"",
-    xUnits:"",
-    usePolling:false,
-    pollingRate:100,
-
-  };
+  /** Array of the process variables, NB must contain correct prefix ie: pva://  eg. ['pva://$(device):test$(id0)','pva://$(device):test$(id1)']*/
+  pvs: PropTypes.array.isRequired,
+  /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id0)':'1','$(id1)':'2'}}*/
+  macros:PropTypes.object,
+  /** Y axis title. */
+  yAxisTitle:PropTypes.string,
+  /** X axis title. */
+  xAxisTitle:PropTypes.string,
 
 
+  /** Custom y axis minimum to be used,if not defined the graph will auto-scale */
+  ymin:PropTypes.number,
+  /** Custom y axis maximum to be used,if not defined the graph will auto-scale */
+  ymax:PropTypes.number,
 
-  export default withStyles(styles,{withTheme:true})(GraphMultiplePVs)
+  /** If defined, then the DataConnection debugging information will be displayed*/
+  debug:PropTypes.bool,
+  /** If defined, then a legend will be displayed,using the string items defined in the array*/
+  legend:PropTypes.array,
+  /** If defined, then the default React-Vis line colors will overided using the string items defined in the array*/
+  lineColor:PropTypes.array,
+  /** If defined then the length of the line graphs will grow up until the value defined*/
+  maxLength:PropTypes.number,
+  /** Custom y axis units to be used*/
+  yUnits:PropTypes.string,
+  /** Custom x axis units to be used*/
+  xUnits:PropTypes.string,
+  /** Directive to sample the PV value, on the client side at the polling rate*/
+  usePolling:PropTypes.bool,
+  /** Directive to scale the y-axis as a log base 10 value*/
+  yScaleLog10:PropTypes.bool,
+  /** Polling interval in ms used in polling mode*/
+  pollingRate:PropTypes.number,
+  /** If defined then the graph will only update on a value change*/
+  triggerOnSingleValueChange:PropTypes.bool,
+
+};
+
+GraphMultiplePVs.defaultProps = {
+
+  debug:false,
+  yAxisTitle:'Y-axis',
+  xAxisTitle:'X-axis',
+  yUnits:"",
+  xUnits:"",
+  usePolling:false,
+  pollingRate:100,
+
+};
+
+
+
+export default withStyles(styles,{withTheme:true})(GraphMultiplePVs)

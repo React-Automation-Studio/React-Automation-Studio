@@ -11,6 +11,7 @@ import TextField from '@material-ui/core/TextField';
 import Switch from '@material-ui/core/Switch';
 import ContextMenu from '../SystemComponents/ContextMenu';
 import uuid from 'uuid';
+import {LanDisconnect} from 'mdi-material-ui/';
 import {
 
   makeVisFlexible,
@@ -141,17 +142,17 @@ function getTickValues(props,min,max,numberOfTicks,x0,x1,y1,xOffset,radialTextOf
       //onsole.log('props.height',props.height)
 
       return (
-
         <svg  width={props.width} height={xOffset+props.width/2}>
-          <text
+
+          { <text
             x={(x0+x1)/2}
             y={y1+valueOffsetY}
             textAnchor='middle'
             className={classes.textValue}
-          >
-            {typeof props.disabled==='undefined'?value+units:'Connecting to: '+props.pvname}
+            >
+            {typeof props.disabled==='undefined'?value+units :""}
 
-          </text>
+          </text> }
 
 
           <linearGradient id={gradientId} >
@@ -183,14 +184,14 @@ function getTickValues(props,min,max,numberOfTicks,x0,x1,y1,xOffset,radialTextOf
 
             transform={'rotate('+ needleRotation +" "+(x0+x1)/2 +' ' +y1+ ')' }
 
-                d={"M "+(xOffset-6)+" "+(y0-1)+" "+ (xOffset +y1-yOffset)+ " "+(y0-4) +" "+ (xOffset +y1-yOffset)+ " "+(y0+4)+" " +(xOffset-6)+" "+(y0+1)
-                +" " + (xOffset-6)+" "+(y0-1)}/>
+            d={"M "+(xOffset-6)+" "+(y0-1)+" "+ (xOffset +y1-yOffset)+ " "+(y0-4) +" "+ (xOffset +y1-yOffset)+ " "+(y0+4)+" " +(xOffset-6)+" "+(y0+1)
+              +" " + (xOffset-6)+" "+(y0-1)}/>
 
 
 
 
-                {getTickValues(props,min,max, 6,x0,x1,y1,xOffset,radialTextOffset)}
-              </svg>
+          {getTickValues(props,min,max, 6,x0,x1,y1,xOffset,radialTextOffset)}
+        </svg>
 
             );
           }
@@ -232,383 +233,386 @@ function getTickValues(props,min,max,numberOfTicks,x0,x1,y1,xOffset,radialTextOf
             //console.log("severity: ",severity);
 
 
-              this.setState({['value']	 :inputValue,
-              ['inputValue']:inputValue,
-              ['pvname']:pvname,
-              ['initialized']:initialized,
-              ['severity']:severity});
+            this.setState({['value']	 :inputValue,
+            ['inputValue']:inputValue,
+            ['pvname']:pvname,
+            ['initialized']:initialized,
+            ['severity']:severity});
 
-        }
+          }
 
 
-        handleMetadata(metadata){
+          handleMetadata(metadata){
 
 
             this.setState({['metadata']	 :metadata,
             ['newMetadata']:metadata});
 
-      }
-
-
-
-      handleInputValueLabel(inputValue){
-
-        this.setState({['label']:inputValue});
-
-      }
-
-
-
-      componentDidMount() {
-
-      }
-
-
-      componentWillUnmount() {
-
-      }
-
-
-      handleContextMenuClose = (event) => {
-
-
-        this.setState({ openContextMenu: false });
-
-      };
-
-      handleToggleContextMenu = (event) => {
-        //   console.log(event.type)
-        event.persist()
-        this.setState(state => ({ openContextMenu: !state.openContextMenu,x0:event.pageX,y0:event.pageY }));
-
-        event.preventDefault();
-      }
-
-
-
-
-
-
-      handleOnFocus= event =>{
-        this.setState({['hasFocus']:true});
-      }
-
-      catchReturn= stateVar => event =>{
-        if (event.key === 'Enter') {
-          this.setState({['outputValue']:this.state['value']});
-        }
-      }
-
-
-      handleOnBlur= event =>{
-        this.setState({['hasFocus']:false,
-        ['value']:this.state['inputValue'],
-        ['metadata'] :this.state['newMetadata'] });
-      }
-
-      handleChange = name => event => {
-        this.setState({
-          [name]: event.target.value,
-        });
-      };
-
-
-
-
-      render() {
-        const {classes}= this.props;
-        const pv = this.props.pv;
-        const macros=  this.props.macros;
-        const usePvLabel= this.props.usePvLabel;
-        const mylabel= this.props.label;
-        const usePrecision= this.props.prec;
-        const useStringValue=this.props.useStringValue;
-        let severity=this.state.severity;
-        let units="";
-        const initialized=this.state.initialized;
-        let value=this.state.value;
-        if(initialized){
-          if(this.props.usePvUnits===true){
-            if (typeof this.state.metadata !== 'undefined'){
-              if (typeof this.state.metadata.units !== 'undefined'){
-                units=this.state.metadata.units;
-              }
-              else{
-                units="";
-              }
-            }
-            else {
-              units="";
-            }
-
-          }
-          else {
-            units=this.props.units;
           }
 
 
-          if (typeof this.props.usePrecision !== 'undefined'){
-            if (this.props.usePrecision==true){
-              if (typeof this.props.prec !== 'undefined'){
-                value=parseFloat(value).toFixed(this.props.prec);
-              }
-              else
-              value=parseFloat(value).toFixed(parseInt(this.state.metadata.precision));
 
-            }
+          handleInputValueLabel(inputValue){
+
+            this.setState({['label']:inputValue});
 
           }
 
-        }
 
-        if (typeof this.props.useStringSeverityMatch !== 'undefined'){
-          if (this.props.useStringSeverityMatch==true){
 
-            if (typeof this.props.StringSeverity !== 'undefined'){
-              let string;
-              for (string in this.props.StringSeverity){
-                //      console.log(this.props.StringSeverity[string].stringMatch)
-                if (value==this.props.StringSeverity[string].stringMatch){
-                  severity=this.props.StringSeverity[string].severity;
-                  break;
+          componentDidMount() {
+
+          }
+
+
+          componentWillUnmount() {
+
+          }
+
+
+          handleContextMenuClose = (event) => {
+
+
+            this.setState({ openContextMenu: false });
+
+          };
+
+          handleToggleContextMenu = (event) => {
+            //   console.log(event.type)
+            event.persist()
+            this.setState(state => ({ openContextMenu: !state.openContextMenu,x0:event.pageX,y0:event.pageY }));
+
+            event.preventDefault();
+          }
+
+
+
+
+
+
+          handleOnFocus= event =>{
+            this.setState({['hasFocus']:true});
+          }
+
+          catchReturn= stateVar => event =>{
+            if (event.key === 'Enter') {
+              this.setState({['outputValue']:this.state['value']});
+            }
+          }
+
+
+          handleOnBlur= event =>{
+            this.setState({['hasFocus']:false,
+            ['value']:this.state['inputValue'],
+            ['metadata'] :this.state['newMetadata'] });
+          }
+
+          handleChange = name => event => {
+            this.setState({
+              [name]: event.target.value,
+            });
+          };
+
+
+
+
+          render() {
+            const {classes}= this.props;
+            const pv = this.props.pv;
+            const macros=  this.props.macros;
+            const usePvLabel= this.props.usePvLabel;
+            const mylabel= this.props.label;
+            const usePrecision= this.props.prec;
+            const useStringValue=this.props.useStringValue;
+            let severity=this.state.severity;
+            let units="";
+            const initialized=this.state.initialized;
+            let value=this.state.value;
+            if(initialized){
+              if(this.props.usePvUnits===true){
+                if (typeof this.state.metadata !== 'undefined'){
+                  if (typeof this.state.metadata.units !== 'undefined'){
+                    units=this.state.metadata.units;
+                  }
+                  else{
+                    units="";
+                  }
+                }
+                else {
+                  units="";
+                }
+
+              }
+              else {
+                units=this.props.units;
+              }
+
+
+              if (typeof this.props.usePrecision !== 'undefined'){
+                if (this.props.usePrecision==true){
+                  if (typeof this.props.prec !== 'undefined'){
+                    value=parseFloat(value).toFixed(this.props.prec);
+                  }
+                  else
+                  value=parseFloat(value).toFixed(parseInt(this.state.metadata.precision));
+
                 }
 
               }
 
             }
-          }
-        }
 
-        let textFieldClassName;
-        let background_color='';
-        if (typeof this.props.alarmSensitive !== 'undefined'){
-          if (this.props.alarmSensitive==true){
-            if (severity==1){
-              textFieldClassName=classes.TextFieldSeverity1;
-              //  background_color='linear-gradient(45deg, #FFFFFF 1%, #FF8E53 99%)';
-            }
-            else if(severity==2){
-              textFieldClassName=classes.TextFieldSeverity2;
-              //  background_color='linear-gradient(45deg, #FFFFFF 1%, #E20101 99%)';
-            }
-            else {
-              textFieldClassName=classes.TextFieldSeverity0;
-              //  background_color='white';
-            }
-          }
+            if (typeof this.props.useStringSeverityMatch !== 'undefined'){
+              if (this.props.useStringSeverityMatch==true){
 
-        }
+                if (typeof this.props.StringSeverity !== 'undefined'){
+                  let string;
+                  for (string in this.props.StringSeverity){
+                    //      console.log(this.props.StringSeverity[string].stringMatch)
+                    if (value==this.props.StringSeverity[string].stringMatch){
+                      severity=this.props.StringSeverity[string].severity;
+                      break;
+                    }
 
+                  }
 
-
-
-
-
-
-        const style = {
-          background: background_color,
-          borderRadius: 4,
-
-        };
-
-
-        let write_access=false;
-        let read_access=false;
-        let min=0;
-        let max=100;
-        if(initialized){
-
-          if (typeof this.state.metadata !== 'undefined'){
-            if (typeof this.state.metadata.write_access !== 'undefined'){
-              write_access=this.state.metadata.write_access;
-            }
-            if (typeof this.state.metadata.read_access !== 'undefined'){
-              read_access=this.state.metadata.read_access;
-            }
-          }
-
-
-          if (typeof this.props.usePvMinMax === 'undefined'){
-            if (typeof this.props.min !== 'undefined'){
-              min=this.props.min;
-            }
-            if (typeof this.props.max !== 'undefined'){
-              max=this.props.max;
-            }
-          }else{
-            if(this.props.usePvMinMax == false)
-            {
-              if (typeof this.props.min !== 'undefined'){
-                min=this.props.min;
-              }
-              if (typeof this.props.max !== 'undefined'){
-                max=this.props.max;
-              }
-            }
-            else {
-              max=this.state.metadata.upper_disp_limit;
-              min=this.state.metadata.lower_disp_limit;
-            }
-          }
-        }
-
-
-
-        if(initialized){
-          if(this.props.usePvUnits===true){
-            if (typeof this.state.metadata !== 'undefined'){
-              if (typeof this.state.metadata.units !== 'undefined'){
-                units=" "+this.state.metadata.units;
-              }
-              else{
-                units="";
-              }
-            }
-            else {
-              units="";
-            }
-
-          }
-          else {
-            units=typeof this.props.units!=='undefined'?" "+this.props.units:"";
-          }
-
-          if (value!==""){
-
-            if (typeof this.props.usePrecision !== 'undefined'){
-              if (this.props.usePrecision==true){
-                if (typeof this.props.prec !== 'undefined'){
-                  value=parseFloat(value).toFixed(this.props.prec);
                 }
-                else
-                value=parseFloat(value).toFixed(parseInt(this.state.metadata.precision));
+              }
+            }
+
+            let textFieldClassName;
+            let background_color='';
+            if (typeof this.props.alarmSensitive !== 'undefined'){
+              if (this.props.alarmSensitive==true){
+                if (severity==1){
+                  textFieldClassName=classes.TextFieldSeverity1;
+                  //  background_color='linear-gradient(45deg, #FFFFFF 1%, #FF8E53 99%)';
+                }
+                else if(severity==2){
+                  textFieldClassName=classes.TextFieldSeverity2;
+                  //  background_color='linear-gradient(45deg, #FFFFFF 1%, #E20101 99%)';
+                }
+                else {
+                  textFieldClassName=classes.TextFieldSeverity0;
+                  //  background_color='white';
+                }
+              }
+
+            }
+
+
+
+
+
+
+
+            const style = {
+              background: background_color,
+              borderRadius: 4,
+
+            };
+
+
+            let write_access=false;
+            let read_access=false;
+            let min=0;
+            let max=100;
+            if(initialized){
+
+              if (typeof this.state.metadata !== 'undefined'){
+                if (typeof this.state.metadata.write_access !== 'undefined'){
+                  write_access=this.state.metadata.write_access;
+                }
+                if (typeof this.state.metadata.read_access !== 'undefined'){
+                  read_access=this.state.metadata.read_access;
+                }
+              }
+
+
+              if (typeof this.props.usePvMinMax === 'undefined'){
+                if (typeof this.props.min !== 'undefined'){
+                  min=this.props.min;
+                }
+                if (typeof this.props.max !== 'undefined'){
+                  max=this.props.max;
+                }
+              }else{
+                if(this.props.usePvMinMax == false)
+                {
+                  if (typeof this.props.min !== 'undefined'){
+                    min=this.props.min;
+                  }
+                  if (typeof this.props.max !== 'undefined'){
+                    max=this.props.max;
+                  }
+                }
+                else {
+                  max=this.state.metadata.upper_disp_limit;
+                  min=this.state.metadata.lower_disp_limit;
+                }
+              }
+            }
+
+
+
+            if(initialized){
+              if(this.props.usePvUnits===true){
+                if (typeof this.state.metadata !== 'undefined'){
+                  if (typeof this.state.metadata.units !== 'undefined'){
+                    units=" "+this.state.metadata.units;
+                  }
+                  else{
+                    units="";
+                  }
+                }
+                else {
+                  units="";
+                }
+
+              }
+              else {
+                units=typeof this.props.units!=='undefined'?" "+this.props.units:"";
+              }
+
+              if (value!==""){
+
+                if (typeof this.props.usePrecision !== 'undefined'){
+                  if (this.props.usePrecision==true){
+                    if (typeof this.props.prec !== 'undefined'){
+                      value=parseFloat(value).toFixed(this.props.prec);
+                    }
+                    else
+                    value=parseFloat(value).toFixed(parseInt(this.state.metadata.precision));
+
+                  }
+
+                }
 
               }
 
             }
 
-          }
-
-        }
 
 
 
 
+            //console.log(units)
+            return (
 
-        //console.log(units)
-        return (
-
-          <div style={{width:'100%',height:'100%'}} onContextMenu={this.handleToggleContextMenu}>
-            <DataConnection
-              pv={pv}
-              macros={macros}
-              usePvLabel={usePvLabel}
-              usePrecision={usePrecision}
-              handleInputValue={this.handleInputValue}
-              handleMetadata={this.handleMetadata}
-              outputValue=  {this.state.outputValue}
-              useStringValue={useStringValue}
-              handleInputValueLabel={this.handleInputValueLabel}
-              intialLocalVariableValue={this.props.intialLocalVariableValue}
-            />
-            <ContextMenu
-              disableProbe={this.props.disableProbe}
-              open={this.state.openContextMenu}
-              anchorReference="anchorPosition"
-              anchorPosition={{ top: +this.state.y0, left: +this.state.x0 }}
-              probeType={'readOnly'}
-              pvs={[{pvname:this.state.pvname,initialized:initialized}]}
-              handleClose={this.handleContextMenuClose}
-
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-            />
-            {initialized===true &&
-              <React.Fragment>
-                <FlexibleGaugeComponent
-                  min={min}
-                  max={max}
-                  units={units}
-                  value={value}
-                  ringWidth={this.props.ringWidth}
-                  pv={this.state.pvname}
+              <div style={{width:'100%',height:'100%'}} onContextMenu={this.handleToggleContextMenu}>
+                <DataConnection
+                  pv={pv}
+                  macros={macros}
+                  usePvLabel={usePvLabel}
+                  usePrecision={usePrecision}
+                  handleInputValue={this.handleInputValue}
+                  handleMetadata={this.handleMetadata}
+                  outputValue=  {this.state.outputValue}
+                  useStringValue={useStringValue}
+                  handleInputValueLabel={this.handleInputValueLabel}
+                  intialLocalVariableValue={this.props.intialLocalVariableValue}
                 />
+                <ContextMenu
+                  disableProbe={this.props.disableProbe}
+                  open={this.state.openContextMenu}
+                  anchorReference="anchorPosition"
+                  anchorPosition={{ top: +this.state.y0, left: +this.state.x0 }}
+                  probeType={'readOnly'}
+                  pvs={[{pvname:this.state.pvname,initialized:initialized}]}
+                  handleClose={this.handleContextMenuClose}
 
-                {/* <svg  width={this.props.width} height={this.props.height}>
-                  <text
-                  x={(x0+x1)/2}
-                  y={y1+valueOffsetY}
-                  textAnchor='middle'
-                  className={classes.textValue}
-                  >
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'left',
+                  }}
+                />
+                {initialized===true &&
+                  <React.Fragment>
+                    <FlexibleGaugeComponent
+                      min={min}
+                      max={max}
+                      units={units}
+                      value={value}
+                      ringWidth={this.props.ringWidth}
+                      pv={this.state.pvname}
+                    />
 
-                  {value+units}
-                  </text>
+                    {/* <svg  width={this.props.width} height={this.props.height}>
+                      <text
+                      x={(x0+x1)/2}
+                      y={y1+valueOffsetY}
+                      textAnchor='middle'
+                      className={classes.textValue}
+                      >
 
-
-                  <linearGradient id={'rect-gradient'} >
-
-                  <stop offset="0%"  stopColor={this.props.theme.palette.primary.main} />
-                  <stop offset="100%" stopColor={this.props.theme.palette.type==='dark'?this.props.theme.palette.grey['300']:this.props.theme.palette.grey['200']} />
-                  </linearGradient>
-
-                  <path
-                  style={{opacity:1,
-                  fill:'none',
-                  fillOpacity:1,
-                  stroke:'url(#rect-gradient)',
-                  strokeWidth:ringWidth,
-                  strokeMiterlimit:4,
-                  strokeDasharray:'none',
-                  strokeOpacity:1}}
-
-
-
-                  d={"M "+x0+" "+y0+ " A "+radius+" "+radius+" 0 0 1 "+x1+" "+y1 }/>
-
-
-
-                  <path
-                  fill={this.props.theme.palette.secondary.main}
+                      {value+units}
+                      </text>
 
 
+                      <linearGradient id={'rect-gradient'} >
 
-                  transform={'rotate('+ needleRotation +" "+(x0+x1)/2 +' ' +y1+ ')' }
+                      <stop offset="0%"  stopColor={this.props.theme.palette.primary.main} />
+                      <stop offset="100%" stopColor={this.props.theme.palette.type==='dark'?this.props.theme.palette.grey['300']:this.props.theme.palette.grey['200']} />
+                      </linearGradient>
 
-                  d={"M "+(xOffset-6)+" "+(y0-1)+" "+ (xOffset +y1-yOffset)+ " "+(y0-4) +" "+ (xOffset +y1-yOffset)+ " "+(y0+4)+" " +(xOffset-6)+" "+(y0+1)
-                  +" " + (xOffset-6)+" "+(y0-1)}/>
-
-
-
-
-                  {this.getTickValues(min,max, 6,x0,x1,y1,xOffset,radialTextOffset)}
-                </svg> */}
-
-
-              </React.Fragment>
-            }
-
-            {(initialized===false||initialized==='undefined') &&
-
-              <FlexibleGaugeComponent
-                min={0}
-                max={100}
-                units={''}
-                value={0}
-                ringWidth={this.props.ringWidth}
-                pvname={this.state.pvname}
-                disabled
-      />
+                      <path
+                      style={{opacity:1,
+                      fill:'none',
+                      fillOpacity:1,
+                      stroke:'url(#rect-gradient)',
+                      strokeWidth:ringWidth,
+                      strokeMiterlimit:4,
+                      strokeDasharray:'none',
+                      strokeOpacity:1}}
 
 
 
-    }
-  </div>
+                      d={"M "+x0+" "+y0+ " A "+radius+" "+radius+" 0 0 1 "+x1+" "+y1 }/>
 
-)
-}
+
+
+                      <path
+                      fill={this.props.theme.palette.secondary.main}
+
+
+
+                      transform={'rotate('+ needleRotation +" "+(x0+x1)/2 +' ' +y1+ ')' }
+
+                      d={"M "+(xOffset-6)+" "+(y0-1)+" "+ (xOffset +y1-yOffset)+ " "+(y0-4) +" "+ (xOffset +y1-yOffset)+ " "+(y0+4)+" " +(xOffset-6)+" "+(y0+1)
+                      +" " + (xOffset-6)+" "+(y0-1)}/>
+
+
+
+
+                      {this.getTickValues(min,max, 6,x0,x1,y1,xOffset,radialTextOffset)}
+                    </svg> */}
+
+                    
+                  </React.Fragment>
+                }
+
+                {(initialized===false||initialized==='undefined') &&
+                  <React.Fragment>
+
+                    <FlexibleGaugeComponent
+                      min={0}
+                      max={100}
+                      units={''}
+                      value={0}
+                      ringWidth={this.props.ringWidth}
+                      pvname={this.state.pvname}
+                      disabled
+                    />
+                    <LanDisconnect style={{color:this.props.theme.palette.error.main,verticalAlign: "middle"}} fontSize='small'/> {this.state.pvname}
+                  </React.Fragment>
+
+
+
+                }
+              </div>
+
+    )
+  }
 }
 
 Gauge.propTypes = {

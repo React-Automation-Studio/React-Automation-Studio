@@ -9,7 +9,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
 import Switch from '@material-ui/core/Switch';
-
+import {LanDisconnect} from 'mdi-material-ui/';
 
 
 
@@ -187,13 +187,14 @@ multipleDataConnections = () => {
 
           handleInputValue={this.handleInputValueLabel(this.state.pvs[pv].pvname)}
 
-                                               />    }
+                                          />    }
         {this.state.pvs[pv].initialized&&<div>
           {this.props.usePvLabel===true?this.state.pvs[pv].label+': ':""}
           {this.state.pvs[pv].value}
-          </div>}
-          {(this.state.pvs[pv].initialized===false)&&<div>
-            {'Connecting to: '+this.state.pvs[pv].pvname}
+        </div>}
+        {(this.state.pvs[pv].initialized===false)&&<div>
+          {<span> <LanDisconnect style={{color:this.props.theme.palette.error.main,verticalAlign: "middle"}} fontSize='small'/> {this.state.pvs[pv].pvname} </span>}
+          
             </div>}
       </div>
         )
@@ -225,8 +226,8 @@ render() {
         macros:PropTypes.object,
         /** Directive to fill the label with the value contained in the  EPICS pv's DESC field. */
         usePvLabel:PropTypes.bool,
-    
+
       };
 
       TextUpdateMultiplePVs.contextType=AutomationStudioContext;
-          export default withStyles(styles)(TextUpdateMultiplePVs)
+          export default withStyles(styles,{withTheme:true})(TextUpdateMultiplePVs)

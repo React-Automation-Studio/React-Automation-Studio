@@ -13,6 +13,8 @@ import ContextMenu from '../SystemComponents/ContextMenu';
 import red from '@material-ui/core/colors/red';
 import deepOrange from '@material-ui/core/colors/deepOrange';
 import uuid from 'uuid';
+import {LanDisconnect} from 'mdi-material-ui/';
+
 import {
 
   makeVisFlexible,
@@ -110,20 +112,20 @@ function getTickValues(props,min,max,numberOfTicks,x0,y0,x1,x2,y1,y2,xOffset,yOf
 
   }
   else{
-    ticks.push(
-      <g key={i=i+1}
-      >
-        <text
-          className={classes.textTicks}
-          x={xOffset}
-          y={y2+yOffset-3}
-          textAnchor={'start'}
-        >
-          {props.pvname}
-        </text>
-      </g>
-
-        )
+    // ticks.push(
+    //   <g key={i=i+1}
+    //   >
+    //     <text
+    //       className={classes.textTicks}
+    //       x={xOffset}
+    //       y={y2+yOffset-3}
+    //       textAnchor={'start'}
+    //     >
+    //       {props.pvname}
+    //     </text>
+    //   </g>
+    //
+    //     )
   }
       if (props.showValue===true)
       {ticks.push(
@@ -135,7 +137,7 @@ function getTickValues(props,min,max,numberOfTicks,x0,y0,x1,x2,y1,y2,xOffset,yOf
             y={yOffset-4}
             textAnchor={'middle'}
           >
-            {typeof props.disabled==='undefined'?parseFloat(value).toFixed(0)+props.units:'Connecting to: '}{}
+            {typeof props.disabled==='undefined'?parseFloat(value).toFixed(0)+props.units:''}{}
           </text>
         </g>
 
@@ -652,19 +654,21 @@ function getTickValues(props,min,max,numberOfTicks,x0,y0,x1,x2,y1,y2,xOffset,yOf
           }
 
           {(initialized===false||initialized==='undefined') &&
+            <React.Fragment>
+              <LanDisconnect style={{color:this.props.theme.palette.error.main,verticalAlign: "middle"}} fontSize='small'/>
+              <FlexibleTankComponent
+                min={0}
+                max={100}
+                units={''}
+                value={0}
 
-            <FlexibleTankComponent
-              min={0}
-              max={100}
-              units={''}
-              value={0}
-
-              pvname={this.state.pvname}
-              disabled
-              showValue={this.props.showValue}
-              showTicks={this.props.showTicks}
-            />
-
+                pvname={this.state.pvname}
+                disabled
+                showValue={this.props.showValue}
+                showTicks={this.props.showTicks}
+              />
+              {this.state.pvname}
+            </React.Fragment>
 
 
           }

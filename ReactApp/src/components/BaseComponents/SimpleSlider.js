@@ -13,7 +13,7 @@ import debounce from 'lodash.debounce';
 import Typography from '@material-ui/core/Typography';
 import { Slider } from '@material-ui/core'
 
-
+import {LanDisconnect} from 'mdi-material-ui/';
 
 
 
@@ -83,7 +83,7 @@ handleInputValue(inputValue,pvname,initialized,severity){
 }
 }
 else{
-  this.setState({
+  this.setState({['pvname']:pvname,
   ['initialized']:initialized,}
   );
 }
@@ -336,7 +336,8 @@ render() {
       {(initialized===false||initialized==='undefined') &&
         <div>
           <div className={classes.rangeLabel}>
-            <Typography id="subtitle2">{'Connecting to: ' +this.state.pvname}</Typography>
+            <Typography id="subtitle2">{<span> <LanDisconnect style={{color:this.props.theme.palette.error.main,verticalAlign: "middle"}} fontSize='small'/> {this.state['pvname']} </span> }</Typography>
+
           </div>
 
           <Slider
@@ -414,4 +415,4 @@ render() {
 
 
 
-      export default withStyles(styles)(SimpleSlider)
+      export default withStyles(styles,{withTheme:true})(SimpleSlider)

@@ -13,7 +13,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import Button from '@material-ui/core/Button';
-
+import {LanDisconnect} from 'mdi-material-ui/';
 
 
 const styles = theme => ({
@@ -280,7 +280,7 @@ render() {
 
           </Button>
         }
-        label={"Connecting to: "}
+        label={<LanDisconnect style={{color:this.props.theme.palette.error.main,verticalAlign: "middle"}} fontSize='small'/>}
         labelPlacement={typeof this.props.labelPlacement !== 'undefined'? this.props.labelPlacement:"top"}
       />
       }
@@ -325,4 +325,4 @@ ActionFanoutButton.defaultProps = {
 };
 
 ActionFanoutButton.contextType=AutomationStudioContext;
-export default withStyles(styles)(ActionFanoutButton)
+export default withStyles(styles,{withTheme:true})(ActionFanoutButton)

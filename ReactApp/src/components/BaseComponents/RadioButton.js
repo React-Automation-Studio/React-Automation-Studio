@@ -13,7 +13,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import MuiRadioButton from '@material-ui/core/Radio';
-
+import {LanDisconnect} from 'mdi-material-ui/';
 
 
 const styles = theme => ({
@@ -251,7 +251,7 @@ render() {
 
             />
           }
-          label={"Connecting to:"+this.state['pvname']}
+          label={<span> <LanDisconnect style={{color:this.props.theme.palette.error.main,verticalAlign: "middle"}} fontSize='small'/> {this.state['pvname']} </span>}
           labelPlacement={labelPosition}
         />
       }
@@ -291,4 +291,4 @@ RadioButton.defaultProps = {
 };
 
 RadioButton.contextType=AutomationStudioContext;
-export default withStyles(styles)(RadioButton)
+export default withStyles(styles,{withTheme:true})(RadioButton)

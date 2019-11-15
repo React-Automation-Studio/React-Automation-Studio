@@ -12,6 +12,7 @@ import Switch from '@material-ui/core/Switch';
 import red from '@material-ui/core/colors/red';
 import deepOrange from '@material-ui/core/colors/deepOrange';
 import ContextMenu from '../SystemComponents/ContextMenu';
+import {LanDisconnect} from 'mdi-material-ui/';
 import { create, all } from 'mathjs';
 const config = { }
 const math = create(all, config)
@@ -339,7 +340,7 @@ render() {
 
         {((initialized===false)||(initialized==='undefined')) &&
         <div className={classes.body1}>
-          {"Connecting to:"+this.state['pvname']}
+          {<span> <LanDisconnect style={{color:this.props.theme.palette.error.main,verticalAlign: "middle"}} fontSize='small'/> {this.state['pvname']} </span>}
 
 
         </div>
@@ -392,4 +393,4 @@ TextUpdate.defaultProps = {
 };
 
 TextUpdate.contextType=AutomationStudioContext;
-export default withStyles(styles)(TextUpdate)
+export default withStyles(styles,{withTheme:true})(TextUpdate)

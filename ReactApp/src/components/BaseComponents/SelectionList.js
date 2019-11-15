@@ -23,6 +23,8 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import {LanDisconnect} from 'mdi-material-ui/';
+
 
 const styles = theme => ({
   root: {
@@ -466,7 +468,7 @@ render() {
             </List>
 
           }
-          label={"Connecting to:"}
+          label={<LanDisconnect style={{color:this.props.theme.palette.error.main,verticalAlign: "middle"}} fontSize='small'/>}
           labelPlacement={typeof this.props.labelPlacement !== 'undefined'? this.props.labelPlacement:"top"}
         />}
 
@@ -508,4 +510,4 @@ SelectionList.defaultProps = {
 };
 
 
-export default withStyles(styles)(SelectionList)
+export default withStyles(styles,{withTheme:true})(SelectionList)

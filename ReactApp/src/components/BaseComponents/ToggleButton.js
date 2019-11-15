@@ -13,6 +13,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import Button from '@material-ui/core/Button';
+import {LanDisconnect} from 'mdi-material-ui/';
 
 
 
@@ -335,7 +336,7 @@ render() {
               </Button>
 
             }
-            label={'Connecting to: '}
+            label={<LanDisconnect style={{color:this.props.theme.palette.error.main,verticalAlign: "middle"}} fontSize='small'/> }
             labelPlacement={typeof this.props.labelPlacement !== 'undefined'? this.props.labelPlacement:"top"}
           />
         }
@@ -381,4 +382,4 @@ ToggleButton.defaultProps = {
   usePvLabel: false
 };
 
-export default withStyles(styles)(ToggleButton)
+export default withStyles(styles,{withTheme:true})(ToggleButton)

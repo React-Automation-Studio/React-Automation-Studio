@@ -11,7 +11,7 @@ import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
 import Divider from '@material-ui/core/Divider';
 import {Link} from 'react-router-dom'
-
+import {LanDisconnect} from 'mdi-material-ui/'
 import ContextMenu from '../SystemComponents/ContextMenu';
 
 import purple from '@material-ui/core/colors/purple';
@@ -468,7 +468,7 @@ render() {
             color='secondary'
             className={textFieldClassName}
             value={this.state.pvname}
-            label={"Connecting to:"}
+            label={<LanDisconnect style={{color:this.props.theme.palette.error.main,verticalAlign: "middle"}} fontSize='small'/>  }
             fullWidth={true}
             onFocus={event=>this.handleOnFocus(event)}
             onBlur={event=>this.handleOnBlur(event)}

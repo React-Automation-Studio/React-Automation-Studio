@@ -11,7 +11,7 @@ import TextField from '@material-ui/core/TextField';
 import ContextMenu from '../SystemComponents/ContextMenu';
 import red from '@material-ui/core/colors/red';
 import deepOrange from '@material-ui/core/colors/deepOrange';
-
+import {LanDisconnect} from 'mdi-material-ui/'
 
 
 const styles = theme => ({
@@ -408,7 +408,7 @@ render() {
         aria-haspopup="true"
         onContextMenu={this.handleToggleContextMenu}
         value={this.state.pvname}
-        label={"Connecting to: "}
+        label={<LanDisconnect style={{color:this.props.theme.palette.error.main,verticalAlign: "middle"}} fontSize='small'/>  }
         fullWidth={true}
         margin="none"
         variant="outlined"
@@ -477,4 +477,4 @@ TextInput.propTypes = {
 
 
 
-export default withStyles(styles)(TextInput)
+export default withStyles(styles,{withTheme:true})(TextInput)

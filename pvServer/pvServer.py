@@ -291,8 +291,8 @@ def databaseRead(message):
     global clientPVlist,REACT_APP_DisableLogin
     dbURL= str(message['dbURL'])
 
-    print("databaseRead: SSID: ",request.sid,' dbURL: ', dbURL)
-    print("message:",str(message))
+    #print("databaseRead: SSID: ",request.sid,' dbURL: ', dbURL)
+    #print("message:",str(message))
     authenticated=False
     if REACT_APP_DisableLogin:
         authenticated=True
@@ -304,7 +304,7 @@ def databaseRead(message):
     if accessControl['userAuthorised'] :
         if "mongodb://" in dbURL:
 
-            print("mongodb database connection request: ",dbURL)
+            #print("mongodb database connection request: ",dbURL)
             str1=dbURL.replace("mongodb://","")
             strings=  str1.split(':')
             try:
@@ -313,14 +313,14 @@ def databaseRead(message):
             except:
                 raise Exception("Parameters are not defined")
 
-            print("Parameters:",str(parameters))
+            #print("Parameters:",str(parameters))
             if(len(strings)>=3):
                 database= strings[0];
                 dbName=   strings[1];
                 colName=  strings[2];
-                print("database: ", database, "length: ", len(database))
-                print("dbName: "  ,   dbName, "length: ", len(dbName))
-                print("colName: " ,  colName, "length: ", len(colName))
+                #print("database: ", database, "length: ", len(database))
+                #print("dbName: "  ,   dbName, "length: ", len(dbName))
+                #print("colName: " ,  colName, "length: ", len(colName))
                 ### must insert a better error detection here
 
                 if ((len(database)>0) and (len(dbName)>0) and (len(colName)>0)):
@@ -347,7 +347,7 @@ def databaseRead(message):
                             mycol=mydb[colName]
                             try:
                                 query=parameters['query']
-                                print("using query:",query)
+                #                print("using query:",query)
                                 X=mycol.find(query)
                             except:
                                 X=mycol.find()
@@ -362,7 +362,7 @@ def databaseRead(message):
                             d={'dbURL': dbURL,'write_access':write_access,'data': data}
 
                             eventName='databaseData:'+dbURL;
-                            print("eventName",eventName)
+                #            print("eventName",eventName)
                             socketio.emit(eventName,d,request.sid,namespace='/pvServer')
                         except:
                             print("could not connect to MongoDB: ",dbURL)
@@ -385,8 +385,8 @@ def databaseRead(message):
     global clientPVlist,REACT_APP_DisableLogin
     dbURL= str(message['dbURL'])
 
-    print("databaseRead: SSID: ",request.sid,' dbURL: ', dbURL)
-    print("message:",str(message))
+    #print("databaseRead: SSID: ",request.sid,' dbURL: ', dbURL)
+    #print("message:",str(message))
     authenticated=False
     if REACT_APP_DisableLogin:
         authenticated=True
@@ -398,7 +398,7 @@ def databaseRead(message):
     if accessControl['userAuthorised'] :
         if "mongodb://" in dbURL:
 
-            print("mongodb database connection request: ",dbURL)
+    #        print("mongodb database connection request: ",dbURL)
             str1=dbURL.replace("mongodb://","")
             strings=  str1.split(':')
             try:
@@ -407,14 +407,14 @@ def databaseRead(message):
             except:
                 raise Exception("Parameters are not defined")
 
-            print("Parameters:",str(parameters))
+    #        print("Parameters:",str(parameters))
             if(len(strings)>=3):
                 database= strings[0];
                 dbName=   strings[1];
                 colName=  strings[2];
-                print("database: ", database, "length: ", len(database))
-                print("dbName: "  ,   dbName, "length: ", len(dbName))
-                print("colName: " ,  colName, "length: ", len(colName))
+    #            print("database: ", database, "length: ", len(database))
+    #            print("dbName: "  ,   dbName, "length: ", len(dbName))
+    #            print("colName: " ,  colName, "length: ", len(colName))
                 ### must insert a better error detection here
 
                 if ((len(database)>0) and (len(dbName)>0) and (len(colName)>0)):
@@ -429,7 +429,7 @@ def databaseRead(message):
                             write_access=False
                             #join_room(str(dbURL))
                         try:
-                            print("connecting: "+dbURL)
+    #                        print("connecting: "+dbURL)
                             try:
                                 myclient = pymongo.MongoClient("mongodb://"+ str(os.environ[database])+"/")
                             except:
@@ -441,7 +441,7 @@ def databaseRead(message):
                             mycol=mydb[colName]
                             try:
                                 query=parameters['query']
-                                print("using query:",query)
+                    #            print("using query:",query)
                                 X=mycol.find(query)
                             except:
                                 X=mycol.find()
@@ -449,14 +449,14 @@ def databaseRead(message):
 
                             #for x in X:
                                 #print(x)
-                            print("done: "+dbURL)
+    #                        print("done: "+dbURL)
 
 
                             data=dumps(X)
 
 
                             eventName='databaseData:'+dbURL;
-                            print("eventName",eventName)
+    #                        print("eventName",eventName)
                             d={'dbURL': dbURL,'write_access':write_access,'data': data}
                             socketio.emit(eventName,d,str(dbURL)+'rw',namespace='/pvServer')
                             d={'dbURL': dbURL,'write_access':False,'data': data}
@@ -483,8 +483,8 @@ def databaseRead(message):
     global clientPVlist,REACT_APP_DisableLogin
     dbURL= str(message['dbURL'])
 
-    print("databaseUpdate: SSID: ",request.sid,' dbURL: ', dbURL)
-    print("message:",str(message))
+#    print("databaseUpdate: SSID: ",request.sid,' dbURL: ', dbURL)
+#    print("message:",str(message))
     authenticated=False
     if REACT_APP_DisableLogin:
         authenticated=True
@@ -497,16 +497,16 @@ def databaseRead(message):
         if accessControl['permissions']['write']:
             if "mongodb://" in dbURL:
 
-                print("mongodb database connection request: ",dbURL)
+#                print("mongodb database connection request: ",dbURL)
                 str1=dbURL.replace("mongodb://","")
                 strings=  str1.split(':')
                 if(len(strings)==3):
                     database= strings[0];
                     dbName=   strings[1];
                     colName=  strings[2];
-                    print("database: ", database, "length: ", len(database))
-                    print("dbName: "  ,   dbName, "length: ", len(dbName))
-                    print("colName: " ,  colName, "length: ", len(colName))
+#                    print("database: ", database, "length: ", len(database))
+#                    print("dbName: "  ,   dbName, "length: ", len(dbName))
+#                    print("colName: " ,  colName, "length: ", len(colName))
                     ### must insert a better error detection here
 
                     if ((len(database)>0) and (len(dbName)>0) and (len(colName)>0)):
@@ -517,7 +517,7 @@ def databaseRead(message):
                             try:
                                 myclient = pymongo.MongoClient("mongodb://"+ str(os.environ[database])+"/")
                             except:
-                                print("Unknown database ID:",database)
+#                                print("Unknown database ID:",database)
                                 raise Exception("Unknown database ID:",database)
 
                             mydb = myclient[dbName]
@@ -526,18 +526,18 @@ def databaseRead(message):
                             id=message['id']
                             newvalues=message['newvalues']
                             try:
-                                print("add newvalues")
-                                print("dbName:",dbName)
-                                print("colName:",colName)
-                                print("id:",str(id))
-                                print("newvalues message:",str(newvalues))
+#                                print("add newvalues")
+#                                print("dbName:",dbName)
+#                                print("colName:",colName)
+#                                print("id:",str(id))
+#                                print("newvalues message:",str(newvalues))
                                 mydb[colName].update_one({'_id':ObjectId(str(id))},newvalues)
 
                             except Exception as e: print(e)
 
 
 
-                            print("done: "+dbURL)
+#                            print("done: "+dbURL)
 
                             try:
                                 responseID=message['responseID']
@@ -562,11 +562,11 @@ def databaseRead(message):
 @socketio.on('databaseInsertOne', namespace='/pvServer')
 def databaseInsertOne(message):
     global clientPVlist,REACT_APP_DisableLogin
-    print("databaseInsertOne")
+#    print("databaseInsertOne")
     dbURL= str(message['dbURL'])
 
-    print("databaseInsertOne: SSID: ",request.sid,' dbURL: ', dbURL)
-    print("message:",str(message))
+#    print("databaseInsertOne: SSID: ",request.sid,' dbURL: ', dbURL)
+#    print("message:",str(message))
     authenticated=False
     if REACT_APP_DisableLogin:
         authenticated=True
@@ -579,23 +579,23 @@ def databaseInsertOne(message):
         if accessControl['permissions']['write']:
             if "mongodb://" in dbURL:
 
-                print("mongodb database connection request: ",dbURL)
+#                print("mongodb database connection request: ",dbURL)
                 str1=dbURL.replace("mongodb://","")
                 strings=  str1.split(':')
                 if(len(strings)==3):
                     database= strings[0];
                     dbName=   strings[1];
                     colName=  strings[2];
-                    print("database: ", database, "length: ", len(database))
-                    print("dbName: "  ,   dbName, "length: ", len(dbName))
-                    print("colName: " ,  colName, "length: ", len(colName))
+#                    print("database: ", database, "length: ", len(database))
+#                    print("dbName: "  ,   dbName, "length: ", len(dbName))
+#                    print("colName: " ,  colName, "length: ", len(colName))
                     ### must insert a better error detection here
 
                     if ((len(database)>0) and (len(dbName)>0) and (len(colName)>0)):
 
 
                         try:
-                            print("connecting: "+dbURL)
+#                            print("connecting: "+dbURL)
                             try:
                                 myclient = pymongo.MongoClient("mongodb://"+ str(os.environ[database])+"/")
                             except:
@@ -609,16 +609,16 @@ def databaseInsertOne(message):
                             # id=message['id']
                             newEntry=message['newEntry']
 
-                            print("newEntry",str(newEntry))
+#                            print("newEntry",str(newEntry))
                             try:
-                                 print("add newEntry")
-                                 print("dbName:",dbName)
-                                 print("colName:",colName)
+                                # print("add newEntry")
+                                # print("dbName:",dbName)
+                                # print("colName:",colName)
 
                                  mydb[colName].insert_one(newEntry)
                             #
                             except Exception as e: print(e)
-                            print("done: "+dbURL)
+#                            print("done: "+dbURL)
 
 
                         except:

@@ -291,7 +291,7 @@ render() {
         <FormControlLabel
           className={classes.FormControl}
           control={
-            <SvgIcon    size='small' style={iconStyle} style={{color:this.state['value']==1? onColor:offColor}}   onContextMenu={this.handleToggleContextMenu}>
+            <SvgIcon    size='small' style={iconStyle} style={{color:this.state['value']!=0? onColor:offColor}}   onContextMenu={this.handleToggleContextMenu}>
 
 
               {typeof this.props.children==='undefined'&&<Lens  />}

@@ -380,7 +380,10 @@ TextUpdate.propTypes = {
   /** If defined, then the string representaion of the number can be formatted using the mathjs format function eg.  numberFormat={{notation: 'engineering',precision: 3}}. See https://mathjs.org/docs/reference/functions/format.html for more examples*/
   numberFormat:PropTypes.object,
   /** local variable intialization value*/
-  intialLocalVariableValue:PropTypes.string
+  intialLocalVariableValue:PropTypes.string,
+  /** If defined, then the string value of the EPICS enumerator type will be forced to be used, if not defined the the enumerator index is used */
+  useStringValue:PropTypes.bool
+
 
 };
 

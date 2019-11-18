@@ -152,9 +152,13 @@ handleButtonClick =increment_value=>(event)=> {
     }else if (new_value<min) {
       new_value=min;
     }
-
-
-    this.setState({ ['value']: new_value.toFixed(this.props.prec_decimal)});
+  //  console.log(new_value)
+    if (typeof this.props.custom_increments==='undefined'){
+      this.setState({ ['value']: new_value.toFixed(this.props.prec_decimal)});
+  }
+  else{
+    this.setState({ ['value']: new_value})
+  }
     window.navigator.vibrate(1);
   }
 
@@ -273,7 +277,7 @@ render() {
   else{
     num_array=this.props.custom_increments;
   }
-
+//console.log("custom_increments",this.props.custom_increments);
 
   return (
 

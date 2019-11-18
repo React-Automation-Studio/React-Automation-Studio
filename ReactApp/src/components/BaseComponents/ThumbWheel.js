@@ -266,8 +266,13 @@ render() {
   else{
     prec_decimal_div=0;
   }
-
-  const num_array = Array(prec_integer+prec_decimal).fill(1);
+  let num_array;
+  if (typeof this.props.custom_increments==='undefined'){
+    num_array = Array(prec_integer+prec_decimal).fill(1);
+  }
+  else{
+    num_array=this.props.custom_increments;
+  }
 
 
   return (
@@ -288,59 +293,86 @@ render() {
 
       {initialized===true &&
 
-
-        <FormControlLabel className={classes.Button}
-          control={
-            <div style={{display:'flex', flexDirection:'row-reverse',}}>
-              {num_array.map((item, index) =>
-                <div key={'toprowbuttons' + index+'div1'} style={{paddingRight:this.props.theme.spacing(1),paddingLeft:this.props.theme.spacing(1)}}>
-                  <div style={{display:'flex', flexDirection:'column'}}>
-                    <FormControlLabel className={classes.Button}
-                      control={
-                        <Button
-                          key={'toprowbuttons' + index} disabled={write_access===false?true:false} size={typeof(this.props.buttonSize)!=='undefined'?this.props.buttonSize:'small'} variant="contained" color={"primary"} className={classes.Button} onClick={this.handleButtonClick(((10**index)/(10**prec_decimal_div)) )} onContextMenu={this.handleToggleContextMenu}>
-                          {((10**index)/(10**prec_decimal_div)) >=0?<ExpandLess  />:<ExpandMore  />}
-                          </Button>
-                        }
-                        label={((10**index)/(10**prec_decimal_div)) }
-                        labelPlacement={"bottom"}
-                              />
-
-                      <Button
-                        key={'bottomrowbuttons' + index} disabled={write_access===false?true:false} size={typeof(this.props.buttonSize)!=='undefined'?this.props.buttonSize:'small'} variant="contained" color={"primary"} className={classes.Button} onClick={this.handleButtonClick((-(10**index)/(10**prec_decimal_div)) )} onContextMenu={this.handleToggleContextMenu}>
-                        {(-(10**index)/(10**prec_decimal_div)) >=0?<ExpandLess  />:<ExpandMore  />}
-                        </Button>
-                      </div>
-                    </div>
-                  )}
-              </div>
-              }
-            />
-
-
-
-          }
-
-          {(initialized===false||initialized==='undefined') &&
-            <FormControlLabel className={classes.Button}
-              control={
-                <FormControlLabel className={classes.Button}
-                  control={
-                    <div style={{display:'flex', flexDirection:'row-reverse',}}>
-                      {num_array.map((item, index) =>
-                        <div key={'toprowbuttons' + index+'div1'} style={{paddingRight:this.props.theme.spacing(1),paddingLeft:this.props.theme.spacing(1)}}>
-                          <div style={{display:'flex', flexDirection:'column'}}>
-                            <FormControlLabel className={classes.Button}
-                              control={
-                                <Button key={'toprowbuttons' + index} disabled={true} size={typeof(this.props.buttonSize)!=='undefined'?this.props.buttonSize:'small'} variant="contained" color={"primary"} className={classes.Button} onClick={this.handleButtonClick(((10**index)/(10**prec_decimal_div)) )} onContextMenu={this.handleToggleContextMenu}>
-                                  {((10**index)/(10**prec_decimal_div)) >=0?<ExpandLess  />:<ExpandMore  />}
-                                  </Button>
-                                }
-                                  label={((10**index)/(10**prec_decimal_div)) }
-                                  labelPlacement={"bottom"}
+        <React.Fragment>
+          {typeof this.props.custom_increments==='undefined'&&<FormControlLabel className={classes.Button}
+            control={
+              <div style={{display:'flex', flexDirection:'row-reverse',}}>
+                {num_array.map((item, index) =>
+                  <div key={'toprowbuttons' + index+'div1'} style={{paddingRight:this.props.theme.spacing(1),paddingLeft:this.props.theme.spacing(1)}}>
+                    <div style={{display:'flex', flexDirection:'column'}}>
+                      <FormControlLabel className={classes.Button}
+                        control={
+                          <Button
+                            key={'toprowbuttons' + index} disabled={write_access===false?true:false} size={typeof(this.props.buttonSize)!=='undefined'?this.props.buttonSize:'small'} variant="contained" color={"primary"} className={classes.Button} onClick={this.handleButtonClick(((10**index)/(10**prec_decimal_div)) )} onContextMenu={this.handleToggleContextMenu}>
+                            {((10**index)/(10**prec_decimal_div)) >=0?<ExpandLess  />:<ExpandMore  />}
+                            </Button>
+                          }
+                          label={((10**index)/(10**prec_decimal_div)) }
+                          labelPlacement={"bottom"}
                                 />
 
-                                <Button key={'bottomrowbuttons' + index} disabled={true} size={typeof(this.props.buttonSize)!=='undefined'?this.props.buttonSize:'small'} variant="contained" color={"primary"} className={classes.Button} onClick={this.handleButtonClick((-(10**index)/(10**prec_decimal_div)) )} onContextMenu={this.handleToggleContextMenu}>
+                        <Button
+                          key={'bottomrowbuttons' + index} disabled={write_access===false?true:false} size={typeof(this.props.buttonSize)!=='undefined'?this.props.buttonSize:'small'} variant="contained" color={"primary"} className={classes.Button} onClick={this.handleButtonClick((-(10**index)/(10**prec_decimal_div)) )} onContextMenu={this.handleToggleContextMenu}>
+                          {(-(10**index)/(10**prec_decimal_div)) >=0?<ExpandLess  />:<ExpandMore  />}
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+                </div>
+                }
+              />}
+            {typeof this.props.custom_increments!=='undefined'&&<FormControlLabel className={classes.Button}
+              control={
+                <div style={{display:'flex', flexDirection:'row-reverse',}}>
+                  {num_array.map((item, index) =>
+                    <div key={'toprowbuttons' + index+'div1'} style={{paddingRight:this.props.theme.spacing(1),paddingLeft:this.props.theme.spacing(1)}}>
+                      <div style={{display:'flex', flexDirection:'column'}}>
+                        <FormControlLabel className={classes.Button}
+                          control={
+                            <Button
+                              key={'toprowbuttons' + index} disabled={write_access===false?true:false} size={typeof(this.props.buttonSize)!=='undefined'?this.props.buttonSize:'small'} variant="contained" color={"primary"} className={classes.Button} onClick={this.handleButtonClick(item)} onContextMenu={this.handleToggleContextMenu}>
+                              {<ExpandLess  />}
+                            </Button>
+                          }
+                          label={item }
+                          labelPlacement={"bottom"}
+                        />
+
+                        <Button
+                          key={'bottomrowbuttons' + index} disabled={write_access===false?true:false} size={typeof(this.props.buttonSize)!=='undefined'?this.props.buttonSize:'small'} variant="contained" color={"primary"} className={classes.Button} onClick={this.handleButtonClick(-item )} onContextMenu={this.handleToggleContextMenu}>
+                            {<ExpandMore  />}
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+                  </div>
+                  }
+                />}
+            </React.Fragment>
+
+
+            }
+
+            {(initialized===false||initialized==='undefined') &&
+              <FormControlLabel className={classes.Button}
+                control={
+                  <FormControlLabel className={classes.Button}
+                    control={
+                      <div style={{display:'flex', flexDirection:'row-reverse',}}>
+                        {num_array.map((item, index) =>
+                          <div key={'toprowbuttons' + index+'div1'} style={{paddingRight:this.props.theme.spacing(1),paddingLeft:this.props.theme.spacing(1)}}>
+                            <div style={{display:'flex', flexDirection:'column'}}>
+                              <FormControlLabel className={classes.Button}
+                                control={
+                                  <Button key={'toprowbuttons' + index} disabled={true} size={typeof(this.props.buttonSize)!=='undefined'?this.props.buttonSize:'small'} variant="contained" color={"primary"} className={classes.Button} onClick={this.handleButtonClick(((10**index)/(10**prec_decimal_div)) )} onContextMenu={this.handleToggleContextMenu}>
+                                    {((10**index)/(10**prec_decimal_div)) >=0?<ExpandLess  />:<ExpandMore  />}
+                                    </Button>
+                                  }
+                                    label={((10**index)/(10**prec_decimal_div)) }
+                                    labelPlacement={"bottom"}
+                                  />
+
+                                  <Button key={'bottomrowbuttons' + index} disabled={true} size={typeof(this.props.buttonSize)!=='undefined'?this.props.buttonSize:'small'} variant="contained" color={"primary"} className={classes.Button} onClick={this.handleButtonClick((-(10**index)/(10**prec_decimal_div)) )} onContextMenu={this.handleToggleContextMenu}>
                                   {(-(10**index)/(10**prec_decimal_div)) >=0?<ExpandLess  />:<ExpandMore  />}
                                 </Button>
                                 </div>
@@ -385,6 +417,8 @@ ThumbWheel.propTypes = {
   prec_integer:PropTypes.number,
   /** If defined this sets the precision of the decimal values of the widget*/
   prec_decimal:PropTypes.number,
+  /** An array of custom increments. If defined, overides any values in 'prec_integer','prec_decimal'*/
+  custom_increments:PropTypes.array,
   /** local variable intialization value*/
   intialLocalVariableValue:PropTypes.string
 

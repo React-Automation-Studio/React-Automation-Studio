@@ -43,8 +43,8 @@ const styles = theme => ({
 });
 
 /**
-* The BitIndicators Component is a wrapper on the Material-UI contained SvgIcon component. The SvgIcon component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
-* The margins and spacing must be controlled from the parent component.<br/><br/>
+* The BitIndicators Component is a wrapper on multiple SvgIcon components. Each SvgIcon component indicates the value of each of the bits of the PV Value.
+*<br/><br/>
 * Material-UI SvgIcon Demos:
 * https://material-ui.com/style/icons/<br/><br/>
 * Material-UI SvgIcon API:
@@ -393,30 +393,90 @@ render() {
       }
 
       {(initialized===false||initialized==='undefined') &&
-        <FormControlLabel
-          className={classes.FormControl}
-          control={
-            <SvgIcon   disabled={true} size='small'  style={{color:'default'}}  onContextMenu={this.handleToggleContextMenu} >
+        <React.Fragment>
+
+          {this.props.horizontal!==true&&
+
+            <Grid
+              container
+              spacing={0}
+              alignItems={'flex-start'}
+              direction={'column'}
+              justify={'center'}
+            >
+              <Grid item xs={12}>
+                <span> <LanDisconnect style={{color:this.props.theme.palette.error.main,verticalAlign: "middle"}} fontSize='small'/> {this.state['pvname']} </span>
+              </Grid>
+
+              {bitArray.map((item,index)=>
+                <Grid item  xs={12}>
+                  <FormControlLabel
+                    className={classes.FormControl}
+                    control={
+                      <SvgIcon   disabled={true} size='small'  style={{color:'grey'}}  onContextMenu={this.handleToggleContextMenu} >
 
 
-              {typeof this.props.children==='undefined'&&<Lens  />}
-              {typeof this.props.children!=='undefined'&& this.props.children}
+                        {typeof this.props.children==='undefined'&&<Lens  />}
+                        {typeof this.props.children!=='undefined'&& this.props.children}
 
 
-            </SvgIcon>
-          }
-          label={<span> <LanDisconnect style={{color:this.props.theme.palette.error.main,verticalAlign: "middle"}} fontSize='small'/> {this.state['pvname']} </span>}
-          labelPlacement={typeof this.props.labelPlacement !== 'undefined'? this.props.labelPlacement:"top"}
-        />
+                      </SvgIcon>
+                    }
+                    label={bitLabels[index]}
+
+                    labelPlacement={typeof this.props.bitLabelPlacement !== 'undefined'? this.props.bitLabelPlacement:"end"}
+                  />
+
+
+
+                </Grid>
+
+              )
+              }
+
+            </Grid>}
+          {this.props.horizontal===true&&<div>
+            <div>
+              <span> <LanDisconnect style={{color:this.props.theme.palette.error.main,verticalAlign: "middle"}} fontSize='small'/> {this.state['pvname']} </span>
+            </div>
+
+            {bitArray.map((item,index)=>
+
+              <FormControlLabel
+
+                control={
+                  <SvgIcon    size='small' style={iconStyle} style={{color:item!=0? onColor:offColor}}   onContextMenu={this.handleToggleContextMenu}>
+
+
+                    {typeof this.props.children==='undefined'&&<Lens  />}
+                    {typeof this.props.children!=='undefined'&& this.props.children}
+
+
+
+                  </SvgIcon>
+                }
+                label={bitLabels[index]}
+                labelPlacement={typeof this.props.bitLabelPlacement !== 'undefined'? this.props.bitLabelPlacement:"top"}
+              />
+
+            )
+            }
+
+
+          </div>}
+        </React.Fragment>
+
+
+
+
+
 
       }
-
     </React.Fragment>
-
-
-)
+  )
 }
 }
+
 
 BitIndicators.propTypes = {
   /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
@@ -439,18 +499,18 @@ BitIndicators.propTypes = {
   bitLabelPlacement: PropTypes.oneOf(['start', 'end', 'top', 'bottom']),
   /** local variable intialization value*/
   intialLocalVariableValue:PropTypes.string,
-  /* Number of bits to indicate*/
+  /** Number of bits to indicate*/
   numberOfBits:PropTypes.number,
-  /* Array of custom bit labels*/
+  /** Array of custom bit labels*/
   bitLabels:PropTypes.array,
-  /* Display bits horizontally*/
+  /** Display bits horizontally*/
   horizontal:PropTypes.bool
 
 };
 
 
 BitIndicators.defaultProps = {
-  labelPlacement: 'top',
+
   debug:false,
   alarmSensitive:false,
   usePvLabel:false,

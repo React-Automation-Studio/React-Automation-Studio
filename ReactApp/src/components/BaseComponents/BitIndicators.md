@@ -64,7 +64,14 @@ BitIndicators example connection to a SoftChannel EPICS AI pv with example overi
   <br/><br/>
   {/*###############*/}  
 
-  <BitIndicators horizontal={true} pv='pva://$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}} label='My Label' labelPlacement='Top' bitLabelPlacement='end' onColor='yellow' offColor='cyan'/>
+  <BitIndicators
+    horizontal={true}
+    pv='pva://$(device):test$(id)'
+    macros={{'$(device)':'testIOC','$(id)':'2'}}
+    label='My Label'
+    bitLabelPlacement='end'
+    onColor='yellow'
+    offColor='cyan'/>
 
   {/*###############*/}
 

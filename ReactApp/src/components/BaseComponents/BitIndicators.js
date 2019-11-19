@@ -31,8 +31,7 @@ const styles = theme => ({
 
   },
   FormControl: {
-    width:'100%',
-    height:'100%',
+
     marginTop:'auto',
     marginBottom:'auto',
     marginLeft:'auto',
@@ -324,40 +323,71 @@ let bitLabels=[];
   {initialized===true &&
     <React.Fragment>
 
+    {this.props.horizontal!==true&&
+
       <Grid
-        container
-        spacing={1}
-        alignItems={'stretch'}
-        direction={'column'}
-        justify={'flex-start'}
-      >
-        <Grid item xs={12}>
-          {this.props.label}
-        </Grid>
-        <Grid item  xs={12}>
-          {bitArray.map((item,index)=>
-            <FormControlLabel
-              className={classes.FormControl}
-              control={
-                <SvgIcon    size='small' style={iconStyle} style={{color:item!=0? onColor:offColor}}   onContextMenu={this.handleToggleContextMenu}>
-
-
-                  {typeof this.props.children==='undefined'&&<Lens  />}
-                  {typeof this.props.children!=='undefined'&& this.props.children}
-
-
-
-                </SvgIcon>
-              }
-              label={bitLabels[index]}
-              labelPlacement={typeof this.props.bitLabelPlacement !== 'undefined'? this.props.bitLabelPlacement:"top"}
-            />
-          )
-          }
-        </Grid>
+      container
+      spacing={1}
+      alignItems={'flex-start'}
+      direction={'column'}
+      justify={'center'}
+    >
+      <Grid item xs={12}>
+        {this.props.label}
       </Grid>
 
+        {bitArray.map((item,index)=>
+          <Grid item  xs={12}>
+          <FormControlLabel
+            className={classes.FormControl}
+            control={
+              <SvgIcon    size='small' style={iconStyle} style={{color:item!=0? onColor:offColor}}   onContextMenu={this.handleToggleContextMenu}>
 
+
+                {typeof this.props.children==='undefined'&&<Lens  />}
+                {typeof this.props.children!=='undefined'&& this.props.children}
+
+
+
+              </SvgIcon>
+            }
+            label={bitLabels[index]}
+            labelPlacement={typeof this.props.bitLabelPlacement !== 'undefined'? this.props.bitLabelPlacement:"top"}
+          />
+          </Grid>
+        )
+        }
+
+    </Grid>}
+    {this.props.horizontal===true&&<div>
+<div>
+        {this.props.label}
+    </div>
+
+        {bitArray.map((item,index)=>
+
+          <FormControlLabel
+
+            control={
+              <SvgIcon    size='small' style={iconStyle} style={{color:item!=0? onColor:offColor}}   onContextMenu={this.handleToggleContextMenu}>
+
+
+                {typeof this.props.children==='undefined'&&<Lens  />}
+                {typeof this.props.children!=='undefined'&& this.props.children}
+
+
+
+              </SvgIcon>
+            }
+            label={bitLabels[index]}
+            labelPlacement={typeof this.props.bitLabelPlacement !== 'undefined'? this.props.bitLabelPlacement:"top"}
+          />
+        
+        )
+        }
+
+
+    </div>}
     </React.Fragment>
 
   }

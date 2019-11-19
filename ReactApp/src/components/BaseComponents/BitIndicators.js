@@ -43,14 +43,14 @@ const styles = theme => ({
 });
 
 /**
- * The BitIndicators Component is a wrapper on the Material-UI contained SvgIcon component. The SvgIcon component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
- * The margins and spacing must be controlled from the parent component.<br/><br/>
- * Material-UI SvgIcon Demos:
- * https://material-ui.com/style/icons/<br/><br/>
- * Material-UI SvgIcon API:
- * https://material-ui.com/api/svg-icon/<br/><br/>
- * A custom Icon can used by importing it in the parent and assigning it as a child <br/><br/>
- */
+* The BitIndicators Component is a wrapper on the Material-UI contained SvgIcon component. The SvgIcon component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
+* The margins and spacing must be controlled from the parent component.<br/><br/>
+* Material-UI SvgIcon Demos:
+* https://material-ui.com/style/icons/<br/><br/>
+* Material-UI SvgIcon API:
+* https://material-ui.com/api/svg-icon/<br/><br/>
+* A custom Icon can used by importing it in the parent and assigning it as a child <br/><br/>
+*/
 class BitIndicators extends React.Component {
   constructor(props) {
     super(props);
@@ -140,7 +140,7 @@ handleToggleContextMenu = (event) => {
 
 handleButtonClick = name => event => {
   //console.log(event.target.checked)
-this.setState({ ['value']: this.state.value==0?1:0});
+  this.setState({ ['value']: this.state.value==0?1:0});
 
 };
 
@@ -192,15 +192,15 @@ render() {
       onColor=this.props.theme.palette.primary.main;
     }
     else if(this.props.onColor==='secondary'){
-        onColor=this.props.theme.palette.secondary.main;
+      onColor=this.props.theme.palette.secondary.main;
     }
     else if(this.props.onColor==='default'){
-         onColor=this.props.theme.palette.grey[50];
-        }
+      onColor=this.props.theme.palette.grey[50];
+    }
     else
-       {
-     onColor=this.props.onColor;
-   }
+    {
+      onColor=this.props.onColor;
+    }
   }
 
 
@@ -209,15 +209,15 @@ render() {
       offColor=this.props.theme.palette.primary.main;
     }
     else if(this.props.offColor==='secondary'){
-        offColor=this.props.theme.palette.secondary.main;
+      offColor=this.props.theme.palette.secondary.main;
     }
     else if(this.props.offColor==='default'){
-         offColor=this.props.theme.palette.grey[50];
-        }
+      offColor=this.props.theme.palette.grey[50];
+    }
     else
-       {
-     offColor=this.props.offColor;
-   }
+    {
+      offColor=this.props.offColor;
+    }
   }
 
 
@@ -254,23 +254,23 @@ render() {
     }
 
 
-}
-let bitArray=[];
-let bitLabels=[];
+  }
+  let bitArray=[];
+  let bitLabels=[];
 
-        let numberOfBits=this.props.numberOfBits;
+  let numberOfBits=this.props.numberOfBits;
 
 
-        let n=0;
-	for(n=0;n<numberOfBits;n++){
-     if(initialized){
-	      bitArray[n]=this.state.value&Math.pow(2,n);
-        if (typeof this.props.bitLabels==='undefined'){
-          bitLabels[n]="Bit "+n;
-        }
-        else {
-          bitLabels[n]=this.props.bitLabels[n];
-        }
+  let n=0;
+  for(n=0;n<numberOfBits;n++){
+    if(initialized){
+      bitArray[n]=this.state.value&Math.pow(2,n);
+      if (typeof this.props.bitLabels==='undefined'){
+        bitLabels[n]="Bit "+n;
+      }
+      else {
+        bitLabels[n]=this.props.bitLabels[n];
+      }
     }
     else{
       bitArray[n]=0;
@@ -281,137 +281,137 @@ let bitLabels=[];
         bitLabels[n]=this.props.bitLabels[n];
       }
     }
-	}
- if(this.props.reverseBits===true){
-   bitLabels=bitLabels.reverse();
-   bitArray=bitArray.reverse();
- }
-
-
-       console.log(this.state.value)
-  return (
-
-<React.Fragment>
-
-  <DataConnection
-    pv={pv}
-    macros={macros}
-    usePvLabel={usePvLabel}
-    usePrecision={usePrecision}
-    handleInputValue={this.handleInputValue}
-    handleMetadata={this.handleMetadata}
-    outputValue=  {this.state.value}
-    useStringValue={useStringValue}
-    debug={this.props.debug}
-    handleInputValueLabel={this.handleInputValueLabel}
-    intialLocalVariableValue={this.props.intialLocalVariableValue}
-  />
-  <ContextMenu
-    disableProbe={this.props.disableProbe}
-    open={this.state.openContextMenu}
-    anchorReference="anchorPosition"
-    anchorPosition={{ top: +this.state.y0, left: +this.state.x0 }}
-    probeType={'readOnly'}
-    pvs={[{pvname:this.state.pvname,initialized:initialized}]}
-    handleClose={this.handleContextMenuClose}
-
-    transformOrigin={{
-      vertical: 'top',
-      horizontal: 'left',
-    }}
-  />
-  {initialized===true &&
-    <React.Fragment>
-
-    {this.props.horizontal!==true&&
-
-      <Grid
-      container
-      spacing={1}
-      alignItems={'flex-start'}
-      direction={'column'}
-      justify={'center'}
-    >
-      <Grid item xs={12}>
-        {this.props.label}
-      </Grid>
-
-        {bitArray.map((item,index)=>
-          <Grid item  xs={12}>
-          <FormControlLabel
-            className={classes.FormControl}
-            control={
-              <SvgIcon    size='small' style={iconStyle} style={{color:item!=0? onColor:offColor}}   onContextMenu={this.handleToggleContextMenu}>
-
-
-                {typeof this.props.children==='undefined'&&<Lens  />}
-                {typeof this.props.children!=='undefined'&& this.props.children}
-
-
-
-              </SvgIcon>
-            }
-            label={bitLabels[index]}
-            labelPlacement={typeof this.props.bitLabelPlacement !== 'undefined'? this.props.bitLabelPlacement:"top"}
-          />
-          </Grid>
-        )
-        }
-
-    </Grid>}
-    {this.props.horizontal===true&&<div>
-<div>
-        {this.props.label}
-    </div>
-
-        {bitArray.map((item,index)=>
-
-          <FormControlLabel
-
-            control={
-              <SvgIcon    size='small' style={iconStyle} style={{color:item!=0? onColor:offColor}}   onContextMenu={this.handleToggleContextMenu}>
-
-
-                {typeof this.props.children==='undefined'&&<Lens  />}
-                {typeof this.props.children!=='undefined'&& this.props.children}
-
-
-
-              </SvgIcon>
-            }
-            label={bitLabels[index]}
-            labelPlacement={typeof this.props.bitLabelPlacement !== 'undefined'? this.props.bitLabelPlacement:"top"}
-          />
-        
-        )
-        }
-
-
-    </div>}
-    </React.Fragment>
-
+  }
+  if(this.props.reverseBits===true){
+    bitLabels=bitLabels.reverse();
+    bitArray=bitArray.reverse();
   }
 
-  {(initialized===false||initialized==='undefined') &&
-    <FormControlLabel
-      className={classes.FormControl}
-      control={
-        <SvgIcon   disabled={true} size='small'  style={{color:'default'}}  onContextMenu={this.handleToggleContextMenu} >
 
+  console.log(this.state.value)
+  return (
 
-            {typeof this.props.children==='undefined'&&<Lens  />}
-            {typeof this.props.children!=='undefined'&& this.props.children}
+    <React.Fragment>
 
-
-          </SvgIcon>
-        }
-        label={<span> <LanDisconnect style={{color:this.props.theme.palette.error.main,verticalAlign: "middle"}} fontSize='small'/> {this.state['pvname']} </span>}
-        labelPlacement={typeof this.props.labelPlacement !== 'undefined'? this.props.labelPlacement:"top"}
+      <DataConnection
+        pv={pv}
+        macros={macros}
+        usePvLabel={usePvLabel}
+        usePrecision={usePrecision}
+        handleInputValue={this.handleInputValue}
+        handleMetadata={this.handleMetadata}
+        outputValue=  {this.state.value}
+        useStringValue={useStringValue}
+        debug={this.props.debug}
+        handleInputValueLabel={this.handleInputValueLabel}
+        intialLocalVariableValue={this.props.intialLocalVariableValue}
       />
+      <ContextMenu
+        disableProbe={this.props.disableProbe}
+        open={this.state.openContextMenu}
+        anchorReference="anchorPosition"
+        anchorPosition={{ top: +this.state.y0, left: +this.state.x0 }}
+        probeType={'readOnly'}
+        pvs={[{pvname:this.state.pvname,initialized:initialized}]}
+        handleClose={this.handleContextMenuClose}
+
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+      />
+      {initialized===true &&
+        <React.Fragment>
+
+          {this.props.horizontal!==true&&
+
+            <Grid
+              container
+              spacing={0}
+              alignItems={'flex-start'}
+              direction={'column'}
+              justify={'center'}
+            >
+              <Grid item xs={12}>
+                {usePvLabel===true? this.state['label']:this.props.label}
+              </Grid>
+
+              {bitArray.map((item,index)=>
+                <Grid item  xs={12}>
+                  <FormControlLabel
+                    className={classes.FormControl}
+                    control={
+                      <SvgIcon    size='small' style={iconStyle} style={{color:item!=0? onColor:offColor}}   onContextMenu={this.handleToggleContextMenu}>
+
+
+                        {typeof this.props.children==='undefined'&&<Lens  />}
+                        {typeof this.props.children!=='undefined'&& this.props.children}
+
+
+
+                      </SvgIcon>
+                    }
+                    label={bitLabels[index]}
+                    labelPlacement={typeof this.props.bitLabelPlacement !== 'undefined'? this.props.bitLabelPlacement:"top"}
+                  />
+                </Grid>
+              )
+              }
+
+            </Grid>}
+          {this.props.horizontal===true&&<div>
+            <div>
+              {usePvLabel===true? this.state['label']:this.props.label}
+            </div>
+
+            {bitArray.map((item,index)=>
+
+              <FormControlLabel
+
+                control={
+                  <SvgIcon    size='small' style={iconStyle} style={{color:item!=0? onColor:offColor}}   onContextMenu={this.handleToggleContextMenu}>
+
+
+                    {typeof this.props.children==='undefined'&&<Lens  />}
+                    {typeof this.props.children!=='undefined'&& this.props.children}
+
+
+
+                  </SvgIcon>
+                }
+                label={bitLabels[index]}
+                labelPlacement={typeof this.props.bitLabelPlacement !== 'undefined'? this.props.bitLabelPlacement:"top"}
+              />
+
+            )
+            }
+
+
+          </div>}
+        </React.Fragment>
 
       }
 
-</React.Fragment>
+      {(initialized===false||initialized==='undefined') &&
+        <FormControlLabel
+          className={classes.FormControl}
+          control={
+            <SvgIcon   disabled={true} size='small'  style={{color:'default'}}  onContextMenu={this.handleToggleContextMenu} >
+
+
+              {typeof this.props.children==='undefined'&&<Lens  />}
+              {typeof this.props.children!=='undefined'&& this.props.children}
+
+
+            </SvgIcon>
+          }
+          label={<span> <LanDisconnect style={{color:this.props.theme.palette.error.main,verticalAlign: "middle"}} fontSize='small'/> {this.state['pvname']} </span>}
+          labelPlacement={typeof this.props.labelPlacement !== 'undefined'? this.props.labelPlacement:"top"}
+        />
+
+      }
+
+    </React.Fragment>
 
 
 )
@@ -435,26 +435,29 @@ BitIndicators.propTypes = {
   onColor: PropTypes.string,
   /** If defined, this sets the color of the widget when the value is a 0 or LOW*/
   offColor: PropTypes.string,
-  /** If defined, the position of the label relative to the widget*/
-  labelPlacement: PropTypes.oneOf(['start', 'end', 'top', 'bottom']),
+  /** If defined, the position of the bit labels relative to the widget*/
+  bitLabelPlacement: PropTypes.oneOf(['start', 'end', 'top', 'bottom']),
   /** local variable intialization value*/
   intialLocalVariableValue:PropTypes.string,
   /* Number of bits to indicate*/
   numberOfBits:PropTypes.number,
   /* Array of custom bit labels*/
-  bitLabels:PropTypes.array
+  bitLabels:PropTypes.array,
+  /* Display bits horizontally*/
+  horizontal:PropTypes.bool
 
 };
 
 
 BitIndicators.defaultProps = {
-    labelPlacement: 'top',
-    debug:false,
-    alarmSensitive:false,
-    usePvLabel:false,
-    onColor:'theme.palette.primary.main',
-    offColor:'theme.palette.grey[50]',
-    numberOfBits:8
+  labelPlacement: 'top',
+  debug:false,
+  alarmSensitive:false,
+  usePvLabel:false,
+  onColor:'theme.palette.primary.main',
+  offColor:'theme.palette.grey[50]',
+  numberOfBits:8,
+  horizontal:false
 
 };
 

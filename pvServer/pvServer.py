@@ -337,10 +337,12 @@ def databaseRead(message):
                         try:
                             print("connecting: "+dbURL)
                             try:
-                                myclient = pymongo.MongoClient("mongodb://"+ str(os.environ[database])+"/")
-                            except:
-                                print("Unknown database ID:",database)
-                                raise Exception("Unknown database ID:",database)
+                                myclient = pymongo.MongoClient("mongodb://"+ str(os.environ[database])+"/",serverSelectionTimeoutMS=10)
+                                myclient.server_info()
+                            except pymongo.errors.ServerSelectionTimeoutError as err:
+                                print(err)
+                                return "Ack: Could not connect to MongoDB: "+str(dbURL)
+
 
                             mydb = myclient[dbName]
 
@@ -364,8 +366,10 @@ def databaseRead(message):
                             eventName='databaseData:'+dbURL;
                 #            print("eventName",eventName)
                             socketio.emit(eventName,d,request.sid,namespace='/pvServer')
+                            return "OK"
                         except:
                             print("could not connect to MongoDB: ",dbURL)
+                            return "Ack: Could not connect to MongoDB: "+str(dbURL)
                 else:
                     print("Malformed database URL, must be in format: mongodb://databaseID:database:collection")
             else:
@@ -381,7 +385,7 @@ def databaseRead(message):
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
 
 @socketio.on('databaseBroadcastRead', namespace='/pvServer')
-def databaseRead(message):
+def databaseBroadcastRead(message):
     global clientPVlist,REACT_APP_DisableLogin
     dbURL= str(message['dbURL'])
 
@@ -431,10 +435,11 @@ def databaseRead(message):
                         try:
     #                        print("connecting: "+dbURL)
                             try:
-                                myclient = pymongo.MongoClient("mongodb://"+ str(os.environ[database])+"/")
-                            except:
-                                print("Unknown database ID:",database)
-                                raise Exception("Unknown database ID:",database)
+                                myclient = pymongo.MongoClient("mongodb://"+ str(os.environ[database])+"/",serverSelectionTimeoutMS=10)
+                                myclient.server_info()
+                            except pymongo.errors.ServerSelectionTimeoutError as err:
+                                print(err)
+                                return "Ack: Could not connect to MongoDB: "+str(dbURL)
 
                             mydb = myclient[dbName]
 
@@ -461,8 +466,10 @@ def databaseRead(message):
                             socketio.emit(eventName,d,str(dbURL)+'rw',namespace='/pvServer')
                             d={'dbURL': dbURL,'write_access':False,'data': data}
                             socketio.emit(eventName,d,str(dbURL)+'ro',namespace='/pvServer')
+                            return 'OK'
                         except:
                             print("could not connect to MongoDB: ",dbURL)
+                            return "Ack: Could not connect to MongoDB: "+str(dbURL)
                 else:
                     print("Malformed database URL, must be in format: mongodb://databaseID:database:collection")
             else:
@@ -479,7 +486,7 @@ def databaseRead(message):
 
 
 @socketio.on('databaseUpdateOne', namespace='/pvServer')
-def databaseRead(message):
+def databaseUpdateOne(message):
     global clientPVlist,REACT_APP_DisableLogin
     dbURL= str(message['dbURL'])
 
@@ -516,9 +523,10 @@ def databaseRead(message):
                             print("connecting: "+dbURL)
                             try:
                                 myclient = pymongo.MongoClient("mongodb://"+ str(os.environ[database])+"/")
-                            except:
-#                                print("Unknown database ID:",database)
-                                raise Exception("Unknown database ID:",database)
+                                myclient.server_info()
+                            except pymongo.errors.ServerSelectionTimeoutError as err:
+                                print(err)
+                                return "Ack: Could not connect to MongoDB: "+str(dbURL)
 
                             mydb = myclient[dbName]
 
@@ -544,9 +552,12 @@ def databaseRead(message):
                             except:
                                 responseID="";
 
-
+                            #eventName='databaseUpdateOne';
+    #                        print("eventName",eventName)
+                            return 'OK'
                         except:
                             print("could not connect to MongoDB: ",dbURL)
+                            return "Ack: Could not connect to MongoDB: "+str(dbURL)
 
                 else:
                     print("Malformed database URL, must be in format: mongodb://databaseID:database:collection")
@@ -598,9 +609,10 @@ def databaseInsertOne(message):
 #                            print("connecting: "+dbURL)
                             try:
                                 myclient = pymongo.MongoClient("mongodb://"+ str(os.environ[database])+"/")
-                            except:
-                                print("Unknown database ID:",database)
-                                raise Exception("Unknown database ID:",database)
+                                myclient.server_info()
+                            except pymongo.errors.ServerSelectionTimeoutError as err:
+                                print(err)
+                                return "Ack: Could not connect to MongoDB: "+str(dbURL)
 
                             mydb = myclient[dbName]
 
@@ -621,8 +633,10 @@ def databaseInsertOne(message):
 #                            print("done: "+dbURL)
 
 
+                            return 'OK'
                         except:
                             print("could not connect to MongoDB: ",dbURL)
+                            return "Ack: Could not connect to MongoDB: "+str(dbURL)
 
                 else:
                     print("Malformed database URL, must be in format: mongodb://databaseID:database:collection")

@@ -41,8 +41,8 @@ print('REACT_APP_PyEpicsServerBASEURL: '+ str(os.environ['REACT_APP_PyEpicsServe
 print('REACT_APP_PyEpicsServerPORT: '+ str(os.environ['REACT_APP_PyEpicsServerPORT']))
 print('REACT_APP_PyEpicsServerNamespace: '+ str(os.environ['REACT_APP_PyEpicsServerNamespace']))
 print('REACT_APP_EnableLogin: '+ str(os.environ['REACT_APP_EnableLogin']))
-print('ENABLE_DATABASE: '+ str(os.environ['ENABLE_DATABASE']))
-print('DATABASE1: '+ str(os.environ['DATABASE1']))
+
+
 print("")
 #app = Flask(__name__, static_folder="../build/static", template_folder="../build")
 app = Flask(__name__)

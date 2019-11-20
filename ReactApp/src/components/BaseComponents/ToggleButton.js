@@ -295,7 +295,7 @@ render() {
 
           {  (momentary===false)&&<FormControlLabel className={classes.FormControl}
             control={
-              <Button disabled={write_access===false?true:false} fullWidth= {true} variant="contained" color={this.state['value']==1?"primary":"default" }className={classes.Button} onClick={this.handleButtonClick } onFocus={this.handleOnFocus} onContextMenu={this.handleToggleContextMenu}>
+              <Button disabled={write_access===false?true:this.props.disabled===true} fullWidth= {true} variant="contained" color={this.state['value']==1?"primary":"default" }className={classes.Button} onClick={this.handleButtonClick } onFocus={this.handleOnFocus} onContextMenu={this.handleToggleContextMenu}>
 
 
                 {this.state['value']==0?enum_strings[0]:enum_strings[1]}

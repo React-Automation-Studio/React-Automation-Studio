@@ -698,7 +698,8 @@ GraphMultiplePVs.propTypes = {
   pollingRate:PropTypes.number,
   /** If defined then the graph will only update on a value change*/
   triggerOnSingleValueChange:PropTypes.bool,
-
+  /** Directive to use PV tiemstamp on x-axis*/
+  useTimeStamp:PropTypes.bool,
 };
 
 GraphMultiplePVs.defaultProps = {

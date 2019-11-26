@@ -126,7 +126,7 @@ class GraphXY extends React.Component {
       //    console.log(pvname)
 
       xPVs[pvname]={label:"", initialized: false,pvname:pvname,value:[],lastValue:"",timestamp:[],char_value:"",alarmColor:"",lower_disp_limit: 0,upper_disp_limit: 10000,lower_warning_limit: 4000,upper_warning_limit: 6000,
-      units: "V",precision: 0, ymin:1000000000000000000,ymax:-1000000000000000000 };
+      units: "V",precision: 0, xmin:1000000000000000000,xmax:-1000000000000000000 };
       pvnamesX.push(pvname);
     }
 
@@ -171,9 +171,9 @@ class GraphXY extends React.Component {
     this.handleToggleContextMenu=this.handleToggleContextMenu.bind(this);
     this.multipleLineData=this.multipleLineData.bind(this);
   }
-  handleInputValueY = (inputValue,pvname,initialized,severity,timestamp)=>{
-
-    if(this.props.usePolling){
+  handleInputValueY =index=>(inputValue,pvname,initialized,severity,timestamp)=>{
+  //  console.log('handleInputValueY',pvname,index,inputValue)
+    if((this.props.updateMode=='updateOnXChange')||this.props.usePolling){
       let yPVs=this.state.yPVs;
       let xPVs=this.state.xPVs;
       yPVs[pvname].initialized=initialized;
@@ -181,13 +181,15 @@ class GraphXY extends React.Component {
       yPVs[pvname].severity=severity;
       this.setState({yPVs:yPVs});
     }
-    else{
+    else if (this.props.updateMode=='updateOnYChange'){
       let yPVs=this.state.yPVs;
       let xPVs=this.state.xPVs;
       yPVs[pvname].initialized=initialized;
+      yPVs[pvname].lastValue=inputValue;
+      yPVs[pvname].severity=severity;
       this.setState({yPVs:yPVs});
-      if(xPVs[this.state.pvnamesX[0]].initialized){
-      this.handleInputValueUpdateY(inputValue,pvname,initialized,severity,  xPVs[this.state.pvnamesX[0]].lastValue);
+      if(xPVs[this.state.pvnamesX[index]].initialized){
+      this.handleInputValueUpdateY(yPVs[this.state.pvnamesY[index]],xPVs[this.state.pvnamesX[index]]);
     }
     }
 
@@ -196,18 +198,20 @@ class GraphXY extends React.Component {
     //  console.log("pvname:", pvname);
   }
 
-  handleInputValueX = (inputValue,pvname,initialized,severity,timestamp)=>{
-
-    if(this.props.updateMode=='updateOnYChange'){
+  handleInputValueX =index=>(inputValue,pvname,initialized,severity,timestamp)=>{
+    //console.log('handleInputValueX',pvname,index,inputValue)
+    if((this.props.updateMode=='updateOnYChange')||this.props.usePolling){
       let xPVs=this.state.xPVs;
       xPVs[pvname].initialized=initialized;
       xPVs[pvname].lastValue=inputValue;
       xPVs[pvname].severity=severity;
       this.setState({xPVs:xPVs});
     }
-    else{
+    else if (this.props.updateMode=='updateOnXChange'){
       let xPVs=this.state.xPVs;
       xPVs[pvname].initialized=initialized;
+      xPVs[pvname].lastValue=inputValue;
+      xPVs[pvname].severity=severity;
       this.setState({xPVs:xPVs});
     //  this.handleInputValueXUnpolled(inputValue,pvname,initialized,severity,timestamp);
     }
@@ -218,18 +222,20 @@ class GraphXY extends React.Component {
   }
 
 
-  handleInputValueYPolled = ()=>{
+  handleInputValueYPolled =()=>{
     let pv;
     let d = new Date();
     let timestamp=d.getTime()/1000;
-
+    let index=0;
     for(pv in this.state.pvnamesY){
 
       if(this.state.yPVs[this.state.pvnamesY[pv]].initialized){
 
+          this.handleInputValueUpdateY(this.state.yPVs[this.state.pvnamesY[index]],this.state.xPVs[this.state.pvnamesX[index]]);
         //    console.log(timestamp,this.state.pvnamesY[pv],this.state.yPVs[this.state.pvnamesY[pv]].lastValue);
-        this.handleInputValueYUnpolled(this.state.yPVs[this.state.pvnamesY[pv]].lastValue,this.state.pvnamesY[pv],this.state.yPVs[this.state.pvnamesY[pv]].initialized,this.state.yPVs[this.state.pvnamesY[pv]].severity,timestamp)
+      //  this.handleInputValueYUnpolled(this.state.yPVs[this.state.pvnamesY[pv]].lastValue,this.state.pvnamesY[pv],this.state.yPVs[this.state.pvnamesY[pv]].initialized,this.state.yPVs[this.state.pvnamesY[pv]].severity,timestamp)
       }
+      index++;
     }
     //  console.log("value: ",inputValue);
     //  console.log("pvname:", pvname);
@@ -245,7 +251,7 @@ class GraphXY extends React.Component {
       if(this.state.xPVs[this.state.pvnamesX[pv]].initialized){
 
         //    console.log(timestamp,this.state.pvnamesY[pv],this.state.xPVs[this.state.pvnamesY[pv]].lastValue);
-        this.handleInputValueYUnpolled(this.state.xPVs[this.state.pvnamesX[pv]].lastValue,this.state.pvnamesX[pv],this.state.xPVs[this.state.pvnamesX[pv]].initialized,this.state.xPVs[this.state.pvnamesX[pv]].severity,timestamp)
+        //this.handleInputValueYUnpolled(this.state.xPVs[this.state.pvnamesX[pv]].lastValue,this.state.pvnamesX[pv],this.state.xPVs[this.state.pvnamesX[pv]].initialized,this.state.xPVs[this.state.pvnamesX[pv]].severity,timestamp)
       }
     }
     //  console.log("value: ",inputValue);
@@ -415,94 +421,91 @@ class GraphXY extends React.Component {
   //this.setState(pvData);
 }
 }
-handleInputValueUpdateY = (inputValue,pvname,initialized,severity,lastInputValueX)=>{
-  console.log("handleInputValueUpdateY",inputValue,pvname,initialized,severity,lastInputValueX);
-  console.log(this.state.xPVs)
-  //  console.log("test");
-  //  console.log("value: ",inputValue);
-  //  console.log("pvname:", pvname);
-  let yPVs=this.state.yPVs;
-  let yDataArray=[];
-  let xDataArray=[];
-  //let ymax=parseFloat(this.state.ymax);
-  //  let ymin=parseFloat(this.state.ymin);
-  //  console.log('ymax init',this.state.ymax)
-  // console.log('ymin init',this.state.ymin)
+handleInputValueUpdateY = (yPV,xPV)=>{
 
-  //  console.log('yPVs[pvname].value', yPVs[pvname].value);
-  //   console.log('inputValue', inputValue);
-  let max;
-  if (initialized===true){
+  console.log(xPV)
+  console.log(yPV)
+//  let yPVs=this.state.yPVs;
+ let yDataArray=[];
+ let xDataArray=[];
+ let max;
+  if (yPV.initialized===true){
     if (typeof this.props.maxLength !== 'undefined'){
       max=this.props.maxLength;
-      if (Array.isArray(inputValue)===false){
-        //  console.log("not array")
+      if (Array.isArray(yPV.lastValue)===false){
         if ((typeof this.props.triggerOnSingleValueChange !== 'undefined')){
-          if (yPVs[pvname].value.length>0){
-            if(inputValue!=yPVs[pvname].value[yPVs[pvname].value.length-1]){
-              yDataArray=yPVs[pvname].value.concat(inputValue);
-              xDataArray=yPVs[pvname].xValue.concat(lastInputValueX);
+          if (yPV.value.length>0){
+            if(yPV.lastValue!=yPV.value[yPV.value.length-1]){
+              yDataArray=yPV.value.concat(yPV.lastValue);
+              xDataArray=xPV.value.concat(xPV.lastValue);
             }
             else{
-              yDataArray=yPVs[pvname].value;
-              xDataArray=yPVs[pvname].xValue;
+              yDataArray=yPV.value;
+              xDataArray=xPV.Value;
             }
           }
           else {
-            yDataArray=[inputValue];
-            xDataArray=[lastInputValueX];
+            yDataArray=[yPV.lastValue];
+            xDataArray=[xPV.lastValue];
           }
 
         }
         else {
           //  console.log(pvname,timestamp)
-          if (yPVs[pvname].value.length>0){
-            yDataArray=yPVs[pvname].value.concat(inputValue);
-            xDataArray=yPVs[pvname].xValue.concat(lastInputValueX);
+          if (yPV.value.length>0){
+            yDataArray=yPV.value.concat(yPV.lastValue);
+            xDataArray=xPV.Value.concat(xPV.lastValue);
           }
           else{
-            yDataArray=[inputValue];
-            xDataArray=[lastInputValueX];
+            yDataArray=[yPV.lastValue];
+            xDataArray=[xPV.lastValue];
           }
 
         }
       }
       else{
-        if (yPVs[pvname].value.length>0){
-          yDataArray=yPVs[pvname].value.concat(inputValue);
+        if (yPV.value.length>0){
+          yDataArray=yPV.value.concat(yPV.lastValue);
+          xDataArray=xPV.value.concat(xPV.lastValue);
         }
         else{
-          yDataArray=inputValue;
+          yDataArray=yPV.lastValue;
+          xDataArray=xPV.lastValue;
         }
       }
     }
     else {
-      yDataArray=inputValue;
-      max=inputValue.length;
+      yDataArray=yPV.lastValue;
+      xDataArray=xPV.lastValue;
+      max=yPV.lastValue.length;
     }
 
 
 
 
-    //  console.log('yDataArray=yPVs[pvname].value.concat(inputValue);', yDataArray);
-    yPVs[pvname].initialized=initialized;
-    yPVs[pvname].severity=severity;
 
-    let length= yDataArray.length;
 
-    if  (length> max){
-      yDataArray=yDataArray.slice(length-max);
-      xDataArray=xDataArray.slice(length-max);
+
+
+
+    if  (yDataArray.length> max){
+      yDataArray=yDataArray.slice(yDataArray.length-max);
+
 
 
     }
-    //    console.log('yDataArray=yDataArray.slice(length-max);', yDataArray);
+    if  (xDataArray.length> max){
+      xDataArray=xDataArray.slice(xDataArray.length-max);
+
+
+
+    }
 
     let i=0;
     let sample;
     let data=[];
     let n;
-    //	console.log("pv.value: ",this.state[this.props.pv].value);
+
     let ymax=-1000000000000000000;
     let ymin=1000000000000000000;
 
@@ -514,14 +517,12 @@ handleInputValueUpdateY = (inputValue,pvname,initialized,severity,lastInputValue
       else{
         val=yDataArray[n];
       }
-      // console.log("value: ",this.state[this.props.pv].value[i]);
-      //console.log('n: ',n,' this.state.ymax: ',this.state.ymax,)
       if(parseFloat(val)>ymax){
 
 
 
         ymax=parseFloat(val);
-        //console.log('new Ymax',ymax)
+
       }
       if(parseFloat(val)<ymin){
         ymin=parseFloat(val);
@@ -531,7 +532,7 @@ handleInputValueUpdateY = (inputValue,pvname,initialized,severity,lastInputValue
 
         sample={x:xDataArray[n],y:val}
 
-      // console.log("sample: ",sample)
+
 
       data[i]=sample;
       i++;
@@ -539,40 +540,16 @@ handleInputValueUpdateY = (inputValue,pvname,initialized,severity,lastInputValue
     }
 
 
-    yPVs[pvname].value=yDataArray;
-    yPVs[pvname].xValue=xDataArray;
-    yPVs[pvname].linedata=data;
-    yPVs[pvname].ymin=ymin;
-    yPVs[pvname].ymax=ymax;
-    //console.log('yPVs[pvname].linedata', yPVs[pvname].linedata);
-    //console.log('yTimeStampArray',yTimeStampArray)
-    //  console.log('length3', yPVs[pvname].linedata.length);
-
-
-
-    /*  if ((typeof this.props.ymax) !=='undefined'){
-    ymax=this.props.ymax;
-
-  }
-
-  if ((typeof this.props.ymin)!=='undefined'){
-  ymin=this.props.ymin;
-
-}
-*/
-//   console.log('ymax end',ymax)
-//   console.log('ymin end',ymin)
-
-this.setState({yPVs:yPVs});//,ymax:ymax,ymin:ymin});
-
-
-//state.yPVs[pvname].inputValue=inputValue;
-//pvData.yPVs[pvname].initialized=initialized;
-//pvData.yPVs[pvname].severity=severity;
-
-//console.log("pvData:",pvData)
-
-//this.setState(pvData);
+    yPV.value=yDataArray;
+    xPV.Value=xDataArray;
+    yPV.linedata=data;
+    yPV.ymin=ymin;
+    yPV.ymax=ymax;
+let yPVs=this.state.yPVs;
+let xPVs=this.state.xPVs;
+yPVs[yPV.pvname]=yPV;
+xPVs[xPV.pvname]=xPV;
+this.setState({yPVs:yPVs,xPVs:xPVs});
 }
 }
 
@@ -642,13 +619,15 @@ multipleDataConnections = () => {
   //this.handleInputValueY();
   let pv;
   let DataConnections=[];
+  let i=0;
   for (pv in this.state.yPVs){
+    const index=i;
     //console.log("linedata: ", this.state.yPVs[pv].linedata);
     DataConnections.push(
-      <div key= {pv.toString()}>
+      <div key= {pv.toString() +'y'+i}>
         <DataConnection
-          pv={this.state.yPVs[pv].pvname}
-          handleInputValue={this.handleInputValueY}
+          pv={this.state.yPVs[pv].pvname }
+          handleInputValue={this.handleInputValueY(index)}
           handleMetadata={this.handleMetadataY(this.state.yPVs[pv].pvname)}
           handleInputValueLabel={this.handleInputValueYLabel(this.state.yPVs[pv].pvname)}
           usePvLabel={this.props.usePvLabel}
@@ -659,14 +638,17 @@ multipleDataConnections = () => {
         {/*this.state.yPVs[pv].value*/}
       </div>
     )
+    i++;
   }
+  i=0;
   for (pv in this.state.xPVs){
+    const index=i;
     //console.log("linedata: ", this.state.yPVs[pv].linedata);
     DataConnections.push(
-      <div key= {pv.toString()}>
+      <div key= {pv.toString() +'x'+i} >
         <DataConnection
           pv={this.state.xPVs[pv].pvname}
-          handleInputValue={this.handleInputValueX}
+          handleInputValue={this.handleInputValueX(index)}
           handleMetadata={this.handleMetadataX(this.state.xPVs[pv].pvname)}
           handleInputValueLabel={this.handleInputValueXLabel(this.state.xPVs[pv].pvname)}
           usePvLabel={this.props.usePvLabel}
@@ -676,7 +658,9 @@ multipleDataConnections = () => {
         {this.props.usePvLabel===true?this.state.xPVs[pv].label+': ':""}
         {/*this.state.yPVs[pv].value*/}
       </div>
+
     )
+      i++;
   }
   //console.log(DataConnections[0]);
   return DataConnections;
@@ -858,6 +842,24 @@ if ((typeof this.props.ymax) !=='undefined'){
 else {
   yDomain=[ymin, ymax];
 }
+
+let xDomain;
+if ((typeof this.props.xmax) !=='undefined'){
+
+
+  if ((typeof this.props.xmin)!=='undefined'){
+
+    xDomain=[this.props.xmin, this.props.xmax]
+  }
+  else {
+    //xDomain=[xmin, xmax];
+    xDomain=undefined;
+  }
+}
+else {
+  //xDomain=[xmin, xmax];
+  xDomain=undefined;
+}
 // console.log('ymax',ymax)
 //   console.log('ymin',ymin)
 return (
@@ -867,7 +869,7 @@ return (
     {theme.palette.type==='light'&& <LoadableReactVisLightCompoment/>}
     {this.multipleDataConnections()}
     <div style={{width:'100%',height:'100%'}} onContextMenu={this.handleToggleContextMenu}>
-      <FlexibleXYPlot yDomain={yDomain} margin={{left: 60}} >
+      <FlexibleXYPlot yDomain={yDomain} xDomain={xDomain} margin={{left: 60}} >
         <ContextMenu
           disableProbe={this.props.disableProbe}
           open={this.state.openContextMenu}

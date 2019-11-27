@@ -1,9 +1,222 @@
 
 	record(acalcout, "$(device):n")  {
+
+	 field(SCAN,".1 second")
 	 field(DTYP,  "Soft Channel")
 	 field(NELM,  "1000")
 	 field(OOPT,  "Every Time")
 	 field(DOPT,  "Use CALC")
 	 field(CALC,  "IX")
-	    field(PINI, "YES")
+	 field(PINI, "YES")
+	 field(FLNK, "$(device):x")
 	 }
+
+
+	 record(ao, "$(device):Amplitude")
+	 {       field(DTYP,"Soft Channel")
+	         field(DESC, "$(device) Amplitude")
+	         field(EGU, "A")
+	         field(HOPR, "10000")
+	         field(DRVH, "10000")
+	         field(DRVL, "0")
+	         field(LOPR, "0")
+	         field(HIHI, "8000")
+	         field(HIGH, "6000")
+	         field(LOW, "4000")
+	         field(LOLO, "2000")
+	         field(HHSV, "MAJOR")
+	         field(HSV, "MINOR")
+	         field(LSV, "MINOR")
+	         field(LLSV, "MAJOR")
+	         field(VAL,"5000")
+					 field(PINI,"YES")
+	 }
+
+	 record(acalcout, "$(device):x")  {
+
+ 	 field(SCAN,".1 second")
+ 	 field(DTYP,  "Soft Channel")
+	 field(INPA,"$(device):Amplitude")
+	 field(INAA, "$(device):n.AVAL")
+ 	 field(NELM,  "1000")
+ 	 field(OOPT,  "Every Time")
+ 	 field(DOPT,  "Use CALC")
+ 	 field(CALC,  "A*COS(2*PI*AA/1000)")
+	 field(FLNK, "$(device):y PP")
+ 	 }
+
+	 record(acalcout, "$(device):y")  {
+
+
+	 field(DTYP,  "Soft Channel")
+	 field(INPA,"$(device):Amplitude")
+	 field(INAA, "$(device):n.AVAL")
+	 field(NELM,  "1000")
+	 field(OOPT,  "Every Time")
+	 field(DOPT,  "Use CALC")
+	 field(CALC,  "A*SIN(2*PI*AA/1000)")
+
+	 }
+
+
+	 	 record(acalcout, "$(device):x1")  {
+
+
+	  	 field(DTYP,  "Soft Channel")
+	 	 field(INPA,"$(device):Amod")
+		 field(INPB,"$(device):Amplitude")
+	 	 field(INAA, "$(device):n.AVAL")
+	  	 field(NELM,  "1000")
+	  	 field(OOPT,  "Every Time")
+	  	 field(DOPT,  "Use CALC")
+	  	 field(CALC,  "(A+B)*COS(2*PI*AA/1000)")
+	 	   field(FLNK, "$(device):y1 PP")
+	  	 }
+
+	 	 record(acalcout, "$(device):y1")  {
+
+
+	 	 field(DTYP,  "Soft Channel")
+	 	 field(INPA,"$(device):Amod")
+		  field(INPB,"$(device):Amplitude")
+	 	 field(INAA, "$(device):n.AVAL")
+	 	 field(NELM,  "1000")
+	 	 field(OOPT,  "Every Time")
+	 	 field(DOPT,  "Use CALC")
+	 	 field(CALC,  "(A+B)*SIN(2*PI*AA/1000)")
+		 field(FLNK, "$(device):x2 PP")
+	 	 }
+
+
+
+
+
+		 record(acalcout, "$(device):x2")  {
+
+
+		 	field(DTYP,  "Soft Channel")
+		 field(INPA,"$(device):Amod")
+		 field(INPB,"$(device):Amplitude")
+		 field(INAA, "$(device):n.AVAL")
+		 	field(NELM,  "1000")
+		 	field(OOPT,  "Every Time")
+		 	field(DOPT,  "Use CALC")
+		 	field(CALC,  "(A+B*COS(8*2*PI*AA/1000))*COS(2*PI*AA/1000)")
+		 	field(FLNK, "$(device):y2 PP")
+		 	}
+
+		 record(acalcout, "$(device):y2")  {
+
+
+		 	field(DTYP,  "Soft Channel")
+		 field(INPA,"$(device):Amod")
+		 field(INPB,"$(device):Amplitude")
+		 field(INAA, "$(device):n.AVAL")
+		 	field(NELM,  "1000")
+		 	field(OOPT,  "Every Time")
+		 	field(DOPT,  "Use CALC")
+		 	field(CALC,  "(A+B*COS(8*2*PI*AA/1000))*SIN(2*PI*AA/1000)")
+
+		 }
+
+
+###########3
+
+
+
+
+
+
+
+record(calcout, "$(device):calc_test1")
+{
+        field(SCAN, "5 second")
+        field(INPA, "$(device):test1")
+        field(CALC, "A<10000?A+1:0")
+        field(OUT,"$(device):test1 PP")
+}
+
+
+
+record(ao, "$(device):modAmp")
+{       field(DTYP,"Soft Channel")
+        field(DESC, "Amplitude of Sine wave")
+        field(EGU, "V")
+        field(HOPR, "10000")
+        field(DRVH, "10000")
+        field(DRVL, "0")
+        field(LOPR, "0")
+        field(HIHI, "8000")
+        field(HIGH, "6000")
+        field(LOW, "4000")
+        field(LOLO, "2000")
+        field(HHSV, "MAJOR")
+        field(HSV, "MINOR")
+        field(LSV, "MINOR")
+        field(LLSV, "MAJOR")
+        field(VAL,"2000")
+				field(PINI,"YES")
+#        field(FLNK,"$(device):test5")
+}
+
+
+record(ao, "$(device):frequency")
+{       field(DTYP,"Soft Channel")
+        field(DESC, "Frequency of Sine wave")
+        field(EGU, "Hz")
+        field(HOPR, "1")
+        field(LOPR, "0")
+        field(HIHI, "0.8")
+        field(HIGH, "0.6")
+        field(LOW, "0.4")
+        field(LOLO, "0.2")
+        field(HHSV, "MAJOR")
+        field(HSV, "MINOR")
+        field(LSV, "MINOR")
+        field(LLSV, "MAJOR")
+        field(VAL,"0.2")
+}
+
+record(ao, "$(device):time")
+{
+        field(DTYP,"Soft Channel")
+        field(DESC, "Analog input")
+        field(EGU, "Seconds")
+        field(HOPR, "10000")
+        field(LOPR, "0")
+        field(VAL,"0")
+        field(PINI, "YES")
+	field(PREC, "1")
+	field(FLNK,"$(device):Amod")
+}
+
+
+
+record(calc, "$(device):Amod")
+{       field(DESC, "Instantaneous value")
+        field(PREC, "4")
+        field(INPA, "$(device):time")
+        field(INPB, "$(device):frequency")
+        field(INPC,"$(device):modAmp")
+        field(CALC, "C*SIN(2*PI*A*B)")
+			  field(FLNK,"$(device):Pmod")
+}
+
+record(calc, "$(device):Pmod")
+{       field(DESC, "Instantaneous value")
+        field(PREC, "4")
+        field(INPA, "$(device):time")
+        field(INPB, "$(device):frequency")
+        field(INPC,"$(device):modAmp")
+        field(CALC, "1*SIN(2*PI*A*B)")
+			  field(FLNK,"$(device):x1")
+}
+
+
+record(calcout, "$(device):calc_time")
+{
+        field(SCAN, ".1 second")
+        field(INPA, "$(device):time")
+        field(CALC, "A<10000?A+0.1:0")
+        field(OUT,"$(device):time PP")
+}

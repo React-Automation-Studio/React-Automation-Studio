@@ -398,7 +398,7 @@ render() {
         /** If defined, then the DataConnection debugging information will be displayed*/
         debug:PropTypes.bool,
         /** If defined, the value will be increment or decremented in the define step intervals*/
-        steps:PropTypes.number,
+        step:PropTypes.number,
         /** local variable intialization value*/
         intialLocalVariableValue:PropTypes.string
 
@@ -408,7 +408,7 @@ render() {
       SimpleSlider.defaultProps = {
 
           debug:false,
-          steps:0.1,
+          step:0.1,
 
 
       };

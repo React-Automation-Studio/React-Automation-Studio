@@ -3,9 +3,9 @@ GraphXY EPICS variable example, drag the slider to modulate the amplitude of the
 import SimpleSlider from './SimpleSlider';
 <div>
 <div style={{height:'25vh'}}>
-  <GraphMultiplePVs  
-    xPVs={['pva://testIOC:test4','pva://testIOC:test5']}  
-    yPVs={['pva://testIOC:test5','pva://testIOC:test4']}  
+  <GraphXY  
+    xPVs={['pva://testIOC:test5']}  
+    yPVs={['pva://testIOC:test5']}  
 
   />
 </div>

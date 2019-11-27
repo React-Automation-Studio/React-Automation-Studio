@@ -60,6 +60,10 @@ dbLoadRecords "db/ithembaFCSim.db", "fcup=testIOC:FC2sim, desc=FC2sim"
 dbLoadRecords "db/ithembaFCSim.db", "fcup=testIOC:FC3sim, desc=FC3sim"
 dbLoadRecords "db/ithembaFCSim.db", "fcup=testIOC:FC4sim, desc=FC4sim"
 dbLoadRecords "db/demoMultipleTextUpdates.db", "device=testIOC"
+
+dbLoadRecords "db/BeamSweepSim.db", "device=testIOC:BeamSweepSim"
+
+
 ## Set this to see messages from mySub
 #var mySubDebug 1
 

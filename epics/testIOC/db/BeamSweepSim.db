@@ -1,0 +1,9 @@
+
+	record(acalcout, "$(device):n")  {
+	 field(DTYP,  "Soft Channel")
+	 field(NELM,  "1000")
+	 field(OOPT,  "Every Time")
+	 field(DOPT,  "Use CALC")
+	 field(CALC,  "IX")
+	    field(PINI, "YES")
+	 }

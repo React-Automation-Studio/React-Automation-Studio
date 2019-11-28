@@ -83,6 +83,9 @@ const styles = theme => ({
 /**
 * The GraphXY Component is a wrapper on Uber's React-Vis FlexibleXYPlot lineSeries graph component. The GraphXY component is implemented with zero margins and enabled to grow to the width and height of its parent container.<br/><br/>
 * The width and height must be controlled from the parent component.<br/><br/>
+* The compoment requires the that X and Y process variables must be defined. The X and Y process variable names are declared in the 'xPVs' and 'yPVs' array props.
+* Multiple traces can be plotted at the same time, the index of the 'xPVs' and 'yPVs' array elements define each trace.
+* PVs can be scalar or array variables.
 * React-vis Demos:
 * https://uber.github.io/react-vis/examples/showcases/plots<br/><br/>
 * React-vis API:
@@ -948,8 +951,10 @@ return (
 }
 GraphXY.propTypes = {
 
-  /** Array of the process variables, NB must contain correct prefix ie: pva://  eg. ['pva://$(device):test$(id0)','pva://$(device):test$(id1)']*/
+  /** Array of the Y process variables, NB must contain correct prefix ie: pva://  eg. ['pva://$(device):test$(id0)','pva://$(device):test$(id1)']*/
   yPVs: PropTypes.array.isRequired,
+  /** Array of the X process variables, NB must contain correct prefix ie: pva://  eg. ['pva://$(device):test$(id0)','pva://$(device):test$(id1)']*/
+  xPVs: PropTypes.array.isRequired,
   /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id0)':'1','$(id1)':'2'}}*/
   macros:PropTypes.object,
   /** Y axis title. */

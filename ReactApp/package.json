@@ -1,20 +1,21 @@
 {
   "name": "react-automation-studio",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "private": true,
   "dependencies": {
-    "@material-ui/core": "4.3.2",
-    "@material-ui/icons": "4.1.0",
+    "@material-ui/core": "4.7.0",
+    "@material-ui/icons": "4.5.1",
     "dotenv": "8.0.0",
     "express": "4.17.1",
     "lodash.debounce": "4.0.8",
     "mdi-material-ui": "5.10.0",
-    "node-sass": "4.12.0",
+    "node-sass": "4.13.0",
     "raw-loader": "2.0.0",
-    "react": "16.8.6",
-    "react-dom": "16.8.6",
+    "react": "16.11.0",
+    "react-dom": "16.11.0",
+    "react-scripts": "3.2.0",
     "react-loadable": "5.5.0",
-    "react-router-dom": "5.0.0",
+    "react-router-dom": "5.1.2",
     "react-scripts": "3.0.1",
     "react-vis": "1.11.6",
     "socket.io": "2.2.0",
@@ -39,7 +40,19 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "browserslist": [],
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+
   "homepage": ".",
   "devDependencies": {
     "cross-env": "5.2.0",

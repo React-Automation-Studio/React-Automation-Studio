@@ -1,3 +1,4 @@
+DEPRECATED: PLEASE USE GraphY COMPONENT INSTEAD!
 GraphMultiplePVs EPICS variable example, drag the slider to modulate the amplitude of the Sine Wave:
 ```js
 import SimpleSlider from './SimpleSlider';

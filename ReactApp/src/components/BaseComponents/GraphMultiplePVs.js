@@ -81,6 +81,7 @@ const styles = theme => ({
 
 
 /**
+* **DEPRECATED: PLEASE USE GraphY COMPONENT INSTEAD!**<br/><br/>
 * The GraphMultiplePVs Component is a wrapper on Uber's React-Vis FlexibleXYPlot lineSeries graph component. The GraphMultiplePVs component is implemented with zero margins and enabled to grow to the width and height of its parent container.<br/><br/>
 * The width and height must be controlled from the parent component.<br/><br/>
 * React-vis Demos:
@@ -92,6 +93,7 @@ const styles = theme => ({
 class GraphMultiplePVs extends React.Component {
   constructor(props) {const FlexibleXYPlot = makeVisFlexible(XYPlot);
     super(props);
+    console.warn("DEPRECATED: Use GraphY component instead!")
     let state={}
     let pv;
     let pvname;

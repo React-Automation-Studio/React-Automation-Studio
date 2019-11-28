@@ -450,6 +450,24 @@ Contact us at rasadmin@tlabs.ac.za
 
 # Changelog
 
+**V1.1.0 Thursday 28 November 2019**
+
+Changed disconnection indicators for all components
+
+Components added:
+BitIndicators
+GraphXY
+GraphY
+
+Components to be deprecated in future:
+GraphMultiplePVs, replacement is GraphY
+
+Major package updates:
+
+Updated to React 16.11.0
+Updated to Material-UI 4.7.0
+Updated to Node LTS 12.13.1
+
 **V1.01 Friday 25 October 2019**
 
 Minor bug fix to Selection List and Radio Button Group components

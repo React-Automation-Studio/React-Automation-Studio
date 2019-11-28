@@ -19,4 +19,4 @@ Currently only the base components are documented.
 In future releases the system components will be documented, as well as the SVG components that are used in the beam line control system examples.
 A strategy to create your own components  will also be documented. For now you will need to browse the source code to see how it is done...
 
-The TextInput component should form a good base for creating new components with a single PV and the TextUpdateMultiplePVs and GraphMultiplePVs components for creating components with multiple PVs.
+The TextInput component should form a good base for creating new components with a single PV and the TextUpdateMultiplePVs and GraphY components for creating components with multiple PVs.

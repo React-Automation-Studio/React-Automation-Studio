@@ -14,7 +14,7 @@ import TextUpdate from '../BaseComponents/TextUpdate';
 import TextInput from '../BaseComponents/TextInput';
 import TextOutput from '../BaseComponents/TextOutput';
 import SimpleSlider from '../BaseComponents/SimpleSlider';
-import GraphMultiplePVs from '../BaseComponents/GraphMultiplePVs';
+import GraphY from '../BaseComponents/GraphY';
 import ThumbWheel from '../BaseComponents/ThumbWheel';
 import Grid from '@material-ui/core/Grid';
 import DataConnection from '../SystemComponents/DataConnection';

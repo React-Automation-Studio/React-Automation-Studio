@@ -13,7 +13,7 @@ import TextInput from '../../../components/BaseComponents/TextInput';
 import TextOutput from '../../../components/BaseComponents/TextOutput';
 import Meter from '../../../components/BaseComponents/Gauge';
 import SimpleSlider from '../../../components/BaseComponents/SimpleSlider';
-import GraphMultiplePVs from '../../../components/BaseComponents/GraphMultiplePVs';
+import GraphY from '../../../components/BaseComponents/GraphY';
 import SelectionList from '../../../components/BaseComponents/SelectionList';
 import StyledIconIndicator from '../../../components/BaseComponents/StyledIconIndicator';
 

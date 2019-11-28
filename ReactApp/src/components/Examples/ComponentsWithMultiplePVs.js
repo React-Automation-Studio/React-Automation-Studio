@@ -3,7 +3,7 @@ import React from 'react'
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 
 import Grid from '@material-ui/core/Grid';
-import GraphMultiplePVs from '../BaseComponents/GraphMultiplePVs';
+import GraphY from '../BaseComponents/GraphY';
 import TextUpdateMultiplePVs from '../BaseComponents/TextUpdateMultiplePVs';
 import TextOutput from '../BaseComponents/TextOutput'
 import { withStyles } from '@material-ui/core/styles';
@@ -48,10 +48,10 @@ const {classes} =this.props;
             ]} usePvLabel={true} macros={this.props['macros']}   />
           <br/>
           <h2>
-            GraphMultiplePVs:
+            GraphY:
           </h2>
           <div style={{width:'800px', height: '400px'}}>
-            <GraphMultiplePVs
+            <GraphY
               pvs={[
                 'pva://testIOC:MTextUpdate1',
                 'pva://testIOC:MTextUpdate2',

@@ -34,7 +34,7 @@ import HarpGraph from '../SiteSpecificComponents/iThembaLABS/CompoundComponents/
 import SideBar from '../SystemComponents/SideBar';
 import AppBar from '@material-ui/core/AppBar';
 import Paper from '@material-ui/core/Paper';
-import GraphMultiplePVs from '../BaseComponents/GraphMultiplePVs';
+import GraphY from '../BaseComponents/GraphY';
 import ControlCenterTable from '../ControlScreens/GridComponents/ControlCenterTable'
 
 
@@ -676,7 +676,7 @@ class ControlTestHarp1 extends React.Component {
                     >
                       <Grid item sm={6}>
                         <div style={{height:'50vh',marginLeft:10,marginRight:10,marginTop:20}}>
-                          <GraphMultiplePVs
+                          <GraphY
                             pvs={['pva://testIOC:PS1:Readback','pva://testIOC:PS2:Readback','pva://testIOC:PS3:Readback'  ]}
                             maxLength={600}
                             legend = {[
@@ -694,7 +694,7 @@ class ControlTestHarp1 extends React.Component {
                       </Grid>
                       <Grid item sm={6}>
                         <div style={{height:'50vh',marginLeft:10,marginRight:10,marginTop:20}}>
-                          {/*}  <GraphMultiplePVs
+                          {/*}  <GraphY
                             pvs={[
                             'pva://testIOC:PS1:Readback:History',
                             'pva://testIOC:PS2:Readback:History',
@@ -714,7 +714,7 @@ class ControlTestHarp1 extends React.Component {
                             ]}
 
                           />*/}
-                          <GraphMultiplePVs
+                          <GraphY
                             pvs={[
                               'pva://testIOC:PS1:Setpoint',
                               'pva://testIOC:PS2:Setpoint',

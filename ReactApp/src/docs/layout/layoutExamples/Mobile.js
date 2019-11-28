@@ -12,7 +12,7 @@ import TextOutput from '../../../components/BaseComponents/TextOutput';
 import ToggleButton from '../../../components/BaseComponents/ToggleButton';
 import Gauge from '../../../components/BaseComponents/Gauge';
 import SimpleSlider from '../../../components/BaseComponents/SimpleSlider';
-import GraphMultiplePVs from '../../../components/BaseComponents/GraphMultiplePVs';
+import GraphY from '../../../components/BaseComponents/GraphY';
 import StyledIconIndicator from '../../../components/BaseComponents/StyledIconIndicator';
 import SelectionInput from '../../../components/BaseComponents/SelectionInput';
 import ThumbWheel from '../../../components/BaseComponents/ThumbWheel';
@@ -42,7 +42,7 @@ class Mobile extends React.Component {
       <Grid container className={classes.root} spacing={2}>
         <Grid item xs={12}>
           <div style={{height:'15vh'}}>
-            <GraphMultiplePVs
+            <GraphY
               pvs={['pva://testIOC:test4','pva://testIOC:test5'] }
               legend={['Sine Wave ','Amplitude ']}
             />

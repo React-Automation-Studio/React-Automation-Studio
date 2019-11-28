@@ -19,7 +19,7 @@ import Button from '@material-ui/core/Button';
 import {Link} from 'react-router-dom'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import GraphMultiplePVs from '../BaseComponents/GraphMultiplePVs';
+import GraphY from '../BaseComponents/GraphY';
 import TextField from '@material-ui/core/TextField';
 //import MenuItem from '@material-ui/core/MenuItem';
 
@@ -79,7 +79,7 @@ class Probe extends React.Component {
             </Grid>
             <Grid item xs={12}  >
               <div style={{height:'25vh'}}>
-                <GraphMultiplePVs
+                <GraphY
                   pvs={['$(device)']}  macros={{'$(device)':probeObject.pvname}}
                   maxLength={1000}
                   triggerOnSingleValueChange
@@ -143,7 +143,7 @@ class Probe extends React.Component {
             </Grid>
             <Grid item xs={12}  >
               <div style={{height:'25vh'}}>
-                <GraphMultiplePVs
+                <GraphY
                   pvs={['$(device)']}  macros={{'$(device)':probeObject.pvname}}
                   maxLength={1000}
                   triggerOnSingleValueChange

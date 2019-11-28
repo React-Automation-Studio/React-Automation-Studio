@@ -12,7 +12,7 @@ import TextInput from '../../../components/BaseComponents/TextInput';
 import TextOutput from '../../../components/BaseComponents/TextOutput';
 import Meter from '../../../components/BaseComponents/Gauge';
 import SimpleSlider from '../../../components/BaseComponents/SimpleSlider';
-import GraphMultiplePVs from '../../../components/BaseComponents/GraphMultiplePVs';
+import GraphY from '../../../components/BaseComponents/GraphY';
 import SelectionList from '../../../components/BaseComponents/SelectionList';
 import StyledIconIndicator from '../../../components/BaseComponents/StyledIconIndicator';
 import Grid from '@material-ui/core/Grid';
@@ -116,7 +116,7 @@ class Example2 extends React.Component {
 
           <Grid item xs={12} >
             <div style={{ height: '50vh', width:'96vw',}}>
-              <GraphMultiplePVs  pvs={['pva://testIOC:test4','pva://testIOC:test5'] } legend={['Sine Wave','Amplitude']} lineColor={[this.props.theme.palette.secondary.main,lime['400']]}/>
+              <GraphY  pvs={['pva://testIOC:test4','pva://testIOC:test5'] } legend={['Sine Wave','Amplitude']} lineColor={[this.props.theme.palette.secondary.main,lime['400']]}/>
             </div>
           </Grid>
           <Grid item xs={12}  >

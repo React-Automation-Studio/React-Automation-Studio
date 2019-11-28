@@ -24,7 +24,7 @@ import LogIn from './LogIn';
 // })
 
 
-console.log('process.env',process.env)
+//console.log('process.env',process.env)
 let port;
 if(typeof process.env.REACT_APP_PyEpicsServerPORT==='undefined'){
   port= 5000;

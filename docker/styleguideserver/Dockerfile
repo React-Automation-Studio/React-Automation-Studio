@@ -1,4 +1,4 @@
-FROM node:12.13.1
+FROM node:12.15.0
 
 ADD ./ReactApp/package.json /app/package.json
 

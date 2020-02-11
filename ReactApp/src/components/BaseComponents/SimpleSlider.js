@@ -58,7 +58,8 @@ class SimpleSlider extends React.Component {
     ['pvname']:"Undefined",
     ['intialized']:false,
     ['metadata']:{},
-    ['severity']:''
+    ['severity']:'',
+    newValueTrigger:0
   }
   this.handleInputValue= this.handleInputValue.bind(this);
   this.handleInputValueLabel= this.handleInputValueLabel.bind(this);
@@ -157,13 +158,14 @@ handleOnDragEnd= (event) =>{
 }
 
 emitChange(value) {
-  this.setState({['outputValue']:value});
+  this.setState({outputValue:value,newValueTrigger:this.state.newValueTrigger+1});
+
 }
 
 handleChange = (event, value) => {
   //console.log("handleChange")
-  this.setState({hasFocus:true,outputValue:value});
-  //this.emitChangeDebounced(value);
+  this.setState({hasFocus:true});
+   this.emitChangeDebounced(value);
 };
 
 handleChangeCommited = (event, value) => {
@@ -309,7 +311,7 @@ render() {
         handleMetadata={this.handleMetadata}
         outputValue=  {this.state.outputValue}
         useStringValue={useStringValue}
-
+        newValueTrigger={this.state.newValueTrigger}
         handleInputValueLabel={this.handleInputValueLabel}
         intialLocalVariableValue={this.props.intialLocalVariableValue}
       />

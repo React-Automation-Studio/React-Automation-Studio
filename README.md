@@ -450,6 +450,11 @@ Contact us at rasadmin@tlabs.ac.za
 
 # Changelog
 
+**V1.2.1 Monday 17 February 2020**
+Minor updates
+
+Updated to React-Scripts 3.4.0
+
 **V1.2.0 Tuesday 11 February 2020**
 Major updates
 

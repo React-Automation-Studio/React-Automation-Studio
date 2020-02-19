@@ -100,7 +100,7 @@ It is advised to only use the containerized version.
 
 Prerequisites: git , latest version of docker-ce and docker compose
 
-To install docker-ce follow:
+To install docker-ce on Unbuntu 18.04 follow:
 
 https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04
 

@@ -19,7 +19,7 @@ import ContextMenu from '../../../SystemComponents/ContextMenu';
 
 //import HarpGraphOverrideCSS from '../../CSS/HarpGraphOverrideCSS.css';
 import {curveCatmullRom} from 'd3-shape';
-import styleable from 'react-styleable'
+
 import {
   XYPlot,
   XAxis,

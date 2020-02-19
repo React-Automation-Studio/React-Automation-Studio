@@ -9,7 +9,6 @@
     "express": "4.17.1",
     "lodash.debounce": "4.0.8",
     "mdi-material-ui": "5.10.0",
-    "node-sass": "4.12.0",
     "raw-loader": "2.0.0",
     "react": "16.12.0",
     "react-dom": "16.12.0",
@@ -23,7 +22,8 @@
     "typeface-roboto": "0.0.54",
     "uuid": "3.3.2",
     "math-js": "1.0.1",
-    "mathjs": "6.0.3"
+    "mathjs": "6.0.3",
+    "sass":"1.25.0"
 
 
   },
@@ -55,8 +55,6 @@
   "homepage": ".",
   "devDependencies": {
     "cross-env": "5.2.0",
-    "link-module-alias": "1.2.0",
-    "react-styleable": "3.3.1",
     "react-styleguidist": "10.6.1"
   }
 }

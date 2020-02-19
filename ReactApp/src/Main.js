@@ -106,7 +106,7 @@ class Main extends Component {
 
           <Grid  item lg={2} sm={4}  xs={8}>
 
-            <div style={{textAlign: 'center'}} className={classes.body1}>React Automation Studio V1.2.1</div>
+            <div style={{textAlign: 'center'}} className={classes.body1}>React Automation Studio V1.2.2</div>
 
           </Grid>
           <Grid item lg={4} sm={4} xs={2}>

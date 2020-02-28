@@ -173,7 +173,14 @@ function getTickValues(props,min,max,numberOfTicks,x0,x1,x2,y1,y2,xOffset,yOffse
 
       const radialTextOffset=0;
       const width=props.width;
-      const height=props.width/2;
+      const aspectRatio=props.aspectRatio;
+      let height;
+      if (props.lockAspectRatio==true){
+        height=props.width/aspectRatio;
+      }
+      else{
+        height=props.height;
+      }
       const y0=yOffset;
       const y2=(height-yOffset);
       const y1=yOffset+(y2-y0)/2;
@@ -583,7 +590,8 @@ function getTickValues(props,min,max,numberOfTicks,x0,x1,x2,y1,y2,xOffset,yOffse
                 max={max}
                 units={units}
                 value={value}
-
+                lockAspectRatio={this.props.lockAspectRatio}
+                aspectRatio={this.props.aspectRatio}
                 pv={this.state.pvname}
                 color={color}
                 showValue={this.props.showValue}
@@ -648,14 +656,18 @@ function getTickValues(props,min,max,numberOfTicks,x0,x1,x2,y1,y2,xOffset,yOffse
             <React.Fragment>
               <LanDisconnect style={{color:this.props.theme.palette.error.main,verticalAlign: "middle"}} fontSize='small'/>
               <FlexibleProgressBarComponent
-                min={0}
-                max={100}
-                units={''}
-                value={0}
-                ringWidth={this.props.ringWidth}
-                pvname={this.state.pvname}
-                disabled
-                showValue={this.props.showValue}
+              min={min}
+              max={max}
+              units={units}
+              value={value}
+              lockAspectRatio={this.props.lockAspectRatio}
+              aspectRatio={this.props.aspectRatio}
+              pv={this.state.pvname}
+              color={color}
+              showValue={this.props.showValue}
+              showTicks={this.props.showTicks}
+              disabled
+
               />
               {this.state.pvname}
             </React.Fragment>
@@ -695,6 +707,10 @@ ProgressBar.propTypes = {
   showValue:PropTypes.bool,
   /** Directive to show the tick values */
   showTicks:PropTypes.bool,
+  /** Lock the aspect ratio, if true,`height=width/aspectRatio`, otherwise the height will grow to the height of the parent container */
+  lockAspectRatio:PropTypes.number,
+  /** Width to height aspect ratio, */
+  aspectRatio:PropTypes.number,
   /** local variable intialization value*/
   intialLocalVariableValue:PropTypes.string
 
@@ -708,7 +724,9 @@ ProgressBar.defaultProps = {
   max:100,
   usePrecision:false,
   showValue:true,
-  showTicks:true
+  showTicks:true,
+  aspectRatio:1.75,
+  lockAspectRatio:true
 
 };
 

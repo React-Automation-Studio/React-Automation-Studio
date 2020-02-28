@@ -180,7 +180,14 @@ function getTickValues(props,min,max,numberOfTicks,x0,y0,x1,x2,y1,y2,xOffset,yOf
       }
       const radialTextOffset=0;
       const width=props.width;
-      const height=props.width;;
+      const aspectRatio=props.aspectRatio;
+      let height;
+      if (props.lockAspectRatio==true){
+        height=props.width/aspectRatio;
+      }
+      else{
+        height=props.height;
+      }
       const y0=yOffset;
       const y2=(height-yOffset);
       const y1=yOffset+(y2-y0)/2;
@@ -596,7 +603,8 @@ function getTickValues(props,min,max,numberOfTicks,x0,y0,x1,x2,y1,y2,xOffset,yOf
                 color={color}
                 showValue={this.props.showValue}
                 showTicks={this.props.showTicks}
-
+                lockAspectRatio={this.props.lockAspectRatio}
+                aspectRatio={this.props.aspectRatio}
               />
 
               {/* <svg  width={this.props.width} height={this.props.height}>
@@ -666,6 +674,8 @@ function getTickValues(props,min,max,numberOfTicks,x0,y0,x1,x2,y1,y2,xOffset,yOf
                 disabled
                 showValue={this.props.showValue}
                 showTicks={this.props.showTicks}
+                lockAspectRatio={this.props.lockAspectRatio}
+                aspectRatio={this.props.aspectRatio}
               />
               {this.state.pvname}
             </React.Fragment>
@@ -705,6 +715,11 @@ Tank.propTypes = {
   showValue:PropTypes.bool,
   /** Directive to show the tick values */
   showTicks:PropTypes.bool,
+  /** Lock the aspect ratio, if true,`height=width/aspectRatio`, otherwise the height will grow to the height of the parent container */
+  lockAspectRatio:PropTypes.number,
+  /** Width to height aspect ratio, */
+  aspectRatio:PropTypes.number,
+
   /** local variable intialization value*/
   intialLocalVariableValue:PropTypes.string
 
@@ -718,6 +733,8 @@ Tank.defaultProps = {
   max:100,
   usePrecision:false,
   showValue:true,
+  aspectRatio:1,
+  lockAspectRatio:true,
   showTicks:true
 
 };

@@ -450,6 +450,11 @@ Contact us at rasadmin@tlabs.ac.za
 
 # Changelog
 
+**V1.2.3 Wednesday 11 March 2020**
+Node 12.16.1 LTS
+Material UI 4.9.5
+React-style-guidist 11.0.1
+Fixed height props and added in an aspect ratio in the progress bar and tank components
 **V1.2.1 Monday 17 February 2020**
 Minor updates
 

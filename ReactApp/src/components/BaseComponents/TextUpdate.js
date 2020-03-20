@@ -301,7 +301,7 @@ render() {
 
   return (
 
-    <div onContextMenu={this.handleToggleContextMenu}>
+    <div onContextMenu={this.props.disableContextMenu===true?undefined:this.handleToggleContextMenu}>
       <DataConnection
         pv={pv}
         macros={macros}
@@ -381,6 +381,8 @@ TextUpdate.propTypes = {
   numberFormat:PropTypes.object,
   /** local variable intialization value*/
   intialLocalVariableValue:PropTypes.string,
+  /** Disable the context menu*/
+  disableContextMenu:PropTypes.bool,
   /** If defined, then the string value of the EPICS enumerator type will be forced to be used, if not defined the the enumerator index is used */
   useStringValue:PropTypes.bool
 
@@ -393,6 +395,7 @@ TextUpdate.defaultProps = {
   usePrecision:false,
   usePvLabel:false,
   usePvUnits:false,
+  disableContextMenu:false,
 };
 
 TextUpdate.contextType=AutomationStudioContext;

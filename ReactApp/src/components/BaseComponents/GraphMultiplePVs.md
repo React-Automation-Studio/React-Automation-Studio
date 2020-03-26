@@ -52,7 +52,7 @@ GraphMultiplePVs EPICS variable example:
       'pva://testIOC:MTextUpdate5'
 
     ]}
-      maxLength={256}/>
+      maxLength={256}
   />
 </div>
 

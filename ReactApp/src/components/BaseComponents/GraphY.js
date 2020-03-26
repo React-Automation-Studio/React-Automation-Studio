@@ -11,7 +11,7 @@ import TextField from '@material-ui/core/TextField';
 import Switch from '@material-ui/core/Switch';
 import Loadable from 'react-loadable';
 import ContextMenu from '../SystemComponents/ContextMenu';
-
+import ReactVisLightDarkTheme from '../SystemComponents/ReactVisLightDarkTheme';
 
 
 //import '../../../node_modules/react-vis/dist/style.css';
@@ -29,45 +29,9 @@ import {
 } from 'react-vis';
 const FlexibleXYPlot = makeVisFlexible(XYPlot);
 
-const LoadableReactVisLightCompoment = Loadable({
-  loader: () => import('../../CSS/ReactVisLightCompoment'),
-  loading() {
-    return <div>Loading LoadableReactVisLightCompoment</div>
-  }
-});
 
-const LoadableReactVisDarkCompoment = Loadable({
-  loader: () => import('../../CSS/ReactVisDarkCompoment'),
-  loading() {
-    return <div>Loading LoadableReactVisLightCompoment</div>
-  }
-});
 
-function calcTimeFormat(timestamp) {
-  let mydate = new Date(timestamp * 1000);
-  //  let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  //  let year = mydate.getFullYear();
-  // let month = months[mydate.getMonth()];
-  //let date = mydate.getDate();
-  let hour = mydate.getHours();
-  let min = mydate.getMinutes();
-  let sec = mydate.getSeconds();
-  //let ms = mydate.getMilliseconds()
-  //let value= hour + ':' + min + ':' + sec +':' + ms;
-  let value;
-  if( min<10){
-    min='0'+min;
 
-  }
-
-  if( sec<10){
-    sec='0'+sec;
-
-  }
-  value=hour + ':' + min + ':' + sec ;
-
-  return value;
-}
 
 const styles = theme => ({
 
@@ -90,7 +54,8 @@ const styles = theme => ({
 
 */
 class GraphY extends React.Component {
-  constructor(props) {const FlexibleXYPlot = makeVisFlexible(XYPlot);
+  constructor(props) {
+    const FlexibleXYPlot = makeVisFlexible(XYPlot);
     super(props);
     let state={}
     let pv;
@@ -141,7 +106,34 @@ class GraphY extends React.Component {
     this.multipleDataConnections=this.multipleDataConnections.bind(this);
     this.handleToggleContextMenu=this.handleToggleContextMenu.bind(this);
     this.multipleLineData=this.multipleLineData.bind(this);
+    this.calcTimeFormat=this.calcTimeFormat.bind(this);
   }
+  calcTimeFormat=(timestamp)=> {
+    let mydate = new Date(timestamp * 1000);
+    //  let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    //  let year = mydate.getFullYear();
+    // let month = months[mydate.getMonth()];
+    //let date = mydate.getDate();
+    let hour = mydate.getHours();
+    let min = mydate.getMinutes();
+    let sec = mydate.getSeconds();
+    //let ms = mydate.getMilliseconds()
+    //let value= hour + ':' + min + ':' + sec +':' + ms;
+    let value;
+    if( min<10){
+      min='0'+min;
+
+    }
+
+    if( sec<10){
+      sec='0'+sec;
+
+    }
+    value=hour + ':' + min + ':' + sec ;
+
+    return value;
+  }
+
   handleInputValue = (inputValue,pvname,initialized,severity,timestamp)=>{
 
     if(this.props.usePolling){
@@ -602,8 +594,7 @@ else {
 return (
 
   <React.Fragment >
-    {theme.palette.type==='dark'&& <LoadableReactVisDarkCompoment/>}
-    {theme.palette.type==='light'&& <LoadableReactVisLightCompoment/>}
+    <ReactVisLightDarkTheme/>
     {this.multipleDataConnections()}
     <div style={{width:'100%',height:'100%'}} onContextMenu={this.handleToggleContextMenu}>
       <FlexibleXYPlot yDomain={yDomain} margin={{left: 60}} >
@@ -625,7 +616,7 @@ return (
         <XAxis
           title={(typeof this.props.xAxisTitle !== 'undefined')?this.props.xAxisTitle:"X Axis"}
           color="white"
-          tickFormat={v => typeof this.props.useTimeStamp!=='undefined'? calcTimeFormat(v):(v)+ this.props.xUnits}
+          tickFormat={v => typeof this.props.useTimeStamp!=='undefined'? this.calcTimeFormat(v):(v)+ this.props.xUnits}
           tickTotal={4}
           style={{
             title:{stroke:theme.palette.type==='dark'?'#dbdbe0':'#6b6b76',strokeWidth:0.2},

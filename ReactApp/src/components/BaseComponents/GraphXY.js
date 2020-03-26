@@ -11,7 +11,7 @@ import TextField from '@material-ui/core/TextField';
 import Switch from '@material-ui/core/Switch';
 import Loadable from 'react-loadable';
 import ContextMenu from '../SystemComponents/ContextMenu';
-
+import ReactVisLightDarkTheme from '../SystemComponents/ReactVisLightDarkTheme';
 
 
 //import '../../../node_modules/react-vis/dist/style.css';
@@ -28,20 +28,6 @@ import {
   DiscreteColorLegend
 } from 'react-vis';
 const FlexibleXYPlot = makeVisFlexible(XYPlot);
-
-const LoadableReactVisLightCompoment = Loadable({
-  loader: () => import('../../CSS/ReactVisLightCompoment'),
-  loading() {
-    return <div>Loading LoadableReactVisLightCompoment</div>
-  }
-});
-
-const LoadableReactVisDarkCompoment = Loadable({
-  loader: () => import('../../CSS/ReactVisDarkCompoment'),
-  loading() {
-    return <div>Loading LoadableReactVisLightCompoment</div>
-  }
-});
 
 function calcTimeFormat(timestamp) {
   let mydate = new Date(timestamp * 1000);
@@ -890,8 +876,7 @@ else {
 return (
 
   <React.Fragment >
-    {theme.palette.type==='dark'&& <LoadableReactVisDarkCompoment/>}
-    {theme.palette.type==='light'&& <LoadableReactVisLightCompoment/>}
+      <ReactVisLightDarkTheme/>
     {this.multipleDataConnections()}
     <div style={{width:'100%',height:'100%'}} onContextMenu={this.handleToggleContextMenu}>
       <FlexibleXYPlot yDomain={yDomain} xDomain={xDomain} margin={{left: 60}} >

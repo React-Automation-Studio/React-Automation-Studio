@@ -55,6 +55,6 @@
   "homepage": ".",
   "devDependencies": {
     "cross-env": "5.2.0",
-    "react-styleguidist": "11.0.1"
+    "react-styleguidist": "11.0.4"
   }
 }

@@ -39,7 +39,7 @@ class ReactVisLightDarkTheme extends React.Component {
     return(
       <React.Fragment>
         {theme.palette.type==='dark'&& <LoadableReactVisDarkCompoment/>}
-        {theme.palette.type==='light'&& <LoadableReactVisLightCompoment/>} */}
+        {theme.palette.type==='light'&& <LoadableReactVisLightCompoment/>}
       </React.Fragment>
 
     )

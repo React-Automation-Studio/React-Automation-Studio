@@ -6,9 +6,10 @@ import { withRouter } from 'react-router-dom';
 
 import {Link} from 'react-router-dom'
 import Button from '@material-ui/core/Button';
-import RedirectToLogIn from './components/SystemComponents/RedirectToLogin.js';
-import SideBar from './components/SystemComponents/SideBar';
-import ToggleButton from './components/BaseComponents/ToggleButton';
+import RedirectToLogIn from '../../components/SystemComponents/RedirectToLogin.js';
+import SideBar from '../../components/SystemComponents/SideBar';
+import ToggleButton from '../../components/BaseComponents/ToggleButton';
+
 import Grid from '@material-ui/core/Grid';
 import { Redirect } from 'react-router-dom'
 // Styles
@@ -76,7 +77,7 @@ else{
   AutomationStudioStyleGuideBuildURL=process.env.REACT_APP_StyleguideServerURL+":"+port;
 }
 
-class Main extends Component {
+class ExperimentalMain extends Component {
   constructor(props) {
     super(props);
     this.logout=this.logout.bind(this);
@@ -89,7 +90,7 @@ class Main extends Component {
   }
   componentDidMount()
   {
-  //  console.log('main mounted')
+  //  console.log('ExperimentalMain mounted')
   }
   render() {
 
@@ -112,6 +113,18 @@ class Main extends Component {
           <Grid item lg={4} sm={4} xs={2}>
 
           </Grid>
+          <Grid item lg={4} sm={4} xs={2}>
+            
+          </Grid>
+
+          <Grid  item lg={2} sm={4}  xs={8}>
+
+            <div style={{textAlign: 'center'}} className={classes.body1}>Experimental Components</div>
+
+          </Grid>
+          <Grid item lg={4} sm={4} xs={2}>
+
+          </Grid>
         </Grid>
         <Grid container direction="row" item justify="center" spacing={1} alignItems="center">
           <Grid item lg={4} sm={4} xs={2}>
@@ -120,45 +133,43 @@ class Main extends Component {
           <Grid item lg={2} sm={4}  xs={8}>
             <Grid container direction="row" justify="center" spacing={3} alignItems="stretch">
               <Grid item xs={12}  >
-                <Button  fullWidth  fullWidth className= {classes.button} component={Link} to="/MobileDemo1" color="primary" variant='contained'>  Mobile Demo 1 </Button>
-              </Grid>
-              <Grid item xs={12}  >
-                <Button  fullWidth className= {classes.button} component={Link} to="/MobileDemo2" color="primary" variant='contained'>  Mobile Demo 2 </Button>
-              </Grid>
-
-
-
-              <Grid item xs={12}  >
-                <Button  fullWidth  className= {classes.button} component={Link} to="/EpicsDemos" color="primary" variant='contained'>  Epics Demos </Button>
-              </Grid>
-
-              <Grid item xs={12}  >
-                <Button  fullWidth  className= {classes.button} component={Link} to="/Staging" color="primary" variant='contained'>  Staging </Button>
-              </Grid>
-
-              <Grid item xs={12}  >
-                <Button  fullWidth className= {classes.button} component={Link} to="/Test3D" color="primary" variant='contained'>  3D Demos </Button>
-
-              </Grid>
-
-              <Grid item xs={12}  >
-                <Button  fullWidth className= {classes.button} component={Link} to="/ControlTestHarp1" color="primary" variant='contained'> Beam Line Control Demo </Button>
-              </Grid>
-
-
-
-              <Grid item xs={12}  >
-                <Button  fullWidth className= {classes.button} component={Link} to="/ControlTableExample" color="primary" variant='contained'> Control Table Example</Button>
+                <Button  fullWidth  fullWidth className= {classes.button} component={Link} to="/ExperimentalMobileDemo1" color="primary" variant='contained'>Experimental Mobile Demo 1 </Button>
               </Grid>
               {/* <Grid item xs={12}  >
-                <Button  fullWidth className= {classes.button} component={Link} to="/Help" color="secondary" variant='contained'>  Help </Button>
+                <Button  fullWidth className= {classes.button} component={Link} to="/ExperimentalMobileDemo2" color="primary" variant='contained'>Experimental  Mobile Demo 2 </Button>
+              </Grid> */}
+
+
+
+              <Grid item xs={12}  >
+                <Button  fullWidth  className= {classes.button} component={Link} to="/ExperimentalEpicsDemos" color="primary" variant='contained'>Experimental  Epics Demos </Button>
+              </Grid>
+
+              {/* <Grid item xs={12}  >
+                <Button  fullWidth  className= {classes.button} component={Link} to="/ExperimentalStaging" color="primary" variant='contained'>Experimental  Staging </Button>
+              </Grid>
+
+              <Grid item xs={12}  >
+                <Button  fullWidth className= {classes.button} component={Link} to="/ExperimentalTest3D" color="primary" variant='contained'>Experimental  3D Demos </Button>
+
+              </Grid>
+
+              <Grid item xs={12}  >
+                <Button  fullWidth className= {classes.button} component={Link} to="/ExperimentalControlTestHarp1" color="primary" variant='contained'>Experimental Beam Line Control Demo </Button>
+              </Grid>
+
+
+
+              <Grid item xs={12}  >
+                <Button  fullWidth className= {classes.button} component={Link} to="/ExperimentalControlTableExample" color="primary" variant='contained'>Experimental Control Table Example</Button>
+              </Grid> */}
+              {/* <Grid item xs={12}  >
+                <Button  fullWidth className= {classes.button} component={Link} to="/Help" color="secondary" variant='contained'>Experimental  Help </Button>
               </Grid> */}
               <Grid item xs={12}  >
                 <Button  fullWidth className= {classes.button} target="_blank" href={AutomationStudioStyleGuideBuildURL} color="secondary" variant='contained'> Help and Style Guide </Button>
               </Grid>
-              <Grid item xs={12}  >
-                <Button  fullWidth className= {classes.button} component={Link} to="/ExperimentalMain" color="primary" variant='contained'> Experimental Main</Button>
-              </Grid>
+
             </Grid>
           </Grid>
 
@@ -174,4 +185,4 @@ class Main extends Component {
         }
         }
 
-        export default withRouter(withStyles(styles)(Main));
+        export default withRouter(withStyles(styles)(ExperimentalMain));

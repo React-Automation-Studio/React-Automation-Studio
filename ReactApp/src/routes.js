@@ -10,6 +10,7 @@ import MobileDemo2 from './components/Examples/Mobile/MobileDemo2';
 import MobileDemo1 from './components/Examples/Mobile/MobileDemo1';
 
 import Main from './Main';
+import ExperimentalMain from './components/ExperimentalExamples/ExperimentalMain';
 import ControlTestHarp1 from './components/ControlScreens/ControlTestHarp1';
 
 import ControlTableExample from './components/ControlScreens/ControlTableExample';
@@ -23,6 +24,8 @@ import Test3D from './components/Experimental/Test3D';
 import Probe from './components/SettingsPages/Probe';
 import SettingsSteererXY from './components/SettingsPages/SettingsSteererXY';
 import SettingsSinglePS from './components/SettingsPages/SettingsSinglePS';
+import ExperimentalEpicsDemos from './components/ExperimentalExamples/ExperimentalEpicsDemos';
+import ExperimentalMobileDemo1 from './components/ExperimentalExamples/Mobile/ExperimentalMobileDemo1';
 import LogIn from './LogIn';
 import { Redirect } from 'react-router-dom'
 export default props=>(
@@ -56,12 +59,9 @@ export default props=>(
     <Route path="/Example1" component={Example1} />
     <Route path="/Example2" component={Example2} />
     <Route path="/Example3" component={Example3} />
-
-
-
-
-
-
+    <Route path="/ExperimentalMain" component={ExperimentalMain} />
+    <Route path="/ExperimentalMobileDemo1" component={ExperimentalMobileDemo1} />
+    <Route path="/ExperimentalEpicsDemos" component={ExperimentalEpicsDemos} />
     </Switch>
 
   </BrowserRouter>

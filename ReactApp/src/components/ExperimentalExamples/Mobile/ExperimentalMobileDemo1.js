@@ -21,7 +21,7 @@ import TextOutput from '../../BaseComponents/TextOutput';
 import Meter from '../../BaseComponents/Gauge';
 import SimpleSlider from '../../BaseComponents/SimpleSlider';
 import GraphY from '../../BaseComponents/GraphY';
-import SelectionList from '../../BaseComponents/SelectionList';
+import SelectionList from '../../ExperimentalBaseComponents/SelectionList';
 import ThumbWheel from '../../BaseComponents/ThumbWheel';
 
 
@@ -29,7 +29,7 @@ import DataConnection from '../../SystemComponents/DataConnection';
 
 import SwitchComponent from '../../BaseComponents/SwitchComponent';
 import SelectionInput from '../../BaseComponents/SelectionInput';
-import ToggleButton from '../../BaseComponents/ToggleButton';
+import ToggleButton from '../../ExperimentalBaseComponents/ToggleButton';
 import ActionButton from '../../BaseComponents/ActionButton';
 
 

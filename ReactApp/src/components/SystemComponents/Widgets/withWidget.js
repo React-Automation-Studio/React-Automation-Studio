@@ -31,7 +31,8 @@ export default function withWidget(WrappedComponent) {
      */
     bindWidgetCallbacks() {
       this.handleContextMenuClose = this.handleContextMenuClose.bind(this);
-      this.handleInputField = this.handleInputField.bind(this);
+
+      this.handleInputValueLabel = this.handleInputValueLabel.bind(this);
       this.handleInputValue = this.handleInputValue.bind(this);
       this.handleMetadata = this.handleMetadata.bind(this);
       this.handleOnBlur = this.handleOnBlur.bind(this);
@@ -274,31 +275,7 @@ export default function withWidget(WrappedComponent) {
      */
     getDataConnection() {
       let dataConnections = [];
-      let usePvInfo = {
-        label: {
-          field: ".DESC",
-          use: this.props.usePvLabel,
-        },
-        prec: {
-          field: ".PREC",
-          use: this.props.usePvPrecision,
-        },
-        min: {
-          field: ".LOPR",
-          use: this.props.usePvMinMax,
-        },
-        max: {
-          field: ".HOPR",
-          use: this.props.usePvMinMax,
-        },
-      };
 
-      let handleLabel;
-      if (this.props.usePvLabel) {
-        handleLabel = (pvName) => (label) => {
-          this.handleInputField(pvName, label, "label")
-        };
-      }
       for (let pv in this.state.dataPVs) {
         let pvName = this.state.dataPVs[pv].pvname;
         dataConnections.push(
@@ -307,14 +284,12 @@ export default function withWidget(WrappedComponent) {
             pv={pvName}
             outputValue={this.state.dataPVs[pv].outputValue}
             useStringValue={this.props.useStringValue}
-            usePvInfo={usePvInfo}
             initialLocalVariableValue={this.props.initialLocalVariableValue}
             newValueTrigger={this.state.dataPVs[pv].newValueTrigger}
             debug={this.props.debug}
             handleInputValue={this.handleInputValue}
             handleMetadata={this.handleMetadata}
-            onHandleInputField={this.handleInputField}
-            handleInputValueLabel={handleLabel(pvName)}
+            handleInputValueLabel={this.handleInputValueLabel(pvName)}
             usePvLabel={this.props.usePvLabel}
           />
         );
@@ -583,19 +558,12 @@ export default function withWidget(WrappedComponent) {
       });
     }
 
-    /**
-     * Read a generic PV field value and store it in the correct state field.
-     * @param {String} pvname
-     * @param {String} inputValue
-     * @param {String} field
-     */
-    handleInputField(pvname, inputValue, field) {
-      let dataPVs = this.state.dataPVs;
-      pvname = pvname.split(".")[0];
-      dataPVs[pvname][field] = inputValue;
-      this.setState({ dataPVs: dataPVs });
-    }
 
+    handleInputValueLabel = (pvName) => (inputValue, pvname, initialized, severity, timestamp) => {
+      let dataPVs = this.state.dataPVs;
+      dataPVs[pvName].label = inputValue;
+      this.setState({ dataPVs: dataPVs })
+    }
     /**
      * Update the value and the inputValue of the corresponding PV
      * with the value read from the PV. Update the value only
@@ -779,10 +747,13 @@ export default function withWidget(WrappedComponent) {
       //  });
       //}
       return (
-        <div style={style} onContextMenu={this.handleToggleContextMenu}>
+        <div
+      //    style={style}
+          onContextMenu={this.handleToggleContextMenu}
+        >
           {dataConnections}
           {contextMenu}
-          <WrappedComponent { ...this.props} {...widgetDetails} />
+          <WrappedComponent {...this.props} {...widgetDetails} />
         </div>
       );
     }
@@ -923,7 +894,7 @@ export default function withWidget(WrappedComponent) {
       alarmSensitive: false,
       debug: false,
       disabled: false,
-      disableProbe: false,
+     // disableProbe: false, // in the context menu it only checks for defined and then assigns a false value
       displayTimeStamp: false,
       onColor: "primary",
       offColor: "default",

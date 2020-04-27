@@ -91,7 +91,7 @@ class TextInput extends React.Component {
         onChange={this.handleChange}
         label={this.props.label}
         fullWidth={true}
-        margin="normal"
+        //margin="dense"
         variant="outlined"
         disabled={this.props.disabled}
         InputProps={inputProps}
@@ -99,5 +99,6 @@ class TextInput extends React.Component {
     );
   }
 }
+
 
 export default withWidget(withStyles(styles, { withTheme: true })(TextInput));

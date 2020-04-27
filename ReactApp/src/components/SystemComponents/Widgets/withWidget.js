@@ -592,13 +592,13 @@ export default function withWidget(WrappedComponent) {
      * with the value read from the PV. Update the value only
      * when the widget is not selected.
      * Based on the connection status update the list of disconnected PVs.
-     * @param {String} pvname
      * @param {String} inputValue
+     * @param {String} pvname
      * @param {boolean} initialized
      * @param {String} severity
      * @param {String} timestamp
      */
-    handleInputValue(pvname, inputValue, initialized, severity, timestamp) {
+    handleInputValue(inputValue, pvname, initialized, severity, timestamp) {
       if (this.props.debug) {
         console.log("inputValue", inputValue);
         console.log("pvname", pvname);
@@ -634,10 +634,10 @@ export default function withWidget(WrappedComponent) {
      * Store metadata received from the PV.
      * Metadata corresponds to the PV's information.
      * When the widget is no more selected apply those values.
-     * @param {String} pvname
      * @param {Object} metadata
      */
-    handleMetadata(pvname, metadata) {
+    handleMetadata(metadata) {
+      let pvname = metadata.pvname;
       let dataPVs = this.state.dataPVs;
       if (!this.state.hasFocus) {
         dataPVs[pvname].metadata = metadata;

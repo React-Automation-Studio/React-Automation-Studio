@@ -80,6 +80,20 @@ module.exports = {
         exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
         usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
       },
+      {
+        name: 'Experimental Base Components',
+        content: 'src/docs/WorkingWithComponents.md',
+        components: 'src/components/ExperimentalBaseComponents/*.js',
+        exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
+        usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
+      },
+      {
+        name: 'Experimental Widget Base Components',
+        content: 'src/docs/widget/widget.md',
+        components: 'src/components/SystemComponents/Widgets/Widget.js',
+        exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
+        usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
+      },
     ],
     sectionDepth: 2
   },

@@ -292,6 +292,13 @@ export default function withWidget(WrappedComponent) {
           use: this.props.usePvMinMax,
         },
       };
+
+      let handleLabel;
+      if (this.props.usePvLabel) {
+        handleLabel = (pvName) => (label) => {
+          this.handleInputField(pvName, label, "label")
+        };
+      }
       for (let pv in this.state.dataPVs) {
         let pvName = this.state.dataPVs[pv].pvname;
         dataConnections.push(
@@ -307,6 +314,8 @@ export default function withWidget(WrappedComponent) {
             handleInputValue={this.handleInputValue}
             handleMetadata={this.handleMetadata}
             onHandleInputField={this.handleInputField}
+            handleInputValueLabel={handleLabel(pvName)}
+            usePvLabel={this.props.usePvLabel}
           />
         );
       }

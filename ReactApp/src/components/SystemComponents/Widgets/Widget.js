@@ -3,8 +3,8 @@ import { LanDisconnect } from "mdi-material-ui/";
 import { format } from "mathjs";
 import PropTypes from "prop-types";
 import { deepOrange, red } from "@material-ui/core/colors";
-import DataConnection from "../SystemComponents/DataConnection";
-import ContextMenu from "../SystemComponents/ContextMenu";
+import DataConnection from "../DataConnection";
+import ContextMenu from "../ContextMenu";
 import { formatTime } from "./WidgetUtils";
 
 /**

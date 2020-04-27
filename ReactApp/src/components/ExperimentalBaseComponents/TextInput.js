@@ -1,7 +1,7 @@
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import { InputAdornment, TextField } from "@material-ui/core";
-import Widget from "../SystemComponents/Widgets/Widget";
+import withWidget from "../SystemComponents/Widgets/withWidget";
 
 const styles = (theme) => ({
   root: {
@@ -10,7 +10,6 @@ const styles = (theme) => ({
   },
   textField: {
     width: "100%",
-    fontWeight: 500,
     borderRadius: 4,
   },
 });
@@ -54,6 +53,7 @@ class TextInput extends React.Component {
   }
 
   render() {
+    const { classes } = this.props;
     let inputProps;
     let style;
     if (this.props.alarmColor !== "") {
@@ -79,7 +79,7 @@ class TextInput extends React.Component {
     }
     return (
       <TextField
-        className={this.props.textField}
+        className={classes.textField}
         style={style}
         key={this.props.pvName}
         //aria-owns={this.state.openContextMenu ? 'menu-list-grow' : undefined}
@@ -91,7 +91,7 @@ class TextInput extends React.Component {
         onChange={this.handleChange}
         label={this.props.label}
         fullWidth={true}
-        margin="dense"
+        margin="normal"
         variant="outlined"
         disabled={this.props.disabled}
         InputProps={inputProps}
@@ -100,8 +100,4 @@ class TextInput extends React.Component {
   }
 }
 
-function Container(props) {
-  return <Widget component={TextInput} {...props} />;
-}
-
-export default withStyles(styles, { withTheme: true })(Container);
+export default withWidget(withStyles(styles, { withTheme: true })(TextInput));

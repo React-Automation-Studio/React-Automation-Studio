@@ -129,7 +129,7 @@ class ToggleButton extends React.Component {
         className={classes.FormControl}
         disabled={this.props.disabled}
         label={this.props.label}
-        labelPlacement={this.props.labelPos}
+        labelPlacement={this.props.labelPlacement}
         control={
           <Button
             className={classes.Button}

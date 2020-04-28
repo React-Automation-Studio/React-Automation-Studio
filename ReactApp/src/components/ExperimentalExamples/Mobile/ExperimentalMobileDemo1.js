@@ -17,7 +17,7 @@ import EpicsAnalogOutDebug from '../../GroupedComponents/EpicsAnalogOutDebug';
 import EpicsMbboDebug from '../../GroupedComponents/EpicsMbboDebug';
 import TextUpdate from '../../BaseComponents/TextUpdate';
 import TextInput from '../../ExperimentalBaseComponents/TextInput';
-import TextOutput from '../../BaseComponents/TextOutput';
+import TextOutput from '../../ExperimentalBaseComponents/TextOutput';
 import Meter from '../../BaseComponents/Gauge';
 import SimpleSlider from '../../BaseComponents/SimpleSlider';
 import GraphY from '../../BaseComponents/GraphY';
@@ -64,7 +64,7 @@ import ExploreIcon from '@material-ui/icons/Explore';
 import withWidth from '@material-ui/core/withWidth';
 
 import {Link} from 'react-router-dom'
-import StyledIconIndicator from '../../BaseComponents/StyledIconIndicator';
+import StyledIconIndicator from '../../ExperimentalBaseComponents/StyledIconIndicator';
 import Home from '@material-ui/icons/Home';
 import lime from '@material-ui/core/colors/lime';
 function TabContainer(props) {

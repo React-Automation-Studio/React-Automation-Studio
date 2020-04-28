@@ -44,7 +44,7 @@ In order to create your personal widget (a component connecting to one or more P
 | **disabled** | based on the received props, the PVs' connection status and PVs' write access, it returns true if the component should be disabled. |
 | **enumStrs** | it returns the list of possible string values. |
 | **label** | it returns the label associated to the component. If the connection is not ready it returns a disconnected icon with the name of the disconnected PVs. |
-| **labelPos** | it returns the label position. |
+| **labelPosition** | it returns the label position. |
 | **min** | it returns the minimum acceptable value. |
 | **max** | it returns the maximum acceptable value. |
 | **offColor** | it returns the color to be used when the widget is switched off (mainly used for buttons or leds). |
@@ -142,7 +142,7 @@ Some values of this component will be passed to its child as props. The componen
 | *getUnits(pvName)* | It returns the PV's measurement units. |
 | *getValue(pvName)* | It can return one of the following: A specific metadata property (if the *displayMetaData* props is a valid one); TimeStamp (if *displayTimeStamp* props is true); Value (If the *numberFormat* is specified apply it, otherwise format value based on precision. If *prec* props is not defined, use PV's precision). It format the value when the widget is no more selected. |
 | *getValueList()* | It returns a list with all the PVs' formatted values. |
-| *getWidgetdetails()* | It returns an object with the following properties: **alarmColor, connection, connectionList, disabled, enumStrs, label, labelPos, min, max, offColor, onColor, precision, pvName, pvList, timestamp, timestampList, units, value, valueList, onUpdateWidgetBlur, onUpdateWidgetFocus, onUpdateWidgetState**. The last three properties are callbacks passed as props to the **Widget**'s child. |
+| *getWidgetdetails()* | It returns an object with the following properties: **alarmColor, connection, connectionList, disabled, enumStrs, label, labelPosition, min, max, offColor, onColor, precision, pvName, pvList, timestamp, timestampList, units, value, valueList, onUpdateWidgetBlur, onUpdateWidgetFocus, onUpdateWidgetState**. The last three properties are callbacks passed as props to the **Widget**'s child. |
 
 ## SET METHODS
 
@@ -178,7 +178,7 @@ This class expects a set of props. **Widget** receives these props from **Custom
 | **displayTimeStamp** | *bool* | false | If defined, then the timestamp of the PV will be displayed instead of its value. |
 | **initialLocalVariableValue** | *string* | undefined | Local variable initialization value. When using loc:// type PVs. |
 | **label** | *string* | undefined | Custom label to be used, if *usePvLabel* is not defined. |
-| **labelPosition**| One between **start**, **end**, **top** or **bottom** | undefined | Custom label position. |
+| **labelPlacement**| One between **start**, **end**, **top** or **bottom** | undefined | Custom label position. |
 | **macros** | *object* | undefined | Array of macros and corresponding values to substitute in the received *pv* props (PVs' names). eg. {{'$(device)':'testIOC','$(id)':'2'}} |
 | **max** | *float* | undefined | Custom maximum value to be used, if *usePvMinMax* is not defined. |
 | **min** | *float* | undefined | Custom minimum value to be used, if *usePvMinMax* is not defined. |

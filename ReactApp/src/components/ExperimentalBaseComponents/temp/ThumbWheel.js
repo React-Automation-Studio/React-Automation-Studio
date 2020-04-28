@@ -73,7 +73,7 @@ class ThumbWheel extends React.Component {
         {...this.props}
         disabled={this.props.disabled}
         label={this.props.label}
-        labelPos={this.props.labelPos}
+        labelPosition={this.props.labelPosition}
         num_array={num_array}
         prec_decimal_div={prec_decimal_div}
         onHandleButtonClick={this.handleButtonClick}
@@ -142,7 +142,7 @@ function ThumbWheelWidget(props) {
         </div>
       }
       label={props.label}
-      labelPlacement={props.labelPos}
+      labelPlacement={props.labelPosition}
     />
   );
 }

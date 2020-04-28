@@ -752,7 +752,7 @@ export default function withWidget(WrappedComponent, options = {}) {
           onContextMenu={
             options.disableContextMenu
             ? undefined
-            : this.handleToggleContextMenu
+            : this.props.disableContextMenu===true?undefined:this.handleToggleContextMenu
           }
         >
           {dataConnections}

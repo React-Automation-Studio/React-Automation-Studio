@@ -31,18 +31,16 @@ const styles = (theme) => ({
  * A custom Icon can used by importing it in the parent and assigning it as a child <br/><br/>
  */
 function StyledIconIndicator(props) {
-  let iconStyle={};
-  if (typeof props.labelPlacement !=='undefined'){
-    if(props.labelPlacement=="top"){
-      iconStyle['marginTop']=props.theme.spacing(1);
-    }else   if(props.labelPlacement=="end"){
-      iconStyle['marginRight']=props.theme.spacing(1);
-    }
-    else   if(props.labelPlacement=="start"){
-      iconStyle['marginLeft']=props.theme.spacing(1);
-    }
-    else   if(props.labelPlacement=="bottom"){
-      iconStyle['marginBottom']=props.theme.spacing(1);
+  let iconStyle = {};
+  if (typeof props.labelPlacement !== "undefined") {
+    if (props.labelPlacement === "top") {
+      iconStyle["marginTop"] = props.theme.spacing(1);
+    } else if (props.labelPlacement === "end") {
+      iconStyle["marginRight"] = props.theme.spacing(1);
+    } else if (props.labelPlacement === "start") {
+      iconStyle["marginLeft"] = props.theme.spacing(1);
+    } else if (props.labelPlacement === "bottom") {
+      iconStyle["marginBottom"] = props.theme.spacing(1);
     }
   }
   let color = props.disabled
@@ -50,7 +48,7 @@ function StyledIconIndicator(props) {
     : props.value === 1
     ? props.onColor
     : props.offColor;
-  
+
   return (
     <FormControlLabel
       key={props.pvName}

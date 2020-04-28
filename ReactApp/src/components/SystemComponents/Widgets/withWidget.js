@@ -213,21 +213,16 @@ export default function withWidget(WrappedComponent, options = {}) {
      * @param {string} defaultColor
      */
     getColor(color, defaultColor) {
-      if (
-        this.props[color] === "primary" ||
-        this.props[color] === "secondary" ||
-        this.props[color] === "inherit"
-      ) {
-        return this.theme !== undefined
-          ? this.theme.palette[this.props[color]].main
-          : this.props[color];
+      if (  this.props[color] === "primary" || this.props[color] === "secondary" ||  this.props[color] === "inherit" ) 
+      {
+        return this.theme !== undefined ? this.theme.palette[this.props[color]].main : this.props[color];
       }
-      if (this.props[color] === "default") {
+      else if (this.props[color] === "default") {
         return this.theme !== undefined ? this.theme.palette.grey[50] : "default";
       }
-      return this.theme !== undefined
-        ? this.theme.palette.primary.main
-        : defaultColor;
+      else {
+        return this.props[color]
+      }
     }
 
     /**

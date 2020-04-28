@@ -19,7 +19,7 @@ import TextUpdate from '../../BaseComponents/TextUpdate';
 import TextInput from '../../ExperimentalBaseComponents/TextInput';
 import TextOutput from '../../ExperimentalBaseComponents/TextOutput';
 import Meter from '../../BaseComponents/Gauge';
-import SimpleSlider from '../../BaseComponents/SimpleSlider';
+import SimpleSlider from '../../ExperimentalBaseComponents/SimpleSlider';
 import GraphY from '../../BaseComponents/GraphY';
 import SelectionList from '../../ExperimentalBaseComponents/SelectionList';
 import ThumbWheel from '../../BaseComponents/ThumbWheel';
@@ -259,7 +259,15 @@ class ExperimentalMobileDemo1 extends React.Component {
                     <div style={{marginTop:'16px'}}>
                       <Grid container direction="row" item xs={12} spacing={2}>
                         <Grid item xs={12}  >
-                          <SimpleSlider pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}} usePvMinMax={true} min={1000} max={500} usePvLabel={true}  />
+                          <SimpleSlider 
+                          pv='pva://$(device):amplitude' 
+                          macros={{'$(device)':'testIOC'}} 
+                          usePvMinMax={true} 
+                          units={"V"}
+                          min={0} 
+                          max={500}
+                          prec={3}
+                          usePvLabel={true}  />
                         </Grid>
                       </Grid>
                     </div>}

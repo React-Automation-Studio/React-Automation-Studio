@@ -10,7 +10,7 @@ import { formatTime } from "./WidgetUtils";
 /**
  * Class with the main functions related to a widget.
  */
-export default function withWidget(WrappedComponent) {
+export default function withWidget(WrappedComponent, options = {}) {
 
   return class Widget extends React.Component {
     constructor(props) {
@@ -260,7 +260,7 @@ export default function withWidget(WrappedComponent) {
             vertical: "top",
             horizontal: "center",
           }}
-          probeType={this.props.readOnly ? "readOnly" : undefined}
+          probeType={options.readOnly ? "readOnly" : undefined}
         />
       );
     }
@@ -312,7 +312,7 @@ export default function withWidget(WrappedComponent) {
         for (let pvName of this.pvNames) {
           disabled = disabled || !this.state.dataPVs[pvName].metadata.read_access;
         }
-        if (!this.props.readOnly) {
+        if (!options.readOnly) {
           let writablePVs =
             this.writablePVs.length > 0 ? this.writablePVs : this.pvNames;
           for (let pvName of writablePVs) {

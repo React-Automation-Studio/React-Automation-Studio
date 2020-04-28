@@ -31,6 +31,42 @@ const styles = (theme) => ({
  * A custom Icon can used by importing it in the parent and assigning it as a child <br/><br/>
  */
 function StyledIconIndicator(props) {
+  
+  
+
+  let onColor=props.theme.palette.primary.main;
+  let offColor=props.theme.palette.grey[50];
+  if (typeof props.onColor !== 'undefined'){
+    if(props.onColor==='primary'){
+      onColor=props.theme.palette.primary.main;
+    }
+    else if(props.onColor==='secondary'){
+        onColor=props.theme.palette.secondary.main;
+    }
+    else if(props.onColor==='default'){
+         onColor=props.theme.palette.grey[50];
+        }
+    else
+       {
+     onColor=props.onColor;
+   }
+  }
+
+  if (typeof props.offColor !== 'undefined'){
+    if(props.offColor==='primary'){
+      offColor=props.theme.palette.primary.main;
+    }
+    else if(props.offColor==='secondary'){
+        offColor=props.theme.palette.secondary.main;
+    }
+    else if(props.offColor==='default'){
+         offColor=props.theme.palette.grey[50];
+        }
+    else
+       {
+     offColor=props.offColor;
+   }
+  }
   let iconStyle={};
   if (typeof props.labelPlacement !=='undefined'){
     if(props.labelPlacement=="top"){
@@ -45,12 +81,16 @@ function StyledIconIndicator(props) {
       iconStyle['marginBottom']=props.theme.spacing(1);
     }
   }
+ 
+
   let color = props.disabled
-    ? "disabled"
+    ? props.theme.palette.grey[50]
     : props.value === 1
-    ? props.onColor
-    : props.offColor;
-  
+    ? onColor
+    : offColor;
+
+    iconStyle['color']=color;
+
   return (
     <FormControlLabel
       key={props.pvName}
@@ -59,7 +99,7 @@ function StyledIconIndicator(props) {
       label={props.label}
       labelPlacement={props.labelPlacement}
       control={
-        <SvgIcon size="small" style={iconStyle} color={color}>
+        <SvgIcon size="small" style={iconStyle} >
           {props.children === undefined ? <Lens /> : props.children}
         </SvgIcon>
       }

@@ -17,6 +17,7 @@ export default function withWidget(WrappedComponent, options = {}) {
       super(props);
       this.createWidgetState();
       this.bindWidgetCallbacks();
+      
     }
 
     //-----------------------------------------------------------
@@ -31,7 +32,9 @@ export default function withWidget(WrappedComponent, options = {}) {
      */
     bindWidgetCallbacks() {
       this.handleContextMenuClose = this.handleContextMenuClose.bind(this);
-
+      this.getMin=this.getMin.bind(this);
+      this.getMax=this.getMax.bind(this);
+      this.getPrec=this.getPrec.bind(this);
       this.handleInputValueLabel = this.handleInputValueLabel.bind(this);
       this.handleInputValue = this.handleInputValue.bind(this);
       this.handleMetadata = this.handleMetadata.bind(this);
@@ -94,9 +97,7 @@ export default function withWidget(WrappedComponent, options = {}) {
           timestamp: undefined,
           newValueTrigger: 0,
           label: "Undefined",
-          max: 0,
-          min: 0,
-          prec: 0,
+         
         };
       }
 
@@ -471,8 +472,9 @@ export default function withWidget(WrappedComponent, options = {}) {
             if (this.props.numberFormat !== undefined) {
               return format(tempValue, this.props.numberFormat);
             }
-            if (this.prec !== undefined) {
-              return tempValue.toFixed(this.prec);
+            let prec=this.getPrec(pvName)
+            if (prec !== undefined) {
+              return tempValue.toFixed(prec);
             }
             return tempValue;
           }
@@ -489,25 +491,66 @@ export default function withWidget(WrappedComponent, options = {}) {
     getValueList() {
       return this.pvNames.map((pvName) => this.getValue(pvName));
     }
+    getMin=pvName=>
+    { 
+      let min;
+      if (this.isConnectionReady(pvName) && this.props.usePvMinMax) {
+        min=parseInt(this.state.dataPVs[pvName].metadata.lower_disp_limit);
+        
+      } else {
+        min = this.props.min;
+      }
+      return min;
 
+    }
+    getMax=pvName=>{ 
+      let max;
+      if (this.isConnectionReady(pvName) && this.props.usePvMinMax) {
+        max=parseInt(this.state.dataPVs[pvName].metadata.upper_disp_limit);
+        
+      } else {
+        max = this.props.max;
+      }
+      return max;
+      
+
+    }
+    getPrec=pvName=>{
+        let precision;
+        if (this.props.usePvPrecision && this.isConnectionReady(pvName)) {
+
+          precision=parseInt(this.state.dataPVs[pvName].metadata.precision);
+          console.log(pvName,"precision",precision)
+          return precision
+        } else if (typeof this.props.prec!=='undefined'){
+          precision=parseInt(this.props.prec);
+        //  console.log(pvName,"precision",precision)
+          return precision
+        }
+        else{
+          return undefined
+        }
+        
+    }
     /**
      * Return all widget details in a object.
      */
     getWidgetdetails() {
       let pvName = this.getPvName();
+      let max=this.getMax(pvName);
       return {
         // Variables and components.
         alarmColor: this.getAlarmColor(pvName),
-        connection: this.isConnectionReady(),
+        connection: this.isConnectionReady(), 
         connectionList: this.getConnections(),
         disabled: this.getDisabled(),
         enumStrs: this.getStringValue(pvName),
         label: this.getLabel(pvName),
-        min: this.min,
-        max: this.max,
+        min: this.getMin(pvName),
+        max: this.getMax(pvName),
         offColor: this.getOffColor(),
         onColor: this.getOnColor(),
-        precision: this.prec,
+        precision: this.getPrec(pvName),
         pvName: pvName,
         pvList: this.pvNames,
         timestamp: this.getTimestamp(pvName),
@@ -598,6 +641,7 @@ export default function withWidget(WrappedComponent, options = {}) {
       let dataPVs = this.state.dataPVs;
       if (!this.state.hasFocus) {
         dataPVs[pvname].metadata = metadata;
+      //  console.log(metadata)
       }
       dataPVs[pvname].newMetadata = metadata;
       this.setState({ dataPVs: dataPVs });
@@ -666,36 +710,7 @@ export default function withWidget(WrappedComponent, options = {}) {
     //
     //-----------------------------------------------------------
 
-    /**
-     * Set min and max value.
-     * If the widget should not use the PV's min and max it uses
-     * the props value, also if undefined (undefined = no min and max values).
-     * @param {String} pvName
-     */
-    setMinMax(pvName) {
-      let min, max;
-      if (this.isConnectionReady() && this.props.usePvMinMax) {
-        min = parseInt(this.state.dataPVs[pvName].min);
-        max = parseInt(this.state.dataPVs[pvName].max);
-      } else {
-        min = this.props.min;
-        max = this.props.max;
-      }
-      this.min = min;
-      this.max = max;
-    }
-
-    /**
-     * Set Widget precision
-     * @param {String} pvName
-     */
-    setPrec(pvName) {
-      if (this.props.usePvPrecision && this.state.dataPVs[pvName] !== undefined) {
-        this.prec = parseInt(this.state.dataPVs[pvName].prec);
-      } else {
-        this.prec = this.props.prec;
-      }
-    }
+  
 
     //-----------------------------------------------------------
     //
@@ -708,17 +723,17 @@ export default function withWidget(WrappedComponent, options = {}) {
      */
     render() {
       let pvName = this.getPvName();
-      this.setPrec(pvName);
-      this.setMinMax(pvName);
-      let contextMenu = this.getContextMenu();
-      let dataConnections = this.getDataConnection();
+      
+      //this.setMinMax(pvName);
+      const contextMenu = this.getContextMenu();
+      const dataConnections = this.getDataConnection();
       let style = {
         width: "100%",
         height: "100%",
   //      overflow: "hidden",
       };
       // Wrap child components with correct values.
-      let child;
+      
       let widgetDetails = this.getWidgetdetails();
       //if (widgetDetails !== undefined) {
       // child = this.wrapComponent(this.props.component, {

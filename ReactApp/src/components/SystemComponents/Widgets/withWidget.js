@@ -735,7 +735,7 @@ export default function withWidget(WrappedComponent) {
       let style = {
         width: "100%",
         height: "100%",
-        overflow: "hidden",
+  //      overflow: "hidden",
       };
       // Wrap child components with correct values.
       let child;
@@ -748,7 +748,7 @@ export default function withWidget(WrappedComponent) {
       //}
       return (
         <div
-      //    style={style}
+          style={style}
           onContextMenu={this.handleToggleContextMenu}
         >
           {dataConnections}

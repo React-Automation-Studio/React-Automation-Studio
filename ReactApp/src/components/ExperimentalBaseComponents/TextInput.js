@@ -91,7 +91,7 @@ class TextInput extends React.Component {
         onChange={this.handleChange}
         label={this.props.label}
         fullWidth={true}
-        //margin="dense"
+        margin="none"
         variant="outlined"
         disabled={this.props.disabled}
         InputProps={inputProps}

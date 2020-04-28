@@ -122,16 +122,17 @@ class ToggleButton extends React.Component {
     let momentary =
       this.props.momentary !== undefined ? this.props.momentary : false;
     let value = this.props.value;
+    const {classes}=this.props;
     return (
       <FormControlLabel
         key={this.props.pvName}
-        className={this.props.classes.FormControl}
+        className={classes.FormControl}
         disabled={this.props.disabled}
         label={this.props.label}
         labelPlacement={this.props.labelPos}
         control={
           <Button
-            className={this.props.classes.Button}
+            className={classes.Button}
             fullWidth={true}
             variant="contained"
             color={value === 1 ? this.props.onColor : this.props.offColor}

@@ -46,7 +46,7 @@ class RadioButton extends React.Component {
         className={this.props.classes.FormControl}
         disabled={this.props.disabled}
         label={this.props.label}
-        labelPlacement={this.props.labelPos}
+        labelPlacement={this.props.labelPosition}
         control={
           <Radio
             onClick={this.handleOnClick}

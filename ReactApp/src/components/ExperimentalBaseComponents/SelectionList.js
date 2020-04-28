@@ -178,7 +178,7 @@ class SelectionList extends React.Component {
           </List>
         }
         label={this.props.label}
-        labelPlacement={this.props.labelPos}
+        labelPlacement={this.props.labelPosition}
       />
     );
   }

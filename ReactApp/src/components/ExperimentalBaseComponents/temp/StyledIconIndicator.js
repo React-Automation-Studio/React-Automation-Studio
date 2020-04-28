@@ -32,7 +32,7 @@ const styles = (theme) => ({
  */
 function StyledIconIndicator(props) {
   const place =
-    props.labelPos.charAt(0).toUpperCase() + props.labelPos.slice(1);
+    props.labelPosition.charAt(0).toUpperCase() + props.labelPosition.slice(1);
   let iconStyle = { ["margin" + place]: props.theme.spacing(1) };
   let color = props.disabled
     ? "disabled"
@@ -45,7 +45,7 @@ function StyledIconIndicator(props) {
       className={props.classes.FormControl}
       disabled={props.disabled}
       label={props.label}
-      labelPlacement={props.labelPos}
+      labelPlacement={props.labelPosition}
       control={
         <SvgIcon size="small" style={iconStyle} color={color}>
           {props.children === undefined ? <Lens /> : props.children}

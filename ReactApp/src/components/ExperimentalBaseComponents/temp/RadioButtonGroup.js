@@ -126,7 +126,7 @@ class RadioButtonGroup extends React.Component {
         component="fieldset"
         disabled={this.props.disabled}
         label={this.props.label}
-        labelPlacement={this.props.labelPos}
+        labelPlacement={this.props.labelPosition}
         control={
           <RadioGroup value={this.props.value} onChange={this.handleChange}>
             {radioButtons}

@@ -364,20 +364,6 @@ export default function withWidget(WrappedComponent, options = {}) {
     }
 
     /**
-     * Get Label position.
-     * Also check that the given custom position is a valid value.
-     */
-    getLabelPosition() {
-      if (this.props.labelPosition !== undefined) {
-        let labelPos = this.props.labelPosition;
-        if (["start", "end", "top", "bottom"].includes(labelPos)) {
-          return labelPos;
-        }
-      }
-      return "top";
-    }
-
-    /**
      * Get OFF color.
      */
     getOffColor() {
@@ -522,7 +508,6 @@ export default function withWidget(WrappedComponent, options = {}) {
         disabled: this.getDisabled(),
         enumStrs: this.getStringValue(pvName),
         label: this.getLabel(pvName),
-        labelPos: this.getLabelPosition(),
         min: this.min,
         max: this.max,
         offColor: this.getOffColor(),
@@ -803,10 +788,6 @@ export default function withWidget(WrappedComponent, options = {}) {
        * Custom label to be used, if  usePvLabel is not defined.
        */
       label: PropTypes.string,
-      /**
-       * Custom label position.
-       */
-      labelPosition: PropTypes.oneOf(["start", "end", "top", "bottom"]),
       /**
        * Values of macros that will be substituted in the pv name.
        * eg. {{'$(device)':'testIOC','$(id)':'2'}}

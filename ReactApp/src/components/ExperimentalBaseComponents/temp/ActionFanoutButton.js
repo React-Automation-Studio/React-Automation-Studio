@@ -54,7 +54,7 @@ class ActionFanoutButton extends React.Component {
         }}
         disabled={this.props.disabled}
         label={this.props.label}
-        labelPlacement={this.props.labelPos}
+        labelPlacement={this.props.labelPosition}
         control={
           <Button
             fullWidth={true}

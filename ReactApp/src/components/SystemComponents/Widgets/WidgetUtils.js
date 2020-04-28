@@ -87,8 +87,8 @@ export const areArrayEqual = (array1, array2) => {
 /**
  * Apply log10 conversion to the given array (or single value).
  * Return an array.
- * @param {Array} value 
+ * @param {Array} value
  */
 export const log10Conversion = (value) => {
-  return value.map((val) => val > 0 ? Math.log10(val) : null);
+  return value.map((val) => (val > 0 ? Math.log10(val) : null));
 };

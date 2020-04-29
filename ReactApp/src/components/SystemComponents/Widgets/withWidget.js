@@ -35,6 +35,8 @@ export default function withWidget(WrappedComponent, options = {}) {
       this.getMin=this.getMin.bind(this);
       this.getMax=this.getMax.bind(this);
       this.getPrec=this.getPrec.bind(this);
+      this.isInsideLimits=this.isInsideLimits.bind(this);
+      this.checkPrecision=this.checkPrecision.bind(this);
       this.handleInputValueLabel = this.handleInputValueLabel.bind(this);
       this.handleInputValue = this.handleInputValue.bind(this);
       this.handleMetadata = this.handleMetadata.bind(this);
@@ -121,6 +123,7 @@ export default function withWidget(WrappedComponent, options = {}) {
      * @param {Object} elem
      * @param {Object} dataPVs
      */
+
     changeValues(pvName, elem, dataPVs) {
       for (let property in elem) {
         if (dataPVs[pvName].hasOwnProperty(property)) {
@@ -129,7 +132,9 @@ export default function withWidget(WrappedComponent, options = {}) {
           } else if (property.toLowerCase().includes("value")) {
             let value = elem[property];
             if (elem.checkValue) {
-              value = this.isInsideLimits(value);
+              value = this.isInsideLimits(pvName,value);
+             // console.log("changeValues",value)
+              value = this.checkPrecision(pvName,value)
             }
             dataPVs[pvName][property] = value;
           }
@@ -143,14 +148,31 @@ export default function withWidget(WrappedComponent, options = {}) {
      * Return the, eventually cropped, value.
      * @param {String} value
      */
-    isInsideLimits(value) {
+    isInsideLimits(pvName,value) {
+      let max=this.getMax(pvName);
+      let min=this.getMin(pvName);
       let tempValue = parseFloat(value);
       if (!isNaN(tempValue)) {
-        tempValue = tempValue > this.max ? this.max : tempValue;
-        tempValue = tempValue < this.min ? this.min : tempValue;
-        value = tempValue;
+        tempValue = tempValue > max ? max : tempValue;
+        tempValue = tempValue < min ? min : tempValue;
+        //value = tempValue;
       }
-      return value;
+      return tempValue;
+    }
+
+
+    /**
+     * Check received value is inside PV limits.
+     * Return the, eventually cropped, value.
+     * @param {String} value
+     */
+    checkPrecision(pvName,value) {
+      let prec=this.getPrec(pvName)
+     // console.log(pvName,prec)
+        let newvalue=value.toFixed(prec);
+     // console.log(pvName,value,newvalue)
+
+      return newvalue;
     }
 
     /**
@@ -455,7 +477,7 @@ export default function withWidget(WrappedComponent, options = {}) {
      * @param {String} pvName
      */
     getValue(pvName) {
-      if (this.isConnectionReady()) {
+      if (this.isConnectionReady(pvName)) {
         let value = this.state.dataPVs[pvName].value;
         if (
           this.props.displayMetaData !== undefined &&
@@ -467,7 +489,9 @@ export default function withWidget(WrappedComponent, options = {}) {
           return formatTime(this.state.dataPVs[pvName].timestamp, true);
         }
         if (!this.state.hasFocus && !Array.isArray(value)) {
+         // console.log("value",pvName,value)
           let tempValue = parseFloat(value);
+         // console.log("tempValue",pvName,tempValue)
           if (!isNaN(tempValue)) {
             if (this.props.numberFormat !== undefined) {
               return format(tempValue, this.props.numberFormat);
@@ -498,7 +522,7 @@ export default function withWidget(WrappedComponent, options = {}) {
         min=parseInt(this.state.dataPVs[pvName].metadata.lower_disp_limit);
         
       } else {
-        min = this.props.min;
+        min = parseInt(this.props.min);
       }
       return min;
 
@@ -509,7 +533,7 @@ export default function withWidget(WrappedComponent, options = {}) {
         max=parseInt(this.state.dataPVs[pvName].metadata.upper_disp_limit);
         
       } else {
-        max = this.props.max;
+        max = parseInt(this.props.max);
       }
       return max;
       
@@ -520,7 +544,7 @@ export default function withWidget(WrappedComponent, options = {}) {
         if (this.props.usePvPrecision && this.isConnectionReady(pvName)) {
 
           precision=parseInt(this.state.dataPVs[pvName].metadata.precision);
-          console.log(pvName,"precision",precision)
+        //  console.log(pvName,"precision",precision)
           return precision
         } else if (typeof this.props.prec!=='undefined'){
           precision=parseInt(this.props.prec);
@@ -637,6 +661,9 @@ export default function withWidget(WrappedComponent, options = {}) {
      * @param {Object} metadata
      */
     handleMetadata(metadata) {
+      if (this.props.debug) {
+        console.log("metadata",metadata)
+      }
       let pvname = metadata.pvname;
       let dataPVs = this.state.dataPVs;
       if (!this.state.hasFocus) {

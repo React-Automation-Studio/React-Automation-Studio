@@ -82,24 +82,7 @@ class ThumbWheel extends React.Component {
     );
   }
 
-  /**
-   * Specific props type and default values for this widgets.
-   * They extends the ones provided for a generic widget.
-   */
-  static propTypes = {
-    // If defined this sets the precision of the integer values of the widget.
-    prec_integer: PropTypes.number,
-    // If defined this sets the precision of the decimal values of the widget
-    prec_decimal: PropTypes.number,
-    // An array of custom increments.
-    // If defined, overides any values in 'prec_integer', 'prec_decimal'.
-    custom_increments: PropTypes.array,
-  };
-
-  static defaultProps = {
-    prec_integer: 4,
-    prec_decimal: 3,
-  };
+  
 }
 
 /**
@@ -170,4 +153,43 @@ function SingleThumbWheelWidget(props) {
   );
 }
 
+
+ThumbWheel.propTypes = {
+  /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+  pv: PropTypes.string.isRequired,
+  /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
+  macros:PropTypes.object,
+  /** Directive to use the HOPR and LOPR EPICS fields to limit the maximum and minimum values that can be contained in the value. */
+  usePvMinMax:PropTypes.bool,
+  /** Directive to use the EPICS alarm severity status to alter the fields backgorund color  */
+  alarmSensitive:PropTypes.bool,
+  /** Custom minimum to be used, if `usePvMinMax` is not defined. */
+  min:PropTypes.number,
+  /** Custom maximum to be used, if `usePvMinMax` is not defined. */
+  max:PropTypes.number,
+  /** If defined, then the DataConnection debugging information will be displayed*/
+  debug:PropTypes.bool,
+  /** If defined this sets the precision of the integer control values of the widget*/
+  prec_integer:PropTypes.number,
+  /** If defined this sets the precision of the decimal control values of the widget*/
+  prec_decimal:PropTypes.number,
+  
+  /** Custom precision to round the value.    */
+  prec: PropTypes.number,
+  
+  /** Directive to round the value using the PREC field of the PV. If not defined it uses the custom precision. */
+      usePvPrecision: PropTypes.bool,
+      /** An array of custom increments. If defined, overides any values in 'prec_integer','prec_decimal'*/
+  custom_increments:PropTypes.array,
+  /** local variable intialization value*/
+  intialLocalVariableValue:PropTypes.string
+
+};
+ThumbWheel.defaultProps = {
+  prec_integer: 4,
+  prec_decimal: 3,
+  usePvMinMax:false,
+  debug:false,
+  alarmSensitive:false,
+};
 export default withWidget(withStyles(styles, { withTheme: true })(ThumbWheel));

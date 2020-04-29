@@ -7,30 +7,22 @@ import DataConnection from "../DataConnection";
 import ContextMenu from "../ContextMenu";
 import { formatTime } from "./WidgetUtils";
 
+
 /**
  * Class with the main functions related to a widget.
  */
 export default function withWidget(WrappedComponent, options = {}) {
-
+  
+   
+ 
   return class Widget extends React.Component {
     constructor(props) {
       super(props);
+      console.log('hello',options,props,WrappedComponent)
+     
       this.createWidgetState();
-      this.bindWidgetCallbacks();
       
-    }
-
-    //-----------------------------------------------------------
-    //
-    // CLASS CREATION METHODS
-    //
-    //-----------------------------------------------------------
-
-    /**
-     * Bind all callbacks in this class to the the class
-     * you are creating.
-     */
-    bindWidgetCallbacks() {
+      this.getDataConnection=this.getDataConnection.bind(this);
       this.handleContextMenuClose = this.handleContextMenuClose.bind(this);
       this.getMin=this.getMin.bind(this);
       this.getMax=this.getMax.bind(this);
@@ -44,6 +36,21 @@ export default function withWidget(WrappedComponent, options = {}) {
       this.handleOnFocus = this.handleOnFocus.bind(this);
       this.handleStateUpdate = this.handleStateUpdate.bind(this);
       this.handleToggleContextMenu = this.handleToggleContextMenu.bind(this);
+    }
+
+    //-----------------------------------------------------------
+    //
+    // CLASS CREATION METHODS
+    //
+    //-----------------------------------------------------------
+
+    /**
+     * Bind all callbacks in this class to the the class
+     * you are creating.
+     */
+    bindWidgetCallbacks() {
+     
+      
     }
 
     /**
@@ -291,11 +298,13 @@ export default function withWidget(WrappedComponent, options = {}) {
      * Moreover it defines, for DataConnection component,
      * if optional connections to specific fields should be established.
      */
-    getDataConnection() {
+    getDataConnection=()=> {
+      console.log(this.props)
       let dataConnections = [];
-
+      
       for (let pv in this.state.dataPVs) {
         let pvName = this.state.dataPVs[pv].pvname;
+        console.log(pvName,this.props)
         dataConnections.push(
           <DataConnection
             key={pvName}
@@ -751,6 +760,8 @@ export default function withWidget(WrappedComponent, options = {}) {
     render() {
       let pvName = this.getPvName();
       
+      console.log('console.logprops',pvName,this.props)
+     
       //this.setMinMax(pvName);
       const contextMenu = this.getContextMenu();
       const dataConnections = this.getDataConnection();
@@ -768,6 +779,7 @@ export default function withWidget(WrappedComponent, options = {}) {
       //    ...widgetDetails,
       //  });
       //}
+      console.log('hello2',WrappedComponent.defaultProps)
       return (
         <div
           style={style}
@@ -779,7 +791,7 @@ export default function withWidget(WrappedComponent, options = {}) {
         >
           {dataConnections}
           {contextMenu}
-          <WrappedComponent {...this.props} {...widgetDetails} />
+          <WrappedComponent {...WrappedComponent.defaultProps} {...this.props} {...widgetDetails} />
         </div>
       );
     }
@@ -912,20 +924,21 @@ export default function withWidget(WrappedComponent, options = {}) {
      * Default props.definition for all widgets linked to
      * PVs storing analog values.
      */
-    static defaultProps = {
-      alarmSensitive: false,
-      debug: false,
-      disabled: false,
-     // disableProbe: false, // in the context menu it only checks for defined and then assigns a false value
-      displayTimeStamp: false,
-      onColor: "primary",
-      offColor: "default",
-      usePvLabel: false,
-      usePvMinMax: false,
-      usePvPrecision: false,
-      usePvUnits: false,
-      useStringValue: false,
-    };
+    static defaultProps=WrappedComponent.defaultProps;
+    // static defaultProps = {
+    // //  alarmSensitive: false,
+    // //  debug: false,
+    //     disabled: false,
+    //  // disableProbe: false, // in the context menu it only checks for defined and then assigns a false value
+    // //  displayTimeStamp: false,
+    //     onColor: "primary",
+    //     offColor: "default",
+    // //  usePvLabel: false,
+    // //  usePvMinMax: false,
+    // //  usePvPrecision: false,
+    // //  usePvUnits: false,
+    // //  useStringValue: false,
+    // };
   }
 
 }

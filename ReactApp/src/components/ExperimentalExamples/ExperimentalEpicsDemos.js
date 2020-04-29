@@ -14,7 +14,7 @@ import TextInput from '../ExperimentalBaseComponents/TextInput';
 import TextOutput from '../ExperimentalBaseComponents/TextOutput';
 import SimpleSlider from '../ExperimentalBaseComponents/SimpleSlider';
 import GraphY from '../BaseComponents/GraphY';
-import ThumbWheel from '../BaseComponents/ThumbWheel';
+import ThumbWheel from '../ExperimentalBaseComponents/ThumbWheel';
 import Grid from '@material-ui/core/Grid';
 import DataConnection from '../SystemComponents/DataConnection';
 import Gauge from '../BaseComponents/Gauge';

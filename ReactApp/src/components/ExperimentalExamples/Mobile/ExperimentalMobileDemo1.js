@@ -22,7 +22,7 @@ import Meter from '../../BaseComponents/Gauge';
 import SimpleSlider from '../../ExperimentalBaseComponents/SimpleSlider';
 import GraphY from '../../BaseComponents/GraphY';
 import SelectionList from '../../ExperimentalBaseComponents/SelectionList';
-import ThumbWheel from '../../BaseComponents/ThumbWheel';
+import ThumbWheel from '../../ExperimentalBaseComponents/ThumbWheel';
 
 
 import DataConnection from '../../SystemComponents/DataConnection';
@@ -251,6 +251,11 @@ class ExperimentalMobileDemo1 extends React.Component {
                             macros={{'$(device)':'testIOC:amplitude'}}
                             prec_integer={3}
                             prec_decimal={1}
+                            prec={1}
+                            //usePvPrecision={true}
+                            usePvLabel={false}
+                            labelPlacement={'top'}
+                            
                           />
                         </div>
                       </Grid>

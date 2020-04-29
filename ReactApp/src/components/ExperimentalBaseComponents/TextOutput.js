@@ -1,7 +1,8 @@
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import { InputAdornment, TextField } from "@material-ui/core";
-import withWidget from "../SystemComponents/Widgets/withWidget";
+
+import GenericWidget from "../SystemComponents/Widgets/GenericWidget";
 
 const styles = (theme) => ({
   root: {
@@ -95,43 +96,56 @@ function TextOutput(props) {
       focused: classes.cssFocused,
     },
   };
-  let style;
-  if (props.alarmColor !== "") {
-    style = {
-      background:
-        "linear-gradient(45deg, " +
-        props.theme.palette.background.default +
-        " 1%, " +
-        props.alarmColor +
-        " 99%)",
-    };
-  }
-  if (props.connection) {
-    inputProps["endAdornment"] = (
-      <InputAdornment position="end">
-        {props.units} {props.children}
-      </InputAdornment>
-    );
-  }
+
+
   return (
-    <TextField
-      className={classes.textField}
-      style={style}
-      key={props.pvName}
-      //aria-owns={state.openContextMenu ? 'menu-list-grow' : undefined}
-      aria-haspopup="true"
-      value={props.value}
-      fullWidth={true}
-      onFocus={props.onUpdateWidgetFocus}
-      onBlur={props.onUpdateWidgetBlur}
-      label={props.label}
-      margin="none"
-      variant="outlined"
-      disabled={props.disabled}
-      InputLabelProps={inputLabelProps}
-      InputProps={inputProps}
-    />
+    <GenericWidget  {...props} readOnly= {true}>
+      {(widgetProps) => {
+        let inputProps = {};
+        if (widgetProps.connection) {
+          inputProps["endAdornment"] = (
+            <InputAdornment position="end">
+              {props.units} {props.children}
+            </InputAdornment>
+          );
+        }
+
+        let style;
+        if (widgetProps.alarmColor !== "") {
+          style = {
+            background:
+              "linear-gradient(45deg, " +
+              props.theme.palette.background.default +
+              " 1%, " +
+              widgetProps.alarmColor +
+              " 99%)",
+          };
+        }
+
+
+        return (
+          <TextField
+            className={classes.textField}
+            style={style}
+            key={widgetProps.pvName}
+            //aria-owns={state.openContextMenu ? 'menu-list-grow' : undefined}
+            aria-haspopup="true"
+            value={widgetProps.value}
+            fullWidth={true}
+            onFocus={widgetProps.onUpdateWidgetFocus}
+            onBlur={widgetProps.onUpdateWidgetBlur}
+            label={widgetProps.label}
+            margin="none"
+            variant="outlined"
+            disabled={widgetProps.disabled}
+            InputLabelProps={inputLabelProps}
+            InputProps={inputProps}
+          />
+        )
+      }}
+
+    </GenericWidget>
   );
 }
 
-export default withWidget(withStyles(styles, { withTheme: true })(TextOutput), {readOnly: true});
+export default withStyles(styles, { withTheme: true })(TextOutput);

@@ -7,8 +7,7 @@ import {
   ListItemText,
 } from "@material-ui/core";
 import PropTypes from "prop-types";
-import GenericWidget from "../SystemComponents/Widgets/GenericWidget";
-
+import withWidget from "../SystemComponents/Widgets/withWidget";
 
 const styles = (theme) => ({
   root: {
@@ -100,14 +99,18 @@ const styles = (theme) => ({
  * Material-UI List API:
  * https://material-ui.com/api/list
  */
-function SelectionListComponent(props) {
+class SelectionList extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleListItemClick = this.handleListItemClick.bind(this);
+  }
 
   /**
    * Store the new item value in the correct PV's state.
    * @param {String} value
    */
-  function handleListItemClick(value) {
-    props.onUpdateWidgetState({
+  handleListItemClick(value) {
+    this.props.onUpdateWidgetState({
       value: value,
       outputValue: value,
       newValueTrigger: 1,
@@ -118,33 +121,33 @@ function SelectionListComponent(props) {
    * Create a list with the value in enumStrs.
    * @param {array} enumStrs
    */
-  function getListItems(enumStrs, value) {
-    let { classes } = props;
+  getListItems(enumStrs, value) {
+    let { classes } = this.props;
     let listItems = enumStrs.map((item, idx) => {
       let className;
-      if (props.horizontal) {
+      if (this.props.horizontal) {
         className =
           idx === 0
             ? classes.buttonFirstHorizontal
             : idx === enumStrs.length - 1
-              ? classes.buttonLastHorizontal
-              : classes.buttonMiddleHorizontal;
+            ? classes.buttonLastHorizontal
+            : classes.buttonMiddleHorizontal;
       } else {
         className =
           idx === 0
             ? classes.buttonFirstVertical
             : idx === enumStrs.length - 1
-              ? classes.buttonLastVertical
-              : classes.buttonMiddleVertical;
+            ? classes.buttonLastVertical
+            : classes.buttonMiddleVertical;
       }
       return (
         <ListItem
           key={item.toString()}
           className={className}
           button
-          value={item}
-          selected={ value === item }
-          onClick={() => handleListItemClick(item)}
+          value={idx}
+          selected={this.props.useStringValue ? value === item : value === idx}
+          onClick={() => this.handleListItemClick(item)}
         >
           <ListItemText primary={item} />
         </ListItem>
@@ -153,77 +156,48 @@ function SelectionListComponent(props) {
     return listItems;
   }
 
-
-
-let itemList = getListItems(props.enumStrs, props.value);
-
-return (
-  <FormControlLabel
-    key={props.pvName}
-    className={props.classes.FormControl}
-    control={
-      <List
-        className={
-          props.horizontal
-            ? props.classes.listHorizontal
-            : props.classes.listVertical
-        }
-        component="nav"
-        disabled={props.disabled}
-        variant="outlined"
-        disablePadding={true}
-      >
-        {itemList}
-      </List>
-    }
-    label={props.label}
-    labelPlacement={props.labelPlacement}
-  />
-);
-  }
-
-class SelectionList extends React.Component {
-  constructor(props) {
-    super(props);
-  }
   render() {
+    let itemList = this.getListItems(this.props.enumStrs, this.props.value);
     return (
-      <GenericWidget {...this.props} useStringValue={true}>
-        {(widgetProps) => {
-          return (
-            <SelectionListComponent {...this.props} {...widgetProps} />
-          )
+      <FormControlLabel
+        key={this.props.pvName}
+        className={this.props.classes.FormControl}
+        control={
+          <List
+            className={
+              this.props.horizontal
+                ? this.props.classes.listHorizontal
+                : this.props.classes.listVertical
+            }
+            component="nav"
+            disabled={this.props.disabled}
+            variant="outlined"
+            disablePadding={true}
+          >
+            {itemList}
+          </List>
         }
-        }
-      </GenericWidget>
-    )
+        label={this.props.label}
+        labelPlacement={this.props.labelPlacement}
+      />
+    );
   }
+
+  /**
+   * Specific props type and default values for this widgets.
+   * They extends the ones provided for a generic widget.
+   */
+  static propTypes = {
+    //If defined, this array of strings overides the default EPICS MBBI/O
+    //pv strings and are displayed as the choices in the RadioButtonGroup component
+    custom_selection_strings: PropTypes.array,
+    // Display list horizontally.
+    horizontal: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    horizontal: false,
+  };
 }
 
-/**
- * Specific props type and default values for this widgets.
- * They extends the ones provided for a generic widget.
- */
-SelectionList.propTypes = {
-  /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
-pv: PropTypes.string.isRequired,
-/** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
-macros: PropTypes.object,
-/** Directive to fill the label with the value contained in the  EPICS pv's DESC field. */
-usePvLabel: PropTypes.bool,
-/** Directive to use the units contained in the  EPICS pv's CttonGroup component
-custom_selection_strings: PropTypes.array,
-
-  /** Material-UI TextField variant*/
-  // Display list horizontally.
-  horizontal: PropTypes.bool,
-
-};
-
-SelectionList.defaultProps = {
-  horizontal: false,
-
-};
-
-
-export default withStyles(styles, { withTheme: true })(SelectionList);
+export default withWidget(withStyles(styles, { withTheme: true })(SelectionList));

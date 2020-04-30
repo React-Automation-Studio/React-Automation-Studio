@@ -3,7 +3,7 @@ import { withStyles } from "@material-ui/core/styles";
 import { InputAdornment, MenuItem, TextField } from "@material-ui/core";
 import PropTypes from 'prop-types';
 
-import withWidget from "../SystemComponents/Widgets/withWidget";
+import GenericWidget from "../SystemComponents/Widgets/GenericWidget";
 
 const styles = (theme) => ({
   root: {
@@ -17,7 +17,68 @@ const styles = (theme) => ({
   },
 });
 
-/**
+
+function SelectionInputComponent(props) {
+ 
+  function handleChange(event) {
+    let value = event.target.value;
+    props.onUpdateWidgetState({
+      value: value,
+      outputValue: value,
+      newValueTrigger: 1,
+    });
+  }
+
+  
+  //  console.log("props.useStringValue",props.useStringValue)
+  //  console.log("props.enumStrs",props.enumStrs)
+  //  console.log("props.value",props.value)
+    let inputProps;
+    let stringValues = props.enumStrs.map((item, idx) => (
+      <MenuItem
+        key={item.toString()}
+        value={props.useStringValue ? item : idx}
+      >
+        {item}
+      </MenuItem>
+    ));
+    if (props.connection) {
+      inputProps = {
+        endAdornment: (
+          <InputAdornment
+            style={{ marginRight: props.theme.spacing(1) }}
+            position="end"
+          >
+            {props.units} {props.children}
+          </InputAdornment>
+        ),
+      };
+    }
+    return (
+      <TextField
+        key={props.pvName}
+        className={props.classes.TextField}
+        select
+        disabled={props.disabled}
+        key={props.pvName}
+        value={props.value}
+        onFocus={props.onUpdateWidgetFocus}
+        onBlur={props.onUpdateWidgetBlur}
+        onChange={handleChange}
+        label={props.label}
+        margin={props.margin}
+        variant={props.variant}
+        InputProps={inputProps}
+      >
+        {stringValues}
+      </TextField>
+    );
+  }
+
+
+  
+ 
+ /**
  * The SelectionInput Component is a wrapper on the Material-UI TextField component. 
  * The TextField component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
  * The margins and spacing must be controlled from the parent component.<br/><br/>
@@ -27,89 +88,52 @@ const styles = (theme) => ({
  * https://material-ui.com/api/text-field
 
  */
+
 class SelectionInput extends React.Component {
   constructor(props) {
     super(props);
-    this.handleChange = this.handleChange.bind(this);
   }
-
-  handleChange(event) {
-    let value = event.target.value;
-    this.props.onUpdateWidgetState({
-      value: value,
-      outputValue: value,
-      newValueTrigger: 1,
-    });
-  }
-
   render() {
-    console.log("this.props.useStringValue",this.props.useStringValue)
-    console.log("this.props.enumStrs",this.props.enumStrs)
-    console.log("this.props.value",this.props.value)
-    let inputProps;
-    let stringValues = this.props.enumStrs.map((item, idx) => (
-      <MenuItem
-        key={item.toString()}
-        value={this.props.useStringValue ? item : idx}
-      >
-        {item}
-      </MenuItem>
-    ));
-    if (this.props.connection) {
-      inputProps = {
-        endAdornment: (
-          <InputAdornment
-            style={{ marginRight: this.props.theme.spacing(1) }}
-            position="end"
-          >
-            {this.props.units} {this.props.children}
-          </InputAdornment>
-        ),
-      };
-    }
     return (
-      <TextField
-        key={this.props.pvName}
-        className={this.props.classes.TextField}
-        select
-        disabled={this.props.disabled}
-        key={this.props.pvName}
-        value={this.props.value}
-        onFocus={this.props.onUpdateWidgetFocus}
-        onBlur={this.props.onUpdateWidgetBlur}
-        onChange={this.handleChange}
-        label={this.props.label}
-        margin="dense"
-        variant="outlined"
-        InputProps={inputProps}
-      >
-        {stringValues}
-      </TextField>
-    );
+      <GenericWidget {...this.props}   useStringValue={true} >
+        {(widgetProps) => {
+          return (
+            <SelectionInputComponent {...this.props} {...widgetProps} />
+          )
+        }
+        }
+      </GenericWidget>
+    )
   }
-
-  /**
-   * Specific props type and default values for this widgets.
-   * They extends the ones provided for a generic widget.
-   */
-  
-  
- 
-  static defaultProps = {
-    useStringValue:true,
-  };
-
 }
 
-SelectionInput.propTypes = {
-  //If defined, this array of strings overides the default EPICS MBBI/O
-  //pv strings and are displayed as the choices in the RadioButtonGroup component
-  custom_selection_strings: PropTypes.array,
-  /**
-     * Directive to use PV's string values.
-     */
-    useStringValue: PropTypes.bool,
+SelectionInput.defaultProps = {
+
+  debug: false,
+  variant: "outlined",
+  margin: "none",
   
 };
 
-export default withWidget(withStyles(styles, { withTheme: true })(SelectionInput));
+
+SelectionInput.propTypes = {
+/** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+pv: PropTypes.string.isRequired,
+/** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
+macros: PropTypes.object,
+/** Directive to fill the label with the value contained in the  EPICS pv's DESC field. */
+usePvLabel: PropTypes.bool,
+/** Directive to use the units contained in the  EPICS pv's EGU field. */
+
+//If defined, this array of strings overides the default EPICS MBBI/O
+//pv strings and are displayed as the choices in the RadioButtonGroup component
+custom_selection_strings: PropTypes.array,
+
+  /** Material-UI TextField variant*/
+  variant: PropTypes.string,
+  /** Material-UI TextField margin*/
+  margin: PropTypes.string,
+
+};
+
+export default withStyles(styles, { withTheme: true })(SelectionInput);

@@ -22,7 +22,7 @@ SelectionInput example connection to a SoftChannel EPICS MBBO pv with EPICS pv s
   macros={{'$(device)':'testIOC','$(id)':'1'}} 
   horizontal={true}  
   usePvLabel={true}
-  debug={true} 
+  
   />
 
   {/*###############*/}
@@ -48,13 +48,14 @@ SelectionInput example connection to a SoftChannel EPICS MBBO pv with custom str
 
   {/*###############*/}  
 
+
   <SelectionInput  
    pv='pva://$(device):mbboTest$(id)'
    macros={{'$(device)':'testIOC','$(id)':'1'}}
    usePvLabel={true}
    labelPlacement='bottom'
    custom_selection_strings={['text 1','text 3']} 
-  debug={true}
+
  
    />
  

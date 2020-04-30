@@ -1,4 +1,32 @@
-StyledIconIndicator local variable example:
+
+StyledIconIndicator with custom icon EPICS variable example:
+
+
+```js
+{/*The ToggleButton code is included for demonstration purposes only*/}  
+{/*Only the the JSX code between the hashes  is required to instantiate the StyledIconIndicator */}  
+  import ToggleButton from './ToggleButton';
+  import Face from '@material-ui/icons/Face';
+  <div style={{textAlign:'center'}}>
+  <ToggleButton
+  pv='pva://$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}}
+  label={"write '1' or '0'"}
+  labelPlacement={"top"}
+  custom_selection_strings={["OFF","ON"]}
+  />
+  <br/><br/>
+  {/*###############*/}  
+
+  <StyledIconIndicator  pv='pva://$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}} label='Test Label'>
+  <Face/>
+  </StyledIconIndicator>
+
+  {/*###############*/}
+
+  </div>
+```
+
+StyledIconIndicator EPICS variable example:
 
 ```js
 {/*The ToggleButton code is included for demonstration purposes only*/}  
@@ -21,7 +49,32 @@ StyledIconIndicator local variable example:
   </div>
 ```
 
-StyledIconIndicator with custom icon local variable example:
+StyledIconIndicator with custom icon EPICS variable example:
+
+
+```js
+{/*The ToggleButton code is included for demonstration purposes only*/}  
+{/*Only the the JSX code between the hashes  is required to instantiate the StyledIconIndicator */}  
+  import ToggleButton from './ToggleButton';
+  import Face from '@material-ui/icons/Face';
+  <div style={{textAlign:'center'}}>
+  <ToggleButton
+  pv='pva://$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}}
+  label={"write '1' or '0'"}
+  labelPlacement={"top"}
+  custom_selection_strings={["OFF","ON"]}
+  />
+  <br/><br/>
+  {/*###############*/}  
+
+  <StyledIconIndicator  pv='pva://$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}} label='Test Label' offColor='secondary'>
+  <Face/>
+  </StyledIconIndicator>
+
+  {/*###############*/}
+
+  </div>
+```
 
 ```js
 {/*The ToggleButton code is included for demonstration purposes only*/}  

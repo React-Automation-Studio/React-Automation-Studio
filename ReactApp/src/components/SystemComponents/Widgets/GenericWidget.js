@@ -6,7 +6,9 @@ import { deepOrange, red } from "@material-ui/core/colors";
 import DataConnection from "../DataConnection";
 import ContextMenu from "../ContextMenu";
 import { formatTime } from "./WidgetUtils";
-import { withStyles } from '@material-ui/core/styles';
+
+
+
 /**
  * Class with the main functions related to a widget.
  */
@@ -50,9 +52,22 @@ class GenericWidget extends React.Component {
   createWidgetState() {
     this.state = {};
     let dataPVs = {};
+    if(this.props.pv){
     this.pvNames = Array.isArray(this.props.pv)
       ? this.props.pv
       : [this.props.pv];
+    }
+    else if  (this.props.dataPVs){
+      this.pvNames = Array.isArray(this.props.dataPVs)
+      ? this.props.dataPVs
+      : [this.props.dataPVs];
+    }
+    else if  (this.props.pvs){
+      this.pvNames = Array.isArray(this.props.pvs)
+      ? this.props.pvs
+      : [this.props.pvs];
+    }
+    
     this.disconnectedPVs = [];
     this.writablePVs = [];
     this.alarmColors = ["", deepOrange["400"], red["800"]];
@@ -94,12 +109,13 @@ class GenericWidget extends React.Component {
 
       };
     }
-
+   
     // Widget's state
     this.state.dataPVs = dataPVs;
     this.state.hasFocus = false;
     this.state.openContextMenu = false;
     this.state.anchorEl = null;
+    
   }
 
   //-----------------------------------------------------------
@@ -287,12 +303,12 @@ class GenericWidget extends React.Component {
    * if optional connections to specific fields should be established.
    */
   getDataConnection = () => {
-    console.log(this.props)
+  //  console.log(this.props)
     let dataConnections = [];
-
+    
     for (let pv in this.state.dataPVs) {
       let pvName = this.state.dataPVs[pv].pvname;
-      console.log(pvName, this.props)
+    //  console.log("willliam2",pvName, this.props)
       dataConnections.push(
         <DataConnection
           key={pvName}
@@ -919,6 +935,6 @@ class GenericWidget extends React.Component {
     //  useStringValue: false,
   };
 }
-export default withStyles({ withTheme: true })(GenericWidget)
+export default (GenericWidget)
 
 

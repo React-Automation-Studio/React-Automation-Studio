@@ -1,7 +1,8 @@
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import { Checkbox as MuiCheckBox, FormControlLabel } from "@material-ui/core";
-import withWidget from "../SystemComponents/Widgets/withWidget";
+import GenericWidget from "../SystemComponents/Widgets/GenericWidget";
+import PropTypes from 'prop-types';
 
 const styles = (theme) => ({
   root: {
@@ -22,42 +23,80 @@ const styles = (theme) => ({
  * The CheckBox component is a wrapper on a Material-UI CheckBox component.
  https://material-ui.com/api/checkbox/
  */
-class CheckBox extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleButtonChange = this.handleButtonChange.bind(this);
-  }
+function CheckBoxComponent (props) {
+ 
 
   /**
    * Send checkbox value to the PV.
    * @param {Event} event
    */
-  handleButtonChange(event) {
+  function handleButtonChange(event) {
     let value = event.target.checked ? 1 : 0;
-    this.props.onUpdateWidgetState({
+    props.onUpdateWidgetState({
       value: value,
       outputValue: value,
     });
   }
 
-  render() {
+ 
     return (
       <FormControlLabel
-        key={this.props.pvName}
-        className={this.props.classes.FormControl}
-        disabled={this.props.disabled}
-        label={this.props.label}
-        labelPlacement={this.props.labelPlacement}
+        key={props.pvName}
+        className={props.classes.FormControl}
+        disabled={props.disabled}
+        label={props.label}
+        labelPlacement={props.labelPlacement}
         control={
           <MuiCheckBox
-            onChange={this.handleButtonChange}
-            checked={this.props.value === 1}
-            color={this.props.onColor}
+            onChange={handleButtonChange}
+            checked={props.value == 1}
+            color={props.onColor}
           />
         }
       />
     );
-  }
+  
 }
 
-export default withWidget(withStyles(styles, { withTheme: true })(CheckBox));
+class CheckBox extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return (
+      <GenericWidget {...this.props}>
+        {(widgetProps) => {
+          return (
+            <CheckBoxComponent {...this.props} {...widgetProps} />
+          )
+        }
+        }
+      </GenericWidget>
+    )
+  }
+}
+CheckBox.propTypes = {
+/** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+pv: PropTypes.string.isRequired,
+/** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
+macros: PropTypes.object,
+
+/** local variable intialization value*/
+intialLocalVariableValue: PropTypes.string,
+ /** If defined, then the DataConnection debugging information will be displayed*/
+ debug: PropTypes.bool,
+  /** label placement*/
+labelPlacement:PropTypes.oneOf(['start', 'top','bottom','end']),
+/** Custom label to be used, if  `usePvLabel` is not defined. */
+label: PropTypes.string,
+    /**
+   * Custom on color to be used, must be derived from Material UI theme color's.
+   */
+  onColor: PropTypes.string,
+ 
+}
+CheckBox.defaultProps = {
+  onColor:'primary',
+  debug: false,
+}
+export default withStyles(styles, { withTheme: true })(CheckBox);

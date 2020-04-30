@@ -2,8 +2,8 @@ import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import { IconButton, FormControlLabel } from "@material-ui/core";
 import { Lens } from "@material-ui/icons";
-import withWidget from "../SystemComponents/Widgets/withWidget";
-
+import GenericWidget from "../SystemComponents/Widgets/GenericWidget";
+import PropTypes from 'prop-types';
 const styles = (theme) => ({
   root: {
     display: "flex",
@@ -19,6 +19,46 @@ const styles = (theme) => ({
   },
 });
 
+
+function StyledIconButtonComponent (props) {
+ 
+  /**
+   * Write in the PV the oppisite value of the actual one.
+   */
+  function handleButtonClick() {
+    let value = props.value === 0 ? 1 : 0;
+    props.onUpdateWidgetState({
+      value: value,
+      outputValue: value,
+      newValueTrigger: 1,
+    });
+  }
+
+ 
+    return (
+      <FormControlLabel
+        key={props.pvName}
+        className={props.classes.FormControl}
+        disabled={props.disabled}
+        label={props.label}
+        labelPlacement={props.labelPosition}
+        control={
+          <IconButton
+            size="small"
+            color={
+              props.value === 1 ? props.onColor : props.offColor
+            }
+            onClick={handleButtonClick}
+          >
+            {props.children === undefined ? <Lens /> : props.children}
+          </IconButton>
+        }
+      />
+    )
+  
+}
+
+
 /**
  * The StyledIconButton Component is a wrapper on the Material-UI contained SvgIcon component.
  * The SvgIcon component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
@@ -32,45 +72,48 @@ const styles = (theme) => ({
 class StyledIconButton extends React.Component {
   constructor(props) {
     super(props);
-    this.handleButtonClick = this.handleButtonClick.bind(this);
   }
-
-  /**
-   * Write in the PV the oppisite value of the actual one.
-   */
-  handleButtonClick() {
-    let value = this.props.value === 0 ? 1 : 0;
-    this.props.onUpdateWidgetState({
-      value: value,
-      outputValue: value,
-      newValueTrigger: 1,
-    });
-  }
-
   render() {
     return (
-      <FormControlLabel
-        key={this.props.pvName}
-        className={this.props.classes.FormControl}
-        disabled={this.props.disabled}
-        label={this.props.label}
-        labelPlacement={this.props.labelPosition}
-        control={
-          <IconButton
-            size="small"
-            color={
-              this.props.value === 1 ? this.props.onColor : this.props.offColor
-            }
-            onClick={this.handleButtonClick}
-          >
-            {this.props.children === undefined ? <Lens /> : this.props.children}
-          </IconButton>
+      <GenericWidget {...this.props}>
+        {(widgetProps) => {
+          return (
+            <StyledIconButtonComponent {...this.props} {...widgetProps} />
+          )
         }
-      />
-    );
+        }
+      </GenericWidget>
+    )
   }
 }
+StyledIconButton.propTypes = {
+  /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+  pv: PropTypes.string.isRequired,
+  /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
+  macros: PropTypes.object,
+ 
+  /** local variable intialization value*/
+  intialLocalVariableValue: PropTypes.string,
+   /** If defined, then the DataConnection debugging information will be displayed*/
+   debug: PropTypes.bool,
+    /** label placement*/
+  labelPlacement:PropTypes.oneOf(['start', 'top','bottom','end']),
+  /** Custom label to be used, if  `usePvLabel` is not defined. */
+  label: PropTypes.string,
+      /**
+     * Custom on color to be used, must be derived from Material UI theme color's or can be a standard color.
+     */
+    onColor: PropTypes.string,
+    /**
+     * Custom off color to be used, must be derived from Material UI theme color's or can be a standard color.
+     */
+    offColor: PropTypes.string,
 
-export default withWidget(
-  withStyles(styles, { withTheme: true })(StyledIconButton)
-);
+};
+StyledIconButton.defaultProps = {
+  onColor:'primary',
+  offColor:'default',
+  debug: false,
+}
+export default  withStyles(styles, { withTheme: true })(StyledIconButton);
+

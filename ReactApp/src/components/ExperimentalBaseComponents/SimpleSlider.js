@@ -87,7 +87,7 @@ function SimpleSliderComponent(props) {
     }
     let min = props.min !== undefined ? props.min : 0;
     let max = props.max !== undefined ? props.max : 100;
-  
+   
     if (props.marks !== undefined) {
       marks = props.marks;
     } else {
@@ -208,6 +208,7 @@ class SimpleSlider extends React.Component {
   SimpleSlider.defaultProps = {
     showThumbValue: false,
     step: 1,
+    
   };
 
 export default  withStyles(styles, { withTheme: true })(SimpleSlider);

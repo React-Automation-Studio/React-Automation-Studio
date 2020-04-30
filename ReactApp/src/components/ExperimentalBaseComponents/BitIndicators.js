@@ -18,16 +18,7 @@ const styles = (theme) => ({
   },
 });
 
-/**
- * The BitIndicators Component is a wrapper on multiple SvgIcon components.
- * Each SvgIcon component indicates the value of each of the bits of the PV Value.
- * <br/><br/>
- * Material-UI SvgIcon Demos:
- * https://material-ui.com/style/icons/<br/><br/>
- * Material-UI SvgIcon API:
- * https://material-ui.com/api/svg-icon/<br/><br/>
- * A custom Icon can used by importing it in the parent and assigning it as a child <br/><br/>
- */
+
 function BitIndicatorsComponent(props) {
 
 
@@ -140,14 +131,18 @@ function BitIndicatorsComponent(props) {
   );
 }
 
+
+
 /**
- * Specific props type and default values for this widgets.
- * They extends the ones provided for a generic widget.
+ * The BitIndicators Component is a wrapper on multiple SvgIcon components.
+ * Each SvgIcon component indicates the value of each of the bits of the PV Value.
+ * <br/><br/>
+ * Material-UI SvgIcon Demos:
+ * https://material-ui.com/style/icons/<br/><br/>
+ * Material-UI SvgIcon API:
+ * https://material-ui.com/api/svg-icon/<br/><br/>
+ * A custom Icon can used by importing it in the parent and assigning it as a child <br/><br/>
  */
-
-
-
-
 class BitIndicators extends React.Component {
   constructor(props) {
     super(props);
@@ -167,6 +162,19 @@ class BitIndicators extends React.Component {
 }
 
 BitIndicators.propTypes = {
+  /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+  pv: PropTypes.string.isRequired,
+  /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
+  macros: PropTypes.object,
+ 
+  /** local variable intialization value*/
+  intialLocalVariableValue: PropTypes.string,
+   /** If defined, then the DataConnection debugging information will be displayed*/
+   debug: PropTypes.bool,
+    /** label placement*/
+  labelPlacement:PropTypes.oneOf(['start', 'top','bottom','end']),
+  /** Custom label to be used, if  `usePvLabel` is not defined. */
+  label: PropTypes.string,
   // Array of custom bit labels.
   bitLabels: PropTypes.array,
   // If defined, the position of the bit labels relative to the widget.

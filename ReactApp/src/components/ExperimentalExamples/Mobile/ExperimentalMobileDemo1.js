@@ -252,6 +252,7 @@ class ExperimentalMobileDemo1 extends React.Component {
                             prec_integer={3}
                             prec_decimal={1}
                             prec={1}
+                            usePvMinMax={true}
                             //usePvPrecision={true}
                             usePvLabel={false}
                             labelPlacement={'top'}

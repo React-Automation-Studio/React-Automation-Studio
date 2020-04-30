@@ -560,6 +560,7 @@ class GenericWidget extends React.Component {
     let pvName = this.getPvName();
 
     return {
+      ...this.props,
       // Variables and components.
       alarmColor: this.getAlarmColor(pvName),
       alarmSeverity: this.getAlarmSeverity(pvName),
@@ -580,6 +581,7 @@ class GenericWidget extends React.Component {
       units: this.getUnits(pvName),
       value: this.getValue(pvName),
       valueList: this.getValueList(),
+    //  useStringValue:this.props.useStringValue,
       // Callbacks.
       onUpdateWidgetBlur: this.handleOnBlur,
       onUpdateWidgetFocus: this.handleOnFocus,

@@ -2,8 +2,8 @@ import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import { FormControlLabel, SvgIcon } from "@material-ui/core";
 import { Lens } from "@material-ui/icons";
-
-import withWidget from "../SystemComponents/Widgets/withWidget";
+import PropTypes from 'prop-types';
+import GenericWidget from "../SystemComponents/Widgets/GenericWidget";
 
 const styles = (theme) => ({
   root: {
@@ -20,17 +20,8 @@ const styles = (theme) => ({
   },
 });
 
-/**
- * The StyledIconIndicator Component is a wrapper on the Material-UI contained SvgIcon component.
- * The SvgIcon component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
- * The margins and spacing must be controlled from the parent component.<br/><br/>
- * Material-UI SvgIcon Demos:
- * https://material-ui.com/style/icons/<br/><br/>
- * Material-UI SvgIcon API:
- * https://material-ui.com/api/svg-icon/<br/><br/>
- * A custom Icon can used by importing it in the parent and assigning it as a child <br/><br/>
- */
-function StyledIconIndicator(props) {
+
+function StyledIconIndicatorComponent(props) {
   
   
 
@@ -107,7 +98,61 @@ function StyledIconIndicator(props) {
   );
 }
 
-export default withWidget(
-  withStyles(styles, { withTheme: true })(StyledIconIndicator),
-  { readOnly: true }
-);
+/**
+ * The StyledIconIndicator Component is a wrapper on the Material-UI contained SvgIcon component.
+ * The SvgIcon component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
+ * The margins and spacing must be controlled from the parent component.<br/><br/>
+ * Material-UI SvgIcon Demos:
+ * https://material-ui.com/style/icons/<br/><br/>
+ * Material-UI SvgIcon API:
+ * https://material-ui.com/api/svg-icon/<br/><br/>
+ * A custom Icon can used by importing it in the parent and assigning it as a child <br/><br/>
+ */
+
+class StyledIconIndicator extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return (
+      <GenericWidget {...this.props}>
+        {(widgetProps) => {
+          return (
+            <StyledIconIndicatorComponent {...this.props} {...widgetProps} />
+          )
+        }
+        }
+      </GenericWidget>
+    )
+  }
+}
+StyledIconIndicator.propTypes = {
+  /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+  pv: PropTypes.string.isRequired,
+  /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
+  macros: PropTypes.object,
+ 
+  /** local variable intialization value*/
+  intialLocalVariableValue: PropTypes.string,
+   /** If defined, then the DataConnection debugging information will be displayed*/
+   debug: PropTypes.bool,
+    /** label placement*/
+  labelPlacement:PropTypes.oneOf(['start', 'top','bottom','end']),
+  /** Custom label to be used, if  `usePvLabel` is not defined. */
+  label: PropTypes.string,
+      /**
+     * Custom on color to be used, must be derived from Material UI theme color's or can be a standard color.
+     */
+    onColor: PropTypes.string,
+    /**
+     * Custom off color to be used, must be derived from Material UI theme color's or can be a standard color.
+     */
+    offColor: PropTypes.string,
+
+};
+StyledIconIndicator.defaultProps = {
+  onColor:'primary',
+  offColor:'default',
+  debug: false,
+}
+export default withStyles(styles, { withTheme: true })(StyledIconIndicator);

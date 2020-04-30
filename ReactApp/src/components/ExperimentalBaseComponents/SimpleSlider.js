@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState,useRef } from 'react';
 import { withStyles } from "@material-ui/core/styles";
 import { Slider, Typography } from "@material-ui/core";
 import PropTypes from "prop-types";
 import debounce from "lodash.debounce";
-import withWidget from "../SystemComponents/Widgets/withWidget";
+import GenericWidget from "../SystemComponents/Widgets/GenericWidget";
+
 
 const styles = (theme) => ({
   root: {
@@ -24,21 +25,9 @@ const styles = (theme) => ({
   },
 });
 
-/**
- * The SimpleSlider Component is a wrapper on the Material-UI contained Slider component. The SimpleSlider component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
- * The margins and spacing must be controlled from the parent component.<br/><br/>
- * Material-UI Slider Demos:
- * https://material-ui.com/components/slider/<br/><br/>
- * Material-UI Slider API:
- * https://material-ui.com/api/slider/
- */
-class SimpleSlider extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleChangeCommited = this.handleChangeCommited.bind(this);
-    this.emitChangeDebounced = debounce(this.emitChange, 10);
-  }
+
+function SimpleSliderComponent(props) {
+  const emitChangeDebounced = useRef(debounce(value => emitChange(value), 10)).current;
 
   /**
    * Write value on the PV using emitChangeDebounced function.
@@ -47,17 +36,18 @@ class SimpleSlider extends React.Component {
    * @param {Event} event
    * @param {float} value
    */
-  handleChange(event, value) {
-    this.props.onUpdateWidgetState({ focus: true });
-    this.emitChangeDebounced(value);
+  function handleChange(event, value) {
+    props.onUpdateWidgetState({ focus: true });
+    //debounce(emitChange(value), 10)
+    emitChangeDebounced(value);
   }
 
   /**
    * Save value on the state.
    * @param {string} value
    */
-  emitChange(value) {
-    this.props.onUpdateWidgetState({
+  function emitChange(value) {
+    props.onUpdateWidgetState({
       checkValue: true,
       value: value,
       outputValue: value,
@@ -70,8 +60,8 @@ class SimpleSlider extends React.Component {
    * @param {Event} event
    * @param {float} value
    */
-  handleChangeCommited(event, value) {
-    this.props.onUpdateWidgetState({
+  function handleChangeCommited(event, value) {
+    props.onUpdateWidgetState({
       checkValue: true,
       value: value,
       outputValue: value,
@@ -80,26 +70,26 @@ class SimpleSlider extends React.Component {
     });
   }
 
-  render() {
+  
     let content, marks;
-    if (this.props.connection) {
+    if (props.connection) {
       content = (
-        <Typography className={this.props.classes.rangeLabel} id="subtitle2">
-          {this.props.label} {this.props.value} {this.props.units}
+        <Typography className={props.classes.rangeLabel} id="subtitle2">
+          {props.label} {props.value} {props.units}
         </Typography>
       );
     } else {
       content = (
-        <Typography className={this.props.classes.rangeLabel} id="subtitle2">
-          {this.props.label}
+        <Typography className={props.classes.rangeLabel} id="subtitle2">
+          {props.label}
         </Typography>
       );
     }
-    let min = this.props.min !== undefined ? this.props.min : 0;
-    let max = this.props.max !== undefined ? this.props.max : 100;
+    let min = props.min !== undefined ? props.min : 0;
+    let max = props.max !== undefined ? props.max : 100;
   
-    if (this.props.marks !== undefined) {
-      marks = this.props.marks;
+    if (props.marks !== undefined) {
+      marks = props.marks;
     } else {
       marks = [
         {
@@ -108,7 +98,7 @@ class SimpleSlider extends React.Component {
    
             min +
             " " +
-            this.props.units,
+            props.units,
         },
         {
           value: max,
@@ -116,42 +106,95 @@ class SimpleSlider extends React.Component {
 
             max +
             " " +
-            this.props.units,
+            props.units,
         },
       ];
     }
-    //console.log('max',max)
-    //console.log('min',min)
-    //console.log('marks',marks)
-    //console.log('this.props.max',this.props.max)
-    //console.log('this.props.units',this.props.units)
-    //console.log(this.props.connection)
+  
     return (
-      <div className={this.props.classes.sliderDiv}>
+      <div className={props.classes.sliderDiv}>
         {content}
         <Slider
-          className={this.props.classes.slider}
-          key={this.props.pvName+this.props.connection}
+          className={props.classes.slider}
+          key={props.pvName+props.connection}
           aria-labelledby="label"
-          disabled={this.props.disabled}
-          value={this.props.value}
-          min={this.props.connection?min:undefined}
-          max={this.props.connection?max:undefined}
-          marks={this.props.connection?marks:undefined}
-          valueLabelDisplay={this.props.showThumbValue ? "on" : "off"}
-          step={this.props.step !== undefined ? this.props.step : undefined}
-          onChange={this.handleChange}
-          onChangeCommitted={this.handleChangeCommited}
+          disabled={props.disabled}
+          value={props.value}
+          min={props.connection?min:undefined}
+          max={props.connection?max:undefined}
+          marks={props.connection?marks:undefined}
+          valueLabelDisplay={props.showThumbValue ? "on" : "off"}
+          step={props.step !== undefined ? props.step : undefined}
+          onChange={handleChange}
+          onChangeCommitted={handleChangeCommited}
         />
       </div>
     );
-  }
+  
 
-  /**
+ 
+}
+
+ /**
+ * The SimpleSlider Component is a wrapper on the Material-UI contained Slider component. The SimpleSlider component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
+ * The margins and spacing must be controlled from the parent component.<br/><br/>
+ * Material-UI Slider Demos:
+ * https://material-ui.com/components/slider/<br/><br/>
+ * Material-UI Slider API:
+ * https://material-ui.com/api/slider/
+ */
+class SimpleSlider extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return (
+      <GenericWidget {...this.props}>
+        {(widgetProps) => {
+          return (
+            <SimpleSliderComponent {...this.props} {...widgetProps} />
+          )
+        }
+        }
+      </GenericWidget>
+    )
+  }
+}
+/**
    * Specific props type and default values for this widgets.
    * They extends the ones provided for a generic widget.
    */
-  static propTypes = {
+  SimpleSlider.propTypes = {
+
+     /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+  pv: PropTypes.string.isRequired,
+  /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
+  macros: PropTypes.object,
+  /** Directive to fill the label with the value contained in the  EPICS pv's DESC field. */
+  usePvLabel: PropTypes.bool,
+  /** Directive to use the units contained in the  EPICS pv's EGU field. */
+  usePvUnits: PropTypes.bool,
+  /** Directive to round the value. */
+  usePrecision: PropTypes.bool,
+  /** Custom precision to round the value too, if not defined then the EPICS PREC field will be used, if `usePrecision` is defined. */
+  prec: PropTypes.number,
+  /** Custom units to be used, if `usePvUnits` is not defined. */
+  units: PropTypes.string,
+  /** Directive to use the HOPR and LOPR EPICS fields to limit the maximum and minimum values that can be contained in the value. */
+  usePvMinMax: PropTypes.bool,
+  /** Custom label to be used, if  `usePvLabel` is not defined. */
+  label: PropTypes.string,
+  /** Custom minimum to be used, if `usePvMinMax` is not defined. */
+  min: PropTypes.number,
+  /** Custom maximum to be used, if `usePvMinMax` is not defined. */
+  max: PropTypes.number,
+  /** If defined, then the string value of the EPICS enumerator type will be forced to be used, if not defined the the enumerator index is used */
+  useStringValue: PropTypes.bool,
+  /** If defined, then the DataConnection debugging information will be displayed*/
+  debug: PropTypes.bool,
+  /** local variable intialization value*/
+  intialLocalVariableValue: PropTypes.string,
+  
     // Custom markers in format:
     // [{value: uservalue1,label:userlabel1},{value: uservalue...,label:userlabel...}
     marks: PropTypes.array,
@@ -162,12 +205,9 @@ class SimpleSlider extends React.Component {
     step: PropTypes.number,
   };
 
-  static defaultProps = {
+  SimpleSlider.defaultProps = {
     showThumbValue: false,
     step: 1,
   };
-}
 
-export default withWidget(
-  withStyles(styles, { withTheme: true })(SimpleSlider)
-);
+export default  withStyles(styles, { withTheme: true })(SimpleSlider);

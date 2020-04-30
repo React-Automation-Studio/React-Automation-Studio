@@ -517,8 +517,9 @@ class GenericWidget extends React.Component {
     if (this.isConnectionReady(pvName) && this.props.usePvMinMax) {
       min = parseInt(this.state.dataPVs[pvName].metadata.lower_disp_limit);
 
-    } else {
-      min = parseInt(this.props.min);
+    } 
+    else {
+      min = this.props.min!==undefined?parseInt(this.props.min):undefined;
     }
     return min;
 
@@ -529,7 +530,7 @@ class GenericWidget extends React.Component {
       max = parseInt(this.state.dataPVs[pvName].metadata.upper_disp_limit);
 
     } else {
-      max = parseInt(this.props.max);
+      max = this.props.max!==undefined?parseInt(this.props.max):undefined;
     }
     return max;
 

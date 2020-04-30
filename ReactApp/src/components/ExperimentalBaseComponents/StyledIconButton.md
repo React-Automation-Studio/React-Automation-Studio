@@ -40,7 +40,13 @@ StyledIconButton example connection to a SoftChannel EPICS AI pv with example of
   </div>
   {/*###############*/}  
 
-  <StyledIconButton  pv='pva://$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}} usePvLabel={true} labelPlacement='end'/>
+  <StyledIconButton  
+    pv='pva://$(device):test$(id)' 
+    macros={{'$(device)':'testIOC','$(id)':'2'}} 
+    usePvLabel={true} 
+    labelPlacement='end' 
+    offColor="secondary"
+    />
 
   {/*###############*/}
 

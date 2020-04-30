@@ -3,7 +3,7 @@ import { withStyles } from "@material-ui/core/styles";
 import { Button, FormControlLabel } from "@material-ui/core";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import PropTypes from "prop-types";
-import withWidget from "../SystemComponents/Widgets/withWidget";
+import GenericWidget from "../SystemComponents/Widgets/GenericWidget";
 
 const styles = (theme) => ({
   root: {
@@ -18,31 +18,15 @@ const styles = (theme) => ({
   },
 });
 
-/**
- *  The ThumbWheel component is a wrapper on an array of Material-UI Button components.
- *  The Button component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
- *  The margins and spacing must be controlled from the parent component.<br/><br/>
- *  Material-UI Button Demos:
- *  https://material-ui.com/demos/buttons/<br/><br/>
- *  Material-UI Button API:
- *  https://material-ui.com/api/button/
- */
-class ThumbWheel extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleButtonClick = this.handleButtonClick.bind(this);
-  }
 
-  /**
-   * Increment tha actual value by the received quantity.
-   * If the new value is outside the limits cut it to the limit.
-   * @param {float} incrementValue
-   */
-  handleButtonClick(incrementValue) {
-    if (this.props.connection) {
-      let value = parseFloat(this.props.value) + parseFloat(incrementValue);
-   //   console.log(this.props.value,value)
-      this.props.onUpdateWidgetState({
+
+
+function ThumbWheelComponent(props) {
+
+  function handleButtonClick(incrementValue) {
+    if (props.connection) {
+      let value = parseFloat(props.value) + parseFloat(incrementValue);
+      props.onUpdateWidgetState({
         checkValue: true,
         value: value,
         outputValue: value,
@@ -50,39 +34,32 @@ class ThumbWheel extends React.Component {
       window.navigator.vibrate(1);
     }
   }
-
-  render() {
-   // console.log(this.props.value)
-    let prec_integer = this.props.prec_integer;
-    let prec_decimal =this.props.prec_decimal;
-    let prec_decimal_div = prec_decimal > 0 ? prec_decimal : 0;
-    let num_array = [];
-    if (this.props.custom_increments !== undefined) {
-      num_array = this.props.custom_increments.sort((a, b) => a - b);
-    } else {
-      for (let i = 0; i < prec_integer; i++) {
-        num_array.push(10 ** i);
-      }
-      for (let i = 1; i <= prec_decimal; i++) {
-        let value=10 ** -i
-        value=value.toFixed(i)
-        num_array.unshift(value);
-      }
+  let prec_integer = props.prec_integer;
+  let prec_decimal = props.prec_decimal;
+  let prec_decimal_div = prec_decimal > 0 ? prec_decimal : 0;
+  let num_array = [];
+  if (props.custom_increments !== undefined) {
+    num_array = props.custom_increments.sort((a, b) => a - b);
+  } else {
+    for (let i = 0; i < prec_integer; i++) {
+      num_array.push(10 ** i);
     }
-    return (
-      <ThumbWheelWidget
-        {...this.props}
-        disabled={this.props.disabled}
-        label={this.props.label}
-        labelPosition={this.props.labelPosition}
-        num_array={num_array}
-        prec_decimal_div={prec_decimal_div}
-        onHandleButtonClick={this.handleButtonClick}
-      />
-    );
+    for (let i = 1; i <= prec_decimal; i++) {
+      let value = 10 ** -i
+      value = value.toFixed(i)
+      num_array.unshift(value);
+    }
   }
-
-  
+  return (<ThumbWheelWidget
+    {...props}
+    disabled={props.disabled}
+    label={props.label}
+    //labelPosition={this.props.labelPosition}
+    num_array={num_array}
+    prec_decimal_div={prec_decimal_div}
+    onHandleButtonClick={handleButtonClick}
+  />
+  )
 }
 
 /**
@@ -152,44 +129,69 @@ function SingleThumbWheelWidget(props) {
     </Button>
   );
 }
-
+/**
+ *  The ThumbWheel component is a wrapper on an array of Material-UI Button components.
+ *  The Button component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
+ *  The margins and spacing must be controlled from the parent component.<br/><br/>
+ *  Material-UI Button Demos:
+ *  https://material-ui.com/demos/buttons/<br/><br/>
+ *  Material-UI Button API:
+ *  https://material-ui.com/api/button/
+ */
+class ThumbWheel extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return (
+      <GenericWidget {...this.props}>
+        {(widgetProps) => {
+          return (
+            <ThumbWheelComponent {...this.props} {...widgetProps} />
+          )
+        }
+        }
+      </GenericWidget>
+    )
+  }
+}
 
 ThumbWheel.propTypes = {
   /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
   pv: PropTypes.string.isRequired,
   /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
-  macros:PropTypes.object,
+  macros: PropTypes.object,
   /** Directive to use the HOPR and LOPR EPICS fields to limit the maximum and minimum values that can be contained in the value. */
-  usePvMinMax:PropTypes.bool,
+  usePvMinMax: PropTypes.bool,
   /** Directive to use the EPICS alarm severity status to alter the fields backgorund color  */
-  alarmSensitive:PropTypes.bool,
+  alarmSensitive: PropTypes.bool,
   /** Custom minimum to be used, if `usePvMinMax` is not defined. */
-  min:PropTypes.number,
+  min: PropTypes.number,
   /** Custom maximum to be used, if `usePvMinMax` is not defined. */
-  max:PropTypes.number,
+  max: PropTypes.number,
   /** If defined, then the DataConnection debugging information will be displayed*/
-  debug:PropTypes.bool,
+  debug: PropTypes.bool,
   /** If defined this sets the precision of the integer control values of the widget*/
-  prec_integer:PropTypes.number,
+  prec_integer: PropTypes.number,
   /** If defined this sets the precision of the decimal control values of the widget*/
-  prec_decimal:PropTypes.number,
-  
+  prec_decimal: PropTypes.number,
+
   /** Custom precision to round the value.    */
   prec: PropTypes.number,
-  
+
   /** Directive to round the value using the PREC field of the PV. If not defined it uses the custom precision. */
-      usePvPrecision: PropTypes.bool,
-      /** An array of custom increments. If defined, overides any values in 'prec_integer','prec_decimal'*/
-  custom_increments:PropTypes.array,
+  usePvPrecision: PropTypes.bool,
+  /** An array of custom increments. If defined, overides any values in 'prec_integer','prec_decimal'*/
+  custom_increments: PropTypes.array,
   /** local variable intialization value*/
-  intialLocalVariableValue:PropTypes.string
+  intialLocalVariableValue: PropTypes.string
 
 };
 ThumbWheel.defaultProps = {
   prec_integer: 4,
   prec_decimal: 3,
-  usePvMinMax:false,
-  debug:false,
-  alarmSensitive:false,
+  usePvMinMax: false,
+  debug: false,
+  alarmSensitive: false,
 };
-export default withWidget(withStyles(styles, { withTheme: true })(ThumbWheel));
+export default withStyles(styles, { withTheme: true })(ThumbWheel);

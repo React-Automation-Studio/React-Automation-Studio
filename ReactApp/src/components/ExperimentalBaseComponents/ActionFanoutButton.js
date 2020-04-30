@@ -2,7 +2,7 @@ import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import { Button, FormControlLabel } from "@material-ui/core";
 import PropTypes from "prop-types";
-import withWidget from "../SystemComponents/Widgets/withWidget";
+import GenericWidget from "../SystemComponents/Widgets/GenericWidget";
 
 const styles = (theme) => ({
   root: {
@@ -11,6 +11,54 @@ const styles = (theme) => ({
   },
 });
 
+
+
+function ActionFanoutButtonComponent(props) {
+  
+
+  /**
+   * Write actionValue to all PVs linked to this component.
+   */
+  function handleButtonClick() {
+    let values = {};
+    for (let pvName of props.pvList) {
+      values[pvName] = {
+        checkValue: true,
+        value: props.actionValue,
+        outputValue: props.actionValue,
+        newValueTrigger: 1,
+      };
+    }
+    props.onUpdateWidgetState(values);
+  }
+
+ 
+    return (
+      <FormControlLabel
+        key={props.pvName}
+        style={{
+          width: "100%",
+          margin: 0,
+        }}
+        disabled={props.disabled}
+        label={props.label}
+        labelPlacement={props.labelPlacement}
+        control={
+          <Button
+            fullWidth={true}
+            variant="contained"
+            color={props.onColor}
+            className={props.classes.button}
+            onClick={handleButtonClick}
+          >
+            {props.actionString}
+          </Button>
+        }
+      />
+    );
+  
+
+}
 /**
  * The ActionFanoutButton Component is a wrapper on the Material-UI Button component.
  * The ActionButton will ouput the `actionValue` to all the process variable.
@@ -20,67 +68,55 @@ const styles = (theme) => ({
  * https://material-ui.com/demos/buttons/<br/><br/>
  * Material-UI Button API:
  * https://material-ui.com/api/button/
- */
+ * 
+ * */
 class ActionFanoutButton extends React.Component {
   constructor(props) {
     super(props);
-    this.handleButtonClick = this.handleButtonClick.bind(this);
   }
-
-  /**
-   * Write actionValue to all PVs linked to this component.
-   */
-  handleButtonClick() {
-    let values = {};
-    for (let pvName of this.props.pvList) {
-      values[pvName] = {
-        checkValue: true,
-        value: this.props.actionValue,
-        outputValue: this.props.actionValue,
-        newValueTrigger: 1,
-      };
-    }
-    this.props.onUpdateWidgetState(values);
-  }
-
   render() {
     return (
-      <FormControlLabel
-        key={this.props.pvName}
-        style={{
-          width: "100%",
-          margin: 0,
-        }}
-        disabled={this.props.disabled}
-        label={this.props.label}
-        labelPlacement={this.props.labelPosition}
-        control={
-          <Button
-            fullWidth={true}
-            variant="contained"
-            color={this.props.onColor}
-            className={this.props.classes.button}
-            onClick={this.handleButtonClick}
-          >
-            {this.props.actionString}
-          </Button>
+      <GenericWidget {...this.props}>
+        {(widgetProps) => {
+          return (
+            <ActionFanoutButtonComponent {...this.props} {...widgetProps} />
+          )
         }
-      />
-    );
+        }
+      </GenericWidget>
+    )
   }
-
-  /**
-   * Specific props type and default values for this widgets.
-   * They extends the ones provided for a generic widget.
-   */
-  static propTypes = {
-    // Define the string on the button.
-    actionString: PropTypes.string,
-    // Define the value to write into the PV.
-    actionValue: PropTypes.any,
-  };
 }
+ActionFanoutButton.propTypes = {
+  /** Names of the process variables, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+  dataPVs: PropTypes.array.isRequired,
+  /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
+  macros:PropTypes.object,
 
-export default withWidget(
-  withStyles(styles, { withTheme: true })(ActionFanoutButton)
-);
+  /** Custom color to be used, must be derived from Material UI them color's*/
+  color: PropTypes.string,
+
+  /** Custom label to be used */
+  label: PropTypes.string,
+
+  /** Postion of label*/
+  labelPlacement:  PropTypes.oneOf(['top', 'bottom','start','end']),
+
+  /** If defined, then the string value of the EPICS enumerator type will be forced to be used, if not defined the the enumerator index is used */
+  useStringValue:PropTypes.bool,
+  /** If defined, then the DataConnection debugging information will be displayed*/
+  debug:PropTypes.bool,
+  /** local variable intialization value*/
+  intialLocalVariableValue:PropTypes.string
+
+
+};
+
+ActionFanoutButton.defaultProps = {
+    debug: false,
+    color: 'primary',
+    useStringValue: false,
+    usePvLabel: false
+};
+
+export default withStyles(styles, { withTheme: true })(ActionFanoutButton);

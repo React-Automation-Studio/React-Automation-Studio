@@ -2,7 +2,8 @@ import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import { Button, FormControlLabel } from "@material-ui/core";
 import PropTypes from "prop-types";
-import withWidget from "../SystemComponents/Widgets/withWidget";
+import GenericWidget from "../SystemComponents/Widgets/GenericWidget";
+
 
 const styles = (theme) => ({
   root: {
@@ -27,6 +28,44 @@ const styles = (theme) => ({
   },
 });
 
+
+ 
+function ActionButtonComponent(props){
+
+  /**
+   * Send the predefined value to the PV.
+   */
+  function handleButtonClick() {
+    props.onUpdateWidgetState({
+      checkValue: true,
+      value: props.actionValue,
+      outputValue: props.actionValue,
+      newValueTrigger: 1,
+    });
+  }
+
+ 
+    return (
+      <FormControlLabel
+        key={props.pvName}
+        className={props.classes.FormControl}
+        disabled={props.disabled}
+        label={props.label}
+        labelPlacement={props.labelPlacement}
+        control={
+          <Button
+            className={props.classes.Button}
+            variant="contained"
+            color={props.onColor}
+            onClick={handleButtonClick}
+          >
+            {props.actionString}
+          </Button>
+        }
+      />
+    );
+  }
+
 /**
  * The ActionButton Component is a wrapper on the Material-UI Button component.
  * The ActionButton will ouput the `actionValue` to the process variable when pressed.
@@ -36,59 +75,53 @@ const styles = (theme) => ({
  * https://material-ui.com/demos/buttons/<br/><br/>
  * Material-UI Button API:
  * https://material-ui.com/api/button/
- */
+ * */
+
 class ActionButton extends React.Component {
   constructor(props) {
     super(props);
-    this.handleButtonClick = this.handleButtonClick.bind(this);
   }
-
-  /**
-   * Send the predefined value to the PV.
-   */
-  handleButtonClick() {
-    this.props.onUpdateWidgetState({
-      checkValue: true,
-      value: this.props.actionValue,
-      outputValue: this.props.actionValue,
-      newValueTrigger: 1,
-    });
-  }
-
   render() {
     return (
-      <FormControlLabel
-        key={this.props.pvName}
-        className={this.props.classes.FormControl}
-        disabled={this.props.disabled}
-        label={this.props.label}
-        labelPlacement={this.props.labelPlacement}
-        control={
-          <Button
-            className={this.props.classes.Button}
-            variant="contained"
-            color={this.props.onColor}
-            onClick={this.handleButtonClick}
-          >
-            {this.props.actionString}
-          </Button>
+      <GenericWidget {...this.props}>
+        {(widgetProps) => {
+          return (
+            <ActionButtonComponent {...this.props} {...widgetProps} />
+          )
         }
-      />
-    );
+        }
+      </GenericWidget>
+    )
   }
-
-  /**
-   * Specific props type and default values for this widgets.
-   * They extends the ones provided for a generic widget.
-   */
-  static propTypes = {
-    // Define the string on the button.
-    actionString: PropTypes.string,
-    // Define the value to write into the PV.
-    actionValue: PropTypes.any,
-  };
 }
+ActionButton.propTypes = {
+  /** Define the string on the button.*/
+  actionString: PropTypes.string,
+  /**  Define the value to write into the PV.*/
+  actionValue: PropTypes.any,
+  /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+  pv: PropTypes.string.isRequired,
+  /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
+  macros:PropTypes.object,
+  /** Directive to fill the label with the value contained in the  EPICS pv's DESC field. */
+  usePvLabel:PropTypes.bool,
 
-export default withWidget(
-  withStyles(styles, { withTheme: true })(ActionButton)
-);
+  /** Custom color to be used, must be derived from Material UI them color's*/
+  color: PropTypes.string,
+
+  /** Custom label to be used, if  `usePvLabel` is not defined. */
+  label: PropTypes.string,
+
+  /** Postion of label*/
+  labelPlacement:  PropTypes.oneOf(['top', 'bottom','start','end']),
+
+  /** If defined, then the string value of the EPICS enumerator type will be forced to be used, if not defined the the enumerator index is used */
+  useStringValue:PropTypes.bool,
+  /** If defined, then the DataConnection debugging information will be displayed*/
+  debug:PropTypes.bool,
+  /** local variable intialization value*/
+  intialLocalVariableValue:PropTypes.string
+
+};
+
+export default  withStyles(styles, { withTheme: true })(ActionButton);

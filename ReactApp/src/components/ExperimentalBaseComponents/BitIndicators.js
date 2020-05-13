@@ -19,7 +19,7 @@ const styles = (theme) => ({
 });
 
 
-function BitIndicatorsComponent(props) {
+const BitIndicatorsComponent=(props)=> {
 
 
 
@@ -143,23 +143,17 @@ function BitIndicatorsComponent(props) {
  * https://material-ui.com/api/svg-icon/<br/><br/>
  * A custom Icon can used by importing it in the parent and assigning it as a child <br/><br/>
  */
-class BitIndicators extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
+const BitIndicators =(props)=>{
     return (
-      <GenericWidget {...this.props}>
-        {(widgetProps) => {
-          return (
-            <BitIndicatorsComponent {...this.props} {...widgetProps} />
-          )
-        }
-        }
+      <GenericWidget {...props}>
+       
+            <BitIndicatorsComponent {...props}  />
+       
+       
       </GenericWidget>
     )
   }
-}
+
 
 BitIndicators.propTypes = {
   /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/

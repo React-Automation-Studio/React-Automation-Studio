@@ -1,4 +1,4 @@
-import React, { useState,useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { withStyles } from "@material-ui/core/styles";
 import { Slider, Typography } from "@material-ui/core";
 import PropTypes from "prop-types";
@@ -70,103 +70,97 @@ function SimpleSliderComponent(props) {
     });
   }
 
-  
-    let content, marks;
-    if (props.connection) {
-      content = (
-        <Typography className={props.classes.rangeLabel} id="subtitle2">
-          {props.label} {props.value} {props.units}
-        </Typography>
-      );
-    } else {
-      content = (
-        <Typography className={props.classes.rangeLabel} id="subtitle2">
-          {props.label}
-        </Typography>
-      );
-    }
-    let min = props.min !== undefined ? props.min : 0;
-    let max = props.max !== undefined ? props.max : 100;
-   
-    if (props.marks !== undefined) {
-      marks = props.marks;
-    } else {
-      marks = [
-        {
-          value: min,
-          label:
-   
-            min +
-            " " +
-            props.units,
-        },
-        {
-          value: max,
-          label:
 
-            max +
-            " " +
-            props.units,
-        },
-      ];
-    }
-  
-    return (
-      <div className={props.classes.sliderDiv}>
-        {content}
-        <Slider
-          className={props.classes.slider}
-          key={props.pvName+props.connection}
-          aria-labelledby="label"
-          disabled={props.disabled}
-          value={props.value}
-          min={props.connection?min:undefined}
-          max={props.connection?max:undefined}
-          marks={props.connection?marks:undefined}
-          valueLabelDisplay={props.showThumbValue ? "on" : "off"}
-          step={props.step !== undefined ? props.step : undefined}
-          onChange={handleChange}
-          onChangeCommitted={handleChangeCommited}
-        />
-      </div>
+  let content, marks;
+  if (props.connection) {
+    content = (
+      <Typography className={props.classes.rangeLabel} id="subtitle2">
+        {props.label} {props.value} {props.units}
+      </Typography>
     );
-  
+  } else {
+    content = (
+      <Typography className={props.classes.rangeLabel} id="subtitle2">
+        {props.label}
+      </Typography>
+    );
+  }
+  let min = props.min !== undefined ? props.min : 0;
+  let max = props.max !== undefined ? props.max : 100;
 
- 
+  if (props.marks !== undefined) {
+    marks = props.marks;
+  } else {
+    marks = [
+      {
+        value: min,
+        label:
+
+          min +
+          " " +
+          props.units,
+      },
+      {
+        value: max,
+        label:
+
+          max +
+          " " +
+          props.units,
+      },
+    ];
+  }
+
+  return (
+    <div className={props.classes.sliderDiv}>
+      {content}
+      <Slider
+        className={props.classes.slider}
+        key={props.pvName + props.connection}
+        aria-labelledby="label"
+        disabled={props.disabled}
+        value={props.value}
+        min={props.connection ? min : undefined}
+        max={props.connection ? max : undefined}
+        marks={props.connection ? marks : undefined}
+        valueLabelDisplay={props.showThumbValue ? "on" : "off"}
+        step={props.step !== undefined ? props.step : undefined}
+        onChange={handleChange}
+        onChangeCommitted={handleChangeCommited}
+      />
+    </div>
+  );
+
+
+
 }
 
- /**
- * The SimpleSlider Component is a wrapper on the Material-UI contained Slider component. The SimpleSlider component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
- * The margins and spacing must be controlled from the parent component.<br/><br/>
- * Material-UI Slider Demos:
- * https://material-ui.com/components/slider/<br/><br/>
- * Material-UI Slider API:
- * https://material-ui.com/api/slider/
- */
-class SimpleSlider extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
-    return (
-      <GenericWidget {...this.props}>
-        {(widgetProps) => {
-          return (
-            <SimpleSliderComponent {...this.props} {...widgetProps} />
-          )
-        }
-        }
-      </GenericWidget>
-    )
-  }
+/**
+* The SimpleSlider Component is a wrapper on the Material-UI contained Slider component. The SimpleSlider component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
+* The margins and spacing must be controlled from the parent component.<br/><br/>
+* Material-UI Slider Demos:
+* https://material-ui.com/components/slider/<br/><br/>
+* Material-UI Slider API:
+* https://material-ui.com/api/slider/
+*/
+const SimpleSlider = (props) => {
+
+  return (
+    <GenericWidget {...props}>
+
+      <SimpleSliderComponent {...props} />
+
+    </GenericWidget>
+  )
 }
+
 /**
    * Specific props type and default values for this widgets.
    * They extends the ones provided for a generic widget.
    */
-  SimpleSlider.propTypes = {
+SimpleSlider.propTypes = {
 
-     /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+  /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
   pv: PropTypes.string.isRequired,
   /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
   macros: PropTypes.object,
@@ -194,21 +188,21 @@ class SimpleSlider extends React.Component {
   debug: PropTypes.bool,
   /** local variable intialization value*/
   intialLocalVariableValue: PropTypes.string,
-  
-    // Custom markers in format:
-    // [{value: uservalue1,label:userlabel1},{value: uservalue...,label:userlabel...}
-    marks: PropTypes.array,
-    // Show thumb with value
-    showThumbValue: PropTypes.bool,
-    // If defined, the value will be increment or decremented
-    // in the define step intervals
-    step: PropTypes.number,
-  };
 
-  SimpleSlider.defaultProps = {
-    showThumbValue: false,
-    step: 1,
-    
-  };
+  // Custom markers in format:
+  // [{value: uservalue1,label:userlabel1},{value: uservalue...,label:userlabel...}
+  marks: PropTypes.array,
+  // Show thumb with value
+  showThumbValue: PropTypes.bool,
+  // If defined, the value will be increment or decremented
+  // in the define step intervals
+  step: PropTypes.number,
+};
 
-export default  withStyles(styles, { withTheme: true })(SimpleSlider);
+SimpleSlider.defaultProps = {
+  showThumbValue: false,
+  step: 1,
+
+};
+
+export default withStyles(styles, { withTheme: true })(SimpleSlider);

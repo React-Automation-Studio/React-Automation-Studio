@@ -29,8 +29,8 @@ const styles = (theme) => ({
 });
 
 
- 
-function ActionButtonComponent(props){
+
+function ActionButtonComponent(props) {
 
   /**
    * Send the predefined value to the PV.
@@ -44,27 +44,27 @@ function ActionButtonComponent(props){
     });
   }
 
- 
-    return (
-      <FormControlLabel
-        key={props.pvName}
-        className={props.classes.FormControl}
-        disabled={props.disabled}
-        label={props.label}
-        labelPlacement={props.labelPlacement}
-        control={
-          <Button
-            className={props.classes.Button}
-            variant="contained"
-            color={props.onColor}
-            onClick={handleButtonClick}
-          >
-            {props.actionString}
-          </Button>
-        }
-      />
-    );
-  }
+
+  return (
+    <FormControlLabel
+      key={props.pvName}
+      className={props.classes.FormControl}
+      disabled={props.disabled}
+      label={props.label}
+      labelPlacement={props.labelPlacement}
+      control={
+        <Button
+          className={props.classes.Button}
+          variant="contained"
+          color={props.onColor}
+          onClick={handleButtonClick}
+        >
+          {props.actionString}
+        </Button>
+      }
+    />
+  );
+}
 
 /**
  * The ActionButton Component is a wrapper on the Material-UI Button component.
@@ -77,23 +77,14 @@ function ActionButtonComponent(props){
  * https://material-ui.com/api/button/
  * */
 
-class ActionButton extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
+const ActionButton = (props)=> {
     return (
-      <GenericWidget {...this.props}>
-        {(widgetProps) => {
-          return (
-            <ActionButtonComponent {...this.props} {...widgetProps} />
-          )
-        }
-        }
+      <GenericWidget {...props}>
+        <ActionButtonComponent {...props} />
       </GenericWidget>
     )
   }
-}
+
 ActionButton.propTypes = {
   /** Define the string on the button.*/
   actionString: PropTypes.string,
@@ -102,9 +93,9 @@ ActionButton.propTypes = {
   /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
   pv: PropTypes.string.isRequired,
   /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
-  macros:PropTypes.object,
+  macros: PropTypes.object,
   /** Directive to fill the label with the value contained in the  EPICS pv's DESC field. */
-  usePvLabel:PropTypes.bool,
+  usePvLabel: PropTypes.bool,
 
   /** Custom color to be used, must be derived from Material UI them color's*/
   color: PropTypes.string,
@@ -113,15 +104,15 @@ ActionButton.propTypes = {
   label: PropTypes.string,
 
   /** Postion of label*/
-  labelPlacement:  PropTypes.oneOf(['top', 'bottom','start','end']),
+  labelPlacement: PropTypes.oneOf(['top', 'bottom', 'start', 'end']),
 
   /** If defined, then the string value of the EPICS enumerator type will be forced to be used, if not defined the the enumerator index is used */
-  useStringValue:PropTypes.bool,
+  useStringValue: PropTypes.bool,
   /** If defined, then the DataConnection debugging information will be displayed*/
-  debug:PropTypes.bool,
+  debug: PropTypes.bool,
   /** local variable intialization value*/
-  intialLocalVariableValue:PropTypes.string
+  intialLocalVariableValue: PropTypes.string
 
 };
 
-export default  withStyles(styles, { withTheme: true })(ActionButton);
+export default withStyles(styles, { withTheme: true })(ActionButton);

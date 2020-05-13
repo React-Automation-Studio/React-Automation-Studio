@@ -54,8 +54,8 @@ const styles = (theme) => ({
 //    * set the PV to the oppisite of the actual value.
 //    */
 //   handleButtonClick() {
-//     let value = this.props.value === 0 ? 1 : 0;
-//     this.props.onUpdateWidgetState({
+//     let value = props.value === 0 ? 1 : 0;
+//     props.onUpdateWidgetState({
 //       value: value,
 //       outputValue: value,
 //       newValueTrigger: 1,
@@ -68,11 +68,11 @@ const styles = (theme) => ({
 //    * When in this this state write 1 to the corresponding PV.
 //    */
 //   handleMouseDown() {
-//     if (this.props.debug) {
+//     if (props.debug) {
 //       console.log("mouseDown");
 //     }
 //     this.clicked = true;
-//     this.props.onUpdateWidgetState({
+//     props.onUpdateWidgetState({
 //       value: 1,
 //       outputValue: 1,
 //       newValueTrigger: 1,
@@ -84,7 +84,7 @@ const styles = (theme) => ({
 //    * When in this this state write 0 to the corresponding PV  after 100ms.
 //    */
 //   handleMouseUp() {
-//     if (this.props.debug) {
+//     if (props.debug) {
 //       console.log("mouseUp");
 //     }
 //     setTimeout(this.turnOff, 100);
@@ -95,7 +95,7 @@ const styles = (theme) => ({
 //    * write 0 to the corresponding PV after 100ms.
 //    */
 //   handlePointerLeave() {
-//     if (this.props.debug) {
+//     if (props.debug) {
 //       console.log("mouseLeave");
 //     }
 //     if (this.clicked) {
@@ -107,11 +107,11 @@ const styles = (theme) => ({
 //    * Function to set to zero the value and to false the click state.
 //    */
 //   turnOff() {
-//     if (this.props.debug) {
+//     if (props.debug) {
 //       console.log("turnoff");
 //     }
 //     this.clicked = false;
-//     this.props.onUpdateWidgetState({
+//     props.onUpdateWidgetState({
 //       value: 0,
 //       outputValue: 0,
 //       newValueTrigger: 1,
@@ -120,28 +120,28 @@ const styles = (theme) => ({
 
 //   render() {
 //     let momentary =
-//       this.props.momentary !== undefined ? this.props.momentary : false;
-//     let value = this.props.value;
-//     const {classes}=this.props;
+//       props.momentary !== undefined ? props.momentary : false;
+//     let value = props.value;
+//     const {classes}=props;
 //     return (
 //       <FormControlLabel
-//         key={this.props.pvName}
+//         key={props.pvName}
 //         className={classes.FormControl}
-//         disabled={this.props.disabled}
-//         label={this.props.label}
-//         labelPlacement={this.props.labelPlacement}
+//         disabled={props.disabled}
+//         label={props.label}
+//         labelPlacement={props.labelPlacement}
 //         control={
 //           <Button
 //             className={classes.Button}
 //             fullWidth={true}
 //             variant="contained"
-//             color={value === 1 ? this.props.onColor : this.props.offColor}
+//             color={value === 1 ? props.onColor : props.offColor}
 //             onClick={momentary ? undefined : this.handleButtonClick}
 //             onPointerUp={momentary ? this.handleMouseUp : undefined}
 //             onPointerDown={momentary ? this.handleMouseDown : undefined}
 //             onPointerLeave={momentary ? this.handlePointerLeave : undefined}
 //           >
-//             {this.props.enumStrs[value === 1 ? value : 0]}
+//             {props.enumStrs[value === 1 ? value : 0]}
 //           </Button>
 //         }
 //       />
@@ -223,23 +223,17 @@ function ToggleButtonComponent(props) {
     />
   )
 }
-class ToggleButton extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
+const ToggleButton = (props)=>{
+
     return (
-      <GenericWidget {...this.props}>
-        {(widgetProps) => {
-          return (
-            <ToggleButtonComponent {...this.props} {...widgetProps} />
-          )
-        }
-        }
+      <GenericWidget {...props}>
+    
+            <ToggleButtonComponent {...props}  />
+      
       </GenericWidget>
     )
   }
-}
+
 
 /**
  * Specific props type and default values for this widgets.

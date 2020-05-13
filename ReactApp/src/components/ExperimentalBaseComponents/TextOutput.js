@@ -153,23 +153,16 @@ function TextOutputComponent(props) {
  *  Material-UI TextField API:
  *  https://material-ui.com/api/text-field
  */
-class TextOutput extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
+const TextOutput =(props)=>{
     return (
-      <GenericWidget {...this.props}>
-         {(widgetProps) => {
-           return(
-               <TextOutputComponent {...this.props} {...widgetProps}/>
-           )
-         }
-        }
+      <GenericWidget {...props}>
+     
+               <TextOutputComponent {...props}/>
+         
       </GenericWidget>
     )
   }
-}
+
 
 TextOutput.propTypes = {
   /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/

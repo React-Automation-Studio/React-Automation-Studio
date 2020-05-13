@@ -129,22 +129,12 @@ function TextInputComponent(props) {
  * 
  * 
  */
-class TextInput extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
+const TextInput =(props)=>{
     return (
-      <GenericWidget {...this.props}>
-        {(widgetProps) => {
-          return (
-            <TextInputComponent {...this.props} {...widgetProps} />
-          )
-        }
-        }
+      <GenericWidget {...props}>
+            <TextInputComponent {...props}  />
       </GenericWidget>
     )
-  }
 }
 
 TextInput.propTypes = {

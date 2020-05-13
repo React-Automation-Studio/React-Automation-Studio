@@ -38,29 +38,20 @@ Generic Widget example that creates a span and display the EPICS pv's value:
 
 ```js static
  import GenericWidget from "path to GenericWidget";
-  function ExampleComponent(props){
+  const ExampleComponent=(props)=>{
       const {value}=props;
       return(
-      <span>{value}</span>
+        <span>{value}</span>
       )
   }
-  class Example extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
+  const Example=(props)=>{
     return (
-      <GenericWidget {...this.props}>
-        {(widgetProps) => {
-          return (
-            <ExampleComponent {...this.props} {...widgetProps} />
-          )
-        }
-        }
+      <GenericWidget {...props}>
+        <ExampleComponent {...props} />
       </GenericWidget>
     )
   }
-}
+
 Example.propTypes = {
   /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
   pv: PropTypes.string.isRequired,

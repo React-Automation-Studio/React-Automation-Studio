@@ -18,8 +18,8 @@ const styles = (theme) => ({
 });
 
 
-function SelectionInputComponent(props) {
- 
+const SelectionInputComponent = (props) => {
+
   function handleChange(event) {
     let value = event.target.value;
     props.onUpdateWidgetState({
@@ -29,105 +29,96 @@ function SelectionInputComponent(props) {
     });
   }
 
-  
+
   //  console.log("props.useStringValue",props.useStringValue)
   //  console.log("props.enumStrs",props.enumStrs)
   //  console.log("props.value",props.value)
-    let inputProps;
-    let stringValues = props.enumStrs.map((item, idx) => (
-      <MenuItem
-        key={item.toString()}
-        value={props.useStringValue ? item : idx}
-      >
-        {item}
-      </MenuItem>
-    ));
-    if (props.connection) {
-      inputProps = {
-        endAdornment: (
-          <InputAdornment
-            style={{ marginRight: props.theme.spacing(1) }}
-            position="end"
-          >
-            {props.units} {props.children}
-          </InputAdornment>
-        ),
-      };
-    }
-    return (
-      <TextField
-        key={props.pvName}
-        className={props.classes.TextField}
-        select
-        disabled={props.disabled}
-        key={props.pvName}
-        value={props.value}
-        onFocus={props.onUpdateWidgetFocus}
-        onBlur={props.onUpdateWidgetBlur}
-        onChange={handleChange}
-        label={props.label}
-        margin={props.margin}
-        variant={props.variant}
-        InputProps={inputProps}
-      >
-        {stringValues}
-      </TextField>
-    );
+  let inputProps;
+  let stringValues = props.enumStrs.map((item, idx) => (
+    <MenuItem
+      key={item.toString()}
+      value={props.useStringValue ? item : idx}
+    >
+      {item}
+    </MenuItem>
+  ));
+  if (props.connection) {
+    inputProps = {
+      endAdornment: (
+        <InputAdornment
+          style={{ marginRight: props.theme.spacing(1) }}
+          position="end"
+        >
+          {props.units} {props.children}
+        </InputAdornment>
+      ),
+    };
   }
-
-
-  
- 
- /**
- * The SelectionInput Component is a wrapper on the Material-UI TextField component. 
- * The TextField component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
- * The margins and spacing must be controlled from the parent component.<br/><br/>
- * Material-UI TextField Demos:
- * https://material-ui.com/demos/text-fields<br/><br/>
- * Material-UI TextField API:
- * https://material-ui.com/api/text-field
-
- */
-
-class SelectionInput extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
-    return (
-      <GenericWidget {...this.props}   useStringValue={true} >
-        {(widgetProps) => {
-          return (
-            <SelectionInputComponent {...this.props} {...widgetProps} />
-          )
-        }
-        }
-      </GenericWidget>
-    )
-  }
+  return (
+    <TextField
+      key={props.pvName}
+      className={props.classes.TextField}
+      select
+      disabled={props.disabled}
+      key={props.pvName}
+      value={props.value}
+      onFocus={props.onUpdateWidgetFocus}
+      onBlur={props.onUpdateWidgetBlur}
+      onChange={handleChange}
+      label={props.label}
+      margin={props.margin}
+      variant={props.variant}
+      InputProps={inputProps}
+    >
+      {stringValues}
+    </TextField>
+  );
 }
+
+
+
+
+/**
+* The SelectionInput Component is a wrapper on the Material-UI TextField component. 
+* The TextField component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
+* The margins and spacing must be controlled from the parent component.<br/><br/>
+* Material-UI TextField Demos:
+* https://material-ui.com/demos/text-fields<br/><br/>
+* Material-UI TextField API:
+* https://material-ui.com/api/text-field
+
+*/
+
+const SelectionInput = (props) => {
+  return (
+    <GenericWidget {...props} useStringValue={true} >
+      <SelectionInputComponent {...props} />
+    </GenericWidget>
+  )
+}
+
 
 SelectionInput.defaultProps = {
 
   debug: false,
   variant: "outlined",
   margin: "none",
-  
+
 };
 
 
 SelectionInput.propTypes = {
-/** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
-pv: PropTypes.string.isRequired,
-/** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
-macros: PropTypes.object,
-/** Directive to fill the label with the value contained in the  EPICS pv's DESC field. */
-usePvLabel: PropTypes.bool,
-/** Directive to use the units contained in the  EPICS pv's EGU field. */
+  /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+  pv: PropTypes.string.isRequired,
+  /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
+  macros: PropTypes.object,
+  /** Directive to fill the label with the value contained in the  EPICS pv's DESC field. */
+  usePvLabel: PropTypes.bool,
+  /** Directive to use the units contained in the  EPICS pv's EGU field. */
 
-//If defined, this array of strings overides the default EPICS MBBI/O
-//pv strings and are displayed as the choices in the RadioButtonGroup component
-custom_selection_strings: PropTypes.array,
+  //If defined, this array of strings overides the default EPICS MBBI/O
+  //pv strings and are displayed as the choices in the RadioButtonGroup component
+  custom_selection_strings: PropTypes.array,
 
   /** Material-UI TextField variant*/
   variant: PropTypes.string,

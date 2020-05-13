@@ -22,65 +22,63 @@ const styles = (theme) => ({
 
 
 function StyledIconIndicatorComponent(props) {
-  
-  
 
-  let onColor=props.theme.palette.primary.main;
-  let offColor=props.theme.palette.grey[50];
-  if (typeof props.onColor !== 'undefined'){
-    if(props.onColor==='primary'){
-      onColor=props.theme.palette.primary.main;
+
+
+  let onColor = props.theme.palette.primary.main;
+  let offColor = props.theme.palette.grey[50];
+  if (typeof props.onColor !== 'undefined') {
+    if (props.onColor === 'primary') {
+      onColor = props.theme.palette.primary.main;
     }
-    else if(props.onColor==='secondary'){
-        onColor=props.theme.palette.secondary.main;
+    else if (props.onColor === 'secondary') {
+      onColor = props.theme.palette.secondary.main;
     }
-    else if(props.onColor==='default'){
-         onColor=props.theme.palette.grey[50];
-        }
-    else
-       {
-     onColor=props.onColor;
-   }
+    else if (props.onColor === 'default') {
+      onColor = props.theme.palette.grey[50];
+    }
+    else {
+      onColor = props.onColor;
+    }
   }
 
-  if (typeof props.offColor !== 'undefined'){
-    if(props.offColor==='primary'){
-      offColor=props.theme.palette.primary.main;
+  if (typeof props.offColor !== 'undefined') {
+    if (props.offColor === 'primary') {
+      offColor = props.theme.palette.primary.main;
     }
-    else if(props.offColor==='secondary'){
-        offColor=props.theme.palette.secondary.main;
+    else if (props.offColor === 'secondary') {
+      offColor = props.theme.palette.secondary.main;
     }
-    else if(props.offColor==='default'){
-         offColor=props.theme.palette.grey[50];
-        }
-    else
-       {
-     offColor=props.offColor;
-   }
-  }
-  let iconStyle={};
-  if (typeof props.labelPlacement !=='undefined'){
-    if(props.labelPlacement=="top"){
-      iconStyle['marginTop']=props.theme.spacing(1);
-    }else   if(props.labelPlacement=="end"){
-      iconStyle['marginRight']=props.theme.spacing(1);
+    else if (props.offColor === 'default') {
+      offColor = props.theme.palette.grey[50];
     }
-    else   if(props.labelPlacement=="start"){
-      iconStyle['marginLeft']=props.theme.spacing(1);
-    }
-    else   if(props.labelPlacement=="bottom"){
-      iconStyle['marginBottom']=props.theme.spacing(1);
+    else {
+      offColor = props.offColor;
     }
   }
- 
+  let iconStyle = {};
+  if (typeof props.labelPlacement !== 'undefined') {
+    if (props.labelPlacement == "top") {
+      iconStyle['marginTop'] = props.theme.spacing(1);
+    } else if (props.labelPlacement == "end") {
+      iconStyle['marginRight'] = props.theme.spacing(1);
+    }
+    else if (props.labelPlacement == "start") {
+      iconStyle['marginLeft'] = props.theme.spacing(1);
+    }
+    else if (props.labelPlacement == "bottom") {
+      iconStyle['marginBottom'] = props.theme.spacing(1);
+    }
+  }
+
 
   let color = props.disabled
     ? props.theme.palette.grey[50]
     : props.value === 1
-    ? onColor
-    : offColor;
+      ? onColor
+      : offColor;
 
-    iconStyle['color']=color;
+  iconStyle['color'] = color;
 
   return (
     <FormControlLabel
@@ -109,50 +107,42 @@ function StyledIconIndicatorComponent(props) {
  * A custom Icon can used by importing it in the parent and assigning it as a child <br/><br/>
  */
 
-class StyledIconIndicator extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
-    return (
-      <GenericWidget {...this.props}>
-        {(widgetProps) => {
-          return (
-            <StyledIconIndicatorComponent {...this.props} {...widgetProps} />
-          )
-        }
-        }
-      </GenericWidget>
-    )
-  }
+const StyledIconIndicator = (props) => {
+
+  return (
+    <GenericWidget {...props}>
+      <StyledIconIndicatorComponent {...props} />
+    </GenericWidget>
+  )
 }
+
 StyledIconIndicator.propTypes = {
   /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
   pv: PropTypes.string.isRequired,
   /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
   macros: PropTypes.object,
- 
+
   /** local variable intialization value*/
   intialLocalVariableValue: PropTypes.string,
-   /** If defined, then the DataConnection debugging information will be displayed*/
-   debug: PropTypes.bool,
-    /** label placement*/
-  labelPlacement:PropTypes.oneOf(['start', 'top','bottom','end']),
+  /** If defined, then the DataConnection debugging information will be displayed*/
+  debug: PropTypes.bool,
+  /** label placement*/
+  labelPlacement: PropTypes.oneOf(['start', 'top', 'bottom', 'end']),
   /** Custom label to be used, if  `usePvLabel` is not defined. */
   label: PropTypes.string,
-      /**
-     * Custom on color to be used, must be derived from Material UI theme color's or can be a standard color.
-     */
-    onColor: PropTypes.string,
-    /**
-     * Custom off color to be used, must be derived from Material UI theme color's or can be a standard color.
-     */
-    offColor: PropTypes.string,
+  /**
+ * Custom on color to be used, must be derived from Material UI theme color's or can be a standard color.
+ */
+  onColor: PropTypes.string,
+  /**
+   * Custom off color to be used, must be derived from Material UI theme color's or can be a standard color.
+   */
+  offColor: PropTypes.string,
 
 };
 StyledIconIndicator.defaultProps = {
-  onColor:'primary',
-  offColor:'default',
+  onColor: 'primary',
+  offColor: 'default',
   debug: false,
 }
 export default withStyles(styles, { withTheme: true })(StyledIconIndicator);

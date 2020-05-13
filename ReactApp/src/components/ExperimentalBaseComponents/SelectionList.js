@@ -143,7 +143,7 @@ function SelectionListComponent(props) {
           className={className}
           button
           value={item}
-          selected={ value === item }
+          selected={value === item}
           onClick={() => handleListItemClick(item)}
         >
           <ListItemText primary={item} />
@@ -155,49 +155,44 @@ function SelectionListComponent(props) {
 
 
 
-let itemList = getListItems(props.enumStrs, props.value);
+  let itemList = getListItems(props.enumStrs, props.value);
 
-return (
-  <FormControlLabel
-    key={props.pvName}
-    className={props.classes.FormControl}
-    control={
-      <List
-        className={
-          props.horizontal
-            ? props.classes.listHorizontal
-            : props.classes.listVertical
-        }
-        component="nav"
-        disabled={props.disabled}
-        variant="outlined"
-        disablePadding={true}
-      >
-        {itemList}
-      </List>
-    }
-    label={props.label}
-    labelPlacement={props.labelPlacement}
-  />
-);
-  }
+  return (
+    <FormControlLabel
+      key={props.pvName}
+      className={props.classes.FormControl}
+      control={
+        <List
+          className={
+            props.horizontal
+              ? props.classes.listHorizontal
+              : props.classes.listVertical
+          }
+          component="nav"
+          disabled={props.disabled}
+          variant="outlined"
+          disablePadding={true}
+        >
+          {itemList}
+        </List>
+      }
+      label={props.label}
+      labelPlacement={props.labelPlacement}
+    />
+  );
+}
 
-class SelectionList extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
-    return (
-      <GenericWidget {...this.props} useStringValue={true}>
-        {(widgetProps) => {
-          return (
-            <SelectionListComponent {...this.props} {...widgetProps} />
-          )
-        }
-        }
-      </GenericWidget>
-    )
-  }
+const SelectionList = (props) => {
+  return (
+    <GenericWidget {...props} useStringValue={true}>
+
+      <SelectionListComponent {...props} />
+
+
+
+    </GenericWidget>
+  )
+
 }
 
 /**
@@ -206,15 +201,15 @@ class SelectionList extends React.Component {
  */
 SelectionList.propTypes = {
   /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
-pv: PropTypes.string.isRequired,
-/** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
-macros: PropTypes.object,
-/** Directive to fill the label with the value contained in the  EPICS pv's DESC field. */
-usePvLabel: PropTypes.bool,
-/** Directive to use the units contained in the  EPICS pv's CttonGroup component
-custom_selection_strings: PropTypes.array,
-
-  /** Material-UI TextField variant*/
+  pv: PropTypes.string.isRequired,
+  /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
+  macros: PropTypes.object,
+  /** Directive to fill the label with the value contained in the  EPICS pv's DESC field. */
+  usePvLabel: PropTypes.bool,
+  /** Directive to use the units contained in the  EPICS pv's CttonGroup component
+  custom_selection_strings: PropTypes.array,
+  
+    /** Material-UI TextField variant*/
   // Display list horizontally.
   horizontal: PropTypes.bool,
 

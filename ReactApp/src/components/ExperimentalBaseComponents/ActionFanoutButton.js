@@ -70,23 +70,14 @@ function ActionFanoutButtonComponent(props) {
  * https://material-ui.com/api/button/
  * 
  * */
-class ActionFanoutButton extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
+const ActionFanoutButton =(props)=> {
     return (
-      <GenericWidget {...this.props}>
-        {(widgetProps) => {
-          return (
-            <ActionFanoutButtonComponent {...this.props} {...widgetProps} />
-          )
-        }
-        }
+      <GenericWidget {...props}>
+        <ActionFanoutButtonComponent {...props}  />
       </GenericWidget>
     )
   }
-}
+
 ActionFanoutButton.propTypes = {
   /** Names of the process variables, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
   dataPVs: PropTypes.array.isRequired,

@@ -6,7 +6,7 @@ import { deepOrange, red } from "@material-ui/core/colors";
 import DataConnection from "../DataConnection";
 import ContextMenu from "../ContextMenu";
 import { formatTime } from "./WidgetUtils";
-
+import Typography from '@material-ui/core/Typography';
 
 
 /**
@@ -52,22 +52,22 @@ class GenericWidget extends React.Component {
   createWidgetState() {
     this.state = {};
     let dataPVs = {};
-    if(this.props.pv){
-    this.pvNames = Array.isArray(this.props.pv)
-      ? this.props.pv
-      : [this.props.pv];
+    if (this.props.pv) {
+      this.pvNames = Array.isArray(this.props.pv)
+        ? this.props.pv
+        : [this.props.pv];
     }
-    else if  (this.props.dataPVs){
+    else if (this.props.dataPVs) {
       this.pvNames = Array.isArray(this.props.dataPVs)
-      ? this.props.dataPVs
-      : [this.props.dataPVs];
+        ? this.props.dataPVs
+        : [this.props.dataPVs];
     }
-    else if  (this.props.pvs){
+    else if (this.props.pvs) {
       this.pvNames = Array.isArray(this.props.pvs)
-      ? this.props.pvs
-      : [this.props.pvs];
+        ? this.props.pvs
+        : [this.props.pvs];
     }
-    
+
     this.disconnectedPVs = [];
     this.writablePVs = [];
     this.alarmColors = ["", deepOrange["400"], red["800"]];
@@ -109,13 +109,13 @@ class GenericWidget extends React.Component {
 
       };
     }
-   
+
     // Widget's state
     this.state.dataPVs = dataPVs;
     this.state.hasFocus = false;
     this.state.openContextMenu = false;
     this.state.anchorEl = null;
-    
+
   }
 
   //-----------------------------------------------------------
@@ -303,12 +303,12 @@ class GenericWidget extends React.Component {
    * if optional connections to specific fields should be established.
    */
   getDataConnection = () => {
-  //  console.log(this.props)
+    //  console.log(this.props)
     let dataConnections = [];
-    
+
     for (let pv in this.state.dataPVs) {
       let pvName = this.state.dataPVs[pv].pvname;
-    //  console.log("willliam2",pvName, this.props)
+      //  console.log("willliam2",pvName, this.props)
       dataConnections.push(
         <DataConnection
           key={pvName}
@@ -533,9 +533,9 @@ class GenericWidget extends React.Component {
     if (this.isConnectionReady(pvName) && this.props.usePvMinMax) {
       min = parseInt(this.state.dataPVs[pvName].metadata.lower_disp_limit);
 
-    } 
+    }
     else {
-      min = this.props.min!==undefined?parseInt(this.props.min):undefined;
+      min = this.props.min !== undefined ? parseInt(this.props.min) : undefined;
     }
     return min;
 
@@ -546,7 +546,7 @@ class GenericWidget extends React.Component {
       max = parseInt(this.state.dataPVs[pvName].metadata.upper_disp_limit);
 
     } else {
-      max = this.props.max!==undefined?parseInt(this.props.max):undefined;
+      max = this.props.max !== undefined ? parseInt(this.props.max) : undefined;
     }
     return max;
 
@@ -597,7 +597,7 @@ class GenericWidget extends React.Component {
       units: this.getUnits(pvName),
       value: this.getValue(pvName),
       valueList: this.getValueList(),
-      useStringValue:this.props.useStringValue,
+      useStringValue: this.props.useStringValue,
       // Callbacks.
       onUpdateWidgetBlur: this.handleOnBlur,
       onUpdateWidgetFocus: this.handleOnFocus,
@@ -768,7 +768,7 @@ class GenericWidget extends React.Component {
 
     const contextMenu = this.getContextMenu();
     const dataConnections = this.getDataConnection();
-    const divStyle={
+    const divStyle = {
       width: "100%",
       height: "100%",
     }
@@ -785,7 +785,14 @@ class GenericWidget extends React.Component {
       >
         {dataConnections}
         {contextMenu}
-        {this.props.children(this.getWidgetdetails())}
+        {React.isValidElement(this.props.children)
+          ? React.cloneElement(this.props.children, this.getWidgetdetails())
+          : <Typography>
+            No Child Defined
+            <br />
+          </Typography>
+        }
+
 
       </div>
     );

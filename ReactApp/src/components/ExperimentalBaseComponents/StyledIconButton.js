@@ -69,23 +69,14 @@ function StyledIconButtonComponent (props) {
  * https://material-ui.com/api/svg-icon/<br/><br/>
  * A custom Icon can used by importing it in the parent and assigning it as a child <br/><br/>
  */
-class StyledIconButton extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
+const StyledIconButton =(props)=>{
     return (
-      <GenericWidget {...this.props}>
-        {(widgetProps) => {
-          return (
-            <StyledIconButtonComponent {...this.props} {...widgetProps} />
-          )
-        }
-        }
+      <GenericWidget {...props}>
+            <StyledIconButtonComponent {...props}  />
       </GenericWidget>
     )
   }
-}
+
 StyledIconButton.propTypes = {
   /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
   pv: PropTypes.string.isRequired,

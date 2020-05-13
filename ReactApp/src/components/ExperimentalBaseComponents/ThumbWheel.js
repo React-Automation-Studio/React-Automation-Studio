@@ -54,7 +54,7 @@ function ThumbWheelComponent(props) {
     {...props}
     disabled={props.disabled}
     label={props.label}
-    //labelPosition={this.props.labelPosition}
+    //labelPosition={props.labelPosition}
     num_array={num_array}
     prec_decimal_div={prec_decimal_div}
     onHandleButtonClick={handleButtonClick}
@@ -138,23 +138,16 @@ function SingleThumbWheelWidget(props) {
  *  Material-UI Button API:
  *  https://material-ui.com/api/button/
  */
-class ThumbWheel extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
-    return (
-      <GenericWidget {...this.props}>
-        {(widgetProps) => {
-          return (
-            <ThumbWheelComponent {...this.props} {...widgetProps} />
-          )
-        }
-        }
-      </GenericWidget>
-    )
-  }
+const ThumbWheel = (props) => {
+  return (
+    <GenericWidget {...props}>
+
+      <ThumbWheelComponent {...props}  />
+
+    </GenericWidget>
+  )
 }
+
 
 ThumbWheel.propTypes = {
   /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/

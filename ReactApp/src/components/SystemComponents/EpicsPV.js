@@ -14,7 +14,9 @@ const styles = theme => ({
 class EpicsPV extends React.Component {
   constructor(props) {
     super(props);
-
+    if (this.props.debug){
+      console.log("props",this.props)
+    }
     let pvname;
     if (typeof this.props.macros !== 'undefined'){
       let macro;

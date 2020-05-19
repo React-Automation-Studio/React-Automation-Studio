@@ -293,6 +293,7 @@ render() {
         useStringValue={useStringValue}
         handleInputValueLabel={this.handleInputValueLabel}
         intialLocalVariableValue={this.props.intialLocalVariableValue}
+        debug={this.props.debug}
       />
 
       {initialized===true &&

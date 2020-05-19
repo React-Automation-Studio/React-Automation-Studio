@@ -1,10 +1,10 @@
 
 
-SelectionInput example connection to a SoftChannel EPICS MBBO pv with EPICS pv strings for choice:
+SelectionList example connection to a SoftChannel EPICS MBBO pv with horizontal orientation and EPICS pv strings for choice:
 
 ```js
 {/*The TextOutput code is included for demonstration purposes only*/}  
-{/*Only the the JSX code between the hashes  is required to instantiate the SelectionInput */}  
+{/*Only the the JSX code between the hashes  is required to instantiate the SelectionList */}  
   import TextOutput from './TextOutput';
   <div style={{textAlign:'center'}}>
   <div style={{marginBottom:8}}>
@@ -17,18 +17,20 @@ SelectionInput example connection to a SoftChannel EPICS MBBO pv with EPICS pv s
 
   {/*###############*/}  
 
-  <SelectionInput  pv='pva://$(device):mbboTest$(id)' macros={{'$(device)':'testIOC','$(id)':'1'}} horizontal={true}  usePvLabel={true} />
+  <SelectionList  pv='pva://$(device):mbboTest$(id)'       macros={{'$(device)':'testIOC','$(id)':'1'}}
+  horizontal={true}  
+  usePvLabel={true}/>
 
   {/*###############*/}
 
 </div>
 ```
 
-SelectionInput example connection to a SoftChannel EPICS MBBO pv with custom strings for choice:
+SelectionList example connection to a SoftChannel EPICS MBBO pv with vertical orientation and custom strings for choice:
 
 ```js
 {/*The TextOutput code is included for demonstration purposes only*/}  
-{/*Only the the JSX code between the hashes  is required to instantiate the SelectionInput */}  
+{/*Only the the JSX code between the hashes  is required to instantiate the SelectionList */}  
   import TextOutput from './TextOutput';
   <div style={{textAlign:'center'}}>
   <div style={{marginBottom:8}}>
@@ -37,19 +39,12 @@ SelectionInput example connection to a SoftChannel EPICS MBBO pv with custom str
     macros={{'$(device)':'testIOC','$(id)':'1'}}
     label={'Custom Label'}
     useStringValue={true}
-    usePvLabel={true} />
+    usePvLabel={true}/>
   </div>
 
   {/*###############*/}  
 
-  <SelectionInput  
-    pv='pva://$(device):mbboTest$(id)' 
-    macros={{'$(device)':'testIOC','$(id)':'1'}}
-    usePvLabel={true}
-    labelPlacement='bottom'
-    custom_selection_strings={['text 1','text 3']} 
-    debug={true}
-    />
+  <SelectionList  pv='pva://$(device):mbboTest$(id)' macros={{'$(device)':'testIOC','$(id)':'1'}}    usePvLabel={true} labelPlacement='bottom' custom_selection_strings={['text 1','text 3']}/>
 
   {/*###############*/}
 

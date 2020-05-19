@@ -203,6 +203,8 @@ render() {
         }
     }
   }
+
+  console.log("render debug",this.state)
   return (
 
     <React.Fragment>

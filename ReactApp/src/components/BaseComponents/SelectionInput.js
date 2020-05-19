@@ -50,6 +50,7 @@ const styles = theme => ({
  */
 class SelectionInput extends React.Component {
   constructor(props) {
+    console.log('will1',props)
     super(props);
     this.state={['value'] : "",
     ['inputValue'] : "",

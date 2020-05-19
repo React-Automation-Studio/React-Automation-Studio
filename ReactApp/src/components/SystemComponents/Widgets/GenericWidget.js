@@ -6,7 +6,7 @@ import { deepOrange, red } from "@material-ui/core/colors";
 import DataConnection from "../DataConnection";
 import ContextMenu from "../ContextMenu";
 import { formatTime } from "./WidgetUtils";
-import Typography from '@material-ui/core/Typography';
+
 
 
 /**
@@ -15,85 +15,51 @@ import Typography from '@material-ui/core/Typography';
 class GenericWidget extends React.Component {
   constructor(props) {
     super(props);
-    this.getDataConnection = this.getDataConnection.bind(this);
-    this.handleContextMenuClose = this.handleContextMenuClose.bind(this);
-    this.getMin = this.getMin.bind(this);
-    this.getMax = this.getMax.bind(this);
-    this.getPrec = this.getPrec.bind(this);
-    this.getAlarmColor = this.getAlarmColor.bind(this);
-    this.getAlarmSeverity = this.getAlarmSeverity.bind(this);
-    this.isInsideLimits = this.isInsideLimits.bind(this);
-    this.checkPrecision = this.checkPrecision.bind(this);
-    this.handleInputValueLabel = this.handleInputValueLabel.bind(this);
-    this.handleInputValue = this.handleInputValue.bind(this);
-    this.handleMetadata = this.handleMetadata.bind(this);
-    this.handleOnBlur = this.handleOnBlur.bind(this);
-    this.handleOnFocus = this.handleOnFocus.bind(this);
-    this.handleStateUpdate = this.handleStateUpdate.bind(this);
-    this.handleToggleContextMenu = this.handleToggleContextMenu.bind(this);
-    this.createWidgetState = this.createWidgetState.bind(this);
-
-
-    this.createWidgetState();
-
-  }
-
-
-
-  /**
-   * Add to the state the main properties to communicate with a PV.
-   * At the beggining it defines a set of instance variables and substitutes
-   * the macros with the correct values.
-   * Then, from the PVs received through pv props, it creates an object with
-   * a set of properties for each pv; each property corresponds to the main
-   * information related to that PV.
-   * Finally, it defines the main properties for a widget's state.
-   */
-  createWidgetState() {
     this.state = {};
     let dataPVs = {};
+    let pvNames;
     if (this.props.pv) {
-      this.pvNames = Array.isArray(this.props.pv)
+      pvNames = Array.isArray(this.props.pv)
         ? this.props.pv
         : [this.props.pv];
     }
     else if (this.props.dataPVs) {
-      this.pvNames = Array.isArray(this.props.dataPVs)
+      pvNames = Array.isArray(this.props.dataPVs)
         ? this.props.dataPVs
         : [this.props.dataPVs];
     }
     else if (this.props.pvs) {
-      this.pvNames = Array.isArray(this.props.pvs)
+      pvNames = Array.isArray(this.props.pvs)
         ? this.props.pvs
         : [this.props.pvs];
     }
 
-    this.disconnectedPVs = [];
-    this.writablePVs = [];
+    this.state.disconnectedPVs = [];
+  //  this.writablePVs = [];
     this.alarmColors = ["", deepOrange["400"], red["800"]];
 
     // Macro substitutions
     let macros = this.props.macros;
     if (macros !== undefined) {
-      for (let i = 0; i < this.pvNames.length; i++) {
-        let oldName = this.pvNames[i];
+      for (let i = 0; i < pvNames.length; i++) {
+        let oldName = pvNames[i];
         for (let macro in macros) {
-          this.pvNames[i] = this.pvNames[i].replace(
+          pvNames[i] = pvNames[i].replace(
             macro.toString(),
             macros[macro].toString()
           );
         }
-        if (
-          this.props.writablePVs !== undefined &&
-          this.props.writablePVs.includes(oldName)
-        ) {
-          this.writablePVs.push(this.pvNames[i]);
-        }
+        // if (
+        //   this.props.writablePVs !== undefined &&
+        //   this.props.writablePVs.includes(oldName)
+        // ) {
+        //   this.writablePVs.push(this.pvNames[i]);
+        // }
       }
     }
 
     // PV state
-    for (let pvName of this.pvNames) {
+    for (let pvName of pvNames) {
       dataPVs[pvName] = {
         pvname: pvName,
         value: "",
@@ -111,12 +77,44 @@ class GenericWidget extends React.Component {
     }
 
     // Widget's state
+    this.state.pvNames=pvNames;
     this.state.dataPVs = dataPVs;
     this.state.hasFocus = false;
     this.state.openContextMenu = false;
     this.state.anchorEl = null;
+   
+  
 
+
+
+
+
+
+
+
+    this.getDataConnection = this.getDataConnection.bind(this);
+    this.handleContextMenuClose = this.handleContextMenuClose.bind(this);
+    this.getMin = this.getMin.bind(this);
+    this.getMax = this.getMax.bind(this);
+    this.getPrec = this.getPrec.bind(this);
+    this.getAlarmColor = this.getAlarmColor.bind(this);
+    this.getAlarmSeverity = this.getAlarmSeverity.bind(this);
+    this.isInsideLimits = this.isInsideLimits.bind(this);
+    this.checkPrecision = this.checkPrecision.bind(this);
+    this.handleInputValueLabel = this.handleInputValueLabel.bind(this);
+    this.handleInputValue = this.handleInputValue.bind(this);
+    this.handleMetadata = this.handleMetadata.bind(this);
+    this.handleOnBlur = this.handleOnBlur.bind(this);
+    this.handleOnFocus = this.handleOnFocus.bind(this);
+    this.handleStateUpdate = this.handleStateUpdate.bind(this);
+    this.handleToggleContextMenu = this.handleToggleContextMenu.bind(this);
+    this.getWidgetDetails=this.getWidgetDetails.bind(this);
+    this.wrapComponent=this.wrapComponent.bind(this);
+    this.renderCount=0;
   }
+
+
+ 
 
   //-----------------------------------------------------------
   //
@@ -140,9 +138,10 @@ class GenericWidget extends React.Component {
         } else if (property.toLowerCase().includes("value")) {
           let value = elem[property];
           if (elem.checkValue) {
+            if(!this.props.useStringValue){
             value = this.isInsideLimits(pvName, value);
-            // console.log("changeValues",value)
             value = this.checkPrecision(pvName, value)
+            }
           }
           dataPVs[pvName][property] = value;
         }
@@ -176,11 +175,14 @@ class GenericWidget extends React.Component {
    */
   checkPrecision(pvName, value) {
     let prec = this.getPrec(pvName)
-    // console.log(pvName,prec)
-    let newvalue = value.toFixed(prec);
-    // console.log(pvName,value,newvalue)
-
-    return newvalue;
+ 
+    let newvalue;
+    if (prec){
+     return value.toFixed(prec);
+    }
+    else{
+      return value
+    }
   }
 
   /**
@@ -189,10 +191,10 @@ class GenericWidget extends React.Component {
    * @param {String} pvName
    */
   isConnectionReady(pvName) {
-    if (pvName !== undefined && this.pvNames.includes(pvName)) {
+    if (pvName !== undefined && this.state.pvNames.includes(pvName)) {
       return this.state.dataPVs[pvName].initialized;
     }
-    return this.disconnectedPVs.length === 0; /////////////////////////////this must move to the state
+    return this.state.disconnectedPVs.length === 0; /////////////////////////////this must move to the state
   }
 
 
@@ -263,7 +265,7 @@ class GenericWidget extends React.Component {
    * Return connections status.
    */
   getConnections() {
-    return this.pvNames.map((pvName) => this.isConnectionReady(pvName));
+    return this.state.pvNames.map((pvName) => this.isConnectionReady(pvName));
   }
 
   /**
@@ -335,22 +337,22 @@ class GenericWidget extends React.Component {
    * or the PV should be writable but it is not.
    * If the writable list is not specified
    * and the widget is not in readOnly mode
-   * all the PVs in this.pvNames should be writable.
+   * all the PVs in this.state.pvNames should be writable.
    */
   getDisabled() {
     let disabled = false || this.props.disabled || !this.isConnectionReady();
     if (!disabled) {
-      for (let pvName of this.pvNames) {
+      for (let pvName of this.state.pvNames) {
         disabled = disabled || !this.state.dataPVs[pvName].metadata.read_access;
       }
-      if (!this.props.readOnly) {
-        let writablePVs =
-          this.writablePVs.length > 0 ? this.writablePVs : this.pvNames;
-        for (let pvName of writablePVs) {
-          disabled =
-            disabled || !this.state.dataPVs[pvName].metadata.write_access;
-        }
-      }
+      // if (!this.props.readOnly) {
+      //   let writablePVs =
+      //     this.writablePVs.length > 0 ? this.writablePVs : this.state.pvNames;
+      //   for (let pvName of writablePVs) {
+      //     disabled =
+      //       disabled || !this.state.dataPVs[pvName].metadata.write_access;
+      //   }
+      // }
     }
     return disabled;
   }
@@ -389,7 +391,7 @@ class GenericWidget extends React.Component {
     return (
       <span>
         {this.getDisconnectedIcon()}
-        {this.disconnectedPVs.toString()}
+        {this.state.disconnectedPVs.toString()}
       </span>
     );
   }
@@ -415,7 +417,7 @@ class GenericWidget extends React.Component {
    * various methods when not specified.
    */
   getPvName(idx = 0) {
-    return this.pvNames[idx];
+    return this.state.pvNames[idx];
   }
 
   /**
@@ -452,7 +454,7 @@ class GenericWidget extends React.Component {
    * Return a list with all the timestamps.
    */
   getTimestampList() {
-    return this.pvNames.map((pvName) => this.state.dataPVs[pvName].timestamp);
+    return this.state.pvNames.map((pvName) => this.state.dataPVs[pvName].timestamp);
   }
 
   /**
@@ -526,7 +528,7 @@ class GenericWidget extends React.Component {
    * Return a list with all PVs' values.
    */
   getValueList() {
-    return this.pvNames.map((pvName) => this.getValue(pvName));
+    return this.state.pvNames.map((pvName) => this.getValue(pvName));
   }
   getMin = pvName => {
     let min;
@@ -572,7 +574,7 @@ class GenericWidget extends React.Component {
   /**
    * Return all widget details in a object.
    */
-  getWidgetdetails() {
+  getWidgetDetails() {
     let pvName = this.getPvName();
 
     return {
@@ -591,7 +593,7 @@ class GenericWidget extends React.Component {
       onColor: this.getOnColor(),
       precision: this.getPrec(pvName),
       pvName: pvName,
-      pvList: this.pvNames,
+      pvList: this.state.pvNames,
       timestamp: this.getTimestamp(pvName),
       timestampList: this.getTimestampList(),
       units: this.getUnits(pvName),
@@ -602,6 +604,7 @@ class GenericWidget extends React.Component {
       onUpdateWidgetBlur: this.handleOnBlur,
       onUpdateWidgetFocus: this.handleOnFocus,
       onUpdateWidgetState: this.handleStateUpdate,
+     
     };
   }
 
@@ -647,6 +650,7 @@ class GenericWidget extends React.Component {
       console.log("timestamp", timestamp);
     }
     let dataPVs = this.state.dataPVs;
+    let disconnectedPVs =this.state.disconnectedPVs;
     if (initialized) {
       if (!this.state.hasFocus) {
         dataPVs[pvname].value = inputValue;
@@ -656,18 +660,19 @@ class GenericWidget extends React.Component {
       dataPVs[pvname].initialized = initialized;
       dataPVs[pvname].severity = severity;
       dataPVs[pvname].timestamp = timestamp;
-      let idx = this.disconnectedPVs.indexOf(pvname);
+      
+      let idx = disconnectedPVs.indexOf(pvname);
       if (idx !== -1) {
-        this.disconnectedPVs.splice(idx, 1);
+        disconnectedPVs.splice(idx, 1);
       }
     } else {
       dataPVs[pvname].initialized = initialized;
-      let idx = this.disconnectedPVs.indexOf(pvname);
+      let idx = disconnectedPVs.indexOf(pvname);
       if (idx === -1) {
-        this.disconnectedPVs.push(pvname);
+        disconnectedPVs.push(pvname);
       }
     }
-    this.setState({ dataPVs: dataPVs });
+    this.setState({ dataPVs: dataPVs,disconnectedPVs:disconnectedPVs });
   }
 
   /**
@@ -721,7 +726,7 @@ class GenericWidget extends React.Component {
   handleStateUpdate(options = {}) {
     let dataPVs = this.state.dataPVs;
     for (let property in options) {
-      if (this.pvNames.includes(property)) {
+      if (this.state.pvNames.includes(property)) {
         let pvName = property;
         dataPVs = this.changeValues(pvName, options[property], dataPVs);
       }
@@ -764,15 +769,29 @@ class GenericWidget extends React.Component {
   /**
    * Render method.
    */
-  render() {
+  
+  wrapComponent(CustomComponent, props,widgetDetails) {
+    //console.log("CustomComponent",CustomComponent,props,widgetDetails)
+    return <CustomComponent {...props} {...widgetDetails} />;
+  }
 
+  render() {
+    if (this.props.debug){
+      console.log("renderCount: ",this.renderCount,this.state.pvNames);
+      this.renderCount+=1;
+    }
     const contextMenu = this.getContextMenu();
     const dataConnections = this.getDataConnection();
+    
+    const widgetDetails = this.getWidgetDetails();
+    const child =this.props.component&&widgetDetails&&this.wrapComponent(this.props.component, this.props,widgetDetails);
+    
     const divStyle = {
       width: "100%",
       height: "100%",
     }
-
+    
+   
 
     return (
       <div
@@ -785,13 +804,8 @@ class GenericWidget extends React.Component {
       >
         {dataConnections}
         {contextMenu}
-        {React.isValidElement(this.props.children)
-          ? React.cloneElement(this.props.children, this.getWidgetdetails())
-          : <Typography>
-            No Child Defined
-            <br />
-          </Typography>
-        }
+        {child}
+     
 
 
       </div>
@@ -915,11 +929,7 @@ class GenericWidget extends React.Component {
      * Directive to use PV's string values.
      */
     useStringValue: PropTypes.bool,
-    /**
-     * Array with writable PV list.
-     * It is a subset of pv.
-     */
-    writablePVs: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
+
   };
 
   /**

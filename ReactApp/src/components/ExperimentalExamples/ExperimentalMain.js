@@ -144,6 +144,9 @@ class ExperimentalMain extends Component {
               <Grid item xs={12}  >
                 <Button  fullWidth  className= {classes.button} component={Link} to="/ExperimentalEpicsDemos" color="primary" variant='contained'>Experimental  Epics Demos </Button>
               </Grid>
+              <Grid item xs={12}  >
+                <Button  fullWidth  className= {classes.button} component={Link} to="/HooksDebuging" color="primary" variant='contained'>HooksDebuging</Button>
+              </Grid>
 
               {/* <Grid item xs={12}  >
                 <Button  fullWidth  className= {classes.button} component={Link} to="/ExperimentalStaging" color="primary" variant='contained'>Experimental  Staging </Button>

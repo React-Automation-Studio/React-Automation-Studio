@@ -26,6 +26,7 @@ import SettingsSteererXY from './components/SettingsPages/SettingsSteererXY';
 import SettingsSinglePS from './components/SettingsPages/SettingsSinglePS';
 import ExperimentalEpicsDemos from './components/ExperimentalExamples/ExperimentalEpicsDemos';
 import ExperimentalMobileDemo1 from './components/ExperimentalExamples/Mobile/ExperimentalMobileDemo1';
+import HooksDebuging from './components/ExperimentalExamples/Mobile/HooksDebuging';
 import LogIn from './LogIn';
 import { Redirect } from 'react-router-dom'
 export default props=>(
@@ -61,6 +62,7 @@ export default props=>(
     <Route path="/Example3" component={Example3} />
     <Route path="/ExperimentalMain" component={ExperimentalMain} />
     <Route path="/ExperimentalMobileDemo1" component={ExperimentalMobileDemo1} />
+    <Route path="/HooksDebuging" component={HooksDebuging} />
     <Route path="/ExperimentalEpicsDemos" component={ExperimentalEpicsDemos} />
     </Switch>
 

@@ -30,13 +30,14 @@ const styles = (theme) => ({
 
 
 
-function ActionButtonComponent(props) {
+const ActionButtonComponent=(props)=> {
 
   /**
    * Send the predefined value to the PV.
    */
-  function handleButtonClick() {
-    props.onUpdateWidgetState({
+  const handleButtonClick=()=> {
+   
+     props.onUpdateWidgetState({
       checkValue: true,
       value: props.actionValue,
       outputValue: props.actionValue,
@@ -78,10 +79,10 @@ function ActionButtonComponent(props) {
  * */
 
 const ActionButton = (props)=> {
+  
     return (
-      <GenericWidget {...props}>
-        <ActionButtonComponent {...props} />
-      </GenericWidget>
+      <GenericWidget  {...props} component={ActionButtonComponent}/> 
+     
     )
   }
 

@@ -119,7 +119,7 @@ function SimpleSliderComponent(props) {
         key={props.pvName + props.connection}
         aria-labelledby="label"
         disabled={props.disabled}
-        value={props.value}
+        value={props.connection?props.value:undefined}
         min={props.connection ? min : undefined}
         max={props.connection ? max : undefined}
         marks={props.connection ? marks : undefined}
@@ -146,11 +146,7 @@ function SimpleSliderComponent(props) {
 const SimpleSlider = (props) => {
 
   return (
-    <GenericWidget {...props}>
-
-      <SimpleSliderComponent {...props} />
-
-    </GenericWidget>
+    <GenericWidget {...props} component={SimpleSliderComponent}/>
   )
 }
 

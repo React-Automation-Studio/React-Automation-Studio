@@ -91,9 +91,7 @@ const SelectionInputComponent = (props) => {
 
 const SelectionInput = (props) => {
   return (
-    <GenericWidget {...props} useStringValue={true} >
-      <SelectionInputComponent {...props} />
-    </GenericWidget>
+    <GenericWidget {...props} useStringValue={true} component={SelectionInputComponent}/>
   )
 }
 

@@ -155,11 +155,9 @@ function TextOutputComponent(props) {
  */
 const TextOutput =(props)=>{
     return (
-      <GenericWidget {...props}>
-     
-               <TextOutputComponent {...props}/>
+      <GenericWidget {...props} component={TextOutputComponent}/>
          
-      </GenericWidget>
+      
     )
   }
 

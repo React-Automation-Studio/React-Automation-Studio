@@ -38,135 +38,27 @@ const styles = (theme) => ({
  * Material-UI Button API:
  * https://material-ui.com/api/button/
  */
-// class ToggleButton extends React.Component {
-//   constructor(props) {
-//     super(props);
-//     this.turnOff = this.turnOff.bind(this);
-//     this.handleMouseUp = this.handleMouseUp.bind(this);
-//     this.handleMouseDown = this.handleMouseDown.bind(this);
-//     this.handlePointerLeave = this.handlePointerLeave.bind(this);
-//     this.handleButtonClick = this.handleButtonClick.bind(this);
-//     this.clicked = false;
-//   }
 
-//   /**
-//    * When clicking the button, not in momentary mode,
-//    * set the PV to the oppisite of the actual value.
-//    */
-//   handleButtonClick() {
-//     let value = props.value === 0 ? 1 : 0;
-//     props.onUpdateWidgetState({
-//       value: value,
-//       outputValue: value,
-//       newValueTrigger: 1,
-//     });
-//     window.navigator.vibrate(1);
-//   }
-
-//   /**
-//    * When in momentary mode, detect down action on mouse click.
-//    * When in this this state write 1 to the corresponding PV.
-//    */
-//   handleMouseDown() {
-//     if (props.debug) {
-//       console.log("mouseDown");
-//     }
-//     this.clicked = true;
-//     props.onUpdateWidgetState({
-//       value: 1,
-//       outputValue: 1,
-//       newValueTrigger: 1,
-//     });
-//   }
-
-//   /**
-//    * When in momentary mode, detect up action on mouse click.
-//    * When in this this state write 0 to the corresponding PV  after 100ms.
-//    */
-//   handleMouseUp() {
-//     if (props.debug) {
-//       console.log("mouseUp");
-//     }
-//     setTimeout(this.turnOff, 100);
-//   }
-
-//   /**
-//    * When the pointer leave the widget, also if the down action persists,
-//    * write 0 to the corresponding PV after 100ms.
-//    */
-//   handlePointerLeave() {
-//     if (props.debug) {
-//       console.log("mouseLeave");
-//     }
-//     if (this.clicked) {
-//       setTimeout(this.turnOff, 100);
-//     }
-//   }
-
-//   /**
-//    * Function to set to zero the value and to false the click state.
-//    */
-//   turnOff() {
-//     if (props.debug) {
-//       console.log("turnoff");
-//     }
-//     this.clicked = false;
-//     props.onUpdateWidgetState({
-//       value: 0,
-//       outputValue: 0,
-//       newValueTrigger: 1,
-//     });
-//   }
-
-//   render() {
-//     let momentary =
-//       props.momentary !== undefined ? props.momentary : false;
-//     let value = props.value;
-//     const {classes}=props;
-//     return (
-//       <FormControlLabel
-//         key={props.pvName}
-//         className={classes.FormControl}
-//         disabled={props.disabled}
-//         label={props.label}
-//         labelPlacement={props.labelPlacement}
-//         control={
-//           <Button
-//             className={classes.Button}
-//             fullWidth={true}
-//             variant="contained"
-//             color={value === 1 ? props.onColor : props.offColor}
-//             onClick={momentary ? undefined : this.handleButtonClick}
-//             onPointerUp={momentary ? this.handleMouseUp : undefined}
-//             onPointerDown={momentary ? this.handleMouseDown : undefined}
-//             onPointerLeave={momentary ? this.handlePointerLeave : undefined}
-//           >
-//             {props.enumStrs[value === 1 ? value : 0]}
-//           </Button>
-//         }
-//       />
-//     );
-//   }
-function ToggleButtonComponent(props) {
-  const [clicked,setclicked]=useState(0);
-  function turnOff() {
-        if (props.debug) {
-          console.log("turnoff");
-        }
-       setclicked(false);
-        props.onUpdateWidgetState({
-          value: 0,
-          outputValue: 0,
-          newValueTrigger: 1,
-        });
-      }
-    function handleMouseUp() {
+const ToggleButtonComponent = (props) => {
+  const [clicked, setclicked] = useState(0);
+  const turnOff = () => {
+    if (props.debug) {
+      console.log("turnoff");
+    }
+    setclicked(false);
+    props.onUpdateWidgetState({
+      value: 0,
+      outputValue: 0,
+      newValueTrigger: 1,
+    });
+  }
+  const handleMouseUp = () => {
     if (props.debug) {
       console.log("mouseUp");
     }
     setTimeout(turnOff, 100);
   }
-  function handleButtonClick() {
+  const handleButtonClick = () => {
     let value = props.value === 0 ? 1 : 0;
     props.onUpdateWidgetState({
       value: value,
@@ -175,11 +67,11 @@ function ToggleButtonComponent(props) {
     });
     window.navigator.vibrate(1);
   }
-    function handleMouseDown() {
+  const handleMouseDown = () => {
     if (props.debug) {
       console.log("mouseDown");
     }
-    
+
     setclicked(false);
     props.onUpdateWidgetState({
       value: 1,
@@ -187,7 +79,7 @@ function ToggleButtonComponent(props) {
       newValueTrigger: 1,
     });
   }
-    function handlePointerLeave() {
+  const handlePointerLeave = () => {
     if (props.debug) {
       console.log("mouseLeave");
     }
@@ -198,7 +90,7 @@ function ToggleButtonComponent(props) {
 
   const { classes } = props;
   const { value } = props;
-  let momentary =props.momentary !== undefined ? props.momentary : false;
+  let momentary = props.momentary !== undefined ? props.momentary : false;
   return (
     <FormControlLabel
       key={props.pvName}
@@ -223,16 +115,13 @@ function ToggleButtonComponent(props) {
     />
   )
 }
-const ToggleButton = (props)=>{
+const ToggleButton = (props) => {
 
-    return (
-      <GenericWidget {...props}>
-    
-            <ToggleButtonComponent {...props}  />
-      
-      </GenericWidget>
-    )
-  }
+  return (
+    <GenericWidget {...props} component={ToggleButtonComponent} />
+
+  )
+}
 
 
 /**
@@ -243,9 +132,9 @@ ToggleButton.propTypes = {
   /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
   pv: PropTypes.string.isRequired,
   /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
-  macros:PropTypes.object,
+  macros: PropTypes.object,
   /** Directive to fill the label with the value contained in the  EPICS pv's DESC field. */
-  usePvLabel:PropTypes.bool,
+  usePvLabel: PropTypes.bool,
 
 
 
@@ -254,25 +143,25 @@ ToggleButton.propTypes = {
 
   /** If defined, then the string value of the EPICS enumerator type will be forced to be used, if not defined the the enumerator index is used */
 
-  debug:PropTypes.bool,
+  debug: PropTypes.bool,
   /** Custom color to be used, must be derived from Material UI theme color's*/
   color: PropTypes.string,
   /** If defined then component will act as momentary button*/
-  momentary:PropTypes.bool,
+  momentary: PropTypes.bool,
   /** An array of custom strings to be displayed on the button for a value of 0 or 1  i.e. ['Off','On'], If not defined then EPICS enum_strs will be used*/
-  custom_selection_strings:PropTypes.array,
+  custom_selection_strings: PropTypes.array,
   /** local variable intialization value*/
-  intialLocalVariableValue:PropTypes.string,
-   /** label placement*/
-  labelPlacement:PropTypes.oneOf(['start', 'top','bottom','end']),
-  
+  intialLocalVariableValue: PropTypes.string,
+  /** label placement*/
+  labelPlacement: PropTypes.oneOf(['start', 'top', 'bottom', 'end']),
+
 };
 
 ToggleButton.defaultProps = {
- 
+
   debug: false,
   color: 'primary',
-  labelPlacement:'end', 
+  labelPlacement: 'end',
   usePvLabel: false
 };
 

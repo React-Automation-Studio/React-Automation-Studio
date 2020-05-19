@@ -100,13 +100,13 @@ const styles = (theme) => ({
  * Material-UI List API:
  * https://material-ui.com/api/list
  */
-function SelectionListComponent(props) {
+const SelectionListComponent=(props)=> {
 
   /**
    * Store the new item value in the correct PV's state.
    * @param {String} value
    */
-  function handleListItemClick(value) {
+  const handleListItemClick=(value)=> {
     props.onUpdateWidgetState({
       value: value,
       outputValue: value,
@@ -118,7 +118,7 @@ function SelectionListComponent(props) {
    * Create a list with the value in enumStrs.
    * @param {array} enumStrs
    */
-  function getListItems(enumStrs, value) {
+  const getListItems=(enumStrs, value)=> {
     let { classes } = props;
     let listItems = enumStrs.map((item, idx) => {
       let className;
@@ -184,13 +184,7 @@ function SelectionListComponent(props) {
 
 const SelectionList = (props) => {
   return (
-    <GenericWidget {...props} useStringValue={true}>
-
-      <SelectionListComponent {...props} />
-
-
-
-    </GenericWidget>
+    <GenericWidget {...props} useStringValue={true} component={SelectionListComponent}/>
   )
 
 }

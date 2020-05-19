@@ -110,9 +110,7 @@ function StyledIconIndicatorComponent(props) {
 const StyledIconIndicator = (props) => {
 
   return (
-    <GenericWidget {...props}>
-      <StyledIconIndicatorComponent {...props} />
-    </GenericWidget>
+    <GenericWidget {...props} component={StyledIconIndicatorComponent}  />
   )
 }
 

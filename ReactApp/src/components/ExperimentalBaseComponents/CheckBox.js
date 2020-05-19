@@ -30,7 +30,7 @@ const CheckBoxComponent = (props) => {
    * Send checkbox value to the PV.
    * @param {Event} event
    */
-  function handleButtonChange(event) {
+  const handleButtonChange=(event)=> {
     let value = event.target.checked ? 1 : 0;
     props.onUpdateWidgetState({
       value: value,
@@ -60,12 +60,8 @@ const CheckBoxComponent = (props) => {
 
 const CheckBox = (props) => {
   return (
-    <GenericWidget {...props}>
+    <GenericWidget {...props} component={CheckBoxComponent}/>
 
-      <CheckBoxComponent {...props} />
-
-
-    </GenericWidget>
   )
 }
 

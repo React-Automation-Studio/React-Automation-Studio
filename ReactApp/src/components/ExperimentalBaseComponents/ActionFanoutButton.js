@@ -13,13 +13,13 @@ const styles = (theme) => ({
 
 
 
-function ActionFanoutButtonComponent(props) {
+const ActionFanoutButtonComponent=(props)=> {
   
 
   /**
    * Write actionValue to all PVs linked to this component.
    */
-  function handleButtonClick() {
+  const handleButtonClick=()=> {
     let values = {};
     for (let pvName of props.pvList) {
       values[pvName] = {
@@ -72,9 +72,7 @@ function ActionFanoutButtonComponent(props) {
  * */
 const ActionFanoutButton =(props)=> {
     return (
-      <GenericWidget {...props}>
-        <ActionFanoutButtonComponent {...props}  />
-      </GenericWidget>
+      <GenericWidget {...props} component={ActionFanoutButtonComponent}  />
     )
   }
 

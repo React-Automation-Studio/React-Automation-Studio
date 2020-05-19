@@ -28,13 +28,13 @@ const styles = (theme) => ({
   }
 });
 
-function TextInputComponent(props) {
+const TextInputComponent=(props)=> {
 
   /**
    * Temporary store the new value
    * @param {Event} event
    */
-  function handleChange(event) {
+  const handleChange=(event)=> {
     props.onUpdateWidgetState({ value: event.target.value });
   }
 
@@ -42,7 +42,7 @@ function TextInputComponent(props) {
    * Save value on output value only when 'Enter' key is pressed.
    * @param {Event} event
    */
-  function catchReturn(event) {
+  const catchReturn=(event)=> {
     if (event.key === "Enter" && props.connection) {
       props.onUpdateWidgetState({
         checkValue: true,
@@ -131,9 +131,7 @@ function TextInputComponent(props) {
  */
 const TextInput =(props)=>{
     return (
-      <GenericWidget {...props}>
-            <TextInputComponent {...props}  />
-      </GenericWidget>
+      <GenericWidget {...props} component={TextInputComponent}/>
     )
 }
 

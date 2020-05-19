@@ -20,12 +20,12 @@ const styles = (theme) => ({
 });
 
 
-function StyledIconButtonComponent (props) {
+const StyledIconButtonComponent=(props)=> {
  
   /**
    * Write in the PV the oppisite value of the actual one.
    */
-  function handleButtonClick() {
+  const handleButtonClick=()=> {
     let value = props.value === 0 ? 1 : 0;
     props.onUpdateWidgetState({
       value: value,
@@ -71,9 +71,8 @@ function StyledIconButtonComponent (props) {
  */
 const StyledIconButton =(props)=>{
     return (
-      <GenericWidget {...props}>
-            <StyledIconButtonComponent {...props}  />
-      </GenericWidget>
+      <GenericWidget {...props} component={StyledIconButtonComponent}/>
+      
     )
   }
 

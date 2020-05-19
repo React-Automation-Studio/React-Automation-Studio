@@ -19,7 +19,7 @@ const styles = (theme) => ({
 });
 
 
-const BitIndicatorsComponent=(props)=> {
+const BitIndicatorsComponent = (props) => {
 
 
 
@@ -94,7 +94,7 @@ const BitIndicatorsComponent=(props)=> {
     return (
       <Grid
         item
-        key={index + bitLabels[index]}
+        key={index.toString()}
         xs={!props.horizontal ? 12 : undefined}
       >
         <FormControlLabel
@@ -143,16 +143,11 @@ const BitIndicatorsComponent=(props)=> {
  * https://material-ui.com/api/svg-icon/<br/><br/>
  * A custom Icon can used by importing it in the parent and assigning it as a child <br/><br/>
  */
-const BitIndicators =(props)=>{
-    return (
-      <GenericWidget {...props}>
-       
-            <BitIndicatorsComponent {...props}  />
-       
-       
-      </GenericWidget>
-    )
-  }
+const BitIndicators = (props) => {
+  return (
+    <GenericWidget {...props} component={BitIndicatorsComponent} />
+  )
+}
 
 
 BitIndicators.propTypes = {
@@ -160,13 +155,13 @@ BitIndicators.propTypes = {
   pv: PropTypes.string.isRequired,
   /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
   macros: PropTypes.object,
- 
+
   /** local variable intialization value*/
   intialLocalVariableValue: PropTypes.string,
-   /** If defined, then the DataConnection debugging information will be displayed*/
-   debug: PropTypes.bool,
-    /** label placement*/
-  labelPlacement:PropTypes.oneOf(['start', 'top','bottom','end']),
+  /** If defined, then the DataConnection debugging information will be displayed*/
+  debug: PropTypes.bool,
+  /** label placement*/
+  labelPlacement: PropTypes.oneOf(['start', 'top', 'bottom', 'end']),
   /** Custom label to be used, if  `usePvLabel` is not defined. */
   label: PropTypes.string,
   // Array of custom bit labels.

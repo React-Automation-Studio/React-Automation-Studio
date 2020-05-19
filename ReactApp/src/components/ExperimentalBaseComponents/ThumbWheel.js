@@ -21,7 +21,7 @@ const styles = (theme) => ({
 
 
 
-function ThumbWheelComponent(props) {
+const ThumbWheelComponent = (props) => {
 
   function handleButtonClick(incrementValue) {
     if (props.connection) {
@@ -66,7 +66,7 @@ function ThumbWheelComponent(props) {
  * Function with the details of the graphic object
  * @param {any} props
  */
-function ThumbWheelWidget(props) {
+const ThumbWheelWidget = (props) => {
   return (
     <FormControlLabel
       key={props.pvName}
@@ -112,7 +112,7 @@ function ThumbWheelWidget(props) {
  * Single wheel element
  * @param {any} props
  */
-function SingleThumbWheelWidget(props) {
+const SingleThumbWheelWidget = (props) => {
   return (
     <Button
       key={(props.up ? "top" : "bottom") + "rowbuttons" + props.index}
@@ -140,11 +140,7 @@ function SingleThumbWheelWidget(props) {
  */
 const ThumbWheel = (props) => {
   return (
-    <GenericWidget {...props}>
-
-      <ThumbWheelComponent {...props}  />
-
-    </GenericWidget>
+    <GenericWidget {...props} component={ThumbWheelComponent} />
   )
 }
 

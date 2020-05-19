@@ -72,7 +72,7 @@ class ActionButton extends React.Component {
   this.handleInputValue= this.handleInputValue.bind(this);
   this.handleInputValueLabel= this.handleInputValueLabel.bind(this);
   this.handleMetadata= this.handleMetadata.bind(this);
-
+  this.renderCount=0;
 }
 
 
@@ -139,6 +139,9 @@ handleButtonClick = name => event => {
 
 
 render() {
+  console.log(this.renderCount)
+  this.renderCount+=1;
+
   const {classes}= this.props;
   const pv = this.props.pv;
   const macros=  this.props.macros;

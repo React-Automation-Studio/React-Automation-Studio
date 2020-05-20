@@ -2,7 +2,7 @@ import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import { InputAdornment, TextField } from "@material-ui/core";
 import PropTypes from 'prop-types';
-import GenericWidget from "../SystemComponents/Widgets/GenericWidget";
+import Widget from "../SystemComponents/Widgets/Widget";
 import red from '@material-ui/core/colors/red';
 import deepOrange from '@material-ui/core/colors/deepOrange';
 
@@ -30,33 +30,14 @@ const styles = (theme) => ({
 
 const TextInputComponent=(props)=> {
 
-  /**
-   * Temporary store the new value
-   * @param {Event} event
-   */
-  const handleChange=(event)=> {
-    props.onUpdateWidgetState({ value: event.target.value });
-  }
+ 
 
-  /**
-   * Save value on output value only when 'Enter' key is pressed.
-   * @param {Event} event
-   */
-  const catchReturn=(event)=> {
-    if (event.key === "Enter" && props.connection) {
-      props.onUpdateWidgetState({
-        checkValue: true,
-        value: props.value,
-        outputValue: props.value,
-      });
-    }
-  }
+
 
 
   let style;
   const { classes } = props;
-  const { alarmColor } = props;
-  const { connection } = props;
+  const { initialized } = props;
   const { theme } = props;
   const { value } = props;
 
@@ -82,7 +63,7 @@ const TextInputComponent=(props)=> {
 
   let inputProps;
 
-  if (connection) {
+  if (initialized) {
     inputProps = {
       endAdornment: (
         <InputAdornment position="end">
@@ -94,7 +75,7 @@ const TextInputComponent=(props)=> {
     inputProps = { readOnly: true };
   }
 
-
+  console.log(value)
   return (
     <TextField
       className={textFieldClassName}
@@ -103,15 +84,15 @@ const TextInputComponent=(props)=> {
       //aria-owns={this.state.openContextMenu ? 'menu-list-grow' : undefined}
       aria-haspopup="true"
       value={value}
-      onKeyPress={catchReturn}
-      onFocus={props.onUpdateWidgetFocus}
-      onBlur={props.onUpdateWidgetBlur}
-      onChange={handleChange}
+      onKeyPress={props.handleCatchReturn}
+      onFocus={props.handleFocus}
+      onBlur={props.handleBlur}
+      onChange={props.handleChange}
       label={props.label}
       fullWidth={true}
       margin="none"
       variant={props.variant}
-      disabled={props.disabled}
+      //disabled={props.disabled}
       InputProps={inputProps}
     />
   );
@@ -131,7 +112,7 @@ const TextInputComponent=(props)=> {
  */
 const TextInput =(props)=>{
     return (
-      <GenericWidget {...props} component={TextInputComponent}/>
+      <Widget {...props} component={TextInputComponent}/>
     )
 }
 

@@ -208,9 +208,9 @@ class ContextMenu extends React.Component {
     const  openContextMenu  = this.props.open;
 
     const pvs=this.props.pvs;
-    const pvname=pvs[0].pvname;
-    const initialized=pvs[0].initialized;
-    const value=pvs[0].value;
+    //const pvname=pvs[0].pvname;
+    //const initialized=pvs[0].initialized;
+    //const value=pvs[0].value;
     // let shortPvNames=[];
     // for(let pvnames in pvs){
     //   let shortPvName=pvs[pvnames].pvname;
@@ -227,6 +227,7 @@ class ContextMenu extends React.Component {
     // }
     const enableProbe=typeof (this.props.disableProbe)!=='undefined'?false: this.context.enableProbe;
     //console.log('this.context.enableProbe',this.context.enableProbe)
+    //console.log(pvs)
     let icon='disconnected';
     if (pvs.length===1){
 
@@ -281,7 +282,7 @@ class ContextMenu extends React.Component {
                   onClick={this.props.handleClose}
                   component={Link} to={{
                       pathname: "/Probe",
-                    search:JSON.stringify({pvname:pvname,probeType:this.props.probeType}),
+                    search:JSON.stringify({pvname:pvs[0].pvname,probeType:this.props.probeType}),
                       state: ["sdas"],
                       data:"hello2"
                   }}

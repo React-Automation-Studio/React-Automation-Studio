@@ -3,7 +3,7 @@ import { withStyles } from "@material-ui/core/styles";
 import { Slider, Typography } from "@material-ui/core";
 import PropTypes from "prop-types";
 import debounce from "lodash.debounce";
-import GenericWidget from "../SystemComponents/Widgets/GenericWidget";
+import Widget from "../SystemComponents/Widgets/Widget";
 
 
 const styles = (theme) => ({
@@ -37,7 +37,7 @@ function SimpleSliderComponent(props) {
    * @param {float} value
    */
   function handleChange(event, value) {
-    props.onUpdateWidgetState({ focus: true });
+    props.handleFocus();
     //debounce(emitChange(value), 10)
     emitChangeDebounced(value);
   }
@@ -47,12 +47,7 @@ function SimpleSliderComponent(props) {
    * @param {string} value
    */
   function emitChange(value) {
-    props.onUpdateWidgetState({
-      checkValue: true,
-      value: value,
-      outputValue: value,
-      newValueTrigger: 1,
-    });
+    props.handleImmediateChange(value)
   }
 
   /**
@@ -60,19 +55,16 @@ function SimpleSliderComponent(props) {
    * @param {Event} event
    * @param {float} value
    */
-  function handleChangeCommited(event, value) {
-    props.onUpdateWidgetState({
-      checkValue: true,
-      value: value,
-      outputValue: value,
-      inputValue: value,
-      focus: false,
-    });
+  function handleChangeCommited(event,value) {
+
+    props.handleImmediateChange(value);
+    props.handleBlur();
+   
   }
 
 
   let content, marks;
-  if (props.connection) {
+  if (props.initialized) {
     content = (
       <Typography className={props.classes.rangeLabel} id="subtitle2">
         {props.label} {props.value} {props.units}
@@ -110,19 +102,19 @@ function SimpleSliderComponent(props) {
       },
     ];
   }
-
+  console.log("value", props.value,"min",props.min,"max", props.max)
   return (
     <div className={props.classes.sliderDiv}>
       {content}
       <Slider
         className={props.classes.slider}
-        key={props.pvName + props.connection}
+        key={props.pvName + props.initialized}
         aria-labelledby="label"
         disabled={props.disabled}
-        value={props.connection?props.value:undefined}
-        min={props.connection ? min : undefined}
-        max={props.connection ? max : undefined}
-        marks={props.connection ? marks : undefined}
+        value={props.initialized?props.value:undefined}
+        min={props.initialized ? min : undefined}
+        max={props.initialized ? max : undefined}
+        marks={props.initialized ? marks : undefined}
         valueLabelDisplay={props.showThumbValue ? "on" : "off"}
         step={props.step !== undefined ? props.step : undefined}
         onChange={handleChange}
@@ -146,7 +138,7 @@ function SimpleSliderComponent(props) {
 const SimpleSlider = (props) => {
 
   return (
-    <GenericWidget {...props} component={SimpleSliderComponent}/>
+    <Widget {...props} component={SimpleSliderComponent} />
   )
 }
 

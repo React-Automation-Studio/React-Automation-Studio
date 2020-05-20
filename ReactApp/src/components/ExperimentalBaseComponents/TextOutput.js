@@ -2,7 +2,7 @@ import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import { InputAdornment, TextField } from "@material-ui/core";
 import PropTypes from 'prop-types';
-import GenericWidget from "../SystemComponents/Widgets/GenericWidget";
+import Widget from "../SystemComponents/Widgets/Widget";
 import red from '@material-ui/core/colors/red';
 import deepOrange from '@material-ui/core/colors/deepOrange';
 const styles = (theme) => ({
@@ -127,8 +127,8 @@ function TextOutputComponent(props) {
             aria-haspopup="true"
             value={props.value}
             fullWidth={true}
-            onFocus={props.onUpdateWidgetFocus}
-            onBlur={props.onUpdateWidgetBlur}
+            onFocus={props.handleFocus}
+            onBlur={props.handleBlur}
             label={props.label}
             margin="none"
             variant="outlined"
@@ -155,7 +155,7 @@ function TextOutputComponent(props) {
  */
 const TextOutput =(props)=>{
     return (
-      <GenericWidget {...props} component={TextOutputComponent}/>
+      <Widget {...props} component={TextOutputComponent}/>
          
       
     )

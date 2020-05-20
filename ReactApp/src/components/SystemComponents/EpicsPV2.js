@@ -1,7 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react'
 import ReactAutomationStudioContext from './AutomationStudioContext';
+import Typography from '@material-ui/core/Typography';
 
-const EpicsPV2 = (props) => {
+const useEpicsPV2 = (props) => {
   const initPV = () => {
     let pvname;
     if (props.macros) {
@@ -97,10 +98,7 @@ const EpicsPV2 = (props) => {
   }
 
 
-  if (props.debug) {
-    console.log("EpicsPV2 Debuging: ", pv.pvname, pv,props.newValueTrigger)
-
-  }
+  
   
   useEffect(()=>{
     
@@ -140,6 +138,25 @@ const EpicsPV2 = (props) => {
   },[props.newValueTrigger])
 
   return (pv)
+
+}
+
+
+const EpicsPV2=(props)=>{
+  const pv= useEpicsPV2(props);
+  useEffect(()=>{
+    props.pvData(pv);
+    
+  },[pv])
+  //console.log("EpicsPV2",pv)
+  return(
+    <React.Fragment>
+      {props.debug&&<Typography>
+      {"PV name: "+ pv.pvname}
+      {"Value: " +pv.value}
+      </Typography>}
+    </React.Fragment>
+  )
 
 }
 export default EpicsPV2

@@ -16,7 +16,7 @@ import EpicsBinaryOutDebug from '../../GroupedComponents/EpicsBinaryOutDebug';
 import EpicsAnalogOutDebug from '../../GroupedComponents/EpicsAnalogOutDebug';
 import EpicsMbboDebug from '../../GroupedComponents/EpicsMbboDebug';
 import TextUpdate from '../../BaseComponents/TextUpdate';
-import TextInputHooks from '../../ExperimentalBaseComponents/TextInputHooks';
+import TextInput from '../../ExperimentalBaseComponents/TextInput';
 import TextOutput from '../../ExperimentalBaseComponents/TextOutput';
 import Meter from '../../BaseComponents/Gauge';
 import SimpleSlider from '../../ExperimentalBaseComponents/SimpleSlider';
@@ -189,20 +189,38 @@ class ExperimentalMobileDemo1 extends React.Component {
             />
           </Grid> */}
           <Grid item xs={12}>
-            <TextInputHooks
+            <TextInput
               pv='pva://$(device):amplitude'
               macros={{ '$(device)': 'testIOC' }}
-              //label={'edas'}
+              label={'edas'}
               usePvUnits={true}
               usePvLabel={true}
               usePvMinMax={true}
-              usePrecision={true}
-              prec={3}
+              //usePvPrecision={true}
+              prec={1}
+              //max={500}
+              //min={100}
               alarmSensitive={true}
-              //debug={true}
-              imediateOutputChange={true}
+              debug={true}
+              //imediateOutputChange={true}
+              useEpicsMetaData={true}
             />
           </Grid>
+          <Grid item xs={12}  >
+                          <SimpleSlider 
+                          pv='pva://$(device):amplitude' 
+                          macros={{'$(device)':'testIOC'}} 
+                          usePvMinMax={true} 
+                          units={"V"}
+                          min={0} 
+                          max={500}
+                          prec={3}
+                          usePvLabel={true} 
+                          useEpicsMetaData={true} 
+                          debug={true}
+                          />
+                          
+                        </Grid>
           {/* <Grid item xs={12}>
             <HooksWidget
               pv='pva://$(device):BO1'

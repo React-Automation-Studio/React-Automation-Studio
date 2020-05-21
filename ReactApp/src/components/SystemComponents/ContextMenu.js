@@ -118,17 +118,15 @@ class ContextMenu extends React.Component {
 
   }
   getListItems = (pvs) => {
-    //this.test("test1");
-    //this.handleInputValue();
-  //  console.log('getListItems')
-  //  console.log('pvs',pvs)
+    
+   
     let listItems=[];
 
     let i=0;
 
 
     for (i=0 ; i<(pvs.length);i++){
-    //  console.log("pvs: ",i, pvs[i]);
+   
       const index=i;
       let icon='disconnected';
       if (pvs[i].initialized===true){
@@ -152,8 +150,8 @@ class ContextMenu extends React.Component {
         listItems.push(
 
 
-          <React.Fragment key={pvs[i].pvname.toString()+i}>
-            <MenuItem onClick={(event)=>this.handleMenuItemSelect(event,index)} selected={index === this.state.menuSelectedIndex} >
+          
+            <MenuItem key={pvs[i].pvname.toString()+i} onClick={(event)=>this.handleMenuItemSelect(event,index)} selected={index === this.state.menuSelectedIndex} >
               <ListItemIcon>
                 <React.Fragment>
                   {(icon=='connected')&&<LanConnect style={{color:this.props.theme.palette.primary.main}} />}
@@ -162,9 +160,10 @@ class ContextMenu extends React.Component {
                 </React.Fragment>
               </ListItemIcon>
               <Typography variant="inherit">  {pvs[i].pvname}</Typography>
+              <Divider/>
             </MenuItem>
-            <Divider/>
-          </React.Fragment>
+           
+         
 
 
 
@@ -173,8 +172,8 @@ class ContextMenu extends React.Component {
       else {
         listItems.push(
 
-          <React.Fragment key={pvs[i].pvname.toString()}>
-            <MenuItem onClick={(event)=>this.handleMenuItemSelect(event,index)} selected={index === this.state.menuSelectedIndex}>
+          
+            <MenuItem key={pvs[i].pvname.toString()+i} onClick={(event)=>this.handleMenuItemSelect(event,index)} selected={index === this.state.menuSelectedIndex}>
               <ListItemIcon>
                 <React.Fragment>
                 {(icon=='connected')&&<LanConnect style={{color:this.props.theme.palette.primary.main}} />}
@@ -185,7 +184,7 @@ class ContextMenu extends React.Component {
               <Typography variant="inherit">  {pvs[i].pvname}</Typography>
             </MenuItem>
 
-          </React.Fragment>
+          
         )
       }
     }

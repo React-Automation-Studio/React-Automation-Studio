@@ -269,11 +269,16 @@ class ExperimentalMobileDemo1 extends React.Component {
                           pv='pva://$(device):amplitude' 
                           macros={{'$(device)':'testIOC'}} 
                           usePvMinMax={true} 
-                          units={"V"}
+                          usePvUnits={true}
+                          //units={"H"}
                           min={0} 
                           max={500}
-                          prec={3}
-                          usePvLabel={true}  />
+                          //prec={3}
+                          usePvPrecision={true}
+                          usePvLabel={true}  
+                         //debug={true}
+                          />
+                          
                         </Grid>
                       </Grid>
                     </div>}

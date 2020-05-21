@@ -1,22 +1,24 @@
 import React, { useState, useEffect } from 'react'
 import AutomationStudioContext from './AutomationStudioContext';
 import EpicsPV2 from './EpicsPV2'
-const usePV = (props) => {
+const PV = (props) => {
   const [pvs, setPvs] = useState(null)
   const [pv, SetPv] = useState({
-    value: "",
+    value: 0,
     label: "",
     initialized: false,
     contextPVs: [],
     severity:0,
+    units:"",
+    min:0,
+    max:0,
+    prec:0,
   })
   const pvConnection = (pv, props) => {
-   // console.log(pv)
     return pv.includes('pva://') ? EpicsPV2({ ...props, pv }) : undefined
   }
   const pvData = (name) => (pv) => {
     if (props.debug) {
-      console.log('pv', name, pv)
     }
     setPvs(pvs => ({
       ...pvs,
@@ -90,37 +92,58 @@ const usePV = (props) => {
     ) : undefined;
   useEffect(()=>{
     if(props.debug){
-      console.log("use effect usePV render")
+      console.log("use effect PV render")
     }
   
 
     let pv = {};
     if (pvs) {
       let pvKeys = Object.keys(pvs);
-      //console.log(pvKeys)
       pv.value = pvs.data ? pvs.data.value : "";
+      pv.pvName= pvs.data ? pvs.data.pvname : "";
       pv.severity = pvs.data ? pvs.data.severity : "";
       pv.label = props.usePvLabel ? (pvs.label ? pvs.label.value : "") : props.label;
       pv.max=props.usePvMinMax?(props.useEpicsMetaData?(pvs.data?pvs.data.metaData.upper_disp_limit:""):pvs.max?pvs.max.value:""):props.max;
       pv.min=props.usePvMinMax?(props.useEpicsMetaData?(pvs.data?pvs.data.metaData.lower_disp_limit:""):pvs.min?pvs.min.value:""):props.min;
       pv.prec=props.usePvPrecision?(props.useEpicsMetaData?(pvs.data?pvs.data.metaData.precision:""):pvs.prec?pvs.prec.value:""):props.prec;
+      pv.units=props.usePvUnits?(props.useEpicsMetaData?(pvs.data?pvs.data.metaData.units:""):pvs.units?pvs.units.value:""):props.units;
       let initialized = true;
       let pvArray = [];
       for (let index in pvKeys) {
-        //console.log(index)
         initialized = initialized && pvs[pvKeys[index]].initialized;
-        pvArray.push({ pvname: pvs[pvKeys[index]].pvname, initialized: pvs[pvKeys[index]].initialized });
+        if(pvs[pvKeys[index]].pvname){
+          pvArray.push({ pvname: pvs[pvKeys[index]].pvname, initialized: pvs[pvKeys[index]].initialized });
+        }
       }
       pv.initialized = initialized;
       pv.contextPVs = pvArray;
+      
       SetPv(pv);
+    
     }
+
+    
     
   },[pvs])
-  console.log(pv)
+  useEffect(()=>{
+    props.pvData(pv)
+  },[pv])
+  if (props.debug){
+    console.log( props.name," Debug:","PV Render States: ","pvs:",pvs)
+    console.log( props.name," Debug:","PV Render pv:",pv)
+  }
   return (
-    pv
+    <React.Fragment>
+      {dataPv}
+      {maxPv}
+      {minPv}
+      {labelPv}
+      {unitsPv}
+      {precisionPv}
+      {alarmPv}
+    </React.Fragment>
+  
   )
 
 }
-export default usePV
+export default PV

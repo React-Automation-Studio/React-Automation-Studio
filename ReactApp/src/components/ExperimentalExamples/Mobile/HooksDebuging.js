@@ -67,7 +67,7 @@ import { Link } from 'react-router-dom'
 import StyledIconIndicator from '../../ExperimentalBaseComponents/StyledIconIndicator';
 import Home from '@material-ui/icons/Home';
 import lime from '@material-ui/core/colors/lime';
-import HooksWidget from '../../SystemComponents/Widgets/HooksWidget';
+//import HooksWidget from '../../SystemComponents/Widgets/HooksWidget';
 function TabContainer(props) {
   return (
     <Typography component="div" style={{ padding: 0, flexGrow: 1 }}>
@@ -188,7 +188,7 @@ class ExperimentalMobileDemo1 extends React.Component {
              // debug={true}
             />
           </Grid> */}
-          <Grid item xs={12}>
+          <Grid item xs={6}>
             <TextInput
               pv='pva://$(device):amplitude'
               macros={{ '$(device)': 'testIOC' }}
@@ -197,30 +197,64 @@ class ExperimentalMobileDemo1 extends React.Component {
               usePvLabel={true}
               usePvMinMax={true}
               //usePvPrecision={true}
-              prec={1}
+              prec={3}
               //max={500}
               //min={100}
               alarmSensitive={true}
-              debug={true}
+              //debug={true}
               //imediateOutputChange={true}
               useEpicsMetaData={true}
             />
           </Grid>
-          <Grid item xs={12}  >
-                          <SimpleSlider 
-                          pv='pva://$(device):amplitude' 
-                          macros={{'$(device)':'testIOC'}} 
-                          usePvMinMax={true} 
-                          units={"V"}
-                          min={0} 
-                          max={500}
-                          prec={3}
-                          usePvLabel={true} 
-                          useEpicsMetaData={true} 
-                          debug={true}
-                          />
-                          
-                        </Grid>
+          <Grid item xs={6}>
+            <TextOutput
+              pv='pva://$(device):amplitude'
+              macros={{ '$(device)': 'testIOC' }}
+              label={'edas'}
+              //usePvUnits={true}
+              units={'h'}
+              //usePvLabel={true}
+              usePvMinMax={true}
+              //usePvPrecision={true}
+              prec={1}
+              //max={500}
+              //min={100}
+              alarmSensitive={true}
+              //debug={true}
+              //imediateOutputChange={true}
+              useEpicsMetaData={true}
+            />
+          </Grid>
+          <Grid item xs={6}  >
+            <SimpleSlider
+              pv='pva://$(device):amplitude'
+              macros={{ '$(device)': 'testIOC' }}
+              usePvMinMax={true}
+              units={"V"}
+              min={0}
+              max={500}
+              prec={3}
+              //usePvLabel={true} 
+              useEpicsMetaData={true}
+            // debug={true}
+            />
+
+          </Grid>
+          <Grid item xs={6}  >
+            <SimpleSlider
+              pv='pva://$(device):amplitude'
+              macros={{ '$(device)': 'testIOC' }}
+              // usePvMinMax={true} 
+              units={"V"}
+              min={2000}
+              max={5000}
+              prec={3}
+              //usePvLabel={true} 
+              useEpicsMetaData={true}
+            //debug={true}
+            />
+
+          </Grid>
           {/* <Grid item xs={12}>
             <HooksWidget
               pv='pva://$(device):BO1'

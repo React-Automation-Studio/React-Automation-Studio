@@ -83,13 +83,21 @@ const styles = (theme) => ({
 
 function TextOutputComponent(props) {
   const { classes } = props;
+  
+
   let inputProps = {
     classes: {
       root: classes.cssOutlinedInput,
       focused: classes.cssFocused,
       input: classes.input,
       notchedOutline: classes.notchedOutline,
+     
     },
+    endAdornment: (
+      <InputAdornment position="end">
+        {props.units} {props.children}
+      </InputAdornment>
+    ),
     readOnly: true,
   };
   let inputLabelProps = {
@@ -125,11 +133,11 @@ function TextOutputComponent(props) {
             key={props.pvName}
             //aria-owns={state.openContextMenu ? 'menu-list-grow' : undefined}
             aria-haspopup="true"
-            value={props.value}
+            label={props.disabled?props.disconnectedIcon:props.label}
             fullWidth={true}
             onFocus={props.handleFocus}
             onBlur={props.handleBlur}
-            label={props.label}
+            value={props.disabled?props.pvName:props.value}
             margin="none"
             variant="outlined"
             disabled={props.disabled}

@@ -31,7 +31,15 @@ const styles = (theme) => ({
 const TextInputComponent=(props)=> {
 
  
-
+  const handleChange=(event)=>{
+    let value=event.target.value;
+    props.handleChange(value);
+  }
+  const handleCatchReturn=(event)=> {
+    if (event.key === "Enter" ) {
+      props.handleCommitChange();
+    }
+  }
 
 
 
@@ -75,7 +83,7 @@ const TextInputComponent=(props)=> {
     inputProps = { readOnly: true };
   }
 
-  console.log(value)
+  
   return (
     <TextField
       className={textFieldClassName}
@@ -83,16 +91,16 @@ const TextInputComponent=(props)=> {
       key={props.pvName}
       //aria-owns={this.state.openContextMenu ? 'menu-list-grow' : undefined}
       aria-haspopup="true"
-      value={value}
-      onKeyPress={props.handleCatchReturn}
+      value={props.disabled?props.pvName:value}
+      onKeyPress={handleCatchReturn}
       onFocus={props.handleFocus}
       onBlur={props.handleBlur}
-      onChange={props.handleChange}
-      label={props.label}
+      onChange={handleChange}
+      label={props.disabled?props.disconnectedIcon:props.label}
       fullWidth={true}
       margin="none"
       variant={props.variant}
-      //disabled={props.disabled}
+      disabled={props.disabled}
       InputProps={inputProps}
     />
   );

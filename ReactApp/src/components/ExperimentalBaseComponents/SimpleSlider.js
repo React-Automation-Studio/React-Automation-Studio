@@ -47,6 +47,7 @@ function SimpleSliderComponent(props) {
    * @param {string} value
    */
   function emitChange(value) {
+    
     props.handleImmediateChange(value)
   }
 
@@ -66,20 +67,20 @@ function SimpleSliderComponent(props) {
   let content, marks;
   if (props.initialized) {
     content = (
-      <Typography className={props.classes.rangeLabel} id="subtitle2">
+      <Typography className={props.classes.rangeLabel}>
         {props.label} {props.value} {props.units}
       </Typography>
     );
   } else {
     content = (
-      <Typography className={props.classes.rangeLabel} id="subtitle2">
-        {props.label}
+      <Typography >
+        {props.disconnectedIcon}{" "+props.pvName}
       </Typography>
     );
   }
   let min = props.min !== undefined ? props.min : 0;
   let max = props.max !== undefined ? props.max : 100;
-
+  let units=props.units?props.units:""
   if (props.marks !== undefined) {
     marks = props.marks;
   } else {
@@ -90,7 +91,7 @@ function SimpleSliderComponent(props) {
 
           min +
           " " +
-          props.units,
+          units,
       },
       {
         value: max,
@@ -98,20 +99,20 @@ function SimpleSliderComponent(props) {
 
           max +
           " " +
-          props.units,
+         units,
       },
     ];
   }
-  console.log("value", props.value,"min",props.min,"max", props.max)
+  
   return (
     <div className={props.classes.sliderDiv}>
       {content}
       <Slider
         className={props.classes.slider}
-        key={props.pvName + props.initialized}
+       
         aria-labelledby="label"
         disabled={props.disabled}
-        value={props.initialized?props.value:undefined}
+        value={props.initialized?props.value:0}
         min={props.initialized ? min : undefined}
         max={props.initialized ? max : undefined}
         marks={props.initialized ? marks : undefined}
@@ -138,7 +139,7 @@ function SimpleSliderComponent(props) {
 const SimpleSlider = (props) => {
 
   return (
-    <Widget {...props} component={SimpleSliderComponent} />
+    <Widget  {...props} component={SimpleSliderComponent} name={"SimpleSlider"}/>
   )
 }
 

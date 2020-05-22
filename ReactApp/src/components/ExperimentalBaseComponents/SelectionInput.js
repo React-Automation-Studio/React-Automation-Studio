@@ -3,7 +3,7 @@ import { withStyles } from "@material-ui/core/styles";
 import { InputAdornment, MenuItem, TextField } from "@material-ui/core";
 import PropTypes from 'prop-types';
 
-import GenericWidget from "../SystemComponents/Widgets/GenericWidget";
+import Widget from "../SystemComponents/Widgets/Widget";
 
 const styles = (theme) => ({
   root: {
@@ -22,27 +22,21 @@ const SelectionInputComponent = (props) => {
 
   function handleChange(event) {
     let value = event.target.value;
-    props.onUpdateWidgetState({
-      value: value,
-      outputValue: value,
-      newValueTrigger: 1,
-    });
+    props.handleImmediateChange(value);
   }
 
-
-  //  console.log("props.useStringValue",props.useStringValue)
-  //  console.log("props.enumStrs",props.enumStrs)
-  //  console.log("props.value",props.value)
+  
   let inputProps;
-  let stringValues = props.enumStrs.map((item, idx) => (
-    <MenuItem
-      key={item.toString()}
-      value={props.useStringValue ? item : idx}
-    >
-      {item}
-    </MenuItem>
-  ));
-  if (props.connection) {
+  let stringValues; 
+  if (props.initialized) {
+    stringValues= props.enumStrs.map((item, idx) => (
+      <MenuItem
+        key={item.toString()}
+        value={props.useStringValue ? item : idx}
+      >
+        {item}
+      </MenuItem>
+    ));
     inputProps = {
       endAdornment: (
         <InputAdornment
@@ -52,20 +46,40 @@ const SelectionInputComponent = (props) => {
           {props.units} {props.children}
         </InputAdornment>
       ),
+      readOnly:props.readOnly,
+      
     };
   }
+  else{
+    
+    
+    inputProps = {
+      endAdornment: (
+        <InputAdornment
+          style={{ marginRight: props.theme.spacing(1) }}
+          position="end"
+        >
+          {props.units} {props.children}
+        </InputAdornment>
+      ),
+      readOnly:props.readOnly,
+      
+    };
+    stringValues=props.pvName
+  }
+  
+
   return (
     <TextField
       key={props.pvName}
       className={props.classes.TextField}
-      select
+      select={props.initialized}
       disabled={props.disabled}
-      key={props.pvName}
-      value={props.value}
+      value={props.disabled?stringValues:props.value}
       onFocus={props.onUpdateWidgetFocus}
       onBlur={props.onUpdateWidgetBlur}
       onChange={handleChange}
-      label={props.label}
+      label={props.disabled?props.disconnectedIcon:props.label}
       margin={props.margin}
       variant={props.variant}
       InputProps={inputProps}
@@ -91,7 +105,7 @@ const SelectionInputComponent = (props) => {
 
 const SelectionInput = (props) => {
   return (
-    <GenericWidget {...props} useStringValue={true} component={SelectionInputComponent}/>
+    <Widget {...props} useStringValue={true} component={SelectionInputComponent}/>
   )
 }
 

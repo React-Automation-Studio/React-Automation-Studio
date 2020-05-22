@@ -26,8 +26,8 @@ ThumbWheel example connection to a SoftChannel EPICS AI pv with custom precision
     pv='pva://$(device):test$(id)'
     macros={{'$(device)':'testIOC','$(id)':'2'}}
     prec_integer={3}
-    prec_decimal={2}
-    prec={2}
+    prec_decimal={5}
+    prec={5}
     />
 
 {/*###############*/}  

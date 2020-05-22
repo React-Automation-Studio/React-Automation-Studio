@@ -11,7 +11,7 @@ const styles = (theme) => ({
     width: 300,
   },
   slider: {
-    padding: "22px 0px ",
+   // padding: "30px 0px ",
     color: "primary",
   },
   rangeLabel: {
@@ -79,7 +79,9 @@ function SimpleSliderComponent(props) {
     );
   }
   let min = props.min !== undefined ? props.min : 0;
+  
   let max = props.max !== undefined ? props.max : 100;
+  
   let units=props.units?props.units:""
   if (props.marks !== undefined) {
     marks = props.marks;
@@ -103,18 +105,18 @@ function SimpleSliderComponent(props) {
       },
     ];
   }
-  
+ //console.log("SimpleSlider",props.value,min,max,marks,props.step)
   return (
-    <div className={props.classes.sliderDiv}>
+    <div  className={props.classes.sliderDiv}>
       {content}
       <Slider
         className={props.classes.slider}
-       
+        
         aria-labelledby="label"
-        disabled={props.disabled}
-        value={props.initialized?props.value:0}
-        min={props.initialized ? min : undefined}
-        max={props.initialized ? max : undefined}
+        disabled={props.disabled||props.readOnly}
+        value={props.initialized?parseFloat(props.value):0}
+        min={props.initialized ?parseFloat(min) : undefined}
+        max={props.initialized ?parseFloat(max) : undefined}
         marks={props.initialized ? marks : undefined}
         valueLabelDisplay={props.showThumbValue ? "on" : "off"}
         step={props.step !== undefined ? props.step : undefined}

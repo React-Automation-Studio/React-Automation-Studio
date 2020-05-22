@@ -3,7 +3,7 @@ import { withStyles } from "@material-ui/core/styles";
 import { Button, FormControlLabel } from "@material-ui/core";
 import PropTypes from "prop-types";
 
-import GenericWidget from "../SystemComponents/Widgets/GenericWidget";
+import Widget from "../SystemComponents/Widgets/Widget";
 const styles = (theme) => ({
   root: {
     display: "flex",
@@ -46,11 +46,7 @@ const ToggleButtonComponent = (props) => {
       console.log("turnoff");
     }
     setclicked(false);
-    props.onUpdateWidgetState({
-      value: 0,
-      outputValue: 0,
-      newValueTrigger: 1,
-    });
+    props.handleImmediateChange(0);
   }
   const handleMouseUp = () => {
     if (props.debug) {
@@ -59,12 +55,8 @@ const ToggleButtonComponent = (props) => {
     setTimeout(turnOff, 100);
   }
   const handleButtonClick = () => {
-    let value = props.value === 0 ? 1 : 0;
-    props.onUpdateWidgetState({
-      value: value,
-      outputValue: value,
-      newValueTrigger: 1,
-    });
+    let value = props.value == 0 ? 1 : 0;
+    props.handleImmediateChange(value);
     window.navigator.vibrate(1);
   }
   const handleMouseDown = () => {
@@ -73,11 +65,7 @@ const ToggleButtonComponent = (props) => {
     }
 
     setclicked(false);
-    props.onUpdateWidgetState({
-      value: 1,
-      outputValue: 1,
-      newValueTrigger: 1,
-    });
+    props.handleImmediateChange(1);
   }
   const handlePointerLeave = () => {
     if (props.debug) {
@@ -91,25 +79,33 @@ const ToggleButtonComponent = (props) => {
   const { classes } = props;
   const { value } = props;
   let momentary = props.momentary !== undefined ? props.momentary : false;
+  let text;
+  if (props.initialized){
+    text=props.enumStrs[value == 1 ? value : 0]
+  }
+  else{
+    text="Disconnected";
+  }
   return (
     <FormControlLabel
       key={props.pvName}
       className={classes.FormControl}
-      disabled={props.disabled}
-      label={props.label}
+      disabled={props.disabled||props.ReadOnly}
+      label={props.initialized?props.label:<span>{props.disconnectedIcon}{" "+props.pvName}</span>}
       labelPlacement={props.labelPlacement}
       control={
         <Button
           className={classes.Button}
           fullWidth={true}
           variant="contained"
-          color={value === 1 ? props.onColor : props.offColor}
+          disabled={props.disabled||props.readOnly}
+          color={value == 1 ? props.onColor : props.offColor}
           onClick={momentary ? undefined : handleButtonClick}
           onPointerUp={momentary ? handleMouseUp : undefined}
           onPointerDown={momentary ? handleMouseDown : undefined}
           onPointerLeave={momentary ? handlePointerLeave : undefined}
-        >
-          {props.enumStrs[value === 1 ? value : 0]}
+        > 
+          {text}
         </Button>
       }
     />
@@ -118,7 +114,7 @@ const ToggleButtonComponent = (props) => {
 const ToggleButton = (props) => {
 
   return (
-    <GenericWidget {...props} component={ToggleButtonComponent} />
+    <Widget {...props} component={ToggleButtonComponent} />
 
   )
 }
@@ -161,8 +157,8 @@ ToggleButton.defaultProps = {
 
   debug: false,
   color: 'primary',
-  labelPlacement: 'end',
-  usePvLabel: false
+  labelPlacement: 'top',
+  usePvLabel: false,
 };
 
 

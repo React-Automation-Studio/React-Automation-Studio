@@ -78,6 +78,7 @@ const TextInputComponent=(props)=> {
           {props.units} {props.children}
         </InputAdornment>
       ),
+      readOnly:props.readOnly
     };
   } else {
     inputProps = { readOnly: true };
@@ -102,6 +103,7 @@ const TextInputComponent=(props)=> {
       variant={props.variant}
       disabled={props.disabled}
       InputProps={inputProps}
+      
     />
   );
 }

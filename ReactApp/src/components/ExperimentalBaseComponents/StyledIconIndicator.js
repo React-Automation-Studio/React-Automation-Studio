@@ -3,7 +3,7 @@ import { withStyles } from "@material-ui/core/styles";
 import { FormControlLabel, SvgIcon } from "@material-ui/core";
 import { Lens } from "@material-ui/icons";
 import PropTypes from 'prop-types';
-import GenericWidget from "../SystemComponents/Widgets/GenericWidget";
+import Widget from "../SystemComponents/Widgets/Widget";
 
 const styles = (theme) => ({
   root: {
@@ -85,7 +85,7 @@ function StyledIconIndicatorComponent(props) {
       key={props.pvName}
       className={props.classes.FormControl}
       disabled={props.disabled}
-      label={props.label}
+      label={props.initialized?props.label:<span>{props.disconnectedIcon}{" "+props.pvName}</span>}
       labelPlacement={props.labelPlacement}
       control={
         <SvgIcon size="small" style={iconStyle} >
@@ -110,7 +110,7 @@ function StyledIconIndicatorComponent(props) {
 const StyledIconIndicator = (props) => {
 
   return (
-    <GenericWidget {...props} component={StyledIconIndicatorComponent}  />
+    <Widget {...props} component={StyledIconIndicatorComponent}  />
   )
 }
 

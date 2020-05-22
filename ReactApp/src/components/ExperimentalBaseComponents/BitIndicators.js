@@ -3,7 +3,7 @@ import { withStyles } from "@material-ui/core/styles";
 import { Grid, FormControlLabel, SvgIcon } from "@material-ui/core";
 import { Lens } from "@material-ui/icons";
 import PropTypes from "prop-types";
-import GenericWidget from "../SystemComponents/Widgets/GenericWidget";
+import Widget from "../SystemComponents/Widgets/Widget";
 
 const styles = (theme) => ({
   root: {
@@ -70,7 +70,7 @@ const BitIndicatorsComponent = (props) => {
 
   for (let n = 0; n < props.numberOfBits; n++) {
     bitArray.push(
-      props.connection ? props.value & Math.pow(2, n) : 0
+      props.initialized ? props.value & Math.pow(2, n) : 0
     );
     bitLabels.push(
       props.bitLabels === undefined
@@ -86,11 +86,7 @@ const BitIndicatorsComponent = (props) => {
   }
 
   let bits = bitArray.map((value, index) => {
-    let color = props.disabled
-      ? "disabled"
-      : value !== 0
-        ? onColor
-        : offColor;
+    let color = props.disabled ? props.theme.palette.grey[50]: value != 0 ? onColor     : offColor;
     return (
       <Grid
         item
@@ -124,7 +120,7 @@ const BitIndicatorsComponent = (props) => {
       direction={props.horizontal ? "row" : "column"}
     >
       <Grid key={props.label} item xs={12}>
-        {props.label}
+      {props.initialized?props.label:<span>{props.disconnectedIcon}{" "+props.pvName}</span>}
       </Grid>
       {bits}
     </Grid>
@@ -145,7 +141,7 @@ const BitIndicatorsComponent = (props) => {
  */
 const BitIndicators = (props) => {
   return (
-    <GenericWidget {...props} component={BitIndicatorsComponent} />
+    <Widget {...props} component={BitIndicatorsComponent} />
   )
 }
 
@@ -158,7 +154,7 @@ BitIndicators.propTypes = {
 
   /** local variable intialization value*/
   intialLocalVariableValue: PropTypes.string,
-  /** If defined, then the DataConnection debugging information will be displayed*/
+  /** If defined, then the Datainitialized debugging information will be displayed*/
   debug: PropTypes.bool,
   /** label placement*/
   labelPlacement: PropTypes.oneOf(['start', 'top', 'bottom', 'end']),

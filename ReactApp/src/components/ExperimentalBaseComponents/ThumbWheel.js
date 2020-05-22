@@ -3,7 +3,7 @@ import { withStyles } from "@material-ui/core/styles";
 import { Button, FormControlLabel } from "@material-ui/core";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import PropTypes from "prop-types";
-import GenericWidget from "../SystemComponents/Widgets/GenericWidget";
+import Widget from "../SystemComponents/Widgets/Widget";
 
 const styles = (theme) => ({
   root: {
@@ -24,13 +24,9 @@ const styles = (theme) => ({
 const ThumbWheelComponent = (props) => {
 
   function handleButtonClick(incrementValue) {
-    if (props.connection) {
+    if (props.initialized) {
       let value = parseFloat(props.value) + parseFloat(incrementValue);
-      props.onUpdateWidgetState({
-        checkValue: true,
-        value: value,
-        outputValue: value,
-      });
+      props.handleImmediateChange(value);;
       window.navigator.vibrate(1);
     }
   }
@@ -71,7 +67,7 @@ const ThumbWheelWidget = (props) => {
     <FormControlLabel
       key={props.pvName}
       className={props.classes.Button}
-      disabled={props.disabled}
+      disabled={props.disabled||props.readOnly}
       control={
         <div
           style={{
@@ -102,7 +98,7 @@ const ThumbWheelWidget = (props) => {
           ))}
         </div>
       }
-      label={props.label}
+      label={props.initialized?props.label:<span>{props.disconnectedIcon}{" "+props.pvName}</span>}
       labelPlacement={props.labelPlacement}
     />
   );
@@ -117,7 +113,7 @@ const SingleThumbWheelWidget = (props) => {
     <Button
       key={(props.up ? "top" : "bottom") + "rowbuttons" + props.index}
       className={props.classes.Button}
-      disabled={props.disabled}
+      disabled={props.disabled||props.readOnly}
       size={props.buttonSize !== undefined ? props.buttonSize : "small"}
       variant="contained"
       color="primary"
@@ -140,7 +136,7 @@ const SingleThumbWheelWidget = (props) => {
  */
 const ThumbWheel = (props) => {
   return (
-    <GenericWidget {...props} component={ThumbWheelComponent} />
+    <Widget {...props} component={ThumbWheelComponent} />
   )
 }
 

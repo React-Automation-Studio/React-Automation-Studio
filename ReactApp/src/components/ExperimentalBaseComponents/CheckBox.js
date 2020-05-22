@@ -1,7 +1,7 @@
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import { Checkbox as MuiCheckBox, FormControlLabel } from "@material-ui/core";
-import GenericWidget from "../SystemComponents/Widgets/GenericWidget";
+import Widget from "../SystemComponents/Widgets/Widget";
 import PropTypes from 'prop-types';
 
 const styles = (theme) => ({
@@ -32,10 +32,7 @@ const CheckBoxComponent = (props) => {
    */
   const handleButtonChange=(event)=> {
     let value = event.target.checked ? 1 : 0;
-    props.onUpdateWidgetState({
-      value: value,
-      outputValue: value,
-    });
+    props.handleImmediateChange(value);
   }
 
 
@@ -43,8 +40,8 @@ const CheckBoxComponent = (props) => {
     <FormControlLabel
       key={props.pvName}
       className={props.classes.FormControl}
-      disabled={props.disabled}
-      label={props.label}
+      disabled={props.disabled||props.readOnly}
+      label={props.initialized?props.label:<span>{props.disconnectedIcon}{" "+props.pvName}</span>}
       labelPlacement={props.labelPlacement}
       control={
         <MuiCheckBox
@@ -60,7 +57,7 @@ const CheckBoxComponent = (props) => {
 
 const CheckBox = (props) => {
   return (
-    <GenericWidget {...props} component={CheckBoxComponent}/>
+    <Widget {...props} component={CheckBoxComponent}/>
 
   )
 }

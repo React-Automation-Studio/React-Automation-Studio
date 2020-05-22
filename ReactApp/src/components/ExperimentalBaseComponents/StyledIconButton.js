@@ -2,7 +2,7 @@ import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import { IconButton, FormControlLabel } from "@material-ui/core";
 import { Lens } from "@material-ui/icons";
-import GenericWidget from "../SystemComponents/Widgets/GenericWidget";
+import Widget from "../SystemComponents/Widgets/Widget";
 import PropTypes from 'prop-types';
 const styles = (theme) => ({
   root: {
@@ -26,12 +26,9 @@ const StyledIconButtonComponent=(props)=> {
    * Write in the PV the oppisite value of the actual one.
    */
   const handleButtonClick=()=> {
-    let value = props.value === 0 ? 1 : 0;
-    props.onUpdateWidgetState({
-      value: value,
-      outputValue: value,
-      newValueTrigger: 1,
-    });
+    let value = props.value == 0 ? 1 : 0;
+    //console.log(props.value,value)
+    props.handleImmediateChange(value);
   }
 
  
@@ -39,14 +36,14 @@ const StyledIconButtonComponent=(props)=> {
       <FormControlLabel
         key={props.pvName}
         className={props.classes.FormControl}
-        disabled={props.disabled}
-        label={props.label}
+        disabled={props.disabled||props.readOnly}
+        label={props.initialized?props.label:<span>{props.disconnectedIcon}{" "+props.pvName}</span>}
         labelPlacement={props.labelPosition}
         control={
           <IconButton
             size="small"
             color={
-              props.value === 1 ? props.onColor : props.offColor
+              props.value == 1 ? props.onColor : props.offColor
             }
             onClick={handleButtonClick}
           >
@@ -71,7 +68,7 @@ const StyledIconButtonComponent=(props)=> {
  */
 const StyledIconButton =(props)=>{
     return (
-      <GenericWidget {...props} component={StyledIconButtonComponent}/>
+      <Widget {...props} component={StyledIconButtonComponent}/>
       
     )
   }

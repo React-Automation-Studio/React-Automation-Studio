@@ -8,11 +8,13 @@ const PV = (props) => {
     label: "",
     initialized: false,
     contextPVs: [],
+    metadata:{},
     severity:0,
     units:"",
     min:0,
     max:0,
     prec:0,
+    readOnly:true,
   })
   const pvConnection = (pv, props) => {
     return pv.includes('pva://') ? EpicsPV2({ ...props, pv }) : undefined
@@ -51,7 +53,7 @@ const PV = (props) => {
       {
         macros: props.macros,
         debug: props.debug,
-        pvData: pvData('max')
+        pvData: pvData('min')
       }
     ) : undefined;
   let labelPv = props.usePvLabel
@@ -102,22 +104,30 @@ const PV = (props) => {
       pv.value = pvs.data ? pvs.data.value : "";
       pv.pvName= pvs.data ? pvs.data.pvname : "";
       pv.severity = pvs.data ? pvs.data.severity : "";
+      pv.metadata = pvs.data ? pvs.data.metadata : {};
+      pv.enum_strs = pvs.data ? pvs.data.metadata.enum_strs : [];
       pv.label = props.usePvLabel ? (pvs.label ? pvs.label.value : "") : props.label;
-      pv.max=props.usePvMinMax?(props.useEpicsMetaData?(pvs.data?pvs.data.metaData.upper_disp_limit:""):pvs.max?pvs.max.value:""):props.max;
-      pv.min=props.usePvMinMax?(props.useEpicsMetaData?(pvs.data?pvs.data.metaData.lower_disp_limit:""):pvs.min?pvs.min.value:""):props.min;
-      pv.prec=props.usePvPrecision?(props.useEpicsMetaData?(pvs.data?pvs.data.metaData.precision:""):pvs.prec?pvs.prec.value:""):props.prec;
-      pv.units=props.usePvUnits?(props.useEpicsMetaData?(pvs.data?pvs.data.metaData.units:""):pvs.units?pvs.units.value:""):props.units;
+      pv.max=props.usePvMinMax?(props.useEpicsMetaData?(pvs.data?pvs.data.metadata.upper_disp_limit:""):pvs.max?pvs.max.value:""):props.max;
+      pv.min=props.usePvMinMax?(props.useEpicsMetaData?(pvs.data?pvs.data.metadata.lower_disp_limit:""):pvs.min?pvs.min.value:""):props.min;
+      pv.prec=props.usePvPrecision?(props.useEpicsMetaData?(pvs.data?pvs.data.metadata.precision:""):pvs.precision?pvs.precision.value:""):props.prec;
+      pv.units=props.usePvUnits?(props.useEpicsMetaData?(pvs.data?pvs.data.metadata.units:""):pvs.units?pvs.units.value:""):props.units;
       let initialized = true;
       let pvArray = [];
       for (let index in pvKeys) {
         initialized = initialized && pvs[pvKeys[index]].initialized;
         if(pvs[pvKeys[index]].pvname){
-          pvArray.push({ pvname: pvs[pvKeys[index]].pvname, initialized: pvs[pvKeys[index]].initialized });
+          pvArray.push(pvs[pvKeys[index]]);
         }
       }
       pv.initialized = initialized;
+      if (pv.initialized){
+        pv.readOnly=!pv.metadata.write_access;
+      }
+      else{
+        pv.readOnly=true;
+      }
       pv.contextPVs = pvArray;
-      
+     // console.log(pv)
       SetPv(pv);
     
     }

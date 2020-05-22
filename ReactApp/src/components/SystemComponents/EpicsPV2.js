@@ -17,7 +17,7 @@ const useEpicsPV2 = (props) => {
       value: 0,
       severity: undefined,
       timestamp: undefined,
-      metaData: { intialized: false, pvname: "", value: "", char_value: "", alarmColor: "", lower_disp_limit: "", upper_disp_limit: "", lower_warning_limit: "", upper_warning_limit: "", units: "", precision: 0 }
+      metadata: { intialized: false, pvname: "", value: "", char_value: "", alarmColor: "", lower_disp_limit: "", upper_disp_limit: "", lower_warning_limit: "", upper_warning_limit: "", units: "", precision: 0,enum_strs:[] }
     }
     
     return pv;
@@ -57,7 +57,7 @@ const useEpicsPV2 = (props) => {
               severity: msg.severity,
               timestamp: msg.timestamp,
               initialized:true,
-              metaData:{
+              metadata:{
                 pvname: msg.pvname, value: msg.value, char_value: msg.char_value, alarmColor: "", enum_strs: msg.enum_strs, lower_disp_limit: msg.lower_disp_limit, upper_disp_limit: msg.upper_disp_limit,
                 lower_warning_limit: msg.lower_warning_limit, upper_warning_limit: msg.upper_warning_limit, lower_ctrl_limit: msg.lower_ctrl_limit, upper_ctrl_limit: msg.upper_ctrl_limit, units: msg.units, precision: parseInt(msg.precision), severity: msg.severity, write_access: msg.write_access, read_access: msg.read_access, host: msg.host
               },
@@ -153,7 +153,7 @@ const EpicsPV2=(props)=>{
     props.pvData(pv);
     
   },[pv])
-
+  
   return(
     <React.Fragment>
       {props.debug&&<Typography>

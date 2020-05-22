@@ -14,13 +14,14 @@ const styles = (theme) => ({
 });
 const Widget = (props) => {
   const [value, setValue] = useState(0);
-  const [initialized, setInitalized] = useState(0);
+  const [initialized, setInitalized] = useState(false);
   const [immediateValue, setImmediateValue] = useState(null);
   const [commitChange, SetCommitChange] = useState(false);
   const [newValueTrigger, setNewValueTrigger] = useState(0);
   const [outputValue, setOutputValue] = useState(null);
   const [focus, setFocus] = useState(false);
-
+  const [readOnly, setReadOnly] = useState(true);
+  const [enumStrings, setEnumStrings] = useState([]);
   const [alarmSeverity, setAlarmSeverity] = useState(0);
   const [min, setMin] = useState(0);
   const [prec, setPrec] = useState(0);
@@ -32,15 +33,22 @@ const Widget = (props) => {
   const [pv, setPv] = useState({
     value: 0,
     label: "",
-    pvName:"",
+    pvName: "",
     initialized: false,
     contextPVs: [],
+    metadata: {},
+    readOnly: true,
     severity: 0,
-    units:"",
+    enum_strs: [],
+    units: "",
   });
-  useEffect(()=>{
-    setInitalized(pv.initialized)
-  },[pv.initialized])
+
+  useEffect(() => {
+    setReadOnly(pv.readOnly || props.readOnly)
+  }, [pv.readOnly, props.readOnly])
+
+
+
   useEffect(() => {
     if (props.usePvLabel) {
       setLabel(pv.label)
@@ -53,10 +61,10 @@ const Widget = (props) => {
 
   useEffect(() => {
     if (props.usePvUnits) {
-      if (pv.units){
-      setUnits(pv.units)
+      if (pv.units) {
+        setUnits(pv.units)
       }
-      else{
+      else {
         setUnits("")
       }
     }
@@ -64,7 +72,7 @@ const Widget = (props) => {
       setUnits(props.units)
     }
   }, [props.units, pv.units])
-  
+
   useEffect(() => {
     if (props.usePvPrecision) {
       setPrec(pv.prec)
@@ -90,7 +98,7 @@ const Widget = (props) => {
     if (!focus) {
       setValue(checkPrecision(pv.value, prec))
     }
-  }, [focus, pv.value])
+  }, [focus, pv.value, prec])
 
   useEffect(() => {
     setAlarmSeverity(pv.severity)
@@ -98,11 +106,13 @@ const Widget = (props) => {
 
 
   useEffect(() => {
-    if(immediateValue){
-    let tempvalue = checkPrecision(isInsideLimits(immediateValue, min, max), prec);
-    setValue(tempvalue);
-    setOutputValue(tempvalue);
-    setNewValueTrigger(newValueTrigger + 1);
+    if (immediateValue !== null) {
+      let tempvalue = checkPrecision(isInsideLimits(immediateValue, min, max), prec);
+      setValue(tempvalue);
+      setOutputValue(tempvalue);
+      //console.log(immediateValue,tempvalue)
+      setNewValueTrigger(newValueTrigger + 1);
+      setImmediateValue(null);
     }
   }, [immediateValue, min, max, prec])
 
@@ -115,7 +125,17 @@ const Widget = (props) => {
       SetCommitChange(false)
     }
   }, [commitChange, min, max, prec])
-
+  useEffect(() => {
+    if (props.custom_selection_strings) {
+      setEnumStrings(props.custom_selection_strings)
+    }
+    else {
+      setEnumStrings(pv.enum_strs)
+    }
+  }, [props.custom_selection_strings, pv.enum_strs])
+  useEffect(() => {
+    setInitalized(pv.initialized)
+  }, [pv.initialized])
   const checkPrecision = (value, prec) => {
     if (props.usePvPrecision || props.prec) {
       let precision = parseInt(prec);
@@ -133,7 +153,7 @@ const Widget = (props) => {
     }
   }
   const isInsideLimits = (value, min, max) => {
-   
+
     if (props.min || props.max || props.usePvMinMax) {
 
       let tempValue = parseFloat(value);
@@ -151,9 +171,9 @@ const Widget = (props) => {
 
 
   }
-  
-  
-  
+
+
+
   const handleToggleContextMenu = (event) => {
     event.preventDefault();
     event.stopPropagation();
@@ -161,19 +181,19 @@ const Widget = (props) => {
     setOpenContextMenu(!openContextMenu);
 
   }
-  
+
   const handleContextMenuClose = () => {
     setOpenContextMenu(false);
   }
 
-  
+
   const wrapComponent = (CustomComponent, props) => {
     return <CustomComponent {...props} />;
   }
-  const disabled=!initialized;
-  const disconnectedIcon=()=> {
+  const disabled = !initialized;
+  const disconnectedIcon = () => {
     return (
-      
+
       <LanDisconnect
         fontSize="small"
         style={{
@@ -185,19 +205,21 @@ const Widget = (props) => {
   }
 
 
-  const child = props.component&&wrapComponent(props.component,
+  const child = props.component && wrapComponent(props.component,
     {
       ...props,
       initialized: initialized,
-      pvName:pv.pvName,
+      pvName: pv.pvName,
       value: value,
       min: min,
       max: max,
       label: label,
-      units:units,
-      disabled:disabled,
+      units: units,
+      disabled: disabled,
+      readOnly: readOnly,
       alarmSeverity: alarmSeverity,
-      disconnectedIcon:disconnectedIcon(),
+      enumStrs: enumStrings,
+      disconnectedIcon: disconnectedIcon(),
       handleChange: setValue,
       handleImmediateChange: setImmediateValue,
       handleCommitChange: () => SetCommitChange(true),
@@ -209,9 +231,9 @@ const Widget = (props) => {
     width: "100%",
     height: "100%",
   }
-  if (props.debug){
-    console.log( props.name," Debug:","Widget Render States: ","value:",value,"units:",units)
-    console.log( props.name," Debug:","Widget Render pv:",pv)
+  if (props.debug) {
+    console.log(props.name, " Debug:", "Widget Render States: ", "value:", value, "units:", units)
+    console.log(props.name, " Debug:", "Widget Render pv:", pv)
   }
   return (
     <div
@@ -239,22 +261,22 @@ const Widget = (props) => {
         probeType={props.readOnly ? "readOnly" : undefined}
       />
       {child}
-      <PV 
-        pv= {props.pv}
-        maxPv= {props.maxPv}
-        minPv= {props.minPv}
-        min= {props.min}
-        max= {props.max}
-        usePvMinMax= {props.usePvMinMax}
-        unitsPv= {props.unitsPv}
-        usePvUnits= {props.usePvUnits}
-        alarmPv= {props.alarmPv}
-        labelPv= {props.labelPv}
-        alarmSensitive= {props.alarmSensitive}
-        usePvLabel= {props.usePvLabel}
-        usePvPrecision= {props.usePvPrecision}
-        prec= {props.prec}
-        precPv= {props.precPv}
+      <PV
+        pv={props.pv}
+        maxPv={props.maxPv}
+        minPv={props.minPv}
+        min={props.min}
+        max={props.max}
+        usePvMinMax={props.usePvMinMax}
+        unitsPv={props.unitsPv}
+        usePvUnits={props.usePvUnits}
+        alarmPv={props.alarmPv}
+        labelPv={props.labelPv}
+        alarmSensitive={props.alarmSensitive}
+        usePvLabel={props.usePvLabel}
+        usePvPrecision={props.usePvPrecision}
+        prec={props.prec}
+        precPv={props.precPv}
         useEpicsMetaData={props.useEpicsMetaData}
         macros={props.macros}
         newValueTrigger={newValueTrigger}
@@ -263,9 +285,9 @@ const Widget = (props) => {
         debug={props.debug}
         pvData={setPv}
         name={props.name}
-        
-       />
-       
+
+      />
+
     </div>
   )
 }

@@ -92,7 +92,16 @@ module.exports = {
         content: 'src/docs/widget/widget.md',
         components: 'src/components/SystemComponents/Widgets/GenericWidget.js',
         exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
-        usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
+        usageMode: 'expand', // 'hide' | 'collapse' | 'expand'
+        sections:[
+          {
+            name: 'Dynamic PV fields',
+            content: 'src/docs/widget/dynamicPvFields.md',
+            components: 'src/components/ExperimentalExamples/Mobile/DynamicPvFieldExample.js',
+            exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
+            usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
+          },
+        ]
       },
     ],
     sectionDepth: 2

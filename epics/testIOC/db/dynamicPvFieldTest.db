@@ -1,0 +1,67 @@
+
+record(ao, "$(device):dynamicPvFields")
+{       
+        field(DTYP,"Soft Channel")
+        field(DESC, "initial PV Fields desc")
+        field(EGU, "A")
+        field(HOPR, "10000")
+        field(LOPR, "0")
+        field(HIHI, "8000")
+        field(HIGH, "6000")
+        field(LOW, "4000")
+        field(LOLO, "2000")
+        field(HHSV, "MAJOR")
+        field(HSV, "MINOR")
+        field(LSV, "MINOR")
+        field(LLSV, "MAJOR")
+        field(VAL,"5000")
+        field(PREC,"3")
+        field(PINI,"YES")
+}
+
+record(ao, "$(device):dynamicPvFields:HOPR")
+{       field(DTYP,"Soft Channel")
+        field(DESC, "HOPR variable")
+        field(VAL,"10000")
+        field(HOPR, "100000")
+        field(LOPR, "-100000")
+        field(OUT,"$(device):dynamicPvFields.HOPR PP")
+        field(PINI,"YES")
+}
+record(ao, "$(device):dynamicPvFields:LOPR")
+{       field(DTYP,"Soft Channel")
+        field(DESC, "LOPR variable")
+        field(HOPR, "100000")
+        field(LOPR, "-100000")
+        field(PREC,"0")
+        field(VAL,"0")
+        field(OUT,"$(device):dynamicPvFields.LOPR PP")
+        field(PINI,"YES")
+}
+
+record(stringout, "$(device):dynamicPvFields:EGU")
+{       field(DTYP,"Soft Channel")
+        field(DESC, "UNITS variable")
+        field(VAL,"B")
+        field(OUT,"$(device):dynamicPvFields.EGU PP")
+        field(PINI,"YES")
+}
+
+record(ao, "$(device):dynamicPvFields:PREC")
+{       field(DTYP,"Soft Channel")
+        field(DESC, "PREC variable")
+        field(HOPR, "12")
+        field(LOPR, "0")
+        field(PREC,"0")
+        field(VAL,"0")
+        field(OUT,"$(device):dynamicPvFields.PREC PP")
+        field(PINI,"YES")
+}
+
+record(stringout, "$(device):dynamicPvFields:DESC")
+{       field(DTYP,"Soft Channel")
+        field(DESC, "DESC variable")
+        field(VAL,"initial PV Fields desc")
+        field(OUT,"$(device):dynamicPvFields.DESC PP")
+        field(PINI,"YES")
+}

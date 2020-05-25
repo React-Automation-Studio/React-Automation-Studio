@@ -39,6 +39,7 @@ function TextUpdateComponent(props) {
   const {classes}=props;
   let textFieldClassName;
   let label = props.label !== undefined ? props.label + ": " : "";
+  let units = props.units !== undefined ? props.units + ": " : "";
   let content;
   if (props.initialized) {
     if (props.alarmSensitive==true){
@@ -57,7 +58,7 @@ function TextUpdateComponent(props) {
     }
 
     content = (
-      <span className={textFieldClassName} >{label + props.value + " " + props.units}</span>
+      <span className={textFieldClassName} >{label + props.value + " " + units}</span>
     );
   } else {
     content = props.label;

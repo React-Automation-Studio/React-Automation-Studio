@@ -46,7 +46,7 @@ const ActionButtonComponent=(props)=> {
       key={props.pvName}
       className={props.classes.FormControl}
       disabled={props.disabled}
-      label={props.initialized?props.label:<span>{props.disconnectedIcon}{" "+props.pvName}</span>}
+      label={props.formControlLabel}
       labelPlacement={props.labelPlacement}
       control={
         <Button

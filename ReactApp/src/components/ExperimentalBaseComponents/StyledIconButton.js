@@ -36,8 +36,8 @@ const StyledIconButtonComponent=(props)=> {
       <FormControlLabel
         key={props.pvName}
         className={props.classes.FormControl}
-        disabled={props.disabled||props.readOnly}
-        label={props.initialized?props.label:<span>{props.disconnectedIcon}{" "+props.pvName}</span>}
+        disabled={props.disabled}
+        label={props.formControlLabel}
         labelPlacement={props.labelPosition}
         control={
           <IconButton

@@ -8,25 +8,25 @@ import Typography from '@material-ui/core/Typography';
 import EpicsBinaryOutDebug from '../../GroupedComponents/EpicsBinaryOutDebug';
 import EpicsAnalogOutDebug from '../../GroupedComponents/EpicsAnalogOutDebug';
 import EpicsMbboDebug from '../../GroupedComponents/EpicsMbboDebug';
-import TextUpdate from '../../BaseComponents/TextUpdate';
-import TextInput from '../../BaseComponents/TextInput';
-import TextOutput from '../../BaseComponents/TextOutput';
-import SimpleSlider from '../../BaseComponents/SimpleSlider';
+import TextUpdate from '../../ExperimentalBaseComponents/TextUpdate';
+import TextInput from '../../ExperimentalBaseComponents/TextInput';
+import TextOutput from '../../ExperimentalBaseComponents/TextOutput';
+import SimpleSlider from '../../ExperimentalBaseComponents/SimpleSlider';
 import GraphY from '../../BaseComponents/GraphY';
 
 import Grid from '@material-ui/core/Grid';
 import DataConnection from '../../SystemComponents/DataConnection';
-import SwitchComponent from '../../BaseComponents/SwitchComponent';
+import SwitchComponent from '../../ExperimentalBaseComponents/SwitchComponent';
 import SelectionInput from '../../ExperimentalBaseComponents/SelectionInput';
 import SelectionList from '../../ExperimentalBaseComponents/SelectionList';
 import ToggleButton from '../../ExperimentalBaseComponents/ToggleButton';
 import ActionButton from '../../ExperimentalBaseComponents/ActionButton';
 import RadioButtonGroup from '../../BaseComponents/RadioButtonGroup';
-import RadioButton from '../../BaseComponents/RadioButton';
+import RadioButton from '../../ExperimentalBaseComponents/RadioButton';
 import CheckBox from '../../ExperimentalBaseComponents/CheckBox';
 import ThumbWheel from '../../ExperimentalBaseComponents/ThumbWheel';
 import Gauge from '../../BaseComponents/Gauge';
-import Tank from '../../BaseComponents/Tank';
+import Tank from '../../ExperimentalBaseComponents/Tank';
 import ProgressBar from '../../BaseComponents/ProgressBar';
 import StyledIconIndicator from '../../ExperimentalBaseComponents/StyledIconIndicator';
 import lime from '@material-ui/core/colors/lime';
@@ -111,13 +111,13 @@ class MobileDemo2 extends React.Component {
               <ProgressBar  pv='pva://$(device):test3' macros={{'$(device)':'testIOC'}} units={'V'}  usePvLabel={true} usePrecision={true} prec={3} min={-10000} max={10000} />
             </Grid>
             <Grid item xs={6} sm={3}  md= {3} lg={2} xl={1}>
-                <ProgressBar  pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}   usePvLabel={true} usePrecision={true} prec={3} usePvMinMax={true} alarmSensitive={true}/>
+                <ProgressBar  pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}    usePrecision={true} prec={3} usePvMinMax={true} alarmSensitive={true}/>
             </Grid>
             <Grid item xs={6} sm={3}  md= {3} lg={2} xl={1}>
-              <Tank  pv='pva://$(device):test3' macros={{'$(device)':'testIOC'}} units={'V'}  usePvLabel={true} usePrecision={true} prec={3} min={-10000} max={10000} />
+              <Tank  pv='pva://$(device):test3' macros={{'$(device)':'testIOC'}} units={'V'}   usePrecision={true} prec={3} min={-10000} max={10000} />
             </Grid>
             <Grid item xs={6} sm={3}  md= {3} lg={2} xl={1}>
-                <Tank  pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}   usePvLabel={true} usePrecision={true} prec={3} usePvMinMax={true} alarmSensitive={true}/>
+                <Tank  pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}   usePrecision={true} prec={3} usePvMinMax={true} alarmSensitive={true}/>
             </Grid>
 
             <Grid item xs={6} lg={2}>

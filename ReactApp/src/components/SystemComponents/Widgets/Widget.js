@@ -49,7 +49,10 @@ const Widget = (props) => {
   const [zPvs, setZPvs] = useState([]);
   useEffect(() => {
   let ro=props.readOnly===true;
- 
+  if (props.pv){
+    ro = ro || pv.readOnly;
+  }
+
   if (props.pvs) {
     pvs.map((item) => {
       ro = ro || item.readOnly;
@@ -72,7 +75,7 @@ const Widget = (props) => {
   }
    
     setReadOnly(ro)
-  }, [pv.readOnly, props.readOnly,pvs,xPvs,yPvs,zPvs])
+  }, [pv, props.readOnly,pvs,xPvs,yPvs,zPvs])
 
 
 
@@ -366,6 +369,7 @@ const Widget = (props) => {
       min: min,
       max: max,
       label: label,
+      formControlLabel:initialized?label :<span>{disconnectedIcon()}{" "+pv.pvName}</span>,
       units: units,
       disabled: disabled,
       readOnly: readOnly,

@@ -67,7 +67,7 @@ const ThumbWheelWidget = (props) => {
     <FormControlLabel
       key={props.pvName}
       className={props.classes.Button}
-      disabled={props.disabled||props.readOnly}
+      disabled={props.disabled}
       control={
         <div
           style={{
@@ -98,7 +98,7 @@ const ThumbWheelWidget = (props) => {
           ))}
         </div>
       }
-      label={props.initialized?props.label:<span>{props.disconnectedIcon}{" "+props.pvName}</span>}
+      label={props.formControlLabel}
       labelPlacement={props.labelPlacement}
     />
   );
@@ -113,7 +113,7 @@ const SingleThumbWheelWidget = (props) => {
     <Button
       key={(props.up ? "top" : "bottom") + "rowbuttons" + props.index}
       className={props.classes.Button}
-      disabled={props.disabled||props.readOnly}
+      disabled={props.disabled}
       size={props.buttonSize !== undefined ? props.buttonSize : "small"}
       variant="contained"
       color="primary"

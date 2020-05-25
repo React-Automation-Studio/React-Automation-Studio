@@ -173,7 +173,7 @@ const SelectionListComponent=(props)=> {
           {itemList}
         </List>
       }
-      label={props.initialized?props.label:<span>{props.disconnectedIcon}{" "+props.pvName}</span>}
+      label={props.formControlLabel}
       labelPlacement={props.labelPlacement}
     />
   );

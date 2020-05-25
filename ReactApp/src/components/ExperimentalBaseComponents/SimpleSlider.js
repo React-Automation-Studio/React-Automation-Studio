@@ -106,6 +106,7 @@ function SimpleSliderComponent(props) {
     ];
   }
  //console.log("SimpleSlider",props.value,min,max,marks,props.step)
+ 
   return (
     <div  className={props.classes.sliderDiv}>
       {content}
@@ -113,7 +114,7 @@ function SimpleSliderComponent(props) {
         className={props.classes.slider}
         
         aria-labelledby="label"
-        disabled={props.disabled||props.readOnly}
+        disabled={props.disabled}
         value={props.initialized?parseFloat(props.value):0}
         min={props.initialized ?parseFloat(min) : undefined}
         max={props.initialized ?parseFloat(max) : undefined}

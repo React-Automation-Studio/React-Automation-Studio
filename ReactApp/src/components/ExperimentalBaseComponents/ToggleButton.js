@@ -90,15 +90,15 @@ const ToggleButtonComponent = (props) => {
     <FormControlLabel
       key={props.pvName}
       className={classes.FormControl}
-      disabled={props.disabled||props.ReadOnly}
-      label={props.initialized?props.label:<span>{props.disconnectedIcon}{" "+props.pvName}</span>}
+      disabled={props.disabled}
+      label={props.formControlLabel}
       labelPlacement={props.labelPlacement}
       control={
         <Button
           className={classes.Button}
           fullWidth={true}
           variant="contained"
-          disabled={props.disabled||props.readOnly}
+          disabled={props.disabled}
           color={value == 1 ? props.onColor : props.offColor}
           onClick={momentary ? undefined : handleButtonClick}
           onPointerUp={momentary ? handleMouseUp : undefined}

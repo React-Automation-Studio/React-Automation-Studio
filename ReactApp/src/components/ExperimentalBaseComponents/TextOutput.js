@@ -128,7 +128,7 @@ function TextOutputComponent(props) {
   return (
     
           <TextField
-            className={classes.textFieldClassName}
+            className={textFieldClassName}
            
             key={props.pvName}
             //aria-owns={state.openContextMenu ? 'menu-list-grow' : undefined}
@@ -140,7 +140,7 @@ function TextOutputComponent(props) {
             value={!props.initialized?props.pvName:props.value}
             margin={props.margin}
             variant={props.variant}
-            disabled={props.disabled}
+            //disabled={props.disabled}
             InputLabelProps={inputLabelProps}
             InputProps={inputProps}
           />

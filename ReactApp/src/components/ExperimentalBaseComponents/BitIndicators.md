@@ -14,7 +14,7 @@ BitIndicators local variable example:
   <br/><br/>
   {/*###############*/}  
 
-  <BitIndicators pv='pva://$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}}label='My Label' labelPlacement='Top' bitLabelPlacement='end' onColor='lime' offColor='red'/>
+  <BitIndicators pv='pva://$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}}label='My Label' labelPlacement='top' bitLabelPlacement='end' onColor='lime' offColor='red'/>
 
   {/*###############*/}
 
@@ -38,7 +38,7 @@ BitIndicators with custom icon local variable example:
   <br/><br/>
   {/*###############*/}  
 
-  <BitIndicators  pv='pva://$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}} label='My Label' labelPlacement='Top' bitLabelPlacement='end' onColor='lime' offColor='red'>
+  <BitIndicators  pv='pva://$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}} label='My Label' labelPlacement='top' bitLabelPlacement='end' onColor='lime' offColor='red'>
   <Face/>
   </BitIndicators>
 
@@ -97,7 +97,7 @@ BitIndicators example connection to a SoftChannel EPICS AI pv with example overi
     pv='pva://$(device):test$(id)'
     macros={{'$(device)':'testIOC','$(id)':'2'}}
     label='Byte 1' 
-    labelPlacement='Top' 
+    labelPlacement='top' 
     bitLabels={[]}
     bitLabelPlacement='end' 
     onColor='lime' 
@@ -110,7 +110,7 @@ BitIndicators example connection to a SoftChannel EPICS AI pv with example overi
     pv='pva://$(device):test$(id)'
     macros={{'$(device)':'testIOC','$(id)':'2'}}
     label='Byte 2' 
-    labelPlacement='Top' 
+    labelPlacement='top' 
     bitLabelPlacement='end' 
     onColor='lime' 
     offColor='red'

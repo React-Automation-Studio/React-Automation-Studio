@@ -133,13 +133,13 @@ function TextOutputComponent(props) {
             key={props.pvName}
             //aria-owns={state.openContextMenu ? 'menu-list-grow' : undefined}
             aria-haspopup="true"
-            label={props.disabled?props.disconnectedIcon:props.label}
+            label={!props.initialized?props.disconnectedIcon:props.label}
             fullWidth={true}
             onFocus={props.handleFocus}
             onBlur={props.handleBlur}
-            value={props.disabled?props.pvName:props.value}
-            margin="none"
-            variant="outlined"
+            value={!props.initialized?props.pvName:props.value}
+            margin={props.margin}
+            variant={props.variant}
             disabled={props.disabled}
             InputLabelProps={inputLabelProps}
             InputProps={inputProps}

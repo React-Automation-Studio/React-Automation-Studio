@@ -42,10 +42,37 @@ const Widget = (props) => {
     enum_strs: [],
     units: "",
   });
-
+  const [pvs, setPvs] = useState([]);
+  const [dataPvs, setDataPvs] = useState([]);
+  const [xPvs, setXPvs] = useState([]);
+  const [yPvs, setYPvs] = useState([]);
+  const [zPvs, setZPvs] = useState([]);
   useEffect(() => {
-    setReadOnly(pv.readOnly || props.readOnly)
-  }, [pv.readOnly, props.readOnly])
+  let ro=props.readOnly===true;
+ 
+  if (props.pvs) {
+    pvs.map((item) => {
+      ro = ro || item.readOnly;
+    })
+  }
+  if (props.xPvs) {
+    xPvs.map((item) => {
+      ro = ro || item.readOnly;
+    })
+  }
+  if (props.yPvs) {
+    yPvs.map((item) => {
+      ro = ro || item.readOnly;
+    })
+  }
+  if (props.zPvs) {
+    zPvs.map((item) => {
+      ro = ro || item.readOnly;
+    })
+  }
+   
+    setReadOnly(ro)
+  }, [pv.readOnly, props.readOnly,pvs,xPvs,yPvs,zPvs])
 
 
 
@@ -115,6 +142,8 @@ const Widget = (props) => {
       setImmediateValue(null);
     }
   }, [immediateValue, min, max, prec])
+  
+ 
 
   useEffect(() => {
     if (commitChange) {
@@ -134,8 +163,42 @@ const Widget = (props) => {
     }
   }, [props.custom_selection_strings, pv.enum_strs])
   useEffect(() => {
-    setInitalized(pv.initialized)
-  }, [pv.initialized])
+
+    let init =
+      (typeof props.pv !== 'undefined')
+      || (typeof props.pvs !== 'undefined')
+      || (typeof props.xPvs !== 'undefined')
+      || (typeof props.yPvs !== 'undefined')
+      || (typeof props.zPvs !== 'undefined');
+   
+    if (props.pv) {
+      init = init&&pv.initialized;
+    }
+    if (props.pvs) {
+      pvs.map((item) => {
+        init = init && item.initialized;
+      })
+    }
+    if (props.xPvs) {
+      xPvs.map((item) => {
+        init = init && item.initialized;
+      })
+    }
+    if (props.yPvs) {
+      yPvs.map((item) => {
+        init = init && item.initialized;
+      })
+    }
+    if (props.zPvs) {
+      zPvs.map((item) => {
+        init = init && item.initialized;
+      })
+    }
+     
+      setInitalized(init)
+    
+    
+  }, [pv.initialized, pvs, xPvs, yPvs, zPvs])
   const checkPrecision = (value, prec) => {
     if (props.usePvPrecision || props.prec) {
       let precision = parseInt(prec);
@@ -190,7 +253,7 @@ const Widget = (props) => {
   const wrapComponent = (CustomComponent, props) => {
     return <CustomComponent {...props} />;
   }
-  const disabled = !initialized||readOnly;
+  const disabled = !initialized || readOnly;
   const disconnectedIcon = () => {
     return (
 
@@ -204,6 +267,95 @@ const Widget = (props) => {
     );
   }
 
+  const getPvs = (pvArray, widgetProps, prevState, setState,newValueTrigger,outputValue) => {
+   // console.log(pvArray, widgetProps)
+    let pvs = [];
+    if (typeof pvArray !== 'undefined') {
+      pvArray.map((item, index) => {
+        let pv;
+        let props;
+        if (typeof item === Object) {
+          pv = item.pv;
+          props = item.props;
+        }
+        else {
+          pv = item;
+          props = widgetProps;
+        }
+        pvs.push(
+          <PV
+            key={index.toString()}
+            pv={pv}
+            maxPv={props.maxPv}
+            minPv={props.minPv}
+            min={props.min}
+            max={props.max}
+            usePvMinMax={props.usePvMinMax}
+            unitsPv={props.unitsPv}
+            usePvUnits={props.usePvUnits}
+            alarmPv={props.alarmPv}
+            labelPv={props.labelPv}
+            alarmSensitive={props.alarmSensitive}
+            usePvLabel={props.usePvLabel}
+            usePvPrecision={props.usePvPrecision}
+            prec={props.prec}
+            precPv={props.precPv}
+            useEpicsMetaData={props.useEpicsMetaData}
+            macros={props.macros}
+            newValueTrigger={newValueTrigger}
+            outputValue={outputValue}
+            useStringValue={props.useStringValue}
+            debug={props.debug}
+            pvData={(data) => setState(prevState => {
+              let state = [...prevState]
+              state[index] = data;
+              return state
+
+            }
+            )}
+            name={props.name}
+
+          />)
+
+      }
+      )
+      return pvs
+    }
+    else {
+      return []
+    }
+  }
+
+  const childPv = typeof props.pv !== 'undefined' && <PV
+    pv={props.pv}
+    maxPv={props.maxPv}
+    minPv={props.minPv}
+    min={props.min}
+    max={props.max}
+    usePvMinMax={props.usePvMinMax}
+    unitsPv={props.unitsPv}
+    usePvUnits={props.usePvUnits}
+    alarmPv={props.alarmPv}
+    labelPv={props.labelPv}
+    alarmSensitive={props.alarmSensitive}
+    usePvLabel={props.usePvLabel}
+    usePvPrecision={props.usePvPrecision}
+    prec={props.prec}
+    precPv={props.precPv}
+    useEpicsMetaData={props.useEpicsMetaData}
+    macros={props.macros}
+    newValueTrigger={newValueTrigger}
+    outputValue={outputValue}
+    useStringValue={props.useStringValue}
+    debug={props.debug}
+    pvData={setPv}
+    name={props.name}
+
+  />
+  const childPvs = getPvs(props.pvs, props, pvs, setPvs,newValueTrigger,outputValue)
+  const childXPvs = getPvs(props.xPvs, props, xPvs, setXPvs)
+  const childYPvs = getPvs(props.yPvs, props, yPvs, setYPvs)
+  const childZPvs = getPvs(props.zPvs, props, zPvs, setZPvs)
 
   const child = props.component && wrapComponent(props.component,
     {
@@ -225,7 +377,12 @@ const Widget = (props) => {
       handleCommitChange: () => SetCommitChange(true),
       handleFocus: () => setFocus(true),
       handleBlur: () => setFocus(false),
-      labelPosition: props.labelPosition,
+      pvData: pv,
+      pvsData: pvs,
+      xPvsData: xPvs,
+      yPvsData: yPvs,
+      xPvsData: zPvs,
+
     })
   const divStyle = {
     width: "100%",
@@ -261,32 +418,11 @@ const Widget = (props) => {
         probeType={props.readOnly ? "readOnly" : undefined}
       />
       {child}
-      <PV
-        pv={props.pv}
-        maxPv={props.maxPv}
-        minPv={props.minPv}
-        min={props.min}
-        max={props.max}
-        usePvMinMax={props.usePvMinMax}
-        unitsPv={props.unitsPv}
-        usePvUnits={props.usePvUnits}
-        alarmPv={props.alarmPv}
-        labelPv={props.labelPv}
-        alarmSensitive={props.alarmSensitive}
-        usePvLabel={props.usePvLabel}
-        usePvPrecision={props.usePvPrecision}
-        prec={props.prec}
-        precPv={props.precPv}
-        useEpicsMetaData={props.useEpicsMetaData}
-        macros={props.macros}
-        newValueTrigger={newValueTrigger}
-        outputValue={outputValue}
-        useStringValue={props.useStringValue}
-        debug={props.debug}
-        pvData={setPv}
-        name={props.name}
-
-      />
+      {childPv}
+      {childPvs}
+      {childXPvs}
+      {childYPvs}
+      {childZPvs}
 
     </div>
   )
@@ -364,15 +500,10 @@ Widget.propTypes = {
    * Custom precision to round the value.
    */
   prec: PropTypes.number,
-  /**
-   * List of the process variables, or the single process variable
-   * to which the widget will be connected.
-   * When using multiple PVs order is important beacuse you will use this property
-   * to referce to specific PVs inside your widget.
-   * Each name must contain the correct prefix (pva:// or loc://)
-   * eg. 'pva://$(device):test$(id)'
-   */
-  pv: PropTypes.oneOfType([PropTypes.string, PropTypes.array]).isRequired,
+  /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+  pv: PropTypes.string,
+  /** Array of the process variables, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+  pvs: PropTypes.arrayOf(PropTypes.string),
   /**
    * Object with a string and the corresponding severity value.
    * When PV value is equal to the string, set the corresponding severity

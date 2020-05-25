@@ -152,7 +152,7 @@ const SelectionListComponent=(props)=> {
 
 
   let itemList = getListItems(props.initialized?props.enumStrs:["N/A","Disconnected"], props.initialized?props.value:"Disconnected");
-  console.log(props.disabled,props.value,props.readOnly)
+ 
   return (
     <FormControlLabel
       key={props.pvName}

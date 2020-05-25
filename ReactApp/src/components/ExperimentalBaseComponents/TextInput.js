@@ -92,14 +92,14 @@ const TextInputComponent=(props)=> {
       key={props.pvName}
       //aria-owns={this.state.openContextMenu ? 'menu-list-grow' : undefined}
       aria-haspopup="true"
-      value={props.disabled?props.pvName:value}
+      value={!props.initialized?props.pvName:value}
       onKeyPress={handleCatchReturn}
       onFocus={props.handleFocus}
       onBlur={props.handleBlur}
       onChange={handleChange}
-      label={props.disabled?props.disconnectedIcon:props.label}
+      label={!props.initialized?props.disconnectedIcon:props.label}
       fullWidth={true}
-      margin="none"
+      margin={props.margin}
       variant={props.variant}
       disabled={props.disabled}
       InputProps={inputProps}

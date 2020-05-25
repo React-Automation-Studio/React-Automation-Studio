@@ -87,7 +87,9 @@ ActionButton.propTypes = {
   /**  Define the value to write into the PV.*/
   actionValue: PropTypes.any,
   /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
-  pv: PropTypes.string.isRequired,
+  pv: PropTypes.string,
+  /** Array of the process variables, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+  pvs: PropTypes.arrayOf(PropTypes.string),
   /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
   macros: PropTypes.object,
   /** Directive to fill the label with the value contained in the  EPICS pv's DESC field. */

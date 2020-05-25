@@ -7,7 +7,7 @@ import {
   ListItemText,
 } from "@material-ui/core";
 import PropTypes from "prop-types";
-import GenericWidget from "../SystemComponents/Widgets/GenericWidget";
+import Widget from "../SystemComponents/Widgets/Widget";
 
 
 const styles = (theme) => ({
@@ -107,11 +107,7 @@ const SelectionListComponent=(props)=> {
    * @param {String} value
    */
   const handleListItemClick=(value)=> {
-    props.onUpdateWidgetState({
-      value: value,
-      outputValue: value,
-      newValueTrigger: 1,
-    });
+    props.handleImmediateChange(value);
   }
 
   /**
@@ -144,7 +140,7 @@ const SelectionListComponent=(props)=> {
           button
           value={item}
           selected={value === item}
-          onClick={() => handleListItemClick(item)}
+          onClick={props.disabled?undefined:() => handleListItemClick(item)}
         >
           <ListItemText primary={item} />
         </ListItem>
@@ -155,12 +151,13 @@ const SelectionListComponent=(props)=> {
 
 
 
-  let itemList = getListItems(props.enumStrs, props.value);
-
+  let itemList = getListItems(props.initialized?props.enumStrs:["N/A","Disconnected"], props.initialized?props.value:"Disconnected");
+  console.log(props.disabled,props.value,props.readOnly)
   return (
     <FormControlLabel
       key={props.pvName}
       className={props.classes.FormControl}
+      disabled={props.disabled}
       control={
         <List
           className={
@@ -169,14 +166,14 @@ const SelectionListComponent=(props)=> {
               : props.classes.listVertical
           }
           component="nav"
-          disabled={props.disabled}
+          
           variant="outlined"
           disablePadding={true}
         >
           {itemList}
         </List>
       }
-      label={props.label}
+      label={props.initialized?props.label:<span>{props.disconnectedIcon}{" "+props.pvName}</span>}
       labelPlacement={props.labelPlacement}
     />
   );
@@ -184,7 +181,7 @@ const SelectionListComponent=(props)=> {
 
 const SelectionList = (props) => {
   return (
-    <GenericWidget {...props} useStringValue={true} component={SelectionListComponent}/>
+    <Widget {...props} useStringValue={true} component={SelectionListComponent}/>
   )
 
 }

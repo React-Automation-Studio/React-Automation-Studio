@@ -15,13 +15,13 @@ const PV = (props) => {
     max:0,
     prec:0,
     readOnly:true,
+    enum_strs:[]
   })
   const pvConnection = (pv, props) => {
     return pv.includes('pva://') ? EpicsPV2({ ...props, pv }) : undefined
   }
   const pvData = (name) => (pv) => {
-    if (props.debug) {
-    }
+    
     setPvs(pvs => ({
       ...pvs,
       [name]: pv,

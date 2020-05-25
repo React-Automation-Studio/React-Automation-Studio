@@ -2,7 +2,7 @@ import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import { Button, FormControlLabel } from "@material-ui/core";
 import PropTypes from "prop-types";
-import GenericWidget from "../SystemComponents/Widgets/GenericWidget";
+import Widget from "../SystemComponents/Widgets/Widget";
 
 
 const styles = (theme) => ({
@@ -37,12 +37,7 @@ const ActionButtonComponent=(props)=> {
    */
   const handleButtonClick=()=> {
    
-     props.onUpdateWidgetState({
-      checkValue: true,
-      value: props.actionValue,
-      outputValue: props.actionValue,
-      newValueTrigger: 1,
-    });
+    props.handleImmediateChange(props.actionValue);
   }
 
 
@@ -51,7 +46,7 @@ const ActionButtonComponent=(props)=> {
       key={props.pvName}
       className={props.classes.FormControl}
       disabled={props.disabled}
-      label={props.label}
+      label={props.initialized?props.label:<span>{props.disconnectedIcon}{" "+props.pvName}</span>}
       labelPlacement={props.labelPlacement}
       control={
         <Button
@@ -81,7 +76,7 @@ const ActionButtonComponent=(props)=> {
 const ActionButton = (props)=> {
   
     return (
-      <GenericWidget  {...props} component={ActionButtonComponent}/> 
+      <Widget  {...props} component={ActionButtonComponent}/> 
      
     )
   }

@@ -75,11 +75,11 @@ const SelectionInputComponent = (props) => {
       className={props.classes.TextField}
       select={props.initialized}
       disabled={props.disabled}
-      value={props.disabled?stringValues:props.value}
+      value={props.initialized?props.value:stringValues}
       onFocus={props.onUpdateWidgetFocus}
       onBlur={props.onUpdateWidgetBlur}
       onChange={handleChange}
-      label={props.disabled?props.disconnectedIcon:props.label}
+      label={props.initialized?props.label:props.disconnectedIcon}
       margin={props.margin}
       variant={props.variant}
       InputProps={inputProps}

@@ -74,7 +74,7 @@ function StyledIconIndicatorComponent(props) {
 
   let color = props.disabled
     ? props.theme.palette.grey[50]
-    : props.value === 1
+    : props.value == 1
       ? onColor
       : offColor;
 

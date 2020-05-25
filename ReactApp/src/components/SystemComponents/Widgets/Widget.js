@@ -190,7 +190,7 @@ const Widget = (props) => {
   const wrapComponent = (CustomComponent, props) => {
     return <CustomComponent {...props} />;
   }
-  const disabled = !initialized;
+  const disabled = !initialized||readOnly;
   const disconnectedIcon = () => {
     return (
 

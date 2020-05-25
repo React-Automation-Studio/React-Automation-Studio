@@ -88,16 +88,16 @@ module.exports = {
         usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
       },
       {
-        name: 'Experimental Widget Base Components',
+        name: 'Experimental Widget and PV Components',
         content: 'src/docs/widget/widget.md',
-        components: 'src/components/SystemComponents/Widgets/GenericWidget.js',
+        components: 'src/components/SystemComponents/Widgets/Widget.js',
         exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
         usageMode: 'expand', // 'hide' | 'collapse' | 'expand'
         sections:[
           {
-            name: 'Dynamic PV fields',
+            name: 'PV component and examples',
             content: 'src/docs/widget/dynamicPvFields.md',
-            components: 'src/components/ExperimentalExamples/Mobile/DynamicPvFieldExample.js',
+            components: [ 'src/components/SystemComponents/PV.js','src/components/ExperimentalExamples/Mobile/DynamicPvFieldExample.js'],
             exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
             usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
           },

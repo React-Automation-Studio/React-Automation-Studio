@@ -182,7 +182,7 @@ class ExperimentalMobileDemo1 extends React.Component {
               pv='pva://$(device):amplitude'
               macros={{ '$(device)': 'testIOC' }}
               usePvLabel={true}
-              usePrecision={true}
+              usePvPrecision={true}
               prec={3}
               alarmSensitive={true}
              // debug={true}
@@ -260,7 +260,7 @@ class ExperimentalMobileDemo1 extends React.Component {
               pv='pva://$(device):BO1'
               macros={{ '$(device)': 'testIOC' }}
               usePvLabel={true}
-              usePrecision={true}
+              usePvPrecision={true}
               prec={3}
               alarmSensitive={true}
               //debug={true}

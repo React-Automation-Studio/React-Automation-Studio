@@ -8,7 +8,7 @@ StyledIconButton example connection to a SoftChannel EPICS AI pv with example of
   import Face from '@material-ui/icons/Face';
   <div style={{textAlign:'center'}}>
   <div style={{marginBottom:8}}>
-    <TextOutput  pv='pva://$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}} usePvLabel={true} usePrecision={true} prec={0}/>
+    <TextOutput  pv='pva://$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}} usePvLabel={true} usePvPrecision={true} prec={0}/>
   </div>
   {/*###############*/}  
 
@@ -32,7 +32,7 @@ StyledIconButton example connection to a SoftChannel EPICS AI pv with example of
       pv='pva://$(device):test$(id)'
       macros={{'$(device)':'testIOC','$(id)':'2'}}
       usePvLabel={true}
-      usePrecision={true}
+      usePvPrecision={true}
       usePvUnits={true}
       usePvMinMax={true}
       alarmSensitive={false}

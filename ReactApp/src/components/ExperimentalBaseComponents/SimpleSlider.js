@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, {  useRef } from 'react';
 import { withStyles } from "@material-ui/core/styles";
 import { Slider, Typography } from "@material-ui/core";
 import PropTypes from "prop-types";
@@ -161,8 +161,8 @@ SimpleSlider.propTypes = {
   /** Directive to use the units contained in the  EPICS pv's EGU field. */
   usePvUnits: PropTypes.bool,
   /** Directive to round the value. */
-  usePrecision: PropTypes.bool,
-  /** Custom precision to round the value too, if not defined then the EPICS PREC field will be used, if `usePrecision` is defined. */
+  usePvPrecision: PropTypes.bool,
+  /** Custom precision to round the value too, if not defined then the EPICS PREC field will be used, if `usePvPrecision` is defined. */
   prec: PropTypes.number,
   /** Custom units to be used, if `usePvUnits` is not defined. */
   units: PropTypes.string,

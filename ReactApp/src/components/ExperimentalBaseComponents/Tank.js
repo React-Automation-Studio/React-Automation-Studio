@@ -275,8 +275,8 @@ Tank.propTypes = {
   /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
   macros: PropTypes.object,
   /** Directive to round the value. */
-  usePrecision: PropTypes.bool,
-  /** Custom precision to round the value too, if not defined then the EPICS PREC field will be used, if `usePrecision` is defined. */
+  usePvPrecision: PropTypes.bool,
+  /** Custom precision to round the value too, if not defined then the EPICS PREC field will be used, if `usePvPrecision` is defined. */
   prec: PropTypes.number,
   /** Directive to use the HOPR and LOPR EPICS fields to limit the maximum and minimum values that can be contained in the value. */
   usePvMinMax: PropTypes.bool,
@@ -313,7 +313,7 @@ Tank.defaultProps = {
   min: 0,
   max: 100,
   
-  usePrecision: false,
+  usePvPrecision: false,
   showValue: true,
   aspectRatio: 1,
   lockAspectRatio: true,

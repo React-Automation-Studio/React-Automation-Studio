@@ -4,6 +4,7 @@ import { withStyles } from "@material-ui/core/styles";
 import Widget from "../SystemComponents/Widgets/Widget";
 import red from '@material-ui/core/colors/red';
 import deepOrange from '@material-ui/core/colors/deepOrange';
+import { Typography } from '@material-ui/core';
 const styles = (theme) => ({
   root: {
     display: "flex",
@@ -37,72 +38,45 @@ const styles = (theme) => ({
  */
 const TextUpdateMultiplePVsComponent=(props)=> {
   const {classes}=props;
-  let textFieldClassName;
-  let label = props.label !== undefined ? props.label + ": " : "";
-  let units = props.units !== undefined ? props.units + ": " : "";
-  let content;
-  console.log(props)
-  if (props.initialized) {
-    if (props.alarmSensitive==true){
-      if (props.alarmSeverity==1){
-        textFieldClassName=classes.TextFieldSeverity1;
-        //  background_color='linear-gradient(45deg, #FFFFFF 1%, #FF8E53 99%)';
+  
+
+    const content=(props)=>{
+       
+        let pvs=props.pvsData;
+        let data=[];
+        let pv;
+        let textFieldClassName;
+        for (pv in pvs){
+         
+          if (pvs[pv].initialized){
+          if (props.alarmSensitive==true){
+            if (pvs[pv].severity==1){
+              textFieldClassName=classes.TextFieldSeverity1;
+              //  background_color='linear-gradient(45deg, #FFFFFF 1%, #FF8E53 99%)';
+            }
+            else if(pvs[pv].severity==2){
+              textFieldClassName=classes.TextFieldSeverity2;
+              //  background_color='linear-gradient(45deg, #FFFFFF 1%, #E20101 99%)';
+            }
+            else {
+              textFieldClassName=classes.TextFieldSeverity0;
+              //  background_color='white';
+            }
+          }
+          let units=pvs[pv].units?" "+pvs[pv].units:"";
+
+          data.push(<Typography className={textFieldClassName} >{pvs[pv].label+": " + pvs[pv].value +  units}</Typography>)
+        }
+        else{
+          data.push(<Typography>{props.disconnectedIcon}{" "+pvs[pv].pvName}</Typography>)
+        }
       }
-      else if(props.alarmSeverity==2){
-        textFieldClassName=classes.TextFieldSeverity2;
-        //  background_color='linear-gradient(45deg, #FFFFFF 1%, #E20101 99%)';
-      }
-      else {
-        textFieldClassName=classes.TextFieldSeverity0;
-        //  background_color='white';
-      }
+      return data;
+      
     }
+ 
 
-    content = (
-      <span className={textFieldClassName} >{label + props.value + " " + units}</span>
-    );
-  } else {
-    content = props.formControlLabel;
-  }
-
-  // const multipleDataConnections = () => {
-  //   //this.test("test1");
-  //   //this.handleInputValue();
-  //   let pv;
-  //   let DataConnections=[];
-  //   for (pv in this.state.pvs){
-  //   //  console.log(this.state.pvs[pv].pvname);
-  //     DataConnections.push(
-  //       <div key= {pv.toString()}>
-  //         <DataConnection
-  //           pv={this.state.pvs[pv].pvname}
-  //           handleInputValue={this.handleInputValue}
-  //           handleMetadata={this.handleMetadata(this.state.pvs[pv].pvname)}
-  //         />
-  //         { this.props.usePvLabel===true && <DataConnection
-  
-  //           pv={pv.toString()+".DESC"}
-  
-  //           handleInputValue={this.handleInputValueLabel(this.state.pvs[pv].pvname)}
-  
-  //                                           />    }
-  //         {this.state.pvs[pv].initialized&&<div>
-  //           {this.props.usePvLabel===true?this.state.pvs[pv].label+': ':""}
-  //           {this.state.pvs[pv].value}
-  //         </div>}
-  //         {(this.state.pvs[pv].initialized===false)&&<div>
-  //           {<span> <LanDisconnect style={{color:this.props.theme.palette.error.main,verticalAlign: "middle"}} fontSize='small'/> {this.state.pvs[pv].pvname} </span>}
-            
-  //             </div>}
-  //       </div>
-  //         )
-  //  }
-  
-  //  return DataConnections;
-  // }
-  
-
-  return <div>{content}</div>;
+  return <React.Fragment>{content(props)}</React.Fragment>;
 }
 
 const TextUpdateMultiplePVs =(props)=>{

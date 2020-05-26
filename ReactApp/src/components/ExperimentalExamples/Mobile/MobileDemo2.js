@@ -27,7 +27,7 @@ import CheckBox from '../../ExperimentalBaseComponents/CheckBox';
 import ThumbWheel from '../../ExperimentalBaseComponents/ThumbWheel';
 import Gauge from '../../ExperimentalBaseComponents/Gauge';
 import Tank from '../../ExperimentalBaseComponents/Tank';
-import ProgressBar from '../../BaseComponents/ProgressBar';
+import ProgressBar from '../../ExperimentalBaseComponents/ProgressBar';
 import StyledIconIndicator from '../../ExperimentalBaseComponents/StyledIconIndicator';
 import lime from '@material-ui/core/colors/lime';
 import SideBar from '../../SystemComponents/SideBar';
@@ -108,7 +108,7 @@ class MobileDemo2 extends React.Component {
               <Gauge  pv='pva://$(device):test3' macros={{'$(device)':'testIOC'}}     prec={3} min={-10000} max={10000}  />
             </Grid>
             <Grid item xs={6} sm={3}  md= {3} lg={2} xl={1}>
-              <ProgressBar  pv='pva://$(device):test3' macros={{'$(device)':'testIOC'}} units={'V'}  usePvLabel={true}  prec={3} min={-10000} max={10000} />
+              <ProgressBar  pv='pva://$(device):test3' macros={{'$(device)':'testIOC'}} units={'V'}    prec={3} min={-10000} max={10000} />
             </Grid>
             <Grid item xs={6} sm={3}  md= {3} lg={2} xl={1}>
                 <ProgressBar  pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}     prec={3} usePvMinMax={true} alarmSensitive={true}/>

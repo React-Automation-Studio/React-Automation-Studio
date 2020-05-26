@@ -86,7 +86,7 @@ const BitIndicatorsComponent = (props) => {
   }
 
   let bits = bitArray.map((value, index) => {
-    let color = props.disabled ? props.theme.palette.grey[50]: value != 0 ? onColor     : offColor;
+    let color = !props.initialized? props.theme.palette.grey[50]: value != 0 ? onColor     : offColor;
     return (
       <Grid
         item

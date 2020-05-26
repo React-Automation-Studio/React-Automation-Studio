@@ -21,7 +21,7 @@ import SelectionInput from '../../ExperimentalBaseComponents/SelectionInput';
 import SelectionList from '../../ExperimentalBaseComponents/SelectionList';
 import ToggleButton from '../../ExperimentalBaseComponents/ToggleButton';
 import ActionButton from '../../ExperimentalBaseComponents/ActionButton';
-import RadioButtonGroup from '../../BaseComponents/RadioButtonGroup';
+import RadioButtonGroup from '../../ExperimentalBaseComponents/RadioButtonGroup';
 import RadioButton from '../../ExperimentalBaseComponents/RadioButton';
 import CheckBox from '../../ExperimentalBaseComponents/CheckBox';
 import ThumbWheel from '../../ExperimentalBaseComponents/ThumbWheel';

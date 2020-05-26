@@ -82,12 +82,14 @@ const styles = (theme) => ({
   listVertical: {
     width: "100%",
     height: "100%",
+    padding:theme.spacing(1)
   },
   listHorizontal: {
     display: "flex",
     flexDirection: "row",
     width: "100%",
     height: "100%",
+    padding:theme.spacing(1)
   },
 });
 
@@ -208,7 +210,7 @@ SelectionList.propTypes = {
 
 SelectionList.defaultProps = {
   horizontal: false,
-
+  labelPlacement:'top'
 };
 
 

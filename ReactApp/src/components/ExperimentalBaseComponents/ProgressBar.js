@@ -358,5 +358,5 @@ ProgressBar.defaultProps = {
 
 };
 
-ProgressBar.contextType = AutomationStudioContext;
+
 export default withStyles(styles, { withTheme: true })(ProgressBar)

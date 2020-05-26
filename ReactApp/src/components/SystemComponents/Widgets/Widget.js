@@ -30,6 +30,7 @@ const Widget = (props) => {
   const [label, setLabel] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const [openContextMenu, setOpenContextMenu] = useState(false);
+  const [contextPVs,setContextPVs]=useState([]);
   const [pv, setPv] = useState({
     value: 0,
     label: "",
@@ -77,7 +78,25 @@ const Widget = (props) => {
     setReadOnly(ro)
   }, [pv, props.readOnly,pvs,xPvs,yPvs,zPvs])
 
+  useEffect(() => {
+    let newContextPVs=[];
+    newContextPVs.push(...pv.contextPVs);
+    pvs.map((item)=>
+      newContextPVs.push(...item.contextPVs)
+    )
+    xPvs.map((item)=>
+      newContextPVs.push(...item.contextPVs)
+    )
+    yPvs.map((item)=>
+    newContextPVs.push(...item.contextPVs)
+    )
+    zPvs.map((item)=>
+    newContextPVs.push(...item.contextPVs)
+  )
+   
+    setContextPVs(newContextPVs)
 
+    }, [pv, pvs,xPvs,yPvs,zPvs])
 
   useEffect(() => {
     if (props.usePvLabel) {
@@ -408,7 +427,7 @@ const Widget = (props) => {
       <ContextMenu
         disableProbe={props.disableProbe}
         open={openContextMenu}
-        pvs={pv.contextPVs}
+        pvs={contextPVs}
         handleClose={handleContextMenuClose}
         anchorEl={anchorEl}
         anchorOrigin={{

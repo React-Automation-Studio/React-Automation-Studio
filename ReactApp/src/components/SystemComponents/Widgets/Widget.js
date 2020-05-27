@@ -1,18 +1,44 @@
 import React, { useState, useEffect } from 'react'
 import PV from '../PV'
-import Typography from '@material-ui/core/Typography';
-import { InputAdornment, TextField } from "@material-ui/core";
 import ContextMenu from "../ContextMenu";
 import PropTypes from "prop-types";
-import { withStyles } from "@material-ui/core/styles";
 import { LanDisconnect } from "mdi-material-ui/";
-const styles = (theme) => ({
-  root: {
-    display: "flex",
-    flexWrap: "wrap",
-  },
-});
-const Widget = (props) => {
+
+/**
+ * The Widget component creates standard properties, state variables and callbacks to manage the behaviour of a component communicating with one or multiple PVs. It also provides the default RAS contextMenu to the child component. 
+ * The props that are fowarded tot he child component are detailed in the table below, and the Widget's props are detailed in the props&methods section.
+ * 
+ * 
+ * 
+ * 
+ *  | Fowarded Props |Type |Default | Description |
+|:-:|:-|
+|props|object|| all the props provided to the widget as describe in the props&methods section below.
+|initialized|bool|false|true if all the pvs specified in the pv and pvs props are initialized, and all the forwarded props are valid,
+|pvName|string|""| The name of the pv after the macros have been applied. Valid after initialization.
+|value|any|""| The pv value. Valid after initialization.
+|min|number||The derived min value from usePvMinMax or min prop. Valid after initialization.
+|max|number||The derived max value from usePvMinMax or max prop. Valid after initialization.
+|label|string||The derived label from usePvLabel or label prop. Valid after initialization.
+|formControlLabel|||The derived formControlLabel  *logic:* ` initialized?label :<span>{disconnectedIcon}{" "+pvName}</span>` Feed this directly into the label prop of a formControlLabel component.
+|units|number||The derived units from usePvUnits or units prop. Valid after initialization,
+|disabled|bool|true|Disabled is derived from `initialized !== true  OR readOnly` ,
+|readOnly|bool|true| False if the widget has write access to the pv or pvs.
+|alarmSeverity|number|0| pv alarm severity, 0=no alarm, 1=minor alarm, 2=major alarm.
+|enumStrs||| enumerator strings  devrived from the pv's metadata.enum_strings or custom_selection_strings
+|disconnectedIcon|svgIcon||: Use the disconnectedIcon to indicated if the pv is not initialized
+|handleChange|callback|| The handleChange can called from any components handleChange callback, it accepts a value, and updates the widgets value state variable with it. The value is not wrtitten to the pv value until the handleCommitChange callback is called.
+|handleCommitChange|callback||The handleCommitChange callback commits the value in widget's state and writes it out to the pv and all the pvs values
+|handleImmediateChange|callback||The handleImmediateChange can be called from any components onChange callback, it accepts a value, and updates the widgets value state variable with it and then writes out the value to the pv.
+|handleFocus|callback||The handleFocus callback sets the widgets focus to true. Connect to any components onFocus callback
+|handleBlur|callback||The handleBlur callback sets the widgets focus to false. Connect to any components onBlur callback
+|pvData|Object||An object that contains the PV component derived from pv prop. Valid after initialization.
+|pvsData|Array of Objects||And object that contains an array of all the PV components derived from pvs prop. Valid after initialization.      
+      
+    
+ * 
+ **/
+  const Widget = (props) => {
   const [value, setValue] = useState(0);
   const [initialized, setInitalized] = useState(false);
   const [immediateValue, setImmediateValue] = useState(null);
@@ -38,6 +64,7 @@ const Widget = (props) => {
     initialized: false,
     contextPVs: [],
     metadata: {},
+    timestamp:"",
     readOnly: true,
     severity: 0,
     enum_strs: [],
@@ -45,9 +72,7 @@ const Widget = (props) => {
   });
   const [pvs, setPvs] = useState([]);
   const [dataPvs, setDataPvs] = useState([]);
-  const [xPvs, setXPvs] = useState([]);
-  const [yPvs, setYPvs] = useState([]);
-  const [zPvs, setZPvs] = useState([]);
+ 
   useEffect(() => {
   let ro=props.readOnly===true;
   if (props.pv){
@@ -59,24 +84,9 @@ const Widget = (props) => {
       ro = ro || item.readOnly;
     })
   }
-  if (props.xPvs) {
-    xPvs.map((item) => {
-      ro = ro || item.readOnly;
-    })
-  }
-  if (props.yPvs) {
-    yPvs.map((item) => {
-      ro = ro || item.readOnly;
-    })
-  }
-  if (props.zPvs) {
-    zPvs.map((item) => {
-      ro = ro || item.readOnly;
-    })
-  }
-   
+  
     setReadOnly(ro)
-  }, [pv, props.readOnly,pvs,xPvs,yPvs,zPvs])
+  }, [pv, props.readOnly,pvs,])
 
   useEffect(() => {
     let newContextPVs=[];
@@ -84,19 +94,12 @@ const Widget = (props) => {
     pvs.map((item)=>
       newContextPVs.push(...item.contextPVs)
     )
-    xPvs.map((item)=>
-      newContextPVs.push(...item.contextPVs)
-    )
-    yPvs.map((item)=>
-    newContextPVs.push(...item.contextPVs)
-    )
-    zPvs.map((item)=>
-    newContextPVs.push(...item.contextPVs)
-  )
+   
+  
    
     setContextPVs(newContextPVs)
 
-    }, [pv, pvs,xPvs,yPvs,zPvs])
+    }, [pv, pvs])
 
   useEffect(() => {
     if (props.usePvLabel) {
@@ -159,7 +162,7 @@ const Widget = (props) => {
       let tempvalue = checkPrecision(isInsideLimits(immediateValue, min, max), prec);
       setValue(tempvalue);
       setOutputValue(tempvalue);
-      //console.log(immediateValue,tempvalue)
+     
       setNewValueTrigger(newValueTrigger + 1);
       setImmediateValue(null);
     }
@@ -189,9 +192,7 @@ const Widget = (props) => {
     let init =
       (typeof props.pv !== 'undefined')
       || (typeof props.pvs !== 'undefined')
-      || (typeof props.xPvs !== 'undefined')
-      || (typeof props.yPvs !== 'undefined')
-      || (typeof props.zPvs !== 'undefined');
+    
    
     if (props.pv) {
       init = init&&pv.initialized;
@@ -201,26 +202,11 @@ const Widget = (props) => {
         init = init && item.initialized;
       })
     }
-    if (props.xPvs) {
-      xPvs.map((item) => {
-        init = init && item.initialized;
-      })
-    }
-    if (props.yPvs) {
-      yPvs.map((item) => {
-        init = init && item.initialized;
-      })
-    }
-    if (props.zPvs) {
-      zPvs.map((item) => {
-        init = init && item.initialized;
-      })
-    }
      
       setInitalized(init)
     
     
-  }, [pv.initialized, pvs, xPvs, yPvs, zPvs])
+  }, [pv.initialized, pvs])
   const checkPrecision = (value, prec) => {
     if (props.usePvPrecision || props.prec) {
       let precision = parseInt(prec);
@@ -375,10 +361,22 @@ const Widget = (props) => {
 
   />
   const childPvs = getPvs(props.pvs, props, pvs, setPvs,newValueTrigger,outputValue)
-  const childXPvs = getPvs(props.xPvs, props, xPvs, setXPvs)
-  const childYPvs = getPvs(props.yPvs, props, yPvs, setYPvs)
-  const childZPvs = getPvs(props.zPvs, props, zPvs, setZPvs)
-
+  const contextMenu=(<ContextMenu
+  disableProbe={props.disableProbe}
+  open={openContextMenu}
+  pvs={contextPVs}
+  handleClose={handleContextMenuClose}
+  anchorEl={anchorEl}
+  anchorOrigin={{
+    vertical: "bottom",
+    horizontal: "center",
+  }}
+  transformOrigin={{
+    vertical: "top",
+    horizontal: "center",
+  }}
+  probeType={props.readOnly ? "readOnly" : undefined}
+/>)
   const child = props.component && wrapComponent(props.component,
     {
       ...props,
@@ -402,19 +400,13 @@ const Widget = (props) => {
       handleBlur: () => setFocus(false),
       pvData: pv,
       pvsData: pvs,
-      xPvsData: xPvs,
-      yPvsData: yPvs,
-      xPvsData: zPvs,
-
+    
     })
   const divStyle = {
     width: "100%",
     height: "100%",
   }
-  if (props.debug) {
-    console.log(props.name, " Debug:", "Widget Render States: ", "value:", value, "units:", units)
-    console.log(props.name, " Debug:", "Widget Render pv:", pv)
-  }
+  
   return (
     <div
       style={divStyle}
@@ -424,29 +416,11 @@ const Widget = (props) => {
           : handleToggleContextMenu
       }
     >
-      <ContextMenu
-        disableProbe={props.disableProbe}
-        open={openContextMenu}
-        pvs={contextPVs}
-        handleClose={handleContextMenuClose}
-        anchorEl={anchorEl}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "center",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "center",
-        }}
-        probeType={props.readOnly ? "readOnly" : undefined}
-      />
+      
       {child}
       {childPv}
       {childPvs}
-      {childXPvs}
-      {childYPvs}
-      {childZPvs}
-
+      {contextMenu}
     </div>
   )
 }
@@ -472,16 +446,6 @@ Widget.propTypes = {
    * Directive to disable the Probe page for a widget
    */
   disableProbe: PropTypes.bool,
-  /**
-   * If defined, then the Metadata property, defined as input string,
-   * of the PV will be displayed instead of its value.
-   * eg. displayMetaData='lower_disp_limit'
-   */
-  displayMetaData: PropTypes.string,
-  /**
-   * If defined, then the timestamp of the PV will be displayed instead of its value
-   */
-  displayTimeStamp: PropTypes.bool,
   /**
    * Local variable intialization value.
    * When using loc:// type PVs.
@@ -571,19 +535,10 @@ Widget.propTypes = {
  */
 // static defaultProps=WrappedComponent.defaultProps;
 Widget.defaultProps = {
-  //  alarmSensitive: false,
-  //  debug: false,
   disabled: false,
-  // disableProbe: false, // in the context menu it only checks for defined and then assigns a false value
-  //  displayTimeStamp: false,
   onColor: "primary",
   offColor: "default",
   useEpicsMetaData: true,
-  //  usePvLabel: false,
-  //  usePvMinMax: false,
-  //  usePvPrecision: false,
-  //  usePvUnits: false,
-  //  useStringValue: false,
 };
 
 export default Widget

@@ -4,6 +4,7 @@ import { withStyles } from "@material-ui/core/styles";
 import Widget from "../SystemComponents/Widgets/Widget";
 import red from '@material-ui/core/colors/red';
 import deepOrange from '@material-ui/core/colors/deepOrange';
+import { Typography } from '@material-ui/core';
 const styles = (theme) => ({
   root: {
     display: "flex",
@@ -39,7 +40,7 @@ function TextUpdateComponent(props) {
   const {classes}=props;
   let textFieldClassName;
   let label = props.label !== undefined ? props.label + ": " : "";
-  let units = props.units !== undefined ? props.units + ": " : "";
+  let units = props.units !== undefined ? props.units + " " : "";
   let content;
   if (props.initialized) {
     if (props.alarmSensitive==true){
@@ -58,7 +59,7 @@ function TextUpdateComponent(props) {
     }
 
     content = (
-      <span className={textFieldClassName} >{label + props.value + " " + units}</span>
+      <Typography className={textFieldClassName} >{label + props.value + " " + units}</Typography>
     );
   } else {
     content = props.formControlLabel;

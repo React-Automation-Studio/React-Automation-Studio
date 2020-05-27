@@ -338,8 +338,6 @@ class DynamicPvFieldExample extends React.Component {
   }
 }
 
-DynamicPvFieldExample.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
+
 
 export default withStyles(styles, { withTheme: true })(DynamicPvFieldExample);

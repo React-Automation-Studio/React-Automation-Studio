@@ -64,8 +64,8 @@ const TextUpdateMultiplePVsComponent=(props)=> {
             }
           }
           let units=pvs[pv].units?" "+pvs[pv].units:"";
-
-          data.push(<Typography className={textFieldClassName} >{pvs[pv].label+": " + pvs[pv].value +  units}</Typography>)
+          let value=pvs[pv].value;
+          data.push(<Typography className={textFieldClassName} >{pvs[pv].label+": " + value +  units}</Typography>)
         }
         else{
           data.push(<Typography>{props.disconnectedIcon}{" "+pvs[pv].pvName}</Typography>)

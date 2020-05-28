@@ -313,6 +313,7 @@ import { LanDisconnect } from "mdi-material-ui/";
             newValueTrigger={newValueTrigger}
             outputValue={outputValue}
             useStringValue={props.useStringValue}
+            intialLocalVariableValue={props.intialLocalVariableValue}
             debug={props.debug}
             pvData={(data) => setState(prevState => {
               let state = [...prevState]
@@ -355,6 +356,7 @@ import { LanDisconnect } from "mdi-material-ui/";
     newValueTrigger={newValueTrigger}
     outputValue={outputValue}
     useStringValue={props.useStringValue}
+    intialLocalVariableValue={props.intialLocalVariableValue}
     debug={props.debug}
     pvData={setPv}
     name={props.name}

@@ -323,7 +323,7 @@ class ExperimentalMobileDemo1 extends React.Component {
         </AppBar>
         <DataConnection
           pv='loc://editorType'
-
+          intialLocalVariableValue='ThumbWheel'
           useStringValue={true}
           handleInputValue={this.handleStateChange}
         />

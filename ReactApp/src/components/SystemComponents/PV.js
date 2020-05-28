@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import AutomationStudioContext from './AutomationStudioContext';
 import EpicsPV2 from './EpicsPV2'
+import LocalPV2 from './LocalPV2'
 import PropTypes from "prop-types";
 const PV = (props) => {
   const [pvs, setPvs] = useState(null)
@@ -9,32 +10,39 @@ const PV = (props) => {
     label: "",
     initialized: false,
     contextPVs: [],
-    metadata:{},
-    severity:0,
-    timestamp:"",
-    units:"",
-    min:0,
-    max:0,
-    prec:0,
-    readOnly:true,
-    enum_strs:[]
+    metadata: {},
+    severity: 0,
+    timestamp: "",
+    units: "",
+    min: 0,
+    max: 0,
+    prec: 0,
+    readOnly: true,
+    enum_strs: []
   })
   const pvConnection = (pv, props) => {
-    return pv.includes('pva://') ? EpicsPV2({ ...props, pv }) : undefined
+    return pv.includes('pva://')
+      ?
+      EpicsPV2({ ...props, pv })
+      : (pv.includes('loc://')
+        ?
+        LocalPV2({ ...props, pv })
+        : undefined)
   }
   const pvData = (name) => (pv) => {
-    
+
     setPvs(pvs => ({
       ...pvs,
       [name]: pv,
     }))
   }
-  
+
   const dataPv = pvConnection(props.pv, {
     macros: props.macros,
     newValueTrigger: props.newValueTrigger,
     outputValue: props.outputValue,
     useStringValue: props.useStringValue,
+    intialLocalVariableValue:props.intialLocalVariableValue,
     debug: props.debug,
     pvData: pvData('data')
 
@@ -45,6 +53,7 @@ const PV = (props) => {
       {
         macros: props.macros,
         debug: props.debug,
+        intialLocalVariableValue:props.intialLocalVariableValue,
         pvData: pvData('max')
 
       }
@@ -55,6 +64,7 @@ const PV = (props) => {
       {
         macros: props.macros,
         debug: props.debug,
+        intialLocalVariableValue:props.intialLocalVariableValue,
         pvData: pvData('min')
       }
     ) : undefined;
@@ -64,6 +74,7 @@ const PV = (props) => {
         macros: props.macros,
         useStringValue: true,
         debug: props.debug,
+        intialLocalVariableValue:props.intialLocalVariableValue,
         pvData: pvData('label')
       }
     ) : undefined;
@@ -73,6 +84,7 @@ const PV = (props) => {
         macros: props.macros,
         useStringValue: true,
         debug: props.debug,
+        intialLocalVariableValue:props.intialLocalVariableValue,
         pvData: pvData('units')
       }
     ) : undefined;
@@ -82,6 +94,7 @@ const PV = (props) => {
         macros: props.macros,
         useStringValue: true,
         debug: props.debug,
+        intialLocalVariableValue:props.intialLocalVariableValue,
         pvData: pvData('precision')
       }
     ) : undefined;
@@ -91,60 +104,62 @@ const PV = (props) => {
         macros: props.macros,
         //useStringValue:true,
         debug: props.debug,
+        intialLocalVariableValue:props.intialLocalVariableValue,
         pvData: pvData('alarm')
       }
     ) : undefined;
-  useEffect(()=>{
-    if(props.debug){
+  useEffect(() => {
+    if (props.debug) {
       console.log("use effect PV render")
     }
-  
+
 
     let pv = {};
     if (pvs) {
       let pvKeys = Object.keys(pvs);
       pv.value = pvs.data ? pvs.data.value : "";
-      pv.pvName= pvs.data ? pvs.data.pvname : "";
-      pv.severity = pvs.data ?  pvs.data.severity : "";
+      pv.pvName = pvs.data ? pvs.data.pvname : "";
+      pv.severity = pvs.data ? pvs.data.severity : "";
       pv.timestamp = pvs.data ? pvs.data.timestamp : "";
       pv.metadata = pvs.data ? pvs.data.metadata : {};
       pv.enum_strs = pvs.data ? pvs.data.metadata.enum_strs : [];
       pv.label = props.usePvLabel ? (pvs.label ? pvs.label.value : "") : props.label;
-      pv.max=props.usePvMinMax?(props.useEpicsMetaData?(pvs.data?pvs.data.metadata.upper_disp_limit:""):pvs.max?pvs.max.value:""):props.max;
-      pv.min=props.usePvMinMax?(props.useEpicsMetaData?(pvs.data?pvs.data.metadata.lower_disp_limit:""):pvs.min?pvs.min.value:""):props.min;
-      pv.prec=props.usePvPrecision?(props.useEpicsMetaData?(pvs.data?pvs.data.metadata.precision:""):pvs.precision?pvs.precision.value:""):props.prec;
-      pv.units=props.usePvUnits?(props.useEpicsMetaData?(pvs.data?pvs.data.metadata.units:""):pvs.units?pvs.units.value:""):props.units;
+      pv.max = props.usePvMinMax ? (props.useEpicsMetaData ? (pvs.data ? pvs.data.metadata.upper_disp_limit : "") : pvs.max ? pvs.max.value : "") : props.max;
+      pv.min = props.usePvMinMax ? (props.useEpicsMetaData ? (pvs.data ? pvs.data.metadata.lower_disp_limit : "") : pvs.min ? pvs.min.value : "") : props.min;
+      pv.prec = props.usePvPrecision ? (props.useEpicsMetaData ? (pvs.data ? pvs.data.metadata.precision : "") : pvs.precision ? pvs.precision.value : "") : props.prec;
+      pv.units = props.usePvUnits ? (props.useEpicsMetaData ? (pvs.data ? pvs.data.metadata.units : "") : pvs.units ? pvs.units.value : "") : props.units;
       let initialized = true;
       let pvArray = [];
       for (let index in pvKeys) {
         initialized = initialized && pvs[pvKeys[index]].initialized;
-        if(pvs[pvKeys[index]].pvname){
+        if (pvs[pvKeys[index]].pvname) {
           pvArray.push(pvs[pvKeys[index]]);
         }
       }
       pv.initialized = initialized;
-      if (pv.initialized){
-        pv.readOnly=!pv.metadata.write_access;
+      if (pv.initialized) {
+        pv.readOnly = !pv.metadata.write_access;
       }
-      else{
-        pv.readOnly=true;
+      else {
+        pv.readOnly = true;
       }
       pv.contextPVs = pvArray;
-     // console.log(pv)
+      // console.log(pv)
       SetPv(pv);
-    
+
     }
 
-    
-    
-  },[pvs])
-  useEffect(()=>{
+
+
+  }, [pvs])
+  useEffect(() => {
     props.pvData(pv)
-  },[pv])
-  if (props.debug){
-    console.log( props.name," Debug:","PV Render States: ","pvs:",pvs)
-    console.log( props.name," Debug:","PV Render pv:",pv)
+  }, [pv])
+  if (props.debug) {
+    console.log(props.name, " Debug:", "PV Render States: ", "pvs:", pvs)
+    console.log(props.name, " Debug:", "PV Render pv:", pv)
   }
+  
   return (
     <React.Fragment>
       {dataPv}
@@ -155,7 +170,7 @@ const PV = (props) => {
       {precisionPv}
       {alarmPv}
     </React.Fragment>
-  
+
   )
 
 }
@@ -169,7 +184,7 @@ PV.propTypes = {
    * the widget debugging information will be displayed.
    */
   debug: PropTypes.bool,
- 
+
   /**
    * Local variable intialization value.
    * When using loc:// type PVs.
@@ -198,7 +213,7 @@ PV.propTypes = {
   prec: PropTypes.number,
   /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
   pv: PropTypes.string,
-  
+
   /**
    * Custom units to be used, if usePvUnits is not defined.
    */
@@ -236,10 +251,10 @@ PV.propTypes = {
  */
 // static defaultProps=WrappedComponent.defaultProps;
 PV.defaultProps = {
- 
+
   debug: false,
   useEpicsMetaData: true,
- 
+
 };
 
 

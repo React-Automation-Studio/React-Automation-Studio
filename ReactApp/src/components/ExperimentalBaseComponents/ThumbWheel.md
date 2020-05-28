@@ -12,10 +12,11 @@ ThumbWheel example connection to a SoftChannel EPICS AI pv with custom precision
       pv='pva://$(device):test$(id)'
       macros={{'$(device)':'testIOC','$(id)':'2'}}
       usePvLabel={true}
-      usePvPrecision={true}
+      
       usePvUnits={true}
       usePvMinMax={true}
-      alarmSensitive={false}
+      alarmSensitive={true}
+      prec={5}
       />
   </div>
 
@@ -25,9 +26,10 @@ ThumbWheel example connection to a SoftChannel EPICS AI pv with custom precision
   <ThumbWheel
     pv='pva://$(device):test$(id)'
     macros={{'$(device)':'testIOC','$(id)':'2'}}
-    prec_integer={3}
+    prec_integer={4}
     prec_decimal={5}
     prec={5}
+    usePvMinMax={true}
     />
 
 {/*###############*/}  

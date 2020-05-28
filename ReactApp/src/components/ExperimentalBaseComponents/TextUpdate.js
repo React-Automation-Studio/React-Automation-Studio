@@ -36,7 +36,7 @@ const styles = (theme) => ({
  * More information on JavaScript <b>div</b> tag:
  * https://www.w3schools.com/tags/tag_div.asp<br/><br/>
  */
-function TextUpdateComponent(props) {
+const TextUpdateComponent=(props)=> {
   const {classes}=props;
   let textFieldClassName;
   let label = props.label !== undefined ? props.label + ": " : "";

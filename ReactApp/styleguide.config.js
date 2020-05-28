@@ -84,7 +84,7 @@ module.exports = {
           name: 'Widget and PV Components',
           content: 'src/docs/widget/widget.md',
           components: ['src/components/SystemComponents/Widgets/Widget.js', 'src/components/SystemComponents/PV.js', 'src/components/ExperimentalExamples/Mobile/DynamicPvFieldExample.js'],
-          exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
+          exampleMode: 'expand', // 'hide' | 'collapse' | 'expand'
           usageMode: 'expand', // 'hide' | 'collapse' | 'expand'
 
 

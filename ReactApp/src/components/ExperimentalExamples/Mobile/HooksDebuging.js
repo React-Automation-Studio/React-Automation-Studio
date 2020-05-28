@@ -203,7 +203,7 @@ class ExperimentalMobileDemo1 extends React.Component {
               alarmSensitive={true}
               //debug={true}
               //imediateOutputChange={true}
-              useEpicsMetaData={true}
+              useMetadata={true}
             />
           </Grid>
           <Grid item xs={6}>
@@ -222,7 +222,7 @@ class ExperimentalMobileDemo1 extends React.Component {
               alarmSensitive={true}
               //debug={true}
               //imediateOutputChange={true}
-              useEpicsMetaData={true}
+              useMetadata={true}
             />
           </Grid>
           <Grid item xs={6}  >
@@ -235,7 +235,7 @@ class ExperimentalMobileDemo1 extends React.Component {
               max={500}
               prec={3}
               //usePvLabel={true} 
-              useEpicsMetaData={true}
+              useMetadata={true}
             // debug={true}
             />
 
@@ -250,7 +250,7 @@ class ExperimentalMobileDemo1 extends React.Component {
               max={5000}
               prec={3}
               //usePvLabel={true} 
-              useEpicsMetaData={true}
+              useMetadata={true}
             //debug={true}
             />
 

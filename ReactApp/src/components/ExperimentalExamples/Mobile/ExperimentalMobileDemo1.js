@@ -298,7 +298,7 @@ class ExperimentalMobileDemo1 extends React.Component {
                   <div style={{marginBottom:8}}>Settings</div>
                   <Grid container spacing={2} alignItems={'stretch'} direction={'row'} justify={'flex-start'}>
                     <Grid item xs={12} lg={4}>
-                      <TextInput   pv='pva://$(device):frequency' macros={{'$(device)':'testIOC'}}    usePvUnits={true} usePvPrecision={true} prec={1} usePvLabel={true}/>
+                      <TextInput   pv='pva://$(device):frequency' macros={{'$(device)':'testIOC'}}    usePvUnits={true}  prec={1} usePvLabel={true}/>
                     </Grid>
                     <Grid item xs={12} lg={4}>
                       <TextInput   pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}    usePvUnits={true} usePvPrecision={true} usePvLabel={true}/>

@@ -198,7 +198,7 @@ class DynamicPvFieldExample extends React.Component {
                     alarmSensitive={true}
                     //debug={true}
 
-                    useEpicsMetaData={true}
+                    useMetadata={true}
                   />
                 </Grid>
                 <Grid item xs={12}  >
@@ -211,7 +211,7 @@ class DynamicPvFieldExample extends React.Component {
                     usePvMinMax={true}
                     usePvPrecision={true}
                     alarmSensitive={true}
-                    useEpicsMetaData={true}
+                    useMetadata={true}
 
                   />
 
@@ -240,7 +240,7 @@ class DynamicPvFieldExample extends React.Component {
                     alarmSensitive={true}
                     //debug={true}
 
-                    useEpicsMetaData={false}
+                    useMetadata={false}
                   />
                 </Grid>
                 <Grid item xs={12}  >
@@ -253,7 +253,7 @@ class DynamicPvFieldExample extends React.Component {
                     usePvMinMax={true}
                     usePvPrecision={true}
                     alarmSensitive={true}
-                    useEpicsMetaData={false}
+                    useMetadata={false}
 
                   />
 
@@ -267,7 +267,7 @@ class DynamicPvFieldExample extends React.Component {
                     usePvLabel={true}
 
 
-                    useEpicsMetaData={true}
+                    useMetadata={true}
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -279,7 +279,7 @@ class DynamicPvFieldExample extends React.Component {
                     usePvLabel={true}
 
 
-                    useEpicsMetaData={true}
+                    useMetadata={true}
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -291,7 +291,7 @@ class DynamicPvFieldExample extends React.Component {
                     usePvLabel={true}
 
 
-                    useEpicsMetaData={true}
+                    useMetadata={true}
                   />
                 </Grid>
 
@@ -305,7 +305,7 @@ class DynamicPvFieldExample extends React.Component {
                     usePvPrecision={true}
 
 
-                    useEpicsMetaData={true}
+                    useMetadata={true}
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -318,7 +318,7 @@ class DynamicPvFieldExample extends React.Component {
                     
 
 
-                    useEpicsMetaData={true}
+                    useMetadata={true}
                   />
                 </Grid>
               </Grid>

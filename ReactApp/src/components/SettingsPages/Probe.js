@@ -48,7 +48,7 @@ class Probe extends React.Component {
     const {classes}= this.props;
     const probeObject=JSON.parse(decodeURIComponent(this.props.location.search.substr(1))) ;
     let probetype;
-    console.log(probeObject)
+
     if (typeof probeObject.probeType==='undefined'){
       probetype='normal';
     }
@@ -62,7 +62,7 @@ class Probe extends React.Component {
 <React.Fragment>
   {probetype=='normal'&&<Grid   container
     direction="column"
-    justify="stretch"
+    justify="center"
     spacing={2}>
     <Grid item xs={12} sm ={6} lg={4} >
       <div style={{"overflowX": "hidden"}} >
@@ -72,7 +72,7 @@ class Probe extends React.Component {
             justify="space-evenly"
             spacing={2}>
             <Grid item xs={12}  >
-              <TextOutput  pv='$(device).NAME' macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV Name:'}/>
+              <TextOutput  pv='$(device).NAME' macros={{'$(device)':probeObject.pvname.toString()}}  label={'EPICS PV Name:'} debug={false}/>
             </Grid>
             <Grid item xs={12}  >
               <TextOutput  pv='$(device).DESC'  macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV DESC:'}/>
@@ -126,7 +126,7 @@ class Probe extends React.Component {
   }
   {probetype=='readOnly'&&<Grid   container
     direction="column"
-    justify="stretch"
+    justify="center"
     spacing={2}>
     <Grid item xs={12} sm ={6} lg={4} >
       <div style={{"overflowX": "hidden"}} >

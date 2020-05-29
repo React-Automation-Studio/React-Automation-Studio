@@ -1,256 +1,99 @@
-import React from 'react'
-import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
-import DataConnection from '../SystemComponents/DataConnection';
-import { withStyles } from '@material-ui/core/styles';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import PropTypes from 'prop-types';
-//import classNames from 'classnames';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import TextField from '@material-ui/core/TextField';
-
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
-import Button from '@material-ui/core/Button';
-import {LanDisconnect} from 'mdi-material-ui/'
+import React from "react";
+import { withStyles } from "@material-ui/core/styles";
+import { Button, FormControlLabel } from "@material-ui/core";
+import PropTypes from "prop-types";
+import Widget from "../SystemComponents/Widgets/Widget";
 
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
-
-    display: 'flex',
-    flexWrap: 'wrap',
-
-
+    display: "flex",
+    flexWrap: "wrap",
   },
   FormControl: {
-    width:'100%',
-    height:'100%',
-    marginTop:'auto',
-    marginBottom:'auto',
-    marginLeft:'auto',
-    marginRight:'auto',
-
-
+    width: "100%",
+    height: "100%",
+    marginTop: "auto",
+    marginBottom: "auto",
+    marginLeft: "auto",
+    marginRight: "auto",
   },
   Button: {
-    width:'100%',
-    height:'100%',
-    marginTop:'auto',
-    marginBottom:'auto',
-    marginLeft:'auto',
-    marginRight:'auto',
-    //  width:'100%',
-    //    marginTop:'auto',
-    //    marginLeft:'auto',
-    //    marginRight:'auto',
-    //    marginBottom:'auto',
-
+    width: "100%",
+    height: "100%",
+    marginTop: "auto",
+    marginBottom: "auto",
+    marginLeft: "auto",
+    marginRight: "auto",
   },
 });
-/**
-* The ActionButton Component is a wrapper on the Material-UI Button component. The ActionButton will ouput the `actionValue` to the process variable when pressed. The ActionButton component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
-* The margins and spacing must be controlled from the parent component.<br/><br/>
-* Material-UI Button Demos:
-* https://material-ui.com/demos/buttons/<br/><br/>
-* Material-UI Button API:
-* https://material-ui.com/api/button/
 
-*/
-class ActionButton extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state={['value'] : "0",
-    ['label']:"Undefined",
-    ['pvname']:"Undefined",
-    ['intialized']:false,
-    ['metadata']:{},
-    ['severity']:'',
-    ['newValueTrigger']:0
+
+
+const ActionButtonComponent=(props)=> {
+
+  /**
+   * Send the predefined value to the PV.
+   */
+  const handleButtonClick=()=> {
+   
+    props.handleImmediateChange(props.actionValue);
   }
-  this.handleInputValue= this.handleInputValue.bind(this);
-  this.handleInputValueLabel= this.handleInputValueLabel.bind(this);
-  this.handleMetadata= this.handleMetadata.bind(this);
-  this.renderCount=0;
-}
 
 
-handleInputValue(inputValue,pvname,initialized,severity){
-  // console.log("severity: ",severity);
-
-  this.setState({    ['value']	 :inputValue,
-
-  ['pvname']:pvname,
-  ['initialized']:initialized,
-  ['severity']:severity});
-
-
-}
-
-
-handleMetadata(metadata){
-
-
-  this.setState({['metadata']:metadata});
-
-
-}
-
-
-
-handleInputValueLabel(inputValue){
-
-  this.setState({['label']:inputValue});
-
-}
-
-
-
-componentDidMount() {
-}
-
-
-componentWillUnmount() {
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-handleButtonClick = name => event => {
-  //console.log(event.target.checked)
-
-  this.setState({ ['value']: this.props.actionValue,
-  ['newValueTrigger']:this.state.newValueTrigger+1});
-};
-
-
-render() {
-  console.log(this.renderCount)
-  this.renderCount+=1;
-
-  const {classes}= this.props;
-  const pv = this.props.pv;
-  const macros=  this.props.macros;
-  const usePvLabel= this.props.usePvLabel;
-  const mylabel= this.props.label;
-  const usePrecision= this.props.prec;
-  const useStringValue=this.props.useStringValue;
-  const severity=this.state.severity;
-  let units="";
-  const initialized=this.state.initialized;
-  const value=this.state.value;
-  let enum_strings={};
-
-
-
-
-
-
-
-
-
-
-
-
-  let write_access=false;
-  let read_access=false;
-  if(initialized){
-
-    if (typeof this.state.metadata !== 'undefined'){
-      if (typeof this.state.metadata.write_access !== 'undefined'){
-        write_access=this.state.metadata.write_access;
-      }
-      if (typeof this.state.metadata.read_access !== 'undefined'){
-        read_access=this.state.metadata.read_access;
-      }
-    }
-  }
   return (
-
-    <div>
-      <DataConnection
-        pv={pv}
-        macros={macros}
-        usePvLabel={usePvLabel}
-        usePrecision={usePrecision}
-        handleInputValue={this.handleInputValue}
-        handleMetadata={this.handleMetadata}
-        outputValue=  {this.state.value}
-        useStringValue={useStringValue}
-        newValueTrigger={this.state.newValueTrigger}
-        intialLocalVariableValue={this.props.intialLocalVariableValue}
-        handleInputValueLabel={this.handleInputValueLabel}
-        debug={this.props.debug}
-      />
-
-      {initialized===true &&
-        <div>
-
-          <FormControlLabel className={classes.FormControl}
-            control={
-              <Button disabled={write_access===false?true:false}  variant="contained" color={typeof this.props.color==='undefined'?"primary":this.props.color} className={classes.Button}  onClick={this.handleButtonClick('value')}>
-
-
-                {this.props.actionString}
-
-              </Button>
-            }
-            label={usePvLabel===true? this.state['label']:this.props.label}
-            labelPlacement={typeof this.props.labelPlacement !== 'undefined'? this.props.labelPlacement:"top"}
-          />
-
-
-        </div>
+    <FormControlLabel
+      key={props.pvName}
+      className={props.classes.FormControl}
+      disabled={props.disabled}
+      label={props.formControlLabel}
+      labelPlacement={props.labelPlacement}
+      control={
+        <Button
+          className={props.classes.Button}
+          variant="contained"
+          color={props.onColor}
+          onClick={handleButtonClick}
+        >
+          {props.actionString}
+        </Button>
       }
-
-      {(initialized===false||initialized==='undefined') &&
-        <div>
-
-          <FormControlLabel className={classes.FormControl}
-            control={
-              <Button disabled={true}  variant="contained" color={typeof this.props.color==='undefined'?"primary":this.props.color} className={classes.Button}  onClick={this.handleButtonClick('value')}>
-
-                {this.state.pvname}
-
-
-              </Button>
-            }
-            label={<LanDisconnect style={{color:this.props.theme.palette.error.main,verticalAlign: "middle"}} fontSize='small'/>}
-            labelPlacement={typeof this.props.labelPlacement !== 'undefined'? this.props.labelPlacement:"top"}
-          />
-
-
-        </div>
-      }
-
-
-    </div>
-
-)
+    />
+  );
 }
-}
+
+/**
+ * The ActionButton Component is a wrapper on the Material-UI Button component.
+ * The ActionButton will ouput the `actionValue` to the process variable when pressed.
+ * The ActionButton component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
+ * The margins and spacing must be controlled from the parent component.<br/><br/>
+ * Material-UI Button Demos:
+ * https://material-ui.com/demos/buttons/<br/><br/>
+ * Material-UI Button API:
+ * https://material-ui.com/api/button/
+ * */
+
+const ActionButton = (props)=> {
+  
+    return (
+      <Widget  {...props} component={ActionButtonComponent}/> 
+     
+    )
+  }
 
 ActionButton.propTypes = {
+  /** Define the string on the button.*/
+  actionString: PropTypes.string,
+  /**  Define the value to write into the PV.*/
+  actionValue: PropTypes.any,
   /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
-  pv: PropTypes.string.isRequired,
+  pv: PropTypes.string,
+  /** Array of the process variables, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+  pvs: PropTypes.arrayOf(PropTypes.string),
   /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
-  macros:PropTypes.object,
+  macros: PropTypes.object,
   /** Directive to fill the label with the value contained in the  EPICS pv's DESC field. */
-  usePvLabel:PropTypes.bool,
+  usePvLabel: PropTypes.bool,
 
   /** Custom color to be used, must be derived from Material UI them color's*/
   color: PropTypes.string,
@@ -259,23 +102,15 @@ ActionButton.propTypes = {
   label: PropTypes.string,
 
   /** Postion of label*/
-  labelPlacement:  PropTypes.oneOf(['top', 'bottom','start','end']),
+  labelPlacement: PropTypes.oneOf(['top', 'bottom', 'start', 'end']),
 
   /** If defined, then the string value of the EPICS enumerator type will be forced to be used, if not defined the the enumerator index is used */
-  useStringValue:PropTypes.bool,
+  useStringValue: PropTypes.bool,
   /** If defined, then the DataConnection debugging information will be displayed*/
-  debug:PropTypes.bool,
+  debug: PropTypes.bool,
   /** local variable intialization value*/
-  intialLocalVariableValue:PropTypes.string
+  intialLocalVariableValue: PropTypes.string
 
 };
 
-ActionButton.defaultProps = {
-  debug: false,
-  color: 'primary',
-  useStringValue: false,
-  usePvLabel: false
-};
-
-ActionButton.contextType=AutomationStudioContext;
-export default withStyles(styles,{withTheme:true})(ActionButton)
+export default withStyles(styles, { withTheme: true })(ActionButton);

@@ -13,7 +13,7 @@ Tank example connection to a SoftChannel EPICS AI pv with usePvMinMax:
 
   {/*###############*/}  
 
-  <Tank  pv='pva://$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}} usePvMinMax={true}/>
+  <Tank  pv='pva://$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}} usePvMinMax={true} usePvUnits={true} />
 
   {/*###############*/}
 

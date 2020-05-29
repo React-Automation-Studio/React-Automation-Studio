@@ -1,238 +1,164 @@
-import React from 'react'
-import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
-import DataConnection from '../SystemComponents/DataConnection';
-import { withStyles } from '@material-ui/core/styles';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import PropTypes from 'prop-types';
-//import classNames from 'classnames';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import TextField from '@material-ui/core/TextField';
-import Switch from '@material-ui/core/Switch';
-import { LanDisconnect } from 'mdi-material-ui/';
+import React from "react";
+import { withStyles } from "@material-ui/core/styles";
+
+import Widget from "../SystemComponents/Widgets/Widget";
+import red from '@material-ui/core/colors/red';
+import deepOrange from '@material-ui/core/colors/deepOrange';
 import { Typography } from '@material-ui/core';
+import PropTypes from 'prop-types';
+import { create, all } from 'mathjs';
 
+const config = { }
 
+const math = create(all, config);
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
-
-    display: 'flex',
-    flexWrap: 'wrap',
+    display: "flex",
+    flexWrap: "wrap",
+  },
+  TextFieldSeverity0: {
 
 
   },
-  TextField: {
-    width: '100%',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    paddingBottom: 0,
-    marginTop: 0,
-    fontWeight: 500,
-    borderRadius: 4
+  TextFieldSeverity1: {
+    borderRadius: 2,
+    padding:1,
+    background:deepOrange['400']
+    //  background:'linear-gradient(45deg, '+ theme.palette.background.default+ ' 1%, '+deepOrange['400'] +' 99%)'
+  },
+  TextFieldSeverity2: {
+    borderRadius: 2,
+    padding:1,
+    background:red['800']
+    //  backgroundColor:'linear-gradient(45deg, #FFFFFF 1%, #FF8E53 99%)'
+    //  background:'linear-gradient(45deg, '+ theme.palette.background.default+ ' 1%, '+red['800'] +' 99%)'
   }
-
 });
-/**
- * The TextUpdateMultiplePVs Component is a wrapper on the JavaScript <b>div</b> container tag. The component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
- * The margins and spacing must be controlled from the parent component.<br/><br/>
- * More information on JavaScript <b>div</b> tag:
- * https://www.w3schools.com/tags/tag_div.asp<br/><br/>
- * This component displays the values of multiple PVs. <br/><br/>
- */
-class TextUpdateMultiplePVs extends React.Component {
-  constructor(props) {
-    super(props);
-    let state = {}
-    let pv;
-    let pvname;
-    let pvs = {};
-    for (pv in this.props.pvs) {
-      pvname = this.props.pvs[pv];
-      if (typeof this.props.macros !== 'undefined') {
 
-        let macro;
-        for (macro in this.props.macros) {
-          pvname = pvname.replace(macro.toString(), this.props.macros[macro].toString());
+
+const TextUpdateMultiplePVsComponent=(props)=> {
+  const {classes}=props;
+  
+
+    const content=(props)=>{
+       
+        let pvs=props.pvsData;
+        let data=[];
+        let pv;
+        let textFieldClassName;
+        for (pv in pvs){
+         
+          if (pvs[pv].initialized){
+          if (props.alarmSensitive==true){
+            if (pvs[pv].severity==1){
+              textFieldClassName=classes.TextFieldSeverity1;
+              //  background_color='linear-gradient(45deg, #FFFFFF 1%, #FF8E53 99%)';
+            }
+            else if(pvs[pv].severity==2){
+              textFieldClassName=classes.TextFieldSeverity2;
+              //  background_color='linear-gradient(45deg, #FFFFFF 1%, #E20101 99%)';
+            }
+            else {
+              textFieldClassName=classes.TextFieldSeverity0;
+              //  background_color='white';
+            }
+          }
+          let units=pvs[pv].units?" "+pvs[pv].units:"";
+          let value;
+          if (typeof props.numberFormat !== 'undefined'){
+            value=math.format(parseFloat(pvs[pv].value),props.numberFormat)
+          }
+          else{
+            value=pvs[pv].value
+          }
+          
+
+          data.push(<Typography className={textFieldClassName} >{pvs[pv].label+": " + value +  units}</Typography>)
+        }
+        else{
+          data.push(<Typography>{props.disconnectedIcon}{" "+pvs[pv].pvName}</Typography>)
         }
       }
-      //    console.log(pvname)
-
-      pvs[pvname] = {
-        label: "", initialized: false, pvname: pvname, value: "", char_value: "", alarmColor: "", lower_disp_limit: 0, upper_disp_limit: 10000, lower_warning_limit: 4000, upper_warning_limit: 6000,
-        units: "V", precision: 0
-      };
+      return data;
+      
     }
-    state['pvs'] = pvs;
-    this.state = state;
+ 
 
-
-
-
-
-
-    this.handleInputValue = this.handleInputValue.bind(this);
-    this.handleInputValueLabel = this.handleInputValueLabel.bind(this);
-    this.handleMetadata = this.handleMetadata.bind(this);
-    this.multipleDataConnections = this.multipleDataConnections.bind(this);
-    this.test = this.test.bind(this);
-  }
-
-
-  handleInputValue = (inputValue, pvname, initialized, severity) => {
-    //  console.log("test");
-    //  console.log("value: ",inputValue);
-    //  console.log("pvname:", pvname);
-    let pvs = this.state.pvs;
-
-    pvs[pvname].value = inputValue;
-    pvs[pvname].initialized = initialized;
-    pvs[pvname].severity = severity;
-
-    this.setState({ pvs: pvs });
-
-
-    //state.pvs[pvname].inputValue=inputValue;
-    //pvData.pvs[pvname].initialized=initialized;
-    //pvData.pvs[pvname].severity=severity;
-
-    //console.log("pvData:",pvData)
-
-    //this.setState(pvData);
-
-  }
-
-
-  handleMetadata = pvname => (metadata) => {
-
-    let pvs = this.state.pvs;
-    pvs[pvname].metadata = metadata;
-    this.setState({ pvs: pvs });
-    //  console.log("metadata",metadata)
-
-  }
-
-
-
-  handleInputValueLabel = pvname => (inputValue) => {
-
-    let pvs = this.state.pvs;
-    pvs[pvname].label = inputValue;
-    this.setState({ pvs: pvs });
-
-  }
-
-
-
-  componentDidMount() {
-  }
-
-
-  componentWillUnmount() {
-
-  }
-
-
-
-
-
-
-
-
-
-  handleOnFocus = event => {
-    this.setState({ ['hasFocus']: true });
-  }
-
-  catchReturn = stateVar => event => {
-    if (event.key === 'Enter') {
-      this.setState({ ['outputValue']: this.state['value'] });
-    }
-  }
-
-
-  handleOnBlur = event => {
-    this.setState({
-      ['hasFocus']: false,
-      ['value']: this.state['inputValue'],
-      ['metadata']: this.state['newMetadata']
-    });
-  }
-
-  handleChange = name => event => {
-    this.setState({
-      [name]: event.target.value,
-    });
-  };
-  test() {
-  }
-
-
-  test = testvalue => {
-    //console.log("test",testvalue);
-  }
-
-  multipleDataConnections = () => {
-    //this.test("test1");
-    //this.handleInputValue();
-    let pv;
-    let DataConnections = [];
-    for (pv in this.state.pvs) {
-      //  console.log(this.state.pvs[pv].pvname);
-      DataConnections.push(
-        <div key={pv.toString()}>
-          <DataConnection
-            pv={this.state.pvs[pv].pvname}
-            handleInputValue={this.handleInputValue}
-            handleMetadata={this.handleMetadata(this.state.pvs[pv].pvname)}
-          />
-          {this.props.usePvLabel === true && <DataConnection
-
-            pv={pv.toString() + ".DESC"}
-
-            handleInputValue={this.handleInputValueLabel(this.state.pvs[pv].pvname)}
-
-          />}
-          {this.state.pvs[pv].initialized && <div>
-            {this.props.usePvLabel === true ? this.state.pvs[pv].label + ': ' : ""}
-            {this.state.pvs[pv].value}
-          </div>}
-          {(this.state.pvs[pv].initialized === false) && <div>
-            {<Typography> <LanDisconnect style={{ color: this.props.theme.palette.error.main, verticalAlign: "middle" }} fontSize='small' /> {this.state.pvs[pv].pvname} </Typography>}
-
-          </div>}
-        </div>
-      )
-    }
-
-    return DataConnections;
-  }
-
-
-  render() {
-
-    return (
-
-      <React.Fragment>
-        {this.multipleDataConnections()}
-
-      </React.Fragment>
-
-
-
-    )
-  }
-
+  return <React.Fragment>{content(props)}</React.Fragment>;
 }
+/**
+ * The TextUpdateMultiplePVs Component is a wrapper on the  <b>Typography</b> container tag.
+ * The component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
+ * The margins and spacing must be controlled from the parent component.<br/><br/>
+ 
+ */
+const TextUpdateMultiplePVs =(props)=>{
+  return (
+    <Widget {...props} component={TextUpdateMultiplePVsComponent}/>
+       
+    
+  )
+}
+
 TextUpdateMultiplePVs.propTypes = {
-  /** Array of process variables to be displayed, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
-  pvs: PropTypes.array.isRequired,
-  /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
-  macros: PropTypes.object,
-  /** Directive to fill the label with the value contained in the  EPICS pv's DESC field. */
-  usePvLabel: PropTypes.bool,
+  /**
+  * Directive to use the  alarm severity status to alter the fields backgorund color.
+  */
 
+ alarmSensitive: PropTypes.bool,
+
+ /**
+  * If defined, then the DataConnection and
+  * the widget debugging information will be displayed.
+  */
+ debug: PropTypes.bool,
+
+ 
+ /**
+  * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver. 
+  * The pyEpics metadata is unfortunately static and the values used will be the intial values that pvserver receives when it connects the first time. 
+  * This is sufficient in most cases except when the user wants to dynamically update the metaData.
+  * In this case a direct connection can be made to all the pv fields by setting useMetadata to false. 
+  * If any of the metadata pvs are defined i.e unitsPv then the PV makes a new data  connection to this alternate pv and will
+  * use the value provided by this pv as the units. 
+  * The same is the case for the precPV, labelPv, alarmPv, unitsPv and minPv.
+  * By setting useMetadata to false also enables connection to other variables as defined by different protocols.
+  */
+ useMetadata: PropTypes.bool,
+ 
+ /**
+  * Directive to use the units contained in the   pv metdata's EGU field or unitsPv.
+  *  If not defined it uses the custom units as defined by the units prop.
+  */
+
+
+ usePvUnits: PropTypes.bool,
+ /**
+  * Directive to use PV's string values.
+  */
+ useStringValue: PropTypes.bool,
+
+
+
+ 
+ /**
+  * If defined, then the string representaion of the number can be formatted
+  * using the mathjs format function
+  * eg. numberFormat={{notation: 'engineering',precision: 3}}.
+  * See https://mathjs.org/docs/reference/functions/format.html for more examples
+  */
+ numberFormat: PropTypes.object,
+
+ 
+
+ /** Array of the process variables, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+ pvs: PropTypes.arrayOf(PropTypes.string),
+ 
 };
-
-TextUpdateMultiplePVs.contextType = AutomationStudioContext;
+TextUpdateMultiplePVs.defaultProps = {
+ debug: false,
+ useMetadata:true,
+ alarmSensitive: false
+};
 export default withStyles(styles, { withTheme: true })(TextUpdateMultiplePVs)

@@ -12,7 +12,7 @@ RadioButton example connection to a SoftChannel EPICS AI pv with use of EPICS la
       pv='pva://$(device):BO$(id)'
       macros={{'$(device)':'testIOC','$(id)':'1'}}
       usePvLabel={true}
-      usePrecision={true}
+      usePvPrecision={true}
       usePvUnits={true}
       usePvMinMax={true}
       alarmSensitive={false}

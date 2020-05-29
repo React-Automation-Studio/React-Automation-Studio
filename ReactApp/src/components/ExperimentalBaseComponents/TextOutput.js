@@ -71,19 +71,19 @@ const styles = (theme) => ({
   TextFieldSeverity1: {
     width: '100%',
     borderRadius: 4,
-    background:'linear-gradient(45deg, '+ theme.palette.background.default+ ' 1%, '+deepOrange['400'] +' 99%)'
+    background: 'linear-gradient(45deg, ' + theme.palette.background.default + ' 1%, ' + deepOrange['400'] + ' 99%)'
   },
   TextFieldSeverity2: {
     width: '100%',
     borderRadius: 4,
-    background:'linear-gradient(45deg, '+ theme.palette.background.default+ ' 1%, '+red['800'] +' 99%)'
+    background: 'linear-gradient(45deg, ' + theme.palette.background.default + ' 1%, ' + red['800'] + ' 99%)'
   }
 });
 
 
 function TextOutputComponent(props) {
   const { classes } = props;
-  
+
 
   let inputProps = {
     classes: {
@@ -91,7 +91,7 @@ function TextOutputComponent(props) {
       focused: classes.cssFocused,
       input: classes.input,
       notchedOutline: classes.notchedOutline,
-     
+
     },
     endAdornment: (
       <InputAdornment position="end">
@@ -125,30 +125,72 @@ function TextOutputComponent(props) {
 
     }
   }
-  return (
-    
-          <TextField
-            className={textFieldClassName}
-           
-            key={props.pvName}
-            //aria-owns={state.openContextMenu ? 'menu-list-grow' : undefined}
-            aria-haspopup="true"
-            label={!props.initialized?props.disconnectedIcon:props.label}
-            fullWidth={true}
-            onFocus={props.handleFocus}
-            onBlur={props.handleBlur}
-            value={!props.initialized?props.pvName:props.value}
-            margin={props.margin}
-            variant={props.variant}
-            //disabled={props.disabled}
-            InputLabelProps={inputLabelProps}
-            InputProps={inputProps}
-          />
-        )
-      
 
+  let value;
+  const { initialized } = props;
+  if (initialized) {
    
-  
+    if (typeof props.displayMetaData === 'undefined') {
+      if (typeof props.displayTimeStamp !== 'undefined') {
+        let mydate = new Date(props.pvData.timestamp * 1000);
+        let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        let year = mydate.getFullYear();
+        let month = months[mydate.getMonth()];
+        let date = mydate.getDate();
+        let hour = mydate.getHours();
+        let min = mydate.getMinutes();
+        let sec = mydate.getSeconds();
+        let ms = mydate.getMilliseconds()
+
+
+        if (min < 10) {
+          min = '0' + min;
+
+        }
+
+        if (sec < 10) {
+          sec = '0' + sec;
+
+        }
+        value = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec + ':' + ms;
+
+
+
+      }
+      else {
+        value = props.value;
+      }
+    } else {
+
+      value = props.pvData.metadata[props.displayMetaData];
+
+    }
+  }
+
+  return (
+
+    <TextField
+      className={textFieldClassName}
+
+      key={props.pvName}
+      //aria-owns={state.openContextMenu ? 'menu-list-grow' : undefined}
+      aria-haspopup="true"
+      label={!props.initialized ? props.disconnectedIcon : props.label}
+      fullWidth={true}
+      onFocus={props.handleFocus}
+      onBlur={props.handleBlur}
+      value={!props.initialized ? props.pvName : value}
+      margin={props.margin}
+      variant={props.variant}
+      //disabled={props.disabled}
+      InputLabelProps={inputLabelProps}
+      InputProps={inputProps}
+    />
+  )
+
+
+
+
 }
 
 
@@ -161,19 +203,19 @@ function TextOutputComponent(props) {
  *  Material-UI TextField API:
  *  https://material-ui.com/api/text-field
  */
-const TextOutput =(props)=>{
-    return (
-      <Widget {...props} component={TextOutputComponent}/>
-         
-      
-    )
-  }
+const TextOutput = (props) => {
+  return (
+    <Widget {...props} component={TextOutputComponent} />
+
+
+  )
+}
 
 
 TextOutput.propTypes = {
-   /**
-   * Directive to use the  alarm severity status to alter the fields backgorund color.
-   */
+  /**
+  * Directive to use the  alarm severity status to alter the fields backgorund color.
+  */
 
   alarmSensitive: PropTypes.bool,
   /**
@@ -220,7 +262,7 @@ TextOutput.propTypes = {
    * Custom PV to define the minimum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
    */
   minPv: PropTypes.string,
-  
+
   /**
    * Custom precision to round the value.
    */
@@ -229,9 +271,9 @@ TextOutput.propTypes = {
    * Custom PV to define the precision to be used, usePvPrecision must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
    */
   precPv: PropTypes.string,
- 
 
-  
+
+
   /**
    * Custom units to be used, if usePvUnits is not defined.
    */
@@ -284,7 +326,7 @@ TextOutput.propTypes = {
 
 
 
-  
+
   /**
    * If defined, then the string representaion of the number can be formatted
    * using the mathjs format function
@@ -300,7 +342,7 @@ TextOutput.propTypes = {
    * Custom off color to be used, must be derived from Material UI theme color's.
    */
   offColor: PropTypes.string,
-  
+
   /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
   pv: PropTypes.string,
   /** Array of the process variables, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/

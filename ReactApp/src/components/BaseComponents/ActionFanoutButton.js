@@ -112,6 +112,7 @@ handleInputValueLabel=pvname=>(inputValue)=>{
 
 
 componentDidMount() {
+  console.warn("Component is deprecated, use the ActionButton instead")
 }
 
 

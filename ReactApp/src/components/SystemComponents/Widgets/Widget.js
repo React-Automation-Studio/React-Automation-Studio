@@ -3,6 +3,9 @@ import PV from '../PV'
 import ContextMenu from "../ContextMenu";
 import PropTypes from "prop-types";
 import { LanDisconnect } from "mdi-material-ui/";
+import { create, all } from 'mathjs';
+const config = { }
+const math = create(all, config)
 
 /**
  * The Widget component creates standard properties, state variables and callbacks to manage the behaviour of a component communicating with one or multiple PVs. It also provides the default RAS contextMenu to the child component. 
@@ -125,19 +128,53 @@ import { LanDisconnect } from "mdi-material-ui/";
 
   useEffect(() => {
     if (!focus) {
-      setValue(checkPrecision(pv.value, prec))
+      let newValue;
+      newValue=checkPrecision(pv.value, prec);
+      if (typeof props.numberFormat !== 'undefined'){
+        newValue=math.format(parseFloat(newValue),props.numberFormat)
+        setValue(newValue)
+      }
+      else{
+        setValue(newValue)
+      }
+      
     }
   }, [focus, pv.value, prec])
 
   useEffect(() => {
-    setAlarmSeverity(pv.severity)
-  }, [pv.severity])
+    let newSeverity=pv.severity;
+    if (typeof props.useStringSeverityMatch !== 'undefined'){
+      if (props.useStringSeverityMatch==true){
+
+        if (typeof props.StringSeverity !== 'undefined'){
+          let string;
+          for (string in props.StringSeverity){
+            
+            if (value==props.StringSeverity[string].stringMatch){
+              newSeverity=props.StringSeverity[string].severity;
+              break;
+            }
+
+          }
+
+        }
+      }
+    }
+    setAlarmSeverity(newSeverity)
+  }, [pv.severity,props.useStringSeverityMatch,props.StringSeverity,value])
 
 
   useEffect(() => {
     if (immediateValue !== null) {
       let tempvalue = checkPrecision(isInsideLimits(immediateValue, min, max), prec);
-      setValue(tempvalue);
+      if (typeof props.numberFormat !== 'undefined'){
+        tempvalue=math.format(parseFloat(tempvalue),props.numberFormat)
+        setValue(tempvalue)
+      }
+      else{
+        setValue(tempvalue)
+      }
+      
       setOutputValue(tempvalue);
      
       setNewValueTrigger(newValueTrigger + 1);
@@ -150,7 +187,13 @@ import { LanDisconnect } from "mdi-material-ui/";
   useEffect(() => {
     if (commitChange) {
       let tempvalue = checkPrecision(isInsideLimits(value, min, max), prec);
-      setValue(tempvalue);
+      if (typeof props.numberFormat !== 'undefined'){
+        tempvalue=math.format(parseFloat(tempvalue),props.numberFormat)
+        setValue(tempvalue)
+      }
+      else{
+        setValue(tempvalue)
+      }
       setOutputValue(tempvalue);
       setNewValueTrigger(newValueTrigger + 1);
       SetCommitChange(false)
@@ -409,22 +452,20 @@ import { LanDisconnect } from "mdi-material-ui/";
  */
 Widget.propTypes = {
   /**
-   * Directive to use the EPICS alarm severity status to alter the fields backgorund color.
+   * Directive to use the  alarm severity status to alter the fields backgorund color.
    */
+
   alarmSensitive: PropTypes.bool,
+  /**
+   * Custom PV to define the alarm severity to be used, alarmSensitive must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+   */
+  alarmPv: PropTypes.string,
   /**
    * If defined, then the DataConnection and
    * the widget debugging information will be displayed.
    */
   debug: PropTypes.bool,
-  /**
-   * Directive to disable the button from outside.
-   */
-  disabled: PropTypes.bool,
-  /**
-   * Directive to disable the Probe page for a widget
-   */
-  disableProbe: PropTypes.bool,
+
   /**
    * Local variable intialization value.
    * When using loc:// type PVs.
@@ -435,6 +476,10 @@ Widget.propTypes = {
    */
   label: PropTypes.string,
   /**
+  * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+  */
+  labelPv: PropTypes.string,
+  /**
    * Values of macros that will be substituted in the pv name.
    * eg. {{'$(device)':'testIOC','$(id)':'2'}}
    */
@@ -444,9 +489,89 @@ Widget.propTypes = {
    */
   max: PropTypes.number,
   /**
+   * Custom PV to define the maximum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+   */
+  maxPv: PropTypes.string,
+  /**
    * Custom minimum value to be used, if usePvMinMax is not defined.
    */
   min: PropTypes.number,
+  /**
+   * Custom PV to define the minimum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+   */
+  minPv: PropTypes.string,
+  /**
+   * when writing to the  pv's outputvalue, increment newValueTrigger to tell the pv component emit the outputputvalue to the process variable.
+   */
+  newValueTrigger:PropTypes.number,
+  /**
+   * the output value to the process variable. It is only emitted once the newValueTrigger is incremented.
+   */
+  outputValue:PropTypes.any,
+  /**
+   * Custom precision to round the value.
+   */
+  prec: PropTypes.number,
+  /**
+   * Custom PV to define the precision to be used, usePvPrecision must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+   */
+  precPv: PropTypes.string,
+ 
+
+  
+  /**
+   * Custom units to be used, if usePvUnits is not defined.
+   */
+
+  units: PropTypes.string,
+  /**
+   * Custom PV to define the units to be used, usePvUnits must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+   */
+  unitsPv: PropTypes.string,
+  /**
+   * Directive to fill the component's label with
+   * the value contained in the  pv metadata's DESC field or the labelPv value.
+   * If not defined it uses the custom label as defined by the label prop.
+   */
+  usePvLabel: PropTypes.bool,
+  /**
+   * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver. 
+   * The pyEpics metadata is unfortunately static and the values used will be the intial values that pvserver receives when it connects the first time. 
+   * This is sufficient in most cases except when the user wants to dynamically update the metaData.
+   * In this case a direct connection can be made to all the pv fields by setting useMetadata to false. 
+   * If any of the metadata pvs are defined i.e unitsPv then the PV makes a new data  connection to this alternate pv and will
+   * use the value provided by this pv as the units. 
+   * The same is the case for the precPV, labelPv, alarmPv, unitsPv and minPv.
+   * By setting useMetadata to false also enables connection to other variables as defined by different protocols.
+   */
+  useMetadata: PropTypes.bool,
+  /**
+   * Directive to use the pv metadata's HOPR and LOPR fields or the minPv and maxPv values
+   * to limit the maximum and minimum values
+   * that can be contained in the value.
+   * If not defined it uses the custom mina nd max as defined by the min and max prop.
+   */
+  usePvMinMax: PropTypes.bool,
+  /**
+   * Directive to round the value using the precision field of the PV metadata or precPv.
+   * If not defined it uses the custom precision as defined by the prec prop.
+   */
+  usePvPrecision: PropTypes.bool,
+  /**
+   * Directive to use the units contained in the   pv metdata's EGU field or unitsPv.
+   *  If not defined it uses the custom units as defined by the units prop.
+   */
+
+
+  usePvUnits: PropTypes.bool,
+  /**
+   * Directive to use PV's string values.
+   */
+  useStringValue: PropTypes.bool,
+
+
+
+  
   /**
    * If defined, then the string representaion of the number can be formatted
    * using the mathjs format function
@@ -462,10 +587,7 @@ Widget.propTypes = {
    * Custom off color to be used, must be derived from Material UI theme color's.
    */
   offColor: PropTypes.string,
-  /**
-   * Custom precision to round the value.
-   */
-  prec: PropTypes.number,
+  
   /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
   pv: PropTypes.string,
   /** Array of the process variables, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
@@ -478,33 +600,9 @@ Widget.propTypes = {
    */
   stringSeverity: PropTypes.object,
   /**
-   * Custom units to be used, if usePvUnits is not defined.
+   * Directive to overided alarm severity with the rules defined in the stringSeverity
    */
-  units: PropTypes.string,
-  /**
-   * Directive to fill the component's label with
-   * the value contained in the  EPICS PV's DESC field.
-   */
-  usePvLabel: PropTypes.bool,
-  /**
-   * Directive to use the HOPR and LOPR EPICS fields
-   * to limit the maximum and minimum values
-   * that can be contained in the value.
-   */
-  usePvMinMax: PropTypes.bool,
-  /**
-   * Directive to round the value using the PREC field of the PV.
-   * If not defined it uses the custom precision.
-   */
-  usePvPrecision: PropTypes.bool,
-  /**
-   * Directive to use the units contained in the  EPICS pv's EGU field.
-   */
-  usePvUnits: PropTypes.bool,
-  /**
-   * Directive to use PV's string values.
-   */
-  useStringValue: PropTypes.bool,
+  useStringSeverityMatch: PropTypes.bool
 
 };
 

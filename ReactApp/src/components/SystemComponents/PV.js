@@ -192,7 +192,7 @@ const PV = (props) => {
 }
 PV.propTypes = {
   /**
-   * Directive to use the EPICS alarm severity status to alter the fields backgorund color.
+   * Directive to use the  alarm severity status to alter the fields backgorund color.
    */
 
   alarmSensitive: PropTypes.bool,
@@ -285,7 +285,8 @@ PV.propTypes = {
    * The pyEpics metadata is unfortunately static and the values used will be the intial values that pvserver receives when it connects the first time. 
    * This is sufficient in most cases except when the user wants to dynamically update the metaData.
    * In this case a direct connection can be made to all the pv fields by setting useMetadata to false. 
-   * If any of the metadata pvs are defined i.e unitsPv then PV makes a new data data connection to this alternate pv and will use the value provided by this pv as the units. 
+   * If any of the metadata pvs are defined i.e unitsPv then the PV makes a new data  connection to this alternate pv and will
+   * use the value provided by this pv as the units. 
    * The same is the case for the precPV, labelPv, alarmPv, unitsPv and minPv.
    * By setting useMetadata to false also enables connection to other variables as defined by different protocols.
    */

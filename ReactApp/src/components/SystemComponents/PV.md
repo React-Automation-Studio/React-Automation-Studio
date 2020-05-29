@@ -1,6 +1,6 @@
 The pv object return through the pvData callback or passed to the child function has a default structure with the following properties:
 
-``` static
+```js static
 {
     value: 0,
     label: "",

@@ -179,12 +179,10 @@ class DynamicPvFieldExample extends React.Component {
         <Grid container className={classes.root} spacing={2}>
 
           <Grid item xs={6}>
-            <Typography style={{ paddingBottom: 0 }}> Example using default pyEpics Metadata</Typography>
+            <Typography style={{ paddingBottom: 0 }}> Example with prop useMetadata=true</Typography>
             <Card>
               <Grid container className={classes.root} spacing={2}>
-                <Grid item xs={12}>
-
-                </Grid>
+                
                 <Grid item xs={12}>
 
                   <TextInput
@@ -221,12 +219,10 @@ class DynamicPvFieldExample extends React.Component {
           </Grid>
 
           <Grid item xs={6}>
-            <Typography style={{ paddingBottom: 0 }}> Dynamic Example connectiosn to PV fields</Typography>
+            <Typography style={{ paddingBottom: 0 }}> Dynamic example with prop useMetadata=false</Typography>
             <Card>
               <Grid container className={classes.root} spacing={2}>
-                <Grid item xs={12}>
-
-                </Grid>
+              
                 <Grid item xs={12}>
 
                   <TextInput
@@ -238,8 +234,6 @@ class DynamicPvFieldExample extends React.Component {
                     usePvMinMax={true}
                     usePvPrecision={true}
                     alarmSensitive={true}
-                    //debug={true}
-
                     useMetadata={false}
                   />
                 </Grid>
@@ -254,31 +248,24 @@ class DynamicPvFieldExample extends React.Component {
                     usePvPrecision={true}
                     alarmSensitive={true}
                     useMetadata={false}
-
                   />
 
                 </Grid>
                 <Grid item xs={6}>
-
                   <TextInput
                     pv='pva://$(device):dynamicPvFields:LOPR'
                     macros={{ '$(device)': 'testIOC' }}
                     usePvMinMax={true}
                     usePvLabel={true}
-
-
                     useMetadata={true}
                   />
                 </Grid>
                 <Grid item xs={6}>
-
                   <TextInput
                     pv='pva://$(device):dynamicPvFields:HOPR'
                     macros={{ '$(device)': 'testIOC' }}
                     usePvMinMax={true}
                     usePvLabel={true}
-
-
                     useMetadata={true}
                   />
                 </Grid>
@@ -287,16 +274,12 @@ class DynamicPvFieldExample extends React.Component {
                   <TextInput
                     pv='pva://$(device):dynamicPvFields:EGU'
                     macros={{ '$(device)': 'testIOC' }}
-
                     usePvLabel={true}
-
-
                     useMetadata={true}
                   />
                 </Grid>
 
                 <Grid item xs={6}>
-
                   <TextInput
                     pv='pva://$(device):dynamicPvFields:PREC'
                     macros={{ '$(device)': 'testIOC' }}
@@ -324,7 +307,7 @@ class DynamicPvFieldExample extends React.Component {
               </Grid>
             </Card>
           </Grid>
-
+          
 
 
 

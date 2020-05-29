@@ -14,6 +14,7 @@ import deepOrange from '@material-ui/core/colors/deepOrange';
 import ContextMenu from '../SystemComponents/ContextMenu';
 import {LanDisconnect} from 'mdi-material-ui/';
 import { create, all } from 'mathjs';
+import Typography from '@material-ui/core/Typography';
 const config = { }
 const math = create(all, config)
 
@@ -331,10 +332,10 @@ render() {
           }}
         />
         {initialized===true &&
-          <span className={textFieldClassName} >
+          <Typography className={textFieldClassName} >
             {usePvLabel===true? this.state['label']+': ':this.props.label}
             {value} {units}
-          </span>
+          </Typography>
 
         }
 

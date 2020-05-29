@@ -68,3 +68,16 @@ TextOutput example :
        usePvUnits={true}
     />
 ```
+TextOutput number format example :
+
+```js
+    <TextOutput  
+       pv='pva://$(device):test$(id)'
+       macros={{'$(device)':'testIOC','$(id)':'2'}}
+       alarmSensitive={true}
+       usePvPrecision={true}
+       prec={3}
+       usePvUnits={true}
+       numberFormat={{notation: 'engineering',precision: 5}}
+    />
+```

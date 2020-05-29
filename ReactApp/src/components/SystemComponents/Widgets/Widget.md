@@ -25,11 +25,19 @@ The props that are fowarded to he child component are detailed in the table belo
 |pvsData|Array of Objects||And object that contains an array of all the PV components derived from pvs prop. Valid after initialization.      
       
 
-
+For Exmaples on how to use the widget see the simple example below or have a look at any of the components in the base components folder.
 Simple example usage:
 
 ```js static
+ import { withStyles } from "@material-ui/core/styles";
  import Widget from "path to Widget";
+ const styles = (theme) => ({
+  root: {
+    display: "flex",
+    flexWrap: "wrap",
+  },
+ })
+
   const ExampleComponent=(props)=>{
       const {value,initialized}=props;
       const content=initialized?<span>{value}</span>:props.formControlLabel;
@@ -58,6 +66,6 @@ Example.defaultProps = {
  
 };
 
-export default Example;
+export default withStyles(styles, { withTheme: true })(Example)
 
 ```

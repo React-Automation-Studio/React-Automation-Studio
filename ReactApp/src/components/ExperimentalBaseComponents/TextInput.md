@@ -68,3 +68,18 @@ TextInput example :
        usePvUnits={true}
     />
 ```
+
+TextInput number format example :
+
+```js
+    <TextInput  
+       pv='pva://$(device):test$(id)'
+       macros={{'$(device)':'testIOC','$(id)':'2'}}
+       alarmSensitive={true}
+       usePvPrecision={true}
+       prec={3}
+       usePvUnits={true}
+       numberFormat={{notation: 'engineering',precision: 5}}
+    />
+```
+

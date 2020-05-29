@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { withStyles } from "@material-ui/core/styles";
 import { Button, FormControlLabel } from "@material-ui/core";
 import PropTypes from "prop-types";
-
+import {isMobile,isTablet} from 'react-device-detect';
 import Widget from "../SystemComponents/Widgets/Widget";
 const styles = (theme) => ({
   root: {
@@ -112,9 +112,22 @@ const ToggleButtonComponent = (props) => {
   )
 }
 const ToggleButton = (props) => {
-
+  let momentary = props.momentary !== undefined ? props.momentary : false;
+  let disableContextMenu;
+  
+  if (isMobile||isTablet){
+    if(momentary===true){
+      disableContextMenu=true;
+    }
+    else{
+      disableContextMenu=props.disableContextMenu;
+    }
+  }
+  else{
+    disableContextMenu=props.disableContextMenu;
+  }
   return (
-    <Widget {...props} component={ToggleButtonComponent} />
+    <Widget {...props} component={ToggleButtonComponent} disableContextMenu={disableContextMenu} />
 
   )
 }

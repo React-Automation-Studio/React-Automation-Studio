@@ -25,3 +25,16 @@ TextUpdate example connection to a SoftChannel EPICS AI pv with EPICS label, pre
    alarmSensitive={true}
 />
 ```
+TextUpdate example connection to a SoftChannel EPICS AI pv with EPICS label, precision, units and numberFormat:
+
+```js
+<TextUpdate  
+   pv='pva://$(device):test$(id)'
+   macros={{'$(device)':'testIOC','$(id)':'2'}}
+   usePvLabel={true}
+   usePvUnits={true}
+   usePvPrecision={true}
+   alarmSensitive={true}
+   numberFormat={{notation: 'engineering',precision: 2}}
+/>
+```

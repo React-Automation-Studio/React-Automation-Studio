@@ -153,7 +153,10 @@ const EpicsPV2=(props)=>{
     props.pvData(pv);
     
   },[pv])
-  
+  if(props.debug){
+    console.log(props)
+    console.log(pv)
+  }
   return(
     <React.Fragment>
       {props.debug&&<Typography>

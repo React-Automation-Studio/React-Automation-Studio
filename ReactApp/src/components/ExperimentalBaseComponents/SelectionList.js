@@ -199,13 +199,28 @@ SelectionList.propTypes = {
   macros: PropTypes.object,
   /** Directive to fill the label with the value contained in the  EPICS pv's DESC field. */
   usePvLabel: PropTypes.bool,
-  /** Directive to use the units contained in the  EPICS pv's CttonGroup component
-  custom_selection_strings: PropTypes.array,
   
-    /** Material-UI TextField variant*/
-  // Display list horizontally.
+  
+  /**  Display list horizontally.*/
   horizontal: PropTypes.bool,
+ 
 
+  /** If defined, this array of strings overides the default EPICS MBBI/O pv strings and are displayed as the choices in the RadioButtonGroup component*/
+  
+  custom_selection_strings: PropTypes.array,
+  /** label placement*/
+  labelPlacement: PropTypes.oneOf(['start', 'top', 'bottom', 'end']),
+  /**
+   * Directive to fill the component's label with
+   * the value contained in the  pv metadata's DESC field or the labelPv value.
+   * If not defined it uses the custom label as defined by the label prop.
+   */
+  usePvLabel: PropTypes.bool,
+   /**
+  * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+  */
+ labelPv: PropTypes.string,
+  
 };
 
 SelectionList.defaultProps = {

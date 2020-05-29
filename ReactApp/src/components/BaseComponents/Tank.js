@@ -689,40 +689,38 @@ function getTickValues(props,min,max,numberOfTicks,x0,y0,x1,x2,y1,y2,xOffset,yOf
 }
 
 Tank.propTypes = {
-  /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
-  pv: PropTypes.string.isRequired,
-  /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
-  macros:PropTypes.object,
-  /** Directive to round the value. */
-  usePrecision:PropTypes.bool,
-  /** Custom precision to round the value too, if not defined then the EPICS PREC field will be used, if `usePrecision` is defined. */
-  prec:PropTypes.number,
-  /** Directive to use the HOPR and LOPR EPICS fields to limit the maximum and minimum values that can be contained in the value. */
-  usePvMinMax:PropTypes.bool,
-  /** Directive to use the EPICS alarm severity status to alter the fields backgorund color  */
-  alarmSensitive:PropTypes.bool,
-  /** Custom minimum to be used, if `usePvMinMax` is not defined. */
-  min:PropTypes.number,
-  /** Custom maximum to be used, if `usePvMinMax` is not defined. */
-  max:PropTypes.number,
-  /** If defined, then the DataConnection debugging information will be displayed*/
-  debug:PropTypes.bool,
-  /** Custom units to be used, if `usePvUnits` is not defined. */
-  units:PropTypes.string,
-  /** Directive to fill the label with the value contained in the  EPICS pv's DESC field. */
-  usePvLabel:PropTypes.bool,
-  /** Directive to show the istantaneous value */
-  showValue:PropTypes.bool,
-  /** Directive to show the tick values */
-  showTicks:PropTypes.bool,
-  /** Lock the aspect ratio, if true,`height=width/aspectRatio`, otherwise the height will grow to the height of the parent container */
-  lockAspectRatio:PropTypes.number,
-  /** Width to height aspect ratio, */
-  aspectRatio:PropTypes.number,
-
-  /** local variable intialization value*/
-  intialLocalVariableValue:PropTypes.string
-
+    /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+    pv: PropTypes.string.isRequired,
+    /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
+    macros:PropTypes.object,
+    /** Directive to round the value. */
+    usePrecision:PropTypes.bool,
+    /** Custom precision to round the value too, if not defined then the EPICS PREC field will be used, if `usePrecision` is defined. */
+    prec:PropTypes.number,
+    /** Directive to use the HOPR and LOPR EPICS fields to limit the maximum and minimum values that can be contained in the value. */
+    usePvMinMax:PropTypes.bool,
+    /** Directive to use the EPICS alarm severity status to alter the fields backgorund color  */
+    alarmSensitive:PropTypes.bool,
+    /** Custom minimum to be used, if `usePvMinMax` is not defined. */
+    min:PropTypes.number,
+    /** Custom maximum to be used, if `usePvMinMax` is not defined. */
+    max:PropTypes.number,
+    /** If defined, then the DataConnection debugging information will be displayed*/
+    debug:PropTypes.bool,
+    /** Custom units to be used, if `usePvUnits` is not defined. */
+    units:PropTypes.string,
+    /** Directive to fill the label with the value contained in the  EPICS pv's DESC field. */
+    usePvLabel:PropTypes.bool,
+    /** Directive to show the istantaneous value */
+    showValue:PropTypes.bool,
+    /** Directive to show the tick values */
+    showTicks:PropTypes.bool,
+    /** Lock the aspect ratio, if true,`height=width/aspectRatio`, otherwise the height will grow to the height of the parent container */
+    lockAspectRatio:PropTypes.number,
+    /** Width to height aspect ratio, */
+    aspectRatio:PropTypes.number,
+    /** local variable intialization value*/
+    intialLocalVariableValue:PropTypes.string
 };
 
 Tank.defaultProps = {

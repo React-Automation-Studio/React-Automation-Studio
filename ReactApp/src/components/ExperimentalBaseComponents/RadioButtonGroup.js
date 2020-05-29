@@ -25,15 +25,7 @@ const styles = (theme) => ({
  
 });
 
-/**
- * The RadioButtonGroup Component is a wrapper on the Material-UI List component.
- * The List component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
- * The margins and spacing must be controlled from the parent component.<br/><br/>
- * Material-UI List Demos:
- * https://material-ui.com/demos/lists<br/><br/>
- * Material-UI List API:
- * https://material-ui.com/api/list
- */
+
 const RadioButtonGroupComponent=(props)=>{
   
 
@@ -73,7 +65,15 @@ const RadioButtonGroupComponent=(props)=>{
 
  
 
-
+/**
+ * The RadioButtonGroup Component is a wrapper on the Material-UI List component.
+ * The List component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
+ * The margins and spacing must be controlled from the parent component.<br/><br/>
+ * Material-UI List Demos:
+ * https://material-ui.com/demos/lists<br/><br/>
+ * Material-UI List API:
+ * https://material-ui.com/api/list
+ */
 const RadioButtonGroup = (props) => {
   return (
     <Widget {...props} useStringValue={true} component={RadioButtonGroupComponent}/>
@@ -87,10 +87,40 @@ const RadioButtonGroup = (props) => {
     //If defined, this array of strings overides the default EPICS MBBI/O
     //pv strings and are displayed as the choices in the RadioButtonGroup component
     custom_selection_strings: PropTypes.array,
+
+      /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+  pv: PropTypes.string.isRequired,
+  /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
+  macros:PropTypes.object,
+  /** Directive to fill the label with the value contained in the  EPICS pv's DESC field. */
+  usePvLabel:PropTypes.bool,
+  /** Custom label to be used, if  `usePvLabel` is not defined. */
+  label: PropTypes.string,
+  /** If defined, then the DataConnection debugging information will be displayed*/
+  debug:PropTypes.bool,
+  /** label placement*/
+  labelPlacement: PropTypes.oneOf(['start', 'top', 'bottom', 'end']),
+  
+  /** local variable intialization value*/
+  intialLocalVariableValue:PropTypes.string,
+  /**
+   * Directive to fill the component's label with
+   * the value contained in the  pv metadata's DESC field or the labelPv value.
+   * If not defined it uses the custom label as defined by the label prop.
+   */
+  usePvLabel: PropTypes.bool,
+   /**
+  * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+  */
+ labelPv: PropTypes.string,
+
+
   };
 
   RadioButtonGroup.defaultProps = {
    labelPlacement:'top'
   };
+
+
 export default   withStyles(styles, { withTheme: true })(RadioButtonGroup)
 

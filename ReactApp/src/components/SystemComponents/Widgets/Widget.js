@@ -227,6 +227,11 @@ const math = create(all, config)
     
     
   }, [pv.initialized, pvs])
+  useEffect(()=>{
+    if (typeof props.usePrecision!=='undefined'){
+      console.warn("prop usePrecision is deprecated, use the usePvPrecision and prec props instead")
+    }
+  },[props])
   const checkPrecision = (value, prec) => {
     if (props.usePvPrecision || props.prec) {
       let precision = parseInt(prec);

@@ -34,12 +34,19 @@ const PV = (props) => {
     enum_strs: []
   })
   const pvConnection = (pv, props) => {
-    return pv.includes('pva://')
+    let pvname = pv.toString();
+    if (props.macros) {
+      let macro;    
+      for (macro in props.macros) {
+        pvname = pvname.replace(macro.toString(), props.macros[macro].toString());
+      }
+    }
+    return pvname.includes('pva://')
       ?
-      EpicsPV2({ ...props, pv })
-      : (pv.includes('loc://')
+      EpicsPV2({ ...props, pv:pvname })
+      : (pvname.includes('loc://')
         ?
-        LocalPV2({ ...props, pv })
+        LocalPV2({ ...props, pv:pvname })
         : undefined)
   }
   const pvData = (name) => (pv) => {
@@ -171,6 +178,7 @@ const PV = (props) => {
     }
   }, [pv])
   if (props.debug) {
+    console.log(props)
     console.log(props.name, " Debug:", "PV Render States: ", "pvs:", pvs)
     console.log(props.name, " Debug:", "PV Render pv:", pv)
   }

@@ -23,7 +23,8 @@
     "uuid": "3.3.2",
     "math-js": "1.0.1",
     "mathjs": "6.0.3",
-    "sass":"1.25.0"
+    "sass":"1.25.0",
+    "react-device-detect":"1.12.1"
 
 
   },

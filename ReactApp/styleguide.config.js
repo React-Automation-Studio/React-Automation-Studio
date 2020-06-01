@@ -80,6 +80,13 @@ module.exports = {
         exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
         usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
       },
+      {
+        name: 'Layout Wrapper Components',
+        content: 'src/docs/WorkingWithLayouts.md',
+        components: 'src/components/UI/Layouts/*.js',
+        exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
+        usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
+      },
     ],
     sectionDepth: 2
   },

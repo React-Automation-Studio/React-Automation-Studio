@@ -18,6 +18,8 @@ import io from 'socket.io-client';
 import { Redirect } from 'react-router-dom'
 import LogIn from './LogIn';
 
+import { lightTheme, darkTheme } from './components/UI/Themes/DefaultTheme'
+
 // const socket = io('https://172.16.5.52:5000/test',{
 //   transports: ['websocket'],
 //   secure:true
@@ -68,36 +70,22 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    let theme = createMuiTheme({
-      palette: {
-        type:themeStyle,
-        primary: themeStyle=='dark'?cyan:indigo,
-        secondary:pink,
-        error: pink,
-        action:green,
-        // Used by `getContrastText()` to maximize the contrast between the background and
-        // the text.
-        contrastThreshold: 3,
-        // Used to shift a color's luminance by approximately
-        // two indexes within its tonal palette.
-        // E.g., shift from Red 500 to Red 300 or Red 700.
-        tonalOffset: 0.2,
+    let theme = null
 
+    let themeStyle = JSON.parse(localStorage.getItem('themeStyle'));
 
+    //console.log('jwt',jwt);
+    if (themeStyle == 'light') {
+      themeStyle = 'light'
+      theme = createMuiTheme(lightTheme)
+      localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
+    }
+    else {
+      themeStyle = 'dark'
+      theme = createMuiTheme(darkTheme)
+      localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
+    }
 
-      },
-      lightLineColors:['#12939A', '#79C7E3', '#1A3177', '#FF9833', '#EF5D28'],
-      darkLineColors:['#ff9800', '#f44336', '#9c27b0', '#3f51b5', '#e91e63'],
-      typography: {
-        useNextVariants: true,
-        fontFamily: [
-
-          'Roboto',
-
-
-        ].join(','),
-      },
-    });
 
 
     this.updateLocalVariable = (name,data) => {

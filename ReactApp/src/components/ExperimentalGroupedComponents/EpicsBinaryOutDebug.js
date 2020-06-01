@@ -1,16 +1,16 @@
 import React from 'react'
 
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
-import TextInput from '../ExperimentalBaseComponents/TextInput';
-import TextOutput from '../ExperimentalBaseComponents/TextOutput';
-import SwitchComponent from '../ExperimentalBaseComponents/SwitchComponent';
-import StyledIconButton from '../ExperimentalBaseComponents/StyledIconButton';
-import StyledIconIndicator from '../ExperimentalBaseComponents/StyledIconIndicator';
-import SelectionInput from '../ExperimentalBaseComponents/SelectionInput';
+import TextInput from '../BaseComponents/TextInput';
+import TextOutput from '../BaseComponents/TextOutput';
+import SwitchComponent from '../BaseComponents/SwitchComponent';
+import StyledIconButton from '../BaseComponents/StyledIconButton';
+import StyledIconIndicator from '../BaseComponents/StyledIconIndicator';
+import SelectionInput from '../BaseComponents/SelectionInput';
 import Grid from '@material-ui/core/Grid';
-import ToggleButton from '../ExperimentalBaseComponents/ToggleButton';
-import RadioButton from '../ExperimentalBaseComponents/RadioButton';
-import CheckBox from '../ExperimentalBaseComponents/CheckBox';
+import ToggleButton from '../BaseComponents/ToggleButton';
+import RadioButton from '../BaseComponents/RadioButton';
+import CheckBox from '../BaseComponents/CheckBox';
 
 
 

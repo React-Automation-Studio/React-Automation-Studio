@@ -16,24 +16,24 @@ import EpicsBinaryOutDebug from '../../GroupedComponents/EpicsBinaryOutDebug';
 import EpicsAnalogOutDebug from '../../GroupedComponents/EpicsAnalogOutDebug';
 import EpicsMbboDebug from '../../GroupedComponents/EpicsMbboDebug';
 import TextUpdate from '../../BaseComponents/TextUpdate';
-import TextInput from '../../ExperimentalBaseComponents/TextInput';
-import TextOutput from '../../ExperimentalBaseComponents/TextOutput';
+import TextInput from '../../BaseComponents/TextInput';
+import TextOutput from '../../BaseComponents/TextOutput';
 import Meter from '../../BaseComponents/Gauge';
-import SimpleSlider from '../../ExperimentalBaseComponents/SimpleSlider';
+import SimpleSlider from '../../BaseComponents/SimpleSlider';
 import GraphY from '../../BaseComponents/GraphY';
-import SelectionList from '../../ExperimentalBaseComponents/SelectionList';
-import ThumbWheel from '../../ExperimentalBaseComponents/ThumbWheel';
+import SelectionList from '../../BaseComponents/SelectionList';
+import ThumbWheel from '../../BaseComponents/ThumbWheel';
 
 
 import DataConnection from '../../SystemComponents/DataConnection';
 
 import SwitchComponent from '../../BaseComponents/SwitchComponent';
 import SelectionInput from '../../BaseComponents/SelectionInput';
-import ToggleButton from '../../ExperimentalBaseComponents/ToggleButton';
-import ActionButton from '../../ExperimentalBaseComponents/ActionButton';
+import ToggleButton from '../../BaseComponents/ToggleButton';
+import ActionButton from '../../BaseComponents/ActionButton';
 
 
-import Gauge from '../../ExperimentalBaseComponents/Gauge';
+import Gauge from '../../BaseComponents/Gauge';
 import Card from '@material-ui/core/Card';
 import SideBar from '../../SystemComponents/SideBar';
 import AppBar from '@material-ui/core/AppBar';
@@ -64,7 +64,7 @@ import ExploreIcon from '@material-ui/icons/Explore';
 import withWidth from '@material-ui/core/withWidth';
 
 import {Link} from 'react-router-dom'
-import StyledIconIndicator from '../../ExperimentalBaseComponents/StyledIconIndicator';
+import StyledIconIndicator from '../../BaseComponents/StyledIconIndicator';
 import Home from '@material-ui/icons/Home';
 import lime from '@material-ui/core/colors/lime';
 function TabContainer(props) {

@@ -1,13 +1,13 @@
 import React from 'react'
 
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
-import TextInput from '../ExperimentalBaseComponents/TextInput';
-import SelectionInput from '../ExperimentalBaseComponents/SelectionInput';
-import SelectionList from '../ExperimentalBaseComponents/SelectionList';
-import TextOutput from '../ExperimentalBaseComponents/TextOutput';
+import TextInput from '../BaseComponents/TextInput';
+import SelectionInput from '../BaseComponents/SelectionInput';
+import SelectionList from '../BaseComponents/SelectionList';
+import TextOutput from '../BaseComponents/TextOutput';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
-import RadioButtonGroup from '../ExperimentalBaseComponents/RadioButtonGroup';
+import RadioButtonGroup from '../BaseComponents/RadioButtonGroup';
 //import MenuItem from '@material-ui/core/MenuItem';
 
 

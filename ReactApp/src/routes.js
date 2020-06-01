@@ -24,9 +24,9 @@ import Test3D from './components/Experimental/Test3D';
 import Probe from './components/SettingsPages/Probe';
 import SettingsSteererXY from './components/SettingsPages/SettingsSteererXY';
 import SettingsSinglePS from './components/SettingsPages/SettingsSinglePS';
-import ExperimentalEpicsDemos from './components/ExperimentalExamples/ExperimentalEpicsDemos';
-import ExperimentalMobileDemo1 from './components/ExperimentalExamples/Mobile/ExperimentalMobileDemo1';
-import HooksDebuging from './components/ExperimentalExamples/Mobile/HooksDebuging';
+// import ExperimentalEpicsDemos from './components/ExperimentalExamples/ExperimentalEpicsDemos';
+// import ExperimentalMobileDemo1 from './components/ExperimentalExamples/Mobile/ExperimentalMobileDemo1';
+// import HooksDebuging from './components/ExperimentalExamples/Mobile/HooksDebuging';
 import LogIn from './LogIn';
 import { Redirect } from 'react-router-dom'
 export default props=>(
@@ -60,10 +60,10 @@ export default props=>(
     <Route path="/Example1" component={Example1} />
     <Route path="/Example2" component={Example2} />
     <Route path="/Example3" component={Example3} />
-    <Route path="/ExperimentalMain" component={ExperimentalMain} />
-    <Route path="/ExperimentalMobileDemo1" component={ExperimentalMobileDemo1} />
-    <Route path="/HooksDebuging" component={HooksDebuging} />
-    <Route path="/ExperimentalEpicsDemos" component={ExperimentalEpicsDemos} />
+    {/* <Route path="/ExperimentalMain" component={ExperimentalMain} /> */}
+    {/* <Route path="/ExperimentalMobileDemo1" component={ExperimentalMobileDemo1} /> */}
+    {/* <Route path="/HooksDebuging" component={HooksDebuging} /> */}
+    {/* <Route path="/ExperimentalEpicsDemos" component={ExperimentalEpicsDemos} /> */}
     </Switch>
 
   </BrowserRouter>

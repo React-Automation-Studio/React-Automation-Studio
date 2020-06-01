@@ -450,6 +450,16 @@ Contact us at rasadmin@tlabs.ac.za
 
 # Changelog
 
+**V1.3.0 Monday 1 June 2020**
+
+Components have been updated to hooks based widget.
+Significant documentation improvements.
+
+
+Breaking changes:
+ActionFanoutButton deprecated. Use ActionButton instead
+GraphMultiplePvs removed. Use GraphY
+
 **V1.2.4 Thursday 2 April 2020**
 
 Minor bug fixed in the styleguide for GraphY and GraphXY

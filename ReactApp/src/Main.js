@@ -106,7 +106,7 @@ class Main extends Component {
 
           <Grid  item lg={2} sm={4}  xs={8}>
 
-            <div style={{textAlign: 'center'}} className={classes.body1}>React Automation Studio V1.2.4</div>
+            <div style={{textAlign: 'center'}} className={classes.body1}>React Automation Studio V1.3.0</div>
 
           </Grid>
           <Grid item lg={4} sm={4} xs={2}>
@@ -156,9 +156,9 @@ class Main extends Component {
               <Grid item xs={12}  >
                 <Button  fullWidth className= {classes.button} target="_blank" href={AutomationStudioStyleGuideBuildURL} color="secondary" variant='contained'> Help and Style Guide </Button>
               </Grid>
-              <Grid item xs={12}  >
+              {/* <Grid item xs={12}  >
                 <Button  fullWidth className= {classes.button} component={Link} to="/ExperimentalMain" color="primary" variant='contained'> Experimental Main</Button>
-              </Grid>
+              </Grid> */}
             </Grid>
           </Grid>
 

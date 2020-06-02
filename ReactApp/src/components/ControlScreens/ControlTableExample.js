@@ -1,42 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
-import EpicsBinaryOutDebug from '../GroupedComponents/EpicsBinaryOutDebug';
-import EpicsAnalogOutDebug from '../GroupedComponents/EpicsAnalogOutDebug';
-import EpicsMbboDebug from '../GroupedComponents/EpicsMbboDebug';
-import TextUpdate from '../BaseComponents/TextUpdate';
-import TextInput from '../BaseComponents/TextInput';
-import TextOutput from '../BaseComponents/TextOutput';
-import SimpleSlider from '../BaseComponents/SimpleSlider';
-
-
 import Grid from '@material-ui/core/Grid';
-import EpicsPV from '../SystemComponents/EpicsPV';
-
-import SwitchComponent from '../BaseComponents/SwitchComponent';
-import SelectionInput from '../BaseComponents/SelectionInput';
-import HarpRangeSelection from '../SiteSpecificComponents/iThembaLABS/CompoundComponents/HarpRangeSelection';
-import ToggleButton from '../BaseComponents/ToggleButton';
-import ActionButton from '../BaseComponents/ActionButton';
-import ActionFanoutButton from '../BaseComponents/ActionFanoutButton';
-import ThumbWheel from '../BaseComponents/ThumbWheel';
 import ControlRightEx1 from '../ControlScreens/GridComponents/ControlRightEx1'
 import ControlRightSteererXY from '../ControlScreens/GridComponents/ControlRightSteererXY'
 import ControlRightSlitXY from '../ControlScreens/GridComponents/ControlRightSlitXY'
 import ControlRightSinglePS from '../ControlScreens/GridComponents/ControlRightSinglePS'
-
-
-import ControlTopHarpEx1 from '../ControlScreens/GridComponents/ControlTopHarpEx1'
 import ControlCenterTable from '../ControlScreens/GridComponents/ControlCenterTable'
-import ControlBottomHarp1 from '../ControlScreens/GridComponents/ControlBottomHarp1'
-import HarpGraph from '../SiteSpecificComponents/iThembaLABS/CompoundComponents/HarpGraph';
-import SideBar from '../SystemComponents/SideBar';
 import AppBar from '@material-ui/core/AppBar';
-
+import TraditionalLayout from '../UI/Layouts/TraditionalLayout.js';
 
   const systems={
 
@@ -213,25 +188,20 @@ class ControlTableExample extends React.Component {
 
   handlePsOnClick(name){
 
-    //  console.log("in control test1 clicked "+name.toString());
-    this.setState({['editorType']:'PS',
-    ['displayEditor']:true,
-    ['editorMacros']:{'$(device)':name}});
+    
+    this.setState({editorType:'PS',
+    displayEditor:true,
+    editorMacros:{'$(device)':name}});
 
-    //  this.setState({ ['clicked']: 1});
+   
   }
   handleOnSystemClick=(system)=>{
-    //  console.log(system)
-    this.setState({['editorType']:system.editorType,
-    ['displayEditor']:true,
-    ['editorSystem']:system,
-    ['editorMacros']:{'$(device)':""}});
-    //  console.log("in control test1 clicked "+name.toString());
-    //    this.setState({['editorType']:'PS',
-    //    ['displayEditor']:true,
-    //    ['editorMacros']:{'$(device)':name}});
-
-    //  this.setState({ ['clicked']: 1});
+   
+    this.setState({editorType:system.editorType,
+    displayEditor:true,
+    editorSystem:system,
+    editorMacros:{'$(device)':""}});
+   
   }
 
 
@@ -240,22 +210,23 @@ class ControlTableExample extends React.Component {
     };
     handleCloseEditor=()=>{
       this.setState({
-        ['displayEditor']:false,}
+        displayEditor:false,}
       );
 
-      //  this.setState({ ['clicked']: 1});
+      
     }
 
       render() {
-        //      console.log("state: ",this.state);
-        //console.log('displayHarps',this.state.displayHarps)
+     
 
-        const { classes } = this.props;
-        const topTabValue  = this.state.topTabValue;
+        
         const sideTabValue  = this.state.sideTabValue;
         return (
-          <div style={{"overflowX": "hidden",'overflowY':'hidden'}}>
-            <SideBar/>
+          
+            <TraditionalLayout
+            title="Control Table Example"
+            >
+           
 
             <Grid
               container
@@ -263,8 +234,9 @@ class ControlTableExample extends React.Component {
               justify="flex-start"
               alignItems="flex-start"
               spacing={0}
+              style={{paddingTop:36}}
             >
-              <Grid item xs={12} sm={2} md={2} lg={2}style={{paddingTop:24}}>
+              <Grid item xs={12} sm={2} md={2} lg={2}>
                 <AppBar position="static" color="inherit" >
                   <VerticalTabs
                     value={sideTabValue}
@@ -284,7 +256,7 @@ class ControlTableExample extends React.Component {
 
                 </AppBar>
               </Grid>
-              <Grid item xs={12} sm={6} md={6} lg={7} style={{paddingTop:24,paddingRight:16}}>
+              <Grid item xs={12} sm={6} md={6} lg={7} style={{paddingRight:16}}>
                 {sideTabValue==0&&<TabContainer > <ControlCenterTable handleOnSystemClick={this.handleOnSystemClick} systems={systems['BeamLine']['PowerSupplies']}         /> </TabContainer>}
                 {sideTabValue==1&&<TabContainer > <ControlCenterTable handleOnSystemClick={this.handleOnSystemClick} systems={systems['BeamLine']['Slits']}         /> </TabContainer>}
               </Grid>
@@ -304,8 +276,8 @@ class ControlTableExample extends React.Component {
 
 
 
-
-    </div>
+      </TraditionalLayout>
+    
 
 
 
@@ -316,8 +288,7 @@ class ControlTableExample extends React.Component {
 }
 
 ControlTableExample.propTypes = {
-  classes: PropTypes.object.isRequired,
+  
 };
 
 export default withStyles(styles)(ControlTableExample);
-//export default ControlTableExample;

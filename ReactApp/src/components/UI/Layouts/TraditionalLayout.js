@@ -159,7 +159,7 @@ const TraditionalLayout = (props) => {
             <CssBaseline />
             <ElevationScroll {...props}>
                 <AppBar color={themeType === 'dark' ? "inherit" : "primary"} position={notInStyleGuide ? undefined : "static"}>
-                    <Toolbar variant={props.denseAppBar ? "dense" : undefined} style={{ display: "flex" }}>
+                    <Toolbar variant={props.denseAppBar ? "dense" : undefined} style={{ display: "flex"}}>
                         <IconButton
                             onClick={() => setShowDrawer(true)}
                             edge="start"

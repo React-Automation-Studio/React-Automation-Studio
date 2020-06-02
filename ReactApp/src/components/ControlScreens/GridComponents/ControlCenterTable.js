@@ -9,7 +9,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import DataConnection from '../../SystemComponents/DataConnection';
 import TextUpdate from '../../BaseComponents/TextUpdate';
-import TextInput from '../../BaseComponents/TextInput';
+
 
 const styles = theme => ({
   root: {

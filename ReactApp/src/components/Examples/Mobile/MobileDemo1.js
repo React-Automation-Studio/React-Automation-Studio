@@ -67,6 +67,7 @@ import {Link} from 'react-router-dom'
 import StyledIconIndicator from '../../BaseComponents/StyledIconIndicator';
 import Home from '@material-ui/icons/Home';
 import lime from '@material-ui/core/colors/lime';
+import TraditionalLayout from '../../UI/Layouts/TraditionalLayout.js';
 function TabContainer(props) {
   return (
     <Typography component="div" style={{ padding: 0, flexGrow:1 }}>
@@ -80,6 +81,7 @@ const styles = theme => ({
   root: {
     flexGrow: 1,
     padding: theme.spacing(1),
+    paddingTop: theme.spacing(2),
     //width:'100%',
     overflowX: "hidden",
     overflowY: "hidden",
@@ -158,20 +160,12 @@ class MobileDemo1 extends React.Component {
     //console.log('window.innerHeight',window.innerHeight)
     return (
 
-      <React.Fragment>
-        <AppBar style={{position:'fixed',bottom:'auto',top:'0'}} color='inherit' >
-          <Grid container direction="row" item justify="center" spacing={2} alignItems="center">
-            <Grid item xs={2}  >
+      <TraditionalLayout
+      title="Mobile Layout Example"
+      denseAppBar
+        >
 
-              <SideBar/>
-            </Grid>
-            <Grid item xs={10} >
-              <div className={classes.body1}>Example System Layout</div>
-            </Grid>
-          </Grid>
-        </AppBar>
-
-
+      
 
 
         {value === 0 && <TabContainer key={'tabContainer0'}>
@@ -308,7 +302,7 @@ class MobileDemo1 extends React.Component {
           useStringValue={true}
           handleInputValue={this.handleStateChange}
         />
-      </React.Fragment>
+      </TraditionalLayout>
 
       );
     }

@@ -256,10 +256,10 @@ const ProgressBarInternalComponent = (props) => {
     if (props.alarmSensitive == true) {
       if (props.alarmSeverity == 1) {
 
-        color = deepOrange['400'];
+        color = props.theme.palette.alarm.minor.dark;
       }
       else if (props.alarmSeverity == 2) {
-        color = red['800'];
+        color = props.theme.palette.alarm.major.dark;
       }
       else {
         color = props.theme.palette.primary.main;

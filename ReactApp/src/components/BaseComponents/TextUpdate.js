@@ -18,13 +18,13 @@ const styles = (theme) => ({
   TextFieldSeverity1: {
     borderRadius: 2,
     padding:1,
-    background:deepOrange['400']
+    background:theme.palette.alarm.minor.main
     //  background:'linear-gradient(45deg, '+ theme.palette.background.default+ ' 1%, '+deepOrange['400'] +' 99%)'
   },
   TextFieldSeverity2: {
     borderRadius: 2,
     padding:1,
-    background:red['800']
+    background:theme.palette.alarm.major.main
     //  backgroundColor:'linear-gradient(45deg, #FFFFFF 1%, #FF8E53 99%)'
     //  background:'linear-gradient(45deg, '+ theme.palette.background.default+ ' 1%, '+red['800'] +' 99%)'
   }

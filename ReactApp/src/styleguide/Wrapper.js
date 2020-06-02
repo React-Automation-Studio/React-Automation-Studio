@@ -13,6 +13,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import AutomationStudioContext from '../components/SystemComponents/AutomationStudioContext';
 import { blue, indigo,pink, red, green,cyan,lime } from '@material-ui/core/colors'
 import io from 'socket.io-client';
+import { lightTheme, darkTheme } from '../components/UI/Themes/DefaultTheme'
 
 
 console.log('process.env',process.env)
@@ -60,37 +61,37 @@ transports: ['websocket']
 class Wrapper extends Component {
   constructor(props) {
     super(props);
-
-    let theme = createMuiTheme({
-      palette: {
-        type:'light',
-        primary: indigo,
-        secondary: red,
-        error: pink,
-        action:green,
-        // Used by `getContrastText()` to maximize the contrast between the background and
-        // the text.
-        contrastThreshold: 3,
-        // Used to shift a color's luminance by Wrapperroximately
-        // two indexes within its tonal palette.
-        // E.g., shift from Red 500 to Red 300 or Red 700.
-        tonalOffset: 0.2,
-
-
-
-      },
-      lightLineColors:['#12939A', '#79C7E3', '#1A3177', '#FF9833', '#EF5D28'],
-      darkLineColors:['#ff9800', '#f44336', '#9c27b0', '#3f51b5', '#e91e63'],
-      typography: {
-        useNextVariants: true,
-        fontFamily: [
-
-          'Roboto',
+    let theme= createMuiTheme(lightTheme);
+    // let theme = createMuiTheme({
+    //   palette: {
+    //     type:'light',
+    //     primary: indigo,
+    //     secondary: red,
+    //     error: pink,
+    //     action:green,
+    //     // Used by `getContrastText()` to maximize the contrast between the background and
+    //     // the text.
+    //     contrastThreshold: 3,
+    //     // Used to shift a color's luminance by Wrapperroximately
+    //     // two indexes within its tonal palette.
+    //     // E.g., shift from Red 500 to Red 300 or Red 700.
+    //     tonalOffset: 0.2,
 
 
-        ].join(','),
-      },
-    });
+
+    //   },
+    //   lightLineColors:['#12939A', '#79C7E3', '#1A3177', '#FF9833', '#EF5D28'],
+    //   darkLineColors:['#ff9800', '#f44336', '#9c27b0', '#3f51b5', '#e91e63'],
+    //   typography: {
+    //     useNextVariants: true,
+    //     fontFamily: [
+
+    //       'Roboto',
+
+
+    //     ].join(','),
+    //   },
+    // });
 
 
     this.updateLocalVariable = (name,data) => {

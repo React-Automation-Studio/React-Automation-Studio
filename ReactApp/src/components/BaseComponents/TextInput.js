@@ -19,12 +19,12 @@ const styles = (theme) => ({
   TextFieldSeverity1: {
     width: '100%',
     borderRadius: 4,
-    background: 'linear-gradient(45deg, ' + theme.palette.background.default + ' 1%, ' + deepOrange['400'] + ' 99%)'
+    background:'linear-gradient(45deg, '+ theme.palette.background.default+ ' 1%, '+ (theme.palette.alarm.minor.dark) +' 99%)'
   },
   TextFieldSeverity2: {
     width: '100%',
     borderRadius: 4,
-    background: 'linear-gradient(45deg, ' + theme.palette.background.default + ' 1%, ' + red['800'] + ' 99%)'
+    background:'linear-gradient(45deg, '+ theme.palette.background.default+ ' 1%, '+ (theme.palette.alarm.major.dark) +' 99%)'
   }
 });
 

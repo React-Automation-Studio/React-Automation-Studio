@@ -11,7 +11,7 @@ import ControlRightSlitXY from '../ControlScreens/GridComponents/ControlRightSli
 import ControlRightSinglePS from '../ControlScreens/GridComponents/ControlRightSinglePS'
 import ControlCenterTable from '../ControlScreens/GridComponents/ControlCenterTable'
 import AppBar from '@material-ui/core/AppBar';
-import TraditionalLayout from '../UI/Layouts/TraditionalLayout.js';
+import TraditionalLayout from '../UI/Layout/ComposedLayouts/TraditionalLayout.js';
 
   const systems={
 

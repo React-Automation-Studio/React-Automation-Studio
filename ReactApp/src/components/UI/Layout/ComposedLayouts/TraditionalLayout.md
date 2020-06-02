@@ -1,6 +1,6 @@
 Simple TraditionalLayout with default app bar styling, drawers and no footer.
 ```js
-import Content from '../../../docs/content/LayoutContent.js';
+import Content from '../../../../docs/content/LayoutContent.js';
 
     <TraditionalLayout
         title="My App Title"
@@ -11,7 +11,7 @@ import Content from '../../../docs/content/LayoutContent.js';
 
 TraditionalLayout with styled app bar, footer and custom footerContent.
 ```js
-import Content from '../../../docs/content/LayoutContent.js'
+import Content from '../../../../docs/content/LayoutContent.js';
 
 import AccountCircle from '@material-ui/icons/AccountCircle'
 import Grid from '@material-ui/core/Grid';
@@ -48,7 +48,7 @@ const footerContents=(
 
 TraditionalLayout with no moreVert drawer and custom items in side drawer
 ```js
-import Content from '../../../docs/content/LayoutContent.js'
+import Content from '../../../../docs/content/LayoutContent.js';
 
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -91,7 +91,7 @@ const drawerItems=(
 
 TraditionalLayout that hides drawers after item click
 ```js
-import Content from '../../../docs/content/LayoutContent.js'
+import Content from '../../../../docs/content/LayoutContent.js';
 
 ;<TraditionalLayout
     title="My App Title"

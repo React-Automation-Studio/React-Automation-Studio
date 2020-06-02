@@ -67,7 +67,7 @@ import {Link} from 'react-router-dom'
 import StyledIconIndicator from '../../BaseComponents/StyledIconIndicator';
 import Home from '@material-ui/icons/Home';
 import lime from '@material-ui/core/colors/lime';
-import TraditionalLayout from '../../UI/Layouts/TraditionalLayout.js';
+import TraditionalLayout from '../../UI/Layout/ComposedLayouts/TraditionalLayout.js';
 function TabContainer(props) {
   return (
     <Typography component="div" style={{ padding: 0, flexGrow:1 }}>
@@ -80,13 +80,13 @@ const styles = theme => ({
   body1: theme.typography.body1,
   root: {
     flexGrow: 1,
-   
-    paddingTop: theme.spacing(2),
+    padding: theme.spacing(1),
+    // paddingTop: theme.spacing(2),
     //width:'100%',
     overflowX: "hidden",
     overflowY: "hidden",
-    marginTop:40,
-    marginBottom:100,
+    // marginTop:40,
+    // marginBottom:100,
 
   },
   paper: {

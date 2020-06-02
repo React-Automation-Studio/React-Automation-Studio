@@ -1,7 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { Link } from 'react-router-dom'
 
-import { Logout } from 'mdi-material-ui/'
 import PropTypes from 'prop-types';
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -10,23 +8,18 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import useScrollTrigger from '@material-ui/core/useScrollTrigger';
-import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
+
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import Card from '@material-ui/core/Card';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import Home from '@material-ui/icons/Home';
 import MoreVertRoundedIcon from '@material-ui/icons/MoreVertRounded';
-import InvertColorsIcon from '@material-ui/icons/InvertColors';
 
-import AutomationStudioContext from '../../SystemComponents/AutomationStudioContext';
-import RedirectToLogIn from '../../SystemComponents/RedirectToLogin.js';
+import SideDrawer from '../LayoutComponents/SideDrawer'
+import MoreVertDrawer from '../LayoutComponents/MoreVertDrawer'
+
+import AutomationStudioContext from '../../../SystemComponents/AutomationStudioContext';
+import RedirectToLogIn from '../../../SystemComponents/RedirectToLogin.js';
 
 function ElevationScroll(props) {
     const { children, window } = props;
@@ -45,9 +38,6 @@ const useStyles = makeStyles(theme => ({
     menuButton: {
         marginRight: 20,
         flexGrow: 1
-    },
-    drawerItems: {
-        minWidth: 250,
     },
     moreVert: {
         marginLeft: 'auto',
@@ -83,83 +73,18 @@ const TraditionalLayout = (props) => {
 
     const context = useContext(AutomationStudioContext)
     const notInStyleGuide = context.styleGuideRedirect
-    const socket = context.socket
-
-    const username = notInStyleGuide ? context.userData.username : "Guest"
 
     const [showDrawer, setShowDrawer] = useState(false)
     const [showMVDrawer, setShowMVDrawer] = useState(false)
 
-    const handleLogout = () => {
-        if (notInStyleGuide) {
-            socket.emit('disconnect', { "goodebye": "see you later" });
-            socket.close()
-            context.logout();
-        }
 
-    }
-
-    const drawerItems = (
-        <div className={classes.drawerItems}>
-            <List onClick={props.hideDrawerAfterItemClick ? () => setShowDrawer(false) : null}>
-                {!props.hideHomeDrawerButton &&
-                    <ListItem button component={notInStyleGuide ? Link : 'div'} to="/" >
-                        <ListItemIcon><Home /></ListItemIcon>
-                        <ListItemText primary={"Home"} />
-                    </ListItem>
-                }
-                {props.drawerItems && !props.hideHomeDrawerButton &&
-                    <Divider />
-                }
-                {/* Drawer list items from user */}
-                {props.drawerItems}
-                {/* Drawer list items from user */}
-                {process.env.REACT_APP_EnableLogin === 'true' &&
-                    <React.Fragment>
-                        <Divider />
-                        <ListItem>
-                            <ListItemIcon><AccountCircle /></ListItemIcon>
-                            <ListItemText style={{ textOverflow: 'ellipsis' }} primary={username} />
-                        </ListItem>
-                        <ListItem button onClick={handleLogout} component={notInStyleGuide ? Link : 'div'} to="/LogIn" >
-                            <ListItemIcon><Logout /></ListItemIcon>
-                            <ListItemText primary={"Log Out"} />
-                        </ListItem>
-                    </React.Fragment>
-                }
-            </List>
-
-        </div>
-    )
-
-    const moreVertDrawerItems = (
-        <div className={classes.drawerItems}>
-            <List onClick={props.hideMoreVertDrawerAfterItemClick ? () => setShowMVDrawer(false) : null}>
-                {props.moreVertDrawerItems &&
-                    <React.Fragment>
-                        {/* MoreVert drawer list items from user */}
-                        {props.moreVertDrawerItems}
-                        {/* MoreVert drawer list items from user */}
-                        <Divider />
-                    </React.Fragment>
-                }
-
-                {!props.hideToggleThemeListItem &&
-                    <ListItem button onClick={context.toggleTheme} >
-                        <ListItemIcon><InvertColorsIcon /></ListItemIcon>
-                        <ListItemText primary={"Toggle Theme"} />
-                    </ListItem>
-                }
-            </List>
-        </div >
-    )
 
     return (
         <React.Fragment>
             <CssBaseline />
             <ElevationScroll {...props}>
                 <AppBar color={themeType === 'dark' ? "inherit" : "primary"} position={notInStyleGuide ? undefined : "static"}>
-                    <Toolbar variant={props.denseAppBar ? "dense" : undefined} style={{ display: "flex"}}>
+                    <Toolbar variant={props.denseAppBar ? "dense" : undefined} style={{ display: "flex" }}>
                         <IconButton
                             onClick={() => setShowDrawer(true)}
                             edge="start"
@@ -169,13 +94,13 @@ const TraditionalLayout = (props) => {
                         >
                             <MenuIcon />
                         </IconButton>
-                        <SwipeableDrawer
-                            open={showDrawer}
-                            onClose={() => setShowDrawer(false)}
-                            onOpen={() => setShowDrawer(true)}
-                        >
-                            {drawerItems}
-                        </SwipeableDrawer>
+                        <SideDrawer
+                            showDrawer={showDrawer}
+                            setShowDrawer={setShowDrawer}
+                            hideDrawerAfterItemClick={props.hideDrawerAfterItemClick}
+                            hideHomeDrawerButton={props.hideHomeDrawerButton}
+                            drawerItems={props.drawerItems}
+                        />
                         <Typography
                             className={classes.titleText}
                             variant={props.titleVariant}
@@ -193,24 +118,23 @@ const TraditionalLayout = (props) => {
                                 >
                                     <MoreVertRoundedIcon />
                                 </IconButton>
-                                <SwipeableDrawer
-                                    anchor='right'
-                                    open={showMVDrawer}
-                                    onClose={() => setShowMVDrawer(false)}
-                                    onOpen={() => setShowMVDrawer(true)}
-                                >
-                                    {moreVertDrawerItems}
-                                </SwipeableDrawer>
+                                <MoreVertDrawer
+                                    showMVDrawer={showMVDrawer}
+                                    setShowMVDrawer={setShowMVDrawer}
+                                    hideMoreVertDrawerAfterItemClick={props.hideMoreVertDrawerAfterItemClick}
+                                    moreVertDrawerItems={props.moreVertDrawerItems}
+                                    hideToggleThemeListItem={props.hideToggleThemeListItem}
+                                />
                             </React.Fragment>}
                     </Toolbar>
                 </AppBar>
             </ElevationScroll>
-            {notInStyleGuide && <div style={{ marginBottom: props.denseAppBar ? "3em" : "4em" }} />}
-            <main>
+            {notInStyleGuide && <div style={{ marginBottom: props.denseAppBar ? "4em" : "5em" }} />}
+            <React.Fragment>
                 {/* ---Children--- */}
                 {props.children}
                 {/* ---Children--- */}
-            </main>
+            </React.Fragment>
             {props.showFooter &&
                 <React.Fragment>
                     <BottomNavigation

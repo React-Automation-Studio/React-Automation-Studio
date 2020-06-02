@@ -75,7 +75,7 @@ module.exports = {
         {
           name: 'Layout Wrapper Components',
           content: 'src/docs/WorkingWithLayouts.md',
-          components: 'src/components/UI/Layouts/*.js',
+          components: 'src/components/UI/Layout/ComposedLayouts/*.js',
           exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
           usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
         },

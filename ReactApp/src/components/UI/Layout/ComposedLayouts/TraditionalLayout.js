@@ -129,7 +129,7 @@ const TraditionalLayout = (props) => {
                     </Toolbar>
                 </AppBar>
             </ElevationScroll>
-            {notInStyleGuide && <div style={{ marginBottom: props.denseAppBar ? "4em" : "5em" }} />}
+            {notInStyleGuide && <div style={{ marginBottom: props.denseAppBar ? "3em" : "4em" }} />}
             <React.Fragment>
                 {/* ---Children--- */}
                 {props.children}

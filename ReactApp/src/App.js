@@ -11,12 +11,8 @@ import Routes from './routes'
 import 'typeface-roboto';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-
 import AutomationStudioContext from './components/SystemComponents/AutomationStudioContext';
-import { blue, indigo,pink, red, green,cyan,lime } from '@material-ui/core/colors'
 import io from 'socket.io-client';
-import { Redirect } from 'react-router-dom'
-import LogIn from './LogIn';
 
 import { lightTheme, darkTheme } from './components/UI/Themes/DefaultTheme'
 
@@ -28,34 +24,34 @@ import { lightTheme, darkTheme } from './components/UI/Themes/DefaultTheme'
 
 //console.log('process.env',process.env)
 let port;
-if(typeof process.env.REACT_APP_PyEpicsServerPORT==='undefined'){
-  port= 5000;
+if (typeof process.env.REACT_APP_PyEpicsServerPORT === 'undefined') {
+  port = 5000;
 }
-else{
-  port=process.env.REACT_APP_PyEpicsServerPORT;
+else {
+  port = process.env.REACT_APP_PyEpicsServerPORT;
 }
 
 let pvServerBASEURL;
-if(typeof process.env.REACT_APP_PyEpicsServerBASEURL==='undefined'){
-  pvServerBASEURL= "http://127.0.0.1";
+if (typeof process.env.REACT_APP_PyEpicsServerBASEURL === 'undefined') {
+  pvServerBASEURL = "http://127.0.0.1";
 }
-else{
-  pvServerBASEURL=process.env.REACT_APP_PyEpicsServerBASEURL;
+else {
+  pvServerBASEURL = process.env.REACT_APP_PyEpicsServerBASEURL;
 }
 
 let pvServerNamespace;
-if(typeof process.env.REACT_APP_PyEpicsServerNamespace==='undefined'){
-  pvServerNamespace= "pvServer";
+if (typeof process.env.REACT_APP_PyEpicsServerNamespace === 'undefined') {
+  pvServerNamespace = "pvServer";
 }
-else{
-  pvServerNamespace=process.env.REACT_APP_PyEpicsServerNamespace;
+else {
+  pvServerNamespace = process.env.REACT_APP_PyEpicsServerNamespace;
 }
 
-let PyEpicsServerURL=pvServerBASEURL+":"+port+"/"+pvServerNamespace;
+let PyEpicsServerURL = pvServerBASEURL + ":" + port + "/" + pvServerNamespace;
 
 
 
-let socket = io(PyEpicsServerURL,{
+let socket = io(PyEpicsServerURL, {
   transports: ['websocket'],
 })
 
@@ -65,7 +61,7 @@ let socket = io(PyEpicsServerURL,{
 const socket = io('127.0.0.1:5000/test',{
 transports: ['websocket']
 })*/
-let themeStyle='dark';
+let themeStyle = 'dark';
 class App extends Component {
   constructor(props) {
     super(props);
@@ -86,68 +82,112 @@ class App extends Component {
       localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
     }
 
+    //console.log(themeStyle)
 
 
-    this.updateLocalVariable = (name,data) => {
-      let system=this.state.system;
-      let localVariables=system.localVariables;
+    this.toggleTheme = () => {
+      let theme = null
+      let themeStyle = this.state.themeStyle;
 
-      localVariables[name]=data;
-      system.localVariables=localVariables
+      if (themeStyle == 'dark') {
+        themeStyle = 'light'
+        theme = createMuiTheme(lightTheme)
+      }
+      else {
+        themeStyle = 'dark'
+        theme = createMuiTheme(darkTheme)
+      }
+
+      this.setState({ themeStyle: themeStyle, theme: theme })
+      localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
+    }
+    this.setUserData = (username, roles) => {
+      let system = this.state.system;
+      let userData = {
+        username: username,
+        roles: roles
+      };
+      system.userData = userData;
+
+      this.setState({ system: system })
+    }
+    this.logout = () => {
+      localStorage.removeItem('jwt');
+      let system = this.state.system;
+      let userData = {
+        username: '',
+        roles: []
+      };
+      system.userData = userData;
+
+      this.setState({ system: system })
+    }
+    this.updateLocalVariable = (name, data) => {
+      let system = this.state.system;
+      let localVariables = system.localVariables;
+
+      localVariables[name] = data;
+      system.localVariables = localVariables
       this.setState({
-        system:system,
+        system: system,
 
       });
       //console.log('name',name)
       //console.log('data',data)
     };
+    let userData = {
+      username: '',
+      roles: []
+    };
 
-    let localVariables={};
-    let system={socket:socket,localVariables:localVariables,updateLocalVariable:this.updateLocalVariable,enableProbe:true,styleGuideRedirect:true}
-    this.state={
-      theme :theme,
-      system:system,
-      redirectToLoginPage:false,
-      Authenticated:false,
-      AuthenticationFailed:false,
+    let localVariables = {};
+    let system = { socket: socket, toggleTheme: this.toggleTheme, localVariables: localVariables, updateLocalVariable: this.updateLocalVariable, userData: userData, setUserData: this.setUserData, logout: this.logout, enableProbe: true, styleGuideRedirect: true }
+    this.state = {
+      themeStyle: themeStyle,
+      theme: theme,
+      system: system,
+      redirectToLoginPage: false,
+      Authenticated: false,
+      AuthenticationFailed: false,
 
 
     }
-    this.handleConnect=this.handleConnect.bind(this);
+    this.handleConnect = this.handleConnect.bind(this);
 
-    this.handleClientAuthorisation=this.handleClientAuthorisation.bind(this);
+    this.handleClientAuthorisation = this.handleClientAuthorisation.bind(this);
   }
 
 
-  handleConnect(){
+  handleConnect() {
 
     //  console.log('soceket connecting');
     let jwt = JSON.parse(localStorage.getItem('jwt'));
 
     //console.log('jwt',jwt);
-    if(jwt){
-      let socket=this.state.system.socket;
+    if (jwt) {
+      let socket = this.state.system.socket;
       socket.emit('AuthoriseClient', jwt);
     }
 
 
   }
-  handleClientAuthorisation(msg){
+  handleClientAuthorisation(msg) {
+    this.state.system.setUserData(msg.username, msg.roles);
+    this.setState({ 'Authorised': msg.successful, 'AuthorisationFailed': msg.successful !== true });
 
-    this.setState({'Authorised':msg.successful,'AuthorisationFailed':msg.successful!==true});
 
 
   }
-  componentDidMount(){
+  componentDidMount() {
 
     let jwt = JSON.parse(localStorage.getItem('jwt'));
 
-    if(jwt){
-      this.setState({'redirectToLoginPage':false});
-      let socket=this.state.system.socket;
-      socket.on('connect',this.handleConnect);
+    if (jwt) {
+      this.setState({ 'redirectToLoginPage': false });
+      let socket = this.state.system.socket;
+      socket.on('connect', this.handleConnect);
       //socket.on('redirectToLogIn', this.handleRedirectToLogIn);
-      socket.on('clientAuthorisation',this.handleClientAuthorisation);
+      socket.on('clientAuthorisation', this.handleClientAuthorisation);
 
 
     }
@@ -155,18 +195,19 @@ class App extends Component {
 
 
   }
-  componentWillUnmount(){
-    console.log('unmounted')
-    let socket=this.state.system.socket;
-    socket.removeListener('connect',this.handleConnect);
+  componentWillUnmount() {
+    // console.log('unmounted')
+    let socket = this.state.system.socket;
+    socket.removeListener('connect', this.handleConnect);
     //  socket.removeListener('redirectToLogIn', this.handleRedirectToLogIn);
-    socket.removeListener('clientAuthorisation',this.handleClientAuthorisation);
+    socket.removeListener('clientAuthorisation', this.handleClientAuthorisation);
   }
   render() {
     //  console.log('node env',process.env.NODE_ENV)
     //  console.log(this.state.theme)
 
-  //  console.log(this.state)
+    //  console.log(this.state)
+    console.log(this.state.theme)
     return (
 
       <AutomationStudioContext.Provider value={this.state.system}>

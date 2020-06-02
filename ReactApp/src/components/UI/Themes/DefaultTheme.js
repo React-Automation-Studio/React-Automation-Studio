@@ -1,11 +1,25 @@
-import { blue, indigo, pink, red, green, cyan, lime } from '@material-ui/core/colors'
+import { blue, indigo, pink, red, green, cyan, lime,deepOrange,orange } from '@material-ui/core/colors'
 
 const lightPalette = {
     type: "light",
     primary: indigo,
     secondary: pink,
-    error: pink,
-    action: green,
+    error:pink,
+    alarm:{
+        major:{
+            light: red['400'],
+            main: red['600'],
+            dark: red['800'],
+        },
+        minor:{
+             light:orange['100'],
+             main:orange['300'],             
+             dark:orange['800']
+            },
+            
+        ok:{light:green['200'],
+            dark:green['500']},
+    },
     // Used by `getContrastText()` to maximize the contrast between the background and
     // the text.
     contrastThreshold: 3,
@@ -19,11 +33,26 @@ const darkPalette = {
     type: "dark",
     primary: cyan,
     secondary: pink,
-    error: pink,
+    error:pink,
     action: green,
     // Used by `getContrastText()` to maximize the contrast between the background and
     // the text.
     contrastThreshold: 3,
+    alarm:{
+        major:{
+            light: red['400'],
+            main: red['600'],
+            dark: red['800'],
+        },
+        minor:{
+             light:deepOrange['200'], 
+             main:deepOrange['300'],              
+             dark:deepOrange['400']
+            },
+            
+        ok:{light:green['200'],
+            dark:green['500']},
+    },
     // Used to shift a color's luminance by approximately
     // two indexes within its tonal palette.
     // E.g., shift from Red 500 to Red 300 or Red 700.

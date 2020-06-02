@@ -26,7 +26,7 @@ function StyledIconIndicatorComponent(props) {
 
 
   let onColor = props.theme.palette.primary.main;
-  let offColor = props.theme.palette.grey[50];
+  let offColor = props.theme.palette.grey[300];
   if (typeof props.onColor !== 'undefined') {
     if (props.onColor === 'primary') {
       onColor = props.theme.palette.primary.main;
@@ -35,7 +35,7 @@ function StyledIconIndicatorComponent(props) {
       onColor = props.theme.palette.secondary.main;
     }
     else if (props.onColor === 'default') {
-      onColor = props.theme.palette.grey[50];
+      onColor = props.theme.palette.grey[300];
     }
     else {
       onColor = props.onColor;
@@ -50,7 +50,7 @@ function StyledIconIndicatorComponent(props) {
       offColor = props.theme.palette.secondary.main;
     }
     else if (props.offColor === 'default') {
-      offColor = props.theme.palette.grey[50];
+      offColor = props.theme.palette.grey[300];
     }
     else {
       offColor = props.offColor;
@@ -73,7 +73,7 @@ function StyledIconIndicatorComponent(props) {
 
 
   let color = !props.initialized
-    ? props.theme.palette.grey[50]
+    ? props.theme.palette.action.disabled
     : props.value == 1
       ? onColor
       : offColor;

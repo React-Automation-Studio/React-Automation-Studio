@@ -139,7 +139,7 @@ class MobileDemo2 extends React.Component {
               <RadioButton pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}} usePvLabel={true}/>
             </Grid>
             <Grid item xs={6} lg={1}>
-              <StyledIconIndicator  pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}} onColor='primary' offColor='secondary' usePvLabel={true} labelPlacement={'start'}/>
+              <StyledIconIndicator  pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}} onColor='primary' offColor='secondary' usePvLabel={true} labelPlacement={'end'}/>
             </Grid>
 
             <Grid item xs={6} lg={1}>

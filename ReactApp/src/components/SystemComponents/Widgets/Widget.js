@@ -291,7 +291,7 @@ const math = create(all, config)
     return (
 
       <LanDisconnect
-        fontSize="small"
+        fontSize="inherit"
         style={{
           color: props.theme.palette.error.main,
           verticalAlign: "middle",
@@ -413,7 +413,7 @@ const math = create(all, config)
       min: min,
       max: max,
       label: label,
-      formControlLabel:initialized?label :<span>{disconnectedIcon()}{" "+pv.pvName}</span>,
+      formControlLabel:initialized?label :<span style={{fontSize:"inherit", whiteSpace: "nowrap"}}>{disconnectedIcon()}{" "+pv.pvName}</span>,
       units: units,
       disabled: disabled,
       readOnly: readOnly,

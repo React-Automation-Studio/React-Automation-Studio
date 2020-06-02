@@ -12,8 +12,8 @@ const lightPalette = {
             dark: red['800'],
         },
         minor:{
-             light:orange['200'],
-             main:orange['400'],             
+             light:orange['100'],
+             main:orange['300'],             
              dark:orange['800']
             },
             

@@ -80,7 +80,7 @@ const styles = theme => ({
   body1: theme.typography.body1,
   root: {
     flexGrow: 1,
-    padding: theme.spacing(1),
+   
     paddingTop: theme.spacing(2),
     //width:'100%',
     overflowX: "hidden",

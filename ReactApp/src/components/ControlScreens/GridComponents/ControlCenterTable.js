@@ -194,20 +194,20 @@ MultiplePVs
             <TableHead>
               <TableRow>
                 <TableCell>Device Description</TableCell>
-                <TableCell align="right">Setpoint</TableCell>
-                <TableCell align="right">Readback</TableCell>
-                <TableCell align="right">SavedValue</TableCell>
-                <TableCell align="right">Status</TableCell>
+                <TableCell align="center">Setpoint</TableCell>
+                <TableCell align="center">Readback</TableCell>
+                <TableCell align="center">Saved Value</TableCell>
+                <TableCell align="center">Status</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {rowPVs.map(row => (
                 <TableRow key={row.id} onClick={this.handleOnClick(row.id)} >
 
-                  <TableCell className={classes.tableCell} component="th" scope="row" >
+                  <TableCell className={classes.tableCell}  align="left"  component="th" scope="row" >
                     {row.displayName}
                   </TableCell>
-                  <TableCell className={classes.tableCell} align="right">
+                  <TableCell className={classes.tableCell} align="center">
                     <TextUpdate
                       pv={row.setpointPV.pvname}
                       usePrecision={(typeof row.rowProps)==='undefined'?undefined:(typeof row.rowProps.usePrecision)==='undefined'?undefined:row.rowProps.usePrecision}
@@ -218,7 +218,7 @@ MultiplePVs
                     />
 
                   </TableCell>
-                  <TableCell className={classes.tableCell} align="right">
+                  <TableCell className={classes.tableCell} align="center">
                     <TextUpdate
                       pv={row.readbackPV.pvname}
                       usePrecision={(typeof row.rowProps)==='undefined'?undefined:(typeof row.rowProps.usePrecision)==='undefined'?undefined:row.rowProps.usePrecision}
@@ -228,8 +228,8 @@ MultiplePVs
                       alarmSensitive={true}
                     />
                   </TableCell>
-                  <TableCell  className={classes.tableCell} align="right">{"N/A"}</TableCell>
-                  <TableCell  className={classes.tableCell} align="right">
+                  <TableCell  className={classes.tableCell} align="center">{"N/A"}</TableCell>
+                  <TableCell  className={classes.tableCell} align="center">
                     {(typeof row.rowProps)==='undefined'?undefined:(typeof row.rowProps.useStatus)==='undefined'?'-':row.rowProps.useStatus===true?row.statusPV.value:'-'}
                   </TableCell>
                 </TableRow>

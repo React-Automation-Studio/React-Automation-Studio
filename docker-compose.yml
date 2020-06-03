@@ -27,6 +27,13 @@ services:
     tty: true
     stdin_open: true
     env_file: .env
+    environment:
+      - ALARM_DATABASE=localhost
+      - ALARM_DATABASE_REPLICA_SET_NAME=devrs
+      - LOADSAVE_DATABASE=localhost
+      - LOADSAVE_DATABASE_REPLICA_SET_NAME=devrs
+      - WATCH_DEBUG_DATABASE=localhost
+      - WATCH_DEBUG_DATABASE_REPLICA_SET_NAME=devrs
     volumes:
       - ./certificates:/certificates/
       - ./users:/pvServer/userAuthentication/users
@@ -76,3 +83,125 @@ services:
     environment:
             - REACT_APP_PyEpicsServerPORT=5001
             - REACT_APP_EnableLogin=false
+  
+  alarmhandlerserver:
+    build:
+      context: ./
+      dockerfile: docker/alarmHandlerServer/Dockerfile
+    hostname: alarmhandlerserver
+    restart: always
+    depends_on:
+      - mongosetup
+    network_mode: "host"
+    stdin_open: true
+    tty: true
+    env_file:
+      - alarmHandlerServer/alarmHandler.env
+    environment:
+      - ALARM_DATABASE=localhost
+      - ALARM_DATABASE_REPLICA_SET_NAME=devrs
+  
+  mongo1:
+    image: mongo:4.2.3-bionic
+    hostname: mongo1
+    restart: always
+    network_mode: "host"
+    env_file: mongoSetup/mongosetup.env
+    logging:
+      driver: "none"
+    volumes:
+      - "mongo-db-data1:/data/db"
+      - "mongo-db-configdb1:/data/configdb"
+    entrypoint:
+      [
+        "/usr/bin/mongod",
+        "--bind_ip_all",
+        "--port",
+        "27017",
+        "--replSet",
+        "devrs",
+      ]
+
+  mongo2:
+    image: mongo:4.2.3-bionic
+    hostname: mongo2
+    restart: always
+    network_mode: "host"
+    env_file: mongoSetup/mongosetup.env
+    logging:
+      driver: "none"
+    volumes:
+      - "mongo-db-data2:/data/db"
+      - "mongo-db-configdb2:/data/configdb"
+    entrypoint:
+      [
+        "/usr/bin/mongod",
+        "--bind_ip_all",
+        "--port",
+        "27018",
+        "--replSet",
+        "devrs",
+      ]
+
+  mongo3:
+    image: mongo:4.2.3-bionic
+    hostname: mongo3
+    restart: always
+    network_mode: "host"
+    env_file: mongoSetup/mongosetup.env
+    logging:
+      driver: "none"
+    volumes:
+      - "mongo-db-data3:/data/db"
+      - "mongo-db-configdb3:/data/configdb"
+    entrypoint:
+      [
+        "/usr/bin/mongod",
+        "--bind_ip_all",
+        "--port",
+        "27019",
+        "--replSet",
+        "devrs",
+      ]
+
+  mongosetup:
+    build:
+      context: ./
+      dockerfile: docker/mongoSetup/Dockerfile
+    hostname: mongosetup
+    restart: on-failure
+    network_mode: "host"
+    depends_on:
+      - mongo1
+      - mongo2
+      - mongo3
+    stdin_open: true
+    tty: true
+    env_file:
+      - mongoSetup/mongosetup.env
+    environment:
+      - REPLICA_SET_NAME=devrs
+      - REPLICA_SET_MEMBERS=localhost:27017,localhost:27018,localhost:27019
+
+  mongo-express:
+    image: mongo-express:0.54.0
+    hostname: mongo-express
+    restart: always
+    network_mode: "host"
+    depends_on:
+      - mongosetup
+    env_file: mongoSetup/mongosetup.env
+    logging:
+      driver: "none"
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=localhost
+    depends_on:
+      - mongosetup
+
+volumes:
+  mongo-db-data1:
+  mongo-db-configdb1:
+  mongo-db-data2:
+  mongo-db-configdb2:
+  mongo-db-data3:
+  mongo-db-configdb3:

@@ -1,0 +1,11 @@
+[
+    {
+        "user": "Joe Soap",
+        "email": "jusabra@gmail.com",
+        "notifyAreas": [
+            "BEAMLINE*",
+            "*WATER*",
+            "BUILDING:HVAC:*"
+        ]
+    }
+]

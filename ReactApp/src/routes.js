@@ -27,6 +27,10 @@ import SettingsSinglePS from './components/SettingsPages/SettingsSinglePS';
 // import ExperimentalEpicsDemos from './components/ExperimentalExamples/ExperimentalEpicsDemos';
 // import ExperimentalMobileDemo1 from './components/ExperimentalExamples/Mobile/ExperimentalMobileDemo1';
 // import HooksDebuging from './components/ExperimentalExamples/Mobile/HooksDebuging';
+
+import AlarmHandler from './components/AlarmHandler/AlarmHandler';
+import Vault from './components/AlarmHandler/Vault';
+
 import LogIn from './LogIn';
 import { Redirect } from 'react-router-dom'
 export default props=>(
@@ -64,6 +68,10 @@ export default props=>(
     {/* <Route path="/ExperimentalMobileDemo1" component={ExperimentalMobileDemo1} /> */}
     {/* <Route path="/HooksDebuging" component={HooksDebuging} /> */}
     {/* <Route path="/ExperimentalEpicsDemos" component={ExperimentalEpicsDemos} /> */}
+
+    <Route path="/AlarmHandlerDemo" component={AlarmHandler} />
+    <Route path="/VaultDemo" component={Vault} />
+
     </Switch>
 
   </BrowserRouter>

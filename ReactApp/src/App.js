@@ -207,7 +207,7 @@ class App extends Component {
     //  console.log(this.state.theme)
 
     //  console.log(this.state)
-    console.log(this.state.theme)
+    // console.log(this.state.theme)
     return (
 
       <AutomationStudioContext.Provider value={this.state.system}>

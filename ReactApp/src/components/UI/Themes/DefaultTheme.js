@@ -1,4 +1,4 @@
-import { blue, indigo, pink, red, green, cyan, lime, deepOrange, orange } from '@material-ui/core/colors'
+import { indigo, pink, red, green, cyan, deepOrange, orange } from '@material-ui/core/colors'
 import { fade } from '@material-ui/core/styles/colorManipulator';
 
 const lightPalette = {
@@ -24,7 +24,7 @@ const lightPalette = {
         },
         minorAcked: {
             light: fade(orange['100'], 0.4),
-            main: fade(orange['300'], 0.4),
+            main: fade(orange['400'], 0.4),
             dark: fade(orange['800'], 0.4)
         },
 

@@ -13,10 +13,6 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
 
-import red from '@material-ui/core/colors/red';
-import deepOrange from '@material-ui/core/colors/deepOrange';
-import grey from '@material-ui/core/colors/grey';
-
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Typography from '@material-ui/core/Typography';
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
@@ -35,14 +31,11 @@ const useStyles = makeStyles(theme => ({
     },
     majorAlarm: {
         backgroundColor: theme.palette.alarm.major.main,
-        // color: grey['200'],
         '&:hover': {
             backgroundColor: theme.palette.alarm.major.light,
-            // color: grey['100'],
         },
         "&.Mui-selected": {
             backgroundColor: theme.palette.alarm.major.light,
-            // color: 'white',
             borderStyle: "solid",
             borderWidth: "thin",
             borderColor: theme.palette.primary.main,
@@ -53,14 +46,11 @@ const useStyles = makeStyles(theme => ({
     },
     majorAlarmAcked: {
         backgroundColor: theme.palette.alarm.majorAcked.main,
-        // color: grey['200'],
         '&:hover': {
             backgroundColor: theme.palette.alarm.majorAcked.light,
-            // color: grey['100'],
         },
         "&.Mui-selected": {
             backgroundColor: theme.palette.alarm.majorAcked.light,
-            // color: 'white',
             borderStyle: "solid",
             borderWidth: "thin",
             borderColor: theme.palette.primary.main,
@@ -71,14 +61,11 @@ const useStyles = makeStyles(theme => ({
     },
     minorAlarm: {
         backgroundColor: theme.palette.alarm.minor.main,
-        // color: grey['200'],
         '&:hover': {
             backgroundColor: theme.palette.alarm.minor.light,
-            // color: grey['100'],
         },
         "&.Mui-selected": {
             backgroundColor: theme.palette.alarm.minor.light,
-            // color: 'white',
             borderStyle: "solid",
             borderWidth: "thin",
             borderColor: theme.palette.primary.main,
@@ -89,14 +76,11 @@ const useStyles = makeStyles(theme => ({
     },
     minorAlarmAcked: {
         backgroundColor: theme.palette.alarm.minorAcked.main,
-        // color: grey['200'],
         '&:hover': {
             backgroundColor: theme.palette.alarm.minorAcked.light,
-            // color: grey['100'],
         },
         "&.Mui-selected": {
             backgroundColor: theme.palette.alarm.minorAcked.light,
-            // color: 'white',
             borderStyle: "solid",
             borderWidth: "thin",
             borderColor: theme.palette.primary.main,
@@ -106,25 +90,21 @@ const useStyles = makeStyles(theme => ({
         }
     },
     noAlarm: {
-        // color: grey['200'],
         '&:hover': {
-            // color: grey['100'],
         },
         "&.Mui-selected": {
-            // color: 'white',
             borderStyle: "solid",
             borderWidth: "thin",
             borderColor: theme.palette.primary.main
         }
     },
     disabled: {
-        backgroundColor: 'grey',
-        // color: grey['200'],
+        backgroundColor: theme.palette.type === 'dark' ? theme.palette.grey[500] : theme.palette.grey[400],
         '&:hover': {
-            // color: grey['100'],
+            backgroundColor: theme.palette.type === 'dark' ? theme.palette.grey[400] : theme.palette.grey[300]
         },
         "&.Mui-selected": {
-            // color: 'white',
+            backgroundColor: theme.palette.type === 'dark' ? theme.palette.grey[400] : theme.palette.grey[200],
             borderStyle: "solid",
             borderWidth: "thin",
             borderColor: theme.palette.primary.main

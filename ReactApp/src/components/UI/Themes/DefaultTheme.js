@@ -19,12 +19,12 @@ const lightPalette = {
         },
         minor: {
             light: orange['100'],
-            main: orange['400'],
+            main: orange['300'],
             dark: orange['800']
         },
         minorAcked: {
             light: fade(orange['100'], 0.4),
-            main: fade(orange['400'], 0.4),
+            main: fade(orange['300'], 0.4),
             dark: fade(orange['800'], 0.4)
         },
 

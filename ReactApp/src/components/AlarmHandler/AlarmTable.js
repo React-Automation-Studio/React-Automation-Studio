@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import TextInput from '../BaseComponents/TextInput';
 import TextUpdateAH from './TextUpdateAH';
 import TextUpdate from '../BaseComponents/TextUpdate';
@@ -18,8 +18,6 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
-import grey from '@material-ui/core/colors/grey';
-
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Typography from '@material-ui/core/Typography';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
@@ -32,15 +30,10 @@ const useStyles = makeStyles(theme => ({
         width: '100%',
         overflowY: 'auto',
     },
-    disabled: {
-        backgroundColor: 'grey',
-        color: grey['400'],
-        fontWeight: 'bold',
-    },
     TextFieldSeverityDisabled: {
         borderRadius: 2,
         padding: 1,
-        backgroundColor: 'grey',
+        backgroundColor: theme.palette.type === 'dark' ? theme.palette.grey[500] : theme.palette.grey[400]
     },
     majorAlarmWarn: {
         background: 'transparent',
@@ -58,6 +51,10 @@ const useStyles = makeStyles(theme => ({
         borderWidth: "thin",
         borderColor: theme.palette.alarm.minor.main
     },
+    styledTableHeadCell: {
+        backgroundColor: theme.palette.type === 'dark' ? undefined : theme.palette.primary.light,
+        color: theme.palette.type === 'dark' ? undefined : 'white',
+    }
 
 }));
 
@@ -65,7 +62,8 @@ const AlarmTable = props => {
 
     // console.log("AlarmTable rendered")
 
-    const classes = useStyles();
+    const classes = useStyles()
+    const theme = useTheme()
     const myRef = useRef()
 
     useEffect(() => {
@@ -95,7 +93,7 @@ const AlarmTable = props => {
     }
 
     return (
-        <TableContainer component={Paper} style={{ height: props.height }} ref={myRef}>
+        <TableContainer component={Paper} style={{ height: props.height }} ref={myRef} elevation={theme.palette.type === 'dark' ? undefined : 5}>
             <Table aria-label="Alarm Table" stickyHeader size="small">
                 <TableHead>
                     <TableRow
@@ -105,17 +103,17 @@ const AlarmTable = props => {
                         }}
                     >
                         {props.debug
-                            ? <TableCell>TEST ALM</TableCell>
+                            ? <TableCell align="left" classes={{ stickyHeader: classes.styledTableHeadCell }}>TEST ALM</TableCell>
                             : null}
-                        <TableCell>PV NAME</TableCell>
-                        <TableCell>PV VALUE</TableCell>
-                        <TableCell align="center">ALM STATUS</TableCell>
-                        <TableCell align="left" >LAST ALM VAL</TableCell>
-                        <TableCell align="left" >LAST ALM TIME</TableCell>
-                        <TableCell align="left" >LAST ALM ACK TIME</TableCell>
-                        <TableCell align="center" >ENBL</TableCell>
-                        <TableCell align="center" >LAT</TableCell>
-                        <TableCell align="center" >NTFY</TableCell>
+                        <TableCell align="left" classes={{ stickyHeader: classes.styledTableHeadCell }}>PV NAME</TableCell>
+                        <TableCell align="left" classes={{ stickyHeader: classes.styledTableHeadCell }}>PV VALUE</TableCell>
+                        <TableCell align="center" classes={{ stickyHeader: classes.styledTableHeadCell }}>ALM STATUS</TableCell>
+                        <TableCell align="left" classes={{ stickyHeader: classes.styledTableHeadCell }}>LAST ALM VAL</TableCell>
+                        <TableCell align="left" classes={{ stickyHeader: classes.styledTableHeadCell }}>LAST ALM TIME</TableCell>
+                        <TableCell align="left" classes={{ stickyHeader: classes.styledTableHeadCell }}>LAST ALM ACK TIME</TableCell>
+                        <TableCell align="center" classes={{ stickyHeader: classes.styledTableHeadCell }}>ENBL</TableCell>
+                        <TableCell align="center" classes={{ stickyHeader: classes.styledTableHeadCell }}>LAT</TableCell>
+                        <TableCell align="center" classes={{ stickyHeader: classes.styledTableHeadCell }}>NTFY</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>

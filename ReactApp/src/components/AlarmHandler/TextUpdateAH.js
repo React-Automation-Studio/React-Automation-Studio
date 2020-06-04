@@ -15,33 +15,33 @@ const styles = (theme) => ({
     background: theme.palette.alarm.major.main,
     borderRadius: 2,
     padding: 2,
-    paddingRight:5,
-    paddingLeft:5,
-    fontWeight:500,
+    paddingRight: 5,
+    paddingLeft: 5,
+    fontWeight: 500,
   },
   majorAlarmAcked: {
     background: theme.palette.alarm.majorAcked.main,
     borderRadius: 2,
     padding: 2,
-    paddingRight:5,
-    paddingLeft:5,
-    fontWeight:500,
+    paddingRight: 5,
+    paddingLeft: 5,
+    fontWeight: 500,
   },
   minorAlarm: {
     background: theme.palette.alarm.minor.main,
     borderRadius: 2,
     padding: 2,
-    paddingRight:5,
-    paddingLeft:5,
-    fontWeight:500,
+    paddingRight: 5,
+    paddingLeft: 5,
+    fontWeight: 500,
   },
   minorAlarmAcked: {
     background: theme.palette.alarm.minorAcked.main,
     borderRadius: 2,
     padding: 2,
-    paddingRight:5,
-    paddingLeft:5,
-    fontWeight:500,
+    paddingRight: 5,
+    paddingLeft: 5,
+    fontWeight: 500,
   },
   noAlarm: {
   },
@@ -248,4 +248,4 @@ TextUpdate.defaultProps = {
 
   alarmSensitive: false
 };
-export default withStyles(styles, { withTheme: true })(TextUpdate)
+export default React.memo(withStyles(styles, { withTheme: true })(TextUpdate))

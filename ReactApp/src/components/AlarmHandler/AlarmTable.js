@@ -81,9 +81,13 @@ const AlarmTable = props => {
     let currTopArea = ""
     let newTopArea = false
 
-    const textFieldClasses = {
-        TextFieldSeverity0: classes.TextFieldSeverityDisabled,
-    };
+    const textFieldDisableClasses = {
+        noAlarm: classes.TextFieldSeverityDisabled,
+        minorAlarmAcked: classes.TextFieldSeverityDisabled,
+        minorAlarm: classes.TextFieldSeverityDisabled,
+        majorAlarmAcked: classes.TextFieldSeverityDisabled,
+        majorAlarm: classes.TextFieldSeverityDisabled,
+    }
 
     const textFieldWarnClasses = {
         TextFieldSeverity1: classes.minorAlarmWarn,
@@ -273,23 +277,17 @@ const AlarmTable = props => {
                                                 />
                                             </TableCell>
                                             <TableCell align="center">
-                                                {props.enableAllAreas && props.areaEnabled[areaName] && areaAlarms[areaAlarmName]["enable"]
-                                                    ?
-                                                    <TextUpdateAH
-                                                        pv={'pva://' + "alarmIOC:" + areaAlarms[areaAlarmName]["name"] + "A"}
-                                                        useStringValue={true}
-                                                        alarmSensitive={true}
-                                                        disableContextMenu={true}
-                                                    />
-                                                    :
-                                                    <TextUpdate
-                                                        pv={'pva://' + "alarmIOC:" + areaAlarms[areaAlarmName]["name"] + "A"}
-                                                        useStringValue={true}
-                                                        alarmSensitive={true}
-                                                        disableContextMenu={true}
-                                                        classes={textFieldClasses}
-                                                    />
-                                                }
+                                                <TextUpdateAH
+                                                    pv={'pva://' + "alarmIOC:" + areaAlarms[areaAlarmName]["name"] + "A"}
+                                                    useStringValue={true}
+                                                    alarmSensitive={true}
+                                                    disableContextMenu={true}
+                                                    classes={
+                                                        props.enableAllAreas && props.areaEnabled[areaName] && areaAlarms[areaAlarmName]["enable"]
+                                                            ? undefined
+                                                            : textFieldDisableClasses
+                                                    }
+                                                />
                                             </TableCell>
 
                                             <TableCell align="left">

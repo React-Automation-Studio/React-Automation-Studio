@@ -39,6 +39,7 @@ const useStyles = makeStyles(theme => ({
         background: 'transparent',
         borderRadius: 2,
         padding: 1,
+        paddingRight:5,
         borderStyle: "solid",
         borderWidth: "thin",
         borderColor: theme.palette.alarm.major.main
@@ -47,6 +48,7 @@ const useStyles = makeStyles(theme => ({
         background: 'transparent',
         borderRadius: 2,
         padding: 1,
+        paddingRight:5,
         borderStyle: "solid",
         borderWidth: "thin",
         borderColor: theme.palette.alarm.minor.main
@@ -263,7 +265,7 @@ const AlarmTable = props => {
                                                     />
                                                 </TableCell>
                                             </Tooltip>
-                                            <TableCell align="left">
+                                            <TableCell align="right">
                                                 <TextUpdate
                                                     pv={'pva://' + areaAlarms[areaAlarmName]["name"]}
                                                     disableContextMenu={true}
@@ -288,7 +290,7 @@ const AlarmTable = props => {
                                                 />
                                             </TableCell>
 
-                                            <TableCell align="left">
+                                            <TableCell align="right">
                                                 <TextUpdate
                                                     pv={'pva://' + "alarmIOC:" + areaAlarms[areaAlarmName]["name"] + "V"}
                                                     disableContextMenu={true}

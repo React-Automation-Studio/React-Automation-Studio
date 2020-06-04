@@ -96,6 +96,16 @@ const useStyles = makeStyles(theme => ({
             },
         },
     },
+    expansionPanelSummaryContent: {
+        paddingTop: 0,
+        paddingBottom: 0,
+        '&$expanded': {
+            margin: 0,
+        },
+    },
+
+    expanded: {}
+
 
 }));
 
@@ -961,12 +971,12 @@ const AlarmHandler = () => {
     }
 
     let alarmTableHeight = '40vh'
-    let alarmLogHeight = '29vh'
+    let alarmLogHeight = '32vh'
     if (alarmTableExpand && !alarmLogExpand && !alarmLogIsExpanded) {
-        alarmTableHeight = '75vh'
+        alarmTableHeight = '76vh'
     }
     else if (!alarmTableExpand && !alarmTableIsExpanded && alarmLogExpand) {
-        alarmLogHeight = '75vh'
+        alarmLogHeight = '76vh'
     }
 
     return (
@@ -1099,6 +1109,7 @@ const AlarmHandler = () => {
                                 expandIcon={<ExpandMoreIcon />}
                                 aria-controls="panel1bh-content"
                                 id="panel1bh-header"
+                                classes={{ content: classes.expansionPanelSummaryContent, expanded: classes.expanded }}
                             >
                                 <div style={{ display: 'flex', width: '100%' }}>
                                     <div style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 20 }}>{`ALARM TABLE: ${areaSelectedName}`}</div>
@@ -1164,6 +1175,7 @@ const AlarmHandler = () => {
                                 expandIcon={<ExpandMoreIcon />}
                                 aria-controls="panel1bh-content"
                                 id="panel1bh-header"
+                                classes={{ content: classes.expansionPanelSummaryContent, expanded: classes.expanded }}
                             >
                                 <div style={{ display: 'flex', width: '100%' }}>
                                     <div style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 20 }}>{`ALARM LOG: ${alarmLogSelectedName}`}</div>

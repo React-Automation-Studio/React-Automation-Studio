@@ -14,7 +14,7 @@ const styles = (theme) => ({
   majorAlarm: {
     background: theme.palette.alarm.major.main,
     borderRadius: 2,
-    padding: 2,
+    padding: 1,
     paddingRight: 5,
     paddingLeft: 5,
     fontWeight: 500,
@@ -22,7 +22,7 @@ const styles = (theme) => ({
   majorAlarmAcked: {
     background: theme.palette.alarm.majorAcked.main,
     borderRadius: 2,
-    padding: 2,
+    padding: 1,
     paddingRight: 5,
     paddingLeft: 5,
     fontWeight: 500,
@@ -30,7 +30,7 @@ const styles = (theme) => ({
   minorAlarm: {
     background: theme.palette.alarm.minor.main,
     borderRadius: 2,
-    padding: 2,
+    padding: 1,
     paddingRight: 5,
     paddingLeft: 5,
     fontWeight: 500,
@@ -38,12 +38,18 @@ const styles = (theme) => ({
   minorAlarmAcked: {
     background: theme.palette.alarm.minorAcked.main,
     borderRadius: 2,
-    padding: 2,
+    padding: 1,
     paddingRight: 5,
     paddingLeft: 5,
     fontWeight: 500,
   },
   noAlarm: {
+    background: 'transparent',
+    borderRadius: 2,
+    padding: 1,
+    paddingRight: 5,
+    paddingLeft: 5,
+    fontWeight: 500,
   },
 });
 
@@ -74,7 +80,7 @@ const TextUpdateComponent = (props) => {
     }
 
     content = (
-      <Typography className={textFieldClassName} >{label + props.value + " " + units}</Typography>
+      <Typography className={textFieldClassName} variant={props.variant ? props.variant : undefined}>{label + props.value + " " + units}</Typography>
     );
   } else {
     content = props.formControlLabel;
@@ -241,11 +247,13 @@ TextUpdate.propTypes = {
    * Directive to overided alarm severity with the rules defined in the stringSeverity
    */
   useStringSeverityMatch: PropTypes.bool,
+  /** Material-UI Typography variant*/
+  variant: PropTypes.string,
 
 };
 TextUpdate.defaultProps = {
   debug: false,
-
+  variant:"body2",
   alarmSensitive: false
 };
 export default React.memo(withStyles(styles, { withTheme: true })(TextUpdate))

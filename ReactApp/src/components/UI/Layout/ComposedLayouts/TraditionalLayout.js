@@ -83,7 +83,7 @@ const TraditionalLayout = (props) => {
         <React.Fragment>
             <CssBaseline />
             <ElevationScroll {...props}>
-                <AppBar color={themeType === 'dark' ? "inherit" : "primary"} position={notInStyleGuide ? undefined : "static"}>
+                <AppBar color={themeType === 'dark' ? "inherit" : "primary"} position={notInStyleGuide ? undefined : "static"}  elevation={theme.palette.paperElevation}>
                     <Toolbar variant={props.denseAppBar ? "dense" : undefined} style={{ display: "flex" }}>
                         <IconButton
                             onClick={() => setShowDrawer(true)}

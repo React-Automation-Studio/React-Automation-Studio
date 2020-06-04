@@ -7,16 +7,18 @@ import TextOutput from '../../BaseComponents/TextOutput';
 import SimpleSlider from '../../BaseComponents/SimpleSlider';
 import TextUpdate from '../../BaseComponents/TextUpdate';
 import Grid from '@material-ui/core/Grid';
-import SwitchComponent from '../../BaseComponents/SwitchComponent';
 import ToggleButton from '../../BaseComponents/ToggleButton';
-import ActionButton from '../../BaseComponents/ActionButton';
-
+import { withStyles } from '@material-ui/core/styles';
 import ThumbWheel from '../../BaseComponents/ThumbWheel';
-import Card from '@material-ui/core/Card';
+import Paper from '@material-ui/core/Paper';
 import Close from '@material-ui/icons/Close';
 //import MenuItem from '@material-ui/core/MenuItem';
 
+const styles = theme => ({
+  body1: theme.typography.body1,
 
+
+});
 
 class ControlRightEx1 extends React.Component {
   constructor(props) {
@@ -48,7 +50,7 @@ class ControlRightEx1 extends React.Component {
         </Grid>
       </Grid>
 
-      <Card style={{ paddingLeft: 12,paddingTop: 12,paddingRight: 12, marginRight:12}}>
+      <Paper style={{ paddingLeft: 12,paddingTop: 12,paddingRight: 12, marginRight:12}} elevation={this.props.theme.palette.paperElevation}>
         <div style={{ "overflowX": "hidden", paddingTop:6}}>
 
           <Grid container spacing={2}>
@@ -99,11 +101,11 @@ class ControlRightEx1 extends React.Component {
           </Grid>
         <br/>
         </div>
-      </Card>
+      </Paper>
  </div>
     );
   }
 }
 
 ControlRightEx1.contextType=AutomationStudioContext;
-export default ControlRightEx1
+export default withStyles(styles,{withTheme:true})(ControlRightEx1)

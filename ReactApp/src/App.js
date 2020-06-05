@@ -14,7 +14,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import AutomationStudioContext from './components/SystemComponents/AutomationStudioContext';
 import io from 'socket.io-client';
 
-import { lightTheme, darkTheme } from './components/UI/Themes/DefaultTheme'
+import { lightTheme, darkTheme,themes } from './components/UI/Themes/DefaultTheme'
 
 // const socket = io('https://172.16.5.52:5000/test',{
 //   transports: ['websocket'],
@@ -69,38 +69,76 @@ class App extends Component {
     let theme = null
 
     let themeStyle = JSON.parse(localStorage.getItem('themeStyle'));
+    let themeKeys= Object.keys(themes);
+    if (themeKeys.includes(themeStyle)) {
+      theme = createMuiTheme(themes[themeStyle])
+      //   localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
+    }
+    else{
+      themeStyle=themeKeys[0];
+      theme = createMuiTheme(themes[themeStyle])
+      localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
+    }
 
+      //   themeStyle = 'light'
+      //   theme = createMuiTheme(lightTheme)
+      //   localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
+      // }
+      // else {
+      //   themeStyle = 'dark'
+      //   theme = createMuiTheme(darkTheme)
+      //   localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
+      // }
     //console.log('jwt',jwt);
-    if (themeStyle == 'light') {
-      themeStyle = 'light'
-      theme = createMuiTheme(lightTheme)
-      localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
-    }
-    else {
-      themeStyle = 'dark'
-      theme = createMuiTheme(darkTheme)
-      localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
-    }
+    // if (themeStyle == 'light') {
+    //   themeStyle = 'light'
+    //   theme = createMuiTheme(lightTheme)
+    //   localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
+    // }
+    // else {
+    //   themeStyle = 'dark'
+    //   theme = createMuiTheme(darkTheme)
+    //   localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
+    // }
 
     //console.log(themeStyle)
-
-
-    this.toggleTheme = () => {
+    this.changeTheme = (event) => {
+      let themeStyle=event.target.value;
+     
       let theme = null
-      let themeStyle = this.state.themeStyle;
-
-      if (themeStyle == 'dark') {
-        themeStyle = 'light'
-        theme = createMuiTheme(lightTheme)
+      let themeStyles = this.state.system.themeStyles;
+      if (themeStyles.includes(themeStyle)) {
+        theme = createMuiTheme(themes[themeStyle])
+        //   localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
       }
-      else {
-        themeStyle = 'dark'
-        theme = createMuiTheme(darkTheme)
+      else{
+        themeStyle=themeStyles[0];
+        theme = createMuiTheme(themes[themeStyle])
+        localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
       }
-
-      this.setState({ themeStyle: themeStyle, theme: theme })
+      
+      let system = this.state.system;
+      system.themeStyle=themeStyle
+      this.setState({ system: system, theme: theme })
       localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
     }
+
+    // this.toggleTheme = () => {
+    //   let theme = null
+    //   let themeStyle = this.state.themeStyle;
+
+    //   if (themeStyle == 'dark') {
+    //     themeStyle = 'light'
+    //     theme = createMuiTheme(lightTheme)
+    //   }
+    //   else {
+    //     themeStyle = 'dark'
+    //     theme = createMuiTheme(darkTheme)
+    //   }
+
+    //   this.setState({ themeStyle: themeStyle, theme: theme })
+    //   localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
+    // }
     this.setUserData = (username, roles) => {
       let system = this.state.system;
       let userData = {
@@ -141,9 +179,8 @@ class App extends Component {
     };
 
     let localVariables = {};
-    let system = { socket: socket, toggleTheme: this.toggleTheme, localVariables: localVariables, updateLocalVariable: this.updateLocalVariable, userData: userData, setUserData: this.setUserData, logout: this.logout, enableProbe: true, styleGuideRedirect: true }
+    let system = { socket: socket, changeTheme:this.changeTheme,themeStyles:themeKeys,themeStyle:themeStyle, localVariables: localVariables, updateLocalVariable: this.updateLocalVariable, userData: userData, setUserData: this.setUserData, logout: this.logout, enableProbe: true, styleGuideRedirect: true }
     this.state = {
-      themeStyle: themeStyle,
       theme: theme,
       system: system,
       redirectToLoginPage: false,
@@ -207,7 +244,7 @@ class App extends Component {
     //  console.log(this.state.theme)
 
     //  console.log(this.state)
-    console.log(this.state.theme)
+    // console.log(this.state.theme)
     return (
 
       <AutomationStudioContext.Provider value={this.state.system}>

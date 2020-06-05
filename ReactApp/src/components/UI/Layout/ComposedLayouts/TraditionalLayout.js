@@ -20,7 +20,8 @@ import MoreVertDrawer from '../LayoutComponents/MoreVertDrawer'
 
 import AutomationStudioContext from '../../../SystemComponents/AutomationStudioContext';
 import RedirectToLogIn from '../../../SystemComponents/RedirectToLogin.js';
-
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 function ElevationScroll(props) {
     const { children, window } = props;
     const trigger = useScrollTrigger({
@@ -82,7 +83,7 @@ const TraditionalLayout = (props) => {
     return (
         <React.Fragment>
             <CssBaseline />
-            <ElevationScroll {...props}>
+            {/* <ElevationScroll {...props}> */}
                 <AppBar color={themeType === 'dark' ? "inherit" : "primary"} position={notInStyleGuide ? undefined : "static"}  elevation={theme.palette.paperElevation}>
                     <Toolbar variant={props.denseAppBar ? "dense" : undefined} style={{ display: "flex" }}>
                         <IconButton
@@ -101,12 +102,25 @@ const TraditionalLayout = (props) => {
                             hideHomeDrawerButton={props.hideHomeDrawerButton}
                             drawerItems={props.drawerItems}
                         />
-                        <Typography
+                        {props.title&&<Typography
                             className={classes.titleText}
                             variant={props.titleVariant}
                         >
                             {props.title}
-                        </Typography>
+                        </Typography>}
+                        {props.tabs&&
+                        <Tabs
+                        style={{flexGrow: 1000,}}
+                        value={props.tabValue}
+                        onChange={props.handleTabChange}
+                        {...props.tabProps}
+                        
+        
+                        >
+                            {props.tabs.map((option,index)=>(
+                                <Tab key= {index.toString()} label={option}/>
+                            ))}
+                        </Tabs>}
                         {!props.hideMoreVertMenu &&
                             <React.Fragment>
                                 <IconButton
@@ -128,7 +142,7 @@ const TraditionalLayout = (props) => {
                             </React.Fragment>}
                     </Toolbar>
                 </AppBar>
-            </ElevationScroll>
+            {/* </ElevationScroll> */}
             {notInStyleGuide && <div style={{ marginBottom: props.denseAppBar ? "3em" : "4em" }} />}
             <React.Fragment>
                 {/* ---Children--- */}

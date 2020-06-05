@@ -11,6 +11,7 @@ import SideBar from './components/SystemComponents/SideBar';
 import ToggleButton from './components/BaseComponents/ToggleButton';
 import Grid from '@material-ui/core/Grid';
 import { Redirect } from 'react-router-dom'
+import TraditionalLayout from './components/UI/Layout/ComposedLayouts/TraditionalLayout.js';
 // Styles
 
 
@@ -97,23 +98,15 @@ class Main extends Component {
     const { classes } = this.props;
 
     return (
-      <React.Fragment>
+      <TraditionalLayout
+      title="React Automation Studio V1.3.0"
+      denseAppBar
+      alignTitle="center"
+    >
 
-        <Grid container direction="row" item justify="center" spacing={1} alignItems="center">
-          <Grid item lg={4} sm={4} xs={2}>
-            <SideBar/>
-          </Grid>
 
-          <Grid  item lg={2} sm={4}  xs={8}>
-
-            <div style={{textAlign: 'center'}} className={classes.body1}>React Automation Studio V1.3.0</div>
-
-          </Grid>
-          <Grid item lg={4} sm={4} xs={2}>
-
-          </Grid>
-        </Grid>
-        <Grid container direction="row" item justify="center" spacing={1} alignItems="center">
+        
+        <Grid container direction="row" item justify="center" spacing={1} alignItems="center" style={{paddingTop:64}}>
           <Grid item lg={4} sm={4} xs={2}>
 
           </Grid>
@@ -169,7 +162,7 @@ class Main extends Component {
           </Grid>
 
           <RedirectToLogIn/>
-        </React.Fragment>
+          </TraditionalLayout>
         )
         }
         }

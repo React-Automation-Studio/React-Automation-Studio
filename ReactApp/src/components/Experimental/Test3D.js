@@ -27,7 +27,7 @@ import SideBar from '../SystemComponents/SideBar';
 import ThreeScene from '../Experimental/ThreeScene';
 import AppBar from '@material-ui/core/AppBar';
 import Card from '@material-ui/core/Card';
-
+import TraditionalLayout from '../UI/Layout/ComposedLayouts/TraditionalLayout.js';
 import {
 
   makeVisFlexible,
@@ -69,25 +69,19 @@ render() {
   const { classes } = this.props;
   return (
     <div>
-
+        <TraditionalLayout
+        title="Epics Control of a 3D Object"
+        denseAppBar
+      >
       <Grid
         container
         direction="row"
         justify="flex-start"
         alignItems="center"
         spacing={1}
+        style={{paddingTop:16}}
       >
-        <Grid item xs={1} >
-          <SideBar/>
-        </Grid>
-        <Grid item xs={10} >
-          <div style={{textAlign: 'center'}}>
-            Epics Control of a 3D Object
-            </div>
-        </Grid>
-        <Grid item xs={1} >
-
-        </Grid>
+       
         <Grid item xs={12} sm={12} md={12} lg={12} style={{width: '100%', height: '100%' }} >
 
 
@@ -127,7 +121,7 @@ render() {
 
 
 
-
+        </TraditionalLayout>
       </div>
 
 

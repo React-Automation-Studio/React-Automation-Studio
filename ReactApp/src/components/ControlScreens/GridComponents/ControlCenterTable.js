@@ -15,6 +15,7 @@ const styles = theme => ({
   root: {
     width: '100%',
     marginTop: theme.spacing(1) * 0,
+    marginBottom: theme.spacing(4),
     overflowX: 'auto',
   },
   table: {

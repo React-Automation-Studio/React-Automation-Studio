@@ -427,12 +427,10 @@ multipleLineData = () => {
       lineColor=this.props.lineColor;
     }
     else{
-      if(theme.palette.type==='dark'){
-        lineColor=theme.darkLineColors;
-      }
-      else{
-        lineColor=theme.lightLineColors;
-      }
+      
+        lineColor=theme.lineColors;
+      
+      
 
     }
     //console.log("linedata: ", this.state.pvs[pv].linedata);
@@ -524,12 +522,9 @@ render() {
       legendColor=this.props.lineColor;
     }
     else{
-      if(theme.palette.type==='dark'){
-        legendColor=theme.darkLineColors;
-      }
-      else{
-        legendColor=theme.lightLineColors;
-      }
+      
+        legendColor=theme.lineColors;
+     
 
     }
     //console.log("linedata: ", this.state.pvs[pv].linedata);

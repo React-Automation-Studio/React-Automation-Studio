@@ -158,10 +158,11 @@ class MobileDemo1 extends React.Component {
       <TraditionalLayout
       title="Mobile Layout Example"
       denseAppBar
+      alignTitle="center"
         >
 
       
-
+        <div style={{paddingBottom:48}}>
 
         {value === 0 && <TabContainer key={'tabContainer0'}>
           <Grid   container className={classes.root}>
@@ -177,23 +178,25 @@ class MobileDemo1 extends React.Component {
 
                 <Grid item xs={12} >
                   <div style={{ height: graphVH, width:'96vw',}}>
-                    <GraphY  pvs={['pva://testIOC:test4','pva://testIOC:test5'] } legend={['Sine Wave','Amplitude']} lineColor={[this.props.theme.palette.secondary.main,lime['400']]}/>
+                    <GraphY  pvs={['pva://testIOC:test4','pva://testIOC:test5'] } legend={['Sine Wave','Amplitude']}
+                     //lineColor={[this.props.theme.palette.secondary.main,lime['400']]}
+                     />
                   </div>
                 </Grid>
                 <Grid item xs={12}>
                   <Grid container direction="row" item justify="center" spacing={2} alignItems="stretch">
                     <Grid item xs={6}  >
-                      <TextInput  pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}   usePvLabel={true} usePrecision={true} prec={3} alarmSensitive={true}/>
+                      <TextInput  pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}   usePvLabel={true} prec={3} alarmSensitive={true}/>
                     </Grid>
                     <Grid item  xs={6}>
-                      <TextOutput  pv='pva://$(device):test3' macros={{'$(device)':'testIOC'}}   usePvLabel={true} usePrecision={true} prec={3} alarmSensitive={true}/>
+                      <TextOutput  pv='pva://$(device):test3' macros={{'$(device)':'testIOC'}}   usePvLabel={true} prec={3} alarmSensitive={true}/>
                     </Grid>
                   </Grid>
                 </Grid>
 
                 <Grid item xs={6} sm={4} lg={3} >
 
-                  <Gauge  pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}   usePvLabel={true} usePrecision={true} prec={3} usePvMinMax={true} />
+                  <Gauge  pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}    prec={3} usePvMinMax={true} />
 
                 </Grid>
 
@@ -268,10 +271,10 @@ class MobileDemo1 extends React.Component {
                   <div style={{marginBottom:8}}>Settings</div>
                   <Grid container spacing={2} alignItems={'stretch'} direction={'row'} justify={'flex-start'}>
                     <Grid item xs={12} lg={4}>
-                      <TextInput   pv='pva://$(device):frequency' macros={{'$(device)':'testIOC'}}    usePvUnits={true} usePrecision={true} prec={1} usePvLabel={true}/>
+                      <TextInput   pv='pva://$(device):frequency' macros={{'$(device)':'testIOC'}}    usePvUnits={true} prec={1} usePvLabel={true}/>
                     </Grid>
                     <Grid item xs={12} lg={4}>
-                      <TextInput   pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}    usePvUnits={true} usePrecision={true} usePvLabel={true}/>
+                      <TextInput   pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}    usePvUnits={true} usePvLabel={true}/>
                     </Grid>
                   </Grid>
 
@@ -282,7 +285,7 @@ class MobileDemo1 extends React.Component {
             </Grid>
           </Grid>
         </TabContainer>}
-
+        </div>
 
         <AppBar className={classes.body1} style={{position:'fixed',bottom:0,top:'auto'}} color='inherit'>
           <Tabs value={value} onChange={this.handleChange} variant="fullWidth" scrollButtons="off">

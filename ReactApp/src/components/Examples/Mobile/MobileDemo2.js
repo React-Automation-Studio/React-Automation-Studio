@@ -31,6 +31,7 @@ import ProgressBar from '../../BaseComponents/ProgressBar';
 import StyledIconIndicator from '../../BaseComponents/StyledIconIndicator';
 import lime from '@material-ui/core/colors/lime';
 import SideBar from '../../SystemComponents/SideBar';
+import TraditionalLayout from '../../UI/Layout/ComposedLayouts/TraditionalLayout.js';
 const styles = theme => ({
   root: {
     flexGrow: 1,
@@ -52,13 +53,18 @@ class MobileDemo2 extends React.Component {
 
 
       <div style={{"overflowX": "hidden"}} >
-        {typeof this.props.nosidebar==='undefined' &&<SideBar/>}
+     
+        {typeof this.props.nosidebar==='undefined' &&    <TraditionalLayout
+      title="Mobile Demo 2"
+      denseAppBar
+      alignTitle="center"
+    ></TraditionalLayout>}
         <div style={{ padding: 24}}>
           <div >
             <Grid container spacing={2}>
               <Grid item xs={12} lg={6}>
                 <div style={{height:'25vh'}}>
-                  <GraphY  pvs={['pva://testIOC:test4','pva://testIOC:test5'] } legend={['Sine Wave ','Amplitude']} lineColor={[this.props.theme.palette.secondary.main,lime['400']]}/>
+                  <GraphY  pvs={['pva://testIOC:test4','pva://testIOC:test5'] } legend={['Sine Wave ','Amplitude']} />
                 </div>
               </Grid>
               <Grid item xs={12} lg={6}>
@@ -73,7 +79,7 @@ class MobileDemo2 extends React.Component {
                     legend={['Instantaneous Amplitude']}
                     maxLength={1000}
 
-                    lineColor={[lime['400']]}
+                    lineColor={[this.props.theme.lineColors[1]]}
                   />
                 </div>
               </Grid>

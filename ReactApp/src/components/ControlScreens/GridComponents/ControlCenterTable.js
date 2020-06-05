@@ -15,10 +15,15 @@ const styles = theme => ({
   root: {
     width: '100%',
     marginTop: theme.spacing(1) * 0,
+    marginBottom: theme.spacing(4),
     overflowX: 'auto',
   },
   table: {
+   
     minWidth: 700,
+  },
+  tableHead:{
+    backgroundColor: theme.palette.type=='light'?theme.palette.primary.light:undefined,
   },
   tableCell:{
      width:"20%"
@@ -186,12 +191,13 @@ MultiplePVs
 
     const rowPVs=this.state.rowPVs;
   //  console.log("render rowPVs",rowPVs)
+  
     return (
       <React.Fragment>
         {this.SystemsDataConnections()}
-        <Paper className={classes.root}>
-          <Table className={classes.table} size={'small'}>
-            <TableHead>
+        <Paper className={classes.root} elevation={this.props.theme.palette.paperElevation}>
+          <Table className={classes.table} size={'small'} >
+            <TableHead className={classes.tableHead}>
               <TableRow>
                 <TableCell>Device Description</TableCell>
                 <TableCell align="center">Setpoint</TableCell>
@@ -246,4 +252,4 @@ ControlCenterTable.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(ControlCenterTable);
+export default withStyles(styles,{withTheme:true})(ControlCenterTable);

@@ -1,4 +1,4 @@
-import React, {  useContext } from 'react';
+import React, { useContext } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
@@ -8,7 +8,8 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InvertColorsIcon from '@material-ui/icons/InvertColors';
-
+import TextField from '@material-ui/core/TextField';
+import MenuItem from '@material-ui/core/MenuItem';
 import AutomationStudioContext from '../../../SystemComponents/AutomationStudioContext';
 
 const useStyles = makeStyles(theme => ({
@@ -37,9 +38,23 @@ const MoreVertDrawer = (props) => {
                 }
 
                 {!props.hideToggleThemeListItem &&
-                    <ListItem button onClick={context.toggleTheme} >
+                    <ListItem  >
                         <ListItemIcon><InvertColorsIcon /></ListItemIcon>
-                        <ListItemText primary={"Toggle Theme"} />
+
+                        <TextField
+                            fullWidth={true}
+                            select
+                            label="Theme"
+                            value={context.themeStyle}
+                            onChange={context.changeTheme}
+
+                        >
+                            {context.themeStyles.map((option, index) => (
+                                <MenuItem key={index.toString()} value={option}>
+                                    {option}
+                                </MenuItem>
+                            ))}
+                        </TextField>
                     </ListItem>
                 }
             </List>

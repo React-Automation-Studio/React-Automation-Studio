@@ -9,7 +9,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import DataConnection from '../../SystemComponents/DataConnection';
 import TextUpdate from '../../BaseComponents/TextUpdate';
-
+import { Typography } from '@material-ui/core';
 
 const styles = theme => ({
   root: {
@@ -19,7 +19,7 @@ const styles = theme => ({
     overflowX: 'auto',
   },
   table: {
-   
+    padding:1,
     minWidth: 700,
   },
   tableHead:{
@@ -196,7 +196,7 @@ MultiplePVs
       <React.Fragment>
         {this.SystemsDataConnections()}
         <Paper className={classes.root} elevation={this.props.theme.palette.paperElevation}>
-          <Table className={classes.table} size={'small'} >
+          <Table className={classes.table} size={'small'}  >
             <TableHead className={classes.tableHead}>
               <TableRow>
                 <TableCell>Device Description</TableCell>
@@ -211,7 +211,7 @@ MultiplePVs
                 <TableRow key={row.id} onClick={this.handleOnClick(row.id)} >
 
                   <TableCell className={classes.tableCell}  align="left"  component="th" scope="row" >
-                    {row.displayName}
+                    <Typography variant={'body2'}>{row.displayName}</Typography>
                   </TableCell>
                   <TableCell className={classes.tableCell} align="center">
                     <TextUpdate

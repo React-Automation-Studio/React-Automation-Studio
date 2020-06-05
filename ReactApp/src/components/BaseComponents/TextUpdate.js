@@ -13,6 +13,7 @@ const styles = (theme) => ({
   },
   TextFieldSeverity0: {
     borderRadius: 2,
+   
     padding:1,
     borderColor:grey[50],
   },
@@ -21,6 +22,7 @@ const styles = (theme) => ({
     borderRadius: 2,
     borderWidth: 1,
     borderStyle:'solid',
+   
     padding:1,
     //background:theme.palette.alarm.minor.main,
     background:'linear-gradient(45deg,'+  fade(theme.palette.alarm.minor.dark,theme.palette.type=='dark'?0.2:0.1)+ ' 0%, '+ (theme.palette.alarm.minor.dark) +' 100%)'
@@ -31,6 +33,7 @@ const styles = (theme) => ({
     borderWidth: 1,
     borderStyle:'solid',
     borderRadius: 2,
+    
     padding:1,
     //background:theme.palette.alarm.major.main,
     background:'linear-gradient(45deg,'+ fade(theme.palette.alarm.major.dark,theme.palette.type=='dark'?0.2:0.1)+ ' 0%, '+ (theme.palette.alarm.major.dark) +' 100%)'
@@ -63,7 +66,7 @@ const TextUpdateComponent=(props)=> {
     }
 
     content = (
-      <Typography className={textFieldClassName} >{label + props.value + " " + units}</Typography>
+      <Typography variant={props.variant} className={textFieldClassName} >{label + props.value + " " + units}</Typography>
     );
   } else {
     content = props.formControlLabel;
@@ -229,12 +232,18 @@ TextUpdate.propTypes = {
  /**
   * Directive to overided alarm severity with the rules defined in the stringSeverity
   */
- useStringSeverityMatch: PropTypes.bool,
 
+
+ variant: PropTypes.string,
+ /**
+  * Material UI Typography variant.
+  */
+ variant: PropTypes.string,
+ 
 };
 TextUpdate.defaultProps = {
  debug: false,
- 
+ variant:'body2',
  alarmSensitive: false
 };
 export default withStyles(styles, { withTheme: true })(TextUpdate)

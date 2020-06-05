@@ -1,8 +1,8 @@
 import React from "react";
-import { withStyles } from "@material-ui/core/styles";
-
+import { withStyles} from "@material-ui/core/styles";
+import { fade } from '@material-ui/core/styles/colorManipulator';
 import Widget from "../SystemComponents/Widgets/Widget";
-import red from '@material-ui/core/colors/red';
+import grey from '@material-ui/core/colors/grey';
 import deepOrange from '@material-ui/core/colors/deepOrange';
 import { Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
@@ -12,19 +12,28 @@ const styles = (theme) => ({
     flexWrap: "wrap",
   },
   TextFieldSeverity0: {
-
-
-  },
-  TextFieldSeverity1: {
     borderRadius: 2,
     padding:1,
-    background:theme.palette.alarm.minor.main
+    borderColor:grey[50],
+  },
+  TextFieldSeverity1: {
+    borderColor:theme.palette.type=='dark'?grey[700]:grey[300],
+    borderRadius: 2,
+    borderWidth: 1,
+    borderStyle:'solid',
+    padding:1,
+    //background:theme.palette.alarm.minor.main,
+    background:'linear-gradient(45deg,'+  fade(theme.palette.alarm.minor.dark,theme.palette.type=='dark'?0.2:0.1)+ ' 0%, '+ (theme.palette.alarm.minor.dark) +' 100%)'
     //  background:'linear-gradient(45deg, '+ theme.palette.background.default+ ' 1%, '+deepOrange['400'] +' 99%)'
   },
   TextFieldSeverity2: {
+    borderColor:theme.palette.type=='dark'?grey[700]:grey[300],
+    borderWidth: 1,
+    borderStyle:'solid',
     borderRadius: 2,
     padding:1,
-    background:theme.palette.alarm.major.main
+    //background:theme.palette.alarm.major.main,
+    background:'linear-gradient(45deg,'+ fade(theme.palette.alarm.major.dark,theme.palette.type=='dark'?0.2:0.1)+ ' 0%, '+ (theme.palette.alarm.major.dark) +' 100%)'
     //  backgroundColor:'linear-gradient(45deg, #FFFFFF 1%, #FF8E53 99%)'
     //  background:'linear-gradient(45deg, '+ theme.palette.background.default+ ' 1%, '+red['800'] +' 99%)'
   }

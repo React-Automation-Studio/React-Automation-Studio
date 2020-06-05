@@ -13,7 +13,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import AutomationStudioContext from '../components/SystemComponents/AutomationStudioContext';
 import { blue, indigo,pink, red, green,cyan,lime } from '@material-ui/core/colors'
 import io from 'socket.io-client';
-import { lightTheme, darkTheme } from '../components/UI/Themes/DefaultTheme'
+import { lightTheme, darkTheme,themes } from '../components/UI/Themes/DefaultTheme'
 
 
 console.log('process.env',process.env)
@@ -61,7 +61,38 @@ transports: ['websocket']
 class Wrapper extends Component {
   constructor(props) {
     super(props);
-    let theme= createMuiTheme(lightTheme);
+    let theme;
+    let themeStyle = JSON.parse(localStorage.getItem('themeStyle'));
+    let themeKeys= Object.keys(themes);
+    if (themeKeys.includes(themeStyle)) {
+      theme = createMuiTheme(themes[themeStyle])
+      //   localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
+    }
+    else{
+      themeStyle=themeKeys[0];
+      theme = createMuiTheme(themes[themeStyle])
+      localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
+    }
+    this.changeTheme = (event) => {
+      let themeStyle=event.target.value;
+     
+      let theme = null
+      let themeStyles = this.state.system.themeStyles;
+      if (themeStyles.includes(themeStyle)) {
+        theme = createMuiTheme(themes[themeStyle])
+        //   localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
+      }
+      else{
+        themeStyle=themeStyles[0];
+        theme = createMuiTheme(themes[themeStyle])
+        localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
+      }
+      
+      let system = this.state.system;
+      system.themeStyle=themeStyle
+      this.setState({ system: system, theme: theme })
+      localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
+    }
     // let theme = createMuiTheme({
     //   palette: {
     //     type:'light',
@@ -100,6 +131,7 @@ class Wrapper extends Component {
 
       localVariables[name]=data;
       system.localVariables=localVariables
+
       this.setState({
         system:system,
         key:this.state.key+1
@@ -113,7 +145,10 @@ class Wrapper extends Component {
                 localVariables:localVariables,
                 updateLocalVariable:this.updateLocalVariable,
                 enableProbe:false,
-                styleGuideRedirect:false}
+                styleGuideRedirect:false,
+                themeStyles:themeKeys,
+                changeTheme:this.changeTheme,
+                }
     this.state={
       theme :theme,
       system:system,

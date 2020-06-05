@@ -279,7 +279,7 @@ class ControlTableExample extends React.Component {
 
             </AppBar>
           </Grid>
-          <Grid item xs={12} sm={6} md={6} lg={7} style={{ paddingRight: 16 }}>
+          <Grid item xs={12} sm={6} md={6} lg={7} style={{ paddingRight: 16}}>
             {sideTabValue == 0 && <TabContainer > <ControlCenterTable handleOnSystemClick={this.handleOnSystemClick} systems={systems['BeamLine']['PowerSupplies']} /> </TabContainer>}
             {sideTabValue == 1 && <TabContainer > <ControlCenterTable handleOnSystemClick={this.handleOnSystemClick} systems={systems['BeamLine']['Slits']} /> </TabContainer>}
           </Grid>

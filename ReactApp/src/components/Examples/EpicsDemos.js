@@ -23,11 +23,12 @@ import SwitchComponent from '../BaseComponents/SwitchComponent';
 import StyledIconButton from '../BaseComponents/StyledIconButton';
 import SideBar from '../SystemComponents/SideBar';
 import MobileDemo2 from './Mobile/MobileDemo2';
+import TraditionalLayout from '../UI/Layout/ComposedLayouts/TraditionalLayout.js';
 import lime from '@material-ui/core/colors/lime';
 import {Link} from 'react-router-dom'
 function TabContainer(props) {
   return (
-    <Typography component="div" style={{ padding: 8 * 1 }}>
+    <Typography component="div" style={{ padding: 8 * 1 ,paddingTop:36}}>
       {props.children}
     </Typography>
   );
@@ -69,39 +70,16 @@ class EpicsDemos extends React.Component {
 
 
       <div >
-
-        <AppBar position="static" color="default">
-          <Grid container direction="row" item justify="center" spacing={2} alignItems="center">
-            <Grid item xs={1}  >
-
-              <SideBar/>
-            </Grid>
-            <Grid item xs={11} >
-
-
-              <Tabs
-                value={value}
-                onChange={this.handleChange}
-                variant="scrollable"
-                scrollButtons="on"
-                indicatorColor="primary"
-                textColor="primary"
-
-
-                >
-                  <Tab label="Main" />
-                  <Tab label="Analog PVs" />
-                  <Tab label="Binary PVs" />
-                  <Tab label="MBBO/I PVs" />
-                  <Tab label="Array PVs" />
-                  <Tab label="String PVs" />
-
-                </Tabs>
-
-              </Grid>
-            </Grid>
-          </AppBar>
-
+         <TraditionalLayout
+      title="EPICS PV Demos"
+      denseAppBar
+      alignTitle="center"
+      tabs={['Main','Analog PVs','Binary PVs',"MBBO/I PVs","Array PVs","String PVs"]}
+      handleTabChange={this.handleChange}
+      tabValue={value}
+      
+        />
+        
           {value === 0 &&
 
               <MobileDemo2 nosidebar/>
@@ -181,19 +159,19 @@ class EpicsDemos extends React.Component {
       <Grid container spacing={3}>
         <Grid item xs={12} sm={12} >
           <div style={{height:'25vh'}}>
-            <GraphY  pvs={['pva://testIOC:test4','pva://testIOC:test5'] } legend={['Sine Wave ','Amplitude']} lineColor={[this.props.theme.palette.secondary.main,lime['400']]}/>
+            <GraphY  pvs={['pva://testIOC:test4','pva://testIOC:test5'] } legend={['Sine Wave ','Amplitude']} />
           </div>
 
         </Grid>
         <Grid item xs={12} sm={6} >
           <div style={{height:'25vh'}}>
-            <GraphY  pvs={['pva://testIOC:test4'] } legend={['Sine Wave']} lineColor={[this.props.theme.palette.secondary.main]}/>
+            <GraphY  pvs={['pva://testIOC:test4'] } legend={['Sine Wave']} lineColor={[this.props.theme.lineColors[1]]}/>
           </div>
 
         </Grid>
         <Grid item xs={12} sm={6}>
           <div style={{height:'25vh'}}>
-            <GraphY  pvs={['pva://testIOC:test5'] } legend={['Amplitude of Sine Wave Circular Buffer']} lineColor={[lime['400']]} />
+            <GraphY  pvs={['pva://testIOC:test5'] } legend={['Amplitude of Sine Wave Circular Buffer']} lineColor={[this.props.theme.lineColors[1]]} />
           </div>
 
         </Grid>

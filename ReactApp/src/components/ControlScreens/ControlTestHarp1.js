@@ -36,7 +36,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Paper from '@material-ui/core/Paper';
 import GraphY from '../BaseComponents/GraphY';
 import ControlCenterTable from '../ControlScreens/GridComponents/ControlCenterTable'
-
+import TraditionalLayout from '../UI/Layout/ComposedLayouts/TraditionalLayout.js';
 
 const VerticalTabs = withStyles(theme => ({
   flexContainer: {
@@ -432,8 +432,11 @@ class ControlTestHarp1 extends React.Component {
       const sideTabValue  = this.state.sideTabValue;
       return (
         <div style={{"overflowX": "hidden",'overflowY':'hidden'}}>
-          <SideBar/>
-          <Grid container spacing={3}>
+          <TraditionalLayout
+        title="Beamline Control System Example"
+        denseAppBar
+      >
+          <Grid container spacing={3} style={{paddingTop:16}}>
 
             <Grid item sm={9}>
               <Grid container spacing={3}>
@@ -815,6 +818,7 @@ class ControlTestHarp1 extends React.Component {
               {((this.state['displayEditor']===true) &&(this.state['editorType']==='slitxy'))&&<ControlRightSlitXY key={'editor-key'+this.state.editorSystem.systemName} system={this.state.editorSystem} handleCloseEditor={this.handleCloseEditor}/>}
             </Grid>
           </Grid>
+          </TraditionalLayout>
         </div>
 
 

@@ -157,17 +157,17 @@ const themeProps = {
     },
 }
 
-const lightTheme = {
+export const lightTheme = {
     palette: { ...lightPalette() },
     ...themeProps
 }
 
-const darkTheme = {
+export const darkTheme = {
     palette: { ...darkPalette() },
     ...themeProps
 }
 
-const lightBlueGrey={
+export const lightBlueGrey={
     palette: { ...lightBlueGreyPalette() },
     ...themeProps
 }

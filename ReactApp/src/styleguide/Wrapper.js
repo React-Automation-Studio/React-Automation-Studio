@@ -11,44 +11,44 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 import AutomationStudioContext from '../components/SystemComponents/AutomationStudioContext';
-import { blue, indigo,pink, red, green,cyan,lime } from '@material-ui/core/colors'
+import { blue, indigo, pink, red, green, cyan, lime } from '@material-ui/core/colors'
 import io from 'socket.io-client';
-import { lightTheme, darkTheme,themes } from '../components/UI/Themes/DefaultTheme'
+import { lightTheme, darkTheme, themes } from '../components/UI/Themes/DefaultTheme'
+import ReactVisCssBaseline from '../components/SystemComponents/ReactVisCssBaseline';
 
-
-console.log('process.env',process.env)
+console.log('process.env', process.env)
 let port;
- if(typeof process.env.REACT_APP_PyEpicsServerStyleguidePORT==='undefined'){
-  port= 5001;
- }
- else{
-  port=process.env.REACT_APP_PyEpicsServerStyleguidePORT;
- }
+if (typeof process.env.REACT_APP_PyEpicsServerStyleguidePORT === 'undefined') {
+  port = 5001;
+}
+else {
+  port = process.env.REACT_APP_PyEpicsServerStyleguidePORT;
+}
 
- let pvServerBASEURL;
-  if(typeof process.env.REACT_APP_PyEpicsServerBASEURL==='undefined'){
-   pvServerBASEURL= "http://127.0.0.1";
-  }
-  else{
-   pvServerBASEURL=process.env.REACT_APP_PyEpicsServerBASEURL;
-  }
+let pvServerBASEURL;
+if (typeof process.env.REACT_APP_PyEpicsServerBASEURL === 'undefined') {
+  pvServerBASEURL = "http://127.0.0.1";
+}
+else {
+  pvServerBASEURL = process.env.REACT_APP_PyEpicsServerBASEURL;
+}
 
-  let pvServerNamespace;
-   if(typeof process.env.REACT_APP_PyEpicsServerNamespace==='undefined'){
-    pvServerNamespace= "pvServer";
-   }
-   else{
-    pvServerNamespace=process.env.REACT_APP_PyEpicsServerNamespace;
-   }
+let pvServerNamespace;
+if (typeof process.env.REACT_APP_PyEpicsServerNamespace === 'undefined') {
+  pvServerNamespace = "pvServer";
+}
+else {
+  pvServerNamespace = process.env.REACT_APP_PyEpicsServerNamespace;
+}
 
-let PyEpicsServerURL=pvServerBASEURL+":"+port+"/"+pvServerNamespace;
+let PyEpicsServerURL = pvServerBASEURL + ":" + port + "/" + pvServerNamespace;
 
-console.log('PyEpicsServerURL: ',PyEpicsServerURL)
+console.log('PyEpicsServerURL: ', PyEpicsServerURL)
 
-if(typeof window.socket==='undefined'){
-  window.socket = io(PyEpicsServerURL,{
-        transports: ['websocket'],
-      })
+if (typeof window.socket === 'undefined') {
+  window.socket = io(PyEpicsServerURL, {
+    transports: ['websocket'],
+  })
 
 }
 
@@ -63,33 +63,33 @@ class Wrapper extends Component {
     super(props);
     let theme;
     let themeStyle = JSON.parse(localStorage.getItem('themeStyle'));
-    let themeKeys= Object.keys(themes);
+    let themeKeys = Object.keys(themes);
     if (themeKeys.includes(themeStyle)) {
       theme = createMuiTheme(themes[themeStyle])
       //   localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
     }
-    else{
-      themeStyle=themeKeys[0];
+    else {
+      themeStyle = themeKeys[0];
       theme = createMuiTheme(themes[themeStyle])
       localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
     }
     this.changeTheme = (event) => {
-      let themeStyle=event.target.value;
-     
+      let themeStyle = event.target.value;
+
       let theme = null
       let themeStyles = this.state.system.themeStyles;
       if (themeStyles.includes(themeStyle)) {
         theme = createMuiTheme(themes[themeStyle])
         //   localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
       }
-      else{
-        themeStyle=themeStyles[0];
+      else {
+        themeStyle = themeStyles[0];
         theme = createMuiTheme(themes[themeStyle])
         localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
       }
-      
+
       let system = this.state.system;
-      system.themeStyle=themeStyle
+      system.themeStyle = themeStyle
       this.setState({ system: system, theme: theme })
       localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
     }
@@ -125,34 +125,35 @@ class Wrapper extends Component {
     // });
 
 
-    this.updateLocalVariable = (name,data) => {
-      let system=this.state.system;
-      let localVariables=system.localVariables;
+    this.updateLocalVariable = (name, data) => {
+      let system = this.state.system;
+      let localVariables = system.localVariables;
 
-      localVariables[name]=data;
-      system.localVariables=localVariables
+      localVariables[name] = data;
+      system.localVariables = localVariables
 
       this.setState({
-        system:system,
-        key:this.state.key+1
+        system: system,
+        key: this.state.key + 1
       });
       //console.log('name',name)
       //console.log('data',data)
     };
 
-    let localVariables={};
-    let system={socket:window.socket,
-                localVariables:localVariables,
-                updateLocalVariable:this.updateLocalVariable,
-                enableProbe:false,
-                styleGuideRedirect:false,
-                themeStyles:themeKeys,
-                changeTheme:this.changeTheme,
-                }
-    this.state={
-      theme :theme,
-      system:system,
-      key :1,
+    let localVariables = {};
+    let system = {
+      socket: window.socket,
+      localVariables: localVariables,
+      updateLocalVariable: this.updateLocalVariable,
+      enableProbe: false,
+      styleGuideRedirect: false,
+      themeStyles: themeKeys,
+      changeTheme: this.changeTheme,
+    }
+    this.state = {
+      theme: theme,
+      system: system,
+      key: 1,
     }
 
 
@@ -162,10 +163,14 @@ class Wrapper extends Component {
 
     return (
 
-      <AutomationStudioContext.Provider  value={this.state.system}>
+      <AutomationStudioContext.Provider value={this.state.system}>
         <MuiThemeProvider theme={this.state.theme}>
-          <CssBaseline />
-          {this.props.children}
+          <CssBaseline >
+            <ReactVisCssBaseline>
+
+              {this.props.children}
+            </ReactVisCssBaseline>
+          </CssBaseline>
         </MuiThemeProvider>
       </AutomationStudioContext.Provider>
     );

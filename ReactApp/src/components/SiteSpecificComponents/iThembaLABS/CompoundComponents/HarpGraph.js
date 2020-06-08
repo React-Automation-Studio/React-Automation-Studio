@@ -12,7 +12,7 @@ import TextField from '@material-ui/core/TextField';
 import Switch from '@material-ui/core/Switch';
 
 //import ReactVisLightCompoment from '../../CSS/ReactVisLightCompoment';
-import ReactVisDarkCompoment from '../../../../CSS/ReactVisDarkCompoment';
+//import ReactVisDarkCompoment from '../../../../CSS/ReactVisDarkCompoment';
 import Loadable from 'react-loadable';
 import ContextMenu from '../../../SystemComponents/ContextMenu';
 
@@ -34,19 +34,19 @@ import {
 } from 'react-vis';
 
 const wireSpacing=[-42,-39,-36,-33,-30,-27,-24,-22,-20,-18,-16,-14,-12,-10,-9,-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,27,30,33,36,39,42,43];
-const LoadableReactVisLightCompoment = Loadable({
-  loader: () => import('../../../../CSS/ReactVisLightCompoment'),
-  loading() {
-    return <div>Loading LoadableReactVisLightCompoment</div>
-  }
-});
+// const LoadableReactVisLightCompoment = Loadable({
+//   loader: () => import('../../../../CSS/ReactVisLightCompoment'),
+//   loading() {
+//     return <div>Loading LoadableReactVisLightCompoment</div>
+//   }
+// });
 
-const LoadableReactVisDarkCompoment = Loadable({
-  loader: () => import('../../../../CSS/ReactVisDarkCompoment'),
-  loading() {
-    return <div>Loading LoadableReactVisLightCompoment</div>
-  }
-});
+// const LoadableReactVisDarkCompoment = Loadable({
+//   loader: () => import('../../../../CSS/ReactVisDarkCompoment'),
+//   loading() {
+//     return <div>Loading LoadableReactVisLightCompoment</div>
+//   }
+// });
 
 const styles = theme => ({
 
@@ -519,8 +519,8 @@ class HarpGraph extends React.Component {
     return (
 
       <React.Fragment>
-        {theme.palette.type==='dark'&& <LoadableReactVisDarkCompoment/>}
-        {theme.palette.type==='light'&& <LoadableReactVisLightCompoment/>}
+        {/* {theme.palette.type==='dark'&& <LoadableReactVisDarkCompoment/>} */}
+        {/* {theme.palette.type==='light'&& <LoadableReactVisLightCompoment/>} */}
         {(typeof this.props.rangePV !== 'undefined')&&<DataConnection
           key={'pv'+this.props.rangePV.toString()}
           pv={this.props.rangePV}

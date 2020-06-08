@@ -11,10 +11,11 @@ import Routes from './routes'
 import 'typeface-roboto';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import ReactVisCssBaseline from './components/SystemComponents/ReactVisCssBaseline';
 import AutomationStudioContext from './components/SystemComponents/AutomationStudioContext';
 import io from 'socket.io-client';
 
-import { lightTheme, darkTheme,themes } from './components/UI/Themes/DefaultTheme'
+import { lightTheme, darkTheme, themes } from './components/UI/Themes/DefaultTheme'
 
 // const socket = io('https://172.16.5.52:5000/test',{
 //   transports: ['websocket'],
@@ -69,26 +70,26 @@ class App extends Component {
     let theme = null
 
     let themeStyle = JSON.parse(localStorage.getItem('themeStyle'));
-    let themeKeys= Object.keys(themes);
+    let themeKeys = Object.keys(themes);
     if (themeKeys.includes(themeStyle)) {
       theme = createMuiTheme(themes[themeStyle])
       //   localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
     }
-    else{
-      themeStyle=themeKeys[0];
+    else {
+      themeStyle = themeKeys[0];
       theme = createMuiTheme(themes[themeStyle])
       localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
     }
 
-      //   themeStyle = 'light'
-      //   theme = createMuiTheme(lightTheme)
-      //   localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
-      // }
-      // else {
-      //   themeStyle = 'dark'
-      //   theme = createMuiTheme(darkTheme)
-      //   localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
-      // }
+    //   themeStyle = 'light'
+    //   theme = createMuiTheme(lightTheme)
+    //   localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
+    // }
+    // else {
+    //   themeStyle = 'dark'
+    //   theme = createMuiTheme(darkTheme)
+    //   localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
+    // }
     //console.log('jwt',jwt);
     // if (themeStyle == 'light') {
     //   themeStyle = 'light'
@@ -103,22 +104,22 @@ class App extends Component {
 
     //console.log(themeStyle)
     this.changeTheme = (event) => {
-      let themeStyle=event.target.value;
-     
+      let themeStyle = event.target.value;
+
       let theme = null
       let themeStyles = this.state.system.themeStyles;
       if (themeStyles.includes(themeStyle)) {
         theme = createMuiTheme(themes[themeStyle])
         //   localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
       }
-      else{
-        themeStyle=themeStyles[0];
+      else {
+        themeStyle = themeStyles[0];
         theme = createMuiTheme(themes[themeStyle])
         localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
       }
-      
+
       let system = this.state.system;
-      system.themeStyle=themeStyle
+      system.themeStyle = themeStyle
       this.setState({ system: system, theme: theme })
       localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
     }
@@ -179,7 +180,7 @@ class App extends Component {
     };
 
     let localVariables = {};
-    let system = { socket: socket, changeTheme:this.changeTheme,themeStyles:themeKeys,themeStyle:themeStyle, localVariables: localVariables, updateLocalVariable: this.updateLocalVariable, userData: userData, setUserData: this.setUserData, logout: this.logout, enableProbe: true, styleGuideRedirect: true }
+    let system = { socket: socket, changeTheme: this.changeTheme, themeStyles: themeKeys, themeStyle: themeStyle, localVariables: localVariables, updateLocalVariable: this.updateLocalVariable, userData: userData, setUserData: this.setUserData, logout: this.logout, enableProbe: true, styleGuideRedirect: true }
     this.state = {
       theme: theme,
       system: system,
@@ -249,12 +250,15 @@ class App extends Component {
 
       <AutomationStudioContext.Provider value={this.state.system}>
         <MuiThemeProvider theme={this.state.theme}>
-          <CssBaseline />
-          <Routes limitRoutes={false}>
-            {/*<Routes limitRoutes={this.state.AuthenticationFailed}/>*/}
+          <CssBaseline >
+            <ReactVisCssBaseline>
+              <Routes limitRoutes={false}>
+                {/*<Routes limitRoutes={this.state.AuthenticationFailed}/>*/}
 
 
-          </Routes>
+              </Routes>
+            </ReactVisCssBaseline>
+          </CssBaseline>
         </MuiThemeProvider>
       </AutomationStudioContext.Provider>
     );

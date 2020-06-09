@@ -3,7 +3,9 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 
 
-const styles = theme => ({
+const styles = theme => {
+console.log(theme)
+return({
 
   
   '@global':{
@@ -25,15 +27,11 @@ const styles = theme => ({
     '.rv-xy-plot canvas': { pointerEvents: 'none' },
     '.rv-xy-plot .rv-xy-canvas': { pointerEvents: 'none', position: 'absolute' },
     '.rv-xy-plot__inner': { display: 'block' },
-    '.rv-xy-plot__axis__line': {
-      fill: 'none',
-      strokeWidth: '2px',
-      stroke: '#e6e6e9'
-    },
-    '.rv-xy-plot__axis__tick__line': { stroke: '#e6e6e9' },
-    '.rv-xy-plot__axis__tick__text': { fill: '#6b6b76', fontSize: '11px' },
-    '.rv-xy-plot__axis__title text': { fill: '#6b6b76', fontSize: '11px' },
-    '.rv-xy-plot__grid-lines__line': { stroke: '#e6e6e9' },
+    '.rv-xy-plot__axis__line': theme.palette.reactVis['.rv-xy-plot__axis__line'],
+    '.rv-xy-plot__axis__tick__line': theme.palette.reactVis['.rv-xy-plot__axis__tick__line'],
+    '.rv-xy-plot__axis__tick__text': theme.palette.reactVis['.rv-xy-plot__axis__tick__text'],
+    '.rv-xy-plot__axis__title text': theme.palette.reactVis['.rv-xy-plot__axis__title text'],
+    '.rv-xy-plot__grid-lines__line': theme.palette.reactVis['.rv-xy-plot__grid-lines__line'],
     '.rv-xy-plot__circular-grid-lines__line': {
       fillOpacity: '0',
       stroke: '#e6e6e9'
@@ -80,11 +78,7 @@ const styles = theme => ({
       fontSize: '12px'
     },
     '.rv-discrete-color-legend.horizontal': { whiteSpace: 'nowrap' },
-    '.rv-discrete-color-legend-item': {
-      color: theme.palette.type==='light'?'#6b6b76':'#FFFFFF',
-      borderRadius: '1px',
-      padding: '9px 10px'
-    },
+    '.rv-discrete-color-legend-item': theme.palette.reactVis['.rv-discrete-color-legend-item'],
     '.rv-discrete-color-legend-item.horizontal': { display: 'inline-block' },
     '.rv-discrete-color-legend-item.horizontal .rv-discrete-color-legend-item__title': {
       marginLeft: '0',
@@ -154,7 +148,8 @@ const styles = theme => ({
     },
     '.rv-legend-titles__right': { right: '0' },
     '.rv-radial-chart .rv-xy-plot__series--label': { pointerEvents: 'none' }}
-});
+})
+};
 
 /**
  * This component injects CSS baseline for the React-Vis graph librbary.

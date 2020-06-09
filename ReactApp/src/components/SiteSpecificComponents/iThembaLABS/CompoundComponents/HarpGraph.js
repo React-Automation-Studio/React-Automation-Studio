@@ -543,34 +543,25 @@ class HarpGraph extends React.Component {
                 horizontal: 'left',
               }}
             />
-            <HorizontalGridLines style={{stroke: theme.palette.type==='dark'?'#0097a7':'#B7E9ED'}} />
+            <HorizontalGridLines />
 
-            <VerticalGridLines tickValues={wireSpacing} style={{stroke: theme.palette.type==='dark'?'#0097a7':'#B7E9ED'}} />
+            <VerticalGridLines tickValues={wireSpacing} />
             <VerticalGridLines tickValues={[0]} style={{stroke: theme.palette.type==='dark'?'white':'grey'}} />
             <XAxis
               title="mm"
               color="white"
-              style={{
-                title:{stroke:theme.palette.type==='dark'?'#dbdbe0':'#6b6b76',strokeWidth:0.2},
-                line: {stroke: '#ADDDE1'},
-                ticks: {stroke: '#ADDDE1'},
-                text: {stroke: 'none', fill: theme.palette.type==='dark'?'#a9a9b2':'#6b6b76', fontWeight: 600}
-              }}
+              
             />
 
             <YAxis title={this.props.ylabel} left={9} tickFormat={v => (v+' '+this.state.rangeUnits)} tickSize={20}  tickPadding={2}
-              style={{
-                title:{stroke:theme.palette.type==='dark'?'#ccccce':'#dbdbe0',strokeWidth:0.2},
-                text: {stroke: 'none', fill: theme.palette.type==='dark'?'#a9a9b2':'#6b6b76', fontWeight: 600}
-              }}
+              
             />
 
             {this.multipleLineData()}
 
             {(typeof this.props.legend !== 'undefined')&&<DiscreteColorLegend
-              color='#e89b02'
-              style={{position: 'absolute', right: '50px', top: '10px',
-                color:theme.palette.type==='dark'?'#ccccce':'#dbdbe0',strokeWidth:0.2}}
+             
+              style={{position: 'absolute', right: '50px', top: '10px',}}
               orientation="horizontal" items={[{title:legendTitle,color:theme.palette.type==='dark'?'#e89b02':'#80deea',stroke:theme.palette.type==='dark'?'#80deea':'#dbdbe0',fontSize:24}]} />}
           </FlexibleXYPlot>
         </div>

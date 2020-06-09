@@ -429,7 +429,7 @@ multipleLineData = () => {
     }
     else{
       
-        lineColor=theme.lineColors;
+        lineColor=theme.palette.reactVis.lineColors;
       
       
 
@@ -518,16 +518,17 @@ render() {
   let pvs=this.state.pvs;
   let ymax=-1000000000000000000;
   let ymin=1000000000000000000;
-  for (pv in pvs){
-    if(typeof this.props.lineColor !=='undefined'){
-      legendColor=this.props.lineColor;
-    }
-    else{
-      
-        legendColor=theme.lineColors;
-     
+  if(typeof this.props.lineColor !=='undefined'){
+    legendColor=this.props.lineColor;
+  }
+  else{
+    
+      legendColor=theme.palette.reactVis.lineColors;
+   
 
-    }
+  }
+  for (pv in pvs){
+    
     //console.log("linedata: ", this.state.pvs[pv].linedata);
 
     i++;
@@ -608,35 +609,42 @@ return (
             horizontal: 'left',
           }}
         />
-        <HorizontalGridLines style={{stroke: theme.palette.type==='dark'?'#0097a7':'#B7E9ED'}} />
-        <VerticalGridLines  style={{stroke: theme.palette.type==='dark'?'#0097a7':'#B7E9ED'}} />
+        <HorizontalGridLines 
+        //style={{stroke: theme.palette.type==='dark'?'#0097a7':'#B7E9ED'}} 
+        />
+        <VerticalGridLines  
+        //style={{stroke: theme.palette.type==='dark'?'#0097a7':'#B7E9ED'}} 
+        />
         <XAxis
           title={(typeof this.props.xAxisTitle !== 'undefined')?this.props.xAxisTitle:"X Axis"}
           color="white"
           tickFormat={v => typeof this.props.useTimeStamp!=='undefined'? this.calcTimeFormat(v):(v)+ this.props.xUnits}
           tickTotal={4}
-          style={{
-            title:{stroke:theme.palette.type==='dark'?'#dbdbe0':'#6b6b76',strokeWidth:0.2},
-            line: {stroke: '#ADDDE1'},
-            ticks: {stroke: '#ADDDE1'},
-            text: {stroke: 'none', fill: theme.palette.type==='dark'?'#a9a9b2':'#6b6b76', fontWeight: 600}
-          }}
+          // style={{
+          //   title:{stroke:theme.palette.type==='dark'?'#dbdbe0':'#6b6b76',strokeWidth:0.2},
+          //   line: {stroke: '#ADDDE1'},
+          //   ticks: {stroke: '#ADDDE1'},
+          //   text: {stroke: 'none', fill: theme.palette.type==='dark'?'#a9a9b2':'#6b6b76', fontWeight: 600}
+          // }}
         />
 
         <YAxis
           title={(typeof this.props.yAxisTitle !== 'undefined')?this.props.yAxisTitle:"Y Axis"}
           left={9} tickFormat={this.props.yScaleLog10===true?v => "10E"+(v)+ " "+this.props.yUnits :v => (v)+ " "+this.props.yUnits} tickSize={20}  tickPadding={2}
-          style={{
-            title:{stroke:theme.palette.type==='dark'?'#ccccce':'#dbdbe0',strokeWidth:0.2},
-            text: {stroke: 'none', fill: theme.palette.type==='dark'?'#a9a9b2':'#6b6b76', fontWeight: 600}
-          }}/>
+          // style={{
+          //   title:{stroke:theme.palette.type==='dark'?'#ccccce':'#dbdbe0',strokeWidth:0.2},
+          //   text: {stroke: 'none', fill: theme.palette.type==='dark'?'#a9a9b2':'#6b6b76', fontWeight: 600}
+          // }}
+          />
         {this.multipleLineData()}
 
 
         {(typeof this.props.legend !== 'undefined')&&<DiscreteColorLegend
-          color='#e89b02'
+        
           style={{position: 'absolute', right: '50px', top: '10px',
-            color:theme.palette.type==='dark'?'#ccccce':'#dbdbe0',strokeWidth:0.2}}
+          //  color:theme.palette.type==='dark'?'#ccccce':'#dbdbe0',strokeWidth:0.2
+        }
+          }
           orientation="horizontal" items= {legendItems}/>}
 
       </FlexibleXYPlot>

@@ -39,6 +39,9 @@ import DoneAllIcon from '@material-ui/icons/DoneAll';
 
 import PublicIcon from '@material-ui/icons/Public';
 
+import Switch from '@material-ui/core/Switch';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+
 function isEmpty(obj) {
     return Object.keys(obj).length === 0;
 }
@@ -174,6 +177,8 @@ const AlarmHandler = () => {
         areaPV: false,
     })
     const [dbWatchId, setDbWatchId] = useState(null)
+    const [fadeTU, setFadeTU] = useState(false)
+    const [fadeList, setFadeList] = useState(false)
 
     // componentDidMount
     useEffect(() => {
@@ -891,6 +896,20 @@ const AlarmHandler = () => {
                 </ListItemIcon>
                 <ListItemText primary={alarmDebug ? "Disable alarm testing/debug" : "Enable alarm testing/debug"} />
             </ListItem>
+            {/* <ListItem >
+                <FormControlLabel
+                    control={<Switch checked={fadeTU} onChange={() => setFadeTU(!fadeTU)} color="primary" />}
+                    label="Fade Alarm Status"
+                    labelPlacement="start"
+                />
+            </ListItem>
+            <ListItem >
+                <FormControlLabel
+                    control={<Switch checked={fadeList} onChange={() => setFadeList(!fadeList)} color="primary" />}
+                    label="Fade Alarm Area List"
+                    labelPlacement="start"
+                />
+            </ListItem> */}
         </React.Fragment>
     )
 
@@ -898,35 +917,6 @@ const AlarmHandler = () => {
     let alarmPVs = null
     if (alarmIOCPVPrefix !== null && alarmIOCPVSuffix !== null) {
         alarmPVs = Object.keys(areaAlarms).map(alarmKey => (
-            // <PV
-            //     key={alarmKey}
-            //     pv={'pva://' + alarmIOCPVPrefix + areaAlarms[alarmKey]["name"] + alarmIOCPVSuffix}
-            // >
-            //     {({ initialized, value }) => {
-            //         if (initialized) {
-            //             const epicsPVName = areaAlarms[alarmKey]["name"]
-            //             console.log(epicsPVName, value)
-            //             // // still connecting to pvs
-            //             if (!loadAlarmTable.alarmPV) {
-            //                 firstAlarmPVDict[epicsPVName] = value
-            //                 if (lastAlarm === epicsPVName) {
-            //                     console.log("here")
-            //                     const localLoadAlarmTable = { ...loadAlarmTable }
-            //                     localLoadAlarmTable.alarmPV = true
-            //                     setLoadAlarmTable(localLoadAlarmTable)
-            //                     setAlarmPVDict(firstAlarmPVDict)
-            //                 }
-            //             }
-            //             // // all pvs connected
-            //             else {
-            //                 const localAlarmPVDict = { ...alarmPVDict }
-            //                 localAlarmPVDict[epicsPVName] = value
-            //                 setAlarmPVDict(localAlarmPVDict)
-            //             }
-            //         }
-            //     }}
-            // </PV>
-
             <DataConnection
                 key={alarmKey}
                 pv={'pva://' + alarmIOCPVPrefix + areaAlarms[alarmKey]["name"] + alarmIOCPVSuffix}
@@ -987,7 +977,7 @@ const AlarmHandler = () => {
             titleTextStyle={{ textTransform: 'uppercase' }}
             denseAppBar
             moreVertDrawerItems={moreVertDrawerItems}
-            hideMoreVertDrawerAfterItemClick
+        // hideMoreVertDrawerAfterItemClick
         // hideToggleThemeListItem
         >
             {alarmPVs}
@@ -1081,6 +1071,7 @@ const AlarmHandler = () => {
                                             listItemClick={handleListItemClick}
                                             listItemRightClick={handleListItemRightClick}
                                             listItemContextClose={handleListItemContextClose}
+                                            fadeList={fadeList}
                                         />
                                         : "No data from database"}
                                 </Grid>
@@ -1157,6 +1148,7 @@ const AlarmHandler = () => {
                                         itemChecked={handleTableItemCheck}
                                         tableItemRightClick={handleTableItemRightClick}
                                         tableRowClick={handleTableRowClick}
+                                        fadeTU={fadeTU}
                                     />
                                     : "No data from database"}
                             </ExpansionPanelDetails>

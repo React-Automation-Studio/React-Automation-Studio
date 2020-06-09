@@ -39,7 +39,7 @@ const useStyles = makeStyles(theme => ({
         background: 'transparent',
         borderRadius: 2,
         padding: 1,
-        paddingRight:5,
+        // paddingRight: 5,
         borderStyle: "solid",
         borderWidth: "thin",
         borderColor: theme.palette.alarm.major.main
@@ -48,7 +48,7 @@ const useStyles = makeStyles(theme => ({
         background: 'transparent',
         borderRadius: 2,
         padding: 1,
-        paddingRight:5,
+        // paddingRight: 5,
         borderStyle: "solid",
         borderWidth: "thin",
         borderColor: theme.palette.alarm.minor.main
@@ -108,11 +108,11 @@ const AlarmTable = props => {
                             ? <TableCell align="left" classes={{ stickyHeader: classes.styledTableHeadCell }}>TEST ALM</TableCell>
                             : null}
                         <TableCell align="left" classes={{ stickyHeader: classes.styledTableHeadCell }}>PV NAME</TableCell>
-                        <TableCell align="left" classes={{ stickyHeader: classes.styledTableHeadCell }}>PV VALUE</TableCell>
+                        <TableCell align="center" classes={{ stickyHeader: classes.styledTableHeadCell }}>PV VALUE</TableCell>
                         <TableCell align="center" classes={{ stickyHeader: classes.styledTableHeadCell }}>ALM STATUS</TableCell>
-                        <TableCell align="left" classes={{ stickyHeader: classes.styledTableHeadCell }}>LAST ALM VAL</TableCell>
-                        <TableCell align="left" classes={{ stickyHeader: classes.styledTableHeadCell }}>LAST ALM TIME</TableCell>
-                        <TableCell align="left" classes={{ stickyHeader: classes.styledTableHeadCell }}>LAST ALM ACK TIME</TableCell>
+                        <TableCell align="center" classes={{ stickyHeader: classes.styledTableHeadCell }}>LAST ALM VAL</TableCell>
+                        <TableCell align="center" classes={{ stickyHeader: classes.styledTableHeadCell }}>LAST ALM TIME</TableCell>
+                        <TableCell align="center" classes={{ stickyHeader: classes.styledTableHeadCell }}>LAST ALM ACK TIME</TableCell>
                         <TableCell align="center" classes={{ stickyHeader: classes.styledTableHeadCell }}>ENBL</TableCell>
                         <TableCell align="center" classes={{ stickyHeader: classes.styledTableHeadCell }}>LAT</TableCell>
                         <TableCell align="center" classes={{ stickyHeader: classes.styledTableHeadCell }}>NTFY</TableCell>
@@ -265,7 +265,7 @@ const AlarmTable = props => {
                                                     />
                                                 </TableCell>
                                             </Tooltip>
-                                            <TableCell align="right">
+                                            <TableCell align="center">
                                                 <TextUpdate
                                                     pv={'pva://' + areaAlarms[areaAlarmName]["name"]}
                                                     disableContextMenu={true}
@@ -287,22 +287,23 @@ const AlarmTable = props => {
                                                             ? undefined
                                                             : textFieldDisableClasses
                                                     }
+                                                    fadeTU={props.fadeTU}
                                                 />
                                             </TableCell>
 
-                                            <TableCell align="right">
+                                            <TableCell align="center">
                                                 <TextUpdate
                                                     pv={'pva://' + "alarmIOC:" + areaAlarms[areaAlarmName]["name"] + "V"}
                                                     disableContextMenu={true}
                                                 />
                                             </TableCell>
-                                            <TableCell align="left">
+                                            <TableCell align="center">
                                                 <TextUpdate
                                                     pv={'pva://' + "alarmIOC:" + areaAlarms[areaAlarmName]["name"] + "T"}
                                                     disableContextMenu={true}
                                                 />
                                             </TableCell>
-                                            <TableCell align="left">
+                                            <TableCell align="center">
                                                 <TextUpdate
                                                     pv={'pva://' + "alarmIOC:" + areaAlarms[areaAlarmName]["name"] + "K"}
                                                     disableContextMenu={true}

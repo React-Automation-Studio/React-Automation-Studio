@@ -61,7 +61,7 @@ const lightBlueGreyPalette =()=> {
     const alarm= {
         major: {
             light:major['400'],
-            main: major['600'],
+            main: major['500'],
             dark: major['800'],
         },
         minor: {
@@ -164,7 +164,7 @@ const darkPalette =()=> {
     const alarm= {
         major: {
             light:major['400'],
-            main: major['600'],
+            main: major['700'],
             dark: major['800'],
         },
         minor: {

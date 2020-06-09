@@ -165,13 +165,13 @@ class EpicsDemos extends React.Component {
         </Grid>
         <Grid item xs={12} sm={6} >
           <div style={{height:'25vh'}}>
-            <GraphY  pvs={['pva://testIOC:test4'] } legend={['Sine Wave']} lineColor={[this.props.theme.lineColors[1]]}/>
+            <GraphY  pvs={['pva://testIOC:test4'] } legend={['Sine Wave']} lineColor={[this.props.theme.palette.reactVis.lineColors[1]]}/>
           </div>
 
         </Grid>
         <Grid item xs={12} sm={6}>
           <div style={{height:'25vh'}}>
-            <GraphY  pvs={['pva://testIOC:test5'] } legend={['Amplitude of Sine Wave Circular Buffer']} lineColor={[this.props.theme.lineColors[1]]} />
+            <GraphY  pvs={['pva://testIOC:test5'] } legend={['Amplitude of Sine Wave Circular Buffer']} lineColor={[this.props.theme.palette.reactVis.lineColors[1]]} />
           </div>
 
         </Grid>

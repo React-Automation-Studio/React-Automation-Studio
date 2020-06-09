@@ -79,7 +79,7 @@ class MobileDemo2 extends React.Component {
                     legend={['Instantaneous Amplitude']}
                     maxLength={1000}
 
-                    lineColor={[this.props.theme.lineColors[1]]}
+                    lineColor={[this.props.theme.palette.reactVis.lineColors[1]]}
                   />
                 </div>
               </Grid>

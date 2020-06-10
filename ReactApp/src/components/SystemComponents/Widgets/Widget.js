@@ -338,7 +338,7 @@ const math = create(all, config)
             newValueTrigger={newValueTrigger}
             outputValue={outputValue}
             useStringValue={props.useStringValue}
-            intialLocalVariableValue={props.intialLocalVariableValue}
+            initialLocalVariableValue={props.initialLocalVariableValue}
             debug={props.debug}
             pvData={(data) => setState(prevState => {
               let state = [...prevState]

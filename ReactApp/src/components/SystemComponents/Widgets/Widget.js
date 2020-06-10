@@ -286,7 +286,7 @@ const math = create(all, config)
   const wrapComponent = (CustomComponent, props) => {
     return <CustomComponent {...props} />;
   }
-  const disabled = !initialized || readOnly;
+  const disabled = !initialized || readOnly||props.disabled;
   const disconnectedIcon = () => {
     return (
 

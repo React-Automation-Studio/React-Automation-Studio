@@ -412,6 +412,7 @@ const math = create(all, config)
       value: value,
       min: min,
       max: max,
+      prec:prec,
       label: label,
       formControlLabel:initialized?label :<span style={{fontSize:"inherit", whiteSpace: "nowrap"}}>{disconnectedIcon()}{" "+pv.pvName}</span>,
       units: units,

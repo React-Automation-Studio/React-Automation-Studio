@@ -1,11 +1,11 @@
 import React from 'react';
 import { useTheme } from '@material-ui/core/styles';
 
-const sevFill = (severity, darkTheme, major, minor) => {
+const sevFill = (severity, darkTheme, major, minor, primary) => {
     let fillColor = ""
     if (severity === 2) fillColor = major
     else if (severity === 1) fillColor = minor
-    else fillColor = darkTheme ? "#FFF" : "#000"
+    else fillColor = darkTheme ? "#FFF" : primary
     return fillColor
 }
 
@@ -17,28 +17,29 @@ const Floor = (props) => {
 
     const major = theme.palette.alarm.major.dark
     const minor = theme.palette.alarm.minor.dark
+    const primary = theme.palette.primary.dark
 
     const { alarmDict } = props
 
     const { building_fire, building_security } = alarmDict
 
     const { building_airtemp_sev, building_airtemp_val } = alarmDict
-    const building_airtemp_fil = sevFill(building_airtemp_sev, darkTheme, major, minor)
+    const building_airtemp_fil = sevFill(building_airtemp_sev, darkTheme, major, minor, primary)
 
     const { building_airhumidity_sev, building_airhumidity_val } = alarmDict
-    const building_airhumidity_fil = sevFill(building_airhumidity_sev, darkTheme, major, minor)
+    const building_airhumidity_fil = sevFill(building_airhumidity_sev, darkTheme, major, minor, primary)
 
     const { building_airpressure_diff_sev, building_airpressure_diff_val } = alarmDict
-    const building_airpressure_diff_fil = sevFill(building_airpressure_diff_sev, darkTheme, major, minor)
+    const building_airpressure_diff_fil = sevFill(building_airpressure_diff_sev, darkTheme, major, minor, primary)
 
     const { vault_door } = alarmDict
 
     const { vault_radiation_sev, vault_radiation_val } = alarmDict
-    const vault_radiation_fil = sevFill(vault_radiation_sev, darkTheme, major, minor)
+    const vault_radiation_fil = sevFill(vault_radiation_sev, darkTheme, major, minor, primary)
 
     const { cyclotron_interlocks, cyclotron_safety, cyclotron_RF1, cyclotron_RF2 } = alarmDict
     const { cyclotron_RF_pickup, cyclotron_RF_pickup_sev } = alarmDict
-    const cyclotron_RF_pickup_fil = sevFill(cyclotron_RF_pickup_sev, darkTheme, major, minor)
+    const cyclotron_RF_pickup_fil = sevFill(cyclotron_RF_pickup_sev, darkTheme, major, minor, primary)
 
     return (
         <g transform='translate(30,30)'>
@@ -47,13 +48,13 @@ const Floor = (props) => {
                     <stop
                         id='stop6071'
                         offset='0'
-                        stopColor='#000'
+                        stopColor={primary}
                         stopOpacity='1'
                     ></stop>
                     <stop
                         id='stop6073'
                         offset='1'
-                        stopColor='#000'
+                        stopColor={primary}
                         stopOpacity='0'
                     ></stop>
                 </linearGradient>
@@ -511,7 +512,7 @@ const Floor = (props) => {
                 id='dee1'
                 fill='url(#linearGradient3056)'
                 fillOpacity='1'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
@@ -524,7 +525,7 @@ const Floor = (props) => {
                 id='dee4'
                 fill='url(#linearGradient3034)'
                 fillOpacity='1'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
@@ -537,7 +538,7 @@ const Floor = (props) => {
                 id='path2507'
                 fill='url(#linearGradient2573)'
                 fillOpacity='1'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
@@ -549,7 +550,7 @@ const Floor = (props) => {
             <path
                 id='path2575'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
@@ -561,7 +562,7 @@ const Floor = (props) => {
             <path
                 id='path2577'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
@@ -576,7 +577,7 @@ const Floor = (props) => {
                 cy='394.997'
                 fill='url(#linearGradient3084)'
                 fillOpacity='1'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeMiterlimit='4'
                 strokeOpacity='1'
@@ -589,7 +590,7 @@ const Floor = (props) => {
                 id='dee3'
                 fill='url(#linearGradient3042)'
                 fillOpacity='1'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
@@ -602,7 +603,7 @@ const Floor = (props) => {
                 id='dee2'
                 fill='url(#linearGradient3064)'
                 fillOpacity='1'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
@@ -615,7 +616,7 @@ const Floor = (props) => {
                 id='path2507-4'
                 fill='url(#linearGradient2844)'
                 fillOpacity='1'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
@@ -627,7 +628,7 @@ const Floor = (props) => {
             <path
                 id='path2575-0'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
@@ -639,7 +640,7 @@ const Floor = (props) => {
             <path
                 id='path2577-3'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
@@ -654,7 +655,7 @@ const Floor = (props) => {
                 cy='-558.623'
                 fill='url(#linearGradient3092)'
                 fillOpacity='1'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeMiterlimit='4'
                 strokeOpacity='1'
@@ -667,7 +668,7 @@ const Floor = (props) => {
             <path
                 id='path2860'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
@@ -679,7 +680,7 @@ const Floor = (props) => {
             <path
                 id='path2862'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
@@ -691,7 +692,7 @@ const Floor = (props) => {
             <path
                 id='path2864'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
@@ -703,7 +704,7 @@ const Floor = (props) => {
             <path
                 id='path2866'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
@@ -726,7 +727,7 @@ const Floor = (props) => {
             <path
                 id='path2870'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
@@ -738,7 +739,7 @@ const Floor = (props) => {
             <path
                 id='path2872'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
@@ -750,7 +751,7 @@ const Floor = (props) => {
             <path
                 id='path2874'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
@@ -762,7 +763,7 @@ const Floor = (props) => {
             <path
                 id='path2876'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
@@ -774,7 +775,7 @@ const Floor = (props) => {
             <path
                 id='path2878'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
@@ -786,7 +787,7 @@ const Floor = (props) => {
             <path
                 id='path2868'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
@@ -809,7 +810,7 @@ const Floor = (props) => {
             <path
                 id='path2995'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
@@ -822,7 +823,7 @@ const Floor = (props) => {
                 id='path1130'
                 fill='none'
                 fillOpacity='1'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
@@ -835,7 +836,7 @@ const Floor = (props) => {
                 id='path1140'
                 fill='none'
                 fillOpacity='1'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
@@ -847,7 +848,7 @@ const Floor = (props) => {
             <path
                 id='path1158'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
@@ -859,7 +860,7 @@ const Floor = (props) => {
             <g
                 id='g1222'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
@@ -876,7 +877,7 @@ const Floor = (props) => {
             <path
                 id='beam2'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
@@ -888,7 +889,7 @@ const Floor = (props) => {
             <path
                 id='beam1'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
@@ -900,7 +901,7 @@ const Floor = (props) => {
             <path
                 id='path1213beam3'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
@@ -912,7 +913,7 @@ const Floor = (props) => {
             <path
                 id='beam4'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
@@ -924,7 +925,7 @@ const Floor = (props) => {
             <path
                 id='beam5'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
@@ -936,7 +937,7 @@ const Floor = (props) => {
             <path
                 id='beam6'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
@@ -949,7 +950,7 @@ const Floor = (props) => {
                 id='quad1'
                 fill='url(#linearGradient1128-8)'
                 fillOpacity='1'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeMiterlimit='4'
                 strokeOpacity='1'
@@ -962,7 +963,7 @@ const Floor = (props) => {
                 id='bend1'
                 fill='url(#linearGradient1192-1)'
                 fillOpacity='1'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeMiterlimit='4'
                 strokeOpacity='1'
@@ -973,7 +974,7 @@ const Floor = (props) => {
             <g
                 id='bunch1'
                 fillOpacity='1'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeMiterlimit='4'
                 strokeOpacity='1'
@@ -995,7 +996,7 @@ const Floor = (props) => {
             </g>
             <g
                 id='steer1'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeMiterlimit='4'
                 strokeOpacity='1'
@@ -1038,7 +1039,7 @@ const Floor = (props) => {
             <g
                 id='harp1'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
                 strokeOpacity='1'
@@ -1054,7 +1055,7 @@ const Floor = (props) => {
             </g>
             <g
                 id='steer2'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeMiterlimit='4'
                 strokeOpacity='1'
@@ -1097,7 +1098,7 @@ const Floor = (props) => {
             <g
                 id='harp2'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
                 strokeOpacity='1'
@@ -1114,7 +1115,7 @@ const Floor = (props) => {
             <g
                 id='slit1'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
@@ -1130,7 +1131,7 @@ const Floor = (props) => {
                 id='quad2'
                 fill='url(#linearGradient1128-88)'
                 fillOpacity='1'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeMiterlimit='4'
                 strokeOpacity='1'
@@ -1143,7 +1144,7 @@ const Floor = (props) => {
                 id='quad3'
                 fill='url(#linearGradient1128-88-9)'
                 fillOpacity='1'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeMiterlimit='4'
                 strokeOpacity='1'
@@ -1156,7 +1157,7 @@ const Floor = (props) => {
                 id='quad4'
                 fill='url(#linearGradient1128-88-3)'
                 fillOpacity='1'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeMiterlimit='4'
                 strokeOpacity='1'
@@ -1168,7 +1169,7 @@ const Floor = (props) => {
             <g
                 id='harp3'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
                 strokeOpacity='1'
@@ -1184,7 +1185,7 @@ const Floor = (props) => {
             </g>
             <g
                 id='steer3'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeMiterlimit='4'
                 strokeOpacity='1'
@@ -1227,7 +1228,7 @@ const Floor = (props) => {
             <path
                 id='valve1'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
@@ -1239,7 +1240,7 @@ const Floor = (props) => {
             <path
                 id='fcup1'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
@@ -1251,7 +1252,7 @@ const Floor = (props) => {
             <path
                 id='valve2'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
@@ -1262,7 +1263,7 @@ const Floor = (props) => {
             ></path>
             <g
                 id='steer4'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeMiterlimit='4'
                 strokeOpacity='1'
@@ -1311,7 +1312,7 @@ const Floor = (props) => {
             <path
                 id='fcup2'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
@@ -1323,7 +1324,7 @@ const Floor = (props) => {
             <g
                 id='harp4'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
                 strokeOpacity='1'
@@ -1341,7 +1342,7 @@ const Floor = (props) => {
                 id='quad5'
                 fill='url(#linearGradient1128-1)'
                 fillOpacity='1'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeMiterlimit='4'
                 strokeOpacity='1'
@@ -1352,7 +1353,7 @@ const Floor = (props) => {
             ></path>
             <g
                 id='steer5'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeMiterlimit='4'
                 strokeOpacity='1'
@@ -1400,7 +1401,7 @@ const Floor = (props) => {
             </g>
             <g
                 id='steer6'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeMiterlimit='4'
                 strokeOpacity='1'
@@ -1449,7 +1450,7 @@ const Floor = (props) => {
             <g
                 id='harp5'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
                 strokeOpacity='1'
@@ -1466,7 +1467,7 @@ const Floor = (props) => {
             <g
                 id='harp6'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
                 strokeOpacity='1'
@@ -1484,7 +1485,7 @@ const Floor = (props) => {
                 id='bend2'
                 fill='url(#linearGradient1202-3)'
                 fillOpacity='1'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeMiterlimit='4'
                 strokeOpacity='1'
@@ -1495,7 +1496,7 @@ const Floor = (props) => {
             ></path>
             <g
                 id='steer7'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeMiterlimit='4'
                 strokeOpacity='1'
@@ -1543,7 +1544,7 @@ const Floor = (props) => {
             </g>
             <g
                 id='steer9'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeMiterlimit='4'
                 strokeOpacity='1'
@@ -1592,7 +1593,7 @@ const Floor = (props) => {
             <g
                 id='harp7'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
                 strokeOpacity='1'
@@ -1608,7 +1609,7 @@ const Floor = (props) => {
             </g>
             <g
                 id='steer8'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeMiterlimit='4'
                 strokeOpacity='1'
@@ -1651,7 +1652,7 @@ const Floor = (props) => {
             <g
                 id='harp8'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
                 strokeOpacity='1'
@@ -1668,7 +1669,7 @@ const Floor = (props) => {
             <path
                 id='valve3'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
@@ -1681,7 +1682,7 @@ const Floor = (props) => {
                 id='bend3'
                 fill='url(#linearGradient2402)'
                 fillOpacity='1'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeMiterlimit='4'
                 strokeOpacity='1'
@@ -1692,7 +1693,7 @@ const Floor = (props) => {
             ></path>
             <g
                 id='steer10'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeMiterlimit='4'
                 strokeOpacity='1'
@@ -1735,7 +1736,7 @@ const Floor = (props) => {
             <g
                 id='harp9'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
                 strokeOpacity='1'
@@ -1752,7 +1753,7 @@ const Floor = (props) => {
             <path
                 id='valve4'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
@@ -1765,7 +1766,7 @@ const Floor = (props) => {
                 id='quad6'
                 fill='url(#linearGradient1128-2)'
                 fillOpacity='1'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeMiterlimit='4'
                 strokeOpacity='1'
@@ -1777,7 +1778,7 @@ const Floor = (props) => {
             <path
                 id='path2503'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
@@ -1789,7 +1790,7 @@ const Floor = (props) => {
             <path
                 id='path2505'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
@@ -1801,7 +1802,7 @@ const Floor = (props) => {
             <path
                 id='path2508'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
@@ -1813,7 +1814,7 @@ const Floor = (props) => {
             <path
                 id='path2510'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='none'
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
@@ -1825,7 +1826,7 @@ const Floor = (props) => {
             <path
                 id='path2512'
                 fill='none'
-                stroke='#000'
+                stroke={primary}
                 strokeDasharray='1, 2'
                 strokeDashoffset='0'
                 strokeLinecap='butt'
@@ -1838,7 +1839,7 @@ const Floor = (props) => {
             <path
                 id='vaultdoor'
                 fill='none'
-                stroke={vault_door ? major : "#000"}
+                stroke={vault_door ? major : primary}
                 strokeDasharray='none'
                 strokeLinecap='butt'
                 strokeLinejoin='miter'
@@ -1849,14 +1850,14 @@ const Floor = (props) => {
             ></path>
             <g
                 id='security'
-                fill={building_security ? major : darkTheme ? "#FFF" : "#000"}
+                fill={building_security ? major : darkTheme ? "#FFF" : primary}
                 fillOpacity='1'
                 transform='matrix(.02498 0 0 .02675 200.88 60.582)'
             >
-                <g id='g3039' fill={building_security ? major : darkTheme ? "#FFF" : "#000"} fillOpacity='1'>
+                <g id='g3039' fill={building_security ? major : darkTheme ? "#FFF" : primary} fillOpacity='1'>
                     <path
                         id='path3037'
-                        fill={building_security ? major : darkTheme ? "#FFF" : "#000"}
+                        fill={building_security ? major : darkTheme ? "#FFF" : primary}
                         fillOpacity='1'
                         d='M794 10H206C98.2 10 10 98.2 10 206v588c0 107.8 88.2 196 196 196h588c107.8 0 196-88.2 196-196V206c0-107.8-88.2-196-196-196zM590.4 132.5l131.8 34-10.6 99.9H469.1l-10.6-99.9zm127.9 192.7c0 70.7-57.2 127.8-127.8 127.8H590.2c-70.5 0-127.7-57.2-127.7-127.8 0-13.7 2.8-26.7 6.7-39h242.6c3.8 12.3 6.5 25.2 6.5 39zm31.6 542.3l-18.2-188-5.9 188H455.1s-4.1-215.2-4.5-220.6l-225 207.6c-7.2 7.2-16.7 10.8-26.2 10.8-9.4 0-18.9-3.6-26.1-10.8-14.5-14.4-14.5-37.8 0-52.3 0 0 236.5-284.2 300.3-304.3 36.8-11.6 61.3-14.9 104.6-14.9h24.6C722 483 770.6 522 802 586.1c9.2 18.9 24.3 164.2 35.5 281.5h-87.6zm-74.7-367.2c20.3 4.1 37.2 10.3 51.5 18L532.5 865.8h-61.6z'
                     ></path>
@@ -1881,16 +1882,16 @@ const Floor = (props) => {
             </g>
             <g
                 id='fire'
-                fill={building_fire ? major : darkTheme ? "#FFF" : "#000"}
+                fill={building_fire ? major : darkTheme ? "#FFF" : primary}
                 fillOpacity='1'
                 transform='matrix(.0332 0 0 .0344 199.684 20.495)'
             >
-                <g id='g3333' fill={building_fire ? major : darkTheme ? "#FFF" : "#000"} fillOpacity='1'>
-                    <g id='_x37__15_' fill={building_fire ? major : darkTheme ? "#FFF" : "#000"} fillOpacity='1'>
-                        <g id='g3330' fill={building_fire ? major : darkTheme ? "#FFF" : "#000"} fillOpacity='1'>
+                <g id='g3333' fill={building_fire ? major : darkTheme ? "#FFF" : primary} fillOpacity='1'>
+                    <g id='_x37__15_' fill={building_fire ? major : darkTheme ? "#FFF" : primary} fillOpacity='1'>
+                        <g id='g3330' fill={building_fire ? major : darkTheme ? "#FFF" : primary} fillOpacity='1'>
                             <path
                                 id='path3328'
-                                fill={building_fire ? major : darkTheme ? "#FFF" : "#000"}
+                                fill={building_fire ? major : darkTheme ? "#FFF" : primary}
                                 fillOpacity='1'
                                 d='M609.764 163.663C506.548 193.086 487.646 276.53 494.308 329.538 420.68 242.987 423.692 143.42 423.692 0 187.531 89.046 242.446 345.733 235.384 423.692c-59.387-48.631-70.615-164.77-70.615-164.77-62.707 32.271-94.154 118.422-94.154 188.308 0 169.006 136.994 306 306 306s306-136.994 306-306c0-100.438-73.746-146.762-72.851-283.567zm-221.379 542.49c-149.493 0-270.692-126.143-270.692-267.75 0-32.906.729-59.575 23.538-85.327-2.495 14.9 32.883 142.526 148.41 135.84-5.014-96.955-31.235-334.481 90.576-416.583-10.781 129.085 20.831 302.493 161.851 327.82-8.074-51.761-7.133-137.888 29.141-153.8 3.884 79.301 62.541 128.237 62.541 204.455-.001 138.006-133.534 255.345-245.365 255.345z'
                             ></path>
@@ -2035,7 +2036,7 @@ const Floor = (props) => {
                         WebkitTextAlign: "start",
                         textAlign: "start",
                     }}
-                    fill={building_fire ? major : darkTheme ? "#FFF" : "#000"}
+                    fill={building_fire ? major : darkTheme ? "#FFF" : primary}
                     fillOpacity='1'
                     fontFamily='sans-serif'
                     fontSize='26.667'
@@ -2064,7 +2065,7 @@ const Floor = (props) => {
                 id='security_text'
                 x='240.024'
                 y='83.664'
-                fill={building_security ? major : darkTheme ? "#FFF" : "#000"}
+                fill={building_security ? major : darkTheme ? "#FFF" : primary}
                 fillOpacity='1'
                 stroke='none'
                 fontFamily='sans-serif'
@@ -2091,7 +2092,7 @@ const Floor = (props) => {
                         WebkitTextAlign: "start",
                         textAlign: "start",
                     }}
-                    fill={building_security ? major : darkTheme ? "#FFF" : "#000"}
+                    fill={building_security ? major : darkTheme ? "#FFF" : primary}
                     fillOpacity='1'
                     fontFamily='sans-serif'
                     fontSize='26.667'

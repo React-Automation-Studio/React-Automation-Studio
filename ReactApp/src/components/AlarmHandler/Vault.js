@@ -35,6 +35,8 @@ const Vault = () => {
     const classes = useStyles()
     const theme = useTheme()
 
+    const primary = theme.palette.primary.dark
+
     const [alarmDict, setAlarmDict] = useState({})
 
     const handlePVChange = (value, pvname, initialized, severity, timestamp) => {
@@ -166,7 +168,7 @@ const Vault = () => {
 
                                     >
                                         <Grid item xs={12} >
-                                            <div style={{ textAlign: 'center', fontSize: 16, fontWeight: 'bold' }}>BUILDING</div>
+                                            <div style={{ textAlign: 'center', fontSize: 16, fontWeight: 'bold', color: primary }}>BUILDING</div>
                                         </Grid>
                                         <Grid item xs={12} lg={5}>
                                             <SelectionList
@@ -228,7 +230,7 @@ const Vault = () => {
 
                                     >
                                         <Grid item xs={12} >
-                                            <div style={{ textAlign: 'center', fontSize: 16, fontWeight: 'bold' }}>VAULT</div>
+                                            <div style={{ textAlign: 'center', fontSize: 16, fontWeight: 'bold', color: primary }}>VAULT</div>
                                         </Grid>
                                         <Grid item xs={12} lg={6}>
                                             <SelectionList
@@ -272,7 +274,7 @@ const Vault = () => {
 
                                     >
                                         <Grid item xs={12} >
-                                            <div style={{ textAlign: 'center', fontSize: 16, fontWeight: 'bold' }}>CYCLOTRON</div>
+                                            <div style={{ textAlign: 'center', fontSize: 16, fontWeight: 'bold', color: primary }}>CYCLOTRON</div>
                                         </Grid>
                                         <Grid item xs={12} lg={3}>
                                             <SelectionList

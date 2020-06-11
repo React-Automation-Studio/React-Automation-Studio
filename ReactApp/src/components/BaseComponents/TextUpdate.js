@@ -3,7 +3,6 @@ import { withStyles} from "@material-ui/core/styles";
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import Widget from "../SystemComponents/Widgets/Widget";
 import grey from '@material-ui/core/colors/grey';
-import deepOrange from '@material-ui/core/colors/deepOrange';
 import { Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
 const styles = (theme) => ({
@@ -234,7 +233,7 @@ TextUpdate.propTypes = {
   */
 
 
- variant: PropTypes.string,
+  useStringSeverityMatch: PropTypes.bool,
  /**
   * Material UI Typography variant.
   */

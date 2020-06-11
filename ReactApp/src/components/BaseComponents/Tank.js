@@ -1,19 +1,7 @@
 import React from 'react'
-import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
-import DataConnection from '../SystemComponents/DataConnection';
 import { withStyles } from '@material-ui/core/styles';
-import InputAdornment from '@material-ui/core/InputAdornment';
 import PropTypes from 'prop-types';
-//import classNames from 'classnames';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import TextField from '@material-ui/core/TextField';
-import Switch from '@material-ui/core/Switch';
-import ContextMenu from '../SystemComponents/ContextMenu';
-import red from '@material-ui/core/colors/red';
-import deepOrange from '@material-ui/core/colors/deepOrange';
 import uuid from 'uuid';
-import { LanDisconnect } from 'mdi-material-ui/';
 import Widget from "../SystemComponents/Widgets/Widget";
 import { FormControlLabel } from "@material-ui/core";
 

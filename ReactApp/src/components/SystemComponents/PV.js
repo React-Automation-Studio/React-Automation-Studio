@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import AutomationStudioContext from './AutomationStudioContext';
 import EpicsPV from './EpicsPV'
 import LocalPV from './LocalPV'
 import PropTypes from "prop-types";

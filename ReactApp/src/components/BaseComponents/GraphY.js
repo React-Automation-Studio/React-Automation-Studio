@@ -1,20 +1,9 @@
 import React from 'react'
-import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 import DataConnection from '../SystemComponents/DataConnection';
 import { withStyles } from '@material-ui/core/styles';
-import InputAdornment from '@material-ui/core/InputAdornment';
 import PropTypes from 'prop-types';
-//import classNames from 'classnames';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import TextField from '@material-ui/core/TextField';
-import Switch from '@material-ui/core/Switch';
-import Loadable from 'react-loadable';
 import ContextMenu from '../SystemComponents/ContextMenu';
-//import ReactVisLightDarkTheme from '../SystemComponents/ReactVisLightDarkTheme';
 
-
-//import '../../../node_modules/react-vis/dist/style.css';
 import {
   XYPlot,
   XAxis,
@@ -23,8 +12,6 @@ import {
   VerticalGridLines,
   LineSeries,
   makeVisFlexible,
-  makeWidthFlexible,
-  makeHeightFlexible,
   DiscreteColorLegend
 } from 'react-vis';
 const FlexibleXYPlot = makeVisFlexible(XYPlot);

@@ -31,4 +31,6 @@ switch(process.env.NODE_ENV){
   case 'test':
   serviceWorker.unregister();
   break;
+  default:
+    // do nothing
 }

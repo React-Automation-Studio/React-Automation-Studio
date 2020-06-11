@@ -53,7 +53,7 @@ const math = create(all, config)
     units: "",
   });
   const [pvs, setPvs] = useState([]);
-  const [dataPvs, setDataPvs] = useState([]);
+  
  
   useEffect(() => {
   let ro=props.readOnly===true;

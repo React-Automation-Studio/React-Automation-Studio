@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+
 import { withStyles } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -12,7 +12,8 @@ import ControlRightSinglePS from '../ControlScreens/GridComponents/ControlRightS
 import ControlCenterTable from '../ControlScreens/GridComponents/ControlCenterTable'
 import AppBar from '@material-ui/core/AppBar';
 import TraditionalLayout from '../UI/Layout/ComposedLayouts/TraditionalLayout.js';
-
+/* eslint-disable eqeqeq */
+/* eslint-disable no-unused-vars */
 const systems = {
 
   'BeamLine': {

@@ -1,16 +1,15 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+
 
 import { Route, BrowserRouter, Switch } from 'react-router-dom'
-import App from './App';
-//import * as serviceWorker from './serviceWorker';
+
 import EpicsDemos from './components/Examples/EpicsDemos';
 import Help from './components/docs/Help';
 import MobileDemo2 from './components/Examples/Mobile/MobileDemo2';
 import MobileDemo1 from './components/Examples/Mobile/MobileDemo1';
 
 import Main from './Main';
-import ExperimentalMain from './components/ExperimentalExamples/ExperimentalMain';
+
 import ControlTestHarp1 from './components/ControlScreens/ControlTestHarp1';
 
 import ControlTableExample from './components/ControlScreens/ControlTableExample';
@@ -24,15 +23,13 @@ import Test3D from './components/Experimental/Test3D';
 import Probe from './components/SettingsPages/Probe';
 import SettingsSteererXY from './components/SettingsPages/SettingsSteererXY';
 import SettingsSinglePS from './components/SettingsPages/SettingsSinglePS';
-// import ExperimentalEpicsDemos from './components/ExperimentalExamples/ExperimentalEpicsDemos';
-// import ExperimentalMobileDemo1 from './components/ExperimentalExamples/Mobile/ExperimentalMobileDemo1';
-// import HooksDebuging from './components/ExperimentalExamples/Mobile/HooksDebuging';
+
 
 import AlarmHandler from './components/AlarmHandler/AlarmHandler';
 import Vault from './components/AlarmHandler/Vault';
 
 import LogIn from './LogIn';
-import { Redirect } from 'react-router-dom'
+
 export default props=>(
   <BrowserRouter >
 

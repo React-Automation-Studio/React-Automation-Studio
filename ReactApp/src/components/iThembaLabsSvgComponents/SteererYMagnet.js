@@ -20,7 +20,8 @@ const styles = theme => ({
   },
 });
 
-
+/* eslint-disable eqeqeq */
+/* eslint-disable no-unused-vars */
 class SteererYMagnet extends React.Component {
   constructor(props) {
     super(props);
@@ -104,10 +105,10 @@ class SteererYMagnet extends React.Component {
     //  const pv = this.props.pv;
     //  const macros=  this.props.macros;
     //  const usePvLabel= this.props.usePvLabel;
-    const mylabel= this.props.label;
+    
     const usePrecision= this.props.prec;
 
-    const useStringValue=this.props.useStringValue;
+    
 
     let units="";
 
@@ -729,7 +730,7 @@ return (
                                         <path
                                           d="m 8.4481214,1118.5965 c 0.092826,-3.8382 0.5483889,-8.5093 1.2007186,-13.6322 v 0"
                                           id="path9504-7-91-7-36"
-                                        />usePvLabel===true? this.state['label']:this.props.label
+                                        />usePvLabel===true? this.state.label:this.props.label
 
                                         <path
                                           d="m 9.7854148,1104.3331 c -0.2708485,0.1 -0.5541262,0.2192 -0.8499483,0.3628 v 0"

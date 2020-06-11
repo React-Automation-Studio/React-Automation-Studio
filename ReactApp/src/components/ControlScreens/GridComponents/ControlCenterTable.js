@@ -10,7 +10,8 @@ import Paper from '@material-ui/core/Paper';
 import DataConnection from '../../SystemComponents/DataConnection';
 import TextUpdate from '../../BaseComponents/TextUpdate';
 import { Typography } from '@material-ui/core';
-
+/* eslint-disable eqeqeq */
+/* eslint-disable no-unused-vars */
 const styles = theme => ({
   root: {
     width: '100%',

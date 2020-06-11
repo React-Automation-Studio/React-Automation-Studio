@@ -15,7 +15,7 @@ import SimpleSlider from '../BaseComponents/SimpleSlider';
 
 
 import Grid from '@material-ui/core/Grid';
-import EpicsPV from '../SystemComponents/EpicsPV';
+
 
 import SwitchComponent from '../BaseComponents/SwitchComponent';
 import SelectionInput from '../BaseComponents/SelectionInput';
@@ -52,9 +52,9 @@ class ControlTest3D extends React.Component {
 handlePsOnClick(name){
 
   //  console.log("in control test1 clicked "+name.toString());
-  this.setState({['editorType']:'PS',
-  ['displayEditor']:true,
-  ['editorMacros']:{'$(device)':name}});
+  this.setState({editorType:'PS',
+  displayEditor:true,
+  editorMacros:{'$(device)':name}});
 
   //  this.setState({ ['clicked']: 1});
 }
@@ -98,16 +98,16 @@ render() {
           </Grid>
           <div style={{height:'25vh',marginLeft:'25px'}}>
             <div style={{height:'50px',width:'400px'}}>
-              <SimpleSlider  pv='pva://testIOC:Cube1:xRotation'      macros={this.props['macros']} usePvMinMax={true} min={1000} max={500} usePvLabel={true} usePrecision={true} step={0.1} prec={3} />
-              <SimpleSlider  pv='pva://testIOC:Cube1:yRotation'      macros={this.props['macros']} usePvMinMax={true} min={1000} max={500} usePvLabel={true} usePrecision={true} step={0.1} prec={3} />
+              <SimpleSlider  pv='pva://testIOC:Cube1:xRotation'      macros={this.props['macros']} usePvMinMax={true} min={1000} max={500} usePvLabel={true}  step={0.1} prec={3} />
+              <SimpleSlider  pv='pva://testIOC:Cube1:yRotation'      macros={this.props['macros']} usePvMinMax={true} min={1000} max={500} usePvLabel={true}  step={0.1} prec={3} />
             </div>
           </div>
         </Grid>
 
         <Grid item sm={3} >
-          {((this.state['displayEditor']===true) &&(this.state['editorMacros']['$(device)']==='testIOC:PS1'))&&<ControlRightEx1 macros={this.state['editorMacros']}/>}
-          {((this.state['displayEditor']===true) &&(this.state['editorMacros']['$(device)']==='testIOC:PS2'))&&<ControlRightEx1 macros={this.state['editorMacros']}/>}
-          {((this.state['displayEditor']===true) &&(this.state['editorMacros']['$(device)']==='testIOC:PS3'))&&<ControlRightEx1 macros={this.state['editorMacros']}/>}
+          {((this.state.displayEditor===true) &&(this.state.editorMacros['$(device)']==='testIOC:PS1'))&&<ControlRightEx1 macros={this.state.editorMacros}/>}
+          {((this.state.displayEditor===true) &&(this.state.editorMacros['$(device)']==='testIOC:PS2'))&&<ControlRightEx1 macros={this.state.editorMacros}/>}
+          {((this.state.displayEditor===true) &&(this.state.editorMacros['$(device)']==='testIOC:PS3'))&&<ControlRightEx1 macros={this.state.editorMacros}/>}
         </Grid>
       </Grid>
 

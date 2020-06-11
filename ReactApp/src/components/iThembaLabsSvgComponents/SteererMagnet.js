@@ -4,19 +4,19 @@ import DataConnection from '../SystemComponents/DataConnection';
 //import MenuItem from '@material-ui/core/MenuItem';
 
 
-
+/* eslint-disable eqeqeq */
 class SteererMagnet extends React.Component {
   constructor(props) {
     super(props);
-    this.state={['value'] : "",
+    this.state={value : "",
     ['inputValue'] : "",
-    ['outputValue'] : "",
-    ['hasFocus']:false,
-    ['label']:"Undefined",
-    ['pvname']:"Undefined",
+    outputValue : "",
+    hasFocus:false,
+    label:"Undefined",
+    pvname:"Undefined",
     ['intialized']:false,
-    ['metadata']:{},
-    ['severity']:''
+    metadata:{},
+    severity:''
   }
   this.handleOnClick= this.handleOnClick.bind(this);
   this.handleInputValue= this.handleInputValue.bind(this);
@@ -41,7 +41,7 @@ componentWillUnmount() {
 handleMetadata(metadata){
 
 
-  this.setState({['metadata']	 :metadata});
+  this.setState({metadata	 :metadata});
 
 
 }
@@ -49,17 +49,17 @@ handleMetadata(metadata){
 
 handleInputValue(inputValue,pvname,initialized,severity){
 
-  this.setState({['value']	 :inputValue,
-  ['pvname']:pvname,
-  ['initialized']:initialized,
-  ['severity']:severity});
+  this.setState({value	 :inputValue,
+  pvname:pvname,
+  initialized:initialized,
+  severity:severity});
 
 }
 
 
 handleInputValueLabel(inputValue){
 
-  this.setState({['label']:inputValue});
+  this.setState({label:inputValue});
 
 }
 
@@ -244,7 +244,7 @@ render() {
             text-anchor='middle'
             filter={this.props.textShadow===true?"url(#"+this.state.pvname+"elipseShadow)":"" }
           >
-            {this.props.usePvUnits===true? value+" "+this.state['metadata'].units: value+" "+this.props.units}
+            {this.props.usePvUnits===true? value+" "+this.state.metadata.units: value+" "+this.props.units}
 
           </text>
           <text
@@ -253,7 +253,7 @@ render() {
             text-anchor='middle'
             filter={this.props.textShadow===true?"url(#"+this.state.pvname+"elipseShadow)":"" }
           >
-            {usePvLabel===true? this.state['label']:this.props.label}
+            {usePvLabel===true? this.state.label:this.props.label}
           </text>
         </g>
       }
@@ -308,7 +308,7 @@ render() {
             text-anchor='middle'
             filter={this.props.textShadow===true?"url(#"+this.state.pvname+"elipseShadow)":"" }
           >
-            {this.props.usePvUnits===true? value+" "+this.state['metadata'].units: value+" "+this.props.units}
+            {this.props.usePvUnits===true? value+" "+this.state.metadata.units: value+" "+this.props.units}
 
           </text>
           <text
@@ -317,7 +317,7 @@ render() {
             text-anchor='middle'
             filter={this.props.textShadow===true?"url(#"+this.state.pvname+"elipseShadow)":"" }
           >
-            {usePvLabel===true? this.state['label']:this.props.label}
+            {usePvLabel===true? this.state.label:this.props.label}
           </text>
         </g>
         }

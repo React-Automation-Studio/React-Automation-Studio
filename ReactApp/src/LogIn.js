@@ -3,10 +3,7 @@ import AutomationStudioContext from './components/SystemComponents/AutomationStu
 import PropTypes from 'prop-types';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
@@ -60,236 +57,233 @@ const styles = theme => ({
 class LogIn extends React.Component {
   constructor(props) {
     super(props);
-    this.state={'emailAddress' : "",
-    'password' : "",
-    'Authenticated':false,
-    'Authorised':false,
-    'AuthorisationFailed':false,
-    'AuthenticationFailed':false,
+    this.state = {
+      'emailAddress': "",
+      'password': "",
+      'Authenticated': false,
+      'Authorised': false,
+      'AuthorisationFailed': false,
+      'AuthenticationFailed': false,
 
-  };
-  this.handleChange=this.handleChange.bind(this);
-  this.catchReturn=this.catchReturn.bind(this);
-  this.handleAuthentication=this.handleAuthentication.bind(this);
-  this.handleAuthorisation=this.handleAuthorisation.bind(this);
-  this.handleUnauthorisedDialogClick=this.handleUnauthorisedDialogClick.bind(this);
-  this.handleAuthorisationFailedDialogClick=this.handleAuthorisationFailedDialogClick.bind(this);
+    };
+    this.handleChange = this.handleChange.bind(this);
+    this.catchReturn = this.catchReturn.bind(this);
+    this.handleAuthentication = this.handleAuthentication.bind(this);
+    this.handleAuthorisation = this.handleAuthorisation.bind(this);
+    this.handleUnauthorisedDialogClick = this.handleUnauthorisedDialogClick.bind(this);
+    this.handleAuthorisationFailedDialogClick = this.handleAuthorisationFailedDialogClick.bind(this);
 
-  this.handleResponse=this.handleResponse.bind(this);
-}
+    this.handleResponse = this.handleResponse.bind(this);
+  }
 
-handleChange = name => event => {
-  let value=event.target.value;
-
-  this.setState({
-    [name]: value,
-  });
-};
-
-catchReturn = name => event => {
-  if(event.key === 'Enter'){
-    let value=event.target.value;
+  handleChange = name => event => {
+    let value = event.target.value;
 
     this.setState({
       [name]: value,
-    },this.handleSubmitClick());
-  }
-};
-handleSubmitClick=()=>{
-  //  console.log('button clicked')
-  //  console.log('email: ',this.state.emailAddress)
-  //  console.log('password: ',this.state.password)
-  let socket=this.context.socket;
-  let user={email:this.state.emailAddress,password:this.state.password}
-  if (socket.disconnected){
-    socket.open()
-    socket.emit('AuthenticateClient', {user:{email: this.state.emailAddress,password:this.state.password}});
-  }
-  else{
-    socket.emit('AuthenticateClient', {user:{email: this.state.emailAddress,password:this.state.password}});
-  }
-  //this.login();
+    });
+  };
 
-}
+  catchReturn = name => event => {
+    if (event.key === 'Enter') {
+      let value = event.target.value;
 
-handleResponse=(response) =>{
-  console.log(response)
-  return response.text().then(text => {
-    const data = text && JSON.parse(text);
-    if (!response.ok) {
-      if (response.status === 401) {
-        // auto logout if 401 response returned from api
-        //logout();
-        //location.reload(true);
+      this.setState({
+        [name]: value,
+      }, this.handleSubmitClick());
+    }
+  };
+  handleSubmitClick = () => {
+    //  console.log('button clicked')
+    //  console.log('email: ',this.state.emailAddress)
+    //  console.log('password: ',this.state.password)
+    let socket = this.context.socket;
+    
+    if (socket.disconnected) {
+      socket.open()
+      socket.emit('AuthenticateClient', { user: { email: this.state.emailAddress, password: this.state.password } });
+    }
+    else {
+      socket.emit('AuthenticateClient', { user: { email: this.state.emailAddress, password: this.state.password } });
+    }
+    //this.login();
+
+  }
+
+  handleResponse = (response) => {
+    console.log(response)
+    return response.text().then(text => {
+      const data = text && JSON.parse(text);
+      if (!response.ok) {
+        if (response.status === 401) {
+          // auto logout if 401 response returned from api
+          //logout();
+          //location.reload(true);
+        }
+
+        const error = (data && data.message) || response.statusText;
+        return Promise.reject(error);
       }
 
-      const error = (data && data.message) || response.statusText;
-      return Promise.reject(error);
+      return data;
+    });
+  }
+
+
+  handleAuthentication(msg) {
+    //  console.log('clientAuthenticated',msg)
+    if (typeof msg.jwt !== 'undefined') {
+      localStorage.setItem('jwt', JSON.stringify(msg.jwt));
+    }
+    else {
+      localStorage.setItem('jwt', JSON.stringify(null));
+    }
+    this.setState({ 'AuthorisationFailed': msg.successful !== true });
+    if (msg.successful) {
+      let jwt = JSON.parse(localStorage.getItem('jwt'));
+      //  console.log('jwt',jwt);
+
+      let socket = this.context.socket;
+      socket.emit('AuthoriseClient', jwt);
+
     }
 
-    return data;
-  });
-}
-
-
-handleAuthentication(msg){
-  //  console.log('clientAuthenticated',msg)
-  if (typeof msg.jwt !== 'undefined'){
-    localStorage.setItem('jwt', JSON.stringify(msg.jwt));
   }
-  else {
-    localStorage.setItem('jwt', JSON.stringify(null));
-  }
-  this.setState({'AuthorisationFailed':msg.successful!==true});
-  if(msg.successful){
-    let jwt = JSON.parse(localStorage.getItem('jwt'));
-    //  console.log('jwt',jwt);
-
-    let socket=this.context.socket;
-    socket.emit('AuthoriseClient', jwt);
+  handleUnauthorisedDialogClick() {
+    this.setState({ 'AuthorisationFailed': false });
 
   }
 
-}
-handleUnauthorisedDialogClick()
-{this.setState({'AuthorisationFailed':false});
+  handleAuthorisationFailedDialogClick() {
+    this.setState({ 'AuthenticationFailed': false });
 
-}
+  }
+  handleAuthorisation(msg) {
 
-handleAuthorisationFailedDialogClick()
-{
-  this.setState({'AuthenticationFailed':false});
-
-}
-handleAuthorisation(msg){
-
-  this.setState({'Authenticated':msg.successful,'AuthenticationFailed':msg.successful!==true});
+    this.setState({ 'Authenticated': msg.successful, 'AuthenticationFailed': msg.successful !== true });
 
 
-}
-componentDidMount() {
-  let socket=this.context.socket;
-  localStorage.removeItem('jwt');
-  socket.on('clientAuthenticated',this.handleAuthentication);
-  socket.on('clientAuthorisation',this.handleAuthorisation);
-}
-componentWillUnmount(){
-  let socket=this.context.socket;
-  socket.removeListener('clientAuthenticated', this.handleAuthentication);
-  socket.removeListener('clientAuthorisation',this.handleAuthorisation);
-}
+  }
+  componentDidMount() {
+    let socket = this.context.socket;
+    localStorage.removeItem('jwt');
+    socket.on('clientAuthenticated', this.handleAuthentication);
+    socket.on('clientAuthorisation', this.handleAuthorisation);
+  }
+  componentWillUnmount() {
+    let socket = this.context.socket;
+    socket.removeListener('clientAuthenticated', this.handleAuthentication);
+    socket.removeListener('clientAuthorisation', this.handleAuthorisation);
+  }
 
-render(){
-  const { classes } = this.props;
-  let user = JSON.parse(localStorage.getItem('user'));
-  let socket=this.context.socket;
-  //console.log(socket)
-  //  console.log(user)
-  return (
-    <React.Fragment>
+  render() {
+    const { classes } = this.props;
+   
+    return (
+      <React.Fragment>
 
-      <Dialog
-        open={this.state.AuthorisationFailed}
-        TransitionComponent={Transition}
-        keepMounted
+        <Dialog
+          open={this.state.AuthorisationFailed}
+          TransitionComponent={Transition}
+          keepMounted
 
-        aria-labelledby="alert-login-title1"
-        aria-describedby="alert-login-slide-description1"
-      >
-        <DialogTitle id="alert-login-title1">
-          Error!
+          aria-labelledby="alert-login-title1"
+          aria-describedby="alert-login-slide-description1"
+        >
+          <DialogTitle id="alert-login-title1">
+            Error!
         </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-login-slide-description1">
-            Invalid username or password!
+          <DialogContent>
+            <DialogContentText id="alert-login-slide-description1">
+              Invalid username or password!
           </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={this.handleUnauthorisedDialogClick} color="primary">
-            Ok
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleUnauthorisedDialogClick} color="primary">
+              Ok
           </Button>
 
-        </DialogActions>
-      </Dialog>
-      <Dialog
-        open={this.state.AuthenticationFailed}
-        TransitionComponent={Transition}
-        keepMounted
+          </DialogActions>
+        </Dialog>
+        <Dialog
+          open={this.state.AuthenticationFailed}
+          TransitionComponent={Transition}
+          keepMounted
 
-        aria-labelledby="alert-login-title2"
-        aria-describedby="alert-login-slide-description2"
-      >
-        <DialogTitle id="alert-login-title2">
-          {"Error!"}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-login-slide-description2">
-            Authentication Failed!
+          aria-labelledby="alert-login-title2"
+          aria-describedby="alert-login-slide-description2"
+        >
+          <DialogTitle id="alert-login-title2">
+            {"Error!"}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-login-slide-description2">
+              Authentication Failed!
           </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={this.handleAuthorisationFailedDialogClick} color="primary">
-            Ok
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleAuthorisationFailedDialogClick} color="primary">
+              Ok
           </Button>
 
-        </DialogActions>
-      </Dialog>
+          </DialogActions>
+        </Dialog>
 
 
 
-      <main className={classes.main}>
+        <main className={classes.main}>
 
-        <Paper className={classes.paper}>
-        <Typography component="h1" variant="h3">
-          React
+          <Paper className={classes.paper}>
+            <Typography component="h1" variant="h3">
+              React
         </Typography>
-          <Typography component="h1" variant="h3">
-            Automation
+            <Typography component="h1" variant="h3">
+              Automation
           </Typography>
-          <Typography component="h1" variant="h3">
-            Studio
+            <Typography component="h1" variant="h3">
+              Studio
           </Typography>
-          <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign in
+            <Avatar className={classes.avatar}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Sign in
           </Typography>
-          <form className={classes.form}>
-            <FormControl margin="normal" required fullWidth>
-              <InputLabel htmlFor="email">Username or Email Address</InputLabel>
-              <Input id="email" name="email" autoComplete="email" autoFocus onChange={this.handleChange('emailAddress')} onKeyPress={this.catchReturn('password')}/>
-            </FormControl>
-            <FormControl margin="normal" required fullWidth>
-              <InputLabel htmlFor="password">Password</InputLabel>
-              <Input name="password" type="password" id="password" autoComplete="current-password" onChange={this.handleChange('password')} onKeyPress={this.catchReturn('password')}/>
+            <form className={classes.form}>
+              <FormControl margin="normal" required fullWidth>
+                <InputLabel htmlFor="email">Username or Email Address</InputLabel>
+                <Input id="email" name="email" autoComplete="email" autoFocus onChange={this.handleChange('emailAddress')} onKeyPress={this.catchReturn('password')} />
+              </FormControl>
+              <FormControl margin="normal" required fullWidth>
+                <InputLabel htmlFor="password">Password</InputLabel>
+                <Input name="password" type="password" id="password" autoComplete="current-password" onChange={this.handleChange('password')} onKeyPress={this.catchReturn('password')} />
 
-            </FormControl>
-            {/* <FormControlLabel
+              </FormControl>
+              {/* <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             /> */}
-            <Button
+              <Button
 
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-              onClick={this.handleSubmitClick}
-            >
-              Sign in
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+                onClick={this.handleSubmitClick}
+              >
+                Sign in
             </Button>
-          </form>
-        </Paper>
-      </main>
-      {this.state.Authenticated&&<Redirect to='/' />}
-    </React.Fragment>
-        );
-      }
-    }
+            </form>
+          </Paper>
+        </main>
+        {this.state.Authenticated && <Redirect to='/' />}
+      </React.Fragment>
+    );
+  }
+}
 
-    LogIn.propTypes = {
-      classes: PropTypes.object.isRequired,
-    };
-    LogIn.contextType=AutomationStudioContext;
-    export default withStyles(styles)(LogIn);
+LogIn.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+LogIn.contextType = AutomationStudioContext;
+export default withStyles(styles)(LogIn);

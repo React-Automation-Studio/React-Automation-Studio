@@ -3,8 +3,8 @@ import AutomationStudioContext from '../SystemComponents/AutomationStudioContext
 import DataConnection from '../SystemComponents/DataConnection';
 //import MenuItem from '@material-ui/core/MenuItem';
 
-
-
+/* eslint-disable eqeqeq */
+/* eslint-disable no-unused-vars */
 class HorizontalBeamline extends React.Component {
   constructor(props) {
     super(props);
@@ -41,7 +41,7 @@ componentWillUnmount() {
 handleMetadata(metadata){
 
 
-  this.setState({['metadata']	 :metadata});
+  this.setState({metadata	 :metadata});
 
 
 }
@@ -49,17 +49,17 @@ handleMetadata(metadata){
 
 handleInputValue(inputValue,pvname,initialized,severity){
 
-  this.setState({['value']	 :inputValue,
-  ['pvname']:pvname,
-  ['initialized']:initialized,
-  ['severity']:severity});
+  this.setState({value	 :inputValue,
+  pvname:pvname,
+  initialized:initialized,
+  severity:severity});
 
 }
 
 
 handleInputValueLabel(inputValue){
 
-  this.setState({['label']:inputValue});
+  this.setState({label:inputValue});
 
 }
 

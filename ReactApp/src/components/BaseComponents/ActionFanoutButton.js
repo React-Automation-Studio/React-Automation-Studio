@@ -59,7 +59,7 @@ class ActionFanoutButton extends React.Component {
       dataPVs[pvname]={label:"", initialized: false,pvname:pvname,value:[],char_value:"",alarmColor:"",lower_disp_limit: 0,upper_disp_limit: 10000,lower_warning_limit: 4000,upper_warning_limit: 6000,
       units: "V",precision: 0};
     }
-  state['value']="0";
+  state.value="0";
   state['dataPVs']=dataPVs;
   state['newValueTrigger']=0;
   this.state=state;
@@ -134,14 +134,14 @@ componentWillUnmount() {
 
 handleButtonChange = name => event => {
   //console.log(event.target.checked)
-  this.setState({ ['value']: event.target.checked?1:0});
+  this.setState({ value: event.target.checked?1:0});
 };
 
 
 handleButtonClick = name => event => {
 //  console.log(event)
 
-  this.setState({ ['value']: this.props.actionValue,
+  this.setState({ value: this.props.actionValue,
                   ['newValueTrigger']:this.state.newValueTrigger+1});
 };
 

@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
 
-import PropTypes from 'prop-types';
+
 import withStyles from '@material-ui/core/styles/withStyles';
 import { withRouter } from 'react-router-dom';
 
 import { Link } from 'react-router-dom'
 import Button from '@material-ui/core/Button';
 import RedirectToLogIn from './components/SystemComponents/RedirectToLogin.js';
-import SideBar from './components/SystemComponents/SideBar';
-import ToggleButton from './components/BaseComponents/ToggleButton';
+
 import Grid from '@material-ui/core/Grid';
-import { Redirect } from 'react-router-dom'
+
 import TraditionalLayout from './components/UI/Layout/ComposedLayouts/TraditionalLayout.js';
 // Styles
 
@@ -112,7 +111,7 @@ class Main extends Component {
           <Grid item lg={2} sm={4} xs={8}>
             <Grid container direction="row" justify="center" spacing={3} alignItems="stretch">
               <Grid item xs={12}  >
-                <Button fullWidth fullWidth className={classes.button} component={Link} to="/MobileDemo1" color="primary" variant='contained'>  Mobile Demo 1 </Button>
+                <Button  fullWidth   className= {classes.button} component={Link} to="/MobileDemo1" color="primary" variant='contained'>  Mobile Demo 1 </Button>
               </Grid>
               <Grid item xs={12}  >
                 <Button fullWidth className={classes.button} component={Link} to="/MobileDemo2" color="primary" variant='contained'>  Mobile Demo 2 </Button>

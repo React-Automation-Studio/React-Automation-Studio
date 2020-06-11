@@ -58,20 +58,20 @@ function StyledIconIndicatorComponent(props) {
   }
   let iconStyle = {};
   if (typeof props.labelPlacement !== 'undefined') {
-    if (props.labelPlacement == "top") {
+    if (props.labelPlacement === "top") {
       iconStyle['marginTop'] = props.theme.spacing(1);
-    } else if (props.labelPlacement == "end") {
+    } else if (props.labelPlacement === "end") {
       iconStyle['marginRight'] = props.theme.spacing(1);
     }
-    else if (props.labelPlacement == "start") {
+    else if (props.labelPlacement === "start") {
       iconStyle['marginLeft'] = props.theme.spacing(1);
     }
-    else if (props.labelPlacement == "bottom") {
+    else if (props.labelPlacement === "bottom") {
       iconStyle['marginBottom'] = props.theme.spacing(1);
     }
   }
 
-
+/* eslint-disable eqeqeq */
   let color = !props.initialized
     ? props.theme.palette.action.disabled
     : props.value == 1
@@ -79,7 +79,7 @@ function StyledIconIndicatorComponent(props) {
       : offColor;
 
   iconStyle['color'] = color;
-
+/* eslint-enable eqeqeq */
   return (
     <FormControlLabel
       key={props.pvName}

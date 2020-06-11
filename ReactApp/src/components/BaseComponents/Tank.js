@@ -1,19 +1,7 @@
 import React from 'react'
-import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
-import DataConnection from '../SystemComponents/DataConnection';
 import { withStyles } from '@material-ui/core/styles';
-import InputAdornment from '@material-ui/core/InputAdornment';
 import PropTypes from 'prop-types';
-//import classNames from 'classnames';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import TextField from '@material-ui/core/TextField';
-import Switch from '@material-ui/core/Switch';
-import ContextMenu from '../SystemComponents/ContextMenu';
-import red from '@material-ui/core/colors/red';
-import deepOrange from '@material-ui/core/colors/deepOrange';
 import uuid from 'uuid';
-import { LanDisconnect } from 'mdi-material-ui/';
 import Widget from "../SystemComponents/Widgets/Widget";
 import { FormControlLabel } from "@material-ui/core";
 
@@ -67,7 +55,6 @@ function getTickValues(props, min, max, numberOfTicks, x0, y0, x1, x2, y1, y2, x
   if (props.initialized===true) {
     if (props.showTicks === true) {
       for (i = 0; i < (numberOfTicks); i++) {
-        const rotation = 0;
         const tickValue = i * (max - min) / (numberOfTicks - 1) + min;
         ticks.push(
           <g key={i}
@@ -98,7 +85,7 @@ function getTickValues(props, min, max, numberOfTicks, x0, y0, x1, x2, y1, y2, x
           y={yOffset - 4}
           textAnchor={'middle'}
         >
-          {props.disabled == false ? parseFloat(value).toFixed(0) + units : ''}{}
+          {props.disabled === false ? parseFloat(value).toFixed(0) + units : ''}{}
         </text>
       </g>
 
@@ -139,11 +126,11 @@ function TankComponent(props) {
   else {
     xOffset = 0;
   }
-  const radialTextOffset = 0;
+
   const width = props.width;
   const aspectRatio = props.aspectRatio;
   let height;
-  if (props.lockAspectRatio == true) {
+  if (props.lockAspectRatio === true) {
     height = props.width / aspectRatio;
   }
   else {
@@ -160,12 +147,12 @@ function TankComponent(props) {
 
   let color;
   if (props.initialized) {
-    if (props.alarmSensitive == true) {
-      if (props.alarmSeverity == 1) {
+    if (props.alarmSensitive === true) {
+      if (props.alarmSeverity === 1) {
 
         color = props.theme.palette.alarm.minor.dark;
       }
-      else if (props.alarmSeverity == 2) {
+      else if (props.alarmSeverity === 2) {
         color = props.theme.palette.alarm.major.dark;
       }
       else {

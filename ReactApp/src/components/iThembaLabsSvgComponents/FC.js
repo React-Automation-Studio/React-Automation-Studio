@@ -36,7 +36,8 @@ const styles = theme => ({
   }
 
 });
-
+/* eslint-disable eqeqeq */
+/* eslint-disable no-unused-vars */
 class FC extends React.Component {
   constructor(props) {
     super(props);
@@ -108,7 +109,7 @@ class FC extends React.Component {
   handleMetadata=name=>(metadata)=>{
 
     let pvs=this.state.pvs;
-    pvs[name]['metadata']=metadata;
+    pvs[name].metadata=metadata;
     this.setState({pvs	 :pvs});
 
 
@@ -153,7 +154,7 @@ class FC extends React.Component {
 
 handleInputValueLabel(inputValue){
 
-  this.setState({['label']:inputValue});
+  this.setState({label:inputValue});
 
 }
 

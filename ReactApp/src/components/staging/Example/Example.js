@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 
-import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { withRouter } from 'react-router-dom';
 
@@ -52,10 +51,7 @@ class Example extends Component {
     localStorage.removeItem('jwt');
 
   }
-  componentDidMount()
-  {
-    console.log('Example mounted')
-  }
+ 
   render() {
 
 

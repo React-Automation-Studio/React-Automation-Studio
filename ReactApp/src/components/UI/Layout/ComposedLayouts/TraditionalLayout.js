@@ -7,7 +7,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import useScrollTrigger from '@material-ui/core/useScrollTrigger';
+
 
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -22,18 +22,7 @@ import AutomationStudioContext from '../../../SystemComponents/AutomationStudioC
 import RedirectToLogIn from '../../../SystemComponents/RedirectToLogin.js';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-function ElevationScroll(props) {
-    const { children, window } = props;
-    const trigger = useScrollTrigger({
-        disableHysteresis: true,
-        threshold: 0,
-        target: window ? window() : undefined,
-    });
 
-    return React.cloneElement(children, {
-        elevation: trigger ? 4 : 0,
-    });
-}
 
 const useStyles = makeStyles(theme => ({
     menuButton: {

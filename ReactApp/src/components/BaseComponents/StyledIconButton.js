@@ -19,7 +19,7 @@ const styles = (theme) => ({
   },
 });
 
-
+/* eslint-disable eqeqeq */
 const StyledIconButtonComponent=(props)=> {
  
   /**
@@ -55,7 +55,7 @@ const StyledIconButtonComponent=(props)=> {
   
 }
 
-
+/* eslint-enable eqeqeq */
 /**
  * The StyledIconButton Component is a wrapper on the Material-UI contained SvgIcon component.
  * The SvgIcon component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>

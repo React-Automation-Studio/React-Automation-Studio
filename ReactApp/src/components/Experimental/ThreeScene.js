@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import * as THREE from 'three';
 import DataConnection from '../SystemComponents/DataConnection';
-import GLTFLoader from 'three-gltf-loader';
+
 import { pink} from '@material-ui/core/colors';
 import { withStyles } from '@material-ui/core/styles';
-import withWidth from '@material-ui/core/withWidth';
+
 const pv1='pva://testIOC:Cube1:xRotation';
 const pv2='pva://testIOC:Cube1:yRotation';
 const styles = theme => ({
@@ -16,7 +16,7 @@ const styles = theme => ({
 
   },
 });
-
+/* eslint-disable eqeqeq */
 class ThreeScene extends Component{
 
 
@@ -38,7 +38,7 @@ class ThreeScene extends Component{
 handleMetadata(pvname,metadata){
 
 
-  this.setState({[pvname]:{['metadata']	 :metadata}});
+  this.setState({[pvname]:{metadata	 :metadata}});
 
 
 }
@@ -46,7 +46,7 @@ handleMetadata(pvname,metadata){
 
 handleInputValue(inputValue,pvname,initialized,severity){
 
-  this.setState({[pvname]:{['value']	 :inputValue,['pvname']:pvname,['initialized']:initialized, ['severity']:severity}});
+  this.setState({[pvname]:{value	 :inputValue,pvname:pvname,initialized:initialized, severity:severity}});
 
 }
 componentDidUpdate(prevProps){
@@ -84,7 +84,7 @@ componentDidMount(){
   this.mount.appendChild(this.renderer.domElement)
 
   //ADD CUBE
-  const radius = 50;
+  //const radius = 50;
   //const geometry = new THREE.IcosahedronBufferGeometry(radius);
   const geometry = new THREE.BoxBufferGeometry(200, 200, 200)
   const material = new THREE.MeshPhongMaterial({

@@ -1,15 +1,6 @@
 import React from 'react'
 
 import AutomationStudioContext from '../../SystemComponents/AutomationStudioContext';
-import TextInput from '../../BaseComponents/TextInput';
-import SelectionInput from '../../BaseComponents/SelectionInput';
-import TextOutput from '../../BaseComponents/TextOutput';
-import SimpleSlider from '../../BaseComponents/SimpleSlider';
-import TextUpdate from '../../BaseComponents/TextUpdate';
-import Grid from '@material-ui/core/Grid';
-import SwitchComponent from '../../BaseComponents/SwitchComponent';
-import ToggleButton from '../../BaseComponents/ToggleButton';
-import ActionButton from '../../BaseComponents/ActionButton';
 import QuadrapoleMagnet from '../../iThembaLabsSvgComponents/QuadrapoleMagnet';
 import Harp from '../../iThembaLabsSvgComponents/Harp';
 import FC from '../../iThembaLabsSvgComponents/FC';
@@ -59,8 +50,7 @@ class ControlTopHarpEx1 extends React.Component {
 
   render() {
 
-    const cX=50;
-    const cY=50;
+    
     return (
 
       <div style={{ padding: 12} }>
@@ -246,7 +236,7 @@ class ControlTopHarpEx1 extends React.Component {
           xUnits={'A'}
           yUnits={'A'}
           prec={3}
-          usePrecision={true}
+          
           alarmSensitive={true}
           labelOffsetY={-27}
           labelOffsetX={0}
@@ -277,7 +267,7 @@ class ControlTopHarpEx1 extends React.Component {
                   xUnits={'A'}
                   yUnits={'A'}
                   prec={3}
-                  usePrecision={true}
+                  
                   alarmSensitive={true}
 
                   labelOffsetY={5}
@@ -309,7 +299,7 @@ class ControlTopHarpEx1 extends React.Component {
           xUnits={'A'}
           yUnits={'A'}
           prec={3}
-          usePrecision={true}
+          
           alarmSensitive={true}
           labelOffsetY={-27}
           labelOffsetX={0}
@@ -337,7 +327,7 @@ class ControlTopHarpEx1 extends React.Component {
           xUnits={'A'}
           yUnits={'A'}
           prec={3}
-          usePrecision={true}
+          
           alarmSensitive={true}
           labelOffsetY={-27}
           labelOffsetX={0}

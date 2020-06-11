@@ -13,7 +13,8 @@ import ThumbWheel from '../../BaseComponents/ThumbWheel';
 import Close from '@material-ui/icons/Close';
 import Paper from '@material-ui/core/Paper';
 //import MenuItem from '@material-ui/core/MenuItem';
-
+/* eslint-disable eqeqeq */
+/* eslint-disable no-unused-vars */
 const styles = theme => ({
   body1: theme.typography.body1,
 
@@ -65,18 +66,18 @@ class ControlRightSinglePS extends React.Component {
             justify="flex-start"
             alignItems="center" spacing={1}>
             <Grid item xs={6}  >
-              <TextInput pv={'pva://' + system.devices.device.deviceName + ":" + system.devices.device.setpoint} usePrecision={true} prec={3} label={'Setpoint:'} alarmSensitive={true} usePvUnits={true} usePvMinMax={true} />
+              <TextInput pv={'pva://' + system.devices.device.deviceName + ":" + system.devices.device.setpoint}  prec={3} label={'Setpoint:'} alarmSensitive={true} usePvUnits={true} usePvMinMax={true} />
 
             </Grid>
             <Grid item xs={6}  >
-              <TextOutput style={{ marginRight: 10 }} pv={'pva://' + system.devices.device.deviceName + ":" + system.devices.device.readback} usePrecision={true} prec={3} usePvUnits={true} alarmSensitive={true} label={'Readback'} />
+              <TextOutput style={{ marginRight: 10 }} pv={'pva://' + system.devices.device.deviceName + ":" + system.devices.device.readback}  prec={3} usePvUnits={true} alarmSensitive={true} label={'Readback'} />
 
 
             </Grid>
 
             <Grid item xs={12}  >
 
-              <SimpleSlider pv={'pva://' + system.devices.device.deviceName + ":" + system.devices.device.setpoint} usePrecision={true} prec={3} label={'Setpoint:'} alarmSensitive={true} usePvUnits={true} usePvMinMax={true} />
+              <SimpleSlider pv={'pva://' + system.devices.device.deviceName + ":" + system.devices.device.setpoint}  prec={3} label={'Setpoint:'} alarmSensitive={true} usePvUnits={true} usePvMinMax={true} />
             </Grid>
             <Grid item xs={6}  >
 

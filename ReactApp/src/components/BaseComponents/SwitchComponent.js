@@ -18,7 +18,7 @@ const styles = (theme) => ({
   },
 });
 
-
+/* eslint-disable eqeqeq */
 const SwitchInternalComponent = (props) => {
   
 
@@ -49,6 +49,7 @@ const SwitchInternalComponent = (props) => {
       />
     );
   }
+  /* eslint-disable eqeqeq */
 /**
  * The SwitchComponent component is a wrapper on a Material-UI Selection Control component.
  * The Selection Control component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>

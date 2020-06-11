@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+
 import { withStyles } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -12,23 +12,24 @@ import ControlRightSinglePS from '../ControlScreens/GridComponents/ControlRightS
 import ControlCenterTable from '../ControlScreens/GridComponents/ControlCenterTable'
 import AppBar from '@material-ui/core/AppBar';
 import TraditionalLayout from '../UI/Layout/ComposedLayouts/TraditionalLayout.js';
-
+/* eslint-disable eqeqeq */
+/* eslint-disable no-unused-vars */
 const systems = {
 
   'BeamLine': {
     'PowerSupplies': [
-      { systemName: 'testIOC:PS1', displayName: 'Q1', editorType: 'oldPS', devices: { device: { deviceName: 'testIOC:PS1', readback: 'Readback', setpoint: 'Setpoint', statusText: 'On' } }, props: { usePrecision: true, prec: 3, units: "A", useStatus: true } },
-      { systemName: 'testIOC:PS2', displayName: 'Q2', editorType: 'oldPS', devices: { device: { deviceName: 'testIOC:PS2', readback: 'Readback', setpoint: 'Setpoint', statusText: 'On' } }, props: { usePrecision: true, prec: 3, units: "A", useStatus: true } },
-      { systemName: 'testIOC:PS3', displayName: 'Q3', editorType: 'oldPS', devices: { device: { deviceName: 'testIOC:PS3', readback: 'Readback', setpoint: 'Setpoint', statusText: 'On' } }, props: { usePrecision: true, prec: 3, units: "A", useStatus: true } },
-      { systemName: 'testIOC:PS4', displayName: 'BM1', editorType: 'oldPS', devices: { device: { deviceName: 'testIOC:PS4', readback: 'Readback', setpoint: 'Setpoint', statusText: 'On' } }, props: { usePrecision: true, prec: 3, units: "A", useStatus: true } },
-      { systemName: 'testIOC:STR1:X', displayName: 'STR1XY:X', editorType: 'singlePS', devices: { device: { deviceName: 'testIOC:STR1:X', readback: 'Readback', setpoint: 'Setpoint', statusText: 'On' } }, props: { usePrecision: true, prec: 3, units: "A", useStatus: true } },
-      { systemName: 'testIOC:STR1:Y', displayName: 'STR1XY:Y', editorType: 'singlePS', devices: { device: { deviceName: 'testIOC:STR1:Y', readback: 'Readback', setpoint: 'Setpoint', statusText: 'On' } }, props: { usePrecision: true, prec: 3, units: "A", useStatus: true } },
+      { systemName: 'testIOC:PS1', displayName: 'Q1', editorType: 'oldPS', devices: { device: { deviceName: 'testIOC:PS1', readback: 'Readback', setpoint: 'Setpoint', statusText: 'On' } }, props: { prec: 3, units: "A", useStatus: true } },
+      { systemName: 'testIOC:PS2', displayName: 'Q2', editorType: 'oldPS', devices: { device: { deviceName: 'testIOC:PS2', readback: 'Readback', setpoint: 'Setpoint', statusText: 'On' } }, props: { prec: 3, units: "A", useStatus: true } },
+      { systemName: 'testIOC:PS3', displayName: 'Q3', editorType: 'oldPS', devices: { device: { deviceName: 'testIOC:PS3', readback: 'Readback', setpoint: 'Setpoint', statusText: 'On' } }, props: { prec: 3, units: "A", useStatus: true } },
+      { systemName: 'testIOC:PS4', displayName: 'BM1', editorType: 'oldPS', devices: { device: { deviceName: 'testIOC:PS4', readback: 'Readback', setpoint: 'Setpoint', statusText: 'On' } }, props: { prec: 3, units: "A", useStatus: true } },
+      { systemName: 'testIOC:STR1:X', displayName: 'STR1XY:X', editorType: 'singlePS', devices: { device: { deviceName: 'testIOC:STR1:X', readback: 'Readback', setpoint: 'Setpoint', statusText: 'On' } }, props: { prec: 3, units: "A", useStatus: true } },
+      { systemName: 'testIOC:STR1:Y', displayName: 'STR1XY:Y', editorType: 'singlePS', devices: { device: { deviceName: 'testIOC:STR1:Y', readback: 'Readback', setpoint: 'Setpoint', statusText: 'On' } }, props: { prec: 3, units: "A", useStatus: true } },
 
-      { systemName: 'testIOC:STR2:X', displayName: 'STR2XY:X', editorType: 'singlePS', devices: { device: { deviceName: 'testIOC:STR2:X', readback: 'Readback', setpoint: 'Setpoint', statusText: 'On' } }, props: { usePrecision: true, prec: 3, units: "A", useStatus: true } },
-      { systemName: 'testIOC:STR2:Y', displayName: 'STR2XY:Y', editorType: 'singlePS', devices: { device: { deviceName: 'testIOC:STR2:Y', readback: 'Readback', setpoint: 'Setpoint', statusText: 'On' } }, props: { usePrecision: true, prec: 3, units: "A", useStatus: true } },
+      { systemName: 'testIOC:STR2:X', displayName: 'STR2XY:X', editorType: 'singlePS', devices: { device: { deviceName: 'testIOC:STR2:X', readback: 'Readback', setpoint: 'Setpoint', statusText: 'On' } }, props: { prec: 3, units: "A", useStatus: true } },
+      { systemName: 'testIOC:STR2:Y', displayName: 'STR2XY:Y', editorType: 'singlePS', devices: { device: { deviceName: 'testIOC:STR2:Y', readback: 'Readback', setpoint: 'Setpoint', statusText: 'On' } }, props: { prec: 3, units: "A", useStatus: true } },
 
-      { systemName: 'testIOC:STR3:Y', displayName: 'STR3:Y', editorType: 'singlePS', devices: { device: { deviceName: 'testIOC:STR3:Y', readback: 'Readback', setpoint: 'Setpoint', statusText: 'On' } }, props: { usePrecision: true, prec: 3, units: "A", useStatus: true } },
-      { systemName: 'testIOC:STR4:X', displayName: 'STR4:X', editorType: 'singlePS', devices: { device: { deviceName: 'testIOC:STR4:X', readback: 'Readback', setpoint: 'Setpoint', statusText: 'On' } }, props: { usePrecision: true, prec: 3, units: "A", useStatus: true } },
+      { systemName: 'testIOC:STR3:Y', displayName: 'STR3:Y', editorType: 'singlePS', devices: { device: { deviceName: 'testIOC:STR3:Y', readback: 'Readback', setpoint: 'Setpoint', statusText: 'On' } }, props: { prec: 3, units: "A", useStatus: true } },
+      { systemName: 'testIOC:STR4:X', displayName: 'STR4:X', editorType: 'singlePS', devices: { device: { deviceName: 'testIOC:STR4:X', readback: 'Readback', setpoint: 'Setpoint', statusText: 'On' } }, props: { prec: 3, units: "A", useStatus: true } },
 
     ],
     'Slits': [
@@ -44,7 +45,7 @@ const systems = {
           yGapDevice: { deviceName: 'testIOC:SLITXY1:Y', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint' },
           yOffsetDevice: { deviceName: 'testIOC:SLITXY1:Y', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint' }
         },
-        props: { usePrecision: true, prec: 2, units: "mm", useStatus: true },
+        props: { prec: 2, units: "mm", useStatus: true },
       },
       {
         systemName: 'testIOC:SLITXY1', displayName: 'SLITXY1 X Offset', editorType: 'slitxy',
@@ -58,7 +59,7 @@ const systems = {
           yGapDevice: { deviceName: 'testIOC:SLITXY1:Y', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint' },
           yOffsetDevice: { deviceName: 'testIOC:SLITXY1:Y', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint' }
         },
-        props: { usePrecision: true, prec: 2, units: "mm", useStatus: true },
+        props: { prec: 2, units: "mm", useStatus: true },
       },
       {
         systemName: 'testIOC:SLITXY1', displayName: 'SLITXY1 Y Gap', editorType: 'slitxy',
@@ -72,7 +73,7 @@ const systems = {
           yGapDevice: { deviceName: 'testIOC:SLITXY1:Y', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint' },
           yOffsetDevice: { deviceName: 'testIOC:SLITXY1:Y', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint' }
         },
-        props: { usePrecision: true, prec: 2, units: "mm", useStatus: true },
+        props: { prec: 2, units: "mm", useStatus: true },
       },
       {
         systemName: 'testIOC:SLITXY1', displayName: 'SLITXY1 Y Offset', editorType: 'slitxy',
@@ -86,7 +87,7 @@ const systems = {
           yGapDevice: { deviceName: 'testIOC:SLITXY1:Y', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint' },
           yOffsetDevice: { deviceName: 'testIOC:SLITXY1:Y', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint' }
         },
-        props: { usePrecision: true, prec: 2, units: "mm", useStatus: true },
+        props: { prec: 2, units: "mm", useStatus: true },
       },
       {
         systemName: 'testIOC:SLITXY2', displayName: 'SLITXY2 X Gap', editorType: 'slitxy',
@@ -100,7 +101,7 @@ const systems = {
           yGapDevice: { deviceName: 'testIOC:SLITXY2:Y', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint' },
           yOffsetDevice: { deviceName: 'testIOC:SLITXY2:Y', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint' }
         },
-        props: { usePrecision: true, prec: 2, units: "mm", useStatus: true },
+        props: { prec: 2, units: "mm", useStatus: true },
       },
       {
         systemName: 'testIOC:SLITXY2', displayName: 'SLITXY2 X Offset', editorType: 'slitxy',
@@ -114,7 +115,7 @@ const systems = {
           yGapDevice: { deviceName: 'testIOC:SLITXY2:Y', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint' },
           yOffsetDevice: { deviceName: 'testIOC:SLITXY2:Y', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint' }
         },
-        props: { usePrecision: true, prec: 2, units: "mm", useStatus: true },
+        props: { prec: 2, units: "mm", useStatus: true },
       },
       {
         systemName: 'testIOC:SLITXY2', displayName: 'SLITXY2 Y Gap', editorType: 'slitxy',
@@ -128,7 +129,7 @@ const systems = {
           yGapDevice: { deviceName: 'testIOC:SLITXY2:Y', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint' },
           yOffsetDevice: { deviceName: 'testIOC:SLITXY2:Y', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint' }
         },
-        props: { usePrecision: true, prec: 2, units: "mm", useStatus: true },
+        props: { prec: 2, units: "mm", useStatus: true },
       },
       {
         systemName: 'testIOC:SLITXY2', displayName: 'SLITXY2 Y Offset', editorType: 'slitxy',
@@ -142,7 +143,7 @@ const systems = {
           yGapDevice: { deviceName: 'testIOC:SLITXY2:Y', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint' },
           yOffsetDevice: { deviceName: 'testIOC:SLITXY2:Y', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint' }
         },
-        props: { usePrecision: true, prec: 2, units: "mm", useStatus: true },
+        props: { prec: 2, units: "mm", useStatus: true },
       },
 
 
@@ -285,15 +286,15 @@ class ControlTableExample extends React.Component {
           </Grid>
 
           <Grid item xs={12} sm={4} md={4} lg={3}>
-            {((this.state['displayEditor'] === true) && (this.state['editorMacros']['$(device)'] === 'testIOC:PS1')) && <ControlRightEx1 macros={this.state['editorMacros']} handleCloseEditor={this.handleCloseEditor} />}
-            {((this.state['displayEditor'] === true) && (this.state['editorMacros']['$(device)'] === 'testIOC:PS2')) && <ControlRightEx1 macros={this.state['editorMacros']} handleCloseEditor={this.handleCloseEditor} />}
-            {((this.state['displayEditor'] === true) && (this.state['editorMacros']['$(device)'] === 'testIOC:PS3')) && <ControlRightEx1 macros={this.state['editorMacros']} handleCloseEditor={this.handleCloseEditor} />}
-            {((this.state['displayEditor'] === true) && (this.state['editorMacros']['$(device)'] === 'testIOC:PS4')) && <ControlRightEx1 macros={this.state['editorMacros']} handleCloseEditor={this.handleCloseEditor} />}
-            {((this.state['displayEditor'] === true) && (this.state['editorMacros']['$(device)'] === 'testIOC:STR1:X')) && <ControlRightEx1 macros={this.state['editorMacros']} handleCloseEditor={this.handleCloseEditor} />}
-            {((this.state['displayEditor'] === true) && (this.state['editorType'] === 'oldPS')) && <ControlRightEx1 key={'editor-key' + this.state.editorSystem.systemName} macros={{ '$(device)': this.state.editorSystem.systemName }} handleCloseEditor={this.handleCloseEditor} />}
-            {((this.state['displayEditor'] === true) && (this.state['editorType'] === 'steererXY')) && <ControlRightSteererXY key={'editor-key' + this.state.editorSystem.systemName} system={this.state.editorSystem} handleCloseEditor={this.handleCloseEditor} />}
-            {((this.state['displayEditor'] === true) && (this.state['editorType'] === 'singlePS')) && <ControlRightSinglePS key={'editor-key' + this.state.editorSystem.systemName} system={this.state.editorSystem} handleCloseEditor={this.handleCloseEditor} />}
-            {((this.state['displayEditor'] === true) && (this.state['editorType'] === 'slitxy')) && <ControlRightSlitXY key={'editor-key' + this.state.editorSystem.systemName} system={this.state.editorSystem} handleCloseEditor={this.handleCloseEditor} />}
+            {((this.state.displayEditor === true) && (this.state.editorMacros['$(device)'] === 'testIOC:PS1')) && <ControlRightEx1 macros={this.state.editorMacros} handleCloseEditor={this.handleCloseEditor} />}
+            {((this.state.displayEditor === true) && (this.state.editorMacros['$(device)'] === 'testIOC:PS2')) && <ControlRightEx1 macros={this.state.editorMacros} handleCloseEditor={this.handleCloseEditor} />}
+            {((this.state.displayEditor === true) && (this.state.editorMacros['$(device)'] === 'testIOC:PS3')) && <ControlRightEx1 macros={this.state.editorMacros} handleCloseEditor={this.handleCloseEditor} />}
+            {((this.state.displayEditor === true) && (this.state.editorMacros['$(device)'] === 'testIOC:PS4')) && <ControlRightEx1 macros={this.state.editorMacros} handleCloseEditor={this.handleCloseEditor} />}
+            {((this.state.displayEditor === true) && (this.state.editorMacros['$(device)'] === 'testIOC:STR1:X')) && <ControlRightEx1 macros={this.state.editorMacros} handleCloseEditor={this.handleCloseEditor} />}
+            {((this.state.displayEditor === true) && (this.state.editorType === 'oldPS')) && <ControlRightEx1 key={'editor-key' + this.state.editorSystem.systemName} macros={{ '$(device)': this.state.editorSystem.systemName }} handleCloseEditor={this.handleCloseEditor} />}
+            {((this.state.displayEditor === true) && (this.state.editorType === 'steererXY')) && <ControlRightSteererXY key={'editor-key' + this.state.editorSystem.systemName} system={this.state.editorSystem} handleCloseEditor={this.handleCloseEditor} />}
+            {((this.state.displayEditor === true) && (this.state.editorType === 'singlePS')) && <ControlRightSinglePS key={'editor-key' + this.state.editorSystem.systemName} system={this.state.editorSystem} handleCloseEditor={this.handleCloseEditor} />}
+            {((this.state.displayEditor === true) && (this.state.editorType === 'slitxy')) && <ControlRightSlitXY key={'editor-key' + this.state.editorSystem.systemName} system={this.state.editorSystem} handleCloseEditor={this.handleCloseEditor} />}
           </Grid>
         </Grid>
 

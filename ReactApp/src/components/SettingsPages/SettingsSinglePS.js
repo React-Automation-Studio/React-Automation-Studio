@@ -4,22 +4,18 @@ import AutomationStudioContext from '../SystemComponents/AutomationStudioContext
 import TextInput from '../BaseComponents/TextInput';
 import SelectionInput from '../BaseComponents/SelectionInput';
 import TextOutput from '../BaseComponents/TextOutput';
-import SimpleSlider from '../BaseComponents/SimpleSlider';
-import TextUpdate from '../BaseComponents/TextUpdate';
+
 import Grid from '@material-ui/core/Grid';
-import SwitchComponent from '../BaseComponents/SwitchComponent';
+
 import ToggleButton from '../BaseComponents/ToggleButton';
 import ActionButton from '../BaseComponents/ActionButton';
 import ThumbWheel from '../BaseComponents/ThumbWheel';
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
+
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import {Link} from 'react-router-dom'
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
-//import MenuItem from '@material-ui/core/MenuItem';
+
 
 const styles = theme => ({
   body1: theme.typography.body1,
@@ -28,10 +24,7 @@ const styles = theme => ({
 });
 
 class SettingsSinglePS extends React.Component {
-  constructor(props) {
-    super(props);
-
-  }
+  
 
 
 
@@ -62,11 +55,11 @@ class SettingsSinglePS extends React.Component {
                     justify="flex-start"
                     alignItems="center" spacing={1}>
                     <Grid item xs={6}  >
-                      <TextInput   pv={'pva://'+system.devices.device.deviceName+":"+system.devices.device.setpoint}     usePrecision={true} prec={3}  label={'Setpoint:'} alarmSensitive={true}  usePvUnits={true} usePvMinMax={true}/>
+                      <TextInput   pv={'pva://'+system.devices.device.deviceName+":"+system.devices.device.setpoint}      prec={3}  label={'Setpoint:'} alarmSensitive={true}  usePvUnits={true} usePvMinMax={true}/>
 
                     </Grid>
                     <Grid item xs={6}  >
-                      <TextOutput style={{marginRight:10}} pv={'pva://'+system.devices.device.deviceName+":"+system.devices.device.readback}        usePrecision={true} prec={3} usePvUnits={true} alarmSensitive={true} label={'Readback'}/>
+                      <TextOutput style={{marginRight:10}} pv={'pva://'+system.devices.device.deviceName+":"+system.devices.device.readback}         prec={3} usePvUnits={true} alarmSensitive={true} label={'Readback'}/>
 
 
                     </Grid>

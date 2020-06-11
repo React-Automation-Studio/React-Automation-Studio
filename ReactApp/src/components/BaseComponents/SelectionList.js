@@ -248,9 +248,7 @@ SelectionList.propTypes = {
   pv: PropTypes.string.isRequired,
   /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
   macros: PropTypes.object,
-  /** Directive to fill the label with the value contained in the  EPICS pv's DESC field. */
-  usePvLabel: PropTypes.bool,
-
+  
 
   /**  Display list horizontally.*/
   horizontal: PropTypes.bool,

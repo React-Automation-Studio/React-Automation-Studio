@@ -27,7 +27,7 @@ const styles = (theme) => ({
   },
 });
 
-
+/* eslint-disable eqeqeq */
 const ToggleButtonComponent = (props) => {
   const [clicked, setclicked] = useState(0);
   const turnOff = () => {
@@ -134,7 +134,7 @@ const ToggleButton = (props) => {
   )
 }
 
-
+/* eslint-disable eqeqeq */
 /**
  * Specific props type and default values for this widgets.
  * They extends the ones provided for a generic widget.

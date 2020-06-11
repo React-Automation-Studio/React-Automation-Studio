@@ -1,18 +1,11 @@
+/* eslint-disable eqeqeq */
+/* eslint-disable no-unused-vars */
 import React from 'react'
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
-import DataConnection from '../SystemComponents/DataConnection';
 import { withStyles } from '@material-ui/core/styles';
-import InputAdornment from '@material-ui/core/InputAdornment';
 import PropTypes from 'prop-types';
-//import classNames from 'classnames';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import TextField from '@material-ui/core/TextField';
-import Switch from '@material-ui/core/Switch';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import Grow from '@material-ui/core/Grow';
 import Paper from '@material-ui/core/Paper';
-import Popper from '@material-ui/core/Popper';
 import Popover from '@material-ui/core/Popover';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
@@ -21,9 +14,7 @@ import {Link} from 'react-router-dom'
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ViewList from '@material-ui/icons/ViewList';
 import Typography from '@material-ui/core/Typography';
-import DraftsIcon from '@material-ui/icons/Drafts';
 import Lock from '@material-ui/icons/Lock';
-import Apps from '@material-ui/icons/Apps';
 import { Coffee,LanConnect,LanDisconnect,ContentCopy } from 'mdi-material-ui/'
 const styles = theme => ({
 

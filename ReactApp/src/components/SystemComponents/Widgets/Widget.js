@@ -4,6 +4,7 @@ import ContextMenu from "../ContextMenu";
 import PropTypes from "prop-types";
 import { LanDisconnect } from "mdi-material-ui/";
 import { create, all } from 'mathjs';
+import { useTheme } from '@material-ui/core/styles';
 const config = { }
 const math = create(all, config)
 
@@ -19,6 +20,7 @@ const math = create(all, config)
  * 
  **/
   const Widget = (props) => {
+  const theme = useTheme();
   const [value, setValue] = useState(0);
   const [initialized, setInitalized] = useState(false);
   const [immediateValue, setImmediateValue] = useState(null);
@@ -51,7 +53,7 @@ const math = create(all, config)
     units: "",
   });
   const [pvs, setPvs] = useState([]);
-  const [dataPvs, setDataPvs] = useState([]);
+  
  
   useEffect(() => {
   let ro=props.readOnly===true;
@@ -60,12 +62,13 @@ const math = create(all, config)
   }
 
   if (props.pvs) {
-    pvs.map((item) => {
+    pvs.forEach((item) => {
       ro = ro || item.readOnly;
     })
   }
   
     setReadOnly(ro)
+     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pv, props.readOnly,pvs,])
 
   useEffect(() => {
@@ -88,7 +91,7 @@ const math = create(all, config)
     else {
       setLabel(props.label)
     }
-
+     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.label, pv.label])
 
   useEffect(() => {
@@ -103,6 +106,7 @@ const math = create(all, config)
     else {
       setUnits(props.units)
     }
+     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.units, pv.units])
 
   useEffect(() => {
@@ -112,6 +116,7 @@ const math = create(all, config)
     else {
       setPrec(props.prec)
     }
+     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.prec, pv.prec, props.usePvPrecision])
 
   useEffect(() => {
@@ -123,7 +128,7 @@ const math = create(all, config)
       setMin(props.min)
       setMax(props.max)
     }
-
+ // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.min, props.max, pv.min, pv.max])
 
   useEffect(() => {
@@ -139,17 +144,18 @@ const math = create(all, config)
       }
       
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [focus, pv.value, prec])
 
   useEffect(() => {
     let newSeverity=pv.severity;
     if (typeof props.useStringSeverityMatch !== 'undefined'){
-      if (props.useStringSeverityMatch==true){
+      if (props.useStringSeverityMatch===true){
 
         if (typeof props.StringSeverity !== 'undefined'){
           let string;
           for (string in props.StringSeverity){
-            
+            // eslint-disable-next-line eqeqeq
             if (value==props.StringSeverity[string].stringMatch){
               newSeverity=props.StringSeverity[string].severity;
               break;
@@ -180,6 +186,7 @@ const math = create(all, config)
       setNewValueTrigger(newValueTrigger + 1);
       setImmediateValue(null);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [immediateValue, min, max, prec])
   
  
@@ -198,6 +205,8 @@ const math = create(all, config)
       setNewValueTrigger(newValueTrigger + 1);
       SetCommitChange(false)
     }
+    
+// eslint-disable-next-line react-hooks/exhaustive-deps
   }, [commitChange, min, max, prec])
   useEffect(() => {
     if (props.custom_selection_strings) {
@@ -218,14 +227,14 @@ const math = create(all, config)
       init = init&&pv.initialized;
     }
     if (props.pvs) {
-      pvs.map((item) => {
+      pvs.forEach((item) => {
         init = init && item.initialized;
       })
     }
      
       setInitalized(init)
     
-    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pv.initialized, pvs])
   useEffect(()=>{
     if (typeof props.usePrecision!=='undefined'){
@@ -286,14 +295,14 @@ const math = create(all, config)
   const wrapComponent = (CustomComponent, props) => {
     return <CustomComponent {...props} />;
   }
-  const disabled = !initialized || readOnly;
+  const disabled = !initialized || readOnly||props.disabled;
   const disconnectedIcon = () => {
     return (
 
       <LanDisconnect
         fontSize="inherit"
         style={{
-          color: props.theme.palette.error.main,
+          color: theme.palette.error.main,
           verticalAlign: "middle",
         }}
       />
@@ -304,7 +313,7 @@ const math = create(all, config)
    // console.log(pvArray, widgetProps)
     let pvs = [];
     if (typeof pvArray !== 'undefined') {
-      pvArray.map((item, index) => {
+      pvArray.forEach((item, index) => {
         let pv;
         let props;
         if (typeof item === Object) {
@@ -338,7 +347,7 @@ const math = create(all, config)
             newValueTrigger={newValueTrigger}
             outputValue={outputValue}
             useStringValue={props.useStringValue}
-            intialLocalVariableValue={props.intialLocalVariableValue}
+            initialLocalVariableValue={props.initialLocalVariableValue}
             debug={props.debug}
             pvData={(data) => setState(prevState => {
               let state = [...prevState]
@@ -412,6 +421,7 @@ const math = create(all, config)
       value: value,
       min: min,
       max: max,
+      prec:prec,
       label: label,
       formControlLabel:initialized?label :<span style={{fontSize:"inherit", whiteSpace: "nowrap"}}>{disconnectedIcon()}{" "+pv.pvName}</span>,
       units: units,

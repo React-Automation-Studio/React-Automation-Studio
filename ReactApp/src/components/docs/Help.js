@@ -2,31 +2,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
+
 import Paper from '@material-ui/core/Paper';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+
 import Typography from '@material-ui/core/Typography';
-import EpicsBinaryOutDebug from '../GroupedComponents/EpicsBinaryOutDebug';
-import EpicsAnalogOutDebug from '../GroupedComponents/EpicsAnalogOutDebug';
-import EpicsMbboDebug from '../GroupedComponents/EpicsMbboDebug';
-import TextUpdate from '../BaseComponents/TextUpdate';
-import TextInput from '../BaseComponents/TextInput';
-import TextOutput from '../BaseComponents/TextOutput';
-import SimpleSlider from '../BaseComponents/SimpleSlider';
-import GraphY from '../BaseComponents/GraphY';
-import ThumbWheel from '../BaseComponents/ThumbWheel';
-import Grid from '@material-ui/core/Grid';
-import DataConnection from '../SystemComponents/DataConnection';
+
 import Container from '@material-ui/core/Container';
-import SwitchComponent from '../BaseComponents/SwitchComponent';
-import StyledIconButton from '../BaseComponents/StyledIconButton';
+
 import SideBar from '../SystemComponents/SideBar';
 
-
-import {Link} from 'react-router-dom'
-import fs from 'fs'
-import {parse} from 'react-docgen';
 //var docs = require("!!react-docgen!../BaseComponents/MyComponent.js");
 
 
@@ -51,9 +35,6 @@ const styles = theme => ({
   },
 });
 
-const hiddenstyle ={
-  display:'none'
-}
 
 class Help extends React.Component {
   state = {
@@ -65,8 +46,7 @@ class Help extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
-    const { value } = this.state;
+    
 
     //  console.log('txt',txt);
     //  console.log('componentDocs',componentDocs);

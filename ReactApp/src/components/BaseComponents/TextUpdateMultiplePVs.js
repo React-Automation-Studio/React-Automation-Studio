@@ -50,12 +50,12 @@ const TextUpdateMultiplePVsComponent=(props)=> {
         for (pv in pvs){
          
           if (pvs[pv].initialized){
-          if (props.alarmSensitive==true){
-            if (pvs[pv].severity==1){
+          if (props.alarmSensitive===true){
+            if (pvs[pv].severity===1){
               textFieldClassName=classes.TextFieldSeverity1;
               //  background_color='linear-gradient(45deg, #FFFFFF 1%, #FF8E53 99%)';
             }
-            else if(pvs[pv].severity==2){
+            else if(pvs[pv].severity===2){
               textFieldClassName=classes.TextFieldSeverity2;
               //  background_color='linear-gradient(45deg, #FFFFFF 1%, #E20101 99%)';
             }

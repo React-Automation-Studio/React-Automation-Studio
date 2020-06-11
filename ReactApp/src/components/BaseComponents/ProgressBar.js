@@ -1,19 +1,11 @@
 import React from 'react'
-import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
-import DataConnection from '../SystemComponents/DataConnection';
+
 import { withStyles } from '@material-ui/core/styles';
-import InputAdornment from '@material-ui/core/InputAdornment';
+
 import PropTypes from 'prop-types';
-//import classNames from 'classnames';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import TextField from '@material-ui/core/TextField';
-import Switch from '@material-ui/core/Switch';
-import ContextMenu from '../SystemComponents/ContextMenu';
-import red from '@material-ui/core/colors/red';
-import deepOrange from '@material-ui/core/colors/deepOrange';
+
 import uuid from 'uuid';
-import { LanDisconnect } from 'mdi-material-ui/';
+
 
 import Widget from "../SystemComponents/Widgets/Widget";
 import { FormControlLabel } from "@material-ui/core";
@@ -24,7 +16,7 @@ import {
 
 } from 'react-vis';
 
-
+/* eslint-disable eqeqeq */
 
 const styles = theme => ({
   textTicks: {
@@ -65,7 +57,7 @@ function getTickValues(props, min, max, numberOfTicks, x0, x1, x2, y1, y2, xOffs
   if (typeof props.disabled === 'undefined') {
     if (props.showTicks === true) {
       for (i = 0; i < (numberOfTicks); i++) {
-        const rotation = 0;
+        
         const tickValue = i * (max - min) / (numberOfTicks - 1) + min;
         ticks.push(
           <g key={i}
@@ -116,8 +108,7 @@ function getTickValues(props, min, max, numberOfTicks, x0, x1, x2, y1, y2, xOffs
 
 const ProgressBarComponent = (props) => {
   const gradientId = uuid.v4();
-  const { classes } = props;
-  const units = props.units;
+
   const value = props.value;
   const min = props.min;
   const max = props.max;
@@ -132,7 +123,7 @@ const ProgressBarComponent = (props) => {
   }
 
 
-  const radialTextOffset = 0;
+  
   const width = props.width;
   const aspectRatio = props.aspectRatio;
   let height;
@@ -456,7 +447,6 @@ ProgressBar.defaultProps = {
   alarmSensitive: false,
   min: 0,
   max: 100,
-  usePrecision: false,
   showValue: true,
   showTicks: true,
   aspectRatio: 1.75,

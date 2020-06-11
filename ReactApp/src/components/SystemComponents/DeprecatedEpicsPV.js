@@ -79,7 +79,7 @@ class DeprecatedEpicsPV extends React.Component {
     if (msg.connected==='0'){
       this.setState(
         {
-          ['initialized']:false
+          initialized:false
         },
         this.handleInputValue
       );
@@ -97,7 +97,7 @@ class DeprecatedEpicsPV extends React.Component {
             {'pv':{pvname:msg.pvname,value: msg.value,char_value: msg.char_value,alarmColor:"",enum_strs:msg.enum_strs,lower_disp_limit: msg.lower_disp_limit,upper_disp_limit: msg.upper_disp_limit,
             lower_warning_limit:msg.lower_warning_limit,upper_warning_limit: msg.upper_warning_limit,lower_ctrl_limit:msg.lower_ctrl_limit,upper_ctrl_limit:msg.upper_ctrl_limit,units: msg.units,precision: parseInt(msg.precision),severity:msg.severity, write_access:msg.write_access,read_access:msg.read_access, host:msg.host},
             ['internalValue']: this.props.useStringValue===true? msg.char_value:msg.value,
-            ['initialized']:true ,
+            initialized:true ,
             ['severity']: msg.severity,
             ['timestamp']: msg.timestamp},
             this.handleMetadata
@@ -122,22 +122,22 @@ class DeprecatedEpicsPV extends React.Component {
 
     connectError(){
       if (this.props.debug){
-        console.log(this.state['pvname'],'client: connect_error');
+        console.log(this.state.pvname,'client: connect_error');
       }
       this.setState(
         {
-          ['initialized']:false
+          initialized:false
         },
         this.handleInputValue
       );
     }
     disconnect(){
       if (this.props.debug){
-        console.log(this.state['pvname'],'client: disconnected');
+        console.log(this.state.pvname,'client: disconnected');
       }
       this.setState(
         {
-          ['initialized']:false
+          initialized:false
         },
         this.handleInputValue
       );
@@ -145,7 +145,7 @@ class DeprecatedEpicsPV extends React.Component {
 
     reconnect(){
       if (this.props.debug){
-        console.log(this.state['pvname'],'client: reconnect');
+        console.log(this.state.pvname,'client: reconnect');
       }
       let socket=this.context.socket;
 
@@ -154,7 +154,7 @@ class DeprecatedEpicsPV extends React.Component {
       if (jwt===null){
         jwt='unauthenticated'
       }
-      socket.emit('request_pv_info', {data: this.state['pvname'],'clientAuthorisation':jwt});
+      socket.emit('request_pv_info', {data: this.state.pvname,'clientAuthorisation':jwt});
     }
     handleInitialConnection(){
 
@@ -173,17 +173,17 @@ class DeprecatedEpicsPV extends React.Component {
       if (jwt===null){
         jwt='unauthenticated'
       }
-      socket.emit('request_pv_info', {data: this.state['pvname'],'clientAuthorisation':jwt});
+      socket.emit('request_pv_info', {data: this.state.pvname,'clientAuthorisation':jwt});
     //  this.handleInitialConnection();
       this.timeout=setTimeout(this.handleInitialConnection, 3000);
-      //    console.log("this.state['pvname']",this.state['pvname']);
+      //    console.log("this.state.pvname",this.state.pvname);
 
-      socket.on(this.state['pvname'],this.updatePVData);
+      socket.on(this.state.pvname,this.updatePVData);
       socket.on('connect_error',this.connectError);
       socket.on('disconnect', this.disconnect);
       socket.on('reconnect', this.reconnect);
       socket.on('redirectToLogIn', this.handleRedirectToLogIn);
-      //  socket.on(this.state['pvname'],this.testFunction);
+      //  socket.on(this.state.pvname,this.testFunction);
 
 
 
@@ -200,7 +200,7 @@ class DeprecatedEpicsPV extends React.Component {
     componentWillUnmount(){
 
       let socket=this.context.socket;
-      //    console.log("this.state['pvname'] unmount",this.state['pvname']);
+      //    console.log("this.state.pvname unmount",this.state.pvname);
       //  if (this.props.debug===true){
       //    console.log('before',socket);
       //}
@@ -210,22 +210,22 @@ class DeprecatedEpicsPV extends React.Component {
       //}
 
       socket.removeListener('redirectToLogIn',this.handleRedirectToLogIn);
-      socket.removeListener(this.state['pvname'],this.updatePVData);
+      socket.removeListener(this.state.pvname,this.updatePVData);
       socket.removeListener('connect_error',this.connectError);
       socket.removeListener('disconnect', this.disconnect);
       socket.removeListener('reconnect', this.reconnect);
       socket.removeListener('redirectToLogIn',this.handleRedirectToLogIn);
 
 
-      //  socket.removeListener(this.state['pvname'],this.testFunction);
+      //  socket.removeListener(this.state.pvname,this.testFunction);
 
       //    if (this.props.debug===true){
       //    }
     }
     componentDidUpdate(prevProps) {
       const value =this.state.internalValue
-      const pvname =this.state['pvname']
-      const initialized= this.state['initialized'];
+      const pvname =this.state.pvname
+      const initialized= this.state.initialized;
       if(this.props.debug){
         console.log('componentDidUpdate this.props.outputValue:', this.props.outputValue)
         console.log('componentDidUpdate prevProps.outputValue:', prevProps.outputValue)
@@ -281,8 +281,8 @@ class DeprecatedEpicsPV extends React.Component {
     render() {
       const {classes} =this.props;
       const value =this.state.internalValue
-      const pvname =this.state['pvname']
-      const initialized= this.state['initialized'];
+      const pvname =this.state.pvname
+      const initialized= this.state.initialized;
       const redirectToLogInPage=this.state.redirectToLogInPage;
       if (this.props.debug===true){
 

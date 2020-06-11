@@ -95,7 +95,7 @@ class SlitXY extends React.Component {
 
   handleInputValueLabel(inputValue){
 
-    this.setState({['label']:inputValue});
+    this.setState({label:inputValue});
 
   }
 

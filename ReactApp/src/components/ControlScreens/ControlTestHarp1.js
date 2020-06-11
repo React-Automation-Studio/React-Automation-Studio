@@ -250,7 +250,7 @@ class ControlTestHarp1 extends React.Component {
 
   handleCloseEditor(){
     this.setState({
-      ['displayEditor']:false,}
+      displayEditor:false,}
     );
 
     //  this.setState({ ['clicked']: 1});
@@ -259,8 +259,8 @@ class ControlTestHarp1 extends React.Component {
   handlePsOnClick(name){
 
     //  console.log("in control test1 clicked "+name.toString());
-    this.setState({['editorType']:'PS',
-    ['displayEditor']:true,
+    this.setState({editorType:'PS',
+    displayEditor:true,
     ['editorMacros']:{'$(device)':name}});
 
     //  this.setState({ ['clicked']: 1});
@@ -289,13 +289,13 @@ class ControlTestHarp1 extends React.Component {
 
   handleOnSystemClick=(system)=>{
     //  console.log(system)
-    this.setState({['editorType']:system.editorType,
-    ['displayEditor']:true,
+    this.setState({editorType:system.editorType,
+    displayEditor:true,
     ['editorSystem']:system,
     ['editorMacros']:{'$(device)':""}});
     //  console.log("in control test1 clicked "+name.toString());
-    //    this.setState({['editorType']:'PS',
-    //    ['displayEditor']:true,
+    //    this.setState({editorType:'PS',
+    //    displayEditor:true,
     //    ['editorMacros']:{'$(device)':name}});
 
     //  this.setState({ ['clicked']: 1});
@@ -810,15 +810,15 @@ class ControlTestHarp1 extends React.Component {
 
             </Grid>
             <Grid item sm={3} >
-              {((this.state['displayEditor']===true) &&(this.state['editorMacros']['$(device)']==='testIOC:PS1'))&&<ControlRightEx1 macros={this.state['editorMacros']} handleCloseEditor={this.handleCloseEditor}/>}
-              {((this.state['displayEditor']===true) &&(this.state['editorMacros']['$(device)']==='testIOC:PS2'))&&<ControlRightEx1 macros={this.state['editorMacros']} handleCloseEditor={this.handleCloseEditor}/>}
-              {((this.state['displayEditor']===true) &&(this.state['editorMacros']['$(device)']==='testIOC:PS3'))&&<ControlRightEx1 macros={this.state['editorMacros']}  handleCloseEditor={this.handleCloseEditor}/>}
-              {((this.state['displayEditor']===true) &&(this.state['editorMacros']['$(device)']==='testIOC:PS4'))&&<ControlRightEx1 macros={this.state['editorMacros']} handleCloseEditor={this.handleCloseEditor} />}
-              {((this.state['displayEditor']===true) &&(this.state['editorMacros']['$(device)']==='testIOC:STR1:X'))&&<ControlRightEx1 macros={this.state['editorMacros']}  handleCloseEditor={this.handleCloseEditor}/>}
-              {((this.state['displayEditor']===true) &&(this.state['editorType']==='oldPS'))&&<ControlRightEx1  key={'editor-key'+this.state.editorSystem.systemName} macros={{'$(device)':this.state.editorSystem.systemName}} handleCloseEditor={this.handleCloseEditor}/>}
-              {((this.state['displayEditor']===true) &&(this.state['editorType']==='steererXY'))&&<ControlRightSteererXY key={'editor-key'+this.state.editorSystem.systemName} system={this.state.editorSystem}  handleCloseEditor={this.handleCloseEditor}/>}
-              {((this.state['displayEditor']===true) &&(this.state['editorType']==='singlePS'))&&<ControlRightSinglePS key={'editor-key'+this.state.editorSystem.systemName} system={this.state.editorSystem} handleCloseEditor={this.handleCloseEditor}/>}
-              {((this.state['displayEditor']===true) &&(this.state['editorType']==='slitxy'))&&<ControlRightSlitXY key={'editor-key'+this.state.editorSystem.systemName} system={this.state.editorSystem} handleCloseEditor={this.handleCloseEditor}/>}
+              {((this.state.displayEditor===true) &&(this.state['editorMacros']['$(device)']==='testIOC:PS1'))&&<ControlRightEx1 macros={this.state['editorMacros']} handleCloseEditor={this.handleCloseEditor}/>}
+              {((this.state.displayEditor===true) &&(this.state['editorMacros']['$(device)']==='testIOC:PS2'))&&<ControlRightEx1 macros={this.state['editorMacros']} handleCloseEditor={this.handleCloseEditor}/>}
+              {((this.state.displayEditor===true) &&(this.state['editorMacros']['$(device)']==='testIOC:PS3'))&&<ControlRightEx1 macros={this.state['editorMacros']}  handleCloseEditor={this.handleCloseEditor}/>}
+              {((this.state.displayEditor===true) &&(this.state['editorMacros']['$(device)']==='testIOC:PS4'))&&<ControlRightEx1 macros={this.state['editorMacros']} handleCloseEditor={this.handleCloseEditor} />}
+              {((this.state.displayEditor===true) &&(this.state['editorMacros']['$(device)']==='testIOC:STR1:X'))&&<ControlRightEx1 macros={this.state['editorMacros']}  handleCloseEditor={this.handleCloseEditor}/>}
+              {((this.state.displayEditor===true) &&(this.state.editorType==='oldPS'))&&<ControlRightEx1  key={'editor-key'+this.state.editorSystem.systemName} macros={{'$(device)':this.state.editorSystem.systemName}} handleCloseEditor={this.handleCloseEditor}/>}
+              {((this.state.displayEditor===true) &&(this.state.editorType==='steererXY'))&&<ControlRightSteererXY key={'editor-key'+this.state.editorSystem.systemName} system={this.state.editorSystem}  handleCloseEditor={this.handleCloseEditor}/>}
+              {((this.state.displayEditor===true) &&(this.state.editorType==='singlePS'))&&<ControlRightSinglePS key={'editor-key'+this.state.editorSystem.systemName} system={this.state.editorSystem} handleCloseEditor={this.handleCloseEditor}/>}
+              {((this.state.displayEditor===true) &&(this.state.editorType==='slitxy'))&&<ControlRightSlitXY key={'editor-key'+this.state.editorSystem.systemName} system={this.state.editorSystem} handleCloseEditor={this.handleCloseEditor}/>}
             </Grid>
           </Grid>
           </TraditionalLayout>

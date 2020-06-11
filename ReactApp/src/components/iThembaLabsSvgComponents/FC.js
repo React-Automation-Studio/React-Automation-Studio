@@ -109,7 +109,7 @@ class FC extends React.Component {
   handleMetadata=name=>(metadata)=>{
 
     let pvs=this.state.pvs;
-    pvs[name]['metadata']=metadata;
+    pvs[name].metadata=metadata;
     this.setState({pvs	 :pvs});
 
 

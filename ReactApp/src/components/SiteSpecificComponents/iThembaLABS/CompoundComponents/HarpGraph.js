@@ -279,21 +279,21 @@ class HarpGraph extends React.Component {
 
 
   handleOnFocus = event => {
-    this.setState({ ['hasFocus']: true });
+    this.setState({ hasFocus: true });
   }
 
   catchReturn = stateVar => event => {
     if (event.key === 'Enter') {
-      this.setState({ ['outputValue']: this.state['value'] });
+      this.setState({ outputValue: this.state.value });
     }
   }
 
 
   handleOnBlur = event => {
     this.setState({
-      ['hasFocus']: false,
-      ['value']: this.state['inputValue'],
-      ['metadata']: this.state['newMetadata']
+      hasFocus: false,
+      value: this.state['inputValue'],
+      metadata: this.state['newMetadata']
     });
   }
 

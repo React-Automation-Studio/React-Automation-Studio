@@ -63,7 +63,7 @@ class DeprecatedLocalPV extends React.Component {
       if (msg.connected==='0'){
         this.setState(
           {
-            ['initialized']:false
+            initialized:false
           },
           this.handleInputValue
         );
@@ -89,7 +89,7 @@ class DeprecatedLocalPV extends React.Component {
             {'pv':{pvname:msg.pvname,value: msg.value,char_value: msg.char_value,alarmColor:"",enum_strs:msg.enum_strs,lower_disp_limit: msg.lower_disp_limit,upper_disp_limit: msg.upper_disp_limit,
             lower_warning_limit:msg.lower_warning_limit,upper_warning_limit: msg.upper_warning_limit,lower_ctrl_limit:msg.lower_ctrl_limit,upper_ctrl_limit:msg.upper_ctrl_limit,units: msg.units,precision: parseInt(msg.precision),severity:msg.severity, write_access:msg.write_access,read_access:msg.read_access},
             ['internalValue']: this.props.useStringValue===true? msg.char_value:msg.value,
-            ['initialized']:true ,
+            initialized:true ,
             ['severity']: msg.severity},
             this.handleMetadata
           );
@@ -161,7 +161,7 @@ class DeprecatedLocalPV extends React.Component {
 
 
 
-    //  socket.on(this.state['pvname'],this.testFunction);
+    //  socket.on(this.state.pvname,this.testFunction);
 
 
 
@@ -170,7 +170,7 @@ class DeprecatedLocalPV extends React.Component {
 
   componentWillUnmount(){
 
-    //  socket.removeListener(this.state['pvname'],this.testFunction);
+    //  socket.removeListener(this.state.pvname,this.testFunction);
 
     //    if (this.props.debug===true){
     //    }
@@ -178,8 +178,8 @@ class DeprecatedLocalPV extends React.Component {
   componentDidUpdate(prevProps) {
   //  console.log("prevProps.value,this.props.value,this.state.internalValue",prevProps.value,this.props.value,this.state.internalValue)
     const value =this.state.internalValue
-    const pvname =this.state['pvname']
-    const initialized= this.state['initialized'];
+    const pvname =this.state.pvname
+    const initialized= this.state.initialized;
     if (initialized===true){
       if  ((this.props.value != prevProps.value)&&(this.props.value != value)){
       //  console.log('updatePVData')
@@ -234,8 +234,8 @@ class DeprecatedLocalPV extends React.Component {
       console.log('state',this.state);
     }
     const value =this.state.internalValue
-    const pvname =this.state['pvname']
-    const initialized= this.state['initialized'];
+    const pvname =this.state.pvname
+    const initialized= this.state.initialized;
     const propsvalue=this.props.value;
 
     if (this.props.debug===true){

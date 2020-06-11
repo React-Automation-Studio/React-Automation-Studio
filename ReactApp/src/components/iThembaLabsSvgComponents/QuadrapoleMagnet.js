@@ -83,7 +83,7 @@ handleToggleContextMenu = (event) => {
 handleMetadata(metadata){
 
 
-  this.setState({['metadata']	 :metadata});
+  this.setState({metadata	 :metadata});
 
 
 }
@@ -91,9 +91,9 @@ handleMetadata(metadata){
 
 handleInputValue(inputValue,pvname,initialized,severity){
 
-  this.setState({['value']	 :inputValue,
+  this.setState({value	 :inputValue,
   ['pvname']:pvname,
-  ['initialized']:initialized,
+  initialized:initialized,
   ['severity']:severity});
 
 }
@@ -101,7 +101,7 @@ handleInputValue(inputValue,pvname,initialized,severity){
 
 handleInputValueLabel(inputValue){
 
-  this.setState({['label']:inputValue});
+  this.setState({label:inputValue});
 
 }
 
@@ -278,7 +278,7 @@ filter={this.props.componentShadow===true?"url(#"+this.state.pvname+"elipseShado
             textAnchor='middle'
             filter={this.props.textShadow===true?"url(#"+this.state.pvname+"elipseShadow)":"" }
           >
-            {this.props.usePvUnits===true? value+" "+this.state['metadata'].units: value+" "+this.props.units}
+            {this.props.usePvUnits===true? value+" "+this.state.metadata.units: value+" "+this.props.units}
 
           </text>
           <text className={classes.textQuadrapoleLabel}
@@ -287,7 +287,7 @@ filter={this.props.componentShadow===true?"url(#"+this.state.pvname+"elipseShado
             textAnchor='middle'
             filter={this.props.textShadow===true?"url(#"+this.state.pvname+"elipseShadow)":"" }
           >
-            {usePvLabel===true? this.state['label']:this.props.label}
+            {usePvLabel===true? this.state.label:this.props.label}
           </text>
         </g>
       }

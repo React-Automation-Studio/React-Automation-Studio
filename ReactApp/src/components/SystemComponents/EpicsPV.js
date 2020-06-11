@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react'
 import ReactAutomationStudioContext from './AutomationStudioContext';
 import Typography from '@material-ui/core/Typography';
 
-export const useEpicsPV2 = (props) => {
+export const useEpicsPV = (props) => {
   const initPV = () => {
     let pvname = props.pv;
     if (props.macros) {
@@ -147,8 +147,8 @@ export const useEpicsPV2 = (props) => {
 }
 
 
-const EpicsPV2=(props)=>{
-  const pv= useEpicsPV2(props);
+const EpicsPV=(props)=>{
+  const pv= useEpicsPV(props);
   useEffect(()=>{
     props.pvData(pv);
     
@@ -167,4 +167,4 @@ const EpicsPV2=(props)=>{
   )
 
 }
-export default EpicsPV2
+export default EpicsPV

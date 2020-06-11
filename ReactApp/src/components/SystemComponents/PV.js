@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import AutomationStudioContext from './AutomationStudioContext';
-import EpicsPV2 from './EpicsPV2'
-import LocalPV2 from './LocalPV2'
+import EpicsPV from './EpicsPV'
+import LocalPV from './LocalPV'
 import PropTypes from "prop-types";
 
 /**
@@ -43,10 +43,10 @@ const PV = (props) => {
     }
     return pvname.includes('pva://')
       ?
-      EpicsPV2({ ...props, pv:pvname })
+      EpicsPV({ ...props, pv:pvname })
       : (pvname.includes('loc://')
         ?
-        LocalPV2({ ...props, pv:pvname })
+        LocalPV({ ...props, pv:pvname })
         : undefined)
   }
   const pvData = (name) => (pv) => {

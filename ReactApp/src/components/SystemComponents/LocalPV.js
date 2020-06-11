@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react'
 import ReactAutomationStudioContext from './AutomationStudioContext';
 import Typography from '@material-ui/core/Typography';
 
-export const useLocalPV2 = (props) => {
+export const useLocalPV = (props) => {
   const initPV = () => {
     let pvname = props.pv;
     if (props.macros) {
@@ -132,8 +132,8 @@ export const useLocalPV2 = (props) => {
 }
 
 
-const LocalPV2 = (props) => {
-  const pv = useLocalPV2(props);
+const LocalPV = (props) => {
+  const pv = useLocalPV(props);
   useEffect(() => {
     props.pvData(pv);
 
@@ -149,4 +149,4 @@ const LocalPV2 = (props) => {
   )
 
 }
-export default LocalPV2
+export default LocalPV

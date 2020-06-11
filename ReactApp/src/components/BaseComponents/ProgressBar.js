@@ -57,7 +57,7 @@ function getTickValues(props, min, max, numberOfTicks, x0, x1, x2, y1, y2, xOffs
   if (typeof props.disabled === 'undefined') {
     if (props.showTicks === true) {
       for (i = 0; i < (numberOfTicks); i++) {
-        const rotation = 0;
+        
         const tickValue = i * (max - min) / (numberOfTicks - 1) + min;
         ticks.push(
           <g key={i}

@@ -50,8 +50,7 @@ class ControlTopHarpEx1 extends React.Component {
 
   render() {
 
-    const cX=50;
-    const cY=50;
+    
     return (
 
       <div style={{ padding: 12} }>

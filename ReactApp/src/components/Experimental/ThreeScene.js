@@ -16,7 +16,7 @@ const styles = theme => ({
 
   },
 });
-
+/* eslint-disable eqeqeq */
 class ThreeScene extends Component{
 
 

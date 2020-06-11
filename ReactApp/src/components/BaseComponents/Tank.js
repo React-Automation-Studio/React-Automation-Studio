@@ -55,7 +55,6 @@ function getTickValues(props, min, max, numberOfTicks, x0, y0, x1, x2, y1, y2, x
   if (props.initialized===true) {
     if (props.showTicks === true) {
       for (i = 0; i < (numberOfTicks); i++) {
-        const rotation = 0;
         const tickValue = i * (max - min) / (numberOfTicks - 1) + min;
         ticks.push(
           <g key={i}
@@ -127,7 +126,7 @@ function TankComponent(props) {
   else {
     xOffset = 0;
   }
-  const radialTextOffset = 0;
+
   const width = props.width;
   const aspectRatio = props.aspectRatio;
   let height;

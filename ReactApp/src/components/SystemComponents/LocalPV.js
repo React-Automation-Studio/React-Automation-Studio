@@ -34,7 +34,7 @@ export const useLocalPV = (props) => {
       setPv(pv => ({ ...pv, initialized: false }))
     }
     else {
-      if (msg.newmetadata == 'False') {
+      if (msg.newmetadata === 'False') {
         setPv(pv => (
           {
             ...pv,
@@ -108,7 +108,7 @@ export const useLocalPV = (props) => {
 
 
 
-
+// eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -125,6 +125,7 @@ export const useLocalPV = (props) => {
       updatePVData(context.localVariables[pv.pvname]);
 
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.newValueTrigger])
 
   return (pv)
@@ -136,7 +137,7 @@ const LocalPV = (props) => {
   const pv = useLocalPV(props);
   useEffect(() => {
     props.pvData(pv);
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pv])
 
   return (

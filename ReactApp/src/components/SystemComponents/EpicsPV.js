@@ -38,7 +38,7 @@ export const useEpicsPV = (props) => {
         setPv(pv => ({ ...pv, initialized: false }))
       }
       else {
-        if (msg.newmetadata == 'False') {
+        if (msg.newmetadata === 'False') {
           setPv(pv => (
             {
               ...pv,
@@ -97,13 +97,13 @@ export const useEpicsPV = (props) => {
       }
       socket.emit('request_pv_info', {data: pv.pvname,'clientAuthorisation':jwt});
     }
-    const handleInitialConnection=()=>{
+    // const handleInitialConnection=()=>{
   
-      if (pv.initialized===false){
-        updatePVData({connected:'0'});
-      }
+    //   if (pv.initialized===false){
+    //     updatePVData({connected:'0'});
+    //   }
   
-    }
+    // }
 
 
 
@@ -127,6 +127,7 @@ export const useEpicsPV = (props) => {
       socket.removeListener('reconnect',reconnect);
      
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
   useEffect(()=>{
@@ -140,6 +141,7 @@ export const useEpicsPV = (props) => {
     socket.emit('write_to_pv', {pvname:pv.pvname, data: props.outputValue,'clientAuthorisation':jwt});
    
   }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[props.newValueTrigger])
 
   return (pv)
@@ -151,7 +153,7 @@ const EpicsPV=(props)=>{
   const pv= useEpicsPV(props);
   useEffect(()=>{
     props.pvData(pv);
-    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[pv])
   if(props.debug){
     console.log(props)

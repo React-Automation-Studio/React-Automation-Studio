@@ -169,12 +169,13 @@ const PV = (props) => {
     }
 
 
-
+ // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pvs])
   useEffect(() => {
     if (typeof props.pvData !=='undefined'){
       props.pvData(pv)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pv])
   if (props.debug) {
     console.log(props)

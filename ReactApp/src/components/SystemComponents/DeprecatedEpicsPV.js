@@ -1,7 +1,7 @@
 import React from 'react'
 import AutomationStudioContext from './AutomationStudioContext';
 import { withStyles } from '@material-ui/core/styles';
-import { Redirect } from 'react-router-dom'
+
 import uuid from 'uuid';
 import RedirectToLogIn from './RedirectToLogin.js';
 const styles = theme => ({
@@ -10,7 +10,9 @@ const styles = theme => ({
 
 
 });
-
+/* eslint-disable eqeqeq */
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-useless-computed-key*/
 class DeprecatedEpicsPV extends React.Component {
   constructor(props) {
     super(props);

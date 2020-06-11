@@ -8,7 +8,9 @@ const styles = theme => ({
 
 
 });
-
+/* eslint-disable eqeqeq */
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-useless-computed-key*/
 class DeprecatedLocalPV extends React.Component {
   constructor(props) {
     super(props);

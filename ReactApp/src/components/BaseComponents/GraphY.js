@@ -18,7 +18,8 @@ const FlexibleXYPlot = makeVisFlexible(XYPlot);
 
 
 
-
+/* eslint-disable eqeqeq */
+/* eslint-disable no-unused-vars */
 
 const styles = theme => ({
 
@@ -43,7 +44,6 @@ const styles = theme => ({
 */
 class GraphY extends React.Component {
   constructor(props) {
-    const FlexibleXYPlot = makeVisFlexible(XYPlot);
     super(props);
     let state={}
     let pv;

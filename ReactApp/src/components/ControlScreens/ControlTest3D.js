@@ -15,7 +15,7 @@ import SimpleSlider from '../BaseComponents/SimpleSlider';
 
 
 import Grid from '@material-ui/core/Grid';
-import deprecatedEpicsPV from '../SystemComponents/deprecatedEpicsPV';
+
 
 import SwitchComponent from '../BaseComponents/SwitchComponent';
 import SelectionInput from '../BaseComponents/SelectionInput';

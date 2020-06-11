@@ -42,18 +42,18 @@ const systems={
 
   'BeamLine':{
     'PowerSupplies':[
-      {systemName:'testIOC:PS1'     , displayName:'Q1'        ,editorType:'oldPS',devices:{device:{deviceName:'testIOC:PS1'     ,readback:'Readback',setpoint:'Setpoint',statusText:'On'}},props:{usePrecision:true,prec:3,units:"A",useStatus:true}},
-      {systemName:'testIOC:PS2'     , displayName:'Q2'        ,editorType:'oldPS',devices:{device:{deviceName:'testIOC:PS2'     ,readback:'Readback',setpoint:'Setpoint',statusText:'On'}},props:{usePrecision:true,prec:3,units:"A",useStatus:true}},
-      {systemName:'testIOC:PS3'     , displayName:'Q3'        ,editorType:'oldPS',devices:{device:{deviceName:'testIOC:PS3'     ,readback:'Readback',setpoint:'Setpoint',statusText:'On'}},props:{usePrecision:true,prec:3,units:"A",useStatus:true}},
-      {systemName:'testIOC:PS4'     , displayName:'BM1'       ,editorType:'oldPS',devices:{device:{deviceName:'testIOC:PS4'     ,readback:'Readback',setpoint:'Setpoint',statusText:'On'}},props:{usePrecision:true,prec:3,units:"A",useStatus:true}},
-      {systemName:'testIOC:STR1:X'  , displayName:'STR1XY:X'  ,editorType:'singlePS',devices:{device:{deviceName:'testIOC:STR1:X'     ,readback:'Readback',setpoint:'Setpoint',statusText:'On'}},props:{usePrecision:true,prec:3,units:"A",useStatus:true}},
-      {systemName:'testIOC:STR1:Y'  , displayName:'STR1XY:Y'  ,editorType:'singlePS',devices:{device:{deviceName:'testIOC:STR1:Y'     ,readback:'Readback',setpoint:'Setpoint',statusText:'On'}},props:{usePrecision:true,prec:3,units:"A",useStatus:true}},
+      {systemName:'testIOC:PS1'     , displayName:'Q1'        ,editorType:'oldPS',devices:{device:{deviceName:'testIOC:PS1'     ,readback:'Readback',setpoint:'Setpoint',statusText:'On'}},props:{prec:3,units:"A",useStatus:true}},
+      {systemName:'testIOC:PS2'     , displayName:'Q2'        ,editorType:'oldPS',devices:{device:{deviceName:'testIOC:PS2'     ,readback:'Readback',setpoint:'Setpoint',statusText:'On'}},props:{prec:3,units:"A",useStatus:true}},
+      {systemName:'testIOC:PS3'     , displayName:'Q3'        ,editorType:'oldPS',devices:{device:{deviceName:'testIOC:PS3'     ,readback:'Readback',setpoint:'Setpoint',statusText:'On'}},props:{prec:3,units:"A",useStatus:true}},
+      {systemName:'testIOC:PS4'     , displayName:'BM1'       ,editorType:'oldPS',devices:{device:{deviceName:'testIOC:PS4'     ,readback:'Readback',setpoint:'Setpoint',statusText:'On'}},props:{prec:3,units:"A",useStatus:true}},
+      {systemName:'testIOC:STR1:X'  , displayName:'STR1XY:X'  ,editorType:'singlePS',devices:{device:{deviceName:'testIOC:STR1:X'     ,readback:'Readback',setpoint:'Setpoint',statusText:'On'}},props:{prec:3,units:"A",useStatus:true}},
+      {systemName:'testIOC:STR1:Y'  , displayName:'STR1XY:Y'  ,editorType:'singlePS',devices:{device:{deviceName:'testIOC:STR1:Y'     ,readback:'Readback',setpoint:'Setpoint',statusText:'On'}},props:{prec:3,units:"A",useStatus:true}},
 
-      {systemName:'testIOC:STR2:X'  , displayName:'STR2XY:X'  ,editorType:'singlePS',devices:{device:{deviceName:'testIOC:STR2:X'     ,readback:'Readback',setpoint:'Setpoint',statusText:'On'}},props:{usePrecision:true,prec:3,units:"A",useStatus:true}},
-      {systemName:'testIOC:STR2:Y'  , displayName:'STR2XY:Y'  ,editorType:'singlePS',devices:{device:{deviceName:'testIOC:STR2:Y'     ,readback:'Readback',setpoint:'Setpoint',statusText:'On'}},props:{usePrecision:true,prec:3,units:"A",useStatus:true}},
+      {systemName:'testIOC:STR2:X'  , displayName:'STR2XY:X'  ,editorType:'singlePS',devices:{device:{deviceName:'testIOC:STR2:X'     ,readback:'Readback',setpoint:'Setpoint',statusText:'On'}},props:{prec:3,units:"A",useStatus:true}},
+      {systemName:'testIOC:STR2:Y'  , displayName:'STR2XY:Y'  ,editorType:'singlePS',devices:{device:{deviceName:'testIOC:STR2:Y'     ,readback:'Readback',setpoint:'Setpoint',statusText:'On'}},props:{prec:3,units:"A",useStatus:true}},
 
-      {systemName:'testIOC:STR3:Y'  , displayName:'STR3:Y'  ,editorType:'singlePS',devices:{device:{deviceName:'testIOC:STR3:Y'     ,readback:'Readback',setpoint:'Setpoint',statusText:'On'}},props:{usePrecision:true,prec:3,units:"A",useStatus:true}},
-      {systemName:'testIOC:STR4:X'  , displayName:'STR4:X'  ,editorType:'singlePS',devices:{device:{deviceName:'testIOC:STR4:X'     ,readback:'Readback',setpoint:'Setpoint',statusText:'On'}},props:{usePrecision:true,prec:3,units:"A",useStatus:true}},
+      {systemName:'testIOC:STR3:Y'  , displayName:'STR3:Y'  ,editorType:'singlePS',devices:{device:{deviceName:'testIOC:STR3:Y'     ,readback:'Readback',setpoint:'Setpoint',statusText:'On'}},props:{prec:3,units:"A",useStatus:true}},
+      {systemName:'testIOC:STR4:X'  , displayName:'STR4:X'  ,editorType:'singlePS',devices:{device:{deviceName:'testIOC:STR4:X'     ,readback:'Readback',setpoint:'Setpoint',statusText:'On'}},props:{prec:3,units:"A",useStatus:true}},
 
     ],
     'Slits':[
@@ -67,7 +67,7 @@ const systems={
           yGapDevice:{deviceName:'testIOC:SLITXY1:Y',readback:'Gap:Readback',setpoint:'Gap:Setpoint'},
           yOffsetDevice:{deviceName:'testIOC:SLITXY1:Y',readback:'Offset:Readback',setpoint:'Offset:Setpoint'}
         },
-        props:{usePrecision:true,prec:2,units:"mm",useStatus:true},
+        props:{prec:2,units:"mm",useStatus:true},
       },
       {systemName:'testIOC:SLITXY1' , displayName:'SLITXY1 X Offset'   ,editorType:'slitxy',
 
@@ -79,7 +79,7 @@ const systems={
           yGapDevice:{deviceName:'testIOC:SLITXY1:Y',readback:'Gap:Readback',setpoint:'Gap:Setpoint'},
           yOffsetDevice:{deviceName:'testIOC:SLITXY1:Y',readback:'Offset:Readback',setpoint:'Offset:Setpoint'}
         },
-        props:{usePrecision:true,prec:2,units:"mm",useStatus:true},
+        props:{prec:2,units:"mm",useStatus:true},
       },
       {systemName:'testIOC:SLITXY1' , displayName:'SLITXY1 Y Gap'   ,editorType:'slitxy',
 
@@ -91,7 +91,7 @@ const systems={
           yGapDevice:{deviceName:'testIOC:SLITXY1:Y',readback:'Gap:Readback',setpoint:'Gap:Setpoint'},
           yOffsetDevice:{deviceName:'testIOC:SLITXY1:Y',readback:'Offset:Readback',setpoint:'Offset:Setpoint'}
         },
-        props:{usePrecision:true,prec:2,units:"mm",useStatus:true},
+        props:{prec:2,units:"mm",useStatus:true},
       },
       {systemName:'testIOC:SLITXY1' , displayName:'SLITXY1 Y Offset'   ,editorType:'slitxy',
 
@@ -103,7 +103,7 @@ const systems={
           yGapDevice:{deviceName:'testIOC:SLITXY1:Y',readback:'Gap:Readback',setpoint:'Gap:Setpoint'},
           yOffsetDevice:{deviceName:'testIOC:SLITXY1:Y',readback:'Offset:Readback',setpoint:'Offset:Setpoint'}
         },
-        props:{usePrecision:true,prec:2,units:"mm",useStatus:true},
+        props:{prec:2,units:"mm",useStatus:true},
       },
       {systemName:'testIOC:SLITXY2' , displayName:'SLITXY2 X Gap'   ,editorType:'slitxy',
 
@@ -115,7 +115,7 @@ const systems={
           yGapDevice:{deviceName:'testIOC:SLITXY2:Y',readback:'Gap:Readback',setpoint:'Gap:Setpoint'},
           yOffsetDevice:{deviceName:'testIOC:SLITXY2:Y',readback:'Offset:Readback',setpoint:'Offset:Setpoint'}
         },
-        props:{usePrecision:true,prec:2,units:"mm",useStatus:true},
+        props:{prec:2,units:"mm",useStatus:true},
       },
       {systemName:'testIOC:SLITXY2' , displayName:'SLITXY2 X Offset'   ,editorType:'slitxy',
 
@@ -127,7 +127,7 @@ const systems={
           yGapDevice:{deviceName:'testIOC:SLITXY2:Y',readback:'Gap:Readback',setpoint:'Gap:Setpoint'},
           yOffsetDevice:{deviceName:'testIOC:SLITXY2:Y',readback:'Offset:Readback',setpoint:'Offset:Setpoint'}
         },
-        props:{usePrecision:true,prec:2,units:"mm",useStatus:true},
+        props:{prec:2,units:"mm",useStatus:true},
       },
       {systemName:'testIOC:SLITXY2' , displayName:'SLITXY2 Y Gap'   ,editorType:'slitxy',
 
@@ -139,7 +139,7 @@ const systems={
           yGapDevice:{deviceName:'testIOC:SLITXY2:Y',readback:'Gap:Readback',setpoint:'Gap:Setpoint'},
           yOffsetDevice:{deviceName:'testIOC:SLITXY2:Y',readback:'Offset:Readback',setpoint:'Offset:Setpoint'}
         },
-        props:{usePrecision:true,prec:2,units:"mm",useStatus:true},
+        props:{prec:2,units:"mm",useStatus:true},
       },
       {systemName:'testIOC:SLITXY2' , displayName:'SLITXY2 Y Offset'   ,editorType:'slitxy',
 
@@ -151,7 +151,7 @@ const systems={
           yGapDevice:{deviceName:'testIOC:SLITXY2:Y',readback:'Gap:Readback',setpoint:'Gap:Setpoint'},
           yOffsetDevice:{deviceName:'testIOC:SLITXY2:Y',readback:'Offset:Readback',setpoint:'Offset:Setpoint'}
         },
-        props:{usePrecision:true,prec:2,units:"mm",useStatus:true},
+        props:{prec:2,units:"mm",useStatus:true},
       },
 
 

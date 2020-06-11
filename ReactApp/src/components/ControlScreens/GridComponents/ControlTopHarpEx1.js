@@ -371,7 +371,7 @@ class ControlTopHarpEx1 extends React.Component {
       cx={900}
       cy={100}
       prec={2}
-      
+      usePrecision={true}
       usePvUnits={true}
       usePvLabel={false}
       alarmSensitive={true}
@@ -401,7 +401,7 @@ class ControlTopHarpEx1 extends React.Component {
       cx={1300}
       cy={100}
       prec={2}
-      
+      usePrecision={true}
       usePvUnits={true}
       usePvLabel={false}
       alarmSensitive={true}

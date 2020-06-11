@@ -65,7 +65,7 @@ class ControlRightSlitXY extends React.Component {
           <Grid container
             direction="row"
             justify="flex-start"
-            alignItems="start" spacing={1}>
+            alignItems="center" spacing={1}>
             <Grid item xs={3}  >
               <TextInput pv={'pva://' + system.devices.xGapDevice.deviceName + ":" + system.devices.xGapDevice.setpoint}  prec={2} label={'X Gap Setpoint'} alarmSensitive={true} usePvUnits={true} usePvMinMax={true} />
 
@@ -105,7 +105,7 @@ class ControlRightSlitXY extends React.Component {
           <Grid container
             direction="row"
             justify="flex-start"
-            alignItems="start" spacing={1}>
+            alignItems="center" spacing={1}>
 
             <Grid item xs={3}  >
               <TextInput pv={'pva://' + system.devices.xOffsetDevice.deviceName + ":" + system.devices.xOffsetDevice.setpoint}  prec={2} label={'X Offset Setpoint'} alarmSensitive={true} usePvUnits={true} usePvMinMax={true} />
@@ -155,7 +155,7 @@ class ControlRightSlitXY extends React.Component {
             <Grid container
               direction="row"
               justify="flex-start"
-              alignItems="start" spacing={1}>
+              alignItems="center" spacing={1}>
               <Grid item xs={3}  >
                 <TextInput pv={'pva://' + system.devices.yGapDevice.deviceName + ":" + system.devices.yGapDevice.setpoint}  prec={2} label={'Y Gap Setpoint'} alarmSensitive={true} usePvUnits={true} usePvMinMax={true} />
 
@@ -195,7 +195,7 @@ class ControlRightSlitXY extends React.Component {
             <Grid container
               direction="row"
               justify="flex-start"
-              alignItems="start" spacing={1}>
+              alignItems="center" spacing={1}>
 
               <Grid item xs={3}  >
                 <TextInput pv={'pva://' + system.devices.yOffsetDevice.deviceName + ":" + system.devices.yOffsetDevice.setpoint}  prec={2} label={'Y Offset Setpoint'} alarmSensitive={true} usePvUnits={true} usePvMinMax={true} />

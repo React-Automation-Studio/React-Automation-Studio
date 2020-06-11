@@ -127,6 +127,7 @@ class HarpGraph extends React.Component {
             this.setState({ rangeUnits: 'pA', 'ymax': 2000, 'rangeYmax': 2000 });
           }
           break;
+        default:
 
 
 
@@ -446,7 +447,7 @@ class HarpGraph extends React.Component {
 
 
 
-    const { classes } = this.props;
+    
     const theme = this.props.theme;
 
     const ymax = this.state.ymax;

@@ -11,7 +11,7 @@ const styles = theme => ({
 
 });
 
-class EpicsPV extends React.Component {
+class deprecatedEpicsPV extends React.Component {
   constructor(props) {
     super(props);
     if (this.props.debug){
@@ -326,5 +326,5 @@ class EpicsPV extends React.Component {
     }
   }
 
-  EpicsPV.contextType=AutomationStudioContext;
-  export default withStyles(styles)(EpicsPV)
+  deprecatedEpicsPV.contextType=AutomationStudioContext;
+  export default withStyles(styles)(deprecatedEpicsPV)

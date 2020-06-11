@@ -51,10 +51,7 @@ class Example extends Component {
     localStorage.removeItem('jwt');
 
   }
-  componentDidMount()
-  {
-    console.log('Example mounted')
-  }
+ 
   render() {
 
 

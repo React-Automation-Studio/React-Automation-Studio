@@ -58,11 +58,7 @@ let socket = io(PyEpicsServerURL, {
 
 
 
-/*
-const socket = io('127.0.0.1:5000/test',{
-transports: ['websocket']
-})*/
-let themeStyle = 'dark';
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -73,7 +69,7 @@ class App extends Component {
     let themeKeys = Object.keys(themes);
     if (themeKeys.includes(themeStyle)) {
       theme = createMuiTheme(themes[themeStyle])
-      //   localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
+     
     }
     else {
       themeStyle = themeKeys[0];
@@ -81,28 +77,7 @@ class App extends Component {
       localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
     }
 
-    //   themeStyle = 'light'
-    //   theme = createMuiTheme(lightTheme)
-    //   localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
-    // }
-    // else {
-    //   themeStyle = 'dark'
-    //   theme = createMuiTheme(darkTheme)
-    //   localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
-    // }
-    //console.log('jwt',jwt);
-    // if (themeStyle == 'light') {
-    //   themeStyle = 'light'
-    //   theme = createMuiTheme(lightTheme)
-    //   localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
-    // }
-    // else {
-    //   themeStyle = 'dark'
-    //   theme = createMuiTheme(darkTheme)
-    //   localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
-    // }
-
-    //console.log(themeStyle)
+   
     this.changeTheme = (event) => {
       let themeStyle = event.target.value;
 
@@ -110,7 +85,7 @@ class App extends Component {
       let themeStyles = this.state.system.themeStyles;
       if (themeStyles.includes(themeStyle)) {
         theme = createMuiTheme(themes[themeStyle])
-        //   localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
+       
       }
       else {
         themeStyle = themeStyles[0];
@@ -124,22 +99,7 @@ class App extends Component {
       localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
     }
 
-    // this.toggleTheme = () => {
-    //   let theme = null
-    //   let themeStyle = this.state.themeStyle;
-
-    //   if (themeStyle == 'dark') {
-    //     themeStyle = 'light'
-    //     theme = createMuiTheme(lightTheme)
-    //   }
-    //   else {
-    //     themeStyle = 'dark'
-    //     theme = createMuiTheme(darkTheme)
-    //   }
-
-    //   this.setState({ themeStyle: themeStyle, theme: theme })
-    //   localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
-    // }
+    
     this.setUserData = (username, roles) => {
       let system = this.state.system;
       let userData = {

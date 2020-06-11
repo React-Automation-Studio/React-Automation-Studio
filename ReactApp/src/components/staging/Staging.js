@@ -52,10 +52,7 @@ class Staging extends Component {
     localStorage.removeItem('jwt');
 
   }
-  componentDidMount()
-  {
-    console.log('Staging mounted')
-  }
+ 
   render() {
 
 

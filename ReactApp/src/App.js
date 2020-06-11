@@ -15,7 +15,7 @@ import ReactVisCssBaseline from './components/SystemComponents/ReactVisCssBaseli
 import AutomationStudioContext from './components/SystemComponents/AutomationStudioContext';
 import io from 'socket.io-client';
 
-import { lightTheme, darkTheme, themes } from './components/UI/Themes/DefaultTheme'
+import {themes } from './components/UI/Themes/DefaultTheme'
 
 // const socket = io('https://172.16.5.52:5000/test',{
 //   transports: ['websocket'],

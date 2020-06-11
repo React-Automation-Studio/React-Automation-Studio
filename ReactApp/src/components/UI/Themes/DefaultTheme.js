@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { indigo, teal, lightBlue, blueGrey, pink, red, blue, green, cyan, deepOrange, orange, amber, lime, grey } from '@material-ui/core/colors'
 import { fade } from '@material-ui/core/styles/colorManipulator';
 

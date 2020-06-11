@@ -16,7 +16,7 @@ import {
 
 } from 'react-vis';
 
-
+/* eslint-disable eqeqeq */
 
 const styles = theme => ({
   textTicks: {
@@ -108,8 +108,7 @@ function getTickValues(props, min, max, numberOfTicks, x0, x1, x2, y1, y2, xOffs
 
 const ProgressBarComponent = (props) => {
   const gradientId = uuid.v4();
-  const { classes } = props;
-  const units = props.units;
+
   const value = props.value;
   const min = props.min;
   const max = props.max;
@@ -124,7 +123,7 @@ const ProgressBarComponent = (props) => {
   }
 
 
-  const radialTextOffset = 0;
+  
   const width = props.width;
   const aspectRatio = props.aspectRatio;
   let height;

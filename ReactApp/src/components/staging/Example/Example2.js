@@ -61,7 +61,7 @@ class Example2 extends React.Component {
                 pv='pva://$(device):amplitude'
                 macros={{'$(device)':'testIOC'}}
                 usePvLabel={true}
-                usePrecision={true}
+                
                 prec={3}
                 alarmSensitive={true}
             />
@@ -70,7 +70,7 @@ class Example2 extends React.Component {
             <TextOutput
               pv='pva://$(device):test3'
               macros={{'$(device)':'testIOC'}}
-              usePvLabel={true} usePrecision={true}
+              usePvLabel={true} 
               prec={3} alarmSensitive={true}
             />
           </Grid>
@@ -79,7 +79,7 @@ class Example2 extends React.Component {
                 pv='pva://$(device):amplitude'
                 macros={{'$(device)':'testIOC'}}
                 usePvLabel={true}
-                usePrecision={true}
+                
                 prec={3}
                 alarmSensitive={true}
             />
@@ -88,7 +88,7 @@ class Example2 extends React.Component {
             <TextOutput
               pv='pva://$(device):test3'
               macros={{'$(device)':'testIOC'}}
-              usePvLabel={true} usePrecision={true}
+              usePvLabel={true} 
               prec={3} alarmSensitive={true}
             />
           </Grid>
@@ -98,7 +98,7 @@ class Example2 extends React.Component {
                 pv='pva://$(device):amplitude'
                 macros={{'$(device)':'testIOC'}}
                 usePvLabel={true}
-                usePrecision={true}
+                
                 prec={3}
                 alarmSensitive={true}
             />
@@ -107,7 +107,7 @@ class Example2 extends React.Component {
             <TextOutput
               pv='pva://$(device):test3'
               macros={{'$(device)':'testIOC'}}
-              usePvLabel={true} usePrecision={true}
+              usePvLabel={true} 
               prec={3} alarmSensitive={true}
             />
           </Grid>

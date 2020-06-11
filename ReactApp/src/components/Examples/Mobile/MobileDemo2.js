@@ -94,13 +94,13 @@ class MobileDemo2 extends React.Component {
           <Grid container spacing={2}  direction="row"  justify="flex-start"  alignItems="center">
 
             <Grid item xs={12} lg={2}>
-              <TextInput  pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}   usePvLabel={true} usePrecision={true} prec={3} alarmSensitive={true}/>
+              <TextInput  pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}   usePvLabel={true}  prec={3} alarmSensitive={true}/>
             </Grid>
             <Grid item xs={12} lg={2}>
-              <TextOutput  pv='pva://$(device):test3' macros={{'$(device)':'testIOC'}}   usePvLabel={true} usePrecision={true} prec={3} alarmSensitive={true}/>
+              <TextOutput  pv='pva://$(device):test3' macros={{'$(device)':'testIOC'}}   usePvLabel={true}  prec={3} alarmSensitive={true}/>
             </Grid>
             <Grid item xs={12} sm={6} lg={2}>
-              <Gauge  pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}   usePvLabel={true} usePrecision={true} prec={3} usePvMinMax={true} />
+              <Gauge  pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}   usePvLabel={true}  prec={3} usePvMinMax={true} />
             </Grid>
             <Grid item xs={12} sm={6} lg={3}>
               <ThumbWheel
@@ -111,19 +111,19 @@ class MobileDemo2 extends React.Component {
               />
             </Grid>
             <Grid item xs={12} sm={3} lg={2}>
-              <Gauge  pv='pva://$(device):test3' macros={{'$(device)':'testIOC'}}   usePvLabel={true} usePrecision={true} prec={3} min={-10000} max={10000} />
+              <Gauge  pv='pva://$(device):test3' macros={{'$(device)':'testIOC'}}   usePvLabel={true}  prec={3} min={-10000} max={10000} />
             </Grid>
             <Grid item xs={6} sm={3}  md= {3} lg={2} xl={1}>
-              <ProgressBar  pv='pva://$(device):test3' macros={{'$(device)':'testIOC'}} units={'V'}  usePvLabel={true} usePrecision={true} prec={3} min={-10000} max={10000} />
+              <ProgressBar  pv='pva://$(device):test3' macros={{'$(device)':'testIOC'}} units={'V'}  usePvLabel={true}  prec={3} min={-10000} max={10000} />
             </Grid>
             <Grid item xs={6} sm={3}  md= {3} lg={2} xl={1}>
-                <ProgressBar  pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}   usePvLabel={true} usePrecision={true} prec={3} usePvMinMax={true} alarmSensitive={true}/>
+                <ProgressBar  pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}   usePvLabel={true}  prec={3} usePvMinMax={true} alarmSensitive={true}/>
             </Grid>
             <Grid item xs={6} sm={3}  md= {3} lg={2} xl={1}>
-              <Tank  pv='pva://$(device):test3' macros={{'$(device)':'testIOC'}} units={'V'}  usePvLabel={true} usePrecision={true} prec={3} min={-10000} max={10000} />
+              <Tank  pv='pva://$(device):test3' macros={{'$(device)':'testIOC'}} units={'V'}  usePvLabel={true}  prec={3} min={-10000} max={10000} />
             </Grid>
             <Grid item xs={6} sm={3}  md= {3} lg={2} xl={1}>
-                <Tank  pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}   usePvLabel={true} usePrecision={true} prec={3} usePvMinMax={true} alarmSensitive={true}/>
+                <Tank  pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}   usePvLabel={true}  prec={3} usePvMinMax={true} alarmSensitive={true}/>
             </Grid>
 
             <Grid item xs={6} lg={2}>

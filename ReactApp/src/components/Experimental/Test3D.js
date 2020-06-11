@@ -100,19 +100,19 @@ render() {
               alignItems="center"
               spacing={2}
             >  <Grid item xs={6}  >
-              <TextInput   pv='pva://testIOC:Cube1:xRotation'      macros={this.props['macros']} usePvMinMax={true} label="xRotation" usePrecision={true} step={0.01} prec={3}  units={'rad'}/>
+              <TextInput   pv='pva://testIOC:Cube1:xRotation'      macros={this.props['macros']} usePvMinMax={true} label="xRotation"  step={0.01} prec={3}  units={'rad'}/>
 
             </Grid>
               <Grid item xs={6}  >
-                <TextInput   pv='pva://testIOC:Cube1:yRotation'      macros={this.props['macros']} usePvMinMax={true} label="yRotation" usePrecision={true} step={0.01} prec={3}  units={'rad'}/>
+                <TextInput   pv='pva://testIOC:Cube1:yRotation'      macros={this.props['macros']} usePvMinMax={true} label="yRotation"  step={0.01} prec={3}  units={'rad'}/>
 
               </Grid>
               <Grid item xs={6} >
-                <SimpleSlider  pv='pva://testIOC:Cube1:xRotation'      macros={this.props['macros']} usePvMinMax={true} label="xRotation:" usePrecision={true} step={0.01} prec={3} />
+                <SimpleSlider  pv='pva://testIOC:Cube1:xRotation'      macros={this.props['macros']} usePvMinMax={true} label="xRotation:"  step={0.01} prec={3} />
               </Grid>
 
               <Grid item xs={6} >
-                <SimpleSlider  pv='pva://testIOC:Cube1:yRotation'      macros={this.props['macros']} usePvMinMax={true}label="yRotation:"  usePrecision={true} step={0.01} prec={3}  />
+                <SimpleSlider  pv='pva://testIOC:Cube1:yRotation'      macros={this.props['macros']} usePvMinMax={true}label="yRotation:"   step={0.01} prec={3}  />
               </Grid>
             </Grid>
           </Card>

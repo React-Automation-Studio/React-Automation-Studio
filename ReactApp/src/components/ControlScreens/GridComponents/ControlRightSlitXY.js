@@ -67,19 +67,19 @@ class ControlRightSlitXY extends React.Component {
             justify="flex-start"
             alignItems="start" spacing={1}>
             <Grid item xs={3}  >
-              <TextInput pv={'pva://' + system.devices.xGapDevice.deviceName + ":" + system.devices.xGapDevice.setpoint} usePrecision={true} prec={2} label={'X Gap Setpoint'} alarmSensitive={true} usePvUnits={true} usePvMinMax={true} />
+              <TextInput pv={'pva://' + system.devices.xGapDevice.deviceName + ":" + system.devices.xGapDevice.setpoint}  prec={2} label={'X Gap Setpoint'} alarmSensitive={true} usePvUnits={true} usePvMinMax={true} />
 
             </Grid>
             <Grid item xs={3}  >
-              <TextOutput pv={'pva://' + system.devices.xGapDevice.deviceName + ":" + system.devices.xGapDevice.readback} label={'X Gap Readback'} usePrecision={true} prec={2} usePvUnits={true} alarmSensitive={true} />
+              <TextOutput pv={'pva://' + system.devices.xGapDevice.deviceName + ":" + system.devices.xGapDevice.readback} label={'X Gap Readback'}  prec={2} usePvUnits={true} alarmSensitive={true} />
             </Grid>
             <Grid item xs={3}  >
-              <TextOutput displayMetaData={'lower_disp_limit'} pv={'pva://' + system.devices.xGapDevice.deviceName + ":" + system.devices.xGapDevice.setpoint} label={'X Gap Min'} usePrecision={true} prec={2} usePvUnits={true} />
+              <TextOutput displayMetaData={'lower_disp_limit'} pv={'pva://' + system.devices.xGapDevice.deviceName + ":" + system.devices.xGapDevice.setpoint} label={'X Gap Min'}  prec={2} usePvUnits={true} />
 
 
             </Grid>
             <Grid item xs={3}  >
-              <TextOutput displayMetaData={'upper_disp_limit'} pv={'pva://' + system.devices.xGapDevice.deviceName + ":" + system.devices.xGapDevice.setpoint} label={'X Gap Max'} usePrecision={true} prec={2} usePvUnits={true} />
+              <TextOutput displayMetaData={'upper_disp_limit'} pv={'pva://' + system.devices.xGapDevice.deviceName + ":" + system.devices.xGapDevice.setpoint} label={'X Gap Max'}  prec={2} usePvUnits={true} />
 
 
             </Grid>
@@ -108,19 +108,19 @@ class ControlRightSlitXY extends React.Component {
             alignItems="start" spacing={1}>
 
             <Grid item xs={3}  >
-              <TextInput pv={'pva://' + system.devices.xOffsetDevice.deviceName + ":" + system.devices.xOffsetDevice.setpoint} usePrecision={true} prec={2} label={'X Offset Setpoint'} alarmSensitive={true} usePvUnits={true} usePvMinMax={true} />
+              <TextInput pv={'pva://' + system.devices.xOffsetDevice.deviceName + ":" + system.devices.xOffsetDevice.setpoint}  prec={2} label={'X Offset Setpoint'} alarmSensitive={true} usePvUnits={true} usePvMinMax={true} />
 
             </Grid>
             <Grid item xs={3}  >
-              <TextOutput pv={'pva://' + system.devices.xOffsetDevice.deviceName + ":" + system.devices.xOffsetDevice.readback} label={'X Offset Readback'} usePrecision={true} prec={2} usePvUnits={true} alarmSensitive={true} />
+              <TextOutput pv={'pva://' + system.devices.xOffsetDevice.deviceName + ":" + system.devices.xOffsetDevice.readback} label={'X Offset Readback'}  prec={2} usePvUnits={true} alarmSensitive={true} />
             </Grid>
             <Grid item xs={3}  >
-              <TextOutput displayMetaData={'lower_disp_limit'} pv={'pva://' + system.devices.xOffsetDevice.deviceName + ":" + system.devices.xOffsetDevice.setpoint} label={'X Offset Min'} usePrecision={true} prec={2} usePvUnits={true} />
+              <TextOutput displayMetaData={'lower_disp_limit'} pv={'pva://' + system.devices.xOffsetDevice.deviceName + ":" + system.devices.xOffsetDevice.setpoint} label={'X Offset Min'}  prec={2} usePvUnits={true} />
 
 
             </Grid>
             <Grid item xs={3}  >
-              <TextOutput displayMetaData={'upper_disp_limit'} pv={'pva://' + system.devices.xOffsetDevice.deviceName + ":" + system.devices.xOffsetDevice.setpoint} label={'X Offset Max'} usePrecision={true} prec={2} usePvUnits={true} />
+              <TextOutput displayMetaData={'upper_disp_limit'} pv={'pva://' + system.devices.xOffsetDevice.deviceName + ":" + system.devices.xOffsetDevice.setpoint} label={'X Offset Max'}  prec={2} usePvUnits={true} />
 
 
             </Grid>
@@ -157,19 +157,19 @@ class ControlRightSlitXY extends React.Component {
               justify="flex-start"
               alignItems="start" spacing={1}>
               <Grid item xs={3}  >
-                <TextInput pv={'pva://' + system.devices.yGapDevice.deviceName + ":" + system.devices.yGapDevice.setpoint} usePrecision={true} prec={2} label={'Y Gap Setpoint'} alarmSensitive={true} usePvUnits={true} usePvMinMax={true} />
+                <TextInput pv={'pva://' + system.devices.yGapDevice.deviceName + ":" + system.devices.yGapDevice.setpoint}  prec={2} label={'Y Gap Setpoint'} alarmSensitive={true} usePvUnits={true} usePvMinMax={true} />
 
               </Grid>
               <Grid item xs={3}  >
-                <TextOutput pv={'pva://' + system.devices.yGapDevice.deviceName + ":" + system.devices.yGapDevice.readback} label={'Y Gap Readback'} usePrecision={true} prec={2} usePvUnits={true} alarmSensitive={true} />
+                <TextOutput pv={'pva://' + system.devices.yGapDevice.deviceName + ":" + system.devices.yGapDevice.readback} label={'Y Gap Readback'}  prec={2} usePvUnits={true} alarmSensitive={true} />
               </Grid>
               <Grid item xs={3}  >
-                <TextOutput displayMetaData={'lower_disp_limit'} pv={'pva://' + system.devices.yGapDevice.deviceName + ":" + system.devices.yGapDevice.setpoint} label={'Y Gap Min'} usePrecision={true} prec={2} usePvUnits={true} />
+                <TextOutput displayMetaData={'lower_disp_limit'} pv={'pva://' + system.devices.yGapDevice.deviceName + ":" + system.devices.yGapDevice.setpoint} label={'Y Gap Min'}  prec={2} usePvUnits={true} />
 
 
               </Grid>
               <Grid item xs={3}  >
-                <TextOutput displayMetaData={'upper_disp_limit'} pv={'pva://' + system.devices.yGapDevice.deviceName + ":" + system.devices.yGapDevice.setpoint} label={'Y Gap Max'} usePrecision={true} prec={2} usePvUnits={true} />
+                <TextOutput displayMetaData={'upper_disp_limit'} pv={'pva://' + system.devices.yGapDevice.deviceName + ":" + system.devices.yGapDevice.setpoint} label={'Y Gap Max'}  prec={2} usePvUnits={true} />
 
 
               </Grid>
@@ -198,19 +198,19 @@ class ControlRightSlitXY extends React.Component {
               alignItems="start" spacing={1}>
 
               <Grid item xs={3}  >
-                <TextInput pv={'pva://' + system.devices.yOffsetDevice.deviceName + ":" + system.devices.yOffsetDevice.setpoint} usePrecision={true} prec={2} label={'Y Offset Setpoint'} alarmSensitive={true} usePvUnits={true} usePvMinMax={true} />
+                <TextInput pv={'pva://' + system.devices.yOffsetDevice.deviceName + ":" + system.devices.yOffsetDevice.setpoint}  prec={2} label={'Y Offset Setpoint'} alarmSensitive={true} usePvUnits={true} usePvMinMax={true} />
 
               </Grid>
               <Grid item xs={3}  >
-                <TextOutput pv={'pva://' + system.devices.yOffsetDevice.deviceName + ":" + system.devices.yOffsetDevice.readback} label={'Y Offset Readback'} usePrecision={true} prec={2} usePvUnits={true} alarmSensitive={true} />
+                <TextOutput pv={'pva://' + system.devices.yOffsetDevice.deviceName + ":" + system.devices.yOffsetDevice.readback} label={'Y Offset Readback'}  prec={2} usePvUnits={true} alarmSensitive={true} />
               </Grid>
               <Grid item xs={3}  >
-                <TextOutput displayMetaData={'lower_disp_limit'} pv={'pva://' + system.devices.yOffsetDevice.deviceName + ":" + system.devices.yOffsetDevice.setpoint} label={'Y Offset Min'} usePrecision={true} prec={2} usePvUnits={true} />
+                <TextOutput displayMetaData={'lower_disp_limit'} pv={'pva://' + system.devices.yOffsetDevice.deviceName + ":" + system.devices.yOffsetDevice.setpoint} label={'Y Offset Min'}  prec={2} usePvUnits={true} />
 
 
               </Grid>
               <Grid item xs={3}  >
-                <TextOutput displayMetaData={'upper_disp_limit'} pv={'pva://' + system.devices.yOffsetDevice.deviceName + ":" + system.devices.yOffsetDevice.setpoint} label={'Y Offset Max'} usePrecision={true} prec={2} usePvUnits={true} />
+                <TextOutput displayMetaData={'upper_disp_limit'} pv={'pva://' + system.devices.yOffsetDevice.deviceName + ":" + system.devices.yOffsetDevice.setpoint} label={'Y Offset Max'}  prec={2} usePvUnits={true} />
 
 
               </Grid>

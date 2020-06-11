@@ -59,17 +59,17 @@ class ControlRightEx1 extends React.Component {
               <TextInput   pv='pva://$(device):Setpoint'      macros={this.props['macros']}  label={'Setpoint:'} alarmSensitive={true}  usePvUnits={true}/>
             </Grid>
             <Grid item xs={6}>
-              <TextOutput  pv='pva://$(device):Readback'      macros={this.props['macros']}   usePrecision={true} prec={3} usePvUnits={true} alarmSensitive={true} label={'Readback'}/>
+              <TextOutput  pv='pva://$(device):Readback'      macros={this.props['macros']}    prec={3} usePvUnits={true} alarmSensitive={true} label={'Readback'}/>
             </Grid>
             <Grid item xs={6}>
               <SelectionInput  pv='pva://$(device):SimReadback.SCAN' macros={this.props['macros']}  label={'Scan rate'} useStringValue={true}/>
             </Grid>
             <Grid item xs={6}>
-              <TextOutput  pv='pva://$(device):SimReadback.OROC' macros={this.props['macros']} usePrecision={true}   label={'OROC'}/>
+              <TextOutput  pv='pva://$(device):SimReadback.OROC' macros={this.props['macros']}    label={'OROC'}/>
             </Grid>
 
             <Grid item xs={12}>
-              <SimpleSlider  pv='pva://$(device):Setpoint'      macros={this.props['macros']} usePvMinMax={true} min={1000} max={500} label={""} usePrecision={true} prec={3} />
+              <SimpleSlider  pv='pva://$(device):Setpoint'      macros={this.props['macros']} usePvMinMax={true} min={1000} max={500} label={""}  prec={3} />
             </Grid>
 
 

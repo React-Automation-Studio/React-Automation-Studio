@@ -456,7 +456,6 @@ ProgressBar.defaultProps = {
   alarmSensitive: false,
   min: 0,
   max: 100,
-  usePrecision: false,
   showValue: true,
   showTicks: true,
   aspectRatio: 1.75,

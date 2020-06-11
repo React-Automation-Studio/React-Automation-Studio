@@ -194,17 +194,17 @@ class Example1 extends React.Component {
                 <Grid item xs={12}>
                   <Grid container direction="row" item justify="center" spacing={2} alignItems="stretch">
                     <Grid item xs={6}  >
-                      <TextInput  pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}   usePvLabel={true} usePrecision={true} prec={3} alarmSensitive={true}/>
+                      <TextInput  pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}   usePvLabel={true}  prec={3} alarmSensitive={true}/>
                     </Grid>
                     <Grid item  xs={6}>
-                      <TextOutput  pv='pva://$(device):test3' macros={{'$(device)':'testIOC'}}   usePvLabel={true} usePrecision={true} prec={3} alarmSensitive={true}/>
+                      <TextOutput  pv='pva://$(device):test3' macros={{'$(device)':'testIOC'}}   usePvLabel={true}  prec={3} alarmSensitive={true}/>
                     </Grid>
                   </Grid>
                 </Grid>
 
                 <Grid item xs={6} sm={4} lg={3} >
 
-                  <Gauge  pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}   usePvLabel={true} usePrecision={true} prec={3} usePvMinMax={true} />
+                  <Gauge  pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}   usePvLabel={true}  prec={3} usePvMinMax={true} />
 
                 </Grid>
 
@@ -279,10 +279,10 @@ class Example1 extends React.Component {
                   <div style={{marginBottom:8}}>Settings</div>
                   <Grid container spacing={2} alignItems={'stretch'} direction={'row'} justify={'flex-start'}>
                     <Grid item xs={12} lg={4}>
-                      <TextInput   pv='pva://$(device):frequency' macros={{'$(device)':'testIOC'}}    usePvUnits={true} usePrecision={true} prec={1} usePvLabel={true}/>
+                      <TextInput   pv='pva://$(device):frequency' macros={{'$(device)':'testIOC'}}    usePvUnits={true}  prec={1} usePvLabel={true}/>
                     </Grid>
                     <Grid item xs={12} lg={4}>
-                      <TextInput   pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}    usePvUnits={true} usePrecision={true} usePvLabel={true}/>
+                      <TextInput   pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}    usePvUnits={true}  usePvLabel={true}/>
                     </Grid>
                   </Grid>
 

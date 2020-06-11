@@ -72,18 +72,18 @@ class SettingsSteererXY extends React.Component {
                 justify="flex-start"
                 alignItems="center" spacing={1}>
                 <Grid item xs={6}  >
-                  <TextInput   pv={'pva://'+system.devices.xDevice.deviceName+":"+system.devices.xDevice.setpoint}     usePrecision={true} prec={3}  label={'X Setpoint:'} alarmSensitive={true}  usePvUnits={true} usePvMinMax={true}/>
+                  <TextInput   pv={'pva://'+system.devices.xDevice.deviceName+":"+system.devices.xDevice.setpoint}      prec={3}  label={'X Setpoint:'} alarmSensitive={true}  usePvUnits={true} usePvMinMax={true}/>
 
                 </Grid>
                 <Grid item xs={6}  >
-                  <TextOutput style={{marginRight:10}} pv={'pva://'+system.devices.xDevice.deviceName+":"+system.devices.xDevice.readback}        usePrecision={true} prec={3} usePvUnits={true} alarmSensitive={true} label={'X Readback'}/>
+                  <TextOutput style={{marginRight:10}} pv={'pva://'+system.devices.xDevice.deviceName+":"+system.devices.xDevice.readback}         prec={3} usePvUnits={true} alarmSensitive={true} label={'X Readback'}/>
 
 
                 </Grid>
 
                 <Grid item xs={12}  >
 
-                  <SimpleSlider   pv={'pva://'+system.devices.xDevice.deviceName+":"+system.devices.xDevice.setpoint}     usePrecision={true} prec={3}  label={'X Setpoint:'} alarmSensitive={true}  usePvUnits={true} usePvMinMax={true}/>
+                  <SimpleSlider   pv={'pva://'+system.devices.xDevice.deviceName+":"+system.devices.xDevice.setpoint}      prec={3}  label={'X Setpoint:'} alarmSensitive={true}  usePvUnits={true} usePvMinMax={true}/>
                 </Grid>
 
 
@@ -158,18 +158,18 @@ class SettingsSteererXY extends React.Component {
                 justify="flex-start"
                 alignItems="center" spacing={1}>
                 <Grid item xs={6}  >
-                  <TextInput   pv={'pva://'+system.devices.yDevice.deviceName+":"+system.devices.yDevice.setpoint}     usePrecision={true} prec={3}  label={'X Setpoint:'} alarmSensitive={true}  usePvUnits={true} usePvMinMax={true}/>
+                  <TextInput   pv={'pva://'+system.devices.yDevice.deviceName+":"+system.devices.yDevice.setpoint}      prec={3}  label={'X Setpoint:'} alarmSensitive={true}  usePvUnits={true} usePvMinMax={true}/>
 
                 </Grid>
                 <Grid item xs={6}  >
-                  <TextOutput style={{marginRight:10}} pv={'pva://'+system.devices.yDevice.deviceName+":"+system.devices.yDevice.readback}        usePrecision={true} prec={3} usePvUnits={true} alarmSensitive={true} label={'X Readback'}/>
+                  <TextOutput style={{marginRight:10}} pv={'pva://'+system.devices.yDevice.deviceName+":"+system.devices.yDevice.readback}         prec={3} usePvUnits={true} alarmSensitive={true} label={'X Readback'}/>
 
 
                 </Grid>
 
                 <Grid item xs={12}  >
 
-                  <SimpleSlider   pv={'pva://'+system.devices.yDevice.deviceName+":"+system.devices.yDevice.setpoint}     usePrecision={true} prec={3}  label={'X Setpoint:'} alarmSensitive={true}  usePvUnits={true} usePvMinMax={true}/>
+                  <SimpleSlider   pv={'pva://'+system.devices.yDevice.deviceName+":"+system.devices.yDevice.setpoint}      prec={3}  label={'X Setpoint:'} alarmSensitive={true}  usePvUnits={true} usePvMinMax={true}/>
                 </Grid>
 
 

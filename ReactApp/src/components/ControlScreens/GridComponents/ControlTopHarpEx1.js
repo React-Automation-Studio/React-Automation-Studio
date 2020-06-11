@@ -246,7 +246,7 @@ class ControlTopHarpEx1 extends React.Component {
           xUnits={'A'}
           yUnits={'A'}
           prec={3}
-          usePrecision={true}
+          
           alarmSensitive={true}
           labelOffsetY={-27}
           labelOffsetX={0}
@@ -277,7 +277,7 @@ class ControlTopHarpEx1 extends React.Component {
                   xUnits={'A'}
                   yUnits={'A'}
                   prec={3}
-                  usePrecision={true}
+                  
                   alarmSensitive={true}
 
                   labelOffsetY={5}
@@ -309,7 +309,7 @@ class ControlTopHarpEx1 extends React.Component {
           xUnits={'A'}
           yUnits={'A'}
           prec={3}
-          usePrecision={true}
+          
           alarmSensitive={true}
           labelOffsetY={-27}
           labelOffsetX={0}
@@ -337,7 +337,7 @@ class ControlTopHarpEx1 extends React.Component {
           xUnits={'A'}
           yUnits={'A'}
           prec={3}
-          usePrecision={true}
+          
           alarmSensitive={true}
           labelOffsetY={-27}
           labelOffsetX={0}
@@ -381,7 +381,7 @@ class ControlTopHarpEx1 extends React.Component {
       cx={900}
       cy={100}
       prec={2}
-      usePrecision={true}
+      
       usePvUnits={true}
       usePvLabel={false}
       alarmSensitive={true}
@@ -411,7 +411,7 @@ class ControlTopHarpEx1 extends React.Component {
       cx={1300}
       cy={100}
       prec={2}
-      usePrecision={true}
+      
       usePvUnits={true}
       usePvLabel={false}
       alarmSensitive={true}

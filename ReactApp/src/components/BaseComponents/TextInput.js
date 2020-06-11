@@ -42,10 +42,10 @@ const TextInputComponent=(props)=> {
 
 
 
-  let style;
+ 
   const { classes } = props;
   const { initialized } = props;
-  const { theme } = props;
+  
   const { value } = props;
 
   let textFieldClassName;

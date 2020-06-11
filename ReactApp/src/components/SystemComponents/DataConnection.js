@@ -1,7 +1,7 @@
 import React from 'react'
 import AutomationStudioContext from './AutomationStudioContext';
-import deprecatedLocalPV from '../SystemComponents/deprecatedLocalPV';
-import deprecatedEpicsPV from '../SystemComponents/deprecatedEpicsPV';
+import DeprecatedLocalPV from '../SystemComponents/DeprecatedLocalPV';
+import DeprecatedEpicsPV from './DeprecatedEpicsPV';
 import { withStyles } from '@material-ui/core/styles';
 import uuid from 'uuid';
 const styles = theme => ({
@@ -62,7 +62,7 @@ class DataConnection extends React.Component {
 
       <React.Fragment  >
       {pv.includes('loc://')&&
-        <deprecatedLocalPV
+        <DeprecatedLocalPV
         localVariable={this.context.localVariables[pv]}
         value={typeof this.context.localVariables[pv]==='undefined'?undefined:this.context.localVariables[pv].value}
         initialValue={this.props.intialLocalVariableValue}
@@ -76,7 +76,7 @@ class DataConnection extends React.Component {
         />
       }
     {pv.includes('pva://')&&
-    <deprecatedEpicsPV
+    <DeprecatedEpicsPV
     pv={pv}
     macros={this.props.macros}
     usePrecision={this.props.usePrecision}
@@ -88,7 +88,7 @@ class DataConnection extends React.Component {
     newValueTrigger={this.props.newValueTrigger}
     />
   }
-  { (pv.includes('pva://')&&this.props.usePvLabel===true) && <deprecatedEpicsPV
+  { (pv.includes('pva://')&&this.props.usePvLabel===true) && <DeprecatedEpicsPV
 
   pv={pv.toString()+".DESC"}
   macros={this.props.macros}

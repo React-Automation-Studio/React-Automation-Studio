@@ -9,7 +9,7 @@ const styles = theme => ({
 
 });
 
-class deprecatedLocalPV extends React.Component {
+class DeprecatedLocalPV extends React.Component {
   constructor(props) {
     super(props);
 
@@ -263,5 +263,5 @@ class deprecatedLocalPV extends React.Component {
   }
 }
 
-deprecatedLocalPV.contextType=AutomationStudioContext;
-export default withStyles(styles)(deprecatedLocalPV)
+DeprecatedLocalPV.contextType=AutomationStudioContext;
+export default withStyles(styles)(DeprecatedLocalPV)

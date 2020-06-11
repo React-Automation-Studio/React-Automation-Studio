@@ -1,5 +1,5 @@
 import React from 'react'
-import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
+import AutomationStudioContext from './AutomationStudioContext';
 import { withStyles } from '@material-ui/core/styles';
 import { Redirect } from 'react-router-dom'
 import uuid from 'uuid';
@@ -11,7 +11,7 @@ const styles = theme => ({
 
 });
 
-class deprecatedEpicsPV extends React.Component {
+class DeprecatedEpicsPV extends React.Component {
   constructor(props) {
     super(props);
     if (this.props.debug){
@@ -326,5 +326,5 @@ class deprecatedEpicsPV extends React.Component {
     }
   }
 
-  deprecatedEpicsPV.contextType=AutomationStudioContext;
-  export default withStyles(styles)(deprecatedEpicsPV)
+  DeprecatedEpicsPV.contextType=AutomationStudioContext;
+  export default withStyles(styles)(DeprecatedEpicsPV)

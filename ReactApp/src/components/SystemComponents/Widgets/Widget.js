@@ -62,7 +62,7 @@ const math = create(all, config)
   }
 
   if (props.pvs) {
-    pvs.each((item) => {
+    pvs.forEach((item) => {
       ro = ro || item.readOnly;
     })
   }
@@ -227,7 +227,7 @@ const math = create(all, config)
       init = init&&pv.initialized;
     }
     if (props.pvs) {
-      pvs.each((item) => {
+      pvs.forEach((item) => {
         init = init && item.initialized;
       })
     }
@@ -313,7 +313,7 @@ const math = create(all, config)
    // console.log(pvArray, widgetProps)
     let pvs = [];
     if (typeof pvArray !== 'undefined') {
-      pvArray.each((item, index) => {
+      pvArray.forEach((item, index) => {
         let pv;
         let props;
         if (typeof item === Object) {

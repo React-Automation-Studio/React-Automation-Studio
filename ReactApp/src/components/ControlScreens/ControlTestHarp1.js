@@ -22,7 +22,6 @@ import SelectionInput from '../BaseComponents/SelectionInput';
 import HarpRangeSelection from '../SiteSpecificComponents/iThembaLABS/CompoundComponents/HarpRangeSelection';
 import ToggleButton from '../BaseComponents/ToggleButton';
 import ActionButton from '../BaseComponents/ActionButton';
-import ActionFanoutButton from '../BaseComponents/ActionFanoutButton';
 import ThumbWheel from '../BaseComponents/ThumbWheel';
 import ControlRightEx1 from '../ControlScreens/GridComponents/ControlRightEx1'
 import ControlRightSteererXY from '../ControlScreens/GridComponents/ControlRightSteererXY'
@@ -502,24 +501,26 @@ class ControlTestHarp1 extends React.Component {
                               <HarpRangeSelection onlyX={this.state.onlyX0} onlyY={this.state.onlyY0} key={'harpRangeSelectionx0'+this.state.x0SystemName} systemName={this.state.x0SystemName} label={'Range'}/>
                               <div style={{marginBottom:8}}>
                                 {((this.state.onlyY0===false)&&(this.state.onlyX0===false))&&
-                                  <ActionFanoutButton  key={'storex0'+this.state.x0SystemName} dataPVs={['pva://$(device):x_store_offset','pva://$(device):y_store_offset']}  macros={{'$(device)':this.state.x0SystemName}}     actionValue={"1"} actionString={"Store Offset"}/>
+                                  <ActionButton  key={'storex0'+this.state.x0SystemName} pvs={['pva://$(device):x_store_offset','pva://$(device):y_store_offset']}  macros={{'$(device)':this.state.x0SystemName}}     actionValue={"1"} actionString={"Store Offset"}/>
                                 }
                                 {((this.state.onlyY0===true)&&(this.state.onlyX0===false))&&
-                                  <ActionFanoutButton  key={'storex0'+this.state.x0SystemName} dataPVs={['pva://$(device):y_store_offset']}  macros={{'$(device)':this.state.x0SystemName}}     actionValue={"1"} actionString={"Store Offset"}/>
+                                  <ActionButton  key={'storex0'+this.state.x0SystemName} pvs={['pva://$(device):y_store_offset']}  macros={{'$(device)':this.state.x0SystemName}}     actionValue={"1"} actionString={"Store Offset"}/>
                                 }
                                 {((this.state.onlyY0===false)&&(this.state.onlyX0===true))&&
-                                  <ActionFanoutButton  key={'storex0'+this.state.x0SystemName} dataPVs={['pva://$(device):x_store_offset']}  macros={{'$(device)':this.state.x0SystemName}}     actionValue={"1"} actionString={"Store Offset"}/>
+                                  <ActionButton  key={'storex0'+this.state.x0SystemName} pvs={['pva://$(device):x_store_offset']}  macros={{'$(device)':this.state.x0SystemName}}     actionValue={"1"} actionString={"Store Offset"}/>
                                 }
                               </div>
+                              <div style={{marginBottom:8}}>
                               {((this.state.onlyY0===false)&&(this.state.onlyX0===false))&&
-                                <ActionFanoutButton key={'clearx0'+this.state.x0SystemName}  dataPVs={['pva://$(device):x_store_offset','pva://$(device):y_store_offset']}  macros={{'$(device)':this.state.x0SystemName}}     actionValue={"0"} actionString={"Clear Offset"}/>
+                                <ActionButton key={'clearx0'+this.state.x0SystemName}  pvs={['pva://$(device):x_store_offset','pva://$(device):y_store_offset']}  macros={{'$(device)':this.state.x0SystemName}}     actionValue={"0"} actionString={"Clear Offset"}/>
                               }
                               {((this.state.onlyY0===true)&&(this.state.onlyX0===false))&&
-                                <ActionFanoutButton key={'clearx0'+this.state.x0SystemName}  dataPVs={['pva://$(device):y_store_offset']}  macros={{'$(device)':this.state.x0SystemName}}     actionValue={"0"} actionString={"Clear Offset"}/>
+                                <ActionButton key={'clearx0'+this.state.x0SystemName}  pvs={['pva://$(device):y_store_offset']}  macros={{'$(device)':this.state.x0SystemName}}     actionValue={"0"} actionString={"Clear Offset"}/>
                               }
                               {((this.state.onlyY0===false)&&(this.state.onlyX0===true))&&
-                                <ActionFanoutButton key={'clearx0'+this.state.x0SystemName}  dataPVs={['pva://$(device):x_store_offset']}  macros={{'$(device)':this.state.x0SystemName}}     actionValue={"0"} actionString={"Clear Offset"}/>
+                                <ActionButton key={'clearx0'+this.state.x0SystemName}  pvs={['pva://$(device):x_store_offset']}  macros={{'$(device)':this.state.x0SystemName}}     actionValue={"0"} actionString={"Clear Offset"}/>
                               }
+                              </div>
 
                             </React.Fragment>}
 
@@ -591,24 +592,26 @@ class ControlTestHarp1 extends React.Component {
                                 <HarpRangeSelection onlyX={this.state.onlyX1} onlyY={this.state.onlyY1} key={'harpRangeSelectionx1'+this.state.x1SystemName} systemName={this.state.x1SystemName} label={'Range'}/>
                                 <div style={{marginBottom:8}}>
                                   {((this.state.onlyY1===false)&&(this.state.onlyX1===false))&&
-                                    <ActionFanoutButton  key={'storex1'+this.state.x1SystemName} dataPVs={['pva://$(device):x_store_offset','pva://$(device):y_store_offset']}  macros={{'$(device)':this.state.x1SystemName}}     actionValue={"1"} actionString={"Store Offset"}/>
+                                    <ActionButton  key={'storex1'+this.state.x1SystemName} pvs={['pva://$(device):x_store_offset','pva://$(device):y_store_offset']}  macros={{'$(device)':this.state.x1SystemName}}     actionValue={"1"} actionString={"Store Offset"}/>
                                   }
                                   {((this.state.onlyY1===true)&&(this.state.onlyX1===false))&&
-                                    <ActionFanoutButton  key={'storex1'+this.state.x1SystemName} dataPVs={['pva://$(device):y_store_offset']}  macros={{'$(device)':this.state.x1SystemName}}     actionValue={"1"} actionString={"Store Offset"}/>
+                                    <ActionButton  key={'storex1'+this.state.x1SystemName} pvs={['pva://$(device):y_store_offset']}  macros={{'$(device)':this.state.x1SystemName}}     actionValue={"1"} actionString={"Store Offset"}/>
                                   }
                                   {((this.state.onlyY1===false)&&(this.state.onlyX1===true))&&
-                                    <ActionFanoutButton  key={'storex1'+this.state.x1SystemName} dataPVs={['pva://$(device):x_store_offset']}  macros={{'$(device)':this.state.x1SystemName}}     actionValue={"1"} actionString={"Store Offset"}/>
+                                    <ActionButton  key={'storex1'+this.state.x1SystemName} pvs={['pva://$(device):x_store_offset']}  macros={{'$(device)':this.state.x1SystemName}}     actionValue={"1"} actionString={"Store Offset"}/>
                                   }
                                 </div>
+                                <div style={{marginBottom:8}}>
                                 {((this.state.onlyY1===false)&&(this.state.onlyX1===false))&&
-                                  <ActionFanoutButton key={'clearx1'+this.state.x1SystemName}  dataPVs={['pva://$(device):x_store_offset','pva://$(device):y_store_offset']}  macros={{'$(device)':this.state.x1SystemName}}     actionValue={"0"} actionString={"Clear Offset"}/>
+                                  <ActionButton key={'clearx1'+this.state.x1SystemName}  pvs={['pva://$(device):x_store_offset','pva://$(device):y_store_offset']}  macros={{'$(device)':this.state.x1SystemName}}     actionValue={"0"} actionString={"Clear Offset"}/>
                                 }
                                 {((this.state.onlyY1===true)&&(this.state.onlyX1===false))&&
-                                  <ActionFanoutButton key={'clearx1'+this.state.x1SystemName}  dataPVs={['pva://$(device):y_store_offset']}  macros={{'$(device)':this.state.x1SystemName}}     actionValue={"0"} actionString={"Clear Offset"}/>
+                                  <ActionButton key={'clearx1'+this.state.x1SystemName}  pvs={['pva://$(device):y_store_offset']}  macros={{'$(device)':this.state.x1SystemName}}     actionValue={"0"} actionString={"Clear Offset"}/>
                                 }
                                 {((this.state.onlyY1===false)&&(this.state.onlyX1===true))&&
-                                  <ActionFanoutButton key={'clearx1'+this.state.x1SystemName}  dataPVs={['pva://$(device):x_store_offset']}  macros={{'$(device)':this.state.x1SystemName}}     actionValue={"0"} actionString={"Clear Offset"}/>
+                                  <ActionButton key={'clearx1'+this.state.x1SystemName}  pvs={['pva://$(device):x_store_offset']}  macros={{'$(device)':this.state.x1SystemName}}     actionValue={"0"} actionString={"Clear Offset"}/>
                                 }
+                                </div>
                               </React.Fragment>}
 
 

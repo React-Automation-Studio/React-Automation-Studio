@@ -62,12 +62,13 @@ const math = create(all, config)
   }
 
   if (props.pvs) {
-    pvs.map((item) => {
+    pvs.each((item) => {
       ro = ro || item.readOnly;
     })
   }
   
     setReadOnly(ro)
+     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pv, props.readOnly,pvs,])
 
   useEffect(() => {
@@ -90,7 +91,7 @@ const math = create(all, config)
     else {
       setLabel(props.label)
     }
-
+     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.label, pv.label])
 
   useEffect(() => {
@@ -105,6 +106,7 @@ const math = create(all, config)
     else {
       setUnits(props.units)
     }
+     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.units, pv.units])
 
   useEffect(() => {
@@ -114,6 +116,7 @@ const math = create(all, config)
     else {
       setPrec(props.prec)
     }
+     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.prec, pv.prec, props.usePvPrecision])
 
   useEffect(() => {
@@ -125,7 +128,7 @@ const math = create(all, config)
       setMin(props.min)
       setMax(props.max)
     }
-
+ // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.min, props.max, pv.min, pv.max])
 
   useEffect(() => {
@@ -141,17 +144,18 @@ const math = create(all, config)
       }
       
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [focus, pv.value, prec])
 
   useEffect(() => {
     let newSeverity=pv.severity;
     if (typeof props.useStringSeverityMatch !== 'undefined'){
-      if (props.useStringSeverityMatch==true){
+      if (props.useStringSeverityMatch===true){
 
         if (typeof props.StringSeverity !== 'undefined'){
           let string;
           for (string in props.StringSeverity){
-            
+            // eslint-disable-next-line eqeqeq
             if (value==props.StringSeverity[string].stringMatch){
               newSeverity=props.StringSeverity[string].severity;
               break;
@@ -182,6 +186,7 @@ const math = create(all, config)
       setNewValueTrigger(newValueTrigger + 1);
       setImmediateValue(null);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [immediateValue, min, max, prec])
   
  
@@ -200,6 +205,8 @@ const math = create(all, config)
       setNewValueTrigger(newValueTrigger + 1);
       SetCommitChange(false)
     }
+    
+// eslint-disable-next-line react-hooks/exhaustive-deps
   }, [commitChange, min, max, prec])
   useEffect(() => {
     if (props.custom_selection_strings) {
@@ -220,14 +227,14 @@ const math = create(all, config)
       init = init&&pv.initialized;
     }
     if (props.pvs) {
-      pvs.map((item) => {
+      pvs.each((item) => {
         init = init && item.initialized;
       })
     }
      
       setInitalized(init)
     
-    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pv.initialized, pvs])
   useEffect(()=>{
     if (typeof props.usePrecision!=='undefined'){
@@ -306,7 +313,7 @@ const math = create(all, config)
    // console.log(pvArray, widgetProps)
     let pvs = [];
     if (typeof pvArray !== 'undefined') {
-      pvArray.map((item, index) => {
+      pvArray.each((item, index) => {
         let pv;
         let props;
         if (typeof item === Object) {

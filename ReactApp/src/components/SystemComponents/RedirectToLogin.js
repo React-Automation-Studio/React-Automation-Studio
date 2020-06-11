@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 
-import PropTypes from 'prop-types';
 
 
 // Styles
@@ -58,8 +57,6 @@ class RedirectToLogIn extends Component {
 
   render() {
 
-//console.log("redirectToLogIn",this.state.redirectToLoginPage)
-    const { classes } = this.props;
 
     return (
       <React.Fragment>

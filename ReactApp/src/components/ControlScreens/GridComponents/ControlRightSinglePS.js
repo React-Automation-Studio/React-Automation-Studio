@@ -13,7 +13,8 @@ import ThumbWheel from '../../BaseComponents/ThumbWheel';
 import Close from '@material-ui/icons/Close';
 import Paper from '@material-ui/core/Paper';
 //import MenuItem from '@material-ui/core/MenuItem';
-
+/* eslint-disable eqeqeq */
+/* eslint-disable no-unused-vars */
 const styles = theme => ({
   body1: theme.typography.body1,
 

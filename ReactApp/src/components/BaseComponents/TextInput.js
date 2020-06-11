@@ -50,7 +50,7 @@ const TextInputComponent=(props)=> {
 
   let textFieldClassName;
   if (typeof props.alarmSensitive !== 'undefined') {
-    if (props.alarmSensitive == true) {
+    if (props.alarmSensitive === true) {
       if (props.alarmSeverity ===1) {
         textFieldClassName = classes.TextFieldSeverity1;
 

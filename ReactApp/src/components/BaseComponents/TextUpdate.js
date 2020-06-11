@@ -18,25 +18,25 @@ const styles = (theme) => ({
     borderColor:grey[50],
   },
   TextFieldSeverity1: {
-    borderColor:theme.palette.type=='dark'?grey[700]:grey[300],
+    borderColor:theme.palette.type==='dark'?grey[700]:grey[300],
     borderRadius: 2,
     borderWidth: 1,
     borderStyle:'solid',
    
     padding:1,
     //background:theme.palette.alarm.minor.main,
-    background:'linear-gradient(45deg,'+  fade(theme.palette.alarm.minor.dark,theme.palette.type=='dark'?0.2:0.1)+ ' 0%, '+ (theme.palette.alarm.minor.dark) +' 100%)'
+    background:'linear-gradient(45deg,'+  fade(theme.palette.alarm.minor.dark,theme.palette.type==='dark'?0.2:0.1)+ ' 0%, '+ (theme.palette.alarm.minor.dark) +' 100%)'
     //  background:'linear-gradient(45deg, '+ theme.palette.background.default+ ' 1%, '+deepOrange['400'] +' 99%)'
   },
   TextFieldSeverity2: {
-    borderColor:theme.palette.type=='dark'?grey[700]:grey[300],
+    borderColor:theme.palette.type==='dark'?grey[700]:grey[300],
     borderWidth: 1,
     borderStyle:'solid',
     borderRadius: 2,
     
     padding:1,
     //background:theme.palette.alarm.major.main,
-    background:'linear-gradient(45deg,'+ fade(theme.palette.alarm.major.dark,theme.palette.type=='dark'?0.2:0.1)+ ' 0%, '+ (theme.palette.alarm.major.dark) +' 100%)'
+    background:'linear-gradient(45deg,'+ fade(theme.palette.alarm.major.dark,theme.palette.type==='dark'?0.2:0.1)+ ' 0%, '+ (theme.palette.alarm.major.dark) +' 100%)'
     //  backgroundColor:'linear-gradient(45deg, #FFFFFF 1%, #FF8E53 99%)'
     //  background:'linear-gradient(45deg, '+ theme.palette.background.default+ ' 1%, '+red['800'] +' 99%)'
   }
@@ -50,12 +50,12 @@ const TextUpdateComponent=(props)=> {
   let units = props.units !== undefined ? props.units + " " : "";
   let content;
   if (props.initialized) {
-    if (props.alarmSensitive==true){
-      if (props.alarmSeverity==1){
+    if (props.alarmSensitive===true){
+      if (props.alarmSeverity===1){
         textFieldClassName=classes.TextFieldSeverity1;
         //  background_color='linear-gradient(45deg, #FFFFFF 1%, #FF8E53 99%)';
       }
-      else if(props.alarmSeverity==2){
+      else if(props.alarmSeverity===2){
         textFieldClassName=classes.TextFieldSeverity2;
         //  background_color='linear-gradient(45deg, #FFFFFF 1%, #E20101 99%)';
       }

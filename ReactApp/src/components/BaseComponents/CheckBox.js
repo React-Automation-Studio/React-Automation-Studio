@@ -37,6 +37,7 @@ const CheckBoxComponent = (props) => {
 
 
   return (
+    /* eslint-disable eqeqeq */
     <FormControlLabel
       key={props.pvName}
       className={props.classes.FormControl}
@@ -51,6 +52,7 @@ const CheckBoxComponent = (props) => {
         />
       }
     />
+    /* eslint-enable eqeqeq */
   );
 
 }

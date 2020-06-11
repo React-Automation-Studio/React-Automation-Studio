@@ -98,7 +98,7 @@ function getTickValues(props, min, max, numberOfTicks, x0, y0, x1, x2, y1, y2, x
           y={yOffset - 4}
           textAnchor={'middle'}
         >
-          {props.disabled == false ? parseFloat(value).toFixed(0) + units : ''}{}
+          {props.disabled === false ? parseFloat(value).toFixed(0) + units : ''}{}
         </text>
       </g>
 
@@ -143,7 +143,7 @@ function TankComponent(props) {
   const width = props.width;
   const aspectRatio = props.aspectRatio;
   let height;
-  if (props.lockAspectRatio == true) {
+  if (props.lockAspectRatio === true) {
     height = props.width / aspectRatio;
   }
   else {
@@ -160,12 +160,12 @@ function TankComponent(props) {
 
   let color;
   if (props.initialized) {
-    if (props.alarmSensitive == true) {
-      if (props.alarmSeverity == 1) {
+    if (props.alarmSensitive === true) {
+      if (props.alarmSeverity === 1) {
 
         color = props.theme.palette.alarm.minor.dark;
       }
-      else if (props.alarmSeverity == 2) {
+      else if (props.alarmSeverity === 2) {
         color = props.theme.palette.alarm.major.dark;
       }
       else {

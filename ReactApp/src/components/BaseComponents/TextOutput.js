@@ -109,12 +109,12 @@ function TextOutputComponent(props) {
 
   let textFieldClassName;
   if (typeof props.alarmSensitive !== 'undefined') {
-    if (props.alarmSensitive == true) {
-      if (props.alarmSeverity == 1) {
+    if (props.alarmSensitive === true) {
+      if (props.alarmSeverity === 1) {
         textFieldClassName = classes.TextFieldSeverity1;
 
       }
-      else if (props.alarmSeverity == 2) {
+      else if (props.alarmSeverity === 2) {
         textFieldClassName = classes.TextFieldSeverity2;
 
       }

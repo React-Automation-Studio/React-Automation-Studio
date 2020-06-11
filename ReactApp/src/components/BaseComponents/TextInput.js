@@ -18,12 +18,12 @@ const styles = (theme) => ({
   TextFieldSeverity1: {
     width: '100%',
     borderRadius: 4,
-    background:'linear-gradient(45deg,'+  fade(theme.palette.alarm.minor.dark,theme.palette.type=='dark'?0.1:0.1)+ ' 0%, '+ (theme.palette.alarm.minor.dark) +' 100%)'
+    background:'linear-gradient(45deg,'+  fade(theme.palette.alarm.minor.dark,theme.palette.type==='dark'?0.1:0.1)+ ' 0%, '+ (theme.palette.alarm.minor.dark) +' 100%)'
   },
   TextFieldSeverity2: {
     width: '100%',
     borderRadius: 4,
-    background:'linear-gradient(45deg,'+ fade(theme.palette.alarm.major.dark,theme.palette.type=='dark'?0.2:0.1)+ ' 0%, '+ (theme.palette.alarm.major.dark) +' 100%)'
+    background:'linear-gradient(45deg,'+ fade(theme.palette.alarm.major.dark,theme.palette.type==='dark'?0.2:0.1)+ ' 0%, '+ (theme.palette.alarm.major.dark) +' 100%)'
   }
 });
 
@@ -51,11 +51,11 @@ const TextInputComponent=(props)=> {
   let textFieldClassName;
   if (typeof props.alarmSensitive !== 'undefined') {
     if (props.alarmSensitive == true) {
-      if (props.alarmSeverity == 1) {
+      if (props.alarmSeverity ===1) {
         textFieldClassName = classes.TextFieldSeverity1;
 
       }
-      else if (props.alarmSeverity == 2) {
+      else if (props.alarmSeverity ===2) {
         textFieldClassName = classes.TextFieldSeverity2;
 
       }

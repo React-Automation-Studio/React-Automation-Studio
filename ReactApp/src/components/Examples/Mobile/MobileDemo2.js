@@ -1,21 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
-import EpicsBinaryOutDebug from '../../GroupedComponents/EpicsBinaryOutDebug';
-import EpicsAnalogOutDebug from '../../GroupedComponents/EpicsAnalogOutDebug';
-import EpicsMbboDebug from '../../GroupedComponents/EpicsMbboDebug';
-import TextUpdate from '../../BaseComponents/TextUpdate';
+
 import TextInput from '../../BaseComponents/TextInput';
 import TextOutput from '../../BaseComponents/TextOutput';
 import SimpleSlider from '../../BaseComponents/SimpleSlider';
 import GraphY from '../../BaseComponents/GraphY';
 
 import Grid from '@material-ui/core/Grid';
-import DataConnection from '../../SystemComponents/DataConnection';
+
 import SwitchComponent from '../../BaseComponents/SwitchComponent';
 import SelectionInput from '../../BaseComponents/SelectionInput';
 import SelectionList from '../../BaseComponents/SelectionList';
@@ -29,8 +22,7 @@ import Gauge from '../../BaseComponents/Gauge';
 import Tank from '../../BaseComponents/Tank';
 import ProgressBar from '../../BaseComponents/ProgressBar';
 import StyledIconIndicator from '../../BaseComponents/StyledIconIndicator';
-import lime from '@material-ui/core/colors/lime';
-import SideBar from '../../SystemComponents/SideBar';
+
 import TraditionalLayout from '../../UI/Layout/ComposedLayouts/TraditionalLayout.js';
 const styles = theme => ({
   root: {

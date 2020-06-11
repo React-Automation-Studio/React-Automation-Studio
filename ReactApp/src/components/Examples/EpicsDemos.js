@@ -1,31 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+
 import Typography from '@material-ui/core/Typography';
 import EpicsBinaryOutDebug from '../GroupedComponents/EpicsBinaryOutDebug';
 import EpicsAnalogOutDebug from '../GroupedComponents/EpicsAnalogOutDebug';
 import EpicsStringOutDebug from '../GroupedComponents/EpicsStringOutDebug';
 import EpicsMbboDebug from '../GroupedComponents/EpicsMbboDebug';
-import TextUpdate from '../BaseComponents/TextUpdate';
-import TextInput from '../BaseComponents/TextInput';
+
 import TextOutput from '../BaseComponents/TextOutput';
 import SimpleSlider from '../BaseComponents/SimpleSlider';
 import GraphY from '../BaseComponents/GraphY';
-import ThumbWheel from '../BaseComponents/ThumbWheel';
+
 import Grid from '@material-ui/core/Grid';
-import DataConnection from '../SystemComponents/DataConnection';
-import Gauge from '../BaseComponents/Gauge';
+
 import Card from '@material-ui/core/Card';
-import SwitchComponent from '../BaseComponents/SwitchComponent';
-import StyledIconButton from '../BaseComponents/StyledIconButton';
-import SideBar from '../SystemComponents/SideBar';
+
 import MobileDemo2 from './Mobile/MobileDemo2';
 import TraditionalLayout from '../UI/Layout/ComposedLayouts/TraditionalLayout.js';
-import lime from '@material-ui/core/colors/lime';
-import {Link} from 'react-router-dom'
+
 function TabContainer(props) {
   return (
     <Typography component="div" style={{ padding: 8 * 1 ,paddingTop:36}}>
@@ -49,9 +42,7 @@ const styles = theme => ({
   },
 });
 
-const hiddenstyle ={
-  display:'none'
-}
+
 
 class EpicsDemos extends React.Component {
   state = {

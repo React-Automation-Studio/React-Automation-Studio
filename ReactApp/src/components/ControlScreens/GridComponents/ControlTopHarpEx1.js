@@ -1,15 +1,6 @@
 import React from 'react'
 
 import AutomationStudioContext from '../../SystemComponents/AutomationStudioContext';
-import TextInput from '../../BaseComponents/TextInput';
-import SelectionInput from '../../BaseComponents/SelectionInput';
-import TextOutput from '../../BaseComponents/TextOutput';
-import SimpleSlider from '../../BaseComponents/SimpleSlider';
-import TextUpdate from '../../BaseComponents/TextUpdate';
-import Grid from '@material-ui/core/Grid';
-import SwitchComponent from '../../BaseComponents/SwitchComponent';
-import ToggleButton from '../../BaseComponents/ToggleButton';
-import ActionButton from '../../BaseComponents/ActionButton';
 import QuadrapoleMagnet from '../../iThembaLabsSvgComponents/QuadrapoleMagnet';
 import Harp from '../../iThembaLabsSvgComponents/Harp';
 import FC from '../../iThembaLabsSvgComponents/FC';

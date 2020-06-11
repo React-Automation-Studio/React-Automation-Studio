@@ -13,10 +13,10 @@ class SteererMagnet extends React.Component {
     outputValue : "",
     hasFocus:false,
     label:"Undefined",
-    ['pvname']:"Undefined",
+    pvname:"Undefined",
     ['intialized']:false,
     metadata:{},
-    ['severity']:''
+    severity:''
   }
   this.handleOnClick= this.handleOnClick.bind(this);
   this.handleInputValue= this.handleInputValue.bind(this);
@@ -50,9 +50,9 @@ handleMetadata(metadata){
 handleInputValue(inputValue,pvname,initialized,severity){
 
   this.setState({value	 :inputValue,
-  ['pvname']:pvname,
+  pvname:pvname,
   initialized:initialized,
-  ['severity']:severity});
+  severity:severity});
 
 }
 

@@ -88,7 +88,7 @@ class DeprecatedEpicsPV extends React.Component {
       if (msg.newmetadata=='False'){
         this.setState({
           ['internalValue']: this.props.useStringValue===true? msg.char_value:msg.value,
-          ['severity']: msg.severity,
+          severity: msg.severity,
           ['timestamp']: msg.timestamp},
           this.handleInputValue);
         }
@@ -98,7 +98,7 @@ class DeprecatedEpicsPV extends React.Component {
             lower_warning_limit:msg.lower_warning_limit,upper_warning_limit: msg.upper_warning_limit,lower_ctrl_limit:msg.lower_ctrl_limit,upper_ctrl_limit:msg.upper_ctrl_limit,units: msg.units,precision: parseInt(msg.precision),severity:msg.severity, write_access:msg.write_access,read_access:msg.read_access, host:msg.host},
             ['internalValue']: this.props.useStringValue===true? msg.char_value:msg.value,
             initialized:true ,
-            ['severity']: msg.severity,
+            severity: msg.severity,
             ['timestamp']: msg.timestamp},
             this.handleMetadata
           );

@@ -24,10 +24,7 @@ const styles = theme => ({
 });
 
 class SettingsSinglePS extends React.Component {
-  constructor(props) {
-    super(props);
-
-  }
+  
 
 
 

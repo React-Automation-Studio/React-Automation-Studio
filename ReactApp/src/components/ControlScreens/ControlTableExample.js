@@ -286,11 +286,11 @@ class ControlTableExample extends React.Component {
           </Grid>
 
           <Grid item xs={12} sm={4} md={4} lg={3}>
-            {((this.state.displayEditor === true) && (this.state['editorMacros']['$(device)'] === 'testIOC:PS1')) && <ControlRightEx1 macros={this.state['editorMacros']} handleCloseEditor={this.handleCloseEditor} />}
-            {((this.state.displayEditor === true) && (this.state['editorMacros']['$(device)'] === 'testIOC:PS2')) && <ControlRightEx1 macros={this.state['editorMacros']} handleCloseEditor={this.handleCloseEditor} />}
-            {((this.state.displayEditor === true) && (this.state['editorMacros']['$(device)'] === 'testIOC:PS3')) && <ControlRightEx1 macros={this.state['editorMacros']} handleCloseEditor={this.handleCloseEditor} />}
-            {((this.state.displayEditor === true) && (this.state['editorMacros']['$(device)'] === 'testIOC:PS4')) && <ControlRightEx1 macros={this.state['editorMacros']} handleCloseEditor={this.handleCloseEditor} />}
-            {((this.state.displayEditor === true) && (this.state['editorMacros']['$(device)'] === 'testIOC:STR1:X')) && <ControlRightEx1 macros={this.state['editorMacros']} handleCloseEditor={this.handleCloseEditor} />}
+            {((this.state.displayEditor === true) && (this.state.editorMacros['$(device)'] === 'testIOC:PS1')) && <ControlRightEx1 macros={this.state.editorMacros} handleCloseEditor={this.handleCloseEditor} />}
+            {((this.state.displayEditor === true) && (this.state.editorMacros['$(device)'] === 'testIOC:PS2')) && <ControlRightEx1 macros={this.state.editorMacros} handleCloseEditor={this.handleCloseEditor} />}
+            {((this.state.displayEditor === true) && (this.state.editorMacros['$(device)'] === 'testIOC:PS3')) && <ControlRightEx1 macros={this.state.editorMacros} handleCloseEditor={this.handleCloseEditor} />}
+            {((this.state.displayEditor === true) && (this.state.editorMacros['$(device)'] === 'testIOC:PS4')) && <ControlRightEx1 macros={this.state.editorMacros} handleCloseEditor={this.handleCloseEditor} />}
+            {((this.state.displayEditor === true) && (this.state.editorMacros['$(device)'] === 'testIOC:STR1:X')) && <ControlRightEx1 macros={this.state.editorMacros} handleCloseEditor={this.handleCloseEditor} />}
             {((this.state.displayEditor === true) && (this.state.editorType === 'oldPS')) && <ControlRightEx1 key={'editor-key' + this.state.editorSystem.systemName} macros={{ '$(device)': this.state.editorSystem.systemName }} handleCloseEditor={this.handleCloseEditor} />}
             {((this.state.displayEditor === true) && (this.state.editorType === 'steererXY')) && <ControlRightSteererXY key={'editor-key' + this.state.editorSystem.systemName} system={this.state.editorSystem} handleCloseEditor={this.handleCloseEditor} />}
             {((this.state.displayEditor === true) && (this.state.editorType === 'singlePS')) && <ControlRightSinglePS key={'editor-key' + this.state.editorSystem.systemName} system={this.state.editorSystem} handleCloseEditor={this.handleCloseEditor} />}

@@ -132,6 +132,8 @@ class HarpRangeSelection extends React.Component {
       case '200 - 2000 pA':
         value = 6;
         break;
+      default :
+        //
 
 
       // code block
@@ -209,6 +211,8 @@ class HarpRangeSelection extends React.Component {
           value = '200 - 2000 pA';
           break;
 
+        default:
+
 
         // code block
       }
@@ -234,12 +238,6 @@ class HarpRangeSelection extends React.Component {
 
 
 
-    const style = {
-      background: 'white',
-      borderRadius: 4,
-
-    };
-
 
 
 
@@ -247,16 +245,14 @@ class HarpRangeSelection extends React.Component {
 
 
     let write_access = false;
-    let read_access = false;
+    
     if (initialized) {
 
       if (typeof this.state.xrange.metadata !== 'undefined') {
         if (typeof this.state.xrange.metadata.write_access !== 'undefined') {
           write_access = this.state.xrange.metadata.write_access;
         }
-        if (typeof this.state.xrange.metadata.read_access !== 'undefined') {
-          read_access = this.state.xrange.metadata.read_access;
-        }
+       
       }
     }
 

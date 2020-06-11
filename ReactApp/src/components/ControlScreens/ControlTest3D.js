@@ -54,7 +54,7 @@ handlePsOnClick(name){
   //  console.log("in control test1 clicked "+name.toString());
   this.setState({editorType:'PS',
   displayEditor:true,
-  ['editorMacros']:{'$(device)':name}});
+  editorMacros:{'$(device)':name}});
 
   //  this.setState({ ['clicked']: 1});
 }
@@ -105,9 +105,9 @@ render() {
         </Grid>
 
         <Grid item sm={3} >
-          {((this.state.displayEditor===true) &&(this.state['editorMacros']['$(device)']==='testIOC:PS1'))&&<ControlRightEx1 macros={this.state['editorMacros']}/>}
-          {((this.state.displayEditor===true) &&(this.state['editorMacros']['$(device)']==='testIOC:PS2'))&&<ControlRightEx1 macros={this.state['editorMacros']}/>}
-          {((this.state.displayEditor===true) &&(this.state['editorMacros']['$(device)']==='testIOC:PS3'))&&<ControlRightEx1 macros={this.state['editorMacros']}/>}
+          {((this.state.displayEditor===true) &&(this.state.editorMacros['$(device)']==='testIOC:PS1'))&&<ControlRightEx1 macros={this.state.editorMacros}/>}
+          {((this.state.displayEditor===true) &&(this.state.editorMacros['$(device)']==='testIOC:PS2'))&&<ControlRightEx1 macros={this.state.editorMacros}/>}
+          {((this.state.displayEditor===true) &&(this.state.editorMacros['$(device)']==='testIOC:PS3'))&&<ControlRightEx1 macros={this.state.editorMacros}/>}
         </Grid>
       </Grid>
 

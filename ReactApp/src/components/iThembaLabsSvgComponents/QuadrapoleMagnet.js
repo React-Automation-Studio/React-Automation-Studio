@@ -92,9 +92,9 @@ handleMetadata(metadata){
 handleInputValue(inputValue,pvname,initialized,severity){
 
   this.setState({value	 :inputValue,
-  ['pvname']:pvname,
+  pvname:pvname,
   initialized:initialized,
-  ['severity']:severity});
+  severity:severity});
 
 }
 
@@ -117,31 +117,15 @@ render() {
   const pv = this.props.pv;
   const macros=  this.props.macros;
   const usePvLabel= this.props.usePvLabel;
-  const mylabel= this.props.label;
+ 
   const usePrecision= this.props.prec;
   const useStringValue=this.props.useStringValue;
   const severity=this.state.severity;
-  let units="";
+  
   const initialized=this.state.initialized;
   let value=this.state.value;
   if(initialized){
-    if(this.props.usePvUnits===true){
-      if (typeof this.state.metadata !== 'undefined'){
-        if (typeof this.state.metadata.units !== 'undefined'){
-          units=this.state.metadata.units;
-        }
-        else{
-          units="";
-        }
-      }
-      else {
-        units="";
-      }
-
-    }
-    else {
-      units=this.props.units;
-    }
+    
 
 
     if (typeof this.props.usePrecision !== 'undefined'){
@@ -160,19 +144,7 @@ render() {
 
 
 
-  let background_color='';
-  if (typeof this.props.alarmSensitive !== 'undefined'){
-    if (this.props.alarmSensitive==true){
-      if (severity==1){
-        background_color='linear-gradient(45deg, #FFFFFF 1%, #FF8E53 99%)';
-      }
-      else if(severity==2){
-        background_color='linear-gradient(45deg, #FFFFFF 1%, #E20101 99%)';
-      }
-      else background_color='white';
-    }
-
-  }
+  
 
   let color='';
   if (typeof this.props.alarmSensitive !== 'undefined'){
@@ -196,11 +168,7 @@ render() {
 
 
 
-  const style = {
-    background: background_color,
-    borderRadius: 4,
-
-  };
+  
 
 
   return (

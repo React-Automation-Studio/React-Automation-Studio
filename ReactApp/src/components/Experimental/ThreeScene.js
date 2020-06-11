@@ -84,7 +84,7 @@ componentDidMount(){
   this.mount.appendChild(this.renderer.domElement)
 
   //ADD CUBE
-  const radius = 50;
+  //const radius = 50;
   //const geometry = new THREE.IcosahedronBufferGeometry(radius);
   const geometry = new THREE.BoxBufferGeometry(200, 200, 200)
   const material = new THREE.MeshPhongMaterial({

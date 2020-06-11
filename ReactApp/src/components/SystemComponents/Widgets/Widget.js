@@ -4,6 +4,7 @@ import ContextMenu from "../ContextMenu";
 import PropTypes from "prop-types";
 import { LanDisconnect } from "mdi-material-ui/";
 import { create, all } from 'mathjs';
+import { useTheme } from '@material-ui/core/styles';
 const config = { }
 const math = create(all, config)
 
@@ -19,6 +20,7 @@ const math = create(all, config)
  * 
  **/
   const Widget = (props) => {
+  const theme = useTheme();
   const [value, setValue] = useState(0);
   const [initialized, setInitalized] = useState(false);
   const [immediateValue, setImmediateValue] = useState(null);
@@ -293,7 +295,7 @@ const math = create(all, config)
       <LanDisconnect
         fontSize="inherit"
         style={{
-          color: props.theme.palette.error.main,
+          color: theme.palette.error.main,
           verticalAlign: "middle",
         }}
       />

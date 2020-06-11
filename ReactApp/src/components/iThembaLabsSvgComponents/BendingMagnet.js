@@ -21,7 +21,7 @@ const styles = theme => ({
   },
 });
 
-
+/* eslint-disable eqeqeq */
 class BendingMagnet extends React.Component {
   constructor(props) {
     super(props);

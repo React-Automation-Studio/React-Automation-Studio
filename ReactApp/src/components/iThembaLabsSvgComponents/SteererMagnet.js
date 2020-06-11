@@ -4,7 +4,7 @@ import DataConnection from '../SystemComponents/DataConnection';
 //import MenuItem from '@material-ui/core/MenuItem';
 
 
-
+/* eslint-disable eqeqeq */
 class SteererMagnet extends React.Component {
   constructor(props) {
     super(props);

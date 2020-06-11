@@ -19,7 +19,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 
 
-
+/* eslint-disable eqeqeq */
 const styles = theme => ({
 
   TextField: {
@@ -329,3 +329,4 @@ HarpRangeSelection.propTypes = {
 
 HarpRangeSelection.contextType=AutomationStudioContext;
 export default withStyles(styles)(HarpRangeSelection)
+  /* eslint-disable eqeqeq */

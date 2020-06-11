@@ -4,7 +4,7 @@ import DataConnection from '../SystemComponents/DataConnection';
 import { withStyles } from '@material-ui/core/styles';
 import ContextMenu from '../SystemComponents/ContextMenu';
 //import MenuItem from '@material-ui/core/MenuItem';
-
+/* eslint-disable eqeqeq */
 const styles = theme => ({
 
 

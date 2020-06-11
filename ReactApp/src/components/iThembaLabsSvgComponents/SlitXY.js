@@ -21,7 +21,7 @@ const styles = theme => ({
 
 });
 
-
+/* eslint-disable eqeqeq */
 
 class SlitXY extends React.Component {
   constructor(props) {

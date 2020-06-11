@@ -20,7 +20,7 @@ const styles = theme => ({
   },
 });
 
-
+/* eslint-disable eqeqeq */
 class SteererYMagnet extends React.Component {
   constructor(props) {
     super(props);

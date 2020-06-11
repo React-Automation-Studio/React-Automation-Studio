@@ -29,7 +29,7 @@ const styles = theme => ({
   }
 
 });
-
+/* eslint-disable eqeqeq */
 class Harp extends React.Component {
   constructor(props) {
     super(props);

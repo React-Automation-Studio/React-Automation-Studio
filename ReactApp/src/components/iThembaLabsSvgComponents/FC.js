@@ -36,7 +36,7 @@ const styles = theme => ({
   }
 
 });
-
+/* eslint-disable eqeqeq */
 class FC extends React.Component {
   constructor(props) {
     super(props);

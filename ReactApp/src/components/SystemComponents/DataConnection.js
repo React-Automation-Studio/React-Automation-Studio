@@ -2,14 +2,7 @@ import React from 'react'
 import AutomationStudioContext from './AutomationStudioContext';
 import DeprecatedLocalPV from '../SystemComponents/DeprecatedLocalPV';
 import DeprecatedEpicsPV from './DeprecatedEpicsPV';
-import { withStyles } from '@material-ui/core/styles';
-import uuid from 'uuid';
-const styles = theme => ({
-  body1: theme.typography.body1,
 
-
-
-});
 
 class DataConnection extends React.Component {
   constructor(props) {
@@ -53,10 +46,10 @@ class DataConnection extends React.Component {
 
 
   render() {
-    const {classes} =this.props;
+   
 
 
-    const pv =this.state['pvname']
+    const pv =this.state.pvname;
 
     return (
 

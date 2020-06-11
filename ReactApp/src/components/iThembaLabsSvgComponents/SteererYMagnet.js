@@ -21,6 +21,7 @@ const styles = theme => ({
 });
 
 /* eslint-disable eqeqeq */
+/* eslint-disable no-unused-vars */
 class SteererYMagnet extends React.Component {
   constructor(props) {
     super(props);
@@ -104,10 +105,10 @@ class SteererYMagnet extends React.Component {
     //  const pv = this.props.pv;
     //  const macros=  this.props.macros;
     //  const usePvLabel= this.props.usePvLabel;
-    const mylabel= this.props.label;
+    
     const usePrecision= this.props.prec;
 
-    const useStringValue=this.props.useStringValue;
+    
 
     let units="";
 

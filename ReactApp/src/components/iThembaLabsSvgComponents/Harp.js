@@ -30,6 +30,7 @@ const styles = theme => ({
 
 });
 /* eslint-disable eqeqeq */
+/* eslint-disable no-unused-vars */
 class Harp extends React.Component {
   constructor(props) {
     super(props);
@@ -174,7 +175,7 @@ this.setState({'value'	 :inputValue,
 
 handleInputValueLabel(inputValue){
 
-  this.setState({['label']:inputValue});
+  this.setState({label:inputValue});
 
 }
 

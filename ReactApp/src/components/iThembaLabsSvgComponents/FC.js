@@ -37,6 +37,7 @@ const styles = theme => ({
 
 });
 /* eslint-disable eqeqeq */
+/* eslint-disable no-unused-vars */
 class FC extends React.Component {
   constructor(props) {
     super(props);
@@ -153,7 +154,7 @@ class FC extends React.Component {
 
 handleInputValueLabel(inputValue){
 
-  this.setState({['label']:inputValue});
+  this.setState({label:inputValue});
 
 }
 

@@ -22,6 +22,7 @@ const styles = theme => ({
 });
 
 /* eslint-disable eqeqeq */
+/* eslint-disable no-unused-vars */
 class SteererXYMagnet extends React.Component {
   constructor(props) {
     super(props);

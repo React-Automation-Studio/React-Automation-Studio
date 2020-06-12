@@ -132,7 +132,7 @@ function SimpleSliderComponent(props) {
 }
 
 /**
-* The SimpleSlider Component is a wrapper on the Material-UI contained Slider component. The SimpleSlider component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
+* **DEPRECATED Use Slider component instead** The SimpleSlider Component is a wrapper on the Material-UI contained Slider component. The SimpleSlider component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
 * The margins and spacing must be controlled from the parent component.<br/><br/>
 * Material-UI Slider Demos:
 * https://material-ui.com/components/slider/<br/><br/>
@@ -140,7 +140,7 @@ function SimpleSliderComponent(props) {
 * https://material-ui.com/api/slider/
 */
 const SimpleSlider = (props) => {
-
+  console.warn("Deprecated use Slider component instead, component will be removed in the next release")
   return (
     <Widget  {...props} component={SimpleSliderComponent} name={"SimpleSlider"}/>
   )

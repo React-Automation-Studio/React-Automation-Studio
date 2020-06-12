@@ -390,7 +390,7 @@ function SliderComponent(props) {
         max={props.initialized ? parseFloat(max) : undefined}
         marks={props.initialized ? marks : undefined}
         // valueLabelDisplay={props.showThumbValue ? "on" : "off"}
-        step={props.step !== undefined ? props.step : undefined}
+        step={props.step !== undefined ? props.step!=0?props.step:undefined : undefined}
         onChange={handleChange}
         onAfterChange={handleChangeCommited}
       />

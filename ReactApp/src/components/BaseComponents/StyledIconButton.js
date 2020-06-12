@@ -68,7 +68,7 @@ const StyledIconButtonComponent=(props)=> {
  */
 const StyledIconButton =(props)=>{
     return (
-      <Widget {...props} component={StyledIconButtonComponent}/>
+      <Widget {...props} component={StyledIconButtonComponent} usePvMinMax={false} usePvPrecision={false} min={undefined} max={undefined} prec={undefined}/>
       
     )
   }

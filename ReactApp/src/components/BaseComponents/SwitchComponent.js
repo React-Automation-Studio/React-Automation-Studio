@@ -61,7 +61,7 @@ const SwitchInternalComponent = (props) => {
  */
 const SwitchComponent =(props)=>{
   return (
-    <Widget {...props} component={SwitchInternalComponent}/>
+    <Widget {...props} component={SwitchInternalComponent} usePvMinMax={false} usePvPrecision={false} min={undefined} max={undefined} prec={undefined} />
        
     
   )

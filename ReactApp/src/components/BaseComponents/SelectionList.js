@@ -234,7 +234,7 @@ const SelectionListComponent = (props) => {
 
 const SelectionList = (props) => {
   return (
-    <Widget {...props} useStringValue={true} component={SelectionListComponent} />
+    <Widget {...props} useStringValue={true} component={SelectionListComponent} usePvMinMax={false} usePvPrecision={false} min={undefined} max={undefined} prec={undefined} />
   )
 
 }

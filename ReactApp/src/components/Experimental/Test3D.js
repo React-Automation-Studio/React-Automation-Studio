@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import TextInput from '../BaseComponents/TextInput';
 
-import SimpleSlider from '../BaseComponents/SimpleSlider';
+import Slider from '../BaseComponents/Slider';
 
 
 import Grid from '@material-ui/core/Grid';
@@ -78,11 +78,11 @@ class Test3D extends React.Component {
 
                   </Grid>
                   <Grid item xs={6} >
-                    <SimpleSlider pv='pva://testIOC:Cube1:xRotation' macros={this.props['macros']} usePvMinMax={true} label="xRotation:" step={0.01} prec={3} />
+                    <Slider pv='pva://testIOC:Cube1:xRotation' macros={this.props['macros']} usePvMinMax={true} label="xRotation:" step={0.01} prec={3} />
                   </Grid>
 
                   <Grid item xs={6} >
-                    <SimpleSlider pv='pva://testIOC:Cube1:yRotation' macros={this.props['macros']} usePvMinMax={true} label="yRotation:" step={0.01} prec={3} />
+                    <Slider pv='pva://testIOC:Cube1:yRotation' macros={this.props['macros']} usePvMinMax={true} label="yRotation:" step={0.01} prec={3} />
                   </Grid>
                 </Grid>
               </Card>

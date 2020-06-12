@@ -9,7 +9,7 @@ import EpicsStringOutDebug from '../GroupedComponents/EpicsStringOutDebug';
 import EpicsMbboDebug from '../GroupedComponents/EpicsMbboDebug';
 
 import TextOutput from '../BaseComponents/TextOutput';
-import SimpleSlider from '../BaseComponents/SimpleSlider';
+import Slider from '../BaseComponents/Slider';
 import GraphY from '../BaseComponents/GraphY';
 
 import Grid from '@material-ui/core/Grid';
@@ -176,7 +176,7 @@ class EpicsDemos extends React.Component {
         </Grid>
 
         <Grid item xs={12} >
-          <SimpleSlider  pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}} usePvMinMax={true} min={1000} max={500} usePvLabel={true}  />
+          <Slider  pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}} usePvMinMax={true} min={1000} max={500} usePvLabel={true}  />
         </Grid>
         <Grid item xs={6} >
 

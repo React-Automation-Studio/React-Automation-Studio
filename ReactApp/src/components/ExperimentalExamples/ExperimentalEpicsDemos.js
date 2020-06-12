@@ -12,7 +12,7 @@ import EpicsMbboDebug from '../ExperimentalGroupedComponents/EpicsMbboDebug';
 import TextUpdate from '../BaseComponents/TextUpdate';
 import TextInput from '../BaseComponents/TextInput';
 import TextOutput from '../BaseComponents/TextOutput';
-import SimpleSlider from '../BaseComponents/SimpleSlider';
+import Slider from '../BaseComponents/Slider';
 import GraphY from '../BaseComponents/GraphY';
 import ThumbWheel from '../BaseComponents/ThumbWheel';
 import Grid from '@material-ui/core/Grid';
@@ -207,7 +207,7 @@ class ExperimentalEpicsDemos extends React.Component {
         </Grid>
 
         <Grid item xs={12} >
-          <SimpleSlider  pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}} usePvMinMax={true} min={1000} max={500} usePvLabel={true}  />
+          <Slider  pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}} usePvMinMax={true} min={1000} max={500} usePvLabel={true}  />
         </Grid>
         <Grid item xs={6} >
 

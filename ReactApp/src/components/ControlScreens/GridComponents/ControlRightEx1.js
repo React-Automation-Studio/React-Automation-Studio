@@ -4,7 +4,7 @@ import AutomationStudioContext from '../../SystemComponents/AutomationStudioCont
 import TextInput from '../../BaseComponents/TextInput';
 import SelectionInput from '../../BaseComponents/SelectionInput';
 import TextOutput from '../../BaseComponents/TextOutput';
-import SimpleSlider from '../../BaseComponents/SimpleSlider';
+import Slider from '../../BaseComponents/Slider';
 import TextUpdate from '../../BaseComponents/TextUpdate';
 import Grid from '@material-ui/core/Grid';
 import ToggleButton from '../../BaseComponents/ToggleButton';
@@ -69,7 +69,7 @@ class ControlRightEx1 extends React.Component {
             </Grid>
 
             <Grid item xs={12}>
-              <SimpleSlider  pv='pva://$(device):Setpoint'      macros={this.props['macros']} usePvMinMax={true} min={1000} max={500} label={""}  prec={3} />
+              <Slider  pv='pva://$(device):Setpoint'      macros={this.props['macros']} usePvMinMax={true} min={1000} max={500} label={""}  prec={3} />
             </Grid>
 
 

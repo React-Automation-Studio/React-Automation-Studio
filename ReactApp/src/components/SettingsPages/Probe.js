@@ -4,7 +4,7 @@ import AutomationStudioContext from '../SystemComponents/AutomationStudioContext
 import TextInput from '../BaseComponents/TextInput';
 
 import TextOutput from '../BaseComponents/TextOutput';
-import SimpleSlider from '../BaseComponents/SimpleSlider';
+import Slider from '../BaseComponents/Slider';
 
 import Grid from '@material-ui/core/Grid';
 
@@ -92,7 +92,7 @@ class Probe extends React.Component {
               <TextInput   pv='$(device)'       macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV Setpoint:'} alarmSensitive={true}/>
             </Grid>
             <Grid item xs={12}  >
-              <SimpleSlider pv='$(device)'  macros={{'$(device)':probeObject.pvname}} usePvMinMax={true}  label="EPICS PV Setpoint:"  />
+              <Slider pv='$(device)'  macros={{'$(device)':probeObject.pvname}} usePvMinMax={true}  label="EPICS PV Setpoint:"  />
             </Grid>
             <Grid item xs={6} >
               <TextOutput  pv='$(device).DRVH'       macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV DRVH:'}/>

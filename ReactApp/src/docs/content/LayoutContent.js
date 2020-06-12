@@ -8,7 +8,7 @@ import Cancel from '@material-ui/icons/Cancel';
 import ProgressBar from '../../components/BaseComponents/ProgressBar';
 import TextOutput from '../../components/BaseComponents/TextOutput';
 import ToggleButton from '../../components/BaseComponents/ToggleButton';
-import SimpleSlider from '../../components/BaseComponents/SimpleSlider';
+import Slider from '../../components/BaseComponents/Slider';
 import GraphY from '../../components/BaseComponents/GraphY';
 import StyledIconIndicator from '../../components/BaseComponents/StyledIconIndicator';
 import SelectionInput from '../../components/BaseComponents/SelectionInput';
@@ -84,7 +84,7 @@ const LayoutContent = () => {
                 </Grid>
             </Grid>
             <Grid item xs={12}>
-                <SimpleSlider pv='pva://$(device):amplitude' macros={{ '$(device)': 'testIOC' }} usePvMinMax={true} usePvLabel={true} />
+                <Slider pv='pva://$(device):amplitude' macros={{ '$(device)': 'testIOC' }} usePvMinMax={true} usePvLabel={true} />
             </Grid>
         </Grid>
     );

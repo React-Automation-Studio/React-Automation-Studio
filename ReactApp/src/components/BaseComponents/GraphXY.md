@@ -1,6 +1,6 @@
 GraphXY EPICS variable example, drag the slider to modulate the amplitude of the Sine Wave:
 ```js
-import SimpleSlider from './SimpleSlider';
+import Slider from './Slider';
 <div>
 <div style={{height:'25vh',width:'25vh'}}>
   <GraphXY  
@@ -23,9 +23,9 @@ import SimpleSlider from './SimpleSlider';
     updateMode={'updateOnYChange'}
   />
 </div>
-  <SimpleSlider  pv='pva://testIOC:BeamSweepSim:Amplitude'   label='Circle Radius' usePvMinMax={true}/>
-  <SimpleSlider  pv='pva://testIOC:BeamSweepSim:modAmp'   label='Modulation Amplitude' usePvMinMax={true}/>
-  <SimpleSlider  
+  <Slider  pv='pva://testIOC:BeamSweepSim:Amplitude'   label='Circle Radius' usePvMinMax={true}/>
+  <Slider  pv='pva://testIOC:BeamSweepSim:modAmp'   label='Modulation Amplitude' usePvMinMax={true}/>
+  <Slider  
     pv='pva://testIOC:BeamSweepSim:frequency'  
     label='Frequency'
     min={0.1}

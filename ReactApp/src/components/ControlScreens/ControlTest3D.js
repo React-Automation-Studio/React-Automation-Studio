@@ -11,7 +11,7 @@ import EpicsMbboDebug from '../GroupedComponents/EpicsMbboDebug';
 import TextUpdate from '../BaseComponents/TextUpdate';
 import TextInput from '../BaseComponents/TextInput';
 import TextOutput from '../BaseComponents/TextOutput';
-import SimpleSlider from '../BaseComponents/SimpleSlider';
+import Slider from '../BaseComponents/Slider';
 
 
 import Grid from '@material-ui/core/Grid';
@@ -98,8 +98,8 @@ render() {
           </Grid>
           <div style={{height:'25vh',marginLeft:'25px'}}>
             <div style={{height:'50px',width:'400px'}}>
-              <SimpleSlider  pv='pva://testIOC:Cube1:xRotation'      macros={this.props['macros']} usePvMinMax={true} min={1000} max={500} usePvLabel={true}  step={0.1} prec={3} />
-              <SimpleSlider  pv='pva://testIOC:Cube1:yRotation'      macros={this.props['macros']} usePvMinMax={true} min={1000} max={500} usePvLabel={true}  step={0.1} prec={3} />
+              <Slider  pv='pva://testIOC:Cube1:xRotation'      macros={this.props['macros']} usePvMinMax={true} min={1000} max={500} usePvLabel={true}  step={0.1} prec={3} />
+              <Slider  pv='pva://testIOC:Cube1:yRotation'      macros={this.props['macros']} usePvMinMax={true} min={1000} max={500} usePvLabel={true}  step={0.1} prec={3} />
             </div>
           </div>
         </Grid>

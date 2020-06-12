@@ -4,7 +4,7 @@ import AutomationStudioContext from '../../SystemComponents/AutomationStudioCont
 import TextInput from '../../BaseComponents/TextInput';
 
 import TextOutput from '../../BaseComponents/TextOutput';
-import SimpleSlider from '../../BaseComponents/SimpleSlider';
+import Slider from '../../BaseComponents/Slider';
 
 import Grid from '@material-ui/core/Grid';
 
@@ -83,7 +83,7 @@ class ControlRightSteererXY extends React.Component {
 
             <Grid item xs={12}  >
 
-              <SimpleSlider pv={'pva://' + system.devices.xDevice.deviceName + ":" + system.devices.xDevice.setpoint} prec={3} label={'X Setpoint:'} alarmSensitive={true} usePvUnits={true} usePvMinMax={true} />
+              <Slider pv={'pva://' + system.devices.xDevice.deviceName + ":" + system.devices.xDevice.setpoint} prec={3} label={'X Setpoint:'} alarmSensitive={true} usePvUnits={true} usePvMinMax={true} />
             </Grid>
             <Grid item xs={6}  >
 
@@ -165,7 +165,7 @@ class ControlRightSteererXY extends React.Component {
 
               <Grid item xs={12}  >
 
-                <SimpleSlider pv={'pva://' + system.devices.yDevice.deviceName + ":" + system.devices.yDevice.setpoint} prec={3} label={'X Setpoint:'} alarmSensitive={true} usePvUnits={true} usePvMinMax={true} />
+                <Slider pv={'pva://' + system.devices.yDevice.deviceName + ":" + system.devices.yDevice.setpoint} prec={3} label={'X Setpoint:'} alarmSensitive={true} usePvUnits={true} usePvMinMax={true} />
               </Grid>
               <Grid item xs={6}  >
 

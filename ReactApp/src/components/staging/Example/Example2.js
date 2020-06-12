@@ -5,7 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import TextInput from '../../../components/BaseComponents/TextInput';
 import TextOutput from '../../../components/BaseComponents/TextOutput';
 
-import SimpleSlider from '../../../components/BaseComponents/SimpleSlider';
+import Slider from '../../BaseComponents/Slider';
 import GraphY from '../../../components/BaseComponents/GraphY';
 
 import Grid from '@material-ui/core/Grid';
@@ -107,7 +107,7 @@ class Example2 extends React.Component {
             </div>
           </Grid>
           <Grid item xs={12}  >
-            <SimpleSlider
+            <Slider
               pv='pva://$(device):amplitude'
               macros={{'$(device)':'testIOC'}}
               usePvMinMax={true}

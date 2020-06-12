@@ -3,7 +3,7 @@ import React from 'react'
 import AutomationStudioContext from '../../SystemComponents/AutomationStudioContext';
 import TextInput from '../../BaseComponents/TextInput';
 import TextOutput from '../../BaseComponents/TextOutput';
-import SimpleSlider from '../../BaseComponents/SimpleSlider';
+import Slider from '../../BaseComponents/Slider';
 import Grid from '@material-ui/core/Grid';
 import ToggleButton from '../../BaseComponents/ToggleButton';
 import { withStyles } from '@material-ui/core/styles';
@@ -77,7 +77,7 @@ class ControlRightSinglePS extends React.Component {
 
             <Grid item xs={12}  >
 
-              <SimpleSlider pv={'pva://' + system.devices.device.deviceName + ":" + system.devices.device.setpoint}  prec={3} label={'Setpoint:'} alarmSensitive={true} usePvUnits={true} usePvMinMax={true} />
+              <Slider pv={'pva://' + system.devices.device.deviceName + ":" + system.devices.device.setpoint}  prec={3} label={'Setpoint:'} alarmSensitive={true} usePvUnits={true} usePvMinMax={true} />
             </Grid>
             <Grid item xs={6}  >
 

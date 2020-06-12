@@ -2,7 +2,7 @@
 
 GraphY EPICS variable example, drag the slider to modulate the amplitude of the Sine Wave:
 ```js
-import SimpleSlider from './SimpleSlider';
+import Slider from './Slider';
 <div>
 <div style={{height:'25vh'}}>
   <GraphY  
@@ -10,7 +10,7 @@ import SimpleSlider from './SimpleSlider';
     legend={['Modulated Sine Wave Amplitude','Sine Wave Amplitude']}
   />
 </div>
-  <SimpleSlider  pv='pva://testIOC:amplitude'   label='Sine Wave Amplitude' usePvMinMax={true}/>
+  <Slider  pv='pva://testIOC:amplitude'   label='Sine Wave Amplitude' usePvMinMax={true}/>
 </div>
 
 
@@ -18,7 +18,7 @@ import SimpleSlider from './SimpleSlider';
 
 GraphY EPICS variable example, alternate line colors:
 ```js
-import SimpleSlider from './SimpleSlider';
+import Slider from './Slider';
 <div>
 <div style={{height:'25vh'}}>
   <GraphY  
@@ -27,7 +27,7 @@ import SimpleSlider from './SimpleSlider';
     lineColor={['#3f51b5','#e91e63']}
   />
 </div>
-  <SimpleSlider  pv='pva://testIOC:amplitude'   label='Sine Wave Amplitude' usePvMinMax={true}/>
+  <Slider  pv='pva://testIOC:amplitude'   label='Sine Wave Amplitude' usePvMinMax={true}/>
 </div>
 
 

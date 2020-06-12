@@ -352,9 +352,9 @@ function SliderComponent(props) {
       </Typography>
     );
   }
-  let min = props.min !== undefined ? parseInt(props.min) : 0;
+  let min = props.min !== undefined ? parseFloat(props.min) : 0;
 
-  let max = props.max !== undefined ? parseInt(props.max) : 100;
+  let max = props.max !== undefined ? parseFloat(props.max) : 100;
 
   let units = props.units ? props.units : ""
   if (props.marks !== undefined) {

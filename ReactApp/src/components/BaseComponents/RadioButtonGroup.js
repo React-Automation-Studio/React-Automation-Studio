@@ -76,7 +76,7 @@ const RadioButtonGroupComponent=(props)=>{
  */
 const RadioButtonGroup = (props) => {
   return (
-    <Widget {...props} useStringValue={true} component={RadioButtonGroupComponent}/>
+    <Widget {...props} useStringValue={true} component={RadioButtonGroupComponent} usePvMinMax={false} usePvPrecision={false} min={undefined} max={undefined} prec={undefined}/>
   )
 }
  /**

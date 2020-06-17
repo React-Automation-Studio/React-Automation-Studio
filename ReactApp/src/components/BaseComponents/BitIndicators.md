@@ -14,7 +14,7 @@ BitIndicators local variable example:
   <br/><br/>
   {/*###############*/}  
 
-  <BitIndicators pv='pva://$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}}label='My Label' labelPlacement='top' bitLabelPlacement='end' onColor='lime' offColor='red'/>
+  <BitIndicators pv='pva://$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}}label='My Label' labelPlacement='top' bitLabelPlacement='end' />
 
   {/*###############*/}
 

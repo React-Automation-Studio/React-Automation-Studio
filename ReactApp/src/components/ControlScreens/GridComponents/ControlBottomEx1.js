@@ -4,7 +4,7 @@ import AutomationStudioContext from '../../SystemComponents/AutomationStudioCont
 import TextInput from '../../BaseComponents/TextInput';
 import SelectionInput from '../../BaseComponents/SelectionInput';
 import TextOutput from '../../BaseComponents/TextOutput';
-import SimpleSlider from '../../BaseComponents/SimpleSlider';
+import Slider from '../../BaseComponents/Slider';
 import TextUpdate from '../../BaseComponents/TextUpdate';
 import Grid from '@material-ui/core/Grid';
 import SwitchComponent from '../../BaseComponents/SwitchComponent';

@@ -19,7 +19,7 @@ import TextUpdate from '../../BaseComponents/TextUpdate';
 import TextInput from '../../BaseComponents/TextInput';
 import TextOutput from '../../BaseComponents/TextOutput';
 import Meter from '../../BaseComponents/Gauge';
-import SimpleSlider from '../../BaseComponents/SimpleSlider';
+import Slider from '../../BaseComponents/Slider';
 import GraphY from '../../BaseComponents/GraphY';
 import SelectionList from '../../BaseComponents/SelectionList';
 import ThumbWheel from '../../BaseComponents/ThumbWheel';
@@ -200,7 +200,7 @@ class DynamicPvFieldExample extends React.Component {
                   />
                 </Grid>
                 <Grid item xs={12}  >
-                  <SimpleSlider
+                  <Slider
                     pv='pva://$(device):dynamicPvFields'
                     macros={{ '$(device)': 'testIOC' }}
                     label={'edas'}
@@ -238,7 +238,7 @@ class DynamicPvFieldExample extends React.Component {
                   />
                 </Grid>
                 <Grid item xs={12}  >
-                  <SimpleSlider
+                  <Slider
                     pv='pva://$(device):dynamicPvFields'
                     macros={{ '$(device)': 'testIOC' }}
                     label={'edas'}

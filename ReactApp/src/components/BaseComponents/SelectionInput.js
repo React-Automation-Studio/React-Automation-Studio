@@ -106,7 +106,7 @@ const SelectionInputComponent = (props) => {
 
 const SelectionInput = (props) => {
   return (
-    <Widget {...props} useStringValue={true} component={SelectionInputComponent}/>
+    <Widget {...props} useStringValue={true} component={SelectionInputComponent} usePvMinMax={false} usePvPrecision={false} min={undefined} max={undefined} prec={undefined}/>
   )
 }
 

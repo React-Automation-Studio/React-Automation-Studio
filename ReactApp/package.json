@@ -24,7 +24,8 @@
     "math-js": "1.0.1",
     "mathjs": "6.0.3",
     "sass":"1.25.0",
-    "react-device-detect":"1.12.1"
+    "react-device-detect":"1.12.1",
+    "rc-slider":"9.3.0"
 
 
   },

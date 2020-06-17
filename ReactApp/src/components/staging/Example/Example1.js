@@ -11,7 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import TextInput from '../../BaseComponents/TextInput';
 import TextOutput from '../../BaseComponents/TextOutput';
 
-import SimpleSlider from '../../BaseComponents/SimpleSlider';
+import Slider from '../../BaseComponents/Slider';
 import GraphY from '../../BaseComponents/GraphY';
 import SelectionList from '../../BaseComponents/SelectionList';
 import ThumbWheel from '../../BaseComponents/ThumbWheel';
@@ -224,7 +224,7 @@ class MobileDemo1 extends React.Component {
                     <div style={{marginTop:'16px'}}>
                       <Grid container direction="row" item xs={12} spacing={2}>
                         <Grid item xs={12}  >
-                          <SimpleSlider pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}} usePvMinMax={true} min={1000} max={500} usePvLabel={true}  />
+                          <Slider pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}} usePvMinMax={true} min={1000} max={500} usePvLabel={true}  />
                         </Grid>
                       </Grid>
                     </div>}

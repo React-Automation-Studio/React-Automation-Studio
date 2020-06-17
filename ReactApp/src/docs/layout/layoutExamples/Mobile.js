@@ -11,7 +11,7 @@ import TextInput from '../../../components/BaseComponents/TextInput';
 import TextOutput from '../../../components/BaseComponents/TextOutput';
 import ToggleButton from '../../../components/BaseComponents/ToggleButton';
 import Gauge from '../../../components/BaseComponents/Gauge';
-import SimpleSlider from '../../../components/BaseComponents/SimpleSlider';
+import Slider from '../../../components/BaseComponents/Slider';
 import GraphY from '../../../components/BaseComponents/GraphY';
 import StyledIconIndicator from '../../../components/BaseComponents/StyledIconIndicator';
 import SelectionInput from '../../../components/BaseComponents/SelectionInput';
@@ -93,7 +93,7 @@ class Mobile extends React.Component {
           />
         </Grid>
         <Grid item xs={12}>  {/* SIXTH ROW */}
-          <SimpleSlider pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}} usePvMinMax={true}  usePvLabel={true}  />
+          <Slider pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}} usePvMinMax={true}  usePvLabel={true}  />
         </Grid>
 
       </Grid>

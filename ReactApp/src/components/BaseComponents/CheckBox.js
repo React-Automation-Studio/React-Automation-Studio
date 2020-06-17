@@ -59,7 +59,7 @@ const CheckBoxComponent = (props) => {
 
 const CheckBox = (props) => {
   return (
-    <Widget {...props} component={CheckBoxComponent}/>
+    <Widget {...props} component={CheckBoxComponent} usePvMinMax={false} usePvPrecision={false} min={undefined} max={undefined} prec={undefined}/>
 
   )
 }

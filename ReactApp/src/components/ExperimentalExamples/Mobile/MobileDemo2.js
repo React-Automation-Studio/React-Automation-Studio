@@ -11,7 +11,7 @@ import EpicsMbboDebug from '../../ExperimentalGroupedComponents/EpicsMbboDebug';
 import TextUpdate from '../../BaseComponents/TextUpdate';
 import TextInput from '../../BaseComponents/TextInput';
 import TextOutput from '../../BaseComponents/TextOutput';
-import SimpleSlider from '../../BaseComponents/SimpleSlider';
+import Slider from '../../BaseComponents/Slider';
 import GraphY from '../../BaseComponents/GraphY';
 
 import Grid from '@material-ui/core/Grid';
@@ -78,7 +78,7 @@ class MobileDemo2 extends React.Component {
                 </div>
               </Grid>
               <Grid item xs={12} lg={12}>
-                <SimpleSlider pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}} usePvMinMax={true} min={1000} max={500} usePvLabel={true}  />
+                <Slider pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}} usePvMinMax={true} min={1000} max={500} usePvLabel={true}  />
               </Grid>
 
             </Grid>

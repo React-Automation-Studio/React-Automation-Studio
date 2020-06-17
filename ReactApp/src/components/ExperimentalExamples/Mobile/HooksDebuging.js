@@ -19,7 +19,7 @@ import TextUpdate from '../../BaseComponents/TextUpdate';
 import TextInput from '../../BaseComponents/TextInput';
 import TextOutput from '../../BaseComponents/TextOutput';
 import Meter from '../../BaseComponents/Gauge';
-import SimpleSlider from '../../BaseComponents/SimpleSlider';
+import Slider from '../../BaseComponents/Slider';
 import GraphY from '../../BaseComponents/GraphY';
 import SelectionList from '../../BaseComponents/SelectionList';
 import ThumbWheel from '../../BaseComponents/ThumbWheel';
@@ -226,7 +226,7 @@ class ExperimentalMobileDemo1 extends React.Component {
             />
           </Grid>
           <Grid item xs={6}  >
-            <SimpleSlider
+            <Slider
               pv='pva://$(device):amplitude'
               macros={{ '$(device)': 'testIOC' }}
               usePvMinMax={true}
@@ -241,7 +241,7 @@ class ExperimentalMobileDemo1 extends React.Component {
 
           </Grid>
           <Grid item xs={6}  >
-            <SimpleSlider
+            <Slider
               pv='pva://$(device):amplitude'
               macros={{ '$(device)': 'testIOC' }}
               // usePvMinMax={true} 

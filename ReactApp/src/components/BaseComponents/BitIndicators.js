@@ -24,7 +24,7 @@ const BitIndicatorsComponent = (props) => {
 
 
   let onColor = props.theme.palette.primary.main;
-  let offColor = props.theme.palette.grey[50];
+  let offColor = props.theme.palette.grey[300];
   if (typeof props.onColor !== 'undefined') {
     if (props.onColor === 'primary') {
       onColor = props.theme.palette.primary.main;
@@ -33,7 +33,7 @@ const BitIndicatorsComponent = (props) => {
       onColor = props.theme.palette.secondary.main;
     }
     else if (props.onColor === 'default') {
-      onColor = props.theme.palette.grey[50];
+      onColor = props.theme.palette.grey[300];
     }
     else {
       onColor = props.onColor;
@@ -48,7 +48,7 @@ const BitIndicatorsComponent = (props) => {
       offColor = props.theme.palette.secondary.main;
     }
     else if (props.offColor === 'default') {
-      offColor = props.theme.palette.grey[50];
+      offColor = props.theme.palette.grey[300];
     }
     else {
       offColor = props.offColor;
@@ -86,7 +86,7 @@ const BitIndicatorsComponent = (props) => {
   }
 
   let bits = bitArray.map((value, index) => {
-    let color = !props.initialized? props.theme.palette.grey[50]: value != 0 ? onColor     : offColor;
+    let color = !props.initialized? props.theme.palette.grey[300]: value != 0 ? onColor     : offColor;
     return (
       <Grid
         item
@@ -176,5 +176,7 @@ BitIndicators.defaultProps = {
   numberOfBits: 8,
   horizontal: false,
   reverseBits: false,
+  onColor:'primary',
+  offColor:'default'
 };
 export default withStyles(styles, { withTheme: true })(BitIndicators);

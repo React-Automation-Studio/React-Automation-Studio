@@ -55,7 +55,7 @@ const RadioButtonComponent=(props)=>{
  */
 const RadioButton = (props) => {
   return (
-    <Widget {...props} component={RadioButtonComponent}/>
+    <Widget {...props} component={RadioButtonComponent} usePvMinMax={false} usePvPrecision={false} min={undefined} max={undefined} prec={undefined}/>
 
   )
 }

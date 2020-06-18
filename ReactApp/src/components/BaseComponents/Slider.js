@@ -597,13 +597,21 @@ Slider.propTypes = {
   /**  Custom markers in format:
   {value1: label1,value2...:label2...}*/
   marks: PropTypes.object,
-  /** If defined, the value will be increment or decremented
+  /** The value will be increment or decremented
    * in the define step intervals
    */
 
   step: PropTypes.number,
-  /** label placement*/
+  /** label placement postion*/
   labelPlacement:PropTypes.oneOf(['start', 'top','bottom','end']),
+  /** value placement postion*/
+  valuePlacement:PropTypes.oneOf(['start', 'top','bottom','end']),
+  /**
+   * Directive to show the value
+   */
+
+
+  showValue: PropTypes.bool,
 };
 
 Slider.defaultProps = {

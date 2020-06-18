@@ -93,6 +93,7 @@ const ToggleButtonComponent = (props) => {
           onPointerUp={momentary ? handleMouseUp : undefined}
           onPointerDown={momentary ? handleMouseDown : undefined}
           onPointerLeave={momentary ? handlePointerLeave : undefined}
+          {...props.muiButtonProps}
         > 
           {text}
         </Button>
@@ -209,6 +210,10 @@ ToggleButton.propTypes = {
   
   /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
   pv: PropTypes.string,
+  /** Any of the MUI Button Props can applied by defining them as an object
+   * 
+   */
+  muiButtonProps: PropTypes.object
   
 
 };

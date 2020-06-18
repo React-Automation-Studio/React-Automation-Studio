@@ -99,7 +99,7 @@ const BitIndicatorsComponent = (props) => {
           label={bitLabels[index]}
           labelPlacement={bitLabelPos}
           control={
-            <SvgIcon size="small" style={bitStyles[index]} style={{ color: color }}>
+            <SvgIcon size="small" style={bitStyles[index]} style={{ color: color }} {...props.muiSvgIconProps}>
               {props.children === undefined ? (
                 <Lens />
               ) : (
@@ -170,6 +170,10 @@ BitIndicators.propTypes = {
   horizontal: PropTypes.bool,
   // Reverse bits order.
   reverseBits: PropTypes.bool,
+  /** Any of the MUI Svg Icon can applied by defining them as an object
+   * 
+   */
+  muiSvgIconProps: PropTypes.object
 };
 
 BitIndicators.defaultProps = {

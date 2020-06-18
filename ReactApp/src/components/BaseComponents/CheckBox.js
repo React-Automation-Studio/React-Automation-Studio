@@ -49,6 +49,7 @@ const CheckBoxComponent = (props) => {
           onChange={handleButtonChange}
           checked={props.value == 1}
           color={props.onColor}
+          {...props.muiCheckBoxProps}
         />
       }
     />
@@ -92,6 +93,10 @@ CheckBox.propTypes = {
   * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
   */
  labelPv: PropTypes.string,
+ /** Any of the MUI Checkbox Props can applied by defining them as an object
+   * 
+   */
+  muiCheckBoxProps: PropTypes.object
 
 }
 CheckBox.defaultProps = {

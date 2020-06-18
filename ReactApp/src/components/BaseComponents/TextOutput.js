@@ -185,6 +185,7 @@ function TextOutputComponent(props) {
       //disabled={props.disabled}
       InputLabelProps={inputLabelProps}
       InputProps={inputProps}
+      {...props.muiTextFieldProps}
     />
   )
 
@@ -358,6 +359,11 @@ TextOutput.propTypes = {
    * Directive to override the alarm severity with the rules defined in the stringSeverity
    */
   useStringSeverityMatch: PropTypes.bool,
+  /** Any of the MUI TextField Props can applied by defining them as an object
+   * 
+   */
+  muiTextFieldProps: PropTypes.object
+
 
 };
 TextOutput.defaultProps = {

@@ -102,6 +102,8 @@ const TextInputComponent=(props)=> {
       variant={props.variant}
       disabled={props.disabled}
       InputProps={inputProps}
+      {...props.muiTextFieldProps}
+      
       
     />
   );
@@ -276,6 +278,12 @@ TextInput.propTypes = {
    * Directive to overide the alarm severity with the rules defined in the stringSeverity
    */
   useStringSeverityMatch: PropTypes.bool,
+  /** Any of the MUI TextField Props can applied by defining them as an object
+   * 
+   */
+  muiTextFieldProps: PropTypes.object
+
+  
 
 
 };

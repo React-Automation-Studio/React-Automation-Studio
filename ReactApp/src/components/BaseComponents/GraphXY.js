@@ -945,7 +945,7 @@ GraphXY.propTypes = {
   debug:PropTypes.bool,
   /** If defined, then a legend will be displayed,using the string items defined in the array*/
   legend:PropTypes.array,
-  /** If defined, then the default React-Vis line colors will overided using the string items defined in the array*/
+  /** If defined, then the default React-Vis line colors will be overridden using the string items defined in the array*/
   lineColor:PropTypes.array,
   /** If defined then the length of the line graphs will grow up until the value defined*/
   maxLength:PropTypes.number,
@@ -960,9 +960,9 @@ GraphXY.propTypes = {
   /** Polling interval in ms used in polling mode*/
   pollingRate:PropTypes.number,
 
-  /** Directive to use PV tiemstamp on x-axis*/
+  /** Directive to use PV timestamp on x-axis*/
   useTimeStamp:PropTypes.bool,
-  /** Update mode of the graph, Note polling mode will overide these settings*/
+  /** Update mode of the graph, Note polling mode will override these settings*/
   updateMode: PropTypes.oneOf(['updateOnXOrYChange', 'updateOnYChange','updateOnXChange']),
 };
 

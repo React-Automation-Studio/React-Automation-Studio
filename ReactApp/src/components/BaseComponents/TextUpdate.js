@@ -229,7 +229,7 @@ TextUpdate.propTypes = {
   */
  stringSeverity: PropTypes.object,
  /**
-  * Directive to overided alarm severity with the rules defined in the stringSeverity
+  * Directive to override alarm severity with the rules defined in the stringSeverity
   */
 
 

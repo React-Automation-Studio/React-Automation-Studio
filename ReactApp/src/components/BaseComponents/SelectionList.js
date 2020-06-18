@@ -254,7 +254,7 @@ SelectionList.propTypes = {
   horizontal: PropTypes.bool,
 
 
-  /** If defined, this array of strings overides the default EPICS MBBI/O pv strings and are displayed as the choices in the RadioButtonGroup component*/
+  /** If defined, this array of strings overrides the default EPICS MBBI/O pv strings and are displayed as the choices in the RadioButtonGroup component*/
 
   custom_selection_strings: PropTypes.array,
   /** label placement*/

@@ -154,7 +154,7 @@ BitIndicators.propTypes = {
 
   /** local variable intialization value*/
   intialLocalVariableValue: PropTypes.string,
-  /** If defined, then the Datainitialized debugging information will be displayed*/
+  /** If defined, then the Data initialized debugging information will be displayed*/
   debug: PropTypes.bool,
   /** label placement*/
   labelPlacement: PropTypes.oneOf(['start', 'top', 'bottom', 'end']),

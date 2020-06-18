@@ -467,7 +467,7 @@ const math = create(all, config)
  */
 Widget.propTypes = {
   /**
-   * Directive to use the  alarm severity status to alter the fields backgorund color.
+   * Directive to use the  alarm severity status to alter the fields background color.
    */
 
   alarmSensitive: PropTypes.bool,
@@ -516,7 +516,7 @@ Widget.propTypes = {
    */
   minPv: PropTypes.string,
   /**
-   * when writing to the  pv's outputvalue, increment newValueTrigger to tell the pv component emit the outputputvalue to the process variable.
+   * when writing to the  pv's output value, increment newValueTrigger to tell the pv component emit the output value to the process variable.
    */
   newValueTrigger:PropTypes.number,
   /**
@@ -551,7 +551,7 @@ Widget.propTypes = {
   usePvLabel: PropTypes.bool,
   /**
    * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver. 
-   * The pyEpics metadata is unfortunately static and the values used will be the intial values that pvserver receives when it connects the first time. 
+   * The pyEpics metadata is unfortunately static and the values used will be the initial values that pvserver receives when it connects the first time. 
    * This is sufficient in most cases except when the user wants to dynamically update the metaData.
    * In this case a direct connection can be made to all the pv fields by setting useMetadata to false. 
    * If any of the metadata pvs are defined i.e unitsPv then the PV makes a new data  connection to this alternate pv and will
@@ -564,7 +564,7 @@ Widget.propTypes = {
    * Directive to use the pv metadata's HOPR and LOPR fields or the minPv and maxPv values
    * to limit the maximum and minimum values
    * that can be contained in the value.
-   * If not defined it uses the custom mina nd max as defined by the min and max prop.
+   * If not defined it uses the custom min and max as defined by the min and max prop.
    */
   usePvMinMax: PropTypes.bool,
   /**
@@ -588,7 +588,7 @@ Widget.propTypes = {
 
   
   /**
-   * If defined, then the string representaion of the number can be formatted
+   * If defined, then the string representation of the number can be formatted
    * using the mathjs format function
    * eg. numberFormat={{notation: 'engineering',precision: 3}}.
    * See https://mathjs.org/docs/reference/functions/format.html for more examples
@@ -615,7 +615,7 @@ Widget.propTypes = {
    */
   stringSeverity: PropTypes.object,
   /**
-   * Directive to overided alarm severity with the rules defined in the stringSeverity
+   * Directive to override alarm severity with the rules defined in the stringSeverity
    */
   useStringSeverityMatch: PropTypes.bool
 

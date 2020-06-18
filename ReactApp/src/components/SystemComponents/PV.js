@@ -249,7 +249,7 @@ PV.propTypes = {
    */
   minPv: PropTypes.string,
   /**
-   * when writing to the  pv's outputvalue, increment newValueTrigger to tell the pv component emit the outputputvalue to the process variable.
+   * when writing to the  pv's output value, increment newValueTrigger to tell the pv component emit the output value to the process variable.
    */
   newValueTrigger:PropTypes.number,
   /**
@@ -303,7 +303,7 @@ PV.propTypes = {
    * Directive to use the pv metadata's HOPR and LOPR fields or the minPv and maxPv values
    * to limit the maximum and minimum values
    * that can be contained in the value.
-   * If not defined it uses the custom mina nd max as defined by the min and max prop.
+   * If not defined it uses the custom min and max as defined by the min and max prop.
    */
   usePvMinMax: PropTypes.bool,
   /**
@@ -312,7 +312,7 @@ PV.propTypes = {
    */
   usePvPrecision: PropTypes.bool,
   /**
-   * Directive to use the units contained in the   pv metdata's EGU field or unitsPv.
+   * Directive to use the units contained in the   pv metadata's EGU field or unitsPv.
    *  If not defined it uses the custom units as defined by the units prop.
    */
 
@@ -342,16 +342,3 @@ PV.defaultProps = {
 
 export default PV
 
-
-
-
-
-
-
-
-
-
-//             newValueTrigger={newValueTrigger}
-//             outputValue={outputValue}
-
-//             pvData

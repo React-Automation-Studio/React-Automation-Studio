@@ -147,7 +147,7 @@ ThumbWheel.propTypes = {
   prec_integer: PropTypes.number,
   /** If defined this sets the precision of the decimal control values of the widget*/
   prec_decimal: PropTypes.number,
-  /** An array of custom increments. If defined, overides any values in 'prec_integer','prec_decimal'*/
+  /** An array of custom increments. If defined, overrides any values in 'prec_integer','prec_decimal'*/
   custom_increments: PropTypes.array,
   
   /**
@@ -219,7 +219,7 @@ ThumbWheel.propTypes = {
   usePvLabel: PropTypes.bool,
   /**
    * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver. 
-   * The pyEpics metadata is unfortunately static and the values used will be the intial values that pvserver receives when it connects the first time. 
+   * The pyEpics metadata is unfortunately static and the values used will be the initial values that pvserver receives when it connects the first time. 
    * This is sufficient in most cases except when the user wants to dynamically update the metaData.
    * In this case a direct connection can be made to all the pv fields by setting useMetadata to false. 
    * If any of the metadata pvs are defined i.e unitsPv then the PV makes a new data  connection to this alternate pv and will
@@ -241,7 +241,7 @@ ThumbWheel.propTypes = {
    */
   usePvPrecision: PropTypes.bool,
   /**
-   * Directive to use the units contained in the   pv metdata's EGU field or unitsPv.
+   * Directive to use the units contained in the   pv metadata's EGU field or unitsPv.
    *  If not defined it uses the custom units as defined by the units prop.
    */
 

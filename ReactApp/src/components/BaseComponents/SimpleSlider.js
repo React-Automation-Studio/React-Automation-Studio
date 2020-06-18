@@ -106,13 +106,19 @@ function SimpleSliderComponent(props) {
     ];
   }
  //console.log("SimpleSlider",props.value,min,max,marks,props.step)
- 
+ function handleOnClickCapture(event){
+  
+  if (event.button !== 0) {
+    event.preventDefault()
+   return;
+ }
+ }
   return (
     <div  className={props.classes.sliderDiv}>
       {content}
       <Slider
         className={props.classes.slider}
-        
+        onPointerDownCapture={handleOnClickCapture}
         aria-labelledby="label"
         disabled={props.disabled}
         value={props.initialized?parseFloat(props.value):0}

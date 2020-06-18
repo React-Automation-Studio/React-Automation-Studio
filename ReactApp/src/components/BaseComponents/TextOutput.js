@@ -362,15 +362,28 @@ TextOutput.propTypes = {
   /** Any of the MUI TextField Props can applied by defining them as an object
    * 
    */
-  muiTextFieldProps: PropTypes.object
+  muiTextFieldProps: PropTypes.object,
+ /**
+   * Tooltip Text
+   */
+  tooltip:PropTypes.string,
+  /**
+   * Directive to show the tooltip
+   */
+  showTooltip:PropTypes.bool,
+  /**
+   *  Any of the MUI Tooltip props can applied by defining them as an object
+   */
 
+  tooltipProps:PropTypes.object,
 
 };
 TextOutput.defaultProps = {
   debug: false,
   variant: "outlined",
   margin: "none",
-  alarmSensitive: false
+  alarmSensitive: false,
+  showTooltip:false
 };
 
 export default withStyles(styles, { withTheme: true })(TextOutput);

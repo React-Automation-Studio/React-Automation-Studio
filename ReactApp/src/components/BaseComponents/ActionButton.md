@@ -17,6 +17,11 @@
     labelPlacement={"top"}
     actionValue={"1"}
     actionString={"write 1 to pva://testIOC:BO1"}
+    tooltip={
+      'Click button to write action value'
+    }
+    showTooltip={true}
+    tooltipProps={{placement:'top'}}
   />
 
   <ActionButton
@@ -25,6 +30,11 @@
     labelPlacement={"top"}
     actionValue={"0"}
     actionString={"write 0 to pva://testIOC:BO1"}
+    tooltip={
+      'Click button to write action value'
+    }
+    showTooltip={true}
+    tooltipProps={{placement:'bottom'}}
   />
   </div>
 ```

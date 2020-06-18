@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import { LanDisconnect } from "mdi-material-ui/";
 import { create, all } from 'mathjs';
 import { useTheme } from '@material-ui/core/styles';
+import Tooltip from '@material-ui/core/Tooltip';
 const config = { }
 const math = create(all, config)
 
@@ -445,6 +446,13 @@ const math = create(all, config)
   }
   
   return (
+    <Tooltip   
+      title={props.tooltip} 
+      disableFocusListener={true}	
+      disableTouchListener={true} 
+      disableHoverListener={props.showTooltip===false} 
+      {...props.tooltipProps}  >
+    
     <div
       style={divStyle}
       onContextMenu={
@@ -453,12 +461,16 @@ const math = create(all, config)
           : handleToggleContextMenu
       }
     >
-      
+     
+
+    
       {child}
+     
       {childPv}
       {childPvs}
       {contextMenu}
     </div>
+     </Tooltip>
   )
 }
 /**
@@ -617,7 +629,20 @@ Widget.propTypes = {
   /**
    * Directive to override alarm severity with the rules defined in the stringSeverity
    */
-  useStringSeverityMatch: PropTypes.bool
+  useStringSeverityMatch: PropTypes.bool,
+  /**
+   * Tooltip Text
+   */
+  tooltip:PropTypes.string,
+  /**
+   * Directive to show the tooltip
+   */
+  showTooltip:PropTypes.bool,
+  /**
+   *  Any of the MUI Tooltip props can applied by defining them as an object
+   */
+
+  tooltipProps:PropTypes.object,
 
 };
 
@@ -630,7 +655,9 @@ Widget.defaultProps = {
   disabled: false,
   onColor: "primary",
   offColor: "default",
+  showTooltip:false,
   useMetadata: true,
+  tooltip:"",
 };
 
 export default Widget

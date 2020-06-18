@@ -154,11 +154,25 @@ TextUpdateMultiplePVs.propTypes = {
 
  /** Array of the process variables, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
  pvs: PropTypes.arrayOf(PropTypes.string),
+ /**
+   * Tooltip Text
+   */
+  tooltip:PropTypes.string,
+  /**
+   * Directive to show the tooltip
+   */
+  showTooltip:PropTypes.bool,
+  /**
+   *  Any of the MUI Tooltip props can applied by defining them as an object
+   */
+
+  tooltipProps:PropTypes.object,
  
 };
 TextUpdateMultiplePVs.defaultProps = {
  debug: false,
  useMetadata:true,
- alarmSensitive: false
+ alarmSensitive: false,
+ showTooltip:false
 };
 export default withStyles(styles, { withTheme: true })(TextUpdateMultiplePVs)

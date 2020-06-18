@@ -84,7 +84,7 @@ const RadioButtonGroup = (props) => {
    * They extends the ones provided for a generic widget.
    */
   RadioButtonGroup.propTypes = {
-    //If defined, this array of strings overides the default EPICS MBBI/O
+    //If defined, this array of strings overrides the default EPICS MBBI/O
     //pv strings and are displayed as the choices in the RadioButtonGroup component
   custom_selection_strings: PropTypes.array,
 
@@ -115,12 +115,26 @@ const RadioButtonGroup = (props) => {
 /** Any of the MUI RadioGroup Props can applied by defining them as an object
    * 
    */
-  muiRadioGroupProps: PropTypes.object
+  muiRadioGroupProps: PropTypes.object,
+   /**
+   * Tooltip Text
+   */
+  tooltip:PropTypes.string,
+  /**
+   * Directive to show the tooltip
+   */
+  showTooltip:PropTypes.bool,
+  /**
+   *  Any of the MUI Tooltip props can applied by defining them as an object
+   */
+
+  tooltipProps:PropTypes.object,
 
   };
 
   RadioButtonGroup.defaultProps = {
-   labelPlacement:'top'
+   labelPlacement:'top',
+   showTooltip:false
   };
 
 

@@ -96,11 +96,25 @@ CheckBox.propTypes = {
  /** Any of the MUI Checkbox Props can applied by defining them as an object
    * 
    */
-  muiCheckBoxProps: PropTypes.object
+  muiCheckBoxProps: PropTypes.object,
+  /**
+   * Tooltip Text
+   */
+  tooltip:PropTypes.string,
+  /**
+   * Directive to show the tooltip
+   */
+  showTooltip:PropTypes.bool,
+  /**
+   *  Any of the MUI Tooltip props can applied by defining them as an object
+   */
+
+  tooltipProps:PropTypes.object,
 
 }
 CheckBox.defaultProps = {
   onColor: 'primary',
   debug: false,
+  showTooltip:false
 }
 export default withStyles(styles, { withTheme: true })(CheckBox);

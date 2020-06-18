@@ -612,6 +612,19 @@ Slider.propTypes = {
 
 
   showValue: PropTypes.bool,
+   /**
+   * Tooltip Text
+   */
+  tooltip:PropTypes.string,
+  /**
+   * Directive to show the tooltip
+   */
+  showTooltip:PropTypes.bool,
+  /**
+   *  Any of the MUI Tooltip props can applied by defining them as an object
+   */
+
+  tooltipProps:PropTypes.object,
 };
 
 Slider.defaultProps = {
@@ -619,7 +632,8 @@ Slider.defaultProps = {
   step: 1,
   labelPlacement: 'top',
   valuePlacement:'top',
-  showValue:true
+  showValue:true,
+  showTooltip:false
 
 };
 

@@ -105,12 +105,27 @@ StyledIconButton.propTypes = {
  * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
  */
 labelPv: PropTypes.string,
+ /**
+   * Tooltip Text
+   */
+  tooltip:PropTypes.string,
+  /**
+   * Directive to show the tooltip
+   */
+  showTooltip:PropTypes.bool,
+  /**
+   *  Any of the MUI Tooltip props can applied by defining them as an object
+   */
+
+  tooltipProps:PropTypes.object,
 
 };
 StyledIconButton.defaultProps = {
   onColor:'primary',
   offColor:'default',
   debug: false,
+  showTooltip:false
+
 }
 export default  withStyles(styles, { withTheme: true })(StyledIconButton);
 

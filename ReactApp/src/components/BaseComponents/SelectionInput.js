@@ -146,9 +146,28 @@ SelectionInput.propTypes = {
    * If not defined it uses the custom label as defined by the label prop.
    */
   usePvLabel: PropTypes.bool,
- 
+  /**
+   * Tooltip Text
+   */
+  tooltip:PropTypes.string,
+  /**
+   * Directive to show the tooltip
+   */
+  showTooltip:PropTypes.bool,
+  /**
+   *  Any of the MUI Tooltip props can applied by defining them as an object
+   */
+
+  tooltipProps:PropTypes.object,
+  
+  };
   
 
-};
+
+SelectionInput.defaultProps = {
+  
+  showTooltip:false,
+  variant:'outlined',
+ };
 
 export default withStyles(styles, { withTheme: true })(SelectionInput);

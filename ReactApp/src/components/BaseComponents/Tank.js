@@ -394,6 +394,19 @@ Tank.propTypes = {
   
   /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
   pv: PropTypes.string,
+  /**
+   * Tooltip Text
+   */
+  tooltip:PropTypes.string,
+  /**
+   * Directive to show the tooltip
+   */
+  showTooltip:PropTypes.bool,
+  /**
+   *  Any of the MUI Tooltip props can applied by defining them as an object
+   */
+
+  tooltipProps:PropTypes.object,
   
 
 };
@@ -410,7 +423,9 @@ Tank.defaultProps = {
   aspectRatio: 1,
   lockAspectRatio: true,
   showTicks: true,
-  labelPlacement:'top'
+  labelPlacement:'top',
+  showTooltip:false
+  
 
 };
 

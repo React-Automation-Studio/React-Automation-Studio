@@ -91,12 +91,27 @@ RadioButton.propTypes = {
  /** Any of the MUI Radio Props can applied by defining them as an object
    * 
    */
-  muiRadioProps: PropTypes.object
+  muiRadioProps: PropTypes.object,
+   /**
+   * Tooltip Text
+   */
+  tooltip:PropTypes.string,
+  /**
+   * Directive to show the tooltip
+   */
+  showTooltip:PropTypes.bool,
+  /**
+   *  Any of the MUI Tooltip props can applied by defining them as an object
+   */
+
+  tooltipProps:PropTypes.object,
+  
 
 
 }
 RadioButton.defaultProps = {
   onColor: 'primary',
   debug: false,
+  showTooltip:false
 }
 export default withStyles(styles, { withTheme: true })(RadioButton);

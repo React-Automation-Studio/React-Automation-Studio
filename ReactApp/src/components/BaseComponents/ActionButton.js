@@ -54,6 +54,7 @@ const ActionButtonComponent=(props)=> {
           variant="contained"
           color={props.onColor}
           onClick={handleButtonClick}
+          {...props.muiButtonProps}
         >
           {props.actionString}
         </Button>
@@ -109,7 +110,11 @@ ActionButton.propTypes = {
   /** If defined, then the DataConnection debugging information will be displayed*/
   debug: PropTypes.bool,
   /** local variable intialization value*/
-  intialLocalVariableValue: PropTypes.string
+  intialLocalVariableValue: PropTypes.string,
+  /** Any of the MUI Button Props can applied by defining them as an object
+   * 
+   */
+  muiButtonProps: PropTypes.object
 
 };
 

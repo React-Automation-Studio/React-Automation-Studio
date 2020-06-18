@@ -1,6 +1,6 @@
-The props that are fowarded to he child component are detailed in the table below:
+The props that are forwarded to he child component are detailed in the table below:
 
-| Fowarded Props |Type |Default | Description |
+| Forwarded Props |Type |Default | Description |
 |:-:|:-|
 |props|object|| all the props provided to the widget as describe in the props&methods section below.
 |initialized|bool|false|true if all the pvs specified in the pv and pvs props are initialized, and all the forwarded props are valid,
@@ -14,9 +14,9 @@ The props that are fowarded to he child component are detailed in the table belo
 |disabled|bool|true|Disabled is derived from `initialized !== true  OR readOnly` ,
 |readOnly|bool|true| False if the widget has write access to the pv or pvs.
 |alarmSeverity|number|0| pv alarm severity, 0=no alarm, 1=minor alarm, 2=major alarm.
-|enumStrs||| enumerator strings  devrived from the pv's metadata.enum_strings or custom_selection_strings
+|enumStrs||| enumerator strings  derived from the pv's metadata.enum_strings or custom_selection_strings
 |disconnectedIcon|svgIcon||: Use the disconnectedIcon to indicated if the pv is not initialized
-|handleChange|callback|| The handleChange can called from any components handleChange callback, it accepts a value, and updates the widgets value state variable with it. The value is not wrtitten to the pv value until the handleCommitChange callback is called.
+|handleChange|callback|| The handleChange can called from any components handleChange callback, it accepts a value, and updates the widgets value state variable with it. The value is not written to the pv value until the handleCommitChange callback is called.
 |handleCommitChange|callback||The handleCommitChange callback commits the value in widget's state and writes it out to the pv and all the pvs values
 |handleImmediateChange|callback||The handleImmediateChange can be called from any components onChange callback, it accepts a value, and updates the widgets value state variable with it and then writes out the value to the pv.
 |handleFocus|callback||The handleFocus callback sets the widgets focus to true. Connect to any components onFocus callback
@@ -25,7 +25,7 @@ The props that are fowarded to he child component are detailed in the table belo
 |pvsData|Array of Objects||And object that contains an array of all the PV components derived from pvs prop. Valid after initialization.      
       
 
-For Exmaples on how to use the widget see the simple example below or have a look at any of the components in the base components folder.
+For Examples on how to use the widget see the simple example below or have a look at any of the components in the base components folder.
 Simple example usage:
 
 ```js static

@@ -2,7 +2,7 @@ The next sections lists all the layout wrapper components that can be used in Re
 
 A layout wrapper is intended to wrap content to provide a consistent look and feel across all interfaces.
 
-React-Automation-Studio currently only contains one layout wrapper component - TradionalLayout. This wraps content with an appbar, footer and sidedrawers. All these features are customisable.
+React-Automation-Studio currently only contains one layout wrapper component - TradionalLayout. This wraps content with an appbar, footer and side drawers. All these features are customizable.
 
 Usage examples and properties for the component is given. The contents of the wrapper components are interactive with the Demo IOC.
 

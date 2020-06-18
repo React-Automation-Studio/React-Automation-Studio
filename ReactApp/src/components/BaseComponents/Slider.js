@@ -4,10 +4,14 @@ import { Typography } from "@material-ui/core";
 import PropTypes from "prop-types";
 import debounce from "lodash.debounce";
 import Widget from "../SystemComponents/Widgets/Widget";
-import RCSlider, { Range } from 'rc-slider';
+import RCSlider  from 'rc-slider';
 
-import uuid from 'uuid';
-//import 'rc-slider/assets/index.css';
+import { FormControlLabel } from "@material-ui/core";
+
+
+
+
+
 const styles = (theme) => {
   const backgroundColor = theme.palette.type === 'light' ? 'rgba(0, 0, 0, 0.23)' : 'rgba(255, 255, 255, 0.23)'; //copied from material ui textfield 
   return (
@@ -16,25 +20,57 @@ const styles = (theme) => {
       root: {
         width: 300,
       },
+      input: {textAlign:'center',marginBottom:8,background:'green'},
       slider: {
-        // padding: "30px 0px ",
+        
         color: "primary",
       },
-      rangeLabel: {
-        paddingBottom: theme.spacing(1) * 1,
-        marginBottom: theme.spacing(1) * 1,
-      },
-      sliderDiv: {
+     
+      horizontalSlider: {
         width: "100%",
-        height: "100%",
-        marginTop: "auto",
-        marginBottom: "auto",
-        marginLeft: "auto",
-        marginRight: "auto",
-        padding: theme.spacing(2),
+     
+        paddingBottom: theme.spacing(3),
         paddingRight: theme.spacing(3),
         paddingLeft: theme.spacing(3),
+    
+      
       },
+      horizontalSliderLabel: {
+        width: "100%",
+    
+        padding: theme.spacing(0),
+    
+      },
+      horizontalSliderValue: {
+        width: "100%",
+     
+        
+        padding: theme.spacing(0),
+       
+      },
+      
+      verticalSliderLabel: {
+        width: "100%",
+        textAlign: 'center',
+        height:'100%', 
+   
+        padding: theme.spacing(1),
+    
+      },
+      verticalSliderValue: {
+        width: "100%",
+        textAlign: 'center',
+        height:'100%', 
+    
+        },
+        verticalSlider: {
+        
+          textAlign: 'center',
+          height:'100%', 
+        
+            padding: theme.spacing(1),
+       
+          },
       '@global': {
         '.rc-slider': {
           position: 'relative',
@@ -79,7 +115,7 @@ const styles = (theme) => {
           ],
           marginTop: -5,
           borderRadius: '50%',
-          //border: 'solid 2px #96dbfa',
+        
           border: 'solid 2px ' + theme.palette.primary.main,
           backgroundColor: theme.palette.primary.main,
           touchAction: 'pan-x'
@@ -152,7 +188,7 @@ const styles = (theme) => {
           marginRight: -4
         },
         '.rc-slider-disabled': {
-          // backgroundColor: theme.palette.grey[500]
+         
         },
         '.rc-slider-disabled .rc-slider-track': {
           backgroundColor: theme.palette.grey[500]
@@ -340,17 +376,18 @@ function SliderComponent(props) {
 
   let content, marks;
   if (props.initialized) {
-    content = (
-      <Typography className={props.classes.rangeLabel}>
-        {props.label} {props.value} {props.units}
+    content = props.showValue===true?(
+      <Typography 
+      className={props.vertical?props.classes.verticalSliderValue:props.classes.horizontalSliderValue}
+      style={{textAlign:'center'}}
+      >
+        {props.value} 
+        {props.units?" "+props.units:""} 
       </Typography>
-    );
+    ):undefined;
+    
   } else {
-    content = (
-      <Typography className={props.classes.rangeLabel}>
-        {props.disconnectedIcon}{" " + props.pvName}
-      </Typography>
-    );
+    content = undefined
   }
   let min = props.min !== undefined ? parseFloat(props.min) : 0;
 
@@ -368,35 +405,55 @@ function SliderComponent(props) {
 
     }
   }
-
-  return (
-
-
-    <div 
+  function handleOnClickCapture(event){
   
-    className={props.classes.sliderDiv}
-      style={{ display: 'flex', height: '100%', flexDirection: 'column', }}>
+   if (event.button !== 0) {
+     event.preventDefault()
+    return;
+  }
+  }
+  return (
+    <div  style={{height:'100%', width:'100%',padding:props.theme.spacing(1)}} onPointerDownCapture={handleOnClickCapture} >
+    <FormControlLabel
+    key={props.pvName + props.initialized}
+    className={props.vertical?props.classes.verticalSliderLabel:props.classes.horizontalSliderLabel}
+    
+    label={props.formControlLabel}
+    labelPlacement={props.labelPlacement}
+    control={
+    <FormControlLabel
+      key={props.pvName + props.initialized}
+      className={props.vertical?props.classes.verticalSliderValue:props.classes.horizontalSliderValue}
+      label={content}
+      labelPlacement={props.valuePlacement}
+      control={
+        <div
+        className={props.vertical?props.classes.verticalSlider:props.classes.horizontalSlider}
+      
 
+        >
+        <RCSlider
 
-      {content}
-      <RCSlider
-
-        
-        // aria-labelledby="label"
+    
         disabled={props.disabled}
         vertical={props.vertical}
         value={props.initialized ? parseFloat(props.value) : 0}
         min={props.initialized ? parseFloat(min) : undefined}
         max={props.initialized ? parseFloat(max) : undefined}
         marks={props.initialized ? marks : undefined}
-        // valueLabelDisplay={props.showThumbValue ? "on" : "off"}
+      
         step={props.step !== undefined ? props.step!=0?props.step:undefined : undefined}
         onChange={handleChange}
         onAfterChange={handleChangeCommited}
       />
+      </div>
+      }
+    />
+    }
+    />
+   </div>
 
 
-    </div>
   );
 
 
@@ -545,11 +602,16 @@ Slider.propTypes = {
    */
 
   step: PropTypes.number,
+  /** label placement*/
+  labelPlacement:PropTypes.oneOf(['start', 'top','bottom','end']),
 };
 
 Slider.defaultProps = {
 //  showThumbValue: false,
   step: 1,
+  labelPlacement: 'top',
+  valuePlacement:'top',
+  showValue:true
 
 };
 

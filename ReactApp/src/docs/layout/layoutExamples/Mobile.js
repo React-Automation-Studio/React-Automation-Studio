@@ -1,13 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
+
 import Grid from '@material-ui/core/Grid';
-import Face from '@material-ui/icons/Face';
+
 import CheckCircle from '@material-ui/icons/CheckCircle';
 import Cancel from '@material-ui/icons/Cancel';
 
-import TextInput from '../../../components/BaseComponents/TextInput';
 import TextOutput from '../../../components/BaseComponents/TextOutput';
 import ToggleButton from '../../../components/BaseComponents/ToggleButton';
 import Gauge from '../../../components/BaseComponents/Gauge';
@@ -31,9 +30,7 @@ const styles = theme => ({
 * @visibleName Mobile Layout
 */
 class Mobile extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+ 
 
   render() {
     const { classes } = this.props;

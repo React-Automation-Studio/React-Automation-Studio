@@ -97,6 +97,7 @@ const BitIndicatorsComponent = (props) => {
   }
 
   let bits = bitArray.map((value, index) => {
+    // eslint-disable-next-line eqeqeq 
     let color = !props.initialized? props.theme.palette.grey[300]: value != 0 ? onColor     : offColor;
     return (
       <Grid
@@ -110,7 +111,7 @@ const BitIndicatorsComponent = (props) => {
           label={bitLabels[index]}
           labelPlacement={bitLabelPos}
           control={
-            <SvgIcon size="small" style={bitStyles[index]} style={{ color: color }} {...props.muiSvgIconProps}>
+            <SvgIcon size="small"  style={{...bitStyles[index], color: color }} {...props.muiSvgIconProps}>
               {props.children === undefined ? (
                 <Lens />
               ) : (

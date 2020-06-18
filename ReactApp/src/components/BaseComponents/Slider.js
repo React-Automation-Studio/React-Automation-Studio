@@ -441,7 +441,7 @@ function SliderComponent(props) {
         min={props.initialized ? parseFloat(min) : undefined}
         max={props.initialized ? parseFloat(max) : undefined}
         marks={props.initialized ? marks : undefined}
-      
+      // eslint-disable-next-line eqeqeq 
         step={props.step !== undefined ? props.step!=0?props.step:undefined : undefined}
         onChange={handleChange}
         onAfterChange={handleChangeCommited}

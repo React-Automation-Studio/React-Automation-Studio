@@ -27,7 +27,7 @@ import ThumbWheel from '../../BaseComponents/ThumbWheel';
 
 import DataConnection from '../../SystemComponents/DataConnection';
 
-import SwitchComponent from '../../BaseComponents/SwitchComponent';
+import Switch from '../../BaseComponents/Switch';
 import SelectionInput from '../../BaseComponents/SelectionInput';
 import ToggleButton from '../../BaseComponents/ToggleButton';
 import ActionButton from '../../BaseComponents/ActionButton';

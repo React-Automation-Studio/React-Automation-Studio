@@ -7,7 +7,7 @@ import TextOutput from '../../BaseComponents/TextOutput';
 import Slider from '../../BaseComponents/Slider';
 import TextUpdate from '../../BaseComponents/TextUpdate';
 import Grid from '@material-ui/core/Grid';
-import SwitchComponent from '../../BaseComponents/SwitchComponent';
+import Switch from '../../BaseComponents/Switch';
 import ToggleButton from '../../BaseComponents/ToggleButton';
 import ActionButton from '../../BaseComponents/ActionButton';
 

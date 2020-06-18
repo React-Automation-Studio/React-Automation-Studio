@@ -16,7 +16,7 @@ import GraphY from '../../BaseComponents/GraphY';
 
 import Grid from '@material-ui/core/Grid';
 import DataConnection from '../../SystemComponents/DataConnection';
-import SwitchComponent from '../../BaseComponents/SwitchComponent';
+import Switch from '../../BaseComponents/Switch';
 import SelectionInput from '../../BaseComponents/SelectionInput';
 import SelectionList from '../../BaseComponents/SelectionList';
 import ToggleButton from '../../BaseComponents/ToggleButton';
@@ -128,7 +128,7 @@ class MobileDemo2 extends React.Component {
             </Grid>
             <Grid item xs={6} lg={1}>
 
-              <SwitchComponent pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}} usePvLabel={true}/>
+              <Switch pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}} usePvLabel={true}/>
             </Grid>
             <Grid item xs={6} lg={1}>
 

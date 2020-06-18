@@ -19,7 +19,7 @@ import Grid from '@material-ui/core/Grid';
 import DataConnection from '../SystemComponents/DataConnection';
 import Gauge from '../BaseComponents/Gauge';
 import Card from '@material-ui/core/Card';
-import SwitchComponent from '../BaseComponents/SwitchComponent';
+import Switch from '../BaseComponents/Switch';
 import StyledIconButton from '../BaseComponents/StyledIconButton';
 import SideBar from '../SystemComponents/SideBar';
 import MobileDemo2 from './Mobile/MobileDemo2';

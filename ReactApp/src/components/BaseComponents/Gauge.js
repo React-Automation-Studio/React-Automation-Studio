@@ -5,7 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 
 
-import uuid from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import Widget from "../SystemComponents/Widgets/Widget";
 import { FormControlLabel } from "@material-ui/core";
 import {
@@ -87,7 +87,7 @@ function getTickValues(props, min, max, numberOfTicks, x0, x1, y1, xOffset, radi
 
 
 function GaugeComponent(props) {
-  const gradientId = uuid.v4();
+  const gradientId = uuidv4();
   const { classes } = props;
   const units = props.units;
   const value = props.value;

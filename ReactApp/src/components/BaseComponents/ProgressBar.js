@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import PropTypes from 'prop-types';
 
-import uuid from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 
 
 import Widget from "../SystemComponents/Widgets/Widget";
@@ -107,7 +107,7 @@ function getTickValues(props, min, max, numberOfTicks, x0, x1, x2, y1, y2, xOffs
 
 
 const ProgressBarComponent = (props) => {
-  const gradientId = uuid.v4();
+  const gradientId = uuidv4();
 
   const value = props.value;
   const min = props.min;

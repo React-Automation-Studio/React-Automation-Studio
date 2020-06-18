@@ -1,7 +1,7 @@
 import React from 'react'
 import AutomationStudioContext from './AutomationStudioContext';
 import { withStyles } from '@material-ui/core/styles';
-import uuid from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 const styles = theme => ({
   body1: theme.typography.body1,
 
@@ -23,7 +23,7 @@ class DeprecatedLocalPV extends React.Component {
         pvname=pvname.replace(macro.toString(),this.props.macros[macro].toString());
       }
       this.state ={
-        'id': uuid.v4(),
+        'id': uuidv4(),
         'initialized':false,
         'pvname':pvname,
         'interalValue':' ',

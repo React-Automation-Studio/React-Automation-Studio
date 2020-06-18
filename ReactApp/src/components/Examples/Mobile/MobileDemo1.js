@@ -224,7 +224,7 @@ class MobileDemo1 extends React.Component {
                     <div style={{marginTop:'16px'}}>
                       <Grid container direction="row" item xs={12} spacing={2}>
                         <Grid item xs={12}  >
-                          <Slider pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}} usePvMinMax={true} min={1000} max={500} usePvLabel={true}  />
+                          <Slider pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}} usePvMinMax={true}  />
                         </Grid>
                       </Grid>
                     </div>}

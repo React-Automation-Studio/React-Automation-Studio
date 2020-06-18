@@ -12,7 +12,7 @@ TextInput example connection to an SoftChannel EPICS AI pv:
        alarmSensitive={true}
     />
 ```
-TextInput example connection to a SoftChannel EPICS AI pv with example overides of EPICS fields:
+TextInput example connection to a SoftChannel EPICS AI pv with example overrides of EPICS fields:
 
 ```js
     <TextInput  

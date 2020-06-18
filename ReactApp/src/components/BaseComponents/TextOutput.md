@@ -12,7 +12,7 @@ TextOutput example connection to an SoftChannel EPICS AI pv:
        alarmSensitive={true}
     />
 ```
-TextOutput example connection to a SoftChannel EPICS AI pv with example overides of EPICS fields:
+TextOutput example connection to a SoftChannel EPICS AI pv with example overrides of EPICS fields:
 
 ```js
     <TextOutput  

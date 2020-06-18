@@ -70,7 +70,7 @@ CheckBox.propTypes = {
   /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
   macros: PropTypes.object,
 
-  /** local variable intialization value*/
+  /** local variable initialization value*/
   intialLocalVariableValue: PropTypes.string,
   /** If defined, then the DataConnection debugging information will be displayed*/
   debug: PropTypes.bool,

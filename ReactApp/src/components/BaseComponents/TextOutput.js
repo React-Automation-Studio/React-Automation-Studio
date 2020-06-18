@@ -229,7 +229,7 @@ TextOutput.propTypes = {
   debug: PropTypes.bool,
 
   /**
-   * Local variable intialization value.
+   * Local variable initialization value.
    * When using loc:// type PVs.
    */
   initialLocalVariableValue: PropTypes.string,

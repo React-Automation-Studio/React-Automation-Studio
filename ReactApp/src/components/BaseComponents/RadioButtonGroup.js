@@ -100,7 +100,7 @@ const RadioButtonGroup = (props) => {
   /** label placement*/
   labelPlacement: PropTypes.oneOf(['start', 'top', 'bottom', 'end']),
   
-  /** local variable intialization value*/
+  /** local variable initialization value*/
   intialLocalVariableValue:PropTypes.string,
   /**
    * Directive to fill the component's label with

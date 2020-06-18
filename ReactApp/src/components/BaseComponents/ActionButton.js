@@ -102,14 +102,14 @@ ActionButton.propTypes = {
   /** Custom label to be used, if  `usePvLabel` is not defined. */
   label: PropTypes.string,
 
-  /** Postion of label*/
+  /** Position of label*/
   labelPlacement: PropTypes.oneOf(['top', 'bottom', 'start', 'end']),
 
   /** If defined, then the string value of the EPICS enumerator type will be forced to be used, if not defined the the enumerator index is used */
   useStringValue: PropTypes.bool,
   /** If defined, then the DataConnection debugging information will be displayed*/
   debug: PropTypes.bool,
-  /** local variable intialization value*/
+  /** local variable initialization value*/
   intialLocalVariableValue: PropTypes.string,
   /** Any of the MUI Button Props can applied by defining them as an object
    * 

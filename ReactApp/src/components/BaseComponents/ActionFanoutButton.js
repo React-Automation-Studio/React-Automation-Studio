@@ -312,7 +312,7 @@ ActionFanoutButton.propTypes = {
   useStringValue:PropTypes.bool,
   /** If defined, then the DataConnection debugging information will be displayed*/
   debug:PropTypes.bool,
-  /** local variable intialization value*/
+  /** local variable initialization value*/
   intialLocalVariableValue:PropTypes.string
 
 

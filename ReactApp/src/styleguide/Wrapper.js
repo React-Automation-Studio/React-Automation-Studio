@@ -11,9 +11,9 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 import AutomationStudioContext from '../components/SystemComponents/AutomationStudioContext';
-import { blue, indigo, pink, red, green, cyan, lime } from '@material-ui/core/colors'
+
 import io from 'socket.io-client';
-import { lightTheme, darkTheme, themes } from '../components/UI/Themes/DefaultTheme'
+import {  themes } from '../Themes'
 import ReactVisCssBaseline from '../components/SystemComponents/ReactVisCssBaseline';
 
 console.log('process.env', process.env)

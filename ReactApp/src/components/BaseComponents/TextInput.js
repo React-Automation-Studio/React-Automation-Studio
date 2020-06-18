@@ -102,6 +102,8 @@ const TextInputComponent=(props)=> {
       variant={props.variant}
       disabled={props.disabled}
       InputProps={inputProps}
+      {...props.muiTextFieldProps}
+      
       
     />
   );
@@ -132,7 +134,7 @@ TextInput.propTypes = {
   /** Material-UI TextField margin*/
   margin: PropTypes.string,
    /**
-   * Directive to use the  alarm severity status to alter the fields backgorund color.
+   * Directive to use the  alarm severity status to alter the fields background color.
    */
 
   alarmSensitive: PropTypes.bool,
@@ -147,7 +149,7 @@ TextInput.propTypes = {
   debug: PropTypes.bool,
 
   /**
-   * Local variable intialization value.
+   * Local variable initialization value.
    * When using loc:// type PVs.
    */
   initialLocalVariableValue: PropTypes.string,
@@ -209,7 +211,7 @@ TextInput.propTypes = {
   usePvLabel: PropTypes.bool,
   /**
    * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver. 
-   * The pyEpics metadata is unfortunately static and the values used will be the intial values that pvserver receives when it connects the first time. 
+   * The pyEpics metadata is unfortunately static and the values used will be the initial values that pvserver receives when it connects the first time. 
    * This is sufficient in most cases except when the user wants to dynamically update the metaData.
    * In this case a direct connection can be made to all the pv fields by setting useMetadata to false. 
    * If any of the metadata pvs are defined i.e unitsPv then the PV makes a new data  connection to this alternate pv and will
@@ -222,7 +224,7 @@ TextInput.propTypes = {
    * Directive to use the pv metadata's HOPR and LOPR fields or the minPv and maxPv values
    * to limit the maximum and minimum values
    * that can be contained in the value.
-   * If not defined it uses the custom mina nd max as defined by the min and max prop.
+   * If not defined it uses the custom min and max as defined by the min and max prop.
    */
   usePvMinMax: PropTypes.bool,
   /**
@@ -246,7 +248,7 @@ TextInput.propTypes = {
 
   
   /**
-   * If defined, then the string representaion of the number can be formatted
+   * If defined, then the string representation of the number can be formatted
    * using the mathjs format function
    * eg. numberFormat={{notation: 'engineering',precision: 3}}.
    * See https://mathjs.org/docs/reference/functions/format.html for more examples
@@ -273,9 +275,28 @@ TextInput.propTypes = {
    */
   stringSeverity: PropTypes.object,
   /**
-   * Directive to overided alarm severity with the rules defined in the stringSeverity
+   * Directive to overide the alarm severity with the rules defined in the stringSeverity
    */
   useStringSeverityMatch: PropTypes.bool,
+  /** Any of the MUI TextField Props can applied by defining them as an object
+   * 
+   */
+  muiTextFieldProps: PropTypes.object,
+   /**
+   * Tooltip Text
+   */
+  tooltip:PropTypes.string,
+  /**
+   * Directive to show the tooltip
+   */
+  showTooltip:PropTypes.bool,
+  /**
+   *  Any of the MUI Tooltip props can applied by defining them as an object
+   */
+
+  tooltipProps:PropTypes.object,
+
+  
 
 
 };
@@ -283,7 +304,8 @@ TextInput.defaultProps = {
   debug: false,
   variant: "outlined",
   margin: "none",
-  alarmSensitive: false
+  alarmSensitive: false,
+  showTooltip:false
 };
 
 export default withStyles(styles, { withTheme: true })(TextInput);

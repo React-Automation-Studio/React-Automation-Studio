@@ -5,7 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 
 
-import uuid from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import Widget from "../SystemComponents/Widgets/Widget";
 import { FormControlLabel } from "@material-ui/core";
 import {
@@ -87,7 +87,7 @@ function getTickValues(props, min, max, numberOfTicks, x0, x1, y1, xOffset, radi
 
 
 function GaugeComponent(props) {
-  const gradientId = uuid.v4();
+  const gradientId = uuidv4();
   const { classes } = props;
   const units = props.units;
   const value = props.value;
@@ -245,7 +245,7 @@ Gauge.propTypes = {
   debug: PropTypes.bool,
 
   /**
-   * Local variable intialization value.
+   * Local variable initialization value.
    * When using loc:// type PVs.
    */
   initialLocalVariableValue: PropTypes.string,
@@ -308,7 +308,7 @@ Gauge.propTypes = {
   usePvLabel: PropTypes.bool,
   /**
    * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver. 
-   * The pyEpics metadata is unfortunately static and the values used will be the intial values that pvserver receives when it connects the first time. 
+   * The pyEpics metadata is unfortunately static and the values used will be the initial values that pvserver receives when it connects the first time. 
    * This is sufficient in most cases except when the user wants to dynamically update the metaData.
    * In this case a direct connection can be made to all the pv fields by setting useMetadata to false. 
    * If any of the metadata pvs are defined i.e unitsPv then the PV makes a new data  connection to this alternate pv and will
@@ -351,7 +351,19 @@ Gauge.propTypes = {
   /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
   pv: PropTypes.string,
  
-  
+  /**
+   * Tooltip Text
+   */
+  tooltip:PropTypes.string,
+  /**
+   * Directive to show the tooltip
+   */
+  showTooltip:PropTypes.bool,
+  /**
+   *  Any of the MUI Tooltip props can applied by defining them as an object
+   */
+
+  tooltipProps:PropTypes.object,
 
 
 };
@@ -363,6 +375,7 @@ Gauge.defaultProps = {
   max: 100,
   usePvPrecision: false,
   labelPlacement:'top',
+  showTooltip:false
 };
 
 export default withStyles(styles, { withTheme: true })(Gauge)

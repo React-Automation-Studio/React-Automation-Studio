@@ -1,9 +1,9 @@
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
-import { Checkbox as MuiCheckBox, FormControlLabel } from "@material-ui/core";
+import { FormControlLabel} from "@material-ui/core";
+import MuiSwitch from "@material-ui/core/Switch";
 import Widget from "../SystemComponents/Widgets/Widget";
 import PropTypes from 'prop-types';
-
 const styles = (theme) => ({
   root: {
     display: "flex",
@@ -19,53 +19,57 @@ const styles = (theme) => ({
   },
 });
 
-/**
- * The CheckBox component is a wrapper on a Material-UI CheckBox component.
- https://material-ui.com/api/checkbox/
- */
-const CheckBoxComponent = (props) => {
-
+/* eslint-disable eqeqeq */
+const SwitchInternalComponent = (props) => {
+  
 
   /**
-   * Send checkbox value to the PV.
+   * Save switch state.
    * @param {Event} event
    */
-  const handleButtonChange=(event)=> {
+ const handleButtonChange=(event)=> {
     let value = event.target.checked ? 1 : 0;
     props.handleImmediateChange(value);
   }
 
-
+ 
+    return (
+      <FormControlLabel
+        key={props.pvName}
+        className={props.classes.FormControl}
+        disabled={props.disabled}
+        label={props.label}
+        labelPlacement={props.labelPosition}
+        control={
+          <MuiSwitch
+            onChange={handleButtonChange}
+            checked={props.value == 1}
+            color={props.onColor}
+            {... props.muiSwitchProps}
+          />
+        }
+      />
+    );
+  }
+  /* eslint-disable eqeqeq */
+/**
+ * The Switch component is a wrapper on a Material-UI Switch component.
+ * The Switch component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
+ * The margins and spacing must be controlled from the parent component.<br/><br/>
+ * Material-UI Switch Demos:
+ * https://material-ui.com/components/switches/#switch<br/><br/>
+ * Material-UI Switch API:
+ * https://material-ui.com/api/switch/
+ */
+const Switch =(props)=>{
   return (
-    /* eslint-disable eqeqeq */
-    <FormControlLabel
-      key={props.pvName}
-      className={props.classes.FormControl}
-      disabled={props.disabled}
-      label={props.formControlLabel}
-      labelPlacement={props.labelPlacement}
-      control={
-        <MuiCheckBox
-          onChange={handleButtonChange}
-          checked={props.value == 1}
-          color={props.onColor}
-          {...props.muiCheckBoxProps}
-        />
-      }
-    />
-    /* eslint-enable eqeqeq */
-  );
-
-}
-
-const CheckBox = (props) => {
-  return (
-    <Widget {...props} component={CheckBoxComponent} usePvMinMax={false} usePvPrecision={false} min={undefined} max={undefined} prec={undefined}/>
-
+    <Widget {...props} component={SwitchInternalComponent} usePvMinMax={false} usePvPrecision={false} min={undefined} max={undefined} prec={undefined} />
+       
+    
   )
 }
 
-CheckBox.propTypes = {
+Switch.propTypes = {
   /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
   pv: PropTypes.string.isRequired,
   /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
@@ -93,11 +97,11 @@ CheckBox.propTypes = {
   * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
   */
  labelPv: PropTypes.string,
- /** Any of the MUI Checkbox Props can applied by defining them as an object
+ /** Any of the MUI Switch Props can applied by defining them as an object
    * 
    */
-  muiCheckBoxProps: PropTypes.object,
-  /**
+  muiSwitchProps: PropTypes.object,
+   /**
    * Tooltip Text
    */
   tooltip:PropTypes.string,
@@ -110,11 +114,14 @@ CheckBox.propTypes = {
    */
 
   tooltipProps:PropTypes.object,
+  
 
 }
-CheckBox.defaultProps = {
+Switch.defaultProps = {
   onColor: 'primary',
   debug: false,
   showTooltip:false
+
 }
-export default withStyles(styles, { withTheme: true })(CheckBox);
+export default withStyles(styles, { withTheme: true })(Switch)
+

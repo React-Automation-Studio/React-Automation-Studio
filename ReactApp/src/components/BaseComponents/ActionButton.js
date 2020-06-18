@@ -54,6 +54,7 @@ const ActionButtonComponent=(props)=> {
           variant="contained"
           color={props.onColor}
           onClick={handleButtonClick}
+          {...props.muiButtonProps}
         >
           {props.actionString}
         </Button>
@@ -64,7 +65,7 @@ const ActionButtonComponent=(props)=> {
 
 /**
  * The ActionButton Component is a wrapper on the Material-UI Button component.
- * The ActionButton will ouput the `actionValue` to the process variable when pressed.
+ * The ActionButton will output the `actionValue` to the process variable when pressed.
  * The ActionButton component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
  * The margins and spacing must be controlled from the parent component.<br/><br/>
  * Material-UI Button Demos:
@@ -101,16 +102,38 @@ ActionButton.propTypes = {
   /** Custom label to be used, if  `usePvLabel` is not defined. */
   label: PropTypes.string,
 
-  /** Postion of label*/
+  /** Position of label*/
   labelPlacement: PropTypes.oneOf(['top', 'bottom', 'start', 'end']),
 
   /** If defined, then the string value of the EPICS enumerator type will be forced to be used, if not defined the the enumerator index is used */
   useStringValue: PropTypes.bool,
   /** If defined, then the DataConnection debugging information will be displayed*/
   debug: PropTypes.bool,
-  /** local variable intialization value*/
-  intialLocalVariableValue: PropTypes.string
+  /** local variable initialization value*/
+  intialLocalVariableValue: PropTypes.string,
+  /** Any of the MUI Button Props can applied by defining them as an object
+   * 
+   */
+  muiButtonProps: PropTypes.object,
+  /**
+   * Tooltip Text
+   */
+  tooltip:PropTypes.string,
+  /**
+   * Directive to show the tooltip
+   */
+  showTooltip:PropTypes.bool,
+  /**
+   *  Any of the MUI Tooltip props can applied by defining them as an object
+   */
 
+  tooltipProps:PropTypes.object,
+
+
+};
+ActionButton.defaultProps = {
+ 
+  showTooltip:false
 };
 
 export default withStyles(styles, { withTheme: true })(ActionButton);

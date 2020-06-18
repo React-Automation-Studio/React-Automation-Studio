@@ -1,11 +1,10 @@
 import React from 'react';
 
-import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import CheckCircle from '@material-ui/icons/CheckCircle';
 import Cancel from '@material-ui/icons/Cancel';
 
-import ProgressBar from '../../components/BaseComponents/ProgressBar';
+
 import TextOutput from '../../components/BaseComponents/TextOutput';
 import ToggleButton from '../../components/BaseComponents/ToggleButton';
 import Slider from '../../components/BaseComponents/Slider';
@@ -14,13 +13,11 @@ import StyledIconIndicator from '../../components/BaseComponents/StyledIconIndic
 import SelectionInput from '../../components/BaseComponents/SelectionInput';
 import ThumbWheel from '../../components/BaseComponents/ThumbWheel';
 
-const useStyles = makeStyles(theme => ({
 
-}))
 
 const LayoutContent = () => {
 
-    const classes = useStyles()
+   
 
     return (
         <Grid

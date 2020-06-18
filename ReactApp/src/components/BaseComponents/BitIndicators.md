@@ -1,4 +1,26 @@
-BitIndicators local variable example:
+BitIndicators EPICS variable example:
+
+```js
+{/*The TextInput code is included for demonstration purposes only*/}  
+{/*Only the the JSX code between the hashes  is required to instantiate the BitIndicators */}  
+  import TextInput from './TextInput';
+  <div style={{textAlign:'center'}}>
+  <TextInput
+  pv='pva://$(device):mbboTest1' macros={{'$(device)':'testIOC','$(id)':'2'}}
+  label={"Byte Value"}
+  labelPlacement={"top"}
+  
+  />
+  <br/><br/>
+  {/*###############*/}  
+
+  <BitIndicators pv='pva://$(device):mbboTest1' macros={{'$(device)':'testIOC','$(id)':'2'}}label='My Label' labelPlacement='top' bitLabelPlacement='end' usePvBitLabels={true} numberOfBits={5}/>
+
+  {/*###############*/}
+
+  </div>
+```
+
 
 ```js
 {/*The TextInput code is included for demonstration purposes only*/}  
@@ -9,19 +31,19 @@ BitIndicators local variable example:
   pv='pva://$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}}
   label={"Byte Value"}
   labelPlacement={"top"}
-  custom_selection_strings={["OFF","ON"]}
+  
   />
   <br/><br/>
   {/*###############*/}  
 
-  <BitIndicators pv='pva://$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}}label='My Label' labelPlacement='top' bitLabelPlacement='end' />
+  <BitIndicators pv='pva://$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}}label='My Label' labelPlacement='top' bitLabelPlacement='end'  />
 
   {/*###############*/}
 
   </div>
 ```
 
-BitIndicators with custom icon local variable example:
+BitIndicators with custom icon EPICS variable example:
 
 ```js
 {/*The TextInput code is included for demonstration purposes only*/}  
@@ -33,7 +55,7 @@ BitIndicators with custom icon local variable example:
   pv='pva://$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}}
   label={"Byte Value"}
   labelPlacement={"top"}
-  custom_selection_strings={["OFF","ON"]}
+  
   />
   <br/><br/>
   {/*###############*/}  
@@ -47,7 +69,7 @@ BitIndicators with custom icon local variable example:
   </div>
 ```
 
-BitIndicators example connection to a SoftChannel EPICS AI pv with example overides of colors and label placement:
+BitIndicators example connection to a SoftChannel EPICS AI pv with example overrides of colors and label placement:
 
 ```js
 {/*The TextInput code is included for demonstration purposes only*/}  
@@ -59,7 +81,7 @@ BitIndicators example connection to a SoftChannel EPICS AI pv with example overi
   macros={{'$(device)':'testIOC','$(id)':'2'}}
   label={"Byte Value"}
   labelPlacement={"top"}
-  custom_selection_strings={["OFF","ON"]}
+  
   />
   <br/><br/>
   {/*###############*/}  
@@ -88,7 +110,7 @@ BitIndicators example connection to a SoftChannel EPICS AI pv with example overi
   pv='pva://$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}}
   label={"Byte Value"}
   labelPlacement={"top"}
-  custom_selection_strings={["OFF","ON"]}
+  
   />
   <br/><br/>
   {/*###############*/}  

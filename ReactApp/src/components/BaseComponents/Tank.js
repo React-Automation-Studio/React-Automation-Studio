@@ -1,7 +1,7 @@
 import React from 'react'
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import uuid from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import Widget from "../SystemComponents/Widgets/Widget";
 import { FormControlLabel } from "@material-ui/core";
 
@@ -102,7 +102,7 @@ function getTickValues(props, min, max, numberOfTicks, x0, y0, x1, x2, y1, y2, x
 
 
 function TankComponent(props) {
-  const gradientId = uuid.v4();
+  const gradientId = uuidv4();
   const { classes } = props;
   const {initialized}=props;
   let value = initialized?props.value:50;
@@ -281,7 +281,7 @@ Tank.propTypes = {
   debug: PropTypes.bool,
 
   /**
-   * Local variable intialization value.
+   * Local variable initialization value.
    * When using loc:// type PVs.
    */
   initialLocalVariableValue: PropTypes.string,
@@ -394,6 +394,19 @@ Tank.propTypes = {
   
   /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
   pv: PropTypes.string,
+  /**
+   * Tooltip Text
+   */
+  tooltip:PropTypes.string,
+  /**
+   * Directive to show the tooltip
+   */
+  showTooltip:PropTypes.bool,
+  /**
+   *  Any of the MUI Tooltip props can applied by defining them as an object
+   */
+
+  tooltipProps:PropTypes.object,
   
 
 };
@@ -410,7 +423,9 @@ Tank.defaultProps = {
   aspectRatio: 1,
   lockAspectRatio: true,
   showTicks: true,
-  labelPlacement:'top'
+  labelPlacement:'top',
+  showTooltip:false
+  
 
 };
 

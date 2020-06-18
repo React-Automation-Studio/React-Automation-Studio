@@ -17,7 +17,7 @@ import Slider from '../BaseComponents/Slider';
 import Grid from '@material-ui/core/Grid';
 
 
-import SwitchComponent from '../BaseComponents/SwitchComponent';
+import Switch from '../BaseComponents/Switch';
 import SelectionInput from '../BaseComponents/SelectionInput';
 import ToggleButton from '../BaseComponents/ToggleButton';
 import ActionButton from '../BaseComponents/ActionButton';

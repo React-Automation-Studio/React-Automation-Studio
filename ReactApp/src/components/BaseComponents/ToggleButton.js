@@ -93,6 +93,7 @@ const ToggleButtonComponent = (props) => {
           onPointerUp={momentary ? handleMouseUp : undefined}
           onPointerDown={momentary ? handleMouseDown : undefined}
           onPointerLeave={momentary ? handlePointerLeave : undefined}
+          {...props.muiButtonProps}
         > 
           {text}
         </Button>
@@ -153,7 +154,7 @@ ToggleButton.propTypes = {
   debug: PropTypes.bool,
 
   /**
-   * Local variable intialization value.
+   * Local variable initialization value.
    * When using loc:// type PVs.
    */
   initialLocalVariableValue: PropTypes.string,
@@ -192,7 +193,7 @@ ToggleButton.propTypes = {
   usePvLabel: PropTypes.bool,
   /**
    * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver. 
-   * The pyEpics metadata is unfortunately static and the values used will be the intial values that pvserver receives when it connects the first time. 
+   * The pyEpics metadata is unfortunately static and the values used will be the initial values that pvserver receives when it connects the first time. 
    * This is sufficient in most cases except when the user wants to dynamically update the metaData.
    * In this case a direct connection can be made to all the pv fields by setting useMetadata to false. 
    * If any of the metadata pvs are defined i.e unitsPv then the PV makes a new data  connection to this alternate pv and will
@@ -209,6 +210,21 @@ ToggleButton.propTypes = {
   
   /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
   pv: PropTypes.string,
+  /** Any of the MUI Button Props can applied by defining them as an object
+   * 
+   */
+  muiButtonProps: PropTypes.object,
+   /**
+   * Tooltip Text
+   */
+  tooltip:PropTypes.string,
+  /**
+   * Directive to show the tooltip
+   */
+  showTooltip:PropTypes.bool,
+  /**
+   *  Any of the MUI Tooltip props can applied by defining them as an object
+   */
   
 
 };
@@ -219,6 +235,7 @@ ToggleButton.defaultProps = {
   color: 'primary',
   labelPlacement: 'top',
   usePvLabel: false,
+  showTooltip:false
 };
 
 

@@ -103,7 +103,7 @@ TextUpdate.propTypes = {
  debug: PropTypes.bool,
 
  /**
-  * Local variable intialization value.
+  * Local variable initialization value.
   * When using loc:// type PVs.
   */
  initialLocalVariableValue: PropTypes.string,
@@ -229,7 +229,7 @@ TextUpdate.propTypes = {
   */
  stringSeverity: PropTypes.object,
  /**
-  * Directive to overided alarm severity with the rules defined in the stringSeverity
+  * Directive to override alarm severity with the rules defined in the stringSeverity
   */
 
 
@@ -238,11 +238,25 @@ TextUpdate.propTypes = {
   * Material UI Typography variant.
   */
  variant: PropTypes.string,
+  /**
+   * Tooltip Text
+   */
+  tooltip:PropTypes.string,
+  /**
+   * Directive to show the tooltip
+   */
+  showTooltip:PropTypes.bool,
+  /**
+   *  Any of the MUI Tooltip props can applied by defining them as an object
+   */
+
+  tooltipProps:PropTypes.object,
  
 };
 TextUpdate.defaultProps = {
  debug: false,
  variant:'body2',
- alarmSensitive: false
+ alarmSensitive: false,
+ showTooltip:false
 };
 export default withStyles(styles, { withTheme: true })(TextUpdate)

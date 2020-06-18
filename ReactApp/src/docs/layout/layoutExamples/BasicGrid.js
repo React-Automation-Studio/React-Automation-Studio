@@ -18,9 +18,7 @@ const styles = theme => ({
 * @visibleName Basic Grid Layout
 */
 class BasicGrid extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+  
 
   render() {
     const { classes } = this.props;

@@ -55,7 +55,7 @@ const RadioButtonGroupComponent=(props)=>{
         label={props.formControlLabel}
         labelPlacement={props.labelPlacement}
         control={
-          <RadioGroup className={props.classes.RadioGroup}   value={props.value} onChange={handleChange}>
+          <RadioGroup className={props.classes.RadioGroup}   value={props.value} onChange={handleChange} {...props.muiRadioGroupProps}>
             {radioButtons}
           </RadioGroup>
         }
@@ -84,7 +84,7 @@ const RadioButtonGroup = (props) => {
    * They extends the ones provided for a generic widget.
    */
   RadioButtonGroup.propTypes = {
-    //If defined, this array of strings overides the default EPICS MBBI/O
+    //If defined, this array of strings overrides the default EPICS MBBI/O
     //pv strings and are displayed as the choices in the RadioButtonGroup component
   custom_selection_strings: PropTypes.array,
 
@@ -100,7 +100,7 @@ const RadioButtonGroup = (props) => {
   /** label placement*/
   labelPlacement: PropTypes.oneOf(['start', 'top', 'bottom', 'end']),
   
-  /** local variable intialization value*/
+  /** local variable initialization value*/
   intialLocalVariableValue:PropTypes.string,
   /**
    * Directive to fill the component's label with
@@ -112,12 +112,29 @@ const RadioButtonGroup = (props) => {
   * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
   */
  labelPv: PropTypes.string,
+/** Any of the MUI RadioGroup Props can applied by defining them as an object
+   * 
+   */
+  muiRadioGroupProps: PropTypes.object,
+   /**
+   * Tooltip Text
+   */
+  tooltip:PropTypes.string,
+  /**
+   * Directive to show the tooltip
+   */
+  showTooltip:PropTypes.bool,
+  /**
+   *  Any of the MUI Tooltip props can applied by defining them as an object
+   */
 
+  tooltipProps:PropTypes.object,
 
   };
 
   RadioButtonGroup.defaultProps = {
-   labelPlacement:'top'
+   labelPlacement:'top',
+   showTooltip:false
   };
 
 

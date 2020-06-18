@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import PropTypes from 'prop-types';
 
-import uuid from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 
 
 import Widget from "../SystemComponents/Widgets/Widget";
@@ -107,7 +107,7 @@ function getTickValues(props, min, max, numberOfTicks, x0, x1, x2, y1, y2, xOffs
 
 
 const ProgressBarComponent = (props) => {
-  const gradientId = uuid.v4();
+  const gradientId = uuidv4();
 
   const value = props.value;
   const min = props.min;
@@ -308,7 +308,7 @@ ProgressBar.propTypes = {
   /** Width to height aspect ratio, */
   aspectRatio: PropTypes.number,
    /**
-   * Directive to use the  alarm severity status to alter the fields backgorund color.
+   * Directive to use the  alarm severity status to alter the fields background color.
    */
 
   alarmSensitive: PropTypes.bool,
@@ -323,7 +323,7 @@ ProgressBar.propTypes = {
   debug: PropTypes.bool,
 
   /**
-   * Local variable intialization value.
+   * Local variable initialization value.
    * When using loc:// type PVs.
    */
   initialLocalVariableValue: PropTypes.string,
@@ -385,7 +385,7 @@ ProgressBar.propTypes = {
   usePvLabel: PropTypes.bool,
   /**
    * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver. 
-   * The pyEpics metadata is unfortunately static and the values used will be the intial values that pvserver receives when it connects the first time. 
+   * The pyEpics metadata is unfortunately static and the values used will be the initial values that pvserver receives when it connects the first time. 
    * This is sufficient in most cases except when the user wants to dynamically update the metaData.
    * In this case a direct connection can be made to all the pv fields by setting useMetadata to false. 
    * If any of the metadata pvs are defined i.e unitsPv then the PV makes a new data  connection to this alternate pv and will
@@ -398,7 +398,7 @@ ProgressBar.propTypes = {
    * Directive to use the pv metadata's HOPR and LOPR fields or the minPv and maxPv values
    * to limit the maximum and minimum values
    * that can be contained in the value.
-   * If not defined it uses the custom mina nd max as defined by the min and max prop.
+   * If not defined it uses the custom min and max as defined by the min and max prop.
    */
   usePvMinMax: PropTypes.bool,
   /**
@@ -419,7 +419,7 @@ ProgressBar.propTypes = {
 
   
   /**
-   * If defined, then the string representaion of the number can be formatted
+   * If defined, then the string representation of the number can be formatted
    * using the mathjs format function
    * eg. numberFormat={{notation: 'engineering',precision: 3}}.
    * See https://mathjs.org/docs/reference/functions/format.html for more examples
@@ -436,6 +436,20 @@ ProgressBar.propTypes = {
   
   /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
   pv: PropTypes.string,
+  /**
+   * Tooltip Text
+   */
+  tooltip:PropTypes.string,
+  /**
+   * Directive to show the tooltip
+   */
+  showTooltip:PropTypes.bool,
+  /**
+   *  Any of the MUI Tooltip props can applied by defining them as an object
+   */
+
+  tooltipProps:PropTypes.object,
+  
   
  
 
@@ -451,7 +465,8 @@ ProgressBar.defaultProps = {
   showTicks: true,
   aspectRatio: 1.75,
   lockAspectRatio: true,
-  labelPlacement: 'top'
+  labelPlacement: 'top',
+  showTooltip:false
 
 };
 

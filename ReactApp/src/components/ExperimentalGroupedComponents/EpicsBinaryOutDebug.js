@@ -3,7 +3,7 @@ import React from 'react'
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 import TextInput from '../BaseComponents/TextInput';
 import TextOutput from '../BaseComponents/TextOutput';
-import SwitchComponent from '../BaseComponents/SwitchComponent';
+import Switch from '../BaseComponents/Switch';
 import StyledIconButton from '../BaseComponents/StyledIconButton';
 import StyledIconIndicator from '../BaseComponents/StyledIconIndicator';
 import SelectionInput from '../BaseComponents/SelectionInput';
@@ -57,7 +57,7 @@ class EpicsBinaryOutDebug extends React.Component {
         </Grid>
         <Grid item  xs={6}>
 
-          <SwitchComponent pv='pva://$(device)' macros={this.props['macros']} label={'Toggle Switch:'}/>
+          <Switch pv='pva://$(device)' macros={this.props['macros']} label={'Toggle Switch:'}/>
 
         </Grid>
         <Grid item  xs={6}>

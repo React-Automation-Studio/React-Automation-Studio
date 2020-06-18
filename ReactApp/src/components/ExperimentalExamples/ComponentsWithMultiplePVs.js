@@ -7,7 +7,7 @@ import GraphY from '../BaseComponents/GraphY';
 import TextUpdateMultiplePVs from '../BaseComponents/TextUpdateMultiplePVs';
 import TextOutput from '../BaseComponents/TextOutput'
 import { withStyles } from '@material-ui/core/styles';
-import uuid from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 const styles = theme => ({
   body1: theme.typography.body1,
 

@@ -72,11 +72,22 @@ const BitIndicatorsComponent = (props) => {
     bitArray.push(
       props.initialized ? props.value & Math.pow(2, n) : 0
     );
+    if (props.usePvBitLabels===false){
     bitLabels.push(
-      props.bitLabels === undefined
-        ? "Bit " + n
-        : props.bitLabels[n]
+      
+        props.bitLabels === undefined
+          ? "Bit " + n
+          : props.bitLabels[n]
+      
+
+
     );
+    }
+    else{
+      if(n<props.enumStrs.length){
+        bitLabels[n]=props.enumStrs[n];
+      }
+    }
     bitStyles.push({ ["margin" + place]: props.theme.spacing(1) });
   }
   if (props.reverseBits) {
@@ -86,6 +97,7 @@ const BitIndicatorsComponent = (props) => {
   }
 
   let bits = bitArray.map((value, index) => {
+    // eslint-disable-next-line eqeqeq 
     let color = !props.initialized? props.theme.palette.grey[300]: value != 0 ? onColor     : offColor;
     return (
       <Grid
@@ -99,7 +111,7 @@ const BitIndicatorsComponent = (props) => {
           label={bitLabels[index]}
           labelPlacement={bitLabelPos}
           control={
-            <SvgIcon size="small" style={bitStyles[index]} style={{ color: color }}>
+            <SvgIcon size="small"  style={{...bitStyles[index], color: color }} {...props.muiSvgIconProps}>
               {props.children === undefined ? (
                 <Lens />
               ) : (
@@ -111,6 +123,7 @@ const BitIndicatorsComponent = (props) => {
       </Grid>
     );
   });
+  
   return (
     <Grid
       key={props.pvName}
@@ -152,9 +165,9 @@ BitIndicators.propTypes = {
   /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
   macros: PropTypes.object,
 
-  /** local variable intialization value*/
+  /** local variable initialization value*/
   intialLocalVariableValue: PropTypes.string,
-  /** If defined, then the Datainitialized debugging information will be displayed*/
+  /** If defined, then the Data initialized debugging information will be displayed*/
   debug: PropTypes.bool,
   /** label placement*/
   labelPlacement: PropTypes.oneOf(['start', 'top', 'bottom', 'end']),
@@ -170,6 +183,13 @@ BitIndicators.propTypes = {
   horizontal: PropTypes.bool,
   // Reverse bits order.
   reverseBits: PropTypes.bool,
+  /** Any of the MUI Svg Icon can applied by defining them as an object*/
+   
+  muiSvgIconProps: PropTypes.object,
+  /** Directive to use the  PV Bit Labels .
+   * 
+   */
+  usePvBitLabels: PropTypes.bool,
 };
 
 BitIndicators.defaultProps = {
@@ -177,6 +197,7 @@ BitIndicators.defaultProps = {
   horizontal: false,
   reverseBits: false,
   onColor:'primary',
-  offColor:'default'
+  offColor:'default',
+  usePvBitLabels:false
 };
 export default withStyles(styles, { withTheme: true })(BitIndicators);

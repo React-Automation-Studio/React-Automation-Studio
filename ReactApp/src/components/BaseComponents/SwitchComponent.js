@@ -20,7 +20,7 @@ const styles = (theme) => ({
 
 /* eslint-disable eqeqeq */
 const SwitchInternalComponent = (props) => {
-  
+  console.warn("Deprecated use Switch instead")
 
   /**
    * Save switch state.
@@ -44,6 +44,7 @@ const SwitchInternalComponent = (props) => {
             onChange={handleButtonChange}
             checked={props.value == 1}
             color={props.onColor}
+            {... props.muiSwitchProps}
           />
         }
       />
@@ -51,7 +52,7 @@ const SwitchInternalComponent = (props) => {
   }
   /* eslint-disable eqeqeq */
 /**
- * The SwitchComponent component is a wrapper on a Material-UI Selection Control component.
+ * **Deprecated  Use the Switch instead**. The SwitchComponent component is a wrapper on a Material-UI Selection Control component.
  * The Selection Control component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
  * The margins and spacing must be controlled from the parent component.<br/><br/>
  * Material-UI Selection Control Demos:
@@ -73,7 +74,7 @@ SwitchComponent.propTypes = {
   /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
   macros: PropTypes.object,
 
-  /** local variable intialization value*/
+  /** local variable initialization value*/
   intialLocalVariableValue: PropTypes.string,
   /** If defined, then the DataConnection debugging information will be displayed*/
   debug: PropTypes.bool,
@@ -95,6 +96,11 @@ SwitchComponent.propTypes = {
   * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
   */
  labelPv: PropTypes.string,
+ /** Any of the MUI Switch Props can applied by defining them as an object
+   * 
+   */
+  muiSwitchProps: PropTypes.object
+  
 
 }
 SwitchComponent.defaultProps = {

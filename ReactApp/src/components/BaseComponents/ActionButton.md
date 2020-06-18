@@ -17,6 +17,11 @@
     labelPlacement={"top"}
     actionValue={"1"}
     actionString={"write 1 to pva://testIOC:BO1"}
+    tooltip={
+      'Click button to write action value'
+    }
+    showTooltip={true}
+    tooltipProps={{placement:'top'}}
   />
 
   <ActionButton
@@ -25,6 +30,11 @@
     labelPlacement={"top"}
     actionValue={"0"}
     actionString={"write 0 to pva://testIOC:BO1"}
+    tooltip={
+      'Click button to write action value'
+    }
+    showTooltip={true}
+    tooltipProps={{placement:'bottom'}}
   />
   </div>
 ```
@@ -34,6 +44,8 @@ ActionButton to multi variable example:
 {/*The TextOuput code is included for demonstration purposes only*/}  
 {/*Only the the JSX code between the hashes  is required to instantiate the ActionButton */}  
   import TextOutput from './TextOutput';
+  import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+    import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
   <div>
   <div style={{marginBottom:8}}>
     <TextOutput  pv='pva://testIOC:BO1'   label='Value of pva://testIOC:BO1 '/>
@@ -49,6 +61,7 @@ ActionButton to multi variable example:
   labelPlacement={"top"}
   actionValue={"1"}
   actionString={"write '1' "}
+  muiButtonProps={{startIcon:<CloudUploadIcon />}}
 />
 
 <ActionButton
@@ -57,6 +70,7 @@ ActionButton to multi variable example:
   labelPlacement={"top"}
   actionValue={"0"}
   actionString={"write '0' "}
+  muiButtonProps={{endIcon:<CloudDownloadIcon />}}
 />
 {/*###############*/}
 </div>

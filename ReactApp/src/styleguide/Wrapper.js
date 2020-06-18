@@ -13,7 +13,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import AutomationStudioContext from '../components/SystemComponents/AutomationStudioContext';
 
 import io from 'socket.io-client';
-import {  themes } from '../components/UI/Themes/DefaultTheme'
+import {  themes } from '../Themes'
 import ReactVisCssBaseline from '../components/SystemComponents/ReactVisCssBaseline';
 
 console.log('process.env', process.env)

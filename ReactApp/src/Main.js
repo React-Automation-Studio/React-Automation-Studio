@@ -106,11 +106,10 @@ class Main extends Component {
 
         
         <Grid container direction="row" item justify="center" spacing={1} alignItems="center" style={{paddingTop:64}}>
-          <Grid item lg={4} sm={4} xs={2}>
-
-          </Grid>
+          <Grid item lg={4} sm={4}  xs={2}>
+            </Grid>
           <Grid item lg={2} sm={4}  xs={8}>
-            <Grid container direction="row" justify="center" spacing={3} alignItems="stretch">
+            <Grid container direction="row" justify="center" spacing={3} alignItems="center">
               <Grid item xs={12}  >
                 <Button  fullWidth   className= {classes.button} component={Link} to="/MobileDemo1" color="primary" variant='contained'>  Mobile Demo 1 </Button>
               </Grid>

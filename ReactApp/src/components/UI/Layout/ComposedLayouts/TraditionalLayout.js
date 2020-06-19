@@ -198,16 +198,7 @@ TraditionalLayout.propTypes = {
      /** Tab props */
      tabProps: PropTypes.object,
 }
-// value={props.tabValue}
-// onChange={props.handleTabChange}
-// {...props.tabProps}
 
-
-// >
-//     {props.tabs.map((option,index)=>(
-//         <Tab key= {index.toString()} label={option}/>
-//     ))}
-// </Tabs>}
 TraditionalLayout.defaultProps = {
     title: null,
     alignTitle: 'left',

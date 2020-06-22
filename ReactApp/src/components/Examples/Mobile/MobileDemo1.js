@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -17,7 +17,6 @@ import SelectionList from '../../BaseComponents/SelectionList';
 import ThumbWheel from '../../BaseComponents/ThumbWheel';
 
 
-import DataConnection from '../../SystemComponents/DataConnection';
 
 
 import ToggleButton from '../../BaseComponents/ToggleButton';
@@ -41,6 +40,9 @@ import withWidth from '@material-ui/core/withWidth';
 import StyledIconIndicator from '../../BaseComponents/StyledIconIndicator';
 
 import TraditionalLayout from '../../UI/Layout/ComposedLayouts/TraditionalLayout.js';
+
+import {useLocalPV} from '../../SystemComponents/LocalPV'
+
 function TabContainer(props) {
   return (
     <Typography component="div" style={{ padding: 0, flexGrow:1 }}>
@@ -68,46 +70,33 @@ const styles = theme => ({
   },
 });
 
-class MobileDemo1 extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state={
-      value: 0,
-      stateValue:0,
+const MobileDemo1 =(props)=> {
+  //const [select,setSelect]=useState(null);
+  const [showAdvancedSettings,setShowAdvancedSettings]=useState(0);
+  const  editorType=useLocalPV({pv:'loc://editorType',})
 
-
-
-      showAdvancedSettings:0,
-    };
-    this.handleStateChange= this.handleStateChange.bind(this);
-
-  }
-
-
-  handleChange = (event, value) => {
-    this.setState({ value });
+  const handleChange = (event, value) => {
+    setShowAdvancedSettings({ value });
   };
 
 
 
-  handleStateChange(stateValue){
-    //console.log(stateValue)
-    this.setState({ stateValue })
-  };
+  // const handleStateChange=(stateValue)=>{
+  //   //console.log(stateValue)
+  //   setSelect(stateValue)
+  // };
 
 
 
 
 
-  render() {
-    const { width } = this.props;
+  
+    const { width } = props;
     //console.log('width',width)
 
-    const { classes } = this.props;
+    const { classes } = props;
     // console.log('classes justin test1',classes)
-    const { value } = this.state;
-    const { stateValue } = this.state;
-
+    
 
 
     //console.log(softLim);
@@ -137,7 +126,7 @@ class MobileDemo1 extends React.Component {
       
         <div style={{paddingBottom:48}}>
 
-        {value === 0 && <TabContainer key={'tabContainer0'}>
+        {showAdvancedSettings === 0 && <TabContainer key={'tabContainer0'}>
           <Grid   container className={classes.root}>
             <Grid item xs={12}>
               <Grid
@@ -194,7 +183,9 @@ class MobileDemo1 extends React.Component {
                 <Grid item xs={12} sm={12} md={12}  lg={12}>
 
 
-                  <SelectionList horizontal={true} pv='loc://editorType'    useStringValue={true} custom_selection_strings={['ThumbWheel','Slider']} intialLocalVariableValue='ThumbWheel' />
+                  <SelectionList debug={false} horizontal={true} pv='loc://editorType'    useStringValue={true} custom_selection_strings={['ThumbWheel','Slider']} 
+                  initialLocalVariableValue='ThumbWheel' 
+                   />
 
 
 
@@ -202,12 +193,12 @@ class MobileDemo1 extends React.Component {
 
                 </Grid>
                 <Grid item  xs={12}>
-                  {stateValue === 'None'&&
+                  {editorType.value === 'None'&&
                     <Grid container direction="row" item xs={12} spacing={2}>
                       <Grid item xs={12} >
                       </Grid>
                     </Grid>}
-                  {stateValue === 'ThumbWheel'&&
+                  {editorType.value === 'ThumbWheel'&&
                     <Grid container direction="row" item xs={12} >
                       <Grid item xs={12}>
                         <div style={{textAlign:'center',marginTop:'16px',}}>
@@ -220,7 +211,7 @@ class MobileDemo1 extends React.Component {
                         </div>
                       </Grid>
                     </Grid>}
-                  {stateValue === 'Slider'&&
+                  {editorType.value === 'Slider'&&
                     <div style={{marginTop:'16px'}}>
                       <Grid container direction="row" item xs={12} spacing={2}>
                         <Grid item xs={12}  >
@@ -234,7 +225,7 @@ class MobileDemo1 extends React.Component {
 
           </Grid>
         </TabContainer>}
-        {value === 1 && <TabContainer key={'tabContainer1'}>
+        {showAdvancedSettings === 1 && <TabContainer key={'tabContainer1'}>
           <Grid   container className={classes.root}>
             <Grid item xs={12}>
               <Grid container spacing={2} alignItems={'stretch'} direction={'column'} justify={'flex-start'}>
@@ -261,26 +252,19 @@ class MobileDemo1 extends React.Component {
         </div>
 
         <AppBar className={classes.body1} style={{position:'fixed',bottom:0,top:'auto'}} color='inherit'>
-          <Tabs value={value} onChange={this.handleChange} variant="fullWidth" scrollButtons="off">
+          <Tabs value={showAdvancedSettings} onChange={handleChange} variant="fullWidth" scrollButtons="off">
             {/* <Tab icon={<SupervisorAccount />} /> */}
             <Tab icon={<AccountCircle />} />
             <Tab icon={<Settings />} />
           </Tabs>
         </AppBar>
-        <DataConnection
-          pv='loc://editorType'
-          intialLocalVariableValue='ThumbWheel'
-          useStringValue={true}
-          handleInputValue={this.handleStateChange}
-        />
+        
       </TraditionalLayout>
 
       );
     }
-  }
+  
 
-  MobileDemo1.propTypes = {
-    classes: PropTypes.object.isRequired,
-  };
+  
 
   export default withWidth()(withStyles(styles,{withTheme:true})(MobileDemo1));

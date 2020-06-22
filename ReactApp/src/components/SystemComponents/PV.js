@@ -61,7 +61,7 @@ const PV = (props) => {
     newValueTrigger: props.newValueTrigger,
     outputValue: props.outputValue,
     useStringValue: props.useStringValue,
-    intialLocalVariableValue: props.intialLocalVariableValue,
+    initialLocalVariableValue: props.initialLocalVariableValue,
     debug: props.debug,
     pvData: pvData('data')
 
@@ -72,7 +72,7 @@ const PV = (props) => {
       {
         macros: props.macros,
         debug: props.debug,
-        intialLocalVariableValue: props.intialLocalVariableValue,
+        initialLocalVariableValue: props.initialLocalVariableValue,
         pvData: pvData('max')
 
       }
@@ -83,7 +83,7 @@ const PV = (props) => {
       {
         macros: props.macros,
         debug: props.debug,
-        intialLocalVariableValue: props.intialLocalVariableValue,
+        initialLocalVariableValue: props.initialLocalVariableValue,
         pvData: pvData('min')
       }
     ) : undefined;
@@ -93,7 +93,7 @@ const PV = (props) => {
         macros: props.macros,
         useStringValue: true,
         debug: props.debug,
-        intialLocalVariableValue: props.intialLocalVariableValue,
+        initialLocalVariableValue: props.initialLocalVariableValue,
         pvData: pvData('label')
       }
     ) : undefined;
@@ -103,7 +103,7 @@ const PV = (props) => {
         macros: props.macros,
         useStringValue: true,
         debug: props.debug,
-        intialLocalVariableValue: props.intialLocalVariableValue,
+        initialLocalVariableValue: props.initialLocalVariableValue,
         pvData: pvData('units')
       }
     ) : undefined;
@@ -113,7 +113,7 @@ const PV = (props) => {
         macros: props.macros,
         useStringValue: true,
         debug: props.debug,
-        intialLocalVariableValue: props.intialLocalVariableValue,
+        initialLocalVariableValue: props.initialLocalVariableValue,
         pvData: pvData('precision')
       }
     ) : undefined;
@@ -123,7 +123,7 @@ const PV = (props) => {
         macros: props.macros,
         //useStringValue:true,
         debug: props.debug,
-        intialLocalVariableValue: props.intialLocalVariableValue,
+        initialLocalVariableValue: props.initialLocalVariableValue,
         pvData: pvData('alarm')
       }
     ) : undefined;

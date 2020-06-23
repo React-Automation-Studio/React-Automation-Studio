@@ -165,11 +165,11 @@ const MobileDemo1 =(props)=> {
                 <Grid item xs={2} sm={4}  lg={5} >
                   <Grid container direction="column" justify="space-evenly" spacing={2} alignItems="stretch">
                     <Grid item>
-                      <StyledIconIndicator  pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}} onColor='primary' offColor='default' label={'On'} labelPlacement={'end'}/>
+                      <StyledIconIndicator  pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}} onColor={props.theme.palette.ok.main} offColor='default' label={'On'} labelPlacement={'end'}/>
 
                     </Grid>
                     <Grid item>
-                      <StyledIconIndicator  pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}} onColor='default' offColor='secondary' label={'Off'} labelPlacement={'end'}/>
+                      <StyledIconIndicator  pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}} onColor='default' offColor={props.theme.palette.error.main} label={'Off'} labelPlacement={'end'}/>
                     </Grid>
                   </Grid>
                 </Grid>

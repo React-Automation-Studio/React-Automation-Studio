@@ -70,7 +70,7 @@ class EpicsBinaryOutDebug extends React.Component {
         </Grid>
 
         <Grid item  xs={6}>
-          <StyledIconButton  pv='pva://$(device)'macros={this.props['macros']} label={'Indicator button'} labelPlacement={'start'}/>
+          <StyledIconButton  pv='pva://$(device)'macros={this.props['macros']} label={'Indicator button'} labelPlacement={'start'} onColor='primary' offColor='secondary'/>
         </Grid>
         <Grid item  xs={6}>
           <SelectionInput   pv='pva://$(device)'      macros={this.props['macros']}    usePvLabel={true} useStringValue={true}/>

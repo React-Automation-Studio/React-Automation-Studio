@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { indigo, teal, lightBlue, blueGrey, pink, red, blue, green, cyan, deepOrange, orange, amber, lime, grey } from '@material-ui/core/colors'
+import { indigo, teal, lightBlue, blueGrey, pink, red, blue, green,lightGreen,  cyan, deepOrange, orange, amber, lime, grey } from '@material-ui/core/colors'
 import { fade } from '@material-ui/core/styles/colorManipulator';
 
 const lightPalette = () => {
@@ -7,6 +7,7 @@ const lightPalette = () => {
     const primary = indigo;
     const secondary = { main: pink[500] };
     const error = pink;
+    const ok={main:lime['400']}
     const major = red;
     const minor = deepOrange;
     const alarm = {
@@ -59,6 +60,7 @@ const lightPalette = () => {
         primary: primary,
         secondary: secondary,
         error: error,
+        ok:ok,
         major: major,
         minor: minor,
         alarm: alarm,
@@ -75,6 +77,7 @@ const lightBlueGreyPalette = () => {
     const primary = blueGrey;
     const secondary = pink;
     const error = pink;
+    const ok={main:lightGreen['400']}
     const major = red;
     const minor = deepOrange;
     const alarm = {
@@ -126,6 +129,7 @@ const lightBlueGreyPalette = () => {
         primary: primary,
         secondary: secondary,
         error: error,
+        ok:ok,
         major: major,
         minor: minor,
         alarm: alarm,
@@ -144,6 +148,7 @@ const darkOceanPalette = () => {
     const error = pink;
     const major = red;
     const minor = deepOrange;
+    const ok={main:lime[300]}
     const alarm = {
         major: {
             light: major['400'],
@@ -196,6 +201,7 @@ const darkOceanPalette = () => {
         primary: primary,
         secondary: secondary,
         error: error,
+        ok:ok,
         major: major,
         minor: minor,
         alarm: alarm,
@@ -213,6 +219,7 @@ const darkPalette = () => {
     const type = "dark";
     const primary = cyan;
     const secondary = pink;
+    const ok={main:lime['400']}
     const error = pink;
     const major = red;
     const minor = deepOrange;
@@ -265,6 +272,7 @@ const darkPalette = () => {
         primary: primary,
         secondary: secondary,
         error: error,
+        ok:ok,
         major: major,
         minor: minor,
         alarm: alarm,

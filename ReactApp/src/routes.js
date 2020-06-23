@@ -57,10 +57,7 @@ export default props=>(
     <Route path="/Example1" component={Example1} />
     <Route path="/Example2" component={Example2} />
     <Route path="/Example3" component={Example3} />
-    {/* <Route path="/ExperimentalMain" component={ExperimentalMain} /> */}
-    {/* <Route path="/ExperimentalMobileDemo1" component={ExperimentalMobileDemo1} /> */}
-    {/* <Route path="/HooksDebuging" component={HooksDebuging} /> */}
-    {/* <Route path="/ExperimentalEpicsDemos" component={ExperimentalEpicsDemos} /> */}
+   
     </Switch>
 
   </BrowserRouter>

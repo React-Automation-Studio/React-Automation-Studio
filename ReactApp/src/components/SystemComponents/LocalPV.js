@@ -119,8 +119,10 @@ export const useLocalPV = (props) => {
     console.log(contextPv)
     }
     updatePVData(context.localVariables[pv.pvname]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[contextPvValue])
 
+  
   useEffect(() => {
 
     if (props.newValueTrigger > 0) {

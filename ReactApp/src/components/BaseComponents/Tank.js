@@ -4,13 +4,16 @@ import PropTypes from 'prop-types';
 import { v4 as uuidv4 } from 'uuid';
 import Widget from "../SystemComponents/Widgets/Widget";
 import { FormControlLabel } from "@material-ui/core";
+import { create, all } from 'mathjs';
+
 
 import {
 
   makeVisFlexible,
 
 } from 'react-vis';
-
+const config = { }
+const math = create(all, config)
 
 
 const styles = theme => ({
@@ -44,7 +47,7 @@ const styles = theme => ({
 
 function getTickValues(props, min, max, numberOfTicks, x0, y0, x1, x2, y1, y2, xOffset, yOffset, value) {
   const { classes } = props;
-  let units = props.units ? props.units : "";
+  let units = props.units ?" "+ props.units : "";
 
   //this.test("test1");
   //this.handleInputValue();
@@ -55,7 +58,12 @@ function getTickValues(props, min, max, numberOfTicks, x0, y0, x1, x2, y1, y2, x
   if (props.initialized===true) {
     if (props.showTicks === true) {
       for (i = 0; i < (numberOfTicks); i++) {
-        const tickValue = i * (max - min) / (numberOfTicks - 1) + min;
+
+        let tickValue = i * (max - min) / (numberOfTicks - 1) + min;
+        if (typeof props.numberFormat !== 'undefined'){
+          tickValue=math.format(parseFloat(tickValue),props.numberFormat)
+         
+        }
         ticks.push(
           <g key={i}
           >
@@ -65,7 +73,7 @@ function getTickValues(props, min, max, numberOfTicks, x0, y0, x1, x2, y1, y2, x
               y={y2 - i * (y2 - y0 - yOffset) / (numberOfTicks - 1) - 3}
               textAnchor={'end'}
             >
-              {parseFloat(tickValue).toFixed(0) + units}
+              {tickValue + units}
             </text>
           </g>
 
@@ -85,7 +93,7 @@ function getTickValues(props, min, max, numberOfTicks, x0, y0, x1, x2, y1, y2, x
           y={yOffset - 4}
           textAnchor={'middle'}
         >
-          {props.disabled === false ? parseFloat(value).toFixed(0) + units : ''}{}
+          {props.disabled === false ? value + units : ''}{}
         </text>
       </g>
 
@@ -106,6 +114,7 @@ function TankComponent(props) {
   const { classes } = props;
   const {initialized}=props;
   let value = initialized?props.value:50;
+  
   let min = initialized?props.min:0;
   let max = initialized?props.max:100;
 
@@ -383,14 +392,7 @@ Tank.propTypes = {
    * See https://mathjs.org/docs/reference/functions/format.html for more examples
    */
   numberFormat: PropTypes.object,
-  /**
-   * Custom on color to be used, must be derived from Material UI theme color's.
-   */
-  onColor: PropTypes.string,
-  /**
-   * Custom off color to be used, must be derived from Material UI theme color's.
-   */
-  offColor: PropTypes.string,
+  
   
   /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
   pv: PropTypes.string,
@@ -407,6 +409,8 @@ Tank.propTypes = {
    */
 
   tooltipProps:PropTypes.object,
+  /** label placement*/
+  labelPlacement: PropTypes.oneOf(['start', 'top', 'bottom', 'end']),
   
 
 };

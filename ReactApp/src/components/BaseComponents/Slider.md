@@ -4,7 +4,7 @@ Slider EPICS variable example:
 
 
 
-  <Slider  pv='pva://testIOC:amplitude'  showValue={true} usePvMinMax={true} step={1} usePvUnits={true}/>
+  <Slider  pv='pva://testIOC:amplitude'  showValue={true} usePvMinMax={true} usePvLabel={true} step={1} usePvUnits={true}/>
 
 
 
@@ -18,29 +18,6 @@ Slider EPICS variable example with extra marks :
 
 
   <Slider  pv='pva://testIOC:amplitude' marks={{0:0,2500:2500,5000:5000,7500:7500,10000:10000}}  usePvLabel={true} usePvMinMax={true} step={1} usePvUnits={true}/>
-
-
-
-
-```
-Slider EPICS variable example with extra marks :
-```js
-
-
-
-  <Slider  pv='pva://testIOC:amplitude' marks={{0:0,2500:2500,5000:5000,7500:7500,10000:10000}}  usePvLabel={true} usePvMinMax={true} step={1} usePvUnits={true} valuePlacement='bottom'/>
-
-
-
-
-```
-
-Slider EPICS variable example with extra marks :
-```js
-
-
-
-  <Slider  pv='pva://testIOC:amplitude' marks={{0:0,2500:2500,5000:5000,7500:7500,10000:10000}}  usePvLabel={true} usePvMinMax={true} step={1} usePvUnits={true} showValue={false}/>
 
 
 

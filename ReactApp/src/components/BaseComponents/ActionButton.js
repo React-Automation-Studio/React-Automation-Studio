@@ -133,7 +133,8 @@ ActionButton.propTypes = {
 };
 ActionButton.defaultProps = {
  
-  showTooltip:false
+  showTooltip:false,
+  color:'primary',
 };
 
 export default withStyles(styles, { withTheme: true })(ActionButton);

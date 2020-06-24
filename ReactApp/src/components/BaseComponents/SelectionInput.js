@@ -159,6 +159,11 @@ SelectionInput.propTypes = {
    */
 
   tooltipProps:PropTypes.object,
+
+  /** Any of the MUI TextField Props can applied by defining them as an object
+   * 
+   */
+  muiTextFieldProps: PropTypes.object,
   
   };
   

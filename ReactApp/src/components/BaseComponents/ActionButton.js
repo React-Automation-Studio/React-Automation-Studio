@@ -52,7 +52,7 @@ const ActionButtonComponent=(props)=> {
         <Button
           className={props.classes.Button}
           variant="contained"
-          color={props.onColor}
+          color={props.color}
           onClick={handleButtonClick}
           {...props.muiButtonProps}
         >

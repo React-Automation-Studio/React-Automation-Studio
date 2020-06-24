@@ -38,8 +38,8 @@ const SwitchInternalComponent = (props) => {
         key={props.pvName}
         className={props.classes.FormControl}
         disabled={props.disabled}
-        label={props.label}
-        labelPlacement={props.labelPosition}
+        label={props.formControlLabel}
+        labelPlacement={props.labelPlacement}
         control={
           <MuiSwitch
             onChange={handleButtonChange}

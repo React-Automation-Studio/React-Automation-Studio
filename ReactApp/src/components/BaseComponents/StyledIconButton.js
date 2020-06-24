@@ -38,7 +38,7 @@ const StyledIconButtonComponent=(props)=> {
         className={props.classes.FormControl}
         disabled={props.disabled}
         label={props.formControlLabel}
-        labelPlacement={props.labelPosition}
+        labelPlacement={props.labelPlacement}
         control={
           <IconButton
             size="small"
@@ -88,11 +88,11 @@ StyledIconButton.propTypes = {
   /** Custom label to be used, if  `usePvLabel` is not defined. */
   label: PropTypes.string,
       /**
-     * Custom on color to be used, must be derived from Material UI theme color's or can be a standard color.
+     * Custom on color to be used, must be derived from Material UI theme color.
      */
     onColor: PropTypes.string,
     /**
-     * Custom off color to be used, must be derived from Material UI theme color's or can be a standard color.
+     * Custom off color to be used, must be derived from Material UI theme color.
      */
     offColor: PropTypes.string,
     /**

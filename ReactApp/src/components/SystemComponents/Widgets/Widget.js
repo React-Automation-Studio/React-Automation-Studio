@@ -135,6 +135,7 @@ const math = create(all, config)
   useEffect(() => {
     if (!focus) {
       let newValue;
+      
       newValue=checkPrecision(pv.value, prec);
       if (typeof props.numberFormat !== 'undefined'){
         newValue=math.format(parseFloat(newValue),props.numberFormat)
@@ -143,7 +144,9 @@ const math = create(all, config)
       else{
         setValue(newValue)
       }
-      
+      if (props.debug){
+        console.log(newValue)
+    }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [focus, pv.value, prec])
@@ -243,7 +246,7 @@ const math = create(all, config)
     }
   },[props])
   const checkPrecision = (value, prec) => {
-    if (props.usePvPrecision || props.prec) {
+    if (props.usePvPrecision===true || (typeof props.prec!=='undefined')) {
       let precision = parseInt(prec);
       let tempvalue = parseFloat(value);
       if (!isNaN(tempvalue)) {
@@ -260,7 +263,7 @@ const math = create(all, config)
   }
   const isInsideLimits = (value, min, max) => {
 
-    if (props.min || props.max || props.usePvMinMax) {
+    if ((typeof props.min!=='undefined') || (typeof props.max!=='undefined') || props.usePvMinMax) {
 
       let tempValue = parseFloat(value);
       if (!isNaN(tempValue)) {

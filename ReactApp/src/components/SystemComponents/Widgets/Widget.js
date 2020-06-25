@@ -156,12 +156,12 @@ const math = create(all, config)
     if (typeof props.useStringSeverityMatch !== 'undefined'){
       if (props.useStringSeverityMatch===true){
 
-        if (typeof props.StringSeverity !== 'undefined'){
+        if (typeof props.stringSeverity !== 'undefined'){
           let string;
-          for (string in props.StringSeverity){
+          for (string in props.stringSeverity){
             // eslint-disable-next-line eqeqeq
-            if (value==props.StringSeverity[string].stringMatch){
-              newSeverity=props.StringSeverity[string].severity;
+            if (value==props.stringSeverity[string].stringMatch){
+              newSeverity=props.stringSeverity[string].severity;
               break;
             }
 
@@ -171,7 +171,7 @@ const math = create(all, config)
       }
     }
     setAlarmSeverity(newSeverity)
-  }, [pv.severity,props.useStringSeverityMatch,props.StringSeverity,value])
+  }, [pv.severity,props.useStringSeverityMatch,props.stringSeverity,value])
 
 
   useEffect(() => {
@@ -533,14 +533,7 @@ Widget.propTypes = {
   /**
    * when writing to the  pv's output value, increment newValueTrigger to tell the pv component emit the output value to the process variable.
    */
-  newValueTrigger:PropTypes.number,
-  /**
-   * the output value to the process variable. It is only emitted once the newValueTrigger is incremented.
-   */
-  outputValue:PropTypes.any,
-  /**
-   * Custom precision to round the value.
-   */
+
   prec: PropTypes.number,
   /**
    * Custom PV to define the precision to be used, usePvPrecision must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.

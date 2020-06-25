@@ -42,9 +42,7 @@ let PyEpicsServerURL = pvServerBASEURL + ":" + port + "/" + pvServerNamespace;
 
 
 
-let socket = io(PyEpicsServerURL, {
-  transports: ['websocket'],
-})
+
 
 
 
@@ -55,11 +53,12 @@ class RasAppCore extends Component {
 
     let theme = null
     let storedThemeStyle=localStorage.getItem('themeStyle')
-    console.log(storedThemeStyle)
     const {defaultTheme}=this.props;
-    console.log(defaultTheme)
     let themeStyle = storedThemeStyle!==null?defaultTheme:JSON.parse(storedThemeStyle);
     let themeKeys = Object.keys(this.props.themes);
+    let socket = io(PyEpicsServerURL, {
+      transports: ['websocket'],
+    })
     if (themeKeys.includes(themeStyle)) {
       theme = createMuiTheme(this.props.themes[themeStyle])
      
@@ -95,6 +94,7 @@ class RasAppCore extends Component {
 
     
     this.setUserData = (username, roles) => {
+     
       let system = this.state.system;
       let userData = {
         username: username,
@@ -164,6 +164,7 @@ class RasAppCore extends Component {
 
   }
   handleClientAuthorisation(msg) {
+
     this.state.system.setUserData(msg.username, msg.roles);
     this.setState({ 'Authorised': msg.successful, 'AuthorisationFailed': msg.successful !== true });
 
@@ -177,10 +178,8 @@ class RasAppCore extends Component {
     if (jwt) {
       this.setState({ 'redirectToLoginPage': false });
       let socket = this.state.system.socket;
-      socket.on('connect', this.handleConnect);
-      //socket.on('redirectToLogIn', this.handleRedirectToLogIn);
       socket.on('clientAuthorisation', this.handleClientAuthorisation);
-
+      socket.on('connect', this.handleConnect);
 
     }
 
@@ -188,29 +187,23 @@ class RasAppCore extends Component {
 
   }
   componentWillUnmount() {
-    // console.log('unmounted')
     let socket = this.state.system.socket;
     socket.removeListener('connect', this.handleConnect);
-    //  socket.removeListener('redirectToLogIn', this.handleRedirectToLogIn);
     socket.removeListener('clientAuthorisation', this.handleClientAuthorisation);
   }
   render() {
-    //  console.log('node env',process.env.NODE_ENV)
-    //  console.log(this.state.theme)
-
-    //  console.log(this.state)
-    // console.log(this.state.theme)
+    const {system}=this.state;
     return (
 
-      <AutomationStudioContext.Provider value={this.state.system}>
+      <AutomationStudioContext.Provider value={{...system}}>
         <MuiThemeProvider theme={this.state.theme}>
-          <CssBaseline >
-            <ReactVisCssBaseline>
+          <CssBaseline />
+            <ReactVisCssBaseline/>
               {/* <Routes /> */}
                {this.props.children}
 
-            </ReactVisCssBaseline>
-          </CssBaseline>
+            {/* </ReactVisCssBaseline> */}
+          {/* </CssBaseline> */}
         </MuiThemeProvider>
       </AutomationStudioContext.Provider>
     );

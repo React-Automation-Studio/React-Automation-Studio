@@ -145,7 +145,7 @@ class Main extends Component {
                 <Button  fullWidth className= {classes.button} component={Link} to="/Help" color="secondary" variant='contained'>  Help </Button>
               </Grid> */}
               <Grid item xs={12}  >
-                <Button  fullWidth className= {classes.button} target="_blank" href={AutomationStudioStyleGuideBuildURL} color="secondary" variant='contained'> Help and Style Guide </Button>
+                <Button  fullWidth className= {classes.button} target="_blank" href={AutomationStudioStyleGuideBuildURL} color="default" variant='contained'> Help and Style Guide </Button>
               </Grid>
               {/* <Grid item xs={12}  >
                 <Button  fullWidth className= {classes.button} component={Link} to="/ExperimentalMain" color="primary" variant='contained'> Experimental Main</Button>

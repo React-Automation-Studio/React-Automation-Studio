@@ -62,7 +62,6 @@ function getTickValues(props, min, max, numberOfTicks, x0, x1, x2, y1, y2, xOffs
       for (i = 0; i < (numberOfTicks); i++) {
         
         let tickValue = i * (max - min) / (numberOfTicks - 1) + min;
-        console.log(props)
         if (typeof props.numberFormat !== 'undefined'){
           tickValue=math.format(parseFloat(tickValue),props.numberFormat)
          

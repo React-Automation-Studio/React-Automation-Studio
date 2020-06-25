@@ -98,7 +98,7 @@ class Main extends Component {
 
     return (
       <TraditionalLayout
-      title="React Automation Studio V1.3.0"
+      title="React Automation Studio V2.0.0"
       denseAppBar
       alignTitle="center"
     >

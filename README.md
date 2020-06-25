@@ -450,7 +450,7 @@ Contact us at rasadmin@tlabs.ac.za
 
 # Changelog
 
-**V1.3.0 Monday 1 June 2020**
+**V2.0.0 Monday 1 June 2020**
 
 Components have been updated to hooks based widget.
 Significant documentation improvements.

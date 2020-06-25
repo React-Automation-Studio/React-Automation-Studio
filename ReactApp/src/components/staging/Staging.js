@@ -6,7 +6,6 @@ import { withRouter } from 'react-router-dom';
 
 import { Link } from 'react-router-dom'
 import Button from '@material-ui/core/Button';
-import RedirectToLogIn from '../../components/SystemComponents/RedirectToLogin.js';
 import TraditionalLayout from '../../components/UI/Layout/ComposedLayouts/TraditionalLayout.js';
 import Grid from '@material-ui/core/Grid';
 // Styles

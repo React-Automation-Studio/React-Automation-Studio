@@ -123,7 +123,7 @@ const TextInputComponent=(props)=> {
  */
 const TextInput =(props)=>{
     return (
-      <Widget {...props} component={TextInputComponent}/>
+      <Widget {...props} component={TextInputComponent} pvs={undefined}/>
     )
 }
 
@@ -254,19 +254,11 @@ TextInput.propTypes = {
    * See https://mathjs.org/docs/reference/functions/format.html for more examples
    */
   numberFormat: PropTypes.object,
-  /**
-   * Custom on color to be used, must be derived from Material UI theme color's.
-   */
-  onColor: PropTypes.string,
-  /**
-   * Custom off color to be used, must be derived from Material UI theme color's.
-   */
-  offColor: PropTypes.string,
+  
   
   /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
   pv: PropTypes.string,
-  /** Array of the process variables, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
-  pvs: PropTypes.arrayOf(PropTypes.string),
+  
   /**
    * Object with a string and the corresponding severity value.
    * When PV value is equal to the string, set the corresponding severity

@@ -255,8 +255,7 @@ ThumbWheel.propTypes = {
   
   /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
   pv: PropTypes.string,
-  /** Array of the process variables, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
-  pvs: PropTypes.arrayOf(PropTypes.string),
+
    /**
    * Tooltip Text
    */

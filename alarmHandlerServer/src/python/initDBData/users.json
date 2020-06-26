@@ -1,8 +1,28 @@
-[
+[{
+        "name": "Justin Abraham",
+        "username": "justin",
+        "email": "jabraham@tlabs.ac.za",
+        "notifyPVs": [
+            "BEAMLINE*",
+            "*WATER*",
+            "BUILDING:HVAC:*"
+        ]
+    },
     {
-        "user": "Joe Soap",
-        "email": "jusabra@gmail.com",
-        "notifyAreas": [
+        "name": "William Duckitt",
+        "username": "william",
+        "email": "wduckitt@tlabs.ac.za",
+        "notifyPVs": [
+            "BEAMLINE*",
+            "*WATER*",
+            "BUILDING:HVAC:*"
+        ]
+    },
+    {
+        "name": "Hein Anderson",
+        "username": "hein",
+        "email": "hein@tlabs.ac.za",
+        "notifyPVs": [
             "BEAMLINE*",
             "*WATER*",
             "BUILDING:HVAC:*"

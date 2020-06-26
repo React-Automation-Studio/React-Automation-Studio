@@ -26,6 +26,7 @@ import SettingsSinglePS from './components/SettingsPages/SettingsSinglePS';
 
 
 import AlarmHandler from './components/AlarmHandler/AlarmHandler';
+import AlarmHandlerUN from './components/AlarmHandler/UserNotification';
 import Vault from './components/AlarmHandler/Vault';
 
 import LogIn from './LogIn';
@@ -67,6 +68,7 @@ export default props=>(
     {/* <Route path="/ExperimentalEpicsDemos" component={ExperimentalEpicsDemos} /> */}
 
     <Route path="/AlarmHandlerDemo" component={AlarmHandler} />
+    <Route path="/AlarmHandlerDemoUN" component={AlarmHandlerUN} />
     <Route path="/VaultDemo" component={Vault} />
 
     </Switch>

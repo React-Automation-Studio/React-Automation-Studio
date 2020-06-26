@@ -38,6 +38,7 @@ import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
 
 import PublicIcon from '@material-ui/icons/Public';
+import { Link } from 'react-router-dom';
 
 function isEmpty(obj) {
     return Object.keys(obj).length === 0;
@@ -896,7 +897,7 @@ const AlarmHandler = () => {
 
     const moreVertDrawerItems = (
         <React.Fragment>
-            <ListItem button>
+            <ListItem button component={Link} to="/AlarmHandlerDemoUN">
                 <ListItemIcon >
                     <ContactPhoneIcon fontSize="small" />
                 </ListItemIcon>
@@ -992,7 +993,7 @@ const AlarmHandler = () => {
             titleTextStyle={{ textTransform: 'uppercase' }}
             denseAppBar
             moreVertDrawerItems={moreVertDrawerItems}
-        // hideMoreVertDrawerAfterItemClick
+            hideMoreVertDrawerAfterItemClick
         // hideToggleThemeListItem
         >
             {alarmPVs}
@@ -1146,6 +1147,7 @@ const AlarmHandler = () => {
                             <ExpansionPanelDetails>
                                 {areaNames
                                     ? <AlarmTable
+                                        alarmIOCPVPrefix={alarmIOCPVPrefix}
                                         enableAllAreas={enableAllAreas}
                                         debug={alarmDebug}
                                         alarmPVDict={alarmPVDict}

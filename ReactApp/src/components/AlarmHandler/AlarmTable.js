@@ -278,7 +278,7 @@ const AlarmTable = props => {
                                             </TableCell>
                                             <TableCell align="center">
                                                 <TextUpdateAH
-                                                    pv={`pva://alarmIOC:${areaAlarms[areaAlarmName]["name"]}A`}
+                                                    pv={`pva://${props.alarmIOCPVPrefix}${areaAlarms[areaAlarmName]["name"]}A`}
                                                     // pv={'pva://' + "alarmIOC:" + areaAlarms[areaAlarmName]["name"] + "A"}
                                                     useStringValue={true}
                                                     alarmSensitive={true}
@@ -294,21 +294,21 @@ const AlarmTable = props => {
 
                                             <TableCell align="center">
                                                 <TextUpdate
-                                                    pv={`pva://alarmIOC:${areaAlarms[areaAlarmName]["name"]}V`}
+                                                    pv={`pva://${props.alarmIOCPVPrefix}${areaAlarms[areaAlarmName]["name"]}V`}
                                                     // pv={'pva://' + "alarmIOC:" + areaAlarms[areaAlarmName]["name"] + "V"}
                                                     disableContextMenu={true}
                                                 />
                                             </TableCell>
                                             <TableCell align="center">
                                                 <TextUpdate
-                                                    pv={`pva://alarmIOC:${areaAlarms[areaAlarmName]["name"]}T`}
+                                                    pv={`pva://${props.alarmIOCPVPrefix}${areaAlarms[areaAlarmName]["name"]}T`}
                                                     // pv={'pva://' + "alarmIOC:" + areaAlarms[areaAlarmName]["name"] + "T"}
                                                     disableContextMenu={true}
                                                 />
                                             </TableCell>
                                             <TableCell align="center">
                                                 <TextUpdate
-                                                    pv={`pva://alarmIOC:${areaAlarms[areaAlarmName]["name"]}K`}
+                                                    pv={`pva://${props.alarmIOCPVPrefix}${areaAlarms[areaAlarmName]["name"]}K`}
                                                     // pv={'pva://' + "alarmIOC:" + areaAlarms[areaAlarmName]["name"] + "K"}
                                                     disableContextMenu={true}
                                                 />

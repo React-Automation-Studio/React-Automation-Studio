@@ -39,9 +39,6 @@ import DoneAllIcon from '@material-ui/icons/DoneAll';
 
 import PublicIcon from '@material-ui/icons/Public';
 
-import Switch from '@material-ui/core/Switch';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-
 function isEmpty(obj) {
     return Object.keys(obj).length === 0;
 }
@@ -177,8 +174,10 @@ const AlarmHandler = () => {
         areaPV: false,
     })
     const [dbWatchId, setDbWatchId] = useState(null)
-    const [fadeTU, setFadeTU] = useState(false)
-    const [fadeList, setFadeList] = useState(false)
+    const [fadeTU] = useState(false)
+    const [fadeList] = useState(false)
+    // const [fadeTU, setFadeTU] = useState(false)
+    // const [fadeList, setFadeList] = useState(false)
 
     // componentDidMount
     useEffect(() => {
@@ -245,6 +244,8 @@ const AlarmHandler = () => {
             socket.removeListener('databaseData:' + dbConfigURL, handleDbConfig);
             socket.removeListener('databaseData:' + dbGlobalURL, handleDbGlobal);
         }
+        // disable useEffect dependencies for "componentDidMount"
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     // update alarm log display data
@@ -282,6 +283,7 @@ const AlarmHandler = () => {
                 }
 
             }
+            return null
         })
 
         localAlarmLogDisplayArray = localAlarmLogDisplayArray.sort(function (a, b) {
@@ -292,9 +294,9 @@ const AlarmHandler = () => {
 
     }, [alarmLogDict, alarmLogSelectedKey])
 
-    const handleDoNothing = () => {
+    // const handleDoNothing = () => {
 
-    }
+    // }
 
     const handleGlobalArea = () => {
         const localAreaSubAreaOpen = { ...areaSubAreaOpen }
@@ -329,13 +331,13 @@ const AlarmHandler = () => {
         const dbURL = "mongodb://" + ALARM_DATABASE + ":" + dbName + ":" + colName
 
         const id = enableAllAreasId
-        const newvalues = { '$set': { ["enableAllAreas"]: value } }
+        const newvalues = { '$set': { "enableAllAreas": value } }
 
         // console.log(newvalues)
 
         socket.emit('databaseUpdateOne', { dbURL: dbURL, 'id': id, 'newvalues': newvalues, 'clientAuthorisation': jwt }, (data) => {
             //  console.log("ackdata", data);
-            if (data == "OK") {
+            if (data === "OK") {
                 socket.emit('databaseBroadcastRead', { dbURL: dbURL + ':Parameters:{}', 'clientAuthorisation': jwt }, (data) => {
                     if (data !== "OK") {
                         console.log("ackdata", data);
@@ -407,9 +409,9 @@ const AlarmHandler = () => {
         setAlarmDebug(!alarmDebug)
     }
 
-    const handleSimplePrint = (value, pvname) => {
-        // console.log(pvname, value)
-    }
+    // const handleSimplePrint = (value, pvname) => {
+    //     // console.log(pvname, value)
+    // }
 
     const handleAreaPVChange = (value, pvname) => {
         let areaName = pvname.replace("pva://", "")
@@ -464,6 +466,13 @@ const AlarmHandler = () => {
         }
     }
 
+    const handleListItemContextClose = useCallback((event, index) => {
+        // console.log("close context")
+        const localAreaContextOpen = { ...areaContextOpen }
+        localAreaContextOpen[index] = false
+        setAreaContextOpen(localAreaContextOpen)
+    }, [areaContextOpen])
+
     const handleAckAllAreaAlarms = useCallback((event, index) => {
         // console.log('Ack all alarms for', index)
 
@@ -479,7 +488,7 @@ const AlarmHandler = () => {
 
         setAlarmAckField(localAlarmAckField)
         setAlarmAckFieldTrig(alarmAckFieldTrig + 1)
-    }, [alarmAckFieldTrig])
+    }, [alarmAckFieldTrig, handleListItemContextClose, username])
 
     const handleTableItemCheck = useCallback((event, index, alarm, field, value) => {
         // to prevent re render of alarm log table?
@@ -514,7 +523,7 @@ const AlarmHandler = () => {
 
         socket.emit('databaseUpdateOne', { dbURL: dbURL, 'id': id, 'newvalues': newvalues, 'clientAuthorisation': jwt }, (data) => {
             //  console.log("ackdata", data);
-            if (data == "OK") {
+            if (data === "OK") {
                 socket.emit('databaseBroadcastRead', { dbURL: dbURL + ':Parameters:{}', 'clientAuthorisation': jwt }, (data) => {
                     if (data !== "OK") {
                         console.log("ackdata", data);
@@ -525,7 +534,7 @@ const AlarmHandler = () => {
             }
         })
 
-    }, [areaMongoId, areaSubAreaMongoId])
+    }, [areaMongoId, areaSubAreaMongoId, socket])
 
     const handleTableRowClick = useCallback((event, alarmName) => {
         event.preventDefault()
@@ -594,7 +603,7 @@ const AlarmHandler = () => {
 
         setAlarmAckField(localAlarmAckField)
         setAlarmAckFieldTrig(alarmAckFieldTrig + 1)
-    }, [alarmAckFieldTrig])
+    }, [alarmAckFieldTrig, handleAlarmContextClose, username])
 
     const handleEnableDisableArea = useCallback((event, index, value) => {
         // console.log('Enable/Disable area', index)
@@ -627,7 +636,7 @@ const AlarmHandler = () => {
 
         socket.emit('databaseUpdateOne', { dbURL: dbURL, 'id': id, 'newvalues': newvalues, 'clientAuthorisation': jwt }, (data) => {
             // console.log("ackdata", data);
-            if (data == "OK") {
+            if (data === "OK") {
                 socket.emit('databaseBroadcastRead', { dbURL: dbURL + ':Parameters:{}', 'clientAuthorisation': jwt }, (data) => {
                     if (data !== "OK") {
                         console.log("ackdata", data);
@@ -640,14 +649,9 @@ const AlarmHandler = () => {
 
         handleListItemContextClose(event, index)
 
-    }, [areaMongoId, areaSubAreaMongoId])
+    }, [areaMongoId, areaSubAreaMongoId, handleListItemContextClose, socket])
 
-    const handleListItemContextClose = useCallback((event, index) => {
-        // console.log("close context")
-        const localAreaContextOpen = { ...areaContextOpen }
-        localAreaContextOpen[index] = false
-        setAreaContextOpen(localAreaContextOpen)
-    }, [areaContextOpen])
+
 
     const handleListItemRightClick = useCallback((event, index) => {
         // console.log("right click")
@@ -719,6 +723,7 @@ const AlarmHandler = () => {
                     alarmContextOpen[`${area["area"]}=${alarmKey}`] = false
                     alarmRowSelected[`${area["area"]}=${alarmKey}`] = false
                     localLastAlarm = area["pvs"][alarmKey]["name"]
+                    return null
                 })
                 Object.keys(area).map(areaKey => {
                     if (areaKey === "area") {
@@ -733,6 +738,7 @@ const AlarmHandler = () => {
                             alarmContextOpen[`${area["area"]}=${area[areaKey]["name"]}=${alarmKey}`] = false
                             alarmRowSelected[`${area["area"]}=${area[areaKey]["name"]}=${alarmKey}`] = false
                             localLastAlarm = area[areaKey]["pvs"][alarmKey]["name"]
+                            return null
                         })
                         if (areaNames[index]["subAreas"]) {
                             areaNames[index]["subAreas"].push(area[areaKey]["name"])
@@ -742,7 +748,9 @@ const AlarmHandler = () => {
                             areaNames[index]["subAreas"] = [area[areaKey]["name"]]
                         }
                     }
+                    return null
                 })
+                return null
             })
             if (!areaSelectedIndex) {
                 setAreaSubAreaOpen(areaSubAreaOpen)
@@ -771,8 +779,10 @@ const AlarmHandler = () => {
                 if (areaKey === "pvs") {
                     Object.keys(area[areaKey]).map(alarm => {
                         localAreaAlarms[`${area["area"]}=${alarm}`] = area[areaKey][alarm]
+                        return null
                     })
                 }
+                return null
             })
             localAreaEnabled[area["area"]] = area["enable"]
             localLastArea = area["area"]
@@ -786,11 +796,15 @@ const AlarmHandler = () => {
                         if (subAreaKey === "pvs") {
                             Object.keys(area[areaKey][subAreaKey]).map(alarm => {
                                 localAreaAlarms[`${area["area"]}=${area[areaKey]["name"]}=${alarm}`] = area[areaKey][subAreaKey][alarm]
+                                return null
                             })
                         }
+                        return null
                     })
                 }
+                return null
             })
+            return null
         })
 
         // console.log(lastArea)
@@ -799,7 +813,7 @@ const AlarmHandler = () => {
         setLastArea(localLastArea)
 
         let displayAlarmTable = true
-        for (const [key, value] of Object.entries(loadAlarmTable)) {
+        for (const [, value] of Object.entries(loadAlarmTable)) {
             // console.log(key, value)
             displayAlarmTable = displayAlarmTable && value
         }
@@ -808,7 +822,7 @@ const AlarmHandler = () => {
         }
 
         let displayAlarmList = true
-        for (const [key, value] of Object.entries(loadAlarmList)) {
+        for (const [, value] of Object.entries(loadAlarmList)) {
             // console.log(key, value)
             displayAlarmList = displayAlarmList && value
         }
@@ -830,6 +844,7 @@ const AlarmHandler = () => {
         const localAlarmLogDict = {}
         data.map((area, index) => {
             localAlarmLogDict[area["identifier"]] = area["history"]
+            return null
         })
         // console.log("history watch")
         // console.log(localAlarmLogDict)
@@ -857,7 +872,7 @@ const AlarmHandler = () => {
                 console.log('Warning: Auto load alarm table')
             }
             const localLoadAlarmTable = { ...loadAlarmTable }
-            for (const [key, value] of Object.entries(localLoadAlarmTable)) {
+            for (const [key,] of Object.entries(localLoadAlarmTable)) {
                 localLoadAlarmTable[key] = true
             }
             setLoadAlarmTable(localLoadAlarmTable)
@@ -871,7 +886,7 @@ const AlarmHandler = () => {
                 console.log('Warning: Auto load alarm list')
             }
             const localLoadAlarmList = { ...loadAlarmList }
-            for (const [key, value] of Object.entries(localLoadAlarmList)) {
+            for (const [key,] of Object.entries(localLoadAlarmList)) {
                 localLoadAlarmList[key] = true
             }
             setLoadAlarmList(localLoadAlarmList)
@@ -949,13 +964,13 @@ const AlarmHandler = () => {
     }
 
     let displayAlarmTable = true
-    for (const [key, value] of Object.entries(loadAlarmTable)) {
+    for (const [, value] of Object.entries(loadAlarmTable)) {
         // console.log(key, value)
         displayAlarmTable = displayAlarmTable && value
     }
 
     let displayAlarmList = true
-    for (const [key, value] of Object.entries(loadAlarmList)) {
+    for (const [, value] of Object.entries(loadAlarmList)) {
         // console.log(key, value)
         displayAlarmList = displayAlarmList && value
     }

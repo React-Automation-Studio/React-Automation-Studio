@@ -154,12 +154,15 @@ def evaluateAreaPVs(areaKey, fromColWatch=False):
                 # force NO_ALARM state so neither alarm nor acked passed
                 # to areas
                 val = 0
-            if (val > alarmState):
-                alarmState = val
-            if(val == 2):
-                minorAlarm = True
-            elif(val == 4):
-                majorAlarm = True
+            try:
+                if (val > alarmState):
+                    alarmState = val
+                if(val == 2):
+                    minorAlarm = True
+                elif(val == 4):
+                    majorAlarm = True
+            except:
+                print('[Warning]', 'val =', val, 'alarmState =', alarmState)
 
     # active alarm always supercedes acked state alarm
     if alarmState in ackStates:

@@ -37,7 +37,7 @@ const Floor = (props) => {
     const { vault_radiation_sev, vault_radiation_val } = alarmDict
     const vault_radiation_fil = sevFill(vault_radiation_sev, darkTheme, major, minor, primary)
 
-    const { cyclotron_interlocks, cyclotron_safety, cyclotron_RF1, cyclotron_RF2 } = alarmDict
+    const { cyclotron_RF1, cyclotron_RF2 } = alarmDict
     const { cyclotron_RF_pickup, cyclotron_RF_pickup_sev } = alarmDict
     const cyclotron_RF_pickup_fil = sevFill(cyclotron_RF_pickup_sev, darkTheme, major, minor, primary)
 

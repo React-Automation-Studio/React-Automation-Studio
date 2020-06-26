@@ -33,92 +33,92 @@ const useStyles = makeStyles(theme => ({
     },
     majorAlarm: props => ({
         background: props.fadeList
-            ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.major.main, theme.palette.type == 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.major.main) + ' 100%)'
+            ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.major.main, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.major.main) + ' 100%)'
             : theme.palette.alarm.major.main,
         '&:hover': {
             background: props.fadeList
-                ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.major.light, theme.palette.type == 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.major.light) + ' 100%)'
+                ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.major.light, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.major.light) + ' 100%)'
                 : theme.palette.alarm.major.light,
         },
         "&.Mui-selected": {
             background: props.fadeList
-                ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.major.light, theme.palette.type == 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.major.light) + ' 100%)'
+                ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.major.light, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.major.light) + ' 100%)'
                 : theme.palette.alarm.major.light,
             borderStyle: "solid",
             borderWidth: "thin",
             borderColor: theme.palette.primary.main,
             '&:hover': {
                 background: props.fadeList
-                    ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.major.dark, theme.palette.type == 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.major.dark) + ' 100%)'
+                    ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.major.dark, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.major.dark) + ' 100%)'
                     : theme.palette.alarm.major.dark,
             },
         }
     }),
     majorAlarmAcked: props => ({
         background: props.fadeList
-            ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.majorAcked.main, theme.palette.type == 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.majorAcked.main) + ' 100%)'
+            ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.majorAcked.main, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.majorAcked.main) + ' 100%)'
             : theme.palette.alarm.majorAcked.main,
         '&:hover': {
             background: props.fadeList
-                ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.majorAcked.light, theme.palette.type == 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.majorAcked.light) + ' 100%)'
+                ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.majorAcked.light, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.majorAcked.light) + ' 100%)'
                 : theme.palette.alarm.majorAcked.light,
         },
         "&.Mui-selected": {
             background: props.fadeList
-                ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.majorAcked.light, theme.palette.type == 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.majorAcked.light) + ' 100%)'
+                ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.majorAcked.light, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.majorAcked.light) + ' 100%)'
                 : theme.palette.alarm.majorAcked.light,
             borderStyle: "solid",
             borderWidth: "thin",
             borderColor: theme.palette.primary.main,
             '&:hover': {
                 background: props.fadeList
-                    ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.majorAcked.dark, theme.palette.type == 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.majorAcked.dark) + ' 100%)'
+                    ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.majorAcked.dark, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.majorAcked.dark) + ' 100%)'
                     : theme.palette.alarm.majorAcked.dark,
             },
         }
     }),
     minorAlarm: props => ({
         background: props.fadeList
-            ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.minor.main, theme.palette.type == 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minor.main) + ' 100%)'
+            ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.minor.main, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minor.main) + ' 100%)'
             : theme.palette.alarm.minor.main,
         '&:hover': {
             background: props.fadeList
-                ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.minor.light, theme.palette.type == 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minor.light) + ' 100%)'
+                ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.minor.light, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minor.light) + ' 100%)'
                 : theme.palette.alarm.minor.light,
         },
         "&.Mui-selected": {
             background: props.fadeList
-                ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.minor.light, theme.palette.type == 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minor.light) + ' 100%)'
+                ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.minor.light, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minor.light) + ' 100%)'
                 : theme.palette.alarm.minor.light,
             borderStyle: "solid",
             borderWidth: "thin",
             borderColor: theme.palette.primary.main,
             '&:hover': {
                 background: props.fadeList
-                    ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.minor.dark, theme.palette.type == 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minor.dark) + ' 100%)'
+                    ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.minor.dark, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minor.dark) + ' 100%)'
                     : theme.palette.alarm.minor.dark,
             },
         }
     }),
     minorAlarmAcked: props => ({
         background: props.fadeList
-            ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.minorAcked.main, theme.palette.type == 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minorAcked.main) + ' 100%)'
+            ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.minorAcked.main, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minorAcked.main) + ' 100%)'
             : theme.palette.alarm.minorAcked.main,
         '&:hover': {
             background: props.fadeList
-                ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.minorAcked.light, theme.palette.type == 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minorAcked.light) + ' 100%)'
+                ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.minorAcked.light, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minorAcked.light) + ' 100%)'
                 : theme.palette.alarm.minorAcked.light,
         },
         "&.Mui-selected": {
             background: props.fadeList
-                ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.minorAcked.light, theme.palette.type == 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minorAcked.light) + ' 100%)'
+                ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.minorAcked.light, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minorAcked.light) + ' 100%)'
                 : theme.palette.alarm.minorAcked.light,
             borderStyle: "solid",
             borderWidth: "thin",
             borderColor: theme.palette.primary.main,
             '&:hover': {
                 background: props.fadeList
-                    ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.minorAcked.dark, theme.palette.type == 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minorAcked.dark) + ' 100%)'
+                    ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.minorAcked.dark, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minorAcked.dark) + ' 100%)'
                     : theme.palette.alarm.minorAcked.dark,
             },
         }
@@ -189,13 +189,13 @@ const AlarmList = props => {
                                             // field(SXST, "INVALID")
 
                                             classes={(props.areaEnabled[`${area["area"]}`] && props.enableAllAreas
-                                                ? props.areaPVDict[`${area["area"]}`] == 6 || props.areaPVDict[`${area["area"]}`] == 4
+                                                ? parseInt(props.areaPVDict[`${area["area"]}`]) === 6 || parseInt(props.areaPVDict[`${area["area"]}`]) === 4
                                                     ? { root: classes.majorAlarm }
-                                                    : props.areaPVDict[`${area["area"]}`] == 5 || props.areaPVDict[`${area["area"]}`] == 3
+                                                    : parseInt(props.areaPVDict[`${area["area"]}`]) === 5 || parseInt(props.areaPVDict[`${area["area"]}`]) === 3
                                                         ? { root: classes.majorAlarmAcked }
-                                                        : props.areaPVDict[`${area["area"]}`] == 2
+                                                        : parseInt(props.areaPVDict[`${area["area"]}`]) === 2
                                                             ? { root: classes.minorAlarm }
-                                                            : props.areaPVDict[`${area["area"]}`] == 1
+                                                            : parseInt(props.areaPVDict[`${area["area"]}`]) === 1
                                                                 ? { root: classes.minorAlarmAcked }
                                                                 : { root: classes.noAlarm }    // noAlarm
                                                 : { root: classes.disabled }
@@ -261,13 +261,13 @@ const AlarmList = props => {
                                                                         onClick={event => props.listItemClick(event, `${area["area"]}=${subArea}`)}
                                                                         onContextMenu={event => props.listItemRightClick(event, `${area["area"]}=${subArea}`)}
                                                                         classes={(props.areaEnabled[`${area["area"]}=${subArea}`] && props.enableAllAreas
-                                                                            ? props.areaPVDict[`${area["area"]}=${subArea}`] == 6 || props.areaPVDict[`${area["area"]}=${subArea}`] == 4
+                                                                            ? parseInt(props.areaPVDict[`${area["area"]}=${subArea}`]) === 6 || parseInt(props.areaPVDict[`${area["area"]}=${subArea}`]) === 4
                                                                                 ? { root: classes.majorAlarm }
-                                                                                : props.areaPVDict[`${area["area"]}=${subArea}`] == 5 || props.areaPVDict[`${area["area"]}=${subArea}`] == 3
+                                                                                : parseInt(props.areaPVDict[`${area["area"]}=${subArea}`]) === 5 || parseInt(props.areaPVDict[`${area["area"]}=${subArea}`]) === 3
                                                                                     ? { root: classes.majorAlarmAcked }
-                                                                                    : props.areaPVDict[`${area["area"]}=${subArea}`] == 2
+                                                                                    : parseInt(props.areaPVDict[`${area["area"]}=${subArea}`]) === 2
                                                                                         ? { root: classes.minorAlarm }
-                                                                                        : props.areaPVDict[`${area["area"]}=${subArea}`] == 1
+                                                                                        : parseInt(props.areaPVDict[`${area["area"]}=${subArea}`]) === 1
                                                                                             ? { root: classes.minorAlarmAcked }
                                                                                             : { root: classes.noAlarm }    // noAlarm
                                                                             : { root: classes.disabled }

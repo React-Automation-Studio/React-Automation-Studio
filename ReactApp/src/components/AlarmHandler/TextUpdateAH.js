@@ -3,7 +3,6 @@ import { withStyles } from "@material-ui/core/styles";
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import Widget from "../SystemComponents/Widgets/Widget";
 import grey from '@material-ui/core/colors/grey';
-import deepOrange from '@material-ui/core/colors/deepOrange';
 import { Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
 const styles = (theme) => ({
@@ -18,34 +17,34 @@ const styles = (theme) => ({
     borderColor: grey[50],
   },
   TextFieldSeverity1: {
-    borderColor: theme.palette.type == 'dark' ? grey[700] : grey[300],
+    borderColor: theme.palette.type === 'dark' ? grey[700] : grey[300],
     borderRadius: 2,
     borderWidth: 1,
     borderStyle: 'solid',
 
     padding: 1,
     //background:theme.palette.alarm.minor.main,
-    background: 'linear-gradient(45deg,' + fade(theme.palette.alarm.minor.dark, theme.palette.type == 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minor.dark) + ' 100%)'
+    background: 'linear-gradient(45deg,' + fade(theme.palette.alarm.minor.dark, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minor.dark) + ' 100%)'
     //  background:'linear-gradient(45deg, '+ theme.palette.background.default+ ' 1%, '+deepOrange['400'] +' 99%)'
   },
   TextFieldSeverity2: {
-    borderColor: theme.palette.type == 'dark' ? grey[700] : grey[300],
+    borderColor: theme.palette.type === 'dark' ? grey[700] : grey[300],
     borderWidth: 1,
     borderStyle: 'solid',
     borderRadius: 2,
 
     padding: 1,
     //background:theme.palette.alarm.major.main,
-    background: 'linear-gradient(45deg,' + fade(theme.palette.alarm.major.dark, theme.palette.type == 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.major.dark) + ' 100%)'
+    background: 'linear-gradient(45deg,' + fade(theme.palette.alarm.major.dark, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.major.dark) + ' 100%)'
     //  backgroundColor:'linear-gradient(45deg, #FFFFFF 1%, #FF8E53 99%)'
     //  background:'linear-gradient(45deg, '+ theme.palette.background.default+ ' 1%, '+red['800'] +' 99%)'
   },
   majorAlarm: props => ({
-    borderColor: theme.palette.type == 'dark' ? grey[700] : grey[300],
+    borderColor: theme.palette.type === 'dark' ? grey[700] : grey[300],
     borderWidth: 1,
     borderStyle: 'solid',
     background: props.fadeTU
-      ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.major.dark, theme.palette.type == 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.major.dark) + ' 100%)'
+      ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.major.dark, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.major.dark) + ' 100%)'
       : theme.palette.alarm.major.main,
     borderRadius: 2,
     padding: 1,
@@ -54,11 +53,11 @@ const styles = (theme) => ({
     //fontWeight: 500,
   }),
   majorAlarmAcked: props => ({
-    borderColor: theme.palette.type == 'dark' ? grey[700] : grey[300],
+    borderColor: theme.palette.type === 'dark' ? grey[700] : grey[300],
     borderWidth: 1,
     borderStyle: 'solid',
     background: props.fadeTU
-      ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.majorAcked.dark, theme.palette.type == 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.majorAcked.dark) + ' 100%)'
+      ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.majorAcked.dark, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.majorAcked.dark) + ' 100%)'
       : theme.palette.alarm.majorAcked.main,
     borderRadius: 2,
     padding: 1,
@@ -67,11 +66,11 @@ const styles = (theme) => ({
     //fontWeight: 500,
   }),
   minorAlarm: props => ({
-    borderColor: theme.palette.type == 'dark' ? grey[700] : grey[300],
+    borderColor: theme.palette.type === 'dark' ? grey[700] : grey[300],
     borderWidth: 1,
     borderStyle: 'solid',
     background: props.fadeTU
-      ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.minor.dark, theme.palette.type == 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minor.dark) + ' 100%)'
+      ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.minor.dark, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minor.dark) + ' 100%)'
       : theme.palette.alarm.minor.main,
     borderRadius: 2,
     padding: 1,
@@ -80,11 +79,11 @@ const styles = (theme) => ({
     //fontWeight: 500,
   }),
   minorAlarmAcked: props => ({
-    borderColor: theme.palette.type == 'dark' ? grey[700] : grey[300],
+    borderColor: theme.palette.type === 'dark' ? grey[700] : grey[300],
     borderWidth: 1,
     borderStyle: 'solid',
     background: props.fadeTU
-      ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.minorAcked.dark, theme.palette.type == 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minorAcked.dark) + ' 100%)'
+      ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.minorAcked.dark, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minorAcked.dark) + ' 100%)'
       : theme.palette.alarm.minorAcked.main,
     borderRadius: 2,
     padding: 1,
@@ -111,20 +110,20 @@ const TextUpdateComponent = (props) => {
   let units = props.units !== undefined ? props.units + " " : "";
   let content;
   if (props.initialized) {
-    if (props.alarmSensitive == true) {
-      if (props.value == "NO_ALARM") {
+    if (props.alarmSensitive === true) {
+      if (props.value === "NO_ALARM") {
         textFieldClassName = classes.noAlarm;
       }
-      else if (props.value == "MINOR_ACKED") {
+      else if (props.value === "MINOR_ACKED") {
         textFieldClassName = classes.minorAlarmAcked;
       }
-      else if (props.value == "MINOR_ALARM") {
+      else if (props.value === "MINOR_ALARM") {
         textFieldClassName = classes.minorAlarm;
       }
-      else if (props.value == "MAJOR_ACKED" || props.value == "INVALID_ACKED") {
+      else if (props.value === "MAJOR_ACKED" || props.value === "INVALID_ACKED") {
         textFieldClassName = classes.majorAlarmAcked;
       }
-      else if (props.value == "MAJOR_ALARM" || props.value == "INVALID") {
+      else if (props.value === "MAJOR_ALARM" || props.value === "INVALID") {
         textFieldClassName = classes.majorAlarm;
       }
     }
@@ -296,9 +295,6 @@ TextUpdate.propTypes = {
   /**
    * Directive to overided alarm severity with the rules defined in the stringSeverity
    */
-
-
-  variant: PropTypes.string,
   /**
    * Material UI Typography variant.
    */

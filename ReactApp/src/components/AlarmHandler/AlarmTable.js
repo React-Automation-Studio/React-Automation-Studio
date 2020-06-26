@@ -127,7 +127,7 @@ const AlarmTable = props => {
                         if (isTopArea) {                                    // areaSelectedIndex is area
                             areaKey = areaKey.split('=')[0]                 // areaKey is area
                         }
-                        if (areaKey == areaSelectedIndex || areaSelectedIndex === 'ALLAREAS') {
+                        if (areaKey === areaSelectedIndex || areaSelectedIndex === 'ALLAREAS') {
                             // console.log('pva://' + "alarmIOC:" + areaAlarms[areaAlarmName]["name"] + "V")
                             const areaAlarmNameArray = areaAlarmName.split('=')
                             let areaName = null
@@ -278,7 +278,8 @@ const AlarmTable = props => {
                                             </TableCell>
                                             <TableCell align="center">
                                                 <TextUpdateAH
-                                                    pv={'pva://' + "alarmIOC:" + areaAlarms[areaAlarmName]["name"] + "A"}
+                                                    pv={`pva://alarmIOC:${areaAlarms[areaAlarmName]["name"]}A`}
+                                                    // pv={'pva://' + "alarmIOC:" + areaAlarms[areaAlarmName]["name"] + "A"}
                                                     useStringValue={true}
                                                     alarmSensitive={true}
                                                     disableContextMenu={true}
@@ -293,19 +294,22 @@ const AlarmTable = props => {
 
                                             <TableCell align="center">
                                                 <TextUpdate
-                                                    pv={'pva://' + "alarmIOC:" + areaAlarms[areaAlarmName]["name"] + "V"}
+                                                    pv={`pva://alarmIOC:${areaAlarms[areaAlarmName]["name"]}V`}
+                                                    // pv={'pva://' + "alarmIOC:" + areaAlarms[areaAlarmName]["name"] + "V"}
                                                     disableContextMenu={true}
                                                 />
                                             </TableCell>
                                             <TableCell align="center">
                                                 <TextUpdate
-                                                    pv={'pva://' + "alarmIOC:" + areaAlarms[areaAlarmName]["name"] + "T"}
+                                                    pv={`pva://alarmIOC:${areaAlarms[areaAlarmName]["name"]}T`}
+                                                    // pv={'pva://' + "alarmIOC:" + areaAlarms[areaAlarmName]["name"] + "T"}
                                                     disableContextMenu={true}
                                                 />
                                             </TableCell>
                                             <TableCell align="center">
                                                 <TextUpdate
-                                                    pv={'pva://' + "alarmIOC:" + areaAlarms[areaAlarmName]["name"] + "K"}
+                                                    pv={`pva://alarmIOC:${areaAlarms[areaAlarmName]["name"]}K`}
+                                                    // pv={'pva://' + "alarmIOC:" + areaAlarms[areaAlarmName]["name"] + "K"}
                                                     disableContextMenu={true}
                                                 />
                                             </TableCell>
@@ -343,6 +347,9 @@ const AlarmTable = props => {
                                     </React.Fragment>
                                     : null
                             )
+                        }
+                        else {
+                            return null
                         }
                     })}
                 </TableBody>

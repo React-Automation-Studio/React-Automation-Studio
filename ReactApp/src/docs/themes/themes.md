@@ -25,7 +25,7 @@ Import it into the App.js as follows to extend the themes:
 import React from 'react';
 import RasAppCore from './components/SystemComponents/RasAppCore';
 import themes  from './components/UI/Themes/themes';
-import customTheme  from './customThemes';
+import customTheme  from './customTheme';
 import Routes from './Routes';
 
 const App = (props) => {
@@ -45,7 +45,7 @@ Or in the event you want to use your theme only, then:
 import React from 'react';
 import RasAppCore from './components/SystemComponents/RasAppCore';
 import themes  from './components/UI/Themes/themes';
-import customTheme  from './customThemes';
+import customTheme  from './customTheme';
 import Routes from './Routes';
 
 const App = (props) => {

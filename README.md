@@ -361,7 +361,38 @@ Although it is more ingenious to create separate user access groups and to defin
 
 In theory, all regular expression allowed by Python regex can be used although this has not been tested. More examples are available at: https://www.w3schools.com/python/python_regex.asp
 
+** New** to release 2.0.0 are the definition of roles, by defining a role dynamic routes can be created using the role. This now enables portions of your app to isolated from other users.
 
+
+```json
+"UAG1":
+{
+  "usernames":["user1"],
+  "roles":["engineer"],
+  "rules":
+  [
+    { "rule":"[0-9].*",                   "read":true,  "write":true },
+    { "rule":"[a-z].*",                   "read":true,  "write":true },
+    { "rule":"[A-Z].*",                   "read":true,  "write":true },
+   
+
+  ]
+},
+"UAG2":
+{
+  "usernames":["operator1"],
+  "roles":["operator"],
+  "rules":
+  [
+    { "rule":"[0-9].*",                   "read":true,  "write":false },
+    { "rule":"[a-z].*",                   "read":true,  "write":false },
+    { "rule":"[A-Z].*",                   "read":true,  "write":false },
+    { "rule":"^pva://testIOC:Harp1",      "read":true, "write":true },
+    { "rule":"^pva://testIOC:FC2",        "read":true,  "write":true },
+
+  ]
+}
+```
 
 ## 3.3 Enabling https
 The system is by default configured to serve the socket connections and client webserver over HTTP on localhost.

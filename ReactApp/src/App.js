@@ -1,7 +1,7 @@
 
 import React from 'react';
 import RasAppCore from './components/SystemComponents/RasAppCore';
-import { themes } from './Themes';
+import themes  from './components/UI/Themes/themes';
 import Routes from './Routes';
 
 const App = (props) => {

@@ -13,7 +13,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import AutomationStudioContext from '../components/SystemComponents/AutomationStudioContext';
 
 import io from 'socket.io-client';
-import {  themes } from '../Themes'
+import   themes  from '../components/UI/Themes/themes'
 import ReactVisCssBaseline from '../components/SystemComponents/ReactVisCssBaseline';
 
 console.log('process.env', process.env)
@@ -61,8 +61,10 @@ transports: ['websocket']
 class Wrapper extends Component {
   constructor(props) {
     super(props);
-    let theme;
-    let themeStyle = JSON.parse(localStorage.getItem('themeStyle'));
+    let theme = null
+    let storedThemeStyle=localStorage.getItem('themeStyle')
+    const defaultTheme='Light';
+    let themeStyle = storedThemeStyle!==null?defaultTheme:JSON.parse(storedThemeStyle);
     let themeKeys = Object.keys(themes);
     if (themeKeys.includes(themeStyle)) {
       theme = createMuiTheme(themes[themeStyle])

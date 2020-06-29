@@ -41,7 +41,7 @@ const UserNotification = () => {
 
     const context = useContext(AutomationStudioContext)
     const { socket } = context
-    // const username = context.userData.username
+    const username = context.userData.username
 
     const [dbPVsURL, setDbPVsURL] = useState('')
     const [dbUsersURL, setUsersURL] = useState('')
@@ -209,6 +209,8 @@ const UserNotification = () => {
                         </ExpansionPanelSummary>
                         <ExpansionPanelDetails>
                             <UserTable
+                                userList={userList}
+                                username={username}
                                 height={userTableHeight}
                             />
                         </ExpansionPanelDetails>
@@ -236,6 +238,7 @@ const UserNotification = () => {
                         </ExpansionPanelSummary>
                         <ExpansionPanelDetails>
                             <PVList
+                                alarmList={alarmList}
                                 height={pvListHeight}
                             />
                         </ExpansionPanelDetails>

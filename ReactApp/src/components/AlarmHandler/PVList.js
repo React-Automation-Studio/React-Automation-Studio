@@ -8,4 +8,4 @@ const PVList = (props) => {
     );
 };
 
-export default PVList;
+export default React.memo(PVList);

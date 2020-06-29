@@ -23,11 +23,13 @@ import Test3D from './components/Experimental/Test3D';
 import Probe from './components/SettingsPages/Probe';
 import SettingsSteererXY from './components/SettingsPages/SettingsSteererXY';
 import SettingsSinglePS from './components/SettingsPages/SettingsSinglePS';
-
+import AlarmHandler from './components/AlarmHandler/AlarmHandler';
+import AlarmHandlerUN from './components/AlarmHandler/UserNotification';
+import Vault from './components/AlarmHandler/Vault';
 import LogIn from './LogIn';
 
 const Routes = (props) => {
-  return  (
+  return (
     <BrowserRouter >
 
       <Switch>
@@ -58,6 +60,14 @@ const Routes = (props) => {
         <Route path="/Example1" component={Example1} />
         <Route path="/Example2" component={Example2} />
         <Route path="/Example3" component={Example3} />
+        {/* <Route path="/ExperimentalMain" component={ExperimentalMain} /> */}
+        {/* <Route path="/ExperimentalMobileDemo1" component={ExperimentalMobileDemo1} /> */}
+        {/* <Route path="/HooksDebuging" component={HooksDebuging} /> */}
+        {/* <Route path="/ExperimentalEpicsDemos" component={ExperimentalEpicsDemos} /> */}
+
+        <Route path="/AlarmHandlerDemo" component={AlarmHandler} />
+        <Route path="/AlarmHandlerDemoUN" component={AlarmHandlerUN} />
+        <Route path="/VaultDemo" component={Vault} />
 
       </Switch>
 

@@ -339,7 +339,7 @@ const styles = (theme) => {
 function SliderComponent(props) {
   const emitChangeDebounced = useRef(debounce(value => emitChange(value), 10)).current;
   
-  const emitBlurDebounced = useRef(debounce(()=> props.handleBlur, 500)).current;
+  const emitBlurDebounced = useRef(debounce(handleBlur, 500)).current;
 
   /**
    * Write value on the PV using emitChangeDebounced function.
@@ -352,9 +352,12 @@ function SliderComponent(props) {
     props.handleFocus();
     
    emitChangeDebounced(value);
-   
+
   }
 
+  function handleBlur(){
+    props.handleBlur();
+  }
   /**
    * Save value on the state.
    * @param {string} value

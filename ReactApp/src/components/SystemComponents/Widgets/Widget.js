@@ -444,8 +444,11 @@ const math = create(all, config)
     
     })
   const divStyle = {
-    width: "100%",
-    height: "100%",
+    //width: "100%",
+    //height: "100%",
+    //position:'relative',
+    borderStyle: 'solid',
+    borderColor: 'coral',
   }
   
   return (

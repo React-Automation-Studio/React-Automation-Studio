@@ -72,20 +72,22 @@ const BitIndicatorsComponent = (props) => {
     bitArray.push(
       props.initialized ? props.value & Math.pow(2, n) : 0
     );
-    if (props.usePvBitLabels===false){
-    bitLabels.push(
-      
+    if (props.usePvBitLabels === false) {
+      bitLabels.push(
+
         props.bitLabels === undefined
           ? "Bit " + n
           : props.bitLabels[n]
-      
 
 
-    );
+
+      );
     }
-    else{
-      if(n<props.enumStrs.length){
-        bitLabels[n]=props.enumStrs[n];
+    else {
+      if (props.enumStrs!==null) {
+        if (n < props.enumStrs.length) {
+          bitLabels[n] = props.enumStrs[n];
+        }
       }
     }
     bitStyles.push({ ["margin" + place]: props.theme.spacing(1) });
@@ -98,7 +100,7 @@ const BitIndicatorsComponent = (props) => {
 
   let bits = bitArray.map((value, index) => {
     // eslint-disable-next-line eqeqeq 
-    let color = !props.initialized? props.theme.palette.grey[300]: value != 0 ? onColor     : offColor;
+    let color = !props.initialized ? props.theme.palette.grey[300] : value != 0 ? onColor : offColor;
     return (
       <Grid
         item
@@ -111,7 +113,7 @@ const BitIndicatorsComponent = (props) => {
           label={bitLabels[index]}
           labelPlacement={bitLabelPos}
           control={
-            <SvgIcon size="small"  style={{...bitStyles[index], color: color }} {...props.muiSvgIconProps}>
+            <SvgIcon size="small" style={{ ...bitStyles[index], color: color }} {...props.muiSvgIconProps}>
               {props.children === undefined ? (
                 <Lens />
               ) : (
@@ -123,7 +125,7 @@ const BitIndicatorsComponent = (props) => {
       </Grid>
     );
   });
-  
+
   return (
     <Grid
       key={props.pvName}
@@ -133,7 +135,7 @@ const BitIndicatorsComponent = (props) => {
       direction={props.horizontal ? "row" : "column"}
     >
       <Grid key={props.label} item xs={12}>
-      {props.initialized?props.label:<span>{props.disconnectedIcon}{" "+props.pvName}</span>}
+        {props.initialized ? props.label : <span>{props.disconnectedIcon}{" " + props.pvName}</span>}
       </Grid>
       {bits}
     </Grid>
@@ -184,33 +186,33 @@ BitIndicators.propTypes = {
   // Reverse bits order.
   reverseBits: PropTypes.bool,
   /** Any of the MUI Svg Icon can applied by defining them as an object*/
-   
+
   muiSvgIconProps: PropTypes.object,
   /** Directive to use the  PV Bit Labels .
    * 
    */
   usePvBitLabels: PropTypes.bool,
-   /**
-   * Tooltip Text
-   */
-  tooltip:PropTypes.string,
+  /**
+  * Tooltip Text
+  */
+  tooltip: PropTypes.string,
   /**
    * Directive to show the tooltip
    */
-  showTooltip:PropTypes.bool,
+  showTooltip: PropTypes.bool,
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
 
-  tooltipProps:PropTypes.object,
+  tooltipProps: PropTypes.object,
 };
 
 BitIndicators.defaultProps = {
   numberOfBits: 8,
   horizontal: false,
   reverseBits: false,
-  onColor:'primary',
-  offColor:'default',
-  usePvBitLabels:false
+  onColor: 'primary',
+  offColor: 'default',
+  usePvBitLabels: false
 };
 export default withStyles(styles, { withTheme: true })(BitIndicators);

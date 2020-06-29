@@ -43,7 +43,7 @@ const styles = theme => ({
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
+    backgroundColor: theme.palette.error.main,
   },
   form: {
     width: '100%', // Fix IE 11 issue.
@@ -111,7 +111,7 @@ class LogIn extends React.Component {
   }
 
   handleResponse = (response) => {
-    console.log(response)
+   
     return response.text().then(text => {
       const data = text && JSON.parse(text);
       if (!response.ok) {
@@ -159,7 +159,8 @@ class LogIn extends React.Component {
 
   }
   handleAuthorisation(msg) {
-
+   
+    this.context.setUserData(msg.username, msg.roles);
     this.setState({ 'Authenticated': msg.successful, 'AuthenticationFailed': msg.successful !== true });
 
 

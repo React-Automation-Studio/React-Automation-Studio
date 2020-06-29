@@ -194,7 +194,7 @@ class MobileDemo1 extends React.Component {
                 <Grid item xs={12} sm={12} md={12}  lg={12}>
 
 
-                  <SelectionList horizontal={true} pv='loc://editorType'    useStringValue={true} custom_selection_strings={['ThumbWheel','Slider']} intialLocalVariableValue='ThumbWheel' />
+                  <SelectionList horizontal={true} pv='loc://editorType'    useStringValue={true} custom_selection_strings={['ThumbWheel','Slider']} initialLocalVariableValue='ThumbWheel' />
 
 
 
@@ -269,7 +269,7 @@ class MobileDemo1 extends React.Component {
         </AppBar>
         <DataConnection
           pv='loc://editorType'
-          intialLocalVariableValue='ThumbWheel'
+          initialLocalVariableValue='ThumbWheel'
           useStringValue={true}
           handleInputValue={this.handleStateChange}
         />

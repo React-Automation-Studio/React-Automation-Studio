@@ -14,7 +14,7 @@ const styles = (theme) => ({
     margin: theme.spacing(1),
   },
   input: {
-    color: theme.palette.type==='dark'?theme.palette.grey[400]:theme.palette.grey[700],
+    color: theme.palette.type === 'dark' ? theme.palette.grey[400] : theme.palette.grey[700],
   },
   cssLabel: {
     "&$cssFocused": {
@@ -71,12 +71,12 @@ const styles = (theme) => ({
   TextFieldSeverity1: {
     width: '100%',
     borderRadius: 4,
-    background:'linear-gradient(45deg,'+  fade(theme.palette.alarm.minor.dark,theme.palette.type==='dark'?0.1:0.1)+ ' 0%, '+ (theme.palette.alarm.minor.dark) +' 100%)'
+    background: 'linear-gradient(45deg,' + fade(theme.palette.alarm.minor.dark, theme.palette.type === 'dark' ? 0.1 : 0.1) + ' 0%, ' + (theme.palette.alarm.minor.dark) + ' 100%)'
   },
   TextFieldSeverity2: {
     width: '100%',
     borderRadius: 4,
-    background:'linear-gradient(45deg,'+ fade(theme.palette.alarm.major.dark,theme.palette.type==='dark'?0.2:0.1)+ ' 0%, '+ (theme.palette.alarm.major.dark) +' 100%)'
+    background: 'linear-gradient(45deg,' + fade(theme.palette.alarm.major.dark, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.major.dark) + ' 100%)'
   }
 });
 
@@ -127,9 +127,10 @@ function TextOutputComponent(props) {
   }
 
   let value;
+
   const { initialized } = props;
   if (initialized) {
-   
+
     if (typeof props.displayMetaData === 'undefined') {
       if (typeof props.displayTimeStamp !== 'undefined') {
         let mydate = new Date(props.pvData.timestamp * 1000);
@@ -206,7 +207,7 @@ function TextOutputComponent(props) {
  */
 const TextOutput = (props) => {
   return (
-    <Widget {...props} component={TextOutputComponent} />
+    <Widget {...props} component={TextOutputComponent} pvs={undefined} />
 
 
   )
@@ -247,22 +248,6 @@ TextOutput.propTypes = {
    * eg. {{'$(device)':'testIOC','$(id)':'2'}}
    */
   macros: PropTypes.object,
-  /**
-   * Custom maximum to be used, if usePvMinMax is not defined.
-   */
-  max: PropTypes.number,
-  /**
-   * Custom PV to define the maximum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
-   */
-  maxPv: PropTypes.string,
-  /**
-   * Custom minimum value to be used, if usePvMinMax is not defined.
-   */
-  min: PropTypes.number,
-  /**
-   * Custom PV to define the minimum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
-   */
-  minPv: PropTypes.string,
 
   /**
    * Custom precision to round the value.
@@ -301,13 +286,7 @@ TextOutput.propTypes = {
    * By setting useMetadata to false also enables connection to other variables as defined by different protocols.
    */
   useMetadata: PropTypes.bool,
-  /**
-   * Directive to use the pv metadata's HOPR and LOPR fields or the minPv and maxPv values
-   * to limit the maximum and minimum values
-   * that can be contained in the value.
-   * If not defined it uses the custom min and max as defined by the min and max prop.
-   */
-  usePvMinMax: PropTypes.bool,
+
   /**
    * Directive to round the value using the precision field of the PV metadata or precPv.
    * If not defined it uses the custom precision as defined by the prec prop.
@@ -335,19 +314,10 @@ TextOutput.propTypes = {
    * See https://mathjs.org/docs/reference/functions/format.html for more examples
    */
   numberFormat: PropTypes.object,
-  /**
-   * Custom on color to be used, must be derived from Material UI theme color's.
-   */
-  onColor: PropTypes.string,
-  /**
-   * Custom off color to be used, must be derived from Material UI theme color's.
-   */
-  offColor: PropTypes.string,
 
   /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
   pv: PropTypes.string,
-  /** Array of the process variables, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
-  pvs: PropTypes.arrayOf(PropTypes.string),
+
   /**
    * Object with a string and the corresponding severity value.
    * When PV value is equal to the string, set the corresponding severity
@@ -363,27 +333,34 @@ TextOutput.propTypes = {
    * 
    */
   muiTextFieldProps: PropTypes.object,
- /**
-   * Tooltip Text
-   */
-  tooltip:PropTypes.string,
+  /**
+    * Tooltip Text
+    */
+  tooltip: PropTypes.string,
   /**
    * Directive to show the tooltip
    */
-  showTooltip:PropTypes.bool,
+  showTooltip: PropTypes.bool,
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
 
-  tooltipProps:PropTypes.object,
-
+  tooltipProps: PropTypes.object,
+  /** If defined, then the timestamp of the PV will be displayed instead of its value*/
+  displayTimeStamp: PropTypes.bool,
+  /** If defined, then the Metadata property of the pyEPICS PV will be displayed instead of its value as defined by the input string eg. displayMetaData={'lower\_disp\_limit'} 
+   * Valid options are
+  */
+  displayMetaData: PropTypes.oneOf(
+    ['pvname', 'value', 'char_value', 'enum_strs', 'lower_disp_limit', 'upper_disp_limit',
+      'lower_warning_limit', 'upper_warning_limit', 'lower_ctrl_limit', 'upper_ctrl_limit', 'units', 'precision', 'severity', 'write_access', 'read_access', 'host'])
 };
 TextOutput.defaultProps = {
   debug: false,
   variant: "outlined",
   margin: "none",
   alarmSensitive: false,
-  showTooltip:false
+  showTooltip: false
 };
 
 export default withStyles(styles, { withTheme: true })(TextOutput);

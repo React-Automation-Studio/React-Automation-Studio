@@ -26,16 +26,16 @@ import Tab from '@material-ui/core/Tab';
 
 const useStyles = makeStyles(theme => ({
     menuButton: {
-        marginRight: 20,
-        flexGrow: 1
+     //   marginRight: 20,
+        //flexGrow: 1
     },
     moreVert: {
         marginLeft: 'auto',
-        flexGrow: 1
+      //  flexGrow: 1
     },
     titleText: props => ({
         textAlign: props.alignTitle,
-        flexGrow: 1000,
+        flexGrow: 1,
         ...props.titleTextStyle
     }),
     bottomNavigation: props => ({
@@ -99,7 +99,7 @@ const TraditionalLayout = (props) => {
                         </Typography>}
                         {props.tabs&&
                         <Tabs
-                        style={{flexGrow: 1000,}}
+                        style={{flexGrow: 1,}}
                         value={props.tabValue}
                         onChange={props.handleTabChange}
                         {...props.tabProps}
@@ -159,36 +159,44 @@ const TraditionalLayout = (props) => {
 };
 
 TraditionalLayout.propTypes = {
-    /** Title to be displayed in the app bar **/
+    /** Title to be displayed in the app bar */
     title: PropTypes.string,
-    /** Alignment of the title in the app bar **/
+    /** Alignment of the title in the app bar */
     alignTitle: PropTypes.oneOf(['left', 'center', 'right']),
-    /** Typography variant of the title text **/
+    /** Typography variant of the title text */
     titleVariant: PropTypes.string,
-    /** JSX style to override title text defaults **/
+    /** JSX style to override title text defaults */
     titleTextStyle: PropTypes.object,
-    /** Directive to use dense variant of the app bar **/
+    /** Directive to use dense variant of the app bar */
     denseAppBar: PropTypes.bool,
-    /** Items to be displayed in the side drawer (left side) **/
+    /** Items to be displayed in the side drawer (left side) */
     drawerItems: PropTypes.element,
-    /** Items to be displayed in the more vert side drawer (right side) **/
+    /** Items to be displayed in the more vert side drawer (right side) */
     moreVertDrawerItems: PropTypes.element,
-    /** Directive to hide the more vert side drawer icon and menu **/
+    /** Directive to hide the more vert side drawer icon and menu */
     hideMoreVertMenu: PropTypes.bool,
-    /** Directive to hide the 'Toggle Theme' item in the more vert side drawer menu **/
+    /** Directive to hide the 'Toggle Theme' item in the more vert side drawer menu */
     hideToggleThemeListItem: PropTypes.bool,
-    /** Directive to hide the 'Home' item in the side drawer menu **/
+    /** Directive to hide the 'Home' item in the side drawer menu */
     hideHomeDrawerButton: PropTypes.bool,
-    /** Directive to hide side drawer once item on it has been clicked **/
+    /** Directive to hide side drawer once item on it has been clicked */
     hideDrawerAfterItemClick: PropTypes.bool,
-    /** Directive to hide more vert side drawer once item on it has been clicked **/
+    /** Directive to hide more vert side drawer once item on it has been clicked */
     hideMoreVertDrawerAfterItemClick: PropTypes.bool,
-    /** Directive to show Footer element **/
+    /** Directive to show Footer element */
     showFooter: PropTypes.bool,
-    /** Height of the Footer element **/
+    /** Height of the Footer element */
     footerHeight: PropTypes.number,
-    /** Items to be displayed in the Footer element **/
+    /** Items to be displayed in the Footer element */
     footerContents: PropTypes.element,
+    /** MUI Tab labels to be displayed in the AppBar element */
+    tabs: PropTypes.arrayOf(PropTypes.string),
+     /** Tab index */
+    tabValue: PropTypes.number,
+     /** Callback for tab change */
+     handleTabChange: PropTypes.func,
+     /** Tab props */
+     tabProps: PropTypes.object,
 }
 
 TraditionalLayout.defaultProps = {

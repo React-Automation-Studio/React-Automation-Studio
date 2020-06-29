@@ -25,9 +25,10 @@ export const useLocalPV = (props) => {
   const [pv, setPv] = useState(initPV());
   const context = useContext(ReactAutomationStudioContext);
 
+  let contextPv=context.localVariables[pv.pvname]?context.localVariables[pv.pvname]:undefined;
+  let contextPvValue=contextPv?contextPv.value:undefined;
 
-
-
+  
   const updatePVData = (msg) => {
 
     if (msg.connected === '0') {
@@ -73,11 +74,11 @@ export const useLocalPV = (props) => {
     if (typeof context.localVariables[pv.pvname] === 'undefined') {
 
       let msg = {
-        value: typeof props.intialLocalVariableValue === 'undefined' ? 0 : props.intialLocalVariableValue,
+        value: typeof props.initialLocalVariableValue === 'undefined' ? 0 : props.initialLocalVariableValue,
         connected: '1',
         newmetadata: 'True',
         pvname: pv.pvname,
-        char_value: typeof props.intialLocalVariableValue === 'undefined' ? 0 : props.intialLocalVariableValue,
+        char_value: typeof props.initialLocalVariableValue === 'undefined' ? 0 : props.initialLocalVariableValue,
         enum_strs: "",
         lower_disp_limit: typeof props.min === 'undefined' ? 0 : props.min,
         upper_disp_limit: typeof props.max === 'undefined' ? 0 : props.max,
@@ -106,11 +107,22 @@ export const useLocalPV = (props) => {
     }
 
 
-
+ 
 
 // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  useEffect(()=>{
+    if (props.debug){
+
+     
+    console.log(contextPv)
+    }
+    updatePVData(context.localVariables[pv.pvname]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[contextPvValue])
+
+  
   useEffect(() => {
 
     if (props.newValueTrigger > 0) {
@@ -128,6 +140,9 @@ export const useLocalPV = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.newValueTrigger])
 
+  if(props.debug){
+    console.log(pv,contextPv)
+  }
   return (pv)
 
 }

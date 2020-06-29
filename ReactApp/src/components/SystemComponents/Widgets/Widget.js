@@ -135,6 +135,7 @@ const math = create(all, config)
   useEffect(() => {
     if (!focus) {
       let newValue;
+      
       newValue=checkPrecision(pv.value, prec);
       if (typeof props.numberFormat !== 'undefined'){
         newValue=math.format(parseFloat(newValue),props.numberFormat)
@@ -143,7 +144,9 @@ const math = create(all, config)
       else{
         setValue(newValue)
       }
-      
+      if (props.debug){
+        console.log(newValue)
+    }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [focus, pv.value, prec])
@@ -153,12 +156,12 @@ const math = create(all, config)
     if (typeof props.useStringSeverityMatch !== 'undefined'){
       if (props.useStringSeverityMatch===true){
 
-        if (typeof props.StringSeverity !== 'undefined'){
+        if (typeof props.stringSeverity !== 'undefined'){
           let string;
-          for (string in props.StringSeverity){
+          for (string in props.stringSeverity){
             // eslint-disable-next-line eqeqeq
-            if (value==props.StringSeverity[string].stringMatch){
-              newSeverity=props.StringSeverity[string].severity;
+            if (value==props.stringSeverity[string].stringMatch){
+              newSeverity=props.stringSeverity[string].severity;
               break;
             }
 
@@ -168,7 +171,7 @@ const math = create(all, config)
       }
     }
     setAlarmSeverity(newSeverity)
-  }, [pv.severity,props.useStringSeverityMatch,props.StringSeverity,value])
+  }, [pv.severity,props.useStringSeverityMatch,props.stringSeverity,value])
 
 
   useEffect(() => {
@@ -243,7 +246,7 @@ const math = create(all, config)
     }
   },[props])
   const checkPrecision = (value, prec) => {
-    if (props.usePvPrecision || props.prec) {
+    if (props.usePvPrecision===true || (typeof props.prec!=='undefined')) {
       let precision = parseInt(prec);
       let tempvalue = parseFloat(value);
       if (!isNaN(tempvalue)) {
@@ -260,7 +263,7 @@ const math = create(all, config)
   }
   const isInsideLimits = (value, min, max) => {
 
-    if (props.min || props.max || props.usePvMinMax) {
+    if ((typeof props.min!=='undefined') || (typeof props.max!=='undefined') || props.usePvMinMax) {
 
       let tempValue = parseFloat(value);
       if (!isNaN(tempValue)) {
@@ -391,7 +394,7 @@ const math = create(all, config)
     newValueTrigger={newValueTrigger}
     outputValue={outputValue}
     useStringValue={props.useStringValue}
-    intialLocalVariableValue={props.intialLocalVariableValue}
+    initialLocalVariableValue={props.initialLocalVariableValue}
     debug={props.debug}
     pvData={setPv}
     name={props.name}
@@ -530,14 +533,7 @@ Widget.propTypes = {
   /**
    * when writing to the  pv's output value, increment newValueTrigger to tell the pv component emit the output value to the process variable.
    */
-  newValueTrigger:PropTypes.number,
-  /**
-   * the output value to the process variable. It is only emitted once the newValueTrigger is incremented.
-   */
-  outputValue:PropTypes.any,
-  /**
-   * Custom precision to round the value.
-   */
+
   prec: PropTypes.number,
   /**
    * Custom PV to define the precision to be used, usePvPrecision must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.

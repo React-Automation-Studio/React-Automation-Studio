@@ -166,7 +166,7 @@ BitIndicators.propTypes = {
   macros: PropTypes.object,
 
   /** local variable initialization value*/
-  intialLocalVariableValue: PropTypes.string,
+  initialLocalVariableValue: PropTypes.string,
   /** If defined, then the Data initialized debugging information will be displayed*/
   debug: PropTypes.bool,
   /** label placement*/
@@ -190,6 +190,19 @@ BitIndicators.propTypes = {
    * 
    */
   usePvBitLabels: PropTypes.bool,
+   /**
+   * Tooltip Text
+   */
+  tooltip:PropTypes.string,
+  /**
+   * Directive to show the tooltip
+   */
+  showTooltip:PropTypes.bool,
+  /**
+   *  Any of the MUI Tooltip props can applied by defining them as an object
+   */
+
+  tooltipProps:PropTypes.object,
 };
 
 BitIndicators.defaultProps = {

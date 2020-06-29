@@ -26,7 +26,7 @@ const styles = theme => ({
 
 });
 /**
- * The ActionFanoutButton Component is a wrapper on the Material-UI Button component.
+ * **Component is deprecated, use the ActionButton instead** The ActionFanoutButton Component is a wrapper on the Material-UI Button component.
  *The ActionButton will output the `actionValue` to all the process variable defined by `dataPVs` when pressed.
  *The ActionButton component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
  * The margins and spacing must be controlled from the parent component.<br/><br/>
@@ -159,7 +159,7 @@ multipleDataConnections = () => {
           handleMetadata={this.handleMetadata(this.state.dataPVs[pv].pvname)}
           outputValue={this.state.value}
           newValueTrigger={this.state.newValueTrigger}
-          intialLocalVariableValue={this.props.intialLocalVariableValue}
+          initialLocalVariableValue={this.props.initialLocalVariableValue}
         />
 
 
@@ -311,7 +311,7 @@ ActionFanoutButton.propTypes = {
   /** If defined, then the DataConnection debugging information will be displayed*/
   debug:PropTypes.bool,
   /** local variable initialization value*/
-  intialLocalVariableValue:PropTypes.string
+  initialLocalVariableValue:PropTypes.string
 
 
 };

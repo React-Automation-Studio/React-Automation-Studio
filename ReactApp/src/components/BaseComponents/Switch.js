@@ -38,8 +38,8 @@ const SwitchInternalComponent = (props) => {
         key={props.pvName}
         className={props.classes.FormControl}
         disabled={props.disabled}
-        label={props.label}
-        labelPlacement={props.labelPosition}
+        label={props.formControlLabel}
+        labelPlacement={props.labelPlacement}
         control={
           <MuiSwitch
             onChange={handleButtonChange}
@@ -76,7 +76,7 @@ Switch.propTypes = {
   macros: PropTypes.object,
 
   /** local variable initialization value*/
-  intialLocalVariableValue: PropTypes.string,
+  initialLocalVariableValue: PropTypes.string,
   /** If defined, then the DataConnection debugging information will be displayed*/
   debug: PropTypes.bool,
   /** label placement*/

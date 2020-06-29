@@ -97,7 +97,7 @@ class Main extends Component {
 
     return (
       <TraditionalLayout
-      title="React Automation Studio V1.3.0"
+      title="React Automation Studio V2.0.0"
       denseAppBar
       alignTitle="center"
     >
@@ -105,11 +105,10 @@ class Main extends Component {
 
         
         <Grid container direction="row" item justify="center" spacing={1} alignItems="center" style={{paddingTop:64}}>
-          <Grid item lg={4} sm={4} xs={2}>
-
-          </Grid>
-          <Grid item lg={2} sm={4} xs={8}>
-            <Grid container direction="row" justify="center" spacing={3} alignItems="stretch">
+          <Grid item lg={4} sm={4}  xs={2}>
+            </Grid>
+          <Grid item lg={2} sm={4}  xs={8}>
+            <Grid container direction="row" justify="center" spacing={3} alignItems="center">
               <Grid item xs={12}  >
                 <Button  fullWidth   className= {classes.button} component={Link} to="/MobileDemo1" color="primary" variant='contained'>  Mobile Demo 1 </Button>
               </Grid>
@@ -154,7 +153,7 @@ class Main extends Component {
                 <Button  fullWidth className= {classes.button} component={Link} to="/Help" color="secondary" variant='contained'>  Help </Button>
               </Grid> */}
               <Grid item xs={12}  >
-                <Button fullWidth className={classes.button} target="_blank" href={AutomationStudioStyleGuideBuildURL} color="secondary" variant='contained'> Help and Style Guide </Button>
+                <Button  fullWidth className= {classes.button} target="_blank" href={AutomationStudioStyleGuideBuildURL} color="default" variant='contained'> Help and Style Guide </Button>
               </Grid>
               {/* <Grid item xs={12}  >
                 <Button  fullWidth className= {classes.button} component={Link} to="/ExperimentalMain" color="primary" variant='contained'> Experimental Main</Button>

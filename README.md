@@ -361,7 +361,38 @@ Although it is more ingenious to create separate user access groups and to defin
 
 In theory, all regular expression allowed by Python regex can be used although this has not been tested. More examples are available at: https://www.w3schools.com/python/python_regex.asp
 
+** New** to release 2.0.0 are the definition of roles, by defining a role dynamic routes can be created using the role. This now enables portions of your app to isolated from other users.
 
+
+```json
+"UAG1":
+{
+  "usernames":["user1"],
+  "roles":["engineer"],
+  "rules":
+  [
+    { "rule":"[0-9].*",                   "read":true,  "write":true },
+    { "rule":"[a-z].*",                   "read":true,  "write":true },
+    { "rule":"[A-Z].*",                   "read":true,  "write":true },
+   
+
+  ]
+},
+"UAG2":
+{
+  "usernames":["operator1"],
+  "roles":["operator"],
+  "rules":
+  [
+    { "rule":"[0-9].*",                   "read":true,  "write":false },
+    { "rule":"[a-z].*",                   "read":true,  "write":false },
+    { "rule":"[A-Z].*",                   "read":true,  "write":false },
+    { "rule":"^pva://testIOC:Harp1",      "read":true, "write":true },
+    { "rule":"^pva://testIOC:FC2",        "read":true,  "write":true },
+
+  ]
+}
+```
 
 ## 3.3 Enabling https
 The system is by default configured to serve the socket connections and client webserver over HTTP on localhost.
@@ -450,15 +481,45 @@ Contact us at rasadmin@tlabs.ac.za
 
 # Changelog
 
-**V1.3.0 Monday 1 June 2020**
+** V2.0.0 Friday 26 June 2020
 
-Components have been updated to hooks based widget.
-Significant documentation improvements.
+Improvements and new features:
+- Updated to React Hooks based  components
+- Introduction of new RasAppCore component, the logic in App.js is replaced by this component
+- Created the new component Widget that is the base component for all Widgets.
+- PV component substitutes old DataConnection component.
+- Dynamic connection: When useMetadata props is false some fields, such as min, max, prec, alarm and units, are read from external PVs or an additional connection with those fields is established. By default useMetadata prop is false.
+- New Layout with new themes.
+- All buttons can receive and icon.
+- All components extending MUI components can pass MUI props to the MUI components through a special prop (it changes based on the component).
+- All components can have a tooltip.
+- Packages updated in both RAS and RAS-Example-Project-1
 
 
-Breaking changes:
-ActionFanoutButton deprecated. Use ActionButton instead
-GraphMultiplePvs removed. Use GraphY
+
+
+Widget Logic:
+Custom Widget -> Widget -> PV -> EpicsPV -> Socket connection to pvServer
+                            		  \  
+                              		     -> LocalPV -> RAS-Context
+The bind between Custom Widget and Widget is made through the HOC function in Widget.
+EpicsPV and LocalPV respectively uses useEpicsPV and useLocalPV hooks that can be used in other components.
+
+Deprecated Components:
+These components will be removed in future releases
+- SimpleSlider -> Use Slider
+- ActionFanoutButton -> Use ActionButton
+- SwitchComponent -> Use Switch
+
+Removed Component:
+- GraphMultiplePVs
+
+Breaking Changes
+- routes.js was renamed Routes.js and now contains extra logic to enable dynamic or isolated routes based on the use role.
+  This is necessary for the next release
+- removal of GraphMultiplePVs
+- If you added extra logic to the App.js you will to adapt to the new RasAppCore component.
+
 
 **V1.2.4 Thursday 2 April 2020**
 

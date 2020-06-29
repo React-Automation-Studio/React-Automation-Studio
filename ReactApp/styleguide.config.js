@@ -80,6 +80,11 @@ module.exports = {
           usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
         },
         {
+          name: 'Theming',
+          content: 'src/docs/themes/themes.md',
+          
+        },
+        {
           name: 'Base Components',
           content: 'src/docs/WorkingWithComponents.md',
           components: 'src/components/BaseComponents/*.js',

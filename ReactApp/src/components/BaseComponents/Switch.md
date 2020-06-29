@@ -26,7 +26,7 @@ Switch example connection to a SoftChannel EPICS AI pv with use of EPICS label a
     pv='pva://$(device):BO$(id)'
     macros={{'$(device)':'testIOC','$(id)':'1'}}
     usePvLabel={true}
-    labelPosition={"end"}
+    labelPlacement='end'
     />
 
 {/*###############*/}  

@@ -95,7 +95,7 @@ const TextUpdateMultiplePVsComponent=(props)=> {
  */
 const TextUpdateMultiplePVs =(props)=>{
   return (
-    <Widget {...props} component={TextUpdateMultiplePVsComponent}/>
+    <Widget {...props} component={TextUpdateMultiplePVsComponent} pvs={undefined}/>
        
     
   )
@@ -152,8 +152,7 @@ TextUpdateMultiplePVs.propTypes = {
 
  
 
- /** Array of the process variables, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
- pvs: PropTypes.arrayOf(PropTypes.string),
+
  /**
    * Tooltip Text
    */

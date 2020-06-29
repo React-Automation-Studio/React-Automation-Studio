@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef} from 'react';
 import { withStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
 import PropTypes from "prop-types";
@@ -338,6 +338,8 @@ const styles = (theme) => {
 
 function SliderComponent(props) {
   const emitChangeDebounced = useRef(debounce(value => emitChange(value), 10)).current;
+  
+  const emitBlurDebounced = useRef(debounce(()=> props.handleBlur, 500)).current;
 
   /**
    * Write value on the PV using emitChangeDebounced function.
@@ -348,8 +350,9 @@ function SliderComponent(props) {
    */
   function handleChange(value) {
     props.handleFocus();
-    //debounce(emitChange(value), 10)
-    emitChangeDebounced(value);
+    
+   emitChangeDebounced(value);
+   
   }
 
   /**
@@ -367,9 +370,12 @@ function SliderComponent(props) {
    * @param {float} value
    */
   function handleChangeCommited(value) {
-
-    props.handleImmediateChange(value);
-    props.handleBlur();
+    props.handleFocus();
+    emitChangeDebounced(value);
+   
+    //props.handleBlur();
+    emitBlurDebounced();
+ 
 
   }
 
@@ -412,8 +418,14 @@ function SliderComponent(props) {
     return;
   }
   }
+
+  
   return (
-    <div  style={{height:'100%', width:'100%',padding:props.theme.spacing(1)}} onPointerDownCapture={handleOnClickCapture} >
+    <div  style={{height:'100%', width:'100%',padding:props.theme.spacing(1)}} onPointerDownCapture={handleOnClickCapture}  
+ 
+    
+    
+    >
     <FormControlLabel
     key={props.pvName + props.initialized}
     className={props.vertical?props.classes.verticalSliderLabel:props.classes.horizontalSliderLabel}
@@ -434,7 +446,7 @@ function SliderComponent(props) {
         >
         <RCSlider
 
-    
+        
         disabled={props.disabled}
         vertical={props.vertical}
         value={props.initialized ? parseFloat(props.value) : 0}
@@ -625,6 +637,12 @@ Slider.propTypes = {
    */
 
   tooltipProps:PropTypes.object,
+  /**
+   * Directive to use a vertical slider
+   */
+
+
+  vertical: PropTypes.bool,
 };
 
 Slider.defaultProps = {
@@ -633,7 +651,8 @@ Slider.defaultProps = {
   labelPlacement: 'top',
   valuePlacement:'top',
   showValue:true,
-  showTooltip:false
+  showTooltip:false,
+  vertical:false,
 
 };
 

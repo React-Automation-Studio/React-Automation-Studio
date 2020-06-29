@@ -52,7 +52,7 @@ const ActionButtonComponent=(props)=> {
         <Button
           className={props.classes.Button}
           variant="contained"
-          color={props.onColor}
+          color={props.color}
           onClick={handleButtonClick}
           {...props.muiButtonProps}
         >
@@ -110,7 +110,7 @@ ActionButton.propTypes = {
   /** If defined, then the DataConnection debugging information will be displayed*/
   debug: PropTypes.bool,
   /** local variable initialization value*/
-  intialLocalVariableValue: PropTypes.string,
+  initialLocalVariableValue: PropTypes.string,
   /** Any of the MUI Button Props can applied by defining them as an object
    * 
    */
@@ -133,7 +133,8 @@ ActionButton.propTypes = {
 };
 ActionButton.defaultProps = {
  
-  showTooltip:false
+  showTooltip:false,
+  color:'primary',
 };
 
 export default withStyles(styles, { withTheme: true })(ActionButton);

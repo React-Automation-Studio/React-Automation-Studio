@@ -121,7 +121,7 @@ StyledIconIndicator.propTypes = {
   macros: PropTypes.object,
 
   /** local variable initialization value*/
-  intialLocalVariableValue: PropTypes.string,
+  initialLocalVariableValue: PropTypes.string,
   /** If defined, then the DataConnection debugging information will be displayed*/
   debug: PropTypes.bool,
   /** label placement*/

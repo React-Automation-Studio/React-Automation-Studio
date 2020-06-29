@@ -159,10 +159,31 @@ SelectionInput.propTypes = {
    */
 
   tooltipProps:PropTypes.object,
-  
-  };
-  
 
+  /** Any of the MUI TextField Props can applied by defining them as an object
+   * 
+   */
+  muiTextFieldProps: PropTypes.object,
+
+  /**
+   * Custom units to be used, if usePvUnits is not defined.
+   */
+
+  units: PropTypes.string,
+  /**
+   * Custom PV to define the units to be used, usePvUnits must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+   */
+  unitsPv: PropTypes.string,
+  
+  
+  /**
+   * Directive to use the units contained in the   pv metdata's EGU field or unitsPv.
+   *  If not defined it uses the custom units as defined by the units prop.
+   */
+
+
+  usePvUnits: PropTypes.bool,
+};
 
 SelectionInput.defaultProps = {
   

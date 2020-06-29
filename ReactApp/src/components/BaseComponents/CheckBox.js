@@ -19,10 +19,7 @@ const styles = (theme) => ({
   },
 });
 
-/**
- * The CheckBox component is a wrapper on a Material-UI CheckBox component.
- https://material-ui.com/api/checkbox/
- */
+
 const CheckBoxComponent = (props) => {
 
 
@@ -57,7 +54,10 @@ const CheckBoxComponent = (props) => {
   );
 
 }
-
+/**
+ * The CheckBox component is a wrapper on a Material-UI CheckBox component.
+ https://material-ui.com/api/checkbox/
+ */
 const CheckBox = (props) => {
   return (
     <Widget {...props} component={CheckBoxComponent} usePvMinMax={false} usePvPrecision={false} min={undefined} max={undefined} prec={undefined}/>
@@ -72,7 +72,7 @@ CheckBox.propTypes = {
   macros: PropTypes.object,
 
   /** local variable initialization value*/
-  intialLocalVariableValue: PropTypes.string,
+  initialLocalVariableValue: PropTypes.string,
   /** If defined, then the DataConnection debugging information will be displayed*/
   debug: PropTypes.bool,
   /** label placement*/

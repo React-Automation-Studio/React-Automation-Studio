@@ -58,7 +58,7 @@ class DataConnection extends React.Component {
         <DeprecatedLocalPV
         localVariable={this.context.localVariables[pv]}
         value={typeof this.context.localVariables[pv]==='undefined'?undefined:this.context.localVariables[pv].value}
-        initialValue={this.props.intialLocalVariableValue}
+        initialValue={this.props.initialLocalVariableValue}
         pv={pv}
         usePrecision={this.props.usePrecision}
         handleInputValue={this.props.handleInputValue}

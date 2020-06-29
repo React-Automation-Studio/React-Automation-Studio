@@ -364,6 +364,8 @@ Gauge.propTypes = {
    */
 
   tooltipProps:PropTypes.object,
+  /** label placement*/
+  labelPlacement: PropTypes.oneOf(['start', 'top', 'bottom', 'end']),
 
 
 };

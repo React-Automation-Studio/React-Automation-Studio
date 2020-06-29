@@ -16,6 +16,9 @@ import {
 
 } from 'react-vis';
 
+import { create, all } from 'mathjs';
+const config = { }
+const math = create(all, config)
 /* eslint-disable eqeqeq */
 
 const styles = theme => ({
@@ -58,7 +61,12 @@ function getTickValues(props, min, max, numberOfTicks, x0, x1, x2, y1, y2, xOffs
     if (props.showTicks === true) {
       for (i = 0; i < (numberOfTicks); i++) {
         
-        const tickValue = i * (max - min) / (numberOfTicks - 1) + min;
+        let tickValue = i * (max - min) / (numberOfTicks - 1) + min;
+        if (typeof props.numberFormat !== 'undefined'){
+          tickValue=math.format(parseFloat(tickValue),props.numberFormat)
+         
+        }
+
         ticks.push(
           <g key={i}
           >
@@ -68,7 +76,7 @@ function getTickValues(props, min, max, numberOfTicks, x0, x1, x2, y1, y2, xOffs
               y={y2 + yOffset}
               textAnchor={i == 0 ? 'start' : i == (numberOfTicks - 1) ? 'end' : 'middle'}
             >
-              {parseFloat(tickValue).toFixed(0) + props.units}
+              {tickValue + props.units}
             </text>
           </g>
 
@@ -90,7 +98,7 @@ function getTickValues(props, min, max, numberOfTicks, x0, x1, x2, y1, y2, xOffs
           y={yOffset - 4}
           textAnchor={'start'}
         >
-          {typeof props.disabled === 'undefined' ? parseFloat(value).toFixed(0) + props.units : ""}{}
+          {typeof props.disabled === 'undefined' ? value + props.units : ""}{}
         </text>
       </g>
 
@@ -269,7 +277,7 @@ const ProgressBarInternalComponent = (props) => {
       labelPlacement={props.labelPlacement}
       control={
         <FlexibleProgressBarComponent
-
+          {...props} 
           min={min}
           max={max}
           units={units}

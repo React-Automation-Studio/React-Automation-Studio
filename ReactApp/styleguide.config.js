@@ -75,9 +75,30 @@ module.exports = {
         {
           name: 'Layout Wrapper Components',
           content: 'src/docs/WorkingWithLayouts.md',
-          components: 'src/components/UI/Layout/ComposedLayouts/*.js',
-          exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
-          usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
+          
+        
+          
+          sections:[
+            { 
+              name: 'Layout Components',
+              components: 'src/components/UI/Layout/ComposedLayouts/*.js',
+              exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
+              usageMode: 'expand', // 'hide' | 'collapse' | 'expand'
+            },
+            { 
+              name: 'TraditionalLayout Example 1',
+              content: 'src/components/UI/Layout/ComposedLayouts/TraditionalLayoutEx1.md',
+            },
+            { 
+              name: 'TraditionalLayout Example 2',
+              content: 'src/components/UI/Layout/ComposedLayouts/TraditionalLayoutEx2.md',
+            },
+            { 
+              name: 'TraditionalLayout Example 3',
+              content: 'src/components/UI/Layout/ComposedLayouts/TraditionalLayoutEx3.md',
+            },
+         
+          ]
         },
         {
           name: 'Theming',
@@ -102,10 +123,25 @@ module.exports = {
 
 
         },
+        
         {
           name: 'Experimental Base Components',
           content: 'src/docs/WorkingWithComponents.md',
           components: 'src/components/ExperimentalBaseComponents/*.js',
+          exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
+          usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
+        },
+        {
+          name: 'Experimental Beamline Components',
+          content: 'src/docs/beamlineComponents/BeamlineComponents.md',
+          components: 'src/components/SvgBeamlineComponents/*.js',
+          exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
+          usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
+        },
+        {
+          name: 'Experimental Alarm Handler',
+          content: 'src/docs/alarmHandler/alarmHandler.md',
+          //components: 'src/components/SvgBeamlineComponents/*.js',
           exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
           usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
         },

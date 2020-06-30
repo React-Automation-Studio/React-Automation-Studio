@@ -85,19 +85,7 @@ class DynamicPvFieldExample extends React.Component {
     return (
 
       <React.Fragment>
-        <AppBar style={{ position: 'fixed', bottom: 'auto', top: '0' }} color='inherit' >
-          <Grid container direction="row" item justify="center" spacing={2} alignItems="center">
-            <Grid item xs={2}  >
-
-              <SideBar />
-            </Grid>
-            <Grid item xs={10} >
-              <div className={classes.body1}>Hooks debugging</div>
-            </Grid>
-          </Grid>
-        </AppBar>
-
-
+       
 
 
 

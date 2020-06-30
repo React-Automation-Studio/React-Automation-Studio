@@ -446,8 +446,20 @@ const math = create(all, config)
   const divStyle = {
     width: "100%",
     height: "100%",
+   
+   
   }
-  
+  const svgDivStyle = {
+    //width: "100%",
+    //height: "100%",
+    borderStyle: props.debugBorder?'solid':undefined,
+    borderColor:  props.debugBorder?'coral':undefined,
+    position:'absolute',
+    top: props.y,
+    left: props.x,
+    width: props.width,
+    //height: '100%',
+  }
   return (
     <Tooltip   
       title={props.tooltip} 
@@ -457,7 +469,7 @@ const math = create(all, config)
       {...props.tooltipProps}  >
     
     <div
-      style={divStyle}
+      style={props.svgWidget?svgDivStyle:divStyle}
       onContextMenu={
         props.disableContextMenu
           ? undefined

@@ -75,9 +75,30 @@ module.exports = {
         {
           name: 'Layout Wrapper Components',
           content: 'src/docs/WorkingWithLayouts.md',
-          components: 'src/components/UI/Layout/ComposedLayouts/*.js',
-          exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
-          usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
+          
+        
+          
+          sections:[
+            { 
+              name: 'Layout Components',
+              components: 'src/components/UI/Layout/ComposedLayouts/*.js',
+              exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
+              usageMode: 'expand', // 'hide' | 'collapse' | 'expand'
+            },
+            { 
+              name: 'TraditionalLayout Example 1',
+              content: 'src/components/UI/Layout/ComposedLayouts/TraditionalLayoutEx1.md',
+            },
+            { 
+              name: 'TraditionalLayout Example 2',
+              content: 'src/components/UI/Layout/ComposedLayouts/TraditionalLayoutEx2.md',
+            },
+            { 
+              name: 'TraditionalLayout Example 3',
+              content: 'src/components/UI/Layout/ComposedLayouts/TraditionalLayoutEx3.md',
+            },
+         
+          ]
         },
         {
           name: 'Theming',

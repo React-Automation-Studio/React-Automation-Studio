@@ -17,7 +17,7 @@ import ThumbWheel from '../../components/BaseComponents/ThumbWheel';
 
 const LayoutContent = () => {
 
-   
+
 
     return (
         <Grid
@@ -81,7 +81,7 @@ const LayoutContent = () => {
                 </Grid>
             </Grid>
             <Grid item xs={12}>
-                <Slider pv='pva://$(device):amplitude' macros={{ '$(device)': 'testIOC' }} usePvMinMax={true} usePvLabel={true} />
+                <Slider pv='pva://$(device):amplitude' macros={{ '$(device)': 'testIOC' }} usePvMinMax={true} usePvLabel={true} prec={1} />
             </Grid>
         </Grid>
     );

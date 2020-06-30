@@ -138,6 +138,13 @@ module.exports = {
           exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
           usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
         },
+        {
+          name: 'Experimental Alarm Handler',
+          content: 'src/docs/alarmHandler/alarmHandler.md',
+          components: 'src/components/SvgBeamlineComponents/*.js',
+          exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
+          usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
+        },
 
       ],
       sectionDepth: 2

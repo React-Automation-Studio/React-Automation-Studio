@@ -11,8 +11,12 @@ import Paper from '@material-ui/core/Paper';
 import Chip from '@material-ui/core/Chip';
 import Tooltip from '@material-ui/core/Tooltip';
 import TextField from '@material-ui/core/TextField';
+import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
+import ClearIcon from '@material-ui/icons/Clear';
+import DoneIcon from '@material-ui/icons/Done';
+import AddIcon from '@material-ui/icons/Add';
 import HelpOutlinedIcon from '@material-ui/icons/HelpOutlined';
 
 const useStyles = makeStyles(theme => ({
@@ -20,6 +24,9 @@ const useStyles = makeStyles(theme => ({
         marginRight: '1em',
         marginTop: '0.5em',
         marginBottom: '0.5em'
+    },
+    emailInputField: {
+        cursor: 'auto'
     },
     styledTableHeadCell: {
         backgroundColor: theme.palette.type === 'dark' ? undefined : theme.palette.primary.light,
@@ -32,13 +39,21 @@ const UserTable = (props) => {
     const classes = useStyles()
     const theme = useTheme()
 
+    const showAddHeader = Object.values(props.userEdit).reduce((acc, edit) => {
+        return acc || edit
+    }, false)
+
+    const { filterUserRegex } = props
+    const fillChipName = filterUserRegex.length === 1 ? filterUserRegex[0] : null
+
     return (
         <TableContainer component={Paper} style={{ height: props.height }} elevation={theme.palette.type === 'dark' ? undefined : 5}>
             <Table aria-label="User Table" stickyHeader size="small">
                 <colgroup>
                     <col style={{ width: '15%' }} />
                     <col style={{ width: '25%' }} />
-                    <col style={{ width: '50%' }} />
+                    <col style={{ width: '40%' }} />
+                    <col style={{ width: '10%' }} />
                     <col style={{ width: '10%' }} />
                 </colgroup>
                 <TableHead>
@@ -75,43 +90,99 @@ const UserTable = (props) => {
                                 </div>
                             </Tooltip>
                         </TableCell>
+                        <TableCell align="center" classes={{ stickyHeader: classes.styledTableHeadCell }}>{showAddHeader ? 'Add' : null}</TableCell>
                         <TableCell align="center" classes={{ stickyHeader: classes.styledTableHeadCell }}></TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {Object.values(props.userList).map(user => {
                         return (
-                            < TableRow key={`${user.username}-${user.email}`} hover>
+                            < TableRow
+                                key={`${user.username}`}
+                                hover
+                                onClick={(event) => {
+                                    event.preventDefault()
+                                    event.stopPropagation()
+                                    props.setFilterUser(user.name, user.username)
+
+                                }}
+                            >
                                 <TableCell>
                                     {user.name}
                                 </TableCell>
                                 <TableCell>
                                     <TextField
-                                        style={{ cursor: 'none' }}
-                                        type="password"
+                                        type={props.username === user.username ? 'text' : 'password'}
                                         value={user.email}
                                         InputProps={{
+                                            classes: { input: classes.emailInputField },
                                             readOnly: true,
                                             disableUnderline: true
                                         }}
                                     />
                                 </TableCell>
                                 <TableCell>
-                                    <Chip
-                                        label="Basic"
-                                        variant="outlined"
-                                        color="secondary"
-                                        className={classes.chip}
-                                        onDelete={() => { console.log('hello') }}
-                                    />
+                                    {Object.values(user.notifyPVs).map(expression => {
+                                        return (
+                                            <Chip
+                                                key={expression}
+                                                label={expression}
+                                                variant={expression === fillChipName ? undefined : "outlined"}
+                                                color="secondary"
+                                                className={classes.chip}
+                                                onClick={(event) => props.setFilterUserRegex(event, expression)}
+                                                onDelete={props.userEdit[`${user.username}-${user.name}`] ? () => { console.log('hello') } : undefined}
+                                            />
+                                        )
+                                    })}
                                 </TableCell>
                                 <TableCell>
-                                    <Tooltip title="Edit" placement="right">
-                                        <IconButton >
-                                            <EditIcon />
-                                        </IconButton>
-                                    </Tooltip>
-
+                                    {
+                                        props.userEdit[`${user.username}-${user.name}`]
+                                            ? <TextField
+                                                value={props.addRegexVal}
+                                                onChange={props.setAddRegexVal}
+                                                fullWidth={true}
+                                                InputProps={{
+                                                    endAdornment: (
+                                                        <InputAdornment position="end" onClick={() => { console.log('adding...') }} >
+                                                            <AddIcon style={{ cursor: 'pointer' }} />
+                                                        </InputAdornment >
+                                                    ),
+                                                }}
+                                            />
+                                            : null
+                                    }
+                                </TableCell>
+                                <TableCell>
+                                    {
+                                        props.username === user.username
+                                            ? props.userEdit[`${user.username}-${user.name}`] ?
+                                                <React.Fragment>
+                                                    <Tooltip title="Apply" placement="bottom">
+                                                        <IconButton
+                                                            onClick={(event) => { props.setUserEdit(event, user.name, user.username, true) }}
+                                                            style={{ marginLeft: '1em' }}
+                                                        >
+                                                            <DoneIcon />
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                    <Tooltip title="Cancel" placement="bottom">
+                                                        <IconButton
+                                                            onClick={(event) => { props.setUserEdit(event, user.name, user.username, false) }}
+                                                            style={{ marginLeft: '1em' }}
+                                                        >
+                                                            <ClearIcon />
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                </React.Fragment>
+                                                : <Tooltip title="Edit" placement="right">
+                                                    <IconButton onClick={(event) => { props.setUserEdit(event, user.name, user.username, true) }}>
+                                                        <EditIcon />
+                                                    </IconButton>
+                                                </Tooltip>
+                                            : null
+                                    }
                                 </TableCell>
                             </TableRow>
                         )

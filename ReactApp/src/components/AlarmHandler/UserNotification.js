@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -47,10 +47,15 @@ const UserNotification = () => {
     const [dbUsersURL, setUsersURL] = useState('')
     const [alarmList, setAlarmList] = useState([])
     const [userList, setUserList] = useState([])
+    const [userEdit, setUserEdit] = useState({})
     const [userTableExpand, setUserTableExpand] = useState(true)
     const [pvListExpand, setPvListExpand] = useState(true)
     const [userTableIsExpanded, setUserTableIsExpanded] = useState(true)
     const [pvListIsExpanded, setPvListIsExpanded] = useState(true)
+    const [filterUser, setFilterUser] = useState('')
+    const [filterUserRegex, setFilterUserRegex] = useState([])
+    const [dictUserRegex, setDictUserRegex] = useState({})
+    const [addRegexVal, setAddRegexVal] = useState('')
 
     const moreVertDrawerItems = (
         <React.Fragment>
@@ -62,6 +67,34 @@ const UserNotification = () => {
             </ListItem>
         </React.Fragment>
     )
+
+    const handleSetAddRegexVal = (event) => {
+        setAddRegexVal(event.target.value)
+        setFilterUserRegex([event.target.value])
+    }
+
+    const handleSetFilterUser = useCallback((name, username) => {
+        setFilterUser(name)
+        setFilterUserRegex(dictUserRegex[`${username}-${name}`])
+    }, [dictUserRegex])
+
+    const handleSetFilterUserRegex = useCallback((event, expression) => {
+        event.preventDefault()
+        event.stopPropagation()
+        setFilterUserRegex([expression])
+    }, [])
+
+    const handleSetUserEdit = useCallback((event, name, username, value) => {
+        event.preventDefault()
+        event.stopPropagation()
+
+        let localUserEdit = { ...userEdit }
+        localUserEdit[`${username}-${name}`] = value
+        setUserEdit(localUserEdit)
+
+        setFilterUserRegex(dictUserRegex[`${username}-${name}`])
+        setAddRegexVal('')
+    }, [userEdit, dictUserRegex])
 
     const handleNewDbPVsList = (msg) => {
 
@@ -95,8 +128,27 @@ const UserNotification = () => {
 
     const handleDbUsers = (msg) => {
 
-        const data = JSON.parse(msg.data);
+        const data = JSON.parse(msg.data)
 
+        let localUserEdit = {}
+        let localDictUserRegex = {}
+        let localFilterUser = null
+        let localFilterUserRegex = null
+
+        data.map((user, index) => {
+            if (index === 0) {
+                localFilterUser = user.name
+                localFilterUserRegex = user.notifyPVs
+            }
+            localDictUserRegex[`${user.username}-${user.name}`] = user.notifyPVs
+            localUserEdit[`${user.username}-${user.name}`] = false
+            return null
+        })
+
+        setDictUserRegex(localDictUserRegex)
+        setFilterUser(localFilterUser)
+        setFilterUserRegex(localFilterUserRegex)
+        setUserEdit(localUserEdit)
         setUserList(data)
     }
 
@@ -160,6 +212,8 @@ const UserNotification = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
+    const filterName = filterUserRegex.length === 1 ? filterUserRegex[0] : filterUser
+
     let userTableHeight = '25vh'
     let pvListHeight = '47vh'
     if (userTableExpand && !pvListExpand && !pvListIsExpanded) {
@@ -168,6 +222,8 @@ const UserNotification = () => {
     else if (!userTableExpand && pvListExpand && !userTableIsExpanded) {
         pvListHeight = '76vh'
     }
+
+    console.log(filterUserRegex)
 
     return (
         <Layout
@@ -209,8 +265,15 @@ const UserNotification = () => {
                         </ExpansionPanelSummary>
                         <ExpansionPanelDetails>
                             <UserTable
+                                addRegexVal={addRegexVal}
                                 userList={userList}
+                                userEdit={userEdit}
                                 username={username}
+                                filterUserRegex={filterUserRegex}
+                                setUserEdit={handleSetUserEdit}
+                                setFilterUser={handleSetFilterUser}
+                                setFilterUserRegex={handleSetFilterUserRegex}
+                                setAddRegexVal={handleSetAddRegexVal}
                                 height={userTableHeight}
                             />
                         </ExpansionPanelDetails>
@@ -233,7 +296,7 @@ const UserNotification = () => {
                             classes={{ content: classes.expansionPanelSummaryContent, expanded: classes.expanded }}
                         >
                             <div style={{ display: 'flex', width: '100%' }}>
-                                <div style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 20 }}>Filtered PVs</div>
+                                <div style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 20 }}>{`Filtered PVs: ${filterName}`}</div>
                             </div>
                         </ExpansionPanelSummary>
                         <ExpansionPanelDetails>

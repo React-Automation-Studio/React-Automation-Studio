@@ -14,8 +14,7 @@
         "email": "wduckitt@tlabs.ac.za",
         "notifyPVs": [
             "BEAMLINE*",
-            "*WATER*",
-            "BUILDING:HVAC:*"
+            "*WATER*"
         ]
     },
     {
@@ -23,9 +22,8 @@
         "username": "hein",
         "email": "hein@tlabs.ac.za",
         "notifyPVs": [
-            "BEAMLINE*",
-            "*WATER*",
-            "BUILDING:HVAC:*"
+            "INTERLOCKS*",
+            "TEMP:*"
         ]
     }
 ]

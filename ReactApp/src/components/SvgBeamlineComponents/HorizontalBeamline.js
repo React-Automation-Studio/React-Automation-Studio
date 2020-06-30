@@ -17,10 +17,16 @@ const HorizontalBeamlineComponent = (props) => {
 
   const { classes } = props;
   const { initialized } = props;
-  const { value } = props;
+ 
   const { severity } = props;
   const {pvName}=props;
-
+  let value;
+  if (initialized ){
+    value=props.value;
+  }
+  else{
+    value=0;
+  }
   let background_color = '';
   if (typeof props.alarmSensitive !== 'undefined') {
     if (props.alarmSensitive == true) {
@@ -63,34 +69,23 @@ const HorizontalBeamlineComponent = (props) => {
 
   };
 
-  console.log("hello")
+  let offsetY=-2;
   return (
 
 
-
+    
     <svg 
-    x={props.x}
+    x={0}
     y={props.y}
     
-    width="100%" height="100%" 
-    //viewBox="0 0 1411 400" 
-    //preserveAspectRatio="xMidYMid meet"
-    >
+    width={props.width} 
+    height= {props.y+10}
+   >
     <g>
 
 
-{/* <text className={classes.textFC}
-                        x={10}
-                        y={10}
-                        textAnchor='middle'
-                        
-                        
-
-                      >
-                        {props.label}
-                      </text> */}
-      {initialized === true &&
-        <g>
+      
+       
           <linearGradient id={pvName + 'Beamline-gradient'} gradientTransform="rotate(90)">
 
             <stop offset="0%" stopOpacity="0" stopColor={value == 0 ? 'grey' : 'red'} />
@@ -113,15 +108,15 @@ const HorizontalBeamlineComponent = (props) => {
 
             width={props.width}
             height="5"
-            x={props.x}
-            y={props.y - 3} />
+            x={0}
+            y={props.y+offsetY - 3} />
           <rect
             fill={'white'}
 
             width={props.width}
             height="5"
-            x={props.x}
-            y={props.y + 2} />
+            x={0}
+            y={props.y+offsetY + 2} />
 
 
           <rect
@@ -129,54 +124,19 @@ const HorizontalBeamlineComponent = (props) => {
 
             width={props.width}
             height="4"
-            x={props.x}
-            y={props.y - 3} />
+            x={0}
+            y={props.y+offsetY - 3} />
           <rect
             fill={'url(#' + pvName + 'Beamline-gradient)'}
 
             width={props.width}
             height="4"
-            x={props.x}
-            y={props.y + 3} />
+            x={0}
+            y={props.y+offsetY + 3} />
         </g>
 
-      }
-      {/* {(initialized === false || initialized === 'undefined') &&
-          <g>
-            <linearGradient id={pvName + 'Beamline-gradient'} gradientTransform="rotate(90)">
-
-              <stop offset="0%" stopOpacity="0" stopColor='grey' />
-              <stop offset={"75%"} stopColor={'grey'} />
-            </linearGradient>
-            <linearGradient id={pvName + 'Beamline-gradient2'} gradientTransform="rotate(90)">
-
-              <stop offset="0%" stopColor={'grey'} />
-              <stop offset={"75%"} stopOpacity="0" stopColor={'grey'} />
-            </linearGradient>
-            <filter id={"horizontalBeamlineShadow"} x="0" y="0" width="600%" height="500%">
-              <feOffset result="offOut" in="SourceGraphic" dx="1.5" dy="1.5" />
-              <feColorMatrix result="matrixOut" in="offOut" type="matrix"
-                values="0.2 0 0 0 0 0 0.2 0 0 0 0 0 0.2 0 0 0 0 0 1 0" />
-              <feGaussianBlur result="blurOut" in="matrixOut" stdDeviation="1" />
-              <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
-            </filter>
-            <rect
-              fill={'url(#' + pvName + 'Beamline-gradient2)'}
-
-              width={props.width}
-              height="4"
-              x={props.cx}
-              y={props.cy - 3} />
-            <rect
-              fill={'url(#' + pvName + 'Beamline-gradient)'}
-
-              width={props.width}
-              height="4"
-              x={props.cx}
-              y={props.cy + 3} />
-          </g>
-        } */}
-    </g>
+      
+     
 
 
       </svg>
@@ -193,7 +153,7 @@ const HorizontalBeamlineComponent = (props) => {
 const HorizontalBeamline = (props) => {
 
   return (
-    <Widget  {...props} component={HorizontalBeamlineComponent} />
+    <Widget svgWidget={true}  {...props} component={HorizontalBeamlineComponent} />
 
   )
 }

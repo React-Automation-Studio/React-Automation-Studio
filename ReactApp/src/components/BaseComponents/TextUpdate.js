@@ -88,7 +88,7 @@ const TextUpdate =(props)=>{
 
 TextUpdate.propTypes = {
   /**
-  * Directive to use the  alarm severity status to alter the fields backgorund color.
+  * Directive to use the  alarm severity status to alter the fields background color.
   */
 
  alarmSensitive: PropTypes.bool,
@@ -120,22 +120,7 @@ TextUpdate.propTypes = {
   * eg. {{'$(device)':'testIOC','$(id)':'2'}}
   */
  macros: PropTypes.object,
- /**
-  * Custom maximum to be used, if usePvMinMax is not defined.
-  */
- max: PropTypes.number,
- /**
-  * Custom PV to define the maximum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
-  */
- maxPv: PropTypes.string,
- /**
-  * Custom minimum value to be used, if usePvMinMax is not defined.
-  */
- min: PropTypes.number,
- /**
-  * Custom PV to define the minimum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
-  */
- minPv: PropTypes.string,
+
  
  /**
   * Custom precision to round the value.
@@ -174,13 +159,7 @@ TextUpdate.propTypes = {
   * By setting useMetadata to false also enables connection to other variables as defined by different protocols.
   */
  useMetadata: PropTypes.bool,
- /**
-  * Directive to use the pv metadata's HOPR and LOPR fields or the minPv and maxPv values
-  * to limit the maximum and minimum values
-  * that can be contained in the value.
-  * If not defined it uses the custom mina nd max as defined by the min and max prop.
-  */
- usePvMinMax: PropTypes.bool,
+ 
  /**
   * Directive to round the value using the precision field of the PV metadata or precPv.
   * If not defined it uses the custom precision as defined by the prec prop.

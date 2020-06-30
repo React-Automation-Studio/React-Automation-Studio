@@ -53,8 +53,9 @@ class RasAppCore extends Component {
 
     let theme = null
     let storedThemeStyle=localStorage.getItem('themeStyle')
+    console.log(storedThemeStyle)
     const {defaultTheme}=this.props;
-    let themeStyle = storedThemeStyle!==null?defaultTheme:JSON.parse(storedThemeStyle);
+    let themeStyle = storedThemeStyle===null?defaultTheme:JSON.parse(storedThemeStyle);
     let themeKeys = Object.keys(this.props.themes);
     let socket = io(PyEpicsServerURL, {
       transports: ['websocket'],

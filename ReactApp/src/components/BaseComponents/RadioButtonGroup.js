@@ -43,7 +43,7 @@ const RadioButtonGroupComponent=(props)=>{
         disabled={props.disabled}
         control={<Radio color={props.onColor} />}
         label={item}
-        labelPlacement="start"
+        labelPlacement={props.bitLabelPlacement}
       />
     ));
     return (
@@ -129,11 +129,16 @@ const RadioButtonGroup = (props) => {
    */
 
   tooltipProps:PropTypes.object,
+  /**
+   * If defined, the position of the bit labels relative to the widget.
+   */ 
+  bitLabelPlacement: PropTypes.oneOf(["start", "end", "top", "bottom"]),
 
   };
 
   RadioButtonGroup.defaultProps = {
    labelPlacement:'top',
+   bitLabelPlacement:'end',
    showTooltip:false
   };
 

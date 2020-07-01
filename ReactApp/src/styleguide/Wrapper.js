@@ -64,7 +64,7 @@ class Wrapper extends Component {
     let theme = null
     let storedThemeStyle=localStorage.getItem('themeStyle')
     const defaultTheme='Light';
-    let themeStyle = storedThemeStyle!==null?defaultTheme:JSON.parse(storedThemeStyle);
+    let themeStyle = storedThemeStyle===null?defaultTheme:JSON.parse(storedThemeStyle);
     let themeKeys = Object.keys(themes);
     if (themeKeys.includes(themeStyle)) {
       theme = createMuiTheme(themes[themeStyle])

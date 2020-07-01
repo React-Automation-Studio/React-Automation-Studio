@@ -132,7 +132,7 @@ const UserTable = (props) => {
                                                 color="secondary"
                                                 className={classes.chip}
                                                 onClick={(event) => props.setFilterUserRegex(event, expression)}
-                                                onDelete={props.userEdit[`${user.username}-${user.name}`] ? () => { props.deleteChip(user.name, user.username, expression) } : undefined}
+                                                onDelete={props.userEdit[`${user.username}-${user.name}`] ? (event) => { props.deleteChip(event, user.name, user.username, expression) } : undefined}
                                             />
                                         )
                                     })}
@@ -147,7 +147,7 @@ const UserTable = (props) => {
                                                 autoFocus={true}
                                                 InputProps={{
                                                     endAdornment: (
-                                                        <InputAdornment position="end" onClick={() => { console.log('adding...') }} >
+                                                        <InputAdornment position="end" onClick={(event) => props.addChip(event, user.name, user.username, props.addRegexVal)} >
                                                             <AddIcon style={{ cursor: 'pointer' }} />
                                                         </InputAdornment >
                                                     ),
@@ -163,7 +163,7 @@ const UserTable = (props) => {
                                                 <React.Fragment>
                                                     <Tooltip title="Apply" placement="bottom">
                                                         <IconButton
-                                                            onClick={(event) => { props.setUserEdit(event, user.name, user.username, true) }}
+                                                            onClick={(event) => { props.applyEdit(event, user.name, user.username) }}
                                                         >
                                                             <DoneIcon />
                                                         </IconButton>

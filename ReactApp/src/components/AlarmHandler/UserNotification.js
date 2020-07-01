@@ -135,20 +135,76 @@ const UserNotification = () => {
         event.preventDefault()
         event.stopPropagation()
 
+        const match = userList.filter(el => el.name === name && el.username === username)[0]
+        setFilterUserRegex(match.notifyPVs)
+        setFilterUser(match.name)
+
         const copyUserList = userList.map(a => ({ ...a }))
         setBackupUserList(copyUserList)
 
         let localUserEdit = { ...userEdit }
         localUserEdit[`${username}-${name}`] = value
-        setUserEdit(localUserEdit)
 
-        setFilterUserRegex(dictUserRegex[`${username}-${name}`])
-        setAddRegexVal('')
-    }, [userEdit, dictUserRegex, userList])
+        setUserEdit(localUserEdit)
+    }, [userEdit, userList])
+
+    const applyEdit = useCallback((event, name, username) => {
+        handleSetUserEdit(event, name, username, false)
+        // Find match and note it's index in userList
+        const match = userList.filter(el => el.name === name && el.username === username)[0]
+        const id = match['_id']['$oid']
+
+        console.log(match.notifyPVs)
+        setFilterUserRegex(match.notifyPVs)
+
+        let jwt = JSON.parse(localStorage.getItem('jwt'))
+        if (jwt === null) {
+            jwt = 'unauthenticated'
+        }
+
+        const ALARM_DATABASE = "ALARM_DATABASE"
+        const dbName = "demoAlarmDatabase"
+        const colName = "users"
+        const dbURL = "mongodb://" + ALARM_DATABASE + ":" + dbName + ":" + colName
+
+        let newvalues = { '$set': { "email": match.email } }
+
+        socket.emit('databaseUpdateOne', { dbURL: dbURL, 'id': id, 'newvalues': newvalues, 'clientAuthorisation': jwt }, (data) => {
+            // console.log("ackdata", data);
+            if (data === "OK") {
+                socket.emit('databaseBroadcastRead', { dbURL: dbURL + ':Parameters:{}', 'clientAuthorisation': jwt }, (data) => {
+                    if (data !== "OK") {
+                        console.log("ackdata", data);
+                    }
+                })
+            } else {
+                console.log("User update area unsuccessful")
+            }
+        })
+
+        newvalues = { '$set': { "notifyPVs": match.notifyPVs } }
+
+        socket.emit('databaseUpdateOne', { dbURL: dbURL, 'id': id, 'newvalues': newvalues, 'clientAuthorisation': jwt }, (data) => {
+            // console.log("ackdata", data);
+            if (data === "OK") {
+                socket.emit('databaseBroadcastRead', { dbURL: dbURL + ':Parameters:{}', 'clientAuthorisation': jwt }, (data) => {
+                    if (data !== "OK") {
+                        console.log("ackdata", data);
+                    }
+                })
+            } else {
+                console.log("User update area unsuccessful")
+            }
+        })
+
+    }, [handleSetUserEdit, userList, socket])
 
     const cancelEdit = useCallback((event, name, username) => {
         handleSetUserEdit(event, name, username, false)
         setUserList(backupUserList)
+        setAddRegexVal('')
+        const match = backupUserList.filter(el => el.name === name && el.username === username)[0]
+        setFilterUserRegex(match.notifyPVs)
     }, [backupUserList, handleSetUserEdit])
 
     const updateUserEmail = useCallback((event, name, username) => {
@@ -165,8 +221,31 @@ const UserNotification = () => {
         setUserList(newUserList)
     }, [userList])
 
-    const handleDeleteChip = useCallback((name, username, expression) => {
+    const addChip = useCallback((event, name, username, expression) => {
+        event.stopPropagation()
+        event.preventDefault()
 
+        setAddRegexVal('')
+
+        // Find match and note it's index in userList
+        const match = userList.filter(el => el.name === name && el.username === username)[0]
+        const userIndex = userList.indexOf(match)
+
+        // Update match by adding relevant expression
+        const newNotifyPVs = [...match.notifyPVs, expression]
+        match.notifyPVs = newNotifyPVs
+
+        // Create new userList
+        const newUserList = [...userList]
+        newUserList[userIndex] = match
+
+        setUserList(newUserList)
+        setFilterUserRegex(newNotifyPVs)
+    }, [userList])
+
+    const deleteChip = useCallback((event, name, username, expression) => {
+        event.preventDefault()
+        event.stopPropagation()
         // Find match and note it's index in userList
         const match = userList.filter(el => el.name === name && el.username === username)[0]
         const userIndex = userList.indexOf(match)
@@ -180,6 +259,7 @@ const UserNotification = () => {
         newUserList[userIndex] = match
 
         setUserList(newUserList)
+        setFilterUserRegex(newNotifyPVs)
     }, [userList])
 
     const handleNewDbPVsList = (msg) => {
@@ -226,13 +306,13 @@ const UserNotification = () => {
 
         let localUserEdit = {}
         let localDictUserRegex = {}
-        let localFilterUser = null
-        let localFilterUserRegex = null
+        // let localFilterUser = null
+        // let localFilterUserRegex = null
 
         data.map((user, index) => {
             if (index === 0) {
-                localFilterUser = user.name
-                localFilterUserRegex = user.notifyPVs
+                // localFilterUser = user.name
+                // localFilterUserRegex = user.notifyPVs
             }
             localDictUserRegex[`${user.username}-${user.name}`] = user.notifyPVs
             localUserEdit[`${user.username}-${user.name}`] = false
@@ -240,8 +320,8 @@ const UserNotification = () => {
         })
 
         setDictUserRegex(localDictUserRegex)
-        setFilterUser(localFilterUser)
-        setFilterUserRegex(localFilterUserRegex)
+        // setFilterUser(localFilterUser)
+        // setFilterUserRegex(localFilterUserRegex)
         setUserEdit(localUserEdit)
         setUserList(data)
     }
@@ -336,10 +416,14 @@ const UserNotification = () => {
         ))
     }
 
-    const filterName = filterUserRegex.length === 1 ? filterUserRegex[0] : filterUser
+    const filterName = filterUserRegex.length === 0
+        ? 'ALL'
+        : filterUserRegex.length === 1
+            ? filterUserRegex[0]
+            : filterUser
 
-    let userTableHeight = '25vh'
-    let pvListHeight = '47vh'
+    let userTableHeight = '30vh'
+    let pvListHeight = '42vh'
     if (userTableExpand && !pvListExpand && !pvListIsExpanded) {
         userTableHeight = '76vh'
     }
@@ -347,11 +431,7 @@ const UserNotification = () => {
         pvListHeight = '76vh'
     }
 
-    // console.log(filterUserRegex)
-
-    // console.log(loadPVList)
-    // console.log('userList:', userList)
-    // console.log('backupUserList:', backupUserList)
+    console.log(filterUserRegex)
 
     return (
         <Layout
@@ -403,8 +483,10 @@ const UserNotification = () => {
                                 setFilterUser={handleSetFilterUser}
                                 setFilterUserRegex={handleSetFilterUserRegex}
                                 setAddRegexVal={handleSetAddRegexVal}
-                                deleteChip={handleDeleteChip}
+                                addChip={addChip}
+                                deleteChip={deleteChip}
                                 cancelEdit={cancelEdit}
+                                applyEdit={applyEdit}
                                 updateUserEmail={updateUserEmail}
                                 height={userTableHeight}
                             />
@@ -434,6 +516,7 @@ const UserNotification = () => {
                         <ExpansionPanelDetails>
                             {loadPVList && <PVList
                                 alarmPVDict={alarmPVDict}
+                                filterUserRegex={filterUserRegex}
                                 height={pvListHeight}
                             />}
                         </ExpansionPanelDetails>

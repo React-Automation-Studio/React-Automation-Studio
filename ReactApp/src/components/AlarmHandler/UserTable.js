@@ -91,7 +91,7 @@ const UserTable = (props) => {
                             </Tooltip>
                         </TableCell>
                         <TableCell align="center" classes={{ stickyHeader: classes.styledTableHeadCell }}>{showAddHeader ? 'Add' : null}</TableCell>
-                        <TableCell align="center" classes={{ stickyHeader: classes.styledTableHeadCell }}></TableCell>
+                        <TableCell align="center" classes={{ stickyHeader: classes.styledTableHeadCell }}>Actions</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -114,10 +114,11 @@ const UserTable = (props) => {
                                     <TextField
                                         type={props.username === user.username ? 'text' : 'password'}
                                         value={user.email}
+                                        onChange={(event) => props.updateUserEmail(event, user.name, user.username)}
                                         InputProps={{
                                             classes: { input: classes.emailInputField },
-                                            readOnly: true,
-                                            disableUnderline: true
+                                            readOnly: props.userEdit[`${user.username}-${user.name}`] ? false : true,
+                                            disableUnderline: props.userEdit[`${user.username}-${user.name}`] ? false : true
                                         }}
                                     />
                                 </TableCell>
@@ -131,7 +132,7 @@ const UserTable = (props) => {
                                                 color="secondary"
                                                 className={classes.chip}
                                                 onClick={(event) => props.setFilterUserRegex(event, expression)}
-                                                onDelete={props.userEdit[`${user.username}-${user.name}`] ? () => { console.log('hello') } : undefined}
+                                                onDelete={props.userEdit[`${user.username}-${user.name}`] ? () => { props.deleteChip(user.name, user.username, expression) } : undefined}
                                             />
                                         )
                                     })}
@@ -143,6 +144,7 @@ const UserTable = (props) => {
                                                 value={props.addRegexVal}
                                                 onChange={props.setAddRegexVal}
                                                 fullWidth={true}
+                                                autoFocus={true}
                                                 InputProps={{
                                                     endAdornment: (
                                                         <InputAdornment position="end" onClick={() => { console.log('adding...') }} >
@@ -154,7 +156,7 @@ const UserTable = (props) => {
                                             : null
                                     }
                                 </TableCell>
-                                <TableCell>
+                                <TableCell align="center">
                                     {
                                         props.username === user.username
                                             ? props.userEdit[`${user.username}-${user.name}`] ?
@@ -162,14 +164,13 @@ const UserTable = (props) => {
                                                     <Tooltip title="Apply" placement="bottom">
                                                         <IconButton
                                                             onClick={(event) => { props.setUserEdit(event, user.name, user.username, true) }}
-                                                            style={{ marginLeft: '1em' }}
                                                         >
                                                             <DoneIcon />
                                                         </IconButton>
                                                     </Tooltip>
                                                     <Tooltip title="Cancel" placement="bottom">
                                                         <IconButton
-                                                            onClick={(event) => { props.setUserEdit(event, user.name, user.username, false) }}
+                                                            onClick={(event) => { props.cancelEdit(event, user.name, user.username) }}
                                                             style={{ marginLeft: '1em' }}
                                                         >
                                                             <ClearIcon />

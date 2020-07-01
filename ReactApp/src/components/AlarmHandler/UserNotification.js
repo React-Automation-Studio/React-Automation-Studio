@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react';
+import React, { useState, useEffect, useContext, useCallback, useRef } from 'react';
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -14,6 +14,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 import Layout from '../UI/Layout/ComposedLayouts/TraditionalLayout';
+import DataConnection from '../SystemComponents/DataConnection';
 import UserTable from './UserTable';
 import PVList from './PVList';
 
@@ -43,10 +44,15 @@ const UserNotification = () => {
     const { socket } = context
     const username = context.userData.username
 
+    // to connect to all PVs before updating state
+    const firstAlarmPVDict = {}
+
     const [dbPVsURL, setDbPVsURL] = useState('')
     const [dbUsersURL, setUsersURL] = useState('')
+    const [dbConfigURL, setDbConfigURL] = useState('')
     const [alarmList, setAlarmList] = useState([])
     const [userList, setUserList] = useState([])
+    const [backupUserList, setBackupUserList] = useState([])
     const [userEdit, setUserEdit] = useState({})
     const [userTableExpand, setUserTableExpand] = useState(true)
     const [pvListExpand, setPvListExpand] = useState(true)
@@ -56,6 +62,14 @@ const UserNotification = () => {
     const [filterUserRegex, setFilterUserRegex] = useState([])
     const [dictUserRegex, setDictUserRegex] = useState({})
     const [addRegexVal, setAddRegexVal] = useState('')
+    const [alarmIOCPVPrefix, setAlarmIOCPVPrefix] = useState(null)
+    const [alarmIOCPVSuffix, setAlarmIOCPVSuffix] = useState(null)
+    const [loadPVList, setLoadPVList] = useState(false)
+    const [lastAlarm, setLastAlarm] = useState(null)
+    const [alarmPVDict, setAlarmPVDict] = useState({})
+
+    const loadPVListRef = useRef(loadPVList);
+    loadPVListRef.current = loadPVList;
 
     const moreVertDrawerItems = (
         <React.Fragment>
@@ -67,6 +81,39 @@ const UserNotification = () => {
             </ListItem>
         </React.Fragment>
     )
+
+    const constructDESC_HOST = (value, pvname) => {
+        let epicsPVName = pvname.replace("pva://", "")
+        epicsPVName = epicsPVName.replace(alarmIOCPVPrefix, "")
+        epicsPVName = epicsPVName.replace(alarmIOCPVSuffix, "")
+
+        // console.log(epicsPVName, value)
+
+        // still connecting to pvs
+        if (!loadPVList) {
+            firstAlarmPVDict[epicsPVName] = [value[1], value[2]]
+            if (epicsPVName === lastAlarm) {
+                setLoadPVList(true)
+                setAlarmPVDict(firstAlarmPVDict)
+            }
+        }
+        // all pvs connected
+        else {
+            const localAlarmPVDict = { ...alarmPVDict }
+            localAlarmPVDict[epicsPVName] = value
+            setAlarmPVDict(localAlarmPVDict)
+        }
+    }
+
+    const autoLoadPVList = () => {
+        const timer = setTimeout(() => {
+            if (!loadPVListRef.current) {
+                console.log('Warning: Auto load PV List')
+            }
+            setLoadPVList(true)
+        }, 5000);
+        return () => clearTimeout(timer);
+    }
 
     const handleSetAddRegexVal = (event) => {
         setAddRegexVal(event.target.value)
@@ -88,24 +135,65 @@ const UserNotification = () => {
         event.preventDefault()
         event.stopPropagation()
 
+        const copyUserList = userList.map(a => ({ ...a }))
+        setBackupUserList(copyUserList)
+
         let localUserEdit = { ...userEdit }
         localUserEdit[`${username}-${name}`] = value
         setUserEdit(localUserEdit)
 
         setFilterUserRegex(dictUserRegex[`${username}-${name}`])
         setAddRegexVal('')
-    }, [userEdit, dictUserRegex])
+    }, [userEdit, dictUserRegex, userList])
+
+    const cancelEdit = useCallback((event, name, username) => {
+        handleSetUserEdit(event, name, username, false)
+        setUserList(backupUserList)
+    }, [backupUserList, handleSetUserEdit])
+
+    const updateUserEmail = useCallback((event, name, username) => {
+        // Find match and note it's index in userList
+        const match = userList.filter(el => el.name === name && el.username === username)[0]
+        const userIndex = userList.indexOf(match)
+
+        match.email = event.target.value
+
+        // Create new userList
+        const newUserList = [...userList]
+        newUserList[userIndex] = match
+
+        setUserList(newUserList)
+    }, [userList])
+
+    const handleDeleteChip = useCallback((name, username, expression) => {
+
+        // Find match and note it's index in userList
+        const match = userList.filter(el => el.name === name && el.username === username)[0]
+        const userIndex = userList.indexOf(match)
+
+        // Update match by removing relevant expression
+        const newNotifyPVs = match.notifyPVs.filter(el => el !== expression)
+        match.notifyPVs = newNotifyPVs
+
+        // Create new userList
+        const newUserList = [...userList]
+        newUserList[userIndex] = match
+
+        setUserList(newUserList)
+    }, [userList])
 
     const handleNewDbPVsList = (msg) => {
 
         const data = JSON.parse(msg.data)
 
         let localAlarmList = []
+        let localLastAlarm = ''
 
         data.map((area) => {
             // Map alarms in area
             Object.keys(area["pvs"]).map(alarmKey => {
                 localAlarmList.push(area["pvs"][alarmKey]["name"])
+                localLastAlarm = area["pvs"][alarmKey]["name"]
                 return null
             })
             Object.keys(area).map(areaKey => {
@@ -113,6 +201,7 @@ const UserNotification = () => {
                     // Map alarms in subarea
                     Object.keys(area[areaKey]["pvs"]).map(alarmKey => {
                         localAlarmList.push(area[areaKey]["pvs"][alarmKey]["name"])
+                        localLastAlarm = area[areaKey]["pvs"][alarmKey]["name"]
                         return null
                     })
                 }
@@ -124,6 +213,11 @@ const UserNotification = () => {
         localAlarmList.sort()
 
         setAlarmList(localAlarmList)
+        setLastAlarm(localLastAlarm)
+
+        if (!loadPVList) {
+            autoLoadPVList()
+        }
     }
 
     const handleDbUsers = (msg) => {
@@ -150,6 +244,12 @@ const UserNotification = () => {
         setFilterUserRegex(localFilterUserRegex)
         setUserEdit(localUserEdit)
         setUserList(data)
+    }
+
+    const handleDbConfig = (msg) => {
+        const data = JSON.parse(msg.data)[0];
+        setAlarmIOCPVPrefix(data["alarmIOCPVPrefix"])
+        setAlarmIOCPVSuffix(data['alarmIOCPVSuffix'])
     }
 
     const handleExpansionComplete = (panelName, isExpanded) => {
@@ -203,14 +303,38 @@ const UserNotification = () => {
         });
         socket.on('databaseData:' + localUsersURL, handleDbUsers);
 
+        colName = "config"
+        const localDbConfigURL = "mongodb://" + ALARM_DATABASE + ":" + dbName + ":" + colName + ":Parameters:{}"
+        setDbConfigURL(localDbConfigURL)
+
+        socket.emit('databaseBroadcastRead', { dbURL: localDbConfigURL, 'clientAuthorisation': jwt }, (data) => {
+            if (data !== "OK") {
+                console.log("ackdata", data);
+            }
+        });
+        socket.on('databaseData:' + localDbConfigURL, handleDbConfig);
+
         // componentWillUnmount
         return () => {
             socket.removeListener('databaseData:' + dbPVsURL, handleNewDbPVsList);
             socket.removeListener('databaseData:' + dbUsersURL, handleDbUsers);
+            socket.removeListener('databaseData:' + dbConfigURL, handleDbConfig);
+
         }
         // disable useEffect dependencies for "componentDidMount"
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+
+    let alarmPVs = null
+    if (alarmIOCPVPrefix !== null && alarmIOCPVSuffix !== null) {
+        alarmPVs = alarmList.map(alarm => (
+            <DataConnection
+                key={alarm}
+                pv={`pva://${alarmIOCPVPrefix}${alarm}${alarmIOCPVSuffix}`}
+                handleInputValue={constructDESC_HOST}
+            />
+        ))
+    }
 
     const filterName = filterUserRegex.length === 1 ? filterUserRegex[0] : filterUser
 
@@ -223,7 +347,11 @@ const UserNotification = () => {
         pvListHeight = '76vh'
     }
 
-    console.log(filterUserRegex)
+    // console.log(filterUserRegex)
+
+    // console.log(loadPVList)
+    // console.log('userList:', userList)
+    // console.log('backupUserList:', backupUserList)
 
     return (
         <Layout
@@ -235,6 +363,7 @@ const UserNotification = () => {
             moreVertDrawerItems={moreVertDrawerItems}
             hideMoreVertDrawerAfterItemClick
         >
+            {alarmPVs}
             <Grid
                 container
                 direction="column"
@@ -274,6 +403,9 @@ const UserNotification = () => {
                                 setFilterUser={handleSetFilterUser}
                                 setFilterUserRegex={handleSetFilterUserRegex}
                                 setAddRegexVal={handleSetAddRegexVal}
+                                deleteChip={handleDeleteChip}
+                                cancelEdit={cancelEdit}
+                                updateUserEmail={updateUserEmail}
                                 height={userTableHeight}
                             />
                         </ExpansionPanelDetails>
@@ -300,10 +432,10 @@ const UserNotification = () => {
                             </div>
                         </ExpansionPanelSummary>
                         <ExpansionPanelDetails>
-                            <PVList
-                                alarmList={alarmList}
+                            {loadPVList && <PVList
+                                alarmPVDict={alarmPVDict}
                                 height={pvListHeight}
-                            />
+                            />}
                         </ExpansionPanelDetails>
                     </ExpansionPanel>
                 </Grid>

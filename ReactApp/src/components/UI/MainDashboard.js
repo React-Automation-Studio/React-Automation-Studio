@@ -317,17 +317,11 @@ class MainDashboard extends Component {
                 <Grid item lg={6} sm={12} xs={12}>
                   <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
                     <Grid item lg={12} sm={12} xs={12}>
-
                       <Button fullWidth className={classes.button} component={Link} to="/AlarmHandlerDemo" color="primary" variant={buttonVariant}>  Alarm Handler Demo </Button>
-
-
-
-
                     </Grid>
                     <Grid item lg={12} sm={12} xs={12}>
                       <Button fullWidth className={classes.button} component={Link} to="/VaultDemo" color="primary" variant={buttonVariant}>  Vault Demo </Button>
                     </Grid>
-
                   </Grid>
                 </Grid>
               </Grid>

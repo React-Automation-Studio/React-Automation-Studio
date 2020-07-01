@@ -41,7 +41,7 @@ const styles = theme => ({
   Paper: {
     padding: theme.spacing(4),
     height: '100%',
-    
+
 
   },
   MainGrid: {
@@ -57,7 +57,7 @@ const styles = theme => ({
     paddingRight: theme.spacing(2),
     paddingBottom: theme.spacing(2),
     marginBottom: theme.spacing(2),
-    
+
   },
   WhatsNew: {
     maxHeight: '35vh',
@@ -68,22 +68,22 @@ const styles = theme => ({
       width: '0.2em'
     },
     '&::-webkit-scrollbar-track': {
-      boxShadow: theme.palette.type==='light'?'inset 0 0 6px rgba(0,0,0,0.075)':'inset 0 0 6px rgba(255,255,255,0.075)',
-      webkitBoxShadow: theme.palette.type==='light'?'inset 0 0 6px rgba(0,0,0,0.075)':'inset 0 0 6px rgba(255,255,255,0.075)'
+      boxShadow: theme.palette.type === 'light' ? 'inset 0 0 6px rgba(0,0,0,0.075)' : 'inset 0 0 6px rgba(255,255,255,0.075)',
+      webkitBoxShadow: theme.palette.type === 'light' ? 'inset 0 0 6px rgba(0,0,0,0.075)' : 'inset 0 0 6px rgba(255,255,255,0.075)'
     },
     '&::-webkit-scrollbar-thumb': {
-      backgroundColor: theme.palette.type==='light'?'rgba(0,0,0,.15)':'rgba(255,255,255,.1)',
+      backgroundColor: theme.palette.type === 'light' ? 'rgba(0,0,0,.15)' : 'rgba(255,255,255,.1)',
       outline: '1px solid slategrey'
     }
   },
-  Icon:{
-    marginRight:theme.spacing(1),
-    fontSize:'inherit',
-   //display: 'inline-flex',
-   // alignSelf: 'center',
+  Icon: {
+    marginRight: theme.spacing(1),
+    fontSize: 'inherit',
+    //display: 'inline-flex',
+    // alignSelf: 'center',
     //verticalAlign:'middle',
-    
-    },
+
+  },
   Button: {
     width: '100%',
     height: '100%',
@@ -149,11 +149,13 @@ class MainDashboard extends Component {
     const { classes } = this.props;
     const paperElevation = this.props.theme.palette.paperElevation;
     const buttonVariant = "contained";
-    const typographyProps={
-      color:"primary",
-      style:{ display: 'inline-flex',
-      alignItems: 'center',},
-      variant:"h5"
+    const typographyProps = {
+      color: "primary",
+      style: {
+        display: 'inline-flex',
+        alignItems: 'center',
+      },
+      variant: "h5"
     };
     return (
       <TraditionalLayout
@@ -168,13 +170,13 @@ class MainDashboard extends Component {
 
 
           <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem} >
-           
+
             <Paper className={classes.Paper} elevation={paperElevation}>
               <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
                 <Grid item lg={6} sm={12} xs={12}>
                   <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
-                  <Grid item lg={12} sm={12} xs={12} style={{textAlign:'center'}}>
-                  <Typography {...typographyProps}><PhoneAndroidIcon className={classes.Icon}/>Mobile Demos</Typography>
+                    <Grid item lg={12} sm={12} xs={12} style={{ textAlign: 'center' }}>
+                      <Typography {...typographyProps}><PhoneAndroidIcon className={classes.Icon} />Mobile Demos</Typography>
                     </Grid>
                     <Grid item lg={12} sm={12} xs={12}>
                       <Button fullWidth className={classes.button} component={Link} to="/MobileDemo1" color="primary" variant={buttonVariant}>  Mobile Demo 1 </Button>
@@ -196,13 +198,13 @@ class MainDashboard extends Component {
           </Grid>
 
           <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem}>
-            
+
             <Paper className={classes.Paper} elevation={paperElevation}>
               <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
                 <Grid item lg={6} sm={12} xs={12}>
                   <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
-                  <Grid item lg={12} sm={12} xs={12} style={{textAlign:'center'}}>
-                  <Typography {...typographyProps}><DesktopWindowsIcon className={classes.Icon}/>  Desktop Demos</Typography>
+                    <Grid item lg={12} sm={12} xs={12} style={{ textAlign: 'center' }}>
+                      <Typography {...typographyProps}><DesktopWindowsIcon className={classes.Icon} />  Desktop Demos</Typography>
                     </Grid>
                     <Grid item lg={12} sm={12} xs={12}>
                       <Button fullWidth className={classes.button} component={Link} to="/ControlTableExample" color="primary" variant={buttonVariant}> Control Table Example</Button>
@@ -229,12 +231,12 @@ class MainDashboard extends Component {
           </Grid>
 
           <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem} >
-           
+
             <Paper className={classes.Paper} elevation={paperElevation}>
               <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
-              <Grid item lg={12} sm={12} xs={12} style={{textAlign:'center'}}>
+                <Grid item lg={12} sm={12} xs={12} style={{ textAlign: 'center' }}>
                   <Typography {...typographyProps}><NewReleasesIcon className={classes.Icon} /> Whats New</Typography>
-                    </Grid>
+                </Grid>
                 <Grid item lg={12} sm={12} xs={12}  >
                   <Typography className={classes.WhatsNew} component='div'>
                     V2.0.0 Friday 26 June 2020
@@ -285,14 +287,14 @@ class MainDashboard extends Component {
             </Paper>
           </Grid>
           <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem} >
-            
+
             <Paper className={classes.Paper} elevation={paperElevation}>
               <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
-              <Grid item lg={12} sm={12} xs={12} style={{textAlign:'center'}}>
-                  <Typography {...typographyProps}><EditIcon className={classes.Icon}/> Staging</Typography>
-                    </Grid>
+                <Grid item lg={12} sm={12} xs={12} style={{ textAlign: 'center' }}>
+                  <Typography {...typographyProps}><EditIcon className={classes.Icon} /> Staging</Typography>
+                </Grid>
                 <Grid item lg={6} sm={12} xs={12}>
-                
+
                   <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
                     <Grid item lg={12} sm={12} xs={12}>
                       <Button fullWidth className={classes.button} component={Link} to="/Staging" color="primary" variant={buttonVariant}>  Staging </Button>
@@ -306,38 +308,38 @@ class MainDashboard extends Component {
             </Paper>
           </Grid>
           <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem} >
-           
+
             <Paper className={classes.Paper} elevation={paperElevation} style={{ textAlign: 'center' }}>
               <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
-              <Grid item lg={12} sm={12} xs={12}>
-                  <Typography {...typographyProps}>  <VisibilityIcon className={classes.Icon}/> Preview</Typography>
-                    </Grid>
+                <Grid item lg={12} sm={12} xs={12}>
+                  <Typography {...typographyProps}>  <VisibilityIcon className={classes.Icon} /> Preview</Typography>
+                </Grid>
                 <Grid item lg={6} sm={12} xs={12}>
                   <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
                     <Grid item lg={12} sm={12} xs={12}>
-                      <Button fullWidth className={classes.button} component={Link} to="/MobileDemo1" color="primary" variant={buttonVariant}>  Mobile Demo 1 </Button>
+
+                      <Button fullWidth className={classes.button} component={Link} to="/AlarmHandlerDemo" color="primary" variant={buttonVariant}>  Alarm Handler Demo </Button>
+
+
+
+
                     </Grid>
                     <Grid item lg={12} sm={12} xs={12}>
-                      <Button fullWidth className={classes.button} component={Link} to="/MobileDemo2" color="primary" variant={buttonVariant}>  Mobile Demo 2 </Button>
+                      <Button fullWidth className={classes.button} component={Link} to="/VaultDemo" color="primary" variant={buttonVariant}>  Vault Demo </Button>
                     </Grid>
-                    <Grid item lg={12} sm={12} xs={12}>
-                      <Button fullWidth className={classes.button} component={Link} to="/EpicsDemos" color="primary" variant={buttonVariant}>  Epics Demos </Button>
-                    </Grid>
-                    <Grid item lg={12} sm={12} xs={12}>
-                      <Button fullWidth className={classes.button} component={Link} to="/Test3D" color="primary" variant={buttonVariant}>  3D Demos </Button>
-                    </Grid>
+
                   </Grid>
                 </Grid>
               </Grid>
             </Paper>
           </Grid>
           <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem} >
-           
+
             <Paper className={classes.Paper} elevation={paperElevation}>
               <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
-              <Grid item lg={12} sm={12} xs={12} style={{textAlign:'center'}}>
-                  <Typography {...typographyProps}><HelpIcon className={classes.Icon}/> Help</Typography>
-                    </Grid>
+                <Grid item lg={12} sm={12} xs={12} style={{ textAlign: 'center' }}>
+                  <Typography {...typographyProps}><HelpIcon className={classes.Icon} /> Help</Typography>
+                </Grid>
                 <Grid item lg={6} sm={12} xs={12}>
                   <Button fullWidth className={classes.button} target="_blank" href={AutomationStudioStyleGuideBuildURL} color="default" variant={buttonVariant}> Help and Style Guide </Button>
                 </Grid>

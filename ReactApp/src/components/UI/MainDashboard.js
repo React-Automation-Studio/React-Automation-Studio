@@ -315,17 +315,9 @@ class MainDashboard extends Component {
                 <Grid item lg={6} sm={12} xs={12}>
                   <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
                     <Grid item lg={12} sm={12} xs={12}>
-                      <Button fullWidth className={classes.button} component={Link} to="/MobileDemo1" color="primary" variant={buttonVariant}>  Mobile Demo 1 </Button>
+                      <Button fullWidth className={classes.button} component={Link} to="/BeamlineControlSystem" color="primary" variant={buttonVariant}>New Beamline Control System Demo </Button>
                     </Grid>
-                    <Grid item lg={12} sm={12} xs={12}>
-                      <Button fullWidth className={classes.button} component={Link} to="/MobileDemo2" color="primary" variant={buttonVariant}>  Mobile Demo 2 </Button>
-                    </Grid>
-                    <Grid item lg={12} sm={12} xs={12}>
-                      <Button fullWidth className={classes.button} component={Link} to="/EpicsDemos" color="primary" variant={buttonVariant}>  Epics Demos </Button>
-                    </Grid>
-                    <Grid item lg={12} sm={12} xs={12}>
-                      <Button fullWidth className={classes.button} component={Link} to="/Test3D" color="primary" variant={buttonVariant}>  3D Demos </Button>
-                    </Grid>
+                    
                   </Grid>
                 </Grid>
               </Grid>

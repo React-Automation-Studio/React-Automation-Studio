@@ -9,7 +9,7 @@ import MobileDemo2 from './components/Examples/Mobile/MobileDemo2';
 import MobileDemo1 from './components/Examples/Mobile/MobileDemo1';
 
 import Main from './Main';
-
+import MainDashboard from './components/UI/MainDashboard';
 import ControlTestHarp1 from './components/ControlScreens/ControlTestHarp1';
 
 import ControlTableExample from './components/ControlScreens/ControlTableExample';
@@ -32,8 +32,8 @@ const Routes = (props) => {
 
       <Switch>
 
-        <Route exact path="/" component={Main} />
-
+        <Route exact path="/" component={MainDashboard} />
+        <Route exact path="/MainDashboard" component={MainDashboard} />
 
         {process.env.REACT_APP_EnableLogin === 'true' &&
           <Route exact path="/LogIn" component={LogIn} />

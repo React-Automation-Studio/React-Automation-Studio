@@ -145,6 +145,8 @@ const UserTable = (props) => {
                                                 onChange={props.setAddRegexVal}
                                                 fullWidth={true}
                                                 autoFocus={true}
+                                                error={true}
+                                                helperText="Invalid regex"
                                                 InputProps={{
                                                     endAdornment: (
                                                         <InputAdornment position="end" onClick={(event) => props.addChip(event, user.name, user.username, props.addRegexVal)} >

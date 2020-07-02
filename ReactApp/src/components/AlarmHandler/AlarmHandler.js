@@ -844,7 +844,7 @@ const AlarmHandler = () => {
         // console.log(data)
         const localAlarmLogDict = {}
         data.map((area, index) => {
-            localAlarmLogDict[area["identifier"]] = area["history"]
+            localAlarmLogDict[area["id"]] = area["history"]
             return null
         })
         // console.log("history watch")

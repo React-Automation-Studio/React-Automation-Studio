@@ -64,17 +64,17 @@ const styles = theme => ({
     'overflow-y':
       'scroll',
     paddingRight: 8,
-    '&::-webkit-scrollbar': {
-      width: '0.2em'
-    },
-    '&::-webkit-scrollbar-track': {
-      boxShadow: theme.palette.type==='light'?'inset 0 0 6px rgba(0,0,0,0.075)':'inset 0 0 6px rgba(255,255,255,0.075)',
-      webkitBoxShadow: theme.palette.type==='light'?'inset 0 0 6px rgba(0,0,0,0.075)':'inset 0 0 6px rgba(255,255,255,0.075)'
-    },
-    '&::-webkit-scrollbar-thumb': {
-      backgroundColor: theme.palette.type==='light'?'rgba(0,0,0,.15)':'rgba(255,255,255,.1)',
-      outline: '1px solid slategrey'
-    }
+    // '&::-webkit-scrollbar': {
+    //   width: '0.2em'
+    // },
+    // '&::-webkit-scrollbar-track': {
+    //   boxShadow: theme.palette.type==='light'?'inset 0 0 6px rgba(0,0,0,0.075)':'inset 0 0 6px rgba(255,255,255,0.075)',
+    //   webkitBoxShadow: theme.palette.type==='light'?'inset 0 0 6px rgba(0,0,0,0.075)':'inset 0 0 6px rgba(255,255,255,0.075)'
+    // },
+    // '&::-webkit-scrollbar-thumb': {
+    //   backgroundColor: theme.palette.type==='light'?'rgba(0,0,0,.15)':'rgba(255,255,255,.1)',
+    //   outline: '1px solid slategrey'
+    // }
   },
   Icon:{
     marginRight:theme.spacing(1),

@@ -139,30 +139,34 @@ def evaluateAreaPVs(areaKey, fromColWatch=False):
     majorAlarm = False
     ackStates = [1, 3, 5]
 
-    for key in pvDict.keys():
-        if (re.sub(r"=pv\d+", "", key) == areaKey):
-            # exact match of area key
-            val = alarmDict[pvDict[key].pvname]["A"].value
-            globalEnable, areaEnable, subAreaEnable, pvEnable = getEnables(
-                pvDict[key].pvname)
-            if (subAreaEnable != None):
-                enable = globalEnable and areaEnable and subAreaEnable and pvEnable
-            else:
-                enable = globalEnable and areaEnable and pvEnable
-            if (not enable):
-                # pv not enabled
-                # force NO_ALARM state so neither alarm nor acked passed
-                # to areas
-                val = 0
-            try:
-                if (val > alarmState):
-                    alarmState = val
-                if(val == 2):
-                    minorAlarm = True
-                elif(val == 4):
-                    majorAlarm = True
-            except:
-                print('[Warning]', 'val =', val, 'alarmState =', alarmState)
+    try:
+        for key in pvDict.keys():
+            if (re.sub(r"=pv\d+", "", key) == areaKey):
+                # exact match of area key
+                val = alarmDict[pvDict[key].pvname]["A"].value
+                globalEnable, areaEnable, subAreaEnable, pvEnable = getEnables(
+                    pvDict[key].pvname)
+                if (subAreaEnable != None):
+                    enable = globalEnable and areaEnable and subAreaEnable and pvEnable
+                else:
+                    enable = globalEnable and areaEnable and pvEnable
+                if (not enable):
+                    # pv not enabled
+                    # force NO_ALARM state so neither alarm nor acked passed
+                    # to areas
+                    val = 0
+                try:
+                    if (val > alarmState):
+                        alarmState = val
+                    if(val == 2):
+                        minorAlarm = True
+                    elif(val == 4):
+                        majorAlarm = True
+                except:
+                    print('[Warning]', 'val =', val,
+                          'alarmState =', alarmState)
+    except:
+        print('[Warning]', 'pvDict changed size during iteration')
 
     # active alarm always supercedes acked state alarm
     if alarmState in ackStates:

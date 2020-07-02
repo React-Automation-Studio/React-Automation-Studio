@@ -38,6 +38,8 @@ const lightBlueGreyPalette = () => {
         dark: fade(alarm.minor.dark, 0.4)
     };
     const beamLineComponent={main:blueGrey['500']};
+    const svgComponentPrimary={main:primary['500']};
+    const svgComponentSecondary={main:secondary['500']};
     const contrastThreshold = 3;
     const tonalOffset = 0.2;
     const paperElevation = 10;
@@ -73,6 +75,8 @@ const lightBlueGreyPalette = () => {
         paperElevation: paperElevation,
         reactVis:reactVis,
         beamLineComponent:beamLineComponent,
+        svgComponentPrimary:svgComponentPrimary,
+        svgComponentSecondary:svgComponentSecondary,
 
     })
 }

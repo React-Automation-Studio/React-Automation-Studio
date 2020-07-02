@@ -39,6 +39,8 @@ const lightPalette = () => {
         dark: fade(alarm.minor.dark, 0.4)
     };
     const beamLineComponent={main:indigo[500]};
+    const svgComponentPrimary={main:primary['500']};
+    const svgComponentSecondary={main:pink[500]};
     const contrastThreshold = 3;
     const tonalOffset = 0.2;
     const paperElevation = 10;
@@ -72,7 +74,9 @@ const lightPalette = () => {
         tonalOffset: tonalOffset,
         paperElevation: paperElevation,
         reactVis:reactVis,
-        beamLineComponent:beamLineComponent
+        beamLineComponent:beamLineComponent,
+        svgComponentPrimary:svgComponentPrimary,
+        svgComponentSecondary:svgComponentSecondary,
 
     })
 }

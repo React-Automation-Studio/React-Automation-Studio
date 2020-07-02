@@ -448,11 +448,24 @@ class ControlTestHarp1 extends React.Component {
 
     const { tabValue } = this.state;
     const sideTabValue = this.state.sideTabValue;
+    const footerContents=(
+      <Grid container direction="row" justify="flex-start" alignItems="center" style={{color:"white"}} >
+          <Grid item xs={12} style={{paddingLeft:"1em"}}>
+             We are in the progress of migrating the original iThemba LABS demo components to reusable hooks components. Watch this space!
+          </Grid>
+          
+      </Grid>
+  )
+  
+  ;
     return (
       <div style={{ "overflowX": "hidden", 'overflowY': 'hidden' }}>
         <TraditionalLayout
           title="Beamline Control System Example"
           denseAppBar
+          showFooter
+          footerHeight={40}
+          footerContents={footerContents}
         >
           <Grid container spacing={3} style={{ paddingTop: 16 }}>
 

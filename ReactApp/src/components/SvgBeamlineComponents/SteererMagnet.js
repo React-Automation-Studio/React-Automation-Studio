@@ -372,7 +372,7 @@ const SteererMagnetComponent = (props) => {
                       </text>
                       <text className={classes.textSteererYMagnetLabel}
                         x={typeof props.labelOffsetX!=='undefined'?props.labelOffsetX:0}
-                        y={typeof props.labelOffsetY!=='undefined'?props.labelOffsetY-35:-35}
+                        y={typeof props.labelOffsetY!=='undefined'?props.labelOffsetY-30:-30}
                         textAnchor='middle'
                         filter={props.textShadow===true?"url(#"+props.system.systemName+"elipseShadow)":"" }
                         >

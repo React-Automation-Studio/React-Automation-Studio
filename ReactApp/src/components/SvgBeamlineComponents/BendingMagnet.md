@@ -1,7 +1,11 @@
  ``` js
 import BeamLineCanvas from './BeamLineCanvas';
 import HorizontalBeamline from './HorizontalBeamline';
-<BeamLineCanvas width={600} height={300} debugBorder={true}>
+<BeamLineCanvas 
+  width={600} 
+  height={300}
+  //debugBorder={true}
+  >
        <HorizontalBeamline 
           x={0}
           y={50}

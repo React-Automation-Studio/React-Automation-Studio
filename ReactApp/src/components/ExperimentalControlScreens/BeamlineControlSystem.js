@@ -703,7 +703,7 @@ class ControlTestHarp1 extends React.Component {
                     /> */}
 
                     <SteererMagnet
-                     // handleOnClick={this.handleOnSystemClick}
+                      handleOnClick={this.handleOnSystemClick}
 
                       system={{
                         systemName: 'testIOC:STR3',
@@ -719,12 +719,12 @@ class ControlTestHarp1 extends React.Component {
 
                       x={1100}
                       y={50}
-                      xUnits={'A'}
-                      yUnits={'A'}
+                     
+                      usePvUnits={true}
                       prec={3}
-
+                      
                       alarmSensitive={true}
-                      labelOffsetY={-27}
+                      labelOffsetY={0}
                       labelOffsetX={0}
                       valueOffsetY={0}
                       valueOffsetX={0}
@@ -734,7 +734,7 @@ class ControlTestHarp1 extends React.Component {
                     />
 
                     <SteererMagnet
-                    //  handleOnClick={this.handleOnSystemClick}
+                      handleOnClick={this.handleOnSystemClick}
                       system={{
                         systemName: 'testIOC:STR4',
                         displayName: 'STR4X',
@@ -747,12 +747,11 @@ class ControlTestHarp1 extends React.Component {
                       }}
                       x={1200}
                       y={50}
-                      xUnits={'A'}
-                      yUnits={'A'}
+                      usePvUnits={true}
                       prec={3}
 
                       alarmSensitive={true}
-                      labelOffsetY={-27}
+                      labelOffsetY={0}
                       labelOffsetX={0}
                       valueOffsetY={0}
                       valueOffsetX={0}

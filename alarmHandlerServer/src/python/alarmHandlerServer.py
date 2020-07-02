@@ -365,7 +365,7 @@ def ackAlarm(ackIdentifier, timestamp, username):
         entry = {"timestamp": timestamp, "entry": " ".join(
             [pvname, "-", username, "acknowledged", alarmPVSevDict[alarmPVSev], "to", ackedStateDict[pvsev]])}
         client[MONGO_INITDB_ALARM_DATABASE].history.update_many(
-            {'identifier': areaKey+'*'+pvname}, {
+            {'id': areaKey+'*'+pvname}, {
                 '$push': {
                     'history': {
                         '$each': [entry],
@@ -608,7 +608,7 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
                 })
     if(logToHistory):
         client[MONGO_INITDB_ALARM_DATABASE].history.update_many(
-            {'identifier': areaKey+'*'+pvname},
+            {'id': areaKey+'*'+pvname},
             {'$push': {
                 'history': {
                     '$each': [entry],
@@ -813,7 +813,7 @@ def initialiseAlarmIOC():
                 alarmDict[pvname]["T"].value = lastAlarmTime
                 # Write entry to database for alarms that were active on startup
                 client[MONGO_INITDB_ALARM_DATABASE].history.update_many(
-                    {'identifier': areaKey+'*'+pvname},
+                    {'id': areaKey+'*'+pvname},
                     {'$push': {
                         'history': {
                             '$each': [entry],
@@ -905,7 +905,7 @@ def pvCollectionWatch():
                         # print(timestamp, topArea,
                         #   "area", msg)
                         client[MONGO_INITDB_ALARM_DATABASE].history.update_many(
-                            {'identifier': topArea},
+                            {'id': topArea},
                             {'$push': {
                                 'history': {
                                     '$each': [entry],
@@ -932,7 +932,7 @@ def pvCollectionWatch():
                         # print(timestamp, pvname,
                         #       "alarm", msg)
                         client[MONGO_INITDB_ALARM_DATABASE].history.update_many(
-                            {'identifier': areaKey+'*'+pvname},
+                            {'id': areaKey+'*'+pvname},
                             {'$push': {
                                 'history': {
                                     '$each': [entry],
@@ -952,7 +952,7 @@ def pvCollectionWatch():
                         # print(timestamp, areaKey.replace("=", " > "),
                         #       "sub area", msg)
                         client[MONGO_INITDB_ALARM_DATABASE].history.update_many(
-                            {'identifier': areaKey},
+                            {'id': areaKey},
                             {'$push': {
                                 'history': {
                                     '$each': [entry],
@@ -985,7 +985,7 @@ def globalCollectionWatch():
                         # print(timestamp, topArea,
                         #   "area", msg)
                         client[MONGO_INITDB_ALARM_DATABASE].history.update_many(
-                            {'identifier': "_GLOBAL"},
+                            {'id': "_GLOBAL"},
                             {'$push': {
                                 'history': {
                                     '$each': [entry],

@@ -1,2 +1,3 @@
+import generateJSON
 import initDB
 import alarmHandlerServer

@@ -119,7 +119,7 @@ const UserNotification = () => {
     const handleSetAddRegexVal = (event) => {
         setAddRegexVal(event.target.value)
         try {
-            const myRe = new RegExp(event.target.value)
+            new RegExp(event.target.value)
             setRegexError(false)
             setFilterUserRegex([event.target.value])
         }
@@ -443,7 +443,7 @@ const UserNotification = () => {
         pvListHeight = '76vh'
     }
 
-    console.log(filterUserRegex)
+    // console.log(filterUserRegex)
 
     return (
         <Layout

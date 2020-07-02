@@ -17,6 +17,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import ClearIcon from '@material-ui/icons/Clear';
 import DoneIcon from '@material-ui/icons/Done';
 import AddIcon from '@material-ui/icons/Add';
+import BlockIcon from '@material-ui/icons/Block';
 import HelpOutlinedIcon from '@material-ui/icons/HelpOutlined';
 
 const useStyles = makeStyles(theme => ({
@@ -145,15 +146,25 @@ const UserTable = (props) => {
                                                 onChange={props.setAddRegexVal}
                                                 fullWidth={true}
                                                 autoFocus={true}
-                                                error={true}
-                                                helperText="Invalid regex"
-                                                InputProps={{
-                                                    endAdornment: (
-                                                        <InputAdornment position="end" onClick={(event) => props.addChip(event, user.name, user.username, props.addRegexVal)} >
-                                                            <AddIcon style={{ cursor: 'pointer' }} />
-                                                        </InputAdornment >
-                                                    ),
-                                                }}
+                                                error={props.regexError}
+                                                label={props.regexError ? "Invalid Regex" : undefined}
+                                                InputProps={
+                                                    props.regexError
+                                                        ? {
+                                                            endAdornment: (
+                                                                <InputAdornment position="end"  >
+                                                                    <BlockIcon />
+                                                                </InputAdornment >
+                                                            )
+                                                        }
+                                                        : {
+                                                            endAdornment: (
+                                                                <InputAdornment position="end" onClick={(event) => props.addChip(event, user.name, user.username, props.addRegexVal)} >
+                                                                    <AddIcon style={{ cursor: 'pointer' }} />
+                                                                </InputAdornment >
+                                                            ),
+                                                        }
+                                                }
                                             />
                                             : null
                                     }

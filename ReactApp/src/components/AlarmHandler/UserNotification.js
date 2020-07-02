@@ -67,6 +67,7 @@ const UserNotification = () => {
     const [loadPVList, setLoadPVList] = useState(false)
     const [lastAlarm, setLastAlarm] = useState(null)
     const [alarmPVDict, setAlarmPVDict] = useState({})
+    const [regexError, setRegexError] = useState(false)
 
     const loadPVListRef = useRef(loadPVList);
     loadPVListRef.current = loadPVList;
@@ -117,7 +118,15 @@ const UserNotification = () => {
 
     const handleSetAddRegexVal = (event) => {
         setAddRegexVal(event.target.value)
-        setFilterUserRegex([event.target.value])
+        try {
+            const myRe = new RegExp(event.target.value)
+            setRegexError(false)
+            setFilterUserRegex([event.target.value])
+        }
+        catch (e) {
+            setRegexError(true)
+        }
+
     }
 
     const handleSetFilterUser = useCallback((name, username) => {
@@ -149,6 +158,7 @@ const UserNotification = () => {
     }, [userEdit, userList])
 
     const applyEdit = useCallback((event, name, username) => {
+        setAddRegexVal('')
         handleSetUserEdit(event, name, username, false)
         // Find match and note it's index in userList
         const match = userList.filter(el => el.name === name && el.username === username)[0]
@@ -419,7 +429,9 @@ const UserNotification = () => {
     const filterName = filterUserRegex.length === 0
         ? 'ALL'
         : filterUserRegex.length === 1
-            ? filterUserRegex[0]
+            ? filterUserRegex[0] === ""
+                ? 'ALL'
+                : filterUserRegex[0]
             : filterUser
 
     let userTableHeight = '30vh'
@@ -474,6 +486,7 @@ const UserNotification = () => {
                         </ExpansionPanelSummary>
                         <ExpansionPanelDetails>
                             <UserTable
+                                regexError={regexError}
                                 addRegexVal={addRegexVal}
                                 userList={userList}
                                 userEdit={userEdit}

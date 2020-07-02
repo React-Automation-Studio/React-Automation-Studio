@@ -28,18 +28,13 @@ const PVList = (props) => {
     }, [props.alarmPVDict.length])
 
     const logData = Object.keys(props.alarmPVDict).map((alarmName) => {
-        
+
         let visible = true
 
         if (props.filterUserRegex.length > 0) {
             visible = props.filterUserRegex.reduce((acc, expression) => {
-                try {
-                    var myRe = new RegExp(expression)
+                    let myRe = new RegExp(expression)
                     return acc || myRe.test(alarmName)
-                }
-                catch (e) {
-                    console.log('Invalid regex')
-                }
             }, false)
         }
 

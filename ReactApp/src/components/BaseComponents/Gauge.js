@@ -147,7 +147,7 @@ function GaugeComponent(props) {
 
 
       <path
-        fill={props.theme.palette.secondary.main}
+        fill={props.theme.palette.svgComponentSecondary.main}
 
 
 

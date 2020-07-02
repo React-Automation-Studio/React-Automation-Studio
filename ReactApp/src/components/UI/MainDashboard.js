@@ -321,7 +321,11 @@ class MainDashboard extends Component {
                     </Grid>
                     <Grid item lg={12} sm={12} xs={12}>
                       <Button fullWidth className={classes.button} component={Link} to="/VaultDemo" color="primary" variant={buttonVariant}>  Vault Demo </Button>
+                      </Grid>
+                    <Grid item lg={12} sm={12} xs={12}>
+                      <Button fullWidth className={classes.button} component={Link} to="/BeamlineControlSystem" color="primary" variant={buttonVariant}>New Beamline Control System Demo </Button>
                     </Grid>
+                    
                   </Grid>
                 </Grid>
               </Grid>

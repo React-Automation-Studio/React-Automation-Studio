@@ -8,7 +8,7 @@ import defaultTheme from './defaultTheme'
 const oceanPalette = () => {
     const type = "dark";
     const primary = { main: blueGrey[400] };
-    const secondary = { main: blueGrey[600] };
+    const secondary = { main: lightBlue[100] };
     const error = pink;
     const major = red;
     const minor = deepOrange;
@@ -40,6 +40,9 @@ const oceanPalette = () => {
         main: fade(alarm.minor.main, 0.4),
         dark: fade(alarm.minor.dark, 0.4)
     };
+    const beamLineComponent={main:blueGrey[500]};
+    const svgComponentPrimary={main:blueGrey[400]};
+    const svgComponentSecondary={main:blueGrey[600]};
     const contrastThreshold = 3;
     const tonalOffset = 0.2;
     const paperElevation = 10;
@@ -74,6 +77,9 @@ const oceanPalette = () => {
         paperElevation: paperElevation,
         background: background,
         reactVis:reactVis,
+        beamLineComponent:beamLineComponent,
+        svgComponentPrimary:svgComponentPrimary,
+        svgComponentSecondary:svgComponentSecondary,
 
 
     })

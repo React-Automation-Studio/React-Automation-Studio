@@ -24,9 +24,9 @@ const styles = theme => ({
 const BendingMagnetComponent = (props) => {
 
 
-  const handleOnClick = device => event => {
+  const handleOnClick = () => {
     if (typeof props.handleOnClick !== 'undefined') {
-      props.handleOnClick(device);
+      props.handleOnClick(props.macros['$(device)']);
     }
 
   };
@@ -35,7 +35,7 @@ const BendingMagnetComponent = (props) => {
   const { classes } = props;
   const { initialized } = props;
  
-  const { severity } = props;
+  const { alarmSeverity } = props;
   const {pvName}=props;
   let value;
   if (initialized ){
@@ -48,16 +48,16 @@ const BendingMagnetComponent = (props) => {
   if (initialized ){
     if (props.alarmSensitive !== 'undefined') {
       if (props.alarmSensitive == true) {
-        if (severity == 1) {
+        if (alarmSeverity == 1) {
           color_side = props.theme.palette.alarm.minor.main;
 
         }
-        else if (severity == 2) {
+        else if (alarmSeverity == 2) {
           color_side = props.theme.palette.alarm.major.main;
 
         }
         else {
-          color_side = props.theme.palette.primary.main;
+          color_side =props.theme.palette.beamLineComponent.main;
 
         }
 
@@ -82,7 +82,7 @@ const BendingMagnetComponent = (props) => {
     height= {props.y+100}
    >
    
-          <g transform={'translate(' + 25 + ',' + props.y + ')'} onClick={handleOnClick(props.macros['$(device)'])}>
+          <g transform={'translate(' + 25 + ',' + props.y + ')'} onClick={handleOnClick}>
             <linearGradient id={pvName + 'elipse-gradient'} gradientTransform="rotate(0)">
               <stop offset="0%" stopOpacity="30" stopColor={'silver'} />
               <stop offset="75%" stopColor={color_side} />

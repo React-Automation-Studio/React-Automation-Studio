@@ -37,6 +37,9 @@ const lightBlueGreyPalette = () => {
         main: fade(alarm.minor.main, 0.4),
         dark: fade(alarm.minor.dark, 0.4)
     };
+    const beamLineComponent={main:blueGrey['500']};
+    const svgComponentPrimary={main:primary['500']};
+    const svgComponentSecondary={main:secondary['500']};
     const contrastThreshold = 3;
     const tonalOffset = 0.2;
     const paperElevation = 10;
@@ -57,6 +60,7 @@ const lightBlueGreyPalette = () => {
           },
           lineColors: ['#12939A', '#79C7E3', '#1A3177', '#FF9833', '#EF5D28'],
         }
+       
     return ({
         type: type,
         primary: primary,
@@ -69,7 +73,10 @@ const lightBlueGreyPalette = () => {
         contrastThreshold: contrastThreshold,
         tonalOffset: tonalOffset,
         paperElevation: paperElevation,
-        reactVis:reactVis
+        reactVis:reactVis,
+        beamLineComponent:beamLineComponent,
+        svgComponentPrimary:svgComponentPrimary,
+        svgComponentSecondary:svgComponentSecondary,
 
     })
 }

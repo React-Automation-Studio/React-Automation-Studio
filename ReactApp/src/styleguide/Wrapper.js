@@ -13,7 +13,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import AutomationStudioContext from '../components/SystemComponents/AutomationStudioContext';
 
 import io from 'socket.io-client';
-import   themes  from '../components/UI/Themes/themes'
+import   lightTheme  from '../components/UI/Themes/lightTheme'
 import ReactVisCssBaseline from '../components/SystemComponents/ReactVisCssBaseline';
 
 console.log('process.env', process.env)
@@ -58,12 +58,15 @@ if (typeof window.socket === 'undefined') {
 const socket = io('127.0.0.1:5000/test',{
 transports: ['websocket']
 })*/
+
+const themes={Light:lightTheme};
 class Wrapper extends Component {
   constructor(props) {
     super(props);
     let theme = null
     let storedThemeStyle=localStorage.getItem('themeStyle')
     const defaultTheme='Light';
+    
     let themeStyle = storedThemeStyle===null?defaultTheme:JSON.parse(storedThemeStyle);
     let themeKeys = Object.keys(themes);
     if (themeKeys.includes(themeStyle)) {

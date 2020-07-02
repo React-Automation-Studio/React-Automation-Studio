@@ -6,11 +6,11 @@ import { grey } from '@material-ui/core/colors'
 const styles = theme => ({
 
 
-  textBMLabel: {
+  Label: {
     fill: theme.palette.text.primary
 
   },
-  textBMValue: {
+  Value: {
     fill: theme.palette.text.primary
 
   },
@@ -24,9 +24,10 @@ const styles = theme => ({
 const QuadrapoleMagnetComponent = (props) => {
 
 
-  const handleOnClick = device => event => {
+  const handleOnClick = () => {
+    
     if (typeof props.handleOnClick !== 'undefined') {
-      props.handleOnClick(device);
+      props.handleOnClick(props.macros['$(device)']);
     }
 
   };
@@ -35,7 +36,7 @@ const QuadrapoleMagnetComponent = (props) => {
   const { classes } = props;
   const { initialized } = props;
  
-  const { severity } = props;
+  const { alarmSeverity } = props;
   const {pvName}=props;
   let value;
   if (initialized ){
@@ -45,19 +46,20 @@ const QuadrapoleMagnetComponent = (props) => {
     value=0;
   }
   let color = '';
+  console.log(props.theme)
   if (initialized ){
     if (props.alarmSensitive !== 'undefined') {
       if (props.alarmSensitive == true) {
-        if (severity == 1) {
+        if (alarmSeverity == 1) {
           color = props.theme.palette.alarm.minor.main;
 
         }
-        else if (severity == 2) {
+        else if (alarmSeverity == 2) {
           color = props.theme.palette.alarm.major.main;
 
         }
         else {
-          color = props.theme.palette.primary.main;
+          color = props.theme.palette.beamLineComponent.main;
 
         }
 
@@ -70,11 +72,12 @@ const QuadrapoleMagnetComponent = (props) => {
     color = 'grey';
   }
   let xOffset=25;
+  
   return (
 
 
 
-    <svg 
+    <svg onClick={handleOnClick}
     x={0}
     y={props.y}
     
@@ -82,7 +85,7 @@ const QuadrapoleMagnetComponent = (props) => {
     height= {props.y+100}
    >
    
-          <g >
+          <g  >
           <linearGradient id={pvName + 'elipse-gradient'} gradientTransform="rotate(0)">
               <stop offset="0%" stopOpacity="0.5" stopColor='silver' />
               <stop offset="65%" stopColor={color} />
@@ -115,7 +118,7 @@ const QuadrapoleMagnetComponent = (props) => {
               filter={props.componentShadow === true ? "url(#" + pvName + "elipseShadow)" : ""}
             />
 
-            <text className={classes.textQuadrapoleValue}
+            <text className={classes.Value}
               x={xOffset + 7.5}
               y={props.y + 57.5}
               textAnchor='middle'
@@ -124,7 +127,7 @@ const QuadrapoleMagnetComponent = (props) => {
               {value + " " + props.units}
 
             </text>
-            <text className={classes.textQuadrapoleLabel}
+            <text className={classes.Label}
               x={xOffset + 7.5}
               y={props.y - 40}
               textAnchor='middle'

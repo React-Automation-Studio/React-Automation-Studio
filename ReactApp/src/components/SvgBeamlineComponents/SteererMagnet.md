@@ -25,16 +25,21 @@ import HorizontalBeamline from './HorizontalBeamline';
     //      debugBorder={true}
         />
         <SteererMagnet
-
+         
           system={{
-            systemName:'testIOC:STR3',
-            displayName:'STR3Y',
-            editorType:'singlePS',
-            devices:
-            {
-              device:{deviceName:'testIOC:STR3:Y',readback:'Readback',setpoint:'Setpoint'}
-
-            }
+            componentType: 'SteererMagnet',
+            systemName: '$(IOC):$(device)',
+            displayName: '$(device)$(XorY)',
+            editorType: 'editorSinglePS',
+            setpointPv: '$(IOC):$(device):$(XorY):Setpoint',
+            readbackPv: '$(IOC):$(device):$(XorY):Readback',
+            statusTextPv: '$(IOC):$(device):$(XorY):On',
+            onOffPv: '$(IOC):$(device):$(XorY):On',
+            macros: {
+              '$(IOC)': 'pva://testIOC',
+              '$(device)': 'STR2',
+              '$(XorY)': 'Y'
+          },
           }}
 
 

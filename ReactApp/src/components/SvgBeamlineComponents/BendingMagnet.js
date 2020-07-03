@@ -1,8 +1,9 @@
-import React from 'react'
+import React,{useState} from 'react'
 
 import Widget from "../SystemComponents/Widgets/Widget";
 import { withStyles } from '@material-ui/core/styles';
-import { grey } from '@material-ui/core/colors'
+import {replaceSystemMacros} from '../SystemComponents/Utils/macroReplacement';
+import { v4 as uuidv4 } from 'uuid';
 const styles = theme => ({
 
 
@@ -24,9 +25,9 @@ const styles = theme => ({
 const BendingMagnetComponent = (props) => {
 
 
-  const handleOnClick = () => {
+  const handleOnClick = device => event => {
     if (typeof props.handleOnClick !== 'undefined') {
-      props.handleOnClick(props.macros['$(device)']);
+      props.handleOnClick(device);
     }
 
   };
@@ -82,7 +83,7 @@ const BendingMagnetComponent = (props) => {
     height= {props.y+100}
    >
    
-          <g transform={'translate(' + 25 + ',' + props.y + ')'} onClick={handleOnClick}>
+          <g transform={'translate(' + 25 + ',' + props.y + ')'}  onClick={handleOnClick(props.system)}>
             <linearGradient id={pvName + 'elipse-gradient'} gradientTransform="rotate(0)">
               <stop offset="0%" stopOpacity="30" stopColor={'silver'} />
               <stop offset="75%" stopColor={color_side} />
@@ -165,9 +166,9 @@ const BendingMagnetComponent = (props) => {
  * */
 
 const BendingMagnet = (props) => {
-
+  const [system,setSystem]=useState(replaceSystemMacros(props.system,props.system.macros))
   return (
-    <Widget svgWidget={true}  {...props} component={BendingMagnetComponent} />
+    <Widget svgWidget={true}  {...props} component={BendingMagnetComponent}  pv={system.readbackPv} label={system.displayName} />
 
   )
 }

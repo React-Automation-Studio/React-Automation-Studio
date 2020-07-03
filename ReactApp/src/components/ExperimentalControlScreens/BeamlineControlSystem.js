@@ -18,6 +18,7 @@ import ControlRightEx1 from '../ControlScreens/GridComponents/ControlRightEx1'
 import ControlRightSteererXY from '../ControlScreens/GridComponents/ControlRightSteererXY'
 import ControlRightSlitXY from '../ControlScreens/GridComponents/ControlRightSlitXY'
 import ControlRightSinglePS from '../ControlScreens/GridComponents/ControlRightSinglePS'
+import EditorSinglePS from '../ExperimentalControlScreens/GridComponents/EditorSinglePS'
 import ControlTopHarpEx1 from '../ControlScreens/GridComponents/ControlTopHarpEx1'
 
 import HarpGraph from '../SiteSpecificComponents/iThembaLABS/CompoundComponents/HarpGraph';
@@ -25,7 +26,7 @@ import HarpGraph from '../SiteSpecificComponents/iThembaLABS/CompoundComponents/
 import AppBar from '@material-ui/core/AppBar';
 
 import GraphY from '../BaseComponents/GraphY';
-import ControlCenterTable from '../ControlScreens/GridComponents/ControlCenterTable'
+import ControlTable from '../ExperimentalControlScreens/GridComponents/ControlTable'
 import TraditionalLayout from '../UI/Layout/ComposedLayouts/TraditionalLayout.js';
 import BeamLineCanvas from '../SvgBeamlineComponents/BeamLineCanvas';
 import HorizontalBeamline from '../SvgBeamlineComponents/HorizontalBeamline';
@@ -42,138 +43,326 @@ const VerticalTabs = withStyles(theme => ({
   }
 }))(Tabs)
 
+const systems2 = {
+  'BeamLine': {
+    'PowerSupplies': {
+      'Q1': {
+        systemName: '$(IOC):$(device)',
+        displayName: 'Q1',
+        editorType: 'editorSinglePS',
+        setpointPv: '$(IOC):$(device):Setpoint',
+        readbackPv: '$(IOC):$(device):Readback',
+        onOffPv: '$(IOC):$(device):On',
+        statusTextPv: '$(IOC):$(device):On',
+        scanPv: '$(IOC):$(device):SimReadback.SCAN',
+        orocPv: '$(IOC):$(device):SimReadback.OROC',
+        rampRatePv: '$(IOC):$(device):RampRate',
+        macros:
+        {
+          '$(IOC)': 'pva://testIOC',
+          '$(device)': 'PS1',
+        },
+        svgProps:{
+          usePvUnits:true,
+          alarmSensitive:true,
+          componentShadow:true,
+          textShadow:false,
+          componentGradient:true,
+          x:150,
+          y:50,
+        },
+        tabelProps: {
+          prec: 3, units: "A", useStatus: true
+        },
+
+      },
+      'Q2': {
+        systemName: '$(IOC):$(device)',
+        displayName: 'Q2',
+        editorType: 'editorSinglePS',
+        setpointPv: '$(IOC):$(device):Setpoint',
+        readbackPv: '$(IOC):$(device):Readback',
+        onOffPv: '$(IOC):$(device):On',
+        statusTextPv: '$(IOC):$(device):On',
+        scanPv: '$(IOC):$(device):SimReadback.SCAN',
+        orocPv: '$(IOC):$(device):SimReadback.OROC',
+        rampRatePv: '$(IOC):$(device):RampRate',
+        macros:
+        {
+          '$(IOC)': 'pva://testIOC',
+          '$(device)': 'PS2',
+        },
+        svgProps:{
+          usePvUnits:true,
+          alarmSensitive:true,
+          componentShadow:true,
+          textShadow:false,
+          componentGradient:true,
+          x:300,
+          y:50,
+        },
+        tabelProps: {
+          prec: 3, units: "A", useStatus: true
+        },
+
+      },
+      'Q3': {
+        systemName: '$(IOC):$(device)',
+        displayName: 'Q3',
+        editorType: 'editorSinglePS',
+        setpointPv: '$(IOC):$(device):Setpoint',
+        readbackPv: '$(IOC):$(device):Readback',
+        onOffPv: '$(IOC):$(device):On',
+        statusTextPv: '$(IOC):$(device):On',
+        scanPv: '$(IOC):$(device):SimReadback.SCAN',
+        orocPv: '$(IOC):$(device):SimReadback.OROC',
+        rampRatePv: '$(IOC):$(device):RampRate',
+        macros:
+        {
+          '$(IOC)': 'pva://testIOC',
+          '$(device)': 'PS3',
+        },
+        svgProps:{
+          usePvUnits:true,
+          alarmSensitive:true,
+          componentShadow:true,
+          textShadow:false,
+          componentGradient:true,
+          x:450,
+          y:50,
+        },
+        tabelProps: {
+          prec: 3, units: "A", useStatus: true
+        },
+
+      },
+      'BM1': {
+        systemName: '$(IOC):$(device)',
+        displayName: 'BM1',
+        editorType: 'editorSinglePS',
+        setpointPv: '$(IOC):$(device):Setpoint',
+        readbackPv: '$(IOC):$(device):Readback',
+        onOffPv: '$(IOC):$(device):On',
+        statusTextPv: '$(IOC):$(device):On',
+        scanPv: '$(IOC):$(device):SimReadback.SCAN',
+        orocPv: '$(IOC):$(device):SimReadback.OROC',
+        rampRatePv: '$(IOC):$(device):RampRate',
+        macros:
+        {
+          '$(IOC)': 'pva://testIOC',
+          '$(device)': 'PS4',
+        },
+        svgProps:{
+          usePvUnits:true,
+          alarmSensitive:true,
+          componentShadow:true,
+          textShadow:false,
+          componentGradient:true,
+          x:600,
+          y:50,
+        },
+        tabelProps: {
+          prec: 3, units: "A", useStatus: true
+        },
+
+      },
+
+
+
+      'STR2': {
+        componentType: 'SteererMagnet',
+        systemName: '$(IOC):$(device)',
+        displayName: '$(device)$(XorY)',
+        editorType: 'editorSinglePS',
+        setpointPv: '$(IOC):$(device):$(XorY):Setpoint',
+        readbackPv: '$(IOC):$(device):$(XorY):Readback',
+        statusTextPv: '$(IOC):$(device):$(XorY):On',
+        //scanPv: '$(IOC):$(device):SimReadback.SCAN',
+        //orocPv: '$(IOC):$(device):SimReadback.OROC',
+        onOffPv: '$(IOC):$(device):$(XorY):On',
+        macros: {
+          '$(IOC)': 'pva://testIOC',
+          '$(device)': 'STR2',
+          '$(XorY)': 'Y'
+        },
+        svgProps: {
+          x: 1100, y: 50,
+          usePvUnits: true, prec: 1, alarmSensitive: true,
+          labelOffsetY: 0, labelOffsetX: 0, valueOffsetY: 0, valueOffsetX: 0,
+          componentShadow: true, textShadow: false, componentGradient: true
+        },
+        tabelProps: {
+          prec: 3, units: "A", useStatus: true
+        },
+      },
+
+
+      'STR3': {
+        componentType: 'SteererMagnet',
+        systemName: '$(IOC):$(device)',
+        displayName: '$(device)$(XorY)',
+        editorType: 'editorSinglePS',
+        setpointPv: '$(IOC):$(device):$(XorY):Setpoint',
+        readbackPv: '$(IOC):$(device):$(XorY):Readback',
+        statusTextPv: '$(IOC):$(device):$(XorY):On',
+        //scanPv: '$(IOC):$(device):SimReadback.SCAN',
+        //orocPv: '$(IOC):$(device):SimReadback.OROC',
+        onOffPv: '$(IOC):$(device):$(XorY):On',
+        macros: {
+          '$(IOC)': 'pva://testIOC',
+          '$(device)': 'STR3',
+          '$(XorY)': 'Y'
+        },
+        svgProps: {
+          x: 1200, y: 50,
+          usePvUnits: true, prec: 1, alarmSensitive: true,
+          labelOffsetY: 0, labelOffsetX: 0, valueOffsetY: 0, valueOffsetX: 0,
+          componentShadow: true, textShadow: false, componentGradient: true
+        },
+        tabelProps: {
+          prec: 3, units: "A", useStatus: true
+        },
+      }
+
+    }
+
+  }
+}
+
+
+
 
 const systems = {
 
   'BeamLine': {
     'PowerSupplies': [
-      { systemName: 'testIOC:PS1', displayName: 'Q1', editorType: 'oldPS', devices: { device: { deviceName: 'testIOC:PS1', readback: 'Readback', setpoint: 'Setpoint', statusText: 'On' } }, props: { prec: 3, units: "A", useStatus: true } },
-      { systemName: 'testIOC:PS2', displayName: 'Q2', editorType: 'oldPS', devices: { device: { deviceName: 'testIOC:PS2', readback: 'Readback', setpoint: 'Setpoint', statusText: 'On' } }, props: { prec: 3, units: "A", useStatus: true } },
-      { systemName: 'testIOC:PS3', displayName: 'Q3', editorType: 'oldPS', devices: { device: { deviceName: 'testIOC:PS3', readback: 'Readback', setpoint: 'Setpoint', statusText: 'On' } }, props: { prec: 3, units: "A", useStatus: true } },
-      { systemName: 'testIOC:PS4', displayName: 'BM1', editorType: 'oldPS', devices: { device: { deviceName: 'testIOC:PS4', readback: 'Readback', setpoint: 'Setpoint', statusText: 'On' } }, props: { prec: 3, units: "A", useStatus: true } },
-      { systemName: 'testIOC:STR1:X', displayName: 'STR1XY:X', editorType: 'singlePS', devices: { device: { deviceName: 'testIOC:STR1:X', readback: 'Readback', setpoint: 'Setpoint', statusText: 'On' } }, props: { prec: 3, units: "A", useStatus: true } },
-      { systemName: 'testIOC:STR1:Y', displayName: 'STR1XY:Y', editorType: 'singlePS', devices: { device: { deviceName: 'testIOC:STR1:Y', readback: 'Readback', setpoint: 'Setpoint', statusText: 'On' } }, props: { prec: 3, units: "A", useStatus: true } },
+      // { systemName: 'testIOC:PS1', displayName: 'Q1', editorType: 'oldPS', devices: { device: { deviceName: 'testIOC:PS1', readback: 'Readback', setpoint: 'Setpoint', statusText: 'On' } }, props: { prec: 3, units: "A", useStatus: true } },
+      // { systemName: 'testIOC:PS2', displayName: 'Q2', editorType: 'oldPS', devices: { device: { deviceName: 'testIOC:PS2', readback: 'Readback', setpoint: 'Setpoint', statusText: 'On' } }, props: { prec: 3, units: "A", useStatus: true } },
+      // { systemName: 'testIOC:PS3', displayName: 'Q3', editorType: 'oldPS', devices: { device: { deviceName: 'testIOC:PS3', readback: 'Readback', setpoint: 'Setpoint', statusText: 'On' } }, props: { prec: 3, units: "A", useStatus: true } },
+      // { systemName: 'testIOC:PS4', displayName: 'BM1', editorType: 'oldPS', devices: { device: { deviceName: 'testIOC:PS4', readback: 'Readback', setpoint: 'Setpoint', statusText: 'On' } }, props: { prec: 3, units: "A", useStatus: true } },
+      // { systemName: 'testIOC:STR1:X', displayName: 'STR1XY:X', editorType: 'singlePS', devices: { device: { deviceName: 'testIOC:STR1:X', readback: 'Readback', setpoint: 'Setpoint', statusText: 'On' } }, props: { prec: 3, units: "A", useStatus: true } },
+      // { systemName: 'testIOC:STR1:Y', displayName: 'STR1XY:Y', editorType: 'singlePS', devices: { device: { deviceName: 'testIOC:STR1:Y', readback: 'Readback', setpoint: 'Setpoint', statusText: 'On' } }, props: { prec: 3, units: "A", useStatus: true } },
 
-      { systemName: 'testIOC:STR2:X', displayName: 'STR2XY:X', editorType: 'singlePS', devices: { device: { deviceName: 'testIOC:STR2:X', readback: 'Readback', setpoint: 'Setpoint', statusText: 'On' } }, props: { prec: 3, units: "A", useStatus: true } },
-      { systemName: 'testIOC:STR2:Y', displayName: 'STR2XY:Y', editorType: 'singlePS', devices: { device: { deviceName: 'testIOC:STR2:Y', readback: 'Readback', setpoint: 'Setpoint', statusText: 'On' } }, props: { prec: 3, units: "A", useStatus: true } },
+      // { systemName: 'testIOC:STR2:X', displayName: 'STR2XY:X', editorType: 'singlePS', devices: { device: { deviceName: 'testIOC:STR2:X', readback: 'Readback', setpoint: 'Setpoint', statusText: 'On' } }, props: { prec: 3, units: "A", useStatus: true } },
+      // { systemName: 'testIOC:STR2:Y', displayName: 'STR2XY:Y', editorType: 'singlePS', devices: { device: { deviceName: 'testIOC:STR2:Y', readback: 'Readback', setpoint: 'Setpoint', statusText: 'On' } }, props: { prec: 3, units: "A", useStatus: true } },
 
       { systemName: 'testIOC:STR3:Y', displayName: 'STR3:Y', editorType: 'singlePS', devices: { device: { deviceName: 'testIOC:STR3:Y', readback: 'Readback', setpoint: 'Setpoint', statusText: 'On' } }, props: { prec: 3, units: "A", useStatus: true } },
       { systemName: 'testIOC:STR4:X', displayName: 'STR4:X', editorType: 'singlePS', devices: { device: { deviceName: 'testIOC:STR4:X', readback: 'Readback', setpoint: 'Setpoint', statusText: 'On' } }, props: { prec: 3, units: "A", useStatus: true } },
 
     ],
     'Slits': [
-      {
-        systemName: 'testIOC:SLITXY1', displayName: 'SLITXY1 X Gap', editorType: 'slitxy',
+      // {
+      //   systemName: 'testIOC:SLITXY1', displayName: 'SLITXY1 X Gap', editorType: 'slitxy',
 
-        devices:
-        {
-          device: { deviceName: 'testIOC:SLITXY1:X', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint', statusText: 'Drive:On' },
+      //   devices:
+      //   {
+      //     device: { deviceName: 'testIOC:SLITXY1:X', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint', statusText: 'Drive:On' },
 
-          xGapDevice: { deviceName: 'testIOC:SLITXY1:X', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint' },
-          xOffsetDevice: { deviceName: 'testIOC:SLITXY1:X', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint' },
-          yGapDevice: { deviceName: 'testIOC:SLITXY1:Y', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint' },
-          yOffsetDevice: { deviceName: 'testIOC:SLITXY1:Y', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint' }
-        },
-        props: { prec: 2, units: "mm", useStatus: true },
-      },
-      {
-        systemName: 'testIOC:SLITXY1', displayName: 'SLITXY1 X Offset', editorType: 'slitxy',
+      //     xGapDevice: { deviceName: 'testIOC:SLITXY1:X', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint' },
+      //     xOffsetDevice: { deviceName: 'testIOC:SLITXY1:X', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint' },
+      //     yGapDevice: { deviceName: 'testIOC:SLITXY1:Y', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint' },
+      //     yOffsetDevice: { deviceName: 'testIOC:SLITXY1:Y', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint' }
+      //   },
+      //   props: { prec: 2, units: "mm", useStatus: true },
+      // },
+      // {
+      //   systemName: 'testIOC:SLITXY1', displayName: 'SLITXY1 X Offset', editorType: 'slitxy',
 
-        devices:
-        {
-          device: { deviceName: 'testIOC:SLITXY1:X', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint', statusText: 'Drive:On' },
+      //   devices:
+      //   {
+      //     device: { deviceName: 'testIOC:SLITXY1:X', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint', statusText: 'Drive:On' },
 
-          xGapDevice: { deviceName: 'testIOC:SLITXY1:X', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint' },
-          xOffsetDevice: { deviceName: 'testIOC:SLITXY1:X', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint' },
-          yGapDevice: { deviceName: 'testIOC:SLITXY1:Y', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint' },
-          yOffsetDevice: { deviceName: 'testIOC:SLITXY1:Y', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint' }
-        },
-        props: { prec: 2, units: "mm", useStatus: true },
-      },
-      {
-        systemName: 'testIOC:SLITXY1', displayName: 'SLITXY1 Y Gap', editorType: 'slitxy',
+      //     xGapDevice: { deviceName: 'testIOC:SLITXY1:X', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint' },
+      //     xOffsetDevice: { deviceName: 'testIOC:SLITXY1:X', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint' },
+      //     yGapDevice: { deviceName: 'testIOC:SLITXY1:Y', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint' },
+      //     yOffsetDevice: { deviceName: 'testIOC:SLITXY1:Y', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint' }
+      //   },
+      //   props: { prec: 2, units: "mm", useStatus: true },
+      // },
+      // {
+      //   systemName: 'testIOC:SLITXY1', displayName: 'SLITXY1 Y Gap', editorType: 'slitxy',
 
-        devices:
-        {
-          device: { deviceName: 'testIOC:SLITXY1:Y', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint', statusText: 'Drive:On' },
+      //   devices:
+      //   {
+      //     device: { deviceName: 'testIOC:SLITXY1:Y', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint', statusText: 'Drive:On' },
 
-          xGapDevice: { deviceName: 'testIOC:SLITXY1:X', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint' },
-          xOffsetDevice: { deviceName: 'testIOC:SLITXY1:X', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint' },
-          yGapDevice: { deviceName: 'testIOC:SLITXY1:Y', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint' },
-          yOffsetDevice: { deviceName: 'testIOC:SLITXY1:Y', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint' }
-        },
-        props: { prec: 2, units: "mm", useStatus: true },
-      },
-      {
-        systemName: 'testIOC:SLITXY1', displayName: 'SLITXY1 Y Offset', editorType: 'slitxy',
+      //     xGapDevice: { deviceName: 'testIOC:SLITXY1:X', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint' },
+      //     xOffsetDevice: { deviceName: 'testIOC:SLITXY1:X', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint' },
+      //     yGapDevice: { deviceName: 'testIOC:SLITXY1:Y', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint' },
+      //     yOffsetDevice: { deviceName: 'testIOC:SLITXY1:Y', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint' }
+      //   },
+      //   props: { prec: 2, units: "mm", useStatus: true },
+      // },
+      // {
+      //   systemName: 'testIOC:SLITXY1', displayName: 'SLITXY1 Y Offset', editorType: 'slitxy',
 
-        devices:
-        {
-          device: { deviceName: 'testIOC:SLITXY1:Y', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint', statusText: 'Drive:On' },
+      //   devices:
+      //   {
+      //     device: { deviceName: 'testIOC:SLITXY1:Y', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint', statusText: 'Drive:On' },
 
-          xGapDevice: { deviceName: 'testIOC:SLITXY1:X', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint' },
-          xOffsetDevice: { deviceName: 'testIOC:SLITXY1:X', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint' },
-          yGapDevice: { deviceName: 'testIOC:SLITXY1:Y', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint' },
-          yOffsetDevice: { deviceName: 'testIOC:SLITXY1:Y', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint' }
-        },
-        props: { prec: 2, units: "mm", useStatus: true },
-      },
-      {
-        systemName: 'testIOC:SLITXY2', displayName: 'SLITXY2 X Gap', editorType: 'slitxy',
+      //     xGapDevice: { deviceName: 'testIOC:SLITXY1:X', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint' },
+      //     xOffsetDevice: { deviceName: 'testIOC:SLITXY1:X', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint' },
+      //     yGapDevice: { deviceName: 'testIOC:SLITXY1:Y', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint' },
+      //     yOffsetDevice: { deviceName: 'testIOC:SLITXY1:Y', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint' }
+      //   },
+      //   props: { prec: 2, units: "mm", useStatus: true },
+      // },
+      // {
+      //   systemName: 'testIOC:SLITXY2', displayName: 'SLITXY2 X Gap', editorType: 'slitxy',
 
-        devices:
-        {
-          device: { deviceName: 'testIOC:SLITXY2:X', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint', statusText: 'Drive:On' },
+      //   devices:
+      //   {
+      //     device: { deviceName: 'testIOC:SLITXY2:X', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint', statusText: 'Drive:On' },
 
-          xGapDevice: { deviceName: 'testIOC:SLITXY2:X', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint' },
-          xOffsetDevice: { deviceName: 'testIOC:SLITXY2:X', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint' },
-          yGapDevice: { deviceName: 'testIOC:SLITXY2:Y', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint' },
-          yOffsetDevice: { deviceName: 'testIOC:SLITXY2:Y', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint' }
-        },
-        props: { prec: 2, units: "mm", useStatus: true },
-      },
-      {
-        systemName: 'testIOC:SLITXY2', displayName: 'SLITXY2 X Offset', editorType: 'slitxy',
+      //     xGapDevice: { deviceName: 'testIOC:SLITXY2:X', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint' },
+      //     xOffsetDevice: { deviceName: 'testIOC:SLITXY2:X', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint' },
+      //     yGapDevice: { deviceName: 'testIOC:SLITXY2:Y', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint' },
+      //     yOffsetDevice: { deviceName: 'testIOC:SLITXY2:Y', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint' }
+      //   },
+      //   props: { prec: 2, units: "mm", useStatus: true },
+      // },
+      // {
+      //   systemName: 'testIOC:SLITXY2', displayName: 'SLITXY2 X Offset', editorType: 'slitxy',
 
-        devices:
-        {
-          device: { deviceName: 'testIOC:SLITXY2:X', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint', statusText: 'Drive:On' },
+      //   devices:
+      //   {
+      //     device: { deviceName: 'testIOC:SLITXY2:X', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint', statusText: 'Drive:On' },
 
-          xGapDevice: { deviceName: 'testIOC:SLITXY2:X', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint' },
-          xOffsetDevice: { deviceName: 'testIOC:SLITXY2:X', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint' },
-          yGapDevice: { deviceName: 'testIOC:SLITXY2:Y', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint' },
-          yOffsetDevice: { deviceName: 'testIOC:SLITXY2:Y', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint' }
-        },
-        props: { prec: 2, units: "mm", useStatus: true },
-      },
-      {
-        systemName: 'testIOC:SLITXY2', displayName: 'SLITXY2 Y Gap', editorType: 'slitxy',
+      //     xGapDevice: { deviceName: 'testIOC:SLITXY2:X', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint' },
+      //     xOffsetDevice: { deviceName: 'testIOC:SLITXY2:X', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint' },
+      //     yGapDevice: { deviceName: 'testIOC:SLITXY2:Y', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint' },
+      //     yOffsetDevice: { deviceName: 'testIOC:SLITXY2:Y', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint' }
+      //   },
+      //   props: { prec: 2, units: "mm", useStatus: true },
+      // },
+      // {
+      //   systemName: 'testIOC:SLITXY2', displayName: 'SLITXY2 Y Gap', editorType: 'slitxy',
 
-        devices:
-        {
-          device: { deviceName: 'testIOC:SLITXY2:Y', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint', statusText: 'Drive:On' },
+      //   devices:
+      //   {
+      //     device: { deviceName: 'testIOC:SLITXY2:Y', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint', statusText: 'Drive:On' },
 
-          xGapDevice: { deviceName: 'testIOC:SLITXY2:X', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint' },
-          xOffsetDevice: { deviceName: 'testIOC:SLITXY2:X', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint' },
-          yGapDevice: { deviceName: 'testIOC:SLITXY2:Y', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint' },
-          yOffsetDevice: { deviceName: 'testIOC:SLITXY2:Y', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint' }
-        },
-        props: { prec: 2, units: "mm", useStatus: true },
-      },
-      {
-        systemName: 'testIOC:SLITXY2', displayName: 'SLITXY2 Y Offset', editorType: 'slitxy',
+      //     xGapDevice: { deviceName: 'testIOC:SLITXY2:X', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint' },
+      //     xOffsetDevice: { deviceName: 'testIOC:SLITXY2:X', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint' },
+      //     yGapDevice: { deviceName: 'testIOC:SLITXY2:Y', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint' },
+      //     yOffsetDevice: { deviceName: 'testIOC:SLITXY2:Y', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint' }
+      //   },
+      //   props: { prec: 2, units: "mm", useStatus: true },
+      // },
+      // {
+      //   systemName: 'testIOC:SLITXY2', displayName: 'SLITXY2 Y Offset', editorType: 'slitxy',
 
-        devices:
-        {
-          device: { deviceName: 'testIOC:SLITXY2:Y', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint', statusText: 'Drive:On' },
+      //   devices:
+      //   {
+      //     device: { deviceName: 'testIOC:SLITXY2:Y', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint', statusText: 'Drive:On' },
 
-          xGapDevice: { deviceName: 'testIOC:SLITXY2:X', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint' },
-          xOffsetDevice: { deviceName: 'testIOC:SLITXY2:X', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint' },
-          yGapDevice: { deviceName: 'testIOC:SLITXY2:Y', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint' },
-          yOffsetDevice: { deviceName: 'testIOC:SLITXY2:Y', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint' }
-        },
-        props: { prec: 2, units: "mm", useStatus: true },
-      },
+      //     xGapDevice: { deviceName: 'testIOC:SLITXY2:X', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint' },
+      //     xOffsetDevice: { deviceName: 'testIOC:SLITXY2:X', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint' },
+      //     yGapDevice: { deviceName: 'testIOC:SLITXY2:Y', readback: 'Gap:Readback', setpoint: 'Gap:Setpoint' },
+      //     yOffsetDevice: { deviceName: 'testIOC:SLITXY2:Y', readback: 'Offset:Readback', setpoint: 'Offset:Setpoint' }
+      //   },
+      //   props: { prec: 2, units: "mm", useStatus: true },
+      // },
 
 
 
@@ -448,16 +637,16 @@ class ControlTestHarp1 extends React.Component {
 
     const { tabValue } = this.state;
     const sideTabValue = this.state.sideTabValue;
-    const footerContents=(
-      <Grid container direction="row" justify="flex-start" alignItems="center" style={{color:"white"}} >
-          <Grid item xs={12} style={{paddingLeft:"1em"}}>
-             We are in the progress of migrating the original iThemba LABS demo components to reusable hooks components. Watch this space!
+    const footerContents = (
+      <Grid container direction="row" justify="flex-start" alignItems="center" style={{ color: "white" }} >
+        <Grid item xs={12} style={{ paddingLeft: "1em" }}>
+          We are in the progress of migrating the original iThemba LABS demo components to reusable hooks components. Watch this space!
           </Grid>
-          
+
       </Grid>
-  )
-  
-  ;
+    )
+
+      ;
     return (
       <div style={{ "overflowX": "hidden", 'overflowY': 'hidden' }}>
         <TraditionalLayout
@@ -477,37 +666,37 @@ class ControlTestHarp1 extends React.Component {
 
                   <BeamLineCanvas width={'100%'} height={'20vh'}  >
 
-                  <HorizontalBeamline 
-                  x={0}
-          y={50}
-          pv={'pva://testIOC:BeamlineA:BeamOn'}
-          width={'113px'}
-        />
-        <HorizontalBeamline 
-        x={'113px'}
-          y={50}
-          pv={'pva://testIOC:BeamlineB:BeamOn'}
-          width={'148px'}
-        />
-        <HorizontalBeamline 
-        x={'261px'}
-          y={50}
-          pv={'pva://testIOC:BeamlineC:BeamOn'}
-          width={'150px'}
-        />
-        <HorizontalBeamline 
-        x={'411px'}
-          y={50}
-          pv={'pva://testIOC:BeamlineD:BeamOn'}
-          width={'150px'}
-        />
-        <HorizontalBeamline 
-        x={'561px'}
-          y={50}
-          pv={'pva://testIOC:BeamlineE:BeamOn'}
-          width={'850px'}
-        />
-{/* 
+                    <HorizontalBeamline
+                      x={0}
+                      y={50}
+                      pv={'pva://testIOC:BeamlineA:BeamOn'}
+                      width={'113px'}
+                    />
+                    <HorizontalBeamline
+                      x={'113px'}
+                      y={50}
+                      pv={'pva://testIOC:BeamlineB:BeamOn'}
+                      width={'148px'}
+                    />
+                    <HorizontalBeamline
+                      x={'261px'}
+                      y={50}
+                      pv={'pva://testIOC:BeamlineC:BeamOn'}
+                      width={'150px'}
+                    />
+                    <HorizontalBeamline
+                      x={'411px'}
+                      y={50}
+                      pv={'pva://testIOC:BeamlineD:BeamOn'}
+                      width={'150px'}
+                    />
+                    <HorizontalBeamline
+                      x={'561px'}
+                      y={50}
+                      pv={'pva://testIOC:BeamlineE:BeamOn'}
+                      width={'850px'}
+                    />
+                    {/* 
         <FC
 
           cx={100}
@@ -520,21 +709,39 @@ class ControlTestHarp1 extends React.Component {
           componentShadow={true}
           label='FC1'
         /> */}
-        <QuadrapoleMagnet
-          handleOnClick={this.handlePsOnClick}
-          x={150}
-          y={50}
-          pv={'pva://$(device):$(pv_suffix)'}
-          macros={{'$(device)':'testIOC:PS1','$(pv_suffix)':'Readback'}}
-          usePvUnits={true}
-          usePvLabel={false}
-          alarmSensitive={true}
-          label='Q1'
-          componentShadow={true}
-          textShadow={false}
-          componentGradient={true}
-        />
-        {/* <Harp
+                    {/* <QuadrapoleMagnet
+                      handleOnClick={this.handleOnSystemClick}
+                      x={150}
+                      y={50}
+                      macros={
+                        {
+                          '$(IOC)': 'pva://testIOC',
+                          '$(device)': 'PS1',
+                        }
+                      }
+                      system={{
+                        systemName: '$(IOC):$(device)',
+                        displayName: 'Q1',
+                        editorType: 'editorSinglePS',
+                        devices:
+                        {
+                          device: {
+                            setpointPv: '$(IOC):$(device):Setpoint',
+                            readbackPv: '$(IOC):$(device):Readback',
+                            onOffPv: '$(IOC):$(device):On',
+                          }
+
+                        }
+                      }}
+                      usePvUnits={true}
+                      usePvLabel={false}
+                      alarmSensitive={true}
+
+                      componentShadow={true}
+                      textShadow={false}
+                      componentGradient={true}
+                    /> */}
+                    {/* <Harp
           maxHarpsReached={this.props.maxHarpsReached}
           x={200}
           y={50}
@@ -559,21 +766,26 @@ class ControlTestHarp1 extends React.Component {
           componentGradient={true}
           componentShadow={true}
           label='FC2'
-        /> */}
-        <QuadrapoleMagnet
-          handleOnClick={this.handlePsOnClick}
-          x={300}
-          y={50}
-          pv={'pva://$(device):$(pv_suffix)'}
-          macros={{'$(device)':'testIOC:PS2','$(pv_suffix)':'Readback'}}
-          usePvUnits={true}
-          alarmSensitive={true}
-          label='Q2'
-          componentShadow={true}
-          textShadow={false}
-          componentGradient={true}
-        />
-        {/* <Harp
+        /> */}      
+                     <QuadrapoleMagnet
+                      handleOnClick={this.handleOnSystemClick}
+                     
+                      system={systems2.BeamLine.PowerSupplies.Q1}
+                      {...systems2.BeamLine.PowerSupplies.Q1.svgProps}
+                    />
+                    <QuadrapoleMagnet
+                      handleOnClick={this.handleOnSystemClick}
+                     
+                      system={systems2.BeamLine.PowerSupplies.Q2}
+                      {...systems2.BeamLine.PowerSupplies.Q2.svgProps}
+                    />
+                    <QuadrapoleMagnet
+                      handleOnClick={this.handleOnSystemClick}
+                     
+                      system={systems2.BeamLine.PowerSupplies.Q3}
+                      {...systems2.BeamLine.PowerSupplies.Q3.svgProps}
+                    />
+                    {/* <Harp
           maxHarpsReached={this.props.maxHarpsReached}
           cx={350}
           cy={100}
@@ -587,7 +799,7 @@ class ControlTestHarp1 extends React.Component {
           handleHarpInsertedOrRemoved={this.props.handleHarpInsertedOrRemoved}
 
         /> */}
-        {/* <FC
+                    {/* <FC
 
           cx={400}
           cy={100}
@@ -599,20 +811,42 @@ class ControlTestHarp1 extends React.Component {
           componentShadow={true}
           label='FC3'
         /> */}
-        <QuadrapoleMagnet
-          handleOnClick={this.handlePsOnClick}
-          x={450}
-          y={50}
-          pv={'pva://$(device):$(pv_suffix)'}
-          macros={{'$(device)':'testIOC:PS3','$(pv_suffix)':'Readback'}}
-          usePvUnits={true}
-          alarmSensitive={true}
-          label='Q3'
-          componentShadow={true}
-          textShadow={false}
-          componentGradient={true}
-        />
-        {/* <FC
+                    {/* <QuadrapoleMagnet
+                      handleOnClick={this.handleOnSystemClick}
+                      x={450}
+                      y={50}
+
+                      macros={
+                        {
+                          '$(IOC)': 'pva://testIOC',
+                          '$(device)': 'PS3',
+                        }
+                      }
+                      system={{
+                        systemName: '$(IOC):$(device)',
+                        displayName: 'Q3',
+                        editorType: 'editorSinglePS',
+                        devices:
+                        {
+                          device: {
+                            setpointPv: '$(IOC):$(device):Setpoint',
+                            readbackPv: '$(IOC):$(device):Readback',
+                            onOffPv: '$(IOC):$(device):On',
+                          }
+
+                        }
+                      }}
+
+
+
+                      usePvUnits={true}
+                      alarmSensitive={true}
+                      label='Q3'
+                      componentShadow={true}
+                      textShadow={false}
+                      componentGradient={true}
+                    /> */}
+                    {/* <FC
 
           cx={550}
           cy={100}
@@ -642,7 +876,7 @@ class ControlTestHarp1 extends React.Component {
 
 
 
-        {/* <SteererXYMagnet
+                    {/* <SteererXYMagnet
           handleOnClick={this.handleOnSystemClick}
           system={{
             systemName:'testIOC:STR2',
@@ -704,78 +938,23 @@ class ControlTestHarp1 extends React.Component {
 
                     <SteererMagnet
                       handleOnClick={this.handleOnSystemClick}
-
-                      system={{
-                        systemName: 'testIOC:STR3',
-                        displayName: 'STR3Y',
-                        editorType: 'singlePS',
-                        devices:
-                        {
-                          device: { deviceName: 'testIOC:STR3:Y', readback: 'Readback', setpoint: 'Setpoint' }
-
-                        }
-                      }}
-
-
-                      x={1100}
-                      y={50}
-                     
-                      usePvUnits={true}
-                      prec={3}
-                      
-                      alarmSensitive={true}
-                      labelOffsetY={0}
-                      labelOffsetX={0}
-                      valueOffsetY={0}
-                      valueOffsetX={0}
-                      componentShadow={true}
-                      textShadow={false}
-                      componentGradient={true}
+                      system={systems2.BeamLine.PowerSupplies.STR2}
+                      {...systems2.BeamLine.PowerSupplies.STR2.svgProps}
                     />
 
                     <SteererMagnet
                       handleOnClick={this.handleOnSystemClick}
-                      system={{
-                        systemName: 'testIOC:STR4',
-                        displayName: 'STR4X',
-                        editorType: 'singlePS',
-                        devices:
-                        {
-                          device: { deviceName: 'testIOC:STR4:X', readback: 'Readback', setpoint: 'Setpoint' }
-
-                        }
-                      }}
-                      x={1200}
-                      y={50}
-                      usePvUnits={true}
-                      prec={3}
-
-                      alarmSensitive={true}
-                      labelOffsetY={0}
-                      labelOffsetX={0}
-                      valueOffsetY={0}
-                      valueOffsetX={0}
-                      componentShadow={true}
-                      textShadow={false}
-                      componentGradient={true}
+                      system={systems2.BeamLine.PowerSupplies.STR3}
+                      {...systems2.BeamLine.PowerSupplies.STR3.svgProps}
                     />
 
                     <BendingMagnet
-                      handleOnClick={this.handlePsOnClick}
-                      x={600}
-                      y={50}
-                      pv={'pva://$(device):$(pv_suffix)'}
-                      macros={{ '$(device)': 'testIOC:PS4', '$(pv_suffix)': 'Readback' }}
-                      usePvUnits={true}
-                      usePvLabel={false}
-                      alarmSensitive={true}
-                      label='BM1'
-                      componentShadow={true}
-                      textShadow={false}
-                      componentGradient={true}
+                      handleOnClick={this.handleOnSystemClick}
+                      system={systems2.BeamLine.PowerSupplies.BM1}
+                      {...systems2.BeamLine.PowerSupplies.BM1.svgProps}
                     />
 
-{/* 
+                    {/* 
                     <SlitXY
                       handleOnClick={this.handleOnSystemClick}
                       system={{
@@ -882,7 +1061,7 @@ class ControlTestHarp1 extends React.Component {
                       <Tab label="Table" />
                       <Tab label="Power Supplies Diagnostics" />
                       <Tab label="Ion Source" />
-                      
+
                       <Tab label="Beam Diagnostics" />
                     </Tabs>
                   </AppBar>
@@ -1207,8 +1386,8 @@ class ControlTestHarp1 extends React.Component {
                         </AppBar>
                       </Grid>
                       <Grid item sm={10}>
-                        {sideTabValue === 0 && <TabContainer > <ControlCenterTable handleOnSystemClick={this.handleOnSystemClick} systems={systems['BeamLine']['PowerSupplies']} /> </TabContainer>}
-                        {sideTabValue === 1 && <TabContainer > <ControlCenterTable handleOnSystemClick={this.handleOnSystemClick} systems={systems['BeamLine']['Slits']} /> </TabContainer>}
+                        {sideTabValue === 0 && <TabContainer > <ControlTable handleOnSystemClick={this.handleOnSystemClick} systems={systems['BeamLine']['PowerSupplies']} /> </TabContainer>}
+                        {sideTabValue === 1 && <TabContainer > <ControlTable handleOnSystemClick={this.handleOnSystemClick} systems={systems['BeamLine']['Slits']} /> </TabContainer>}
                       </Grid>
                     </Grid>
                   </Grid>}
@@ -1226,6 +1405,7 @@ class ControlTestHarp1 extends React.Component {
               {((this.state.displayEditor === true) && (this.state.editorType === 'oldPS')) && <ControlRightEx1 key={'editor-key' + this.state.editorSystem.systemName} macros={{ '$(device)': this.state.editorSystem.systemName }} handleCloseEditor={this.handleCloseEditor} />}
               {((this.state.displayEditor === true) && (this.state.editorType === 'steererXY')) && <ControlRightSteererXY key={'editor-key' + this.state.editorSystem.systemName} system={this.state.editorSystem} handleCloseEditor={this.handleCloseEditor} />}
               {((this.state.displayEditor === true) && (this.state.editorType === 'singlePS')) && <ControlRightSinglePS key={'editor-key' + this.state.editorSystem.systemName} system={this.state.editorSystem} handleCloseEditor={this.handleCloseEditor} />}
+              {((this.state.displayEditor === true) && (this.state.editorType === 'editorSinglePS')) && <EditorSinglePS key={'editor-key' + this.state.editorSystem.systemName} system={this.state.editorSystem} handleCloseEditor={this.handleCloseEditor} />}
               {((this.state.displayEditor === true) && (this.state.editorType === 'slitxy')) && <ControlRightSlitXY key={'editor-key' + this.state.editorSystem.systemName} system={this.state.editorSystem} handleCloseEditor={this.handleCloseEditor} />}
             </Grid>
           </Grid>

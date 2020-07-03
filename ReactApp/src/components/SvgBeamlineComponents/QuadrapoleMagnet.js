@@ -1,8 +1,9 @@
-import React from 'react'
+import React,{useState} from 'react'
 
 import Widget from "../SystemComponents/Widgets/Widget";
 import { withStyles } from '@material-ui/core/styles';
-import { grey } from '@material-ui/core/colors'
+import {replaceSystemMacros} from '../SystemComponents/Utils/macroReplacement';
+import { v4 as uuidv4 } from 'uuid';
 const styles = theme => ({
 
 
@@ -24,14 +25,12 @@ const styles = theme => ({
 const QuadrapoleMagnetComponent = (props) => {
 
 
-  const handleOnClick = () => {
-    
+  const handleOnClick = device => event => {
     if (typeof props.handleOnClick !== 'undefined') {
-      props.handleOnClick(props.macros['$(device)']);
+      props.handleOnClick(device);
     }
 
   };
-
 
   const { classes } = props;
   const { initialized } = props;
@@ -77,7 +76,7 @@ const QuadrapoleMagnetComponent = (props) => {
 
 
 
-    <svg onClick={handleOnClick}
+    <svg onClick={handleOnClick(props.system)}
     x={0}
     y={props.y}
     
@@ -154,9 +153,10 @@ const QuadrapoleMagnetComponent = (props) => {
  * */
 
 const QuadrapoleMagnet = (props) => {
-
+  const [system,setSystem]=useState(replaceSystemMacros(props.system,props.system.macros))
+  console.log(system)
   return (
-    <Widget svgWidget={true}  {...props} component={QuadrapoleMagnetComponent} />
+    <Widget svgWidget={true}  {...props} component={QuadrapoleMagnetComponent}  pv={system.readbackPv} label={system.displayName}/>
 
   )
 }

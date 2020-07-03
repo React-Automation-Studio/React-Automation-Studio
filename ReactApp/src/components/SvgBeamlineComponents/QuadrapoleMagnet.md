@@ -11,29 +11,30 @@ import HorizontalBeamline from './HorizontalBeamline';
           y={50}
        
           pv={'pva://testIOC:BeamlineA:BeamOn'}
-          width={'113px'}
+          width={'600px'}
       //    debugBorder={true}
         />
-        <HorizontalBeamline 
-          x={'113px'}
-          y={50}
-          pv={'pva://testIOC:BeamlineB:BeamOn'}
-          width={'148px'}
-     //     debugBorder={true}
-        />
-        <HorizontalBeamline 
-          x={'261px'}
-          y={50}
-          pv={'pva://testIOC:BeamlineC:BeamOn'}
-          width={'150px'}
-    //      debugBorder={true}
-        />
+      
         <QuadrapoleMagnet
        // handleOnClick={this.handleOnClick}
-        x={50}
-        y={50}
-        pv={'pva://$(device):$(pv_suffix)'}
-        macros={{'$(device)':'testIOC:PS4','$(pv_suffix)':'Readback'}}
+          x={50}
+          y={50}
+          system={{ systemName: '$(IOC):$(device)',
+            displayName: 'Q3',
+            editorType: 'editorSinglePS',
+            setpointPv: '$(IOC):$(device):Setpoint',
+            readbackPv: '$(IOC):$(device):Readback',
+            onOffPv: '$(IOC):$(device):On',
+            statusTextPv: '$(IOC):$(device):On',
+            scanPv: '$(IOC):$(device):SimReadback.SCAN',
+            orocPv: '$(IOC):$(device):SimReadback.OROC',
+            rampRatePv: '$(IOC):$(device):RampRate',
+            macros:
+            {
+              '$(IOC)': 'pva://testIOC',
+              '$(device)': 'PS3',
+            },
+            }}
         usePvUnits={true}
         usePvLabel={false}
         alarmSensitive={true}

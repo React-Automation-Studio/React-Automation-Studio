@@ -1,28 +1,26 @@
-import React from 'react'
+import React,{useState} from 'react'
 
 import Widget from "../SystemComponents/Widgets/Widget";
 import { withStyles } from '@material-ui/core/styles';
-import { grey } from '@material-ui/core/colors'
+import {replaceSystemMacros} from '../SystemComponents/Utils/macroReplacement';
+import { v4 as uuidv4 } from 'uuid';
 const styles = theme => ({
 
 
-  textBMLabel: {
+  Label: {
     fill: theme.palette.text.primary
 
   },
-  textBMValue: {
+  Value: {
     fill: theme.palette.text.primary
 
   },
-  textBMLabelDisconneted: {
-    fill: 'dimgrey'
-
-  },
+  
 });
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */
 const SteererMagnetComponent = (props) => {
-
+  
 
   const handleOnClick = device => event => {
     if (typeof props.handleOnClick !== 'undefined') {
@@ -70,7 +68,8 @@ const SteererMagnetComponent = (props) => {
   else{
     color = 'grey';
   }
-  let xOffset=25;
+  let xOffset=40;
+  const componentId = uuidv4();
   return (
 
 
@@ -79,19 +78,19 @@ const SteererMagnetComponent = (props) => {
     x={0}
     y={props.y}
     
-    width={60} 
+    width={80} 
     height= {props.y+100}
    >
    
    <g transform={'translate('+xOffset+','+props.y+')'} 
    onClick={handleOnClick(props.system)}
    >
-        <linearGradient id={props.system.systemName+'elipse-gradient'} gradientTransform="rotate(0)">
+        <linearGradient id={componentId+'elipse-gradient'} gradientTransform="rotate(0)">
           <stop offset="0%" stopOpacity="30" stopColor={'silver'} />
           <stop offset="75%" stopColor={color} />
         </linearGradient>
         <defs>
-          <filter id={props.system.systemName+"elipseShadow"} x="0" y="0" width="600%" height="500%">
+          <filter id={componentId+"elipseShadow"} x="0" y="0" width="600%" height="500%">
             <feOffset result="offOut" in="SourceGraphic" dx="2.5" dy="2.5" />
             <feColorMatrix result="matrixOut" in="offOut" type="matrix"
               values="0.2 0 0 0 0 0 0.2 0 0 0 0 0 0.2 0 0 0 0 0 1 0" />
@@ -99,12 +98,12 @@ const SteererMagnetComponent = (props) => {
               <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
             </filter>
           </defs>
-          <g filter={props.componentShadow===true?"url(#"+props.system.systemName+"elipseShadow)":"" }
+          <g filter={props.componentShadow===true?"url(#"+componentId+"elipseShadow)":"" }
             >
               <g>
 
                 <g transform="translate(-10,-1097)"
-                  fill={props.componentGradient===true?'url(#'+props.system.systemName+'elipse-gradient)':color}
+                  fill={props.componentGradient===true?'url(#'+componentId+'elipse-gradient)':color}
                   style={{'strokeWidth':'0.3',
                   'stroke':'black'}}
                   >
@@ -361,20 +360,20 @@ const SteererMagnetComponent = (props) => {
 
 
 
-                    <text className={classes.textSteererYMagnetValue}
+                    <text className={classes.Value}
                       x={typeof props.valueOffsetX!=='undefined'?props.valueOffsetX:0}
                       y={typeof props.valueOffsetY!=='undefined'?props.valueOffsetY+57.5:57.5}
                       textAnchor='middle'
-                      filter={props.textShadow===true?"url(#"+props.system.systemName+"elipseShadow)":"" }
+                      filter={props.textShadow===true?"url(#"+componentId+"elipseShadow)":"" }
                       >
                         {value+" "+props.units}
 
                       </text>
-                      <text className={classes.textSteererYMagnetLabel}
+                      <text className={classes.Label}
                         x={typeof props.labelOffsetX!=='undefined'?props.labelOffsetX:0}
                         y={typeof props.labelOffsetY!=='undefined'?props.labelOffsetY-30:-30}
                         textAnchor='middle'
-                        filter={props.textShadow===true?"url(#"+props.system.systemName+"elipseShadow)":"" }
+                        filter={props.textShadow===true?"url(#"+componentId+"elipseShadow)":"" }
                         >
                           {props.label}
                         </text>
@@ -397,9 +396,10 @@ const SteererMagnetComponent = (props) => {
  * */
 
 const SteererMagnet = (props) => {
-
+  const [system,setSystem]=useState(replaceSystemMacros(props.system,props.system.macros))
+  
   return (
-    <Widget svgWidget={true}  {...props} component={SteererMagnetComponent} pv={'pva://'+props.system.devices.device.deviceName+":"+props.system.devices.device.readback} label={props.system.displayName}/>
+    <Widget svgWidget={true}  {...props} component={SteererMagnetComponent} pv={system.readbackPv} label={system.displayName}/>
 
   )
 }

@@ -171,9 +171,9 @@ const UserTable = (props) => {
                                 </TableCell>
                                 <TableCell align="center">
                                     {
-                                        props.username === user.username
-                                            ? props.userEdit[`${user.username}-${user.name}`] ?
-                                                <React.Fragment>
+                                        props.username !== user.username
+                                            ? props.userEdit[`${user.username}-${user.name}`]
+                                                ? <React.Fragment>
                                                     <Tooltip title="Apply" placement="bottom">
                                                         <IconButton
                                                             onClick={(event) => { props.applyEdit(event, user.name, user.username) }}

@@ -52,7 +52,6 @@ const UserNotification = () => {
     const [dbConfigURL, setDbConfigURL] = useState('')
     const [alarmList, setAlarmList] = useState([])
     const [userList, setUserList] = useState([])
-    const [backupUserList, setBackupUserList] = useState([])
     const [userEdit, setUserEdit] = useState({})
     const [userTableExpand, setUserTableExpand] = useState(true)
     const [pvListExpand, setPvListExpand] = useState(true)
@@ -61,12 +60,14 @@ const UserNotification = () => {
     const [filterUser, setFilterUser] = useState('')
     const [filterUserRegex, setFilterUserRegex] = useState([])
     const [dictUserRegex, setDictUserRegex] = useState({})
-    const [addRegexVal, setAddRegexVal] = useState('')
     const [alarmIOCPVPrefix, setAlarmIOCPVPrefix] = useState(null)
     const [alarmIOCPVSuffix, setAlarmIOCPVSuffix] = useState(null)
     const [loadPVList, setLoadPVList] = useState(false)
     const [lastAlarm, setLastAlarm] = useState(null)
     const [alarmPVDict, setAlarmPVDict] = useState({})
+    
+    const [addRegexVal, setAddRegexVal] = useState('')
+    const [backupUserList, setBackupUserList] = useState([])
     const [regexError, setRegexError] = useState(false)
 
     const loadPVListRef = useRef(loadPVList);

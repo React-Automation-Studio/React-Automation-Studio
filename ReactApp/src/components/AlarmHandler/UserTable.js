@@ -142,14 +142,14 @@ const UserTable = (props) => {
                                     {
                                         props.userEdit[`${user.username}-${user.name}`]
                                             ? <TextField
-                                                value={props.addRegexVal}
-                                                onChange={props.setAddRegexVal}
+                                                value={props.addRegexVal[`${user.username}-${user.name}`]}
+                                                onChange={(event) => props.setAddRegexVal(event, user.username, user.name)}
                                                 fullWidth={true}
                                                 autoFocus={true}
-                                                error={props.regexError}
-                                                label={props.regexError ? "Invalid Regex" : undefined}
+                                                error={props.regexError[`${user.username}-${user.name}`]}
+                                                label={props.regexError[`${user.username}-${user.name}`] ? "Invalid Regex" : undefined}
                                                 InputProps={
-                                                    props.regexError
+                                                    props.regexError[`${user.username}-${user.name}`]
                                                         ? {
                                                             endAdornment: (
                                                                 <InputAdornment position="end"  >
@@ -159,7 +159,7 @@ const UserTable = (props) => {
                                                         }
                                                         : {
                                                             endAdornment: (
-                                                                <InputAdornment position="end" onClick={(event) => props.addChip(event, user.name, user.username, props.addRegexVal)} >
+                                                                <InputAdornment position="end" onClick={(event) => props.addChip(event, user.name, user.username, props.addRegexVal[`${user.username}-${user.name}`])} >
                                                                     <AddIcon style={{ cursor: 'pointer' }} />
                                                                 </InputAdornment >
                                                             ),

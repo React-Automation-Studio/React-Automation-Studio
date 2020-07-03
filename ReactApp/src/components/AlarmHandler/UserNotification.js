@@ -65,10 +65,10 @@ const UserNotification = () => {
     const [loadPVList, setLoadPVList] = useState(false)
     const [lastAlarm, setLastAlarm] = useState(null)
     const [alarmPVDict, setAlarmPVDict] = useState({})
-    
-    const [addRegexVal, setAddRegexVal] = useState('')
-    const [backupUserList, setBackupUserList] = useState([])
-    const [regexError, setRegexError] = useState(false)
+    const [backupUserList, setBackupUserList] = useState({})
+    const [regexError, setRegexError] = useState({})
+    const [addRegexVal, setAddRegexVal] = useState({})
+
 
     const loadPVListRef = useRef(loadPVList);
     loadPVListRef.current = loadPVList;
@@ -117,15 +117,23 @@ const UserNotification = () => {
         return () => clearTimeout(timer);
     }
 
-    const handleSetAddRegexVal = (event) => {
-        setAddRegexVal(event.target.value)
+    const handleSetAddRegexVal = (event, username, name) => {
+
+        const localAddRegexVal = { ...addRegexVal }
+        localAddRegexVal[`${username}-${name}`] = event.target.value
+        setAddRegexVal(localAddRegexVal)
+
         try {
             new RegExp(event.target.value)
-            setRegexError(false)
+            const localRegexError = { ...regexError }
+            localRegexError[`${username}-${name}`] = false
+            setRegexError(localRegexError)
             setFilterUserRegex([event.target.value])
         }
         catch (e) {
-            setRegexError(true)
+            const localRegexError = { ...regexError }
+            localRegexError[`${username}-${name}`] = true
+            setRegexError(localRegexError)
         }
 
     }
@@ -149,23 +157,30 @@ const UserNotification = () => {
         setFilterUserRegex(match.notifyPVs)
         setFilterUser(match.name)
 
-        const copyUserList = userList.map(a => ({ ...a }))
-        setBackupUserList(copyUserList)
+        if (value) {
+            // only back up when starting to edit
+            const localBackupUserList = { ...backupUserList }
+            localBackupUserList[`${username}-${name}`] = { ...match }
+            setBackupUserList(localBackupUserList)
+        }
 
         let localUserEdit = { ...userEdit }
         localUserEdit[`${username}-${name}`] = value
-
         setUserEdit(localUserEdit)
-    }, [userEdit, userList])
+    }, [userEdit, userList, backupUserList])
 
     const applyEdit = useCallback((event, name, username) => {
-        setAddRegexVal('')
+
+        const localAddRegexVal = { ...addRegexVal }
+        localAddRegexVal[`${username}-${name}`] = ''
+        setAddRegexVal(localAddRegexVal)
+
         handleSetUserEdit(event, name, username, false)
         // Find match and note it's index in userList
         const match = userList.filter(el => el.name === name && el.username === username)[0]
         const id = match['_id']['$oid']
 
-        console.log(match.notifyPVs)
+        // console.log(match.notifyPVs)
         setFilterUserRegex(match.notifyPVs)
 
         let jwt = JSON.parse(localStorage.getItem('jwt'))
@@ -208,15 +223,27 @@ const UserNotification = () => {
             }
         })
 
-    }, [handleSetUserEdit, userList, socket])
+    }, [handleSetUserEdit, userList, socket, addRegexVal])
 
     const cancelEdit = useCallback((event, name, username) => {
         handleSetUserEdit(event, name, username, false)
-        setUserList(backupUserList)
-        setAddRegexVal('')
-        const match = backupUserList.filter(el => el.name === name && el.username === username)[0]
-        setFilterUserRegex(match.notifyPVs)
-    }, [backupUserList, handleSetUserEdit])
+
+        // Find match and note it's index in userList
+        const match = userList.filter(el => el.name === name && el.username === username)[0]
+        const userIndex = userList.indexOf(match)
+
+        // Create new userList
+        const newUserList = [...userList]
+        newUserList[userIndex] = backupUserList[`${username}-${name}`]
+        setUserList(newUserList)
+
+        const localAddRegexVal = { ...addRegexVal }
+        localAddRegexVal[`${username}-${name}`] = ''
+        setAddRegexVal(localAddRegexVal)
+
+        setFilterUserRegex(backupUserList[`${username}-${name}`].notifyPVs)
+
+    }, [backupUserList, handleSetUserEdit, addRegexVal, userList])
 
     const updateUserEmail = useCallback((event, name, username) => {
         // Find match and note it's index in userList
@@ -236,23 +263,28 @@ const UserNotification = () => {
         event.stopPropagation()
         event.preventDefault()
 
-        setAddRegexVal('')
+        // Only add non blank chips
+        if (expression !== '') {
+            const localAddRegexVal = { ...addRegexVal }
+            localAddRegexVal[`${username}-${name}`] = ''
+            setAddRegexVal(localAddRegexVal)
 
-        // Find match and note it's index in userList
-        const match = userList.filter(el => el.name === name && el.username === username)[0]
-        const userIndex = userList.indexOf(match)
+            // Find match and note it's index in userList
+            const match = userList.filter(el => el.name === name && el.username === username)[0]
+            const userIndex = userList.indexOf(match)
 
-        // Update match by adding relevant expression
-        const newNotifyPVs = [...match.notifyPVs, expression]
-        match.notifyPVs = newNotifyPVs
+            // Update match by adding relevant expression
+            const newNotifyPVs = [...match.notifyPVs, expression]
+            match.notifyPVs = newNotifyPVs
 
-        // Create new userList
-        const newUserList = [...userList]
-        newUserList[userIndex] = match
+            // Create new userList
+            const newUserList = [...userList]
+            newUserList[userIndex] = match
 
-        setUserList(newUserList)
-        setFilterUserRegex(newNotifyPVs)
-    }, [userList])
+            setUserList(newUserList)
+            setFilterUserRegex(newNotifyPVs)
+        }
+    }, [userList, addRegexVal])
 
     const deleteChip = useCallback((event, name, username, expression) => {
         event.preventDefault()
@@ -315,8 +347,11 @@ const UserNotification = () => {
 
         const data = JSON.parse(msg.data)
 
-        let localUserEdit = {}
-        let localDictUserRegex = {}
+        const localUserEdit = {}
+        const localDictUserRegex = {}
+        const localBackupUserList = {}
+        const localRegexError = {}
+        const localAddRegexVal = {}
         // let localFilterUser = null
         // let localFilterUserRegex = null
 
@@ -326,14 +361,23 @@ const UserNotification = () => {
                 // localFilterUserRegex = user.notifyPVs
             }
             localDictUserRegex[`${user.username}-${user.name}`] = user.notifyPVs
+            localBackupUserList[`${user.username}-${user.name}`] = user
             localUserEdit[`${user.username}-${user.name}`] = false
+            localRegexError[`${user.username}-${user.name}`] = false
+            localAddRegexVal[`${user.username}-${user.name}`] = ''
             return null
         })
+
+        if (Object.keys(userEdit).length === 0) {
+            setUserEdit(localUserEdit)
+            setRegexError(localRegexError)
+            setAddRegexVal(localAddRegexVal)
+        }
 
         setDictUserRegex(localDictUserRegex)
         // setFilterUser(localFilterUser)
         // setFilterUserRegex(localFilterUserRegex)
-        setUserEdit(localUserEdit)
+        setBackupUserList(localBackupUserList)
         setUserList(data)
     }
 
@@ -444,7 +488,7 @@ const UserNotification = () => {
         pvListHeight = '76vh'
     }
 
-    // console.log(filterUserRegex)
+    // console.log(userEdit)
 
     return (
         <Layout

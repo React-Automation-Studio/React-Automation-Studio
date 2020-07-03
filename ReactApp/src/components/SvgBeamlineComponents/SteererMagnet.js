@@ -33,7 +33,7 @@ const SteererMagnetComponent = (props) => {
   const { classes } = props;
   const { initialized } = props;
  
-  const { severity } = props;
+  const { alarmSeverity } = props;
   const {pvName}=props;
   let value;
   if (initialized ){
@@ -46,11 +46,11 @@ const SteererMagnetComponent = (props) => {
   if (initialized ){
     if (props.alarmSensitive !== 'undefined') {
       if (props.alarmSensitive == true) {
-        if (severity == 1) {
+        if (alarmSeverity == 1) {
           color = props.theme.palette.alarm.minor.main;
 
         }
-        else if (severity == 2) {
+        else if (alarmSeverity == 2) {
           color = props.theme.palette.alarm.major.main;
 
         }

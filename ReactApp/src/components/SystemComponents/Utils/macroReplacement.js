@@ -3,7 +3,7 @@ export const replaceMacros = (pv, macros) => {
 
 
 
-    if (macros) {
+    if (macros&&pv) {
         let macro;
         for (macro in macros) {
             pv = pv.replace(macro.toString(), macros[macro].toString());
@@ -14,12 +14,33 @@ export const replaceMacros = (pv, macros) => {
 
 }
 
+export const replaceArrayMacros = (array, macros) => {
+
+
+
+    if (macros&&array) {
+        let macro;
+        for (macro in macros) {
+            for(let item in array){ 
+                array[item] = array[item].replace(macro.toString(), macros[macro].toString());
+            }
+        }
+    }
+    return (array);
+
+
+}
+
 const replaceObjectMacros = (object, macros) => {
-    if (macros) {
+    if (macros&&object) {
         let keys = Object.keys(object);
         for (let key in keys) {
             if (typeof object[keys[key]] === 'string') {
                 object[keys[key]] = replaceMacros(object[keys[key]], macros)
+
+            }
+            else if (typeof object[keys[key]] === 'array') {
+                object[keys[key]] = replaceArrayMacros(object[keys[key]], macros)
 
             }
             else if (typeof object[keys[key]] === 'object') {
@@ -34,8 +55,8 @@ const replaceObjectMacros = (object, macros) => {
 }
 
 export const replaceSystemMacros = (system, macros) => {
-    if (macros) {
-        replaceObjectMacros(system,macros) 
+    if (macros&&system) {
+        system=replaceObjectMacros(system,macros) 
         
     }
 

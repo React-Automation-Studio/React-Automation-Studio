@@ -13,7 +13,7 @@ const math = create(all, config)
 /**
  * The Widget component creates standard properties, state variables and callbacks to manage the behaviour of a component communicating with one or multiple PVs. It also provides the default RAS contextMenu to the child component.
  * 
- * The label, min, max, units, and tooltip all accept macros that can be replaced by the values defined in the macros prop. 
+ * The label, min, max, units, pv and tooltip all accept macros that can be replaced by the values defined in the macros prop. 
  * 
  * 
  * 
@@ -288,6 +288,7 @@ const math = create(all, config)
 
 
   const handleToggleContextMenu = (event) => {
+    
     event.preventDefault();
     event.stopPropagation();
     setAnchorEl(event.target);
@@ -462,8 +463,10 @@ const math = create(all, config)
     top: props.y,
     left: props.x,
     width: props.width,
+    
     //height: '100%',
   }
+  const Tag=props.svgWidget?"g":"div";
   return (
     <Tooltip   
       title={tooltip} 
@@ -472,13 +475,9 @@ const math = create(all, config)
       disableHoverListener={props.showTooltip===false} 
       {...props.tooltipProps}  >
     
-    <div
-      style={props.svgWidget?svgDivStyle:divStyle}
-      onContextMenu={
-        props.disableContextMenu
-          ? undefined
-          : handleToggleContextMenu
-      }
+    <Tag
+      style={props.svgWidget?undefined:divStyle}
+      onContextMenu={ props.disableContextMenu ? undefined : handleToggleContextMenu}
     >
      
 
@@ -488,8 +487,8 @@ const math = create(all, config)
       {childPv}
       {childPvs}
       {contextMenu}
-    </div>
-     </Tooltip>
+    </Tag>
+   </Tooltip>
   )
 }
 /**

@@ -6,11 +6,14 @@ import { LanDisconnect } from "mdi-material-ui/";
 import { create, all } from 'mathjs';
 import { useTheme } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
+import {replaceMacros,replaceArrayMacros} from '../Utils/macroReplacement';
 const config = { }
 const math = create(all, config)
 
 /**
- * The Widget component creates standard properties, state variables and callbacks to manage the behaviour of a component communicating with one or multiple PVs. It also provides the default RAS contextMenu to the child component. 
+ * The Widget component creates standard properties, state variables and callbacks to manage the behaviour of a component communicating with one or multiple PVs. It also provides the default RAS contextMenu to the child component.
+ * 
+ * The label, min, max, units, and tooltip all accept macros that can be replaced by the values defined in the macros prop. 
  * 
  * 
  * 
@@ -37,6 +40,7 @@ const math = create(all, config)
   const [max, setMax] = useState(0);
   const [units, setUnits] = useState("");
   const [label, setLabel] = useState("");
+  const [tooltip, setTooltip] = useState(replaceMacros(props.tooltip));
   const [anchorEl, setAnchorEl] = useState(null);
   const [openContextMenu, setOpenContextMenu] = useState(false);
   const [contextPVs,setContextPVs]=useState([]);
@@ -90,10 +94,10 @@ const math = create(all, config)
       setLabel(pv.label)
     }
     else {
-      setLabel(props.label)
+      setLabel(replaceMacros(props.label,props.macros))
     }
      // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.label, pv.label])
+  }, [props.label, pv.label,props.macros])
 
   useEffect(() => {
     if (props.usePvUnits) {
@@ -105,7 +109,7 @@ const math = create(all, config)
       }
     }
     else {
-      setUnits(props.units)
+      setUnits(replaceMacros(props.units,props.macros))
     }
      // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.units, pv.units])
@@ -126,8 +130,8 @@ const math = create(all, config)
       setMax(pv.max)
     }
     else {
-      setMin(props.min)
-      setMax(props.max)
+      setMin(props.min,props.macros)
+      setMax(props.max,props.macros)
     }
  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.min, props.max, pv.min, pv.max])
@@ -214,7 +218,7 @@ const math = create(all, config)
   }, [commitChange, min, max, prec])
   useEffect(() => {
     if (props.custom_selection_strings) {
-      setEnumStrings(props.custom_selection_strings)
+      setEnumStrings(replaceArrayMacros(props.custom_selection_strings,props.macros))
     }
     else {
       setEnumStrings(pv.enum_strs)
@@ -462,7 +466,7 @@ const math = create(all, config)
   }
   return (
     <Tooltip   
-      title={props.tooltip} 
+      title={tooltip} 
       disableFocusListener={true}	
       disableTouchListener={true} 
       disableHoverListener={props.showTooltip===false} 

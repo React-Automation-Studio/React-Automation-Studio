@@ -1,6 +1,22 @@
  ``` js
 import BeamLineCanvas from './BeamLineCanvas';
 import HorizontalBeamline from './HorizontalBeamline';
+const  system={
+            componentType: 'SteererXMagnet',
+            systemName: '$(IOC):$(device)',
+            displayName: '$(device)$(XorY)',
+            editorType: 'editorSinglePS',
+            setpointPv: '$(IOC):$(device):$(XorY):Setpoint',
+            readbackPv: '$(IOC):$(device):$(XorY):Readback',
+            statusTextPv: '$(IOC):$(device):$(XorY):On',
+            onOffPv: '$(IOC):$(device):$(XorY):On',
+            macros: {
+              '$(IOC)': 'pva://testIOC',
+              '$(device)': 'STR2',
+              '$(XorY)': 'Y'
+          },
+          };
+
 <BeamLineCanvas width={600} height={300} >
        <HorizontalBeamline 
           x={0}
@@ -24,25 +40,17 @@ import HorizontalBeamline from './HorizontalBeamline';
           width={'150px'}
     //      debugBorder={true}
         />
-        <SteererMagnet
+        <SteererXMagnet
          
-          system={{
-            componentType: 'SteererMagnet',
-            systemName: '$(IOC):$(device)',
-            displayName: '$(device)$(XorY)',
-            editorType: 'editorSinglePS',
-            setpointPv: '$(IOC):$(device):$(XorY):Setpoint',
-            readbackPv: '$(IOC):$(device):$(XorY):Readback',
-            statusTextPv: '$(IOC):$(device):$(XorY):On',
-            onOffPv: '$(IOC):$(device):$(XorY):On',
-            macros: {
+          system={system}
+          readbackPv={'$(IOC):$(device):$(XorY):Readback'}
+          label='STR2'
+          macros= {{
               '$(IOC)': 'pva://testIOC',
               '$(device)': 'STR2',
               '$(XorY)': 'Y'
-          },
-          }}
-
-
+          }
+          }
           x={50}
           y={50}
           usePvUnits={true}
@@ -57,6 +65,7 @@ import HorizontalBeamline from './HorizontalBeamline';
           textShadow={false}
           componentGradient={true}
         />
+      
       
         </BeamLineCanvas>
 

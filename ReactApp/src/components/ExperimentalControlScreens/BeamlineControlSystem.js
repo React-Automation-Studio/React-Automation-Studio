@@ -32,7 +32,7 @@ import BeamLineCanvas from '../SvgBeamlineComponents/BeamLineCanvas';
 import HorizontalBeamline from '../SvgBeamlineComponents/HorizontalBeamline';
 import QuadrapoleMagnet from '../SvgBeamlineComponents/QuadrapoleMagnet';
 import BendingMagnet from '../SvgBeamlineComponents/BendingMagnet';
-import SteererMagnet from '../SvgBeamlineComponents/SteererMagnet';
+import SteererYMagnet from '../SvgBeamlineComponents/SteererYMagnet';
 
 const VerticalTabs = withStyles(theme => ({
   flexContainer: {
@@ -170,7 +170,7 @@ const systems2 = {
 
 
       'STR2': {
-        componentType: 'SteererMagnet',
+        componentType: 'SteererYMagnet',
         systemName: '$(IOC):$(device)',
         displayName: '$(device)$(XorY)',
         editorType: 'editorSinglePS',
@@ -198,7 +198,7 @@ const systems2 = {
 
 
       'STR3': {
-        componentType: 'SteererMagnet',
+        componentType: 'SteererYMagnet',
         systemName: '$(IOC):$(device)',
         displayName: '$(device)$(XorY)',
         editorType: 'editorSinglePS',
@@ -936,15 +936,21 @@ class ControlTestHarp1 extends React.Component {
                       componentGradient={true}
                     /> */}
 
-                    <SteererMagnet
+                    <SteererYMagnet
                       handleOnClick={this.handleOnSystemClick}
                       system={systems2.BeamLine.PowerSupplies.STR2}
+                      readbackPv={systems2.BeamLine.PowerSupplies.STR2.readbackPv}
+                      label={systems2.BeamLine.PowerSupplies.STR2.displayName}
+                      macros={systems2.BeamLine.PowerSupplies.STR2.macros}
                       {...systems2.BeamLine.PowerSupplies.STR2.svgProps}
                     />
 
-                    <SteererMagnet
+                    <SteererYMagnet
                       handleOnClick={this.handleOnSystemClick}
                       system={systems2.BeamLine.PowerSupplies.STR3}
+                      readbackPv={systems2.BeamLine.PowerSupplies.STR3.readbackPv}
+                      label={systems2.BeamLine.PowerSupplies.STR3.displayName}
+                      macros={systems2.BeamLine.PowerSupplies.STR3.macros}
                       {...systems2.BeamLine.PowerSupplies.STR3.svgProps}
                     />
 

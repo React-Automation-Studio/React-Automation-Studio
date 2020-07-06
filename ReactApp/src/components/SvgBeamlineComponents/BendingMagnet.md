@@ -3,7 +3,7 @@ import BeamLineCanvas from './BeamLineCanvas';
 import HorizontalBeamline from './HorizontalBeamline';
 <BeamLineCanvas 
   width={600} 
-  height={300}
+  height={400}
   //debugBorder={true}
   >
        <HorizontalBeamline 

@@ -4,6 +4,7 @@ import Widget from "../SystemComponents/Widgets/Widget";
 import { withStyles } from '@material-ui/core/styles';
 import {replaceSystemMacros} from '../SystemComponents/Utils/macroReplacement';
 import { v4 as uuidv4 } from 'uuid';
+import  {svgHeight,svgCenterY,svgWidth,svgCenterX} from "../SystemComponents/svgConstants";
 const styles = theme => ({
 
 
@@ -70,21 +71,23 @@ const QuadrapoleMagnetComponent = (props) => {
   else{
     color = 'grey';
   }
-  let xOffset=25;
+  let xOffset=0;
   
   return (
 
 
 
-    <svg onClick={handleOnClick(props.system)}
-    x={0}
+    <svg
+    x={props.x}
     y={props.y}
-    
-    width={60} 
-    height= {props.y+100}
-   >
-   
-          <g  >
+
+    width={svgWidth}
+    height={svgHeight}
+  >
+
+      <g transform={'translate(' + svgCenterX + ',' + (svgCenterY) + ')'}
+       onClick={handleOnClick(props.system)}
+      >
           <linearGradient id={pvName + 'elipse-gradient'} gradientTransform="rotate(0)">
               <stop offset="0%" stopOpacity="0.5" stopColor='silver' />
               <stop offset="65%" stopColor={color} />
@@ -103,7 +106,7 @@ const QuadrapoleMagnetComponent = (props) => {
 
 
               cx={xOffset + 15}
-              cy={props.y}
+              cy={0}
               rx="10"
               ry="30"
               filter={props.componentShadow === true ? "url(#" + pvName + "elipseShadow)" : ""}
@@ -111,15 +114,16 @@ const QuadrapoleMagnetComponent = (props) => {
             <ellipse
               fill={props.componentGradient === true ? 'url(#' + pvName + 'elipse-gradient)' : color}
               cx={xOffset}
-              cy={props.y}
+              cy={0}
               rx="10"
               ry="30"
               filter={props.componentShadow === true ? "url(#" + pvName + "elipseShadow)" : ""}
             />
 
             <text className={classes.Value}
-              x={xOffset + 7.5}
-              y={props.y + 57.5}
+               x={typeof props.valueOffsetX !== 'undefined' ? props.valueOffsetX +7.5:7.5}
+               y={typeof props.valueOffsetY !== 'undefined' ? props.valueOffsetY +57.5:57.5}
+          
               textAnchor='middle'
               filter={props.textShadow === true ? "url(#" + pvName + "elipseShadow)" : ""}
             >
@@ -127,8 +131,8 @@ const QuadrapoleMagnetComponent = (props) => {
 
             </text>
             <text className={classes.Label}
-              x={xOffset + 7.5}
-              y={props.y - 40}
+              x={typeof props.labelOffsetX !== 'undefined' ? props.labelOffsetX +7.5:7.5}
+              y={typeof props.labelOffsetY !== 'undefined' ? props.labelOffsetY -40:-40}
               textAnchor='middle'
               filter={props.textShadow === true ? "url(#" + pvName + "elipseShadow)" : ""}
             >

@@ -1,7 +1,7 @@
 import React from 'react'
 
 import Widget from "../SystemComponents/Widgets/Widget";
-
+import  {svgHeight,svgCenterY,svgWidth,svgCenterX} from "../SystemComponents/svgConstants";
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */
 const HorizontalBeamlineComponent = (props) => {
@@ -74,15 +74,17 @@ const HorizontalBeamlineComponent = (props) => {
 
 
     
-    <svg 
-    x={0}
+    <svg
+    x={props.x}
     y={props.y}
-    
-    width={props.width} 
-    height= {props.y+10}
-   >
-    <g>
 
+    width={props.width}
+    height={svgHeight}
+  >
+
+      <g transform={'translate(' + 0 + ',' + (svgCenterY) + ')'}
+        
+      >
 
       
        
@@ -109,14 +111,14 @@ const HorizontalBeamlineComponent = (props) => {
             width={props.width}
             height="5"
             x={0}
-            y={props.y+offsetY - 3} />
+            y={offsetY - 3} />
           <rect
             fill={'white'}
 
             width={props.width}
             height="5"
             x={0}
-            y={props.y+offsetY + 2} />
+            y={offsetY + 2} />
 
 
           <rect
@@ -125,14 +127,14 @@ const HorizontalBeamlineComponent = (props) => {
             width={props.width}
             height="4"
             x={0}
-            y={props.y+offsetY - 3} />
+            y={offsetY - 3} />
           <rect
             fill={'url(#' + pvName + 'Beamline-gradient)'}
 
             width={props.width}
             height="4"
             x={0}
-            y={props.y+offsetY + 3} />
+            y={offsetY + 3} />
         </g>
 
       

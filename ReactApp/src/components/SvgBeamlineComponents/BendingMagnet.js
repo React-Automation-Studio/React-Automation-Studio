@@ -4,6 +4,7 @@ import Widget from "../SystemComponents/Widgets/Widget";
 import { withStyles } from '@material-ui/core/styles';
 import {replaceSystemMacros} from '../SystemComponents/Utils/macroReplacement';
 import { v4 as uuidv4 } from 'uuid';
+import  {svgHeight,svgCenterY,svgWidth,svgCenterX} from "../SystemComponents/svgConstants";
 const styles = theme => ({
 
 
@@ -75,15 +76,17 @@ const BendingMagnetComponent = (props) => {
 
 
 
-    <svg 
-    x={0}
+    <svg
+    x={props.x}
     y={props.y}
-    
-    width={60} 
-    height= {props.y+100}
-   >
-   
-          <g transform={'translate(' + 25 + ',' + props.y + ')'}  onClick={handleOnClick(props.system)}>
+
+    width={svgWidth}
+    height={svgHeight}
+  >
+
+      <g transform={'translate(' + svgCenterX + ',' + (svgCenterY) + ')'}
+         onClick={handleOnClick(props.system)}
+      >
             <linearGradient id={pvName + 'elipse-gradient'} gradientTransform="rotate(0)">
               <stop offset="0%" stopOpacity="30" stopColor={'silver'} />
               <stop offset="75%" stopColor={color_side} />
@@ -131,8 +134,8 @@ const BendingMagnetComponent = (props) => {
 
 
             <text className={classes.textBMValue}
-              x={7.5}
-              y={57.5}
+           x={typeof props.valueOffsetX !== 'undefined' ? props.valueOffsetX +7.5:7.5}
+           y={typeof props.valueOffsetY !== 'undefined' ? props.valueOffsetY +57.5:57.5}
               textAnchor='middle'
               filter={props.textShadow === true ? "url(#" + pvName + "elipseShadow)" : ""}
             >
@@ -140,8 +143,8 @@ const BendingMagnetComponent = (props) => {
 
             </text>
             <text className={classes.textBMLabel}
-              x={7.5}
-              y={-40}
+             x={typeof props.labelOffsetX !== 'undefined' ? props.labelOffsetX +7.5:7.5}
+             y={typeof props.labelOffsetY !== 'undefined' ? props.labelOffsetY -40:-40}
               textAnchor='middle'
               filter={props.textShadow === true ? "url(#" + pvName + "elipseShadow)" : ""}
             >

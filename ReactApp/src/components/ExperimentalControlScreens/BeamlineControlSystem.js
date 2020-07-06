@@ -771,18 +771,29 @@ class ControlTestHarp1 extends React.Component {
                       handleOnClick={this.handleOnSystemClick}
                      
                       system={systems2.BeamLine.PowerSupplies.Q1}
+                      readbackPv={systems2.BeamLine.PowerSupplies.Q1.readbackPv}
+                      label={systems2.BeamLine.PowerSupplies.Q1.displayName}
+                      macros={systems2.BeamLine.PowerSupplies.Q1.macros}
                       {...systems2.BeamLine.PowerSupplies.Q1.svgProps}
+                      
                     />
                     <QuadrapoleMagnet
                       handleOnClick={this.handleOnSystemClick}
                      
                       system={systems2.BeamLine.PowerSupplies.Q2}
+                      readbackPv={systems2.BeamLine.PowerSupplies.Q2.readbackPv}
+                      label={systems2.BeamLine.PowerSupplies.Q2.displayName}
+                      macros={systems2.BeamLine.PowerSupplies.Q2.macros}
                       {...systems2.BeamLine.PowerSupplies.Q2.svgProps}
+                
                     />
                     <QuadrapoleMagnet
                       handleOnClick={this.handleOnSystemClick}
                      
                       system={systems2.BeamLine.PowerSupplies.Q3}
+                      readbackPv={systems2.BeamLine.PowerSupplies.Q3.readbackPv}
+                      label={systems2.BeamLine.PowerSupplies.Q3.displayName}
+                      macros={systems2.BeamLine.PowerSupplies.Q3.macros}
                       {...systems2.BeamLine.PowerSupplies.Q3.svgProps}
                     />
                     {/* <Harp
@@ -957,6 +968,9 @@ class ControlTestHarp1 extends React.Component {
                     <BendingMagnet
                       handleOnClick={this.handleOnSystemClick}
                       system={systems2.BeamLine.PowerSupplies.BM1}
+                      readbackPv={systems2.BeamLine.PowerSupplies.BM1.readbackPv}
+                      label={systems2.BeamLine.PowerSupplies.BM1.displayName}
+                      macros={systems2.BeamLine.PowerSupplies.BM1.macros}
                       {...systems2.BeamLine.PowerSupplies.BM1.svgProps}
                     />
 

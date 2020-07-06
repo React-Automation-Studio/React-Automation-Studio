@@ -32,23 +32,14 @@ import HorizontalBeamline from './HorizontalBeamline';
        // handleOnClick={this.handleOnClick}
         x={50}
         y={50}
-        system={{
-          systemName: '$(IOC):$(device)',
-          displayName: 'BM1',
-          editorType: 'editorSinglePS',
-          setpointPv: '$(IOC):$(device):Setpoint',
-          readbackPv: '$(IOC):$(device):Readback',
-          onOffPv: '$(IOC):$(device):On',
-          statusTextPv: '$(IOC):$(device):On',
-          scanPv: '$(IOC):$(device):SimReadback.SCAN',
-          orocPv: '$(IOC):$(device):SimReadback.OROC',
-          rampRatePv: '$(IOC):$(device):RampRate',
-          macros:
-          {
+       label= 'BM1'
+       readbackPv= '$(IOC):$(device):Readback'
+        macros=
+          {{
           '$(IOC)': 'pva://testIOC',
           '$(device)': 'PS4',
-          },
-		    }}
+          }}
+		    
         usePvUnits={true}
         usePvLabel={false}
         alarmSensitive={true}

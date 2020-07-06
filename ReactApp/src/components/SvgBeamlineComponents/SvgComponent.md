@@ -15,12 +15,11 @@ import HorizontalBeamline from './HorizontalBeamline';
       //    debugBorder={true}
         />
       
-        <QuadrapoleMagnet
+        <SvgComponent
        // handleOnClick={this.handleOnClick}
           x={50}
           y={50}
-          label='Q3'
-          readbackPv= '$(IOC):$(device):Readback'
+          readbackPv={'$(IOC):$(device):Readback'}
           macros=
             {{
               '$(IOC)': 'pva://testIOC',
@@ -29,11 +28,20 @@ import HorizontalBeamline from './HorizontalBeamline';
         usePvUnits={true}
         usePvLabel={false}
         alarmSensitive={true}
-        label='Q1'
+        label='C1'
         componentShadow={true}
         textShadow={false}
         componentGradient={true}
+      >
+         <svg width={50} height={50} viewBox="0 0 13.229 13.229" >
+      <path
+        d="M10.141 10.603l-3.398-1.67-3.303 1.854.538-3.749L1.195 4.47l3.731-.646L6.508.384l1.769 3.348 3.76.442L9.4 6.89z"
+        fill="none"
+        stroke="#000"
+        strokeWidth={0.026}
       />
+    </svg>
+      </SvgComponent>
         </BeamLineCanvas>
 
 ```

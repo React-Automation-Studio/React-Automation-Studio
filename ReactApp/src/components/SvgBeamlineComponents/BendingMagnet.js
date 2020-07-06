@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import {replaceSystemMacros} from '../SystemComponents/Utils/macroReplacement';
 import { v4 as uuidv4 } from 'uuid';
 import  {svgHeight,svgCenterY,svgWidth,svgCenterX} from "../SystemComponents/svgConstants";
+import PropTypes from 'prop-types';
 const styles = theme => ({
 
 
@@ -166,16 +167,218 @@ const BendingMagnetComponent = (props) => {
 
 /**
 * BendingMagnet Beam line component
+* 
+* The label, min, max, units, readbackPv and tooltip all accept macros that can be replaced by the values defined in the macros prop.  
  * */
 
 const BendingMagnet = (props) => {
-  const [system,setSystem]=useState(replaceSystemMacros(props.system,props.system.macros))
+
   return (
-    <Widget svgWidget={true}  {...props} component={BendingMagnetComponent}  pv={system.readbackPv} label={system.displayName} />
+    <Widget svgWidget={true}  {...props} component={BendingMagnetComponent}  pv={props.readbackPv} />
 
   )
 }
 
+BendingMagnet.propTypes = {
+
+
+  /**
+  * Directive to use the  alarm severity status to alter the fields background color.
+  */
+
+  alarmSensitive: PropTypes.bool,
+  /**
+   * Custom PV to define the alarm severity to be used, alarmSensitive must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+   */
+  alarmPv: PropTypes.string,
+  /**
+   * If defined, then the DataConnection and
+   * the widget debugging information will be displayed.
+   */
+  debug: PropTypes.bool,
+
+  /**
+   * Local variable initialization value.
+   * When using loc:// type PVs.
+   */
+  initialLocalVariableValue: PropTypes.string,
+  /**
+   * Custom label to be used, if  usePvLabel is not defined.
+   */
+  label: PropTypes.string,
+  /**
+  * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+  */
+  labelPv: PropTypes.string,
+  /**
+   * Values of macros that will be substituted in the pv name.
+   * eg. {{'$(device)':'testIOC','$(id)':'2'}}
+   */
+  macros: PropTypes.object,
+  /**
+   * Custom maximum to be used, if usePvMinMax is not defined.
+   */
+  max: PropTypes.number,
+  /**
+   * Custom PV to define the maximum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+   */
+  maxPv: PropTypes.string,
+  /**
+   * Custom minimum value to be used, if usePvMinMax is not defined.
+   */
+  min: PropTypes.number,
+  /**
+   * Custom PV to define the minimum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+   */
+  minPv: PropTypes.string,
+
+  /**
+   * Custom precision to round the value.
+   */
+  prec: PropTypes.number,
+  /**
+   * Custom PV to define the precision to be used, usePvPrecision must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+   */
+  precPv: PropTypes.string,
+
+
+
+  /**
+   * Custom units to be used, if usePvUnits is not defined.
+   */
+
+  units: PropTypes.string,
+  /**
+   * Custom PV to define the units to be used, usePvUnits must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+   */
+  unitsPv: PropTypes.string,
+  /**
+   * Directive to fill the component's label with
+   * the value contained in the  pv metadata's DESC field or the labelPv value.
+   * If not defined it uses the custom label as defined by the label prop.
+   */
+  usePvLabel: PropTypes.bool,
+  /**
+   * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver. 
+   * The pyEpics metadata is unfortunately static and the values used will be the initial values that pvserver receives when it connects the first time. 
+   * This is sufficient in most cases except when the user wants to dynamically update the metaData.
+   * In this case a direct connection can be made to all the pv fields by setting useMetadata to false. 
+   * If any of the metadata pvs are defined i.e unitsPv then the PV makes a new data  connection to this alternate pv and will
+   * use the value provided by this pv as the units. 
+   * The same is the case for the precPV, labelPv, alarmPv, unitsPv and minPv.
+   * By setting useMetadata to false also enables connection to other variables as defined by different protocols.
+   */
+  useMetadata: PropTypes.bool,
+  /**
+   * Directive to use the pv metadata's HOPR and LOPR fields or the minPv and maxPv values
+   * to limit the maximum and minimum values
+   * that can be contained in the value.
+   * If not defined it uses the custom min and max as defined by the min and max prop.
+   */
+  usePvMinMax: PropTypes.bool,
+  /**
+   * Directive to round the value using the precision field of the PV metadata or precPv.
+   * If not defined it uses the custom precision as defined by the prec prop.
+   */
+  usePvPrecision: PropTypes.bool,
+  /**
+   * Directive to use the units contained in the   pv metdata's EGU field or unitsPv.
+   *  If not defined it uses the custom units as defined by the units prop.
+   */
+
+
+  usePvUnits: PropTypes.bool,
+  /**
+   * Directive to use PV's string values.
+   */
+  useStringValue: PropTypes.bool,
+
+
+
+
+  /**
+   * If defined, then the string representation of the number can be formatted
+   * using the mathjs format function
+   * eg. numberFormat={{notation: 'engineering',precision: 3}}.
+   * See https://mathjs.org/docs/reference/functions/format.html for more examples
+   */
+  numberFormat: PropTypes.object,
+
+
+  /** Name of the readback process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+  readbackPv: PropTypes.string,
+
+
+
+
+  /**
+  * Tooltip Text
+  */
+  tooltip: PropTypes.string,
+  /**
+   * Directive to show the tooltip
+   */
+  showTooltip: PropTypes.bool,
+  /**
+   *  Any of the MUI Tooltip props can applied by defining them as an object
+   */
+
+  tooltipProps: PropTypes.object,
+  /**
+   *  A System description object the passed to the callback function when the item is clicked on
+   */
+
+  system: PropTypes.object,
+  /**
+   *  A callback function when the item is clicked on, returns the system object
+   */
+
+  handleOnClick: PropTypes.func,
+  /**
+   * Y Offset for the label
+   */
+  labelOffsetY: PropTypes.number,
+  /**
+   * X Offset for the label
+   */
+  labelOffsetX: PropTypes.number,
+  /**
+  * Y Offset for the readback value
+  */
+  valueOffsetY: PropTypes.number,
+  /**
+   * X Offset for the readback value
+   */
+  valueOffsetX: PropTypes.number,
+  /**
+   * enable a shadow behind the text
+   */
+  textShadow: PropTypes.bool,
+  /**
+   * use a gradient fil on the component
+   */
+  componentGradient: PropTypes.bool,
+  /**
+   * enable a shadow behind the component
+   */
+  componentShadow: PropTypes.bool,
+
+
+
+};
+BendingMagnet.defaultProps = {
+  debug: false,
+
+  alarmSensitive: false,
+  showTooltip: false,
+  labelOffsetY: 0,
+  labelOffsetX: 0,
+  valueOffsetY: 0,
+  valueOffsetX: 0,
+  componentShadow: true,
+  textShadow: false,
+  componentGradient: true,
+};
 
 export default withStyles(styles,{withTheme:true})(BendingMagnet)
 

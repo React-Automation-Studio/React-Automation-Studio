@@ -2,18 +2,13 @@ import React from 'react'
 
 import Widget from "../SystemComponents/Widgets/Widget";
 import  {svgHeight,svgCenterY,svgWidth,svgCenterX} from "../SystemComponents/svgConstants";
+import PropTypes from 'prop-types';
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */
 const HorizontalBeamlineComponent = (props) => {
 
 
-  const handleOnClick = device => event => {
-    if (typeof props.handleOnClick !== 'undefined') {
-      props.handleOnClick(device);
-    }
-
-  };
-
+  
 
   const { classes } = props;
   const { initialized } = props;
@@ -159,6 +154,37 @@ const HorizontalBeamline = (props) => {
 
   )
 }
+
+HorizontalBeamline.propTypes = {
+
+
+ 
+ /**
+  * If defined, then the DataConnection and
+  * the widget debugging information will be displayed.
+  */
+ debug: PropTypes.bool,
+
+ /**
+  * Local variable initialization value.
+  * When using loc:// type PVs.
+  */
+ initialLocalVariableValue: PropTypes.string,
+ 
+ /** Name of the  process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+pv: PropTypes.string,
+
+
+
+
+
+
+};
+HorizontalBeamline.defaultProps = {
+ debug: false,
+
+ 
+};
 
 
 export default HorizontalBeamline

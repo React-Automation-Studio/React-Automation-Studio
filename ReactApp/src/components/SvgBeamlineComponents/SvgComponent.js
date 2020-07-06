@@ -24,7 +24,7 @@ const styles = theme => ({
 });
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */
-const QuadrapoleMagnetComponent = (props) => {
+const SvgComponentComponent = (props) => {
 
 
   const handleOnClick = device => event => {
@@ -47,7 +47,7 @@ const QuadrapoleMagnetComponent = (props) => {
     value=0;
   }
   let color = '';
-  console.log(props.theme)
+
   if (initialized ){
     if (props.alarmSensitive !== 'undefined') {
       if (props.alarmSensitive == true) {
@@ -102,24 +102,9 @@ const QuadrapoleMagnetComponent = (props) => {
                 <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
               </filter>
             </defs>
-            <ellipse
-              fill={props.componentGradient === true ? 'url(#' + pvName + 'elipse-gradient)' : color}
-
-
-              cx={xOffset + 15}
-              cy={0}
-              rx="10"
-              ry="30"
-              filter={props.componentShadow === true ? "url(#" + pvName + "elipseShadow)" : ""}
-            />
-            <ellipse
-              fill={props.componentGradient === true ? 'url(#' + pvName + 'elipse-gradient)' : color}
-              cx={xOffset}
-              cy={0}
-              rx="10"
-              ry="30"
-              filter={props.componentShadow === true ? "url(#" + pvName + "elipseShadow)" : ""}
-            />
+            <g>
+              {props.children}
+            </g>
 
             <text className={classes.Value}
                x={typeof props.valueOffsetX !== 'undefined' ? props.valueOffsetX +7.5:7.5}
@@ -159,15 +144,15 @@ const QuadrapoleMagnetComponent = (props) => {
 * The label, min, max, units, readbackPv and tooltip all accept macros that can be replaced by the values defined in the macros prop.  
  * */
 
-const QuadrapoleMagnet = (props) => {
+const SvgComponent = (props) => {
 
   return (
-    <Widget svgWidget={true}  {...props} component={QuadrapoleMagnetComponent}  pv={props.readbackPv} />
+    <Widget svgWidget={true}  {...props} component={SvgComponentComponent}  pv={props.readbackPv} label={props.label}/>
 
   )
 }
 
-QuadrapoleMagnet.propTypes = {
+SvgComponent.propTypes = {
 
 
   /**
@@ -354,7 +339,7 @@ QuadrapoleMagnet.propTypes = {
 
 
 };
-QuadrapoleMagnet.defaultProps = {
+SvgComponent.defaultProps = {
   debug: false,
 
   alarmSensitive: false,
@@ -369,6 +354,6 @@ QuadrapoleMagnet.defaultProps = {
 };
 
 
-export default withStyles(styles,{withTheme:true})(QuadrapoleMagnet)
+export default withStyles(styles,{withTheme:true})(SvgComponent)
 
 

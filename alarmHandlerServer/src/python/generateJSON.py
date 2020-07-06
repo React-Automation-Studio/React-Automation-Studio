@@ -3,24 +3,46 @@ import json
 with open('./initDBData/pvList.json') as f:
     data = json.load(f)
 
-history = []
-history.append({"id": "_GLOBAL", "history": []})
+keys = {}
 
-pvs = []
-pvKey = 0
-subAreaKey = 0
+pvs = {}
+pvsFile = []
+
+history = {}
+historyFile = []
+historyFile.append({"id": "_GLOBAL", "history": []})
+
+
+area = ''
+subArea = ''
+areaList = []
+subAreaList = []
 
 for entry in data:
-    hist_entry = entry
-    hist_entry["history"] = []
-    history.append(hist_entry)
-
-    if(len(entry["id"].split("=")) > 1):
-        # subArea
-        if(len(entry["id"].split("*")) > 1):
+    # area
+    area = entry["pv"].split("=")[0].split("*")[0]
+    if(area not in areaList):
+        # new area
+        areaList.append(area)
+        pvs[area] = {
+            "area": area,
+            "enable": True,
+            "pvs": {}
+        }
+        keys[area] = {
+            "pvKey": 0,
+            "subAreaKey": 0
+        }
+        history[area] = {
+            "id": area,
+            "history": []
+        }
+    if(len(entry["pv"].split("=")) == 1):
+        # area
+        if(len(entry["pv"].split("*")) > 1):
             # pv
-            pv = entry["id"].split("*")[1]
-            pvs[-1]["subArea"+str(subAreaKey-1)]["pvs"]["pv"+str(pvKey)] = {
+            pv = entry["pv"].split("*")[1]
+            pvs[area]["pvs"]["pv"+str(keys[area]["pvKey"])] = {
                 "name": pv,
                 "enable": True,
                 "latch": True,
@@ -29,24 +51,35 @@ for entry in data:
                 "lastAlarmTime": "",
                 "lastAlarmAckTime": ""
             }
-            pvKey += 1
-        else:
+            keys[area]["pvKey"] += 1
+            history[area+"*"+pv] = {
+                "id": area+"*"+pv,
+                "history": []
+            }
+    else:
+        # subArea
+        subArea = entry["pv"].split("=")[1].split("*")[0]
+        identifier = area+"="+subArea
+        if(identifier not in subAreaList):
             # new subArea
-            subArea = entry["id"].split("=")[1]
-            pvKey = 0
-            pvs[-1]["subArea"+str(subAreaKey)] = {
+            subAreaList.append(identifier)
+            keys[identifier] = {
+                "pvKey": 0
+            }
+            pvs[area]["subArea"+str(keys[area]["subAreaKey"])] = {
                 "name": subArea,
                 "enable": True,
                 "pvs": {}
             }
-            subAreaKey += 1
-
-    else:
-        # area
-        if(len(entry["id"].split("*")) > 1):
+            keys[area]["subAreaKey"] += 1
+            history[identifier] = {
+                "id": identifier,
+                "history": []
+            }
+        if(len(entry["pv"].split("*")) > 1):
             # pv
-            pv = entry["id"].split("*")[1]
-            pvs[-1]["pvs"]["pv"+str(pvKey)] = {
+            pv = entry["pv"].split("*")[1]
+            pvs[area]["subArea"+str(keys[area]["subAreaKey"]-1)]["pvs"]["pv"+str(keys[identifier]["pvKey"])] = {
                 "name": pv,
                 "enable": True,
                 "latch": True,
@@ -55,25 +88,24 @@ for entry in data:
                 "lastAlarmTime": "",
                 "lastAlarmAckTime": ""
             }
-            pvKey += 1
-        else:
-            # new area
-            area = entry["id"].split("=")[0]
-            pvKey = 0
-            subAreaKey = 0
-            pvs.append({
-                "area": area,
-                "enable": True,
-                "pvs": {}
-            })
+            keys[identifier]["pvKey"] += 1
+            history[identifier+"*"+pv] = {
+                "id": identifier+"*"+pv,
+                "history": []
+            }
 
-# print(history)
-# print(pvs)
 
-with open('./initDBData/history.json', 'w') as json_file:
-    json.dump(history, json_file)
-json_file.close()
+for value in pvs.values():
+    pvsFile.append(value)
+
+for value in history.values():
+    historyFile.append(value)
+
 
 with open('./initDBData/pvs.json', 'w') as json_file:
-    json.dump(pvs, json_file)
+    json.dump(pvsFile, json_file)
+json_file.close()
+
+with open('./initDBData/history.json', 'w') as json_file:
+    json.dump(historyFile, json_file)
 json_file.close()

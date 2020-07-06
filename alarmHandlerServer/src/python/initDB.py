@@ -60,12 +60,18 @@ dbnames = client.list_database_names()
 if (MONGO_INITDB_ALARM_DATABASE not in dbnames):
     db = client[MONGO_INITDB_ALARM_DATABASE]
     print("Instantiating database:", MONGO_INITDB_ALARM_DATABASE)
-    colnames = ['config', 'glob', 'history', 'pvs', 'users']
+    colnames = ['config', 'history', 'pvs', 'users']
     for col in colnames:
         collection = db[col]
         with open('./initDBData/' + col + '.json') as f:
             jsonData = json.load(f)
         collection.insert_many(jsonData)
+    collection = db['glob']
+    collection.insert_many(
+        [{
+            "enableAllAreas": True
+        }]
+    )
     print(MONGO_INITDB_ALARM_DATABASE, "database instantiated successfully.")
 
     client.close()

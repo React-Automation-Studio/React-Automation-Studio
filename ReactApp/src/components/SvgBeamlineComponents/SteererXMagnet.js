@@ -56,7 +56,7 @@ const SteererXMagnetComponent = (props) => {
 
         }
         else {
-          color = props.theme.palette.primary.main;
+          color = props.theme.palette.beamLineComponent.main;
 
         }
 

@@ -73,7 +73,7 @@ const SteererXYMagnetComponent = (props) => {
 
         }
         else {
-          color = props.theme.palette.primary.main;
+          color = props.theme.palette.beamLineComponent.main;
 
         }
 
@@ -88,7 +88,7 @@ const SteererXYMagnetComponent = (props) => {
   }
 
   const componentId = uuidv4();
-  console.log(props)
+
   return (
 
 

@@ -26,6 +26,9 @@ const useStyles = makeStyles(theme => ({
         marginTop: '0.5em',
         marginBottom: '0.5em'
     },
+    chipOutlinedSecondary: {
+        borderWidth: '1.5px'
+    },
     emailInputField: {
         cursor: 'auto'
     },
@@ -127,6 +130,7 @@ const UserTable = (props) => {
                                     {Object.values(user.notifyPVs).map(expression => {
                                         return (
                                             <Chip
+                                                classes={{ outlinedSecondary: classes.chipOutlinedSecondary }}
                                                 key={expression}
                                                 label={expression}
                                                 variant={expression === fillChipName ? undefined : "outlined"}

@@ -10,7 +10,7 @@ import Grid from '@material-ui/core/Grid';
 
 import ToggleButton from '../../BaseComponents/ToggleButton';
 
-import Card from '@material-ui/core/Card';
+import Paper from '@material-ui/core/Paper';
 
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -51,7 +51,7 @@ const EditorSteererXY =(props)=>{
           </Grid>
         </Grid>
 
-        <Card style={{ padding: 12 }} >
+        <Paper style={{ padding: 12 }}  elevation={props.theme.palette.paperElevation}>
 
 
 
@@ -127,13 +127,13 @@ const EditorSteererXY =(props)=>{
 
           </Grid>
 
-        </Card>
+        </Paper>
         <div className={classes.body1} style={{ marginTop: 12 }}>
 
           {system.displayName + ": Y-Steerer"}
           {/*<TextUpdate  pv='pva://$(device):Setpoint.NAME' macros={props['macros']}  />*/}
 
-          <Card style={{ padding: 12 }} >
+          <Paper style={{ padding: 12 }} elevation={props.theme.palette.paperElevation} >
 
 
 
@@ -209,7 +209,7 @@ const EditorSteererXY =(props)=>{
 
             </Grid>
 
-          </Card>
+          </Paper>
         </div>
 
       </div>

@@ -46,6 +46,8 @@ const VerticalTabs = withStyles(theme => ({
   }
 }))(Tabs)
 
+const yOffset = 0;
+
 const systems2 = {
   'BeamLine': {
     'PowerSupplies': {
@@ -72,7 +74,7 @@ const systems2 = {
           textShadow: false,
           componentGradient: true,
           x: 150,
-          y: 50,
+          y: yOffset,
           prec: 3,
         },
         tableProps: {
@@ -103,7 +105,7 @@ const systems2 = {
           textShadow: false,
           componentGradient: true,
           x: 300,
-          y: 50,
+          y: yOffset,
           prec: 3,
         },
         tableProps: {
@@ -134,7 +136,7 @@ const systems2 = {
           textShadow: false,
           componentGradient: true,
           x: 450,
-          y: 50,
+          y: yOffset,
           prec: 3,
         },
         tableProps: {
@@ -165,7 +167,7 @@ const systems2 = {
           textShadow: false,
           componentGradient: true,
           x: 600,
-          y: 50,
+          y: yOffset,
           prec: 3,
         },
         tableProps: {
@@ -194,7 +196,7 @@ const systems2 = {
 
         },
         svgProps: {
-          x: 785, y: 50,
+          x: 785, y: yOffset,
           usePvUnits: true, prec: 1, alarmSensitive: true,
           labelOffsetY: 0, labelOffsetX: 0, valueOffsetY: 0, valueOffsetX: 0,
           componentShadow: true, textShadow: false, componentGradient: true,
@@ -227,7 +229,7 @@ const systems2 = {
 
         },
         svgProps: {
-          x: 800, y: 50,
+          x: 800, y: yOffset,
           usePvUnits: true, prec: 1, alarmSensitive: true,
           labelOffsetY: 0, labelOffsetX: 0, valueOffsetY: 0, valueOffsetX: 0,
           componentShadow: true, textShadow: false, componentGradient: true,
@@ -258,7 +260,7 @@ const systems2 = {
           '$(XorY)': 'Y'
         },
         svgProps: {
-          x: 1100, y: 50,
+          x: 1100, y: yOffset,
           usePvUnits: true, prec: 1, alarmSensitive: true,
           labelOffsetY: 0, labelOffsetX: 0, valueOffsetY: 0, valueOffsetX: 0,
           componentShadow: true, textShadow: false, componentGradient: true
@@ -286,7 +288,7 @@ const systems2 = {
           '$(XorY)': 'Y'
         },
         svgProps: {
-          x: 1200, y: 50,
+          x: 1200, y: yOffset,
           usePvUnits: true, prec: 1, alarmSensitive: true,
           labelOffsetY: 0, labelOffsetX: 0, valueOffsetY: 0, valueOffsetX: 0,
           componentShadow: true, textShadow: false, componentGradient: true
@@ -321,7 +323,7 @@ const systems2 = {
 
         },
         svgProps: {
-          x: 1100, y: 50,
+          x: 1280, y: yOffset,
           usePvUnits: true, prec: 1, alarmSensitive: true,
           labelOffsetY: 0, labelOffsetX: 0, valueOffsetY: 0, valueOffsetX: 0,
           componentShadow: true, textShadow: false, componentGradient: true
@@ -771,35 +773,35 @@ class ControlTestHarp1 extends React.Component {
                 <Grid item sm={12}>
 
 
-                  <BeamLineCanvas width={'100%'} height={'30vh'}  >
+                  <BeamLineCanvas width={'100%'} height={'22.5vh'}  >
 
                     <HorizontalBeamline
                       x={0}
-                      y={50}
+                      y={yOffset}
                       pv={'pva://testIOC:BeamlineA:BeamOn'}
                       width={'113px'}
                     />
                     <HorizontalBeamline
                       x={'113px'}
-                      y={50}
+                      y={yOffset}
                       pv={'pva://testIOC:BeamlineB:BeamOn'}
                       width={'148px'}
                     />
                     <HorizontalBeamline
                       x={'261px'}
-                      y={50}
+                      y={yOffset}
                       pv={'pva://testIOC:BeamlineC:BeamOn'}
                       width={'150px'}
                     />
                     <HorizontalBeamline
                       x={'411px'}
-                      y={50}
+                      y={yOffset}
                       pv={'pva://testIOC:BeamlineD:BeamOn'}
                       width={'150px'}
                     />
                     <HorizontalBeamline
                       x={'561px'}
-                      y={50}
+                      y={yOffset}
                       pv={'pva://testIOC:BeamlineE:BeamOn'}
                       width={'850px'}
                     />
@@ -819,7 +821,7 @@ class ControlTestHarp1 extends React.Component {
                     {/* <QuadrapoleMagnet
                       handleOnClick={this.handleOnSystemClick}
                       x={150}
-                      y={50}
+                      y={yOffset}
                       macros={
                         {
                           '$(IOC)': 'pva://testIOC',
@@ -851,7 +853,7 @@ class ControlTestHarp1 extends React.Component {
                     {/* <Harp
           maxHarpsReached={this.props.maxHarpsReached}
           x={200}
-          y={50}
+          y={yOffset}
           systemName={'testIOC:Harp1'}
           usePvLabel={false}
           alarmSensitive={true}
@@ -865,7 +867,7 @@ class ControlTestHarp1 extends React.Component {
         <FC
 
           x={250}
-          y={50}
+          y={yOffset}
           systemName={'testIOC:FC2sim'}
           usePvUnits={true}
           usePvLabel={false}
@@ -933,7 +935,7 @@ class ControlTestHarp1 extends React.Component {
                     {/* <QuadrapoleMagnet
                       handleOnClick={this.handleOnSystemClick}
                       x={450}
-                      y={50}
+                      y={yOffset}
 
                       macros={
                         {
@@ -1096,21 +1098,8 @@ class ControlTestHarp1 extends React.Component {
 
 
 
-                      x={1280}
-                      y={50}
-                      prec={2}
-                      usePrecision={true}
-                      usePvUnits={true}
-                      usePvLabel={false}
-                      alarmSensitive={true}
-                      label='SlitXY 2'
-                      //labelOffsetY={-14}
-                      // labelOffsetX={0}
-                      // valueOffsetY={18}
-                      // valueOffsetX={0}
-                      componentShadow={true}
-                      textShadow={false}
-                      componentGradient={true}
+                     
+                     
                     />
 
 

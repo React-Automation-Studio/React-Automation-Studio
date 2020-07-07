@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -7,12 +7,11 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import PV from '../../SystemComponents/PV';
+
 import TextUpdate from '../../BaseComponents/TextUpdate';
 import { Typography } from '@material-ui/core';
 import { replaceSystemMacros } from '../../SystemComponents/Utils/macroReplacement';
-/* eslint-disable eqeqeq */
-/* eslint-disable no-unused-vars */
+
 const styles = theme => ({
   root: {
     width: '100%',
@@ -137,7 +136,7 @@ const ControlTable = (props) => {
               <TableCell className={classes.tableCell} align="center">{"N/A"}</TableCell>
               <TableCell className={classes.tableCell} align="center">
                 {(typeof row.rowProps) === 'undefined' ? undefined : (typeof row.rowProps.useStatus) === 'undefined' ? '-' : row.rowProps.useStatus === true ?
-                  //row.statusTextPv.value :
+                  
                   <TextUpdate
                     pv={row.statusTextPv}
                     useStringValue={true}

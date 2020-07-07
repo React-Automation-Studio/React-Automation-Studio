@@ -29,7 +29,22 @@ const SteererXYMagnetComponent = (props) => {
     }
 
   };
+  const checkPrecision = (value,prec) => {
+    if (props.usePvPrecision===true || (typeof props.prec!=='undefined')) {
+      let precision = parseInt(prec);
+      let tempvalue = parseFloat(value);
+      if (!isNaN(tempvalue)) {
+        return tempvalue.toFixed(precision);
 
+      }
+      else {
+        return value;
+      }
+    }
+    else {
+      return (value)
+    }
+  }
   // const handleContextMenu = event => {
   //   props.handleToggleContextMenu(event);
 
@@ -47,9 +62,12 @@ const SteererXYMagnetComponent = (props) => {
   let unitsY=""
   let valueX;
   let valueY;
+  
   if (initialized) {
-    valueX = xPv.value;
-    valueY = yPv.value;
+    let precX=props.usePvPrecision?xPv.prec:props.prec;
+    let precY=props.usePvPrecision?yPv.prec:props.prec;
+    valueX = checkPrecision(xPv.value,precX)
+    valueY = checkPrecision(yPv.value,precY)
   }
   else {
     valueX = 0;
@@ -58,8 +76,8 @@ const SteererXYMagnetComponent = (props) => {
   let color = '';
   if (initialized) {
     
-      unitsX=props.usePvUnits===true?xPv.units:props.units?props.units:"";
-      unitsY=props.usePvUnits===true?yPv.units:props.units?props.units:"";
+      unitsX=props.usePvUnits===true?xPv.units:props.unitsX?props.unitsX:"";
+      unitsY=props.usePvUnits===true?yPv.units:props.unitsY?props.unitsY:"";
     
     if (props.alarmSensitive !== 'undefined') {
       if (props.alarmSensitive == true) {
@@ -88,7 +106,7 @@ const SteererXYMagnetComponent = (props) => {
   }
 
   const componentId = uuidv4();
-
+  console.log(props,valueX,valueY)
   return (
 
 
@@ -382,13 +400,13 @@ const SteererXYMagnetComponent = (props) => {
 
 
 
-        <text className={classes.Value}
+        <text className={classes.Value} 
           x={typeof props.valueOffsetX !== 'undefined' ? props.valueOffsetX : 0}
           y={typeof props.valueOffsetY !== 'undefined' ? props.valueOffsetY + 57.5 : 57.5}
           textAnchor='middle'
           filter={props.textShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
         >
-          {valueX + " " + unitsX}
+          {"X: "+valueX + " " + unitsX}
 
         </text>
         <text className={classes.Value}
@@ -397,7 +415,7 @@ const SteererXYMagnetComponent = (props) => {
           textAnchor='middle'
           filter={props.textShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
         >
-          {valueY + " " + unitsY}
+          {"Y: "+valueY + " " + unitsY}
 
         </text>
         <text className={classes.Label}

@@ -19,6 +19,8 @@ import ControlRightSteererXY from '../ControlScreens/GridComponents/ControlRight
 import ControlRightSlitXY from '../ControlScreens/GridComponents/ControlRightSlitXY'
 import ControlRightSinglePS from '../ControlScreens/GridComponents/ControlRightSinglePS'
 import EditorSinglePS from '../ExperimentalControlScreens/GridComponents/EditorSinglePS'
+import EditorSlitXY from '../ExperimentalControlScreens/GridComponents/EditorSlitXY'
+import EditorSteererXY from '../ExperimentalControlScreens/GridComponents/EditorSteererXY'
 import ControlTopHarpEx1 from '../ControlScreens/GridComponents/ControlTopHarpEx1'
 
 import HarpGraph from '../SiteSpecificComponents/iThembaLABS/CompoundComponents/HarpGraph';
@@ -33,7 +35,8 @@ import HorizontalBeamline from '../SvgBeamlineComponents/HorizontalBeamline';
 import QuadrapoleMagnet from '../SvgBeamlineComponents/QuadrapoleMagnet';
 import BendingMagnet from '../SvgBeamlineComponents/BendingMagnet';
 import SteererYMagnet from '../SvgBeamlineComponents/SteererYMagnet';
-
+import SteererXYMagnet from '../SvgBeamlineComponents/SteererXYMagnet';
+import SlitXY from '../SvgBeamlineComponents/SlitXY';
 const VerticalTabs = withStyles(theme => ({
   flexContainer: {
     flexDirection: 'column'
@@ -62,14 +65,15 @@ const systems2 = {
           '$(IOC)': 'pva://testIOC',
           '$(device)': 'PS1',
         },
-        svgProps:{
-          usePvUnits:true,
-          alarmSensitive:true,
-          componentShadow:true,
-          textShadow:false,
-          componentGradient:true,
-          x:150,
-          y:50,
+        svgProps: {
+          usePvUnits: true,
+          alarmSensitive: true,
+          componentShadow: true,
+          textShadow: false,
+          componentGradient: true,
+          x: 150,
+          y: 50,
+          prec:3,
         },
         tabelProps: {
           prec: 3, units: "A", useStatus: true
@@ -92,14 +96,15 @@ const systems2 = {
           '$(IOC)': 'pva://testIOC',
           '$(device)': 'PS2',
         },
-        svgProps:{
-          usePvUnits:true,
-          alarmSensitive:true,
-          componentShadow:true,
-          textShadow:false,
-          componentGradient:true,
-          x:300,
-          y:50,
+        svgProps: {
+          usePvUnits: true,
+          alarmSensitive: true,
+          componentShadow: true,
+          textShadow: false,
+          componentGradient: true,
+          x: 300,
+          y: 50,
+          prec:3,
         },
         tabelProps: {
           prec: 3, units: "A", useStatus: true
@@ -122,14 +127,15 @@ const systems2 = {
           '$(IOC)': 'pva://testIOC',
           '$(device)': 'PS3',
         },
-        svgProps:{
-          usePvUnits:true,
-          alarmSensitive:true,
-          componentShadow:true,
-          textShadow:false,
-          componentGradient:true,
-          x:450,
-          y:50,
+        svgProps: {
+          usePvUnits: true,
+          alarmSensitive: true,
+          componentShadow: true,
+          textShadow: false,
+          componentGradient: true,
+          x: 450,
+          y: 50,
+          prec:3,
         },
         tabelProps: {
           prec: 3, units: "A", useStatus: true
@@ -152,14 +158,15 @@ const systems2 = {
           '$(IOC)': 'pva://testIOC',
           '$(device)': 'PS4',
         },
-        svgProps:{
-          usePvUnits:true,
-          alarmSensitive:true,
-          componentShadow:true,
-          textShadow:false,
-          componentGradient:true,
-          x:600,
-          y:50,
+        svgProps: {
+          usePvUnits: true,
+          alarmSensitive: true,
+          componentShadow: true,
+          textShadow: false,
+          componentGradient: true,
+          x: 600,
+          y: 50,
+          prec:3,
         },
         tabelProps: {
           prec: 3, units: "A", useStatus: true
@@ -167,7 +174,71 @@ const systems2 = {
 
       },
 
-
+      'STR1XY': {
+        componentType: 'SteererXYMagnet',
+        systemName: '$(IOC):$(device)',
+        displayName: '$(device)XY',
+        editorType: 'editorSteererXY',
+        ySetpointPv: '$(IOC):$(device):Y:Setpoint',
+        yReadbackPv: '$(IOC):$(device):Y:Readback',
+        yOnPv: '$(IOC):$(device):Y:On',
+        xSetpointPv: '$(IOC):$(device):X:Setpoint',
+        xReadbackPv: '$(IOC):$(device):X:Readback',
+        xOnPv: '$(IOC):$(device):X:On',
+        //scanPv: '$(IOC):$(device):SimReadback.SCAN',
+        //orocPv: '$(IOC):$(device):SimReadback.OROC',
+        
+        macros: {
+          '$(IOC)': 'pva://testIOC',
+          '$(device)': 'STR1',
+        
+        },
+        svgProps: {
+          x: 785, y: 50,
+          usePvUnits: true, prec: 1, alarmSensitive: true,
+          labelOffsetY: 0, labelOffsetX: 0, valueOffsetY: 0, valueOffsetX: 0,
+          componentShadow: true, textShadow: false, componentGradient: true,
+          
+         
+          
+          
+        },
+        tabelProps: {
+          prec: 3, units: "A", useStatus: true
+        },
+      },
+      'STR2XY': {
+        componentType: 'SteererXYMagnet',
+        systemName: '$(IOC):$(device)',
+        displayName: '$(device)XY',
+        editorType: 'editorSteererXY',
+        ySetpointPv: '$(IOC):$(device):Y:Setpoint',
+        yReadbackPv: '$(IOC):$(device):Y:Readback',
+        yOnPv: '$(IOC):$(device):Y:On',
+        xSetpointPv: '$(IOC):$(device):X:Setpoint',
+        xReadbackPv: '$(IOC):$(device):X:Readback',
+        xOnPv: '$(IOC):$(device):X:On',
+        //scanPv: '$(IOC):$(device):SimReadback.SCAN',
+        //orocPv: '$(IOC):$(device):SimReadback.OROC',
+        
+        macros: {
+          '$(IOC)': 'pva://testIOC',
+          '$(device)': 'STR2',
+        
+        },
+        svgProps: {
+          x: 800, y: 50,
+          usePvUnits: true, prec: 1, alarmSensitive: true,
+          labelOffsetY: 0, labelOffsetX: 0, valueOffsetY: 0, valueOffsetX: 0,
+          componentShadow: true, textShadow: false, componentGradient: true,
+          valueOffsetY:30,
+          labelOffsetY:-15
+          
+        },
+        tabelProps: {
+          prec: 3, units: "A", useStatus: true
+        },
+      },
 
       'STR2': {
         componentType: 'SteererYMagnet',
@@ -177,6 +248,7 @@ const systems2 = {
         setpointPv: '$(IOC):$(device):$(XorY):Setpoint',
         readbackPv: '$(IOC):$(device):$(XorY):Readback',
         statusTextPv: '$(IOC):$(device):$(XorY):On',
+        statusOnPv: '$(IOC):$(device):$(XorY):On',
         //scanPv: '$(IOC):$(device):SimReadback.SCAN',
         //orocPv: '$(IOC):$(device):SimReadback.OROC',
         onOffPv: '$(IOC):$(device):$(XorY):On',
@@ -223,6 +295,41 @@ const systems2 = {
           prec: 3, units: "A", useStatus: true
         },
       }
+
+    },
+    'Slits':{
+
+      'SLITXY2': {
+        componentType: 'SlitXY',
+        systemName: '$(IOC):$(device)',
+        displayName: '$(device)',
+        editorType: 'editorSlitXY',
+        xDriveOnPv:'$(IOC):$(device):X:Drive:On',
+        yDriveOnPv:'$(IOC):$(device):Y:Drive:On',
+        xGapReadbackPv:'$(IOC):$(device):X:Gap:Readback',
+        yGapReadbackPv:'$(IOC):$(device):Y:Gap:Readback',  
+        xOffsetReadbackPv:'$(IOC):$(device):X:Offset:Readback',
+        yOffsetReadbackPv:'$(IOC):$(device):Y:Offset:Readback' ,
+        xGapSetpointPv:'$(IOC):$(device):X:Gap:Setpoint',
+        yGapSetpointPv:'$(IOC):$(device):Y:Gap:Setpoint',  
+        xOffsetSetpointPv:'$(IOC):$(device):X:Offset:Setpoint',
+        yOffsetSetpointPv:'$(IOC):$(device):Y:Offset:Setpoint' ,
+        label:'$(device)',
+        macros: {
+          '$(IOC)': 'pva://testIOC',
+          '$(device)': 'SLITXY2',
+        
+        },
+        svgProps: {
+          x: 1100, y: 50,
+          usePvUnits: true, prec: 1, alarmSensitive: true,
+          labelOffsetY: 0, labelOffsetX: 0, valueOffsetY: 0, valueOffsetX: 0,
+          componentShadow: true, textShadow: false, componentGradient: true
+        },
+        tabelProps: {
+          prec: 1, units: "mm", useStatus: true
+        },
+      },
 
     }
 
@@ -664,7 +771,7 @@ class ControlTestHarp1 extends React.Component {
                 <Grid item sm={12}>
 
 
-                  <BeamLineCanvas width={'100%'} height={'20vh'}  >
+                  <BeamLineCanvas width={'100%'} height={'30vh'}  >
 
                     <HorizontalBeamline
                       x={0}
@@ -766,30 +873,31 @@ class ControlTestHarp1 extends React.Component {
           componentGradient={true}
           componentShadow={true}
           label='FC2'
-        /> */}      
-                     <QuadrapoleMagnet
+        /> */}
+                    <QuadrapoleMagnet
                       handleOnClick={this.handleOnSystemClick}
-                     
+
                       system={systems2.BeamLine.PowerSupplies.Q1}
                       pv={systems2.BeamLine.PowerSupplies.Q1.readbackPv}
                       label={systems2.BeamLine.PowerSupplies.Q1.displayName}
                       macros={systems2.BeamLine.PowerSupplies.Q1.macros}
                       {...systems2.BeamLine.PowerSupplies.Q1.svgProps}
                       
+
                     />
                     <QuadrapoleMagnet
                       handleOnClick={this.handleOnSystemClick}
-                     
+
                       system={systems2.BeamLine.PowerSupplies.Q2}
                       pv={systems2.BeamLine.PowerSupplies.Q2.readbackPv}
                       label={systems2.BeamLine.PowerSupplies.Q2.displayName}
                       macros={systems2.BeamLine.PowerSupplies.Q2.macros}
                       {...systems2.BeamLine.PowerSupplies.Q2.svgProps}
-                
+
                     />
                     <QuadrapoleMagnet
                       handleOnClick={this.handleOnSystemClick}
-                     
+
                       system={systems2.BeamLine.PowerSupplies.Q3}
                       pv={systems2.BeamLine.PowerSupplies.Q3.readbackPv}
                       label={systems2.BeamLine.PowerSupplies.Q3.displayName}
@@ -887,66 +995,36 @@ class ControlTestHarp1 extends React.Component {
 
 
 
-                    {/* <SteererXYMagnet
-          handleOnClick={this.handleOnSystemClick}
-          system={{
-            systemName:'testIOC:STR2',
-            displayName:'STR2XY',
-            editorType:'steererXY',
-            devices:
-            {
-              xDevice:{deviceName:'testIOC:STR2:X',readback:'Readback',setpoint:'Setpoint'},
-              yDevice:{deviceName:'testIOC:STR2:Y',readback:'Readback',setpoint:'Setpoint'}
-            }
-          }}
 
-          cx={800}
-          cy={100}
-          xUnits={'A'}
-          yUnits={'A'}
-          prec={3}
-          
-          alarmSensitive={true}
-          labelOffsetY={-27}
-          labelOffsetX={0}
-          valueOffsetY={35}
-          valueOffsetX={0}
-          componentShadow={true}
-          textShadow={false}
-          componentGradient={true}
-        /> */}
+                   
+<SteererXYMagnet
 
-                    {/* <SteererXYMagnet
+handleOnClick={this.handleOnSystemClick}
+system={systems2.BeamLine.PowerSupplies.STR1XY}
+
+xPv={systems2.BeamLine.PowerSupplies.STR1XY.xReadbackPv}
+yPv={systems2.BeamLine.PowerSupplies.STR1XY.yReadbackPv}
+label={systems2.BeamLine.PowerSupplies.STR1XY.displayName}
+macros={systems2.BeamLine.PowerSupplies.STR1XY.macros}
+{...systems2.BeamLine.PowerSupplies.STR1XY.svgProps}
+
+
+
+/> 
+                   <SteererXYMagnet
 
                       handleOnClick={this.handleOnSystemClick}
-                      system={{
-                        systemName: 'testIOC:STR1',
-                        displayName: 'STR1XY',
-                        editorType: 'steererXY',
-                        devices:
-                        {
-                          xDevice: { deviceName: 'testIOC:STR1:X', readback: 'Readback', setpoint: 'Setpoint' },
-                          yDevice: { deviceName: 'testIOC:STR1:Y', readback: 'Readback', setpoint: 'Setpoint' }
-                        }
-                      }}
-                      cx={785}
-                      cy={100}
-
-                      xUnits={'A'}
-                      yUnits={'A'}
-                      prec={3}
-
-                      alarmSensitive={true}
-
-                      labelOffsetY={5}
-                      labelOffsetX={0}
-                      valueOffsetY={5}
-                      valueOffsetX={0}
-                      componentShadow={true}
-                      textShadow={false}
-                      componentGradient={true}
-                    /> */}
-
+                      system={systems2.BeamLine.PowerSupplies.STR2XY}
+                    
+                      xPv={systems2.BeamLine.PowerSupplies.STR2XY.xReadbackPv}
+                      yPv={systems2.BeamLine.PowerSupplies.STR2XY.yReadbackPv}
+                      label={systems2.BeamLine.PowerSupplies.STR2XY.displayName}
+                      macros={systems2.BeamLine.PowerSupplies.STR2XY.macros}
+                      {...systems2.BeamLine.PowerSupplies.STR2XY.svgProps}
+                   
+                     
+                     
+                    /> 
                     <SteererYMagnet
                       handleOnClick={this.handleOnSystemClick}
                       system={systems2.BeamLine.PowerSupplies.STR2}
@@ -1005,36 +1083,35 @@ class ControlTestHarp1 extends React.Component {
                       textShadow={false}
                       componentGradient={true}
                     /> */}
-                    {/* <SlitXY
+                     <SlitXY
                       handleOnClick={this.handleOnSystemClick}
-                      system={{
-                        systemName: 'testIOC:SLITXY2',
-                        displayName: 'SLITXY2',
-                        editorType: 'slitxy',
-                        devices:
-                        {
-                          xGapDevice: { deviceName: 'testIOC:SLITXY2:X:Gap', readback: 'Readback', setpoint: 'Setpoint' },
-                          xOffsetDevice: { deviceName: 'testIOC:SLITXY2:X:Offset', readback: 'Readback', setpoint: 'Setpoint' },
-                          yGapDevice: { deviceName: 'testIOC:SLITXY2:Y:Gap', readback: 'Readback', setpoint: 'Setpoint' },
-                          yOffsetDevice: { deviceName: 'testIOC:SLITXY2:Y:Offset', readback: 'Readback', setpoint: 'Setpoint' }
-                        }
-                      }}
-                      cx={1300}
-                      cy={100}
+                      system={systems2.BeamLine.Slits.SLITXY2}
+                      xGapPv={systems2.BeamLine.Slits.SLITXY2.xGapReadbackPv}
+                      yGapPv={systems2.BeamLine.Slits.SLITXY2.yGapReadbackPv}
+                      xOffsetPv={systems2.BeamLine.Slits.SLITXY2.xOffsetReadbackPv}
+                      yOffsetPv={systems2.BeamLine.Slits.SLITXY2.yOffsetReadbackPv}
+                      label={systems2.BeamLine.Slits.SLITXY2.displayName}
+                      macros={systems2.BeamLine.Slits.SLITXY2.macros}
+                      {...systems2.BeamLine.Slits.SLITXY2.svgProps}
+                   
+              
+                    
+                      x={1280}
+                      y={50}
                       prec={2}
                       usePrecision={true}
                       usePvUnits={true}
                       usePvLabel={false}
                       alarmSensitive={true}
-                      label='SlitXY 1'
-                      labelOffsetY={-14}
-                      labelOffsetX={0}
-                      valueOffsetY={18}
-                      valueOffsetX={0}
+                      label='SlitXY 2'
+                      //labelOffsetY={-14}
+                     // labelOffsetX={0}
+                     // valueOffsetY={18}
+                     // valueOffsetX={0}
                       componentShadow={true}
                       textShadow={false}
                       componentGradient={true}
-                    /> */}
+                    /> 
 
 
                     {/* <Harp
@@ -1423,10 +1500,10 @@ class ControlTestHarp1 extends React.Component {
               {((this.state.displayEditor === true) && (this.state.editorMacros['$(device)'] === 'testIOC:PS4')) && <ControlRightEx1 macros={this.state.editorMacros} handleCloseEditor={this.handleCloseEditor} />}
               {((this.state.displayEditor === true) && (this.state.editorMacros['$(device)'] === 'testIOC:STR1:X')) && <ControlRightEx1 macros={this.state.editorMacros} handleCloseEditor={this.handleCloseEditor} />}
               {((this.state.displayEditor === true) && (this.state.editorType === 'oldPS')) && <ControlRightEx1 key={'editor-key' + this.state.editorSystem.systemName} macros={{ '$(device)': this.state.editorSystem.systemName }} handleCloseEditor={this.handleCloseEditor} />}
-              {((this.state.displayEditor === true) && (this.state.editorType === 'steererXY')) && <ControlRightSteererXY key={'editor-key' + this.state.editorSystem.systemName} system={this.state.editorSystem} handleCloseEditor={this.handleCloseEditor} />}
+              {((this.state.displayEditor === true) && (this.state.editorType === 'editorSteererXY')) && <EditorSteererXY key={'editor-key' + this.state.editorSystem.systemName} system={this.state.editorSystem} handleCloseEditor={this.handleCloseEditor} />}
               {((this.state.displayEditor === true) && (this.state.editorType === 'singlePS')) && <ControlRightSinglePS key={'editor-key' + this.state.editorSystem.systemName} system={this.state.editorSystem} handleCloseEditor={this.handleCloseEditor} />}
               {((this.state.displayEditor === true) && (this.state.editorType === 'editorSinglePS')) && <EditorSinglePS key={'editor-key' + this.state.editorSystem.systemName} system={this.state.editorSystem} handleCloseEditor={this.handleCloseEditor} />}
-              {((this.state.displayEditor === true) && (this.state.editorType === 'slitxy')) && <ControlRightSlitXY key={'editor-key' + this.state.editorSystem.systemName} system={this.state.editorSystem} handleCloseEditor={this.handleCloseEditor} />}
+              {((this.state.displayEditor === true) && (this.state.editorType === 'editorSlitXY')) && <EditorSlitXY key={'editor-key' + this.state.editorSystem.systemName} system={this.state.editorSystem} handleCloseEditor={this.handleCloseEditor} />}
             </Grid>
           </Grid>
         </TraditionalLayout>

@@ -20,7 +20,7 @@ import HorizontalBeamline from './HorizontalBeamline';
           x={50}
           y={50}
           label='Q3'
-          readbackPv= '$(IOC):$(device):Readback'
+          pv= '$(IOC):$(device):Readback'
           macros=
             {{
               '$(IOC)': 'pva://testIOC',

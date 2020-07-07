@@ -75,14 +75,14 @@ const SteererXMagnetComponent = (props) => {
 
 
     <svg
-      x={0}
-      y={0}
+    x={props.x}
+    y={props.y}
 
-      width={svgWidth}
-      height={svgHeight}
-    >
+    width={svgWidth}
+    height={svgHeight}
+  >
 
-      <g transform={'translate(' + svgCenterX + ',' + (svgCenterY) + ')'}
+    <g transform={'translate(' + svgCenterX + ',' + (svgCenterY) + ')'}
         onClick={handleOnClick(props.system)}
       >
         <linearGradient id={componentId + 'elipse-gradient'} gradientTransform="rotate(0)">
@@ -396,14 +396,14 @@ const SteererXMagnetComponent = (props) => {
 /**
 * SteererXMagnet Beam line component
 *
-*  The label, min, max, units, readbackPv and tooltip all accept macros that can be replaced by the values defined in the macros prop.  
+*  The label, min, max, units, pv and tooltip all accept macros that can be replaced by the values defined in the macros prop.  
 */
 
 const SteererXMagnet = (props) => {
  
 
   return (
-    <Widget svgWidget={true}  {...props} component={SteererXMagnetComponent} pv={props.readbackPv} label={props.label} />
+    <Widget svgWidget={true}  {...props} component={SteererXMagnetComponent} pv={props.pv} label={props.label} />
 
   )
 }
@@ -533,8 +533,8 @@ SteererXMagnet.propTypes = {
   numberFormat: PropTypes.object,
 
 
-  /** Name of the readback process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
-  readbackPv: PropTypes.string,
+  /** Name of the pv process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+  pv: PropTypes.string,
 
 
 
@@ -571,11 +571,11 @@ SteererXMagnet.propTypes = {
    */
   labelOffsetX: PropTypes.number,
   /**
-  * Y Offset for the readback value
+  * Y Offset for the pv value
   */
   valueOffsetY: PropTypes.number,
   /**
-   * X Offset for the readback value
+   * X Offset for the pv value
    */
   valueOffsetX: PropTypes.number,
   /**
@@ -590,13 +590,22 @@ SteererXMagnet.propTypes = {
    * enable a shadow behind the component
    */
   componentShadow: PropTypes.bool,
+  /**
+   * Direct to show the label
+   */
+  showLabel: PropTypes.bool,
+  /**
+   * Direct to show the value
+   */
+  showValue: PropTypes.bool,
 
 
 
 };
 SteererXMagnet.defaultProps = {
   debug: false,
-
+  showLabel:true,
+  showValue:true,
   alarmSensitive: false,
   showTooltip: false,
   labelOffsetY: 0,

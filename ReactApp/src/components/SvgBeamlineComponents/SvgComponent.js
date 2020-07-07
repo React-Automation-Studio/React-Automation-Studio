@@ -1,10 +1,10 @@
-import React,{useState} from 'react'
+import React, { useState } from 'react'
 
 import Widget from "../SystemComponents/Widgets/Widget";
 import { withStyles } from '@material-ui/core/styles';
-import {replaceSystemMacros} from '../SystemComponents/Utils/macroReplacement';
+import { replaceSystemMacros } from '../SystemComponents/Utils/macroReplacement';
 import { v4 as uuidv4 } from 'uuid';
-import  {svgHeight,svgCenterY,svgWidth,svgCenterX} from "../SystemComponents/svgConstants";
+import { svgHeight, svgCenterY, svgWidth, svgCenterX } from "../SystemComponents/svgConstants";
 import PropTypes from 'prop-types';
 const styles = theme => ({
 
@@ -36,19 +36,19 @@ const SvgComponentComponent = (props) => {
 
   const { classes } = props;
   const { initialized } = props;
- 
+
   const { alarmSeverity } = props;
-  const {pvName}=props;
+  const { pvName } = props;
   let value;
-  if (initialized ){
-    value=props.value;
+  if (initialized) {
+    value = props.value;
   }
-  else{
-    value=0;
+  else {
+    value = 0;
   }
   let color = '';
 
-  if (initialized ){
+  if (initialized) {
     if (props.alarmSensitive !== 'undefined') {
       if (props.alarmSensitive == true) {
         if (alarmSeverity == 1) {
@@ -65,73 +65,86 @@ const SvgComponentComponent = (props) => {
         }
 
       }
-
+      else{
+        color = props.theme.palette.beamLineComponent.main;
+      }
     }
+   
 
   }
-  else{
+  else {
     color = 'grey';
   }
-  let xOffset=0;
-  
+  let xOffset = 0;
+  const componentId = uuidv4();
   return (
 
 
 
     <svg
-    x={props.x}
-    y={props.y}
+      x={props.x}
+      y={props.y}
 
-    width={svgWidth}
-    height={svgHeight}
-  >
+    // width={svgWidth}
+    // height={svgHeight}
+    >
 
       <g transform={'translate(' + svgCenterX + ',' + (svgCenterY) + ')'}
-       onClick={handleOnClick(props.system)}
+        onClick={handleOnClick(props.system)}
       >
-          <linearGradient id={pvName + 'elipse-gradient'} gradientTransform="rotate(0)">
-              <stop offset="0%" stopOpacity="0.5" stopColor='silver' />
-              <stop offset="65%" stopColor={color} />
-            </linearGradient>
-            <defs>
-              <filter id={pvName + "elipseShadow"} x="0" y="0" width="600%" height="500%">
-                <feOffset result="offOut" in="SourceGraphic" dx="2.5" dy="2.5" />
-                <feColorMatrix result="matrixOut" in="offOut" type="matrix"
-                  values="0.2 0 0 0 0 0 0.2 0 0 0 0 0 0.2 0 0 0 0 0 1 0" />
-                <feGaussianBlur result="blurOut" in="matrixOut" stdDeviation="2.5" />
-                <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
-              </filter>
-            </defs>
-            <g>
-              {props.children}
-            </g>
-
-            <text className={classes.Value}
-               x={typeof props.valueOffsetX !== 'undefined' ? props.valueOffsetX +7.5:7.5}
-               y={typeof props.valueOffsetY !== 'undefined' ? props.valueOffsetY +57.5:57.5}
+        <linearGradient id={componentId + 'componentGradient'} gradientTransform="rotate(0)">
+          <stop offset="0%" stopOpacity="30" stopColor={'silver'} />
+          <stop offset="75%" stopColor={color} />
+        </linearGradient>
+        <defs>
+          <filter id={componentId + "componentShadow"} x="0" y="0" width="600%" height="500%">
+            <feOffset result="offOut" in="SourceGraphic" dx="2.5" dy="2.5" />
+            <feColorMatrix result="matrixOut" in="offOut" type="matrix"
+              values="0.2 0 0 0 0 0 0.2 0 0 0 0 0 0.2 0 0 0 0 0 1 0" />
+            <feGaussianBlur result="blurOut" in="matrixOut" stdDeviation="2.5" />
+            <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+          </filter>
+        </defs>
+        <g
+          filter={props.componentShadow === true ? "url(#" + componentId + "componentShadow)" : ""}
+          fill={props.componentGradient === true ? 'url(#' + componentId + 'componentGradient)' : color}
+          style={{
+            'strokeWidth': '0.1',
+            'stroke': 'black',
+            ...props.svgStyle
+          }}
           
-              textAnchor='middle'
-              filter={props.textShadow === true ? "url(#" + pvName + "elipseShadow)" : ""}
-            >
-              {value + " " + props.units}
+        >
+          {props.children}
+        </g>
 
-            </text>
-            <text className={classes.Label}
-              x={typeof props.labelOffsetX !== 'undefined' ? props.labelOffsetX +7.5:7.5}
-              y={typeof props.labelOffsetY !== 'undefined' ? props.labelOffsetY -40:-40}
-              textAnchor='middle'
-              filter={props.textShadow === true ? "url(#" + pvName + "elipseShadow)" : ""}
-            >
-              {props.label}
-            </text>
-          </g>
-        
+        {props.showValue&&<text className={classes.Value}
+          x={typeof props.valueOffsetX !== 'undefined' ? props.valueOffsetX : 0}
+          y={typeof props.valueOffsetY !== 'undefined' ? props.valueOffsetY + 57.5 : 57.5}
 
-      
-     
+          textAnchor='middle'
+          filter={props.textShadow === true ? "url(#" + componentId + "componentShadow)" : ""}
+        >
+
+          {value + " " + props.units}
+
+        </text>}
+        {props.showLabel&&<text className={classes.Label}
+          x={typeof props.labelOffsetX !== 'undefined' ? props.labelOffsetX : 0}
+          y={typeof props.labelOffsetY !== 'undefined' ? props.labelOffsetY - 40 : -40}
+          textAnchor='middle'
+          filter={props.textShadow === true ? "url(#" + componentId + "componentShadow)" : ""}
+        >
+          {props.label}
+        </text>}
+      </g>
 
 
-      </svg>
+
+
+
+
+    </svg>
   );
 }
 
@@ -139,15 +152,15 @@ const SvgComponentComponent = (props) => {
 
 
 /**
-* Quadrapole Magnet Beam line component
+* This component accepts an svg image as child
 * 
-* The label, min, max, units, readbackPv and tooltip all accept macros that can be replaced by the values defined in the macros prop.  
+* The label, min, max, units, pv and tooltip all accept macros that can be replaced by the values defined in the macros prop.  
  * */
 
 const SvgComponent = (props) => {
 
   return (
-    <Widget svgWidget={true}  {...props} component={SvgComponentComponent}  pv={props.readbackPv} label={props.label}/>
+    <Widget svgWidget={true}  {...props} component={SvgComponentComponent} pv={props.pv} label={props.label} />
 
   )
 }
@@ -278,8 +291,8 @@ SvgComponent.propTypes = {
   numberFormat: PropTypes.object,
 
 
-  /** Name of the readback process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
-  readbackPv: PropTypes.string,
+  /** Name of the pv process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+  pv: PropTypes.string,
 
 
 
@@ -316,11 +329,11 @@ SvgComponent.propTypes = {
    */
   labelOffsetX: PropTypes.number,
   /**
-  * Y Offset for the readback value
+  * Y Offset for the pv value
   */
   valueOffsetY: PropTypes.number,
   /**
-   * X Offset for the readback value
+   * X Offset for the pv value
    */
   valueOffsetX: PropTypes.number,
   /**
@@ -335,13 +348,26 @@ SvgComponent.propTypes = {
    * enable a shadow behind the component
    */
   componentShadow: PropTypes.bool,
+  /**
+   * Direct to show the label
+   */
+  showLabel: PropTypes.bool,
+  /**
+   * Direct to show the value
+   */
+  showValue: PropTypes.bool,
+  
+
+
+
 
 
 
 };
 SvgComponent.defaultProps = {
   debug: false,
-
+  showLabel:true,
+  showValue:true,
   alarmSensitive: false,
   showTooltip: false,
   labelOffsetY: 0,
@@ -354,6 +380,6 @@ SvgComponent.defaultProps = {
 };
 
 
-export default withStyles(styles,{withTheme:true})(SvgComponent)
+export default withStyles(styles, { withTheme: true })(SvgComponent)
 
 

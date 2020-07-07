@@ -425,14 +425,14 @@ const SteererXYMagnetComponent = (props) => {
 /**
 * SteererXYMagnet Beam line component
 *
-*  The label, min, max, units, readbackPv and tooltip all accept macros that can be replaced by the values defined in the macros prop.  
+*  The label, min, max, units, pv and tooltip all accept macros that can be replaced by the values defined in the macros prop.  
 */
 
 const SteererXYMagnet = (props) => {
 
 
   return (
-    <Widget svgWidget={true}  {...props} component={SteererXYMagnetComponent} pvs={[props.xReadbackPv,props.yReadbackPv]} label={props.label} />
+    <Widget svgWidget={true}  {...props} component={SteererXYMagnetComponent} pvs={[props.xPv,props.yPv]} label={props.label} />
 
   )
 }
@@ -562,8 +562,8 @@ SteererXYMagnet.propTypes = {
   numberFormat: PropTypes.object,
 
 
-  /** Name of the readback process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
-  readbackPv: PropTypes.string,
+  /** Name of the pv process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+  pv: PropTypes.string,
 
 
 
@@ -600,11 +600,11 @@ SteererXYMagnet.propTypes = {
    */
   labelOffsetX: PropTypes.number,
   /**
-  * Y Offset for the readback value
+  * Y Offset for the pv value
   */
   valueOffsetY: PropTypes.number,
   /**
-   * X Offset for the readback value
+   * X Offset for the pv value
    */
   valueOffsetX: PropTypes.number,
   /**
@@ -619,13 +619,22 @@ SteererXYMagnet.propTypes = {
    * enable a shadow behind the component
    */
   componentShadow: PropTypes.bool,
+  /**
+   * Direct to show the label
+   */
+  showLabel: PropTypes.bool,
+  /**
+   * Direct to show the value
+   */
+  showValue: PropTypes.bool,
 
 
 
 };
 SteererXYMagnet.defaultProps = {
   debug: false,
-
+  showLabel:true,
+  showValue:true,
   alarmSensitive: false,
   showTooltip: false,
   labelOffsetY: 0,

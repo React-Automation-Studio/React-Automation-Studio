@@ -7,7 +7,7 @@ const  system={
             displayName: '$(device)$(XorY)',
             editorType: 'editorSinglePS',
             setpointPv: '$(IOC):$(device):$(XorY):Setpoint',
-            readbackPv: '$(IOC):$(device):$(XorY):Readback',
+            pv: '$(IOC):$(device):$(XorY):Readback',
             statusTextPv: '$(IOC):$(device):$(XorY):On',
             onOffPv: '$(IOC):$(device):$(XorY):On',
             macros: {
@@ -43,8 +43,8 @@ const  system={
         <SteererXYMagnet
          
           system={system}
-          xReadbackPv={'$(IOC):$(device):X:Readback'}
-          yReadbackPv={'$(IOC):$(device):Y:Readback'}  
+          xPv={'$(IOC):$(device):X:Readback'}
+          yPv={'$(IOC):$(device):Y:Readback'}  
           label='STRXY2'
           macros= {{
               '$(IOC)': 'pva://testIOC',

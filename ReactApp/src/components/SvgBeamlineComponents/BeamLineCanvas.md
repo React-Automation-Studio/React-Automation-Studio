@@ -31,7 +31,7 @@ import SteererXYMagnet from './SteererXYMagnet';
 		x={0}
 		y={50}
 	 	label='Q3'
-        readbackPv= '$(IOC):$(device):Readback'
+        pv= '$(IOC):$(device):Readback'
         macros=
          {{
            '$(IOC)': 'pva://testIOC',
@@ -49,7 +49,7 @@ import SteererXYMagnet from './SteererXYMagnet';
 		x={100}
 		y={50}
 		label= 'BM1'
-       	readbackPv= '$(IOC):$(device):Readback'
+       	pv= '$(IOC):$(device):Readback'
         macros=
           {{
           '$(IOC)': 'pva://testIOC',
@@ -67,8 +67,8 @@ import SteererXYMagnet from './SteererXYMagnet';
 	 <SteererXYMagnet
          
           
-          xReadbackPv={'$(IOC):$(device):X:Readback'}
-          yReadbackPv={'$(IOC):$(device):Y:Readback'}  
+          xPv={'$(IOC):$(device):X:Readback'}
+          yPv={'$(IOC):$(device):Y:Readback'}  
           label='STRXY2'
           macros= {{
               '$(IOC)': 'pva://testIOC',
@@ -86,7 +86,7 @@ import SteererXYMagnet from './SteererXYMagnet';
           
         />
 	<SteererYMagnet
-		readbackPv={'$(IOC):$(device):$(XorY):Readback'}
+		pv={'$(IOC):$(device):$(XorY):Readback'}
         label='STR2'
         macros= {{
               '$(IOC)': 'pva://testIOC',

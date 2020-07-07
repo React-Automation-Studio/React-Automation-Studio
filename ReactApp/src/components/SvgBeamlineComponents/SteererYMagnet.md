@@ -7,7 +7,7 @@ const  system={
             displayName: '$(device)$(XorY)',
             editorType: 'editorSinglePS',
             setpointPv: '$(IOC):$(device):$(XorY):Setpoint',
-            readbackPv: '$(IOC):$(device):$(XorY):Readback',
+            pv: '$(IOC):$(device):$(XorY):Readback',
             statusTextPv: '$(IOC):$(device):$(XorY):On',
             onOffPv: '$(IOC):$(device):$(XorY):On',
             macros: {
@@ -43,7 +43,7 @@ const  system={
         <SteererYMagnet
          
           system={system}
-          readbackPv={'$(IOC):$(device):$(XorY):Readback'}
+          pv={'$(IOC):$(device):$(XorY):Readback'}
           label='STR2'
           macros= {{
               '$(IOC)': 'pva://testIOC',

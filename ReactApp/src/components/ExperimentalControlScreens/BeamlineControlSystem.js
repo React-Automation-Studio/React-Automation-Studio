@@ -771,7 +771,7 @@ class ControlTestHarp1 extends React.Component {
                       handleOnClick={this.handleOnSystemClick}
                      
                       system={systems2.BeamLine.PowerSupplies.Q1}
-                      readbackPv={systems2.BeamLine.PowerSupplies.Q1.readbackPv}
+                      pv={systems2.BeamLine.PowerSupplies.Q1.readbackPv}
                       label={systems2.BeamLine.PowerSupplies.Q1.displayName}
                       macros={systems2.BeamLine.PowerSupplies.Q1.macros}
                       {...systems2.BeamLine.PowerSupplies.Q1.svgProps}
@@ -781,7 +781,7 @@ class ControlTestHarp1 extends React.Component {
                       handleOnClick={this.handleOnSystemClick}
                      
                       system={systems2.BeamLine.PowerSupplies.Q2}
-                      readbackPv={systems2.BeamLine.PowerSupplies.Q2.readbackPv}
+                      pv={systems2.BeamLine.PowerSupplies.Q2.readbackPv}
                       label={systems2.BeamLine.PowerSupplies.Q2.displayName}
                       macros={systems2.BeamLine.PowerSupplies.Q2.macros}
                       {...systems2.BeamLine.PowerSupplies.Q2.svgProps}
@@ -791,7 +791,7 @@ class ControlTestHarp1 extends React.Component {
                       handleOnClick={this.handleOnSystemClick}
                      
                       system={systems2.BeamLine.PowerSupplies.Q3}
-                      readbackPv={systems2.BeamLine.PowerSupplies.Q3.readbackPv}
+                      pv={systems2.BeamLine.PowerSupplies.Q3.readbackPv}
                       label={systems2.BeamLine.PowerSupplies.Q3.displayName}
                       macros={systems2.BeamLine.PowerSupplies.Q3.macros}
                       {...systems2.BeamLine.PowerSupplies.Q3.svgProps}
@@ -950,7 +950,7 @@ class ControlTestHarp1 extends React.Component {
                     <SteererYMagnet
                       handleOnClick={this.handleOnSystemClick}
                       system={systems2.BeamLine.PowerSupplies.STR2}
-                      readbackPv={systems2.BeamLine.PowerSupplies.STR2.readbackPv}
+                      pv={systems2.BeamLine.PowerSupplies.STR2.readbackPv}
                       label={systems2.BeamLine.PowerSupplies.STR2.displayName}
                       macros={systems2.BeamLine.PowerSupplies.STR2.macros}
                       {...systems2.BeamLine.PowerSupplies.STR2.svgProps}
@@ -959,7 +959,7 @@ class ControlTestHarp1 extends React.Component {
                     <SteererYMagnet
                       handleOnClick={this.handleOnSystemClick}
                       system={systems2.BeamLine.PowerSupplies.STR3}
-                      readbackPv={systems2.BeamLine.PowerSupplies.STR3.readbackPv}
+                      pv={systems2.BeamLine.PowerSupplies.STR3.readbackPv}
                       label={systems2.BeamLine.PowerSupplies.STR3.displayName}
                       macros={systems2.BeamLine.PowerSupplies.STR3.macros}
                       {...systems2.BeamLine.PowerSupplies.STR3.svgProps}
@@ -968,7 +968,7 @@ class ControlTestHarp1 extends React.Component {
                     <BendingMagnet
                       handleOnClick={this.handleOnSystemClick}
                       system={systems2.BeamLine.PowerSupplies.BM1}
-                      readbackPv={systems2.BeamLine.PowerSupplies.BM1.readbackPv}
+                      pv={systems2.BeamLine.PowerSupplies.BM1.readbackPv}
                       label={systems2.BeamLine.PowerSupplies.BM1.displayName}
                       macros={systems2.BeamLine.PowerSupplies.BM1.macros}
                       {...systems2.BeamLine.PowerSupplies.BM1.svgProps}

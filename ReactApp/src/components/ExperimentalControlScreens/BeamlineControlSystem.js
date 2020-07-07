@@ -73,9 +73,9 @@ const systems2 = {
           componentGradient: true,
           x: 150,
           y: 50,
-          prec:3,
+          prec: 3,
         },
-        tabelProps: {
+        tableProps: {
           prec: 3, units: "A", useStatus: true
         },
 
@@ -104,9 +104,9 @@ const systems2 = {
           componentGradient: true,
           x: 300,
           y: 50,
-          prec:3,
+          prec: 3,
         },
-        tabelProps: {
+        tableProps: {
           prec: 3, units: "A", useStatus: true
         },
 
@@ -135,9 +135,9 @@ const systems2 = {
           componentGradient: true,
           x: 450,
           y: 50,
-          prec:3,
+          prec: 3,
         },
-        tabelProps: {
+        tableProps: {
           prec: 3, units: "A", useStatus: true
         },
 
@@ -166,9 +166,9 @@ const systems2 = {
           componentGradient: true,
           x: 600,
           y: 50,
-          prec:3,
+          prec: 3,
         },
-        tabelProps: {
+        tableProps: {
           prec: 3, units: "A", useStatus: true
         },
 
@@ -187,23 +187,23 @@ const systems2 = {
         xOnPv: '$(IOC):$(device):X:On',
         //scanPv: '$(IOC):$(device):SimReadback.SCAN',
         //orocPv: '$(IOC):$(device):SimReadback.OROC',
-        
+
         macros: {
           '$(IOC)': 'pva://testIOC',
           '$(device)': 'STR1',
-        
+
         },
         svgProps: {
           x: 785, y: 50,
           usePvUnits: true, prec: 1, alarmSensitive: true,
           labelOffsetY: 0, labelOffsetX: 0, valueOffsetY: 0, valueOffsetX: 0,
           componentShadow: true, textShadow: false, componentGradient: true,
-          
-         
-          
-          
+
+
+
+
         },
-        tabelProps: {
+        tableProps: {
           prec: 3, units: "A", useStatus: true
         },
       },
@@ -220,22 +220,22 @@ const systems2 = {
         xOnPv: '$(IOC):$(device):X:On',
         //scanPv: '$(IOC):$(device):SimReadback.SCAN',
         //orocPv: '$(IOC):$(device):SimReadback.OROC',
-        
+
         macros: {
           '$(IOC)': 'pva://testIOC',
           '$(device)': 'STR2',
-        
+
         },
         svgProps: {
           x: 800, y: 50,
           usePvUnits: true, prec: 1, alarmSensitive: true,
           labelOffsetY: 0, labelOffsetX: 0, valueOffsetY: 0, valueOffsetX: 0,
           componentShadow: true, textShadow: false, componentGradient: true,
-          valueOffsetY:30,
-          labelOffsetY:-15
-          
+          valueOffsetY: 30,
+          labelOffsetY: -15
+
         },
-        tabelProps: {
+        tableProps: {
           prec: 3, units: "A", useStatus: true
         },
       },
@@ -263,7 +263,7 @@ const systems2 = {
           labelOffsetY: 0, labelOffsetX: 0, valueOffsetY: 0, valueOffsetX: 0,
           componentShadow: true, textShadow: false, componentGradient: true
         },
-        tabelProps: {
+        tableProps: {
           prec: 3, units: "A", useStatus: true
         },
       },
@@ -291,34 +291,34 @@ const systems2 = {
           labelOffsetY: 0, labelOffsetX: 0, valueOffsetY: 0, valueOffsetX: 0,
           componentShadow: true, textShadow: false, componentGradient: true
         },
-        tabelProps: {
+        tableProps: {
           prec: 3, units: "A", useStatus: true
         },
       }
 
     },
-    'Slits':{
+    'Slits': {
 
       'SLITXY2': {
         componentType: 'SlitXY',
         systemName: '$(IOC):$(device)',
         displayName: '$(device)',
         editorType: 'editorSlitXY',
-        xDriveOnPv:'$(IOC):$(device):X:Drive:On',
-        yDriveOnPv:'$(IOC):$(device):Y:Drive:On',
-        xGapReadbackPv:'$(IOC):$(device):X:Gap:Readback',
-        yGapReadbackPv:'$(IOC):$(device):Y:Gap:Readback',  
-        xOffsetReadbackPv:'$(IOC):$(device):X:Offset:Readback',
-        yOffsetReadbackPv:'$(IOC):$(device):Y:Offset:Readback' ,
-        xGapSetpointPv:'$(IOC):$(device):X:Gap:Setpoint',
-        yGapSetpointPv:'$(IOC):$(device):Y:Gap:Setpoint',  
-        xOffsetSetpointPv:'$(IOC):$(device):X:Offset:Setpoint',
-        yOffsetSetpointPv:'$(IOC):$(device):Y:Offset:Setpoint' ,
-        label:'$(device)',
+        xDriveOnPv: '$(IOC):$(device):X:Drive:On',
+        yDriveOnPv: '$(IOC):$(device):Y:Drive:On',
+        xGapReadbackPv: '$(IOC):$(device):X:Gap:Readback',
+        yGapReadbackPv: '$(IOC):$(device):Y:Gap:Readback',
+        xOffsetReadbackPv: '$(IOC):$(device):X:Offset:Readback',
+        yOffsetReadbackPv: '$(IOC):$(device):Y:Offset:Readback',
+        xGapSetpointPv: '$(IOC):$(device):X:Gap:Setpoint',
+        yGapSetpointPv: '$(IOC):$(device):Y:Gap:Setpoint',
+        xOffsetSetpointPv: '$(IOC):$(device):X:Offset:Setpoint',
+        yOffsetSetpointPv: '$(IOC):$(device):Y:Offset:Setpoint',
+        label: '$(device)',
         macros: {
           '$(IOC)': 'pva://testIOC',
           '$(device)': 'SLITXY2',
-        
+
         },
         svgProps: {
           x: 1100, y: 50,
@@ -326,7 +326,7 @@ const systems2 = {
           labelOffsetY: 0, labelOffsetX: 0, valueOffsetY: 0, valueOffsetX: 0,
           componentShadow: true, textShadow: false, componentGradient: true
         },
-        tabelProps: {
+        tableProps: {
           prec: 1, units: "mm", useStatus: true
         },
       },
@@ -882,7 +882,7 @@ class ControlTestHarp1 extends React.Component {
                       label={systems2.BeamLine.PowerSupplies.Q1.displayName}
                       macros={systems2.BeamLine.PowerSupplies.Q1.macros}
                       {...systems2.BeamLine.PowerSupplies.Q1.svgProps}
-                      
+
 
                     />
                     <QuadrapoleMagnet
@@ -996,35 +996,35 @@ class ControlTestHarp1 extends React.Component {
 
 
 
-                   
-<SteererXYMagnet
-
-handleOnClick={this.handleOnSystemClick}
-system={systems2.BeamLine.PowerSupplies.STR1XY}
-
-xPv={systems2.BeamLine.PowerSupplies.STR1XY.xReadbackPv}
-yPv={systems2.BeamLine.PowerSupplies.STR1XY.yReadbackPv}
-label={systems2.BeamLine.PowerSupplies.STR1XY.displayName}
-macros={systems2.BeamLine.PowerSupplies.STR1XY.macros}
-{...systems2.BeamLine.PowerSupplies.STR1XY.svgProps}
-
-
-
-/> 
-                   <SteererXYMagnet
+                    <SteererXYMagnet
 
                       handleOnClick={this.handleOnSystemClick}
                       system={systems2.BeamLine.PowerSupplies.STR2XY}
-                    
+
                       xPv={systems2.BeamLine.PowerSupplies.STR2XY.xReadbackPv}
                       yPv={systems2.BeamLine.PowerSupplies.STR2XY.yReadbackPv}
                       label={systems2.BeamLine.PowerSupplies.STR2XY.displayName}
                       macros={systems2.BeamLine.PowerSupplies.STR2XY.macros}
                       {...systems2.BeamLine.PowerSupplies.STR2XY.svgProps}
-                   
-                     
-                     
-                    /> 
+
+
+
+                    />
+                    <SteererXYMagnet
+
+                      handleOnClick={this.handleOnSystemClick}
+                      system={systems2.BeamLine.PowerSupplies.STR1XY}
+
+                      xPv={systems2.BeamLine.PowerSupplies.STR1XY.xReadbackPv}
+                      yPv={systems2.BeamLine.PowerSupplies.STR1XY.yReadbackPv}
+                      label={systems2.BeamLine.PowerSupplies.STR1XY.displayName}
+                      macros={systems2.BeamLine.PowerSupplies.STR1XY.macros}
+                      {...systems2.BeamLine.PowerSupplies.STR1XY.svgProps}
+
+
+
+                    />
+
                     <SteererYMagnet
                       handleOnClick={this.handleOnSystemClick}
                       system={systems2.BeamLine.PowerSupplies.STR2}
@@ -1083,7 +1083,7 @@ macros={systems2.BeamLine.PowerSupplies.STR1XY.macros}
                       textShadow={false}
                       componentGradient={true}
                     /> */}
-                     <SlitXY
+                    <SlitXY
                       handleOnClick={this.handleOnSystemClick}
                       system={systems2.BeamLine.Slits.SLITXY2}
                       xGapPv={systems2.BeamLine.Slits.SLITXY2.xGapReadbackPv}
@@ -1093,9 +1093,9 @@ macros={systems2.BeamLine.PowerSupplies.STR1XY.macros}
                       label={systems2.BeamLine.Slits.SLITXY2.displayName}
                       macros={systems2.BeamLine.Slits.SLITXY2.macros}
                       {...systems2.BeamLine.Slits.SLITXY2.svgProps}
-                   
-              
-                    
+
+
+
                       x={1280}
                       y={50}
                       prec={2}
@@ -1105,13 +1105,13 @@ macros={systems2.BeamLine.PowerSupplies.STR1XY.macros}
                       alarmSensitive={true}
                       label='SlitXY 2'
                       //labelOffsetY={-14}
-                     // labelOffsetX={0}
-                     // valueOffsetY={18}
-                     // valueOffsetX={0}
+                      // labelOffsetX={0}
+                      // valueOffsetY={18}
+                      // valueOffsetX={0}
                       componentShadow={true}
                       textShadow={false}
                       componentGradient={true}
-                    /> 
+                    />
 
 
                     {/* <Harp
@@ -1483,8 +1483,8 @@ macros={systems2.BeamLine.PowerSupplies.STR1XY.macros}
                         </AppBar>
                       </Grid>
                       <Grid item sm={10}>
-                        {sideTabValue === 0 && <TabContainer > <ControlTable handleOnSystemClick={this.handleOnSystemClick} systems={systems['BeamLine']['PowerSupplies']} /> </TabContainer>}
-                        {sideTabValue === 1 && <TabContainer > <ControlTable handleOnSystemClick={this.handleOnSystemClick} systems={systems['BeamLine']['Slits']} /> </TabContainer>}
+                        {sideTabValue === 0 && <TabContainer > <ControlTable handleOnSystemClick={this.handleOnSystemClick} systems={systems2['BeamLine']['PowerSupplies']} /> </TabContainer>}
+                        {sideTabValue === 1 && <TabContainer > <ControlTable handleOnSystemClick={this.handleOnSystemClick} systems={systems2['BeamLine']['Slits']} /> </TabContainer>}
                       </Grid>
                     </Grid>
                   </Grid>}

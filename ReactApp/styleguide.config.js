@@ -53,9 +53,42 @@ module.exports = {
             },
           ]
         },
-
-
-      ]
+        {
+          name: 'Configuring MongoDB Server Settings',
+          content: 'src/docs/MongoDB/MongoDB.md',
+          sections: [
+            {
+              name: 'MongoDB Primer',
+              content: 'src/docs/MongoDB/MongoDB_Primer.md',
+              sections: [
+                {
+                  name: 'Replication',
+                  content: 'src/docs/MongoDB/MongoDB_Primer_Replication.md',
+                },
+                {
+                  name: 'Mongo Express',
+                  content: 'src/docs/MongoDB/MongoDB_Primer_MExpress.md',
+                }
+              ]
+            },
+            {
+              name: 'MongoDB Configuration',
+              content: 'src/docs/MongoDB/MongoDB_Config.md',
+              sections: [
+                {
+                  name: 'Default configuration',
+                  content: 'src/docs/MongoDB/MongoDB_Config_Default.md',
+                },
+                {
+                  name: 'Configuration settings and files',
+                  content: 'src/docs/MongoDB/MongoDB_Config_Config.md',
+                }
+              ]
+            },
+          ],
+        },
+      ],
+      sectionDepth: 1
     },
     {
       name: 'Style Guide',
@@ -75,35 +108,35 @@ module.exports = {
         {
           name: 'Layout Wrapper Components',
           content: 'src/docs/WorkingWithLayouts.md',
-          
-        
-          
-          sections:[
-            { 
+
+
+
+          sections: [
+            {
               name: 'Layout Components',
               components: 'src/components/UI/Layout/ComposedLayouts/*.js',
               exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
               usageMode: 'expand', // 'hide' | 'collapse' | 'expand'
             },
-            { 
+            {
               name: 'TraditionalLayout Example 1',
               content: 'src/components/UI/Layout/ComposedLayouts/TraditionalLayoutEx1.md',
             },
-            { 
+            {
               name: 'TraditionalLayout Example 2',
               content: 'src/components/UI/Layout/ComposedLayouts/TraditionalLayoutEx2.md',
             },
-            { 
+            {
               name: 'TraditionalLayout Example 3',
               content: 'src/components/UI/Layout/ComposedLayouts/TraditionalLayoutEx3.md',
             },
-         
+
           ]
         },
         {
           name: 'Theming',
           content: 'src/docs/themes/themes.md',
-          
+
         },
         {
           name: 'Base Components',
@@ -123,7 +156,7 @@ module.exports = {
 
 
         },
-        
+
         {
           name: 'Experimental Base Components',
           content: 'src/docs/WorkingWithComponents.md',
@@ -145,7 +178,6 @@ module.exports = {
           exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
           usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
         },
-
       ],
       sectionDepth: 2
     },

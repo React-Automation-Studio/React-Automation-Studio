@@ -1,0 +1,3 @@
+Mongo Express is a lightweight web-based administrative interface deployed to manage MongoDB databases interactively. It is authored using Node. js, Express and Bootstrap packages. For more details see the [official Mongo Express GitHub](http://github.com/mongo-express/mongo-express).
+
+***In React Automation Studio the Mongo Express web interface can be accessed on `http://localhost:8081` (or `http://host-ip:8081`). This is meant as a means to debug and maintain the MongoDB server. CRUD operations on the MongoDB server using Mongo Express is not advised.**

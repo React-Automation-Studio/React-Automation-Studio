@@ -1,6 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react'
 import ReactAutomationStudioContext from './AutomationStudioContext';
 import Typography from '@material-ui/core/Typography';
+import PropTypes from "prop-types";
+
 
 export const useEpicsPV = (props) => {
   const initPV = () => {
@@ -148,7 +150,19 @@ export const useEpicsPV = (props) => {
 
 }
 
-
+/**
+ * The EpicsPV  component handles connections to EPICS process variables.
+ * This is done by defining the pv name in the pv prop and using a prefix to define protocol ie "pva://" for EPICS .
+ * The EpicsPV component also performs macro substitution on the pv prop using the macros prop.
+ * The pv state can be raised as an object using the pvData callback or passed to child function component. All the data in this pv object is valid when pv.initialized===true
+ * 
+ * A hook called `useEpicsPV` is also exported which returns the pv object.
+ * 
+ * 
+ * 
+ * 
+ * 
+ **/
 const EpicsPV=(props)=>{
   const pv= useEpicsPV(props);
   useEffect(()=>{
@@ -169,4 +183,52 @@ const EpicsPV=(props)=>{
   )
 
 }
+EpicsPV.propTypes = {
+ 
+  /**
+   * If defined, then the DataConnection and
+   * the widget debugging information will be displayed.
+   */
+  debug: PropTypes.bool,
+
+  
+  /**
+   * when writing to the  pv's output value, increment newValueTrigger to tell the pv component emit the output value to the process variable.
+   */
+  newValueTrigger:PropTypes.number,
+  /**
+   * the output value to the process variable. It is only emitted once the newValueTrigger is incremented.
+   */
+  outputValue:PropTypes.any,
+ 
+  /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+
+  pv: PropTypes.string,
+
+   /** A function that returns the pv object */
+
+   pvData: PropTypes.func,
+
+  
+  
+  /**
+   * Directive to use PV's string values.
+   */
+  useStringValue: PropTypes.bool,
+
+
+};
+
+/**
+ * Default props.definition for all widgets linked to
+ * PVs storing analog values.
+ */
+// static defaultProps=WrappedComponent.defaultProps;
+EpicsPV.defaultProps = {
+
+  debug: false,
+  
+};
+
+
 export default EpicsPV

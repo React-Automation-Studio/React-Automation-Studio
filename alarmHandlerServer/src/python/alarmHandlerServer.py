@@ -205,12 +205,16 @@ def evaluateTopArea(topArea, alarmState):
                 pv = areaPVDict[area]
                 val = pv.value
                 # print(pv, pv.value)
-                if (val > alarmState):
-                    alarmState = val
-                if(val == 2):
-                    minorAlarm = True
-                elif(val == 4):
-                    majorAlarm = True
+                try:
+                    if (val > alarmState):
+                        alarmState = val
+                    if(val == 2):
+                        minorAlarm = True
+                    elif(val == 4):
+                        majorAlarm = True
+                except:
+                    print('[Warning]', 'val =', val,
+                          'alarmState =', alarmState)
 
     # active alarm always supercedes acked state alarm
     if alarmState in ackStates:

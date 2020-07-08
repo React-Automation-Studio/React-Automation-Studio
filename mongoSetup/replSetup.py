@@ -26,26 +26,50 @@ if (mongoAuth):
 else:
     client = MongoClient('mongodb://%s' % (REPLICA_SET_MEMBERS[0]))
 
+config_document = {
+    "_id": REPLICA_SET_NAME,
+    "members": []
+}
+id = 0
+for MEMBER in REPLICA_SET_MEMBERS:
+    config_document["members"].append({
+        "_id": id,
+        "host": MEMBER
+    })
+    id += 1
+
 try:
-    client.admin.command({"replSetGetStatus": 1})
-    print("Replset already instantiated... skipping this step.")
-    print(
-        "Mongo setup complete. Exiting mongosetup docker service. [mongodb still running!]")
+    replMembers = []
+    for member in client.admin.command({"replSetGetStatus": 1})["members"]:
+        replMembers.append(member["name"])
+    print("Replset already instantiated")
+    if(replMembers == REPLICA_SET_MEMBERS):
+        print("All replica set members remain the same")
+        print(
+            "Mongo setup complete. Exiting mongosetup docker service. [mongodb still running!]")
+    else:
+        print("Replica set members have changed")
+        print("Existing member list:", replMembers)
+        print("New member list:", REPLICA_SET_MEMBERS)
+        reConfig = client.admin.command({"replSetGetConfig": 1})["config"]
+        reConfig["members"] = config_document["members"]
+        reConfig["version"] += 1
+        client.admin.command(
+            {
+                "replSetReconfig": reConfig,
+                "force": True
+            }
+        )
+        print("Replset successfully reconfigured.")
+        print(client.admin.command({"replSetGetStatus": 1})["members"])
+        print("Replset successfully reconfigured.")
+        print(
+            "Mongo setup complete. Exiting mongosetup docker service. [mongodb still running!]")
+
 
 except OperationFailure as err:
     if("no replset config" in str(err)):
         print("Initialising new mongodb replset.")
-        config_document = {
-            "_id": REPLICA_SET_NAME,
-            "members": []
-        }
-        id = 0
-        for MEMBER in REPLICA_SET_MEMBERS:
-            config_document["members"].append({
-                "_id": id,
-                "host": MEMBER
-            })
-            id += 1
         replSetOkay = False
         while(not replSetOkay):
             try:

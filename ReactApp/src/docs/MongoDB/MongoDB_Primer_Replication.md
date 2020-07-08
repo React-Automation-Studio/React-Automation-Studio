@@ -4,7 +4,7 @@ In MongoDB replication is provided for using a replica set - a group of mongod p
 
 The primary node receives all write operations. The secondaries replicate the primary’s oplog and apply the operations to their data sets such that the secondaries’ data sets reflect the primary’s data set. If the primary is unavailable, an eligible secondary will hold an election to elect itself the new primary.
 
-<center><img src="src/docs/MongoDB/replica-set.svg" alt="RDBMS-MongoDB" width="50%"/></center>  
+<center><img src="img/replica-set.svg" alt="RDBMS-MongoDB" width="50%"/></center>  
 <center>*Replication in MongoDB (source: docs.mongodb.com)*</center>
 <br/><br/>
 

@@ -108,7 +108,7 @@ services:
     volumes:
       - "mongo-db-data1:/data/db"
       - "mongo-db-configdb1:/data/configdb"
-    command: "--bind_ip_all --port 27017 --replSet devrs"
+    command: "--bind_ip_all --port 27017 --replSet ${REPLICA_SET_NAME-devrs}"
 
   mongo2:
     image: mongo:4.2.3-bionic
@@ -121,7 +121,7 @@ services:
     volumes:
       - "mongo-db-data2:/data/db"
       - "mongo-db-configdb2:/data/configdb"
-    command: "--bind_ip_all --port 27018 --replSet devrs"
+    command: "--bind_ip_all --port 27018 --replSet ${REPLICA_SET_NAME-devrs}"
 
   mongo3:
     image: mongo:4.2.3-bionic
@@ -134,7 +134,7 @@ services:
     volumes:
       - "mongo-db-data3:/data/db"
       - "mongo-db-configdb3:/data/configdb"
-    command: "--bind_ip_all --port 27019 --replSet devrs"
+    command: "--bind_ip_all --port 27019 --replSet ${REPLICA_SET_NAME-devrs}"
 
   mongosetup:
     build:
@@ -163,6 +163,9 @@ services:
       driver: "none"
     environment:
       - ME_CONFIG_MONGODB_SERVER=${ME_MONGODB_SERVER-localhost}
+      - ME_CONFIG_MONGODB_PORT=${ME_MONGODB_PORT-27017}
+      - ME_CONFIG_BASICAUTH_USERNAME=${ME_BASICAUTH_USERNAME-user1}
+      - ME_CONFIG_BASICAUTH_PASSWORD=${ME_BASICAUTH_PASSWORD-password}
     depends_on:
       - mongosetup
 

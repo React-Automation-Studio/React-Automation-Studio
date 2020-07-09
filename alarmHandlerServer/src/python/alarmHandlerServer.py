@@ -12,8 +12,14 @@ import _thread
 from epics import PV, caput
 from datetime import datetime
 
-ALARM_DATABASE = os.environ['ALARM_DATABASE']
-ALARM_DATABASE_REPLICA_SET_NAME = os.environ['ALARM_DATABASE_REPLICA_SET_NAME']
+try:
+    ALARM_DATABASE = os.environ['ALARM_DATABASE']
+except:
+    ALARM_DATABASE = "localhost"
+try:
+    ALARM_DATABASE_REPLICA_SET_NAME = os.environ['ALARM_DATABASE_REPLICA_SET_NAME']
+except:
+    ALARM_DATABASE_REPLICA_SET_NAME = "devrs"
 
 try:
     MONGO_INITDB_ROOT_USERNAME = os.environ['MONGO_INITDB_ROOT_USERNAME']
@@ -26,13 +32,18 @@ try:
 except:
     mongoAuth = False
 
-MONGO_INITDB_ALARM_DATABASE = os.environ['MONGO_INITDB_ALARM_DATABASE']
-
+try:
+    MONGO_INITDB_ALARM_DATABASE = os.environ['MONGO_INITDB_ALARM_DATABASE']
+except:
+    MONGO_INITDB_ALARM_DATABASE = "demoAlarmDatabase"
 try:
     DEMO_ALARMS_IOC = os.environ['DEMO_ALARMS_IOC']
-    runDemoIOC = True
 except:
-    runDemoIOC = False
+    DEMO_ALARMS_IOC = "demoAlarmsIOC"
+try:
+    RUN_DEMO_ALARMS_IOC = bool(os.environ['RUN_DEMO_ALARMS_IOC'])
+except:
+    RUN_DEMO_ALARMS_IOC = True
 
 if (mongoAuth):
     client = MongoClient(
@@ -651,8 +662,8 @@ def replaceAllInFile(filename, original, replacedWith):
     fin.close()
 
 
-def startDemoIOC(runDemoIOC):
-    if (runDemoIOC):
+def startDemoIOC(RUN_DEMO_ALARMS_IOC):
+    if (RUN_DEMO_ALARMS_IOC):
         # replaceAllInFile("/epics/demoAlarmsIOC/db/dbDemoAlarm.db", '$(ioc)',
         #                  DEMO_ALARMS_IOC)
         replaceAllInFile("/epics/demoAlarmsIOC/db/demoAlarms.db", '$(ioc)',
@@ -1003,7 +1014,7 @@ def globalCollectionWatch():
 
 def main():
     getListOfPVNames()
-    startDemoIOC(runDemoIOC)
+    startDemoIOC(RUN_DEMO_ALARMS_IOC)
     startAlarmIOC()
     # Initialise string PVs for front end
     initAlarmDict()

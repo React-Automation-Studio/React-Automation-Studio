@@ -1,12 +1,19 @@
 from pymongo import MongoClient
 from pymongo.errors import OperationFailure
+import urllib.parse
 from time import sleep
 import os
 
-REPLICA_SET_NAME = os.environ['REPLICA_SET_NAME']
-REPLICA_SET_MEMBERS = os.environ['REPLICA_SET_MEMBERS'].split(',')
-print("REPLICA_SET_NAME", REPLICA_SET_NAME)
-print("REPLICA_SET_MEMBERS", REPLICA_SET_MEMBERS)
+try:
+    REPLICA_SET_NAME = os.environ['REPLICA_SET_NAME']
+except:
+    REPLICA_SET_NAME = "devrs"
+try:
+    REPLICA_SET_MEMBERS = os.environ['REPLICA_SET_MEMBERS'].split(',')
+except:
+    REPLICA_SET_MEMBERS = ['localhost:27017',
+                           'localhost:27018',
+                           'localhost:27019']
 
 try:
     MONGO_INITDB_ROOT_USERNAME = os.environ['MONGO_INITDB_ROOT_USERNAME']

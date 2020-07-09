@@ -4,8 +4,14 @@ import os
 import json
 from time import sleep
 
-ALARM_DATABASE = os.environ['ALARM_DATABASE']
-ALARM_DATABASE_REPLICA_SET_NAME = os.environ['ALARM_DATABASE_REPLICA_SET_NAME']
+try:
+    ALARM_DATABASE = os.environ['ALARM_DATABASE']
+except:
+    ALARM_DATABASE = "localhost"
+try:
+    ALARM_DATABASE_REPLICA_SET_NAME = os.environ['ALARM_DATABASE_REPLICA_SET_NAME']
+except:
+    ALARM_DATABASE_REPLICA_SET_NAME = "devrs"
 
 try:
     MONGO_INITDB_ROOT_USERNAME = os.environ['MONGO_INITDB_ROOT_USERNAME']
@@ -18,15 +24,20 @@ try:
 except:
     mongoAuth = False
 
-MONGO_INITDB_ALARM_DATABASE = os.environ['MONGO_INITDB_ALARM_DATABASE']
-
+try:
+    MONGO_INITDB_ALARM_DATABASE = os.environ['MONGO_INITDB_ALARM_DATABASE']
+except:
+    MONGO_INITDB_ALARM_DATABASE = "demoAlarmDatabase"
 try:
     DEMO_ALARMS_IOC = os.environ['DEMO_ALARMS_IOC']
-    runDemoIOC = True
 except:
-    runDemoIOC = False
+    DEMO_ALARMS_IOC = "demoAlarmsIOC"
+try:
+    RUN_DEMO_ALARMS_IOC = bool(os.environ['RUN_DEMO_ALARMS_IOC'])
+except:
+    RUN_DEMO_ALARMS_IOC = True
 
-if (runDemoIOC):
+if (RUN_DEMO_ALARMS_IOC):
     fin = open("./initDBData/pvs.json", "rt")
     data = fin.read()
     data = data.replace('$(DEMO_ALARMS_IOC)', DEMO_ALARMS_IOC)

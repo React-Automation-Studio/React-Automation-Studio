@@ -37,6 +37,7 @@ import BendingMagnet from '../SvgBeamlineComponents/BendingMagnet';
 import SteererYMagnet from '../SvgBeamlineComponents/SteererYMagnet';
 import SteererXYMagnet from '../SvgBeamlineComponents/SteererXYMagnet';
 import SlitXY from '../SvgBeamlineComponents/SlitXY';
+import Harp from '../SvgBeamlineComponents/Harp';
 const VerticalTabs = withStyles(theme => ({
   flexContainer: {
     flexDirection: 'column'
@@ -300,6 +301,37 @@ const systems = {
 
     },
     'Slits': {
+      'SLITXY1': {
+        componentType: 'SlitXY',
+        systemName: '$(IOC):$(device)',
+        displayName: '$(device)',
+        editorType: 'editorSlitXY',
+        xDriveOnPv: '$(IOC):$(device):X:Drive:On',
+        yDriveOnPv: '$(IOC):$(device):Y:Drive:On',
+        xGapReadbackPv: '$(IOC):$(device):X:Gap:Readback',
+        yGapReadbackPv: '$(IOC):$(device):Y:Gap:Readback',
+        xOffsetReadbackPv: '$(IOC):$(device):X:Offset:Readback',
+        yOffsetReadbackPv: '$(IOC):$(device):Y:Offset:Readback',
+        xGapSetpointPv: '$(IOC):$(device):X:Gap:Setpoint',
+        yGapSetpointPv: '$(IOC):$(device):Y:Gap:Setpoint',
+        xOffsetSetpointPv: '$(IOC):$(device):X:Offset:Setpoint',
+        yOffsetSetpointPv: '$(IOC):$(device):Y:Offset:Setpoint',
+        label: '$(device)',
+        macros: {
+          '$(IOC)': 'pva://testIOC',
+          '$(device)': 'SLITXY1',
+
+        },
+        svgProps: {
+          x: 900, y: yOffset,
+          usePvUnits: true, prec: 1, alarmSensitive: true,
+          labelOffsetY: 0, labelOffsetX: 0, valueOffsetY: 0, valueOffsetX: 0,
+          componentShadow: true, textShadow: false, componentGradient: true
+        },
+        tableProps: {
+          prec: 1, units: "mm", useStatus: true
+        },
+      },
 
       'SLITXY2': {
         componentType: 'SlitXY',
@@ -367,7 +399,7 @@ function TabContainer(props) {
 TabContainer.propTypes = {
   children: PropTypes.node.isRequired,
 };
-class ControlTestHarp1 extends React.Component {
+class BeamlineControlSystem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -724,8 +756,39 @@ class ControlTestHarp1 extends React.Component {
           componentGradient={true}
           handleHarpInsertedOrRemoved={this.props.handleHarpInsertedOrRemoved}
 
-        />
-        <FC
+                    />*/}
+                    <Harp
+                      //maxHarpsReached={this.props.maxHarpsReached}
+                      maxHarpsReached={false}
+                      x={200}
+                      y={yOffset}
+
+                      usePvLabel={false}
+                      alarmSensitive={true}
+
+
+                      textShadow={false}
+                      componentGradient={true}
+                      //handleHarpInsertedOrRemoved={this.props.handleHarpInsertedOrRemoved}
+                      pv={'pva://$(IOC):$(actuatorName):put-outIn'}
+                      isMovingPv={'pva://$(IOC):$(actuatorName):get-status.B5'}
+                      inLimitPv={'pva://$(IOC):$(actuatorName):get-status.B6'}
+                      outLimitPv={'pva://$(IOC):$(actuatorName):get-status.B7'}
+                      inLimitValue={1}
+                      outLimitValue={1}
+                      isMovingValue={1}
+                      maxHarpsReached={false}
+
+                      label={'$(actuatorName)'}
+
+                      macros={{
+                        '$(IOC)': 'testIOC',
+                        '$(actuatorName)': 'Harp1',
+
+                      }
+                      }
+                    />
+                    {/* <FC
 
           x={250}
           y={yOffset}
@@ -767,20 +830,37 @@ class ControlTestHarp1 extends React.Component {
                       macros={systems.BeamLine.PowerSupplies.Q3.macros}
                       {...systems.BeamLine.PowerSupplies.Q3.svgProps}
                     />
-                    {/* <Harp
-          maxHarpsReached={this.props.maxHarpsReached}
-          cx={350}
-          cy={100}
-          systemName={'testIOC:Harp2'}
-          usePvLabel={false}
-          alarmSensitive={true}
-          label='Harp 2'
+                    <Harp
+                      //maxHarpsReached={this.props.maxHarpsReached}
+                      maxHarpsReached={false}
+                      x={350}
+                      y={yOffset}
 
-          textShadow={false}
-          componentGradient={true}
-          handleHarpInsertedOrRemoved={this.props.handleHarpInsertedOrRemoved}
+                      usePvLabel={false}
+                      alarmSensitive={true}
 
-        /> */}
+
+                      textShadow={false}
+                      componentGradient={true}
+                      //handleHarpInsertedOrRemoved={this.props.handleHarpInsertedOrRemoved}
+                      pv={'pva://$(IOC):$(actuatorName):put-outIn'}
+                      isMovingPv={'pva://$(IOC):$(actuatorName):get-status.B5'}
+                      inLimitPv={'pva://$(IOC):$(actuatorName):get-status.B6'}
+                      outLimitPv={'pva://$(IOC):$(actuatorName):get-status.B7'}
+                      inLimitValue={1}
+                      outLimitValue={1}
+                      isMovingValue={1}
+                      maxHarpsReached={false}
+
+                      label={'$(actuatorName)'}
+
+                      macros={{
+                        '$(IOC)': 'testIOC',
+                        '$(actuatorName)': 'Harp2',
+
+                      }
+                      }
+                    />
                     {/* <FC
 
           cx={400}
@@ -855,7 +935,37 @@ class ControlTestHarp1 extends React.Component {
           handleHarpInsertedOrRemoved={this.props.handleHarpInsertedOrRemoved}
 
         /> */}
+                    <Harp
+                      //maxHarpsReached={this.props.maxHarpsReached}
+                      maxHarpsReached={false}
+                      x={500}
+                      y={yOffset}
 
+                      usePvLabel={false}
+                      alarmSensitive={true}
+
+
+                      textShadow={false}
+                      componentGradient={true}
+                      //handleHarpInsertedOrRemoved={this.props.handleHarpInsertedOrRemoved}
+                      pv={'pva://$(IOC):$(actuatorName):put-outIn'}
+                      isMovingPv={'pva://$(IOC):$(actuatorName):get-status.B5'}
+                      inLimitPv={'pva://$(IOC):$(actuatorName):get-status.B6'}
+                      outLimitPv={'pva://$(IOC):$(actuatorName):get-status.B7'}
+                      inLimitValue={1}
+                      outLimitValue={1}
+                      isMovingValue={1}
+                      maxHarpsReached={false}
+
+                      label={'$(actuatorName)'}
+
+                      macros={{
+                        '$(IOC)': 'testIOC',
+                        '$(actuatorName)': 'Harp3',
+
+                      }
+                      }
+                    />
 
 
 
@@ -946,6 +1056,23 @@ class ControlTestHarp1 extends React.Component {
                       textShadow={false}
                       componentGradient={true}
                     /> */}
+
+                    <SlitXY
+                      handleOnClick={this.handleOnSystemClick}
+                      system={systems.BeamLine.Slits.SLITXY1}
+                      xGapPv={systems.BeamLine.Slits.SLITXY1.xGapReadbackPv}
+                      yGapPv={systems.BeamLine.Slits.SLITXY1.yGapReadbackPv}
+                      xOffsetPv={systems.BeamLine.Slits.SLITXY1.xOffsetReadbackPv}
+                      yOffsetPv={systems.BeamLine.Slits.SLITXY1.yOffsetReadbackPv}
+                      label={systems.BeamLine.Slits.SLITXY1.displayName}
+                      macros={systems.BeamLine.Slits.SLITXY1.macros}
+                      {...systems.BeamLine.Slits.SLITXY1.svgProps}
+
+
+
+
+
+                    />
                     <SlitXY
                       handleOnClick={this.handleOnSystemClick}
                       system={systems.BeamLine.Slits.SLITXY2}
@@ -964,20 +1091,37 @@ class ControlTestHarp1 extends React.Component {
                     />
 
 
-                    {/* <Harp
-                      maxHarpsReached={this.props.maxHarpsReached}
-                      cx={1150}
-                      cy={100}
-                      systemName={'testIOC:Harp4'}
+                    <Harp
+                      //maxHarpsReached={this.props.maxHarpsReached}
+                      maxHarpsReached={false}
+                      x={1150}
+                      y={yOffset}
+
                       usePvLabel={false}
                       alarmSensitive={true}
-                      label='Harp 4'
+
 
                       textShadow={false}
                       componentGradient={true}
-                      handleHarpInsertedOrRemoved={this.props.handleHarpInsertedOrRemoved}
+                      //handleHarpInsertedOrRemoved={this.props.handleHarpInsertedOrRemoved}
+                      pv={'pva://$(IOC):$(actuatorName):put-outIn'}
+                      isMovingPv={'pva://$(IOC):$(actuatorName):get-status.B5'}
+                      inLimitPv={'pva://$(IOC):$(actuatorName):get-status.B6'}
+                      outLimitPv={'pva://$(IOC):$(actuatorName):get-status.B7'}
+                      inLimitValue={1}
+                      outLimitValue={1}
+                      isMovingValue={1}
+                      maxHarpsReached={false}
 
-                    /> */}
+                      label={'$(actuatorName)'}
+
+                      macros={{
+                        '$(IOC)': 'testIOC',
+                        '$(actuatorName)': 'Harp4',
+
+                      }
+                      }
+                    />
 
                   </BeamLineCanvas>
                   {/* <ControlTopHarpEx1
@@ -1362,9 +1506,9 @@ class ControlTestHarp1 extends React.Component {
   }
 }
 
-ControlTestHarp1.propTypes = {
+BeamlineControlSystem.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(ControlTestHarp1);
-                    //export default ControlTestHarp1;
+export default withStyles(styles)(BeamlineControlSystem);
+                    //export default BeamlineControlSystem;

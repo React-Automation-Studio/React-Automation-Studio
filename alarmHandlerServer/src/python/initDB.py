@@ -14,12 +14,12 @@ except:
     ALARM_DATABASE_REPLICA_SET_NAME = "devrs"
 
 try:
-    MONGO_INITDB_ROOT_USERNAME = os.environ['MONGO_INITDB_ROOT_USERNAME']
-    MONGO_INITDB_ROOT_PASSWORD = os.environ['MONGO_INITDB_ROOT_PASSWORD']
-    MONGO_INITDB_ROOT_USERNAME = urllib.parse.quote_plus(
-        MONGO_INITDB_ROOT_USERNAME)
-    MONGO_INITDB_ROOT_PASSWORD = urllib.parse.quote_plus(
-        MONGO_INITDB_ROOT_PASSWORD)
+    MONGO_ROOT_USERNAME = os.environ['MONGO_ROOT_USERNAME']
+    MONGO_ROOT_PASSWORD = os.environ['MONGO_ROOT_PASSWORD']
+    MONGO_ROOT_USERNAME = urllib.parse.quote_plus(
+        MONGO_ROOT_USERNAME)
+    MONGO_ROOT_PASSWORD = urllib.parse.quote_plus(
+        MONGO_ROOT_PASSWORD)
     mongoAuth = True
 except:
     mongoAuth = False
@@ -57,7 +57,7 @@ if (RUN_DEMO_ALARMS_IOC):
 if (mongoAuth):
     client = MongoClient(
         'mongodb://%s:%s@%s' %
-        (MONGO_INITDB_ROOT_USERNAME, MONGO_INITDB_ROOT_PASSWORD, ALARM_DATABASE), replicaSet=ALARM_DATABASE_REPLICA_SET_NAME)
+        (MONGO_ROOT_USERNAME, MONGO_ROOT_PASSWORD, ALARM_DATABASE), replicaSet=ALARM_DATABASE_REPLICA_SET_NAME)
     # Wait for MongoClient to discover the whole replica set and identify MASTER!
     sleep(0.1)
 else:

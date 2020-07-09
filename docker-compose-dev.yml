@@ -166,7 +166,7 @@ services:
     logging:
       driver: "none"
     environment:
-      - ME_CONFIG_MONGODB_SERVER=localhost
+      - ME_CONFIG_MONGODB_SERVER=${ME_MONGODB_SERVER-localhost}
     depends_on:
       - mongosetup
 

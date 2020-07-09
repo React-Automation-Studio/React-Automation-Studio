@@ -16,12 +16,12 @@ except:
                            'localhost:27019']
 
 try:
-    MONGO_INITDB_ROOT_USERNAME = os.environ['MONGO_INITDB_ROOT_USERNAME']
-    MONGO_INITDB_ROOT_PASSWORD = os.environ['MONGO_INITDB_ROOT_PASSWORD']
-    MONGO_INITDB_ROOT_USERNAME = urllib.parse.quote_plus(
-        MONGO_INITDB_ROOT_USERNAME)
-    MONGO_INITDB_ROOT_PASSWORD = urllib.parse.quote_plus(
-        MONGO_INITDB_ROOT_PASSWORD)
+    MONGO_ROOT_USERNAME = os.environ['MONGO_ROOT_USERNAME']
+    MONGO_ROOT_PASSWORD = os.environ['MONGO_ROOT_PASSWORD']
+    MONGO_ROOT_USERNAME = urllib.parse.quote_plus(
+        MONGO_ROOT_USERNAME)
+    MONGO_ROOT_PASSWORD = urllib.parse.quote_plus(
+        MONGO_ROOT_PASSWORD)
     mongoAuth = True
 except:
     mongoAuth = False
@@ -29,7 +29,7 @@ except:
 if (mongoAuth):
     client = MongoClient(
         'mongodb://%s:%s@%s' %
-        (MONGO_INITDB_ROOT_USERNAME, MONGO_INITDB_ROOT_PASSWORD, REPLICA_SET_MEMBERS[0]))
+        (MONGO_ROOT_USERNAME, MONGO_ROOT_PASSWORD, REPLICA_SET_MEMBERS[0]))
 else:
     client = MongoClient('mongodb://%s' % (REPLICA_SET_MEMBERS[0]))
 

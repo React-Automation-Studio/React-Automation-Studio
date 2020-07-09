@@ -43,6 +43,6 @@ return(
   <div>{value}</div>
  )
 }
-<Example1/> -->
+<Example1/>
 ```
 * Note: LocalPV's cannot be used with in the styleguide

@@ -390,7 +390,7 @@ const styles = theme => ({
 
 function TabContainer(props) {
   return (
-    <Typography component="div" style={{ padding: 8 * 0 }}>
+    <Typography component="div" style={{ padding: 8 * 0 ,...props.style}}>
       {props.children}
     </Typography>
   );
@@ -1478,8 +1478,8 @@ class BeamlineControlSystem extends React.Component {
                         </AppBar>
                       </Grid>
                       <Grid item sm={10}>
-                        {sideTabValue === 0 && <TabContainer > <ControlTable handleOnSystemClick={this.handleOnSystemClick} systems={allSystems} />                            </TabContainer>}
-                        {sideTabValue === 1 && <TabContainer > <ControlTable handleOnSystemClick={this.handleOnSystemClick} systems={systems['BeamLine']['PowerSupplies']} />  </TabContainer>}
+                        {sideTabValue === 0 && <TabContainer style={{overflowY:'scroll',maxHeight:'50vh'}}> <ControlTable handleOnSystemClick={this.handleOnSystemClick} systems={allSystems}  />                            </TabContainer>}
+                        {sideTabValue === 1 && <TabContainer> <ControlTable handleOnSystemClick={this.handleOnSystemClick} systems={systems['BeamLine']['PowerSupplies']} />  </TabContainer>}
                         {sideTabValue === 2 && <TabContainer > <ControlTable handleOnSystemClick={this.handleOnSystemClick} systems={systems['BeamLine']['Slits']} />         </TabContainer>}
                       </Grid>
                     </Grid>

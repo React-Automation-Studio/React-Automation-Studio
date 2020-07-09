@@ -194,6 +194,7 @@ const math = create(all, config)
       setNewValueTrigger(newValueTrigger + 1);
       setImmediateValue(null);
     }
+    
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [immediateValue, min, max, prec])
   
@@ -405,7 +406,7 @@ const math = create(all, config)
     name={props.name}
 
   />
-  const childPvs = getPvs(props.pvs, props, pvs, setPvs,newValueTrigger,outputValue)
+  const childPvs = getPvs(props.pvs, props, pvs, setPvs,props.writeOutputValueToAllpvs?newValueTrigger:undefined,props.writeOutputValueToAllpvs?outputValue:undefined)
   const contextMenu=(<ContextMenu
   disableProbe={props.disableProbe}
   open={openContextMenu}
@@ -467,6 +468,7 @@ const math = create(all, config)
     //height: '100%',
   }
   const Tag=props.svgWidget?"g":"div";
+  
   return (
     <Tooltip   
       title={tooltip} 
@@ -510,7 +512,10 @@ Widget.propTypes = {
    * the widget debugging information will be displayed.
    */
   debug: PropTypes.bool,
-
+  /**
+   * Directive to the output value to all the pvs defined in the pvs array
+   */
+  writeOutputValueToAllpvs:PropTypes.bool,
   /**
    * Local variable initialization value.
    * When using loc:// type PVs.
@@ -669,6 +674,7 @@ Widget.defaultProps = {
   showTooltip:false,
   useMetadata: true,
   tooltip:"",
+  writeOutputValueToAllpvs:false,
 };
 
 export default Widget

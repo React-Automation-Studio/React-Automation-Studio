@@ -358,47 +358,16 @@ const handleYes = () => {
      * eg. {{'$(device)':'testIOC','$(id)':'2'}}
      */
     macros: PropTypes.object,
-    /**
-     * Custom maximum to be used, if usePvMinMax is not defined.
-     */
-    max: PropTypes.number,
-    /**
-     * Custom PV to define the maximum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
-     */
-    maxPv: PropTypes.string,
+    
     /**
      * Directive to prevent more harps being inserted if the maximum is reached.
      */
     maxHarpsReached: PropTypes.bool,
-    /**
-     * Custom minimum value to be used, if usePvMinMax is not defined.
-     */
-    min: PropTypes.number,
-    /**
-     * Custom PV to define the minimum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
-     */
-    minPv: PropTypes.string,
-
-    /**
-     * Custom precision to round the value.
-     */
-    prec: PropTypes.number,
-    /**
-     * Custom PV to define the precision to be used, usePvPrecision must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
-     */
-    precPv: PropTypes.string,
+    
 
 
 
-    /**
-     * Custom units to be used, if usePvUnits is not defined.
-     */
-
-    units: PropTypes.string,
-    /**
-     * Custom PV to define the units to be used, usePvUnits must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
-     */
-    unitsPv: PropTypes.string,
+    
     /**
      * Directive to fill the component's label with
      * the value contained in the  pv metadata's DESC field or the labelPv value.
@@ -416,25 +385,7 @@ const handleYes = () => {
      * By setting useMetadata to false also enables connection to other variables as defined by different protocols.
      */
     useMetadata: PropTypes.bool,
-    /**
-     * Directive to use the pv metadata's HOPR and LOPR fields or the minPv and maxPv values
-     * to limit the maximum and minimum values
-     * that can be contained in the value.
-     * If not defined it uses the custom min and max as defined by the min and max prop.
-     */
-    usePvMinMax: PropTypes.bool,
-    /**
-     * Directive to round the value using the precision field of the PV metadata or precPv.
-     * If not defined it uses the custom precision as defined by the prec prop.
-     */
-    usePvPrecision: PropTypes.bool,
-    /**
-     * Directive to use the units contained in the   pv metdata's EGU field or unitsPv.
-     *  If not defined it uses the custom units as defined by the units prop.
-     */
-
-
-    usePvUnits: PropTypes.bool,
+   
     /**
      * Directive to use PV's string values.
      */
@@ -443,14 +394,7 @@ const handleYes = () => {
 
 
 
-    /**
-     * If defined, then the string representation of the number can be formatted
-     * using the mathjs format function
-     * eg. numberFormat={{notation: 'engineering',precision: 3}}.
-     * See https://mathjs.org/docs/reference/functions/format.html for more examples
-     */
-    numberFormat: PropTypes.object,
-
+   
 
     /** Name of the pv process variable that sends the command 1 for out and 0 for in, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
     pv: PropTypes.string,
@@ -539,7 +483,7 @@ const handleYes = () => {
     labelOffsetX: 0,
     valueOffsetY: 0,
     valueOffsetX: 0,
-    componentShadow: true,
+    componentShadow: false,
     textShadow: false,
     componentGradient: true,
   };

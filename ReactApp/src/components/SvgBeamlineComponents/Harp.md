@@ -49,12 +49,8 @@ import HorizontalBeamline from './HorizontalBeamline';
           y={50}
           
           alarmSensitive={true}
-          labelOffsetY={0}
-          labelOffsetX={0}
-          valueOffsetY={0}
-          valueOffsetX={0}
-          componentShadow={true}
-          textShadow={false}
+         
+        
           componentGradient={true}
         />
       

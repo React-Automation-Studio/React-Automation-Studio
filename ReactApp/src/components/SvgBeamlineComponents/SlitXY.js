@@ -69,7 +69,7 @@ const SlitXYComponent = (props) => {
   let unitsOffsetY = ""
   let xOffsetReadback;
   let yOffsetReadback;
-  console.log(props)
+// console.log(props)
   if (initialized) {
     let precGapX = props.usePvPrecision ? xGapPv.prec : props.prec;
     let precGapY = props.usePvPrecision ? yGapPv.prec : props.prec;

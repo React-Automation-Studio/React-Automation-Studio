@@ -106,7 +106,7 @@ const SteererXYMagnetComponent = (props) => {
   }
 
   const componentId = uuidv4();
-  console.log(props,valueX,valueY)
+  //console.log(props,valueX,valueY)
   return (
 
 

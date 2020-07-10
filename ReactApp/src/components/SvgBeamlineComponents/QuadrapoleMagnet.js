@@ -47,7 +47,7 @@ const QuadrapoleMagnetComponent = (props) => {
     value=0;
   }
   let color = '';
-  console.log(props.theme)
+  
   if (initialized ){
     if (props.alarmSensitive !== 'undefined') {
       if (props.alarmSensitive == true) {

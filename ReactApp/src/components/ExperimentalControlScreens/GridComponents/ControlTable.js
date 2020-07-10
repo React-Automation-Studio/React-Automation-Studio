@@ -20,7 +20,7 @@ const styles = theme => ({
     overflowX: 'auto',
   },
   table: {
-    padding: 1,
+    padding:0,
     minWidth: 700,
   },
   tableHead: {
@@ -94,9 +94,9 @@ const ControlTable = (props) => {
 
   return (
 
-    <Paper className={classes.root} elevation={props.theme.palette.paperElevation}>
-      <Table className={classes.table} size={'small'}  >
-        <TableHead className={classes.tableHead}>
+    <Paper className={classes.root} elevation={props.theme.palette.paperElevation} style={props.style}>
+      <Table className={classes.table} size={'small'} stickyHeader={true} >
+        <TableHead className={classes.tableHead} >
           <TableRow>
             <TableCell>Device Description</TableCell>
             <TableCell align="center">Setpoint</TableCell>
@@ -106,8 +106,8 @@ const ControlTable = (props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rowPvs.map(row => (
-            <TableRow key={row.id} onClick={handleOnClick(row.id)} >
+          {rowPvs.map((row,index) => (
+            <TableRow key={index.toString()} onClick={handleOnClick(row.id)} >
 
               <TableCell className={classes.tableCell} align="left" component="th" scope="row" >
                 <Typography variant={'body2'}>{row.displayName}</Typography>

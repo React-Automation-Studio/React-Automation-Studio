@@ -778,66 +778,69 @@ def initialiseAlarmIOC():
 
         pv = alarmDict[pvname]["D"]
         val = pv.get()
-        # actual pv did not connect during server initialisation
-        if (val.size == 0):
-            # status initially 39 char string for memory
-            pv.put(
-                np.array([
-                    'abcdefghijklmnopqrstuvwxyzAbcdefghijk_0',
-                    "[Disconnected]", "[Disconnected]"
-                ]))
-        else:
-            # if alarm was activated when server initialised
-            try:
-                units = pvInitDict[pvname][3]
-                enum_strs = pvInitDict[pvname][4]
-                value = pvInitDict[pvname][0]
-                if(enum_strs):
-                    lastAlarmVal = enum_strs[value]
-                else:
-                    lastAlarmVal = str(value)+" "+units
-                lastAlarmTime = datetime.fromtimestamp(
-                    pvInitDict[pvname][2]).strftime("%a, %d %b %Y at %H:%M:%S")
-                # set current alarm status
-                sev = pvInitDict[pvname][1]
-                if(sev == 1):     # MINOR alarm
-                    alarmDict[pvname]["A"].value = 2
-                    # Log to history
-                    entry = {"timestamp": pvInitDict[pvname][2], "entry": " ".join(
-                        [pvname, "-", "MINOR_ALARM triggered, alarm value =", str(lastAlarmVal)])}
-                    # print(pvInitDict[pvname][2], pvname,
-                    #       "MINOR_ALARM triggered, alarm value =", lastAlarmVal)
-                elif(sev == 2):     # MAJOR alarm
-                    alarmDict[pvname]["A"].value = 4
-                    # Log to history
-                    entry = {"timestamp": pvInitDict[pvname][2], "entry": " ".join(
-                        [pvname, "-", "MAJOR_ALARM triggered, alarm value =", str(lastAlarmVal)])}
-                    # print(pvInitDict[pvname][2], pvname,
-                    #       "MAJOR_ALARM triggered, alarm value =", lastAlarmVal)
-                elif(sev == 3):     # INVALID alarm
-                    alarmDict[pvname]["A"].value = 6
-                    # Log to history
-                    entry = {"timestamp": pvInitDict[pvname][2], "entry": " ".join(
-                        [pvname, "-", "INVALID_ALARM triggered, alarm value =", str(lastAlarmVal)])}
-                    # print(pvInitDict[pvname][2], pvname,
-                    #       "INVALID_ALARM triggered, alarm value =", lastAlarmVal)
-                # Set up pv values accordingly
-                # set alarm value
-                alarmDict[pvname]["V"].value = str(lastAlarmVal)
-                # set alarm time
-                alarmDict[pvname]["T"].value = lastAlarmTime
-                # Write entry to database for alarms that were active on startup
-                client[MONGO_INITDB_ALARM_DATABASE].history.update_many(
-                    {'id': areaKey+'*'+pvname},
-                    {'$push': {
-                        'history': {
-                            '$each': [entry],
-                            '$position': 0
-                        }
-                    }})
-            except:
-                # set current alarm status to NO_ALARM
-                alarmDict[pvname]["A"].value = 0
+        try:
+            # actual pv did not connect during server initialisation
+            if (val.size == 0):
+                # status initially 39 char string for memory
+                pv.put(
+                    np.array([
+                        'abcdefghijklmnopqrstuvwxyzAbcdefghijk_0',
+                        "[Disconnected]", "[Disconnected]"
+                    ]))
+            else:
+                # if alarm was activated when server initialised
+                try:
+                    units = pvInitDict[pvname][3]
+                    enum_strs = pvInitDict[pvname][4]
+                    value = pvInitDict[pvname][0]
+                    if(enum_strs):
+                        lastAlarmVal = enum_strs[value]
+                    else:
+                        lastAlarmVal = str(value)+" "+units
+                    lastAlarmTime = datetime.fromtimestamp(
+                        pvInitDict[pvname][2]).strftime("%a, %d %b %Y at %H:%M:%S")
+                    # set current alarm status
+                    sev = pvInitDict[pvname][1]
+                    if(sev == 1):     # MINOR alarm
+                        alarmDict[pvname]["A"].value = 2
+                        # Log to history
+                        entry = {"timestamp": pvInitDict[pvname][2], "entry": " ".join(
+                            [pvname, "-", "MINOR_ALARM triggered, alarm value =", str(lastAlarmVal)])}
+                        # print(pvInitDict[pvname][2], pvname,
+                        #       "MINOR_ALARM triggered, alarm value =", lastAlarmVal)
+                    elif(sev == 2):     # MAJOR alarm
+                        alarmDict[pvname]["A"].value = 4
+                        # Log to history
+                        entry = {"timestamp": pvInitDict[pvname][2], "entry": " ".join(
+                            [pvname, "-", "MAJOR_ALARM triggered, alarm value =", str(lastAlarmVal)])}
+                        # print(pvInitDict[pvname][2], pvname,
+                        #       "MAJOR_ALARM triggered, alarm value =", lastAlarmVal)
+                    elif(sev == 3):     # INVALID alarm
+                        alarmDict[pvname]["A"].value = 6
+                        # Log to history
+                        entry = {"timestamp": pvInitDict[pvname][2], "entry": " ".join(
+                            [pvname, "-", "INVALID_ALARM triggered, alarm value =", str(lastAlarmVal)])}
+                        # print(pvInitDict[pvname][2], pvname,
+                        #       "INVALID_ALARM triggered, alarm value =", lastAlarmVal)
+                    # Set up pv values accordingly
+                    # set alarm value
+                    alarmDict[pvname]["V"].value = str(lastAlarmVal)
+                    # set alarm time
+                    alarmDict[pvname]["T"].value = lastAlarmTime
+                    # Write entry to database for alarms that were active on startup
+                    client[MONGO_INITDB_ALARM_DATABASE].history.update_many(
+                        {'id': areaKey+'*'+pvname},
+                        {'$push': {
+                            'history': {
+                                '$each': [entry],
+                                '$position': 0
+                            }
+                        }})
+                except:
+                    # set current alarm status to NO_ALARM
+                    alarmDict[pvname]["A"].value = 0
+        except:
+            print('[Warning]', 'val =', val)
 
         # set alarm value
         alarmDict[pvname]["V"].value = str(lastAlarmVal)

@@ -8,7 +8,7 @@ import Help from './components/docs/Help';
 import MobileDemo2 from './components/Examples/Mobile/MobileDemo2';
 import MobileDemo1 from './components/Examples/Mobile/MobileDemo1';
 
-import Main from './Main';
+//import Main from './Main';
 import MainDashboard from './components/UI/MainDashboard';
 import ControlTestHarp1 from './components/ControlScreens/ControlTestHarp1';
 import BeamlineControlSystem from './components/ExperimentalControlScreens/BeamlineControlSystem';

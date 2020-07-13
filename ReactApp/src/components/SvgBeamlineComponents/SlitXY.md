@@ -1,48 +1,32 @@
+
+
  ``` js
 import BeamLineCanvas from './BeamLineCanvas';
 import HorizontalBeamline from './HorizontalBeamline';
-const  system={
-            componentType: 'SlitXY',
-            systemName: '$(IOC):$(device)',
-            displayName: '$(device)$(XorY)',
-            editorType: 'editorSinglePS',
-            setpointPv: '$(IOC):$(device):$(XorY):Setpoint',
-            pv: '$(IOC):$(device):$(XorY):Readback',
-            statusTextPv: '$(IOC):$(device):$(XorY):On',
-            onOffPv: '$(IOC):$(device):$(XorY):On',
-            macros: {
-              '$(IOC)': 'pva://testIOC',
-              '$(device)': 'STR2',
-              '$(XorY)': 'Y'
-          },
-          };
+import EditorSlitXY from '../ExperimentalControlScreens/Components/EditorSlitXY';
+import React,{useState} from 'react';
+import Grid from '@material-ui/core/Grid';
+const [displayEditor,setDisplayEditor]=useState(false);
 
-<BeamLineCanvas width={600} height={300} >
-       <HorizontalBeamline 
+  <Grid container direction="row" justify="flex-start" alignItems="flex-start" >
+  <Grid item xs={12} lg={12}>
+    <div>Click on the slit to open the editor</div>
+  </Grid>
+    <Grid item xs={12} lg={6}>
+      <BeamLineCanvas 
+        width={'100%'} 
+        height={400}
+       
+      >
+        <HorizontalBeamline 
           x={0}
           y={50}
-       
-          pv={'pva://testIOC:BeamlineA:BeamOn'}
-          width={'113px'}
-      //    debugBorder={true}
+          width={'300px'}
         />
-        <HorizontalBeamline 
-          x={'113px'}
-          y={50}
-          pv={'pva://testIOC:BeamlineB:BeamOn'}
-          width={'148px'}
-     //     debugBorder={true}
-        />
-        <HorizontalBeamline 
-          x={'261px'}
-          y={50}
-          pv={'pva://testIOC:BeamlineC:BeamOn'}
-          width={'150px'}
-    //      debugBorder={true}
-        />
-        <SlitXY
+        
+       <SlitXY
          
-          system={system}
+          handleOnClick={()=>setDisplayEditor(true)}
           xGapPv={'$(IOC):$(device):X:Gap:Readback'}
           yGapPv={'$(IOC):$(device):Y:Gap:Readback'}  
           xOffsetPv={'$(IOC):$(device):X:Offset:Readback'}
@@ -62,7 +46,38 @@ const  system={
           alarmSensitive={true}
           
         />
-      
         </BeamLineCanvas>
+      </Grid>
+      <Grid item xs={12} lg={6}>
+        {displayEditor&&<EditorSlitXY  
+          system={
+            {
+              systemName: '$(IOC):$(device)',
+          displayName: '$(device)',
+          editorType: 'editorSlitXY',
+          xDriveOnPv: '$(IOC):$(device):X:Drive:On',
+          yDriveOnPv: '$(IOC):$(device):Y:Drive:On',
+          xGapReadbackPv: '$(IOC):$(device):X:Gap:Readback',
+          yGapReadbackPv: '$(IOC):$(device):Y:Gap:Readback',
+          xOffsetReadbackPv: '$(IOC):$(device):X:Offset:Readback',
+          yOffsetReadbackPv: '$(IOC):$(device):Y:Offset:Readback',
+          xGapSetpointPv: '$(IOC):$(device):X:Gap:Setpoint',
+          yGapSetpointPv: '$(IOC):$(device):Y:Gap:Setpoint',
+          xOffsetSetpointPv: '$(IOC):$(device):X:Offset:Setpoint',
+          yOffsetSetpointPv: '$(IOC):$(device):Y:Offset:Setpoint',
+          label: '$(device)',
+          macros: {
+            '$(IOC)': 'pva://testIOC',
+            '$(device)': 'SLITXY1',
+          },
+              disableLink:true
+          
+          }
+          }
+          handleCloseEditor={() => setDisplayEditor(false)} 
+        />}
+      </Grid>
+    </Grid>
+
 
 ```

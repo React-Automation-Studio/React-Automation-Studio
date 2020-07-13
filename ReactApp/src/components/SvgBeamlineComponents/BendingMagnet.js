@@ -39,7 +39,7 @@ const BendingMagnetComponent = (props) => {
   const { initialized } = props;
  
   const { alarmSeverity } = props;
-  const {pvName}=props;
+
   let value;
   if (initialized ){
     value=props.value;
@@ -72,7 +72,7 @@ const BendingMagnetComponent = (props) => {
   else{
     color_side = 'grey';
   }
-
+  const componentId = uuidv4();
   return (
 
 
@@ -88,12 +88,12 @@ const BendingMagnetComponent = (props) => {
       <g transform={'translate(' + svgCenterX + ',' + (svgCenterY) + ')'}
          onClick={handleOnClick(props.system)}
       >
-            <linearGradient id={pvName + 'elipse-gradient'} gradientTransform="rotate(0)">
+            <linearGradient id={componentId + 'elipse-gradient'} gradientTransform="rotate(0)">
               <stop offset="0%" stopOpacity="30" stopColor={'silver'} />
               <stop offset="75%" stopColor={color_side} />
             </linearGradient>
             <defs>
-              <filter id={pvName + "elipseShadow"} x="0" y="0" width="600%" height="500%">
+              <filter id={componentId + "elipseShadow"} x="0" y="0" width="600%" height="500%">
                 <feOffset result="offOut" in="SourceGraphic" dx="2.5" dy="2.5" />
                 <feColorMatrix result="matrixOut" in="offOut" type="matrix"
                   values="0.2 0 0 0 0 0 0.2 0 0 0 0 0 0.2 0 0 0 0 0 1 0" />
@@ -102,13 +102,13 @@ const BendingMagnetComponent = (props) => {
               </filter>
             </defs>
             <g transform="translate(-10,-1086)"
-              fill={props.componentGradient === true ? 'url(#' + pvName + 'elipse-gradient)' : color_side}
+              fill={props.componentGradient === true ? 'url(#' + componentId + 'elipse-gradient)' : color_side}
               style={{
                 'strokeWidth': '0.3',
                 'stroke': 'black'
               }}
             >
-              <g filter={props.componentShadow === true ? "url(#" + pvName + "elipseShadow)" : ""}>
+              <g filter={props.componentShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}>
                 <path
                   id="path8478"
                   d="M 24.149959,1064.5524 5.135178,1049.0529 h 10.000004 l 19.014781,15.4995 z"
@@ -138,7 +138,7 @@ const BendingMagnetComponent = (props) => {
            x={typeof props.valueOffsetX !== 'undefined' ? props.valueOffsetX +7.5:7.5}
            y={typeof props.valueOffsetY !== 'undefined' ? props.valueOffsetY +57.5:57.5}
               textAnchor='middle'
-              filter={props.textShadow === true ? "url(#" + pvName + "elipseShadow)" : ""}
+              filter={props.textShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
             >
               {value + " " + props.units}
 
@@ -147,7 +147,7 @@ const BendingMagnetComponent = (props) => {
              x={typeof props.labelOffsetX !== 'undefined' ? props.labelOffsetX +7.5:7.5}
              y={typeof props.labelOffsetY !== 'undefined' ? props.labelOffsetY -40:-40}
               textAnchor='middle'
-              filter={props.textShadow === true ? "url(#" + pvName + "elipseShadow)" : ""}
+              filter={props.textShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
             >
               {props.label}
             </text>

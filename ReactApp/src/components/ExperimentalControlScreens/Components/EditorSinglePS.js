@@ -115,12 +115,14 @@ const EditorSinglePS =(props)=>{
             </Grid>
             <Grid item xs={4}  >
 
-              <Button component={Link} to={{
+             {system.disableLink!==true&& <Button component={Link} to={{
                 pathname: "/AdvancedSettingsSinglePS",
                 search: JSON.stringify(system),
                 state: ["sdas"],
                 data: "hello2"
-              }} target="_blank" color="primary" style={{ width: "100%" }} variant='contained'>  Settings </Button>
+              }} target="_blank" color="primary" style={{ width: "100%" }} variant='contained'>
+                  Settings
+                   </Button>}
 
             </Grid>
             <Grid item xs={12}  >

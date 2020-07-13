@@ -7,6 +7,7 @@ import BendingMagnet from './BendingMagnet';
 import SteererYMagnet from './SteererYMagnet';
 import SteererXMagnet from './SteererXMagnet';
 import SteererXYMagnet from './SteererXYMagnet';
+
 <BeamLineCanvas width={600} height={400} >
 	<HorizontalBeamline 
 		x={0}
@@ -46,7 +47,7 @@ import SteererXYMagnet from './SteererXYMagnet';
 		componentGradient={true}
 	/>
 	<BendingMagnet
-		x={100}
+		x={75}
 		y={50}
 		label= 'BM1'
        	pv= '$(IOC):$(device):Readback'

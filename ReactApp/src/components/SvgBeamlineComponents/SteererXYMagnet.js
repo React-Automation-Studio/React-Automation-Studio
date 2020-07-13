@@ -55,7 +55,7 @@ const SteererXYMagnetComponent = (props) => {
   const { initialized } = props;
 
   let alarmSeverity=0;
-  const { pvName } = props;
+
   const xPv=props.pvsData[0];
   const yPv=props.pvsData[1];
   let unitsX="";

@@ -35,7 +35,7 @@ const SteererXMagnetComponent = (props) => {
   const { initialized } = props;
 
   const { alarmSeverity } = props;
-  const { pvName } = props;
+
   let value;
   if (initialized) {
     value = props.value;

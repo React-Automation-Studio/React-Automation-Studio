@@ -7,25 +7,10 @@ import HorizontalBeamline from './HorizontalBeamline';
        <HorizontalBeamline 
           x={0}
           y={50}
+          width={'300px'}
+     
+        />
        
-          pv={'pva://testIOC:BeamlineA:BeamOn'}
-          width={'113px'}
-      //    debugBorder={true}
-        />
-        <HorizontalBeamline 
-          x={'113px'}
-          y={50}
-          pv={'pva://testIOC:BeamlineB:BeamOn'}
-          width={'148px'}
-     //     debugBorder={true}
-        />
-        <HorizontalBeamline 
-          x={'261px'}
-          y={50}
-          pv={'pva://testIOC:BeamlineC:BeamOn'}
-          width={'150px'}
-    //      debugBorder={true}
-        />
         <Harp
 
           pv={'pva://$(IOC):$(actuatorName):put-outIn'}

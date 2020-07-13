@@ -1,8 +1,7 @@
-import React,{useState} from 'react'
+import React from 'react'
 
 import Widget from "../SystemComponents/Widgets/Widget";
 import { withStyles } from '@material-ui/core/styles';
-import {replaceSystemMacros} from '../SystemComponents/Utils/macroReplacement';
 import { v4 as uuidv4 } from 'uuid';
 import  {svgHeight,svgCenterY,svgWidth,svgCenterX} from "../SystemComponents/svgConstants";
 import PropTypes from 'prop-types';
@@ -38,7 +37,7 @@ const QuadrapoleMagnetComponent = (props) => {
   const { initialized } = props;
  
   const { alarmSeverity } = props;
-  const {pvName}=props;
+
   let value;
   if (initialized ){
     value=props.value;
@@ -73,7 +72,7 @@ const QuadrapoleMagnetComponent = (props) => {
     color = 'grey';
   }
   let xOffset=0;
-  
+  const componentId = uuidv4();
   return (
 
 
@@ -89,12 +88,12 @@ const QuadrapoleMagnetComponent = (props) => {
       <g transform={'translate(' + svgCenterX + ',' + (svgCenterY) + ')'}
        onClick={handleOnClick(props.system)}
       >
-          <linearGradient id={pvName + 'elipse-gradient'} gradientTransform="rotate(0)">
+          <linearGradient id={componentId + 'elipse-gradient'} gradientTransform="rotate(0)">
               <stop offset="0%" stopOpacity="0.5" stopColor='silver' />
               <stop offset="65%" stopColor={color} />
             </linearGradient>
             <defs>
-              <filter id={pvName + "elipseShadow"} x="0" y="0" width="600%" height="500%">
+              <filter id={componentId + "elipseShadow"} x="0" y="0" width="600%" height="500%">
                 <feOffset result="offOut" in="SourceGraphic" dx="2.5" dy="2.5" />
                 <feColorMatrix result="matrixOut" in="offOut" type="matrix"
                   values="0.2 0 0 0 0 0 0.2 0 0 0 0 0 0.2 0 0 0 0 0 1 0" />
@@ -103,22 +102,22 @@ const QuadrapoleMagnetComponent = (props) => {
               </filter>
             </defs>
             <ellipse
-              fill={props.componentGradient === true ? 'url(#' + pvName + 'elipse-gradient)' : color}
+              fill={props.componentGradient === true ? 'url(#' + componentId + 'elipse-gradient)' : color}
 
 
               cx={xOffset + 15}
               cy={0}
               rx="10"
               ry="30"
-              filter={props.componentShadow === true ? "url(#" + pvName + "elipseShadow)" : ""}
+              filter={props.componentShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
             />
             <ellipse
-              fill={props.componentGradient === true ? 'url(#' + pvName + 'elipse-gradient)' : color}
+              fill={props.componentGradient === true ? 'url(#' + componentId + 'elipse-gradient)' : color}
               cx={xOffset}
               cy={0}
               rx="10"
               ry="30"
-              filter={props.componentShadow === true ? "url(#" + pvName + "elipseShadow)" : ""}
+              filter={props.componentShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
             />
 
             <text className={classes.Value}
@@ -126,7 +125,7 @@ const QuadrapoleMagnetComponent = (props) => {
                y={typeof props.valueOffsetY !== 'undefined' ? props.valueOffsetY +57.5:57.5}
           
               textAnchor='middle'
-              filter={props.textShadow === true ? "url(#" + pvName + "elipseShadow)" : ""}
+              filter={props.textShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
             >
               {value + " " + props.units}
 
@@ -135,7 +134,7 @@ const QuadrapoleMagnetComponent = (props) => {
               x={typeof props.labelOffsetX !== 'undefined' ? props.labelOffsetX +7.5:7.5}
               y={typeof props.labelOffsetY !== 'undefined' ? props.labelOffsetY -40:-40}
               textAnchor='middle'
-              filter={props.textShadow === true ? "url(#" + pvName + "elipseShadow)" : ""}
+              filter={props.textShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
             >
               {props.label}
             </text>

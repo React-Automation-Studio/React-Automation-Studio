@@ -55,7 +55,7 @@ const SlitXYComponent = (props) => {
   const { initialized } = props;
 
   let alarmSeverity = 0;
-  const { pvName } = props;
+
   const xGapPv = props.pvsData[0];
   const yGapPv = props.pvsData[1];
   const xOffsetPv = props.pvsData[2];

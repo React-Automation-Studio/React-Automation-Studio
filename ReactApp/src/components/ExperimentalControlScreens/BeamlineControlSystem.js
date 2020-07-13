@@ -9,14 +9,14 @@ import HarpRangeSelection from '../SiteSpecificComponents/iThembaLABS/CompoundCo
 import ToggleButton from '../BaseComponents/ToggleButton';
 import ActionButton from '../BaseComponents/ActionButton';
 
-import EditorSinglePS from '../ExperimentalControlScreens/GridComponents/EditorSinglePS'
-import EditorSlitXY from '../ExperimentalControlScreens/GridComponents/EditorSlitXY'
-import EditorSteererXY from '../ExperimentalControlScreens/GridComponents/EditorSteererXY'
-import { BottomNavigationAction } from '@material-ui/core';
+import EditorSinglePS from './Components/EditorSinglePS'
+import EditorSlitXY from './Components/EditorSlitXY'
+import EditorSteererXY from './Components/EditorSteererXY'
+
 import HarpGraph from '../SiteSpecificComponents/iThembaLABS/CompoundComponents/HarpGraph';
 import AppBar from '@material-ui/core/AppBar';
 import GraphY from '../BaseComponents/GraphY';
-import ControlTable from '../ExperimentalControlScreens/GridComponents/ControlTable'
+import ControlTable from './Components/ControlTable'
 import TraditionalLayout from '../UI/Layout/ComposedLayouts/TraditionalLayout.js';
 import BeamLineCanvas from '../SvgBeamlineComponents/BeamLineCanvas';
 import HorizontalBeamline from '../SvgBeamlineComponents/HorizontalBeamline';
@@ -28,6 +28,7 @@ import SlitXY from '../SvgBeamlineComponents/SlitXY';
 import Harp from '../SvgBeamlineComponents/Harp';
 import FC from '../SvgBeamlineComponents/FC';
 import PV from '../SystemComponents/PV'
+import { replaceMacros } from '../SystemComponents/Utils/macroReplacement';
 
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */
@@ -66,40 +67,40 @@ const BeamlineControlSystem = (props) => {
   const [editorType, setEditorType] = useState("");
   const [displayEditor, setDisplayEditor] = useState(false);
   const [editorSystem, setEditorSystem] = useState({});
-  const [displayHarps, setDisplayHarps] = useState(
-    [
-      { systemName: 'testIOC:Harp1', displayName: 'Harp 1', inserted: false },
-      { systemName: 'testIOC:Harp2', displayName: 'Harp 2', inserted: false },
-      { systemName: 'testIOC:Harp3', displayName: 'Harp 3', inserted: false },
-      { systemName: 'testIOC:Harp4', displayName: 'Harp 4', inserted: false },
-    ]);
+
   const [maxHarpsReached, setMaxHarpsReached] = useState(false);
-  const [x0GraphPVs, setX0GraphPVs] = useState([]);
-  const [y0GraphPVs, setY0GraphPVs] = useState([]);
-  const [x0legend, setX0legend] = useState([]);
-  const [y0legend, setY0legend] = useState([]);
-  const [x0GraphKey, setX0GraphKey] = useState("");
-  const [onlyY0, setOnlyY0] = useState(false);
-  const [onlyX0, setOnlyX0] = useState(false);
-  const [x1GraphPVs, setX1GraphPVs] = useState([]);
-  const [y1GraphPVs, setY1GraphPVs] = useState([]);
-  const [x1legend, setX1legend] = useState([]);
-  const [y1legend, setY1legend] = useState([]);
-  const [x1GraphKey, setX1GraphKey] = useState("");
-  const [onlyY1, setOnlyY1] = useState(false);
-  const [onlyX1, setOnlyX1] = useState(false);
+  const [harpGraphsState,setHarpGraphsState]=useState({
+    x0GraphPVs:[],
+    y0GraphPVs:[],
+    x0legend:[],
+    y0legend:[],
+    x0GraphKey:"",
+    onlyY0:false,
+    onlyX0:false,
+    x1GraphPVs:[],
+    y1GraphPVs:[],
+    x1legend:[],
+    y1legend:[],
+    x1GraphKey:"",
+  onlyY1:false,
+  onlyX1:false,
+  topXgraphYmax:0,
+  topYgraphYmax:0, ///
+  bottomYgraphYmax:0,
+  bottomXgraphYmax:0,
+  x0SystemName:undefined,
+  x1SystemName:undefined,
+  x0RangePV:undefined,
+  x1RangePV:undefined,
+  y0RangePV:undefined,
+  y1RangePV:undefined,
+  y0GraphKey:null,
+  y1GraphKey:null,
+  });
   const [topXgraphYmax, setTopXgraphYmax] = useState(0); ///
   const [topYgraphYmax, setTopYgraphYmax] = useState(0); ///
   const [bottomYgraphYmax, setBottomYgraphYmax] = useState(0);
   const [bottomXgraphYmax, setBottomXgraphYmax] = useState(0);
-  const [x0SystemName, setX0SystemName] = useState(null)
-  const [x1SystemName, setX1SystemName] = useState(null)
-  const [x0RangePV, setX0RangePV] = useState(undefined)
-  const [x1RangePV, setX1RangePV] = useState(undefined)
-  const [y0RangePV, setY0RangePV] = useState(undefined)
-  const [y1RangePV, setY1RangePV] = useState(undefined)
-  const [y0GraphKey, setY0GraphKey] = useState(null)
-  const [y1GraphKey, setY1GraphKey] = useState(null)
   const yOffset = 0;
   const handleTabChange = (event, value) => {
     setTabValue(value)
@@ -111,7 +112,7 @@ const BeamlineControlSystem = (props) => {
   }
   const harps = [];
 
-  const systems = {
+  const [systems,setSystems] = useState({
     'BeamLine': {
       'PowerSupplies': {
         'Q1': {
@@ -299,8 +300,7 @@ const BeamlineControlSystem = (props) => {
           readbackPv: '$(IOC):$(device):$(XorY):Readback',
           statusTextPv: '$(IOC):$(device):$(XorY):On',
           statusOnPv: '$(IOC):$(device):$(XorY):On',
-          //scanPv: '$(IOC):$(device):SimReadback.SCAN',
-          //orocPv: '$(IOC):$(device):SimReadback.OROC',
+      
           onOffPv: '$(IOC):$(device):$(XorY):On',
           macros: {
             '$(IOC)': 'pva://testIOC',
@@ -325,8 +325,7 @@ const BeamlineControlSystem = (props) => {
           setpointPv: '$(IOC):$(device):$(XorY):Setpoint',
           readbackPv: '$(IOC):$(device):$(XorY):Readback',
           statusTextPv: '$(IOC):$(device):$(XorY):On',
-          //scanPv: '$(IOC):$(device):SimReadback.SCAN',
-          //orocPv: '$(IOC):$(device):SimReadback.OROC',
+         
           onOffPv: '$(IOC):$(device):$(XorY):On',
           macros: {
             '$(IOC)': 'pva://testIOC',
@@ -406,8 +405,8 @@ const BeamlineControlSystem = (props) => {
           },
         },
       },
-      Harps: {
-        Harp1: {
+      'Harps': {
+        'Harp1': {
           maxHarpsReached: maxHarpsReached,
           x: 140,
           y: yOffset,
@@ -422,6 +421,7 @@ const BeamlineControlSystem = (props) => {
           outLimitValue: 1,
           isMovingValue: 1,
           label: '$(actuatorName)',
+          systemName:'$(IOC):$(actuatorName)',
           macros: {
             '$(IOC)': 'testIOC',
             '$(actuatorName)': 'Harp1',
@@ -442,6 +442,7 @@ const BeamlineControlSystem = (props) => {
           outLimitValue: 1,
           isMovingValue: 1,
           label: '$(actuatorName)',
+          systemName:'$(IOC):$(actuatorName)',
           macros: {
             '$(IOC)': 'testIOC',
             '$(actuatorName)': 'Harp2',
@@ -462,6 +463,7 @@ const BeamlineControlSystem = (props) => {
           outLimitValue: 1,
           isMovingValue: 1,
           label: '$(actuatorName)',
+          systemName:'$(IOC):$(actuatorName)',
           macros: {
             '$(IOC)': 'testIOC',
             '$(actuatorName)': 'Harp3',
@@ -481,6 +483,7 @@ const BeamlineControlSystem = (props) => {
           inLimitValue: 1,
           outLimitValue: 1,
           isMovingValue: 1,
+          systemName:'$(IOC):$(actuatorName)',
           label: '$(actuatorName)',
           macros: {
             '$(IOC)': 'testIOC',
@@ -490,23 +493,24 @@ const BeamlineControlSystem = (props) => {
 
       }
     }
-  }
+  });
   const allSystems = { ...systems.BeamLine.PowerSupplies, ...systems.BeamLine.Slits }
+
   const [harpPvs, setHarpPvs] = useState({});
   const harpPvConnections = (harpSystems) => {
     let pvs = [];
     let index = 0;
     for (let harp in harpSystems) {
-      // console.log(harp)
+      
       pvs.push(
         <PV
-        //debug={true}
+        
           key={index.toString()}
           pv={harpSystems[harp].inLimitPv}
           macros={harpSystems[harp].macros}
           pvData={(pv) => setHarpPvs(prePvs => {
-            let pvs = {...prePvs}
-            // if you want modify the  pv data do it here!
+            let pvs = { ...prePvs }
+           
             pvs[harp] = pv;
             return pvs
 
@@ -518,26 +522,7 @@ const BeamlineControlSystem = (props) => {
 
     return pvs
   }
-  useEffect(()=>{
-    let harp;
-    let numberOfInsertedHarps=0;
-    for(harp in harpPvs ){
-     
-      if(harpPvs[harp]){
-        //console.log(harp,harpPvs[harp])
-        if (harpPvs[harp].value==1){
-          numberOfInsertedHarps++;
-        }
-      }
-    }
-    if (numberOfInsertedHarps>=2){
-      setMaxHarpsReached(true);
-    }
-    else{
-      setMaxHarpsReached(false);
-    }
-  },[harpPvs])
-  const handleHarpInsertedOrRemoved = (inserted, name) => {
+  useEffect(() => {
     let harp;
     let x0GraphPVs = [];
     let y0GraphPVs = [];
@@ -562,110 +547,123 @@ const BeamlineControlSystem = (props) => {
     let x1GraphKey = "x1Graph";
     let y1GraphKey = "y1Graph";
     let numberOfInsertedGraphs = 0;
-    let maxHarpsReached = false;
-    for (harp in displayHarps) {
-      if (displayHarps[harp].systemName === name) {
-        displayHarps[harp].inserted = inserted;
-      }
-      if (displayHarps[harp].inserted === true) {
-        if (numberOfInsertedGraphs === 0) {
-          if (typeof displayHarps[harp].onlyY !== 'undefined') {
-            x0GraphPVs.push('pva://' + displayHarps[harp].systemName + ':ycur');
-            x0RangePV = 'pva://' + displayHarps[harp].systemName + ':yrange';
-            onlyY0 = true;
+    let numberOfInsertedHarps = 0;
+    for (harp in harpPvs) {
+
+      if (harpPvs[harp]) {
+        let currentHarp=systems.BeamLine.Harps[harp];
+        let systemName= replaceMacros(currentHarp.systemName,currentHarp.macros);
+        let label=replaceMacros(currentHarp.label,currentHarp.macros);
+        if (harpPvs[harp].value == 1) {
+          if (numberOfInsertedGraphs === 0) {
+            if (typeof currentHarp.onlyY !== 'undefined') {
+              
+              x0GraphPVs.push('pva://' + systemName + ':ycur');
+              x0RangePV = 'pva://' + systemName + ':yrange';
+              onlyY0 = true;
+            }
+            else {
+              x0GraphPVs.push('pva://' + systemName + ':xcur');
+              x0RangePV = 'pva://' + systemName + ':xrange';
+              onlyY0 = false;
+            }
+            x0legend.push(label);
+            x0GraphKey = x0GraphKey + systemName;
+            x0SystemName = systemName;
+            //    }
+            if (typeof currentHarp.onlyX !== 'undefined') {
+              y0GraphPVs.push('pva://' + systemName + ':xcur');
+              y0RangePV = 'pva://' + systemName + ':xrange';
+              onlyX0 = true;
+            }
+            else {
+              y0GraphPVs.push('pva://' + systemName + ':ycur');
+              y0RangePV = 'pva://' + systemName + ':yrange';
+              onlyX0 = false;
+            }
+            y0GraphKey = y0GraphKey + systemName;
+            y0legend.push(label);
+            numberOfInsertedGraphs++;
+          } else {
+            if (typeof currentHarp.onlyY !== 'undefined') {
+              x1GraphPVs.push('pva://' + systemName + ':ycur');
+              x1RangePV = 'pva://' + systemName + ':yrange';
+              onlyY1 = true;
+            }
+            else {
+              x1GraphPVs.push('pva://' + systemName + ':xcur');
+              x1RangePV = 'pva://' + systemName + ':xrange';
+              onlyY1 = false;
+            }
+            if (typeof currentHarp.onlyX !== 'undefined') {
+              y1GraphPVs.push('pva://' + systemName + ':xcur');
+              y1RangePV = 'pva://' + systemName + ':xrange';
+              onlyX1 = true;
+            }
+            else {
+              y1GraphPVs.push('pva://' + systemName + ':ycur');
+              y1RangePV = 'pva://' + systemName + ':yrange';
+              onlyX1 = false;
+            }
+            x1legend.push(label);
+            y1legend.push(label);
+            x1GraphKey = x1GraphKey + systemName;
+            y1GraphKey = y1GraphKey + systemName;
+            x1SystemName = systemName;
+            numberOfInsertedGraphs++;
           }
-          else {
-            x0GraphPVs.push('pva://' + displayHarps[harp].systemName + ':xcur');
-            x0RangePV = 'pva://' + displayHarps[harp].systemName + ':xrange';
-            onlyY0 = false;
-          }
-          x0legend.push(displayHarps[harp].displayName);
-          x0GraphKey = x0GraphKey + displayHarps[harp].systemName;
-          x0SystemName = displayHarps[harp].systemName;
-          //    }
-          if (typeof displayHarps[harp].onlyX !== 'undefined') {
-            y0GraphPVs.push('pva://' + displayHarps[harp].systemName + ':xcur');
-            y0RangePV = 'pva://' + displayHarps[harp].systemName + ':xrange';
-            onlyX0 = true;
-          }
-          else {
-            y0GraphPVs.push('pva://' + displayHarps[harp].systemName + ':ycur');
-            y0RangePV = 'pva://' + displayHarps[harp].systemName + ':yrange';
-            onlyX0 = false;
-          }
-          y0GraphKey = y0GraphKey + displayHarps[harp].systemName;
-          y0legend.push(displayHarps[harp].displayName);
-          numberOfInsertedGraphs++;
-        } else {
-          if (typeof displayHarps[harp].onlyY !== 'undefined') {
-            x1GraphPVs.push('pva://' + displayHarps[harp].systemName + ':ycur');
-            x1RangePV = 'pva://' + displayHarps[harp].systemName + ':yrange';
-            onlyY1 = true;
-          }
-          else {
-            x1GraphPVs.push('pva://' + displayHarps[harp].systemName + ':xcur');
-            x1RangePV = 'pva://' + displayHarps[harp].systemName + ':xrange';
-            onlyY1 = false;
-          }
-          if (typeof displayHarps[harp].onlyX !== 'undefined') {
-            y1GraphPVs.push('pva://' + displayHarps[harp].systemName + ':xcur');
-            y1RangePV = 'pva://' + displayHarps[harp].systemName + ':xrange';
-            onlyX1 = true;
-          }
-          else {
-            y1GraphPVs.push('pva://' + displayHarps[harp].systemName + ':ycur');
-            y1RangePV = 'pva://' + displayHarps[harp].systemName + ':yrange';
-            onlyX1 = false;
-          }
-          x1legend.push(displayHarps[harp].displayName);
-          y1legend.push(displayHarps[harp].displayName);
-          x1GraphKey = x1GraphKey + displayHarps[harp].systemName;
-          y1GraphKey = y1GraphKey + displayHarps[harp].systemName;
-          x1SystemName = displayHarps[harp].systemName;
-          numberOfInsertedGraphs++;
+
+
+
+
+          numberOfInsertedHarps++;
         }
       }
     }
-    if (numberOfInsertedGraphs >= 2) {
-      maxHarpsReached = true;
+    if (numberOfInsertedHarps >= 2) {
+      setMaxHarpsReached(true);
     }
-    // this.setState({
-    //   displayHarps: displayHarps,
-    //   maxHarpsReached: maxHarpsReached,
-    //   x0GraphPVs: x0GraphPVs,
-    //   y0GraphPVs: y0GraphPVs,
-    //   x0legend: x0legend,
-    //   y0legend: y0legend,
-    //   x0GraphKey: x0GraphKey,
-    //   y0GraphKey: y0GraphKey,
-    //   x1GraphPVs: x1GraphPVs,
-    //   y1GraphPVs: y1GraphPVs,
-    //   x1legend: x1legend,
-    //   y1legend: y1legend,
-    //   x1GraphKey: x1GraphKey,
-    //   y1GraphKey: y1GraphKey,
-    //   x0RangePV: x0RangePV,
-    //   x1RangePV: x1RangePV,
-    //   y0RangePV: y0RangePV,
-    //   y1RangePV: y1RangePV,
-    //   x0SystemName: x0SystemName,
-    //   x1SystemName: x1SystemName,
-    //   onlyX0: onlyX0,
-    //   onlyX1: onlyX1,
-    //   onlyY0: onlyY0,
-    //   onlyY1: onlyY1
-    // })
-  }
+    else {
+      setMaxHarpsReached(false);
+    }
+    
+    setHarpGraphsState({
+          
+          x0GraphPVs: x0GraphPVs,
+          y0GraphPVs: y0GraphPVs,
+          x0legend: x0legend,
+          y0legend: y0legend,
+          x0GraphKey: x0GraphKey,
+          y0GraphKey: y0GraphKey,
+          x1GraphPVs: x1GraphPVs,
+          y1GraphPVs: y1GraphPVs,
+          x1legend: x1legend,
+          y1legend: y1legend,
+          x1GraphKey: x1GraphKey,
+          y1GraphKey: y1GraphKey,
+          x0RangePV: x0RangePV,
+          x1RangePV: x1RangePV,
+          y0RangePV: y0RangePV,
+          y1RangePV: y1RangePV,
+          x0SystemName: x0SystemName,
+          x1SystemName: x1SystemName,
+          onlyX0: onlyX0,
+          onlyX1: onlyX1,
+          onlyY0: onlyY0,
+          onlyY1: onlyY1
+        })
 
+  }, [harpPvs,systems.BeamLine.Harps])
+  
   const footerContents = (
     <Grid container direction="row" justify="flex-start" alignItems="center" >
       <Grid item xs={12} style={{ paddingLeft: "1em" }}>
         <Typography>
-        We are in the progress of migrating the original iThemba LABS demo components to reusable hooks components. Watch this space!
+          We are in the progress of migrating the original iThemba LABS demo components to reusable hooks components. Watch this space!
         </Typography>
-          </Grid>
+      </Grid>
     </Grid>
-   //  <BottomNavigationAction showLabel label="We are in the progress of migrating the original iThemba LABS demo components to reusable hooks components. Watch this space!" />
+   
   )
 
   const handleSideTabChange = (event, value) => {
@@ -678,10 +676,8 @@ const BeamlineControlSystem = (props) => {
       <TraditionalLayout
         title="Beamline Control System Example"
         denseAppBar
-      //  showFooter
-     //   footerHeight={40}
-       // footerContents={footerContents}
-       
+     
+
       >
         {harpPvConnections(systems.BeamLine.Harps)}
         <Grid container spacing={3} style={{ paddingTop: 16 }}>
@@ -689,9 +685,9 @@ const BeamlineControlSystem = (props) => {
             <Grid container spacing={3}>
               <Grid item sm={12}>
                 <BeamLineCanvas
-                  width= "100%"
-                  height= "250"
-                  svgProps={{  viewBox: "0 0 1410 250", preserveAspectRatio: "xMidYMid meet" }}
+                  width="100%"
+                  height="250"
+                  svgProps={{ viewBox: "0 0 1410 250", preserveAspectRatio: "xMidYMid meet" }}
                 >
                   <HorizontalBeamline
                     x={0}
@@ -946,29 +942,29 @@ const BeamlineControlSystem = (props) => {
                       alignItems="center"
                     >
                       <Grid item sm={2} >
-                        <div style={{ height: '30vh', marginLeft: 10, marginRight: 10, marginTop: 20 }}>
-                          {(x0SystemName !== null) && <React.Fragment>
-                            <HarpRangeSelection onlyX={onlyX0} onlyY={onlyY0} key={'harpRangeSelectionx0' + x0SystemName} systemName={x0SystemName} label={'Range'} />
+                        <div style={{ height: '25vh', marginLeft: 10, marginRight: 10, marginTop: 20 }}>
+                          {(harpGraphsState.x0SystemName !== undefined) && <React.Fragment>
+                            <HarpRangeSelection onlyX={harpGraphsState.onlyX0} onlyY={harpGraphsState.onlyY0} key={'harpRangeSelectionx0' + harpGraphsState.x0SystemName} systemName={harpGraphsState.x0SystemName} label={'Range'} />
                             <div style={{ marginBottom: 8 }}>
-                              {((onlyY0 === false) && (onlyX0 === false)) &&
-                                <ActionButton key={'storex0' + x0SystemName} pvs={['pva://$(device):x_store_offset', 'pva://$(device):y_store_offset']} macros={{ '$(device)': x0SystemName }} actionValue={"1"} actionString={"Store Offset"} />
+                              {((harpGraphsState.onlyY0 === false) && (harpGraphsState.onlyX0 === false)) &&
+                                <ActionButton key={'storex0' +harpGraphsState.x0SystemName} pvs={['pva://$(device):x_store_offset', 'pva://$(device):y_store_offset']} macros={{ '$(device)': harpGraphsState.x0SystemName }} actionValue={"1"} actionString={"Store Offset"} />
                               }
-                              {((onlyY0 === true) && (onlyX0 === false)) &&
-                                <ActionButton key={'storex0' + x0SystemName} pvs={['pva://$(device):y_store_offset']} macros={{ '$(device)': x0SystemName }} actionValue={"1"} actionString={"Store Offset"} />
+                              {((harpGraphsState.onlyY0 === true) && (harpGraphsState.onlyX0 === false)) &&
+                                <ActionButton key={'storex0' + harpGraphsState.x0SystemName} pvs={['pva://$(device):y_store_offset']} macros={{ '$(device)': harpGraphsState.x0SystemName }} actionValue={"1"} actionString={"Store Offset"} />
                               }
-                              {((onlyY0 === false) && (onlyX0 === true)) &&
-                                <ActionButton key={'storex0' + x0SystemName} pvs={['pva://$(device):x_store_offset']} macros={{ '$(device)': x0SystemName }} actionValue={"1"} actionString={"Store Offset"} />
+                              {((harpGraphsState.onlyY0 === false) && (harpGraphsState.onlyX0 === true)) &&
+                                <ActionButton key={'storex0' + harpGraphsState.x0SystemName} pvs={['pva://$(device):x_store_offset']} macros={{ '$(device)': harpGraphsState.x0SystemName }} actionValue={"1"} actionString={"Store Offset"} />
                               }
                             </div>
                             <div style={{ marginBottom: 8 }}>
-                              {((onlyY0 === false) && (onlyX0 === false)) &&
-                                <ActionButton key={'clearx0' + x0SystemName} pvs={['pva://$(device):x_store_offset', 'pva://$(device):y_store_offset']} macros={{ '$(device)': x0SystemName }} actionValue={"0"} actionString={"Clear Offset"} />
+                              {((harpGraphsState.onlyY0 === false) && (harpGraphsState.onlyX0 === false)) &&
+                                <ActionButton key={'clearx0' + harpGraphsState.x0SystemName} pvs={['pva://$(device):x_store_offset', 'pva://$(device):y_store_offset']} macros={{ '$(device)': harpGraphsState.x0SystemName }} actionValue={"0"} actionString={"Clear Offset"} />
                               }
-                              {((onlyY0 === true) && (onlyX0 === false)) &&
-                                <ActionButton key={'clearx0' + x0SystemName} pvs={['pva://$(device):y_store_offset']} macros={{ '$(device)': x0SystemName }} actionValue={"0"} actionString={"Clear Offset"} />
+                              {((harpGraphsState.onlyY0 === true) && (harpGraphsState.onlyX0 === false)) &&
+                                <ActionButton key={'clearx0' + harpGraphsState.x0SystemName} pvs={['pva://$(device):y_store_offset']} macros={{ '$(device)': harpGraphsState.x0SystemName }} actionValue={"0"} actionString={"Clear Offset"} />
                               }
-                              {((onlyY0 === false) && (onlyX0 === true)) &&
-                                <ActionButton key={'clearx0' + x0SystemName} pvs={['pva://$(device):x_store_offset']} macros={{ '$(device)': x0SystemName }} actionValue={"0"} actionString={"Clear Offset"} />
+                              {((harpGraphsState.onlyY0 === false) && (harpGraphsState.onlyX0 === true)) &&
+                                <ActionButton key={'clearx0' + harpGraphsState.x0SystemName} pvs={['pva://$(device):x_store_offset']} macros={{ '$(device)': harpGraphsState.x0SystemName }} actionValue={"0"} actionString={"Clear Offset"} />
                               }
                             </div>
                           </React.Fragment>}
@@ -982,14 +978,14 @@ const BeamlineControlSystem = (props) => {
                           alignItems="center"
                         >
                           <Grid item sm={6}>
-                            <div style={{ height: '30vh' }}>
-                              {((onlyY0 === false) && x0GraphPVs.length > 0) && <HarpGraph
+                            <div style={{ height: '25vh' }}>
+                              {((harpGraphsState.onlyY0 === false) && harpGraphsState.x0GraphPVs.length > 0) && <HarpGraph
                                 ymax={2000}
                                 units={'pA'}
-                                key={x0GraphKey}
-                                dataPVs={x0GraphPVs}
-                                rangePV={x0RangePV}
-                                legend={x0legend}
+                                key={harpGraphsState.x0GraphKey}
+                                dataPVs={harpGraphsState.x0GraphPVs}
+                                rangePV={harpGraphsState.x0RangePV}
+                                legend={harpGraphsState.x0legend}
                                 changeOtherGraphYmax={setTopYgraphYmax}
                                 ymaxFromOtherGraph={topXgraphYmax}
                                 ylabel="X Axis"
@@ -998,19 +994,19 @@ const BeamlineControlSystem = (props) => {
                             </div>
                           </Grid>
                           <Grid item sm={6}>
-                            <div style={{ height: '30vh' }}>
-                              {((onlyX0 === false) && y0GraphPVs.length > 0) && <HarpGraph
+                            <div style={{ height: '25vh' }}>
+                              {((harpGraphsState.onlyX0 === false) && harpGraphsState.y0GraphPVs.length > 0) && <HarpGraph
                                 ymax={2000}
                                 units={'pA'}
-                                key={y0GraphKey}
-                                dataPVs={y0GraphPVs}
-                                rangePV={y0RangePV}
-                                legend={y0legend}
+                                key={harpGraphsState.y0GraphKey}
+                                dataPVs={harpGraphsState.y0GraphPVs}
+                                rangePV={harpGraphsState.y0RangePV}
+                                legend={harpGraphsState.y0legend}
                                 changeOtherGraphYmax={setTopXgraphYmax}
                                 ymaxFromOtherGraph={topYgraphYmax}
                                 ylabel="Y Axis"
                               />}
-                              {/*  <GraphTest style pv='pva://testIOC:PS1:Readback:History'  />*/}
+                              
                             </div>
                           </Grid>
                         </Grid>
@@ -1018,7 +1014,7 @@ const BeamlineControlSystem = (props) => {
                     </Grid>
                   </Grid>
                   <Grid item sm={12}>
-                    <div style={{ height: '30vh' }}>
+                    <div style={{ height: '25vh' }}>
                       <Grid
                         container
                         direction="row"
@@ -1026,29 +1022,29 @@ const BeamlineControlSystem = (props) => {
                         alignItems="center"
                       >
                         <Grid item sm={2}>
-                          <div style={{ height: '30vh', marginLeft: 10, marginRight: 10, marginTop: 20 }}>
-                            {(x1SystemName !== null) && <React.Fragment>
-                              <HarpRangeSelection onlyX={onlyX1} onlyY={onlyY1} key={'harpRangeSelectionx1' + x1SystemName} systemName={x1SystemName} label={'Range'} />
+                          <div style={{ height: '25vh', marginLeft: 10, marginRight: 10, marginTop: 20 }}>
+                            {(harpGraphsState.x1SystemName !== undefined) && <React.Fragment>
+                              <HarpRangeSelection onlyX={harpGraphsState.onlyX1} onlyY={harpGraphsState.onlyY1} key={'harpRangeSelectionx1' + harpGraphsState.x1SystemName} systemName={harpGraphsState.x1SystemName} label={'Range'} />
                               <div style={{ marginBottom: 8 }}>
-                                {((onlyY1 === false) && (onlyX1 === false)) &&
-                                  <ActionButton key={'storex1' + x1SystemName} pvs={['pva://$(device):x_store_offset', 'pva://$(device):y_store_offset']} macros={{ '$(device)': x1SystemName }} actionValue={"1"} actionString={"Store Offset"} />
+                                {((harpGraphsState.onlyY1 === false) && (harpGraphsState.onlyX1 === false)) &&
+                                  <ActionButton key={'storex1' + harpGraphsState.x1SystemName} pvs={['pva://$(device):x_store_offset', 'pva://$(device):y_store_offset']} macros={{ '$(device)': harpGraphsState.x1SystemName }} actionValue={"1"} actionString={"Store Offset"} />
                                 }
-                                {((onlyY1 === true) && (onlyX1 === false)) &&
-                                  <ActionButton key={'storex1' + x1SystemName} pvs={['pva://$(device):y_store_offset']} macros={{ '$(device)': x1SystemName }} actionValue={"1"} actionString={"Store Offset"} />
+                                {((harpGraphsState.onlyY1 === true) && (harpGraphsState.onlyX1 === false)) &&
+                                  <ActionButton key={'storex1' + harpGraphsState.x1SystemName} pvs={['pva://$(device):y_store_offset']} macros={{ '$(device)': harpGraphsState.x1SystemName }} actionValue={"1"} actionString={"Store Offset"} />
                                 }
-                                {((onlyY1 === false) && (onlyX1 === true)) &&
-                                  <ActionButton key={'storex1' + x1SystemName} pvs={['pva://$(device):x_store_offset']} macros={{ '$(device)': x1SystemName }} actionValue={"1"} actionString={"Store Offset"} />
+                                {((harpGraphsState.onlyY1 === false) && (harpGraphsState.onlyX1 === true)) &&
+                                  <ActionButton key={'storex1' + harpGraphsState.x1SystemName} pvs={['pva://$(device):x_store_offset']} macros={{ '$(device)': harpGraphsState.x1SystemName }} actionValue={"1"} actionString={"Store Offset"} />
                                 }
                               </div>
                               <div style={{ marginBottom: 8 }}>
-                                {((onlyY1 === false) && (onlyX1 === false)) &&
-                                  <ActionButton key={'clearx1' + x1SystemName} pvs={['pva://$(device):x_store_offset', 'pva://$(device):y_store_offset']} macros={{ '$(device)': x1SystemName }} actionValue={"0"} actionString={"Clear Offset"} />
+                                {((harpGraphsState.onlyY1 === false) && (harpGraphsState.onlyX1 === false)) &&
+                                  <ActionButton key={'clearx1' + harpGraphsState.x1SystemName} pvs={['pva://$(device):x_store_offset', 'pva://$(device):y_store_offset']} macros={{ '$(device)': harpGraphsState.x1SystemName }} actionValue={"0"} actionString={"Clear Offset"} />
                                 }
-                                {((onlyY1 === true) && (onlyX1 === false)) &&
-                                  <ActionButton key={'clearx1' + x1SystemName} pvs={['pva://$(device):y_store_offset']} macros={{ '$(device)': x1SystemName }} actionValue={"0"} actionString={"Clear Offset"} />
+                                {((harpGraphsState.onlyY1 === true) && (harpGraphsState.onlyX1 === false)) &&
+                                  <ActionButton key={'clearx1' + harpGraphsState.x1SystemName} pvs={['pva://$(device):y_store_offset']} macros={{ '$(device)': harpGraphsState.x1SystemName }} actionValue={"0"} actionString={"Clear Offset"} />
                                 }
-                                {((onlyY1 === false) && (onlyX1 === true)) &&
-                                  <ActionButton key={'clearx1' + x1SystemName} pvs={['pva://$(device):x_store_offset']} macros={{ '$(device)': x1SystemName }} actionValue={"0"} actionString={"Clear Offset"} />
+                                {((harpGraphsState.onlyY1 === false) && (harpGraphsState.onlyX1 === true)) &&
+                                  <ActionButton key={'clearx1' + harpGraphsState.x1SystemName} pvs={['pva://$(device):x_store_offset']} macros={{ '$(device)': harpGraphsState.x1SystemName }} actionValue={"0"} actionString={"Clear Offset"} />
                                 }
                               </div>
                             </React.Fragment>}
@@ -1068,35 +1064,35 @@ const BeamlineControlSystem = (props) => {
                               alignItems="center"
                             >
                               <Grid item sm={6}>
-                                <div style={{ height: '30vh' }}>
-                                  {((onlyY1 === false) && x1GraphPVs.length > 0) && <HarpGraph
+                                <div style={{ height: '25vh' }}>
+                                  {((harpGraphsState.onlyY1 === false) && harpGraphsState.x1GraphPVs.length > 0) && <HarpGraph
                                     ymax={2000}
                                     units={'pA'}
-                                    key={x1GraphKey}
-                                    dataPVs={x1GraphPVs}
-                                    rangePV={x1RangePV}
-                                    legend={x1legend}
+                                    key={harpGraphsState.x1GraphKey}
+                                    dataPVs={harpGraphsState.x1GraphPVs}
+                                    rangePV={harpGraphsState.x1RangePV}
+                                    legend={harpGraphsState.x1legend}
                                     ylabel="X Axis"
                                     changeOtherGraphYmax={setBottomYgraphYmax}
                                     ymaxFromOtherGraph={bottomXgraphYmax}
                                   />}
-                                  {/*}<GraphTest style pv='pva://testIOC:test4'  />*/}
+                                  
                                 </div>
                               </Grid>
                               <Grid item sm={6}>
-                                <div style={{ height: '30vh' }}>
-                                  {((onlyX1 === false) && y1GraphPVs.length > 0) && <HarpGraph
+                                <div style={{ height: '25vh' }}>
+                                  {((harpGraphsState.onlyX1 === false) && harpGraphsState.y1GraphPVs.length > 0) && <HarpGraph
                                     ymax={2000}
                                     units={'pA'}
-                                    key={y1GraphKey}
-                                    dataPVs={y1GraphPVs}
-                                    rangePV={y1RangePV}
-                                    legend={y1legend}
+                                    key={harpGraphsState.y1GraphKey}
+                                    dataPVs={harpGraphsState.y1GraphPVs}
+                                    rangePV={harpGraphsState.y1RangePV}
+                                    legend={harpGraphsState.y1legend}
                                     ylabel="Y Axis"
                                     changeOtherGraphYmax={setBottomXgraphYmax}
                                     ymaxFromOtherGraph={bottomYgraphYmax}
                                   />}
-                                  {/*  <GraphTest style pv='pva://testIOC:PS1:Readback:History'  />*/}
+                                 
                                 </div>
                               </Grid>
                             </Grid>
@@ -1225,15 +1221,13 @@ const BeamlineControlSystem = (props) => {
             {((displayEditor === true) && (editorType === 'editorSlitXY')) && <EditorSlitXY key={'editor-key' + editorSystem.systemName} system={editorSystem} handleCloseEditor={() => setDisplayEditor(false)} />}
           </Grid>
         </Grid>
-        <AppBar  style={{position:'fixed',bottom:0,top:'auto',height:40}}color={props.theme.palette.type === 'dark' ? "inherit" : "primary"}>
+        <AppBar style={{ position: 'fixed', bottom: 0, top: 'auto', height: 40 }} color={props.theme.palette.type === 'dark' ? "inherit" : "primary"}>
           {footerContents}
         </AppBar>
       </TraditionalLayout>
     </div>
   );
 }
-BeamlineControlSystem.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-export default withStyles(styles,{withTheme:true})(BeamlineControlSystem);
-                    //export default BeamlineControlSystem;
+
+export default withStyles(styles, { withTheme: true })(BeamlineControlSystem);
+

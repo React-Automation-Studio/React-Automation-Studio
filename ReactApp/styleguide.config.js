@@ -80,7 +80,7 @@ module.exports = {
                   content: 'src/docs/MongoDB/MongoDB_Config_Default.md',
                 },
                 {
-                  name: 'Configuration settings and files',
+                  name: 'Changing MongoDB configuration settings',
                   content: 'src/docs/MongoDB/MongoDB_Config_Config.md',
                 }
               ]

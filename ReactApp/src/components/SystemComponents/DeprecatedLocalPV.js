@@ -28,7 +28,7 @@ class DeprecatedLocalPV extends React.Component {
         'pvname':pvname,
         'interalValue':' ',
         'inputValue':this.props.value,
-        'pv':{intialized: false,pvname:"",value:"",char_value:"",alarmColor:"",lower_disp_limit: 0,upper_disp_limit: 10000,lower_warning_limit: 4000,upper_warning_limit: 6000,
+        'pv':{initialized: false,pvname:"",value:"",char_value:"",alarmColor:"",lower_disp_limit: 0,upper_disp_limit: 10000,lower_warning_limit: 4000,upper_warning_limit: 6000,
         units: "V",precision: 0}};
       }
       else{
@@ -36,7 +36,7 @@ class DeprecatedLocalPV extends React.Component {
         this.state ={ 'initialized':false,
         'pvname':pvname,
         'interalValue':' ',
-        'pv':{intialized: false,pvname:"",value:"",char_value:"",alarmColor:"",lower_disp_limit: 0,upper_disp_limit: 10000,lower_warning_limit: 4000,upper_warning_limit: 6000,
+        'pv':{initialized: false,pvname:"",value:"",char_value:"",alarmColor:"",lower_disp_limit: 0,upper_disp_limit: 10000,lower_warning_limit: 4000,upper_warning_limit: 6000,
         units: "V",precision: 0}};
       }
       this.updatePVData= this.updatePVData.bind(this);

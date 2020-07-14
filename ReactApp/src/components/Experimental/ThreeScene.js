@@ -23,8 +23,8 @@ class ThreeScene extends Component{
   constructor(props) {
     super(props);
     this.state={
-      [pv1]:{'value' : "",'hasFocus':false,'label':"Undefined", 'pvname':"Undefined",'intialized':false,'metadata':{},'severity':''},
-      [pv2]:{'value' : "",'hasFocus':false,'label':"Undefined", 'pvname':"Undefined",'intialized':false,'metadata':{},'severity':''},
+      [pv1]:{'value' : "",'hasFocus':false,'label':"Undefined", 'pvname':"Undefined",'initialized':false,'metadata':{},'severity':''},
+      [pv2]:{'value' : "",'hasFocus':false,'label':"Undefined", 'pvname':"Undefined",'initialized':false,'metadata':{},'severity':''},
 
   }
 

@@ -8,7 +8,7 @@ The pv object return through the pvData callback or or returned from the  `useEp
       severity: number,
       timestamp: number,
       metadata: { 
-        intialized: false, 
+        initialized: false, 
         pvname: "", 
         value: "", 
         char_value: "", 
@@ -23,7 +23,7 @@ The pv object return through the pvData callback or or returned from the  `useEp
 |  Property |Type |Default | Description |
 |:-:|:-|
 |value|any|0| The pv's value, valid after initialized===true
-|initialize|bool|false| true when all the pvs are intialized and connected to live data
+|initialize|bool|false| true when all the pvs are initialized and connected to live data
 |metadata|object|{}| The metadata from the pv, valid after initialized===true
 |severity|number|0| The derived alarm severity , valid after initialized===true
 |timestamp|number|""| The timestamp of the pv, valid after initialized===true
@@ -37,7 +37,7 @@ import {useEpicsPV} from './EpicsPV'
 const Example1=(props)=>{
     const pv=useEpicsPV({pv:'pva://$(device):test$(id)', macros:{'$(device)':'testIOC','$(id)':'2'}})
     const {initialized}=pv;
-    const value=initialized?pv.value:"value is not intialized";
+    const value=initialized?pv.value:"value is not initialized";
 
 return(   
   <div>{value}</div>

@@ -34,7 +34,7 @@ class DeprecatedEpicsPV extends React.Component {
         'inputValue':this.props.value,
         'severity':undefined,
         'timestamp':undefined,
-        'pv':{intialized: false,pvname:"",value:"",char_value:"",alarmColor:"",lower_disp_limit: 0,upper_disp_limit: 10000,lower_warning_limit: 4000,upper_warning_limit: 6000,
+        'pv':{initialized: false,pvname:"",value:"",char_value:"",alarmColor:"",lower_disp_limit: 0,upper_disp_limit: 10000,lower_warning_limit: 4000,upper_warning_limit: 6000,
         units: "V",precision: 0},
         redirectToLogInPage:false,
       };
@@ -44,7 +44,7 @@ class DeprecatedEpicsPV extends React.Component {
       this.state ={ 'initialized':false,
       'pvname':pvname,
       'interalValue':' ',
-      'pv':{intialized: false,pvname:"",value:"",char_value:"",alarmColor:"",lower_disp_limit: 0,upper_disp_limit: 10000,lower_warning_limit: 4000,upper_warning_limit: 6000,
+      'pv':{initialized: false,pvname:"",value:"",char_value:"",alarmColor:"",lower_disp_limit: 0,upper_disp_limit: 10000,lower_warning_limit: 4000,upper_warning_limit: 6000,
       units: "V",precision: 0},
       redirectToLogInPage:false,};
     }

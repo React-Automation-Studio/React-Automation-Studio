@@ -42,7 +42,7 @@ class QuadrapoleMagnet extends React.Component {
       'hasFocus': false,
       'label': "Undefined",
       'pvname': pvname,
-      'intialized': false,
+      'initialized': false,
       'metadata': {},
       'severity': '',
       openContextMenu: false,

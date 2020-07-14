@@ -19,7 +19,7 @@ export const useEpicsPV = (props) => {
       value: 0,
       severity: undefined,
       timestamp: undefined,
-      metadata: { intialized: false, pvname: "", value: "", char_value: "", alarmColor: "", lower_disp_limit: "", upper_disp_limit: "", lower_warning_limit: "", upper_warning_limit: "", units: "", precision: 0,enum_strs:[] }
+      metadata: { initialized: false, pvname: "", value: "", char_value: "", alarmColor: "", lower_disp_limit: "", upper_disp_limit: "", lower_warning_limit: "", upper_warning_limit: "", units: "", precision: 0,enum_strs:[] }
     }
     
     return pv;

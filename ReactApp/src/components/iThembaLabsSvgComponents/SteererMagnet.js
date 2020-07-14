@@ -14,7 +14,7 @@ class SteererMagnet extends React.Component {
     hasFocus:false,
     label:"Undefined",
     pvname:"Undefined",
-    ['intialized']:false,
+    ['initialized']:false,
     metadata:{},
     severity:''
   }

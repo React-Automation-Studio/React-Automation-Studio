@@ -1,3 +1,5 @@
+//This example is deprecated and will be removed in a future release 
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -28,6 +30,7 @@ import ControlBottomEx1 from '../ControlScreens/GridComponents/ControlBottomEx1'
 import SideBar from '../SystemComponents/SideBar';
 import ThreeScene from '../..//api/ThreeScene';
 import AppBar from '@material-ui/core/AppBar';
+console.warn("This example is deprecated and will be removed in a future release")
 const styles = theme => ({
   root: {
     flexGrow: 1,

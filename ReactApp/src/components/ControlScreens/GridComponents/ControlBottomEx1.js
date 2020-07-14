@@ -1,3 +1,4 @@
+//This example is deprecated and will be removed in a future release 
 import React from 'react'
 
 import AutomationStudioContext from '../../SystemComponents/AutomationStudioContext';
@@ -10,7 +11,7 @@ import Grid from '@material-ui/core/Grid';
 import Switch from '../../BaseComponents/Switch';
 import ToggleButton from '../../BaseComponents/ToggleButton';
 import ActionButton from '../../BaseComponents/ActionButton';
-
+console.warn("This example is deprecated and will be removed in a future release")
 
 class ControlBottomEx1 extends React.Component {
   constructor(props) {

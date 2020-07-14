@@ -1,3 +1,6 @@
+//This example is deprecated and will be removed in a future release 
+
+
 import React from 'react';
 
 import { withStyles } from '@material-ui/core/styles';
@@ -14,6 +17,7 @@ import AppBar from '@material-ui/core/AppBar';
 import TraditionalLayout from '../UI/Layout/ComposedLayouts/TraditionalLayout.js';
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */
+console.warn("This example is deprecated and will be removed in a future release")
 const systems = {
 
   'BeamLine': {

@@ -1,0 +1,28 @@
+{
+    "components": [
+        {
+            "component": "TextOutput",
+            "props": {
+                "pv": "pva://testIOC:rf_frequency",
+                "label": "RF Frequency",
+                "usePvUnits": true
+            }
+        },
+        {
+            "component": "TextInput",
+            "props": {
+                "pv": "pva://testIOC:energy",
+                "label": "Energy",
+                "usePvUnits": true
+            }
+        },
+        {
+            "component": "TextInput",
+            "props": {
+                "pv": "pva://testIOC:description",
+                "label": "Description"
+            }
+        }
+    ]
+}
+    

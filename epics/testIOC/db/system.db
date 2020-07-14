@@ -1,0 +1,47 @@
+
+record(stringout, "$(device):description")
+{       field(DTYP,"Soft Channel")
+        field(DESC, "Description")
+        field(VAL,"")
+        field(PINI,"YES")
+}
+
+
+
+
+
+record(ao, "$(device):energy")
+{       field(DTYP,"Soft Channel")
+        field(DESC, "Energy")
+        field(EGU, "GeV")
+        field(HOPR, "1000")
+        field(LOPR, "0")
+     
+      
+        field(VAL,"3")
+        field(PREC,"3")
+
+}
+
+record(ao, "$(device):rf_frequency")
+{       field(DTYP,"Soft Channel")
+        field(DESC, "RF Frequency")
+        field(EGU, "GHz")
+        field(HOPR, "5")
+        field(LOPR, "0")
+     
+      
+        field(VAL,"3")
+        field(PREC,"12")
+
+}
+
+record(bo, "$(device):loadSaveEnable")
+{       field(DTYP,"Soft Channel")
+        field(DESC, "Load Save Enable")
+        
+      
+        field(VAL,"1")
+       
+
+}

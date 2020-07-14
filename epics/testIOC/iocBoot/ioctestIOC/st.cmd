@@ -13,6 +13,7 @@ testIOC_registerRecordDeviceDriver pdbbase
 
 ## Load record instances
 dbLoadRecords "db/test.db", "device=testIOC"
+dbLoadRecords "db/system.db", "device=testIOC"
 dbLoadRecords "db/dynamicPvFieldTest.db", "device=testIOC"
 dbLoadRecords "db/PowerSupply.db", "device=testIOC:PS1"
 dbLoadRecords "db/PowerSupply.db", "device=testIOC:PS2"

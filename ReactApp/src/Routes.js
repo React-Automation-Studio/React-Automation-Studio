@@ -29,6 +29,7 @@ import AlarmHandlerUN from './components/AlarmHandler/UserNotification';
 import Vault from './components/AlarmHandler/Vault';
 import AdvancedSettingsSinglePS from './components/ExperimentalControlScreens/SettingsPages/AdvancedSettingsSinglePS';
 import LogIn from './LogIn';
+import LoadSaveExample from './components/ExperimentalExamples/LoadSaveExample';
 
 const Routes = (props) => {
   return (
@@ -62,14 +63,12 @@ const Routes = (props) => {
         <Route path="/Example1" component={Example1} />
         <Route path="/Example2" component={Example2} />
         <Route path="/Example3" component={Example3} />
-        {/* <Route path="/ExperimentalMain" component={ExperimentalMain} /> */}
-        {/* <Route path="/ExperimentalMobileDemo1" component={ExperimentalMobileDemo1} /> */}
-        {/* <Route path="/HooksDebuging" component={HooksDebuging} /> */}
-        {/* <Route path="/ExperimentalEpicsDemos" component={ExperimentalEpicsDemos} /> */}
+     
 
         <Route path="/AlarmHandlerDemo" component={AlarmHandler} />
         <Route path="/AlarmHandlerDemoUN" component={AlarmHandlerUN} />
         <Route path="/VaultDemo" component={Vault} />
+        <Route path="/LoadSaveExample" component={LoadSaveExample} />
         {/* new Beamline control System routes start*/}
           <Route path="/BeamlineControlSystem" component={BeamlineControlSystem} />
           <Route path="/AdvancedSettingsSinglePS" component={AdvancedSettingsSinglePS} />

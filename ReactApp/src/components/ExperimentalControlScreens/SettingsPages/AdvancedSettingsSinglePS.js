@@ -63,18 +63,18 @@ const AdvancedSettingsSinglePS=(props)=>{
               justify="flex-start"
               alignItems="center" spacing={1}>
               <Grid item xs={6}  >
-                <TextInput pv={system.devices.device.setpointPv} prec={3} label={'Setpoint:'} alarmSensitive={true} usePvUnits={true} usePvMinMax={true} />
+                <TextInput pv={system.setpointPv} prec={3} label={'Setpoint:'} alarmSensitive={true} usePvUnits={true} usePvMinMax={true} />
 
               </Grid>
               <Grid item xs={6}  >
-                <TextOutput style={{ marginRight: 10 }} pv={system.devices.device.readbackPv} prec={3} usePvUnits={true} alarmSensitive={true} label={'Readback'} />
+                <TextOutput style={{ marginRight: 10 }} pv={system.readbackPv} prec={3} usePvUnits={true} alarmSensitive={true} label={'Readback'} />
 
 
               </Grid>
 
               <Grid item xs={12}  >
 
-                <Slider pv={system.devices.device.setpointPv} prec={3} label={'Setpoint:'} alarmSensitive={true} usePvUnits={true} usePvMinMax={true} />
+                <Slider pv={system.setpointPv} prec={3} label={'Setpoint:'} alarmSensitive={true} usePvUnits={true} usePvMinMax={true} />
               </Grid>
               <Grid item xs={6}  >
 
@@ -92,7 +92,7 @@ const AdvancedSettingsSinglePS=(props)=>{
                 <Grid container justify="flex-start" direction="row" alignItems="center" spacing={1}>
                   <Grid item xs={12} sm={12} >
                     <ThumbWheel
-                      pv={system.devices.device.setpointPv}
+                      pv={system.setpointPv}
                       macros={props['macros']}
                       prec_integer={2}
                       prec_decimal={2}
@@ -102,7 +102,7 @@ const AdvancedSettingsSinglePS=(props)=>{
                 </Grid>
               </Grid>
               <Grid item xs={4}  >
-                <ToggleButton pv={system.devices.device.onOffPv} macros={props['macros']} labelPlacement={"top"} />
+                <ToggleButton pv={system.onOffPv} macros={props['macros']} labelPlacement={"top"} />
 
 
 

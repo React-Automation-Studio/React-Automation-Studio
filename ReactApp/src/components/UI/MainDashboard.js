@@ -208,7 +208,7 @@ class MainDashboard extends Component {
                       <Button fullWidth className={classes.button} component={Link} to="/ControlTableExample" color="primary" variant={buttonVariant}> Control Table Example</Button>
                     </Grid>
                     <Grid item lg={12} sm={12} xs={12}  >
-                      <Button fullWidth className={classes.button} component={Link} to="/ControlTestHarp1" color="primary" variant={buttonVariant}> Beam Line Control Demo </Button>
+                      <Button fullWidth className={classes.button} component={Link} to="/BeamlineControlSystem" color="primary" variant={buttonVariant}> Beam Line Control Demo </Button>
                     </Grid>
                     <Grid item lg={12} sm={12} xs={12}>
                       <Button fullWidth className={classes.button} component={Link} to="/MobileDemo1" color="primary" variant={buttonVariant}>  Mobile Demo 1 </Button>

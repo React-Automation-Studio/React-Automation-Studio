@@ -11,7 +11,7 @@ import MobileDemo1 from './components/Examples/Mobile/MobileDemo1';
 //import Main from './Main';
 import MainDashboard from './components/UI/MainDashboard';
 import ControlTestHarp1 from './components/ControlScreens/ControlTestHarp1';
-import BeamlineControlSystem from './components/ExperimentalControlScreens/BeamlineControlSystem';
+import BeamlineControlSystem from './components/ControlScreens/BeamlineControlSystem';
 
 import ControlTableExample from './components/ControlScreens/ControlTableExample';
 import ComponentsWithMultiplePVs from './components/Examples/ComponentsWithMultiplePVs';
@@ -46,8 +46,8 @@ const Routes = (props) => {
         <Route path="/MobileDemo2" component={MobileDemo2} />
         <Route path="/MobileDemo1" component={MobileDemo1} />
 
-        <Route path="/ControlTestHarp1" component={ControlTestHarp1} />
-        <Route path="/ControlTableExample" component={ControlTableExample} />
+        {/* <Route path="/ControlTestHarp1" component={ControlTestHarp1} />
+        <Route path="/ControlTableExample" component={ControlTableExample} /> */}
       
         <Route path="/EpicsDemos" component={EpicsDemos} />
         <Route path="/Help" component={Help} />

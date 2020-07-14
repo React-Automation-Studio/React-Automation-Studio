@@ -123,6 +123,13 @@ module.exports = {
 
 
         },
+        {
+          name: 'Beamline Components',
+          content: 'src/docs/beamlineComponents/BeamlineComponents.md',
+          components: 'src/components/SvgBeamlineComponents/*.js',
+          exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
+          usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
+        },
         
         {
           name: 'Experimental Base Components',
@@ -134,7 +141,7 @@ module.exports = {
         {
           name: 'Experimental Beamline Components',
           content: 'src/docs/beamlineComponents/BeamlineComponents.md',
-          components: 'src/components/SvgBeamlineComponents/*.js',
+          components: 'src/components/ExperimentalSvgBeamlineComponents/*.js',
           exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
           usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
         },

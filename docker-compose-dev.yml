@@ -181,6 +181,24 @@ services:
       - ME_CONFIG_BASICAUTH_PASSWORD=${ME_BASICAUTH_PASSWORD-password}
     depends_on:
       - mongosetup
+  initializeloadsavedb:
+    env_file: .env
+    environment:
+      - LOADSAVE_DATABASE=localhost
+      - LOADSAVE_DATABASE_REPLICA_SET_NAME=devrs
+    build:
+      context: ./
+      
+      args: # Environment variables available at build-time
+                - http_proxy
+                - https_proxy
+                - no_proxy
+      dockerfile: docker/loadSaveDbInit/Dockerfile
+    network_mode: "host"
+    tty: true
+    stdin_open: true
+    depends_on:
+      - mongosetup
 
 volumes:
   mongo-db-data1:

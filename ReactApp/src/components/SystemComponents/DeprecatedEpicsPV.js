@@ -54,7 +54,7 @@ class DeprecatedEpicsPV extends React.Component {
     this.disconnect=this.disconnect.bind(this);
     this.reconnect=this.reconnect.bind(this);
     this.handleInitialConnection=this.handleInitialConnection.bind(this);
-
+    this.handleRequestPvInfoAck=this.handleRequestPvInfoAck.bind(this);
 
     //  this.testFunction= this.testFunction.bind(this);
 
@@ -68,6 +68,17 @@ class DeprecatedEpicsPV extends React.Component {
 
     }
     this.props.handleInputValue(this.state.internalValue,this.state.pvname,this.state.initialized,this.state.severity,this.state.timestamp);
+  }
+
+  handleRequestPvInfoAck=(msg)=>{
+    //console.log(this.state['pvname'], "msg: ",msg)
+    if ( typeof msg !=='undefined'){
+      console.log(this.state['pvname'], "pvConnectionId: ",msg.pvConnectionId)
+      this.setState({pvConnectionId:msg.pvConnectionId})
+    }
+    else{
+      
+    }
   }
 
   updatePVData(msg){
@@ -173,7 +184,7 @@ class DeprecatedEpicsPV extends React.Component {
       if (jwt===null){
         jwt='unauthenticated'
       }
-      socket.emit('request_pv_info', {data: this.state.pvname,'clientAuthorisation':jwt});
+      socket.emit('request_pv_info', {data: this.state.pvname,'clientAuthorisation':jwt},this.handleRequestPvInfoAck);
     //  this.handleInitialConnection();
       this.timeout=setTimeout(this.handleInitialConnection, 3000);
       //    console.log("this.state.pvname",this.state.pvname);
@@ -208,7 +219,13 @@ class DeprecatedEpicsPV extends React.Component {
       //  clearTimeout(this.timeout)
       //  this.timeout = null
       //}
-
+      let jwt = JSON.parse(localStorage.getItem('jwt'));
+      if (jwt===null){
+        jwt='unauthenticated'
+      }
+      if (typeof( this.state.pvConnectionId) !=='undefined'){
+        socket.emit('remove_pv_connection', {pvname: this.state['pvname'],pvConnectionId:this.state.pvConnectionId,'clientAuthorisation':jwt});
+      }
       socket.removeListener('redirectToLogIn',this.handleRedirectToLogIn);
       socket.removeListener(this.state.pvname,this.updatePVData);
       socket.removeListener('connect_error',this.connectError);

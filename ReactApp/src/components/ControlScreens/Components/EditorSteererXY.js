@@ -12,12 +12,12 @@ import ToggleButton from '../../BaseComponents/ToggleButton';
 import Paper from '@material-ui/core/Paper';
 
 import { withStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import { Link } from 'react-router-dom'
+//import Button from '@material-ui/core/Button';
+//import { Link } from 'react-router-dom'
 
 import ThumbWheel from '../../BaseComponents/ThumbWheel';
 import Close from '@material-ui/icons/Close';
-//import MenuItem from '@material-ui/core/MenuItem';
+
 import {replaceSystemMacros} from '../../SystemComponents/Utils/macroReplacement';
 const styles = theme => ({
   body1: theme.typography.body1,

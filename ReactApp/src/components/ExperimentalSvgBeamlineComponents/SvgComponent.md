@@ -1,6 +1,6 @@
  ``` js
-import BeamLineCanvas from './BeamLineCanvas';
-import HorizontalBeamline from './HorizontalBeamline';
+import BeamLineCanvas from '../SvgBeamlineComponents/BeamLineCanvas';
+import HorizontalBeamline from '../SvgBeamlineComponents/HorizontalBeamline';
 <BeamLineCanvas 
   width={600} 
   height={300} 

@@ -1,19 +1,14 @@
 import React from 'react'
 
 import Widget from "../SystemComponents/Widgets/Widget";
-
+import  {svgHeight,svgCenterY} from "../SystemComponents/svgConstants";
+import PropTypes from 'prop-types';
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */
 const HorizontalBeamlineComponent = (props) => {
 
 
-  const handleOnClick = device => event => {
-    if (typeof props.handleOnClick !== 'undefined') {
-      props.handleOnClick(device);
-    }
-
-  };
-
+  
 
   const { classes } = props;
   const { initialized } = props;
@@ -74,15 +69,17 @@ const HorizontalBeamlineComponent = (props) => {
 
 
     
-    <svg 
-    x={0}
+    <svg
+    x={props.x}
     y={props.y}
-    
-    width={props.width} 
-    height= {props.y+10}
-   >
-    <g>
 
+    width={props.width}
+    height={svgHeight}
+  >
+
+      <g transform={'translate(' + 0 + ',' + (svgCenterY) + ')'}
+        
+      >
 
       
        
@@ -109,14 +106,14 @@ const HorizontalBeamlineComponent = (props) => {
             width={props.width}
             height="5"
             x={0}
-            y={props.y+offsetY - 3} />
+            y={offsetY - 3} />
           <rect
             fill={'white'}
 
             width={props.width}
             height="5"
             x={0}
-            y={props.y+offsetY + 2} />
+            y={offsetY + 2} />
 
 
           <rect
@@ -125,14 +122,14 @@ const HorizontalBeamlineComponent = (props) => {
             width={props.width}
             height="4"
             x={0}
-            y={props.y+offsetY - 3} />
+            y={offsetY - 3} />
           <rect
             fill={'url(#' + pvName + 'Beamline-gradient)'}
 
             width={props.width}
             height="4"
             x={0}
-            y={props.y+offsetY + 3} />
+            y={offsetY + 3} />
         </g>
 
       
@@ -153,10 +150,45 @@ const HorizontalBeamlineComponent = (props) => {
 const HorizontalBeamline = (props) => {
 
   return (
-    <Widget svgWidget={true}  {...props} component={HorizontalBeamlineComponent} />
+    <Widget svgWidget={true}  {...props} component={HorizontalBeamlineComponent} disableContextMenu={props.pv?props.disableContextMenu:true} />
 
   )
 }
+
+HorizontalBeamline.propTypes = {
+
+
+ 
+ /**
+  * If defined, then the DataConnection and
+  * the widget debugging information will be displayed.
+  */
+ debug: PropTypes.bool,
+
+ /**
+  * Local variable initialization value.
+  * When using loc:// type PVs.
+  */
+ initialLocalVariableValue: PropTypes.string,
+ 
+ /** Name of the  process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'
+  * 
+  * If undefined then the beam line component will render with no animations or context menu
+ */
+
+pv: PropTypes.string,
+
+
+
+
+
+
+};
+HorizontalBeamline.defaultProps = {
+ debug: false,
+
+ 
+};
 
 
 export default HorizontalBeamline

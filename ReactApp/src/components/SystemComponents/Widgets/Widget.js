@@ -6,11 +6,14 @@ import { LanDisconnect } from "mdi-material-ui/";
 import { create, all } from 'mathjs';
 import { useTheme } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
+import {replaceMacros,replaceArrayMacros} from '../Utils/macroReplacement';
 const config = { }
 const math = create(all, config)
 
 /**
- * The Widget component creates standard properties, state variables and callbacks to manage the behaviour of a component communicating with one or multiple PVs. It also provides the default RAS contextMenu to the child component. 
+ * The Widget component creates standard properties, state variables and callbacks to manage the behaviour of a component communicating with one or multiple PVs. It also provides the default RAS contextMenu to the child component.
+ * 
+ * The label, min, max, units, pv and tooltip all accept macros that can be replaced by the values defined in the macros prop. 
  * 
  * 
  * 
@@ -37,6 +40,7 @@ const math = create(all, config)
   const [max, setMax] = useState(0);
   const [units, setUnits] = useState("");
   const [label, setLabel] = useState("");
+  const [tooltip] = useState(replaceMacros(props.tooltip));
   const [anchorEl, setAnchorEl] = useState(null);
   const [openContextMenu, setOpenContextMenu] = useState(false);
   const [contextPVs,setContextPVs]=useState([]);
@@ -90,10 +94,10 @@ const math = create(all, config)
       setLabel(pv.label)
     }
     else {
-      setLabel(props.label)
+      setLabel(replaceMacros(props.label,props.macros))
     }
      // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.label, pv.label])
+  }, [props.label, pv.label,props.macros])
 
   useEffect(() => {
     if (props.usePvUnits) {
@@ -105,10 +109,10 @@ const math = create(all, config)
       }
     }
     else {
-      setUnits(props.units)
+      setUnits(replaceMacros(props.units,props.macros))
     }
      // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.units, pv.units])
+  }, [props.units, pv.units,props.macros])
 
   useEffect(() => {
     if (props.usePvPrecision) {
@@ -126,8 +130,8 @@ const math = create(all, config)
       setMax(pv.max)
     }
     else {
-      setMin(props.min)
-      setMax(props.max)
+      setMin(props.min,props.macros)
+      setMax(props.max,props.macros)
     }
  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.min, props.max, pv.min, pv.max])
@@ -190,6 +194,7 @@ const math = create(all, config)
       setNewValueTrigger(newValueTrigger + 1);
       setImmediateValue(null);
     }
+    
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [immediateValue, min, max, prec])
   
@@ -214,12 +219,12 @@ const math = create(all, config)
   }, [commitChange, min, max, prec])
   useEffect(() => {
     if (props.custom_selection_strings) {
-      setEnumStrings(props.custom_selection_strings)
+      setEnumStrings(replaceArrayMacros(props.custom_selection_strings,props.macros))
     }
     else {
       setEnumStrings(pv.enum_strs)
     }
-  }, [props.custom_selection_strings, pv.enum_strs])
+  }, [props.custom_selection_strings, pv.enum_strs,props.macros])
   useEffect(() => {
 
     let init =
@@ -284,6 +289,7 @@ const math = create(all, config)
 
 
   const handleToggleContextMenu = (event) => {
+    
     event.preventDefault();
     event.stopPropagation();
     setAnchorEl(event.target);
@@ -400,7 +406,7 @@ const math = create(all, config)
     name={props.name}
 
   />
-  const childPvs = getPvs(props.pvs, props, pvs, setPvs,newValueTrigger,outputValue)
+  const childPvs = getPvs(props.pvs, props, pvs, setPvs,props.writeOutputValueToAllpvs?newValueTrigger:undefined,props.writeOutputValueToAllpvs?outputValue:undefined)
   const contextMenu=(<ContextMenu
   disableProbe={props.disableProbe}
   open={openContextMenu}
@@ -449,32 +455,20 @@ const math = create(all, config)
    
    
   }
-  const svgDivStyle = {
-    //width: "100%",
-    //height: "100%",
-    borderStyle: props.debugBorder?'solid':undefined,
-    borderColor:  props.debugBorder?'coral':undefined,
-    position:'absolute',
-    top: props.y,
-    left: props.x,
-    width: props.width,
-    //height: '100%',
-  }
+  
+  const Tag=props.svgWidget?"g":"div";
+  
   return (
     <Tooltip   
-      title={props.tooltip} 
+      title={tooltip} 
       disableFocusListener={true}	
       disableTouchListener={true} 
       disableHoverListener={props.showTooltip===false} 
       {...props.tooltipProps}  >
     
-    <div
-      style={props.svgWidget?svgDivStyle:divStyle}
-      onContextMenu={
-        props.disableContextMenu
-          ? undefined
-          : handleToggleContextMenu
-      }
+    <Tag
+      style={props.svgWidget?undefined:divStyle}
+      onContextMenu={ props.disableContextMenu ? undefined : handleToggleContextMenu}
     >
      
 
@@ -484,8 +478,8 @@ const math = create(all, config)
       {childPv}
       {childPvs}
       {contextMenu}
-    </div>
-     </Tooltip>
+    </Tag>
+   </Tooltip>
   )
 }
 /**
@@ -507,7 +501,10 @@ Widget.propTypes = {
    * the widget debugging information will be displayed.
    */
   debug: PropTypes.bool,
-
+  /**
+   * Directive to the output value to all the pvs defined in the pvs array
+   */
+  writeOutputValueToAllpvs:PropTypes.bool,
   /**
    * Local variable initialization value.
    * When using loc:// type PVs.
@@ -666,6 +663,7 @@ Widget.defaultProps = {
   showTooltip:false,
   useMetadata: true,
   tooltip:"",
+  writeOutputValueToAllpvs:false,
 };
 
 export default Widget

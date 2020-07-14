@@ -77,7 +77,7 @@ const ActionButtonComponent=(props)=> {
 const ActionButton = (props)=> {
   
     return (
-      <Widget  {...props} component={ActionButtonComponent}/> 
+      <Widget  {...props} component={ActionButtonComponent} writeOutputValueToAllpvs={true}/> 
      
     )
   }

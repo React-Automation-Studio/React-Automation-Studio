@@ -8,12 +8,12 @@ import Help from './components/docs/Help';
 import MobileDemo2 from './components/Examples/Mobile/MobileDemo2';
 import MobileDemo1 from './components/Examples/Mobile/MobileDemo1';
 
-import Main from './Main';
+//import Main from './Main';
 import MainDashboard from './components/UI/MainDashboard';
-import ControlTestHarp1 from './components/ControlScreens/ControlTestHarp1';
-import BeamlineControlSystem from './components/ExperimentalControlScreens/BeamlineControlSystem';
 
-import ControlTableExample from './components/ControlScreens/ControlTableExample';
+import BeamlineControlSystem from './components/ControlScreens/BeamlineControlSystem';
+
+import TableControlSystem from './components/ControlScreens/TableControlSystem';
 import ComponentsWithMultiplePVs from './components/Examples/ComponentsWithMultiplePVs';
 import Staging from './components/staging/Staging';
 import Example from './components/staging/Example/Example';
@@ -27,6 +27,7 @@ import SettingsSinglePS from './components/SettingsPages/SettingsSinglePS';
 import AlarmHandler from './components/AlarmHandler/AlarmHandler';
 import AlarmHandlerUN from './components/AlarmHandler/UserNotification';
 import Vault from './components/AlarmHandler/Vault';
+import AdvancedSettingsSinglePS from './components/ExperimentalControlScreens/SettingsPages/AdvancedSettingsSinglePS';
 import LogIn from './LogIn';
 
 const Routes = (props) => {
@@ -48,11 +49,9 @@ const Routes = (props) => {
         <Route path="/MobileDemo2" component={MobileDemo2} />
         <Route path="/MobileDemo1" component={MobileDemo1} />
 
-        <Route path="/ControlTestHarp1" component={ControlTestHarp1} />
-        <Route path="/ControlTestHarp1" component={ControlTestHarp1} />
-
-        <Route path="/BeamlineControlSystem" component={BeamlineControlSystem} />
         
+        <Route path="/TableControlSystem" component={TableControlSystem} /> 
+      
         <Route path="/EpicsDemos" component={EpicsDemos} />
         <Route path="/Help" component={Help} />
         <Route path="/Staging" component={Staging} />
@@ -71,6 +70,11 @@ const Routes = (props) => {
         <Route path="/AlarmHandlerDemo" component={AlarmHandler} />
         <Route path="/AlarmHandlerDemoUN" component={AlarmHandlerUN} />
         <Route path="/VaultDemo" component={Vault} />
+        {/* new Beamline control System routes start*/}
+          <Route path="/BeamlineControlSystem" component={BeamlineControlSystem} />
+          <Route path="/AdvancedSettingsSinglePS" component={AdvancedSettingsSinglePS} />
+        {/* new Beamline control System routes end*/}
+
 
       </Switch>
 

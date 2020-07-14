@@ -64,17 +64,17 @@ const styles = theme => ({
     'overflow-y':
       'scroll',
     paddingRight: 8,
-    '&::-webkit-scrollbar': {
-      width: '0.2em'
-    },
-    '&::-webkit-scrollbar-track': {
-      boxShadow: theme.palette.type === 'light' ? 'inset 0 0 6px rgba(0,0,0,0.075)' : 'inset 0 0 6px rgba(255,255,255,0.075)',
-      webkitBoxShadow: theme.palette.type === 'light' ? 'inset 0 0 6px rgba(0,0,0,0.075)' : 'inset 0 0 6px rgba(255,255,255,0.075)'
-    },
-    '&::-webkit-scrollbar-thumb': {
-      backgroundColor: theme.palette.type === 'light' ? 'rgba(0,0,0,.15)' : 'rgba(255,255,255,.1)',
-      outline: '1px solid slategrey'
-    }
+    // '&::-webkit-scrollbar': {
+    //   width: '0.2em'
+    // },
+    // '&::-webkit-scrollbar-track': {
+    //   boxShadow: theme.palette.type==='light'?'inset 0 0 6px rgba(0,0,0,0.075)':'inset 0 0 6px rgba(255,255,255,0.075)',
+    //   webkitBoxShadow: theme.palette.type==='light'?'inset 0 0 6px rgba(0,0,0,0.075)':'inset 0 0 6px rgba(255,255,255,0.075)'
+    // },
+    // '&::-webkit-scrollbar-thumb': {
+    //   backgroundColor: theme.palette.type==='light'?'rgba(0,0,0,.15)':'rgba(255,255,255,.1)',
+    //   outline: '1px solid slategrey'
+    // }
   },
   Icon: {
     marginRight: theme.spacing(1),
@@ -207,10 +207,10 @@ class MainDashboard extends Component {
                       <Typography {...typographyProps}><DesktopWindowsIcon className={classes.Icon} />  Desktop Demos</Typography>
                     </Grid>
                     <Grid item lg={12} sm={12} xs={12}>
-                      <Button fullWidth className={classes.button} component={Link} to="/ControlTableExample" color="primary" variant={buttonVariant}> Control Table Example</Button>
+                      <Button fullWidth className={classes.button} component={Link} to="/TableControlSystem" color="primary" variant={buttonVariant}> Table Control Demo</Button>
                     </Grid>
                     <Grid item lg={12} sm={12} xs={12}  >
-                      <Button fullWidth className={classes.button} component={Link} to="/ControlTestHarp1" color="primary" variant={buttonVariant}> Beam Line Control Demo </Button>
+                      <Button fullWidth className={classes.button} component={Link} to="/BeamlineControlSystem" color="primary" variant={buttonVariant}> Beam Line Control Demo </Button>
                     </Grid>
                     <Grid item lg={12} sm={12} xs={12}>
                       <Button fullWidth className={classes.button} component={Link} to="/MobileDemo1" color="primary" variant={buttonVariant}>  Mobile Demo 1 </Button>
@@ -322,9 +322,7 @@ class MainDashboard extends Component {
                     <Grid item lg={12} sm={12} xs={12}>
                       <Button fullWidth className={classes.button} component={Link} to="/VaultDemo" color="primary" variant={buttonVariant}>  Vault Demo </Button>
                       </Grid>
-                    <Grid item lg={12} sm={12} xs={12}>
-                      <Button fullWidth className={classes.button} component={Link} to="/BeamlineControlSystem" color="primary" variant={buttonVariant}>New Beamline Control System Demo </Button>
-                    </Grid>
+                   
                     
                   </Grid>
                 </Grid>

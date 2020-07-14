@@ -11,8 +11,6 @@ import TextInput from '../../BaseComponents/TextInput';
 import Slider from '../../BaseComponents/Slider';
 
 import Card from '@material-ui/core/Card';
-import SideBar from '../../SystemComponents/SideBar';
-import AppBar from '@material-ui/core/AppBar';
 
 
 

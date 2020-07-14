@@ -1,3 +1,4 @@
+//This example is deprecated and will be removed in a future release 
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';

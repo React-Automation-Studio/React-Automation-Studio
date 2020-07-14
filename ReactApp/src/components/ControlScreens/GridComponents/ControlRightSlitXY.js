@@ -1,3 +1,4 @@
+//This example is deprecated and will be removed in a future release 
 import React from 'react'
 
 import AutomationStudioContext from '../../SystemComponents/AutomationStudioContext';
@@ -14,7 +15,7 @@ import { withStyles } from '@material-ui/core/styles';
 import ThumbWheel from '../../BaseComponents/ThumbWheel';
 import Close from '@material-ui/icons/Close';
 //import MenuItem from '@material-ui/core/MenuItem';
-
+console.warn("This example is deprecated and will be removed in a future release")
 const styles = theme => ({
   body1: theme.typography.body1,
 

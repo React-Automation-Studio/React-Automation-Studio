@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import EpicsPV from './EpicsPV'
 import LocalPV from './LocalPV'
+import UnknownPV from './UnknownPV'
 import PropTypes from "prop-types";
 
 /**
@@ -46,7 +47,7 @@ const PV = (props) => {
       : (pvname.includes('loc://')
         ?
         LocalPV({ ...props, pv:pvname })
-        : undefined)
+        : UnknownPV({ ...props, pv:pvname }))
   }
   const pvData = (name) => (pv) => {
 

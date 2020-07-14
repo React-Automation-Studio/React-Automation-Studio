@@ -4,8 +4,11 @@
 import HorizontalBeamline from './HorizontalBeamline';
 import QuadrapoleMagnet from './QuadrapoleMagnet';
 import BendingMagnet from './BendingMagnet';
-import SteererMagnet from './SteererMagnet';
-<BeamLineCanvas width={600} height={300} >
+import SteererYMagnet from './SteererYMagnet';
+import SteererXMagnet from './SteererXMagnet';
+import SteererXYMagnet from './SteererXYMagnet';
+
+<BeamLineCanvas width={600} height={400} >
 	<HorizontalBeamline 
 		x={0}
 		y={50}
@@ -22,26 +25,37 @@ import SteererMagnet from './SteererMagnet';
 		x={'261px'}
 		y={50}
 		pv={'pva://testIOC:BeamlineC:BeamOn'}
-		width={'150px'}
+		width={'10px'}
 	/>
+	
 	<QuadrapoleMagnet
-		x={50}
+		x={0}
 		y={50}
-		pv={'pva://$(device):$(pv_suffix)'}
-		macros={{'$(device)':'testIOC:PS1','$(pv_suffix)':'Readback'}}
-	  usePvUnits={true}
+	 	label='Q3'
+        pv= '$(IOC):$(device):Readback'
+        macros=
+         {{
+           '$(IOC)': 'pva://testIOC',
+           '$(device)': 'PS3',
+          }}
+	  	usePvUnits={true}
 		usePvLabel={false}
 		alarmSensitive={true}
-		label='Q1'
+		
 		componentShadow={true}
 		textShadow={false}
 		componentGradient={true}
 	/>
 	<BendingMagnet
-		x={100}
+		x={75}
 		y={50}
-		pv={'pva://$(device):$(pv_suffix)'}
-		macros={{'$(device)':'testIOC:PS4','$(pv_suffix)':'Readback'}}
+		label= 'BM1'
+       	pv= '$(IOC):$(device):Readback'
+        macros=
+          {{
+          '$(IOC)': 'pva://testIOC',
+          '$(device)': 'PS4',
+          }}
 		usePvUnits={true}
 		usePvLabel={false}
 		alarmSensitive={true}
@@ -49,22 +63,38 @@ import SteererMagnet from './SteererMagnet';
 		componentShadow={true}
 		textShadow={false}
 		componentGradient={true}
+		valueOffsetY={15}
 	/>
-	<SteererMagnet
-		system={{
-		systemName:'testIOC:STR3',
-		displayName:'STR3Y',
-		editorType:'singlePS',
-		devices:
-			{
-				device:
-					{
-						deviceName:'testIOC:STR3:Y',
-						readback:'Readback',
-						setpoint:'Setpoint'
-					}
-				}
-		}}
+	 <SteererXYMagnet
+         
+          
+          xPv={'$(IOC):$(device):X:Readback'}
+          yPv={'$(IOC):$(device):Y:Readback'}  
+          label='STRXY2'
+          macros= {{
+              '$(IOC)': 'pva://testIOC',
+              '$(device)': 'STR2',
+              
+          }
+          }
+          x={165}
+          y={50}
+          usePvUnits={true}
+          prec={3}
+		  valueOffsetY={15}
+		   labelOffsetY={-15}
+          alarmSensitive={true}
+          
+        />
+	<SteererYMagnet
+		pv={'$(IOC):$(device):$(XorY):Readback'}
+        label='STR2'
+        macros= {{
+              '$(IOC)': 'pva://testIOC',
+              '$(device)': 'STR2',
+              '$(XorY)': 'Y'
+          }
+        }
 		x={150}
 		y={50}
 		usePvUnits={true}
@@ -78,5 +108,6 @@ import SteererMagnet from './SteererMagnet';
 		textShadow={false}
 		componentGradient={true}
 	/>
+	
 </BeamLineCanvas>
 ```

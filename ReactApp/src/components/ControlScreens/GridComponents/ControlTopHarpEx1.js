@@ -1,3 +1,4 @@
+//This example is deprecated and will be removed in a future release 
 import React from 'react'
 
 import AutomationStudioContext from '../../SystemComponents/AutomationStudioContext';
@@ -9,7 +10,7 @@ import SteererYMagnet from '../../iThembaLabsSvgComponents/SteererYMagnet';
 import SteererXYMagnet from '../../iThembaLabsSvgComponents/SteererXYMagnet';
 import SlitXY from '../../iThembaLabsSvgComponents/SlitXY';
 import HorizontalBeamline from '../../iThembaLabsSvgComponents/HorizontalBeamline';
-
+console.warn("This example is deprecated and will be removed in a future release")
 
 class ControlTopHarpEx1 extends React.Component {
   constructor(props) {

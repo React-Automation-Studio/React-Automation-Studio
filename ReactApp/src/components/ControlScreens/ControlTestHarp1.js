@@ -1,3 +1,4 @@
+//This example is deprecated and will be removed in a future release 
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -27,6 +28,8 @@ import AppBar from '@material-ui/core/AppBar';
 import GraphY from '../BaseComponents/GraphY';
 import ControlCenterTable from '../ControlScreens/GridComponents/ControlCenterTable'
 import TraditionalLayout from '../UI/Layout/ComposedLayouts/TraditionalLayout.js';
+
+console.warn("This example is deprecated and will be removed in a future release")
 
 const VerticalTabs = withStyles(theme => ({
   flexContainer: {

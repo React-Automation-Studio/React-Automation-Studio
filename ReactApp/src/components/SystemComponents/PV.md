@@ -21,7 +21,7 @@ The pv object return through the pvData callback or passed to the child function
 |:-:|:-|
 |value|any|0| The pv's value, valid after initialized===true
 |label|string|""| The derived label, valid after initialized===true
-|initialize|bool|false| true when all the pvs are intialized and connected to live data
+|initialize|bool|false| true when all the pvs are initialized and connected to live data
 |PVS|array|[]| An array of all the pvs, valid after initialized===true
 |metadata|object|{}| The metadata from the pv, valid after initialized===true
 |severity|number|0| The derived alarm severity , valid after initialized===true
@@ -45,7 +45,7 @@ const pvConnection=<PV
    pvData={setPv}
  />
 let {initialized}=pv;
-let value=initialized?pv.value:"value is not intialized";
+let value=initialized?pv.value:"value is not initialized";
 let content=<div>{value}</div>;
 return(   
   <React.Fragment>
@@ -68,7 +68,7 @@ const Example2=(props)=>{
            { 
             (pv)=>{
                let {initialized}=pv;
-               let value=initialized?pv.value:"value is not intialized";
+               let value=initialized?pv.value:"value is not initialized";
                let content=<div>{value}</div>;
                return (content)
             }
@@ -90,7 +90,7 @@ import React, { useState } from 'react'
 
 const Content=(props)=>{
     let {initialized}=props;
-    let value=initialized?props.value:"value is not intialized";
+    let value=initialized?props.value:"value is not initialized";
     return (<div>{value}</div>)
     
 }
@@ -120,7 +120,7 @@ const Example4=(props)=>{
         <PV     pv='pva://$(device):test$(id)'       macros={{'$(device)':'testIOC','$(id)':'2'}} >
            { 
             ({initialized,value})=>{
-               return <div>{initialized?value:"value is not intialized"}</div>
+               return <div>{initialized?value:"value is not initialized"}</div>
                
             }
            }

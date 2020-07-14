@@ -12,9 +12,11 @@ const styles = (theme) => ({
   },
   TextFieldSeverity0: {
     borderRadius: 2,
-   
+    borderWidth: 1,
     padding:1,
-    borderColor:grey[50],
+    borderStyle:'solid',
+    borderColor:'rgba(0,0,0,0)',
+  
   },
   TextFieldSeverity1: {
     borderColor:theme.palette.type==='dark'?grey[700]:grey[300],

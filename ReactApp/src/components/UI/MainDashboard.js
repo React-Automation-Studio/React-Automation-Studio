@@ -205,7 +205,7 @@ class MainDashboard extends Component {
                   <Typography {...typographyProps}><DesktopWindowsIcon className={classes.Icon}/>  Desktop Demos</Typography>
                     </Grid>
                     <Grid item lg={12} sm={12} xs={12}>
-                      <Button fullWidth className={classes.button} component={Link} to="/ControlTableExample" color="primary" variant={buttonVariant}> Control Table Example</Button>
+                      <Button fullWidth className={classes.button} component={Link} to="/TableControlSystem" color="primary" variant={buttonVariant}> Table Control Demo</Button>
                     </Grid>
                     <Grid item lg={12} sm={12} xs={12}  >
                       <Button fullWidth className={classes.button} component={Link} to="/BeamlineControlSystem" color="primary" variant={buttonVariant}> Beam Line Control Demo </Button>
@@ -314,9 +314,6 @@ class MainDashboard extends Component {
                     </Grid>
                 <Grid item lg={6} sm={12} xs={12}>
                   <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
-                    <Grid item lg={12} sm={12} xs={12}>
-                      <Button fullWidth className={classes.button} component={Link} to="/BeamlineControlSystem" color="primary" variant={buttonVariant}>New Beamline Control System Demo </Button>
-                    </Grid>
                     
                   </Grid>
                 </Grid>

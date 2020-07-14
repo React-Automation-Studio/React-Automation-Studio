@@ -3,7 +3,7 @@
  ``` js
 import BeamLineCanvas from './BeamLineCanvas';
 import HorizontalBeamline from './HorizontalBeamline';
-import EditorSlitXY from '../ExperimentalControlScreens/Components/EditorSlitXY';
+import EditorSlitXY from '../ControlScreens/Components/EditorSlitXY';
 import React,{useState} from 'react';
 import Grid from '@material-ui/core/Grid';
 const [displayEditor,setDisplayEditor]=useState(false);

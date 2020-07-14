@@ -1,7 +1,7 @@
  ``` js
 import BeamLineCanvas from './BeamLineCanvas';
 import HorizontalBeamline from './HorizontalBeamline';
-import EditorSinglePS from '../ExperimentalControlScreens/Components/EditorSinglePS';
+import EditorSinglePS from '../ControlScreens/Components/EditorSinglePS';
 import React,{useState} from 'react';
 import Grid from '@material-ui/core/Grid';
 const [displayEditor,setDisplayEditor]=useState(false);

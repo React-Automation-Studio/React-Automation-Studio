@@ -4,7 +4,7 @@
  ``` js
 import BeamLineCanvas from './BeamLineCanvas';
 import HorizontalBeamline from './HorizontalBeamline';
-import EditorSteererXY from '../ExperimentalControlScreens/Components/EditorSteererXY';
+import EditorSteererXY from '../ControlScreens/Components/EditorSteererXY';
 import React,{useState} from 'react';
 import Grid from '@material-ui/core/Grid';
 const [displayEditor,setDisplayEditor]=useState(false);

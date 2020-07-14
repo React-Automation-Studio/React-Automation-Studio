@@ -1,7 +1,7 @@
 import React from 'react'
 
 import Widget from "../SystemComponents/Widgets/Widget";
-import  {svgHeight,svgCenterY,svgWidth,svgCenterX} from "../SystemComponents/svgConstants";
+import  {svgHeight,svgCenterY} from "../SystemComponents/svgConstants";
 import PropTypes from 'prop-types';
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */

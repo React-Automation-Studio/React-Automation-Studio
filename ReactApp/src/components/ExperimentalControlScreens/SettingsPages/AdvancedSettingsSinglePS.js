@@ -1,20 +1,18 @@
 import React from 'react'
 
-import AutomationStudioContext from '../../SystemComponents/AutomationStudioContext';
 import TextInput from '../../BaseComponents/TextInput';
-import SelectionInput from '../../BaseComponents/SelectionInput';
+
 import TextOutput from '../../BaseComponents/TextOutput';
 
 import Grid from '@material-ui/core/Grid';
 
 import ToggleButton from '../../BaseComponents/ToggleButton';
-import ActionButton from '../../BaseComponents/ActionButton';
+
 import ThumbWheel from '../../BaseComponents/ThumbWheel';
-import Card from '@material-ui/core/Card';
+
 
 import { withStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import { Link } from 'react-router-dom'
+
 import Slider from '../../BaseComponents/Slider';
 import Paper from '@material-ui/core/Paper';
 const styles = theme => ({
@@ -30,7 +28,7 @@ const AdvancedSettingsSinglePS=(props)=>{
 
 
   
-    const { classes } =props;
+   
     const system = JSON.parse(decodeURIComponent(props.location.search.substr(1)));
     return (
 

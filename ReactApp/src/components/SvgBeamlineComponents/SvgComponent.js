@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import Widget from "../SystemComponents/Widgets/Widget";
 import { withStyles } from '@material-ui/core/styles';
-import { replaceSystemMacros } from '../SystemComponents/Utils/macroReplacement';
+
 import { v4 as uuidv4 } from 'uuid';
-import { svgHeight, svgCenterY, svgWidth, svgCenterX } from "../SystemComponents/svgConstants";
+import {svgCenterY, svgCenterX } from "../SystemComponents/svgConstants";
 import PropTypes from 'prop-types';
 const styles = theme => ({
 

@@ -23,7 +23,7 @@ const styles = theme => ({
 
 const EditorSlitXY =(props)=>
 {
-  const [system,setSystem]=useState(replaceSystemMacros(props.system,props.system.macros))
+  const [system]=useState(replaceSystemMacros(props.system,props.system.macros))
     //    console.log("json stringify",JSON.stringify(system))
     const { classes } = props;
 

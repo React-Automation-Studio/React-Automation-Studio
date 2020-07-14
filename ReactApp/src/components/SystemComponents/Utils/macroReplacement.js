@@ -39,7 +39,7 @@ const replaceObjectMacros = (object, macros) => {
                 object[keys[key]] = replaceMacros(object[keys[key]], macros)
 
             }
-            else if (typeof object[keys[key]] === 'array') {
+            else if (Array.isArray(object[keys[key]])) {
                 object[keys[key]] = replaceArrayMacros(object[keys[key]], macros)
 
             }

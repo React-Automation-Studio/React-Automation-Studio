@@ -1,4 +1,4 @@
-import React, { useState useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import Typography from '@material-ui/core/Typography';
 import PropTypes from "prop-types";
@@ -24,7 +24,7 @@ export const useUnknownPV = (props) => {
     
     return pv;
   }
-  const [pv, setPv] = useState(initPV());
+  const [pv] = useState(initPV());
 
   
   

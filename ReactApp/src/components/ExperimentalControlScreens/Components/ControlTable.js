@@ -24,6 +24,7 @@ const styles = theme => ({
     minWidth: 700,
   },
   tableHead: {
+    // eslint-disable-next-line eqeqeq 
     backgroundColor: theme.palette.type == 'light' ? theme.palette.primary.light : undefined,
   },
   tableCell: {

@@ -1,6 +1,5 @@
 import React, {useState} from 'react'
 
-import AutomationStudioContext from '../../SystemComponents/AutomationStudioContext';
 import TextInput from '../../BaseComponents/TextInput';
 
 import TextOutput from '../../BaseComponents/TextOutput';
@@ -27,7 +26,7 @@ const styles = theme => ({
 });
 
 const EditorSteererXY =(props)=>{
-  const [system,setSystem]=useState(replaceSystemMacros(props.system,props.system.macros))
+  const [system]=useState(replaceSystemMacros(props.system,props.system.macros))
     //    console.log("json stringify",JSON.stringify(system))
     const { classes } = props;
 

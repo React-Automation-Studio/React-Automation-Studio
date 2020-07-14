@@ -40,7 +40,7 @@ const math = create(all, config)
   const [max, setMax] = useState(0);
   const [units, setUnits] = useState("");
   const [label, setLabel] = useState("");
-  const [tooltip, setTooltip] = useState(replaceMacros(props.tooltip));
+  const [tooltip] = useState(replaceMacros(props.tooltip));
   const [anchorEl, setAnchorEl] = useState(null);
   const [openContextMenu, setOpenContextMenu] = useState(false);
   const [contextPVs,setContextPVs]=useState([]);
@@ -112,7 +112,7 @@ const math = create(all, config)
       setUnits(replaceMacros(props.units,props.macros))
     }
      // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.units, pv.units])
+  }, [props.units, pv.units,props.macros])
 
   useEffect(() => {
     if (props.usePvPrecision) {
@@ -224,7 +224,7 @@ const math = create(all, config)
     else {
       setEnumStrings(pv.enum_strs)
     }
-  }, [props.custom_selection_strings, pv.enum_strs])
+  }, [props.custom_selection_strings, pv.enum_strs,props.macros])
   useEffect(() => {
 
     let init =
@@ -455,18 +455,7 @@ const math = create(all, config)
    
    
   }
-  const svgDivStyle = {
-    //width: "100%",
-    //height: "100%",
-    borderStyle: props.debugBorder?'solid':undefined,
-    borderColor:  props.debugBorder?'coral':undefined,
-    position:'absolute',
-    top: props.y,
-    left: props.x,
-    width: props.width,
-    
-    //height: '100%',
-  }
+  
   const Tag=props.svgWidget?"g":"div";
   
   return (

@@ -239,7 +239,7 @@ const BeamlineControlSystem = (props) => {
           svgProps: {
             x: 800, y: yOffset,
             usePvUnits: true, prec: 1, alarmSensitive: true,
-            labelOffsetY: 0, labelOffsetX: 0, valueOffsetY: 0, valueOffsetX: 0,
+             labelOffsetX: 0, valueOffsetX: 0,
             componentShadow: true, textShadow: false, componentGradient: true,
             valueOffsetY: 30,
             labelOffsetY: -15

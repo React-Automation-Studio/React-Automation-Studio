@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 
-import AutomationStudioContext from '../../SystemComponents/AutomationStudioContext';
+
 import TextInput from '../../BaseComponents/TextInput';
 import TextOutput from '../../BaseComponents/TextOutput';
 import Slider from '../../BaseComponents/Slider';

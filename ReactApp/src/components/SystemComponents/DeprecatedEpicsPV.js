@@ -73,7 +73,7 @@ class DeprecatedEpicsPV extends React.Component {
   handleRequestPvInfoAck=(msg)=>{
     //console.log(this.state['pvname'], "msg: ",msg)
     if ( typeof msg !=='undefined'){
-      console.log(this.state['pvname'], "pvConnectionId: ",msg.pvConnectionId)
+    //  console.log(this.state['pvname'], "pvConnectionId: ",msg.pvConnectionId)
       this.setState({pvConnectionId:msg.pvConnectionId})
     }
     else{

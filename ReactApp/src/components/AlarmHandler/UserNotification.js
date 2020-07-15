@@ -2,18 +2,12 @@ import React, { useState, useEffect, useContext, useCallback, useRef } from 'rea
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import { Link } from 'react-router-dom';
-import ListItemText from '@material-ui/core/ListItemText';
-import TableChartIcon from '@material-ui/icons/TableChart';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
-import Layout from '../UI/Layout/ComposedLayouts/TraditionalLayout';
 import DataConnection from '../SystemComponents/DataConnection';
 import UserTable from './UserTable';
 import PVList from './PVList';
@@ -35,7 +29,7 @@ const useStyles = makeStyles(theme => ({
     expanded: {}
 }))
 
-const UserNotification = () => {
+const UserNotification = (props) => {
 
     const classes = useStyles()
     const theme = useTheme()
@@ -72,17 +66,6 @@ const UserNotification = () => {
 
     const loadPVListRef = useRef(loadPVList);
     loadPVListRef.current = loadPVList;
-
-    const moreVertDrawerItems = (
-        <React.Fragment>
-            <ListItem button component={Link} to="/AlarmHandlerDemo">
-                <ListItemIcon >
-                    <TableChartIcon fontSize="small" />
-                </ListItemIcon>
-                <ListItemText primary={"Alarm Handler"} />
-            </ListItem>
-        </React.Fragment>
-    )
 
     const constructDESC_HOST = (value, pvname) => {
         let epicsPVName = pvname.replace("pva://", "")
@@ -189,7 +172,7 @@ const UserNotification = () => {
         }
 
         const ALARM_DATABASE = "ALARM_DATABASE"
-        const dbName = "demoAlarmDatabase"
+        const dbName = props.dbName
         const colName = "users"
         const dbURL = "mongodb://" + ALARM_DATABASE + ":" + dbName + ":" + colName
 
@@ -223,7 +206,7 @@ const UserNotification = () => {
             }
         })
 
-    }, [handleSetUserEdit, userList, socket, addRegexVal])
+    }, [handleSetUserEdit, userList, socket, addRegexVal, props.dbName])
 
     const cancelEdit = useCallback((event, name, username) => {
         handleSetUserEdit(event, name, username, false)
@@ -415,7 +398,7 @@ const UserNotification = () => {
         }
 
         const ALARM_DATABASE = "ALARM_DATABASE"
-        const dbName = "demoAlarmDatabase"
+        const dbName = props.dbName
         let colName = "pvs"
         const localDbPVsURL = "mongodb://" + ALARM_DATABASE + ":" + dbName + ":" + colName + ":Parameters:{}"
         setDbPVsURL(localDbPVsURL)
@@ -491,15 +474,7 @@ const UserNotification = () => {
     // console.log(userEdit)
 
     return (
-        <Layout
-            title="Demo Alarm Handler: User Notification"
-            alignTitle="left"
-            titleVariant="h6"
-            // titleTextStyle={{ textTransform: 'uppercase' }}
-            denseAppBar
-            moreVertDrawerItems={moreVertDrawerItems}
-            hideMoreVertDrawerAfterItemClick
-        >
+        <React.Fragment>
             {alarmPVs}
             <Grid
                 container
@@ -581,8 +556,8 @@ const UserNotification = () => {
                     </ExpansionPanel>
                 </Grid>
             </Grid>
-        </Layout>
+        </React.Fragment>
     );
 };
 
-export default UserNotification;
+export default React.memo(UserNotification);

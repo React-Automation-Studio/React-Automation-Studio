@@ -14,13 +14,19 @@ services:
       - ./ReactApp/package.json:/frontendserverAppDev/package.json
       - ./ReactApp/src:/frontendserverAppDev/src
       - ./ReactApp/public:/frontendserverAppDev/public
-    environment:
-          - REACT_APP_StyleguideServerPORT=6060
-          - REACT_APP_StyleguideServerURL=http://127.0.0.1
     restart: always
+    logging:
+      driver: "none"
     network_mode: host
   pvserver:
     env_file: .env
+    environment:
+      - ALARM_DATABASE=localhost
+      - ALARM_DATABASE_REPLICA_SET_NAME=devrs
+      - LOADSAVE_DATABASE=localhost
+      - LOADSAVE_DATABASE_REPLICA_SET_NAME=devrs
+      - WATCH_DEBUG_DATABASE=localhost
+      - WATCH_DEBUG_DATABASE_REPLICA_SET_NAME=devrs
     build:
       context: ./
       args: # Environment variables available at build-time
@@ -64,6 +70,118 @@ services:
     stdin_open: true
     restart: always
     network_mode: host
+   
+  alarmhandlerserver:
+    build:
+      context: ./
+      dockerfile: docker/alarmHandlerServer/Dockerfile
+    hostname: alarmhandlerserver
+    restart: always
+    depends_on:
+      - mongosetup
+    network_mode: "host"
+    stdin_open: true
+    tty: true
+    env_file: .env
+  
+  mongo1:
+    image: mongo:4.2.3-bionic
+    hostname: mongo1
+    restart: always
+    network_mode: "host"
+    env_file: .env
+    # environment: 
+    #   MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME-admin}
+    #   MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD-password}
+    logging:
+      driver: "none"
+    volumes:
+      - "mongo-db-data1:/data/db"
+      - "mongo-db-configdb1:/data/configdb"
+    command: "--bind_ip_all --port 27017 --replSet ${REPLICA_SET_NAME-devrs}"
+
+  mongo2:
+    image: mongo:4.2.3-bionic
+    hostname: mongo2
+    restart: always
+    network_mode: "host"
+    env_file: .env
+    # environment: 
+    #   MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME-admin}
+    #   MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD-password}
+    logging:
+      driver: "none"
+    volumes:
+      - "mongo-db-data2:/data/db"
+      - "mongo-db-configdb2:/data/configdb"
+    command: "--bind_ip_all --port 27018 --replSet ${REPLICA_SET_NAME-devrs}"
+
+  mongo3:
+    image: mongo:4.2.3-bionic
+    hostname: mongo3
+    restart: always
+    network_mode: "host"
+    env_file: .env
+    # environment: 
+    #   MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME-admin}
+    #   MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD-password}
+    logging:
+      driver: "none"
+    volumes:
+      - "mongo-db-data3:/data/db"
+      - "mongo-db-configdb3:/data/configdb"
+    command: "--bind_ip_all --port 27019 --replSet ${REPLICA_SET_NAME-devrs}"
+
+  mongosetup:
+    build:
+      context: ./
+      dockerfile: docker/mongoSetup/Dockerfile
+    hostname: mongosetup
+    restart: on-failure
+    network_mode: "host"
+    depends_on:
+      - mongo1
+      - mongo2
+      - mongo3
+    stdin_open: true
+    tty: true
+    env_file: .env
+
+  mongo-express:
+    image: mongo-express:0.54.0
+    hostname: mongo-express
+    restart: always
+    network_mode: "host"
+    depends_on:
+      - mongosetup
+    env_file: .env
+    logging:
+      driver: "none"
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=${ME_MONGODB_SERVER-localhost}
+      - ME_CONFIG_MONGODB_PORT=${ME_MONGODB_PORT-27017}
+      - ME_CONFIG_BASICAUTH_USERNAME=${ME_BASICAUTH_USERNAME-user1}
+      - ME_CONFIG_BASICAUTH_PASSWORD=${ME_BASICAUTH_PASSWORD-password}
+    depends_on:
+      - mongosetup
+  initializeloadsavedb:
+    env_file: .env
+    environment:
+      - LOADSAVE_DATABASE=localhost
+      - LOADSAVE_DATABASE_REPLICA_SET_NAME=devrs
+    build:
+      context: ./
+      
+      args: # Environment variables available at build-time
+                - http_proxy
+                - https_proxy
+                - no_proxy
+      dockerfile: docker/loadSaveDbInit/Dockerfile
+    network_mode: "host"
+    tty: true
+    stdin_open: true
+    depends_on:
+      - mongosetup
   styleguideserverdev:
     env_file: .env
     build:
@@ -81,3 +199,13 @@ services:
       - ./ReactApp/styleguide.config.js:/frontendserverAppDev/styleguide.config.js
     restart: always
     network_mode: host
+
+
+volumes:
+  mongo-db-data1:
+  mongo-db-configdb1:
+  mongo-db-data2:
+  mongo-db-configdb2:
+  mongo-db-data3:
+  mongo-db-configdb3:
+ 

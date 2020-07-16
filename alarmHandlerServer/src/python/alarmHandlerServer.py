@@ -840,7 +840,7 @@ def initialiseAlarmIOC():
                     # set current alarm status to NO_ALARM
                     alarmDict[pvname]["A"].value = 0
         except:
-            print('[Warning]', 'val =', val)
+            print('[Warning]', 'Unable to connect to pv:', pvname)
 
         # set alarm value
         alarmDict[pvname]["V"].value = str(lastAlarmVal)

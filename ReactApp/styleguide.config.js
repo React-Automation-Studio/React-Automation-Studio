@@ -148,7 +148,7 @@ module.exports = {
         {
           name: 'Widget and PV Components',
           content: 'src/docs/widget/widget.md',
-          components: ['src/components/SystemComponents/Widgets/Widget.js', 'src/components/SystemComponents/PV.js', 'src/components/ExperimentalExamples/Mobile/DynamicPvFieldExample.js','src/components/SystemComponents/EpicsPV.js','src/components/SystemComponents/LocalPV.js',],
+          components: ['src/components/SystemComponents/Widgets/Widget.js', 'src/components/SystemComponents/PV.js', 'src/components/ExperimentalExamples/Mobile/DynamicPvFieldExample.js', 'src/components/SystemComponents/EpicsPV.js', 'src/components/SystemComponents/LocalPV.js',],
           exampleMode: 'expand', // 'hide' | 'collapse' | 'expand'
           usageMode: 'expand', // 'hide' | 'collapse' | 'expand'
 
@@ -163,7 +163,7 @@ module.exports = {
           exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
           usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
         },
-        
+
         {
           name: 'Experimental Base Components',
           content: 'src/docs/WorkingWithComponents.md',
@@ -181,7 +181,37 @@ module.exports = {
         {
           name: 'Experimental Alarm Handler',
           content: 'src/docs/alarmHandler/alarmHandler.md',
-          //components: 'src/components/SvgBeamlineComponents/*.js',
+          sections: [
+            {
+              name: 'Setting Up Alarm Server',
+              content: 'src/docs/alarmHandler/setup.md',
+              sections: [
+                {
+                  name: 'Environment settings',
+                  content: 'src/docs/alarmHandler/environment.md',
+                },
+                {
+                  name: 'MongoDB seed data',
+                  content: 'src/docs/alarmHandler/seedData.md',
+                },
+              ]
+            },
+            {
+              name: 'Alarm Handler User Guide',
+              content: 'src/docs/alarmHandler/userGuide.md',
+              sections: [
+                {
+                  name: 'Alarm setup',
+                  content: 'src/docs/alarmHandler/alarmSetup.md',
+                },
+                {
+                  name: 'User notification',
+                  content: 'src/docs/alarmHandler/userNotification.md',
+                },
+              ]
+            }
+          ],
+          components: 'src/components/AlarmHandler/AlarmHandler.js',
           exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
           usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
         },

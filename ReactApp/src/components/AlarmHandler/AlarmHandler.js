@@ -12,6 +12,14 @@ import Layout from '../UI/Layout/ComposedLayouts/TraditionalLayout';
 import AlarmSetup from './AlarmSetup';
 import UserNotification from './UserNotification';
 
+/**
+* This is a preview AlarmHandler component. This component is built on a React Automation Studio based front end that connects 
+* to an alarm server back end.
+* 
+* The AlarmHandler component is still in development and is not considered production ready. Follow the setup and user guides is the Style
+* Guide to deploy the AlarmHandler for testing and experimentation.
+* <br/><br/>
+*/
 const AlarmHandler = (props) => {
 
     const [userSetup, setUserSetup] = useState(false)
@@ -40,10 +48,7 @@ const AlarmHandler = (props) => {
 
     return (
         <Layout
-            title={props.title}
-            alignTitle="center"
-            titleVariant="h6"
-            titleTextStyle={{ textTransform: 'uppercase' }}
+            {...props.titleProps}
             denseAppBar
             moreVertDrawerItems={moreVertDrawerItems}
             hideMoreVertDrawerAfterItemClick
@@ -62,14 +67,16 @@ const AlarmHandler = (props) => {
 };
 
 AlarmHandler.propTypes = {
-    /** Title of Alarm Handler - to be displayed in the app bar */
-    title: PropTypes.string,
     /** Name of the MongoDB alarm database to connect to */
     alarmDatabaseName: PropTypes.string,
+    /** Props passed to the underlying TraditionalLayout component and style the title displayed in the app bar.
+     * See TraditionalLayout component for more information.
+    */
+    titleProps: PropTypes.object,
 }
 
 AlarmHandler.defaultProps = {
-    title: '',
+    titleProps: {},
     alarmDatabaseName: ''
 }
 

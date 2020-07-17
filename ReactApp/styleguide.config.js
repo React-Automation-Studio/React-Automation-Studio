@@ -193,6 +193,20 @@ module.exports = {
                 {
                   name: 'MongoDB seed data',
                   content: 'src/docs/alarmHandler/seedData.md',
+                  sections: [
+                    {
+                      name: 'config.json',
+                      content: 'src/docs/alarmHandler/configJson.md',
+                    },
+                    {
+                      name: 'pvList.json',
+                      content: 'src/docs/alarmHandler/pvListJson.md',
+                    },
+                    {
+                      name: 'users.json',
+                      content: 'src/docs/alarmHandler/usersJson.md',
+                    },
+                  ]
                 },
               ]
             },
@@ -201,11 +215,29 @@ module.exports = {
               content: 'src/docs/alarmHandler/userGuide.md',
               sections: [
                 {
-                  name: 'Alarm setup',
-                  content: 'src/docs/alarmHandler/alarmSetup.md',
+                  name: 'Functional implementation and conventions',
+                  content: 'src/docs/alarmHandler/implementConventions.md',
                 },
                 {
-                  name: 'User notification',
+                  name: 'Alarm setup view',
+                  content: 'src/docs/alarmHandler/alarmSetup.md',
+                  sections: [
+                    {
+                      name: 'ALARM AREAS',
+                      content: 'src/docs/alarmHandler/alarmAreas.md',
+                    },
+                    {
+                      name: 'ALARM TABLE',
+                      content: 'src/docs/alarmHandler/alarmTable.md',
+                    },
+                    {
+                      name: 'ALARM LOG',
+                      content: 'src/docs/alarmHandler/alarmLog.md',
+                    },
+                  ]
+                },
+                {
+                  name: 'User notification view',
                   content: 'src/docs/alarmHandler/userNotification.md',
                 },
               ]

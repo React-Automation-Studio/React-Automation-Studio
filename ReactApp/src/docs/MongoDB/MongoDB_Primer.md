@@ -1,4 +1,4 @@
-*(The following section is intended as a primer for developers not familiar with MongoDB and is not intended as a comprehensive helper. For detailed documentation see the [official MongoDB wesbite](https://www.mongodb.com/))*
+*(The following section is intended as a primer for developers not familiar with MongoDB and is not intended as a comprehensive helper. For detailed documentation see the [official MongoDB website](https://www.mongodb.com/))*
 
 MongoDB is a document-oriented NoSQL database used for high volume data storage. Instead of using tables and rows as in traditional relational databases (RDBMS), MongoDB makes use of collections and documents.
 

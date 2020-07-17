@@ -24,8 +24,7 @@ import Test3D from './components/Experimental/Test3D';
 import Probe from './components/SettingsPages/Probe';
 import SettingsSteererXY from './components/SettingsPages/SettingsSteererXY';
 import SettingsSinglePS from './components/SettingsPages/SettingsSinglePS';
-import AlarmHandler from './components/AlarmHandler/AlarmHandler';
-import AlarmHandlerUN from './components/AlarmHandler/UserNotification';
+import AlarmHandlerDemo from './components/Examples/AlarmHandlerDemo';
 import Vault from './components/AlarmHandler/Vault';
 import AdvancedSettingsSinglePS from './components/ExperimentalControlScreens/SettingsPages/AdvancedSettingsSinglePS';
 import LogIn from './LogIn';
@@ -50,9 +49,9 @@ const Routes = (props) => {
         <Route path="/MobileDemo2" component={MobileDemo2} />
         <Route path="/MobileDemo1" component={MobileDemo1} />
 
-        
-        <Route path="/TableControlSystem" component={TableControlSystem} /> 
-      
+
+        <Route path="/TableControlSystem" component={TableControlSystem} />
+
         <Route path="/EpicsDemos" component={EpicsDemos} />
         <Route path="/Help" component={Help} />
         <Route path="/Staging" component={Staging} />
@@ -63,15 +62,14 @@ const Routes = (props) => {
         <Route path="/Example1" component={Example1} />
         <Route path="/Example2" component={Example2} />
         <Route path="/Example3" component={Example3} />
-     
 
-        <Route path="/AlarmHandlerDemo" component={AlarmHandler} />
-        <Route path="/AlarmHandlerDemoUN" component={AlarmHandlerUN} />
+
+        <Route path="/AlarmHandlerDemo" component={AlarmHandlerDemo} />
         <Route path="/VaultDemo" component={Vault} />
         <Route path="/LoadSaveExample" component={LoadSaveExample} />
         {/* new Beamline control System routes start*/}
-          <Route path="/BeamlineControlSystem" component={BeamlineControlSystem} />
-          <Route path="/AdvancedSettingsSinglePS" component={AdvancedSettingsSinglePS} />
+        <Route path="/BeamlineControlSystem" component={BeamlineControlSystem} />
+        <Route path="/AdvancedSettingsSinglePS" component={AdvancedSettingsSinglePS} />
         {/* new Beamline control System routes end*/}
 
 

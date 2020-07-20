@@ -9,29 +9,3 @@ In addition to this, the alarm handler also has three acknowledge statuses to in
 <center><img src="img/alarmHandler/Alarm_colours.png" alt="Alarm_colours" width="35%"/></center>  
 <center>*Fig 2: Alarm states and colours*</center>
 <br/><br/>
-
-Conventions header
-
-<br/>
-**C1. Propagation of alarms up to subAreas and areas:** ddfdf
-
-**C1.1 Precedence of active alarms in subAreas and areas:**
-
-**C1.2 Disabled alarms in subAreas and areas:**
-
-<br/>
-**C2. Acknowledgement of alarms:**
-
-<br/>
-**C3. Disabled alarms:**
-
-<br/>
-**C3. Latched alarms:**
-
-Logging header
-
-
-
- 
-
-The remainder of the user guide addresses the alarm handler user interface. This is comprised of two views - an alarm setup view and a user notification view.

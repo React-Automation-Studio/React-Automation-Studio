@@ -217,6 +217,16 @@ module.exports = {
                 {
                   name: 'Functional implementation and conventions',
                   content: 'src/docs/alarmHandler/implementConventions.md',
+                  sections: [
+                    {
+                      name: 'Alarm server conventions',
+                      content: 'src/docs/alarmHandler/serverConventions.md',
+                    },
+                    {
+                      name: 'Logging of alarm activities',
+                      content: 'src/docs/alarmHandler/serverLogging.md',
+                    }
+                  ]
                 },
                 {
                   name: 'Alarm setup view',

@@ -27,7 +27,8 @@ import Card from '@material-ui/core/Card';
 import PV from '../SystemComponents/PV';
 import { LanDisconnect } from 'mdi-material-ui/'
 import useMongoDbWatch from '../SystemComponents/database/MongoDB/useMongoDbWatch'
-
+import useMongoDbUpdateOne from '../SystemComponents/database/MongoDB/useMongoDbUpdateOne';
+import useMongoDbInsertOne from '../SystemComponents/database/MongoDB/useMongoDbInsertOne';
 const styles = theme => ({
   root: {
     width: '100%',
@@ -162,6 +163,8 @@ const LoadSave = (props) => {
   const [metadataComponentsPVs, setMetadataComponentsPVs] = useState([]);
   const [processVariables, setProcessVariables] = useState({});
   const context = useContext(AutomationStudioContext);
+  const [dbUpdateOne]=useMongoDbUpdateOne(null);
+  const dbInsertOne=useMongoDbInsertOne(null);
   const [metadataPvs, setMetadataPvs] = useState({});
   //const [dbPVsList, setDbPVsList] = useState({});
   const dbPVsObject=useMongoDbWatch(dbListBroadcastReadPvsURL);
@@ -521,96 +524,59 @@ const LoadSave = (props) => {
     for (key in processVariablesSchemaKeys) {
       newEntry.process_variables[processVariablesSchemaKeys[key]] = { pvName: dbDataAndLiveData[processVariablesSchemaKeys[key]].pvname, pvValue: dbDataAndLiveData[processVariablesSchemaKeys[key]].pvValue };
     }
+    console.log('click')
+    dbInsertOne({dbURL:dbListUpdateOneURL,newEntry:newEntry});
+    
     // console.log(newEntry)
-    let socket = context.socket;
-    let jwt = JSON.parse(localStorage.getItem('jwt'));
-    if (jwt === null) {
-      jwt = 'unauthenticated'
-    }
-    socket.emit('databaseInsertOne', { dbURL: dbListInsertOneURL, 'newEntry': newEntry, 'clientAuthorisation': jwt }, (data) => {
+    // let socket = context.socket;
+    // let jwt = JSON.parse(localStorage.getItem('jwt'));
+    // if (jwt === null) {
+    //   jwt = 'unauthenticated'
+    // }
+    // socket.emit('databaseInsertOne', { dbURL: dbListInsertOneURL, 'newEntry': newEntry, 'clientAuthorisation': jwt }, (data) => {
      
-      if (data !== "OK") {
-        console.log("Save values unsuccessful")
-      }
-    });
+    //   if (data !== "OK") {
+    //     console.log("Save values unsuccessful")
+    //   }
+    // });
   }
  
   const handleOnClickWorking = () => {
   
-    let socket = context.socket;
-    let jwt = JSON.parse(localStorage.getItem('jwt'));
-    if (jwt === null) {
-      jwt = 'unauthenticated'
-    }
+   
     let id = dbList[displayIndex]['_id']['$oid'];
-    let newvalues = { '$set': { "beam_setup.Status": "Working" } }
-    socket.emit('databaseUpdateOne', { dbURL: dbListUpdateOneURL, 'id': id, 'newvalues': newvalues, 'clientAuthorisation': jwt }, (data) => {
-      console.log("ackdata", data);
-      if (data !== "OK") {
-        
-        console.log("set status: working  unsuccessful")
-      }
-    });
+    let newValues = { '$set': { "beam_setup.Status": "Working" } }
+    dbUpdateOne({dbURL:dbListUpdateOneURL,id:id,newValues:newValues});
   }
   const handleOnClickPending = () => {
-    //  console.log('marking row index working', displayIndex);
+  
 
-    let socket = context.socket;
-    let jwt = JSON.parse(localStorage.getItem('jwt'));
-    if (jwt === null) {
-      jwt = 'unauthenticated'
-    }
     let id = dbList[displayIndex]['_id']['$oid'];
-    let newvalues = { '$set': { "beam_setup.Status": "Pending" } }
-    socket.emit('databaseUpdateOne', { dbURL: dbListUpdateOneURL, 'id': id, 'newvalues': newvalues, 'clientAuthorisation': jwt }, (data) => {
-      console.log("ackdata", data);
-      if (data !== "OK") {
-       
-        console.log("set status: pending  unsuccessful")
-      }
-    });
+    let newValues = { '$set': { "beam_setup.Status": "Pending" } }
+    dbUpdateOne({dbURL:dbListUpdateOneURL,id:id,newValues:newValues});
+    
   }
   const handleOnClickObselete = () => {
 
-    let socket = context.socket;
-    let jwt = JSON.parse(localStorage.getItem('jwt'));
-    if (jwt === null) {
-      jwt = 'unauthenticated'
-    }
+   
     let id = dbList[displayIndex]['_id']['$oid'];
-    let newvalues = { '$set': { "beam_setup.Status": "Obselete" } }
-    socket.emit('databaseUpdateOne', { dbURL: dbListUpdateOneURL, 'id': id, 'newvalues': newvalues, 'clientAuthorisation': jwt }, (data) => {
-      console.log("ackdata", data);
-      if (data !== "OK") {
-        
-        console.log("set status: Obselete  unsuccessful")
-      }
-    });
+    let newValues = { '$set': { "beam_setup.Status": "Obselete" } }
+    dbUpdateOne({dbURL:dbListUpdateOneURL,id:id,newValues:newValues});
   }
   const handleOnClickDelete = () => {
 
-    let socket = context.socket;
-    let jwt = JSON.parse(localStorage.getItem('jwt'));
-    if (jwt === null) {
-      jwt = 'unauthenticated'
-    }
+   
     let id = dbList[displayIndex]['_id']['$oid'];
-    let newvalues = { '$set': { "beam_setup.Status": "Delete" } }
+    let newValues = { '$set': { "beam_setup.Status": "Delete" } }
     if (displayIndex >= 1) {
       setDisplayIndex(displayIndex - 1);
     }
     else {
       setDisplayIndex(0);
     }
-    socket.emit('databaseUpdateOne', { dbURL: dbListUpdateOneURL, 'id': id, 'newvalues': newvalues, 'clientAuthorisation': jwt }, (data) => {
-      //console.log("ackdata", data);
-
-      if (data !== "OK") {
-        
-        console.log("set status: Delete  unsuccessful")
-      }
-    });
+    dbUpdateOne({dbURL:dbListUpdateOneURL,id:id,newValues:newValues});
   }
+  
 
 
 

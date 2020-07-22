@@ -157,6 +157,13 @@ module.exports = {
 
         },
         {
+          name: 'Database Hooks',
+          //content: 'src/docs/beamlineComponents/BeamlineComponents.md',
+          components: 'src/components/SystemComponents/database/MongoDB/*.js',
+          exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
+          usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
+        },
+        {
           name: 'Beamline Components',
           content: 'src/docs/beamlineComponents/BeamlineComponents.md',
           components: 'src/components/SvgBeamlineComponents/*.js',

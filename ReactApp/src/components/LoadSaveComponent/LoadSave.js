@@ -26,7 +26,7 @@ import Box from '@material-ui/core/Box';
 import Card from '@material-ui/core/Card';
 import PV from '../SystemComponents/PV';
 import { LanDisconnect } from 'mdi-material-ui/'
-import useMongoDbWatch from '../SystemComponents/database/MongoDB/useMongoDbWatch'
+import {useMongoDbWatch} from '../SystemComponents/database/MongoDB/MongoDbWatch'
 import useMongoDbUpdateOne from '../SystemComponents/database/MongoDB/useMongoDbUpdateOne';
 import useMongoDbInsertOne from '../SystemComponents/database/MongoDB/useMongoDbInsertOne';
 const styles = theme => ({
@@ -163,14 +163,14 @@ const LoadSave = (props) => {
   const [metadataComponentsPVs, setMetadataComponentsPVs] = useState([]);
   const [processVariables, setProcessVariables] = useState({});
   const context = useContext(AutomationStudioContext);
-  const [dbUpdateOne]=useMongoDbUpdateOne(null);
-  const dbInsertOne=useMongoDbInsertOne(null);
+  const dbUpdateOne=useMongoDbUpdateOne({});
+  const dbInsertOne=useMongoDbInsertOne({});
   const [metadataPvs, setMetadataPvs] = useState({});
   //const [dbPVsList, setDbPVsList] = useState({});
-  const dbPVsObject=useMongoDbWatch(dbListBroadcastReadPvsURL);
-  
+  const dbPVsObject=useMongoDbWatch({dbURL:dbListBroadcastReadPvsURL});
+  console.log(dbListBroadcastReadDataURL)
   const dbPVsList=dbPVsObject.data;
-  const dbDataObject=useMongoDbWatch(dbListBroadcastReadDataURL);
+  const dbDataObject=useMongoDbWatch({dbURL:dbListBroadcastReadDataURL});
   useEffect(() => {
    
 

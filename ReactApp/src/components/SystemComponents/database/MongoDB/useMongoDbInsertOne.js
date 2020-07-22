@@ -1,27 +1,28 @@
-import React, { useReducer, useContext, useState, useEffect, useCallback } from 'react';
+import { useContext, useCallback } from 'react';
 import AutomationStudioContext from '../../AutomationStudioContext';
-
 const useMongoDbInsertOne = (props) => {
 
-    const context = useContext(AutomationStudioContext);
+    const { socket } = useContext(AutomationStudioContext);
 
-    const memoizedReducer = useCallback((state, action) => {
-        let socket = context.socket;
-        let jwt = JSON.parse(localStorage.getItem('jwt'));
-        if (jwt === null) {
-            jwt = 'unauthenticated'
-        }
-        console.log("insertone")
-        socket.emit('databaseInsertOne', { dbURL: action.dbURL,'newEntry': action.newEntry, 'clientAuthorisation': jwt }, (data) => {
-            console.log("ackdata", data);
-            if (data !== "OK") {
+    const dbInsertOne = useCallback((props) => {
 
-                console.log("InsertOne  unsuccessful")
+        if (props.dbURL && props.newEntry) {
+
+            let jwt = JSON.parse(localStorage.getItem('jwt'));
+            if (jwt === null) {
+                jwt = 'unauthenticated'
             }
-        });
+            
+            socket.emit('databaseInsertOne', { dbURL: props.dbURL, 'newEntry': props.newEntry, 'clientAuthorisation': jwt }, (data) => {
+                console.log("ackdata", data);
+                if (data !== "OK") {
 
-    },[])
-    const [state, dispatch] = useReducer(memoizedReducer, {});
-    return (dispatch)
+                    console.log("InsertOne  unsuccessful")
+                }
+            });
+        }
+    }, [])
+    return (dbInsertOne);
+   
 }
 export default useMongoDbInsertOne

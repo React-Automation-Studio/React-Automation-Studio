@@ -1,25 +1,29 @@
-import React, { useReducer, useContext, useCallback } from 'react';
-import AutomationStudioContext from '../../AutomationStudioContext';
 
+import { useContext, useCallback } from 'react';
+import AutomationStudioContext from '../../AutomationStudioContext';
 const useMongoDbUpdateOne = (props) => {
 
-    const context = useContext(AutomationStudioContext);
-    const memoizedReducer = useCallback((state, action) => {
-        let socket = context.socket;
-        let jwt = JSON.parse(localStorage.getItem('jwt'));
-        if (jwt === null) {
-            jwt = 'unauthenticated'
-        }
-        socket.emit('databaseUpdateOne', { dbURL: action.dbURL, 'id': action.id, 'newvalues': action.newValues, 'clientAuthorisation': jwt }, (data) => {
-            console.log("ackdata", data);
+    const { socket } = useContext(AutomationStudioContext);
+
+    const dbUpdateOne = useCallback((props) => {
+
+        if (props.dbURL && props.newValues&&props.id) {
+
+            let jwt = JSON.parse(localStorage.getItem('jwt'));
+            if (jwt === null) {
+                jwt = 'unauthenticated'
+            }
+  
+                    socket.emit('databaseUpdateOne', { dbURL: props.dbURL, 'id': props.id, 'newvalues': props.newValues, 'clientAuthorisation': jwt }, (data) => {
+  
             if (data !== "OK") {
 
                 console.log("updateOne  unsuccessful")
             }
         });
-
-    },[])
-    const [state, dispatch] = useReducer(memoizedReducer, {});
-    return ([dispatch])
+        }
+    }, [])
+    return (dbUpdateOne);
+   
 }
 export default useMongoDbUpdateOne

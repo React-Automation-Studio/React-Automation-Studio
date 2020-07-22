@@ -621,7 +621,8 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
                         'pvs.' + pvKey + '.lastAlarmTime': timestamp_string
                     }
                 })
-    if(logToHistory):
+    # disbaled alarms not logged
+    if(enable and logToHistory):
         client[MONGO_INITDB_ALARM_DATABASE].history.update_many(
             {'id': areaKey+'*'+pvname},
             {'$push': {

@@ -64,10 +64,6 @@ module.exports = {
                 {
                   name: 'Replication',
                   content: 'src/docs/MongoDB/MongoDB_Primer_Replication.md',
-                },
-                {
-                  name: 'Mongo Express',
-                  content: 'src/docs/MongoDB/MongoDB_Primer_MExpress.md',
                 }
               ]
             },
@@ -85,6 +81,10 @@ module.exports = {
                 }
               ]
             },
+            {
+              name: 'MongoDB Compass - A GUI for MongoDB',
+              content: 'src/docs/MongoDB/MongoDB_Compass.md',
+            }
           ],
         },
       ],

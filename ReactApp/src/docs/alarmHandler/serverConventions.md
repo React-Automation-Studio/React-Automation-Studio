@@ -4,7 +4,7 @@ These conventions will be refined and optimised as the alarm handler and server 
 
 <br/>
 **C1. Acknowledgement of alarms:**<br/>
-An unlatched alarm is always acknowledged to its corresponding \_ACKED state as per Fig 2 above. A latched alarm is always acknowledged to the \_ACKED state of its current alarm severity level. The table below shows this convention in practice. 
+An unlatched alarm is always acknowledged to its corresponding \_ACKED state as per Table 2 above. A latched alarm is always acknowledged to the \_ACKED state of its current alarm severity level. The table below shows this convention in practice. 
 
 <center>
 | Current alarm status | Current alarm severity | When acknowledged |
@@ -34,22 +34,22 @@ The last alarm acknowledge time is updated whenever an alarm is acknowledged fro
 
 <br/>
 **C2. Disabled alarms:**<br/>
-Disabled alarms behave like unlatched alarms. The alarm status, last alarm time and alarm log will be updated accordingly. However, disabled alarms will not propagate their severity up to their subAreas or areas.
+Disabled alarms behave like unlatched alarms. The alarm status, last alarm value and last alarm time will be updated accordingly. However, disabled alarms will not propagate their severity up to their subAreas or areas nor are their alarm events logged.
 
 <br/>
 **C3. Latched alarms:**<br/>
-A latched alarm will always latch on its worst alarm severity. Its last alarm time timestamp will also latch the time when its worst alarm was triggered. The table below shows this convention in practice.
+A latched alarm will always latch on its worst alarm severity. Its last alarm value and last alarm time will also latch the value and time when its worst alarm was triggered. The table below shows this convention in practice.
 
 <center>
-| Current alarm status | New alarm severity | New alarm status | Update LAST ALM TIME? |
-| -------------------- | ------------------ | ---------------- | --------------------- |
-| MAJOR\_ALARM         | MAJOR\_ALARM       | MAJOR\_ALARM     | No                    |
-| MINOR\_ALARM         | MAJOR\_ALARM       | MAJOR\_ALARM     | Yes                   |
-| MAJOR\_ALARM         | NO\_ALARM          | MAJOR\_ALARM     | No                    |
+| Current alarm status | New alarm severity | New alarm status | Update LAST ALM VAL and TIME? |
+| -------------------- | ------------------ | ---------------- | ----------------------------- |
+| MAJOR\_ALARM         | MAJOR\_ALARM       | MAJOR\_ALARM     | No                            |
+| MINOR\_ALARM         | MAJOR\_ALARM       | MAJOR\_ALARM     | Yes                           |
+| MAJOR\_ALARM         | NO\_ALARM          | MAJOR\_ALARM     | No                            |
 </center>
 
-**C3.1 Last alarm time:**<br/>
-The last alarm time is updated whenever an alarm is triggered. For an unlatched alarm this time is updated on transition to any new alarm severity. For a latched alarm this time is only updated on transition to a worse alarm severity.
+**C3.1 Last alarm value and last alarm time:**<br/>
+The last alarm value and last alarm time are updated whenever an alarm is triggered. For an unlatched alarm this value and time is updated on transition to any new alarm severity. For a latched alarm this value and time is only updated on transition to a worse alarm severity.
 
 <br/>
 **C4. Propagation of alarms up to subAreas and areas:**<br/>

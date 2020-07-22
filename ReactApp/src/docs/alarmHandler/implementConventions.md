@@ -14,6 +14,12 @@ The alarm handler maps the EPICS database record alarm severity (SEVR) field to 
 In addition to this, the alarm handler also has three acknowledge statuses to indicate when an alarm has been acknowledged. An alarm can thus be in one of seven (7) states as depicted in the table below. Each state is also colour coded (changing the theme can result in alarm colour variations).
 
 <center>
+<img src="img/alarmHandler/Alarm_colours.png" alt="alarmSetup_ExpansionPanel1" width="30%"/>
+</center>
+<center>*Table 2: Alarm states and colours*</center>
+<br/><br/>
+
+<center>
 | Alarm          | Acknowledged   |
 | -------------- | -------------- |
 | NO\_ALARM      | NO\_ALARM      |

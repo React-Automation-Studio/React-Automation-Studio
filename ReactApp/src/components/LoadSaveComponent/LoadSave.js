@@ -26,6 +26,8 @@ import Box from '@material-ui/core/Box';
 import Card from '@material-ui/core/Card';
 import PV from '../SystemComponents/PV';
 import { LanDisconnect } from 'mdi-material-ui/'
+import useMongoDbWatch from '../SystemComponents/database/MongoDB/useMongoDbWatch'
+
 const styles = theme => ({
   root: {
     width: '100%',
@@ -161,7 +163,22 @@ const LoadSave = (props) => {
   const [processVariables, setProcessVariables] = useState({});
   const context = useContext(AutomationStudioContext);
   const [metadataPvs, setMetadataPvs] = useState({});
-  const [dbPVsList, setDbPVsList] = useState({});
+  //const [dbPVsList, setDbPVsList] = useState({});
+  const dbPVsObject=useMongoDbWatch(dbListBroadcastReadPvsURL);
+  
+  const dbPVsList=dbPVsObject.data;
+  const dbDataObject=useMongoDbWatch(dbListBroadcastReadDataURL);
+  useEffect(() => {
+   
+
+      let data = dbDataObject.data;
+      if(data!==null){
+      let sortedData = data.sort(compare);
+      setDbList(sortedData);
+      setDbListWriteAccess(dbDataObject.writeAccess);}
+    },[dbDataObject]);
+
+  
   const dbDataAndLiveDataReducer = (state, action) => {
     let newState = {};
     let newProcessVariables;
@@ -313,92 +330,9 @@ const LoadSave = (props) => {
   const [dbDataAndLiveData, dispatchDbDataAndLiveData] = useReducer(dbDataAndLiveDataReducer, {});
 
 
-  // let pvs = {};
-  // if (this.props.useLoadEnable) {
-  //   let loadEnablePV = this.props.loadEnablePV
-  //   let pvname = loadEnablePV;
-  //   if (typeof this.props.macros !== 'undefined') {
-  //     let macro;
-  //     for (macro in this.props.macros) {
-  //       pvname = pvname.replace(macro.toString(), this.props.macros[macro].toString());
-  //     }
-  //   }
-  //   pvs['loadEnablePV'] = {
-  //     label: "",
-  //     initialized: false,
-  //     pvname: pvname,
-  //     value: "",
-  //     metadata: {}
-  //   };
-  // }
-  // console.log(pvs)
-  // this.state = {
-  //   pvs: pvs,
-  //   dbList: [],
-  //   dbDataAndLiveData: [],
-  //   processVariablesSchemaKeys: [],
-  //   displayIndex: 0,
-  //   tabValue: 0,
-  //   dbListWriteAccess: false,
-  //   dbListBroadcastReadPvsURL: dbListBroadcastReadPvsURL,
-  //   dbListBroadcastReadDataURL: dbListBroadcastReadDataURL,
-  //   dbListUpdateOneURL: dbListUpdateOneURL,
-  //   dbListInsertOneURL: dbListInsertOneURL,
-  //   newValuesLoaded: false,
-  //   metadataComponents: [],
-  //   metadataComponentsPVs: [],
-  // };
-
-
-  // handleInputValue = name => (inputValue, pvname, initialized, severity) => {
-  //   let pvs = this.state.pvs;
-  //   pvs[name].value = inputValue;
-  //   pvs[name].initialized = initialized;
-  //   pvs[name].severity = severity;
-  //   this.setState({ pvs: pvs });
-  // }
-  // handleMetadata = name => (metadata) => {
-  //   let pvs = this.state.pvs;
-  //   pvs[name].metadata = metadata;
-  //   this.setState({ pvs: pvs });
-  // }
-  // handleMetadataComponentsPVsInputValue = index => (inputValue, pvname, initialized, severity) => {
-  //   let metadataComponentsPVs = this.state.metadataComponentsPVs;
-  //   metadataComponentsPVs[index].value = inputValue;
-  //   metadataComponentsPVs[index].initialized = initialized;
-  //   metadataComponentsPVs[index].severity = severity;
-  //   this.setState({ metadataComponentsPVs: metadataComponentsPVs });
-  // }
-  // handleMetadataComponentsPVsMetadata = index => (metadata) => {
-  //   let metadataComponentsPVs = this.state.metadataComponentsPVs;
-  //   metadataComponentsPVs[index].metadata = metadata;
-  //   this.setState({ metadataComponentsPVs: metadataComponentsPVs });
-  // }
-  // handleInputValueLabel = pvname => (inputValue) => {
-  //   let pvs = this.state.pvs;
-  //   pvs[pvname].label = inputValue;
-  //   this.setState({ pvs: pvs });
-  // }
-
-
-  // handleDbListInputValue = (key) => (inputValue, pvname, initialized, severity) => {
-  //   let dbDataAndLiveData = this.state.dbDataAndLiveData;
-  //   if (initialized) {
-  //     dbDataAndLiveData[key].pvValue = inputValue;
-  //   }
-  //   dbDataAndLiveData[key].initialized = initialized;
-  //   dbDataAndLiveData[key].severity = severity;
-  //   this.setState({ dbDataAndLiveData: dbDataAndLiveData });
-  // }
-  // handleDbListMetadata = (key) => (metadata) => {
-  //   let dbDataAndLiveData = this.state.dbDataAndLiveData;
-  //   dbDataAndLiveData[key].metadata = metadata;
-  //   this.setState({ dbDataAndLiveData: dbDataAndLiveData });
-
-  // }
-
   useEffect(() => {
-    if (typeof dbPVsList[0] !== 'undefined') {
+    if (dbPVsList !== null) {
+      console.log(dbPVsList)
       let processVariables = dbPVsList[0].process_variables;
       let newProcessVariablesSchemaKeys = Object.keys(dbPVsList[0].process_variables);
       let metadataComponents = dbPVsList[0].metadata.components;
@@ -429,7 +363,7 @@ const LoadSave = (props) => {
           newDbDataAndLiveData[newProcessVariablesSchemaKeys[key]] = { description: description, pvname: pvName, pvValue: undefined, newValue: undefined, newValueTrigger: 0, dbValue: undefined, metadata: {}, initialized: false, severity: 0 }
         }
       }
-      //  console.log(newProcessVariablesSchemaKeys)
+      
       setProcessVariablesSchemaKeys(newProcessVariablesSchemaKeys);
       dispatchDbDataAndLiveData({ type: 'initPvList', data: newDbDataAndLiveData });
       setProcessVariables(processVariables);
@@ -438,23 +372,24 @@ const LoadSave = (props) => {
     }
   }, [dbPVsList])
 
-  useEffect(() => {
-    if (processVariablesSchemaKeys.length > 0) {
-      // console.log(processVariablesSchemaKeys)
+  // useEffect(() => {
+  //   if (processVariablesSchemaKeys.length > 0) {
+     
+  //  //   useMongoDbBroadcastRead(dbListBroadcastReadDataURL);
+  //     let socket = context.socket;
+  //     let jwt = JSON.parse(localStorage.getItem('jwt'));
+  //     if (jwt === null) {
+  //       jwt = 'unauthenticated'
+  //     }
 
-      let socket = context.socket;
-      let jwt = JSON.parse(localStorage.getItem('jwt'));
-      if (jwt === null) {
-        jwt = 'unauthenticated'
-      }
-      socket.emit('databaseBroadcastRead', { dbURL: dbListBroadcastReadDataURL, 'clientAuthorisation': jwt }, (data) => {
-        if (data !== "OK") {
-          console.log("ackdata", data);
-        }
-        //    console.log("emitted databaseBroadcastRead")
-      });
-    }
-  }, [processVariablesSchemaKeys])
+  //     socket.emit('databaseBroadcastRead', { dbURL: dbListBroadcastReadDataURL, 'clientAuthorisation': jwt }, (data) => {
+  //       if (data !== "OK") {
+  //         console.log("ackdata", data);
+  //       }
+       
+  //     });
+  //   }
+  // }, [processVariablesSchemaKeys])
 
   useEffect(() => {
 
@@ -481,41 +416,38 @@ const LoadSave = (props) => {
 
     }
   }, [dbList, processVariablesSchemaKeys])
-  useEffect(() => {
-    const handleNewDbPVsList = (msg) => {
+  // useEffect(() => {
+   
 
-      let data = JSON.parse(msg.data);
-
-      //  console.log(data)
-      setDbPVsList(data);
-
-    }
-
-    const handleNewDbDataList = (msg) => {
-      // console.log("receive handleNewDbDataList")
-      let item;
-      let data = JSON.parse(msg.data);
-      let sortedData = data.sort(compare);
-      setDbList(sortedData);
-      setDbListWriteAccess(msg.write_access);
+  //   const handleNewDbDataList = (msg) => {
+  //     // console.log("receive handleNewDbDataList")
+  //     let item;
+  //     let data = JSON.parse(msg.data);
+  //     let sortedData = data.sort(compare);
+  //     setDbList(sortedData);
+  //     setDbListWriteAccess(msg.write_access);
 
 
-    }
+  //   }
 
-    let socket = context.socket;
-    let jwt = JSON.parse(localStorage.getItem('jwt'));
-    if (jwt === null) {
-      jwt = 'unauthenticated'
-    }
-    socket.emit('databaseBroadcastRead', { dbURL: dbListBroadcastReadPvsURL, 'clientAuthorisation': jwt }, (data) => {
-      if (data !== "OK") {
-        //   console.log("ackdata", data);
-      }
-    });
+  //   let socket = context.socket;
+  //   let jwt = JSON.parse(localStorage.getItem('jwt'));
+  //   if (jwt === null) {
+  //     jwt = 'unauthenticated'
+  //   }
+  //   // socket.emit('databaseBroadcastRead', { dbURL: dbListBroadcastReadPvsURL, 'clientAuthorisation': jwt }, (data) => {
+  //   //   if (data !== "OK") {
+  //   //     //   console.log("ackdata", data);
+  //   //   }
+  //   // });
 
-    socket.on('databaseData:' + dbListBroadcastReadPvsURL, handleNewDbPVsList);
-    socket.on('databaseData:' + dbListBroadcastReadDataURL, handleNewDbDataList);
-  }, [])
+   
+  //   //socket.on('databaseData:' + dbListBroadcastReadDataURL, handleNewDbDataList);
+  // }, [])
+
+
+
+
   // handleOnClick = (index) => () => {
 
 
@@ -596,31 +528,15 @@ const LoadSave = (props) => {
       jwt = 'unauthenticated'
     }
     socket.emit('databaseInsertOne', { dbURL: dbListInsertOneURL, 'newEntry': newEntry, 'clientAuthorisation': jwt }, (data) => {
-      //console.log("ackdata", data);
-      if (data == "OK") {
-        socket.emit('databaseBroadcastRead', { dbURL: dbListBroadcastReadDataURL, 'clientAuthorisation': jwt }, (data) => {
-          if (data !== "OK") {
-            console.log("ackdata", data);
-          }
-        });
-      } else {
+     
+      if (data !== "OK") {
         console.log("Save values unsuccessful")
       }
     });
   }
-  // handleWriteNewValues = () => {
-  //   let processVariablesSchemaKeys = this.state.processVariablesSchemaKeys;
-  //   let dbDataAndLiveData = this.state.dbDataAndLiveData;
-  //   let key;
-  //   for (key in processVariablesSchemaKeys) {
-  //     dbDataAndLiveData[processVariablesSchemaKeys[key]].pvValue = dbDataAndLiveData[processVariablesSchemaKeys[key]].newValue;
-  //     dbDataAndLiveData[processVariablesSchemaKeys[key]].newValueTrigger++;
-  //   }
-  //   this.setState({ dbDataAndLiveData: dbDataAndLiveData })
-  // }
+ 
   const handleOnClickWorking = () => {
-    // console.log('marking row index working', displayIndex);
-
+  
     let socket = context.socket;
     let jwt = JSON.parse(localStorage.getItem('jwt'));
     if (jwt === null) {
@@ -630,13 +546,8 @@ const LoadSave = (props) => {
     let newvalues = { '$set': { "beam_setup.Status": "Working" } }
     socket.emit('databaseUpdateOne', { dbURL: dbListUpdateOneURL, 'id': id, 'newvalues': newvalues, 'clientAuthorisation': jwt }, (data) => {
       console.log("ackdata", data);
-      if (data == "OK") {
-        socket.emit('databaseBroadcastRead', { dbURL: dbListBroadcastReadDataURL, 'clientAuthorisation': jwt }, (data) => {
-          if (data !== "OK") {
-            console.log("ackdata", data);
-          }
-        });
-      } else {
+      if (data !== "OK") {
+        
         console.log("set status: working  unsuccessful")
       }
     });
@@ -653,13 +564,8 @@ const LoadSave = (props) => {
     let newvalues = { '$set': { "beam_setup.Status": "Pending" } }
     socket.emit('databaseUpdateOne', { dbURL: dbListUpdateOneURL, 'id': id, 'newvalues': newvalues, 'clientAuthorisation': jwt }, (data) => {
       console.log("ackdata", data);
-      if (data == "OK") {
-        socket.emit('databaseBroadcastRead', { dbURL: dbListBroadcastReadDataURL, 'clientAuthorisation': jwt }, (data) => {
-          if (data !== "OK") {
-            console.log("ackdata", data);
-          }
-        });
-      } else {
+      if (data !== "OK") {
+       
         console.log("set status: pending  unsuccessful")
       }
     });
@@ -675,13 +581,8 @@ const LoadSave = (props) => {
     let newvalues = { '$set': { "beam_setup.Status": "Obselete" } }
     socket.emit('databaseUpdateOne', { dbURL: dbListUpdateOneURL, 'id': id, 'newvalues': newvalues, 'clientAuthorisation': jwt }, (data) => {
       console.log("ackdata", data);
-      if (data == "OK") {
-        socket.emit('databaseBroadcastRead', { dbURL: dbListBroadcastReadDataURL, 'clientAuthorisation': jwt }, (data) => {
-          if (data !== "OK") {
-            console.log("ackdata", data);
-          }
-        });
-      } else {
+      if (data !== "OK") {
+        
         console.log("set status: Obselete  unsuccessful")
       }
     });
@@ -703,13 +604,9 @@ const LoadSave = (props) => {
     }
     socket.emit('databaseUpdateOne', { dbURL: dbListUpdateOneURL, 'id': id, 'newvalues': newvalues, 'clientAuthorisation': jwt }, (data) => {
       //console.log("ackdata", data);
-      if (data == "OK") {
-        socket.emit('databaseBroadcastRead', { dbURL: dbListBroadcastReadDataURL, 'clientAuthorisation': jwt }, (data) => {
-          if (data !== "OK") {
-            console.log("ackdata", data);
-          }
-        })
-      } else {
+
+      if (data !== "OK") {
+        
         console.log("set status: Delete  unsuccessful")
       }
     });

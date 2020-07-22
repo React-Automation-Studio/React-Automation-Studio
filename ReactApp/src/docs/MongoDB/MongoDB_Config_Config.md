@@ -1,4 +1,4 @@
-The MongoDB and Mongo Express configuration settings can be changed by declaring the relevant parameter name and value as environment variables.
+The MongoDB configuration settings can be changed by declaring the relevant parameter name and value as environment variables.
 
 In the React Automation Studio root folder:
 
@@ -22,12 +22,7 @@ NOTE: In order for the change of replica set name to take effect, the Docker vol
 <br/>
 **Updating members of the replica set:**
 
-Edit .env file and list all members (comma delimited):
+Edit .env file and list all {n} members (comma delimited):
 ```bash
-    REPLICA_SET_MEMBERS=hostname1:port1,hostname2:port2,hostname3:port3
+    REPLICA_SET_MEMBERS=hostname1:port1,hostname2:port2,...hostname{n}:port{n}
 ```
-
-<br/>
-**Updating Mongo Express settings:**
-
-Edit .env file and follow same steps as above, parameter names as shown in Table 2 and sample values shown in the example.env file.

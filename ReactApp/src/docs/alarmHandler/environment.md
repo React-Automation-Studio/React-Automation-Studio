@@ -52,7 +52,7 @@ Edit .env file and set new name:
 
 **NOTE:** If the alarm database name is changed, upon restart of the alarm handler, a new database with the set name is created and initialised with seed data (see next section for details on seed data). **The alarm server will no longer point to the previous alarm database and historical alarm data will not be accessible!** For this reason it is recommended that the alarm database name is set as desired before deploying into production or saving critical data onto the database.
 
-The previous database will still exist on the MongoDB server and can be viewed/deleted via Mongo Express or by pruning the Docker volume attached to the MongoDB server on which the alarm database resides. Please refer to the [Docker volumes] (https://docs.docker.com/storage/volumes/) documentation and to the [Docker documentation on how to backup, restore or migrate data volumes](https://docs.docker.com/storage/volumes/#backup-restore-or-migrate-data-volumes) for more info.
+The previous database will still exist on the MongoDB server and can be viewed/deleted via MongoDB Compass or by pruning the Docker volume attached to the MongoDB server on which the alarm database resides. Please refer to the [Docker volumes] (https://docs.docker.com/storage/volumes/) documentation and to the [Docker documentation on how to backup, restore or migrate data volumes](https://docs.docker.com/storage/volumes/#backup-restore-or-migrate-data-volumes) for more info.
 
 <br/><br/>
 For all other settings: edit the .env file and follow the same steps as above, parameter names as shown in Table 1 and sample values shown in the example.env file.

@@ -160,23 +160,6 @@ services:
     tty: true
     env_file: .env
 
-  mongo-express:
-    image: mongo-express:0.54.0
-    hostname: mongo-express
-    restart: always
-    network_mode: "host"
-    depends_on:
-      - mongosetup
-    env_file: .env
-    logging:
-      driver: "none"
-    environment:
-      - ME_CONFIG_MONGODB_SERVER=${ME_MONGODB_SERVER-localhost}
-      - ME_CONFIG_MONGODB_PORT=${ME_MONGODB_PORT-27017}
-      - ME_CONFIG_BASICAUTH_USERNAME=${ME_BASICAUTH_USERNAME-user1}
-      - ME_CONFIG_BASICAUTH_PASSWORD=${ME_BASICAUTH_PASSWORD-password}
-    depends_on:
-      - mongosetup
   initializeloadsavedb:
     env_file: .env
     environment:

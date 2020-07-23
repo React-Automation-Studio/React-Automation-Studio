@@ -204,10 +204,11 @@ def test_write(message):
                 pvname2=pvname1.replace("pva://","")
                 try:
                     clientPVlist[pvname1]['pv'].put(message['data']);
-                except:
+                except Exception as e:
                     print("***EPICS PV put error: ")
                     print("PV name: "+ str(pvname2))
                     print("Value to put : "+str(message['data']))
+                    print("Exception: {}".format(e))
 
 
 

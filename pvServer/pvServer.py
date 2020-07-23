@@ -115,7 +115,7 @@ def check_pv_initialized_after_disconnect():
                           print("A type error exists in metadata dictionary and can't be converted into JSON format, previously this was caused by in CHID of type c_long(), a work arround exits, if CHID is not a c_long then try debugging")
                           clientPVlist[pvname]['isConnected']=True
                           clientPVlist[pvname]['initialized']=False
-                          print(type(d['value']))
+                          print("Value type: {}".format(type(d['value'])))
                           if ('epics.dbr.c_float_Array_0' in str(type(d['value']))):
                               print("type is epics.dbr.c_float_Array_0")
                           d={}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useReducer } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import { replaceMacros } from '../SystemComponents/Utils/macroReplacement';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -12,7 +12,6 @@ import TextUpdate from '../BaseComponents/TextUpdate';
 import TextInput from '../BaseComponents/TextInput';
 import ToggleButton from '../BaseComponents/ToggleButton';
 import TextOutput from '../BaseComponents/TextOutput';
-import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import orange from '@material-ui/core/colors/orange';
@@ -25,8 +24,7 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Card from '@material-ui/core/Card';
 import PV from '../SystemComponents/PV';
-import { LanDisconnect } from 'mdi-material-ui/'
-import {useMongoDbWatch} from '../SystemComponents/database/MongoDB/MongoDbWatch'
+import useMongoDbWatch from '../SystemComponents/database/MongoDB/useMongoDbWatch'
 import useMongoDbUpdateOne from '../SystemComponents/database/MongoDB/useMongoDbUpdateOne';
 import useMongoDbInsertOne from '../SystemComponents/database/MongoDB/useMongoDbInsertOne';
 const styles = theme => ({
@@ -97,31 +95,29 @@ function TabPanel(props) {
     </Typography>
   );
 }
-function a11yProps(index) {
-  return {
-    id: `full-width-tab-${index}`,
-    'aria-controls': `full-width-tabpanel-${index}`,
-  };
-}
 function compare(a, b) {
   if (a.beam_setup.Frequency > b.beam_setup.Frequency) return 1;
   if (b.beam_setup.Frequency > a.beam_setup.Frequency) return -1;
   return 0;
 }
 function compareValues(a, b, initialized) {
-  //console.log(initialized)
-  if (initialized == true) {
+  if (initialized === true) {
+    
+    // eslint-disable-next-line eqeqeq 
     if (a == b) {
       return true
     }
     else {
+      // eslint-disable-next-line use-isnan 
       if (!(isNaN(a) || isNaN(b))) {
         let afloat = parseFloat(a);
         let bfloat = parseFloat(b);
-        if ((afloat == NaN) || (bfloat == NaN)) {
+         // eslint-disable-next-line use-isnan 
+        if ((isNaN(afloat)) || (isNaN(bfloat))) {
           return false
         }
         else {
+          // eslint-disable-next-line eqeqeq 
           return (afloat == bfloat)
         }
       }
@@ -135,62 +131,50 @@ function compareValues(a, b, initialized) {
   }
 }
 const LoadSave = (props) => {
-
-  // let pv;
-  // let DataConnections = [];
-  // let sys;
-  // let id = 0;
   const systemName = props.macros['$(systemName)'];
   const dbListQueryParameters = { 'query': { "beam_setup.Status": { "$ne": "Delete" } } };
   const Parameters = JSON.stringify(dbListQueryParameters);
+  const replicaSet = props.replicaSet;
   const database = props.database;
-  const collection = props.collection;
-  const [dbListBroadcastReadDataURL] = useState('mongodb://' + database + ':' + collection + ':' + systemName + '_DATA:Parameters:' + Parameters)
-  const [dbListBroadcastReadPvsURL] = useState('mongodb://' + database + ':' + collection + ':' + systemName + '_PVs:Parameters:""')
-  const [dbListUpdateOneURL] = useState('mongodb://' + database + ':' + collection + ':' + systemName + '_DATA')
-  const [dbListInsertOneURL] = useState('mongodb://' + database + ':' + collection + ':' + systemName + '_DATA')
-  const [pvs, setPvs] = useState({});
-  const systems = props.systems;
+  const [dbListBroadcastReadDataURL] = useState('mongodb://' + replicaSet + ':' + database + ':' + systemName + '_DATA:Parameters:' + Parameters)
+  const [dbListBroadcastReadPvsURL] = useState('mongodb://' + replicaSet + ':' + database + ':' + systemName + '_PVs:Parameters:""')
+  const [dbListUpdateOneURL] = useState('mongodb://' + replicaSet + ':' + database + ':' + systemName + '_DATA')
+  const [dbListInsertOneURL] = useState('mongodb://' + replicaSet + ':' + database + ':' + systemName + '_DATA')
   const [dbList, setDbList] = useState([]);
   const [processVariablesSchemaKeys, setProcessVariablesSchemaKeys] = useState([]);
-
   const [displayIndex, setDisplayIndex] = useState(0);
   const [tabValue, setTabValue] = useState(0);
   const [dbListWriteAccess, setDbListWriteAccess] = useState(false);
-
   const [newValuesLoaded, setNewValuesLoaded] = useState(false);
   const [metadataComponents, setMetadataComponents] = useState([]);
   const [metadataComponentsPVs, setMetadataComponentsPVs] = useState([]);
   const [processVariables, setProcessVariables] = useState({});
-  const context = useContext(AutomationStudioContext);
   const dbUpdateOne=useMongoDbUpdateOne({});
   const dbInsertOne=useMongoDbInsertOne({});
-  const [metadataPvs, setMetadataPvs] = useState({});
-  //const [dbPVsList, setDbPVsList] = useState({});
   const dbPVsObject=useMongoDbWatch({dbURL:dbListBroadcastReadPvsURL});
-  console.log(dbListBroadcastReadDataURL)
+  
   const dbPVsList=dbPVsObject.data;
+  const dbPVsInitialized=dbPVsObject.initialized;
   const dbDataObject=useMongoDbWatch({dbURL:dbListBroadcastReadDataURL});
+  const dbDataInitialized=dbDataObject.initialized;
+  const [loadTimedOut,setLoadTimedOut]=useState(false);
   useEffect(() => {
    
-
       let data = dbDataObject.data;
       if(data!==null){
       let sortedData = data.sort(compare);
       setDbList(sortedData);
       setDbListWriteAccess(dbDataObject.writeAccess);}
-    },[dbDataObject]);
-
+    },[dbDataObject,dbDataInitialized]);
   
   const dbDataAndLiveDataReducer = (state, action) => {
     let newState = {};
     let newProcessVariables;
     switch (action.type) {
       case 'initPvList':
-        // console.log("initPvList", action.index)
+        
         return { ...action.data }
       case 'initDbDataList':
-
         let key;
         let pvValue;
         let newValue;
@@ -246,17 +230,13 @@ const LoadSave = (props) => {
             metadata = {};
           }
           let description = processVariables[processVariablesSchemaKeys[key]].description;
-
           let pvName = processVariables[processVariablesSchemaKeys[key]].pvName;
           let dbValue = dbList[displayIndex].process_variables[processVariablesSchemaKeys[key]].pvValue
           newState[processVariablesSchemaKeys[key]] = { description: description, pvname: pvName, pvValue: pvValue, newValue: newValue, newValueTrigger: newValueTrigger, dbValue: dbValue, metadata: metadata, initialized: initialized, severity: severity }
         }
-
         return newState
-
       case 'initDbDataListNoData':
-        //   console.log("initDbDataListNoData")
-
+     
         for (let key in processVariablesSchemaKeys) {
           if (typeof state[processVariablesSchemaKeys[key]] !== 'undefined') {
             newState[processVariablesSchemaKeys[key]] = state[processVariablesSchemaKeys[key]];
@@ -265,12 +245,10 @@ const LoadSave = (props) => {
           }
         }
         return newState
-
-
+        
       case 'updatePvData':
-        //   console.log("updating:", action.key)
         newState = { ...state };
-        //console.log(action.key)
+     
         newState[action.key].initialized = action.pvData.initialized;
         newState[action.key].pvValue = action.pvData.value;
         newState[action.key].severity = action.pvData.severity;
@@ -287,10 +265,7 @@ const LoadSave = (props) => {
         }
         setDisplayIndex(action.index);
         return (newState)
-
-
       case 'loadSavedValueToNewValues':
-
         newProcessVariables = dbList[displayIndex].process_variables;
         newState = { ...state };
         if (processVariablesSchemaKeys[0]) {
@@ -300,15 +275,8 @@ const LoadSave = (props) => {
           }
         }
         setNewValuesLoaded(true);
-
-
-
-
-
         return (newState)
-
       case 'writeNewValuesToPvValues':
-
         newProcessVariables = dbList[displayIndex].process_variables;
         newState = { ...state };
         if (processVariablesSchemaKeys[0]) {
@@ -318,38 +286,28 @@ const LoadSave = (props) => {
             newState[processVariablesSchemaKeys[key]].newValueTrigger++
           }
         }
-
-
-
-
+        break;
+        case 'reset':
+          return {};
+      default:
     }
-
     return (newState)
-
-
-
-
   }
   const [dbDataAndLiveData, dispatchDbDataAndLiveData] = useReducer(dbDataAndLiveDataReducer, {});
-
-
   useEffect(() => {
     if (dbPVsList !== null) {
-      console.log(dbPVsList)
+     
       let processVariables = dbPVsList[0].process_variables;
       let newProcessVariablesSchemaKeys = Object.keys(dbPVsList[0].process_variables);
       let metadataComponents = dbPVsList[0].metadata.components;
-      // console.log(metadataComponents)
+      
       let oldDbDataAndLiveData = dbDataAndLiveData;
       let newDbDataAndLiveData = {}
       let metadataComponentsPVs = [];
       let component;
       let pvname;
       for (component in metadataComponents) {
-
         pvname = replaceMacros(metadataComponents[component].props.pv, props.macros)
-
-
         metadataComponentsPVs.push({ label: "", initialized: false, pvname: pvname, value: "", metadata: {}, componentProps: metadataComponents[component].props });
       }
       let key;
@@ -357,7 +315,7 @@ const LoadSave = (props) => {
         let description = processVariables[newProcessVariablesSchemaKeys[key]].description;
         let pvName = processVariables[newProcessVariablesSchemaKeys[key]].pvName
         if (oldDbDataAndLiveData[newProcessVariablesSchemaKeys[key]]) {
-          if (oldDbDataAndLiveData[newProcessVariablesSchemaKeys[key]].pvname == pvName) {
+          if (oldDbDataAndLiveData[newProcessVariablesSchemaKeys[key]].pvname === pvName) {
             newDbDataAndLiveData[newProcessVariablesSchemaKeys[key]] = oldDbDataAndLiveData[newProcessVariablesSchemaKeys[key]];
             newDbDataAndLiveData[newProcessVariablesSchemaKeys[key]].description = description;
           }
@@ -373,120 +331,38 @@ const LoadSave = (props) => {
       setMetadataComponents(metadataComponents);
       setMetadataComponentsPVs(metadataComponentsPVs);
     }
-  }, [dbPVsList])
-
-  // useEffect(() => {
-  //   if (processVariablesSchemaKeys.length > 0) {
-     
-  //  //   useMongoDbBroadcastRead(dbListBroadcastReadDataURL);
-  //     let socket = context.socket;
-  //     let jwt = JSON.parse(localStorage.getItem('jwt'));
-  //     if (jwt === null) {
-  //       jwt = 'unauthenticated'
-  //     }
-
-  //     socket.emit('databaseBroadcastRead', { dbURL: dbListBroadcastReadDataURL, 'clientAuthorisation': jwt }, (data) => {
-  //       if (data !== "OK") {
-  //         console.log("ackdata", data);
-  //       }
-       
-  //     });
-  //   }
-  // }, [processVariablesSchemaKeys])
-
+    else{
+      dispatchDbDataAndLiveData({type:'reset'})
+      setProcessVariablesSchemaKeys([])
+      setProcessVariables({})
+      setMetadataComponents([])
+      setMetadataComponentsPVs([])
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dbPVsList,props.macros,dbPVsInitialized])
+ 
   useEffect(() => {
-
     if (typeof dbList[0] !== 'undefined') {
-      //  console.log("defined")
+  
       if (dbList[0]) {
-
-
-
-
-
         dispatchDbDataAndLiveData({ type: 'initDbDataList' });
-
       }
-
-
     }
     else {
-
-
-
-
       dispatchDbDataAndLiveData({ type: 'initDbDataListNoData' });
-
     }
   }, [dbList, processVariablesSchemaKeys])
-  // useEffect(() => {
-   
-
-  //   const handleNewDbDataList = (msg) => {
-  //     // console.log("receive handleNewDbDataList")
-  //     let item;
-  //     let data = JSON.parse(msg.data);
-  //     let sortedData = data.sort(compare);
-  //     setDbList(sortedData);
-  //     setDbListWriteAccess(msg.write_access);
-
-
-  //   }
-
-  //   let socket = context.socket;
-  //   let jwt = JSON.parse(localStorage.getItem('jwt'));
-  //   if (jwt === null) {
-  //     jwt = 'unauthenticated'
-  //   }
-  //   // socket.emit('databaseBroadcastRead', { dbURL: dbListBroadcastReadPvsURL, 'clientAuthorisation': jwt }, (data) => {
-  //   //   if (data !== "OK") {
-  //   //     //   console.log("ackdata", data);
-  //   //   }
-  //   // });
-
-   
-  //   //socket.on('databaseData:' + dbListBroadcastReadDataURL, handleNewDbDataList);
-  // }, [])
-
-
-
-
-  // handleOnClick = (index) => () => {
-
-
-  //   let process_variables = dbList[index].process_variables;
-
-  //   if (processVariablesSchemaKeys[0]) {
-  //     let key;
-  //     for (key in processVariablesSchemaKeys) {
-  //       dbDataAndLiveData[processVariablesSchemaKeys[key]].dbValue = process_variables[processVariablesSchemaKeys[key]].pvValue;
-  //     }
-  //   }
-  //   this.setState({ displayIndex: index, dbDataAndLiveData: dbDataAndLiveData })
-  // }
-  // handleLoadSelectedValues = () => {
-  //   let index = this.state.displayIndex;
-  //   let processVariablesSchemaKeys = this.state.processVariablesSchemaKeys;
-  //   let dbDataAndLiveData = this.state.dbDataAndLiveData;
-  //   let key;
-  //   for (key in processVariablesSchemaKeys) {
-  //     dbDataAndLiveData[processVariablesSchemaKeys[key]].newValue = dbDataAndLiveData[processVariablesSchemaKeys[key]].dbValue;
-  //   }
-  //   this.setState({ dbDataAndLiveData: dbDataAndLiveData, newValuesLoaded: true })
-  // }
+  
   const handleSavedValues = () => {
-    let index = displayIndex;
-
+    
     let key;
-    // console.log("save")
-    // console.log(dbList[0])
+   
     let newEntry = {};
     newEntry['process_variables'] = {}
     newEntry['beam_setup'] = {}
     let component;
-    //console.log(metadataPvs)
+    
     for (component in metadataComponentsPVs) {
-      //console.log(metadataPvs[component])
       let key;
       if (metadataComponentsPVs[component].componentProps.usePvLabel === true) {
         key = metadataComponentsPVs[component].label;
@@ -506,7 +382,6 @@ const LoadSave = (props) => {
     let ms = mydate.getMilliseconds()
     if (hour < 10) {
       hour = '0' + hour;
-
     }
     else if (ms < 100) {
       ms = '0' + ms;
@@ -525,170 +400,73 @@ const LoadSave = (props) => {
       newEntry.process_variables[processVariablesSchemaKeys[key]] = { pvName: dbDataAndLiveData[processVariablesSchemaKeys[key]].pvname, pvValue: dbDataAndLiveData[processVariablesSchemaKeys[key]].pvValue };
     }
     console.log('click')
-    dbInsertOne({dbURL:dbListUpdateOneURL,newEntry:newEntry});
+    dbInsertOne({dbURL:dbListInsertOneURL,newEntry:newEntry});
     
-    // console.log(newEntry)
-    // let socket = context.socket;
-    // let jwt = JSON.parse(localStorage.getItem('jwt'));
-    // if (jwt === null) {
-    //   jwt = 'unauthenticated'
-    // }
-    // socket.emit('databaseInsertOne', { dbURL: dbListInsertOneURL, 'newEntry': newEntry, 'clientAuthorisation': jwt }, (data) => {
-     
-    //   if (data !== "OK") {
-    //     console.log("Save values unsuccessful")
-    //   }
-    // });
+   
   }
  
   const handleOnClickWorking = () => {
   
    
     let id = dbList[displayIndex]['_id']['$oid'];
-    let newValues = { '$set': { "beam_setup.Status": "Working" } }
-    dbUpdateOne({dbURL:dbListUpdateOneURL,id:id,newValues:newValues});
+    let update = { '$set': { "beam_setup.Status": "Working" } }
+    dbUpdateOne({dbURL:dbListUpdateOneURL,id:id,update:update});
   }
   const handleOnClickPending = () => {
   
-
     let id = dbList[displayIndex]['_id']['$oid'];
-    let newValues = { '$set': { "beam_setup.Status": "Pending" } }
-    dbUpdateOne({dbURL:dbListUpdateOneURL,id:id,newValues:newValues});
+    let update = { '$set': { "beam_setup.Status": "Pending" } }
+    dbUpdateOne({dbURL:dbListUpdateOneURL,id:id,update:update});
     
   }
   const handleOnClickObselete = () => {
-
    
     let id = dbList[displayIndex]['_id']['$oid'];
-    let newValues = { '$set': { "beam_setup.Status": "Obselete" } }
-    dbUpdateOne({dbURL:dbListUpdateOneURL,id:id,newValues:newValues});
+    let update = { '$set': { "beam_setup.Status": "Obselete" } }
+    dbUpdateOne({dbURL:dbListUpdateOneURL,id:id,update:update});
   }
   const handleOnClickDelete = () => {
-
    
     let id = dbList[displayIndex]['_id']['$oid'];
-    let newValues = { '$set': { "beam_setup.Status": "Delete" } }
+    let update = { '$set': { "beam_setup.Status": "Delete" } }
     if (displayIndex >= 1) {
       setDisplayIndex(displayIndex - 1);
     }
     else {
       setDisplayIndex(0);
     }
-    dbUpdateOne({dbURL:dbListUpdateOneURL,id:id,newValues:newValues});
+    dbUpdateOne({dbURL:dbListUpdateOneURL,id:id,update:update});
   }
   
-
-
-
-  // const metadataPVsDataConnections = () => {
-
-  //   let DataConnections = [];
-
-  //   let metadataComponents = this.state.metadataComponents;
-  //   let item;
-  //   for (item in metadataComponents) {
-  //     const index = item;
-  //     DataConnections.push(
-  //       <PV
-  //         key={metadataComponents[item].props.pv}
-  //         {...metadataComponents[item].props}
-  //         pvData=
-  //       />
-  //     )
-  //   }
-  //   return DataConnections;
-  // }
-
   const metadataPvsConnections = () => {
     let pvs = [];
-
-
     metadataComponentsPVs.map((item, index) => (
-
       pvs.push(
         <PV
-
           key={index.toString()}
-          //pv={item.pvname}
           {...item.componentProps}
           pvData={(pvData) => setMetadataComponentsPVs(prePvs => {
-
             let pvs = [...prePvs]
-
             pvs[index] = { ...pvs[index], ...pvData }
-
             return pvs
-
           }
           )}
         />)
     ))
-
-
-
     return pvs
   }
-
-
-  // multipleDataConnections = () => {
-  //   let pv;
-  //   let DataConnections = [];
-  //   let id = 0;
-  //   let pvs = this.state.pvs;
-  //   let key;
-  //   let pvKeys = Object.keys(pvs)
-  //   for (key in pvKeys) {
-  //     DataConnections.push(
-  //       <DataConnection key={this.state.pvs[pvKeys[key]].pvname + id}
-  //         pv={this.state.pvs[pvKeys[key]].pvname}
-  //         handleInputValue={this.handleInputValue(pvKeys[key])}
-  //         handleMetadata={this.handleMetadata(pvKeys[key])}
-  //       />
-  //     )
-  //   }
-  //   return DataConnections;
-  // }
   const SystemsDataConnections = () => {
     const pvs = [];
     let id = 0;
-
     for (
       const key in processVariablesSchemaKeys) {
       const item = processVariablesSchemaKeys[key];
-      //  console.log(dbDataAndLiveData[processVariablesSchemaKeys[key]])
+     
       pvs.push(
         <PV
           key={dbDataAndLiveData[item].pvname + id.toString()}
           pv={dbDataAndLiveData[item].pvname}
-          //   handleInputValue={this.handleDbListInputValue(item)}
-          //   handleMetadata={this.handleDbListMetadata(item)}
-          // handleDbListInputValue = (key) => (inputValue, pvname, initialized, severity) => {
-          //   let dbDataAndLiveData = this.state.dbDataAndLiveData;
-          //   if (initialized) {
-          //     dbDataAndLiveData[key].pvValue = inputValue;
-          //   }
-          //   dbDataAndLiveData[key].initialized = initialized;
-          //   dbDataAndLiveData[key].severity = severity;
-          //   this.setState({ dbDataAndLiveData: dbDataAndLiveData });
-          // }
-          // handleDbListMetadata = (key) => (metadata) => {
-          //   let dbDataAndLiveData = this.state.dbDataAndLiveData;
-          //   dbDataAndLiveData[key].metadata = metadata;
-          //   this.setState({ dbDataAndLiveData: dbDataAndLiveData });
-          //   pvData={(pvData) => setDbDataAndLiveData(prePvs => {
-          //     let pvs = {...prePvs};
-
-          //     pvs[item].pvValue = pvData.value;
-          //     pvs[item].initialized = pvData.initialized;
-          //     pvs[item].severity = pvData.severity;
-          //     pvs[item].metadata = pvData.metadata;
-          //   //  console.log(item,pvData)
-          //   //  console.log(key,pvData)
-
-          //     return pvs
-
-          //  }
-          //   )}
+        
           pvData={(pvData) => dispatchDbDataAndLiveData({ type: 'updatePvData', pvData: pvData, key: item })}
           outputValue={dbDataAndLiveData[item].pvValue}
           newValueTrigger={dbDataAndLiveData[item].newValueTrigger}
@@ -698,33 +476,28 @@ const LoadSave = (props) => {
     }
     return pvs;
   }
-  const pvValueTextUpdate = (pv) => {
-    const initialized = pv.initialized;
-    const pvValue = pv.pvValue;
-    const pvName = pv.pvname;
-    if (initialized) {
-      return pvValue;
-    }
-    else {
-      return (
-        <React.Fragment>
-          <LanDisconnect style={{ color: props.theme.palette.error.main, verticalAlign: "middle" }} fontSize='small' />   {pvName}
-        </React.Fragment>
-      );
-    }
-  }
+  const showTable=(!loadTimedOut||(dbPVsInitialized&&dbDataInitialized));
+  useEffect(()=>{
+    const timer=setTimeout(()=>{
+     
+      if(!(dbPVsInitialized&&dbDataInitialized)){
 
+        setLoadTimedOut(true)
+      }
+    }
+    ,3000  );
+    return()=>clearTimeout(timer)
+  },[])
+  
   const { classes } = props;
-
-  let item;
-  let rows = [];
-  let process_variables2;
+  
   let disableDeleteButton = true;
-
   let disableLoadButton = true;
+  let disableButtons=true;
   if (typeof dbList[displayIndex] !== 'undefined') {
+    disableButtons=false;
     disableLoadButton = false
-    if (dbList[displayIndex].beam_setup.Status == "Obselete") {
+    if (dbList[displayIndex].beam_setup.Status === "Obselete") {
       disableDeleteButton = false;
     }
     else {
@@ -734,25 +507,19 @@ const LoadSave = (props) => {
   else {
     disableLoadButton = true;
   }
-  //const dbListWriteAccess = !dbListWriteAccess;
+ 
   const dbDataAndLiveDataKeys = Object.keys(dbDataAndLiveData);
-  // console.log("this.state.metadataComponentsPVs",metadataComponentsPVs)
-  // console.log("metadataComponents",metadataComponents)
-  // console.log("metadataPvs",metadataPvs)
-  // console.log("dbList",dbList)
-  // console.log("dbDataAndLiveDataKeys",dbDataAndLiveDataKeys)
-  //console.log(dbDataAndLiveData)
-  //console.log(processVariablesSchemaKeys)
+  
   return (
     <React.Fragment>
       {metadataPvsConnections()}
       {SystemsDataConnections()}
-
-      {/* {this.multipleDataConnections()}
-
-        {this.SystemsDataConnections(this.state.displayIndex)}
-        {this.metadataPVsDataConnections()} */}
-      <Grid
+      {!showTable&&
+                        <Typography style={{padding:8,paddingBottom:16}}>
+                          {replicaSet +" database is not available"}
+                        </Typography>
+                    }
+      {showTable&&<Grid
         container
         direction="row"
         justify="flex-start"
@@ -760,8 +527,10 @@ const LoadSave = (props) => {
         spacing={2}
         style={{ padding: 8 }}
       >
+        
         <Grid item xs={12} sm={12} md={12} lg={12} >
           <Card style={{ padding: 8 }}>
+        
             <Grid
               container
               direction="row"
@@ -770,13 +539,13 @@ const LoadSave = (props) => {
               spacing={2}
             > {metadataComponents.map((item, index) => (
               <Grid key={index.toString()} item xs={12} sm={12} md={3} lg={2} >
-                {item.component == "TextInput" &&
+                {item.component === "TextInput" &&
                   <TextInput
                     macros={props.macros}
                     {...item.props}
                   />
                 }
-                {item.component == "TextOutput" &&
+                {item.component === "TextOutput" &&
                   <TextOutput
                     macros={props.macros}
                     {...item.props}
@@ -803,9 +572,11 @@ const LoadSave = (props) => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
+                   
                     {dbList.map((row, index) => (
                       <TableRow key={index.toString()} hover role="checkbox"
                         onClick={() => dispatchDbDataAndLiveData({ type: 'changeRowIndex', index: index })}
+                        // eslint-disable-next-line eqeqeq 
                         selected={index == displayIndex}>
                         {metadataComponentsPVs.map((item, index) =>
                           <TableCell key={index.toString()} align="center">{row.beam_setup[item.componentProps.usePvLabel === true ? item.label : item.componentProps.label]}  </TableCell>
@@ -813,7 +584,7 @@ const LoadSave = (props) => {
                         <TableCell className={classes.tableCell} component="th" scope="row" align='center'>
                           {row.beam_setup.DateTime}
                         </TableCell>
-                        <TableCell className={row.beam_setup.Status == "Working" ? classes.tableCellWorking : row.beam_setup.Status == "Pending" ? classes.tableCellPending : row.beam_setup.Status == "Obselete" ? classes.tableCellObselete : classes.tableCell} component="th" scope="row" align='center'>
+                        <TableCell className={row.beam_setup.Status === "Working" ? classes.tableCellWorking : row.beam_setup.Status === "Pending" ? classes.tableCellPending : row.beam_setup.Status === "Obselete" ? classes.tableCellObselete : classes.tableCell} component="th" scope="row" align='center'>
                           <span >
                             {row.beam_setup.Status}
                           </span>
@@ -894,9 +665,7 @@ const LoadSave = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6} md={6} lg={3} >
                   {props.useLoadEnable === true &&
-
                     <PV
-
                       pv={props.loadEnablePV}
                       macros={props.macros}
                     >
@@ -906,7 +675,8 @@ const LoadSave = (props) => {
                           color="primary"
                           className={classes.Button}
                           onClick={() => dispatchDbDataAndLiveData({ type: 'writeNewValuesToPvValues' })}
-                          disabled={(!newValuesLoaded) || (initialized == false) || (value != 0)}
+                          // eslint-disable-next-line eqeqeq 
+                          disabled={(!newValuesLoaded) || (initialized === false) || (value != 0)||disableButtons}
                         >
                           Write New Values
                         </Button>
@@ -917,10 +687,9 @@ const LoadSave = (props) => {
                   {props.useLoadEnable === false && <Button
                     variant="contained"
                     color="primary"
-
                     className={classes.Button}
                     onClick={() => dispatchDbDataAndLiveData({ type: 'writeNewValuesToPvValues' })}
-                    disabled={(!newValuesLoaded)}
+                    disabled={(!newValuesLoaded)||disableButtons}
                   >
                     Write New Values
                     </Button>}
@@ -952,7 +721,7 @@ const LoadSave = (props) => {
                     variant="contained"
                     className={classes.workingButton}
                     onClick={handleOnClickWorking}
-                    disabled={!dbListWriteAccess}
+                    disabled={!dbListWriteAccess||disableButtons}
                   >
                     Working
                         </Button>
@@ -962,7 +731,7 @@ const LoadSave = (props) => {
                     variant="contained"
                     className={classes.pendingButton}
                     onClick={handleOnClickPending}
-                    disabled={!dbListWriteAccess}
+                    disabled={!dbListWriteAccess||disableButtons}
                   >
                     Pending
                         </Button>
@@ -972,7 +741,7 @@ const LoadSave = (props) => {
                     variant="contained"
                     className={classes.obseleteButton}
                     onClick={handleOnClickObselete}
-                    disabled={!dbListWriteAccess}
+                    disabled={!dbListWriteAccess||disableButtons}
                   >
                     Obselete
                         </Button>
@@ -983,7 +752,7 @@ const LoadSave = (props) => {
                     color="secondary"
                     className={classes.button}
                     onClick={handleOnClickDelete}
-                    disabled={disableDeleteButton || !dbListWriteAccess}
+                    disabled={disableDeleteButton ||disableButtons|| !dbListWriteAccess}
                   >
                     Delete
                         </Button>
@@ -1001,11 +770,10 @@ const LoadSave = (props) => {
           </Grid>}
         </React.Fragment>
         }
-      </Grid>
+      </Grid>}
     </React.Fragment>
   );
 }
-
 LoadSave.propTypes = {
   /** if true, when the value of loadEnablePV does not equal 0, then the new values can be loaded into the pv values*/
   useLoadEnable: PropTypes.bool
@@ -1013,5 +781,4 @@ LoadSave.propTypes = {
 LoadSave.defaultProps = {
   useLoadEnable: false
 }
-
 export default withStyles(styles, { withTheme: true })(LoadSave);

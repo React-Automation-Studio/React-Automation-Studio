@@ -19,17 +19,6 @@ In addition to this, the alarm handler also has three acknowledge statuses to in
 <center>*Table 2: Alarm states and colours*</center>
 <br/><br/>
 
-<center>
-| Alarm          | Acknowledged   |
-| -------------- | -------------- |
-| NO\_ALARM      | NO\_ALARM      |
-| MINOR\_ALARM   | MINOR\_ACKED   |
-| MAJOR\_ALARM   | MAJOR\_ACKED   |
-| INVALID\_ALARM | INVALID\_ACKED |
-</center>
-<center>*Table 2: Alarm states*</center>
-<br/><br/>
-
 The alarm server ranks the seven (7) states from best (least severe) to worst (most severe) severity as follows:
 
 <center>
@@ -43,5 +32,5 @@ The alarm server ranks the seven (7) states from best (least severe) to worst (m
 | MAJOR\_ALARM   |                     |
 | INVALID\_ALARM | Worst (most severe) |
 </center>
-<center>*Table 2: Alarm severity ranking*</center>
+<center>*Table 3: Alarm severity ranking*</center>
 <br/><br/>

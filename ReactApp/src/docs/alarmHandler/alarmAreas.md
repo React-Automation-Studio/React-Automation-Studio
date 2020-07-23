@@ -7,7 +7,7 @@ Each area can be expanded/contracted to reveal/hide the subAreas within that are
 |                                        BEAMLINE DEMO Area (subAreas hidden)                                         |                                       BEAMLINE DEMO Area (subAreas shown)                                       |
 | :-----------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------: |
 | <img src="img/alarmHandler/alarmSetup_AlarmList_Contracted.png" alt="alarmSetup_AlarmList_Contracted" width="80%"/> | <img src="img/alarmHandler/alarmSetup_AlarmList_Expanded.png" alt="alarmSetup_AlarmList_Expanded" width="80%"/> |
-<center>*Fig 2: Area with subAreas hidden or shown*</center>
+<center>*Area with subAreas hidden or shown*</center>
 
 <br/>
 **Colour scheme**
@@ -20,7 +20,7 @@ The colour of each area/subArea in the **ALARM AREAS** list reflects the worst s
 Alarms can be acknowledged by right clicking the relevant area/subArea and clicking on the acknowledge menu item, as shown below. This acknowledges all the alarms in that area/subArea. Individual alarms can be acknowledged using the **ALARM TABLE** which is described in the next section.
 
 <center><img src="img/alarmHandler/alarmSetup_AlarmList_RightClick.png" alt="alarmSetup_AlarmList_RightClick" width="35%"/></center>  
-<center>*Fig 3: Acknowledging alarms using ALARM AREAS list*</center>
+<center>*Acknowledging alarms using ALARM AREAS list*</center>
 <br/><br/>
 
 <br/>
@@ -31,7 +31,7 @@ Areas or subAreas can be enabled/disabled by right clicking the relevant area/su
 A disabled area/subArea is reflected with a grey colour as shown below. This follows the colour scheme used throughout the alarm handler.
 
 <center><img src="img/alarmHandler/alarmSetup_AlarmList_Disabled.png" alt="alarmSetup_AlarmList_Disabled" width="90%"/></center>  
-<center>*Fig 4: BUILDING DEMO area with disabled HVAC subArea*</center>
+<center>*BUILDING DEMO area with disabled HVAC subArea*</center>
 <br/><br/>
 
 <br/>
@@ -40,5 +40,5 @@ A disabled area/subArea is reflected with a grey colour as shown below. This fol
 The **ALARM AREAS** section also has a global icon (*world icon* on the top left) that a user can click (left click) to select all the areas (complete alarm handler). Right clicking this icon enables a user to acknowledge or enable/disable all the areas. This is shown below.
 
 <center><img src="img/alarmHandler/alarmSetup_AlarmList_Global.png" alt="alarmSetup_AlarmList_Global" width="35%"/></center>  
-<center>*Fig 5: Global alarm handler actions*</center>
+<center>*Global alarm handler actions*</center>
 <br/><br/>

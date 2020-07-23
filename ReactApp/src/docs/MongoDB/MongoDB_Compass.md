@@ -9,6 +9,4 @@ The following connection string can be used if the default React Automation Stud
 
 If you have changed the replica set members or the replica set name, please replace them in the above connection string as necessary.
 
-
-
 ***We recommend the use of MongoDB Compass as a means to debug and maintain the MongoDB servers. CRUD operations on production MongoDB servers using MongoDB Compass is not advised.**

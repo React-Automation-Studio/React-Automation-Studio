@@ -10,7 +10,5 @@ The table below lists the alarm actions/events and parameters that the alarm ser
 | SubArea enabled/disabled |     X     |              |          |          |
 | Area enabled/disabled    |     X     |              |          |          |
 </center>
-<center>*Table 3: Actions and events logged by alarm server*</center>
+<center>*Table 4: Actions and events logged by alarm server*</center>
 <br/><br/>
-
-The remainder of the user guide addresses the alarm handler user interface. This is comprised of two views - an alarm setup view and a user notification view.

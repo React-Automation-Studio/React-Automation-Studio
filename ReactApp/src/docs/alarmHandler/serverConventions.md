@@ -34,7 +34,7 @@ The last alarm acknowledge time is updated whenever an alarm is acknowledged fro
 
 <br/>
 **C2. Disabled alarms:**<br/>
-Disabled alarms behave like unlatched alarms. The alarm status, last alarm value and last alarm time will be updated accordingly. However, disabled alarms will not propagate their severity up to their subAreas or areas nor are their alarm events logged.
+Disabled alarms behave like unlatched alarms. The alarm status, last alarm value and last alarm time will be updated accordingly. However, disabled alarms will not propagate their severity up to their subAreas or areas nor are their alarm events logged. When an alarm is disabled, the corresponding subArea and area are reevaluated.
 
 <br/>
 **C3. Latched alarms:**<br/>

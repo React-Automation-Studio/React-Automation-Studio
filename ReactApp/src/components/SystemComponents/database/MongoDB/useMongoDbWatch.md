@@ -1,8 +1,6 @@
 
 
-### useMongoDbWatch Hook
-
-The `useMongoDbWatch` returns all the data on the initial read and after subsequent updates to the data in the database.
+The `useMongoDbWatch` hook returns all the data on the initial read and after subsequent updates to the data in the database.
 
 |  Property |Type |Default | Description |
 |:-:|:-|
@@ -15,13 +13,15 @@ The object that is returned has a default structure with the following propertie
 {
     data: null,
     writeAccess:false,
+    initialized:false,
     dbURL:props.dbURL
   }
 ```
 |  Property |Type |Default | Description |
 |:-:|:-|
 |data|any|null| The db watch's returned data
-|writeAccess|bool|false| true when has write access to the database
+|initialized|bool|false| true when valid data has return from the database
+|writeAccess|bool|false| true when the user has write access to the database
 |dbURL|string|| The dbURL .
 
 
@@ -37,5 +37,6 @@ const dbObject=useMongoDbWatch(
     });
 const {data}=dbObject;
 const {writeAccess}=dbObject;
+const {initialized}=dbObject;
 ...
 ```

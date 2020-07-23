@@ -158,10 +158,24 @@ module.exports = {
         },
         {
           name: 'Database Hooks',
-          //content: 'src/docs/beamlineComponents/BeamlineComponents.md',
-          components: 'src/components/SystemComponents/database/MongoDB/*.js',
+          content: 'src/components/SystemComponents/database/MongoDB/MongoDb.md',
+          //components: 'src/components/SystemComponents/database/MongoDB/*.js',
           exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
-          usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
+          usageMode: 'expand', // 'hide' | 'collapse' | 'expand'
+          sections: [
+            {
+              name: 'useMongoDbWatch',
+              content: 'src/components/SystemComponents/database/MongoDB/useMongoDbWatch.md',
+            },
+            {
+              name: 'useMongoDbInsertOne',
+              content: 'src/components/SystemComponents/database/MongoDB/useMongoDbInsertOne.md',
+            },
+            {
+              name: 'useMongoDbUpdateOne',
+              content: 'src/components/SystemComponents/database/MongoDB/useMongoDbUpdateOne.md',
+            },
+          ],
         },
         {
           name: 'Beamline Components',

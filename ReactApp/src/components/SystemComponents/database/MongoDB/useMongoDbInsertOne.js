@@ -1,6 +1,6 @@
 import { useContext, useCallback } from 'react';
 import AutomationStudioContext from '../../AutomationStudioContext';
-const useMongoDbInsertOne = (props) => {
+export const useMongoDbInsertOne = (props) => {
 
     const { socket } = useContext(AutomationStudioContext);
 
@@ -25,4 +25,6 @@ const useMongoDbInsertOne = (props) => {
     return (dbInsertOne);
    
 }
+
+
 export default useMongoDbInsertOne

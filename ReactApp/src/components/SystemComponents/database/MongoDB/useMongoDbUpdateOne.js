@@ -7,14 +7,14 @@ const useMongoDbUpdateOne = (props) => {
 
     const dbUpdateOne = useCallback((props) => {
 
-        if (props.dbURL && props.newValues&&props.id) {
+        if (props.dbURL && props.update&&props.id) {
 
             let jwt = JSON.parse(localStorage.getItem('jwt'));
             if (jwt === null) {
                 jwt = 'unauthenticated'
             }
   
-                    socket.emit('databaseUpdateOne', { dbURL: props.dbURL, 'id': props.id, 'newvalues': props.newValues, 'clientAuthorisation': jwt }, (data) => {
+                    socket.emit('databaseUpdateOne', { dbURL: props.dbURL, 'id': props.id, 'newvalues': props.update, 'clientAuthorisation': jwt }, (data) => {
   
             if (data !== "OK") {
 

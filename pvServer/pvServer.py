@@ -91,10 +91,8 @@ def check_pv_initialized_after_disconnect():
 
                       if(clientPVlist[pvname]['pv'].count >1):
                           d['value']=list(d['value'])
-                      if(clientPVlist[pvname]['pv'].count ==0):  #work around for unitilized float array
-                          if ('epics.dbr.c_float_Array_0' in str(type(d['value']))):
-                              print("type is epics.dbr.c_float_Array_0")
-                              d['value']=[]
+                      if(clientPVlist[pvname]['pv'].count==0):
+                          d['value']=[]
                       d['pvname']= pvname
                       d['newmetadata']= 'True'
                       d['connected']= '1'

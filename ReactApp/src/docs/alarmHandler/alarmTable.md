@@ -1,4 +1,4 @@
-The **ALARM TABLE** provides a tabular view of all the alarms in the currently selected area/subArea (selection via **ALARM AREAS** menu list). A sample is shown below.
+The **ALARM TABLE** provides a tabular view of all the alarms in the currently selected area/subArea (selection via **ALARM AREAS** menu list). A sample is shown below. NOTE: When the component is first mounted, the alarm table lists all the pvs.
 
 <center>
 <img src="img/alarmHandler/alarmSetup_AlarmTable_Overview.png" alt="alarmSetup_AlarmTable_Overview" width="100%"/>

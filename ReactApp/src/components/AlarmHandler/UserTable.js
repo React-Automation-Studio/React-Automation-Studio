@@ -80,7 +80,7 @@ const UserTable = (props) => {
                                             <br />
                                             <b>For more information on JS regular expressions see: </b>
                                             <br />
-                                            <b><a href="http://www.w3schools.com/js/js_regexp.asp" target="_blank" rel="noopener noreferrer">www.W3Schools.com</a></b>
+                                            <b><a href="https://www.tutorialspoint.com/javascript/javascript_regexp_object.htm" target="_blank" rel="noopener noreferrer">www.tutorialspoint.com</a></b>
                                         </p>
                                     </React.Fragment>
                                 }

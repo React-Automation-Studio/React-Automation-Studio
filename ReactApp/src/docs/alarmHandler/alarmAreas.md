@@ -37,7 +37,7 @@ A disabled area/subArea is reflected with a grey colour as shown below. This fol
 <br/>
 **Global actions**
 
-The **ALARM AREAS** section also has a global icon (*world icon* on the top left) that a user can click (left click) to select all the areas (complete alarm handler). Right clicking this icon enables a user to acknowledge or enable/disable all the areas. This is shown below.
+The **ALARM AREAS** section also has a global button (*world icon* on the top left) that a user can click (left click) to select all the areas (complete alarm handler). Right clicking this icon enables a user to acknowledge or enable/disable all the areas. This is shown below.
 
 <center><img src="img/alarmHandler/alarmSetup_AlarmList_Global.png" alt="alarmSetup_AlarmList_Global" width="35%"/></center>  
 <center>*Global alarm handler actions*</center>

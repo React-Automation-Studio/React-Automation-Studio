@@ -270,6 +270,16 @@ module.exports = {
                 {
                   name: 'User notification view',
                   content: 'src/docs/alarmHandler/userNotification.md',
+                  sections: [
+                    {
+                      name: 'Alarm handler user table',
+                      content: 'src/docs/alarmHandler/alarmUserTable.md',
+                    },
+                    {
+                      name: 'Filtered pvs list',
+                      content: 'src/docs/alarmHandler/filterPvList.md',
+                    },
+                  ]
                 },
               ]
             }

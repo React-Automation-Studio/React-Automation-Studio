@@ -39,8 +39,15 @@ const styles = theme => ({
   table: {
     minWidth: 500,
   },
-  tableCell: {
+  tableCellDescription: {
+    width: "30%"
+  },
+  tableCellValues: {
     width: "20%"
+  },
+  tableCellUnits: {
+    width: "10%",
+  
   },
   tableWrapper: {
     maxHeight: "70vh",
@@ -79,6 +86,7 @@ const styles = theme => ({
     width: "20%",
     backgroundColor: red[500],
   },
+  
 });
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -229,10 +237,25 @@ const LoadSave = (props) => {
             severity = 0;
             metadata = {};
           }
-          let description = processVariables[processVariablesSchemaKeys[key]].description;
-          let pvName = processVariables[processVariablesSchemaKeys[key]].pvName;
+          let label = processVariables[processVariablesSchemaKeys[key]].label;
+          let pv = processVariables[processVariablesSchemaKeys[key]].pv;
           let dbValue = dbList[displayIndex].process_variables[processVariablesSchemaKeys[key]].pvValue
-          newState[processVariablesSchemaKeys[key]] = { description: description, pvname: pvName, pvValue: pvValue, newValue: newValue, newValueTrigger: newValueTrigger, dbValue: dbValue, metadata: metadata, initialized: initialized, severity: severity }
+          newState[processVariablesSchemaKeys[key]] = {
+             label: label,
+             pv: pv,
+             pvValue: pvValue,
+             newValue: newValue,
+             newValueTrigger: newValueTrigger,
+             dbValue: dbValue,
+             metadata: metadata,
+             initialized: initialized,
+             severity: severity,
+             usePvLabel: processVariables[processVariablesSchemaKeys[key]].usePvLabel,
+             usePvUnits: processVariables[processVariablesSchemaKeys[key]].usePvUnits,
+             usePvPrecision: processVariables[processVariablesSchemaKeys[key]].usePvPrecision,
+             units:processVariables[processVariablesSchemaKeys[key]].units,
+             prec:processVariables[processVariablesSchemaKeys[key]].prec,
+            }
         }
         return newState
       case 'initDbDataListNoData':
@@ -305,23 +328,23 @@ const LoadSave = (props) => {
       let newDbDataAndLiveData = {}
       let metadataComponentsPVs = [];
       let component;
-      let pvname;
+      let pv;
       for (component in metadataComponents) {
-        pvname = replaceMacros(metadataComponents[component].props.pv, props.macros)
-        metadataComponentsPVs.push({ label: "", initialized: false, pvname: pvname, value: "", metadata: {}, componentProps: metadataComponents[component].props });
+        pv = replaceMacros(metadataComponents[component].props.pv, props.macros)
+        metadataComponentsPVs.push({ label: "", initialized: false, pv: pv, value: "", metadata: {}, componentProps: metadataComponents[component].props });
       }
       let key;
       for (key in newProcessVariablesSchemaKeys) {
-        let description = processVariables[newProcessVariablesSchemaKeys[key]].description;
-        let pvName = processVariables[newProcessVariablesSchemaKeys[key]].pvName
+        let label = processVariables[newProcessVariablesSchemaKeys[key]].label;
+        let pv = processVariables[newProcessVariablesSchemaKeys[key]].pv
         if (oldDbDataAndLiveData[newProcessVariablesSchemaKeys[key]]) {
-          if (oldDbDataAndLiveData[newProcessVariablesSchemaKeys[key]].pvname === pvName) {
+          if (oldDbDataAndLiveData[newProcessVariablesSchemaKeys[key]].pv === pv) {
             newDbDataAndLiveData[newProcessVariablesSchemaKeys[key]] = oldDbDataAndLiveData[newProcessVariablesSchemaKeys[key]];
-            newDbDataAndLiveData[newProcessVariablesSchemaKeys[key]].description = description;
+            newDbDataAndLiveData[newProcessVariablesSchemaKeys[key]].label = label;
           }
         }
         else {
-          newDbDataAndLiveData[newProcessVariablesSchemaKeys[key]] = { description: description, pvname: pvName, pvValue: undefined, newValue: undefined, newValueTrigger: 0, dbValue: undefined, metadata: {}, initialized: false, severity: 0 }
+          newDbDataAndLiveData[newProcessVariablesSchemaKeys[key]] = { label: label, pv: pv, pvValue: undefined, newValue: undefined, newValueTrigger: 0, dbValue: undefined, metadata: {}, initialized: false, severity: 0,props }
         }
       }
       
@@ -397,7 +420,7 @@ const LoadSave = (props) => {
     newEntry.beam_setup['DateTime'] = value;
     newEntry.beam_setup['Status'] = "Pending";
     for (key in processVariablesSchemaKeys) {
-      newEntry.process_variables[processVariablesSchemaKeys[key]] = { pvName: dbDataAndLiveData[processVariablesSchemaKeys[key]].pvname, pvValue: dbDataAndLiveData[processVariablesSchemaKeys[key]].pvValue };
+      newEntry.process_variables[processVariablesSchemaKeys[key]] = { pv: dbDataAndLiveData[processVariablesSchemaKeys[key]].pv, pvValue: dbDataAndLiveData[processVariablesSchemaKeys[key]].pvValue };
     }
     console.log('click')
     dbInsertOne({dbURL:dbListInsertOneURL,newEntry:newEntry});
@@ -464,8 +487,8 @@ const LoadSave = (props) => {
      
       pvs.push(
         <PV
-          key={dbDataAndLiveData[item].pvname + id.toString()}
-          pv={dbDataAndLiveData[item].pvname}
+          key={dbDataAndLiveData[item].pv + id.toString()}
+          pv={dbDataAndLiveData[item].pv}
         
           pvData={(pvData) => dispatchDbDataAndLiveData({ type: 'updatePvData', pvData: pvData, key: item })}
           outputValue={dbDataAndLiveData[item].pvValue}
@@ -487,6 +510,7 @@ const LoadSave = (props) => {
     }
     ,3000  );
     return()=>clearTimeout(timer)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
   
   const { classes } = props;
@@ -608,23 +632,29 @@ const LoadSave = (props) => {
                       <TableCell align="center">Saved Value</TableCell>
                       <TableCell align="center">New Value</TableCell>
                       <TableCell align="center">PV Value</TableCell>
+                      <TableCell align="center">Units</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {dbDataAndLiveDataKeys.map((value, index) => (
+                    {dbDataAndLiveDataKeys.map((item, index) => (
                       <TableRow key={index.toString()} hover role="checkbox" >
-                        <TableCell className={classes.tableCell} component="th" scope="row" >
-                          {dbDataAndLiveData[value].description}
+                        <TableCell className={classes.tableCellDescription} component="th" scope="row" >
+                          {dbDataAndLiveData[item].label}
                         </TableCell>
-                        <TableCell className={classes.tableCell} style={{ backgroundColor: compareValues(dbDataAndLiveData[value].dbValue, dbDataAndLiveData[value].pvValue, dbDataAndLiveData[value].initialized) ? green[500] : undefined }} align="center">
-                          {dbDataAndLiveData[value].dbValue}
+                        <TableCell className={classes.tableCellValues} style={{ backgroundColor: compareValues(dbDataAndLiveData[item].dbValue, dbDataAndLiveData[item].pvValue, dbDataAndLiveData[item].initialized) ? green[500] : undefined }} align="center">
+                          {dbDataAndLiveData[item].dbValue}
                         </TableCell>
-                        <TableCell className={classes.tableCell} style={{ backgroundColor: compareValues(dbDataAndLiveData[value].newValue, dbDataAndLiveData[value].pvValue, dbDataAndLiveData[value].initialized) ? green[500] : undefined }} align="center">
-                          {dbDataAndLiveData[value].newValue}
+                        <TableCell className={classes.tableCellValues} style={{ backgroundColor: compareValues(dbDataAndLiveData[item].newValue, dbDataAndLiveData[item].pvValue, dbDataAndLiveData[item].initialized) ? green[500] : undefined }} align="center">
+                          {dbDataAndLiveData[item].newValue}
                         </TableCell>
-                        <TableCell className={classes.tableCell} style={{ backgroundColor: (compareValues(dbDataAndLiveData[value].newValue, dbDataAndLiveData[value].pvValue, dbDataAndLiveData[value].initialized) || compareValues(dbDataAndLiveData[value].dbValue, dbDataAndLiveData[value].pvValue, dbDataAndLiveData[value].initialized)) ? green[500] : undefined }} align="center">
-                          {/* {pvValueTextUpdate(dbDataAndLiveData[value])}*/}
-                          <TextUpdate pv={dbDataAndLiveData[value].pvname} alarmSensitive={true} />
+                        <TableCell className={classes.tableCellValues} style={{ backgroundColor: (compareValues(dbDataAndLiveData[item].newValue, dbDataAndLiveData[item].pvValue, dbDataAndLiveData[item].initialized) || compareValues(dbDataAndLiveData[item].dbValue, dbDataAndLiveData[item].pvValue, dbDataAndLiveData[item].initialized)) ? green[500] : undefined }} align="center">
+                          
+                          <TextUpdate pv={dbDataAndLiveData[item].pv} alarmSensitive={true} {...dbDataAndLiveData[item]} usePvLabel={false} label={undefined} units={""} usePvUnits={false} />
+                          
+                        </TableCell>
+                        <TableCell className={classes.tableCellUnits} style={{ backgroundColor: (compareValues(dbDataAndLiveData[item].newValue, dbDataAndLiveData[item].pvValue, dbDataAndLiveData[item].initialized) || compareValues(dbDataAndLiveData[item].dbValue, dbDataAndLiveData[item].pvValue, dbDataAndLiveData[item].initialized)) ? green[500] : undefined }} align="center">
+                        {dbDataAndLiveData[item].usePvUnits?dbDataAndLiveData[item].metadata.units:dbDataAndLiveData[item].units}
+                    
                         </TableCell>
                       </TableRow>
                     ))}

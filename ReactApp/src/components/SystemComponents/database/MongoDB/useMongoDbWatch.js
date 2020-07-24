@@ -60,7 +60,7 @@ const useMongoDbWatch = (props) => {
             }
 
         }
-
+// eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.dbURL])
 
     return ({ data: data, writeAccess: writeAccess,initialized:initialized, dbURl: props.dbURL })

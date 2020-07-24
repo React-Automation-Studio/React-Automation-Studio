@@ -73,8 +73,8 @@ else:
                     newKey=newKey.replace("kd","Kd")
                     system['keys'][newKey]=newKey
                     system['PVs'][newKey]={}
-                    system['PVs'][newKey]['pvName']="pva://"+line
-                    system['PVs'][newKey]['description']=newKey
+                    system['PVs'][newKey]['pv']="pva://"+line
+                    system['PVs'][newKey]['label']=newKey
                     system['PVs'][newKey]['usePvLabel']=usePvLabelsAsDescription
                     system['PVs'][newKey]['usePvUnits']=True
                     system['PVs'][newKey]['units']=""

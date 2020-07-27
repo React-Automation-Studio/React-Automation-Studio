@@ -41,6 +41,7 @@ const styles = theme => ({
   Paper: {
     padding: theme.spacing(4),
     height: '100%',
+    
 
 
   },
@@ -57,6 +58,7 @@ const styles = theme => ({
     paddingRight: theme.spacing(2),
     paddingBottom: theme.spacing(2),
     marginBottom: theme.spacing(2),
+    
 
   },
   WhatsNew: {
@@ -239,7 +241,7 @@ class MainDashboard extends Component {
                 </Grid>
                 <Grid item lg={12} sm={12} xs={12}  >
                   <Typography className={classes.WhatsNew} component='div'>
-                    V2.0.0 Friday 26 June 2020
+                    V2.0.0 Monday 27 July 2020
                     <br />
 
                     Improvements and new features:
@@ -254,98 +256,130 @@ class MainDashboard extends Component {
                       <li>All buttons can receive and icon.</li>
                       <li>All components extending MUI components can pass MUI props to the MUI components through a special prop (it changes based on the component).</li>
                       <li>All components can have a tooltip.</li>
+                      <li>Widget base components now accept macros in the label and units</li>
+                      <li>Integration with MongoDb database with the addition of Mongodb hooks to setup a watch, and perform an update and insert a MongoDb document.</li>
+                      <li>Update of all demos to Hooks based components</li>
+                      <li>Update of all beam line components to Hooks based components, with new documentation</li>
+                      <li>Create new experimental sections to hose previews of new components</li>
+                      <li>Preview Components
+                        <ul>
+                          <li>
+                            Preview release of the Alarm Handler server and client UI
+                          </li>
+                          <li>
+                            Preview release of the Load/Save client UI
+                          </li>
+                        </ul>
+                      </li>
+                      
+                      
+                      <li> Deprecated Components: These components will be removed in future releases                  <br />
+                        <ul>
+                          <li>
+                            SimpleSlider -> Use Slider
+                          </li>
+                          <li>
+                            ActionFanoutButton -> Use ActionButton
+                          </li>
+                          <li>
+                            SwitchComponent -> Use Switch
+                          </li>
+                          </ul>
+                      </li>
+                      <li> 
+                        Removed Component:
+                      
+                      <ul>
+                        <li>
+                          GraphMultiplePVs
+                        </li>
+                      </ul>
+                      </li>
+                      <li> 
+                       Breaking Changes:
+                      
+                      <ul>
+                        <li>
+                        routes.js was renamed Routes.js and now contains extra logic to enable dynamic or isolated routes based on the use role.
+                        </li>
+                        <li>
+                        If you added extra logic to the App.js you will to adapt to the new RasAppCore component.
+                        </li>
+                      </ul>
+                      </li>
                       <li>Packages updated in both RAS and RAS-Example-Project-1</li>
+                      
                     </ul>
 
 
 
-                    Widget Logic:
-                    Custom Widget -> Widget -> PV -> EpicsPV -> Socket connection to pvServer
-                    \
-                    -> LocalPV -> RAS-Context
-                    The bind between Custom Widget and Widget is made through the HOC function in Widget.
-                    EpicsPV and LocalPV respectively uses useEpicsPV and useLocalPV hooks that can be used in other components.
-
-                    Deprecated Components:
-                    These components will be removed in future releases
-                    - SimpleSlider -> Use Slider
-                    - ActionFanoutButton -> Use ActionButton
-                    - SwitchComponent -> Use Switch
-
-                    Removed Component:
-                    - GraphMultiplePVs
-
-                    Breaking Changes
-                    - routes.js was renamed Routes.js and now contains extra logic to enable dynamic or isolated routes based on the use role.
-                    This is necessary for the next release
-                    - removal of GraphMultiplePVs
-                    - If you added extra logic to the App.js you will to adapt to the new RasAppCore component.
                   </Typography>
-                </Grid>
+              </Grid>
 
               </Grid>
             </Paper>
-          </Grid>
-          <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem} >
+        </Grid>
+        <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem} >
 
-            <Paper className={classes.Paper} elevation={paperElevation}>
-              <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
-                <Grid item lg={12} sm={12} xs={12} style={{ textAlign: 'center' }}>
-                  <Typography {...typographyProps}><EditIcon className={classes.Icon} /> Staging</Typography>
-                </Grid>
-                <Grid item lg={6} sm={12} xs={12}>
-
-                  <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
-                    <Grid item lg={12} sm={12} xs={12}>
-                      <Button fullWidth className={classes.button} component={Link} to="/Staging" color="primary" variant={buttonVariant}>  Staging </Button>
-                    </Grid>
-                  </Grid>
-                </Grid>
-
-
-
+          <Paper className={classes.Paper} elevation={paperElevation}>
+            <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
+              <Grid item lg={12} sm={12} xs={12} style={{ textAlign: 'center' }}>
+                <Typography {...typographyProps}><EditIcon className={classes.Icon} /> Staging</Typography>
               </Grid>
-            </Paper>
-          </Grid>
-          <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem} >
+              <Grid item lg={6} sm={12} xs={12}>
 
-            <Paper className={classes.Paper} elevation={paperElevation} style={{ textAlign: 'center' }}>
-              <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
-                <Grid item lg={12} sm={12} xs={12}>
-                  <Typography {...typographyProps}>  <VisibilityIcon className={classes.Icon} /> Preview</Typography>
-                </Grid>
-                <Grid item lg={6} sm={12} xs={12}>
-                  <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
-                    <Grid item lg={12} sm={12} xs={12}>
-                      <Button fullWidth className={classes.button} component={Link} to="/AlarmHandlerDemo" color="primary" variant={buttonVariant}>  Alarm Handler Demo </Button>
-                    </Grid>
-                    <Grid item lg={12} sm={12} xs={12}>
-                      <Button fullWidth className={classes.button} component={Link} to="/VaultDemo" color="primary" variant={buttonVariant}>  Vault Demo </Button>
-                      </Grid>
-                      <Grid lg={12} sm={12} xs={12} >
-                <Button  fullWidth className= {classes.button} component={Link} to="/LoadSaveExample" color="primary" variant='contained'> LoadSave Example</Button>
-              </Grid>
-                   
-                    
+                <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
+                  <Grid item lg={12} sm={12} xs={12}>
+                    <Button fullWidth className={classes.button} component={Link} to="/Staging" color="primary" variant={buttonVariant}>  Staging </Button>
                   </Grid>
                 </Grid>
               </Grid>
-            </Paper>
-          </Grid>
-          <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem} >
 
-            <Paper className={classes.Paper} elevation={paperElevation}>
-              <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
-                <Grid item lg={12} sm={12} xs={12} style={{ textAlign: 'center' }}>
-                  <Typography {...typographyProps}><HelpIcon className={classes.Icon} /> Help</Typography>
-                </Grid>
-                <Grid item lg={6} sm={12} xs={12}>
-                  <Button fullWidth className={classes.button} target="_blank" href={AutomationStudioStyleGuideBuildURL} color="default" variant={buttonVariant}> Help and Style Guide </Button>
-                </Grid>
 
+
+            </Grid>
+          </Paper>
+        </Grid>
+        <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem} >
+
+          <Paper className={classes.Paper} elevation={paperElevation} style={{ textAlign: 'center' }}>
+            <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
+              <Grid item lg={12} sm={12} xs={12}>
+                <Typography {...typographyProps}>  <VisibilityIcon className={classes.Icon} /> Preview</Typography>
               </Grid>
-            </Paper>
-          </Grid>
+              <Grid item lg={6} sm={12} xs={12}>
+                <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
+                 
+                  <Grid item lg={12} sm={12} xs={12}>
+                    <Button fullWidth className={classes.button} component={Link} to="/AlarmHandlerDemo" color="primary" variant={buttonVariant}>  Alarm Handler Demo </Button>
+                  </Grid>
+                  <Grid item lg={12} sm={12} xs={12}>
+                    <Button fullWidth className={classes.button} component={Link} to="/VaultDemo" color="primary" variant={buttonVariant}>  Vault Demo </Button>
+                  </Grid>
+                  <Grid item lg={12} sm={12} xs={12} >
+                    <Button fullWidth className={classes.button} component={Link} to="/LoadSaveExample" color="primary" variant={buttonVariant}> LoadSave Example </Button>
+                  </Grid>
+                 
+
+                </Grid>
+              </Grid>
+            </Grid>
+          </Paper>
+        </Grid>
+        <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem} >
+
+          <Paper className={classes.Paper} elevation={paperElevation}>
+            <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
+              <Grid item lg={12} sm={12} xs={12} style={{ textAlign: 'center' }}>
+                <Typography {...typographyProps}><HelpIcon className={classes.Icon} /> Help</Typography>
+              </Grid>
+              <Grid item lg={6} sm={12} xs={12}>
+                <Button fullWidth className={classes.button} target="_blank" href={AutomationStudioStyleGuideBuildURL} color="default" variant={buttonVariant}> Help and Style Guide </Button>
+              </Grid>
+
+            </Grid>
+          </Paper>
+        </Grid>
 
 
 
@@ -358,8 +392,8 @@ class MainDashboard extends Component {
 
 
 
-        <RedirectToLogIn />
-      </TraditionalLayout>
+      <RedirectToLogIn />
+      </TraditionalLayout >
     )
   }
 }

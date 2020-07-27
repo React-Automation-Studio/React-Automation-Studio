@@ -5,7 +5,7 @@ It returns a function which can be called with the following props:
 
 |  Property |Type |Default | Description |
 |:-:|:-|
-|dbURL|string|| The dbURL string format is : <br/><br/>mongodb://**`MongoDbReplicaSet`**:**`databaseName`**:**`collectionName`**<br/><br/> **`MongoDbReplicaSet`**: Is name of the environment variable defined in your .env or docker-compose yaml file file and corresponds to hostname or ip and port of the mongoDB replica set, eg. `LOADSAVE_DATABASE`<br/><br/>**`databaseName`**: Is the internal MongoDB database name<br/><br/>**`collectionName`**: Is the MongoDB collection name<br/><br/>
+|dbURL|string|| The dbURL string format is : <br/><br/>mongodb://**`host`**:**`databaseName`**:**`collectionName`**<br/><br/> **`host`**: Is name of the environment variable defined in your .env or docker-compose yaml file file and corresponds to hostname or ip and port of the mongoDB replica set, eg. `LOADSAVE_DATABASE`<br/><br/>**`databaseName`**: Is the internal MongoDB database name<br/><br/>**`collectionName`**: Is the MongoDB collection name<br/><br/>
 |newEntry|Object|| The new document that will be inserted into the collection
 
 The dBURL for example, to connect to the  LOAD_SAVE database example and insert new a new entry is:<br/>

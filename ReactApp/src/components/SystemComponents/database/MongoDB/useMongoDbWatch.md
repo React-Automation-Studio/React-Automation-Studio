@@ -4,7 +4,7 @@ The `useMongoDbWatch` hook returns all the data on the initial read and after su
 
 |  Property |Type |Default | Description |
 |:-:|:-|
-|dbURL|string|| The dbURL string format is : <br/><br/>mongodb://**`MongoDbReplicaSet`**:**`databaseName`**:**`collectionName`**:Parameters:**`Parameters`**<br/><br/>**`MongoDbReplicaSet`**: Is name of the environment variable defined in your .env or docker-compose yaml file file and corresponds to hostname or ip and port of the mongoDB replica set, eg. `LOADSAVE_DATABASE`<br/><br/>**`databaseName`**: Is the internal MongoDB database name<br/><br/>**`collectionName`**: Is the MongoDB collection name<br/><br/>**`Parameters`**: is a JSON object that defines the MongoDB `find` query parameters<br/><br/>
+|dbURL|string|| The dbURL string format is : <br/><br/>mongodb://**`host`**:**`databaseName`**:**`collectionName`**:Parameters:**`Parameters`**<br/><br/>**`host`**: Is name of the environment variable defined in your .env or docker-compose yaml file file and corresponds to hostname or ip and port of the mongoDB replica set, eg. `LOADSAVE_DATABASE`<br/><br/>**`databaseName`**: Is the internal MongoDB database name<br/><br/>**`collectionName`**: Is the MongoDB collection name<br/><br/>**`Parameters`**: is a JSON object that defines the MongoDB `find` query parameters<br/><br/>
 The dBURL for example, to connect to the  LOAD_SAVE database example and read and watch the data that is not marked deleted is:<br/>
 `mongodb://LOADSAVE_DATABASE:testIOCSystems:testIOC_DATA:Parameters:{"query":{"beam_setup.Status":{"$ne":"Delete"}}}`
 

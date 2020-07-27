@@ -5,7 +5,7 @@ It returns a function which can be called with the following props:
 
 |  Property |Type |Default | Description |
 |:-:|:-|
-|dbURL|string|| The dbURL string format is : <br/><br/>mongodb://**`MongoDbReplicaSet`**:**`databaseName`**:**`collectionName`**<br/><br/> **`MongoDbReplicaSet`**: Is name of the environment variable defined in your .env or docker-compose yaml file file and corresponds to hostname or ip and port of the mongoDB replica set, eg. `LOADSAVE_DATABASE`<br/><br/>**`databaseName`**: Is the internal MongoDB database name<br/><br/>**`collectionName`**: Is the MongoDB collection name<br/><br/>
+|dbURL|string|| The dbURL string format is : <br/><br/>mongodb://**`host`**:**`databaseName`**:**`collectionName`**<br/><br/> **`host`**: Is name of the environment variable defined in your .env or docker-compose yaml file file and corresponds to hostname or ip and port of the mongoDB replica set, eg. `LOADSAVE_DATABASE`<br/><br/>**`databaseName`**: Is the internal MongoDB database name<br/><br/>**`collectionName`**: Is the MongoDB collection name<br/><br/>
 |id|string| |The id of the document to be updated
 |update|Object|| This Object defines the pyMongo update_one update that will be performed eg. <br> 
 

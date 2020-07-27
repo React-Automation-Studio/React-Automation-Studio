@@ -288,6 +288,14 @@ module.exports = {
           exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
           usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
         },
+        {
+          name: 'Experimental Load Save',
+          content: 'src/docs/loadSave/loadSave.md',
+          components: 'src/components/LoadSaveComponent/LoadSave.js',
+          exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
+          usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
+         
+        },
       ],
       sectionDepth: 2
     },

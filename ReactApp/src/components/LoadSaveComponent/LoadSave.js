@@ -138,16 +138,25 @@ function compareValues(a, b, initialized) {
     return false
   }
 }
+/**
+* This is a preview LoadSave component. This component is built on a React Automation Studio based front end that connects 
+* to MongoDB database that contains the saved data.
+* 
+* The LoadSave component is still in preview and may change in future releases. Follow the seeding section is the Style
+* Guide to deploy the LoadSave for testing and experimentation.
+* <br/><br/>
+*/
+
 const LoadSave = (props) => {
   const systemName = props.macros['$(systemName)'];
   const dbListQueryParameters = { 'query': { "beam_setup.Status": { "$ne": "Delete" } } };
   const Parameters = JSON.stringify(dbListQueryParameters);
-  const replicaSet = props.replicaSet;
+  const host = props.host;
   const database = props.database;
-  const [dbListBroadcastReadDataURL] = useState('mongodb://' + replicaSet + ':' + database + ':' + systemName + '_DATA:Parameters:' + Parameters)
-  const [dbListBroadcastReadPvsURL] = useState('mongodb://' + replicaSet + ':' + database + ':' + systemName + '_PVs:Parameters:""')
-  const [dbListUpdateOneURL] = useState('mongodb://' + replicaSet + ':' + database + ':' + systemName + '_DATA')
-  const [dbListInsertOneURL] = useState('mongodb://' + replicaSet + ':' + database + ':' + systemName + '_DATA')
+  const [dbListBroadcastReadDataURL] = useState('mongodb://' + host + ':' + database + ':' + systemName + '_DATA:Parameters:' + Parameters)
+  const [dbListBroadcastReadPvsURL] = useState('mongodb://' + host + ':' + database + ':' + systemName + '_PVs:Parameters:""')
+  const [dbListUpdateOneURL] = useState('mongodb://' + host + ':' + database + ':' + systemName + '_DATA')
+  const [dbListInsertOneURL] = useState('mongodb://' + host + ':' + database + ':' + systemName + '_DATA')
   const [dbList, setDbList] = useState([]);
   const [processVariablesSchemaKeys, setProcessVariablesSchemaKeys] = useState([]);
   const [displayIndex, setDisplayIndex] = useState(0);
@@ -422,7 +431,7 @@ const LoadSave = (props) => {
     for (key in processVariablesSchemaKeys) {
       newEntry.process_variables[processVariablesSchemaKeys[key]] = { pv: dbDataAndLiveData[processVariablesSchemaKeys[key]].pv, pvValue: dbDataAndLiveData[processVariablesSchemaKeys[key]].pvValue };
     }
-    console.log('click')
+    
     dbInsertOne({dbURL:dbListInsertOneURL,newEntry:newEntry});
     
    
@@ -540,7 +549,7 @@ const LoadSave = (props) => {
       {SystemsDataConnections()}
       {!showTable&&
                         <Typography style={{padding:8,paddingBottom:16}}>
-                          {replicaSet +" database is not available"}
+                          {host +" database is not available"}
                         </Typography>
                     }
       {showTable&&<Grid
@@ -806,7 +815,31 @@ const LoadSave = (props) => {
 }
 LoadSave.propTypes = {
   /** if true, when the value of loadEnablePV does not equal 0, then the new values can be loaded into the pv values*/
-  useLoadEnable: PropTypes.bool
+  useLoadEnable: PropTypes.bool,
+  /** Is name of the environment variable defined in your .env or docker-compose yaml file file and corresponds to hostname or ip and port of the mongoDB replica set, eg. `LOADSAVE_DATABASE`
+  *
+  */
+  host:PropTypes.string,
+  /** The internal MongoDB database name
+  *
+  */
+  database:PropTypes.string,
+  /**
+   * Values of macros that will be substituted.
+   * eg. {{'$(device)':'testIOC','$(id)':'2'}}
+   */
+  macros: PropTypes.object,
+  /** Name of the load enable process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+
+  loadEnablePV: PropTypes.string,
+  /**
+   * Custom loadEnable button label to be used
+   */
+  loadEnableLabel: PropTypes.string,
+  /** if true, then the button to enable loading of new values will be shown*/
+  showLoadEnableButton: PropTypes.bool,
+  
+  
 };
 LoadSave.defaultProps = {
   useLoadEnable: false

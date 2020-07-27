@@ -10,7 +10,7 @@ const LoadSaveExample = (props) => {
     >
       <div style={{padding:8}}>
       <LoadSave
-        replicaSet='LOADSAVE_DATABASE'
+        host='LOADSAVE_DATABASE'
         database='testIOCSystems'
         macros={{ '$(systemName)': 'testIOC' }}
         loadEnablePV={'pva://$(systemName):loadSaveEnable'}

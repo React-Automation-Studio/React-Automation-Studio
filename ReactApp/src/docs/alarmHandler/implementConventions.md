@@ -3,7 +3,7 @@ The alarm handler maps the EPICS database record alarm severity (SEVR) field to 
 <center>
 | EPICS SEVR | Alarm Status   |
 | ---------- | -------------- |
-| NO\_ALARM  | MAJOR\_ALARM   |
+| NO\_ALARM  | NO\_ALARM   |
 | MINOR      | MINOR\_ALARM   |
 | MAJOR      | MAJOR\_ALARM   |
 | INVALID    | INVALID\_ALARM |

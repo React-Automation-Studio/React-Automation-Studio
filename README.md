@@ -481,45 +481,75 @@ Contact us at rasadmin@tlabs.ac.za
 
 # Changelog
 
-** V2.0.0 Friday 26 June 2020
+V2.0.0 Monday 27 July 2020
+<br />
 
 Improvements and new features:
-- Updated to React Hooks based  components
-- Introduction of new RasAppCore component, the logic in App.js is replaced by this component
-- Created the new component Widget that is the base component for all Widgets.
-- PV component substitutes old DataConnection component.
-- Dynamic connection: When useMetadata props is false some fields, such as min, max, prec, alarm and units, are read from external PVs or an additional connection with those fields is established. By default useMetadata prop is false.
-- New Layout with new themes.
-- All buttons can receive and icon.
-- All components extending MUI components can pass MUI props to the MUI components through a special prop (it changes based on the component).
-- All components can have a tooltip.
-- Packages updated in both RAS and RAS-Example-Project-1
-
-
-
-
-Widget Logic:
-Custom Widget -> Widget -> PV -> EpicsPV -> Socket connection to pvServer
-                            		  \  
-                              		     -> LocalPV -> RAS-Context
-The bind between Custom Widget and Widget is made through the HOC function in Widget.
-EpicsPV and LocalPV respectively uses useEpicsPV and useLocalPV hooks that can be used in other components.
-
-Deprecated Components:
-These components will be removed in future releases
-- SimpleSlider -> Use Slider
-- ActionFanoutButton -> Use ActionButton
-- SwitchComponent -> Use Switch
-
-Removed Component:
-- GraphMultiplePVs
-
-Breaking Changes
-- routes.js was renamed Routes.js and now contains extra logic to enable dynamic or isolated routes based on the use role.
-  This is necessary for the next release
-- removal of GraphMultiplePVs
-- If you added extra logic to the App.js you will to adapt to the new RasAppCore component.
-
+<br />
+<ul>
+  <li>Updated to React Hooks based  components</li>
+  <li>Introduction of new RasAppCore component, the logic in App.js is replaced by this component</li>
+  <li>Created the new component Widget that is the base component for all Widgets.</li>
+  <li>PV component substitutes old DataConnection component.</li>
+  <li>Dynamic connection: When useMetadata props is false some fields, such as min, max, prec, alarm and units, are read from external PVs or an additional connection with those fields is established. By default useMetadata prop is false.</li>
+  <li>New Layout with new themes.</li>
+  <li>All buttons can receive and icon.</li>
+  <li>All components extending MUI components can pass MUI props to the MUI components through a special prop (it changes based on the component).</li>
+  <li>All components can have a tooltip.</li>
+  <li>Widget base components now accept macros in the label and units</li>
+  <li>Integration with MongoDb database with the addition of Mongodb hooks to setup a watch, and perform an update and insert a MongoDb document.</li>
+  <li>Update of all demos to Hooks based components</li>
+  <li>Update of all beam line components to Hooks based components, with new documentation</li>
+  <li>Create new experimental sections to hose previews of new components</li>
+  <li>Preview Components
+    <ul>
+      <li>
+        Preview release of the Alarm Handler server and client UI
+      </li>
+      <li>
+        Preview release of the Load/Save client UI
+      </li>
+    </ul>
+  </li>
+  
+  
+  <li> Deprecated Components: These components will be removed in future releases                  <br />
+    <ul>
+      <li>
+        SimpleSlider -> Use Slider
+      </li>
+      <li>
+        ActionFanoutButton -> Use ActionButton
+      </li>
+      <li>
+        SwitchComponent -> Use Switch
+      </li>
+      </ul>
+  </li>
+  <li> 
+    Removed Component:
+  
+  <ul>
+    <li>
+      GraphMultiplePVs
+    </li>
+  </ul>
+  </li>
+  <li> 
+    Breaking Changes:
+  
+  <ul>
+    <li>
+    routes.js was renamed Routes.js and now contains extra logic to enable dynamic or isolated routes based on the use role.
+    </li>
+    <li>
+    If you added extra logic to the App.js you will to adapt to the new RasAppCore component.
+    </li>
+  </ul>
+  </li>
+  <li>Packages updated in both RAS and RAS-Example-Project-1</li>
+  
+</ul>
 
 **V1.2.4 Thursday 2 April 2020**
 

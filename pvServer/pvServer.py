@@ -794,13 +794,13 @@ def test_message(message):
                     print("debug4: ",dbWatchId, watchEventName)
              #       print("after pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
             except:
-                print("could not remove wathcID")
+                print("could not remove watchID")
                 pass
           
 
 
-        else:
-            print("Error watchEventName not in clientDbWatchList: ",watchEventName)
+        #else:
+        #    print("Error watchEventName not in clientDbWatchList: ",watchEventName)
             
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')

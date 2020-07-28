@@ -87,7 +87,15 @@ In this release, and with authentication enabled, the user name and password are
 
 Access rights can be controlled though a JSON file which contains user access groups and rules for defining PV access using regular expressions in the same way that the EPICS Gatewayaccess is defined. All of the components in React Automation studio currently indicate access rights to the PV.
 
+*4. MongoDB*
 
+Since V2.0.0, React-Automation-Studio is integrated with MongoDB to store persistent data. The PyMongo driver is used within the pvServer to connect to a MongoDB replica set.
+
+React hooks are available that setup a watch, perform an update or an insert to MongoDB replica set within the pvServer. 
+
+See the documentation in the style guide.
+
+Currently the Alarm Handler component  and LoadSave component make use of the MongoDB database. In a future release more hooks will be included and the command line administrator will be replaced with a web based administrator.
 
 
 
@@ -448,9 +456,9 @@ Inside: `./epics`the demo  IOC that interacts with the Demo react screens is loc
 
 `./frontendServer`contains the source files for Node Express serves that serves the client UIs.
 
-`./pvServer`contains the source files for EPCIS process variable server.
+`./pvServer`contains the source files for EPICS process variable server.
 
-
+`./alarmHandlerServer`contains the source files for the Alarm Halnder  server.
 
 `./ReactApp`contains the source files for the web app. They can be edited as is described in Section 2.
 

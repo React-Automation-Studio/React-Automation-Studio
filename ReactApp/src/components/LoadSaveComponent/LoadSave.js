@@ -140,7 +140,9 @@ function compareValues(a, b, initialized) {
 }
 /**
 * This is a preview LoadSave component. This component is built on a React Automation Studio based front end that connects 
-* to MongoDB database that contains the saved data.
+* to MongoDB database that contains the saved settings data. The saved settings data can then be written to live processes variables in a controlled way by first loading the saved values to new values and then finally writing the new values to pv values.
+* The component can also be configured to display write meta along with the data that is saved to the database. The life cycle of the saved settings can also  be managed on the advanced tab.
+
 * 
 * The LoadSave component is still in preview and may change in future releases. Follow the seeding section is the Style
 * Guide to deploy the LoadSave for testing and experimentation.
@@ -814,7 +816,7 @@ const LoadSave = (props) => {
   );
 }
 LoadSave.propTypes = {
-  /** if true, when the value of loadEnablePV does not equal 0, then the new values can be loaded into the pv values*/
+  /** if true, when the value of loadEnablePV does not equal 0, then the new values can **not** be loaded into the pv values*/
   useLoadEnable: PropTypes.bool,
   /** Is name of the environment variable defined in your .env or docker-compose yaml file file and corresponds to hostname or ip and port of the mongoDB replica set, eg. `LOADSAVE_DATABASE`
   *

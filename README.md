@@ -1,3 +1,5 @@
+Current Release: V2.0.0
+
 # Introduction
 
 React Automation Studio is a new software platform to enable the control of large scientific equipment through EPICS.
@@ -477,7 +479,7 @@ On a desktop running Chrome, whilst viewing the website, click on the 3 dots at 
 **Note**: Unless HTTPS is enabled then when viewing the PWA, a banner at the top stating that the webapp is unsecure will appear,
 
 # 6 Theme and color scheme
-The theme and color scheme is currently hard coded but can be edited in `ReactApp/src/App.js` on line 66.
+Refer to theme section in the style guide.
 
 # 7 Contributing
 

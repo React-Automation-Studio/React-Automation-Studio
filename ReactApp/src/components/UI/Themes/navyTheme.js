@@ -16,8 +16,8 @@ const navyPalette = () => {
     const alarm = {
         major: {
             light: major['400'],
-            main: major['600'],
-            dark: major['800'],
+            main: major['700'],
+            dark: major['900'],
         },
         minor: {
             light: minor['100'],

@@ -741,6 +741,7 @@ const LoadSave = (props) => {
                     color="primary"
                     className={classes.Button}
                     onClick={handleSavedValues}
+                    disabled={!dbListWriteAccess||disableButtons}
                   >
                     Save Values
                         </Button>

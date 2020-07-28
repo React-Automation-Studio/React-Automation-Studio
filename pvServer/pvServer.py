@@ -161,7 +161,7 @@ def check_pv_initialized_after_disconnect():
 def dbWatchControlThread():
     global clientDbWatchList
 
-    print("dbWatchControlThread started")
+    #print("dbWatchControlThread started")
     while (True):
         
         for watchEventName in list(clientDbWatchList) :
@@ -206,7 +206,7 @@ def dbWatchControlThread():
 def dbWatchThread(watchEventName):
     global clientDbWatchList
 
-    print("dbWatchThread started for:",watchEventName)
+    #print("dbWatchThread started for:",watchEventName)
     exitThread=False
     while (exitThread==False):
         
@@ -602,7 +602,7 @@ def databaseRead(message):
                             write_access=False
                             #join_room(str(dbURL))
                         try:
-                            print("connecting: "+dbURL)
+                            #print("connecting: "+dbURL)
                             try:
                                 databaseString="mongodb://"+ str(os.environ[database])+"/"
                                 replicaSetName=str(os.environ[database+"_REPLICA_SET_NAME"])
@@ -939,12 +939,12 @@ def databaseBroadcastRead(message):
                                     clientDbWatchList[watchEventName]['sockets'][request.sid]={'dbWatchIds':{dbWatchId:True}}
 
                                 join_room(str(watchEventName))
-                                print("watch already exists: ",watchEventName)
+                                #print("watch already exists: ",watchEventName)
                            
                             return {"dbWatchId":dbWatchId}
                             
                         except:
-                            print("could not connect to MongoDB: ",dbURL)
+                          #  print("could not connect to MongoDB: ",dbURL)
                             return "Ack: Could not connect to MongoDB: "+str(dbURL)
                 else:
                     print("Malformed database URL, must be in format: mongodb://databaseID:database:collection")
@@ -996,7 +996,7 @@ def databaseUpdateOne(message):
 
 
                         try:
-                            print("connecting: "+dbURL)
+                            #print("connecting: "+dbURL)
                             try:
                                 databaseString="mongodb://"+ str(os.environ[database])+"/"
                                 replicaSetName=str(os.environ[database+"_REPLICA_SET_NAME"])

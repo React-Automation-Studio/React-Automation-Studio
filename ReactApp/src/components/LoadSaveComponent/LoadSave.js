@@ -528,6 +528,8 @@ const LoadSave = (props) => {
   
   let disableDeleteButton = true;
   let disableLoadButton = true;
+  let disableSaveButton=!dbListWriteAccess;
+  
   let disableButtons=true;
   if (typeof dbList[displayIndex] !== 'undefined') {
     disableButtons=false;
@@ -741,7 +743,7 @@ const LoadSave = (props) => {
                     color="primary"
                     className={classes.Button}
                     onClick={handleSavedValues}
-                    disabled={!dbListWriteAccess||disableButtons}
+                    disabled={disableSaveButton}
                   >
                     Save Values
                         </Button>

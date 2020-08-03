@@ -44,6 +44,10 @@ try:
     RUN_DEMO_ALARMS_IOC = bool(os.environ['RUN_DEMO_ALARMS_IOC'])
 except:
     RUN_DEMO_ALARMS_IOC = True
+try:
+    AH_DEBUG = bool(os.environ['AH_DEBUG'])
+except:
+    AH_DEBUG = False
 
 if (mongoAuth):
     client = MongoClient(
@@ -89,8 +93,12 @@ areaPVDict = {}
 
 # Prefix and suffix for alarmIOC pvs
 doc = client[MONGO_INITDB_ALARM_DATABASE].config.find_one()
-alarmIOCPVPrefix = doc["alarmIOCPVPrefix"]
-alarmIOCPVSuffix = doc["alarmIOCPVSuffix"]
+try:
+    alarmIOCPVPrefix = doc["alarmIOCPVPrefix"]
+    alarmIOCPVSuffix = doc["alarmIOCPVSuffix"]
+except:
+    if(AH_DEBUG):
+        print('[Warning]', 'alarmIOCPVPrefix not instantiated')
 
 
 def printVal(pvname=None, value=None, **kw):
@@ -174,10 +182,12 @@ def evaluateAreaPVs(areaKey, fromColWatch=False):
                     elif(val == 4):
                         majorAlarm = True
                 except:
-                    print('[Warning]', 'val =', val,
-                          'alarmState =', alarmState)
+                    if(AH_DEBUG):
+                        print('[Warning]', 'val =', val,
+                              'alarmState =', alarmState)
     except:
-        print('[Warning]', 'pvDict changed size during iteration')
+        if(AH_DEBUG):
+            print('[Warning]', 'pvDict changed size during iteration')
 
     # active alarm always supercedes acked state alarm
     if alarmState in ackStates:
@@ -224,8 +234,9 @@ def evaluateTopArea(topArea, alarmState):
                     elif(val == 4):
                         majorAlarm = True
                 except:
-                    print('[Warning]', 'val =', val,
-                          'alarmState =', alarmState)
+                    if(AH_DEBUG):
+                        print('[Warning]', 'val =', val,
+                              'alarmState =', alarmState)
 
     # active alarm always supercedes acked state alarm
     if alarmState in ackStates:
@@ -841,7 +852,8 @@ def initialiseAlarmIOC():
                     # set current alarm status to NO_ALARM
                     alarmDict[pvname]["A"].value = 0
         except:
-            print('[Warning]', 'Unable to connect to pv:', pvname)
+            if(AH_DEBUG):
+                print('[Warning]', 'Unable to connect to pv:', pvname)
 
         # set alarm value
         alarmDict[pvname]["V"].value = str(lastAlarmVal)

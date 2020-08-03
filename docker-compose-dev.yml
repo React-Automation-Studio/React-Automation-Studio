@@ -88,6 +88,19 @@ services:
     volumes:
       - ./certificates:/certificates/
   
+  initializealarmhandlerdb:
+    build:
+      context: ./
+      dockerfile: docker/alarmHandlerDbInit/Dockerfile
+    hostname: initializealarmhandlerdb
+    restart: on-failure
+    network_mode: "host"
+    depends_on:
+      - mongosetup
+    stdin_open: true
+    tty: true
+    env_file: .env
+  
   alarmhandlerserver:
     build:
       context: ./
@@ -95,7 +108,7 @@ services:
     hostname: alarmhandlerserver
     restart: always
     depends_on:
-      - mongosetup
+      - initializealarmhandlerdb
     network_mode: "host"
     stdin_open: true
     tty: true

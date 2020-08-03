@@ -45,7 +45,6 @@ WORKDIR /usr/src/app
 RUN ln -s /epics/demoAlarmsIOC/iocBoot/iocdemoAlarmsIOC/start_tmux_st.cmd /usr/src/app/startDemoIOC.cmd
 RUN ln -s /epics/alarmIOC/iocBoot/iocalarmIOC/start_tmux_st.cmd /usr/src/app/startAlarmIOC.cmd
 
-COPY alarmHandlerServer/initDBData /usr/src/app/initDBData
 COPY alarmHandlerServer/src/python/*.py ./
 
 # custom EPICS_CA_ADDR_LIST to only allow dev stuff to communicate

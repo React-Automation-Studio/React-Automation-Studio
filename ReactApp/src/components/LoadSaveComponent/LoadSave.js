@@ -7,7 +7,6 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
 import TextUpdate from '../BaseComponents/TextUpdate';
 import TextInput from '../BaseComponents/TextInput';
 import ToggleButton from '../BaseComponents/ToggleButton';
@@ -22,7 +21,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import Card from '@material-ui/core/Card';
+import Paper from '@material-ui/core/Paper';
 import PV from '../SystemComponents/PV';
 import useMongoDbWatch from '../SystemComponents/database/MongoDB/useMongoDbWatch'
 import useMongoDbUpdateOne from '../SystemComponents/database/MongoDB/useMongoDbUpdateOne';
@@ -177,6 +176,7 @@ const LoadSave = (props) => {
   const dbDataObject=useMongoDbWatch({dbURL:dbListBroadcastReadDataURL});
   const dbDataInitialized=dbDataObject.initialized;
   const [loadTimedOut,setLoadTimedOut]=useState(false);
+  const {theme}=props;
   useEffect(() => {
    
       let data = dbDataObject.data;
@@ -566,7 +566,7 @@ const LoadSave = (props) => {
       >
         
         <Grid item xs={12} sm={12} md={12} lg={12} >
-          <Card style={{ padding: 8 }}>
+          <Paper elevation={theme.palette.paperElevation} style={{ padding: 8 ,marginTop:8}}>
         
             <Grid
               container
@@ -592,11 +592,11 @@ const LoadSave = (props) => {
             )
               }
             </Grid>
-          </Card>
+          </Paper>
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg={5} >
-          <Card>
-            <Paper className={classes.root}>
+          <Paper>
+            <Paper elevation={theme.palette.paperElevation} className={classes.root}>
               <div className={classes.tableWrapper}>
                 <Table className={classes.table} stickyHeader size="small" aria-label="sticky table">
                   <TableHead>
@@ -632,11 +632,11 @@ const LoadSave = (props) => {
                 </Table>
               </div>
             </Paper>
-          </Card>
+          </Paper>
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg={7} >
-          <Card>
-            <Paper className={classes.root}>
+          <Paper>
+            <Paper elevation={theme.palette.paperElevation} className={classes.root}>
               <div className={classes.tableWrapper}>
                 <Table className={classes.table} stickyHeader size="small" aria-label="sticky table">
                   <TableHead>
@@ -675,10 +675,10 @@ const LoadSave = (props) => {
                 </Table>
               </div>
             </Paper>
-          </Card>
+          </Paper>
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={5} >
-          <Card>
+          <Paper>
             <AppBar position="static" color="inherit">
               <Tabs aria-label="simple tabs example" value={tabValue}
                 onChange={(event, value) => setTabValue(value)}
@@ -803,14 +803,14 @@ const LoadSave = (props) => {
                 </Grid>
               </Grid>
             </TabPanel>
-          </Card>
+          </Paper>
         </Grid>
         {props.useLoadEnable && <React.Fragment>
           {(typeof props.loadEnablePV !== 'undefined' && props.showLoadEnableButton === true) && <Grid item xs={12} sm={12} md={12} lg={1} >
             {typeof props.loadEnableLabel !== 'undefined' && <h4 style={{ margin: 0 }}>{props.loadEnableLabel}</h4>}
-            <Card style={{ padding: 8 }}>
+            <Paper elevation={theme.palette.paperElevation} style={{ padding: 8 }}>
               <ToggleButton pv={props.loadEnablePV} macros={props.macros} custom_selection_strings={["OFF", "ON"]} />
-            </Card>
+            </Paper>
           </Grid>}
         </React.Fragment>
         }

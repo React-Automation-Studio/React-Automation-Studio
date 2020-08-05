@@ -491,7 +491,7 @@ Contact us at rasadmin@tlabs.ac.za
 
 # Changelog
 
-V2.0.0 Monday 27 July 2020
+V2.0.0 Wednesday 5 August 2020
 <br />
 
 Improvements and new features:

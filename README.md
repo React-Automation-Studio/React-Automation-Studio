@@ -99,7 +99,8 @@ See the documentation in the style guide.
 
 Currently the Alarm Handler component  and LoadSave component make use of the MongoDB database. In a future release more hooks will be included and the command line administrator will be replaced with a web based administrator.
 
-
+## YouTube Channel:
+[![React Automation Studio Youtube](http://img.youtube.com/vi/djTPrkRxgAo/0.jpg)](https://www.youtube.com/playlist?list=PL7x0LbUrw5BIgc2PUN3h1D0QRRqRuGzEO "React Automation Studio")
 
 # 1 Installation
 The development and production versions of React Automation Studio have been containerized with Docker.

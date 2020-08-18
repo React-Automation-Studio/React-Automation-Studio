@@ -12,10 +12,11 @@ ThumbWheel example connection to a SoftChannel EPICS AI pv with custom precision
       pv='pva://$(device):test$(id)'
       macros={{'$(device)':'testIOC','$(id)':'2'}}
       usePvLabel={true}
-      usePrecision={true}
+      
       usePvUnits={true}
       usePvMinMax={true}
-      alarmSensitive={false}
+      alarmSensitive={true}
+      prec={3}
       />
   </div>
 
@@ -25,10 +26,23 @@ ThumbWheel example connection to a SoftChannel EPICS AI pv with custom precision
   <ThumbWheel
     pv='pva://$(device):test$(id)'
     macros={{'$(device)':'testIOC','$(id)':'2'}}
-    prec_integer={3}
-    prec_decimal={2}
+    prec_integer={4}
+    prec_decimal={3}
+    prec={3}
+    usePvMinMax={true}
     />
 
 {/*###############*/}  
   </React.Fragment>
+```
+custom increments example
+```js
+ <ThumbWheel
+    pv='pva://$(device):test$(id)'
+    macros={{'$(device)':'testIOC','$(id)':'2'}}
+    
+    prec={1}
+    usePvMinMax={true}
+    custom_increments={[500,50,5,0.5]}
+    />
 ```

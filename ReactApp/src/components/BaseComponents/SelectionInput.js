@@ -1,369 +1,194 @@
-import React from 'react'
-import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
-import DataConnection from '../SystemComponents/DataConnection';
-import { withStyles } from '@material-ui/core/styles';
-import InputAdornment from '@material-ui/core/InputAdornment';
+import React from "react";
+import { withStyles } from "@material-ui/core/styles";
+import { InputAdornment, MenuItem, TextField } from "@material-ui/core";
 import PropTypes from 'prop-types';
-////import classNames from 'classnames';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import TextField from '@material-ui/core/TextField';
-import Switch from '@material-ui/core/Switch';
-import MenuItem from '@material-ui/core/MenuItem';
-import Input from '@material-ui/core/Input';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
-import FilledInput from '@material-ui/core/FilledInput';
-import InputLabel from '@material-ui/core/InputLabel';
-import {LanDisconnect} from 'mdi-material-ui/';
 
-import Select from '@material-ui/core/Select';
+import Widget from "../SystemComponents/Widgets/Widget";
 
-
-
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
-
-    display: 'flex',
-    flexWrap: 'wrap',
-
-
+    display: "flex",
+    flexWrap: "wrap",
   },
   TextField: {
-    width: '100%',
-
-
+    width: "100%",
     fontWeight: 500,
     borderRadius: 4,
-  //  background:theme.palette.background.default
-  }
-
+  },
 });
 
-/**
- * The SelectionInput Component is a wrapper on the Material-UI TextField component. The TextField component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
- * The margins and spacing must be controlled from the parent component.<br/><br/>
- * Material-UI TextField Demos:
- * https://material-ui.com/demos/text-fields<br/><br/>
- * Material-UI TextField API:
- * https://material-ui.com/api/text-field
 
- */
-class SelectionInput extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state={['value'] : "",
-    ['inputValue'] : "",
-    ['outputValue'] : "",
-    ['hasFocus']:false,
-    ['label']:"Undefined",
-    ['pvname']:"Undefined",
-    ['intialized']:false,
-    ['metadata']:{},
-    ['severity']:'',
-    ['newValueTrigger']:0
-  }
-  this.handleInputValue= this.handleInputValue.bind(this);
-  this.handleInputValueLabel= this.handleInputValueLabel.bind(this);
-  this.handleMetadata= this.handleMetadata.bind(this);
+const SelectionInputComponent = (props) => {
 
-}
-
-
-handleInputValue(inputValue,pvname,initialized,severity){
-  // console.log("severity: ",severity);
-
-  if (this.state['hasFocus']===false){
-    this.setState({['value']	 :inputValue,
-    ['inputValue']:inputValue,
-    ['pvname']:pvname,
-    ['initialized']:initialized,
-    ['severity']:severity});
-  }
-  else {  this.setState({['inputValue']:inputValue,
-  ['pvname']:pvname,
-  ['initialized']:initialized,
-  ['severity']:severity});
-}
-}
-
-
-handleMetadata(metadata){
-
-  if (this.state['hasFocus']===false){
-    this.setState({['metadata']	 :metadata,
-    ['newMetadata']:metadata});
-  }
-  else {  this.setState({['newMetadata']:metadata});
-
-}
-}
-
-
-
-handleInputValueLabel(inputValue){
-
-  this.setState({['label']:inputValue});
-
-}
-
-
-
-componentDidMount() {
-}
-
-
-componentWillUnmount() {
-//console.log("selectioninput CWU",this.state.pvname)
-}
-
-
-
-
-
-
-
-
-
-handleOnFocus= event =>{
-  this.setState({['hasFocus']:true});
-}
-
-catchReturn= stateVar => event =>{
-  if (event.key === 'Enter') {
-    this.setState({['outputValue']:this.state['value']});
-  }
-}
-
-
-handleOnBlur= event =>{
-  this.setState({['hasFocus']:false,
-  ['value']:this.state['inputValue'],
-  ['metadata'] :this.state['newMetadata'] });
-}
-
-handleChange = name => event => {
-//  console.log('value',event.target.value)
-  this.setState({
-    ['value']: event.target.value,
-    ['outputValue']: event.target.value,
-    ['newValueTrigger']:this.state.newValueTrigger+1
-  });
-};
-
-
-
-
-
-
-
-
-
-render() {
-  const {classes}= this.props;
-  const {theme}= this.props;
-  const pv = this.props.pv;
-  const macros=  this.props.macros;
-  const usePvLabel= this.props.usePvLabel;
-  const mylabel= this.props.label;
-  const usePrecision= this.props.prec;
-  const useStringValue=true;
-  const severity=this.state.severity;
-  let units="";
-  const initialized=this.state.initialized;
-  let value=this.state.value;
-  let enum_strings={};
-  if(initialized){
-    if(this.props.usePvUnits===true){
-      if (typeof this.state.metadata !== 'undefined'){
-        if (typeof this.state.metadata.units !== 'undefined'){
-          units=this.state.metadata.units;
-        }
-        else{
-          units="";
-        }
-      }
-      else {
-        units="";
-      }
-
-    }
-    else {
-      units=this.props.units;
-    }
-    if (typeof this.props.usePrecision !== 'undefined'){
-      if (this.props.usePrecision==true){
-        if (typeof this.props.prec !== 'undefined'){
-          value=parseFloat(value).toFixed(this.props.prec);
-        }
-        else
-        value=parseFloat(value).toFixed(parseInt(this.state.metadata.precision));
-
-      }
-
-    }
-    // console.log(this.state.metadata.enum_strs)
-    if (typeof this.props.custom_selection_strings !== 'undefined'){
-      enum_strings=this.props.custom_selection_strings;
-
-    } else {
-
-      enum_strings=this.state.metadata.enum_strs;
-    }
-
-  }
-  //   console.log("this.state.metadata.enum_strs",this.state.metadata.enum_strs)
-  //   console.log("enum_strings",enum_strings)
-
-
-  let background_color='';
-  if (typeof this.props.alarmSensitive !== 'undefined'){
-    if (this.props.alarmSensitive==true){
-      if (severity==1){
-        background_color='linear-gradient(45deg, #FFFFFF 1%, #FF8E53 99%)';
-      }
-      else if(severity==2){
-        background_color='linear-gradient(45deg, #FFFFFF 1%, #E20101 99%)';
-      }
-      else background_color='white';
-    }
-
+  function handleChange(event) {
+    let value = event.target.value;
+    props.handleImmediateChange(value);
   }
 
-
-
-
-
-
-
-  const style = {
-    background: background_color,
-    borderRadius: 4,
-
-  };
-  const display_strings=enum_strings
-
-
-  let write_access=false;
-  let read_access=false;
-  if(initialized){
-
-    if (typeof this.state.metadata !== 'undefined'){
-      if (typeof this.state.metadata.write_access !== 'undefined'){
-        write_access=this.state.metadata.write_access;
-      }
-      if (typeof this.state.metadata.read_access !== 'undefined'){
-        read_access=this.state.metadata.read_access;
-      }
-    }
+  
+  let inputProps;
+  let stringValues; 
+  if (props.initialized) {
+    stringValues= props.enumStrs.map((item, idx) => (
+      <MenuItem
+        key={item.toString()}
+       
+        value={props.useStringValue ? item : idx}
+      >
+        {item}
+      </MenuItem>
+    ));
+    inputProps = {
+      endAdornment: (
+        <InputAdornment
+          style={{ marginRight: props.theme.spacing(1) }}
+          position="end"
+        >
+          {props.units} {props.children}
+        </InputAdornment>
+      ),
+      readOnly:props.readOnly,
+      
+    };
   }
+  else{
+    
+    
+    inputProps = {
+      endAdornment: (
+        <InputAdornment
+          style={{ marginRight: props.theme.spacing(1) }}
+          position="end"
+        >
+          {props.units} {props.children}
+        </InputAdornment>
+      ),
+      readOnly:props.readOnly,
+      
+    };
+    stringValues=props.pvName
+  }
+  
+
   return (
-
-    <div>
-      <DataConnection
-        pv={pv}
-        macros={macros}
-        usePvLabel={usePvLabel}
-        usePrecision={usePrecision}
-        handleInputValue={this.handleInputValue}
-        handleMetadata={this.handleMetadata}
-        outputValue=  {this.state.outputValue}
-        useStringValue={true}
-        newValueTrigger={this.state.newValueTrigger}
-        debug={this.props.debug}
-        handleInputValueLabel={this.handleInputValueLabel}
-        intialLocalVariableValue={this.props.intialLocalVariableValue}
-      />
-
-      {initialized===true &&
-        <TextField
-          disabled={write_access===false?true:false}
-          key={this.state.pvname+' connected'+ this.state['label']+this.props.label}
-          select
-          className={classes.TextField}
-          value={value}
-          onKeyPress={this.catchReturn('value')}
-          onFocus={event=>this.handleOnFocus(event)}
-          onBlur={event=>this.handleOnBlur(event)}
-          onChange={this.handleChange('value')}
-          label={usePvLabel===true? this.state['label']:this.props.label}
-          margin="none"
-          variant="outlined"
-          InputProps={{
-
-            endAdornment: <InputAdornment style={{marginRight:theme.spacing(1)}} position="end">{typeof units==='undefined'?units:units.toString() +" "} {this.props.children} </InputAdornment>,
-
-          }}>
-
-          {enum_strings.map((item) =>
-            <MenuItem key={item.toString()} value={item}> {item} </MenuItem>
-          )}
-        </TextField>
-
-
-      }
-
-      {(initialized===false||initialized==='undefined') &&
-
-
-        <TextField
-          disabled={true}
-          key={this.state.pvname+' disconnected'+ this.state['label']+this.props.label}
-          select
-          className={classes.TextField}
-          value={this.state['pvname']}
-
-          label={<LanDisconnect style={{color:this.props.theme.palette.error.main,verticalAlign: "middle"}} fontSize='small'/>}
-          margin="none"
-          variant="outlined"
-          InputProps={{
-
-            endAdornment: <InputAdornment position="end">{units} {this.props.children} </InputAdornment>,
-
-          }}>
-
-          <MenuItem  value={this.state['pvname']}> {this.state['pvname']} </MenuItem>
-          )
-        </TextField>
-      }
+    <TextField
+      key={props.pvName}
+      className={props.classes.TextField}
+      select={props.initialized}
+      disabled={props.disabled}
+      value={props.initialized?props.value:stringValues}
+      onFocus={props.onUpdateWidgetFocus}
+      onBlur={props.onUpdateWidgetBlur}
+      onChange={handleChange}
+      label={props.initialized?props.label:props.disconnectedIcon}
+      margin={props.margin}
+      variant={props.variant}
+      InputProps={inputProps}
+    >
+      {stringValues}
+    </TextField>
+  );
+}
 
 
 
-    </div>
 
+/**
+* The SelectionInput Component is a wrapper on the Material-UI TextField component. 
+* The TextField component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
+* The margins and spacing must be controlled from the parent component.<br/><br/>
+* Material-UI TextField Demos:
+* https://material-ui.com/demos/text-fields<br/><br/>
+* Material-UI TextField API:
+* https://material-ui.com/api/text-field
+
+*/
+
+const SelectionInput = (props) => {
+  return (
+    <Widget {...props} useStringValue={true} component={SelectionInputComponent} usePvMinMax={false} usePvPrecision={false} min={undefined} max={undefined} prec={undefined}/>
   )
 }
-}
+
+
+SelectionInput.defaultProps = {
+
+  debug: false,
+  variant: "outlined",
+  margin: "none",
+
+};
+
 
 SelectionInput.propTypes = {
   /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
   pv: PropTypes.string.isRequired,
   /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
-  macros:PropTypes.object,
-  /** Directive to fill the label with the value contained in the  EPICS pv's DESC field. */
-  usePvLabel:PropTypes.bool,
-  /** Directive to use the EPICS alarm severity status to alter the fields backgorund color  */
-  alarmSensitive:PropTypes.bool,
-  /** Custom label to be used, if  `usePvLabel` is not defined. */
-  label: PropTypes.string,
-  /** If defined, then the DataConnection debugging information will be displayed*/
-  debug:PropTypes.bool,
-  /** If defined, this array of strings overides the default EPICS MBBI/O pv strings and are displayed as the choices in the SelectionInput component*/
-  custom_selection_strings: PropTypes.array,
-  /** Directive to use the units contained in the  EPICS pv's EGU field. */
-  usePvUnits: PropTypes.bool,
-  /** Custom units to be used, if `usePvUnits` is not defined. */
-  units:PropTypes.string,
-  /** local variable intialization value*/
-  intialLocalVariableValue:PropTypes.string
+  macros: PropTypes.object,
+ 
 
+  /** If defined, this array of strings overrides the default EPICS MBBI/O pv strings and are displayed as the choices in the RadioButtonGroup component*/
+  
+  custom_selection_strings: PropTypes.array,
+
+  /** Material-UI TextField variant*/
+  variant: PropTypes.string,
+  /** Material-UI TextField margin*/
+  margin: PropTypes.string,
+  
+   /**
+  * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+  */
+ labelPv: PropTypes.string,
+ /**
+   * Directive to fill the component's label with
+   * the value contained in the  pv metadata's DESC field or the labelPv value.
+   * If not defined it uses the custom label as defined by the label prop.
+   */
+  usePvLabel: PropTypes.bool,
+  /**
+   * Tooltip Text
+   */
+  tooltip:PropTypes.string,
+  /**
+   * Directive to show the tooltip
+   */
+  showTooltip:PropTypes.bool,
+  /**
+   *  Any of the MUI Tooltip props can applied by defining them as an object
+   */
+
+  tooltipProps:PropTypes.object,
+
+  /** Any of the MUI TextField Props can applied by defining them as an object
+   * 
+   */
+  muiTextFieldProps: PropTypes.object,
+
+  /**
+   * Custom units to be used, if usePvUnits is not defined.
+   */
+
+  units: PropTypes.string,
+  /**
+   * Custom PV to define the units to be used, usePvUnits must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+   */
+  unitsPv: PropTypes.string,
+  
+  
+  /**
+   * Directive to use the units contained in the   pv metdata's EGU field or unitsPv.
+   *  If not defined it uses the custom units as defined by the units prop.
+   */
+
+
+  usePvUnits: PropTypes.bool,
 };
 
 SelectionInput.defaultProps = {
-    debug:false,
-    alarmSensitive:false,
-    usePvLabel:false,
-    usePvUnits:false,
-};
+  
+  showTooltip:false,
+  variant:'outlined',
+ };
 
-SelectionInput.contextType=AutomationStudioContext;
-export default withStyles(styles,{withTheme:true})(SelectionInput)
+export default withStyles(styles, { withTheme: true })(SelectionInput);

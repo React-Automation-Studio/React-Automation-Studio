@@ -21,7 +21,7 @@ const styles = theme => ({
 
 });
 
-
+/* eslint-disable eqeqeq */
 
 class SlitXY extends React.Component {
   constructor(props) {
@@ -95,7 +95,7 @@ class SlitXY extends React.Component {
 
   handleInputValueLabel(inputValue){
 
-    this.setState({['label']:inputValue});
+    this.setState({label:inputValue});
 
   }
 
@@ -112,15 +112,13 @@ class SlitXY extends React.Component {
     //  const pv = this.props.pv;
     //  const macros=  this.props.macros;
     //  const usePvLabel= this.props.usePvLabel;
-    const mylabel= this.props.label;
+    
     const usePrecision= this.props.prec;
 
-    const useStringValue=this.props.useStringValue;
+    
 
-    let xGapUnits="";
-    let yGapUnits="";
-    let xOffsetUnits="";
-    let yOffsetUnits="";
+
+    
     const initialized=pvs.xGapReadback.initialized&&pvs.yGapReadback.initialized&&pvs.yOffsetReadback.initialized&&pvs.xOffsetReadback.initialized;
     let xGapReadbackValue=pvs.xGapReadback.value;
     let yGapReadbackValue=pvs.yGapReadback.value;
@@ -128,24 +126,7 @@ class SlitXY extends React.Component {
     let yOffsetReadbackValue=pvs.yOffsetReadback.value;
     let severity=0;
     if(initialized){
-      if(this.props.usePvUnits===true){
-
-        xGapUnits=pvs.xGapReadback.metadata.units;
-        yGapUnits=pvs.yGapReadback.metadata.units;
-        xOffsetUnits=pvs.xOffsetReadback.metadata.units;
-        yOffsetUnits=pvs.yOffsetReadback.metadata.units;
-      }
-
-
-
-
-
-      else {
-        xGapUnits=this.props.xUnits;
-        yGapUnits=this.props.yUnits;
-        xOffsetUnits=this.props.xUnits;
-        yOffsetUnits=this.props.yUnits;
-      }
+      
 
 
       if (typeof this.props.usePrecision !== 'undefined'){
@@ -183,34 +164,24 @@ class SlitXY extends React.Component {
 
 
     let color_side='';
-    let color_face='';
-    let color_top='';
+    
     if (typeof this.props.alarmSensitive !== 'undefined'){
       if (this.props.alarmSensitive==true){
         if (severity==1){
           color_side='#FF8E53';
-          color_face='#FF8E43';
-          color_top='#FF8E63';
+       
         }
         else if(severity==2){
           color_side='#E20101';
-          color_face='#E20901';
-          color_top='#E20111';
+        
         }
-        // else {
-        //   if((pvs.xOffOn.value==1)||(pvs.yOffOn.value==1)){
-        //     color_side='#2e7d32';
-        //     color_face='#2e7d32';
-        //     color_top='#2e7d32';
-        //   }
+     
         else{
           color_side='#133CA9';
-          color_face='#133C99';
-          color_top='#133CA3';
+      
 
         }
-        // }
-
+       
       }
 
     }

@@ -2,12 +2,11 @@ import React from 'react'
 
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 
-import Grid from '@material-ui/core/Grid';
 import GraphY from '../BaseComponents/GraphY';
 import TextUpdateMultiplePVs from '../BaseComponents/TextUpdateMultiplePVs';
-import TextOutput from '../BaseComponents/TextOutput'
+
 import { withStyles } from '@material-ui/core/styles';
-import uuid from 'uuid';
+
 const styles = theme => ({
   body1: theme.typography.body1,
 

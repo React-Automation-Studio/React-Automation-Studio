@@ -1,5 +1,6 @@
 ToggleButton EPICS example:
 ```js
+import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 {/*The TextOutput code is included for demonstration purposes only*/}  
 {/*Only the the JSX code between the hashes  is required to instantiate the ToggleButton */}  
   import TextOutput from './TextOutput';
@@ -13,7 +14,7 @@ ToggleButton EPICS example:
   pv='pva://testIOC:BO1'
   label={'pva://testIOC:BO1 '}
   labelPlacement={"top"}
-
+  muiButtonProps={{startIcon:<PowerSettingsNewIcon />}}
 />
 {/*###############*/}
 
@@ -24,6 +25,7 @@ ToggleButton EPICS example:
 
 Momentary ToggleButton EPICS example:
 ```js
+import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 {/*The TextOutput code is included for demonstration purposes only*/}  
 {/*Only the the JSX code between the hashes  is required to instantiate the ToggleButton */}  
   import TextOutput from './TextOutput';
@@ -38,6 +40,8 @@ Momentary ToggleButton EPICS example:
   label={'pva://testIOC:BO1 '}
   labelPlacement={"top"}
   momentary
+  muiButtonProps={{startIcon:<PowerSettingsNewIcon />}}
+ 
 
 />
 {/*###############*/}

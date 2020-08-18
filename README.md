@@ -1,3 +1,5 @@
+Current Release: V2.0.0
+
 # Introduction
 
 React Automation Studio is a new software platform to enable the control of large scientific equipment through EPICS.
@@ -87,9 +89,18 @@ In this release, and with authentication enabled, the user name and password are
 
 Access rights can be controlled though a JSON file which contains user access groups and rules for defining PV access using regular expressions in the same way that the EPICS Gatewayaccess is defined. All of the components in React Automation studio currently indicate access rights to the PV.
 
+*4. MongoDB*
 
+Since V2.0.0, React-Automation-Studio is integrated with MongoDB to store persistent data. The PyMongo driver is used within the pvServer to connect to a MongoDB replica set.
 
+React hooks are available that setup a watch, perform an update or an insert to MongoDB replica set within the pvServer. 
 
+See the documentation in the style guide.
+
+Currently the Alarm Handler component  and LoadSave component make use of the MongoDB database. In a future release more hooks will be included and the command line administrator will be replaced with a web based administrator.
+
+## YouTube Channel:
+[![React Automation Studio Youtube](http://img.youtube.com/vi/djTPrkRxgAo/0.jpg)](https://www.youtube.com/playlist?list=PL7x0LbUrw5BIgc2PUN3h1D0QRRqRuGzEO "React Automation Studio")
 
 # 1 Installation
 The development and production versions of React Automation Studio have been containerized with Docker.
@@ -361,7 +372,38 @@ Although it is more ingenious to create separate user access groups and to defin
 
 In theory, all regular expression allowed by Python regex can be used although this has not been tested. More examples are available at: https://www.w3schools.com/python/python_regex.asp
 
+** New** to release 2.0.0 are the definition of roles, by defining a role dynamic routes can be created using the role. This now enables portions of your app to isolated from other users.
 
+
+```json
+"UAG1":
+{
+  "usernames":["user1"],
+  "roles":["engineer"],
+  "rules":
+  [
+    { "rule":"[0-9].*",                   "read":true,  "write":true },
+    { "rule":"[a-z].*",                   "read":true,  "write":true },
+    { "rule":"[A-Z].*",                   "read":true,  "write":true },
+   
+
+  ]
+},
+"UAG2":
+{
+  "usernames":["operator1"],
+  "roles":["operator"],
+  "rules":
+  [
+    { "rule":"[0-9].*",                   "read":true,  "write":false },
+    { "rule":"[a-z].*",                   "read":true,  "write":false },
+    { "rule":"[A-Z].*",                   "read":true,  "write":false },
+    { "rule":"^pva://testIOC:Harp1",      "read":true, "write":true },
+    { "rule":"^pva://testIOC:FC2",        "read":true,  "write":true },
+
+  ]
+}
+```
 
 ## 3.3 Enabling https
 The system is by default configured to serve the socket connections and client webserver over HTTP on localhost.
@@ -417,9 +459,9 @@ Inside: `./epics`the demo  IOC that interacts with the Demo react screens is loc
 
 `./frontendServer`contains the source files for Node Express serves that serves the client UIs.
 
-`./pvServer`contains the source files for EPCIS process variable server.
+`./pvServer`contains the source files for EPICS process variable server.
 
-
+`./alarmHandlerServer`contains the source files for the Alarm Halnder  server.
 
 `./ReactApp`contains the source files for the web app. They can be edited as is described in Section 2.
 
@@ -438,7 +480,7 @@ On a desktop running Chrome, whilst viewing the website, click on the 3 dots at 
 **Note**: Unless HTTPS is enabled then when viewing the PWA, a banner at the top stating that the webapp is unsecure will appear,
 
 # 6 Theme and color scheme
-The theme and color scheme is currently hard coded but can be edited in `ReactApp/src/App.js` on line 66.
+Refer to theme section in the style guide.
 
 # 7 Contributing
 
@@ -449,6 +491,76 @@ Site specific components and app screens should be kept in your repository. If y
 Contact us at rasadmin@tlabs.ac.za
 
 # Changelog
+
+V2.0.0 Wednesday 5 August 2020
+<br />
+
+Improvements and new features:
+<br />
+<ul>
+  <li>Updated to React Hooks based  components</li>
+  <li>Introduction of new RasAppCore component, the logic in App.js is replaced by this component</li>
+  <li>Created the new component Widget that is the base component for all Widgets.</li>
+  <li>PV component substitutes old DataConnection component.</li>
+  <li>Dynamic connection: When useMetadata props is false some fields, such as min, max, prec, alarm and units, are read from external PVs or an additional connection with those fields is established. By default useMetadata prop is false.</li>
+  <li>New Layout with new themes.</li>
+  <li>All buttons can receive and icon.</li>
+  <li>All components extending MUI components can pass MUI props to the MUI components through a special prop (it changes based on the component).</li>
+  <li>All components can have a tooltip.</li>
+  <li>Widget base components now accept macros in the label and units</li>
+  <li>Integration with MongoDb database with the addition of Mongodb hooks to setup a watch, and perform an update and insert a MongoDb document.</li>
+  <li>Update of all demos to Hooks based components</li>
+  <li>Update of all beam line components to Hooks based components, with new documentation</li>
+  <li>Create new experimental sections to hose previews of new components</li>
+  <li>Preview Components
+    <ul>
+      <li>
+        Preview release of the Alarm Handler server and client UI
+      </li>
+      <li>
+        Preview release of the Load/Save client UI
+      </li>
+    </ul>
+  </li>
+  
+  
+  <li> Deprecated Components: These components will be removed in future releases                  <br />
+    <ul>
+      <li>
+        SimpleSlider -> Use Slider
+      </li>
+      <li>
+        ActionFanoutButton -> Use ActionButton
+      </li>
+      <li>
+        SwitchComponent -> Use Switch
+      </li>
+      </ul>
+  </li>
+  <li> 
+    Removed Component:
+  
+  <ul>
+    <li>
+      GraphMultiplePVs
+    </li>
+  </ul>
+  </li>
+  <li> 
+    Breaking Changes:
+  
+  <ul>
+    <li>
+    routes.js was renamed Routes.js and now contains extra logic to enable dynamic or isolated routes based on the use role.
+    </li>
+    <li>
+    If you added extra logic to the App.js you will to adapt to the new RasAppCore component.
+    </li>
+  </ul>
+  </li>
+  <li>Packages updated in both RAS and RAS-Example-Project-1</li>
+  
+</ul>
 
 **V1.2.4 Thursday 2 April 2020**
 

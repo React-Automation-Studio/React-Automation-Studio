@@ -1,0 +1,38 @@
+# Description and Host info
+record(waveform, "$(alarm_name)") {
+    field(DTYP, "Soft Channel")
+    field(DESC, "Test waveform")
+    field(NELM, "3")
+    field(FTVL, "STRING")   
+}
+# Alarm status
+record(mbbi, "$(alarm_name)A") {
+    field(DTYP, "Soft Channel")
+    field(ZRST, "NO_ALARM")
+    field(ONST, "MINOR_ACKED")
+    field(TWST, "MINOR_ALARM")
+    field(THST, "MAJOR_ACKED")
+    field(FRST, "MAJOR_ALARM")
+    field(FVST, "INVALID_ACKED")
+    field(SXST, "INVALID_ALARM")
+    field(PINI, "YES")
+    field(VAL, "0")
+}
+# Alarm Value
+record(stringin, "$(alarm_name)V") {
+    field(DTYP, "Soft Channel")
+    field(PINI, "YES")
+    field(VAL, "")
+}
+# Alarm Time
+record(stringin, "$(alarm_name)T") {
+    field(DTYP, "Soft Channel")
+    field(PINI, "YES")
+    field(VAL, "")
+}
+# Alarm Acknowledge Value
+record(stringin, "$(alarm_name)K") {
+    field(DTYP, "Soft Channel")
+    field(PINI, "YES")
+    field(VAL, "")
+}

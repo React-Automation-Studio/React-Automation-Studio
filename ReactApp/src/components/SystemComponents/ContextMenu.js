@@ -1,18 +1,11 @@
+/* eslint-disable eqeqeq */
+/* eslint-disable no-unused-vars */
 import React from 'react'
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
-import DataConnection from '../SystemComponents/DataConnection';
 import { withStyles } from '@material-ui/core/styles';
-import InputAdornment from '@material-ui/core/InputAdornment';
 import PropTypes from 'prop-types';
-//import classNames from 'classnames';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import TextField from '@material-ui/core/TextField';
-import Switch from '@material-ui/core/Switch';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import Grow from '@material-ui/core/Grow';
 import Paper from '@material-ui/core/Paper';
-import Popper from '@material-ui/core/Popper';
 import Popover from '@material-ui/core/Popover';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
@@ -21,9 +14,7 @@ import {Link} from 'react-router-dom'
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ViewList from '@material-ui/icons/ViewList';
 import Typography from '@material-ui/core/Typography';
-import DraftsIcon from '@material-ui/icons/Drafts';
 import Lock from '@material-ui/icons/Lock';
-import Apps from '@material-ui/icons/Apps';
 import { Coffee,LanConnect,LanDisconnect,ContentCopy } from 'mdi-material-ui/'
 const styles = theme => ({
 
@@ -118,17 +109,15 @@ class ContextMenu extends React.Component {
 
   }
   getListItems = (pvs) => {
-    //this.test("test1");
-    //this.handleInputValue();
-  //  console.log('getListItems')
-  //  console.log('pvs',pvs)
+    
+   
     let listItems=[];
 
     let i=0;
 
 
     for (i=0 ; i<(pvs.length);i++){
-    //  console.log("pvs: ",i, pvs[i]);
+   
       const index=i;
       let icon='disconnected';
       if (pvs[i].initialized===true){
@@ -152,8 +141,8 @@ class ContextMenu extends React.Component {
         listItems.push(
 
 
-          <React.Fragment key={pvs[i].pvname.toString()+i}>
-            <MenuItem onClick={(event)=>this.handleMenuItemSelect(event,index)} selected={index === this.state.menuSelectedIndex} >
+          
+            <MenuItem key={pvs[i].pvname.toString()+i} onClick={(event)=>this.handleMenuItemSelect(event,index)} selected={index === this.state.menuSelectedIndex} >
               <ListItemIcon>
                 <React.Fragment>
                   {(icon=='connected')&&<LanConnect style={{color:this.props.theme.palette.primary.main}} />}
@@ -162,9 +151,10 @@ class ContextMenu extends React.Component {
                 </React.Fragment>
               </ListItemIcon>
               <Typography variant="inherit">  {pvs[i].pvname}</Typography>
+              <Divider/>
             </MenuItem>
-            <Divider/>
-          </React.Fragment>
+           
+         
 
 
 
@@ -173,8 +163,8 @@ class ContextMenu extends React.Component {
       else {
         listItems.push(
 
-          <React.Fragment key={pvs[i].pvname.toString()}>
-            <MenuItem onClick={(event)=>this.handleMenuItemSelect(event,index)} selected={index === this.state.menuSelectedIndex}>
+          
+            <MenuItem key={pvs[i].pvname.toString()+i} onClick={(event)=>this.handleMenuItemSelect(event,index)} selected={index === this.state.menuSelectedIndex}>
               <ListItemIcon>
                 <React.Fragment>
                 {(icon=='connected')&&<LanConnect style={{color:this.props.theme.palette.primary.main}} />}
@@ -185,7 +175,7 @@ class ContextMenu extends React.Component {
               <Typography variant="inherit">  {pvs[i].pvname}</Typography>
             </MenuItem>
 
-          </React.Fragment>
+          
         )
       }
     }
@@ -208,9 +198,9 @@ class ContextMenu extends React.Component {
     const  openContextMenu  = this.props.open;
 
     const pvs=this.props.pvs;
-    const pvname=pvs[0].pvname;
-    const initialized=pvs[0].initialized;
-    const value=pvs[0].value;
+    //const pvname=pvs[0].pvname;
+    //const initialized=pvs[0].initialized;
+    //const value=pvs[0].value;
     // let shortPvNames=[];
     // for(let pvnames in pvs){
     //   let shortPvName=pvs[pvnames].pvname;
@@ -227,6 +217,7 @@ class ContextMenu extends React.Component {
     // }
     const enableProbe=typeof (this.props.disableProbe)!=='undefined'?false: this.context.enableProbe;
     //console.log('this.context.enableProbe',this.context.enableProbe)
+    //console.log(pvs)
     let icon='disconnected';
     if (pvs.length===1){
 
@@ -281,7 +272,7 @@ class ContextMenu extends React.Component {
                   onClick={this.props.handleClose}
                   component={Link} to={{
                       pathname: "/Probe",
-                    search:JSON.stringify({pvname:pvname,probeType:this.props.probeType}),
+                    search:JSON.stringify({pvname:pvs[0].pvname,probeType:this.props.probeType}),
                       state: ["sdas"],
                       data:"hello2"
                   }}

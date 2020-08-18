@@ -1,22 +1,25 @@
+//This example is deprecated and will be removed in a future release 
 import React from 'react'
 
 import AutomationStudioContext from '../../SystemComponents/AutomationStudioContext';
 import TextInput from '../../BaseComponents/TextInput';
 import SelectionInput from '../../BaseComponents/SelectionInput';
 import TextOutput from '../../BaseComponents/TextOutput';
-import SimpleSlider from '../../BaseComponents/SimpleSlider';
+import Slider from '../../BaseComponents/Slider';
 import TextUpdate from '../../BaseComponents/TextUpdate';
 import Grid from '@material-ui/core/Grid';
-import SwitchComponent from '../../BaseComponents/SwitchComponent';
 import ToggleButton from '../../BaseComponents/ToggleButton';
-import ActionButton from '../../BaseComponents/ActionButton';
-
+import { withStyles } from '@material-ui/core/styles';
 import ThumbWheel from '../../BaseComponents/ThumbWheel';
-import Card from '@material-ui/core/Card';
+import Paper from '@material-ui/core/Paper';
 import Close from '@material-ui/icons/Close';
 //import MenuItem from '@material-ui/core/MenuItem';
+console.warn("This example is deprecated and will be removed in a future release")
+const styles = theme => ({
+  body1: theme.typography.body1,
 
 
+});
 
 class ControlRightEx1 extends React.Component {
   constructor(props) {
@@ -48,7 +51,7 @@ class ControlRightEx1 extends React.Component {
         </Grid>
       </Grid>
 
-      <Card style={{ paddingLeft: 12,paddingTop: 12,paddingRight: 12, marginRight:12}}>
+      <Paper style={{ paddingLeft: 12,paddingTop: 12,paddingRight: 12, marginRight:12}} elevation={this.props.theme.palette.paperElevation}>
         <div style={{ "overflowX": "hidden", paddingTop:6}}>
 
           <Grid container spacing={2}>
@@ -57,17 +60,17 @@ class ControlRightEx1 extends React.Component {
               <TextInput   pv='pva://$(device):Setpoint'      macros={this.props['macros']}  label={'Setpoint:'} alarmSensitive={true}  usePvUnits={true}/>
             </Grid>
             <Grid item xs={6}>
-              <TextOutput  pv='pva://$(device):Readback'      macros={this.props['macros']}   usePrecision={true} prec={3} usePvUnits={true} alarmSensitive={true} label={'Readback'}/>
+              <TextOutput  pv='pva://$(device):Readback'      macros={this.props['macros']}    prec={3} usePvUnits={true} alarmSensitive={true} label={'Readback'}/>
             </Grid>
             <Grid item xs={6}>
               <SelectionInput  pv='pva://$(device):SimReadback.SCAN' macros={this.props['macros']}  label={'Scan rate'} useStringValue={true}/>
             </Grid>
             <Grid item xs={6}>
-              <TextOutput  pv='pva://$(device):SimReadback.OROC' macros={this.props['macros']} usePrecision={true}   label={'OROC'}/>
+              <TextOutput  pv='pva://$(device):SimReadback.OROC' macros={this.props['macros']}    label={'OROC'}/>
             </Grid>
 
             <Grid item xs={12}>
-              <SimpleSlider  pv='pva://$(device):Setpoint'      macros={this.props['macros']} usePvMinMax={true} min={1000} max={500} label={""} usePrecision={true} prec={3} />
+              <Slider  pv='pva://$(device):Setpoint'      macros={this.props['macros']} usePvMinMax={true} min={1000} max={500} label={""}  prec={3} />
             </Grid>
 
 
@@ -99,11 +102,11 @@ class ControlRightEx1 extends React.Component {
           </Grid>
         <br/>
         </div>
-      </Card>
+      </Paper>
  </div>
     );
   }
 }
 
 ControlRightEx1.contextType=AutomationStudioContext;
-export default ControlRightEx1
+export default withStyles(styles,{withTheme:true})(ControlRightEx1)

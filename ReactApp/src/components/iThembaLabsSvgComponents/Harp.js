@@ -29,7 +29,8 @@ const styles = theme => ({
   }
 
 });
-
+/* eslint-disable eqeqeq */
+/* eslint-disable no-unused-vars */
 class Harp extends React.Component {
   constructor(props) {
     super(props);
@@ -118,7 +119,7 @@ class Harp extends React.Component {
   handleMetadata=name=>(metadata)=>{
 
     let pvs=this.state.pvs;
-    pvs[name]['metadata']=metadata;
+    pvs[name].metadata=metadata;
     this.setState({pvs	 :pvs});
 
 
@@ -174,7 +175,7 @@ this.setState({'value'	 :inputValue,
 
 handleInputValueLabel(inputValue){
 
-  this.setState({['label']:inputValue});
+  this.setState({label:inputValue});
 
 }
 
@@ -198,7 +199,7 @@ handleOnClick =device=> (event) => {
   //  console.log("In Harp: clicked "+device.toString());
   //this.props.handleOnClick(device);
   let pvs=this.state.pvs;
-  if((pvs['commandPV']['metadata']['write_access']===true)){
+  if((pvs['commandPV'].metadata['write_access']===true)){
   if (pvs['inPV'].value==1){
     pvs['commandPV'].value=0;
     pvs['xrawScanPV'].value=0;
@@ -501,7 +502,7 @@ handleOnClick =device=> (event) => {
                           textAnchor='middle'
                           filter={this.props.textShadow===true?"url(#"+this.props.systemName+"HarpShadow)":"" }
                         >
-                          {this.props.usePvLabel===true? this.state['label']:this.props.label}
+                          {this.props.usePvLabel===true? this.state.label:this.props.label}
                         </text>
                       </g>
                     </g>
@@ -536,7 +537,7 @@ handleOnClick =device=> (event) => {
                         textAnchor='middle'
                         filter={this.props.textShadow===true?"url(#"+this.props.systemName+"HarpShadow)":"" }
                       >
-                        {this.props.usePvLabel===true? this.state['label']:this.props.label}
+                        {this.props.usePvLabel===true? this.state.label:this.props.label}
                       </text>
                     </g>
                   }

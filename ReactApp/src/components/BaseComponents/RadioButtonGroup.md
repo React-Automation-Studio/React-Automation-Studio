@@ -17,7 +17,8 @@ RadioButtonGroup example connection to a SoftChannel EPICS MBBO pv with horizont
 
   {/*###############*/}  
 
-  <RadioButtonGroup  pv='pva://$(device):mbboTest$(id)'       macros={{'$(device)':'testIOC','$(id)':'1'}}
+  <RadioButtonGroup  pv='pva://$(device):mbboTest$(id)' 
+        macros={{'$(device)':'testIOC','$(id)':'1'}}
   horizontal={true}  
   usePvLabel={true}/>
 
@@ -44,7 +45,7 @@ RadioButtonGroup example connection to a SoftChannel EPICS MBBO pv with vertical
 
   {/*###############*/}  
 
-  <RadioButtonGroup  pv='pva://$(device):mbboTest$(id)' macros={{'$(device)':'testIOC','$(id)':'1'}}    usePvLabel={true} labelPlacement='bottom' custom_selection_strings={['text 1','text 3']}/>
+  <RadioButtonGroup  pv='pva://$(device):mbboTest$(id)' macros={{'$(device)':'testIOC','$(id)':'1'}}    usePvLabel={true}  custom_selection_strings={['text 1','text 3']}/>
 
   {/*###############*/}
 

@@ -1,0 +1,1 @@
+React Automation Studio uses MongoDB as its backend database management system to store and retrieve persistent data.

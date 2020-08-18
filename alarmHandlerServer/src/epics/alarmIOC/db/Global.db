@@ -1,0 +1,18 @@
+# ACK PV
+# record(stringin, "$(ioc):ACK_PV") {
+#     field(DTYP, "Soft Channel")
+#     field(PINI, "YES")
+#     field(VAL, "")
+# }
+record(waveform, "$(ioc):ACK_PV") {
+    field(DTYP, "Soft Channel")
+    field(DESC, "Test waveform")
+    field(NELM, "6")
+    # 0 identifier 0 = area, 1 = subArea, 2 = area_pv, 3 = subArea_pv
+    # 1 area
+    # 2 subArea
+    # 3 pv
+    # 4 logged in username
+    # 5 value
+    field(FTVL, "STRING")   
+}

@@ -8,11 +8,18 @@ StyledIconButton example connection to a SoftChannel EPICS AI pv with example of
   import Face from '@material-ui/icons/Face';
   <div style={{textAlign:'center'}}>
   <div style={{marginBottom:8}}>
-    <TextOutput  pv='pva://$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}} usePvLabel={true} usePrecision={true} prec={0}/>
+    <TextOutput   
+     pv='pva://$(device):BO$(id)'
+     macros={{'$(device)':'testIOC','$(id)':'1'}} 
+     usePvLabel={true} 
+     usePvPrecision={true} />
   </div>
   {/*###############*/}  
 
-  <StyledIconButton  pv='pva://$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}} usePvLabel={true}>
+  <StyledIconButton    
+    pv='pva://$(device):BO$(id)'
+    macros={{'$(device)':'testIOC','$(id)':'1'}} 
+    usePvLabel={true}>
     <Face/>
   </StyledIconButton>
 
@@ -29,10 +36,10 @@ StyledIconButton example connection to a SoftChannel EPICS AI pv with example of
   <div style={{textAlign:'center'}}>
   <div style={{marginBottom:8}}>
     <TextOutput
-      pv='pva://$(device):test$(id)'
-      macros={{'$(device)':'testIOC','$(id)':'2'}}
+      pv='pva://$(device):BO$(id)'
+      macros={{'$(device)':'testIOC','$(id)':'1'}} 
       usePvLabel={true}
-      usePrecision={true}
+      usePvPrecision={true}
       usePvUnits={true}
       usePvMinMax={true}
       alarmSensitive={false}
@@ -40,7 +47,13 @@ StyledIconButton example connection to a SoftChannel EPICS AI pv with example of
   </div>
   {/*###############*/}  
 
-  <StyledIconButton  pv='pva://$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}} usePvLabel={true} labelPlacement='end'/>
+  <StyledIconButton  
+    pv='pva://$(device):BO$(id)'
+    macros={{'$(device)':'testIOC','$(id)':'1'}} 
+    usePvLabel={true} 
+    labelPlacement='end' 
+    offColor="secondary"
+    />
 
   {/*###############*/}
 

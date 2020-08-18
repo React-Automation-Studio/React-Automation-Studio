@@ -2,19 +2,17 @@ import React from 'react'
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 import DataConnection from '../SystemComponents/DataConnection';
 import { withStyles } from '@material-ui/core/styles';
-import InputAdornment from '@material-ui/core/InputAdornment';
+
 import PropTypes from 'prop-types';
 //import classNames from 'classnames';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import TextField from '@material-ui/core/TextField';
 
-import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
+
 import Button from '@material-ui/core/Button';
 import {LanDisconnect} from 'mdi-material-ui/';
-
+/* eslint-disable eqeqeq */
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-useless-computed-key*/
 
 const styles = theme => ({
   root: {
@@ -28,8 +26,8 @@ const styles = theme => ({
 
 });
 /**
- * The ActionFanoutButton Component is a wrapper on the Material-UI Button component.
- *The ActionButton will ouput the `actionValue` to all the process variable defined by `dataPVs` when pressed.
+ * **Component is deprecated, use the ActionButton instead** The ActionFanoutButton Component is a wrapper on the Material-UI Button component.
+ *The ActionButton will output the `actionValue` to all the process variable defined by `dataPVs` when pressed.
  *The ActionButton component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
  * The margins and spacing must be controlled from the parent component.<br/><br/>
  * Material-UI Button Demos:
@@ -59,7 +57,7 @@ class ActionFanoutButton extends React.Component {
       dataPVs[pvname]={label:"", initialized: false,pvname:pvname,value:[],char_value:"",alarmColor:"",lower_disp_limit: 0,upper_disp_limit: 10000,lower_warning_limit: 4000,upper_warning_limit: 6000,
       units: "V",precision: 0};
     }
-  state['value']="0";
+  state.value="0";
   state['dataPVs']=dataPVs;
   state['newValueTrigger']=0;
   this.state=state;
@@ -112,6 +110,7 @@ handleInputValueLabel=pvname=>(inputValue)=>{
 
 
 componentDidMount() {
+  console.warn("Component is deprecated, use the ActionButton instead")
 }
 
 
@@ -133,14 +132,14 @@ componentWillUnmount() {
 
 handleButtonChange = name => event => {
   //console.log(event.target.checked)
-  this.setState({ ['value']: event.target.checked?1:0});
+  this.setState({ value: event.target.checked?1:0});
 };
 
 
 handleButtonClick = name => event => {
 //  console.log(event)
 
-  this.setState({ ['value']: this.props.actionValue,
+  this.setState({ value: this.props.actionValue,
                   ['newValueTrigger']:this.state.newValueTrigger+1});
 };
 
@@ -160,7 +159,7 @@ multipleDataConnections = () => {
           handleMetadata={this.handleMetadata(this.state.dataPVs[pv].pvname)}
           outputValue={this.state.value}
           newValueTrigger={this.state.newValueTrigger}
-          intialLocalVariableValue={this.props.intialLocalVariableValue}
+          initialLocalVariableValue={this.props.initialLocalVariableValue}
         />
 
 
@@ -304,15 +303,15 @@ ActionFanoutButton.propTypes = {
   /** Custom label to be used */
   label: PropTypes.string,
 
-  /** Postion of label*/
+  /** Position of label*/
   labelPlacement:  PropTypes.oneOf(['top', 'bottom','start','end']),
 
   /** If defined, then the string value of the EPICS enumerator type will be forced to be used, if not defined the the enumerator index is used */
   useStringValue:PropTypes.bool,
   /** If defined, then the DataConnection debugging information will be displayed*/
   debug:PropTypes.bool,
-  /** local variable intialization value*/
-  intialLocalVariableValue:PropTypes.string
+  /** local variable initialization value*/
+  initialLocalVariableValue:PropTypes.string
 
 
 };

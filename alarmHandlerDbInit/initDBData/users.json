@@ -1,0 +1,41 @@
+[{
+        "name": "User One",
+        "username": "user1",
+        "email": "user1@example.com",
+        "notifyPVs": [
+            "amplitude\\b",
+            "vault",
+            "cyclotron.*RF",
+            "cyclotron.*RF\\d",
+            "air.*press",
+            "SLIT.*2"
+        ]
+    },
+    {
+        "name": "User Two",
+        "username": "user2",
+        "email": "user2@example.com",
+        "notifyPVs": [
+            "radiation",
+            "^testIOC.*STR",
+            "SLIT.*Gap",
+            "vault"
+        ]
+    },
+    {
+        "name": "User Three",
+        "username": "user3",
+        "email": "user3@example.com",
+        "notifyPVs": [
+            "SLITXY1.*Gap",
+            "building.*air",
+            "SLIT",
+            "interlocks",
+            "water.*flow",
+            "building.*temp",
+            "SLIT.*1.*Readback",
+            "air.*diff",
+            "demoAlarms.*\\:.*building"
+        ]
+    }
+]

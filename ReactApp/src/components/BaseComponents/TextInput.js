@@ -1,480 +1,303 @@
-import React from 'react'
-import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
-import DataConnection from '../SystemComponents/DataConnection';
-import { withStyles } from '@material-ui/core/styles';
-import InputAdornment from '@material-ui/core/InputAdornment';
+import React from "react";
+import { withStyles } from "@material-ui/core/styles";
+import { InputAdornment, TextField } from "@material-ui/core";
 import PropTypes from 'prop-types';
-//import classNames from 'classnames';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import TextField from '@material-ui/core/TextField';
-import ContextMenu from '../SystemComponents/ContextMenu';
-import red from '@material-ui/core/colors/red';
-import deepOrange from '@material-ui/core/colors/deepOrange';
-import {LanDisconnect} from 'mdi-material-ui/'
+import Widget from "../SystemComponents/Widgets/Widget";
 
+import { fade } from '@material-ui/core/styles/colorManipulator';
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
-
-    display: 'flex',
-    flexWrap: 'wrap',
-
-
+    display: "flex",
+    flexWrap: "wrap",
   },
   TextFieldSeverity0: {
     width: '100%',
-    //marginTop:theme.spacing(1),
-
-
-
-
-    fontWeight: 500,
     borderRadius: 4,
-
   },
   TextFieldSeverity1: {
     width: '100%',
-
-
-    //marginTop:theme.spacing(1),
-
-    fontWeight: 500,
     borderRadius: 4,
-    //backgroundColor:'linear-gradient(45deg, #FFFFFF 1%, #FF8E53 99%)'
-  //  background:'linear-gradient(45deg, '+ theme.palette.background.default+ ' 1%, #FF8E53 99%)'//'green'
-    background:'linear-gradient(45deg, '+ theme.palette.background.default+ ' 1%, '+deepOrange['400'] +' 99%)'
+    background:'linear-gradient(45deg,'+  fade(theme.palette.alarm.minor.dark,theme.palette.type==='dark'?0.1:0.1)+ ' 0%, '+ (theme.palette.alarm.minor.dark) +' 100%)'
   },
   TextFieldSeverity2: {
     width: '100%',
-
-    //marginTop:theme.spacing(1),
-
-
-    fontWeight: 500,
     borderRadius: 4,
-    //backgroundColor:'linear-gradient(45deg, #FFFFFF 1%, #FF8E53 99%)'
-    background:'linear-gradient(45deg, '+ theme.palette.background.default+ ' 1%, '+red['800'] +' 99%)'
+    background:'linear-gradient(45deg,'+ fade(theme.palette.alarm.major.dark,theme.palette.type==='dark'?0.2:0.1)+ ' 0%, '+ (theme.palette.alarm.major.dark) +' 100%)'
   }
 });
+
+const TextInputComponent=(props)=> {
+
+ 
+  const handleChange=(event)=>{
+    let value=event.target.value;
+    props.handleChange(value);
+  }
+  const handleCatchReturn=(event)=> {
+    if (event.key === "Enter" ) {
+      props.handleCommitChange();
+    }
+  }
+
+
+
+ 
+  const { classes } = props;
+  const { initialized } = props;
+  
+  const { value } = props;
+
+  let textFieldClassName;
+  if (typeof props.alarmSensitive !== 'undefined') {
+    if (props.alarmSensitive === true) {
+      if (props.alarmSeverity ===1) {
+        textFieldClassName = classes.TextFieldSeverity1;
+
+      }
+      else if (props.alarmSeverity ===2) {
+        textFieldClassName = classes.TextFieldSeverity2;
+
+      }
+      else {
+        textFieldClassName = classes.TextFieldSeverity0;
+
+      }
+
+    }
+  }
+
+
+  let inputProps;
+
+  if (initialized) {
+    inputProps = {
+      endAdornment: (
+        <InputAdornment position="end">
+          {props.units} {props.children}
+        </InputAdornment>
+      ),
+      readOnly:props.readOnly
+    };
+  } else {
+    inputProps = { readOnly: true };
+  }
+
+  
+  return (
+    <TextField
+      className={textFieldClassName}
+
+      key={props.pvName}
+      //aria-owns={this.state.openContextMenu ? 'menu-list-grow' : undefined}
+      aria-haspopup="true"
+      value={!props.initialized?props.pvName:value}
+      onKeyPress={handleCatchReturn}
+      onFocus={props.handleFocus}
+      onBlur={props.handleBlur}
+      onChange={handleChange}
+      label={!props.initialized?props.disconnectedIcon:props.label}
+      fullWidth={true}
+      margin={props.margin}
+      variant={props.variant}
+      disabled={props.disabled}
+      InputProps={inputProps}
+      {...props.muiTextFieldProps}
+      
+      
+    />
+  );
+}
+
 /**
- * The TextInput Component is a wrapper on the Material-UI contained TextField component. The TextField component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
+ * The TextInput Component is a wrapper on the Material-UI contained TextField component.
+ * The TextField component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
  * The margins and spacing must be controlled from the parent component.<br/><br/>
  * Material-UI TextField Demos:
  * https://material-ui.com/demos/text-fields<br/><br/>
  * Material-UI TextField API:
  * https://material-ui.com/api/text-field
-
+ * 
+ * 
+ * 
  */
-class TextInput extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state={['value'] : "",
-    ['inputValue'] : "",
-    ['outputValue'] : "",
-    ['hasFocus']:false,
-    ['label']:"Undefined",
-    ['pvname']:"Undefined",
-    ['intialized']:false,
-    ['metadata']:{},
-    ['severity']:'',
-    openContextMenu: false,
-  }
-  this.handleInputValue= this.handleInputValue.bind(this);
-  this.handleInputValueLabel= this.handleInputValueLabel.bind(this);
-  this.handleMetadata= this.handleMetadata.bind(this);
-  this.handleContextMenuClose= this.handleContextMenuClose.bind(this);
-
-}
-
-
-handleInputValue(inputValue,pvname,initialized,severity){
-  if(this.props.debug===true){
-    console.log('inputValue',inputValue);
-    console.log('pvname',pvname);
-    console.log('initialized',initialized);
-    console.log('severity',severity);
-
-  }
-  //console.log("severity: ",severity);
-
-  if (this.state['hasFocus']===false){
-    this.setState({['value']	 :inputValue,
-    ['inputValue']:inputValue,
-    ['pvname']:pvname,
-    ['initialized']:initialized,
-    ['severity']:severity});
-  }
-  else {  this.setState({['inputValue']:inputValue,
-  ['pvname']:pvname,
-  ['initialized']:initialized,
-  ['severity']:severity});
-}
-}
-
-
-handleMetadata(metadata){
-
-  if (this.state['hasFocus']===false){
-    this.setState({['metadata']	 :metadata,
-    ['newMetadata']:metadata});
-  }
-  else {  this.setState({['newMetadata']:metadata});
-
-}
-}
-
-
-
-handleInputValueLabel(inputValue){
-
-  this.setState({['label']:inputValue});
-
-}
-
-
-
-componentDidMount() {
-}
-
-
-componentWillUnmount() {
-
-}
-
-
-
-
-
-
-
-
-
-handleOnFocus= event =>{
-  this.setState({['hasFocus']:true});
-}
-
-catchReturn= stateVar => event =>{
-  let value=this.state.value;
-  if (typeof this.props.usePrecision !== 'undefined'){
-    if (this.props.usePrecision==true){
-      if (typeof this.props.prec !== 'undefined'){
-        value=parseFloat(value).toFixed(this.props.prec);
-      }
-      else
-      value=parseFloat(value).toFixed(parseInt(this.state.metadata.precision));
-
-    }
-
-  }
-  let min;
-  let max;
-  if (this.state.initialized===true){
-  if (typeof this.props.usePvMinMax === 'undefined'){
-    if (typeof this.props.min !== 'undefined'){
-      min=this.props.min;
-    }
-    if (typeof this.props.max !== 'undefined'){
-      max=this.props.max;
-    }
-  }else{
-    if(this.props.usePvMinMax == false)
-    {
-      if (typeof this.props.min !== 'undefined'){
-        min=this.props.min;
-      }
-      if (typeof this.props.max !== 'undefined'){
-        max=this.props.max;
-      }
-    }
-    else {
-      max=this.state.metadata.upper_disp_limit;
-      min=this.state.metadata.lower_disp_limit;
-    }
-
-  }
-
-
-  if (value>max){
-    value=max;
-  }else if (value<min) {
-   value=min;
-  }
-}
-  if (event.key === 'Enter') {
-    this.setState({['outputValue']:value});
-  }
-}
-
-
-handleOnBlur= event =>{
-  this.setState({['hasFocus']:false,
-  ['value']:this.state['inputValue'],
-  ['metadata'] :this.state['newMetadata'] });
-}
-
-handleChange = name => event => {
-  let value=event.target.value;
-
-  this.setState({
-    [name]: value,
-  });
-};
-
-
-handleContextMenuClose = event => {
-
-
-   this.setState({ openContextMenu: false });
- };
-
- handleToggleContextMenu = (event) => {
-//   console.log(event.type)
-
-     this.setState(state => ({ openContextMenu: !state.openContextMenu }));
-
-
-   event.preventDefault();
- }
-
-
-
-
-
-
-render() {
-  const {classes}= this.props;
-
-  const pv = this.props.pv;
-  const macros=  this.props.macros;
-  const usePvLabel= this.props.usePvLabel;
-  const mylabel= this.props.label;
-  const usePrecision= this.props.prec;
-  const useStringValue=this.props.useStringValue;
-  const severity=this.state.severity;
-  let units="";
-  const initialized=this.state.initialized;
-  let value=this.state.value;
-  if(initialized){
-    if(this.props.usePvUnits===true){
-      if (typeof this.state.metadata !== 'undefined'){
-        if (typeof this.state.metadata.units !== 'undefined'){
-          units=this.state.metadata.units;
-        }
-        else{
-          units="";
-        }
-      }
-      else {
-        units="";
-      }
-
-    }
-    else {
-      units=this.props.units;
-    }
-
-    if (value!==""){
-      if (this.state.hasFocus===false){
-        if (typeof this.props.usePrecision !== 'undefined'){
-          if (this.props.usePrecision==true){
-            if (typeof this.props.prec !== 'undefined'){
-              value=parseFloat(value).toFixed(this.props.prec);
-            }
-            else
-            value=parseFloat(value).toFixed(parseInt(this.state.metadata.precision));
-
-          }
-
-        }
-
-      }
-
-    }
-
-  }
-
-
-  let textFieldClassName;
-  let background_color='';
-  if (typeof this.props.alarmSensitive !== 'undefined'){
-    if (this.props.alarmSensitive==true){
-      if (severity==1){
-        textFieldClassName=classes.TextFieldSeverity1;
-        //  background_color='linear-gradient(45deg, #FFFFFF 1%, #FF8E53 99%)';
-      }
-      else if(severity==2){
-        textFieldClassName=classes.TextFieldSeverity2;
-        //  background_color='linear-gradient(45deg, #FFFFFF 1%, #E20101 99%)';
-      }
-      else {
-        textFieldClassName=classes.TextFieldSeverity0;
-        //  background_color='white';
-      }
-    }
-
-  }
-
-
-
-
-
-
-
-  const style ={
-
-    background: background_color,
-    borderRadius: 4,
-
-  };
-  let write_access=false;
-  let read_access=false;
-  if(initialized){
-
-    if (typeof this.state.metadata !== 'undefined'){
-      if (typeof this.state.metadata.write_access !== 'undefined'){
-        write_access=this.state.metadata.write_access;
-      }
-      if (typeof this.state.metadata.read_access !== 'undefined'){
-        read_access=this.state.metadata.read_access;
-      }
-    }
-  }
-
-  const  openContextMenu  = this.state.openContextMenu;
-
-  const pvs=[{pvname:this.state.pvname,
-             initialized:this.state.initialized,
-             value:value,
-             metadata:this.state.metadata}]
-             if(this.props.debug){
-             console.log('textinput pvs',pvs)
-             console.log(this.state.metadata)
-           }
-  return (
-
-    <React.Fragment>
-      <DataConnection
-        pv={pv}
-        macros={macros}
-        usePvLabel={usePvLabel}
-        usePrecision={usePrecision}
-        intialLocalVariableValue={this.props.intialLocalVariableValue}
-        handleInputValue={this.handleInputValue}
-        handleMetadata={this.handleMetadata}
-        outputValue=  {this.state.outputValue}
-        useStringValue={useStringValue}
-        debug={this.props.debug}
-        handleInputValueLabel={this.handleInputValueLabel}
-      />
-
-      {initialized===true &&
-        <TextField
-        key={this.state.pvname+' connected'+ this.state['label']+this.props.label}
-
-        inputRef={node => {
-            this.anchorEl = node;
-        }}
-        aria-owns={openContextMenu ? 'menu-list-grow' : undefined}
-        aria-haspopup="true"
-        onContextMenu={this.handleToggleContextMenu}
-          className={textFieldClassName}
-          value={value}
-          onKeyPress={this.catchReturn('value')}
-          onFocus={event=>this.handleOnFocus(event)}
-          onBlur={event=>this.handleOnBlur(event)}
-          onChange={this.handleChange('value')}
-          label={usePvLabel===true? this.state['label']:this.props.label}
-
-          fullWidth={true}
-          margin="none"
-          variant="outlined"
-          disabled={write_access===false?true:false}
-          InputProps={{
-
-            endAdornment: <InputAdornment position="end">{units} {this.props.children} </InputAdornment>,
-
-          }}
-        />
-      }
-
-      {(initialized===false||initialized==='undefined') &&
-      <TextField
-        key={this.state.pvname+' disconnected' + this.state['label']+this.props.label}
-        inputRef={node => {
-          this.anchorEl = node;
-        }}
-        aria-owns={openContextMenu ? 'menu-list-grow' : undefined}
-        aria-haspopup="true"
-        onContextMenu={this.handleToggleContextMenu}
-        value={this.state.pvname}
-        label={<LanDisconnect style={{color:this.props.theme.palette.error.main,verticalAlign: "middle"}} fontSize='small'/>  }
-        fullWidth={true}
-        margin="none"
-        variant="outlined"
-
-        className={textFieldClassName}
-        InputProps={{
-            readOnly: true,}}
-      />}
-        <ContextMenu
-          disableProbe={this.props.disableProbe}
-          open={openContextMenu}
-          anchorEl={this.anchorEl}
-          pvs={pvs}
-          handleClose={this.handleContextMenuClose}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'center',
-          }}
-          transformOrigin={{
-              vertical: 'top',
-              horizontal: 'center',
-          }}
-        />
-
-
-    </React.Fragment>
-
-  )
-}
+const TextInput =(props)=>{
+    return (
+      <Widget {...props} component={TextInputComponent} pvs={undefined}/>
+    )
 }
 
 TextInput.propTypes = {
-  /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
-  pv: PropTypes.string.isRequired,
-  /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
-  macros:PropTypes.object,
-  /** Directive to fill the label with the value contained in the  EPICS pv's DESC field. */
-  usePvLabel:PropTypes.bool,
-  /** Directive to use the units contained in the  EPICS pv's EGU field. */
-  usePvUnits: PropTypes.bool,
-  /** Directive to round the value. */
-  usePrecision:PropTypes.bool,
-  /** Custom precision to round the value too, if not defined then the EPICS PREC field will be used, if `usePrecision` is defined. */
-  prec:PropTypes.number,
-  /** Custom units to be used, if `usePvUnits` is not defined. */
-  units:PropTypes.string,
-  /** Directive to use the HOPR and LOPR EPICS fields to limit the maximum and minimum values that can be contained in the value. */
-  usePvMinMax:PropTypes.bool,
-  /** Directive to use the EPICS alarm severity status to alter the fields backgorund color  */
-  alarmSensitive:PropTypes.bool,
-  /** Custom label to be used, if  `usePvLabel` is not defined. */
+  
+  /** Material-UI TextField variant*/
+  variant: PropTypes.string,
+  /** Material-UI TextField margin*/
+  margin: PropTypes.string,
+   /**
+   * Directive to use the  alarm severity status to alter the fields background color.
+   */
+
+  alarmSensitive: PropTypes.bool,
+  /**
+   * Custom PV to define the alarm severity to be used, alarmSensitive must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+   */
+  alarmPv: PropTypes.string,
+  /**
+   * If defined, then the DataConnection and
+   * the widget debugging information will be displayed.
+   */
+  debug: PropTypes.bool,
+
+  /**
+   * Local variable initialization value.
+   * When using loc:// type PVs.
+   */
+  initialLocalVariableValue: PropTypes.string,
+  /**
+   * Custom label to be used, if  usePvLabel is not defined.
+   */
   label: PropTypes.string,
-  /** Custom minimum to be used, if `usePvMinMax` is not defined. */
-  min:PropTypes.number,
-  /** Custom maximum to be used, if `usePvMinMax` is not defined. */
-  max:PropTypes.number,
-  /** If defined, then the string value of the EPICS enumerator type will be forced to be used, if not defined the the enumerator index is used */
-  useStringValue:PropTypes.bool,
-  /** If defined, then the DataConnection debugging information will be displayed*/
-  debug:PropTypes.bool,
-  /** local variable intialization value*/
-  intialLocalVariableValue:PropTypes.string
+  /**
+  * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+  */
+  labelPv: PropTypes.string,
+  /**
+   * Values of macros that will be substituted in the pv name.
+   * eg. {{'$(device)':'testIOC','$(id)':'2'}}
+   */
+  macros: PropTypes.object,
+  /**
+   * Custom maximum to be used, if usePvMinMax is not defined.
+   */
+  max: PropTypes.number,
+  /**
+   * Custom PV to define the maximum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+   */
+  maxPv: PropTypes.string,
+  /**
+   * Custom minimum value to be used, if usePvMinMax is not defined.
+   */
+  min: PropTypes.number,
+  /**
+   * Custom PV to define the minimum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+   */
+  minPv: PropTypes.string,
+  
+  /**
+   * Custom precision to round the value.
+   */
+  prec: PropTypes.number,
+  /**
+   * Custom PV to define the precision to be used, usePvPrecision must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+   */
+  precPv: PropTypes.string,
+ 
+
+  
+  /**
+   * Custom units to be used, if usePvUnits is not defined.
+   */
+
+  units: PropTypes.string,
+  /**
+   * Custom PV to define the units to be used, usePvUnits must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+   */
+  unitsPv: PropTypes.string,
+  /**
+   * Directive to fill the component's label with
+   * the value contained in the  pv metadata's DESC field or the labelPv value.
+   * If not defined it uses the custom label as defined by the label prop.
+   */
+  usePvLabel: PropTypes.bool,
+  /**
+   * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver. 
+   * The pyEpics metadata is unfortunately static and the values used will be the initial values that pvserver receives when it connects the first time. 
+   * This is sufficient in most cases except when the user wants to dynamically update the metaData.
+   * In this case a direct connection can be made to all the pv fields by setting useMetadata to false. 
+   * If any of the metadata pvs are defined i.e unitsPv then the PV makes a new data  connection to this alternate pv and will
+   * use the value provided by this pv as the units. 
+   * The same is the case for the precPV, labelPv, alarmPv, unitsPv and minPv.
+   * By setting useMetadata to false also enables connection to other variables as defined by different protocols.
+   */
+  useMetadata: PropTypes.bool,
+  /**
+   * Directive to use the pv metadata's HOPR and LOPR fields or the minPv and maxPv values
+   * to limit the maximum and minimum values
+   * that can be contained in the value.
+   * If not defined it uses the custom min and max as defined by the min and max prop.
+   */
+  usePvMinMax: PropTypes.bool,
+  /**
+   * Directive to round the value using the precision field of the PV metadata or precPv.
+   * If not defined it uses the custom precision as defined by the prec prop.
+   */
+  usePvPrecision: PropTypes.bool,
+  /**
+   * Directive to use the units contained in the   pv metdata's EGU field or unitsPv.
+   *  If not defined it uses the custom units as defined by the units prop.
+   */
+
+
+  usePvUnits: PropTypes.bool,
+  /**
+   * Directive to use PV's string values.
+   */
+  useStringValue: PropTypes.bool,
+
+
+
+  
+  /**
+   * If defined, then the string representation of the number can be formatted
+   * using the mathjs format function
+   * eg. numberFormat={{notation: 'engineering',precision: 3}}.
+   * See https://mathjs.org/docs/reference/functions/format.html for more examples
+   */
+  numberFormat: PropTypes.object,
+  
+  
+  /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+  pv: PropTypes.string,
+  
+  /**
+   * Object with a string and the corresponding severity value.
+   * When PV value is equal to the string, set the corresponding severity
+   * in the widget's severity.
+   * Example: { stringMatch: '1', severity: 2 }.
+   */
+  stringSeverity: PropTypes.object,
+  /**
+   * Directive to overide the alarm severity with the rules defined in the stringSeverity
+   */
+  useStringSeverityMatch: PropTypes.bool,
+  /** Any of the MUI TextField Props can applied by defining them as an object
+   * 
+   */
+  muiTextFieldProps: PropTypes.object,
+   /**
+   * Tooltip Text
+   */
+  tooltip:PropTypes.string,
+  /**
+   * Directive to show the tooltip
+   */
+  showTooltip:PropTypes.bool,
+  /**
+   *  Any of the MUI Tooltip props can applied by defining them as an object
+   */
+
+  tooltipProps:PropTypes.object,
+
+  
+
 
 };
+TextInput.defaultProps = {
+  debug: false,
+  variant: "outlined",
+  margin: "none",
+  alarmSensitive: false,
+  showTooltip:false
+};
 
-
-
-
-export default withStyles(styles,{withTheme:true})(TextInput)
+export default withStyles(styles, { withTheme: true })(TextInput);

@@ -1,0 +1,124 @@
+[{
+        "area": "BEAMLINE DEMO",
+        "pvs": {},
+        "subArea0": {
+            "name": "POWER SUPPLIES",
+            "pvs": {
+                "pv0": "testIOC:PS1:Readback",
+                "pv1": "testIOC:PS2:Readback",
+                "pv2": "testIOC:PS3:Readback",
+                "pv3": "testIOC:PS4:Readback",
+                "pv4": "testIOC:STR1:X:Readback",
+                "pv5": "testIOC:STR1:Y:Readback",
+                "pv6": "testIOC:STR2:X:Readback",
+                "pv7": "testIOC:STR2:Y:Readback",
+                "pv8": "testIOC:STR3:Y:Readback",
+                "pv9": "testIOC:STR4:X:Readback"
+            }
+        },
+        "subArea1": {
+            "name": "SLITS",
+            "pvs": {
+                "pv0": "testIOC:SLITXY1:X:Gap:Readback",
+                "pv1": "testIOC:SLITXY1:X:Offset:Readback",
+                "pv2": "testIOC:SLITXY1:Y:Gap:Readback",
+                "pv3": "testIOC:SLITXY1:Y:Offset:Readback",
+                "pv4": "testIOC:SLITXY2:X:Gap:Readback",
+                "pv5": "testIOC:SLITXY2:X:Offset:Readback",
+                "pv6": "testIOC:SLITXY2:Y:Gap:Readback",
+                "pv7": "testIOC:SLITXY2:Y:Offset:Readback",
+                "pv8": "testIOC:SLITXY3:X:Gap:Readback",
+                "pv9": "testIOC:SLITXY3:X:Offset:Readback",
+                "pv10": "testIOC:SLITXY3:Y:Gap:Readback",
+                "pv11": "testIOC:SLITXY3:Y:Offset:Readback"
+            }
+        }
+    },
+    {
+        "area": "BUILDING DEMO",
+        "pvs": {},
+        "subArea0": {
+            "name": "FIRE",
+            "pvs": {
+                "pv0": "$(DEMO_ALARMS_IOC):building_fire"
+            }
+        },
+        "subArea1": {
+            "name": "HVAC",
+            "pvs": {
+                "pv0": "$(DEMO_ALARMS_IOC):building_airtemp",
+                "pv1": "$(DEMO_ALARMS_IOC):building_airhumidity",
+                "pv2": "$(DEMO_ALARMS_IOC):building_airpressure_diff"
+            }
+        },
+        "subArea2": {
+            "name": "SECURITY",
+            "pvs": {
+                "pv0": "$(DEMO_ALARMS_IOC):building_security"
+            }
+        }
+    },
+    {
+        "area": "CYCLOTRON DEMO",
+        "pvs": {
+            "pv0": "$(DEMO_ALARMS_IOC):cyclotron_interlocks"
+        },
+        "subArea0": {
+            "name": "AIR",
+            "pvs": {
+                "pv0": "$(DEMO_ALARMS_IOC):cyclotron_airpressure"
+            }
+        },
+        "subArea1": {
+            "name": "RF",
+            "pvs": {
+                "pv0": "$(DEMO_ALARMS_IOC):cyclotron_RF1",
+                "pv1": "$(DEMO_ALARMS_IOC):cyclotron_RF2",
+                "pv2": "$(DEMO_ALARMS_IOC):cyclotron_RF_pickup"
+            }
+        },
+        "subArea2": {
+            "name": "SAFETY",
+            "pvs": {
+                "pv0": "$(DEMO_ALARMS_IOC):cyclotron_safety"
+            }
+        },
+        "subArea3": {
+            "name": "VACUUM",
+            "pvs": {
+                "pv0": "$(DEMO_ALARMS_IOC):cyclotron_vacuum"
+            }
+        },
+        "subArea4": {
+            "name": "WATER",
+            "pvs": {
+                "pv0": "$(DEMO_ALARMS_IOC):cyclotron_water_flow",
+                "pv1": "$(DEMO_ALARMS_IOC):cyclotron_water_temp"
+            }
+        }
+    },
+    {
+        "area": "VAULT DEMO",
+        "pvs": {},
+        "subArea0": {
+            "name": "ARMS",
+            "pvs": {
+                "pv0": "$(DEMO_ALARMS_IOC):vault_radiation"
+            }
+        },
+        "subArea1": {
+            "name": "CLEARANCE",
+            "pvs": {
+                "pv0": "$(DEMO_ALARMS_IOC):vault_door",
+                "pv1": "$(DEMO_ALARMS_IOC):vault_clear"
+            }
+        }
+    },
+    {
+        "area": "EPICS PVS DEMO",
+        "pvs": {
+            "pv0": "testIOC:amplitude"
+        }
+
+    }
+]

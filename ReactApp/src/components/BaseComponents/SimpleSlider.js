@@ -1,422 +1,292 @@
-import React from 'react'
-import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
-import DataConnection from '../SystemComponents/DataConnection';
-import { withStyles } from '@material-ui/core/styles';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import PropTypes from 'prop-types';
-//import classNames from 'classnames';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import TextField from '@material-ui/core/TextField';
-import Switch from '@material-ui/core/Switch';
-import debounce from 'lodash.debounce';
-import Typography from '@material-ui/core/Typography';
-import { Slider } from '@material-ui/core'
-
-import {LanDisconnect} from 'mdi-material-ui/';
+import React, {  useRef } from 'react';
+import { withStyles } from "@material-ui/core/styles";
+import { Slider, Typography } from "@material-ui/core";
+import PropTypes from "prop-types";
+import debounce from "lodash.debounce";
+import Widget from "../SystemComponents/Widgets/Widget";
 
 
-
-
-
-const styles  = theme =>({
+const styles = (theme) => ({
   root: {
     width: 300,
   },
   slider: {
-    padding: '22px 0px ',
-    color:'primary'
+   // padding: "30px 0px ",
+    color: "primary",
   },
   rangeLabel: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    paddingTop: theme.spacing(1) * 2
+    display: "flex",
+    justifyContent: "space-between",
+    paddingTop: theme.spacing(1) * 2,
   },
   sliderDiv: {
-
-    paddingRight: theme.spacing(1)*3,
-    paddingLeft: theme.spacing(1)*3
-  }
+    paddingRight: theme.spacing(1) * 3,
+    paddingLeft: theme.spacing(1) * 3,
+  },
 });
-/**
- * The SimpleSlider Component is a wrapper on the Material-UI contained Slider component. The SimpleSlider component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
- * The margins and spacing must be controlled from the parent component.<br/><br/>
- * Material-UI Slider Demos:
- * https://material-ui.com/components/slider/<br/><br/>
- * Material-UI Slider API:
- * https://material-ui.com/api/slider/
 
- */
-class SimpleSlider extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state={['value'] : 0,
-    ['inputValue'] : 0,
-    ['outputValue'] : 0,
-    ['hasFocus']:false,
-    ['label']:"Undefined",
-    ['pvname']:"Undefined",
-    ['intialized']:false,
-    ['metadata']:{},
-    ['severity']:'',
-    newValueTrigger:0
+
+function SimpleSliderComponent(props) {
+  const emitChangeDebounced = useRef(debounce(value => emitChange(value), 10)).current;
+
+  /**
+   * Write value on the PV using emitChangeDebounced function.
+   * This function store the value and then wait for 10ms
+   * before it can be triggered again.
+   * @param {Event} event
+   * @param {float} value
+   */
+  function handleChange(event, value) {
+    props.handleFocus();
+    //debounce(emitChange(value), 10)
+    emitChangeDebounced(value);
   }
-  this.handleInputValue= this.handleInputValue.bind(this);
-  this.handleInputValueLabel= this.handleInputValueLabel.bind(this);
-  this.handleMetadata= this.handleMetadata.bind(this);
-  this.handleOnDragEnd=this.handleOnDragEnd.bind(this);
-  this.handleOnDragStart=this.handleOnDragStart.bind(this);
-  this.handleChange = this.handleChange.bind(this);
-  this.handleChangeCommited = this.handleChangeCommited.bind(this);
-  this.emitChangeDebounced = debounce(this.emitChange, 10);
-  this.valuetext=this.valuetext.bind(this);
-}
 
-
-
-handleInputValue(inputValue,pvname,initialized,severity){
-  //console.log("severity: ",severity);
-  if(initialized){
-  if (this.state['hasFocus']===false){
-    this.setState({['outputValue']	 :parseFloat(inputValue),
-    ['inputValue']:parseFloat(inputValue),
-    ['pvname']:pvname,
-    ['initialized']:initialized,
-    ['severity']:severity});
+  /**
+   * Save value on the state.
+   * @param {string} value
+   */
+  function emitChange(value) {
+    
+    props.handleImmediateChange(value)
   }
-  else {  this.setState(
-  {['inputValue']:inputValue,
-  ['pvname']:pvname,
-  ['initialized']:initialized,
-  ['severity']:severity});
-}
-}
-else{
-  this.setState({['pvname']:pvname,
-  ['initialized']:initialized,}
-  );
-}
-}
 
+  /**
+   * When stop moving the slider save the reached value.
+   * @param {Event} event
+   * @param {float} value
+   */
+  function handleChangeCommited(event,value) {
 
-
-handleMetadata(metadata){
-
-
-  this.setState({['metadata']	 :metadata});
-
-
-
-}
-
-
-
-handleInputValueLabel(inputValue){
-
-
-  this.setState({['label']:inputValue});
-
-}
-
-
-
-componentDidMount() {
-}
-
-
-componentWillUnmount() {
-
-  //  console.log("simple slider component willunmount called")
-
-}
-
-
-
-
-
-
-
-
-
-handleOnFocus= event =>{
-  this.setState({['hasFocus']:true});
-}
-
-
-
-
-
-handleOnDragStart= (event) =>{
-  //console.log("input has focus");
-  this.setState({['hasFocus']:true});
-  // console.log("this.state['hasFocus']: ",this.state['hasFocus']);
-}
-handleOnDragEnd= (event) =>{
-  //console.log("input has lost focus");
-  this.setState({['hasFocus']:false});
-  // console.log("this.state['hasFocus']: ",this.state['hasFocus']);
-}
-
-emitChange(value) {
-  this.setState({outputValue:value,newValueTrigger:this.state.newValueTrigger+1});
-
-}
-
-handleChange = (event, value) => {
-  //console.log("handleChange")
-  this.setState({hasFocus:true});
-   this.emitChangeDebounced(value);
-};
-
-handleChangeCommited = (event, value) => {
-  this.setState({hasFocus:false,outputValue:value,inputValue:value});
-
-  //console.log("onChangeCommitted")
-  //this.emitChangeDebounced(value);
-
-};
-
-valuetext= value =>()=> {
- return `${value}`;
-}
-
-
-render() {
-  const {classes}= this.props;
-  const pv = this.props.pv;
-  const macros=  this.props.macros;
-  const usePvLabel= this.props.usePvLabel;
-  const mylabel= this.props.label;
-  const usePrecision= this.props.prec;
-  const useStringValue=this.props.useStringValue;
-  const severity=this.state.severity;
-  let units="";
-  const initialized=this.state.initialized;
-  let value=this.state.value;
-  if(initialized){
-    if(this.props.usePvUnits===true){
-      if (typeof this.state.metadata !== 'undefined'){
-        if (typeof this.state.metadata.units !== 'undefined'){
-          units=this.state.metadata.units;
-        }
-        else{
-          units="";
-        }
-      }
-      else {
-        units="";
-      }
-
-    }
-    else {
-      units=typeof this.props.units!=='undefined'?this.props.units:"";
-    }
-
-    if (value!==""){
-      if (typeof this.props.usePrecision !== 'undefined'){
-        if (this.props.usePrecision==true){
-          if (typeof this.props.prec !== 'undefined'){
-            value=parseFloat(value).toFixed(this.props.prec);
-          }
-          else
-          value=parseFloat(value).toFixed(parseInt(this.state.metadata.precision));
-
-        }
-
-      }
-
-    }
+    props.handleImmediateChange(value);
+    props.handleBlur();
+   
   }
 
 
-
-  let background_color='';
-  if (typeof this.props.alarmSensitive !== 'undefined'){
-    if (this.props.alarmSensitive==true){
-      if (severity==1){
-        background_color='linear-gradient(45deg, #FFFFFF 1%, #FF8E53 99%)';
-      }
-      else if(severity==2){
-        background_color='linear-gradient(45deg, #FFFFFF 1%, #E20101 99%)';
-      }
-      else background_color='white';
-    }
-
+  let content, marks;
+  if (props.initialized) {
+    content = (
+      <Typography className={props.classes.rangeLabel}>
+        {props.label} {props.value} {props.units}
+      </Typography>
+    );
+  } else {
+    content = (
+      <Typography >
+        {props.disconnectedIcon}{" "+props.pvName}
+      </Typography>
+    );
   }
-
-
-
-
-
-
-
-  const style = {
-    background: background_color,
-    borderRadius: 4,
-
-  };
-  let write_access=false;
-  let read_access=false;
-  let min=0;
-  let max=0;
-  if(initialized){
-
-    if (typeof this.state.metadata !== 'undefined'){
-      if (typeof this.state.metadata.write_access !== 'undefined'){
-        write_access=this.state.metadata.write_access;
-      }
-      if (typeof this.state.metadata.read_access !== 'undefined'){
-        read_access=this.state.metadata.read_access;
-      }
-    }
-
-
-    if (typeof this.props.usePvMinMax === 'undefined'){
-      if (typeof this.props.min !== 'undefined'){
-        min=this.props.min;
-      }
-      if (typeof this.props.max !== 'undefined'){
-        max=this.props.max;
-      }
-    }else{
-      if(this.props.usePvMinMax == false)
+  let min = props.min !== undefined ? props.min : 0;
+  
+  let max = props.max !== undefined ? props.max : 100;
+  
+  let units=props.units?props.units:""
+  if (props.marks !== undefined) {
+    marks = props.marks;
+  } else {
+    marks = [
       {
-        if (typeof this.props.min !== 'undefined'){
-          min=this.props.min;
-        }
-        if (typeof this.props.max !== 'undefined'){
-          max=this.props.max;
-        }
-      }
-      else {
-        max=this.state.metadata.upper_disp_limit;
-        min=this.state.metadata.lower_disp_limit;
-      }
-    }
+        value: min,
+        label:
+
+          min +
+          " " +
+          units,
+      },
+      {
+        value: max,
+        label:
+
+          max +
+          " " +
+         units,
+      },
+    ];
   }
-  //console.log('max',max)
-  //console.log('min',min)
-  //console.log('metadata',this.state.metadata)
-//  console.log('this.state.outputValue',this.state.outputValue)
-  let disabled=write_access===false?true:false;
+ //console.log("SimpleSlider",props.value,min,max,marks,props.step)
+ function handleOnClickCapture(event){
+  
+  if (event.button !== 0) {
+    event.preventDefault()
+   return;
+ }
+ }
   return (
-
-    <div>
-      <DataConnection
-        pv={pv}
-        macros={macros}
-        usePvLabel={usePvLabel}
-        usePrecision={usePrecision}
-        handleInputValue={this.handleInputValue}
-        handleMetadata={this.handleMetadata}
-        outputValue=  {this.state.outputValue}
-        useStringValue={useStringValue}
-        newValueTrigger={this.state.newValueTrigger}
-        handleInputValueLabel={this.handleInputValueLabel}
-        intialLocalVariableValue={this.props.intialLocalVariableValue}
+    <div  className={props.classes.sliderDiv}>
+      {content}
+      <Slider
+        className={props.classes.slider}
+        onPointerDownCapture={handleOnClickCapture}
+        aria-labelledby="label"
+        disabled={props.disabled}
+        value={props.initialized?parseFloat(props.value):0}
+        min={props.initialized ?parseFloat(min) : undefined}
+        max={props.initialized ?parseFloat(max) : undefined}
+        marks={props.initialized ? marks : undefined}
+        valueLabelDisplay={props.showThumbValue ? "on" : "off"}
+        step={props.step !== undefined ? props.step : undefined}
+        onChange={handleChange}
+        onChangeCommitted={handleChangeCommited}
       />
-
-      {initialized===true &&
-        <div className={classes.sliderDiv}>
-          <div className={classes.rangeLabel}>
-            <Typography id="subtitle2">{usePvLabel===true? this.state['label']+": ":this.props.label+" "+units} {+this.state.outputValue+" "+units}</Typography>
-          </div>
-
-          <Slider
-
-            className={classes.slider}
-            disabled={disabled}
-            value={this.state.outputValue}
-            aria-labelledby="label"
-            onChange={this.handleChange}
-            onDragStart={this.handleOnDragStart}
-            onDragEnd={this.handleOnDragEnd}
-            max={max}
-            min={min}
-            marks={typeof this.props.marks!=='undefined'?this.props.marks:[{value:min,label:min+" "+units},{value:max,label:max+" "+units}]}
-            valueLabelDisplay={this.props.showThumbValue===true?"on":undefined}
-
-            step={typeof this.props.step !== 'undefined'?this.props.step:undefined}
-            onChangeCommitted={this.handleChangeCommited}
-
-          />
-
-        </div>
-      }
-
-      {(initialized===false||initialized==='undefined') &&
-        <div className={classes.sliderDiv}>
-          <div className={classes.rangeLabel}>
-            <Typography id="subtitle2">{<span> <LanDisconnect style={{color:this.props.theme.palette.error.main,verticalAlign: "middle"}} fontSize='small'/> {this.state['pvname']} </span> }</Typography>
-
-          </div>
-
-          <Slider
-            className={classes.slider}
-            disabled
-            value={this.state.outputValue}
-            aria-labelledby="label"
-            onChange={this.handleChange}
-
-
-            max={max}
-            min={min}
-            step={typeof this.props.step !== 'undefined'?this.props.step:undefined}
-
-
-          />
-
-
-        </div>
-      }
     </div>
+  );
 
 
 
-
-      )
 }
-    }
+
+/**
+* **DEPRECATED Use Slider component instead** The SimpleSlider Component is a wrapper on the Material-UI contained Slider component. The SimpleSlider component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
+* The margins and spacing must be controlled from the parent component.<br/><br/>
+* Material-UI Slider Demos:
+* https://material-ui.com/components/slider/<br/><br/>
+* Material-UI Slider API:
+* https://material-ui.com/api/slider/
+*/
+const SimpleSlider = (props) => {
+  console.warn("Deprecated use Slider component instead, component will be removed in the next release")
+  return (
+    <Widget  {...props} component={SimpleSliderComponent} name={"SimpleSlider"}/>
+  )
+}
+
+/**
+   * Specific props type and default values for this widgets.
+   * They extends the ones provided for a generic widget.
+   */
+SimpleSlider.propTypes = {
+
+  /**
+   * If defined, then the DataConnection and
+   * the widget debugging information will be displayed.
+   */
+ 
+ 
+  debug: PropTypes.bool,
+
+  /**
+   * Local variable initialization value.
+   * When using loc:// type PVs.
+   */
+  initialLocalVariableValue: PropTypes.string,
+  /**
+   * Custom label to be used, if  usePvLabel is not defined.
+   */
+  label: PropTypes.string,
+  /**
+  * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+  */
+  labelPv: PropTypes.string,
+  /**
+   * Values of macros that will be substituted in the pv name.
+   * eg. {{'$(device)':'testIOC','$(id)':'2'}}
+   */
+  macros: PropTypes.object,
+  /**
+   * Custom maximum to be used, if usePvMinMax is not defined.
+   */
+  max: PropTypes.number,
+  /**
+   * Custom PV to define the maximum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+   */
+  maxPv: PropTypes.string,
+  /**
+   * Custom minimum value to be used, if usePvMinMax is not defined.
+   */
+  min: PropTypes.number,
+  /**
+   * Custom PV to define the minimum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+   */
+  minPv: PropTypes.string,
+  
+  
+  /**
+   * Custom precision to round the value.
+   */
+  prec: PropTypes.number,
+  /**
+   * Custom PV to define the precision to be used, usePvPrecision must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+   */
+  precPv: PropTypes.string,
+ 
+
+  
+  /**
+   * Custom units to be used, if usePvUnits is not defined.
+   */
+
+  units: PropTypes.string,
+  /**
+   * Custom PV to define the units to be used, usePvUnits must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+   */
+  unitsPv: PropTypes.string,
+  /**
+   * Directive to fill the component's label with
+   * the value contained in the  pv metadata's DESC field or the labelPv value.
+   * If not defined it uses the custom label as defined by the label prop.
+   */
+  usePvLabel: PropTypes.bool,
+  /**
+   * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver. 
+   * The pyEpics metadata is unfortunately static and the values used will be the initial values that pvserver receives when it connects the first time. 
+   * This is sufficient in most cases except when the user wants to dynamically update the metaData.
+   * In this case a direct connection can be made to all the pv fields by setting useMetadata to false. 
+   * If any of the metadata pvs are defined i.e unitsPv then the PV makes a new data  connection to this alternate pv and will
+   * use the value provided by this pv as the units. 
+   * The same is the case for the precPV, labelPv, alarmPv, unitsPv and minPv.
+   * By setting useMetadata to false also enables connection to other variables as defined by different protocols.
+   */
+  useMetadata: PropTypes.bool,
+  /**
+   * Directive to use the pv metadata's HOPR and LOPR fields or the minPv and maxPv values
+   * to limit the maximum and minimum values
+   * that can be contained in the value.
+   * If not defined it uses the custom min and max as defined by the min and max prop.
+   */
+  usePvMinMax: PropTypes.bool,
+  /**
+   * Directive to round the value using the precision field of the PV metadata or precPv.
+   * If not defined it uses the custom precision as defined by the prec prop.
+   */
+  usePvPrecision: PropTypes.bool,
+  /**
+   * Directive to use the units contained in the   pv metdata's EGU field or unitsPv.
+   *  If not defined it uses the custom units as defined by the units prop.
+   */
 
 
-    SimpleSlider.propTypes = {
+  usePvUnits: PropTypes.bool,
+  
 
-      /** Array of the process variables, NB must contain correct prefix ie: pva://  eg. ['pva://$(device):test$(id0)','pva://$(device):test$(id1)']*/
-      pv: PropTypes.string.isRequired,
-        /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id0)':'1','$(id1)':'2'}}*/
-        macros:PropTypes.object,
-        /** Directive to use the HOPR and LOPR EPICS fields to limit the maximum and minimum values that can be contained in the value. */
-        usePvMinMax:PropTypes.bool,
-        /** Directive to fill the label with the value contained in the  EPICS pv's DESC field. */
-        usePvLabel:PropTypes.bool,
+  
+  /**
+   * If defined, then the string representation of the number can be formatted
+   * using the mathjs format function
+   * eg. numberFormat={{notation: 'engineering',precision: 3}}.
+   * See https://mathjs.org/docs/reference/functions/format.html for more examples
+   */
+  numberFormat: PropTypes.object,
+  
+  
+  /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+  pv: PropTypes.string,
 
-        /** Custom  minimum to be used */
-        min:PropTypes.number,
-        /** Custom maximum to be used */
-        max:PropTypes.number,
-        /** custom markers: in format : [{value: uservalue1,label:userlabel1},{value: uservalue...,label:userlabel...}*/
-        marks: PropTypes.array,
-        /** show thumb with value */
-        showThumbValue:PropTypes.bool,
-        /** If defined, then the DataConnection debugging information will be displayed*/
-        debug:PropTypes.bool,
-        /** If defined, the value will be increment or decremented in the define step intervals*/
-        step:PropTypes.number,
-        /** local variable intialization value*/
-        intialLocalVariableValue:PropTypes.string
+  // Custom markers in format:
+  // [{value: uservalue1,label:userlabel1},{value: uservalue...,label:userlabel...}
+  marks: PropTypes.array,
+  // Show thumb with value
+  showThumbValue: PropTypes.bool,
+  // If defined, the value will be increment or decremented
+  // in the define step intervals
+  step: PropTypes.number,
+};
 
+SimpleSlider.defaultProps = {
+  showThumbValue: false,
+  step: 1,
 
-      };
+};
 
-      SimpleSlider.defaultProps = {
-
-          debug:false,
-          step:1,
-          marks:undefined,
-          showThumbValue:false
-
-      };
-
-
-
-      export default withStyles(styles,{withTheme:true})(SimpleSlider)
+export default withStyles(styles, { withTheme: true })(SimpleSlider);

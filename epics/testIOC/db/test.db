@@ -125,13 +125,14 @@ record(bo, "$(device):BO1")
 record(bo, "$(device):BO2")
 {
         field(DTYP,"Soft Channel")
-        field(DESC, "BO2: will reset after 2 seconds")
+        field(DESC, "BO 2")
         field(ZNAM, "Off")
         field(ONAM, "On")
-        field(HIGH,"2")
+       
         field(VAL,"0")
         field(PINI, "YES")
 }
+
 
 record(calc, "$(device):test3")
 {       field(DESC, "Instantaneous value")

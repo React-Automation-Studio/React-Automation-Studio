@@ -1,3 +1,4 @@
+//This example is deprecated and will be removed in a future release 
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -9,16 +10,22 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import DataConnection from '../../SystemComponents/DataConnection';
 import TextUpdate from '../../BaseComponents/TextUpdate';
-import TextInput from '../../BaseComponents/TextInput';
-
+import { Typography } from '@material-ui/core';
+/* eslint-disable eqeqeq */
+/* eslint-disable no-unused-vars */
 const styles = theme => ({
   root: {
     width: '100%',
     marginTop: theme.spacing(1) * 0,
+    marginBottom: theme.spacing(4),
     overflowX: 'auto',
   },
   table: {
+    padding:1,
     minWidth: 700,
+  },
+  tableHead:{
+    backgroundColor: theme.palette.type=='light'?theme.palette.primary.light:undefined,
   },
   tableCell:{
      width:"20%"
@@ -186,28 +193,29 @@ MultiplePVs
 
     const rowPVs=this.state.rowPVs;
   //  console.log("render rowPVs",rowPVs)
+  
     return (
       <React.Fragment>
         {this.SystemsDataConnections()}
-        <Paper className={classes.root}>
-          <Table className={classes.table} size={'small'}>
-            <TableHead>
+        <Paper className={classes.root} elevation={this.props.theme.palette.paperElevation}>
+          <Table className={classes.table} size={'small'}  >
+            <TableHead className={classes.tableHead}>
               <TableRow>
                 <TableCell>Device Description</TableCell>
-                <TableCell align="right">Setpoint</TableCell>
-                <TableCell align="right">Readback</TableCell>
-                <TableCell align="right">SavedValue</TableCell>
-                <TableCell align="right">Status</TableCell>
+                <TableCell align="center">Setpoint</TableCell>
+                <TableCell align="center">Readback</TableCell>
+                <TableCell align="center">Saved Value</TableCell>
+                <TableCell align="center">Status</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {rowPVs.map(row => (
                 <TableRow key={row.id} onClick={this.handleOnClick(row.id)} >
 
-                  <TableCell className={classes.tableCell} component="th" scope="row" >
-                    {row.displayName}
+                  <TableCell className={classes.tableCell}  align="left"  component="th" scope="row" >
+                    <Typography variant={'body2'}>{row.displayName}</Typography>
                   </TableCell>
-                  <TableCell className={classes.tableCell} align="right">
+                  <TableCell className={classes.tableCell} align="center">
                     <TextUpdate
                       pv={row.setpointPV.pvname}
                       usePrecision={(typeof row.rowProps)==='undefined'?undefined:(typeof row.rowProps.usePrecision)==='undefined'?undefined:row.rowProps.usePrecision}
@@ -218,7 +226,7 @@ MultiplePVs
                     />
 
                   </TableCell>
-                  <TableCell className={classes.tableCell} align="right">
+                  <TableCell className={classes.tableCell} align="center">
                     <TextUpdate
                       pv={row.readbackPV.pvname}
                       usePrecision={(typeof row.rowProps)==='undefined'?undefined:(typeof row.rowProps.usePrecision)==='undefined'?undefined:row.rowProps.usePrecision}
@@ -228,8 +236,8 @@ MultiplePVs
                       alarmSensitive={true}
                     />
                   </TableCell>
-                  <TableCell  className={classes.tableCell} align="right">{"N/A"}</TableCell>
-                  <TableCell  className={classes.tableCell} align="right">
+                  <TableCell  className={classes.tableCell} align="center">{"N/A"}</TableCell>
+                  <TableCell  className={classes.tableCell} align="center">
                     {(typeof row.rowProps)==='undefined'?undefined:(typeof row.rowProps.useStatus)==='undefined'?'-':row.rowProps.useStatus===true?row.statusPV.value:'-'}
                   </TableCell>
                 </TableRow>
@@ -246,4 +254,4 @@ ControlCenterTable.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(ControlCenterTable);
+export default withStyles(styles,{withTheme:true})(ControlCenterTable);

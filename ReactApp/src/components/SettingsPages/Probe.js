@@ -2,23 +2,14 @@ import React from 'react'
 
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 import TextInput from '../BaseComponents/TextInput';
-import SelectionInput from '../BaseComponents/SelectionInput';
+
 import TextOutput from '../BaseComponents/TextOutput';
-import SimpleSlider from '../BaseComponents/SimpleSlider';
-import TextUpdate from '../BaseComponents/TextUpdate';
+import Slider from '../BaseComponents/Slider';
+
 import Grid from '@material-ui/core/Grid';
-import SwitchComponent from '../BaseComponents/SwitchComponent';
-import ToggleButton from '../BaseComponents/ToggleButton';
-import ActionButton from '../BaseComponents/ActionButton';
-import ThumbWheel from '../BaseComponents/ThumbWheel';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
+
 import { withStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import {Link} from 'react-router-dom'
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
+
 import GraphY from '../BaseComponents/GraphY';
 import TextField from '@material-ui/core/TextField';
 //import MenuItem from '@material-ui/core/MenuItem';
@@ -36,10 +27,7 @@ const styles = theme => ({
 });
 
 class Probe extends React.Component {
-  constructor(props) {
-    super(props);
-
-  }
+ 
 
 
 
@@ -48,7 +36,7 @@ class Probe extends React.Component {
     const {classes}= this.props;
     const probeObject=JSON.parse(decodeURIComponent(this.props.location.search.substr(1))) ;
     let probetype;
-    console.log(probeObject)
+
     if (typeof probeObject.probeType==='undefined'){
       probetype='normal';
     }
@@ -60,9 +48,9 @@ class Probe extends React.Component {
 
 
 <React.Fragment>
-  {probetype=='normal'&&<Grid   container
+  {probetype==='normal'&&<Grid   container
     direction="column"
-    justify="stretch"
+    justify="center"
     spacing={2}>
     <Grid item xs={12} sm ={6} lg={4} >
       <div style={{"overflowX": "hidden"}} >
@@ -72,7 +60,7 @@ class Probe extends React.Component {
             justify="space-evenly"
             spacing={2}>
             <Grid item xs={12}  >
-              <TextOutput  pv='$(device).NAME' macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV Name:'}/>
+              <TextOutput  pv='$(device).NAME' macros={{'$(device)':probeObject.pvname.toString()}}  label={'EPICS PV Name:'} debug={false}/>
             </Grid>
             <Grid item xs={12}  >
               <TextOutput  pv='$(device).DESC'  macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV DESC:'}/>
@@ -104,7 +92,7 @@ class Probe extends React.Component {
               <TextInput   pv='$(device)'       macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV Setpoint:'} alarmSensitive={true}/>
             </Grid>
             <Grid item xs={12}  >
-              <SimpleSlider pv='$(device)'  macros={{'$(device)':probeObject.pvname}} usePvMinMax={true}  label="EPICS PV Setpoint:"  />
+              <Slider pv='$(device)'  macros={{'$(device)':probeObject.pvname}} usePvMinMax={true}  label="EPICS PV Setpoint:"  />
             </Grid>
             <Grid item xs={6} >
               <TextOutput  pv='$(device).DRVH'       macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV DRVH:'}/>
@@ -124,9 +112,9 @@ class Probe extends React.Component {
     </Grid>
   </Grid>
   }
-  {probetype=='readOnly'&&<Grid   container
+  {probetype==='readOnly'&&<Grid   container
     direction="column"
-    justify="stretch"
+    justify="center"
     spacing={2}>
     <Grid item xs={12} sm ={6} lg={4} >
       <div style={{"overflowX": "hidden"}} >
@@ -178,7 +166,7 @@ class Probe extends React.Component {
     </Grid>
   </Grid>
   }
-  {probetype=='simple'&&<Grid   container
+  {probetype==='simple'&&<Grid   container
     direction="column"
     justify="stretch"
     spacing={2}>

@@ -1,267 +1,232 @@
-import React from 'react'
-import AutomationStudioContext from './AutomationStudioContext';
-import { withStyles } from '@material-ui/core/styles';
-import uuid from 'uuid';
-const styles = theme => ({
-  body1: theme.typography.body1,
-
-
-
-});
-
-class LocalPV extends React.Component {
-  constructor(props) {
-    super(props);
-
-    let pvname;
-    if (typeof this.props.macros !== 'undefined'){
+import React, { useState, useContext, useEffect } from 'react'
+import ReactAutomationStudioContext from './AutomationStudioContext';
+import Typography from '@material-ui/core/Typography';
+import PropTypes from "prop-types";
+export const useLocalPV = (props) => {
+  const initPV = () => {
+    let pvname = props.pv;
+    if (props.macros) {
       let macro;
-      pvname=this.props.pv;
-      for (macro in this.props.macros){
-        pvname=pvname.replace(macro.toString(),this.props.macros[macro].toString());
+      for (macro in props.macros) {
+        pvname = pvname.replace(macro.toString(), props.macros[macro].toString());
       }
-      this.state ={
-        'id': uuid.v4(),
-        'initialized':false,
-        'pvname':pvname,
-        'interalValue':' ',
-        'inputValue':this.props.value,
-        'pv':{intialized: false,pvname:"",value:"",char_value:"",alarmColor:"",lower_disp_limit: 0,upper_disp_limit: 10000,lower_warning_limit: 4000,upper_warning_limit: 6000,
-        units: "V",precision: 0}};
-      }
-      else{
-        pvname=this.props.pv;
-        this.state ={ 'initialized':false,
-        'pvname':pvname,
-        'interalValue':' ',
-        'pv':{intialized: false,pvname:"",value:"",char_value:"",alarmColor:"",lower_disp_limit: 0,upper_disp_limit: 10000,lower_warning_limit: 4000,upper_warning_limit: 6000,
-        units: "V",precision: 0}};
-      }
-      this.updatePVData= this.updatePVData.bind(this);
-      //  this.testFunction= this.testFunction.bind(this);
-      this.test=this.test.bind(this);
     }
-    handleInputValue(){
-      this.props.handleInputValue(this.state.internalValue,this.state.pvname,this.state.initialized,this.state.severity);
-    }
-    handleMetadata(){
-      if (typeof this.props.handleMetadata !== 'undefined'){
-        this.props.handleMetadata(this.state['pv']);
-
-      }
-      this.props.handleInputValue(this.state.internalValue,this.state.pvname,this.state.initialized,this.state.severity);
+    let pv = {
+      initialized: false,
+      pvname: pvname,
+      value: 0,
+      severity: undefined,
+      timestamp: undefined,
+      metadata: { initialized: false, pvname: "", value: "", char_value: "", alarmColor: "", lower_disp_limit: "", upper_disp_limit: "", lower_warning_limit: "", upper_warning_limit: "", units: "", precision: 0, enum_strs: [] }
     }
 
-    updatePVData(msg){
-      //  console.log("state: ",this.state);
-      //    console.log("msg: ", msg)
-      if (this.props.debug===true){
-        console.log('updateDate is active');
-      }
-      if (msg.connected==='0'){
-        this.setState(
+    return pv;
+  }
+  const [pv, setPv] = useState(initPV());
+  const context = useContext(ReactAutomationStudioContext);
+
+  let contextPv=context.localVariables[pv.pvname]?context.localVariables[pv.pvname]:undefined;
+  let contextPvValue=contextPv?contextPv.value:undefined;
+
+  
+  const updatePVData = (msg) => {
+
+    if (msg.connected === '0') {
+      setPv(pv => ({ ...pv, initialized: false }))
+    }
+    else {
+      if (msg.newmetadata === 'False') {
+        setPv(pv => (
           {
-            ['initialized']:false
-          },
-          this.handleInputValue
-        );
-
-        if (this.props.debug===true){
-          console.log('not connected');
-        }
-      }
-      else{
-        if (msg.newmetadata=='False'){
-          this.setState({['internalValue']: this.props.useStringValue===true? msg.char_value:msg.value,
-          ['severity']: msg.severity},
-        this.handleInputValue);
-          if (this.props.debug===true){
-            console.log('no metadata');
+            ...pv,
+            value: props.useStringValue === true ? msg.char_value : msg.value,
+            severity: msg.severity,
+            timestamp: msg.timestamp
           }
-        }
-        else {
-          if (this.props.debug===true){
-            console.log('New metadata connected');
+        ))
+      }
+
+      else {
+        setPv(pv => (
+          {
+            ...pv,
+            value: props.useStringValue === true ? msg.char_value : msg.value,
+            severity: msg.severity,
+            timestamp: msg.timestamp,
+            initialized: true,
+            metadata: {
+              pvname: msg.pvname, value: msg.value, char_value: msg.char_value, alarmColor: "", enum_strs: msg.enum_strs, lower_disp_limit: msg.lower_disp_limit, upper_disp_limit: msg.upper_disp_limit,
+              lower_warning_limit: msg.lower_warning_limit, upper_warning_limit: msg.upper_warning_limit, lower_ctrl_limit: msg.lower_ctrl_limit, upper_ctrl_limit: msg.upper_ctrl_limit, units: msg.units, precision: parseInt(msg.precision), severity: msg.severity, write_access: msg.write_access, read_access: msg.read_access, host: msg.host
+            },
           }
-          this.setState(
-            {'pv':{pvname:msg.pvname,value: msg.value,char_value: msg.char_value,alarmColor:"",enum_strs:msg.enum_strs,lower_disp_limit: msg.lower_disp_limit,upper_disp_limit: msg.upper_disp_limit,
-            lower_warning_limit:msg.lower_warning_limit,upper_warning_limit: msg.upper_warning_limit,lower_ctrl_limit:msg.lower_ctrl_limit,upper_ctrl_limit:msg.upper_ctrl_limit,units: msg.units,precision: parseInt(msg.precision),severity:msg.severity, write_access:msg.write_access,read_access:msg.read_access},
-            ['internalValue']: this.props.useStringValue===true? msg.char_value:msg.value,
-            ['initialized']:true ,
-            ['severity']: msg.severity},
-            this.handleMetadata
-          );
-          //        if (typeof this.props.handleMetadata !== 'undefined'){
-          //          this.props.handleMetadata(this.state['pv']);
-          //        }
-          //  console.log(msg);
-        }
-        // if (this.state.pvname.includes('loc://')){
-        //   console.log('fire');
-        //   this.props.handleInputValue(21312,this.state.pvname,true,0)
-        // }
-        // else{
-        //   this.props.handleInputValue(this.state.internalValue,this.state.pvname,this.state.initialized,this.state.severity);
-        // }
+        ))
+
+
       }
 
-      if (this.props.debug===true){
-        console.log('state',this.state);
-      }
+
     }
+  }
 
-    //testFunction(msg){
+  useEffect(() => {
 
-    //  if (this.props.debug===true){
-    //    console.log(msg)
-    //   console.log('testFunction')
 
-    // }
-    // }
-    test(){
-      console.log('changed');
+    if (typeof context.localVariables[pv.pvname] === 'undefined') {
+
+      let msg = {
+        value: typeof props.initialLocalVariableValue === 'undefined' ? 0 : props.initialLocalVariableValue,
+        connected: '1',
+        newmetadata: 'True',
+        pvname: pv.pvname,
+        char_value: typeof props.initialLocalVariableValue === 'undefined' ? 0 : props.initialLocalVariableValue,
+        enum_strs: "",
+        lower_disp_limit: typeof props.min === 'undefined' ? 0 : props.min,
+        upper_disp_limit: typeof props.max === 'undefined' ? 0 : props.max,
+        lower_warning_limit: typeof props.min === 'undefined' ? 0 : props.min,
+        upper_warning_limit: typeof props.max === 'undefined' ? 0 : props.max,
+        lower_ctrl_limit: typeof props.min === 'undefined' ? 0 : props.min,
+        upper_ctrl_limit: typeof props.max === 'undefined' ? 0 : props.max,
+        units: typeof props.units === 'undefined' ? "" : props.units,
+        precision: 1,
+        severity: 0,
+        write_access: true,
+        read_access: true,
+
+      };
+
+
+      context.updateLocalVariable(pv.pvname, msg);
+      updatePVData(context.localVariables[pv.pvname]);
     }
-    componentDidMount() {
-      let socket=this.context.socket;
+    else {
 
-        if (typeof this.context.localVariables[this.state.pvname]==='undefined'){
-          let msg={ value:typeof this.props.initialValue==='undefined'?0:this.props.initialValue,
-          connected:'1',
-          newmetadata:'True',
-          pvname:this.state.pvname,
-          char_value: typeof this.props.initialValue==='undefined'?0:this.props.initialValue,
-          enum_strs:"",
-          lower_disp_limit:typeof this.props.min==='undefined'?0:this.props.min,
-          upper_disp_limit:typeof this.props.max==='undefined'?0:this.props.max,
-          lower_warning_limit:typeof this.props.min==='undefined'?0:this.props.min,
-          upper_warning_limit:typeof this.props.max==='undefined'?0:this.props.max,
-          lower_ctrl_limit:typeof this.props.min==='undefined'?0:this.props.min,
-          upper_ctrl_limit:typeof this.props.max==='undefined'?0:this.props.max,
-          units:typeof this.props.units==='undefined'?"":this.props.units,
-          precision:1,
-          severity:0,
-          write_access:true,
-          read_access:true,
-
-        };
-
-
-        this.context.updateLocalVariable(this.state.pvname,msg);
-        this.updatePVData(this.context.localVariables[this.state.pvname]);
-      }
-      else{
-
-        //this.context.localVariables[this.state.pvname].newmetadata='True';
-        this.updatePVData(this.context.localVariables[this.state.pvname]);
+      //this.context.localVariables[this.state.pvname].newmetadata='True';
+      updatePVData(context.localVariables[pv.pvname]);
       //  console.log(this.state)
 
-      }
-
-
-
-    //  socket.on(this.state['pvname'],this.testFunction);
-
-
-
-
-  }
-
-  componentWillUnmount(){
-
-    //  socket.removeListener(this.state['pvname'],this.testFunction);
-
-    //    if (this.props.debug===true){
-    //    }
-  }
-  componentDidUpdate(prevProps) {
-  //  console.log("prevProps.value,this.props.value,this.state.internalValue",prevProps.value,this.props.value,this.state.internalValue)
-    const value =this.state.internalValue
-    const pvname =this.state['pvname']
-    const initialized= this.state['initialized'];
-    if (initialized===true){
-      if  ((this.props.value != prevProps.value)&&(this.props.value != value)){
-      //  console.log('updatePVData')
-        this.updatePVData(this.context.localVariables[this.state.pvname]);
-      }
-      if (typeof this.props.outputValue !== 'undefined'){
-        if  ((this.props.outputValue != prevProps.outputValue)&&(this.props.outputValue != value)){
-
-            let msg=this.context.localVariables[this.state.pvname];
-            if(this.props.useStringValue){
-              msg.char_value=this.props.outputValue;
-                msg.value=this.props.outputValue;
-            } else{
-              msg.value=this.props.outputValue;
-            }
-            this.context.updateLocalVariable(this.state.pvname,msg);
-            this.updatePVData(this.context.localVariables[this.state.pvname]);
-
-        }
-        else{
-          if (typeof this.props.newValueTrigger !== 'undefined'){
-            if (this.props.newValueTrigger!=prevProps.newValueTrigger)
-            {
-
-                let msg=this.context.localVariables[this.state.pvname];
-                if(this.props.useStringValue){
-                  msg.char_value=this.props.outputValue;
-                  msg.value=this.props.outputValue;
-                } else{
-                  msg.value=this.props.outputValue;
-              }
-                this.context.updateLocalVariable(this.state.pvname,msg);
-                this.updatePVData(this.context.localVariables[this.state.pvname]);
-
-            }
-
-          }
-        }
-      }
     }
 
 
+ 
 
+// eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
-  }
+  useEffect(()=>{
+    if (props.debug){
 
-
-  render() {
-
-    const {classes} =this.props;
-    if (this.props.debug===true){
-      console.log('state',this.state);
+     
+    console.log(contextPv)
     }
-    const value =this.state.internalValue
-    const pvname =this.state['pvname']
-    const initialized= this.state['initialized'];
-    const propsvalue=this.props.value;
+    updatePVData(context.localVariables[pv.pvname]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[contextPvValue])
 
-    if (this.props.debug===true){
+  
+  useEffect(() => {
 
-      if (initialized===true){
-
-
-        return (
-          <div className={classes.body1}>
-            <div>{"EPICS Debug Info:" }</div>
-            <div>{"Python server variable: " +pvname }</div>
-            <div>{"PV name: " +pvname.replace("pva://","") }</div>
-            <div>{"Initial Value: " +this.props.initialValue }</div>
-            <div>{"context Variable Value: " +propsvalue }</div>
-            <div>{"Current Value: " +this.state.internalValue }</div>
-            <div>{"New Value from parent component: " +this.props.outputValue }</div>
-          </div>
-
-        );
+    if (props.newValueTrigger > 0) {
+      let msg = context.localVariables[pv.pvname];
+      if (props.useStringValue) {
+        msg.char_value = props.outputValue;
+        msg.value = props.outputValue;
+      } else {
+        msg.value = props.outputValue;
       }
-      else return ( <div style={{background: "#eee", padding: "20px", margin: "20px"}}>
-        <div>{"EPICS Debug Info:" }</div>
-        <div>{"Connecting to Python server variable: " +pvname }</div>
-      </div>);
+      context.updateLocalVariable(pv.pvname, msg);
+      updatePVData(context.localVariables[pv.pvname]);
+
     }
-    return <React.Fragment  ></React.Fragment>;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.newValueTrigger])
+
+  if(props.debug){
+    console.log(pv,contextPv)
   }
+  return (pv)
+
 }
 
-LocalPV.contextType=AutomationStudioContext;
-export default withStyles(styles)(LocalPV)
+/**
+ * The LocalPV  component handles connections to local process variables which are valid within the same web page
+ * This is done by defining the pv name in the pv prop and using a prefix to define protocol ie "loc://" 
+ * The LocalPV component also performs macro substitution on the pv prop using the macros prop.
+ * The pv state can be raised as an object using the pvData callback or passed to child function component. All the data in this pv object is valid when pv.initialized===true
+ * 
+ * A hook called `useLocalPV` is also exported which returns the pv object.
+ * 
+ * 
+ * 
+ * 
+ * 
+ **/
+const LocalPV = (props) => {
+  const pv = useLocalPV(props);
+  useEffect(() => {
+    props.pvData(pv);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pv])
+
+  return (
+    <React.Fragment>
+      {props.debug && <Typography>
+        {"PV name: " + pv.pvname}
+        {"Value: " + pv.value}
+      </Typography>}
+    </React.Fragment>
+  )
+
+}
+
+LocalPV.propTypes = {
+ 
+  /**
+   * If defined, then the DataConnection and
+   * the widget debugging information will be displayed.
+   */
+  debug: PropTypes.bool,
+
+  /**
+   * Local variable initialization value.
+   * When using loc:// type PVs.
+   */
+  initialLocalVariableValue: PropTypes.string,
+  /**
+   * when writing to the  pv's output value, increment newValueTrigger to tell the pv component emit the output value to the process variable.
+   */
+  newValueTrigger:PropTypes.number,
+  /**
+   * the output value to the process variable. It is only emitted once the newValueTrigger is incremented.
+   */
+  outputValue:PropTypes.any,
+ 
+  /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+
+  pv: PropTypes.string,
+
+   /** A function that returns the pv object */
+
+   pvData: PropTypes.func,
+
+  
+  
+  /**
+   * Directive to use PV's string values.
+   */
+  useStringValue: PropTypes.bool,
+
+
+};
+
+/**
+ * Default props.definition for all widgets linked to
+ * PVs storing analog values.
+ */
+// static defaultProps=WrappedComponent.defaultProps;
+LocalPV.defaultProps = {
+
+  debug: false,
+  
+};
+
+export default LocalPV

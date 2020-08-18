@@ -1,20 +1,13 @@
 import React from 'react'
-import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
+
 import DataConnection from '../SystemComponents/DataConnection';
 import { withStyles } from '@material-ui/core/styles';
-import InputAdornment from '@material-ui/core/InputAdornment';
+
 import PropTypes from 'prop-types';
-//import classNames from 'classnames';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import TextField from '@material-ui/core/TextField';
-import Switch from '@material-ui/core/Switch';
-import Loadable from 'react-loadable';
+
+
 import ContextMenu from '../SystemComponents/ContextMenu';
-import ReactVisLightDarkTheme from '../SystemComponents/ReactVisLightDarkTheme';
 
-
-//import '../../../node_modules/react-vis/dist/style.css';
 import {
   XYPlot,
   XAxis,
@@ -23,12 +16,12 @@ import {
   VerticalGridLines,
   LineSeries,
   makeVisFlexible,
-  makeWidthFlexible,
-  makeHeightFlexible,
+ 
   DiscreteColorLegend
 } from 'react-vis';
 const FlexibleXYPlot = makeVisFlexible(XYPlot);
-
+/* eslint-disable eqeqeq */
+/* eslint-disable no-unused-vars */
 function calcTimeFormat(timestamp) {
   let mydate = new Date(timestamp * 1000);
   //  let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -676,12 +669,7 @@ multipleLineData = () => {
       lineColor=this.props.lineColor;
     }
     else{
-      if(theme.palette.type==='dark'){
-        lineColor=theme.darkLineColors;
-      }
-      else{
-        lineColor=theme.lightLineColors;
-      }
+      lineColor=theme.palette.reactVis.lineColors;
 
     }
     //console.log("linedata: ", this.state.yPVs[pv].linedata);
@@ -777,13 +765,9 @@ render() {
       legendColor=this.props.lineColor;
     }
     else{
-      if(theme.palette.type==='dark'){
-        legendColor=theme.darkLineColors;
-      }
-      else{
-        legendColor=theme.lightLineColors;
-      }
-
+      
+      legendColor=theme.palette.reactVis.lineColors;
+     
     }
     //console.log("linedata: ", this.state.yPVs[pv].linedata);
 
@@ -876,7 +860,7 @@ else {
 return (
 
   <React.Fragment >
-      <ReactVisLightDarkTheme/>
+      {/* <ReactVisLightDarkTheme/> */}
     {this.multipleDataConnections()}
     <div style={{width:'100%',height:'100%'}} onContextMenu={this.handleToggleContextMenu}>
       <FlexibleXYPlot yDomain={yDomain} xDomain={xDomain} margin={{left: 60}} >
@@ -893,35 +877,28 @@ return (
             horizontal: 'left',
           }}
         />
-        <HorizontalGridLines style={{stroke: theme.palette.type==='dark'?'#0097a7':'#B7E9ED'}} />
-        <VerticalGridLines  style={{stroke: theme.palette.type==='dark'?'#0097a7':'#B7E9ED'}} />
+        <HorizontalGridLines 
+        
+        />
+        <VerticalGridLines   />
         <XAxis
           title={(typeof this.props.xAxisTitle !== 'undefined')?this.props.xAxisTitle:"X Axis"}
           color="white"
           tickFormat={v => typeof this.props.useTimeStamp!=='undefined'? calcTimeFormat(v):(v)+ this.props.xUnits}
           tickTotal={4}
-          style={{
-            title:{stroke:theme.palette.type==='dark'?'#dbdbe0':'#6b6b76',strokeWidth:0.2},
-            line: {stroke: '#ADDDE1'},
-            ticks: {stroke: '#ADDDE1'},
-            text: {stroke: 'none', fill: theme.palette.type==='dark'?'#a9a9b2':'#6b6b76', fontWeight: 600}
-          }}
+          
         />
 
         <YAxis
           title={(typeof this.props.yAxisTitle !== 'undefined')?this.props.yAxisTitle:"Y Axis"}
           left={9} tickFormat={this.props.yScaleLog10===true?v => "10E"+(v)+ " "+this.props.yUnits :v => (v)+ " "+this.props.yUnits} tickSize={20}  tickPadding={2}
-          style={{
-            title:{stroke:theme.palette.type==='dark'?'#ccccce':'#dbdbe0',strokeWidth:0.2},
-            text: {stroke: 'none', fill: theme.palette.type==='dark'?'#a9a9b2':'#6b6b76', fontWeight: 600}
-          }}/>
+          />
         {this.multipleLineData()}
 
 
         {(typeof this.props.legend !== 'undefined')&&<DiscreteColorLegend
           color='#e89b02'
-          style={{position: 'absolute', right: '50px', top: '10px',
-            color:theme.palette.type==='dark'?'#ccccce':'#dbdbe0',strokeWidth:0.2}}
+          style={{position: 'absolute', right: '50px', top: '10px',}}
           orientation="horizontal" items= {legendItems}/>}
 
       </FlexibleXYPlot>
@@ -961,7 +938,7 @@ GraphXY.propTypes = {
   debug:PropTypes.bool,
   /** If defined, then a legend will be displayed,using the string items defined in the array*/
   legend:PropTypes.array,
-  /** If defined, then the default React-Vis line colors will overided using the string items defined in the array*/
+  /** If defined, then the default React-Vis line colors will be overridden using the string items defined in the array*/
   lineColor:PropTypes.array,
   /** If defined then the length of the line graphs will grow up until the value defined*/
   maxLength:PropTypes.number,
@@ -976,9 +953,9 @@ GraphXY.propTypes = {
   /** Polling interval in ms used in polling mode*/
   pollingRate:PropTypes.number,
 
-  /** Directive to use PV tiemstamp on x-axis*/
+  /** Directive to use PV timestamp on x-axis*/
   useTimeStamp:PropTypes.bool,
-  /** Update mode of the graph, Note polling mode will overide these settings*/
+  /** Update mode of the graph, Note polling mode will override these settings*/
   updateMode: PropTypes.oneOf(['updateOnXOrYChange', 'updateOnYChange','updateOnXChange']),
 };
 

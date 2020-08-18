@@ -1,3 +1,5 @@
+//This example is deprecated and will be removed in a future release 
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -11,13 +13,13 @@ import EpicsMbboDebug from '../GroupedComponents/EpicsMbboDebug';
 import TextUpdate from '../BaseComponents/TextUpdate';
 import TextInput from '../BaseComponents/TextInput';
 import TextOutput from '../BaseComponents/TextOutput';
-import SimpleSlider from '../BaseComponents/SimpleSlider';
+import Slider from '../BaseComponents/Slider';
 
 
 import Grid from '@material-ui/core/Grid';
-import EpicsPV from '../SystemComponents/EpicsPV';
 
-import SwitchComponent from '../BaseComponents/SwitchComponent';
+
+import Switch from '../BaseComponents/Switch';
 import SelectionInput from '../BaseComponents/SelectionInput';
 import ToggleButton from '../BaseComponents/ToggleButton';
 import ActionButton from '../BaseComponents/ActionButton';
@@ -28,6 +30,7 @@ import ControlBottomEx1 from '../ControlScreens/GridComponents/ControlBottomEx1'
 import SideBar from '../SystemComponents/SideBar';
 import ThreeScene from '../..//api/ThreeScene';
 import AppBar from '@material-ui/core/AppBar';
+console.warn("This example is deprecated and will be removed in a future release")
 const styles = theme => ({
   root: {
     flexGrow: 1,
@@ -52,9 +55,9 @@ class ControlTest3D extends React.Component {
 handlePsOnClick(name){
 
   //  console.log("in control test1 clicked "+name.toString());
-  this.setState({['editorType']:'PS',
-  ['displayEditor']:true,
-  ['editorMacros']:{'$(device)':name}});
+  this.setState({editorType:'PS',
+  displayEditor:true,
+  editorMacros:{'$(device)':name}});
 
   //  this.setState({ ['clicked']: 1});
 }
@@ -98,16 +101,16 @@ render() {
           </Grid>
           <div style={{height:'25vh',marginLeft:'25px'}}>
             <div style={{height:'50px',width:'400px'}}>
-              <SimpleSlider  pv='pva://testIOC:Cube1:xRotation'      macros={this.props['macros']} usePvMinMax={true} min={1000} max={500} usePvLabel={true} usePrecision={true} step={0.1} prec={3} />
-              <SimpleSlider  pv='pva://testIOC:Cube1:yRotation'      macros={this.props['macros']} usePvMinMax={true} min={1000} max={500} usePvLabel={true} usePrecision={true} step={0.1} prec={3} />
+              <Slider  pv='pva://testIOC:Cube1:xRotation'      macros={this.props['macros']} usePvMinMax={true} min={1000} max={500} usePvLabel={true}  step={0.1} prec={3} />
+              <Slider  pv='pva://testIOC:Cube1:yRotation'      macros={this.props['macros']} usePvMinMax={true} min={1000} max={500} usePvLabel={true}  step={0.1} prec={3} />
             </div>
           </div>
         </Grid>
 
         <Grid item sm={3} >
-          {((this.state['displayEditor']===true) &&(this.state['editorMacros']['$(device)']==='testIOC:PS1'))&&<ControlRightEx1 macros={this.state['editorMacros']}/>}
-          {((this.state['displayEditor']===true) &&(this.state['editorMacros']['$(device)']==='testIOC:PS2'))&&<ControlRightEx1 macros={this.state['editorMacros']}/>}
-          {((this.state['displayEditor']===true) &&(this.state['editorMacros']['$(device)']==='testIOC:PS3'))&&<ControlRightEx1 macros={this.state['editorMacros']}/>}
+          {((this.state.displayEditor===true) &&(this.state.editorMacros['$(device)']==='testIOC:PS1'))&&<ControlRightEx1 macros={this.state.editorMacros}/>}
+          {((this.state.displayEditor===true) &&(this.state.editorMacros['$(device)']==='testIOC:PS2'))&&<ControlRightEx1 macros={this.state.editorMacros}/>}
+          {((this.state.displayEditor===true) &&(this.state.editorMacros['$(device)']==='testIOC:PS3'))&&<ControlRightEx1 macros={this.state.editorMacros}/>}
         </Grid>
       </Grid>
 

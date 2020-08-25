@@ -49,7 +49,6 @@ function ComponentList(props) {
     }
     width = 100 / length + "%";
   }
-  console.log(width)
 
   const classes = useStyles({ width });
 
@@ -105,7 +104,6 @@ function ComponentList(props) {
         </span>
       );
     }
-    return;
   });
 
   return (
@@ -131,11 +129,15 @@ function ArrayContainerComponent(props) {
  * The ArrayContainer is a wrapper to show,
  * for each value of the array stored in the connected PV,
  * the component passed to the component props.
+ * It works only with waveform PVs.
  *
  * If you want to reuse the widget components you need to use
  * the desired widget's inner component.
  * For example if you want to create an ArrayContainer with a multiple TextInput
  * you need to pass to the component prop *TextInputComponent*.
+ * (i.e. choose your inner component, such as TextInput,
+ * and append the word "Component" -> TextInputComponent.
+ * See the examples to learn more about its usage).
  *
  * In addiction to the props presented in this guide user can pass to
  * ArrayContainer all the props that must be forwarded to the component

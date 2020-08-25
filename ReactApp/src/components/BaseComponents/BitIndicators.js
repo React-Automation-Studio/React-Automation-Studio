@@ -1,11 +1,11 @@
 import React from "react";
-import { withStyles } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { Grid, FormControlLabel, SvgIcon } from "@material-ui/core";
 import { Lens } from "@material-ui/icons";
 import PropTypes from "prop-types";
 import Widget from "../SystemComponents/Widgets/Widget";
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     flexWrap: "wrap",
@@ -16,24 +16,24 @@ const styles = (theme) => ({
     marginLeft: "auto",
     marginRight: "auto",
   },
-});
+}));
 
 
 const BitIndicatorsComponent = (props) => {
+  const theme = useTheme();
+  const classes = useStyles();
 
-
-
-  let onColor = props.theme.palette.primary.main;
-  let offColor = props.theme.palette.grey[300];
+  let onColor = theme.palette.primary.main;
+  let offColor = theme.palette.grey[300];
   if (typeof props.onColor !== 'undefined') {
     if (props.onColor === 'primary') {
-      onColor = props.theme.palette.primary.main;
+      onColor = theme.palette.primary.main;
     }
     else if (props.onColor === 'secondary') {
-      onColor = props.theme.palette.secondary.main;
+      onColor = theme.palette.secondary.main;
     }
     else if (props.onColor === 'default') {
-      onColor = props.theme.palette.grey[300];
+      onColor = theme.palette.grey[300];
     }
     else {
       onColor = props.onColor;
@@ -42,13 +42,13 @@ const BitIndicatorsComponent = (props) => {
 
   if (typeof props.offColor !== 'undefined') {
     if (props.offColor === 'primary') {
-      offColor = props.theme.palette.primary.main;
+      offColor = theme.palette.primary.main;
     }
     else if (props.offColor === 'secondary') {
-      offColor = props.theme.palette.secondary.main;
+      offColor = theme.palette.secondary.main;
     }
     else if (props.offColor === 'default') {
-      offColor = props.theme.palette.grey[300];
+      offColor = theme.palette.grey[300];
     }
     else {
       offColor = props.offColor;
@@ -90,7 +90,7 @@ const BitIndicatorsComponent = (props) => {
         }
       }
     }
-    bitStyles.push({ ["margin" + place]: props.theme.spacing(1) });
+    bitStyles.push({ ["margin" + place]: theme.spacing(1) });
   }
   if (props.reverseBits) {
     bitLabels = bitLabels.reverse();
@@ -100,7 +100,7 @@ const BitIndicatorsComponent = (props) => {
 
   let bits = bitArray.map((value, index) => {
     // eslint-disable-next-line eqeqeq 
-    let color = !props.initialized ? props.theme.palette.grey[300] : value != 0 ? onColor : offColor;
+    let color = !props.initialized ? theme.palette.grey[300] : value != 0 ? onColor : offColor;
     return (
       <Grid
         item
@@ -108,7 +108,7 @@ const BitIndicatorsComponent = (props) => {
         xs={!props.horizontal ? 12 : undefined}
       >
         <FormControlLabel
-          className={props.classes.FormControl}
+          className={classes.FormControl}
           disabled={props.disabled}
           label={bitLabels[index]}
           labelPlacement={bitLabelPos}
@@ -215,4 +215,8 @@ BitIndicators.defaultProps = {
   offColor: 'default',
   usePvBitLabels: false
 };
-export default withStyles(styles, { withTheme: true })(BitIndicators);
+
+BitIndicatorsComponent.defaultProps = BitIndicators.defaultProps;
+
+export default BitIndicators;
+export { BitIndicators, BitIndicatorsComponent };

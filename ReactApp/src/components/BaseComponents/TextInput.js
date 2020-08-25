@@ -1,12 +1,12 @@
 import React from "react";
-import { withStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import { InputAdornment, TextField } from "@material-ui/core";
 import PropTypes from 'prop-types';
 import Widget from "../SystemComponents/Widgets/Widget";
 
 import { fade } from '@material-ui/core/styles/colorManipulator';
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     flexWrap: "wrap",
@@ -25,7 +25,7 @@ const styles = (theme) => ({
     borderRadius: 4,
     background:'linear-gradient(45deg,'+ fade(theme.palette.alarm.major.dark,theme.palette.type==='dark'?0.2:0.1)+ ' 0%, '+ (theme.palette.alarm.major.dark) +' 100%)'
   }
-});
+}));
 
 const TextInputComponent=(props)=> {
 
@@ -43,7 +43,7 @@ const TextInputComponent=(props)=> {
 
 
  
-  const { classes } = props;
+  const classes = useStyles();
   const { initialized } = props;
   
   const { value } = props;
@@ -300,4 +300,7 @@ TextInput.defaultProps = {
   showTooltip:false
 };
 
-export default withStyles(styles, { withTheme: true })(TextInput);
+TextInputComponent.defaultProps = TextInput.defaultProps;
+
+export default TextInput;
+export { TextInput, TextInputComponent };

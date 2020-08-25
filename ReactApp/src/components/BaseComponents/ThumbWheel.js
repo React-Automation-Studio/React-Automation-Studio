@@ -1,11 +1,11 @@
 import React from "react";
-import { withStyles } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { Button, FormControlLabel } from "@material-ui/core";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import PropTypes from "prop-types";
 import Widget from "../SystemComponents/Widgets/Widget";
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     flexWrap: "wrap",
@@ -16,13 +16,12 @@ const styles = (theme) => ({
     marginTop: "auto",
     marginBottom: "auto",
   },
-});
+}));
 
 
 
 
 const ThumbWheelComponent = (props) => {
-
   function handleButtonClick(incrementValue) {
     if (props.initialized) {
       let value = parseFloat(props.value) + parseFloat(incrementValue);
@@ -63,10 +62,12 @@ const ThumbWheelComponent = (props) => {
  * @param {any} props
  */
 const ThumbWheelWidget = (props) => {
+  const classes = useStyles();
+  const theme = useTheme();
   return (
     <FormControlLabel
       key={props.pvName}
-      className={props.classes.Button}
+      className={classes.Button}
       disabled={props.disabled}
       control={
         <div
@@ -79,14 +80,14 @@ const ThumbWheelWidget = (props) => {
             <div
               key={"toprowbuttons" + index + "div1"}
               style={{
-                paddingRight: props.theme.spacing(1),
-                paddingLeft: props.theme.spacing(1),
+                paddingRight: theme.spacing(1),
+                paddingLeft: theme.spacing(1),
                 display: "flex",
                 flexDirection: "column",
               }}
             >
               <FormControlLabel
-                className={props.classes.Button}
+                className={classes.Button}
                 control={
                   <SingleThumbWheelWidget {...props} item={item} up={true} />
                 }
@@ -109,10 +110,11 @@ const ThumbWheelWidget = (props) => {
  * @param {any} props
  */
 const SingleThumbWheelWidget = (props) => {
+  const classes = useStyles();
   return (
     <Button
       key={(props.up ? "top" : "bottom") + "rowbuttons" + props.index}
-      className={props.classes.Button}
+      className={classes.Button}
       disabled={props.disabled}
       size={props.buttonSize !== undefined ? props.buttonSize : "small"}
       variant="contained"
@@ -272,12 +274,16 @@ ThumbWheel.propTypes = {
 
 
 };
+
 ThumbWheel.defaultProps = {
   prec_integer: 4,
   prec_decimal: 3,
   usePvMinMax: false,
   debug: false,
-  showTooltip:false
-  
+  showTooltip:false  
 };
-export default withStyles(styles, { withTheme: true })(ThumbWheel);
+
+ThumbWheelComponent.defaultProps = ThumbWheel.defaultProps;
+
+export default ThumbWheel;
+export { ThumbWheel, ThumbWheelComponent };

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { withStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 
 import PropTypes from 'prop-types';
 
@@ -21,7 +21,7 @@ const config = { }
 const math = create(all, config)
 /* eslint-disable eqeqeq */
 
-const styles = theme => ({
+const useStyles = makeStyles((theme) => ({
   textTicks: {
     fill: theme.palette.type === 'dark' ? theme.palette.grey['300'] : theme.palette.grey['500']
 
@@ -47,10 +47,9 @@ const styles = theme => ({
     marginRight: "auto",
   },
 
-});
+}));
 
-function getTickValues(props, min, max, numberOfTicks, x0, x1, x2, y1, y2, xOffset, yOffset, value) {
-  const { classes } = props;
+function getTickValues(props, min, max, numberOfTicks, x0, x1, x2, y1, y2, xOffset, yOffset, value, classes) {
   //this.test("test1");
   //this.handleInputValue();
 
@@ -116,7 +115,8 @@ function getTickValues(props, min, max, numberOfTicks, x0, x1, x2, y1, y2, xOffs
 
 const ProgressBarComponent = (props) => {
   const gradientId = uuidv4();
-
+  const classes = useStyles();
+  const theme = useTheme();
   const value = props.value;
   const min = props.min;
   const max = props.max;
@@ -156,25 +156,25 @@ const ProgressBarComponent = (props) => {
 
 
       <linearGradient id={gradientId + 'baseBottom1'} gradientTransform="rotate(90)" >
-        <stop offset="0%" stopColor={props.theme.palette.type === 'dark' ? props.theme.palette.grey['300'] : props.theme.palette.grey['200']} />
-        <stop offset="100%" stopColor={typeof props.disabled === 'undefined' ? props.theme.palette.grey['200'] : 'default'} />
+        <stop offset="0%" stopColor={theme.palette.type === 'dark' ? theme.palette.grey['300'] : theme.palette.grey['200']} />
+        <stop offset="100%" stopColor={typeof props.disabled === 'undefined' ? theme.palette.grey['200'] : 'default'} />
 
       </linearGradient>
       <linearGradient id={gradientId + 'baseTop1'} gradientTransform="rotate(90)" >
 
-        <stop offset="0%" stopColor={typeof props.disabled === 'undefined' ? props.theme.palette.grey['200'] : 'default'} />
-        <stop offset="100%" stopColor={props.theme.palette.type === 'dark' ? props.theme.palette.grey['300'] : props.theme.palette.grey['200']} />
+        <stop offset="0%" stopColor={typeof props.disabled === 'undefined' ? theme.palette.grey['200'] : 'default'} />
+        <stop offset="100%" stopColor={theme.palette.type === 'dark' ? theme.palette.grey['300'] : theme.palette.grey['200']} />
       </linearGradient>
 
       <linearGradient id={gradientId + 'bottom1'} gradientTransform="rotate(90)" >
-        <stop offset="0%" stopColor={props.theme.palette.type === 'dark' ? props.theme.palette.grey['300'] : props.theme.palette.grey['200']} />
+        <stop offset="0%" stopColor={theme.palette.type === 'dark' ? theme.palette.grey['300'] : theme.palette.grey['200']} />
         <stop offset="100%" stopColor={typeof props.disabled === 'undefined' ? color : 'default'} />
 
       </linearGradient>
       <linearGradient id={gradientId + 'top1'} gradientTransform="rotate(90)" >
 
         <stop offset="0%" stopColor={typeof props.disabled === 'undefined' ? color : 'default'} />
-        <stop offset="100%" stopColor={props.theme.palette.type === 'dark' ? props.theme.palette.grey['300'] : props.theme.palette.grey['200']} />
+        <stop offset="100%" stopColor={theme.palette.type === 'dark' ? theme.palette.grey['300'] : theme.palette.grey['200']} />
       </linearGradient>
 
 
@@ -211,7 +211,7 @@ const ProgressBarComponent = (props) => {
 
       />
 
-      {getTickValues(props, min, max, 2, x0, x1, x2, y1, y2, xOffset, yOffset, value)}
+      {getTickValues(props, min, max, 2, x0, x1, x2, y1, y2, xOffset, yOffset, value, classes)}
 
     </svg>
 
@@ -222,12 +222,13 @@ ProgressBarComponent.propTypes = {
   height: PropTypes.number,
   width: PropTypes.number,
 }
-const FlexibleProgressBarComponent = makeVisFlexible(withStyles(styles, { withTheme: true })(ProgressBarComponent));
+const FlexibleProgressBarComponent = makeVisFlexible(ProgressBarComponent);
 
 
 const ProgressBarInternalComponent = (props) => {
   const { initialized } = props;
-  const { classes } = props;
+  const classes = useStyles();
+  const theme = useTheme();
   let units;
   let value;
   let min;
@@ -248,20 +249,20 @@ const ProgressBarInternalComponent = (props) => {
     min = 0;
     max = 1000;
   }
-  let color = props.theme.palette.primary.main;
+  let color = theme.palette.primary.main;
 
 
   if (typeof props.alarmSensitive !== 'undefined') {
     if (props.alarmSensitive == true) {
       if (props.alarmSeverity == 1) {
 
-        color = props.theme.palette.alarm.minor.dark;
+        color = theme.palette.alarm.minor.dark;
       }
       else if (props.alarmSeverity == 2) {
-        color = props.theme.palette.alarm.major.dark;
+        color = theme.palette.alarm.major.dark;
       }
       else {
-        color = props.theme.palette.primary.main;
+        color = theme.palette.primary.main;
         //  background_color='white';
       }
     }
@@ -464,7 +465,6 @@ ProgressBar.propTypes = {
 };
 
 ProgressBar.defaultProps = {
-
   debug: false,
   alarmSensitive: false,
   min: 0,
@@ -475,8 +475,9 @@ ProgressBar.defaultProps = {
   lockAspectRatio: true,
   labelPlacement: 'top',
   showTooltip:false
-
 };
 
+ProgressBarInternalComponent.defaultProps = ProgressBar.defaultProps;
 
-export default withStyles(styles, { withTheme: true })(ProgressBar)
+export default ProgressBar;
+export { ProgressBar, ProgressBarInternalComponent as ProgressBarComponent };

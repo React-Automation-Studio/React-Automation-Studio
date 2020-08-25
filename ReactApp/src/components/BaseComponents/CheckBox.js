@@ -1,10 +1,10 @@
 import React from "react";
-import { withStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import { Checkbox as MuiCheckBox, FormControlLabel } from "@material-ui/core";
 import Widget from "../SystemComponents/Widgets/Widget";
 import PropTypes from 'prop-types';
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     flexWrap: "wrap",
@@ -17,11 +17,12 @@ const styles = (theme) => ({
     marginLeft: "auto",
     marginRight: "auto",
   },
-});
+}));
 
 
 const CheckBoxComponent = (props) => {
 
+  const classes = useStyles();
 
   /**
    * Send checkbox value to the PV.
@@ -37,7 +38,7 @@ const CheckBoxComponent = (props) => {
     /* eslint-disable eqeqeq */
     <FormControlLabel
       key={props.pvName}
-      className={props.classes.FormControl}
+      className={classes.FormControl}
       disabled={props.disabled}
       label={props.formControlLabel}
       labelPlacement={props.labelPlacement}
@@ -112,9 +113,14 @@ CheckBox.propTypes = {
   tooltipProps:PropTypes.object,
 
 }
+
 CheckBox.defaultProps = {
   onColor: 'primary',
   debug: false,
   showTooltip:false
 }
-export default withStyles(styles, { withTheme: true })(CheckBox);
+
+CheckBoxComponent.defaultProps = CheckBox.defaultProps;
+
+export default CheckBox;
+export { CheckBox, CheckBoxComponent };

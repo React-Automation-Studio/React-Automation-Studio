@@ -1,11 +1,11 @@
 import React from "react";
-import { withStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import { Button, FormControlLabel } from "@material-ui/core";
 import PropTypes from "prop-types";
 import Widget from "../SystemComponents/Widgets/Widget";
 
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     flexWrap: "wrap",
@@ -26,12 +26,13 @@ const styles = (theme) => ({
     marginLeft: "auto",
     marginRight: "auto",
   },
-});
+}));
 
 
 
 const ActionButtonComponent=(props)=> {
 
+  const classes = useStyles();
   /**
    * Send the predefined value to the PV.
    */
@@ -44,13 +45,13 @@ const ActionButtonComponent=(props)=> {
   return (
     <FormControlLabel
       key={props.pvName}
-      className={props.classes.FormControl}
+      className={classes.FormControl}
       disabled={props.disabled}
       label={props.formControlLabel}
       labelPlacement={props.labelPlacement}
       control={
         <Button
-          className={props.classes.Button}
+          className={classes.Button}
           variant="contained"
           color={props.color}
           onClick={handleButtonClick}
@@ -131,10 +132,13 @@ ActionButton.propTypes = {
 
 
 };
-ActionButton.defaultProps = {
- 
+
+ActionButton.defaultProps = { 
   showTooltip:false,
   color:'primary',
 };
 
-export default withStyles(styles, { withTheme: true })(ActionButton);
+ActionButtonComponent.defaultProps = ActionButton.defaultProps;
+
+export default ActionButton;
+export { ActionButton, ActionButtonComponent };

@@ -1,5 +1,5 @@
 import React from "react";
-import { withStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import {
   FormControlLabel,
   List,
@@ -8,9 +8,10 @@ import {
 } from "@material-ui/core";
 import PropTypes from "prop-types";
 import Widget from "../SystemComponents/Widgets/Widget";
+import SelectionInput, { SelectionInputComponent } from "./SelectionInput";
 
 
-const styles = (theme) => {
+const useStyles = makeStyles((theme) => {
   const borderColor =
     theme.palette.type === 'light' ? 'rgba(0, 0, 0, 0.23)' : 'rgba(255, 255, 255, 0.23)'; //copied from material ui textfield 
   const borderColorTop =
@@ -142,7 +143,7 @@ const styles = (theme) => {
   }
   )
 
-};
+});
 
 /**
  * The SelectionList Component is a wrapper on the Material-UI List component.
@@ -154,6 +155,8 @@ const styles = (theme) => {
  * https://material-ui.com/api/list
  */
 const SelectionListComponent = (props) => {
+
+  const classes = useStyles();
 
   /**
    * Store the new item value in the correct PV's state.
@@ -168,7 +171,6 @@ const SelectionListComponent = (props) => {
    * @param {array} enumStrs
    */
   const getListItems = (enumStrs, value) => {
-    let { classes } = props;
     let listItems = enumStrs.map((item, idx) => {
       let className;
       if (props.horizontal) {
@@ -203,20 +205,20 @@ const SelectionListComponent = (props) => {
   }
 
 
-
-  let itemList = getListItems(props.initialized ? props.enumStrs : ["N/A", "Disconnected"], props.initialized ? props.value : "Disconnected");
+  let enumStrings = props.initialized && props.enumStrs !== undefined && props.enumStrs !== null ? props.enumStrs : ["N/A", "Disconnected"];
+  let itemList = getListItems(enumStrings, props.initialized ? props.value : "Disconnected");
 
   return (
     <FormControlLabel
       key={props.pvName}
-      className={props.classes.FormControl}
+      className={classes.FormControl}
       disabled={props.disabled}
       control={
         <List
           className={
             props.horizontal
-              ? props.classes.listHorizontal
-              : props.classes.listVertical
+              ? classes.listHorizontal
+              : classes.listVertical
           }
           component="nav"
 
@@ -292,5 +294,7 @@ SelectionList.defaultProps = {
   showTooltip:false
 };
 
+SelectionInputComponent.defaultProps = SelectionInput.defaultProps;
 
-export default withStyles(styles, { withTheme: true })(SelectionList);
+export default SelectionList;
+export { SelectionList, SelectionListComponent };

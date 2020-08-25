@@ -11,7 +11,7 @@ const config = { }
 const math = create(all, config)
 
 /**
- * The Widget component creates standard properties, state variables and callbacks to manage the behaviour of a component communicating with one or multiple PVs. It also provides the default RAS contextMenu to the child component.
+ * The Widget component creates standard properties, state variables and callbacks to manage the behaviour of a component communicating with one or multiple PVs. It also provides the default RAS contextMenu to the child component. 
  * 
  * The label, min, max, units, pv and tooltip all accept macros that can be replaced by the values defined in the macros prop. 
  * 
@@ -139,10 +139,16 @@ const math = create(all, config)
   useEffect(() => {
     if (!focus) {
       let newValue;
-      
+
       newValue=checkPrecision(pv.value, prec);
       if (typeof props.numberFormat !== 'undefined'){
-        newValue=math.format(parseFloat(newValue),props.numberFormat)
+        if (Array.isArray(newValue)) {
+          newValue = newValue.map((val) => (
+            math.format(parseFloat(val),props.numberFormat)
+          ));
+        } else {
+          newValue=math.format(parseFloat(newValue),props.numberFormat);
+        }
         setValue(newValue)
       }
       else{
@@ -182,7 +188,13 @@ const math = create(all, config)
     if (immediateValue !== null) {
       let tempvalue = checkPrecision(isInsideLimits(immediateValue, min, max), prec);
       if (typeof props.numberFormat !== 'undefined'){
-        tempvalue=math.format(parseFloat(tempvalue),props.numberFormat)
+        if (Array.isArray(tempvalue)) {
+          tempvalue = tempvalue.map((val) => (
+            math.format(parseFloat(val),props.numberFormat)
+          ));
+        } else {
+          tempvalue=math.format(parseFloat(tempvalue),props.numberFormat);
+        }
         setValue(tempvalue)
       }
       else{
@@ -194,7 +206,7 @@ const math = create(all, config)
       setNewValueTrigger(newValueTrigger + 1);
       setImmediateValue(null);
     }
-    
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [immediateValue, min, max, prec])
   
@@ -204,8 +216,15 @@ const math = create(all, config)
     if (commitChange) {
       let tempvalue = checkPrecision(isInsideLimits(value, min, max), prec);
       if (typeof props.numberFormat !== 'undefined'){
-        tempvalue=math.format(parseFloat(tempvalue),props.numberFormat)
-        setValue(tempvalue)
+        let formatValue; 
+        if (Array.isArray(tempvalue)) {
+          formatValue = tempvalue.map((val) => (
+            math.format(parseFloat(val),props.numberFormat)
+          ));
+        } else {
+          formatValue=math.format(parseFloat(tempvalue),props.numberFormat);
+        }
+        setValue(formatValue)
       }
       else{
         setValue(tempvalue)
@@ -253,24 +272,38 @@ const math = create(all, config)
   const checkPrecision = (value, prec) => {
     if (props.usePvPrecision===true || (typeof props.prec!=='undefined')) {
       let precision = parseInt(prec);
-      let tempvalue = parseFloat(value);
-      if (!isNaN(tempvalue)) {
-        return tempvalue.toFixed(precision);
-
+      let tempValue;
+      if (Array.isArray(value)) {
+        tempValue = value.map((val) => parseFloat(val));
+      } else {
+        tempValue = parseFloat(value);
       }
-      else {
+      if (!isNaN(tempValue)) {
+        return tempValue.toFixed(precision);
+      } else {
         return value;
       }
-    }
-    else {
+    } else {
       return (value)
     }
   }
   const isInsideLimits = (value, min, max) => {
 
     if ((typeof props.min!=='undefined') || (typeof props.max!=='undefined') || props.usePvMinMax) {
-
-      let tempValue = parseFloat(value);
+      let tempValue;
+      if (Array.isArray(value)) {
+        tempValue = value.map((v) => { 
+          let tempV = parseFloat(v);
+          if (!isNaN(tempV)) {
+           tempV = tempV > max ? max : tempV;
+           tempV = tempV < min ? min : tempV;
+          }
+          return tempV; 
+        })
+        return tempValue
+      }
+      
+      tempValue = parseFloat(value);
       if (!isNaN(tempValue)) {
         tempValue = tempValue > max ? max : tempValue;
         tempValue = tempValue < min ? min : tempValue;
@@ -278,8 +311,13 @@ const math = create(all, config)
       }
 
       return tempValue;
-
     } else {
+      if (Array.isArray(value)) {
+        return value.map((v) => {
+          let val = parseFloat(v); 
+          return isNaN(val) ? v : val;
+        });
+      }
       return value
     }
 
@@ -289,7 +327,7 @@ const math = create(all, config)
 
 
   const handleToggleContextMenu = (event) => {
-    
+
     event.preventDefault();
     event.stopPropagation();
     setAnchorEl(event.target);
@@ -452,10 +490,10 @@ const math = create(all, config)
   const divStyle = {
     width: "100%",
     height: "100%",
-   
-   
+
+    
   }
-  
+
   const Tag=props.svgWidget?"g":"div";
   
   return (
@@ -479,7 +517,7 @@ const math = create(all, config)
       {childPvs}
       {contextMenu}
     </Tag>
-   </Tooltip>
+     </Tooltip>
   )
 }
 /**

@@ -1,11 +1,11 @@
 import React from "react";
-import { withStyles } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { InputAdornment, MenuItem, TextField } from "@material-ui/core";
 import PropTypes from 'prop-types';
 
 import Widget from "../SystemComponents/Widgets/Widget";
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     flexWrap: "wrap",
@@ -15,10 +15,13 @@ const styles = (theme) => ({
     fontWeight: 500,
     borderRadius: 4,
   },
-});
+}));
 
 
 const SelectionInputComponent = (props) => {
+
+  const classes = useStyles();
+  const theme = useTheme();
 
   function handleChange(event) {
     let value = event.target.value;
@@ -29,19 +32,22 @@ const SelectionInputComponent = (props) => {
   let inputProps;
   let stringValues; 
   if (props.initialized) {
-    stringValues= props.enumStrs.map((item, idx) => (
-      <MenuItem
-        key={item.toString()}
-       
-        value={props.useStringValue ? item : idx}
-      >
-        {item}
-      </MenuItem>
-    ));
+    if(props.enumStrs !== undefined && props.enumStrs !== null) {
+      stringValues = props.enumStrs.map((item, idx) => (
+        <MenuItem
+          key={item.toString()} 
+          value={props.useStringValue ? item : idx}
+        >
+          {item}
+        </MenuItem>
+      ));
+    } else {
+      stringValues = [];
+    }
     inputProps = {
       endAdornment: (
         <InputAdornment
-          style={{ marginRight: props.theme.spacing(1) }}
+          style={{ marginRight: theme.spacing(1) }}
           position="end"
         >
           {props.units} {props.children}
@@ -57,7 +63,7 @@ const SelectionInputComponent = (props) => {
     inputProps = {
       endAdornment: (
         <InputAdornment
-          style={{ marginRight: props.theme.spacing(1) }}
+          style={{ marginRight: theme.spacing(1) }}
           position="end"
         >
           {props.units} {props.children}
@@ -73,7 +79,7 @@ const SelectionInputComponent = (props) => {
   return (
     <TextField
       key={props.pvName}
-      className={props.classes.TextField}
+      className={classes.TextField}
       select={props.initialized}
       disabled={props.disabled}
       value={props.initialized?props.value:stringValues}
@@ -186,9 +192,11 @@ SelectionInput.propTypes = {
 };
 
 SelectionInput.defaultProps = {
-  
   showTooltip:false,
   variant:'outlined',
- };
+};
 
-export default withStyles(styles, { withTheme: true })(SelectionInput);
+SelectionInputComponent.defaultProps = SelectionInput.defaultProps;
+
+export default SelectionInput;
+export { SelectionInput, SelectionInputComponent };

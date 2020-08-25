@@ -1,9 +1,10 @@
 import React from "react";
-import { withStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import { Radio, FormControlLabel } from "@material-ui/core";
 import Widget from "../SystemComponents/Widgets/Widget";
 import PropTypes from 'prop-types';
-const styles = (theme) => ({
+
+const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     flexWrap: "wrap",
@@ -16,10 +17,12 @@ const styles = (theme) => ({
     marginLeft: "auto",
     marginRight: "auto",
   },
-});
+}));
 
 /* eslint-disable eqeqeq */
 const RadioButtonComponent=(props)=>{
+
+  const classes = useStyles();
 
   /**
    * Send to PV the opposite value
@@ -33,7 +36,7 @@ const RadioButtonComponent=(props)=>{
     return (
       <FormControlLabel
         key={props.pvName}
-        className={props.classes.FormControl}
+        className={classes.FormControl}
         disabled={props.disabled}
         label={props.formControlLabel}
         labelPlacement={props.labelPosition}
@@ -109,9 +112,14 @@ RadioButton.propTypes = {
 
 
 }
+
 RadioButton.defaultProps = {
   onColor: 'primary',
   debug: false,
   showTooltip:false
 }
-export default withStyles(styles, { withTheme: true })(RadioButton);
+
+RadioButtonComponent.defaultProps = RadioButton.defaultProps;
+
+export default RadioButton;
+export { RadioButton, RadioButtonComponent };

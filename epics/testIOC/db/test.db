@@ -190,3 +190,18 @@ record(mbbo,"$(device):mbboTest1") {
     field(VAL,"0")
 
 }
+
+record(waveform, "$(device):binaryWaveform") {
+    field(DESC, "Waveform with 0-1 values")
+    field(NELM, "10")
+    field(FTVL, "SHORT")
+    field(PINI, "YES")
+}
+
+record(acalcout, "$(device):initBinaryWaveform") {
+    field(DESC, "Init Waveform")
+    field(NELM, "10")
+    field(CALC, "ARR(1)")
+    field(OUT, "$(device):binaryWaveform PP")
+    field(PINI, "YES")
+}

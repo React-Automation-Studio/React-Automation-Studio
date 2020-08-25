@@ -1,5 +1,5 @@
 import React from 'react'
-import { withStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { v4 as uuidv4 } from 'uuid';
 import Widget from "../SystemComponents/Widgets/Widget";
@@ -16,7 +16,7 @@ const config = { }
 const math = create(all, config)
 
 
-const styles = theme => ({
+const useStyles = makeStyles((theme) => ({
   textTicks: {
     fill: theme.palette.type === 'dark' ? theme.palette.grey['300'] : theme.palette.grey['500']
 
@@ -43,10 +43,9 @@ const styles = theme => ({
     marginRight: "auto",
   },
 
-});
+}));
 
-function getTickValues(props, min, max, numberOfTicks, x0, y0, x1, x2, y1, y2, xOffset, yOffset, value) {
-  const { classes } = props;
+function getTickValues(props, min, max, numberOfTicks, x0, y0, x1, x2, y1, y2, xOffset, yOffset, value, classes) {
   let units = props.units ?" "+ props.units : "";
 
   //this.test("test1");
@@ -111,7 +110,8 @@ function getTickValues(props, min, max, numberOfTicks, x0, y0, x1, x2, y1, y2, x
 
 function TankComponent(props) {
   const gradientId = uuidv4();
-  const { classes } = props;
+  const classes = useStyles();
+  const theme = useTheme();
   const {initialized}=props;
   let value = initialized?props.value:50;
   
@@ -159,18 +159,18 @@ function TankComponent(props) {
     if (props.alarmSensitive === true) {
       if (props.alarmSeverity === 1) {
 
-        color = props.theme.palette.alarm.minor.dark;
+        color = theme.palette.alarm.minor.dark;
       }
       else if (props.alarmSeverity === 2) {
-        color = props.theme.palette.alarm.major.dark;
+        color = theme.palette.alarm.major.dark;
       }
       else {
-        color = props.theme.palette.primary.main;
+        color = theme.palette.primary.main;
 
       }
     }
     else {
-      color = props.theme.palette.primary.main;
+      color = theme.palette.primary.main;
     }
   }
 
@@ -186,25 +186,25 @@ function TankComponent(props) {
 
 
           <linearGradient id={gradientId + 'baseleft1'}  >
-            <stop offset="0%" stopColor={props.theme.palette.type === 'dark' ? props.theme.palette.grey['300'] : props.theme.palette.grey['200']} />
-            <stop offset="100%" stopColor={props.initialized===true ? props.theme.palette.grey['200'] : 'default'} />
+            <stop offset="0%" stopColor={theme.palette.type === 'dark' ? theme.palette.grey['300'] : theme.palette.grey['200']} />
+            <stop offset="100%" stopColor={props.initialized===true ? theme.palette.grey['200'] : 'default'} />
 
           </linearGradient>
           <linearGradient id={gradientId + 'baseright1'}  >
 
-            <stop offset="0%" stopColor={props.initialized===true ? props.theme.palette.grey['200'] : 'default'} />
-            <stop offset="100%" stopColor={props.theme.palette.type === 'dark' ? props.theme.palette.grey['300'] : props.theme.palette.grey['200']} />
+            <stop offset="0%" stopColor={props.initialized===true ? theme.palette.grey['200'] : 'default'} />
+            <stop offset="100%" stopColor={theme.palette.type === 'dark' ? theme.palette.grey['300'] : theme.palette.grey['200']} />
           </linearGradient>
 
           <linearGradient id={gradientId + 'right1'} >
-            <stop offset="0%" stopColor={props.theme.palette.type === 'dark' ? props.theme.palette.grey['300'] : props.theme.palette.grey['200']} />
+            <stop offset="0%" stopColor={theme.palette.type === 'dark' ? theme.palette.grey['300'] : theme.palette.grey['200']} />
             <stop offset="100%" stopColor={props.initialized===true ? color : 'default'} />
 
           </linearGradient>
           <linearGradient id={gradientId + 'left1'}  >
 
             <stop offset="0%" stopColor={props.initialized===true ? color : 'default'} />
-            <stop offset="100%" stopColor={props.theme.palette.type === 'dark' ? props.theme.palette.grey['300'] : props.theme.palette.grey['200']} />
+            <stop offset="100%" stopColor={theme.palette.type === 'dark' ? theme.palette.grey['300'] : theme.palette.grey['200']} />
           </linearGradient>
 
           <g >
@@ -241,7 +241,7 @@ function TankComponent(props) {
 
             />
 
-            {getTickValues(props, min, max, 3, x0, y0, x1, x2, y1, y2, xOffset, yOffset, value)}
+            {getTickValues(props, min, max, 3, x0, y0, x1, x2, y1, y2, xOffset, yOffset, value, classes)}
           </g>
         </svg>}
     />
@@ -416,12 +416,10 @@ Tank.propTypes = {
 };
 
 Tank.defaultProps = {
-
   debug: false,
   alarmSensitive: false,
   min: 0,
   max: 100,
-  
   usePvPrecision: false,
   showValue: true,
   aspectRatio: 1,
@@ -429,9 +427,10 @@ Tank.defaultProps = {
   showTicks: true,
   labelPlacement:'top',
   showTooltip:false
-  
-
 };
 
+TankComponent.defaultProps = Tank.defaultProps;
 
-export default withStyles(styles, { withTheme: true })(Tank)
+export default Tank;
+const TComponent = makeVisFlexible(TankComponent);
+export { Tank, TComponent as TankComponent };

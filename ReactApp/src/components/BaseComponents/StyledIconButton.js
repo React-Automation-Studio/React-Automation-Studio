@@ -1,10 +1,11 @@
 import React from "react";
-import { withStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import { IconButton, FormControlLabel } from "@material-ui/core";
 import { Lens } from "@material-ui/icons";
 import Widget from "../SystemComponents/Widgets/Widget";
 import PropTypes from 'prop-types';
-const styles = (theme) => ({
+
+const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     flexWrap: "wrap",
@@ -17,11 +18,13 @@ const styles = (theme) => ({
     marginLeft: "auto",
     marginRight: "auto",
   },
-});
+}));
 
 /* eslint-disable eqeqeq */
 const StyledIconButtonComponent=(props)=> {
- 
+
+  const classes = useStyles();
+
   /**
    * Write in the PV the oppisite value of the actual one.
    */
@@ -31,11 +34,10 @@ const StyledIconButtonComponent=(props)=> {
     props.handleImmediateChange(value);
   }
 
- 
     return (
       <FormControlLabel
         key={props.pvName}
-        className={props.classes.FormControl}
+        className={classes.FormControl}
         disabled={props.disabled}
         label={props.formControlLabel}
         labelPlacement={props.labelPlacement}
@@ -120,12 +122,16 @@ labelPv: PropTypes.string,
   tooltipProps:PropTypes.object,
 
 };
+
 StyledIconButton.defaultProps = {
   onColor:'primary',
   offColor:'default',
   debug: false,
   showTooltip:false
-
 }
-export default  withStyles(styles, { withTheme: true })(StyledIconButton);
+
+StyledIconButtonComponent.defaultProps = StyledIconButton.defaultProps;
+
+export default StyledIconButton;
+export { StyledIconButton, StyledIconButtonComponent };
 

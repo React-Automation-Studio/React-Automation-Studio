@@ -1,10 +1,10 @@
 import React from "react";
-import { withStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import { FormControlLabel, Radio, RadioGroup } from "@material-ui/core";
 import PropTypes from "prop-types";
 import Widget from "../SystemComponents/Widgets/Widget";
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.paper,
     borderRadius: 4,
@@ -23,11 +23,12 @@ const styles = (theme) => ({
     padding:theme.spacing(1)
   }
  
-});
+}));
 
 
 const RadioButtonGroupComponent=(props)=>{
   
+  const classes = useStyles();
 
   const handleChange=(event)=> {
     let value = event.target.value;
@@ -35,27 +36,29 @@ const RadioButtonGroupComponent=(props)=>{
   }
 
  
-    let radioButtons = props.enumStrs.map((item, index) => (
-      <FormControlLabel
-     
-        key={item}
-        value={item}
-        disabled={props.disabled}
-        control={<Radio color={props.onColor} />}
-        label={item}
-        labelPlacement={props.bitLabelPlacement}
-      />
-    ));
+    let radioButtons;
+    if (props.enumStrs !== undefined && props.enumStrs !== null) {
+      radioButtons = props.enumStrs.map((item, index) => (
+        <FormControlLabel
+          key={item}
+          value={item}
+          disabled={props.disabled}
+          control={<Radio color={props.onColor} />}
+          label={item}
+          labelPlacement={props.bitLabelPlacement}
+        />
+      ));
+    }
     return (
       <FormControlLabel
         key={props.pvName}
-        className={props.classes.formControl}
+        className={classes.formControl}
      //   component="fieldset"
         disabled={props.disabled}
         label={props.formControlLabel}
         labelPlacement={props.labelPlacement}
         control={
-          <RadioGroup className={props.classes.RadioGroup}   value={props.value} onChange={handleChange} {...props.muiRadioGroupProps}>
+          <RadioGroup className={classes.RadioGroup}   value={props.value} onChange={handleChange} {...props.muiRadioGroupProps}>
             {radioButtons}
           </RadioGroup>
         }
@@ -136,12 +139,14 @@ const RadioButtonGroup = (props) => {
 
   };
 
-  RadioButtonGroup.defaultProps = {
-   labelPlacement:'top',
-   bitLabelPlacement:'end',
-   showTooltip:false
-  };
+RadioButtonGroup.defaultProps = {
+  labelPlacement:'top',
+  bitLabelPlacement:'end',
+  showTooltip:false
+};
 
+RadioButtonGroupComponent.defaultProps = RadioButtonGroup.defaultProps;
 
-export default   withStyles(styles, { withTheme: true })(RadioButtonGroup)
+export default RadioButtonGroup;
+export { RadioButtonGroup, RadioButtonGroupComponent };
 

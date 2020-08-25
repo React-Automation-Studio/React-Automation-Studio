@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { withStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import { Button, FormControlLabel } from "@material-ui/core";
 import PropTypes from "prop-types";
 import {isMobile,isTablet} from 'react-device-detect';
 import Widget from "../SystemComponents/Widgets/Widget";
-const styles = (theme) => ({
+
+const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     flexWrap: "wrap",
@@ -25,7 +26,7 @@ const styles = (theme) => ({
     marginLeft: "auto",
     marginRight: "auto",
   },
-});
+}));
 
 /* eslint-disable eqeqeq */
 const ToggleButtonComponent = (props) => {
@@ -65,12 +66,16 @@ const ToggleButtonComponent = (props) => {
     }
   }
 
-  const { classes } = props;
+  const classes = useStyles();
   const { value } = props;
   let momentary = props.momentary !== undefined ? props.momentary : false;
   let text;
   if (props.initialized){
-    text=props.enumStrs[value == 1 ? 1 : 0]
+    if (props.enumStrs !== null && props.enumStrs !== undefined) {
+      text=props.enumStrs[value == 1 ? 1 : 0]
+    } else {
+      text = value;
+    }
   }
   else{
     text="Disconnected";
@@ -226,7 +231,6 @@ ToggleButton.propTypes = {
 };
 
 ToggleButton.defaultProps = {
-
   debug: false,
   color: 'primary',
   labelPlacement: 'top',
@@ -234,6 +238,7 @@ ToggleButton.defaultProps = {
   showTooltip:false
 };
 
+ToggleButtonComponent.defaultProps = ToggleButton.defaultProps;
 
-
-export default withStyles(styles, { withTheme: true })(ToggleButton);
+export default ToggleButton;
+export { ToggleButton, ToggleButtonComponent };

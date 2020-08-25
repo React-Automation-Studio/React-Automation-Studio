@@ -1,10 +1,11 @@
 import React from "react";
-import { withStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import { FormControlLabel} from "@material-ui/core";
 import MuiSwitch from "@material-ui/core/Switch";
 import Widget from "../SystemComponents/Widgets/Widget";
 import PropTypes from 'prop-types';
-const styles = (theme) => ({
+
+const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     flexWrap: "wrap",
@@ -17,11 +18,12 @@ const styles = (theme) => ({
     marginLeft: "auto",
     marginRight: "auto",
   },
-});
+}));
 
 /* eslint-disable eqeqeq */
 const SwitchInternalComponent = (props) => {
   
+  const classes = useStyles();
 
   /**
    * Save switch state.
@@ -36,7 +38,7 @@ const SwitchInternalComponent = (props) => {
     return (
       <FormControlLabel
         key={props.pvName}
-        className={props.classes.FormControl}
+        className={classes.FormControl}
         disabled={props.disabled}
         label={props.formControlLabel}
         labelPlacement={props.labelPlacement}
@@ -117,11 +119,15 @@ Switch.propTypes = {
   
 
 }
+
 Switch.defaultProps = {
   onColor: 'primary',
   debug: false,
   showTooltip:false
-
 }
-export default withStyles(styles, { withTheme: true })(Switch)
+
+SwitchInternalComponent.defaultProps = Switch.defaultProps;
+
+export default Switch;
+export { Switch, SwitchInternalComponent as SwitchComponent };
 

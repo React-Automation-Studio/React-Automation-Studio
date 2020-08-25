@@ -1,11 +1,12 @@
 import React from "react";
-import { withStyles} from "@material-ui/core/styles";
+import { makeStyles} from "@material-ui/core/styles";
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import Widget from "../SystemComponents/Widgets/Widget";
 import grey from '@material-ui/core/colors/grey';
 import { Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
-const styles = (theme) => ({
+
+const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     flexWrap: "wrap",
@@ -41,11 +42,11 @@ const styles = (theme) => ({
     //  backgroundColor:'linear-gradient(45deg, #FFFFFF 1%, #FF8E53 99%)'
     //  background:'linear-gradient(45deg, '+ theme.palette.background.default+ ' 1%, '+red['800'] +' 99%)'
   }
-});
+}));
 
 
 const TextUpdateComponent=(props)=> {
-  const {classes}=props;
+  const classes = useStyles();
   let textFieldClassName;
   let label = props.label !== undefined ? props.label + ": " : "";
   let units = props.units !== undefined ? props.units + " " : "";
@@ -226,4 +227,8 @@ TextUpdate.defaultProps = {
  alarmSensitive: false,
  showTooltip:false
 };
-export default withStyles(styles, { withTheme: true })(TextUpdate)
+
+TextUpdateComponent.defaultProps = TextUpdate.defaultProps;
+
+export default TextUpdate;
+export { TextUpdate, TextUpdateComponent };

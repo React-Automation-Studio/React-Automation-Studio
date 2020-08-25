@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { withStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 
 import PropTypes from 'prop-types';
 
@@ -16,7 +16,7 @@ import {
 
 
 
-const styles = theme => ({
+const useStyles = makeStyles((theme) => ({
   textTicks: {
     fill: theme.palette.type === 'dark' ? theme.palette.grey['300'] : theme.palette.grey['500']
 
@@ -42,10 +42,9 @@ const styles = theme => ({
     marginRight: "auto",
   },
   
-});
+}));
 
-function getTickValues(props, min, max, numberOfTicks, x0, x1, y1, xOffset, radialTextOffset) {
-  const { classes } = props;
+function getTickValues(props, min, max, numberOfTicks, x0, x1, y1, xOffset, radialTextOffset, classes) {
   //this.test("test1");
   //this.handleInputValue();
 
@@ -88,7 +87,8 @@ function getTickValues(props, min, max, numberOfTicks, x0, x1, y1, xOffset, radi
 
 function GaugeComponent(props) {
   const gradientId = uuidv4();
-  const { classes } = props;
+  const classes = useStyles();
+  const theme = useTheme();
   const units = props.units;
   const value = props.value;
   const min = props.min;
@@ -124,8 +124,8 @@ function GaugeComponent(props) {
 
       <linearGradient id={gradientId} >
 
-        <stop offset="0%" stopColor={typeof props.disabled === 'undefined' ? props.theme.palette.primary.main : 'default'} />
-        <stop offset="100%" stopColor={props.theme.palette.type === 'dark' ? props.theme.palette.grey['300'] : props.theme.palette.grey['200']} />
+        <stop offset="0%" stopColor={typeof props.disabled === 'undefined' ? theme.palette.primary.main : 'default'} />
+        <stop offset="100%" stopColor={theme.palette.type === 'dark' ? theme.palette.grey['300'] : theme.palette.grey['200']} />
       </linearGradient>
 
       <path
@@ -147,7 +147,7 @@ function GaugeComponent(props) {
 
 
       <path
-        fill={props.theme.palette.svgComponentSecondary.main}
+        fill={theme.palette.svgComponentSecondary.main}
 
 
 
@@ -159,7 +159,7 @@ function GaugeComponent(props) {
 
 
 
-      {getTickValues(props, min, max, 6, x0, x1, y1, xOffset, radialTextOffset)}
+      {getTickValues(props, min, max, 6, x0, x1, y1, xOffset, radialTextOffset, classes)}
     </svg>
 
   );
@@ -169,7 +169,7 @@ GaugeComponent.propTypes = {
   height: PropTypes.number,
   width: PropTypes.number,
 }
-const FlexibleGaugeComponent = makeVisFlexible(withStyles(styles, { withTheme: true })(GaugeComponent));
+const FlexibleGaugeComponent = makeVisFlexible(GaugeComponent);
 
 /**
 * The Gauge Component is an Automation-studio component.
@@ -177,7 +177,7 @@ const FlexibleGaugeComponent = makeVisFlexible(withStyles(styles, { withTheme: t
 
 const GaugeInternalComponent = (props) => {
   const { initialized } = props;
-  const {classes}=props;
+  const classes = useStyles();
   let units;
   let value;
   let min;
@@ -372,7 +372,6 @@ Gauge.propTypes = {
 
 Gauge.defaultProps = {
   debug: false,
-  
   min: 0,
   max: 100,
   usePvPrecision: false,
@@ -380,4 +379,7 @@ Gauge.defaultProps = {
   showTooltip:false
 };
 
-export default withStyles(styles, { withTheme: true })(Gauge)
+GaugeInternalComponent.defaultProps = Gauge.defaultProps;
+
+export default Gauge;
+export { Gauge, GaugeInternalComponent as GaugeComponent };

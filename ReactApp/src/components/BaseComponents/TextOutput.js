@@ -1,11 +1,11 @@
 import React from "react";
-import { withStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import { InputAdornment, TextField } from "@material-ui/core";
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import PropTypes from 'prop-types';
 import Widget from "../SystemComponents/Widgets/Widget";
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     flexWrap: "wrap",
@@ -78,11 +78,11 @@ const styles = (theme) => ({
     borderRadius: 4,
     background: 'linear-gradient(45deg,' + fade(theme.palette.alarm.major.dark, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.major.dark) + ' 100%)'
   }
-});
+}));
 
 
 function TextOutputComponent(props) {
-  const { classes } = props;
+  const classes = useStyles();
 
 
   let inputProps = {
@@ -355,6 +355,7 @@ TextOutput.propTypes = {
     ['pvname', 'value', 'char_value', 'enum_strs', 'lower_disp_limit', 'upper_disp_limit',
       'lower_warning_limit', 'upper_warning_limit', 'lower_ctrl_limit', 'upper_ctrl_limit', 'units', 'precision', 'severity', 'write_access', 'read_access', 'host'])
 };
+
 TextOutput.defaultProps = {
   debug: false,
   variant: "outlined",
@@ -363,4 +364,7 @@ TextOutput.defaultProps = {
   showTooltip: false
 };
 
-export default withStyles(styles, { withTheme: true })(TextOutput);
+TextOutputComponent.defaultProps = TextOutput.defaultProps;
+
+export default TextOutput;
+export { TextOutput, TextOutputComponent };

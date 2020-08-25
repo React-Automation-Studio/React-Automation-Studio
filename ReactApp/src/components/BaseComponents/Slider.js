@@ -1,5 +1,5 @@
 import React, { useRef} from 'react';
-import { withStyles } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
 import PropTypes from "prop-types";
 import debounce from "lodash.debounce";
@@ -12,7 +12,7 @@ import { FormControlLabel } from "@material-ui/core";
 
 
 
-const styles = (theme) => {
+const useStyles = makeStyles((theme) => {
   const backgroundColor = theme.palette.type === 'light' ? 'rgba(0, 0, 0, 0.23)' : 'rgba(255, 255, 255, 0.23)'; //copied from material ui textfield 
   return (
 
@@ -333,13 +333,16 @@ const styles = (theme) => {
       }
 
     })
-};
+});
 
 
 function SliderComponent(props) {
   const emitChangeDebounced = useRef(debounce(value => emitChange(value), 10)).current;
   
   const emitBlurDebounced = useRef(debounce(handleBlur, 500)).current;
+
+  const classes = useStyles();
+  const theme = useTheme();
 
   /**
    * Write value on the PV using emitChangeDebounced function.
@@ -387,7 +390,9 @@ function SliderComponent(props) {
   if (props.initialized) {
     content = props.showValue===true?(
       <Typography 
-      className={props.vertical?props.classes.verticalSliderValue:props.classes.horizontalSliderValue}
+      className={ props.vertical ? 
+        classes.verticalSliderValue : classes.horizontalSliderValue
+      }
       style={{textAlign:'center'}}
       >
         {props.value} 
@@ -424,26 +429,32 @@ function SliderComponent(props) {
 
   
   return (
-    <div  style={{height:'100%', width:'100%',padding:props.theme.spacing(1)}} onPointerDownCapture={handleOnClickCapture}  
+    <div  style={{height:'100%', width:'100%',padding:theme.spacing(1)}} onPointerDownCapture={handleOnClickCapture}  
  
     
     
     >
     <FormControlLabel
     key={props.pvName + props.initialized}
-    className={props.vertical?props.classes.verticalSliderLabel:props.classes.horizontalSliderLabel}
+    className={ props.vertical ? 
+      classes.verticalSliderLabel : classes.horizontalSliderLabel
+    }
     
     label={props.formControlLabel}
     labelPlacement={props.labelPlacement}
     control={
     <FormControlLabel
       key={props.pvName + props.initialized}
-      className={props.vertical?props.classes.verticalSliderValue:props.classes.horizontalSliderValue}
+      className={ props.vertical ? 
+        classes.verticalSliderValue : classes.horizontalSliderValue
+      }
       label={content}
       labelPlacement={props.valuePlacement}
       control={
         <div
-        className={props.vertical?props.classes.verticalSlider:props.classes.horizontalSlider}
+        className={ props.vertical ? 
+          classes.verticalSlider : classes.horizontalSlider
+        }
       
 
         >
@@ -656,7 +667,9 @@ Slider.defaultProps = {
   showValue:true,
   showTooltip:false,
   vertical:false,
-
 };
 
-export default withStyles(styles, { withTheme: true })(Slider);
+SliderComponent.defaultProps = Slider.defaultProps;
+
+export default Slider;
+export { Slider, SliderComponent };

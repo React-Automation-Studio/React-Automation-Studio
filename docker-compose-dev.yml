@@ -27,6 +27,7 @@ services:
       - LOADSAVE_DATABASE_REPLICA_SET_NAME=devrs
       - WATCH_DEBUG_DATABASE=localhost
       - WATCH_DEBUG_DATABASE_REPLICA_SET_NAME=devrs
+      - DEMO_ARCHIVER=http://localhost:17668
     build:
       context: ./
       args: # Environment variables available at build-time

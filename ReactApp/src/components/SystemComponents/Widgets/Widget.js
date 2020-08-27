@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
+import { makeStyles, FormControlLabel } from "@material-ui/core";
 import PV from '../PV'
 import ContextMenu from "../ContextMenu";
 import PropTypes from "prop-types";
@@ -9,6 +10,19 @@ import Tooltip from '@material-ui/core/Tooltip';
 import {replaceMacros,replaceArrayMacros} from '../Utils/macroReplacement';
 const config = { }
 const math = create(all, config)
+
+const useStyles = makeStyles((theme) => ({
+  horizontalSpan: {
+    padding: theme.spacing(1),
+    display: "inline-block",
+    width: (props) => props.width,
+  },
+  verticalSpan: {
+    padding: theme.spacing(1),
+    display: "inline-block",
+    width: "100%",
+  },
+}));
 
 /**
  * The Widget component creates standard properties, state variables and callbacks to manage the behaviour of a component communicating with one or multiple PVs. It also provides the default RAS contextMenu to the child component. 
@@ -269,19 +283,25 @@ const math = create(all, config)
       console.warn("prop usePrecision is deprecated, use the usePvPrecision and prec props instead")
     }
   },[props])
+  const applyPrecision = (value, precision) => {
+    if (!isNaN(value)) {
+      return value.toFixed(precision);
+    }
+    return value;
+  }
   const checkPrecision = (value, prec) => {
     if (props.usePvPrecision===true || (typeof props.prec!=='undefined')) {
       let precision = parseInt(prec);
       let tempValue;
       if (Array.isArray(value)) {
-        tempValue = value.map((val) => parseFloat(val));
+        tempValue = value.map((val) => {
+          let floatValue = parseFloat(val);
+          return applyPrecision(floatValue, precision);
+        });
+        return tempValue;
       } else {
         tempValue = parseFloat(value);
-      }
-      if (!isNaN(tempValue)) {
-        return tempValue.toFixed(precision);
-      } else {
-        return value;
+        return applyPrecision(tempValue, precision)
       }
     } else {
       return (value)
@@ -461,17 +481,36 @@ const math = create(all, config)
   }}
   probeType={props.readOnly ? "readOnly" : undefined}
 />)
-  const child = props.component && wrapComponent(props.component,
-    {
+  let formControlLabel = initialized ? 
+    label :
+    <span style={{fontSize:"inherit", whiteSpace: "nowrap"}}>
+      {disconnectedIcon()}{" "+pv.pvName}
+    </span>;
+
+  let filteredValues = value;
+  if (Array.isArray(value) && props.registers !== undefined && Array.isArray(props.registers)) {
+    filteredValues = props.registers.map((item) => value[item]);
+  }
+
+  let width;
+  if (initialized && props.alignHorizontal && props.stretch) {
+    let length = filteredValues.length > 0 ? filteredValues.length : 1;
+    width = 100 / length + "%";
+  }
+  const classes = useStyles({ width });
+
+  let child;
+  if (!Array.isArray(value) && props.component) {
+    child = wrapComponent(props.component, {
       ...props,
       initialized: initialized,
       pvName: pv.pvName,
       value: value,
       min: min,
       max: max,
-      prec:prec,
+      prec: prec,
       label: label,
-      formControlLabel:initialized?label :<span style={{fontSize:"inherit", whiteSpace: "nowrap"}}>{disconnectedIcon()}{" "+pv.pvName}</span>,
+      formControlLabel: formControlLabel,
       units: units,
       disabled: disabled,
       readOnly: readOnly,
@@ -485,13 +524,74 @@ const math = create(all, config)
       handleBlur: () => setFocus(false),
       pvData: pv,
       pvsData: pvs,
-    
     })
+  } else if (Array.isArray(value) && props.component) {
+    let children = filteredValues.map((v, idx) => {
+      const handleIndexValue = (val) => {
+        let newValue = [...value];
+        newValue[idx] = val;
+        setValue(newValue);
+      }
+      const handleIndexImmediateValue = (val) => {
+        let newValue = [...value];
+        newValue[idx] = val;
+        setImmediateValue(newValue);
+      }
+      const handleIndependentValue = (arrayValue, singleValue) => {
+        if (arrayValue !== undefined && arrayValue.length > idx) {
+          return arrayValue[idx];
+        }
+        return singleValue;
+      }
+      let registerLabel = handleIndependentValue(props.registersLabel, undefined);
+      return (
+        <span
+          className={
+            props.alignHorizontal ? classes.horizontalSpan : classes.verticalSpan
+          }
+          key={"elem" + idx}
+        >
+          {wrapComponent(props.component, {
+            ...props,
+            index: idx,
+            initialized: initialized,
+            pvName: pv.pvName,
+            value: v,
+            min: min,
+            max: max,
+            prec: prec,
+            label: registerLabel,
+            formControlLabel: initialized ? registerLabel : undefined,
+            labelPlacement: props.registersLabelPlacement,
+            units: units,
+            disabled: disabled,
+            readOnly: readOnly,
+            alarmSeverity: alarmSeverity,
+            enumStrs: enumStrings,
+            disconnectedIcon: disconnectedIcon(),
+            handleChange: handleIndexValue,
+            handleImmediateChange: handleIndexImmediateValue,
+            handleCommitChange: () => SetCommitChange(true),
+            handleFocus: () => setFocus(true),
+            handleBlur: () => setFocus(false),
+            pvData: pv,
+            pvsData: pvs,
+          })}
+        </span>
+      );
+    })
+    child = (
+      <FormControlLabel
+        label={formControlLabel}
+        labelPlacement={props.labelPlacement}
+        control={<div>{children}</div>}
+      />
+    );
+  }
+  
   const divStyle = {
     width: "100%",
-    height: "100%",
-
-    
+    height: "100%",    
   }
 
   const Tag=props.svgWidget?"g":"div";
@@ -686,7 +786,32 @@ Widget.propTypes = {
    */
 
   tooltipProps:PropTypes.object,
-
+  /**
+   * When receiving a PV storing an array of values users can choose a subset of these value.
+   * Registers accept the indexes of the registers to effectively show.
+   * Order does count!
+   */
+  registers: PropTypes.arrayOf(PropTypes.number),
+  /**
+   * When receiving a PV storing an array of values users can assign a label to each register
+   * or a subset of them.
+   */
+  registersLabel: PropTypes.arrayOf(PropTypes.string),
+  /**
+   * When receiving a PV storing an array of values users can set the label position for each register,
+   * or a subset of them, if the receiving components allows it.
+   */
+  registersLabelPlacement: PropTypes.oneOf(["top", "bottom", "start", "end"]),
+  /**
+   * Directive to display array elements horizontal aligned.
+   */
+  alignHorizontal: PropTypes.bool,
+  /**
+   * When alignHorizontal is true, if stretch is true
+   * all the elements are aligned into one row, otherwise
+   * they have their standard width.
+   */
+  stretch: PropTypes.bool,
 };
 
 /**
@@ -702,6 +827,8 @@ Widget.defaultProps = {
   useMetadata: true,
   tooltip:"",
   writeOutputValueToAllpvs:false,
+  alignHorizontal: false,
+  stretch: true,
 };
 
 export default Widget

@@ -366,8 +366,32 @@ Gauge.propTypes = {
   tooltipProps:PropTypes.object,
   /** label placement*/
   labelPlacement: PropTypes.oneOf(['start', 'top', 'bottom', 'end']),
-
-
+  /**
+   * When receiving a PV storing an array of values users can choose a subset of these value.
+   * Registers accept the indexes of the registers to effectively show.
+   * Order does count!
+   */
+  registers: PropTypes.arrayOf(PropTypes.number),
+  /**
+   * When receiving a PV storing an array of values users can assign a label to each register
+   * or a subset of them.
+   */
+  registersLabel: PropTypes.arrayOf(PropTypes.string),
+  /**
+   * When receiving a PV storing an array of values users can set the label position for each register,
+   * or a subset of them, if the receiving components allows it.
+   */
+  registersLabelPlacement: PropTypes.oneOf(["top", "bottom", "start", "end"]),
+  /**
+   * Directive to display array elements horizontal aligned.
+   */
+  alignHorizontal: PropTypes.bool,
+  /**
+   * When alignHorizontal is true, if stretch is true
+   * all the elements are aligned into one row, otherwise
+   * they have their standard width.
+   */
+  stretch: PropTypes.bool,
 };
 
 Gauge.defaultProps = {
@@ -376,7 +400,9 @@ Gauge.defaultProps = {
   max: 100,
   usePvPrecision: false,
   labelPlacement:'top',
-  showTooltip:false
+  showTooltip:false,
+  alignHorizontal: false,
+  stretch: true,
 };
 
 GaugeInternalComponent.defaultProps = Gauge.defaultProps;

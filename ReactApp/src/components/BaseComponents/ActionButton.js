@@ -31,33 +31,51 @@ const useStyles = makeStyles((theme) => ({
 
 
 const ActionButtonComponent=(props)=> {
-
   const classes = useStyles();
+  const { 
+    color, 
+    disabled, 
+    formControlLabel, 
+    index,
+    labelPlacement, 
+    muiButtonProps, 
+    pvName,
+    registersActionString,
+    registersActionValue,
+  } = props;
+
+  const handleIndexValue = (arrayValue, singleValue) => {
+    if (index !== undefined && arrayValue !== undefined && arrayValue.length > index) {
+      return arrayValue[index];
+    }
+    return singleValue;
+  };
+  let actionString = handleIndexValue(registersActionString, props.actionString);
+  let actionValue = handleIndexValue(registersActionValue, props.actionValue);
+
   /**
    * Send the predefined value to the PV.
    */
   const handleButtonClick=()=> {
-   
-    props.handleImmediateChange(props.actionValue);
+    props.handleImmediateChange(actionValue);
   }
-
 
   return (
     <FormControlLabel
-      key={props.pvName}
+      key={pvName}
       className={classes.FormControl}
-      disabled={props.disabled}
-      label={props.formControlLabel}
-      labelPlacement={props.labelPlacement}
+      disabled={disabled}
+      label={formControlLabel}
+      labelPlacement={labelPlacement}
       control={
         <Button
           className={classes.Button}
           variant="contained"
-          color={props.color}
+          color={color}
           onClick={handleButtonClick}
-          {...props.muiButtonProps}
+          {...muiButtonProps}
         >
-          {props.actionString}
+          {actionString}
         </Button>
       }
     />
@@ -127,15 +145,48 @@ ActionButton.propTypes = {
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-
   tooltipProps:PropTypes.object,
-
-
+  /**
+   * Single element action string.
+   */
+  registersActionString: PropTypes.arrayOf(PropTypes.string),
+  /**
+   * Single element action value.
+   */
+  registersActionValue: PropTypes.arrayOf(PropTypes.number),
+  /**
+   * When receiving a PV storing an array of values users can choose a subset of these value.
+   * Registers accept the indexes of the registers to effectively show.
+   * Order does count!
+   */
+  registers: PropTypes.arrayOf(PropTypes.number),
+  /**
+   * When receiving a PV storing an array of values users can assign a label to each register
+   * or a subset of them.
+   */
+  registersLabel: PropTypes.arrayOf(PropTypes.string),
+  /**
+   * When receiving a PV storing an array of values users can set the label position for each register,
+   * or a subset of them, if the receiving components allows it.
+   */
+  registersLabelPlacement: PropTypes.oneOf(["top", "bottom", "start", "end"]),
+  /**
+   * Directive to display array elements horizontal aligned.
+   */
+  alignHorizontal: PropTypes.bool,
+  /**
+   * When alignHorizontal is true, if stretch is true
+   * all the elements are aligned into one row, otherwise
+   * they have their standard width.
+   */
+  stretch: PropTypes.bool,
 };
 
 ActionButton.defaultProps = { 
   showTooltip:false,
   color:'primary',
+  alignHorizontal: false,
+  stretch: true,
 };
 
 ActionButtonComponent.defaultProps = ActionButton.defaultProps;

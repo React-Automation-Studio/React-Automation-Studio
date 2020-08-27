@@ -1,75 +1,63 @@
-In this example the ArrayContainer receives as component TextInputComponent:
+In this example the ArrayContainer receives as component TextInput.
+It shows only the first 5 elements.
 
 ```js
-import { TextInputComponent } from "./TextInput";
+import TextInput from "./TextInput";
 <ArrayContainer
   pv="pva://testIOC:test4"
-  usePvLabel
-  labelPlacement="top"
-  units="V"
-  usePvPrecision
-  numberFormat={{ notation: "engineering", precision: 5 }}
-  component={TextInputComponent}
-  numberOfVisibleElements={5}
+  component={TextInput}
+  registers={[0,1,2,3,4]}
 />;
 ```
 
-ArrayContainer using TextInputComponent with the single elements horizontal aligned:
+ArrayContainer using TextInput with the single elements horizontal aligned:
 
 ```js
-import { TextInputComponent } from "./TextInput";
+import TextInput from "./TextInput";
 <ArrayContainer
   pv="pva://testIOC:test4"
-  usePvLabel
-  labelPlacement="top"
-  units="V"
-  usePvPrecision
-  numberFormat={{ notation: "engineering", precision: 5 }}
-  component={TextInputComponent}
-  numberOfVisibleElements={5}
+  component={TextInput}
+  registers={[0,1,2,3,4]}
   alignHorizontal
 />;
 ```
 
-ArrayContainer using TextInputComponent with a label for each array value:
+ArrayContainer using TextInput with a label for each array value:
 
 ```js
-import { TextInputComponent } from "./TextInput";
+import TextInput from "./TextInput";
 <ArrayContainer
   pv="pva://testIOC:test4"
+  component={TextInput}
+  registers={[1, 2, 5]}
+  registersLabel={["one", "two", "five"]}
+  registersLabelPlacement="top"
   usePvLabel
   labelPlacement="top"
   units="V"
   usePvPrecision
   numberFormat={{ notation: "engineering", precision: 5 }}
-  component={TextInputComponent}
-  numberOfVisibleElements={5}
-  elementLabel={["first", "second", "third", "fourth", "fifth"]}
 />;
 ```
 
-ArrayContainer using TextUpdateComponent.
+ArrayContainer using TextUpdate.
 
 ```js
-import { TextUpdateComponent } from "./TextUpdate";
+import TextUpdate from "./TextUpdate";
 <ArrayContainer
   pv="pva://testIOC:test4"
-  usePvLabel
-  labelPlacement="top"
-  units="V"
-  usePvPrecision
-  numberFormat={{ notation: "engineering", precision: 5 }}
-  component={TextUpdateComponent}
-  numberOfVisibleElements={5}
-  elementLabel={["first", "second", "third", "fourth", "fifth"]}
+  component={TextUpdate}
+  registers={[1, 2, 5]}
+  registersLabel={["one", "two", "five"]}
+  registersLabelPlacement="top"
 />;
 ```
 
-ArrayContainer receives a binary waveform and the StyledIconButtonComponent.
+ArrayContainer receives a binary waveform and the StyledIconButton.
 ArrayContainer forward its children.
 
 ```js
-import { StyledIconButtonComponent } from "./StyledIconButton";
+import StyledIconButton from "./StyledIconButton";
 import { Grid } from "@material-ui/core";
 import { Face } from "@material-ui/icons";
 
@@ -79,8 +67,8 @@ import { Face } from "@material-ui/icons";
       pv="pva://testIOC:binaryWaveform"
       usePvLabel
       labelPlacement="top"
-      component={StyledIconButtonComponent}
-      elementLabel={[
+      component={StyledIconButton}
+      registersLabel={[
         "1st",
         "2nd",
         "3rd",
@@ -101,9 +89,9 @@ import { Face } from "@material-ui/icons";
       pv="pva://testIOC:binaryWaveform"
       usePvLabel
       labelPlacement="top"
-      component={StyledIconButtonComponent}
-      elementLabelPlacement="bottom"
-      elementLabel={[
+      component={StyledIconButton}
+      registersLabelPlacement="bottom"
+      registersLabel={[
         "1st",
         "2nd",
         "3rd",

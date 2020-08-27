@@ -1,129 +1,5 @@
 import React from "react";
-import { FormControlLabel } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
-import Widget from "../SystemComponents/Widgets/Widget";
-
-const useStyles = makeStyles((theme) => ({
-  formLabel: {
-    height: "100%",
-    width: "100%",
-    margin: "auto",
-  },
-  horizontalSpan: {
-    padding: theme.spacing(1),
-    display: "inline-block",
-    width: (props) => props.width,
-  },
-  verticalSpan: {
-    padding: theme.spacing(1),
-    display: "inline-block",
-    width: "100%",
-  },
-}));
-
-function ComponentList(props) {
-  const {
-    actionValue,
-    actionString,
-    alignHorizontal,
-    initialized,
-    InputComponent,
-    formControlLabel,
-    labelPlacement,
-    elementLabel,
-    elementLabelPlacement,
-    elementActionValue,
-    elementActionString,
-    value,
-    numberOfVisibleElements,
-    stretch,
-  } = props;
-
-  let width;
-  if (initialized && alignHorizontal && stretch) {
-    let length = value.length === undefined ? 1 : value.length;
-    if (numberOfVisibleElements !== undefined) {
-      let numVisibleElem = Math.max(1, parseInt(numberOfVisibleElements));
-      length = Math.min(length, numVisibleElem);
-    }
-    width = 100 / length + "%";
-  }
-
-  const classes = useStyles({ width });
-
-  const setValue = (arrayValue, singleValue, idx) => {
-    if (arrayValue !== undefined && arrayValue.length > idx) {
-      return arrayValue[idx];
-    }
-    return singleValue;
-  };
-
-  let list = value.map((v, idx) => {
-    const handleChange = (v) => {
-      let newValue = [...value];
-      newValue[idx] = v;
-      props.handleChange(newValue);
-    };
-
-    const handleImmediateChange = (v) => {
-      let newValue = [...value];
-      newValue[idx] = v;
-      props.handleImmediateChange(newValue);
-    };
-
-    if (
-      numberOfVisibleElements === undefined ||
-      (numberOfVisibleElements > 0 && idx < numberOfVisibleElements)
-    ) {
-      let componentLabel = setValue(elementLabel, undefined, idx);
-      let componentActionValue = setValue(elementActionValue, actionValue, idx);
-      let componentActionString = setValue(
-        elementActionString,
-        actionString,
-        idx
-      );
-      return (
-        <span
-          className={
-            alignHorizontal ? classes.horizontalSpan : classes.verticalSpan
-          }
-          key={"elem" + idx}
-        >
-          <InputComponent
-            {...props}
-            value={v}
-            formControlLabel={componentLabel}
-            label={componentLabel}
-            labelPlacement={elementLabelPlacement}
-            actionValue={componentActionValue}
-            actionString={componentActionString}
-            handleChange={handleChange}
-            handleImmediateChange={handleImmediateChange}
-          />
-        </span>
-      );
-    }
-  });
-
-  return (
-    <FormControlLabel
-      className={classes.formLabel}
-      label={formControlLabel}
-      labelPlacement={labelPlacement}
-      control={<div>{list}</div>}
-    />
-  );
-}
-
-function ArrayContainerComponent(props) {
-  const { containerComponent, formControlLabel, initialized, value } = props;
-  let core = formControlLabel;
-  if (initialized && Array.isArray(value)) {
-    core = <ComponentList InputComponent={containerComponent} {...props} />;
-  }
-  return <div>{core}</div>;
-}
 
 /**
  * The ArrayContainer is a wrapper to show,
@@ -147,50 +23,30 @@ function ArrayContainerComponent(props) {
  * (i.e. RadioButtonGroup, SelectionInput, SelectionList).
  */
 function ArrayContainer(props) {
-  return (
-    <Widget
-      {...props}
-      component={ArrayContainerComponent}
-      containerComponent={props.component}
-      pvs={undefined}
-      useStringValue={false}
-    />
-  );
+  const wrapComponent = (InputComponent, props) => {
+    return <InputComponent {...props} pvs={undefined} useStringValue={false} />;
+  };
+  const BaseComponent = wrapComponent(props.component, props);
+  return <div>{BaseComponent}</div>;
 }
 
 ArrayContainer.propTypes = {
   /**
-   * Max number of visible elements.
-   * It must be a positive, non zero, integer.
-   * If not defined it is equal to the array length.
+   * When receiving a PV storing an array of values users can choose a subset of these value.
+   * Registers accept the indexes of the registers to effectively show.
+   * Order does count!
    */
-  numberOfVisibleElements: PropTypes.number,
+  registers: PropTypes.arrayOf(PropTypes.number),
   /**
-   * Each element of the array can have a personal label.
-   * This props expect a list with the label to assign, in order,
-   * to each component.
-   * This prop is applied only if the received component
-   * expects the prop *label*.
+   * When receiving a PV storing an array of values users can assign a label to each register
+   * or a subset of them.
    */
-  elementLabel: PropTypes.array,
+  registersLabel: PropTypes.arrayOf(PropTypes.string),
   /**
-   * Single element label position.
-   * This prop is applied only if the received component
-   * expects the prop *labelPlacement*.
+   * When receiving a PV storing an array of values users can set the label position for each register,
+   * or a subset of them, if the receiving components allows it.
    */
-  elementLabelPlacement: PropTypes.oneOf(["top", "bottom", "start", "end"]),
-  /**
-   * Single element action string.
-   * This prop is applied only if the received component
-   * expects the prop *actionString*.
-   */
-  elementActionString: PropTypes.array,
-  /**
-   * Single element action value.
-   * This prop is applied only if the received component
-   * expects the prop *actionValue*.
-   */
-  elementActionValue: PropTypes.arrayOf(PropTypes.number),
+  registersLabelPlacement: PropTypes.oneOf(["top", "bottom", "start", "end"]),
   /**
    * Directive to display array elements horizontal aligned.
    */
@@ -209,4 +65,4 @@ ArrayContainer.defaultProps = {
 };
 
 export default ArrayContainer;
-export { ArrayContainerComponent, ArrayContainer };
+export { ArrayContainer };

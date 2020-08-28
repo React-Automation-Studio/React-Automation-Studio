@@ -1,11 +1,11 @@
 import React from "react";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 import { Grid, FormControlLabel, SvgIcon } from "@material-ui/core";
 import { Lens } from "@material-ui/icons";
 import PropTypes from "prop-types";
 import Widget from "../SystemComponents/Widgets/Widget";
 
-const useStyles = makeStyles((theme) => ({
+const styles = (theme) => ({
   root: {
     display: "flex",
     flexWrap: "wrap",
@@ -16,24 +16,24 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "auto",
     marginRight: "auto",
   },
-}));
+});
 
 
 const BitIndicatorsComponent = (props) => {
-  const theme = useTheme();
-  const classes = useStyles();
 
-  let onColor = theme.palette.primary.main;
-  let offColor = theme.palette.grey[300];
+
+
+  let onColor = props.theme.palette.primary.main;
+  let offColor = props.theme.palette.grey[300];
   if (typeof props.onColor !== 'undefined') {
     if (props.onColor === 'primary') {
-      onColor = theme.palette.primary.main;
+      onColor = props.theme.palette.primary.main;
     }
     else if (props.onColor === 'secondary') {
-      onColor = theme.palette.secondary.main;
+      onColor = props.theme.palette.secondary.main;
     }
     else if (props.onColor === 'default') {
-      onColor = theme.palette.grey[300];
+      onColor = props.theme.palette.grey[300];
     }
     else {
       onColor = props.onColor;
@@ -42,13 +42,13 @@ const BitIndicatorsComponent = (props) => {
 
   if (typeof props.offColor !== 'undefined') {
     if (props.offColor === 'primary') {
-      offColor = theme.palette.primary.main;
+      offColor = props.theme.palette.primary.main;
     }
     else if (props.offColor === 'secondary') {
-      offColor = theme.palette.secondary.main;
+      offColor = props.theme.palette.secondary.main;
     }
     else if (props.offColor === 'default') {
-      offColor = theme.palette.grey[300];
+      offColor = props.theme.palette.grey[300];
     }
     else {
       offColor = props.offColor;
@@ -90,7 +90,7 @@ const BitIndicatorsComponent = (props) => {
         }
       }
     }
-    bitStyles.push({ ["margin" + place]: theme.spacing(1) });
+    bitStyles.push({ ["margin" + place]: props.theme.spacing(1) });
   }
   if (props.reverseBits) {
     bitLabels = bitLabels.reverse();
@@ -100,7 +100,7 @@ const BitIndicatorsComponent = (props) => {
 
   let bits = bitArray.map((value, index) => {
     // eslint-disable-next-line eqeqeq 
-    let color = !props.initialized ? theme.palette.grey[300] : value != 0 ? onColor : offColor;
+    let color = !props.initialized ? props.theme.palette.grey[300] : value != 0 ? onColor : offColor;
     return (
       <Grid
         item
@@ -108,7 +108,7 @@ const BitIndicatorsComponent = (props) => {
         xs={!props.horizontal ? 12 : undefined}
       >
         <FormControlLabel
-          className={classes.FormControl}
+          className={props.classes.FormControl}
           disabled={props.disabled}
           label={bitLabels[index]}
           labelPlacement={bitLabelPos}
@@ -205,32 +205,6 @@ BitIndicators.propTypes = {
    */
 
   tooltipProps: PropTypes.object,
-  /**
-   * When receiving a PV storing an array of values users can choose a subset of these value.
-   * Registers accept the indexes of the registers to effectively show.
-   * Order does count!
-   */
-  registers: PropTypes.arrayOf(PropTypes.number),
-  /**
-   * When receiving a PV storing an array of values users can assign a label to each register
-   * or a subset of them.
-   */
-  registersLabel: PropTypes.arrayOf(PropTypes.string),
-  /**
-   * When receiving a PV storing an array of values users can set the label position for each register,
-   * or a subset of them, if the receiving components allows it.
-   */
-  registersLabelPlacement: PropTypes.oneOf(["top", "bottom", "start", "end"]),
-  /**
-   * Directive to display array elements horizontal aligned.
-   */
-  alignHorizontal: PropTypes.bool,
-  /**
-   * When alignHorizontal is true, if stretch is true
-   * all the elements are aligned into one row, otherwise
-   * they have their standard width.
-   */
-  stretch: PropTypes.bool,
 };
 
 BitIndicators.defaultProps = {
@@ -239,12 +213,6 @@ BitIndicators.defaultProps = {
   reverseBits: false,
   onColor: 'primary',
   offColor: 'default',
-  usePvBitLabels: false,
-  alignHorizontal: false,
-  stretch: true,
+  usePvBitLabels: false
 };
-
-BitIndicatorsComponent.defaultProps = BitIndicators.defaultProps;
-
-export default BitIndicators;
-export { BitIndicators, BitIndicatorsComponent };
+export default withStyles(styles, { withTheme: true })(BitIndicators);

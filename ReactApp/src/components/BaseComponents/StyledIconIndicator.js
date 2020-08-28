@@ -1,11 +1,11 @@
 import React from "react";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 import { FormControlLabel, SvgIcon } from "@material-ui/core";
 import { Lens } from "@material-ui/icons";
 import PropTypes from 'prop-types';
 import Widget from "../SystemComponents/Widgets/Widget";
 
-const useStyles = makeStyles((theme) => ({
+const styles = (theme) => ({
   root: {
     display: "flex",
     flexWrap: "wrap",
@@ -18,24 +18,24 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "auto",
     marginRight: "auto",
   },
-}));
+});
 
 
 function StyledIconIndicatorComponent(props) {
-  const classes = useStyles();
-  const theme = useTheme();
 
-  let onColor = theme.palette.primary.main;
-  let offColor = theme.palette.grey[300];
+
+
+  let onColor = props.theme.palette.primary.main;
+  let offColor = props.theme.palette.grey[300];
   if (typeof props.onColor !== 'undefined') {
     if (props.onColor === 'primary') {
-      onColor = theme.palette.primary.main;
+      onColor = props.theme.palette.primary.main;
     }
     else if (props.onColor === 'secondary') {
-      onColor = theme.palette.secondary.main;
+      onColor = props.theme.palette.secondary.main;
     }
     else if (props.onColor === 'default') {
-      onColor = theme.palette.grey[300];
+      onColor = props.theme.palette.grey[300];
     }
     else {
       onColor = props.onColor;
@@ -44,13 +44,13 @@ function StyledIconIndicatorComponent(props) {
 
   if (typeof props.offColor !== 'undefined') {
     if (props.offColor === 'primary') {
-      offColor = theme.palette.primary.main;
+      offColor = props.theme.palette.primary.main;
     }
     else if (props.offColor === 'secondary') {
-      offColor = theme.palette.secondary.main;
+      offColor = props.theme.palette.secondary.main;
     }
     else if (props.offColor === 'default') {
-      offColor = theme.palette.grey[300];
+      offColor = props.theme.palette.grey[300];
     }
     else {
       offColor = props.offColor;
@@ -59,21 +59,21 @@ function StyledIconIndicatorComponent(props) {
   let iconStyle = {};
   if (typeof props.labelPlacement !== 'undefined') {
     if (props.labelPlacement === "top") {
-      iconStyle['marginTop'] = theme.spacing(1);
+      iconStyle['marginTop'] = props.theme.spacing(1);
     } else if (props.labelPlacement === "end") {
-      iconStyle['marginRight'] = theme.spacing(1);
+      iconStyle['marginRight'] = props.theme.spacing(1);
     }
     else if (props.labelPlacement === "start") {
-      iconStyle['marginLeft'] = theme.spacing(1);
+      iconStyle['marginLeft'] = props.theme.spacing(1);
     }
     else if (props.labelPlacement === "bottom") {
-      iconStyle['marginBottom'] = theme.spacing(1);
+      iconStyle['marginBottom'] = props.theme.spacing(1);
     }
   }
 
 /* eslint-disable eqeqeq */
   let color = !props.initialized
-    ? theme.palette.action.disabled
+    ? props.theme.palette.action.disabled
     : props.value == 1
       ? onColor
       : offColor;
@@ -83,7 +83,7 @@ function StyledIconIndicatorComponent(props) {
   return (
     <FormControlLabel
       key={props.pvName}
-      className={classes.FormControl}
+      className={props.classes.FormControl}
       disabled={props.disabled}
       label={props.formControlLabel}
       labelPlacement={props.labelPlacement}
@@ -157,45 +157,14 @@ StyledIconIndicator.propTypes = {
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-  tooltipProps:PropTypes.object,
-  /**
-   * When receiving a PV storing an array of values users can choose a subset of these value.
-   * Registers accept the indexes of the registers to effectively show.
-   * Order does count!
-   */
-  registers: PropTypes.arrayOf(PropTypes.number),
-  /**
-   * When receiving a PV storing an array of values users can assign a label to each register
-   * or a subset of them.
-   */
-  registersLabel: PropTypes.arrayOf(PropTypes.string),
-  /**
-   * When receiving a PV storing an array of values users can set the label position for each register,
-   * or a subset of them, if the receiving components allows it.
-   */
-  registersLabelPlacement: PropTypes.oneOf(["top", "bottom", "start", "end"]),
-  /**
-   * Directive to display array elements horizontal aligned.
-   */
-  alignHorizontal: PropTypes.bool,
-  /**
-   * When alignHorizontal is true, if stretch is true
-   * all the elements are aligned into one row, otherwise
-   * they have their standard width.
-   */
-  stretch: PropTypes.bool,
-};
 
+  tooltipProps:PropTypes.object,
+
+};
 StyledIconIndicator.defaultProps = {
   onColor: 'primary',
   offColor: 'default',
   debug: false,
-  showTooltip:false,
-  alignHorizontal: false,
-  stretch: true,
+  showTooltip:false
 }
-
-StyledIconIndicatorComponent.defaultProps = StyledIconIndicator.defaultProps;
-
-export default StyledIconIndicator;
-export { StyledIconIndicator, StyledIconIndicatorComponent };
+export default withStyles(styles, { withTheme: true })(StyledIconIndicator);

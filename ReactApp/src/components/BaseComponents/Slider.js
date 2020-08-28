@@ -1,5 +1,5 @@
 import React, { useRef} from 'react';
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
 import PropTypes from "prop-types";
 import debounce from "lodash.debounce";
@@ -12,7 +12,7 @@ import { FormControlLabel } from "@material-ui/core";
 
 
 
-const useStyles = makeStyles((theme) => {
+const styles = (theme) => {
   const backgroundColor = theme.palette.type === 'light' ? 'rgba(0, 0, 0, 0.23)' : 'rgba(255, 255, 255, 0.23)'; //copied from material ui textfield 
   return (
 
@@ -333,16 +333,13 @@ const useStyles = makeStyles((theme) => {
       }
 
     })
-});
+};
 
 
 function SliderComponent(props) {
   const emitChangeDebounced = useRef(debounce(value => emitChange(value), 10)).current;
   
   const emitBlurDebounced = useRef(debounce(handleBlur, 500)).current;
-
-  const classes = useStyles();
-  const theme = useTheme();
 
   /**
    * Write value on the PV using emitChangeDebounced function.
@@ -390,9 +387,7 @@ function SliderComponent(props) {
   if (props.initialized) {
     content = props.showValue===true?(
       <Typography 
-      className={ props.vertical ? 
-        classes.verticalSliderValue : classes.horizontalSliderValue
-      }
+      className={props.vertical?props.classes.verticalSliderValue:props.classes.horizontalSliderValue}
       style={{textAlign:'center'}}
       >
         {props.value} 
@@ -429,32 +424,26 @@ function SliderComponent(props) {
 
   
   return (
-    <div  style={{height:'100%', width:'100%',padding:theme.spacing(1)}} onPointerDownCapture={handleOnClickCapture}  
+    <div  style={{height:'100%', width:'100%',padding:props.theme.spacing(1)}} onPointerDownCapture={handleOnClickCapture}  
  
     
     
     >
     <FormControlLabel
     key={props.pvName + props.initialized}
-    className={ props.vertical ? 
-      classes.verticalSliderLabel : classes.horizontalSliderLabel
-    }
+    className={props.vertical?props.classes.verticalSliderLabel:props.classes.horizontalSliderLabel}
     
     label={props.formControlLabel}
     labelPlacement={props.labelPlacement}
     control={
     <FormControlLabel
       key={props.pvName + props.initialized}
-      className={ props.vertical ? 
-        classes.verticalSliderValue : classes.horizontalSliderValue
-      }
+      className={props.vertical?props.classes.verticalSliderValue:props.classes.horizontalSliderValue}
       label={content}
       labelPlacement={props.valuePlacement}
       control={
         <div
-        className={ props.vertical ? 
-          classes.verticalSlider : classes.horizontalSlider
-        }
+        className={props.vertical?props.classes.verticalSlider:props.classes.horizontalSlider}
       
 
         >
@@ -654,33 +643,9 @@ Slider.propTypes = {
   /**
    * Directive to use a vertical slider
    */
+
+
   vertical: PropTypes.bool,
-  /**
-   * When receiving a PV storing an array of values users can choose a subset of these value.
-   * Registers accept the indexes of the registers to effectively show.
-   * Order does count!
-   */
-  registers: PropTypes.arrayOf(PropTypes.number),
-  /**
-   * When receiving a PV storing an array of values users can assign a label to each register
-   * or a subset of them.
-   */
-  registersLabel: PropTypes.arrayOf(PropTypes.string),
-  /**
-   * When receiving a PV storing an array of values users can set the label position for each register,
-   * or a subset of them, if the receiving components allows it.
-   */
-  registersLabelPlacement: PropTypes.oneOf(["top", "bottom", "start", "end"]),
-  /**
-   * Directive to display array elements horizontal aligned.
-   */
-  alignHorizontal: PropTypes.bool,
-  /**
-   * When alignHorizontal is true, if stretch is true
-   * all the elements are aligned into one row, otherwise
-   * they have their standard width.
-   */
-  stretch: PropTypes.bool,
 };
 
 Slider.defaultProps = {
@@ -691,11 +656,7 @@ Slider.defaultProps = {
   showValue:true,
   showTooltip:false,
   vertical:false,
-  alignHorizontal: false,
-  stretch: true,
+
 };
 
-SliderComponent.defaultProps = Slider.defaultProps;
-
-export default Slider;
-export { Slider, SliderComponent };
+export default withStyles(styles, { withTheme: true })(Slider);

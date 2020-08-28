@@ -1,5 +1,5 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 import {
   FormControlLabel,
   List,
@@ -8,10 +8,9 @@ import {
 } from "@material-ui/core";
 import PropTypes from "prop-types";
 import Widget from "../SystemComponents/Widgets/Widget";
-import SelectionInput, { SelectionInputComponent } from "./SelectionInput";
 
 
-const useStyles = makeStyles((theme) => {
+const styles = (theme) => {
   const borderColor =
     theme.palette.type === 'light' ? 'rgba(0, 0, 0, 0.23)' : 'rgba(255, 255, 255, 0.23)'; //copied from material ui textfield 
   const borderColorTop =
@@ -143,7 +142,7 @@ const useStyles = makeStyles((theme) => {
   }
   )
 
-});
+};
 
 /**
  * The SelectionList Component is a wrapper on the Material-UI List component.
@@ -155,8 +154,6 @@ const useStyles = makeStyles((theme) => {
  * https://material-ui.com/api/list
  */
 const SelectionListComponent = (props) => {
-
-  const classes = useStyles();
 
   /**
    * Store the new item value in the correct PV's state.
@@ -171,6 +168,7 @@ const SelectionListComponent = (props) => {
    * @param {array} enumStrs
    */
   const getListItems = (enumStrs, value) => {
+    let { classes } = props;
     let listItems = enumStrs.map((item, idx) => {
       let className;
       if (props.horizontal) {
@@ -211,14 +209,14 @@ const SelectionListComponent = (props) => {
   return (
     <FormControlLabel
       key={props.pvName}
-      className={classes.FormControl}
+      className={props.classes.FormControl}
       disabled={props.disabled}
       control={
         <List
           className={
             props.horizontal
-              ? classes.listHorizontal
-              : classes.listVertical
+              ? props.classes.listHorizontal
+              : props.classes.listVertical
           }
           component="nav"
 
@@ -294,7 +292,5 @@ SelectionList.defaultProps = {
   showTooltip:false
 };
 
-SelectionInputComponent.defaultProps = SelectionInput.defaultProps;
 
-export default SelectionList;
-export { SelectionList, SelectionListComponent };
+export default withStyles(styles, { withTheme: true })(SelectionList);

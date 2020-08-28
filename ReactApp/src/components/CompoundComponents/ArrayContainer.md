@@ -2,7 +2,7 @@ In this example the ArrayContainer receives as component TextInput.
 It shows only the first 5 elements.
 
 ```js
-import TextInput from "./TextInput";
+import TextInput from "../BaseComponents/TextInput";
 <ArrayContainer
   pv="pva://testIOC:test4"
   component={TextInput}
@@ -13,7 +13,7 @@ import TextInput from "./TextInput";
 ArrayContainer using TextInput with the single elements horizontal aligned:
 
 ```js
-import TextInput from "./TextInput";
+import TextInput from "../BaseComponents/TextInput";
 <ArrayContainer
   pv="pva://testIOC:test4"
   component={TextInput}
@@ -25,7 +25,7 @@ import TextInput from "./TextInput";
 ArrayContainer using TextInput with a label for each array value:
 
 ```js
-import TextInput from "./TextInput";
+import TextInput from "../BaseComponents/TextInput";
 <ArrayContainer
   pv="pva://testIOC:test4"
   component={TextInput}
@@ -43,7 +43,7 @@ import TextInput from "./TextInput";
 ArrayContainer using TextUpdate.
 
 ```js
-import TextUpdate from "./TextUpdate";
+import TextUpdate from "../BaseComponents/TextUpdate";
 <ArrayContainer
   pv="pva://testIOC:test4"
   component={TextUpdate}
@@ -57,7 +57,7 @@ ArrayContainer receives a binary waveform and the StyledIconButton.
 ArrayContainer forward its children.
 
 ```js
-import StyledIconButton from "./StyledIconButton";
+import StyledIconButton from "../BaseComponents/StyledIconButton";
 import { Grid } from "@material-ui/core";
 import { Face } from "@material-ui/icons";
 

@@ -146,6 +146,13 @@ module.exports = {
           usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
         },
         {
+          name: 'Compound Components',
+          content: 'src/docs/WorkingWithComponents.md',
+          components: 'src/components/CompoundComponents/*.js',
+          exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
+          usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
+        },
+        {
           name: 'Widget and PV Components',
           content: 'src/docs/widget/widget.md',
           components: ['src/components/SystemComponents/Widgets/Widget.js', 'src/components/SystemComponents/PV.js', 'src/components/ExperimentalExamples/Mobile/DynamicPvFieldExample.js', 'src/components/SystemComponents/EpicsPV.js', 'src/components/SystemComponents/LocalPV.js',],

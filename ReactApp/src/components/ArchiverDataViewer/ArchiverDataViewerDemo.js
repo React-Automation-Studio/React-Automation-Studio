@@ -8,7 +8,10 @@ return(
     <ArchiverData
         debug={true}
         pv={'pva://testIOC:BO1'}
-        options={'&donotchunk'}
+        from={'2020-08-31T12:20:00Z'}
+        to={'2020-08-31T15:30:00Z'}
+
+       
     />
     </div>
 )   

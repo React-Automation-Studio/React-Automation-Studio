@@ -21,6 +21,36 @@ const styles=()=>{
 
 }
 
+const calcTimeFormat=(timestamp)=> {
+    let mydate = new Date(timestamp*1000);
+     let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+     let year = mydate.getFullYear();
+     let month = months[mydate.getMonth()];
+    let date = mydate.getDate();
+    let hour = mydate.getHours();
+    let min = mydate.getMinutes();
+    let sec = mydate.getSeconds();
+    let ms = mydate.getMilliseconds()
+    //let value= hour + ':' + min + ':' + sec +':' + ms;
+    let value;
+    if( hour<10){
+        hour='0'+hour;
+  
+      }
+    if( min<10){
+      min='0'+min;
+
+    }
+
+    if( sec<10){
+      sec='0'+sec;
+
+    }
+    value=hour + ':' + min + ':' + sec+" "+date+" "+month+" "+year ;
+
+    return value;
+  }
+
 const useArchiverDataHook = (props) => {
   
     const context = useContext(AutomationStudioContext);
@@ -92,7 +122,7 @@ const useArchiverDataHook = (props) => {
 
 const ArchiverData = (props) => {
 
-    const archData = useArchiverDataHook({ archiverURL: 'arch://DEMO_ARCHIVER:request:{"pv":"' + props.pv + '","options":"' + props.options + '"}' })
+    const archData = useArchiverDataHook({ archiverURL: 'arch://DEMO_ARCHIVER:request:{"pv":"' + props.pv + '","options":{"from":"' + props.from + '","to":"'+props.to+'"}}' })
     //const [xYData,setXYData]=useState([]);
     const data=archData.data;
     const [lineData,setLineData]=useState([]);
@@ -109,6 +139,10 @@ const ArchiverData = (props) => {
                  
                  let sample;
                  for(sample in newArchiverData){
+                     console.log(sample,newArchiverData[sample].secs,calcTimeFormat(newArchiverData[sample].secs,newArchiverData[sample].val))
+                     if (sample>0){
+                        newXYData.push({x:newArchiverData[sample].secs,y:newArchiverData[sample-1].val})
+                     }
                      newXYData.push({x:newArchiverData[sample].secs,y:newArchiverData[sample].val})
                  }
 
@@ -160,8 +194,8 @@ const ArchiverData = (props) => {
                     <XAxis
                         title={(typeof props.xAxisTitle !== 'undefined') ? props.xAxisTitle : "X Axis"}
                         color="white"
-                        // tickFormat={v => typeof props.useTimeStamp !== 'undefined' ? calcTimeFormat(v) : (v) + props.xUnits}
-                        tickTotal={4}
+                        tickFormat={v => calcTimeFormat(v)}
+                        tickTotal={5}
                     // style={{
                     //   title:{stroke:theme.palette.type==='dark'?'#dbdbe0':'#6b6b76',strokeWidth:0.2},
                     //   line: {stroke: '#ADDDE1'},

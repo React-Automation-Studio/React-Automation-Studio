@@ -359,6 +359,9 @@ class MainDashboard extends Component {
                   <Grid item lg={12} sm={12} xs={12} >
                     <Button fullWidth className={classes.button} component={Link} to="/LoadSaveExample" color="primary" variant={buttonVariant}> LoadSave Example </Button>
                   </Grid>
+                  <Grid item lg={12} sm={12} xs={12} >
+                    <Button fullWidth className={classes.button} component={Link} to="/ArchiverDataViewerDemo" color="primary" variant={buttonVariant}> ArchiverDataViewerDemo </Button>
+                  </Grid>
                  
 
                 </Grid>

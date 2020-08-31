@@ -1199,9 +1199,17 @@ def archiverRead(message):
                             pv=request['pv']
                             pv=pv.replace("pva://","")
                             pv=urllib.parse.quote(pv)
-                            options=request['options']
-                            print(pv,options)
-                            URL=str(os.environ[archiver])+'/retrieval/data/getData.json?pv='+pv+options
+                            #options=['options'];
+                            fromOptions=request['options']['from']
+                            print("options",str(request['options']))
+                            print("fromOptions",fromOptions)
+                            fromOptions=urllib.parse.quote(fromOptions)
+                            toOptions=request['options']['to']
+                            print("toOptions",toOptions)
+                            toOptions=urllib.parse.quote(toOptions)
+                            print(pv,fromOptions,toOptions)
+                            URL=str(os.environ[archiver])+'/retrieval/data/getData.json?pv='+pv+'&from='+fromOptions+'&to='+toOptions+'&donotchunk'
+                            print("URL", URL)
                             req = urllib.request.urlopen(URL)
                             data = json.load(req)
                             print(data)

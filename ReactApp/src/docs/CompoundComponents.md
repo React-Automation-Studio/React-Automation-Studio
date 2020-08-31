@@ -1,0 +1,1 @@
+The next section lists more complex components or strategies to use baseComponents in a different way.

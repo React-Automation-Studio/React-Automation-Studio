@@ -147,7 +147,7 @@ module.exports = {
         },
         {
           name: 'Compound Components',
-          content: 'src/docs/WorkingWithComponents.md',
+          content: 'src/docs/CompoundComponents.md',
           components: 'src/components/CompoundComponents/*.js',
           exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
           usageMode: 'expand' // 'hide' | 'collapse' | 'expand'

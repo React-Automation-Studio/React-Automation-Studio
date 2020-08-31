@@ -1,34 +1,31 @@
-In this example the ArrayContainer receives as component TextInput.
-It shows only the first 5 elements.
+In this example the TextInput receives a waveform PV.
+The registers prop allows the widget to show only the first 5 elements.
 
 ```js
 import TextInput from "../BaseComponents/TextInput";
-<ArrayContainer
+<TextInput
   pv="pva://testIOC:test4"
-  component={TextInput}
   registers={[0,1,2,3,4]}
 />;
 ```
 
-ArrayContainer using TextInput with the single elements horizontal aligned:
+TextInput with the single elements horizontal aligned:
 
 ```js
 import TextInput from "../BaseComponents/TextInput";
-<ArrayContainer
+<TextInput
   pv="pva://testIOC:test4"
-  component={TextInput}
   registers={[0,1,2,3,4]}
   alignHorizontal
 />;
 ```
 
-ArrayContainer using TextInput with a label for each array value:
+TextInput with a label for each array value:
 
 ```js
 import TextInput from "../BaseComponents/TextInput";
-<ArrayContainer
+<TextInput
   pv="pva://testIOC:test4"
-  component={TextInput}
   registers={[1, 2, 5]}
   registersLabel={["one", "two", "five"]}
   registersLabelPlacement="top"
@@ -40,21 +37,19 @@ import TextInput from "../BaseComponents/TextInput";
 />;
 ```
 
-ArrayContainer using TextUpdate.
+TextUpdate receiving a waveform PV:
 
 ```js
 import TextUpdate from "../BaseComponents/TextUpdate";
-<ArrayContainer
+<TextUpdate
   pv="pva://testIOC:test4"
-  component={TextUpdate}
   registers={[1, 2, 5]}
   registersLabel={["one", "two", "five"]}
   registersLabelPlacement="top"
 />;
 ```
 
-ArrayContainer receives a binary waveform and the StyledIconButton.
-ArrayContainer forward its children.
+Binary waveform using StyledIconButton.
 
 ```js
 import StyledIconButton from "../BaseComponents/StyledIconButton";
@@ -63,11 +58,10 @@ import { Face } from "@material-ui/icons";
 
 <Grid container spacing={2}>
   <Grid item xs={6}>
-    <ArrayContainer
+    <StyledIconButton
       pv="pva://testIOC:binaryWaveform"
       usePvLabel
       labelPlacement="top"
-      component={StyledIconButton}
       registersLabel={[
         "1st",
         "2nd",
@@ -82,14 +76,13 @@ import { Face } from "@material-ui/icons";
       ]}
     >
       <Face />
-    </ArrayContainer>
+    </StyledIconButton>
   </Grid>
   <Grid item xs={6}>
-    <ArrayContainer
+    <StyledIconButton
       pv="pva://testIOC:binaryWaveform"
       usePvLabel
       labelPlacement="top"
-      component={StyledIconButton}
       registersLabelPlacement="bottom"
       registersLabel={[
         "1st",
@@ -106,7 +99,7 @@ import { Face } from "@material-ui/icons";
       alignHorizontal
     >
       <Face />
-    </ArrayContainer>
+    </StyledIconButton>
   </Grid>
 </Grid>;
 ```

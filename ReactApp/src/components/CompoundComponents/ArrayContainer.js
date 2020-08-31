@@ -2,25 +2,24 @@ import React from "react";
 import PropTypes from "prop-types";
 
 /**
- * The ArrayContainer is a wrapper to show,
- * for each value of the array stored in the connected PV,
- * the component passed to the component props.
- * It works only with waveform PVs.
+ * Each BaseComponent, when receiving a waveform PV,
+ * can create an instance of the graphical BaseComponents
+ * for each value of the array stored in the connected PV.
  *
- * If you want to reuse the widget components you need to use
- * the desired widget's inner component.
- * For example if you want to create an ArrayContainer with a multiple TextInput
- * you need to pass to the component prop *TextInputComponent*.
- * (i.e. choose your inner component, such as TextInput,
- * and append the word "Component" -> TextInputComponent.
- * See the examples to learn more about its usage).
+ * For example you have a waveform of 5 values and you want 
+ * to modify each array value independently; you can pass to the 
+ * pv prop of a TextInput this pv, then the TextInput will automatically
+ * create 5 TextInputs where each one can show and edit only one
+ * value of the array stored in the PV.
+ * See examples below.
  *
- * In addiction to the props presented in this guide user can pass to
- * ArrayContainer all the props that must be forwarded to the component
- * passed to the component prop.
+ * All BaseComponents, in addiction to their specific props,
+ * can receive the following props.
  *
- * Currently it can't be used with components based on mbbo/mbbi PVs
- * (i.e. RadioButtonGroup, SelectionInput, SelectionList).
+ * Currently this feature can't be used with components based on mbbo/mbbi PVs
+ * (i.e. RadioButtonGroup, SelectionInput, SelectionList) and Graphs.
+ * 
+ * @visibleName Use BaseComponents with waveform PV
  */
 function ArrayContainer(props) {
   const wrapComponent = (InputComponent, props) => {

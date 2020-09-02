@@ -2,12 +2,12 @@ import React, { useContext, useState, useEffect } from 'react';
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 import TextField from '@material-ui/core/TextField';
 import DateFnsUtils from '@date-io/date-fns'; 
-
+import formatISO from 'date-fns/formatISO';
 
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { useTheme } from '@material-ui/core/styles';
-import { KeyboardDateTimePicker,MuiPickersUtilsProvider } from "@material-ui/pickers";
+import { DateTimePicker,MuiPickersUtilsProvider } from "@material-ui/pickers";
 import {
     XYPlot,
     XAxis,
@@ -20,7 +20,9 @@ import {
     DiscreteColorLegend
 } from 'react-vis';
 import GraphY from '../BaseComponents/GraphY';
+import DateFnsAdapter from "@date-io/date-fns";
 
+const dateFns = new DateFnsAdapter();
 
 const FlexibleXYPlot = makeVisFlexible(XYPlot);
 
@@ -139,7 +141,9 @@ const ArchiverData = (props) => {
 
     const classes = useStyles();
     const theme = useTheme();
-    const archData = useArchiverDataHook({ archiverURL: 'arch://DEMO_ARCHIVER:request:{"pv":"' + props.pv + '","options":{"from":"' + props.from+'Z' + '","to":"' + props.to + 'Z"}}' })
+    const [selectedFromDate,setSelectedFromDate]=useState(new Date(props.from))
+    const [selectedToDate,setSelectedToDate]=useState(new Date(props.to))
+    const archData = useArchiverDataHook({ archiverURL: 'arch://DEMO_ARCHIVER:request:{"pv":"' + props.pv + '","options":{"from":"' + formatISO(selectedFromDate) + '","to":"' + formatISO(selectedToDate) + '"}}' })
     //const [xYData,setXYData]=useState([]);
     const data = archData.data;
     const [lineData, setLineData] = useState([]);
@@ -150,8 +154,7 @@ const ArchiverData = (props) => {
 
         setCrosshairValues([lineData[index]]);
     };
-    const [selectedFromDate,setSelectedFromDate]=useState(new Date(props.from))
-    const [selectedToDate,setSelectedToDate]=useState(new Date(props.to))
+   
     // const data = useArchiverData({ archiverURL: "arch://DEMO_ARCHIVER:{pv:testIOC:BO1}" })
     console.log(archData)
     console.log(data)
@@ -186,7 +189,7 @@ const ArchiverData = (props) => {
     }, [])
     console.log(lineData)
     console.log(crosshairValues)
-    console.log(selectedFromDate)
+    
     return (
         <React.Fragment>
              <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -194,7 +197,7 @@ const ArchiverData = (props) => {
                 {"PV name: " + props.pv + " Data: "}
             </Typography>}
             <Typography>
-            <KeyboardDateTimePicker
+            <DateTimePicker
         variant="inline"
         ampm={false}
         label="From:"
@@ -204,10 +207,10 @@ const ArchiverData = (props) => {
         //disablePast
         format="yyyy/MM/dd HH:mm"
       />
-       <KeyboardDateTimePicker
+       <DateTimePicker
         variant="inline"
         ampm={false}
-        label="To"
+        label="To:"
         value={selectedToDate}
         onChange={setSelectedToDate}
         //onError={console.log}

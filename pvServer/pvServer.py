@@ -1146,7 +1146,7 @@ def archiverRead(message):
 
     if accessControl['userAuthorised'] :
         if "arch://" in archiverURL:
-            print(archiverURL)
+           # print(archiverURL)
             #pv = urllib.parse.quote("testIOC:BO1")
             #print(pv)
             #req = urllib.request.urlopen('http://localhost:17668/retrieval/data/getData.json?pv='+pv+'&donotchunk')
@@ -1201,18 +1201,20 @@ def archiverRead(message):
                             pv=urllib.parse.quote(pv)
                             #options=['options'];
                             fromOptions=request['options']['from']
-                            print("options",str(request['options']))
-                            print("fromOptions",fromOptions)
+                            #print("options",str(request['options']))
+                            #print("fromOptions",fromOptions)
                             fromOptions=urllib.parse.quote(fromOptions)
                             toOptions=request['options']['to']
-                            print("toOptions",toOptions)
+                            #print("toOptions",toOptions)
                             toOptions=urllib.parse.quote(toOptions)
-                            print(pv,fromOptions,toOptions)
-                            URL=str(os.environ[archiver])+'/retrieval/data/getData.json?pv='+pv+'&from='+fromOptions+'&to='+toOptions+'&donotchunk'
-                            print("URL", URL)
+                            parameters=request['options']['parameters']
+                          
+                            #print(pv,fromOptions,toOptions,parameters)
+                            URL=str(os.environ[archiver])+'/retrieval/data/getData.json?pv='+pv+'&from='+fromOptions+'&to='+toOptions+parameters
+                            #print("URL", URL)
                             req = urllib.request.urlopen(URL)
                             data = json.load(req)
-                            print(data)
+                            #print(data)
                             #req = urllib.request.urlopen(archiver+'/retrieval/data/getData.json?pv='+pv+options')
                        
                 

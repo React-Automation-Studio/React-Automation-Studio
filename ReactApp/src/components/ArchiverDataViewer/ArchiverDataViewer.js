@@ -159,94 +159,162 @@ const useArchiverDataHook = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.archiverURL])
     console.log("useArchiverDataHook", data)
-    return ({ data: data })
+    return (data)
 
 }
-
 const ArchiverData = (props) => {
+
+    const data = useArchiverDataHook({ archiverURL: props.archiverURL });
+    const [dataXY, setDataXY] = useState({ x: [], y: [] })
+    useEffect(() => {
+        if (data !== null) {
+            let newArchiverData = [];
+            let x = [];
+            let y = [];
+            if (typeof data[0].data !== undefined) {
+
+                newArchiverData = data[0].data
+
+                let sample;
+                for (sample in newArchiverData) {
+
+
+                    if (sample > 0) {
+                        x.push(new Date(newArchiverData[sample].secs * 1000));
+                        y.push(newArchiverData[sample - 1].val)
+
+                    }
+                    x.push(new Date(newArchiverData[sample].secs * 1000));
+                    y.push(newArchiverData[sample].val)
+
+
+                }
+
+
+                //        // console.log(ArchiverDataViewer,xYData)
+
+                setDataXY({ x: x, y: y })
+            }
+
+        }
+
+    }, [data])
+
+
+    useEffect(() => {
+        props.archData(dataXY);
+    }, [dataXY])
+
+    return (
+        <div />
+        // <Typography> {props.archiverURL}   </Typography>
+    )
+}
+
+const ArchiverDataViewer = (props) => {
 
     const classes = useStyles();
     const theme = useTheme();
+    const [pvsArchData, setPvsArchData] = useState([]);
     const [showCrosshair, setShowCrosshair] = useState(props.showCrosshair === true ? true : false)
     const [selectedFromDate, setSelectedFromDate] = useState(props.from ? new Date(props.from) : subHours(new Date(), 1))
     const [selectedToDate, setSelectedToDate] = useState(props.to ? new Date(props.to) : new Date())
     const [plotlyData, setPlotlyData] = useState({ x: [], y: [] })
-    const [live,setLive]=useState(false);
-    const [liveIntervalId,setLiveIntervalId]=useState(null);
+    const [live, setLive] = useState(false);
+    const [liveIntervalId, setLiveIntervalId] = useState(null);
+    const archData = { data: null }
+    const [fromButton,setFromButton]=useState("none");
+    // const archData = useArchiverDataHook({ archiverURL: 'arch://DEMO_ARCHIVER:request:'+JSON.stringify({
+    //     pv:props.pvs[0],
+    //     options:{
+    //         from:formatISO(selectedFromDate),
+    //         to:  formatISO(selectedToDate),
+    //         parameters:"&donotchunk"
 
-    const archData = useArchiverDataHook({ archiverURL: 'arch://DEMO_ARCHIVER:request:{"pv":"' + props.pv + '","options":{"from":"' + formatISO(selectedFromDate) + '","to":"' + formatISO(selectedToDate) + '"}}' })
+    //     }
+    // })});
     //const [xYData,setXYData]=useState([]);
-    useEffect(()=>{ 
-        const updateToDate=()=>{
+    useEffect(() => {
+        const updateToDate = () => {
             let date = new Date();
             setSelectedToDate(date)
         }
-        if(live){
-            const intervalId=setInterval(updateToDate,1000);
+        if (live) {
+            const intervalId = setInterval(updateToDate, 1000);
             setLiveIntervalId(intervalId)
 
         }
-        else{
+        else {
             clearInterval(liveIntervalId)
         }
-        return ()=>{
+        return () => {
             clearInterval(liveIntervalId)
         }
-    },[live])
-   
+    }, [live])
+
 
     const handleOnClick30s = () => {
-        
+
         let date = new Date();
         setSelectedFromDate(subSeconds(date, 30))
         setSelectedToDate(date)
+        setFromButton("30s");
     }
 
     const handleOnClick1m = () => {
-        
+
         let date = new Date();
         setSelectedFromDate(subMinutes(date, 1))
         setSelectedToDate(date)
+        setFromButton("1m");
     }
     const handleOnClick5m = () => {
         let date = new Date();
         setSelectedFromDate(subMinutes(date, 5))
         setSelectedToDate(date)
+        setFromButton("5m");
     }
     const handleOnClick30m = () => {
         let date = new Date();
         setSelectedFromDate(subMinutes(date, 30))
         setSelectedToDate(date)
+        setFromButton("30m");
     }
     const handleOnClick1h = () => {
         let date = new Date();
         setSelectedFromDate(subHours(date, 1))
         setSelectedToDate(date)
+        setFromButton("1h");
     }
     const handleOnClick2h = () => {
         let date = new Date();
         setSelectedFromDate(subHours(date, 2))
         setSelectedToDate(date)
+        setFromButton("2h");
     }
     const handleOnClick12h = () => {
         let date = new Date();
         setSelectedFromDate(subHours(date, 12))
         setSelectedToDate(date)
+        setFromButton("12h");
     }
     const handleOnClick1d = () => {
         let date = new Date();
         setSelectedFromDate(subDays(date, 1))
         setSelectedToDate(date)
+        setFromButton("1d");
     }
     const handleOnClick2d = () => {
         let date = new Date();
         setSelectedFromDate(subDays(date, 2))
         setSelectedToDate(date)
+        setFromButton("2d");
     }
     const handleOnClick1w = () => {
         let date = new Date();
         setSelectedFromDate(subWeeks(date, 1))
         setSelectedToDate(date)
+        setFromButton("1w");
     }
     const data = archData.data;
     const [lineData, setLineData] = useState([]);
@@ -261,44 +329,44 @@ const ArchiverData = (props) => {
     // const data = useArchiverData({ archiverURL: "arch://DEMO_ARCHIVER:{pv:testIOC:BO1}" })
     console.log(archData)
     console.log(data)
-    useEffect(() => {
-        if (data !== null) {
-            let newArchiverData = [];
-            let newXYData = [];
-            let x = [];
-            let y = [];
-            if (typeof data[0].data !== undefined) {
-                console.log(data[0].data)
-                newArchiverData = data[0].data
+    // useEffect(() => {
+    //     if (data !== null) {
+    //         let newArchiverData = [];
+    //         let newXYData = [];
+    //         let x = [];
+    //         let y = [];
+    //         if (typeof data[0].data !== undefined) {
+    //             console.log(data[0].data)
+    //             newArchiverData = data[0].data
 
-                let sample;
-                for (sample in newArchiverData) {
-                    console.log(sample, newArchiverData[sample].secs, calcTimeFormat(newArchiverData[sample].secs, newArchiverData[sample].val))
+    //             let sample;
+    //             for (sample in newArchiverData) {
+    //                 console.log(sample, newArchiverData[sample].secs, calcTimeFormat(newArchiverData[sample].secs, newArchiverData[sample].val))
 
-                    if (sample > 0) {
-                        x.push(new Date(newArchiverData[sample].secs * 1000));
-                        y.push(newArchiverData[sample - 1].val)
-                        newXYData.push({ x: newArchiverData[sample].secs, y: newArchiverData[sample - 1].val })
-                    }
-                    x.push(new Date(newArchiverData[sample].secs * 1000));
-                    y.push(newArchiverData[sample].val)
+    //                 if (sample > 0) {
+    //                     x.push(new Date(newArchiverData[sample].secs * 1000));
+    //                     y.push(newArchiverData[sample - 1].val)
+    //                     newXYData.push({ x: newArchiverData[sample].secs, y: newArchiverData[sample - 1].val })
+    //                 }
+    //                 x.push(new Date(newArchiverData[sample].secs * 1000));
+    //                 y.push(newArchiverData[sample].val)
 
-                    newXYData.push({ x: newArchiverData[sample].secs, y: newArchiverData[sample].val })
-                }
+    //                 newXYData.push({ x: newArchiverData[sample].secs, y: newArchiverData[sample].val })
+    //             }
 
 
-                //        // console.log(archiverData,xYData)
-                console.log(newXYData)
-                setLineData(newXYData);
-                setPlotlyData({ x: x, y: y })
-            }
+    //             //        // console.log(ArchiverDataViewer,xYData)
+    //             console.log(newXYData)
+    //             setLineData(newXYData);
+    //             setPlotlyData({ x: x, y: y })
+    //         }
 
-        }
+    //     }
 
-    }, [data])
-    useEffect(() => {
+    // }, [data])
+    // useEffect(() => {
 
-    }, [])
+    // }, [])
 
     const [anchorEl, setAnchorEl] = useState(null);
     const [openContextMenu, setOpenContextMenu] = useState(false);
@@ -327,9 +395,48 @@ const ArchiverData = (props) => {
 
         'path': "M9,10H7V12H9V10M13,10H11V12H13V10M17,10H15V12H17V10M19,3H18V1H16V3H8V1H6V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M19,19H5V8H19V19Z"
     }
-    return (
-       <Paper elevation={theme.palette.paperElevation}>
+    console.log("pvsArchData", pvsArchData)
+    const data2 =
 
+        pvsArchData.map((pvData, index) => (
+            {
+                x: pvData.x,
+                y: pvData.y,
+                name: props.pvs[index],
+                type: 'scatter',
+                mode: 'lines',
+                marker: { color: theme.palette.reactVis.lineColors[index] },
+
+            }
+
+        ))
+
+    let data3x = [new Date()];
+    let data3y = [1];
+    console.log(data2, data3x, data3y)
+    return (
+        <Paper elevation={theme.palette.paperElevation}>
+            {props.pvs.map((pv, index) => (
+                <ArchiverData
+                    key={index.toString()}
+                    archiverURL={'arch://DEMO_ARCHIVER:request:' + JSON.stringify({
+                        pv: pv,
+                        options: {
+                            from: formatISO(selectedFromDate),
+                            to: formatISO(selectedToDate),
+                            parameters: "&donotchunk"
+
+                        }
+                    })
+                    }
+
+                    archData={(data) => setPvsArchData(prevData => {
+                        let pvData = [...prevData]
+                        pvData[index] = data;
+                        return pvData;
+                    })}
+                />
+            ))}
             <Grid
                 container
                 spacing={2}
@@ -340,7 +447,7 @@ const ArchiverData = (props) => {
 
             >
                 <Grid item lg={6} >
-                <Grid
+                    <Grid
                         container
                         spacing={2}
                         alignItems={'center'}
@@ -349,57 +456,52 @@ const ArchiverData = (props) => {
 
                     >
 
-                <Grid item xs={1} >
-                            <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick30s}>
+                        <Grid item xs={1} >
+                            <Button classes={{ root: classes.buttonRoot }}variant={'outlined'} color={fromButton==="30s"?"secondary":"default"} onClick={handleOnClick30s}>
                                 30s
                     </Button>
                         </Grid>
                         <Grid item xs={1} >
-                            <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1m}>
+                            <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1m} variant={'outlined'} color={fromButton==="1m"?"secondary":"default"}>
                                 1m
                     </Button>
                         </Grid>
                         <Grid item xs={1} >
-                            <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick5m}>
+                            <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick5m} variant={'outlined'} color={fromButton==="5m"?"secondary":"default"}>
                                 5m
                     </Button>
                         </Grid>
                         <Grid item xs={1} >
-                            <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick30m}>
+                            <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick30m} variant={'outlined'} color={fromButton==="30m"?"secondary":"default"}>
                                 30m
                     </Button>
                         </Grid>
                         <Grid item xs={1} >
-                            <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1h}>
+                            <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1h} variant={'outlined'} color={fromButton==="1h"?"secondary":"default"}>
                                 1h
                     </Button>
                         </Grid>
                         <Grid item xs={1} >
-                            <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick2h}>
+                            <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick2h} variant={'outlined'} color={fromButton==="2h"?"secondary":"default"}>
                                 2h
                     </Button>
                         </Grid>
                         <Grid item xs={1} >
-                            <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick12h}>
-                                12h
-                    </Button>
-                        </Grid>
-                        <Grid item xs={1} >
-                            <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1d}>
+                            <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1d} variant={'outlined'} color={fromButton==="1d"?"secondary":"default"}>
                                 1d
                     </Button>
                         </Grid>
                         <Grid item xs={1} >
-                            <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick2d}>
+                            <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick2d} variant={'outlined'} color={fromButton==="2d"?"secondary":"default"}>
                                 2d
                     </Button>
                         </Grid>
                         <Grid item xs={1} >
-                            <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1w}>
+                            <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1w} variant={'outlined'} color={fromButton==="1w"?"secondary":"default"}>
                                 1w
                     </Button>
                         </Grid>
-                        </Grid>
+                    </Grid>
                 </Grid>
                 <Grid item lg={2} style={{ textAlign: 'center' }}>
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -443,11 +545,11 @@ const ArchiverData = (props) => {
 
 
                         <Grid item xs={1} >
-                            <Button classes={{ root: classes.buttonRoot }} variant={'contained'} color={live?'primary':'default'} onClick={()=>setLive(live===true?false:true)}>
+                            <Button classes={{ root: classes.buttonRoot }} variant={'contained'} color={live ? 'primary' : 'default'} onClick={() => setLive(live === true ? false : true)}>
                                 Live
                     </Button>
                         </Grid>
-                      
+
                     </Grid>
                 </Grid>
 
@@ -456,42 +558,32 @@ const ArchiverData = (props) => {
 
 
             <div style={{ width: '100%', height: '35vh', background: theme.palette.background.default }}
-                // onContextMenu={handleToggleContextMenu}
+
                 onContextMenu={props.disableContextMenu ? undefined : handleToggleContextMenu}
             >
                 <Plot
                     config={{
                         "displaylogo": false,
-                        scrollZoom: true,
-                        // modeBarButtons: [
-                        //     [{
-                        //         name: 'color toggler',
-                        //         icon: icon1,
-                        //         click: () => {
-                        //             console.log('clicked')
-                        //         }
-                        //         //   click: function(gd) {
-                        //         //     var newColor = colors[Math.floor(3 * Math.random())]
-                        //         //     Plotly.restyle(gd, 'line.color', newColor)
-                        //         //   }
-                        //     },],
-                        //     ['zoom2d','autoScale2d','resetScale2d','hoverClosestCartesian','hoverCompareCartesian','toggleSpikelines','pan2d','toImage']
-                        // ]
+                        scrollZoom: false,
 
                     }}
                     useResizeHandler={true}
                     style={{ position: 'relative', display: 'inline-block', width: '100%', height: '35vh' }}
-                    data={[
-                        {
-                            x: plotlyData.x,
-                            y: plotlyData.y,
-                            name: props.pv,
-                            type: 'scatter',
-                            mode: 'lines',
-                            marker: { color: theme.palette.reactVis.lineColors[0] },
-                        },
+                    data={
+                        pvsArchData.map((pvData, index) => (
+                            {
+                                x: pvData.x,
+                                y: pvData.y,
+                                name: props.pvs[index],
+                                type: 'scatter',
+                                mode: 'lines',
+                                marker: { color: theme.palette.reactVis.lineColors[index] },
 
-                    ]}
+                            }
+
+                        ))
+                    }
+
                     layout={
                         {
                             //  title: 'A Fancy Plot',
@@ -505,6 +597,7 @@ const ArchiverData = (props) => {
                                 showline: true,
                                 showgrid: true,
                                 tickformat: "%H:%M:%S \n %a %d %b %Y ",
+                                range:[selectedFromDate,selectedToDate],
 
 
                             },
@@ -535,10 +628,10 @@ const ArchiverData = (props) => {
                         }}
 
                 />
-                <ContextMenu
+                {/* <ContextMenu
                     disableProbe={props.disableProbe}
                     open={openContextMenu}
-                    pvs={[props.pv]}
+                    pvs={props.pvs}
                     handleClose={handleContextMenuClose}
                     anchorEl={anchorEl}
                     anchorOrigin={{
@@ -550,12 +643,12 @@ const ArchiverData = (props) => {
                         horizontal: "center",
                     }}
                     probeType={props.readOnly ? "readOnly" : undefined}
-                />
+                />  */}
 
             </div>
 
 
-            </Paper>
+        </Paper>
     )
 }
-export default ArchiverData
+export default ArchiverDataViewer

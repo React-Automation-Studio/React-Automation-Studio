@@ -303,7 +303,7 @@ def ackProcess(ackArray, timestamp):
     if(len(ackArray) > 2):
         ackNormal(ackArray, timestamp)
     else:
-        ackGlobal(timestamp)
+        ackGlobal(ackArray[0], timestamp)
 
 
 def ackNormal(ackArray, timestamp):
@@ -352,8 +352,11 @@ def ackNormal(ackArray, timestamp):
                 ackAlarm(key, timestamp, username)
 
 
-def ackGlobal(timestamp):
-    print(timestamp, "Global ack")
+def ackGlobal(username, timestamp):
+    topAreaList = [item for item in areaList if "=" not in item]
+    for area in topAreaList:
+        ackArray = ['0', area, None, None, username, True]
+        ackNormal(ackArray, timestamp)
 
 
 def ackAlarm(ackIdentifier, timestamp, username):

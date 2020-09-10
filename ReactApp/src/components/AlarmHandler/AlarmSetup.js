@@ -403,7 +403,7 @@ const AlarmSetup = (props) => {
     }
 
     const handleAckGlobal = () => {
-        const localAlarmAckField = ['ALLAREAS', true]
+        const localAlarmAckField = [username, true]
         setAlarmAckField(localAlarmAckField)
         setAlarmAckFieldTrig(alarmAckFieldTrig + 1)
         setGlobalContextOpen(false)
@@ -548,10 +548,10 @@ const AlarmSetup = (props) => {
 
         let localAlarmAckField = null
         if (index.includes("=")) {
-            localAlarmAckField = ['1', index.split("=")[0], index.split("=")[1], null, username, 'True']
+            localAlarmAckField = ['1', index.split("=")[0], index.split("=")[1], null, username, true]
         }
         else {
-            localAlarmAckField = ['0', index, null, null, username, 'True']
+            localAlarmAckField = ['0', index, null, null, username, true]
         }
 
         handleListItemContextClose(event, index)
@@ -644,10 +644,10 @@ const AlarmSetup = (props) => {
         const equalsLength = index.match(/=/g).length
         let localAlarmAckField = null
         if (equalsLength === 2) {
-            localAlarmAckField = ['3', index.split("=")[0], index.split("=")[1], index.split("=")[2], username, 'True']
+            localAlarmAckField = ['3', index.split("=")[0], index.split("=")[1], index.split("=")[2], username, true]
         }
         else {
-            localAlarmAckField = ['2', index.split("=")[0], null, index.split("=")[1], username, 'True']
+            localAlarmAckField = ['2', index.split("=")[0], null, index.split("=")[1], username, true]
         }
 
         // console.log(alarmAckField)

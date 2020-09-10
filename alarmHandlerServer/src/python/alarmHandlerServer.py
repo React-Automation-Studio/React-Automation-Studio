@@ -78,7 +78,7 @@ alarmPVSevDict = {
     5: "INVALID_ACKED",
     6: "INVALID_ALARM",
     7: "DISCONN_ACKED",
-    8: "DISCONN_ALARM"
+    8: "DISCONNECTED"
 }
 
 pvNameList = []
@@ -155,7 +155,7 @@ def evaluateAreaPVs(areaKey, fromColWatch=False):
     # 5 "INVALID_ACKED"
     # 6 "INVALID"
     # 7 "DISCONN_ACKED"
-    # 8 "DISCONN"
+    # 8 "DISCONNECTED"
     alarmState = 0
     # to catch in alarm state to negate a higher level ack state
     # no need to catch disconn alarm as it is highest ranked
@@ -376,7 +376,12 @@ def ackGlobal(username, timestamp):
 
 def ackAlarm(ackIdentifier, timestamp, username):
     # problem here if pv disconnected won't get severity
-    pvsev = pvDict[ackIdentifier].severity
+    print(pvDict[ackIdentifier].pvname, pvDict[ackIdentifier].status)
+    if(pvDict[ackIdentifier].status == 1):
+        pvsev = pvDict[ackIdentifier].severity
+    else:
+        pvsev = 4
+
     pvname = pvDict[ackIdentifier].pvname
     alarmPVSev = alarmDict[pvname]["A"].value
 
@@ -423,12 +428,13 @@ def ackAlarm(ackIdentifier, timestamp, username):
     # 1	"MINOR"     # 1 "MINOR_ACKED"
     # 2	"MAJOR"     # 2 "MINOR"
     # 3	"INVALID"   # 3 "MAJOR_ACKED"
-    #               # 4 "MAJOR"
+    # 4 "DISCONN"   # 4 "MAJOR"
     #               # 5 "INVALID_ACKED"
     #               # 6 "INVALID"
     #               # 7 "DISCONN_ACKED"
-    #               # 8 "DISCONN"
+    #               # 8 "DISCONNECTED"
     # problem here if pv disconnected won't get severity
+    # solve with pseudo pvsev = 4 state for disconnected
     if (pvsev == 0):    # in NO_ALARM state
         alarmDict[pvname]["A"].value = 0    # set to NO_ALARM state
     elif (pvsev == 1):  # in MINOR state
@@ -437,6 +443,8 @@ def ackAlarm(ackIdentifier, timestamp, username):
         alarmDict[pvname]["A"].value = 3    # set to MAJOR_ACKED state
     elif (pvsev == 3):  # in INVALID state
         alarmDict[pvname]["A"].value = 5    # set to INVALID_ACKED state
+    elif (pvsev == 4):  # in DISCONN state
+        alarmDict[pvname]["A"].value = 7    # set to DISCONN_ACKED state
 
 
 def descChange(pvname=None, value=None, host=None, **kw):
@@ -472,6 +480,8 @@ def descDisconn(pvname, conn):
                 'abcdefghijklmnopqrstuvwxyzAbcdefghijk_0', "[Disconnected]",
                 "[Disconnected]"
             ]))
+        # set current alarm status to DISCONNECTED
+        alarmDict[pvname]["A"].value = 8
 
 
 def onChanges(pvname=None, value=None, **kw):
@@ -557,7 +567,7 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
     # 5 "INVALID_ACKED"
     # 6 "INVALID"
     # 7 "DISCONN_ACKED"
-    # 8 "DISCONN"
+    # 8 "DISCONNECTED"
     alarmState = alarmDict[pvname]["A"].value
 
     noAlarm = severity == 0 and alarmState != 0
@@ -567,7 +577,7 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
 
     alarmSet = False
     transparent = not latch or not enable
-    inAckState = alarmState == 1 or alarmState == 3 or alarmState == 5
+    inAckState = alarmState == 1 or alarmState == 3 or alarmState == 5 or alarmState == 7
 
     logToHistory = False
 
@@ -595,6 +605,14 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
             [pvname, "-", "INVALID_ACKED alarm demoted to MINOR_ACKED"])}
         # print(timestamp, pvname, "INVALID_ACKED alarm demoted to MINOR_ACKED")
         logToHistory = True
+    elif(minorAlarm and alarmState == 7):
+        # set current alarm status to MINOR_ACKED
+        alarmDict[pvname]["A"].value = 1
+        # Log to history
+        entry = {"timestamp": timestamp, "entry": " ".join(
+            [pvname, "-", "DISCONN_ACKED alarm demoted to MINOR_ACKED"])}
+        # print(timestamp, pvname, "DISCONN_ACKED alarm demoted to MINOR_ACKED")
+        logToHistory = True
     elif(minorAlarm and (alarmState < 1 or (transparent and alarmState != 1))):
         # set current alarm status to MINOR
         alarmDict[pvname]["A"].value = 2
@@ -612,6 +630,14 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
             [pvname, "-", "INVALID_ACKED alarm demoted to MAJOR_ACKED"])}
         # print(timestamp, pvname, "INVALID_ACKED alarm demoted to MAJOR_ACKED")
         logToHistory = True
+    elif(majorAlarm and alarmState == 7):
+        # set current alarm status to MAJOR_ACKED
+        alarmDict[pvname]["A"].value = 3
+        # Log to history
+        entry = {"timestamp": timestamp, "entry": " ".join(
+            [pvname, "-", "DISCONN_ACKED alarm demoted to MAJOR_ACKED"])}
+        # print(timestamp, pvname, "DISCONN_ACKED alarm demoted to MAJOR_ACKED")
+        logToHistory = True
     elif(majorAlarm and (alarmState < 3 or (transparent and alarmState != 3))):
         # set current alarm status to MAJOR
         alarmDict[pvname]["A"].value = 4
@@ -620,6 +646,14 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
         entry = {"timestamp": timestamp, "entry": " ".join(
             [pvname, "-", "MAJOR_ALARM triggered, alarm value =", str(value)])}
         # print(timestamp, pvname, "MAJOR_ALARM triggered, alarm value =", value)
+        logToHistory = True
+    elif(invalidAlarm and alarmState == 7):
+        # set current alarm status to INVALID_ACKED
+        alarmDict[pvname]["A"].value = 5
+        # Log to history
+        entry = {"timestamp": timestamp, "entry": " ".join(
+            [pvname, "-", "DISCONN_ACKED alarm demoted to INVALID_ACKED"])}
+        # print(timestamp, pvname, "DISCONN_ACKED alarm demoted to INVALID_ACKED")
         logToHistory = True
     elif(invalidAlarm and (alarmState < 5 or (transparent and alarmState != 5))):
         # set current alarm status to INVALID

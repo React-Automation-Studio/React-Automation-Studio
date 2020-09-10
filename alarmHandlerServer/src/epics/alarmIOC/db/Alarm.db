@@ -16,7 +16,7 @@ record(mbbi, "$(alarm_name)A") {
     field(FVST, "INVALID_ACKED")
     field(SXST, "INVALID_ALARM")
     field(SVST, "DISCONN_ACKED")
-    field(EIST, "DISCONN_ALARM")
+    field(EIST, "DISCONNECTED")
     field(PINI, "YES")
     field(VAL, "0")
 }

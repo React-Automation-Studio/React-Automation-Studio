@@ -65,7 +65,8 @@ ackedStateDict = {
     0: "NO_ALARM",
     1: "MINOR_ACKED",
     2: "MAJOR_ACKED",
-    3: "INVALID_ACKED"
+    3: "INVALID_ACKED",
+    4: "DISCONN_ACKED"
 }
 
 alarmPVSevDict = {
@@ -75,7 +76,9 @@ alarmPVSevDict = {
     3: "MAJOR_ACKED",
     4: "MAJOR_ALARM",
     5: "INVALID_ACKED",
-    6: "INVALID_ALARM"
+    6: "INVALID_ALARM",
+    7: "DISCONN_ACKED",
+    8: "DISCONN_ALARM"
 }
 
 pvNameList = []
@@ -151,12 +154,15 @@ def evaluateAreaPVs(areaKey, fromColWatch=False):
     # 4 "MAJOR"
     # 5 "INVALID_ACKED"
     # 6 "INVALID"
+    # 7 "DISCONN_ACKED"
+    # 8 "DISCONN"
     alarmState = 0
     # to catch in alarm state to negate a higher level ack state
-    # no need to catch invalid alarm as it is highest ranked
+    # no need to catch disconn alarm as it is highest ranked
     minorAlarm = False
     majorAlarm = False
-    ackStates = [1, 3, 5]
+    invalidAlarm = False
+    ackStates = [1, 3, 5, 7]
 
     try:
         for key in pvDict.keys():
@@ -181,6 +187,8 @@ def evaluateAreaPVs(areaKey, fromColWatch=False):
                         minorAlarm = True
                     elif(val == 4):
                         majorAlarm = True
+                    elif(val == 6):
+                        invalidAlarm = True
                 except:
                     if(AH_DEBUG):
                         print('[Warning]', 'val =', val,
@@ -191,8 +199,10 @@ def evaluateAreaPVs(areaKey, fromColWatch=False):
 
     # active alarm always supercedes acked state alarm
     if alarmState in ackStates:
-        # major alarm takes precedence
-        if(majorAlarm):
+        # invalid alarm takes precedence
+        if(invalidAlarm):
+            alarmState = 6
+        elif(majorAlarm):
             alarmState = 4
         elif(minorAlarm):
             alarmState = 2
@@ -215,10 +225,11 @@ def evaluateTopArea(topArea, alarmState):
     alarmState = alarmState
 
     # to catch in alarm state to negate a higher level ack state
-    # no need to catch invalid alarm as it is highest ranked
+    # no need to catch disconn alarm as it is highest ranked
     minorAlarm = False
     majorAlarm = False
-    ackStates = [1, 3, 5]
+    invalidAlarm = False
+    ackStates = [1, 3, 5, 7]
 
     for area in areaList:
         if ("=" in area):
@@ -233,6 +244,8 @@ def evaluateTopArea(topArea, alarmState):
                         minorAlarm = True
                     elif(val == 4):
                         majorAlarm = True
+                    elif(val == 6):
+                        invalidAlarm = True
                 except:
                     if(AH_DEBUG):
                         print('[Warning]', 'val =', val,
@@ -240,8 +253,10 @@ def evaluateTopArea(topArea, alarmState):
 
     # active alarm always supercedes acked state alarm
     if alarmState in ackStates:
-        # major alarm takes precedence
-        if(majorAlarm):
+        # invalid alarm takes precedence
+        if(invalidAlarm):
+            alarmState = 6
+        elif(majorAlarm):
             alarmState = 4
         elif(minorAlarm):
             alarmState = 2
@@ -360,14 +375,15 @@ def ackGlobal(username, timestamp):
 
 
 def ackAlarm(ackIdentifier, timestamp, username):
+    # problem here if pv disconnected won't get severity
     pvsev = pvDict[ackIdentifier].severity
     pvname = pvDict[ackIdentifier].pvname
     alarmPVSev = alarmDict[pvname]["A"].value
 
     areaKey, pvKey = getKeys(pvname)
 
-    if (alarmPVSev == 2 or alarmPVSev == 4 or alarmPVSev == 6):
-        # in minor, major or invalid state, valid state for ack
+    if (alarmPVSev == 2 or alarmPVSev == 4 or alarmPVSev == 6 or alarmPVSev == 8):
+        # in minor, major, invalid or disconn state, valid state for ack
         timestamp_string = datetime.fromtimestamp(timestamp).strftime(
             "%a, %d %b %Y at %H:%M:%S")
         # set ack time
@@ -410,6 +426,9 @@ def ackAlarm(ackIdentifier, timestamp, username):
     #               # 4 "MAJOR"
     #               # 5 "INVALID_ACKED"
     #               # 6 "INVALID"
+    #               # 7 "DISCONN_ACKED"
+    #               # 8 "DISCONN"
+    # problem here if pv disconnected won't get severity
     if (pvsev == 0):    # in NO_ALARM state
         alarmDict[pvname]["A"].value = 0    # set to NO_ALARM state
     elif (pvsev == 1):  # in MINOR state
@@ -537,6 +556,8 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
     # 4 "MAJOR"
     # 5 "INVALID_ACKED"
     # 6 "INVALID"
+    # 7 "DISCONN_ACKED"
+    # 8 "DISCONN"
     alarmState = alarmDict[pvname]["A"].value
 
     noAlarm = severity == 0 and alarmState != 0

@@ -259,10 +259,7 @@ const AlarmTable = props => {
                                                 enterDelay={400}
                                             >
                                                 <TableCell align="left">
-                                                    <TextUpdate
-                                                        pv={'pva://' + areaAlarms[areaAlarmName]["name"] + ".NAME"}
-                                                        disableContextMenu={true}
-                                                    />
+                                                    {areaAlarms[areaAlarmName]["name"]}
                                                 </TableCell>
                                             </Tooltip>
                                             <TableCell align="center">

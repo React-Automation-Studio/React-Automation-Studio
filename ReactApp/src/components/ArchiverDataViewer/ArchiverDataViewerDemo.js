@@ -22,8 +22,26 @@ const ArchiverDataViewerDemo = (props) => {
                 <Grid item xs={12} style={{ paddingBottom: 16 }}>
                     <ArchiverDataViewer
                         debug={true}
+                        archiver={"DEMO_ARCHIVER"}
+                        title={"Demo Buttons"}
+                        showButtons={true}
+                        //displayModeBar={true}
                         // pvs={['pva://testIOC:BO1']}
                         pvs={['pva://testIOC:BO1', 'pva://testIOC:BO2']}
+                        // traces={
+                        //     [
+                        //         {pv:'pva://testIOC:BO1',
+                        //          yAxis:'yAxis',
+
+
+                        //     }
+
+                        // ]}
+                        // yAxes={{'yAxis':{
+
+                        // }
+
+                        // }}
                     //  from={'2020-08-31T12:20:00'}
                     //  to=  {'2020-09-02T15:30:00'}
 
@@ -33,6 +51,7 @@ const ArchiverDataViewerDemo = (props) => {
                 <Grid item xs={12}>
                     <ArchiverDataViewer
                         debug={true}
+                        archiver={"DEMO_ARCHIVER"}
                         pvs={['pva://testIOC:amplitude']}
                     //from={'2020-08-31T12:20:00'}
                     //to={'2020-09-02T15:30:00'}

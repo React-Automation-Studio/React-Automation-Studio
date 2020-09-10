@@ -164,7 +164,15 @@ const useArchiverDataHook = (props) => {
 }
 const ArchiverData = (props) => {
 
-    const data = useArchiverDataHook({ archiverURL: props.archiverURL });
+    const data = useArchiverDataHook({ archiverURL: 'arch://DEMO_ARCHIVER:request:' + JSON.stringify({
+        pv: props.pv,
+        options: {
+            from: formatISO(props.from),
+            to: formatISO(props.to),
+            parameters: props.parameters,
+
+        }
+    })});
     const [dataXY, setDataXY] = useState({ x: [], y: [] })
     useEffect(() => {
         if (data !== null) {
@@ -178,7 +186,11 @@ const ArchiverData = (props) => {
                 let sample;
                 for (sample in newArchiverData) {
 
-
+                    if (sample==0){
+                        x.push(props.from);
+                        y.push(newArchiverData[sample].val)
+                    }
+                    else{
                     if (sample > 0) {
                         x.push(new Date(newArchiverData[sample].secs * 1000));
                         y.push(newArchiverData[sample - 1].val)
@@ -186,7 +198,14 @@ const ArchiverData = (props) => {
                     }
                     x.push(new Date(newArchiverData[sample].secs * 1000));
                     y.push(newArchiverData[sample].val)
+                   
+                }
+               
+                if (sample==(newArchiverData.length-1)){
+                    x.push(props.to);
+                    y.push(newArchiverData[sample].val)
 
+                }
 
                 }
 
@@ -223,7 +242,7 @@ const ArchiverDataViewer = (props) => {
     const [live, setLive] = useState(false);
     const [liveIntervalId, setLiveIntervalId] = useState(null);
     const archData = { data: null }
-    const [fromButton,setFromButton]=useState("none");
+    const [fromButton, setFromButton] = useState("none");
     // const archData = useArchiverDataHook({ archiverURL: 'arch://DEMO_ARCHIVER:request:'+JSON.stringify({
     //     pv:props.pvs[0],
     //     options:{
@@ -238,19 +257,53 @@ const ArchiverDataViewer = (props) => {
         const updateToDate = () => {
             let date = new Date();
             setSelectedToDate(date)
+          
+            switch (fromButton) {
+                case "30s":
+                    setSelectedFromDate(subSeconds(date, 30));
+                    break;
+                case "1m":
+                    setSelectedFromDate(subMinutes(date, 1))
+                    break;
+                case "5m":
+                    setSelectedFromDate(subMinutes(date, 5))
+                    break;
+                case "30m":
+                    setSelectedFromDate(subMinutes(date, 30))
+                    break;
+                case "1h":
+                    setSelectedFromDate(subHours(date, 1))
+                    break;
+                case "2h":
+                    setSelectedFromDate(subHours(date, 2))
+                    break;
+                case "12h":
+                    setSelectedFromDate(subHours(date, 12))
+                    break;
+                case "1d":
+                    setSelectedFromDate(subDays(date, 1))
+                    break;
+                case "2d":
+                    setSelectedFromDate(subDays(date, 2))
+                    break;
+                case "1w":
+                    setSelectedFromDate(subWeeks(date, 1))
+                    break;
+                default:
+            }
+        
         }
+        let intervalId;
         if (live) {
-            const intervalId = setInterval(updateToDate, 1000);
-            setLiveIntervalId(intervalId)
+            intervalId = setInterval(updateToDate, 1000);
+            //setLiveIntervalId(intervalId)
 
         }
-        else {
-            clearInterval(liveIntervalId)
-        }
+        
         return () => {
-            clearInterval(liveIntervalId)
+            clearInterval(intervalId)
         }
-    }, [live])
+    }, [live,fromButton])
 
 
     const handleOnClick30s = () => {
@@ -329,6 +382,7 @@ const ArchiverDataViewer = (props) => {
     // const data = useArchiverData({ archiverURL: "arch://DEMO_ARCHIVER:{pv:testIOC:BO1}" })
     console.log(archData)
     console.log(data)
+   // console.log("fromButton",fromButton,"selectedFromDate",selectedFromDate,"selectedToDate",selectedToDate)   
     // useEffect(() => {
     //     if (data !== null) {
     //         let newArchiverData = [];
@@ -419,16 +473,13 @@ const ArchiverDataViewer = (props) => {
             {props.pvs.map((pv, index) => (
                 <ArchiverData
                     key={index.toString()}
-                    archiverURL={'arch://DEMO_ARCHIVER:request:' + JSON.stringify({
-                        pv: pv,
-                        options: {
-                            from: formatISO(selectedFromDate),
-                            to: formatISO(selectedToDate),
-                            parameters: "&donotchunk"
-
-                        }
-                    })
-                    }
+                   
+                
+                    archiver={props.archiver}
+                    pv={pv}
+                    from={selectedFromDate}
+                    to={selectedToDate}
+                    parameters={"&donotchunk"}
 
                     archData={(data) => setPvsArchData(prevData => {
                         let pvData = [...prevData]
@@ -437,7 +488,7 @@ const ArchiverDataViewer = (props) => {
                     })}
                 />
             ))}
-            <Grid
+            {props.showButtons&&<Grid
                 container
                 spacing={2}
                 alignItems={'center'}
@@ -446,7 +497,7 @@ const ArchiverDataViewer = (props) => {
                 style={{ paddingTop: 32 }}
 
             >
-                <Grid item lg={6} >
+                <Grid item xl={6} lg={6} md={12} sm={12} xs={12} >
                     <Grid
                         container
                         spacing={2}
@@ -456,54 +507,54 @@ const ArchiverDataViewer = (props) => {
 
                     >
 
-                        <Grid item xs={1} >
-                            <Button classes={{ root: classes.buttonRoot }}variant={'outlined'} color={fromButton==="30s"?"secondary":"default"} onClick={handleOnClick30s}>
+                        <Grid item xs={2}  sm={'auto'} md={1} lg={1} >
+                            <Button classes={{ root: classes.buttonRoot }} variant={'outlined'} color={fromButton === "30s" ? "secondary" : "default"} onClick={handleOnClick30s}>
                                 30s
                     </Button>
                         </Grid>
-                        <Grid item xs={1} >
-                            <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1m} variant={'outlined'} color={fromButton==="1m"?"secondary":"default"}>
+                        <Grid item xs={2} sm={'auto'} md={1} lg={1} >
+                            <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1m} variant={'outlined'} color={fromButton === "1m" ? "secondary" : "default"}>
                                 1m
                     </Button>
                         </Grid>
-                        <Grid item xs={1} >
-                            <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick5m} variant={'outlined'} color={fromButton==="5m"?"secondary":"default"}>
+                        <Grid item xs={2} sm={'auto'} md={1} lg={1} >
+                            <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick5m} variant={'outlined'} color={fromButton === "5m" ? "secondary" : "default"}>
                                 5m
                     </Button>
                         </Grid>
-                        <Grid item xs={1} >
-                            <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick30m} variant={'outlined'} color={fromButton==="30m"?"secondary":"default"}>
+                        <Grid item xs={2} sm={'auto'} md={1} lg={1} >
+                            <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick30m} variant={'outlined'} color={fromButton === "30m" ? "secondary" : "default"}>
                                 30m
                     </Button>
                         </Grid>
-                        <Grid item xs={1} >
-                            <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1h} variant={'outlined'} color={fromButton==="1h"?"secondary":"default"}>
+                        <Grid item xs={2} sm={'auto'} md={1} lg={1} >
+                            <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1h} variant={'outlined'} color={fromButton === "1h" ? "secondary" : "default"}>
                                 1h
                     </Button>
                         </Grid>
-                        <Grid item xs={1} >
-                            <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick2h} variant={'outlined'} color={fromButton==="2h"?"secondary":"default"}>
+                        <Grid item xs={2} sm={'auto'} md={1} lg={1} >
+                            <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick2h} variant={'outlined'} color={fromButton === "2h" ? "secondary" : "default"}>
                                 2h
                     </Button>
                         </Grid>
-                        <Grid item xs={1} >
-                            <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1d} variant={'outlined'} color={fromButton==="1d"?"secondary":"default"}>
+                        <Grid item xs={2} sm={'auto'} md={1} lg={1} >
+                            <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1d} variant={'outlined'} color={fromButton === "1d" ? "secondary" : "default"}>
                                 1d
                     </Button>
                         </Grid>
-                        <Grid item xs={1} >
-                            <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick2d} variant={'outlined'} color={fromButton==="2d"?"secondary":"default"}>
+                        <Grid item xs={2} sm={'auto'} md={1} lg={1} >
+                            <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick2d} variant={'outlined'} color={fromButton === "2d" ? "secondary" : "default"}>
                                 2d
                     </Button>
                         </Grid>
-                        <Grid item xs={1} >
-                            <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1w} variant={'outlined'} color={fromButton==="1w"?"secondary":"default"}>
+                        <Grid item xs={2} sm={'auto'} md={1} lg={1} >
+                            <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1w} variant={'outlined'} color={fromButton === "1w" ? "secondary" : "default"}>
                                 1w
                     </Button>
                         </Grid>
                     </Grid>
                 </Grid>
-                <Grid item lg={2} style={{ textAlign: 'center' }}>
+              <Grid item xl={2} lg={2} md={4} sm={4} xs={6} style={{ textAlign: 'center' }}>
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
 
                         <DateTimePicker
@@ -511,21 +562,36 @@ const ArchiverDataViewer = (props) => {
                             ampm={false}
                             label="From:"
                             value={selectedFromDate}
-                            onChange={setSelectedFromDate}
+                            onChange={
+                                (newDate) => {
+                                 setSelectedFromDate(newDate)
+                                 console.log("setSelectedFromDate",newDate)
+                                 setFromButton("none")
+                                }
+                            }
                             //onError={console.log}
                             //disablePast
                             format="yyyy/MM/dd HH:mm:ss"
                         />
                     </MuiPickersUtilsProvider>
                 </Grid>
-                <Grid item lg={2} style={{ textAlign: 'center' }}>
+                <Grid item xl={2} lg={2} md={4} sm={4} xs={6} style={{ textAlign: 'center' }}>
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <DateTimePicker
                             variant="inline"
                             ampm={false}
                             label="To:"
                             value={selectedToDate}
-                            onChange={setSelectedToDate}
+                            onChange={
+                                (newDate) => {
+                                 //   console.log("selectedToDate",newDate)
+                                    setSelectedToDate(newDate)
+                                    setFromButton("none")
+                                    setLive(false)
+                            //     setSelectedToDate
+                                }
+                            }
+                            
                             //onError={console.log}
                             //disablePast
                             format="yyyy/MM/dd HH:mm:ss"
@@ -533,7 +599,7 @@ const ArchiverDataViewer = (props) => {
 
                     </MuiPickersUtilsProvider>
                 </Grid>
-                <Grid item lg={2} >
+                <Grid item xl={2} lg={2} md={4} sm={4} xs={6}>
                     <Grid
                         container
                         spacing={2}
@@ -553,7 +619,7 @@ const ArchiverDataViewer = (props) => {
                     </Grid>
                 </Grid>
 
-            </Grid>
+            </Grid>}
 
 
 
@@ -562,11 +628,23 @@ const ArchiverDataViewer = (props) => {
                 onContextMenu={props.disableContextMenu ? undefined : handleToggleContextMenu}
             >
                 <Plot
-                    config={{
+                    config={props.displayModeBar?{
                         "displaylogo": false,
                         scrollZoom: false,
+                        displayModeBar: props.displayModeBar,
+                        toImageButtonOptions: {
+                            format: 'svg'
+                        }}:{
+                            "displaylogo": false,
+                            scrollZoom: false,
+                            toImageButtonOptions: {
+                                format: 'svg'
+                            }
+                        }
 
-                    }}
+
+
+                    }                   
                     useResizeHandler={true}
                     style={{ position: 'relative', display: 'inline-block', width: '100%', height: '35vh' }}
                     data={
@@ -586,9 +664,10 @@ const ArchiverDataViewer = (props) => {
 
                     layout={
                         {
-                            //  title: 'A Fancy Plot',
+                            title: props.title,
                             plot_bgcolor: theme.palette.background.paper,
                             xaxis: {
+                                title: props.xAxisTitle ? props.xAxisTitle : 'X-Axis',
                                 gridcolor: theme.palette.reactVis[".rv-xy-plot__grid-lines__line"].stroke,
                                 tickcolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
                                 zerolinecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
@@ -597,11 +676,13 @@ const ArchiverDataViewer = (props) => {
                                 showline: true,
                                 showgrid: true,
                                 tickformat: "%H:%M:%S \n %a %d %b %Y ",
-                                range:[selectedFromDate,selectedToDate],
+                                range: [selectedFromDate, selectedToDate],
 
 
                             },
                             yaxis: {
+                                title: props.yAxisTitle ? props.yAxisTitle : 'Y-Axis',
+
                                 gridcolor: theme.palette.reactVis[".rv-xy-plot__grid-lines__line"].stroke,
                                 tickcolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
                                 zerolinecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
@@ -612,14 +693,14 @@ const ArchiverDataViewer = (props) => {
 
                             },
                             font: {
-                                family: 'Roboto',
+                                family: 'Roboto,Arial',
                                 //       size: 18,
                                 color: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke
                             },
 
                             //paper_bgcolor: theme.palette.background.default,
                             paper_bgcolor: theme.palette.background.paper,
-                            showlegend: true,
+                            showlegend: props.showLegend,
                             // legend: {
                             //     x: 1,
                             //     xanchor: 'right',

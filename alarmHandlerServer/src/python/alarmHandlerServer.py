@@ -376,8 +376,7 @@ def ackGlobal(username, timestamp):
 
 def ackAlarm(ackIdentifier, timestamp, username):
     # problem here if pv disconnected won't get severity
-    print(pvDict[ackIdentifier].pvname, pvDict[ackIdentifier].status)
-    if(pvDict[ackIdentifier].status == 1):
+    if ('_1' in alarmDict[pvDict[ackIdentifier].pvname]["D"].value[0]):
         pvsev = pvDict[ackIdentifier].severity
     else:
         pvsev = 4
@@ -471,17 +470,46 @@ def descConn(pvname=None, conn=None, **kw):
 
 
 def descDisconn(pvname, conn):
+    pvname = re.sub('.DESC$', '', pvname)
+    pv = alarmDict[pvname]["D"]
+    curr_desc = pv.value
     if (not conn):
-        pvname = re.sub('.DESC$', '', pvname)
-        pv = alarmDict[pvname]["D"]
+        timestamp = datetime.timestamp(datetime.now())
         # status initially 39 char string for memory
-        pv.put(
-            np.array([
-                'abcdefghijklmnopqrstuvwxyzAbcdefghijk_0', "[Disconnected]",
-                "[Disconnected]"
-            ]))
+        try:
+            curr_desc[0] = 'abcdefghijklmnopqrstuvwxyzAbcdefghijk_0'
+        except:
+            pass
+        pv.put(np.array(curr_desc))
         # set current alarm status to DISCONNECTED
         alarmDict[pvname]["A"].value = 8
+        # log alarm time and value
+
+        # log to database
+        areaKey = getKeys(pvname)[0]
+        globalEnable, areaEnable, subAreaEnable, pvEnable = getEnables(pvname)
+        if ("=" in areaKey):
+            enable = globalEnable and areaEnable and subAreaEnable and pvEnable
+        else:
+            enable = globalEnable and areaEnable and pvEnable
+        entry = {"timestamp": timestamp, "entry": " ".join(
+            [pvname, "-", "DISCONNECTED"])}
+        # disabled alarms not logged
+        if(enable):
+            client[MONGO_INITDB_ALARM_DATABASE].history.update_many(
+                {'id': areaKey+'*'+pvname},
+                {'$push': {
+                    'history': {
+                        '$each': [entry],
+                        '$position': 0
+                    }
+                }})
+    else:
+        try:
+            curr_desc[0] = 'abcdefghijklmnopqrstuvwxyzAbcdefghijk_1'
+        except:
+            pass
+        pv.put(np.array(curr_desc))
 
 
 def onChanges(pvname=None, value=None, **kw):
@@ -690,7 +718,7 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
                         'pvs.' + pvKey + '.lastAlarmTime': timestamp_string
                     }
                 })
-    # disbaled alarms not logged
+    # disabled alarms not logged
     if(enable and logToHistory):
         client[MONGO_INITDB_ALARM_DATABASE].history.update_many(
             {'id': areaKey+'*'+pvname},

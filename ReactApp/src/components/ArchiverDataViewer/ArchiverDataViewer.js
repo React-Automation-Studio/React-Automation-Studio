@@ -36,6 +36,7 @@ import { CarretDownIcon } from 'plotly-icons';
 import Plot from 'react-plotly.js';
 import Grid from '@material-ui/core/Grid';
 import { update } from 'plotly.js';
+import PropTypes from "prop-types";
 
 const dateFns = new DateFnsAdapter();
 
@@ -469,7 +470,7 @@ const ArchiverDataViewer = (props) => {
     let data3y = [1];
     console.log(data2, data3x, data3y)
     return (
-        <Paper elevation={theme.palette.paperElevation}>
+        <div >
             {props.pvs.map((pv, index) => (
                 <ArchiverData
                     key={index.toString()}
@@ -497,7 +498,7 @@ const ArchiverDataViewer = (props) => {
                 style={{ paddingTop: 32 }}
 
             >
-                <Grid item xl={6} lg={6} md={12} sm={12} xs={12} >
+                <Grid item xl={6} lg={'auto'} md={12} sm={12} xs={12} >
                     <Grid
                         container
                         spacing={2}
@@ -507,54 +508,54 @@ const ArchiverDataViewer = (props) => {
 
                     >
 
-                        <Grid item xs={2}  sm={'auto'} md={1} lg={1} >
+                        <Grid item xs={2}  sm={'auto'} md={1} lg={'auto'} >
                             <Button classes={{ root: classes.buttonRoot }} variant={'outlined'} color={fromButton === "30s" ? "secondary" : "default"} onClick={handleOnClick30s}>
                                 30s
                     </Button>
                         </Grid>
-                        <Grid item xs={2} sm={'auto'} md={1} lg={1} >
+                        <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
                             <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1m} variant={'outlined'} color={fromButton === "1m" ? "secondary" : "default"}>
                                 1m
                     </Button>
                         </Grid>
-                        <Grid item xs={2} sm={'auto'} md={1} lg={1} >
+                        <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
                             <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick5m} variant={'outlined'} color={fromButton === "5m" ? "secondary" : "default"}>
                                 5m
                     </Button>
                         </Grid>
-                        <Grid item xs={2} sm={'auto'} md={1} lg={1} >
+                        <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
                             <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick30m} variant={'outlined'} color={fromButton === "30m" ? "secondary" : "default"}>
                                 30m
                     </Button>
                         </Grid>
-                        <Grid item xs={2} sm={'auto'} md={1} lg={1} >
+                        <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
                             <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1h} variant={'outlined'} color={fromButton === "1h" ? "secondary" : "default"}>
                                 1h
                     </Button>
                         </Grid>
-                        <Grid item xs={2} sm={'auto'} md={1} lg={1} >
+                        <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
                             <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick2h} variant={'outlined'} color={fromButton === "2h" ? "secondary" : "default"}>
                                 2h
                     </Button>
                         </Grid>
-                        <Grid item xs={2} sm={'auto'} md={1} lg={1} >
+                        <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
                             <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1d} variant={'outlined'} color={fromButton === "1d" ? "secondary" : "default"}>
                                 1d
                     </Button>
                         </Grid>
-                        <Grid item xs={2} sm={'auto'} md={1} lg={1} >
+                        <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
                             <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick2d} variant={'outlined'} color={fromButton === "2d" ? "secondary" : "default"}>
                                 2d
                     </Button>
                         </Grid>
-                        <Grid item xs={2} sm={'auto'} md={1} lg={1} >
+                        <Grid item xs={2} sm={'auto'} md={1}lg={'auto'} >
                             <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1w} variant={'outlined'} color={fromButton === "1w" ? "secondary" : "default"}>
                                 1w
                     </Button>
                         </Grid>
                     </Grid>
                 </Grid>
-              <Grid item xl={2} lg={2} md={4} sm={4} xs={6} style={{ textAlign: 'center' }}>
+              <Grid item xl={2} lg={'auto'} md={4} sm={4} xs={6} style={{ textAlign: 'center' }}>
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
 
                         <DateTimePicker
@@ -575,7 +576,7 @@ const ArchiverDataViewer = (props) => {
                         />
                     </MuiPickersUtilsProvider>
                 </Grid>
-                <Grid item xl={2} lg={2} md={4} sm={4} xs={6} style={{ textAlign: 'center' }}>
+                <Grid item xl={2} lg={'auto'} md={4} sm={4} xs={6} style={{ textAlign: 'center' }}>
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <DateTimePicker
                             variant="inline"
@@ -599,7 +600,7 @@ const ArchiverDataViewer = (props) => {
 
                     </MuiPickersUtilsProvider>
                 </Grid>
-                <Grid item xl={2} lg={2} md={4} sm={4} xs={6}>
+                <Grid item xl={2} lg={'auto'} md={4} sm={4} xs={6}>
                     <Grid
                         container
                         spacing={2}
@@ -623,7 +624,7 @@ const ArchiverDataViewer = (props) => {
 
 
 
-            <div style={{ width: '100%', height: '35vh', background: theme.palette.background.default }}
+            <div style={{ width: props.width, height: props.height, background: theme.palette.background.default }}
 
                 onContextMenu={props.disableContextMenu ? undefined : handleToggleContextMenu}
             >
@@ -729,7 +730,38 @@ const ArchiverDataViewer = (props) => {
             </div>
 
 
-        </Paper>
+        </div>
     )
 }
+
+ArchiverDataViewer.propTypes = {
+    
+    /**
+     * If defined, then the DataConnection and
+     * the widget debugging information will be displayed.
+     */
+    debug: PropTypes.bool,
+    /**
+     * The height of the graph
+     */
+    height: PropTypes.string,
+    /**
+     * The width of the graph
+     */
+    height: PropTypes.string,
+  
+  
+  
+  };
+  
+  /**
+   * Default props.definition 
+   */
+  ArchiverDataViewer.defaultProps = {
+  
+    debug: false,
+    width: '100%',
+    height: '40vh',
+  
+  };
 export default ArchiverDataViewer

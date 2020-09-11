@@ -446,20 +446,20 @@ def ackAlarm(ackIdentifier, timestamp, username):
         alarmDict[pvname]["A"].value = 7    # set to DISCONN_ACKED state
 
 
-def descChange(pvname=None, value=None, host=None, **kw):
-    _thread.start_new_thread(updatePVDesc, (
-        pvname,
-        value,
-        host,
-    ))
+# def descChange(pvname=None, value=None, host=None, **kw):
+#     _thread.start_new_thread(updatePVDesc, (
+#         pvname,
+#         value,
+#         host,
+#     ))
 
 
-def updatePVDesc(pvname, desc, host):
-    # updates description and host in waveform
-    pvname = re.sub('.DESC$', '', pvname)
-    pv = alarmDict[pvname]["D"]
-    # status initially 39 char string for memory
-    pv.put(np.array(['abcdefghijklmnopqrstuvwxyzAbcdefghijk_1', desc, host]))
+# def updatePVDesc(pvname, desc, host):
+#     # updates description and host in waveform
+#     pvname = re.sub('.DESC$', '', pvname)
+#     pv = alarmDict[pvname]["D"]
+#     # status initially 39 char string for memory
+#     pv.put(np.array(['abcdefghijklmnopqrstuvwxyzAbcdefghijk_1', desc, host]))
 
 
 def descConn(pvname=None, conn=None, **kw):
@@ -472,41 +472,61 @@ def descConn(pvname=None, conn=None, **kw):
 def descDisconn(pvname, conn):
     pvname = re.sub('.DESC$', '', pvname)
     pv = alarmDict[pvname]["D"]
-    curr_desc = pv.value
     if (not conn):
         timestamp = datetime.timestamp(datetime.now())
+        timestamp_string = datetime.fromtimestamp(timestamp).strftime(
+            "%a, %d %b %Y at %H:%M:%S")
+        globalEnable, areaEnable, subAreaEnable, pvEnable = getEnables(pvname)
+        areaKey, pvKey = getKeys(pvname)
+        if ("=" in areaKey):
+            subAreaKey = subAreaDict[areaKey]
+            areaKey = areaKey.split("=")[0]
+            doc = client[MONGO_INITDB_ALARM_DATABASE].pvs.find_one(
+                {"area": areaKey})
+            enable = globalEnable and areaEnable and subAreaEnable and pvEnable
+            latch = doc[subAreaKey]["pvs"][pvKey]["latch"]
+        else:
+            doc = client[MONGO_INITDB_ALARM_DATABASE].pvs.find_one(
+                {"area": areaKey})
+            enable = globalEnable and areaEnable and pvEnable
+            latch = doc["pvs"][pvKey]["latch"]
+
+        transparent = not latch or not enable
+        alarmState = alarmDict[pvname]["A"].value
+        disconnAlarm = alarmState != 8
         # status initially 39 char string for memory
         try:
+            curr_desc = pv.value
             curr_desc[0] = 'abcdefghijklmnopqrstuvwxyzAbcdefghijk_0'
         except:
             pass
         pv.put(np.array(curr_desc))
         # set current alarm status to DISCONNECTED
-        alarmDict[pvname]["A"].value = 8
-        # log alarm time and value
-
-        # log to database
-        areaKey = getKeys(pvname)[0]
-        globalEnable, areaEnable, subAreaEnable, pvEnable = getEnables(pvname)
-        if ("=" in areaKey):
-            enable = globalEnable and areaEnable and subAreaEnable and pvEnable
-        else:
-            enable = globalEnable and areaEnable and pvEnable
-        entry = {"timestamp": timestamp, "entry": " ".join(
-            [pvname, "-", "DISCONNECTED"])}
-        # disabled alarms not logged
-        if(enable):
-            client[MONGO_INITDB_ALARM_DATABASE].history.update_many(
-                {'id': areaKey+'*'+pvname},
-                {'$push': {
-                    'history': {
-                        '$each': [entry],
-                        '$position': 0
-                    }
-                }})
+        if(disconnAlarm and (alarmState < 7 or (transparent and alarmState != 7))):
+            alarmDict[pvname]["A"].value = 8
+            # set alarm value
+            alarmDict[pvname]["V"].value = ""
+            # set alarm time
+            alarmDict[pvname]["T"].value = timestamp_string
+            # log to database
+            entry = {"timestamp": timestamp, "entry": " ".join(
+                [pvname, "-", "DISCONNECTED"])}
+            # disabled alarms not logged
+            if(enable):
+                # areaKey was split above so find again
+                areaKey = getKeys(pvname)[0]
+                client[MONGO_INITDB_ALARM_DATABASE].history.update_many(
+                    {'id': areaKey+'*'+pvname},
+                    {'$push': {
+                        'history': {
+                            '$each': [entry],
+                            '$position': 0
+                        }
+                    }})
     else:
         try:
-            curr_desc[0] = 'abcdefghijklmnopqrstuvwxyzAbcdefghijk_1'
+            curr_desc = [
+                'abcdefghijklmnopqrstuvwxyzAbcdefghijk_1', pvDescDict[pvname].value, pv.host]
         except:
             pass
         pv.put(np.array(curr_desc))
@@ -958,7 +978,7 @@ def initDescDict():
         desc = pvname + ".DESC"
         pv = PV(pvname=desc,
                 connection_timeout=0.001,
-                callback=descChange,
+                # callback=descChange,
                 connection_callback=descConn)
         pvDescDict[pvname] = pv
 

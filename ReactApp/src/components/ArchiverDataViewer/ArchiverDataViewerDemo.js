@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React  from 'react';
 import ArchiverDataViewer from '../ArchiverDataViewer/ArchiverDataViewer'
 import TraditionalLayout from '../UI/Layout/ComposedLayouts/TraditionalLayout.js';
 import Grid from '@material-ui/core/Grid';
@@ -19,29 +19,72 @@ const ArchiverDataViewerDemo = (props) => {
                 style={{ paddingTop: 32, paddingLeft: 8, paddingRight: 8 }}
 
             >
-                <Grid item xs={12} style={{ paddingBottom: 16 }}>
+                <Grid item xs={12} >
                     <ArchiverDataViewer
-                        debug={true}
+                      //  debug={true}
                         archiver={"DEMO_ARCHIVER"}
                         title={"Demo Buttons"}
                         showButtons={true}
+                        defaultButtonsExpanded={true}
+                        livePolling={true}
+                        fromTimeOffset={'1m'}
+                      //  height={'35vh'}
                         //displayModeBar={true}
                         // pvs={['pva://testIOC:BO1']}
-                        pvs={['pva://testIOC:BO1', 'pva://testIOC:BO2']}
-                        // traces={
-                        //     [
-                        //         {pv:'pva://testIOC:BO1',
-                        //          yAxis:'yAxis',
+                       
+                        traces={
+                            [
+                                {
+                                    pv: 'pva://testIOC:BO1',
+                                     yAxis: 0
 
 
-                        //     }
+                                },
+                               
 
-                        // ]}
-                        // yAxes={{'yAxis':{
+                                {
+                                    pv: 'pva://testIOC:BO2',
+                                    yAxis: 1
+                                },
+                                {
+                                    pv: 'pva://testIOC:amplitude',
+                                    yAxis: 2
+                                },
+                            ]}
+                        yAxes={
+                            [
+                                {
+                                    title: "BO1",
+                                },
+                                {
+                                    title: "BO2",
+                                },
+                                {
+                                    title: "Amplitude",
+                                },
+                            ]}
+                        //     {pv:'pva://testIOC:BO1',
 
-                        // }
 
-                        // }}
+
+                        // },
+                        // {pv:'pva://testIOC:amplitude',
+                        // yaxis:'y4'},
+
+                        // {pv:'pva://testIOC:BO2',
+                        // yaxis:'y5'}
+
+
+
+
+
+
+                        showLegend={true}
+                    // yAxes={{'yAxis':{
+
+                    // }
+
+                    // }}
                     //  from={'2020-08-31T12:20:00'}
                     //  to=  {'2020-09-02T15:30:00'}
 
@@ -49,12 +92,74 @@ const ArchiverDataViewerDemo = (props) => {
                     />
                 </Grid>
                 <Grid item xs={12}>
-                    <ArchiverDataViewer
+                <ArchiverDataViewer
                         debug={true}
                         archiver={"DEMO_ARCHIVER"}
-                        pvs={['pva://testIOC:amplitude']}
-                    //from={'2020-08-31T12:20:00'}
-                    //to={'2020-09-02T15:30:00'}
+                        title={"Demo Buttons"}
+                        showButtons={true}
+                       // height={'35vh'}
+                        //displayModeBar={true}
+                        // pvs={['pva://testIOC:BO1']}
+                       
+                        traces={
+                            [
+                               
+                               
+
+                              
+                                {
+                                    pv: 'pva://testIOC:amplitude',
+                                    yAxis: 0
+                                },
+                                {
+                                    pv: 'pva://testIOC:BO1',
+                                     yAxis: 1
+
+
+                                },
+                                {
+                                    pv: 'pva://testIOC:BO2',
+                                    yAxis: 2
+                                },
+                            ]}
+                        yAxes={
+                            [
+                                {
+                                    title: "Amplitude",
+                                   
+                                },
+                                {
+                                    title: "BO1",
+                                },
+                                {
+                                    title: "BO2",
+                                },
+                                
+                            ]}
+                        //     {pv:'pva://testIOC:BO1',
+
+
+
+                        // },
+                        // {pv:'pva://testIOC:amplitude',
+                        // yaxis:'y4'},
+
+                        // {pv:'pva://testIOC:BO2',
+                        // yaxis:'y5'}
+
+
+
+
+
+
+                        showLegend={true}
+                    // yAxes={{'yAxis':{
+
+                    // }
+
+                    // }}
+                    //  from={'2020-08-31T12:20:00'}
+                    //  to=  {'2020-09-02T15:30:00'}
 
 
                     />

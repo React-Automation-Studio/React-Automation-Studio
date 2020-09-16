@@ -1,46 +1,27 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 import ContextMenu from "../SystemComponents/ContextMenu";
-import TextField from '@material-ui/core/TextField';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Paper from '@material-ui/core/Paper';
 import DateFnsUtils from '@date-io/date-fns';
 import formatISO from 'date-fns/formatISO';
-import { format, subHours, subSeconds, subMinutes, subDays, subWeeks, subMonths } from 'date-fns';
-import Typography from '@material-ui/core/Typography';
+import { format, subHours, subSeconds, subMinutes, subDays, subWeeks } from 'date-fns';
+
 import { makeStyles } from '@material-ui/core/styles';
 import { useTheme } from '@material-ui/core/styles';
 import { DateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
-import {
-    XYPlot,
-    XAxis,
-    YAxis,
-    HorizontalGridLines,
-    VerticalGridLines,
-    LineSeries,
-    makeVisFlexible,
-    Crosshair,
-    DiscreteColorLegend
-} from 'react-vis';
-import GraphY from '../BaseComponents/GraphY';
+
+
 import DateFnsAdapter from "@date-io/date-fns";
-import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
-import ZoomInIcon from '@material-ui/icons/ZoomIn';
-import ZoomOutIcon from '@material-ui/icons/ZoomOut';
-import ZoomOutMapIcon from '@material-ui/icons/ZoomOutMap';
-import { CrosshairsGps } from "mdi-material-ui/";
-import { ArrowLeftRight } from "mdi-material-ui/";
-import { ArrowUpDown } from "mdi-material-ui/";
-import { Magnify } from "mdi-material-ui/";
-import { CarretDownIcon } from 'plotly-icons';
 import Plot from 'react-plotly.js';
+
 import Grid from '@material-ui/core/Grid';
-import { update } from 'plotly.js';
 import PropTypes from "prop-types";
-
-const dateFns = new DateFnsAdapter();
-
-const FlexibleXYPlot = makeVisFlexible(XYPlot);
+import { isMobile, isTablet } from 'react-device-detect';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -64,45 +45,14 @@ const useStyles = makeStyles((theme) => ({
 
     },
 }));
-const calcTimeFormat = (timestamp) => {
-    let mydate = new Date(timestamp * 1000);
-    // let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    // let year = mydate.getFullYear();
-    // let month = months[mydate.getMonth()];
-    // let date = mydate.getDate();
-    // let hour = mydate.getHours();
-    // let min = mydate.getMinutes();
-    // let sec = mydate.getSeconds();
-    // let ms = mydate.getMilliseconds()
-    // //let value= hour + ':' + min + ':' + sec +':' + ms;
-    // let value;
-    // if (hour < 10) {
-    //     hour = '0' + hour;
 
-    // }
-    // if (min < 10) {
-    //     min = '0' + min;
-
-    // }
-
-    // if (sec < 10) {
-    //     sec = '0' + sec;
-
-    // }
-    // value = hour + ':' + min + ':' + sec + " " + date + " " + month + " " + year;
-    let value = format(mydate, 'dd/MM/yyyy HH:mm:ss')
-    return value;
-}
 
 const useArchiverDataHook = (props) => {
 
     const context = useContext(AutomationStudioContext);
     const [dbWatchId, setDbWatchId] = useState(null);
     const [data, setData] = useState(null);
-    // useEffect(()=>{
-    //     setData([{data:[{secs:123123,val:1}]}])
 
-    // },[])
     const [writeAccess, setWriteAccess] = useState(false);
     const [initialized, setInitialized] = useState(false);
 
@@ -114,8 +64,7 @@ const useArchiverDataHook = (props) => {
             }
         }
         const handleArchiverReadData = (msg) => {
-            // console.log(msg.data)
-            //const newData = JSON.parse(msg.data);
+
             setData(msg.data);
             setInitialized(true)
             setWriteAccess(msg.write_access)
@@ -148,10 +97,7 @@ const useArchiverDataHook = (props) => {
         return () => {
 
             if (props.archiverURL) {
-                // if (dbWatchId !== null) {
-                //     socket.emit('remove_dbWatch', { archiverURL: props.archiverURL, dbWatchId: dbWatchId, 'clientAuthorisation': jwt });
-                // }
-                // socket.removeListener('databaseWatchData:' + props.archiverURL, handleArchiverReadData);
+
                 socket.removeListener('reconnect', reconnect);
                 socket.removeListener('disconnect', disconnect);
             }
@@ -159,21 +105,23 @@ const useArchiverDataHook = (props) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.archiverURL])
-    console.log("useArchiverDataHook", data)
+
     return (data)
 
 }
 const ArchiverData = (props) => {
 
-    const data = useArchiverDataHook({ archiverURL: 'arch://DEMO_ARCHIVER:request:' + JSON.stringify({
-        pv: props.pv,
-        options: {
-            from: formatISO(props.from),
-            to: formatISO(props.to),
-            parameters: props.parameters,
+    const data = useArchiverDataHook({
+        archiverURL: 'arch://DEMO_ARCHIVER:request:' + JSON.stringify({
+            pv: props.pv,
+            options: {
+                from: formatISO(props.from),
+                to: formatISO(props.to),
+                parameters: props.parameters,
 
-        }
-    })});
+            }
+        })
+    });
     const [dataXY, setDataXY] = useState({ x: [], y: [] })
     useEffect(() => {
         if (data !== null) {
@@ -186,32 +134,30 @@ const ArchiverData = (props) => {
 
                 let sample;
                 for (sample in newArchiverData) {
-
-                    if (sample==0){
+                    // eslint-disable-next-line eqeqeq 
+                    if (sample == 0) {
                         x.push(props.from);
                         y.push(newArchiverData[sample].val)
                     }
-                    else{
-                    if (sample > 0) {
+                    else {
+                        if (sample > 0) {
+                            x.push(new Date(newArchiverData[sample].secs * 1000));
+                            y.push(newArchiverData[sample - 1].val)
+
+                        }
                         x.push(new Date(newArchiverData[sample].secs * 1000));
-                        y.push(newArchiverData[sample - 1].val)
+                        y.push(newArchiverData[sample].val)
 
                     }
-                    x.push(new Date(newArchiverData[sample].secs * 1000));
-                    y.push(newArchiverData[sample].val)
-                   
-                }
-               
-                if (sample==(newArchiverData.length-1)){
-                    x.push(props.to);
-                    y.push(newArchiverData[sample].val)
+                    // eslint-disable-next-line eqeqeq 
+                    if (sample == (newArchiverData.length - 1)) {
+                        x.push(props.to);
+                        y.push(newArchiverData[sample].val)
+
+                    }
 
                 }
 
-                }
-
-
-                //        // console.log(ArchiverDataViewer,xYData)
 
                 setDataXY({ x: x, y: y })
             }
@@ -227,12 +173,12 @@ const ArchiverData = (props) => {
 
     return (
         <div />
-        // <Typography> {props.archiverURL}   </Typography>
+
     )
 }
 
 const ArchiverDataViewer = (props) => {
-
+    const paperRef = useRef(null);
     const classes = useStyles();
     const theme = useTheme();
     const [pvsArchData, setPvsArchData] = useState([]);
@@ -240,25 +186,16 @@ const ArchiverDataViewer = (props) => {
     const [selectedFromDate, setSelectedFromDate] = useState(props.from ? new Date(props.from) : subHours(new Date(), 1))
     const [selectedToDate, setSelectedToDate] = useState(props.to ? new Date(props.to) : new Date())
     const [plotlyData, setPlotlyData] = useState({ x: [], y: [] })
-    const [live, setLive] = useState(false);
+    const [live, setLive] = useState(props.livePolling===true);
     const [liveIntervalId, setLiveIntervalId] = useState(null);
     const archData = { data: null }
-    const [fromButton, setFromButton] = useState("none");
-    // const archData = useArchiverDataHook({ archiverURL: 'arch://DEMO_ARCHIVER:request:'+JSON.stringify({
-    //     pv:props.pvs[0],
-    //     options:{
-    //         from:formatISO(selectedFromDate),
-    //         to:  formatISO(selectedToDate),
-    //         parameters:"&donotchunk"
+    const [fromButton, setFromButton] = useState(props.fromTimeOffset?props.fromTimeOffset:'none');
 
-    //     }
-    // })});
-    //const [xYData,setXYData]=useState([]);
     useEffect(() => {
         const updateToDate = () => {
             let date = new Date();
             setSelectedToDate(date)
-          
+
             switch (fromButton) {
                 case "30s":
                     setSelectedFromDate(subSeconds(date, 30));
@@ -292,19 +229,19 @@ const ArchiverDataViewer = (props) => {
                     break;
                 default:
             }
-        
+
         }
         let intervalId;
         if (live) {
-            intervalId = setInterval(updateToDate, 1000);
-            //setLiveIntervalId(intervalId)
+            intervalId = setInterval(updateToDate, props.pollingRatePeriod?(props.pollingRatePeriod>1000?props.pollingRatePeriod:1000): 1000);
+
 
         }
-        
+
         return () => {
             clearInterval(intervalId)
         }
-    }, [live,fromButton])
+    }, [live, fromButton])
 
 
     const handleOnClick30s = () => {
@@ -374,54 +311,11 @@ const ArchiverDataViewer = (props) => {
     const [lineData, setLineData] = useState([]);
     const [crosshairValues, setCrosshairValues] = useState([]);
     const onNearestX = (value, { index }) => {
-        console.log(index)
-        console.log(lineData[index])
 
         setCrosshairValues([lineData[index]]);
     };
 
-    // const data = useArchiverData({ archiverURL: "arch://DEMO_ARCHIVER:{pv:testIOC:BO1}" })
-    console.log(archData)
-    console.log(data)
-   // console.log("fromButton",fromButton,"selectedFromDate",selectedFromDate,"selectedToDate",selectedToDate)   
-    // useEffect(() => {
-    //     if (data !== null) {
-    //         let newArchiverData = [];
-    //         let newXYData = [];
-    //         let x = [];
-    //         let y = [];
-    //         if (typeof data[0].data !== undefined) {
-    //             console.log(data[0].data)
-    //             newArchiverData = data[0].data
 
-    //             let sample;
-    //             for (sample in newArchiverData) {
-    //                 console.log(sample, newArchiverData[sample].secs, calcTimeFormat(newArchiverData[sample].secs, newArchiverData[sample].val))
-
-    //                 if (sample > 0) {
-    //                     x.push(new Date(newArchiverData[sample].secs * 1000));
-    //                     y.push(newArchiverData[sample - 1].val)
-    //                     newXYData.push({ x: newArchiverData[sample].secs, y: newArchiverData[sample - 1].val })
-    //                 }
-    //                 x.push(new Date(newArchiverData[sample].secs * 1000));
-    //                 y.push(newArchiverData[sample].val)
-
-    //                 newXYData.push({ x: newArchiverData[sample].secs, y: newArchiverData[sample].val })
-    //             }
-
-
-    //             //        // console.log(ArchiverDataViewer,xYData)
-    //             console.log(newXYData)
-    //             setLineData(newXYData);
-    //             setPlotlyData({ x: x, y: y })
-    //         }
-
-    //     }
-
-    // }, [data])
-    // useEffect(() => {
-
-    // }, [])
 
     const [anchorEl, setAnchorEl] = useState(null);
     const [openContextMenu, setOpenContextMenu] = useState(false);
@@ -438,9 +332,6 @@ const ArchiverDataViewer = (props) => {
         setOpenContextMenu(false);
     }
 
-    console.log(lineData)
-    // console.log(crosshairValues)
-    console.log(CarretDownIcon)
     const icon2 = (
         <svg width="2048" height="1792" viewBox="0 0 2048 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1728 640q0-80-56-136t-136-56h-64v384h64q80 0 136-56t56-136zm-1664 768h1792q0 106-75 181t-181 75h-1280q-106 0-181-75t-75-181zm1856-768q0 159-112.5 271.5t-271.5 112.5h-64v32q0 92-66 158t-158 66h-704q-92 0-158-66t-66-158v-736q0-26 19-45t45-19h1152q159 0 271.5 112.5t112.5 271.5z" /></svg>
     )
@@ -450,34 +341,211 @@ const ArchiverDataViewer = (props) => {
 
         'path': "M9,10H7V12H9V10M13,10H11V12H13V10M17,10H15V12H17V10M19,3H18V1H16V3H8V1H6V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M19,19H5V8H19V19Z"
     }
-    console.log("pvsArchData", pvsArchData)
-    const data2 =
+    const [width, setWidth] = useState(null);
+    const [height, setHeight] = useState(null);
 
-        pvsArchData.map((pvData, index) => (
-            {
-                x: pvData.x,
-                y: pvData.y,
-                name: props.pvs[index],
-                type: 'scatter',
-                mode: 'lines',
-                marker: { color: theme.palette.reactVis.lineColors[index] },
+    useEffect(() => {
+        const handleResize = () => {
+            if (paperRef.current) {
+
+                setHeight(paperRef.current.offsetHeight)
+                setWidth(paperRef.current.offsetWidth)
 
             }
+        }
+        // The 'current' property contains info of the reference:
+        // align, title, ... , width, height, etc.
+        if (paperRef.current) {
 
-        ))
+            setHeight(paperRef.current.offsetHeight)
+            setWidth(paperRef.current.offsetWidth)
 
-    let data3x = [new Date()];
-    let data3y = [1];
-    console.log(data2, data3x, data3y)
+        }
+        window.addEventListener("resize", handleResize)
+        return () => window.removeEventListener("resize", handleResize);
+
+    }, [paperRef]);
+
+    const [domain, setDomain] = useState([0, 1])
+    const [yPositions, setYPositions] = useState([0, 0, 0])
+    useEffect(() => {
+
+
+        if (props.yAxes !== undefined) {
+            let numberOfyAxes = props.yAxes.length;
+            let newYPositions = [];
+            let increment = 100 / width;
+
+
+            let newDomain = [increment * (numberOfyAxes - 1), 1]
+            let i = numberOfyAxes;
+            let index = 0;
+            for (i = numberOfyAxes; i >= 0, i--;) {
+                newYPositions[index] = i * increment;
+                index++;
+
+            }
+            setYPositions(newYPositions)
+            setDomain(newDomain)
+        }
+        else {
+            setYPositions([0])
+            setDomain([0, 1])
+        }
+    }, [width])
+
+
+    let yAxes = {};
+    if (props.yAxes !== undefined) {
+
+        props.yAxes.forEach((item, index) => {
+            let key = index == 0 ? 'yaxis' : 'yaxis' + (index + 1)
+
+            if (index > 0) {
+                yAxes[key] = {
+                    title: item.title ? item.title : "Y-Axis " + (index + 1),
+                    titlefont: { color: props.yAxes.length > 1 ? theme.palette.reactVis.lineColors[index] : theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke },
+                    tickfont: { color: props.yAxes.length > 1 ? theme.palette.reactVis.lineColors[index] : theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke },
+                    gridcolor: theme.palette.reactVis[".rv-xy-plot__grid-lines__line"].stroke,
+                    tickcolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
+                    zerolinecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
+                    linecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
+                    zeroline: true,
+                    showline: true,
+                    showgrid: item.showGrid ? item.showGrid : true,
+
+                    side: 'left',
+                    position: yPositions[index],
+                    anchor: 'free',
+                    overlaying: 'y',
+                    type: item.type === 'log' ? 'log' : 'linear',
+                    tickformat: item.tickFormat ? item.tickFormat : ''
+                }
+            }
+            else {
+               
+                yAxes['yaxis'] = {
+                    title: item.title ? item.title : "Y-Axis " + (index + 1),
+                    titlefont: { color: theme.palette.reactVis.lineColors[index], },
+                    tickfont: { color: theme.palette.reactVis.lineColors[index], },
+                    gridcolor: theme.palette.reactVis[".rv-xy-plot__grid-lines__line"].stroke,
+                    tickcolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
+                    zerolinecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
+                    linecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
+                    zeroline: true,
+                    showline: true,
+                    showgrid: true,
+                    type: item.type == 'log' ? 'log' : 'linear',
+                    tickformat: item.tickFormat ? item.tickFormat : ''
+                }
+            }
+        })
+    }
+    else {
+        yAxes['yaxis'] = {
+            title: "Y-Axis ",
+
+            gridcolor: theme.palette.reactVis[".rv-xy-plot__grid-lines__line"].stroke,
+            tickcolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
+            zerolinecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
+            linecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
+            zeroline: true,
+            showline: true,
+            showgrid: true,
+
+
+
+        }
+    }
+
+    let data2 =
+        pvsArchData.map((pvData, index) => {
+            if (index == 0) {
+                return ({
+                    x: pvData.x,
+                    y: pvData.y,
+                    name: props.traces[index].name ? props.traces[index].name : props.traces[index].pv,
+                    type: props.traces[index].type ? props.traces[index].type : 'scatter',
+                    mode: props.traces[index].mode ? props.traces[index].mode : 'lines',
+                    marker: { color: props.traces[index].color ? props.traces[index].color : theme.palette.reactVis.lineColors[index] },
+
+
+
+                })
+            }
+            else {
+                return ({
+                    x: pvData.x,
+                    y: pvData.y,
+                    name: props.traces[index].name ? props.traces[index].name : props.traces[index].pv,
+                    type: props.traces[index].type ? props.traces[index].type : 'scatter',
+                    mode: props.traces[index].mode ? props.traces[index].mode : 'lines',
+                    marker: { color: props.traces[index].color ? props.traces[index].color : theme.palette.reactVis.lineColors[index] },
+                    // yaxis: 'y2'
+                    yaxis: typeof (props.traces[index].yAxis) !== 'undefined' ? (props.traces[index].yAxis == 0 ? undefined : 'y' + (parseInt(props.traces[index].yAxis) + 1)) : 'yaxis',
+
+                })
+
+            }
+        })
+
+
+    let legend = {
+        legend: isMobile ? {
+
+            orientation: 'h',
+            x: 0,
+            y: 1.1
+        } : undefined
+    }
+    let layout =
+    {
+        title: props.title,
+        plot_bgcolor: theme.palette.background.paper,
+        xaxis: {
+            domain: domain,
+            title: props.xAxisTitle ? props.xAxisTitle : '',
+            gridcolor: theme.palette.reactVis[".rv-xy-plot__grid-lines__line"].stroke,
+            tickcolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
+            zerolinecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
+            linecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
+            zeroline: true,
+            showline: true,
+            showgrid: true,
+            range: [selectedFromDate, selectedToDate],
+
+
+        },
+        ...yAxes,
+
+        font: {
+            family: 'Roboto,Arial',
+
+            color: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke
+        },
+
+
+        paper_bgcolor: theme.palette.background.paper,
+        showlegend: props.showLegend,
+        ...legend,
+
+
+    }
+    // if (props.debug) {
+    //     console.log(layout)
+    // }
+
+
+
     return (
-        <div >
-            {props.pvs.map((pv, index) => (
+        <Paper ref={paperRef} style={{ width: props.width, paddingBottom: 8 }}>
+            {props.traces.map((trace, index) => (
                 <ArchiverData
                     key={index.toString()}
-                   
-                
+
+
                     archiver={props.archiver}
-                    pv={pv}
+                    pv={trace.pv}
                     from={selectedFromDate}
                     to={selectedToDate}
                     parameters={"&donotchunk"}
@@ -489,16 +557,10 @@ const ArchiverDataViewer = (props) => {
                     })}
                 />
             ))}
-            {props.showButtons&&<Grid
-                container
-                spacing={2}
-                alignItems={'center'}
-                direction={'row'}
-                justify={'center'}
-                style={{ paddingTop: 32 }}
-
-            >
-                <Grid item xl={6} lg={'auto'} md={12} sm={12} xs={12} >
+            {props.showButtons && <Accordion elevation={0} defaultExpanded={props.defaultButtonsExpanded}>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                </AccordionSummary>
+                <AccordionDetails>
                     <Grid
                         container
                         spacing={2}
@@ -506,136 +568,148 @@ const ArchiverDataViewer = (props) => {
                         direction={'row'}
                         justify={'center'}
 
-                    >
-
-                        <Grid item xs={2}  sm={'auto'} md={1} lg={'auto'} >
-                            <Button classes={{ root: classes.buttonRoot }} variant={'outlined'} color={fromButton === "30s" ? "secondary" : "default"} onClick={handleOnClick30s}>
-                                30s
-                    </Button>
-                        </Grid>
-                        <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
-                            <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1m} variant={'outlined'} color={fromButton === "1m" ? "secondary" : "default"}>
-                                1m
-                    </Button>
-                        </Grid>
-                        <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
-                            <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick5m} variant={'outlined'} color={fromButton === "5m" ? "secondary" : "default"}>
-                                5m
-                    </Button>
-                        </Grid>
-                        <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
-                            <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick30m} variant={'outlined'} color={fromButton === "30m" ? "secondary" : "default"}>
-                                30m
-                    </Button>
-                        </Grid>
-                        <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
-                            <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1h} variant={'outlined'} color={fromButton === "1h" ? "secondary" : "default"}>
-                                1h
-                    </Button>
-                        </Grid>
-                        <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
-                            <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick2h} variant={'outlined'} color={fromButton === "2h" ? "secondary" : "default"}>
-                                2h
-                    </Button>
-                        </Grid>
-                        <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
-                            <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1d} variant={'outlined'} color={fromButton === "1d" ? "secondary" : "default"}>
-                                1d
-                    </Button>
-                        </Grid>
-                        <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
-                            <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick2d} variant={'outlined'} color={fromButton === "2d" ? "secondary" : "default"}>
-                                2d
-                    </Button>
-                        </Grid>
-                        <Grid item xs={2} sm={'auto'} md={1}lg={'auto'} >
-                            <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1w} variant={'outlined'} color={fromButton === "1w" ? "secondary" : "default"}>
-                                1w
-                    </Button>
-                        </Grid>
-                    </Grid>
-                </Grid>
-              <Grid item xl={2} lg={'auto'} md={4} sm={4} xs={6} style={{ textAlign: 'center' }}>
-                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-
-                        <DateTimePicker
-                            variant="inline"
-                            ampm={false}
-                            label="From:"
-                            value={selectedFromDate}
-                            onChange={
-                                (newDate) => {
-                                 setSelectedFromDate(newDate)
-                                 console.log("setSelectedFromDate",newDate)
-                                 setFromButton("none")
-                                }
-                            }
-                            //onError={console.log}
-                            //disablePast
-                            format="yyyy/MM/dd HH:mm:ss"
-                        />
-                    </MuiPickersUtilsProvider>
-                </Grid>
-                <Grid item xl={2} lg={'auto'} md={4} sm={4} xs={6} style={{ textAlign: 'center' }}>
-                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <DateTimePicker
-                            variant="inline"
-                            ampm={false}
-                            label="To:"
-                            value={selectedToDate}
-                            onChange={
-                                (newDate) => {
-                                 //   console.log("selectedToDate",newDate)
-                                    setSelectedToDate(newDate)
-                                    setFromButton("none")
-                                    setLive(false)
-                            //     setSelectedToDate
-                                }
-                            }
-                            
-                            //onError={console.log}
-                            //disablePast
-                            format="yyyy/MM/dd HH:mm:ss"
-                        />
-
-                    </MuiPickersUtilsProvider>
-                </Grid>
-                <Grid item xl={2} lg={'auto'} md={4} sm={4} xs={6}>
-                    <Grid
-                        container
-                        spacing={2}
-                        alignItems={'center'}
-                        direction={'row'}
-                        justify={'center'}
 
                     >
+                        <Grid item xl={6} lg={'auto'} md={12} sm={12} xs={12} >
 
+                            <Grid
+                                container
+                                spacing={2}
+                                alignItems={'center'}
+                                direction={'row'}
+                                justify={'center'}
 
-                        <Grid item xs={1} >
-                            <Button classes={{ root: classes.buttonRoot }} variant={'contained'} color={live ? 'primary' : 'default'} onClick={() => setLive(live === true ? false : true)}>
-                                Live
+                            >
+
+                                <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
+                                    <Button classes={{ root: classes.buttonRoot }} variant={'outlined'} color={fromButton === "30s" ? "secondary" : "default"} onClick={handleOnClick30s}>
+                                        30s
                     </Button>
+                                </Grid>
+                                <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
+                                    <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1m} variant={'outlined'} color={fromButton === "1m" ? "secondary" : "default"}>
+                                        1m
+                    </Button>
+                                </Grid>
+                                <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
+                                    <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick5m} variant={'outlined'} color={fromButton === "5m" ? "secondary" : "default"}>
+                                        5m
+                    </Button>
+                                </Grid>
+                                <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
+                                    <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick30m} variant={'outlined'} color={fromButton === "30m" ? "secondary" : "default"}>
+                                        30m
+                    </Button>
+                                </Grid>
+                                <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
+                                    <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1h} variant={'outlined'} color={fromButton === "1h" ? "secondary" : "default"}>
+                                        1h
+                    </Button>
+                                </Grid>
+                                <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
+                                    <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick2h} variant={'outlined'} color={fromButton === "2h" ? "secondary" : "default"}>
+                                        2h
+                    </Button>
+                                </Grid>
+                                <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
+                                    <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1d} variant={'outlined'} color={fromButton === "1d" ? "secondary" : "default"}>
+                                        1d
+                    </Button>
+                                </Grid>
+                                <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
+                                    <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick2d} variant={'outlined'} color={fromButton === "2d" ? "secondary" : "default"}>
+                                        2d
+                    </Button>
+                                </Grid>
+                                <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
+                                    <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1w} variant={'outlined'} color={fromButton === "1w" ? "secondary" : "default"}>
+                                        1w
+                    </Button>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                        <Grid item xl={2} lg={'auto'} md={4} sm={4} xs={6} style={{ textAlign: 'center' }}>
+                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+
+                                <DateTimePicker
+                                    variant="inline"
+                                    ampm={false}
+                                    label="From:"
+                                    value={selectedFromDate}
+                                    onChange={
+                                        (newDate) => {
+                                            setSelectedFromDate(newDate)
+                                            console.log("setSelectedFromDate", newDate)
+                                            setFromButton("none")
+                                        }
+                                    }
+                                    //onError={console.log}
+                                    //disablePast
+                                    format="yyyy/MM/dd HH:mm:ss"
+                                />
+                            </MuiPickersUtilsProvider>
+                        </Grid>
+                        <Grid item xl={2} lg={'auto'} md={4} sm={4} xs={6} style={{ textAlign: 'center' }}>
+                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                <DateTimePicker
+                                    variant="inline"
+                                    ampm={false}
+                                    label="To:"
+                                    value={selectedToDate}
+                                    onChange={
+                                        (newDate) => {
+                                            //   console.log("selectedToDate",newDate)
+                                            setSelectedToDate(newDate)
+                                            setFromButton("none")
+                                            setLive(false)
+                                            //     setSelectedToDate
+                                        }
+                                    }
+
+                                    //onError={console.log}
+                                    //disablePast
+                                    format="yyyy/MM/dd HH:mm:ss"
+                                />
+
+                            </MuiPickersUtilsProvider>
+                        </Grid>
+                        <Grid item xl={2} lg={'auto'} md={4} sm={4} xs={6}>
+                            <Grid
+                                container
+                                spacing={2}
+                                alignItems={'center'}
+                                direction={'row'}
+                                justify={'center'}
+
+                            >
+
+
+                                <Grid item xs={1} >
+                                    <Button classes={{ root: classes.buttonRoot }} variant={'contained'} color={live ? 'primary' : 'default'} onClick={() => setLive(live === true ? false : true)}>
+                                        Live
+                    </Button>
+                                </Grid>
+
+                            </Grid>
                         </Grid>
 
                     </Grid>
-                </Grid>
+                </AccordionDetails>
+            </Accordion>}
 
-            </Grid>}
-
-
-
-            <div style={{ width: props.width, height: props.height, background: theme.palette.background.default }}
+            {(width !== null) && (height !== null) && <div style={{ width: width, height: props.height, background: theme.palette.background.paper, paddingTop: 8, paddingBottom: 8 }}
 
                 onContextMenu={props.disableContextMenu ? undefined : handleToggleContextMenu}
             >
                 <Plot
-                    config={props.displayModeBar?{
+                    config={props.displayModeBar ? {
                         "displaylogo": false,
                         scrollZoom: false,
                         displayModeBar: props.displayModeBar,
                         toImageButtonOptions: {
                             format: 'svg'
-                        }}:{
+                        }
+                    } : {
                             "displaylogo": false,
                             scrollZoom: false,
                             toImageButtonOptions: {
@@ -645,69 +719,49 @@ const ArchiverDataViewer = (props) => {
 
 
 
-                    }                   
+                    }
                     useResizeHandler={true}
-                    style={{ position: 'relative', display: 'inline-block', width: '100%', height: '35vh' }}
-                    data={
-                        pvsArchData.map((pvData, index) => (
-                            {
+                    style={{
+                        position: 'relative',
+                        display: 'inline-block',
+                        width: '100%', height: '100%', paddingBottom: 8
+                    }}
+                    data={pvsArchData.map((pvData, index) => {
+                        if (index == 0) {
+                            return ({
                                 x: pvData.x,
                                 y: pvData.y,
-                                name: props.pvs[index],
-                                type: 'scatter',
-                                mode: 'lines',
-                                marker: { color: theme.palette.reactVis.lineColors[index] },
-
-                            }
-
-                        ))
-                    }
-
-                    layout={
-                        {
-                            title: props.title,
-                            plot_bgcolor: theme.palette.background.paper,
-                            xaxis: {
-                                title: props.xAxisTitle ? props.xAxisTitle : 'X-Axis',
-                                gridcolor: theme.palette.reactVis[".rv-xy-plot__grid-lines__line"].stroke,
-                                tickcolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
-                                zerolinecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
-                                linecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
-                                zeroline: true,
-                                showline: true,
-                                showgrid: true,
-                                tickformat: "%H:%M:%S \n %a %d %b %Y ",
-                                range: [selectedFromDate, selectedToDate],
+                                name: props.traces[index].name ? props.traces[index].name : props.traces[index].pv,
+                                type: props.traces[index].type ? props.traces[index].type : 'scatter',
+                                mode: props.traces[index].mode ? props.traces[index].mode : 'lines',
+                                marker: { color: props.traces[index].color ? props.traces[index].color : theme.palette.reactVis.lineColors[index] },
+                                hovertemplate:
+                                    "(%{y}) %{x}"
+                                //                 "%{yaxis.title.text}: %{y:$,.0f}<br>" +
+                                //                 "%{xaxis.title.text}: %{x:.0%}<br>" +
+                                //                 "Number Employed: %{marker.size:,}" +
+                                //                 "<extra></extra>"
 
 
-                            },
-                            yaxis: {
-                                title: props.yAxisTitle ? props.yAxisTitle : 'Y-Axis',
+                            })
+                        }
+                        else {
+                            return ({
+                                x: pvData.x,
+                                y: pvData.y,
+                                name: props.traces[index].name ? props.traces[index].name : props.traces[index].pv,
+                                type: props.traces[index].type ? props.traces[index].type : 'scatter',
+                                mode: props.traces[index].mode ? props.traces[index].mode : 'lines',
+                                marker: { color: props.traces[index].color ? props.traces[index].color : theme.palette.reactVis.lineColors[index] },
+                                yaxis: typeof (props.traces[index].yAxis) !== 'undefined' ? (props.traces[index].yAxis == 0 ? undefined : 'y' + (parseInt(props.traces[index].yAxis) + 1)) : 'yaxis',
+                                hovertemplate:
+                                    "(%{y}) %{x}" + "<extra>%{fullData.name}</extra>"
+                            })
 
-                                gridcolor: theme.palette.reactVis[".rv-xy-plot__grid-lines__line"].stroke,
-                                tickcolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
-                                zerolinecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
-                                linecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
-                                zeroline: true,
-                                showline: true,
-                                showgrid: true,
+                        }
+                    })}
+                    layout={{ ...layout }}
 
-                            },
-                            font: {
-                                family: 'Roboto,Arial',
-                                //       size: 18,
-                                color: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke
-                            },
-
-                            //paper_bgcolor: theme.palette.background.default,
-                            paper_bgcolor: theme.palette.background.paper,
-                            showlegend: props.showLegend,
-                            // legend: {
-                            //     x: 1,
-                            //     xanchor: 'right',
-                            //     y: 1
-                            // }
-                        }}
 
                 />
                 {/* <ContextMenu
@@ -727,41 +781,114 @@ const ArchiverDataViewer = (props) => {
                     probeType={props.readOnly ? "readOnly" : undefined}
                 />  */}
 
-            </div>
+            </div>}
 
 
-        </div>
+        </Paper>
     )
 }
 
 ArchiverDataViewer.propTypes = {
-    
-    /**
-     * If defined, then the DataConnection and
-     * the widget debugging information will be displayed.
-     */
-    debug: PropTypes.bool,
+
+
     /**
      * The height of the graph
      */
     height: PropTypes.string,
+
     /**
      * The width of the graph
      */
-    height: PropTypes.string,
-  
-  
-  
-  };
-  
-  /**
-   * Default props.definition 
-   */
-  ArchiverDataViewer.defaultProps = {
-  
-    debug: false,
+    width: PropTypes.string,
+    /**
+     * Direct to show the legend
+     */
+    legend: PropTypes.bool,
+    /**
+     * An array of objects with shape that defines each trace
+     */
+    traces: PropTypes.arrayOf(PropTypes.shape({
+        /**
+* The pv name
+*/
+        pv: PropTypes.string.isRequired,
+        /**
+     * The custom name of the trace
+     */
+        name: PropTypes.string,
+        /**
+  * The type of the trace i.e. `'scatter'`
+  */
+        type: PropTypes.string,
+        /**
+* The mode of the trace i.e. `'lines'`
+*/
+        mode: PropTypes.string,
+        /**
+         * The custom color of the trace
+         */
+        color: PropTypes.color,
+        /**
+         * Corresponding yAxis index
+         */
+        yAxisIndex: PropTypes.number,
+    })),
+
+    /**
+     * 
+* An array of objects with shape that defines each Y Axis
+*/
+    yAxes: PropTypes.arrayOf(PropTypes.shape({
+        title: PropTypes.string,
+        color: PropTypes.string,
+        showgrid: PropTypes.bool,
+    })),
+/**
+* 
+* Expand the buttons accordion
+*/
+    defaultButtonsExpanded: PropTypes.bool,
+/**
+* 
+* Display mode bar, true= display permanently, false=permanently hidden, undefine= auto hide
+*/
+    displayModeBar:PropTypes.bool,
+/**
+* 
+* Show buttons accordion
+*/
+showButtons:PropTypes.bool,
+
+/**
+* 
+* When enabled, new data will be polled at 1Hz. Increments the from and too dates at 1Hz
+*/
+livePolling:PropTypes.bool,
+/**
+* 
+* Polling Rate Period in ms, minimum=1000 ms
+*/
+pollingRatePeriod:PropTypes.number,
+
+/**
+ * Sets fromTimeOffset button
+ */
+fromTimeOffset:PropTypes.oneOf(["30s","1m","5m","30m","1h","2h","12h","1d","2d","1w"]),
+};
+
+
+/**
+ * Default props.definition 
+ */
+
+ArchiverDataViewer.defaultProps = {
+
+    pollingRatePeriod:1000,
     width: '100%',
-    height: '40vh',
-  
-  };
+    height: isMobile ? '150vh' : '40vh',
+    legend: false,
+    defaultButtonsExpanded: true,
+
+
+};
 export default ArchiverDataViewer

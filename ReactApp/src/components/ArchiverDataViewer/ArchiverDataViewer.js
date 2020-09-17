@@ -7,7 +7,8 @@ import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Paper from '@material-ui/core/Paper';
 import DateFnsUtils from '@date-io/date-fns';
 import formatISO from 'date-fns/formatISO';
-import { format, subHours, subSeconds, subMinutes, subDays, subWeeks } from 'date-fns';
+import { subHours, subSeconds, subMinutes, subDays, subWeeks, } from 'date-fns';
+import PV from '../SystemComponents/PV'
 
 import { makeStyles } from '@material-ui/core/styles';
 import { useTheme } from '@material-ui/core/styles';
@@ -110,10 +111,28 @@ const useArchiverDataHook = (props) => {
 
 }
 const ArchiverData = (props) => {
+   
+    // const calcBin=(pv,from,to,maxNumberOfSamples,raw)=>{
+    //     let dif =differenceInSeconds(to,from);
+    //     if(raw){
+
+    //     }
+    //     else if (dif>maxNumberOfSamples){
+    //        let binSizeInSeconds=Math.ceil(dif/maxNumberOfSamples)
+    //        let query='lastSample'+binSizeInSeconds+'('+pv+')'
+    //       // console.log(query)
+    //        return(query)
+
+    //     }
+    //     else{
+    //         return (pv)
+    //     }
+    // }
 
     const data = useArchiverDataHook({
         archiverURL: 'arch://DEMO_ARCHIVER:request:' + JSON.stringify({
-            pv: props.pv,
+            //pv: calcBin(props.pv,props.from,props.to,props.maxNumberOfSamples),
+            pv:props.pv,
             options: {
                 from: formatISO(props.from),
                 to: formatISO(props.to),
@@ -176,12 +195,41 @@ const ArchiverData = (props) => {
 
     )
 }
-
+/**
+ * The ArchiverDataViewer is an interface to display EPICS archived data. It uses plotly.js to display the the pv data. 
+ * The archiver needs to be declared as environment variable in order for the pvServer to connect to a valid archiver (see the archiver prop). For the DEMO_ARCHIVER, the environment variable declaration is:
+ * `DEMO_ARCHIVER=http://localhost:17668`
+ * @param {*} props 
+ */
 const ArchiverDataViewer = (props) => {
     const paperRef = useRef(null);
     const classes = useStyles();
     const theme = useTheme();
     const [pvsArchData, setPvsArchData] = useState([]);
+    const [pvs,setPvs]=useState([]);
+    const pvConnections=()=>{
+        let newPvs=[];
+        {props.traces.map((item, index) => {
+           
+            newPvs.push(
+            <PV
+                key={index.toString()}
+                pv={item.pv}
+                macros={props.macros} 
+                pvData={(pv) => setPvs(prePvs => {
+                    let newPvs = [...prePvs]
+                    // if you want modify the  pv data do it here!
+                    newPvs[index] = pv;
+                    newPvs[index]['pvname'] = item.pv;
+                    return newPvs
+      
+                  }
+                  )}
+              />)
+        })
+        return newPvs
+        }
+    }
     const [showCrosshair, setShowCrosshair] = useState(props.showCrosshair === true ? true : false)
     const [selectedFromDate, setSelectedFromDate] = useState(props.from ? new Date(props.from) : subHours(new Date(), 1))
     const [selectedToDate, setSelectedToDate] = useState(props.to ? new Date(props.to) : new Date())
@@ -458,37 +506,7 @@ const ArchiverDataViewer = (props) => {
         }
     }
 
-    let data2 =
-        pvsArchData.map((pvData, index) => {
-            if (index == 0) {
-                return ({
-                    x: pvData.x,
-                    y: pvData.y,
-                    name: props.traces[index].name ? props.traces[index].name : props.traces[index].pv,
-                    type: props.traces[index].type ? props.traces[index].type : 'scatter',
-                    mode: props.traces[index].mode ? props.traces[index].mode : 'lines',
-                    marker: { color: props.traces[index].color ? props.traces[index].color : theme.palette.reactVis.lineColors[index] },
-
-
-
-                })
-            }
-            else {
-                return ({
-                    x: pvData.x,
-                    y: pvData.y,
-                    name: props.traces[index].name ? props.traces[index].name : props.traces[index].pv,
-                    type: props.traces[index].type ? props.traces[index].type : 'scatter',
-                    mode: props.traces[index].mode ? props.traces[index].mode : 'lines',
-                    marker: { color: props.traces[index].color ? props.traces[index].color : theme.palette.reactVis.lineColors[index] },
-                    // yaxis: 'y2'
-                    yaxis: typeof (props.traces[index].yAxis) !== 'undefined' ? (props.traces[index].yAxis == 0 ? undefined : 'y' + (parseInt(props.traces[index].yAxis) + 1)) : 'yaxis',
-
-                })
-
-            }
-        })
-
+  
 
     let legend = {
         legend: isMobile ? {
@@ -536,13 +554,13 @@ const ArchiverDataViewer = (props) => {
     // }
 
 
-
     return (
         <Paper ref={paperRef} style={{ width: props.width, paddingBottom: 8 }}>
+            {pvConnections()}
             {props.traces.map((trace, index) => (
                 <ArchiverData
                     key={index.toString()}
-
+                    //maxNumberOfSamples={width*10}
 
                     archiver={props.archiver}
                     pv={trace.pv}
@@ -764,10 +782,10 @@ const ArchiverDataViewer = (props) => {
 
 
                 />
-                {/* <ContextMenu
+                <ContextMenu
                     disableProbe={props.disableProbe}
                     open={openContextMenu}
-                    pvs={props.pvs}
+                    pvs={pvs}
                     handleClose={handleContextMenuClose}
                     anchorEl={anchorEl}
                     anchorOrigin={{
@@ -779,7 +797,7 @@ const ArchiverDataViewer = (props) => {
                         horizontal: "center",
                     }}
                     probeType={props.readOnly ? "readOnly" : undefined}
-                />  */}
+                /> 
 
             </div>}
 
@@ -790,7 +808,11 @@ const ArchiverDataViewer = (props) => {
 
 ArchiverDataViewer.propTypes = {
 
-
+    /**
+     * 	Is name of the environment variable defined in your .env or docker-compose yaml file file and corresponds to hostname or ip of the archiver followed by retrieval_url port, eg DEMO_ARCHIVER
+     * In the .env file it should be declared as DEMO_ARCHIVER=http://localhost:17688
+     */
+    archiver:PropTypes.string,
     /**
      * The height of the graph
      */

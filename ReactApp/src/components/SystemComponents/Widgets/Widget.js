@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
   const [value, setValue] = useState(0);
   const [initialized, setInitalized] = useState(false);
   const [immediateValue, setImmediateValue] = useState(null);
-  const [commitChange, SetCommitChange] = useState(false);
+  const [commitChange, setCommitChange] = useState(false);
   const [newValueTrigger, setNewValueTrigger] = useState(0);
   const [outputValue, setOutputValue] = useState(null);
   const [focus, setFocus] = useState(false);
@@ -245,7 +245,7 @@ const useStyles = makeStyles((theme) => ({
       }
       setOutputValue(tempvalue);
       setNewValueTrigger(newValueTrigger + 1);
-      SetCommitChange(false)
+      setCommitChange(false)
     }
     
 // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -519,7 +519,7 @@ const useStyles = makeStyles((theme) => ({
       disconnectedIcon: disconnectedIcon(),
       handleChange: setValue,
       handleImmediateChange: setImmediateValue,
-      handleCommitChange: () => SetCommitChange(true),
+      handleCommitChange: () => setCommitChange(true),
       handleFocus: () => setFocus(true),
       handleBlur: () => setFocus(false),
       pvData: pv,
@@ -571,7 +571,7 @@ const useStyles = makeStyles((theme) => ({
             disconnectedIcon: disconnectedIcon(),
             handleChange: handleIndexValue,
             handleImmediateChange: handleIndexImmediateValue,
-            handleCommitChange: () => SetCommitChange(true),
+            handleCommitChange: () => setCommitChange(true),
             handleFocus: () => setFocus(true),
             handleBlur: () => setFocus(false),
             pvData: pv,

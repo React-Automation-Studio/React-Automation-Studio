@@ -114,11 +114,12 @@ def check_pv_initialized_after_disconnect():
                                 clientPVlist[pvname]['isConnected']=True
                                 clientPVlist[pvname]['initialized']=True
                             #
-                            except TypeError:
+                            except TypeError as e:
                                 #"A type error exists in metadata dictionary and can't be converted into JSON format, previously this was caused by in CHID of type c_long(), a work arround exits, if CHID is not a c_long then try debugging")
                                 print("***EPICS PV info initial request info error: ")
                                 print("PV name: "+ str(pvname))
                                 print("PyEpics PV metadata: "+ str(d))
+                                print("Exception: {}".format(e))
                                 print("A type error exists in metadata dictionary and can't be converted into JSON format, previously this was caused by in CHID of type c_long(), a work arround exits, if CHID is not a c_long then try debugging")
                                 clientPVlist[pvname]['isConnected']=True
                                 clientPVlist[pvname]['initialized']=False

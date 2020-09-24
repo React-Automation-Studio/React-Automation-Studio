@@ -14,7 +14,6 @@ from flask_socketio import SocketIO, emit, join_room, leave_room, \
 from bson.json_util import dumps
 
 from epics import PV
-import logging
 import os
 import sys
 import json
@@ -42,6 +41,8 @@ print('REACT_APP_PyEpicsServerBASEURL: '+ str(os.environ['REACT_APP_PyEpicsServe
 print('REACT_APP_PyEpicsServerPORT: '+ str(os.environ['REACT_APP_PyEpicsServerPORT']))
 print('REACT_APP_PyEpicsServerNamespace: '+ str(os.environ['REACT_APP_PyEpicsServerNamespace']))
 print('REACT_APP_EnableLogin: '+ str(os.environ['REACT_APP_EnableLogin']))
+print('REACT_APP_LogLevel: {}'.format(os.environ.get('REACT_APP_LogLevel', None)))
+print('REACT_APP_LogFile: {}'.format(os.environ.get('REACT_APP_LogFile', None)))
 
 
 print("")
@@ -67,8 +68,7 @@ socketio = SocketIO(app, async_mode=async_mode)
 thread = None
 thread_lock = threading.Lock()
 
-log = logging.getLogger('werkzeug')
-log.setLevel(logging.ERROR)
+import log
 
 
 
@@ -116,23 +116,23 @@ def check_pv_initialized_after_disconnect():
                             #
                             except TypeError as e:
                                 #"A type error exists in metadata dictionary and can't be converted into JSON format, previously this was caused by in CHID of type c_long(), a work arround exits, if CHID is not a c_long then try debugging")
-                                print("***EPICS PV info initial request info error: ")
-                                print("PV name: "+ str(pvname))
-                                print("PyEpics PV metadata: "+ str(d))
-                                print("Exception: {}".format(e))
-                                print("A type error exists in metadata dictionary and can't be converted into JSON format, previously this was caused by in CHID of type c_long(), a work arround exits, if CHID is not a c_long then try debugging")
+                                log.error("***EPICS PV info initial request info error: ")
+                                log.error("PV name: {}",pvname)
+                                log.error("PyEpics PV metadata: {}",d)
+                                log.error("Exception: {}",e)
+                                log.error("A type error exists in metadata dictionary and can't be converted into JSON format, previously this was caused by in CHID of type c_long(), a work arround exits, if CHID is not a c_long then try debugging")
                                 clientPVlist[pvname]['isConnected']=True
                                 clientPVlist[pvname]['initialized']=False
-                                print(type(d['value']))
+                                log.error("Type: {}", type(d['value']))
                                 if ('epics.dbr.c_float_Array_0' in str(type(d['value']))):
-                                    print("type is epics.dbr.c_float_Array_0")
+                                    log.info("type is epics.dbr.c_float_Array_0")
                                 d={}
                                 d['pvname']= pvname
                                 d['connected']= '0'
 
                                 socketio.emit(pvname,d,room=str(pvname),namespace='/pvServer')
                             except:
-                                print("Unexpected error:", sys.exc_info()[0])
+                                log.error("Unexpected error: {}", sys.exc_info()[0])
                                 raise
 
         # for watchEventName in clientDbWatchList :
@@ -231,7 +231,7 @@ def dbWatchThread(watchEventName):
                             socketio.emit(eventName,d,str(dbURL)+'ro',namespace='/pvServer')
 
                         except:
-                            print("Unexpected error:", sys.exc_info()[0])
+                            log.error("Unexpected error: {}",sys.exc_info()[0])
                             raise
                     #print("dbWatchThread running:",watchEventName)
                     if clientDbWatchList[watchEventName]['closeWatch']==True:
@@ -321,18 +321,18 @@ def test_write(message):
                 try:
                     clientPVlist[pvname1]['pv'].put(message['data']);
                 except Exception as e:
-                    print("***EPICS PV put error: ")
-                    print("PV name: "+ str(pvname2))
-                    print("Value to put : "+str(message['data']))
-                    print("Exception: {}".format(e))
+                    log.error("***EPICS PV put error: ")
+                    log.error("PV name: {}",pvname2)
+                    log.error("Value to put: {}",message['data'])
+                    log.error("Exception: {}",e)
 
 
 
-            else: print("Unknown PV type")
+            else: log.error("Unknown PV type ({})", pvname1)
         else:
-            print("***PV put error: write access denied ")
-            print("PV name: "+ str(message['pvname']))
-            print("Value to put : "+str(message['data']))
+            log.warning("***PV put error: write access denied ")
+            log.warning("PV name: {}",message['pvname'])
+            log.warning("Value to put: {}",message['data'])
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
 
@@ -404,11 +404,11 @@ def test_message(message):
 
 
             else:
-                print("Unknown PV type")
+                log.error("Unknown PV type ({})",pvname1)
 
 
         else:
-            print("Error pvname not in clientPVlist: ",pvname1)
+            log.error("Pvname ({}) not in clientPVlist",pvname1)
 
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
@@ -474,7 +474,7 @@ def test_message(message):
 
 
             else:
-                print("Unknown PV type")
+                log.error("Unknown PV type ({})",pvname1)
 
 
         else:
@@ -497,7 +497,7 @@ def test_message(message):
 
                             if 'pvConnectionIds' in clientPVlist[pvname1]['sockets'][request.sid]:
                                 if  pvConnectionId in clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds']:
-                                    print("not a unique id ",pvConnectionId, " ",pvname1 )
+                                    log.info("not a unique id {} {}",pvConnectionId,pvname1)
                      #               print("allConnectionIds ",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
                                 else:
                                     clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'][pvConnectionId]=True
@@ -508,7 +508,7 @@ def test_message(message):
                         if request.sid in clientPVlist[pvname1]['socketsRW']:
                             if 'pvConnectionIds' in clientPVlist[pvname1]['socketsRW'][request.sid]:
                                 if  pvConnectionId in clientPVlist[pvname1]['socketsRW'][request.sid]['pvConnectionIds']:
-                                     print("not a unique id RW ",pvConnectionId, " ",pvname1 )
+                                     log.info("not a unique id RW {} {}",pvConnectionId,pvname1)
                       #              print("allConnectionIds RW ",clientPVlist[pvname1]['socketsRW'][request.sid]['pvConnectionIds'])
                                 else:
                                     clientPVlist[pvname1]['socketsRW'][request.sid]['pvConnectionIds'][pvConnectionId]=True
@@ -525,7 +525,7 @@ def test_message(message):
                         if request.sid in clientPVlist[pvname1]['sockets']:
                             if 'pvConnectionIds' in clientPVlist[pvname1]['sockets'][request.sid]:
                                 if  pvConnectionId in clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds']:
-                                    print("not a unique id ",pvConnectionId, " ",pvname1 )
+                                    log.info("not a unique id {} {}",pvConnectionId,pvname1)
                        #             print("allConnectionIds",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
                                 else:
                                     clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'][pvConnectionId]=True
@@ -537,7 +537,7 @@ def test_message(message):
                         if request.sid in clientPVlist[pvname1]['socketsRO']:
                             if 'pvConnectionIds' in clientPVlist[pvname1]['socketsRO'][request.sid]:
                                 if  pvConnectionId in clientPVlist[pvname1]['socketsRO'][request.sid]['pvConnectionIds']:
-                                    print("not a unique id ro",pvConnectionId, " ",pvname1 )
+                                    log.info("not a unique id ro {} {}",pvConnectionId,pvname1)
                          #           print("allConnectionIds ro",clientPVlist[pvname1]['socketsRO'][request.sid]['pvConnectionIds'])
                                 else:
                                     clientPVlist[pvname1]['socketsRO'][request.sid]['pvConnectionIds'][pvConnectionId]=True
@@ -549,7 +549,8 @@ def test_message(message):
                     return {"pvConnectionId":pvConnectionId}
 
 
-            else: print("Unknown PV type")
+            else:
+                log.error("Unknown PV type ({})",pvname1)
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
 
@@ -611,7 +612,7 @@ def databaseRead(message):
                                 time.sleep(0.1)
                                 #myclient.server_info()
                             except pymongo.errors.ServerSelectionTimeoutError as err:
-                                print(err)
+                                log.error(err)
                                 return "Ack: Could not connect to MongoDB: "+str(dbURL)
 
 
@@ -628,7 +629,7 @@ def databaseRead(message):
 
                             #for x in X:
                                 #print(x)
-                            print("done: "+dbURL)
+                            log.info("done: {}",dbURL)
 
 
                             data=dumps(X)
@@ -639,19 +640,19 @@ def databaseRead(message):
                             socketio.emit(eventName,d,request.sid,namespace='/pvServer')
                             return "OK"
                         except:
-                            print("could not connect to MongoDB: ",dbURL)
+                            log.error("Could not connect to MongoDB: {}",dbURL)
                             return "Ack: Could not connect to MongoDB: "+str(dbURL)
                 else:
-                    print("Malformed database URL, must be in format: mongodb://databaseID:database:collection")
+                    log.error("Malformed database URL, must be in format: mongodb://databaseID:database:collection")
             else:
-                print("Malformed database URL, must be in format: mongodb://databaseID:database:collection")
+                log.error("Malformed database URL, must be in format: mongodb://databaseID:database:collection")
 
 
 
 
 
         else:
-            print("Unknown PV type")
+            log.error("Unknown URL schema ({})",dbURL)
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
 
@@ -713,7 +714,7 @@ def databaseBroadcastRead(message):
                                 time.sleep(0.1)
                                 #myclient.server_info()
                             except pymongo.errors.ServerSelectionTimeoutError as err:
-                                print(err)
+                                log.error(err)
                                 return "Ack: Could not connect to MongoDB: "+str(dbURL)
 
                             mydb = myclient[dbName]
@@ -743,19 +744,19 @@ def databaseBroadcastRead(message):
                             socketio.emit(eventName,d,str(dbURL)+'ro',namespace='/pvServer')
                             return 'OK'
                         except:
-                            print("could not connect to MongoDB: ",dbURL)
+                            log.error("Could not connect to MongoDB: {}",dbURL)
                             return "Ack: Could not connect to MongoDB: "+str(dbURL)
                 else:
-                    print("Malformed database URL, must be in format: mongodb://databaseID:database:collection")
+                    log.error("Malformed database URL, must be in format: mongodb://databaseID:database:collection")
             else:
-                print("Malformed database URL, must be in format: mongodb://databaseID:database:collection")
+                log.error("Malformed database URL, must be in format: mongodb://databaseID:database:collection")
 
 
 
 
 
         else:
-            print("Unknown PV type")
+            log.error("Unknown URL schema ({})",dbURL)
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
 
@@ -777,24 +778,24 @@ def test_message(message):
 
         watchEventName='databaseWatchData:'+dbURL;
         if watchEventName in	clientDbWatchList:
-            print("remove ",watchEventName)
+            log.info("remove {}",watchEventName)
             #print(message)
             dbWatchId=message['dbWatchId']
             try:
                 #print("before pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
                 if dbWatchId in clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']:
-                    print("debug1: ",dbWatchId, watchEventName)
+                    log.debug("debug1: {} {}",dbWatchId,watchEventName)
             #         #print("before pop",clientDbWatchList[watchEventName]['sockets'][request.sid]['pvConnectionIds'])
                     clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds'].pop(str(dbWatchId))
-                    print("debug2: ",dbWatchId, watchEventName)
+                    log.debug("debug2: {} {}",dbWatchId,watchEventName)
                     if len(clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds'])==0:
-                        print("debug3: ",dbWatchId, watchEventName)
+                        log.debug("debug3: {} {}",dbWatchId,watchEventName)
                         leave_room(str(watchEventName))
                         clientDbWatchList[watchEventName]['sockets'].pop(request.sid)
-                    print("debug4: ",dbWatchId, watchEventName)
+                    log.debug("debug4: {} {}",dbWatchId,watchEventName)
              #       print("after pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
             except:
-                print("could not remove watchID")
+                log.info("Could not remove watchID")
                 pass
 
 
@@ -866,7 +867,7 @@ def databaseBroadcastRead(message):
                                 time.sleep(0.1)
                                 #myclient.server_info()
                             except pymongo.errors.ServerSelectionTimeoutError as err:
-                                print(err)
+                                log.error(err)
                                 return "Ack: Could not connect to MongoDB: "+str(dbURL)
 
                             mydb = myclient[dbName]
@@ -929,7 +930,7 @@ def databaseBroadcastRead(message):
                                 if request.sid in clientDbWatchList[watchEventName]['sockets']:
                                     if 'dbWatchIds' in clientDbWatchList[watchEventName]['sockets'][request.sid]:
                                         if  dbWatchIds in clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']:
-                                            print("not a unique id ",dbWatchIds, " ",watchEventName )
+                                            log.info("not a unique id {} {}",dbWatchIds,watchEventName)
                             #               print("allConnectionIds ",clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds'])
                                         else:
                                             clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds'][dbWatchIds]=True
@@ -944,19 +945,19 @@ def databaseBroadcastRead(message):
                             return {"dbWatchId":dbWatchId}
 
                         except:
-                          #  print("could not connect to MongoDB: ",dbURL)
+                          #  print("Could not connect to MongoDB: ",dbURL)
                             return "Ack: Could not connect to MongoDB: "+str(dbURL)
                 else:
-                    print("Malformed database URL, must be in format: mongodb://databaseID:database:collection")
+                    log.error("Malformed database URL, must be in format: mongodb://databaseID:database:collection")
             else:
-                print("Malformed database URL, must be in format: mongodb://databaseID:database:collection")
+                log.error("Malformed database URL, must be in format: mongodb://databaseID:database:collection")
 
 
 
 
 
         else:
-            print("Unknown PV type")
+            log.error("Unknown URL schema ({})",dbURL)
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
 
@@ -1005,7 +1006,7 @@ def databaseUpdateOne(message):
                                 time.sleep(0.1)
                                 #myclient.server_info()
                             except pymongo.errors.ServerSelectionTimeoutError as err:
-                                print(err)
+                                log.info(err)
                                 return "Ack: Could not connect to MongoDB: "+str(dbURL)
 
                             mydb = myclient[dbName]
@@ -1016,7 +1017,8 @@ def databaseUpdateOne(message):
                             try:
                                 mydb[colName].update_one({'_id':ObjectId(str(id))},newvalues)
 
-                            except Exception as e: print(e)
+                            except Exception as e:
+                                log.info(e)
 
 
 
@@ -1031,15 +1033,15 @@ def databaseUpdateOne(message):
     #                        print("eventName",eventName)
                             return 'OK'
                         except:
-                            print("could not connect to MongoDB: ",dbURL)
+                            log.error("Could not connect to MongoDB: {}",dbURL)
                             return "Ack: Could not connect to MongoDB: "+str(dbURL)
 
                 else:
-                    print("Malformed database URL, must be in format: mongodb://databaseID:database:collection")
+                    log.error("Malformed database URL, must be in format: mongodb://databaseID:database:collection")
             else:
-                print("Unknown db type type: ",dbURL)
+                log.error("Unknown URL schema ({})",dbURL)
         else:
-            print("write access denied to database URL: ", dbURL)
+            log.warning("Write access denied to database URL: {}",dbURL)
 
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
@@ -1090,7 +1092,7 @@ def databaseInsertOne(message):
                                 time.sleep(0.1)
                                 #myclient.server_info()
                             except pymongo.errors.ServerSelectionTimeoutError as err:
-                                print(err)
+                                log.error(err)
                                 return "Ack: Could not connect to MongoDB: "+str(dbURL)
 
                             mydb = myclient[dbName]
@@ -1108,21 +1110,22 @@ def databaseInsertOne(message):
 
                                  mydb[colName].insert_one(newEntry)
                             #
-                            except Exception as e: print(e)
+                            except Exception as e:
+                                log.info(e)
 #                            print("done: "+dbURL)
 
 
                             return 'OK'
                         except:
-                            print("could not connect to MongoDB: ",dbURL)
+                            log.error("Could not connect to MongoDB: {}",dbURL)
                             return "Ack: Could not connect to MongoDB: "+str(dbURL)
 
                 else:
-                    print("Malformed database URL, must be in format: mongodb://databaseID:database:collection")
+                    log.error("Malformed database URL, must be in format: mongodb://databaseID:database:collection")
             else:
-                print("Unknown db type type: ",dbURL)
+                log.error("Unknown URL schema ({})",dbURL)
         else:
-            print("write access denied to database URL: ", dbURL)
+            log.warning("Write access denied to database URL: {}",dbURL)
 
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
@@ -1165,7 +1168,7 @@ def test_authenticate(message):
 @socketio.on('connect', namespace='/pvServer')
 def test_connect():
     global thread
-    print("Client Connected: " +request.sid)
+    log.info('Client Connected: {}',request.sid)
     with thread_lock:
         if thread is None:
             thread = socketio.start_background_task(background_thread)
@@ -1174,7 +1177,7 @@ def test_connect():
 
 @socketio.on('disconnect', namespace='/pvServer')
 def test_disconnect():
-    print('Client disconnected', request.sid)
+    log.info('Client disconnected: {}',request.sid)
     for pvname1 in	clientPVlist:
         if "pva://" in pvname1:
 
@@ -1200,7 +1203,7 @@ def test_disconnect():
 
 
         else:
-            print("Unknown PV type")
+            log.info("Unknown PV type ({})", pvname1)
     try:
         for watchEventName in list(clientDbWatchList) :
             clientDbWatchList[watchEventName]['sockets'].pop(str(request.id))

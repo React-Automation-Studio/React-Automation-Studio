@@ -27,6 +27,8 @@ services:
       - LOADSAVE_DATABASE_REPLICA_SET_NAME=devrs
       - WATCH_DEBUG_DATABASE=localhost
       - WATCH_DEBUG_DATABASE_REPLICA_SET_NAME=devrs
+      - pvServerLogLevel=INFO
+     # - pvServerLogFile=/pvServer/log/pvServerLogFile
     build:
       context: ./
       args: # Environment variables available at build-time
@@ -41,6 +43,7 @@ services:
     volumes:
       - ./certificates:/certificates/
       - ./users:/pvServer/userAuthentication/users
+      - ./log/:/pvServer/log
   unsecurestylguidepvserver:
     env_file: .env
     environment:

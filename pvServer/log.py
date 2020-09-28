@@ -3,11 +3,11 @@ import logging
 
 # Logging facilities
 #
-initial_log_level = os.environ.get('REACT_APP_LogLevel', 'INFO')
+initial_log_level = os.environ.get('pvServerLogLevel', 'INFO')
 if not hasattr(logging, initial_log_level.upper()):
     print('Log level {} not found. Use ERROR, WARNING, INFO, or DEBUG.'.format(initial_log_level))
     exit()
-log_file = os.environ.get('REACT_APP_LogFile', None)
+log_file = os.environ.get('pvServerLogFile', None)
 
 logging.basicConfig(format='%(asctime)s %(levelname)-7s %(message)s', filename=log_file)
 
@@ -18,7 +18,7 @@ logger.setLevel(getattr(logging, initial_log_level.upper()))
 
 # Logging optimization
 # Prevent formatting a message if logging is not enabled at given level.
-# Use command an environmental variable REACT_APP_LogLevel to set the logging level.
+# Use command an environmental variable pvServerLogLevel to set the logging level.
 #
 def _log(func, msg, args, kwargs):
     if isinstance(msg, str):

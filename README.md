@@ -1,4 +1,4 @@
-Current Release: V2.0.0
+Current Release: V2.0.1
 
 # Introduction
 
@@ -491,6 +491,10 @@ Site specific components and app screens should be kept in your repository. If y
 Contact us at rasadmin@tlabs.ac.za
 
 # Changelog
+
+V2.0.1 Tuesday 29 September 2020
+
+Minor bug fix to pvServer
 
 V2.0.0 Wednesday 5 August 2020
 <br />

@@ -4,6 +4,8 @@ import logging
 import logging.handlers
 
 def _convert_to_int(value, min_value, default_value):
+    if value is None:
+        return default_value
     try:
         return max(min_value, int(value))
     except ValueError:

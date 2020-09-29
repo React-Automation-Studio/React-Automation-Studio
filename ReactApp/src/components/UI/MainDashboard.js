@@ -242,6 +242,7 @@ class MainDashboard extends Component {
                 <Grid item lg={12} sm={12} xs={12}  >
                   <Typography className={classes.WhatsNew} component='div'>
                   V2.0.1 Tuesday 29 September 2020
+                  <br />
                   Improvements and new features:
                     <br />
                     <ul>

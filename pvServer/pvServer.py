@@ -43,6 +43,8 @@ print('REACT_APP_PyEpicsServerNamespace: '+ str(os.environ['REACT_APP_PyEpicsSer
 print('REACT_APP_EnableLogin: '+ str(os.environ['REACT_APP_EnableLogin']))
 print('REACT_APP_LogLevel: {}'.format(os.environ.get('REACT_APP_LogLevel', None)))
 print('REACT_APP_LogFile: {}'.format(os.environ.get('REACT_APP_LogFile', None)))
+print('REACT_APP_LogFileSize: {}'.format(os.environ.get('REACT_APP_LogFileSize', None)))
+print('REACT_APP_LogFileBackup: {}'.format(os.environ.get('REACT_APP_LogFileBackup', None)))
 
 
 print("")

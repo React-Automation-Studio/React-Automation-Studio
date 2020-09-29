@@ -41,3 +41,7 @@ def warning(msg, *args, **kwagrs):
 def error(msg, *args, **kwagrs):
     if logger.isEnabledFor(logging.ERROR):
         _log(logger.error, msg, args, kwagrs)
+
+def exception(msg, *args, **kwargs):
+    if logger.isEnabledFor(logging.CRITICAL):
+        _log(logger.exception, msg, args, kwargs)

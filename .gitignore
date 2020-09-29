@@ -3,6 +3,7 @@
 # dependencies
 /frontendServer/node_modules
 /styleguideServer/node_modules
+/ReactApp/node_modules
 /node_modules
 /.pnp
 .pnp.js
@@ -74,16 +75,16 @@ yarn-error.log*
 *.cer
 *.key
 
-epics/testIOC/configure/O.linux-x86_64/
+epics/testIOC/configure/O.*/
 epics/testIOC/iocBoot/iocexample/envPaths
 epics/testIOC/iocBoot/ioctestIOC/envPaths
 epics/testIOC/dbd/testIOC.dbd
-epics/testIOC/testIOCApp/Db/O.linux-x86_64/
-epics/testIOC/testIOCApp/src/O.Common/
-epics/testIOC/testIOCApp/src/O.linux-x86_64/
+epics/testIOC/testIOCApp/Db/O.*/
+epics/testIOC/testIOCApp/src/O.*/
 epics/testIOC/bin/
 epics/testIOC/bin/
 epics/*.gz
+epics/*.local
 
 __pycache__/
 

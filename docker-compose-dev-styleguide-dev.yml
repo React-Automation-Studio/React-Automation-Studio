@@ -27,6 +27,8 @@ services:
       - LOADSAVE_DATABASE_REPLICA_SET_NAME=devrs
       - WATCH_DEBUG_DATABASE=localhost
       - WATCH_DEBUG_DATABASE_REPLICA_SET_NAME=devrs
+      - pvServerLogLevel=INFO
+      - pvServerLogFile=/pvServer/log/pvServerLogFile
     build:
       context: ./
       args: # Environment variables available at build-time
@@ -41,6 +43,7 @@ services:
     volumes:
       - ./certificates:/certificates/
       - ./users:/pvServer/userAuthentication/users
+      - ./log/:/pvServer/log
   unsecurestylguidepvserver:
     env_file: .env
     environment:
@@ -70,7 +73,7 @@ services:
     stdin_open: true
     restart: always
     network_mode: host
-  
+
   initializealarmhandlerdb:
     build:
       context: ./
@@ -83,7 +86,7 @@ services:
     stdin_open: true
     tty: true
     env_file: .env
-   
+
   alarmhandlerserver:
     build:
       context: ./
@@ -96,14 +99,14 @@ services:
     stdin_open: true
     tty: true
     env_file: .env
-  
+
   mongo1:
     image: mongo:4.2.3-bionic
     hostname: mongo1
     restart: always
     network_mode: "host"
     env_file: .env
-    # environment: 
+    # environment:
     #   MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME-admin}
     #   MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD-password}
     logging:
@@ -119,7 +122,7 @@ services:
     restart: always
     network_mode: "host"
     env_file: .env
-    # environment: 
+    # environment:
     #   MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME-admin}
     #   MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD-password}
     logging:
@@ -135,7 +138,7 @@ services:
     restart: always
     network_mode: "host"
     env_file: .env
-    # environment: 
+    # environment:
     #   MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME-admin}
     #   MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD-password}
     logging:
@@ -167,7 +170,7 @@ services:
       - LOADSAVE_DATABASE_REPLICA_SET_NAME=devrs
     build:
       context: ./
-      
+
       args: # Environment variables available at build-time
                 - http_proxy
                 - https_proxy
@@ -204,4 +207,3 @@ volumes:
   mongo-db-configdb2:
   mongo-db-data3:
   mongo-db-configdb3:
- 

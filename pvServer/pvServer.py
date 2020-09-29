@@ -82,7 +82,7 @@ def check_pv_initialized_after_disconnect():
         for pvname in list(clientPVlist) :
             if not((len(clientPVlist[pvname]['sockets'])>0 ) or (len(clientPVlist[pvname]['socketsRW'])>0 )or (len(clientPVlist[pvname]['socketsRO'])>0 )):
                 #print(pvname, " has no listening clients, removing")
-                
+
                 clientPVlist[pvname]['pv'].disconnect()
                 clientPVlist.pop(pvname)
             else:
@@ -152,17 +152,17 @@ def check_pv_initialized_after_disconnect():
         #                 socketio.emit(eventName,d,str(dbURL)+'rw',namespace='/pvServer')
         #                 d={'dbURL': dbURL,'write_access':False,'data': data}
         #                 socketio.emit(eventName,d,str(dbURL)+'ro',namespace='/pvServer')
-                        
+
         #             except:
         #                 print("Unexpected error:", sys.exc_info()[0])
-        #                 raise    
+        #                 raise
         time.sleep(0.1)
 def dbWatchControlThread():
     global clientDbWatchList
 
     #print("dbWatchControlThread started")
     while (True):
-        
+
         for watchEventName in list(clientDbWatchList) :
             #print("clientDbWatchList[watchEventName]['sockets']",clientDbWatchList[watchEventName]['sockets'])
             if clientDbWatchList[watchEventName]['threadStarted'] is False:
@@ -171,10 +171,10 @@ def dbWatchControlThread():
                 clientDbWatchList[watchEventName]['closeWatch']=False
                 #print("control thread starting thread",watchEventName)
             if len(clientDbWatchList[watchEventName]['sockets'])==0:
-               
+
                 if clientDbWatchList[watchEventName]['closeWatch']==False:
                     #print("before client close")
-                    
+
                     clientDbWatchList[watchEventName]['closeWatch']=True
                     #print("after client close")
             if clientDbWatchList[watchEventName]['threadClosed'] is True:
@@ -196,10 +196,10 @@ def dbWatchControlThread():
             #             socketio.emit(eventName,d,str(dbURL)+'rw',namespace='/pvServer')
             #             d={'dbURL': dbURL,'write_access':False,'data': data}
             #             socketio.emit(eventName,d,str(dbURL)+'ro',namespace='/pvServer')
-                        
+
             #         except:
             #             print("Unexpected error:", sys.exc_info()[0])
-            #             raise    
+            #             raise
         time.sleep(0.1)
 
 def dbWatchThread(watchEventName):
@@ -208,9 +208,9 @@ def dbWatchThread(watchEventName):
     #print("dbWatchThread started for:",watchEventName)
     exitThread=False
     while (exitThread==False):
-        
+
         if watchEventName in clientDbWatchList :
-            
+
             with clientDbWatchList[watchEventName]['watch'] as stream:
                 #for change in stream:
                 while stream.alive:
@@ -229,18 +229,18 @@ def dbWatchThread(watchEventName):
                             socketio.emit(eventName,d,str(dbURL)+'rw',namespace='/pvServer')
                             d={'dbURL': dbURL,'write_access':False,'data': data}
                             socketio.emit(eventName,d,str(dbURL)+'ro',namespace='/pvServer')
-                            
+
                         except:
                             print("Unexpected error:", sys.exc_info()[0])
-                            raise 
+                            raise
                     #print("dbWatchThread running:",watchEventName)
                     if clientDbWatchList[watchEventName]['closeWatch']==True:
-                        #print("clientDbWatchList[watchEventName]['closeWatch']",clientDbWatchList[watchEventName]['closeWatch']) 
+                        #print("clientDbWatchList[watchEventName]['closeWatch']",clientDbWatchList[watchEventName]['closeWatch'])
                         clientDbWatchList[watchEventName]['watch'].close()
                        # print("dbWatchThread afterclose :",watchEventName)
 
                     time.sleep(0.1)
-                #print("clientDbWatchList[watchEventName]['clientClosed']",clientDbWatchList[watchEventName]['clientClosed'])   
+                #print("clientDbWatchList[watchEventName]['clientClosed']",clientDbWatchList[watchEventName]['clientClosed'])
                 #print("dbWatchThread stream not alive :",watchEventName)
                 clientDbWatchList[watchEventName]['threadClosed']=True
                 exitThread=True
@@ -367,12 +367,12 @@ def test_message(message):
                         if len(clientPVlist[pvname1]['socketsRW'][request.sid]['pvConnectionIds'])==0:
                             leave_room(str(pvname1)+'rw')
                             clientPVlist[pvname1]['socketsRW'].pop(request.sid)
-                        
+
                         #print("after pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
                 except:
                     pass
                     #print("remove_pv_connection id not in socketsRW: ",pvConnectionId, pvname1)
-                    
+
                 try:
                     #print("before pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
                     if pvConnectionId in clientPVlist[pvname1]['socketsRO'][request.sid]['pvConnectionIds']:
@@ -383,7 +383,7 @@ def test_message(message):
                         #print("after pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
                 except:
                     pass
-                    #print("remove_pv_connection id not in socketsRO: ",pvConnectionId, pvname1) 
+                    #print("remove_pv_connection id not in socketsRO: ",pvConnectionId, pvname1)
                 try:
                     #print("before pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
                     if pvConnectionId in clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds']:
@@ -396,7 +396,7 @@ def test_message(message):
                         #print("after pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
                 except:
                     pass
-                    #print("remove_pv_connection id not in sockets: ",pvConnectionId, pvname1) 
+                    #print("remove_pv_connection id not in sockets: ",pvConnectionId, pvname1)
 
                 #print("sockets",clientPVlist[pvname1]['sockets'])
                 #print("socketsRO",clientPVlist[pvname1]['socketsRO'])
@@ -409,7 +409,7 @@ def test_message(message):
 
         else:
             print("Error pvname not in clientPVlist: ",pvname1)
-            
+
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
 
@@ -437,32 +437,32 @@ def test_message(message):
 
 
                 if(accessControl['permissions']['read']):
-                    
+
                     pvname2=pvname1.replace("pva://","")
                     pv= PV(pvname2,connection_timeout=0.002,connection_callback= onConnectionChange)
                     pvlist={}
                     pvlist['pv']=pv
                     pvlist['isConnected']=False
                     pvlist['initialized']=False
-                  
+
                     #pvConnectionId=str(uuid.uuid1())
                     myuid=myuid+1
                     pvConnectionId=str(myuid)
                     if(accessControl['permissions']['write']):
                         join_room(str(pvname1)+'rw')
                         join_room(str(pvname1))
-                        
-                        
-                        
+
+
+
                         pvlist['sockets']={request.sid:{'pvConnectionIds':{pvConnectionId:True}}}
                         pvlist['socketsRW']={request.sid:{'pvConnectionIds':{pvConnectionId:True}}}
                         pvlist['socketsRO']={}
                     else:
                         join_room(str(pvname1)+'ro')
                         join_room(str(pvname1))
-                   
-                        
-                       
+
+
+
                         pvlist['sockets']={request.sid:{'pvConnectionIds':{pvConnectionId:True}}}
                         pvlist['socketsRO']={request.sid:{'pvConnectionIds':{pvConnectionId:True}}}
                         pvlist['socketsRW']={}
@@ -481,7 +481,7 @@ def test_message(message):
 
             if "pva://" in pvname1:
                 if(accessControl['permissions']['read']):
-                    
+
                     pvname2=pvname1.replace("pva://","")
                     clientPVlist[pvname1]['initialized']=False
                     myuid=myuid+1
@@ -494,7 +494,7 @@ def test_message(message):
                         join_room(str(pvname1)+'rw')
                         join_room(str(pvname1))
                         if request.sid in clientPVlist[pvname1]['sockets']:
-                            
+
                             if 'pvConnectionIds' in clientPVlist[pvname1]['sockets'][request.sid]:
                                 if  pvConnectionId in clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds']:
                                     print("not a unique id ",pvConnectionId, " ",pvname1 )
@@ -517,8 +517,8 @@ def test_message(message):
                         else:
                             clientPVlist[pvname1]['socketsRW'][request.sid]={'pvConnectionIds':{pvConnectionId:True}}
 
-                       
-                
+
+
                     else:
                         join_room(str(pvname1)+'ro')
                         join_room(str(pvname1))
@@ -545,7 +545,7 @@ def test_message(message):
                                 clientPVlist[pvname1]['socketsRO'][request.sid]['pvConnectionIds']={pvConnectionId:True}
                         else:
                             clientPVlist[pvname1]['socketsRO'][request.sid]={'pvConnectionIds':{pvConnectionId:True}}
-                    
+
                     return {"pvConnectionId":pvConnectionId}
 
 
@@ -796,12 +796,12 @@ def test_message(message):
             except:
                 print("could not remove watchID")
                 pass
-          
+
 
 
         #else:
         #    print("Error watchEventName not in clientDbWatchList: ",watchEventName)
-            
+
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
 
@@ -894,9 +894,9 @@ def databaseBroadcastRead(message):
 
                             d={'dbURL': dbURL,'write_access':write_access,'data': data}
                             socketio.emit(eventName,d,request.sid,namespace='/pvServer')
-                            
-                            
-                            
+
+
+
                             watchEventName=eventName
                             myDbWatchUid=myDbWatchUid+1
                             dbWatchId=str(myDbWatchUid)
@@ -920,12 +920,12 @@ def databaseBroadcastRead(message):
                                 dbWatch['threadStarted']=False
                                 dbWatch['closeWatch']=False
                                 dbWatch['threadClosed']=False
-                                
-                                
+
+
                                 clientDbWatchList[watchEventName]=dbWatch
                                 join_room(str(watchEventName))
                             else:
-                                
+
                                 if request.sid in clientDbWatchList[watchEventName]['sockets']:
                                     if 'dbWatchIds' in clientDbWatchList[watchEventName]['sockets'][request.sid]:
                                         if  dbWatchIds in clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']:
@@ -940,9 +940,9 @@ def databaseBroadcastRead(message):
 
                                 join_room(str(watchEventName))
                                 #print("watch already exists: ",watchEventName)
-                           
+
                             return {"dbWatchId":dbWatchId}
-                            
+
                         except:
                           #  print("could not connect to MongoDB: ",dbURL)
                             return "Ack: Could not connect to MongoDB: "+str(dbURL)
@@ -1177,7 +1177,7 @@ def test_disconnect():
     print('Client disconnected', request.sid)
     for pvname1 in	clientPVlist:
         if "pva://" in pvname1:
-          
+
             try:
                 leave_room(str(pvname1)+'rw')
                 clientPVlist[pvname1]['socketsRW'].pop(request.sid)
@@ -1193,7 +1193,7 @@ def test_disconnect():
                 clientPVlist[pvname1]['sockets'].pop(request.sid)
             except:
                 pass
-  
+
             #print("disconn sockets",clientPVlist[pvname1]['sockets'])
             #print("disconn socketsRO",clientPVlist[pvname1]['socketsRO'])
             #print("disconn socketsRW",clientPVlist[pvname1]['socketsRW'])

@@ -446,31 +446,14 @@ def ackAlarm(ackIdentifier, timestamp, username):
         alarmDict[pvname]["A"].value = 7    # set to DISCONN_ACKED state
 
 
-# def descChange(pvname=None, value=None, host=None, **kw):
-#     _thread.start_new_thread(updatePVDesc, (
-#         pvname,
-#         value,
-#         host,
-#     ))
-
-
-# def updatePVDesc(pvname, desc, host):
-#     # updates description and host in waveform
-#     pvname = re.sub('.DESC$', '', pvname)
-#     pv = alarmDict[pvname]["D"]
-#     # status initially 39 char string for memory
-#     pv.put(np.array(['abcdefghijklmnopqrstuvwxyzAbcdefghijk_1', desc, host]))
-
-
-def descConn(pvname=None, conn=None, **kw):
-    _thread.start_new_thread(descDisconn, (
+def pvConn(pvname=None, conn=None, **kw):
+    _thread.start_new_thread(pvDisconn, (
         pvname,
         conn,
     ))
 
 
-def descDisconn(pvname, conn):
-    pvname = re.sub('.DESC$', '', pvname)
+def pvDisconn(pvname, conn):
     pv = alarmDict[pvname]["D"]
     if (not conn):
         timestamp = datetime.timestamp(datetime.now())
@@ -526,7 +509,7 @@ def descDisconn(pvname, conn):
     else:
         try:
             curr_desc = [
-                'abcdefghijklmnopqrstuvwxyzAbcdefghijk_1', pvDescDict[pvname].value, pv.host]
+                'abcdefghijklmnopqrstuvwxyzAbcdefghijk_1', pvDescDict[pvname].value, pvDescDict[pvname].host]
         except:
             pass
         pv.put(np.array(curr_desc))
@@ -805,6 +788,7 @@ def initSubPVDict(subArea, areaName):
                 pv = PV(pvname=pvname,
                         connection_timeout=0.001,
                         callback=onChanges,
+                        connection_callback=pvConn,
                         form='ctrl')
                 pvDict[subAreaName + "=" + pvKey] = pv
                 areaDict[subAreaName + "=" +
@@ -823,6 +807,7 @@ def initPVDict():
                     pv = PV(pvname=pvname,
                             connection_timeout=0.001,
                             callback=onChanges,
+                            connection_callback=pvConn,
                             form='ctrl')
                     pvDict[areaName + "=" + pvKey] = pv
                     areaDict[areaName + "=" + pvKey] = area[key][pvKey]["name"]
@@ -905,6 +890,10 @@ def initialiseAlarmIOC():
                         'abcdefghijklmnopqrstuvwxyzAbcdefghijk_0',
                         "[Disconnected]", "[Disconnected]"
                     ]))
+                _thread.start_new_thread(pvDisconn, (
+                    pvname,
+                    False,
+                ))
             else:
                 # if alarm was activated when server initialised
                 try:
@@ -976,10 +965,7 @@ def initialiseAlarmIOC():
 def initDescDict():
     for pvname in pvNameList:
         desc = pvname + ".DESC"
-        pv = PV(pvname=desc,
-                connection_timeout=0.001,
-                # callback=descChange,
-                connection_callback=descConn)
+        pv = PV(pvname=desc, connection_timeout=0.001)
         pvDescDict[pvname] = pv
 
 

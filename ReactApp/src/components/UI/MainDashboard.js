@@ -246,8 +246,8 @@ class MainDashboard extends Component {
                   Improvements and new features:
                     <br />
                     <ul>
-                      <li>Minor bug fix to pvServer</li>
                       <li>Added logging to pvServer</li>
+                      <li>Minor bug fix to pvServer</li>
                     </ul>
 
                   V2.0.0 Wednesday 5 August 2020

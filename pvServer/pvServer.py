@@ -134,7 +134,7 @@ def check_pv_initialized_after_disconnect():
 
                                 socketio.emit(pvname,d,room=str(pvname),namespace='/pvServer')
                             except:
-                                log.error("Unexpected error: {}", sys.exc_info()[0])
+                                log.exception("Unexpected error")
                                 raise
 
         # for watchEventName in clientDbWatchList :

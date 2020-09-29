@@ -41,8 +41,10 @@ print('REACT_APP_PyEpicsServerBASEURL: '+ str(os.environ['REACT_APP_PyEpicsServe
 print('REACT_APP_PyEpicsServerPORT: '+ str(os.environ['REACT_APP_PyEpicsServerPORT']))
 print('REACT_APP_PyEpicsServerNamespace: '+ str(os.environ['REACT_APP_PyEpicsServerNamespace']))
 print('REACT_APP_EnableLogin: '+ str(os.environ['REACT_APP_EnableLogin']))
-print('REACT_APP_LogLevel: {}'.format(os.environ.get('REACT_APP_LogLevel', None)))
-print('REACT_APP_LogFile: {}'.format(os.environ.get('REACT_APP_LogFile', None)))
+print('pvServerLogLevel: {}'.format(os.environ.get('pvServerLogLevel', None)))
+print('pvServerLogFile: {}'.format(os.environ.get('pvServerLogFile', None)))
+print('pvServerLogFileSize: {}'.format(os.environ.get('pvServerLogFileSize', None)))
+print('pvServerLogFileBackup: {}'.format(os.environ.get('pvServerLogFileBackup', None)))
 
 
 print("")
@@ -132,7 +134,7 @@ def check_pv_initialized_after_disconnect():
 
                                 socketio.emit(pvname,d,room=str(pvname),namespace='/pvServer')
                             except:
-                                log.error("Unexpected error: {}", sys.exc_info()[0])
+                                log.exception("Unexpected error")
                                 raise
 
         # for watchEventName in clientDbWatchList :

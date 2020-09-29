@@ -93,7 +93,7 @@ Access rights can be controlled though a JSON file which contains user access gr
 
 Since V2.0.0, React-Automation-Studio is integrated with MongoDB to store persistent data. The PyMongo driver is used within the pvServer to connect to a MongoDB replica set.
 
-React hooks are available that setup a watch, perform an update or an insert to MongoDB replica set within the pvServer. 
+React hooks are available that setup a watch, perform an update or an insert to MongoDB replica set within the pvServer.
 
 See the documentation in the style guide.
 
@@ -385,7 +385,7 @@ In theory, all regular expression allowed by Python regex can be used although t
     { "rule":"[0-9].*",                   "read":true,  "write":true },
     { "rule":"[a-z].*",                   "read":true,  "write":true },
     { "rule":"[A-Z].*",                   "read":true,  "write":true },
-   
+
 
   ]
 },
@@ -493,8 +493,13 @@ Contact us at rasadmin@tlabs.ac.za
 # Changelog
 
 V2.0.1 Tuesday 29 September 2020
-
-Minor bug fix to pvServer
+  <br />
+  Improvements and new features:
+  <br />
+  <ul>
+    <li>Minor bug fix to pvServer</li>
+    <li>Added logging to pvServer</li>
+  </ul>
 
 V2.0.0 Wednesday 5 August 2020
 <br />
@@ -526,8 +531,8 @@ Improvements and new features:
       </li>
     </ul>
   </li>
-  
-  
+
+
   <li> Deprecated Components: These components will be removed in future releases                  <br />
     <ul>
       <li>
@@ -541,18 +546,18 @@ Improvements and new features:
       </li>
       </ul>
   </li>
-  <li> 
+  <li>
     Removed Component:
-  
+
   <ul>
     <li>
       GraphMultiplePVs
     </li>
   </ul>
   </li>
-  <li> 
+  <li>
     Breaking Changes:
-  
+
   <ul>
     <li>
     routes.js was renamed Routes.js and now contains extra logic to enable dynamic or isolated routes based on the use role.
@@ -563,7 +568,7 @@ Improvements and new features:
   </ul>
   </li>
   <li>Packages updated in both RAS and RAS-Example-Project-1</li>
-  
+
 </ul>
 
 **V1.2.4 Thursday 2 April 2020**

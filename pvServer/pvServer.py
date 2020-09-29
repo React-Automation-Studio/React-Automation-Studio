@@ -31,7 +31,7 @@ load_dotenv()
 async_mode = 'gevent'
 print("")
 print('**************************************')
-print("React Automation Studio V2.0.0")
+print("React Automation Studio V2.0.1")
 print("")
 print("pvServer Environment Variables:")
 print("")
@@ -98,10 +98,8 @@ def check_pv_initialized_after_disconnect():
 
                             if(clientPVlist[pvname]['pv'].count >1):
                                 d['value']=list(d['value'])
-                            if(clientPVlist[pvname]['pv'].count ==0):  #work around for unitialized float array
-                                if ('epics.dbr.c_float_Array_0' in str(type(d['value']))):
-                                    print("type is epics.dbr.c_float_Array_0")
-                                    d['value']=[]
+                            if(clientPVlist[pvname]['pv'].count==0):
+                                d['value']=[]
                             d['pvname']= pvname
                             d['newmetadata']= 'True'
                             d['connected']= '1'
@@ -116,11 +114,12 @@ def check_pv_initialized_after_disconnect():
                                 clientPVlist[pvname]['isConnected']=True
                                 clientPVlist[pvname]['initialized']=True
                             #
-                            except TypeError:
+                            except TypeError as e:
                                 #"A type error exists in metadata dictionary and can't be converted into JSON format, previously this was caused by in CHID of type c_long(), a work arround exits, if CHID is not a c_long then try debugging")
                                 print("***EPICS PV info initial request info error: ")
                                 print("PV name: "+ str(pvname))
                                 print("PyEpics PV metadata: "+ str(d))
+                                print("Exception: {}".format(e))
                                 print("A type error exists in metadata dictionary and can't be converted into JSON format, previously this was caused by in CHID of type c_long(), a work arround exits, if CHID is not a c_long then try debugging")
                                 clientPVlist[pvname]['isConnected']=True
                                 clientPVlist[pvname]['initialized']=False
@@ -321,10 +320,11 @@ def test_write(message):
                 pvname2=pvname1.replace("pva://","")
                 try:
                     clientPVlist[pvname1]['pv'].put(message['data']);
-                except:
+                except Exception as e:
                     print("***EPICS PV put error: ")
                     print("PV name: "+ str(pvname2))
                     print("Value to put : "+str(message['data']))
+                    print("Exception: {}".format(e))
 
 
 

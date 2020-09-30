@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -19,6 +20,7 @@ import DoneIcon from '@material-ui/icons/Done';
 import AddIcon from '@material-ui/icons/Add';
 import BlockIcon from '@material-ui/icons/Block';
 import HelpOutlinedIcon from '@material-ui/icons/HelpOutlined';
+import EventIcon from '@material-ui/icons/Event';
 
 const useStyles = makeStyles(theme => ({
     chip: {
@@ -31,6 +33,9 @@ const useStyles = makeStyles(theme => ({
     },
     emailInputField: {
         cursor: 'auto'
+    },
+    icon: {
+        color: theme.palette.secondary.main
     },
     styledTableHeadCell: {
         backgroundColor: theme.palette.type === 'dark' ? undefined : theme.palette.primary.light,
@@ -54,11 +59,12 @@ const UserTable = (props) => {
         <TableContainer component={Paper} style={{ height: props.height }} elevation={theme.palette.type === 'dark' ? undefined : 5}>
             <Table aria-label="User Table" stickyHeader size="small">
                 <colgroup>
+                    <col style={{ width: '10%' }} />
                     <col style={{ width: '15%' }} />
-                    <col style={{ width: '25%' }} />
-                    <col style={{ width: '40%' }} />
+                    <col style={{ width: '35%' }} />
                     <col style={{ width: '10%' }} />
                     <col style={{ width: '10%' }} />
+                    <col style={{ width: '20%' }} />
                 </colgroup>
                 <TableHead>
                     <TableRow
@@ -96,6 +102,7 @@ const UserTable = (props) => {
                         </TableCell>
                         <TableCell align="center" classes={{ stickyHeader: classes.styledTableHeadCell }}>{showAddHeader ? 'Add' : null}</TableCell>
                         <TableCell align="center" classes={{ stickyHeader: classes.styledTableHeadCell }}>Actions</TableCell>
+                        <TableCell align="left" classes={{ stickyHeader: classes.styledTableHeadCell }}>Notification Schedule</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -164,7 +171,9 @@ const UserTable = (props) => {
                                                         : {
                                                             endAdornment: (
                                                                 <InputAdornment position="end" onClick={(event) => props.addChip(event, user.name, user.username, props.addRegexVal[`${user.username}-${user.name}`])} >
-                                                                    <AddIcon style={{ cursor: 'pointer' }} />
+                                                                    <Tooltip title="Add" placement="bottom">
+                                                                        <AddIcon style={{ cursor: 'pointer' }} className={classes.icon} />
+                                                                    </Tooltip>
                                                                 </InputAdornment >
                                                             ),
                                                         }
@@ -182,7 +191,7 @@ const UserTable = (props) => {
                                                         <IconButton
                                                             onClick={(event) => { props.applyEdit(event, user.name, user.username) }}
                                                         >
-                                                            <DoneIcon />
+                                                            <DoneIcon className={classes.icon} />
                                                         </IconButton>
                                                     </Tooltip>
                                                     <Tooltip title="Cancel" placement="bottom">
@@ -190,17 +199,49 @@ const UserTable = (props) => {
                                                             onClick={(event) => { props.cancelEdit(event, user.name, user.username) }}
                                                             style={{ marginLeft: '1em' }}
                                                         >
-                                                            <ClearIcon />
+                                                            <ClearIcon className={classes.icon} />
                                                         </IconButton>
                                                     </Tooltip>
                                                 </React.Fragment>
-                                                : <Tooltip title="Edit" placement="right">
+                                                : <Tooltip title="Edit expressions" placement="bottom">
                                                     <IconButton onClick={(event) => { props.setUserEdit(event, user.name, user.username, true) }}>
-                                                        <EditIcon />
+                                                        <EditIcon className={classes.icon} />
                                                     </IconButton>
                                                 </Tooltip>
                                             : null
                                     }
+                                </TableCell>
+                                <TableCell>
+                                    <Grid
+                                        container
+                                        direction="row"
+                                        justify="flex-start"
+                                        alignItems="center"
+                                    >
+                                        <Grid item>
+                                            Notify all day everyday
+                                        </Grid>
+                                        <Grid item
+                                            style={{
+                                                display: "flex",
+                                                flexDirection: "column",
+                                                justifyContent: "center",
+                                                marginLeft: 'auto'
+                                            }}
+                                        >
+                                            {
+                                                props.username === user.username
+                                                    ? <Tooltip title="Edit schedule" placement="left">
+                                                        <IconButton onClick={(event) => { console.log(user.name, user.username) }}>
+                                                            <EventIcon className={classes.icon} />
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                    : null
+                                            }
+                                        </Grid>
+                                    </Grid>
+
+
                                 </TableCell>
                             </TableRow>
                         )

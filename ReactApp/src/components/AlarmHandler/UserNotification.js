@@ -396,8 +396,8 @@ const UserNotification = (props) => {
                 : filterUserRegex[0]
             : filterUser
 
-    let userTableHeight = '30vh'
-    let pvListHeight = '42vh'
+    let userTableHeight = '40vh'
+    let pvListHeight = '32vh'
     if (userTableExpand && !pvListExpand && !pvListIsExpanded) {
         userTableHeight = '76vh'
     }

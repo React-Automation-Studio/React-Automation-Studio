@@ -2,6 +2,11 @@ import React, { useState, useEffect, useContext, useCallback, useRef } from 'rea
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import Slide from '@material-ui/core/Slide';
+
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
@@ -60,6 +65,8 @@ const UserNotification = (props) => {
     const [backupUserList, setBackupUserList] = useState({})
     const [regexError, setRegexError] = useState({})
     const [addRegexVal, setAddRegexVal] = useState({})
+
+    const [dialogOpen, setDialogOpen] = useState(false)
 
     const dbPVData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs:Parameters:{}` }).data
     const dbUsersData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:users:Parameters:{}` }).data
@@ -286,6 +293,15 @@ const UserNotification = (props) => {
         }
     }
 
+    const handleOpenDialog = useCallback((event, name, username) => {
+        console.log(name, username)
+        setDialogOpen(true)
+    }, [])
+
+    const handleCloseDialog = () => {
+        setDialogOpen(false)
+    }
+
     // handleNewDbPVsList
     useEffect(() => {
         if (dbPVData !== null) {
@@ -405,11 +421,27 @@ const UserNotification = (props) => {
         pvListHeight = '76vh'
     }
 
+    // const Transition = React.forwardRef(function Transition(props, ref) {
+    //     return <Slide direction="left" ref={ref} {...props} />
+    // })
+
     // console.log(userEdit)
 
     return (
         <React.Fragment>
             {alarmPVs}
+            <Dialog
+                // TransitionComponent={Transition}
+                // fullWidth={fullWidth}
+                // maxWidth={maxWidth}
+                open={dialogOpen}
+                onBackdropClick={handleCloseDialog}
+                onClose={handleCloseDialog}
+            >
+                <DialogTitle>Hello world</DialogTitle>
+                <DialogContent>
+                </DialogContent>
+            </Dialog>
             <Grid
                 container
                 direction="column"
@@ -455,6 +487,7 @@ const UserNotification = (props) => {
                                 cancelEdit={cancelEdit}
                                 applyEdit={applyEdit}
                                 updateUserEmail={updateUserEmail}
+                                openDialog={handleOpenDialog}
                                 height={userTableHeight}
                             />
                         </ExpansionPanelDetails>

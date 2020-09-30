@@ -232,7 +232,7 @@ const UserTable = (props) => {
                                             {
                                                 props.username === user.username
                                                     ? <Tooltip title="Edit schedule" placement="left">
-                                                        <IconButton onClick={(event) => { console.log(user.name, user.username) }}>
+                                                        <IconButton onClick={(event) => { props.openDialog(event, user.name, user.username) }}>
                                                             <EventIcon className={classes.icon} />
                                                         </IconButton>
                                                     </Tooltip>

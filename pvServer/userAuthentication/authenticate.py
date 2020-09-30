@@ -121,7 +121,7 @@ def checkUserRole(username):
                         roles.append(role)
                         #print("username: "+str(username) + ' role: '+ role)
     return roles
-            
+
 
 
 #print(knownUsers)
@@ -156,7 +156,7 @@ def  AuthoriseUser(JWT):
         if JWT in knownUsers:
             username=knownUsers[JWT]['username']
             roles=checkUserRole(username)
-            
+
 #            print("match")
             return {'authorised':True,'username':username,'roles':roles}
         else:

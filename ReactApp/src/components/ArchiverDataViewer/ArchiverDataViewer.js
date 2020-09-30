@@ -15,13 +15,12 @@ import { useTheme } from '@material-ui/core/styles';
 import { DateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 
 
-import DateFnsAdapter from "@date-io/date-fns";
 import Button from '@material-ui/core/Button';
 import Plot from 'react-plotly.js';
 
 import Grid from '@material-ui/core/Grid';
 import PropTypes from "prop-types";
-import { isMobile, isTablet } from 'react-device-detect';
+import { isMobile } from 'react-device-detect';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 const useStyles = makeStyles((theme) => ({
@@ -51,19 +50,14 @@ const useStyles = makeStyles((theme) => ({
 const useArchiverDataHook = (props) => {
 
     const context = useContext(AutomationStudioContext);
-    const [dbWatchId, setDbWatchId] = useState(null);
-    const [data, setData] = useState(null);
 
+    const [data, setData] = useState(null);
+    // eslint-disable-next-line no-unused-vars
     const [writeAccess, setWriteAccess] = useState(false);
     const [initialized, setInitialized] = useState(false);
 
     useEffect(() => {
-        const handleArchiverReadAck = (msg) => {
 
-            if (typeof msg !== 'undefined') {
-                setDbWatchId(msg.dbWatchId)
-            }
-        }
         const handleArchiverReadData = (msg) => {
 
             setData(msg.data);
@@ -78,13 +72,13 @@ const useArchiverDataHook = (props) => {
             jwt = 'unauthenticated'
         }
         if (props.archiverURL) {
-            socket.emit('archiverRead', { 'archiverURL': props.archiverURL, 'clientAuthorisation': jwt }, handleArchiverReadAck)
+            socket.emit('archiverRead', { 'archiverURL': props.archiverURL, 'clientAuthorisation': jwt })
             socket.on('archiverReadData:' + props.archiverURL, handleArchiverReadData);
         }
 
         const reconnect = () => {
             if (props.archiverURL) {
-                socket.emit('archiverRead', { 'archiverURL': props.archiverURL, 'clientAuthorisation': jwt }, handleArchiverReadAck)
+                socket.emit('archiverRead', { 'archiverURL': props.archiverURL, 'clientAuthorisation': jwt })
             }
         }
         const disconnect = () => {
@@ -111,7 +105,7 @@ const useArchiverDataHook = (props) => {
 
 }
 const ArchiverData = (props) => {
-   
+
     // const calcBin=(pv,from,to,maxNumberOfSamples,raw)=>{
     //     let dif =differenceInSeconds(to,from);
     //     if(raw){
@@ -132,7 +126,7 @@ const ArchiverData = (props) => {
     const data = useArchiverDataHook({
         archiverURL: 'arch://DEMO_ARCHIVER:request:' + JSON.stringify({
             //pv: calcBin(props.pv,props.from,props.to,props.maxNumberOfSamples),
-            pv:props.pv,
+            pv: props.pv,
             options: {
                 from: formatISO(props.from),
                 to: formatISO(props.to),
@@ -153,7 +147,7 @@ const ArchiverData = (props) => {
 
                 let sample;
                 for (sample in newArchiverData) {
-                    // eslint-disable-next-line eqeqeq 
+                    // eslint-disable-next-line eqeqeq
                     if (sample == 0) {
                         x.push(props.from);
                         y.push(newArchiverData[sample].val)
@@ -168,7 +162,7 @@ const ArchiverData = (props) => {
                         y.push(newArchiverData[sample].val)
 
                     }
-                    // eslint-disable-next-line eqeqeq 
+                    // eslint-disable-next-line eqeqeq
                     if (sample == (newArchiverData.length - 1)) {
                         x.push(props.to);
                         y.push(newArchiverData[sample].val)
@@ -182,12 +176,13 @@ const ArchiverData = (props) => {
             }
 
         }
-
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data])
 
 
     useEffect(() => {
         props.archData(dataXY);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dataXY])
 
     return (
@@ -196,48 +191,48 @@ const ArchiverData = (props) => {
     )
 }
 /**
- * The ArchiverDataViewer is an interface to display EPICS archived data. It uses plotly.js to display the the pv data. 
+ * The ArchiverDataViewer is an interface to display EPICS archived data. It uses plotly.js to display the the pv data.
  * The archiver needs to be declared as environment variable in order for the pvServer to connect to a valid archiver (see the archiver prop). For the DEMO_ARCHIVER, the environment variable declaration is:
  * `DEMO_ARCHIVER=http://localhost:17668`
- * @param {*} props 
+ * @param {*} props
  */
 const ArchiverDataViewer = (props) => {
     const paperRef = useRef(null);
     const classes = useStyles();
     const theme = useTheme();
     const [pvsArchData, setPvsArchData] = useState([]);
-    const [pvs,setPvs]=useState([]);
-    const pvConnections=()=>{
-        let newPvs=[];
-        {props.traces.map((item, index) => {
-           
+    const [pvs, setPvs] = useState([]);
+    const pvConnections = () => {
+        let newPvs = [];
+        props.traces.forEach((item, index) => {
+
             newPvs.push(
-            <PV
-                key={index.toString()}
-                pv={item.pv}
-                macros={props.macros} 
-                pvData={(pv) => setPvs(prePvs => {
-                    let newPvs = [...prePvs]
-                    // if you want modify the  pv data do it here!
-                    newPvs[index] = pv;
-                    newPvs[index]['pvname'] = item.pv;
-                    return newPvs
-      
-                  }
-                  )}
-              />)
+                <PV
+                    key={index.toString()}
+                    pv={item.pv}
+                    macros={props.macros}
+                    pvData={(pv) => setPvs(prePvs => {
+                        let newPvs = [...prePvs]
+
+                        newPvs[index] = pv;
+                        newPvs[index]['pvname'] = item.pv;
+                        return newPvs
+
+                    }
+                    )}
+                />)
         })
         return newPvs
-        }
+
     }
-    const [showCrosshair, setShowCrosshair] = useState(props.showCrosshair === true ? true : false)
+
     const [selectedFromDate, setSelectedFromDate] = useState(props.from ? new Date(props.from) : subHours(new Date(), 1))
     const [selectedToDate, setSelectedToDate] = useState(props.to ? new Date(props.to) : new Date())
-    const [plotlyData, setPlotlyData] = useState({ x: [], y: [] })
-    const [live, setLive] = useState(props.livePolling===true);
-    const [liveIntervalId, setLiveIntervalId] = useState(null);
-    const archData = { data: null }
-    const [fromButton, setFromButton] = useState(props.fromTimeOffset?props.fromTimeOffset:'none');
+
+    const [live, setLive] = useState(props.livePolling === true);
+
+
+    const [fromButton, setFromButton] = useState(props.fromTimeOffset ? props.fromTimeOffset : 'none');
 
     useEffect(() => {
         const updateToDate = () => {
@@ -281,7 +276,7 @@ const ArchiverDataViewer = (props) => {
         }
         let intervalId;
         if (live) {
-            intervalId = setInterval(updateToDate, props.pollingRatePeriod?(props.pollingRatePeriod>1000?props.pollingRatePeriod:1000): 1000);
+            intervalId = setInterval(updateToDate, props.pollingRatePeriod ? (props.pollingRatePeriod > 1000 ? props.pollingRatePeriod : 1000) : 1000);
 
 
         }
@@ -289,7 +284,7 @@ const ArchiverDataViewer = (props) => {
         return () => {
             clearInterval(intervalId)
         }
-    }, [live, fromButton])
+    }, [live, fromButton,props.pollingRatePeriod])
 
 
     const handleOnClick30s = () => {
@@ -355,13 +350,8 @@ const ArchiverDataViewer = (props) => {
         setSelectedToDate(date)
         setFromButton("1w");
     }
-    const data = archData.data;
-    const [lineData, setLineData] = useState([]);
-    const [crosshairValues, setCrosshairValues] = useState([]);
-    const onNearestX = (value, { index }) => {
 
-        setCrosshairValues([lineData[index]]);
-    };
+
 
 
 
@@ -380,15 +370,8 @@ const ArchiverDataViewer = (props) => {
         setOpenContextMenu(false);
     }
 
-    const icon2 = (
-        <svg width="2048" height="1792" viewBox="0 0 2048 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1728 640q0-80-56-136t-136-56h-64v384h64q80 0 136-56t56-136zm-1664 768h1792q0 106-75 181t-181 75h-1280q-106 0-181-75t-75-181zm1856-768q0 159-112.5 271.5t-271.5 112.5h-64v32q0 92-66 158t-158 66h-704q-92 0-158-66t-66-158v-736q0-26 19-45t45-19h1152q159 0 271.5 112.5t112.5 271.5z" /></svg>
-    )
-    const DateRangeIcon = {
-        'width': '24',
-        'height': '24',
 
-        'path': "M9,10H7V12H9V10M13,10H11V12H13V10M17,10H15V12H17V10M19,3H18V1H16V3H8V1H6V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M19,19H5V8H19V19Z"
-    }
+
     const [width, setWidth] = useState(null);
     const [height, setHeight] = useState(null);
 
@@ -426,20 +409,22 @@ const ArchiverDataViewer = (props) => {
 
 
             let newDomain = [increment * (numberOfyAxes - 1), 1]
-            let i = numberOfyAxes;
+
             let index = 0;
-            for (i = numberOfyAxes; i >= 0, i--;) {
+            for (let i = numberOfyAxes-1; i >= 0; i--) {
                 newYPositions[index] = i * increment;
                 index++;
 
             }
             setYPositions(newYPositions)
+
             setDomain(newDomain)
         }
         else {
             setYPositions([0])
             setDomain([0, 1])
         }
+         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [width])
 
 
@@ -471,7 +456,7 @@ const ArchiverDataViewer = (props) => {
                 }
             }
             else {
-               
+
                 yAxes['yaxis'] = {
                     title: item.title ? item.title : "Y-Axis " + (index + 1),
                     titlefont: { color: theme.palette.reactVis.lineColors[index], },
@@ -483,7 +468,7 @@ const ArchiverDataViewer = (props) => {
                     zeroline: true,
                     showline: true,
                     showgrid: true,
-                    type: item.type == 'log' ? 'log' : 'linear',
+                    type: item.type === 'log' ? 'log' : 'linear',
                     tickformat: item.tickFormat ? item.tickFormat : ''
                 }
             }
@@ -506,7 +491,7 @@ const ArchiverDataViewer = (props) => {
         }
     }
 
-  
+
 
     let legend = {
         legend: isMobile ? {
@@ -630,6 +615,11 @@ const ArchiverDataViewer = (props) => {
                     </Button>
                                 </Grid>
                                 <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
+                                    <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick12h} variant={'outlined'} color={fromButton === "12h" ? "secondary" : "default"}>
+                                        12h
+                    </Button>
+                                </Grid>
+                                <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
                                     <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1d} variant={'outlined'} color={fromButton === "1d" ? "secondary" : "default"}>
                                         1d
                     </Button>
@@ -745,7 +735,7 @@ const ArchiverDataViewer = (props) => {
                         width: '100%', height: '100%', paddingBottom: 8
                     }}
                     data={pvsArchData.map((pvData, index) => {
-                        if (index == 0) {
+                        if (index === 0) {
                             return ({
                                 x: pvData.x,
                                 y: pvData.y,
@@ -771,9 +761,8 @@ const ArchiverDataViewer = (props) => {
                                 type: props.traces[index].type ? props.traces[index].type : 'scatter',
                                 mode: props.traces[index].mode ? props.traces[index].mode : 'lines',
                                 marker: { color: props.traces[index].color ? props.traces[index].color : theme.palette.reactVis.lineColors[index] },
-                                yaxis: typeof (props.traces[index].yAxis) !== 'undefined' ? (props.traces[index].yAxis == 0 ? undefined : 'y' + (parseInt(props.traces[index].yAxis) + 1)) : 'yaxis',
-                                hovertemplate:
-                                    "(%{y}) %{x}" + "<extra>%{fullData.name}</extra>"
+                                yaxis: typeof (props.traces[index].yAxis) !== 'undefined' ? (parseInt(props.traces[index].yAxis) === 0 ? undefined : 'y' + (parseInt(props.traces[index].yAxis) + 1)) : 'yaxis',
+                                hovertemplate: "(%{y}) %{x}<extra>%{fullData.name}</extra>"
                             })
 
                         }
@@ -797,7 +786,7 @@ const ArchiverDataViewer = (props) => {
                         horizontal: "center",
                     }}
                     probeType={props.readOnly ? "readOnly" : undefined}
-                /> 
+                />
 
             </div>}
 
@@ -812,7 +801,7 @@ ArchiverDataViewer.propTypes = {
      * 	Is name of the environment variable defined in your .env or docker-compose yaml file file and corresponds to hostname or ip of the archiver followed by retrieval_url port, eg DEMO_ARCHIVER
      * In the .env file it should be declared as DEMO_ARCHIVER=http://localhost:17688
      */
-    archiver:PropTypes.string,
+    archiver: PropTypes.string,
     /**
      * The height of the graph
      */
@@ -857,7 +846,7 @@ ArchiverDataViewer.propTypes = {
     })),
 
     /**
-     * 
+     *
 * An array of objects with shape that defines each Y Axis
 */
     yAxes: PropTypes.arrayOf(PropTypes.shape({
@@ -865,47 +854,47 @@ ArchiverDataViewer.propTypes = {
         color: PropTypes.string,
         showgrid: PropTypes.bool,
     })),
-/**
-* 
-* Expand the buttons accordion
-*/
+    /**
+    *
+    * Expand the buttons accordion
+    */
     defaultButtonsExpanded: PropTypes.bool,
-/**
-* 
-* Display mode bar, true= display permanently, false=permanently hidden, undefine= auto hide
-*/
-    displayModeBar:PropTypes.bool,
-/**
-* 
-* Show buttons accordion
-*/
-showButtons:PropTypes.bool,
+    /**
+    *
+    * Display mode bar, true= display permanently, false=permanently hidden, undefine= auto hide
+    */
+    displayModeBar: PropTypes.bool,
+    /**
+    *
+    * Show buttons accordion
+    */
+    showButtons: PropTypes.bool,
 
-/**
-* 
-* When enabled, new data will be polled at 1Hz. Increments the from and too dates at 1Hz
-*/
-livePolling:PropTypes.bool,
-/**
-* 
-* Polling Rate Period in ms, minimum=1000 ms
-*/
-pollingRatePeriod:PropTypes.number,
+    /**
+    *
+    * When enabled, new data will be polled at 1Hz. Increments the from and too dates at 1Hz
+    */
+    livePolling: PropTypes.bool,
+    /**
+    *
+    * Polling Rate Period in ms, minimum=1000 ms
+    */
+    pollingRatePeriod: PropTypes.number,
 
-/**
- * Sets fromTimeOffset button
- */
-fromTimeOffset:PropTypes.oneOf(["30s","1m","5m","30m","1h","2h","12h","1d","2d","1w"]),
+    /**
+     * Sets fromTimeOffset button
+     */
+    fromTimeOffset: PropTypes.oneOf(["30s", "1m", "5m", "30m", "1h", "2h", "12h", "1d", "2d", "1w"]),
 };
 
 
 /**
- * Default props.definition 
+ * Default props.definition
  */
 
 ArchiverDataViewer.defaultProps = {
 
-    pollingRatePeriod:1000,
+    pollingRatePeriod: 1000,
     width: '100%',
     height: isMobile ? '150vh' : '40vh',
     legend: false,

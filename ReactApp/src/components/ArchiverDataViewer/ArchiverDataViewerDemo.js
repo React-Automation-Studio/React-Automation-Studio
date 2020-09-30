@@ -31,7 +31,7 @@ const ArchiverDataViewerDemo = (props) => {
                       //  height={'35vh'}
                         //displayModeBar={true}
                         // pvs={['pva://testIOC:BO1']}
-                       
+
                         traces={
                             [
                                 {
@@ -40,7 +40,7 @@ const ArchiverDataViewerDemo = (props) => {
 
 
                                 },
-                               
+
 
                                 {
                                     pv: 'pva://testIOC:BO2',
@@ -100,13 +100,13 @@ const ArchiverDataViewerDemo = (props) => {
                        // height={'35vh'}
                         //displayModeBar={true}
                         // pvs={['pva://testIOC:BO1']}
-                       
+
                         traces={
                             [
-                               
-                               
 
-                              
+
+
+
                                 {
                                     pv: 'pva://testIOC:amplitude',
                                     yAxis: 0
@@ -126,7 +126,7 @@ const ArchiverDataViewerDemo = (props) => {
                             [
                                 {
                                     title: "Amplitude",
-                                   
+
                                 },
                                 {
                                     title: "BO1",
@@ -134,7 +134,7 @@ const ArchiverDataViewerDemo = (props) => {
                                 {
                                     title: "BO2",
                                 },
-                                
+
                             ]}
                         //     {pv:'pva://testIOC:BO1',
 

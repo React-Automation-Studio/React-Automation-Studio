@@ -2,10 +2,6 @@ import React, { useState, useEffect, useContext, useCallback, useRef } from 'rea
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import Slide from '@material-ui/core/Slide';
 
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
@@ -14,6 +10,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 import DataConnection from '../SystemComponents/DataConnection';
+import ScheduleDialog from './ScheduleDialog';
 import UserTable from './UserTable';
 import PVList from './PVList';
 import useMongoDbWatch from '../SystemComponents/database/MongoDB/useMongoDbWatch';
@@ -298,9 +295,9 @@ const UserNotification = (props) => {
         setDialogOpen(true)
     }, [])
 
-    const handleCloseDialog = () => {
+    const handleCloseDialog = useCallback(() => {
         setDialogOpen(false)
-    }
+    }, [])
 
     // handleNewDbPVsList
     useEffect(() => {
@@ -421,27 +418,15 @@ const UserNotification = (props) => {
         pvListHeight = '76vh'
     }
 
-    // const Transition = React.forwardRef(function Transition(props, ref) {
-    //     return <Slide direction="left" ref={ref} {...props} />
-    // })
-
     // console.log(userEdit)
 
     return (
         <React.Fragment>
             {alarmPVs}
-            <Dialog
-                // TransitionComponent={Transition}
-                // fullWidth={fullWidth}
-                // maxWidth={maxWidth}
-                open={dialogOpen}
-                onBackdropClick={handleCloseDialog}
-                onClose={handleCloseDialog}
-            >
-                <DialogTitle>Hello world</DialogTitle>
-                <DialogContent>
-                </DialogContent>
-            </Dialog>
+            <ScheduleDialog
+                dialogOpen={dialogOpen}
+                closeDialog={handleCloseDialog}
+            />
             <Grid
                 container
                 direction="column"

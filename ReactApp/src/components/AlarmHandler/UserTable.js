@@ -40,6 +40,11 @@ const useStyles = makeStyles(theme => ({
     styledTableHeadCell: {
         backgroundColor: theme.palette.type === 'dark' ? undefined : theme.palette.primary.light,
         color: theme.palette.type === 'dark' ? undefined : 'white',
+    },
+    verticalMiddle: {
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
     }
 }))
 
@@ -222,10 +227,8 @@ const UserTable = (props) => {
                                             Notify all day everyday
                                         </Grid>
                                         <Grid item
+                                            className={classes.verticalMiddle}
                                             style={{
-                                                display: "flex",
-                                                flexDirection: "column",
-                                                justifyContent: "center",
                                                 marginLeft: 'auto'
                                             }}
                                         >

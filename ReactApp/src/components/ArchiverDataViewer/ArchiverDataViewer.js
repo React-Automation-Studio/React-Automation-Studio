@@ -9,7 +9,7 @@ import DateFnsUtils from '@date-io/date-fns';
 import formatISO from 'date-fns/formatISO';
 import { subHours, subSeconds, subMinutes, subDays, subWeeks, } from 'date-fns';
 import PV from '../SystemComponents/PV'
-
+import {replaceMacros} from '../SystemComponents/Utils/macroReplacement';
 import { makeStyles } from '@material-ui/core/styles';
 import { useTheme } from '@material-ui/core/styles';
 import { DateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
@@ -124,7 +124,7 @@ const ArchiverData = (props) => {
     // }
 
     const data = useArchiverDataHook({
-        archiverURL: 'arch://DEMO_ARCHIVER:request:' + JSON.stringify({
+        archiverURL: 'arch://'+props.archiver+':request:' + JSON.stringify({
             //pv: calcBin(props.pv,props.from,props.to,props.maxNumberOfSamples),
             pv: props.pv,
             options: {
@@ -182,6 +182,7 @@ const ArchiverData = (props) => {
 
     useEffect(() => {
         props.archData(dataXY);
+        console.log(dataXY)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dataXY])
 
@@ -215,7 +216,7 @@ const ArchiverDataViewer = (props) => {
                         let newPvs = [...prePvs]
 
                         newPvs[index] = pv;
-                        newPvs[index]['pvname'] = item.pv;
+                        newPvs[index]['pvname'] = replaceMacros(item.pv,props.macros);
                         return newPvs
 
                     }
@@ -493,14 +494,14 @@ const ArchiverDataViewer = (props) => {
 
 
 
-    let legend = {
+    let legend = props.showLegend===true?{
         legend: isMobile ? {
 
             orientation: 'h',
             x: 0,
             y: 1.1
         } : undefined
-    }
+    }:{}
     let layout =
     {
         title: props.title,
@@ -529,8 +530,10 @@ const ArchiverDataViewer = (props) => {
 
 
         paper_bgcolor: theme.palette.background.paper,
-        showlegend: props.showLegend,
-        ...legend,
+
+
+     ...legend,
+     showlegend: props.showLegend,
 
 
     }
@@ -548,7 +551,7 @@ const ArchiverDataViewer = (props) => {
                     //maxNumberOfSamples={width*10}
 
                     archiver={props.archiver}
-                    pv={trace.pv}
+                    pv={replaceMacros(trace.pv,props.macros)}
                     from={selectedFromDate}
                     to={selectedToDate}
                     parameters={"&donotchunk"}
@@ -739,7 +742,7 @@ const ArchiverDataViewer = (props) => {
                             return ({
                                 x: pvData.x,
                                 y: pvData.y,
-                                name: props.traces[index].name ? props.traces[index].name : props.traces[index].pv,
+                                name: props.traces[index].name ? props.traces[index].name : replaceMacros(props.traces[index].pv,props.macros),
                                 type: props.traces[index].type ? props.traces[index].type : 'scatter',
                                 mode: props.traces[index].mode ? props.traces[index].mode : 'lines',
                                 marker: { color: props.traces[index].color ? props.traces[index].color : theme.palette.reactVis.lineColors[index] },
@@ -757,7 +760,7 @@ const ArchiverDataViewer = (props) => {
                             return ({
                                 x: pvData.x,
                                 y: pvData.y,
-                                name: props.traces[index].name ? props.traces[index].name : props.traces[index].pv,
+                                name: props.traces[index].name ? props.traces[index].name : replaceMacros(props.traces[index].pv,props.macros),
                                 type: props.traces[index].type ? props.traces[index].type : 'scatter',
                                 mode: props.traces[index].mode ? props.traces[index].mode : 'lines',
                                 marker: { color: props.traces[index].color ? props.traces[index].color : theme.palette.reactVis.lineColors[index] },
@@ -767,7 +770,7 @@ const ArchiverDataViewer = (props) => {
 
                         }
                     })}
-                    layout={{ ...layout }}
+                    layout={{ ...layout,}}
 
 
                 />
@@ -814,7 +817,7 @@ ArchiverDataViewer.propTypes = {
     /**
      * Direct to show the legend
      */
-    legend: PropTypes.bool,
+    showLegend: PropTypes.bool,
     /**
      * An array of objects with shape that defines each trace
      */
@@ -897,7 +900,7 @@ ArchiverDataViewer.defaultProps = {
     pollingRatePeriod: 1000,
     width: '100%',
     height: isMobile ? '150vh' : '40vh',
-    legend: false,
+    showLegend: false,
     defaultButtonsExpanded: true,
 
 

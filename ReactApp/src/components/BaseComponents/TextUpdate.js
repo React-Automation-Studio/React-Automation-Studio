@@ -67,7 +67,7 @@ const TextUpdateComponent=(props)=> {
     }
 
     content = (
-      <Typography variant={props.variant} className={textFieldClassName} >{label + props.value + " " + units}</Typography>
+      <Typography variant={props.variant} align={props.align} className={textFieldClassName} >{label + props.value + " " + units}</Typography>
     );
   } else {
     content = props.formControlLabel;
@@ -205,6 +205,10 @@ TextUpdate.propTypes = {
   * Material UI Typography variant.
   */
  variant: PropTypes.string,
+ /**
+  * Material UI Typography align.
+  */
+ align: PropTypes.string,
   /**
    * Tooltip Text
    */

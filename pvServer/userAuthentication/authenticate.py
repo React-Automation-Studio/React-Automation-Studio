@@ -79,7 +79,7 @@ def createJTWUserIDs(UAGS):
         return knownUsers
     except:
         log.exception('Exception while creating JWT lookup table. No user will be allowed.')
-        return {}
+        return None
 
 
 def loadPvAccess():

@@ -91,7 +91,7 @@ def loadPvAccess():
             data['timestamp']=str(timestamp)
             return data
     except:
-        print("Error Cant load file pvAccess.json")
+        log.exception('Exception while loading pvAccess.json.')
         return None
 
 
@@ -104,7 +104,7 @@ def loadUsers():
             data['timestamp']=str(timestamp)
             return data
     except:
-        print("Error Cant load file users.json")
+        log.exception('Exception while loading users.json.')
         return None
 
 REACT_APP_DisableLogin=not(os.getenv('REACT_APP_EnableLogin')=='true')

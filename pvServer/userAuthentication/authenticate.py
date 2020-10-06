@@ -6,10 +6,48 @@ import string
 import os
 import bcrypt
 
+import log
+
 def randomString(stringLength=10):
     """Generate a random string of fixed length """
     letters = string.ascii_lowercase
     return ''.join(random.choice(letters) for i in range(stringLength))
+
+
+def mask_left(s, unmasked_len=3, min_masked=4):
+    if s is None:
+        return None
+    s_len = len(s)
+    if s_len < min_masked:
+        return '*' * min_masked
+    unmasked_len = min(unmasked_len, s_len - min_masked)
+    return s[:unmasked_len] + '*' * (s_len - unmasked_len)
+
+
+def mask_right(s, unmasked_len=3, min_masked=4):
+    if s is None:
+        return None
+    s_len = len(s)
+    if s_len < min_masked:
+        return '*' * min_masked
+    unmasked_len = min(unmasked_len, s_len - min_masked)
+    return '*' * (s_len - unmasked_len) + s[-unmasked_len:]
+
+
+def mask_email(email):
+    if email is None:
+        return None
+    name_domain = email.split('@')
+    name_domain[0] = mask_left(name_domain[0])
+    if len(name_domain) < 2:
+        return name_domain[0]
+    domain_components = name_domain[1].split('.')
+    domain_components_last = domain_components[-1]
+    domain_components[:] = ['*' * len(c) for c in domain_components]
+    domain_components[-1] = mask_right(domain_components_last)
+    name_domain[1] = '.'.join(domain_components)
+    return '@'.join(name_domain[:2])
+
 
 def loadFileSecretKey(filename):
     try:
@@ -40,10 +78,8 @@ def createJTWUserIDs(UAGS):
         #print("createJTWUserIDs users: " +str(knownUsers))
         return knownUsers
     except:
-        print("Error Cant load file USERS")
-        return None
-
-
+        log.exception('Exception while creating JWT lookup table. No user will be allowed.')
+        return {}
 
 
 def loadPvAccess():
@@ -183,7 +219,7 @@ def AuthenticateUser(user):
                     return {'JWT':JWT,'username':username,'roles':roles}
 
         else:
-            print('Uknown user:' + str(user['email']))
+            log.warning('Unknown user or invalid password: "{}"', mask_email(user.get('email', None)))
             return None
     return None
     #print(user)

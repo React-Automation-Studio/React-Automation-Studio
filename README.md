@@ -220,11 +220,11 @@ _Note: The administrator must first enable login ability and setup the users and
 
 The administration utility in 3.1 is used to create users and store the passwords in an encrypted format using Bcrypt.
 
-The usernames and passwords are stored in json format in USERS/users.json file.
+The usernames and passwords are stored in json format in `users/users.json` file.
 
 Only the administration utility should be used to edit this file.
 
-The access rights for each user are managed in the USERS/pvAccess.json file.
+The access rights for each user are managed in the `users/pvAccess.json` file.
 Configuring this file is described in 3.2.
 
 If the system is configured correctly then the user will be directed to the login page initially.
@@ -237,7 +237,7 @@ The JWT can also be invalidated by changing the username/ password in the admini
 
 If the JWT is invalid the user will be redirected tot he login screen.
 
-All JWT's of all users can also be invalidated by declaring a new secret key in the USERS/SECRET_PWD_KEY file. If the SECRET_PWD_KEY file is not defined then a random key will be used and the JWTs will change everytime the server restarts.
+All JWT's of all users can also be invalidated by declaring a new secret key in the `users/SECRET_PWD_KEY` file. If the SECRET_PWD_KEY file is not defined then a random key will be used and the JWTs will change everytime the server restarts.
 
 For every process variable write the access rights are first checked to confirm if the process variable can be written to. And for every user at the initial data connection to each process variable the read access rights are checked.
 
@@ -271,7 +271,7 @@ Make sure that the other parameters in the file are correct. Or see 4.1:
 
 The administration utility is used to create users and store the passwords in an encrypted format using Bcrypt.
 
-The usernames and passwords are stored in json format in USERS/users.json file.
+The usernames and passwords are stored in json format in `users/users.json` file.
 
 Only the administration utility should be used to edit this file.
 
@@ -305,7 +305,7 @@ admin-list-users
 ```
 ## 3.2 Enabling user access rights
 
-The access rights for each user are managed in the USERS/pvAccess.json file.
+The access rights for each user are managed in the `users/pvAccess.json` file.
 
 The pvAccess.json file an be created by placing the contents of the example.pvAccess.json in a new pvAccess.json file.
 

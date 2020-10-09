@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
+import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import Dialog from '@material-ui/core/Dialog';
@@ -8,6 +9,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import Radio from '@material-ui/core/Radio';
 import Switch from '@material-ui/core/Switch';
@@ -39,6 +41,12 @@ const useStyles = makeStyles(theme => ({
         display: "flex",
         flexDirection: "row",
         justifyContent: "center",
+    },
+    smallAvatar: {
+        width: theme.spacing(4),
+        height: theme.spacing(4),
+        marginLeft: '0.4em',
+        marginRight: '0.4em',
     },
     verticalCenter: {
         display: "flex",
@@ -80,7 +88,7 @@ const ScheduleDialog = (props) => {
                     justify="flex-start"
                     alignItems="stretch"
                 >
-                    <Grid item xs={12} style={{ marginBottom: '1em' }}>
+                    <Grid item xs={12}>
                         <Grid
                             container
                             direction="row"
@@ -98,7 +106,10 @@ const ScheduleDialog = (props) => {
                             </Grid>
                         </Grid>
                     </Grid>
-                    <Grid item xs={12} style={{ marginBottom: '1em' }}>
+                    <Grid item xs={12} style={{ marginTop: '0.75em', marginBottom: '0.75em' }}>
+                        <Divider variant="middle" />
+                    </Grid>
+                    <Grid item xs={12}>
                         <Grid
                             container
                             direction="row"
@@ -152,7 +163,10 @@ const ScheduleDialog = (props) => {
                             </Grid>
                         </Grid>
                     </Grid>
-                    <Grid item xs={12} style={{ marginBottom: '1em' }}>
+                    <Grid item xs={12} style={{ marginTop: '0.75em', marginBottom: '0.75em' }}>
+                        <Divider variant="middle" />
+                    </Grid>
+                    <Grid item xs={12} >
                         <Grid
                             container
                             direction="row"
@@ -165,7 +179,41 @@ const ScheduleDialog = (props) => {
                             <Grid item xs={2} className={classes.verticalCenter}>
                                 <span style={{ fontSize: '1rem' }}>Weekly</span>
                             </Grid>
+                            <Grid item xs={8} className={classes.verticalCenter}>
+                                <Grid
+                                    container
+                                    direction="row"
+                                    justify="flex-start"
+                                    alignItems="stretch"
+                                >
+                                    <Grid item>
+                                        <Avatar style={{ marginLeft: '1em' }} className={classes.smallAvatar}>M</Avatar>
+                                    </Grid>
+                                    <Grid item>
+                                        <Avatar className={classes.smallAvatar}>T</Avatar>
+                                    </Grid>
+                                    <Grid item>
+                                        <Avatar className={classes.smallAvatar}>W</Avatar>
+                                    </Grid>
+                                    <Grid item>
+                                        <Avatar className={classes.smallAvatar}>T</Avatar>
+                                    </Grid>
+                                    <Grid item>
+                                        <Avatar className={classes.smallAvatar}>F</Avatar>
+                                    </Grid>
+                                    <Grid item>
+                                        <Avatar className={classes.smallAvatar}>S</Avatar>
+                                    </Grid>
+                                    <Grid item>
+                                        <Avatar className={classes.smallAvatar}>S</Avatar>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
                         </Grid>
+                    </Grid>
+                    <Grid item xs={4} ></Grid>
+                    <Grid item xs={8} style={{ marginTop: '0.75em', marginBottom: '0.75em' }}>
+                        <Divider variant="middle" />
                     </Grid>
                     <Grid item xs={12} style={{ marginBottom: '1em' }}>
                         <Grid
@@ -179,6 +227,31 @@ const ScheduleDialog = (props) => {
                             </Grid>
                             <Grid item xs={2} className={classes.verticalCenter}>
                                 <span style={{ fontSize: '1rem' }}>Date range</span>
+                            </Grid>
+                            <Grid item xs={8}>
+                                <Grid
+                                    container
+                                    direction="row"
+                                    justify="flex-start"
+                                    alignItems="stretch"
+                                >
+                                    <Grid item xs={2} style={{ marginLeft: '1.5em' }} className={classes.verticalCenter}>
+                                        From
+                                    </Grid>
+                                    <Grid item xs={9}>
+                                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                            <DatePicker value={selectedDate} onChange={handleDateChange} />
+                                        </MuiPickersUtilsProvider>
+                                    </Grid>
+                                    <Grid item xs={2} style={{ marginLeft: '1.5em' }} className={classes.verticalCenter}>
+                                        To
+                                    </Grid>
+                                    <Grid item xs={9}>
+                                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                            <DatePicker value={selectedDate} onChange={handleDateChange} />
+                                        </MuiPickersUtilsProvider>
+                                    </Grid>
+                                </Grid>
                             </Grid>
                         </Grid>
                     </Grid>

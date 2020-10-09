@@ -42,6 +42,10 @@ const useStyles = makeStyles(theme => ({
         flexDirection: "row",
         justifyContent: "center",
     },
+    selectedAvatar: {
+        color: theme.palette.getContrastText(theme.palette.secondary.main),
+        backgroundColor: theme.palette.secondary.main,
+    },
     smallAvatar: {
         width: theme.spacing(4),
         height: theme.spacing(4),
@@ -156,7 +160,9 @@ const ScheduleDialog = (props) => {
                                     </Grid>
                                     <Grid item xs={9} >
                                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                            <TimePicker value={selectedDate} onChange={handleDateChange} />
+                                            <TimePicker
+                                                value={selectedDate}
+                                                onChange={handleDateChange} />
                                         </MuiPickersUtilsProvider>
                                     </Grid>
                                 </Grid>
@@ -190,7 +196,7 @@ const ScheduleDialog = (props) => {
                                         <Avatar style={{ marginLeft: '1em' }} className={classes.smallAvatar}>M</Avatar>
                                     </Grid>
                                     <Grid item>
-                                        <Avatar className={classes.smallAvatar}>T</Avatar>
+                                        <Avatar className={[classes.smallAvatar, classes.selectedAvatar]}>T</Avatar>
                                     </Grid>
                                     <Grid item>
                                         <Avatar className={classes.smallAvatar}>W</Avatar>
@@ -240,7 +246,10 @@ const ScheduleDialog = (props) => {
                                     </Grid>
                                     <Grid item xs={9}>
                                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                            <DatePicker value={selectedDate} onChange={handleDateChange} />
+                                            <DatePicker
+                                                format="dd MMMM yyyy"
+                                                value={selectedDate}
+                                                onChange={handleDateChange} />
                                         </MuiPickersUtilsProvider>
                                     </Grid>
                                     <Grid item xs={2} style={{ marginLeft: '1.5em' }} className={classes.verticalCenter}>
@@ -248,7 +257,11 @@ const ScheduleDialog = (props) => {
                                     </Grid>
                                     <Grid item xs={9}>
                                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                            <DatePicker value={selectedDate} onChange={handleDateChange} />
+                                            <DatePicker
+                                                format="dd MMMM yyyy"
+                                                value={selectedDate}
+                                                onChange={handleDateChange}
+                                            />
                                         </MuiPickersUtilsProvider>
                                     </Grid>
                                 </Grid>

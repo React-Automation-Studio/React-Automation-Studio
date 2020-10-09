@@ -9,7 +9,26 @@
             "cyclotron.*RF\\d",
             "air.*press",
             "SLIT.*2"
-        ]
+        ],
+        "notifySetup": {
+            "notify": true,
+            "allDay": true,
+            "fromTime": "",
+            "toTime": "",
+            "weekly": true,
+            "days": {
+                "Monday": true,
+                "Tuesday": true,
+                "Wednesday": true,
+                "Thursday": true,
+                "Friday": true,
+                "Saturday": true,
+                "Sunday": true
+            },
+            "dateRange": false,
+            "fromDate": "",
+            "toDate": ""
+        }
     },
     {
         "name": "User Two",
@@ -20,7 +39,26 @@
             "^testIOC.*STR",
             "SLIT.*Gap",
             "vault"
-        ]
+        ],
+        "notifySetup": {
+            "notify": true,
+            "allDay": true,
+            "fromTime": "",
+            "toTime": "",
+            "weekly": true,
+            "days": {
+                "Monday": true,
+                "Tuesday": true,
+                "Wednesday": true,
+                "Thursday": true,
+                "Friday": true,
+                "Saturday": true,
+                "Sunday": true
+            },
+            "dateRange": false,
+            "fromDate": "",
+            "toDate": ""
+        }
     },
     {
         "name": "User Three",
@@ -36,6 +74,25 @@
             "SLIT.*1.*Readback",
             "air.*diff",
             "demoAlarms.*\\:.*building"
-        ]
+        ],
+        "notifySetup": {
+            "notify": true,
+            "allDay": true,
+            "fromTime": "",
+            "toTime": "",
+            "weekly": true,
+            "days": {
+                "Monday": true,
+                "Tuesday": true,
+                "Wednesday": true,
+                "Thursday": true,
+                "Friday": true,
+                "Saturday": true,
+                "Sunday": true
+            },
+            "dateRange": false,
+            "fromDate": "",
+            "toDate": ""
+        }
     }
 ]

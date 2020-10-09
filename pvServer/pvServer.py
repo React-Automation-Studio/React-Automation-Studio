@@ -73,8 +73,8 @@ try:
     pyepics_ca = epics.ca.find_libca()
 except epics.ca.ChannelAccessException as e:
     print('ERROR: {}'.format(e))
-    print('pyepics requries EPICS base libraries libca and libCOM.')
-    print('Define location of libca through the env. var. "PYEPICS_LIBCA".')
+    print('pyepics requries EPICS base libraries ca and COM.')
+    print('Define location of ca through the env. var. "PYEPICS_LIBCA".')
     print('pyepics will use it to find the COM library as well.')
     print('See pyepics installation instructions for more details.')
     exit(1)

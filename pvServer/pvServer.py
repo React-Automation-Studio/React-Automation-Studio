@@ -13,6 +13,7 @@ from flask_socketio import SocketIO, emit, join_room, leave_room, \
 
 from bson.json_util import dumps
 
+import epics
 from epics import PV
 import os
 import sys
@@ -34,7 +35,7 @@ print("React Automation Studio V2.0.1")
 print("")
 print("pvServer Environment Variables:")
 print("")
-print('PYEPICS_LIBCA: '+ str(os.environ['PYEPICS_LIBCA']))
+print('PYEPICS_LIBCA: {}'.format(os.environ.get('PYEPICS_LIBCA', None)))
 print('EPICS_BASE: '+ str(os.environ['EPICS_BASE']))
 print('EPICS_CA_ADDR_LIST: '+ str(os.environ['EPICS_CA_ADDR_LIST']))
 print('REACT_APP_PyEpicsServerBASEURL: '+ str(os.environ['REACT_APP_PyEpicsServerBASEURL']))
@@ -65,6 +66,25 @@ if (REACT_APP_DisableLogin) :
 else:
     print("Authenitcation and Authorisation is ENABLED")
 print("")
+
+
+try:
+    pyepics_com = epics.ca.find_libCom()
+    pyepics_ca = epics.ca.find_libca()
+except epics.ca.ChannelAccessException as e:
+    print('ERROR: {}'.format(e))
+    print('pyepics requries EPICS base libraries libca and libCOM.')
+    print('Define location of libca through the env. var. "PYEPICS_LIBCA".')
+    print('pyepics will use it to find the COM library as well.')
+    print('See pyepics installation instructions for more details.')
+    exit(1)
+
+print('pyepics Configuration:')
+print()
+print('libca library: {}'.format(pyepics_ca))
+print('libCOM library: {}'.format(pyepics_com))
+print()
+
 
 socketio = SocketIO(app, async_mode=async_mode)
 thread = None

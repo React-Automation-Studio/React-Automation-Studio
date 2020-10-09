@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -14,6 +14,13 @@ import Switch from '@material-ui/core/Switch';
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 import ScheduleIcon from '@material-ui/icons/Schedule';
 // import Slide from '@material-ui/core/Slide';
+
+import DateFnsUtils from '@date-io/date-fns';
+import {
+    MuiPickersUtilsProvider,
+    TimePicker,
+    DatePicker,
+} from '@material-ui/pickers';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -45,7 +52,9 @@ const ScheduleDialog = (props) => {
     const classes = useStyles()
     const theme = useTheme()
 
-    console.log(theme)
+    const [selectedDate, handleDateChange] = useState(new Date());
+
+    // console.log(theme)
 
     // const Transition = React.forwardRef(function Transition(props, ref) {
     //     return <Slide direction="left" ref={ref} {...props} />
@@ -102,18 +111,44 @@ const ScheduleDialog = (props) => {
                             <Grid item xs={2} className={classes.verticalCenter}>
                                 <span style={{ fontSize: '1rem' }}>All-day</span>
                             </Grid>
-                            <Grid item xs={8}>
+                            <Grid item xs={2}>
                                 <Switch />
                             </Grid>
-                            <Grid item xs={4}>
+                            <Grid item xs={6}>
+                                <Grid
+                                    container
+                                    direction="row"
+                                    justify="flex-start"
+                                    alignItems="stretch"
+                                >
+                                    <Grid item xs={3} className={classes.verticalCenter}>
+                                        From
+                                    </Grid>
+                                    <Grid item xs={9} >
+                                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                            <TimePicker value={selectedDate} onChange={handleDateChange} />
+                                        </MuiPickersUtilsProvider>
+                                    </Grid>
+                                </Grid>
                             </Grid>
-                            <Grid item xs={8} style={{ paddingLeft: '0.75em' }}>
-                                From
+                            <Grid item xs={6}>
                             </Grid>
-                            <Grid item xs={4}>
-                            </Grid>
-                            <Grid item xs={8} style={{ paddingLeft: '0.75em' }}>
-                                To
+                            <Grid item xs={6} >
+                                <Grid
+                                    container
+                                    direction="row"
+                                    justify="flex-start"
+                                    alignItems="stretch"
+                                >
+                                    <Grid item xs={3} className={classes.verticalCenter}>
+                                        To
+                                    </Grid>
+                                    <Grid item xs={9} >
+                                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                            <TimePicker value={selectedDate} onChange={handleDateChange} />
+                                        </MuiPickersUtilsProvider>
+                                    </Grid>
+                                </Grid>
                             </Grid>
                         </Grid>
                     </Grid>

@@ -17,7 +17,13 @@ import {
   useReadOnly, 
   useUnits,
 } from "../Utils/widgetHooks";
-import { checkPrecision, formatValue, getTooltipProps, isInsideLimits } from "../Utils/widgetFunctions"
+import { 
+  checkPrecision, 
+  formatValue, 
+  getTooltipProps,
+  isInsideLimits, 
+  wrapComponent, 
+} from "../Utils/widgetFunctions"
 
 const useStyles = makeStyles((theme) => ({
   horizontalSpan: {
@@ -47,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
  **/
 const Widget = (props) => {
   const theme = useTheme();
-  const { debug, disabled: userDisabled, numberFormat } = props;
+  const { debug, disabled: userDisabled, disableProbe, numberFormat } = props;
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [focus, setFocus] = useState(false);
@@ -87,6 +93,31 @@ const Widget = (props) => {
         verticalAlign: "middle",
       }}
     />
+  );
+  const contextMenu = (
+    <ContextMenu
+      disableProbe={disableProbe}
+      open={openContextMenu}
+      pvs={contextPVs}
+      handleClose={() => setOpenContextMenu(false)}
+      anchorEl={anchorEl}
+      anchorOrigin={{
+        vertical: "bottom",
+        horizontal: "center",
+      }}
+      transformOrigin={{
+        vertical: "top",
+        horizontal: "center",
+      }}
+      probeType={readOnly ? "readOnly" : undefined}
+    />
+  );
+  let formControlLabel = initialized ? (
+    label
+  ) : (
+    <span style={{ fontSize: "inherit", whiteSpace: "nowrap" }}>
+      {disconnectedIcon} {pv.pvName}
+    </span>
   );
 
   const [value, setValue] = useState(0);
@@ -139,14 +170,6 @@ const Widget = (props) => {
     event.stopPropagation();
     setAnchorEl(event.target);
     setOpenContextMenu(!openContextMenu);
-  }
-
-  const handleContextMenuClose = () => {
-    setOpenContextMenu(false);
-  }
-
-  const wrapComponent = (CustomComponent, props) => {
-    return <CustomComponent {...props} />;
   }
 
   const getPvs = (pvArray, widgetProps, prevState, setState,newValueTrigger,outputValue) => {
@@ -237,27 +260,6 @@ const Widget = (props) => {
 
   />
   const childPvs = getPvs(props.pvs, props, pvs, setPvs,props.writeOutputValueToAllpvs?newValueTrigger:undefined,props.writeOutputValueToAllpvs?outputValue:undefined)
-  const contextMenu=(<ContextMenu
-  disableProbe={props.disableProbe}
-  open={openContextMenu}
-  pvs={contextPVs}
-  handleClose={handleContextMenuClose}
-  anchorEl={anchorEl}
-  anchorOrigin={{
-    vertical: "bottom",
-    horizontal: "center",
-  }}
-  transformOrigin={{
-    vertical: "top",
-    horizontal: "center",
-  }}
-  probeType={props.readOnly ? "readOnly" : undefined}
-/>)
-  let formControlLabel = initialized ? 
-    label :
-    <span style={{fontSize:"inherit", whiteSpace: "nowrap"}}>
-      {disconnectedIcon}{" "+pv.pvName}
-    </span>;
 
   let filteredValues = value;
   if (Array.isArray(value) && props.registers !== undefined && Array.isArray(props.registers)) {

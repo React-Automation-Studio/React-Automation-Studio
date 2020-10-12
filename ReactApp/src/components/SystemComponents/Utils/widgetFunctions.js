@@ -1,8 +1,9 @@
-import { create, all } from 'mathjs';
+import React from "react";
+import { create, all } from "mathjs";
 import { replaceMacros } from "./macroReplacement";
 
-const config = { }
-const math = create(all, config)
+const config = {};
+const math = create(all, config);
 
 const applyPrecision = (value, precision) => {
   if (!isNaN(value)) {
@@ -25,6 +26,22 @@ const checkPrecision = (value, prec) => {
       tempValue = parseFloat(value);
       return applyPrecision(tempValue, precision);
     }
+  } else {
+    return value;
+  }
+};
+
+const formatValue = (value, numberFormat) => {
+  if (numberFormat !== undefined) {
+    let formatValue;
+    if (Array.isArray(value)) {
+      formatValue = value.map((val) =>
+        math.format(parseFloat(val), numberFormat)
+      );
+    } else {
+      formatValue = math.format(parseFloat(value), numberFormat);
+    }
+    return formatValue;
   } else {
     return value;
   }
@@ -73,20 +90,14 @@ const isInsideLimits = (value, min, max) => {
   }
 };
 
-const formatValue = (value, numberFormat) => {
-  if (numberFormat !== undefined) {
-    let formatValue;
-    if (Array.isArray(value)) {
-      formatValue = value.map((val) =>
-        math.format(parseFloat(val), numberFormat)
-      );
-    } else {
-      formatValue = math.format(parseFloat(value), numberFormat);
-    }
-    return formatValue;
-  } else {
-    return value;
-  }
+const wrapComponent = (CustomComponent, props) => {
+  return <CustomComponent {...props} />;
 };
 
-export { checkPrecision, formatValue, getTooltipProps, isInsideLimits };
+export {
+  checkPrecision,
+  formatValue,
+  getTooltipProps,
+  isInsideLimits,
+  wrapComponent,
+};

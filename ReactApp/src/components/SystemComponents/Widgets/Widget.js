@@ -8,6 +8,7 @@ import { create, all } from 'mathjs';
 import { useTheme } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import {replaceMacros,replaceArrayMacros} from '../Utils/macroReplacement';
+import { useUnits } from '../Utils/widgetFunctions';
 const config = { }
 const math = create(all, config)
 
@@ -52,7 +53,6 @@ const useStyles = makeStyles((theme) => ({
   const [min, setMin] = useState(0);
   const [prec, setPrec] = useState(0);
   const [max, setMax] = useState(0);
-  const [units, setUnits] = useState("");
   const [label, setLabel] = useState("");
   const [tooltip] = useState(replaceMacros(props.tooltip));
   const [anchorEl, setAnchorEl] = useState(null);
@@ -74,6 +74,8 @@ const useStyles = makeStyles((theme) => ({
   const [pvs, setPvs] = useState([]);
   
  
+  const units = useUnits(props, pv);
+
   useEffect(() => {
   let ro=props.readOnly===true;
   if (props.pv){
@@ -113,20 +115,7 @@ const useStyles = makeStyles((theme) => ({
      // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.label, pv.label,props.macros])
 
-  useEffect(() => {
-    if (props.usePvUnits) {
-      if (pv.units) {
-        setUnits(pv.units)
-      }
-      else {
-        setUnits("")
-      }
-    }
-    else {
-      setUnits(replaceMacros(props.units,props.macros))
-    }
-     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.units, pv.units,props.macros])
+  
 
   useEffect(() => {
     if (props.usePvPrecision) {

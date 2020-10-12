@@ -15,8 +15,25 @@ const useUnits = (props, pv) => {
     } else {
       setUnits(replaceMacros(userUnits, macros));
     }
-  }, [userUnits, pvUnits, macros]);
+  }, [usePvUnits, userUnits, pvUnits, macros]);
   return units;
 };
 
-export { useUnits };
+const useMinMax = (props, pv) => {
+  const { usePvMinMax, min: userMin, max: userMax } = props;
+  const { min: pvMin, max: pvMax } = pv;
+  const [min, setMin] = useState(0);
+  const [max, setMax] = useState(0);
+  useEffect(() => {
+    if (usePvMinMax) {
+      setMin(pvMin);
+      setMax(pvMax);
+    } else {
+      if (userMin !== undefined) setMin(userMin);
+      if (userMax !== undefined) setMax(userMax);
+    }
+  }, [usePvMinMax, userMin, userMax, pvMin, pvMax]);
+  return { min: min, max: max };
+};
+
+export { useMinMax, useUnits };

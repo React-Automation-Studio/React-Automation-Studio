@@ -7,7 +7,6 @@ import { LanDisconnect } from "mdi-material-ui/";
 import { create, all } from 'mathjs';
 import { useTheme } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
-import {replaceMacros,replaceArrayMacros} from '../Utils/macroReplacement';
 import { 
   useAlarmSeverity, 
   useContextPVs, 
@@ -19,7 +18,7 @@ import {
   useReadOnly, 
   useUnits,
 } from "../Utils/widgetHooks";
-import { checkPrecision, isInsideLimits } from "../Utils/widgetFunctions"
+import { checkPrecision, getTooltipProps, isInsideLimits } from "../Utils/widgetFunctions"
 
 const config = { }
 const math = create(all, config)
@@ -57,9 +56,10 @@ const useStyles = makeStyles((theme) => ({
   const [commitChange, setCommitChange] = useState(false);
   const [newValueTrigger, setNewValueTrigger] = useState(0);
   const [outputValue, setOutputValue] = useState(null);
-  const [focus, setFocus] = useState(false);
-  const [tooltip] = useState(replaceMacros(props.tooltip));
+  
+  
   const [anchorEl, setAnchorEl] = useState(null);
+  const [focus, setFocus] = useState(false);
   const [openContextMenu, setOpenContextMenu] = useState(false);
   const [pv, setPv] = useState({
     value: 0,
@@ -86,7 +86,17 @@ const useStyles = makeStyles((theme) => ({
   const readOnly = useReadOnly(props, pv, pvs); 
   const units = useUnits(props, pv);
 
-
+  const disabled = !initialized || readOnly || props.disabled;
+  const tooltipProps = getTooltipProps(props);
+  const disconnectedIcon = (
+    <LanDisconnect
+      fontSize="inherit"
+      style={{
+        color: theme.palette.error.main,
+        verticalAlign: "middle",
+      }}
+    />
+  );
 
   useEffect(() => {
     if (!focus) {
@@ -187,19 +197,6 @@ const useStyles = makeStyles((theme) => ({
 
   const wrapComponent = (CustomComponent, props) => {
     return <CustomComponent {...props} />;
-  }
-  const disabled = !initialized || readOnly||props.disabled;
-  const disconnectedIcon = () => {
-    return (
-
-      <LanDisconnect
-        fontSize="inherit"
-        style={{
-          color: theme.palette.error.main,
-          verticalAlign: "middle",
-        }}
-      />
-    );
   }
 
   const getPvs = (pvArray, widgetProps, prevState, setState,newValueTrigger,outputValue) => {
@@ -309,7 +306,7 @@ const useStyles = makeStyles((theme) => ({
   let formControlLabel = initialized ? 
     label :
     <span style={{fontSize:"inherit", whiteSpace: "nowrap"}}>
-      {disconnectedIcon()}{" "+pv.pvName}
+      {disconnectedIcon}{" "+pv.pvName}
     </span>;
 
   let filteredValues = value;
@@ -341,7 +338,7 @@ const useStyles = makeStyles((theme) => ({
       readOnly: readOnly,
       alarmSeverity: alarmSeverity,
       enumStrs: enumStrings,
-      disconnectedIcon: disconnectedIcon(),
+      disconnectedIcon: disconnectedIcon,
       handleChange: setValue,
       handleImmediateChange: setImmediateValue,
       handleCommitChange: () => setCommitChange(true),
@@ -393,7 +390,7 @@ const useStyles = makeStyles((theme) => ({
             readOnly: readOnly,
             alarmSeverity: alarmSeverity,
             enumStrs: enumStrings,
-            disconnectedIcon: disconnectedIcon(),
+            disconnectedIcon: disconnectedIcon,
             handleChange: handleIndexValue,
             handleImmediateChange: handleIndexImmediateValue,
             handleCommitChange: () => setCommitChange(true),
@@ -420,29 +417,19 @@ const useStyles = makeStyles((theme) => ({
   }
 
   const Tag=props.svgWidget?"g":"div";
-  
-  return (
-    <Tooltip   
-      title={tooltip} 
-      disableFocusListener={true}	
-      disableTouchListener={true} 
-      disableHoverListener={props.showTooltip===false} 
-      {...props.tooltipProps}  >
-    
-    <Tag
-      style={props.svgWidget?undefined:divStyle}
-      onContextMenu={ props.disableContextMenu ? undefined : handleToggleContextMenu}
-    >
-     
 
-    
-      {child}
-     
-      {childPv}
-      {childPvs}
-      {contextMenu}
-    </Tag>
-     </Tooltip>
+  return (
+    <Tooltip {...tooltipProps}  >
+      <Tag
+        style={props.svgWidget?undefined:divStyle}
+        onContextMenu={ props.disableContextMenu ? undefined : handleToggleContextMenu}
+      >
+        {child}
+        {childPv}
+        {childPvs}
+        {contextMenu}
+      </Tag>
+    </Tooltip>
   )
 }
 /**

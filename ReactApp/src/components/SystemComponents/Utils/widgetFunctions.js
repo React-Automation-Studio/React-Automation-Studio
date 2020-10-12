@@ -1,3 +1,5 @@
+import { replaceMacros } from "./macroReplacement";
+
 const applyPrecision = (value, precision) => {
   if (!isNaN(value)) {
     return value.toFixed(precision);
@@ -22,6 +24,18 @@ const checkPrecision = (value, prec) => {
   } else {
     return value;
   }
+};
+
+const getTooltipProps = (props) => {
+  const { tooltip: userTooltip, tooltipProps, showTooltip, macros } = props;
+  const tooltip = replaceMacros(userTooltip, macros);
+  return {
+    title: tooltip,
+    disableFocusListener: true,
+    disableTouchListener: true,
+    disableHoverListener: !showTooltip,
+    ...tooltipProps,
+  };
 };
 
 const isInsideLimits = (value, min, max) => {
@@ -55,4 +69,4 @@ const isInsideLimits = (value, min, max) => {
   }
 };
 
-export { checkPrecision, isInsideLimits };
+export { checkPrecision, getTooltipProps, isInsideLimits };

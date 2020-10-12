@@ -1,6 +1,31 @@
 import { useEffect, useState } from "react";
 import { replaceArrayMacros, replaceMacros } from "./macroReplacement";
 
+const useAlarmSeverity = (props, pv) => {
+  const {
+    useStringSeverityMatch,
+    stringSeverity: usersSeverityStrings,
+  } = props;
+  const { severity: pvSeverity, value } = pv;
+  const [alarmSeverity, setAlarmSeverity] = useState(0);
+  useEffect(() => {
+    if (useStringSeverityMatch && usersSeverityStrings !== undefined) {
+      for (let string in usersSeverityStrings) {
+        if (
+          value.toString() ===
+          usersSeverityStrings[string].stringMatch.toString()
+        ) {
+          setAlarmSeverity(usersSeverityStrings[string].severity);
+          break;
+        }
+      }
+    } else {
+      setAlarmSeverity(pvSeverity);
+    }
+  }, [pvSeverity, useStringSeverityMatch, usersSeverityStrings, value]);
+  return alarmSeverity;
+};
+
 const useEnumStrings = (props, pv) => {
   const { custom_selection_strings, macros } = props;
   const { enum_strs } = pv;
@@ -78,4 +103,11 @@ const useUnits = (props, pv) => {
   return units;
 };
 
-export { useEnumStrings, useLabel, useMinMax, usePrec, useUnits };
+export {
+  useAlarmSeverity,
+  useEnumStrings,
+  useLabel,
+  useMinMax,
+  usePrec,
+  useUnits,
+};

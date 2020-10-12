@@ -8,7 +8,7 @@ import { create, all } from 'mathjs';
 import { useTheme } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import {replaceMacros,replaceArrayMacros} from '../Utils/macroReplacement';
-import { useEnumStrings, useLabel, useMinMax, usePrec, useUnits } from '../Utils/widgetFunctions';
+import { useAlarmSeverity, useEnumStrings, useLabel, useMinMax, usePrec, useUnits } from '../Utils/widgetFunctions';
 const config = { }
 const math = create(all, config)
 
@@ -48,7 +48,6 @@ const useStyles = makeStyles((theme) => ({
   const [outputValue, setOutputValue] = useState(null);
   const [focus, setFocus] = useState(false);
   const [readOnly, setReadOnly] = useState(true);
-  const [alarmSeverity, setAlarmSeverity] = useState(0);
   const [tooltip] = useState(replaceMacros(props.tooltip));
   const [anchorEl, setAnchorEl] = useState(null);
   const [openContextMenu, setOpenContextMenu] = useState(false);
@@ -68,6 +67,7 @@ const useStyles = makeStyles((theme) => ({
   });
   const [pvs, setPvs] = useState([]);
   
+  const alarmSeverity = useAlarmSeverity(props, pv)
   const enumStrings = useEnumStrings(props, pv);
   const label = useLabel(props, pv);
   const { min, max } = useMinMax(props, pv); 
@@ -127,29 +127,6 @@ const useStyles = makeStyles((theme) => ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [focus, pv.value, prec])
-
-  useEffect(() => {
-    let newSeverity=pv.severity;
-    if (typeof props.useStringSeverityMatch !== 'undefined'){
-      if (props.useStringSeverityMatch===true){
-
-        if (typeof props.stringSeverity !== 'undefined'){
-          let string;
-          for (string in props.stringSeverity){
-            // eslint-disable-next-line eqeqeq
-            if (value==props.stringSeverity[string].stringMatch){
-              newSeverity=props.stringSeverity[string].severity;
-              break;
-            }
-
-          }
-
-        }
-      }
-    }
-    setAlarmSeverity(newSeverity)
-  }, [pv.severity,props.useStringSeverityMatch,props.stringSeverity,value])
-
 
   useEffect(() => {
     if (immediateValue !== null) {

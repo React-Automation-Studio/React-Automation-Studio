@@ -4,7 +4,6 @@ import PV from '../PV'
 import ContextMenu from "../ContextMenu";
 import PropTypes from "prop-types";
 import { LanDisconnect } from "mdi-material-ui/";
-import { create, all } from 'mathjs';
 import { useTheme } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import { 
@@ -18,10 +17,7 @@ import {
   useReadOnly, 
   useUnits,
 } from "../Utils/widgetHooks";
-import { checkPrecision, getTooltipProps, isInsideLimits } from "../Utils/widgetFunctions"
-
-const config = { }
-const math = create(all, config)
+import { checkPrecision, formatValue, getTooltipProps, isInsideLimits } from "../Utils/widgetFunctions"
 
 const useStyles = makeStyles((theme) => ({
   horizontalSpan: {
@@ -49,18 +45,14 @@ const useStyles = makeStyles((theme) => ({
     
  * 
  **/
-  const Widget = (props) => {
+const Widget = (props) => {
   const theme = useTheme();
-  const [value, setValue] = useState(0);
-  const [immediateValue, setImmediateValue] = useState(null);
-  const [commitChange, setCommitChange] = useState(false);
-  const [newValueTrigger, setNewValueTrigger] = useState(0);
-  const [outputValue, setOutputValue] = useState(null);
-  
-  
+  const { debug, disabled: userDisabled, numberFormat } = props;
+
   const [anchorEl, setAnchorEl] = useState(null);
   const [focus, setFocus] = useState(false);
   const [openContextMenu, setOpenContextMenu] = useState(false);
+  const [pvs, setPvs] = useState([]);
   const [pv, setPv] = useState({
     value: 0,
     label: "",
@@ -74,8 +66,7 @@ const useStyles = makeStyles((theme) => ({
     enum_strs: [],
     units: "",
   });
-  const [pvs, setPvs] = useState([]);
-  
+
   const alarmSeverity = useAlarmSeverity(props, pv);
   const contextPVs = useContextPVs(pv, pvs);
   const enumStrings = useEnumStrings(props, pv);
@@ -86,7 +77,7 @@ const useStyles = makeStyles((theme) => ({
   const readOnly = useReadOnly(props, pv, pvs); 
   const units = useUnits(props, pv);
 
-  const disabled = !initialized || readOnly || props.disabled;
+  const disabled = !initialized || readOnly || userDisabled;
   const tooltipProps = getTooltipProps(props);
   const disconnectedIcon = (
     <LanDisconnect
@@ -98,81 +89,44 @@ const useStyles = makeStyles((theme) => ({
     />
   );
 
+  const [value, setValue] = useState(0);
+  const [immediateValue, setImmediateValue] = useState(null);
+  const [commitChange, setCommitChange] = useState(false);
+  const [newValueTrigger, setNewValueTrigger] = useState(0);
+  const [outputValue, setOutputValue] = useState(null);
+
   useEffect(() => {
     if (!focus) {
-      let newValue;
-
-      newValue=checkPrecision(pv.value, prec);
-      if (typeof props.numberFormat !== 'undefined'){
-        if (Array.isArray(newValue)) {
-          newValue = newValue.map((val) => (
-            math.format(parseFloat(val),props.numberFormat)
-          ));
-        } else {
-          newValue=math.format(parseFloat(newValue),props.numberFormat);
-        }
-        setValue(newValue)
+      const tempValue = checkPrecision(pv.value, prec);
+      setValue(formatValue(tempValue, numberFormat));
+      if (debug) {
+        console.log(tempValue);
       }
-      else{
-        setValue(newValue)
-      }
-      if (props.debug){
-        console.log(newValue)
     }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [focus, pv.value, prec])
+  }, [focus, pv.value, prec, numberFormat, debug]);
 
   useEffect(() => {
     if (immediateValue !== null) {
-      let tempvalue = checkPrecision(isInsideLimits(immediateValue, min, max), prec);
-      if (typeof props.numberFormat !== 'undefined'){
-        if (Array.isArray(tempvalue)) {
-          tempvalue = tempvalue.map((val) => (
-            math.format(parseFloat(val),props.numberFormat)
-          ));
-        } else {
-          tempvalue=math.format(parseFloat(tempvalue),props.numberFormat);
-        }
-        setValue(tempvalue)
-      }
-      else{
-        setValue(tempvalue)
-      }
-      
-      setOutputValue(tempvalue);
-     
+      const tempValue = checkPrecision(
+        isInsideLimits(immediateValue, min, max),
+        prec
+      );
+      setValue(formatValue(tempValue, numberFormat));
+      setOutputValue(tempValue);
       setNewValueTrigger(newValueTrigger + 1);
       setImmediateValue(null);
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [immediateValue, min, max, prec])
+  }, [immediateValue, min, max, prec, numberFormat, newValueTrigger]);
 
   useEffect(() => {
     if (commitChange) {
-      let tempvalue = checkPrecision(isInsideLimits(value, min, max), prec);
-      if (typeof props.numberFormat !== 'undefined'){
-        let formatValue; 
-        if (Array.isArray(tempvalue)) {
-          formatValue = tempvalue.map((val) => (
-            math.format(parseFloat(val),props.numberFormat)
-          ));
-        } else {
-          formatValue=math.format(parseFloat(tempvalue),props.numberFormat);
-        }
-        setValue(formatValue)
-      }
-      else{
-        setValue(tempvalue)
-      }
-      setOutputValue(tempvalue);
+      const tempValue = checkPrecision(isInsideLimits(value, min, max), prec);
+      setValue(formatValue(tempValue, numberFormat));
+      setOutputValue(tempValue);
       setNewValueTrigger(newValueTrigger + 1);
-      setCommitChange(false)
+      setCommitChange(false);
     }
-    
-// eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [commitChange, min, max, prec])
+  }, [commitChange, min, max, prec, numberFormat, newValueTrigger, value]);
 
   useEffect(()=>{
     if (typeof props.usePrecision!=='undefined'){
@@ -180,20 +134,16 @@ const useStyles = makeStyles((theme) => ({
     }
   },[props])
   
-
   const handleToggleContextMenu = (event) => {
-
     event.preventDefault();
     event.stopPropagation();
     setAnchorEl(event.target);
     setOpenContextMenu(!openContextMenu);
-
   }
 
   const handleContextMenuClose = () => {
     setOpenContextMenu(false);
   }
-
 
   const wrapComponent = (CustomComponent, props) => {
     return <CustomComponent {...props} />;
@@ -238,7 +188,7 @@ const useStyles = makeStyles((theme) => ({
             outputValue={outputValue}
             useStringValue={props.useStringValue}
             initialLocalVariableValue={props.initialLocalVariableValue}
-            debug={props.debug}
+            debug={debug}
             pvData={(data) => setState(prevState => {
               let state = [...prevState]
               state[index] = data;
@@ -281,7 +231,7 @@ const useStyles = makeStyles((theme) => ({
     outputValue={outputValue}
     useStringValue={props.useStringValue}
     initialLocalVariableValue={props.initialLocalVariableValue}
-    debug={props.debug}
+    debug={debug}
     pvData={setPv}
     name={props.name}
 

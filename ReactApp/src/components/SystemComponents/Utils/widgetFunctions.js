@@ -1,4 +1,8 @@
+import { create, all } from 'mathjs';
 import { replaceMacros } from "./macroReplacement";
+
+const config = { }
+const math = create(all, config)
 
 const applyPrecision = (value, precision) => {
   if (!isNaN(value)) {
@@ -69,4 +73,20 @@ const isInsideLimits = (value, min, max) => {
   }
 };
 
-export { checkPrecision, getTooltipProps, isInsideLimits };
+const formatValue = (value, numberFormat) => {
+  if (numberFormat !== undefined) {
+    let formatValue;
+    if (Array.isArray(value)) {
+      formatValue = value.map((val) =>
+        math.format(parseFloat(val), numberFormat)
+      );
+    } else {
+      formatValue = math.format(parseFloat(value), numberFormat);
+    }
+    return formatValue;
+  } else {
+    return value;
+  }
+};
+
+export { checkPrecision, formatValue, getTooltipProps, isInsideLimits };

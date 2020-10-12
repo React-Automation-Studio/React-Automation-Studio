@@ -26,6 +26,17 @@ const useAlarmSeverity = (props, pv) => {
   return alarmSeverity;
 };
 
+const useContextPVs = (pv, pvs) => {
+  const [contextPVs, setContextPVs] = useState([]);
+  useEffect(() => {
+    let newContextPVs = [];
+    newContextPVs.push(...pv.PVs);
+    pvs.map((item) => newContextPVs.push(...item.PVs));
+    setContextPVs(newContextPVs);
+  }, [pv, pvs]);
+  return contextPVs;
+};
+
 const useEnumStrings = (props, pv) => {
   const { custom_selection_strings, macros } = props;
   const { enum_strs } = pv;
@@ -143,6 +154,7 @@ const useUnits = (props, pv) => {
 
 export {
   useAlarmSeverity,
+  useContextPVs,
   useEnumStrings,
   useInitialized,
   useLabel,

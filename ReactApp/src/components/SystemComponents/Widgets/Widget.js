@@ -8,7 +8,17 @@ import { create, all } from 'mathjs';
 import { useTheme } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import {replaceMacros,replaceArrayMacros} from '../Utils/macroReplacement';
-import { useAlarmSeverity, useEnumStrings, useInitialized, useLabel, useMinMax, usePrec, useReadOnly, useUnits } from '../Utils/widgetFunctions';
+import { 
+  useAlarmSeverity, 
+  useContextPVs, 
+  useEnumStrings, 
+  useInitialized, 
+  useLabel, 
+  useMinMax, 
+  usePrec, 
+  useReadOnly, 
+  useUnits,
+} from '../Utils/widgetFunctions';
 const config = { }
 const math = create(all, config)
 
@@ -49,7 +59,6 @@ const useStyles = makeStyles((theme) => ({
   const [tooltip] = useState(replaceMacros(props.tooltip));
   const [anchorEl, setAnchorEl] = useState(null);
   const [openContextMenu, setOpenContextMenu] = useState(false);
-  const [contextPVs,setContextPVs]=useState([]);
   const [pv, setPv] = useState({
     value: 0,
     label: "",
@@ -65,27 +74,17 @@ const useStyles = makeStyles((theme) => ({
   });
   const [pvs, setPvs] = useState([]);
   
-  const alarmSeverity = useAlarmSeverity(props, pv)
+  const alarmSeverity = useAlarmSeverity(props, pv);
+  const contextPVs = useContextPVs(pv, pvs);
   const enumStrings = useEnumStrings(props, pv);
   const initialized = useInitialized(props, pv, pvs);
   const label = useLabel(props, pv);
   const { min, max } = useMinMax(props, pv); 
   const prec = usePrec(props, pv);
-  const readOnly = useReadOnly(props, pv, pvs)
+  const readOnly = useReadOnly(props, pv, pvs); 
   const units = useUnits(props, pv);
 
-  useEffect(() => {
-    let newContextPVs=[];
-    newContextPVs.push(...pv.PVs);
-    pvs.map((item)=>
-      newContextPVs.push(...item.PVs)
-    )
-   
-  
-   
-    setContextPVs(newContextPVs)
 
-    }, [pv, pvs])
 
   useEffect(() => {
     if (!focus) {

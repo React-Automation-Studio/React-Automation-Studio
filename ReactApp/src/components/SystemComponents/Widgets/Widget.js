@@ -19,6 +19,9 @@ import {
   useReadOnly, 
   useUnits,
 } from "../Utils/widgetHooks";
+import {
+  checkPrecision
+} from "../Utils/widgetFunctions"
 
 const config = { }
 const math = create(all, config)
@@ -170,30 +173,7 @@ const useStyles = makeStyles((theme) => ({
       console.warn("prop usePrecision is deprecated, use the usePvPrecision and prec props instead")
     }
   },[props])
-  const applyPrecision = (value, precision) => {
-    if (!isNaN(value)) {
-      return value.toFixed(precision);
-    }
-    return value;
-  }
-  const checkPrecision = (value, prec) => {
-    if (props.usePvPrecision===true || (typeof props.prec!=='undefined')) {
-      let precision = parseInt(prec);
-      let tempValue;
-      if (Array.isArray(value)) {
-        tempValue = value.map((val) => {
-          let floatValue = parseFloat(val);
-          return applyPrecision(floatValue, precision);
-        });
-        return tempValue;
-      } else {
-        tempValue = parseFloat(value);
-        return applyPrecision(tempValue, precision)
-      }
-    } else {
-      return (value)
-    }
-  }
+  
   const isInsideLimits = (value, min, max) => {
 
     if ((typeof props.min!=='undefined') || (typeof props.max!=='undefined') || props.usePvMinMax) {

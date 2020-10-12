@@ -19,9 +19,7 @@ import {
   useReadOnly, 
   useUnits,
 } from "../Utils/widgetHooks";
-import {
-  checkPrecision
-} from "../Utils/widgetFunctions"
+import { checkPrecision, isInsideLimits } from "../Utils/widgetFunctions"
 
 const config = { }
 const math = create(all, config)
@@ -140,8 +138,6 @@ const useStyles = makeStyles((theme) => ({
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [immediateValue, min, max, prec])
-  
- 
 
   useEffect(() => {
     if (commitChange) {
@@ -174,44 +170,6 @@ const useStyles = makeStyles((theme) => ({
     }
   },[props])
   
-  const isInsideLimits = (value, min, max) => {
-
-    if ((typeof props.min!=='undefined') || (typeof props.max!=='undefined') || props.usePvMinMax) {
-      let tempValue;
-      if (Array.isArray(value)) {
-        tempValue = value.map((v) => { 
-          let tempV = parseFloat(v);
-          if (!isNaN(tempV)) {
-           tempV = tempV > max ? max : tempV;
-           tempV = tempV < min ? min : tempV;
-          }
-          return tempV; 
-        })
-        return tempValue
-      }
-      
-      tempValue = parseFloat(value);
-      if (!isNaN(tempValue)) {
-        tempValue = tempValue > max ? max : tempValue;
-        tempValue = tempValue < min ? min : tempValue;
-        //value = tempValue;
-      }
-
-      return tempValue;
-    } else {
-      if (Array.isArray(value)) {
-        return value.map((v) => {
-          let val = parseFloat(v); 
-          return isNaN(val) ? v : val;
-        });
-      }
-      return value
-    }
-
-
-  }
-
-
 
   const handleToggleContextMenu = (event) => {
 

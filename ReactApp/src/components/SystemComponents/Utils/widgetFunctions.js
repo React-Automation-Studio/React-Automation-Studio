@@ -24,4 +24,35 @@ const checkPrecision = (value, prec) => {
   }
 };
 
-export { checkPrecision };
+const isInsideLimits = (value, min, max) => {
+  if (min !== undefined || max !== undefined) {
+    let tempValue;
+    if (Array.isArray(value)) {
+      tempValue = value.map((v) => {
+        let tempV = parseFloat(v);
+        if (!isNaN(tempV)) {
+          tempV = tempV > max ? max : tempV;
+          tempV = tempV < min ? min : tempV;
+        }
+        return tempV;
+      });
+      return tempValue;
+    }
+    tempValue = parseFloat(value);
+    if (!isNaN(tempValue)) {
+      tempValue = tempValue > max ? max : tempValue;
+      tempValue = tempValue < min ? min : tempValue;
+    }
+    return tempValue;
+  } else {
+    if (Array.isArray(value)) {
+      return value.map((v) => {
+        let val = parseFloat(v);
+        return isNaN(val) ? v : val;
+      });
+    }
+    return value;
+  }
+};
+
+export { checkPrecision, isInsideLimits };

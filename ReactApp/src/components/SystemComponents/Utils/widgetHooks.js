@@ -87,8 +87,8 @@ const useLabel = (props, pv) => {
 const useMinMax = (props, pv) => {
   const { usePvMinMax, min: userMin, max: userMax } = props;
   const { min: pvMin, max: pvMax } = pv;
-  const [min, setMin] = useState(0);
-  const [max, setMax] = useState(0);
+  const [min, setMin] = useState(undefined);
+  const [max, setMax] = useState(undefined);
   useEffect(() => {
     if (usePvMinMax) {
       setMin(pvMin);

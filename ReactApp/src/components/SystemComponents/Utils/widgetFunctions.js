@@ -1,5 +1,19 @@
 import { useEffect, useState } from "react";
-import { replaceMacros } from "./macroReplacement";
+import { replaceArrayMacros, replaceMacros } from "./macroReplacement";
+
+const useEnumStrings = (props, pv) => {
+  const { custom_selection_strings, macros } = props;
+  const { enum_strs } = pv;
+  const [enumStrings, setEnumStrings] = useState([]);
+  useEffect(() => {
+    if (custom_selection_strings) {
+      setEnumStrings(replaceArrayMacros(custom_selection_strings, macros));
+    } else {
+      setEnumStrings(enum_strs);
+    }
+  }, [custom_selection_strings, enum_strs, macros]);
+  return enumStrings;
+};
 
 const useLabel = (props, pv) => {
   const { usePvLabel, label: userLabel, macros } = props;
@@ -64,4 +78,4 @@ const useUnits = (props, pv) => {
   return units;
 };
 
-export { useLabel, useMinMax, usePrec, useUnits };
+export { useEnumStrings, useLabel, useMinMax, usePrec, useUnits };

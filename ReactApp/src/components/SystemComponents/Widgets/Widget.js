@@ -8,7 +8,7 @@ import { create, all } from 'mathjs';
 import { useTheme } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import {replaceMacros,replaceArrayMacros} from '../Utils/macroReplacement';
-import { useLabel, useMinMax, usePrec, useUnits } from '../Utils/widgetFunctions';
+import { useEnumStrings, useLabel, useMinMax, usePrec, useUnits } from '../Utils/widgetFunctions';
 const config = { }
 const math = create(all, config)
 
@@ -48,7 +48,6 @@ const useStyles = makeStyles((theme) => ({
   const [outputValue, setOutputValue] = useState(null);
   const [focus, setFocus] = useState(false);
   const [readOnly, setReadOnly] = useState(true);
-  const [enumStrings, setEnumStrings] = useState([]);
   const [alarmSeverity, setAlarmSeverity] = useState(0);
   const [tooltip] = useState(replaceMacros(props.tooltip));
   const [anchorEl, setAnchorEl] = useState(null);
@@ -69,7 +68,7 @@ const useStyles = makeStyles((theme) => ({
   });
   const [pvs, setPvs] = useState([]);
   
- 
+  const enumStrings = useEnumStrings(props, pv);
   const label = useLabel(props, pv);
   const { min, max } = useMinMax(props, pv); 
   const prec = usePrec(props, pv);
@@ -204,14 +203,7 @@ const useStyles = makeStyles((theme) => ({
     
 // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [commitChange, min, max, prec])
-  useEffect(() => {
-    if (props.custom_selection_strings) {
-      setEnumStrings(replaceArrayMacros(props.custom_selection_strings,props.macros))
-    }
-    else {
-      setEnumStrings(pv.enum_strs)
-    }
-  }, [props.custom_selection_strings, pv.enum_strs,props.macros])
+
   useEffect(() => {
 
     let init =

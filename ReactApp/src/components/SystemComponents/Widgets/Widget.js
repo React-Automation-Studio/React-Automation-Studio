@@ -8,7 +8,7 @@ import { create, all } from 'mathjs';
 import { useTheme } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import {replaceMacros,replaceArrayMacros} from '../Utils/macroReplacement';
-import { useAlarmSeverity, useEnumStrings, useLabel, useMinMax, usePrec, useReadOnly, useUnits } from '../Utils/widgetFunctions';
+import { useAlarmSeverity, useEnumStrings, useInitialized, useLabel, useMinMax, usePrec, useReadOnly, useUnits } from '../Utils/widgetFunctions';
 const config = { }
 const math = create(all, config)
 
@@ -41,7 +41,6 @@ const useStyles = makeStyles((theme) => ({
   const Widget = (props) => {
   const theme = useTheme();
   const [value, setValue] = useState(0);
-  const [initialized, setInitalized] = useState(false);
   const [immediateValue, setImmediateValue] = useState(null);
   const [commitChange, setCommitChange] = useState(false);
   const [newValueTrigger, setNewValueTrigger] = useState(0);
@@ -68,6 +67,7 @@ const useStyles = makeStyles((theme) => ({
   
   const alarmSeverity = useAlarmSeverity(props, pv)
   const enumStrings = useEnumStrings(props, pv);
+  const initialized = useInitialized(props, pv, pvs);
   const label = useLabel(props, pv);
   const { min, max } = useMinMax(props, pv); 
   const prec = usePrec(props, pv);
@@ -165,26 +165,6 @@ const useStyles = makeStyles((theme) => ({
 // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [commitChange, min, max, prec])
 
-  useEffect(() => {
-
-    let init =
-      (typeof props.pv !== 'undefined')
-      || (typeof props.pvs !== 'undefined')
-    
-   
-    if (props.pv) {
-      init = init&&pv.initialized;
-    }
-    if (props.pvs) {
-      pvs.forEach((item) => {
-        init = init && item.initialized;
-      })
-    }
-     
-      setInitalized(init)
-    
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pv.initialized, pvs])
   useEffect(()=>{
     if (typeof props.usePrecision!=='undefined'){
       console.warn("prop usePrecision is deprecated, use the usePvPrecision and prec props instead")

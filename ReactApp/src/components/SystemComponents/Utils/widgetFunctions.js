@@ -40,6 +40,25 @@ const useEnumStrings = (props, pv) => {
   return enumStrings;
 };
 
+const useInitialized = (props, pv, pvs) => {
+  const { pv: userPv, pvs: userPvs } = props;
+  const { initialized: pvInitialized } = pv;
+  const [initialized, setInitialized] = useState(false);
+  useEffect(() => {
+    if (userPv) {
+      setInitialized(pvInitialized);
+    }
+    if (userPvs) {
+      let init = true;
+      pvs.forEach((item) => {
+        init = init && item.initialized;
+      });
+      setInitialized(init);
+    }
+  }, [userPv, userPvs, pvInitialized, pvs]);
+  return initialized;
+};
+
 const useLabel = (props, pv) => {
   const { usePvLabel, label: userLabel, macros } = props;
   const { label: pvLabel } = pv;
@@ -125,6 +144,7 @@ const useUnits = (props, pv) => {
 export {
   useAlarmSeverity,
   useEnumStrings,
+  useInitialized,
   useLabel,
   useMinMax,
   usePrec,

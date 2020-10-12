@@ -36,4 +36,18 @@ const useMinMax = (props, pv) => {
   return { min: min, max: max };
 };
 
-export { useMinMax, useUnits };
+const usePrec = (props, pv) => {
+  const { usePvPrecision, prec: userPrec } = props;
+  const { prec: pvPrec } = pv;
+  const [prec, setPrec] = useState(0);
+  useEffect(() => {
+    if (usePvPrecision) {
+      setPrec(pvPrec);
+    } else {
+      setPrec(userPrec);
+    }
+  }, [userPrec, pvPrec, usePvPrecision]);
+  return prec;
+};
+
+export { useMinMax, usePrec, useUnits };

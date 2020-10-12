@@ -8,7 +8,7 @@ import { create, all } from 'mathjs';
 import { useTheme } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import {replaceMacros,replaceArrayMacros} from '../Utils/macroReplacement';
-import { useMinMax, useUnits } from '../Utils/widgetFunctions';
+import { useMinMax, usePrec, useUnits } from '../Utils/widgetFunctions';
 const config = { }
 const math = create(all, config)
 
@@ -50,7 +50,6 @@ const useStyles = makeStyles((theme) => ({
   const [readOnly, setReadOnly] = useState(true);
   const [enumStrings, setEnumStrings] = useState([]);
   const [alarmSeverity, setAlarmSeverity] = useState(0);
-  const [prec, setPrec] = useState(0);
   const [label, setLabel] = useState("");
   const [tooltip] = useState(replaceMacros(props.tooltip));
   const [anchorEl, setAnchorEl] = useState(null);
@@ -72,8 +71,9 @@ const useStyles = makeStyles((theme) => ({
   const [pvs, setPvs] = useState([]);
   
  
-  const units = useUnits(props, pv);
   const { min, max } = useMinMax(props, pv); 
+  const prec = usePrec(props, pv);
+  const units = useUnits(props, pv);
 
   useEffect(() => {
   let ro=props.readOnly===true;
@@ -113,18 +113,6 @@ const useStyles = makeStyles((theme) => ({
     }
      // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.label, pv.label,props.macros])
-
-  
-
-  useEffect(() => {
-    if (props.usePvPrecision) {
-      setPrec(pv.prec)
-    }
-    else {
-      setPrec(props.prec)
-    }
-     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.prec, pv.prec, props.usePvPrecision])
 
   useEffect(() => {
     if (!focus) {

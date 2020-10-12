@@ -18,7 +18,8 @@ import {
   usePrec, 
   useReadOnly, 
   useUnits,
-} from '../Utils/widgetFunctions';
+} from "../Utils/widgetHooks";
+
 const config = { }
 const math = create(all, config)
 

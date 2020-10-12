@@ -1,22 +1,18 @@
 import { useEffect, useState } from "react";
 import { replaceMacros } from "./macroReplacement";
 
-const useUnits = (props, pv) => {
-  const { usePvUnits, units: userUnits, macros } = props;
-  const { units: pvUnits } = pv;
-  const [units, setUnits] = useState("");
+const useLabel = (props, pv) => {
+  const { usePvLabel, label: userLabel, macros } = props;
+  const { label: pvLabel } = pv;
+  const [label, setLabel] = useState("");
   useEffect(() => {
-    if (usePvUnits) {
-      if (pvUnits) {
-        setUnits(pvUnits);
-      } else {
-        setUnits("");
-      }
+    if (usePvLabel) {
+      setLabel(pvLabel);
     } else {
-      setUnits(replaceMacros(userUnits, macros));
+      setLabel(replaceMacros(userLabel, macros));
     }
-  }, [usePvUnits, userUnits, pvUnits, macros]);
-  return units;
+  }, [usePvLabel, userLabel, pvLabel, macros]);
+  return label;
 };
 
 const useMinMax = (props, pv) => {
@@ -50,4 +46,22 @@ const usePrec = (props, pv) => {
   return prec;
 };
 
-export { useMinMax, usePrec, useUnits };
+const useUnits = (props, pv) => {
+  const { usePvUnits, units: userUnits, macros } = props;
+  const { units: pvUnits } = pv;
+  const [units, setUnits] = useState("");
+  useEffect(() => {
+    if (usePvUnits) {
+      if (pvUnits) {
+        setUnits(pvUnits);
+      } else {
+        setUnits("");
+      }
+    } else {
+      setUnits(replaceMacros(userUnits, macros));
+    }
+  }, [usePvUnits, userUnits, pvUnits, macros]);
+  return units;
+};
+
+export { useLabel, useMinMax, usePrec, useUnits };

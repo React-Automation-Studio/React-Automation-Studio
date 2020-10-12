@@ -8,7 +8,7 @@ import { create, all } from 'mathjs';
 import { useTheme } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import {replaceMacros,replaceArrayMacros} from '../Utils/macroReplacement';
-import { useAlarmSeverity, useEnumStrings, useLabel, useMinMax, usePrec, useUnits } from '../Utils/widgetFunctions';
+import { useAlarmSeverity, useEnumStrings, useLabel, useMinMax, usePrec, useReadOnly, useUnits } from '../Utils/widgetFunctions';
 const config = { }
 const math = create(all, config)
 
@@ -47,7 +47,6 @@ const useStyles = makeStyles((theme) => ({
   const [newValueTrigger, setNewValueTrigger] = useState(0);
   const [outputValue, setOutputValue] = useState(null);
   const [focus, setFocus] = useState(false);
-  const [readOnly, setReadOnly] = useState(true);
   const [tooltip] = useState(replaceMacros(props.tooltip));
   const [anchorEl, setAnchorEl] = useState(null);
   const [openContextMenu, setOpenContextMenu] = useState(false);
@@ -72,23 +71,8 @@ const useStyles = makeStyles((theme) => ({
   const label = useLabel(props, pv);
   const { min, max } = useMinMax(props, pv); 
   const prec = usePrec(props, pv);
+  const readOnly = useReadOnly(props, pv, pvs)
   const units = useUnits(props, pv);
-
-  useEffect(() => {
-  let ro=props.readOnly===true;
-  if (props.pv){
-    ro = ro || pv.readOnly;
-  }
-
-  if (props.pvs) {
-    pvs.forEach((item) => {
-      ro = ro || item.readOnly;
-    })
-  }
-  
-    setReadOnly(ro)
-     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pv, props.readOnly,pvs,])
 
   useEffect(() => {
     let newContextPVs=[];

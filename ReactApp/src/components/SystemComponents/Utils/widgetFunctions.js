@@ -85,6 +85,25 @@ const usePrec = (props, pv) => {
   return prec;
 };
 
+const useReadOnly = (props, pv, pvs) => {
+  const { readOnly: userReadOnly, pv: userPv, pvs: userPvs } = props;
+  const { readOnly: pvReadOnly } = pv;
+  const [readOnly, setReadOnly] = useState(true);
+  useEffect(() => {
+    let ro = userReadOnly;
+    if (userPv) {
+      ro = ro || pvReadOnly;
+    }
+    if (userPvs) {
+      pvs.forEach((item) => {
+        ro = ro || item.readOnly;
+      });
+    }
+    setReadOnly(ro);
+  }, [userPv, userPvs, userReadOnly, pvReadOnly, pvs]);
+  return readOnly;
+};
+
 const useUnits = (props, pv) => {
   const { usePvUnits, units: userUnits, macros } = props;
   const { units: pvUnits } = pv;
@@ -109,5 +128,6 @@ export {
   useLabel,
   useMinMax,
   usePrec,
+  useReadOnly,
   useUnits,
 };

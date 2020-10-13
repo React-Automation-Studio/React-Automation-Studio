@@ -8,7 +8,6 @@ import { useTheme } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import { 
   useAlarmSeverity, 
-  useContextPVs, 
   useEnumStrings, 
   useInitialized, 
   useLabel, 
@@ -20,6 +19,7 @@ import {
 import { 
   checkPrecision, 
   formatValue, 
+  getContextPVs, 
   getTooltipProps,
   isInsideLimits, 
   wrapComponent, 
@@ -58,6 +58,7 @@ const Widget = (props) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [focus, setFocus] = useState(false);
   const [openContextMenu, setOpenContextMenu] = useState(false);
+  const [contextPVs, setContextPVs] = useState([]);
   const [pvs, setPvs] = useState([]);
   const [pv, setPv] = useState({
     value: 0,
@@ -74,7 +75,6 @@ const Widget = (props) => {
   });
 
   const alarmSeverity = useAlarmSeverity(props, pv);
-  const contextPVs = useContextPVs(pv, pvs);
   const enumStrings = useEnumStrings(props, pv);
   const initialized = useInitialized(props, pv, pvs);
   const label = useLabel(props, pv);
@@ -170,6 +170,7 @@ const Widget = (props) => {
     event.stopPropagation();
     setAnchorEl(event.target);
     setOpenContextMenu(!openContextMenu);
+    setContextPVs(getContextPVs([pv]));
   }
 
   const getPvs = (pvArray, widgetProps, prevState, setState,newValueTrigger,outputValue) => {

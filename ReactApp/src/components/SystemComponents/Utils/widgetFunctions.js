@@ -47,6 +47,12 @@ const formatValue = (value, numberFormat) => {
   }
 };
 
+const getContextPVs = (pvs) => {
+  let newContextPVs = [];
+  pvs.forEach((item) => newContextPVs.push(...item.PVs));
+  return newContextPVs;
+};
+
 const getTooltipProps = (props) => {
   const { tooltip: userTooltip, tooltipProps, showTooltip, macros } = props;
   const tooltip = replaceMacros(userTooltip, macros);
@@ -97,6 +103,7 @@ const wrapComponent = (CustomComponent, props) => {
 export {
   checkPrecision,
   formatValue,
+  getContextPVs,
   getTooltipProps,
   isInsideLimits,
   wrapComponent,

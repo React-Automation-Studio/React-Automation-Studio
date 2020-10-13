@@ -1,58 +1,46 @@
-import React, { useState, useEffect } from 'react';
-import { makeStyles, FormControlLabel } from "@material-ui/core";
-import PV from '../PV'
-import ContextMenu from "../ContextMenu";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { LanDisconnect } from "mdi-material-ui/";
-import { useTheme } from '@material-ui/core/styles';
-import Tooltip from '@material-ui/core/Tooltip';
-import { 
-  useAlarmSeverity, 
-  useEnumStrings, 
-  useInitialized, 
-  useLabel, 
-  useMinMax, 
-  usePrec, 
-  useReadOnly, 
+import { Tooltip, makeStyles } from "@material-ui/core";
+import PV from "../PV";
+import ContextMenu from "../ContextMenu";
+import {
+  useAlarmSeverity,
+  useEnumStrings,
+  useInitialized,
+  useLabel,
+  useMinMax,
+  usePrec,
+  useReadOnly,
   useUnits,
 } from "../Utils/widgetHooks";
-import { 
-  checkPrecision, 
-  formatValue, 
-  getContextPVs, 
+import {
+  checkPrecision,
+  formatValue,
+  getContextPVs,
   getTooltipProps,
-  isInsideLimits, 
-  wrapComponent, 
-} from "../Utils/widgetFunctions"
+  isInsideLimits,
+  wrapComponent,
+} from "../Utils/widgetFunctions";
 
 const useStyles = makeStyles((theme) => ({
-  horizontalSpan: {
-    padding: theme.spacing(1),
-    display: "inline-block",
-    width: (props) => props.width,
+  disconnectedIcon: {
+    color: theme.palette.error.main,
+    verticalAlign: "middle",
   },
-  verticalSpan: {
-    padding: theme.spacing(1),
-    display: "inline-block",
-    width: "100%",
-  },
+  disconnectedIconForm: { fontSize: "inherit", whiteSpace: "nowrap" },
 }));
-
 /**
- * The Widget component creates standard properties, state variables and callbacks to manage the behaviour of a component communicating with one or multiple PVs. It also provides the default RAS contextMenu to the child component. 
- * 
- * The label, min, max, units, pv and tooltip all accept macros that can be replaced by the values defined in the macros prop. 
- * 
- * 
- * 
- * 
- * 
- *  
-    
- * 
+ * The Widget component creates standard properties,
+ * state variables and callbacks to manage the behaviour
+ * of a component communicating with one or multiple PVs.
+ * It also provides the default RAS contextMenu to the child component.
+ *
+ * The label, min, max, units, pv and tooltip all accept macros
+ * that can be replaced by the values defined in the macros prop.
  **/
-const Widget = (props) => {
-  const theme = useTheme();
+function WidgetSinglePV(props) {
+  const classes = useStyles();
   const { debug, disabled: userDisabled, disableProbe, numberFormat } = props;
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -67,7 +55,7 @@ const Widget = (props) => {
     initialized: false,
     PVs: [],
     metadata: {},
-    timestamp:"",
+    timestamp: "",
     readOnly: true,
     severity: 0,
     enum_strs: [],
@@ -78,21 +66,22 @@ const Widget = (props) => {
   const enumStrings = useEnumStrings(props, pv);
   const initialized = useInitialized([pv, ...pvs]);
   const label = useLabel(props, pv);
-  const { min, max } = useMinMax(props, pv); 
+  const { min, max } = useMinMax(props, pv);
   const prec = usePrec(props, pv);
-  const readOnly = useReadOnly(props, [pv, ...pvs]); 
+  const readOnly = useReadOnly(props, [pv, ...pvs]);
   const units = useUnits(props, pv);
 
   const disabled = !initialized || readOnly || userDisabled;
   const tooltipProps = getTooltipProps(props);
   const disconnectedIcon = (
-    <LanDisconnect
-      fontSize="inherit"
-      style={{
-        color: theme.palette.error.main,
-        verticalAlign: "middle",
-      }}
-    />
+    <LanDisconnect fontSize="inherit" className={classes.disconnectedIcon} />
+  );
+  const formControlLabel = initialized ? (
+    label
+  ) : (
+    <span className={classes.disconnectedIconForm}>
+      {disconnectedIcon} {pv.pvName}
+    </span>
   );
   const contextMenu = (
     <ContextMenu
@@ -112,13 +101,14 @@ const Widget = (props) => {
       probeType={readOnly ? "readOnly" : undefined}
     />
   );
-  let formControlLabel = initialized ? (
-    label
-  ) : (
-    <span style={{ fontSize: "inherit", whiteSpace: "nowrap" }}>
-      {disconnectedIcon} {pv.pvName}
-    </span>
-  );
+
+  const handleToggleContextMenu = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setAnchorEl(event.target);
+    setOpenContextMenu(!openContextMenu);
+    setContextPVs(getContextPVs([pv, ...pvs]));
+  };
 
   const [value, setValue] = useState(0);
   const [immediateValue, setImmediateValue] = useState(null);
@@ -159,32 +149,92 @@ const Widget = (props) => {
     }
   }, [commitChange, min, max, prec, numberFormat, newValueTrigger, value]);
 
-  useEffect(()=>{
-    if (typeof props.usePrecision!=='undefined'){
-      console.warn("prop usePrecision is deprecated, use the usePvPrecision and prec props instead")
-    }
-  },[props])
-  
-  const handleToggleContextMenu = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    setAnchorEl(event.target);
-    setOpenContextMenu(!openContextMenu);
-    setContextPVs(getContextPVs([pv]));
+  let childPv;
+  if (props.pv !== undefined) {
+    childPv = (
+      <PV
+        pv={props.pv}
+        maxPv={props.maxPv}
+        minPv={props.minPv}
+        min={props.min}
+        max={props.max}
+        usePvMinMax={props.usePvMinMax}
+        unitsPv={props.unitsPv}
+        usePvUnits={props.usePvUnits}
+        alarmPv={props.alarmPv}
+        labelPv={props.labelPv}
+        alarmSensitive={props.alarmSensitive}
+        usePvLabel={props.usePvLabel}
+        usePvPrecision={props.usePvPrecision}
+        prec={props.prec}
+        precPv={props.precPv}
+        useMetadata={props.useMetadata}
+        macros={props.macros}
+        newValueTrigger={newValueTrigger}
+        outputValue={outputValue}
+        useStringValue={props.useStringValue}
+        initialLocalVariableValue={props.initialLocalVariableValue}
+        debug={debug}
+        pvData={setPv}
+        name={props.name}
+      />
+    );
   }
 
-  const getPvs = (pvArray, widgetProps, prevState, setState,newValueTrigger,outputValue) => {
-   // console.log(pvArray, widgetProps)
+  let child;
+  if (props.component !== undefined) {
+    child = wrapComponent(props.component, {
+      ...props,
+      initialized: initialized,
+      pvName: pv.pvName,
+      value: value,
+      min: min,
+      max: max,
+      prec: prec,
+      label: label,
+      formControlLabel: formControlLabel,
+      units: units,
+      disabled: disabled,
+      readOnly: readOnly,
+      alarmSeverity: alarmSeverity,
+      enumStrs: enumStrings,
+      disconnectedIcon: disconnectedIcon,
+      handleChange: setValue,
+      handleImmediateChange: setImmediateValue,
+      handleCommitChange: () => setCommitChange(true),
+      handleFocus: () => setFocus(true),
+      handleBlur: () => setFocus(false),
+      pvData: pv,
+      pvsData: pvs,
+    });
+  }
+  
+  useEffect(() => {
+    if (typeof props.usePrecision !== "undefined") {
+      console.warn(
+        "prop usePrecision is deprecated, use the usePvPrecision and prec props instead"
+      );
+    }
+  }, [props]);
+
+  const getPvs = (
+    pvArray,
+    widgetProps,
+    prevState,
+    setState,
+    newValueTrigger,
+    outputValue
+  ) => {
+    // console.log(pvArray, widgetProps)
     let pvs = [];
-    if (typeof pvArray !== 'undefined') {
+    if (typeof pvArray !== "undefined") {
       pvArray.forEach((item, index) => {
         let pv;
         let props;
         if (typeof item === Object) {
           pv = item.pv;
           props = item.props;
-        }
-        else {
+        } else {
           pv = item;
           props = widgetProps;
         }
@@ -213,169 +263,45 @@ const Widget = (props) => {
             useStringValue={props.useStringValue}
             initialLocalVariableValue={props.initialLocalVariableValue}
             debug={debug}
-            pvData={(data) => setState(prevState => {
-              let state = [...prevState]
-              state[index] = data;
-              return state
-
+            pvData={(data) =>
+              setState((prevState) => {
+                let state = [...prevState];
+                state[index] = data;
+                return state;
+              })
             }
-            )}
             name={props.name}
-
-          />)
-
-      }
-      )
-      return pvs
+          />
+        );
+      });
+      return pvs;
+    } else {
+      return [];
     }
-    else {
-      return []
-    }
-  }
+  };
 
-  const childPv = typeof props.pv !== 'undefined' && <PV
-    pv={props.pv}
-    maxPv={props.maxPv}
-    minPv={props.minPv}
-    min={props.min}
-    max={props.max}
-    usePvMinMax={props.usePvMinMax}
-    unitsPv={props.unitsPv}
-    usePvUnits={props.usePvUnits}
-    alarmPv={props.alarmPv}
-    labelPv={props.labelPv}
-    alarmSensitive={props.alarmSensitive}
-    usePvLabel={props.usePvLabel}
-    usePvPrecision={props.usePvPrecision}
-    prec={props.prec}
-    precPv={props.precPv}
-    useMetadata={props.useMetadata}
-    macros={props.macros}
-    newValueTrigger={newValueTrigger}
-    outputValue={outputValue}
-    useStringValue={props.useStringValue}
-    initialLocalVariableValue={props.initialLocalVariableValue}
-    debug={debug}
-    pvData={setPv}
-    name={props.name}
+  const childPvs = getPvs(
+    props.pvs,
+    props,
+    pvs,
+    setPvs,
+    props.writeOutputValueToAllpvs ? newValueTrigger : undefined,
+    props.writeOutputValueToAllpvs ? outputValue : undefined
+  );
 
-  />
-  const childPvs = getPvs(props.pvs, props, pvs, setPvs,props.writeOutputValueToAllpvs?newValueTrigger:undefined,props.writeOutputValueToAllpvs?outputValue:undefined)
-
-  let filteredValues = value;
-  if (Array.isArray(value) && props.registers !== undefined && Array.isArray(props.registers)) {
-    filteredValues = props.registers.map((item) => value[item]);
-  }
-
-  let width;
-  if (initialized && props.alignHorizontal && props.stretch) {
-    let length = filteredValues.length > 0 ? filteredValues.length : 1;
-    width = 100 / length + "%";
-  }
-  const classes = useStyles({ width });
-
-  let child;
-  if (!Array.isArray(value) && props.component) {
-    child = wrapComponent(props.component, {
-      ...props,
-      initialized: initialized,
-      pvName: pv.pvName,
-      value: value,
-      min: min,
-      max: max,
-      prec: prec,
-      label: label,
-      formControlLabel: formControlLabel,
-      units: units,
-      disabled: disabled,
-      readOnly: readOnly,
-      alarmSeverity: alarmSeverity,
-      enumStrs: enumStrings,
-      disconnectedIcon: disconnectedIcon,
-      handleChange: setValue,
-      handleImmediateChange: setImmediateValue,
-      handleCommitChange: () => setCommitChange(true),
-      handleFocus: () => setFocus(true),
-      handleBlur: () => setFocus(false),
-      pvData: pv,
-      pvsData: pvs,
-    })
-  } else if (Array.isArray(value) && props.component) {
-    let children = filteredValues.map((v, idx) => {
-      const handleIndexValue = (val) => {
-        let newValue = [...value];
-        newValue[idx] = val;
-        setValue(newValue);
-      }
-      const handleIndexImmediateValue = (val) => {
-        let newValue = [...value];
-        newValue[idx] = val;
-        setImmediateValue(newValue);
-      }
-      const handleIndependentValue = (arrayValue, singleValue) => {
-        if (arrayValue !== undefined && arrayValue.length > idx) {
-          return arrayValue[idx];
-        }
-        return singleValue;
-      }
-      let registerLabel = handleIndependentValue(props.registersLabel, undefined);
-      return (
-        <span
-          className={
-            props.alignHorizontal ? classes.horizontalSpan : classes.verticalSpan
-          }
-          key={"elem" + idx}
-        >
-          {wrapComponent(props.component, {
-            ...props,
-            index: idx,
-            initialized: initialized,
-            pvName: pv.pvName,
-            value: v,
-            min: min,
-            max: max,
-            prec: prec,
-            label: registerLabel,
-            formControlLabel: initialized ? registerLabel : undefined,
-            labelPlacement: props.registersLabelPlacement,
-            units: units,
-            disabled: disabled,
-            readOnly: readOnly,
-            alarmSeverity: alarmSeverity,
-            enumStrs: enumStrings,
-            disconnectedIcon: disconnectedIcon,
-            handleChange: handleIndexValue,
-            handleImmediateChange: handleIndexImmediateValue,
-            handleCommitChange: () => setCommitChange(true),
-            handleFocus: () => setFocus(true),
-            handleBlur: () => setFocus(false),
-            pvData: pv,
-            pvsData: pvs,
-          })}
-        </span>
-      );
-    })
-    child = (
-      <FormControlLabel
-        label={formControlLabel}
-        labelPlacement={props.labelPlacement}
-        control={<div>{children}</div>}
-      />
-    );
-  }
-  
+  const Tag = props.svgWidget ? "g" : "div";
   const divStyle = {
     width: "100%",
-    height: "100%",    
-  }
-
-  const Tag=props.svgWidget?"g":"div";
+    height: "100%",
+  };
 
   return (
-    <Tooltip {...tooltipProps}  >
+    <Tooltip {...tooltipProps}>
       <Tag
-        style={props.svgWidget?undefined:divStyle}
-        onContextMenu={ props.disableContextMenu ? undefined : handleToggleContextMenu}
+        style={props.svgWidget ? undefined : divStyle}
+        onContextMenu={
+          props.disableContextMenu ? undefined : handleToggleContextMenu
+        }
       >
         {child}
         {childPv}
@@ -383,13 +309,13 @@ const Widget = (props) => {
         {contextMenu}
       </Tag>
     </Tooltip>
-  )
+  );
 }
 /**
  * Props definition for all widgets linked to PVs storing
  * analog values.
  */
-Widget.propTypes = {
+WidgetSinglePV.propTypes = {
   /**
    * Directive to use the  alarm severity status to alter the fields background color.
    */
@@ -407,7 +333,7 @@ Widget.propTypes = {
   /**
    * Directive to the output value to all the pvs defined in the pvs array
    */
-  writeOutputValueToAllpvs:PropTypes.bool,
+  writeOutputValueToAllpvs: PropTypes.bool,
   /**
    * Local variable initialization value.
    * When using loc:// type PVs.
@@ -418,8 +344,8 @@ Widget.propTypes = {
    */
   label: PropTypes.string,
   /**
-  * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
-  */
+   * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+   */
   labelPv: PropTypes.string,
   /**
    * Values of macros that will be substituted in the pv name.
@@ -451,9 +377,7 @@ Widget.propTypes = {
    * Custom PV to define the precision to be used, usePvPrecision must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
    */
   precPv: PropTypes.string,
- 
 
-  
   /**
    * Custom units to be used, if usePvUnits is not defined.
    */
@@ -470,12 +394,12 @@ Widget.propTypes = {
    */
   usePvLabel: PropTypes.bool,
   /**
-   * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver. 
-   * The pyEpics metadata is unfortunately static and the values used will be the initial values that pvserver receives when it connects the first time. 
+   * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver.
+   * The pyEpics metadata is unfortunately static and the values used will be the initial values that pvserver receives when it connects the first time.
    * This is sufficient in most cases except when the user wants to dynamically update the metaData.
-   * In this case a direct connection can be made to all the pv fields by setting useMetadata to false. 
+   * In this case a direct connection can be made to all the pv fields by setting useMetadata to false.
    * If any of the metadata pvs are defined i.e unitsPv then the PV makes a new data  connection to this alternate pv and will
-   * use the value provided by this pv as the units. 
+   * use the value provided by this pv as the units.
    * The same is the case for the precPV, labelPv, alarmPv, unitsPv and minPv.
    * By setting useMetadata to false also enables connection to other variables as defined by different protocols.
    */
@@ -497,16 +421,12 @@ Widget.propTypes = {
    *  If not defined it uses the custom units as defined by the units prop.
    */
 
-
   usePvUnits: PropTypes.bool,
   /**
    * Directive to use PV's string values.
    */
   useStringValue: PropTypes.bool,
 
-
-
-  
   /**
    * If defined, then the string representation of the number can be formatted
    * using the mathjs format function
@@ -522,7 +442,7 @@ Widget.propTypes = {
    * Custom off color to be used, must be derived from Material UI theme color's.
    */
   offColor: PropTypes.string,
-  
+
   /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
   pv: PropTypes.string,
   /** Array of the process variables, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
@@ -541,16 +461,16 @@ Widget.propTypes = {
   /**
    * Tooltip Text
    */
-  tooltip:PropTypes.string,
+  tooltip: PropTypes.string,
   /**
    * Directive to show the tooltip
    */
-  showTooltip:PropTypes.bool,
+  showTooltip: PropTypes.bool,
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
 
-  tooltipProps:PropTypes.object,
+  tooltipProps: PropTypes.object,
   /**
    * When receiving a PV storing an array of values users can choose a subset of these value.
    * Registers accept the indexes of the registers to effectively show.
@@ -583,17 +503,16 @@ Widget.propTypes = {
  * Default props.definition for all widgets linked to
  * PVs storing analog values.
  */
-// static defaultProps=WrappedComponent.defaultProps;
-Widget.defaultProps = {
+WidgetSinglePV.defaultProps = {
   disabled: false,
   onColor: "primary",
   offColor: "default",
-  showTooltip:false,
+  showTooltip: false,
   useMetadata: true,
-  tooltip:"",
-  writeOutputValueToAllpvs:false,
+  tooltip: "",
+  writeOutputValueToAllpvs: false,
   alignHorizontal: false,
   stretch: true,
 };
 
-export default Widget
+export default WidgetSinglePV;

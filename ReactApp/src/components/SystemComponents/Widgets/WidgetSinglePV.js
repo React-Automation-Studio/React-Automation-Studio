@@ -30,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
   disconnectedIconForm: { fontSize: "inherit", whiteSpace: "nowrap" },
 }));
+
 /**
  * The Widget component creates standard properties,
  * state variables and callbacks to manage the behaviour
@@ -40,15 +41,11 @@ const useStyles = makeStyles((theme) => ({
  * that can be replaced by the values defined in the macros prop.
  **/
 function WidgetSinglePV(props) {
+  if (props.pv === undefined) console.log("sono undefined");
   const classes = useStyles();
   const { debug, disabled: userDisabled, disableProbe, numberFormat } = props;
 
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [focus, setFocus] = useState(false);
-  const [openContextMenu, setOpenContextMenu] = useState(false);
-  const [contextPVs, setContextPVs] = useState([]);
-  const [pvs, setPvs] = useState([]);
-  const [pv, setPv] = useState({
+  const defaultPV = {
     value: 0,
     label: "",
     pvName: "",
@@ -60,7 +57,20 @@ function WidgetSinglePV(props) {
     severity: 0,
     enum_strs: [],
     units: "",
-  });
+  };
+  let defaultPVs;
+  if (props.pvs !== undefined) {
+    defaultPVs = props.pvs.map(() => defaultPV);
+  } else {
+    defaultPVs = [];
+  }
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [focus, setFocus] = useState(false);
+  const [openContextMenu, setOpenContextMenu] = useState(false);
+  const [contextPVs, setContextPVs] = useState([]);
+  const [pvs, setPvs] = useState(defaultPVs);
+  const [pv, setPv] = useState(defaultPV);
 
   const alarmSeverity = useAlarmSeverity(props, pv);
   const enumStrings = useEnumStrings(props, pv);
@@ -208,7 +218,7 @@ function WidgetSinglePV(props) {
       pvsData: pvs,
     });
   }
-  
+
   useEffect(() => {
     if (typeof props.usePrecision !== "undefined") {
       console.warn(
@@ -217,83 +227,53 @@ function WidgetSinglePV(props) {
     }
   }, [props]);
 
-  const getPvs = (
-    pvArray,
-    widgetProps,
-    prevState,
-    setState,
-    newValueTrigger,
-    outputValue
-  ) => {
-    // console.log(pvArray, widgetProps)
-    let pvs = [];
-    if (typeof pvArray !== "undefined") {
-      pvArray.forEach((item, index) => {
-        let pv;
-        let props;
-        if (typeof item === Object) {
-          pv = item.pv;
-          props = item.props;
-        } else {
-          pv = item;
-          props = widgetProps;
-        }
-        pvs.push(
-          <PV
-            key={index.toString()}
-            pv={pv}
-            maxPv={props.maxPv}
-            minPv={props.minPv}
-            min={props.min}
-            max={props.max}
-            usePvMinMax={props.usePvMinMax}
-            unitsPv={props.unitsPv}
-            usePvUnits={props.usePvUnits}
-            alarmPv={props.alarmPv}
-            labelPv={props.labelPv}
-            alarmSensitive={props.alarmSensitive}
-            usePvLabel={props.usePvLabel}
-            usePvPrecision={props.usePvPrecision}
-            prec={props.prec}
-            precPv={props.precPv}
-            useMetadata={props.useMetadata}
-            macros={props.macros}
-            newValueTrigger={newValueTrigger}
-            outputValue={outputValue}
-            useStringValue={props.useStringValue}
-            initialLocalVariableValue={props.initialLocalVariableValue}
-            debug={debug}
-            pvData={(data) =>
-              setState((prevState) => {
-                let state = [...prevState];
-                state[index] = data;
-                return state;
-              })
-            }
-            name={props.name}
-          />
-        );
-      });
-      return pvs;
-    } else {
-      return [];
-    }
-  };
-
-  const childPvs = getPvs(
-    props.pvs,
-    props,
-    pvs,
-    setPvs,
-    props.writeOutputValueToAllpvs ? newValueTrigger : undefined,
-    props.writeOutputValueToAllpvs ? outputValue : undefined
-  );
-
   const Tag = props.svgWidget ? "g" : "div";
   const divStyle = {
     width: "100%",
     height: "100%",
   };
+
+  let childPvs;
+  if (props.pvs !== undefined) {
+    childPvs = props.pvs.map((item, index) => {
+      const handleData = (data) => {
+        let newData = [...pvs];
+        newData[index] = data;
+        setPvs(newData);
+      };
+      return (
+        <PV
+          key={index.toString()}
+          pv={item}
+          maxPv={props.maxPv}
+          minPv={props.minPv}
+          min={props.min}
+          max={props.max}
+          usePvMinMax={props.usePvMinMax}
+          unitsPv={props.unitsPv}
+          usePvUnits={props.usePvUnits}
+          alarmPv={props.alarmPv}
+          labelPv={props.labelPv}
+          alarmSensitive={props.alarmSensitive}
+          usePvLabel={props.usePvLabel}
+          usePvPrecision={props.usePvPrecision}
+          prec={props.prec}
+          precPv={props.precPv}
+          useMetadata={props.useMetadata}
+          macros={props.macros}
+          newValueTrigger={
+            props.writeOutputValueToAllpvs ? newValueTrigger : undefined
+          }
+          outputValue={props.writeOutputValueToAllpvs ? outputValue : undefined}
+          useStringValue={props.useStringValue}
+          initialLocalVariableValue={props.initialLocalVariableValue}
+          debug={debug}
+          pvData={handleData}
+          name={props.name}
+        />
+      );
+    });
+  }
 
   return (
     <Tooltip {...tooltipProps}>
@@ -311,6 +291,7 @@ function WidgetSinglePV(props) {
     </Tooltip>
   );
 }
+
 /**
  * Props definition for all widgets linked to PVs storing
  * analog values.
@@ -319,10 +300,11 @@ WidgetSinglePV.propTypes = {
   /**
    * Directive to use the  alarm severity status to alter the fields background color.
    */
-
   alarmSensitive: PropTypes.bool,
   /**
-   * Custom PV to define the alarm severity to be used, alarmSensitive must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+   * Custom PV to define the alarm severity to be used, 
+   * alarmSensitive must be set to `true` and useMetadata to `false`, 
+   * NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
    */
   alarmPv: PropTypes.string,
   /**
@@ -344,7 +326,9 @@ WidgetSinglePV.propTypes = {
    */
   label: PropTypes.string,
   /**
-   * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+   * Custom PV to define the units to be used, 
+   * usePvLabel must be set to `true` and useMetadata to `false`, 
+   * NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
    */
   labelPv: PropTypes.string,
   /**
@@ -357,7 +341,9 @@ WidgetSinglePV.propTypes = {
    */
   max: PropTypes.number,
   /**
-   * Custom PV to define the maximum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+   * Custom PV to define the maximum to be used, 
+   * usePvMinMax must be set to `true` and useMetadata to `false`, 
+   * NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
    */
   maxPv: PropTypes.string,
   /**
@@ -365,26 +351,31 @@ WidgetSinglePV.propTypes = {
    */
   min: PropTypes.number,
   /**
-   * Custom PV to define the minimum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+   * Custom PV to define the minimum to be used, 
+   * usePvMinMax must be set to `true` and useMetadata to `false`, 
+   * NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
    */
   minPv: PropTypes.string,
   /**
-   * when writing to the  pv's output value, increment newValueTrigger to tell the pv component emit the output value to the process variable.
+   * when writing to the  pv's output value, 
+   * increment newValueTrigger to tell the pv component emit the 
+   * output value to the process variable.
    */
-
   prec: PropTypes.number,
   /**
-   * Custom PV to define the precision to be used, usePvPrecision must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+   * Custom PV to define the precision to be used, 
+   * usePvPrecision must be set to `true` and useMetadata to `false`, 
+   * NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
    */
   precPv: PropTypes.string,
-
   /**
    * Custom units to be used, if usePvUnits is not defined.
    */
-
   units: PropTypes.string,
   /**
-   * Custom PV to define the units to be used, usePvUnits must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+   * Custom PV to define the units to be used, 
+   * usePvUnits must be set to `true` and useMetadata to `false`, 
+   * NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
    */
   unitsPv: PropTypes.string,
   /**
@@ -395,7 +386,8 @@ WidgetSinglePV.propTypes = {
   usePvLabel: PropTypes.bool,
   /**
    * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver.
-   * The pyEpics metadata is unfortunately static and the values used will be the initial values that pvserver receives when it connects the first time.
+   * The pyEpics metadata is unfortunately static and the values used will be 
+   * the initial values that pvserver receives when it connects the first time.
    * This is sufficient in most cases except when the user wants to dynamically update the metaData.
    * In this case a direct connection can be made to all the pv fields by setting useMetadata to false.
    * If any of the metadata pvs are defined i.e unitsPv then the PV makes a new data  connection to this alternate pv and will
@@ -420,13 +412,11 @@ WidgetSinglePV.propTypes = {
    * Directive to use the units contained in the   pv metdata's EGU field or unitsPv.
    *  If not defined it uses the custom units as defined by the units prop.
    */
-
   usePvUnits: PropTypes.bool,
   /**
    * Directive to use PV's string values.
    */
   useStringValue: PropTypes.bool,
-
   /**
    * If defined, then the string representation of the number can be formatted
    * using the mathjs format function
@@ -442,7 +432,6 @@ WidgetSinglePV.propTypes = {
    * Custom off color to be used, must be derived from Material UI theme color's.
    */
   offColor: PropTypes.string,
-
   /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
   pv: PropTypes.string,
   /** Array of the process variables, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
@@ -469,7 +458,6 @@ WidgetSinglePV.propTypes = {
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-
   tooltipProps: PropTypes.object,
   /**
    * When receiving a PV storing an array of values users can choose a subset of these value.

@@ -76,11 +76,11 @@ const Widget = (props) => {
 
   const alarmSeverity = useAlarmSeverity(props, pv);
   const enumStrings = useEnumStrings(props, pv);
-  const initialized = useInitialized(props, pv, pvs);
+  const initialized = useInitialized([pv, ...pvs]);
   const label = useLabel(props, pv);
   const { min, max } = useMinMax(props, pv); 
   const prec = usePrec(props, pv);
-  const readOnly = useReadOnly(props, pv, pvs); 
+  const readOnly = useReadOnly(props, [pv, ...pvs]); 
   const units = useUnits(props, pv);
 
   const disabled = !initialized || readOnly || userDisabled;

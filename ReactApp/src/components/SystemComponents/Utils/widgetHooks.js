@@ -40,22 +40,15 @@ const useEnumStrings = (props, pv) => {
   return enumStrings;
 };
 
-const useInitialized = (props, pv, pvs) => {
-  const { pv: userPv, pvs: userPvs } = props;
-  const { initialized: pvInitialized } = pv;
+const useInitialized = (pvs) => {
   const [initialized, setInitialized] = useState(false);
   useEffect(() => {
-    if (userPv) {
-      setInitialized(pvInitialized);
-    }
-    if (userPvs) {
-      let init = true;
-      pvs.forEach((item) => {
-        init = init && item.initialized;
-      });
-      setInitialized(init);
-    }
-  }, [userPv, userPvs, pvInitialized, pvs]);
+    let init = true;
+    pvs.forEach((item) => {
+      init = init && item.initialized;
+    });
+    setInitialized(init);
+  }, [pvs]);
   return initialized;
 };
 
@@ -104,22 +97,16 @@ const usePrec = (props, pv) => {
   return prec;
 };
 
-const useReadOnly = (props, pv, pvs) => {
-  const { readOnly: userReadOnly, pv: userPv, pvs: userPvs } = props;
-  const { readOnly: pvReadOnly } = pv;
+const useReadOnly = (props, pvs) => {
+  const { readOnly: userReadOnly } = props;
   const [readOnly, setReadOnly] = useState(true);
   useEffect(() => {
     let ro = userReadOnly;
-    if (userPv) {
-      ro = ro || pvReadOnly;
-    }
-    if (userPvs) {
-      pvs.forEach((item) => {
-        ro = ro || item.readOnly;
-      });
-    }
+    pvs.forEach((item) => {
+      ro = ro || item.readOnly;
+    });
     setReadOnly(ro);
-  }, [userPv, userPvs, userReadOnly, pvReadOnly, pvs]);
+  }, [userReadOnly, pvs]);
   return readOnly;
 };
 

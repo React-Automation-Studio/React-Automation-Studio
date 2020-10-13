@@ -7,9 +7,9 @@ import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Paper from '@material-ui/core/Paper';
 import DateFnsUtils from '@date-io/date-fns';
 import formatISO from 'date-fns/formatISO';
-import { subHours, subSeconds, subMinutes, subDays, subWeeks, } from 'date-fns';
+import { subHours, subSeconds, subMinutes, subDays, subWeeks, differenceInSeconds } from 'date-fns';
 import PV from '../SystemComponents/PV'
-import {replaceMacros} from '../SystemComponents/Utils/macroReplacement';
+import { replaceMacros } from '../SystemComponents/Utils/macroReplacement';
 import { makeStyles } from '@material-ui/core/styles';
 import { useTheme } from '@material-ui/core/styles';
 import { DateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
@@ -106,27 +106,33 @@ const useArchiverDataHook = (props) => {
 }
 const ArchiverData = (props) => {
 
-    // const calcBin=(pv,from,to,maxNumberOfSamples,raw)=>{
-    //     let dif =differenceInSeconds(to,from);
-    //     if(raw){
+    // console.log("maxNumberOfSamples", props.maxNumberOfSamples)
+    const calcBin = (pv, from, to, maxNumberOfSamples, raw) => {
+        // console.log("calcBinmaxNumberOfSamples", maxNumberOfSamples)
 
-    //     }
-    //     else if (dif>maxNumberOfSamples){
-    //        let binSizeInSeconds=Math.ceil(dif/maxNumberOfSamples)
-    //        let query='lastSample'+binSizeInSeconds+'('+pv+')'
-    //       // console.log(query)
-    //        return(query)
+        let dif = differenceInSeconds(to, from);
+        // console.log("calcBinDif", dif)
+        if (raw) {
 
-    //     }
-    //     else{
-    //         return (pv)
-    //     }
-    // }
+        }
+        else if (dif > maxNumberOfSamples) {
+            let binSizeInSeconds = Math.ceil(dif / maxNumberOfSamples)
+
+            // console.log("calcBinDifLarge", "pv", pv, maxNumberOfSamples, "dif", dif, "binSizeInSeconds", binSizeInSeconds)
+            let query = 'mean_' + binSizeInSeconds + '(' + pv + ')'
+            // console.log("calcBinQuery", query)
+            return (query)
+
+        }
+        else {
+            return (pv)
+        }
+    }
 
     const data = useArchiverDataHook({
-        archiverURL: 'arch://'+props.archiver+':request:' + JSON.stringify({
-            //pv: calcBin(props.pv,props.from,props.to,props.maxNumberOfSamples),
-            pv: props.pv,
+        archiverURL: 'arch://' + props.archiver + ':request:' + JSON.stringify({
+            pv: calcBin(props.pv, props.from, props.to, props.maxNumberOfSamples),
+            //pv: props.pv,
             options: {
                 from: formatISO(props.from),
                 to: formatISO(props.to),
@@ -182,7 +188,7 @@ const ArchiverData = (props) => {
 
     useEffect(() => {
         props.archData(dataXY);
-        console.log(dataXY)
+   //     console.log('data', dataXY)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dataXY])
 
@@ -212,15 +218,36 @@ const ArchiverDataViewer = (props) => {
                     key={index.toString()}
                     pv={item.pv}
                     macros={props.macros}
-                    pvData={(pv) => setPvs(prePvs => {
-                        let newPvs = [...prePvs]
+                    pvData={(pv) => {
 
-                        newPvs[index] = pv;
-                        newPvs[index]['pvname'] = replaceMacros(item.pv,props.macros);
-                        return newPvs
+                        if (pvs[index]) {
+                            if (pvs[index].initialized !== pv.initialized) {
+                                setPvs(prePvs => {
+                                    let newPvs = [...prePvs]
+
+                                    newPvs[index] = {};
+                                    newPvs[index]['initialized'] = pv.initialized;
+                                    newPvs[index]['pvname'] = replaceMacros(item.pv, props.macros);
+                                    return newPvs
+                                }
+                                )
+                            }
+
+                        }
+                        else {
+                            setPvs(prePvs => {
+                                let newPvs = [...prePvs]
+
+                                newPvs[index] = {};
+                                newPvs[index]['initialized'] = pv.initialized;
+                                newPvs[index]['pvname'] = replaceMacros(item.pv, props.macros);
+                                return newPvs
+                            }
+                            )
+                        }
 
                     }
-                    )}
+                }
                 />)
         })
         return newPvs
@@ -277,7 +304,11 @@ const ArchiverDataViewer = (props) => {
         }
         let intervalId;
         if (live) {
-            intervalId = setInterval(updateToDate, props.pollingRatePeriod ? (props.pollingRatePeriod > 1000 ? props.pollingRatePeriod : 1000) : 1000);
+            let dif = differenceInSeconds(selectedToDate, selectedFromDate);
+          //  console.log("dif", dif)
+            let pollingRatePeriod = dif < 1000 ? 1000 : 1000 * Math.ceil(dif / 17519);
+         //   console.log("pollingRatePeriod", pollingRatePeriod)
+            intervalId = setInterval(updateToDate, props.pollingRatePeriod ? (props.pollingRatePeriod > 1000 ? props.pollingRatePeriod : 1000) : pollingRatePeriod);
 
 
         }
@@ -285,7 +316,7 @@ const ArchiverDataViewer = (props) => {
         return () => {
             clearInterval(intervalId)
         }
-    }, [live, fromButton,props.pollingRatePeriod])
+    }, [live, fromButton, props.pollingRatePeriod])
 
 
     const handleOnClick30s = () => {
@@ -378,6 +409,7 @@ const ArchiverDataViewer = (props) => {
 
     useEffect(() => {
         const handleResize = () => {
+       //     console.log("handleResize")
             if (paperRef.current) {
 
                 setHeight(paperRef.current.offsetHeight)
@@ -412,7 +444,7 @@ const ArchiverDataViewer = (props) => {
             let newDomain = [increment * (numberOfyAxes - 1), 1]
 
             let index = 0;
-            for (let i = numberOfyAxes-1; i >= 0; i--) {
+            for (let i = numberOfyAxes - 1; i >= 0; i--) {
                 newYPositions[index] = i * increment;
                 index++;
 
@@ -425,7 +457,7 @@ const ArchiverDataViewer = (props) => {
             setYPositions([0])
             setDomain([0, 1])
         }
-         // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [width])
 
 
@@ -494,14 +526,14 @@ const ArchiverDataViewer = (props) => {
 
 
 
-    let legend = props.showLegend===true?{
+    let legend = props.showLegend === true ? {
         legend: isMobile ? {
 
             orientation: 'h',
             x: 0,
             y: 1.1
         } : undefined
-    }:{}
+    } : {}
     let layout =
     {
         title: props.title,
@@ -532,26 +564,26 @@ const ArchiverDataViewer = (props) => {
         paper_bgcolor: theme.palette.background.paper,
 
 
-     ...legend,
-     showlegend: props.showLegend,
+        ...legend,
+        showlegend: props.showLegend,
 
 
     }
     // if (props.debug) {
     //     console.log(layout)
     // }
-
-
+    // console.log("render")
+    // console.log(width)
     return (
         <Paper ref={paperRef} style={{ width: props.width, paddingBottom: 8 }}>
             {pvConnections()}
             {props.traces.map((trace, index) => (
                 <ArchiverData
                     key={index.toString()}
-                    //maxNumberOfSamples={width*10}
+                    maxNumberOfSamples={width * 10}
 
                     archiver={props.archiver}
-                    pv={replaceMacros(trace.pv,props.macros)}
+                    pv={replaceMacros(trace.pv, props.macros)}
                     from={selectedFromDate}
                     to={selectedToDate}
                     parameters={"&donotchunk"}
@@ -709,13 +741,41 @@ const ArchiverDataViewer = (props) => {
             </Accordion>}
 
             {(width !== null) && (height !== null) && <div style={{ width: width, height: props.height, background: theme.palette.background.paper, paddingTop: 8, paddingBottom: 8 }}
+            onContextMenu={props.disableContextMenu ? undefined : handleToggleContextMenu}
+                // onClickCapture={(event)=>{
+                //     console.log("click",event.button)
+                //     // if (event.button !== 0) {
+                //     //     console.log("rightlcick")
+                //     //     event.preventDefault()
+                //     //    return;
+                //     //  }
 
-                onContextMenu={props.disableContextMenu ? undefined : handleToggleContextMenu}
+                // }}
+                // onContextMenuCapture={(event)=>{
+                //     console.log("contextMenu",event.button)
+                //     if (event.button !== 0) {
+                //         console.log("rightlcick")
+                //         event.preventDefault()
+                //        return;
+                //      }
+
+                // }}
+                onPointerDownCapture={(event)=>{
+                    console.log("PointerDown",event.button)
+                    if (event.button !== 0) {
+                        console.log("rightlcick")
+                        event.preventDefault()
+                       return;
+                     }
+
+                }}
             >
                 <Plot
+
                     config={props.displayModeBar ? {
                         "displaylogo": false,
                         scrollZoom: false,
+                        doubleclick:false,
                         displayModeBar: props.displayModeBar,
                         toImageButtonOptions: {
                             format: 'svg'
@@ -742,7 +802,7 @@ const ArchiverDataViewer = (props) => {
                             return ({
                                 x: pvData.x,
                                 y: pvData.y,
-                                name: props.traces[index].name ? props.traces[index].name : replaceMacros(props.traces[index].pv,props.macros),
+                                name: props.traces[index].name ? props.traces[index].name : replaceMacros(props.traces[index].pv, props.macros),
                                 type: props.traces[index].type ? props.traces[index].type : 'scatter',
                                 mode: props.traces[index].mode ? props.traces[index].mode : 'lines',
                                 marker: { color: props.traces[index].color ? props.traces[index].color : theme.palette.reactVis.lineColors[index] },
@@ -760,7 +820,7 @@ const ArchiverDataViewer = (props) => {
                             return ({
                                 x: pvData.x,
                                 y: pvData.y,
-                                name: props.traces[index].name ? props.traces[index].name : replaceMacros(props.traces[index].pv,props.macros),
+                                name: props.traces[index].name ? props.traces[index].name : replaceMacros(props.traces[index].pv, props.macros),
                                 type: props.traces[index].type ? props.traces[index].type : 'scatter',
                                 mode: props.traces[index].mode ? props.traces[index].mode : 'lines',
                                 marker: { color: props.traces[index].color ? props.traces[index].color : theme.palette.reactVis.lineColors[index] },
@@ -770,28 +830,29 @@ const ArchiverDataViewer = (props) => {
 
                         }
                     })}
-                    layout={{ ...layout,}}
+                    layout={{ ...layout, }}
 
 
                 />
-                <ContextMenu
-                    disableProbe={props.disableProbe}
-                    open={openContextMenu}
-                    pvs={pvs}
-                    handleClose={handleContextMenuClose}
-                    anchorEl={anchorEl}
-                    anchorOrigin={{
-                        vertical: "bottom",
-                        horizontal: "center",
-                    }}
-                    transformOrigin={{
-                        vertical: "top",
-                        horizontal: "center",
-                    }}
-                    probeType={props.readOnly ? "readOnly" : undefined}
-                />
+                     <ContextMenu
+                disableProbe={props.disableProbe}
+                open={openContextMenu}
+                pvs={pvs}
+                handleClose={handleContextMenuClose}
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "center",
+                }}
+                transformOrigin={{
+                    vertical: "top",
+                    horizontal: "center",
+                }}
+                probeType={props.readOnly ? "readOnly" : undefined}
+            />
 
-            </div>}
+            </div>
+          }
 
 
         </Paper>
@@ -897,7 +958,7 @@ ArchiverDataViewer.propTypes = {
 
 ArchiverDataViewer.defaultProps = {
 
-    pollingRatePeriod: 1000,
+
     width: '100%',
     height: isMobile ? '150vh' : '40vh',
     showLegend: false,

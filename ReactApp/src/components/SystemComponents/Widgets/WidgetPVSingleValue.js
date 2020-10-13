@@ -40,8 +40,7 @@ const useStyles = makeStyles((theme) => ({
  * The label, min, max, units, pv and tooltip all accept macros
  * that can be replaced by the values defined in the macros prop.
  **/
-function WidgetSinglePV(props) {
-  if (props.pv === undefined) console.log("sono undefined");
+function WidgetPVSingleValue(props) {
   const classes = useStyles();
   const { debug, disabled: userDisabled, disableProbe, numberFormat } = props;
 
@@ -296,7 +295,7 @@ function WidgetSinglePV(props) {
  * Props definition for all widgets linked to PVs storing
  * analog values.
  */
-WidgetSinglePV.propTypes = {
+WidgetPVSingleValue.propTypes = {
   /**
    * Directive to use the  alarm severity status to alter the fields background color.
    */
@@ -491,7 +490,7 @@ WidgetSinglePV.propTypes = {
  * Default props.definition for all widgets linked to
  * PVs storing analog values.
  */
-WidgetSinglePV.defaultProps = {
+WidgetPVSingleValue.defaultProps = {
   disabled: false,
   onColor: "primary",
   offColor: "default",
@@ -503,4 +502,4 @@ WidgetSinglePV.defaultProps = {
   stretch: true,
 };
 
-export default WidgetSinglePV;
+export default WidgetPVSingleValue;

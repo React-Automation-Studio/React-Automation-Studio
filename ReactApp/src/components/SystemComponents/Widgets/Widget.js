@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import WidgetSinglePV from "./WidgetSinglePV";
-import WidgetMultiplePVs from "./WidgetMultiplePVs";
+import WidgetPVSingleValue from "./WidgetPVSingleValue";
+import WidgetPVArray from "./WidgetPVArray";
 
 /**
  * The Widget component creates standard properties,
@@ -13,11 +13,11 @@ import WidgetMultiplePVs from "./WidgetMultiplePVs";
  * that can be replaced by the values defined in the macros prop.
  **/
 function Widget(props) {
-  const { pv } = props;
-  if (pv !== undefined) {
-    return <WidgetSinglePV {...props} />;
+  const { showAsArray } = props;
+  if (showAsArray) {
+    return <WidgetPVArray {...props} /> 
   } else {
-    return <WidgetMultiplePVs {...props} />;
+    return <WidgetPVSingleValue {...props} />;
   }
 }
 

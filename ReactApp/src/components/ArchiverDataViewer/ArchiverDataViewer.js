@@ -22,7 +22,8 @@ import Grid from '@material-ui/core/Grid';
 import PropTypes from "prop-types";
 import { isMobile } from 'react-device-detect';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-
+import TextField from '@material-ui/core/TextField';
+import InputAdornment from '@material-ui/core/InputAdornment';
 const useStyles = makeStyles((theme) => ({
     container: {
         display: 'flex',
@@ -119,7 +120,8 @@ const ArchiverData = (props) => {
             let binSizeInSeconds = Math.ceil(dif / maxNumberOfSamples)
 
             // console.log("calcBinDifLarge", "pv", pv, maxNumberOfSamples, "dif", dif, "binSizeInSeconds", binSizeInSeconds)
-            let query = 'mean_' + binSizeInSeconds + '(' + pv + ')'
+           // let query = isNaN(binSizeInSeconds) ? 'mean_' + binSizeInSeconds + '(' + pv + ')' : 'mean(' + pv + ')'
+            let query = 'mean_' + binSizeInSeconds + '(' + pv + ')' ;
             // console.log("calcBinQuery", query)
             return (query)
 
@@ -188,7 +190,7 @@ const ArchiverData = (props) => {
 
     useEffect(() => {
         props.archData(dataXY);
-   //     console.log('data', dataXY)
+        //     console.log('data', dataXY)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dataXY])
 
@@ -247,18 +249,68 @@ const ArchiverDataViewer = (props) => {
                         }
 
                     }
-                }
+                    }
                 />)
         })
         return newPvs
 
     }
+    const initSelectedFromDate = () => {
+        if (typeof props.from !== 'undefined') {
+            return new Date(props.from)
 
-    const [selectedFromDate, setSelectedFromDate] = useState(props.from ? new Date(props.from) : subHours(new Date(), 1))
+        }
+        else if (typeof props.fromTimeOffset !== 'undefined') {
+            let newDate;
+            let date = new Date();
+            switch (props.fromTimeOffset) {
+                case "30s":
+                    newDate = subSeconds(date, 30);
+                    break;
+                case "1m":
+                    newDate = subMinutes(date, 1);
+                    break;
+                case "5m":
+                    newDate = subMinutes(date, 5);
+                    break;
+                case "30m":
+                    newDate = subMinutes(date, 30);
+                    break;
+                case "1h":
+                    newDate = subHours(date, 1);
+                    break;
+                case "2h":
+                    newDate = subHours(date, 2);
+                    break;
+                case "12h":
+                    newDate = subHours(date, 12);
+                    break;
+                case "1d":
+                    newDate = subDays(date, 1);
+                    break;
+                case "2d":
+                    newDate = subDays(date, 2);
+                    break;
+                case "1w":
+                    newDate = subWeeks(date, 1);
+                    break;
+                default:
+                    newDate = subHours(date, 1);
+            }
+            return newDate
+        }
+        else {
+            return subHours(new Date(), 1)
+        }
+
+
+    }
+
+    const [selectedFromDate, setSelectedFromDate] = useState(initSelectedFromDate())
     const [selectedToDate, setSelectedToDate] = useState(props.to ? new Date(props.to) : new Date())
 
     const [live, setLive] = useState(props.livePolling === true);
-
+    const [livePollingRatePeriod, setLivePollingRatePeriod] = useState(props.pollingRatePeriod);
 
     const [fromButton, setFromButton] = useState(props.fromTimeOffset ? props.fromTimeOffset : 'none');
 
@@ -305,10 +357,12 @@ const ArchiverDataViewer = (props) => {
         let intervalId;
         if (live) {
             let dif = differenceInSeconds(selectedToDate, selectedFromDate);
-          //  console.log("dif", dif)
+            //  console.log("dif", dif)
             let pollingRatePeriod = dif < 1000 ? 1000 : 1000 * Math.ceil(dif / 17519);
-         //   console.log("pollingRatePeriod", pollingRatePeriod)
-            intervalId = setInterval(updateToDate, props.pollingRatePeriod ? (props.pollingRatePeriod > 1000 ? props.pollingRatePeriod : 1000) : pollingRatePeriod);
+            let newPollingRatePeriod=  props.pollingRatePeriod ? (props.pollingRatePeriod > 1000 ? props.pollingRatePeriod : 1000) : pollingRatePeriod;
+            setLivePollingRatePeriod(newPollingRatePeriod);
+            //   console.log("pollingRatePeriod", pollingRatePeriod)
+            intervalId = setInterval(updateToDate, newPollingRatePeriod);
 
 
         }
@@ -409,7 +463,7 @@ const ArchiverDataViewer = (props) => {
 
     useEffect(() => {
         const handleResize = () => {
-       //     console.log("handleResize")
+            //     console.log("handleResize")
             if (paperRef.current) {
 
                 setHeight(paperRef.current.offsetHeight)
@@ -578,7 +632,7 @@ const ArchiverDataViewer = (props) => {
         <Paper ref={paperRef} style={{ width: props.width, paddingBottom: 8 }}>
             {pvConnections()}
             {props.traces.map((trace, index) => (
-                <ArchiverData
+                (width !== null) && (height !== null) && <ArchiverData
                     key={index.toString()}
                     maxNumberOfSamples={width * 10}
 
@@ -727,10 +781,24 @@ const ArchiverDataViewer = (props) => {
                             >
 
 
-                                <Grid item xs={1} >
+                               <Grid item xs={6} >
                                     <Button classes={{ root: classes.buttonRoot }} variant={'contained'} color={live ? 'primary' : 'default'} onClick={() => setLive(live === true ? false : true)}>
                                         Live
                     </Button>
+                                </Grid>
+                                <Grid item xs={6} >
+                                <TextField
+                                label="Refresh Rate"
+                                variant="outlined"
+                                value={(livePollingRatePeriod/1000)}
+
+                                InputProps={{
+                                    readOnly: true,
+                                    endAdornment:<InputAdornment position="end">sec</InputAdornment>
+                                  }}
+                                />
+
+
                                 </Grid>
 
                             </Grid>
@@ -741,7 +809,7 @@ const ArchiverDataViewer = (props) => {
             </Accordion>}
 
             {(width !== null) && (height !== null) && <div style={{ width: width, height: props.height, background: theme.palette.background.paper, paddingTop: 8, paddingBottom: 8 }}
-            onContextMenu={props.disableContextMenu ? undefined : handleToggleContextMenu}
+                onContextMenu={props.disableContextMenu ? undefined : handleToggleContextMenu}
                 // onClickCapture={(event)=>{
                 //     console.log("click",event.button)
                 //     // if (event.button !== 0) {
@@ -760,13 +828,13 @@ const ArchiverDataViewer = (props) => {
                 //      }
 
                 // }}
-                onPointerDownCapture={(event)=>{
-                    console.log("PointerDown",event.button)
+                onPointerDownCapture={(event) => {
+
                     if (event.button !== 0) {
-                        console.log("rightlcick")
+
                         event.preventDefault()
-                       return;
-                     }
+                        return;
+                    }
 
                 }}
             >
@@ -775,7 +843,7 @@ const ArchiverDataViewer = (props) => {
                     config={props.displayModeBar ? {
                         "displaylogo": false,
                         scrollZoom: false,
-                        doubleclick:false,
+                        doubleclick: false,
                         displayModeBar: props.displayModeBar,
                         toImageButtonOptions: {
                             format: 'svg'
@@ -834,25 +902,25 @@ const ArchiverDataViewer = (props) => {
 
 
                 />
-                     <ContextMenu
-                disableProbe={props.disableProbe}
-                open={openContextMenu}
-                pvs={pvs}
-                handleClose={handleContextMenuClose}
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "center",
-                }}
-                transformOrigin={{
-                    vertical: "top",
-                    horizontal: "center",
-                }}
-                probeType={props.readOnly ? "readOnly" : undefined}
-            />
+                <ContextMenu
+                    disableProbe={props.disableProbe}
+                    open={openContextMenu}
+                    pvs={pvs}
+                    handleClose={handleContextMenuClose}
+                    anchorEl={anchorEl}
+                    anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "center",
+                    }}
+                    transformOrigin={{
+                        vertical: "top",
+                        horizontal: "center",
+                    }}
+                    probeType={props.readOnly ? "readOnly" : undefined}
+                />
 
             </div>
-          }
+            }
 
 
         </Paper>

@@ -158,6 +158,34 @@ function WidgetPVSingleValue(props) {
     }
   }, [commitChange, min, max, prec, numberFormat, newValueTrigger, value]);
 
+  let child;
+  if (props.component !== undefined) {
+    child = wrapComponent(props.component, {
+      ...props,
+      initialized: initialized,
+      pvName: pv.pvName,
+      value: value,
+      min: min,
+      max: max,
+      prec: prec,
+      label: label,
+      formControlLabel: formControlLabel,
+      units: units,
+      disabled: disabled,
+      readOnly: readOnly,
+      alarmSeverity: alarmSeverity,
+      enumStrs: enumStrings,
+      disconnectedIcon: disconnectedIcon,
+      handleChange: setValue,
+      handleImmediateChange: setImmediateValue,
+      handleCommitChange: () => setCommitChange(true),
+      handleFocus: () => setFocus(true),
+      handleBlur: () => setFocus(false),
+      pvData: pv,
+      pvsData: pvs,
+    });
+  }
+
   let childPv;
   if (props.pv !== undefined) {
     childPv = (
@@ -189,48 +217,6 @@ function WidgetPVSingleValue(props) {
       />
     );
   }
-
-  let child;
-  if (props.component !== undefined) {
-    child = wrapComponent(props.component, {
-      ...props,
-      initialized: initialized,
-      pvName: pv.pvName,
-      value: value,
-      min: min,
-      max: max,
-      prec: prec,
-      label: label,
-      formControlLabel: formControlLabel,
-      units: units,
-      disabled: disabled,
-      readOnly: readOnly,
-      alarmSeverity: alarmSeverity,
-      enumStrs: enumStrings,
-      disconnectedIcon: disconnectedIcon,
-      handleChange: setValue,
-      handleImmediateChange: setImmediateValue,
-      handleCommitChange: () => setCommitChange(true),
-      handleFocus: () => setFocus(true),
-      handleBlur: () => setFocus(false),
-      pvData: pv,
-      pvsData: pvs,
-    });
-  }
-
-  useEffect(() => {
-    if (typeof props.usePrecision !== "undefined") {
-      console.warn(
-        "prop usePrecision is deprecated, use the usePvPrecision and prec props instead"
-      );
-    }
-  }, [props]);
-
-  const Tag = props.svgWidget ? "g" : "div";
-  const divStyle = {
-    width: "100%",
-    height: "100%",
-  };
 
   let childPvs;
   if (props.pvs !== undefined) {
@@ -274,10 +260,19 @@ function WidgetPVSingleValue(props) {
     });
   }
 
+  const Tag = props.svgWidget ? "g" : "div";
+
+  useEffect(() => {
+    if (typeof props.usePrecision !== "undefined") {
+      console.warn(
+        "prop usePrecision is deprecated, use the usePvPrecision and prec props instead"
+      );
+    }
+  }, [props]);
+
   return (
     <Tooltip {...tooltipProps}>
       <Tag
-        style={props.svgWidget ? undefined : divStyle}
         onContextMenu={
           props.disableContextMenu ? undefined : handleToggleContextMenu
         }
@@ -301,8 +296,8 @@ WidgetPVSingleValue.propTypes = {
    */
   alarmSensitive: PropTypes.bool,
   /**
-   * Custom PV to define the alarm severity to be used, 
-   * alarmSensitive must be set to `true` and useMetadata to `false`, 
+   * Custom PV to define the alarm severity to be used,
+   * alarmSensitive must be set to `true` and useMetadata to `false`,
    * NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
    */
   alarmPv: PropTypes.string,
@@ -325,8 +320,8 @@ WidgetPVSingleValue.propTypes = {
    */
   label: PropTypes.string,
   /**
-   * Custom PV to define the units to be used, 
-   * usePvLabel must be set to `true` and useMetadata to `false`, 
+   * Custom PV to define the units to be used,
+   * usePvLabel must be set to `true` and useMetadata to `false`,
    * NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
    */
   labelPv: PropTypes.string,
@@ -340,8 +335,8 @@ WidgetPVSingleValue.propTypes = {
    */
   max: PropTypes.number,
   /**
-   * Custom PV to define the maximum to be used, 
-   * usePvMinMax must be set to `true` and useMetadata to `false`, 
+   * Custom PV to define the maximum to be used,
+   * usePvMinMax must be set to `true` and useMetadata to `false`,
    * NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
    */
   maxPv: PropTypes.string,
@@ -350,20 +345,20 @@ WidgetPVSingleValue.propTypes = {
    */
   min: PropTypes.number,
   /**
-   * Custom PV to define the minimum to be used, 
-   * usePvMinMax must be set to `true` and useMetadata to `false`, 
+   * Custom PV to define the minimum to be used,
+   * usePvMinMax must be set to `true` and useMetadata to `false`,
    * NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
    */
   minPv: PropTypes.string,
   /**
-   * when writing to the  pv's output value, 
-   * increment newValueTrigger to tell the pv component emit the 
+   * when writing to the  pv's output value,
+   * increment newValueTrigger to tell the pv component emit the
    * output value to the process variable.
    */
   prec: PropTypes.number,
   /**
-   * Custom PV to define the precision to be used, 
-   * usePvPrecision must be set to `true` and useMetadata to `false`, 
+   * Custom PV to define the precision to be used,
+   * usePvPrecision must be set to `true` and useMetadata to `false`,
    * NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
    */
   precPv: PropTypes.string,
@@ -372,8 +367,8 @@ WidgetPVSingleValue.propTypes = {
    */
   units: PropTypes.string,
   /**
-   * Custom PV to define the units to be used, 
-   * usePvUnits must be set to `true` and useMetadata to `false`, 
+   * Custom PV to define the units to be used,
+   * usePvUnits must be set to `true` and useMetadata to `false`,
    * NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
    */
   unitsPv: PropTypes.string,
@@ -385,7 +380,7 @@ WidgetPVSingleValue.propTypes = {
   usePvLabel: PropTypes.bool,
   /**
    * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver.
-   * The pyEpics metadata is unfortunately static and the values used will be 
+   * The pyEpics metadata is unfortunately static and the values used will be
    * the initial values that pvserver receives when it connects the first time.
    * This is sufficient in most cases except when the user wants to dynamically update the metaData.
    * In this case a direct connection can be made to all the pv fields by setting useMetadata to false.
@@ -458,32 +453,6 @@ WidgetPVSingleValue.propTypes = {
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
   tooltipProps: PropTypes.object,
-  /**
-   * When receiving a PV storing an array of values users can choose a subset of these value.
-   * Registers accept the indexes of the registers to effectively show.
-   * Order does count!
-   */
-  registers: PropTypes.arrayOf(PropTypes.number),
-  /**
-   * When receiving a PV storing an array of values users can assign a label to each register
-   * or a subset of them.
-   */
-  registersLabel: PropTypes.arrayOf(PropTypes.string),
-  /**
-   * When receiving a PV storing an array of values users can set the label position for each register,
-   * or a subset of them, if the receiving components allows it.
-   */
-  registersLabelPlacement: PropTypes.oneOf(["top", "bottom", "start", "end"]),
-  /**
-   * Directive to display array elements horizontal aligned.
-   */
-  alignHorizontal: PropTypes.bool,
-  /**
-   * When alignHorizontal is true, if stretch is true
-   * all the elements are aligned into one row, otherwise
-   * they have their standard width.
-   */
-  stretch: PropTypes.bool,
 };
 
 /**

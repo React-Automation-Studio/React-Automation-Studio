@@ -781,12 +781,12 @@ const ArchiverDataViewer = (props) => {
                             >
 
 
-                               <Grid item xs={6} >
+                               <Grid item xs={12} >
                                     <Button classes={{ root: classes.buttonRoot }} variant={'contained'} color={live ? 'primary' : 'default'} onClick={() => setLive(live === true ? false : true)}>
                                         Live
                     </Button>
                                 </Grid>
-                                <Grid item xs={6} >
+                                <Grid item xs={12} >
                                 <TextField
                                 label="Refresh Rate"
                                 variant="outlined"

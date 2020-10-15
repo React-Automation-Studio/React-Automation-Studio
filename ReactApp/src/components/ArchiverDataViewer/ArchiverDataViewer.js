@@ -4,7 +4,7 @@ import ContextMenu from "../SystemComponents/ContextMenu";
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
-import Paper from '@material-ui/core/Paper';
+import Card from '@material-ui/core/Card';
 import DateFnsUtils from '@date-io/date-fns';
 import formatISO from 'date-fns/formatISO';
 import { subHours, subSeconds, subMinutes, subDays, subWeeks, differenceInSeconds } from 'date-fns';
@@ -501,7 +501,7 @@ const ArchiverDataViewer = (props) => {
         showlegend: props.showLegend,
     }
     return (
-        <Paper ref={paperRef} style={{ width: props.width, paddingBottom: 8 }}>
+        <Card ref={paperRef} style={{ width: props.width, paddingBottom: 8 }}>
             {pvConnections()}
             {props.traces.map((trace, index) => (
                 (width !== null) && (height !== null) && <ArchiverData
@@ -663,22 +663,7 @@ const ArchiverDataViewer = (props) => {
             </Accordion>}
             {(width !== null) && (height !== null) && <div style={{ width: width, height: props.height, background: theme.palette.background.paper, paddingTop: 8, paddingBottom: 8 }}
                 onContextMenu={props.disableContextMenu ? undefined : handleToggleContextMenu}
-                // onClickCapture={(event)=>{
-                //     console.log("click",event.button)
-                //     // if (event.button !== 0) {
-                //     //     console.log("rightlcick")
-                //     //     event.preventDefault()
-                //     //    return;
-                //     //  }
-                // }}
-                // onContextMenuCapture={(event)=>{
-                //     console.log("contextMenu",event.button)
-                //     if (event.button !== 0) {
-                //         console.log("rightlcick")
-                //         event.preventDefault()
-                //        return;
-                //      }
-                // }}
+
                 onPointerDownCapture={(event) => {
                     if (event.button !== 0) {
                         event.preventDefault()
@@ -720,10 +705,7 @@ const ArchiverDataViewer = (props) => {
                                 marker: { color: props.traces[index].color ? props.traces[index].color : theme.palette.reactVis.lineColors[index] },
                                 hovertemplate:
                                     "(%{y}) %{x}"
-                                //                 "%{yaxis.title.text}: %{y:$,.0f}<br>" +
-                                //                 "%{xaxis.title.text}: %{x:.0%}<br>" +
-                                //                 "Number Employed: %{marker.size:,}" +
-                                //                 "<extra></extra>"
+
                             })
                         }
                         else {
@@ -759,7 +741,7 @@ const ArchiverDataViewer = (props) => {
                 />
             </div>
             }
-        </Paper>
+        </Card>
     )
 }
 ArchiverDataViewer.propTypes = {
@@ -835,12 +817,12 @@ ArchiverDataViewer.propTypes = {
     showButtons: PropTypes.bool,
     /**
     *
-    * When enabled, new data will be polled at 1Hz. Increments the from and too dates at 1Hz
+    * When enabled, new data will be polled at 1Hz up to 12 hours of data. The polling rate period then increase linearly as to not overload the archiver
     */
     livePolling: PropTypes.bool,
     /**
     *
-    * Polling Rate Period in ms, minimum=1000 ms
+    * Polling Rate Period in ms, minimum=1000 ms. This value will also overide the linear scaling of the polling period for data queires of larger than 12 hours
     */
     pollingRatePeriod: PropTypes.number,
     /**

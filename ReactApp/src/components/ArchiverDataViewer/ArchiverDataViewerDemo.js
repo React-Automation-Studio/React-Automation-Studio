@@ -37,7 +37,7 @@ const ArchiverDataViewerDemo = (props) => {
 
             >
                 <Grid item xs={12} >
-                  <Paper elevation={theme.palette.paperElevation}>
+                  <Paper elevation={theme.palette.paperElevation} style={{padding:8}}>
                     <ArchiverDataViewer
 
                         archiver={"DEMO_ARCHIVER"}

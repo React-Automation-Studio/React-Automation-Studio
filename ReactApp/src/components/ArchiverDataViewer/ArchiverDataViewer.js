@@ -501,7 +501,7 @@ const ArchiverDataViewer = (props) => {
         showlegend: props.showLegend,
     }
     return (
-        <Card ref={paperRef} style={{ width: props.width, paddingBottom: 8 }}>
+        <div ref={paperRef} style={{ width: props.width}}>
             {pvConnections()}
             {props.traces.map((trace, index) => (
                 (width !== null) && (height !== null) && <ArchiverData
@@ -519,8 +519,8 @@ const ArchiverDataViewer = (props) => {
                     })}
                 />
             ))}
-            {props.showButtons && <Accordion elevation={0} defaultExpanded={props.defaultButtonsExpanded}>
-                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            {props.showButtons && <Accordion elevation={0} defaultExpanded={props.defaultButtonsExpanded}  style={{marginBottom:0}}>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />} >
                 </AccordionSummary>
                 <AccordionDetails>
                     <Grid
@@ -529,6 +529,7 @@ const ArchiverDataViewer = (props) => {
                         alignItems={'center'}
                         direction={'row'}
                         justify={'center'}
+
                     >
                         <Grid item xl={6} lg={'auto'} md={12} sm={12} xs={12} >
                             <Grid
@@ -661,7 +662,7 @@ const ArchiverDataViewer = (props) => {
                     </Grid>
                 </AccordionDetails>
             </Accordion>}
-            {(width !== null) && (height !== null) && <div style={{ width: width, height: props.height, background: theme.palette.background.paper, paddingTop: 8, paddingBottom: 8 }}
+            {(width !== null) && (height !== null) && <div style={{ width: width, height: props.height, background: theme.palette.background.paper,  paddingBottom: 8 }}
                 onContextMenu={props.disableContextMenu ? undefined : handleToggleContextMenu}
 
                 onPointerDownCapture={(event) => {
@@ -741,7 +742,7 @@ const ArchiverDataViewer = (props) => {
                 />
             </div>
             }
-        </Card>
+        </div>
     )
 }
 ArchiverDataViewer.propTypes = {

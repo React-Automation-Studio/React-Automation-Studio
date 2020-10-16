@@ -1151,13 +1151,7 @@ def archiverRead(message):
 
     if accessControl['userAuthorised'] :
         if "arch://" in archiverURL:
-           # print(archiverURL)
-            #pv = urllib.parse.quote("testIOC:BO1")
-            #print(pv)
-            #req = urllib.request.urlopen('http://localhost:17668/retrieval/data/getData.json?pv='+pv+'&donotchunk')
-            #data = json.load(req)
-            #print(data)
-    #        print("mongodb database connection request: ",archiverURL)
+
             str1=archiverURL.replace("arch://","")
             strings=  str1.split(':')
             try:
@@ -1169,8 +1163,6 @@ def archiverRead(message):
 
             if(len(strings)>=1):
                 archiver= strings[0];
-            #     dbName=   strings[1];
-            #     colName=  strings[2];
 
 
                 if ((len(archiver)>0)):
@@ -1179,80 +1171,51 @@ def archiverRead(message):
                         if(accessControl['permissions']['write']):
                             join_room(str(archiverURL)+'rw')
                             write_access=True
-                            #join_room(str(dbURL))
+
                         else:
                             join_room(str(archiverURL)+'ro')
                             write_access=False
-                            #join_room(str(dbURL))
-                        # try:
-                        #    print("connecting: "+archiverURL)
-                            # try:
-                            #     databaseString="mongodb://"+ str(os.environ[database])+"/"
-                            #     replicaSetName=str(os.environ[database+"_REPLICA_SET_NAME"])
-                            #     myclient = pymongo.MongoClient(databaseString,serverSelectionTimeoutMS=10,replicaSet=replicaSetName)
-                            #     # Wait for MongoClient to discover the whole replica set and identify MASTER!
-                            #     time.sleep(0.1)
-                            #     #myclient.server_info()
-                            # except pymongo.errors.ServerSelectionTimeoutError as err:
-                            #     print(err)
-                            #     return "Ack: Could not connect to MongoDB: "+str(dbURL)
 
-                            # mydb = myclient[dbName]
-
-                            # mycol=mydb[colName]
                         try:
                             pv=request['pv']
                             pv=pv.replace("pva://","")
                             pv=urllib.parse.quote(pv)
-                            #options=['options'];
+
                             fromOptions=request['options']['from']
-                            #print("options",str(request['options']))
-                            #print("fromOptions",fromOptions)
+
                             fromOptions=urllib.parse.quote(fromOptions)
                             toOptions=request['options']['to']
-                            #print("toOptions",toOptions)
+
                             toOptions=urllib.parse.quote(toOptions)
                             parameters=request['options']['parameters']
 
-                            #print(pv,fromOptions,toOptions,parameters)
+
                             URL=str(os.environ[archiver])+'/retrieval/data/getData.json?pv='+pv+'&from='+fromOptions+'&to='+toOptions+parameters
-                            #print("URL", URL)
+
                             req = urllib.request.urlopen(URL)
                             data = json.load(req)
-                            #print(data)
-                            #req = urllib.request.urlopen(archiver+'/retrieval/data/getData.json?pv='+pv+options')
-
-
-
-    #                         #for x in X:
-    #                             #print(x)
-    # #                        print("done: "+dbURL)
-
-
-    #                         data=dumps(X)
 
 
                             eventName='archiverReadData:'+archiverURL;
-    #                        print("eventName",eventName)
+
                             d={'archiverURL': archiverURL,'write_access':write_access,'data': data}
                             socketio.emit(eventName,d,str(archiverURL)+'rw',namespace='/pvServer')
                             d={'archiverURL': archiverURL,'write_access':False,'data': data}
                             socketio.emit(eventName,d,str(archiverURL)+'ro',namespace='/pvServer')
-                            return 'OK'
+                            return {'initialized':True}
                         except:
-                            print("could not connect to Archiver: ",archiverURL)
-                            return "Ack: Could not connect to Archiver: "+str(archiverURL)
-    #             else:
-    #                 print("Malformed database URL, must be in format: mongodb://databaseID:database:collection")
-            # else:
-                # print("Malformed archiver URL, must be in format: mongodb://databaseID:database:collection")
+
+                            log.info('could not connect to Archiver: : {}',archiverURL)
+                            return {'initialized':False}
+
+
 
 
 
 
 
         else:
-            print("Unknown PV type")
+             log.info('Unkwown Archiver URL: : {}',archiverURL)
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
 

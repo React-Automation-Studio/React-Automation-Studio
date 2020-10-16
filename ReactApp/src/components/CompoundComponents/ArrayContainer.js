@@ -3,16 +3,19 @@ import PropTypes from "prop-types";
 import { FormControlLabel, makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
-  item: ({ direction, numVisibleItems, itemMinWidth }) => {
+  item: ({ direction, numVisibleItems, itemMinWidth, spacing }) => {
     if (direction === "horizontal") {
       let width = parseFloat(100 / numVisibleItems).toFixed(2);
       width = Math.max(width, itemMinWidth) + "%";
       return {
         display: "inline-block",
         width: width,
+        padding: theme.spacing(spacing),
       };
     } else {
-      return {};
+      return {
+        padding: theme.spacing(spacing),
+      };
     }
   },
   container: {
@@ -54,8 +57,8 @@ function ArrayContainer(props) {
     numVisibleItems: userNumVisibleItems,
     maxItemsCount,
     itemMinWidth,
+    spacing,
   } = props;
-  //const bufferSize = 10;
   const [startIdx, setStartIdx] = useState(0);
   const [items, setItems] = useState([]);
 
@@ -71,7 +74,12 @@ function ArrayContainer(props) {
     numVisibleItems = userNumVisibleItems;
   }
 
-  const classes = useStyles({ direction, numVisibleItems, itemMinWidth });
+  const classes = useStyles({
+    direction,
+    numVisibleItems,
+    itemMinWidth,
+    spacing,
+  });
 
   useEffect(() => {
     let newItems = [];
@@ -205,12 +213,18 @@ ArrayContainer.propTypes = {
    * Min space width, in percentage, an item can occupy.
    */
   itemMinWidth: PropTypes.number,
+  /**
+   * Spacing between items. Follows the same logic as grid container's spacing.
+   * Must be a non negative integer.
+   */
+  spacing: PropTypes.number,
 };
 
 ArrayContainer.defaultProps = {
   direction: "vertical",
   labelPlacement: "top",
   itemMinWidth: 2,
+  spacing: 0,
 };
 
 export default ArrayContainer;

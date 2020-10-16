@@ -4,7 +4,7 @@ Current Release: V2.0.1
 
 React Automation Studio is a new software platform to enable the control of large scientific equipment through EPICS.
 
-The system has been containerised with Docker and version controlled as a mono-repository using Git.
+The system has been containerized with Docker and version controlled as a mono-repository using Git.
 
 
 This repository is the master repository which  contains the code base and demos for each the component and interactive UI's that depend on the demo IOC micro service.

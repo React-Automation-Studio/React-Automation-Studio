@@ -36,6 +36,11 @@ const useStyles = makeStyles((theme) => ({
     buttonRoot: {
         textTransform: 'none',
     },
+    accordianRoot: {
+        '&:before':{
+        background:'rgba(0,0,0,0)',
+        }
+    },
     '@global': {
         '.js-plotly-plot .plotly .modebar': {
             // left: '50%',
@@ -534,7 +539,7 @@ const ArchiverDataViewer = (props) => {
         <div ref={paperRef} style={{ width: props.width}}>
             {pvConnections()}
 
-            {props.showButtons && <Accordion elevation={0} defaultExpanded={props.defaultButtonsExpanded}  style={{marginBottom:0}}>
+            {props.showButtons && <Accordion classes={{root:classes.accordianRoot}} elevation={0} defaultExpanded={props.defaultButtonsExpanded}  style={{marginBottom:0}}>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />} >
                 </AccordionSummary>
                 <AccordionDetails>

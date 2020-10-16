@@ -71,7 +71,14 @@ function ArrayContainer(props) {
   } else if (maxItemsCount !== undefined) {
     maxItems = maxItemsCount;
   }
-  if (visibleItemsCount !== undefined) {
+  if (
+    visibleItemsCount !== undefined &&
+    !(
+      registers !== undefined &&
+      Array.isArray(registers) &&
+      registers.length <= visibleItemsCount
+    )
+  ) {
     numVisibleItems = visibleItemsCount;
   }
 

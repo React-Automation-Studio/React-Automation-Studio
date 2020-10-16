@@ -3,9 +3,10 @@ import PropTypes from "prop-types";
 import { FormControlLabel, makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
-  item: ({ direction, numVisibleItems }) => {
+  item: ({ direction, numVisibleItems, itemMinWidth }) => {
     if (direction === "horizontal") {
-      let width = parseFloat(100 / numVisibleItems).toFixed(2) + "%";
+      let width = parseFloat(100 / numVisibleItems).toFixed(2);
+      width = Math.max(width, itemMinWidth) + "%";
       return {
         display: "inline-block",
         width: width,
@@ -52,6 +53,7 @@ function ArrayContainer(props) {
     direction,
     numVisibleItems: userNumVisibleItems,
     maxItemsCount,
+    itemMinWidth,
   } = props;
   //const bufferSize = 10;
   const [startIdx, setStartIdx] = useState(0);
@@ -69,7 +71,7 @@ function ArrayContainer(props) {
     numVisibleItems = userNumVisibleItems;
   }
 
-  const classes = useStyles({ direction, numVisibleItems });
+  const classes = useStyles({ direction, numVisibleItems, itemMinWidth });
 
   useEffect(() => {
     let newItems = [];
@@ -199,11 +201,16 @@ ArrayContainer.propTypes = {
    * Directive to display array elements horizontally or vertically aligned.
    */
   direction: PropTypes.string,
+  /**
+   * Min space width, in percentage, an item can occupy.
+   */
+  itemMinWidth: PropTypes.number,
 };
 
 ArrayContainer.defaultProps = {
   direction: "vertical",
   labelPlacement: "top",
+  itemMinWidth: 2,
 };
 
 export default ArrayContainer;

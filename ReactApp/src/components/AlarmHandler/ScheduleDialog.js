@@ -18,6 +18,8 @@ import ScheduleIcon from '@material-ui/icons/Schedule';
 // import Slide from '@material-ui/core/Slide';
 
 import DateFnsUtils from '@date-io/date-fns';
+import { formatISO } from 'date-fns';
+
 import {
     MuiPickersUtilsProvider,
     TimePicker,
@@ -65,13 +67,26 @@ const ScheduleDialog = (props) => {
     const classes = useStyles()
     // const theme = useTheme()
 
-    const [selectedDate, handleDateChange] = useState(new Date());
+    const [startTime, setStartTime] = useState(new Date())
+    const [endTime, setEndTime] = useState(new Date())
+    const [selectedDate, handleDateChange] = useState(new Date())
 
     // console.log(theme)
 
     // const Transition = React.forwardRef(function Transition(props, ref) {
     //     return <Slide direction="left" ref={ref} {...props} />
     // })
+
+    const handleNotify = (event) => {
+        props.setDialogUserObject({ ...props.dialogUserObject, notify: event.target.checked })
+    }
+
+    const handleAllDay = (event) => {
+        props.setDialogUserObject({ ...props.dialogUserObject, allDay: event.target.checked })
+        if (!event.target.checked) {
+            console.log(formatISO(startTime))
+        }
+    }
 
     return (
         <Dialog
@@ -85,7 +100,7 @@ const ScheduleDialog = (props) => {
             <DialogTitle>{`${props.name}'s notification schedule`}</DialogTitle>
             <DialogContent>
                 <DialogContentText>
-                    Notify me all day everyday
+                    {props.userScheduleString(props.dialogUserObject)}
                 </DialogContentText>
                 <Grid
                     container
@@ -107,7 +122,10 @@ const ScheduleDialog = (props) => {
                                 <span style={{ fontSize: '1rem' }}>Notify</span>
                             </Grid>
                             <Grid item xs={8}>
-                                <Checkbox />
+                                <Checkbox
+                                    checked={props.dialogUserObject.notify}
+                                    onChange={handleNotify}
+                                />
                             </Grid>
                         </Grid>
                     </Grid>
@@ -128,46 +146,60 @@ const ScheduleDialog = (props) => {
                                 <span style={{ fontSize: '1rem' }}>All-day</span>
                             </Grid>
                             <Grid item xs={2}>
-                                <Switch />
+                                <Switch
+                                    checked={props.dialogUserObject.allDay}
+                                    onChange={handleAllDay}
+                                />
                             </Grid>
-                            <Grid item xs={6}>
-                                <Grid
-                                    container
-                                    direction="row"
-                                    justify="flex-start"
-                                    alignItems="stretch"
-                                >
-                                    <Grid item xs={3} className={classes.verticalCenter}>
-                                        From
+                            {props.dialogUserObject.allDay &&
+                                <Grid item xs={6}></Grid>
+                            }
+                            {!props.dialogUserObject.allDay &&
+                                <Grid item xs={6}>
+                                    <Grid
+                                        container
+                                        direction="row"
+                                        justify="flex-start"
+                                        alignItems="stretch"
+                                    >
+                                        <Grid item xs={3} className={classes.verticalCenter}>
+                                            From
                                     </Grid>
-                                    <Grid item xs={9} >
-                                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                            <TimePicker value={selectedDate} onChange={handleDateChange} />
-                                        </MuiPickersUtilsProvider>
-                                    </Grid>
-                                </Grid>
-                            </Grid>
-                            <Grid item xs={6}>
-                            </Grid>
-                            <Grid item xs={6} >
-                                <Grid
-                                    container
-                                    direction="row"
-                                    justify="flex-start"
-                                    alignItems="stretch"
-                                >
-                                    <Grid item xs={3} className={classes.verticalCenter}>
-                                        To
-                                    </Grid>
-                                    <Grid item xs={9} >
-                                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                            <TimePicker
-                                                value={selectedDate}
-                                                onChange={handleDateChange} />
-                                        </MuiPickersUtilsProvider>
+                                        <Grid item xs={9} >
+                                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                                <TimePicker
+                                                    value={startTime}
+                                                    onChange={setStartTime} />
+                                            </MuiPickersUtilsProvider>
+                                        </Grid>
                                     </Grid>
                                 </Grid>
-                            </Grid>
+                            }
+                            {!props.dialogUserObject.allDay &&
+                                <Grid item xs={6}>
+                                </Grid>
+                            }
+                            {!props.dialogUserObject.allDay &&
+                                <Grid item xs={6} >
+                                    <Grid
+                                        container
+                                        direction="row"
+                                        justify="flex-start"
+                                        alignItems="stretch"
+                                    >
+                                        <Grid item xs={3} className={classes.verticalCenter}>
+                                            To
+                                    </Grid>
+                                        <Grid item xs={9} >
+                                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                                <TimePicker
+                                                    value={endTime}
+                                                    onChange={setEndTime} />
+                                            </MuiPickersUtilsProvider>
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+                            }
                         </Grid>
                     </Grid>
                     <Grid item xs={12} style={{ marginTop: '0.75em', marginBottom: '0.75em' }}>

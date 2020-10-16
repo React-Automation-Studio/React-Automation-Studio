@@ -224,7 +224,7 @@ const UserTable = (props) => {
                                         alignItems="center"
                                     >
                                         <Grid item>
-                                            {props.userScheduleString(user.username, user.name)}
+                                            {props.userScheduleString(props.userSchedule[`${user.username}-${user.name}`])}
                                         </Grid>
                                         <Grid item
                                             className={classes.verticalMiddle}

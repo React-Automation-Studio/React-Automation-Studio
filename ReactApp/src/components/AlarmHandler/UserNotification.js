@@ -65,6 +65,7 @@ const UserNotification = (props) => {
     const [addRegexVal, setAddRegexVal] = useState({})
 
     const [dialogOpen, setDialogOpen] = useState(false)
+    const [dialogUserObject, setDialogUserObject] = useState({})
 
     const dbPVData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs:Parameters:{}` }).data
     const dbUsersData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:users:Parameters:{}` }).data
@@ -76,17 +77,36 @@ const UserNotification = (props) => {
     const loadPVListRef = useRef(loadPVList);
     loadPVListRef.current = loadPVList;
 
-    const userScheduleString = useCallback((username, name) => {
+    const userScheduleString = useCallback((userObject) => {
         let sumString = "Do not notify me"
-        const userObject = userSchedule[`${username}-${name}`]
-        console.log(userObject)
         if (userObject.notify) {
             sumString = "Notify me "
             if (userObject.allDay) {
-                sumString = sumString.concat("all day")
+                sumString = sumString.concat("all day ")
             }
             else {
-
+                sumString = sumString.concat(`between ${userObject.fromTime} and ${userObject.fromTime} `)
+            }
+            if (userObject.weekly) {
+                let days = Object.entries(userObject.days).reduce((acc, day) => {
+                    if (day[1]) {
+                        acc.push(day[0])
+                    }
+                    return acc
+                }, [])
+                if (days.length === 7) {
+                    sumString = sumString.concat("everyday")
+                }
+                else {
+                    const lastDay = days[days.length - 1]
+                    days.pop()
+                    days = days.join(', ')
+                    days = days.concat(` and ${lastDay}`)
+                    sumString = sumString.concat(`on a ${days}`)
+                }
+            }
+            else {
+                sumString = sumString.concat(`from ${userObject.fromDate} to ${userObject.toDate}`)
             }
             return sumString
         }
@@ -94,7 +114,7 @@ const UserNotification = (props) => {
             return sumString
 
         }
-    }, [userSchedule])
+    }, [])
 
     const constructDESC_HOST = (value, pvname) => {
         let epicsPVName = pvname.replace("pva://", "")
@@ -309,9 +329,9 @@ const UserNotification = (props) => {
     }
 
     const handleOpenDialog = useCallback((event, name, username) => {
-        console.log(name, username)
+        setDialogUserObject(userSchedule[`${username}-${name}`])
         setDialogOpen(true)
-    }, [])
+    }, [userSchedule])
 
     const handleCloseDialog = useCallback(() => {
         setDialogOpen(false)
@@ -439,7 +459,7 @@ const UserNotification = (props) => {
         pvListHeight = '76vh'
     }
 
-    // console.log(userSchedule)
+    console.log(dialogUserObject)
 
     return (
         <React.Fragment>
@@ -447,6 +467,9 @@ const UserNotification = (props) => {
             <ScheduleDialog
                 dialogOpen={dialogOpen}
                 closeDialog={handleCloseDialog}
+                dialogUserObject={dialogUserObject}
+                setDialogUserObject={setDialogUserObject}
+                userScheduleString={userScheduleString}
             />
             <Grid
                 container
@@ -495,6 +518,7 @@ const UserNotification = (props) => {
                                 updateUserEmail={updateUserEmail}
                                 openDialog={handleOpenDialog}
                                 height={userTableHeight}
+                                userSchedule={userSchedule}
                                 userScheduleString={userScheduleString}
                             />
                         </ExpansionPanelDetails>

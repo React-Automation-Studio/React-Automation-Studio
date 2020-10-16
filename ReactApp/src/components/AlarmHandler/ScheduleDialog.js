@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -51,6 +51,7 @@ const useStyles = makeStyles(theme => ({
         height: theme.spacing(4),
         marginLeft: '0.4em',
         marginRight: '0.4em',
+        cursor: 'pointer'
     },
     verticalCenter: {
         display: "flex",
@@ -62,7 +63,7 @@ const useStyles = makeStyles(theme => ({
 const ScheduleDialog = (props) => {
 
     const classes = useStyles()
-    const theme = useTheme()
+    // const theme = useTheme()
 
     const [selectedDate, handleDateChange] = useState(new Date());
 
@@ -196,7 +197,7 @@ const ScheduleDialog = (props) => {
                                         <Avatar style={{ marginLeft: '1em' }} className={classes.smallAvatar}>M</Avatar>
                                     </Grid>
                                     <Grid item>
-                                        <Avatar className={[classes.smallAvatar, classes.selectedAvatar]}>T</Avatar>
+                                        <Avatar className={[classes.smallAvatar, classes.selectedAvatar].join(' ')}>T</Avatar>
                                     </Grid>
                                     <Grid item>
                                         <Avatar className={classes.smallAvatar}>W</Avatar>

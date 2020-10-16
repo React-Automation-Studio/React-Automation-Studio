@@ -224,7 +224,7 @@ const UserTable = (props) => {
                                         alignItems="center"
                                     >
                                         <Grid item>
-                                            Notify me all day everyday
+                                            {props.userScheduleString(user.username, user.name)}
                                         </Grid>
                                         <Grid item
                                             className={classes.verticalMiddle}

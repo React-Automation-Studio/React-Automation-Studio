@@ -47,6 +47,7 @@ const UserNotification = (props) => {
     const [alarmList, setAlarmList] = useState([])
     const [userList, setUserList] = useState([])
     const [userEdit, setUserEdit] = useState({})
+    const [userSchedule, setUserSchedule] = useState({})
     const [userTableExpand, setUserTableExpand] = useState(true)
     const [pvListExpand, setPvListExpand] = useState(true)
     const [userTableIsExpanded, setUserTableIsExpanded] = useState(true)
@@ -75,12 +76,30 @@ const UserNotification = (props) => {
     const loadPVListRef = useRef(loadPVList);
     loadPVListRef.current = loadPVList;
 
+    const userScheduleString = useCallback((username, name) => {
+        let sumString = "Do not notify me"
+        const userObject = userSchedule[`${username}-${name}`]
+        console.log(userObject)
+        if (userObject.notify) {
+            sumString = "Notify me "
+            if (userObject.allDay) {
+                sumString = sumString.concat("all day")
+            }
+            else {
+
+            }
+            return sumString
+        }
+        else {
+            return sumString
+
+        }
+    }, [userSchedule])
+
     const constructDESC_HOST = (value, pvname) => {
         let epicsPVName = pvname.replace("pva://", "")
         epicsPVName = epicsPVName.replace(alarmIOCPVPrefix, "")
         epicsPVName = epicsPVName.replace(alarmIOCPVSuffix, "")
-
-        // console.log(epicsPVName, value)
 
         // still connecting to pvs
         if (!loadPVList) {
@@ -171,7 +190,6 @@ const UserNotification = (props) => {
         const match = userList.filter(el => el.name === name && el.username === username)[0]
         const id = match['_id']['$oid']
 
-        // console.log(match.notifyPVs)
         setFilterUserRegex(match.notifyPVs)
 
         let newvalues = { '$set': { "email": match.email } }
@@ -347,6 +365,7 @@ const UserNotification = (props) => {
             const localBackupUserList = {}
             const localRegexError = {}
             const localAddRegexVal = {}
+            const localUserSchedule = {}
             // let localFilterUser = null
             // let localFilterUserRegex = null
 
@@ -356,6 +375,7 @@ const UserNotification = (props) => {
                     // localFilterUserRegex = user.notifyPVs
                 }
                 localDictUserRegex[`${user.username}-${user.name}`] = user.notifyPVs
+                localUserSchedule[`${user.username}-${user.name}`] = { ...user.notifySetup }
                 localBackupUserList[`${user.username}-${user.name}`] = user
                 localUserEdit[`${user.username}-${user.name}`] = false
                 localRegexError[`${user.username}-${user.name}`] = false
@@ -370,6 +390,7 @@ const UserNotification = (props) => {
             }
 
             setDictUserRegex(localDictUserRegex)
+            setUserSchedule(localUserSchedule)
             // setFilterUser(localFilterUser)
             // setFilterUserRegex(localFilterUserRegex)
             setBackupUserList(localBackupUserList)
@@ -418,7 +439,7 @@ const UserNotification = (props) => {
         pvListHeight = '76vh'
     }
 
-    // console.log(userEdit)
+    // console.log(userSchedule)
 
     return (
         <React.Fragment>
@@ -474,6 +495,7 @@ const UserNotification = (props) => {
                                 updateUserEmail={updateUserEmail}
                                 openDialog={handleOpenDialog}
                                 height={userTableHeight}
+                                userScheduleString={userScheduleString}
                             />
                         </ExpansionPanelDetails>
                     </ExpansionPanel>

@@ -4,7 +4,6 @@ import ContextMenu from "../SystemComponents/ContextMenu";
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
-import Card from '@material-ui/core/Card';
 import DateFnsUtils from '@date-io/date-fns';
 import formatISO from 'date-fns/formatISO';
 import { subHours, subSeconds, subMinutes, subDays, subWeeks, differenceInSeconds } from 'date-fns';
@@ -21,6 +20,9 @@ import { isMobile } from 'react-device-detect';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import Typography from '@material-ui/core/Typography'
+import { LanDisconnect } from "mdi-material-ui/";
+
 const useStyles = makeStyles((theme) => ({
     container: {
         display: 'flex',
@@ -43,11 +45,20 @@ const useStyles = makeStyles((theme) => ({
 }));
 const useArchiverDataHook = (props) => {
     const context = useContext(AutomationStudioContext);
+
     const [data, setData] = useState(null);
     // eslint-disable-next-line no-unused-vars
     const [writeAccess, setWriteAccess] = useState(false);
-    const [initialized, setInitialized] = useState(false);
+    const [initialized, setInitialized] = useState(true);
     useEffect(() => {
+        const handleAck=(msg) => {
+
+            if (typeof msg !== 'undefined') {
+
+                setInitialized(msg.initialized)
+            }
+
+        }
         const handleArchiverReadData = (msg) => {
             setData(msg.data);
             setInitialized(true)
@@ -59,12 +70,12 @@ const useArchiverDataHook = (props) => {
             jwt = 'unauthenticated'
         }
         if (props.archiverURL) {
-            socket.emit('archiverRead', { 'archiverURL': props.archiverURL, 'clientAuthorisation': jwt })
+            socket.emit('archiverRead', { 'archiverURL': props.archiverURL, 'clientAuthorisation': jwt },handleAck)
             socket.on('archiverReadData:' + props.archiverURL, handleArchiverReadData);
         }
         const reconnect = () => {
             if (props.archiverURL) {
-                socket.emit('archiverRead', { 'archiverURL': props.archiverURL, 'clientAuthorisation': jwt })
+                socket.emit('archiverRead', { 'archiverURL': props.archiverURL, 'clientAuthorisation': jwt,handleAck })
             }
         }
         const disconnect = () => {
@@ -83,9 +94,10 @@ const useArchiverDataHook = (props) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.archiverURL])
-    return (data)
+    return ({data:data,initialized:initialized})
 }
 const ArchiverData = (props) => {
+    const theme =useTheme();
     const calcBin = (pv, from, to, maxNumberOfSamples, raw) => {
         let dif = differenceInSeconds(to, from);
         if (raw) {
@@ -99,7 +111,7 @@ const ArchiverData = (props) => {
             return (pv)
         }
     }
-    const data = useArchiverDataHook({
+    const {data,initialized} = useArchiverDataHook({
         archiverURL: 'arch://' + props.archiver + ':request:' + JSON.stringify({
             pv: calcBin(props.pv, props.from, props.to, props.maxNumberOfSamples),
             options: {
@@ -111,10 +123,12 @@ const ArchiverData = (props) => {
     });
     const [dataXY, setDataXY] = useState({ x: [], y: [] })
     useEffect(() => {
-        if (data !== null) {
+
+        if ((data !== null)&&(typeof data!=='undefined')) {
             let newArchiverData = [];
             let x = [];
             let y = [];
+            if (data.length>0 ){
             if (typeof data[0].data !== undefined) {
                 newArchiverData = data[0].data
                 let sample;
@@ -141,6 +155,7 @@ const ArchiverData = (props) => {
                 setDataXY({ x: x, y: y })
             }
         }
+    }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data])
     useEffect(() => {
@@ -148,8 +163,21 @@ const ArchiverData = (props) => {
         //     console.log('data', dataXY)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dataXY])
+
     return (
+        <React.Fragment>
         <div />
+        {initialized===false&&<Typography>
+
+      <LanDisconnect
+        fontSize="inherit"
+        style={{
+          color: theme.palette.error.main,
+          verticalAlign: "middle",
+        }}
+      />{" "+props.archiver+" Not connected or no data for PV: "+props.pv}
+        </Typography>}
+        </React.Fragment>
     )
 }
 /**
@@ -251,7 +279,7 @@ const ArchiverDataViewer = (props) => {
     const [selectedFromDate, setSelectedFromDate] = useState(initSelectedFromDate())
     const [selectedToDate, setSelectedToDate] = useState(props.to ? new Date(props.to) : new Date())
     const [live, setLive] = useState(props.livePolling === true);
-    const [livePollingRatePeriod, setLivePollingRatePeriod] = useState(props.pollingRatePeriod);
+    const [livePollingRatePeriod, setLivePollingRatePeriod] = useState(props.pollingRatePeriod?parseInt(props.pollingRatePeriod):1000);
     const [fromButton, setFromButton] = useState(props.fromTimeOffset ? props.fromTimeOffset : 'none');
     useEffect(() => {
         const updateToDate = () => {
@@ -302,6 +330,7 @@ const ArchiverDataViewer = (props) => {
         return () => {
             clearInterval(intervalId)
         }
+         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [live, fromButton, props.pollingRatePeriod])
     const handleOnClick30s = () => {
         let date = new Date();
@@ -417,7 +446,7 @@ const ArchiverDataViewer = (props) => {
     let yAxes = {};
     if (props.yAxes !== undefined) {
         props.yAxes.forEach((item, index) => {
-            let key = index == 0 ? 'yaxis' : 'yaxis' + (index + 1)
+            let key = index === 0 ? 'yaxis' : 'yaxis' + (index + 1)
             if (index > 0) {
                 yAxes[key] = {
                     title: item.title ? item.title : "Y-Axis " + (index + 1),
@@ -503,22 +532,7 @@ const ArchiverDataViewer = (props) => {
     return (
         <div ref={paperRef} style={{ width: props.width}}>
             {pvConnections()}
-            {props.traces.map((trace, index) => (
-                (width !== null) && (height !== null) && <ArchiverData
-                    key={index.toString()}
-                    maxNumberOfSamples={width * 10}
-                    archiver={props.archiver}
-                    pv={replaceMacros(trace.pv, props.macros)}
-                    from={selectedFromDate}
-                    to={selectedToDate}
-                    parameters={"&donotchunk"}
-                    archData={(data) => setPvsArchData(prevData => {
-                        let pvData = [...prevData]
-                        pvData[index] = data;
-                        return pvData;
-                    })}
-                />
-            ))}
+
             {props.showButtons && <Accordion elevation={0} defaultExpanded={props.defaultButtonsExpanded}  style={{marginBottom:0}}>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />} >
                 </AccordionSummary>
@@ -650,7 +664,7 @@ const ArchiverDataViewer = (props) => {
                                     <TextField
                                         label="Refresh Rate"
                                         variant="outlined"
-                                        value={(livePollingRatePeriod / 1000)}
+                                        value={(parseInt(livePollingRatePeriod) / 1000)}
                                         InputProps={{
                                             readOnly: true,
                                             endAdornment: <InputAdornment position="end">sec</InputAdornment>
@@ -740,8 +754,25 @@ const ArchiverDataViewer = (props) => {
                     }}
                     probeType={props.readOnly ? "readOnly" : undefined}
                 />
+
             </div>
             }
+               {props.traces.map((trace, index) => (
+                (width !== null) && (height !== null) && <ArchiverData
+                    key={index.toString()}
+                    maxNumberOfSamples={width * 10}
+                    archiver={props.archiver}
+                    pv={replaceMacros(trace.pv, props.macros)}
+                    from={selectedFromDate}
+                    to={selectedToDate}
+                    parameters={"&donotchunk"}
+                    archData={(data) => setPvsArchData(prevData => {
+                        let pvData = [...prevData]
+                        pvData[index] = data;
+                        return pvData;
+                    })}
+                />
+            ))}
         </div>
     )
 }

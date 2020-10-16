@@ -1,6 +1,7 @@
 import React, { Children, cloneElement, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { FormControlLabel, makeStyles } from "@material-ui/core";
+import widgetProps from "../SystemComponents/Utils/widgetProps";
 
 const useStyles = makeStyles((theme) => ({
   item: ({ direction, numVisibleItems, itemMinWidth, spacing }) => {
@@ -54,7 +55,7 @@ function ArrayContainer(props) {
     label,
     labelPlacement,
     direction,
-    numVisibleItems: userNumVisibleItems,
+    visibleItemsCount,
     maxItemsCount,
     itemMinWidth,
     spacing,
@@ -70,8 +71,8 @@ function ArrayContainer(props) {
   } else if (maxItemsCount !== undefined) {
     maxItems = maxItemsCount;
   }
-  if (userNumVisibleItems !== undefined) {
-    numVisibleItems = userNumVisibleItems;
+  if (visibleItemsCount !== undefined) {
+    numVisibleItems = visibleItemsCount;
   }
 
   const classes = useStyles({
@@ -178,12 +179,26 @@ ArrayContainer.propTypes = {
    * Users can choose how many items they want to show.
    * If not specified, the default value is 10.
    * If not specified and the `registers` prop is a valid array
-   * `numVisibleItems` is the length of the `registers` array.
+   * `visibleItemsCount` is the length of the `registers` array.
    * If defined the number of visible elements,
    * in any case, is equal to this number.
    * Must be a non negative integer.
    */
-  numVisibleItems: PropTypes.number,
+  visibleItemsCount: (props, propName, componentName) => {
+    widgetProps.nonNegativeInteger(props, propName, componentName);
+    if (props[propName] > props.maxItemsCount) {
+      return new Error(
+        "Invalid prop `" +
+          propName +
+          "` supplied to" +
+          " `" +
+          componentName +
+          "`. Prop `" +
+          propName +
+          "` must be lower or equal than `maxItemsCount`. Validation failed."
+      );
+    }
+  },
   /**
    * Max items in the array.
    * If not specified, the default value is 100.
@@ -191,15 +206,15 @@ ArrayContainer.propTypes = {
    * `maxItemsCount` is the length of the `registers` array.
    * If defined the number of total elements,
    * in any case, is equal to this number.
-   * Must be a non negative integer and greater or equal than `numVisibleItems`
+   * Must be a non negative integer and greater or equal than `visibleItemsCount`
    */
-  maxItemsCount: PropTypes.number,
+  maxItemsCount: widgetProps.nonNegativeInteger,
   /**
    * When receiving a PV storing an array of values users can choose a subset of these value.
    * Registers accept the indexes of the registers to effectively show.
    * Order does count!
    */
-  registers: PropTypes.arrayOf(PropTypes.number),
+  registers: PropTypes.arrayOf(widgetProps.nonNegativeInteger),
   /**
    * When receiving a PV storing an array of values users can assign a label to each register
    * or a subset of them.
@@ -208,16 +223,29 @@ ArrayContainer.propTypes = {
   /**
    * Directive to display array elements horizontally or vertically aligned.
    */
-  direction: PropTypes.string,
+  direction: PropTypes.oneOf(["vertical", "horizontal"]),
   /**
    * Min space width, in percentage, an item can occupy.
    */
-  itemMinWidth: PropTypes.number,
+  itemMinWidth: (props, propName, componentName) => {
+    if (!(props[propName] >= 0 && props[propName] <= 100)) {
+      return new Error(
+        "Invalid prop `" +
+          propName +
+          "` supplied to" +
+          " `" +
+          componentName +
+          "`. Prop `" +
+          propName +
+          "` must be a floating number between 0 and 100. Validation failed."
+      );
+    }
+  },
   /**
    * Spacing between items. Follows the same logic as grid container's spacing.
    * Must be a non negative integer.
    */
-  spacing: PropTypes.number,
+  spacing: widgetProps.nonNegativeInteger,
 };
 
 ArrayContainer.defaultProps = {

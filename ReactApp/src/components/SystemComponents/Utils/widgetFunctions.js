@@ -12,6 +12,10 @@ const applyPrecision = (value, precision) => {
   return value;
 };
 
+const checkIndex = (index, value) => {
+  return index !== undefined && Array.isArray(value);
+};
+
 const checkPrecision = (value, prec) => {
   const precision = parseInt(prec);
   if (prec !== undefined && !isNaN(precision)) {
@@ -102,6 +106,7 @@ const wrapComponent = (CustomComponent, props) => {
 
 export {
   checkPrecision,
+  checkIndex,
   formatValue,
   getContextPVs,
   getTooltipProps,

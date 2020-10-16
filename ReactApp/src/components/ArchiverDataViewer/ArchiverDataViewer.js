@@ -183,7 +183,8 @@ const ArchiverData = (props) => {
 /**
  * The ArchiverDataViewer is an interface to display EPICS archived data. It uses plotly.js to display the the pv data.
  * The archiver needs to be declared as environment variable in order for the pvServer to connect to a valid archiver (see the archiver prop). For the DEMO_ARCHIVER, the environment variable declaration is:
- * `DEMO_ARCHIVER=http://localhost:17668`
+ * `DEMO_ARCHIVER=http://localhost:17668`. The demo archiver needs to built for the demos to work. It is available at: <a href="https://github.com/wduckitt/React-Automation-Studio-Demo-Archiver"> React-Automation-Studio-Demo-Archiver</a>
+ * <br/>The ArchiveDataViewer will indicate if connection can't be established to the pv's archived data.
  * @param {*} props
  */
 const ArchiverDataViewer = (props) => {
@@ -778,8 +779,8 @@ const ArchiverDataViewer = (props) => {
 }
 ArchiverDataViewer.propTypes = {
     /**
-     * 	Is name of the environment variable defined in your .env or docker-compose yaml file file and corresponds to hostname or ip of the archiver followed by retrieval_url port, eg DEMO_ARCHIVER
-     * In the .env file it should be declared as DEMO_ARCHIVER=http://localhost:17688
+     * 	Is name of the environment variable defined in your .env or docker-compose yaml file file and corresponds to hostname or ip of the archiver followed by `retrieval_url` port, eg DEMO_ARCHIVER
+     * In the .env file it should be declared as `DEMO_ARCHIVER=http://localhost:17688`
      */
     archiver: PropTypes.string,
     /**
@@ -821,7 +822,7 @@ ArchiverDataViewer.propTypes = {
         /**
          * Corresponding yAxis index
          */
-        yAxisIndex: PropTypes.number,
+        yAxis: PropTypes.number,
     })),
     /**
      *
@@ -854,7 +855,7 @@ ArchiverDataViewer.propTypes = {
     livePolling: PropTypes.bool,
     /**
     *
-    * Polling Rate Period in ms, minimum=1000 ms. This value will also overide the linear scaling of the polling period for data queires of larger than 12 hours
+    * Polling Rate Period in ms, minimum=1000 ms. This value will also override the linear scaling of the polling period for data queries of larger than 12 hours worth of data.
     */
     pollingRatePeriod: PropTypes.number,
     /**
@@ -867,7 +868,7 @@ ArchiverDataViewer.propTypes = {
  */
 ArchiverDataViewer.defaultProps = {
     width: '100%',
-    height: isMobile ? '150vh' : '40vh',
+    height: '40vh',
     showLegend: false,
     defaultButtonsExpanded: true,
 };

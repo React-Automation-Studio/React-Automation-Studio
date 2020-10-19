@@ -30,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
     verticalAlign: "middle",
   },
   disconnectedIconForm: { fontSize: "inherit", whiteSpace: "nowrap" },
+  expandHeight: { height: "100%" },
 }));
 
 /**
@@ -194,7 +195,8 @@ function Widget(props) {
       enumStrs: enumStrings,
       disconnectedIcon: disconnectedIcon,
       handleChange: (newValue) => handleValue(newValue, setValue),
-      handleImmediateChange: (newValue) => handleValue(newValue, setImmediateValue),
+      handleImmediateChange: (newValue) =>
+        handleValue(newValue, setImmediateValue),
       handleCommitChange: () => setCommitChange(true),
       handleFocus: () => setFocus(true),
       handleBlur: () => setFocus(false),
@@ -290,6 +292,7 @@ function Widget(props) {
   return (
     <Tooltip {...tooltipProps}>
       <Tag
+        className={classes.expandHeight}
         onContextMenu={
           props.disableContextMenu ? undefined : handleToggleContextMenu
         }

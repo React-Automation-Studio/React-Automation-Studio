@@ -110,7 +110,9 @@ const UserNotification = (props) => {
                 }
             }
             else {
-                sumString = sumString.concat(`from ${userObject.fromDate} to ${userObject.toDate}`)
+                const fromDate = format(new Date(userObject.fromDate), 'dd MMMM yyyy')
+                const toDate = format(new Date(userObject.toDate), 'dd MMMM yyyy')
+                sumString = sumString.concat(`from ${fromDate} to ${toDate}`)
             }
             return sumString
         }
@@ -337,6 +339,22 @@ const UserNotification = (props) => {
         setDialogOpen(true)
     }, [userSchedule])
 
+    const handleAcceptDialog = useCallback((name, username) => {
+        // Find match and note it's index in userList
+        const match = userList.filter(el => el.name === name && el.username === username)[0]
+        const id = match['_id']['$oid']
+
+        let newvalues = { '$set': { "notifySetup": dialogUserObject } }
+
+        dbUpdateOne({
+            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:users`,
+            id: id,
+            update: newvalues
+        })
+
+        setDialogOpen(false)
+    }, [dbUpdateOne, dialogUserObject, userList, props.dbName])
+
     const handleCloseDialog = useCallback(() => {
         setDialogOpen(false)
     }, [])
@@ -472,6 +490,7 @@ const UserNotification = (props) => {
                 Object.keys(dialogUserObject).length !== 0
                     ? <ScheduleDialog
                         dialogOpen={dialogOpen}
+                        acceptDialog={handleAcceptDialog}
                         closeDialog={handleCloseDialog}
                         dialogUserObject={dialogUserObject}
                         setDialogUserObject={setDialogUserObject}

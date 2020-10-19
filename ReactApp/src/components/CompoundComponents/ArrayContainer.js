@@ -169,7 +169,11 @@ function ArrayContainer(props) {
       label={label}
       labelPlacement={labelPlacement}
       control={
-        <div className={classes.container} onWheelCapture={handleWheel}>
+        <div
+          className={classes.container}
+          onWheelCapture={handleWheel}
+          onClick={(e) => e.preventDefault()}
+        >
           {visibleItems}
         </div>
       }

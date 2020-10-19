@@ -30,6 +30,9 @@ services:
       - DEMO_ARCHIVER=http://localhost:17668
       - pvServerLogLevel=INFO
       - pvServerLogFile=/pvServer/log/pvServerLogFile
+      - http_proxy
+      - https_proxy
+      - no_proxy
     build:
       context: ./
       args: # Environment variables available at build-time
@@ -51,6 +54,9 @@ services:
           - REACT_APP_PyEpicsServerPORT=5001
           - REACT_APP_EnableLogin=false
           - DEMO_ARCHIVER=http://localhost:17668
+          - http_proxy
+          - https_proxy
+          - no_proxy
 
     build:
       context: ./

@@ -67,8 +67,12 @@ const ScheduleDialog = (props) => {
     const classes = useStyles()
     // const theme = useTheme()
 
-    const [startTime, setStartTime] = useState(new Date())
-    const [endTime, setEndTime] = useState(new Date())
+    const fromTime = props.dialogUserObject.fromTime
+        ? new Date(props.dialogUserObject.fromTime)
+        : new Date()
+    const toTime = props.dialogUserObject.toTime
+        ? new Date(props.dialogUserObject.toTime)
+        : new Date()
     const [selectedDate, handleDateChange] = useState(new Date())
 
     // console.log(theme)
@@ -82,9 +86,49 @@ const ScheduleDialog = (props) => {
     }
 
     const handleAllDay = (event) => {
-        props.setDialogUserObject({ ...props.dialogUserObject, allDay: event.target.checked })
         if (!event.target.checked) {
-            console.log(formatISO(startTime))
+            props.setDialogUserObject({
+                ...props.dialogUserObject,
+                allDay: event.target.checked,
+                fromTime: formatISO(fromTime),
+                toTime: formatISO(toTime)
+            })
+        }
+        else {
+            props.setDialogUserObject({ ...props.dialogUserObject, allDay: event.target.checked })
+        }
+    }
+
+    const handleFromTime = (event) => {
+        const newTime = formatISO(event)
+        props.setDialogUserObject({ ...props.dialogUserObject, fromTime: newTime })
+
+    }
+
+    const handleToTime = (event) => {
+        const newTime = formatISO(event)
+        props.setDialogUserObject({ ...props.dialogUserObject, toTime: newTime })
+
+    }
+
+    const handleWeekly = (event) => {
+        if (event.target.value) {
+            props.setDialogUserObject({
+                ...props.dialogUserObject,
+                weekly: event.target.value,
+                dateRange: !event.target.value
+            })
+        }
+    }
+
+    const handleDateRange = (event) => {
+        console.log(event)
+        if (event.target.value) {
+            props.setDialogUserObject({
+                ...props.dialogUserObject,
+                weekly: !event.target.value,
+                dateRange: event.target.value
+            })
         }
     }
 
@@ -168,8 +212,8 @@ const ScheduleDialog = (props) => {
                                         <Grid item xs={9} >
                                             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                                 <TimePicker
-                                                    value={startTime}
-                                                    onChange={setStartTime} />
+                                                    value={fromTime}
+                                                    onChange={handleFromTime} />
                                             </MuiPickersUtilsProvider>
                                         </Grid>
                                     </Grid>
@@ -193,8 +237,8 @@ const ScheduleDialog = (props) => {
                                         <Grid item xs={9} >
                                             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                                 <TimePicker
-                                                    value={endTime}
-                                                    onChange={setEndTime} />
+                                                    value={toTime}
+                                                    onChange={handleToTime} />
                                             </MuiPickersUtilsProvider>
                                         </Grid>
                                     </Grid>
@@ -213,7 +257,10 @@ const ScheduleDialog = (props) => {
                             alignItems="stretch"
                         >
                             <Grid item xs={2} className={classes.centerInBlock}>
-                                <Radio checked={true} />
+                                <Radio
+                                    checked={props.dialogUserObject.weekly}
+                                    onChange={handleWeekly}
+                                />
                             </Grid>
                             <Grid item xs={2} className={classes.verticalCenter}>
                                 <span style={{ fontSize: '1rem' }}>Weekly</span>
@@ -226,25 +273,25 @@ const ScheduleDialog = (props) => {
                                     alignItems="stretch"
                                 >
                                     <Grid item>
-                                        <Avatar style={{ marginLeft: '1em' }} className={classes.smallAvatar}>M</Avatar>
+                                        <Avatar style={{ marginLeft: '1em' }} className={[classes.smallAvatar, props.dialogUserObject.days.Monday ? classes.selectedAvatar : null].join(' ')}>M</Avatar>
                                     </Grid>
                                     <Grid item>
-                                        <Avatar className={[classes.smallAvatar, classes.selectedAvatar].join(' ')}>T</Avatar>
+                                        <Avatar className={[classes.smallAvatar, props.dialogUserObject.days.Tuesday ? classes.selectedAvatar : null].join(' ')}>T</Avatar>
                                     </Grid>
                                     <Grid item>
-                                        <Avatar className={classes.smallAvatar}>W</Avatar>
+                                        <Avatar className={[classes.smallAvatar, props.dialogUserObject.days.Wednesday ? classes.selectedAvatar : null].join(' ')}>W</Avatar>
                                     </Grid>
                                     <Grid item>
-                                        <Avatar className={classes.smallAvatar}>T</Avatar>
+                                        <Avatar className={[classes.smallAvatar, props.dialogUserObject.days.Thursday ? classes.selectedAvatar : null].join(' ')}>T</Avatar>
                                     </Grid>
                                     <Grid item>
-                                        <Avatar className={classes.smallAvatar}>F</Avatar>
+                                        <Avatar className={[classes.smallAvatar, props.dialogUserObject.days.Friday ? classes.selectedAvatar : null].join(' ')}>F</Avatar>
                                     </Grid>
                                     <Grid item>
-                                        <Avatar className={classes.smallAvatar}>S</Avatar>
+                                        <Avatar className={[classes.smallAvatar, props.dialogUserObject.days.Saturday ? classes.selectedAvatar : null].join(' ')}>S</Avatar>
                                     </Grid>
                                     <Grid item>
-                                        <Avatar className={classes.smallAvatar}>S</Avatar>
+                                        <Avatar className={[classes.smallAvatar, props.dialogUserObject.days.Sunday ? classes.selectedAvatar : null].join(' ')}>S</Avatar>
                                     </Grid>
                                 </Grid>
                             </Grid>
@@ -262,7 +309,10 @@ const ScheduleDialog = (props) => {
                             alignItems="stretch"
                         >
                             <Grid item xs={2} className={classes.centerInBlock}>
-                                <Radio />
+                                <Radio
+                                    checked={props.dialogUserObject.dateRange}
+                                    onChange={handleDateRange}
+                                />
                             </Grid>
                             <Grid item xs={2} className={classes.verticalCenter}>
                                 <span style={{ fontSize: '1rem' }}>Date range</span>

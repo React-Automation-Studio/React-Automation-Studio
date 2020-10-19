@@ -16,6 +16,8 @@ import PVList from './PVList';
 import useMongoDbWatch from '../SystemComponents/database/MongoDB/useMongoDbWatch';
 import useMongoDbUpdateOne from '../SystemComponents/database/MongoDB/useMongoDbUpdateOne';
 
+import { format } from 'date-fns';
+
 const useStyles = makeStyles(theme => ({
     root: {
         padding: theme.spacing(1),
@@ -85,7 +87,9 @@ const UserNotification = (props) => {
                 sumString = sumString.concat("all day ")
             }
             else {
-                sumString = sumString.concat(`between ${userObject.fromTime} and ${userObject.fromTime} `)
+                const fromTime = format(new Date(userObject.fromTime), 'hh:mm a')
+                const toTime = format(new Date(userObject.toTime), 'hh:mm a')
+                sumString = sumString.concat(`between ${fromTime} and ${toTime} `)
             }
             if (userObject.weekly) {
                 let days = Object.entries(userObject.days).reduce((acc, day) => {
@@ -464,13 +468,17 @@ const UserNotification = (props) => {
     return (
         <React.Fragment>
             {alarmPVs}
-            <ScheduleDialog
-                dialogOpen={dialogOpen}
-                closeDialog={handleCloseDialog}
-                dialogUserObject={dialogUserObject}
-                setDialogUserObject={setDialogUserObject}
-                userScheduleString={userScheduleString}
-            />
+            {
+                Object.keys(dialogUserObject).length !== 0
+                    ? <ScheduleDialog
+                        dialogOpen={dialogOpen}
+                        closeDialog={handleCloseDialog}
+                        dialogUserObject={dialogUserObject}
+                        setDialogUserObject={setDialogUserObject}
+                        userScheduleString={userScheduleString}
+                    />
+                    : null
+            }
             <Grid
                 container
                 direction="column"

@@ -48,8 +48,11 @@ import ThumbWheel from '../../components/BaseComponents/ThumbWheel.js';
     <ArchiverDataViewer
         debug={true}
         archiver={"DEMO_ARCHIVER"}
-        title={"Demo Archiver Viewer"}
+        title={"Archived Data"}
         showButtons={true}
+        defaultButtonsExpanded={true}
+        livePolling={true}
+        fromTimeOffset={'1m'}
         traces={
             [
                 {

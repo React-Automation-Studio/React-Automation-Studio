@@ -21,6 +21,8 @@ import AddIcon from '@material-ui/icons/Add';
 import BlockIcon from '@material-ui/icons/Block';
 import HelpOutlinedIcon from '@material-ui/icons/HelpOutlined';
 import EventIcon from '@material-ui/icons/Event';
+import EmailIcon from '@material-ui/icons/Email';
+import CallIcon from '@material-ui/icons/Call';
 
 const useStyles = makeStyles(theme => ({
     chip: {
@@ -32,7 +34,9 @@ const useStyles = makeStyles(theme => ({
         borderWidth: '1.5px'
     },
     emailInputField: {
-        cursor: 'auto'
+        cursor: 'auto',
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis'
     },
     icon: {
         color: theme.palette.secondary.main
@@ -79,7 +83,7 @@ const UserTable = (props) => {
                         }}
                     >
                         <TableCell align="left" classes={{ stickyHeader: classes.styledTableHeadCell }}>Name</TableCell>
-                        <TableCell align="left" classes={{ stickyHeader: classes.styledTableHeadCell }}>Email</TableCell>
+                        <TableCell align="left" classes={{ stickyHeader: classes.styledTableHeadCell }}>Contact</TableCell>
                         <TableCell align="left" classes={{ stickyHeader: classes.styledTableHeadCell }}>
                             <Tooltip
                                 interactive
@@ -127,16 +131,43 @@ const UserTable = (props) => {
                                     {user.name}
                                 </TableCell>
                                 <TableCell>
-                                    <TextField
-                                        type={props.username === user.username ? 'text' : 'password'}
-                                        value={user.email}
-                                        onChange={(event) => props.updateUserEmail(event, user.name, user.username)}
-                                        InputProps={{
-                                            classes: { input: classes.emailInputField },
-                                            readOnly: props.userEdit[`${user.username}-${user.name}`] ? false : true,
-                                            disableUnderline: props.userEdit[`${user.username}-${user.name}`] ? false : true
-                                        }}
-                                    />
+                                    <Grid
+                                        container
+                                        direction="row"
+                                        justify="center"
+                                        alignItems="center"
+                                    >
+                                        <Grid item xs={2} className={classes.verticalMiddle}>
+                                            <EmailIcon />
+                                        </Grid>
+                                        <Grid item xs={10}>
+                                            <TextField
+                                                type={props.username === user.username ? 'text' : 'password'}
+                                                value={user.email}
+                                                onChange={(event) => props.updateUserEmail(event, user.name, user.username)}
+                                                InputProps={{
+                                                    classes: { input: classes.emailInputField },
+                                                    readOnly: props.userEdit[`${user.username}-${user.name}`] ? false : true,
+                                                    disableUnderline: props.userEdit[`${user.username}-${user.name}`] ? false : true
+                                                }}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={2} className={classes.verticalMiddle}>
+                                            <CallIcon />
+                                        </Grid>
+                                        <Grid item xs={10}>
+                                            <TextField
+                                                type={props.username === user.username ? 'text' : 'password'}
+                                                value={user.mobile}
+                                                onChange={(event) => props.updateUserMobile(event, user.name, user.username)}
+                                                InputProps={{
+                                                    classes: { input: classes.emailInputField },
+                                                    readOnly: props.userEdit[`${user.username}-${user.name}`] ? false : true,
+                                                    disableUnderline: props.userEdit[`${user.username}-${user.name}`] ? false : true
+                                                }}
+                                            />
+                                        </Grid>
+                                    </Grid>
                                 </TableCell>
                                 <TableCell>
                                     {Object.values(user.notifyPVs).map(expression => {
@@ -223,10 +254,12 @@ const UserTable = (props) => {
                                         justify="flex-start"
                                         alignItems="center"
                                     >
-                                        <Grid item>
+                                        <Grid item xs={11}
+                                            style={{ paddingRight: '0.5em' }}
+                                        >
                                             {props.userScheduleString(props.userSchedule[`${user.username}-${user.name}`])}
                                         </Grid>
-                                        <Grid item
+                                        <Grid item xs={1}
                                             className={classes.verticalMiddle}
                                             style={{
                                                 marginLeft: 'auto'

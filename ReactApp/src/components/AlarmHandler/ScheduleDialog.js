@@ -15,6 +15,8 @@ import Radio from '@material-ui/core/Radio';
 import Switch from '@material-ui/core/Switch';
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 import ScheduleIcon from '@material-ui/icons/Schedule';
+import EmailIcon from '@material-ui/icons/Email';
+import CallIcon from '@material-ui/icons/Call';
 // import Slide from '@material-ui/core/Slide';
 
 import DateFnsUtils from '@date-io/date-fns';
@@ -87,6 +89,14 @@ const ScheduleDialog = (props) => {
 
     const handleNotify = (event) => {
         props.setDialogUserObject({ ...props.dialogUserObject, notify: event.target.checked })
+    }
+
+    const handleEmail = (event) => {
+        props.setDialogUserObject({ ...props.dialogUserObject, email: event.target.checked })
+    }
+
+    const handleMobile = (event) => {
+        props.setDialogUserObject({ ...props.dialogUserObject, mobile: event.target.checked })
     }
 
     const handleAllDay = (event) => {
@@ -164,7 +174,7 @@ const ScheduleDialog = (props) => {
             onBackdropClick={props.closeDialog}
             onClose={props.closeDialog}
         >
-            <DialogTitle>{`${props.name}'s notification schedule`}</DialogTitle>
+            <DialogTitle>{`${props.dialogUser.name}'s notification schedule`}</DialogTitle>
             <DialogContent>
                 <DialogContentText>
                     {props.userScheduleString(props.dialogUserObject)}
@@ -192,6 +202,53 @@ const ScheduleDialog = (props) => {
                                 <Checkbox
                                     checked={props.dialogUserObject.notify}
                                     onChange={handleNotify}
+                                />
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid item xs={12} style={{ marginTop: '0.75em', marginBottom: '0.75em' }}>
+                        <Divider variant="middle" />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Grid
+                            container
+                            direction="row"
+                            justify="flex-start"
+                            alignItems="stretch"
+                        >
+                            <Grid item xs={2} className={classes.centerInBlock}>
+                                <EmailIcon />
+                            </Grid>
+                            <Grid item xs={2} className={classes.verticalCenter}>
+                                <span style={{ fontSize: '1rem' }}>Email</span>
+                            </Grid>
+                            <Grid item xs={8}>
+                                <Checkbox
+                                    checked={props.dialogUserObject.email}
+                                    onChange={handleEmail}
+                                    disabled={!props.dialogUserObject.notify}
+                                />
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Grid
+                            container
+                            direction="row"
+                            justify="flex-start"
+                            alignItems="stretch"
+                        >
+                            <Grid item xs={2} className={classes.centerInBlock}>
+                                <CallIcon />
+                            </Grid>
+                            <Grid item xs={2} className={classes.verticalCenter}>
+                                <span style={{ fontSize: '1rem' }}>Mobile</span>
+                            </Grid>
+                            <Grid item xs={8}>
+                                <Checkbox
+                                    checked={props.dialogUserObject.mobile}
+                                    onChange={handleMobile}
+                                    disabled={!props.dialogUserObject.notify || true}
                                 />
                             </Grid>
                         </Grid>
@@ -364,6 +421,7 @@ const ScheduleDialog = (props) => {
                                                 value={fromDate}
                                                 onChange={handleFromDate}
                                                 disabled={props.dialogUserObject.weekly}
+                                                autoOk
                                             />
                                         </MuiPickersUtilsProvider>
                                     </Grid>
@@ -377,6 +435,7 @@ const ScheduleDialog = (props) => {
                                                 value={toDate}
                                                 onChange={handleToDate}
                                                 disabled={props.dialogUserObject.weekly}
+                                                autoOk
                                             />
                                         </MuiPickersUtilsProvider>
                                     </Grid>
@@ -390,7 +449,7 @@ const ScheduleDialog = (props) => {
                 <Button onClick={props.closeDialog} color="secondary">
                     Cancel
                 </Button>
-                <Button onClick={() => props.acceptDialog(props.name, props.username)} color="secondary">
+                <Button onClick={() => props.acceptDialog(props.dialogUser.name, props.dialogUser.username)} color="secondary">
                     Apply
                 </Button>
             </DialogActions>

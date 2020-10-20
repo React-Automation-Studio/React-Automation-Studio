@@ -67,6 +67,7 @@ const UserNotification = (props) => {
     const [addRegexVal, setAddRegexVal] = useState({})
 
     const [dialogOpen, setDialogOpen] = useState(false)
+    const [dialogUser, setDialogUser] = useState({})
     const [dialogUserObject, setDialogUserObject] = useState({})
 
     const dbPVData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs:Parameters:{}` }).data
@@ -83,6 +84,18 @@ const UserNotification = (props) => {
         let sumString = "Do not notify me"
         if (userObject.notify) {
             sumString = "Notify me "
+            if (userObject.email) {
+                sumString = sumString.concat("on email ")
+                if (userObject.mobile) {
+                    sumString = sumString.concat("and mobile ")
+                }
+            }
+            else if (userObject.mobile) {
+                sumString = sumString.concat("on mobile ")
+            }
+            else {
+                sumString = sumString.concat("on !!NO CONTACT METHOD SELECTED!! ")
+            }
             if (userObject.allDay) {
                 sumString = sumString.concat("all day ")
             }
@@ -100,6 +113,12 @@ const UserNotification = (props) => {
                 }, [])
                 if (days.length === 7) {
                     sumString = sumString.concat("everyday")
+                }
+                else if (days.length === 0) {
+                    sumString = sumString.concat(`on a !!NO DAY(S) SELECTED!!`)
+                }
+                else if (days.length === 1) {
+                    sumString = sumString.concat(`on a ${days}`)
                 }
                 else {
                     const lastDay = days[days.length - 1]
@@ -226,6 +245,14 @@ const UserNotification = (props) => {
             update: newvalues
         })
 
+        newvalues = { '$set': { "mobile": match.mobile } }
+
+        dbUpdateOne({
+            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:users`,
+            id: id,
+            update: newvalues
+        })
+
         newvalues = { '$set': { "notifyPVs": match.notifyPVs } }
 
         dbUpdateOne({
@@ -262,6 +289,20 @@ const UserNotification = (props) => {
         const userIndex = userList.indexOf(match)
 
         match.email = event.target.value
+
+        // Create new userList
+        const newUserList = [...userList]
+        newUserList[userIndex] = match
+
+        setUserList(newUserList)
+    }, [userList])
+
+    const updateUserMobile = useCallback((event, name, username) => {
+        // Find match and note it's index in userList
+        const match = userList.filter(el => el.name === name && el.username === username)[0]
+        const userIndex = userList.indexOf(match)
+
+        match.mobile = event.target.value
 
         // Create new userList
         const newUserList = [...userList]
@@ -336,6 +377,10 @@ const UserNotification = (props) => {
 
     const handleOpenDialog = useCallback((event, name, username) => {
         setDialogUserObject(userSchedule[`${username}-${name}`])
+        setDialogUser({
+            name: name,
+            username: username
+        })
         setDialogOpen(true)
     }, [userSchedule])
 
@@ -481,7 +526,7 @@ const UserNotification = (props) => {
         pvListHeight = '76vh'
     }
 
-    console.log(dialogUserObject)
+    // console.log(dialogUserObject)
 
     return (
         <React.Fragment>
@@ -492,6 +537,7 @@ const UserNotification = (props) => {
                         dialogOpen={dialogOpen}
                         acceptDialog={handleAcceptDialog}
                         closeDialog={handleCloseDialog}
+                        dialogUser={dialogUser}
                         dialogUserObject={dialogUserObject}
                         setDialogUserObject={setDialogUserObject}
                         userScheduleString={userScheduleString}
@@ -543,6 +589,7 @@ const UserNotification = (props) => {
                                 cancelEdit={cancelEdit}
                                 applyEdit={applyEdit}
                                 updateUserEmail={updateUserEmail}
+                                updateUserMobile={updateUserMobile}
                                 openDialog={handleOpenDialog}
                                 height={userTableHeight}
                                 userSchedule={userSchedule}

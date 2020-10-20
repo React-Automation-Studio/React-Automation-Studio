@@ -653,7 +653,7 @@ const ArchiverDataViewer = (props) => {
                                 />
                             </MuiPickersUtilsProvider>
                         </Grid>
-                        <Grid item xl={2} lg={'auto'} md={4} sm={6} xs={12}>
+                        <Grid item xl={3} lg={'auto'} md={4} sm={6} xs={12}>
                             <Grid
                                 container
                                 spacing={2}
@@ -661,7 +661,7 @@ const ArchiverDataViewer = (props) => {
                                 direction={'row'}
                                 justify={'center'}
                             >
-                                <Grid item xs={4} md={4}>
+                                <Grid item xs={4} md={4} >
                                     <Button classes={{ root: classes.buttonRoot }} variant={'contained'} color={live ? 'primary' : 'default'} onClick={() => setLive(live === true ? false : true)}>
                                         Live
                     </Button>
@@ -828,6 +828,7 @@ ArchiverDataViewer.propTypes = {
          * Corresponding yAxis index
          */
         yAxis: PropTypes.number,
+
     })),
     /**
      *
@@ -867,6 +868,15 @@ ArchiverDataViewer.propTypes = {
      * Sets fromTimeOffset button
      */
     fromTimeOffset: PropTypes.oneOf(["30s", "1m", "5m", "30m", "1h", "2h", "12h", "1d", "2d", "1w"]),
+    /**
+     * From  time, ISO date format: (YYYY-MM-DDTHH:MM:SSZ), will override the fromTimeOffset
+     */
+    from:PropTypes.string,
+    /**
+     * To  time,  ISO date format: (YYYY-MM-DDTHH:MM:SSZ)
+     */
+    to:PropTypes.string,
+
 };
 /**
  * Default props.definition

@@ -241,6 +241,15 @@ class MainDashboard extends Component {
                 </Grid>
                 <Grid item lg={12} sm={12} xs={12}  >
                   <Typography className={classes.WhatsNew} component='div'>
+                  V2.1.0 Tuesday 20 October 2020
+                  <br />
+                  Improvements and new features:
+                    <br />
+                    <ul>
+                      <li>Added Epics Archiver Viewer component</li>
+                      <li>Package updates</li>
+                    </ul>
+
                   V2.0.1 Tuesday 29 September 2020
                   <br />
                   Improvements and new features:
@@ -369,7 +378,7 @@ class MainDashboard extends Component {
                     <Button fullWidth className={classes.button} component={Link} to="/LoadSaveExample" color="primary" variant={buttonVariant}> LoadSave Example </Button>
                   </Grid>
                   <Grid item lg={12} sm={12} xs={12} >
-                    <Button fullWidth className={classes.button} component={Link} to="/ArchiverDataViewerDemo" color="primary" variant={buttonVariant}> ArchiverDataViewerDemo </Button>
+                    <Button fullWidth className={classes.button} component={Link} to="/ArchiverDataViewerDemo" color="primary" variant={buttonVariant}> Archiver Data Viewer Demo </Button>
                   </Grid>
 
 

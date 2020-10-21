@@ -283,6 +283,7 @@ const AlarmSetup = (props) => {
         })
 
         setAlarmLogDisplayArray(localAlarmLogDisplayArray)
+        setPage(0)
 
     }, [alarmLogDict, alarmLogSelectedKey])
 
@@ -522,6 +523,7 @@ const AlarmSetup = (props) => {
             clearTimeout(alarmLogSearchTimer)
         }
         setAlarmLogSearchStringStore(srch)
+        setPage(0)
         setAlarmLogSearchTimer(setTimeout(() => {
             setAlarmLogSearchString(srch)
         }, 300))
@@ -536,7 +538,9 @@ const AlarmSetup = (props) => {
         }
     }
 
-    const handleExpandPanel = (panelName) => {
+    const handleExpandPanel = (event, panelName) => {
+        event.preventDefault()
+        event.stopPropagation()
         if (panelName === 'alarmTable') {
             setAlarmTableExpand(alarmTableExpand ? false : true)
         }
@@ -829,7 +833,7 @@ const AlarmSetup = (props) => {
 
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(parseInt(event.target.value, 10))
-        setPage(0);
+        setPage(0)
     };
 
     const filteredData = alarmLogDisplayArray.filter((entry) => {
@@ -1009,7 +1013,7 @@ const AlarmSetup = (props) => {
                         <ExpansionPanel
                             elevation={theme.palette.paperElevation}
                             expanded={alarmTableExpand}
-                            onClick={() => handleExpandPanel('alarmTable')}
+                            onClick={(event) => handleExpandPanel(event, 'alarmTable')}
                             TransitionProps={{
                                 onEntered: () => handleExpansionComplete('alarmTable', true),
                                 onExited: () => handleExpansionComplete('alarmTable', false)
@@ -1039,7 +1043,7 @@ const AlarmSetup = (props) => {
                                                     onClick={event => event.stopPropagation()}
                                                     onFocus={event => event.stopPropagation()}
                                                     onChange={event => handleSearchAlarmTable(event)}
-                                                    onBlur={() => { setAlarmTableSearchStringStore(''); setAlarmTableSearchString('') }}
+                                                    // onBlur={() => { setAlarmTableSearchStringStore(''); setAlarmTableSearchString('') }}
                                                     value={alarmTableSearchStringStore}
                                                 />
                                             </div>
@@ -1077,7 +1081,7 @@ const AlarmSetup = (props) => {
                         <ExpansionPanel
                             elevation={theme.palette.paperElevation}
                             expanded={alarmLogExpand}
-                            onClick={() => handleExpandPanel('alarmLog')}
+                            onClick={(event) => handleExpandPanel(event, 'alarmLog')}
                             TransitionProps={{
                                 onEntered: () => handleExpansionComplete('alarmLog', true),
                                 onExited: () => handleExpansionComplete('alarmLog', false)
@@ -1130,7 +1134,7 @@ const AlarmSetup = (props) => {
                                                     onClick={event => event.stopPropagation()}
                                                     onFocus={event => event.stopPropagation()}
                                                     onChange={event => handleSearchAlarmLog(event)}
-                                                    onBlur={() => { setAlarmLogSearchStringStore(''); setAlarmLogSearchString('') }}
+                                                    // onBlur={() => { setAlarmLogSearchStringStore(''); setAlarmLogSearchString('') }}
                                                     value={alarmLogSearchStringStore}
                                                 />
                                             </div>

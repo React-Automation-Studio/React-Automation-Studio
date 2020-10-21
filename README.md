@@ -1,4 +1,4 @@
-Current Release: V2.0.1
+Current Release: V2.1.0
 
 # Introduction
 
@@ -491,6 +491,15 @@ Site specific components and app screens should be kept in your repository. If y
 Contact us at rasadmin@tlabs.ac.za
 
 # Changelog
+ V2.1.0 Tuesday 20 October 2020
+<br />
+  Improvements and new features:
+<br />
+<ul>
+  <li>Added Epics Archiver Viewer component</li>
+  <li>Package updates</li>
+</ul>
+
 
 V2.0.1 Tuesday 29 September 2020
   <br />

@@ -97,13 +97,13 @@ class Main extends Component {
 
     return (
       <TraditionalLayout
-      title="React Automation Studio V2.0.1"
+      title="React Automation Studio V2.1.0"
       denseAppBar
       alignTitle="center"
     >
 
 
-        
+
         <Grid container direction="row" item justify="center" spacing={1} alignItems="center" style={{paddingTop:64}}>
           <Grid item lg={4} sm={4}  xs={2}>
             </Grid>
@@ -151,7 +151,7 @@ class Main extends Component {
                 <Button fullWidth className={classes.button} component={Link} to="/VaultDemo" color="primary" variant='contained'>  Vault Demo </Button>
               </Grid>
 
-              
+
               {/* <Grid item xs={12}  >
                 <Button  fullWidth className= {classes.button} component={Link} to="/Help" color="secondary" variant='contained'>  Help </Button>
               </Grid> */}

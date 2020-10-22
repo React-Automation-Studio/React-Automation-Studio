@@ -577,7 +577,15 @@ const UserNotification = (props) => {
                         >
                             <div style={{ display: 'flex', width: '100%' }}>
                                 <div style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 20 }}>Alarm Handler Users</div>
+                                <div style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 1 }}>
+                                    {
+                                        userTableExpand
+                                            ? null
+                                            : '[click to show]'
+                                    }
+                                </div>
                             </div>
+
                         </ExpansionPanelSummary>
                         <ExpansionPanelDetails>
                             <UserTable
@@ -624,6 +632,13 @@ const UserNotification = (props) => {
                         >
                             <div style={{ display: 'flex', width: '100%' }}>
                                 <div style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 20 }}>{`Filtered PVs: ${filterName}`}</div>
+                                <div style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 1 }}>
+                                    {
+                                        pvListExpand
+                                            ? null
+                                            : '[click to show]'
+                                    }
+                                </div>
                             </div>
                         </ExpansionPanelSummary>
                         <ExpansionPanelDetails>

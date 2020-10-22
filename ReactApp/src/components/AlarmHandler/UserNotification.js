@@ -383,6 +383,8 @@ const UserNotification = (props) => {
     }
 
     const handleOpenDialog = useCallback((event, name, username) => {
+        event.preventDefault()
+        event.stopPropagation()
         setDialogUserObject(userSchedule[`${username}-${name}`])
         setDialogUser({
             name: name,

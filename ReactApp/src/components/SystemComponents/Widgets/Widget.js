@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import PV from '../PV'
-import ContextMenu from "../ContextMenu";
 import PropTypes from "prop-types";
 import { LanDisconnect } from "mdi-material-ui/";
 import { create, all } from 'mathjs';
 import { useTheme } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import {replaceMacros,replaceArrayMacros} from '../Utils/macroReplacement';
+import { useContextMenu } from "../Utils/widgetHooks";
+
 const config = { }
 const math = create(all, config)
 
@@ -24,6 +25,7 @@ const math = create(all, config)
  * 
  **/
   const Widget = (props) => {
+  const { disableProbe } = props;
   const theme = useTheme();
   const [value, setValue] = useState(0);
   const [initialized, setInitalized] = useState(false);
@@ -41,9 +43,6 @@ const math = create(all, config)
   const [units, setUnits] = useState("");
   const [label, setLabel] = useState("");
   const [tooltip] = useState(replaceMacros(props.tooltip));
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [openContextMenu, setOpenContextMenu] = useState(false);
-  const [contextPVs,setContextPVs]=useState([]);
   const [pv, setPv] = useState({
     value: 0,
     label: "",
@@ -59,6 +58,11 @@ const math = create(all, config)
   });
   const [pvs, setPvs] = useState([]);
   
+  const [contextMenu, handleToggleContextMenu] = useContextMenu(
+    [pv, ...pvs], 
+    readOnly, 
+    disableProbe
+  );
  
   useEffect(() => {
   let ro=props.readOnly===true;
@@ -75,19 +79,6 @@ const math = create(all, config)
     setReadOnly(ro)
      // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pv, props.readOnly,pvs,])
-
-  useEffect(() => {
-    let newContextPVs=[];
-    newContextPVs.push(...pv.PVs);
-    pvs.map((item)=>
-      newContextPVs.push(...item.PVs)
-    )
-   
-  
-   
-    setContextPVs(newContextPVs)
-
-    }, [pv, pvs])
 
   useEffect(() => {
     if (props.usePvLabel) {
@@ -286,22 +277,6 @@ const math = create(all, config)
 
   }
 
-
-
-  const handleToggleContextMenu = (event) => {
-    
-    event.preventDefault();
-    event.stopPropagation();
-    setAnchorEl(event.target);
-    setOpenContextMenu(!openContextMenu);
-
-  }
-
-  const handleContextMenuClose = () => {
-    setOpenContextMenu(false);
-  }
-
-
   const wrapComponent = (CustomComponent, props) => {
     return <CustomComponent {...props} />;
   }
@@ -407,22 +382,6 @@ const math = create(all, config)
 
   />
   const childPvs = getPvs(props.pvs, props, pvs, setPvs,props.writeOutputValueToAllpvs?newValueTrigger:undefined,props.writeOutputValueToAllpvs?outputValue:undefined)
-  const contextMenu=(<ContextMenu
-  disableProbe={props.disableProbe}
-  open={openContextMenu}
-  pvs={contextPVs}
-  handleClose={handleContextMenuClose}
-  anchorEl={anchorEl}
-  anchorOrigin={{
-    vertical: "bottom",
-    horizontal: "center",
-  }}
-  transformOrigin={{
-    vertical: "top",
-    horizontal: "center",
-  }}
-  probeType={props.readOnly ? "readOnly" : undefined}
-/>)
   const child = props.component && wrapComponent(props.component,
     {
       ...props,

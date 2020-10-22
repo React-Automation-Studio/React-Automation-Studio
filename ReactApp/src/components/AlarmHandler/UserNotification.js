@@ -54,7 +54,7 @@ const UserNotification = (props) => {
     const [pvListExpand, setPvListExpand] = useState(true)
     const [userTableIsExpanded, setUserTableIsExpanded] = useState(true)
     const [pvListIsExpanded, setPvListIsExpanded] = useState(true)
-    const [filterUser, setFilterUser] = useState('')
+    const [filterUser, setFilterUser] = useState({})
     const [filterUserRegex, setFilterUserRegex] = useState([])
     const [dictUserRegex, setDictUserRegex] = useState({})
     const [alarmIOCPVPrefix, setAlarmIOCPVPrefix] = useState(null)
@@ -194,7 +194,10 @@ const UserNotification = (props) => {
     }
 
     const handleSetFilterUser = useCallback((name, username) => {
-        setFilterUser(name)
+        setFilterUser({
+            name: name,
+            username: username
+        })
         setFilterUserRegex(dictUserRegex[`${username}-${name}`])
     }, [dictUserRegex])
 
@@ -202,6 +205,7 @@ const UserNotification = (props) => {
         event.preventDefault()
         event.stopPropagation()
         setFilterUserRegex([expression])
+        setFilterUser({})
     }, [])
 
     const handleSetUserEdit = useCallback((event, name, username, value) => {
@@ -210,7 +214,10 @@ const UserNotification = (props) => {
 
         const match = userList.filter(el => el.name === name && el.username === username)[0]
         setFilterUserRegex(match.notifyPVs)
-        setFilterUser(match.name)
+        setFilterUser({
+            name: match.name,
+            username: match.username
+        })
 
         if (value) {
             // only back up when starting to edit
@@ -515,7 +522,7 @@ const UserNotification = (props) => {
             ? filterUserRegex[0] === ""
                 ? 'ALL'
                 : filterUserRegex[0]
-            : filterUser
+            : filterUser.name
 
     let userTableHeight = '40vh'
     let pvListHeight = '32vh'
@@ -579,6 +586,7 @@ const UserNotification = (props) => {
                                 userList={userList}
                                 userEdit={userEdit}
                                 username={username}
+                                filterUser={filterUser}
                                 filterUserRegex={filterUserRegex}
                                 setUserEdit={handleSetUserEdit}
                                 setFilterUser={handleSetFilterUser}

@@ -67,14 +67,24 @@ const UserTable = (props) => {
     return (
         <TableContainer component={Paper} style={{ height: props.height }} elevation={theme.palette.type === 'dark' ? undefined : 5}>
             <Table aria-label="User Table" stickyHeader size="small">
-                <colgroup>
-                    <col style={{ width: '10%' }} />
-                    <col style={{ width: '15%' }} />
-                    <col style={{ width: '35%' }} />
-                    <col style={{ width: '10%' }} />
-                    <col style={{ width: '10%' }} />
-                    <col style={{ width: '20%' }} />
-                </colgroup>
+                {
+                    showAddHeader
+                        ? <colgroup>
+                            <col style={{ width: '10%' }} />
+                            <col style={{ width: '15%' }} />
+                            <col style={{ width: '35%' }} />
+                            <col style={{ width: '10%' }} />
+                            <col style={{ width: '10%' }} />
+                            <col style={{ width: '20%' }} />
+                        </colgroup>
+                        : <colgroup>
+                            <col style={{ width: '10%' }} />
+                            <col style={{ width: '17%' }} />
+                            <col style={{ width: '45%' }} />
+                            <col style={{ width: '5%' }} />
+                            <col style={{ width: '23%' }} />
+                        </colgroup>
+                }
                 <TableHead>
                     <TableRow
                         onClick={(event) => {
@@ -109,7 +119,7 @@ const UserTable = (props) => {
                                 </div>
                             </Tooltip>
                         </TableCell>
-                        <TableCell align="center" classes={{ stickyHeader: classes.styledTableHeadCell }}>{showAddHeader ? 'Add' : null}</TableCell>
+                        {showAddHeader && <TableCell align="center" classes={{ stickyHeader: classes.styledTableHeadCell }}>Add</TableCell>}
                         <TableCell align="center" classes={{ stickyHeader: classes.styledTableHeadCell }}>Actions</TableCell>
                         <TableCell align="left" classes={{ stickyHeader: classes.styledTableHeadCell }}>Notification Schedule</TableCell>
                     </TableRow>
@@ -118,7 +128,7 @@ const UserTable = (props) => {
                     {Object.values(props.userList).map(user => {
                         return (
                             < TableRow
-                                key={`${user.username}`}
+                                key={`${user.username}-${user.name}`}
                                 hover
                                 onClick={(event) => {
                                     event.preventDefault()
@@ -176,7 +186,11 @@ const UserTable = (props) => {
                                                 classes={{ outlinedSecondary: classes.chipOutlinedSecondary }}
                                                 key={expression}
                                                 label={expression}
-                                                variant={expression === fillChipName ? undefined : "outlined"}
+                                                variant={
+                                                    expression === fillChipName || (user.name === props.filterUser.name && user.username === props.filterUser.username)
+                                                        ? undefined
+                                                        : "outlined"
+                                                }
                                                 color="secondary"
                                                 className={classes.chip}
                                                 onClick={(event) => props.setFilterUserRegex(event, expression)}
@@ -185,7 +199,7 @@ const UserTable = (props) => {
                                         )
                                     })}
                                 </TableCell>
-                                <TableCell>
+                                {showAddHeader && <TableCell>
                                     {
                                         props.userEdit[`${user.username}-${user.name}`]
                                             ? <TextField
@@ -217,7 +231,7 @@ const UserTable = (props) => {
                                             />
                                             : null
                                     }
-                                </TableCell>
+                                </TableCell>}
                                 <TableCell align="center">
                                     {
                                         props.username === user.username

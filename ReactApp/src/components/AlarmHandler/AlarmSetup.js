@@ -294,8 +294,8 @@ const AlarmSetup = (props) => {
             if (isEmpty(alarmRowSelected)) {
                 let localLastAlarm = ""
                 dbPVData.map((area, index) => {
-                    areaContextOpen[area["area"]] = false
-                    areaSubAreaOpen[area["area"]] = false
+                    // areaContextOpen[area["area"]] = false
+                    // areaSubAreaOpen[area["area"]] = false
                     areaMongoId[area["area"]] = area["_id"]["$oid"]
                     // Map alarms in area
                     Object.keys(area["pvs"]).map(alarmKey => {
@@ -309,7 +309,7 @@ const AlarmSetup = (props) => {
                             areaNames.push({ "area": area[areaKey] })
                         }
                         else if (areaKey.includes("subArea")) {
-                            areaContextOpen[`${area["area"]}=${area[areaKey]["name"]}`] = false
+                            // areaContextOpen[`${area["area"]}=${area[areaKey]["name"]}`] = false
                             areaSubAreaMongoId[`${area["area"]}=${area[areaKey]["name"]}`] = areaKey
                             areaMongoId[`${area["area"]}=${area[areaKey]["name"]}`] = area["_id"]["$oid"]
                             // Map alarms in subarea
@@ -332,7 +332,7 @@ const AlarmSetup = (props) => {
                     return null
                 })
                 if (!areaSelectedIndex) {
-                    setAreaSubAreaOpen(areaSubAreaOpen)
+                    // setAreaSubAreaOpen(areaSubAreaOpen)
                     setAreaSelectedIndex('ALLAREAS')
                     setAreaSelectedName('ALL AREAS')
                     setAlarmLogSelectedName('ALL AREAS')
@@ -345,7 +345,7 @@ const AlarmSetup = (props) => {
                 setAreaMongoId(areaMongoId)
                 setAreaSubAreaMongoId(areaSubAreaMongoId)
                 setAreaNames(areaNames)
-                setAreaContextOpen(areaContextOpen)
+                // setAreaContextOpen(areaContextOpen)
             }
 
             const localAreaAlarms = {}
@@ -457,16 +457,11 @@ const AlarmSetup = (props) => {
 
 
     const handleGlobalArea = () => {
-        const localAreaSubAreaOpen = { ...areaSubAreaOpen }
-        localAreaSubAreaOpen[areaSelectedIndex.split('=')[0]] = false   // set previous area to false
-
         setAreaSelectedIndex('ALLAREAS')
         setAlarmLogSelectedKey('ALLAREAS')
         setAreaSelectedName('ALL AREAS')
         setAlarmLogSelectedName('ALL AREAS')
-        setAreaSubAreaOpen(localAreaSubAreaOpen)
-
-        // handleUpdateLogDisplayData('ALLAREAS')
+        setAreaSubAreaOpen({})
     }
 
     const handleAckGlobal = () => {
@@ -608,10 +603,8 @@ const AlarmSetup = (props) => {
 
     const handleListItemContextClose = useCallback((event, index) => {
         // console.log("close context")
-        const localAreaContextOpen = { ...areaContextOpen }
-        localAreaContextOpen[index] = false
-        setAreaContextOpen(localAreaContextOpen)
-    }, [areaContextOpen])
+        setAreaContextOpen({})
+    }, [])
 
     const handleAckAllAreaAlarms = useCallback((event, index) => {
         // console.log('Ack all alarms for', index)
@@ -726,6 +719,9 @@ const AlarmSetup = (props) => {
     const handleEnableDisableArea = useCallback((event, index, value) => {
         // console.log('Enable/Disable area', index)
 
+        event.preventDefault()
+        event.stopPropagation()
+
         const id = areaMongoId[index]
         let newvalues = null
 
@@ -755,19 +751,16 @@ const AlarmSetup = (props) => {
 
     const handleListItemRightClick = useCallback((event, index) => {
         // console.log("right click")
-        event.preventDefault();
-
-        const localAreaContextOpen = { ...areaContextOpen }
-        localAreaContextOpen[index] = true
-
-        setAreaContextOpen(localAreaContextOpen)
+        event.preventDefault()
+        event.stopPropagation()
+        setAreaContextOpen({
+            [index]: true
+        })
         setContextMouseX(event.clientX - 2)
         setContextMouseY(event.clientY - 2)
-    }, [areaContextOpen])
+    }, [])
 
     const handleListItemClick = useCallback((event, index) => {
-        const localAreaSubAreaOpen = { ...areaSubAreaOpen }
-
         let localAreaSelectedName = index.split('=')
 
         if (localAreaSelectedName.length > 1) {                  // selected area is a subArea
@@ -775,11 +768,14 @@ const AlarmSetup = (props) => {
         }
         else {                                              // selected area is an area
             if (index === areaSelectedIndex) {   // selected same area twice
-                localAreaSubAreaOpen[index] = !areaSubAreaOpen[index]
+                setAreaSubAreaOpen({
+                    [index]: !areaSubAreaOpen[index]
+                })
             }
             else {                                           // selected a different area
-                localAreaSubAreaOpen[areaSelectedIndex.split('=')[0]] = false   // set previous area to false
-                localAreaSubAreaOpen[index] = true                           // set current area to true
+                setAreaSubAreaOpen({
+                    [index]: true
+                })
             }
         }
 
@@ -787,7 +783,6 @@ const AlarmSetup = (props) => {
         setAreaSelectedIndex(index)
         setAreaSelectedName(localAreaSelectedName)
         setAlarmLogSelectedName(localAreaSelectedName)
-        setAreaSubAreaOpen(localAreaSubAreaOpen)
         setAlarmLogSelectedKey(index)
         setAlarmRowSelected({})
 

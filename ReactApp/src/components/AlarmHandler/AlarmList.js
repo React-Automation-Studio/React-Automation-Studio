@@ -150,6 +150,8 @@ const AlarmList = props => {
 
     // console.log("AlarmList rendered")
 
+    // console.log(props.areaContextOpen)
+
     const classes = useStyles(props);
 
     return (
@@ -280,7 +282,7 @@ const AlarmList = props => {
                                                                     </ListItem>
                                                                     <Menu
                                                                         keepMounted
-                                                                        open={props.areaContextOpen[`${area["area"]}=${subArea}`]}
+                                                                        open={props.areaContextOpen[`${area["area"]}=${subArea}`] ? true : false}
                                                                         onClose={event => props.listItemContextClose(event, `${area["area"]}=${subArea}`)}
                                                                         anchorReference="anchorPosition"
                                                                         anchorPosition={props.contextMouseY !== null && props.contextMouseX !== null ?

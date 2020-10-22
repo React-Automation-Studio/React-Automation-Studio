@@ -181,17 +181,15 @@ const UserTable = (props) => {
                                     </Grid>
                                 </TableCell>
                                 <TableCell>
-                                    {Object.values(user.notifyPVs).map(expression => {
+                                    {user.notifyPVs.map(expressionObject => {
+                                        const expression = expressionObject.regEx
+                                        const filledChip = expression === fillChipName || (!showAddHeader && (user.name === props.filterUser.name && user.username === props.filterUser.username))
                                         return (
                                             <Chip
                                                 classes={{ outlinedSecondary: classes.chipOutlinedSecondary }}
                                                 key={expression}
                                                 label={expression}
-                                                variant={
-                                                    expression === fillChipName || (user.name === props.filterUser.name && user.username === props.filterUser.username)
-                                                        ? undefined
-                                                        : "outlined"
-                                                }
+                                                variant={filledChip ? undefined : "outlined"}
                                                 color="secondary"
                                                 className={classes.chip}
                                                 onClick={(event) => props.setFilterUserRegex(event, expression)}

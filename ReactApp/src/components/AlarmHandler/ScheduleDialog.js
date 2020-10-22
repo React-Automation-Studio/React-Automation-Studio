@@ -165,6 +165,8 @@ const ScheduleDialog = (props) => {
         props.setDialogUserObject({ ...props.dialogUserObject, toDate: newDate })
     }
 
+    console.log(props.dialogUserObject)
+
     return (
         <Dialog
             // TransitionComponent={Transition}
@@ -185,6 +187,34 @@ const ScheduleDialog = (props) => {
                     justify="flex-start"
                     alignItems="stretch"
                 >
+                    <Grid item xs={12}>
+                        <Grid
+                            container
+                            direction="row"
+                            justify="flex-start"
+                            alignItems="stretch"
+                        >
+                            {/* <Grid item xs={2} className={classes.centerInBlock}>
+                                <NotificationsActiveIcon />
+                            </Grid> */}
+                            <Grid item xs={4} className={classes.centerInBlock}>
+                                <span style={{ fontSize: '1.1rem', fontWeight: 500 }}>Global profile</span>
+                            </Grid>
+                            <Grid item xs={8}>
+                                <Checkbox
+                                    checked={props.dialogUserObject.notify}
+                                    onChange={handleNotify}
+                                />
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid item xs={12} style={{ marginTop: '0.75em', marginBottom: '0.75em' }}>
+                        <Divider variant="middle" />
+                    </Grid>
+
+                    <Grid item xs={12} style={{ marginTop: '0.75em', marginBottom: '0.75em' }}>
+                        <Divider variant="middle" />
+                    </Grid>
                     <Grid item xs={12}>
                         <Grid
                             container

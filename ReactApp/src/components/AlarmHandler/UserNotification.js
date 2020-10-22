@@ -333,7 +333,30 @@ const UserNotification = (props) => {
             const userIndex = userList.indexOf(match)
 
             // Update match by adding relevant expression
-            const newNotifyPVs = [...match.notifyPVs, expression]
+            const newNotifyPVs = [...match.notifyPVs, {
+                "regEx": expression,
+                "notifySetup": {
+                    "notify": true,
+                    "email": true,
+                    "mobile": false,
+                    "allDay": true,
+                    "fromTime": "",
+                    "toTime": "",
+                    "weekly": true,
+                    "days": {
+                        "Monday": true,
+                        "Tuesday": true,
+                        "Wednesday": true,
+                        "Thursday": true,
+                        "Friday": true,
+                        "Saturday": true,
+                        "Sunday": true
+                    },
+                    "dateRange": false,
+                    "fromDate": "",
+                    "toDate": ""
+                }
+            }]
             match.notifyPVs = newNotifyPVs
 
             // Create new userList
@@ -348,17 +371,23 @@ const UserNotification = (props) => {
     const deleteChip = useCallback((event, name, username, expression) => {
         event.preventDefault()
         event.stopPropagation()
+
         // Find match and note it's index in userList
         const match = userList.filter(el => el.name === name && el.username === username)[0]
         const userIndex = userList.indexOf(match)
 
-        // Update match by removing relevant expression
-        const newNotifyPVs = match.notifyPVs.filter(el => el !== expression)
-        match.notifyPVs = newNotifyPVs
+        // Remove regEx not required
+        const newNotifyPVs = match.notifyPVs.filter(el => el.regEx !== expression)
+
+        // Create new match with updated notifyPVs
+        const newMatch = {
+            ...match,
+            notifyPVs: newNotifyPVs
+        }
 
         // Create new userList
         const newUserList = [...userList]
-        newUserList[userIndex] = match
+        newUserList[userIndex] = newMatch
 
         setUserList(newUserList)
         setFilterUserRegex(newNotifyPVs)
@@ -535,7 +564,7 @@ const UserNotification = (props) => {
         pvListHeight = '76vh'
     }
 
-    // console.log(dialogUserObject)
+    // console.log(userList)
 
     return (
         <React.Fragment>

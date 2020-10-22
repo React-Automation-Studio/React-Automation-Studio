@@ -130,6 +130,7 @@ const UserTable = (props) => {
                             < TableRow
                                 key={`${user.username}-${user.name}`}
                                 hover
+                                selected={user.name === props.filterUser.name && user.username === props.filterUser.username}
                                 onClick={(event) => {
                                     event.preventDefault()
                                     event.stopPropagation()

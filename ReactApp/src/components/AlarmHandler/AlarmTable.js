@@ -72,6 +72,8 @@ const AlarmTable = props => {
         majorAlarm: classes.TextFieldSeverityDisabled,
     }
 
+    // console.log(props.alarmContextOpen)
+
     return (
         <TableContainer component={Paper} style={{ height: props.height }} ref={myRef} elevation={theme.palette.type === 'dark' ? undefined : 5}>
             <Table aria-label="Alarm Table" stickyHeader size="small">
@@ -189,11 +191,11 @@ const AlarmTable = props => {
                                             hover={props.areaEnabled[areaName] && props.enableAllAreas}
                                             onContextMenu={event => props.tableItemRightClick(event, areaAlarmName)}
                                             selected={props.alarmRowSelected[areaAlarmName]}
-                                            onClick={event => props.tableRowClick(event, `${areaName}*${areaAlarms[areaAlarmName]["name"]}`)}
+                                            onClick={event => props.tableRowClick(event, `${areaName}*${areaAlarms[areaAlarmName]["name"]}`, areaAlarmName)}
                                         >
                                             <Menu
                                                 keepMounted
-                                                open={props.alarmContextOpen[areaAlarmName]}
+                                                open={props.alarmContextOpen[areaAlarmName] ? true : false}
                                                 onClose={event => props.alarmContextClose(event, areaAlarmName)}
                                                 anchorReference="anchorPosition"
                                                 anchorPosition={props.contextMouseY !== null && props.contextMouseX !== null ?

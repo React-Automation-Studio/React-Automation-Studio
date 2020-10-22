@@ -299,8 +299,8 @@ const AlarmSetup = (props) => {
                     areaMongoId[area["area"]] = area["_id"]["$oid"]
                     // Map alarms in area
                     Object.keys(area["pvs"]).map(alarmKey => {
-                        alarmContextOpen[`${area["area"]}=${alarmKey}`] = false
-                        alarmRowSelected[`${area["area"]}=${alarmKey}`] = false
+                        // alarmContextOpen[`${area["area"]}=${alarmKey}`] = false
+                        // alarmRowSelected[`${area["area"]}=${alarmKey}`] = false
                         localLastAlarm = area["pvs"][alarmKey]["name"]
                         return null
                     })
@@ -314,8 +314,8 @@ const AlarmSetup = (props) => {
                             areaMongoId[`${area["area"]}=${area[areaKey]["name"]}`] = area["_id"]["$oid"]
                             // Map alarms in subarea
                             Object.keys(area[areaKey]["pvs"]).map(alarmKey => {
-                                alarmContextOpen[`${area["area"]}=${area[areaKey]["name"]}=${alarmKey}`] = false
-                                alarmRowSelected[`${area["area"]}=${area[areaKey]["name"]}=${alarmKey}`] = false
+                                // alarmContextOpen[`${area["area"]}=${area[areaKey]["name"]}=${alarmKey}`] = false
+                                // alarmRowSelected[`${area["area"]}=${area[areaKey]["name"]}=${alarmKey}`] = false
                                 localLastAlarm = area[areaKey]["pvs"][alarmKey]["name"]
                                 return null
                             })
@@ -340,8 +340,8 @@ const AlarmSetup = (props) => {
                 }
                 // console.log(lastAlarm)
                 setLastAlarm(localLastAlarm)
-                setAlarmRowSelected(alarmRowSelected)
-                setAlarmContextOpen(alarmContextOpen)
+                // setAlarmRowSelected(alarmRowSelected)
+                // setAlarmContextOpen(alarmContextOpen)
                 setAreaMongoId(areaMongoId)
                 setAreaSubAreaMongoId(areaSubAreaMongoId)
                 setAreaNames(areaNames)
@@ -659,11 +659,14 @@ const AlarmSetup = (props) => {
 
     }, [areaMongoId, areaSubAreaMongoId, dbUpdateOne, props.dbName])
 
-    const handleTableRowClick = useCallback((event, alarmName) => {
+    const handleTableRowClick = useCallback((event, alarmName, index) => {
         event.preventDefault()
         event.stopPropagation()
         setAlarmLogSelectedName(alarmName.replace(/[=*]/g, " > "))
         setAlarmLogSelectedKey(alarmName)
+        setAlarmRowSelected({
+            [index]: true
+        })
         // handleUpdateLogDisplayData(alarmName)
     }, [])
 
@@ -678,33 +681,25 @@ const AlarmSetup = (props) => {
             areaName = areaAlarmNameArray[0]
         }
         if (areaEnabled[areaName] && areaAlarms[index]["enable"]) {
-            const localAlarmContextOpen = { ...alarmContextOpen }
-            localAlarmContextOpen[index] = true
-
-            const localAlarmRowSelected = { ...alarmRowSelected }
-            localAlarmRowSelected[index] = true
-
             const localContextMouseX = event.clientX - 2
             const localContextMouseY = event.clientY - 2
 
-            setAlarmContextOpen(localAlarmContextOpen)
-            setAlarmRowSelected(localAlarmRowSelected)
+            setAlarmContextOpen({
+                [index]: true
+            })
+            setAlarmRowSelected({
+                [index]: true
+            })
             setContextMouseX(localContextMouseX)
             setContextMouseY(localContextMouseY)
 
         }
-    }, [areaEnabled, areaAlarms, alarmContextOpen, alarmRowSelected])
+    }, [areaEnabled, areaAlarms])
 
     const handleAlarmContextClose = useCallback((event, index) => {
-        const localAlarmContextOpen = { ...alarmContextOpen }
-        localAlarmContextOpen[index] = false
-
-        const localAlarmRowSelected = { ...alarmRowSelected }
-        localAlarmRowSelected[index] = false
-
-        setAlarmRowSelected(localAlarmRowSelected)
-        setAlarmContextOpen(localAlarmContextOpen)
-    }, [alarmContextOpen, alarmRowSelected])
+        setAlarmRowSelected({})
+        setAlarmContextOpen({})
+    }, [])
 
     const handleAlarmAcknowledge = useCallback((event, index) => {
         // console.log("Ack alarm:", index)
@@ -794,6 +789,7 @@ const AlarmSetup = (props) => {
         setAlarmLogSelectedName(localAreaSelectedName)
         setAreaSubAreaOpen(localAreaSubAreaOpen)
         setAlarmLogSelectedKey(index)
+        setAlarmRowSelected({})
 
         // console.log(index)
         // handleUpdateLogDisplayData(index)

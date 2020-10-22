@@ -126,11 +126,12 @@ const UserTable = (props) => {
                 </TableHead>
                 <TableBody>
                     {Object.values(props.userList).map(user => {
+                        const rowSelected = user.name === props.filterUser.name && user.username === props.filterUser.username
                         return (
                             < TableRow
                                 key={`${user.username}-${user.name}`}
                                 hover
-                                selected={user.name === props.filterUser.name && user.username === props.filterUser.username}
+                                selected={rowSelected}
                                 onClick={(event) => {
                                     event.preventDefault()
                                     event.stopPropagation()
@@ -270,7 +271,7 @@ const UserTable = (props) => {
                                         <div
                                             style={{ paddingRight: '0.5em' }}
                                         >
-                                            {props.userScheduleString(props.userSchedule[`${user.username}-${user.name}`])}
+                                            {/* {props.userScheduleString(props.userSchedule[`${user.username}-${user.name}`])} */}
                                         </div>
                                         <div
                                             className={classes.verticalMiddle}

@@ -49,7 +49,6 @@ const UserNotification = (props) => {
     const [alarmList, setAlarmList] = useState([])
     const [userList, setUserList] = useState([])
     const [userEdit, setUserEdit] = useState({})
-    const [userSchedule, setUserSchedule] = useState({})
     const [userTableExpand, setUserTableExpand] = useState(true)
     const [pvListExpand, setPvListExpand] = useState(true)
     const [userTableIsExpanded, setUserTableIsExpanded] = useState(true)
@@ -68,7 +67,6 @@ const UserNotification = (props) => {
 
     const [dialogOpen, setDialogOpen] = useState(false)
     const [dialogUser, setDialogUser] = useState({})
-    const [dialogUserObject, setDialogUserObject] = useState({})
 
     const dbPVData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs:Parameters:{}` }).data
     const dbUsersData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:users:Parameters:{}` }).data
@@ -414,29 +412,28 @@ const UserNotification = (props) => {
     const handleOpenDialog = useCallback((event, name, username) => {
         event.preventDefault()
         event.stopPropagation()
-        setDialogUserObject(userSchedule[`${username}-${name}`])
         setDialogUser({
             name: name,
             username: username
         })
         setDialogOpen(true)
-    }, [userSchedule])
+    }, [])
 
     const handleAcceptDialog = useCallback((name, username) => {
         // Find match and note it's index in userList
-        const match = userList.filter(el => el.name === name && el.username === username)[0]
-        const id = match['_id']['$oid']
+        // const match = userList.filter(el => el.name === name && el.username === username)[0]
+        // const id = match['_id']['$oid']
 
-        let newvalues = { '$set': { "notifySetup": dialogUserObject } }
+        // let newvalues = { '$set': { "notifySetup": dialogUserObject } }
 
-        dbUpdateOne({
-            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:users`,
-            id: id,
-            update: newvalues
-        })
+        // dbUpdateOne({
+        //     dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:users`,
+        //     id: id,
+        //     update: newvalues
+        // })
 
         setDialogOpen(false)
-    }, [dbUpdateOne, dialogUserObject, userList, props.dbName])
+    }, [dbUpdateOne, userList, props.dbName])
 
     const handleCloseDialog = useCallback(() => {
         setDialogOpen(false)
@@ -490,7 +487,6 @@ const UserNotification = (props) => {
             const localBackupUserList = {}
             const localRegexError = {}
             const localAddRegexVal = {}
-            const localUserSchedule = {}
             // let localFilterUser = null
             // let localFilterUserRegex = null
 
@@ -500,7 +496,6 @@ const UserNotification = (props) => {
                     // localFilterUserRegex = user.notifyPVs
                 }
                 localDictUserRegex[`${user.username}-${user.name}`] = user.notifyPVs
-                localUserSchedule[`${user.username}-${user.name}`] = { ...user.notifySetup }
                 localBackupUserList[`${user.username}-${user.name}`] = user
                 localUserEdit[`${user.username}-${user.name}`] = false
                 localRegexError[`${user.username}-${user.name}`] = false
@@ -515,7 +510,6 @@ const UserNotification = (props) => {
             }
 
             setDictUserRegex(localDictUserRegex)
-            setUserSchedule(localUserSchedule)
             // setFilterUser(localFilterUser)
             // setFilterUserRegex(localFilterUserRegex)
             setBackupUserList(localBackupUserList)
@@ -569,19 +563,18 @@ const UserNotification = (props) => {
     return (
         <React.Fragment>
             {alarmPVs}
-            {
-                Object.keys(dialogUserObject).length !== 0
+            {/* {
+                userList.length !== 0
                     ? <ScheduleDialog
                         dialogOpen={dialogOpen}
                         acceptDialog={handleAcceptDialog}
                         closeDialog={handleCloseDialog}
                         dialogUser={dialogUser}
-                        dialogUserObject={dialogUserObject}
-                        setDialogUserObject={setDialogUserObject}
+                        userList={userList}
                         userScheduleString={userScheduleString}
                     />
                     : null
-            }
+            } */}
             <Grid
                 container
                 direction="column"
@@ -639,7 +632,6 @@ const UserNotification = (props) => {
                                 updateUserMobile={updateUserMobile}
                                 openDialog={handleOpenDialog}
                                 height={userTableHeight}
-                                userSchedule={userSchedule}
                                 userScheduleString={userScheduleString}
                             />
                         </ExpansionPanelDetails>

@@ -263,18 +263,18 @@ const UserTable = (props) => {
                                     }
                                 </TableCell>
                                 <TableCell>
-                                    <Grid
-                                        container
-                                        direction="row"
-                                        justify="flex-start"
-                                        alignItems="center"
+                                    <div
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center'
+                                        }}
                                     >
-                                        <Grid item xs={11}
+                                        <div
                                             style={{ paddingRight: '0.5em' }}
                                         >
                                             {props.userScheduleString(props.userSchedule[`${user.username}-${user.name}`])}
-                                        </Grid>
-                                        <Grid item xs={1}
+                                        </div>
+                                        <div
                                             className={classes.verticalMiddle}
                                             style={{
                                                 marginLeft: 'auto'
@@ -289,14 +289,11 @@ const UserTable = (props) => {
                                                     </Tooltip>
                                                     : null
                                             }
-                                        </Grid>
-                                    </Grid>
-
-
+                                        </div>
+                                    </div>
                                 </TableCell>
                             </TableRow>
                         )
-
                     })}
 
                 </TableBody>

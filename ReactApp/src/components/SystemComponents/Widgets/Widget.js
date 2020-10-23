@@ -24,6 +24,7 @@ const math = create(all, config)
  * 
  **/
   const Widget = (props) => {
+  const { index } = props;
   const theme = useTheme();
   const [value, setValue] = useState(0);
   const [initialized, setInitalized] = useState(false);
@@ -423,12 +424,27 @@ const math = create(all, config)
   }}
   probeType={props.readOnly ? "readOnly" : undefined}
 />)
+
+  const checkIndex = (index, value) => {
+    return index !== undefined && Array.isArray(value);
+  };
+
+  const handleValue = (newValue, setFunction) => {
+    if (checkIndex(index, value)) {
+      let newArrayValue = [...value];
+      newArrayValue[index] = newValue;
+      setFunction(newArrayValue);
+    } else {
+      setFunction(newValue);
+    }
+  };
+
   const child = props.component && wrapComponent(props.component,
     {
       ...props,
       initialized: initialized,
       pvName: pv.pvName,
-      value: value,
+      value: checkIndex(index, value) ? value[index] : value,
       min: min,
       max: max,
       prec:prec,
@@ -440,8 +456,9 @@ const math = create(all, config)
       alarmSeverity: alarmSeverity,
       enumStrs: enumStrings,
       disconnectedIcon: disconnectedIcon(),
-      handleChange: setValue,
-      handleImmediateChange: setImmediateValue,
+      handleChange: (newValue) => handleValue(newValue, setValue),
+      handleImmediateChange: (newValue) =>
+        handleValue(newValue, setImmediateValue),
       handleCommitChange: () => SetCommitChange(true),
       handleFocus: () => setFocus(true),
       handleBlur: () => setFocus(false),

@@ -104,6 +104,12 @@ def check_pv_initialized_after_disconnect():
                                 d['value']=list(d['value'])
                             if(clientPVlist[pvname]['pv'].count==0):
                                 d['value']=[]
+                            if(clientPVlist[pvname]['pv'].count==1):
+                                new_char_value=str(d['char_value'])
+                                if (len(new_char_value)==0):
+                                    new_char_value=str(d['value'])
+                                d['char_value']=new_char_value
+
                             d['pvname']= pvname
                             d['newmetadata']= 'True'
                             d['connected']= '1'
@@ -256,8 +262,13 @@ def onValueChanges(pvname=None,count=None,char_value=None,severity=None,status=N
     pvname1='pva://'+str(pvname)
     if(clientPVlist[pvname1]['initialized']==True):
         if (float(count)== 1):
+           new_char_value=str(char_value)
+           if (len(new_char_value)==0):
+               new_char_value=str(value)
+
+
            socketio.emit(pvname1,
-              {'pvname': pvname1,'newmetadata': 'False','value': str(value),'char_value': str(char_value),'count':count, 'connected':'1', 'severity': severity,'timestamp':timestamp
+              {'pvname': pvname1,'newmetadata': 'False','value': str(value),'char_value': new_char_value,'count':count, 'connected':'1', 'severity': severity,'timestamp':timestamp
               },room='pva://'+str(pvname),namespace='/pvServer')
         else:
            d={'pvname': pvname1,'newmetadata': 'False','value': list((value)),'count':count, 'connected':'1', 'severity': severity,'timestamp':timestamp}

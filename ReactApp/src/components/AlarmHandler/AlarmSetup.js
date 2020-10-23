@@ -10,6 +10,8 @@ import InputBase from '@material-ui/core/InputBase';
 
 import DataConnection from '../SystemComponents/DataConnection';
 import PV from '../SystemComponents/PV';
+import useMongoDbWatch from '../SystemComponents/database/MongoDB/useMongoDbWatch';
+import useMongoDbUpdateOne from '../SystemComponents/database/MongoDB/useMongoDbUpdateOne';
 import Typography from '@material-ui/core/Typography';
 
 import Menu from '@material-ui/core/Menu';
@@ -33,6 +35,12 @@ import DoneAllIcon from '@material-ui/icons/DoneAll';
 
 import PublicIcon from '@material-ui/icons/Public';
 
+import FirstPageIcon from '@material-ui/icons/FirstPage';
+import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
+import LastPageIcon from '@material-ui/icons/LastPage';
+import TablePagination from '@material-ui/core/TablePagination';
+
 function isEmpty(obj) {
     return Object.keys(obj).length === 0;
 }
@@ -43,6 +51,10 @@ const useStyles = makeStyles(theme => ({
         padding: theme.spacing(1),
         margin: 0,
         width: "100%"
+    },
+    PaginationRoot: {
+        flexShrink: 0,
+        marginLeft: theme.spacing(2.5),
     },
     paper: {
         padding: theme.spacing(2),
@@ -97,11 +109,64 @@ const useStyles = makeStyles(theme => ({
             margin: 0,
         },
     },
-
-    expanded: {}
-
-
+    expanded: {},
+    verticalMiddle: {
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+    }
 }));
+
+const TablePaginationActions = (props) => {
+    const classes = useStyles()
+    const theme = useTheme()
+    const { count, page, rowsPerPage, onChangePage } = props
+
+    const handleFirstPageButtonClick = (event) => {
+        onChangePage(event, 0)
+    }
+
+    const handleBackButtonClick = (event) => {
+        onChangePage(event, page - 1)
+    }
+
+    const handleNextButtonClick = (event) => {
+        onChangePage(event, page + 1)
+    }
+
+    const handleLastPageButtonClick = (event) => {
+        onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1))
+    }
+
+    return (
+        <div className={classes.PaginationRoot}>
+            <IconButton
+                onClick={handleFirstPageButtonClick}
+                disabled={page === 0}
+                aria-label="first page"
+            >
+                {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+            </IconButton>
+            <IconButton onClick={handleBackButtonClick} disabled={page === 0} aria-label="previous page">
+                {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+            </IconButton>
+            <IconButton
+                onClick={handleNextButtonClick}
+                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                aria-label="next page"
+            >
+                {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+            </IconButton>
+            <IconButton
+                onClick={handleLastPageButtonClick}
+                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                aria-label="last page"
+            >
+                {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+            </IconButton>
+        </div>
+    )
+}
 
 const AlarmSetup = (props) => {
 
@@ -111,7 +176,6 @@ const AlarmSetup = (props) => {
     const theme = useTheme()
 
     const context = useContext(AutomationStudioContext)
-    const socket = context.socket
     const username = context.userData.username
 
     // to connect to all PVs before updating state
@@ -130,10 +194,6 @@ const AlarmSetup = (props) => {
     const [alarmLogSelectedKey, setAlarmLogSelectedKey] = useState('')
     const [alarmLogDict, setAlarmLogDict] = useState({})
     const [alarmLogDisplayArray, setAlarmLogDisplayArray] = useState([])
-    const [dbHistoryURL, setDbHistoryURL] = useState('')
-    const [dbPVsURL, setDbPVsURL] = useState('')
-    const [dbConfigURL, setDbConfigURL] = useState('')
-    const [dbGlobalURL, setDbGlobalURL] = useState('')
     const [alarmLogExpand, setAlarmLogExpand] = useState(true)
     const [alarmLogIsExpanded, setAlarmLogIsExpanded] = useState(true)
     const [alarmTableExpand, setAlarmTableExpand] = useState(true)
@@ -167,80 +227,18 @@ const AlarmSetup = (props) => {
     const [loadAlarmList, setLoadAlarmList] = useState({
         areaPV: false,
     })
-    const [dbWatchId, setDbWatchId] = useState(null)
     const [fadeTU] = useState(false)
     const [fadeList] = useState(false)
-    // const [fadeTU, setFadeTU] = useState(false)
-    // const [fadeList, setFadeList] = useState(false)
+    const [page, setPage] = React.useState(0)
+    const [rowsPerPage, setRowsPerPage] = React.useState(25)
 
-    // componentDidMount
-    useEffect(() => {
-        // console.log('[AlarmHander] componentDidMount')
-        let jwt = JSON.parse(localStorage.getItem('jwt'));
 
-        if (jwt === null) {
-            jwt = 'unauthenticated'
-        }
+    const dbPVData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs:Parameters:{}` }).data
+    const dbHistoryData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history:Parameters:{}` }).data
+    const dbConfigData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:config:Parameters:{}` }).data
+    const dbGlobData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:glob:Parameters:{}` }).data
 
-        const ALARM_DATABASE = "ALARM_DATABASE"
-        const dbName = props.dbName
-        let colName = "pvs"
-        const localDbPVsURL = "mongodb://" + ALARM_DATABASE + ":" + dbName + ":" + colName + ":Parameters:{}"
-        setDbPVsURL(localDbPVsURL)
-
-        socket.emit('databaseBroadcastRead', { dbURL: localDbPVsURL, 'clientAuthorisation': jwt }, (data) => {
-            if (data !== "OK") {
-                console.log("ackdata", data);
-            }
-        });
-        socket.on('databaseData:' + localDbPVsURL, handleNewDbPVsList);
-
-        colName = "history"
-        const localDbHistoryURL = "mongodb://" + ALARM_DATABASE + ":" + dbName + ":" + colName + ":Parameters:{}"
-        setDbHistoryURL(localDbHistoryURL)
-
-        socket.emit('databaseReadWatchAndBroadcast', { dbURL: localDbHistoryURL, 'clientAuthorisation': jwt }, handleDatabaseReadWatchAndBroadcastAck)
-        socket.on('databaseWatchData:' + localDbHistoryURL, handleNewDbLogReadWatchBroadcast);
-
-        colName = "config"
-        const localDbConfigURL = "mongodb://" + ALARM_DATABASE + ":" + dbName + ":" + colName + ":Parameters:{}"
-        setDbConfigURL(localDbConfigURL)
-
-        socket.emit('databaseBroadcastRead', { dbURL: localDbConfigURL, 'clientAuthorisation': jwt }, (data) => {
-            if (data !== "OK") {
-                console.log("ackdata", data);
-            }
-        });
-        socket.on('databaseData:' + localDbConfigURL, handleDbConfig);
-
-        colName = "glob"
-        const localDbGlobalURL = "mongodb://" + ALARM_DATABASE + ":" + dbName + ":" + colName + ":Parameters:{}"
-        setDbGlobalURL(localDbGlobalURL)
-
-        socket.emit('databaseBroadcastRead', { dbURL: localDbGlobalURL, 'clientAuthorisation': jwt }, (data) => {
-            if (data !== "OK") {
-                console.log("ackdata", data);
-            }
-        });
-        socket.on('databaseData:' + localDbGlobalURL, handleDbGlobal);
-
-        // componentWillUnmount
-        return () => {
-            let jwt = JSON.parse(localStorage.getItem('jwt'));
-            if (jwt === null) {
-                jwt = 'unauthenticated'
-            }
-            if (typeof (dbWatchId) !== 'undefined') {
-                socket.emit('remove_dbWatch', { dbURL: dbHistoryURL, dbWatchId: dbWatchId, 'clientAuthorisation': jwt });
-            }
-            socket.removeListener('databaseWatchData:' + dbHistoryURL, handleNewDbLogReadWatchBroadcast);
-            socket.removeListener('databaseData:' + dbPVsURL, handleNewDbPVsList);
-            socket.removeListener('databaseData:' + dbConfigURL, handleDbConfig);
-            socket.removeListener('databaseData:' + dbGlobalURL, handleDbGlobal);
-        }
-        // disable useEffect dependencies for "componentDidMount"
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    const dbUpdateOne = useMongoDbUpdateOne({})
 
     // update alarm log display data
     useEffect(() => {
@@ -285,28 +283,189 @@ const AlarmSetup = (props) => {
         })
 
         setAlarmLogDisplayArray(localAlarmLogDisplayArray)
+        setPage(0)
 
     }, [alarmLogDict, alarmLogSelectedKey])
+
+    // handleNewDbPVsList
+    useEffect(() => {
+        if (dbPVData !== null) {
+            const areaNames = []
+            if (isEmpty(alarmRowSelected)) {
+                let localLastAlarm = ""
+                dbPVData.map((area, index) => {
+                    // areaContextOpen[area["area"]] = false
+                    // areaSubAreaOpen[area["area"]] = false
+                    areaMongoId[area["area"]] = area["_id"]["$oid"]
+                    // Map alarms in area
+                    Object.keys(area["pvs"]).map(alarmKey => {
+                        // alarmContextOpen[`${area["area"]}=${alarmKey}`] = false
+                        // alarmRowSelected[`${area["area"]}=${alarmKey}`] = false
+                        localLastAlarm = area["pvs"][alarmKey]["name"]
+                        return null
+                    })
+                    Object.keys(area).map(areaKey => {
+                        if (areaKey === "area") {
+                            areaNames.push({ "area": area[areaKey] })
+                        }
+                        else if (areaKey.includes("subArea")) {
+                            // areaContextOpen[`${area["area"]}=${area[areaKey]["name"]}`] = false
+                            areaSubAreaMongoId[`${area["area"]}=${area[areaKey]["name"]}`] = areaKey
+                            areaMongoId[`${area["area"]}=${area[areaKey]["name"]}`] = area["_id"]["$oid"]
+                            // Map alarms in subarea
+                            Object.keys(area[areaKey]["pvs"]).map(alarmKey => {
+                                // alarmContextOpen[`${area["area"]}=${area[areaKey]["name"]}=${alarmKey}`] = false
+                                // alarmRowSelected[`${area["area"]}=${area[areaKey]["name"]}=${alarmKey}`] = false
+                                localLastAlarm = area[areaKey]["pvs"][alarmKey]["name"]
+                                return null
+                            })
+                            if (areaNames[index]["subAreas"]) {
+                                areaNames[index]["subAreas"].push(area[areaKey]["name"])
+                            }
+                            else {
+                                // console.log(areaNames[index])
+                                areaNames[index]["subAreas"] = [area[areaKey]["name"]]
+                            }
+                        }
+                        return null
+                    })
+                    return null
+                })
+                if (!areaSelectedIndex) {
+                    // setAreaSubAreaOpen(areaSubAreaOpen)
+                    setAreaSelectedIndex('ALLAREAS')
+                    setAreaSelectedName('ALL AREAS')
+                    setAlarmLogSelectedName('ALL AREAS')
+                    setAlarmLogSelectedKey('ALLAREAS')
+                }
+                // console.log(lastAlarm)
+                setLastAlarm(localLastAlarm)
+                // setAlarmRowSelected(alarmRowSelected)
+                // setAlarmContextOpen(alarmContextOpen)
+                setAreaMongoId(areaMongoId)
+                setAreaSubAreaMongoId(areaSubAreaMongoId)
+                setAreaNames(areaNames)
+                // setAreaContextOpen(areaContextOpen)
+            }
+
+            const localAreaAlarms = {}
+            const localAreaEnabled = {}
+            let localLastArea = ""
+
+            dbPVData.map((area, index) => {
+                // map all alarms in area
+                Object.keys(area).map(areaKey => {
+                    if (areaKey === "pvs") {
+                        Object.keys(area[areaKey]).map(alarm => {
+                            localAreaAlarms[`${area["area"]}=${alarm}`] = area[areaKey][alarm]
+                            return null
+                        })
+                    }
+                    return null
+                })
+                localAreaEnabled[area["area"]] = area["enable"]
+                localLastArea = area["area"]
+                Object.keys(area).map(areaKey => {
+                    if (areaKey.includes("subArea")) {
+                        // Area enabled for subArea includes parent area
+                        localAreaEnabled[`${area["area"]}=${area[areaKey]["name"]}`] = area[areaKey]["enable"] && localAreaEnabled[area["area"]]
+                        localLastArea = `${area["area"]}=${area[areaKey]["name"]}`
+                        // map all alarms in subArea
+                        Object.keys(area[areaKey]).map(subAreaKey => {
+                            if (subAreaKey === "pvs") {
+                                Object.keys(area[areaKey][subAreaKey]).map(alarm => {
+                                    localAreaAlarms[`${area["area"]}=${area[areaKey]["name"]}=${alarm}`] = area[areaKey][subAreaKey][alarm]
+                                    return null
+                                })
+                            }
+                            return null
+                        })
+                    }
+                    return null
+                })
+                return null
+            })
+
+            // console.log(lastArea)
+            setAreaAlarms(localAreaAlarms)
+            setAreaEnabled(localAreaEnabled)
+            setLastArea(localLastArea)
+
+            let displayAlarmTable = true
+            for (const [, value] of Object.entries(loadAlarmTable)) {
+                // console.log(key, value)
+                displayAlarmTable = displayAlarmTable && value
+            }
+            if (!displayAlarmTable) {
+                autoLoadAlarmTable()
+            }
+
+            let displayAlarmList = true
+            for (const [, value] of Object.entries(loadAlarmList)) {
+                // console.log(key, value)
+                displayAlarmList = displayAlarmList && value
+            }
+            if (!displayAlarmList) {
+                autoLoadAlarmList()
+            }
+        }
+        // disable useEffect dependencies for "dbPVData"
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dbPVData])
+
+    // handleNewDbLogReadWatchBroadcast
+    useEffect(() => {
+        if (dbHistoryData !== null) {
+            const localAlarmLogDict = {}
+            dbHistoryData.map((area, index) => {
+                localAlarmLogDict[area["id"]] = area["history"]
+                return null
+            })
+            setAlarmLogDict(localAlarmLogDict)
+        }
+        // disable useEffect dependencies for "dbHistoryData"
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dbHistoryData])
+
+    // handleDbConfig
+    useEffect(() => {
+        if (dbConfigData !== null) {
+            const data = dbConfigData[0];
+            setAlarmIOCPVPrefix(data["alarmIOCPVPrefix"])
+            setAlarmIOCPVSuffix(data['alarmIOCPVSuffix'])
+        }
+        // disable useEffect dependencies for "dbConfigData"
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dbConfigData])
+
+    // handleDbGlobal
+    useEffect(() => {
+        if (dbGlobData !== null) {
+            // ["_id"]["$oid"]
+            const data = dbGlobData[0];
+            setEnableAllAreas(data["enableAllAreas"])
+            setEnableAllAreasId(data["_id"]["$oid"])
+        }
+        // disable useEffect dependencies for "dbGlobData"
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dbGlobData])
 
     // const handleDoNothing = () => {
 
     // }
 
-    const handleGlobalArea = () => {
-        const localAreaSubAreaOpen = { ...areaSubAreaOpen }
-        localAreaSubAreaOpen[areaSelectedIndex.split('=')[0]] = false   // set previous area to false
 
+
+    const handleGlobalArea = () => {
         setAreaSelectedIndex('ALLAREAS')
         setAlarmLogSelectedKey('ALLAREAS')
         setAreaSelectedName('ALL AREAS')
         setAlarmLogSelectedName('ALL AREAS')
-        setAreaSubAreaOpen(localAreaSubAreaOpen)
-
-        // handleUpdateLogDisplayData('ALLAREAS')
+        setAreaSubAreaOpen({})
     }
 
     const handleAckGlobal = () => {
-        const localAlarmAckField = ['ALLAREAS', true]
+        const localAlarmAckField = [username, true]
         setAlarmAckField(localAlarmAckField)
         setAlarmAckFieldTrig(alarmAckFieldTrig + 1)
         setGlobalContextOpen(false)
@@ -314,32 +473,15 @@ const AlarmSetup = (props) => {
 
     const handleDisableEnableGlobal = (value) => {
         // console.log(value)
-        let jwt = JSON.parse(localStorage.getItem('jwt'));
-        if (jwt === null) {
-            jwt = 'unauthenticated'
-        }
-
-        const ALARM_DATABASE = "ALARM_DATABASE"
-        const dbName = props.dbName
-        const colName = "glob"
-        const dbURL = "mongodb://" + ALARM_DATABASE + ":" + dbName + ":" + colName
-
         const id = enableAllAreasId
         const newvalues = { '$set': { "enableAllAreas": value } }
 
         // console.log(newvalues)
 
-        socket.emit('databaseUpdateOne', { dbURL: dbURL, 'id': id, 'newvalues': newvalues, 'clientAuthorisation': jwt }, (data) => {
-            //  console.log("ackdata", data);
-            if (data === "OK") {
-                socket.emit('databaseBroadcastRead', { dbURL: dbURL + ':Parameters:{}', 'clientAuthorisation': jwt }, (data) => {
-                    if (data !== "OK") {
-                        console.log("ackdata", data);
-                    }
-                })
-            } else {
-                console.log("Global var update unsuccessful")
-            }
+        dbUpdateOne({
+            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:glob`,
+            id: id,
+            update: newvalues
         })
 
         setGlobalContextOpen(false)
@@ -376,6 +518,7 @@ const AlarmSetup = (props) => {
             clearTimeout(alarmLogSearchTimer)
         }
         setAlarmLogSearchStringStore(srch)
+        setPage(0)
         setAlarmLogSearchTimer(setTimeout(() => {
             setAlarmLogSearchString(srch)
         }, 300))
@@ -390,7 +533,9 @@ const AlarmSetup = (props) => {
         }
     }
 
-    const handleExpandPanel = (panelName) => {
+    const handleExpandPanel = (event, panelName) => {
+        event.preventDefault()
+        event.stopPropagation()
         if (panelName === 'alarmTable') {
             setAlarmTableExpand(alarmTableExpand ? false : true)
         }
@@ -458,20 +603,18 @@ const AlarmSetup = (props) => {
 
     const handleListItemContextClose = useCallback((event, index) => {
         // console.log("close context")
-        const localAreaContextOpen = { ...areaContextOpen }
-        localAreaContextOpen[index] = false
-        setAreaContextOpen(localAreaContextOpen)
-    }, [areaContextOpen])
+        setAreaContextOpen({})
+    }, [])
 
     const handleAckAllAreaAlarms = useCallback((event, index) => {
         // console.log('Ack all alarms for', index)
 
         let localAlarmAckField = null
         if (index.includes("=")) {
-            localAlarmAckField = ['1', index.split("=")[0], index.split("=")[1], null, username, 'True']
+            localAlarmAckField = ['1', index.split("=")[0], index.split("=")[1], null, username, true]
         }
         else {
-            localAlarmAckField = ['0', index, null, null, username, 'True']
+            localAlarmAckField = ['0', index, null, null, username, true]
         }
 
         handleListItemContextClose(event, index)
@@ -484,16 +627,6 @@ const AlarmSetup = (props) => {
         // to prevent re render of alarm log table?
         event.preventDefault()
         event.stopPropagation()
-
-        let jwt = JSON.parse(localStorage.getItem('jwt'));
-        if (jwt === null) {
-            jwt = 'unauthenticated'
-        }
-
-        const ALARM_DATABASE = "ALARM_DATABASE"
-        const dbName = props.dbName
-        const colName = "pvs"
-        const dbURL = "mongodb://" + ALARM_DATABASE + ":" + dbName + ":" + colName
 
         const id = areaMongoId[index]
         let newvalues = null
@@ -511,26 +644,22 @@ const AlarmSetup = (props) => {
 
         // console.log(newvalues)
 
-        socket.emit('databaseUpdateOne', { dbURL: dbURL, 'id': id, 'newvalues': newvalues, 'clientAuthorisation': jwt }, (data) => {
-            //  console.log("ackdata", data);
-            if (data === "OK") {
-                socket.emit('databaseBroadcastRead', { dbURL: dbURL + ':Parameters:{}', 'clientAuthorisation': jwt }, (data) => {
-                    if (data !== "OK") {
-                        console.log("ackdata", data);
-                    }
-                })
-            } else {
-                console.log("TableItemCheck unsuccessful")
-            }
+        dbUpdateOne({
+            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
+            id: id,
+            update: newvalues
         })
 
-    }, [areaMongoId, areaSubAreaMongoId, socket, props.dbName])
+    }, [areaMongoId, areaSubAreaMongoId, dbUpdateOne, props.dbName])
 
-    const handleTableRowClick = useCallback((event, alarmName) => {
+    const handleTableRowClick = useCallback((event, alarmName, index) => {
         event.preventDefault()
         event.stopPropagation()
         setAlarmLogSelectedName(alarmName.replace(/[=*]/g, " > "))
         setAlarmLogSelectedKey(alarmName)
+        setAlarmRowSelected({
+            [index]: true
+        })
         // handleUpdateLogDisplayData(alarmName)
     }, [])
 
@@ -545,33 +674,25 @@ const AlarmSetup = (props) => {
             areaName = areaAlarmNameArray[0]
         }
         if (areaEnabled[areaName] && areaAlarms[index]["enable"]) {
-            const localAlarmContextOpen = { ...alarmContextOpen }
-            localAlarmContextOpen[index] = true
-
-            const localAlarmRowSelected = { ...alarmRowSelected }
-            localAlarmRowSelected[index] = true
-
             const localContextMouseX = event.clientX - 2
             const localContextMouseY = event.clientY - 2
 
-            setAlarmContextOpen(localAlarmContextOpen)
-            setAlarmRowSelected(localAlarmRowSelected)
+            setAlarmContextOpen({
+                [index]: true
+            })
+            setAlarmRowSelected({
+                [index]: true
+            })
             setContextMouseX(localContextMouseX)
             setContextMouseY(localContextMouseY)
 
         }
-    }, [areaEnabled, areaAlarms, alarmContextOpen, alarmRowSelected])
+    }, [areaEnabled, areaAlarms])
 
     const handleAlarmContextClose = useCallback((event, index) => {
-        const localAlarmContextOpen = { ...alarmContextOpen }
-        localAlarmContextOpen[index] = false
-
-        const localAlarmRowSelected = { ...alarmRowSelected }
-        localAlarmRowSelected[index] = false
-
-        setAlarmRowSelected(localAlarmRowSelected)
-        setAlarmContextOpen(localAlarmContextOpen)
-    }, [alarmContextOpen, alarmRowSelected])
+        setAlarmRowSelected({})
+        setAlarmContextOpen({})
+    }, [])
 
     const handleAlarmAcknowledge = useCallback((event, index) => {
         // console.log("Ack alarm:", index)
@@ -581,10 +702,10 @@ const AlarmSetup = (props) => {
         const equalsLength = index.match(/=/g).length
         let localAlarmAckField = null
         if (equalsLength === 2) {
-            localAlarmAckField = ['3', index.split("=")[0], index.split("=")[1], index.split("=")[2], username, 'True']
+            localAlarmAckField = ['3', index.split("=")[0], index.split("=")[1], index.split("=")[2], username, true]
         }
         else {
-            localAlarmAckField = ['2', index.split("=")[0], null, index.split("=")[1], username, 'True']
+            localAlarmAckField = ['2', index.split("=")[0], null, index.split("=")[1], username, true]
         }
 
         // console.log(alarmAckField)
@@ -598,15 +719,8 @@ const AlarmSetup = (props) => {
     const handleEnableDisableArea = useCallback((event, index, value) => {
         // console.log('Enable/Disable area', index)
 
-        let jwt = JSON.parse(localStorage.getItem('jwt'));
-        if (jwt === null) {
-            jwt = 'unauthenticated'
-        }
-
-        const ALARM_DATABASE = "ALARM_DATABASE"
-        const dbName = props.dbName
-        const colName = "pvs"
-        const dbURL = "mongodb://" + ALARM_DATABASE + ":" + dbName + ":" + colName
+        event.preventDefault()
+        event.stopPropagation()
 
         const id = areaMongoId[index]
         let newvalues = null
@@ -623,41 +737,30 @@ const AlarmSetup = (props) => {
 
         // console.log(newvalues)
 
-
-        socket.emit('databaseUpdateOne', { dbURL: dbURL, 'id': id, 'newvalues': newvalues, 'clientAuthorisation': jwt }, (data) => {
-            // console.log("ackdata", data);
-            if (data === "OK") {
-                socket.emit('databaseBroadcastRead', { dbURL: dbURL + ':Parameters:{}', 'clientAuthorisation': jwt }, (data) => {
-                    if (data !== "OK") {
-                        console.log("ackdata", data);
-                    }
-                })
-            } else {
-                console.log("Enable/Disable area unsuccessful")
-            }
+        dbUpdateOne({
+            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
+            id: id,
+            update: newvalues
         })
 
         handleListItemContextClose(event, index)
 
-    }, [areaMongoId, areaSubAreaMongoId, handleListItemContextClose, socket, props.dbName])
+    }, [areaMongoId, areaSubAreaMongoId, handleListItemContextClose, dbUpdateOne, props.dbName])
 
 
 
     const handleListItemRightClick = useCallback((event, index) => {
         // console.log("right click")
-        event.preventDefault();
-
-        const localAreaContextOpen = { ...areaContextOpen }
-        localAreaContextOpen[index] = true
-
-        setAreaContextOpen(localAreaContextOpen)
+        event.preventDefault()
+        event.stopPropagation()
+        setAreaContextOpen({
+            [index]: true
+        })
         setContextMouseX(event.clientX - 2)
         setContextMouseY(event.clientY - 2)
-    }, [areaContextOpen])
+    }, [])
 
     const handleListItemClick = useCallback((event, index) => {
-        const localAreaSubAreaOpen = { ...areaSubAreaOpen }
-
         let localAreaSelectedName = index.split('=')
 
         if (localAreaSelectedName.length > 1) {                  // selected area is a subArea
@@ -665,11 +768,14 @@ const AlarmSetup = (props) => {
         }
         else {                                              // selected area is an area
             if (index === areaSelectedIndex) {   // selected same area twice
-                localAreaSubAreaOpen[index] = !areaSubAreaOpen[index]
+                setAreaSubAreaOpen({
+                    [index]: !areaSubAreaOpen[index]
+                })
             }
             else {                                           // selected a different area
-                localAreaSubAreaOpen[areaSelectedIndex.split('=')[0]] = false   // set previous area to false
-                localAreaSubAreaOpen[index] = true                           // set current area to true
+                setAreaSubAreaOpen({
+                    [index]: true
+                })
             }
         }
 
@@ -677,184 +783,12 @@ const AlarmSetup = (props) => {
         setAreaSelectedIndex(index)
         setAreaSelectedName(localAreaSelectedName)
         setAlarmLogSelectedName(localAreaSelectedName)
-        setAreaSubAreaOpen(localAreaSubAreaOpen)
         setAlarmLogSelectedKey(index)
+        setAlarmRowSelected({})
 
         // console.log(index)
         // handleUpdateLogDisplayData(index)
-    }, [areaSelectedIndex, areaSubAreaOpen]);
-
-    const handleNewDbPVsList = (msg) => {
-        // console.log('handleNewDbPVsList')
-        const data = JSON.parse(msg.data);
-        // console.log(data)
-        const areaNames = []
-        if (isEmpty(alarmRowSelected)) {
-            // console.log('Only once OR for local UI vars')
-            let localLastAlarm = ""
-            // const areaContextOpen = {}
-            // const alarmContextOpen = {}
-            // const alarmRowSelected = {}
-            // const areaMongoId = {}
-            // const areaSubAreaMongoId = {}
-
-            data.map((area, index) => {
-                areaContextOpen[area["area"]] = false
-                // if (index === 0) {
-                //     // Open first area on start up or refresh page
-                //     areaSubAreaOpen[area["area"]] = true
-                // }
-                // else {
-                areaSubAreaOpen[area["area"]] = false
-                // }
-                areaMongoId[area["area"]] = area["_id"]["$oid"]
-                // Map alarms in area
-                Object.keys(area["pvs"]).map(alarmKey => {
-                    alarmContextOpen[`${area["area"]}=${alarmKey}`] = false
-                    alarmRowSelected[`${area["area"]}=${alarmKey}`] = false
-                    localLastAlarm = area["pvs"][alarmKey]["name"]
-                    return null
-                })
-                Object.keys(area).map(areaKey => {
-                    if (areaKey === "area") {
-                        areaNames.push({ "area": area[areaKey] })
-                    }
-                    else if (areaKey.includes("subArea")) {
-                        areaContextOpen[`${area["area"]}=${area[areaKey]["name"]}`] = false
-                        areaSubAreaMongoId[`${area["area"]}=${area[areaKey]["name"]}`] = areaKey
-                        areaMongoId[`${area["area"]}=${area[areaKey]["name"]}`] = area["_id"]["$oid"]
-                        // Map alarms in subarea
-                        Object.keys(area[areaKey]["pvs"]).map(alarmKey => {
-                            alarmContextOpen[`${area["area"]}=${area[areaKey]["name"]}=${alarmKey}`] = false
-                            alarmRowSelected[`${area["area"]}=${area[areaKey]["name"]}=${alarmKey}`] = false
-                            localLastAlarm = area[areaKey]["pvs"][alarmKey]["name"]
-                            return null
-                        })
-                        if (areaNames[index]["subAreas"]) {
-                            areaNames[index]["subAreas"].push(area[areaKey]["name"])
-                        }
-                        else {
-                            // console.log(areaNames[index])
-                            areaNames[index]["subAreas"] = [area[areaKey]["name"]]
-                        }
-                    }
-                    return null
-                })
-                return null
-            })
-            if (!areaSelectedIndex) {
-                setAreaSubAreaOpen(areaSubAreaOpen)
-                setAreaSelectedIndex('ALLAREAS')
-                setAreaSelectedName('ALL AREAS')
-                setAlarmLogSelectedName('ALL AREAS')
-                setAlarmLogSelectedKey('ALLAREAS')
-            }
-            // console.log(lastAlarm)
-            setLastAlarm(localLastAlarm)
-            setAlarmRowSelected(alarmRowSelected)
-            setAlarmContextOpen(alarmContextOpen)
-            setAreaMongoId(areaMongoId)
-            setAreaSubAreaMongoId(areaSubAreaMongoId)
-            setAreaNames(areaNames)
-            setAreaContextOpen(areaContextOpen)
-        }
-
-        const localAreaAlarms = {}
-        const localAreaEnabled = {}
-        let localLastArea = ""
-
-        data.map((area, index) => {
-            // map all alarms in area
-            Object.keys(area).map(areaKey => {
-                if (areaKey === "pvs") {
-                    Object.keys(area[areaKey]).map(alarm => {
-                        localAreaAlarms[`${area["area"]}=${alarm}`] = area[areaKey][alarm]
-                        return null
-                    })
-                }
-                return null
-            })
-            localAreaEnabled[area["area"]] = area["enable"]
-            localLastArea = area["area"]
-            Object.keys(area).map(areaKey => {
-                if (areaKey.includes("subArea")) {
-                    // Area enabled for subArea includes parent area
-                    localAreaEnabled[`${area["area"]}=${area[areaKey]["name"]}`] = area[areaKey]["enable"] && localAreaEnabled[area["area"]]
-                    localLastArea = `${area["area"]}=${area[areaKey]["name"]}`
-                    // map all alarms in subArea
-                    Object.keys(area[areaKey]).map(subAreaKey => {
-                        if (subAreaKey === "pvs") {
-                            Object.keys(area[areaKey][subAreaKey]).map(alarm => {
-                                localAreaAlarms[`${area["area"]}=${area[areaKey]["name"]}=${alarm}`] = area[areaKey][subAreaKey][alarm]
-                                return null
-                            })
-                        }
-                        return null
-                    })
-                }
-                return null
-            })
-            return null
-        })
-
-        // console.log(lastArea)
-        setAreaAlarms(localAreaAlarms)
-        setAreaEnabled(localAreaEnabled)
-        setLastArea(localLastArea)
-
-        let displayAlarmTable = true
-        for (const [, value] of Object.entries(loadAlarmTable)) {
-            // console.log(key, value)
-            displayAlarmTable = displayAlarmTable && value
-        }
-        if (!displayAlarmTable) {
-            autoLoadAlarmTable()
-        }
-
-        let displayAlarmList = true
-        for (const [, value] of Object.entries(loadAlarmList)) {
-            // console.log(key, value)
-            displayAlarmList = displayAlarmList && value
-        }
-        if (!displayAlarmList) {
-            autoLoadAlarmList()
-        }
-    }
-
-    const handleDatabaseReadWatchAndBroadcastAck = (msg) => {
-        // console.log(msg)
-        if (typeof msg !== 'undefined') {
-            setDbWatchId(msg.dbWatchId)
-        }
-    }
-
-    const handleNewDbLogReadWatchBroadcast = (msg) => {
-        const data = JSON.parse(msg.data);
-        // console.log(data)
-        const localAlarmLogDict = {}
-        data.map((area, index) => {
-            localAlarmLogDict[area["id"]] = area["history"]
-            return null
-        })
-        // console.log("history watch")
-        // console.log(localAlarmLogDict)
-        setAlarmLogDict(localAlarmLogDict)
-        // handleUpdateLogDisplayData()
-    }
-
-    const handleDbConfig = (msg) => {
-        const data = JSON.parse(msg.data)[0];
-        setAlarmIOCPVPrefix(data["alarmIOCPVPrefix"])
-        setAlarmIOCPVSuffix(data['alarmIOCPVSuffix'])
-    }
-
-    const handleDbGlobal = (msg) => {
-        // console.log(JSON.parse(msg.data)[0])
-        // ["_id"]["$oid"]
-        const data = JSON.parse(msg.data)[0];
-        setEnableAllAreas(data["enableAllAreas"])
-        setEnableAllAreasId(data["_id"]["$oid"])
-    }
+    }, [areaSelectedIndex, areaSubAreaOpen])
 
     const autoLoadAlarmTable = () => {
         const timer = setTimeout(() => {
@@ -883,6 +817,25 @@ const AlarmSetup = (props) => {
         }, 10000);
         return () => clearTimeout(timer);
     }
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage)
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10))
+        setPage(0)
+    };
+
+    const filteredData = alarmLogDisplayArray.filter((entry) => {
+        const date = new Date(entry.timestamp * 1000)
+        const content = `${date.toLocaleString()}: ${entry.entry}`
+        const visible = content.toLowerCase().includes(alarmLogSearchString.toLowerCase())
+        if (visible) {
+            return entry
+        }
+        return null
+    })
 
     let alarmPVs = null
     if (alarmIOCPVPrefix !== null && alarmIOCPVSuffix !== null) {
@@ -1051,7 +1004,7 @@ const AlarmSetup = (props) => {
                         <ExpansionPanel
                             elevation={theme.palette.paperElevation}
                             expanded={alarmTableExpand}
-                            onClick={() => handleExpandPanel('alarmTable')}
+                            onClick={(event) => handleExpandPanel(event, 'alarmTable')}
                             TransitionProps={{
                                 onEntered: () => handleExpansionComplete('alarmTable', true),
                                 onExited: () => handleExpansionComplete('alarmTable', false)
@@ -1064,7 +1017,7 @@ const AlarmSetup = (props) => {
                                 classes={{ content: classes.expansionPanelSummaryContent, expanded: classes.expanded }}
                             >
                                 <div style={{ display: 'flex', width: '100%' }}>
-                                    <div style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 20 }}>{`ALARM TABLE: ${areaSelectedName}`}</div>
+                                    <div className={classes.verticalMiddle} style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 20 }}>{`ALARM TABLE: ${areaSelectedName}`}</div>
                                     <div style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 1 }}>{
                                         alarmTableExpand
                                             ? <div className={classes.search}>
@@ -1081,7 +1034,7 @@ const AlarmSetup = (props) => {
                                                     onClick={event => event.stopPropagation()}
                                                     onFocus={event => event.stopPropagation()}
                                                     onChange={event => handleSearchAlarmTable(event)}
-                                                    onBlur={() => { setAlarmTableSearchStringStore(''); setAlarmTableSearchString('') }}
+                                                    // onBlur={() => { setAlarmTableSearchStringStore(''); setAlarmTableSearchString('') }}
                                                     value={alarmTableSearchStringStore}
                                                 />
                                             </div>
@@ -1119,7 +1072,7 @@ const AlarmSetup = (props) => {
                         <ExpansionPanel
                             elevation={theme.palette.paperElevation}
                             expanded={alarmLogExpand}
-                            onClick={() => handleExpandPanel('alarmLog')}
+                            onClick={(event) => handleExpandPanel(event, 'alarmLog')}
                             TransitionProps={{
                                 onEntered: () => handleExpansionComplete('alarmLog', true),
                                 onExited: () => handleExpansionComplete('alarmLog', false)
@@ -1132,8 +1085,31 @@ const AlarmSetup = (props) => {
                                 classes={{ content: classes.expansionPanelSummaryContent, expanded: classes.expanded }}
                             >
                                 <div style={{ display: 'flex', width: '100%' }}>
-                                    <div style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 20 }}>{`ALARM LOG: ${alarmLogSelectedName}`}</div>
-                                    <div style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 1 }}>{
+                                    <div className={classes.verticalMiddle} style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 20 }}>{`ALARM LOG: ${alarmLogSelectedName}`}</div>
+                                    {
+                                        alarmLogExpand
+                                            ? <TablePagination
+                                                component="div"
+                                                onClick={(event) => {
+                                                    event.preventDefault()
+                                                    event.stopPropagation()
+                                                }}
+                                                rowsPerPageOptions={[25, 50, 100]}
+                                                colSpan={3}
+                                                count={filteredData.length}
+                                                rowsPerPage={rowsPerPage}
+                                                page={page}
+                                                SelectProps={{
+                                                    inputProps: { 'aria-label': 'rows per page' },
+                                                    native: true,
+                                                }}
+                                                onChangePage={handleChangePage}
+                                                onChangeRowsPerPage={handleChangeRowsPerPage}
+                                                ActionsComponent={TablePaginationActions}
+                                            />
+                                            : null
+                                    }
+                                    <div className={classes.verticalMiddle} style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 1 }}>{
                                         alarmLogExpand
                                             ? <div className={classes.search}>
                                                 <div className={classes.searchIcon}>
@@ -1149,7 +1125,7 @@ const AlarmSetup = (props) => {
                                                     onClick={event => event.stopPropagation()}
                                                     onFocus={event => event.stopPropagation()}
                                                     onChange={event => handleSearchAlarmLog(event)}
-                                                    onBlur={() => { setAlarmLogSearchStringStore(''); setAlarmLogSearchString('') }}
+                                                    // onBlur={() => { setAlarmLogSearchStringStore(''); setAlarmLogSearchString('') }}
                                                     value={alarmLogSearchStringStore}
                                                 />
                                             </div>
@@ -1161,9 +1137,9 @@ const AlarmSetup = (props) => {
                             <ExpansionPanelDetails>
                                 <AlarmLog
                                     height={alarmLogHeight}
-                                    alarmLogDisplayArray={alarmLogDisplayArray}
-                                    alarmLogSelectedKey={alarmLogSelectedKey}
-                                    alarmLogSearchString={alarmLogSearchString}
+                                    filteredData={filteredData}
+                                    page={page}
+                                    rowsPerPage={rowsPerPage}
                                 />
                             </ExpansionPanelDetails>
                         </ExpansionPanel>

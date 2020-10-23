@@ -150,6 +150,8 @@ const AlarmList = props => {
 
     // console.log("AlarmList rendered")
 
+    // console.log(props.areaContextOpen)
+
     const classes = useStyles(props);
 
     return (
@@ -187,11 +189,13 @@ const AlarmList = props => {
                                             // field(FRST, "MAJOR")
                                             // field(FVST, "INVALID_ACKED")
                                             // field(SXST, "INVALID")
+                                            // field(SVST, "DISCONN_ACKED")
+                                            // field(EIST, "DISCONNECTED")
 
                                             classes={(props.areaEnabled[`${area["area"]}`] && props.enableAllAreas
-                                                ? parseInt(props.areaPVDict[`${area["area"]}`]) === 6 || parseInt(props.areaPVDict[`${area["area"]}`]) === 4
+                                                ? parseInt(props.areaPVDict[`${area["area"]}`]) === 8 || parseInt(props.areaPVDict[`${area["area"]}`]) === 6 || parseInt(props.areaPVDict[`${area["area"]}`]) === 4
                                                     ? { root: classes.majorAlarm }
-                                                    : parseInt(props.areaPVDict[`${area["area"]}`]) === 5 || parseInt(props.areaPVDict[`${area["area"]}`]) === 3
+                                                    : parseInt(props.areaPVDict[`${area["area"]}`]) === 7 || parseInt(props.areaPVDict[`${area["area"]}`]) === 5 || parseInt(props.areaPVDict[`${area["area"]}`]) === 3
                                                         ? { root: classes.majorAlarmAcked }
                                                         : parseInt(props.areaPVDict[`${area["area"]}`]) === 2
                                                             ? { root: classes.minorAlarm }
@@ -261,9 +265,9 @@ const AlarmList = props => {
                                                                         onClick={event => props.listItemClick(event, `${area["area"]}=${subArea}`)}
                                                                         onContextMenu={event => props.listItemRightClick(event, `${area["area"]}=${subArea}`)}
                                                                         classes={(props.areaEnabled[`${area["area"]}=${subArea}`] && props.enableAllAreas
-                                                                            ? parseInt(props.areaPVDict[`${area["area"]}=${subArea}`]) === 6 || parseInt(props.areaPVDict[`${area["area"]}=${subArea}`]) === 4
+                                                                            ? parseInt(props.areaPVDict[`${area["area"]}=${subArea}`]) === 8 || parseInt(props.areaPVDict[`${area["area"]}=${subArea}`]) === 6 || parseInt(props.areaPVDict[`${area["area"]}=${subArea}`]) === 4
                                                                                 ? { root: classes.majorAlarm }
-                                                                                : parseInt(props.areaPVDict[`${area["area"]}=${subArea}`]) === 5 || parseInt(props.areaPVDict[`${area["area"]}=${subArea}`]) === 3
+                                                                                : parseInt(props.areaPVDict[`${area["area"]}=${subArea}`]) === 7 || parseInt(props.areaPVDict[`${area["area"]}=${subArea}`]) === 5 || parseInt(props.areaPVDict[`${area["area"]}=${subArea}`]) === 3
                                                                                     ? { root: classes.majorAlarmAcked }
                                                                                     : parseInt(props.areaPVDict[`${area["area"]}=${subArea}`]) === 2
                                                                                         ? { root: classes.minorAlarm }
@@ -278,7 +282,7 @@ const AlarmList = props => {
                                                                     </ListItem>
                                                                     <Menu
                                                                         keepMounted
-                                                                        open={props.areaContextOpen[`${area["area"]}=${subArea}`]}
+                                                                        open={props.areaContextOpen[`${area["area"]}=${subArea}`] ? true : false}
                                                                         onClose={event => props.listItemContextClose(event, `${area["area"]}=${subArea}`)}
                                                                         anchorReference="anchorPosition"
                                                                         anchorPosition={props.contextMouseY !== null && props.contextMouseX !== null ?

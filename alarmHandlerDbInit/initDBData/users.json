@@ -2,40 +2,543 @@
         "name": "User One",
         "username": "user1",
         "email": "user1@example.com",
-        "notifyPVs": [
-            "amplitude\\b",
-            "vault",
-            "cyclotron.*RF",
-            "cyclotron.*RF\\d",
-            "air.*press",
-            "SLIT.*2"
+        "mobile": "+27 00 000 0001",
+        "global": false,
+        "globalSetup": {
+            "notify": true,
+            "email": true,
+            "mobile": false,
+            "allDay": true,
+            "fromTime": "",
+            "toTime": "",
+            "weekly": true,
+            "days": {
+                "Monday": true,
+                "Tuesday": true,
+                "Wednesday": true,
+                "Thursday": true,
+                "Friday": true,
+                "Saturday": true,
+                "Sunday": true
+            },
+            "dateRange": false,
+            "fromDate": "",
+            "toDate": ""
+        },
+        "notifyPVs": [{
+                "regEx": "amplitude\\b",
+                "notifySetup": {
+                    "notify": true,
+                    "email": true,
+                    "mobile": false,
+                    "allDay": true,
+                    "fromTime": "",
+                    "toTime": "",
+                    "weekly": true,
+                    "days": {
+                        "Monday": true,
+                        "Tuesday": true,
+                        "Wednesday": true,
+                        "Thursday": true,
+                        "Friday": true,
+                        "Saturday": true,
+                        "Sunday": true
+                    },
+                    "dateRange": false,
+                    "fromDate": "",
+                    "toDate": ""
+                }
+            },
+            {
+                "regEx": "vault",
+                "notifySetup": {
+                    "notify": true,
+                    "email": true,
+                    "mobile": false,
+                    "allDay": true,
+                    "fromTime": "",
+                    "toTime": "",
+                    "weekly": true,
+                    "days": {
+                        "Monday": true,
+                        "Tuesday": true,
+                        "Wednesday": true,
+                        "Thursday": true,
+                        "Friday": true,
+                        "Saturday": true,
+                        "Sunday": true
+                    },
+                    "dateRange": false,
+                    "fromDate": "",
+                    "toDate": ""
+                }
+            },
+            {
+                "regEx": "cyclotron.*RF",
+                "notifySetup": {
+                    "notify": true,
+                    "email": true,
+                    "mobile": false,
+                    "allDay": true,
+                    "fromTime": "",
+                    "toTime": "",
+                    "weekly": true,
+                    "days": {
+                        "Monday": true,
+                        "Tuesday": true,
+                        "Wednesday": true,
+                        "Thursday": true,
+                        "Friday": true,
+                        "Saturday": true,
+                        "Sunday": true
+                    },
+                    "dateRange": false,
+                    "fromDate": "",
+                    "toDate": ""
+                }
+            },
+            {
+                "regEx": "cyclotron.*RF\\d",
+                "notifySetup": {
+                    "notify": true,
+                    "email": true,
+                    "mobile": false,
+                    "allDay": true,
+                    "fromTime": "",
+                    "toTime": "",
+                    "weekly": true,
+                    "days": {
+                        "Monday": true,
+                        "Tuesday": true,
+                        "Wednesday": true,
+                        "Thursday": true,
+                        "Friday": true,
+                        "Saturday": true,
+                        "Sunday": true
+                    },
+                    "dateRange": false,
+                    "fromDate": "",
+                    "toDate": ""
+                }
+            },
+            {
+                "regEx": "air.*press",
+                "notifySetup": {
+                    "notify": true,
+                    "email": true,
+                    "mobile": false,
+                    "allDay": true,
+                    "fromTime": "",
+                    "toTime": "",
+                    "weekly": true,
+                    "days": {
+                        "Monday": true,
+                        "Tuesday": true,
+                        "Wednesday": true,
+                        "Thursday": true,
+                        "Friday": true,
+                        "Saturday": true,
+                        "Sunday": true
+                    },
+                    "dateRange": false,
+                    "fromDate": "",
+                    "toDate": ""
+                }
+            },
+            {
+                "regEx": "SLIT.*2",
+                "notifySetup": {
+                    "notify": true,
+                    "email": true,
+                    "mobile": false,
+                    "allDay": true,
+                    "fromTime": "",
+                    "toTime": "",
+                    "weekly": true,
+                    "days": {
+                        "Monday": true,
+                        "Tuesday": true,
+                        "Wednesday": true,
+                        "Thursday": true,
+                        "Friday": true,
+                        "Saturday": true,
+                        "Sunday": true
+                    },
+                    "dateRange": false,
+                    "fromDate": "",
+                    "toDate": ""
+                }
+            }
         ]
     },
     {
         "name": "User Two",
         "username": "user2",
         "email": "user2@example.com",
-        "notifyPVs": [
-            "radiation",
-            "^testIOC.*STR",
-            "SLIT.*Gap",
-            "vault"
+        "mobile": "+27 00 000 0002",
+        "global": false,
+        "globalSetup": {
+            "notify": true,
+            "email": true,
+            "mobile": false,
+            "allDay": true,
+            "fromTime": "",
+            "toTime": "",
+            "weekly": true,
+            "days": {
+                "Monday": true,
+                "Tuesday": true,
+                "Wednesday": true,
+                "Thursday": true,
+                "Friday": true,
+                "Saturday": true,
+                "Sunday": true
+            },
+            "dateRange": false,
+            "fromDate": "",
+            "toDate": ""
+        },
+        "notifyPVs": [{
+                "regEx": "radiation",
+                "notifySetup": {
+                    "notify": true,
+                    "email": true,
+                    "mobile": false,
+                    "allDay": true,
+                    "fromTime": "",
+                    "toTime": "",
+                    "weekly": true,
+                    "days": {
+                        "Monday": true,
+                        "Tuesday": true,
+                        "Wednesday": true,
+                        "Thursday": true,
+                        "Friday": true,
+                        "Saturday": true,
+                        "Sunday": true
+                    },
+                    "dateRange": false,
+                    "fromDate": "",
+                    "toDate": ""
+                }
+            },
+            {
+                "regEx": "^testIOC.*STR",
+                "notifySetup": {
+                    "notify": true,
+                    "email": true,
+                    "mobile": false,
+                    "allDay": true,
+                    "fromTime": "",
+                    "toTime": "",
+                    "weekly": true,
+                    "days": {
+                        "Monday": true,
+                        "Tuesday": true,
+                        "Wednesday": true,
+                        "Thursday": true,
+                        "Friday": true,
+                        "Saturday": true,
+                        "Sunday": true
+                    },
+                    "dateRange": false,
+                    "fromDate": "",
+                    "toDate": ""
+                }
+            },
+            {
+                "regEx": "SLIT.*Gap",
+                "notifySetup": {
+                    "notify": true,
+                    "email": true,
+                    "mobile": false,
+                    "allDay": true,
+                    "fromTime": "",
+                    "toTime": "",
+                    "weekly": true,
+                    "days": {
+                        "Monday": true,
+                        "Tuesday": true,
+                        "Wednesday": true,
+                        "Thursday": true,
+                        "Friday": true,
+                        "Saturday": true,
+                        "Sunday": true
+                    },
+                    "dateRange": false,
+                    "fromDate": "",
+                    "toDate": ""
+                }
+            },
+            {
+                "regEx": "vault",
+                "notifySetup": {
+                    "notify": true,
+                    "email": true,
+                    "mobile": false,
+                    "allDay": true,
+                    "fromTime": "",
+                    "toTime": "",
+                    "weekly": true,
+                    "days": {
+                        "Monday": true,
+                        "Tuesday": true,
+                        "Wednesday": true,
+                        "Thursday": true,
+                        "Friday": true,
+                        "Saturday": true,
+                        "Sunday": true
+                    },
+                    "dateRange": false,
+                    "fromDate": "",
+                    "toDate": ""
+                }
+            }
         ]
     },
     {
         "name": "User Three",
         "username": "user3",
         "email": "user3@example.com",
-        "notifyPVs": [
-            "SLITXY1.*Gap",
-            "building.*air",
-            "SLIT",
-            "interlocks",
-            "water.*flow",
-            "building.*temp",
-            "SLIT.*1.*Readback",
-            "air.*diff",
-            "demoAlarms.*\\:.*building"
+        "mobile": "+27 00 000 0003",
+        "global": false,
+        "globalSetup": {
+            "notify": true,
+            "email": true,
+            "mobile": false,
+            "allDay": true,
+            "fromTime": "",
+            "toTime": "",
+            "weekly": true,
+            "days": {
+                "Monday": true,
+                "Tuesday": true,
+                "Wednesday": true,
+                "Thursday": true,
+                "Friday": true,
+                "Saturday": true,
+                "Sunday": true
+            },
+            "dateRange": false,
+            "fromDate": "",
+            "toDate": ""
+        },
+        "notifyPVs": [{
+                "regEx": "SLITXY1.*Gap",
+                "notifySetup": {
+                    "notify": true,
+                    "email": true,
+                    "mobile": false,
+                    "allDay": true,
+                    "fromTime": "",
+                    "toTime": "",
+                    "weekly": true,
+                    "days": {
+                        "Monday": true,
+                        "Tuesday": true,
+                        "Wednesday": true,
+                        "Thursday": true,
+                        "Friday": true,
+                        "Saturday": true,
+                        "Sunday": true
+                    },
+                    "dateRange": false,
+                    "fromDate": "",
+                    "toDate": ""
+                }
+            },
+            {
+                "regEx": "building.*air",
+                "notifySetup": {
+                    "notify": true,
+                    "email": true,
+                    "mobile": false,
+                    "allDay": true,
+                    "fromTime": "",
+                    "toTime": "",
+                    "weekly": true,
+                    "days": {
+                        "Monday": true,
+                        "Tuesday": true,
+                        "Wednesday": true,
+                        "Thursday": true,
+                        "Friday": true,
+                        "Saturday": true,
+                        "Sunday": true
+                    },
+                    "dateRange": false,
+                    "fromDate": "",
+                    "toDate": ""
+                }
+            },
+            {
+                "regEx": "SLIT",
+                "notifySetup": {
+                    "notify": true,
+                    "email": true,
+                    "mobile": false,
+                    "allDay": true,
+                    "fromTime": "",
+                    "toTime": "",
+                    "weekly": true,
+                    "days": {
+                        "Monday": true,
+                        "Tuesday": true,
+                        "Wednesday": true,
+                        "Thursday": true,
+                        "Friday": true,
+                        "Saturday": true,
+                        "Sunday": true
+                    },
+                    "dateRange": false,
+                    "fromDate": "",
+                    "toDate": ""
+                }
+            },
+            {
+                "regEx": "interlocks",
+                "notifySetup": {
+                    "notify": true,
+                    "email": true,
+                    "mobile": false,
+                    "allDay": true,
+                    "fromTime": "",
+                    "toTime": "",
+                    "weekly": true,
+                    "days": {
+                        "Monday": true,
+                        "Tuesday": true,
+                        "Wednesday": true,
+                        "Thursday": true,
+                        "Friday": true,
+                        "Saturday": true,
+                        "Sunday": true
+                    },
+                    "dateRange": false,
+                    "fromDate": "",
+                    "toDate": ""
+                }
+            },
+            {
+                "regEx": "water.*flow",
+                "notifySetup": {
+                    "notify": true,
+                    "email": true,
+                    "mobile": false,
+                    "allDay": true,
+                    "fromTime": "",
+                    "toTime": "",
+                    "weekly": true,
+                    "days": {
+                        "Monday": true,
+                        "Tuesday": true,
+                        "Wednesday": true,
+                        "Thursday": true,
+                        "Friday": true,
+                        "Saturday": true,
+                        "Sunday": true
+                    },
+                    "dateRange": false,
+                    "fromDate": "",
+                    "toDate": ""
+                }
+            },
+            {
+                "regEx": "building.*temp",
+                "notifySetup": {
+                    "notify": true,
+                    "email": true,
+                    "mobile": false,
+                    "allDay": true,
+                    "fromTime": "",
+                    "toTime": "",
+                    "weekly": true,
+                    "days": {
+                        "Monday": true,
+                        "Tuesday": true,
+                        "Wednesday": true,
+                        "Thursday": true,
+                        "Friday": true,
+                        "Saturday": true,
+                        "Sunday": true
+                    },
+                    "dateRange": false,
+                    "fromDate": "",
+                    "toDate": ""
+                }
+            },
+            {
+                "regEx": "SLIT.*1.*Readback",
+                "notifySetup": {
+                    "notify": true,
+                    "email": true,
+                    "mobile": false,
+                    "allDay": true,
+                    "fromTime": "",
+                    "toTime": "",
+                    "weekly": true,
+                    "days": {
+                        "Monday": true,
+                        "Tuesday": true,
+                        "Wednesday": true,
+                        "Thursday": true,
+                        "Friday": true,
+                        "Saturday": true,
+                        "Sunday": true
+                    },
+                    "dateRange": false,
+                    "fromDate": "",
+                    "toDate": ""
+                }
+            },
+            {
+                "regEx": "air.*diff",
+                "notifySetup": {
+                    "notify": true,
+                    "email": true,
+                    "mobile": false,
+                    "allDay": true,
+                    "fromTime": "",
+                    "toTime": "",
+                    "weekly": true,
+                    "days": {
+                        "Monday": true,
+                        "Tuesday": true,
+                        "Wednesday": true,
+                        "Thursday": true,
+                        "Friday": true,
+                        "Saturday": true,
+                        "Sunday": true
+                    },
+                    "dateRange": false,
+                    "fromDate": "",
+                    "toDate": ""
+                }
+            },
+            {
+                "regEx": "demoAlarms.*\\:.*building",
+                "notifySetup": {
+                    "notify": true,
+                    "email": true,
+                    "mobile": false,
+                    "allDay": true,
+                    "fromTime": "",
+                    "toTime": "",
+                    "weekly": true,
+                    "days": {
+                        "Monday": true,
+                        "Tuesday": true,
+                        "Wednesday": true,
+                        "Thursday": true,
+                        "Friday": true,
+                        "Saturday": true,
+                        "Sunday": true
+                    },
+                    "dateRange": false,
+                    "fromDate": "",
+                    "toDate": ""
+                }
+            }
         ]
     }
 ]

@@ -120,10 +120,10 @@ const TextUpdateComponent = (props) => {
       else if (props.value === "MINOR_ALARM") {
         textFieldClassName = classes.minorAlarm;
       }
-      else if (props.value === "MAJOR_ACKED" || props.value === "INVALID_ACKED") {
+      else if (props.value === "MAJOR_ACKED" || props.value === "INVALID_ACKED" || props.value === "DISCONN_ACKED") {
         textFieldClassName = classes.majorAlarmAcked;
       }
-      else if (props.value === "MAJOR_ALARM" || props.value === "INVALID") {
+      else if (props.value === "MAJOR_ALARM" || props.value === "INVALID" || props.value === "DISCONNECTED") {
         textFieldClassName = classes.majorAlarm;
       }
     }

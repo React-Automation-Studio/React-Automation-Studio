@@ -65,7 +65,8 @@ ackedStateDict = {
     0: "NO_ALARM",
     1: "MINOR_ACKED",
     2: "MAJOR_ACKED",
-    3: "INVALID_ACKED"
+    3: "INVALID_ACKED",
+    4: "DISCONN_ACKED"
 }
 
 alarmPVSevDict = {
@@ -75,7 +76,9 @@ alarmPVSevDict = {
     3: "MAJOR_ACKED",
     4: "MAJOR_ALARM",
     5: "INVALID_ACKED",
-    6: "INVALID_ALARM"
+    6: "INVALID_ALARM",
+    7: "DISCONN_ACKED",
+    8: "DISCONNECTED"
 }
 
 pvNameList = []
@@ -151,12 +154,15 @@ def evaluateAreaPVs(areaKey, fromColWatch=False):
     # 4 "MAJOR"
     # 5 "INVALID_ACKED"
     # 6 "INVALID"
+    # 7 "DISCONN_ACKED"
+    # 8 "DISCONNECTED"
     alarmState = 0
     # to catch in alarm state to negate a higher level ack state
-    # no need to catch invalid alarm as it is highest ranked
+    # no need to catch disconn alarm as it is highest ranked
     minorAlarm = False
     majorAlarm = False
-    ackStates = [1, 3, 5]
+    invalidAlarm = False
+    ackStates = [1, 3, 5, 7]
 
     try:
         for key in pvDict.keys():
@@ -181,6 +187,8 @@ def evaluateAreaPVs(areaKey, fromColWatch=False):
                         minorAlarm = True
                     elif(val == 4):
                         majorAlarm = True
+                    elif(val == 6):
+                        invalidAlarm = True
                 except:
                     if(AH_DEBUG):
                         print('[Warning]', 'val =', val,
@@ -191,8 +199,10 @@ def evaluateAreaPVs(areaKey, fromColWatch=False):
 
     # active alarm always supercedes acked state alarm
     if alarmState in ackStates:
-        # major alarm takes precedence
-        if(majorAlarm):
+        # invalid alarm takes precedence
+        if(invalidAlarm):
+            alarmState = 6
+        elif(majorAlarm):
             alarmState = 4
         elif(minorAlarm):
             alarmState = 2
@@ -215,10 +225,11 @@ def evaluateTopArea(topArea, alarmState):
     alarmState = alarmState
 
     # to catch in alarm state to negate a higher level ack state
-    # no need to catch invalid alarm as it is highest ranked
+    # no need to catch disconn alarm as it is highest ranked
     minorAlarm = False
     majorAlarm = False
-    ackStates = [1, 3, 5]
+    invalidAlarm = False
+    ackStates = [1, 3, 5, 7]
 
     for area in areaList:
         if ("=" in area):
@@ -233,6 +244,8 @@ def evaluateTopArea(topArea, alarmState):
                         minorAlarm = True
                     elif(val == 4):
                         majorAlarm = True
+                    elif(val == 6):
+                        invalidAlarm = True
                 except:
                     if(AH_DEBUG):
                         print('[Warning]', 'val =', val,
@@ -240,8 +253,10 @@ def evaluateTopArea(topArea, alarmState):
 
     # active alarm always supercedes acked state alarm
     if alarmState in ackStates:
-        # major alarm takes precedence
-        if(majorAlarm):
+        # invalid alarm takes precedence
+        if(invalidAlarm):
+            alarmState = 6
+        elif(majorAlarm):
             alarmState = 4
         elif(minorAlarm):
             alarmState = 2
@@ -303,7 +318,7 @@ def ackProcess(ackArray, timestamp):
     if(len(ackArray) > 2):
         ackNormal(ackArray, timestamp)
     else:
-        ackGlobal(timestamp)
+        ackGlobal(ackArray[0], timestamp)
 
 
 def ackNormal(ackArray, timestamp):
@@ -352,19 +367,27 @@ def ackNormal(ackArray, timestamp):
                 ackAlarm(key, timestamp, username)
 
 
-def ackGlobal(timestamp):
-    print(timestamp, "Global ack")
+def ackGlobal(username, timestamp):
+    topAreaList = [item for item in areaList if "=" not in item]
+    for area in topAreaList:
+        ackArray = ['0', area, None, None, username, True]
+        ackNormal(ackArray, timestamp)
 
 
 def ackAlarm(ackIdentifier, timestamp, username):
-    pvsev = pvDict[ackIdentifier].severity
+    # problem here if pv disconnected won't get severity
+    if ('_1' in alarmDict[pvDict[ackIdentifier].pvname]["D"].value[0]):
+        pvsev = pvDict[ackIdentifier].severity
+    else:
+        pvsev = 4
+
     pvname = pvDict[ackIdentifier].pvname
     alarmPVSev = alarmDict[pvname]["A"].value
 
     areaKey, pvKey = getKeys(pvname)
 
-    if (alarmPVSev == 2 or alarmPVSev == 4 or alarmPVSev == 6):
-        # in minor, major or invalid state, valid state for ack
+    if (alarmPVSev == 2 or alarmPVSev == 4 or alarmPVSev == 6 or alarmPVSev == 8):
+        # in minor, major, invalid or disconn state, valid state for ack
         timestamp_string = datetime.fromtimestamp(timestamp).strftime(
             "%a, %d %b %Y at %H:%M:%S")
         # set ack time
@@ -404,9 +427,13 @@ def ackAlarm(ackIdentifier, timestamp, username):
     # 1	"MINOR"     # 1 "MINOR_ACKED"
     # 2	"MAJOR"     # 2 "MINOR"
     # 3	"INVALID"   # 3 "MAJOR_ACKED"
-    #               # 4 "MAJOR"
+    # 4 "DISCONN"   # 4 "MAJOR"
     #               # 5 "INVALID_ACKED"
     #               # 6 "INVALID"
+    #               # 7 "DISCONN_ACKED"
+    #               # 8 "DISCONNECTED"
+    # problem here if pv disconnected won't get severity
+    # solve with pseudo pvsev = 4 state for disconnected
     if (pvsev == 0):    # in NO_ALARM state
         alarmDict[pvname]["A"].value = 0    # set to NO_ALARM state
     elif (pvsev == 1):  # in MINOR state
@@ -415,41 +442,77 @@ def ackAlarm(ackIdentifier, timestamp, username):
         alarmDict[pvname]["A"].value = 3    # set to MAJOR_ACKED state
     elif (pvsev == 3):  # in INVALID state
         alarmDict[pvname]["A"].value = 5    # set to INVALID_ACKED state
+    elif (pvsev == 4):  # in DISCONN state
+        alarmDict[pvname]["A"].value = 7    # set to DISCONN_ACKED state
 
 
-def descChange(pvname=None, value=None, host=None, **kw):
-    _thread.start_new_thread(updatePVDesc, (
-        pvname,
-        value,
-        host,
-    ))
-
-
-def updatePVDesc(pvname, desc, host):
-    # updates description and host in waveform
-    pvname = re.sub('.DESC$', '', pvname)
-    pv = alarmDict[pvname]["D"]
-    # status initially 39 char string for memory
-    pv.put(np.array(['abcdefghijklmnopqrstuvwxyzAbcdefghijk_1', desc, host]))
-
-
-def descConn(pvname=None, conn=None, **kw):
-    _thread.start_new_thread(descDisconn, (
+def pvConn(pvname=None, conn=None, **kw):
+    _thread.start_new_thread(pvDisconn, (
         pvname,
         conn,
     ))
 
 
-def descDisconn(pvname, conn):
+def pvDisconn(pvname, conn):
+    pv = alarmDict[pvname]["D"]
     if (not conn):
-        pvname = re.sub('.DESC$', '', pvname)
-        pv = alarmDict[pvname]["D"]
+        timestamp = datetime.timestamp(datetime.now())
+        timestamp_string = datetime.fromtimestamp(timestamp).strftime(
+            "%a, %d %b %Y at %H:%M:%S")
+        globalEnable, areaEnable, subAreaEnable, pvEnable = getEnables(pvname)
+        areaKey, pvKey = getKeys(pvname)
+        if ("=" in areaKey):
+            subAreaKey = subAreaDict[areaKey]
+            areaKey = areaKey.split("=")[0]
+            doc = client[MONGO_INITDB_ALARM_DATABASE].pvs.find_one(
+                {"area": areaKey})
+            enable = globalEnable and areaEnable and subAreaEnable and pvEnable
+            latch = doc[subAreaKey]["pvs"][pvKey]["latch"]
+        else:
+            doc = client[MONGO_INITDB_ALARM_DATABASE].pvs.find_one(
+                {"area": areaKey})
+            enable = globalEnable and areaEnable and pvEnable
+            latch = doc["pvs"][pvKey]["latch"]
+
+        transparent = not latch or not enable
+        alarmState = alarmDict[pvname]["A"].value
+        disconnAlarm = alarmState != 8
         # status initially 39 char string for memory
-        pv.put(
-            np.array([
-                'abcdefghijklmnopqrstuvwxyzAbcdefghijk_0', "[Disconnected]",
-                "[Disconnected]"
-            ]))
+        try:
+            curr_desc = pv.value
+            curr_desc[0] = 'abcdefghijklmnopqrstuvwxyzAbcdefghijk_0'
+        except:
+            pass
+        pv.put(np.array(curr_desc))
+        # set current alarm status to DISCONNECTED
+        if(disconnAlarm and (alarmState < 7 or (transparent and alarmState != 7))):
+            alarmDict[pvname]["A"].value = 8
+            # set alarm value
+            alarmDict[pvname]["V"].value = ""
+            # set alarm time
+            alarmDict[pvname]["T"].value = timestamp_string
+            # log to database
+            entry = {"timestamp": timestamp, "entry": " ".join(
+                [pvname, "-", "DISCONNECTED"])}
+            # disabled alarms not logged
+            if(enable):
+                # areaKey was split above so find again
+                areaKey = getKeys(pvname)[0]
+                client[MONGO_INITDB_ALARM_DATABASE].history.update_many(
+                    {'id': areaKey+'*'+pvname},
+                    {'$push': {
+                        'history': {
+                            '$each': [entry],
+                            '$position': 0
+                        }
+                    }})
+    else:
+        try:
+            curr_desc = [
+                'abcdefghijklmnopqrstuvwxyzAbcdefghijk_1', pvDescDict[pvname].value, pvDescDict[pvname].host]
+        except:
+            pass
+        pv.put(np.array(curr_desc))
 
 
 def onChanges(pvname=None, value=None, **kw):
@@ -534,6 +597,8 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
     # 4 "MAJOR"
     # 5 "INVALID_ACKED"
     # 6 "INVALID"
+    # 7 "DISCONN_ACKED"
+    # 8 "DISCONNECTED"
     alarmState = alarmDict[pvname]["A"].value
 
     noAlarm = severity == 0 and alarmState != 0
@@ -543,7 +608,7 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
 
     alarmSet = False
     transparent = not latch or not enable
-    inAckState = alarmState == 1 or alarmState == 3 or alarmState == 5
+    inAckState = alarmState == 1 or alarmState == 3 or alarmState == 5 or alarmState == 7
 
     logToHistory = False
 
@@ -571,6 +636,14 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
             [pvname, "-", "INVALID_ACKED alarm demoted to MINOR_ACKED"])}
         # print(timestamp, pvname, "INVALID_ACKED alarm demoted to MINOR_ACKED")
         logToHistory = True
+    elif(minorAlarm and alarmState == 7):
+        # set current alarm status to MINOR_ACKED
+        alarmDict[pvname]["A"].value = 1
+        # Log to history
+        entry = {"timestamp": timestamp, "entry": " ".join(
+            [pvname, "-", "DISCONN_ACKED alarm demoted to MINOR_ACKED"])}
+        # print(timestamp, pvname, "DISCONN_ACKED alarm demoted to MINOR_ACKED")
+        logToHistory = True
     elif(minorAlarm and (alarmState < 1 or (transparent and alarmState != 1))):
         # set current alarm status to MINOR
         alarmDict[pvname]["A"].value = 2
@@ -588,6 +661,14 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
             [pvname, "-", "INVALID_ACKED alarm demoted to MAJOR_ACKED"])}
         # print(timestamp, pvname, "INVALID_ACKED alarm demoted to MAJOR_ACKED")
         logToHistory = True
+    elif(majorAlarm and alarmState == 7):
+        # set current alarm status to MAJOR_ACKED
+        alarmDict[pvname]["A"].value = 3
+        # Log to history
+        entry = {"timestamp": timestamp, "entry": " ".join(
+            [pvname, "-", "DISCONN_ACKED alarm demoted to MAJOR_ACKED"])}
+        # print(timestamp, pvname, "DISCONN_ACKED alarm demoted to MAJOR_ACKED")
+        logToHistory = True
     elif(majorAlarm and (alarmState < 3 or (transparent and alarmState != 3))):
         # set current alarm status to MAJOR
         alarmDict[pvname]["A"].value = 4
@@ -596,6 +677,14 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
         entry = {"timestamp": timestamp, "entry": " ".join(
             [pvname, "-", "MAJOR_ALARM triggered, alarm value =", str(value)])}
         # print(timestamp, pvname, "MAJOR_ALARM triggered, alarm value =", value)
+        logToHistory = True
+    elif(invalidAlarm and alarmState == 7):
+        # set current alarm status to INVALID_ACKED
+        alarmDict[pvname]["A"].value = 5
+        # Log to history
+        entry = {"timestamp": timestamp, "entry": " ".join(
+            [pvname, "-", "DISCONN_ACKED alarm demoted to INVALID_ACKED"])}
+        # print(timestamp, pvname, "DISCONN_ACKED alarm demoted to INVALID_ACKED")
         logToHistory = True
     elif(invalidAlarm and (alarmState < 5 or (transparent and alarmState != 5))):
         # set current alarm status to INVALID
@@ -632,7 +721,7 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
                         'pvs.' + pvKey + '.lastAlarmTime': timestamp_string
                     }
                 })
-    # disbaled alarms not logged
+    # disabled alarms not logged
     if(enable and logToHistory):
         client[MONGO_INITDB_ALARM_DATABASE].history.update_many(
             {'id': areaKey+'*'+pvname},
@@ -699,6 +788,7 @@ def initSubPVDict(subArea, areaName):
                 pv = PV(pvname=pvname,
                         connection_timeout=0.001,
                         callback=onChanges,
+                        connection_callback=pvConn,
                         form='ctrl')
                 pvDict[subAreaName + "=" + pvKey] = pv
                 areaDict[subAreaName + "=" +
@@ -717,6 +807,7 @@ def initPVDict():
                     pv = PV(pvname=pvname,
                             connection_timeout=0.001,
                             callback=onChanges,
+                            connection_callback=pvConn,
                             form='ctrl')
                     pvDict[areaName + "=" + pvKey] = pv
                     areaDict[areaName + "=" + pvKey] = area[key][pvKey]["name"]
@@ -799,6 +890,10 @@ def initialiseAlarmIOC():
                         'abcdefghijklmnopqrstuvwxyzAbcdefghijk_0',
                         "[Disconnected]", "[Disconnected]"
                     ]))
+                _thread.start_new_thread(pvDisconn, (
+                    pvname,
+                    False,
+                ))
             else:
                 # if alarm was activated when server initialised
                 try:
@@ -870,10 +965,7 @@ def initialiseAlarmIOC():
 def initDescDict():
     for pvname in pvNameList:
         desc = pvname + ".DESC"
-        pv = PV(pvname=desc,
-                connection_timeout=0.001,
-                callback=descChange,
-                connection_callback=descConn)
+        pv = PV(pvname=desc, connection_timeout=0.001)
         pvDescDict[pvname] = pv
 
 

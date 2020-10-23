@@ -3,6 +3,7 @@ import React, { useRef, useEffect } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import TextInput from '../BaseComponents/TextInput';
 import TextUpdateAH from './TextUpdateAH';
+import LivePVVal from './LivePVVal';
 import TextUpdate from '../BaseComponents/TextUpdate';
 
 import Table from '@material-ui/core/Table';
@@ -34,24 +35,6 @@ const useStyles = makeStyles(theme => ({
         borderRadius: 2,
         padding: 1,
         backgroundColor: theme.palette.type === 'dark' ? theme.palette.grey[500] : theme.palette.grey[400]
-    },
-    majorAlarmWarn: {
-        background: 'transparent',
-        borderRadius: 2,
-        padding: 1,
-        // paddingRight: 5,
-        borderStyle: "solid",
-        borderWidth: "thin",
-        borderColor: theme.palette.alarm.major.main
-    },
-    minorAlarmWarn: {
-        background: 'transparent',
-        borderRadius: 2,
-        padding: 1,
-        // paddingRight: 5,
-        borderStyle: "solid",
-        borderWidth: "thin",
-        borderColor: theme.palette.alarm.minor.main
     },
     styledTableHeadCell: {
         backgroundColor: theme.palette.type === 'dark' ? undefined : theme.palette.primary.light,
@@ -89,10 +72,7 @@ const AlarmTable = props => {
         majorAlarm: classes.TextFieldSeverityDisabled,
     }
 
-    const textFieldWarnClasses = {
-        TextFieldSeverity1: classes.minorAlarmWarn,
-        TextFieldSeverity2: classes.majorAlarmWarn
-    }
+    // console.log(props.alarmContextOpen)
 
     return (
         <TableContainer component={Paper} style={{ height: props.height }} ref={myRef} elevation={theme.palette.type === 'dark' ? undefined : 5}>
@@ -211,11 +191,11 @@ const AlarmTable = props => {
                                             hover={props.areaEnabled[areaName] && props.enableAllAreas}
                                             onContextMenu={event => props.tableItemRightClick(event, areaAlarmName)}
                                             selected={props.alarmRowSelected[areaAlarmName]}
-                                            onClick={event => props.tableRowClick(event, `${areaName}*${areaAlarms[areaAlarmName]["name"]}`)}
+                                            onClick={event => props.tableRowClick(event, `${areaName}*${areaAlarms[areaAlarmName]["name"]}`, areaAlarmName)}
                                         >
                                             <Menu
                                                 keepMounted
-                                                open={props.alarmContextOpen[areaAlarmName]}
+                                                open={props.alarmContextOpen[areaAlarmName] ? true : false}
                                                 onClose={event => props.alarmContextClose(event, areaAlarmName)}
                                                 anchorReference="anchorPosition"
                                                 anchorPosition={props.contextMouseY !== null && props.contextMouseX !== null ?
@@ -259,14 +239,11 @@ const AlarmTable = props => {
                                                 enterDelay={400}
                                             >
                                                 <TableCell align="left">
-                                                    <TextUpdate
-                                                        pv={'pva://' + areaAlarms[areaAlarmName]["name"] + ".NAME"}
-                                                        disableContextMenu={true}
-                                                    />
+                                                    {areaAlarms[areaAlarmName]["name"]}
                                                 </TableCell>
                                             </Tooltip>
                                             <TableCell align="center">
-                                                <TextUpdate
+                                                {/* <TextUpdate
                                                     pv={'pva://' + areaAlarms[areaAlarmName]["name"]}
                                                     disableContextMenu={true}
                                                     useStringValue={true}
@@ -274,6 +251,9 @@ const AlarmTable = props => {
                                                     usePvPrecision={true}
                                                     alarmSensitive={true}
                                                     classes={textFieldWarnClasses}
+                                                /> */}
+                                                <LivePVVal
+                                                    pv={'pva://' + areaAlarms[areaAlarmName]["name"]}
                                                 />
                                             </TableCell>
                                             <TableCell align="center">

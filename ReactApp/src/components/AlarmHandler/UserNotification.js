@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext, useCallback, useRef } from 'rea
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
@@ -9,8 +10,13 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 import DataConnection from '../SystemComponents/DataConnection';
+import ScheduleDialog from './ScheduleDialog';
 import UserTable from './UserTable';
 import PVList from './PVList';
+import useMongoDbWatch from '../SystemComponents/database/MongoDB/useMongoDbWatch';
+import useMongoDbUpdateOne from '../SystemComponents/database/MongoDB/useMongoDbUpdateOne';
+
+import { format } from 'date-fns';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -35,15 +41,11 @@ const UserNotification = (props) => {
     const theme = useTheme()
 
     const context = useContext(AutomationStudioContext)
-    const { socket } = context
     const username = context.userData.username
 
     // to connect to all PVs before updating state
     const firstAlarmPVDict = {}
 
-    const [dbPVsURL, setDbPVsURL] = useState('')
-    const [dbUsersURL, setUsersURL] = useState('')
-    const [dbConfigURL, setDbConfigURL] = useState('')
     const [alarmList, setAlarmList] = useState([])
     const [userList, setUserList] = useState([])
     const [userEdit, setUserEdit] = useState({})
@@ -51,7 +53,7 @@ const UserNotification = (props) => {
     const [pvListExpand, setPvListExpand] = useState(true)
     const [userTableIsExpanded, setUserTableIsExpanded] = useState(true)
     const [pvListIsExpanded, setPvListIsExpanded] = useState(true)
-    const [filterUser, setFilterUser] = useState('')
+    const [filterUser, setFilterUser] = useState({})
     const [filterUserRegex, setFilterUserRegex] = useState([])
     const [dictUserRegex, setDictUserRegex] = useState({})
     const [alarmIOCPVPrefix, setAlarmIOCPVPrefix] = useState(null)
@@ -63,16 +65,84 @@ const UserNotification = (props) => {
     const [regexError, setRegexError] = useState({})
     const [addRegexVal, setAddRegexVal] = useState({})
 
+    const [dialogOpen, setDialogOpen] = useState(false)
+    const [dialogUser, setDialogUser] = useState({})
+
+    const dbPVData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs:Parameters:{}` }).data
+    const dbUsersData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:users:Parameters:{}` }).data
+    const dbConfigData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:config:Parameters:{}` }).data
+
+    const dbUpdateOne = useMongoDbUpdateOne({})
+
 
     const loadPVListRef = useRef(loadPVList);
     loadPVListRef.current = loadPVList;
+
+    const userScheduleString = useCallback((userObject) => {
+        let sumString = "Do not notify me"
+        if (userObject.notify) {
+            sumString = "Notify me "
+            if (userObject.email) {
+                sumString = sumString.concat("on email ")
+                if (userObject.mobile) {
+                    sumString = sumString.concat("and mobile ")
+                }
+            }
+            else if (userObject.mobile) {
+                sumString = sumString.concat("on mobile ")
+            }
+            else {
+                sumString = sumString.concat("on !!NO CONTACT METHOD SELECTED!! ")
+            }
+            if (userObject.allDay) {
+                sumString = sumString.concat("all day ")
+            }
+            else {
+                const fromTime = format(new Date(userObject.fromTime), 'hh:mm a')
+                const toTime = format(new Date(userObject.toTime), 'hh:mm a')
+                sumString = sumString.concat(`between ${fromTime} and ${toTime} `)
+            }
+            if (userObject.weekly) {
+                let days = Object.entries(userObject.days).reduce((acc, day) => {
+                    if (day[1]) {
+                        acc.push(day[0])
+                    }
+                    return acc
+                }, [])
+                if (days.length === 7) {
+                    sumString = sumString.concat("everyday")
+                }
+                else if (days.length === 0) {
+                    sumString = sumString.concat(`on a !!NO DAY(S) SELECTED!!`)
+                }
+                else if (days.length === 1) {
+                    sumString = sumString.concat(`on a ${days}`)
+                }
+                else {
+                    const lastDay = days[days.length - 1]
+                    days.pop()
+                    days = days.join(', ')
+                    days = days.concat(` and ${lastDay}`)
+                    sumString = sumString.concat(`on a ${days}`)
+                }
+            }
+            else {
+                const fromDate = format(new Date(userObject.fromDate), 'dd MMMM yyyy')
+                const toDate = format(new Date(userObject.toDate), 'dd MMMM yyyy')
+                sumString = sumString.concat(`from ${fromDate} to ${toDate}`)
+            }
+            return sumString
+        }
+        else {
+            return sumString
+
+        }
+    }, [])
 
     const constructDESC_HOST = (value, pvname) => {
         let epicsPVName = pvname.replace("pva://", "")
         epicsPVName = epicsPVName.replace(alarmIOCPVPrefix, "")
         epicsPVName = epicsPVName.replace(alarmIOCPVSuffix, "")
-
-        // console.log(epicsPVName, value)
 
         // still connecting to pvs
         if (!loadPVList) {
@@ -122,7 +192,10 @@ const UserNotification = (props) => {
     }
 
     const handleSetFilterUser = useCallback((name, username) => {
-        setFilterUser(name)
+        setFilterUser({
+            name: name,
+            username: username
+        })
         setFilterUserRegex(dictUserRegex[`${username}-${name}`])
     }, [dictUserRegex])
 
@@ -130,6 +203,7 @@ const UserNotification = (props) => {
         event.preventDefault()
         event.stopPropagation()
         setFilterUserRegex([expression])
+        setFilterUser({})
     }, [])
 
     const handleSetUserEdit = useCallback((event, name, username, value) => {
@@ -138,7 +212,10 @@ const UserNotification = (props) => {
 
         const match = userList.filter(el => el.name === name && el.username === username)[0]
         setFilterUserRegex(match.notifyPVs)
-        setFilterUser(match.name)
+        setFilterUser({
+            name: match.name,
+            username: match.username
+        })
 
         if (value) {
             // only back up when starting to edit
@@ -163,50 +240,33 @@ const UserNotification = (props) => {
         const match = userList.filter(el => el.name === name && el.username === username)[0]
         const id = match['_id']['$oid']
 
-        // console.log(match.notifyPVs)
         setFilterUserRegex(match.notifyPVs)
-
-        let jwt = JSON.parse(localStorage.getItem('jwt'))
-        if (jwt === null) {
-            jwt = 'unauthenticated'
-        }
-
-        const ALARM_DATABASE = "ALARM_DATABASE"
-        const dbName = props.dbName
-        const colName = "users"
-        const dbURL = "mongodb://" + ALARM_DATABASE + ":" + dbName + ":" + colName
 
         let newvalues = { '$set': { "email": match.email } }
 
-        socket.emit('databaseUpdateOne', { dbURL: dbURL, 'id': id, 'newvalues': newvalues, 'clientAuthorisation': jwt }, (data) => {
-            // console.log("ackdata", data);
-            if (data === "OK") {
-                socket.emit('databaseBroadcastRead', { dbURL: dbURL + ':Parameters:{}', 'clientAuthorisation': jwt }, (data) => {
-                    if (data !== "OK") {
-                        console.log("ackdata", data);
-                    }
-                })
-            } else {
-                console.log("User update area unsuccessful")
-            }
+        dbUpdateOne({
+            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:users`,
+            id: id,
+            update: newvalues
+        })
+
+        newvalues = { '$set': { "mobile": match.mobile } }
+
+        dbUpdateOne({
+            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:users`,
+            id: id,
+            update: newvalues
         })
 
         newvalues = { '$set': { "notifyPVs": match.notifyPVs } }
 
-        socket.emit('databaseUpdateOne', { dbURL: dbURL, 'id': id, 'newvalues': newvalues, 'clientAuthorisation': jwt }, (data) => {
-            // console.log("ackdata", data);
-            if (data === "OK") {
-                socket.emit('databaseBroadcastRead', { dbURL: dbURL + ':Parameters:{}', 'clientAuthorisation': jwt }, (data) => {
-                    if (data !== "OK") {
-                        console.log("ackdata", data);
-                    }
-                })
-            } else {
-                console.log("User update area unsuccessful")
-            }
+        dbUpdateOne({
+            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:users`,
+            id: id,
+            update: newvalues
         })
 
-    }, [handleSetUserEdit, userList, socket, addRegexVal, props.dbName])
+    }, [handleSetUserEdit, userList, dbUpdateOne, addRegexVal, props.dbName])
 
     const cancelEdit = useCallback((event, name, username) => {
         handleSetUserEdit(event, name, username, false)
@@ -242,6 +302,20 @@ const UserNotification = (props) => {
         setUserList(newUserList)
     }, [userList])
 
+    const updateUserMobile = useCallback((event, name, username) => {
+        // Find match and note it's index in userList
+        const match = userList.filter(el => el.name === name && el.username === username)[0]
+        const userIndex = userList.indexOf(match)
+
+        match.mobile = event.target.value
+
+        // Create new userList
+        const newUserList = [...userList]
+        newUserList[userIndex] = match
+
+        setUserList(newUserList)
+    }, [userList])
+
     const addChip = useCallback((event, name, username, expression) => {
         event.stopPropagation()
         event.preventDefault()
@@ -257,7 +331,30 @@ const UserNotification = (props) => {
             const userIndex = userList.indexOf(match)
 
             // Update match by adding relevant expression
-            const newNotifyPVs = [...match.notifyPVs, expression]
+            const newNotifyPVs = [...match.notifyPVs, {
+                "regEx": expression,
+                "notifySetup": {
+                    "notify": true,
+                    "email": true,
+                    "mobile": false,
+                    "allDay": true,
+                    "fromTime": "",
+                    "toTime": "",
+                    "weekly": true,
+                    "days": {
+                        "Monday": true,
+                        "Tuesday": true,
+                        "Wednesday": true,
+                        "Thursday": true,
+                        "Friday": true,
+                        "Saturday": true,
+                        "Sunday": true
+                    },
+                    "dateRange": false,
+                    "fromDate": "",
+                    "toDate": ""
+                }
+            }]
             match.notifyPVs = newNotifyPVs
 
             // Create new userList
@@ -272,103 +369,27 @@ const UserNotification = (props) => {
     const deleteChip = useCallback((event, name, username, expression) => {
         event.preventDefault()
         event.stopPropagation()
+
         // Find match and note it's index in userList
         const match = userList.filter(el => el.name === name && el.username === username)[0]
         const userIndex = userList.indexOf(match)
 
-        // Update match by removing relevant expression
-        const newNotifyPVs = match.notifyPVs.filter(el => el !== expression)
-        match.notifyPVs = newNotifyPVs
+        // Remove regEx not required
+        const newNotifyPVs = match.notifyPVs.filter(el => el.regEx !== expression)
+
+        // Create new match with updated notifyPVs
+        const newMatch = {
+            ...match,
+            notifyPVs: newNotifyPVs
+        }
 
         // Create new userList
         const newUserList = [...userList]
-        newUserList[userIndex] = match
+        newUserList[userIndex] = newMatch
 
         setUserList(newUserList)
         setFilterUserRegex(newNotifyPVs)
     }, [userList])
-
-    const handleNewDbPVsList = (msg) => {
-
-        const data = JSON.parse(msg.data)
-
-        let localAlarmList = []
-        let localLastAlarm = ''
-
-        data.map((area) => {
-            // Map alarms in area
-            Object.keys(area["pvs"]).map(alarmKey => {
-                localAlarmList.push(area["pvs"][alarmKey]["name"])
-                localLastAlarm = area["pvs"][alarmKey]["name"]
-                return null
-            })
-            Object.keys(area).map(areaKey => {
-                if (areaKey.includes("subArea")) {
-                    // Map alarms in subarea
-                    Object.keys(area[areaKey]["pvs"]).map(alarmKey => {
-                        localAlarmList.push(area[areaKey]["pvs"][alarmKey]["name"])
-                        localLastAlarm = area[areaKey]["pvs"][alarmKey]["name"]
-                        return null
-                    })
-                }
-                return null
-            })
-            return null
-        })
-
-        localAlarmList.sort()
-
-        setAlarmList(localAlarmList)
-        setLastAlarm(localLastAlarm)
-
-        if (!loadPVList) {
-            autoLoadPVList()
-        }
-    }
-
-    const handleDbUsers = (msg) => {
-
-        const data = JSON.parse(msg.data)
-
-        const localUserEdit = {}
-        const localDictUserRegex = {}
-        const localBackupUserList = {}
-        const localRegexError = {}
-        const localAddRegexVal = {}
-        // let localFilterUser = null
-        // let localFilterUserRegex = null
-
-        data.map((user, index) => {
-            if (index === 0) {
-                // localFilterUser = user.name
-                // localFilterUserRegex = user.notifyPVs
-            }
-            localDictUserRegex[`${user.username}-${user.name}`] = user.notifyPVs
-            localBackupUserList[`${user.username}-${user.name}`] = user
-            localUserEdit[`${user.username}-${user.name}`] = false
-            localRegexError[`${user.username}-${user.name}`] = false
-            localAddRegexVal[`${user.username}-${user.name}`] = ''
-            return null
-        })
-
-        if (Object.keys(userEdit).length === 0) {
-            setUserEdit(localUserEdit)
-            setRegexError(localRegexError)
-            setAddRegexVal(localAddRegexVal)
-        }
-
-        setDictUserRegex(localDictUserRegex)
-        // setFilterUser(localFilterUser)
-        // setFilterUserRegex(localFilterUserRegex)
-        setBackupUserList(localBackupUserList)
-        setUserList(data)
-    }
-
-    const handleDbConfig = (msg) => {
-        const data = JSON.parse(msg.data)[0];
-        setAlarmIOCPVPrefix(data["alarmIOCPVPrefix"])
-        setAlarmIOCPVSuffix(data['alarmIOCPVSuffix'])
-    }
 
     const handleExpansionComplete = (panelName, isExpanded) => {
         if (panelName === 'userTable') {
@@ -388,60 +409,126 @@ const UserNotification = (props) => {
         }
     }
 
-    // componentDidMount
-    useEffect(() => {
-        // console.log('[AlarmHanderUN] componentDidMount')
-        let jwt = JSON.parse(localStorage.getItem('jwt'));
-
-        if (jwt === null) {
-            jwt = 'unauthenticated'
-        }
-
-        const ALARM_DATABASE = "ALARM_DATABASE"
-        const dbName = props.dbName
-        let colName = "pvs"
-        const localDbPVsURL = "mongodb://" + ALARM_DATABASE + ":" + dbName + ":" + colName + ":Parameters:{}"
-        setDbPVsURL(localDbPVsURL)
-
-        socket.emit('databaseBroadcastRead', { dbURL: localDbPVsURL, 'clientAuthorisation': jwt }, (data) => {
-            if (data !== "OK") {
-                console.log("ackdata", data);
-            }
-        });
-        socket.on('databaseData:' + localDbPVsURL, handleNewDbPVsList);
-
-        colName = "users"
-        const localUsersURL = "mongodb://" + ALARM_DATABASE + ":" + dbName + ":" + colName + ":Parameters:{}"
-        setUsersURL(localUsersURL)
-
-        socket.emit('databaseBroadcastRead', { dbURL: localUsersURL, 'clientAuthorisation': jwt }, (data) => {
-            if (data !== "OK") {
-                console.log("ackdata", data);
-            }
-        });
-        socket.on('databaseData:' + localUsersURL, handleDbUsers);
-
-        colName = "config"
-        const localDbConfigURL = "mongodb://" + ALARM_DATABASE + ":" + dbName + ":" + colName + ":Parameters:{}"
-        setDbConfigURL(localDbConfigURL)
-
-        socket.emit('databaseBroadcastRead', { dbURL: localDbConfigURL, 'clientAuthorisation': jwt }, (data) => {
-            if (data !== "OK") {
-                console.log("ackdata", data);
-            }
-        });
-        socket.on('databaseData:' + localDbConfigURL, handleDbConfig);
-
-        // componentWillUnmount
-        return () => {
-            socket.removeListener('databaseData:' + dbPVsURL, handleNewDbPVsList);
-            socket.removeListener('databaseData:' + dbUsersURL, handleDbUsers);
-            socket.removeListener('databaseData:' + dbConfigURL, handleDbConfig);
-
-        }
-        // disable useEffect dependencies for "componentDidMount"
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+    const handleOpenDialog = useCallback((event, name, username) => {
+        event.preventDefault()
+        event.stopPropagation()
+        setDialogUser({
+            name: name,
+            username: username
+        })
+        setDialogOpen(true)
     }, [])
+
+    const handleAcceptDialog = useCallback((name, username) => {
+        // Find match and note it's index in userList
+        // const match = userList.filter(el => el.name === name && el.username === username)[0]
+        // const id = match['_id']['$oid']
+
+        // let newvalues = { '$set': { "notifySetup": dialogUserObject } }
+
+        // dbUpdateOne({
+        //     dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:users`,
+        //     id: id,
+        //     update: newvalues
+        // })
+
+        setDialogOpen(false)
+    }, [dbUpdateOne, userList, props.dbName])
+
+    const handleCloseDialog = useCallback(() => {
+        setDialogOpen(false)
+    }, [])
+
+    // handleNewDbPVsList
+    useEffect(() => {
+        if (dbPVData !== null) {
+            let localAlarmList = []
+            let localLastAlarm = ''
+
+            dbPVData.map((area) => {
+                // Map alarms in area
+                Object.keys(area["pvs"]).map(alarmKey => {
+                    localAlarmList.push(area["pvs"][alarmKey]["name"])
+                    localLastAlarm = area["pvs"][alarmKey]["name"]
+                    return null
+                })
+                Object.keys(area).map(areaKey => {
+                    if (areaKey.includes("subArea")) {
+                        // Map alarms in subarea
+                        Object.keys(area[areaKey]["pvs"]).map(alarmKey => {
+                            localAlarmList.push(area[areaKey]["pvs"][alarmKey]["name"])
+                            localLastAlarm = area[areaKey]["pvs"][alarmKey]["name"]
+                            return null
+                        })
+                    }
+                    return null
+                })
+                return null
+            })
+
+            localAlarmList.sort()
+
+            setAlarmList(localAlarmList)
+            setLastAlarm(localLastAlarm)
+
+            if (!loadPVList) {
+                autoLoadPVList()
+            }
+        }
+        // disable useEffect dependencies for "dbPVData"
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dbPVData])
+
+    // handleDbUsers
+    useEffect(() => {
+        if (dbUsersData !== null) {
+            const localUserEdit = {}
+            const localDictUserRegex = {}
+            const localBackupUserList = {}
+            const localRegexError = {}
+            const localAddRegexVal = {}
+            // let localFilterUser = null
+            // let localFilterUserRegex = null
+
+            dbUsersData.map((user, index) => {
+                if (index === 0) {
+                    // localFilterUser = user.name
+                    // localFilterUserRegex = user.notifyPVs
+                }
+                localDictUserRegex[`${user.username}-${user.name}`] = user.notifyPVs
+                localBackupUserList[`${user.username}-${user.name}`] = user
+                localUserEdit[`${user.username}-${user.name}`] = false
+                localRegexError[`${user.username}-${user.name}`] = false
+                localAddRegexVal[`${user.username}-${user.name}`] = ''
+                return null
+            })
+
+            if (Object.keys(userEdit).length === 0) {
+                setUserEdit(localUserEdit)
+                setRegexError(localRegexError)
+                setAddRegexVal(localAddRegexVal)
+            }
+
+            setDictUserRegex(localDictUserRegex)
+            // setFilterUser(localFilterUser)
+            // setFilterUserRegex(localFilterUserRegex)
+            setBackupUserList(localBackupUserList)
+            setUserList(dbUsersData)
+        }
+        // disable useEffect dependencies for "dbUsersData"
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dbUsersData])
+
+    // handleDbConfig
+    useEffect(() => {
+        if (dbConfigData !== null) {
+            const data = dbConfigData[0];
+            setAlarmIOCPVPrefix(data["alarmIOCPVPrefix"])
+            setAlarmIOCPVSuffix(data['alarmIOCPVSuffix'])
+        }
+        // disable useEffect dependencies for "dbConfigData"
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dbConfigData])
 
     let alarmPVs = null
     if (alarmIOCPVPrefix !== null && alarmIOCPVSuffix !== null) {
@@ -460,10 +547,10 @@ const UserNotification = (props) => {
             ? filterUserRegex[0] === ""
                 ? 'ALL'
                 : filterUserRegex[0]
-            : filterUser
+            : filterUser.name
 
-    let userTableHeight = '30vh'
-    let pvListHeight = '42vh'
+    let userTableHeight = '40vh'
+    let pvListHeight = '32vh'
     if (userTableExpand && !pvListExpand && !pvListIsExpanded) {
         userTableHeight = '76vh'
     }
@@ -471,11 +558,23 @@ const UserNotification = (props) => {
         pvListHeight = '76vh'
     }
 
-    // console.log(userEdit)
+    // console.log(userList)
 
     return (
         <React.Fragment>
             {alarmPVs}
+            {/* {
+                userList.length !== 0
+                    ? <ScheduleDialog
+                        dialogOpen={dialogOpen}
+                        acceptDialog={handleAcceptDialog}
+                        closeDialog={handleCloseDialog}
+                        dialogUser={dialogUser}
+                        userList={userList}
+                        userScheduleString={userScheduleString}
+                    />
+                    : null
+            } */}
             <Grid
                 container
                 direction="column"
@@ -502,7 +601,15 @@ const UserNotification = (props) => {
                         >
                             <div style={{ display: 'flex', width: '100%' }}>
                                 <div style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 20 }}>Alarm Handler Users</div>
+                                <div style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 1 }}>
+                                    {
+                                        userTableExpand
+                                            ? null
+                                            : '[click to show]'
+                                    }
+                                </div>
                             </div>
+
                         </ExpansionPanelSummary>
                         <ExpansionPanelDetails>
                             <UserTable
@@ -511,6 +618,7 @@ const UserNotification = (props) => {
                                 userList={userList}
                                 userEdit={userEdit}
                                 username={username}
+                                filterUser={filterUser}
                                 filterUserRegex={filterUserRegex}
                                 setUserEdit={handleSetUserEdit}
                                 setFilterUser={handleSetFilterUser}
@@ -521,7 +629,10 @@ const UserNotification = (props) => {
                                 cancelEdit={cancelEdit}
                                 applyEdit={applyEdit}
                                 updateUserEmail={updateUserEmail}
+                                updateUserMobile={updateUserMobile}
+                                openDialog={handleOpenDialog}
                                 height={userTableHeight}
+                                userScheduleString={userScheduleString}
                             />
                         </ExpansionPanelDetails>
                     </ExpansionPanel>
@@ -544,6 +655,13 @@ const UserNotification = (props) => {
                         >
                             <div style={{ display: 'flex', width: '100%' }}>
                                 <div style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 20 }}>{`Filtered PVs: ${filterName}`}</div>
+                                <div style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 1 }}>
+                                    {
+                                        pvListExpand
+                                            ? null
+                                            : '[click to show]'
+                                    }
+                                </div>
                             </div>
                         </ExpansionPanelSummary>
                         <ExpansionPanelDetails>

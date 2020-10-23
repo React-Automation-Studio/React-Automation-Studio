@@ -1,5 +1,8 @@
 FROM python:3.7.5
 
+# Set timezone for timestamps
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 # Install OS packages and other dependencies 
 RUN apt-get update && \
     apt install -y tmux

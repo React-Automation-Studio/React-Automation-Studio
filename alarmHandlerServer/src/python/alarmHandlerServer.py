@@ -6,7 +6,7 @@ import numpy as np
 import re
 from bson.json_util import dumps
 from bson.objectid import ObjectId
-from time import sleep, time
+from time import sleep
 import subprocess
 import _thread
 from epics import PV, caput
@@ -301,7 +301,8 @@ def getEnables(pvname):
     return globalEnable, areaEnable, subAreaEnable, pvEnable
 
 
-def ackPVChange(value=None, timestamp=None, **kw):
+def ackPVChange(value=None, **kw):
+    timestamp = datetime.timestamp(datetime.now())
     # print("ack pv:", value)
     if(value):
         if (value[0] != ''):
@@ -517,12 +518,13 @@ def pvDisconn(pvname, conn):
 
 def onChanges(pvname=None, value=None, **kw):
     global alarmDictInitialised
+    timestamp = datetime.timestamp(datetime.now())
     if (alarmDictInitialised):
         _thread.start_new_thread(pvPrepareData, (
             pvname,
             value,
             kw["severity"],
-            kw["timestamp"],
+            timestamp,
             kw["units"],
             kw["enum_strs"]
         ))
@@ -1009,7 +1011,7 @@ def pvCollectionWatch():
                 doc = client[MONGO_INITDB_ALARM_DATABASE].pvs.find_one(
                     documentKey)
                 change = change["updateDescription"]["updatedFields"]
-                timestamp = time()
+                timestamp = datetime.timestamp(datetime.now())
                 for key in change.keys():
                     # print(key)
                     if (key == "enable"):
@@ -1093,7 +1095,7 @@ def globalCollectionWatch():
             # print(change)
             try:
                 change = change["updateDescription"]["updatedFields"]
-                timestamp = time()
+                timestamp = datetime.timestamp(datetime.now())
                 for key in change.keys():
                     if (key == "enableAllAreas"):
                         # print(areaKey, "area enable changed!")

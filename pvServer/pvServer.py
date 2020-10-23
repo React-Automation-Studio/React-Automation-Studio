@@ -96,54 +96,55 @@ def check_pv_initialized_after_disconnect():
                         clientPVlist[pvname]['pv'].get(as_string=True)
                         d=clientPVlist[pvname]['pv'].get_with_metadata(with_ctrlvars=True,use_monitor=True)
                         if  (clientPVlist[pvname]['pv'].value)!=None :
-                            for keys in d:
-                                if(str(d[keys])=='nan'):
-                                    d[keys]=None
+                            if d!=None:
+                                for keys in d:
+                                    if(str(d[keys])=='nan'):
+                                        d[keys]=None
 
-                            if(clientPVlist[pvname]['pv'].count >1):
-                                d['value']=list(d['value'])
-                            if(clientPVlist[pvname]['pv'].count==0):
-                                d['value']=[]
-                            if(clientPVlist[pvname]['pv'].count==1):
-                                new_char_value=str(d['char_value'])
-                                if (len(new_char_value)==0):
-                                    new_char_value=str(d['value'])
-                                d['char_value']=new_char_value
+                                if(clientPVlist[pvname]['pv'].count >1):
+                                    d['value']=list(d['value'])
+                                if(clientPVlist[pvname]['pv'].count==0):
+                                    d['value']=[]
+                                if(clientPVlist[pvname]['pv'].count==1):
+                                    new_char_value=str(d['char_value'])
+                                    if (len(new_char_value)==0):
+                                        new_char_value=str(d['value'])
+                                    d['char_value']=new_char_value
 
-                            d['pvname']= pvname
-                            d['newmetadata']= 'True'
-                            d['connected']= '1'
-                            d['emitter']="request_pv_info: pv not in list"
-                            d['chid']=str(d['chid'])
-                            try:
-                                rw_room=str(pvname)+'rw'
-                                socketio.emit(pvname,d,room=rw_room,namespace='/pvServer')
-                                d['write_access']=False
-                                ro_room=str(pvname)+'ro'
-                                socketio.emit(pvname,d,room=ro_room,namespace='/pvServer')
-                                clientPVlist[pvname]['isConnected']=True
-                                clientPVlist[pvname]['initialized']=True
-                            #
-                            except TypeError as e:
-                                #"A type error exists in metadata dictionary and can't be converted into JSON format, previously this was caused by in CHID of type c_long(), a work arround exits, if CHID is not a c_long then try debugging")
-                                log.error("***EPICS PV info initial request info error: ")
-                                log.error("PV name: {}",pvname)
-                                log.error("PyEpics PV metadata: {}",d)
-                                log.error("Exception: {}",e)
-                                log.error("A type error exists in metadata dictionary and can't be converted into JSON format, previously this was caused by in CHID of type c_long(), a work arround exits, if CHID is not a c_long then try debugging")
-                                clientPVlist[pvname]['isConnected']=True
-                                clientPVlist[pvname]['initialized']=False
-                                log.error("Type: {}", type(d['value']))
-                                if ('epics.dbr.c_float_Array_0' in str(type(d['value']))):
-                                    log.info("type is epics.dbr.c_float_Array_0")
-                                d={}
                                 d['pvname']= pvname
-                                d['connected']= '0'
+                                d['newmetadata']= 'True'
+                                d['connected']= '1'
+                                d['emitter']="request_pv_info: pv not in list"
+                                d['chid']=str(d['chid'])
+                                try:
+                                    rw_room=str(pvname)+'rw'
+                                    socketio.emit(pvname,d,room=rw_room,namespace='/pvServer')
+                                    d['write_access']=False
+                                    ro_room=str(pvname)+'ro'
+                                    socketio.emit(pvname,d,room=ro_room,namespace='/pvServer')
+                                    clientPVlist[pvname]['isConnected']=True
+                                    clientPVlist[pvname]['initialized']=True
+                                #
+                                except TypeError as e:
+                                    #"A type error exists in metadata dictionary and can't be converted into JSON format, previously this was caused by in CHID of type c_long(), a work arround exits, if CHID is not a c_long then try debugging")
+                                    log.error("***EPICS PV info initial request info error: ")
+                                    log.error("PV name: {}",pvname)
+                                    log.error("PyEpics PV metadata: {}",d)
+                                    log.error("Exception: {}",e)
+                                    log.error("A type error exists in metadata dictionary and can't be converted into JSON format, previously this was caused by in CHID of type c_long(), a work arround exits, if CHID is not a c_long then try debugging")
+                                    clientPVlist[pvname]['isConnected']=True
+                                    clientPVlist[pvname]['initialized']=False
+                                    log.error("Type: {}", type(d['value']))
+                                    if ('epics.dbr.c_float_Array_0' in str(type(d['value']))):
+                                        log.info("type is epics.dbr.c_float_Array_0")
+                                    d={}
+                                    d['pvname']= pvname
+                                    d['connected']= '0'
 
-                                socketio.emit(pvname,d,room=str(pvname),namespace='/pvServer')
-                            except:
-                                log.exception("Unexpected error")
-                                raise
+                                    socketio.emit(pvname,d,room=str(pvname),namespace='/pvServer')
+                                except:
+                                    log.exception("Unexpected error")
+                                    raise
 
         # for watchEventName in clientDbWatchList :
         #     print("watchEventName")

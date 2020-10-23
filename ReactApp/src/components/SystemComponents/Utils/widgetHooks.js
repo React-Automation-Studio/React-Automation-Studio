@@ -7,21 +7,24 @@ const useContextMenu = (pvs, readOnly, disableProbe) => {
   const [openContextMenu, setOpenContextMenu] = useState(false);
   const [contextPVs, setContextPVs] = useState([]);
 
-  const contextMenu = (
-    <ContextMenu
-      disableProbe={disableProbe}
-      open={openContextMenu}
-      pvs={contextPVs}
-      handleClose={() => setOpenContextMenu(false)}
-      anchorReference="anchorPosition"
-      anchorPosition={{ top: yPos, left: xPos }}
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "center",
-      }}
-      probeType={readOnly ? "readOnly" : undefined}
-    />
-  );
+  let contextMenu;
+  if (openContextMenu) {
+    contextMenu = (
+      <ContextMenu
+        disableProbe={disableProbe}
+        open={openContextMenu}
+        pvs={contextPVs}
+        handleClose={() => setOpenContextMenu(false)}
+        anchorReference="anchorPosition"
+        anchorPosition={{ top: yPos, left: xPos }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "center",
+        }}
+        probeType={readOnly ? "readOnly" : undefined}
+      />
+    );
+  }
 
   const getContextPVs = (pvs) => {
     let newContextPVs = [];

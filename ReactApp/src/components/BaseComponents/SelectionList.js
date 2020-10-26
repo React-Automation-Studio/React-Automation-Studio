@@ -203,8 +203,8 @@ const SelectionListComponent = (props) => {
   }
 
 
-  let enumStrings = props.initialized && props.enumStrs !== undefined && props.enumStrs !== null ? props.enumStrs : ["N/A", "Disconnected"];
-  let itemList = getListItems(enumStrings, props.initialized ? props.value : "Disconnected");
+
+  let itemList = getListItems(props.initialized ? props.enumStrs : ["N/A", "Disconnected"], props.initialized ? props.value : "Disconnected");
 
   return (
     <FormControlLabel

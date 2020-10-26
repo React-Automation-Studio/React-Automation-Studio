@@ -29,18 +29,15 @@ const SelectionInputComponent = (props) => {
   let inputProps;
   let stringValues; 
   if (props.initialized) {
-    if(props.enumStrs !== undefined && props.enumStrs !== null) {
-      stringValues = props.enumStrs.map((item, idx) => (
-        <MenuItem
-          key={item.toString()}   
-          value={props.useStringValue ? item : idx}
-        >
-          {item}
-        </MenuItem>
-      ));
-    } else {
-      stringValues = [];
-    }
+    stringValues= props.enumStrs.map((item, idx) => (
+      <MenuItem
+        key={item.toString()}
+
+        value={props.useStringValue ? item : idx}
+      >
+        {item}
+      </MenuItem>
+    ));
     inputProps = {
       endAdornment: (
         <InputAdornment

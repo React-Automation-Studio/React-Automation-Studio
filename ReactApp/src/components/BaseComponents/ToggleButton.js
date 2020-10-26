@@ -70,11 +70,7 @@ const ToggleButtonComponent = (props) => {
   let momentary = props.momentary !== undefined ? props.momentary : false;
   let text;
   if (props.initialized){
-    if (props.enumStrs !== null && props.enumStrs !== undefined) {
-      text=props.enumStrs[value == 1 ? 1 : 0]
-    } else {
-      text = value;
-    }
+    text=props.enumStrs[value == 1 ? 1 : 0]
   }
   else{
     text="Disconnected";

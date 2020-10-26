@@ -35,10 +35,9 @@ const RadioButtonGroupComponent=(props)=>{
   }
 
 
-  let radioButtons;
-  if (props.enumStrs !== undefined && props.enumStrs !== null) {
-    radioButtons = props.enumStrs.map((item) => (
-      <FormControlLabel     
+    let radioButtons = props.enumStrs.map((item, index) => (
+      <FormControlLabel
+
         key={item}
         value={item}
         disabled={props.disabled}
@@ -47,7 +46,6 @@ const RadioButtonGroupComponent=(props)=>{
         labelPlacement={props.bitLabelPlacement}
       />
     ));
-  }
     return (
       <FormControlLabel
         key={props.pvName}

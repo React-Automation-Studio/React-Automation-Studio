@@ -327,6 +327,7 @@ PV.propTypes = {
 
   /**
    * Read value from PV on specified period interval [ms].
+   * If set to zero, no polling is applied.
    */
   pollingRate: PropTypes.number,
 

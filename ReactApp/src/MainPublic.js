@@ -85,14 +85,14 @@ class MainPublic extends Component {
 
     return (
       <TraditionalLayout
-      title="React Automation Studio V2.0.0"
+      title="React Automation Studio V2.1.0"
       denseAppBar
       alignTitle="center"
     >
 
 
       <RedirectToLogIn/>
-      <div style={{textAlign:'center',paddingTop:'50vh'}}><CircularProgress /></div> 
+      <div style={{textAlign:'center',paddingTop:'50vh'}}><CircularProgress /></div>
 
 
 

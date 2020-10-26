@@ -41,7 +41,7 @@ const styles = theme => ({
   Paper: {
     padding: theme.spacing(4),
     height: '100%',
-    
+
 
 
   },
@@ -58,7 +58,7 @@ const styles = theme => ({
     paddingRight: theme.spacing(2),
     paddingBottom: theme.spacing(2),
     marginBottom: theme.spacing(2),
-    
+
 
   },
   WhatsNew: {
@@ -241,6 +241,24 @@ class MainDashboard extends Component {
                 </Grid>
                 <Grid item lg={12} sm={12} xs={12}  >
                   <Typography className={classes.WhatsNew} component='div'>
+                  V2.1.0 Tuesday 20 October 2020
+                  <br />
+                  Improvements and new features:
+                    <br />
+                    <ul>
+                      <li>Added Epics Archiver Viewer component</li>
+                      <li>Package updates</li>
+                    </ul>
+
+                  V2.0.1 Tuesday 29 September 2020
+                  <br />
+                  Improvements and new features:
+                    <br />
+                    <ul>
+                      <li>Added logging to pvServer</li>
+                      <li>Minor bug fix to pvServer</li>
+                    </ul>
+
                   V2.0.0 Wednesday 5 August 2020
                     <br />
 
@@ -271,8 +289,8 @@ class MainDashboard extends Component {
                           </li>
                         </ul>
                       </li>
-                      
-                      
+
+
                       <li> Deprecated Components: These components will be removed in future releases                  <br />
                         <ul>
                           <li>
@@ -286,18 +304,18 @@ class MainDashboard extends Component {
                           </li>
                           </ul>
                       </li>
-                      <li> 
+                      <li>
                         Removed Component:
-                      
+
                       <ul>
                         <li>
                           GraphMultiplePVs
                         </li>
                       </ul>
                       </li>
-                      <li> 
+                      <li>
                        Breaking Changes:
-                      
+
                       <ul>
                         <li>
                         routes.js was renamed Routes.js and now contains extra logic to enable dynamic or isolated routes based on the use role.
@@ -308,7 +326,7 @@ class MainDashboard extends Component {
                       </ul>
                       </li>
                       <li>Packages updated in both RAS and RAS-Example-Project-1</li>
-                      
+
                     </ul>
 
 
@@ -349,7 +367,7 @@ class MainDashboard extends Component {
               </Grid>
               <Grid item lg={6} sm={12} xs={12}>
                 <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
-                 
+
                   <Grid item lg={12} sm={12} xs={12}>
                     <Button fullWidth className={classes.button} component={Link} to="/AlarmHandlerDemo" color="primary" variant={buttonVariant}>  Alarm Handler Demo </Button>
                   </Grid>
@@ -359,7 +377,10 @@ class MainDashboard extends Component {
                   <Grid item lg={12} sm={12} xs={12} >
                     <Button fullWidth className={classes.button} component={Link} to="/LoadSaveExample" color="primary" variant={buttonVariant}> LoadSave Example </Button>
                   </Grid>
-                 
+                  <Grid item lg={12} sm={12} xs={12} >
+                    <Button fullWidth className={classes.button} component={Link} to="/ArchiverDataViewerDemo" color="primary" variant={buttonVariant}> Archiver Data Viewer Demo </Button>
+                  </Grid>
+
 
                 </Grid>
               </Grid>

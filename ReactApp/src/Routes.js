@@ -11,6 +11,7 @@ import TableControlSystem from './components/ControlScreens/TableControlSystem';
 import Test3D from './components/Experimental/Test3D';
 import AlarmHandlerDemo from './components/Examples/AlarmHandlerDemo';
 import LoadSaveExample from './components/ExperimentalExamples/LoadSaveExample';
+import ArchiverDataViewerDemo from './components/ArchiverDataViewer/ArchiverDataViewerDemo';
 import SettingsSteererXY from './components/SettingsPages/SettingsSteererXY';
 import SettingsSinglePS from './components/SettingsPages/SettingsSinglePS';
 import AdvancedSettingsSinglePS from './components/ExperimentalControlScreens/SettingsPages/AdvancedSettingsSinglePS';
@@ -49,6 +50,7 @@ const Routes = (props) => {
         <Route path="/EpicsDemos" component={EpicsDemos} />
         <Route path="/Test3D" component={Test3D} />
         <Route path="/AlarmHandlerDemo" component={AlarmHandlerDemo} />
+        <Route path="/ArchiverDataViewerDemo" component={ArchiverDataViewerDemo}/>
         <Route path="/VaultDemo" component={Vault} />
         <Route path="/LoadSaveExample" component={LoadSaveExample} />
         {/* new Beamline and table control System routes start*/}

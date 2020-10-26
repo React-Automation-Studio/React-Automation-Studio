@@ -34,7 +34,7 @@ const styles = theme => ({
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */
 const HarpComponent = (props) => {
- 
+
 const [dialogOpen,setDialogOpen]=useState(false);
 
 const handleYes = () => {
@@ -45,9 +45,9 @@ const handleYes = () => {
 };
 
   const handleOnClick = () => {
-  
+
     let newValue=props.value==1?0:1;
-   
+
     props.handleImmediateChange(newValue)
   };
   // const handleContextMenu = event => {
@@ -94,7 +94,7 @@ const handleYes = () => {
   if (initialized) {
     let inValue=props.inLimitPv?inLimitPv.value:value;
     let inLimitValue=props.inLimitValue?props.inLimitValue:1;
-   
+
     isIn = inValue==inLimitValue;
   //  console.log(inValue,inLimitValue,isIn,inLimitPv)
     let outValue=props.outLimitPv?outLimitPv.value:value;
@@ -108,7 +108,7 @@ const handleYes = () => {
 
     isMoving=props.isMovingValue?isMovingValue==isMovingValueValid:(!(isIn||isOut));
     yOffset =isIn?0:-35;
-    
+
   }
   else {
     yOffset = 0;
@@ -147,7 +147,7 @@ const handleYes = () => {
 
     const componentId = uuidv4();
     //console.log(isIn)
-    
+
     return (
 
 
@@ -162,7 +162,7 @@ const handleYes = () => {
 
         <g
           transform={'translate(' + svgCenterX + ',' + (svgCenterY) + ')'}
-          
+
         //    onContextMenu={handleContextMenu}
         >
 
@@ -284,7 +284,7 @@ const handleYes = () => {
 
               <text className={classes.Label}
                 x={0}
-                y={+yOffset - 40}
+                y={+yOffset - 40+ props.labelOffsetY}
                 textAnchor='middle'
                 filter={props.textShadow === true ? "url(#" + componentId + "HarpShadow)" : ""}
               >
@@ -309,14 +309,14 @@ const handleYes = () => {
   /**
   * Harp Beam line component
   *
-  *  The label, min, max, units, pv and tooltip all accept macros that can be replaced by the values defined in the macros prop.  
+  *  The label, min, max, units, pv and tooltip all accept macros that can be replaced by the values defined in the macros prop.
   */
 
   const Harp = (props) => {
 
 
     return (
-      <Widget svgWidget={true}  {...props} component={HarpComponent}  
+      <Widget svgWidget={true}  {...props} component={HarpComponent}
        pvs={[props.inLimitPv,props.outLimitPv,props.isMovingPv]}
        label={props.label} />
 
@@ -358,16 +358,16 @@ const handleYes = () => {
      * eg. {{'$(device)':'testIOC','$(id)':'2'}}
      */
     macros: PropTypes.object,
-    
+
     /**
      * Directive to prevent more harps being inserted if the maximum is reached.
      */
     maxHarpsReached: PropTypes.bool,
-    
 
 
 
-    
+
+
     /**
      * Directive to fill the component's label with
      * the value contained in the  pv metadata's DESC field or the labelPv value.
@@ -375,17 +375,17 @@ const handleYes = () => {
      */
     usePvLabel: PropTypes.bool,
     /**
-     * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver. 
-     * The pyEpics metadata is unfortunately static and the values used will be the initial values that pvserver receives when it connects the first time. 
+     * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver.
+     * The pyEpics metadata is unfortunately static and the values used will be the initial values that pvserver receives when it connects the first time.
      * This is sufficient in most cases except when the user wants to dynamically update the metaData.
-     * In this case a direct connection can be made to all the pv fields by setting useMetadata to false. 
+     * In this case a direct connection can be made to all the pv fields by setting useMetadata to false.
      * If any of the metadata pvs are defined i.e unitsPv then the PV makes a new data  connection to this alternate pv and will
-     * use the value provided by this pv as the units. 
+     * use the value provided by this pv as the units.
      * The same is the case for the precPV, labelPv, alarmPv, unitsPv and minPv.
      * By setting useMetadata to false also enables connection to other variables as defined by different protocols.
      */
     useMetadata: PropTypes.bool,
-   
+
     /**
      * Directive to use PV's string values.
      */
@@ -394,7 +394,7 @@ const handleYes = () => {
 
 
 
-   
+
 
     /** Name of the pv process variable that sends the command 1 for out and 0 for in, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
     pv: PropTypes.string,

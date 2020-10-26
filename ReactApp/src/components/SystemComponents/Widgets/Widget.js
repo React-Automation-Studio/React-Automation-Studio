@@ -358,6 +358,7 @@ const math = create(all, config)
             outputValue={outputValue}
             useStringValue={props.useStringValue}
             initialLocalVariableValue={props.initialLocalVariableValue}
+            pollingRate={props.pollingRate}
             debug={props.debug}
             pvData={(data) => setState(prevState => {
               let state = [...prevState]
@@ -401,6 +402,7 @@ const math = create(all, config)
     outputValue={outputValue}
     useStringValue={props.useStringValue}
     initialLocalVariableValue={props.initialLocalVariableValue}
+    pollingRate={props.pollingRate}
     debug={props.debug}
     pvData={setPv}
     name={props.name}

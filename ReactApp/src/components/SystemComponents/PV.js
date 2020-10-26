@@ -63,6 +63,7 @@ const PV = (props) => {
     outputValue: props.outputValue,
     useStringValue: props.useStringValue,
     initialLocalVariableValue: props.initialLocalVariableValue,
+    pollingRate: props.pollingRate,
     debug: props.debug,
     pvData: pvData('data')
 
@@ -324,6 +325,11 @@ PV.propTypes = {
    */
   useStringValue: PropTypes.bool,
 
+  /**
+   * Read value from PV on specified period interval [ms].
+   */
+  pollingRate: PropTypes.number,
+
 
 };
 
@@ -333,7 +339,7 @@ PV.propTypes = {
  */
 // static defaultProps=WrappedComponent.defaultProps;
 PV.defaultProps = {
-
+  pollingRate: 0,
   debug: false,
   useMetadata: true,
 

@@ -123,7 +123,19 @@ export const useEpicsPV = (props) => {
       jwt = 'unauthenticated'
     }
     socket.emit('request_pv_info', { data: pv.pvname, 'clientAuthorisation': jwt },handleRequestPvInfoAck);
-    socket.on(pv.pvname, updatePVData);
+    let timerId;
+    if (props.pollingRate === 0) {
+      socket.on(pv.pvname, updatePVData);
+    } else {
+      timerId = setInterval(() => {
+        socket.emit(
+          "get_polled_value",
+          { data: pv.pvname, clientAuthorisation: jwt },
+          updatePVData
+        );
+      }, props.pollingRate);
+    }
+    socket.on("init_" + pv.pvname, updatePVData);
     socket.on('connect_error', connectError);
     socket.on('disconnect', disconnect);
     socket.on('reconnect', reconnect);
@@ -141,7 +153,9 @@ export const useEpicsPV = (props) => {
       socket.removeListener('connect_error', connectError);
       socket.removeListener('disconnect', disconnect);
       socket.removeListener('reconnect', reconnect);
-
+      if (timerId !== undefined) {
+        clearInterval(timerId);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -230,6 +244,10 @@ EpicsPV.propTypes = {
    */
   useStringValue: PropTypes.bool,
 
+  /**
+   * Read value from PV on specified period interval [ms].
+   */
+  pollingRate: PropTypes.number,
 
 };
 
@@ -239,7 +257,7 @@ EpicsPV.propTypes = {
  */
 // static defaultProps=WrappedComponent.defaultProps;
 EpicsPV.defaultProps = {
-
+  pollingRate: 0,
   debug: false,
 
 };

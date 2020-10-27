@@ -296,6 +296,14 @@ module.exports = {
           usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
          
         },
+        {
+          name: 'Experimental Archiver Data Viewer',
+          content: 'src/components/ArchiverDataViewer/Archiver.md',
+          components: 'src/components/ArchiverDataViewer/ArchiverDataViewer.js',
+          exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
+          usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
+         
+        },
       ],
       sectionDepth: 2
     },

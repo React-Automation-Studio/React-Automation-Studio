@@ -1,10 +1,10 @@
-Current Release: V2.0.0
+Current Release: V2.1.0
 
 # Introduction
 
 React Automation Studio is a new software platform to enable the control of large scientific equipment through EPICS.
 
-The system has been containerised with Docker and version controlled as a mono-repository using Git.
+The system has been containerized with Docker and version controlled as a mono-repository using Git.
 
 
 This repository is the master repository which  contains the code base and demos for each the component and interactive UI's that depend on the demo IOC micro service.
@@ -57,7 +57,7 @@ Similarly for writes to an EPICS variable, depending on the access rights, the c
 
 React was chosen to develop the frontend for the PWA as it enables us to develop the frontend in a single language, i.e JavaScript  as opposed to conventional web development in HTML, JavaScript and CSS. The UI interfaces that we have created are highly responsive and offer a real-time experience as is shown in the example of a mobile view in in Fig. 1.
 
-We have integrated selected components from the Material-UI React component framework and the React-visgraphing framework with our system to create user interfaces with the same features that we use in our current CS-Studio operator interfaces. These components have been integrated with a data connection layer which handles, input and output, meta-data for labels, limits, precision, alarm sensitivity and initialisation from the pvServer.
+We have integrated selected components from the Material-UI React component framework and the React-vis graphing framework with our system to create user interfaces with the same features that we use in our current CS-Studio operator interfaces. These components have been integrated with a data connection layer which handles, input and output, meta-data for labels, limits, precision, alarm sensitivity and initialization from the pvServer.
 
 Some components can handle multiple PVs such as the graph or single PVs such as text inputs. For each of the components the PVs name can be declared using macros. The macros are replaced at component instantiation. This allows the  design of complex user interfaces that can be reused by simply grouping the components and changing the global macro to point to another system.
 
@@ -93,7 +93,7 @@ Access rights can be controlled though a JSON file which contains user access gr
 
 Since V2.0.0, React-Automation-Studio is integrated with MongoDB to store persistent data. The PyMongo driver is used within the pvServer to connect to a MongoDB replica set.
 
-React hooks are available that setup a watch, perform an update or an insert to MongoDB replica set within the pvServer. 
+React hooks are available that setup a watch, perform an update or an insert to MongoDB replica set within the pvServer.
 
 See the documentation in the style guide.
 
@@ -385,7 +385,7 @@ In theory, all regular expression allowed by Python regex can be used although t
     { "rule":"[0-9].*",                   "read":true,  "write":true },
     { "rule":"[a-z].*",                   "read":true,  "write":true },
     { "rule":"[A-Z].*",                   "read":true,  "write":true },
-   
+
 
   ]
 },
@@ -491,6 +491,24 @@ Site specific components and app screens should be kept in your repository. If y
 Contact us at rasadmin@tlabs.ac.za
 
 # Changelog
+ V2.1.0 Tuesday 20 October 2020
+<br />
+  Improvements and new features:
+<br />
+<ul>
+  <li>Added Epics Archiver Viewer component</li>
+  <li>Package updates</li>
+</ul>
+
+
+V2.0.1 Tuesday 29 September 2020
+  <br />
+  Improvements and new features:
+  <br />
+  <ul>
+    <li>Added logging to pvServer</li>
+    <li>Minor bug fix to pvServer</li>
+  </ul>
 
 V2.0.0 Wednesday 5 August 2020
 <br />
@@ -522,8 +540,8 @@ Improvements and new features:
       </li>
     </ul>
   </li>
-  
-  
+
+
   <li> Deprecated Components: These components will be removed in future releases                  <br />
     <ul>
       <li>
@@ -537,18 +555,18 @@ Improvements and new features:
       </li>
       </ul>
   </li>
-  <li> 
+  <li>
     Removed Component:
-  
+
   <ul>
     <li>
       GraphMultiplePVs
     </li>
   </ul>
   </li>
-  <li> 
+  <li>
     Breaking Changes:
-  
+
   <ul>
     <li>
     routes.js was renamed Routes.js and now contains extra logic to enable dynamic or isolated routes based on the use role.
@@ -559,7 +577,7 @@ Improvements and new features:
   </ul>
   </li>
   <li>Packages updated in both RAS and RAS-Example-Project-1</li>
-  
+
 </ul>
 
 **V1.2.4 Thursday 2 April 2020**

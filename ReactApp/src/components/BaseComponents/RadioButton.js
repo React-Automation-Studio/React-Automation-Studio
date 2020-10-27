@@ -1,10 +1,9 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 import { Radio, FormControlLabel } from "@material-ui/core";
 import Widget from "../SystemComponents/Widgets/Widget";
 import PropTypes from 'prop-types';
-
-const useStyles = makeStyles((theme) => ({
+const styles = (theme) => ({
   root: {
     display: "flex",
     flexWrap: "wrap",
@@ -17,12 +16,10 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "auto",
     marginRight: "auto",
   },
-}));
+});
 
 /* eslint-disable eqeqeq */
 const RadioButtonComponent=(props)=>{
-
-  const classes = useStyles();
 
   /**
    * Send to PV the opposite value
@@ -36,7 +33,7 @@ const RadioButtonComponent=(props)=>{
     return (
       <FormControlLabel
         key={props.pvName}
-        className={classes.FormControl}
+        className={props.classes.FormControl}
         disabled={props.disabled}
         label={props.formControlLabel}
         labelPlacement={props.labelPosition}
@@ -108,43 +105,13 @@ RadioButton.propTypes = {
    */
 
   tooltipProps:PropTypes.object,
-  /**
-   * When receiving a PV storing an array of values users can choose a subset of these value.
-   * Registers accept the indexes of the registers to effectively show.
-   * Order does count!
-   */
-  registers: PropTypes.arrayOf(PropTypes.number),
-  /**
-   * When receiving a PV storing an array of values users can assign a label to each register
-   * or a subset of them.
-   */
-  registersLabel: PropTypes.arrayOf(PropTypes.string),
-  /**
-   * When receiving a PV storing an array of values users can set the label position for each register,
-   * or a subset of them, if the receiving components allows it.
-   */
-  registersLabelPlacement: PropTypes.oneOf(["top", "bottom", "start", "end"]),
-  /**
-   * Directive to display array elements horizontal aligned.
-   */
-  alignHorizontal: PropTypes.bool,
-  /**
-   * When alignHorizontal is true, if stretch is true
-   * all the elements are aligned into one row, otherwise
-   * they have their standard width.
-   */
-  stretch: PropTypes.bool,
-}
+  
 
+
+}
 RadioButton.defaultProps = {
   onColor: 'primary',
   debug: false,
-  showTooltip:false,
-  alignHorizontal: false,
-  stretch: true,
+  showTooltip:false
 }
-
-RadioButtonComponent.defaultProps = RadioButton.defaultProps;
-
-export default RadioButton;
-export { RadioButton, RadioButtonComponent };
+export default withStyles(styles, { withTheme: true })(RadioButton);

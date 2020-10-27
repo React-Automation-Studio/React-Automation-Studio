@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { makeStyles } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 import { Button, FormControlLabel } from "@material-ui/core";
 import PropTypes from "prop-types";
 import {isMobile,isTablet} from 'react-device-detect';
 import Widget from "../SystemComponents/Widgets/Widget";
-
-const useStyles = makeStyles((theme) => ({
+const styles = (theme) => ({
   root: {
     display: "flex",
     flexWrap: "wrap",
@@ -26,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "auto",
     marginRight: "auto",
   },
-}));
+});
 
 /* eslint-disable eqeqeq */
 const ToggleButtonComponent = (props) => {
@@ -66,16 +65,12 @@ const ToggleButtonComponent = (props) => {
     }
   }
 
-  const classes = useStyles();
+  const { classes } = props;
   const { value } = props;
   let momentary = props.momentary !== undefined ? props.momentary : false;
   let text;
   if (props.initialized){
-    if (props.enumStrs !== null && props.enumStrs !== undefined) {
-      text=props.enumStrs[value == 1 ? 1 : 0]
-    } else {
-      text = value;
-    }
+    text=props.enumStrs[value == 1 ? 1 : 0]
   }
   else{
     text="Disconnected";
@@ -226,45 +221,19 @@ ToggleButton.propTypes = {
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-  /**
-   * When receiving a PV storing an array of values users can choose a subset of these value.
-   * Registers accept the indexes of the registers to effectively show.
-   * Order does count!
-   */
-  registers: PropTypes.arrayOf(PropTypes.number),
-  /**
-   * When receiving a PV storing an array of values users can assign a label to each register
-   * or a subset of them.
-   */
-  registersLabel: PropTypes.arrayOf(PropTypes.string),
-  /**
-   * When receiving a PV storing an array of values users can set the label position for each register,
-   * or a subset of them, if the receiving components allows it.
-   */
-  registersLabelPlacement: PropTypes.oneOf(["top", "bottom", "start", "end"]),
-  /**
-   * Directive to display array elements horizontal aligned.
-   */
-  alignHorizontal: PropTypes.bool,
-  /**
-   * When alignHorizontal is true, if stretch is true
-   * all the elements are aligned into one row, otherwise
-   * they have their standard width.
-   */
-  stretch: PropTypes.bool,
+  
+
 };
 
 ToggleButton.defaultProps = {
+
   debug: false,
   color: 'primary',
   labelPlacement: 'top',
   usePvLabel: false,
-  showTooltip:false,
-  alignHorizontal: false,
-  stretch: true,
+  showTooltip:false
 };
 
-ToggleButtonComponent.defaultProps = ToggleButton.defaultProps;
 
-export default ToggleButton;
-export { ToggleButton, ToggleButtonComponent };
+
+export default withStyles(styles, { withTheme: true })(ToggleButton);

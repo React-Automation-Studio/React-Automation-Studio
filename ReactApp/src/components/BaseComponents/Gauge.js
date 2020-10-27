@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 
 import PropTypes from 'prop-types';
 
@@ -16,7 +16,7 @@ import {
 
 
 
-const useStyles = makeStyles((theme) => ({
+const styles = theme => ({
   textTicks: {
     fill: theme.palette.type === 'dark' ? theme.palette.grey['300'] : theme.palette.grey['500']
 
@@ -42,9 +42,10 @@ const useStyles = makeStyles((theme) => ({
     marginRight: "auto",
   },
   
-}));
+});
 
-function getTickValues(props, min, max, numberOfTicks, x0, x1, y1, xOffset, radialTextOffset, classes) {
+function getTickValues(props, min, max, numberOfTicks, x0, x1, y1, xOffset, radialTextOffset) {
+  const { classes } = props;
   //this.test("test1");
   //this.handleInputValue();
 
@@ -87,8 +88,7 @@ function getTickValues(props, min, max, numberOfTicks, x0, x1, y1, xOffset, radi
 
 function GaugeComponent(props) {
   const gradientId = uuidv4();
-  const classes = useStyles();
-  const theme = useTheme();
+  const { classes } = props;
   const units = props.units;
   const value = props.value;
   const min = props.min;
@@ -124,8 +124,8 @@ function GaugeComponent(props) {
 
       <linearGradient id={gradientId} >
 
-        <stop offset="0%" stopColor={typeof props.disabled === 'undefined' ? theme.palette.primary.main : 'default'} />
-        <stop offset="100%" stopColor={theme.palette.type === 'dark' ? theme.palette.grey['300'] : theme.palette.grey['200']} />
+        <stop offset="0%" stopColor={typeof props.disabled === 'undefined' ? props.theme.palette.primary.main : 'default'} />
+        <stop offset="100%" stopColor={props.theme.palette.type === 'dark' ? props.theme.palette.grey['300'] : props.theme.palette.grey['200']} />
       </linearGradient>
 
       <path
@@ -147,7 +147,7 @@ function GaugeComponent(props) {
 
 
       <path
-        fill={theme.palette.svgComponentSecondary.main}
+        fill={props.theme.palette.svgComponentSecondary.main}
 
 
 
@@ -159,7 +159,7 @@ function GaugeComponent(props) {
 
 
 
-      {getTickValues(props, min, max, 6, x0, x1, y1, xOffset, radialTextOffset, classes)}
+      {getTickValues(props, min, max, 6, x0, x1, y1, xOffset, radialTextOffset)}
     </svg>
 
   );
@@ -169,7 +169,7 @@ GaugeComponent.propTypes = {
   height: PropTypes.number,
   width: PropTypes.number,
 }
-const FlexibleGaugeComponent = makeVisFlexible(GaugeComponent);
+const FlexibleGaugeComponent = makeVisFlexible(withStyles(styles, { withTheme: true })(GaugeComponent));
 
 /**
 * The Gauge Component is an Automation-studio component.
@@ -177,7 +177,7 @@ const FlexibleGaugeComponent = makeVisFlexible(GaugeComponent);
 
 const GaugeInternalComponent = (props) => {
   const { initialized } = props;
-  const classes = useStyles();
+  const {classes}=props;
   let units;
   let value;
   let min;
@@ -366,46 +366,18 @@ Gauge.propTypes = {
   tooltipProps:PropTypes.object,
   /** label placement*/
   labelPlacement: PropTypes.oneOf(['start', 'top', 'bottom', 'end']),
-  /**
-   * When receiving a PV storing an array of values users can choose a subset of these value.
-   * Registers accept the indexes of the registers to effectively show.
-   * Order does count!
-   */
-  registers: PropTypes.arrayOf(PropTypes.number),
-  /**
-   * When receiving a PV storing an array of values users can assign a label to each register
-   * or a subset of them.
-   */
-  registersLabel: PropTypes.arrayOf(PropTypes.string),
-  /**
-   * When receiving a PV storing an array of values users can set the label position for each register,
-   * or a subset of them, if the receiving components allows it.
-   */
-  registersLabelPlacement: PropTypes.oneOf(["top", "bottom", "start", "end"]),
-  /**
-   * Directive to display array elements horizontal aligned.
-   */
-  alignHorizontal: PropTypes.bool,
-  /**
-   * When alignHorizontal is true, if stretch is true
-   * all the elements are aligned into one row, otherwise
-   * they have their standard width.
-   */
-  stretch: PropTypes.bool,
+
+
 };
 
 Gauge.defaultProps = {
   debug: false,
+  
   min: 0,
   max: 100,
   usePvPrecision: false,
   labelPlacement:'top',
-  showTooltip:false,
-  alignHorizontal: false,
-  stretch: true,
+  showTooltip:false
 };
 
-GaugeInternalComponent.defaultProps = Gauge.defaultProps;
-
-export default Gauge;
-export { Gauge, GaugeInternalComponent as GaugeComponent };
+export default withStyles(styles, { withTheme: true })(Gauge)

@@ -1,11 +1,11 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 import { Button, FormControlLabel } from "@material-ui/core";
 import PropTypes from "prop-types";
 import Widget from "../SystemComponents/Widgets/Widget";
 
 
-const useStyles = makeStyles((theme) => ({
+const styles = (theme) => ({
   root: {
     display: "flex",
     flexWrap: "wrap",
@@ -26,56 +26,37 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "auto",
     marginRight: "auto",
   },
-}));
+});
 
 
 
 const ActionButtonComponent=(props)=> {
-  const classes = useStyles();
-  const { 
-    color, 
-    disabled, 
-    formControlLabel, 
-    index,
-    labelPlacement, 
-    muiButtonProps, 
-    pvName,
-    registersActionString,
-    registersActionValue,
-  } = props;
-
-  const handleIndexValue = (arrayValue, singleValue) => {
-    if (index !== undefined && arrayValue !== undefined && arrayValue.length > index) {
-      return arrayValue[index];
-    }
-    return singleValue;
-  };
-  let actionString = handleIndexValue(registersActionString, props.actionString);
-  let actionValue = handleIndexValue(registersActionValue, props.actionValue);
 
   /**
    * Send the predefined value to the PV.
    */
   const handleButtonClick=()=> {
-    props.handleImmediateChange(actionValue);
+   
+    props.handleImmediateChange(props.actionValue);
   }
+
 
   return (
     <FormControlLabel
-      key={pvName}
-      className={classes.FormControl}
-      disabled={disabled}
-      label={formControlLabel}
-      labelPlacement={labelPlacement}
+      key={props.pvName}
+      className={props.classes.FormControl}
+      disabled={props.disabled}
+      label={props.formControlLabel}
+      labelPlacement={props.labelPlacement}
       control={
         <Button
-          className={classes.Button}
+          className={props.classes.Button}
           variant="contained"
-          color={color}
+          color={props.color}
           onClick={handleButtonClick}
-          {...muiButtonProps}
+          {...props.muiButtonProps}
         >
-          {actionString}
+          {props.actionString}
         </Button>
       }
     />
@@ -145,51 +126,15 @@ ActionButton.propTypes = {
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-  tooltipProps:PropTypes.object,
-  /**
-   * Single element action string.
-   */
-  registersActionString: PropTypes.arrayOf(PropTypes.string),
-  /**
-   * Single element action value.
-   */
-  registersActionValue: PropTypes.arrayOf(PropTypes.number),
-  /**
-   * When receiving a PV storing an array of values users can choose a subset of these value.
-   * Registers accept the indexes of the registers to effectively show.
-   * Order does count!
-   */
-  registers: PropTypes.arrayOf(PropTypes.number),
-  /**
-   * When receiving a PV storing an array of values users can assign a label to each register
-   * or a subset of them.
-   */
-  registersLabel: PropTypes.arrayOf(PropTypes.string),
-  /**
-   * When receiving a PV storing an array of values users can set the label position for each register,
-   * or a subset of them, if the receiving components allows it.
-   */
-  registersLabelPlacement: PropTypes.oneOf(["top", "bottom", "start", "end"]),
-  /**
-   * Directive to display array elements horizontal aligned.
-   */
-  alignHorizontal: PropTypes.bool,
-  /**
-   * When alignHorizontal is true, if stretch is true
-   * all the elements are aligned into one row, otherwise
-   * they have their standard width.
-   */
-  stretch: PropTypes.bool,
-};
 
-ActionButton.defaultProps = { 
+  tooltipProps:PropTypes.object,
+
+
+};
+ActionButton.defaultProps = {
+ 
   showTooltip:false,
   color:'primary',
-  alignHorizontal: false,
-  stretch: true,
 };
 
-ActionButtonComponent.defaultProps = ActionButton.defaultProps;
-
-export default ActionButton;
-export { ActionButton, ActionButtonComponent };
+export default withStyles(styles, { withTheme: true })(ActionButton);

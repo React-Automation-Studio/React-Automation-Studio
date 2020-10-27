@@ -1,31 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { makeStyles, FormControlLabel } from "@material-ui/core";
+import React, { useState, useEffect } from 'react'
 import PV from '../PV'
 import ContextMenu from "../ContextMenu";
 import PropTypes from "prop-types";
 import { LanDisconnect } from "mdi-material-ui/";
-import { create, all } from 'mathjs';
 import { useTheme } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import {replaceMacros,replaceArrayMacros} from '../Utils/macroReplacement';
-const config = { }
-const math = create(all, config)
-
-const useStyles = makeStyles((theme) => ({
-  horizontalSpan: {
-    padding: theme.spacing(1),
-    display: "inline-block",
-    width: (props) => props.width,
-  },
-  verticalSpan: {
-    padding: theme.spacing(1),
-    display: "inline-block",
-    width: "100%",
-  },
-}));
+import { 
+  checkIndex, 
+  checkPrecision, 
+  formatValue, 
+  isInsideLimits
+} from "../Utils/widgetFunctions";
 
 /**
- * The Widget component creates standard properties, state variables and callbacks to manage the behaviour of a component communicating with one or multiple PVs. It also provides the default RAS contextMenu to the child component. 
+ * The Widget component creates standard properties, state variables and callbacks to manage the behaviour of a component communicating with one or multiple PVs. It also provides the default RAS contextMenu to the child component.
  * 
  * The label, min, max, units, pv and tooltip all accept macros that can be replaced by the values defined in the macros prop. 
  * 
@@ -38,11 +27,12 @@ const useStyles = makeStyles((theme) => ({
  * 
  **/
   const Widget = (props) => {
+  const { index } = props;
   const theme = useTheme();
   const [value, setValue] = useState(0);
   const [initialized, setInitalized] = useState(false);
   const [immediateValue, setImmediateValue] = useState(null);
-  const [commitChange, SetCommitChange] = useState(false);
+  const [commitChange, setCommitChange] = useState(false);
   const [newValueTrigger, setNewValueTrigger] = useState(0);
   const [outputValue, setOutputValue] = useState(null);
   const [focus, setFocus] = useState(false);
@@ -152,28 +142,13 @@ const useStyles = makeStyles((theme) => ({
 
   useEffect(() => {
     if (!focus) {
-      let newValue;
-
-      newValue=checkPrecision(pv.value, prec);
-      if (typeof props.numberFormat !== 'undefined'){
-        if (Array.isArray(newValue)) {
-          newValue = newValue.map((val) => (
-            math.format(parseFloat(val),props.numberFormat)
-          ));
-        } else {
-          newValue=math.format(parseFloat(newValue),props.numberFormat);
-        }
-        setValue(newValue)
+      const tempValue = checkPrecision(pv.value, prec);
+      setValue(formatValue(tempValue, props.numberFormat));
+      if (props.debug) {
+        console.log(tempValue);
       }
-      else{
-        setValue(newValue)
-      }
-      if (props.debug){
-        console.log(newValue)
     }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [focus, pv.value, prec])
+  }, [focus, pv.value, prec, props.numberFormat, props.debug]);
 
   useEffect(() => {
     let newSeverity=pv.severity;
@@ -197,59 +172,29 @@ const useStyles = makeStyles((theme) => ({
     setAlarmSeverity(newSeverity)
   }, [pv.severity,props.useStringSeverityMatch,props.stringSeverity,value])
 
-
   useEffect(() => {
     if (immediateValue !== null) {
-      let tempvalue = checkPrecision(isInsideLimits(immediateValue, min, max), prec);
-      if (typeof props.numberFormat !== 'undefined'){
-        if (Array.isArray(tempvalue)) {
-          tempvalue = tempvalue.map((val) => (
-            math.format(parseFloat(val),props.numberFormat)
-          ));
-        } else {
-          tempvalue=math.format(parseFloat(tempvalue),props.numberFormat);
-        }
-        setValue(tempvalue)
-      }
-      else{
-        setValue(tempvalue)
-      }
-      
-      setOutputValue(tempvalue);
-     
+      const tempValue = checkPrecision(
+        isInsideLimits(immediateValue, min, max),
+        prec
+      );
+      setValue(formatValue(tempValue, props.numberFormat));
+      setOutputValue(tempValue);
       setNewValueTrigger(newValueTrigger + 1);
       setImmediateValue(null);
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [immediateValue, min, max, prec])
-  
- 
+  }, [immediateValue, min, max, prec, props.numberFormat, newValueTrigger]);
 
   useEffect(() => {
     if (commitChange) {
-      let tempvalue = checkPrecision(isInsideLimits(value, min, max), prec);
-      if (typeof props.numberFormat !== 'undefined'){
-        let formatValue; 
-        if (Array.isArray(tempvalue)) {
-          formatValue = tempvalue.map((val) => (
-            math.format(parseFloat(val),props.numberFormat)
-          ));
-        } else {
-          formatValue=math.format(parseFloat(tempvalue),props.numberFormat);
-        }
-        setValue(formatValue)
-      }
-      else{
-        setValue(tempvalue)
-      }
-      setOutputValue(tempvalue);
+      const tempValue = checkPrecision(isInsideLimits(value, min, max), prec);
+      setValue(formatValue(tempValue, props.numberFormat));
+      setOutputValue(tempValue);
       setNewValueTrigger(newValueTrigger + 1);
-      SetCommitChange(false)
+      setCommitChange(false);
     }
+  }, [commitChange, min, max, prec, props.numberFormat, newValueTrigger, value]);
     
-// eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [commitChange, min, max, prec])
   useEffect(() => {
     if (props.custom_selection_strings) {
       setEnumStrings(replaceArrayMacros(props.custom_selection_strings,props.macros))
@@ -283,71 +228,9 @@ const useStyles = makeStyles((theme) => ({
       console.warn("prop usePrecision is deprecated, use the usePvPrecision and prec props instead")
     }
   },[props])
-  const applyPrecision = (value, precision) => {
-    if (!isNaN(value)) {
-      return value.toFixed(precision);
-    }
-    return value;
-  }
-  const checkPrecision = (value, prec) => {
-    if (props.usePvPrecision===true || (typeof props.prec!=='undefined')) {
-      let precision = parseInt(prec);
-      let tempValue;
-      if (Array.isArray(value)) {
-        tempValue = value.map((val) => {
-          let floatValue = parseFloat(val);
-          return applyPrecision(floatValue, precision);
-        });
-        return tempValue;
-      } else {
-        tempValue = parseFloat(value);
-        return applyPrecision(tempValue, precision)
-      }
-    } else {
-      return (value)
-    }
-  }
-  const isInsideLimits = (value, min, max) => {
-
-    if ((typeof props.min!=='undefined') || (typeof props.max!=='undefined') || props.usePvMinMax) {
-      let tempValue;
-      if (Array.isArray(value)) {
-        tempValue = value.map((v) => { 
-          let tempV = parseFloat(v);
-          if (!isNaN(tempV)) {
-           tempV = tempV > max ? max : tempV;
-           tempV = tempV < min ? min : tempV;
-          }
-          return tempV; 
-        })
-        return tempValue
-      }
-      
-      tempValue = parseFloat(value);
-      if (!isNaN(tempValue)) {
-        tempValue = tempValue > max ? max : tempValue;
-        tempValue = tempValue < min ? min : tempValue;
-        //value = tempValue;
-      }
-
-      return tempValue;
-    } else {
-      if (Array.isArray(value)) {
-        return value.map((v) => {
-          let val = parseFloat(v); 
-          return isNaN(val) ? v : val;
-        });
-      }
-      return value
-    }
-
-
-  }
-
-
 
   const handleToggleContextMenu = (event) => {
-
+    
     event.preventDefault();
     event.stopPropagation();
     setAnchorEl(event.target);
@@ -481,119 +364,51 @@ const useStyles = makeStyles((theme) => ({
   }}
   probeType={props.readOnly ? "readOnly" : undefined}
 />)
-  let formControlLabel = initialized ? 
-    label :
-    <span style={{fontSize:"inherit", whiteSpace: "nowrap"}}>
-      {disconnectedIcon()}{" "+pv.pvName}
-    </span>;
 
-  let filteredValues = value;
-  if (Array.isArray(value) && props.registers !== undefined && Array.isArray(props.registers)) {
-    filteredValues = props.registers.map((item) => value[item]);
-  }
+  const handleValue = (newValue, setFunction) => {
+    if (checkIndex(index, value)) {
+      let newArrayValue = [...value];
+      newArrayValue[index] = newValue;
+      setFunction(newArrayValue);
+    } else {
+      setFunction(newValue);
+    }
+  };
 
-  let width;
-  if (initialized && props.alignHorizontal && props.stretch) {
-    let length = filteredValues.length > 0 ? filteredValues.length : 1;
-    width = 100 / length + "%";
-  }
-  const classes = useStyles({ width });
-
-  let child;
-  if (!Array.isArray(value) && props.component) {
-    child = wrapComponent(props.component, {
+  const child = props.component && wrapComponent(props.component,
+    {
       ...props,
       initialized: initialized,
       pvName: pv.pvName,
-      value: value,
+      value: checkIndex(index, value) ? value[index] : value,
       min: min,
       max: max,
-      prec: prec,
+      prec:prec,
       label: label,
-      formControlLabel: formControlLabel,
+      formControlLabel:initialized?label :<span style={{fontSize:"inherit", whiteSpace: "nowrap"}}>{disconnectedIcon()}{" "+pv.pvName}</span>,
       units: units,
       disabled: disabled,
       readOnly: readOnly,
       alarmSeverity: alarmSeverity,
       enumStrs: enumStrings,
       disconnectedIcon: disconnectedIcon(),
-      handleChange: setValue,
-      handleImmediateChange: setImmediateValue,
-      handleCommitChange: () => SetCommitChange(true),
+      handleChange: (newValue) => handleValue(newValue, setValue),
+      handleImmediateChange: (newValue) =>
+        handleValue(newValue, setImmediateValue),
+      handleCommitChange: () => setCommitChange(true),
       handleFocus: () => setFocus(true),
       handleBlur: () => setFocus(false),
       pvData: pv,
       pvsData: pvs,
+    
     })
-  } else if (Array.isArray(value) && props.component) {
-    let children = filteredValues.map((v, idx) => {
-      const handleIndexValue = (val) => {
-        let newValue = [...value];
-        newValue[idx] = val;
-        setValue(newValue);
-      }
-      const handleIndexImmediateValue = (val) => {
-        let newValue = [...value];
-        newValue[idx] = val;
-        setImmediateValue(newValue);
-      }
-      const handleIndependentValue = (arrayValue, singleValue) => {
-        if (arrayValue !== undefined && arrayValue.length > idx) {
-          return arrayValue[idx];
-        }
-        return singleValue;
-      }
-      let registerLabel = handleIndependentValue(props.registersLabel, undefined);
-      return (
-        <span
-          className={
-            props.alignHorizontal ? classes.horizontalSpan : classes.verticalSpan
-          }
-          key={"elem" + idx}
-        >
-          {wrapComponent(props.component, {
-            ...props,
-            index: idx,
-            initialized: initialized,
-            pvName: pv.pvName,
-            value: v,
-            min: min,
-            max: max,
-            prec: prec,
-            label: registerLabel,
-            formControlLabel: initialized ? registerLabel : undefined,
-            labelPlacement: props.registersLabelPlacement,
-            units: units,
-            disabled: disabled,
-            readOnly: readOnly,
-            alarmSeverity: alarmSeverity,
-            enumStrs: enumStrings,
-            disconnectedIcon: disconnectedIcon(),
-            handleChange: handleIndexValue,
-            handleImmediateChange: handleIndexImmediateValue,
-            handleCommitChange: () => SetCommitChange(true),
-            handleFocus: () => setFocus(true),
-            handleBlur: () => setFocus(false),
-            pvData: pv,
-            pvsData: pvs,
-          })}
-        </span>
-      );
-    })
-    child = (
-      <FormControlLabel
-        label={formControlLabel}
-        labelPlacement={props.labelPlacement}
-        control={<div>{children}</div>}
-      />
-    );
-  }
-  
   const divStyle = {
     width: "100%",
-    height: "100%",    
+    height: "100%",
+   
+   
   }
-
+  
   const Tag=props.svgWidget?"g":"div";
   
   return (
@@ -617,7 +432,7 @@ const useStyles = makeStyles((theme) => ({
       {childPvs}
       {contextMenu}
     </Tag>
-     </Tooltip>
+   </Tooltip>
   )
 }
 /**
@@ -786,32 +601,7 @@ Widget.propTypes = {
    */
 
   tooltipProps:PropTypes.object,
-  /**
-   * When receiving a PV storing an array of values users can choose a subset of these value.
-   * Registers accept the indexes of the registers to effectively show.
-   * Order does count!
-   */
-  registers: PropTypes.arrayOf(PropTypes.number),
-  /**
-   * When receiving a PV storing an array of values users can assign a label to each register
-   * or a subset of them.
-   */
-  registersLabel: PropTypes.arrayOf(PropTypes.string),
-  /**
-   * When receiving a PV storing an array of values users can set the label position for each register,
-   * or a subset of them, if the receiving components allows it.
-   */
-  registersLabelPlacement: PropTypes.oneOf(["top", "bottom", "start", "end"]),
-  /**
-   * Directive to display array elements horizontal aligned.
-   */
-  alignHorizontal: PropTypes.bool,
-  /**
-   * When alignHorizontal is true, if stretch is true
-   * all the elements are aligned into one row, otherwise
-   * they have their standard width.
-   */
-  stretch: PropTypes.bool,
+
 };
 
 /**
@@ -827,8 +617,6 @@ Widget.defaultProps = {
   useMetadata: true,
   tooltip:"",
   writeOutputValueToAllpvs:false,
-  alignHorizontal: false,
-  stretch: true,
 };
 
 export default Widget

@@ -1,5 +1,5 @@
 import React from 'react'
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { v4 as uuidv4 } from 'uuid';
 import Widget from "../SystemComponents/Widgets/Widget";
@@ -16,7 +16,7 @@ const config = { }
 const math = create(all, config)
 
 
-const useStyles = makeStyles((theme) => ({
+const styles = theme => ({
   textTicks: {
     fill: theme.palette.type === 'dark' ? theme.palette.grey['300'] : theme.palette.grey['500']
 
@@ -43,9 +43,10 @@ const useStyles = makeStyles((theme) => ({
     marginRight: "auto",
   },
 
-}));
+});
 
-function getTickValues(props, min, max, numberOfTicks, x0, y0, x1, x2, y1, y2, xOffset, yOffset, value, classes) {
+function getTickValues(props, min, max, numberOfTicks, x0, y0, x1, x2, y1, y2, xOffset, yOffset, value) {
+  const { classes } = props;
   let units = props.units ?" "+ props.units : "";
 
   //this.test("test1");
@@ -110,8 +111,7 @@ function getTickValues(props, min, max, numberOfTicks, x0, y0, x1, x2, y1, y2, x
 
 function TankComponent(props) {
   const gradientId = uuidv4();
-  const classes = useStyles();
-  const theme = useTheme();
+  const { classes } = props;
   const {initialized}=props;
   let value = initialized?props.value:50;
   
@@ -159,18 +159,18 @@ function TankComponent(props) {
     if (props.alarmSensitive === true) {
       if (props.alarmSeverity === 1) {
 
-        color = theme.palette.alarm.minor.dark;
+        color = props.theme.palette.alarm.minor.dark;
       }
       else if (props.alarmSeverity === 2) {
-        color = theme.palette.alarm.major.dark;
+        color = props.theme.palette.alarm.major.dark;
       }
       else {
-        color = theme.palette.primary.main;
+        color = props.theme.palette.primary.main;
 
       }
     }
     else {
-      color = theme.palette.primary.main;
+      color = props.theme.palette.primary.main;
     }
   }
 
@@ -186,25 +186,25 @@ function TankComponent(props) {
 
 
           <linearGradient id={gradientId + 'baseleft1'}  >
-            <stop offset="0%" stopColor={theme.palette.type === 'dark' ? theme.palette.grey['300'] : theme.palette.grey['200']} />
-            <stop offset="100%" stopColor={props.initialized===true ? theme.palette.grey['200'] : 'default'} />
+            <stop offset="0%" stopColor={props.theme.palette.type === 'dark' ? props.theme.palette.grey['300'] : props.theme.palette.grey['200']} />
+            <stop offset="100%" stopColor={props.initialized===true ? props.theme.palette.grey['200'] : 'default'} />
 
           </linearGradient>
           <linearGradient id={gradientId + 'baseright1'}  >
 
-            <stop offset="0%" stopColor={props.initialized===true ? theme.palette.grey['200'] : 'default'} />
-            <stop offset="100%" stopColor={theme.palette.type === 'dark' ? theme.palette.grey['300'] : theme.palette.grey['200']} />
+            <stop offset="0%" stopColor={props.initialized===true ? props.theme.palette.grey['200'] : 'default'} />
+            <stop offset="100%" stopColor={props.theme.palette.type === 'dark' ? props.theme.palette.grey['300'] : props.theme.palette.grey['200']} />
           </linearGradient>
 
           <linearGradient id={gradientId + 'right1'} >
-            <stop offset="0%" stopColor={theme.palette.type === 'dark' ? theme.palette.grey['300'] : theme.palette.grey['200']} />
+            <stop offset="0%" stopColor={props.theme.palette.type === 'dark' ? props.theme.palette.grey['300'] : props.theme.palette.grey['200']} />
             <stop offset="100%" stopColor={props.initialized===true ? color : 'default'} />
 
           </linearGradient>
           <linearGradient id={gradientId + 'left1'}  >
 
             <stop offset="0%" stopColor={props.initialized===true ? color : 'default'} />
-            <stop offset="100%" stopColor={theme.palette.type === 'dark' ? theme.palette.grey['300'] : theme.palette.grey['200']} />
+            <stop offset="100%" stopColor={props.theme.palette.type === 'dark' ? props.theme.palette.grey['300'] : props.theme.palette.grey['200']} />
           </linearGradient>
 
           <g >
@@ -241,7 +241,7 @@ function TankComponent(props) {
 
             />
 
-            {getTickValues(props, min, max, 3, x0, y0, x1, x2, y1, y2, xOffset, yOffset, value, classes)}
+            {getTickValues(props, min, max, 3, x0, y0, x1, x2, y1, y2, xOffset, yOffset, value)}
           </g>
         </svg>}
     />
@@ -411,52 +411,27 @@ Tank.propTypes = {
   tooltipProps:PropTypes.object,
   /** label placement*/
   labelPlacement: PropTypes.oneOf(['start', 'top', 'bottom', 'end']),
-  /**
-   * When receiving a PV storing an array of values users can choose a subset of these value.
-   * Registers accept the indexes of the registers to effectively show.
-   * Order does count!
-   */
-  registers: PropTypes.arrayOf(PropTypes.number),
-  /**
-   * When receiving a PV storing an array of values users can assign a label to each register
-   * or a subset of them.
-   */
-  registersLabel: PropTypes.arrayOf(PropTypes.string),
-  /**
-   * When receiving a PV storing an array of values users can set the label position for each register,
-   * or a subset of them, if the receiving components allows it.
-   */
-  registersLabelPlacement: PropTypes.oneOf(["top", "bottom", "start", "end"]),
-  /**
-   * Directive to display array elements horizontal aligned.
-   */
-  alignHorizontal: PropTypes.bool,
-  /**
-   * When alignHorizontal is true, if stretch is true
-   * all the elements are aligned into one row, otherwise
-   * they have their standard width.
-   */
-  stretch: PropTypes.bool,
+  
+
 };
 
 Tank.defaultProps = {
+
   debug: false,
   alarmSensitive: false,
   min: 0,
   max: 100,
+  
   usePvPrecision: false,
   showValue: true,
   aspectRatio: 1,
   lockAspectRatio: true,
   showTicks: true,
   labelPlacement:'top',
-  showTooltip:false,
-  alignHorizontal: false,
-  stretch: true,
+  showTooltip:false
+  
+
 };
 
-TankComponent.defaultProps = Tank.defaultProps;
 
-export default Tank;
-const TComponent = makeVisFlexible(TankComponent);
-export { Tank, TComponent as TankComponent };
+export default withStyles(styles, { withTheme: true })(Tank)

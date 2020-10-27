@@ -43,11 +43,11 @@ const PV = (props) => {
     }
     return pvname.includes('pva://')
       ?
-      EpicsPV({ ...props, pv:pvname })
+      <EpicsPV { ...props}  pv={pvname} />
       : (pvname.includes('loc://')
         ?
-        LocalPV({ ...props, pv:pvname })
-        : UnknownPV({ ...props, pv:pvname }))
+        <LocalPV { ...props} pv={pvname}/>
+        : <UnknownPV { ...props} pv={pvname} />)
   }
   const pvData = (name) => (pv) => {
 

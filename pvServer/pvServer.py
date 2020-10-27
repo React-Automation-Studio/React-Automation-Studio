@@ -574,10 +574,20 @@ def test_message(message):
 # Get last observed value when asked (for polling)
 @socketio.on('get_polled_value', namespace='/pvServer')
 def getPolledValue(message):
-    # clientPVlist[pvname][last_event] is populated by onValueChange (only with read permission)
-    if "data" in message and message["data"] in clientPVlist:
-        return clientPVlist[str(message["data"])].get('last_event', {"connected" : 0})
-    return {"connected" : 0}
+    global REACT_APP_DisableLogin
+    pvname = str(message["data"])
+    accessControl = {}
+    if REACT_APP_DisableLogin:
+        accessControl={'userAuthorised':True,'permissions':{'read':True,'write':True}}
+    else :
+        accessControl=AutheriseUserAndPermissions(message['clientAuthorisation'],pvname)
+    
+    if accessControl['userAuthorised'] and accessControl['permissions']['read']:
+        if pvname in clientPVlist:
+            # clientPVlist[pvname][last_event] is populated by onValueChange
+            return clientPVlist[pvname].get('last_event', {"connected" : 0})
+        return {"connected" : 0}
+    socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
 
 @socketio.on('databaseRead', namespace='/pvServer')
 def databaseRead(message):

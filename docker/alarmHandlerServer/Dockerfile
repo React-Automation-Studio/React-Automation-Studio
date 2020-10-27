@@ -52,5 +52,6 @@ COPY alarmHandlerServer/src/python/*.py ./
 
 # custom EPICS_CA_ADDR_LIST to only allow dev stuff to communicate
 ENV EPICS_CA_ADDR_LIST="0.0.0.0:8001"
+EXPOSE 5000 5064 5065 8001
 
 CMD ["python","main.py"]

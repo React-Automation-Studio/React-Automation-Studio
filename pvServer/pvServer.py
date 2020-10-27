@@ -587,7 +587,9 @@ def getPolledValue(message):
             # clientPVlist[pvname][last_event] is populated by onValueChange
             return clientPVlist[pvname].get('last_event', {"connected" : 0})
         return {"connected" : 0}
+    
     socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
+    return {"connected" : 0}
 
 @socketio.on('databaseRead', namespace='/pvServer')
 def databaseRead(message):

@@ -31,19 +31,19 @@ const useStyles = makeStyles((theme) => ({
 /**
  * How can we display waveforms as list of BaseComponents?
  *
- * The ArrayContainer receives as a child one or more BaseComponents
+ * The `ArrayContainer` receives as a child one or more BaseComponents
  * and create a list of these assigning to each one the corresponding value
  * of the array stored in the PV.
  *
  * For example you have a waveform of 5 values and you want
  * to modify each array value independently; users can pass, to the
- * ArrayContainer, a TextInput connected to the target pv.
- * The ArrayContainer component will automatically
+ * `ArrayContainer`, a `TextInput` connected to the target pv.
+ * The `ArrayContainer` component will automatically
  * create 5 TextInputs where each one can show and edit only one
  * value of the array stored in the PV.
  * See examples below.
  *
- * The ArrayContainer needs some props to correctly instantiates the widgets.
+ * The `ArrayContainer` needs some props to correctly instantiates the widgets.
  *
  * Currently this feature can't be used with BaseComponents
  * based on mbbo/mbbi PVs (i.e. RadioButtonGroup, SelectionInput,

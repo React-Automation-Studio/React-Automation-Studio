@@ -1,8 +1,8 @@
 In this example the TextInput component receives a waveform PV.
 
-Reading harp 1 x-axis current PV.
+Reading a binary waveform of 10 elements.
 
-The current is centered in the array. You have to scroll till you see the values (around 22-25 indexes). By default the ArrayContainer shows only 10 elements per time.
+By default the ArrayContainer shows only 10 elements per time but this value can be changed.
 
 The ArrayContainer does not know how many items there are in the PV value. For this reason it expects a props with the array length. By default the maxItemsCount is 100
 

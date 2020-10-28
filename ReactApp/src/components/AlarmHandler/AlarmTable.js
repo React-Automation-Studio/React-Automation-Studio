@@ -2,8 +2,8 @@ import React, { useRef, useEffect } from 'react';
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import TextInput from '../BaseComponents/TextInput';
-import TextUpdateAH from './TextUpdateAH';
-import LivePVVal from './LivePVVal';
+import TextUpdateStatus from './TextUpdateStatus';
+import TextUpdateStateful from './TextUpdateStateful';
 import TextUpdate from '../BaseComponents/TextUpdate';
 
 import Table from '@material-ui/core/Table';
@@ -252,12 +252,14 @@ const AlarmTable = props => {
                                                     alarmSensitive={true}
                                                     classes={textFieldWarnClasses}
                                                 /> */}
-                                                <LivePVVal
+                                                <TextUpdateStateful
                                                     pv={'pva://' + areaAlarms[areaAlarmName]["name"]}
+                                                    useStringValue={true}
+                                                    usePvUnits={true}
                                                 />
                                             </TableCell>
                                             <TableCell align="center">
-                                                <TextUpdateAH
+                                                <TextUpdateStatus
                                                     pv={`pva://${props.alarmIOCPVPrefix}${areaAlarms[areaAlarmName]["name"]}A`}
                                                     // pv={'pva://' + "alarmIOC:" + areaAlarms[areaAlarmName]["name"] + "A"}
                                                     useStringValue={true}

@@ -3,9 +3,9 @@ import React, { useState, useEffect, useContext, useCallback, useRef } from 'rea
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
@@ -584,7 +584,7 @@ const UserNotification = (props) => {
                 spacing={2}
             >
                 <Grid item xs={12}>
-                    <ExpansionPanel
+                    <Accordion
                         elevation={theme.palette.paperElevation}
                         expanded={userTableExpand}
                         onClick={() => handleExpandPanel('userTable')}
@@ -593,7 +593,7 @@ const UserNotification = (props) => {
                             onExited: () => handleExpansionComplete('userTable', false)
                         }}
                     >
-                        <ExpansionPanelSummary
+                        <AccordionSummary
                             expandIcon={<ExpandMoreIcon />}
                             aria-controls="panel1bh-content"
                             id="panel1bh-header"
@@ -610,8 +610,8 @@ const UserNotification = (props) => {
                                 </div>
                             </div>
 
-                        </ExpansionPanelSummary>
-                        <ExpansionPanelDetails>
+                        </AccordionSummary>
+                        <AccordionDetails>
                             <UserTable
                                 regexError={regexError}
                                 addRegexVal={addRegexVal}
@@ -634,11 +634,11 @@ const UserNotification = (props) => {
                                 height={userTableHeight}
                                 userScheduleString={userScheduleString}
                             />
-                        </ExpansionPanelDetails>
-                    </ExpansionPanel>
+                        </AccordionDetails>
+                    </Accordion>
                 </Grid>
                 <Grid item xs={12}>
-                    <ExpansionPanel
+                    <Accordion
                         elevation={theme.palette.paperElevation}
                         expanded={pvListExpand}
                         onClick={() => handleExpandPanel('pvList')}
@@ -647,7 +647,7 @@ const UserNotification = (props) => {
                             onExited: () => handleExpansionComplete('pvList', false)
                         }}
                     >
-                        <ExpansionPanelSummary
+                        <AccordionSummary
                             expandIcon={<ExpandMoreIcon />}
                             aria-controls="panel1bh-content"
                             id="panel1bh-header"
@@ -663,15 +663,15 @@ const UserNotification = (props) => {
                                     }
                                 </div>
                             </div>
-                        </ExpansionPanelSummary>
-                        <ExpansionPanelDetails>
+                        </AccordionSummary>
+                        <AccordionDetails>
                             {loadPVList && <PVList
                                 alarmPVDict={alarmPVDict}
                                 filterUserRegex={filterUserRegex}
                                 height={pvListHeight}
                             />}
-                        </ExpansionPanelDetails>
-                    </ExpansionPanel>
+                        </AccordionDetails>
+                    </Accordion>
                 </Grid>
             </Grid>
         </React.Fragment>

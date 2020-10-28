@@ -16,7 +16,7 @@ import {
   VerticalGridLines,
   LineSeries,
   makeVisFlexible,
- 
+
   DiscreteColorLegend
 } from 'react-vis';
 const FlexibleXYPlot = makeVisFlexible(XYPlot);
@@ -765,9 +765,9 @@ render() {
       legendColor=this.props.lineColor;
     }
     else{
-      
+
       legendColor=theme.palette.reactVis.lineColors;
-     
+
     }
     //console.log("linedata: ", this.state.yPVs[pv].linedata);
 
@@ -877,21 +877,23 @@ return (
             horizontal: 'left',
           }}
         />
-        <HorizontalGridLines 
-        
+        <HorizontalGridLines tickValues={this.props.yTickValues}
+
         />
-        <VerticalGridLines   />
+        <VerticalGridLines  tickValues={this.props.xTickValues} />
         <XAxis
           title={(typeof this.props.xAxisTitle !== 'undefined')?this.props.xAxisTitle:"X Axis"}
           color="white"
           tickFormat={v => typeof this.props.useTimeStamp!=='undefined'? calcTimeFormat(v):(v)+ this.props.xUnits}
-          tickTotal={4}
-          
-        />
+          tickTotal={this.props.xTickTotal}
+         // tickTotal={4}
 
+        />
+        {this.props.children}
         <YAxis
           title={(typeof this.props.yAxisTitle !== 'undefined')?this.props.yAxisTitle:"Y Axis"}
           left={9} tickFormat={this.props.yScaleLog10===true?v => "10E"+(v)+ " "+this.props.yUnits :v => (v)+ " "+this.props.yUnits} tickSize={20}  tickPadding={2}
+          tickTotal={this.props.yTickTotal}
           />
         {this.multipleLineData()}
 

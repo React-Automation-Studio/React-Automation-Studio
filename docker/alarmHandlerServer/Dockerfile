@@ -30,12 +30,6 @@ RUN make
 
 RUN ln -s /epics/base/bin/linux-x86_64/caRepeater /bin/caRepeater
 
-# Move demoAlarmsIOC into place and make
-COPY alarmHandlerServer/src/epics/demoAlarmsIOC /epics/demoAlarmsIOC
-
-WORKDIR /epics/demoAlarmsIOC
-RUN make
-
 # Move alarmIOC into place and make
 COPY alarmHandlerServer/src/epics/alarmIOC /epics/alarmIOC
 
@@ -45,7 +39,6 @@ RUN make
 WORKDIR /usr/src/app
 
 # symbolic links to start iocs
-RUN ln -s /epics/demoAlarmsIOC/iocBoot/iocdemoAlarmsIOC/start_tmux_st.cmd /usr/src/app/startDemoIOC.cmd
 RUN ln -s /epics/alarmIOC/iocBoot/iocalarmIOC/start_tmux_st.cmd /usr/src/app/startAlarmIOC.cmd
 
 COPY alarmHandlerServer/src/python/*.py ./

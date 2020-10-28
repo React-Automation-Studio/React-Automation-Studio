@@ -1,4 +1,4 @@
-record(mbbo, "$(ioc):building_fire") {
+record(mbbo, "$(device):building_fire") {
     field(DTYP, "Soft Channel")
     field(DESC, "Fire")
     field(ZRST, "FIRE")     field(ZRSV, "MAJOR")
@@ -6,7 +6,7 @@ record(mbbo, "$(ioc):building_fire") {
     field(PINI, "YES")
     field(VAL, "1")
 }
-record(mbbo, "$(ioc):building_security") {
+record(mbbo, "$(device):building_security") {
     field(DTYP, "Soft Channel")
     field(DESC, "Security")
     field(ZRST, "UNSECURE")   field(ZRSV, "MAJOR")
@@ -14,7 +14,7 @@ record(mbbo, "$(ioc):building_security") {
     field(PINI, "YES")
     field(VAL, "1")
 }
-record(ao, "$(ioc):building_airtemp") {
+record(ao, "$(device):building_airtemp") {
     field(DTYP, "Soft Channel")
     field(DESC, "Air temp")
     field(DRVH, "60")
@@ -29,7 +29,7 @@ record(ao, "$(ioc):building_airtemp") {
     field(PINI, "YES")
     field(VAL, "23")
 }
-record(ao, "$(ioc):building_airhumidity") {
+record(ao, "$(device):building_airhumidity") {
     field(DTYP, "Soft Channel")
     field(DESC, "Air humidity")
     field(DRVH, "100")
@@ -44,7 +44,7 @@ record(ao, "$(ioc):building_airhumidity") {
     field(PINI, "YES")
     field(VAL, "40")
 }
-record(ao, "$(ioc):building_airpressure_diff") {
+record(ao, "$(device):building_airpressure_diff") {
     field(DTYP, "Soft Channel")
     field(DESC, "Air press diff")
     field(DRVH, "5")
@@ -59,7 +59,7 @@ record(ao, "$(ioc):building_airpressure_diff") {
     field(PINI, "YES")
     field(VAL, "-8")
 }
-record(mbbo, "$(ioc):cyclotron_interlocks") {
+record(mbbo, "$(device):cyclotron_interlocks") {
     field(DTYP, "Soft Channel")
     field(DESC, "Interlocks")
     field(ZRST, "NOT CLEAR")    field(ZRSV, "MAJOR")
@@ -67,7 +67,7 @@ record(mbbo, "$(ioc):cyclotron_interlocks") {
     field(PINI, "YES")
     field(VAL, "1")
 }
-record(ao, "$(ioc):cyclotron_airpressure") {
+record(ao, "$(device):cyclotron_airpressure") {
     field(DTYP, "Soft Channel")
     field(DESC, "Air press")
     field(DRVH, "20")
@@ -82,7 +82,7 @@ record(ao, "$(ioc):cyclotron_airpressure") {
     field(PINI, "YES")
     field(VAL, "13")
 }
-record(mbbo, "$(ioc):cyclotron_RF1") {
+record(mbbo, "$(device):cyclotron_RF1") {
     field(DTYP, "Soft Channel")
     field(DESC, "RF System 1")
     field(ZRST, "FAULT")        field(ZRSV, "MAJOR")
@@ -90,7 +90,7 @@ record(mbbo, "$(ioc):cyclotron_RF1") {
     field(PINI, "YES")
     field(VAL, "1")
 }
-record(mbbo, "$(ioc):cyclotron_RF2") {
+record(mbbo, "$(device):cyclotron_RF2") {
     field(DTYP, "Soft Channel")
     field(DESC, "RF System 2")
     field(ZRST, "FAULT")        field(ZRSV, "MAJOR")
@@ -98,7 +98,7 @@ record(mbbo, "$(ioc):cyclotron_RF2") {
     field(PINI, "YES")
     field(VAL, "1")
 }
-record(ao, "$(ioc):cyclotron_RF_pickup") {
+record(ao, "$(device):cyclotron_RF_pickup") {
     field(DTYP, "Soft Channel")
     field(DESC, "RF pickup")
     field(DRVH, "20")
@@ -113,7 +113,7 @@ record(ao, "$(ioc):cyclotron_RF_pickup") {
     field(PINI, "YES")
     field(VAL, "0")
 }
-record(mbbo, "$(ioc):cyclotron_safety") {
+record(mbbo, "$(device):cyclotron_safety") {
     field(DTYP, "Soft Channel")
     field(DESC, "Safety")
     field(ZRST, "UNSAFE")   field(ZRSV, "MAJOR")
@@ -121,7 +121,7 @@ record(mbbo, "$(ioc):cyclotron_safety") {
     field(PINI, "YES")
     field(VAL, "1")
 }
-record(ao, "$(ioc):cyclotron_vacuum") {
+record(ao, "$(device):cyclotron_vacuum") {
     field(DTYP, "Soft Channel")
     field(DESC, "Vacuum lev (10^)")
     field(DRVH, "0")
@@ -134,7 +134,7 @@ record(ao, "$(ioc):cyclotron_vacuum") {
     field(PINI, "YES")
     field(VAL, "-8")
 }
-record(ao, "$(ioc):cyclotron_water_flow") {
+record(ao, "$(device):cyclotron_water_flow") {
     field(DTYP, "Soft Channel")
     field(DESC, "Water flow")
     field(DRVH, "20")
@@ -149,7 +149,7 @@ record(ao, "$(ioc):cyclotron_water_flow") {
     field(PINI, "YES")
     field(VAL, "12")
 }
-record(ao, "$(ioc):cyclotron_water_temp") {
+record(ao, "$(device):cyclotron_water_temp") {
     field(DTYP, "Soft Channel")
     field(DESC, "Water temp")
     field(DRVH, "40")
@@ -164,7 +164,7 @@ record(ao, "$(ioc):cyclotron_water_temp") {
     field(PINI, "YES")
     field(VAL, "15")
 }
-record(ao, "$(ioc):vault_radiation") {
+record(ao, "$(device):vault_radiation") {
     field(DTYP, "Soft Channel")
     field(DESC, "Radiation level")
     field(DRVH, "5")
@@ -178,7 +178,7 @@ record(ao, "$(ioc):vault_radiation") {
     field(PINI, "YES")
     field(VAL, "0")
 }
-record(mbbo, "$(ioc):vault_door") {
+record(mbbo, "$(device):vault_door") {
     field(DTYP, "Soft Channel")
     field(DESC, "Vault door")
     field(ZRST, "OPEN")     field(ZRSV, "MAJOR")
@@ -186,7 +186,7 @@ record(mbbo, "$(ioc):vault_door") {
     field(PINI, "YES")
     field(VAL, "0")
 }
-record(mbbo, "$(ioc):vault_clear") {
+record(mbbo, "$(device):vault_clear") {
     field(DTYP, "Soft Channel")
     field(DESC, "Vault clear")
     field(ZRST, "NOT CLEAR")        field(ZRSV, "MAJOR")

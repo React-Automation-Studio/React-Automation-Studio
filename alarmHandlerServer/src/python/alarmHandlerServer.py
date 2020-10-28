@@ -37,14 +37,6 @@ try:
 except:
     MONGO_INITDB_ALARM_DATABASE = "demoAlarmDatabase"
 try:
-    DEMO_ALARMS_IOC = os.environ['DEMO_ALARMS_IOC']
-except:
-    DEMO_ALARMS_IOC = "demoAlarmsIOC"
-try:
-    RUN_DEMO_ALARMS_IOC = bool(os.environ['RUN_DEMO_ALARMS_IOC'])
-except:
-    RUN_DEMO_ALARMS_IOC = True
-try:
     AH_DEBUG = bool(os.environ['AH_DEBUG'])
 except:
     AH_DEBUG = False
@@ -765,20 +757,6 @@ def replaceAllInFile(filename, original, replacedWith):
     fin.close()
 
 
-def startDemoIOC(RUN_DEMO_ALARMS_IOC):
-    if (RUN_DEMO_ALARMS_IOC):
-        # replaceAllInFile("/epics/demoAlarmsIOC/db/dbDemoAlarm.db", '$(ioc)',
-        #                  DEMO_ALARMS_IOC)
-        replaceAllInFile("/epics/demoAlarmsIOC/db/demoAlarms.db", '$(ioc)',
-                         DEMO_ALARMS_IOC)
-        print("Running demo alarms IOC")
-        subprocess.call("./startDemoIOC.cmd", shell=True)
-        print("Demo alarms IOC running successfully")
-
-    else:
-        print("Demo alarms IOC disabled")
-
-
 def initSubPVDict(subArea, areaName):
     subAreaName = areaName
     for key in subArea.keys():
@@ -1124,7 +1102,6 @@ def globalCollectionWatch():
 
 def main():
     getListOfPVNames()
-    startDemoIOC(RUN_DEMO_ALARMS_IOC)
     startAlarmIOC()
     # Initialise string PVs for front end
     initAlarmDict()

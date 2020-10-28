@@ -196,7 +196,10 @@ const UserNotification = (props) => {
             name: name,
             username: username
         })
-        setFilterUserRegex(dictUserRegex[`${username}-${name}`])
+        const newFilterUserRegex = Object.values(dictUserRegex[`${username}-${name}`]).map(entry =>
+            entry.regEx
+        )
+        setFilterUserRegex(newFilterUserRegex)
     }, [dictUserRegex])
 
     const handleSetFilterUserRegex = useCallback((event, expression) => {
@@ -211,7 +214,10 @@ const UserNotification = (props) => {
         event.stopPropagation()
 
         const match = userList.filter(el => el.name === name && el.username === username)[0]
-        setFilterUserRegex(match.notifyPVs)
+        const newFilterUserRegex = Object.values(match.notifyPVs).map(entry =>
+            entry.regEx
+        )
+        setFilterUserRegex(newFilterUserRegex)
         setFilterUser({
             name: match.name,
             username: match.username
@@ -240,7 +246,10 @@ const UserNotification = (props) => {
         const match = userList.filter(el => el.name === name && el.username === username)[0]
         const id = match['_id']['$oid']
 
-        setFilterUserRegex(match.notifyPVs)
+        const newFilterUserRegex = Object.values(match.notifyPVs).map(entry =>
+            entry.regEx
+        )
+        setFilterUserRegex(newFilterUserRegex)
 
         let newvalues = { '$set': { "email": match.email } }
 
@@ -284,7 +293,10 @@ const UserNotification = (props) => {
         localAddRegexVal[`${username}-${name}`] = ''
         setAddRegexVal(localAddRegexVal)
 
-        setFilterUserRegex(backupUserList[`${username}-${name}`].notifyPVs)
+        const newFilterUserRegex = Object.values(backupUserList[`${username}-${name}`].notifyPVs).map(entry =>
+            entry.regEx
+        )
+        setFilterUserRegex(newFilterUserRegex)
 
     }, [backupUserList, handleSetUserEdit, addRegexVal, userList])
 
@@ -362,7 +374,11 @@ const UserNotification = (props) => {
             newUserList[userIndex] = match
 
             setUserList(newUserList)
-            setFilterUserRegex(newNotifyPVs)
+            
+            const newFilterUserRegex = Object.values(newNotifyPVs).map(entry =>
+                entry.regEx
+            )
+            setFilterUserRegex(newFilterUserRegex)
         }
     }, [userList, addRegexVal])
 
@@ -388,7 +404,11 @@ const UserNotification = (props) => {
         newUserList[userIndex] = newMatch
 
         setUserList(newUserList)
-        setFilterUserRegex(newNotifyPVs)
+
+        const newFilterUserRegex = Object.values(newNotifyPVs).map(entry =>
+            entry.regEx
+        )
+        setFilterUserRegex(newFilterUserRegex)
     }, [userList])
 
     const handleExpansionComplete = (panelName, isExpanded) => {
@@ -510,8 +530,6 @@ const UserNotification = (props) => {
             }
 
             setDictUserRegex(localDictUserRegex)
-            // setFilterUser(localFilterUser)
-            // setFilterUserRegex(localFilterUserRegex)
             setBackupUserList(localBackupUserList)
             setUserList(dbUsersData)
         }

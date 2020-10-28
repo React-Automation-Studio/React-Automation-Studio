@@ -37,14 +37,6 @@ try:
 except:
     MONGO_INITDB_ALARM_DATABASE = "demoAlarmDatabase"
 try:
-    DEMO_ALARMS_IOC = os.environ['DEMO_ALARMS_IOC']
-except:
-    DEMO_ALARMS_IOC = "demoAlarmsIOC"
-try:
-    RUN_DEMO_ALARMS_IOC = bool(os.environ['RUN_DEMO_ALARMS_IOC'])
-except:
-    RUN_DEMO_ALARMS_IOC = True
-try:
     AH_DEBUG = bool(os.environ['AH_DEBUG'])
 except:
     AH_DEBUG = False
@@ -765,20 +757,6 @@ def replaceAllInFile(filename, original, replacedWith):
     fin.close()
 
 
-def startDemoIOC(RUN_DEMO_ALARMS_IOC):
-    if (RUN_DEMO_ALARMS_IOC):
-        # replaceAllInFile("/epics/demoAlarmsIOC/db/dbDemoAlarm.db", '$(ioc)',
-        #                  DEMO_ALARMS_IOC)
-        replaceAllInFile("/epics/demoAlarmsIOC/db/demoAlarms.db", '$(ioc)',
-                         DEMO_ALARMS_IOC)
-        print("Running demo alarms IOC")
-        subprocess.call("./startDemoIOC.cmd", shell=True)
-        print("Demo alarms IOC running successfully")
-
-    else:
-        print("Demo alarms IOC disabled")
-
-
 def initSubPVDict(subArea, areaName):
     subAreaName = areaName
     for key in subArea.keys():
@@ -848,8 +826,16 @@ def startAlarmIOC():
     # ACK PV
     replaceAllInFile("/epics/alarmIOC/db/Global.db", '$(ioc):',
                      alarmIOCPVPrefix)
-    # run alarmIOC with newly created pvs
-    print("Running alarm server IOC")
+    # Check to see if must run on custom port
+    if(alarmIOCPVPrefix == "alarmIOC:"):
+        with open('/epics/alarmIOC/iocBoot/iocalarmIOC/st.cmd', 'r') as file:
+            lines = file.readlines()
+        lines[6] = lines[6].replace("#", "")
+        with open('/epics/alarmIOC/iocBoot/iocalarmIOC/st.cmd', 'w') as file:
+            file.writelines(lines)
+        print("Running alarm server IOC on port 8004")
+    else:
+        print("Running alarm server IOC on default port")
     subprocess.call("./startAlarmIOC.cmd", shell=True)
     print("Alarm server IOC running successfully")
 
@@ -1124,7 +1110,6 @@ def globalCollectionWatch():
 
 def main():
     getListOfPVNames()
-    startDemoIOC(RUN_DEMO_ALARMS_IOC)
     startAlarmIOC()
     # Initialise string PVs for front end
     initAlarmDict()

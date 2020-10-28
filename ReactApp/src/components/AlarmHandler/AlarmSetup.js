@@ -25,9 +25,9 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
 
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import NotificationsOffIcon from '@material-ui/icons/NotificationsOff';
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
@@ -1001,7 +1001,7 @@ const AlarmSetup = (props) => {
                     </Grid>}
                 {displayAlarmTable ?
                     <Grid item xs={10} >
-                        <ExpansionPanel
+                        <Accordion
                             elevation={theme.palette.paperElevation}
                             expanded={alarmTableExpand}
                             onClick={(event) => handleExpandPanel(event, 'alarmTable')}
@@ -1010,7 +1010,7 @@ const AlarmSetup = (props) => {
                                 onExited: () => handleExpansionComplete('alarmTable', false)
                             }}
                         >
-                            <ExpansionPanelSummary
+                            <AccordionSummary
                                 expandIcon={<ExpandMoreIcon />}
                                 aria-controls="panel1bh-content"
                                 id="panel1bh-header"
@@ -1041,8 +1041,8 @@ const AlarmSetup = (props) => {
                                             : '[click to show]'
                                     }</div>
                                 </div>
-                            </ExpansionPanelSummary>
-                            <ExpansionPanelDetails>
+                            </AccordionSummary>
+                            <AccordionDetails>
                                 {areaNames
                                     ? <AlarmTable
                                         alarmIOCPVPrefix={alarmIOCPVPrefix}
@@ -1066,10 +1066,10 @@ const AlarmSetup = (props) => {
                                         fadeTU={fadeTU}
                                     />
                                     : "No data from database"}
-                            </ExpansionPanelDetails>
-                        </ExpansionPanel>
+                            </AccordionDetails>
+                        </Accordion>
 
-                        <ExpansionPanel
+                        <Accordion
                             elevation={theme.palette.paperElevation}
                             expanded={alarmLogExpand}
                             onClick={(event) => handleExpandPanel(event, 'alarmLog')}
@@ -1078,7 +1078,7 @@ const AlarmSetup = (props) => {
                                 onExited: () => handleExpansionComplete('alarmLog', false)
                             }}
                         >
-                            <ExpansionPanelSummary
+                            <AccordionSummary
                                 expandIcon={<ExpandMoreIcon />}
                                 aria-controls="panel1bh-content"
                                 id="panel1bh-header"
@@ -1133,16 +1133,16 @@ const AlarmSetup = (props) => {
                                     }
                                     </div>
                                 </div>
-                            </ExpansionPanelSummary>
-                            <ExpansionPanelDetails>
+                            </AccordionSummary>
+                            <AccordionDetails>
                                 <AlarmLog
                                     height={alarmLogHeight}
                                     filteredData={filteredData}
                                     page={page}
                                     rowsPerPage={rowsPerPage}
                                 />
-                            </ExpansionPanelDetails>
-                        </ExpansionPanel>
+                            </AccordionDetails>
+                        </Accordion>
 
                     </Grid>
                     :

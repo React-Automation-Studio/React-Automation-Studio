@@ -3,9 +3,9 @@ import React, { useState, useEffect, useContext, useCallback, useRef } from 'rea
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
@@ -196,7 +196,10 @@ const UserNotification = (props) => {
             name: name,
             username: username
         })
-        setFilterUserRegex(dictUserRegex[`${username}-${name}`])
+        const newFilterUserRegex = Object.values(dictUserRegex[`${username}-${name}`]).map(entry =>
+            entry.regEx
+        )
+        setFilterUserRegex(newFilterUserRegex)
     }, [dictUserRegex])
 
     const handleSetFilterUserRegex = useCallback((event, expression) => {
@@ -211,7 +214,10 @@ const UserNotification = (props) => {
         event.stopPropagation()
 
         const match = userList.filter(el => el.name === name && el.username === username)[0]
-        setFilterUserRegex(match.notifyPVs)
+        const newFilterUserRegex = Object.values(match.notifyPVs).map(entry =>
+            entry.regEx
+        )
+        setFilterUserRegex(newFilterUserRegex)
         setFilterUser({
             name: match.name,
             username: match.username
@@ -240,7 +246,10 @@ const UserNotification = (props) => {
         const match = userList.filter(el => el.name === name && el.username === username)[0]
         const id = match['_id']['$oid']
 
-        setFilterUserRegex(match.notifyPVs)
+        const newFilterUserRegex = Object.values(match.notifyPVs).map(entry =>
+            entry.regEx
+        )
+        setFilterUserRegex(newFilterUserRegex)
 
         let newvalues = { '$set': { "email": match.email } }
 
@@ -284,7 +293,10 @@ const UserNotification = (props) => {
         localAddRegexVal[`${username}-${name}`] = ''
         setAddRegexVal(localAddRegexVal)
 
-        setFilterUserRegex(backupUserList[`${username}-${name}`].notifyPVs)
+        const newFilterUserRegex = Object.values(backupUserList[`${username}-${name}`].notifyPVs).map(entry =>
+            entry.regEx
+        )
+        setFilterUserRegex(newFilterUserRegex)
 
     }, [backupUserList, handleSetUserEdit, addRegexVal, userList])
 
@@ -362,7 +374,11 @@ const UserNotification = (props) => {
             newUserList[userIndex] = match
 
             setUserList(newUserList)
-            setFilterUserRegex(newNotifyPVs)
+            
+            const newFilterUserRegex = Object.values(newNotifyPVs).map(entry =>
+                entry.regEx
+            )
+            setFilterUserRegex(newFilterUserRegex)
         }
     }, [userList, addRegexVal])
 
@@ -388,7 +404,11 @@ const UserNotification = (props) => {
         newUserList[userIndex] = newMatch
 
         setUserList(newUserList)
-        setFilterUserRegex(newNotifyPVs)
+
+        const newFilterUserRegex = Object.values(newNotifyPVs).map(entry =>
+            entry.regEx
+        )
+        setFilterUserRegex(newFilterUserRegex)
     }, [userList])
 
     const handleExpansionComplete = (panelName, isExpanded) => {
@@ -510,8 +530,6 @@ const UserNotification = (props) => {
             }
 
             setDictUserRegex(localDictUserRegex)
-            // setFilterUser(localFilterUser)
-            // setFilterUserRegex(localFilterUserRegex)
             setBackupUserList(localBackupUserList)
             setUserList(dbUsersData)
         }
@@ -584,7 +602,7 @@ const UserNotification = (props) => {
                 spacing={2}
             >
                 <Grid item xs={12}>
-                    <ExpansionPanel
+                    <Accordion
                         elevation={theme.palette.paperElevation}
                         expanded={userTableExpand}
                         onClick={() => handleExpandPanel('userTable')}
@@ -593,7 +611,7 @@ const UserNotification = (props) => {
                             onExited: () => handleExpansionComplete('userTable', false)
                         }}
                     >
-                        <ExpansionPanelSummary
+                        <AccordionSummary
                             expandIcon={<ExpandMoreIcon />}
                             aria-controls="panel1bh-content"
                             id="panel1bh-header"
@@ -610,8 +628,8 @@ const UserNotification = (props) => {
                                 </div>
                             </div>
 
-                        </ExpansionPanelSummary>
-                        <ExpansionPanelDetails>
+                        </AccordionSummary>
+                        <AccordionDetails>
                             <UserTable
                                 regexError={regexError}
                                 addRegexVal={addRegexVal}
@@ -634,11 +652,11 @@ const UserNotification = (props) => {
                                 height={userTableHeight}
                                 userScheduleString={userScheduleString}
                             />
-                        </ExpansionPanelDetails>
-                    </ExpansionPanel>
+                        </AccordionDetails>
+                    </Accordion>
                 </Grid>
                 <Grid item xs={12}>
-                    <ExpansionPanel
+                    <Accordion
                         elevation={theme.palette.paperElevation}
                         expanded={pvListExpand}
                         onClick={() => handleExpandPanel('pvList')}
@@ -647,7 +665,7 @@ const UserNotification = (props) => {
                             onExited: () => handleExpansionComplete('pvList', false)
                         }}
                     >
-                        <ExpansionPanelSummary
+                        <AccordionSummary
                             expandIcon={<ExpandMoreIcon />}
                             aria-controls="panel1bh-content"
                             id="panel1bh-header"
@@ -663,15 +681,15 @@ const UserNotification = (props) => {
                                     }
                                 </div>
                             </div>
-                        </ExpansionPanelSummary>
-                        <ExpansionPanelDetails>
+                        </AccordionSummary>
+                        <AccordionDetails>
                             {loadPVList && <PVList
                                 alarmPVDict={alarmPVDict}
                                 filterUserRegex={filterUserRegex}
                                 height={pvListHeight}
                             />}
-                        </ExpansionPanelDetails>
-                    </ExpansionPanel>
+                        </AccordionDetails>
+                    </Accordion>
                 </Grid>
             </Grid>
         </React.Fragment>

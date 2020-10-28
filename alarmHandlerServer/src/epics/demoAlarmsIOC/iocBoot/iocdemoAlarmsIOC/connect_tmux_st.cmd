@@ -1,1 +1,0 @@
-tmux a -t DEMOIOC

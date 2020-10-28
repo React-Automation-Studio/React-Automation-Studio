@@ -826,8 +826,16 @@ def startAlarmIOC():
     # ACK PV
     replaceAllInFile("/epics/alarmIOC/db/Global.db", '$(ioc):',
                      alarmIOCPVPrefix)
-    # run alarmIOC with newly created pvs
-    print("Running alarm server IOC")
+    # Check to see if must run on custom port
+    if(alarmIOCPVPrefix == "alarmIOC:"):
+        with open('/epics/alarmIOC/iocBoot/iocalarmIOC/st.cmd', 'r') as file:
+            lines = file.readlines()
+        lines[6] = lines[6].replace("#", "")
+        with open('/epics/alarmIOC/iocBoot/iocalarmIOC/st.cmd', 'w') as file:
+            file.writelines(lines)
+        print("Running alarm server IOC on port 8004")
+    else:
+        print("Running alarm server IOC on default port")
     subprocess.call("./startAlarmIOC.cmd", shell=True)
     print("Alarm server IOC running successfully")
 

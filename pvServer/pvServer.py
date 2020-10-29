@@ -280,7 +280,7 @@ def onValueChanges(pvname=None,count=None,char_value=None,severity=None,status=N
 def onConnectionChange(pvname=None, conn= None, value=None, **kws):
     global clientPVlist
     pvname1='pva://'+str(pvname)
-
+    
     if (conn==True):
         try:
             clientPVlist[pvname1]['isConnected']=True
@@ -300,7 +300,8 @@ def onConnectionChange(pvname=None, conn= None, value=None, **kws):
         try:
             clientPVlist[pvname1]['isConnected']=False
             clientPVlist[pvname1]['initialized']=False
-            del clientPVlist[pvname1]['last_event']
+            if 'last_event' in clientPVlist[pvname1]:
+                del clientPVlist[pvname1]['last_event']
             socketio.emit("init_"+pvname1,d,room=str(pvname1),namespace='/pvServer')
         except:
             error=2

@@ -36,7 +36,7 @@ export const useEpicsPV = (props) => {
   useEffect(() => {
 
     const updatePVData = (msg) => {
-
+      if (msg === undefined || msg === null) return;
       if (msg.connected === '0') {
         setPv(pv => ({ ...pv, initialized: false }))
       }
@@ -150,6 +150,7 @@ export const useEpicsPV = (props) => {
         socket.emit('remove_pv_connection', { pvname: pv.pvname, pvConnectionId: pvConnectionId, 'clientAuthorisation': jwt });
       }
       socket.removeListener(pv.pvname, updatePVData);
+      socket.removeListener("init_"+pv.pvname, updatePVData);
       socket.removeListener('connect_error', connectError);
       socket.removeListener('disconnect', disconnect);
       socket.removeListener('reconnect', reconnect);

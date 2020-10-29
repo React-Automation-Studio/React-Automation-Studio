@@ -141,7 +141,7 @@ def check_pv_initialized_after_disconnect():
                                     d['pvname']= pvname
                                     d['connected']= '0'
 
-                                    socketio.emit(pvname,d,room=str(pvname),namespace='/pvServer')
+                                    socketio.emit("init_"+pvname,d,room=str(pvname),namespace='/pvServer')
                                 except:
                                     log.exception("Unexpected error")
                                     raise
@@ -300,7 +300,8 @@ def onConnectionChange(pvname=None, conn= None, value=None, **kws):
         try:
             clientPVlist[pvname1]['isConnected']=False
             clientPVlist[pvname1]['initialized']=False
-            socketio.emit(pvname1,d,room=str(pvname1),namespace='/pvServer')
+            del clientPVlist[pvname1]['last_event']
+            socketio.emit("init_"+pvname1,d,room=str(pvname1),namespace='/pvServer')
         except:
             error=2
 
@@ -583,13 +584,13 @@ def getPolledValue(message):
         accessControl=AutheriseUserAndPermissions(message['clientAuthorisation'],pvname)
     
     if accessControl['userAuthorised'] and accessControl['permissions']['read']:
-        if pvname in clientPVlist:
+        if pvname in clientPVlist and 'last_event' in clientPVlist[pvname] and clientPVlist[pvname]['initialized']:
             # clientPVlist[pvname][last_event] is populated by onValueChange
-            return clientPVlist[pvname].get('last_event', {"connected" : 0})
-        return {"connected" : 0}
-    
+            return clientPVlist[pvname]['last_event']
+        return None
+
     socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
-    return {"connected" : 0}
+    return None
 
 @socketio.on('databaseRead', namespace='/pvServer')
 def databaseRead(message):

@@ -12,16 +12,16 @@ const math = create(all, config)
 
 /**
  * The Widget component creates standard properties, state variables and callbacks to manage the behaviour of a component communicating with one or multiple PVs. It also provides the default RAS contextMenu to the child component.
- * 
- * The label, min, max, units, pv and tooltip all accept macros that can be replaced by the values defined in the macros prop. 
- * 
- * 
- * 
- * 
- * 
- *  
-    
- * 
+ *
+ * The label, min, max, units, pv and tooltip all accept macros that can be replaced by the values defined in the macros prop.
+ *
+ *
+ *
+ *
+ *
+ *
+
+ *
  **/
   const Widget = (props) => {
   const theme = useTheme();
@@ -58,8 +58,8 @@ const math = create(all, config)
     units: "",
   });
   const [pvs, setPvs] = useState([]);
-  
- 
+
+
   useEffect(() => {
   let ro=props.readOnly===true;
   if (props.pv){
@@ -71,7 +71,7 @@ const math = create(all, config)
       ro = ro || item.readOnly;
     })
   }
-  
+
     setReadOnly(ro)
      // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pv, props.readOnly,pvs,])
@@ -82,9 +82,9 @@ const math = create(all, config)
     pvs.map((item)=>
       newContextPVs.push(...item.PVs)
     )
-   
-  
-   
+
+
+
     setContextPVs(newContextPVs)
 
     }, [pv, pvs])
@@ -139,7 +139,7 @@ const math = create(all, config)
   useEffect(() => {
     if (!focus) {
       let newValue;
-      
+
       newValue=checkPrecision(pv.value, prec);
       if (typeof props.numberFormat !== 'undefined'){
         newValue=math.format(parseFloat(newValue),props.numberFormat)
@@ -188,17 +188,17 @@ const math = create(all, config)
       else{
         setValue(tempvalue)
       }
-      
+
       setOutputValue(tempvalue);
-     
+
       setNewValueTrigger(newValueTrigger + 1);
       setImmediateValue(null);
     }
-    
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [immediateValue, min, max, prec])
-  
- 
+
+
 
   useEffect(() => {
     if (commitChange) {
@@ -214,7 +214,7 @@ const math = create(all, config)
       setNewValueTrigger(newValueTrigger + 1);
       SetCommitChange(false)
     }
-    
+
 // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [commitChange, min, max, prec])
   useEffect(() => {
@@ -230,8 +230,8 @@ const math = create(all, config)
     let init =
       (typeof props.pv !== 'undefined')
       || (typeof props.pvs !== 'undefined')
-    
-   
+
+
     if (props.pv) {
       init = init&&pv.initialized;
     }
@@ -240,9 +240,9 @@ const math = create(all, config)
         init = init && item.initialized;
       })
     }
-     
+
       setInitalized(init)
-    
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pv.initialized, pvs])
   useEffect(()=>{
@@ -289,7 +289,7 @@ const math = create(all, config)
 
 
   const handleToggleContextMenu = (event) => {
-    
+
     event.preventDefault();
     event.stopPropagation();
     setAnchorEl(event.target);
@@ -447,34 +447,36 @@ const math = create(all, config)
       handleBlur: () => setFocus(false),
       pvData: pv,
       pvsData: pvs,
-    
+
     })
   const divStyle = {
     width: "100%",
     height: "100%",
-   
-   
+
+
   }
-  
+
   const Tag=props.svgWidget?"g":"div";
-  
+  if(props.debug){
+    console.log("Widget PVs",props.pvs)
+  }
   return (
-    <Tooltip   
-      title={tooltip} 
-      disableFocusListener={true}	
-      disableTouchListener={true} 
-      disableHoverListener={props.showTooltip===false} 
+    <Tooltip
+      title={tooltip}
+      disableFocusListener={true}
+      disableTouchListener={true}
+      disableHoverListener={props.showTooltip===false}
       {...props.tooltipProps}  >
-    
+
     <Tag
       style={props.svgWidget?undefined:divStyle}
       onContextMenu={ props.disableContextMenu ? undefined : handleToggleContextMenu}
     >
-     
 
-    
+
+
       {child}
-     
+
       {childPv}
       {childPvs}
       {contextMenu}
@@ -548,9 +550,9 @@ Widget.propTypes = {
    * Custom PV to define the precision to be used, usePvPrecision must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
    */
   precPv: PropTypes.string,
- 
 
-  
+
+
   /**
    * Custom units to be used, if usePvUnits is not defined.
    */
@@ -567,12 +569,12 @@ Widget.propTypes = {
    */
   usePvLabel: PropTypes.bool,
   /**
-   * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver. 
-   * The pyEpics metadata is unfortunately static and the values used will be the initial values that pvserver receives when it connects the first time. 
+   * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver.
+   * The pyEpics metadata is unfortunately static and the values used will be the initial values that pvserver receives when it connects the first time.
    * This is sufficient in most cases except when the user wants to dynamically update the metaData.
-   * In this case a direct connection can be made to all the pv fields by setting useMetadata to false. 
+   * In this case a direct connection can be made to all the pv fields by setting useMetadata to false.
    * If any of the metadata pvs are defined i.e unitsPv then the PV makes a new data  connection to this alternate pv and will
-   * use the value provided by this pv as the units. 
+   * use the value provided by this pv as the units.
    * The same is the case for the precPV, labelPv, alarmPv, unitsPv and minPv.
    * By setting useMetadata to false also enables connection to other variables as defined by different protocols.
    */
@@ -603,7 +605,7 @@ Widget.propTypes = {
 
 
 
-  
+
   /**
    * If defined, then the string representation of the number can be formatted
    * using the mathjs format function
@@ -619,7 +621,7 @@ Widget.propTypes = {
    * Custom off color to be used, must be derived from Material UI theme color's.
    */
   offColor: PropTypes.string,
-  
+
   /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
   pv: PropTypes.string,
   /** Array of the process variables, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/

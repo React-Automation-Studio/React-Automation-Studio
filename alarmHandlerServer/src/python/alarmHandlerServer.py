@@ -797,6 +797,8 @@ def initPVDict():
 
 
 def startAlarmIOC():
+    global alarmIOCPVPrefix
+    global alarmIOCPVSuffix
     # ALARM PVS
     lines = []
     lines.append("file \"db/Alarm.db\" {\n")

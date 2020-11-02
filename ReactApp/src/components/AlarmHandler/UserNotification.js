@@ -66,7 +66,8 @@ const UserNotification = (props) => {
     const [addRegexVal, setAddRegexVal] = useState({})
 
     const [dialogOpen, setDialogOpen] = useState(false)
-    const [dialogUser, setDialogUser] = useState({})
+    const [dialogUserObject, setDialogUserObject] = useState({})
+    const [dialogUserNotifyIndex, setDialogUserNotifyIndex] = useState(0)
 
     const dbPVData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs:Parameters:{}` }).data
     const dbUsersData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:users:Parameters:{}` }).data
@@ -374,7 +375,7 @@ const UserNotification = (props) => {
             newUserList[userIndex] = match
 
             setUserList(newUserList)
-            
+
             const newFilterUserRegex = Object.values(newNotifyPVs).map(entry =>
                 entry.regEx
             )
@@ -432,12 +433,12 @@ const UserNotification = (props) => {
     const handleOpenDialog = useCallback((event, name, username) => {
         event.preventDefault()
         event.stopPropagation()
-        setDialogUser({
-            name: name,
-            username: username
-        })
+
+        const match = userList.filter(el => el.name === name && el.username === username)[0]
+
+        setDialogUserObject(match)
         setDialogOpen(true)
-    }, [])
+    }, [userList])
 
     const handleAcceptDialog = useCallback((name, username) => {
         // Find match and note it's index in userList
@@ -576,23 +577,25 @@ const UserNotification = (props) => {
         pvListHeight = '76vh'
     }
 
-    // console.log(userList)
+    // console.table(userList)
 
     return (
         <React.Fragment>
             {alarmPVs}
-            {/* {
-                userList.length !== 0
+            {
+                Object.entries(dialogUserObject).length !== 0
                     ? <ScheduleDialog
                         dialogOpen={dialogOpen}
                         acceptDialog={handleAcceptDialog}
                         closeDialog={handleCloseDialog}
-                        dialogUser={dialogUser}
-                        userList={userList}
+                        dialogUserObject={dialogUserObject}
+                        setDialogUserObject={setDialogUserObject}
+                        dialogUserNotifyIndex={dialogUserNotifyIndex}
+                        setDialogUserNotifyIndex={setDialogUserNotifyIndex}
                         userScheduleString={userScheduleString}
                     />
                     : null
-            } */}
+            }
             <Grid
                 container
                 direction="column"

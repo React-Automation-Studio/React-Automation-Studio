@@ -839,6 +839,10 @@ const AlarmSetup = (props) => {
         }
     })
 
+    const slicedData = rowsPerPage > 0
+        ? filteredData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+        : filteredData
+
     const filteredAreaAlarms = areaAlarms.reduce((acc, entry) => {
         const value = entry[1]
         const visible = value["name"].toLowerCase().includes(alarmTableSearchString.toLowerCase())
@@ -1152,9 +1156,7 @@ const AlarmSetup = (props) => {
                             <AccordionDetails>
                                 <AlarmLog
                                     height={alarmLogHeight}
-                                    filteredData={filteredData}
-                                    page={page}
-                                    rowsPerPage={rowsPerPage}
+                                    slicedData={slicedData}
                                 />
                             </AccordionDetails>
                         </Accordion>

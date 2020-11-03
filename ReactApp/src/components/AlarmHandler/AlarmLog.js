@@ -14,16 +14,13 @@ const AlarmLog = (props) => {
 
     useEffect(() => {
         myRef.current.scrollTo(0, 0)
-    }, [props.filteredData.length])
+    }, [props.slicedData.length])
 
     return (
         <TableContainer style={{ height: props.height, overflow: 'auto' }} ref={myRef}>
             <Table aria-label="Log Table" size="small" >
                 <TableBody>
-                    {(props.rowsPerPage > 0
-                        ? props.filteredData.slice(props.page * props.rowsPerPage, props.page * props.rowsPerPage + props.rowsPerPage)
-                        : props.filteredData
-                    ).map((entry) => {
+                    {props.slicedData.map((entry) => {
                         const date = new Date(entry.timestamp * 1000)
                         const content = `${date.toLocaleString()}: ${entry.entry}`
                         return (

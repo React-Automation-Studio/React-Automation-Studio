@@ -8,13 +8,6 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 
 
-// const useStyles = makeStyles(theme => ({
-//     root: {
-//         flexShrink: 0,
-//         marginLeft: theme.spacing(2.5),
-//     },
-// }))
-
 const AlarmLog = (props) => {
     // const classes = useStyles();
     const myRef = useRef()

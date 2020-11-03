@@ -12,7 +12,7 @@ import _thread
 from epics import PV, caput
 from datetime import datetime
 
-from notify import notifyEmail
+from notify import notify
 
 try:
     ALARM_DATABASE = os.environ['ALARM_DATABASE']
@@ -1161,7 +1161,7 @@ def main():
         global notifyBuffer
         sleep(5.0)
         if(len(notifyBuffer) != 0):
-            notifyEmail(notifyBuffer)
+            notify(notifyBuffer)
             notifyBuffer = []
 
 

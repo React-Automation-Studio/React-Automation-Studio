@@ -126,7 +126,17 @@ const UserTable = (props) => {
                 </TableHead>
                 <TableBody>
                     {Object.values(props.userList).map(user => {
+                        // console.log(user)
                         const rowSelected = user.name === props.filterUser.name && user.username === props.filterUser.username
+
+                        let scheduleIndex
+                        const chipSelected = user.notifyPVs.reduce((acc, area, index) => {
+                            if (area.regEx === fillChipName) {
+                                scheduleIndex = index
+                            }
+                            return acc || area.regEx === fillChipName
+                        }, false)
+
                         return (
                             < TableRow
                                 key={`${user.username}-${user.name}`}
@@ -182,7 +192,7 @@ const UserTable = (props) => {
                                     </Grid>
                                 </TableCell>
                                 <TableCell>
-                                    {user.notifyPVs.map(expressionObject => {
+                                    {user.notifyPVs.map((expressionObject, index) => {
                                         const expression = expressionObject.regEx
                                         const filledChip = expression === fillChipName || (!showAddHeader && (user.name === props.filterUser.name && user.username === props.filterUser.username))
                                         return (
@@ -193,7 +203,7 @@ const UserTable = (props) => {
                                                 variant={filledChip ? undefined : "outlined"}
                                                 color="secondary"
                                                 className={classes.chip}
-                                                onClick={(event) => props.setFilterUserRegex(event, expression)}
+                                                onClick={(event) => props.setFilterUserRegex(event, expression, index)}
                                                 onDelete={props.userEdit[`${user.username}-${user.name}`] ? (event) => { props.deleteChip(event, user.name, user.username, expression) } : undefined}
                                             />
                                         )
@@ -271,7 +281,15 @@ const UserTable = (props) => {
                                         <div
                                             style={{ paddingRight: '0.5em' }}
                                         >
-                                            {/* {props.userScheduleString(props.userSchedule[`${user.username}-${user.name}`])} */}
+                                            {
+                                                rowSelected || !chipSelected
+                                                    ? user.global
+                                                        ? props.userScheduleString({ isGlobal: true, ...user.globalSetup })
+                                                        : "Global profile not enabled"
+                                                    : user.global
+                                                        ? props.userScheduleString({ isGlobal: true, ...user.globalSetup })
+                                                        : props.userScheduleString({ isGlobal: false, ...user.notifyPVs[scheduleIndex].notifySetup })
+                                            }
                                         </div>
                                         <div
                                             className={classes.verticalMiddle}

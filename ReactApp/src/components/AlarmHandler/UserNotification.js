@@ -214,11 +214,12 @@ const UserNotification = (props) => {
         setFilterUserRegex(newFilterUserRegex)
     }, [dictUserRegex])
 
-    const handleSetFilterUserRegex = useCallback((event, expression) => {
+    const handleSetFilterUserRegex = useCallback((event, expression, index) => {
         event.preventDefault()
         event.stopPropagation()
         setFilterUserRegex([expression])
         setFilterUser({})
+        setDialogUserNotifyIndex(index)
     }, [])
 
     const handleSetUserEdit = useCallback((event, name, username, value) => {

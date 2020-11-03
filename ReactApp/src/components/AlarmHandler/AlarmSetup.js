@@ -231,6 +231,8 @@ const AlarmSetup = (props) => {
     const [fadeList] = useState(false)
     const [page, setPage] = React.useState(0)
     const [rowsPerPage, setRowsPerPage] = React.useState(25)
+    const [pageAT, setPageAT] = React.useState(0)
+    const [rowsPerPageAT, setRowsPerPageAT] = React.useState(25)
 
 
     const dbPVData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs:Parameters:{}` }).data
@@ -462,6 +464,7 @@ const AlarmSetup = (props) => {
         setAreaSelectedName('ALL AREAS')
         setAlarmLogSelectedName('ALL AREAS')
         setAreaSubAreaOpen({})
+        setPageAT(0)
     }
 
     const handleAckGlobal = () => {
@@ -507,6 +510,7 @@ const AlarmSetup = (props) => {
             clearTimeout(alarmTableSearchTimer)
         }
         setAlarmTableSearchStringStore(srch)
+        setPageAT(0)
         setAlarmTableSearchTimer(setTimeout(() => {
             setAlarmTableSearchString(srch)
         }, 300))
@@ -785,6 +789,7 @@ const AlarmSetup = (props) => {
         setAlarmLogSelectedName(localAreaSelectedName)
         setAlarmLogSelectedKey(index)
         setAlarmRowSelected({})
+        setPageAT(0)
 
         // console.log(index)
         // handleUpdateLogDisplayData(index)
@@ -820,12 +825,21 @@ const AlarmSetup = (props) => {
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage)
-    };
+    }
 
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(parseInt(event.target.value, 10))
         setPage(0)
-    };
+    }
+
+    const handleChangePageAT = (event, newPage) => {
+        setPageAT(newPage)
+    }
+
+    const handleChangeRowsPerPageAT = (event) => {
+        setRowsPerPageAT(parseInt(event.target.value, 10))
+        setPageAT(0)
+    }
 
     const filteredData = alarmLogDisplayArray.filter((entry) => {
         const date = new Date(entry.timestamp * 1000)
@@ -843,7 +857,19 @@ const AlarmSetup = (props) => {
         ? filteredData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
         : filteredData
 
-    const filteredAreaAlarms = areaAlarms.reduce((acc, entry) => {
+    const keyedAreaAlarms = areaAlarms.reduce((acc, entry) => {
+        const areaAlarmName = entry[0]
+        let areaKey = areaAlarmName.replace(/=pv\d+/, "")   // areaKey is area | area=subArea
+        if (!areaSelectedIndex.includes("=")) {             // areaSelectedIndex is area
+            areaKey = areaKey.split('=')[0]                 // areaKey is area
+        }
+        if (areaKey === areaSelectedIndex || areaSelectedIndex === 'ALLAREAS') {
+            acc.push(entry)
+        }
+        return acc
+    }, [])
+
+    const filteredAreaAlarms = keyedAreaAlarms.reduce((acc, entry) => {
         const value = entry[1]
         const visible = value["name"].toLowerCase().includes(alarmTableSearchString.toLowerCase())
         if (visible) {
@@ -851,6 +877,10 @@ const AlarmSetup = (props) => {
         }
         return acc
     }, [])
+
+    const slicedAreaAlarms = rowsPerPageAT > 0
+        ? filteredAreaAlarms.slice(pageAT * rowsPerPageAT, pageAT * rowsPerPageAT + rowsPerPageAT)
+        : filteredAreaAlarms
 
     let alarmPVs = null
     if (alarmIOCPVPrefix !== null && alarmIOCPVSuffix !== null) {
@@ -942,7 +972,7 @@ const AlarmSetup = (props) => {
                                         onContextMenu={(event) => handleIconClick(event)}
                                     >
                                         {areaSelectedIndex === 'ALLAREAS'
-                                            ? <PublicIcon color="primary" />
+                                            ? <PublicIcon color="secondary" />
                                             : <PublicIcon />}
                                     </IconButton>
                                     <Menu
@@ -1037,7 +1067,30 @@ const AlarmSetup = (props) => {
                             >
                                 <div style={{ display: 'flex', width: '100%' }}>
                                     <div className={classes.verticalMiddle} style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 20 }}>{`ALARM TABLE: ${areaSelectedName}`}</div>
-                                    <div style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 1 }}>{
+                                    {
+                                        alarmTableExpand
+                                            ? <TablePagination
+                                                component="div"
+                                                onClick={(event) => {
+                                                    event.preventDefault()
+                                                    event.stopPropagation()
+                                                }}
+                                                rowsPerPageOptions={[25, 50]}
+                                                colSpan={3}
+                                                count={filteredAreaAlarms.length}
+                                                rowsPerPage={rowsPerPageAT}
+                                                page={pageAT}
+                                                SelectProps={{
+                                                    inputProps: { 'aria-label': 'rows per page' },
+                                                    native: true,
+                                                }}
+                                                onChangePage={handleChangePageAT}
+                                                onChangeRowsPerPage={handleChangeRowsPerPageAT}
+                                                ActionsComponent={TablePaginationActions}
+                                            />
+                                            : null
+                                    }
+                                    <div className={classes.verticalMiddle} style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 1 }}>{
                                         alarmTableExpand
                                             ? <div className={classes.search}>
                                                 <div className={classes.searchIcon}>
@@ -1070,8 +1123,8 @@ const AlarmSetup = (props) => {
                                         alarmPVDict={alarmPVDict}
                                         alarmRowSelected={alarmRowSelected}
                                         alarmContextOpen={alarmContextOpen}
-                                        areaSelectedIndex={areaSelectedIndex}
-                                        areaAlarms={filteredAreaAlarms}
+                                        isTopArea={!areaSelectedIndex.includes("=")}
+                                        areaAlarms={slicedAreaAlarms}
                                         contextMouseX={contextMouseX}
                                         contextMouseY={contextMouseY}
                                         areaEnabled={areaEnabled}

@@ -286,6 +286,8 @@ const AlarmSetup = (props) => {
 
         setAlarmLogDisplayArray(localAlarmLogDisplayArray)
         setPage(0)
+        setAlarmLogSearchStringStore('')
+        setAlarmLogSearchString('')
 
     }, [alarmLogDict, alarmLogSelectedKey])
 
@@ -465,6 +467,8 @@ const AlarmSetup = (props) => {
         setAlarmLogSelectedName('ALL AREAS')
         setAreaSubAreaOpen({})
         setPageAT(0)
+        setAlarmTableSearchStringStore('')
+        setAlarmTableSearchString('')
     }
 
     const handleAckGlobal = () => {
@@ -790,7 +794,8 @@ const AlarmSetup = (props) => {
         setAlarmLogSelectedKey(index)
         setAlarmRowSelected({})
         setPageAT(0)
-
+        setAlarmTableSearchStringStore('')
+        setAlarmTableSearchString('')
         // console.log(index)
         // handleUpdateLogDisplayData(index)
     }, [areaSelectedIndex, areaSubAreaOpen])

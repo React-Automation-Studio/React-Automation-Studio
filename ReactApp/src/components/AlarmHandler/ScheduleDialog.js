@@ -832,7 +832,7 @@ const ScheduleDialog = (props) => {
                                                 format="dd MMMM yyyy"
                                                 value={fromDate}
                                                 onChange={handleFromDate}
-                                                disabled={displayUserObject.weekly}
+                                                disabled={displayUserObject.weekly || !displayUserObject.notify}
                                                 autoOk
                                             />
                                         </MuiPickersUtilsProvider>
@@ -846,7 +846,7 @@ const ScheduleDialog = (props) => {
                                                 format="dd MMMM yyyy"
                                                 value={toDate}
                                                 onChange={handleToDate}
-                                                disabled={displayUserObject.weekly}
+                                                disabled={displayUserObject.weekly || !displayUserObject.notify}
                                                 autoOk
                                             />
                                         </MuiPickersUtilsProvider>

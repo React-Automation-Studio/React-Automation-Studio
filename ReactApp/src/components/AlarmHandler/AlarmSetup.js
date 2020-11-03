@@ -8,7 +8,6 @@ import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
 
 
-import DataConnection from '../SystemComponents/DataConnection';
 import PV from '../SystemComponents/PV';
 import useMongoDbWatch from '../SystemComponents/database/MongoDB/useMongoDbWatch';
 import useMongoDbUpdateOne from '../SystemComponents/database/MongoDB/useMongoDbUpdateOne';
@@ -177,10 +176,6 @@ const AlarmSetup = (props) => {
 
     const context = useContext(AutomationStudioContext)
     const username = context.userData.username
-
-    // to connect to all PVs before updating state
-    const firstAlarmPVDict = {}
-    const firstAreaPVDict = {}
 
     const [enableAllAreas, setEnableAllAreas] = useState(true)
     const [enableAllAreasId, setEnableAllAreasId] = useState(null)
@@ -556,58 +551,6 @@ const AlarmSetup = (props) => {
     //     // console.log(pvname, value)
     // }
 
-    const handleAreaPVChange = (value, pvname) => {
-        let areaName = pvname.replace("pva://", "")
-        areaName = areaName.replace(alarmIOCPVPrefix, "")
-
-        // console.log(pvname)
-
-        // console.log(areaName)
-
-        // still connecting to pvs
-        if (!loadAlarmList.areaPV) {
-            firstAreaPVDict[areaName] = value
-            if (lastArea === areaName) {
-                const localLoadAlarmList = { ...loadAlarmList }
-                localLoadAlarmList.areaPV = true
-                setLoadAlarmList(localLoadAlarmList)
-                setAreaPVDict(firstAreaPVDict)
-                // console.log(firstAreaPVDict)
-            }
-        }
-        // all pvs connected
-        else {
-            const localAreaPVDict = { ...areaPVDict }
-            localAreaPVDict[areaName] = value
-            setAreaPVDict(localAreaPVDict)
-        }
-    }
-
-    const handleAlarmPVChange = (value, pvname) => {
-        // console.log(pvname)
-        let epicsPVName = pvname.replace("pva://", "")
-        epicsPVName = epicsPVName.replace(alarmIOCPVPrefix, "")
-        epicsPVName = epicsPVName.replace(alarmIOCPVSuffix, "")
-
-        // console.log(epicsPVName, value)
-
-        // still connecting to pvs
-        if (!loadAlarmTable.alarmPV) {
-            firstAlarmPVDict[epicsPVName] = value
-            if (lastAlarm === epicsPVName) {
-                const localLoadAlarmTable = { ...loadAlarmTable }
-                localLoadAlarmTable.alarmPV = true
-                setLoadAlarmTable(localLoadAlarmTable)
-                setAlarmPVDict(firstAlarmPVDict)
-            }
-        }
-        // all pvs connected
-        else {
-            const localAlarmPVDict = { ...alarmPVDict }
-            localAlarmPVDict[epicsPVName] = value
-            setAlarmPVDict(localAlarmPVDict)
-        }
-    }
 
     const handleListItemContextClose = useCallback((event, index) => {
         // console.log("close context")
@@ -887,20 +830,41 @@ const AlarmSetup = (props) => {
         ? filteredAreaAlarms.slice(pageAT * rowsPerPageAT, pageAT * rowsPerPageAT + rowsPerPageAT)
         : filteredAreaAlarms
 
+    const setPvData = (pvData) => {
+        if (pvData.initialized && !loadAlarmTable.alarmPV) {
+            // console.log(pvData)
+            let epicsPVName = pvData.pvName.replace("pva://", "")
+            epicsPVName = epicsPVName.replace(alarmIOCPVPrefix, "")
+            epicsPVName = epicsPVName.replace(alarmIOCPVSuffix, "")
+            setAlarmPVDict({
+                ...alarmPVDict,
+                [epicsPVName]: pvData.value
+            })
+            if (lastAlarm === epicsPVName) {
+                setLoadAlarmTable({
+                    ...loadAlarmTable,
+                    alarmPV: true
+                })
+            }
+        }
+    }
+
     let alarmPVs = null
     if (alarmIOCPVPrefix !== null && alarmIOCPVSuffix !== null) {
         alarmPVs = areaAlarms.map(entry => {
             const key = entry[0]
             const value = entry[1]
             return (
-                <DataConnection
+                <PV
                     key={key}
                     pv={'pva://' + alarmIOCPVPrefix + value["name"] + alarmIOCPVSuffix}
-                    handleInputValue={handleAlarmPVChange}
+                    pvData={setPvData}
                 />
             )
         })
     }
+
+
 
     let ackPV = null
     if (alarmIOCPVPrefix !== null) {
@@ -914,13 +878,32 @@ const AlarmSetup = (props) => {
         )
     }
 
+    const setAreaPvData = (pvData) => {
+        if (pvData.initialized) {
+            // console.log(pvData)
+            let areaName = pvData.pvName.replace("pva://", "")
+            areaName = areaName.replace(alarmIOCPVPrefix, "")
+            setAreaPVDict({
+                ...areaPVDict,
+                [areaName]: pvData.value
+            })
+            if (lastArea === areaName) {
+                // console.log('lastArea === areaName')
+                setLoadAlarmList({
+                    ...loadAlarmList,
+                    areaPV: true
+                })
+            }
+        }
+    }
     let areaPVs = null
     if (alarmIOCPVPrefix !== null) {
         areaPVs = Object.keys(areaEnabled).map(areaName => (
-            <DataConnection
+            <PV
                 key={areaName}
                 pv={'pva://' + alarmIOCPVPrefix + areaName}
-                handleInputValue={handleAreaPVChange}
+                pvData={setAreaPvData}
+            // handleInputValue={handleAreaPVChange}
             />
         ))
     }
@@ -948,9 +931,9 @@ const AlarmSetup = (props) => {
 
     return (
         <React.Fragment>
-            {alarmPVs}
-            {areaPVs}
             {ackPV}
+            {areaPVs}
+            {alarmPVs}
             <Grid
                 container
                 direction="row"
@@ -1128,7 +1111,7 @@ const AlarmSetup = (props) => {
                                         alarmPVDict={alarmPVDict}
                                         alarmRowSelected={alarmRowSelected}
                                         alarmContextOpen={alarmContextOpen}
-                                        isTopArea={!areaSelectedIndex.includes("=")}
+                                        areaSelectedIndex={areaSelectedIndex}
                                         areaAlarms={slicedAreaAlarms}
                                         contextMouseX={contextMouseX}
                                         contextMouseY={contextMouseY}

@@ -57,6 +57,7 @@ const AlarmTable = props => {
 
     const { areaAlarms } = props;
 
+    const isTopArea = !props.areaSelectedIndex.includes("=")
     let currSubArea = ""
     let newSubArea = false
     let currTopArea = ""
@@ -146,7 +147,7 @@ const AlarmTable = props => {
                                             : null}
                                     </TableRow>
                                     : null}
-                                {props.isTopArea && newSubArea && props.alarmTableSearchString.length === 0
+                                {isTopArea && newSubArea && props.alarmTableSearchString.length === 0
                                     ? <TableRow
                                         onClick={(event) => {
                                             event.preventDefault()

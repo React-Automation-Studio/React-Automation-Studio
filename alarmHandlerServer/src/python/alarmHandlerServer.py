@@ -12,6 +12,8 @@ import _thread
 from epics import PV, caput
 from datetime import datetime
 
+from notify import notifyEmail
+
 try:
     ALARM_DATABASE = os.environ['ALARM_DATABASE']
 except:
@@ -85,6 +87,8 @@ areaDict = {}
 subAreaDict = {}
 
 areaPVDict = {}
+
+notifyBuffer = []
 
 # Prefix and suffix for alarmIOC pvs
 doc = client[MONGO_INITDB_ALARM_DATABASE].config.find_one()
@@ -499,6 +503,10 @@ def pvDisconn(pvname, conn):
                             '$position': 0
                         }
                     }})
+                notifyBuffer.append({
+                    "pv": pvname,
+                    "message": entry
+                })
     else:
         try:
             curr_desc = [
@@ -725,6 +733,11 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
                     '$position': 0
                 }
             }})
+    if(enable and alarmSet):
+        notifyBuffer.append({
+            "pv": pvname,
+            "message": entry
+        })
 
 
 def getListOfPVNames():
@@ -1145,7 +1158,11 @@ def main():
 
     print("Alarm server running...")
     while (True):
+        global notifyBuffer
         sleep(5.0)
+        if(len(notifyBuffer) != 0):
+            notifyEmail(notifyBuffer)
+            notifyBuffer = []
 
 
 main()

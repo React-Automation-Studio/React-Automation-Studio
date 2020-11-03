@@ -834,6 +834,19 @@ const AlarmSetup = (props) => {
         if (visible) {
             return entry
         }
+        else {
+            return null
+        }
+    })
+
+    let filteredAreaAlarms = {}
+    const filterAreaAlarms = Object.entries(areaAlarms).map(entry => {
+        const key = entry[0]
+        const value = entry[1]
+        const visible = areaAlarms[key]["name"].toLowerCase().includes(alarmTableSearchString.toLowerCase())
+        if (visible) {
+            filteredAreaAlarms[key] = value
+        }
         return null
     })
 
@@ -1052,7 +1065,7 @@ const AlarmSetup = (props) => {
                                         alarmRowSelected={alarmRowSelected}
                                         alarmContextOpen={alarmContextOpen}
                                         areaSelectedIndex={areaSelectedIndex}
-                                        areaAlarms={areaAlarms}
+                                        areaAlarms={filteredAreaAlarms}
                                         contextMouseX={contextMouseX}
                                         contextMouseY={contextMouseY}
                                         areaEnabled={areaEnabled}

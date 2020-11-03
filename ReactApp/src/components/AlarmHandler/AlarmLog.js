@@ -12,6 +12,8 @@ const AlarmLog = (props) => {
     // const classes = useStyles();
     const myRef = useRef()
 
+    // console.log('AlarmLog rendered')
+
     useEffect(() => {
         myRef.current.scrollTo(0, 0)
     }, [props.slicedData.length])

@@ -204,6 +204,8 @@ const AlarmSetup = (props) => {
     const [alarmRowSelected, setAlarmRowSelected] = useState({})
     const [alarmContextOpen, setAlarmContextOpen] = useState({})
     const [areaAlarms, setAreaAlarms] = useState([])
+    const [filteredAreaAlarms, setFilteredAreaAlarms] = useState([])
+    const [preSliceAreaAlarms, setPreSliceAreaAlarms] = useState([])
     const [areaContextOpen, setAreaContextOpen] = useState({})
     const [areaEnabled, setAreaEnabled] = useState({})
     const [areaMongoId, setAreaMongoId] = useState({})
@@ -236,6 +238,11 @@ const AlarmSetup = (props) => {
     const dbGlobData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:glob:Parameters:{}` }).data
 
     const dbUpdateOne = useMongoDbUpdateOne({})
+
+    const [alarmTableHeight, setAlarmTableHeight] = useState('40vh')
+    const [alarmLogHeight, setAlarmLogHeight] = useState('32vh')
+    const [filteredData, setFilteredData] = useState([])
+    const [preSliceData, setPreSliceData] = useState([])
 
     // update alarm log display data
     useEffect(() => {
@@ -789,46 +796,66 @@ const AlarmSetup = (props) => {
         setPageAT(0)
     }
 
-    const filteredData = alarmLogDisplayArray.filter((entry) => {
-        const date = new Date(entry.timestamp * 1000)
-        const content = `${date.toLocaleString()}: ${entry.entry}`
-        const visible = content.toLowerCase().includes(alarmLogSearchString.toLowerCase())
-        if (visible) {
-            return entry
-        }
-        else {
-            return null
-        }
-    })
+    useEffect(() => {
+        const searchedData = alarmLogDisplayArray.filter((entry) => {
+            const date = new Date(entry.timestamp * 1000)
+            const content = `${date.toLocaleString()}: ${entry.entry}`
+            const visible = content.toLowerCase().includes(alarmLogSearchString.toLowerCase())
+            if (visible) {
+                return entry
+            }
+            else {
+                return null
+            }
+        })
 
-    const slicedData = rowsPerPage > 0
-        ? filteredData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-        : filteredData
+        setPreSliceData(searchedData)
 
-    const keyedAreaAlarms = areaAlarms.reduce((acc, entry) => {
-        const areaAlarmName = entry[0]
-        let areaKey = areaAlarmName.replace(/=pv\d+/, "")   // areaKey is area | area=subArea
-        if (!areaSelectedIndex.includes("=")) {             // areaSelectedIndex is area
-            areaKey = areaKey.split('=')[0]                 // areaKey is area
-        }
-        if (areaKey === areaSelectedIndex || areaSelectedIndex === 'ALLAREAS') {
-            acc.push(entry)
-        }
-        return acc
-    }, [])
+        const slicedData = rowsPerPage > 0
+            ? searchedData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            : searchedData
 
-    const filteredAreaAlarms = keyedAreaAlarms.reduce((acc, entry) => {
-        const value = entry[1]
-        const visible = value["name"].toLowerCase().includes(alarmTableSearchString.toLowerCase())
-        if (visible) {
-            acc.push(entry)
-        }
-        return acc
-    }, [])
+        setFilteredData(slicedData)
 
-    const slicedAreaAlarms = rowsPerPageAT > 0
-        ? filteredAreaAlarms.slice(pageAT * rowsPerPageAT, pageAT * rowsPerPageAT + rowsPerPageAT)
-        : filteredAreaAlarms
+    }, [alarmLogDisplayArray, alarmLogSearchString, page, rowsPerPage])
+
+
+
+    useEffect(() => {
+        const keyedAreaAlarms = areaAlarms.reduce((acc, entry) => {
+            const areaAlarmName = entry[0]
+            let areaKey = areaAlarmName.replace(/=pv\d+/, "")   // areaKey is area | area=subArea
+            if (!areaSelectedIndex.includes("=")) {             // areaSelectedIndex is area
+                areaKey = areaKey.split('=')[0]                 // areaKey is area
+            }
+            if (areaKey === areaSelectedIndex || areaSelectedIndex === 'ALLAREAS') {
+                acc.push(entry)
+            }
+            return acc
+        }, [])
+
+        const searchedAreaAlarms = keyedAreaAlarms.reduce((acc, entry) => {
+            const value = entry[1]
+            const visible = value["name"].toLowerCase().includes(alarmTableSearchString.toLowerCase())
+            if (visible) {
+                acc.push(entry)
+            }
+            return acc
+        }, [])
+
+        setPreSliceAreaAlarms(searchedAreaAlarms)
+
+        const slicedAreaAlarms = rowsPerPageAT > 0
+            ? searchedAreaAlarms.slice(pageAT * rowsPerPageAT, pageAT * rowsPerPageAT + rowsPerPageAT)
+            : searchedAreaAlarms
+
+        setFilteredAreaAlarms(slicedAreaAlarms)
+
+    }, [areaAlarms, areaSelectedIndex, alarmTableSearchString, pageAT, rowsPerPageAT])
+
+
+
+
 
     const setPvData = (pvData) => {
         if (pvData.initialized && !loadAlarmTable.alarmPV) {
@@ -920,14 +947,21 @@ const AlarmSetup = (props) => {
         displayAlarmList = displayAlarmList && value
     }
 
-    let alarmTableHeight = '40vh'
-    let alarmLogHeight = '32vh'
-    if (alarmTableExpand && !alarmLogExpand && !alarmLogIsExpanded) {
-        alarmTableHeight = '76vh'
-    }
-    else if (!alarmTableExpand && !alarmTableIsExpanded && alarmLogExpand) {
-        alarmLogHeight = '76vh'
-    }
+
+    useEffect(() => {
+        if (alarmTableExpand && !alarmLogExpand && !alarmLogIsExpanded) {
+            setAlarmTableHeight('76vh')
+        }
+        else if (!alarmTableExpand && !alarmTableIsExpanded && alarmLogExpand) {
+            setAlarmLogHeight('76vh')
+        }
+        else {
+            setAlarmTableHeight('40vh')
+            setAlarmLogHeight('32vh')
+        }
+    }, [alarmTableExpand, alarmLogExpand, alarmLogIsExpanded, alarmTableIsExpanded])
+
+    // console.log('Top render')
 
     return (
         <React.Fragment>
@@ -1065,7 +1099,7 @@ const AlarmSetup = (props) => {
                                                 }}
                                                 rowsPerPageOptions={[25, 50]}
                                                 colSpan={3}
-                                                count={filteredAreaAlarms.length}
+                                                count={preSliceAreaAlarms.length}
                                                 rowsPerPage={rowsPerPageAT}
                                                 page={pageAT}
                                                 SelectProps={{
@@ -1112,7 +1146,7 @@ const AlarmSetup = (props) => {
                                         alarmRowSelected={alarmRowSelected}
                                         alarmContextOpen={alarmContextOpen}
                                         areaSelectedIndex={areaSelectedIndex}
-                                        areaAlarms={slicedAreaAlarms}
+                                        areaAlarms={filteredAreaAlarms}
                                         contextMouseX={contextMouseX}
                                         contextMouseY={contextMouseY}
                                         areaEnabled={areaEnabled}
@@ -1156,7 +1190,7 @@ const AlarmSetup = (props) => {
                                                 }}
                                                 rowsPerPageOptions={[25, 50, 100]}
                                                 colSpan={3}
-                                                count={filteredData.length}
+                                                count={preSliceData.length}
                                                 rowsPerPage={rowsPerPage}
                                                 page={page}
                                                 SelectProps={{
@@ -1197,7 +1231,7 @@ const AlarmSetup = (props) => {
                             <AccordionDetails>
                                 <AlarmLog
                                     height={alarmLogHeight}
-                                    slicedData={slicedData}
+                                    slicedData={filteredData}
                                 />
                             </AccordionDetails>
                         </Accordion>

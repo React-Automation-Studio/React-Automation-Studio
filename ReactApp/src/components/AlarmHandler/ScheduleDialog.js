@@ -532,7 +532,13 @@ const ScheduleDialog = (props) => {
             onBackdropClick={props.closeDialog}
             onClose={props.closeDialog}
         >
-            <DialogTitle>{`${props.dialogUserObject.name}'s notification schedule`}</DialogTitle>
+            <DialogTitle>
+                {
+                    global
+                        ? `${props.dialogUserObject.name}'s notification schedule (Global)`
+                        : `${props.dialogUserObject.name}'s notification schedule (${props.dialogUserObject.notifyPVs[props.dialogUserNotifyIndex].regEx})`
+                }
+            </DialogTitle>
             <DialogContent>
                 <DialogContentText>
                     {props.userScheduleString({ isGlobal: global, ...displayUserObject })}
@@ -543,55 +549,54 @@ const ScheduleDialog = (props) => {
                     justify="flex-start"
                     alignItems="stretch"
                 >
+                    <Grid item xs={12} style={{ marginTop: '0.75em', marginBottom: '0.75em' }}>
+                        <Divider variant="middle" />
+                    </Grid>
                     <Grid item xs={12}>
                         <Grid
                             container
                             direction="row"
-                            justify="flex-start"
+                            justify="center"
                             alignItems="stretch"
                         >
-                            {/* <Grid item xs={2} className={classes.centerInBlock}>
-                                <NotificationsActiveIcon />
-                            </Grid> */}
-                            <Grid item xs={4} className={classes.centerInBlock}>
-                                <span style={{ fontSize: '1.1rem', fontWeight: 500 }}>Global profile</span>
+                            <Grid item className={classes.centerInBlock}>
+                                <span style={{ fontSize: '1.1rem', fontWeight: 500 }}>Unique schedules</span>
                             </Grid>
-                            <Grid item xs={8}>
+                            <Grid item className={classes.centerInBlock}>
                                 <Switch
                                     checked={global}
                                     onChange={handleNotifyGlobal}
                                 />
+                            </Grid>
+                            <Grid item className={classes.centerInBlock}>
+                                <span style={{ fontSize: '1.1rem', fontWeight: 500 }}>Global schedule</span>
                             </Grid>
                         </Grid>
                     </Grid>
                     <Grid item xs={12} style={{ marginTop: '0.75em', marginBottom: '0.75em' }}>
                         <Divider variant="middle" />
                     </Grid>
-                    {!global &&
-                        <Grid item xs={12} style={{ paddingLeft: 24, paddingRight: 24 }}>
-                            {
-                                props.dialogUserObject.notifyPVs.map((area, index) => {
-                                    return (
-                                        <Chip
-                                            classes={{ outlinedSecondary: classes.chipOutlinedSecondary }}
-                                            key={area.regEx}
-                                            label={area.regEx}
-                                            variant={index === props.dialogUserNotifyIndex ? undefined : "outlined"}
-                                            color="secondary"
-                                            className={classes.chip}
-                                            onClick={() => props.setDialogUserNotifyIndex(index)}
-                                        />
+                    <Grid item xs={12} style={{ paddingLeft: 24, paddingRight: 24 }}>
+                        {
+                            props.dialogUserObject.notifyPVs.map((area, index) => {
+                                return (
+                                    <Chip
+                                        classes={{ outlinedSecondary: classes.chipOutlinedSecondary }}
+                                        key={area.regEx}
+                                        label={area.regEx}
+                                        variant={index === props.dialogUserNotifyIndex || global ? undefined : "outlined"}
+                                        color="secondary"
+                                        className={classes.chip}
+                                        onClick={() => props.setDialogUserNotifyIndex(index)}
+                                    />
 
-                                    )
-                                })
-                            }
-                        </Grid>
-                    }
-                    {!global &&
-                        <Grid item xs={12} style={{ marginTop: '0.75em', marginBottom: '0.75em' }}>
-                            <Divider variant="middle" />
-                        </Grid>
-                    }
+                                )
+                            })
+                        }
+                    </Grid>
+                    <Grid item xs={12} style={{ marginTop: '0.75em', marginBottom: '0.75em' }}>
+                        <Divider variant="middle" />
+                    </Grid>
                     <Grid item xs={12}>
                         <Grid
                             container

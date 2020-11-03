@@ -285,7 +285,7 @@ const UserTable = (props) => {
                                                 rowSelected || !chipSelected
                                                     ? user.global
                                                         ? props.userScheduleString({ isGlobal: true, ...user.globalSetup })
-                                                        : "Global profile not enabled"
+                                                        : "Global schedule not enabled. Click notification expressions to see its unique notification schedule."
                                                     : user.global
                                                         ? props.userScheduleString({ isGlobal: true, ...user.globalSetup })
                                                         : props.userScheduleString({ isGlobal: false, ...user.notifyPVs[scheduleIndex].notifySetup })

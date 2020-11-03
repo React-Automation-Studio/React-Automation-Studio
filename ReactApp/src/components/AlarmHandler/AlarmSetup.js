@@ -208,7 +208,7 @@ const AlarmSetup = (props) => {
     const [areaPVDict, setAreaPVDict] = useState({})
     const [alarmRowSelected, setAlarmRowSelected] = useState({})
     const [alarmContextOpen, setAlarmContextOpen] = useState({})
-    const [areaAlarms, setAreaAlarms] = useState({})
+    const [areaAlarms, setAreaAlarms] = useState([])
     const [areaContextOpen, setAreaContextOpen] = useState({})
     const [areaEnabled, setAreaEnabled] = useState({})
     const [areaMongoId, setAreaMongoId] = useState({})
@@ -348,7 +348,7 @@ const AlarmSetup = (props) => {
                 // setAreaContextOpen(areaContextOpen)
             }
 
-            const localAreaAlarms = {}
+            const localAreaAlarms = []
             const localAreaEnabled = {}
             let localLastArea = ""
 
@@ -357,7 +357,7 @@ const AlarmSetup = (props) => {
                 Object.keys(area).map(areaKey => {
                     if (areaKey === "pvs") {
                         Object.keys(area[areaKey]).map(alarm => {
-                            localAreaAlarms[`${area["area"]}=${alarm}`] = area[areaKey][alarm]
+                            localAreaAlarms.push([`${area["area"]}=${alarm}`, area[areaKey][alarm]])
                             return null
                         })
                     }
@@ -374,7 +374,7 @@ const AlarmSetup = (props) => {
                         Object.keys(area[areaKey]).map(subAreaKey => {
                             if (subAreaKey === "pvs") {
                                 Object.keys(area[areaKey][subAreaKey]).map(alarm => {
-                                    localAreaAlarms[`${area["area"]}=${area[areaKey]["name"]}=${alarm}`] = area[areaKey][subAreaKey][alarm]
+                                    localAreaAlarms.push([`${area["area"]}=${area[areaKey]["name"]}=${alarm}`, area[areaKey][subAreaKey][alarm]])
                                     return null
                                 })
                             }
@@ -663,7 +663,7 @@ const AlarmSetup = (props) => {
         // handleUpdateLogDisplayData(alarmName)
     }, [])
 
-    const handleTableItemRightClick = useCallback((event, index) => {
+    const handleTableItemRightClick = useCallback((event, index, entryIndex) => {
         event.preventDefault();
         const areaAlarmNameArray = index.split('=')
         let areaName = null
@@ -673,7 +673,7 @@ const AlarmSetup = (props) => {
         else {
             areaName = areaAlarmNameArray[0]
         }
-        if (areaEnabled[areaName] && areaAlarms[index]["enable"]) {
+        if (areaEnabled[areaName] && areaAlarms[entryIndex][1]["enable"]) {
             const localContextMouseX = event.clientX - 2
             const localContextMouseY = event.clientY - 2
 
@@ -839,26 +839,28 @@ const AlarmSetup = (props) => {
         }
     })
 
-    let filteredAreaAlarms = {}
-    const filterAreaAlarms = Object.entries(areaAlarms).map(entry => {
-        const key = entry[0]
+    const filteredAreaAlarms = areaAlarms.reduce((acc, entry) => {
         const value = entry[1]
-        const visible = areaAlarms[key]["name"].toLowerCase().includes(alarmTableSearchString.toLowerCase())
+        const visible = value["name"].toLowerCase().includes(alarmTableSearchString.toLowerCase())
         if (visible) {
-            filteredAreaAlarms[key] = value
+            acc.push(entry)
         }
-        return null
-    })
+        return acc
+    }, [])
 
     let alarmPVs = null
     if (alarmIOCPVPrefix !== null && alarmIOCPVSuffix !== null) {
-        alarmPVs = Object.keys(areaAlarms).map(alarmKey => (
-            <DataConnection
-                key={alarmKey}
-                pv={'pva://' + alarmIOCPVPrefix + areaAlarms[alarmKey]["name"] + alarmIOCPVSuffix}
-                handleInputValue={handleAlarmPVChange}
-            />
-        ))
+        alarmPVs = areaAlarms.map(entry => {
+            const key = entry[0]
+            const value = entry[1]
+            return (
+                <DataConnection
+                    key={key}
+                    pv={'pva://' + alarmIOCPVPrefix + value["name"] + alarmIOCPVSuffix}
+                    handleInputValue={handleAlarmPVChange}
+                />
+            )
+        })
     }
 
     let ackPV = null

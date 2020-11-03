@@ -99,8 +99,9 @@ const AlarmTable = props => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {Object.keys(areaAlarms).map((areaAlarmName, areaAlarmIndex) => {
-                        // console.log(areaAlarms[areaAlarmName]["name"], areaAlarms[areaAlarmName]["enable"])
+                    {areaAlarms.map((entry, entryIndex) => {
+                        const areaAlarmName = entry[0]
+                        const value = entry[1]
                         // areaSelectedIndex is area | area=subArea
                         // areaAlarmName is area | area=subArea | area=subArea | area=subArea=pvd+
                         let areaKey = areaAlarmName.replace(/=pv\d+/, "")   // areaKey is area | area=subArea
@@ -108,7 +109,6 @@ const AlarmTable = props => {
                             areaKey = areaKey.split('=')[0]                 // areaKey is area
                         }
                         if (areaKey === areaSelectedIndex || areaSelectedIndex === 'ALLAREAS') {
-                            // console.log('pva://' + "alarmIOC:" + areaAlarms[areaAlarmName]["name"] + "V")
                             const areaAlarmNameArray = areaAlarmName.split('=')
                             let areaName = null
                             let alarm = null
@@ -186,9 +186,9 @@ const AlarmTable = props => {
                                     <TableRow
                                         // key={areaAlarmName}
                                         hover={props.areaEnabled[areaName] && props.enableAllAreas}
-                                        onContextMenu={event => props.tableItemRightClick(event, areaAlarmName)}
+                                        onContextMenu={event => props.tableItemRightClick(event, areaAlarmName, entryIndex)}
                                         selected={props.alarmRowSelected[areaAlarmName]}
-                                        onClick={event => props.tableRowClick(event, `${areaName}*${areaAlarms[areaAlarmName]["name"]}`, areaAlarmName)}
+                                        onClick={event => props.tableRowClick(event, `${areaName}*${value["name"]}`, areaAlarmName)}
                                     >
                                         <Menu
                                             keepMounted
@@ -212,7 +212,7 @@ const AlarmTable = props => {
                                         {props.debug
                                             ? <TableCell>
                                                 <TextInput
-                                                    pv={'pva://' + areaAlarms[areaAlarmName]["name"]}
+                                                    pv={'pva://' + value["name"]}
                                                     usePvLabel={true}
                                                     usePvPrecision={true}
                                                     usePvUnits={true}
@@ -223,47 +223,36 @@ const AlarmTable = props => {
                                             </TableCell>
                                             : null}
                                         <Tooltip
-                                            // title={props.pvDescDict[areaAlarms[areaAlarmName]["name"]]}
                                             title={
                                                 <React.Fragment>
-                                                    <Typography color="inherit">{areaAlarms[areaAlarmName]["name"]}</Typography>
+                                                    <Typography color="inherit">{value["name"]}</Typography>
                                                     <p>
-                                                        <b>Description: </b> {props.alarmPVDict[areaAlarms[areaAlarmName]["name"]][1]}<br />
-                                                        <b>Host: </b> {props.alarmPVDict[areaAlarms[areaAlarmName]["name"]][2]}<br />
+                                                        <b>Description: </b> {props.alarmPVDict[value["name"]][1]}<br />
+                                                        <b>Host: </b> {props.alarmPVDict[value["name"]][2]}<br />
                                                     </p>
                                                 </React.Fragment>
                                             }
                                             enterDelay={400}
                                         >
                                             <TableCell align="left">
-                                                {areaAlarms[areaAlarmName]["name"]}
+                                                {value["name"]}
                                             </TableCell>
                                         </Tooltip>
                                         <TableCell align="center">
-                                            {/* <TextUpdate
-                                                    pv={'pva://' + areaAlarms[areaAlarmName]["name"]}
-                                                    disableContextMenu={true}
-                                                    useStringValue={true}
-                                                    usePvUnits={true}
-                                                    usePvPrecision={true}
-                                                    alarmSensitive={true}
-                                                    classes={textFieldWarnClasses}
-                                                /> */}
                                             <TextUpdateStateful
-                                                pv={'pva://' + areaAlarms[areaAlarmName]["name"]}
+                                                pv={'pva://' + value["name"]}
                                                 useStringValue={true}
                                                 usePvUnits={true}
                                             />
                                         </TableCell>
                                         <TableCell align="center">
                                             <TextUpdateStatus
-                                                pv={`pva://${props.alarmIOCPVPrefix}${areaAlarms[areaAlarmName]["name"]}A`}
-                                                // pv={'pva://' + "alarmIOC:" + areaAlarms[areaAlarmName]["name"] + "A"}
+                                                pv={`pva://${props.alarmIOCPVPrefix}${value["name"]}A`}
                                                 useStringValue={true}
                                                 alarmSensitive={true}
                                                 disableContextMenu={true}
                                                 classes={
-                                                    props.enableAllAreas && props.areaEnabled[areaName] && areaAlarms[areaAlarmName]["enable"]
+                                                    props.enableAllAreas && props.areaEnabled[areaName] && value["enable"]
                                                         ? undefined
                                                         : textFieldDisableClasses
                                                 }
@@ -273,22 +262,19 @@ const AlarmTable = props => {
 
                                         <TableCell align="center">
                                             <TextUpdate
-                                                pv={`pva://${props.alarmIOCPVPrefix}${areaAlarms[areaAlarmName]["name"]}V`}
-                                                // pv={'pva://' + "alarmIOC:" + areaAlarms[areaAlarmName]["name"] + "V"}
+                                                pv={`pva://${props.alarmIOCPVPrefix}${value["name"]}V`}
                                                 disableContextMenu={true}
                                             />
                                         </TableCell>
                                         <TableCell align="center">
                                             <TextUpdate
-                                                pv={`pva://${props.alarmIOCPVPrefix}${areaAlarms[areaAlarmName]["name"]}T`}
-                                                // pv={'pva://' + "alarmIOC:" + areaAlarms[areaAlarmName]["name"] + "T"}
+                                                pv={`pva://${props.alarmIOCPVPrefix}${value["name"]}T`}
                                                 disableContextMenu={true}
                                             />
                                         </TableCell>
                                         <TableCell align="center">
                                             <TextUpdate
-                                                pv={`pva://${props.alarmIOCPVPrefix}${areaAlarms[areaAlarmName]["name"]}K`}
-                                                // pv={'pva://' + "alarmIOC:" + areaAlarms[areaAlarmName]["name"] + "K"}
+                                                pv={`pva://${props.alarmIOCPVPrefix}${value["name"]}K`}
                                                 disableContextMenu={true}
                                             />
                                         </TableCell>
@@ -296,30 +282,30 @@ const AlarmTable = props => {
                                             <Checkbox
                                                 style={{ padding: 0, margin: 0 }}
                                                 disabled={!props.areaEnabled[areaName] || !props.enableAllAreas}
-                                                value={areaAlarms[areaAlarmName]["enable"]}
+                                                value={value["enable"]}
                                                 color="primary"
-                                                checked={areaAlarms[areaAlarmName]["enable"]}
-                                                onClick={event => props.itemChecked(event, areaName, alarm, "enable", !areaAlarms[areaAlarmName]["enable"])}
+                                                checked={value["enable"]}
+                                                onClick={event => props.itemChecked(event, areaName, alarm, "enable", !value["enable"])}
                                             />
                                         </TableCell>
                                         <TableCell align="center">
                                             <Checkbox
                                                 style={{ padding: 0, margin: 0 }}
                                                 disabled={!props.areaEnabled[areaName] || !props.enableAllAreas}
-                                                value={areaAlarms[areaAlarmName]["latch"]}
+                                                value={value["latch"]}
                                                 color="primary"
-                                                checked={areaAlarms[areaAlarmName]["latch"]}
-                                                onClick={event => props.itemChecked(event, areaName, alarm, "latch", !areaAlarms[areaAlarmName]["latch"])}
+                                                checked={value["latch"]}
+                                                onClick={event => props.itemChecked(event, areaName, alarm, "latch", !value["latch"])}
                                             />
                                         </TableCell>
                                         <TableCell align="center">
                                             <Checkbox
                                                 style={{ padding: 0, margin: 0 }}
                                                 disabled={!props.areaEnabled[areaName] || !props.enableAllAreas}
-                                                value={areaAlarms[areaAlarmName]["notify"]}
+                                                value={value["notify"]}
                                                 color="primary"
-                                                checked={areaAlarms[areaAlarmName]["notify"]}
-                                                onClick={event => props.itemChecked(event, areaName, alarm, "notify", !areaAlarms[areaAlarmName]["notify"])}
+                                                checked={value["notify"]}
+                                                onClick={event => props.itemChecked(event, areaName, alarm, "notify", !value["notify"])}
                                             />
                                         </TableCell>
                                     </TableRow>

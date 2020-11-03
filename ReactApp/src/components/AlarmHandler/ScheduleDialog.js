@@ -560,7 +560,7 @@ const ScheduleDialog = (props) => {
                             alignItems="stretch"
                         >
                             <Grid item className={classes.centerInBlock}>
-                                <span style={{ fontSize: '1.1rem', fontWeight: 500 }}>Unique schedules</span>
+                                <span style={{ fontSize: '1.1rem', fontWeight: 500 }}>Unique schedule</span>
                             </Grid>
                             <Grid item className={classes.centerInBlock}>
                                 <Switch

@@ -1025,21 +1025,27 @@ def pvCollectionWatch():
                                     '$position': 0
                                 }
                             }})
-                    elif ("pvs." in key and key.endswith(".enable")):
-                        # pv enable
-                        # print("enable of pv changed!")
+                    elif ("pvs." in key and (key.endswith(".enable") or key.endswith(".latch") or key.endswith(".notify"))):
+                        # pv enable/latch/notify
+                        # print("enable/latch/notify of pv changed!")
                         pvname = None
                         keys = key.split(".")
                         for one_key in keys:
-                            if (one_key != "enable"):
+                            if (one_key not in ["enable", "latch", "notify"]):
                                 doc = doc.get(one_key)
                             else:
                                 doc = doc.get("name")
                                 pvname = doc
                         areaKey = getKeys(pvname)[0]
-                        evaluateAreaPVs(areaKey, True)
+                        if(key.endswith(".enable")):
+                            evaluateAreaPVs(areaKey, True)
                         # Log to history
-                        msg = "ENABLED" if change[key] else "DISABLED"
+                        if(key.endswith(".enable")):
+                            msg = "ENABLED" if change[key] else "DISABLED"
+                        elif(key.endswith(".latch")):
+                            msg = "latch ENABLED" if change[key] else "latch DISABLED"
+                        elif(key.endswith(".notify")):
+                            msg = "notify ENABLED" if change[key] else "notify DISABLED"
                         entry = {"timestamp": timestamp, "entry": " ".join(
                             [pvname, '-', "Alarm", msg])}
                         # print(timestamp, pvname,

@@ -8,29 +8,19 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 
 
-// const useStyles = makeStyles(theme => ({
-//     root: {
-//         flexShrink: 0,
-//         marginLeft: theme.spacing(2.5),
-//     },
-// }))
-
 const AlarmLog = (props) => {
     // const classes = useStyles();
     const myRef = useRef()
 
     useEffect(() => {
         myRef.current.scrollTo(0, 0)
-    }, [props.filteredData.length])
+    }, [props.slicedData.length])
 
     return (
         <TableContainer style={{ height: props.height, overflow: 'auto' }} ref={myRef}>
             <Table aria-label="Log Table" size="small" >
                 <TableBody>
-                    {(props.rowsPerPage > 0
-                        ? props.filteredData.slice(props.page * props.rowsPerPage, props.page * props.rowsPerPage + props.rowsPerPage)
-                        : props.filteredData
-                    ).map((entry) => {
+                    {props.slicedData.map((entry) => {
                         const date = new Date(entry.timestamp * 1000)
                         const content = `${date.toLocaleString()}: ${entry.entry}`
                         return (

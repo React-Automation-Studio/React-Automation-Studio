@@ -3,6 +3,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
+import Chip from '@material-ui/core/Chip';
 import Checkbox from '@material-ui/core/Checkbox';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -41,6 +42,14 @@ const useStyles = makeStyles(theme => ({
         justifyContent: "center",
         alignItems: 'center'
     },
+    chip: {
+        marginRight: '1em',
+        marginTop: '0.5em',
+        marginBottom: '0.5em'
+    },
+    chipOutlinedSecondary: {
+        borderWidth: '1.5px'
+    },
     horizontalCenter: {
         display: "flex",
         flexDirection: "row",
@@ -55,7 +64,6 @@ const useStyles = makeStyles(theme => ({
         height: theme.spacing(4),
         marginLeft: '0.4em',
         marginRight: '0.4em',
-        cursor: props => props.dialogUserObject.weekly && props.dialogUserObject.notify ? 'pointer' : null
     },
     verticalCenter: {
         display: "flex",
@@ -69,103 +77,451 @@ const ScheduleDialog = (props) => {
     const classes = useStyles(props)
     // const theme = useTheme()
 
-    const fromTime = props.dialogUserObject.fromTime
-        ? new Date(props.dialogUserObject.fromTime)
+    const { global } = props.dialogUserObject
+
+    const displayUserObject = global
+        ? props.dialogUserObject.globalSetup
+        : props.dialogUserObject.notifyPVs[props.dialogUserNotifyIndex].notifySetup
+
+    const fromTime = displayUserObject.fromTime
+        ? new Date(displayUserObject.fromTime)
         : new Date()
-    const toTime = props.dialogUserObject.toTime
-        ? new Date(props.dialogUserObject.toTime)
+    const toTime = displayUserObject.toTime
+        ? new Date(displayUserObject.toTime)
         : new Date()
 
-    const fromDate = props.dialogUserObject.fromDate
-        ? new Date(props.dialogUserObject.fromDate)
+    const fromDate = displayUserObject.fromDate
+        ? new Date(displayUserObject.fromDate)
         : new Date()
-    const toDate = props.dialogUserObject.toDate
-        ? new Date(props.dialogUserObject.toDate)
+    const toDate = displayUserObject.toDate
+        ? new Date(displayUserObject.toDate)
         : new Date()
+
+    // console.clear()
+    // global
+    //     ? console.log('Global')
+    //     : console.log(props.dialogUserObject.notifyPVs[props.dialogUserNotifyIndex].regEx)
+
+    // console.table(displayUserObject)
 
     // const Transition = React.forwardRef(function Transition(props, ref) {
     //     return <Slide direction="left" ref={ref} {...props} />
     // })
 
+    const handleNotifyGlobal = (event) => {
+        props.setDialogUserObject({ ...props.dialogUserObject, global: event.target.checked })
+    }
+
     const handleNotify = (event) => {
-        props.setDialogUserObject({ ...props.dialogUserObject, notify: event.target.checked })
-    }
-
-    const handleEmail = (event) => {
-        props.setDialogUserObject({ ...props.dialogUserObject, email: event.target.checked })
-    }
-
-    const handleMobile = (event) => {
-        props.setDialogUserObject({ ...props.dialogUserObject, mobile: event.target.checked })
-    }
-
-    const handleAllDay = (event) => {
-        if (!event.target.checked) {
+        if (global) {
             props.setDialogUserObject({
                 ...props.dialogUserObject,
-                allDay: event.target.checked,
-                fromTime: formatISO(fromTime),
-                toTime: formatISO(toTime)
+                globalSetup: {
+                    ...props.dialogUserObject.globalSetup,
+                    notify: event.target.checked
+                }
             })
         }
         else {
-            props.setDialogUserObject({ ...props.dialogUserObject, allDay: event.target.checked })
+            const newNotifyPVs = props.dialogUserObject.notifyPVs.map((area, index) => {
+                if (props.dialogUserNotifyIndex !== index) {
+                    return area
+                }
+                else {
+                    const newArea = {
+                        ...area,
+                        notifySetup: {
+                            ...area.notifySetup,
+                            notify: event.target.checked
+                        }
+                    }
+                    return newArea
+                }
+            })
+            props.setDialogUserObject({
+                ...props.dialogUserObject,
+                notifyPVs: newNotifyPVs
+            })
+        }
+    }
+
+    const handleEmail = (event) => {
+        if (global) {
+            props.setDialogUserObject({
+                ...props.dialogUserObject,
+                globalSetup: {
+                    ...props.dialogUserObject.globalSetup,
+                    email: event.target.checked
+                }
+            })
+        }
+        else {
+            const newNotifyPVs = props.dialogUserObject.notifyPVs.map((area, index) => {
+                if (props.dialogUserNotifyIndex !== index) {
+                    return area
+                }
+                else {
+                    const newArea = {
+                        ...area,
+                        notifySetup: {
+                            ...area.notifySetup,
+                            email: event.target.checked
+                        }
+                    }
+                    return newArea
+                }
+            })
+            props.setDialogUserObject({
+                ...props.dialogUserObject,
+                notifyPVs: newNotifyPVs
+            })
+        }
+    }
+
+    const handleMobile = (event) => {
+        if (global) {
+            props.setDialogUserObject({
+                ...props.dialogUserObject,
+                globalSetup: {
+                    ...props.dialogUserObject.globalSetup,
+                    mobile: event.target.checked
+                }
+            })
+        }
+        else {
+            const newNotifyPVs = props.dialogUserObject.notifyPVs.map((area, index) => {
+                if (props.dialogUserNotifyIndex !== index) {
+                    return area
+                }
+                else {
+                    const newArea = {
+                        ...area,
+                        notifySetup: {
+                            ...area.notifySetup,
+                            mobile: event.target.checked
+                        }
+                    }
+                    return newArea
+                }
+            })
+            props.setDialogUserObject({
+                ...props.dialogUserObject,
+                notifyPVs: newNotifyPVs
+            })
+        }
+    }
+
+    const handleAllDay = (event) => {
+        if (global) {
+            if (!event.target.checked) {
+                props.setDialogUserObject({
+                    ...props.dialogUserObject,
+                    globalSetup: {
+                        ...props.dialogUserObject.globalSetup,
+                        allDay: event.target.checked,
+                        fromTime: formatISO(fromTime),
+                        toTime: formatISO(toTime)
+                    }
+                })
+            }
+            else {
+                props.setDialogUserObject({
+                    ...props.dialogUserObject,
+                    globalSetup: {
+                        ...props.dialogUserObject.globalSetup,
+                        allDay: event.target.checked
+                    }
+                })
+            }
+
+        }
+        else {
+            const newNotifyPVs = props.dialogUserObject.notifyPVs.map((area, index) => {
+                if (props.dialogUserNotifyIndex !== index) {
+                    return area
+                }
+                else {
+                    let newArea
+                    if (!event.target.checked) {
+                        newArea = {
+                            ...area,
+                            notifySetup: {
+                                ...area.notifySetup,
+                                allDay: event.target.checked,
+                                fromTime: formatISO(fromTime),
+                                toTime: formatISO(toTime)
+                            }
+                        }
+                    }
+                    else {
+                        newArea = {
+                            ...area,
+                            notifySetup: {
+                                ...area.notifySetup,
+                                allDay: event.target.checked
+                            }
+                        }
+                    }
+                    return newArea
+                }
+            })
+            props.setDialogUserObject({
+                ...props.dialogUserObject,
+                notifyPVs: newNotifyPVs
+            })
         }
     }
 
     const handleFromTime = (event) => {
         const newTime = formatISO(event)
-        props.setDialogUserObject({ ...props.dialogUserObject, fromTime: newTime })
-
-    }
-
-    const handleToTime = (event) => {
-        const newTime = formatISO(event)
-        props.setDialogUserObject({ ...props.dialogUserObject, toTime: newTime })
-
-    }
-
-    const handleWeekly = () => {
-        props.setDialogUserObject({
-            ...props.dialogUserObject,
-            weekly: true,
-            dateRange: false
-        })
-    }
-
-    const handleDay = (day) => {
-        if (props.dialogUserObject.weekly && props.dialogUserObject.notify) {
+        if (global) {
             props.setDialogUserObject({
                 ...props.dialogUserObject,
-                days: {
-                    ...props.dialogUserObject.days,
-                    [day]: !props.dialogUserObject.days[day],
+                globalSetup: {
+                    ...props.dialogUserObject.globalSetup,
+                    fromTime: newTime
                 }
+            })
+        }
+        else {
+            const newNotifyPVs = props.dialogUserObject.notifyPVs.map((area, index) => {
+                if (props.dialogUserNotifyIndex !== index) {
+                    return area
+                }
+                else {
+                    const newArea = {
+                        ...area,
+                        notifySetup: {
+                            ...area.notifySetup,
+                            fromTime: newTime
+                        }
+                    }
+                    return newArea
+                }
+            })
+            props.setDialogUserObject({
+                ...props.dialogUserObject,
+                notifyPVs: newNotifyPVs
             })
         }
     }
 
+    const handleToTime = (event) => {
+        const newTime = formatISO(event)
+        if (global) {
+            props.setDialogUserObject({
+                ...props.dialogUserObject,
+                globalSetup: {
+                    ...props.dialogUserObject.globalSetup,
+                    toTime: newTime
+                }
+            })
+        }
+        else {
+            const newNotifyPVs = props.dialogUserObject.notifyPVs.map((area, index) => {
+                if (props.dialogUserNotifyIndex !== index) {
+                    return area
+                }
+                else {
+                    const newArea = {
+                        ...area,
+                        notifySetup: {
+                            ...area.notifySetup,
+                            toTime: newTime
+                        }
+                    }
+                    return newArea
+                }
+            })
+            props.setDialogUserObject({
+                ...props.dialogUserObject,
+                notifyPVs: newNotifyPVs
+            })
+        }
+    }
+
+    const handleWeekly = () => {
+        if (global) {
+            props.setDialogUserObject({
+                ...props.dialogUserObject,
+                globalSetup: {
+                    ...props.dialogUserObject.globalSetup,
+                    weekly: true,
+                    dateRange: false
+                }
+            })
+        }
+        else {
+            const newNotifyPVs = props.dialogUserObject.notifyPVs.map((area, index) => {
+                if (props.dialogUserNotifyIndex !== index) {
+                    return area
+                }
+                else {
+                    const newArea = {
+                        ...area,
+                        notifySetup: {
+                            ...area.notifySetup,
+                            weekly: true,
+                            dateRange: false
+                        }
+                    }
+                    return newArea
+                }
+            })
+            props.setDialogUserObject({
+                ...props.dialogUserObject,
+                notifyPVs: newNotifyPVs
+            })
+        }
+    }
+
+    const handleDay = (day) => {
+        if (displayUserObject.weekly && displayUserObject.notify) {
+            if (global) {
+                props.setDialogUserObject({
+                    ...props.dialogUserObject,
+                    globalSetup: {
+                        ...props.dialogUserObject.globalSetup,
+                        days: {
+                            ...props.dialogUserObject.globalSetup.days,
+                            [day]: !props.dialogUserObject.globalSetup.days[day],
+                        }
+                    }
+                })
+            }
+            else {
+                const newNotifyPVs = props.dialogUserObject.notifyPVs.map((area, index) => {
+                    if (props.dialogUserNotifyIndex !== index) {
+                        return area
+                    }
+                    else {
+                        const newArea = {
+                            ...area,
+                            notifySetup: {
+                                ...area.notifySetup,
+                                days: {
+                                    ...area.notifySetup.days,
+                                    [day]: !area.notifySetup.days[day],
+                                }
+                            }
+                        }
+                        return newArea
+                    }
+                })
+                props.setDialogUserObject({
+                    ...props.dialogUserObject,
+                    notifyPVs: newNotifyPVs
+                })
+            }
+        }
+    }
+
     const handleDateRange = () => {
-        props.setDialogUserObject({
-            ...props.dialogUserObject,
-            weekly: false,
-            dateRange: true,
-            fromDate: formatISO(fromDate),
-            toDate: formatISO(toDate)
-        })
+        if (global) {
+            props.setDialogUserObject({
+                ...props.dialogUserObject,
+                globalSetup: {
+                    ...props.dialogUserObject.globalSetup,
+                    weekly: false,
+                    dateRange: true,
+                    fromDate: formatISO(fromDate),
+                    toDate: formatISO(toDate)
+                }
+            })
+        }
+        else {
+            const newNotifyPVs = props.dialogUserObject.notifyPVs.map((area, index) => {
+                if (props.dialogUserNotifyIndex !== index) {
+                    return area
+                }
+                else {
+                    const newArea = {
+                        ...area,
+                        notifySetup: {
+                            ...area.notifySetup,
+                            weekly: false,
+                            dateRange: true,
+                            fromDate: formatISO(fromDate),
+                            toDate: formatISO(toDate)
+                        }
+                    }
+                    return newArea
+                }
+            })
+            props.setDialogUserObject({
+                ...props.dialogUserObject,
+                notifyPVs: newNotifyPVs
+            })
+        }
     }
 
     const handleFromDate = (event) => {
         const newDate = formatISO(event)
-        props.setDialogUserObject({ ...props.dialogUserObject, fromDate: newDate })
+        if (global) {
+            props.setDialogUserObject({
+                ...props.dialogUserObject,
+                globalSetup: {
+                    ...props.dialogUserObject.globalSetup,
+                    fromDate: newDate
+                }
+            })
+        }
+        else {
+            const newNotifyPVs = props.dialogUserObject.notifyPVs.map((area, index) => {
+                if (props.dialogUserNotifyIndex !== index) {
+                    return area
+                }
+                else {
+                    const newArea = {
+                        ...area,
+                        notifySetup: {
+                            ...area.notifySetup,
+                            fromDate: newDate
+                        }
+                    }
+                    return newArea
+                }
+            })
+            props.setDialogUserObject({
+                ...props.dialogUserObject,
+                notifyPVs: newNotifyPVs
+            })
+        }
     }
 
     const handleToDate = (event) => {
         const newDate = formatISO(event)
-        props.setDialogUserObject({ ...props.dialogUserObject, toDate: newDate })
+        if (global) {
+            props.setDialogUserObject({
+                ...props.dialogUserObject,
+                globalSetup: {
+                    ...props.dialogUserObject.globalSetup,
+                    toDate: newDate
+                }
+            })
+        }
+        else {
+            const newNotifyPVs = props.dialogUserObject.notifyPVs.map((area, index) => {
+                if (props.dialogUserNotifyIndex !== index) {
+                    return area
+                }
+                else {
+                    const newArea = {
+                        ...area,
+                        notifySetup: {
+                            ...area.notifySetup,
+                            toDate: newDate
+                        }
+                    }
+                    return newArea
+                }
+            })
+            props.setDialogUserObject({
+                ...props.dialogUserObject,
+                notifyPVs: newNotifyPVs
+            })
+        }
     }
-
-    console.log(props.dialogUserObject)
 
     return (
         <Dialog
@@ -176,10 +532,16 @@ const ScheduleDialog = (props) => {
             onBackdropClick={props.closeDialog}
             onClose={props.closeDialog}
         >
-            <DialogTitle>{`${props.dialogUser.name}'s notification schedule`}</DialogTitle>
+            <DialogTitle>
+                {
+                    global
+                        ? `${props.dialogUserObject.name}'s notification schedule (Global)`
+                        : `${props.dialogUserObject.name}'s notification schedule (${props.dialogUserObject.notifyPVs[props.dialogUserNotifyIndex].regEx})`
+                }
+            </DialogTitle>
             <DialogContent>
                 <DialogContentText>
-                    {props.userScheduleString(props.dialogUserObject)}
+                    {props.userScheduleString({ isGlobal: global, ...displayUserObject })}
                 </DialogContentText>
                 <Grid
                     container
@@ -187,31 +549,51 @@ const ScheduleDialog = (props) => {
                     justify="flex-start"
                     alignItems="stretch"
                 >
+                    <Grid item xs={12} style={{ marginTop: '0.75em', marginBottom: '0.75em' }}>
+                        <Divider variant="middle" />
+                    </Grid>
                     <Grid item xs={12}>
                         <Grid
                             container
                             direction="row"
-                            justify="flex-start"
+                            justify="center"
                             alignItems="stretch"
                         >
-                            {/* <Grid item xs={2} className={classes.centerInBlock}>
-                                <NotificationsActiveIcon />
-                            </Grid> */}
-                            <Grid item xs={4} className={classes.centerInBlock}>
-                                <span style={{ fontSize: '1.1rem', fontWeight: 500 }}>Global profile</span>
+                            <Grid item className={classes.centerInBlock}>
+                                <span style={{ fontSize: '1.1rem', fontWeight: 500 }}>Unique schedules</span>
                             </Grid>
-                            <Grid item xs={8}>
-                                <Checkbox
-                                    checked={props.dialogUserObject.notify}
-                                    onChange={handleNotify}
+                            <Grid item className={classes.centerInBlock}>
+                                <Switch
+                                    checked={global}
+                                    onChange={handleNotifyGlobal}
                                 />
+                            </Grid>
+                            <Grid item className={classes.centerInBlock}>
+                                <span style={{ fontSize: '1.1rem', fontWeight: 500 }}>Global schedule</span>
                             </Grid>
                         </Grid>
                     </Grid>
                     <Grid item xs={12} style={{ marginTop: '0.75em', marginBottom: '0.75em' }}>
                         <Divider variant="middle" />
                     </Grid>
+                    <Grid item xs={12} style={{ paddingLeft: 24, paddingRight: 24 }}>
+                        {
+                            props.dialogUserObject.notifyPVs.map((area, index) => {
+                                return (
+                                    <Chip
+                                        classes={{ outlinedSecondary: classes.chipOutlinedSecondary }}
+                                        key={area.regEx}
+                                        label={area.regEx}
+                                        variant={index === props.dialogUserNotifyIndex || global ? undefined : "outlined"}
+                                        color="secondary"
+                                        className={classes.chip}
+                                        onClick={() => props.setDialogUserNotifyIndex(index)}
+                                    />
 
+                                )
+                            })
+                        }
+                    </Grid>
                     <Grid item xs={12} style={{ marginTop: '0.75em', marginBottom: '0.75em' }}>
                         <Divider variant="middle" />
                     </Grid>
@@ -230,7 +612,7 @@ const ScheduleDialog = (props) => {
                             </Grid>
                             <Grid item xs={8}>
                                 <Checkbox
-                                    checked={props.dialogUserObject.notify}
+                                    checked={displayUserObject.notify}
                                     onChange={handleNotify}
                                 />
                             </Grid>
@@ -254,9 +636,9 @@ const ScheduleDialog = (props) => {
                             </Grid>
                             <Grid item xs={8}>
                                 <Checkbox
-                                    checked={props.dialogUserObject.email}
+                                    checked={displayUserObject.email}
                                     onChange={handleEmail}
-                                    disabled={!props.dialogUserObject.notify}
+                                    disabled={!displayUserObject.notify}
                                 />
                             </Grid>
                         </Grid>
@@ -276,9 +658,9 @@ const ScheduleDialog = (props) => {
                             </Grid>
                             <Grid item xs={8}>
                                 <Checkbox
-                                    checked={props.dialogUserObject.mobile}
+                                    checked={displayUserObject.mobile}
                                     onChange={handleMobile}
-                                    disabled={!props.dialogUserObject.notify || true}
+                                    disabled={!displayUserObject.notify || true}
                                 />
                             </Grid>
                         </Grid>
@@ -301,15 +683,15 @@ const ScheduleDialog = (props) => {
                             </Grid>
                             <Grid item xs={2}>
                                 <Switch
-                                    checked={props.dialogUserObject.allDay}
+                                    checked={displayUserObject.allDay}
                                     onChange={handleAllDay}
-                                    disabled={!props.dialogUserObject.notify}
+                                    disabled={!displayUserObject.notify}
                                 />
                             </Grid>
-                            {props.dialogUserObject.allDay &&
+                            {displayUserObject.allDay &&
                                 <Grid item xs={6}></Grid>
                             }
-                            {!props.dialogUserObject.allDay &&
+                            {!displayUserObject.allDay &&
                                 <Grid item xs={6}>
                                     <Grid
                                         container
@@ -325,18 +707,18 @@ const ScheduleDialog = (props) => {
                                                 <TimePicker
                                                     value={fromTime}
                                                     onChange={handleFromTime}
-                                                    disabled={!props.dialogUserObject.notify}
+                                                    disabled={!displayUserObject.notify}
                                                 />
                                             </MuiPickersUtilsProvider>
                                         </Grid>
                                     </Grid>
                                 </Grid>
                             }
-                            {!props.dialogUserObject.allDay &&
+                            {!displayUserObject.allDay &&
                                 <Grid item xs={6}>
                                 </Grid>
                             }
-                            {!props.dialogUserObject.allDay &&
+                            {!displayUserObject.allDay &&
                                 <Grid item xs={6} >
                                     <Grid
                                         container
@@ -352,7 +734,7 @@ const ScheduleDialog = (props) => {
                                                 <TimePicker
                                                     value={toTime}
                                                     onChange={handleToTime}
-                                                    disabled={!props.dialogUserObject.notify}
+                                                    disabled={!displayUserObject.notify}
                                                 />
                                             </MuiPickersUtilsProvider>
                                         </Grid>
@@ -373,9 +755,9 @@ const ScheduleDialog = (props) => {
                         >
                             <Grid item xs={2} className={classes.centerInBlock}>
                                 <Radio
-                                    checked={props.dialogUserObject.weekly}
+                                    checked={displayUserObject.weekly}
                                     onChange={handleWeekly}
-                                    disabled={!props.dialogUserObject.notify}
+                                    disabled={!displayUserObject.notify}
                                 />
                             </Grid>
                             <Grid item xs={2} className={classes.verticalCenter}>
@@ -389,25 +771,25 @@ const ScheduleDialog = (props) => {
                                     alignItems="stretch"
                                 >
                                     <Grid item>
-                                        <Avatar onClick={() => handleDay('Monday')} style={{ marginLeft: '1em' }} className={[classes.smallAvatar, props.dialogUserObject.notify && props.dialogUserObject.weekly && props.dialogUserObject.days.Monday ? classes.selectedAvatar : null].join(' ')}>M</Avatar>
+                                        <Avatar onClick={() => handleDay('Monday')} style={{ marginLeft: '1em', cursor: displayUserObject.weekly && displayUserObject.notify ? 'pointer' : null }} className={[classes.smallAvatar, displayUserObject.notify && displayUserObject.weekly && displayUserObject.days.Monday ? classes.selectedAvatar : null].join(' ')}>M</Avatar>
                                     </Grid>
                                     <Grid item>
-                                        <Avatar onClick={() => handleDay('Tuesday')} className={[classes.smallAvatar, props.dialogUserObject.notify && props.dialogUserObject.weekly && props.dialogUserObject.days.Tuesday ? classes.selectedAvatar : null].join(' ')}>T</Avatar>
+                                        <Avatar onClick={() => handleDay('Tuesday')} style={{ cursor: displayUserObject.weekly && displayUserObject.notify ? 'pointer' : null }} className={[classes.smallAvatar, displayUserObject.notify && displayUserObject.weekly && displayUserObject.days.Tuesday ? classes.selectedAvatar : null].join(' ')}>T</Avatar>
                                     </Grid>
                                     <Grid item>
-                                        <Avatar onClick={() => handleDay('Wednesday')} className={[classes.smallAvatar, props.dialogUserObject.notify && props.dialogUserObject.weekly && props.dialogUserObject.days.Wednesday ? classes.selectedAvatar : null].join(' ')}>W</Avatar>
+                                        <Avatar onClick={() => handleDay('Wednesday')} style={{ cursor: displayUserObject.weekly && displayUserObject.notify ? 'pointer' : null }} className={[classes.smallAvatar, displayUserObject.notify && displayUserObject.weekly && displayUserObject.days.Wednesday ? classes.selectedAvatar : null].join(' ')}>W</Avatar>
                                     </Grid>
                                     <Grid item>
-                                        <Avatar onClick={() => handleDay('Thursday')} className={[classes.smallAvatar, props.dialogUserObject.notify && props.dialogUserObject.weekly && props.dialogUserObject.days.Thursday ? classes.selectedAvatar : null].join(' ')}>T</Avatar>
+                                        <Avatar onClick={() => handleDay('Thursday')} style={{ cursor: displayUserObject.weekly && displayUserObject.notify ? 'pointer' : null }} className={[classes.smallAvatar, displayUserObject.notify && displayUserObject.weekly && displayUserObject.days.Thursday ? classes.selectedAvatar : null].join(' ')}>T</Avatar>
                                     </Grid>
                                     <Grid item>
-                                        <Avatar onClick={() => handleDay('Friday')} className={[classes.smallAvatar, props.dialogUserObject.notify && props.dialogUserObject.weekly && props.dialogUserObject.days.Friday ? classes.selectedAvatar : null].join(' ')}>F</Avatar>
+                                        <Avatar onClick={() => handleDay('Friday')} style={{ cursor: displayUserObject.weekly && displayUserObject.notify ? 'pointer' : null }} className={[classes.smallAvatar, displayUserObject.notify && displayUserObject.weekly && displayUserObject.days.Friday ? classes.selectedAvatar : null].join(' ')}>F</Avatar>
                                     </Grid>
                                     <Grid item>
-                                        <Avatar onClick={() => handleDay('Saturday')} className={[classes.smallAvatar, props.dialogUserObject.notify && props.dialogUserObject.weekly && props.dialogUserObject.days.Saturday ? classes.selectedAvatar : null].join(' ')}>S</Avatar>
+                                        <Avatar onClick={() => handleDay('Saturday')} style={{ cursor: displayUserObject.weekly && displayUserObject.notify ? 'pointer' : null }} className={[classes.smallAvatar, displayUserObject.notify && displayUserObject.weekly && displayUserObject.days.Saturday ? classes.selectedAvatar : null].join(' ')}>S</Avatar>
                                     </Grid>
                                     <Grid item>
-                                        <Avatar onClick={() => handleDay('Sunday')} className={[classes.smallAvatar, props.dialogUserObject.notify && props.dialogUserObject.weekly && props.dialogUserObject.days.Sunday ? classes.selectedAvatar : null].join(' ')}>S</Avatar>
+                                        <Avatar onClick={() => handleDay('Sunday')} style={{ cursor: displayUserObject.weekly && displayUserObject.notify ? 'pointer' : null }} className={[classes.smallAvatar, displayUserObject.notify && displayUserObject.weekly && displayUserObject.days.Sunday ? classes.selectedAvatar : null].join(' ')}>S</Avatar>
                                     </Grid>
                                 </Grid>
                             </Grid>
@@ -426,9 +808,9 @@ const ScheduleDialog = (props) => {
                         >
                             <Grid item xs={2} className={classes.centerInBlock}>
                                 <Radio
-                                    checked={props.dialogUserObject.dateRange}
+                                    checked={displayUserObject.dateRange}
                                     onChange={handleDateRange}
-                                    disabled={!props.dialogUserObject.notify}
+                                    disabled={!displayUserObject.notify}
                                 />
                             </Grid>
                             <Grid item xs={2} className={classes.verticalCenter}>
@@ -450,7 +832,7 @@ const ScheduleDialog = (props) => {
                                                 format="dd MMMM yyyy"
                                                 value={fromDate}
                                                 onChange={handleFromDate}
-                                                disabled={props.dialogUserObject.weekly}
+                                                disabled={displayUserObject.weekly || !displayUserObject.notify}
                                                 autoOk
                                             />
                                         </MuiPickersUtilsProvider>
@@ -464,7 +846,7 @@ const ScheduleDialog = (props) => {
                                                 format="dd MMMM yyyy"
                                                 value={toDate}
                                                 onChange={handleToDate}
-                                                disabled={props.dialogUserObject.weekly}
+                                                disabled={displayUserObject.weekly || !displayUserObject.notify}
                                                 autoOk
                                             />
                                         </MuiPickersUtilsProvider>
@@ -479,7 +861,7 @@ const ScheduleDialog = (props) => {
                 <Button onClick={props.closeDialog} color="secondary">
                     Cancel
                 </Button>
-                <Button onClick={() => props.acceptDialog(props.dialogUser.name, props.dialogUser.username)} color="secondary">
+                <Button onClick={() => props.acceptDialog(props.dialogUserObject.name, props.dialogUserObject.username)} color="secondary">
                     Apply
                 </Button>
             </DialogActions>

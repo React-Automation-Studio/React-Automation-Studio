@@ -66,7 +66,8 @@ const UserNotification = (props) => {
     const [addRegexVal, setAddRegexVal] = useState({})
 
     const [dialogOpen, setDialogOpen] = useState(false)
-    const [dialogUser, setDialogUser] = useState({})
+    const [dialogUserObject, setDialogUserObject] = useState({})
+    const [dialogUserNotifyIndex, setDialogUserNotifyIndex] = useState(0)
 
     const dbPVData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs:Parameters:{}` }).data
     const dbUsersData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:users:Parameters:{}` }).data
@@ -79,9 +80,20 @@ const UserNotification = (props) => {
     loadPVListRef.current = loadPVList;
 
     const userScheduleString = useCallback((userObject) => {
-        let sumString = "Do not notify me"
+        let sumString
+        if (userObject.isGlobal) {
+            sumString = "Global - Do not notify me"
+        }
+        else {
+            sumString = "Do not notify me"
+        }
         if (userObject.notify) {
-            sumString = "Notify me "
+            if (userObject.isGlobal) {
+                sumString = "Global - Notify me "
+            }
+            else {
+                sumString = "Notify me "
+            }
             if (userObject.email) {
                 sumString = sumString.concat("on email ")
                 if (userObject.mobile) {
@@ -202,11 +214,12 @@ const UserNotification = (props) => {
         setFilterUserRegex(newFilterUserRegex)
     }, [dictUserRegex])
 
-    const handleSetFilterUserRegex = useCallback((event, expression) => {
+    const handleSetFilterUserRegex = useCallback((event, expression, index) => {
         event.preventDefault()
         event.stopPropagation()
         setFilterUserRegex([expression])
         setFilterUser({})
+        setDialogUserNotifyIndex(index)
     }, [])
 
     const handleSetUserEdit = useCallback((event, name, username, value) => {
@@ -374,7 +387,7 @@ const UserNotification = (props) => {
             newUserList[userIndex] = match
 
             setUserList(newUserList)
-            
+
             const newFilterUserRegex = Object.values(newNotifyPVs).map(entry =>
                 entry.regEx
             )
@@ -432,31 +445,51 @@ const UserNotification = (props) => {
     const handleOpenDialog = useCallback((event, name, username) => {
         event.preventDefault()
         event.stopPropagation()
-        setDialogUser({
-            name: name,
-            username: username
-        })
+
+        const match = userList.filter(el => el.name === name && el.username === username)[0]
+
+        setDialogUserObject(match)
         setDialogOpen(true)
-    }, [])
+    }, [userList])
 
     const handleAcceptDialog = useCallback((name, username) => {
         // Find match and note it's index in userList
-        // const match = userList.filter(el => el.name === name && el.username === username)[0]
-        // const id = match['_id']['$oid']
+        const match = userList.filter(el => el.name === name && el.username === username)[0]
+        const id = match['_id']['$oid']
 
-        // let newvalues = { '$set': { "notifySetup": dialogUserObject } }
+        // console.log(dialogUserObject)
 
-        // dbUpdateOne({
-        //     dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:users`,
-        //     id: id,
-        //     update: newvalues
-        // })
+        let newvalues = { '$set': { "global": dialogUserObject.global } }
+
+        dbUpdateOne({
+            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:users`,
+            id: id,
+            update: newvalues
+        })
+
+        newvalues = { '$set': { "globalSetup": dialogUserObject.globalSetup } }
+
+        dbUpdateOne({
+            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:users`,
+            id: id,
+            update: newvalues
+        })
+
+        newvalues = { '$set': { "notifyPVs": dialogUserObject.notifyPVs } }
+
+        dbUpdateOne({
+            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:users`,
+            id: id,
+            update: newvalues
+        })
 
         setDialogOpen(false)
-    }, [dbUpdateOne, userList, props.dbName])
+        setDialogUserNotifyIndex(0)
+    }, [dbUpdateOne, userList, props.dbName, dialogUserObject])
 
     const handleCloseDialog = useCallback(() => {
         setDialogOpen(false)
+        setDialogUserNotifyIndex(0)
     }, [])
 
     // handleNewDbPVsList
@@ -576,23 +609,25 @@ const UserNotification = (props) => {
         pvListHeight = '76vh'
     }
 
-    // console.log(userList)
+    // console.table(userList)
 
     return (
         <React.Fragment>
             {alarmPVs}
-            {/* {
-                userList.length !== 0
+            {
+                Object.entries(dialogUserObject).length !== 0
                     ? <ScheduleDialog
                         dialogOpen={dialogOpen}
                         acceptDialog={handleAcceptDialog}
                         closeDialog={handleCloseDialog}
-                        dialogUser={dialogUser}
-                        userList={userList}
+                        dialogUserObject={dialogUserObject}
+                        setDialogUserObject={setDialogUserObject}
+                        dialogUserNotifyIndex={dialogUserNotifyIndex}
+                        setDialogUserNotifyIndex={setDialogUserNotifyIndex}
                         userScheduleString={userScheduleString}
                     />
                     : null
-            } */}
+            }
             <Grid
                 container
                 direction="column"

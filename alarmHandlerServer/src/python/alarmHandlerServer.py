@@ -75,20 +75,21 @@ alarmPVSevDict = {
     8: "DISCONNECTED"
 }
 
+alarmDictInitialised = False
+alarmServerRestart = False
+
 pvNameList = []
 areaList = []
+notifyBuffer = []
+
 pvDict = {}
 pvInitDict = {}
-
 pvDescDict = {}
 alarmDict = {}
-alarmDictInitialised = False
 areaDict = {}
 subAreaDict = {}
-
 areaPVDict = {}
 
-notifyBuffer = []
 
 # Prefix and suffix for alarmIOC pvs
 doc = client[MONGO_INITDB_ALARM_DATABASE].config.find_one()
@@ -492,7 +493,8 @@ def pvDisconn(pvname, conn):
             entry = {"timestamp": timestamp, "entry": " ".join(
                 [pvname, "-", "DISCONNECTED"])}
             # disabled alarms not logged
-            if(enable):
+            # Only if not a controlled alarm server restart
+            if(enable and not alarmServerRestart):
                 # areaKey was split above so find again
                 areaKey = getKeys(pvname)[0]
                 client[MONGO_INITDB_ALARM_DATABASE].history.update_many(
@@ -943,14 +945,16 @@ def initialiseAlarmIOC():
                     # set alarm time
                     alarmDict[pvname]["T"].value = lastAlarmTime
                     # Write entry to database for alarms that were active on startup
-                    client[MONGO_INITDB_ALARM_DATABASE].history.update_many(
-                        {'id': areaKey+'*'+pvname},
-                        {'$push': {
-                            'history': {
-                                '$each': [entry],
-                                '$position': 0
-                            }
-                        }})
+                    # Only if not a controlled alarm server restart
+                    if(not alarmServerRestart):
+                        client[MONGO_INITDB_ALARM_DATABASE].history.update_many(
+                            {'id': areaKey+'*'+pvname},
+                            {'$push': {
+                                'history': {
+                                    '$each': [entry],
+                                    '$position': 0
+                                }
+                            }})
                 except:
                     # set current alarm status to NO_ALARM
                     alarmDict[pvname]["A"].value = 0
@@ -1055,6 +1059,10 @@ def clearGlobalDicts():
 
 
 def restartAlarmServer():
+
+    global alarmServerRestart
+    alarmServerRestart = True
+
     disconnectAllPVs()
     clearGlobalDicts()
     getListOfPVNames()
@@ -1077,6 +1085,8 @@ def restartAlarmServer():
     # Initialiase saved string PVs from database
     initialiseAlarmIOC()
     print("Alarm server restarted...")
+
+    alarmServerRestart = False
 
 
 def pvCollectionWatch():

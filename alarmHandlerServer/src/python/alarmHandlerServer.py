@@ -48,12 +48,12 @@ if (mongoAuth):
         'mongodb://%s:%s@%s' %
         (MONGO_ROOT_USERNAME, MONGO_ROOT_PASSWORD, ALARM_DATABASE), replicaSet=ALARM_DATABASE_REPLICA_SET_NAME)
     # Wait for MongoClient to discover the whole replica set and identify MASTER!
-    sleep(0.1)
+    sleep(0.5)
 else:
     client = MongoClient('mongodb://%s' % (ALARM_DATABASE),
                          replicaSet=ALARM_DATABASE_REPLICA_SET_NAME)
     # Wait for MongoClient to discover the whole replica set and identify MASTER!
-    sleep(0.1)
+    sleep(0.5)
 
 ackedStateDict = {
     0: "NO_ALARM",
@@ -809,6 +809,11 @@ def initPVDict():
                 initSubPVDict(area[key], areaName)
 
 
+def killAlarmIOC():
+    subprocess.call("tmux kill-session -t ALARMIOC", shell=True)
+    print("Alarm server IOC stopped")
+
+
 def startAlarmIOC():
     global alarmIOCPVPrefix
     global alarmIOCPVSuffix
@@ -1003,6 +1008,72 @@ def initAlarmDict():
     alarmDict["ACK_PV"] = pv
 
 
+def disconnectAllPVs():
+
+    for pv in pvDict.values():
+        pv.disconnect()
+
+    for pv in pvDescDict.values():
+        pv.disconnect()
+
+    for pv in areaPVDict.values():
+        pv.disconnect()
+
+    for pvname in pvNameList:
+        alarmDict[pvname]["A"].disconnect()
+        alarmDict[pvname]["D"].disconnect()
+        alarmDict[pvname]["V"].disconnect()
+        alarmDict[pvname]["T"].disconnect()
+        alarmDict[pvname]["K"].disconnect()
+
+    alarmDict["ACK_PV"].disconnect()
+
+
+def clearGlobalDicts():
+    global alarmDictInitialised
+    alarmDictInitialised = False
+    global areaList
+    global pvNameList
+    del areaList[:]
+    del pvNameList[:]
+    global pvDict
+    global areaDict
+    global subAreaDict
+    pvDict.clear()
+    areaDict.clear()
+    subAreaDict.clear()
+    global pvDescDict
+    pvDescDict.clear()
+    global areaPVDict
+    areaPVDict.clear()
+    global alarmDict
+    alarmDict.clear()
+
+
+def restartAlarmServer():
+    disconnectAllPVs()
+    clearGlobalDicts()
+    getListOfPVNames()
+    # Restart alarm IOC
+    killAlarmIOC()
+    sleep(0.1)
+    startAlarmIOC()
+    # Initialise string PVs for front end
+    initAlarmDict()
+    sleep(1.0)
+    # Initialise area PVs (for alarmList)
+    initAreaPVDict()
+    # Initialise description PV of each alarm PV
+    initDescDict()
+    # Initialise alarm PVs
+    initPVDict()
+    # Sleep to allow all connects
+    sleep(1.0)
+    # Initialiase saved string PVs from database
+    initialiseAlarmIOC()
+    print("Alarm server restarted...")
+
+
 def pvCollectionWatch():
     with client[MONGO_INITDB_ALARM_DATABASE].pvs.watch() as stream:
         for change in stream:
@@ -1139,7 +1210,7 @@ def main():
     initAreaPVDict()
     # Initialise description PV of each alarm PV
     initDescDict()
-    # Initialise alarm PVs with callback
+    # Initialise alarm PVs
     initPVDict()
     # Sleep to allow all connects
     sleep(1.0)
@@ -1163,6 +1234,7 @@ def main():
         if(len(notifyBuffer) != 0):
             notify(notifyBuffer)
             notifyBuffer = []
+        # restartAlarmServer()
 
 
 main()

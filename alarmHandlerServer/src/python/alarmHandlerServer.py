@@ -981,6 +981,7 @@ def initAreaPVDict():
     for area in areaList:
         pvname = alarmIOCPVPrefix + area
         pv = PV(pvname=pvname, connection_timeout=0.001, callback=printVal)
+        pv.wait_for_connection(timeout=5)
         areaPVDict[area] = pv
 
 
@@ -992,10 +993,12 @@ def initAlarmDict():
                 pv = PV(pvname=alarmName + suff,
                         connection_timeout=0.001,
                         callback=propagateAreaAlarms)
+                pv.wait_for_connection(timeout=5)
             else:
                 pv = PV(pvname=alarmName + suff,
                         connection_timeout=0.001,
                         callback=printVal)
+                pv.wait_for_connection(timeout=5)
             if (suff == ""):
                 alarmDict[pvname] = {}
                 alarmDict[pvname]["D"] = pv
@@ -1005,6 +1008,7 @@ def initAlarmDict():
     pv = PV(pvname=alarmIOCPVPrefix + "ACK_PV",
             connection_timeout=0.001,
             callback=ackPVChange)
+    pv.wait_for_connection(timeout=5)
     alarmDict["ACK_PV"] = pv
 
 
@@ -1060,15 +1064,16 @@ def restartAlarmServer():
     startAlarmIOC()
     # Initialise string PVs for front end
     initAlarmDict()
-    sleep(1.0)
     # Initialise area PVs (for alarmList)
     initAreaPVDict()
     # Initialise description PV of each alarm PV
+    # External PVs
     initDescDict()
     # Initialise alarm PVs
+    # External PVs
     initPVDict()
-    # Sleep to allow all connects
-    sleep(1.0)
+    # Sleep to allow all external PV connects
+    sleep(2.0)
     # Initialiase saved string PVs from database
     initialiseAlarmIOC()
     print("Alarm server restarted...")
@@ -1205,15 +1210,16 @@ def main():
     startAlarmIOC()
     # Initialise string PVs for front end
     initAlarmDict()
-    sleep(1.0)
     # Initialise area PVs (for alarmList)
     initAreaPVDict()
     # Initialise description PV of each alarm PV
+    # External PVs
     initDescDict()
     # Initialise alarm PVs
+    # External PVs
     initPVDict()
-    # Sleep to allow all connects
-    sleep(1.0)
+    # Sleep to allow all external PV connects
+    sleep(2.0)
     # Initialiase saved string PVs from database
     initialiseAlarmIOC()
     # Initialise database collection watch on pvs
@@ -1228,6 +1234,7 @@ def main():
     # print('pvDict', pvDict)
 
     print("Alarm server running...")
+
     while (True):
         global notifyBuffer
         sleep(5.0)

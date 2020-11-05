@@ -484,7 +484,10 @@ def pvDisconn(pvname, conn):
         pv.put(np.array(curr_desc))
         # set current alarm status to DISCONNECTED
         if(disconnAlarm and (alarmState < 7 or (transparent and alarmState != 7))):
-            alarmDict[pvname]["A"].value = 8
+            if(alarmServerRestart):
+                alarmDict[pvname]["A"].value = 7
+            else:
+                alarmDict[pvname]["A"].value = 8
             # set alarm value
             alarmDict[pvname]["V"].value = ""
             # set alarm time
@@ -939,31 +942,35 @@ def initialiseAlarmIOC():
                     # set current alarm status
                     sev = pvInitDict[pvname][1]
                     if(sev == 1):     # MINOR alarm
-                        alarmDict[pvname]["A"].value = 2
+                        if(alarmServerRestart):
+                            alarmDict[pvname]["A"].value = 1
+                        else:
+                            alarmDict[pvname]["A"].value = 2
                         # Log to history
                         entry = {"timestamp": pvInitDict[pvname][2], "entry": " ".join(
                             [pvname, "-", "MINOR_ALARM triggered, alarm value =", str(lastAlarmVal)])}
                         # print(pvInitDict[pvname][2], pvname,
                         #       "MINOR_ALARM triggered, alarm value =", lastAlarmVal)
                     elif(sev == 2):     # MAJOR alarm
-                        alarmDict[pvname]["A"].value = 4
+                        if(alarmServerRestart):
+                            alarmDict[pvname]["A"].value = 3
+                        else:
+                            alarmDict[pvname]["A"].value = 4
                         # Log to history
                         entry = {"timestamp": pvInitDict[pvname][2], "entry": " ".join(
                             [pvname, "-", "MAJOR_ALARM triggered, alarm value =", str(lastAlarmVal)])}
                         # print(pvInitDict[pvname][2], pvname,
                         #       "MAJOR_ALARM triggered, alarm value =", lastAlarmVal)
                     elif(sev == 3):     # INVALID alarm
-                        alarmDict[pvname]["A"].value = 6
+                        if(alarmServerRestart):
+                            alarmDict[pvname]["A"].value = 5
+                        else:
+                            alarmDict[pvname]["A"].value = 6
                         # Log to history
                         entry = {"timestamp": pvInitDict[pvname][2], "entry": " ".join(
                             [pvname, "-", "INVALID_ALARM triggered, alarm value =", str(lastAlarmVal)])}
                         # print(pvInitDict[pvname][2], pvname,
                         #       "INVALID_ALARM triggered, alarm value =", lastAlarmVal)
-                    # Set up pv values accordingly
-                    # set alarm value
-                    alarmDict[pvname]["V"].value = str(lastAlarmVal)
-                    # set alarm time
-                    alarmDict[pvname]["T"].value = lastAlarmTime
                     # Write entry to database for alarms that were active on startup
                     # Only if not a controlled alarm server restart
                     if(not alarmServerRestart):

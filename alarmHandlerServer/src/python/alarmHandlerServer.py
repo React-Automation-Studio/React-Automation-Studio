@@ -131,7 +131,7 @@ def propAreaAlarms(pvname, value):
             if (enable):
                 evaluateAreaPVs(areaKey + "=" + subArea)
                 # wait for subArea to evaluate before topArea
-                sleep(0.005)
+                sleep(0.01)
                 # Fixed
                 evaluateAreaPVs(areaKey)
 
@@ -209,7 +209,7 @@ def evaluateAreaPVs(areaKey, fromColWatch=False):
         areaPV.put(alarmState, wait=True, timeout=0.01)
         if (fromColWatch):
             # wait for subArea to evaluate before topArea
-            sleep(0.005)
+            sleep(0.01)
             # if from col watch also reasses top area
             evaluateAreaPVs(areaKey.split("=")[0])
     else:

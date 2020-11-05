@@ -544,10 +544,11 @@ def pvDisconn(pvname, conn):
                             '$position': 0
                         }
                     }})
-                notifyBuffer.append({
-                    "pv": pvname,
-                    "message": entry
-                })
+                if(alarmDictInitialised):
+                    notifyBuffer.append({
+                        "pv": pvname,
+                        "message": entry
+                    })
     else:
         try:
             curr_desc = [

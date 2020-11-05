@@ -452,11 +452,27 @@ def pvConn(pvname=None, conn=None, **kw):
 
 
 def pvDisconn(pvname, conn):
+
+    areaKey, pvKey = getKeys(pvname)
+    if ("=" in areaKey):
+        subAreaKey = subAreaDict[areaKey]
+        topArea = areaKey.split("=")[0]
+        doc = client[MONGO_INITDB_ALARM_DATABASE].pvs.find_one(
+            {"area": topArea})
+        lastAlarmTime = doc[subAreaKey]["pvs"][pvKey]["lastAlarmTime"]
+    else:
+        doc = client[MONGO_INITDB_ALARM_DATABASE].pvs.find_one(
+            {"area": areaKey})
+        lastAlarmTime = doc["pvs"][pvKey]["lastAlarmTime"]
+
     pv = alarmDict[pvname]["D"]
     if (not conn):
-        timestamp = datetime.timestamp(datetime.now())
-        timestamp_string = datetime.fromtimestamp(timestamp).strftime(
-            "%a, %d %b %Y at %H:%M:%S")
+        if(alarmServerRestart):
+            timestamp_string = lastAlarmTime
+        else:
+            timestamp = datetime.timestamp(datetime.now())
+            timestamp_string = datetime.fromtimestamp(timestamp).strftime(
+                "%a, %d %b %Y at %H:%M:%S")
         globalEnable, areaEnable, subAreaEnable, pvEnable = getEnables(pvname)
         areaKey, pvKey = getKeys(pvname)
         if ("=" in areaKey):
@@ -515,11 +531,11 @@ def pvDisconn(pvname, conn):
                         }
                     })
             # log to database
-            entry = {"timestamp": timestamp, "entry": " ".join(
-                [pvname, "-", "DISCONNECTED"])}
             # disabled alarms not logged
             # Only if not a controlled alarm server restart
             if(enable and not alarmServerRestart):
+                entry = {"timestamp": timestamp, "entry": " ".join(
+                    [pvname, "-", "DISCONNECTED"])}
                 client[MONGO_INITDB_ALARM_DATABASE].history.update_many(
                     {'id': areaKey+'*'+pvname},
                     {'$push': {
@@ -914,19 +930,18 @@ def initialiseAlarmIOC():
 
         pv = alarmDict[pvname]["D"]
         val = pv.get()
+        pvDisconnected = False
         try:
             # actual pv did not connect during server initialisation
             if (val.size == 0):
+                pvDisconnected = True
                 # status initially 39 char string for memory
                 pv.put(
                     np.array([
                         'abcdefghijklmnopqrstuvwxyzAbcdefghijk_0',
                         "[Disconnected]", "[Disconnected]"
                     ]))
-                _thread.start_new_thread(pvDisconn, (
-                    pvname,
-                    False,
-                ))
+                pvDisconn(pvname, False)
             else:
                 # if alarm was activated when server initialised
                 try:
@@ -937,8 +952,9 @@ def initialiseAlarmIOC():
                         lastAlarmVal = enum_strs[value]
                     else:
                         lastAlarmVal = str(value)+" "+units
-                    lastAlarmTime = datetime.fromtimestamp(
-                        pvInitDict[pvname][2]).strftime("%a, %d %b %Y at %H:%M:%S")
+                    if(not alarmServerRestart):
+                        lastAlarmTime = datetime.fromtimestamp(
+                            pvInitDict[pvname][2]).strftime("%a, %d %b %Y at %H:%M:%S")
                     # set current alarm status
                     sev = pvInitDict[pvname][1]
                     if(sev == 1):     # MINOR alarm
@@ -971,6 +987,27 @@ def initialiseAlarmIOC():
                             [pvname, "-", "INVALID_ALARM triggered, alarm value =", str(lastAlarmVal)])}
                         # print(pvInitDict[pvname][2], pvname,
                         #       "INVALID_ALARM triggered, alarm value =", lastAlarmVal)
+                    # write to db
+                    areaKey, pvKey = getKeys(pvname)
+                    if ("=" in areaKey):
+                        subAreaKey = subAreaDict[areaKey]
+                        topArea = areaKey.split("=")[0]
+                        client[MONGO_INITDB_ALARM_DATABASE].pvs.update_many(
+                            {'area': topArea}, {
+                                '$set': {
+                                    subAreaKey + '.pvs.' + pvKey + '.lastAlarmVal': lastAlarmVal,
+                                    subAreaKey + '.pvs.' + pvKey + '.lastAlarmTime':
+                                    lastAlarmTime
+                                }
+                            })
+                    else:
+                        client[MONGO_INITDB_ALARM_DATABASE].pvs.update_many(
+                            {'area': areaKey}, {
+                                '$set': {
+                                    'pvs.' + pvKey + '.lastAlarmVal': lastAlarmVal,
+                                    'pvs.' + pvKey + '.lastAlarmTime': lastAlarmTime
+                                }
+                            })
                     # Write entry to database for alarms that were active on startup
                     # Only if not a controlled alarm server restart
                     if(not alarmServerRestart):
@@ -989,10 +1026,11 @@ def initialiseAlarmIOC():
             if(AH_DEBUG):
                 print('[Warning]', 'Unable to connect to pv:', pvname)
 
-        # set alarm value
-        alarmDict[pvname]["V"].value = str(lastAlarmVal)
-        # set alarm time
-        alarmDict[pvname]["T"].value = lastAlarmTime
+        if(not pvDisconnected):
+            # set alarm value
+            alarmDict[pvname]["V"].value = str(lastAlarmVal)
+            # set alarm time
+            alarmDict[pvname]["T"].value = lastAlarmTime
         # set ack time
         alarmDict[pvname]["K"].value = lastAlarmAckTime
 

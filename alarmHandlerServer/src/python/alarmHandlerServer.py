@@ -489,14 +489,34 @@ def pvDisconn(pvname, conn):
             alarmDict[pvname]["V"].value = ""
             # set alarm time
             alarmDict[pvname]["T"].value = timestamp_string
+            # write to db
+            # areaKey was split above so find again
+            areaKey, pvKey = getKeys(pvname)
+            if ("=" in areaKey):
+                subAreaKey = subAreaDict[areaKey]
+                topArea = areaKey.split("=")[0]
+                client[MONGO_INITDB_ALARM_DATABASE].pvs.update_many(
+                    {'area': topArea}, {
+                        '$set': {
+                            subAreaKey + '.pvs.' + pvKey + '.lastAlarmVal': "",
+                            subAreaKey + '.pvs.' + pvKey + '.lastAlarmTime':
+                            timestamp_string
+                        }
+                    })
+            else:
+                client[MONGO_INITDB_ALARM_DATABASE].pvs.update_many(
+                    {'area': areaKey}, {
+                        '$set': {
+                            'pvs.' + pvKey + '.lastAlarmVal': "",
+                            'pvs.' + pvKey + '.lastAlarmTime': timestamp_string
+                        }
+                    })
             # log to database
             entry = {"timestamp": timestamp, "entry": " ".join(
                 [pvname, "-", "DISCONNECTED"])}
             # disabled alarms not logged
             # Only if not a controlled alarm server restart
             if(enable and not alarmServerRestart):
-                # areaKey was split above so find again
-                areaKey = getKeys(pvname)[0]
                 client[MONGO_INITDB_ALARM_DATABASE].history.update_many(
                     {'id': areaKey+'*'+pvname},
                     {'$push': {

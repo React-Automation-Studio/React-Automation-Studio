@@ -122,24 +122,26 @@ def propAreaAlarms(pvname, value):
         areaKey = getKeys(pvname)[0]
         globalEnable, areaEnable, subAreaEnable, pvEnable = getEnables(pvname)
 
-        if ("=" in areaKey):
-            subArea = areaKey.split("=")[1]
-            areaKey = areaKey.split("=")[0]
-
+        if (subAreaEnable != None):
             enable = globalEnable and areaEnable and subAreaEnable and pvEnable
-
-            if (enable):
-                evaluateAreaPVs(areaKey + "=" + subArea)
-                # wait for subArea to evaluate before topArea
-                sleep(0.01)
-                # Fixed
-                evaluateAreaPVs(areaKey)
-
         else:
             enable = globalEnable and areaEnable and pvEnable
 
-            if (enable):
+        if(enable):
+            # PV is enabled
+            areaPV = areaPVDict[areaKey]
+            if(value > areaPV.value):
+                # Alarm triggered
+                areaPV.value = value
+                if ("=" in areaKey):
+                    # Evaluate top area
+                    evaluateAreaPVs(areaKey.split("=")[0])
+            elif(value < areaPV.value):
+                # Alarm acknowledged
                 evaluateAreaPVs(areaKey)
+                if ("=" in areaKey):
+                    # Evaluate top area
+                    evaluateAreaPVs(areaKey.split("=")[0])
 
 
 def evaluateAreaPVs(areaKey, fromColWatch=False):
@@ -163,8 +165,7 @@ def evaluateAreaPVs(areaKey, fromColWatch=False):
 
     try:
         for key in pvDict.keys():
-            if (re.sub(r"=pv\d+", "", key) == areaKey):
-                # exact match of area key
+            if (re.sub(r"pv\d+", "", key).startswith(areaKey+"=")):
                 val = alarmDict[pvDict[key].pvname]["A"].value
                 globalEnable, areaEnable, subAreaEnable, pvEnable = getEnables(
                     pvDict[key].pvname)
@@ -204,61 +205,11 @@ def evaluateAreaPVs(areaKey, fromColWatch=False):
         elif(minorAlarm):
             alarmState = 2
 
-    if ("=" in areaKey):
-        # wait for subArea fixed here
-        areaPV.put(alarmState, wait=True, timeout=0.01)
-        if (fromColWatch):
-            # wait for subArea to evaluate before topArea
-            sleep(0.01)
-            # if from col watch also reasses top area
-            evaluateAreaPVs(areaKey.split("=")[0])
-    else:
-        # this is a top area
-        evaluateTopArea(areaKey, alarmState)
+    areaPV.value = alarmState
 
-
-def evaluateTopArea(topArea, alarmState):
-    areaPV = areaPVDict[topArea]
-    alarmState = alarmState
-
-    # to catch in alarm state to negate a higher level ack state
-    # no need to catch disconn alarm as it is highest ranked
-    minorAlarm = False
-    majorAlarm = False
-    invalidAlarm = False
-    ackStates = [1, 3, 5, 7]
-
-    for area in areaList:
-        if ("=" in area):
-            if (area.split("=")[0] == topArea):
-                pv = areaPVDict[area]
-                val = pv.value
-                # print(pv, pv.value)
-                try:
-                    if (val > alarmState):
-                        alarmState = val
-                    if(val == 2):
-                        minorAlarm = True
-                    elif(val == 4):
-                        majorAlarm = True
-                    elif(val == 6):
-                        invalidAlarm = True
-                except:
-                    if(AH_DEBUG):
-                        print('[Warning]', 'val =', val,
-                              'alarmState =', alarmState)
-
-    # active alarm always supercedes acked state alarm
-    if alarmState in ackStates:
-        # invalid alarm takes precedence
-        if(invalidAlarm):
-            alarmState = 6
-        elif(majorAlarm):
-            alarmState = 4
-        elif(minorAlarm):
-            alarmState = 2
-
-    areaPV.put(alarmState, wait=True, timeout=0.01)
+    if (fromColWatch and ("=" in areaKey)):
+        # if from col watch also reasses top area
+        evaluateAreaPVs(areaKey.split("=")[0])
 
 
 def getKeys(pvname):

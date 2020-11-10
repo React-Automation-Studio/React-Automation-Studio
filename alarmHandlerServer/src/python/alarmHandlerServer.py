@@ -990,8 +990,6 @@ def initialiseAlarmIOC():
         # set ack time
         alarmDict[pvname]["K"].value = lastAlarmAckTime
 
-    global alarmDictInitialised
-    alarmDictInitialised = True
     print("Alarm server IOC successfully initialised from database")
 
 
@@ -1059,8 +1057,6 @@ def disconnectAllPVs():
 
 
 def clearGlobalDicts():
-    global alarmDictInitialised
-    alarmDictInitialised = False
     global areaList
     global pvNameList
     del areaList[:]
@@ -1080,6 +1076,9 @@ def clearGlobalDicts():
 
 
 def restartAlarmServer():
+
+    global alarmDictInitialised
+    alarmDictInitialised = False
 
     global alarmServerRestart
     alarmServerRestart = True
@@ -1111,6 +1110,7 @@ def restartAlarmServer():
 
     print("Alarm server restarted...")
 
+    alarmDictInitialised = True
     alarmServerRestart = False
 
 
@@ -1273,6 +1273,9 @@ def main():
     # print('pvDict', pvDict)
 
     print("Alarm server running...")
+
+    global alarmDictInitialised
+    alarmDictInitialised = True
 
     while (True):
         global notifyBuffer

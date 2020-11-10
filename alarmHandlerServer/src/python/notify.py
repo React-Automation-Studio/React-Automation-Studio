@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 import os
 import numpy as np
-import re
+import js_regex
 from time import sleep
 import subprocess
 import _thread
@@ -105,7 +105,14 @@ def notifyEmail():
 
 def notify(notifyBuffer):
     for entry in notifyBuffer:
-        print(entry)
+        pvname = entry["pv"]
+        print(pvname)
+        # message = entry["message"]
+        for user in alarmDB.users.find():
+            email = user["email"]
+            for notifyPV in user["notifyPVs"]:
+                if(js_regex.compile(notifyPV["regEx"]).search(pvname)):
+                    print(email, pvname)
 
 
 def disconnectAllPVs():

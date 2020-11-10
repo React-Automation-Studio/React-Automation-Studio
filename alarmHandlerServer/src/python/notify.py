@@ -2,6 +2,10 @@ def notifyEmail():
     pass
 
 
-def notify(notifyBuffer):
+def disconnectNotifyPVs():
+    print("Disconnecting notify PVs")
+
+
+def setNotifyBuffer(notifyBuffer):
     for entry in notifyBuffer:
         print(entry)

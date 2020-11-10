@@ -12,7 +12,7 @@ import _thread
 from epics import PV, caput
 from datetime import datetime
 
-from notify import notify
+from notify import setNotifyBuffer, disconnectNotifyPVs
 
 try:
     ALARM_DATABASE = os.environ['ALARM_DATABASE']
@@ -1059,6 +1059,8 @@ def disconnectAllPVs():
     alarmDict["ACK_PV"].disconnect()
     alarmDict["NOTIFY"].disconnect()
 
+    disconnectNotifyPVs()
+
 
 def clearGlobalDicts():
     global alarmDictInitialised
@@ -1272,7 +1274,7 @@ def main():
         global notifyBuffer
         sleep(5.0)
         if(len(notifyBuffer) != 0):
-            notify(notifyBuffer)
+            setNotifyBuffer(notifyBuffer)
             notifyBuffer = []
         # restartAlarmServer()
 

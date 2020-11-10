@@ -103,16 +103,29 @@ def notifyEmail():
     pass
 
 
+def timeValid(timeObject):
+    print(timeObject)
+    return True
+
+
+def notifyValid(user):
+    print(user)
+    return timeValid(user["globalSetup"])
+
+
 def notify(notifyBuffer):
     for entry in notifyBuffer:
         pvname = entry["pv"]
-        print(pvname)
         # message = entry["message"]
         for user in alarmDB.users.find():
             email = user["email"]
             for notifyPV in user["notifyPVs"]:
                 if(js_regex.compile(notifyPV["regEx"]).search(pvname)):
-                    print(email, pvname)
+                    # Passes regEx check
+                    print("regEx:", email, pvname)
+                    if(notifyValid(user)):
+                        # Passes notifyValid check
+                        print("notifyValid:", email, pvname)
 
 
 def disconnectAllPVs():

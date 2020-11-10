@@ -1,9 +1,4 @@
 # ACK PV
-# record(stringin, "$(ioc):ACK_PV") {
-#     field(DTYP, "Soft Channel")
-#     field(PINI, "YES")
-#     field(VAL, "")
-# }
 record(waveform, "$(ioc):ACK_PV") {
     field(DTYP, "Soft Channel")
     field(DESC, "Test waveform")
@@ -15,4 +10,10 @@ record(waveform, "$(ioc):ACK_PV") {
     # 4 logged in username
     # 5 value
     field(FTVL, "STRING")   
+}
+# NOTIFY PV
+record(bo, "$(ioc):NOTIFY") {
+    field(DTYP, "Soft Channel")
+    field(PINI, "YES")
+    field(VAL,  "0")
 }

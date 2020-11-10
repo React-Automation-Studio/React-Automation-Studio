@@ -1031,6 +1031,11 @@ def initAlarmDict():
             callback=ackPVChange)
     pv.wait_for_connection(timeout=5)
     alarmDict["ACK_PV"] = pv
+    # NOTIFY PV
+    pv = PV(pvname=alarmIOCPVPrefix + "NOTIFY",
+            connection_timeout=0.001)
+    pv.wait_for_connection(timeout=5)
+    alarmDict["NOTIFY"] = pv
 
 
 def disconnectAllPVs():
@@ -1052,6 +1057,7 @@ def disconnectAllPVs():
         alarmDict[pvname]["K"].disconnect()
 
     alarmDict["ACK_PV"].disconnect()
+    alarmDict["NOTIFY"].disconnect()
 
 
 def clearGlobalDicts():

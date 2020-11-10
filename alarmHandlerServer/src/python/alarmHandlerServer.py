@@ -12,45 +12,9 @@ from datetime import datetime
 from notify import setNotifyBuffer, restartNotifyServer
 
 try:
-    ALARM_DATABASE = os.environ['ALARM_DATABASE']
-except:
-    ALARM_DATABASE = "localhost"
-try:
-    ALARM_DATABASE_REPLICA_SET_NAME = os.environ['ALARM_DATABASE_REPLICA_SET_NAME']
-except:
-    ALARM_DATABASE_REPLICA_SET_NAME = "devrs"
-
-try:
-    MONGO_ROOT_USERNAME = os.environ['MONGO_ROOT_USERNAME']
-    MONGO_ROOT_PASSWORD = os.environ['MONGO_ROOT_PASSWORD']
-    MONGO_ROOT_USERNAME = urllib.parse.quote_plus(
-        MONGO_ROOT_USERNAME)
-    MONGO_ROOT_PASSWORD = urllib.parse.quote_plus(
-        MONGO_ROOT_PASSWORD)
-    mongoAuth = True
-except:
-    mongoAuth = False
-
-try:
-    MONGO_INITDB_ALARM_DATABASE = os.environ['MONGO_INITDB_ALARM_DATABASE']
-except:
-    MONGO_INITDB_ALARM_DATABASE = "demoAlarmDatabase"
-try:
     AH_DEBUG = bool(os.environ['AH_DEBUG'])
 except:
     AH_DEBUG = False
-
-if (mongoAuth):
-    client = MongoClient(
-        'mongodb://%s:%s@%s' %
-        (MONGO_ROOT_USERNAME, MONGO_ROOT_PASSWORD, ALARM_DATABASE), replicaSet=ALARM_DATABASE_REPLICA_SET_NAME)
-    # Wait for MongoClient to discover the whole replica set and identify MASTER!
-    sleep(0.5)
-else:
-    client = MongoClient('mongodb://%s' % (ALARM_DATABASE),
-                         replicaSet=ALARM_DATABASE_REPLICA_SET_NAME)
-    # Wait for MongoClient to discover the whole replica set and identify MASTER!
-    sleep(0.5)
 
 ackedStateDict = {
     0: "NO_ALARM",
@@ -88,14 +52,57 @@ subAreaDict = {}
 areaPVDict = {}
 
 
-# Prefix and suffix for alarmIOC pvs
-doc = client[MONGO_INITDB_ALARM_DATABASE].config.find_one()
-try:
-    alarmIOCPVPrefix = doc["alarmIOCPVPrefix"]
-    alarmIOCPVSuffix = doc["alarmIOCPVSuffix"]
-except:
-    if(AH_DEBUG):
-        print('[Warning]', 'alarmIOCPVPrefix not instantiated')
+def initDatabase():
+    try:
+        ALARM_DATABASE = os.environ['ALARM_DATABASE']
+    except:
+        ALARM_DATABASE = "localhost"
+    try:
+        ALARM_DATABASE_REPLICA_SET_NAME = os.environ['ALARM_DATABASE_REPLICA_SET_NAME']
+    except:
+        ALARM_DATABASE_REPLICA_SET_NAME = "devrs"
+
+    try:
+        MONGO_ROOT_USERNAME = os.environ['MONGO_ROOT_USERNAME']
+        MONGO_ROOT_PASSWORD = os.environ['MONGO_ROOT_PASSWORD']
+        MONGO_ROOT_USERNAME = urllib.parse.quote_plus(
+            MONGO_ROOT_USERNAME)
+        MONGO_ROOT_PASSWORD = urllib.parse.quote_plus(
+            MONGO_ROOT_PASSWORD)
+        mongoAuth = True
+    except:
+        mongoAuth = False
+
+    try:
+        MONGO_INITDB_ALARM_DATABASE = os.environ['MONGO_INITDB_ALARM_DATABASE']
+    except:
+        MONGO_INITDB_ALARM_DATABASE = "demoAlarmDatabase"
+
+    if (mongoAuth):
+        client = MongoClient(
+            'mongodb://%s:%s@%s' %
+            (MONGO_ROOT_USERNAME, MONGO_ROOT_PASSWORD, ALARM_DATABASE), replicaSet=ALARM_DATABASE_REPLICA_SET_NAME)
+        # Wait for MongoClient to discover the whole replica set and identify MASTER!
+        sleep(0.5)
+    else:
+        client = MongoClient('mongodb://%s' % (ALARM_DATABASE),
+                             replicaSet=ALARM_DATABASE_REPLICA_SET_NAME)
+        # Wait for MongoClient to discover the whole replica set and identify MASTER!
+        sleep(0.5)
+
+    global alarmDB
+    alarmDB = client[MONGO_INITDB_ALARM_DATABASE]
+
+    # Prefix and suffix for alarmIOC pvs
+    global alarmIOCPVPrefix
+    global alarmIOCPVSuffix
+    doc = alarmDB.config.find_one()
+    try:
+        alarmIOCPVPrefix = doc["alarmIOCPVPrefix"]
+        alarmIOCPVSuffix = doc["alarmIOCPVSuffix"]
+    except:
+        if(AH_DEBUG):
+            print('[Warning]', 'alarmIOCPVPrefix not instantiated')
 
 
 def printVal(pvname=None, value=None, **kw):
@@ -225,7 +232,7 @@ def getEnables(pvname):
         subAreaKey = subAreaDict[areaKey]
         areaKey = areaKey.split("=")[0]
 
-        doc = client[MONGO_INITDB_ALARM_DATABASE].pvs.find_one(
+        doc = alarmDB.pvs.find_one(
             {"area": areaKey})
 
         areaEnable = doc["enable"]
@@ -233,14 +240,14 @@ def getEnables(pvname):
         pvEnable = doc[subAreaKey]["pvs"][pvKey]["enable"]
 
     else:
-        doc = client[MONGO_INITDB_ALARM_DATABASE].pvs.find_one(
+        doc = alarmDB.pvs.find_one(
             {"area": areaKey})
 
         areaEnable = doc["enable"]
         subAreaEnable = None
         pvEnable = doc["pvs"][pvKey]["enable"]
 
-    globalEnable = client[MONGO_INITDB_ALARM_DATABASE].glob.find_one()[
+    globalEnable = alarmDB.glob.find_one()[
         "enableAllAreas"]
 
     return globalEnable, areaEnable, subAreaEnable, pvEnable
@@ -342,7 +349,7 @@ def ackAlarm(ackIdentifier, timestamp, username):
             subAreaKey = subAreaDict[areaKey]
             topArea = areaKey.split("=")[0]
             # write to db
-            client[MONGO_INITDB_ALARM_DATABASE].pvs.update_many(
+            alarmDB.pvs.update_many(
                 {'area': topArea}, {
                     '$set': {
                         subAreaKey + '.pvs.' + pvKey + '.lastAlarmAckTime':
@@ -351,7 +358,7 @@ def ackAlarm(ackIdentifier, timestamp, username):
                 })
         else:
             # write to db
-            client[MONGO_INITDB_ALARM_DATABASE].pvs.update_many(
+            alarmDB.pvs.update_many(
                 {'area': areaKey},
                 {'$set': {
                     'pvs.' + pvKey + '.lastAlarmAckTime': timestamp_string
@@ -359,7 +366,7 @@ def ackAlarm(ackIdentifier, timestamp, username):
         # Log to history
         entry = {"timestamp": timestamp, "entry": " ".join(
             [pvname, "-", username, "acknowledged", alarmPVSevDict[alarmPVSev], "to", ackedStateDict[pvsev]])}
-        client[MONGO_INITDB_ALARM_DATABASE].history.update_many(
+        alarmDB.history.update_many(
             {'id': areaKey+'*'+pvname}, {
                 '$push': {
                     'history': {
@@ -405,11 +412,11 @@ def pvDisconn(pvname, conn):
     if ("=" in areaKey):
         subAreaKey = subAreaDict[areaKey]
         topArea = areaKey.split("=")[0]
-        doc = client[MONGO_INITDB_ALARM_DATABASE].pvs.find_one(
+        doc = alarmDB.pvs.find_one(
             {"area": topArea})
         lastAlarmTime = doc[subAreaKey]["pvs"][pvKey]["lastAlarmTime"]
     else:
-        doc = client[MONGO_INITDB_ALARM_DATABASE].pvs.find_one(
+        doc = alarmDB.pvs.find_one(
             {"area": areaKey})
         lastAlarmTime = doc["pvs"][pvKey]["lastAlarmTime"]
 
@@ -426,12 +433,12 @@ def pvDisconn(pvname, conn):
         if ("=" in areaKey):
             subAreaKey = subAreaDict[areaKey]
             areaKey = areaKey.split("=")[0]
-            doc = client[MONGO_INITDB_ALARM_DATABASE].pvs.find_one(
+            doc = alarmDB.pvs.find_one(
                 {"area": areaKey})
             enable = globalEnable and areaEnable and subAreaEnable and pvEnable
             latch = doc[subAreaKey]["pvs"][pvKey]["latch"]
         else:
-            doc = client[MONGO_INITDB_ALARM_DATABASE].pvs.find_one(
+            doc = alarmDB.pvs.find_one(
                 {"area": areaKey})
             enable = globalEnable and areaEnable and pvEnable
             latch = doc["pvs"][pvKey]["latch"]
@@ -462,7 +469,7 @@ def pvDisconn(pvname, conn):
             if ("=" in areaKey):
                 subAreaKey = subAreaDict[areaKey]
                 topArea = areaKey.split("=")[0]
-                client[MONGO_INITDB_ALARM_DATABASE].pvs.update_many(
+                alarmDB.pvs.update_many(
                     {'area': topArea}, {
                         '$set': {
                             subAreaKey + '.pvs.' + pvKey + '.lastAlarmVal': "",
@@ -471,7 +478,7 @@ def pvDisconn(pvname, conn):
                         }
                     })
             else:
-                client[MONGO_INITDB_ALARM_DATABASE].pvs.update_many(
+                alarmDB.pvs.update_many(
                     {'area': areaKey}, {
                         '$set': {
                             'pvs.' + pvKey + '.lastAlarmVal': "",
@@ -484,7 +491,7 @@ def pvDisconn(pvname, conn):
             if(enable and not alarmServerRestart):
                 entry = {"timestamp": timestamp, "entry": " ".join(
                     [pvname, "-", "DISCONNECTED"])}
-                client[MONGO_INITDB_ALARM_DATABASE].history.update_many(
+                alarmDB.history.update_many(
                     {'id': areaKey+'*'+pvname},
                     {'$push': {
                         'history': {
@@ -542,7 +549,7 @@ def pvPrepareData(pvname, value, severity, timestamp, units, enum_strs):
         subAreaKey = subAreaDict[areaKey]
         areaKey = areaKey.split("=")[0]
 
-        doc = client[MONGO_INITDB_ALARM_DATABASE].pvs.find_one(
+        doc = alarmDB.pvs.find_one(
             {"area": areaKey})
 
         enable = globalEnable and areaEnable and subAreaEnable and pvEnable
@@ -552,7 +559,7 @@ def pvPrepareData(pvname, value, severity, timestamp, units, enum_strs):
         pvELN.append(doc[subAreaKey]["pvs"][pvKey]["notify"])
 
     else:
-        doc = client[MONGO_INITDB_ALARM_DATABASE].pvs.find_one(
+        doc = alarmDB.pvs.find_one(
             {"area": areaKey})
 
         enable = globalEnable and areaEnable and pvEnable
@@ -697,7 +704,7 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
         if ("=" in areaKey):
             subAreaKey = subAreaDict[areaKey]
             topArea = areaKey.split("=")[0]
-            client[MONGO_INITDB_ALARM_DATABASE].pvs.update_many(
+            alarmDB.pvs.update_many(
                 {'area': topArea}, {
                     '$set': {
                         subAreaKey + '.pvs.' + pvKey + '.lastAlarmVal': value,
@@ -706,7 +713,7 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
                     }
                 })
         else:
-            client[MONGO_INITDB_ALARM_DATABASE].pvs.update_many(
+            alarmDB.pvs.update_many(
                 {'area': areaKey}, {
                     '$set': {
                         'pvs.' + pvKey + '.lastAlarmVal': value,
@@ -715,7 +722,7 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
                 })
     # disabled alarms not logged
     if(enable and logToHistory):
-        client[MONGO_INITDB_ALARM_DATABASE].history.update_many(
+        alarmDB.history.update_many(
             {'id': areaKey+'*'+pvname},
             {'$push': {
                 'history': {
@@ -732,7 +739,7 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
 
 def getListOfPVNames():
     # loop through each document = area
-    for area in client[MONGO_INITDB_ALARM_DATABASE].pvs.find():
+    for area in alarmDB.pvs.find():
         for key in area.keys():
             if (key == "area"):
                 areaList.append(area[key])
@@ -780,7 +787,7 @@ def initSubPVDict(subArea, areaName):
 
 def initPVDict():
     # loop through each document = area
-    for area in client[MONGO_INITDB_ALARM_DATABASE].pvs.find():
+    for area in alarmDB.pvs.find():
         for key in area.keys():
             if (key == "area"):
                 areaName = area[key]
@@ -861,7 +868,7 @@ def initialiseAlarmIOC():
             subAreaKey = subAreaDict[areaKey]
             topArea = areaKey.split("=")[0]
 
-            doc = client[MONGO_INITDB_ALARM_DATABASE].pvs.find_one(
+            doc = alarmDB.pvs.find_one(
                 {"area": topArea})
 
             lastAlarmVal = doc[subAreaKey]["pvs"][pvKey]["lastAlarmVal"]
@@ -870,7 +877,7 @@ def initialiseAlarmIOC():
                 "lastAlarmAckTime"]
 
         else:
-            doc = client[MONGO_INITDB_ALARM_DATABASE].pvs.find_one(
+            doc = alarmDB.pvs.find_one(
                 {"area": areaKey})
 
             lastAlarmVal = doc["pvs"][pvKey]["lastAlarmVal"]
@@ -941,7 +948,7 @@ def initialiseAlarmIOC():
                     if ("=" in areaKey):
                         subAreaKey = subAreaDict[areaKey]
                         topArea = areaKey.split("=")[0]
-                        client[MONGO_INITDB_ALARM_DATABASE].pvs.update_many(
+                        alarmDB.pvs.update_many(
                             {'area': topArea}, {
                                 '$set': {
                                     subAreaKey + '.pvs.' + pvKey + '.lastAlarmVal': lastAlarmVal,
@@ -950,7 +957,7 @@ def initialiseAlarmIOC():
                                 }
                             })
                     else:
-                        client[MONGO_INITDB_ALARM_DATABASE].pvs.update_many(
+                        alarmDB.pvs.update_many(
                             {'area': areaKey}, {
                                 '$set': {
                                     'pvs.' + pvKey + '.lastAlarmVal': lastAlarmVal,
@@ -960,7 +967,7 @@ def initialiseAlarmIOC():
                     # Write entry to database for alarms that were active on startup
                     # Only if not a controlled alarm server restart
                     if(not alarmServerRestart):
-                        client[MONGO_INITDB_ALARM_DATABASE].history.update_many(
+                        alarmDB.history.update_many(
                             {'id': areaKey+'*'+pvname},
                             {'$push': {
                                 'history': {
@@ -1114,12 +1121,12 @@ def restartAlarmServer():
 
 
 def pvCollectionWatch():
-    with client[MONGO_INITDB_ALARM_DATABASE].pvs.watch() as stream:
+    with alarmDB.pvs.watch() as stream:
         for change in stream:
             # print(change)
             try:
                 documentKey = change["documentKey"]
-                doc = client[MONGO_INITDB_ALARM_DATABASE].pvs.find_one(
+                doc = alarmDB.pvs.find_one(
                     documentKey)
                 change = change["updateDescription"]["updatedFields"]
                 timestamp = datetime.timestamp(datetime.now())
@@ -1140,7 +1147,7 @@ def pvCollectionWatch():
                             [topArea, "area", msg])}
                         # print(timestamp, topArea,
                         #   "area", msg)
-                        client[MONGO_INITDB_ALARM_DATABASE].history.update_many(
+                        alarmDB.history.update_many(
                             {'id': topArea},
                             {'$push': {
                                 'history': {
@@ -1173,7 +1180,7 @@ def pvCollectionWatch():
                             [pvname, '-', "Alarm", msg])}
                         # print(timestamp, pvname,
                         #       "alarm", msg)
-                        client[MONGO_INITDB_ALARM_DATABASE].history.update_many(
+                        alarmDB.history.update_many(
                             {'id': areaKey+'*'+pvname},
                             {'$push': {
                                 'history': {
@@ -1193,7 +1200,7 @@ def pvCollectionWatch():
                             [areaKey.replace("=", " > "), "sub area", msg])}
                         # print(timestamp, areaKey.replace("=", " > "),
                         #       "sub area", msg)
-                        client[MONGO_INITDB_ALARM_DATABASE].history.update_many(
+                        alarmDB.history.update_many(
                             {'id': areaKey},
                             {'$push': {
                                 'history': {
@@ -1207,7 +1214,7 @@ def pvCollectionWatch():
 
 
 def globalCollectionWatch():
-    with client[MONGO_INITDB_ALARM_DATABASE].glob.watch() as stream:
+    with alarmDB.glob.watch() as stream:
         for change in stream:
             # print(change)
             try:
@@ -1226,7 +1233,7 @@ def globalCollectionWatch():
                             ["ALL AREAS", msg])}
                         # print(timestamp, topArea,
                         #   "area", msg)
-                        client[MONGO_INITDB_ALARM_DATABASE].history.update_many(
+                        alarmDB.history.update_many(
                             {'id': "_GLOBAL"},
                             {'$push': {
                                 'history': {
@@ -1240,6 +1247,7 @@ def globalCollectionWatch():
 
 
 def main():
+    initDatabase()
     getListOfPVNames()
     startAlarmIOC()
     # Initialise string PVs for front end

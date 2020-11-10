@@ -99,33 +99,47 @@ def initAlarmDict():
     alarmDict["NOTIFY"] = pv
 
 
-def notifyEmail():
-    pass
+def notifyEmail(userNotifyDict):
+    print(userNotifyDict)
 
 
-def timeValid(timeObject):
-    print(timeObject)
+def notifyValid(notifySetup):
+    print(notifySetup)
     return True
-
-
-def notifyValid(user):
-    print(user)
-    return timeValid(user["globalSetup"])
 
 
 def notify(notifyBuffer):
     for entry in notifyBuffer:
         pvname = entry["pv"]
-        # message = entry["message"]
+        message = entry["message"]
         for user in alarmDB.users.find():
+            userNotifyDict = {}
             email = user["email"]
+            if(AH_DEBUG):
+                print(email, pvname)
             for notifyPV in user["notifyPVs"]:
                 if(js_regex.compile(notifyPV["regEx"]).search(pvname)):
                     # Passes regEx check
-                    print("regEx:", email, pvname)
-                    if(notifyValid(user)):
+                    if(AH_DEBUG):
+                        print("Pass regEx")
+                    notify = False
+                    if(user["global"]):
+                        if(AH_DEBUG):
+                            print("Using global profile")
+                        notify = notifyValid(user["globalSetup"])
+                    else:
+                        if(AH_DEBUG):
+                            print("Using unique profile")
+                        notify = notifyValid(notifyPV["notifySetup"])
+                    if(notify):
                         # Passes notifyValid check
-                        print("notifyValid:", email, pvname)
+                        if(AH_DEBUG):
+                            print("Pass notifyValid")
+                        if email not in userNotifyDict:
+                            userNotifyDict[email] = {}
+                        userNotifyDict[email][pvname] = message
+            if(userNotifyDict):
+                notifyEmail(userNotifyDict)
 
 
 def disconnectAllPVs():

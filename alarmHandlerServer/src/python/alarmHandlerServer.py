@@ -9,7 +9,7 @@ import _thread
 from epics import PV, caput
 from datetime import datetime
 
-from notify import setNotifyBuffer, startNotifyServer, restartNotifyServer
+from notify import startNotifyServer, restartNotifyServer, notify
 
 try:
     AH_DEBUG = bool(os.environ['AH_DEBUG'])
@@ -1278,7 +1278,7 @@ def main():
         global notifyBuffer
         sleep(5.0)
         if(len(notifyBuffer) != 0):
-            setNotifyBuffer(notifyBuffer)
+            notify(notifyBuffer)
             notifyBuffer = []
         # restartAlarmServer()
 

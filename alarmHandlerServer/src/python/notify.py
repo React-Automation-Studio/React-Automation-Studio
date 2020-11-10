@@ -103,9 +103,9 @@ def notifyEmail():
     pass
 
 
-def setNotifyBuffer(notifyBuffer):
-    # for entry in notifyBuffer:
-    #     print(entry)
+def notify(notifyBuffer):
+    for entry in notifyBuffer:
+        print(entry)
     print(pvNameList)
 
 
@@ -133,7 +133,7 @@ def startNotifyServer():
     initDatabase()
     getListOfPVNames()
     initAlarmDict()
-    
+
     # debug prints
     # print(alarmDict)
 

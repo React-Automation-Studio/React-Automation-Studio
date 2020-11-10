@@ -14,6 +14,7 @@ except:
     AH_DEBUG = False
 
 pvNameList = []
+alarmDict = {}
 
 
 def initDatabase():
@@ -84,12 +85,22 @@ def getListOfPVNames():
                                 area[key][subAreaKey][pvKey]["name"])
 
 
+def initAlarmDict():
+    for pvname in pvNameList:
+        alarmName = alarmIOCPVPrefix + pvname + alarmIOCPVSuffix
+        pv = PV(pvname=alarmName + "A",
+                connection_timeout=0.001)
+        pv.wait_for_connection(timeout=5)
+        alarmDict[pvname] = pv
+    # NOTIFY PV
+    pv = PV(pvname=alarmIOCPVPrefix + "NOTIFY",
+            connection_timeout=0.001)
+    pv.wait_for_connection(timeout=5)
+    alarmDict["NOTIFY"] = pv
+
+
 def notifyEmail():
     pass
-
-
-def restartNotifyServer():
-    print("Disconnecting notify PVs")
 
 
 def setNotifyBuffer(notifyBuffer):
@@ -98,10 +109,32 @@ def setNotifyBuffer(notifyBuffer):
     print(pvNameList)
 
 
-def main():
+def disconnectAllPVs():
+    for pvname in pvNameList:
+        alarmDict[pvname].disconnect()
+
+
+def clearGlobalDicts():
+    global pvNameList
+    del pvNameList[:]
+    global alarmDict
+    alarmDict.clear()
+
+
+def restartNotifyServer():
+    disconnectAllPVs()
+    clearGlobalDicts()
+    getListOfPVNames()
+    initAlarmDict()
+    print("Notify server restarted...")
+
+
+def startNotifyServer():
     initDatabase()
     getListOfPVNames()
+    initAlarmDict()
+    
+    # debug prints
+    # print(alarmDict)
+
     print("Notify server running...")
-
-
-main()

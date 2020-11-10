@@ -9,7 +9,7 @@ import _thread
 from epics import PV, caput
 from datetime import datetime
 
-from notify import setNotifyBuffer, restartNotifyServer
+from notify import setNotifyBuffer, startNotifyServer, restartNotifyServer
 
 try:
     AH_DEBUG = bool(os.environ['AH_DEBUG'])
@@ -1269,6 +1269,9 @@ def main():
     _thread.start_new_thread(pvCollectionWatch, ())
     # For change to global enable to reevaluate area pvs
     _thread.start_new_thread(globalCollectionWatch, ())
+
+    # Start notify server
+    startNotifyServer()
 
     # Final debug outputs
     # print('areaPVDict', areaPVDict)

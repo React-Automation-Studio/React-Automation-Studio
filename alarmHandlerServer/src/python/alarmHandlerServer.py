@@ -1,11 +1,8 @@
 from pymongo import MongoClient
-from pymongo.errors import NotMasterError
 import urllib.parse
 import os
 import numpy as np
 import re
-from bson.json_util import dumps
-from bson.objectid import ObjectId
 from time import sleep
 import subprocess
 import _thread

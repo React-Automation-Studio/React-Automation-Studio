@@ -106,7 +106,6 @@ def notifyEmail():
 def notify(notifyBuffer):
     for entry in notifyBuffer:
         print(entry)
-    print(pvNameList)
 
 
 def disconnectAllPVs():

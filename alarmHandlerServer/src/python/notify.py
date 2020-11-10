@@ -104,8 +104,21 @@ def notifyEmail(userNotifyDict):
 
 
 def notifyValid(notifySetup):
-    print(notifySetup)
-    return True
+    if(notifySetup["notify"]):
+        if(AH_DEBUG):
+            print("Must notify")
+        if(notifySetup["allDay"]):
+            if(AH_DEBUG):
+                print("All day")
+        else:
+            if(AH_DEBUG):
+                print("Time restricted")
+
+        return True
+    else:
+        if(AH_DEBUG):
+            print("!!Don't notify!!")
+        return False
 
 
 def notify(notifyBuffer):

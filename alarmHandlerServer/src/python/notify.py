@@ -12,7 +12,7 @@ def notifyEmail():
     pass
 
 
-def disconnectNotifyPVs():
+def restartNotifyServer():
     print("Disconnecting notify PVs")
 
 

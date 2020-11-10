@@ -9,7 +9,7 @@ import _thread
 from epics import PV, caput
 from datetime import datetime
 
-from notify import setNotifyBuffer, disconnectNotifyPVs
+from notify import setNotifyBuffer, restartNotifyServer
 
 try:
     ALARM_DATABASE = os.environ['ALARM_DATABASE']
@@ -1056,8 +1056,6 @@ def disconnectAllPVs():
     alarmDict["ACK_PV"].disconnect()
     alarmDict["NOTIFY"].disconnect()
 
-    disconnectNotifyPVs()
-
 
 def clearGlobalDicts():
     global alarmDictInitialised
@@ -1106,6 +1104,10 @@ def restartAlarmServer():
     sleep(2.0)
     # Initialiase saved string PVs from database
     initialiseAlarmIOC()
+
+    # Restart notify server
+    restartNotifyServer()
+
     print("Alarm server restarted...")
 
     alarmServerRestart = False

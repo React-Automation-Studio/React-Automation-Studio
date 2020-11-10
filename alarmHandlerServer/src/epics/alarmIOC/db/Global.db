@@ -11,9 +11,3 @@ record(waveform, "$(ioc):ACK_PV") {
     # 5 value
     field(FTVL, "STRING")   
 }
-# NOTIFY PV
-record(bo, "$(ioc):NOTIFY") {
-    field(DTYP, "Soft Channel")
-    field(PINI, "YES")
-    field(VAL,  "0")
-}

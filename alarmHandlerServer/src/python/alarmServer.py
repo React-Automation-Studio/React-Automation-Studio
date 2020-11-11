@@ -470,20 +470,15 @@ def pvDisconn(pvname, conn):
             timestamp = datetime.timestamp(datetime.now())
             timestamp_string = datetime.fromtimestamp(timestamp).strftime(
                 "%a, %d %b %Y at %H:%M:%S")
+
         globalEnable, areaEnable, subAreaEnable, pvEnable = getEnables(pvname)
-        areaKey, pvKey = getKeys(pvname)
-        if ("=" in areaKey):
-            subAreaKey = subAreaDict[areaKey]
-            areaKey = areaKey.split("=")[0]
-            doc = alarmDB.pvs.find_one(
-                {"area": areaKey})
+        if (subAreaEnable != None):
             enable = globalEnable and areaEnable and subAreaEnable and pvEnable
-            latch = doc[subAreaKey]["pvs"][pvKey]["latch"]
         else:
-            doc = alarmDB.pvs.find_one(
-                {"area": areaKey})
             enable = globalEnable and areaEnable and pvEnable
-            latch = doc["pvs"][pvKey]["latch"]
+
+        latch = getLatch(pvname)
+        notify = getNotify(pvname)
 
         transparent = not latch or not enable
         alarmState = alarmDict[pvname]["A"].value
@@ -541,7 +536,7 @@ def pvDisconn(pvname, conn):
                             '$position': 0
                         }
                     }})
-                if(alarmDictInitialised):
+                if(alarmDictInitialised and notify):
                     notifyBuffer.append({
                         "pv": pvname,
                         "message": entry
@@ -616,7 +611,7 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
 
     enable = pvELN[0]
     latch = pvELN[1]
-    # notify = pvELN[2]
+    notify = pvELN[2]
 
     # 0 "NO_ALARM"
     # 1 "MINOR_ACKED"
@@ -759,7 +754,7 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
                     '$position': 0
                 }
             }})
-    if(enable and alarmSet):
+    if(enable and alarmSet and notify):
         notifyBuffer.append({
             "pv": pvname,
             "message": entry

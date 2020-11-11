@@ -253,6 +253,48 @@ def getEnables(pvname):
     return globalEnable, areaEnable, subAreaEnable, pvEnable
 
 
+def getLatch(pvname):
+    areaKey, pvKey = getKeys(pvname)
+
+    if ("=" in areaKey):
+        subAreaKey = subAreaDict[areaKey]
+        areaKey = areaKey.split("=")[0]
+
+        doc = alarmDB.pvs.find_one(
+            {"area": areaKey})
+
+        latch = doc[subAreaKey]["pvs"][pvKey]["latch"]
+
+    else:
+        doc = alarmDB.pvs.find_one(
+            {"area": areaKey})
+
+        latch = doc["pvs"][pvKey]["latch"]
+
+    return latch
+
+
+def getNotify(pvname):
+    areaKey, pvKey = getKeys(pvname)
+
+    if ("=" in areaKey):
+        subAreaKey = subAreaDict[areaKey]
+        areaKey = areaKey.split("=")[0]
+
+        doc = alarmDB.pvs.find_one(
+            {"area": areaKey})
+
+        notify = doc[subAreaKey]["pvs"][pvKey]["notify"]
+
+    else:
+        doc = alarmDB.pvs.find_one(
+            {"area": areaKey})
+
+        notify = doc["pvs"][pvKey]["notify"]
+
+    return notify
+
+
 def ackPVChange(value=None, **kw):
     timestamp = datetime.timestamp(datetime.now())
     # print("ack pv:", value)
@@ -540,33 +582,20 @@ def pvPrepareData(pvname, value, severity, timestamp, units, enum_strs):
     timestamp_string = datetime.fromtimestamp(timestamp).strftime(
         "%a, %d %b %Y at %H:%M:%S")
 
-    areaKey, pvKey = getKeys(pvname)
     globalEnable, areaEnable, subAreaEnable, pvEnable = getEnables(pvname)
 
-    pvELN = []
-
-    if ("=" in areaKey):
-        subAreaKey = subAreaDict[areaKey]
-        areaKey = areaKey.split("=")[0]
-
-        doc = alarmDB.pvs.find_one(
-            {"area": areaKey})
-
+    if (subAreaEnable != None):
         enable = globalEnable and areaEnable and subAreaEnable and pvEnable
-
-        pvELN.append(enable)
-        pvELN.append(doc[subAreaKey]["pvs"][pvKey]["latch"])
-        pvELN.append(doc[subAreaKey]["pvs"][pvKey]["notify"])
-
     else:
-        doc = alarmDB.pvs.find_one(
-            {"area": areaKey})
-
         enable = globalEnable and areaEnable and pvEnable
 
-        pvELN.append(enable)
-        pvELN.append(doc["pvs"][pvKey]["latch"])
-        pvELN.append(doc["pvs"][pvKey]["notify"])
+    latch = getLatch(pvname)
+    notify = getNotify(pvname)
+
+    pvELN = []
+    pvELN.append(enable)
+    pvELN.append(latch)
+    pvELN.append(notify)
 
     # manipulate value
     if(enum_strs):

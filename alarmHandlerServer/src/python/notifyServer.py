@@ -125,8 +125,10 @@ def notify(notifyBuffer):
         pvname = entry["pv"]
         message = entry["message"]
         for user in alarmDB.users.find():
-            userNotifyDict = {}
+            userNotifyEmailDict = {}
+            userNotifyMobileDict = {}
             email = user["email"]
+            mobile = user["mobile"]
             if(AH_DEBUG):
                 print(email, pvname)
             for notifyPV in user["notifyPVs"]:
@@ -135,23 +137,42 @@ def notify(notifyBuffer):
                     if(AH_DEBUG):
                         print("Pass regEx")
                     notify = False
+                    notifyOnEmail = False
+                    notifyOnMobile = False
                     if(user["global"]):
                         if(AH_DEBUG):
                             print("Using global profile")
                         notify = notifyValid(user["globalSetup"])
+                        notifyOnEmail = user["globalSetup"]["email"]
+                        notifyOnMobile = user["globalSetup"]["mobile"]
                     else:
                         if(AH_DEBUG):
                             print("Using unique profile")
                         notify = notifyValid(notifyPV["notifySetup"])
+                        notifyOnEmail = notifyPV["notifySetup"]["email"]
+                        notifyOnMobile = notifyPV["notifySetup"]["mobile"]
                     if(notify):
                         # Passes notifyValid check
                         if(AH_DEBUG):
                             print("Pass notifyValid")
-                        if email not in userNotifyDict:
-                            userNotifyDict[email] = {}
-                        userNotifyDict[email][pvname] = message
-            if(userNotifyDict):
-                notifyEmail(userNotifyDict)
+                        if(notifyOnEmail):
+                            # Notify via email
+                            if(AH_DEBUG):
+                                print("Notify via email")
+                            if email not in userNotifyEmailDict:
+                                userNotifyEmailDict[email] = {}
+                            userNotifyEmailDict[email][pvname] = message
+                        if(notifyOnMobile):
+                            # Notify via mobile
+                            if(AH_DEBUG):
+                                print("Notify via mobile")
+                            if mobile not in userNotifyMobileDict:
+                                userNotifyMobileDict[mobile] = {}
+                            userNotifyMobileDict[mobile][pvname] = message
+            if(userNotifyEmailDict):
+                notifyEmail(userNotifyEmailDict)
+            if(userNotifyMobileDict):
+                notifyMobile(userNotifyMobileDict)
 
 
 def disconnectAllPVs():

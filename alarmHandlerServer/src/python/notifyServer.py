@@ -8,6 +8,9 @@ import _thread
 from epics import PV
 from datetime import datetime
 
+from notifyEmail import notifyEmail
+from notifyMobile import notifyMobile
+
 try:
     AH_DEBUG = bool(os.environ['AH_DEBUG'])
 except:
@@ -97,10 +100,6 @@ def initAlarmDict():
             connection_timeout=0.001)
     pv.wait_for_connection(timeout=5)
     alarmDict["NOTIFY"] = pv
-
-
-def notifyEmail(userNotifyDict):
-    print(userNotifyDict)
 
 
 def notifyValid(notifySetup):

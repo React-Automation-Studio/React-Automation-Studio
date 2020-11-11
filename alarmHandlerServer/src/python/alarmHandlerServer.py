@@ -9,7 +9,7 @@ import _thread
 from epics import PV, caput
 from datetime import datetime
 
-from notify import startNotifyServer, restartNotifyServer, notify
+from notifyServer import startNotifyServer, restartNotifyServer, notify
 
 try:
     AH_DEBUG = bool(os.environ['AH_DEBUG'])

@@ -10,7 +10,7 @@ from epics import PV, caput
 from datetime import datetime
 
 from notifyServer import startNotifyServer, restartNotifyServer, notify
-from dbMongo import dbGetEnables, dbGetPVField, dbSetPVField, dbUpdateHistory
+from dbMongo import dbGetEnables, dbGetListOfPVNames, dbGetPVField, dbSetPVField, dbUpdateHistory
 
 try:
     AH_DEBUG = bool(os.environ['AH_DEBUG'])
@@ -693,23 +693,9 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
 
 
 def getListOfPVNames():
-    # loop through each document = area
-    for area in alarmDB.pvs.find():
-        for key in area.keys():
-            if (key == "area"):
-                areaList.append(area[key])
-            if (key == "pvs"):
-                for pvKey in area[key].keys():
-                    pvNameList.append(area[key][pvKey]["name"])
-            if ("subArea" in key):
-                for subAreaKey in area[key].keys():
-                    if (subAreaKey == "name"):
-                        areaList.append(area["area"] + '=' +
-                                        area[key][subAreaKey])
-                    if (subAreaKey == "pvs"):
-                        for pvKey in area[key][subAreaKey].keys():
-                            pvNameList.append(
-                                area[key][subAreaKey][pvKey]["name"])
+    global areaList
+    global pvNameList
+    areaList, pvNameList = dbGetListOfPVNames()
 
 
 def replaceAllInFile(filename, original, replacedWith):

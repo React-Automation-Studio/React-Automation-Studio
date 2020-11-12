@@ -80,6 +80,29 @@ def dbGetEnables(areaKey, pvKey, subAreaKey=None):
     return globalEnable, areaEnable, subAreaEnable, pvEnable
 
 
+def dbGetListOfPVNames():
+    areaList = []
+    pvNameList = []
+    # loop through each document = area
+    for area in alarmDB.pvs.find():
+        for key in area.keys():
+            if (key == "area"):
+                areaList.append(area[key])
+            if (key == "pvs"):
+                for pvKey in area[key].keys():
+                    pvNameList.append(area[key][pvKey]["name"])
+            if ("subArea" in key):
+                for subAreaKey in area[key].keys():
+                    if (subAreaKey == "name"):
+                        areaList.append(area["area"] + '=' +
+                                        area[key][subAreaKey])
+                    if (subAreaKey == "pvs"):
+                        for pvKey in area[key][subAreaKey].keys():
+                            pvNameList.append(
+                                area[key][subAreaKey][pvKey]["name"])
+    return areaList, pvNameList
+
+
 def dbGetPVField(field, areaKey, pvKey, subAreaKey=None):
     doc = alarmDB.pvs.find_one(
         {"area": areaKey})

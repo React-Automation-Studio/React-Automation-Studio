@@ -150,17 +150,17 @@ def clearGlobalDicts():
 
 
 def restartNotifyServer():
-    disconnectAllPVs()
-    clearGlobalDicts()
-    getListOfPVNames()
-    initAlarmDict()
+    # disconnectAllPVs()
+    # clearGlobalDicts()
+    # getListOfPVNames()
+    # initAlarmDict()
     print("Notify server restarted...")
 
 
 def startNotifyServer():
-    initPreSuffix()
-    getListOfPVNames()
-    initAlarmDict()
+    # initPreSuffix()
+    # getListOfPVNames()
+    # initAlarmDict()
 
     # debug prints
     # print(alarmDict)

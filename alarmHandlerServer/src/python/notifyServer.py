@@ -8,6 +8,8 @@ import _thread
 from epics import PV
 from datetime import datetime
 
+from dbMongo import dbFindOne, dbGetCollection
+
 from notifyEmail import notifyEmail
 from notifyMobile import notifyMobile
 
@@ -20,51 +22,11 @@ pvNameList = []
 alarmDict = {}
 
 
-def initDatabase():
-    try:
-        ALARM_DATABASE = os.environ['ALARM_DATABASE']
-    except:
-        ALARM_DATABASE = "localhost"
-    try:
-        ALARM_DATABASE_REPLICA_SET_NAME = os.environ['ALARM_DATABASE_REPLICA_SET_NAME']
-    except:
-        ALARM_DATABASE_REPLICA_SET_NAME = "devrs"
-
-    try:
-        MONGO_ROOT_USERNAME = os.environ['MONGO_ROOT_USERNAME']
-        MONGO_ROOT_PASSWORD = os.environ['MONGO_ROOT_PASSWORD']
-        MONGO_ROOT_USERNAME = urllib.parse.quote_plus(
-            MONGO_ROOT_USERNAME)
-        MONGO_ROOT_PASSWORD = urllib.parse.quote_plus(
-            MONGO_ROOT_PASSWORD)
-        mongoAuth = True
-    except:
-        mongoAuth = False
-
-    try:
-        MONGO_INITDB_ALARM_DATABASE = os.environ['MONGO_INITDB_ALARM_DATABASE']
-    except:
-        MONGO_INITDB_ALARM_DATABASE = "demoAlarmDatabase"
-
-    if (mongoAuth):
-        client = MongoClient(
-            'mongodb://%s:%s@%s' %
-            (MONGO_ROOT_USERNAME, MONGO_ROOT_PASSWORD, ALARM_DATABASE), replicaSet=ALARM_DATABASE_REPLICA_SET_NAME)
-        # Wait for MongoClient to discover the whole replica set and identify MASTER!
-        sleep(0.5)
-    else:
-        client = MongoClient('mongodb://%s' % (ALARM_DATABASE),
-                             replicaSet=ALARM_DATABASE_REPLICA_SET_NAME)
-        # Wait for MongoClient to discover the whole replica set and identify MASTER!
-        sleep(0.5)
-
-    global alarmDB
-    alarmDB = client[MONGO_INITDB_ALARM_DATABASE]
-
+def initPreSuffix():
     # Prefix and suffix for alarmIOC pvs
     global alarmIOCPVPrefix
     global alarmIOCPVSuffix
-    doc = alarmDB.config.find_one()
+    doc = dbFindOne("config")
     try:
         alarmIOCPVPrefix = doc["alarmIOCPVPrefix"]
         alarmIOCPVSuffix = doc["alarmIOCPVSuffix"]
@@ -75,7 +37,7 @@ def initDatabase():
 
 def getListOfPVNames():
     # loop through each document = area
-    for area in alarmDB.pvs.find():
+    for area in dbGetCollection("pvs").find():
         for key in area.keys():
             if (key == "pvs"):
                 for pvKey in area[key].keys():
@@ -124,7 +86,7 @@ def notify(notifyBuffer):
     for entry in notifyBuffer:
         pvname = entry["pv"]
         message = entry["message"]
-        for user in alarmDB.users.find():
+        for user in dbGetCollection("users").find():
             userNotifyEmailDict = {}
             userNotifyMobileDict = {}
             email = user["email"]
@@ -196,7 +158,7 @@ def restartNotifyServer():
 
 
 def startNotifyServer():
-    initDatabase()
+    initPreSuffix()
     getListOfPVNames()
     initAlarmDict()
 

@@ -10,7 +10,7 @@ from epics import PV, caput
 from datetime import datetime
 
 from notifyServer import startNotifyServer, restartNotifyServer, notify
-from dbMongo import dbGetEnables, dbGetPVField, dbUpdateHistory
+from dbMongo import dbGetEnables, dbGetPVField, dbSetPVField, dbUpdateHistory
 
 try:
     AH_DEBUG = bool(os.environ['AH_DEBUG'])
@@ -368,20 +368,12 @@ def ackAlarm(ackIdentifier, timestamp, username):
             subAreaKey = subAreaDict[areaKey]
             topArea = areaKey.split("=")[0]
             # write to db
-            alarmDB.pvs.update_many(
-                {'area': topArea}, {
-                    '$set': {
-                        subAreaKey + '.pvs.' + pvKey + '.lastAlarmAckTime':
-                        timestamp_string
-                    }
-                })
+            dbSetPVField('lastAlarmAckTime', timestamp_string,
+                         topArea, pvKey, subAreaKey)
         else:
             # write to db
-            alarmDB.pvs.update_many(
-                {'area': areaKey},
-                {'$set': {
-                    'pvs.' + pvKey + '.lastAlarmAckTime': timestamp_string
-                }})
+            dbSetPVField('lastAlarmAckTime', timestamp_string,
+                         areaKey, pvKey)
         # Log to history
         entry = {"timestamp": timestamp, "entry": " ".join(
             [pvname, "-", username, "acknowledged", alarmPVSevDict[alarmPVSev], "to", ackedStateDict[pvsev]])}
@@ -473,22 +465,15 @@ def pvDisconn(pvname, conn):
             if ("=" in areaKey):
                 subAreaKey = subAreaDict[areaKey]
                 topArea = areaKey.split("=")[0]
-                alarmDB.pvs.update_many(
-                    {'area': topArea}, {
-                        '$set': {
-                            subAreaKey + '.pvs.' + pvKey + '.lastAlarmVal': "",
-                            subAreaKey + '.pvs.' + pvKey + '.lastAlarmTime':
-                            timestamp_string
-                        }
-                    })
+                dbSetPVField('lastAlarmVal', "",
+                             topArea, pvKey, subAreaKey)
+                dbSetPVField('lastAlarmTime', timestamp_string,
+                             topArea, pvKey, subAreaKey)
             else:
-                alarmDB.pvs.update_many(
-                    {'area': areaKey}, {
-                        '$set': {
-                            'pvs.' + pvKey + '.lastAlarmVal': "",
-                            'pvs.' + pvKey + '.lastAlarmTime': timestamp_string
-                        }
-                    })
+                dbSetPVField('lastAlarmVal', "",
+                             areaKey, pvKey)
+                dbSetPVField('lastAlarmTime', timestamp_string,
+                             areaKey, pvKey)
             # log to database
             # disabled alarms not logged
             # Only if not a controlled alarm server restart
@@ -688,22 +673,15 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
         if ("=" in areaKey):
             subAreaKey = subAreaDict[areaKey]
             topArea = areaKey.split("=")[0]
-            alarmDB.pvs.update_many(
-                {'area': topArea}, {
-                    '$set': {
-                        subAreaKey + '.pvs.' + pvKey + '.lastAlarmVal': value,
-                        subAreaKey + '.pvs.' + pvKey + '.lastAlarmTime':
-                        timestamp_string
-                    }
-                })
+            dbSetPVField('lastAlarmVal', value,
+                         topArea, pvKey, subAreaKey)
+            dbSetPVField('lastAlarmTime', timestamp_string,
+                         topArea, pvKey, subAreaKey)
         else:
-            alarmDB.pvs.update_many(
-                {'area': areaKey}, {
-                    '$set': {
-                        'pvs.' + pvKey + '.lastAlarmVal': value,
-                        'pvs.' + pvKey + '.lastAlarmTime': timestamp_string
-                    }
-                })
+            dbSetPVField('lastAlarmVal', value,
+                         areaKey, pvKey)
+            dbSetPVField('lastAlarmTime', timestamp_string,
+                         areaKey, pvKey)
     # disabled alarms not logged
     if(enable and logToHistory):
         dbUpdateHistory(areaKey+'*'+pvname, entry)
@@ -921,22 +899,15 @@ def initialiseAlarmIOC():
                     if ("=" in areaKey):
                         subAreaKey = subAreaDict[areaKey]
                         topArea = areaKey.split("=")[0]
-                        alarmDB.pvs.update_many(
-                            {'area': topArea}, {
-                                '$set': {
-                                    subAreaKey + '.pvs.' + pvKey + '.lastAlarmVal': lastAlarmVal,
-                                    subAreaKey + '.pvs.' + pvKey + '.lastAlarmTime':
-                                    lastAlarmTime
-                                }
-                            })
+                        dbSetPVField('lastAlarmVal', lastAlarmVal,
+                                     topArea, pvKey, subAreaKey)
+                        dbSetPVField('lastAlarmTime', lastAlarmTime,
+                                     topArea, pvKey, subAreaKey)
                     else:
-                        alarmDB.pvs.update_many(
-                            {'area': areaKey}, {
-                                '$set': {
-                                    'pvs.' + pvKey + '.lastAlarmVal': lastAlarmVal,
-                                    'pvs.' + pvKey + '.lastAlarmTime': lastAlarmTime
-                                }
-                            })
+                        dbSetPVField('lastAlarmVal', lastAlarmVal,
+                                     areaKey, pvKey)
+                        dbSetPVField('lastAlarmTime', lastAlarmTime,
+                                     areaKey, pvKey)
                     # Write entry to database for alarms that were active on startup
                     # Only if not a controlled alarm server restart
                     if(not alarmServerRestart):

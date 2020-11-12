@@ -90,6 +90,22 @@ def dbGetPVField(field, areaKey, pvKey, subAreaKey=None):
     return fieldValue
 
 
+def dbSetPVField(field, value, areaKey, pvKey, subAreaKey=None):
+    if (subAreaKey):
+        alarmDB.pvs.update_many(
+            {'area': areaKey},
+            {'$set': {
+                subAreaKey + '.pvs.' + pvKey + '.'+field:
+                value
+            }})
+    else:
+        alarmDB.pvs.update_many(
+            {'area': areaKey},
+            {'$set': {
+                'pvs.' + pvKey + '.'+field: value
+            }})
+
+
 def dbUpdateHistory(id, entry):
     alarmDB.history.update_many(
         {'id': id},

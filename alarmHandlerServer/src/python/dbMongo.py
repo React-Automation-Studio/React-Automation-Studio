@@ -80,6 +80,16 @@ def dbGetEnables(areaKey, pvKey, subAreaKey=None):
     return globalEnable, areaEnable, subAreaEnable, pvEnable
 
 
+def dbGetPVField(field, areaKey, pvKey, subAreaKey=None):
+    doc = alarmDB.pvs.find_one(
+        {"area": areaKey})
+    if (subAreaKey):
+        fieldValue = doc[subAreaKey]["pvs"][pvKey][field]
+    else:
+        fieldValue = doc["pvs"][pvKey][field]
+    return fieldValue
+
+
 def dbUpdateHistory(id, entry):
     alarmDB.history.update_many(
         {'id': id},

@@ -10,7 +10,7 @@ from epics import PV, caput
 from datetime import datetime
 
 from notifyServer import startNotifyServer, restartNotifyServer, notify
-from dbMongo import dbGetEnables, dbUpdateHistory
+from dbMongo import dbGetEnables, dbGetPVField, dbUpdateHistory
 
 try:
     AH_DEBUG = bool(os.environ['AH_DEBUG'])
@@ -249,16 +249,10 @@ def getLatch(pvname):
         subAreaKey = subAreaDict[areaKey]
         areaKey = areaKey.split("=")[0]
 
-        doc = alarmDB.pvs.find_one(
-            {"area": areaKey})
-
-        latch = doc[subAreaKey]["pvs"][pvKey]["latch"]
+        latch = dbGetPVField("latch", areaKey, pvKey, subAreaKey)
 
     else:
-        doc = alarmDB.pvs.find_one(
-            {"area": areaKey})
-
-        latch = doc["pvs"][pvKey]["latch"]
+        latch = dbGetPVField("latch", areaKey, pvKey)
 
     return latch
 
@@ -270,16 +264,10 @@ def getNotify(pvname):
         subAreaKey = subAreaDict[areaKey]
         areaKey = areaKey.split("=")[0]
 
-        doc = alarmDB.pvs.find_one(
-            {"area": areaKey})
-
-        notify = doc[subAreaKey]["pvs"][pvKey]["notify"]
+        notify = dbGetPVField("notify", areaKey, pvKey, subAreaKey)
 
     else:
-        doc = alarmDB.pvs.find_one(
-            {"area": areaKey})
-
-        notify = doc["pvs"][pvKey]["notify"]
+        notify = dbGetPVField("notify", areaKey, pvKey)
 
     return notify
 
@@ -434,14 +422,12 @@ def pvDisconn(pvname, conn):
     areaKey, pvKey = getKeys(pvname)
     if ("=" in areaKey):
         subAreaKey = subAreaDict[areaKey]
-        topArea = areaKey.split("=")[0]
-        doc = alarmDB.pvs.find_one(
-            {"area": topArea})
-        lastAlarmTime = doc[subAreaKey]["pvs"][pvKey]["lastAlarmTime"]
+        areaKey = areaKey.split("=")[0]
+
+        lastAlarmTime = dbGetPVField(
+            "lastAlarmTime", areaKey, pvKey, subAreaKey)
     else:
-        doc = alarmDB.pvs.find_one(
-            {"area": areaKey})
-        lastAlarmTime = doc["pvs"][pvKey]["lastAlarmTime"]
+        lastAlarmTime = dbGetPVField("lastAlarmTime", areaKey, pvKey)
 
     pv = alarmDict[pvname]["D"]
     if (not conn):
@@ -857,23 +843,19 @@ def initialiseAlarmIOC():
 
         if ("=" in areaKey):
             subAreaKey = subAreaDict[areaKey]
-            topArea = areaKey.split("=")[0]
+            areaKey = areaKey.split("=")[0]
 
-            doc = alarmDB.pvs.find_one(
-                {"area": topArea})
-
-            lastAlarmVal = doc[subAreaKey]["pvs"][pvKey]["lastAlarmVal"]
-            lastAlarmTime = doc[subAreaKey]["pvs"][pvKey]["lastAlarmTime"]
-            lastAlarmAckTime = doc[subAreaKey]["pvs"][pvKey][
-                "lastAlarmAckTime"]
+            lastAlarmVal = dbGetPVField(
+                "lastAlarmVal", areaKey, pvKey, subAreaKey)
+            lastAlarmTime = dbGetPVField(
+                "lastAlarmTime", areaKey, pvKey, subAreaKey)
+            lastAlarmAckTime = dbGetPVField(
+                "lastAlarmAckTime", areaKey, pvKey, subAreaKey)
 
         else:
-            doc = alarmDB.pvs.find_one(
-                {"area": areaKey})
-
-            lastAlarmVal = doc["pvs"][pvKey]["lastAlarmVal"]
-            lastAlarmTime = doc["pvs"][pvKey]["lastAlarmTime"]
-            lastAlarmAckTime = doc["pvs"][pvKey]["lastAlarmAckTime"]
+            lastAlarmVal = dbGetPVField("lastAlarmVal", areaKey, pvKey)
+            lastAlarmTime = dbGetPVField("lastAlarmTime", areaKey, pvKey)
+            lastAlarmAckTime = dbGetPVField("lastAlarmAckTime", areaKey, pvKey)
 
         pv = alarmDict[pvname]["D"]
         val = pv.get()

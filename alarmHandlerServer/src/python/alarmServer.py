@@ -10,6 +10,7 @@ from epics import PV, caput
 from datetime import datetime
 
 from notifyServer import startNotifyServer, restartNotifyServer, notify
+from dbMongo import dbUpdateHistory
 
 try:
     AH_DEBUG = bool(os.environ['AH_DEBUG'])
@@ -408,15 +409,7 @@ def ackAlarm(ackIdentifier, timestamp, username):
         # Log to history
         entry = {"timestamp": timestamp, "entry": " ".join(
             [pvname, "-", username, "acknowledged", alarmPVSevDict[alarmPVSev], "to", ackedStateDict[pvsev]])}
-        alarmDB.history.update_many(
-            {'id': areaKey+'*'+pvname}, {
-                '$push': {
-                    'history': {
-                        '$each': [entry],
-                        '$position': 0
-                    }
-                }
-            })
+        dbUpdateHistory(areaKey+'*'+pvname, entry)
 
     # 0	"NO_ALARM"  # 0 "NO_ALARM"
     # 1	"MINOR"     # 1 "MINOR_ACKED"
@@ -528,14 +521,7 @@ def pvDisconn(pvname, conn):
             if(enable and not alarmServerRestart):
                 entry = {"timestamp": timestamp, "entry": " ".join(
                     [pvname, "-", "DISCONNECTED"])}
-                alarmDB.history.update_many(
-                    {'id': areaKey+'*'+pvname},
-                    {'$push': {
-                        'history': {
-                            '$each': [entry],
-                            '$position': 0
-                        }
-                    }})
+                dbUpdateHistory(areaKey+'*'+pvname, entry)
                 if(alarmDictInitialised and notify):
                     notifyBuffer.append({
                         "pv": pvname,
@@ -746,14 +732,7 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
                 })
     # disabled alarms not logged
     if(enable and logToHistory):
-        alarmDB.history.update_many(
-            {'id': areaKey+'*'+pvname},
-            {'$push': {
-                'history': {
-                    '$each': [entry],
-                    '$position': 0
-                }
-            }})
+        dbUpdateHistory(areaKey+'*'+pvname, entry)
     if(enable and alarmSet and notify):
         notifyBuffer.append({
             "pv": pvname,
@@ -991,14 +970,7 @@ def initialiseAlarmIOC():
                     # Write entry to database for alarms that were active on startup
                     # Only if not a controlled alarm server restart
                     if(not alarmServerRestart):
-                        alarmDB.history.update_many(
-                            {'id': areaKey+'*'+pvname},
-                            {'$push': {
-                                'history': {
-                                    '$each': [entry],
-                                    '$position': 0
-                                }
-                            }})
+                        dbUpdateHistory(areaKey+'*'+pvname, entry)
                 except:
                     # set current alarm status to NO_ALARM
                     alarmDict[pvname]["A"].value = 0
@@ -1165,14 +1137,7 @@ def pvCollectionWatch():
                             [topArea, "area", msg])}
                         # print(timestamp, topArea,
                         #   "area", msg)
-                        alarmDB.history.update_many(
-                            {'id': topArea},
-                            {'$push': {
-                                'history': {
-                                    '$each': [entry],
-                                    '$position': 0
-                                }
-                            }})
+                        dbUpdateHistory(topArea, entry)
                     elif ("pvs." in key and (key.endswith(".enable") or key.endswith(".latch") or key.endswith(".notify"))):
                         # pv enable/latch/notify
                         # print("enable/latch/notify of pv changed!")
@@ -1198,14 +1163,7 @@ def pvCollectionWatch():
                             [pvname, '-', "Alarm", msg])}
                         # print(timestamp, pvname,
                         #       "alarm", msg)
-                        alarmDB.history.update_many(
-                            {'id': areaKey+'*'+pvname},
-                            {'$push': {
-                                'history': {
-                                    '$each': [entry],
-                                    '$position': 0
-                                }
-                            }})
+                        dbUpdateHistory(areaKey+'*'+pvname, entry)
                     elif (key.endswith(".enable")):
                         # subArea enable
                         areaKey = doc.get("area") + "=" + doc.get(
@@ -1218,14 +1176,7 @@ def pvCollectionWatch():
                             [areaKey.replace("=", " > "), "sub area", msg])}
                         # print(timestamp, areaKey.replace("=", " > "),
                         #       "sub area", msg)
-                        alarmDB.history.update_many(
-                            {'id': areaKey},
-                            {'$push': {
-                                'history': {
-                                    '$each': [entry],
-                                    '$position': 0
-                                }
-                            }})
+                        dbUpdateHistory(areaKey, entry)
 
             except:
                 print("no relevant updates")
@@ -1251,14 +1202,7 @@ def globalCollectionWatch():
                             ["ALL AREAS", msg])}
                         # print(timestamp, topArea,
                         #   "area", msg)
-                        alarmDB.history.update_many(
-                            {'id': "_GLOBAL"},
-                            {'$push': {
-                                'history': {
-                                    '$each': [entry],
-                                    '$position': 0
-                                }
-                            }})
+                        dbUpdateHistory("_GLOBAL", entry)
 
             except:
                 print("No relevant lobal var updates")

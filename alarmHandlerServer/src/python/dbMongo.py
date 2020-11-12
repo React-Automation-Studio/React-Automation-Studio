@@ -61,6 +61,25 @@ def initDatabase():
             print('[Warning]', 'alarmIOCPVPrefix not instantiated')
 
 
+def dbGetEnables(areaKey, pvKey, subAreaKey=None):
+    doc = alarmDB.pvs.find_one(
+        {"area": areaKey})
+    if (subAreaKey):
+        areaEnable = doc["enable"]
+        subAreaEnable = doc[subAreaKey]["enable"]
+        pvEnable = doc[subAreaKey]["pvs"][pvKey]["enable"]
+
+    else:
+        areaEnable = doc["enable"]
+        subAreaEnable = None
+        pvEnable = doc["pvs"][pvKey]["enable"]
+
+    globalEnable = alarmDB.glob.find_one()[
+        "enableAllAreas"]
+
+    return globalEnable, areaEnable, subAreaEnable, pvEnable
+
+
 def dbUpdateHistory(id, entry):
     alarmDB.history.update_many(
         {'id': id},

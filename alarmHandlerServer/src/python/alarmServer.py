@@ -10,7 +10,7 @@ from epics import PV, caput
 from datetime import datetime
 
 from notifyServer import startNotifyServer, restartNotifyServer, notify
-from dbMongo import dbUpdateHistory
+from dbMongo import dbGetEnables, dbUpdateHistory
 
 try:
     AH_DEBUG = bool(os.environ['AH_DEBUG'])
@@ -233,23 +233,11 @@ def getEnables(pvname):
         subAreaKey = subAreaDict[areaKey]
         areaKey = areaKey.split("=")[0]
 
-        doc = alarmDB.pvs.find_one(
-            {"area": areaKey})
-
-        areaEnable = doc["enable"]
-        subAreaEnable = doc[subAreaKey]["enable"]
-        pvEnable = doc[subAreaKey]["pvs"][pvKey]["enable"]
-
+        globalEnable, areaEnable, subAreaEnable, pvEnable = dbGetEnables(
+            areaKey, pvKey, subAreaKey)
     else:
-        doc = alarmDB.pvs.find_one(
-            {"area": areaKey})
-
-        areaEnable = doc["enable"]
-        subAreaEnable = None
-        pvEnable = doc["pvs"][pvKey]["enable"]
-
-    globalEnable = alarmDB.glob.find_one()[
-        "enableAllAreas"]
+        globalEnable, areaEnable, subAreaEnable, pvEnable = dbGetEnables(
+            areaKey, pvKey)
 
     return globalEnable, areaEnable, subAreaEnable, pvEnable
 

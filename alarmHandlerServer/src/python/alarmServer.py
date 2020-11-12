@@ -10,7 +10,7 @@ from epics import PV, caput
 from datetime import datetime
 
 from notifyServer import startNotifyServer, restartNotifyServer, notify
-from dbMongo import dbGetCollection, dbGetEnables, dbGetListOfPVNames, dbGetPVField, dbSetPVField, dbUpdateHistory
+from dbMongo import dbGetCollection, dbGetEnables, dbGetListOfPVNames, dbGetPVField, dbSetPVField, dbFindOne, dbUpdateHistory
 
 try:
     AH_DEBUG = bool(os.environ['AH_DEBUG'])
@@ -97,7 +97,7 @@ def initDatabase():
     # Prefix and suffix for alarmIOC pvs
     global alarmIOCPVPrefix
     global alarmIOCPVSuffix
-    doc = alarmDB.config.find_one()
+    doc = dbFindOne("config")
     try:
         alarmIOCPVPrefix = doc["alarmIOCPVPrefix"]
         alarmIOCPVSuffix = doc["alarmIOCPVSuffix"]
@@ -1043,8 +1043,7 @@ def pvCollectionWatch():
             # print(change)
             try:
                 documentKey = change["documentKey"]
-                doc = alarmDB.pvs.find_one(
-                    documentKey)
+                doc = dbFindOne("pvs", documentKey)
                 change = change["updateDescription"]["updatedFields"]
                 timestamp = datetime.timestamp(datetime.now())
                 for key in change.keys():

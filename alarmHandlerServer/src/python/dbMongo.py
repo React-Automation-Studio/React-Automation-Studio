@@ -133,6 +133,15 @@ def dbSetPVField(field, value, areaKey, pvKey, subAreaKey=None):
             }})
 
 
+def dbFindOne(collection, documentKey=None):
+    if(documentKey):
+        doc = alarmDB[collection].find_one(
+            documentKey)
+    else:
+        doc = alarmDB[collection].find_one()
+    return doc
+
+
 def dbUpdateHistory(id, entry):
     alarmDB.history.update_many(
         {'id': id},

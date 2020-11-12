@@ -10,7 +10,7 @@ from epics import PV, caput
 from datetime import datetime
 
 from notifyServer import startNotifyServer, restartNotifyServer, notify
-from dbMongo import dbGetEnables, dbGetListOfPVNames, dbGetPVField, dbSetPVField, dbUpdateHistory
+from dbMongo import dbGetCollection, dbGetEnables, dbGetListOfPVNames, dbGetPVField, dbSetPVField, dbUpdateHistory
 
 try:
     AH_DEBUG = bool(os.environ['AH_DEBUG'])
@@ -728,7 +728,7 @@ def initSubPVDict(subArea, areaName):
 
 def initPVDict():
     # loop through each document = area
-    for area in alarmDB.pvs.find():
+    for area in dbGetCollection("pvs").find():
         for key in area.keys():
             if (key == "area"):
                 areaName = area[key]
@@ -1038,7 +1038,7 @@ def restartAlarmServer():
 
 
 def pvCollectionWatch():
-    with alarmDB.pvs.watch() as stream:
+    with dbGetCollection("pvs").watch() as stream:
         for change in stream:
             # print(change)
             try:
@@ -1110,7 +1110,7 @@ def pvCollectionWatch():
 
 
 def globalCollectionWatch():
-    with alarmDB.glob.watch() as stream:
+    with dbGetCollection("glob").watch() as stream:
         for change in stream:
             # print(change)
             try:

@@ -61,6 +61,10 @@ def initDatabase():
             print('[Warning]', 'alarmIOCPVPrefix not instantiated')
 
 
+def dbGetCollection(collection):
+    return alarmDB[collection]
+
+
 def dbGetEnables(areaKey, pvKey, subAreaKey=None):
     doc = alarmDB.pvs.find_one(
         {"area": areaKey})

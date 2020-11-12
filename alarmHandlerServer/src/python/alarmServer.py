@@ -1,5 +1,3 @@
-from pymongo import MongoClient
-import urllib.parse
 import os
 import numpy as np
 import re
@@ -53,47 +51,7 @@ subAreaDict = {}
 areaPVDict = {}
 
 
-def initDatabase():
-    try:
-        ALARM_DATABASE = os.environ['ALARM_DATABASE']
-    except:
-        ALARM_DATABASE = "localhost"
-    try:
-        ALARM_DATABASE_REPLICA_SET_NAME = os.environ['ALARM_DATABASE_REPLICA_SET_NAME']
-    except:
-        ALARM_DATABASE_REPLICA_SET_NAME = "devrs"
-
-    try:
-        MONGO_ROOT_USERNAME = os.environ['MONGO_ROOT_USERNAME']
-        MONGO_ROOT_PASSWORD = os.environ['MONGO_ROOT_PASSWORD']
-        MONGO_ROOT_USERNAME = urllib.parse.quote_plus(
-            MONGO_ROOT_USERNAME)
-        MONGO_ROOT_PASSWORD = urllib.parse.quote_plus(
-            MONGO_ROOT_PASSWORD)
-        mongoAuth = True
-    except:
-        mongoAuth = False
-
-    try:
-        MONGO_INITDB_ALARM_DATABASE = os.environ['MONGO_INITDB_ALARM_DATABASE']
-    except:
-        MONGO_INITDB_ALARM_DATABASE = "demoAlarmDatabase"
-
-    if (mongoAuth):
-        client = MongoClient(
-            'mongodb://%s:%s@%s' %
-            (MONGO_ROOT_USERNAME, MONGO_ROOT_PASSWORD, ALARM_DATABASE), replicaSet=ALARM_DATABASE_REPLICA_SET_NAME)
-        # Wait for MongoClient to discover the whole replica set and identify MASTER!
-        sleep(0.5)
-    else:
-        client = MongoClient('mongodb://%s' % (ALARM_DATABASE),
-                             replicaSet=ALARM_DATABASE_REPLICA_SET_NAME)
-        # Wait for MongoClient to discover the whole replica set and identify MASTER!
-        sleep(0.5)
-
-    global alarmDB
-    alarmDB = client[MONGO_INITDB_ALARM_DATABASE]
-
+def initPreSuffix():
     # Prefix and suffix for alarmIOC pvs
     global alarmIOCPVPrefix
     global alarmIOCPVSuffix
@@ -1135,7 +1093,7 @@ def globalCollectionWatch():
 
 
 def main():
-    initDatabase()
+    initPreSuffix()
     getListOfPVNames()
     startAlarmIOC()
     # Initialise string PVs for front end

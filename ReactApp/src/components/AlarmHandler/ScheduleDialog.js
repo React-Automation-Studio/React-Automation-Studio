@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
@@ -75,7 +75,6 @@ const useStyles = makeStyles(theme => ({
 const ScheduleDialog = (props) => {
 
     const classes = useStyles(props)
-    const theme = useTheme()
 
     // console.table(theme)
 
@@ -422,16 +421,30 @@ const ScheduleDialog = (props) => {
     const handleDay = (day) => {
         if (displayUserObject.weekly && displayUserObject.notify) {
             if (global) {
-                props.setDialogUserObject({
-                    ...props.dialogUserObject,
-                    globalSetup: {
-                        ...props.dialogUserObject.globalSetup,
-                        days: {
-                            ...props.dialogUserObject.globalSetup.days,
-                            [day]: !props.dialogUserObject.globalSetup.days[day],
-                        }
+                // Check at least one day selected
+                let days = Object.entries(props.dialogUserObject.globalSetup.days).reduce((acc, day) => {
+                    if (day[1]) {
+                        acc.push(day[0])
                     }
-                })
+                    return acc
+                }, [])
+                const lastDayChecked = days.length === 1 && days[0] === day
+                //
+                if (lastDayChecked) {
+                    props.setSnackMessage("At least one day must be selected!")
+                }
+                else {
+                    props.setDialogUserObject({
+                        ...props.dialogUserObject,
+                        globalSetup: {
+                            ...props.dialogUserObject.globalSetup,
+                            days: {
+                                ...props.dialogUserObject.globalSetup.days,
+                                [day]: !props.dialogUserObject.globalSetup.days[day],
+                            }
+                        }
+                    })
+                }
             }
             else {
                 const newNotifyPVs = props.dialogUserObject.notifyPVs.map((area, index) => {
@@ -439,17 +452,32 @@ const ScheduleDialog = (props) => {
                         return area
                     }
                     else {
-                        const newArea = {
-                            ...area,
-                            notifySetup: {
-                                ...area.notifySetup,
-                                days: {
-                                    ...area.notifySetup.days,
-                                    [day]: !area.notifySetup.days[day],
+                        // Check at least one day selected
+                        let days = Object.entries(area.notifySetup.days).reduce((acc, day) => {
+                            if (day[1]) {
+                                acc.push(day[0])
+                            }
+                            return acc
+                        }, [])
+                        const lastDayChecked = days.length === 1 && days[0] === day
+                        //
+                        if (lastDayChecked) {
+                            props.setSnackMessage("At least one day must be selected!")
+                            return area
+                        }
+                        else {
+                            const newArea = {
+                                ...area,
+                                notifySetup: {
+                                    ...area.notifySetup,
+                                    days: {
+                                        ...area.notifySetup.days,
+                                        [day]: !area.notifySetup.days[day],
+                                    }
                                 }
                             }
+                            return newArea
                         }
-                        return newArea
                     }
                 })
                 props.setDialogUserObject({

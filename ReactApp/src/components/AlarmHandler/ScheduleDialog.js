@@ -752,6 +752,7 @@ const ScheduleDialog = (props) => {
                                         color="secondary"
                                         className={classes.chip}
                                         onClick={() => props.setDialogUserNotifyIndex(index)}
+                                        disabled={global}
                                     />
 
                                 )
@@ -824,8 +825,8 @@ const ScheduleDialog = (props) => {
                                 <Checkbox
                                     checked={displayUserObject.mobile}
                                     onChange={handleMobile}
-                                    // disabled={!displayUserObject.notify || true}
-                                    disabled={!displayUserObject.notify}
+                                    disabled={!displayUserObject.notify || true}
+                                // disabled={!displayUserObject.notify}
                                 />
                             </Grid>
                         </Grid>

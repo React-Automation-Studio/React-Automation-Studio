@@ -3,7 +3,7 @@
         "username": "user1",
         "email": "user1@example.com",
         "mobile": "+27 00 000 0001",
-        "global": false,
+        "global": true,
         "globalSetup": {
             "notify": true,
             "email": true,
@@ -176,7 +176,7 @@
         "username": "user2",
         "email": "user2@example.com",
         "mobile": "+27 00 000 0002",
-        "global": false,
+        "global": true,
         "globalSetup": {
             "notify": true,
             "email": true,
@@ -301,7 +301,7 @@
         "username": "user3",
         "email": "user3@example.com",
         "mobile": "+27 00 000 0003",
-        "global": false,
+        "global": true,
         "globalSetup": {
             "notify": true,
             "email": true,

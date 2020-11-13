@@ -628,7 +628,7 @@ const UserNotification = (props) => {
                     horizontal: 'center',
                 }}
                 open={snackMessage !== ""}
-                autoHideDuration={3000}
+                autoHideDuration={5000}
                 onClose={handleSnackClose}
                 message={snackMessage}
                 action={

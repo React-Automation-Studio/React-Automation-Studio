@@ -502,11 +502,20 @@ const ScheduleDialog = (props) => {
     const handleFromDate = (event) => {
         const newDate = formatISO(event)
         if (global) {
+            // Check if fromDate after toDate
+            let newDateAfterToDate = false
+            if (isAfter(parseISO(newDate), parseISO(props.dialogUserObject.globalSetup.toDate))) {
+                newDateAfterToDate = true
+            }
+            //
             props.setDialogUserObject({
                 ...props.dialogUserObject,
                 globalSetup: {
                     ...props.dialogUserObject.globalSetup,
-                    fromDate: newDate
+                    fromDate: newDate,
+                    toDate: newDateAfterToDate
+                        ? newDate
+                        : props.dialogUserObject.globalSetup.toDate
                 }
             })
         }
@@ -516,11 +525,20 @@ const ScheduleDialog = (props) => {
                     return area
                 }
                 else {
+                    // Check if fromDate after toDate
+                    let newDateAfterToDate = false
+                    if (isAfter(parseISO(newDate), parseISO(area.notifySetup.toDate))) {
+                        newDateAfterToDate = true
+                    }
+                    //
                     const newArea = {
                         ...area,
                         notifySetup: {
                             ...area.notifySetup,
-                            fromDate: newDate
+                            fromDate: newDate,
+                            toDate: newDateAfterToDate
+                                ? newDate
+                                : area.notifySetup.toDate
                         }
                     }
                     return newArea
@@ -536,13 +554,28 @@ const ScheduleDialog = (props) => {
     const handleToDate = (event) => {
         const newDate = formatISO(event)
         if (global) {
-            props.setDialogUserObject({
-                ...props.dialogUserObject,
-                globalSetup: {
-                    ...props.dialogUserObject.globalSetup,
-                    toDate: newDate
-                }
-            })
+            // Check if toDate after fromDate
+            let newDateAfterFromDate = false
+            if (isAfter(parseISO(newDate), parseISO(props.dialogUserObject.globalSetup.fromDate))) {
+                newDateAfterFromDate = true
+            }
+            else if (isSameDay(parseISO(newDate), parseISO(props.dialogUserObject.globalSetup.fromDate))) {
+                newDateAfterFromDate = true
+            }
+            //
+            if (newDateAfterFromDate) {
+                props.setDialogUserObject({
+                    ...props.dialogUserObject,
+                    globalSetup: {
+                        ...props.dialogUserObject.globalSetup,
+                        toDate: newDate
+                    }
+                })
+            }
+            else {
+                props.setSnackMessage("To date must be after from date!")
+            }
+
         }
         else {
             const newNotifyPVs = props.dialogUserObject.notifyPVs.map((area, index) => {
@@ -550,14 +583,29 @@ const ScheduleDialog = (props) => {
                     return area
                 }
                 else {
-                    const newArea = {
-                        ...area,
-                        notifySetup: {
-                            ...area.notifySetup,
-                            toDate: newDate
-                        }
+                    // Check if toDate after fromDate
+                    let newDateAfterFromDate = false
+                    if (isAfter(parseISO(newDate), parseISO(area.notifySetup.fromDate))) {
+                        newDateAfterFromDate = true
                     }
-                    return newArea
+                    else if (isSameDay(parseISO(newDate), parseISO(area.notifySetup.fromDate))) {
+                        newDateAfterFromDate = true
+                    }
+                    //
+                    if (newDateAfterFromDate) {
+                        const newArea = {
+                            ...area,
+                            notifySetup: {
+                                ...area.notifySetup,
+                                toDate: newDate
+                            }
+                        }
+                        return newArea
+                    }
+                    else {
+                        props.setSnackMessage("To date must be after from date!")
+                        return area
+                    }
                 }
             })
             props.setDialogUserObject({

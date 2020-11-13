@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
@@ -21,7 +21,7 @@ import CallIcon from '@material-ui/icons/Call';
 // import Slide from '@material-ui/core/Slide';
 
 import DateFnsUtils from '@date-io/date-fns';
-import { formatISO } from 'date-fns';
+import { formatISO, isFuture, isSameDay, isToday, isAfter } from 'date-fns';
 
 import {
     MuiPickersUtilsProvider,
@@ -50,6 +50,9 @@ const useStyles = makeStyles(theme => ({
     chipOutlinedSecondary: {
         borderWidth: '1.5px'
     },
+    errorDivider: {
+        backgroundColor: theme.palette.type === "dark" ? theme.palette.error.light : theme.palette.error.main
+    },
     horizontalCenter: {
         display: "flex",
         flexDirection: "row",
@@ -75,7 +78,9 @@ const useStyles = makeStyles(theme => ({
 const ScheduleDialog = (props) => {
 
     const classes = useStyles(props)
-    // const theme = useTheme()
+    const theme = useTheme()
+
+    // console.table(theme)
 
     const { global } = props.dialogUserObject
 
@@ -532,7 +537,7 @@ const ScheduleDialog = (props) => {
             onBackdropClick={props.closeDialog}
             onClose={props.closeDialog}
         >
-            <DialogTitle>
+            <DialogTitle className={classes.horizontalCenter}>
                 {
                     global
                         ? `${props.dialogUserObject.name}'s notification schedule (Global)`
@@ -540,7 +545,7 @@ const ScheduleDialog = (props) => {
                 }
             </DialogTitle>
             <DialogContent>
-                <DialogContentText>
+                <DialogContentText className={classes.horizontalCenter}>
                     {props.userScheduleString({ isGlobal: global, ...displayUserObject })}
                 </DialogContentText>
                 <Grid
@@ -705,6 +710,7 @@ const ScheduleDialog = (props) => {
                                         <Grid item xs={9} >
                                             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                                 <TimePicker
+                                                    ampm={false}
                                                     value={fromTime}
                                                     onChange={handleFromTime}
                                                     disabled={!displayUserObject.notify}
@@ -732,6 +738,7 @@ const ScheduleDialog = (props) => {
                                         <Grid item xs={9} >
                                             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                                 <TimePicker
+                                                    ampm={false}
                                                     value={toTime}
                                                     onChange={handleToTime}
                                                     disabled={!displayUserObject.notify}
@@ -855,13 +862,29 @@ const ScheduleDialog = (props) => {
                             </Grid>
                         </Grid>
                     </Grid>
+                    {props.dialogErrorMsg != ""
+                        ? <React.Fragment>
+                            <Grid item xs={12} style={{ marginTop: '0.75em', marginBottom: '0.75em' }} classes={{ root: classes.errorDivider }}>
+                                <Divider variant="middle" />
+                            </Grid>
+                            <Grid item xs={12} className={classes.horizontalCenter}>
+                                <span style={{ color: theme.palette.type === "dark" ? theme.palette.error.light : theme.palette.error.main, fontSize: '1rem', fontWeight: 500 }}>
+                                    {props.dialogErrorMsg}
+                                </span>
+                            </Grid>
+                            <Grid item xs={12} style={{ marginTop: '0.75em', marginBottom: '0.75em' }} classes={{ root: classes.errorDivider }}>
+                                <Divider variant="middle" />
+                            </Grid>
+                        </React.Fragment>
+                        : null
+                    }
                 </Grid>
             </DialogContent>
             <DialogActions>
-                <Button onClick={props.closeDialog} color="secondary">
+                <Button onClick={props.closeDialog}>
                     Cancel
                 </Button>
-                <Button onClick={() => props.acceptDialog(props.dialogUserObject.name, props.dialogUserObject.username)} color="secondary">
+                <Button disabled={props.dialogErrorMsg != ""} onClick={() => props.acceptDialog(props.dialogUserObject.name, props.dialogUserObject.username)} color="secondary">
                     Apply
                 </Button>
             </DialogActions>

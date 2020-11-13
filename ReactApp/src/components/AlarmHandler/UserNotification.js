@@ -68,6 +68,7 @@ const UserNotification = (props) => {
     const [dialogOpen, setDialogOpen] = useState(false)
     const [dialogUserObject, setDialogUserObject] = useState({})
     const [dialogUserNotifyIndex, setDialogUserNotifyIndex] = useState(0)
+    const [dialogErrorMsg, setDialogErrorMsg] = useState("")
 
     const dbPVData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs:Parameters:{}` }).data
     const dbUsersData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:users:Parameters:{}` }).data
@@ -625,6 +626,7 @@ const UserNotification = (props) => {
                         dialogUserNotifyIndex={dialogUserNotifyIndex}
                         setDialogUserNotifyIndex={setDialogUserNotifyIndex}
                         userScheduleString={userScheduleString}
+                        dialogErrorMsg={dialogErrorMsg}
                     />
                     : null
             }

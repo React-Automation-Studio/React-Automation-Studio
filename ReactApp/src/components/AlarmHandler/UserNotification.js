@@ -71,7 +71,7 @@ const UserNotification = (props) => {
     const [dialogOpen, setDialogOpen] = useState(false)
     const [dialogUserObject, setDialogUserObject] = useState({})
     const [dialogUserNotifyIndex, setDialogUserNotifyIndex] = useState(0)
-    const [snackMessage, setSnackMessage] = useState("re")
+    const [snackMessage, setSnackMessage] = useState("")
 
     const dbPVData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs:Parameters:{}` }).data
     const dbUsersData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:users:Parameters:{}` }).data
@@ -627,7 +627,7 @@ const UserNotification = (props) => {
                     vertical: 'bottom',
                     horizontal: 'center',
                 }}
-                open={snackMessage != ""}
+                open={snackMessage !== ""}
                 autoHideDuration={3000}
                 onClose={handleSnackClose}
                 message={snackMessage}

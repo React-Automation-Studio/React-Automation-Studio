@@ -7,6 +7,9 @@ import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 import DataConnection from '../SystemComponents/DataConnection';
@@ -68,7 +71,7 @@ const UserNotification = (props) => {
     const [dialogOpen, setDialogOpen] = useState(false)
     const [dialogUserObject, setDialogUserObject] = useState({})
     const [dialogUserNotifyIndex, setDialogUserNotifyIndex] = useState(0)
-    const [dialogErrorMsg, setDialogErrorMsg] = useState("")
+    const [snackMessage, setSnackMessage] = useState("re")
 
     const dbPVData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs:Parameters:{}` }).data
     const dbUsersData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:users:Parameters:{}` }).data
@@ -493,6 +496,10 @@ const UserNotification = (props) => {
         setDialogUserNotifyIndex(0)
     }, [])
 
+    const handleSnackClose = () => {
+        setSnackMessage("")
+    }
+
     // handleNewDbPVsList
     useEffect(() => {
         if (dbPVData !== null) {
@@ -615,6 +622,23 @@ const UserNotification = (props) => {
     return (
         <React.Fragment>
             {alarmPVs}
+            <Snackbar
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'center',
+                }}
+                open={snackMessage != ""}
+                autoHideDuration={3000}
+                onClose={handleSnackClose}
+                message={snackMessage}
+                action={
+                    <React.Fragment>
+                        <IconButton size="small" aria-label="close" color="inherit" onClick={handleSnackClose}>
+                            <CloseIcon fontSize="small" />
+                        </IconButton>
+                    </React.Fragment>
+                }
+            />
             {
                 Object.entries(dialogUserObject).length !== 0
                     ? <ScheduleDialog
@@ -626,7 +650,7 @@ const UserNotification = (props) => {
                         dialogUserNotifyIndex={dialogUserNotifyIndex}
                         setDialogUserNotifyIndex={setDialogUserNotifyIndex}
                         userScheduleString={userScheduleString}
-                        dialogErrorMsg={dialogErrorMsg}
+                        setSnackMessage={setSnackMessage}
                     />
                     : null
             }

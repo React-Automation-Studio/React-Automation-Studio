@@ -50,9 +50,6 @@ const useStyles = makeStyles(theme => ({
     chipOutlinedSecondary: {
         borderWidth: '1.5px'
     },
-    errorDivider: {
-        backgroundColor: theme.palette.type === "dark" ? theme.palette.error.light : theme.palette.error.main
-    },
     horizontalCenter: {
         display: "flex",
         flexDirection: "row",
@@ -862,29 +859,13 @@ const ScheduleDialog = (props) => {
                             </Grid>
                         </Grid>
                     </Grid>
-                    {props.dialogErrorMsg != ""
-                        ? <React.Fragment>
-                            <Grid item xs={12} style={{ marginTop: '0.75em', marginBottom: '0.75em' }} classes={{ root: classes.errorDivider }}>
-                                <Divider variant="middle" />
-                            </Grid>
-                            <Grid item xs={12} className={classes.horizontalCenter}>
-                                <span style={{ color: theme.palette.type === "dark" ? theme.palette.error.light : theme.palette.error.main, fontSize: '1rem', fontWeight: 500 }}>
-                                    {props.dialogErrorMsg}
-                                </span>
-                            </Grid>
-                            <Grid item xs={12} style={{ marginTop: '0.75em', marginBottom: '0.75em' }} classes={{ root: classes.errorDivider }}>
-                                <Divider variant="middle" />
-                            </Grid>
-                        </React.Fragment>
-                        : null
-                    }
                 </Grid>
             </DialogContent>
             <DialogActions>
                 <Button onClick={props.closeDialog}>
                     Cancel
                 </Button>
-                <Button disabled={props.dialogErrorMsg != ""} onClick={() => props.acceptDialog(props.dialogUserObject.name, props.dialogUserObject.username)} color="secondary">
+                <Button onClick={() => props.acceptDialog(props.dialogUserObject.name, props.dialogUserObject.username)} color="secondary">
                     Apply
                 </Button>
             </DialogActions>

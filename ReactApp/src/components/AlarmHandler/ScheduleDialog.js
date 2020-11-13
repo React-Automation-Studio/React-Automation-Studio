@@ -148,13 +148,24 @@ const ScheduleDialog = (props) => {
 
     const handleEmail = (event) => {
         if (global) {
-            props.setDialogUserObject({
-                ...props.dialogUserObject,
-                globalSetup: {
-                    ...props.dialogUserObject.globalSetup,
-                    email: event.target.checked
-                }
-            })
+            // Check onePlatform is checked
+            const onePlatform = !event.target.checked
+                ? props.dialogUserObject.globalSetup.mobile
+                : true
+            //
+            if (onePlatform) {
+                props.setDialogUserObject({
+                    ...props.dialogUserObject,
+                    globalSetup: {
+                        ...props.dialogUserObject.globalSetup,
+                        email: event.target.checked
+                    }
+                })
+            }
+            else {
+                props.setSnackMessage("At least one notification platform must be set!")
+            }
+
         }
         else {
             const newNotifyPVs = props.dialogUserObject.notifyPVs.map((area, index) => {
@@ -162,14 +173,25 @@ const ScheduleDialog = (props) => {
                     return area
                 }
                 else {
-                    const newArea = {
-                        ...area,
-                        notifySetup: {
-                            ...area.notifySetup,
-                            email: event.target.checked
+                    // Check onePlatform is checked
+                    const onePlatform = !event.target.checked
+                        ? area.notifySetup.mobile
+                        : true
+                    //
+                    if (onePlatform) {
+                        const newArea = {
+                            ...area,
+                            notifySetup: {
+                                ...area.notifySetup,
+                                email: event.target.checked
+                            }
                         }
+                        return newArea
                     }
-                    return newArea
+                    else {
+                        props.setSnackMessage("At least one notification platform must be set!")
+                        return area
+                    }
                 }
             })
             props.setDialogUserObject({
@@ -181,13 +203,23 @@ const ScheduleDialog = (props) => {
 
     const handleMobile = (event) => {
         if (global) {
-            props.setDialogUserObject({
-                ...props.dialogUserObject,
-                globalSetup: {
-                    ...props.dialogUserObject.globalSetup,
-                    mobile: event.target.checked
-                }
-            })
+            // Check onePlatform is checked
+            const onePlatform = !event.target.checked
+                ? props.dialogUserObject.globalSetup.email
+                : true
+            //
+            if (onePlatform) {
+                props.setDialogUserObject({
+                    ...props.dialogUserObject,
+                    globalSetup: {
+                        ...props.dialogUserObject.globalSetup,
+                        mobile: event.target.checked
+                    }
+                })
+            }
+            else {
+                props.setSnackMessage("At least one notification platform must be set!")
+            }
         }
         else {
             const newNotifyPVs = props.dialogUserObject.notifyPVs.map((area, index) => {
@@ -195,14 +227,26 @@ const ScheduleDialog = (props) => {
                     return area
                 }
                 else {
-                    const newArea = {
-                        ...area,
-                        notifySetup: {
-                            ...area.notifySetup,
-                            mobile: event.target.checked
+                    // Check onePlatform is checked
+                    const onePlatform = !event.target.checked
+                        ? area.notifySetup.email
+                        : true
+                    //
+                    if (onePlatform) {
+                        const newArea = {
+                            ...area,
+                            notifySetup: {
+                                ...area.notifySetup,
+                                mobile: event.target.checked
+                            }
                         }
+                        return newArea
                     }
-                    return newArea
+                    else {
+                        props.setSnackMessage("At least one notification platform must be set!")
+                        return area
+                    }
+
                 }
             })
             props.setDialogUserObject({
@@ -780,7 +824,8 @@ const ScheduleDialog = (props) => {
                                 <Checkbox
                                     checked={displayUserObject.mobile}
                                     onChange={handleMobile}
-                                    disabled={!displayUserObject.notify || true}
+                                    // disabled={!displayUserObject.notify || true}
+                                    disabled={!displayUserObject.notify}
                                 />
                             </Grid>
                         </Grid>

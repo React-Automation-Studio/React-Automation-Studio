@@ -1,1 +1,3 @@
 import alarmServer
+
+alarmServer.main()

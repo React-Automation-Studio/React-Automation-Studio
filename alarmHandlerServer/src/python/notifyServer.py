@@ -8,7 +8,7 @@ import _thread
 from epics import PV
 from datetime import datetime
 
-from dbMongo import dbFindOne, dbGetCollection
+from dbMongo import dbFindOne, dbGetCollection, dbUpdateHistory
 
 from notifyEmail import notifyEmail
 from notifyMobile import notifyMobile
@@ -89,6 +89,7 @@ def notify(notifyBuffer):
         for user in dbGetCollection("users").find():
             userNotifyEmailDict = {}
             userNotifyMobileDict = {}
+            username = user["username"]
             email = user["email"]
             mobile = user["mobile"]
             if(AH_DEBUG):
@@ -133,8 +134,19 @@ def notify(notifyBuffer):
                             userNotifyMobileDict[mobile][pvname] = message
             if(userNotifyEmailDict):
                 notifyEmail(userNotifyEmailDict)
+                # Log to global db
+                timestamp = datetime.timestamp(datetime.now())
+                entry = {"timestamp": timestamp, "entry": " ".join(
+                    [username, "notified on email"])}
+                dbUpdateHistory("_GLOBAL", entry)
+
             if(userNotifyMobileDict):
                 notifyMobile(userNotifyMobileDict)
+                # Log to global db
+                timestamp = datetime.timestamp(datetime.now())
+                entry = {"timestamp": timestamp, "entry": " ".join(
+                    [username, "notified on mobile"])}
+                dbUpdateHistory("_GLOBAL", entry)
 
 
 def disconnectAllPVs():

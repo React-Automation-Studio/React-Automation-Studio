@@ -114,8 +114,8 @@ const UserNotification = (props) => {
                 sumString = sumString.concat("all day ")
             }
             else {
-                const fromTime = format(new Date(userObject.fromTime), 'hh:mm a')
-                const toTime = format(new Date(userObject.toTime), 'hh:mm a')
+                const fromTime = format(new Date(userObject.fromTime), 'HH:mm')
+                const toTime = format(new Date(userObject.toTime), 'HH:mm')
                 sumString = sumString.concat(`between ${fromTime} and ${toTime} `)
             }
             if (userObject.weekly) {

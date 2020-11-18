@@ -1131,7 +1131,7 @@ def main():
 
     while (True):
         global notifyBuffer
-        sleep(5.0)
+        sleep(3.0)
         if(len(notifyBuffer) != 0):
             notify(notifyBuffer)
             notifyBuffer = []

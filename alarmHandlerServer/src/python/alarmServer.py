@@ -35,6 +35,9 @@ alarmPVSevDict = {
     8: "DISCONNECTED"
 }
 
+alarmIOCPVPrefix = ""
+alarmIOCPVSuffix = ""
+
 alarmDictInitialised = False
 alarmServerRestart = False
 

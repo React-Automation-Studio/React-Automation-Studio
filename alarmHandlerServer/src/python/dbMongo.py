@@ -7,6 +7,8 @@ try:
 except:
     AH_DEBUG = False
 
+alarmDB = None
+
 
 def initDatabase():
     try:
@@ -48,17 +50,6 @@ def initDatabase():
 
     global alarmDB
     alarmDB = client[MONGO_INITDB_ALARM_DATABASE]
-
-    # Prefix and suffix for alarmIOC pvs
-    global alarmIOCPVPrefix
-    global alarmIOCPVSuffix
-    doc = alarmDB.config.find_one()
-    try:
-        alarmIOCPVPrefix = doc["alarmIOCPVPrefix"]
-        alarmIOCPVSuffix = doc["alarmIOCPVSuffix"]
-    except:
-        if(AH_DEBUG):
-            print('[Warning]', 'alarmIOCPVPrefix not instantiated')
 
 
 def dbGetCollection(collection):

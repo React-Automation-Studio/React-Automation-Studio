@@ -366,6 +366,7 @@ const UserNotification = (props) => {
                     "notify": true,
                     "email": true,
                     "sms": false,
+                    "whatsapp": false,
                     "allDay": true,
                     "fromTime": "",
                     "toTime": "",

@@ -100,12 +100,12 @@ const UserNotification = (props) => {
             }
             if (userObject.email) {
                 sumString = sumString.concat("on email ")
-                if (userObject.mobile) {
-                    sumString = sumString.concat("and mobile ")
+                if (userObject.sms) {
+                    sumString = sumString.concat("and sms ")
                 }
             }
-            else if (userObject.mobile) {
-                sumString = sumString.concat("on mobile ")
+            else if (userObject.sms) {
+                sumString = sumString.concat("on sms ")
             }
             else {
                 sumString = sumString.concat("on !!NO CONTACT METHOD SELECTED!! ")
@@ -365,7 +365,7 @@ const UserNotification = (props) => {
                 "notifySetup": {
                     "notify": true,
                     "email": true,
-                    "mobile": false,
+                    "sms": false,
                     "allDay": true,
                     "fromTime": "",
                     "toTime": "",

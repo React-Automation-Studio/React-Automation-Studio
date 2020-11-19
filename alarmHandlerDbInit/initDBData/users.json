@@ -7,7 +7,7 @@
         "globalSetup": {
             "notify": true,
             "email": true,
-            "mobile": false,
+            "sms": false,
             "allDay": true,
             "fromTime": "",
             "toTime": "",
@@ -30,7 +30,7 @@
                 "notifySetup": {
                     "notify": true,
                     "email": true,
-                    "mobile": false,
+                    "sms": false,
                     "allDay": true,
                     "fromTime": "",
                     "toTime": "",
@@ -54,7 +54,7 @@
                 "notifySetup": {
                     "notify": true,
                     "email": true,
-                    "mobile": false,
+                    "sms": false,
                     "allDay": true,
                     "fromTime": "",
                     "toTime": "",
@@ -78,7 +78,7 @@
                 "notifySetup": {
                     "notify": true,
                     "email": true,
-                    "mobile": false,
+                    "sms": false,
                     "allDay": true,
                     "fromTime": "",
                     "toTime": "",
@@ -102,7 +102,7 @@
                 "notifySetup": {
                     "notify": true,
                     "email": true,
-                    "mobile": false,
+                    "sms": false,
                     "allDay": true,
                     "fromTime": "",
                     "toTime": "",
@@ -126,7 +126,7 @@
                 "notifySetup": {
                     "notify": true,
                     "email": true,
-                    "mobile": false,
+                    "sms": false,
                     "allDay": true,
                     "fromTime": "",
                     "toTime": "",
@@ -150,7 +150,7 @@
                 "notifySetup": {
                     "notify": true,
                     "email": true,
-                    "mobile": false,
+                    "sms": false,
                     "allDay": true,
                     "fromTime": "",
                     "toTime": "",
@@ -180,7 +180,7 @@
         "globalSetup": {
             "notify": true,
             "email": true,
-            "mobile": false,
+            "sms": false,
             "allDay": true,
             "fromTime": "",
             "toTime": "",
@@ -203,7 +203,7 @@
                 "notifySetup": {
                     "notify": true,
                     "email": true,
-                    "mobile": false,
+                    "sms": false,
                     "allDay": true,
                     "fromTime": "",
                     "toTime": "",
@@ -227,7 +227,7 @@
                 "notifySetup": {
                     "notify": true,
                     "email": true,
-                    "mobile": false,
+                    "sms": false,
                     "allDay": true,
                     "fromTime": "",
                     "toTime": "",
@@ -251,7 +251,7 @@
                 "notifySetup": {
                     "notify": true,
                     "email": true,
-                    "mobile": false,
+                    "sms": false,
                     "allDay": true,
                     "fromTime": "",
                     "toTime": "",
@@ -275,7 +275,7 @@
                 "notifySetup": {
                     "notify": true,
                     "email": true,
-                    "mobile": false,
+                    "sms": false,
                     "allDay": true,
                     "fromTime": "",
                     "toTime": "",
@@ -305,7 +305,7 @@
         "globalSetup": {
             "notify": true,
             "email": true,
-            "mobile": false,
+            "sms": false,
             "allDay": true,
             "fromTime": "",
             "toTime": "",
@@ -328,7 +328,7 @@
                 "notifySetup": {
                     "notify": true,
                     "email": true,
-                    "mobile": false,
+                    "sms": false,
                     "allDay": true,
                     "fromTime": "",
                     "toTime": "",
@@ -352,7 +352,7 @@
                 "notifySetup": {
                     "notify": true,
                     "email": true,
-                    "mobile": false,
+                    "sms": false,
                     "allDay": true,
                     "fromTime": "",
                     "toTime": "",
@@ -376,7 +376,7 @@
                 "notifySetup": {
                     "notify": true,
                     "email": true,
-                    "mobile": false,
+                    "sms": false,
                     "allDay": true,
                     "fromTime": "",
                     "toTime": "",
@@ -400,7 +400,7 @@
                 "notifySetup": {
                     "notify": true,
                     "email": true,
-                    "mobile": false,
+                    "sms": false,
                     "allDay": true,
                     "fromTime": "",
                     "toTime": "",
@@ -424,7 +424,7 @@
                 "notifySetup": {
                     "notify": true,
                     "email": true,
-                    "mobile": false,
+                    "sms": false,
                     "allDay": true,
                     "fromTime": "",
                     "toTime": "",
@@ -448,7 +448,7 @@
                 "notifySetup": {
                     "notify": true,
                     "email": true,
-                    "mobile": false,
+                    "sms": false,
                     "allDay": true,
                     "fromTime": "",
                     "toTime": "",
@@ -472,7 +472,7 @@
                 "notifySetup": {
                     "notify": true,
                     "email": true,
-                    "mobile": false,
+                    "sms": false,
                     "allDay": true,
                     "fromTime": "",
                     "toTime": "",
@@ -496,7 +496,7 @@
                 "notifySetup": {
                     "notify": true,
                     "email": true,
-                    "mobile": false,
+                    "sms": false,
                     "allDay": true,
                     "fromTime": "",
                     "toTime": "",
@@ -520,7 +520,7 @@
                 "notifySetup": {
                     "notify": true,
                     "email": true,
-                    "mobile": false,
+                    "sms": false,
                     "allDay": true,
                     "fromTime": "",
                     "toTime": "",

@@ -17,7 +17,7 @@ import Switch from '@material-ui/core/Switch';
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 import ScheduleIcon from '@material-ui/icons/Schedule';
 import EmailIcon from '@material-ui/icons/Email';
-import CallIcon from '@material-ui/icons/Call';
+import SmsIcon from '@material-ui/icons/Sms';
 // import Slide from '@material-ui/core/Slide';
 
 import DateFnsUtils from '@date-io/date-fns';
@@ -150,7 +150,7 @@ const ScheduleDialog = (props) => {
         if (global) {
             // Check onePlatform is checked
             const onePlatform = !event.target.checked
-                ? props.dialogUserObject.globalSetup.mobile
+                ? props.dialogUserObject.globalSetup.sms
                 : true
             //
             if (onePlatform) {
@@ -175,7 +175,7 @@ const ScheduleDialog = (props) => {
                 else {
                     // Check onePlatform is checked
                     const onePlatform = !event.target.checked
-                        ? area.notifySetup.mobile
+                        ? area.notifySetup.sms
                         : true
                     //
                     if (onePlatform) {
@@ -201,7 +201,7 @@ const ScheduleDialog = (props) => {
         }
     }
 
-    const handleMobile = (event) => {
+    const handleSMS = (event) => {
         if (global) {
             // Check onePlatform is checked
             const onePlatform = !event.target.checked
@@ -213,7 +213,7 @@ const ScheduleDialog = (props) => {
                     ...props.dialogUserObject,
                     globalSetup: {
                         ...props.dialogUserObject.globalSetup,
-                        mobile: event.target.checked
+                        sms: event.target.checked
                     }
                 })
             }
@@ -237,7 +237,7 @@ const ScheduleDialog = (props) => {
                             ...area,
                             notifySetup: {
                                 ...area.notifySetup,
-                                mobile: event.target.checked
+                                sms: event.target.checked
                             }
                         }
                         return newArea
@@ -816,17 +816,16 @@ const ScheduleDialog = (props) => {
                             alignItems="stretch"
                         >
                             <Grid item xs={2} className={classes.centerInBlock}>
-                                <CallIcon />
+                                <SmsIcon />
                             </Grid>
                             <Grid item xs={2} className={classes.verticalCenter}>
-                                <span style={{ fontSize: '1rem' }}>Mobile</span>
+                                <span style={{ fontSize: '1rem' }}>SMS</span>
                             </Grid>
                             <Grid item xs={8}>
                                 <Checkbox
-                                    checked={displayUserObject.mobile}
-                                    onChange={handleMobile}
-                                    disabled={!displayUserObject.notify || true}
-                                // disabled={!displayUserObject.notify}
+                                    checked={displayUserObject.sms}
+                                    onChange={handleSMS}
+                                    disabled={!displayUserObject.notify}
                                 />
                             </Grid>
                         </Grid>

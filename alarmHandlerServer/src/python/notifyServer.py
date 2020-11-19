@@ -11,7 +11,7 @@ from datetime import datetime
 from dbMongo import dbFindOne, dbGetCollection, dbUpdateHistory
 
 from notifyEmail import notifyEmail
-from notifyMobile import notifyMobile
+from notifySMS import notifySMS
 
 try:
     AH_DEBUG = bool(os.environ['AH_DEBUG'])
@@ -88,7 +88,7 @@ def notify(notifyBuffer):
         message = entry["message"]
         for user in dbGetCollection("users").find():
             userNotifyEmailDict = {}
-            userNotifyMobileDict = {}
+            userNotifySMSDict = {}
             username = user["username"]
             email = user["email"]
             mobile = user["mobile"]
@@ -101,19 +101,19 @@ def notify(notifyBuffer):
                         print("Pass regEx")
                     notify = False
                     notifyOnEmail = False
-                    notifyOnMobile = False
+                    notifyOnSMS = False
                     if(user["global"]):
                         if(AH_DEBUG):
                             print("Using global profile")
                         notify = notifyValid(user["globalSetup"])
                         notifyOnEmail = user["globalSetup"]["email"]
-                        notifyOnMobile = user["globalSetup"]["mobile"]
+                        notifyOnSMS = user["globalSetup"]["sms"]
                     else:
                         if(AH_DEBUG):
                             print("Using unique profile")
                         notify = notifyValid(notifyPV["notifySetup"])
                         notifyOnEmail = notifyPV["notifySetup"]["email"]
-                        notifyOnMobile = notifyPV["notifySetup"]["mobile"]
+                        notifyOnSMS = notifyPV["notifySetup"]["sms"]
                     if(notify):
                         # Passes notifyValid check
                         if(AH_DEBUG):
@@ -125,13 +125,13 @@ def notify(notifyBuffer):
                             if email not in userNotifyEmailDict:
                                 userNotifyEmailDict[email] = {}
                             userNotifyEmailDict[email][pvname] = message
-                        if(notifyOnMobile):
-                            # Notify via mobile
+                        if(notifyOnSMS):
+                            # Notify via sms
                             if(AH_DEBUG):
-                                print("Notify via mobile")
-                            if mobile not in userNotifyMobileDict:
-                                userNotifyMobileDict[mobile] = {}
-                            userNotifyMobileDict[mobile][pvname] = message
+                                print("Notify via sms")
+                            if mobile not in userNotifySMSDict:
+                                userNotifySMSDict[mobile] = {}
+                            userNotifySMSDict[mobile][pvname] = message
             if(userNotifyEmailDict):
                 notifyEmail(userNotifyEmailDict)
                 # Log to global db
@@ -140,12 +140,12 @@ def notify(notifyBuffer):
                     [username, "notified on email"])}
                 dbUpdateHistory("_GLOBAL", entry)
 
-            if(userNotifyMobileDict):
-                notifyMobile(userNotifyMobileDict)
+            if(userNotifySMSDict):
+                notifySMS(userNotifySMSDict)
                 # Log to global db
                 timestamp = datetime.timestamp(datetime.now())
                 entry = {"timestamp": timestamp, "entry": " ".join(
-                    [username, "notified on mobile"])}
+                    [username, "notified on sms"])}
                 dbUpdateHistory("_GLOBAL", entry)
 
 

@@ -93,22 +93,31 @@ const UserNotification = (props) => {
         }
         if (userObject.notify) {
             if (userObject.isGlobal) {
-                sumString = "Global - Notify me "
+                sumString = "Global - Notify me on "
             }
             else {
-                sumString = "Notify me "
+                sumString = "Notify me on "
             }
-            if (userObject.email) {
-                sumString = sumString.concat("on email ")
-                if (userObject.sms) {
-                    sumString = sumString.concat("and sms ")
-                }
+            if (userObject.email && userObject.sms && userObject.whatsapp) {
+                sumString = sumString.concat("email, SMS and WhatsApp ")
+            }
+            else if (userObject.email && userObject.sms) {
+                sumString = sumString.concat("email and SMS ")
+            }
+            else if (userObject.email && userObject.whatsapp) {
+                sumString = sumString.concat("email and WhatsApp ")
+            }
+            else if (userObject.email) {
+                sumString = sumString.concat("email ")
+            }
+            else if (userObject.sms && userObject.whatsapp) {
+                sumString = sumString.concat("SMS and WhatsApp ")
             }
             else if (userObject.sms) {
-                sumString = sumString.concat("on sms ")
+                sumString = sumString.concat("SMS ")
             }
-            else {
-                sumString = sumString.concat("on !!NO CONTACT METHOD SELECTED!! ")
+            else if (userObject.whatsapp) {
+                sumString = sumString.concat("WhatsApp ")
             }
             if (userObject.allDay) {
                 sumString = sumString.concat("all day ")
@@ -128,9 +137,6 @@ const UserNotification = (props) => {
                 if (days.length === 7) {
                     sumString = sumString.concat("everyday")
                 }
-                else if (days.length === 0) {
-                    sumString = sumString.concat(`on a !!NO DAY(S) SELECTED!!`)
-                }
                 else if (days.length === 1) {
                     sumString = sumString.concat(`on a ${days}`)
                 }
@@ -143,8 +149,8 @@ const UserNotification = (props) => {
                 }
             }
             else {
-                const fromDate = format(new Date(userObject.fromDate), 'dd MMMM yyyy')
-                const toDate = format(new Date(userObject.toDate), 'dd MMMM yyyy')
+                const fromDate = format(new Date(userObject.fromDate), 'dd MMM yyyy')
+                const toDate = format(new Date(userObject.toDate), 'dd MMM yyyy')
                 sumString = sumString.concat(`from ${fromDate} to ${toDate}`)
             }
             return sumString

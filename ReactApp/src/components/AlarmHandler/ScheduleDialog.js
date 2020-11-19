@@ -257,6 +257,61 @@ const ScheduleDialog = (props) => {
         }
     }
 
+    const handleWhatsApp = (event) => {
+        if (global) {
+            // Check oneMedium is checked
+            const oneMedium = !event.target.checked
+                ? props.dialogUserObject.globalSetup.email || props.dialogUserObject.globalSetup.sms
+                : true
+            //
+            if (oneMedium) {
+                props.setDialogUserObject({
+                    ...props.dialogUserObject,
+                    globalSetup: {
+                        ...props.dialogUserObject.globalSetup,
+                        whatsapp: event.target.checked
+                    }
+                })
+            }
+            else {
+                props.setSnackMessage("At least one notification medium must be set!")
+            }
+        }
+        else {
+            const newNotifyPVs = props.dialogUserObject.notifyPVs.map((area, index) => {
+                if (props.dialogUserNotifyIndex !== index) {
+                    return area
+                }
+                else {
+                    // Check oneMedium is checked
+                    const oneMedium = !event.target.checked
+                        ? area.notifySetup.email || area.notifySetup.sms
+                        : true
+                    //
+                    if (oneMedium) {
+                        const newArea = {
+                            ...area,
+                            notifySetup: {
+                                ...area.notifySetup,
+                                whatsapp: event.target.checked
+                            }
+                        }
+                        return newArea
+                    }
+                    else {
+                        props.setSnackMessage("At least one notification medium must be set!")
+                        return area
+                    }
+
+                }
+            })
+            props.setDialogUserObject({
+                ...props.dialogUserObject,
+                notifyPVs: newNotifyPVs
+            })
+        }
+    }
+
     const handleAllDay = (event) => {
         if (global) {
             if (!event.target.checked) {
@@ -832,7 +887,7 @@ const ScheduleDialog = (props) => {
                                     <Grid item xs={3}>
                                         <Checkbox
                                             checked={displayUserObject.whatsapp}
-                                            onChange={() => console.log('whatsapp clicked')}
+                                            onChange={handleWhatsApp}
                                             disabled={!displayUserObject.notify}
                                         />
                                     </Grid>

@@ -16,8 +16,9 @@ import Radio from '@material-ui/core/Radio';
 import Switch from '@material-ui/core/Switch';
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 import ScheduleIcon from '@material-ui/icons/Schedule';
-import EmailIcon from '@material-ui/icons/Email';
-import SmsIcon from '@material-ui/icons/Sms';
+import EmailOutlinedIcon from '@material-ui/icons/EmailOutlined';
+import SmsOutlinedIcon from '@material-ui/icons/SmsOutlined';
+import WhatsAppIcon from '@material-ui/icons/WhatsApp';
 // import Slide from '@material-ui/core/Slide';
 
 import DateFnsUtils from '@date-io/date-fns';
@@ -148,12 +149,12 @@ const ScheduleDialog = (props) => {
 
     const handleEmail = (event) => {
         if (global) {
-            // Check onePlatform is checked
-            const onePlatform = !event.target.checked
-                ? props.dialogUserObject.globalSetup.sms
+            // Check oneMedium is checked
+            const oneMedium = !event.target.checked
+                ? props.dialogUserObject.globalSetup.sms || props.dialogUserObject.globalSetup.whatsapp
                 : true
             //
-            if (onePlatform) {
+            if (oneMedium) {
                 props.setDialogUserObject({
                     ...props.dialogUserObject,
                     globalSetup: {
@@ -163,7 +164,7 @@ const ScheduleDialog = (props) => {
                 })
             }
             else {
-                props.setSnackMessage("At least one notification platform must be set!")
+                props.setSnackMessage("At least one notification medium must be set!")
             }
 
         }
@@ -173,12 +174,12 @@ const ScheduleDialog = (props) => {
                     return area
                 }
                 else {
-                    // Check onePlatform is checked
-                    const onePlatform = !event.target.checked
-                        ? area.notifySetup.sms
+                    // Check oneMedium is checked
+                    const oneMedium = !event.target.checked
+                        ? area.notifySetup.sms || area.notifySetup.whatsapp
                         : true
                     //
-                    if (onePlatform) {
+                    if (oneMedium) {
                         const newArea = {
                             ...area,
                             notifySetup: {
@@ -189,7 +190,7 @@ const ScheduleDialog = (props) => {
                         return newArea
                     }
                     else {
-                        props.setSnackMessage("At least one notification platform must be set!")
+                        props.setSnackMessage("At least one notification medium must be set!")
                         return area
                     }
                 }
@@ -203,12 +204,12 @@ const ScheduleDialog = (props) => {
 
     const handleSMS = (event) => {
         if (global) {
-            // Check onePlatform is checked
-            const onePlatform = !event.target.checked
-                ? props.dialogUserObject.globalSetup.email
+            // Check oneMedium is checked
+            const oneMedium = !event.target.checked
+                ? props.dialogUserObject.globalSetup.email || props.dialogUserObject.globalSetup.whatsapp
                 : true
             //
-            if (onePlatform) {
+            if (oneMedium) {
                 props.setDialogUserObject({
                     ...props.dialogUserObject,
                     globalSetup: {
@@ -218,7 +219,7 @@ const ScheduleDialog = (props) => {
                 })
             }
             else {
-                props.setSnackMessage("At least one notification platform must be set!")
+                props.setSnackMessage("At least one notification medium must be set!")
             }
         }
         else {
@@ -227,12 +228,12 @@ const ScheduleDialog = (props) => {
                     return area
                 }
                 else {
-                    // Check onePlatform is checked
-                    const onePlatform = !event.target.checked
-                        ? area.notifySetup.email
+                    // Check oneMedium is checked
+                    const oneMedium = !event.target.checked
+                        ? area.notifySetup.email || area.notifySetup.whatsapp
                         : true
                     //
-                    if (onePlatform) {
+                    if (oneMedium) {
                         const newArea = {
                             ...area,
                             notifySetup: {
@@ -243,7 +244,7 @@ const ScheduleDialog = (props) => {
                         return newArea
                     }
                     else {
-                        props.setSnackMessage("At least one notification platform must be set!")
+                        props.setSnackMessage("At least one notification medium must be set!")
                         return area
                     }
 
@@ -793,40 +794,71 @@ const ScheduleDialog = (props) => {
                             justify="flex-start"
                             alignItems="stretch"
                         >
-                            <Grid item xs={2} className={classes.centerInBlock}>
-                                <EmailIcon />
+                            <Grid item xs={6}>
+                                <Grid
+                                    container
+                                    direction="row"
+                                    justify="center"
+                                    alignItems="stretch"
+                                >
+                                    <Grid item xs={3} className={classes.centerInBlock}>
+                                        <EmailOutlinedIcon />
+                                    </Grid>
+                                    <Grid item xs={4} className={classes.verticalCenter}>
+                                        <span style={{ fontSize: '1rem' }}>Email</span>
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                        <Checkbox
+                                            checked={displayUserObject.email}
+                                            onChange={handleEmail}
+                                            disabled={!displayUserObject.notify}
+                                        />
+                                    </Grid>
+                                </Grid>
                             </Grid>
-                            <Grid item xs={2} className={classes.verticalCenter}>
-                                <span style={{ fontSize: '1rem' }}>Email</span>
+                            <Grid item xs={6}>
+                                <Grid
+                                    container
+                                    direction="row"
+                                    justify="center"
+                                    alignItems="stretch"
+                                >
+                                    <Grid item xs={3} className={classes.centerInBlock}>
+                                        <WhatsAppIcon />
+                                    </Grid>
+                                    <Grid item xs={4} className={classes.verticalCenter}>
+                                        <span style={{ fontSize: '1rem' }}>WhatsApp</span>
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                        <Checkbox
+                                            checked={displayUserObject.whatsapp}
+                                            onChange={() => console.log('whatsapp clicked')}
+                                            disabled={!displayUserObject.notify}
+                                        />
+                                    </Grid>
+                                </Grid>
                             </Grid>
-                            <Grid item xs={8}>
-                                <Checkbox
-                                    checked={displayUserObject.email}
-                                    onChange={handleEmail}
-                                    disabled={!displayUserObject.notify}
-                                />
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Grid
-                            container
-                            direction="row"
-                            justify="flex-start"
-                            alignItems="stretch"
-                        >
-                            <Grid item xs={2} className={classes.centerInBlock}>
-                                <SmsIcon />
-                            </Grid>
-                            <Grid item xs={2} className={classes.verticalCenter}>
-                                <span style={{ fontSize: '1rem' }}>SMS</span>
-                            </Grid>
-                            <Grid item xs={8}>
-                                <Checkbox
-                                    checked={displayUserObject.sms}
-                                    onChange={handleSMS}
-                                    disabled={!displayUserObject.notify}
-                                />
+                            <Grid item xs={6}>
+                                <Grid
+                                    container
+                                    direction="row"
+                                    justify="center"
+                                    alignItems="stretch"
+                                >
+                                    <Grid item xs={3} className={classes.centerInBlock}>
+                                        <SmsOutlinedIcon />
+                                    </Grid>
+                                    <Grid item xs={4} className={classes.verticalCenter}>
+                                        <span style={{ fontSize: '1rem' }}>SMS</span>
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                        <Checkbox
+                                            checked={displayUserObject.sms}
+                                            onChange={handleSMS}
+                                            disabled={!displayUserObject.notify}
+                                        />
+                                    </Grid>
+                                </Grid>
                             </Grid>
                         </Grid>
                     </Grid>

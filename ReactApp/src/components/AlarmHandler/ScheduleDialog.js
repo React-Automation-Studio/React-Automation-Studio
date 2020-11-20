@@ -376,20 +376,11 @@ const ScheduleDialog = (props) => {
     const handleFromTime = (event) => {
         const newTime = formatISO(event)
         if (global) {
-            // Check if fromTime after toTime
-            let newTimeAfterToTime = false
-            if (isAfter(parseISO(newTime), parseISO(props.dialogUserObject.globalSetup.toTime))) {
-                newTimeAfterToTime = true
-            }
-            //
             props.setDialogUserObject({
                 ...props.dialogUserObject,
                 globalSetup: {
                     ...props.dialogUserObject.globalSetup,
                     fromTime: newTime,
-                    toTime: newTimeAfterToTime
-                        ? newTime
-                        : props.dialogUserObject.globalSetup.toTime
                 }
             })
         }
@@ -399,20 +390,11 @@ const ScheduleDialog = (props) => {
                     return area
                 }
                 else {
-                    // Check if fromTime after toTime
-                    let newTimeAfterToTime = false
-                    if (isAfter(parseISO(newTime), parseISO(area.notifySetup.toTime))) {
-                        newTimeAfterToTime = true
-                    }
-                    //
                     const newArea = {
                         ...area,
                         notifySetup: {
                             ...area.notifySetup,
-                            fromTime: newTime,
-                            toTime: newTimeAfterToTime
-                                ? newTime
-                                : area.notifySetup.toTime
+                            fromTime: newTime
                         }
                     }
                     return newArea
@@ -428,24 +410,13 @@ const ScheduleDialog = (props) => {
     const handleToTime = (event) => {
         const newTime = formatISO(event)
         if (global) {
-            // Check if toTime after fromTime
-            let newTimeAfterFromTime = false
-            if (isAfter(parseISO(newTime), parseISO(props.dialogUserObject.globalSetup.fromTime))) {
-                newTimeAfterFromTime = true
-            }
-            //
-            if (newTimeAfterFromTime) {
-                props.setDialogUserObject({
-                    ...props.dialogUserObject,
-                    globalSetup: {
-                        ...props.dialogUserObject.globalSetup,
-                        toTime: newTime
-                    }
-                })
-            }
-            else {
-                props.setSnackMessage("To time must be after from time!")
-            }
+            props.setDialogUserObject({
+                ...props.dialogUserObject,
+                globalSetup: {
+                    ...props.dialogUserObject.globalSetup,
+                    toTime: newTime
+                }
+            })
 
         }
         else {
@@ -454,26 +425,14 @@ const ScheduleDialog = (props) => {
                     return area
                 }
                 else {
-                    // Check if toTime after fromTime
-                    let newTimeAfterFromTime = false
-                    if (isAfter(parseISO(newTime), parseISO(area.notifySetup.fromTime))) {
-                        newTimeAfterFromTime = true
-                    }
-                    //
-                    if (newTimeAfterFromTime) {
-                        const newArea = {
-                            ...area,
-                            notifySetup: {
-                                ...area.notifySetup,
-                                toTime: newTime
-                            }
+                    const newArea = {
+                        ...area,
+                        notifySetup: {
+                            ...area.notifySetup,
+                            toTime: newTime
                         }
-                        return newArea
                     }
-                    else {
-                        props.setSnackMessage("To time must be after from time!")
-                        return area
-                    }
+                    return newArea
                 }
             })
             props.setDialogUserObject({

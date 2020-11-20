@@ -51,9 +51,11 @@ def initDatabase():
     global alarmDB
     alarmDB = client[MONGO_INITDB_ALARM_DATABASE]
 
-    while(alarmDB.list_collection_names() == []):
+    while(len(alarmDB.list_collection_names()) == 0):
         if(AH_DEBUG):
             print('Waiting for Pymongo to connect to alarm database')
+    if(AH_DEBUG):
+        print('Pymongo connected to alarm database')
 
 
 def dbGetCollection(collection):

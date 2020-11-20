@@ -41,15 +41,19 @@ def initDatabase():
             'mongodb://%s:%s@%s' %
             (MONGO_ROOT_USERNAME, MONGO_ROOT_PASSWORD, ALARM_DATABASE), replicaSet=ALARM_DATABASE_REPLICA_SET_NAME)
         # Wait for MongoClient to discover the whole replica set and identify MASTER!
-        sleep(0.5)
+        # sleep(0.5)
     else:
         client = MongoClient('mongodb://%s' % (ALARM_DATABASE),
                              replicaSet=ALARM_DATABASE_REPLICA_SET_NAME)
         # Wait for MongoClient to discover the whole replica set and identify MASTER!
-        sleep(0.5)
+        # sleep(0.5)
 
     global alarmDB
     alarmDB = client[MONGO_INITDB_ALARM_DATABASE]
+
+    while(alarmDB.list_collection_names() == []):
+        if(AH_DEBUG):
+            print('Waiting for Pymongo to connect to alarm database')
 
 
 def dbGetCollection(collection):

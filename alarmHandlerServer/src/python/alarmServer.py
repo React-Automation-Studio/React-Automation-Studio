@@ -500,9 +500,18 @@ def pvPrepareData(pvname, value, severity, timestamp, units, enum_strs):
 
     # manipulate value
     if(enum_strs):
-        value = enum_strs[value]
+        if(enum_strs[value] != ''):
+            value = enum_strs[value]
+        else:
+            if(units):
+                value = str(value)+" "+units
+            else:
+                value = str(value)
     else:
-        value = str(value)+" "+units
+        if(units):
+            value = str(value)+" "+units
+        else:
+            value = str(value)
 
     processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN)
 
@@ -803,9 +812,18 @@ def initialiseAlarmIOC():
                     enum_strs = pvInitDict[pvname][4]
                     value = pvInitDict[pvname][0]
                     if(enum_strs):
-                        lastAlarmVal = enum_strs[value]
+                        if(enum_strs[value] != ''):
+                            lastAlarmVal = enum_strs[value]
+                        else:
+                            if(units):
+                                lastAlarmVal = str(value)+" "+units
+                            else:
+                                lastAlarmVal = str(value)
                     else:
-                        lastAlarmVal = str(value)+" "+units
+                        if(units):
+                            lastAlarmVal = str(value)+" "+units
+                        else:
+                            lastAlarmVal = str(value)
                     if(not alarmServerRestart):
                         lastAlarmTime = datetime.fromtimestamp(
                             pvInitDict[pvname][2]).strftime("%a, %d %b %Y at %H:%M:%S")

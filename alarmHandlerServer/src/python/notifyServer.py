@@ -10,8 +10,9 @@ from datetime import datetime
 
 from dbMongo import dbFindOne, dbGetCollection, dbUpdateHistory
 
-from notifyEmail import notifyEmail
-from notifySMS import notifySMS
+from notificationMethods.notifyEmail import notifyEmail
+from notificationMethods.notifySMS import notifySMS
+from notificationMethods.notifyWhatsApp import notifyWhatsApp
 
 try:
     AH_DEBUG = bool(os.environ['AH_DEBUG'])

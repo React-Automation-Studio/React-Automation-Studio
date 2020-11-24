@@ -41,7 +41,7 @@ WORKDIR /usr/src/app
 # symbolic links to start iocs
 RUN ln -s /epics/alarmIOC/iocBoot/iocalarmIOC/start_tmux_st.cmd /usr/src/app/startAlarmIOC.cmd
 
-COPY alarmHandlerServer/src/python/*.py ./
+COPY alarmHandlerServer/src/python/ ./
 
 # custom EPICS_CA_ADDR_LIST to only allow dev stuff to communicate
 ENV EPICS_CA_ADDR_LIST="0.0.0.0:8001 0.0.0.0:8004"

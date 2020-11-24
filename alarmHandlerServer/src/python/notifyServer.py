@@ -90,6 +90,7 @@ def notify(notifyBuffer):
         for user in dbGetCollection("users").find():
             userNotifyEmailDict = {}
             userNotifySMSDict = {}
+            userNotifyWhatsAppDict = {}
             username = user["username"]
             email = user["email"]
             mobile = user["mobile"]
@@ -103,18 +104,21 @@ def notify(notifyBuffer):
                     notify = False
                     notifyOnEmail = False
                     notifyOnSMS = False
+                    notifyOnWhatsApp = False
                     if(user["global"]):
                         if(AH_DEBUG):
                             print("Using global profile")
                         notify = notifyValid(user["globalSetup"])
                         notifyOnEmail = user["globalSetup"]["email"]
                         notifyOnSMS = user["globalSetup"]["sms"]
+                        notifyOnWhatsApp = user["globalSetup"]["whatsapp"]
                     else:
                         if(AH_DEBUG):
                             print("Using unique profile")
                         notify = notifyValid(notifyPV["notifySetup"])
                         notifyOnEmail = notifyPV["notifySetup"]["email"]
                         notifyOnSMS = notifyPV["notifySetup"]["sms"]
+                        notifyOnWhatsApp = notifyPV["notifySetup"]["whatsapp"]
                     if(notify):
                         # Passes notifyValid check
                         if(AH_DEBUG):
@@ -133,6 +137,13 @@ def notify(notifyBuffer):
                             if mobile not in userNotifySMSDict:
                                 userNotifySMSDict[mobile] = {}
                             userNotifySMSDict[mobile][pvname] = message
+                        if(notifyOnWhatsApp):
+                            # Notify via whatsapp
+                            if(AH_DEBUG):
+                                print("Notify via whatsapp")
+                            if mobile not in userNotifyWhatsAppDict:
+                                userNotifyWhatsAppDict[mobile] = {}
+                            userNotifyWhatsAppDict[mobile][pvname] = message
             if(userNotifyEmailDict):
                 notifyEmail(userNotifyEmailDict)
                 # Log to global db
@@ -147,6 +158,14 @@ def notify(notifyBuffer):
                 timestamp = datetime.timestamp(datetime.now())
                 entry = {"timestamp": timestamp, "entry": " ".join(
                     [username, "notified on sms"])}
+                dbUpdateHistory("_GLOBAL", entry)
+
+            if(userNotifyWhatsAppDict):
+                notifyWhatsApp(userNotifyWhatsAppDict)
+                # Log to global db
+                timestamp = datetime.timestamp(datetime.now())
+                entry = {"timestamp": timestamp, "entry": " ".join(
+                    [username, "notified on whatsapp"])}
                 dbUpdateHistory("_GLOBAL", entry)
 
 

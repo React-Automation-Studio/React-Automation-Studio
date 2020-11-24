@@ -53,7 +53,7 @@ def initDatabase():
 
     while(len(alarmDB.list_collection_names()) != 5):
         if(AH_DEBUG):
-            print('Waiting for Pymongo to connect to alarm database')
+            print('Waiting for Pymongo to connect to all collections in alarm database')
     if(AH_DEBUG):
         print('Pymongo connected to alarm database')
         print(alarmDB.list_collection_names())

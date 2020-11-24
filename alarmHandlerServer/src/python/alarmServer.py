@@ -245,6 +245,7 @@ def ackPVChange(value=None, **kw):
 
 
 def ackProcess(ackArray, timestamp):
+    global alarmDict
     # reset ack pv so you can ack same pv/area multiple times
     alarmDict["ACK_PV"].value = []
 
@@ -308,6 +309,7 @@ def ackGlobal(username, timestamp):
 
 
 def ackAlarm(ackIdentifier, timestamp, username):
+    global alarmDict
     # problem here if pv disconnected won't get severity
     if ('_1' in alarmDict[pvDict[ackIdentifier].pvname]["D"].value[0]):
         pvsev = pvDict[ackIdentifier].severity
@@ -371,6 +373,8 @@ def pvConn(pvname=None, conn=None, **kw):
 
 
 def pvDisconn(pvname, conn):
+    global notifyBuffer
+    global alarmDict
 
     areaKey, pvKey = getKeys(pvname)
     if ("=" in areaKey):
@@ -457,7 +461,6 @@ def pvDisconn(pvname, conn):
 
 
 def onChanges(pvname=None, value=None, **kw):
-    global alarmDictInitialised
     timestamp = datetime.timestamp(datetime.now())
     if (alarmDictInitialised):
         _thread.start_new_thread(pvPrepareData, (
@@ -517,11 +520,15 @@ def pvPrepareData(pvname, value, severity, timestamp, units, enum_strs):
 
 
 def pvInitData(pvname, value, severity, timestamp, units, enum_strs):
+    global pvInitDict
     if (severity > 0):
         pvInitDict[pvname] = [value, severity, timestamp, units, enum_strs]
 
 
 def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
+    global notifyBuffer
+    global alarmDict
+
     areaKey, pvKey = getKeys(pvname)
 
     enable = pvELN[0]
@@ -679,6 +686,8 @@ def replaceAllInFile(filename, original, replacedWith):
 
 
 def initSubPVDict(subArea, areaName):
+    global pvDict
+    global areaDict
     subAreaName = areaName
     for key in subArea.keys():
         if (key == "name"):
@@ -697,6 +706,9 @@ def initSubPVDict(subArea, areaName):
 
 
 def initPVDict():
+    global pvDict
+    global areaDict
+    global subAreaDict
     # loop through each document = area
     for area in dbGetCollection("pvs").find():
         for key in area.keys():
@@ -723,8 +735,6 @@ def killAlarmIOC():
 
 
 def startAlarmIOC():
-    global alarmIOCPVPrefix
-    global alarmIOCPVSuffix
     # ALARM PVS
     lines = []
     lines.append("file \"db/Alarm.db\" {\n")
@@ -769,6 +779,7 @@ def startAlarmIOC():
 
 
 def initialiseAlarmIOC():
+    global alarmDict
     print("Intilialising alarm server IOC from database")
 
     for pvname in pvNameList:
@@ -896,6 +907,7 @@ def initialiseAlarmIOC():
 
 
 def initDescDict():
+    global pvDescDict
     for pvname in pvNameList:
         desc = pvname + ".DESC"
         pv = PV(pvname=desc, connection_timeout=0.001)
@@ -903,6 +915,7 @@ def initDescDict():
 
 
 def initAreaPVDict():
+    global areaPVDict
     for area in areaList:
         pvname = alarmIOCPVPrefix + area
         pv = PV(pvname=pvname, connection_timeout=0.001, callback=printVal)
@@ -911,6 +924,7 @@ def initAreaPVDict():
 
 
 def initAlarmDict():
+    global alarmDict
     for pvname in pvNameList:
         alarmName = alarmIOCPVPrefix + pvname + alarmIOCPVSuffix
         for suff in ["", "A", "V", "T", "K"]:

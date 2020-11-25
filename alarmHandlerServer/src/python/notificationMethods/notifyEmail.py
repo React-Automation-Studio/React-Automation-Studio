@@ -15,15 +15,17 @@ except:
 try:
     SMTP_HOST = os.environ['SMTP_HOST']
     SMTP_PORT = os.environ['SMTP_PORT']
-    print("SMTP host and port defined")
+    SMTP_SENDER = os.environ['SMTP_SENDER']
+    print("Email SMTP settings configured")
 except:
-    print("SMTP host or port not defined!")
+    print("Email SMTP settings not configured!")
     print("Using Python built-in debugging mail server")
     print("Emails will only be printed to the terminal and not actually sent out")
     subprocess.call(
         "python -m smtpd -c DebuggingServer -n localhost:1025 &", shell=True)
     SMTP_HOST = 'localhost'
     SMTP_PORT = 1025
+    SMTP_SENDER = 'alarmdb@example.com'
 
 try:
     SMTP_USER = os.environ['SMTP_USER']
@@ -43,7 +45,7 @@ def notifyEmail(email, userNotifyDict):
         print(userNotifyDict)
 
     msg = MIMEMultipart()
-    msg['From'] = "epicsalarmtest@tlabs.ac.za"
+    msg['From'] = SMTP_SENDER
     msg['To'] = email
     msg['Subject'] = "Hello world..."
     # msg.attach(MIMEText(email_body_text, 'html', 'utf-8'))

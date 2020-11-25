@@ -62,7 +62,8 @@ def notifyEmail(email, userNotifyDict):
                 server.login(SMTP_USER, SMTP_PASS)
             server.sendmail(msg['From'], msg['To'], msg.as_string())
             server.quit()
+        print("Successfully sent email to", email)
         return True
     except:
-        print("Failed to send email to ", "j@k.com! ", "Verify SMTP settings.")
+        print("Failed to send email to", email, ". Verify SMTP settings.")
         return False

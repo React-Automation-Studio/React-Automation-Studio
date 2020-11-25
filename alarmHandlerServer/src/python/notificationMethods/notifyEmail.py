@@ -35,8 +35,8 @@ except:
 
 
 def notifyEmail(email, userNotifyDict):
-    # This function must return True as an acknowledgedment to the notification server
-    # that the notification method executed successfully
+    # This function must return True as an acknowledgedment to the notification
+    # server that the notification method executed successfully
 
     if(AH_DEBUG):
         print(email)
@@ -44,7 +44,7 @@ def notifyEmail(email, userNotifyDict):
 
     msg = MIMEMultipart()
     msg['From'] = "epicsalarmtest@tlabs.ac.za"
-    msg['To'] = "jabraham@tlabs.ac.za"
+    msg['To'] = email
     msg['Subject'] = "Hello world..."
     # msg.attach(MIMEText(email_body_text, 'html', 'utf-8'))
     msg.attach(MIMEText("Hello world...", 'html', 'utf-8'))

@@ -88,6 +88,15 @@ def notifyValid(notifySetup):
         else:
             if(AH_DEBUG):
                 print("Time restricted")
+            # def is_between(time, time_range):
+            #     if time_range[1] < time_range[0]:
+            #         return time >= time_range[0] or time <= time_range[1]
+            #     return time_range[0] <= time <= time_range[1]
+
+            # print(is_between("11:00", ("09:00", "16:00")))  # True
+            # print(is_between("17:00", ("09:00", "16:00")))  # False
+            # print(is_between("01:15", ("21:30", "04:30")))  # True
+
             fromTime = datetime.fromisoformat(notifySetup["fromTime"])
             toTime = datetime.fromisoformat(notifySetup["toTime"])
             now_utc_dt = datetime.now(utc)

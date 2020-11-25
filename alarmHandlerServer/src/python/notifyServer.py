@@ -88,9 +88,9 @@ def notify(notifyBuffer):
         pvname = entry["pv"]
         message = entry["message"]
         for user in dbGetCollection("users").find():
-            userNotifyEmailDict = {}
-            userNotifySMSDict = {}
-            userNotifyWhatsAppDict = {}
+            notifyEmailDict = {}
+            notifySMSDict = {}
+            notifyWhatsAppDict = {}
             username = user["username"]
             email = user["email"]
             mobile = user["mobile"]
@@ -127,25 +127,23 @@ def notify(notifyBuffer):
                             # Notify via email
                             if(AH_DEBUG):
                                 print("Notify via email")
-                            if email not in userNotifyEmailDict:
-                                userNotifyEmailDict[email] = {}
-                            userNotifyEmailDict[email][pvname] = message
+                            notifyEmailDict[pvname] = message
                         if(notifyOnSMS):
                             # Notify via sms
                             if(AH_DEBUG):
                                 print("Notify via sms")
-                            if mobile not in userNotifySMSDict:
-                                userNotifySMSDict[mobile] = {}
-                            userNotifySMSDict[mobile][pvname] = message
+                            if mobile not in notifySMSDict:
+                                notifySMSDict[mobile] = {}
+                            notifySMSDict[mobile][pvname] = message
                         if(notifyOnWhatsApp):
                             # Notify via whatsapp
                             if(AH_DEBUG):
                                 print("Notify via whatsapp")
-                            if mobile not in userNotifyWhatsAppDict:
-                                userNotifyWhatsAppDict[mobile] = {}
-                            userNotifyWhatsAppDict[mobile][pvname] = message
-            if(userNotifyEmailDict):
-                if(notifyEmail(userNotifyEmailDict)):
+                            if mobile not in notifyWhatsAppDict:
+                                notifyWhatsAppDict[mobile] = {}
+                            notifyWhatsAppDict[mobile][pvname] = message
+            if(notifyEmailDict):
+                if(notifyEmail(email, notifyEmailDict)):
                     # Log to global db
                     timestamp = datetime.timestamp(datetime.now())
                     entry = {"timestamp": timestamp, "entry": " ".join(
@@ -158,8 +156,8 @@ def notify(notifyBuffer):
                         ["FAILED to notify", username, "on email!"])}
                     dbUpdateHistory("_GLOBAL", entry)
 
-            if(userNotifySMSDict):
-                if(notifySMS(userNotifySMSDict)):
+            if(notifySMSDict):
+                if(notifySMS(notifySMSDict)):
                     # Log to global db
                     timestamp = datetime.timestamp(datetime.now())
                     entry = {"timestamp": timestamp, "entry": " ".join(
@@ -172,8 +170,8 @@ def notify(notifyBuffer):
                         ["FAILED to notify", username, "on SMS!"])}
                     dbUpdateHistory("_GLOBAL", entry)
 
-            if(userNotifyWhatsAppDict):
-                if(notifyWhatsApp(userNotifyWhatsAppDict)):
+            if(notifyWhatsAppDict):
+                if(notifyWhatsApp(notifyWhatsAppDict)):
                     # Log to global db
                     timestamp = datetime.timestamp(datetime.now())
                     entry = {"timestamp": timestamp, "entry": " ".join(

@@ -34,11 +34,12 @@ except:
     print("SMTP user/password not set, login not required")
 
 
-def notifyEmail(userNotifyDict):
+def notifyEmail(email, userNotifyDict):
     # This function must return True as an acknowledgedment to the notification server
     # that the notification method executed successfully
 
     if(AH_DEBUG):
+        print(email)
         print(userNotifyDict)
 
     msg = MIMEMultipart()

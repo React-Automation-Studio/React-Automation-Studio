@@ -7,6 +7,7 @@ import subprocess
 import _thread
 from epics import PV
 from datetime import datetime
+from pytz import timezone, utc
 
 from dbMongo import dbFindOne, dbGetCollection, dbUpdateHistory
 
@@ -18,6 +19,11 @@ try:
     AH_DEBUG = bool(os.environ['AH_DEBUG'])
 except:
     AH_DEBUG = False
+
+try:
+    TZ = os.environ['TZ']
+except:
+    TZ = "Africa/Johannesburg"
 
 pvNameList = []
 alarmDict = {}
@@ -65,6 +71,13 @@ def initAlarmDict():
     alarmDict["NOTIFY"] = pv
 
 
+def time_in_between(now, fromTime, toTime):
+    if fromTime <= toTime:
+        return fromTime <= now <= toTime
+    else:  # over midnight e.g., 23:30-04:15
+        return fromTime <= now or now <= toTime
+
+
 def notifyValid(notifySetup):
     if(notifySetup["notify"]):
         if(AH_DEBUG):
@@ -75,6 +88,23 @@ def notifyValid(notifySetup):
         else:
             if(AH_DEBUG):
                 print("Time restricted")
+            fromTime = datetime.fromisoformat(notifySetup["fromTime"])
+            toTime = datetime.fromisoformat(notifySetup["toTime"])
+            now_utc_dt = datetime.now(utc)
+            loc_tz = timezone(TZ)
+            now = now_utc_dt.astimezone(loc_tz)
+            if(AH_DEBUG):
+                print('fromTime', fromTime)
+                print('toTime', toTime)
+                print('nowTime', now)
+            if(time_in_between(now, fromTime, toTime)):
+                if(AH_DEBUG):
+                    print("Current time between fromTime and toTime")
+            else:
+                if(AH_DEBUG):
+                    print("Current time NOT between fromTime and toTime")
+                    print("!!Don't notify!!")
+                return False
 
         return True
     else:

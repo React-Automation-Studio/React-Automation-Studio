@@ -132,9 +132,7 @@ def notify(notifyBuffer):
                             # Notify via sms
                             if(AH_DEBUG):
                                 print("Notify via sms")
-                            if mobile not in notifySMSDict:
-                                notifySMSDict[mobile] = {}
-                            notifySMSDict[mobile][pvname] = message
+                            notifySMSDict[pvname] = message
                         if(notifyOnWhatsApp):
                             # Notify via whatsapp
                             if(AH_DEBUG):
@@ -157,7 +155,7 @@ def notify(notifyBuffer):
                     dbUpdateHistory("_GLOBAL", entry)
 
             if(notifySMSDict):
-                if(notifySMS(notifySMSDict)):
+                if(notifySMS(mobile, notifySMSDict)):
                     # Log to global db
                     timestamp = datetime.timestamp(datetime.now())
                     entry = {"timestamp": timestamp, "entry": " ".join(

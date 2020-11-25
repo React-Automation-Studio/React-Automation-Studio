@@ -8,6 +8,11 @@ import subprocess
 smtpAuth = False
 
 try:
+    AH_DEBUG = bool(os.environ['AH_DEBUG'])
+except:
+    AH_DEBUG = False
+
+try:
     SMTP_HOST = os.environ['SMTP_HOST']
     SMTP_PORT = os.environ['SMTP_PORT']
     print("SMTP host and port defined")
@@ -19,11 +24,6 @@ except:
         "python -m smtpd -c DebuggingServer -n localhost:1025 &", shell=True)
     SMTP_HOST = 'localhost'
     SMTP_PORT = 1025
-
-try:
-    SMTP_STARTTLS = bool(os.environ['SMTP_STARTTLS'])
-except:
-    SMTP_STARTTLS = False
 
 try:
     SMTP_USER = os.environ['SMTP_USER']
@@ -38,20 +38,30 @@ def notifyEmail(userNotifyDict):
     # This function must return True as an acknowledgedment to the notification server
     # that the notification method executed successfully
 
+    if(AH_DEBUG):
+        print(userNotifyDict)
+
     msg = MIMEMultipart()
     msg['From'] = "epicsalarmtest@tlabs.ac.za"
     msg['To'] = "jabraham@tlabs.ac.za"
     msg['Subject'] = "Hello world..."
     # msg.attach(MIMEText(email_body_text, 'html', 'utf-8'))
-    msg.attach(MIMEText("hello", 'html', 'utf-8'))
+    msg.attach(MIMEText("Hello world...", 'html', 'utf-8'))
     try:
         with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
-            if(SMTP_STARTTLS):
+            if(AH_DEBUG):
+                server.set_debuglevel(2)
+            # identify ourselves, prompting server for supported features
+            server.ehlo()
+            # If we can encrypt this session, do it
+            if server.has_extn('STARTTLS'):
                 server.starttls()
+                server.ehlo()  # re-identify ourselves over TLS connection
             if(smtpAuth):
                 server.login(SMTP_USER, SMTP_PASS)
             server.sendmail(msg['From'], msg['To'], msg.as_string())
             server.quit()
         return True
     except:
+        print("Failed to send email to ", "j@k.com! ", "Verify SMTP settings.")
         return False

@@ -121,7 +121,14 @@ def notifyValid(notifySetup):
             if(AH_DEBUG):
                 print("Notify on", " ".join(daysToNotify))
                 print("Today is", dayToday)
-
+            if(dayToday in daysToNotify):
+                if(AH_DEBUG):
+                    print("Notify today")
+            else:
+                if(AH_DEBUG):
+                    print("Don't notify today")
+                    print("!!Don't notify!!")
+                return False
         else:
             if(AH_DEBUG):
                 print("Notify date range")

@@ -22,7 +22,7 @@ import WhatsAppIcon from '@material-ui/icons/WhatsApp';
 // import Slide from '@material-ui/core/Slide';
 
 import DateFnsUtils from '@date-io/date-fns';
-import { formatISO, isSameDay, isAfter, parseISO } from 'date-fns';
+import { formatISO, isSameDay, isAfter, parseISO, setSeconds, startOfDay, endOfDay } from 'date-fns';
 
 import {
     MuiPickersUtilsProvider,
@@ -87,17 +87,17 @@ const ScheduleDialog = (props) => {
 
     const fromTime = displayUserObject.fromTime
         ? new Date(displayUserObject.fromTime)
-        : new Date()
+        : setSeconds(new Date(), 0)
     const toTime = displayUserObject.toTime
         ? new Date(displayUserObject.toTime)
-        : new Date()
+        : setSeconds(new Date(), 0)
 
     const fromDate = displayUserObject.fromDate
         ? new Date(displayUserObject.fromDate)
-        : new Date()
+        : startOfDay(new Date())
     const toDate = displayUserObject.toDate
         ? new Date(displayUserObject.toDate)
-        : new Date()
+        : endOfDay(new Date())
 
     // console.clear()
     // global
@@ -374,7 +374,7 @@ const ScheduleDialog = (props) => {
     }
 
     const handleFromTime = (event) => {
-        const newTime = formatISO(event)
+        const newTime = formatISO(setSeconds(event, 0))
         if (global) {
             props.setDialogUserObject({
                 ...props.dialogUserObject,
@@ -408,7 +408,7 @@ const ScheduleDialog = (props) => {
     }
 
     const handleToTime = (event) => {
-        const newTime = formatISO(event)
+        const newTime = formatISO(setSeconds(event, 0))
         if (global) {
             props.setDialogUserObject({
                 ...props.dialogUserObject,
@@ -587,7 +587,7 @@ const ScheduleDialog = (props) => {
     }
 
     const handleFromDate = (event) => {
-        const newDate = formatISO(event)
+        const newDate = formatISO(startOfDay(event))
         if (global) {
             // Check if fromDate after toDate
             let newDateAfterToDate = false
@@ -639,7 +639,7 @@ const ScheduleDialog = (props) => {
     }
 
     const handleToDate = (event) => {
-        const newDate = formatISO(event)
+        const newDate = formatISO(endOfDay(event))
         if (global) {
             // Check if toDate after fromDate
             let newDateAfterFromDate = false

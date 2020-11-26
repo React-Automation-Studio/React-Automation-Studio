@@ -37,15 +37,13 @@ except:
 
 
 def composeEmailBody(userNotifyDict):
+    body = "Hello"
+
     return """<html>
                 <body>
-                    <p>Thank you for being a loyal customer.<br>
-                    Here is your unique code to unlock exclusive content:<br>
-                    <br><br><h1></h1><br>
-                    </p>
+                    {body}
                 </body>
-                </html>
-            """.format(**locals())
+            < /html >""".format(**locals())
 
 
 def notifyEmail(timestamp, email, userNotifyDict):

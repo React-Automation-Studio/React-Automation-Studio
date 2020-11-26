@@ -37,7 +37,13 @@ except:
 
 
 def composeEmailBody(userNotifyDict):
-    body = "Hello"
+    body = ""
+    for area in userNotifyDict:
+        body = body+"<font size=\"3\"><b>"+area+"</font></b><br/><br/>"
+        for pvname in userNotifyDict[area]:
+            body = body + "<font size=\"2\"><b>"+pvname+"</b></span><br/>"
+            body = body + \
+                userNotifyDict[area][pvname]["entry"] + "</font><br/><br/>"
 
     return """<html>
                 <body>

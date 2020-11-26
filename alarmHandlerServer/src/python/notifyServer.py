@@ -71,14 +71,17 @@ def initAlarmDict():
     alarmDict["NOTIFY"] = pv
 
 
-def time_in_between(now, fromTime, toTime):
-    if fromTime <= toTime:
-        return fromTime <= now <= toTime
-    else:  # over midnight e.g., 23:30-04:15
-        return fromTime <= now or now <= toTime
+def time_is_between(now, fromTime, toTime):
+    if toTime < fromTime:
+        # over midnight e.g., 23:30-04:15
+        return now >= fromTime or now <= toTime
+    return fromTime <= now <= toTime
 
 
 def notifyValid(notifySetup):
+    now_utc_dt = datetime.now(utc)
+    loc_tz = timezone(TZ)
+    now = now_utc_dt.astimezone(loc_tz)
     if(notifySetup["notify"]):
         if(AH_DEBUG):
             print("Must notify")
@@ -88,25 +91,17 @@ def notifyValid(notifySetup):
         else:
             if(AH_DEBUG):
                 print("Time restricted")
-            # def is_between(time, time_range):
-            #     if time_range[1] < time_range[0]:
-            #         return time >= time_range[0] or time <= time_range[1]
-            #     return time_range[0] <= time <= time_range[1]
-
-            # print(is_between("11:00", ("09:00", "16:00")))  # True
-            # print(is_between("17:00", ("09:00", "16:00")))  # False
-            # print(is_between("01:15", ("21:30", "04:30")))  # True
-
-            fromTime = datetime.fromisoformat(notifySetup["fromTime"])
-            toTime = datetime.fromisoformat(notifySetup["toTime"])
-            now_utc_dt = datetime.now(utc)
-            loc_tz = timezone(TZ)
-            now = now_utc_dt.astimezone(loc_tz)
+            formatTime = "%H:%M"
+            fromTime = datetime.fromisoformat(
+                notifySetup["fromTime"]).strftime(formatTime)
+            toTime = datetime.fromisoformat(
+                notifySetup["toTime"]).strftime(formatTime)
+            nowTime = now.strftime(formatTime)
             if(AH_DEBUG):
                 print('fromTime', fromTime)
                 print('toTime', toTime)
-                print('nowTime', now)
-            if(time_in_between(now, fromTime, toTime)):
+                print('nowTime', nowTime)
+            if(time_is_between(nowTime, fromTime, toTime)):
                 if(AH_DEBUG):
                     print("Current time between fromTime and toTime")
             else:
@@ -134,12 +129,13 @@ def notify(notifyBuffer):
             email = user["email"]
             mobile = user["mobile"]
             if(AH_DEBUG):
+                print('##-START NOTIFY DEBUG-##')
                 print(email, pvname)
             for notifyPV in user["notifyPVs"]:
                 if(js_regex.compile(notifyPV["regEx"]).search(pvname)):
                     # Passes regEx check
                     if(AH_DEBUG):
-                        print("Pass regEx")
+                        print("Pass regEx", notifyPV["regEx"])
                     notify = False
                     notifyOnEmail = False
                     notifyOnSMS = False
@@ -177,6 +173,12 @@ def notify(notifyBuffer):
                             if(AH_DEBUG):
                                 print("Notify via whatsapp")
                             notifyWhatsAppDict[pvname] = message
+                    else:
+                        if(AH_DEBUG):
+                            print("Fail notifyValid")
+                else:
+                    if(AH_DEBUG):
+                        print("Fail regEx", notifyPV["regEx"])
             if(notifyEmailDict):
                 if(notifyEmail(email, notifyEmailDict)):
                     # Log to global db
@@ -218,6 +220,8 @@ def notify(notifyBuffer):
                     entry = {"timestamp": timestamp, "entry": " ".join(
                         ["FAILED to notify", username, "on WhatsApp!"])}
                     dbUpdateHistory("_GLOBAL", entry)
+            if(AH_DEBUG):
+                print('###-END NOTIFY DEBUG-###')
 
 
 def disconnectAllPVs():

@@ -36,6 +36,18 @@ except:
     print("SMTP user/password not set, login not required")
 
 
+def composeEmailBody(userNotifyDict):
+    return """"<html>
+                <body>
+                    <p>Thank you for being a loyal customer.<br>
+                    Here is your unique code to unlock exclusive content:<br>
+                    <br><br><h1></h1><br>
+                    </p>
+                </body>
+                </html>
+            """.format(**locals())
+
+
 def notifyEmail(timestamp, email, userNotifyDict):
     # This function must return True as an acknowledgedment to the notification
     # server that the notification method executed successfully
@@ -52,8 +64,9 @@ def notifyEmail(timestamp, email, userNotifyDict):
     msg['To'] = email
     msg['Subject'] = "Alarm Notification: " + \
         timestamp.strftime('%a, %d %b %Y at %H:%M:%S')
-    # msg.attach(MIMEText(email_body_text, 'html', 'utf-8'))
-    msg.attach(MIMEText("Hello world...", 'html', 'utf-8'))
+    email_body = composeEmailBody(userNotifyDict)
+    msg.attach(MIMEText(email_body, 'html', 'utf-8'))
+
     try:
         with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
             if(AH_DEBUG):

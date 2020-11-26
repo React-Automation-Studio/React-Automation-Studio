@@ -25,7 +25,7 @@ except:
         "python -m smtpd -c DebuggingServer -n localhost:1025 &", shell=True)
     SMTP_HOST = 'localhost'
     SMTP_PORT = 1025
-    SMTP_SENDER = 'alarmdb@example.com'
+    SMTP_SENDER = 'alarmdb@lab.edu'
 
 try:
     SMTP_USER = os.environ['SMTP_USER']
@@ -36,18 +36,22 @@ except:
     print("SMTP user/password not set, login not required")
 
 
-def notifyEmail(email, userNotifyDict):
+def notifyEmail(timestamp, email, userNotifyDict):
     # This function must return True as an acknowledgedment to the notification
     # server that the notification method executed successfully
 
+    timestamp = datetime.fromtimestamp(timestamp)
+
     if(AH_DEBUG):
+        print(timestamp.strftime('%a, %d %b %Y at %H:%M:%S'))
         print(email)
         print(userNotifyDict)
 
     msg = MIMEMultipart()
     msg['From'] = SMTP_SENDER
     msg['To'] = email
-    msg['Subject'] = "Hello world..."
+    msg['Subject'] = "Alarm Notification: " + \
+        timestamp.strftime('%a, %d %b %Y at %H:%M:%S')
     # msg.attach(MIMEText(email_body_text, 'html', 'utf-8'))
     msg.attach(MIMEText("Hello world...", 'html', 'utf-8'))
     try:

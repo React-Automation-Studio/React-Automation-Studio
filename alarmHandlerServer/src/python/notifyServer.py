@@ -222,16 +222,15 @@ def notify(notifyBuffer):
                 else:
                     if(AH_DEBUG):
                         print("Fail regEx", notifyPV["regEx"])
+            timestamp = datetime.timestamp(datetime.now())
             if(notifyEmailDict):
-                if(notifyEmail(email, notifyEmailDict)):
+                if(notifyEmail(timestamp, email, notifyEmailDict)):
                     # Log to global db
-                    timestamp = datetime.timestamp(datetime.now())
                     entry = {"timestamp": timestamp, "entry": " ".join(
                         [username, "notified on email"])}
                     dbUpdateHistory("_GLOBAL", entry)
                 else:
                     # Log to global db
-                    timestamp = datetime.timestamp(datetime.now())
                     entry = {"timestamp": timestamp, "entry": " ".join(
                         ["FAILED to notify", username, "on email!"])}
                     dbUpdateHistory("_GLOBAL", entry)
@@ -239,13 +238,11 @@ def notify(notifyBuffer):
             if(notifySMSDict):
                 if(notifySMS(mobile, notifySMSDict)):
                     # Log to global db
-                    timestamp = datetime.timestamp(datetime.now())
                     entry = {"timestamp": timestamp, "entry": " ".join(
                         [username, "notified on SMS"])}
                     dbUpdateHistory("_GLOBAL", entry)
                 else:
                     # Log to global db
-                    timestamp = datetime.timestamp(datetime.now())
                     entry = {"timestamp": timestamp, "entry": " ".join(
                         ["FAILED to notify", username, "on SMS!"])}
                     dbUpdateHistory("_GLOBAL", entry)
@@ -253,13 +250,11 @@ def notify(notifyBuffer):
             if(notifyWhatsAppDict):
                 if(notifyWhatsApp(mobile, notifyWhatsAppDict)):
                     # Log to global db
-                    timestamp = datetime.timestamp(datetime.now())
                     entry = {"timestamp": timestamp, "entry": " ".join(
                         [username, "notified on WhatsApp"])}
                     dbUpdateHistory("_GLOBAL", entry)
                 else:
                     # Log to global db
-                    timestamp = datetime.timestamp(datetime.now())
                     entry = {"timestamp": timestamp, "entry": " ".join(
                         ["FAILED to notify", username, "on WhatsApp!"])}
                     dbUpdateHistory("_GLOBAL", entry)

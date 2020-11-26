@@ -37,7 +37,7 @@ except:
 
 
 def composeEmailBody(userNotifyDict):
-    return """"<html>
+    return """<html>
                 <body>
                     <p>Thank you for being a loyal customer.<br>
                     Here is your unique code to unlock exclusive content:<br>

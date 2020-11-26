@@ -53,6 +53,7 @@ def notifyEmail(timestamp, email, userNotifyDict):
     timestamp = datetime.fromtimestamp(timestamp)
 
     if(AH_DEBUG):
+        print("###-EMAIL NOTIFY-###")
         print(timestamp.strftime('%a, %d %b %Y at %H:%M:%S'))
         print(email)
         print(userNotifyDict)

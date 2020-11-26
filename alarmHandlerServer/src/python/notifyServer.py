@@ -161,105 +161,113 @@ def notifyValid(notifySetup):
 
 
 def notify(notifyBuffer):
-    for entry in notifyBuffer:
-        pvname = entry["pv"]
-        message = entry["message"]
-        for user in dbGetCollection("users").find():
-            notifyEmailDict = {}
-            notifySMSDict = {}
-            notifyWhatsAppDict = {}
-            name = user["name"]
-            email = user["email"]
-            mobile = user["mobile"]
-            if(AH_DEBUG):
-                print('##-START NOTIFY DEBUG-##')
-                print(email, pvname)
-            for notifyPV in user["notifyPVs"]:
-                if(js_regex.compile(notifyPV["regEx"]).search(pvname)):
-                    # Passes regEx check
+    for user in dbGetCollection("users").find():
+        notifyEmailDict = {}
+        notifySMSDict = {}
+        notifyWhatsAppDict = {}
+        name = user["name"]
+        email = user["email"]
+        mobile = user["mobile"]
+        for notifyPV in user["notifyPVs"]:
+            for area in notifyBuffer:
+                for pvname in notifyBuffer[area]:
                     if(AH_DEBUG):
-                        print("Pass regEx", notifyPV["regEx"])
-                    notify = False
-                    notifyOnEmail = False
-                    notifyOnSMS = False
-                    notifyOnWhatsApp = False
-                    if(user["global"]):
+                        print('##-START NOTIFY DEBUG-##')
+                        print(name)
+                        print(area)
+                        print(pvname)
+                    message = notifyBuffer[area][pvname]
+                    if(js_regex.compile(notifyPV["regEx"]).search(pvname)):
+                        # Passes regEx check
                         if(AH_DEBUG):
-                            print("Using global profile")
-                        notify = notifyValid(user["globalSetup"])
-                        notifyOnEmail = user["globalSetup"]["email"]
-                        notifyOnSMS = user["globalSetup"]["sms"]
-                        notifyOnWhatsApp = user["globalSetup"]["whatsapp"]
+                            print("Pass regEx", notifyPV["regEx"])
+                        notify = False
+                        notifyOnEmail = False
+                        notifyOnSMS = False
+                        notifyOnWhatsApp = False
+                        if(user["global"]):
+                            if(AH_DEBUG):
+                                print("Using global profile")
+                            notify = notifyValid(user["globalSetup"])
+                            notifyOnEmail = user["globalSetup"]["email"]
+                            notifyOnSMS = user["globalSetup"]["sms"]
+                            notifyOnWhatsApp = user["globalSetup"]["whatsapp"]
+                        else:
+                            if(AH_DEBUG):
+                                print("Using unique profile")
+                            notify = notifyValid(notifyPV["notifySetup"])
+                            notifyOnEmail = notifyPV["notifySetup"]["email"]
+                            notifyOnSMS = notifyPV["notifySetup"]["sms"]
+                            notifyOnWhatsApp = notifyPV["notifySetup"]["whatsapp"]
+                        if(notify):
+                            # Passes notifyValid check
+                            if(AH_DEBUG):
+                                print("Pass notifyValid")
+                            if(notifyOnEmail):
+                                # Notify via email
+                                if(AH_DEBUG):
+                                    print("Notify via email")
+                                if(area not in notifyEmailDict):
+                                    notifyEmailDict[area] = {}
+                                notifyEmailDict[area][pvname] = message
+                            if(notifyOnSMS):
+                                # Notify via sms
+                                if(AH_DEBUG):
+                                    print("Notify via sms")
+                                if(area not in notifySMSDict):
+                                    notifySMSDict[area] = {}
+                                notifySMSDict[area][pvname] = message
+                            if(notifyOnWhatsApp):
+                                # Notify via whatsapp
+                                if(AH_DEBUG):
+                                    print("Notify via whatsapp")
+                                if(area not in notifyWhatsAppDict):
+                                    notifyWhatsAppDict[area] = {}
+                                notifyWhatsAppDict[area][pvname] = message
+                        else:
+                            if(AH_DEBUG):
+                                print("Fail notifyValid")
                     else:
                         if(AH_DEBUG):
-                            print("Using unique profile")
-                        notify = notifyValid(notifyPV["notifySetup"])
-                        notifyOnEmail = notifyPV["notifySetup"]["email"]
-                        notifyOnSMS = notifyPV["notifySetup"]["sms"]
-                        notifyOnWhatsApp = notifyPV["notifySetup"]["whatsapp"]
-                    if(notify):
-                        # Passes notifyValid check
-                        if(AH_DEBUG):
-                            print("Pass notifyValid")
-                        if(notifyOnEmail):
-                            # Notify via email
-                            if(AH_DEBUG):
-                                print("Notify via email")
-                            notifyEmailDict[pvname] = message
-                        if(notifyOnSMS):
-                            # Notify via sms
-                            if(AH_DEBUG):
-                                print("Notify via sms")
-                            notifySMSDict[pvname] = message
-                        if(notifyOnWhatsApp):
-                            # Notify via whatsapp
-                            if(AH_DEBUG):
-                                print("Notify via whatsapp")
-                            notifyWhatsAppDict[pvname] = message
-                    else:
-                        if(AH_DEBUG):
-                            print("Fail notifyValid")
-                else:
+                            print("Fail regEx", notifyPV["regEx"])
                     if(AH_DEBUG):
-                        print("Fail regEx", notifyPV["regEx"])
-            timestamp = datetime.timestamp(datetime.now())
-            if(notifyEmailDict):
-                if(notifyEmail(timestamp, email, notifyEmailDict)):
-                    # Log to global db
-                    entry = {"timestamp": timestamp, "entry": " ".join(
-                        [name, "notified on email"])}
-                    dbUpdateHistory("_GLOBAL", entry)
-                else:
-                    # Log to global db
-                    entry = {"timestamp": timestamp, "entry": " ".join(
-                        ["FAILED to notify", name, "on email!"])}
-                    dbUpdateHistory("_GLOBAL", entry)
+                        print('###-END NOTIFY DEBUG-###')
+        timestamp = datetime.timestamp(datetime.now())
+        if(notifyEmailDict):
+            if(notifyEmail(timestamp, email, notifyEmailDict)):
+                # Log to global db
+                entry = {"timestamp": timestamp, "entry": " ".join(
+                    [name, "notified on email"])}
+                dbUpdateHistory("_GLOBAL", entry)
+            else:
+                # Log to global db
+                entry = {"timestamp": timestamp, "entry": " ".join(
+                    ["FAILED to notify", name, "on email!"])}
+                dbUpdateHistory("_GLOBAL", entry)
 
-            if(notifySMSDict):
-                if(notifySMS(mobile, notifySMSDict)):
-                    # Log to global db
-                    entry = {"timestamp": timestamp, "entry": " ".join(
-                        [name, "notified on SMS"])}
-                    dbUpdateHistory("_GLOBAL", entry)
-                else:
-                    # Log to global db
-                    entry = {"timestamp": timestamp, "entry": " ".join(
-                        ["FAILED to notify", name, "on SMS!"])}
-                    dbUpdateHistory("_GLOBAL", entry)
+        if(notifySMSDict):
+            if(notifySMS(mobile, notifySMSDict)):
+                # Log to global db
+                entry = {"timestamp": timestamp, "entry": " ".join(
+                    [name, "notified on SMS"])}
+                dbUpdateHistory("_GLOBAL", entry)
+            else:
+                # Log to global db
+                entry = {"timestamp": timestamp, "entry": " ".join(
+                    ["FAILED to notify", name, "on SMS!"])}
+                dbUpdateHistory("_GLOBAL", entry)
 
-            if(notifyWhatsAppDict):
-                if(notifyWhatsApp(mobile, notifyWhatsAppDict)):
-                    # Log to global db
-                    entry = {"timestamp": timestamp, "entry": " ".join(
-                        [name, "notified on WhatsApp"])}
-                    dbUpdateHistory("_GLOBAL", entry)
-                else:
-                    # Log to global db
-                    entry = {"timestamp": timestamp, "entry": " ".join(
-                        ["FAILED to notify", name, "on WhatsApp!"])}
-                    dbUpdateHistory("_GLOBAL", entry)
-            if(AH_DEBUG):
-                print('###-END NOTIFY DEBUG-###')
+        if(notifyWhatsAppDict):
+            if(notifyWhatsApp(mobile, notifyWhatsAppDict)):
+                # Log to global db
+                entry = {"timestamp": timestamp, "entry": " ".join(
+                    [name, "notified on WhatsApp"])}
+                dbUpdateHistory("_GLOBAL", entry)
+            else:
+                # Log to global db
+                entry = {"timestamp": timestamp, "entry": " ".join(
+                    ["FAILED to notify", name, "on WhatsApp!"])}
+                dbUpdateHistory("_GLOBAL", entry)
 
 
 def disconnectAllPVs():

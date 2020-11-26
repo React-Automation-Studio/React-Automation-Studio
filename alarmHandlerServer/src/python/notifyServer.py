@@ -78,6 +78,10 @@ def time_is_between(now, fromTime, toTime):
     return fromTime <= now <= toTime
 
 
+def date_is_between(now, fromDate, toDate):
+    return fromDate <= now <= toDate
+
+
 def notifyValid(notifySetup):
     now_utc_dt = datetime.now(utc)
     loc_tz = timezone(TZ)
@@ -130,8 +134,24 @@ def notifyValid(notifySetup):
                     print("!!Don't notify!!")
                 return False
         else:
+            formatTime = "%d %B %Y"
+            fromDate = datetime.fromisoformat(
+                notifySetup["fromDate"])
+            toDate = datetime.fromisoformat(
+                notifySetup["toDate"])
             if(AH_DEBUG):
                 print("Notify date range")
+                print('fromDate', fromDate.strftime(formatTime))
+                print('toDate', toDate.strftime(formatTime))
+                print("Today", now.strftime(formatTime))
+            if(date_is_between(now, fromDate, toDate)):
+                if(AH_DEBUG):
+                    print("Notify today")
+            else:
+                if(AH_DEBUG):
+                    print("Don't notify today")
+                    print("!!Don't notify!!")
+                return False
 
         return True
     else:

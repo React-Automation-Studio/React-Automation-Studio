@@ -43,7 +43,7 @@ alarmServerRestart = False
 
 pvNameList = []
 areaList = []
-notifyBuffer = []
+notifyBuffer = {}
 
 pvDict = {}
 pvInitDict = {}
@@ -447,10 +447,9 @@ def pvDisconn(pvname, conn):
                     [pvname, "-", "DISCONNECTED"])}
                 dbUpdateHistory(areaKey+'*'+pvname, entry)
                 if(alarmDictInitialised and notify):
-                    notifyBuffer.append({
-                        "pv": pvname,
-                        "message": entry
-                    })
+                    if(areaKey not in notifyBuffer):
+                        notifyBuffer[areaKey] = {}
+                    notifyBuffer[areaKey][pvname] = entry
     else:
         try:
             curr_desc = [
@@ -663,10 +662,9 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
     if(enable and logToHistory):
         dbUpdateHistory(areaKey+'*'+pvname, entry)
     if(enable and alarmSet and notify):
-        notifyBuffer.append({
-            "pv": pvname,
-            "message": entry
-        })
+        if(areaKey not in notifyBuffer):
+            notifyBuffer[areaKey] = {}
+        notifyBuffer[areaKey][pvname] = entry
 
 
 def getListOfPVNames():
@@ -1169,7 +1167,7 @@ def main():
         sleep(3.0)
         if(len(notifyBuffer) != 0):
             notify(notifyBuffer)
-            notifyBuffer = []
+            notifyBuffer = {}
         # restartAlarmServer()
 
 

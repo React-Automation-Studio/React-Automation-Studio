@@ -109,6 +109,22 @@ def notifyValid(notifySetup):
                     print("Current time NOT between fromTime and toTime")
                     print("!!Don't notify!!")
                 return False
+        if(notifySetup["weekly"]):
+            formatTime = "%A"
+            dayToday = now.strftime(formatTime)
+            if(AH_DEBUG):
+                print("Notify weekly")
+            daysToNotify = []
+            for key, value in notifySetup["days"].items():
+                if(value):
+                    daysToNotify.append(key)
+            if(AH_DEBUG):
+                print("Notify on", " ".join(daysToNotify))
+                print("Today is", dayToday)
+
+        else:
+            if(AH_DEBUG):
+                print("Notify date range")
 
         return True
     else:

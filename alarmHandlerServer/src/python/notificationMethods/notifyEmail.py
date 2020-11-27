@@ -39,11 +39,32 @@ except:
 def composeEmailBody(userNotifyDict):
     body = ""
     for area in userNotifyDict:
-        body = body+"<font size=\"3\"><b>"+area+"</font></b><br/><br/>"
+        if("=" in area):
+            displayArea = area.replace("=", " > ")
+        else:
+            displayArea = area
+        if(body == ""):
+            body = body+"<font size=\"3\"><b>"+displayArea+"</b></font><br/><br/>"
+        else:
+            body = body+"<br/><br/><font size=\"3\"><b>"+displayArea+"</b></font><br/><br/>"
         for pvname in userNotifyDict[area]:
-            body = body + "<font size=\"2\"><b>"+pvname+"</b></span><br/>"
-            body = body + \
-                userNotifyDict[area][pvname]["entry"] + "</font><br/><br/>"
+            timestamp = userNotifyDict[area][pvname]["timestamp"]
+            entry = userNotifyDict[area][pvname]["entry"]
+            message = entry.split(pvname+' - ')[1]
+            if("DISCONNECTED" in message):
+                formattedMessage = "<span><b style=\"background-color:rgb(198,40,40); color:rgb(255,255,255); padding:2;\">DISCONNECTED</b></span>"
+            else:
+                alarm, shortMessage = message.split(" triggered, ")
+                if("MINOR_ALARM" in message):
+                    formattedMessage = "<span><b style=\"background-color:rgb(255,138,101); color:rgb(255,255,255); padding:2;\">"+alarm+"</b> triggered, " + \
+                        shortMessage+"</span>"
+                else:
+                    formattedMessage = "<span><b style=\"background-color:rgb(198,40,40); color:rgb(255,255,255); padding:2;\">"+alarm+"</b> triggered, " + \
+                        shortMessage+"</span>"
+            str_time = datetime.fromtimestamp(timestamp).strftime(
+                "%H:%M:%S %a, %d %b %Y")
+            body = body + "<font size=\"2\"><u>"+str_time + \
+                ":</u> <b>"+pvname+"</b> - "+formattedMessage+"</font><br/>"
 
     return """<html>
                 <body>

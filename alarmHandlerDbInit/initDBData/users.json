@@ -1,7 +1,7 @@
 [{
         "name": "User One",
         "username": "user1",
-        "email": "user1@example.com",
+        "email": "user1@lab.edu",
         "mobile": "+27 00 000 0001",
         "global": true,
         "globalSetup": {
@@ -181,7 +181,7 @@
     {
         "name": "User Two",
         "username": "user2",
-        "email": "user2@example.com",
+        "email": "user2@lab.edu",
         "mobile": "+27 00 000 0002",
         "global": true,
         "globalSetup": {
@@ -311,7 +311,7 @@
     {
         "name": "User Three",
         "username": "user3",
-        "email": "user3@example.com",
+        "email": "user3@lab.edu",
         "mobile": "+27 00 000 0003",
         "global": true,
         "globalSetup": {

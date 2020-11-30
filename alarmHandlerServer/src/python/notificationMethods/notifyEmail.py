@@ -70,7 +70,7 @@ def composeEmailBody(userNotifyDict):
                 <body>
                     {body}
                 </body>
-            < /html >""".format(**locals())
+            </html>""".format(**locals())
 
 
 def notifyEmail(timestamp, email, userNotifyDict):

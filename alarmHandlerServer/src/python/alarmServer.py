@@ -451,7 +451,9 @@ def pvDisconn(pvname, conn):
                 if(alarmDictInitialised and notify):
                     if(areaKey not in notifyBuffer):
                         notifyBuffer[areaKey] = {}
-                    notifyBuffer[areaKey][pvname] = entry
+                    if(pvname not in notifyBuffer[areaKey]):
+                        notifyBuffer[areaKey][pvname] = []
+                    notifyBuffer[areaKey][pvname].append(entry)
                     notifyContent = True
     else:
         try:
@@ -668,7 +670,9 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
     if(enable and alarmSet and notify):
         if(areaKey not in notifyBuffer):
             notifyBuffer[areaKey] = {}
-        notifyBuffer[areaKey][pvname] = entry
+        if(pvname not in notifyBuffer[areaKey]):
+            notifyBuffer[areaKey][pvname] = []
+        notifyBuffer[areaKey][pvname].append(entry)
         notifyContent = True
 
 
@@ -1173,11 +1177,11 @@ def main():
         sleep(1.0)
         if(notifyContent):
             notifyContent = False
-            sleep(2.0)
+            sleep(1.0)
             if(not notifyContent):
                 notify(notifyBuffer)
                 notifyBuffer = {}
-            
+
         # restartAlarmServer()
 
 

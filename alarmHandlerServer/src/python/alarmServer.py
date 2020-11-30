@@ -40,6 +40,7 @@ alarmIOCPVSuffix = ""
 
 alarmDictInitialised = False
 alarmServerRestart = False
+notifyContent = False
 
 pvNameList = []
 areaList = []
@@ -374,6 +375,7 @@ def pvConn(pvname=None, conn=None, **kw):
 
 def pvDisconn(pvname, conn):
     global notifyBuffer
+    global notifyContent
     global alarmDict
 
     areaKey, pvKey = getKeys(pvname)
@@ -450,6 +452,7 @@ def pvDisconn(pvname, conn):
                     if(areaKey not in notifyBuffer):
                         notifyBuffer[areaKey] = {}
                     notifyBuffer[areaKey][pvname] = entry
+                    notifyContent = True
     else:
         try:
             curr_desc = [
@@ -526,6 +529,7 @@ def pvInitData(pvname, value, severity, timestamp, units, enum_strs):
 
 def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
     global notifyBuffer
+    global notifyContent
     global alarmDict
 
     areaKey, pvKey = getKeys(pvname)
@@ -665,6 +669,7 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
         if(areaKey not in notifyBuffer):
             notifyBuffer[areaKey] = {}
         notifyBuffer[areaKey][pvname] = entry
+        notifyContent = True
 
 
 def getListOfPVNames():
@@ -1164,10 +1169,15 @@ def main():
 
     while (True):
         global notifyBuffer
-        sleep(3.0)
-        if(len(notifyBuffer) != 0):
-            notify(notifyBuffer)
-            notifyBuffer = {}
+        global notifyContent
+        sleep(1.0)
+        if(notifyContent):
+            notifyContent = False
+            sleep(2.0)
+            if(not notifyContent):
+                notify(notifyBuffer)
+                notifyBuffer = {}
+            
         # restartAlarmServer()
 
 

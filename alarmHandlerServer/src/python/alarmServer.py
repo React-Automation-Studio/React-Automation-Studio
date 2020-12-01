@@ -38,6 +38,8 @@ alarmPVSevDict = {
 alarmIOCPVPrefix = ""
 alarmIOCPVSuffix = ""
 
+notifyTimeout = 0
+
 alarmDictInitialised = False
 alarmServerRestart = False
 notifyContent = False
@@ -1174,13 +1176,16 @@ def main():
     while (True):
         global notifyBuffer
         global notifyContent
+        global notifyTimeout
         sleep(1.0)
         if(notifyContent):
+            notifyTimeout += 1
             notifyContent = False
             sleep(1.0)
-            if(not notifyContent):
+            if((not notifyContent) or (notifyTimeout >= 2)):
                 notify(notifyBuffer)
                 notifyBuffer = {}
+                notifyTimeout = 0
 
         # restartAlarmServer()
 

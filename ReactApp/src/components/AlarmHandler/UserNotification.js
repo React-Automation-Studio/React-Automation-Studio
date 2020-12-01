@@ -11,8 +11,11 @@ import InputBase from '@material-ui/core/InputBase';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
 import CloseIcon from '@material-ui/icons/Close';
 import SearchIcon from '@material-ui/icons/Search';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
+
 
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 import DataConnection from '../SystemComponents/DataConnection';
@@ -32,7 +35,7 @@ const useStyles = makeStyles(theme => ({
         margin: 0
     },
     button: {
-        // margin: theme.spacing(1),
+        margin: theme.spacing(1),
     },
     expansionPanelSummaryContent: {
         paddingTop: 0,
@@ -709,7 +712,7 @@ const UserNotification = (props) => {
         pvListHeight = '76vh'
     }
 
-    console.table(showDeleteButton)
+    // console.table(showDeleteButton)
 
     return (
         <React.Fragment>
@@ -773,10 +776,31 @@ const UserNotification = (props) => {
                             <div style={{ display: 'flex', width: '100%' }}>
                                 <div className={classes.verticalMiddle} style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 20 }}>Alarm Handler Users</div>
                                 {
+                                    userTableExpand
+                                        ? <Button
+                                            variant="contained"
+                                            color="secondary"
+                                            size="small"
+                                            className={classes.button}
+                                            startIcon={<PersonAddIcon />}
+                                            style={{ marginRight: 20 }}
+                                        >
+                                            Add
+                                        </Button>
+                                        : null
+                                }
+                                {
                                     userTableExpand && showDeleteButton
-                                        ? <IconButton aria-label="delete" className={classes.button} style={{ marginRight: 20 }}>
-                                            <AccountRemove color="secondary" />
-                                        </IconButton>
+                                        ? <Button
+                                            variant="outlined"
+                                            color="primary"
+                                            size="small"
+                                            className={classes.button}
+                                            startIcon={<AccountRemove />}
+                                            style={{ marginRight: 20 }}
+                                        >
+                                            Delete
+                                        </Button>
                                         : null
                                 }
                                 <div className={classes.verticalMiddle} style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 1 }}>

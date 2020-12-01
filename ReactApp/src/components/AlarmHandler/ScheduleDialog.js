@@ -745,6 +745,7 @@ const ScheduleDialog = (props) => {
                                 <Switch
                                     checked={global}
                                     onChange={handleNotifyGlobal}
+                                    disabled={props.dialogUserObject.notifyPVs.length === 0}
                                 />
                             </Grid>
                             <Grid item className={classes.centerInBlock}>

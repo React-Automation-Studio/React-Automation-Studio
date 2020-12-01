@@ -1,4 +1,5 @@
 [{
     "alarmIOCPVPrefix": "alarmIOC:",
-    "alarmIOCPVSuffix": ""
+    "alarmIOCPVSuffix": "",
+    "alarmUserAuth": false
 }]

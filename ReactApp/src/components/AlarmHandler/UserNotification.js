@@ -566,6 +566,11 @@ const UserNotification = (props) => {
         setDialogUserNotifyIndex(0)
     }, [])
 
+    const handleDeleteUser = useCallback(() => {
+        console.log(`Delete user ${filterUser.name}`)
+        setDeleteDialogOpen(false)
+    }, [filterUser.name])
+
     const handleSnackClose = () => {
         setSnackMessage("")
     }
@@ -740,6 +745,7 @@ const UserNotification = (props) => {
                 open={deleteDialogOpen}
                 handleClose={() => setDeleteDialogOpen(false)}
                 user={filterUser.name}
+                handleDelete={handleDeleteUser}
             />
             {
                 Object.entries(dialogUserObject).length !== 0

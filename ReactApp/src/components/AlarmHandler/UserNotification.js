@@ -561,6 +561,7 @@ const UserNotification = (props) => {
         setUserTableSearchStringStore(srch)
         setUserTableSearchTimer(setTimeout(() => {
             setUserTableSearchString(srch)
+            setFilterUserRegex([])
         }, 300))
     }
 

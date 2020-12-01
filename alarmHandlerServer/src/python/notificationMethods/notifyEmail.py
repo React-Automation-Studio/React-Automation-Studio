@@ -37,35 +37,54 @@ except:
 
 
 def composeEmailBody(userNotifyDict):
-    body = ""
+    body = "<br/> \
+            <table>"
     for area in userNotifyDict:
         if("=" in area):
             displayArea = area.replace("=", " > ")
         else:
             displayArea = area
         if(body == ""):
-            body = body+"<font size=\"3\"><b>"+displayArea+"</b></font><br/><br/>"
+            body = body + \
+                "<tr> \
+                <th colspan=\"4\" style=\"text-align: left\">"+displayArea+"</th> \
+                </tr>"
         else:
-            body = body+"<br/><br/><font size=\"3\"><b>"+displayArea+"</b></font><br/><br/>"
+            body = body + \
+                "<tr><td>"+" "+"</td></tr> \
+                <tr><td>"+" "+"</td></tr> \
+                <tr><td>"+" "+"</td></tr> \
+                <tr> \
+                <th colspan=\"4\" style=\"text-align: left\">"+displayArea+"</th> \
+                </tr>"
         for pvname in userNotifyDict[area]:
             for item in userNotifyDict[area][pvname]:
                 timestamp = item["timestamp"]
                 entry = item["entry"]
                 message = entry.split(pvname+' - ')[1]
                 if("DISCONNECTED" in message):
-                    formattedMessage = "<span><b style=\"background-color:rgb(198,40,40); color:rgb(255,255,255); padding:2;\">DISCONNECTED</b></span>"
+                    formattedAlarm = "<span><b style=\"background-color:rgb(198,40,40); color:rgb(255,255,255); padding:2;\">DISCONNECTED</b></span>"
+                    shortMessage = ""
                 else:
                     alarm, shortMessage = message.split(" triggered, ")
                     if("MINOR_ALARM" in message):
-                        formattedMessage = "<span><b style=\"background-color:rgb(255,138,101); color:rgb(255,255,255); padding:2;\">"+alarm+"</b> triggered, " + \
-                            shortMessage+"</span>"
+                        formattedAlarm = "<span><b style=\"background-color:rgb(255,138,101); color:rgb(255,255,255); padding:2;\">" + \
+                            alarm+"</b></span>"
                     else:
-                        formattedMessage = "<span><b style=\"background-color:rgb(198,40,40); color:rgb(255,255,255); padding:2;\">"+alarm+"</b> triggered, " + \
-                            shortMessage+"</span>"
+                        formattedAlarm = "<span><b style=\"background-color:rgb(198,40,40); color:rgb(255,255,255); padding:2;\">" + \
+                            alarm+"</b></span>"
                 str_time = datetime.fromtimestamp(timestamp).strftime(
                     "%H:%M:%S %a, %d %b %Y")
-                body = body + "<font size=\"2\"><u>"+str_time + \
-                    ":</u> <b>"+pvname+"</b> - "+formattedMessage+"</font><br/>"
+                body = body + \
+                    "<tr> \
+                        <td><u>"+str_time+":</u>  "+"</td> \
+                        <td><b>"+pvname+"</b></td> \
+                        <td>"+formattedAlarm+"</td> \
+                        <td>"+shortMessage+"</td> \
+                    </tr>"
+
+    body = body + \
+        "</table> "
 
     return """<html>
                 <body>

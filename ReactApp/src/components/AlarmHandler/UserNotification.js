@@ -20,6 +20,7 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 import DataConnection from '../SystemComponents/DataConnection';
 import ScheduleDialog from './ScheduleDialog';
+import DeleteDialog from './DeleteDialog';
 import UserTable from './UserTable';
 import PVList from './PVList';
 import useMongoDbWatch from '../SystemComponents/database/MongoDB/useMongoDbWatch';
@@ -133,6 +134,7 @@ const UserNotification = (props) => {
     const [alarmUserAuth, setAlarmUserAuth] = useState(false)
 
     const [showDeleteButton, setShowDeleteButton] = useState(false)
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
 
     const dbPVData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs:Parameters:{}` }).data
     const dbUsersData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:users:Parameters:{}` }).data
@@ -734,6 +736,11 @@ const UserNotification = (props) => {
                     </React.Fragment>
                 }
             />
+            <DeleteDialog
+                open={deleteDialogOpen}
+                handleClose={() => setDeleteDialogOpen(false)}
+                user={filterUser.name}
+            />
             {
                 Object.entries(dialogUserObject).length !== 0
                     ? <ScheduleDialog
@@ -798,6 +805,11 @@ const UserNotification = (props) => {
                                             className={classes.button}
                                             startIcon={<AccountRemove />}
                                             style={{ marginRight: 20 }}
+                                            onClick={(event) => {
+                                                event.preventDefault()
+                                                event.stopPropagation()
+                                                setDeleteDialogOpen(true)
+                                            }}
                                         >
                                             Delete
                                         </Button>

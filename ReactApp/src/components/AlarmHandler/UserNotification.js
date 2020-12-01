@@ -1,15 +1,18 @@
 import React, { useState, useEffect, useContext, useCallback, useRef } from 'react';
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { fade } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
+import InputBase from '@material-ui/core/InputBase';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import SearchIcon from '@material-ui/icons/Search';
 
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 import DataConnection from '../SystemComponents/DataConnection';
@@ -24,7 +27,6 @@ import { format } from 'date-fns';
 const useStyles = makeStyles(theme => ({
     root: {
         padding: theme.spacing(1),
-        paddingTop: theme.spacing(2),
         width: "100%",
         margin: 0
     },
@@ -35,7 +37,46 @@ const useStyles = makeStyles(theme => ({
             margin: 0,
         },
     },
-    expanded: {}
+    expanded: {},
+    search: {
+        position: 'relative',
+        borderRadius: theme.shape.borderRadius,
+        backgroundColor: theme.palette.type === 'dark' ? fade(theme.palette.common.white, 0.15) : fade(theme.palette.common.black, 0.15),
+        '&:hover': {
+            backgroundColor: theme.palette.type === 'dark' ? fade(theme.palette.common.white, 0.25) : fade(theme.palette.common.black, 0.25),
+        },
+        marginLeft: 0,
+        width: '100%',
+        [theme.breakpoints.up('sm')]: {
+            marginLeft: theme.spacing(1),
+            width: 'auto',
+        },
+    },
+    searchIcon: {
+        padding: theme.spacing(0, 2),
+        height: '100%',
+        position: 'absolute',
+        pointerEvents: 'none',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    inputRoot: {
+        color: 'inherit',
+    },
+    inputInput: {
+        padding: theme.spacing(1, 1, 1, 0),
+        // // vertical padding + font size from searchIcon
+        paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+        transition: theme.transitions.create('width'),
+        width: '100%',
+        [theme.breakpoints.up('sm')]: {
+            width: '20ch',
+            '&:focus': {
+                width: '30ch',
+            },
+        },
+    },
 }))
 
 const UserNotification = (props) => {
@@ -72,6 +113,10 @@ const UserNotification = (props) => {
     const [dialogUserObject, setDialogUserObject] = useState({})
     const [dialogUserNotifyIndex, setDialogUserNotifyIndex] = useState(0)
     const [snackMessage, setSnackMessage] = useState("")
+
+    const [userTableSearchString, setUserTableSearchString] = useState('')
+    const [userTableSearchStringStore, setUserTableSearchStringStore] = useState('')
+    const [userTableSearchTimer, setUserTableSearchTimer] = useState(null)
 
     const dbPVData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs:Parameters:{}` }).data
     const dbUsersData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:users:Parameters:{}` }).data
@@ -507,6 +552,17 @@ const UserNotification = (props) => {
         setSnackMessage("")
     }
 
+    const handleSearchUserTable = (event) => {
+        const srch = event.target.value
+        if (userTableSearchTimer) {
+            clearTimeout(userTableSearchTimer)
+        }
+        setUserTableSearchStringStore(srch)
+        setUserTableSearchTimer(setTimeout(() => {
+            setUserTableSearchString(srch)
+        }, 300))
+    }
+
     // handleNewDbPVsList
     useEffect(() => {
         if (dbPVData !== null) {
@@ -690,7 +746,24 @@ const UserNotification = (props) => {
                                 <div style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 1 }}>
                                     {
                                         userTableExpand
-                                            ? null
+                                            ? <div className={classes.search}>
+                                                <div className={classes.searchIcon}>
+                                                    <SearchIcon />
+                                                </div>
+                                                <InputBase
+                                                    placeholder="Search user table…"
+                                                    classes={{
+                                                        root: classes.inputRoot,
+                                                        input: classes.inputInput,
+                                                    }}
+                                                    inputProps={{ 'aria-label': 'search' }}
+                                                    onClick={event => event.stopPropagation()}
+                                                    onFocus={event => event.stopPropagation()}
+                                                    onChange={event => handleSearchUserTable(event)}
+                                                    // onBlur={() => { setUserTableSearchStringStore(''); setUserTableSearchString('') }}
+                                                    value={userTableSearchStringStore}
+                                                />
+                                            </div>
                                             : '[click to show]'
                                     }
                                 </div>

@@ -117,6 +117,7 @@ const UserNotification = (props) => {
     const [userTableSearchString, setUserTableSearchString] = useState('')
     const [userTableSearchStringStore, setUserTableSearchStringStore] = useState('')
     const [userTableSearchTimer, setUserTableSearchTimer] = useState(null)
+    const [searchedUsers, setSearchedUsers] = useState([])
 
     const dbPVData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs:Parameters:{}` }).data
     const dbUsersData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:users:Parameters:{}` }).data
@@ -649,6 +650,17 @@ const UserNotification = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dbConfigData])
 
+    useEffect(() => {
+        const filteredUsers = userList.reduce((acc, entry) => {
+            const visible = entry["name"].toLowerCase().includes(userTableSearchString.toLowerCase())
+            if (visible) {
+                acc.push(entry)
+            }
+            return acc
+        }, [])
+        setSearchedUsers(filteredUsers)
+    }, [userList, userTableSearchString])
+
     let alarmPVs = null
     if (alarmIOCPVPrefix !== null && alarmIOCPVSuffix !== null) {
         alarmPVs = alarmList.map(alarm => (
@@ -771,7 +783,7 @@ const UserNotification = (props) => {
                             <UserTable
                                 regexError={regexError}
                                 addRegexVal={addRegexVal}
-                                userList={userList}
+                                userList={searchedUsers}
                                 userEdit={userEdit}
                                 username={username}
                                 filterUser={filterUser}

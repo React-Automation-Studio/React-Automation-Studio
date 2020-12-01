@@ -25,6 +25,7 @@ import UserTable from './UserTable';
 import PVList from './PVList';
 import useMongoDbWatch from '../SystemComponents/database/MongoDB/useMongoDbWatch';
 import useMongoDbUpdateOne from '../SystemComponents/database/MongoDB/useMongoDbUpdateOne';
+import useMongoDbDeleteOne from '../SystemComponents/database/MongoDB/useMongoDbDeleteOne';
 
 import { AccountRemove } from "mdi-material-ui/";
 import { format } from 'date-fns';
@@ -141,6 +142,7 @@ const UserNotification = (props) => {
     const dbConfigData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:config:Parameters:{}` }).data
 
     const dbUpdateOne = useMongoDbUpdateOne({})
+    const dbDeleteOne = useMongoDbDeleteOne({})
 
 
     const loadPVListRef = useRef(loadPVList);
@@ -567,9 +569,16 @@ const UserNotification = (props) => {
     }, [])
 
     const handleDeleteUser = useCallback(() => {
-        console.log(`Delete user ${filterUser.name}`)
+        // Find match and note it's index in userList
+        const match = userList.filter(el => el.name === filterUser.name && el.username === filterUser.username)[0]
+        const id = match['_id']['$oid']
+        dbDeleteOne({
+            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:users`,
+            id: id,
+        })
+        setFilterUser({})
         setDeleteDialogOpen(false)
-    }, [filterUser.name])
+    }, [filterUser.name, filterUser.username, userList, dbDeleteOne, props.dbName])
 
     const handleSnackClose = () => {
         setSnackMessage("")

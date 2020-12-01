@@ -118,6 +118,7 @@ const UserNotification = (props) => {
     const [userTableSearchStringStore, setUserTableSearchStringStore] = useState('')
     const [userTableSearchTimer, setUserTableSearchTimer] = useState(null)
     const [searchedUsers, setSearchedUsers] = useState([])
+    const [alarmUserAuth, setAlarmUserAuth] = useState(false)
 
     const dbPVData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs:Parameters:{}` }).data
     const dbUsersData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:users:Parameters:{}` }).data
@@ -646,6 +647,7 @@ const UserNotification = (props) => {
             const data = dbConfigData[0];
             setAlarmIOCPVPrefix(data["alarmIOCPVPrefix"])
             setAlarmIOCPVSuffix(data['alarmIOCPVSuffix'])
+            setAlarmUserAuth(data["alarmUserAuth"])
         }
         // disable useEffect dependencies for "dbConfigData"
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -690,7 +692,7 @@ const UserNotification = (props) => {
         pvListHeight = '76vh'
     }
 
-    // console.table(userList)
+    // console.table(alarmUserAuth)
 
     return (
         <React.Fragment>
@@ -789,6 +791,7 @@ const UserNotification = (props) => {
                                 username={username}
                                 filterUser={filterUser}
                                 filterUserRegex={filterUserRegex}
+                                alarmUserAuth={alarmUserAuth}
                                 setUserEdit={handleSetUserEdit}
                                 setFilterUser={handleSetFilterUser}
                                 setFilterUserRegex={handleSetFilterUserRegex}

@@ -137,7 +137,7 @@ const UserTable = (props) => {
                             return acc || area.regEx === fillChipName
                         }, false)
 
-                        const isDemoUser = user.username === 'user1' || user.username === 'user2' || user.username === 'user3'
+                        const isDemoUser = user.username === 'user1' || user.username === 'user2' || user.username === 'user3' || !props.alarmUserAuth
 
                         return (
                             < TableRow

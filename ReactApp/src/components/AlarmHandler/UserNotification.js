@@ -611,14 +611,8 @@ const UserNotification = (props) => {
             const localBackupUserList = {}
             const localRegexError = {}
             const localAddRegexVal = {}
-            // let localFilterUser = null
-            // let localFilterUserRegex = null
 
             dbUsersData.map((user, index) => {
-                if (index === 0) {
-                    // localFilterUser = user.name
-                    // localFilterUserRegex = user.notifyPVs
-                }
                 localDictUserRegex[`${user.username}-${user.name}`] = user.notifyPVs
                 localBackupUserList[`${user.username}-${user.name}`] = user
                 localUserEdit[`${user.username}-${user.name}`] = false
@@ -635,6 +629,9 @@ const UserNotification = (props) => {
 
             setDictUserRegex(localDictUserRegex)
             setBackupUserList(localBackupUserList)
+            // Sort users alphabetically by name field
+            dbUsersData.sort((a, b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0))
+            //
             setUserList(dbUsersData)
         }
         // disable useEffect dependencies for "dbUsersData"

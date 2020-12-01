@@ -22,6 +22,7 @@ import PVList from './PVList';
 import useMongoDbWatch from '../SystemComponents/database/MongoDB/useMongoDbWatch';
 import useMongoDbUpdateOne from '../SystemComponents/database/MongoDB/useMongoDbUpdateOne';
 
+import { AccountRemove } from "mdi-material-ui/";
 import { format } from 'date-fns';
 
 const useStyles = makeStyles(theme => ({
@@ -29,6 +30,9 @@ const useStyles = makeStyles(theme => ({
         padding: theme.spacing(1),
         width: "100%",
         margin: 0
+    },
+    button: {
+        // margin: theme.spacing(1),
     },
     expansionPanelSummaryContent: {
         paddingTop: 0,
@@ -77,6 +81,11 @@ const useStyles = makeStyles(theme => ({
             },
         },
     },
+    verticalMiddle: {
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+    }
 }))
 
 const UserNotification = (props) => {
@@ -119,6 +128,8 @@ const UserNotification = (props) => {
     const [userTableSearchTimer, setUserTableSearchTimer] = useState(null)
     const [searchedUsers, setSearchedUsers] = useState([])
     const [alarmUserAuth, setAlarmUserAuth] = useState(false)
+
+    const [showDeleteButton, setShowDeleteButton] = useState(false)
 
     const dbPVData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs:Parameters:{}` }).data
     const dbUsersData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:users:Parameters:{}` }).data
@@ -563,6 +574,7 @@ const UserNotification = (props) => {
         setUserTableSearchTimer(setTimeout(() => {
             setUserTableSearchString(srch)
             setFilterUserRegex([])
+            setFilterUser({})
         }, 300))
     }
 
@@ -664,6 +676,11 @@ const UserNotification = (props) => {
         setSearchedUsers(filteredUsers)
     }, [userList, userTableSearchString])
 
+    useEffect(() => {
+        const showDeleteButton = filterUser.username && (filterUser.username === username || filterUser.username === 'user1' || filterUser.username === 'user2' || filterUser.username === 'user3' || !alarmUserAuth)
+        setShowDeleteButton(showDeleteButton)
+    }, [filterUser, username, alarmUserAuth])
+
     let alarmPVs = null
     if (alarmIOCPVPrefix !== null && alarmIOCPVSuffix !== null) {
         alarmPVs = alarmList.map(alarm => (
@@ -692,7 +709,7 @@ const UserNotification = (props) => {
         pvListHeight = '76vh'
     }
 
-    // console.table(alarmUserAuth)
+    console.table(showDeleteButton)
 
     return (
         <React.Fragment>
@@ -754,8 +771,15 @@ const UserNotification = (props) => {
                             classes={{ content: classes.expansionPanelSummaryContent, expanded: classes.expanded }}
                         >
                             <div style={{ display: 'flex', width: '100%' }}>
-                                <div style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 20 }}>Alarm Handler Users</div>
-                                <div style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 1 }}>
+                                <div className={classes.verticalMiddle} style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 20 }}>Alarm Handler Users</div>
+                                {
+                                    userTableExpand && showDeleteButton
+                                        ? <IconButton aria-label="delete" className={classes.button} style={{ marginRight: 20 }}>
+                                            <AccountRemove color="secondary" />
+                                        </IconButton>
+                                        : null
+                                }
+                                <div className={classes.verticalMiddle} style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 1 }}>
                                     {
                                         userTableExpand
                                             ? <div className={classes.search}>

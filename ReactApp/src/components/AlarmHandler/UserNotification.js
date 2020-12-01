@@ -21,10 +21,12 @@ import AutomationStudioContext from '../SystemComponents/AutomationStudioContext
 import DataConnection from '../SystemComponents/DataConnection';
 import ScheduleDialog from './ScheduleDialog';
 import DeleteDialog from './DeleteDialog';
+import AddDialog from './AddDialog';
 import UserTable from './UserTable';
 import PVList from './PVList';
 import useMongoDbWatch from '../SystemComponents/database/MongoDB/useMongoDbWatch';
 import useMongoDbUpdateOne from '../SystemComponents/database/MongoDB/useMongoDbUpdateOne';
+import useMongoDbInsertOne from '../SystemComponents/database/MongoDB/useMongoDbInsertOne';
 import useMongoDbDeleteOne from '../SystemComponents/database/MongoDB/useMongoDbDeleteOne';
 
 import { AccountRemove } from "mdi-material-ui/";
@@ -136,12 +138,17 @@ const UserNotification = (props) => {
 
     const [showDeleteButton, setShowDeleteButton] = useState(false)
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+    const [addDialogOpen, setAddDialogOpen] = useState(false)
+
+    const [newName, setNewName] = useState("")
+    const [newUsername, setNewUsername] = useState("")
 
     const dbPVData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs:Parameters:{}` }).data
     const dbUsersData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:users:Parameters:{}` }).data
     const dbConfigData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:config:Parameters:{}` }).data
 
     const dbUpdateOne = useMongoDbUpdateOne({})
+    const dbInsertOne = useMongoDbInsertOne({})
     const dbDeleteOne = useMongoDbDeleteOne({})
 
 
@@ -597,6 +604,46 @@ const UserNotification = (props) => {
         }, 300))
     }
 
+    const handleAddNewUser = () => {
+        const newEntry = {
+            "name": newName,
+            "username": newUsername,
+            "email": "",
+            "mobile": "",
+            "global": true,
+            "globalSetup": {
+                "notify": true,
+                "email": true,
+                "sms": false,
+                "whatsapp": false,
+                "allDay": true,
+                "fromTime": "",
+                "toTime": "",
+                "weekly": true,
+                "days": {
+                    "Monday": true,
+                    "Tuesday": true,
+                    "Wednesday": true,
+                    "Thursday": true,
+                    "Friday": true,
+                    "Saturday": true,
+                    "Sunday": true
+                },
+                "dateRange": false,
+                "fromDate": "",
+                "toDate": ""
+            },
+            "notifyPVs": []
+        }
+        dbInsertOne({
+            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:users`,
+            newEntry: newEntry
+        })
+        setNewName('')
+        setNewUsername('')
+        setAddDialogOpen(false)
+    }
+
     // handleNewDbPVsList
     useEffect(() => {
         if (dbPVData !== null) {
@@ -756,6 +803,19 @@ const UserNotification = (props) => {
                 user={filterUser.name}
                 handleDelete={handleDeleteUser}
             />
+            <AddDialog
+                open={addDialogOpen}
+                handleClose={() => {
+                    setNewName('')
+                    setNewUsername('')
+                    setAddDialogOpen(false)
+                }}
+                name={newName}
+                username={newUsername}
+                setNewName={(event) => setNewName(event.target.value)}
+                setNewUsername={(event) => setNewUsername(event.target.value)}
+                handleAddNewUser={handleAddNewUser}
+            />
             {
                 Object.entries(dialogUserObject).length !== 0
                     ? <ScheduleDialog
@@ -806,6 +866,11 @@ const UserNotification = (props) => {
                                             className={classes.button}
                                             startIcon={<PersonAddIcon />}
                                             style={{ marginRight: 20 }}
+                                            onClick={(event) => {
+                                                event.preventDefault()
+                                                event.stopPropagation()
+                                                setAddDialogOpen(true)
+                                            }}
                                         >
                                             Add
                                         </Button>

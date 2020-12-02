@@ -1,5 +1,5 @@
 
-The `useMongoDbDeleteOne` hook can be used to delete a document into a MongoDB collection.
+The `useMongoDbDeleteOne` hook can be used to delete a document in a MongoDB collection.
 
 It returns a function which can be called with the following props:
 

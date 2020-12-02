@@ -172,6 +172,10 @@ module.exports = {
               content: 'src/components/SystemComponents/database/MongoDB/useMongoDbInsertOne.md',
             },
             {
+              name: 'useMongoDbDeleteOne',
+              content: 'src/components/SystemComponents/database/MongoDB/useMongoDbDeleteOne.md',
+            },
+            {
               name: 'useMongoDbUpdateOne',
               content: 'src/components/SystemComponents/database/MongoDB/useMongoDbUpdateOne.md',
             },

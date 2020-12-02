@@ -7,7 +7,7 @@ import subprocess
 import _thread
 from epics import PV
 from datetime import datetime
-from pytz import timezone, utc
+from pytz import utc
 
 from dbMongo import dbFindOne, dbGetCollection, dbUpdateHistory
 
@@ -19,11 +19,6 @@ try:
     AH_DEBUG = bool(os.environ['AH_DEBUG'])
 except:
     AH_DEBUG = False
-
-try:
-    TZ = os.environ['TZ']
-except:
-    TZ = "Africa/Johannesburg"
 
 pvNameList = []
 alarmDict = {}
@@ -83,9 +78,7 @@ def date_is_between(now, fromDate, toDate):
 
 
 def notifyValid(notifySetup):
-    now_utc_dt = datetime.now(utc)
-    loc_tz = timezone(TZ)
-    now = now_utc_dt.astimezone(loc_tz)
+    now = datetime.now(utc)
     if(notifySetup["notify"]):
         if(AH_DEBUG):
             print("Must notify")
@@ -97,14 +90,14 @@ def notifyValid(notifySetup):
                 print("Time restricted")
             formatTime = "%H:%M"
             fromTime = datetime.fromisoformat(
-                notifySetup["fromTime"]).strftime(formatTime)
+                notifySetup["fromTime"]).astimezone(utc).strftime(formatTime)
             toTime = datetime.fromisoformat(
-                notifySetup["toTime"]).strftime(formatTime)
+                notifySetup["toTime"]).astimezone(utc).strftime(formatTime)
             nowTime = now.strftime(formatTime)
             if(AH_DEBUG):
-                print('fromTime', fromTime)
-                print('toTime', toTime)
-                print('nowTime', nowTime)
+                print('fromTime UTC', fromTime)
+                print('toTime UTC', toTime)
+                print('nowTime UTC', nowTime)
             if(time_is_between(nowTime, fromTime, toTime)):
                 if(AH_DEBUG):
                     print("Current time between fromTime and toTime")
@@ -136,9 +129,9 @@ def notifyValid(notifySetup):
         else:
             formatTime = "%d %B %Y"
             fromDate = datetime.fromisoformat(
-                notifySetup["fromDate"])
+                notifySetup["fromDate"]).astimezone(utc)
             toDate = datetime.fromisoformat(
-                notifySetup["toDate"])
+                notifySetup["toDate"]).astimezone(utc)
             if(AH_DEBUG):
                 print("Notify date range")
                 print('fromDate', fromDate.strftime(formatTime))

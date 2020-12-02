@@ -225,7 +225,7 @@ def notify(notifyBuffer):
                             print("Fail regEx", notifyPV["regEx"])
                     if(AH_DEBUG):
                         print('###-END NOTIFY DEBUG-###')
-        timestamp = datetime.timestamp(datetime.now())
+        timestamp = datetime.isoformat(datetime.now(utc))
         if(notifyEmailDict):
             if(notifyEmail(timestamp, email, notifyEmailDict)):
                 # Log to global db

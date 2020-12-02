@@ -74,7 +74,7 @@ def composeEmailBody(userNotifyDict):
                     else:
                         formattedAlarm = "<span><b style=\"background-color:rgb(198,40,40); color:rgb(255,255,255); padding:2;\">" + \
                             alarm+"</b></span>"
-                str_time = datetime.fromtimestamp(timestamp).strftime(
+                str_time = datetime.fromisoformat(timestamp).strftime(
                     "%H:%M:%S %a, %d %b %Y")
                 body = body + \
                     "<tr> \
@@ -98,11 +98,11 @@ def notifyEmail(timestamp, email, userNotifyDict):
     # This function must return True as an acknowledgedment to the notification
     # server that the notification method executed successfully
 
-    timestamp = datetime.fromtimestamp(timestamp)
+    timestamp = datetime.fromisoformat(timestamp)
 
     if(AH_DEBUG):
         print("###-EMAIL NOTIFY-###")
-        print(timestamp.strftime('%a, %d %b %Y at %H:%M:%S'))
+        print(timestamp.strftime('%a, %d %b %Y at %H:%M:%S UTC'))
         print(email)
         print(userNotifyDict)
 

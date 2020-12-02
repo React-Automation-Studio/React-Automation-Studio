@@ -6,6 +6,7 @@ import subprocess
 import _thread
 from epics import PV, caput
 from datetime import datetime
+from pytz import utc
 
 from notifyServer import startNotifyServer, restartNotifyServer, notify
 from dbMongo import dbGetCollection, dbGetEnables, dbGetListOfPVNames, dbGetPVField, dbSetPVField, dbFindOne, dbUpdateHistory
@@ -237,7 +238,7 @@ def getNotify(pvname):
 
 
 def ackPVChange(value=None, **kw):
-    timestamp = datetime.timestamp(datetime.now())
+    timestamp = datetime.isoformat(datetime.now(utc))
     # print("ack pv:", value)
     if(value):
         if (value[0] != ''):
@@ -326,8 +327,7 @@ def ackAlarm(ackIdentifier, timestamp, username):
 
     if (alarmPVSev == 2 or alarmPVSev == 4 or alarmPVSev == 6 or alarmPVSev == 8):
         # in minor, major, invalid or disconn state, valid state for ack
-        timestamp_string = datetime.fromtimestamp(timestamp).strftime(
-            "%a, %d %b %Y at %H:%M:%S")
+        timestamp_string = timestamp
         # set ack time
         alarmDict[pvname]["K"].value = timestamp_string
         if ("=" in areaKey):
@@ -395,9 +395,8 @@ def pvDisconn(pvname, conn):
         if(alarmServerRestart):
             timestamp_string = lastAlarmTime
         else:
-            timestamp = datetime.timestamp(datetime.now())
-            timestamp_string = datetime.fromtimestamp(timestamp).strftime(
-                "%a, %d %b %Y at %H:%M:%S")
+            timestamp = datetime.isoformat(datetime.now(utc))
+            timestamp_string = timestamp
 
         globalEnable, areaEnable, subAreaEnable, pvEnable = getEnables(pvname)
         if (subAreaEnable != None):
@@ -467,7 +466,7 @@ def pvDisconn(pvname, conn):
 
 
 def onChanges(pvname=None, value=None, **kw):
-    timestamp = datetime.timestamp(datetime.now())
+    timestamp = datetime.isoformat(datetime.now(utc))
     if (alarmDictInitialised):
         _thread.start_new_thread(pvPrepareData, (
             pvname,
@@ -482,15 +481,14 @@ def onChanges(pvname=None, value=None, **kw):
             pvname,
             value,
             kw["severity"],
-            kw["timestamp"],
+            timestamp,
             kw["units"],
             kw["enum_strs"]
         ))
 
 
 def pvPrepareData(pvname, value, severity, timestamp, units, enum_strs):
-    timestamp_string = datetime.fromtimestamp(timestamp).strftime(
-        "%a, %d %b %Y at %H:%M:%S")
+    timestamp_string = timestamp
 
     globalEnable, areaEnable, subAreaEnable, pvEnable = getEnables(pvname)
 
@@ -845,8 +843,7 @@ def initialiseAlarmIOC():
                         else:
                             lastAlarmVal = str(value)
                     if(not alarmServerRestart):
-                        lastAlarmTime = datetime.fromtimestamp(
-                            pvInitDict[pvname][2]).strftime("%a, %d %b %Y at %H:%M:%S")
+                        lastAlarmTime = pvInitDict[pvname][2]
                     # set current alarm status
                     sev = pvInitDict[pvname][1]
                     if(sev == 1):     # MINOR alarm
@@ -908,6 +905,7 @@ def initialiseAlarmIOC():
             # set alarm value
             alarmDict[pvname]["V"].value = str(lastAlarmVal)
             # set alarm time
+            print(lastAlarmTime)
             alarmDict[pvname]["T"].value = lastAlarmTime
         # set ack time
         alarmDict[pvname]["K"].value = lastAlarmAckTime
@@ -1047,7 +1045,7 @@ def pvCollectionWatch():
                 documentKey = change["documentKey"]
                 doc = dbFindOne("pvs", documentKey)
                 change = change["updateDescription"]["updatedFields"]
-                timestamp = datetime.timestamp(datetime.now())
+                timestamp = datetime.isoformat(datetime.now(utc))
                 for key in change.keys():
                     # print(key)
                     if (key == "enable"):
@@ -1116,7 +1114,7 @@ def globalCollectionWatch():
             # print(change)
             try:
                 change = change["updateDescription"]["updatedFields"]
-                timestamp = datetime.timestamp(datetime.now())
+                timestamp = datetime.isoformat(datetime.now(utc))
                 for key in change.keys():
                     if (key == "enableAllAreas"):
                         # print(areaKey, "area enable changed!")

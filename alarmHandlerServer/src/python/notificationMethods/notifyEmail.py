@@ -37,8 +37,7 @@ except:
 
 
 def composeEmailBody(userNotifyDict):
-    body = "<br/> \
-            <table>"
+    body = ""
     for area in userNotifyDict:
         if("=" in area):
             displayArea = area.replace("=", " > ")
@@ -46,7 +45,9 @@ def composeEmailBody(userNotifyDict):
             displayArea = area
         if(body == ""):
             body = body + \
-                "<tr> \
+                "<br/> \
+                <table> \
+                <tr> \
                 <th colspan=\"4\" style=\"text-align: left\">"+displayArea+"</th> \
                 </tr>"
         else:

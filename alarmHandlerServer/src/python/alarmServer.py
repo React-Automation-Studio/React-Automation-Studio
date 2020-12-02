@@ -905,7 +905,6 @@ def initialiseAlarmIOC():
             # set alarm value
             alarmDict[pvname]["V"].value = str(lastAlarmVal)
             # set alarm time
-            print(lastAlarmTime)
             alarmDict[pvname]["T"].value = lastAlarmTime
         # set ack time
         alarmDict[pvname]["K"].value = lastAlarmAckTime

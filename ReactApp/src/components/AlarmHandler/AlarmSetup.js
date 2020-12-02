@@ -40,7 +40,7 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import TablePagination from '@material-ui/core/TablePagination';
 
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 
 function isEmpty(obj) {
     return Object.keys(obj).length === 0;
@@ -285,7 +285,7 @@ const AlarmSetup = (props) => {
         })
 
         localAlarmLogDisplayArray = localAlarmLogDisplayArray.sort(function (a, b) {
-            return b.timestamp - a.timestamp
+            return parseISO(b.timestamp) - parseISO(a.timestamp)
         })
 
         setAlarmLogDisplayArray(localAlarmLogDisplayArray)
@@ -800,7 +800,7 @@ const AlarmSetup = (props) => {
 
     useEffect(() => {
         const searchedData = alarmLogDisplayArray.filter((entry) => {
-            const date = format(new Date(entry.timestamp * 1000), "HH:mm:ss E, dd LLL yyyy")
+            const date = format(parseISO(entry.timestamp), "HH:mm:ss E, dd LLL yyyy")
             const content = `${date}: ${entry.entry}`
             const visible = content.toLowerCase().includes(alarmLogSearchString.toLowerCase())
             if (visible) {

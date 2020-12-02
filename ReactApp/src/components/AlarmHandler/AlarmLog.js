@@ -7,7 +7,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 
 const AlarmLog = (props) => {
     // const classes = useStyles();
@@ -24,7 +24,7 @@ const AlarmLog = (props) => {
             <Table aria-label="Log Table" size="small" >
                 <TableBody>
                     {props.slicedData.map((entry) => {
-                        const date = format(new Date(entry.timestamp * 1000), "HH:mm:ss E, dd LLL yyyy")
+                        const date = format(parseISO(entry.timestamp), "HH:mm:ss E, dd LLL yyyy")
                         const content = `${date}: ${entry.entry}`
                         return (
                             <TableRow

@@ -778,7 +778,9 @@ const UserNotification = (props) => {
         pvListHeight = '76vh'
     }
 
-    const warnAdminMessage = "Only a user with 'alarmAdmin' role can add or remove users"
+    const warnAdminMessageAdd = "Only a user with 'alarmAdmin' role can add users"
+    const warnAdminMessageDelete = "Only a user with 'alarmAdmin' role can delete users"
+    const warnAdminMessageSelect = "Select user to delete first"
 
     // console.table(showDeleteButton)
 
@@ -865,7 +867,7 @@ const UserNotification = (props) => {
                                 {
                                     userTableExpand
                                         ? <Tooltip
-                                            title={isAlarmAdmin ? "Add user" : warnAdminMessage}
+                                            title={isAlarmAdmin ? "Add user" : warnAdminMessageAdd}
                                             placement="bottom"
                                             classes={{ tooltip: classes.tooltipWidth }}
                                         >
@@ -898,22 +900,36 @@ const UserNotification = (props) => {
                                 }
                                 {
                                     userTableExpand
-                                        ? <Button
-                                            variant="outlined"
-                                            color="primary"
-                                            size="small"
-                                            className={classes.button}
-                                            startIcon={<AccountRemove />}
-                                            style={{ marginRight: 20 }}
-                                            onClick={(event) => {
-                                                event.preventDefault()
-                                                event.stopPropagation()
-                                                setDeleteDialogOpen(true)
-                                            }}
-                                            disabled={!isAlarmAdmin}
+                                        ? <Tooltip
+                                            title={isAlarmAdmin ? filterUser.name ? "Delete user" : warnAdminMessageSelect : warnAdminMessageDelete}
+                                            placement="bottom"
+                                            classes={{ tooltip: classes.tooltipWidth }}
                                         >
-                                            Delete
-                                        </Button>
+                                            <div
+                                                onClick={(event) => {
+                                                    event.preventDefault()
+                                                    event.stopPropagation()
+                                                    isAlarmAdmin && filterUser.name && setDeleteDialogOpen(true)
+                                                }}
+                                            >
+                                                <Button
+                                                    variant="contained"
+                                                    color="primary"
+                                                    size="small"
+                                                    className={classes.button}
+                                                    startIcon={<AccountRemove />}
+                                                    style={{ marginRight: 20 }}
+                                                    // onClick={(event) => {
+                                                    //     event.preventDefault()
+                                                    //     event.stopPropagation()
+                                                    //     setDeleteDialogOpen(true)
+                                                    // }}
+                                                    disabled={!isAlarmAdmin || !filterUser.name}
+                                                >
+                                                    Delete
+                                                 </Button>
+                                            </div>
+                                        </Tooltip>
                                         : null
                                 }
                                 <div className={classes.verticalMiddle} style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 1 }}>

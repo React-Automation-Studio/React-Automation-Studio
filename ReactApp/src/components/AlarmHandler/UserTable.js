@@ -137,7 +137,8 @@ const UserTable = (props) => {
                             return acc || area.regEx === fillChipName
                         }, false)
 
-                        const isDemoUser = user.username === 'user1' || user.username === 'user2' || user.username === 'user3' || !props.alarmUserAuth
+                        const isDemoUser = user.username === 'user1' || user.username === 'user2' || user.username === 'user3'
+                        const allowEdit = isDemoUser || user.username === props.username || props.isAlarmAdmin
 
                         return (
                             < TableRow
@@ -166,7 +167,7 @@ const UserTable = (props) => {
                                         </Grid>
                                         <Grid item xs={10}>
                                             <TextField
-                                                type={props.username === user.username || isDemoUser ? 'text' : 'password'}
+                                                type={allowEdit ? 'text' : 'password'}
                                                 value={user.email}
                                                 onChange={(event) => props.updateUserEmail(event, user.name, user.username)}
                                                 InputProps={{
@@ -181,7 +182,7 @@ const UserTable = (props) => {
                                         </Grid>
                                         <Grid item xs={10}>
                                             <TextField
-                                                type={props.username === user.username || isDemoUser ? 'text' : 'password'}
+                                                type={allowEdit ? 'text' : 'password'}
                                                 value={user.mobile}
                                                 onChange={(event) => props.updateUserMobile(event, user.name, user.username)}
                                                 InputProps={{
@@ -246,7 +247,7 @@ const UserTable = (props) => {
                                 </TableCell>}
                                 <TableCell align="center">
                                     {
-                                        props.username === user.username || isDemoUser
+                                        allowEdit
                                             ? props.userEdit[`${user.username}-${user.name}`]
                                                 ? <React.Fragment>
                                                     <Tooltip title="Apply" placement="bottom">
@@ -300,7 +301,7 @@ const UserTable = (props) => {
                                             }}
                                         >
                                             {
-                                                props.username === user.username || isDemoUser
+                                                allowEdit
                                                     ? <Tooltip title="Edit schedule" placement="left">
                                                         <IconButton onClick={(event) => { props.openDialog(event, user.name, user.username) }}>
                                                             <EventIcon className={classes.icon} />

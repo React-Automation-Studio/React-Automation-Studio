@@ -143,7 +143,6 @@ const UserNotification = (props) => {
     const [userTableSearchStringStore, setUserTableSearchStringStore] = useState('')
     const [userTableSearchTimer, setUserTableSearchTimer] = useState(null)
     const [searchedUsers, setSearchedUsers] = useState([])
-    const [alarmUserAuth, setAlarmUserAuth] = useState(false)
 
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
     const [addDialogOpen, setAddDialogOpen] = useState(false)
@@ -733,7 +732,6 @@ const UserNotification = (props) => {
             const data = dbConfigData[0];
             setAlarmIOCPVPrefix(data["alarmIOCPVPrefix"])
             setAlarmIOCPVSuffix(data['alarmIOCPVSuffix'])
-            setAlarmUserAuth(data["alarmUserAuth"])
         }
         // disable useEffect dependencies for "dbConfigData"
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -966,9 +964,9 @@ const UserNotification = (props) => {
                                 userList={searchedUsers}
                                 userEdit={userEdit}
                                 username={username}
+                                isAlarmAdmin={isAlarmAdmin}
                                 filterUser={filterUser}
                                 filterUserRegex={filterUserRegex}
-                                alarmUserAuth={alarmUserAuth}
                                 setUserEdit={handleSetUserEdit}
                                 setFilterUser={handleSetFilterUser}
                                 setFilterUserRegex={handleSetFilterUserRegex}

@@ -7,6 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
+import Tooltip from '@material-ui/core/Tooltip';
 import InputBase from '@material-ui/core/InputBase';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -92,6 +93,9 @@ const useStyles = makeStyles(theme => ({
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
+    },
+    tooltipWidth: {
+        maxWidth: 200,
     }
 }))
 
@@ -774,6 +778,8 @@ const UserNotification = (props) => {
         pvListHeight = '76vh'
     }
 
+    const warnAdminMessage = "Only a user with 'alarmAdmin' role can add or remove users"
+
     // console.table(showDeleteButton)
 
     return (
@@ -858,22 +864,36 @@ const UserNotification = (props) => {
                                 <div className={classes.verticalMiddle} style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 20 }}>Alarm Handler Users</div>
                                 {
                                     userTableExpand
-                                        ? <Button
-                                            variant="contained"
-                                            color="secondary"
-                                            size="small"
-                                            className={classes.button}
-                                            startIcon={<PersonAddIcon />}
-                                            style={{ marginRight: 20 }}
-                                            onClick={(event) => {
-                                                event.preventDefault()
-                                                event.stopPropagation()
-                                                setAddDialogOpen(true)
-                                            }}
-                                            disabled={!isAlarmAdmin}
+                                        ? <Tooltip
+                                            title={isAlarmAdmin ? "Add user" : warnAdminMessage}
+                                            placement="bottom"
+                                            classes={{ tooltip: classes.tooltipWidth }}
                                         >
-                                            Add
-                                        </Button>
+                                            <div
+                                                onClick={(event) => {
+                                                    event.preventDefault()
+                                                    event.stopPropagation()
+                                                    isAlarmAdmin && setAddDialogOpen(true)
+                                                }}
+                                            >
+                                                <Button
+                                                    variant="contained"
+                                                    color="secondary"
+                                                    size="small"
+                                                    className={classes.button}
+                                                    startIcon={<PersonAddIcon />}
+                                                    style={{ marginRight: 20 }}
+                                                    // onClick={(event) => {
+                                                    //     event.preventDefault()
+                                                    //     event.stopPropagation()
+                                                    //     setAddDialogOpen(true)
+                                                    // }}
+                                                    disabled={!isAlarmAdmin}
+                                                >
+                                                    Add
+                                                </Button>
+                                            </div>
+                                        </Tooltip>
                                         : null
                                 }
                                 {
@@ -987,7 +1007,7 @@ const UserNotification = (props) => {
                     </Accordion>
                 </Grid>
             </Grid>
-        </React.Fragment>
+        </React.Fragment >
     );
 };
 

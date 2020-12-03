@@ -346,6 +346,14 @@ const UserNotification = (props) => {
         handleSetUserEdit(event, name, username, false)
         // Find match and note it's index in userList
         const match = userList.filter(el => el.name === name && el.username === username)[0]
+        const userIndex = userList.indexOf(match)
+
+        // Reset userList to backup to guarantee 
+        // new values propogate from dbwatch
+        const newUserList = [...userList]
+        newUserList[userIndex] = backupUserList[`${username}-${name}`]
+        setUserList(newUserList)
+
         const id = match['_id']['$oid']
 
         const newFilterUserRegex = Object.values(match.notifyPVs).map(entry =>

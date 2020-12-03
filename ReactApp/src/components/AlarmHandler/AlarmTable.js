@@ -4,6 +4,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import TextInput from '../BaseComponents/TextInput';
 import TextUpdateStatus from './TextUpdateStatus';
 import TextUpdateStateful from './TextUpdateStateful';
+import TextUpdateDate from './TextUpdateDate';
 import TextUpdate from '../BaseComponents/TextUpdate';
 
 import Table from '@material-ui/core/Table';
@@ -261,15 +262,17 @@ const AlarmTable = props => {
                                         />
                                     </TableCell>
                                     <TableCell align="center">
-                                        <TextUpdate
+                                        <TextUpdateDate
                                             pv={`pva://${props.alarmIOCPVPrefix}${value["name"]}T`}
                                             disableContextMenu={true}
+                                            dateFormat="E, dd LLL yyyy 'at' HH:mm:ss"
                                         />
                                     </TableCell>
                                     <TableCell align="center">
-                                        <TextUpdate
+                                        <TextUpdateDate
                                             pv={`pva://${props.alarmIOCPVPrefix}${value["name"]}K`}
                                             disableContextMenu={true}
+                                            dateFormat="E, dd LLL yyyy 'at' HH:mm:ss"
                                         />
                                     </TableCell>
                                     <TableCell align="center">

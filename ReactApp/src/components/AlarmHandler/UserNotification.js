@@ -30,7 +30,7 @@ import useMongoDbInsertOne from '../SystemComponents/database/MongoDB/useMongoDb
 import useMongoDbDeleteOne from '../SystemComponents/database/MongoDB/useMongoDbDeleteOne';
 
 import { AccountRemove } from "mdi-material-ui/";
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -195,8 +195,8 @@ const UserNotification = (props) => {
                 sumString = sumString.concat("all day ")
             }
             else {
-                const fromTime = format(new Date(userObject.fromTime), 'HH:mm')
-                const toTime = format(new Date(userObject.toTime), 'HH:mm')
+                const fromTime = format(parseISO(userObject.fromTime), 'HH:mm')
+                const toTime = format(parseISO(userObject.toTime), 'HH:mm')
                 sumString = sumString.concat(`between ${fromTime} and ${toTime} `)
             }
             if (userObject.weekly) {
@@ -221,8 +221,8 @@ const UserNotification = (props) => {
                 }
             }
             else {
-                const fromDate = format(new Date(userObject.fromDate), 'dd MMM yyyy')
-                const toDate = format(new Date(userObject.toDate), 'dd MMM yyyy')
+                const fromDate = format(parseISO(userObject.fromDate), 'dd MMM yyyy')
+                const toDate = format(parseISO(userObject.toDate), 'dd MMM yyyy')
                 sumString = sumString.concat(`from ${fromDate} to ${toDate}`)
             }
             return sumString

@@ -86,17 +86,17 @@ const ScheduleDialog = (props) => {
         : props.dialogUserObject.notifyPVs[props.dialogUserNotifyIndex].notifySetup
 
     const fromTime = displayUserObject.fromTime
-        ? new Date(displayUserObject.fromTime)
+        ? parseISO(displayUserObject.fromTime)
         : setSeconds(new Date(), 0)
     const toTime = displayUserObject.toTime
-        ? new Date(displayUserObject.toTime)
+        ? parseISO(displayUserObject.toTime)
         : setSeconds(new Date(), 0)
 
     const fromDate = displayUserObject.fromDate
-        ? new Date(displayUserObject.fromDate)
+        ? parseISO(displayUserObject.fromDate)
         : startOfDay(new Date())
     const toDate = displayUserObject.toDate
-        ? new Date(displayUserObject.toDate)
+        ? parseISO(displayUserObject.toDate)
         : endOfDay(new Date())
 
     // console.clear()

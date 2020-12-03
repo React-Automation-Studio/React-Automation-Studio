@@ -103,6 +103,11 @@ const UserNotification = (props) => {
     const context = useContext(AutomationStudioContext)
     const username = context.userData.username
 
+    const isLoggedIn = context.userData.username !== undefined
+    const isAlarmAdmin = isLoggedIn
+        ? context.userData.roles.includes("alarmAdmin")
+        : false
+
     // to connect to all PVs before updating state
     const firstAlarmPVDict = {}
 
@@ -136,7 +141,6 @@ const UserNotification = (props) => {
     const [searchedUsers, setSearchedUsers] = useState([])
     const [alarmUserAuth, setAlarmUserAuth] = useState(false)
 
-    const [showDeleteButton, setShowDeleteButton] = useState(false)
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
     const [addDialogOpen, setAddDialogOpen] = useState(false)
 
@@ -742,11 +746,6 @@ const UserNotification = (props) => {
         setSearchedUsers(filteredUsers)
     }, [userList, userTableSearchString])
 
-    useEffect(() => {
-        const showDeleteButton = filterUser.username && (filterUser.username === username || filterUser.username === 'user1' || filterUser.username === 'user2' || filterUser.username === 'user3' || !alarmUserAuth)
-        setShowDeleteButton(showDeleteButton)
-    }, [filterUser, username, alarmUserAuth])
-
     let alarmPVs = null
     if (alarmIOCPVPrefix !== null && alarmIOCPVSuffix !== null) {
         alarmPVs = alarmList.map(alarm => (
@@ -871,13 +870,14 @@ const UserNotification = (props) => {
                                                 event.stopPropagation()
                                                 setAddDialogOpen(true)
                                             }}
+                                            disabled={!isAlarmAdmin}
                                         >
                                             Add
                                         </Button>
                                         : null
                                 }
                                 {
-                                    userTableExpand && showDeleteButton
+                                    userTableExpand
                                         ? <Button
                                             variant="outlined"
                                             color="primary"
@@ -890,6 +890,7 @@ const UserNotification = (props) => {
                                                 event.stopPropagation()
                                                 setDeleteDialogOpen(true)
                                             }}
+                                            disabled={!isAlarmAdmin}
                                         >
                                             Delete
                                         </Button>

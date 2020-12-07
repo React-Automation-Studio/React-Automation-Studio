@@ -51,17 +51,21 @@ def composeEmailBody(userNotifyDict):
         else:
             displayArea = area
         if(body == ""):
+            if(not localtz):
+                body = body + \
+                    "<span style=\"font-size: 0.875em;\"><b>**WARNING**</b></span> \
+                    <br/> \
+                    <span style=\"font-size: 0.875em;\">Local timezone for alarm handler not set. All times shown are timezone UTC.</span> \
+                    <br/> \
+                    <br/>"
             body = body + \
-                "<br/> \
-                <table> \
+                "<table> \
                 <tr> \
                 <th colspan=\"4\" style=\"text-align: left\">"+displayArea+"</th> \
                 </tr>"
         else:
             body = body + \
                 "<tr><td>"+" "+"</td></tr> \
-                <tr><td>"+" "+"</td></tr> \
-                <tr><td>"+" "+"</td></tr> \
                 <tr> \
                 <th colspan=\"4\" style=\"text-align: left\">"+displayArea+"</th> \
                 </tr>"
@@ -98,9 +102,21 @@ def composeEmailBody(userNotifyDict):
                     </tr>"
 
     body = body + \
-        "</table> "
+        "</table>"
 
-    return """<html>
+    if(localtz):
+        body = body + \
+            "<br/> \
+            <span style=\"font-size: 0.875em;\">NOTE: All times shown are timezone "+AH_TZ+"</span>"
+    else:
+        body = body + \
+            "<br/> \
+            <span style=\"font-size: 0.875em;\"><b>**WARNING**</b></span> \
+            <br/> \
+            <span style=\"font-size: 0.875em;\">Local timezone for alarm handler not set. All times shown are timezone UTC.</span>"
+
+    return """ \
+            <html>
                 <body>
                     {body}
                 </body>

@@ -7,7 +7,7 @@ import subprocess
 import _thread
 from epics import PV
 from datetime import datetime
-from pytz import utc
+from pytz import utc, timezone
 
 from dbMongo import dbFindOne, dbGetCollection, dbUpdateHistory
 
@@ -19,6 +19,13 @@ try:
     AH_DEBUG = bool(os.environ['AH_DEBUG'])
 except:
     AH_DEBUG = False
+
+try:
+    timezone(os.environ['AH_TZ'])
+    print('Local timezone for alarm handler set to', os.environ['AH_TZ'])
+except:
+    print('[Warning]', 'Local timezone for alarm handler not set!')
+
 
 pvNameList = []
 alarmDict = {}

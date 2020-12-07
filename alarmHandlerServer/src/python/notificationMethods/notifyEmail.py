@@ -4,6 +4,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from datetime import datetime
 import subprocess
+from pytz import timezone
 
 smtpAuth = False
 
@@ -11,6 +12,12 @@ try:
     AH_DEBUG = bool(os.environ['AH_DEBUG'])
 except:
     AH_DEBUG = False
+
+try:
+    AH_TZ = os.environ['AH_TZ']
+    localtz = timezone(AH_TZ)
+except:
+    localtz = None
 
 try:
     SMTP_HOST = os.environ['SMTP_HOST']
@@ -74,8 +81,14 @@ def composeEmailBody(userNotifyDict):
                     else:
                         formattedAlarm = "<span><b style=\"background-color:rgb(198,40,40); color:rgb(255,255,255); padding:2;\">" + \
                             alarm+"</b></span>"
-                str_time = datetime.fromisoformat(timestamp).strftime(
-                    "%H:%M:%S %a, %d %b %Y")
+                # Time zone localisation
+                if(localtz):
+                    str_time = datetime.fromisoformat(timestamp).astimezone(localtz).strftime(
+                        "%H:%M:%S %a, %d %b %Y")
+                else:
+                    str_time = datetime.fromisoformat(timestamp).strftime(
+                        "%H:%M:%S %a, %d %b %Y")+" (UTC)"
+                # Time zone localisation
                 body = body + \
                     "<tr> \
                         <td><u>"+str_time+":</u>  "+"</td> \
@@ -109,8 +122,15 @@ def notifyEmail(timestamp, email, userNotifyDict):
     msg = MIMEMultipart()
     msg['From'] = SMTP_SENDER
     msg['To'] = email
-    msg['Subject'] = "Alarm Notification: " + \
-        timestamp.strftime('%a, %d %b %Y at %H:%M:%S')
+    # Time zone localisation
+    if(localtz):
+        str_time = timestamp.astimezone(localtz).strftime(
+            '%a, %d %b %Y at %H:%M:%S')
+    else:
+        str_time = timestamp.strftime(
+            '%a, %d %b %Y at %H:%M:%S')+" (UTC)"
+    # Time zone localisation
+    msg['Subject'] = "Alarm Notification: " + str_time
     email_body = composeEmailBody(userNotifyDict)
     msg.attach(MIMEText(email_body, 'html', 'utf-8'))
 

@@ -784,9 +784,9 @@ const UserNotification = (props) => {
         pvListHeight = '76vh'
     }
 
-    const warnAdminMessageAdd = "Only a user with 'alarmAdmin' role can add users"
-    const warnAdminMessageDelete = "Only a user with 'alarmAdmin' role can delete users"
-    const warnAdminMessageSelect = "Select user to delete first"
+    const warnAdminMessageAdd = "Only alarmAdmin role users can add users"
+    const warnAdminMessageDelete = "Only alarmAdmin role users can delete users"
+    const warnAdminMessageSelect = "Select a user to delete first"
 
     // console.table(showDeleteButton)
 

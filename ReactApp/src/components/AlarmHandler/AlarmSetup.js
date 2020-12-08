@@ -329,14 +329,9 @@ const AlarmSetup = (props) => {
                             areaNames[index]["subAreas"] = [area[areaKey]["name"]]
                         }
                         // map all alarms in subArea
-                        Object.keys(area[areaKey]).map(subAreaKey => {
-                            if (subAreaKey === "pvs") {
-                                Object.keys(area[areaKey][subAreaKey]).map(alarmKey => {
-                                    localAreaAlarms.push([`${area["area"]}=${area[areaKey]["name"]}=${alarmKey}`, area[areaKey][subAreaKey][alarmKey]])
-                                    localLastAlarm = area[areaKey][subAreaKey][alarmKey]["name"]
-                                    return null
-                                })
-                            }
+                        Object.keys(area[areaKey]["pvs"]).map(alarmKey => {
+                            localAreaAlarms.push([`${area["area"]}=${area[areaKey]["name"]}=${alarmKey}`, area[areaKey]["pvs"][alarmKey]])
+                            localLastAlarm = area[areaKey]["pvs"][alarmKey]["name"]
                             return null
                         })
                     }

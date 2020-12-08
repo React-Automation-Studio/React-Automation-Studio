@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react';
+import React, { useState, useEffect, useContext, useCallback, useMemo } from 'react';
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { fade } from '@material-ui/core/styles';
@@ -173,7 +173,19 @@ const AlarmSetup = (props) => {
     const theme = useTheme()
 
     const context = useContext(AutomationStudioContext)
-    const username = context.userData.username
+
+    const username = useMemo(() => {
+        return context.userData.username
+    }, [context.userData.username])
+
+    const isAlarmAdmin = useMemo(() => {
+        const isLoggedIn = context.userData.username !== undefined
+        return isLoggedIn
+            ? context.userData.roles.includes("alarmAdmin")
+            : false
+    }, [context.userData.username, context.userData.roles])
+
+
 
     const [enableAllAreas, setEnableAllAreas] = useState(true)
     const [enableAllAreasId, setEnableAllAreasId] = useState(null)
@@ -913,18 +925,17 @@ const AlarmSetup = (props) => {
         ))
     }
 
-    let displayAlarmTable = true
-    for (const [, value] of Object.entries(loadAlarmTable)) {
-        // console.log(key, value)
-        displayAlarmTable = displayAlarmTable && value
-    }
+    const displayAlarmTable = useMemo(() => {
+        return Object.entries(loadAlarmTable).reduce((acc, entry) => {
+            return acc && entry[1]
+        }, true)
+    }, [loadAlarmTable])
 
-    let displayAlarmList = true
-    for (const [, value] of Object.entries(loadAlarmList)) {
-        // console.log(key, value)
-        displayAlarmList = displayAlarmList && value
-    }
-
+    const displayAlarmList = useMemo(() => {
+        return Object.entries(loadAlarmList).reduce((acc, entry) => {
+            return acc && entry[1]
+        }, true)
+    }, [loadAlarmList])
 
     useEffect(() => {
         if (alarmTableExpand && !alarmLogExpand && !alarmLogIsExpanded) {
@@ -1035,6 +1046,7 @@ const AlarmSetup = (props) => {
                                             listItemRightClick={handleListItemRightClick}
                                             listItemContextClose={handleListItemContextClose}
                                             fadeList={fadeList}
+                                            isAlarmAdmin={isAlarmAdmin}
                                         />
                                         : "No data from database"}
                                 </Grid>

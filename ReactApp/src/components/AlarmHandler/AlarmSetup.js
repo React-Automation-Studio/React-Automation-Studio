@@ -328,6 +328,14 @@ const AlarmSetup = (props) => {
                         else {
                             areaNames[index]["subAreas"] = [area[areaKey]["name"]]
                         }
+                        const items = Object.entries(area[areaKey]["pvs"]).map(value => {
+                            return value
+                        })
+                        items.sort((A, B) => {
+                            const nameA = A[1]["name"]
+                            const nameB = B[1]["name"]
+                            return (nameA < nameB) ? -1 : (nameA > nameB) ? 1 : 0
+                        })
                         // map all alarms in subArea
                         Object.keys(area[areaKey]["pvs"]).map(alarmKey => {
                             localAreaAlarms.push([`${area["area"]}=${area[areaKey]["name"]}=${alarmKey}`, area[areaKey]["pvs"][alarmKey]])

@@ -224,10 +224,12 @@ const AlarmSetup = (props) => {
     })
     const [fadeTU] = useState(false)
     const [fadeList] = useState(false)
-    const [page, setPage] = React.useState(0)
-    const [rowsPerPage, setRowsPerPage] = React.useState(25)
-    const [pageAT, setPageAT] = React.useState(0)
-    const [rowsPerPageAT, setRowsPerPageAT] = React.useState(25)
+    const [page, setPage] = useState(0)
+    const [rowsPerPage, setRowsPerPage] = useState(25)
+    const [pageAT, setPageAT] = useState(0)
+    const [rowsPerPageAT, setRowsPerPageAT] = useState(25)
+
+    const [lastPVKey, setLastPVKey] = useState({})
 
 
     const dbPVData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs:Parameters:{}` }).data
@@ -294,9 +296,10 @@ const AlarmSetup = (props) => {
     // handleNewDbPVsList
     useEffect(() => {
         if (dbPVData !== null) {
-            const areaNames = []
+            const localAreaNames = []
             const localAreaAlarms = []
             const localAreaEnabled = {}
+            const localLastPVKey = {}
             let localLastAlarm = ""
             let localLastArea = ""
 
@@ -307,28 +310,8 @@ const AlarmSetup = (props) => {
                 Object.keys(area).map(areaKey => {
                     if (areaKey === "pvs") {
                         // Map alarms in area
-                        Object.keys(area[areaKey]).map(alarmKey => {
-                            localAreaAlarms.push([`${area["area"]}=${alarmKey}`, area[areaKey][alarmKey]])
-                            localLastAlarm = area[areaKey][alarmKey]["name"]
-                            return null
-                        })
-                    }
-                    else if (areaKey === "area") {
-                        areaNames.push({ "area": area[areaKey] })
-                    }
-                    else if (areaKey.includes("subArea")) {
-                        areaSubAreaMongoId[`${area["area"]}=${area[areaKey]["name"]}`] = areaKey
-                        areaMongoId[`${area["area"]}=${area[areaKey]["name"]}`] = area["_id"]["$oid"]
-                        // Area enabled for subArea includes parent area
-                        localAreaEnabled[`${area["area"]}=${area[areaKey]["name"]}`] = area[areaKey]["enable"] && localAreaEnabled[area["area"]]
-                        localLastArea = `${area["area"]}=${area[areaKey]["name"]}`
-                        if (areaNames[index]["subAreas"]) {
-                            areaNames[index]["subAreas"].push(area[areaKey]["name"])
-                        }
-                        else {
-                            areaNames[index]["subAreas"] = [area[areaKey]["name"]]
-                        }
-                        const items = Object.entries(area[areaKey]["pvs"]).map(value => {
+                        const items = Object.entries(area[areaKey]).map(value => {
+                            localLastPVKey[area["area"]] = parseInt(value[0].replace("pv", ""))
                             return value
                         })
                         items.sort((A, B) => {
@@ -336,10 +319,40 @@ const AlarmSetup = (props) => {
                             const nameB = B[1]["name"]
                             return (nameA < nameB) ? -1 : (nameA > nameB) ? 1 : 0
                         })
+                        items.map(item => {
+                            localAreaAlarms.push([`${area["area"]}=${item[0]}`, item[1]])
+                            localLastAlarm = item[1]["name"]
+                            return null
+                        })
+                    }
+                    else if (areaKey === "area") {
+                        localAreaNames.push({ "area": area[areaKey] })
+                    }
+                    else if (areaKey.includes("subArea")) {
+                        areaSubAreaMongoId[`${area["area"]}=${area[areaKey]["name"]}`] = areaKey
+                        areaMongoId[`${area["area"]}=${area[areaKey]["name"]}`] = area["_id"]["$oid"]
+                        // Area enabled for subArea includes parent area
+                        localAreaEnabled[`${area["area"]}=${area[areaKey]["name"]}`] = area[areaKey]["enable"] && localAreaEnabled[area["area"]]
+                        localLastArea = `${area["area"]}=${area[areaKey]["name"]}`
+                        if (localAreaNames[index]["subAreas"]) {
+                            localAreaNames[index]["subAreas"].push(area[areaKey]["name"])
+                        }
+                        else {
+                            localAreaNames[index]["subAreas"] = [area[areaKey]["name"]]
+                        }
                         // map all alarms in subArea
-                        Object.keys(area[areaKey]["pvs"]).map(alarmKey => {
-                            localAreaAlarms.push([`${area["area"]}=${area[areaKey]["name"]}=${alarmKey}`, area[areaKey]["pvs"][alarmKey]])
-                            localLastAlarm = area[areaKey]["pvs"][alarmKey]["name"]
+                        const items = Object.entries(area[areaKey]["pvs"]).map(value => {
+                            localLastPVKey[`${area["area"]}=${area[areaKey]["name"]}`] = parseInt(value[0].replace("pv", ""))
+                            return value
+                        })
+                        items.sort((A, B) => {
+                            const nameA = A[1]["name"]
+                            const nameB = B[1]["name"]
+                            return (nameA < nameB) ? -1 : (nameA > nameB) ? 1 : 0
+                        })
+                        items.map(item => {
+                            localAreaAlarms.push([`${area["area"]}=${area[areaKey]["name"]}=${item[0]}`, item[1]])
+                            localLastAlarm = item[1]["name"]
                             return null
                         })
                     }
@@ -356,10 +369,11 @@ const AlarmSetup = (props) => {
             setLastAlarm(localLastAlarm)
             setAreaMongoId(areaMongoId)
             setAreaSubAreaMongoId(areaSubAreaMongoId)
-            setAreaNames(areaNames)
+            setAreaNames(localAreaNames)
             setAreaAlarms(localAreaAlarms)
             setAreaEnabled(localAreaEnabled)
             setLastArea(localLastArea)
+            setLastPVKey(localLastPVKey)
 
             let displayAlarmTable = true
             for (const [, value] of Object.entries(loadAlarmTable)) {

@@ -42,10 +42,6 @@ import TablePagination from '@material-ui/core/TablePagination';
 
 import { format, parseISO } from 'date-fns';
 
-function isEmpty(obj) {
-    return Object.keys(obj).length === 0;
-}
-
 // Styles
 const useStyles = makeStyles(theme => ({
     root: {
@@ -299,66 +295,54 @@ const AlarmSetup = (props) => {
     useEffect(() => {
         if (dbPVData !== null) {
             const areaNames = []
-            if (isEmpty(alarmRowSelected)) {
-                let localLastAlarm = ""
-                dbPVData.map((area, index) => {
-                    // areaContextOpen[area["area"]] = false
-                    // areaSubAreaOpen[area["area"]] = false
-                    areaMongoId[area["area"]] = area["_id"]["$oid"]
-                    // Map alarms in area
-                    Object.keys(area["pvs"]).map(alarmKey => {
-                        // alarmContextOpen[`${area["area"]}=${alarmKey}`] = false
-                        // alarmRowSelected[`${area["area"]}=${alarmKey}`] = false
-                        localLastAlarm = area["pvs"][alarmKey]["name"]
-                        return null
-                    })
-                    Object.keys(area).map(areaKey => {
-                        if (areaKey === "area") {
-                            areaNames.push({ "area": area[areaKey] })
-                        }
-                        else if (areaKey.includes("subArea")) {
-                            // areaContextOpen[`${area["area"]}=${area[areaKey]["name"]}`] = false
-                            areaSubAreaMongoId[`${area["area"]}=${area[areaKey]["name"]}`] = areaKey
-                            areaMongoId[`${area["area"]}=${area[areaKey]["name"]}`] = area["_id"]["$oid"]
-                            // Map alarms in subarea
-                            Object.keys(area[areaKey]["pvs"]).map(alarmKey => {
-                                // alarmContextOpen[`${area["area"]}=${area[areaKey]["name"]}=${alarmKey}`] = false
-                                // alarmRowSelected[`${area["area"]}=${area[areaKey]["name"]}=${alarmKey}`] = false
-                                localLastAlarm = area[areaKey]["pvs"][alarmKey]["name"]
-                                return null
-                            })
-                            if (areaNames[index]["subAreas"]) {
-                                areaNames[index]["subAreas"].push(area[areaKey]["name"])
-                            }
-                            else {
-                                // console.log(areaNames[index])
-                                areaNames[index]["subAreas"] = [area[areaKey]["name"]]
-                            }
-                        }
-                        return null
-                    })
-                    return null
-                })
-                if (!areaSelectedIndex) {
-                    // setAreaSubAreaOpen(areaSubAreaOpen)
-                    setAreaSelectedIndex('ALLAREAS')
-                    setAreaSelectedName('ALL AREAS')
-                    setAlarmLogSelectedName('ALL AREAS')
-                    setAlarmLogSelectedKey('ALLAREAS')
-                }
-                // console.log(lastAlarm)
-                setLastAlarm(localLastAlarm)
-                // setAlarmRowSelected(alarmRowSelected)
-                // setAlarmContextOpen(alarmContextOpen)
-                setAreaMongoId(areaMongoId)
-                setAreaSubAreaMongoId(areaSubAreaMongoId)
-                setAreaNames(areaNames)
-                // setAreaContextOpen(areaContextOpen)
-            }
-
             const localAreaAlarms = []
             const localAreaEnabled = {}
+            let localLastAlarm = ""
             let localLastArea = ""
+
+            dbPVData.map((area, index) => {
+                areaMongoId[area["area"]] = area["_id"]["$oid"]
+                // Map alarms in area
+                Object.keys(area["pvs"]).map(alarmKey => {
+                    localLastAlarm = area["pvs"][alarmKey]["name"]
+                    return null
+                })
+                Object.keys(area).map(areaKey => {
+                    if (areaKey === "area") {
+                        areaNames.push({ "area": area[areaKey] })
+                    }
+                    else if (areaKey.includes("subArea")) {
+                        areaSubAreaMongoId[`${area["area"]}=${area[areaKey]["name"]}`] = areaKey
+                        areaMongoId[`${area["area"]}=${area[areaKey]["name"]}`] = area["_id"]["$oid"]
+                        // Map alarms in subarea
+                        Object.keys(area[areaKey]["pvs"]).map(alarmKey => {
+                            localLastAlarm = area[areaKey]["pvs"][alarmKey]["name"]
+                            return null
+                        })
+                        if (areaNames[index]["subAreas"]) {
+                            areaNames[index]["subAreas"].push(area[areaKey]["name"])
+                        }
+                        else {
+                            areaNames[index]["subAreas"] = [area[areaKey]["name"]]
+                        }
+                    }
+                    return null
+                })
+                return null
+            })
+            if (!areaSelectedIndex) {
+                setAreaSelectedIndex('ALLAREAS')
+                setAreaSelectedName('ALL AREAS')
+                setAlarmLogSelectedName('ALL AREAS')
+                setAlarmLogSelectedKey('ALLAREAS')
+            }
+            setLastAlarm(localLastAlarm)
+            setAreaMongoId(areaMongoId)
+            setAreaSubAreaMongoId(areaSubAreaMongoId)
+            setAreaNames(areaNames)
+
+
+
 
             dbPVData.map((area, index) => {
                 // map all alarms in area
@@ -394,7 +378,6 @@ const AlarmSetup = (props) => {
                 return null
             })
 
-            // console.log(lastArea)
             setAreaAlarms(localAreaAlarms)
             setAreaEnabled(localAreaEnabled)
             setLastArea(localLastArea)

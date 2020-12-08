@@ -246,7 +246,7 @@ def notify(notifyBuffer):
                 dbUpdateHistory("_GLOBAL", entry)
 
         if(notifySMSDict):
-            if(notifySMS(mobile, notifySMSDict)):
+            if(notifySMS(timestamp, mobile, notifySMSDict)):
                 # Log to global db
                 entry = {"timestamp": timestamp, "entry": " ".join(
                     [name, "notified on SMS"])}
@@ -258,7 +258,7 @@ def notify(notifyBuffer):
                 dbUpdateHistory("_GLOBAL", entry)
 
         if(notifyWhatsAppDict):
-            if(notifyWhatsApp(mobile, notifyWhatsAppDict)):
+            if(notifyWhatsApp(timestamp, mobile, notifyWhatsAppDict)):
                 # Log to global db
                 entry = {"timestamp": timestamp, "entry": " ".join(
                     [name, "notified on WhatsApp"])}

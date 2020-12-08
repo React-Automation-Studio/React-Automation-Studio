@@ -6,7 +6,7 @@ except:
     AH_DEBUG = False
 
 
-def notifyWhatsApp(mobile, userNotifyDict):
+def notifyWhatsApp(timestamp, mobile, userNotifyDict):
     # This function must return True as an acknowledgedment to the notification
     # server that the notification method executed successfully
 
@@ -14,4 +14,4 @@ def notifyWhatsApp(mobile, userNotifyDict):
         print(mobile)
         print(userNotifyDict)
 
-    return True
+    return False

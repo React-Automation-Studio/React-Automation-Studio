@@ -302,18 +302,25 @@ const AlarmSetup = (props) => {
 
             dbPVData.map((area, index) => {
                 areaMongoId[area["area"]] = area["_id"]["$oid"]
-                // Map alarms in area
-                Object.keys(area["pvs"]).map(alarmKey => {
-                    localLastAlarm = area["pvs"][alarmKey]["name"]
-                    return null
-                })
+                localAreaEnabled[area["area"]] = area["enable"]
+                localLastArea = area["area"]
                 Object.keys(area).map(areaKey => {
-                    if (areaKey === "area") {
+                    if (areaKey === "pvs") {
+                        // Map alarms in area
+                        Object.keys(area[areaKey]).map(alarmKey => {
+                            localLastAlarm = area[areaKey][alarmKey]["name"]
+                            return null
+                        })
+                    }
+                    else if (areaKey === "area") {
                         areaNames.push({ "area": area[areaKey] })
                     }
                     else if (areaKey.includes("subArea")) {
                         areaSubAreaMongoId[`${area["area"]}=${area[areaKey]["name"]}`] = areaKey
                         areaMongoId[`${area["area"]}=${area[areaKey]["name"]}`] = area["_id"]["$oid"]
+                        // Area enabled for subArea includes parent area
+                        localAreaEnabled[`${area["area"]}=${area[areaKey]["name"]}`] = area[areaKey]["enable"] && localAreaEnabled[area["area"]]
+                        localLastArea = `${area["area"]}=${area[areaKey]["name"]}`
                         // Map alarms in subarea
                         Object.keys(area[areaKey]["pvs"]).map(alarmKey => {
                             localLastAlarm = area[areaKey]["pvs"][alarmKey]["name"]
@@ -355,13 +362,8 @@ const AlarmSetup = (props) => {
                     }
                     return null
                 })
-                localAreaEnabled[area["area"]] = area["enable"]
-                localLastArea = area["area"]
                 Object.keys(area).map(areaKey => {
                     if (areaKey.includes("subArea")) {
-                        // Area enabled for subArea includes parent area
-                        localAreaEnabled[`${area["area"]}=${area[areaKey]["name"]}`] = area[areaKey]["enable"] && localAreaEnabled[area["area"]]
-                        localLastArea = `${area["area"]}=${area[areaKey]["name"]}`
                         // map all alarms in subArea
                         Object.keys(area[areaKey]).map(subAreaKey => {
                             if (subAreaKey === "pvs") {

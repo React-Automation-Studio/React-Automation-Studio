@@ -3,7 +3,6 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from datetime import datetime
-import subprocess
 from pytz import timezone
 
 smtpAuth = False
@@ -25,14 +24,11 @@ try:
     SMTP_SENDER = os.environ['SMTP_SENDER']
     print("Email SMTP settings configured")
 except:
+    SMTP_HOST = ''
+    SMTP_PORT = ''
+    SMTP_SENDER = ''
     print("Email SMTP settings not configured!")
-    print("Using Python built-in debugging mail server")
-    print("Emails will only be printed to the terminal and not actually sent out")
-    subprocess.call(
-        "python -m smtpd -c DebuggingServer -n localhost:1025 &", shell=True)
-    SMTP_HOST = 'localhost'
-    SMTP_PORT = 1025
-    SMTP_SENDER = 'alarmdb@lab.edu'
+    print("Email notifications will not be sent")
 
 try:
     SMTP_USER = os.environ['SMTP_USER']

@@ -385,7 +385,7 @@ const UserNotification = (props) => {
             update: newvalues
         })
 
-    }, [handleSetUserEdit, userList, dbUpdateOne, addRegexVal, props.dbName])
+    }, [handleSetUserEdit, userList, dbUpdateOne, addRegexVal, props.dbName, backupUserList])
 
     const cancelEdit = useCallback((event, name, username) => {
         handleSetUserEdit(event, name, username, false)

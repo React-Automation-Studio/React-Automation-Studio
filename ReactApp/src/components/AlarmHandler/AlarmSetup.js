@@ -242,6 +242,7 @@ const AlarmSetup = (props) => {
     const [rowsPerPageAT, setRowsPerPageAT] = useState(25)
 
     const [lastPVKey, setLastPVKey] = useState({})
+    const [newPVInfo, setNewPVInfo] = useState({})
 
 
     const dbPVData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs:Parameters:{}` }).data
@@ -740,6 +741,18 @@ const AlarmSetup = (props) => {
         // handleUpdateLogDisplayData(index)
     }, [areaSelectedIndex, areaSubAreaOpen])
 
+    const handleAddNewPV = useCallback((event, index) => {
+        const lastKey = lastPVKey[index]
+        const newKey = isNaN(lastKey)
+            ? 0
+            : lastKey + 1
+        setNewPVInfo({
+            ...newPVInfo,
+            alarmKey: newKey
+        })
+        setAreaContextOpen({})
+    }, [lastPVKey, newPVInfo])
+
     const autoLoadAlarmTable = () => {
         const timer = setTimeout(() => {
             if (!loadAlarmTable) {
@@ -951,7 +964,7 @@ const AlarmSetup = (props) => {
     }, [alarmTableExpand, alarmLogExpand, alarmLogIsExpanded, alarmTableIsExpanded])
 
     // console.log('Top render')
-
+    
     return (
         <React.Fragment>
             {ackPV}
@@ -1040,13 +1053,14 @@ const AlarmSetup = (props) => {
                                             areaSelectedIndex={areaSelectedIndex}
                                             contextMouseX={contextMouseX}
                                             contextMouseY={contextMouseY}
+                                            fadeList={fadeList}
+                                            isAlarmAdmin={isAlarmAdmin}
                                             ackAllAreaAlarms={handleAckAllAreaAlarms}
                                             enableDisableArea={handleEnableDisableArea}
                                             listItemClick={handleListItemClick}
                                             listItemRightClick={handleListItemRightClick}
                                             listItemContextClose={handleListItemContextClose}
-                                            fadeList={fadeList}
-                                            isAlarmAdmin={isAlarmAdmin}
+                                            addNewPV={handleAddNewPV}
                                         />
                                         : "No data from database"}
                                 </Grid>

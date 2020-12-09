@@ -18,6 +18,7 @@ import Typography from '@material-ui/core/Typography';
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 import NotificationsOffIcon from '@material-ui/icons/NotificationsOff';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
+import AddIcon from '@material-ui/icons/Add';
 
 import { fade } from '@material-ui/core/styles/colorManipulator';
 
@@ -245,6 +246,13 @@ const AlarmList = props => {
                                                                 <DoneAllIcon fontSize="small" />
                                                             </ListItemIcon>
                                                             <Typography variant="inherit">ACK all area alarms</Typography>
+                                                        </MenuItem> : null}
+                                                    {props.areaEnabled[`${area["area"]}`] && props.enableAllAreas && props.isAlarmAdmin ?
+                                                        <MenuItem onClick={event => props.addNewPV(event, `${area["area"]}`)}>
+                                                            <ListItemIcon >
+                                                                <AddIcon fontSize="small" />
+                                                            </ListItemIcon>
+                                                            <Typography variant="inherit">Add new pv</Typography>
                                                         </MenuItem> : null}
                                                 </Menu>
                                                 : null

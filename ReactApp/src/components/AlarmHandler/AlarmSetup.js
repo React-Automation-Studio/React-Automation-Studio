@@ -40,6 +40,8 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import TablePagination from '@material-ui/core/TablePagination';
 
+import AddPVDialog from './AddPVDialog';
+
 import { format, parseISO } from 'date-fns';
 
 // Styles
@@ -243,6 +245,7 @@ const AlarmSetup = (props) => {
 
     const [lastPVKey, setLastPVKey] = useState({})
     const [newPVInfo, setNewPVInfo] = useState({})
+    const [addPVDialogOpen, setAddPVDialogOpen] = useState(false)
 
 
     const dbPVData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs:Parameters:{}` }).data
@@ -746,11 +749,17 @@ const AlarmSetup = (props) => {
         const newKey = isNaN(lastKey)
             ? 0
             : lastKey + 1
+        const areaName = index.includes("=")
+            ? `${index.split('=')[0]} > ${index.split('=')[1]}`
+            : index
         setNewPVInfo({
             ...newPVInfo,
-            alarmKey: newKey
+            alarmKey: newKey,
+            areaIndex: index,
+            areaName: areaName
         })
         setAreaContextOpen({})
+        setAddPVDialogOpen(true)
     }, [lastPVKey, newPVInfo])
 
     const autoLoadAlarmTable = () => {
@@ -964,12 +973,20 @@ const AlarmSetup = (props) => {
     }, [alarmTableExpand, alarmLogExpand, alarmLogIsExpanded, alarmTableIsExpanded])
 
     // console.log('Top render')
-    
+
     return (
         <React.Fragment>
             {ackPV}
             {areaPVs}
             {alarmPVs}
+            <AddPVDialog
+                open={addPVDialogOpen}
+                handleClose={() => {
+                    setNewPVInfo({})
+                    setAddPVDialogOpen(false)
+                }}
+                newPVInfo={newPVInfo}
+            />
             <Grid
                 container
                 direction="row"

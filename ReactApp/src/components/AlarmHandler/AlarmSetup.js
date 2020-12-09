@@ -756,7 +756,21 @@ const AlarmSetup = (props) => {
             ...newPVInfo,
             alarmKey: newKey,
             areaIndex: index,
-            areaName: areaName
+            areaName: areaName,
+            pvs: [
+                {
+                    pvname: "",
+                    connected: false
+                },
+                {
+                    pvname: "",
+                    connected: false
+                },
+                {
+                    pvname: "",
+                    connected: false
+                }
+            ]
         })
         setAreaContextOpen({})
         setAddPVDialogOpen(true)
@@ -982,8 +996,8 @@ const AlarmSetup = (props) => {
             <AddPVDialog
                 open={addPVDialogOpen}
                 handleClose={() => {
-                    setNewPVInfo({})
                     setAddPVDialogOpen(false)
+                    // setNewPVInfo({})
                 }}
                 newPVInfo={newPVInfo}
             />

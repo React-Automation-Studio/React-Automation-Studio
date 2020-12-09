@@ -316,6 +316,12 @@ const AlarmList = props => {
                                                                                             </ListItemIcon>
                                                                                             <Typography variant="inherit">ACK all area alarms</Typography>
                                                                                         </MenuItem>
+                                                                                        {props.isAlarmAdmin && <MenuItem onClick={event => props.addNewPV(event, `${area["area"]}=${subArea}`)}>
+                                                                                            <ListItemIcon >
+                                                                                                <AddIcon fontSize="small" />
+                                                                                            </ListItemIcon>
+                                                                                            <Typography variant="inherit">Add new pv</Typography>
+                                                                                        </MenuItem>}
                                                                                     </div>
                                                                                     :
                                                                                     <MenuItem onClick={event => props.enableDisableArea(event, `${area["area"]}=${subArea}`, true)}>

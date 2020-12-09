@@ -7,13 +7,18 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
+import IconButton from '@material-ui/core/IconButton';
+import InputAdornment from '@material-ui/core/InputAdornment';
 import Typography from '@material-ui/core/Typography';
-import { Domain, Lan, LanConnect } from "mdi-material-ui/";
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
+import { Domain, Lan, LanConnect, LanDisconnect } from "mdi-material-ui/";
 
 // Styles
 const useStyles = makeStyles(theme => ({
     boldText: {
         fontWeight: 500,
+        textAlign: 'center',
     },
     centerInBlock: {
         display: "flex",
@@ -43,7 +48,7 @@ const AddPVDialog = (props) => {
             open={props.open}
             onClose={props.handleClose}
             fullWidth
-            maxWidth={"sm"}
+            maxWidth={"md"}
         >
             <DialogTitle >{`Add new PV`}</DialogTitle>
             <DialogContent>
@@ -61,10 +66,10 @@ const AddPVDialog = (props) => {
                             justify="flex-start"
                             alignItems="stretch"
                         >
-                            <Grid item xs={2} className={classes.centerInBlock}>
+                            <Grid item xs={1} className={classes.centerInBlock}>
                                 <Domain />
                             </Grid>
-                            <Grid item xs={2} className={classes.verticalMiddle} >
+                            <Grid item xs={1} className={classes.verticalMiddle} style={{ marginRight: '2rem' }}>
                                 <Typography className={classes.boldText} >
                                     AREA
                                 </Typography>
@@ -83,10 +88,10 @@ const AddPVDialog = (props) => {
                             justify="flex-start"
                             alignItems="stretch"
                         >
-                            <Grid item xs={2} className={classes.centerInBlock}>
+                            <Grid item xs={1} className={classes.centerInBlock}>
                                 <Lan />
                             </Grid>
-                            <Grid item xs={2} className={classes.verticalMiddle} >
+                            <Grid item xs={1} className={classes.verticalMiddle} style={{ marginRight: '2rem' }}>
                                 <Typography className={classes.boldText} >
                                     PV
                                 </Typography>
@@ -98,40 +103,36 @@ const AddPVDialog = (props) => {
                                     onChange={() => console.log('h')}
                                     fullWidth
                                     autoFocus
+                                    InputProps={{
+                                        endAdornment: (
+                                            <InputAdornment position="end"  >
+                                                {props.newPVInfo["connected"]
+                                                    ? <LanConnect className={classes.connected} />
+                                                    : <LanDisconnect className={classes.disconnected} />
+                                                }
+                                            </InputAdornment >
+                                        )
+                                    }}
                                 />
                             </Grid>
-                        </Grid>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Grid
-                            container
-                            direction="row"
-                            justify="flex-start"
-                            alignItems="stretch"
-                        >
-                            <Grid item xs={2} className={classes.centerInBlock}>
-                                <LanConnect />
-                            </Grid>
-                            <Grid item xs={2} className={classes.verticalMiddle} >
-                                <Typography className={classes.boldText} >
-                                    STATUS
-                                </Typography>
-                            </Grid>
-                            <Grid item xs={8} className={classes.verticalMiddle}>
-                                <Typography className={[props.newPVInfo["connected"] ? classes.connected : classes.disconnected, classes.boldText].join(' ')}>
-                                    {props.newPVInfo["connected"] ? "CONNECTED" : "DISCONNECTED"}
-                                </Typography>
+                            <Grid item className={classes.centerInBlock}>
+                                <IconButton style={{ marginLeft: '0.5em' }}>
+                                    <RemoveCircleIcon color="primary" />
+                                </IconButton>
+                                <IconButton>
+                                    <AddCircleIcon color="secondary" />
+                                </IconButton>
                             </Grid>
                         </Grid>
                     </Grid>
                 </Grid>
             </DialogContent>
-            <DialogActions>
-                <Button onClick={props.handleClose} color="secondary">
+            <DialogActions style={{ marginTop: '2rem' }}>
+                <Button onClick={props.handleClose} color="primary">
                     Cancel
                 </Button>
-                <Button onClick={props.handleDelete} color="primary" disabled={!props.newPVInfo["connected"]}>
-                    Add PV
+                <Button onClick={props.handleDelete} color="secondary" disabled={!props.newPVInfo["connected"]}>
+                    Add
                 </Button>
             </DialogActions>
         </Dialog>

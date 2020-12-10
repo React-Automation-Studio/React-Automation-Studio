@@ -248,6 +248,8 @@ const AlarmSetup = (props) => {
     const [addPVDialogPvs, setAddPVDialogPvs] = useState([])
     const [ackPV, setAckPV] = useState()
 
+    const [dbPVData, setDbPVData] = useState({})
+
     const alarmPVDictReducer = useCallback((state, action) => {
         switch (action.type) {
             case 'updatePVData':
@@ -303,7 +305,7 @@ const AlarmSetup = (props) => {
     const [areaPVDict, dispatchAreaPVDict] = useReducer(areaPVDictReducer, {})
     const [areaPVs, setAreaPVs] = useState([])
 
-    const dbPVData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs:Parameters:{}` }).data
+    const dbPVDataRaw = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs:Parameters:{}` }).data
     const dbHistoryData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history:Parameters:{}` }).data
     const dbConfigData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:config:Parameters:{}` }).data
     const dbGlobData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:glob:Parameters:{}` }).data
@@ -366,7 +368,7 @@ const AlarmSetup = (props) => {
 
     // handleNewDbPVsList
     useEffect(() => {
-        if (dbPVData !== null) {
+        if (dbPVDataRaw !== null) {
             const localAreaNames = []
             const localAreaAlarms = []
             const localAreaEnabled = {}
@@ -374,7 +376,7 @@ const AlarmSetup = (props) => {
             let localLastAlarm = ""
             let localLastArea = ""
 
-            dbPVData.map((area, index) => {
+            dbPVDataRaw.map((area, index) => {
                 areaMongoId[area["area"]] = area["_id"]["$oid"]
                 localAreaEnabled[area["area"]] = area["enable"]
                 localLastArea = area["area"]
@@ -446,6 +448,8 @@ const AlarmSetup = (props) => {
             setLastArea(localLastArea)
             setLastPVKey(localLastPVKey)
 
+            setDbPVData(dbPVDataRaw)
+
             let displayAlarmTable = true
             for (const [, value] of Object.entries(loadAlarmTable)) {
                 // console.log(key, value)
@@ -464,9 +468,9 @@ const AlarmSetup = (props) => {
                 autoLoadAlarmList()
             }
         }
-        // disable useEffect dependencies for "dbPVData"
+        // disable useEffect dependencies for "dbPVDataRaw"
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dbPVData])
+    }, [dbPVDataRaw])
 
     // handleNewDbLogReadWatchBroadcast
     useEffect(() => {
@@ -843,8 +847,55 @@ const AlarmSetup = (props) => {
     }, [newPVInfo])
 
     const handleExecuteAddNewPVs = useCallback(() => {
-        console.log(newPVInfo)
-    }, [newPVInfo])
+        const { areaIndex, pvs, alarmKey } = newPVInfo
+        const id = areaMongoId[areaIndex]
+        let subAreaId = null
+        let oldPvs = null
+        let newPvs = null
+        let key = alarmKey
+        const matchDoc = dbPVData.filter(el => el["_id"]["$oid"] === id)[0]
+        if (areaIndex.includes("=")) {
+            subAreaId = areaSubAreaMongoId[areaIndex]
+            oldPvs = matchDoc[subAreaId].pvs
+        }
+        else {
+            oldPvs = matchDoc.pvs
+        }
+        console.log('oldPvs', oldPvs)
+        newPvs = { ...oldPvs }
+        pvs.map(pv => {
+            newPvs = {
+                ...newPvs,
+                [`pv${key}`]: {
+                    name: pv.pvname,
+                    enable: true,
+                    latch: true,
+                    notify: true,
+                    lastAlarmVal: "",
+                    lastAlarmTime: "",
+                    lastAlarmAckTime: ""
+                }
+            }
+            key = key + 1
+            return null
+        })
+        console.log('newPvs', newPvs)
+        let newvalues = {}
+        if (subAreaId) {
+            newvalues = { '$set': { [`${subAreaId}.pvs`]: newPvs } }
+        }
+        else {
+            newvalues = { '$set': { [`pvs`]: newPvs } }
+        }
+
+        // console.log(newvalues)
+
+        dbUpdateOne({
+            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
+            id: id,
+            update: newvalues
+        })
+    }, [dbPVData, newPVInfo, areaMongoId, areaSubAreaMongoId])
 
     const autoLoadAlarmTable = useCallback(() => {
         const timer = setTimeout(() => {

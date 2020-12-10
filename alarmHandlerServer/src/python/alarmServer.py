@@ -782,6 +782,7 @@ def startAlarmIOC():
     else:
         print("Running alarm server IOC on default port")
     subprocess.call("./startAlarmIOC.cmd", shell=True)
+    sleep(0.1)
     print("Alarm server IOC running successfully")
 
 
@@ -1007,6 +1008,7 @@ def restartAlarmServer():
 
     disconnectAllPVs()
     clearGlobalDicts()
+    sleep(0.1)
     getListOfPVNames()
     # Restart alarm IOC
     killAlarmIOC()
@@ -1102,6 +1104,9 @@ def pvCollectionWatch():
                         # print(timestamp, areaKey.replace("=", " > "),
                         #       "sub area", msg)
                         dbUpdateHistory(areaKey, entry)
+                    elif (key == "pvs" or key.endswith(".pvs")):
+                        # New pvs added
+                        restartAlarmServer()
 
             except:
                 print("no relevant updates")

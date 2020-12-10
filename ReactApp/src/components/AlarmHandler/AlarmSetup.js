@@ -998,7 +998,7 @@ const AlarmSetup = (props) => {
         }
     }, [alarmTableExpand, alarmLogExpand, alarmLogIsExpanded, alarmTableIsExpanded])
 
-    const setDialogPvData = (pvData) => {
+    const setDialogPvData = useCallback((pvData) => {
         const epicsPVName = pvData.pvName?.replace("pva://", "")
         const index = newPVInfo.pvs.findIndex(item => item.pvname === epicsPVName)
         if (pvData.initialized) {
@@ -1007,7 +1007,7 @@ const AlarmSetup = (props) => {
         else if (epicsPVName) {
             console.log(index, 'disconnected')
         }
-    }
+    }, [newPVInfo.pvs])
 
     useEffect(() => {
         if (Object.keys(newPVInfo).length !== 0) {
@@ -1025,7 +1025,7 @@ const AlarmSetup = (props) => {
         return () => {
             setAddPVDialogPvs([])
         }
-    }, [newPVInfo])
+    }, [newPVInfo, setDialogPvData])
 
     // console.log('Top render')
 

@@ -121,6 +121,17 @@ const AlarmTable = props => {
                             newTopArea = currTopArea !== areaName
                             currTopArea = areaName
                         }
+
+                        const toolTipContents = props.alarmPVDict[value["name"]]
+                            ? <p>
+                                <b>Description: </b>{props.alarmPVDict[value["name"]][1]}<br />
+                                <b>Host: </b>{props.alarmPVDict[value["name"]][2]}<br />
+                            </p>
+                            : <p>
+                                <b>Description: </b>{"Error connecting to pv"}<br />
+                                <b>Host: </b>{"Error connecting to pv"}<br />
+                            </p>
+
                         return (
                             <React.Fragment key={areaAlarmName}>
                                 {newTopArea && props.alarmTableSearchString.length === 0
@@ -221,10 +232,7 @@ const AlarmTable = props => {
                                         title={
                                             <React.Fragment>
                                                 <Typography color="inherit">{value["name"]}</Typography>
-                                                <p>
-                                                    <b>Description: </b> {props.alarmPVDict[value["name"]][1]}<br />
-                                                    <b>Host: </b> {props.alarmPVDict[value["name"]][2]}<br />
-                                                </p>
+                                                {toolTipContents}
                                             </React.Fragment>
                                         }
                                         enterDelay={400}

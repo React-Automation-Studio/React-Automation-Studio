@@ -1002,22 +1002,40 @@ const AlarmSetup = (props) => {
         const epicsPVName = pvData.pvName?.replace("pva://", "")
         const index = newPVInfo.pvs.findIndex(item => item.pvname === epicsPVName)
         if (pvData.initialized) {
-            console.log(index, 'connected')
+            if (!newPVInfo.pvs[index].connected) {
+                // console.log('Connected')
+                const newPvs = newPVInfo.pvs.filter(item => true)
+                newPvs[index].connected = true
+                setNewPVInfo({
+                    ...newPVInfo,
+                    pvs: newPvs
+                })
+            }
         }
         else if (epicsPVName) {
-            console.log(index, 'disconnected')
+            if (newPVInfo.pvs[index].connected) {
+                // console.log('Disconnected')
+                const newPvs = newPVInfo.pvs.filter(item => true)
+                newPvs[index].connected = false
+                setNewPVInfo({
+                    ...newPVInfo,
+                    pvs: newPvs
+                })
+            }
         }
-    }, [newPVInfo.pvs])
+    }, [newPVInfo])
 
     useEffect(() => {
         if (Object.keys(newPVInfo).length !== 0) {
             let localAddPVDialogPvs = []
             newPVInfo.pvs.map((pv, index) => {
-                const pvObject = <PV
-                    key={`${pv.pvname}-${index}`}
-                    pv={'pva://' + pv.pvname}
-                    pvData={setDialogPvData}
-                />
+                const pvObject = pv.pvname !== ""
+                    ? <PV
+                        key={`${pv.pvname}-${index}`}
+                        pv={'pva://' + pv.pvname}
+                        pvData={setDialogPvData}
+                    />
+                    : null
                 localAddPVDialogPvs = [...localAddPVDialogPvs, pvObject]
             })
             setAddPVDialogPvs(localAddPVDialogPvs)

@@ -46,6 +46,10 @@ const AddPVDialog = (props) => {
 
     const lastIndex = props.newPVInfo.pvs?.length - 1
 
+    const enableAddButton = props.newPVInfo.pvs?.reduce((acc, pv) => {
+        return acc && pv.connected
+    }, true)
+
     const pvGrid = props.newPVInfo.pvs
         ? props.newPVInfo["pvs"].map((pv, index) => {
             return (
@@ -68,7 +72,7 @@ const AddPVDialog = (props) => {
                             InputProps={{
                                 endAdornment: (
                                     <InputAdornment position="end"  >
-                                        {props.newPVInfo["connected"]
+                                        {props.newPVInfo.pvs[index].connected
                                             ? <LanConnect className={classes.connected} />
                                             : <LanDisconnect className={classes.disconnected} />
                                         }
@@ -158,7 +162,7 @@ const AddPVDialog = (props) => {
                 <Button onClick={props.handleClose} color="primary">
                     Cancel
                 </Button>
-                <Button onClick={props.handleDelete} color="secondary" disabled={!props.newPVInfo["connected"]}>
+                <Button onClick={props.handleDelete} color="secondary" disabled={!enableAddButton}>
                     Add
                 </Button>
             </DialogActions>

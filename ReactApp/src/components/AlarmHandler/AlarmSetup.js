@@ -1069,7 +1069,7 @@ const AlarmSetup = (props) => {
         }
     }, [newPVInfo, setDialogPvData])
 
-    console.log('Top render')
+    // console.log('Top render')
 
     return (
         <React.Fragment>

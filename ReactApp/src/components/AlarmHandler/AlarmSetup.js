@@ -246,8 +246,9 @@ const AlarmSetup = (props) => {
     const [lastPVKey, setLastPVKey] = useState({})
     const [newPVInfo, setNewPVInfo] = useState({})
     const [addPVDialogOpen, setAddPVDialogOpen] = useState(false)
-    const [addPVDialogPvs, setAddPVDialogPvs] = useState([])
 
+    const [addPVDialogPvs, setAddPVDialogPvs] = useState([])
+    const [ackPV, setAckPV] = useState()
 
     const dbPVData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs:Parameters:{}` }).data
     const dbHistoryData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history:Parameters:{}` }).data
@@ -931,17 +932,20 @@ const AlarmSetup = (props) => {
 
 
 
-    let ackPV = null
-    if (alarmIOCPVPrefix !== null) {
-        ackPV = (
-            <PV
-                pv={'pva://' + alarmIOCPVPrefix + "ACK_PV"}
-                outputValue={alarmAckField}
-                debug={false}
-                newValueTrigger={alarmAckFieldTrig}
-            />
-        )
-    }
+    useEffect(() => {
+        if (alarmIOCPVPrefix !== null) {
+            const localAckPV = (
+                <PV
+                    pv={'pva://' + alarmIOCPVPrefix + "ACK_PV"}
+                    outputValue={alarmAckField}
+                    debug={false}
+                    newValueTrigger={alarmAckFieldTrig}
+                />
+            )
+            setAckPV(localAckPV)
+        }
+    }, [alarmIOCPVPrefix, alarmAckField, alarmAckFieldTrig])
+
 
     const setAreaPvData = (pvData) => {
         if (pvData.initialized) {
@@ -1045,7 +1049,7 @@ const AlarmSetup = (props) => {
         }
     }, [newPVInfo, setDialogPvData])
 
-    // console.log('Top render')
+    console.log('Top render')
 
     return (
         <React.Fragment>

@@ -895,7 +895,7 @@ const AlarmSetup = (props) => {
             id: id,
             update: newvalues
         })
-    }, [dbPVData, newPVInfo, areaMongoId, areaSubAreaMongoId])
+    }, [dbPVData, newPVInfo, areaMongoId, areaSubAreaMongoId, dbUpdateOne, props.dbName])
 
     const autoLoadAlarmTable = useCallback(() => {
         const timer = setTimeout(() => {

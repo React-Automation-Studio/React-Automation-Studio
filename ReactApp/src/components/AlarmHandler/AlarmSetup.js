@@ -27,6 +27,8 @@ import IconButton from '@material-ui/core/IconButton';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import NotificationsOffIcon from '@material-ui/icons/NotificationsOff';
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
@@ -50,6 +52,10 @@ const useStyles = makeStyles(theme => ({
         padding: theme.spacing(1),
         margin: 0,
         width: "100%"
+    },
+    backdrop: {
+        zIndex: theme.zIndex.drawer + 1,
+        color: '#fff',
     },
     PaginationRoot: {
         flexShrink: 0,
@@ -247,6 +253,9 @@ const AlarmSetup = (props) => {
 
     const [addPVDialogPvs, setAddPVDialogPvs] = useState([])
     const [ackPV, setAckPV] = useState()
+
+    const [backdropOpen, setbackDropOpen] = useState(false)
+    const [ASRestartProgress, setASRestartProgress] = useState(0)
 
     const [dbPVData, setDbPVData] = useState({})
 
@@ -861,7 +870,7 @@ const AlarmSetup = (props) => {
         else {
             oldPvs = matchDoc.pvs
         }
-        console.log('oldPvs', oldPvs)
+        // console.log('oldPvs', oldPvs)
         newPvs = { ...oldPvs }
         pvs.map(pv => {
             newPvs = {
@@ -879,7 +888,7 @@ const AlarmSetup = (props) => {
             key = key + 1
             return null
         })
-        console.log('newPvs', newPvs)
+        // console.log('newPvs', newPvs)
         let newvalues = {}
         if (subAreaId) {
             newvalues = { '$set': { [`${subAreaId}.pvs`]: newPvs } }
@@ -889,7 +898,8 @@ const AlarmSetup = (props) => {
         }
 
         // console.log(newvalues)
-
+        setAddPVDialogOpen(false)
+        setbackDropOpen(true)
         dbUpdateOne({
             dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
             id: id,
@@ -1124,6 +1134,22 @@ const AlarmSetup = (props) => {
         }
     }, [newPVInfo, setDialogPvData])
 
+    useEffect(() => {
+        let timer1, timer2
+        if (backdropOpen) {
+            timer1 = setInterval(() => {
+                setASRestartProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 10))
+            }, 500)
+            timer2 = setInterval(() => {
+                setbackDropOpen(false)
+            }, 5 * 1000)
+        }
+        return () => {
+            clearInterval(timer1)
+            clearInterval(timer2)
+        }
+    }, [backdropOpen])
+
     // console.log('Top render')
 
     return (
@@ -1132,6 +1158,27 @@ const AlarmSetup = (props) => {
             {areaPVs}
             {alarmPVs}
             {addPVDialogPvs}
+            <Backdrop
+                className={classes.backdrop}
+                open={backdropOpen}
+                onClick={() => setbackDropOpen(false)}
+                style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+
+                }}
+            >
+                <Typography variant="h4">Restarting alarm server...</Typography>
+                <CircularProgress
+                    color="inherit"
+                    style={{ marginTop: '2rem' }}
+                    size="4rem"
+                    variant="determinate"
+                    value={ASRestartProgress}
+                />
+            </Backdrop>
             <AddPVDialog
                 open={addPVDialogOpen}
                 appendNewPVInfo={handleAppendNewPVInfo}
@@ -1152,7 +1199,7 @@ const AlarmSetup = (props) => {
                 spacing={2}
                 className={classes.root}
             >
-                {displayAlarmList
+                {displayAlarmList && !backdropOpen
                     ? <Grid item xs={2}>
                         <Paper className={classes.paper} elevation={theme.palette.paperElevation}>
                             <Grid
@@ -1248,7 +1295,7 @@ const AlarmSetup = (props) => {
                                     </div>
                         </Paper>
                     </Grid>}
-                {displayAlarmTable ?
+                {displayAlarmTable && !backdropOpen ?
                     <Grid item xs={10} >
                         <Accordion
                             elevation={theme.palette.paperElevation}

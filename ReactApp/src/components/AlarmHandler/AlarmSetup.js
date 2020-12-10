@@ -757,24 +757,35 @@ const AlarmSetup = (props) => {
             alarmKey: newKey,
             areaIndex: index,
             areaName: areaName,
-            pvs: [
-                {
-                    pvname: "",
-                    connected: false
-                },
-                {
-                    pvname: "",
-                    connected: false
-                },
-                {
-                    pvname: "",
-                    connected: false
-                }
-            ]
+            pvs: [{ pvname: "", connected: false }]
         })
         setAreaContextOpen({})
         setAddPVDialogOpen(true)
     }, [lastPVKey, newPVInfo])
+
+    const handleAppendNewPVInfo = useCallback(() => {
+        setNewPVInfo({
+            ...newPVInfo,
+            pvs: [...newPVInfo.pvs, { pvname: "", connected: false }]
+        })
+    }, [newPVInfo])
+
+    const handlePopNewPVInfo = useCallback((index) => {
+        const newPvs = newPVInfo.pvs.filter((item, itemIndex) => itemIndex !== index)
+        setNewPVInfo({
+            ...newPVInfo,
+            pvs: newPvs
+        })
+    }, [newPVInfo])
+
+    const handleUpdateNewPVInfoPVName = useCallback((event, index) => {
+        const newPvs = newPVInfo.pvs.filter(item => true)
+        newPvs[index].pvname = event.target.value
+        setNewPVInfo({
+            ...newPVInfo,
+            pvs: newPvs
+        })
+    }, [newPVInfo])
 
     const autoLoadAlarmTable = () => {
         const timer = setTimeout(() => {
@@ -995,6 +1006,9 @@ const AlarmSetup = (props) => {
             {alarmPVs}
             <AddPVDialog
                 open={addPVDialogOpen}
+                appendNewPVInfo={handleAppendNewPVInfo}
+                popNewPVInfo={handlePopNewPVInfo}
+                updateNewPVInfoPVName={handleUpdateNewPVInfoPVName}
                 handleClose={() => {
                     setAddPVDialogOpen(false)
                     // setNewPVInfo({})

@@ -7,6 +7,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
+import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Typography from '@material-ui/core/Typography';
@@ -43,88 +44,63 @@ const useStyles = makeStyles(theme => ({
 const AddPVDialog = (props) => {
     const classes = useStyles()
 
-    const pvsLength = props.newPVInfo.pvs?.length
+    const lastIndex = props.newPVInfo.pvs?.length - 1
 
     const pvGrid = props.newPVInfo.pvs
         ? props.newPVInfo["pvs"].map((pv, index) => {
-            if (index === 0) {
-                return (
-                    <React.Fragment key={`${pv}-${index}`}>
-                        <Grid item xs={1} className={classes.centerInBlock}>
-                            <Lan />
-                        </Grid>
-                        <Grid item xs={1} className={classes.verticalMiddle} style={{ marginRight: '2rem' }}>
-                            <Typography className={classes.boldText} >
-                                PV
+            return (
+                <React.Fragment key={`${pv}-${index}`}>
+                    <Grid item xs={1} className={classes.centerInBlock}>
+                        <Lan />
+                    </Grid>
+                    <Grid item xs={1} className={classes.verticalMiddle} style={{ marginRight: '2rem' }}>
+                        <Typography className={classes.boldText} >
+                            PV
                                 </Typography>
-                        </Grid>
-                        <Grid item xs={8} className={classes.verticalMiddle}>
-                            <TextField
-                                type='text'
-                                value={props.newPVInfo["pvName"]}
-                                onChange={() => console.log('h')}
-                                fullWidth
-                                autoFocus
-                                InputProps={{
-                                    endAdornment: (
-                                        <InputAdornment position="end"  >
-                                            {props.newPVInfo["connected"]
-                                                ? <LanConnect className={classes.connected} />
-                                                : <LanDisconnect className={classes.disconnected} />
-                                            }
-                                        </InputAdornment >
-                                    )
-                                }}
-                            />
-                        </Grid>
-                        <Grid item className={classes.centerInBlock}>
-                            <IconButton style={{ marginLeft: '0.5em' }}>
-                                <RemoveCircleIcon color="primary" />
-                            </IconButton>
-                            <IconButton>
-                                <AddCircleIcon color="secondary" />
-                            </IconButton>
-                        </Grid>
-                    </React.Fragment>
-
-                )
-            }
-            else {
-                return (
-                    <React.Fragment key={`${pv}-${index}`}>
-                        <Grid item xs={2} style={{ marginRight: '2rem' }}>
-                        </Grid>
-                        <Grid item xs={8} className={classes.verticalMiddle}>
-                            <TextField
-                                type='text'
-                                value={props.newPVInfo["pvName"]}
-                                onChange={() => console.log('h')}
-                                fullWidth
-                                autoFocus
-                                InputProps={{
-                                    endAdornment: (
-                                        <InputAdornment position="end"  >
-                                            {props.newPVInfo["connected"]
-                                                ? <LanConnect className={classes.connected} />
-                                                : <LanDisconnect className={classes.disconnected} />
-                                            }
-                                        </InputAdornment >
-                                    )
-                                }}
-                            />
-                        </Grid>
-                        <Grid item className={classes.centerInBlock}>
-                            <IconButton style={{ marginLeft: '0.5em' }}>
-                                <RemoveCircleIcon color="primary" />
-                            </IconButton>
-                            <IconButton>
-                                <AddCircleIcon color="secondary" />
-                            </IconButton>
-                        </Grid>
-                    </React.Fragment>
-
-                )
-            }
+                    </Grid>
+                    <Grid item xs={8} className={classes.verticalMiddle}>
+                        <TextField
+                            type='text'
+                            value={props.newPVInfo.pvs[index].pvname}
+                            onChange={(event) => props.updateNewPVInfoPVName(event, index)}
+                            fullWidth
+                            autoFocus
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end"  >
+                                        {props.newPVInfo["connected"]
+                                            ? <LanConnect className={classes.connected} />
+                                            : <LanDisconnect className={classes.disconnected} />
+                                        }
+                                    </InputAdornment >
+                                )
+                            }}
+                        />
+                    </Grid>
+                    <Grid item className={classes.centerInBlock}>
+                        {lastIndex !== 0 &&
+                            <Tooltip title="Remove PV" placement="bottom">
+                                <IconButton
+                                    onClick={() => props.popNewPVInfo(index)}
+                                    style={{ marginLeft: '0.5em' }}
+                                >
+                                    <RemoveCircleIcon color="primary" />
+                                </IconButton>
+                            </Tooltip>
+                        }
+                        {index === lastIndex &&
+                            <Tooltip title="Add another PV" placement="bottom">
+                                <IconButton
+                                    onClick={props.appendNewPVInfo}
+                                    style={{ marginLeft: lastIndex === 0 && '0.5em' }}
+                                >
+                                    <AddCircleIcon color="secondary" />
+                                </IconButton>
+                            </Tooltip>
+                        }
+                    </Grid>
+                </React.Fragment>
+            )
         })
         : null
 

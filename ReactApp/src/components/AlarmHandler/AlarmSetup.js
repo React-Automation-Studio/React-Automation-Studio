@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useContext, useCallback, useMemo, useReducer } from 'react';
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { fade } from '@material-ui/core/styles';
@@ -121,21 +121,21 @@ const TablePaginationActions = (props) => {
     const theme = useTheme()
     const { count, page, rowsPerPage, onChangePage } = props
 
-    const handleFirstPageButtonClick = (event) => {
+    const handleFirstPageButtonClick = useCallback((event) => {
         onChangePage(event, 0)
-    }
+    }, [onChangePage])
 
-    const handleBackButtonClick = (event) => {
+    const handleBackButtonClick = useCallback((event) => {
         onChangePage(event, page - 1)
-    }
+    }, [onChangePage, page])
 
-    const handleNextButtonClick = (event) => {
+    const handleNextButtonClick = useCallback((event) => {
         onChangePage(event, page + 1)
-    }
+    }, [onChangePage, page])
 
-    const handleLastPageButtonClick = (event) => {
+    const handleLastPageButtonClick = useCallback((event) => {
         onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1))
-    }
+    }, [count, onChangePage, rowsPerPage])
 
     return (
         <div className={classes.PaginationRoot}>
@@ -211,8 +211,6 @@ const AlarmSetup = (props) => {
     const [alarmAckFieldTrig, setAlarmAckFieldTrig] = useState(0)
     const [alarmIOCPVPrefix, setAlarmIOCPVPrefix] = useState(null)
     const [alarmIOCPVSuffix, setAlarmIOCPVSuffix] = useState(null)
-    const [alarmPVDict, setAlarmPVDict] = useState({})
-    const [areaPVDict, setAreaPVDict] = useState({})
     const [alarmRowSelected, setAlarmRowSelected] = useState({})
     const [alarmContextOpen, setAlarmContextOpen] = useState({})
     const [areaAlarms, setAreaAlarms] = useState([])
@@ -249,6 +247,61 @@ const AlarmSetup = (props) => {
 
     const [addPVDialogPvs, setAddPVDialogPvs] = useState([])
     const [ackPV, setAckPV] = useState()
+
+    const alarmPVDictReducer = useCallback((state, action) => {
+        switch (action.type) {
+            case 'updatePVData':
+                if (action.pvData.initialized && !loadAlarmTable.alarmPV) {
+                    let epicsPVName = action.pvData.pvName.replace("pva://", "")
+                    epicsPVName = epicsPVName.replace(alarmIOCPVPrefix, "")
+                    epicsPVName = epicsPVName.replace(alarmIOCPVSuffix, "")
+                    if (lastAlarm === epicsPVName) {
+                        setLoadAlarmTable({
+                            ...loadAlarmTable,
+                            alarmPV: true
+                        })
+                    }
+                    return {
+                        ...state,
+                        [epicsPVName]: action.pvData.value
+                    }
+                }
+                else {
+                    return state
+                }
+            default:
+                throw new Error();
+        }
+    }, [alarmIOCPVPrefix, alarmIOCPVSuffix, lastAlarm, loadAlarmTable])
+    const [alarmPVDict, dispatchAlarmPVDict] = useReducer(alarmPVDictReducer, {})
+    const [alarmPVs, setAlarmPVs] = useState([])
+
+    const areaPVDictReducer = useCallback((state, action) => {
+        switch (action.type) {
+            case 'updatePVData':
+                if (action.pvData.initialized) {
+                    let areaName = action.pvData.pvName.replace("pva://", "")
+                    areaName = areaName.replace(alarmIOCPVPrefix, "")
+                    if (lastArea === areaName) {
+                        setLoadAlarmList({
+                            ...loadAlarmList,
+                            areaPV: true
+                        })
+                    }
+                    return {
+                        ...state,
+                        [areaName]: action.pvData.value
+                    }
+                }
+                else {
+                    return state
+                }
+            default:
+                throw new Error();
+        }
+    }, [alarmIOCPVPrefix, lastArea, loadAlarmList])
+    const [areaPVDict, dispatchAreaPVDict] = useReducer(areaPVDictReducer, {})
+    const [areaPVs, setAreaPVs] = useState([])
 
     const dbPVData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs:Parameters:{}` }).data
     const dbHistoryData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history:Parameters:{}` }).data
@@ -458,7 +511,7 @@ const AlarmSetup = (props) => {
 
 
 
-    const handleGlobalArea = () => {
+    const handleGlobalArea = useCallback(() => {
         setAreaSelectedIndex('ALLAREAS')
         setAlarmLogSelectedKey('ALLAREAS')
         setAreaSelectedName('ALL AREAS')
@@ -467,16 +520,16 @@ const AlarmSetup = (props) => {
         setPageAT(0)
         setAlarmTableSearchStringStore('')
         setAlarmTableSearchString('')
-    }
+    }, [])
 
-    const handleAckGlobal = () => {
+    const handleAckGlobal = useCallback(() => {
         const localAlarmAckField = [username, true]
         setAlarmAckField(localAlarmAckField)
         setAlarmAckFieldTrig(alarmAckFieldTrig + 1)
         setGlobalContextOpen(false)
-    }
+    }, [alarmAckFieldTrig, username])
 
-    const handleDisableEnableGlobal = (value) => {
+    const handleDisableEnableGlobal = useCallback((value) => {
         // console.log(value)
         const id = enableAllAreasId
         const newvalues = { '$set': { "enableAllAreas": value } }
@@ -490,9 +543,9 @@ const AlarmSetup = (props) => {
         })
 
         setGlobalContextOpen(false)
-    }
+    }, [dbUpdateOne, enableAllAreasId, props.dbName])
 
-    const handleIconClick = (event) => {
+    const handleIconClick = useCallback((event) => {
         // console.log("right click")
         event.preventDefault();
 
@@ -500,13 +553,13 @@ const AlarmSetup = (props) => {
         setContextMouseX(event.clientX - 2)
         setContextMouseY(event.clientY - 2)
 
-    }
+    }, [])
 
-    const handleAlarmGlobalContextClose = () => {
+    const handleAlarmGlobalContextClose = useCallback(() => {
         setGlobalContextOpen(false)
-    }
+    }, [])
 
-    const handleSearchAlarmTable = (event) => {
+    const handleSearchAlarmTable = useCallback((event) => {
         const srch = event.target.value
         if (alarmTableSearchTimer) {
             clearTimeout(alarmTableSearchTimer)
@@ -516,9 +569,9 @@ const AlarmSetup = (props) => {
         setAlarmTableSearchTimer(setTimeout(() => {
             setAlarmTableSearchString(srch)
         }, 300))
-    }
+    }, [alarmTableSearchTimer])
 
-    const handleSearchAlarmLog = (event) => {
+    const handleSearchAlarmLog = useCallback((event) => {
         const srch = event.target.value
         if (alarmLogSearchTimer) {
             clearTimeout(alarmLogSearchTimer)
@@ -528,18 +581,18 @@ const AlarmSetup = (props) => {
         setAlarmLogSearchTimer(setTimeout(() => {
             setAlarmLogSearchString(srch)
         }, 300))
-    }
+    }, [alarmLogSearchTimer])
 
-    const handleExpansionComplete = (panelName, isExpanded) => {
+    const handleExpansionComplete = useCallback((panelName, isExpanded) => {
         if (panelName === 'alarmTable') {
             setAlarmTableIsExpanded(isExpanded)
         }
         else if (panelName === 'alarmLog') {
             setAlarmLogIsExpanded(isExpanded)
         }
-    }
+    }, [])
 
-    const handleExpandPanel = (event, panelName) => {
+    const handleExpandPanel = useCallback((event, panelName) => {
         event.preventDefault()
         event.stopPropagation()
         if (panelName === 'alarmTable') {
@@ -548,7 +601,7 @@ const AlarmSetup = (props) => {
         else if (panelName === 'alarmLog') {
             setAlarmLogExpand(alarmLogExpand ? false : true)
         }
-    }
+    }, [alarmLogExpand, alarmTableExpand])
 
     // const handleSimplePrint = (value, pvname) => {
     //     // console.log(pvname, value)
@@ -789,7 +842,7 @@ const AlarmSetup = (props) => {
         })
     }, [newPVInfo])
 
-    const autoLoadAlarmTable = () => {
+    const autoLoadAlarmTable = useCallback(() => {
         const timer = setTimeout(() => {
             if (!loadAlarmTable) {
                 console.log('Warning: Auto load alarm table')
@@ -801,9 +854,9 @@ const AlarmSetup = (props) => {
             setLoadAlarmTable(localLoadAlarmTable)
         }, 10000);
         return () => clearTimeout(timer);
-    }
+    }, [loadAlarmTable])
 
-    const autoLoadAlarmList = () => {
+    const autoLoadAlarmList = useCallback(() => {
         const timer = setTimeout(() => {
             if (!loadAlarmList) {
                 console.log('Warning: Auto load alarm list')
@@ -815,25 +868,25 @@ const AlarmSetup = (props) => {
             setLoadAlarmList(localLoadAlarmList)
         }, 10000);
         return () => clearTimeout(timer);
-    }
+    }, [loadAlarmList])
 
-    const handleChangePage = (event, newPage) => {
+    const handleChangePage = useCallback((event, newPage) => {
         setPage(newPage)
-    }
+    }, [])
 
-    const handleChangeRowsPerPage = (event) => {
+    const handleChangeRowsPerPage = useCallback((event) => {
         setRowsPerPage(parseInt(event.target.value, 10))
         setPage(0)
-    }
+    }, [])
 
-    const handleChangePageAT = (event, newPage) => {
+    const handleChangePageAT = useCallback((event, newPage) => {
         setPageAT(newPage)
-    }
+    }, [])
 
-    const handleChangeRowsPerPageAT = (event) => {
+    const handleChangeRowsPerPageAT = useCallback((event) => {
         setRowsPerPageAT(parseInt(event.target.value, 10))
         setPageAT(0)
-    }
+    }, [])
 
     useEffect(() => {
         const searchedData = alarmLogDisplayArray.filter((entry) => {
@@ -892,45 +945,24 @@ const AlarmSetup = (props) => {
 
     }, [areaAlarms, areaSelectedIndex, alarmTableSearchString, pageAT, rowsPerPageAT])
 
-
-
-
-
-    const setPvData = (pvData) => {
-        if (pvData.initialized && !loadAlarmTable.alarmPV) {
-            // console.log(pvData)
-            let epicsPVName = pvData.pvName.replace("pva://", "")
-            epicsPVName = epicsPVName.replace(alarmIOCPVPrefix, "")
-            epicsPVName = epicsPVName.replace(alarmIOCPVSuffix, "")
-            setAlarmPVDict({
-                ...alarmPVDict,
-                [epicsPVName]: pvData.value
+    useEffect(() => {
+        if (alarmIOCPVPrefix !== null && alarmIOCPVSuffix !== null) {
+            let localAlarmPVs = []
+            areaAlarms.map(entry => {
+                const key = entry[0]
+                const value = entry[1]
+                const pvObject =
+                    <PV
+                        key={key}
+                        pv={'pva://' + alarmIOCPVPrefix + value["name"] + alarmIOCPVSuffix}
+                        pvData={(pvData) => dispatchAlarmPVDict({ type: 'updatePVData', pvData: pvData })}
+                    />
+                localAlarmPVs = [...localAlarmPVs, pvObject]
+                return null
             })
-            if (lastAlarm === epicsPVName) {
-                setLoadAlarmTable({
-                    ...loadAlarmTable,
-                    alarmPV: true
-                })
-            }
+            setAlarmPVs(localAlarmPVs)
         }
-    }
-
-    let alarmPVs = null
-    if (alarmIOCPVPrefix !== null && alarmIOCPVSuffix !== null) {
-        alarmPVs = areaAlarms.map(entry => {
-            const key = entry[0]
-            const value = entry[1]
-            return (
-                <PV
-                    key={key}
-                    pv={'pva://' + alarmIOCPVPrefix + value["name"] + alarmIOCPVSuffix}
-                    pvData={setPvData}
-                />
-            )
-        })
-    }
-
-
+    }, [alarmIOCPVPrefix, alarmIOCPVSuffix, areaAlarms])
 
     useEffect(() => {
         if (alarmIOCPVPrefix !== null) {
@@ -947,35 +979,22 @@ const AlarmSetup = (props) => {
     }, [alarmIOCPVPrefix, alarmAckField, alarmAckFieldTrig])
 
 
-    const setAreaPvData = (pvData) => {
-        if (pvData.initialized) {
-            // console.log(pvData)
-            let areaName = pvData.pvName.replace("pva://", "")
-            areaName = areaName.replace(alarmIOCPVPrefix, "")
-            setAreaPVDict({
-                ...areaPVDict,
-                [areaName]: pvData.value
+    useEffect(() => {
+        if (alarmIOCPVPrefix !== null) {
+            let localAreaPVs = []
+            Object.keys(areaEnabled).map(areaName => {
+                const pvObject = <PV
+                    key={areaName}
+                    pv={'pva://' + alarmIOCPVPrefix + areaName}
+                    pvData={(pvData) => dispatchAreaPVDict({ type: 'updatePVData', pvData: pvData })}
+                />
+                localAreaPVs = [...localAreaPVs, pvObject]
+                return null
             })
-            if (lastArea === areaName) {
-                // console.log('lastArea === areaName')
-                setLoadAlarmList({
-                    ...loadAlarmList,
-                    areaPV: true
-                })
-            }
+            setAreaPVs(localAreaPVs)
         }
-    }
-    let areaPVs = null
-    if (alarmIOCPVPrefix !== null) {
-        areaPVs = Object.keys(areaEnabled).map(areaName => (
-            <PV
-                key={areaName}
-                pv={'pva://' + alarmIOCPVPrefix + areaName}
-                pvData={setAreaPvData}
-            // handleInputValue={handleAreaPVChange}
-            />
-        ))
-    }
+    }, [alarmIOCPVPrefix, areaEnabled])
+
 
     const displayAlarmTable = useMemo(() => {
         return Object.entries(loadAlarmTable).reduce((acc, entry) => {
@@ -1041,6 +1060,7 @@ const AlarmSetup = (props) => {
                     />
                     : null
                 localAddPVDialogPvs = [...localAddPVDialogPvs, pvObject]
+                return null
             })
             setAddPVDialogPvs(localAddPVDialogPvs)
         }

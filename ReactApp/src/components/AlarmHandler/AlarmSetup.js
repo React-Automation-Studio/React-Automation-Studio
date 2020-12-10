@@ -842,6 +842,10 @@ const AlarmSetup = (props) => {
         })
     }, [newPVInfo])
 
+    const handleExecuteAddNewPVs = useCallback(() => {
+        console.log(newPVInfo)
+    }, [newPVInfo])
+
     const autoLoadAlarmTable = useCallback(() => {
         const timer = setTimeout(() => {
             if (!loadAlarmTable) {
@@ -1082,6 +1086,7 @@ const AlarmSetup = (props) => {
                 appendNewPVInfo={handleAppendNewPVInfo}
                 popNewPVInfo={handlePopNewPVInfo}
                 updateNewPVInfoPVName={handleUpdateNewPVInfoPVName}
+                executeAddNewPVs={handleExecuteAddNewPVs}
                 handleClose={() => {
                     setAddPVDialogOpen(false)
                     // setNewPVInfo({})

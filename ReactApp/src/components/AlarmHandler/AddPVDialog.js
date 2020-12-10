@@ -53,57 +53,69 @@ const AddPVDialog = (props) => {
     const pvGrid = props.newPVInfo.pvs
         ? props.newPVInfo["pvs"].map((pv, index) => {
             return (
-                <React.Fragment key={`${pv}-${index}`}>
-                    <Grid item xs={1} className={classes.centerInBlock}>
-                        <Lan />
-                    </Grid>
-                    <Grid item xs={1} className={classes.verticalMiddle} style={{ marginRight: '2rem' }}>
-                        <Typography className={classes.boldText} >
-                            PV
+                <Grid
+                    key={`${pv}-${index}`}
+                    item
+                    xs={12}
+                >
+                    <Grid
+
+                        container
+                        direction="row"
+                        justify="flex-start"
+                        alignItems="stretch"
+                    >
+                        <Grid item xs={1} className={classes.centerInBlock}>
+                            <Lan />
+                        </Grid>
+                        <Grid item xs={1} className={classes.verticalMiddle} style={{ marginRight: '2rem' }}>
+                            <Typography className={classes.boldText} >
+                                PV
                                 </Typography>
+                        </Grid>
+                        <Grid item xs={8} className={classes.verticalMiddle}>
+                            <TextField
+                                type='text'
+                                value={props.newPVInfo.pvs[index].pvname}
+                                onChange={(event) => props.updateNewPVInfoPVName(event, index)}
+                                fullWidth
+                                autoFocus
+                                InputProps={{
+                                    endAdornment: (
+                                        <InputAdornment position="end"  >
+                                            {props.newPVInfo.pvs[index].connected
+                                                ? <LanConnect className={classes.connected} />
+                                                : <LanDisconnect className={classes.disconnected} />
+                                            }
+                                        </InputAdornment >
+                                    )
+                                }}
+                            />
+                        </Grid>
+                        <Grid item >
+                            {lastIndex !== 0 &&
+                                <Tooltip title="Remove PV" placement="bottom">
+                                    <IconButton
+                                        onClick={() => props.popNewPVInfo(index)}
+                                        style={{ marginLeft: '0.5em' }}
+                                    >
+                                        <RemoveCircleIcon color="primary" />
+                                    </IconButton>
+                                </Tooltip>
+                            }
+                            {index === lastIndex &&
+                                <Tooltip title="Add another PV" placement="bottom">
+                                    <IconButton
+                                        onClick={props.appendNewPVInfo}
+                                        style={{ marginLeft: lastIndex === 0 && '0.5em' }}
+                                    >
+                                        <AddCircleIcon color="secondary" />
+                                    </IconButton>
+                                </Tooltip>
+                            }
+                        </Grid>
                     </Grid>
-                    <Grid item xs={8} className={classes.verticalMiddle}>
-                        <TextField
-                            type='text'
-                            value={props.newPVInfo.pvs[index].pvname}
-                            onChange={(event) => props.updateNewPVInfoPVName(event, index)}
-                            fullWidth
-                            autoFocus
-                            InputProps={{
-                                endAdornment: (
-                                    <InputAdornment position="end"  >
-                                        {props.newPVInfo.pvs[index].connected
-                                            ? <LanConnect className={classes.connected} />
-                                            : <LanDisconnect className={classes.disconnected} />
-                                        }
-                                    </InputAdornment >
-                                )
-                            }}
-                        />
-                    </Grid>
-                    <Grid item className={classes.centerInBlock}>
-                        {lastIndex !== 0 &&
-                            <Tooltip title="Remove PV" placement="bottom">
-                                <IconButton
-                                    onClick={() => props.popNewPVInfo(index)}
-                                    style={{ marginLeft: '0.5em' }}
-                                >
-                                    <RemoveCircleIcon color="primary" />
-                                </IconButton>
-                            </Tooltip>
-                        }
-                        {index === lastIndex &&
-                            <Tooltip title="Add another PV" placement="bottom">
-                                <IconButton
-                                    onClick={props.appendNewPVInfo}
-                                    style={{ marginLeft: lastIndex === 0 && '0.5em' }}
-                                >
-                                    <AddCircleIcon color="secondary" />
-                                </IconButton>
-                            </Tooltip>
-                        }
-                    </Grid>
-                </React.Fragment>
+                </Grid>
             )
         })
         : null
@@ -162,7 +174,7 @@ const AddPVDialog = (props) => {
                 <Button onClick={props.handleClose} color="primary">
                     Cancel
                 </Button>
-                <Button onClick={props.handleDelete} color="secondary" disabled={!enableAddButton}>
+                <Button onClick={props.executeAddNewPVs} color="secondary" disabled={!enableAddButton}>
                     Add
                 </Button>
             </DialogActions>

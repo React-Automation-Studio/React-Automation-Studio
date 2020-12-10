@@ -931,8 +931,10 @@ def initAreaPVDict():
 
 
 def initAlarmDict():
+    print("start", "initAlarmDict")
     global alarmDict
     for pvname in pvNameList:
+        print("pvname", pvname)
         alarmName = alarmIOCPVPrefix + pvname + alarmIOCPVSuffix
         for suff in ["", "A", "V", "T", "K"]:
             if (suff == "A"):
@@ -1016,18 +1018,23 @@ def restartAlarmServer():
     startAlarmIOC()
     # Initialise string PVs for front end
     initAlarmDict()
+    print("after", "initAlarmDict")
     # Initialise area PVs (for alarmList)
     initAreaPVDict()
+    print("after", "initAreaPVDict")
     # Initialise description PV of each alarm PV
     # External PVs
     initDescDict()
+    print("after", "initDescDict")
     # Initialise alarm PVs
     # External PVs
     initPVDict()
+    print("after", "initPVDict")
     # Sleep to allow all external PV connects
     sleep(2.0)
     # Initialiase saved string PVs from database
     initialiseAlarmIOC()
+    print("after", "initialiseAlarmIOC")
 
     # Restart notify server
     restartNotifyServer()
@@ -1041,14 +1048,14 @@ def restartAlarmServer():
 def pvCollectionWatch():
     with dbGetCollection("pvs").watch() as stream:
         for change in stream:
-            # print(change)
+            print(change)
             try:
                 documentKey = change["documentKey"]
                 doc = dbFindOne("pvs", documentKey)
                 change = change["updateDescription"]["updatedFields"]
                 timestamp = datetime.isoformat(datetime.now(utc))
                 for key in change.keys():
-                    # print(key)
+                    print(key)
                     if (key == "enable"):
                         # area enable
                         topArea = doc.get("area")

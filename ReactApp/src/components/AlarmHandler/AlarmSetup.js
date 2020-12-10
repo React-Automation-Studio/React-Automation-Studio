@@ -246,6 +246,7 @@ const AlarmSetup = (props) => {
     const [lastPVKey, setLastPVKey] = useState({})
     const [newPVInfo, setNewPVInfo] = useState({})
     const [addPVDialogOpen, setAddPVDialogOpen] = useState(false)
+    const [addPVDialogPvs, setAddPVDialogPvs] = useState([])
 
 
     const dbPVData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs:Parameters:{}` }).data
@@ -997,6 +998,35 @@ const AlarmSetup = (props) => {
         }
     }, [alarmTableExpand, alarmLogExpand, alarmLogIsExpanded, alarmTableIsExpanded])
 
+    const setDialogPvData = (pvData) => {
+        const epicsPVName = pvData.pvName?.replace("pva://", "")
+        const index = newPVInfo.pvs.findIndex(item => item.pvname === epicsPVName)
+        if (pvData.initialized) {
+            console.log(index, 'connected')
+        }
+        else if (epicsPVName) {
+            console.log(index, 'disconnected')
+        }
+    }
+
+    useEffect(() => {
+        if (Object.keys(newPVInfo).length !== 0) {
+            let localAddPVDialogPvs = []
+            newPVInfo.pvs.map((pv, index) => {
+                const pvObject = <PV
+                    key={`${pv.pvname}-${index}`}
+                    pv={'pva://' + pv.pvname}
+                    pvData={setDialogPvData}
+                />
+                localAddPVDialogPvs = [...localAddPVDialogPvs, pvObject]
+            })
+            setAddPVDialogPvs(localAddPVDialogPvs)
+        }
+        return () => {
+            setAddPVDialogPvs([])
+        }
+    }, [newPVInfo])
+
     // console.log('Top render')
 
     return (
@@ -1004,6 +1034,7 @@ const AlarmSetup = (props) => {
             {ackPV}
             {areaPVs}
             {alarmPVs}
+            {addPVDialogPvs}
             <AddPVDialog
                 open={addPVDialogOpen}
                 appendNewPVInfo={handleAppendNewPVInfo}

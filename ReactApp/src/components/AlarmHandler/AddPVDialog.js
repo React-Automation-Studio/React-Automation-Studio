@@ -170,4 +170,4 @@ const AddPVDialog = (props) => {
     )
 }
 
-export default AddPVDialog;
+export default React.memo(AddPVDialog);

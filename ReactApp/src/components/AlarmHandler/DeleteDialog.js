@@ -30,4 +30,4 @@ const DeleteDialog = (props) => {
     )
 }
 
-export default DeleteDialog;
+export default React.memo(DeleteDialog);

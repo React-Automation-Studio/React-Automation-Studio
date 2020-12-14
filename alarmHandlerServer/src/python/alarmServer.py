@@ -3,8 +3,9 @@ import numpy as np
 import re
 from time import sleep
 import subprocess
-import _thread
-from epics import PV, caput
+# import _thread
+from epics.ca import CAThread
+from epics import PV
 from datetime import datetime
 from pytz import utc
 
@@ -79,10 +80,14 @@ def printVal(pvname=None, value=None, **kw):
 
 
 def propagateAreaAlarms(pvname=None, value=None, **kw):
-    _thread.start_new_thread(propAreaAlarms, (
+    CAThread(target=propAreaAlarms, args=(
         pvname,
         value,
-    ))
+    )).start()
+    # _thread.start_new_thread(propAreaAlarms, (
+    #     pvname,
+    #     value,
+    # ))
 
 
 def propAreaAlarms(pvname, value):
@@ -244,10 +249,14 @@ def ackPVChange(value=None, **kw):
     # print("ack pv:", value)
     if(value):
         if (value[0] != ''):
-            _thread.start_new_thread(ackProcess, (
+            CAThread(target=ackProcess, args=(
                 value,
                 timestamp,
-            ))
+            )).start()
+            # _thread.start_new_thread(ackProcess, (
+            #     value,
+            #     timestamp,
+            # ))
 
 
 def ackProcess(ackArray, timestamp):
@@ -384,10 +393,14 @@ def waitConnFE():
 
 
 def pvConn(pvname=None, conn=None, **kw):
-    _thread.start_new_thread(pvDisconn, (
+    CAThread(target=pvDisconn, args=(
         pvname,
         conn,
-    ))
+    )).start()
+    # _thread.start_new_thread(pvDisconn, (
+    #     pvname,
+    #     conn,
+    # ))
 
 
 def pvDisconn(pvname, conn):
@@ -483,23 +496,39 @@ def pvDisconn(pvname, conn):
 def onChanges(pvname=None, value=None, **kw):
     timestamp = datetime.isoformat(datetime.now(utc))
     if (alarmDictInitialised):
-        _thread.start_new_thread(pvPrepareData, (
+        CAThread(target=pvPrepareData, args=(
             pvname,
             value,
             kw["severity"],
             timestamp,
             kw["units"],
             kw["enum_strs"]
-        ))
+        )).start()
+        # _thread.start_new_thread(pvPrepareData, (
+        #     pvname,
+        #     value,
+        #     kw["severity"],
+        #     timestamp,
+        #     kw["units"],
+        #     kw["enum_strs"]
+        # ))
     else:
-        _thread.start_new_thread(pvInitData, (
+        CAThread(target=pvInitData, args=(
             pvname,
             value,
             kw["severity"],
             timestamp,
             kw["units"],
             kw["enum_strs"]
-        ))
+        )).start()
+        # _thread.start_new_thread(pvInitData, (
+        #     pvname,
+        #     value,
+        #     kw["severity"],
+        #     timestamp,
+        #     kw["units"],
+        #     kw["enum_strs"]
+        # ))
 
 
 def pvPrepareData(pvname, value, severity, timestamp, units, enum_strs):
@@ -1145,7 +1174,8 @@ def pvCollectionWatch():
                     elif (key == "pvs" or key.endswith(".pvs")):
                         # New pvs added
                         watchRestartAlarmServer = True
-                        _thread.start_new_thread(restartAlarmServer, ())
+                        CAThread(target=restartAlarmServer, args=()).start()
+                        # _thread.start_new_thread(restartAlarmServer, ())
             except:
                 print("no relevant updates")
 
@@ -1199,9 +1229,11 @@ def main():
     initialiseAlarmIOC()
     # Initialise database collection watch on pvs
     # For enable change on pv to reevaluate area pvs
-    _thread.start_new_thread(pvCollectionWatch, ())
+    CAThread(target=pvCollectionWatch, args=()).start()
+    # _thread.start_new_thread(pvCollectionWatch, ())
     # For change to global enable to reevaluate area pvs
-    _thread.start_new_thread(globalCollectionWatch, ())
+    CAThread(target=globalCollectionWatch, args=()).start()
+    # _thread.start_new_thread(globalCollectionWatch, ())
 
     # Start notify server
     startNotifyServer()

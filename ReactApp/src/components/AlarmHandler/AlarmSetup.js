@@ -1139,10 +1139,10 @@ const AlarmSetup = (props) => {
         if (backdropOpen) {
             timer1 = setInterval(() => {
                 setASRestartProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 10))
-            }, 800)
+            }, 500)
             timer2 = setInterval(() => {
                 setbackDropOpen(false)
-            }, 8 * 1000)
+            }, 5 * 1000)
         }
         return () => {
             clearInterval(timer1)

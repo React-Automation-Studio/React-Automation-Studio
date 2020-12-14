@@ -1036,7 +1036,6 @@ def restartAlarmServer():
 
     disconnectAllPVs()
     clearGlobalDicts()
-    sleep(0.1)
     getListOfPVNames()
     # Restart alarm IOC
     killAlarmIOC()

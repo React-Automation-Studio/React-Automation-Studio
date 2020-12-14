@@ -369,6 +369,19 @@ def ackAlarm(ackIdentifier, timestamp, username):
         alarmDict[pvname]["A"].value = 7    # set to DISCONN_ACKED state
 
 
+def pvConnFE(pvname=None, conn=None, **kw):
+    frontEndConnDict[pvname] = conn
+
+
+def waitConnFE():
+    allConnected = False
+    while(not allConnected):
+        sleep(0.1)
+        allConnected = True
+        for pvConnected in frontEndConnDict.values():
+            allConnected &= pvConnected
+
+
 def pvConn(pvname=None, conn=None, **kw):
     _thread.start_new_thread(pvDisconn, (
         pvname,
@@ -924,28 +937,38 @@ def initDescDict():
 
 def initAreaPVDict():
     global areaPVDict
+    global frontEndConnDict
     for area in areaList:
         pvname = alarmIOCPVPrefix + area
-        pv = PV(pvname=pvname, connection_timeout=0.001, callback=printVal)
-        pv.wait_for_connection(timeout=5)
+        pv = PV(pvname=pvname,
+                connection_timeout=0.001,
+                callback=printVal,
+                connection_callback=pvConnFE)
+        frontEndConnDict[pvname] = False
+        # pv.wait_for_connection(timeout=5)
         areaPVDict[area] = pv
 
 
 def initAlarmDict():
     global alarmDict
+    global frontEndConnDict
     for pvname in pvNameList:
         alarmName = alarmIOCPVPrefix + pvname + alarmIOCPVSuffix
         for suff in ["", "A", "V", "T", "K"]:
             if (suff == "A"):
                 pv = PV(pvname=alarmName + suff,
                         connection_timeout=0.001,
-                        callback=propagateAreaAlarms)
-                pv.wait_for_connection(timeout=5)
+                        callback=propagateAreaAlarms,
+                        connection_callback=pvConnFE)
+                frontEndConnDict[alarmName + suff] = False
+                # pv.wait_for_connection(timeout=5)
             else:
                 pv = PV(pvname=alarmName + suff,
                         connection_timeout=0.001,
-                        callback=printVal)
-                pv.wait_for_connection(timeout=5)
+                        callback=printVal,
+                        connection_callback=pvConnFE)
+                frontEndConnDict[alarmName + suff] = False
+                # pv.wait_for_connection(timeout=5)
             if (suff == ""):
                 alarmDict[pvname] = {}
                 alarmDict[pvname]["D"] = pv
@@ -954,8 +977,10 @@ def initAlarmDict():
     # ACK PV
     pv = PV(pvname=alarmIOCPVPrefix + "ACK_PV",
             connection_timeout=0.001,
-            callback=ackPVChange)
-    pv.wait_for_connection(timeout=5)
+            callback=ackPVChange,
+            connection_callback=pvConnFE)
+    frontEndConnDict[alarmIOCPVPrefix + "ACK_PV"] = False
+    # pv.wait_for_connection(timeout=5)
     alarmDict["ACK_PV"] = pv
 
 
@@ -1021,6 +1046,9 @@ def restartAlarmServer():
     initAlarmDict()
     # Initialise area PVs (for alarmList)
     initAreaPVDict()
+    # Wait for all front end PVs to connect - must!
+    # ~ 1.0 seconds at most
+    waitConnFE()
     # Initialise description PV of each alarm PV
     # External PVs
     initDescDict()
@@ -1044,14 +1072,14 @@ def restartAlarmServer():
 def pvCollectionWatch():
     with dbGetCollection("pvs").watch() as stream:
         for change in stream:
-            print(change)
+            # print(change)
             try:
                 documentKey = change["documentKey"]
                 doc = dbFindOne("pvs", documentKey)
                 change = change["updateDescription"]["updatedFields"]
                 timestamp = datetime.isoformat(datetime.now(utc))
                 for key in change.keys():
-                    print(key)
+                    # print(key)
                     if (key == "enable"):
                         # area enable
                         topArea = doc.get("area")
@@ -1149,6 +1177,9 @@ def main():
     initAlarmDict()
     # Initialise area PVs (for alarmList)
     initAreaPVDict()
+    # Wait for all front end PVs to connect - must!
+    # ~ 1.0 seconds at most
+    waitConnFE()
     # Initialise description PV of each alarm PV
     # External PVs
     initDescDict()

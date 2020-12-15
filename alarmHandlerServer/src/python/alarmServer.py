@@ -1028,51 +1028,44 @@ def clearGlobalDicts():
 
 
 def restartAlarmServer():
+    global alarmDictInitialised
+    alarmDictInitialised = False
 
-    global watchRestartAlarmServer
-    watchRestartAlarmServer = False
-    sleep(0.5)
+    global alarmServerRestart
+    alarmServerRestart = True
 
-    if(not watchRestartAlarmServer):
+    disconnectAllPVs()
+    clearGlobalDicts()
+    getListOfPVNames()
+    # Restart alarm IOC
+    killAlarmIOC()
+    sleep(0.1)
+    startAlarmIOC()
+    # Initialise string PVs for front end
+    initAlarmDict()
+    # Initialise area PVs (for alarmList)
+    initAreaPVDict()
+    # Wait for all front end PVs to connect - must!
+    # ~ 1.0 seconds at most
+    waitConnFE()
+    # Initialise description PV of each alarm PV
+    # External PVs
+    initDescDict()
+    # Initialise alarm PVs
+    # External PVs
+    initPVDict()
+    # Sleep to allow all external PV connects
+    sleep(2.0)
+    # Initialiase saved string PVs from database
+    initialiseAlarmIOC()
 
-        global alarmDictInitialised
-        alarmDictInitialised = False
+    # Restart notify server
+    restartNotifyServer()
 
-        global alarmServerRestart
-        alarmServerRestart = True
+    print("Alarm server restarted...")
 
-        disconnectAllPVs()
-        clearGlobalDicts()
-        getListOfPVNames()
-        # Restart alarm IOC
-        killAlarmIOC()
-        sleep(0.1)
-        startAlarmIOC()
-        # Initialise string PVs for front end
-        initAlarmDict()
-        # Initialise area PVs (for alarmList)
-        initAreaPVDict()
-        # Wait for all front end PVs to connect - must!
-        # ~ 1.0 seconds at most
-        waitConnFE()
-        # Initialise description PV of each alarm PV
-        # External PVs
-        initDescDict()
-        # Initialise alarm PVs
-        # External PVs
-        initPVDict()
-        # Sleep to allow all external PV connects
-        sleep(2.0)
-        # Initialiase saved string PVs from database
-        initialiseAlarmIOC()
-
-        # Restart notify server
-        restartNotifyServer()
-
-        print("Alarm server restarted...")
-
-        alarmDictInitialised = True
-        alarmServerRestart = False
+    alarmDictInitialised = True
+    alarmServerRestart = False
 
 
 def pvCollectionWatch():
@@ -1145,7 +1138,6 @@ def pvCollectionWatch():
                     elif (key == "pvs" or key.endswith(".pvs")):
                         # New pvs added
                         watchRestartAlarmServer = True
-                        _thread.start_new_thread(restartAlarmServer, ())
             except:
                 print("no relevant updates")
 
@@ -1220,7 +1212,11 @@ def main():
         global notifyBuffer
         global notifyContent
         global notifyTimeout
+        global watchRestartAlarmServer
         sleep(1.0)
+        if(watchRestartAlarmServer):
+            watchRestartAlarmServer = False
+            restartAlarmServer()
         if(notifyContent):
             notifyTimeout += 1
             notifyContent = False

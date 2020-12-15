@@ -988,21 +988,28 @@ def initAlarmDict():
 def disconnectAllPVs():
 
     for pv in pvDict.values():
+        pv.clear_auto_monitor()
+        pv.clear_callbacks()
         pv.disconnect()
 
     for pv in pvDescDict.values():
+        pv.clear_auto_monitor()
+        pv.clear_callbacks()
         pv.disconnect()
 
     for pv in areaPVDict.values():
+        pv.clear_auto_monitor()
+        pv.clear_callbacks()
         pv.disconnect()
 
     for pvname in pvNameList:
-        alarmDict[pvname]["A"].disconnect()
-        alarmDict[pvname]["D"].disconnect()
-        alarmDict[pvname]["V"].disconnect()
-        alarmDict[pvname]["T"].disconnect()
-        alarmDict[pvname]["K"].disconnect()
+        for suff in ["A", "D", "K", "T", "V"]:
+            alarmDict[pvname][suff].clear_auto_monitor()
+            alarmDict[pvname][suff].clear_callbacks()
+            alarmDict[pvname][suff].disconnect()
 
+    alarmDict["ACK_PV"].clear_auto_monitor()
+    alarmDict["ACK_PV"].clear_callbacks()
     alarmDict["ACK_PV"].disconnect()
 
 

@@ -430,10 +430,6 @@ def pvDisconn(pvname, conn):
             curr_desc = pv.value
             curr_desc[0] = 'abcdefghijklmnopqrstuvwxyzAbcdefghijk_0'
         except:
-            curr_desc = [
-                'abcdefghijklmnopqrstuvwxyzAbcdefghijk_0',
-                "[Disconnected]", "[Disconnected]"
-            ]
             pass
         pv.put(np.array(curr_desc))
         # set current alarm status to DISCONNECTED
@@ -477,15 +473,9 @@ def pvDisconn(pvname, conn):
                     notifyContent = True
     else:
         try:
-            curr_desc = [
-                'abcdefghijklmnopqrstuvwxyzAbcdefghijk_1',
-                pvDescDict[pvname].value, pvDescDict[pvname].host
-            ]
+            curr_desc = ['abcdefghijklmnopqrstuvwxyzAbcdefghijk_1',
+                         pvDescDict[pvname].value, pvDescDict[pvname].host]
         except:
-            curr_desc = [
-                'abcdefghijklmnopqrstuvwxyzAbcdefghijk_0',
-                "[Disconnected]", "[Disconnected]"
-            ]
             pass
         pv.put(np.array(curr_desc))
 

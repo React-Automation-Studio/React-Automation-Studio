@@ -73,15 +73,15 @@ def initPreSuffix():
             print('[Warning]', 'alarmIOCPVPrefix not instantiated')
 
 
-def printVal(pvname=None, value=None, **kw):
-    # print(pvname, value)
+def printVal(**kw):
+    # print(kw)
     pass
 
 
-def propagateAreaAlarms(pvname=None, value=None, **kw):
+def propagateAreaAlarms(**kw):
     _thread.start_new_thread(propAreaAlarms, (
-        pvname,
-        value,
+        kw["pvname"],
+        kw["value"],
     ))
 
 
@@ -239,13 +239,13 @@ def getNotify(pvname):
     return notify
 
 
-def ackPVChange(value=None, **kw):
+def ackPVChange(**kw):
     timestamp = datetime.isoformat(datetime.now(utc))
     # print("ack pv:", value)
-    if(value):
-        if (value[0] != ''):
+    if(kw["value"]):
+        if (kw["value"][0] != ''):
             _thread.start_new_thread(ackProcess, (
-                value,
+                kw["value"],
                 timestamp,
             ))
 
@@ -480,12 +480,12 @@ def pvDisconn(pvname, conn):
         pv.put(np.array(curr_desc))
 
 
-def onChanges(pvname=None, value=None, **kw):
+def onChanges(**kw):
     timestamp = datetime.isoformat(datetime.now(utc))
     if (alarmDictInitialised):
         _thread.start_new_thread(pvPrepareData, (
-            pvname,
-            value,
+            kw["pvname"],
+            kw["value"],
             kw["severity"],
             timestamp,
             kw["units"],
@@ -493,8 +493,8 @@ def onChanges(pvname=None, value=None, **kw):
         ))
     else:
         _thread.start_new_thread(pvInitData, (
-            pvname,
-            value,
+            kw["pvname"],
+            kw["value"],
             kw["severity"],
             timestamp,
             kw["units"],

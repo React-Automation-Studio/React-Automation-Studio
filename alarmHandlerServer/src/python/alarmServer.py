@@ -503,39 +503,51 @@ def onChanges(**kw):
 
 
 def pvPrepareData(pvname, value, severity, timestamp, units, enum_strs):
-    timestamp_string = timestamp
 
-    globalEnable, areaEnable, subAreaEnable, pvEnable = getEnables(pvname)
+    alarmState = alarmDict[pvname]["A"].value
 
-    if (subAreaEnable != None):
-        enable = globalEnable and areaEnable and subAreaEnable and pvEnable
-    else:
-        enable = globalEnable and areaEnable and pvEnable
+    noAlarm = severity == 0 and alarmState != 0
+    minorAlarm = severity == 1 and alarmState != 2
+    majorAlarm = severity == 2 and alarmState != 4
+    invalidAlarm = severity == 3 and alarmState != 6
 
-    latch = getLatch(pvname)
-    notify = getNotify(pvname)
+    proceed = noAlarm or minorAlarm or majorAlarm or invalidAlarm
 
-    pvELN = []
-    pvELN.append(enable)
-    pvELN.append(latch)
-    pvELN.append(notify)
+    if(proceed):
+        timestamp_string = timestamp
 
-    # manipulate value
-    if(enum_strs):
-        if(enum_strs[value] != ''):
-            value = enum_strs[value]
+        globalEnable, areaEnable, subAreaEnable, pvEnable = getEnables(pvname)
+
+        if (subAreaEnable != None):
+            enable = globalEnable and areaEnable and subAreaEnable and pvEnable
+        else:
+            enable = globalEnable and areaEnable and pvEnable
+
+        latch = getLatch(pvname)
+        notify = getNotify(pvname)
+
+        pvELN = []
+        pvELN.append(enable)
+        pvELN.append(latch)
+        pvELN.append(notify)
+
+        # manipulate value
+        if(enum_strs):
+            if(enum_strs[value] != ''):
+                value = enum_strs[value]
+            else:
+                if(units):
+                    value = str(value)+" "+units
+                else:
+                    value = str(value)
         else:
             if(units):
                 value = str(value)+" "+units
             else:
                 value = str(value)
-    else:
-        if(units):
-            value = str(value)+" "+units
-        else:
-            value = str(value)
 
-    processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN)
+        processPVAlarm(pvname, value, severity,
+                       timestamp, timestamp_string, pvELN)
 
 
 def pvInitData(pvname, value, severity, timestamp, units, enum_strs):

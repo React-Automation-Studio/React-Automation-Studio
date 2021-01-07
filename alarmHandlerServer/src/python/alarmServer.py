@@ -345,7 +345,7 @@ def ackAlarm(ackIdentifier, timestamp, username):
         # Log to history
         entry = {"timestamp": timestamp, "entry": " ".join(
             [pvname, "-", username, "acknowledged", alarmPVSevDict[alarmPVSev], "to", ackedStateDict[pvsev]])}
-        dbUpdateHistory(areaKey+'*'+pvname, entry)
+        dbUpdateHistory(pvname, entry)
 
     # 0	"NO_ALARM"  # 0 "NO_ALARM"
     # 1	"MINOR"     # 1 "MINOR_ACKED"
@@ -463,7 +463,7 @@ def pvDisconn(pvname, conn):
             if(enable and not alarmServerRestart):
                 entry = {"timestamp": timestamp, "entry": " ".join(
                     [pvname, "-", "DISCONNECTED"])}
-                dbUpdateHistory(areaKey+'*'+pvname, entry)
+                dbUpdateHistory(pvname, entry)
                 if(alarmDictInitialised and notify):
                     if(areaKey not in notifyBuffer):
                         notifyBuffer[areaKey] = {}
@@ -693,7 +693,7 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
                          areaKey, pvKey)
     # disabled alarms not logged
     if(enable and logToHistory):
-        dbUpdateHistory(areaKey+'*'+pvname, entry)
+        dbUpdateHistory(pvname, entry)
     if(enable and alarmSet and notify):
         if(areaKey not in notifyBuffer):
             notifyBuffer[areaKey] = {}
@@ -921,7 +921,7 @@ def initialiseAlarmIOC():
                     # Write entry to database for alarms that were active on startup
                     # Only if not a controlled alarm server restart
                     if(not alarmServerRestart):
-                        dbUpdateHistory(areaKey+'*'+pvname, entry)
+                        dbUpdateHistory(pvname, entry)
                 except:
                     # set current alarm status to NO_ALARM
                     alarmDict[pvname]["A"].value = 0
@@ -1140,7 +1140,7 @@ def pvCollectionWatch():
                             [pvname, '-', "Alarm", msg])}
                         # print(timestamp, pvname,
                         #       "alarm", msg)
-                        dbUpdateHistory(areaKey+'*'+pvname, entry)
+                        dbUpdateHistory(pvname, entry)
                     elif (key.endswith(".enable")):
                         # subArea enable
                         areaKey = doc.get("area") + "=" + doc.get(

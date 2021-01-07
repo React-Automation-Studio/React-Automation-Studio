@@ -332,7 +332,7 @@ const AlarmSetup = (props) => {
     useEffect(() => {
         let localAlarmLogDisplayArray = []
 
-        // console.log(alarmLogSelectedKey)
+        // console.log('alarmLogSelectedKey', alarmLogSelectedKey)
         // console.log(alarmLogDict)
 
         const isPV = alarmLogSelectedKey.includes('*')
@@ -340,28 +340,29 @@ const AlarmSetup = (props) => {
 
         // Map alarmLogDict
         Object.keys(alarmLogDict).map(key => {
-            // console.log(key)
+            // console.log('key', key)
             if (alarmLogSelectedKey === 'ALLAREAS') {
-                localAlarmLogDisplayArray = localAlarmLogDisplayArray.concat(alarmLogDict[key])
+                localAlarmLogDisplayArray = localAlarmLogDisplayArray.concat(alarmLogDict[key]["history"])
             }
             else if (isPV) {
-                if (key === alarmLogSelectedKey) {
-                    localAlarmLogDisplayArray = localAlarmLogDisplayArray.concat(alarmLogDict[key])
+                if (key === alarmLogSelectedKey.split('*')[1]) {
+                    localAlarmLogDisplayArray = localAlarmLogDisplayArray.concat(alarmLogDict[key]["history"])
                 }
             }
             else if (isSubArea) {
-                const areaKey = key.split('*')[0]
-                if (areaKey === alarmLogSelectedKey) {
-                    localAlarmLogDisplayArray = localAlarmLogDisplayArray.concat(alarmLogDict[key])
+                const areaArray = alarmLogDict[key]["areas"]
+                if (areaArray?.includes(alarmLogSelectedKey)) {
+                    localAlarmLogDisplayArray = localAlarmLogDisplayArray.concat(alarmLogDict[key]["history"])
                 }
             }
             else {
-                let areaKey = key.split('*')[0]
-                areaKey = areaKey.split('=')[0]
-                if (areaKey === alarmLogSelectedKey) {
-                    localAlarmLogDisplayArray = localAlarmLogDisplayArray.concat(alarmLogDict[key])
+                const areaArray = alarmLogDict[key]["areas"]
+                const concat = areaArray?.reduce((acc, area) => {
+                    return acc || area.split('=')[0] === alarmLogSelectedKey
+                }, false)
+                if (concat) {
+                    localAlarmLogDisplayArray = localAlarmLogDisplayArray.concat(alarmLogDict[key]["history"])
                 }
-
             }
             return null
         })
@@ -487,8 +488,11 @@ const AlarmSetup = (props) => {
     useEffect(() => {
         if (dbHistoryData !== null) {
             const localAlarmLogDict = {}
-            dbHistoryData.map((area, index) => {
-                localAlarmLogDict[area["id"]] = area["history"]
+            dbHistoryData.map(area => {
+                localAlarmLogDict[area["id"]] = {
+                    "areas": area["areas"],
+                    "history": area["history"],
+                }
                 return null
             })
             setAlarmLogDict(localAlarmLogDict)

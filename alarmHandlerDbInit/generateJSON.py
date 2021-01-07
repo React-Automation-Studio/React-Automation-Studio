@@ -39,10 +39,17 @@ for area in data:
                     "lastAlarmTime": "",
                     "lastAlarmAckTime": ""
                 }
-                history[areaName+"*"+pvName] = {
-                    "id": areaName+"*"+pvName,
-                    "history": []
-                }
+                if pvName not in history:
+                    history[pvName] = {
+                        "id": pvName,
+                        "areas": [areaName],
+                        "history": []
+                    }
+                else:
+                    areas=history[pvName]["areas"]
+                    newArea = areaName
+                    areas.append(newArea)
+                    history[pvName]["areas"] = list(set(areas))
         elif("subArea" in areaKey):
             # new subArea template
             pvs[areaName][areaKey] = {
@@ -65,10 +72,17 @@ for area in data:
                     "lastAlarmTime": "",
                     "lastAlarmAckTime": ""
                 }
-                history[areaName+"="+areaValue["name"]+"*"+pvName] = {
-                    "id": areaName+"="+areaValue["name"]+"*"+pvName,
-                    "history": []
-                }
+                if pvName not in history:
+                    history[pvName] = {
+                        "id": pvName,
+                        "areas": [areaName+"="+areaValue["name"]],
+                        "history": []
+                    }
+                else:
+                    areas = history[pvName]["areas"]
+                    newArea = areaName+"="+areaValue["name"]
+                    areas.append(newArea)
+                    history[pvName]["areas"] = list(set(areas))
 
 for value in pvs.values():
     pvsFile.append(value)

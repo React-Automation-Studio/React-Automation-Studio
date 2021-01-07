@@ -272,7 +272,10 @@ def notify(notifyBuffer):
 
 def disconnectAllPVs():
     for pvname in pvNameList:
-        alarmDict[pvname].disconnect()
+        pv = alarmDict[pvname]
+        pv.clear_auto_monitor()
+        pv.clear_callbacks()
+        pv.disconnect()
 
 
 def clearGlobalDicts():

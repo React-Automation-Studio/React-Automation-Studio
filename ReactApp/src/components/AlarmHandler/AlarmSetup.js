@@ -257,6 +257,8 @@ const AlarmSetup = (props) => {
     const [backdropOpen, setbackDropOpen] = useState(false)
     const [ASRestartProgress, setASRestartProgress] = useState(0)
 
+    const [alarmAdminListExpand, setAlarmAdminListExpand] = useState(false)
+
     const [dbPVData, setDbPVData] = useState({})
 
     const alarmPVDictReducer = useCallback((state, action) => {
@@ -623,6 +625,7 @@ const AlarmSetup = (props) => {
 
     const handleListItemContextClose = useCallback((event, index) => {
         // console.log("close context")
+        setAlarmAdminListExpand(false)
         setAreaContextOpen({})
     }, [])
 
@@ -828,6 +831,7 @@ const AlarmSetup = (props) => {
             pvs: [{ pvname: "", connected: false }]
         })
         setAreaContextOpen({})
+        setAlarmAdminListExpand(false)
         setAddPVDialogOpen(true)
     }, [lastPVKey, newPVInfo])
 
@@ -1276,12 +1280,14 @@ const AlarmSetup = (props) => {
                                             contextMouseY={contextMouseY}
                                             fadeList={fadeList}
                                             isAlarmAdmin={isAlarmAdmin}
+                                            alarmAdminListExpand={alarmAdminListExpand}
                                             ackAllAreaAlarms={handleAckAllAreaAlarms}
                                             enableDisableArea={handleEnableDisableArea}
                                             listItemClick={handleListItemClick}
                                             listItemRightClick={handleListItemRightClick}
                                             listItemContextClose={handleListItemContextClose}
                                             addNewPV={handleAddNewPV}
+                                            setAlarmAdminListExpand={setAlarmAdminListExpand}
                                         />
                                         : "No data from database"}
                                 </Grid>

@@ -18,6 +18,7 @@ import Typography from '@material-ui/core/Typography';
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 import NotificationsOffIcon from '@material-ui/icons/NotificationsOff';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
+import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import AddIcon from '@material-ui/icons/Add';
 
 import { fade } from '@material-ui/core/styles/colorManipulator';
@@ -223,7 +224,7 @@ const AlarmList = props => {
                                                         { top: props.contextMouseY, left: props.contextMouseX } : null}
                                                 >
                                                     <MenuItem disabled >{area["area"]}</MenuItem>
-                                                    <hr />
+                                                    {/* <hr /> */}
                                                     {props.enableAllAreas ?
                                                         props.areaEnabled[`${area["area"]}`] ?
                                                             <MenuItem onClick={event => props.enableDisableArea(event, `${area["area"]}`, false)}>
@@ -248,12 +249,29 @@ const AlarmList = props => {
                                                             <Typography variant="inherit">ACK all area alarms</Typography>
                                                         </MenuItem> : null}
                                                     {props.areaEnabled[`${area["area"]}`] && props.enableAllAreas && props.isAlarmAdmin ?
-                                                        <MenuItem onClick={event => props.addNewPV(event, `${area["area"]}`)}>
+                                                        <MenuItem
+                                                            onClick={() => props.setAlarmAdminListExpand(!props.alarmAdminListExpand)}
+                                                        >
                                                             <ListItemIcon >
-                                                                <AddIcon fontSize="small" />
+                                                                <SupervisorAccountIcon fontSize="small" />
                                                             </ListItemIcon>
-                                                            <Typography variant="inherit">Add new pv</Typography>
+                                                            <ListItemText primary="Alarm admin actions" />
+                                                            {props.alarmAdminListExpand ? <ExpandLess style={{ marginLeft: 16 }} /> : <ExpandMore style={{ marginLeft: 16 }} />}
                                                         </MenuItem> : null}
+                                                    <Collapse in={props.alarmAdminListExpand} timeout="auto" unmountOnExit>
+                                                        <List component="div" disablePadding >
+                                                            <ListItem
+                                                                button
+                                                                className={classes.nested}
+                                                                onClick={event => props.addNewPV(event, `${area["area"]}`)}
+                                                            >
+                                                                <ListItemIcon >
+                                                                    <AddIcon fontSize="small" />
+                                                                </ListItemIcon>
+                                                                <ListItemText primary="Add new pv" />
+                                                            </ListItem>
+                                                        </List>
+                                                    </Collapse>
                                                 </Menu>
                                                 : null
                                         }
@@ -298,7 +316,7 @@ const AlarmList = props => {
                                                                     >
 
                                                                         {props.areaEnabled[`${area["area"]}`] ? <MenuItem disabled>{`${area["area"]} > ${subArea}`}</MenuItem> : null}
-                                                                        {props.areaEnabled[`${area["area"]}`] ? <hr /> : null}
+                                                                        {/* {props.areaEnabled[`${area["area"]}`] ? <hr /> : null} */}
 
                                                                         {props.enableAllAreas ?
                                                                             props.areaEnabled[`${area["area"]}`] ?
@@ -316,12 +334,29 @@ const AlarmList = props => {
                                                                                             </ListItemIcon>
                                                                                             <Typography variant="inherit">ACK all area alarms</Typography>
                                                                                         </MenuItem>
-                                                                                        {props.isAlarmAdmin && <MenuItem onClick={event => props.addNewPV(event, `${area["area"]}=${subArea}`)}>
+                                                                                        {props.isAlarmAdmin && <MenuItem
+                                                                                            onClick={() => props.setAlarmAdminListExpand(!props.alarmAdminListExpand)}
+                                                                                        >
                                                                                             <ListItemIcon >
-                                                                                                <AddIcon fontSize="small" />
+                                                                                                <SupervisorAccountIcon fontSize="small" />
                                                                                             </ListItemIcon>
-                                                                                            <Typography variant="inherit">Add new pv</Typography>
+                                                                                            <ListItemText primary="Alarm admin actions" />
+                                                                                            {props.alarmAdminListExpand ? <ExpandLess style={{ marginLeft: 16 }} /> : <ExpandMore style={{ marginLeft: 16 }} />}
                                                                                         </MenuItem>}
+                                                                                        <Collapse in={props.alarmAdminListExpand} timeout="auto" unmountOnExit>
+                                                                                            <List component="div" disablePadding >
+                                                                                                <ListItem
+                                                                                                    button
+                                                                                                    className={classes.nested}
+                                                                                                    onClick={event => props.addNewPV(event, `${area["area"]}=${subArea}`)}
+                                                                                                >
+                                                                                                    <ListItemIcon >
+                                                                                                        <AddIcon fontSize="small" />
+                                                                                                    </ListItemIcon>
+                                                                                                    <ListItemText primary="Add new pv" />
+                                                                                                </ListItem>
+                                                                                            </List>
+                                                                                        </Collapse>
                                                                                     </div>
                                                                                     :
                                                                                     <MenuItem onClick={event => props.enableDisableArea(event, `${area["area"]}=${subArea}`, true)}>

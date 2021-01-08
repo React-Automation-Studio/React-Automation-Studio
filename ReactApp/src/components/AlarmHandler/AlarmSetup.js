@@ -915,15 +915,16 @@ const AlarmSetup = (props) => {
             const { pvname } = pv
             let proceedToAddPV = false
             if (pvname in alarmLogDict) {
-                const currAreas = alarmLogDict[pvname]["areas"]
-                if (currAreas.includes(areaIndex)) {
-                    console.log(`[WARNING] ${pvname} already in area ${areaIndex}`)
-                    console.log("[WARNING] PV add aborted")
-                }
-                else {
-                    proceedToAddPV = true
-                    restartAlarmServer = true
-                }
+                // const currAreas = alarmLogDict[pvname]["areas"]
+                // if (currAreas.includes(areaIndex)) {
+                //     console.log(`[WARNING] ${pvname} already in area ${areaIndex}`)
+                //     console.log("[WARNING] PV add aborted")
+                // }
+                // else {
+                //     proceedToAddPV = true
+                //     restartAlarmServer = true
+                // }
+                console.log(`[WARNING] ${pvname} already in alarm server. Duplicate pv in more than one area not permitted. PV add aborted.`)
             }
             else {
                 proceedToAddPV = true

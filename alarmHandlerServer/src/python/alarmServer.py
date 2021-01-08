@@ -777,7 +777,8 @@ def startAlarmIOC():
         lines.append("{ alarm_name = \"" + pvname + "\" }\n")
     lines.append("}\n")
     # remove duplicates in case multiple areas had same pv
-    lines = list(dict.fromkeys(lines))
+    # not required anymore - fixed in dbGetListOfPVNames
+    # lines = list(dict.fromkeys(lines))
     # write to Alarms.substitutions
     alarmsSubFile = open("/epics/alarmIOC/db/Alarms.substitutions", "w")
     alarmsSubFile.writelines(lines)

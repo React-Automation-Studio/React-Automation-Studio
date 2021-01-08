@@ -102,7 +102,7 @@ def dbGetListOfPVNames():
                         for pvKey in area[key][subAreaKey].keys():
                             pvNameList.append(
                                 area[key][subAreaKey][pvKey]["name"])
-    return areaList, pvNameList
+    return areaList, list(set(pvNameList))
 
 
 def dbGetPVField(field, areaKey, pvKey, subAreaKey=None):

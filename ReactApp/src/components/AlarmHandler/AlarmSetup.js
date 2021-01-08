@@ -11,6 +11,7 @@ import InputBase from '@material-ui/core/InputBase';
 import PV from '../SystemComponents/PV';
 import useMongoDbWatch from '../SystemComponents/database/MongoDB/useMongoDbWatch';
 import useMongoDbUpdateOne from '../SystemComponents/database/MongoDB/useMongoDbUpdateOne';
+import useMongoDbInsertOne from '../SystemComponents/database/MongoDB/useMongoDbInsertOne';
 import Typography from '@material-ui/core/Typography';
 
 import Menu from '@material-ui/core/Menu';
@@ -322,6 +323,7 @@ const AlarmSetup = (props) => {
     const dbGlobData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:glob:Parameters:{}` }).data
 
     const dbUpdateOne = useMongoDbUpdateOne({})
+    const dbInsertOne = useMongoDbInsertOne({})
 
     const [alarmTableHeight, setAlarmTableHeight] = useState('40vh')
     const [alarmLogHeight, setAlarmLogHeight] = useState('32vh')
@@ -490,11 +492,13 @@ const AlarmSetup = (props) => {
             const localAlarmLogDict = {}
             dbHistoryData.map(area => {
                 localAlarmLogDict[area["id"]] = {
+                    "id": area["_id"]["$oid"],
                     "areas": area["areas"],
                     "history": area["history"],
                 }
                 return null
             })
+            console.log(localAlarmLogDict)
             setAlarmLogDict(localAlarmLogDict)
         }
         // disable useEffect dependencies for "dbHistoryData"
@@ -864,6 +868,32 @@ const AlarmSetup = (props) => {
     }, [newPVInfo])
 
     const handleExecuteAddNewPVs = useCallback(() => {
+        const updateHistoryDb = (pvname, areaIndex) => {
+            if (pvname in alarmLogDict) {
+                const currAreas = alarmLogDict[pvname]["areas"]
+                currAreas.push(areaIndex)
+
+                const id = alarmLogDict[pvname]["id"]
+                const newvalues = { '$set': { "areas": currAreas } }
+
+                dbUpdateOne({
+                    dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history`,
+                    id: id,
+                    update: newvalues
+                })
+            }
+            else {
+                const newEntry = {
+                    "id": pvname,
+                    "areas": [areaIndex],
+                    "history": []
+                }
+                dbInsertOne({
+                    dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history`,
+                    newEntry: newEntry
+                })
+            }
+        }
         const { areaIndex, pvs, alarmKey } = newPVInfo
         const id = areaMongoId[areaIndex]
         let subAreaId = null
@@ -880,40 +910,65 @@ const AlarmSetup = (props) => {
         }
         // console.log('oldPvs', oldPvs)
         newPvs = { ...oldPvs }
+        let restartAlarmServer = false
         pvs.map(pv => {
-            newPvs = {
-                ...newPvs,
-                [`pv${key}`]: {
-                    name: pv.pvname,
-                    enable: true,
-                    latch: true,
-                    notify: true,
-                    lastAlarmVal: "",
-                    lastAlarmTime: "",
-                    lastAlarmAckTime: ""
+            const { pvname } = pv
+            let proceedToAddPV = false
+            if (pvname in alarmLogDict) {
+                const currAreas = alarmLogDict[pvname]["areas"]
+                if (currAreas.includes(areaIndex)) {
+                    console.log(`[WARNING] ${pvname} already in area ${areaIndex}`)
+                    console.log("[WARNING] PV add aborted")
+                }
+                else {
+                    proceedToAddPV = true
+                    restartAlarmServer = true
                 }
             }
-            key = key + 1
+            else {
+                proceedToAddPV = true
+                restartAlarmServer = true
+            }
+            if (proceedToAddPV) {
+                updateHistoryDb(pvname, areaIndex)
+                newPvs = {
+                    ...newPvs,
+                    [`pv${key}`]: {
+                        name: pvname,
+                        enable: true,
+                        latch: true,
+                        notify: true,
+                        lastAlarmVal: "",
+                        lastAlarmTime: "",
+                        lastAlarmAckTime: ""
+                    }
+                }
+                key = key + 1
+            }
             return null
         })
-        // console.log('newPvs', newPvs)
-        let newvalues = {}
-        if (subAreaId) {
-            newvalues = { '$set': { [`${subAreaId}.pvs`]: newPvs } }
-        }
-        else {
-            newvalues = { '$set': { [`pvs`]: newPvs } }
+        if (restartAlarmServer) {
+            // console.log('newPvs', newPvs)
+            let newvalues = {}
+            if (subAreaId) {
+                newvalues = { '$set': { [`${subAreaId}.pvs`]: newPvs } }
+            }
+            else {
+                newvalues = { '$set': { [`pvs`]: newPvs } }
+            }
+
+            // console.log(newvalues)
+            setbackDropOpen(true)
+            dbUpdateOne({
+                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
+                id: id,
+                update: newvalues
+            })
         }
 
-        // console.log(newvalues)
         setAddPVDialogOpen(false)
-        setbackDropOpen(true)
-        dbUpdateOne({
-            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
-            id: id,
-            update: newvalues
-        })
-    }, [dbPVData, newPVInfo, areaMongoId, areaSubAreaMongoId, dbUpdateOne, props.dbName])
+
+    }, [dbPVData, newPVInfo, areaMongoId, areaSubAreaMongoId, dbUpdateOne, props.dbName, alarmLogDict, dbInsertOne])
 
     const autoLoadAlarmTable = useCallback(() => {
         const timer = setTimeout(() => {

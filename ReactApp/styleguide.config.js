@@ -250,6 +250,10 @@ module.exports = {
                     {
                       name: 'Logging of alarm activities',
                       content: 'src/docs/alarmHandler/serverLogging.md',
+                    },
+                    {
+                      name: 'Notification of alarm events',
+                      content: 'src/docs/alarmHandler/alarmNotification.md',
                     }
                   ]
                 },

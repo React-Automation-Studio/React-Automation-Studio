@@ -35,9 +35,20 @@ A disabled area/subArea is reflected with a grey colour as shown below. This fol
 <br/><br/>
 
 <br/>
+**Admin actions - Adding a new pv**
+
+To add a new pv right click the relevant area/subArea and under the `Alarm admin actions` menu click on `Add new pv`. This opens up the add pv dialog as shown below. The `ADD` button of the dialog is disabled until a valid live pv name is typed in. Multiple pvs can be added simultaneously by clicking the `+` icon next to the pv name.
+
+<center><img src="img/alarmHandler/alarmSetup_addpv_dialog.png" alt="alarmSetup_addpv_dialog" width="80%"/></center>  
+<center>*Add pv dialog*</center>
+<br/><br/>
+
+**NOTE:** Only alarmAdmin role users can execute any alarm admin actions. 
+
+<br/>
 **Global actions**
 
-The **ALARM AREAS** section also has a global button (*world icon* on the top left) that a user can click (left click) to select all the areas (complete alarm handler). Right clicking this icon enables a user to acknowledge or enable/disable all the areas. This is shown below.
+The **ALARM AREAS** section also has a global button (*`world icon`* on the top left) that a user can click (left click) to select all the areas (complete alarm handler). Right clicking this icon enables a user to acknowledge or enable/disable all the areas. This is shown below.
 
 <center><img src="img/alarmHandler/alarmSetup_AlarmList_Global.png" alt="alarmSetup_AlarmList_Global" width="35%"/></center>  
 <center>*Global alarm handler actions*</center>

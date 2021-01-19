@@ -68,7 +68,7 @@ else:
     print("Authenitcation and Authorisation is ENABLED")
 print("")
 
-socketio = SocketIO(app, async_mode=async_mode)
+socketio = SocketIO(app,async_mode=async_mode,cors_allowed_origins='*')
 thread = None
 thread_lock = threading.Lock()
 

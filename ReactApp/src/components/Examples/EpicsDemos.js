@@ -185,17 +185,7 @@ class EpicsDemos extends React.Component {
                 <TextOutput pv='pva://$(device):test4' macros={{ '$(device)': 'testIOC' }}/>
               </ArrayContainer>
             </Grid>
-            <Grid item xs={12} sm={6} >
-              <ArrayContainer
-                label="First 3 samples of Sine Wave Circular Buffer using ArrayContainer"
-                registersLabel={['1','2','3']}
-                spacing={1}
-                visibleItemsCount={3}
-                maxItemsCount={10}
-              >
-                <TextOutput pv='pva://$(device):test4' macros={{ '$(device)': 'testIOC' }}/>
-              </ArrayContainer>
-            </Grid>
+            
 
             <Grid item xs={12} >
               <Slider pv='pva://$(device):amplitude' macros={{ '$(device)': 'testIOC' }} usePvMinMax={true} min={1000} max={500} usePvLabel={true} />

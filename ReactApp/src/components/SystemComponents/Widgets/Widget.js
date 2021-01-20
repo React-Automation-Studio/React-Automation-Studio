@@ -3,12 +3,15 @@ import PV from '../PV'
 import ContextMenu from "../ContextMenu";
 import PropTypes from "prop-types";
 import { LanDisconnect } from "mdi-material-ui/";
-import { create, all } from 'mathjs';
 import { useTheme } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import {replaceMacros,replaceArrayMacros} from '../Utils/macroReplacement';
-const config = { }
-const math = create(all, config)
+import { 
+  checkIndex, 
+  checkPrecision, 
+  formatValue, 
+  isInsideLimits
+} from "../Utils/widgetFunctions";
 
 /**
  * The Widget component creates standard properties, state variables and callbacks to manage the behaviour of a component communicating with one or multiple PVs. It also provides the default RAS contextMenu to the child component.
@@ -24,11 +27,12 @@ const math = create(all, config)
  *
  **/
   const Widget = (props) => {
+  const { index } = props;
   const theme = useTheme();
   const [value, setValue] = useState(0);
   const [initialized, setInitalized] = useState(false);
   const [immediateValue, setImmediateValue] = useState(null);
-  const [commitChange, SetCommitChange] = useState(false);
+  const [commitChange, setCommitChange] = useState(false);
   const [newValueTrigger, setNewValueTrigger] = useState(0);
   const [outputValue, setOutputValue] = useState(null);
   const [focus, setFocus] = useState(false);
@@ -138,22 +142,13 @@ const math = create(all, config)
 
   useEffect(() => {
     if (!focus) {
-      let newValue;
-
-      newValue=checkPrecision(pv.value, prec);
-      if (typeof props.numberFormat !== 'undefined'){
-        newValue=math.format(parseFloat(newValue),props.numberFormat)
-        setValue(newValue)
+      const tempValue = checkPrecision(pv.value, prec);
+      setValue(formatValue(tempValue, props.numberFormat));
+      if (props.debug) {
+        console.log(tempValue);
       }
-      else{
-        setValue(newValue)
-      }
-      if (props.debug){
-        console.log(newValue)
     }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [focus, pv.value, prec])
+  }, [focus, pv.value, prec, props.numberFormat, props.debug]);
 
   useEffect(() => {
     let newSeverity=pv.severity;
@@ -177,46 +172,29 @@ const math = create(all, config)
     setAlarmSeverity(newSeverity)
   }, [pv.severity,props.useStringSeverityMatch,props.stringSeverity,value])
 
-
   useEffect(() => {
     if (immediateValue !== null) {
-      let tempvalue = checkPrecision(isInsideLimits(immediateValue, min, max), prec);
-      if (typeof props.numberFormat !== 'undefined'){
-        tempvalue=math.format(parseFloat(tempvalue),props.numberFormat)
-        setValue(tempvalue)
-      }
-      else{
-        setValue(tempvalue)
-      }
-
-      setOutputValue(tempvalue);
-
+      const tempValue = checkPrecision(
+        isInsideLimits(immediateValue, min, max),
+        prec
+      );
+      setValue(formatValue(tempValue, props.numberFormat));
+      setOutputValue(tempValue);
       setNewValueTrigger(newValueTrigger + 1);
       setImmediateValue(null);
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [immediateValue, min, max, prec])
-
-
+  }, [immediateValue, min, max, prec, props.numberFormat, newValueTrigger]);
 
   useEffect(() => {
     if (commitChange) {
-      let tempvalue = checkPrecision(isInsideLimits(value, min, max), prec);
-      if (typeof props.numberFormat !== 'undefined'){
-        tempvalue=math.format(parseFloat(tempvalue),props.numberFormat)
-        setValue(tempvalue)
-      }
-      else{
-        setValue(tempvalue)
-      }
-      setOutputValue(tempvalue);
+      const tempValue = checkPrecision(isInsideLimits(value, min, max), prec);
+      setValue(formatValue(tempValue, props.numberFormat));
+      setOutputValue(tempValue);
       setNewValueTrigger(newValueTrigger + 1);
-      SetCommitChange(false)
+      setCommitChange(false);
     }
-
-// eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [commitChange, min, max, prec])
+  }, [commitChange, min, max, prec, props.numberFormat, newValueTrigger, value]);
+    
   useEffect(() => {
     if (props.custom_selection_strings) {
       setEnumStrings(replaceArrayMacros(props.custom_selection_strings,props.macros))
@@ -250,43 +228,6 @@ const math = create(all, config)
       console.warn("prop usePrecision is deprecated, use the usePvPrecision and prec props instead")
     }
   },[props])
-  const checkPrecision = (value, prec) => {
-    if (props.usePvPrecision===true || (typeof props.prec!=='undefined')) {
-      let precision = parseInt(prec);
-      let tempvalue = parseFloat(value);
-      if (!isNaN(tempvalue)) {
-        return tempvalue.toFixed(precision);
-
-      }
-      else {
-        return value;
-      }
-    }
-    else {
-      return (value)
-    }
-  }
-  const isInsideLimits = (value, min, max) => {
-
-    if ((typeof props.min!=='undefined') || (typeof props.max!=='undefined') || props.usePvMinMax) {
-
-      let tempValue = parseFloat(value);
-      if (!isNaN(tempValue)) {
-        tempValue = tempValue > max ? max : tempValue;
-        tempValue = tempValue < min ? min : tempValue;
-        //value = tempValue;
-      }
-
-      return tempValue;
-
-    } else {
-      return value
-    }
-
-
-  }
-
-
 
   const handleToggleContextMenu = (event) => {
 
@@ -423,12 +364,23 @@ const math = create(all, config)
   }}
   probeType={props.readOnly ? "readOnly" : undefined}
 />)
+
+  const handleValue = (newValue, setFunction) => {
+    if (checkIndex(index, value)) {
+      let newArrayValue = [...value];
+      newArrayValue[index] = newValue;
+      setFunction(newArrayValue);
+    } else {
+      setFunction(newValue);
+    }
+  };
+
   const child = props.component && wrapComponent(props.component,
     {
       ...props,
       initialized: initialized,
       pvName: pv.pvName,
-      value: value,
+      value: checkIndex(index, value) ? value[index] : value,
       min: min,
       max: max,
       prec:prec,
@@ -440,9 +392,10 @@ const math = create(all, config)
       alarmSeverity: alarmSeverity,
       enumStrs: enumStrings,
       disconnectedIcon: disconnectedIcon(),
-      handleChange: setValue,
-      handleImmediateChange: setImmediateValue,
-      handleCommitChange: () => SetCommitChange(true),
+      handleChange: (newValue) => handleValue(newValue, setValue),
+      handleImmediateChange: (newValue) =>
+        handleValue(newValue, setImmediateValue),
+      handleCommitChange: () => setCommitChange(true),
       handleFocus: () => setFocus(true),
       handleBlur: () => setFocus(false),
       pvData: pv,

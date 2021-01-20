@@ -32,7 +32,7 @@ const SelectionInputComponent = (props) => {
     stringValues= props.enumStrs.map((item, idx) => (
       <MenuItem
         key={item.toString()}
-       
+
         value={props.useStringValue ? item : idx}
       >
         {item}

@@ -34,10 +34,10 @@ const RadioButtonGroupComponent=(props)=>{
     props.handleImmediateChange(value);
   }
 
- 
+
     let radioButtons = props.enumStrs.map((item, index) => (
       <FormControlLabel
-     
+
         key={item}
         value={item}
         disabled={props.disabled}

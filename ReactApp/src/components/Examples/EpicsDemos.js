@@ -11,7 +11,7 @@ import EpicsMbboDebug from '../GroupedComponents/EpicsMbboDebug';
 import TextOutput from '../BaseComponents/TextOutput';
 import Slider from '../BaseComponents/Slider';
 import GraphY from '../BaseComponents/GraphY';
-
+import ArrayContainer from '../CompoundComponents/ArrayContainer';
 import Grid from '@material-ui/core/Grid';
 
 import Card from '@material-ui/core/Card';
@@ -21,7 +21,7 @@ import TraditionalLayout from '../UI/Layout/ComposedLayouts/TraditionalLayout.js
 
 function TabContainer(props) {
   return (
-    <Typography component="div" style={{ padding: 8 * 1 ,paddingTop:36}}>
+    <Typography component="div" style={{ padding: 8 * 1, paddingTop: 36 }}>
       {props.children}
     </Typography>
   );
@@ -61,59 +61,59 @@ class EpicsDemos extends React.Component {
 
 
       <div >
-         <TraditionalLayout
-      title="EPICS PV Demos"
-      denseAppBar
-      alignTitle="center"
-      tabs={['Main','Analog PVs','Binary PVs',"MBBO/I PVs","Array PVs","String PVs"]}
-      handleTabChange={this.handleChange}
-      tabValue={value}
-      
+        <TraditionalLayout
+          title="EPICS PV Demos"
+          denseAppBar
+          alignTitle="center"
+          tabs={['Main', 'Analog PVs', 'Binary PVs', "MBBO/I PVs", "Array PVs", "String PVs"]}
+          handleTabChange={this.handleChange}
+          tabValue={value}
+
         />
-        
-          {value === 0 &&
 
-              <MobileDemo2 nosidebar/>
+        {value === 0 &&
 
-          }
+          <MobileDemo2 nosidebar />
 
-          {value === 1 && <TabContainer key='TabContainer1'>
-            <Grid container spacing={1}>
-
-              <Grid item xs={12} sm={6} lg={3}>
-                <Card className={classes.card}>
-                  <EpicsAnalogOutDebug macros={{'$(device)':'testIOC:amplitude'}}/>
-                </Card>
-              </Grid>
-              <Grid item xs={12} sm={6} lg={3} >
-                <Card className={classes.card}>
-                  <EpicsAnalogOutDebug macros={{'$(device)':'testIOC:test1'}}/>
-                </Card>
-              </Grid>
-              <Grid item xs={12} sm={6} lg={3} >
-                <Card className={classes.card}>
-                  <EpicsAnalogOutDebug macros={{'$(device)':'testIOC:test2'}}/>
-                </Card>
-              </Grid>
-              <Grid item xs={12} sm={6} lg={3} >
-                <Card className={classes.card}>
-                  <EpicsAnalogOutDebug macros={{'$(device)':'testIOC:time'}}/>
-                </Card>
-              </Grid>
-            </Grid>
-          </TabContainer>
         }
 
-        {value === 2 &&  <TabContainer key='TabContainer2'>
-          <Grid container spacing={3}>
+        {value === 1 && <TabContainer key='TabContainer1'>
+          <Grid container spacing={1}>
+
             <Grid item xs={12} sm={6} lg={3}>
               <Card className={classes.card}>
-                <EpicsBinaryOutDebug macros={{'$(device)':'testIOC:BO1'}}/>
+                <EpicsAnalogOutDebug macros={{ '$(device)': 'testIOC:amplitude' }} />
               </Card>
             </Grid>
             <Grid item xs={12} sm={6} lg={3} >
               <Card className={classes.card}>
-                <EpicsBinaryOutDebug macros={{'$(device)':'testIOC:BO2'}}/>
+                <EpicsAnalogOutDebug macros={{ '$(device)': 'testIOC:test1' }} />
+              </Card>
+            </Grid>
+            <Grid item xs={12} sm={6} lg={3} >
+              <Card className={classes.card}>
+                <EpicsAnalogOutDebug macros={{ '$(device)': 'testIOC:test2' }} />
+              </Card>
+            </Grid>
+            <Grid item xs={12} sm={6} lg={3} >
+              <Card className={classes.card}>
+                <EpicsAnalogOutDebug macros={{ '$(device)': 'testIOC:time' }} />
+              </Card>
+            </Grid>
+          </Grid>
+        </TabContainer>
+        }
+
+        {value === 2 && <TabContainer key='TabContainer2'>
+          <Grid container spacing={3}>
+            <Grid item xs={12} sm={6} lg={3}>
+              <Card className={classes.card}>
+                <EpicsBinaryOutDebug macros={{ '$(device)': 'testIOC:BO1' }} />
+              </Card>
+            </Grid>
+            <Grid item xs={12} sm={6} lg={3} >
+              <Card className={classes.card}>
+                <EpicsBinaryOutDebug macros={{ '$(device)': 'testIOC:BO2' }} />
               </Card>
             </Grid>
             <Grid item xs={12} sm={6} lg={3}>
@@ -126,99 +126,111 @@ class EpicsDemos extends React.Component {
           </Grid>
 
         </TabContainer>
-      }
-      {value === 3 && 	 <TabContainer key='TabContainer3'>
-        <Grid container spacing={3}>
+        }
+        {value === 3 && <TabContainer key='TabContainer3'>
+          <Grid container spacing={3}>
 
-          <Grid item xs={12} sm={6} lg={3}>
-            <Card className={classes.card}>
-              <EpicsMbboDebug macros={{'$(device)':'testIOC:mbboTest1'}}/>
-            </Card>
+            <Grid item xs={12} sm={6} lg={3}>
+              <Card className={classes.card}>
+                <EpicsMbboDebug macros={{ '$(device)': 'testIOC:mbboTest1' }} />
+              </Card>
+            </Grid>
+            <Grid item xs={12} sm={6} lg={3}>
+              <Card className={classes.card}>
+                <EpicsMbboDebug macros={{ '$(device)': 'testIOC:mbboTest1' }} custom_selection_strings={['text 1', 'text 4']} />
+              </Card>
+            </Grid>
+
+
           </Grid>
-          <Grid item xs={12} sm={6} lg={3}>
-            <Card className={classes.card}>
-              <EpicsMbboDebug macros={{'$(device)':'testIOC:mbboTest1'}} custom_selection_strings={['text 1','text 4']}/>
-            </Card>
+
+        </TabContainer>
+        }
+        {value === 4 && <TabContainer key='TabContainer4'>
+          <Grid container spacing={3}>
+            <Grid item xs={12} sm={12} >
+              <div style={{ height: '25vh' }}>
+                <GraphY pvs={['pva://testIOC:test4', 'pva://testIOC:test5']} legend={['Sine Wave ', 'Amplitude']} />
+              </div>
+
+            </Grid>
+            <Grid item xs={12} sm={6} >
+              <div style={{ height: '25vh' }}>
+                <GraphY pvs={['pva://testIOC:test4']} legend={['Sine Wave']} lineColor={[this.props.theme.palette.reactVis.lineColors[1]]} />
+              </div>
+
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <div style={{ height: '25vh' }}>
+                <GraphY pvs={['pva://testIOC:test5']} legend={['Amplitude of Sine Wave Circular Buffer']} lineColor={[this.props.theme.palette.reactVis.lineColors[1]]} />
+              </div>
+
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextOutput pv='pva://$(device):test4' macros={{ '$(device)': 'testIOC' }} label={'Sine Wave Circular Buffer'} />
+
+            </Grid>
+            <Grid item xs={12} sm={6} >
+
+              <TextOutput pv='pva://$(device):test5' macros={{ '$(device)': 'testIOC' }} label={'Amplitude of Sine Wave Circular Buffer'} />
+            </Grid>
+            <Grid item xs={12} sm={6} >
+              <ArrayContainer
+                label="First 3 samples of Sine Wave Circular Buffer us ArrayContainer"
+                registersLabel={['1','2','3']}
+                spacing={1}
+                visibleItemsCount={3}
+                maxItemsCount={10}
+              >
+                <TextOutput pv='pva://$(device):test4' macros={{ '$(device)': 'testIOC' }}/>
+              </ArrayContainer>
+            </Grid>
+            
+
+            <Grid item xs={12} >
+              <Slider pv='pva://$(device):amplitude' macros={{ '$(device)': 'testIOC' }} usePvMinMax={true} min={1000} max={500} usePvLabel={true} />
+            </Grid>
+            <Grid item xs={6} >
+
+            </Grid>
           </Grid>
 
+        </TabContainer>
+        }
+        {value === 5 && <TabContainer key='TabContainer5'>
 
-        </Grid>
+          <Grid container spacing={3}>
 
-      </TabContainer>
-    }
-    {value === 4 &&     <TabContainer key='TabContainer4'>
-      <Grid container spacing={3}>
-        <Grid item xs={12} sm={12} >
-          <div style={{height:'25vh'}}>
-            <GraphY  pvs={['pva://testIOC:test4','pva://testIOC:test5'] } legend={['Sine Wave ','Amplitude']} />
-          </div>
+            <Grid item xs={12} sm={6} lg={3}>
+              <Card className={classes.card}>
 
-        </Grid>
-        <Grid item xs={12} sm={6} >
-          <div style={{height:'25vh'}}>
-            <GraphY  pvs={['pva://testIOC:test4'] } legend={['Sine Wave']} lineColor={[this.props.theme.palette.reactVis.lineColors[1]]}/>
-          </div>
+                <EpicsStringOutDebug macros={{ '$(device)': 'testIOC:stringtest1' }} />
+              </Card>
+            </Grid>
+            <Grid item xs={12} sm={6} lg={3}>
+              <Card className={classes.card}>
 
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <div style={{height:'25vh'}}>
-            <GraphY  pvs={['pva://testIOC:test5'] } legend={['Amplitude of Sine Wave Circular Buffer']} lineColor={[this.props.theme.palette.reactVis.lineColors[1]]} />
-          </div>
+                <EpicsStringOutDebug macros={{ '$(device)': 'testIOC:stringtest2' }} />
+              </Card>
+            </Grid>
+          </Grid>
 
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextOutput  pv='pva://$(device):test4' macros={{'$(device)':'testIOC'}} label={'Sine Wave Circular Buffer'}   />
+        </TabContainer>
+        }
 
-        </Grid>
-        <Grid item xs={12} sm={6} >
 
-          <TextOutput  pv='pva://$(device):test5' macros={{'$(device)':'testIOC'}}label={'Amplitude of Sine Wave Circular Buffer'}  />
-        </Grid>
 
-        <Grid item xs={12} >
-          <Slider  pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}} usePvMinMax={true} min={1000} max={500} usePvLabel={true}  />
-        </Grid>
-        <Grid item xs={6} >
 
-        </Grid>
-      </Grid>
 
-    </TabContainer>
+
+
+      </div>
+    );
   }
-  {value === 5 && <TabContainer key='TabContainer5'>
-
-    <Grid container spacing={3}>
-
-        <Grid item xs={12} sm={6} lg={3}>
-          <Card className={classes.card}>
-
-        <EpicsStringOutDebug macros={{'$(device)':'testIOC:stringtest1'}}/>
-      </Card>
-      </Grid>
-      <Grid item xs={12} sm={6} lg={3}>
-        <Card className={classes.card}>
-
-        <EpicsStringOutDebug macros={{'$(device)':'testIOC:stringtest2'}}/>
-      </Card>
-      </Grid>
-    </Grid>
-
-  </TabContainer>
-}
-
-
-
-
-
-
-
-</div>
-);
-}
 }
 
 EpicsDemos.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles,{withTheme:true})(EpicsDemos);
+export default withStyles(styles, { withTheme: true })(EpicsDemos);

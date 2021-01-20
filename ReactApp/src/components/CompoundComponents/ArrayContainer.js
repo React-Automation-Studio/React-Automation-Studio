@@ -145,7 +145,7 @@ function ArrayContainer(props) {
       additionalProps["index"] = index;
     }
     if (registersLabel !== undefined && Array.isArray(registersLabel)) {
-      additionalProps["label"] = registersLabel[index];
+      additionalProps["label"] = registersLabel[index].toString();
     }
     return (
       <div key={index.toString()} className={classes.item}>

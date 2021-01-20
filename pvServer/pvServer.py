@@ -237,9 +237,9 @@ def dbWatchThread(watchEventName):
                             eventName=watchEventName
                             dbURL=clientDbWatchList[watchEventName]['dbURL']
                             d={'dbURL': dbURL,'write_access':True,'data': data}
-                            socketio.emit(eventName,d,str(dbURL)+'rw',namespace='/pvServer')
+                            socketio.emit(eventName,d,room=str(dbURL)+'rw',namespace='/pvServer')
                             d={'dbURL': dbURL,'write_access':False,'data': data}
-                            socketio.emit(eventName,d,str(dbURL)+'ro',namespace='/pvServer')
+                            socketio.emit(eventName,d,room=str(dbURL)+'ro',namespace='/pvServer')
 
                         except:
                             log.error("Unexpected error: {}",sys.exc_info()[0])
@@ -653,7 +653,7 @@ def databaseRead(message):
 
                             eventName='databaseData:'+dbURL;
                 #            print("eventName",eventName)
-                            socketio.emit(eventName,d,request.sid,namespace='/pvServer')
+                            socketio.emit(eventName,d,room=request.sid,namespace='/pvServer')
                             return "OK"
                         except:
                             log.error("Could not connect to MongoDB: {}",dbURL)
@@ -755,9 +755,9 @@ def databaseBroadcastRead(message):
                             eventName='databaseData:'+dbURL;
     #                        print("eventName",eventName)
                             d={'dbURL': dbURL,'write_access':write_access,'data': data}
-                            socketio.emit(eventName,d,str(dbURL)+'rw',namespace='/pvServer')
+                            socketio.emit(eventName,d,room=str(dbURL)+'rw',namespace='/pvServer')
                             d={'dbURL': dbURL,'write_access':False,'data': data}
-                            socketio.emit(eventName,d,str(dbURL)+'ro',namespace='/pvServer')
+                            socketio.emit(eventName,d,room=str(dbURL)+'ro',namespace='/pvServer')
                             return 'OK'
                         except:
                             log.error("Could not connect to MongoDB: {}",dbURL)
@@ -910,7 +910,7 @@ def databaseBroadcastRead(message):
     #                        print("eventName",eventName)
 
                             d={'dbURL': dbURL,'write_access':write_access,'data': data}
-                            socketio.emit(eventName,d,request.sid,namespace='/pvServer')
+                            socketio.emit(eventName,d,room=str(request.sid),namespace='/pvServer')
 
 
 
@@ -1295,9 +1295,9 @@ def archiverRead(message):
                             eventName='archiverReadData:'+archiverURL;
 
                             d={'archiverURL': archiverURL,'write_access':write_access,'data': data}
-                            socketio.emit(eventName,d,str(archiverURL)+'rw',namespace='/pvServer')
+                            socketio.emit(eventName,d,room=str(archiverURL)+'rw',namespace='/pvServer')
                             d={'archiverURL': archiverURL,'write_access':False,'data': data}
-                            socketio.emit(eventName,d,str(archiverURL)+'ro',namespace='/pvServer')
+                            socketio.emit(eventName,d,room=str(archiverURL)+'ro',namespace='/pvServer')
                             return {'initialized':True}
                         except:
 

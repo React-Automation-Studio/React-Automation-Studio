@@ -67,7 +67,14 @@ const TextUpdateComponent=(props)=> {
     }
 
     content = (
-      <Typography variant={props.variant} className={textFieldClassName} >{label + props.value + " " + units}</Typography>
+      <Typography
+        variant={props.variant}
+        align={props.align}
+        className={textFieldClassName}
+        {...props.muiTypographyProps}
+      >
+        {label + props.value + " " + units}
+      </Typography>
     );
   } else {
     content = props.formControlLabel;
@@ -183,28 +190,33 @@ TextUpdate.propTypes = {
 
  
 
- 
- /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
- pv: PropTypes.string,
- /** Array of the process variables, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
- pvs: PropTypes.arrayOf(PropTypes.string),
- /**
-  * Object with a string and the corresponding severity value.
-  * When PV value is equal to the string, set the corresponding severity
-  * in the widget's severity.
-  * Example: { stringMatch: '1', severity: 2 }.
-  */
- stringSeverity: PropTypes.object,
- /**
-  * Directive to override alarm severity with the rules defined in the stringSeverity
-  */
-
-
+  /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+  pv: PropTypes.string,
+  /** Array of the process variables, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+  pvs: PropTypes.arrayOf(PropTypes.string),
+  /**
+   * Object with a string and the corresponding severity value.
+   * When PV value is equal to the string, set the corresponding severity
+   * in the widget's severity.
+   * Example: { stringMatch: '1', severity: 2 }.
+   */
+  stringSeverity: PropTypes.object,
+  /**
+   * Directive to override alarm severity with the rules defined in the stringSeverity
+   */
   useStringSeverityMatch: PropTypes.bool,
- /**
-  * Material UI Typography variant.
-  */
- variant: PropTypes.string,
+  /**
+   * Material UI Typography variant.
+   */
+  variant: PropTypes.string,
+  /**
+   * Material UI Typography align.
+   */
+  align: PropTypes.string,
+  /**
+   * Any of the MUI Typography Props can applied by defining them as an object
+   */
+  muiTypographyProps: PropTypes.object,
   /**
    * Tooltip Text
    */
@@ -216,7 +228,6 @@ TextUpdate.propTypes = {
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-
   tooltipProps:PropTypes.object,
  
 };

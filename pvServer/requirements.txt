@@ -8,7 +8,7 @@ greenlet==1.0.0
 itsdangerous==1.1.0
 Jinja2==2.10
 MarkupSafe==1.1.0
-pyepics==3.4.0
+pyepics==3.4.3
 PyJWT==1.7.1
 python-dotenv==0.10.3
 python-engineio==4.0.0

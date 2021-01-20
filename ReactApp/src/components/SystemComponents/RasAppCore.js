@@ -9,7 +9,7 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import ReactVisCssBaseline from './ReactVisCssBaseline';
 import AutomationStudioContext from './AutomationStudioContext';
-import io from 'socket.io-client';
+import { io } from 'socket.io-client';
 import RasCssBaseline from './RasCssBaseline';
 
 
@@ -154,7 +154,7 @@ class RasAppCore extends Component {
 
   handleConnect() {
 
-    //  console.log('soceket connecting');
+     console.log('socket connecting');
     let jwt = JSON.parse(localStorage.getItem('jwt'));
 
     //console.log('jwt',jwt);

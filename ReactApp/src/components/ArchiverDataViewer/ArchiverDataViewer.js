@@ -90,10 +90,10 @@ const useArchiverDataHook = (props) => {
             }
         }
         socket.on('disconnect', disconnect);
-        socket.on('reconnect', reconnect);
+        socket.on('connect', reconnect);
         return () => {
             if (props.archiverURL) {
-                socket.removeListener('reconnect', reconnect);
+                socket.removeListener('connect', reconnect);
                 socket.removeListener('disconnect', disconnect);
             }
         }

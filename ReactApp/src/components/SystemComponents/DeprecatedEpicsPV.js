@@ -192,7 +192,7 @@ class DeprecatedEpicsPV extends React.Component {
       socket.on(this.state.pvname,this.updatePVData);
       socket.on('connect_error',this.connectError);
       socket.on('disconnect', this.disconnect);
-      socket.on('reconnect', this.reconnect);
+      socket.on('connect', this.reconnect);
       socket.on('redirectToLogIn', this.handleRedirectToLogIn);
       //  socket.on(this.state.pvname,this.testFunction);
 
@@ -230,7 +230,7 @@ class DeprecatedEpicsPV extends React.Component {
       socket.removeListener(this.state.pvname,this.updatePVData);
       socket.removeListener('connect_error',this.connectError);
       socket.removeListener('disconnect', this.disconnect);
-      socket.removeListener('reconnect', this.reconnect);
+      socket.removeListener('connect', this.reconnect);
       socket.removeListener('redirectToLogIn',this.handleRedirectToLogIn);
 
 

@@ -126,7 +126,7 @@ export const useEpicsPV = (props) => {
     socket.on(pv.pvname, updatePVData);
     socket.on('connect_error', connectError);
     socket.on('disconnect', disconnect);
-    socket.on('reconnect', reconnect);
+    socket.on('connect', reconnect);
 
     return () => {
 
@@ -140,7 +140,7 @@ export const useEpicsPV = (props) => {
       socket.removeListener(pv.pvname, updatePVData);
       socket.removeListener('connect_error', connectError);
       socket.removeListener('disconnect', disconnect);
-      socket.removeListener('reconnect', reconnect);
+      socket.removeListener('connect', reconnect);
 
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

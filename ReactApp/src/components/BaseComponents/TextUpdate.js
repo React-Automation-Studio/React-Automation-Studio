@@ -212,7 +212,7 @@ TextUpdate.propTypes = {
   /**
    * Material UI Typography align.
    */
-  align: PropTypes.string,
+  align: PropTypes.oneOf(['inherit', 'left', 'center', 'right','justify']),
   /**
    * Any of the MUI Typography Props can applied by defining them as an object
    */
@@ -233,6 +233,7 @@ TextUpdate.propTypes = {
 };
 TextUpdate.defaultProps = {
  debug: false,
+ align:'ingerit',
  variant:'body2',
  alarmSensitive: false,
  showTooltip:false

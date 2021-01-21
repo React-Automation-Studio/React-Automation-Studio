@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import PV from '../PV'
-import ContextMenu from "../ContextMenu";
 import PropTypes from "prop-types";
 import { LanDisconnect } from "mdi-material-ui/";
 import { useTheme } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import {replaceMacros,replaceArrayMacros} from '../Utils/macroReplacement';
+import { useContextMenu } from "../Utils/widgetHooks";
 import { 
   checkIndex, 
   checkPrecision, 
@@ -27,7 +27,7 @@ import {
  *
  **/
   const Widget = (props) => {
-  const { index } = props;
+  const { disableProbe, index } = props;
   const theme = useTheme();
   const [value, setValue] = useState(0);
   const [initialized, setInitalized] = useState(false);
@@ -45,9 +45,6 @@ import {
   const [units, setUnits] = useState("");
   const [label, setLabel] = useState("");
   const [tooltip] = useState(replaceMacros(props.tooltip));
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [openContextMenu, setOpenContextMenu] = useState(false);
-  const [contextPVs,setContextPVs]=useState([]);
   const [pv, setPv] = useState({
     value: 0,
     label: "",
@@ -63,7 +60,12 @@ import {
   });
   const [pvs, setPvs] = useState([]);
 
-
+  const [contextMenu, handleToggleContextMenu] = useContextMenu(
+    [pv, ...pvs], 
+    readOnly, 
+    disableProbe
+  );
+ 
   useEffect(() => {
   let ro=props.readOnly===true;
   if (props.pv){
@@ -79,19 +81,6 @@ import {
     setReadOnly(ro)
      // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pv, props.readOnly,pvs,])
-
-  useEffect(() => {
-    let newContextPVs=[];
-    newContextPVs.push(...pv.PVs);
-    pvs.map((item)=>
-      newContextPVs.push(...item.PVs)
-    )
-
-
-
-    setContextPVs(newContextPVs)
-
-    }, [pv, pvs])
 
   useEffect(() => {
     if (props.usePvLabel) {
@@ -229,20 +218,6 @@ import {
     }
   },[props])
 
-  const handleToggleContextMenu = (event) => {
-
-    event.preventDefault();
-    event.stopPropagation();
-    setAnchorEl(event.target);
-    setOpenContextMenu(!openContextMenu);
-
-  }
-
-  const handleContextMenuClose = () => {
-    setOpenContextMenu(false);
-  }
-
-
   const wrapComponent = (CustomComponent, props) => {
     return <CustomComponent {...props} />;
   }
@@ -348,22 +323,6 @@ import {
 
   />
   const childPvs = getPvs(props.pvs, props, pvs, setPvs,props.writeOutputValueToAllpvs?newValueTrigger:undefined,props.writeOutputValueToAllpvs?outputValue:undefined)
-  const contextMenu=(<ContextMenu
-  disableProbe={props.disableProbe}
-  open={openContextMenu}
-  pvs={contextPVs}
-  handleClose={handleContextMenuClose}
-  anchorEl={anchorEl}
-  anchorOrigin={{
-    vertical: "bottom",
-    horizontal: "center",
-  }}
-  transformOrigin={{
-    vertical: "top",
-    horizontal: "center",
-  }}
-  probeType={props.readOnly ? "readOnly" : undefined}
-/>)
 
   const handleValue = (newValue, setFunction) => {
     if (checkIndex(index, value)) {

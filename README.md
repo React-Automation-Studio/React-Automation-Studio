@@ -1,4 +1,4 @@
-Current Release: V2.1.0
+Current Release: V2.2.0
 
 # Introduction
 

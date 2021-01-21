@@ -40,7 +40,7 @@
         "eject": "react-scripts eject",
         "styleguide": "styleguidist server",
         "styleguide:build": "styleguidist build",
-        "styleguidebuild": "cross-env NODE_ENV=production styleguidist build"
+        "styleguidebuild": "cross-env NODE_ENV=production NODE_OPTIONS=--max-old-space-size=4096 styleguidist build "
     },
     "eslintConfig": {
         "extends": "react-app"

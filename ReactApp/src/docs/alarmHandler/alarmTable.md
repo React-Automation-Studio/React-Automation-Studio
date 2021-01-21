@@ -1,7 +1,7 @@
 The **ALARM TABLE** provides a tabular view of all the alarms in the currently selected area/subArea (selection via **ALARM AREAS** menu list). A sample is shown below. NOTE: When the component is first mounted, the alarm table lists all the pvs.
 
 <center>
-<img src="img/alarmHandler/alarmSetup_AlarmTable_Overview.png" alt="alarmSetup_AlarmTable_Overview" width="100%"/>
+<img src="img/alarmHandler/alarmSetup_AlarmTable_Overview2.png" alt="alarmSetup_AlarmTable_Overview" width="100%"/>
 </center>
 <center>*Sample ALARM TABLE*</center>
 <br/><br/>
@@ -9,10 +9,10 @@ The **ALARM TABLE** provides a tabular view of all the alarms in the currently s
 <br/>
 **Searching the table**
 
-A search bar is provided on the top right that searches through the alarms currently in the table. The search string is case insensitive and accepts no breaks. An example is shown below.
+A search bar is provided on the top right that searches through the alarms currently in the table. The search string is case insensitive and accepts no breaks. An example is shown below. A user can also set the number of rows and navigate the alarm table using the table pagination navbar to the left of the search bar.
 
 <center>
-<img src="img/alarmHandler/alarmSetup_AlarmTable_Filter.png" alt="alarmSetup_AlarmTable_Filter" width="100%"/>
+<img src="img/alarmHandler/alarmSetup_AlarmTable_Filter2.png" alt="alarmSetup_AlarmTable_Filter" width="100%"/>
 </center>
 <center>*Seaching ALARM TABLE*</center>
 <br/><br/>
@@ -23,7 +23,7 @@ A search bar is provided on the top right that searches through the alarms curre
 An alarm can be acknowledged by right clicking the relevant row within the table. This is shown below.
 
 <center>
-<img src="img/alarmHandler/alarmSetup_AlarmTable_AckAlarm1.png" alt="alarmSetup_AlarmTable_AckAlarm1" width="100%"/>
+<img src="img/alarmHandler/alarmSetup_AlarmTable_AckAlarm12.png" alt="alarmSetup_AlarmTable_AckAlarm1" width="100%"/>
 </center>
 <center>*Acknowledging an alarm*</center>
 <br/><br/>
@@ -36,7 +36,7 @@ The right click context menu is disabled for disabled alarms - disabled alarms c
 The PV NAME column displays the name of the alarm pv. Hovering over this column reveals the description of the pv (as per EPICS record DESC field) and the hostname of the machine on which the alarm pv IOC was deployed. This is shown below.
 
 <center>
-<img src="img/alarmHandler/alarmSetup_AlarmTable_Hover.png" alt="alarmSetup_AlarmTable_Hover" width="100%"/>
+<img src="img/alarmHandler/alarmSetup_AlarmTable_Hover2.png" alt="alarmSetup_AlarmTable_Hover" width="100%"/>
 </center>
 <center>*Pv description and hostname on hover*</center>
 <br/><br/>
@@ -76,7 +76,7 @@ This checkbox will be disabled (greyed out) if the subArea/area to which the ala
 Disabled alarms are reflected with a grey colour as shown below. This follows the colour scheme used throughout the alarm handler.
 
 <center>
-<img src="img/alarmHandler/alarmSetup_AlarmTable_Disabled.png" alt="alarmSetup_AlarmTable_Disabled" width="100%"/>
+<img src="img/alarmHandler/alarmSetup_AlarmTable_Disabled2.png" alt="alarmSetup_AlarmTable_Disabled" width="100%"/>
 </center>
 <center>*Disabled alarm in table*</center>
 <br/><br/>
@@ -91,6 +91,6 @@ This checkbox will be disabled (greyed out) if the subArea/area to which the ala
 <br/>
 **NTFY**
 
-The NTFY checkbox allows a user to configure whether alarms from the pv should notify users. **The notification functionality has yet to be implemented in the alarm server. It is envisaged that this will be done before the beta release.**
+The NTFY checkbox allows a user to configure whether alarms from the pv should notify users.
 
 This checkbox will be disabled (greyed out) if the subArea/area to which the alarm pv belongs in disabled.

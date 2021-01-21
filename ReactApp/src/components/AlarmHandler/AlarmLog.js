@@ -7,51 +7,37 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 
+import { format, parseISO } from 'date-fns';
 
-// Styles
-// const useStyles = makeStyles(theme => ({
-//     root: {
-//         width: '100%',
-//         overflowY: 'auto',
-
-//     },
-// }));
-
-const AlarmLog = props => {
-
-    // console.log("AlarmLog rendered")
-
+const AlarmLog = (props) => {
     // const classes = useStyles();
     const myRef = useRef()
 
+    // console.log('AlarmLog rendered')
+
     useEffect(() => {
         myRef.current.scrollTo(0, 0)
-    }, [props.alarmLogDisplayArray.length])
-
-    const logData = props.alarmLogDisplayArray.map((entry) => {
-        const date = new Date(entry.timestamp * 1000)
-        const content = `${date.toLocaleString()}: ${entry.entry}`
-        const visible = content.toLowerCase().includes(props.alarmLogSearchString.toLowerCase())
-        return (
-            visible
-                ? <TableRow
-                    onClick={(event) => {
-                        event.preventDefault()
-                        event.stopPropagation()
-                    }}
-                    hover
-                    key={`${entry.timestamp}-${entry.entry}`}>
-                    <TableCell>{content}</TableCell>
-                </TableRow>
-                : null
-        )
-    })
+    }, [props.slicedData.length])
 
     return (
         <TableContainer style={{ height: props.height, overflow: 'auto' }} ref={myRef}>
             <Table aria-label="Log Table" size="small" >
                 <TableBody>
-                    {logData}
+                    {props.slicedData.map((entry) => {
+                        const date = format(parseISO(entry.timestamp), "HH:mm:ss E, dd LLL yyyy")
+                        const content = `${date}: ${entry.entry}`
+                        return (
+                            <TableRow
+                                onClick={(event) => {
+                                    event.preventDefault()
+                                    event.stopPropagation()
+                                }}
+                                hover
+                                key={`${entry.timestamp}-${entry.entry}`}>
+                                <TableCell>{content}</TableCell>
+                            </TableRow>
+                        )
+                    })}
                 </TableBody>
             </Table>
         </TableContainer>

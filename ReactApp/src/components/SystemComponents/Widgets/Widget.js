@@ -2,35 +2,37 @@ import React, { useState, useEffect } from 'react'
 import PV from '../PV'
 import PropTypes from "prop-types";
 import { LanDisconnect } from "mdi-material-ui/";
-import { create, all } from 'mathjs';
 import { useTheme } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import {replaceMacros,replaceArrayMacros} from '../Utils/macroReplacement';
 import { useContextMenu } from "../Utils/widgetHooks";
-
-const config = { }
-const math = create(all, config)
+import { 
+  checkIndex, 
+  checkPrecision, 
+  formatValue, 
+  isInsideLimits
+} from "../Utils/widgetFunctions";
 
 /**
  * The Widget component creates standard properties, state variables and callbacks to manage the behaviour of a component communicating with one or multiple PVs. It also provides the default RAS contextMenu to the child component.
- * 
- * The label, min, max, units, pv and tooltip all accept macros that can be replaced by the values defined in the macros prop. 
- * 
- * 
- * 
- * 
- * 
- *  
-    
- * 
+ *
+ * The label, min, max, units, pv and tooltip all accept macros that can be replaced by the values defined in the macros prop.
+ *
+ *
+ *
+ *
+ *
+ *
+
+ *
  **/
   const Widget = (props) => {
-  const { disableProbe } = props;
+  const { disableProbe, index } = props;
   const theme = useTheme();
   const [value, setValue] = useState(0);
   const [initialized, setInitalized] = useState(false);
   const [immediateValue, setImmediateValue] = useState(null);
-  const [commitChange, SetCommitChange] = useState(false);
+  const [commitChange, setCommitChange] = useState(false);
   const [newValueTrigger, setNewValueTrigger] = useState(0);
   const [outputValue, setOutputValue] = useState(null);
   const [focus, setFocus] = useState(false);
@@ -57,7 +59,7 @@ const math = create(all, config)
     units: "",
   });
   const [pvs, setPvs] = useState([]);
-  
+
   const [contextMenu, handleToggleContextMenu] = useContextMenu(
     [pv, ...pvs], 
     readOnly, 
@@ -75,7 +77,7 @@ const math = create(all, config)
       ro = ro || item.readOnly;
     })
   }
-  
+
     setReadOnly(ro)
      // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pv, props.readOnly,pvs,])
@@ -129,22 +131,13 @@ const math = create(all, config)
 
   useEffect(() => {
     if (!focus) {
-      let newValue;
-      
-      newValue=checkPrecision(pv.value, prec);
-      if (typeof props.numberFormat !== 'undefined'){
-        newValue=math.format(parseFloat(newValue),props.numberFormat)
-        setValue(newValue)
+      const tempValue = checkPrecision(pv.value, prec);
+      setValue(formatValue(tempValue, props.numberFormat));
+      if (props.debug) {
+        console.log(tempValue);
       }
-      else{
-        setValue(newValue)
-      }
-      if (props.debug){
-        console.log(newValue)
     }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [focus, pv.value, prec])
+  }, [focus, pv.value, prec, props.numberFormat, props.debug]);
 
   useEffect(() => {
     let newSeverity=pv.severity;
@@ -168,46 +161,29 @@ const math = create(all, config)
     setAlarmSeverity(newSeverity)
   }, [pv.severity,props.useStringSeverityMatch,props.stringSeverity,value])
 
-
   useEffect(() => {
     if (immediateValue !== null) {
-      let tempvalue = checkPrecision(isInsideLimits(immediateValue, min, max), prec);
-      if (typeof props.numberFormat !== 'undefined'){
-        tempvalue=math.format(parseFloat(tempvalue),props.numberFormat)
-        setValue(tempvalue)
-      }
-      else{
-        setValue(tempvalue)
-      }
-      
-      setOutputValue(tempvalue);
-     
+      const tempValue = checkPrecision(
+        isInsideLimits(immediateValue, min, max),
+        prec
+      );
+      setValue(formatValue(tempValue, props.numberFormat));
+      setOutputValue(tempValue);
       setNewValueTrigger(newValueTrigger + 1);
       setImmediateValue(null);
     }
-    
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [immediateValue, min, max, prec])
-  
- 
+  }, [immediateValue, min, max, prec, props.numberFormat, newValueTrigger]);
 
   useEffect(() => {
     if (commitChange) {
-      let tempvalue = checkPrecision(isInsideLimits(value, min, max), prec);
-      if (typeof props.numberFormat !== 'undefined'){
-        tempvalue=math.format(parseFloat(tempvalue),props.numberFormat)
-        setValue(tempvalue)
-      }
-      else{
-        setValue(tempvalue)
-      }
-      setOutputValue(tempvalue);
+      const tempValue = checkPrecision(isInsideLimits(value, min, max), prec);
+      setValue(formatValue(tempValue, props.numberFormat));
+      setOutputValue(tempValue);
       setNewValueTrigger(newValueTrigger + 1);
-      SetCommitChange(false)
+      setCommitChange(false);
     }
+  }, [commitChange, min, max, prec, props.numberFormat, newValueTrigger, value]);
     
-// eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [commitChange, min, max, prec])
   useEffect(() => {
     if (props.custom_selection_strings) {
       setEnumStrings(replaceArrayMacros(props.custom_selection_strings,props.macros))
@@ -221,8 +197,8 @@ const math = create(all, config)
     let init =
       (typeof props.pv !== 'undefined')
       || (typeof props.pvs !== 'undefined')
-    
-   
+
+
     if (props.pv) {
       init = init&&pv.initialized;
     }
@@ -231,9 +207,9 @@ const math = create(all, config)
         init = init && item.initialized;
       })
     }
-     
+
       setInitalized(init)
-    
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pv.initialized, pvs])
   useEffect(()=>{
@@ -241,41 +217,6 @@ const math = create(all, config)
       console.warn("prop usePrecision is deprecated, use the usePvPrecision and prec props instead")
     }
   },[props])
-  const checkPrecision = (value, prec) => {
-    if (props.usePvPrecision===true || (typeof props.prec!=='undefined')) {
-      let precision = parseInt(prec);
-      let tempvalue = parseFloat(value);
-      if (!isNaN(tempvalue)) {
-        return tempvalue.toFixed(precision);
-
-      }
-      else {
-        return value;
-      }
-    }
-    else {
-      return (value)
-    }
-  }
-  const isInsideLimits = (value, min, max) => {
-
-    if ((typeof props.min!=='undefined') || (typeof props.max!=='undefined') || props.usePvMinMax) {
-
-      let tempValue = parseFloat(value);
-      if (!isNaN(tempValue)) {
-        tempValue = tempValue > max ? max : tempValue;
-        tempValue = tempValue < min ? min : tempValue;
-        //value = tempValue;
-      }
-
-      return tempValue;
-
-    } else {
-      return value
-    }
-
-
-  }
 
   const wrapComponent = (CustomComponent, props) => {
     return <CustomComponent {...props} />;
@@ -382,12 +323,23 @@ const math = create(all, config)
 
   />
   const childPvs = getPvs(props.pvs, props, pvs, setPvs,props.writeOutputValueToAllpvs?newValueTrigger:undefined,props.writeOutputValueToAllpvs?outputValue:undefined)
+
+  const handleValue = (newValue, setFunction) => {
+    if (checkIndex(index, value)) {
+      let newArrayValue = [...value];
+      newArrayValue[index] = newValue;
+      setFunction(newArrayValue);
+    } else {
+      setFunction(newValue);
+    }
+  };
+
   const child = props.component && wrapComponent(props.component,
     {
       ...props,
       initialized: initialized,
       pvName: pv.pvName,
-      value: value,
+      value: checkIndex(index, value) ? value[index] : value,
       min: min,
       max: max,
       prec:prec,
@@ -399,41 +351,44 @@ const math = create(all, config)
       alarmSeverity: alarmSeverity,
       enumStrs: enumStrings,
       disconnectedIcon: disconnectedIcon(),
-      handleChange: setValue,
-      handleImmediateChange: setImmediateValue,
-      handleCommitChange: () => SetCommitChange(true),
+      handleChange: (newValue) => handleValue(newValue, setValue),
+      handleImmediateChange: (newValue) =>
+        handleValue(newValue, setImmediateValue),
+      handleCommitChange: () => setCommitChange(true),
       handleFocus: () => setFocus(true),
       handleBlur: () => setFocus(false),
       pvData: pv,
       pvsData: pvs,
-    
+
     })
   const divStyle = {
     width: "100%",
     height: "100%",
-   
-   
+
+
   }
-  
+
   const Tag=props.svgWidget?"g":"div";
-  
+  if(props.debug){
+    console.log("Widget PVs",props.pvs)
+  }
   return (
-    <Tooltip   
-      title={tooltip} 
-      disableFocusListener={true}	
-      disableTouchListener={true} 
-      disableHoverListener={props.showTooltip===false} 
+    <Tooltip
+      title={tooltip}
+      disableFocusListener={true}
+      disableTouchListener={true}
+      disableHoverListener={props.showTooltip===false}
       {...props.tooltipProps}  >
-    
+
     <Tag
       style={props.svgWidget?undefined:divStyle}
       onContextMenu={ props.disableContextMenu ? undefined : handleToggleContextMenu}
     >
-     
 
-    
+
+
       {child}
-     
+
       {childPv}
       {childPvs}
       {contextMenu}
@@ -507,9 +462,9 @@ Widget.propTypes = {
    * Custom PV to define the precision to be used, usePvPrecision must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
    */
   precPv: PropTypes.string,
- 
 
-  
+
+
   /**
    * Custom units to be used, if usePvUnits is not defined.
    */
@@ -526,12 +481,12 @@ Widget.propTypes = {
    */
   usePvLabel: PropTypes.bool,
   /**
-   * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver. 
-   * The pyEpics metadata is unfortunately static and the values used will be the initial values that pvserver receives when it connects the first time. 
+   * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver.
+   * The pyEpics metadata is unfortunately static and the values used will be the initial values that pvserver receives when it connects the first time.
    * This is sufficient in most cases except when the user wants to dynamically update the metaData.
-   * In this case a direct connection can be made to all the pv fields by setting useMetadata to false. 
+   * In this case a direct connection can be made to all the pv fields by setting useMetadata to false.
    * If any of the metadata pvs are defined i.e unitsPv then the PV makes a new data  connection to this alternate pv and will
-   * use the value provided by this pv as the units. 
+   * use the value provided by this pv as the units.
    * The same is the case for the precPV, labelPv, alarmPv, unitsPv and minPv.
    * By setting useMetadata to false also enables connection to other variables as defined by different protocols.
    */
@@ -562,7 +517,7 @@ Widget.propTypes = {
 
 
 
-  
+
   /**
    * If defined, then the string representation of the number can be formatted
    * using the mathjs format function
@@ -578,7 +533,7 @@ Widget.propTypes = {
    * Custom off color to be used, must be derived from Material UI theme color's.
    */
   offColor: PropTypes.string,
-  
+
   /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
   pv: PropTypes.string,
   /** Array of the process variables, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/

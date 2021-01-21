@@ -313,11 +313,17 @@ const handleYes = () => {
   */
 
   const Harp = (props) => {
-
+    let pvs=[];
+    if( typeof props.isMovingPv!=='undefined'){
+      pvs=[props.inLimitPv, props.outLimitPv, props.isMovingPv]
+    }
+    else{
+      pvs=[props.inLimitPv, props.outLimitPv]
+    }
 
     return (
       <Widget svgWidget={true}  {...props} component={HarpComponent}
-       pvs={[props.inLimitPv,props.outLimitPv,props.isMovingPv]}
+       pvs={pvs}
        label={props.label} />
 
     )

@@ -65,6 +65,8 @@ dbLoadRecords "db/demoMultipleTextUpdates.db", "device=testIOC"
 
 dbLoadRecords "db/BeamSweepSim.db", "device=testIOC:BeamSweepSim"
 
+dbLoadRecords "db/demoAlarms.db", "device=demoAlarmsIOC"
+
 
 ## Set this to see messages from mySub
 #var mySubDebug 1

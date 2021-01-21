@@ -275,15 +275,21 @@ const FCComponent = (props) => {
 /**
 * FC Beam line component
 *
-*  The label, min, max, units, pv and tooltip all accept macros that can be replaced by the values defined in the macros prop.  
+*  The label, min, max, units, pv and tooltip all accept macros that can be replaced by the values defined in the macros prop.
 */
 
 const FC = (props) => {
 
-
+  let pvs=[];
+  if( typeof props.isMovingPv!=='undefined'){
+    pvs=[props.inLimitPv, props.outLimitPv, props.isMovingPv]
+  }
+  else{
+    pvs=[props.inLimitPv, props.outLimitPv]
+  }
   return (
     <Widget svgWidget={true}  {...props} component={FCComponent}
-      pvs={[props.inLimitPv, props.outLimitPv, props.isMovingPv]}
+      pvs={pvs}
       label={props.label} />
 
   )
@@ -341,12 +347,12 @@ FC.propTypes = {
    */
   usePvLabel: PropTypes.bool,
   /**
-   * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver. 
-   * The pyEpics metadata is unfortunately static and the values used will be the initial values that pvserver receives when it connects the first time. 
+   * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver.
+   * The pyEpics metadata is unfortunately static and the values used will be the initial values that pvserver receives when it connects the first time.
    * This is sufficient in most cases except when the user wants to dynamically update the metaData.
-   * In this case a direct connection can be made to all the pv fields by setting useMetadata to false. 
+   * In this case a direct connection can be made to all the pv fields by setting useMetadata to false.
    * If any of the metadata pvs are defined i.e unitsPv then the PV makes a new data  connection to this alternate pv and will
-   * use the value provided by this pv as the units. 
+   * use the value provided by this pv as the units.
    * The same is the case for the precPV, labelPv, alarmPv, unitsPv and minPv.
    * By setting useMetadata to false also enables connection to other variables as defined by different protocols.
    */

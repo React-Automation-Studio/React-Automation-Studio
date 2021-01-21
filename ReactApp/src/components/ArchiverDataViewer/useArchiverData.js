@@ -48,7 +48,7 @@ const useArchiverData = (props) => {
             }
         }
         socket.on('disconnect', disconnect);
-        socket.on('reconnect', reconnect);
+        socket.on('connect', reconnect);
         return () => {
 
             if (props.archiverURL) {
@@ -56,7 +56,7 @@ const useArchiverData = (props) => {
                     socket.emit('remove_dbWatch', { archiverURL: props.archiverURL, dbWatchId: dbWatchId, 'clientAuthorisation': jwt });
                 }
                 socket.removeListener('databaseWatchData:' + props.archiverURL, handleArchiverReadData);
-                socket.removeListener('reconnect', reconnect);
+                socket.removeListener('connect', reconnect);
                 socket.removeListener('disconnect', disconnect);
             }
 

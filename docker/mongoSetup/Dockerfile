@@ -1,4 +1,4 @@
-FROM python:3.7.5
+FROM python:3.9.1
 # Install python dependencies
 WORKDIR /usr/src/app
 

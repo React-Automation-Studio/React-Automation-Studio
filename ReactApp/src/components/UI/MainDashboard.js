@@ -241,6 +241,22 @@ class MainDashboard extends Component {
                 </Grid>
                 <Grid item lg={12} sm={12} xs={12}  >
                   <Typography className={classes.WhatsNew} component='div'>
+                    V2.2.0 Wednesday 20 January 2021
+<br />
+Improvements and new features:
+  <br />
+                    <ul>
+                      <li>AlarmHandler now supports email notifications</li>
+                      <li>New Components:
+    <ul>
+                          <li>New ArrayContainer</li>
+                          <li>New LightPanel</li>
+                        </ul>
+                        <li>Upgraded to Socket.IO 3.1.0</li>
+                        <li>Upgraded pvServer to Flask-SocketIO 5.0.1</li>
+                        <li>Package updates</li>
+                      </li>
+                    </ul>
                   V2.1.0 Tuesday 20 October 2020
                   <br />
                   Improvements and new features:
@@ -302,28 +318,28 @@ class MainDashboard extends Component {
                           <li>
                             SwitchComponent -> Use Switch
                           </li>
-                          </ul>
+                        </ul>
                       </li>
                       <li>
                         Removed Component:
 
                       <ul>
-                        <li>
-                          GraphMultiplePVs
+                          <li>
+                            GraphMultiplePVs
                         </li>
-                      </ul>
+                        </ul>
                       </li>
                       <li>
-                       Breaking Changes:
+                        Breaking Changes:
 
                       <ul>
-                        <li>
-                        routes.js was renamed Routes.js and now contains extra logic to enable dynamic or isolated routes based on the use role.
+                          <li>
+                            routes.js was renamed Routes.js and now contains extra logic to enable dynamic or isolated routes based on the use role.
                         </li>
-                        <li>
-                        If you added extra logic to the App.js you will to adapt to the new RasAppCore component.
+                          <li>
+                            If you added extra logic to the App.js you will to adapt to the new RasAppCore component.
                         </li>
-                      </ul>
+                        </ul>
                       </li>
                       <li>Packages updated in both RAS and RAS-Example-Project-1</li>
 
@@ -332,75 +348,75 @@ class MainDashboard extends Component {
 
 
                   </Typography>
-              </Grid>
+                </Grid>
 
               </Grid>
             </Paper>
-        </Grid>
-        <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem} >
+          </Grid>
+          <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem} >
 
-          <Paper className={classes.Paper} elevation={paperElevation}>
-            <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
-              <Grid item lg={12} sm={12} xs={12} style={{ textAlign: 'center' }}>
-                <Typography {...typographyProps}><EditIcon className={classes.Icon} /> Staging</Typography>
+            <Paper className={classes.Paper} elevation={paperElevation}>
+              <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
+                <Grid item lg={12} sm={12} xs={12} style={{ textAlign: 'center' }}>
+                  <Typography {...typographyProps}><EditIcon className={classes.Icon} /> Staging</Typography>
+                </Grid>
+                <Grid item lg={6} sm={12} xs={12}>
+
+                  <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
+                    <Grid item lg={12} sm={12} xs={12}>
+                      <Button fullWidth className={classes.button} component={Link} to="/Staging" color="primary" variant={buttonVariant}>  Staging </Button>
+                    </Grid>
+                  </Grid>
+                </Grid>
+
+
+
               </Grid>
-              <Grid item lg={6} sm={12} xs={12}>
+            </Paper>
+          </Grid>
+          <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem} >
 
-                <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
-                  <Grid item lg={12} sm={12} xs={12}>
-                    <Button fullWidth className={classes.button} component={Link} to="/Staging" color="primary" variant={buttonVariant}>  Staging </Button>
+            <Paper className={classes.Paper} elevation={paperElevation} style={{ textAlign: 'center' }}>
+              <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
+                <Grid item lg={12} sm={12} xs={12}>
+                  <Typography {...typographyProps}>  <VisibilityIcon className={classes.Icon} /> Preview</Typography>
+                </Grid>
+                <Grid item lg={6} sm={12} xs={12}>
+                  <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
+
+                    <Grid item lg={12} sm={12} xs={12}>
+                      <Button fullWidth className={classes.button} component={Link} to="/AlarmHandlerDemo" color="primary" variant={buttonVariant}>  Alarm Handler Demo </Button>
+                    </Grid>
+                    <Grid item lg={12} sm={12} xs={12}>
+                      <Button fullWidth className={classes.button} component={Link} to="/VaultDemo" color="primary" variant={buttonVariant}>  Vault Demo </Button>
+                    </Grid>
+                    <Grid item lg={12} sm={12} xs={12} >
+                      <Button fullWidth className={classes.button} component={Link} to="/LoadSaveExample" color="primary" variant={buttonVariant}> LoadSave Example </Button>
+                    </Grid>
+                    <Grid item lg={12} sm={12} xs={12} >
+                      <Button fullWidth className={classes.button} component={Link} to="/ArchiverDataViewerDemo" color="primary" variant={buttonVariant}> Archiver Data Viewer Demo </Button>
+                    </Grid>
+
+
                   </Grid>
                 </Grid>
               </Grid>
+            </Paper>
+          </Grid>
+          <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem} >
 
-
-
-            </Grid>
-          </Paper>
-        </Grid>
-        <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem} >
-
-          <Paper className={classes.Paper} elevation={paperElevation} style={{ textAlign: 'center' }}>
-            <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
-              <Grid item lg={12} sm={12} xs={12}>
-                <Typography {...typographyProps}>  <VisibilityIcon className={classes.Icon} /> Preview</Typography>
-              </Grid>
-              <Grid item lg={6} sm={12} xs={12}>
-                <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
-
-                  <Grid item lg={12} sm={12} xs={12}>
-                    <Button fullWidth className={classes.button} component={Link} to="/AlarmHandlerDemo" color="primary" variant={buttonVariant}>  Alarm Handler Demo </Button>
-                  </Grid>
-                  <Grid item lg={12} sm={12} xs={12}>
-                    <Button fullWidth className={classes.button} component={Link} to="/VaultDemo" color="primary" variant={buttonVariant}>  Vault Demo </Button>
-                  </Grid>
-                  <Grid item lg={12} sm={12} xs={12} >
-                    <Button fullWidth className={classes.button} component={Link} to="/LoadSaveExample" color="primary" variant={buttonVariant}> LoadSave Example </Button>
-                  </Grid>
-                  <Grid item lg={12} sm={12} xs={12} >
-                    <Button fullWidth className={classes.button} component={Link} to="/ArchiverDataViewerDemo" color="primary" variant={buttonVariant}> Archiver Data Viewer Demo </Button>
-                  </Grid>
-
-
+            <Paper className={classes.Paper} elevation={paperElevation}>
+              <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
+                <Grid item lg={12} sm={12} xs={12} style={{ textAlign: 'center' }}>
+                  <Typography {...typographyProps}><HelpIcon className={classes.Icon} /> Help</Typography>
                 </Grid>
-              </Grid>
-            </Grid>
-          </Paper>
-        </Grid>
-        <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem} >
+                <Grid item lg={6} sm={12} xs={12}>
+                  <Button fullWidth className={classes.button} target="_blank" href={AutomationStudioStyleGuideBuildURL} color="default" variant={buttonVariant}> Help and Style Guide </Button>
+                </Grid>
 
-          <Paper className={classes.Paper} elevation={paperElevation}>
-            <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
-              <Grid item lg={12} sm={12} xs={12} style={{ textAlign: 'center' }}>
-                <Typography {...typographyProps}><HelpIcon className={classes.Icon} /> Help</Typography>
               </Grid>
-              <Grid item lg={6} sm={12} xs={12}>
-                <Button fullWidth className={classes.button} target="_blank" href={AutomationStudioStyleGuideBuildURL} color="default" variant={buttonVariant}> Help and Style Guide </Button>
-              </Grid>
-
-            </Grid>
-          </Paper>
-        </Grid>
+            </Paper>
+          </Grid>
 
 
 
@@ -413,7 +429,7 @@ class MainDashboard extends Component {
 
 
 
-      <RedirectToLogIn />
+        <RedirectToLogIn />
       </TraditionalLayout >
     )
   }

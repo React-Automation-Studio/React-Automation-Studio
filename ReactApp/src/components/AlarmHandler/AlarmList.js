@@ -18,6 +18,8 @@ import Typography from '@material-ui/core/Typography';
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 import NotificationsOffIcon from '@material-ui/icons/NotificationsOff';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
+import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
+import AddIcon from '@material-ui/icons/Add';
 
 import { fade } from '@material-ui/core/styles/colorManipulator';
 
@@ -150,6 +152,8 @@ const AlarmList = props => {
 
     // console.log("AlarmList rendered")
 
+    // console.log(props.areaContextOpen)
+
     const classes = useStyles(props);
 
     return (
@@ -187,11 +191,13 @@ const AlarmList = props => {
                                             // field(FRST, "MAJOR")
                                             // field(FVST, "INVALID_ACKED")
                                             // field(SXST, "INVALID")
+                                            // field(SVST, "DISCONN_ACKED")
+                                            // field(EIST, "DISCONNECTED")
 
                                             classes={(props.areaEnabled[`${area["area"]}`] && props.enableAllAreas
-                                                ? parseInt(props.areaPVDict[`${area["area"]}`]) === 6 || parseInt(props.areaPVDict[`${area["area"]}`]) === 4
+                                                ? parseInt(props.areaPVDict[`${area["area"]}`]) === 8 || parseInt(props.areaPVDict[`${area["area"]}`]) === 6 || parseInt(props.areaPVDict[`${area["area"]}`]) === 4
                                                     ? { root: classes.majorAlarm }
-                                                    : parseInt(props.areaPVDict[`${area["area"]}`]) === 5 || parseInt(props.areaPVDict[`${area["area"]}`]) === 3
+                                                    : parseInt(props.areaPVDict[`${area["area"]}`]) === 7 || parseInt(props.areaPVDict[`${area["area"]}`]) === 5 || parseInt(props.areaPVDict[`${area["area"]}`]) === 3
                                                         ? { root: classes.majorAlarmAcked }
                                                         : parseInt(props.areaPVDict[`${area["area"]}`]) === 2
                                                             ? { root: classes.minorAlarm }
@@ -218,7 +224,7 @@ const AlarmList = props => {
                                                         { top: props.contextMouseY, left: props.contextMouseX } : null}
                                                 >
                                                     <MenuItem disabled >{area["area"]}</MenuItem>
-                                                    <hr />
+                                                    {/* <hr /> */}
                                                     {props.enableAllAreas ?
                                                         props.areaEnabled[`${area["area"]}`] ?
                                                             <MenuItem onClick={event => props.enableDisableArea(event, `${area["area"]}`, false)}>
@@ -242,6 +248,30 @@ const AlarmList = props => {
                                                             </ListItemIcon>
                                                             <Typography variant="inherit">ACK all area alarms</Typography>
                                                         </MenuItem> : null}
+                                                    {props.areaEnabled[`${area["area"]}`] && props.enableAllAreas && props.isAlarmAdmin ?
+                                                        <MenuItem
+                                                            onClick={() => props.setAlarmAdminListExpand(!props.alarmAdminListExpand)}
+                                                        >
+                                                            <ListItemIcon >
+                                                                <SupervisorAccountIcon fontSize="small" />
+                                                            </ListItemIcon>
+                                                            <ListItemText primary="Alarm admin actions" />
+                                                            {props.alarmAdminListExpand ? <ExpandLess style={{ marginLeft: 16 }} /> : <ExpandMore style={{ marginLeft: 16 }} />}
+                                                        </MenuItem> : null}
+                                                    <Collapse in={props.alarmAdminListExpand} timeout="auto" unmountOnExit>
+                                                        <List component="div" disablePadding >
+                                                            <ListItem
+                                                                button
+                                                                className={classes.nested}
+                                                                onClick={event => props.addNewPV(event, `${area["area"]}`)}
+                                                            >
+                                                                <ListItemIcon >
+                                                                    <AddIcon fontSize="small" />
+                                                                </ListItemIcon>
+                                                                <ListItemText primary="Add new pv" />
+                                                            </ListItem>
+                                                        </List>
+                                                    </Collapse>
                                                 </Menu>
                                                 : null
                                         }
@@ -261,9 +291,9 @@ const AlarmList = props => {
                                                                         onClick={event => props.listItemClick(event, `${area["area"]}=${subArea}`)}
                                                                         onContextMenu={event => props.listItemRightClick(event, `${area["area"]}=${subArea}`)}
                                                                         classes={(props.areaEnabled[`${area["area"]}=${subArea}`] && props.enableAllAreas
-                                                                            ? parseInt(props.areaPVDict[`${area["area"]}=${subArea}`]) === 6 || parseInt(props.areaPVDict[`${area["area"]}=${subArea}`]) === 4
+                                                                            ? parseInt(props.areaPVDict[`${area["area"]}=${subArea}`]) === 8 || parseInt(props.areaPVDict[`${area["area"]}=${subArea}`]) === 6 || parseInt(props.areaPVDict[`${area["area"]}=${subArea}`]) === 4
                                                                                 ? { root: classes.majorAlarm }
-                                                                                : parseInt(props.areaPVDict[`${area["area"]}=${subArea}`]) === 5 || parseInt(props.areaPVDict[`${area["area"]}=${subArea}`]) === 3
+                                                                                : parseInt(props.areaPVDict[`${area["area"]}=${subArea}`]) === 7 || parseInt(props.areaPVDict[`${area["area"]}=${subArea}`]) === 5 || parseInt(props.areaPVDict[`${area["area"]}=${subArea}`]) === 3
                                                                                     ? { root: classes.majorAlarmAcked }
                                                                                     : parseInt(props.areaPVDict[`${area["area"]}=${subArea}`]) === 2
                                                                                         ? { root: classes.minorAlarm }
@@ -278,7 +308,7 @@ const AlarmList = props => {
                                                                     </ListItem>
                                                                     <Menu
                                                                         keepMounted
-                                                                        open={props.areaContextOpen[`${area["area"]}=${subArea}`]}
+                                                                        open={props.areaContextOpen[`${area["area"]}=${subArea}`] ? true : false}
                                                                         onClose={event => props.listItemContextClose(event, `${area["area"]}=${subArea}`)}
                                                                         anchorReference="anchorPosition"
                                                                         anchorPosition={props.contextMouseY !== null && props.contextMouseX !== null ?
@@ -286,7 +316,7 @@ const AlarmList = props => {
                                                                     >
 
                                                                         {props.areaEnabled[`${area["area"]}`] ? <MenuItem disabled>{`${area["area"]} > ${subArea}`}</MenuItem> : null}
-                                                                        {props.areaEnabled[`${area["area"]}`] ? <hr /> : null}
+                                                                        {/* {props.areaEnabled[`${area["area"]}`] ? <hr /> : null} */}
 
                                                                         {props.enableAllAreas ?
                                                                             props.areaEnabled[`${area["area"]}`] ?
@@ -304,6 +334,29 @@ const AlarmList = props => {
                                                                                             </ListItemIcon>
                                                                                             <Typography variant="inherit">ACK all area alarms</Typography>
                                                                                         </MenuItem>
+                                                                                        {props.isAlarmAdmin && <MenuItem
+                                                                                            onClick={() => props.setAlarmAdminListExpand(!props.alarmAdminListExpand)}
+                                                                                        >
+                                                                                            <ListItemIcon >
+                                                                                                <SupervisorAccountIcon fontSize="small" />
+                                                                                            </ListItemIcon>
+                                                                                            <ListItemText primary="Alarm admin actions" />
+                                                                                            {props.alarmAdminListExpand ? <ExpandLess style={{ marginLeft: 16 }} /> : <ExpandMore style={{ marginLeft: 16 }} />}
+                                                                                        </MenuItem>}
+                                                                                        <Collapse in={props.alarmAdminListExpand} timeout="auto" unmountOnExit>
+                                                                                            <List component="div" disablePadding >
+                                                                                                <ListItem
+                                                                                                    button
+                                                                                                    className={classes.nested}
+                                                                                                    onClick={event => props.addNewPV(event, `${area["area"]}=${subArea}`)}
+                                                                                                >
+                                                                                                    <ListItemIcon >
+                                                                                                        <AddIcon fontSize="small" />
+                                                                                                    </ListItemIcon>
+                                                                                                    <ListItemText primary="Add new pv" />
+                                                                                                </ListItem>
+                                                                                            </List>
+                                                                                        </Collapse>
                                                                                     </div>
                                                                                     :
                                                                                     <MenuItem onClick={event => props.enableDisableArea(event, `${area["area"]}=${subArea}`, true)}>

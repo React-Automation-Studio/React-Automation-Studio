@@ -4,7 +4,7 @@
 ## everywhere it appears in this file
 
 < envPaths
-
+#epicsEnvSet EPICS_CA_SERVER_PORT 8004
 cd "${TOP}"
 
 ## Register all support components

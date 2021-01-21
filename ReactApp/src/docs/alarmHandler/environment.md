@@ -6,10 +6,16 @@ The alarm server is deployed with the following default parameters:
 | ----------------------------------- | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
 | ALARM\_DATABASE                     | localhost         | Hostname of MongoDB server where the alarm database is deployed.                                                                    |
 | ALARM\_DATABASE\_REPLICA\_SET\_NAME | devrs             | Replica set name of MongoDB server where the alarm database is deployed.                                                            |
-| MONGO\_INITDB\_ALARM\_DATABASE      | demoAlarmDatabase | MongoDB alarm database name. If this database does not exist on the MongoDB server it is created and initialised with seed data (see next section for details on seed data) on first run of the alarm handler. |
-|                                     |                   |                                                                                                                                     |
-| DEMO\_ALARMS\_IOC                   | demoAlarmsIOC     | Prefix to give demo alarm pvs. Demo alarm pvs will be of form $(DEMO\_ALARM\_IOC):alarmxxx                                          |
-| RUN\_DEMO\_ALARMS\_IOC              | True              | Directive to run demo alarms ioc. Set to False if you would not like the demo ioc to run on start up of the alarm handler.          |
+| MONGO\_INITDB\_ALARM\_DATABASE      | demoAlarmDatabase | MongoDB alarm database name. If this database does not exist on the MongoDB server it is created and initialised with seed data (see next section for details on seed data) on first run of the alarm handler.
+| | |
+| AH\_DEBUG | false | Directive to print additional data useful for debugging the alarm handler to the terminal
+| AH\_TZ | Etc\/UTC (Canonical +00:00) | Time zone setting for alarm handler server. This is used when dates are formatted to strings for notification. Set as per https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+| | |
+| SMTP_HOST | | SMTP server hostname. Required for alarm handler to notify alarm events via email
+| SMTP_PORT | | SMTP server port number. Required for alarm handler to notify alarm events via email
+| SMTP_SENDER | | SMTP sender email address. Required for alarm handler to notify alarm events via email
+| SMTP_USER | | Username to log into SMTP server. Optional - leave blank if no login required
+| SMTP_PASS | | Password to log into SMTP server. Optional - leave blank if no login required
 </center>
 <center>*Table 1: Default alarm server configuration*</center>
 <br/><br/>
@@ -26,21 +32,6 @@ If the .env file does not exist in the root folder then copy example file provid
 ```bash
     cp example.env .env
 ```
-<br/>
-**Changing demo alarms ioc prefix:**
-
-Edit .env file and set new name:
-```bash
-    DEMO_ALARMS_IOC=myCustomIOC
-```
-
-<br/>
-**Setting directive to not run demo alarms ioc:**
-
-Edit .env file and set new name:
-```bash
-    RUN_DEMO_ALARMS_IOC=False
-```
 
 <br/>
 **Changing MongoDB alarm database name:**
@@ -48,6 +39,32 @@ Edit .env file and set new name:
 Edit .env file and set new name:
 ```bash
     MONGO_INITDB_ALARM_DATABASE=myCustomAlarmDatabase
+```
+
+<br/>
+**Setting directive to print alarm handler debug data to terminal:**
+
+Edit .env file and set:
+```bash
+    AH_DEBUG=true
+```
+
+<br/>
+**Setting local timezone:**
+
+Edit .env file and set new timezone (as per https://en.wikipedia.org/wiki/List_of_tz_database_time_zones):
+```bash
+    AH_TZ=America/Chicago
+```
+
+<br/>
+**Configuring SMTP server settings for email notification:**
+
+Edit .env file and set server settings (in this example login credentials have been omitted as the server does not require login):
+```bash
+    SMTP_HOST=smtpserver.lab.edu
+    SMTP_PORT=12345
+    SMTP_SENDER=alarmnotifier@lab.edu
 ```
 
 **NOTE:** If the alarm database name is changed, upon restart of the alarm handler, a new database with the set name is created and initialised with seed data (see next section for details on seed data). **The alarm server will no longer point to the previous alarm database and historical alarm data will not be accessible!** For this reason it is recommended that the alarm database name is set as desired before deploying into production or saving critical data onto the database.

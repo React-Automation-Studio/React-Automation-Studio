@@ -3,10 +3,6 @@ services:
   frontendserver:
     build:
       context: ./
-      args: # Environment variables available at build-time
-                - http_proxy
-                - https_proxy
-                - no_proxy
       dockerfile: docker/frontendserver/Dockerfile
       network: host
     volumes:
@@ -17,10 +13,6 @@ services:
   pvserver:
     build:
       context: ./
-      args: # Environment variables available at build-time
-                - http_proxy
-                - https_proxy
-                - no_proxy
       dockerfile: docker/pvserver/Dockerfile
     restart: always
     network_mode: host
@@ -37,8 +29,8 @@ services:
       - DEMO_ARCHIVER=http://localhost:17668
       - pvServerLogLevel=INFO
       - pvServerLogFile=/pvServer/log/pvServerLogFile
-      - http_proxy
-      - https_proxy
+      
+      
       - no_proxy
     volumes:
       - ./certificates:/certificates/
@@ -48,10 +40,7 @@ services:
   unsecurestylguidepvserver:
     build:
       context: ./
-      args: # Environment variables available at build-time
-                - http_proxy
-                - https_proxy
-                - no_proxy
+ 
       dockerfile: docker/pvserver/Dockerfile
     restart: always
     network_mode: host
@@ -60,8 +49,8 @@ services:
           - REACT_APP_PyEpicsServerPORT=5001
           - REACT_APP_EnableLogin=false
           - DEMO_ARCHIVER=http://localhost:17668
-          - http_proxy
-          - https_proxy
+          
+          
           - no_proxy
     volumes:
           - ./certificates:/certificates/
@@ -69,10 +58,6 @@ services:
   demoioc:
     build:
       context: ./
-      args: # Environment variables available at build-time
-                - http_proxy
-                - https_proxy
-                - no_proxy
       dockerfile: docker/demoioc/Dockerfile
     tty: true
     stdin_open: true
@@ -81,10 +66,6 @@ services:
   styleguideserver:
     build:
       context: ./
-      args: # Environment variables available at build-time
-                - http_proxy
-                - https_proxy
-                - no_proxy
       dockerfile: docker/styleguideserver/Dockerfile
     volumes:
       - ./certificates:/certificates/
@@ -191,11 +172,6 @@ services:
       - LOADSAVE_DATABASE_REPLICA_SET_NAME=devrs
     build:
       context: ./
-
-      args: # Environment variables available at build-time
-                - http_proxy
-                - https_proxy
-                - no_proxy
       dockerfile: docker/loadSaveDbInit/Dockerfile
     network_mode: "host"
     tty: true

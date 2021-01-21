@@ -12,7 +12,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 
 import AutomationStudioContext from '../components/SystemComponents/AutomationStudioContext';
 
-import io from 'socket.io-client';
+import { io } from 'socket.io-client';
 import   lightTheme  from '../components/UI/Themes/lightTheme'
 import ReactVisCssBaseline from '../components/SystemComponents/ReactVisCssBaseline';
 

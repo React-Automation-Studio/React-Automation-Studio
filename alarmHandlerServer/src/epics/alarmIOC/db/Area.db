@@ -8,6 +8,8 @@ record(mbbi, "$(area_name)") {
     field(FRST, "MAJOR_ALARM")
     field(FVST, "INVALID_ACKED")
     field(SXST, "INVALID_ALARM")
+    field(SVST, "DISCONN_ACKED")
+    field(EIST, "DISCONNECTED")
     field(PINI, "YES")
     field(VAL, "0")
 }

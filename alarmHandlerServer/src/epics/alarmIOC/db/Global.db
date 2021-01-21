@@ -1,9 +1,4 @@
 # ACK PV
-# record(stringin, "$(ioc):ACK_PV") {
-#     field(DTYP, "Soft Channel")
-#     field(PINI, "YES")
-#     field(VAL, "")
-# }
 record(waveform, "$(ioc):ACK_PV") {
     field(DTYP, "Soft Channel")
     field(DESC, "Test waveform")

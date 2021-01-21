@@ -1,4 +1,4 @@
-FROM python:3.7.5
+FROM python:3.9.1
 
 # Install OS packages and other dependencies 
 RUN apt-get update && \
@@ -27,12 +27,6 @@ RUN make
 
 RUN ln -s /epics/base/bin/linux-x86_64/caRepeater /bin/caRepeater
 
-# Move demoAlarmsIOC into place and make
-COPY alarmHandlerServer/src/epics/demoAlarmsIOC /epics/demoAlarmsIOC
-
-WORKDIR /epics/demoAlarmsIOC
-RUN make
-
 # Move alarmIOC into place and make
 COPY alarmHandlerServer/src/epics/alarmIOC /epics/alarmIOC
 
@@ -42,12 +36,11 @@ RUN make
 WORKDIR /usr/src/app
 
 # symbolic links to start iocs
-RUN ln -s /epics/demoAlarmsIOC/iocBoot/iocdemoAlarmsIOC/start_tmux_st.cmd /usr/src/app/startDemoIOC.cmd
 RUN ln -s /epics/alarmIOC/iocBoot/iocalarmIOC/start_tmux_st.cmd /usr/src/app/startAlarmIOC.cmd
 
-COPY alarmHandlerServer/src/python/*.py ./
+COPY alarmHandlerServer/src/python/ ./
 
 # custom EPICS_CA_ADDR_LIST to only allow dev stuff to communicate
-ENV EPICS_CA_ADDR_LIST="0.0.0.0:8001"
+ENV EPICS_CA_ADDR_LIST="0.0.0.0:8001 0.0.0.0:8004"
 
 CMD ["python","main.py"]

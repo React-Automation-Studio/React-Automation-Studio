@@ -47,7 +47,7 @@ const useMongoDbWatch = (props) => {
             }
         }
         socket.on('disconnect', disconnect);
-        socket.on('reconnect', reconnect);
+        socket.on('connect', reconnect);
         return () => {
 
             if (props.dbURL) {
@@ -55,7 +55,7 @@ const useMongoDbWatch = (props) => {
                     socket.emit('remove_dbWatch', { dbURL: props.dbURL, dbWatchId: dbWatchId, 'clientAuthorisation': jwt });
                 }
                 socket.removeListener('databaseWatchData:' + props.dbURL, handleNewDbLogReadWatchBroadcast);
-                socket.removeListener('reconnect', reconnect);
+                socket.removeListener('connect', reconnect);
                 socket.removeListener('disconnect', disconnect);
             }
 

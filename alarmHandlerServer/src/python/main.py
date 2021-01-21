@@ -1,1 +1,3 @@
-import alarmHandlerServer
+import alarmServer
+
+alarmServer.main()

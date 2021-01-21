@@ -3,10 +3,6 @@ services:
   administrator:
     build:
       context: ./
-      args: # Environment variables available at build-time
-                  - http_proxy
-                  - https_proxy
-                  - no_proxy
       dockerfile: docker/administrator/Dockerfile
     network_mode: host
     tty: true

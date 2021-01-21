@@ -146,6 +146,13 @@ module.exports = {
           usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
         },
         {
+          name: 'Compound Components',
+          content: 'src/docs/CompoundComponents.md',
+          components: 'src/components/CompoundComponents/*.js',
+          exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
+          usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
+        },
+        {
           name: 'Widget and PV Components',
           content: 'src/docs/widget/widget.md',
           components: ['src/components/SystemComponents/Widgets/Widget.js', 'src/components/SystemComponents/PV.js', 'src/components/ExperimentalExamples/Mobile/DynamicPvFieldExample.js', 'src/components/SystemComponents/EpicsPV.js', 'src/components/SystemComponents/LocalPV.js',],
@@ -170,6 +177,10 @@ module.exports = {
             {
               name: 'useMongoDbInsertOne',
               content: 'src/components/SystemComponents/database/MongoDB/useMongoDbInsertOne.md',
+            },
+            {
+              name: 'useMongoDbDeleteOne',
+              content: 'src/components/SystemComponents/database/MongoDB/useMongoDbDeleteOne.md',
             },
             {
               name: 'useMongoDbUpdateOne',
@@ -246,6 +257,10 @@ module.exports = {
                     {
                       name: 'Logging of alarm activities',
                       content: 'src/docs/alarmHandler/serverLogging.md',
+                    },
+                    {
+                      name: 'Notification of alarm events',
+                      content: 'src/docs/alarmHandler/alarmNotification.md',
                     }
                   ]
                 },

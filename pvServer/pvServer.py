@@ -68,7 +68,7 @@ else:
     print("Authenitcation and Authorisation is ENABLED")
 print("")
 
-socketio = SocketIO(app, async_mode=async_mode)
+socketio = SocketIO(app,async_mode=async_mode,cors_allowed_origins='*')
 thread = None
 thread_lock = threading.Lock()
 
@@ -96,48 +96,55 @@ def check_pv_initialized_after_disconnect():
                         clientPVlist[pvname]['pv'].get(as_string=True)
                         d=clientPVlist[pvname]['pv'].get_with_metadata(with_ctrlvars=True,use_monitor=True)
                         if  (clientPVlist[pvname]['pv'].value)!=None :
-                            for keys in d:
-                                if(str(d[keys])=='nan'):
-                                    d[keys]=None
+                            if d!=None:
+                                for keys in d:
+                                    if(str(d[keys])=='nan'):
+                                        d[keys]=None
 
-                            if(clientPVlist[pvname]['pv'].count >1):
-                                d['value']=list(d['value'])
-                            if(clientPVlist[pvname]['pv'].count==0):
-                                d['value']=[]
-                            d['pvname']= pvname
-                            d['newmetadata']= 'True'
-                            d['connected']= '1'
-                            d['emitter']="request_pv_info: pv not in list"
-                            d['chid']=str(d['chid'])
-                            try:
-                                rw_room=str(pvname)+'rw'
-                                socketio.emit(pvname,d,room=rw_room,namespace='/pvServer')
-                                d['write_access']=False
-                                ro_room=str(pvname)+'ro'
-                                socketio.emit(pvname,d,room=ro_room,namespace='/pvServer')
-                                clientPVlist[pvname]['isConnected']=True
-                                clientPVlist[pvname]['initialized']=True
-                            #
-                            except TypeError as e:
-                                #"A type error exists in metadata dictionary and can't be converted into JSON format, previously this was caused by in CHID of type c_long(), a work arround exits, if CHID is not a c_long then try debugging")
-                                log.error("***EPICS PV info initial request info error: ")
-                                log.error("PV name: {}",pvname)
-                                log.error("PyEpics PV metadata: {}",d)
-                                log.error("Exception: {}",e)
-                                log.error("A type error exists in metadata dictionary and can't be converted into JSON format, previously this was caused by in CHID of type c_long(), a work arround exits, if CHID is not a c_long then try debugging")
-                                clientPVlist[pvname]['isConnected']=True
-                                clientPVlist[pvname]['initialized']=False
-                                log.error("Type: {}", type(d['value']))
-                                if ('epics.dbr.c_float_Array_0' in str(type(d['value']))):
-                                    log.info("type is epics.dbr.c_float_Array_0")
-                                d={}
+                                if(clientPVlist[pvname]['pv'].count >1):
+                                    d['value']=list(d['value'])
+                                if(clientPVlist[pvname]['pv'].count==0):
+                                    d['value']=[]
+                                if(clientPVlist[pvname]['pv'].count==1):
+                                    new_char_value=str(d['char_value'])
+                                    if (len(new_char_value)==0):
+                                        new_char_value=str(d['value'])
+                                    d['char_value']=new_char_value
+
                                 d['pvname']= pvname
-                                d['connected']= '0'
+                                d['newmetadata']= 'True'
+                                d['connected']= '1'
+                                d['emitter']="request_pv_info: pv not in list"
+                                d['chid']=str(d['chid'])
+                                try:
+                                    rw_room=str(pvname)+'rw'
+                                    socketio.emit(pvname,d,room=rw_room,namespace='/pvServer')
+                                    d['write_access']=False
+                                    ro_room=str(pvname)+'ro'
+                                    socketio.emit(pvname,d,room=ro_room,namespace='/pvServer')
+                                    clientPVlist[pvname]['isConnected']=True
+                                    clientPVlist[pvname]['initialized']=True
+                                #
+                                except TypeError as e:
+                                    #"A type error exists in metadata dictionary and can't be converted into JSON format, previously this was caused by in CHID of type c_long(), a work arround exits, if CHID is not a c_long then try debugging")
+                                    log.error("***EPICS PV info initial request info error: ")
+                                    log.error("PV name: {}",pvname)
+                                    log.error("PyEpics PV metadata: {}",d)
+                                    log.error("Exception: {}",e)
+                                    log.error("A type error exists in metadata dictionary and can't be converted into JSON format, previously this was caused by in CHID of type c_long(), a work arround exits, if CHID is not a c_long then try debugging")
+                                    clientPVlist[pvname]['isConnected']=True
+                                    clientPVlist[pvname]['initialized']=False
+                                    log.error("Type: {}", type(d['value']))
+                                    if ('epics.dbr.c_float_Array_0' in str(type(d['value']))):
+                                        log.info("type is epics.dbr.c_float_Array_0")
+                                    d={}
+                                    d['pvname']= pvname
+                                    d['connected']= '0'
 
-                                socketio.emit(pvname,d,room=str(pvname),namespace='/pvServer')
-                            except:
-                                log.exception("Unexpected error")
-                                raise
+                                    socketio.emit(pvname,d,room=str(pvname),namespace='/pvServer')
+                                except:
+                                    log.exception("Unexpected error")
+                                    raise
 
         # for watchEventName in clientDbWatchList :
         #     print("watchEventName")
@@ -230,9 +237,9 @@ def dbWatchThread(watchEventName):
                             eventName=watchEventName
                             dbURL=clientDbWatchList[watchEventName]['dbURL']
                             d={'dbURL': dbURL,'write_access':True,'data': data}
-                            socketio.emit(eventName,d,str(dbURL)+'rw',namespace='/pvServer')
+                            socketio.emit(eventName,d,room=str(dbURL)+'rw',namespace='/pvServer')
                             d={'dbURL': dbURL,'write_access':False,'data': data}
-                            socketio.emit(eventName,d,str(dbURL)+'ro',namespace='/pvServer')
+                            socketio.emit(eventName,d,room=str(dbURL)+'ro',namespace='/pvServer')
 
                         except:
                             log.error("Unexpected error: {}",sys.exc_info()[0])
@@ -256,8 +263,13 @@ def onValueChanges(pvname=None,count=None,char_value=None,severity=None,status=N
     pvname1='pva://'+str(pvname)
     if(clientPVlist[pvname1]['initialized']==True):
         if (float(count)== 1):
+           new_char_value=str(char_value)
+           if (len(new_char_value)==0):
+               new_char_value=str(value)
+
+
            socketio.emit(pvname1,
-              {'pvname': pvname1,'newmetadata': 'False','value': str(value),'char_value': str(char_value),'count':count, 'connected':'1', 'severity': severity,'timestamp':timestamp
+              {'pvname': pvname1,'newmetadata': 'False','value': str(value),'char_value': new_char_value,'count':count, 'connected':'1', 'severity': severity,'timestamp':timestamp
               },room='pva://'+str(pvname),namespace='/pvServer')
         else:
            d={'pvname': pvname1,'newmetadata': 'False','value': list((value)),'count':count, 'connected':'1', 'severity': severity,'timestamp':timestamp}
@@ -641,7 +653,7 @@ def databaseRead(message):
 
                             eventName='databaseData:'+dbURL;
                 #            print("eventName",eventName)
-                            socketio.emit(eventName,d,request.sid,namespace='/pvServer')
+                            socketio.emit(eventName,d,room=request.sid,namespace='/pvServer')
                             return "OK"
                         except:
                             log.error("Could not connect to MongoDB: {}",dbURL)
@@ -743,9 +755,9 @@ def databaseBroadcastRead(message):
                             eventName='databaseData:'+dbURL;
     #                        print("eventName",eventName)
                             d={'dbURL': dbURL,'write_access':write_access,'data': data}
-                            socketio.emit(eventName,d,str(dbURL)+'rw',namespace='/pvServer')
+                            socketio.emit(eventName,d,room=str(dbURL)+'rw',namespace='/pvServer')
                             d={'dbURL': dbURL,'write_access':False,'data': data}
-                            socketio.emit(eventName,d,str(dbURL)+'ro',namespace='/pvServer')
+                            socketio.emit(eventName,d,room=str(dbURL)+'ro',namespace='/pvServer')
                             return 'OK'
                         except:
                             log.error("Could not connect to MongoDB: {}",dbURL)
@@ -898,7 +910,7 @@ def databaseBroadcastRead(message):
     #                        print("eventName",eventName)
 
                             d={'dbURL': dbURL,'write_access':write_access,'data': data}
-                            socketio.emit(eventName,d,request.sid,namespace='/pvServer')
+                            socketio.emit(eventName,d,room=str(request.sid),namespace='/pvServer')
 
 
 
@@ -1020,6 +1032,90 @@ def databaseUpdateOne(message):
                             newvalues=message['newvalues']
                             try:
                                 mydb[colName].update_one({'_id':ObjectId(str(id))},newvalues)
+
+                            except Exception as e:
+                                log.info(e)
+
+
+
+#                            print("done: "+dbURL)
+
+                            try:
+                                responseID=message['responseID']
+                            except:
+                                responseID="";
+
+                            #eventName='databaseUpdateOne';
+    #                        print("eventName",eventName)
+                            return 'OK'
+                        except:
+                            log.error("Could not connect to MongoDB: {}",dbURL)
+                            return "Ack: Could not connect to MongoDB: "+str(dbURL)
+
+                else:
+                    log.error("Malformed database URL, must be in format: mongodb://databaseID:database:collection")
+            else:
+                log.error("Unknown URL schema ({})",dbURL)
+        else:
+            log.warning("Write access denied to database URL: {}",dbURL)
+
+    else:
+        socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
+
+@socketio.on('databaseDeleteOne', namespace='/pvServer')
+def databaseDeleteOne(message):
+    global clientPVlist,REACT_APP_DisableLogin
+    dbURL= str(message['dbURL'])
+
+#    print("databaseUpdate: SSID: ",request.sid,' dbURL: ', dbURL)
+#    print("message:",str(message))
+    authenticated=False
+    if REACT_APP_DisableLogin:
+        authenticated=True
+        accessControl={'userAuthorised':True,'permissions':{'read':True,'write':True}}
+    else :
+        accessControl=AutheriseUserAndPermissions(message['clientAuthorisation'],dbURL)
+        authenticated=accessControl['userAuthorised']
+
+    if accessControl['userAuthorised'] :
+        if accessControl['permissions']['write']:
+            if "mongodb://" in dbURL:
+
+#                print("mongodb database connection request: ",dbURL)
+                str1=dbURL.replace("mongodb://","")
+                strings=  str1.split(':')
+                if(len(strings)==3):
+                    database= strings[0];
+                    dbName=   strings[1];
+                    colName=  strings[2];
+#                    print("database: ", database, "length: ", len(database))
+#                    print("dbName: "  ,   dbName, "length: ", len(dbName))
+#                    print("colName: " ,  colName, "length: ", len(colName))
+                    ### must insert a better error detection here
+
+                    if ((len(database)>0) and (len(dbName)>0) and (len(colName)>0)):
+
+
+                        try:
+                            #print("connecting: "+dbURL)
+                            try:
+                                databaseString="mongodb://"+ str(os.environ[database])+"/"
+                                replicaSetName=str(os.environ[database+"_REPLICA_SET_NAME"])
+                                myclient = pymongo.MongoClient(databaseString,serverSelectionTimeoutMS=10,replicaSet=replicaSetName)
+                                # Wait for MongoClient to discover the whole replica set and identify MASTER!
+                                time.sleep(0.1)
+                                #myclient.server_info()
+                            except pymongo.errors.ServerSelectionTimeoutError as err:
+                                log.info(err)
+                                return "Ack: Could not connect to MongoDB: "+str(dbURL)
+
+                            mydb = myclient[dbName]
+
+                            mycol=mydb[colName]
+                            id=message['id']
+                            # newvalues=message['newvalues']
+                            try:
+                                mydb[colName].delete_one({'_id':ObjectId(str(id))})
 
                             except Exception as e:
                                 log.info(e)
@@ -1199,9 +1295,9 @@ def archiverRead(message):
                             eventName='archiverReadData:'+archiverURL;
 
                             d={'archiverURL': archiverURL,'write_access':write_access,'data': data}
-                            socketio.emit(eventName,d,str(archiverURL)+'rw',namespace='/pvServer')
+                            socketio.emit(eventName,d,room=str(archiverURL)+'rw',namespace='/pvServer')
                             d={'archiverURL': archiverURL,'write_access':False,'data': data}
-                            socketio.emit(eventName,d,str(archiverURL)+'ro',namespace='/pvServer')
+                            socketio.emit(eventName,d,room=str(archiverURL)+'ro',namespace='/pvServer')
                             return {'initialized':True}
                         except:
 

@@ -90,10 +90,10 @@ const useArchiverDataHook = (props) => {
             }
         }
         socket.on('disconnect', disconnect);
-        socket.on('reconnect', reconnect);
+        socket.on('connect', reconnect);
         return () => {
             if (props.archiverURL) {
-                socket.removeListener('reconnect', reconnect);
+                socket.removeListener('connect', reconnect);
                 socket.removeListener('disconnect', disconnect);
             }
         }
@@ -724,8 +724,9 @@ const ArchiverDataViewer = (props) => {
                                 type: props.traces[index].type ? props.traces[index].type : 'scatter',
                                 mode: props.traces[index].mode ? props.traces[index].mode : 'lines',
                                 marker: { color: props.traces[index].color ? props.traces[index].color : theme.palette.reactVis.lineColors[index] },
-                                hovertemplate:
-                                    "(%{y}) %{x}"
+                                hovertemplate:props.traces[index].yHoverFormat?
+                                    "(%{y:"+props.traces[index].yHoverFormat+"}) %{x}<extra>%{fullData.name}</extra>"
+                                    : "(%{y}) %{x}<extra>%{fullData.name}</extra>"
 
                             })
                         }
@@ -738,7 +739,10 @@ const ArchiverDataViewer = (props) => {
                                 mode: props.traces[index].mode ? props.traces[index].mode : 'lines',
                                 marker: { color: props.traces[index].color ? props.traces[index].color : theme.palette.reactVis.lineColors[index] },
                                 yaxis: typeof (props.traces[index].yAxis) !== 'undefined' ? (parseInt(props.traces[index].yAxis) === 0 ? undefined : 'y' + (parseInt(props.traces[index].yAxis) + 1)) : 'yaxis',
-                                hovertemplate: "(%{y}) %{x}<extra>%{fullData.name}</extra>"
+                                hovertemplate:props.traces[index].yHoverFormat?
+                                "(%{y:"+props.traces[index].yHoverFormat+"}) %{x}<extra>%{fullData.name}</extra>"
+                                : "(%{y}) %{x}<extra>%{fullData.name}</extra>"
+
                             })
                         }
                     })}
@@ -828,6 +832,12 @@ ArchiverDataViewer.propTypes = {
          * Corresponding yAxis index
          */
         yAxis: PropTypes.number,
+        /**
+         * The plotjs format overide for the y value. This is derived from the <a href="https://github.com/d3/d3-format/blob/v2.0.0/README.md#format">d3 format specification</a>
+         * Example: ".3e" : exponential notaion with 3 digits.
+         *
+         */
+        yHoverFormat: PropTypes.string,
 
     })),
     /**
@@ -835,9 +845,28 @@ ArchiverDataViewer.propTypes = {
 * An array of objects with shape that defines each Y Axis
 */
     yAxes: PropTypes.arrayOf(PropTypes.shape({
+        /**
+         * Axis title
+         */
         title: PropTypes.string,
+        /**
+         * Axis color
+         */
         color: PropTypes.string,
+        /**
+         * show or hide the grid
+         */
         showgrid: PropTypes.bool,
+         /**
+         * The plotjs format overide for the tick format. This is derived from the <a href="https://github.com/d3/d3-format/blob/v2.0.0/README.md#format">d3 format specification</a>
+         * Example: ".3e" : exponential notaion with 3 digits.
+         *
+         */
+        tickFormat:PropTypes.string,
+        /**
+         * 'linear' or 'log' type
+         */
+        type: PropTypes.string,
     })),
     /**
     *

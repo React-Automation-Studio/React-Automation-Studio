@@ -52,13 +52,17 @@ const ControlTable = (props) => {
       }
       else if (editorType === 'editorSlitXY') {
         rowPvs.push({ id: id, system: system, displayName: system.displayName+' X Gap', setpointPv: system.xGapSetpointPv, readbackPv: system.xGapReadbackPv, statusTextPv: system.xDriveOnPv, rowProps });
+        id++;
         rowPvs.push({ id: id, system: system, displayName: system.displayName+' X Offset', setpointPv: system.xOffsetSetpointPv, readbackPv: system.xOffsetReadbackPv, statusTextPv: system.xDriveOnPv, rowProps });
+        id++;
         rowPvs.push({ id: id, system: system, displayName: system.displayName+' Y Gap', setpointPv: system.yGapSetpointPv, readbackPv: system.yGapReadbackPv, statusTextPv: system.yDriveOnPv, rowProps });
+        id++;
         rowPvs.push({ id: id, system: system, displayName: system.displayName+' Y Offset', setpointPv: system.yOffsetSetpointPv, readbackPv: system.yOffsetReadbackPv, statusTextPv: system.yDriveOnPv, rowProps });
         id++;
       }
       else if (editorType === 'editorSteererXY') {
         rowPvs.push({ id: id, system: system, displayName: system.displayName+' X ', setpointPv: system.xSetpointPv, readbackPv: system.xSetpointPv, statusTextPv: system.xOnPv, rowProps });
+        id++;
         rowPvs.push({ id: id, system: system, displayName: system.displayName+' Y ', setpointPv: system.ySetpointPv, readbackPv: system.ySetpointPv, statusTextPv: system.yOnPv, rowProps });
         
         id++;

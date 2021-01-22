@@ -505,6 +505,7 @@ Improvements and new features:
     <li>Upgraded to Socket.IO 3.1.0</li>
     <li>Upgraded pvServer to Flask-SocketIO 5.0.1</li>
     <li>Package updates</li>
+    <li>Minor Bug Fixes</li>
     </li>
   </ul>
 

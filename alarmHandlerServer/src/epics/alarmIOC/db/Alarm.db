@@ -2,7 +2,7 @@
 record(waveform, "$(alarm_name)") {
     field(DTYP, "Soft Channel")
     field(DESC, "Test waveform")
-    field(NELM, "3")
+    field(NELM, "10")
     field(FTVL, "STRING")   
 }
 # Alarm status

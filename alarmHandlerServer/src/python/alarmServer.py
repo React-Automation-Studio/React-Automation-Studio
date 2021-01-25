@@ -473,8 +473,13 @@ def pvDisconn(pvname, conn):
                     notifyContent = True
     else:
         try:
+            description = pvDescDict[pvname].value
+            hostname = pvDescDict[pvname].host
+            # hostname = "AAbcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyZZ"
+            n = 39
+            hostchunks = [hostname[i:i+n] for i in range(0, len(hostname), n)]
             curr_desc = ['abcdefghijklmnopqrstuvwxyzAbcdefghijk_1',
-                         pvDescDict[pvname].value, pvDescDict[pvname].host]
+                         description] + hostchunks
         except:
             pass
         pv.put(np.array(curr_desc))

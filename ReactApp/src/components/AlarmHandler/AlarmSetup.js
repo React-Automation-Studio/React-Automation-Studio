@@ -498,7 +498,7 @@ const AlarmSetup = (props) => {
                 }
                 return null
             })
-            console.log(localAlarmLogDict)
+            // console.log(localAlarmLogDict)
             setAlarmLogDict(localAlarmLogDict)
         }
         // disable useEffect dependencies for "dbHistoryData"

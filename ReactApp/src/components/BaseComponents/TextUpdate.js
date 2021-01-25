@@ -233,7 +233,7 @@ TextUpdate.propTypes = {
 };
 TextUpdate.defaultProps = {
  debug: false,
- align:'ingerit',
+ align:'inherit',
  variant:'body2',
  alarmSensitive: false,
  showTooltip:false

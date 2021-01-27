@@ -13,25 +13,27 @@ ADD ./ReactApp/public /frontendserverApp/public
 ADD ./ReactApp/src /frontendserverApp/src
 ADD  ./.env /frontendserverApp/
 
+
 RUN npm run build
-RUN cp -R /frontendserverApp/build/ /build/
-ADD ./frontendServer/ /frontendServer
-WORKDIR /frontendServer
-ENV PATH /frontendServer/node_modules/.bin:$PATH
-RUN npm set registry http://registry.npmjs.org/
-RUN npm install
+VOLUME /build
+CMD cp -R /frontendserverApp/build/* /build/
+# ADD ./frontendServer/ /frontendServer
+# WORKDIR /frontendServer
+# ENV PATH /frontendServer/node_modules/.bin:$PATH
+# RUN npm set registry http://registry.npmjs.org/
+# RUN npm install
 
-#RUN test
+# #RUN test
 
-WORKDIR /
-
-
-
+# WORKDIR /
 
 
-WORKDIR /frontendServer
 
 
-CMD node frontendServer.js
+
+# WORKDIR /frontendServer
+
+
+# CMD node frontendServer.js
 
 EXPOSE $REACT_APP_FrontendServerPORT $REACT_APP_PyEpicsServerPORT

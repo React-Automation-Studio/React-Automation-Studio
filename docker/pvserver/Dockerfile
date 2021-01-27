@@ -42,7 +42,7 @@ RUN echo $REACT_APP_PyEpicsServerNamespace
 #RUN ls /epics/base/lib/linux-x86_64/
 
 
-RUN mkdir /build
+
 VOLUME /pvServer/userAuthentication/users
 
 

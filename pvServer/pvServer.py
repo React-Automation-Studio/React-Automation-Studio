@@ -7,7 +7,7 @@ import pymongo
 import threading
 import uuid
 
-from flask import Flask, render_template, session, request, jsonify
+from flask import Flask, render_template, session, request, jsonify, send_from_directory
 from flask_socketio import SocketIO, emit, join_room, leave_room, \
     close_room, rooms, disconnect
 
@@ -50,14 +50,23 @@ print('pvServerLogFileBackup: {}'.format(os.environ.get('pvServerLogFileBackup',
 
 
 print("")
-#app = Flask(__name__, static_folder="../build/static", template_folder="../build")
-app = Flask(__name__)
-#@app.route('/', defaults={'path': ''})
-#@app.route('/<path:path>')
-#def index(path):
+app = Flask(__name__, static_folder="./build/static", template_folder="./build")
 
-#    return render_template('index.html', async_mode=socketio.async_mode)
 
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def index(path):
+
+    return render_template('index.html', async_mode=socketio.async_mode)
+
+# @app.route("/manifest.json")
+# def manifest():
+#     return send_from_directory('./build', 'manifest.json')
+
+
+# @app.route('/favicon.ico')
+# def favicon():
+#     return send_from_directory('./build', 'favicon.ico')
 
 
 

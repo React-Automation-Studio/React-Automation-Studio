@@ -1,8 +1,8 @@
-FROM python:3.8.7
+FROM python:3.9.1
 
 # Install OS packages and other dependencies 
 RUN apt-get update && \
-    apt install -y tmux
+    apt install -y tmux wkhtmltopdf
 
 # Install python dependencies
 WORKDIR /usr/src/app

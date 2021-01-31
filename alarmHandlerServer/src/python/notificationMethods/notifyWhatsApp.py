@@ -17,11 +17,11 @@ except:
     localtz = None
 
 try:
-    SIGNAL_CLI_ENDPOINT = os.environ['SIGNAL_CLI_ENDPOINT']
+    SIGNAL_CLI_REST_ENDPOINT = os.environ['SIGNAL_CLI_REST_ENDPOINT']
 except:
     print("Signal CLI endpoint not configured!")
     print("Signal notifications will not be sent")
-    SIGNAL_CLI_ENDPOINT = ''
+    SIGNAL_CLI_REST_ENDPOINT = ''
 
 
 def composeEmailBody(userNotifyDict, sent_time):
@@ -122,7 +122,7 @@ def notifyWhatsApp(timestamp, mobile, userNotifyDict):
         print(mobile)
         print(userNotifyDict)
 
-    if(SIGNAL_CLI_ENDPOINT != ''):
+    if(SIGNAL_CLI_REST_ENDPOINT != ''):
         # Time zone localisation
         if(localtz):
             str_time = timestamp.astimezone(localtz).strftime(
@@ -156,7 +156,7 @@ def notifyWhatsApp(timestamp, mobile, userNotifyDict):
         }
         
         try:
-            r = requests.post(SIGNAL_CLI_ENDPOINT, json=data)
+            r = requests.post(SIGNAL_CLI_REST_ENDPOINT, json=data)
             return r.ok
         except:
             print("Failed to send Signal message to",

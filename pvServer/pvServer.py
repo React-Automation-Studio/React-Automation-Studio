@@ -26,6 +26,8 @@ sys.path.insert(0, 'userAuthentication/')
 from authenticate import  AuthoriseUser,AutheriseUserAndPermissions, AuthenticateUser
 from dotenv import load_dotenv
 
+
+from flask_cors import CORS
 class RegexConverter(BaseConverter):
     def __init__(self, url_map, *items):
         super(RegexConverter, self).__init__(url_map)
@@ -61,32 +63,40 @@ print('pvServerLogFileBackup: {}'.format(os.environ.get('pvServerLogFileBackup',
 print("")
 app = flask.Flask(__name__, static_folder="./build/static", template_folder="./build")
 app.url_map.converters['regex'] = RegexConverter
-@app.route('/protected')
 
-def protected():
-    return 'hello'
-@app.route('/newlogin')
-def newlogin():
-    return redirect("MobileDemo1", code=302)
+CORS(app)
+
+@app.route('/api/login/local', methods=['POST'])
+def login():
+    user = request.json.get('user', None)
+    userData=AuthenticateUser(user)
+    if (userData is None):
+        log.info("Unknown user login: {} ",user['email'])
+        return jsonify({'login': False}), 401
+    username=userData['username']
+    roles=userData['roles']
+    jwt=userData['JWT']
+    resp= jsonify({'login': True, 'jwt':jwt,'username':username,'roles':roles})
+    log.info("User logged in: {} ",username)
+    return resp, 200
+
+
+
+
 
 @app.route("/<regex(r'(.*?)\.(json|txt|png|ico|js)$'):file>", methods=["GET"])
 def public(file):
     return flask.send_from_directory('./build', file)
 
+
+
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
+
 def index(path):
 
     return render_template('index.html', async_mode=socketio.async_mode)
 
-# @app.route("/manifest.json")
-# def manifest():
-#     return send_from_directory('./build', 'manifest.json')
-
-
-# @app.route('/favicon.ico')
-# def favicon():
-#     return send_from_directory('./build', 'favicon.ico')
 
 
 
@@ -1346,18 +1356,19 @@ def archiverRead(message):
 
 
 @socketio.on('AuthenticateClient', namespace='/pvServer')
-def test_authorise(message):
-    global REACT_APP_DisableLogin
+def authenticate(message):
+    print("Error, old socket io authentication is disabled")
+    # global REACT_APP_DisableLogin
 
-    if (not REACT_APP_DisableLogin ):
-        userData=AuthenticateUser(message['user'])
-        if not (userData is None) :
-            emit('clientAuthenticated', {'successful': True, 'jwt':userData['JWT'],'username':userData['username'],'roles':userData['roles']},room=request.sid,namespace='/pvServer')
-        else:
-            emit('clientAuthenticated', {'successful': False},room=request.sid,namespace='/pvServer')
-            socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
-    else:
-        emit('clientAuthenticated', {'successful': True, 'jwt':'anonomous'},room=request.sid,namespace='/pvServer')
+    # if (not REACT_APP_DisableLogin ):
+    #     userData=AuthenticateUser(message['user'])
+    #     if not (userData is None) :
+    #         emit('clientAuthenticated', {'successful': True, 'jwt':userData['JWT'],'username':userData['username'],'roles':userData['roles']},room=request.sid,namespace='/pvServer')
+    #     else:
+    #         emit('clientAuthenticated', {'successful': False},room=request.sid,namespace='/pvServer')
+    #         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
+    # else:
+    #     emit('clientAuthenticated', {'successful': True, 'jwt':'anonomous'},room=request.sid,namespace='/pvServer')
 
 @socketio.on('AuthoriseClient', namespace='/pvServer')
 def test_authenticate(message):

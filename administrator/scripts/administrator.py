@@ -56,12 +56,12 @@ if str((sys.argv[1]))=="changeUserPw":
                 userFound=True
                 confirm=""
                 password=""
-                password = getpass.getpass(prompt="Enter the new password: ", stream=None)
+                password = getpass.getpass(prompt="Enter the new local password: ", stream=None)
 
                 while(len(password)<6):
                     print("Error password must be at least 6 characters long, Please retry again:")
-                    password = getpass.getpass(prompt="Enter the new password: ", stream=None)
-                confirm = getpass.getpass(prompt="Confirm the new password: ", stream=None)
+                    password = getpass.getpass(prompt="Enter the new local password: ", stream=None)
+                confirm = getpass.getpass(prompt="Confirm the new local password: ", stream=None)
                 if confirm==password:
                     user['password']=(bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt(12))).decode('utf-8')
                 else:
@@ -85,12 +85,15 @@ if str((sys.argv[1]))=="checkUserPw":
                 confirm=""
                 password=""
                 password = getpass.getpass(prompt="Enter password: ", stream=None)
-                if bcrypt.checkpw(password.encode('utf-8'), user['password'].encode('utf-8')):
-                    print("Password is correct")
-                else:
+                try :
+                    if bcrypt.checkpw(password.encode('utf-8'), user['password'].encode('utf-8')):
+                        print("Password is correct")
+                    else:
+                        print("Password is not correct")
+                    break
+                except:
                     print("Password is not correct")
-
-                break;
+                    break
         if userFound==False:
             print("Error: Unknown user")
     else:
@@ -139,18 +142,25 @@ if str((sys.argv[1]))=="addUser":
         else:
             confirm=""
             password=""
-            password = getpass.getpass(prompt="Enter the new users password: ", stream=None)
+            createPassword = input("Do you want to create a local password, Y/n: ")
+            if str(createPassword).capitalize() == "Y":
+                password = getpass.getpass(prompt="Enter the new users password: ", stream=None)
 
-            while(len(password)<6):
-                print("Error password must be at least 6 characters long, Please retry again:")
-                password = getpass.getpass(prompt="Enter the new password: ", stream=None)
-            confirm = getpass.getpass(prompt="Confirm the new password: ", stream=None)
-            if confirm==password:
+                while(len(password)<6):
+                    print("Error password must be at least 6 characters long, Please retry again:")
+                    password = getpass.getpass(prompt="Enter the new password: ", stream=None)
+                confirm = getpass.getpass(prompt="Confirm the new password: ", stream=None)
+                if confirm==password:
 
-                encryptedPassword=(bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt(12))).decode('utf-8')
-                d={'username':username,'password':encryptedPassword}
+                    encryptedPassword=(bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt(12))).decode('utf-8')
+                    d={'username':username,'password':encryptedPassword}
+                    users.append(d)
+                    saveUsers(data)
+                    print("Added user: "+str(username))
+                else:
+                    print("Error: passwords don't match, exiting!")
+            else:
+                d={'username':username,'password':""}
                 users.append(d)
                 saveUsers(data)
-                print("Added user: "+str(username))
-            else:
-                print("Error: passwords don't match, exiting!")
+

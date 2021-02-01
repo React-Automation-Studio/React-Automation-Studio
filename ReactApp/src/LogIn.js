@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect,useState,useContext } from 'react';
 import AutomationStudioContext from './components/SystemComponents/AutomationStudioContext';
 import PropTypes from 'prop-types';
 import Avatar from '@material-ui/core/Avatar';
@@ -9,9 +9,9 @@ import InputLabel from '@material-ui/core/InputLabel';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import withStyles from '@material-ui/core/styles/withStyles';
-import { Redirect } from 'react-router-dom';
 
+import { Redirect } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -22,7 +22,7 @@ import Slide from '@material-ui/core/Slide';
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
-const styles = theme => ({
+const useStyles = makeStyles((theme)=> ({
   main: {
     width: 'auto',
     display: 'block', // Fix IE 11 issue.
@@ -52,178 +52,172 @@ const styles = theme => ({
   submit: {
     marginTop: theme.spacing(1) * 3,
   },
-});
+}));
 
-class LogIn extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      'emailAddress': "",
-      'password': "",
-      'Authenticated': false,
-      'Authorised': false,
-      'AuthorisationFailed': false,
-      'AuthenticationFailed': false,
+const Login =(props)=>{
+  const classes = useStyles();
+  const context = useContext(AutomationStudioContext);
 
-    };
-    this.handleChange = this.handleChange.bind(this);
-    this.catchReturn = this.catchReturn.bind(this);
-    this.handleAuthentication = this.handleAuthentication.bind(this);
-    this.handleAuthorisation = this.handleAuthorisation.bind(this);
-    this.handleUnauthorisedDialogClick = this.handleUnauthorisedDialogClick.bind(this);
-    this.handleAuthorisationFailedDialogClick = this.handleAuthorisationFailedDialogClick.bind(this);
-
-    this.handleResponse = this.handleResponse.bind(this);
-  }
-
-  handleChange = name => event => {
-    let value = event.target.value;
-
-    this.setState({
-      [name]: value,
-    });
-  };
-
-  catchReturn = name => event => {
-    if (event.key === 'Enter') {
-      let value = event.target.value;
-
-      this.setState({
-        [name]: value,
-      }, this.handleSubmitClick());
-    }
-  };
-  handleSubmitClick = () => {
-    //  console.log('button clicked')
-    //  console.log('email: ',this.state.emailAddress)
-    //  console.log('password: ',this.state.password)
-    let socket = this.context.socket;
+  const [emailAddress,setEmailAddress]=useState("")
+  const [password,setPassword]=useState("")
+  //const [authenticated,setAuthenticated]=useState(false)
+  const [authorised,setAuthorised]=useState(false)
+  const [authorisationFailed,setAuthorisationFailed]=useState(false)
+  const [authenticationFailed,setAuthenticationFailed]=useState(false)
+  const [submit,setSubmit]=useState(false);
     
-    if (socket.disconnected) {
-      socket.open()
-      socket.emit('AuthenticateClient', { user: { email: this.state.emailAddress, password: this.state.password } });
+  
+  
+
+  
+  
+  useEffect(()=> {
+    if (submit==true){
+    
+    let port;
+    if (typeof process.env.REACT_APP_PyEpicsServerPORT === 'undefined') {
+      port = 5000;
     }
     else {
-      socket.emit('AuthenticateClient', { user: { email: this.state.emailAddress, password: this.state.password } });
+      port = process.env.REACT_APP_PyEpicsServerPORT;
     }
-    //this.login();
 
-  }
-
-  handleResponse = (response) => {
-   
-    return response.text().then(text => {
-      const data = text && JSON.parse(text);
-      if (!response.ok) {
-        if (response.status === 401) {
-          // auto logout if 401 response returned from api
-          //logout();
-          //location.reload(true);
-        }
-
-        const error = (data && data.message) || response.statusText;
-        return Promise.reject(error);
-      }
-
-      return data;
-    });
-  }
-
-
-  handleAuthentication(msg) {
-    //  console.log('clientAuthenticated',msg)
-    if (typeof msg.jwt !== 'undefined') {
-      localStorage.setItem('jwt', JSON.stringify(msg.jwt));
+    let pvServerBASEURL;
+    if (typeof process.env.REACT_APP_PyEpicsServerBASEURL === 'undefined') {
+      pvServerBASEURL = "http://127.0.0.1";
     }
     else {
-      localStorage.setItem('jwt', JSON.stringify(null));
-    }
-    this.setState({ 'AuthorisationFailed': msg.successful !== true });
-    if (msg.successful) {
-      let jwt = JSON.parse(localStorage.getItem('jwt'));
-      //  console.log('jwt',jwt);
-
-      let socket = this.context.socket;
-      socket.emit('AuthoriseClient', jwt);
-
+      pvServerBASEURL = process.env.REACT_APP_PyEpicsServerBASEURL;
     }
 
-  }
-  handleUnauthorisedDialogClick() {
-    this.setState({ 'AuthorisationFailed': false });
+    let PyEpicsServerURL = pvServerBASEURL + ":" + port;
 
-  }
-
-  handleAuthorisationFailedDialogClick() {
-    this.setState({ 'AuthenticationFailed': false });
-
-  }
-  handleAuthorisation(msg) {
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user: { email: emailAddress, password: password } })
+    };
+    fetch(PyEpicsServerURL + '/api/login/local', requestOptions)
+      .then(response => response.json())
+      .then(msg => {
+         console.log(msg)
    
-    this.context.setUserData(msg.username, msg.roles);
-    this.setState({ 'Authenticated': msg.successful, 'AuthenticationFailed': msg.successful !== true });
+          if (typeof msg.jwt !== 'undefined') {
+            localStorage.setItem('jwt', JSON.stringify(msg.jwt));
+          }
+          else {
+            localStorage.setItem('jwt', JSON.stringify(null));
+          }
+          
+          if (msg.login) {
+            const jwt = JSON.parse(localStorage.getItem('jwt'));
+            
+      
+            
+            const {socket}=context;
+            if (socket.disconnected) {
+              socket.open();
+              socket.emit('AuthoriseClient', jwt);
+            }
+            else {
+              socket.emit('AuthoriseClient', jwt);
+            }
+            
+      
+          }
+          setAuthenticationFailed(msg.login !== true );
+      
+        }        
 
 
-  }
-  componentDidMount() {
-    let socket = this.context.socket;
+      )
+      setSubmit(false)
+    }
+    
+  },[submit]
+
+  )
+
+
+  
+
+ 
+
+  
+
+ 
+  
+  useEffect(()=> {
+    
+    
+    const handleAuthorisation=(msg)=>{
+    
+      context.setUserData(msg.username, msg.roles);
+      setAuthenticationFailed(msg.successful !== true )
+      setAuthorised(msg.successful)
+      
+  
+  
+    }
+    
+    const {socket} = context;
     localStorage.removeItem('jwt');
-    socket.on('clientAuthenticated', this.handleAuthentication);
-    socket.on('clientAuthorisation', this.handleAuthorisation);
-  }
-  componentWillUnmount() {
-    let socket = this.context.socket;
-    socket.removeListener('clientAuthenticated', this.handleAuthentication);
-    socket.removeListener('clientAuthorisation', this.handleAuthorisation);
-  }
+    
+    socket.on('clientAuthorisation', handleAuthorisation);
+    return()=>{
+      
+    socket.removeListener('clientAuthorisation', handleAuthorisation);
+    }
+  },[])
+ 
 
-  render() {
-    const { classes } = this.props;
-   
+  
+    
+    
     return (
       <React.Fragment>
 
         <Dialog
-          open={this.state.AuthorisationFailed}
+          open={authorisationFailed}
           TransitionComponent={Transition}
           keepMounted
 
-          aria-labelledby="alert-login-title1"
-          aria-describedby="alert-login-slide-description1"
+          aria-labelledby="alert-Login-title1"
+          aria-describedby="alert-Login-slide-description1"
         >
-          <DialogTitle id="alert-login-title1">
+          <DialogTitle id="alert-Login-title1">
             Error!
         </DialogTitle>
           <DialogContent>
-            <DialogContentText id="alert-login-slide-description1">
+            <DialogContentText id="alert-Login-slide-description1">
               Invalid username or password!
           </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleUnauthorisedDialogClick} color="primary">
+            <Button onClick={()=>setAuthorisationFailed(false)} color="primary">
               Ok
           </Button>
 
           </DialogActions>
         </Dialog>
         <Dialog
-          open={this.state.AuthenticationFailed}
+          open={authenticationFailed}
           TransitionComponent={Transition}
           keepMounted
 
-          aria-labelledby="alert-login-title2"
-          aria-describedby="alert-login-slide-description2"
+          aria-labelledby="alert-Login-title2"
+          aria-describedby="alert-Login-slide-description2"
         >
-          <DialogTitle id="alert-login-title2">
+          <DialogTitle id="alert-Login-title2">
             {"Error!"}
           </DialogTitle>
           <DialogContent>
-            <DialogContentText id="alert-login-slide-description2">
+            <DialogContentText id="alert-Login-slide-description2">
               Authentication Failed!
           </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleAuthorisationFailedDialogClick} color="primary">
+            <Button onClick={()=>setAuthenticationFailed(false)} color="primary">
               Ok
           </Button>
 
@@ -253,38 +247,47 @@ class LogIn extends React.Component {
             <form className={classes.form}>
               <FormControl margin="normal" required fullWidth>
                 <InputLabel htmlFor="email">Username or Email Address</InputLabel>
-                <Input id="email" name="email" autoComplete="email" autoFocus onChange={this.handleChange('emailAddress')} onKeyPress={this.catchReturn('password')} />
+                <Input id="email" name="email" autoComplete="email" autoFocus onChange={(event)=>(setEmailAddress(event.target.value))}
+                 onKeyPress={(event)=>{
+                   if (event.key === 'Enter') {
+                      setEmailAddress(event.target.value)
+                      setSubmit(true)
+                     }
+                    }} 
+    />
               </FormControl>
               <FormControl margin="normal" required fullWidth>
                 <InputLabel htmlFor="password">Password</InputLabel>
-                <Input name="password" type="password" id="password" autoComplete="current-password" onChange={this.handleChange('password')} onKeyPress={this.catchReturn('password')} />
+                <Input name="password" type="password" id="password" autoComplete="current-password" onChange={(event)=>(setPassword(event.target.value))} 
+                onKeyPress={(event)=>{
+                  if (event.key === 'Enter') {
+                     setPassword(event.target.value)
+                     setSubmit(true)
+                    }
+                   }}
+                    />
 
               </FormControl>
-              {/* <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            /> */}
+          
               <Button
 
                 fullWidth
                 variant="contained"
                 color="primary"
                 className={classes.submit}
-                onClick={this.handleSubmitClick}
+                onClick={()=> setSubmit(true)}
               >
                 Sign in
             </Button>
             </form>
           </Paper>
         </main>
-        {this.state.Authenticated && <Redirect to='/' />}
+        {authorised && <Redirect to='/' />}
       </React.Fragment>
     );
   }
-}
 
-LogIn.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-LogIn.contextType = AutomationStudioContext;
-export default withStyles(styles)(LogIn);
+
+
+
+export default Login;

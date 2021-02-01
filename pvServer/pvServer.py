@@ -6,11 +6,11 @@ import pymongo
 
 import threading
 import uuid
-
-from flask import Flask, render_template, session, request, jsonify, send_from_directory
+import flask
+from flask import Flask, render_template, session, request, jsonify, send_from_directory, redirect
 from flask_socketio import SocketIO, emit, join_room, leave_room, \
     close_room, rooms, disconnect
-
+from werkzeug.routing import BaseConverter
 from bson.json_util import dumps
 
 from epics import PV
@@ -25,10 +25,19 @@ sys.path.insert(0, 'userAuthentication/')
 
 from authenticate import  AuthoriseUser,AutheriseUserAndPermissions, AuthenticateUser
 from dotenv import load_dotenv
+
+class RegexConverter(BaseConverter):
+    def __init__(self, url_map, *items):
+        super(RegexConverter, self).__init__(url_map)
+        self.regex = items[0]
+
 load_dotenv()
 # Set this variable to "threading", "eventlet" or "gevent" to test the
 # different async modes, or leave it set to None for the application to choose
 # the best option based on installed packages.
+
+
+
 async_mode = 'gevent'
 print("")
 print('**************************************')
@@ -50,8 +59,19 @@ print('pvServerLogFileBackup: {}'.format(os.environ.get('pvServerLogFileBackup',
 
 
 print("")
-app = Flask(__name__, static_folder="./build/static", template_folder="./build")
+app = flask.Flask(__name__, static_folder="./build/static", template_folder="./build")
+app.url_map.converters['regex'] = RegexConverter
+@app.route('/protected')
 
+def protected():
+    return 'hello'
+@app.route('/newlogin')
+def newlogin():
+    return redirect("MobileDemo1", code=302)
+
+@app.route("/<regex(r'(.*?)\.(json|txt|png|ico|js)$'):file>", methods=["GET"])
+def public(file):
+    return flask.send_from_directory('./build', file)
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')

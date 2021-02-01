@@ -23,7 +23,7 @@ from bson.objectid import ObjectId
 sys.path.insert(0, '../')
 sys.path.insert(0, 'userAuthentication/')
 
-from authenticate import  AuthoriseUser,AutheriseUserAndPermissions, AuthenticateUser
+from authenticate import  AuthoriseUser,AutheriseUserAndPermissions, LocalAuthenticateUser
 from dotenv import load_dotenv
 
 
@@ -69,9 +69,9 @@ CORS(app)
 @app.route('/api/login/local', methods=['POST'])
 def login():
     user = request.json.get('user', None)
-    userData=AuthenticateUser(user)
+    userData=LocalAuthenticateUser(user)
     if (userData is None):
-        log.info("Unknown user login: {} ",user['email'])
+        log.info("Unknown user login: {} ",user['username'])
         return jsonify({'login': False}), 401
     username=userData['username']
     roles=userData['roles']
@@ -1361,7 +1361,7 @@ def authenticate(message):
     # global REACT_APP_DisableLogin
 
     # if (not REACT_APP_DisableLogin ):
-    #     userData=AuthenticateUser(message['user'])
+    #     userData=LocalAuthenticateUser(message['user'])
     #     if not (userData is None) :
     #         emit('clientAuthenticated', {'successful': True, 'jwt':userData['JWT'],'username':userData['username'],'roles':userData['roles']},room=request.sid,namespace='/pvServer')
     #     else:

@@ -14,6 +14,7 @@ from dbMongo import dbFindOne, dbGetCollection, dbUpdateHistory
 from notificationMethods.notifyEmail import notifyEmail
 from notificationMethods.notifySMS import notifySMS
 from notificationMethods.notifyWhatsApp import notifyWhatsApp
+from notificationMethods.notifySignal import notifySignal
 
 try:
     AH_DEBUG = bool(os.environ['AH_DEBUG'])
@@ -165,6 +166,7 @@ def notify(notifyBuffer):
         notifyEmailDict = {}
         notifySMSDict = {}
         notifyWhatsAppDict = {}
+        notifySignalDict = {}
         name = user["name"]
         email = user["email"]
         mobile = user["mobile"]
@@ -185,6 +187,7 @@ def notify(notifyBuffer):
                         notifyOnEmail = False
                         notifyOnSMS = False
                         notifyOnWhatsApp = False
+                        notifyOnSignal = False
                         if(user["global"]):
                             if(AH_DEBUG):
                                 print("Using global profile")
@@ -192,6 +195,9 @@ def notify(notifyBuffer):
                             notifyOnEmail = user["globalSetup"]["email"]
                             notifyOnSMS = user["globalSetup"]["sms"]
                             notifyOnWhatsApp = user["globalSetup"]["whatsapp"]
+                            # Backwards compatible
+                            notifyOnSignal = user["globalSetup"]["signal"] if (
+                                "signal" in user["globalSetup"]) else False
                         else:
                             if(AH_DEBUG):
                                 print("Using unique profile")
@@ -199,6 +205,9 @@ def notify(notifyBuffer):
                             notifyOnEmail = notifyPV["notifySetup"]["email"]
                             notifyOnSMS = notifyPV["notifySetup"]["sms"]
                             notifyOnWhatsApp = notifyPV["notifySetup"]["whatsapp"]
+                            # Backwards compatible
+                            notifyOnSignal = user["notifySetup"]["signal"] if (
+                                "signal" in user["notifySetup"]) else False
                         if(notify):
                             # Passes notifyValid check
                             if(AH_DEBUG):
@@ -224,6 +233,13 @@ def notify(notifyBuffer):
                                 if(area not in notifyWhatsAppDict):
                                     notifyWhatsAppDict[area] = {}
                                 notifyWhatsAppDict[area][pvname] = message
+                            if(notifyOnSignal):
+                                # Notify via signal
+                                if(AH_DEBUG):
+                                    print("Notify via Signal")
+                                if(area not in notifySignalDict):
+                                    notifySignalDict[area] = {}
+                                notifySignalDict[area][pvname] = message
                         else:
                             if(AH_DEBUG):
                                 print("Fail notifyValid")

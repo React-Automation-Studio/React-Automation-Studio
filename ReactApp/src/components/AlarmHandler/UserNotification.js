@@ -172,11 +172,61 @@ const UserNotification = (props) => {
         }
         if (userObject.notify) {
             if (userObject.isGlobal) {
-                sumString = "Global - Notify me on "
+                sumString = "Global - Notify me about "
             }
             else {
-                sumString = "Notify me on "
+                sumString = "Notify me about "
             }
+            // alarm types - Backwards compatible
+            if ((userObject.alarmMinor ?? true) && (userObject.alarmMajor ?? true) && (userObject.alarmInvalid ?? true) && (userObject.alarmDisconn ?? true)) {
+                sumString = sumString.concat("all alarm types on ")
+            }
+            else if ((userObject.alarmMinor ?? true) && (userObject.alarmMajor ?? true) && (userObject.alarmInvalid ?? true)) {
+                sumString = sumString.concat("MINOR, MAJOR and INVALID alarm types on ")
+            }
+            else if ((userObject.alarmMinor ?? true) && (userObject.alarmMajor ?? true) && (userObject.alarmDisconn ?? true)) {
+                sumString = sumString.concat("MINOR, MAJOR and DISCONN alarm types on ")
+            }
+            else if ((userObject.alarmMinor ?? true) && (userObject.alarmInvalid ?? true) && (userObject.alarmDisconn ?? true)) {
+                sumString = sumString.concat("MINOR, INVALID and DISCONN alarm types on ")
+            }
+            else if ((userObject.alarmMajor ?? true) && (userObject.alarmInvalid ?? true) && (userObject.alarmDisconn ?? true)) {
+                sumString = sumString.concat("MAJOR, INVALID and DISCONN alarm types on ")
+            }
+            else if ((userObject.alarmMinor ?? true) && (userObject.alarmMajor ?? true)) {
+                sumString = sumString.concat("MINOR and MAJOR alarm types on ")
+            }
+            else if ((userObject.alarmMinor ?? true) && (userObject.alarmInvalid ?? true)) {
+                sumString = sumString.concat("MINOR and INVALID alarm types on ")
+            }
+            else if ((userObject.alarmMinor ?? true) && (userObject.alarmDisconn ?? true)) {
+                sumString = sumString.concat("MINOR and DISCONN alarm types on ")
+            }
+            else if ((userObject.alarmMajor ?? true) && (userObject.alarmInvalid ?? true)) {
+                sumString = sumString.concat("MAJOR and INVALID alarm types on ")
+            }
+            else if ((userObject.alarmMajor ?? true) && (userObject.alarmDisconn ?? true)) {
+                sumString = sumString.concat("MAJOR and DISCONN alarm types on ")
+            }
+            else if ((userObject.alarmInvalid ?? true) && (userObject.alarmDisconn ?? true)) {
+                sumString = sumString.concat("INVALID and DISCONN alarm types on ")
+            }
+            else if ((userObject.alarmMinor ?? true)) {
+                sumString = sumString.concat("MINOR alarm types on ")
+            }
+            else if ((userObject.alarmMajor ?? true)) {
+                sumString = sumString.concat("MAJOR alarm types on ")
+            }
+            else if ((userObject.alarmInvalid ?? true)) {
+                sumString = sumString.concat("INVALID alarm types on ")
+            }
+            else if ((userObject.alarmDisconn ?? true)) {
+                sumString = sumString.concat("DISCONN alarm types on ")
+            }
+            else{
+                sumString = sumString.concat("no alarm types on ")
+            }
+            //
             // Backwards compatible
             if (userObject.email && userObject.sms && userObject.whatsapp && (userObject.signal ?? false)) {
                 sumString = sumString.concat("email, SMS, WhatsApp and Signal ")

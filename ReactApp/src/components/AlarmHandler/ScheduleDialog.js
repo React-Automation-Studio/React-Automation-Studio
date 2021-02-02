@@ -765,6 +765,39 @@ const ScheduleDialog = (props) => {
         }
     }
 
+    const handleAlarmType = (event, alarmType) => {
+        if (global) {
+            props.setDialogUserObject({
+                ...props.dialogUserObject,
+                globalSetup: {
+                    ...props.dialogUserObject.globalSetup,
+                    [alarmType]: event.target.checked
+                }
+            })
+        }
+        else {
+            const newNotifyPVs = props.dialogUserObject.notifyPVs.map((area, index) => {
+                if (props.dialogUserNotifyIndex !== index) {
+                    return area
+                }
+                else {
+                    const newArea = {
+                        ...area,
+                        notifySetup: {
+                            ...area.notifySetup,
+                            [alarmType]: event.target.checked
+                        }
+                    }
+                    return newArea
+                }
+            })
+            props.setDialogUserObject({
+                ...props.dialogUserObject,
+                notifyPVs: newNotifyPVs
+            })
+        }
+    }
+
     return (
         <Dialog
             // TransitionComponent={Transition}
@@ -859,6 +892,102 @@ const ScheduleDialog = (props) => {
                                     checked={displayUserObject.notify}
                                     onChange={handleNotify}
                                 />
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid item xs={12} style={{ marginTop: '0.75em', marginBottom: '0.75em' }}>
+                        <Divider variant="middle" />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Grid
+                            container
+                            direction="row"
+                            justify="flex-start"
+                            alignItems="stretch"
+                            style={{
+                                paddingLeft: '1em',
+                                paddingRight: '1em'
+                            }}
+                        >
+                            <Grid item xs={3}>
+                                <Grid
+                                    container
+                                    direction="row"
+                                    justify="center"
+                                    alignItems="stretch"
+                                >
+                                    <Grid item className={classes.verticalCenter}>
+                                        <span style={{ fontSize: '1rem', marginRight: 'auto' }}>MINOR</span>
+                                    </Grid>
+                                    <Grid item >
+                                        <Checkbox
+                                            // Backwards compatible
+                                            checked={displayUserObject.alarmMinor ?? true}
+                                            onChange={(event) => handleAlarmType(event, 'alarmMinor')}
+                                            disabled={!displayUserObject.notify}
+                                        />
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                            <Grid item xs={3}>
+                                <Grid
+                                    container
+                                    direction="row"
+                                    justify="center"
+                                    alignItems="stretch"
+                                >
+                                    <Grid item className={classes.verticalCenter}>
+                                        <span style={{ fontSize: '1rem' }}>MAJOR</span>
+                                    </Grid>
+                                    <Grid item >
+                                        <Checkbox
+                                            // Backwards compatible
+                                            checked={displayUserObject.alarmMajor ?? true}
+                                            onChange={(event) => handleAlarmType(event, 'alarmMajor')}
+                                            disabled={!displayUserObject.notify}
+                                        />
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                            <Grid item xs={3}>
+                                <Grid
+                                    container
+                                    direction="row"
+                                    justify="center"
+                                    alignItems="stretch"
+                                >
+                                    <Grid item className={classes.verticalCenter}>
+                                        <span style={{ fontSize: '1rem' }}>INVALID</span>
+                                    </Grid>
+                                    <Grid item >
+                                        <Checkbox
+                                            // Backwards compatible
+                                            checked={displayUserObject.alarmInvalid ?? true}
+                                            onChange={(event) => handleAlarmType(event, 'alarmInvalid')}
+                                            disabled={!displayUserObject.notify}
+                                        />
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                            <Grid item xs={3}>
+                                <Grid
+                                    container
+                                    direction="row"
+                                    justify="center"
+                                    alignItems="stretch"
+                                >
+                                    <Grid item className={classes.verticalCenter}>
+                                        <span style={{ fontSize: '1rem' }}>DISCONN</span>
+                                    </Grid>
+                                    <Grid item >
+                                        <Checkbox
+                                            // Backwards compatible
+                                            checked={displayUserObject.alarmDisconn ?? true}
+                                            onChange={(event) => handleAlarmType(event, 'alarmDisconn')}
+                                            disabled={!displayUserObject.notify}
+                                        />
+                                    </Grid>
+                                </Grid>
                             </Grid>
                         </Grid>
                     </Grid>

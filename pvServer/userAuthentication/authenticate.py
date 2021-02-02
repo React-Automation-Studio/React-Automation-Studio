@@ -123,7 +123,6 @@ def  AuthoriseUser(JWT):
 def LocalAuthenticateUser(user):
     global knownUsers
     if knownUsers!= None:
-        JWTUsernameAndPw=str(jwt.encode({'username':str(user['username']),'password':str(user['password'])}, SECRET_PWD_KEY, algorithm='HS256').decode('utf-8'))
         keys=list(knownUsers.keys())
         for JWT in knownUsers:
             username=knownUsers[JWT]['username']
@@ -134,6 +133,21 @@ def LocalAuthenticateUser(user):
                         return {'JWT':JWT,'username':username,'roles':roles}
                 except :
                     return None
+        else:
+            print('Uknown user:' + str(user['username']))
+            return None
+    return None
+def ExternalAuthenticateUser(user):
+    global knownUsers
+    if knownUsers!= None:
+        keys=list(knownUsers.keys())
+        for JWT in knownUsers:
+            username=knownUsers[JWT]['username']
+            
+            if user['username']==username:
+                roles=checkUserRole(username)
+                return {'JWT':JWT,'username':username,'roles':roles}
+            
         else:
             print('Uknown user:' + str(user['username']))
             return None

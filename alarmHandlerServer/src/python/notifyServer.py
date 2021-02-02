@@ -285,6 +285,18 @@ def notify(notifyBuffer):
                     ["FAILED to notify", name, "on WhatsApp!"])}
                 dbUpdateHistory("_GLOBAL", entry)
 
+        if(notifySignalDict):
+            if(notifySignal(timestamp, mobile, notifySignalDict)):
+                # Log to global db
+                entry = {"timestamp": timestamp, "entry": " ".join(
+                    [name, "notified on Signal"])}
+                dbUpdateHistory("_GLOBAL", entry)
+            else:
+                # Log to global db
+                entry = {"timestamp": timestamp, "entry": " ".join(
+                    ["FAILED to notify", name, "on Signal!"])}
+                dbUpdateHistory("_GLOBAL", entry)
+
 
 def disconnectAllPVs():
     for pvname in pvNameList:

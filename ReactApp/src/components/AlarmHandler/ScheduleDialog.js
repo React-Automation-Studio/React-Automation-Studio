@@ -19,6 +19,7 @@ import ScheduleIcon from '@material-ui/icons/Schedule';
 import EmailOutlinedIcon from '@material-ui/icons/EmailOutlined';
 import SmsOutlinedIcon from '@material-ui/icons/SmsOutlined';
 import WhatsAppIcon from '@material-ui/icons/WhatsApp';
+import SignalIcon from './SignalIcon';
 // import Slide from '@material-ui/core/Slide';
 
 import DateFnsUtils from '@date-io/date-fns';
@@ -865,6 +866,28 @@ const ScheduleDialog = (props) => {
                                     </Grid>
                                     <Grid item xs={4} className={classes.verticalCenter}>
                                         <span style={{ fontSize: '1rem' }}>SMS</span>
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                        <Checkbox
+                                            checked={displayUserObject.sms}
+                                            onChange={handleSMS}
+                                            disabled={!displayUserObject.notify}
+                                        />
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Grid
+                                    container
+                                    direction="row"
+                                    justify="center"
+                                    alignItems="stretch"
+                                >
+                                    <Grid item xs={3} className={classes.centerInBlock}>
+                                        <SignalIcon />
+                                    </Grid>
+                                    <Grid item xs={4} className={classes.verticalCenter}>
+                                        <span style={{ fontSize: '1rem' }}>Signal</span>
                                     </Grid>
                                     <Grid item xs={3}>
                                         <Checkbox

@@ -17,6 +17,9 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -51,6 +54,17 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1) * 3,
   },
 }));
+
+let loginModes=[];
+      if (!(process.env.REACT_APP_DisableStandardLogin=== 'true')) {
+        loginModes.push("Standard Login")        
+      }
+      if ((process.env.REACT_APP_EnableActiveDirectoryLogin=== 'true')) {
+        loginModes.push("Active Directory")        
+      }
+console.log( process.env.REACT_APP_EnableActiveDirectoryLogin)
+
+
 const Login = (props) => {
   const classes = useStyles();
   const context = useContext(AutomationStudioContext);
@@ -60,7 +74,20 @@ const Login = (props) => {
   const [authorisationFailed, setAuthorisationFailed] = useState(false)
   const [authenticationFailed, setAuthenticationFailed] = useState(false)
   const [submit, setSubmit] = useState(false);
-  
+  const [loginTabValue,setLoginTabValue]=useState(0);
+  const [loginModes,setLoginModes]=useState([]);
+  const enableStandardLogin=!(process.env.REACT_APP_DisableStandardLogin=== 'true');
+  const enableActiveDirectoryLogin=process.env.REACT_APP_EnableActiveDirectoryLogin=== 'true';
+  useEffect(()=>{
+    let modes=[]
+    if (enableStandardLogin){
+      modes.push('Standard Login')
+    }
+    if (enableActiveDirectoryLogin){
+      modes.push('Active Directory')
+    }
+    setLoginModes(modes);
+  },[enableStandardLogin,enableActiveDirectoryLogin])
   useEffect(() => {
     if (submit == true) {
       let port;
@@ -83,7 +110,13 @@ const Login = (props) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ user: { username: username, password: password } })
       };
-      fetch(PyEpicsServerURL + '/api/login/local', requestOptions)
+      let endpoint=loginModes[loginTabValue]==='Standard Login'
+      ?      '/api/login/local'
+      :   loginModes[loginTabValue]==='Active Directory'
+      ?     '/api/login/ldap'
+      : null
+    if(endpoint){
+      fetch(PyEpicsServerURL + endpoint, requestOptions)
         .then(response => response.json())
         .then(msg => {
           console.log(msg)
@@ -107,6 +140,7 @@ const Login = (props) => {
           setAuthenticationFailed(msg.login !== true);
         }
         )
+      }
       setSubmit(false)
     }
   }, [submit]
@@ -182,10 +216,22 @@ const Login = (props) => {
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h5" style={{paddingBottom:16}}>
             Sign in
           </Typography>
-          <form className={classes.form}>
+          <AppBar position="static" color='inherit' >
+        <Tabs value={loginTabValue} onChange={(event,newValue)=>setLoginTabValue(newValue)} aria-label="simple tabs example"
+        indicatorColor="primary"
+        textColor="primary"
+        >
+          {loginModes.map((item,index)=>
+          <Tab label= {item} style={{textTransform:'capitalize'}}key={index.toString()}/>
+          )
+          
+}
+        </Tabs>
+      </AppBar>
+          {(enableStandardLogin||enableActiveDirectoryLogin)&&<form className={classes.form}>
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="email">Username or Email Address</InputLabel>
               <Input id="email" name="email" autoComplete="email" autoFocus onChange={(event) => (setUsername(event.target.value))}
@@ -217,7 +263,7 @@ const Login = (props) => {
             >
               Sign in
             </Button>
-          </form>
+          </form>}
         </Paper>
       </main>
       {authorised && <Redirect to='/' />}

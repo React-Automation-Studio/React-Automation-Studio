@@ -23,8 +23,9 @@ from bson.objectid import ObjectId
 sys.path.insert(0, '../')
 sys.path.insert(0, 'userAuthentication/')
 
-from authenticate import  AuthoriseUser,AutheriseUserAndPermissions, LocalAuthenticateUser
+from authenticate import  AuthoriseUser,AutheriseUserAndPermissions, LocalAuthenticateUser, ExternalAuthenticateUser
 from dotenv import load_dotenv
+import ldap
 
 
 from flask_cors import CORS
@@ -58,7 +59,9 @@ print('pvServerLogLevel: {}'.format(os.environ.get('pvServerLogLevel', None)))
 print('pvServerLogFile: {}'.format(os.environ.get('pvServerLogFile', None)))
 print('pvServerLogFileSize: {}'.format(os.environ.get('pvServerLogFileSize', None)))
 print('pvServerLogFileBackup: {}'.format(os.environ.get('pvServerLogFileBackup', None)))
+print('REACT_APP_EnableActiveDirectoryLogin: '+ str(os.environ['REACT_APP_EnableActiveDirectoryLogin']))
 
+REACT_APP_EnableActiveDirectoryLogin=(os.getenv('REACT_APP_EnableActiveDirectoryLogin')=='true')
 
 print("")
 app = flask.Flask(__name__, static_folder="./build/static", template_folder="./build")
@@ -67,7 +70,7 @@ app.url_map.converters['regex'] = RegexConverter
 CORS(app)
 
 @app.route('/api/login/local', methods=['POST'])
-def login():
+def localLogin():
     user = request.json.get('user', None)
     userData=LocalAuthenticateUser(user)
     if (userData is None):
@@ -80,6 +83,49 @@ def login():
     log.info("User logged in: {} ",username)
     return resp, 200
 
+@app.route('/api/login/ldap', methods=['POST'])
+def ldapLogin():
+    if REACT_APP_EnableActiveDirectoryLogin :
+        user = request.json.get('user', None)
+        LDAP_HOST=os.getenv('LDAP_HOST')
+        LDAP_PORT=os.getenv('LDAP_PORT')
+        LDAP_USER_DN=user['username']
+        LDAP_USER_PW=user['password']
+        try:
+            con=ldap.initialize(LDAP_HOST+":"+LDAP_PORT)
+            con.bind(LDAP_USER_DN,LDAP_USER_PW,ldap.AUTH_SIMPLE)
+            con.result()
+            userData=ExternalAuthenticateUser(user)
+            if (userData is None):
+                log.info("Unknown user login: {} ",user['username'])
+                return jsonify({'login': False}), 401
+            username=userData['username']
+            roles=userData['roles']
+            jwt=userData['JWT']
+            resp= jsonify({'login': True, 'jwt':jwt,'username':username,'roles':roles})
+            log.info("User logged in: {} ",username)
+            return resp, 200
+        except:
+            return jsonify({'login': False}), 401
+        # s = ldap.Server(host=LDPA_HOST,port=LDAP_PORT,use_ssl=False,get_info='ALL')
+        # c = Connection(s, user=ldap_user_dn, password=ldap_user_pw)
+        # if not c.bind():
+        #     print('error in bind', c.result)
+        # print(c.result)
+        # userData=LocalAuthenticateUser(user)
+        # if (userData is None):
+        #     log.info("Unknown user login: {} ",user['username'])
+        #     return jsonify({'login': False}), 401
+        # username=userData['username']
+        # roles=userData['roles']
+        # jwt=userData['JWT']
+        # resp= jsonify({'login': True, 'jwt':jwt,'username':username,'roles':roles})
+        # log.info("User logged in: {} ",username)
+        # return resp, 200
+       
+    else:
+        log.info("Forbiddden Active Directory login login: {} ",user['username'])
+        return jsonify({'login': False}), 401
 
 
 
@@ -94,8 +140,10 @@ def public(file):
 @app.route('/<path:path>')
 
 def index(path):
-
-    return render_template('index.html', async_mode=socketio.async_mode)
+    try :
+        return render_template('index.html', async_mode=socketio.async_mode)
+    except :
+        return "", 404
 
 
 

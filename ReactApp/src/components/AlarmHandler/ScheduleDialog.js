@@ -152,7 +152,8 @@ const ScheduleDialog = (props) => {
         if (global) {
             // Check oneMedium is checked
             const oneMedium = !event.target.checked
-                ? props.dialogUserObject.globalSetup.sms || props.dialogUserObject.globalSetup.whatsapp
+                // Backwards compatible
+                ? props.dialogUserObject.globalSetup.sms || props.dialogUserObject.globalSetup.whatsapp || (props.dialogUserObject.globalSetup.signal ?? false)
                 : true
             //
             if (oneMedium) {
@@ -177,7 +178,8 @@ const ScheduleDialog = (props) => {
                 else {
                     // Check oneMedium is checked
                     const oneMedium = !event.target.checked
-                        ? area.notifySetup.sms || area.notifySetup.whatsapp
+                        // Backwards compatible
+                        ? area.notifySetup.sms || area.notifySetup.whatsapp || (area.notifySetup.signal ?? false)
                         : true
                     //
                     if (oneMedium) {
@@ -207,7 +209,8 @@ const ScheduleDialog = (props) => {
         if (global) {
             // Check oneMedium is checked
             const oneMedium = !event.target.checked
-                ? props.dialogUserObject.globalSetup.email || props.dialogUserObject.globalSetup.whatsapp
+                // Backwards compatible
+                ? props.dialogUserObject.globalSetup.email || props.dialogUserObject.globalSetup.whatsapp || (props.dialogUserObject.globalSetup.signal ?? false)
                 : true
             //
             if (oneMedium) {
@@ -231,7 +234,8 @@ const ScheduleDialog = (props) => {
                 else {
                     // Check oneMedium is checked
                     const oneMedium = !event.target.checked
-                        ? area.notifySetup.email || area.notifySetup.whatsapp
+                        // Backwards compatible
+                        ? area.notifySetup.email || area.notifySetup.whatsapp || (area.notifySetup.signal ?? false)
                         : true
                     //
                     if (oneMedium) {
@@ -262,7 +266,8 @@ const ScheduleDialog = (props) => {
         if (global) {
             // Check oneMedium is checked
             const oneMedium = !event.target.checked
-                ? props.dialogUserObject.globalSetup.email || props.dialogUserObject.globalSetup.sms
+                // Backwards compatible
+                ? props.dialogUserObject.globalSetup.email || props.dialogUserObject.globalSetup.sms || (props.dialogUserObject.globalSetup.signal ?? false)
                 : true
             //
             if (oneMedium) {
@@ -286,7 +291,8 @@ const ScheduleDialog = (props) => {
                 else {
                     // Check oneMedium is checked
                     const oneMedium = !event.target.checked
-                        ? area.notifySetup.email || area.notifySetup.sms
+                        // Backwards compatible
+                        ? area.notifySetup.email || area.notifySetup.sms || (area.notifySetup.signal ?? false)
                         : true
                     //
                     if (oneMedium) {
@@ -295,6 +301,62 @@ const ScheduleDialog = (props) => {
                             notifySetup: {
                                 ...area.notifySetup,
                                 whatsapp: event.target.checked
+                            }
+                        }
+                        return newArea
+                    }
+                    else {
+                        props.setSnackMessage("At least one notification medium must be set!")
+                        return area
+                    }
+
+                }
+            })
+            props.setDialogUserObject({
+                ...props.dialogUserObject,
+                notifyPVs: newNotifyPVs
+            })
+        }
+    }
+
+    const handleSignal = (event) => {
+        if (global) {
+            // Check oneMedium is checked
+            const oneMedium = !event.target.checked
+                ? props.dialogUserObject.globalSetup.email || props.dialogUserObject.globalSetup.sms || props.dialogUserObject.globalSetup.whatsapp
+                : true
+            //
+            if (oneMedium) {
+                props.setDialogUserObject({
+                    ...props.dialogUserObject,
+                    globalSetup: {
+                        ...props.dialogUserObject.globalSetup,
+                        signal: event.target.checked
+                    }
+                })
+            }
+            else {
+                props.setSnackMessage("At least one notification medium must be set!")
+            }
+        }
+        else {
+            const newNotifyPVs = props.dialogUserObject.notifyPVs.map((area, index) => {
+                if (props.dialogUserNotifyIndex !== index) {
+                    return area
+                }
+                else {
+                    // Check oneMedium is checked
+                    const oneMedium = !event.target.checked
+                        // Backwards compatible
+                        ? area.notifySetup.email || area.notifySetup.sms || area.notifySetup.whatsapp
+                        : true
+                    //
+                    if (oneMedium) {
+                        const newArea = {
+                            ...area,
+                            notifySetup: {
+                                ...area.notifySetup,
+                                signal: event.target.checked
                             }
                         }
                         return newArea
@@ -891,8 +953,9 @@ const ScheduleDialog = (props) => {
                                     </Grid>
                                     <Grid item xs={3}>
                                         <Checkbox
-                                            checked={displayUserObject.sms}
-                                            onChange={handleSMS}
+                                            // Backwards compatible
+                                            checked={displayUserObject.signal ?? false}
+                                            onChange={handleSignal}
                                             disabled={!displayUserObject.notify}
                                         />
                                     </Grid>

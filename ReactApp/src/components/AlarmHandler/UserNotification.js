@@ -177,8 +177,24 @@ const UserNotification = (props) => {
             else {
                 sumString = "Notify me on "
             }
-            if (userObject.email && userObject.sms && userObject.whatsapp) {
+            // Backwards compatible
+            if (userObject.email && userObject.sms && userObject.whatsapp && (userObject.signal ?? false)) {
+                sumString = sumString.concat("email, SMS, WhatsApp and Signal ")
+            }
+            else if (userObject.email && userObject.sms && userObject.whatsapp) {
                 sumString = sumString.concat("email, SMS and WhatsApp ")
+            }
+            // Backwards compatible
+            else if (userObject.email && userObject.sms && (userObject.signal ?? false)) {
+                sumString = sumString.concat("email, SMS and Signal ")
+            }
+            // Backwards compatible
+            else if (userObject.email && userObject.whatsapp && (userObject.signal ?? false)) {
+                sumString = sumString.concat("email, WhatsApp and Signal ")
+            }
+            // Backwards compatible
+            else if (userObject.sms && userObject.whatsapp && (userObject.signal ?? false)) {
+                sumString = sumString.concat("SMS, WhatsApp and Signal ")
             }
             else if (userObject.email && userObject.sms) {
                 sumString = sumString.concat("email and SMS ")
@@ -186,17 +202,33 @@ const UserNotification = (props) => {
             else if (userObject.email && userObject.whatsapp) {
                 sumString = sumString.concat("email and WhatsApp ")
             }
-            else if (userObject.email) {
-                sumString = sumString.concat("email ")
+            // Backwards compatible
+            else if (userObject.email && (userObject.signal ?? false)) {
+                sumString = sumString.concat("email and Signal ")
             }
             else if (userObject.sms && userObject.whatsapp) {
                 sumString = sumString.concat("SMS and WhatsApp ")
+            }
+            // Backwards compatible
+            else if (userObject.sms && (userObject.signal ?? false)) {
+                sumString = sumString.concat("SMS and Signal ")
+            }
+            // Backwards compatible
+            else if (userObject.whatsapp && (userObject.signal ?? false)) {
+                sumString = sumString.concat("WhatsApp and Signal ")
+            }
+            else if (userObject.email) {
+                sumString = sumString.concat("email ")
             }
             else if (userObject.sms) {
                 sumString = sumString.concat("SMS ")
             }
             else if (userObject.whatsapp) {
                 sumString = sumString.concat("WhatsApp ")
+            }
+            // Backwards compatible
+            else if (userObject.signal ?? false) {
+                sumString = sumString.concat("Signal ")
             }
             if (userObject.allDay) {
                 sumString = sumString.concat("all day ")

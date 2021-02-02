@@ -179,11 +179,30 @@ def notify(notifyBuffer):
                         print(area)
                         print(pvname)
                     message = notifyBuffer[area][pvname]
+                    minorAlarm = False
+                    majorAlarm = False
+                    invalidAlarm = False
+                    disconnAlarm = False
+                    for entry in message:
+                        minorAlarm = minorAlarm or (
+                            "MINOR_ALARM" in entry["entry"])
+                        majorAlarm = majorAlarm or (
+                            "MAJOR_ALARM" in entry["entry"])
+                        invalidAlarm = invalidAlarm or (
+                            "INVALID_ALARM" in entry["entry"])
+                        disconnAlarm = disconnAlarm or (
+                            "DISCONNECTED" in entry["entry"])
+                    if(AH_DEBUG):
+                        print("minorAlarm", minorAlarm)
+                        print("majorAlarm", majorAlarm)
+                        print("invalidAlarm", invalidAlarm)
+                        print("disconnAlarm", disconnAlarm)
                     if(js_regex.compile(notifyPV["regEx"]).search(pvname)):
                         # Passes regEx check
                         if(AH_DEBUG):
                             print("Pass regEx", notifyPV["regEx"])
                         notify = False
+                        notifyAlarmType = False
                         notifyOnEmail = False
                         notifyOnSMS = False
                         notifyOnWhatsApp = False
@@ -198,6 +217,15 @@ def notify(notifyBuffer):
                             # Backwards compatible
                             notifyOnSignal = user["globalSetup"]["signal"] if (
                                 "signal" in user["globalSetup"]) else False
+                            notifyMinorAlarm = user["globalSetup"]["alarmMinor"] if (
+                                "alarmMinor" in user["globalSetup"]) else True
+                            notifyMajorAlarm = user["globalSetup"]["alarmMajor"] if (
+                                "alarmMajor" in user["globalSetup"]) else True
+                            notifyInvalidAlarm = user["globalSetup"]["alarmInvalid"] if (
+                                "alarmInvalid" in user["globalSetup"]) else True
+                            notifyDisconnAlarm = user["globalSetup"]["alarmDisconn"] if (
+                                "alarmDisconn" in user["globalSetup"]) else True
+                            #
                         else:
                             if(AH_DEBUG):
                                 print("Using unique profile")
@@ -206,12 +234,34 @@ def notify(notifyBuffer):
                             notifyOnSMS = notifyPV["notifySetup"]["sms"]
                             notifyOnWhatsApp = notifyPV["notifySetup"]["whatsapp"]
                             # Backwards compatible
-                            notifyOnSignal = user["notifySetup"]["signal"] if (
-                                "signal" in user["notifySetup"]) else False
-                        if(notify):
+                            notifyOnSignal = notifyPV["notifySetup"]["signal"] if (
+                                "signal" in notifyPV["notifySetup"]) else False
+                            notifyMinorAlarm = notifyPV["notifySetup"]["alarmMinor"] if (
+                                "alarmMinor" in notifyPV["notifySetup"]) else True
+                            notifyMajorAlarm = notifyPV["notifySetup"]["alarmMajor"] if (
+                                "alarmMajor" in notifyPV["notifySetup"]) else True
+                            notifyInvalidAlarm = notifyPV["notifySetup"]["alarmInvalid"] if (
+                                "alarmInvalid" in notifyPV["notifySetup"]) else True
+                            notifyDisconnAlarm = notifyPV["notifySetup"]["alarmDisconn"] if (
+                                "alarmDisconn" in notifyPV["notifySetup"]) else True
+                            #
+                        if(AH_DEBUG):
+                            print("notifyMinorAlarm", notifyMinorAlarm)
+                            print("notifyMajorAlarm", notifyMajorAlarm)
+                            print("notifyInvalidAlarm", notifyInvalidAlarm)
+                            print("notifyDisconnAlarm", notifyDisconnAlarm)
+                        if(minorAlarm and notifyMinorAlarm):
+                            notifyAlarmType = True
+                        elif(majorAlarm and notifyMajorAlarm):
+                            notifyAlarmType = True
+                        elif(invalidAlarm and notifyInvalidAlarm):
+                            notifyAlarmType = True
+                        elif(disconnAlarm and notifyDisconnAlarm):
+                            notifyAlarmType = True
+                        if(notify and notifyAlarmType):
                             # Passes notifyValid check
                             if(AH_DEBUG):
-                                print("Pass notifyValid")
+                                print("Pass notifyValid and alarm type checks")
                             if(notifyOnEmail):
                                 # Notify via email
                                 if(AH_DEBUG):
@@ -242,7 +292,7 @@ def notify(notifyBuffer):
                                 notifySignalDict[area][pvname] = message
                         else:
                             if(AH_DEBUG):
-                                print("Fail notifyValid")
+                                print("Fail notifyValid or alarm type check")
                     else:
                         if(AH_DEBUG):
                             print("Fail regEx", notifyPV["regEx"])

@@ -1,7 +1,13 @@
 import React from 'react';
+import { useTheme } from '@material-ui/core/styles';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
 const SignalIcon = () => {
+
+    const theme = useTheme()
+
+    const isDark = theme.palette.type === 'dark'
+
     return (
         <SvgIcon>
             <defs>
@@ -9,7 +15,7 @@ const SignalIcon = () => {
                     <path
                         fill="none"
                         fillOpacity="1"
-                        stroke="#000"
+                        stroke={isDark ? "#fff" : "#000"}
                         strokeDasharray="none"
                         strokeDashoffset="0"
                         strokeMiterlimit="4"
@@ -21,8 +27,8 @@ const SignalIcon = () => {
                 </clipPath>
             </defs>
             <path
-                fill="#000"
-                stroke="#000"
+                fill={isDark ? "#fff" : "#000"}
+                stroke={isDark ? "#fff" : "#000"}
                 strokeDasharray="none"
                 strokeMiterlimit="4"
                 strokeOpacity="1"

@@ -224,7 +224,7 @@ const Login = (props) => {
           <Typography component="h1" variant="h5" style={{paddingBottom:16}}>
             Sign in
           </Typography>
-          <AppBar position="static" color='inherit' >
+          {(loginModes.length>1)&&<AppBar position="static" color='inherit' >
         <Tabs value={loginTabValue} onChange={(event,newValue)=>setLoginTabValue(newValue)} aria-label="simple tabs example"
         indicatorColor="primary"
         textColor="primary"
@@ -235,7 +235,7 @@ const Login = (props) => {
           
 }
         </Tabs>
-      </AppBar>
+      </AppBar>}
           {(enableStandardLogin||enableActiveDirectoryLogin)&&<form className={classes.form}>
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="email">Username or Email Address</InputLabel>

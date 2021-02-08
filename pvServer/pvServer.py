@@ -94,18 +94,24 @@ def ldapLogin():
         try:
             con=ldap.initialize(LDAP_HOST+":"+LDAP_PORT)
             con.bind(LDAP_USER_DN,LDAP_USER_PW,ldap.AUTH_SIMPLE)
-            con.result()
-            userData=ExternalAuthenticateUser(user)
-            if (userData is None):
-                log.info("Unknown user login: {} ",user['username'])
-                return jsonify({'login': False}), 401
-            username=userData['username']
-            roles=userData['roles']
-            jwt=userData['JWT']
-            resp= jsonify({'login': True, 'jwt':jwt,'username':username,'roles':roles})
-            log.info("User logged in: {} ",username)
-            return resp, 200
+            if con.result():
+            
+                userData=ExternalAuthenticateUser(user)
+                if (userData is None):
+                    log.info("Unknown user login: {} ",user['username'])
+                    return jsonify({'login': False}), 401
+                username=userData['username']
+                roles=userData['roles']
+                jwt=userData['JWT']
+                resp= jsonify({'login': True, 'jwt':jwt,'username':username,'roles':roles})
+                log.info("User logged in: {} ",username)
+                return resp, 200
+            else:
+                log.info("Ldap login failed: {} ",username)
+                jsonify({'login': False}), 401
         except:
+            log.info("Ldap login failed: {} ",LDAP_USER_DN)
+            jsonify({'login': False}), 401
             return jsonify({'login': False}), 401
         # s = ldap.Server(host=LDPA_HOST,port=LDAP_PORT,use_ssl=False,get_info='ALL')
         # c = Connection(s, user=ldap_user_dn, password=ldap_user_pw)

@@ -20,6 +20,10 @@ import Slide from '@material-ui/core/Slide';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import IconButton from '@material-ui/core/IconButton';
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -76,6 +80,7 @@ const Login = (props) => {
   const [submit, setSubmit] = useState(false);
   const [loginTabValue,setLoginTabValue]=useState(0);
   const [loginModes,setLoginModes]=useState([]);
+  const [showPassword,setShowPassword]=useState(false);
   const enableStandardLogin=!(process.env.REACT_APP_DisableStandardLogin=== 'true');
   const enableActiveDirectoryLogin=process.env.REACT_APP_EnableActiveDirectoryLogin=== 'true';
   useEffect(()=>{
@@ -245,13 +250,31 @@ const Login = (props) => {
             </FormControl>
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="password">Password</InputLabel>
-              <Input name="password" type="password" id="password" autoComplete="current-password" onChange={(event) => (setPassword(event.target.value))}
+              <Input 
+                name="password" 
+                type={showPassword?"text":"password" }
+                id="password" 
+                autoComplete="current-password" 
+                onChange={(event) => (setPassword(event.target.value))}
                 onKeyPress={(event) => {
                   if (event.key === 'Enter') {
                     setPassword(event.target.value)
                     setSubmit(true)
                   }
                 }}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={()=>(setShowPassword(prev=>(!prev)))}
+                     
+                      edge="end"
+                    >
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+
               />
             </FormControl>
             <Button

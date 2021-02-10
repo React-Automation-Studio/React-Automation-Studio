@@ -21,7 +21,7 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 import DataConnection from '../SystemComponents/DataConnection';
 import ScheduleDialog from './ScheduleDialog';
-import DeleteDialog from './DeleteDialog';
+import DeleteUserDialog from './DeleteUserDialog';
 import AddDialog from './AddDialog';
 import UserTable from './UserTable';
 import PVList from './PVList';
@@ -892,7 +892,7 @@ const UserNotification = (props) => {
                     </React.Fragment>
                 }
             />
-            <DeleteDialog
+            <DeleteUserDialog
                 open={deleteDialogOpen}
                 handleClose={() => setDeleteDialogOpen(false)}
                 user={filterUser.name}

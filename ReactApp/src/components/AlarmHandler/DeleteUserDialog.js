@@ -6,7 +6,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-const DeleteDialog = (props) => {
+const DeleteUserDialog = (props) => {
     return (
         <Dialog
             open={props.open}
@@ -30,4 +30,4 @@ const DeleteDialog = (props) => {
     )
 }
 
-export default React.memo(DeleteDialog);
+export default React.memo(DeleteUserDialog);

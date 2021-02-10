@@ -11,7 +11,7 @@ services:
     #restart: always
     network_mode: host
     env_file: .env
-  pvserver:
+  pvserver1:
     build:
       context: ./
       dockerfile: docker/pvserver/Dockerfile
@@ -30,15 +30,85 @@ services:
       - DEMO_ARCHIVER=http://localhost:17668
       - pvServerLogLevel=INFO
       - pvServerLogFile=/pvServer/log/pvServerLogFile
-      
-      
-      - no_proxy
+      - REACT_APP_PyEpicsServerPORT=9001
+      - REACT_APP_PyEpicsServerBASEURL=http://127.0.0.1
     volumes:
       - ./certificates:/certificates/
       - ./users:/pvServer/userAuthentication/users
       - ./log/:/pvServer/log
       - ./build:/pvServer/build
+  pvserver2:
+    build:
+      context: ./
+      dockerfile: docker/pvserver/Dockerfile
+    restart: always
+    network_mode: host
+    tty: true
+    stdin_open: true
+    env_file: .env
+    environment:
+      - ALARM_DATABASE=localhost
+      - ALARM_DATABASE_REPLICA_SET_NAME=devrs
+      - LOADSAVE_DATABASE=localhost
+      - LOADSAVE_DATABASE_REPLICA_SET_NAME=devrs
+      - WATCH_DEBUG_DATABASE=localhost
+      - WATCH_DEBUG_DATABASE_REPLICA_SET_NAME=devrs
+      - DEMO_ARCHIVER=http://localhost:17668
+      - pvServerLogLevel=INFO
+      - pvServerLogFile=/pvServer/log/pvServerLogFile
+      - REACT_APP_PyEpicsServerPORT=9002
+      - REACT_APP_PyEpicsServerBASEURL=http://127.0.0.1
+    volumes:
+      - ./certificates:/certificates/
+      - ./users:/pvServer/userAuthentication/users
+      - ./log/:/pvServer/log
+      - ./build:/pvServer/build
+  pvserver3:
+    build:
+      context: ./
+      dockerfile: docker/pvserver/Dockerfile
+    restart: always
+    network_mode: host
+    tty: true
+    stdin_open: true
+    env_file: .env
+    environment:
+      - ALARM_DATABASE=localhost
+      - ALARM_DATABASE_REPLICA_SET_NAME=devrs
+      - LOADSAVE_DATABASE=localhost
+      - LOADSAVE_DATABASE_REPLICA_SET_NAME=devrs
+      - WATCH_DEBUG_DATABASE=localhost
+      - WATCH_DEBUG_DATABASE_REPLICA_SET_NAME=devrs
+      - DEMO_ARCHIVER=http://localhost:17668
+      - pvServerLogLevel=INFO
+      - pvServerLogFile=/pvServer/log/pvServerLogFile
+      - REACT_APP_PyEpicsServerPORT=9003
+      - REACT_APP_PyEpicsServerBASEURL=http://127.0.0.1
+    volumes:
+      - ./certificates:/certificates/
+      - ./users:/pvServer/userAuthentication/users
+      - ./log/:/pvServer/log
+      - ./build:/pvServer/build
+  nginx:
+    image: nginx:1.19.6
+    restart: always
+    network_mode: host
+    depends_on:
+      - pvserver1
+      - pvserver2
+      - pvserver3
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/templates/default.conf.template
+      - ./build:/var/www
+      - ./certificates/server.cer:/etc/nginx/server.cer
+      - ./certificates/server.key:/etc/nginx/server.key
+    env_file: .env
+    #environment:
+      #REACT_APP_SERVER_PORT: ${REACT_APP_SERVER_PORT-5000}
+    # ports:
+    #   - 80:80
 
+      #- ${REACT_APP_SERVER_PORT-5000}:${REACT_APP_SERVER_PORT-5000}
   unsecurestylguidepvserver:
     build:
       context: ./

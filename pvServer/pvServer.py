@@ -136,20 +136,20 @@ def ldapLogin():
 
 
 
-@app.route("/<regex(r'(.*?)\.(json|txt|png|ico|js)$'):file>", methods=["GET"])
-def public(file):
-    return flask.send_from_directory('./build', file)
+# @app.route("/<regex(r'(.*?)\.(json|txt|png|ico|js)$'):file>", methods=["GET"])
+# def public(file):
+#     return flask.send_from_directory('./build', file)
 
 
 
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
+# @app.route('/', defaults={'path': ''})
+# @app.route('/<path:path>')
 
-def index(path):
-    try :
-        return render_template('index.html', async_mode=socketio.async_mode)
-    except :
-        return "", 404
+# def index(path):
+#     try :
+#         return render_template('index.html', async_mode=socketio.async_mode)
+#     except :
+#         return "", 404
 
 
 

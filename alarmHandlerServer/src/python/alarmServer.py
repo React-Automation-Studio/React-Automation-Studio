@@ -6,7 +6,7 @@ import subprocess
 import _thread
 from epics import PV
 from datetime import datetime
-from pytz import utc
+from pytz import utc, timezone
 
 from notifyServer import startNotifyServer, restartNotifyServer, notify
 from dbMongo import dbGetCollection, dbGetEnables, dbGetListOfPVNames, dbGetPVField, dbSetPVField, dbFindOne, dbUpdateHistory
@@ -15,6 +15,12 @@ try:
     AH_DEBUG = bool(os.environ['AH_DEBUG'])
 except:
     AH_DEBUG = False
+
+try:
+    AH_TZ = os.environ['AH_TZ']
+    localtz = timezone(AH_TZ)
+except:
+    localtz = None
 
 ackedStateDict = {
     0: "NO_ALARM",
@@ -38,6 +44,7 @@ alarmPVSevDict = {
 
 alarmIOCPVPrefix = ""
 alarmIOCPVSuffix = ""
+bridgeMessage = ""
 
 notifyTimeout = 0
 
@@ -45,6 +52,7 @@ alarmDictInitialised = False
 alarmServerRestart = False
 notifyContent = False
 watchRestartAlarmServer = False
+bridgeEvent = False
 
 pvNameList = []
 areaList = []
@@ -1095,6 +1103,8 @@ def restartAlarmServer():
 
 def pvCollectionWatch():
     global watchRestartAlarmServer
+    global bridgeMessage
+    global bridgeEvent
     with dbGetCollection("pvs").watch() as stream:
         for change in stream:
             # print(change)
@@ -1105,7 +1115,25 @@ def pvCollectionWatch():
                 timestamp = datetime.isoformat(datetime.now(utc))
                 for key in change.keys():
                     # print(key)
-                    if (key == "enable"):
+                    if(key == "bridge"):
+                        bridgeEvent = change[key]
+                        topArea = doc.get("area")
+                        bridgeMessage = topArea+" area BRIDGED until "
+                    elif(key == "bridgeTime"):
+                        # Time zone localisation
+                        if(localtz):
+                            str_time = datetime.fromisoformat(change[key]).astimezone(localtz).strftime(
+                                "%d %b %Y %H:%M:%S")
+                        else:
+                            str_time = datetime.fromisoformat(change[key]).strftime(
+                                "%d %b %Y %H:%M:%S")+" (UTC)"
+                        # Time zone localisation
+                        bridgeMessage = bridgeMessage+str_time
+                        entry = {"timestamp": timestamp,
+                                 "entry": bridgeMessage}
+                        if(bridgeEvent):
+                            dbUpdateHistory(topArea, entry)
+                    elif(key == "enable"):
                         # area enable
                         topArea = doc.get("area")
                         # print(areaKey, "area enable changed!")
@@ -1120,7 +1148,8 @@ def pvCollectionWatch():
                             [topArea, "area", msg])}
                         # print(timestamp, topArea,
                         #   "area", msg)
-                        dbUpdateHistory(topArea, entry)
+                        if(not bridgeEvent):
+                            dbUpdateHistory(topArea, entry)
                     elif ("pvs." in key and (key.endswith(".enable") or key.endswith(".latch") or key.endswith(".notify"))):
                         # pv enable/latch/notify
                         # print("enable/latch/notify of pv changed!")

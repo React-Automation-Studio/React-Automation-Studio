@@ -295,9 +295,9 @@ const AlarmTable = props => {
                                             style={{ padding: 0, margin: 0 }}
                                             disabled={!props.areaEnabled[areaName] || !props.enableAllAreas}
                                             value={value["enable"]}
-                                            color="primary"
+                                            color="secondary"
                                             checked={value["enable"]}
-                                            onClick={event => props.itemChecked(event, areaName, alarm, "enable", !value["enable"])}
+                                            onClick={event => props.enableChecked(event, areaName, alarm, entryIndex)}
                                         />
                                     </TableCell>
                                     <TableCell align="center">
@@ -305,7 +305,7 @@ const AlarmTable = props => {
                                             style={{ padding: 0, margin: 0 }}
                                             disabled={!props.areaEnabled[areaName] || !props.enableAllAreas}
                                             value={value["latch"]}
-                                            color="primary"
+                                            color="secondary"
                                             checked={value["latch"]}
                                             onClick={event => props.itemChecked(event, areaName, alarm, "latch", !value["latch"])}
                                         />
@@ -315,7 +315,7 @@ const AlarmTable = props => {
                                             style={{ padding: 0, margin: 0 }}
                                             disabled={!props.areaEnabled[areaName] || !props.enableAllAreas}
                                             value={value["notify"]}
-                                            color="primary"
+                                            color="secondary"
                                             checked={value["notify"]}
                                             onClick={event => props.itemChecked(event, areaName, alarm, "notify", !value["notify"])}
                                         />

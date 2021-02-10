@@ -44,6 +44,7 @@ import LastPageIcon from '@material-ui/icons/LastPage';
 import TablePagination from '@material-ui/core/TablePagination';
 
 import AddPVDialog from './AddPVDialog';
+import EnablePVDialog from './EnablePVDialog';
 
 import { format, parseISO } from 'date-fns';
 
@@ -254,6 +255,9 @@ const AlarmSetup = (props) => {
 
     const [addPVDialogPvs, setAddPVDialogPvs] = useState([])
     const [ackPV, setAckPV] = useState()
+
+    const [enablePVDialogOpen, setEnablePVDialogOpen] = useState(false)
+    const [enablePVDialogData, setEnablePVDialogData] = useState({})
 
     const [backdropOpen, setbackDropOpen] = useState(false)
     const [ASRestartProgress, setASRestartProgress] = useState(0)
@@ -682,6 +686,85 @@ const AlarmSetup = (props) => {
         })
 
     }, [areaMongoId, areaSubAreaMongoId, dbUpdateOne, props.dbName])
+
+    const handleTableEnableCheck = useCallback((event, areaName, alarm, entryIndex) => {
+        // to prevent re render of alarm log table?
+        event.preventDefault()
+        event.stopPropagation()
+
+        setEnablePVDialogData({
+            ...filteredAreaAlarms[entryIndex][1],
+            areaName: areaName,
+            alarm: alarm
+        })
+        setEnablePVDialogOpen(true)
+
+    }, [filteredAreaAlarms])
+
+    const handleExecuteEnablePV = useCallback(() => {
+        const index = enablePVDialogData.areaName
+        const alarm = enablePVDialogData.alarm
+
+        const id = areaMongoId[index]
+        let newvalues = null
+        let subAreaId = null
+
+        // Check if it is a subArea
+        // console.log(index)
+        if (index.includes("=")) {
+            // enable
+            subAreaId = areaSubAreaMongoId[index] + ".pvs." + alarm + ".enable"
+            newvalues = { '$set': { [subAreaId]: enablePVDialogData.enable } }
+            dbUpdateOne({
+                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
+                id: id,
+                update: newvalues
+            })
+            // bridge
+            subAreaId = areaSubAreaMongoId[index] + ".pvs." + alarm + ".bridge"
+            newvalues = { '$set': { [subAreaId]: enablePVDialogData.bridge } }
+            dbUpdateOne({
+                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
+                id: id,
+                update: newvalues
+            })
+            // bridgeTime
+            subAreaId = areaSubAreaMongoId[index] + ".pvs." + alarm + ".bridgeTime"
+            newvalues = { '$set': { [subAreaId]: enablePVDialogData.bridgeTime } }
+            dbUpdateOne({
+                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
+                id: id,
+                update: newvalues
+            })
+        }
+        else {
+            // enable
+            subAreaId = "pvs." + alarm + ".enable"
+            newvalues = { '$set': { [subAreaId]: enablePVDialogData.enable } }
+            dbUpdateOne({
+                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
+                id: id,
+                update: newvalues
+            })
+            // bridge
+            subAreaId = "pvs." + alarm + ".bridge"
+            newvalues = { '$set': { [subAreaId]: enablePVDialogData.bridge } }
+            dbUpdateOne({
+                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
+                id: id,
+                update: newvalues
+            })
+            // bridgeTime
+            subAreaId = "pvs." + alarm + ".bridgeTime"
+            newvalues = { '$set': { [subAreaId]: enablePVDialogData.bridgeTime } }
+            dbUpdateOne({
+                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
+                id: id,
+                update: newvalues
+            })
+        }
+        setEnablePVDialogOpen(false)
+    }, [enablePVDialogData, areaMongoId, areaSubAreaMongoId, dbUpdateOne, props.dbName])
 
     const handleTableRowClick = useCallback((event, alarmName, index) => {
         event.preventDefault()
@@ -1255,6 +1338,16 @@ const AlarmSetup = (props) => {
                 }}
                 newPVInfo={newPVInfo}
             />
+            <EnablePVDialog
+                open={enablePVDialogOpen}
+                data={enablePVDialogData}
+                executeEnablePV={handleExecuteEnablePV}
+                setEnablePVDialogData={setEnablePVDialogData}
+                handleClose={() => {
+                    setEnablePVDialogOpen(false)
+                }}
+
+            />
             <Grid
                 container
                 direction="row"
@@ -1446,6 +1539,7 @@ const AlarmSetup = (props) => {
                                         alarmAcknowledge={handleAlarmAcknowledge}
                                         alarmContextClose={handleAlarmContextClose}
                                         itemChecked={handleTableItemCheck}
+                                        enableChecked={handleTableEnableCheck}
                                         tableItemRightClick={handleTableItemRightClick}
                                         tableRowClick={handleTableRowClick}
                                         fadeTU={fadeTU}

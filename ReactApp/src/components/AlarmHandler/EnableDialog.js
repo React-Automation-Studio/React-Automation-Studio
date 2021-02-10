@@ -31,6 +31,11 @@ const useStyles = makeStyles(theme => ({
         justifyContent: "center",
         alignItems: 'center'
     },
+    horizontalCenter: {
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "center",
+    },
     verticalMiddle: {
         display: "flex",
         flexDirection: "column",
@@ -39,7 +44,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
-const EnablePVDialog = (props) => {
+const EnableDialog = (props) => {
     const classes = useStyles()
 
     // Backwards compatible
@@ -48,7 +53,7 @@ const EnablePVDialog = (props) => {
         : setSeconds(addHours(new Date(), 1), 0)
 
     const handleEnable = () => {
-        props.setEnablePVDialogData({
+        props.setEnableDialogData({
             ...props.data,
             enable: true,
             bridge: false
@@ -56,7 +61,7 @@ const EnablePVDialog = (props) => {
     }
 
     const handleDisable = () => {
-        props.setEnablePVDialogData({
+        props.setEnableDialogData({
             ...props.data,
             enable: false,
             bridge: false
@@ -64,7 +69,7 @@ const EnablePVDialog = (props) => {
     }
 
     const handleBridge = () => {
-        props.setEnablePVDialogData({
+        props.setEnableDialogData({
             ...props.data,
             enable: false,
             bridge: true,
@@ -74,7 +79,7 @@ const EnablePVDialog = (props) => {
 
     const handleBridgeTime = (event) => {
         const newDateTime = formatISO(setSeconds(event, 0))
-        props.setEnablePVDialogData({
+        props.setEnableDialogData({
             ...props.data,
             bridgeTime: newDateTime
         })
@@ -87,7 +92,7 @@ const EnablePVDialog = (props) => {
             fullWidth
             maxWidth={"xs"}
         >
-            <DialogTitle >{`${props.data.name}`}</DialogTitle>
+            <DialogTitle className={classes.horizontalCenter}>{`${props.data.name}`}</DialogTitle>
             <DialogContent>
                 <Grid
                     container
@@ -159,7 +164,7 @@ const EnablePVDialog = (props) => {
                 <Button onClick={props.handleClose} color="primary">
                     Cancel
                 </Button>
-                <Button onClick={props.executeEnablePV} color="secondary">
+                <Button onClick={props.executeEnable} color="secondary">
                     OKAY
                 </Button>
             </DialogActions>
@@ -167,4 +172,4 @@ const EnablePVDialog = (props) => {
     )
 }
 
-export default React.memo(EnablePVDialog);
+export default React.memo(EnableDialog);

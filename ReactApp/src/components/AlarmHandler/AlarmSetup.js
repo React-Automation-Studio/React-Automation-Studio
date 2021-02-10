@@ -44,7 +44,7 @@ import LastPageIcon from '@material-ui/icons/LastPage';
 import TablePagination from '@material-ui/core/TablePagination';
 
 import AddPVDialog from './AddPVDialog';
-import EnablePVDialog from './EnablePVDialog';
+import EnableDialog from './EnableDialog';
 
 import { format, parseISO } from 'date-fns';
 
@@ -226,6 +226,7 @@ const AlarmSetup = (props) => {
     const [preSliceAreaAlarms, setPreSliceAreaAlarms] = useState([])
     const [areaContextOpen, setAreaContextOpen] = useState({})
     const [areaEnabled, setAreaEnabled] = useState({})
+    const [areaBridged, setAreaBridged] = useState({})
     const [areaMongoId, setAreaMongoId] = useState({})
     const [areaNames, setAreaNames] = useState([])
     const [areaSelectedIndex, setAreaSelectedIndex] = useState('')
@@ -256,8 +257,8 @@ const AlarmSetup = (props) => {
     const [addPVDialogPvs, setAddPVDialogPvs] = useState([])
     const [ackPV, setAckPV] = useState()
 
-    const [enablePVDialogOpen, setEnablePVDialogOpen] = useState(false)
-    const [enablePVDialogData, setEnablePVDialogData] = useState({})
+    const [enableDialogOpen, setEnableDialogOpen] = useState(false)
+    const [enableDialogData, setEnableDialogData] = useState({})
 
     const [backdropOpen, setbackDropOpen] = useState(false)
     const [ASRestartProgress, setASRestartProgress] = useState(0)
@@ -390,6 +391,7 @@ const AlarmSetup = (props) => {
             const localAreaNames = []
             const localAreaAlarms = []
             const localAreaEnabled = {}
+            const localAreaBridged = {}
             const localLastPVKey = {}
             let localLastAlarm = ""
             let localLastArea = ""
@@ -397,6 +399,11 @@ const AlarmSetup = (props) => {
             dbPVDataRaw.map((area, index) => {
                 areaMongoId[area["area"]] = area["_id"]["$oid"]
                 localAreaEnabled[area["area"]] = area["enable"]
+                // Backwards compatible
+                localAreaBridged[area["area"]] = {
+                    bridge: (area["bridge"] ?? false),
+                    bridgeTime: (area["bridgeTime"] ?? '')
+                }
                 localLastArea = area["area"]
                 Object.keys(area).map(areaKey => {
                     if (areaKey === "pvs") {
@@ -424,6 +431,11 @@ const AlarmSetup = (props) => {
                         areaMongoId[`${area["area"]}=${area[areaKey]["name"]}`] = area["_id"]["$oid"]
                         // Area enabled for subArea includes parent area
                         localAreaEnabled[`${area["area"]}=${area[areaKey]["name"]}`] = area[areaKey]["enable"] && localAreaEnabled[area["area"]]
+                        // Backwards compatible
+                        localAreaBridged[`${area["area"]}=${area[areaKey]["name"]}`] = {
+                            bridge: (area[areaKey]["bridge"] ?? false),
+                            bridgeTime: (area[areaKey]["bridgeTime"] ?? '')
+                        }
                         localLastArea = `${area["area"]}=${area[areaKey]["name"]}`
                         if (localAreaNames[index]["subAreas"]) {
                             localAreaNames[index]["subAreas"].push(area[areaKey]["name"])
@@ -463,6 +475,7 @@ const AlarmSetup = (props) => {
             setAreaNames(localAreaNames)
             setAreaAlarms(localAreaAlarms)
             setAreaEnabled(localAreaEnabled)
+            setAreaBridged(localAreaBridged)
             setLastArea(localLastArea)
             setLastPVKey(localLastPVKey)
 
@@ -692,18 +705,19 @@ const AlarmSetup = (props) => {
         event.preventDefault()
         event.stopPropagation()
 
-        setEnablePVDialogData({
+        setEnableDialogData({
             ...filteredAreaAlarms[entryIndex][1],
             areaName: areaName,
-            alarm: alarm
+            alarm: alarm,
+            type: 'pv'
         })
-        setEnablePVDialogOpen(true)
+        setEnableDialogOpen(true)
 
     }, [filteredAreaAlarms])
 
     const handleExecuteEnablePV = useCallback(() => {
-        const index = enablePVDialogData.areaName
-        const alarm = enablePVDialogData.alarm
+        const index = enableDialogData.areaName
+        const alarm = enableDialogData.alarm
 
         const id = areaMongoId[index]
         let newvalues = null
@@ -714,7 +728,7 @@ const AlarmSetup = (props) => {
         if (index.includes("=")) {
             // enable
             subAreaId = areaSubAreaMongoId[index] + ".pvs." + alarm + ".enable"
-            newvalues = { '$set': { [subAreaId]: enablePVDialogData.enable } }
+            newvalues = { '$set': { [subAreaId]: enableDialogData.enable } }
             dbUpdateOne({
                 dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
                 id: id,
@@ -722,7 +736,7 @@ const AlarmSetup = (props) => {
             })
             // bridge
             subAreaId = areaSubAreaMongoId[index] + ".pvs." + alarm + ".bridge"
-            newvalues = { '$set': { [subAreaId]: enablePVDialogData.bridge } }
+            newvalues = { '$set': { [subAreaId]: enableDialogData.bridge } }
             dbUpdateOne({
                 dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
                 id: id,
@@ -730,7 +744,7 @@ const AlarmSetup = (props) => {
             })
             // bridgeTime
             subAreaId = areaSubAreaMongoId[index] + ".pvs." + alarm + ".bridgeTime"
-            newvalues = { '$set': { [subAreaId]: enablePVDialogData.bridgeTime } }
+            newvalues = { '$set': { [subAreaId]: enableDialogData.bridgeTime } }
             dbUpdateOne({
                 dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
                 id: id,
@@ -740,7 +754,7 @@ const AlarmSetup = (props) => {
         else {
             // enable
             subAreaId = "pvs." + alarm + ".enable"
-            newvalues = { '$set': { [subAreaId]: enablePVDialogData.enable } }
+            newvalues = { '$set': { [subAreaId]: enableDialogData.enable } }
             dbUpdateOne({
                 dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
                 id: id,
@@ -748,7 +762,7 @@ const AlarmSetup = (props) => {
             })
             // bridge
             subAreaId = "pvs." + alarm + ".bridge"
-            newvalues = { '$set': { [subAreaId]: enablePVDialogData.bridge } }
+            newvalues = { '$set': { [subAreaId]: enableDialogData.bridge } }
             dbUpdateOne({
                 dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
                 id: id,
@@ -756,15 +770,15 @@ const AlarmSetup = (props) => {
             })
             // bridgeTime
             subAreaId = "pvs." + alarm + ".bridgeTime"
-            newvalues = { '$set': { [subAreaId]: enablePVDialogData.bridgeTime } }
+            newvalues = { '$set': { [subAreaId]: enableDialogData.bridgeTime } }
             dbUpdateOne({
                 dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
                 id: id,
                 update: newvalues
             })
         }
-        setEnablePVDialogOpen(false)
-    }, [enablePVDialogData, areaMongoId, areaSubAreaMongoId, dbUpdateOne, props.dbName])
+        setEnableDialogOpen(false)
+    }, [enableDialogData, areaMongoId, areaSubAreaMongoId, dbUpdateOne, props.dbName])
 
     const handleTableRowClick = useCallback((event, alarmName, index) => {
         event.preventDefault()
@@ -831,35 +845,92 @@ const AlarmSetup = (props) => {
     }, [alarmAckFieldTrig, handleAlarmContextClose, username])
 
     const handleEnableDisableArea = useCallback((event, index, value) => {
-        // console.log('Enable/Disable area', index)
-
         event.preventDefault()
         event.stopPropagation()
 
-        const id = areaMongoId[index]
-        let newvalues = null
-
-        // Check if it is a subArea
-        // console.log(index)
+        let name = ''
         if (index.includes("=")) {
-            const subAreaId = areaSubAreaMongoId[index] + ".enable"
-            newvalues = { '$set': { [subAreaId]: value } }
+            name = `${index.split("=")[0]} > ${index.split("=")[1]}`
         }
         else {
-            newvalues = { '$set': { "enable": value } }
+            name = `${index}`
         }
 
-        // console.log(newvalues)
-
-        dbUpdateOne({
-            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
-            id: id,
-            update: newvalues
+        setEnableDialogData({
+            name: name,
+            index: index,
+            enable: areaEnabled[index],
+            bridge: areaBridged[index].bridge,
+            bridgeTime: areaBridged[index].bridgeTime,
+            type: 'area'
         })
 
         handleListItemContextClose(event, index)
+        setEnableDialogOpen(true)
 
-    }, [areaMongoId, areaSubAreaMongoId, handleListItemContextClose, dbUpdateOne, props.dbName])
+
+    }, [areaEnabled, areaBridged, handleListItemContextClose])
+
+    const handleExecuteEnableDisableArea = useCallback((event) => {
+        const index = enableDialogData.index
+        const id = areaMongoId[index]
+
+        let newvalues = null
+        let subAreaId = null
+        // Check if it is a subArea
+        if (index.includes("=")) {
+            // enable
+            subAreaId = areaSubAreaMongoId[index] + ".enable"
+            newvalues = { '$set': { [subAreaId]: enableDialogData.enable } }
+            dbUpdateOne({
+                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
+                id: id,
+                update: newvalues
+            })
+            // bridge
+            subAreaId = areaSubAreaMongoId[index] + ".bridge"
+            newvalues = { '$set': { [subAreaId]: enableDialogData.bridge } }
+            dbUpdateOne({
+                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
+                id: id,
+                update: newvalues
+            })
+            // bridgeTime
+            subAreaId = areaSubAreaMongoId[index] + ".bridgeTime"
+            newvalues = { '$set': { [subAreaId]: enableDialogData.bridgeTime } }
+            dbUpdateOne({
+                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
+                id: id,
+                update: newvalues
+            })
+        }
+        else {
+            // enable
+            newvalues = { '$set': { "enable": enableDialogData.enable } }
+            dbUpdateOne({
+                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
+                id: id,
+                update: newvalues
+            })
+            // bridge
+            newvalues = { '$set': { "bridge": enableDialogData.bridge } }
+            dbUpdateOne({
+                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
+                id: id,
+                update: newvalues
+            })
+            // bridgeTime
+            newvalues = { '$set': { "bridgeTime": enableDialogData.bridgeTime } }
+            dbUpdateOne({
+                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
+                id: id,
+                update: newvalues
+            })
+        }
+
+        setEnableDialogOpen(false)
+
+    }, [enableDialogData, areaMongoId, areaSubAreaMongoId, dbUpdateOne, props.dbName])
 
 
 
@@ -1338,13 +1409,13 @@ const AlarmSetup = (props) => {
                 }}
                 newPVInfo={newPVInfo}
             />
-            <EnablePVDialog
-                open={enablePVDialogOpen}
-                data={enablePVDialogData}
-                executeEnablePV={handleExecuteEnablePV}
-                setEnablePVDialogData={setEnablePVDialogData}
+            <EnableDialog
+                open={enableDialogOpen}
+                data={enableDialogData}
+                executeEnable={enableDialogData.type === 'pv' ? handleExecuteEnablePV : handleExecuteEnableDisableArea}
+                setEnableDialogData={setEnableDialogData}
                 handleClose={() => {
-                    setEnablePVDialogOpen(false)
+                    setEnableDialogOpen(false)
                 }}
 
             />

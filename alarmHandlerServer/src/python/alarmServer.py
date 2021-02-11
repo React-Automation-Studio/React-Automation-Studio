@@ -1113,25 +1113,43 @@ def bridgeWatchThread(areaKey, bridgeTime, subAreaKey=None, pvKey=None):
         sleep(1.0)
         if(subAreaKey):
             topAreaKey = areaKey.split("=")[0]
-            enable = dbGetField('enable', topAreaKey, subAreaKey=subAreaKey)
+            if(pvKey):
+                enable = dbGetField('enable', topAreaKey, pvKey, subAreaKey)
+            else:
+                enable = dbGetField('enable', topAreaKey,
+                                    subAreaKey=subAreaKey)
         else:
-            enable = dbGetField('enable', areaKey)
+            if(pvKey):
+                enable = dbGetField('enable', areaKey, pvKey)
+            else:
+                enable = dbGetField('enable', areaKey)
         if(enable):
             break
         elif(datetime.now(utc).isoformat() > bridgeTime):
             if(AH_DEBUG):
                 print("Bridge timeout "+areaKey)
             if(subAreaKey):
-                dbSetField('bridge', False, topAreaKey, subAreaKey=subAreaKey)
-                dbSetField('enable', True, topAreaKey, subAreaKey=subAreaKey)
+                if(pvKey):
+                    dbSetField('bridge', False, topAreaKey, pvKey, subAreaKey)
+                    dbSetField('enable', True, topAreaKey, pvKey, subAreaKey)
+                else:
+                    dbSetField('bridge', False, topAreaKey,
+                               subAreaKey=subAreaKey)
+                    dbSetField('enable', True, topAreaKey,
+                               subAreaKey=subAreaKey)
             else:
-                dbSetField('bridge', False, areaKey)
-                dbSetField('enable', True, areaKey)
+                if(pvKey):
+                    dbSetField('bridge', False, areaKey, pvKey)
+                    dbSetField('enable', True, areaKey, pvKey)
+                else:
+                    dbSetField('bridge', False, areaKey)
+                    dbSetField('enable', True, areaKey)
             break
         else:
-            if(AH_DEBUG):
-                print(datetime.now().isoformat())
-                print(bridgeTime)
+            pass
+            # if(AH_DEBUG):
+            #     print(datetime.now().isoformat())
+            #     print(bridgeTime)
 
     if(AH_DEBUG):
         print("Thread ENDED "+areaKey)
@@ -1227,8 +1245,14 @@ def pvCollectionWatch():
                                  "entry": bridgeMessage}
                         if(bridgeEvent):
                             dbUpdateHistory(pvname, entry)
-                            # _thread.start_new_thread(
-                            #     bridgeWatchThread, (topArea, change[key],))
+                            areaKey, pvKey = getKeys(pvname)
+                            if ("=" in areaKey):
+                                subAreaKey = subAreaDict[areaKey]
+                                areaKey = areaKey.split("=")[0]
+                            else:
+                                subAreaKey = None
+                            _thread.start_new_thread(
+                                bridgeWatchThread, (areaKey, change[key], subAreaKey, pvKey,))
                     elif ("pvs." in key and (key.endswith(".enable") or key.endswith(".latch") or key.endswith(".notify"))):
                         # pv enable/latch/notify
                         # print("enable/latch/notify of pv changed!")

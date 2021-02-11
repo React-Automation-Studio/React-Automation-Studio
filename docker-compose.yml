@@ -97,18 +97,19 @@ services:
       - pvserver1
       - pvserver2
       - pvserver3
+    entrypoint:
+      - /custom/setupNginx.sh
+      - /docker-entrypoint.sh
+    command: ["nginx", "-g", "daemon off;"] 
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/templates/default.conf.template
+      - ./nginx/setupNginx.sh:/custom/setupNginx.sh
+      - ./nginx/nginx.production.conf:/custom/nginx.production.conf
+      - ./nginx/nginx.httpredirect.conf:/custom/nginx.httpredirect.conf
       - ./build:/var/www
       - ./certificates/server.cer:/etc/nginx/server.cer
       - ./certificates/server.key:/etc/nginx/server.key
     env_file: .env
-    #environment:
-      #REACT_APP_SERVER_PORT: ${REACT_APP_SERVER_PORT-5000}
-    # ports:
-    #   - 80:80
-
-      #- ${REACT_APP_SERVER_PORT-5000}:${REACT_APP_SERVER_PORT-5000}
+   
   unsecurestylguidepvserver:
     build:
       context: ./

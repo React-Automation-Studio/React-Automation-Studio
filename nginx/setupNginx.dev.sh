@@ -7,7 +7,7 @@ if [ $ssl == "true" ]
 then
     export listen="3000 ssl"
 else
-         export listen="$3000"
+         export listen="3000"
 fi
 
 echo listen = $listen

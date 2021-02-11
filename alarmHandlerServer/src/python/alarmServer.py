@@ -1152,7 +1152,7 @@ def pvCollectionWatch():
                 timestamp = datetime.now(utc).isoformat()
                 for key in change.keys():
                     # print('#####')
-                    print(key)
+                    # print(key)
                     if(key == "bridge"):
                         bridgeEvent = change[key]
                         topArea = doc.get("area")

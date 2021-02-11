@@ -396,6 +396,8 @@ const AlarmSetup = (props) => {
     // handleNewDbPVsList
     useEffect(() => {
         if (dbPVDataRaw !== null) {
+            // Sort by area always
+            dbPVDataRaw.sort((a,b) => (a.area > b.area) ? 1 : ((b.area > a.area) ? -1 : 0))
             const localAreaNames = []
             const localAreaAlarms = []
             const localAreaEnabled = {}

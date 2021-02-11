@@ -1214,6 +1214,36 @@ def pvCollectionWatch():
                         # print(timestamp, pvname,
                         #       "alarm", msg)
                         dbUpdateHistory(pvname, entry)
+                    elif (key.endswith(".bridge")):
+                        # subArea bridge
+                        bridgeEvent = change[key]
+                        areaKey = doc.get("area") + "=" + doc.get(
+                            key.split(".")[0])["name"]
+                        areaName = areaKey.replace("=", " > ")
+                        if(not bridgeEvent):
+                            bridgeMessage = areaName+" area BRIDGE cleared to area DISABLED"
+                            entry = {"timestamp": timestamp,
+                                     "entry": bridgeMessage}
+                            dbUpdateHistory(areaKey, entry)
+                        else:
+                            bridgeMessage = areaName+" area BRIDGED until "
+                    elif (key.endswith(".bridgeTime")):
+                        # subArea bridgeTime
+                        # Time zone localisation
+                        if(localtz):
+                            str_time = datetime.fromisoformat(change[key]).astimezone(localtz).strftime(
+                                "%d %b %Y %H:%M:%S")
+                        else:
+                            str_time = datetime.fromisoformat(change[key]).strftime(
+                                "%d %b %Y %H:%M:%S")+" (UTC)"
+                        # Time zone localisation
+                        bridgeMessage = bridgeMessage+str_time
+                        entry = {"timestamp": timestamp,
+                                 "entry": bridgeMessage}
+                        if(bridgeEvent):
+                            dbUpdateHistory(areaKey, entry)
+                            # _thread.start_new_thread(
+                            #     bridgeWatchThread, (areaKey, change[key], documentKey,))
                     elif (key.endswith(".enable")):
                         # subArea enable
                         areaKey = doc.get("area") + "=" + doc.get(
@@ -1226,7 +1256,8 @@ def pvCollectionWatch():
                             [areaKey.replace("=", " > "), "sub area", msg])}
                         # print(timestamp, areaKey.replace("=", " > "),
                         #       "sub area", msg)
-                        dbUpdateHistory(areaKey, entry)
+                        if(not bridgeEvent):
+                            dbUpdateHistory(areaKey, entry)
                     elif (key == "pvs" or key.endswith(".pvs")):
                         # New pvs added
                         watchRestartAlarmServer = True

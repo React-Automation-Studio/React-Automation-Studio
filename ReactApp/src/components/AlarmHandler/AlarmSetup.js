@@ -358,11 +358,19 @@ const AlarmSetup = (props) => {
             }
             else if (isSubArea) {
                 const areaArray = alarmLogDict[key]["areas"]
-                if (areaArray?.includes(alarmLogSelectedKey)) {
+                if (key === alarmLogSelectedKey) {
+                    localAlarmLogDisplayArray = localAlarmLogDisplayArray.concat(alarmLogDict[key]["history"])
+                }
+                // pvs
+                else if (areaArray?.includes(alarmLogSelectedKey)) {
                     localAlarmLogDisplayArray = localAlarmLogDisplayArray.concat(alarmLogDict[key]["history"])
                 }
             }
             else {
+                if (alarmLogSelectedKey === key.split('=')[0]) {
+                    localAlarmLogDisplayArray = localAlarmLogDisplayArray.concat(alarmLogDict[key]["history"])
+                }
+                // pvs
                 const areaArray = alarmLogDict[key]["areas"]
                 const concat = areaArray?.reduce((acc, area) => {
                     return acc || area.split('=')[0] === alarmLogSelectedKey

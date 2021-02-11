@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useRef } from 'react';
 import AutomationStudioContext from './components/SystemComponents/AutomationStudioContext';
 import PropTypes from 'prop-types';
 import Avatar from '@material-ui/core/Avatar';
@@ -24,6 +24,8 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
+import axios from 'axios';
+
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -59,14 +61,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-let loginModes=[];
-      if (!(process.env.REACT_APP_DisableStandardLogin=== 'true')) {
-        loginModes.push("Standard Login")        
-      }
-      if ((process.env.REACT_APP_EnableActiveDirectoryLogin=== 'true')) {
-        loginModes.push("Active Directory")        
-      }
-console.log( process.env.REACT_APP_EnableActiveDirectoryLogin)
+
 
 
 const Login = (props) => {
@@ -78,22 +73,24 @@ const Login = (props) => {
   const [authorisationFailed, setAuthorisationFailed] = useState(false)
   const [authenticationFailed, setAuthenticationFailed] = useState(false)
   const [submit, setSubmit] = useState(false);
-  const [loginTabValue,setLoginTabValue]=useState(0);
-  const [loginModes,setLoginModes]=useState([]);
-  const [showPassword,setShowPassword]=useState(false);
-  const enableStandardLogin=!(process.env.REACT_APP_DisableStandardLogin=== 'true');
-  const enableActiveDirectoryLogin=process.env.REACT_APP_EnableActiveDirectoryLogin=== 'true';
-  useEffect(()=>{
-    let modes=[]
-    if (enableStandardLogin){
+  const [loginTabValue, setLoginTabValue] = useState(0);
+  const [loginModes, setLoginModes] = useState([]);
+  const [showPassword, setShowPassword] = useState(false);
+  const mounted = useRef(true);
+  const enableStandardLogin = !(process.env.REACT_APP_DisableStandardLogin === 'true');
+  const enableActiveDirectoryLogin = process.env.REACT_APP_EnableActiveDirectoryLogin === 'true';
+  useEffect(() => {
+    let modes = []
+    if (enableStandardLogin) {
       modes.push('Standard Login')
     }
-    if (enableActiveDirectoryLogin){
+    if (enableActiveDirectoryLogin) {
       modes.push('Active Directory')
     }
     setLoginModes(modes);
-  },[enableStandardLogin,enableActiveDirectoryLogin])
+  }, [enableStandardLogin, enableActiveDirectoryLogin])
   useEffect(() => {
+    mounted.current = true;
     if (submit == true) {
       let port;
       if (typeof process.env.REACT_APP_PyEpicsServerPORT === 'undefined') {
@@ -110,44 +107,62 @@ const Login = (props) => {
         pvServerBASEURL = process.env.REACT_APP_PyEpicsServerBASEURL;
       }
       let PyEpicsServerURL = pvServerBASEURL + ":" + port;
-      const requestOptions = {
-        method: 'POST',
+      const options = {
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ user: { username: username, password: password } })
+        timeout: props.timeout,
       };
-      let endpoint=loginModes[loginTabValue]==='Standard Login'
-      ?      '/api/login/local'
-      :   loginModes[loginTabValue]==='Active Directory'
-      ?     '/api/login/ldap'
-      : null
-    if(endpoint){
-      fetch(PyEpicsServerURL + endpoint, requestOptions)
-        .then(response => response.json())
-        .then(msg => {
-          console.log(msg)
-          if (typeof msg.jwt !== 'undefined') {
-            localStorage.setItem('jwt', JSON.stringify(msg.jwt));
-          }
-          else {
-            localStorage.setItem('jwt', JSON.stringify(null));
-          }
-          if (msg.login) {
-            const jwt = JSON.parse(localStorage.getItem('jwt'));
-            const { socket } = context;
-            if (socket.disconnected) {
-              socket.open();
-              socket.emit('AuthoriseClient', jwt);
+      let body = JSON.stringify({ user: { username: username, password: password } })
+      let endpoint = loginModes[loginTabValue] === 'Standard Login'
+        ? '/api/login/local'
+        : loginModes[loginTabValue] === 'Active Directory'
+          ? '/api/login/ldap'
+          : null
+      if (endpoint) {
+        axios.post(PyEpicsServerURL + endpoint, body, options)
+          // .then(response => response.json())
+          .then(response => {
+            const { data } = response;
+            console.log(data)
+            if (mounted.current) {
+
+              if (typeof data.jwt !== 'undefined') {
+                localStorage.setItem('jwt', JSON.stringify(data.jwt));
+              }
+              else {
+                localStorage.setItem('jwt', JSON.stringify(null));
+              }
+              if (data.login) {
+                const jwt = JSON.parse(localStorage.getItem('jwt'));
+                const { socket } = context;
+                if (socket.disconnected) {
+                  socket.open();
+                  socket.emit('AuthoriseClient', jwt);
+                }
+                else {
+                  socket.emit('AuthoriseClient', jwt);
+                }
+              }
+              setAuthorisationFailed(data.login !== true);
             }
-            else {
-              socket.emit('AuthoriseClient', jwt);
-            }
           }
-          setAuthenticationFailed(msg.login !== true);
-        }
-        )
+          )
+          .catch(err=>{
+            //setAuthenticationFailed(true);
+            let str=err.toString();
+            if (!(str.includes("401"))){
+              console.log(str)
+              setAuthenticationFailed(true)
+            }
+            else{
+              setAuthorisationFailed(true);
+            }
+            
+            
+          })
       }
       setSubmit(false)
     }
+    return () => mounted.current = false;
   }, [submit]
   )
   useEffect(() => {
@@ -163,6 +178,13 @@ const Login = (props) => {
       socket.removeListener('clientAuthorisation', handleAuthorisation);
     }
   }, [])
+
+  let usernameText = loginModes[loginTabValue] === 'Standard Login'
+    ? props.standardLoginUsernameDisplayText
+    : loginModes[loginTabValue] === 'Active Directory'
+      ? props.activeDirectoryLoginUsernameDisplayText
+      : ""
+
   return (
     <React.Fragment>
       <Dialog
@@ -209,36 +231,38 @@ const Login = (props) => {
       </Dialog>
       <main className={classes.main}>
         <Paper className={classes.paper}>
-          <Typography component="h1" variant="h3">
-            React
-        </Typography>
-          <Typography component="h1" variant="h3">
-            Automation
-          </Typography>
-          <Typography component="h1" variant="h3">
-            Studio
-          </Typography>
-          <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5" style={{paddingBottom:16}}>
-            Sign in
-          </Typography>
-          {(loginModes.length>1)&&<AppBar position="static" color='inherit' >
-        <Tabs value={loginTabValue} onChange={(event,newValue)=>setLoginTabValue(newValue)} aria-label="simple tabs example"
-        indicatorColor="primary"
-        textColor="primary"
-        >
-          {loginModes.map((item,index)=>
-          <Tab label= {item} style={{textTransform:'capitalize'}}key={index.toString()}/>
-          )
-          
-}
-        </Tabs>
-      </AppBar>}
-          {(enableStandardLogin||enableActiveDirectoryLogin)&&<form className={classes.form}>
+          {props.title1 && <Typography component="h1" variant="h3">
+            {props.title1}
+          </Typography>}
+          {props.title2 && <Typography component="h1" variant="h3">
+            {props.title2}
+          </Typography>}
+          {props.title3 && <Typography component="h1" variant="h3">
+            {props.title3}
+          </Typography>}
+          {props.logoIcon && <Avatar className={classes.avatar}>
+            {props.logoIcon}
+
+          </Avatar>}
+          {props.signInText &&
+            <Typography component="h1" variant="h5" style={{ paddingBottom: 16 }}>
+              {props.signInText}
+            </Typography>}
+          {(loginModes.length > 1) && <AppBar position="static" color='inherit' >
+            <Tabs value={loginTabValue} onChange={(event, newValue) => setLoginTabValue(newValue)} aria-label="simple tabs example"
+              indicatorColor="primary"
+              textColor="primary"
+            >
+              {loginModes.map((item, index) =>
+                <Tab label={item} style={{ textTransform: 'capitalize' }} key={index.toString()} />
+              )
+
+              }
+            </Tabs>
+          </AppBar>}
+          {(enableStandardLogin || enableActiveDirectoryLogin) && <form className={classes.form}>
             <FormControl margin="normal" required fullWidth>
-              <InputLabel htmlFor="email">Username or Email Address</InputLabel>
+              <InputLabel htmlFor="email">{usernameText}</InputLabel>
               <Input id="email" name="email" autoComplete="email" autoFocus onChange={(event) => (setUsername(event.target.value))}
                 onKeyPress={(event) => {
                   if (event.key === 'Enter') {
@@ -250,11 +274,11 @@ const Login = (props) => {
             </FormControl>
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="password">Password</InputLabel>
-              <Input 
-                name="password" 
-                type={showPassword?"text":"password" }
-                id="password" 
-                autoComplete="current-password" 
+              <Input
+                name="password"
+                type={showPassword ? "text" : "password"}
+                id="password"
+                autoComplete="current-password"
                 onChange={(event) => (setPassword(event.target.value))}
                 onKeyPress={(event) => {
                   if (event.key === 'Enter') {
@@ -266,8 +290,8 @@ const Login = (props) => {
                   <InputAdornment position="end">
                     <IconButton
                       aria-label="toggle password visibility"
-                      onClick={()=>(setShowPassword(prev=>(!prev)))}
-                     
+                      onClick={() => (setShowPassword(prev => (!prev)))}
+
                       edge="end"
                     >
                       {showPassword ? <Visibility /> : <VisibilityOff />}
@@ -287,10 +311,58 @@ const Login = (props) => {
               Sign in
             </Button>
           </form>}
+
+          {props.footer && <Typography style={{ paddingTop: 24 }} align="left" variant="caption">
+            {props.footer}
+          </Typography>}
+
+          {props.version && <Typography style={{ paddingTop: 16 }} align="left" variant="caption">
+            {props.version}
+
+          </Typography>}
         </Paper>
       </main>
       {authorised && <Redirect to='/' />}
     </React.Fragment>
   );
 }
+Login.propTypes = {
+  /** Title text top row.*/
+  title1: PropTypes.string,
+  /** Title text middle row.*/
+  title2: PropTypes.string,
+  /** Title text bottom row.*/
+  title3: PropTypes.string,
+  /** Sign in text.*/
+  signInText: PropTypes.string,
+  /** Footer.*/
+  footer: PropTypes.string,
+  /** Version.*/
+  version: PropTypes.string,
+  /** Standard Login Username display string.*/
+  standardLoginUsernameDisplayText: PropTypes.string,
+  /** Active Directory Login Username display string.*/
+  activeDirectoryLoginUsernameDisplayText: PropTypes.string,
+  /** Login timeout.*/
+  timeout: PropTypes.number,
+  /** Login Icon. Must be of type @material-ui/icons/...*/
+  logoIcon: PropTypes.element,
+
+
+};
+Login.defaultProps = {
+  title1: "React",
+  title2: "Automation",
+  title3: "Studio",
+  signInText: "Sign In",
+  footer: "Login is now customizable",
+  version: "V2.2.0",
+  standardLoginUsernameDisplayText: "Username",
+  activeDirectoryLoginUsernameDisplayText: "Email Address",
+  logoIcon: <LockOutlinedIcon />,
+  timeout: 15000,
+
+};
+
+
 export default Login;

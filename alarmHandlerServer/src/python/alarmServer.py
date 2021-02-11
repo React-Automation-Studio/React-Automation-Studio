@@ -1107,6 +1107,7 @@ def pvCollectionWatch():
     global bridgeEvent
     with dbGetCollection("pvs").watch() as stream:
         for change in stream:
+            # os.system('cls' if os.name == 'nt' else 'clear')
             # print(change)
             try:
                 documentKey = change["documentKey"]
@@ -1114,11 +1115,18 @@ def pvCollectionWatch():
                 change = change["updateDescription"]["updatedFields"]
                 timestamp = datetime.isoformat(datetime.now(utc))
                 for key in change.keys():
+                    # print('#####')
                     # print(key)
                     if(key == "bridge"):
                         bridgeEvent = change[key]
                         topArea = doc.get("area")
-                        bridgeMessage = topArea+" area BRIDGED until "
+                        if(not bridgeEvent):
+                            bridgeMessage = topArea+" area BRIDGE cleared to area DISABLED"
+                            entry = {"timestamp": timestamp,
+                                     "entry": bridgeMessage}
+                            dbUpdateHistory(topArea, entry)
+                        else:
+                            bridgeMessage = topArea+" area BRIDGED until "
                     elif(key == "bridgeTime"):
                         # Time zone localisation
                         if(localtz):

@@ -115,7 +115,7 @@ def dbGetPVField(field, areaKey, pvKey, subAreaKey=None):
     return fieldValue
 
 
-def dbSetPVField(field, value, areaKey, pvKey, subAreaKey=None):
+def dbSetField(field, value, areaKey, pvKey=None, subAreaKey=None):
     if (subAreaKey):
         alarmDB.pvs.update_many(
             {'area': areaKey},

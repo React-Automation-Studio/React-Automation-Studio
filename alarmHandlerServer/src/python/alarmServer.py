@@ -9,7 +9,7 @@ from datetime import datetime
 from pytz import utc, timezone
 
 from notifyServer import startNotifyServer, restartNotifyServer, notify
-from dbMongo import dbGetCollection, dbGetEnables, dbGetListOfPVNames, dbGetPVField, dbSetPVField, dbFindOne, dbUpdateHistory
+from dbMongo import dbGetCollection, dbGetEnables, dbGetListOfPVNames, dbGetPVField, dbSetField, dbFindOne, dbUpdateHistory
 
 try:
     AH_DEBUG = bool(os.environ['AH_DEBUG'])
@@ -344,11 +344,11 @@ def ackAlarm(ackIdentifier, timestamp, username):
             subAreaKey = subAreaDict[areaKey]
             topArea = areaKey.split("=")[0]
             # write to db
-            dbSetPVField('lastAlarmAckTime', timestamp_string,
+            dbSetField('lastAlarmAckTime', timestamp_string,
                          topArea, pvKey, subAreaKey)
         else:
             # write to db
-            dbSetPVField('lastAlarmAckTime', timestamp_string,
+            dbSetField('lastAlarmAckTime', timestamp_string,
                          areaKey, pvKey)
         # Log to history
         entry = {"timestamp": timestamp, "entry": " ".join(
@@ -456,14 +456,14 @@ def pvDisconn(pvname, conn):
             if ("=" in areaKey):
                 subAreaKey = subAreaDict[areaKey]
                 topArea = areaKey.split("=")[0]
-                dbSetPVField('lastAlarmVal', "",
+                dbSetField('lastAlarmVal', "",
                              topArea, pvKey, subAreaKey)
-                dbSetPVField('lastAlarmTime', timestamp_string,
+                dbSetField('lastAlarmTime', timestamp_string,
                              topArea, pvKey, subAreaKey)
             else:
-                dbSetPVField('lastAlarmVal', "",
+                dbSetField('lastAlarmVal', "",
                              areaKey, pvKey)
-                dbSetPVField('lastAlarmTime', timestamp_string,
+                dbSetField('lastAlarmTime', timestamp_string,
                              areaKey, pvKey)
             # log to database
             # disabled alarms not logged
@@ -695,14 +695,14 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
         if ("=" in areaKey):
             subAreaKey = subAreaDict[areaKey]
             topArea = areaKey.split("=")[0]
-            dbSetPVField('lastAlarmVal', value,
+            dbSetField('lastAlarmVal', value,
                          topArea, pvKey, subAreaKey)
-            dbSetPVField('lastAlarmTime', timestamp_string,
+            dbSetField('lastAlarmTime', timestamp_string,
                          topArea, pvKey, subAreaKey)
         else:
-            dbSetPVField('lastAlarmVal', value,
+            dbSetField('lastAlarmVal', value,
                          areaKey, pvKey)
-            dbSetPVField('lastAlarmTime', timestamp_string,
+            dbSetField('lastAlarmTime', timestamp_string,
                          areaKey, pvKey)
     # disabled alarms not logged
     if(enable and logToHistory):
@@ -923,14 +923,14 @@ def initialiseAlarmIOC():
                     if ("=" in areaKey):
                         subAreaKey = subAreaDict[areaKey]
                         topArea = areaKey.split("=")[0]
-                        dbSetPVField('lastAlarmVal', lastAlarmVal,
+                        dbSetField('lastAlarmVal', lastAlarmVal,
                                      topArea, pvKey, subAreaKey)
-                        dbSetPVField('lastAlarmTime', lastAlarmTime,
+                        dbSetField('lastAlarmTime', lastAlarmTime,
                                      topArea, pvKey, subAreaKey)
                     else:
-                        dbSetPVField('lastAlarmVal', lastAlarmVal,
+                        dbSetField('lastAlarmVal', lastAlarmVal,
                                      areaKey, pvKey)
-                        dbSetPVField('lastAlarmTime', lastAlarmTime,
+                        dbSetField('lastAlarmTime', lastAlarmTime,
                                      areaKey, pvKey)
                     # Write entry to database for alarms that were active on startup
                     # Only if not a controlled alarm server restart

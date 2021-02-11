@@ -105,13 +105,19 @@ def dbGetListOfPVNames():
     return areaList, list(set(pvNameList))
 
 
-def dbGetPVField(field, areaKey, pvKey, subAreaKey=None):
+def dbGetField(field, areaKey, pvKey=None, subAreaKey=None):
     doc = alarmDB.pvs.find_one(
         {"area": areaKey})
     if (subAreaKey):
-        fieldValue = doc[subAreaKey]["pvs"][pvKey][field]
+        if(pvKey):
+            fieldValue = doc[subAreaKey]["pvs"][pvKey][field]
+        else:
+            fieldValue = doc[subAreaKey][field]
     else:
-        fieldValue = doc["pvs"][pvKey][field]
+        if(pvKey):
+            fieldValue = doc["pvs"][pvKey][field]
+        else:
+            fieldValue = doc[field]
     return fieldValue
 
 

@@ -9,7 +9,7 @@ from datetime import datetime
 from pytz import utc, timezone
 
 from notifyServer import startNotifyServer, restartNotifyServer, notify
-from dbMongo import dbGetCollection, dbGetEnables, dbGetListOfPVNames, dbGetPVField, dbSetField, dbFindOne, dbUpdateHistory
+from dbMongo import dbGetCollection, dbGetEnables, dbGetListOfPVNames, dbGetField, dbSetField, dbFindOne, dbUpdateHistory
 
 try:
     AH_DEBUG = bool(os.environ['AH_DEBUG'])
@@ -224,10 +224,10 @@ def getLatch(pvname):
         subAreaKey = subAreaDict[areaKey]
         areaKey = areaKey.split("=")[0]
 
-        latch = dbGetPVField("latch", areaKey, pvKey, subAreaKey)
+        latch = dbGetField("latch", areaKey, pvKey, subAreaKey)
 
     else:
-        latch = dbGetPVField("latch", areaKey, pvKey)
+        latch = dbGetField("latch", areaKey, pvKey)
 
     return latch
 
@@ -239,10 +239,10 @@ def getNotify(pvname):
         subAreaKey = subAreaDict[areaKey]
         areaKey = areaKey.split("=")[0]
 
-        notify = dbGetPVField("notify", areaKey, pvKey, subAreaKey)
+        notify = dbGetField("notify", areaKey, pvKey, subAreaKey)
 
     else:
-        notify = dbGetPVField("notify", areaKey, pvKey)
+        notify = dbGetField("notify", areaKey, pvKey)
 
     return notify
 
@@ -408,10 +408,10 @@ def pvDisconn(pvname, conn):
         subAreaKey = subAreaDict[areaKey]
         areaKey = areaKey.split("=")[0]
 
-        lastAlarmTime = dbGetPVField(
+        lastAlarmTime = dbGetField(
             "lastAlarmTime", areaKey, pvKey, subAreaKey)
     else:
-        lastAlarmTime = dbGetPVField("lastAlarmTime", areaKey, pvKey)
+        lastAlarmTime = dbGetField("lastAlarmTime", areaKey, pvKey)
 
     pv = alarmDict[pvname]["D"]
     if (not conn):
@@ -839,17 +839,17 @@ def initialiseAlarmIOC():
             subAreaKey = subAreaDict[areaKey]
             areaKey = areaKey.split("=")[0]
 
-            lastAlarmVal = dbGetPVField(
+            lastAlarmVal = dbGetField(
                 "lastAlarmVal", areaKey, pvKey, subAreaKey)
-            lastAlarmTime = dbGetPVField(
+            lastAlarmTime = dbGetField(
                 "lastAlarmTime", areaKey, pvKey, subAreaKey)
-            lastAlarmAckTime = dbGetPVField(
+            lastAlarmAckTime = dbGetField(
                 "lastAlarmAckTime", areaKey, pvKey, subAreaKey)
 
         else:
-            lastAlarmVal = dbGetPVField("lastAlarmVal", areaKey, pvKey)
-            lastAlarmTime = dbGetPVField("lastAlarmTime", areaKey, pvKey)
-            lastAlarmAckTime = dbGetPVField("lastAlarmAckTime", areaKey, pvKey)
+            lastAlarmVal = dbGetField("lastAlarmVal", areaKey, pvKey)
+            lastAlarmTime = dbGetField("lastAlarmTime", areaKey, pvKey)
+            lastAlarmAckTime = dbGetField("lastAlarmAckTime", areaKey, pvKey)
 
         pv = alarmDict[pvname]["D"]
         val = pv.get()
@@ -1101,7 +1101,7 @@ def restartAlarmServer():
     alarmServerRestart = False
 
 
-def bridgeWatchThread(areaKey, bridgeTime, docKey):
+def bridgeWatchThread(areaKey, bridgeTime, subAreaKey=None, pvKey=None):
     if(AH_DEBUG):
         print("Thread STARTED "+areaKey)
         print("Bridge until "+bridgeTime)
@@ -1111,14 +1111,22 @@ def bridgeWatchThread(areaKey, bridgeTime, docKey):
 
     while(True):
         sleep(1.0)
-        doc = dbFindOne("pvs", docKey)
-        if(doc.get("enable")):
+        if(subAreaKey):
+            topAreaKey = areaKey.split("=")[0]
+            enable = dbGetField('enable', topAreaKey, subAreaKey=subAreaKey)
+        else:
+            enable = dbGetField('enable', areaKey)
+        if(enable):
             break
         elif(datetime.now(utc).isoformat() > bridgeTime):
             if(AH_DEBUG):
                 print("Bridge timeout "+areaKey)
-            dbSetField('bridge', False, areaKey)
-            dbSetField('enable', True, areaKey)
+            if(subAreaKey):
+                dbSetField('bridge', False, topAreaKey, subAreaKey=subAreaKey)
+                dbSetField('enable', True, topAreaKey, subAreaKey=subAreaKey)
+            else:
+                dbSetField('bridge', False, areaKey)
+                dbSetField('enable', True, areaKey)
             break
         else:
             if(AH_DEBUG):
@@ -1170,7 +1178,7 @@ def pvCollectionWatch():
                         if(bridgeEvent):
                             dbUpdateHistory(topArea, entry)
                             _thread.start_new_thread(
-                                bridgeWatchThread, (topArea, change[key], documentKey,))
+                                bridgeWatchThread, (topArea, change[key],))
                     elif(key == "enable"):
                         # area enable
                         topArea = doc.get("area")
@@ -1242,8 +1250,8 @@ def pvCollectionWatch():
                                  "entry": bridgeMessage}
                         if(bridgeEvent):
                             dbUpdateHistory(areaKey, entry)
-                            # _thread.start_new_thread(
-                            #     bridgeWatchThread, (areaKey, change[key], documentKey,))
+                            _thread.start_new_thread(
+                                bridgeWatchThread, (areaKey, change[key], key.split(".")[0],))
                     elif (key.endswith(".enable")):
                         # subArea enable
                         areaKey = doc.get("area") + "=" + doc.get(

@@ -37,7 +37,15 @@ const Routes = (props) => {
         <Route exact path="/MainDashboard" component={MainDashboard} />
 
         {process.env.REACT_APP_EnableLogin === 'true' &&
-          <Route exact path="/LogIn" component={LogIn} />
+          <Route
+            exact path="/LogIn"
+            component={() =>
+              <LogIn 
+                //standardLoginUsernameDisplayText={"custom"}
+                timeout={5000}
+               />
+            }
+          />
         }
 
         <Route path="/Probe" component={Probe} />
@@ -50,7 +58,7 @@ const Routes = (props) => {
         <Route path="/EpicsDemos" component={EpicsDemos} />
         <Route path="/Test3D" component={Test3D} />
         <Route path="/AlarmHandlerDemo" component={AlarmHandlerDemo} />
-        <Route path="/ArchiverDataViewerDemo" component={ArchiverDataViewerDemo}/>
+        <Route path="/ArchiverDataViewerDemo" component={ArchiverDataViewerDemo} />
         <Route path="/VaultDemo" component={Vault} />
         <Route path="/LoadSaveExample" component={LoadSaveExample} />
         {/* new Beamline and table control System routes start*/}
@@ -72,7 +80,7 @@ const Routes = (props) => {
         {/*staging end*/}
 
 
-        
+
 
       </Switch>
 

@@ -118,7 +118,7 @@ const Login = (props) => {
           ? '/api/login/ldap'
           : null
       if (endpoint) {
-        axios.post(PyEpicsServerURL + endpoint, body, options)
+        axios.post(endpoint, body, options)
           // .then(response => response.json())
           .then(response => {
             const { data } = response;

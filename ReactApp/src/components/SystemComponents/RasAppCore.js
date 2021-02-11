@@ -58,9 +58,12 @@ class RasAppCore extends Component {
     const {defaultTheme}=this.props;
     let themeStyle = storedThemeStyle===null?defaultTheme:JSON.parse(storedThemeStyle);
     let themeKeys = Object.keys(this.props.themes);
-    let socket = io(PyEpicsServerURL, {
-      transports: ['websocket'],
-    })
+    // let socket = io(PyEpicsServerURL, {
+    //   transports: ['websocket'],
+    // })
+    let socket = io("/pvServer", {
+         transports: ['websocket'],
+       })
     if (themeKeys.includes(themeStyle)) {
       theme = createMuiTheme(this.props.themes[themeStyle])
      

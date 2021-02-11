@@ -248,7 +248,7 @@ def getNotify(pvname):
 
 
 def ackPVChange(**kw):
-    timestamp = datetime.isoformat(datetime.now(utc))
+    timestamp = datetime.now(utc).isoformat()
     # print("ack pv:", value)
     if(kw["value"]):
         if (kw["value"][0] != ''):
@@ -418,7 +418,7 @@ def pvDisconn(pvname, conn):
         if(alarmServerRestart):
             timestamp_string = lastAlarmTime
         else:
-            timestamp = datetime.isoformat(datetime.now(utc))
+            timestamp = datetime.now(utc).isoformat()
             timestamp_string = timestamp
 
         globalEnable, areaEnable, subAreaEnable, pvEnable = getEnables(pvname)
@@ -494,7 +494,7 @@ def pvDisconn(pvname, conn):
 
 
 def onChanges(**kw):
-    timestamp = datetime.isoformat(datetime.now(utc))
+    timestamp = datetime.now(utc).isoformat()
     if (alarmDictInitialised):
         _thread.start_new_thread(pvPrepareData, (
             kw["pvname"],
@@ -1101,6 +1101,33 @@ def restartAlarmServer():
     alarmServerRestart = False
 
 
+def bridgeWatchThread(areaKey, bridgeTime, docKey):
+    if(AH_DEBUG):
+        print("Thread STARTED "+areaKey)
+        print("Bridge until "+bridgeTime)
+
+    bridgeTime = datetime.isoformat(
+        datetime.fromisoformat(bridgeTime).astimezone(utc))
+
+    while(True):
+        sleep(1.0)
+        doc = dbFindOne("pvs", docKey)
+        if(doc.get("enable")):
+            break
+        elif(datetime.now().isoformat() > bridgeTime):
+            if(AH_DEBUG):
+                print("Bridge timeout "+areaKey)
+                
+            break
+        else:
+            if(AH_DEBUG):
+                print(datetime.now().isoformat())
+                print(bridgeTime)
+
+    if(AH_DEBUG):
+        print("Thread ENDED "+areaKey)
+
+
 def pvCollectionWatch():
     global watchRestartAlarmServer
     global bridgeMessage
@@ -1113,7 +1140,7 @@ def pvCollectionWatch():
                 documentKey = change["documentKey"]
                 doc = dbFindOne("pvs", documentKey)
                 change = change["updateDescription"]["updatedFields"]
-                timestamp = datetime.isoformat(datetime.now(utc))
+                timestamp = datetime.now(utc).isoformat()
                 for key in change.keys():
                     # print('#####')
                     # print(key)
@@ -1141,6 +1168,8 @@ def pvCollectionWatch():
                                  "entry": bridgeMessage}
                         if(bridgeEvent):
                             dbUpdateHistory(topArea, entry)
+                            _thread.start_new_thread(
+                                bridgeWatchThread, (topArea, change[key], documentKey,))
                     elif(key == "enable"):
                         # area enable
                         topArea = doc.get("area")
@@ -1201,7 +1230,8 @@ def pvCollectionWatch():
                         # New pvs added
                         watchRestartAlarmServer = True
             except:
-                print("no relevant updates")
+                if(AH_DEBUG):
+                    print("no relevant updates")
 
 
 def globalCollectionWatch():
@@ -1210,7 +1240,7 @@ def globalCollectionWatch():
             # print(change)
             try:
                 change = change["updateDescription"]["updatedFields"]
-                timestamp = datetime.isoformat(datetime.now(utc))
+                timestamp = datetime.now(utc).isoformat()
                 for key in change.keys():
                     if (key == "enableAllAreas"):
                         # print(areaKey, "area enable changed!")
@@ -1227,7 +1257,8 @@ def globalCollectionWatch():
                         dbUpdateHistory("_GLOBAL", entry)
 
             except:
-                print("No relevant lobal var updates")
+                if(AH_DEBUG):
+                    print("No relevant lobal var updates")
 
 
 def main():

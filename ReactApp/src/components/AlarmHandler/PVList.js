@@ -27,14 +27,21 @@ const PVList = (props) => {
         myRef.current.scrollTo(0, 0)
     }, [props.alarmPVDict.length])
 
-    const logData = Object.keys(props.alarmPVDict).map((alarmName) => {
+    const orderedData = Object.keys(props.alarmPVDict).sort().reduce((obj, key) => {
+        obj[key] = props.alarmPVDict[key];
+        return obj;
+    }, {})
+
+    // console.log(props.alarmPVDict)
+
+    const logData = Object.keys(orderedData).map((alarmName) => {
 
         let visible = true
 
         if (props.filterUserRegex.length > 0) {
             visible = props.filterUserRegex.reduce((acc, expression) => {
-                    let myRe = new RegExp(expression)
-                    return acc || myRe.test(alarmName)
+                let myRe = new RegExp(expression)
+                return acc || myRe.test(alarmName)
             }, false)
         }
 

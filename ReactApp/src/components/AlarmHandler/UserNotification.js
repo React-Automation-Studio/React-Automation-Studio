@@ -22,7 +22,7 @@ import AutomationStudioContext from '../SystemComponents/AutomationStudioContext
 import DataConnection from '../SystemComponents/DataConnection';
 import ScheduleDialog from './ScheduleDialog';
 import DeleteUserDialog from './DeleteUserDialog';
-import AddDialog from './AddDialog';
+import AddUserDialog from './AddUserDialog';
 import UserTable from './UserTable';
 import PVList from './PVList';
 import useMongoDbWatch from '../SystemComponents/database/MongoDB/useMongoDbWatch';
@@ -898,7 +898,7 @@ const UserNotification = (props) => {
                 user={filterUser.name}
                 handleDelete={handleDeleteUser}
             />
-            <AddDialog
+            <AddUserDialog
                 open={addDialogOpen}
                 handleClose={() => {
                     setNewName('')

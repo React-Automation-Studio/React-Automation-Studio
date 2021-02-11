@@ -108,6 +108,8 @@ services:
       - ./build:/var/www
       - ./certificates/server.cer:/etc/nginx/server.cer
       - ./certificates/server.key:/etc/nginx/server.key
+    environment:
+      - port=${port-5000}
     env_file: .env
    
   unsecurestylguidepvserver:

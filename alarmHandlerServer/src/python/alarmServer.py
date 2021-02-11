@@ -345,11 +345,11 @@ def ackAlarm(ackIdentifier, timestamp, username):
             topArea = areaKey.split("=")[0]
             # write to db
             dbSetField('lastAlarmAckTime', timestamp_string,
-                         topArea, pvKey, subAreaKey)
+                       topArea, pvKey, subAreaKey)
         else:
             # write to db
             dbSetField('lastAlarmAckTime', timestamp_string,
-                         areaKey, pvKey)
+                       areaKey, pvKey)
         # Log to history
         entry = {"timestamp": timestamp, "entry": " ".join(
             [pvname, "-", username, "acknowledged", alarmPVSevDict[alarmPVSev], "to", ackedStateDict[pvsev]])}
@@ -457,14 +457,14 @@ def pvDisconn(pvname, conn):
                 subAreaKey = subAreaDict[areaKey]
                 topArea = areaKey.split("=")[0]
                 dbSetField('lastAlarmVal', "",
-                             topArea, pvKey, subAreaKey)
+                           topArea, pvKey, subAreaKey)
                 dbSetField('lastAlarmTime', timestamp_string,
-                             topArea, pvKey, subAreaKey)
+                           topArea, pvKey, subAreaKey)
             else:
                 dbSetField('lastAlarmVal', "",
-                             areaKey, pvKey)
+                           areaKey, pvKey)
                 dbSetField('lastAlarmTime', timestamp_string,
-                             areaKey, pvKey)
+                           areaKey, pvKey)
             # log to database
             # disabled alarms not logged
             # Only if not a controlled alarm server restart
@@ -696,14 +696,14 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
             subAreaKey = subAreaDict[areaKey]
             topArea = areaKey.split("=")[0]
             dbSetField('lastAlarmVal', value,
-                         topArea, pvKey, subAreaKey)
+                       topArea, pvKey, subAreaKey)
             dbSetField('lastAlarmTime', timestamp_string,
-                         topArea, pvKey, subAreaKey)
+                       topArea, pvKey, subAreaKey)
         else:
             dbSetField('lastAlarmVal', value,
-                         areaKey, pvKey)
+                       areaKey, pvKey)
             dbSetField('lastAlarmTime', timestamp_string,
-                         areaKey, pvKey)
+                       areaKey, pvKey)
     # disabled alarms not logged
     if(enable and logToHistory):
         dbUpdateHistory(pvname, entry)
@@ -924,14 +924,14 @@ def initialiseAlarmIOC():
                         subAreaKey = subAreaDict[areaKey]
                         topArea = areaKey.split("=")[0]
                         dbSetField('lastAlarmVal', lastAlarmVal,
-                                     topArea, pvKey, subAreaKey)
+                                   topArea, pvKey, subAreaKey)
                         dbSetField('lastAlarmTime', lastAlarmTime,
-                                     topArea, pvKey, subAreaKey)
+                                   topArea, pvKey, subAreaKey)
                     else:
                         dbSetField('lastAlarmVal', lastAlarmVal,
-                                     areaKey, pvKey)
+                                   areaKey, pvKey)
                         dbSetField('lastAlarmTime', lastAlarmTime,
-                                     areaKey, pvKey)
+                                   areaKey, pvKey)
                     # Write entry to database for alarms that were active on startup
                     # Only if not a controlled alarm server restart
                     if(not alarmServerRestart):
@@ -1114,10 +1114,11 @@ def bridgeWatchThread(areaKey, bridgeTime, docKey):
         doc = dbFindOne("pvs", docKey)
         if(doc.get("enable")):
             break
-        elif(datetime.now().isoformat() > bridgeTime):
+        elif(datetime.now(utc).isoformat() > bridgeTime):
             if(AH_DEBUG):
                 print("Bridge timeout "+areaKey)
-                
+            dbSetField('bridge', False, areaKey)
+            dbSetField('enable', True, areaKey)
             break
         else:
             if(AH_DEBUG):

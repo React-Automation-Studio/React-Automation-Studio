@@ -117,18 +117,33 @@ def dbGetPVField(field, areaKey, pvKey, subAreaKey=None):
 
 def dbSetField(field, value, areaKey, pvKey=None, subAreaKey=None):
     if (subAreaKey):
-        alarmDB.pvs.update_many(
-            {'area': areaKey},
-            {'$set': {
-                subAreaKey + '.pvs.' + pvKey + '.'+field:
-                value
-            }})
+        if(pvKey):
+            alarmDB.pvs.update_many(
+                {'area': areaKey},
+                {'$set': {
+                    subAreaKey + '.pvs.' + pvKey + '.'+field:
+                    value
+                }})
+        else:
+            alarmDB.pvs.update_many(
+                {'area': areaKey},
+                {'$set': {
+                    subAreaKey + '.'+field:
+                    value
+                }})
     else:
-        alarmDB.pvs.update_many(
-            {'area': areaKey},
-            {'$set': {
-                'pvs.' + pvKey + '.'+field: value
-            }})
+        if(pvKey):
+            alarmDB.pvs.update_many(
+                {'area': areaKey},
+                {'$set': {
+                    'pvs.' + pvKey + '.'+field: value
+                }})
+        else:
+            alarmDB.pvs.update_many(
+                {'area': areaKey},
+                {'$set': {
+                    field: value
+                }})
 
 
 def dbFindOne(collection, documentKey=None):

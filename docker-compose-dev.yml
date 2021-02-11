@@ -13,8 +13,17 @@ services:
     restart: always
     logging:
       driver: "none"
+    #network_mode: host
+    ports:
+      - "3001:3000"
+  pvserver1:
+    build:
+      context: ./
+      dockerfile: docker/pvserver/Dockerfile
+    restart: always
     network_mode: host
-  pvserver:
+    tty: true
+    stdin_open: true
     env_file: .env
     environment:
       - ALARM_DATABASE=localhost
@@ -26,20 +35,30 @@ services:
       - DEMO_ARCHIVER=http://localhost:17668
       - pvServerLogLevel=INFO
       - pvServerLogFile=/pvServer/log/pvServerLogFile
-      - http_proxy
-      - https_proxy
-      - no_proxy
-    build:
-      context: ./
-      dockerfile: docker/pvserver/Dockerfile
-    restart: always
-    network_mode: host
-    tty: true
-    stdin_open: true
+      - REACT_APP_PyEpicsServerPORT=9001
+      - REACT_APP_PyEpicsServerBASEURL=http://127.0.0.1
     volumes:
       - ./certificates:/certificates/
       - ./users:/pvServer/userAuthentication/users
       - ./log/:/pvServer/log
+      - ./build:/pvServer/build
+  nginx:
+    image: nginx:1.19.6
+    restart: always
+    network_mode: host
+    depends_on:
+      - pvserver1
+    entrypoint:
+      - /custom/setupNginx.dev.sh
+      - /docker-entrypoint.sh
+    command: ["nginx", "-g", "daemon off;"] 
+    volumes:
+      - ./nginx/setupNginx.dev.sh:/custom/setupNginx.dev.sh
+      - ./nginx/nginx.dev.conf:/custom/nginx.dev.conf
+      - ./build:/var/www
+      - ./certificates/server.cer:/etc/nginx/server.cer
+      - ./certificates/server.key:/etc/nginx/server.key
+    env_file: .env
   unsecurestylguidepvserver:
     env_file: .env
     environment:

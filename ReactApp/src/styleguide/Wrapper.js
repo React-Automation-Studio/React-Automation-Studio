@@ -46,7 +46,7 @@ let PyEpicsServerURL = pvServerBASEURL + ":" + port + "/" + pvServerNamespace;
 console.log('PyEpicsServerURL: ', PyEpicsServerURL)
 
 if (typeof window.socket === 'undefined') {
-  window.socket = io(PyEpicsServerURL, {
+  window.socket = io("/pvServer", {
     transports: ['websocket'],
   })
 

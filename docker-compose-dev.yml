@@ -55,27 +55,30 @@ services:
     volumes:
       - ./nginx/setupNginx.dev.sh:/custom/setupNginx.dev.sh
       - ./nginx/nginx.dev.conf:/custom/nginx.dev.conf
-      - ./build:/var/www
+      - ./nginx/nginx.httpredirect.conf:/custom/nginx.httpredirect.conf
+      - ./build/styleguide:/var/www/styleguide
       - ./certificates/server.cer:/etc/nginx/server.cer
       - ./certificates/server.key:/etc/nginx/server.key
     env_file: .env
   unsecurestylguidepvserver:
-    env_file: .env
-    environment:
-          - REACT_APP_PyEpicsServerPORT=5001
-          - REACT_APP_EnableLogin=false
-          - DEMO_ARCHIVER=http://localhost:17668
-          - http_proxy
-          - https_proxy
-          - no_proxy
-
     build:
       context: ./
+ 
       dockerfile: docker/pvserver/Dockerfile
     restart: always
     network_mode: host
+    env_file: .env
+    environment:
+          - REACT_APP_PyEpicsServerBASEURL=http://127.0.0.1
+          - REACT_APP_PyEpicsServerPORT=5001
+          - REACT_APP_EnableLogin=false
+          - DEMO_ARCHIVER=http://localhost:17668
+          
+          
+          - no_proxy
     volumes:
-      - ./certificates:/certificates/
+          - ./certificates:/certificates/
+
   demoioc:
     build:
       context: ./
@@ -85,20 +88,16 @@ services:
     stdin_open: true
     restart: always
     network_mode: host
-  styleguideserver:
+  styleguide:
+    build:
+      context: ./
+      dockerfile: docker/styleguide/Dockerfile    
     env_file: .env
     environment:
             - REACT_APP_PyEpicsServerPORT=5001
             - REACT_APP_EnableLogin=false
-
-    build:
-      context: ./
-     
-      dockerfile: docker/styleguideserver/Dockerfile
-    restart: always
-    network_mode: host
     volumes:
-      - ./certificates:/certificates/
+      - ./build/styleguide:/build/
 
   initializealarmhandlerdb:
     build:

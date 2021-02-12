@@ -3,21 +3,21 @@ echo "exporting dynamic enviroment variable"
 
 mkdir /etc/nginx/templates
 cp /custom/nginx.production.conf /etc/nginx/templates/default.conf.template
-if [ $port == "443" ]
+if [ $SERVER_PORT == "443" ]
 then
     export listen="443 ssl"
-    if [ $httpRedirect == "true" ]
+    if [ $HTTP_REDIRECT_TO_HTTPS == "true" ]
     then
         cat /custom/nginx.httpredirect.conf >> /etc/nginx/templates/default.conf.template
     fi
 else
-    if [ $ssl == "true" ]
+    if [ $SECURE == "true" ]
     then
-        export listen="$port ssl"
+        export listen="$SERVER_PORT ssl"
     else
-         export listen="$port"
+         export listen="$SERVER_PORT"
     fi
 fi
 echo listen = $listen
-echo httpRedirect= $httpRedirect
+echo HTTP_REDIRECT_TO_HTTPS= $HTTP_REDIRECT_TO_HTTPS
 exec "$@"

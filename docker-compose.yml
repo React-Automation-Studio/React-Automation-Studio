@@ -1,13 +1,13 @@
 version: '3.4'
 services:
-  frontendserver:
+  frontend:
     build:
       context: ./
-      dockerfile: docker/frontendserver/Dockerfile
+      dockerfile: docker/frontend/Dockerfile
       network: host
     volumes:
       - ./certificates:/certificates/
-      - ./build:/build
+      - ./build/frontend:/build
     #restart: always
     network_mode: host
     env_file: .env
@@ -36,7 +36,7 @@ services:
       - ./certificates:/certificates/
       - ./users:/pvServer/userAuthentication/users
       - ./log/:/pvServer/log
-      - ./build:/pvServer/build
+      # - ./build:/pvServer/build
   pvserver2:
     build:
       context: ./
@@ -62,7 +62,7 @@ services:
       - ./certificates:/certificates/
       - ./users:/pvServer/userAuthentication/users
       - ./log/:/pvServer/log
-      - ./build:/pvServer/build
+      # - ./build:/pvServer/build
   pvserver3:
     build:
       context: ./
@@ -88,7 +88,7 @@ services:
       - ./certificates:/certificates/
       - ./users:/pvServer/userAuthentication/users
       - ./log/:/pvServer/log
-      - ./build:/pvServer/build
+      # - ./build:/pvServer/build
   nginx:
     image: nginx:1.19.6
     restart: always
@@ -105,7 +105,8 @@ services:
       - ./nginx/setupNginx.sh:/custom/setupNginx.sh
       - ./nginx/nginx.production.conf:/custom/nginx.production.conf
       - ./nginx/nginx.httpredirect.conf:/custom/nginx.httpredirect.conf
-      - ./build:/var/www
+      - ./build/frontend:/var/www/frontend
+      - ./build/styleguide:/var/www/styleguide
       - ./certificates/server.cer:/etc/nginx/server.cer
       - ./certificates/server.key:/etc/nginx/server.key
     environment:
@@ -121,6 +122,7 @@ services:
     network_mode: host
     env_file: .env
     environment:
+          - REACT_APP_PyEpicsServerBASEURL=http://127.0.0.1
           - REACT_APP_PyEpicsServerPORT=5001
           - REACT_APP_EnableLogin=false
           - DEMO_ARCHIVER=http://localhost:17668
@@ -138,18 +140,16 @@ services:
     stdin_open: true
     restart: always
     network_mode: host
-  styleguideserver:
+  styleguide:
     build:
       context: ./
-      dockerfile: docker/styleguideserver/Dockerfile
-    volumes:
-      - ./certificates:/certificates/
-    restart: always
-    network_mode: host
+      dockerfile: docker/styleguide/Dockerfile    
     env_file: .env
     environment:
             - REACT_APP_PyEpicsServerPORT=5001
             - REACT_APP_EnableLogin=false
+    volumes:
+      - ./build/styleguide:/build/
 
   initializealarmhandlerdb:
     build:

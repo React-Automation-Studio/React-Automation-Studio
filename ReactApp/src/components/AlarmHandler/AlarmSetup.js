@@ -11,7 +11,6 @@ import InputBase from '@material-ui/core/InputBase';
 import PV from '../SystemComponents/PV';
 import useMongoDbWatch from '../SystemComponents/database/MongoDB/useMongoDbWatch';
 import useMongoDbUpdateOne from '../SystemComponents/database/MongoDB/useMongoDbUpdateOne';
-import useMongoDbInsertOne from '../SystemComponents/database/MongoDB/useMongoDbInsertOne';
 import Typography from '@material-ui/core/Typography';
 
 import Menu from '@material-ui/core/Menu';
@@ -207,8 +206,6 @@ const AlarmSetup = (props) => {
     const [alarmTableSearchStringStore, setAlarmTableSearchStringStore] = useState('')
     const [alarmTableSearchTimer, setAlarmTableSearchTimer] = useState(null)
     const [alarmLogSelectedKey, setAlarmLogSelectedKey] = useState('')
-    const [alarmLogDict, setAlarmLogDict] = useState({})
-    const [alarmLogDisplayArray, setAlarmLogDisplayArray] = useState([])
     const [alarmLogExpand, setAlarmLogExpand] = useState(true)
     const [alarmLogIsExpanded, setAlarmLogIsExpanded] = useState(true)
     const [alarmTableExpand, setAlarmTableExpand] = useState(true)
@@ -327,77 +324,29 @@ const AlarmSetup = (props) => {
     const dbConfigData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:config:Parameters:{}` }).data
     const dbGlobData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:glob:Parameters:{}` }).data
 
+    const [lastIdParams, setLastIdParams] = useState({
+        query: {
+            "singleEntry": true,
+            "id": { '$regex': '.*' }
+        },
+        sort: [['timestamp', -1]],
+        limit: 1
+    })
+
+
+    // console.log(Parameters)
+    const lastIdData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history:Parameters:${JSON.stringify(lastIdParams)}` }).data
+
     const dbUpdateOne = useMongoDbUpdateOne({})
-    const dbInsertOne = useMongoDbInsertOne({})
 
     const [alarmTableHeight, setAlarmTableHeight] = useState('40vh')
     const [alarmLogHeight, setAlarmLogHeight] = useState('32vh')
-    const [filteredData, setFilteredData] = useState([])
-    const [preSliceData, setPreSliceData] = useState([])
-
-    // update alarm log display data
-    useEffect(() => {
-        let localAlarmLogDisplayArray = []
-
-        // console.log('alarmLogSelectedKey', alarmLogSelectedKey)
-        // console.log(alarmLogDict)
-
-        const isPV = alarmLogSelectedKey.includes('*')
-        const isSubArea = alarmLogSelectedKey.includes('=') && !isPV
-
-        // Map alarmLogDict
-        Object.keys(alarmLogDict).map(key => {
-            // console.log('key', key)
-            if (alarmLogSelectedKey === 'ALLAREAS') {
-                localAlarmLogDisplayArray = localAlarmLogDisplayArray.concat(alarmLogDict[key]["history"])
-            }
-            else if (isPV) {
-                if (key === alarmLogSelectedKey.split('*')[1]) {
-                    localAlarmLogDisplayArray = localAlarmLogDisplayArray.concat(alarmLogDict[key]["history"])
-                }
-            }
-            else if (isSubArea) {
-                const areaArray = alarmLogDict[key]["areas"]
-                if (key === alarmLogSelectedKey) {
-                    localAlarmLogDisplayArray = localAlarmLogDisplayArray.concat(alarmLogDict[key]["history"])
-                }
-                // pvs
-                else if (areaArray?.includes(alarmLogSelectedKey)) {
-                    localAlarmLogDisplayArray = localAlarmLogDisplayArray.concat(alarmLogDict[key]["history"])
-                }
-            }
-            else {
-                if (alarmLogSelectedKey === key.split('=')[0]) {
-                    localAlarmLogDisplayArray = localAlarmLogDisplayArray.concat(alarmLogDict[key]["history"])
-                }
-                // pvs
-                const areaArray = alarmLogDict[key]["areas"]
-                const concat = areaArray?.reduce((acc, area) => {
-                    return acc || area.split('=')[0] === alarmLogSelectedKey
-                }, false)
-                if (concat) {
-                    localAlarmLogDisplayArray = localAlarmLogDisplayArray.concat(alarmLogDict[key]["history"])
-                }
-            }
-            return null
-        })
-
-        localAlarmLogDisplayArray = localAlarmLogDisplayArray.sort(function (a, b) {
-            return parseISO(b.timestamp) - parseISO(a.timestamp)
-        })
-
-        setAlarmLogDisplayArray(localAlarmLogDisplayArray)
-        setPage(0)
-        setAlarmLogSearchStringStore('')
-        setAlarmLogSearchString('')
-
-    }, [alarmLogDict, alarmLogSelectedKey])
 
     // handleNewDbPVsList
     useEffect(() => {
         if (dbPVDataRaw !== null) {
             // Sort by area always
-            dbPVDataRaw.sort((a,b) => (a.area > b.area) ? 1 : ((b.area > a.area) ? -1 : 0))
+            dbPVDataRaw.sort((a, b) => (a.area > b.area) ? 1 : ((b.area > a.area) ? -1 : 0))
             const localAreaNames = []
             const localAreaAlarms = []
             const localAreaEnabled = {}
@@ -513,20 +462,26 @@ const AlarmSetup = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dbPVDataRaw])
 
+    // update last doc id regex
+    useEffect(() => {
+        if (alarmLogSelectedKey.includes("*")) {
+            let regex = String.raw`${alarmLogSelectedKey.replace("*", "\\*")}`
+            // regex = (regex)
+            console.log(regex)
+        }
+    }, [alarmLogSelectedKey])
+
+    // update last doc id
+    useEffect(() => {
+        if (lastIdData?.[0]?._id.$oid) {
+            console.log(lastIdData?.[0]?._id.$oid)
+        }
+    }, [lastIdData])
+
     // handleNewDbLogReadWatchBroadcast
     useEffect(() => {
         if (dbHistoryData !== null) {
-            const localAlarmLogDict = {}
-            dbHistoryData.map(area => {
-                localAlarmLogDict[area["id"]] = {
-                    "id": area["_id"]["$oid"],
-                    "areas": area["areas"],
-                    "history": area["history"],
-                }
-                return null
-            })
-            // console.log(localAlarmLogDict)
-            setAlarmLogDict(localAlarmLogDict)
+            console.log(dbHistoryData)
         }
         // disable useEffect dependencies for "dbHistoryData"
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -1032,32 +987,6 @@ const AlarmSetup = (props) => {
     }, [newPVInfo])
 
     const handleExecuteAddNewPVs = useCallback(() => {
-        const updateHistoryDb = (pvname, areaIndex) => {
-            if (pvname in alarmLogDict) {
-                const currAreas = alarmLogDict[pvname]["areas"]
-                currAreas.push(areaIndex)
-
-                const id = alarmLogDict[pvname]["id"]
-                const newvalues = { '$set': { "areas": currAreas } }
-
-                dbUpdateOne({
-                    dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history`,
-                    id: id,
-                    update: newvalues
-                })
-            }
-            else {
-                const newEntry = {
-                    "id": pvname,
-                    "areas": [areaIndex],
-                    "history": []
-                }
-                dbInsertOne({
-                    dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history`,
-                    newEntry: newEntry
-                })
-            }
-        }
         const { areaIndex, pvs, alarmKey } = newPVInfo
         const id = areaMongoId[areaIndex]
         let subAreaId = null
@@ -1078,24 +1007,11 @@ const AlarmSetup = (props) => {
         pvs.map(pv => {
             const { pvname } = pv
             let proceedToAddPV = false
-            if (pvname in alarmLogDict) {
-                // const currAreas = alarmLogDict[pvname]["areas"]
-                // if (currAreas.includes(areaIndex)) {
-                //     console.log(`[WARNING] ${pvname} already in area ${areaIndex}`)
-                //     console.log("[WARNING] PV add aborted")
-                // }
-                // else {
-                //     proceedToAddPV = true
-                //     restartAlarmServer = true
-                // }
-                console.log(`[WARNING] ${pvname} already in alarm server. Duplicate pv in more than one area not permitted. PV add aborted.`)
-            }
-            else {
-                proceedToAddPV = true
-                restartAlarmServer = true
-            }
+
+            proceedToAddPV = true
+            restartAlarmServer = true
+
             if (proceedToAddPV) {
-                updateHistoryDb(pvname, areaIndex)
                 newPvs = {
                     ...newPvs,
                     [`pv${key}`]: {
@@ -1133,7 +1049,7 @@ const AlarmSetup = (props) => {
 
         setAddPVDialogOpen(false)
 
-    }, [dbPVData, newPVInfo, areaMongoId, areaSubAreaMongoId, dbUpdateOne, props.dbName, alarmLogDict, dbInsertOne])
+    }, [dbPVData, newPVInfo, areaMongoId, areaSubAreaMongoId, dbUpdateOne, props.dbName])
 
     const autoLoadAlarmTable = useCallback(() => {
         const timer = setTimeout(() => {
@@ -1180,31 +1096,6 @@ const AlarmSetup = (props) => {
         setRowsPerPageAT(parseInt(event.target.value, 10))
         setPageAT(0)
     }, [])
-
-    useEffect(() => {
-        const searchedData = alarmLogDisplayArray.filter((entry) => {
-            const date = format(parseISO(entry.timestamp), "HH:mm:ss E, dd LLL yyyy")
-            const content = `${date}: ${entry.entry}`
-            const visible = content.toLowerCase().includes(alarmLogSearchString.toLowerCase())
-            if (visible) {
-                return entry
-            }
-            else {
-                return null
-            }
-        })
-
-        setPreSliceData(searchedData)
-
-        const slicedData = rowsPerPage > 0
-            ? searchedData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            : searchedData
-
-        setFilteredData(slicedData)
-
-    }, [alarmLogDisplayArray, alarmLogSearchString, page, rowsPerPage])
-
-
 
     useEffect(() => {
         const keyedAreaAlarms = areaAlarms.reduce((acc, entry) => {
@@ -1379,6 +1270,8 @@ const AlarmSetup = (props) => {
     }, [backdropOpen])
 
     // console.log('Top render')
+
+    // console.log(alarmLogSelectedKey)
 
     return (
         <React.Fragment>
@@ -1656,7 +1549,7 @@ const AlarmSetup = (props) => {
                                                 }}
                                                 rowsPerPageOptions={[25, 50, 100]}
                                                 colSpan={3}
-                                                count={preSliceData.length}
+                                                count={0}
                                                 rowsPerPage={rowsPerPage}
                                                 page={page}
                                                 SelectProps={{
@@ -1695,10 +1588,10 @@ const AlarmSetup = (props) => {
                                 </div>
                             </AccordionSummary>
                             <AccordionDetails>
-                                <AlarmLog
+                                {/* <AlarmLog
                                     height={alarmLogHeight}
                                     slicedData={filteredData}
-                                />
+                                /> */}
                             </AccordionDetails>
                         </Accordion>
 

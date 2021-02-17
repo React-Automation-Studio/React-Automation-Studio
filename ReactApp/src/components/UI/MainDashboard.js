@@ -135,11 +135,9 @@ class MainDashboard extends Component {
       },
       variant: "h5"
     };
-    // console.log(window.location.href)
-    // console.log(window.location.hostname)
-    // console.log(window.location.protocol)
-    const styleguideURL=window.location.protocol+"//"+window.location.hostname+':6060/';
-       return (
+
+    const styleguideURL = window.location.protocol + "//" + window.location.hostname + ':6060/';
+    return (
       <TraditionalLayout
         title="React Automation Studio"
         denseAppBar
@@ -232,187 +230,187 @@ Improvements and new features:
                           <li>New ArrayContainer</li>
                           <li>New LightPanel</li>
                         </ul>
-                        </li>
-                        <li>Upgraded to Socket.IO 3.1.0</li>
-                        <li>Upgraded pvServer to Flask-SocketIO 5.0.1</li>
-                        <li>Package updates</li>
-                    
+                      </li>
+                      <li>Upgraded to Socket.IO 3.1.0</li>
+                      <li>Upgraded pvServer to Flask-SocketIO 5.0.1</li>
+                      <li>Package updates</li>
+
                     </ul>
                   V2.1.0 Tuesday 20 October 2020
                   <br />
                   Improvements and new features:
                     <br />
-                      <ul>
-                        <li>Added Epics Archiver Viewer component</li>
-                        <li>Package updates</li>
-                      </ul>
+                    <ul>
+                      <li>Added Epics Archiver Viewer component</li>
+                      <li>Package updates</li>
+                    </ul>
 
                   V2.0.1 Tuesday 29 September 2020
                   <br />
                   Improvements and new features:
                     <br />
-                      <ul>
-                        <li>Added logging to pvServer</li>
-                        <li>Minor bug fix to pvServer</li>
-                      </ul>
+                    <ul>
+                      <li>Added logging to pvServer</li>
+                      <li>Minor bug fix to pvServer</li>
+                    </ul>
 
                   V2.0.0 Wednesday 5 August 2020
                     <br />
 
                     Improvements and new features:
                     <br />
-                      <ul>
-                        <li>Updated to React Hooks based  components</li>
-                        <li>Introduction of new RasAppCore component, the logic in App.js is replaced by this component</li>
-                        <li>Created the new component Widget that is the base component for all Widgets.</li>
-                        <li>PV component substitutes old DataConnection component.</li>
-                        <li>Dynamic connection: When useMetadata props is false some fields, such as min, max, prec, alarm and units, are read from external PVs or an additional connection with those fields is established. By default useMetadata prop is false.</li>
-                        <li>New Layout with new themes.</li>
-                        <li>All buttons can receive and icon.</li>
-                        <li>All components extending MUI components can pass MUI props to the MUI components through a special prop (it changes based on the component).</li>
-                        <li>All components can have a tooltip.</li>
-                        <li>Widget base components now accept macros in the label and units</li>
-                        <li>Integration with MongoDb database with the addition of Mongodb hooks to setup a watch, and perform an update and insert a MongoDb document.</li>
-                        <li>Update of all demos to Hooks based components</li>
-                        <li>Update of all beam line components to Hooks based components, with new documentation</li>
-                        <li>Create new experimental sections to hose previews of new components</li>
-                        <li>Preview Components
+                    <ul>
+                      <li>Updated to React Hooks based  components</li>
+                      <li>Introduction of new RasAppCore component, the logic in App.js is replaced by this component</li>
+                      <li>Created the new component Widget that is the base component for all Widgets.</li>
+                      <li>PV component substitutes old DataConnection component.</li>
+                      <li>Dynamic connection: When useMetadata props is false some fields, such as min, max, prec, alarm and units, are read from external PVs or an additional connection with those fields is established. By default useMetadata prop is false.</li>
+                      <li>New Layout with new themes.</li>
+                      <li>All buttons can receive and icon.</li>
+                      <li>All components extending MUI components can pass MUI props to the MUI components through a special prop (it changes based on the component).</li>
+                      <li>All components can have a tooltip.</li>
+                      <li>Widget base components now accept macros in the label and units</li>
+                      <li>Integration with MongoDb database with the addition of Mongodb hooks to setup a watch, and perform an update and insert a MongoDb document.</li>
+                      <li>Update of all demos to Hooks based components</li>
+                      <li>Update of all beam line components to Hooks based components, with new documentation</li>
+                      <li>Create new experimental sections to hose previews of new components</li>
+                      <li>Preview Components
                         <ul>
-                            <li>
-                              Preview release of the Alarm Handler server and client UI
+                          <li>
+                            Preview release of the Alarm Handler server and client UI
                           </li>
-                            <li>
-                              Preview release of the Load/Save client UI
+                          <li>
+                            Preview release of the Load/Save client UI
                           </li>
-                          </ul>
-                        </li>
+                        </ul>
+                      </li>
 
 
-                        <li> Deprecated Components: These components will be removed in future releases                  <br />
-                          <ul>
-                            <li>
-                              SimpleSlider -> Use Slider
+                      <li> Deprecated Components: These components will be removed in future releases                  <br />
+                        <ul>
+                          <li>
+                            SimpleSlider -> Use Slider
                           </li>
-                            <li>
-                              ActionFanoutButton -> Use ActionButton
+                          <li>
+                            ActionFanoutButton -> Use ActionButton
                           </li>
-                            <li>
-                              SwitchComponent -> Use Switch
+                          <li>
+                            SwitchComponent -> Use Switch
                           </li>
-                          </ul>
-                        </li>
-                        <li>
-                          Removed Component:
-
-                      <ul>
-                            <li>
-                              GraphMultiplePVs
-                        </li>
-                          </ul>
-                        </li>
-                        <li>
-                          Breaking Changes:
+                        </ul>
+                      </li>
+                      <li>
+                        Removed Component:
 
                       <ul>
-                            <li>
-                              routes.js was renamed Routes.js and now contains extra logic to enable dynamic or isolated routes based on the use role.
+                          <li>
+                            GraphMultiplePVs
                         </li>
-                            <li>
-                              If you added extra logic to the App.js you will to adapt to the new RasAppCore component.
-                        </li>
-                          </ul>
-                        </li>
-                        <li>Packages updated in both RAS and RAS-Example-Project-1</li>
+                        </ul>
+                      </li>
+                      <li>
+                        Breaking Changes:
 
-                      </ul>
+                      <ul>
+                          <li>
+                            routes.js was renamed Routes.js and now contains extra logic to enable dynamic or isolated routes based on the use role.
+                        </li>
+                          <li>
+                            If you added extra logic to the App.js you will to adapt to the new RasAppCore component.
+                        </li>
+                        </ul>
+                      </li>
+                      <li>Packages updated in both RAS and RAS-Example-Project-1</li>
+
+                    </ul>
 
 
 
                   </Typography>
                 </Grid>
 
-                </Grid>
+              </Grid>
             </Paper>
           </Grid>
-            <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem} >
+          <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem} >
 
-              <Paper className={classes.Paper} elevation={paperElevation}>
-                <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
-                  <Grid item lg={12} sm={12} xs={12} style={{ textAlign: 'center' }}>
-                    <Typography {...typographyProps}><EditIcon className={classes.Icon} /> Staging</Typography>
-                  </Grid>
-                  <Grid item lg={6} sm={12} xs={12}>
-
-                    <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
-                      <Grid item lg={12} sm={12} xs={12}>
-                        <Button fullWidth className={classes.button} component={Link} to="/Staging" color="primary" variant={buttonVariant}>  Staging </Button>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-
-
-
+            <Paper className={classes.Paper} elevation={paperElevation}>
+              <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
+                <Grid item lg={12} sm={12} xs={12} style={{ textAlign: 'center' }}>
+                  <Typography {...typographyProps}><EditIcon className={classes.Icon} /> Staging</Typography>
                 </Grid>
-              </Paper>
-            </Grid>
-            <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem} >
+                <Grid item lg={6} sm={12} xs={12}>
 
-              <Paper className={classes.Paper} elevation={paperElevation} style={{ textAlign: 'center' }}>
-                <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
-                  <Grid item lg={12} sm={12} xs={12}>
-                    <Typography {...typographyProps}>  <VisibilityIcon className={classes.Icon} /> Preview</Typography>
-                  </Grid>
-                  <Grid item lg={6} sm={12} xs={12}>
-                    <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
-
-                      <Grid item lg={12} sm={12} xs={12}>
-                        <Button fullWidth className={classes.button} component={Link} to="/AlarmHandlerDemo" color="primary" variant={buttonVariant}>  Alarm Handler Demo </Button>
-                      </Grid>
-                      <Grid item lg={12} sm={12} xs={12}>
-                        <Button fullWidth className={classes.button} component={Link} to="/VaultDemo" color="primary" variant={buttonVariant}>  Vault Demo </Button>
-                      </Grid>
-                      <Grid item lg={12} sm={12} xs={12} >
-                        <Button fullWidth className={classes.button} component={Link} to="/LoadSaveExample" color="primary" variant={buttonVariant}> LoadSave Example </Button>
-                      </Grid>
-                      <Grid item lg={12} sm={12} xs={12} >
-                        <Button fullWidth className={classes.button} component={Link} to="/ArchiverDataViewerDemo" color="primary" variant={buttonVariant}> Archiver Data Viewer Demo </Button>
-                      </Grid>
-
-
+                  <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
+                    <Grid item lg={12} sm={12} xs={12}>
+                      <Button fullWidth className={classes.button} component={Link} to="/Staging" color="primary" variant={buttonVariant}>  Staging </Button>
                     </Grid>
                   </Grid>
                 </Grid>
-              </Paper>
-            </Grid>
-            <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem} >
 
-              <Paper className={classes.Paper} elevation={paperElevation}>
-                <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
-                  <Grid item lg={12} sm={12} xs={12} style={{ textAlign: 'center' }}>
-                    <Typography {...typographyProps}><HelpIcon className={classes.Icon} /> Help</Typography>
+
+
+              </Grid>
+            </Paper>
+          </Grid>
+          <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem} >
+
+            <Paper className={classes.Paper} elevation={paperElevation} style={{ textAlign: 'center' }}>
+              <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
+                <Grid item lg={12} sm={12} xs={12}>
+                  <Typography {...typographyProps}>  <VisibilityIcon className={classes.Icon} /> Preview</Typography>
+                </Grid>
+                <Grid item lg={6} sm={12} xs={12}>
+                  <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
+
+                    <Grid item lg={12} sm={12} xs={12}>
+                      <Button fullWidth className={classes.button} component={Link} to="/AlarmHandlerDemo" color="primary" variant={buttonVariant}>  Alarm Handler Demo </Button>
+                    </Grid>
+                    <Grid item lg={12} sm={12} xs={12}>
+                      <Button fullWidth className={classes.button} component={Link} to="/VaultDemo" color="primary" variant={buttonVariant}>  Vault Demo </Button>
+                    </Grid>
+                    <Grid item lg={12} sm={12} xs={12} >
+                      <Button fullWidth className={classes.button} component={Link} to="/LoadSaveExample" color="primary" variant={buttonVariant}> LoadSave Example </Button>
+                    </Grid>
+                    <Grid item lg={12} sm={12} xs={12} >
+                      <Button fullWidth className={classes.button} component={Link} to="/ArchiverDataViewerDemo" color="primary" variant={buttonVariant}> Archiver Data Viewer Demo </Button>
+                    </Grid>
+
+
                   </Grid>
-                  <Grid item lg={6} sm={12} xs={12}>
-                    
-                    <Button fullWidth className={classes.button} target="_blank" href={styleguideURL} color="default" variant={buttonVariant}> Help and Style Guide </Button>
-  
-                  </Grid>
+                </Grid>
+              </Grid>
+            </Paper>
+          </Grid>
+          <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem} >
+
+            <Paper className={classes.Paper} elevation={paperElevation}>
+              <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
+                <Grid item lg={12} sm={12} xs={12} style={{ textAlign: 'center' }}>
+                  <Typography {...typographyProps}><HelpIcon className={classes.Icon} /> Help</Typography>
+                </Grid>
+                <Grid item lg={6} sm={12} xs={12}>
+
+                  <Button fullWidth className={classes.button} target="_blank" href={styleguideURL} color="default" variant={buttonVariant}> Help and Style Guide </Button>
 
                 </Grid>
-              </Paper>
-            </Grid>
 
-
-
-
-
-
+              </Grid>
+            </Paper>
           </Grid>
 
 
 
 
 
-          <RedirectToLogIn />
+
+        </Grid>
+
+
+
+
+
+        <RedirectToLogIn />
       </TraditionalLayout >
     )
   }

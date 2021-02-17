@@ -107,8 +107,7 @@ services:
       - ./nginx/nginx.httpredirect.conf:/custom/nginx.httpredirect.conf
       - ./build/frontend:/var/www/frontend
       - ./build/styleguide:/var/www/styleguide
-      - ./certificates/server.cer:/etc/nginx/server.cer
-      - ./certificates/server.key:/etc/nginx/server.key
+      - ./certificates:/etc/nginx/certificates
     environment:
       - SERVER_PORT=${SERVER_PORT-5000}
     env_file: .env

@@ -57,8 +57,7 @@ services:
       - ./nginx/nginx.styleguide.dev.conf:/custom/nginx.styleguide.dev.conf
       - ./nginx/nginx.httpredirect.conf:/custom/nginx.httpredirect.conf
       - ./build/styleguide:/var/www/styleguide
-      - ./certificates/server.cer:/etc/nginx/server.cer
-      - ./certificates/server.key:/etc/nginx/server.key
+      - ./certificates:/etc/nginx/certificates
     env_file: .env
   unsecurestylguidepvserver:
     build:

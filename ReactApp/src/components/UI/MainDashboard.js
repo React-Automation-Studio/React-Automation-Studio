@@ -105,31 +105,7 @@ const styles = theme => ({
 
 
 
-let pvServerBASEURL;
-if (typeof process.env.REACT_APP_PyEpicsServerBASEURL === 'undefined') {
-  pvServerBASEURL = "http://127.0.0.1";
-}
-else {
-  pvServerBASEURL = process.env.REACT_APP_PyEpicsServerBASEURL;
-}
 
-let port;
-if (typeof process.env.REACT_APP_StyleguideServerPORT === 'undefined') {
-  port = 6060;
-}
-else {
-  port = process.env.REACT_APP_StyleguideServerPORT;
-}
-
-
-let AutomationStudioStyleGuideBuildURL;
-
-if (typeof process.env.REACT_APP_StyleguideServerURL === 'undefined') {
-  AutomationStudioStyleGuideBuildURL = pvServerBASEURL + ":" + port;
-}
-else {
-  AutomationStudioStyleGuideBuildURL = process.env.REACT_APP_StyleguideServerURL + ":" + port;
-}
 
 class MainDashboard extends Component {
   constructor(props) {
@@ -159,7 +135,11 @@ class MainDashboard extends Component {
       },
       variant: "h5"
     };
-    return (
+    // console.log(window.location.href)
+    // console.log(window.location.hostname)
+    // console.log(window.location.protocol)
+    const styleguideURL=window.location.protocol+"//"+window.location.hostname+':6060/';
+       return (
       <TraditionalLayout
         title="React Automation Studio"
         denseAppBar
@@ -412,7 +392,9 @@ Improvements and new features:
                     <Typography {...typographyProps}><HelpIcon className={classes.Icon} /> Help</Typography>
                   </Grid>
                   <Grid item lg={6} sm={12} xs={12}>
-                    <Button fullWidth className={classes.button} target="_blank" href={AutomationStudioStyleGuideBuildURL} color="default" variant={buttonVariant}> Help and Style Guide </Button>
+                    
+                    <Button fullWidth className={classes.button} target="_blank" href={styleguideURL} color="default" variant={buttonVariant}> Help and Style Guide </Button>
+  
                   </Grid>
 
                 </Grid>

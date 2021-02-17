@@ -7,6 +7,10 @@ if [ $SECURE == "true" ]
 then
     export listen="3000 ssl"
     export styleguidelisten="6060 ssl"
+    sed -i '8s/.*/    ssl_certificate server.cer;/' /etc/nginx/templates/default.conf.template
+    sed -i '9s/.*/    ssl_certificate_key server.key;/' /etc/nginx/templates/default.conf.template
+    sed -i '34s/.*/    ssl_certificate server.cer;/' /etc/nginx/templates/default.conf.template
+    sed -i '35s/.*/    ssl_certificate_key server.key;/' /etc/nginx/templates/default.conf.template
 else
          export listen="3000"
          export styleguidelisten="6060"

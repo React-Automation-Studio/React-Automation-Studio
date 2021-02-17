@@ -353,7 +353,7 @@ def ackAlarm(ackIdentifier, timestamp, username):
         # Log to history
         entry = {"timestamp": timestamp, "entry": " ".join(
             [pvname, "-", username, "acknowledged", alarmPVSevDict[alarmPVSev], "to", ackedStateDict[pvsev]])}
-        dbUpdateHistory(pvname, entry)
+        dbUpdateHistory(areaKey, entry, pvname)
 
     # 0	"NO_ALARM"  # 0 "NO_ALARM"
     # 1	"MINOR"     # 1 "MINOR_ACKED"
@@ -471,7 +471,7 @@ def pvDisconn(pvname, conn):
             if(enable and not alarmServerRestart):
                 entry = {"timestamp": timestamp, "entry": " ".join(
                     [pvname, "-", "DISCONNECTED"])}
-                dbUpdateHistory(pvname, entry)
+                dbUpdateHistory(areaKey, entry, pvname)
                 if(alarmDictInitialised and notify):
                     if(areaKey not in notifyBuffer):
                         notifyBuffer[areaKey] = {}
@@ -706,7 +706,7 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
                        areaKey, pvKey)
     # disabled alarms not logged
     if(enable and logToHistory):
-        dbUpdateHistory(pvname, entry)
+        dbUpdateHistory(areaKey, entry, pvname)
     if(enable and alarmSet and notify):
         if(areaKey not in notifyBuffer):
             notifyBuffer[areaKey] = {}
@@ -935,7 +935,7 @@ def initialiseAlarmIOC():
                     # Write entry to database for alarms that were active on startup
                     # Only if not a controlled alarm server restart
                     if(not alarmServerRestart):
-                        dbUpdateHistory(pvname, entry)
+                        dbUpdateHistory(areaKey, entry, pvname)
                 except:
                     # set current alarm status to NO_ALARM
                     alarmDict[pvname]["A"].value = 0
@@ -1228,7 +1228,8 @@ def pvCollectionWatch():
                             bridgeMessage = pvname+" - Alarm BRIDGE cleared to DISABLED"
                             entry = {"timestamp": timestamp,
                                      "entry": bridgeMessage}
-                            dbUpdateHistory(pvname, entry)
+                            areaKey = getKeys(pvname)[0]
+                            dbUpdateHistory(areaKey, entry, pvname)
                         else:
                             bridgeMessage = pvname+" - Alarm BRIDGED until "
                     elif ("pvs." in key and (key.endswith(".bridgeTime"))):
@@ -1244,8 +1245,8 @@ def pvCollectionWatch():
                         entry = {"timestamp": timestamp,
                                  "entry": bridgeMessage}
                         if(bridgeEvent):
-                            dbUpdateHistory(pvname, entry)
                             areaKey, pvKey = getKeys(pvname)
+                            dbUpdateHistory(areaKey, entry, pvname)
                             if ("=" in areaKey):
                                 subAreaKey = subAreaDict[areaKey]
                                 areaKey = areaKey.split("=")[0]
@@ -1279,7 +1280,7 @@ def pvCollectionWatch():
                         # print(timestamp, pvname,
                         #       "alarm", msg)
                         if((key.endswith(".enable") and not bridgeEvent) or key.endswith(".latch") or key.endswith(".notify")):
-                            dbUpdateHistory(pvname, entry)
+                            dbUpdateHistory(areaKey, entry, pvname)
                     elif (key.endswith(".bridge")):
                         # subArea bridge
                         bridgeEvent = change[key]

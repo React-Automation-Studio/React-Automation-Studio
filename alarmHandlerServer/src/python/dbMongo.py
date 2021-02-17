@@ -161,15 +161,16 @@ def dbFindOne(collection, documentKey=None):
     return doc
 
 
-def dbUpdateHistory(id, entry):
-    alarmDB.history.update_many(
-        {'id': id},
-        {'$push': {
-            'history': {
-                '$each': [entry],
-                '$position': 0
-            }
-        }})
+def dbUpdateHistory(areaKey, entry, pvname=None):
+    id = areaKey
+    if(pvname):
+        id = id+"*"+pvname
+    alarmDB.history.insert_one({
+        'singleEntry': True,
+        'id': id,
+        'timestamp': entry["timestamp"],
+        'entry': entry["entry"]
+    })
 
 
 def main():

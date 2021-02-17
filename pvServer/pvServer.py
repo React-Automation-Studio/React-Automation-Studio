@@ -229,7 +229,11 @@ def dbWatchThread(watchEventName):
                     if change is not None:
                         try:
                             #documentKey = change["documentKey"]
-                            doc = clientDbWatchList[watchEventName]['collection'].find(clientDbWatchList[watchEventName]['query'])
+                            query = clientDbWatchList[watchEventName]['query']
+                            projection = clientDbWatchList[watchEventName]['projection']
+                            sort = clientDbWatchList[watchEventName]['sort']
+                            limit = clientDbWatchList[watchEventName]['limit']
+                            doc = clientDbWatchList[watchEventName]['collection'].find(query,projection).sort(sort).limit(limit)
                   #         print(str(change))
                             #print("documentKey: ",documentKey)
                             #print(watchEventName,change)
@@ -889,13 +893,25 @@ def databaseBroadcastRead(message):
                             mydb = myclient[dbName]
 
                             mycol=mydb[colName]
-                            try:
-                                query=parameters['query']
-                    #            print("using query:",query)
-                                X=mycol.find(query)
-                            except:
-                                X=mycol.find()
-                                query=None
+                            
+                            query=parameters['query'] if ('query' in parameters) else None
+                            projection=parameters['projection'] if ('projection' in parameters) else None
+                            if('sort' in parameters):
+                                sort=[]
+                                for sortItem in parameters['sort']:
+                                    sort.append((sortItem[0],sortItem[1]))
+                            else:
+                                sort=[('$natural', 1)]
+                            limit=parameters['limit'] if ('limit' in parameters) else 0
+
+                            # print('dbURL',dbURL)
+                            # print('query',query)
+                            # print('projection',projection)
+                            # print('sort',sort)
+                            # print('limit',limit)
+                            
+                            X=mycol.find(query,projection).sort(sort).limit(limit)
+                            
 
 
                             #for x in X:
@@ -926,6 +942,9 @@ def databaseBroadcastRead(message):
                                 dbWatch['watch']=mycol.watch()
                                 dbWatch['dbURL']=dbURL
                                 dbWatch['query']=query
+                                dbWatch['projection']=projection
+                                dbWatch['sort']=sort
+                                dbWatch['limit']=limit
                                 dbWatch['sockets']={
                                     str(request.sid):{
                                         "dbWatchIds":{

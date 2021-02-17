@@ -1,7 +1,7 @@
 #!/bin/bash
 echo "exporting dynamic enviroment variable"
 
-mkdir /etc/nginx/templates
+mkdir -p /etc/nginx/templates
 cp /custom/nginx.production.conf /etc/nginx/templates/default.conf.template
 if [ $SERVER_PORT == "443" ]
 then

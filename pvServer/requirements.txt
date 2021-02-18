@@ -19,3 +19,4 @@ bcrypt==3.1.7
 pymongo==3.11.2
 flask-cors
 python-ldap
+google-api-python-client

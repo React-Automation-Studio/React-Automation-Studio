@@ -25,6 +25,7 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
 import axios from 'axios';
+import { GoogleLogin } from 'react-google-login';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -79,6 +80,63 @@ const Login = (props) => {
   const mounted = useRef(true);
   const enableStandardLogin = !(process.env.REACT_APP_DisableStandardLogin === 'true');
   const enableActiveDirectoryLogin = process.env.REACT_APP_EnableActiveDirectoryLogin === 'true';
+  const enableGoogleLogin = process.env.REACT_APP_EnableGoogleLogin === 'true';
+
+  const responseGoogle = (response) => {
+    const token = response.tokenId;
+
+    const options = {
+      headers: { 'Content-Type': 'application/json' },
+      timeout: props.timeout,
+    };
+    let body = JSON.stringify({ jwt: token })
+    let endpoint = '/api/login/google';
+    if (endpoint) {
+      axios.post(endpoint, body, options)
+        // .then(response => response.json())
+        .then(response => {
+          const { data } = response;
+          console.log(data)
+
+
+          if (typeof data.jwt !== 'undefined') {
+            localStorage.setItem('jwt', JSON.stringify(data.jwt));
+          }
+          else {
+            localStorage.setItem('jwt', JSON.stringify(null));
+          }
+          if (data.login) {
+            const jwt = JSON.parse(localStorage.getItem('jwt'));
+            const { socket } = context;
+            if (socket.disconnected) {
+              socket.open();
+              socket.emit('AuthoriseClient', jwt);
+            }
+            else {
+              socket.emit('AuthoriseClient', jwt);
+            }
+          }
+          setAuthorisationFailed(data.login !== true);
+        }
+
+        )
+        .catch(err => {
+          //setAuthenticationFailed(true);
+          let str = err.toString();
+          if (!(str.includes("401"))) {
+            console.log(str)
+            setAuthenticationFailed(true)
+          }
+          else {
+            setAuthorisationFailed(true);
+          }
+
+
+        })
+
+    }
+  }
+
   useEffect(() => {
     let modes = []
     if (enableStandardLogin) {
@@ -92,21 +150,7 @@ const Login = (props) => {
   useEffect(() => {
     mounted.current = true;
     if (submit == true) {
-      let port;
-      if (typeof process.env.REACT_APP_PyEpicsServerPORT === 'undefined') {
-        port = 5000;
-      }
-      else {
-        port = process.env.REACT_APP_PyEpicsServerPORT;
-      }
-      let pvServerBASEURL;
-      if (typeof process.env.REACT_APP_PyEpicsServerBASEURL === 'undefined') {
-        pvServerBASEURL = "http://127.0.0.1";
-      }
-      else {
-        pvServerBASEURL = process.env.REACT_APP_PyEpicsServerBASEURL;
-      }
-      let PyEpicsServerURL = pvServerBASEURL + ":" + port;
+
       const options = {
         headers: { 'Content-Type': 'application/json' },
         timeout: props.timeout,
@@ -146,18 +190,18 @@ const Login = (props) => {
             }
           }
           )
-          .catch(err=>{
+          .catch(err => {
             //setAuthenticationFailed(true);
-            let str=err.toString();
-            if (!(str.includes("401"))){
+            let str = err.toString();
+            if (!(str.includes("401"))) {
               console.log(str)
               setAuthenticationFailed(true)
             }
-            else{
+            else {
               setAuthorisationFailed(true);
             }
-            
-            
+
+
           })
       }
       setSubmit(false)
@@ -311,7 +355,16 @@ const Login = (props) => {
               Sign in
             </Button>
           </form>}
-
+          {enableGoogleLogin &&
+            <div style={{ paddingTop: 24 }}>
+              <GoogleLogin
+                clientId={process.env.REACT_APP_EnableGoogleLoginId}
+                buttonText="Login"
+                onSuccess={responseGoogle}
+                onFailure={(response) => { console.log("google login failed", response) }}
+                cookiePolicy={'single_host_origin'}
+              />
+            </div>}
           {props.footer && <Typography style={{ paddingTop: 24 }} align="left" variant="caption">
             {props.footer}
           </Typography>}

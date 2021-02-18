@@ -27,7 +27,8 @@
         "date-fns": "2.16.1",
         "plotly.js": "1.58.4",
         "react-plotly.js": "2.5.1",
-        "axios":"0.21.1"
+        "axios":"0.21.1",
+        "react-google-login":"5.2.2"
 
 
 

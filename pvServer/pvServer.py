@@ -23,7 +23,7 @@ from bson.objectid import ObjectId
 sys.path.insert(0, '../')
 sys.path.insert(0, 'userAuthentication/')
 
-from authenticate import  AuthoriseUser,AutheriseUserAndPermissions, LocalAuthenticateUser, ExternalAuthenticateUser
+from authenticate import  AuthoriseUser,AutheriseUserAndPermissions, LocalAuthenticateUser, ExternalAuthenticateUser, decodeTokenGoogle
 from dotenv import load_dotenv
 import ldap
 
@@ -60,8 +60,9 @@ print('pvServerLogFile: {}'.format(os.environ.get('pvServerLogFile', None)))
 print('pvServerLogFileSize: {}'.format(os.environ.get('pvServerLogFileSize', None)))
 print('pvServerLogFileBackup: {}'.format(os.environ.get('pvServerLogFileBackup', None)))
 print('REACT_APP_EnableActiveDirectoryLogin: '+ str(os.environ['REACT_APP_EnableActiveDirectoryLogin']))
-
+print('REACT_APP_EnableGoogleLogin: '+ str(os.environ['REACT_APP_EnableGoogleLogin']))
 REACT_APP_EnableActiveDirectoryLogin=(os.getenv('REACT_APP_EnableActiveDirectoryLogin')=='true')
+REACT_APP_EnableGoogleLogin=(os.getenv('REACT_APP_EnableGoogleLogin')=='true')
 REACT_APP_DisableStandardLogin=(os.getenv('REACT_APP_DisableStandardLogin')=='true')
 
 print("")
@@ -124,6 +125,38 @@ def ldapLogin():
        
     else:
         log.info("Forbiddden Active Directory login login: {} ",user['username'])
+        return jsonify({'login': False}), 401
+
+
+@app.route('/api/login/google', methods=['POST'])
+def googleLogin():
+    global REACT_APP_EnableGoogleLogin
+    if REACT_APP_EnableGoogleLogin :
+        
+        jwt = request.json.get('jwt', None)
+        print(str(jwt))
+        REACT_APP_EnableGoogleLoginId=(os.getenv('REACT_APP_EnableGoogleLoginId') if os.getenv('REACT_APP_EnableGoogleLoginId') else None)
+        if REACT_APP_EnableGoogleLoginId :
+            decoded=decodeTokenGoogle(jwt,REACT_APP_EnableGoogleLoginId)
+            if decoded:
+                if decoded['email'] and (decoded['email_verified']==True):
+                    userData=ExternalAuthenticateUser({'username':decoded['email']})
+                    if (userData is None):
+                        log.info("Unknown user login: {} ",decoded['email'])
+                        return jsonify({'login': False}), 401
+                    username=userData['username']
+                    roles=userData['roles']
+                    jwt=userData['JWT']
+                    resp= jsonify({'login': True, 'jwt':jwt,'username':username,'roles':roles})
+                    log.info("User logged in: {} ",username)
+                    return resp, 200
+        else :
+            return jsonify({'login': False}), 401
+        
+        return jsonify({'login': False}), 401
+       
+    else:
+        log.info("Forbiddden google login")
         return jsonify({'login': False}), 401
 
 

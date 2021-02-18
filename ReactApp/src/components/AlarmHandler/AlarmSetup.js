@@ -46,7 +46,6 @@ import AddPVDialog from './AddPVDialog';
 import EnableDialog from './EnableDialog';
 
 import { format, parseISO } from 'date-fns';
-import { typeOf } from 'mathjs';
 
 // Styles
 const useStyles = makeStyles(theme => ({
@@ -212,6 +211,7 @@ const AlarmSetup = (props) => {
     const [alarmTableExpand, setAlarmTableExpand] = useState(true)
     const [alarmTableIsExpanded, setAlarmTableIsExpanded] = useState(true)
     const [alarmLogSelectedName, setAlarmLogSelectedName] = useState('')
+    const [alarmLogDisplayArray, setAlarmLogDisplayArray] = useState([])
     const [alarmDebug] = useState(false)
     const [alarmAckField, setAlarmAckField] = useState([])
     const [alarmAckFieldTrig, setAlarmAckFieldTrig] = useState(0)
@@ -572,10 +572,18 @@ const AlarmSetup = (props) => {
     // handleNewDbLogReadWatchBroadcast
     useEffect(() => {
         if (dbHistoryData !== null) {
-            console.log(dbHistoryData)
+            const tempArray = []
+            dbHistoryData.map(entry => {
+                const date = format(parseISO(entry.timestamp), "HH:mm:ss E, dd LLL yyyy")
+                const content = `${date}: ${entry.entry}`
+                tempArray.push({
+                    key: entry._id.$oid,
+                    content: content
+                })
+                return null
+            })
+            setAlarmLogDisplayArray(tempArray)
         }
-        // disable useEffect dependencies for "dbHistoryData"
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dbHistoryData])
 
     // handleDbConfig
@@ -585,8 +593,6 @@ const AlarmSetup = (props) => {
             setAlarmIOCPVPrefix(data["alarmIOCPVPrefix"])
             setAlarmIOCPVSuffix(data['alarmIOCPVSuffix'])
         }
-        // disable useEffect dependencies for "dbConfigData"
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dbConfigData])
 
     // handleDbGlobal
@@ -597,8 +603,6 @@ const AlarmSetup = (props) => {
             setEnableAllAreas(data["enableAllAreas"])
             setEnableAllAreasId(data["_id"]["$oid"])
         }
-        // disable useEffect dependencies for "dbGlobData"
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dbGlobData])
 
     // const handleDoNothing = () => {
@@ -1679,10 +1683,10 @@ const AlarmSetup = (props) => {
                                 </div>
                             </AccordionSummary>
                             <AccordionDetails>
-                                {/* <AlarmLog
+                                <AlarmLog
                                     height={alarmLogHeight}
-                                    slicedData={filteredData}
-                                /> */}
+                                    alarmLogDisplayArray={alarmLogDisplayArray}
+                                />
                             </AccordionDetails>
                         </Accordion>
 

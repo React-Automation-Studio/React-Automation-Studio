@@ -7,8 +7,6 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 
-import { format, parseISO } from 'date-fns';
-
 const AlarmLog = (props) => {
     // const classes = useStyles();
     const myRef = useRef()
@@ -17,15 +15,13 @@ const AlarmLog = (props) => {
 
     useEffect(() => {
         myRef.current.scrollTo(0, 0)
-    }, [props.slicedData.length])
+    }, [props.alarmLogDisplayArray.length])
 
     return (
         <TableContainer style={{ height: props.height, overflow: 'auto' }} ref={myRef}>
             <Table aria-label="Log Table" size="small" >
                 <TableBody>
-                    {props.slicedData.map((entry) => {
-                        const date = format(parseISO(entry.timestamp), "HH:mm:ss E, dd LLL yyyy")
-                        const content = `${date}: ${entry.entry}`
+                    {props.alarmLogDisplayArray.map((entry) => {
                         return (
                             <TableRow
                                 onClick={(event) => {
@@ -33,8 +29,8 @@ const AlarmLog = (props) => {
                                     event.stopPropagation()
                                 }}
                                 hover
-                                key={`${entry.timestamp}-${entry.entry}`}>
-                                <TableCell>{content}</TableCell>
+                                key={`${entry.key}`}>
+                                <TableCell>{entry.content}</TableCell>
                             </TableRow>
                         )
                     })}

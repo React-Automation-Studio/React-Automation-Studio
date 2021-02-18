@@ -527,7 +527,7 @@ const AlarmSetup = (props) => {
         }))
     }, [historyQuery, rowsPerPage])
 
-    // update history query regex
+    // update historyQuery regex
     useEffect(() => {
         let regex = ``
         if (alarmLogSelectedKey === "ALLAREAS") {
@@ -535,7 +535,8 @@ const AlarmSetup = (props) => {
             regex = '.*'
             setHistoryQuery(prevState => ({
                 ...prevState,
-                id: { '$regex': regex }
+                id: { '$regex': regex },
+                entry: { '$regex': `(?i)${alarmLogSearchString}` }
             }))
         }
         else if (alarmLogSelectedKey.includes("*")) {
@@ -543,7 +544,8 @@ const AlarmSetup = (props) => {
             regex = `^${alarmLogSelectedKey.replace("*", "\\*")}$`
             setHistoryQuery(prevState => ({
                 ...prevState,
-                id: { '$regex': regex }
+                id: { '$regex': regex },
+                entry: { '$regex': `(?i)${alarmLogSearchString}` }
             }))
         }
         else if (alarmLogSelectedKey.includes("=")) {
@@ -551,7 +553,8 @@ const AlarmSetup = (props) => {
             regex = `(^${alarmLogSelectedKey}\\*)|(^${alarmLogSelectedKey}$)`
             setHistoryQuery(prevState => ({
                 ...prevState,
-                id: { '$regex': regex }
+                id: { '$regex': regex },
+                entry: { '$regex': `(?i)${alarmLogSearchString}` }
             }))
         }
         else {
@@ -559,11 +562,12 @@ const AlarmSetup = (props) => {
             regex = `(^${alarmLogSelectedKey}(=|\\*))|(^${alarmLogSelectedKey}$)`
             setHistoryQuery(prevState => ({
                 ...prevState,
-                id: { '$regex': regex }
+                id: { '$regex': regex },
+                entry: { '$regex': `(?i)${alarmLogSearchString}` }
             }))
         }
 
-    }, [alarmLogSelectedKey])
+    }, [alarmLogSelectedKey, alarmLogSearchString])
 
     // handleNewDbLogReadWatchBroadcast
     useEffect(() => {

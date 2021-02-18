@@ -899,6 +899,10 @@ def databaseBroadcastRead(message):
                             mycol=mydb[colName]
                             
                             query=parameters['query'] if ('query' in parameters) else None
+                            # Convert string ObjectId's to valid ObjectId objects
+                            if("_id") in query:
+                                for key,value in query["_id"].items():
+                                    query["_id"][key]=ObjectId(value)
                             projection=parameters['projection'] if ('projection' in parameters) else None
                             if('sort' in parameters):
                                 sort=[]

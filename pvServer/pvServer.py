@@ -62,6 +62,7 @@ print('pvServerLogFileBackup: {}'.format(os.environ.get('pvServerLogFileBackup',
 print('REACT_APP_EnableActiveDirectoryLogin: '+ str(os.environ['REACT_APP_EnableActiveDirectoryLogin']))
 
 REACT_APP_EnableActiveDirectoryLogin=(os.getenv('REACT_APP_EnableActiveDirectoryLogin')=='true')
+REACT_APP_DisableStandardLogin=(os.getenv('REACT_APP_DisableStandardLogin')=='true')
 
 print("")
 app = flask.Flask(__name__, static_folder="./build/static", template_folder="./build")
@@ -71,24 +72,31 @@ CORS(app)
 
 @app.route('/api/login/local', methods=['POST'])
 def localLogin():
-    user = request.json.get('user', None)
-    userData=LocalAuthenticateUser(user)
-    if (userData is None):
-        log.info("Unknown user login: {} ",user['username'])
-        return jsonify({'login': False}), 401
-    username=userData['username']
-    roles=userData['roles']
-    jwt=userData['JWT']
-    resp= jsonify({'login': True, 'jwt':jwt,'username':username,'roles':roles})
-    log.info("User logged in: {} ",username)
-    return resp, 200
+    global REACT_APP_DisableStandardLogin
+    if not REACT_APP_DisableStandardLogin:
+        user = request.json.get('user', None)
+        userData=LocalAuthenticateUser(user)
+        if (userData is None):
+            log.info("Unknown user login: {} ",user['username'])
+            return jsonify({'login': False}), 401
+        username=userData['username']
+        roles=userData['roles']
+        jwt=userData['JWT']
+        resp= jsonify({'login': True, 'jwt':jwt,'username':username,'roles':roles})
+        log.info("User logged in: {} ",username)
+        return resp, 200
+    else:
+       log.info("Standard login not allowed: {} ",user['username'])
+       return jsonify({'login': False}), 401 
 
 @app.route('/api/login/ldap', methods=['POST'])
 def ldapLogin():
+    global REACT_APP_EnableActiveDirectoryLogin
     if REACT_APP_EnableActiveDirectoryLogin :
         user = request.json.get('user', None)
         LDAP_HOST=os.getenv('LDAP_HOST')
         LDAP_PORT=os.getenv('LDAP_PORT')
+        
         LDAP_USER_DN=user['username']
         LDAP_USER_PW=user['password']
         try:
@@ -113,21 +121,6 @@ def ldapLogin():
             log.info("Ldap login failed: {} ",LDAP_USER_DN)
             jsonify({'login': False}), 401
             return jsonify({'login': False}), 401
-        # s = ldap.Server(host=LDPA_HOST,port=LDAP_PORT,use_ssl=False,get_info='ALL')
-        # c = Connection(s, user=ldap_user_dn, password=ldap_user_pw)
-        # if not c.bind():
-        #     print('error in bind', c.result)
-        # print(c.result)
-        # userData=LocalAuthenticateUser(user)
-        # if (userData is None):
-        #     log.info("Unknown user login: {} ",user['username'])
-        #     return jsonify({'login': False}), 401
-        # username=userData['username']
-        # roles=userData['roles']
-        # jwt=userData['JWT']
-        # resp= jsonify({'login': True, 'jwt':jwt,'username':username,'roles':roles})
-        # log.info("User logged in: {} ",username)
-        # return resp, 200
        
     else:
         log.info("Forbiddden Active Directory login login: {} ",user['username'])

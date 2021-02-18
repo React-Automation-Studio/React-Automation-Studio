@@ -321,13 +321,18 @@ const AlarmSetup = (props) => {
     const [areaPVs, setAreaPVs] = useState([])
 
     const dbPVDataRaw = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs:Parameters:{}` }).data
-    const dbHistoryData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history:Parameters:{}` }).data
     const dbConfigData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:config:Parameters:{}` }).data
     const dbGlobData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:glob:Parameters:{}` }).data
 
     const [historyQuery, setHistoryQuery] = useState({
-        "singleEntry": true,
-        "id": { '$regex': '.*' }
+        singleEntry: true,
+        id: { '$regex': '.*' },
+        entry: { '$regex': '.*' }
+    })
+    const [historyDataParams, setHistoryDataParams] = useState({
+        query: { ...historyQuery },
+        sort: [['_id', -1]],
+        limit: rowsPerPage
     })
     const [totalDocsParams, setTotalDocsParams] = useState({
         query: { ...historyQuery },
@@ -345,10 +350,11 @@ const AlarmSetup = (props) => {
     })
 
 
-    // console.log(totalDocsParams)
+    const dbHistoryData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history:Parameters:${JSON.stringify(historyDataParams)}` }).data
     const totalDocs = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history:Parameters:${JSON.stringify(totalDocsParams)}` }).data ?? 0
     const firstDocId = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history:Parameters:${JSON.stringify(firstDocIdParams)}` }).data?.[0]?._id.$oid
     const lastDocId = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history:Parameters:${JSON.stringify(lastDocIdParams)}` }).data?.[0]?._id.$oid
+    // console.log('dbHistoryData', dbHistoryData)
     // console.log('totalDocs', totalDocs)
     // console.log('firstDocId', firstDocId)
     // console.log('lastDocId', lastDocId)
@@ -485,25 +491,41 @@ const AlarmSetup = (props) => {
             ...prevState,
             query: {
                 ...prevState.query,
-                "id": historyQuery.id
+                id: historyQuery.id,
+                entry: historyQuery.entry
             }
         }))
         setFirstDocIdParams(prevState => ({
             ...prevState,
             query: {
                 ...prevState.query,
-                "id": historyQuery.id
+                id: historyQuery.id,
+                entry: historyQuery.entry
             }
         }))
         setLastDocIdParams(prevState => ({
             ...prevState,
             query: {
                 ...prevState.query,
-                "id": historyQuery.id
+                id: historyQuery.id,
+                entry: historyQuery.entry
             }
         }))
     }, [historyQuery])
 
+
+    // update historyDataParams
+    useEffect(() => {
+        setHistoryDataParams(prevState => ({
+            ...prevState,
+            query: {
+                ...prevState.query,
+                id: historyQuery.id,
+                entry: historyQuery.entry
+            },
+            limit: rowsPerPage
+        }))
+    }, [historyQuery, rowsPerPage])
 
     // update history query regex
     useEffect(() => {
@@ -513,7 +535,7 @@ const AlarmSetup = (props) => {
             regex = '.*'
             setHistoryQuery(prevState => ({
                 ...prevState,
-                "id": { '$regex': regex }
+                id: { '$regex': regex }
             }))
         }
         else if (alarmLogSelectedKey.includes("*")) {
@@ -521,7 +543,7 @@ const AlarmSetup = (props) => {
             regex = `^${alarmLogSelectedKey.replace("*", "\\*")}$`
             setHistoryQuery(prevState => ({
                 ...prevState,
-                "id": { '$regex': regex }
+                id: { '$regex': regex }
             }))
         }
         else if (alarmLogSelectedKey.includes("=")) {
@@ -529,7 +551,7 @@ const AlarmSetup = (props) => {
             regex = `(^${alarmLogSelectedKey}\\*)|(^${alarmLogSelectedKey}$)`
             setHistoryQuery(prevState => ({
                 ...prevState,
-                "id": { '$regex': regex }
+                id: { '$regex': regex }
             }))
         }
         else {
@@ -537,15 +559,16 @@ const AlarmSetup = (props) => {
             regex = `(^${alarmLogSelectedKey}(=|\\*))|(^${alarmLogSelectedKey}$)`
             setHistoryQuery(prevState => ({
                 ...prevState,
-                "id": { '$regex': regex }
+                id: { '$regex': regex }
             }))
         }
+
     }, [alarmLogSelectedKey])
 
     // handleNewDbLogReadWatchBroadcast
     useEffect(() => {
         if (dbHistoryData !== null) {
-            // console.log(dbHistoryData)
+            console.log(dbHistoryData)
         }
         // disable useEffect dependencies for "dbHistoryData"
         // eslint-disable-next-line react-hooks/exhaustive-deps

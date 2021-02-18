@@ -1640,7 +1640,7 @@ const AlarmSetup = (props) => {
                                                 }}
                                                 rowsPerPageOptions={[25, 50, 100]}
                                                 colSpan={3}
-                                                count={0}
+                                                count={totalDocs}
                                                 rowsPerPage={rowsPerPage}
                                                 page={page}
                                                 SelectProps={{

@@ -170,10 +170,8 @@ def decodeTokenGoogle(token,CLIENT_ID):
         #     raise ValueError('Wrong hosted domain.')
 
         # ID token is valid. Get the user's Google Account ID from the decoded token.
-        userid = idinfo['sub']
-        print("userid",userid)
-        print("idinfo",idinfo)
+       
         return idinfo
     except ValueError:
         # Invalid token
-        pass
+        return None

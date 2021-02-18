@@ -134,7 +134,6 @@ def googleLogin():
     if REACT_APP_EnableGoogleLogin :
         
         jwt = request.json.get('jwt', None)
-        print(str(jwt))
         REACT_APP_EnableGoogleLoginId=(os.getenv('REACT_APP_EnableGoogleLoginId') if os.getenv('REACT_APP_EnableGoogleLoginId') else None)
         if REACT_APP_EnableGoogleLoginId :
             decoded=decodeTokenGoogle(jwt,REACT_APP_EnableGoogleLoginId)

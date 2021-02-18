@@ -324,6 +324,10 @@ const AlarmSetup = (props) => {
     const dbConfigData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:config:Parameters:{}` }).data
     const dbGlobData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:glob:Parameters:{}` }).data
 
+    const [currentPageDocId, setCurrentPageDocId] = useState('')
+    const [nextPageDocId, setNextPageDocId] = useState('')
+    const [prevPageDocId, setPrevPageDocId] = useState('')
+
     const [historyQuery, setHistoryQuery] = useState({
         singleEntry: true,
         id: { '$regex': '.*' },
@@ -521,11 +525,13 @@ const AlarmSetup = (props) => {
             query: {
                 ...prevState.query,
                 id: historyQuery.id,
-                entry: historyQuery.entry
+                entry: historyQuery.entry,
+                ...(currentPageDocId && { id: { $lt: currentPageDocId } })
+
             },
             limit: rowsPerPage
         }))
-    }, [historyQuery, rowsPerPage])
+    }, [historyQuery, rowsPerPage, currentPageDocId])
 
     // update historyQuery regex
     useEffect(() => {
@@ -557,7 +563,7 @@ const AlarmSetup = (props) => {
                 entry: { '$regex': `(?i)${alarmLogSearchString}` }
             }))
         }
-        else {
+        else if (alarmLogSelectedKey) {
             // Area
             regex = `(^${alarmLogSelectedKey}(=|\\*))|(^${alarmLogSelectedKey}$)`
             setHistoryQuery(prevState => ({

@@ -233,7 +233,11 @@ def dbWatchThread(watchEventName):
                             projection = clientDbWatchList[watchEventName]['projection']
                             sort = clientDbWatchList[watchEventName]['sort']
                             limit = clientDbWatchList[watchEventName]['limit']
-                            doc = clientDbWatchList[watchEventName]['collection'].find(query,projection).sort(sort).limit(limit)
+                            count = clientDbWatchList[watchEventName]['count']
+                            if(count):
+                                doc = clientDbWatchList[watchEventName]['collection'].count_documents(query)
+                            else:
+                                doc = clientDbWatchList[watchEventName]['collection'].find(query,projection).sort(sort).limit(limit)
                   #         print(str(change))
                             #print("documentKey: ",documentKey)
                             #print(watchEventName,change)
@@ -903,14 +907,19 @@ def databaseBroadcastRead(message):
                             else:
                                 sort=[('$natural', 1)]
                             limit=parameters['limit'] if ('limit' in parameters) else 0
+                            count=parameters['count'] if ('count' in parameters) else False
 
                             # print('dbURL',dbURL)
                             # print('query',query)
                             # print('projection',projection)
                             # print('sort',sort)
                             # print('limit',limit)
+                            # print('count',count)
                             
-                            X=mycol.find(query,projection).sort(sort).limit(limit)
+                            if(count):
+                                X=mycol.count_documents(query)
+                            else:
+                                X=mycol.find(query,projection).sort(sort).limit(limit)
                             
 
 
@@ -945,6 +954,7 @@ def databaseBroadcastRead(message):
                                 dbWatch['projection']=projection
                                 dbWatch['sort']=sort
                                 dbWatch['limit']=limit
+                                dbWatch['count']=count
                                 dbWatch['sockets']={
                                     str(request.sid):{
                                         "dbWatchIds":{

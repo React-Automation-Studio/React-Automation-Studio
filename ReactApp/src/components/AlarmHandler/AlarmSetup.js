@@ -46,6 +46,7 @@ import AddPVDialog from './AddPVDialog';
 import EnableDialog from './EnableDialog';
 
 import { format, parseISO } from 'date-fns';
+import { typeOf } from 'mathjs';
 
 // Styles
 const useStyles = makeStyles(theme => ({
@@ -329,8 +330,9 @@ const AlarmSetup = (props) => {
             "singleEntry": true,
             "id": { '$regex': '.*' }
         },
-        sort: [['timestamp', -1]],
-        limit: 1
+        // sort: [['timestamp', -1]],
+        // limit: 1
+        count: true
     })
 
 
@@ -464,18 +466,26 @@ const AlarmSetup = (props) => {
 
     // update last doc id regex
     useEffect(() => {
+        let regex = ``
         if (alarmLogSelectedKey.includes("*")) {
-            let regex = String.raw`${alarmLogSelectedKey.replace("*", "\\*")}`
-            // regex = (regex)
+            regex = `${alarmLogSelectedKey.replace("*", "\\*")}`
             console.log(regex)
+            setLastIdParams({
+                ...lastIdParams,
+                query: {
+                    ...lastIdParams.query,
+                    "id": { '$regex': regex }
+                }
+            })
         }
     }, [alarmLogSelectedKey])
 
     // update last doc id
     useEffect(() => {
-        if (lastIdData?.[0]?._id.$oid) {
-            console.log(lastIdData?.[0]?._id.$oid)
-        }
+        // if (lastIdData?.[0]?._id.$oid) {
+        //     console.log(lastIdData?.[0]?._id.$oid)
+        // }
+        console.log(typeOf(lastIdData), lastIdData)
     }, [lastIdData])
 
     // handleNewDbLogReadWatchBroadcast

@@ -245,6 +245,7 @@ const AlarmSetup = (props) => {
     const [fadeList] = useState(false)
     const [page, setPage] = useState(0)
     const [lastPage, setLastPage] = useState(undefined)
+    const [lastPageSkip, setLastPageSkip] = useState(0)
     const [rowsPerPage, setRowsPerPage] = useState(25)
     const [pageAT, setPageAT] = useState(0)
     const [rowsPerPageAT, setRowsPerPageAT] = useState(25)
@@ -350,11 +351,12 @@ const AlarmSetup = (props) => {
     const [lastPageDocIdParams, setLastPageDocIdParams] = useState({
         query: { ...historyQuery },
         sort: [['_id', 1]],
+        skip: lastPageSkip,
         limit: 1
     })
 
     // console.clear()
-    // console.log(JSON.stringify(prevPageDocIdParams))
+    console.log(JSON.stringify(historyDataParams))
     const dbHistoryData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history:Parameters:${JSON.stringify(historyDataParams)}` }).data
     const totalDocs = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history:Parameters:${JSON.stringify(totalDocsParams)}` }).data ?? 0
     const prevPageDocId = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history:Parameters:${JSON.stringify(prevPageDocIdParams)}` }).data?.[0]?._id.$oid
@@ -364,7 +366,7 @@ const AlarmSetup = (props) => {
     // console.log('currentPageDocId', currentPageDocId)
     // console.log('nextPageDocId', nextPageDocId)
     // console.log('prevPageDocId', prevPageDocId)
-    // console.log('lastDocId', lastDocId)
+    // console.log('lastPageDocId', lastPageDocId)
 
 
     const dbUpdateOne = useMongoDbUpdateOne({})
@@ -600,6 +602,26 @@ const AlarmSetup = (props) => {
         setPage(0)
         setCurrentPageDocId(undefined)
     }, [alarmLogSearchString, alarmLogSelectedKey, rowsPerPage])
+
+    // update lastPageSkip based on totalDocs
+    useEffect(() => {
+        const remainder = totalDocs % rowsPerPage
+        if (remainder === 0) {
+            setLastPageSkip(rowsPerPage)
+        }
+        else {
+            setLastPageSkip(remainder)
+        }
+
+    }, [totalDocs, rowsPerPage])
+
+    // update lastPageDocIdParams based on lastPageSkip
+    useEffect(() => {
+        setLastPageDocIdParams(prevState => ({
+            ...prevState,
+            skip: lastPageSkip
+        }))
+    }, [lastPageSkip])
 
     // handleNewDbLogReadWatchBroadcast
     useEffect(() => {
@@ -1225,10 +1247,10 @@ const AlarmSetup = (props) => {
         }
         else {
             // last page
-            setCurrentPageDocId(nextPageDocId)
+            setCurrentPageDocId(lastPageDocId)
         }
         setPage(newPage)
-    }, [lastPage, page, nextPageDocId, prevPageDocId])
+    }, [lastPage, page, nextPageDocId, prevPageDocId, lastPageDocId])
 
     const handleChangeRowsPerPage = useCallback((event) => {
         setRowsPerPage(parseInt(event.target.value, 10))

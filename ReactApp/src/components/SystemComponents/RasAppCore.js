@@ -15,32 +15,6 @@ import RasCssBaseline from './RasCssBaseline';
 
 
 
-let port;
-if (typeof process.env.REACT_APP_PyEpicsServerPORT === 'undefined') {
-  port = 5000;
-}
-else {
-  port = process.env.REACT_APP_PyEpicsServerPORT;
-}
-
-let pvServerBASEURL;
-if (typeof process.env.REACT_APP_PyEpicsServerBASEURL === 'undefined') {
-  pvServerBASEURL = "http://127.0.0.1";
-}
-else {
-  pvServerBASEURL = process.env.REACT_APP_PyEpicsServerBASEURL;
-}
-
-let pvServerNamespace;
-if (typeof process.env.REACT_APP_PyEpicsServerNamespace === 'undefined') {
-  pvServerNamespace = "pvServer";
-}
-else {
-  pvServerNamespace = process.env.REACT_APP_PyEpicsServerNamespace;
-}
-
-let PyEpicsServerURL = pvServerBASEURL + ":" + port + "/" + pvServerNamespace;
-
 
 
 
@@ -53,20 +27,17 @@ class RasAppCore extends Component {
     super(props);
 
     let theme = null
-    let storedThemeStyle=localStorage.getItem('themeStyle')
+    let storedThemeStyle = localStorage.getItem('themeStyle')
     console.log(storedThemeStyle)
-    const {defaultTheme}=this.props;
-    let themeStyle = storedThemeStyle===null?defaultTheme:JSON.parse(storedThemeStyle);
+    const { defaultTheme } = this.props;
+    let themeStyle = storedThemeStyle === null ? defaultTheme : JSON.parse(storedThemeStyle);
     let themeKeys = Object.keys(this.props.themes);
-    // let socket = io(PyEpicsServerURL, {
-    //   transports: ['websocket'],
-    // })
     let socket = io("/pvServer", {
-         transports: ['websocket'],
-       })
+      transports: ['websocket'],
+    })
     if (themeKeys.includes(themeStyle)) {
       theme = createMuiTheme(this.props.themes[themeStyle])
-     
+
     }
     else {
       themeStyle = defaultTheme;
@@ -74,7 +45,7 @@ class RasAppCore extends Component {
       localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
     }
 
-   
+
     this.changeTheme = (event) => {
       let themeStyle = event.target.value;
 
@@ -82,10 +53,10 @@ class RasAppCore extends Component {
       let themeStyles = this.state.system.themeStyles;
       if (themeStyles.includes(themeStyle)) {
         theme = createMuiTheme(this.props.themes[themeStyle])
-       
+
       }
       else {
-        const {defaultTheme}=props.defaultTheme;
+        const { defaultTheme } = props.defaultTheme;
         themeStyle = defaultTheme;
         theme = createMuiTheme(this.props.themes[themeStyle])
         localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
@@ -96,14 +67,34 @@ class RasAppCore extends Component {
       this.setState({ system: system, theme: theme })
       localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
     }
+    this.setUserTokens = (accessToken) => {
 
-    
+      let system = this.state.system;
+      let userTokens = {
+        accessToken: accessToken,
+      };
+      system.userTokens = userTokens;
+      localStorage.setItem('jwt', JSON.stringify(userTokens.accessToken))
+      if (system.socket.disconnected) {
+        system.socket.open();
+
+        system.socket.emit('AuthoriseClient', system.userTokens.accessToken); //must authorise client over socket io too
+      }
+      else {
+        system.socket.emit('AuthoriseClient', system.userTokens.accessToken); //must authorise client over socket io too
+      }
+
+      this.setState({ system: system })
+
+    }
+
     this.setUserData = (username, roles) => {
-     
+
       let system = this.state.system;
       let userData = {
         username: username,
-        roles: roles
+        roles: roles,
+        loggedIn: true,
       };
       system.userData = userData;
 
@@ -114,10 +105,12 @@ class RasAppCore extends Component {
       let system = this.state.system;
       let userData = {
         username: '',
-        roles: []
+        roles: [],
+        loggedIn: false,
       };
+      let userTokens = { accessToken: null };
       system.userData = userData;
-
+      system.userTokens = userTokens;
       this.setState({ system: system })
     }
     this.updateLocalVariable = (name, data) => {
@@ -130,16 +123,16 @@ class RasAppCore extends Component {
         system: system,
 
       });
-      //console.log('name',name)
-      //console.log('data',data)
     };
     let userData = {
       username: '',
       roles: []
     };
-
+    let userTokens = {
+      accessToken: JSON.parse(localStorage.getItem('jwt'))
+    }
     let localVariables = {};
-    let system = { socket: socket, changeTheme: this.changeTheme, themeStyles: themeKeys, themeStyle: themeStyle, localVariables: localVariables, updateLocalVariable: this.updateLocalVariable, userData: userData, setUserData: this.setUserData, logout: this.logout, enableProbe: true, styleGuideRedirect: true }
+    let system = { socket: socket, changeTheme: this.changeTheme, themeStyles: themeKeys, themeStyle: themeStyle, localVariables: localVariables, updateLocalVariable: this.updateLocalVariable, userData: userData, userTokens: userTokens, setUserTokens: this.setUserTokens, setUserData: this.setUserData, logout: this.logout, enableProbe: true, styleGuideRedirect: true }
     this.state = {
       theme: theme,
       system: system,
@@ -157,10 +150,9 @@ class RasAppCore extends Component {
 
   handleConnect() {
 
-     console.log('socket connecting');
-    let jwt = JSON.parse(localStorage.getItem('jwt'));
-
-    //console.log('jwt',jwt);
+    
+    let jwt = this.state.system.userTokens.accessToken;
+   
     if (jwt) {
       let socket = this.state.system.socket;
       socket.emit('AuthoriseClient', jwt);
@@ -178,8 +170,7 @@ class RasAppCore extends Component {
   }
   componentDidMount() {
 
-    let jwt = JSON.parse(localStorage.getItem('jwt'));
-
+    let jwt = this.state.system.userTokens.accessToken;
     if (jwt) {
       this.setState({ 'redirectToLoginPage': false });
       let socket = this.state.system.socket;
@@ -197,19 +188,17 @@ class RasAppCore extends Component {
     socket.removeListener('clientAuthorisation', this.handleClientAuthorisation);
   }
   render() {
-    const {system}=this.state;
+
+    const { system } = this.state;
+
     return (
 
-      <AutomationStudioContext.Provider value={{...system}}>
+      <AutomationStudioContext.Provider value={{ ...system }}>
         <MuiThemeProvider theme={this.state.theme}>
           <CssBaseline />
-            <ReactVisCssBaseline/>
-            <RasCssBaseline/>
-              {/* <Routes /> */}
-               {this.props.children}
-
-            {/* </ReactVisCssBaseline> */}
-          {/* </CssBaseline> */}
+          <ReactVisCssBaseline />
+          <RasCssBaseline />
+          {this.props.children}
         </MuiThemeProvider>
       </AutomationStudioContext.Provider>
     );

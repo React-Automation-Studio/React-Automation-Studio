@@ -68,6 +68,7 @@ const useStyles = makeStyles((theme) => ({
 const Login = (props) => {
   const classes = useStyles();
   const context = useContext(AutomationStudioContext);
+  const loggedIn = context.userData.loggedIn;
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [authorised, setAuthorised] = useState(false)
@@ -93,35 +94,21 @@ const Login = (props) => {
     let endpoint = '/api/login/google';
     if (endpoint) {
       axios.post(endpoint, body, options)
-        // .then(response => response.json())
-        .then(response => {
+        .then(response => { 
           const { data } = response;
-          console.log(data)
-
-
-          if (typeof data.jwt !== 'undefined') {
-            localStorage.setItem('jwt', JSON.stringify(data.jwt));
-          }
-          else {
-            localStorage.setItem('jwt', JSON.stringify(null));
-          }
-          if (data.login) {
-            const jwt = JSON.parse(localStorage.getItem('jwt'));
-            const { socket } = context;
-            if (socket.disconnected) {
-              socket.open();
-              socket.emit('AuthoriseClient', jwt);
+         
+              if (typeof data.jwt !== 'undefined') {
+                context.setUserTokens(data.jwt);
+                
+              }
+              else {
+                context.setUserTokens(data.null);
+              }
+              setAuthorisationFailed(data.login !== true);
             }
-            else {
-              socket.emit('AuthoriseClient', jwt);
-            }
-          }
-          setAuthorisationFailed(data.login !== true);
-        }
 
         )
         .catch(err => {
-          //setAuthenticationFailed(true);
           let str = err.toString();
           if (!(str.includes("401"))) {
             console.log(str)
@@ -166,25 +153,15 @@ const Login = (props) => {
           // .then(response => response.json())
           .then(response => {
             const { data } = response;
-            console.log(data)
+           
             if (mounted.current) {
 
               if (typeof data.jwt !== 'undefined') {
-                localStorage.setItem('jwt', JSON.stringify(data.jwt));
+                context.setUserTokens(data.jwt);
+                
               }
               else {
-                localStorage.setItem('jwt', JSON.stringify(null));
-              }
-              if (data.login) {
-                const jwt = JSON.parse(localStorage.getItem('jwt'));
-                const { socket } = context;
-                if (socket.disconnected) {
-                  socket.open();
-                  socket.emit('AuthoriseClient', jwt);
-                }
-                else {
-                  socket.emit('AuthoriseClient', jwt);
-                }
+                context.setUserTokens(data.null);
               }
               setAuthorisationFailed(data.login !== true);
             }
@@ -193,6 +170,7 @@ const Login = (props) => {
           .catch(err => {
             //setAuthenticationFailed(true);
             let str = err.toString();
+            console.log(str)
             if (!(str.includes("401"))) {
               console.log(str)
               setAuthenticationFailed(true)
@@ -205,30 +183,23 @@ const Login = (props) => {
           })
       }
       setSubmit(false)
+      setPassword("")
     }
     return () => mounted.current = false;
   }, [submit]
   )
   useEffect(() => {
-    const handleAuthorisation = (msg) => {
-      context.setUserData(msg.username, msg.roles);
-      setAuthenticationFailed(msg.successful !== true)
-      setAuthorised(msg.successful)
+    if (loggedIn){
+      setAuthorised(loggedIn)
     }
-    const { socket } = context;
-    localStorage.removeItem('jwt');
-    socket.on('clientAuthorisation', handleAuthorisation);
-    return () => {
-      socket.removeListener('clientAuthorisation', handleAuthorisation);
-    }
-  }, [])
+  }, [loggedIn])
 
   let usernameText = loginModes[loginTabValue] === 'Standard Login'
     ? props.standardLoginUsernameDisplayText
     : loginModes[loginTabValue] === 'Active Directory'
       ? props.activeDirectoryLoginUsernameDisplayText
       : ""
-
+ 
   return (
     <React.Fragment>
       <Dialog

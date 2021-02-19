@@ -11,7 +11,7 @@ import ReactVisCssBaseline from './ReactVisCssBaseline';
 import AutomationStudioContext from './AutomationStudioContext';
 import { io } from 'socket.io-client';
 import RasCssBaseline from './RasCssBaseline';
-
+import PropTypes from 'prop-types';
 
 
 
@@ -95,6 +95,7 @@ class RasAppCore extends Component {
         username: username,
         roles: roles,
         loggedIn: true,
+        loggingIn:false,
       };
       system.userData = userData;
 
@@ -107,11 +108,19 @@ class RasAppCore extends Component {
         username: '',
         roles: [],
         loggedIn: false,
+        loggingIn:false,
       };
       let userTokens = { accessToken: "unauthenticated" };
       system.userData = userData;
       system.userTokens = userTokens;
       this.setState({ system: system })
+    }
+    this.clearLoggingIn=()=>{
+      let system = this.state.system;
+      system.userData.loggingIn=false;
+      this.setState({ system: system })
+
+
     }
     this.updateLocalVariable = (name, data) => {
       let system = this.state.system;
@@ -128,6 +137,7 @@ class RasAppCore extends Component {
       username: '',
       roles: [],
       loggedIn:false,
+      loggingIn:true,
     };
     let jwt =JSON.parse(localStorage.getItem('jwt'));
     if (jwt===null){
@@ -178,7 +188,7 @@ class RasAppCore extends Component {
 
   }
   componentDidMount() {
-
+    setTimeout(this.state.system.clearLoggingIn, this.props.loginTimeout)
     let jwt = this.state.system.userTokens.accessToken;
     if (jwt) {
       this.setState({ 'redirectToLoginPage': false });
@@ -199,7 +209,8 @@ class RasAppCore extends Component {
   render() {
 
     const { system } = this.state;
-
+    console.log("loggingIn",system.userData.loggingIn)
+    console.log("loggedIn",system.userData.loggedIn)
     return (
 
       <AutomationStudioContext.Provider value={{ ...system }}>
@@ -213,5 +224,14 @@ class RasAppCore extends Component {
     );
   }
 }
+RasAppCore.propTypes = {
+  
+  /** login Timeout */
+  loginTimeout: PropTypes.number,
+  
+}
 
+RasAppCore.defaultProps = {
+  loginTimeout:10000
+}
 export default RasAppCore

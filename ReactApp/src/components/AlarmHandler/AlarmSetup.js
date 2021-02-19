@@ -579,7 +579,7 @@ const AlarmSetup = (props) => {
         setLastPage(Math.floor(totalDocs / rowsPerPage))
     }, [totalDocs, rowsPerPage])
 
-    // update prevPageDocIdParams based on currentPageDocId
+    // update prevPageDocIdParams based on currentPageDocId and rowsPerPage
     useEffect(() => {
         setPrevPageDocIdParams(prevState => ({
             ...prevState,

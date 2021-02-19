@@ -623,6 +623,15 @@ const AlarmSetup = (props) => {
         }))
     }, [lastPageSkip])
 
+    // update currentPageDocId to lastPageDocId if you're
+    // on last page - to catch updating log during view of
+    // last page
+    useEffect(() => {
+        if (page === lastPage) {
+            setCurrentPageDocId(lastPageDocId)
+        }
+    }, [lastPageDocId, page, lastPage])
+
     // handleNewDbLogReadWatchBroadcast
     useEffect(() => {
         if (dbHistoryData !== null) {

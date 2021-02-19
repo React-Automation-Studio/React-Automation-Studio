@@ -597,7 +597,7 @@ const AlarmSetup = (props) => {
         }))
     }, [currentPageDocId, rowsPerPage])
 
-    // update page based on alarmLogSearchString, alarmLogSelectedKey and rowsPerPage
+    // update page and currentPageDocId based on alarmLogSearchString, alarmLogSelectedKey and rowsPerPage
     useEffect(() => {
         setPage(0)
         setCurrentPageDocId(undefined)
@@ -627,7 +627,7 @@ const AlarmSetup = (props) => {
     // on last page - to catch updating log during view of
     // last page
     useEffect(() => {
-        if (page === lastPage) {
+        if (page === lastPage && page !== 0) {
             setCurrentPageDocId(lastPageDocId)
         }
     }, [lastPageDocId, page, lastPage])

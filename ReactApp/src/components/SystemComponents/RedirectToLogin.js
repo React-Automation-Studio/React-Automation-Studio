@@ -30,9 +30,10 @@ class RedirectToLogIn extends Component {
     socket.on('redirectToLogIn', this.handleRedirectToLogIn);
 
     if (process.env.REACT_APP_EnableLogin==='true'){
-      let loggedIn = this.context.userData.loggedIn;
+      let jwt=this.context.userTokens.accessToken;
+      //let loggedIn = this.context.userData.loggedIn;
      
-    if(loggedIn){
+    if(jwt!=='unauthenticated'){
       this.setState({'redirectToLoginPage':false});
 
 

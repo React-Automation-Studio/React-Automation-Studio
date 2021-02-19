@@ -356,7 +356,7 @@ const AlarmSetup = (props) => {
     })
 
     // console.clear()
-    console.log(JSON.stringify(historyDataParams))
+    // console.log(JSON.stringify(historyDataParams))
     const dbHistoryData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history:Parameters:${JSON.stringify(historyDataParams)}` }).data
     const totalDocs = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history:Parameters:${JSON.stringify(totalDocsParams)}` }).data ?? 0
     const prevPageDocId = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history:Parameters:${JSON.stringify(prevPageDocIdParams)}` }).data?.[0]?._id.$oid
@@ -578,7 +578,7 @@ const AlarmSetup = (props) => {
 
     // update lastPage based on totalDocs
     useEffect(() => {
-        setLastPage(Math.floor(totalDocs / rowsPerPage))
+        setLastPage(Math.floor(totalDocs / rowsPerPage) - 1)
     }, [totalDocs, rowsPerPage])
 
     // update prevPageDocIdParams based on currentPageDocId and rowsPerPage

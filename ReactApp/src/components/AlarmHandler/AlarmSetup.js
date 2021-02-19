@@ -244,6 +244,7 @@ const AlarmSetup = (props) => {
     const [fadeTU] = useState(false)
     const [fadeList] = useState(false)
     const [page, setPage] = useState(0)
+    const [lastPage, setLastPage] = useState(undefined)
     const [rowsPerPage, setRowsPerPage] = useState(25)
     const [pageAT, setPageAT] = useState(0)
     const [rowsPerPageAT, setRowsPerPageAT] = useState(25)
@@ -353,7 +354,7 @@ const AlarmSetup = (props) => {
         limit: 1
     })
 
-
+    console.log(JSON.stringify(historyDataParams))
     const dbHistoryData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history:Parameters:${JSON.stringify(historyDataParams)}` }).data
     const totalDocs = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history:Parameters:${JSON.stringify(totalDocsParams)}` }).data ?? 0
     const firstDocId = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history:Parameters:${JSON.stringify(firstDocIdParams)}` }).data?.[0]?._id.$oid
@@ -526,7 +527,10 @@ const AlarmSetup = (props) => {
                 ...prevState.query,
                 id: historyQuery.id,
                 entry: historyQuery.entry,
-                ...(currentPageDocId && { id: { $lt: currentPageDocId } })
+                ...(currentPageDocId
+                    ? { _id: { $lt: currentPageDocId } }
+                    : { _id: undefined }
+                )
 
             },
             limit: rowsPerPage
@@ -575,6 +579,12 @@ const AlarmSetup = (props) => {
 
     }, [alarmLogSelectedKey, alarmLogSearchString])
 
+
+    // update lastPage based on totalDocs
+    useEffect(() => {
+        setLastPage(Math.floor(totalDocs / rowsPerPage))
+    }, [totalDocs, rowsPerPage])
+
     // handleNewDbLogReadWatchBroadcast
     useEffect(() => {
         if (dbHistoryData !== null) {
@@ -586,6 +596,7 @@ const AlarmSetup = (props) => {
                     key: entry._id.$oid,
                     content: content
                 })
+                setNextPageDocId(entry._id.$oid)
                 return null
             })
             setAlarmLogDisplayArray(tempArray)
@@ -1181,8 +1192,28 @@ const AlarmSetup = (props) => {
     }, [loadAlarmList])
 
     const handleChangePage = useCallback((event, newPage) => {
+        if (newPage === 0) {
+            // first page
+            setCurrentPageDocId(undefined)
+        }
+        else if (newPage !== lastPage) {
+            // normal page
+            if (newPage > page) {
+                // page forward
+                setPrevPageDocId(currentPageDocId)
+                setCurrentPageDocId(nextPageDocId)
+            }
+            else {
+                // page backward
+                setCurrentPageDocId(prevPageDocId)
+            }
+        }
+        else {
+            // last page
+            setCurrentPageDocId(nextPageDocId)
+        }
         setPage(newPage)
-    }, [])
+    }, [lastPage, page, currentPageDocId, nextPageDocId, prevPageDocId])
 
     const handleChangeRowsPerPage = useCallback((event) => {
         setRowsPerPage(parseInt(event.target.value, 10))

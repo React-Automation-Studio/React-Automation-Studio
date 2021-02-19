@@ -1200,7 +1200,6 @@ const AlarmSetup = (props) => {
             // normal page
             if (newPage > page) {
                 // page forward
-                setPrevPageDocId(currentPageDocId)
                 setCurrentPageDocId(nextPageDocId)
             }
             else {
@@ -1213,7 +1212,7 @@ const AlarmSetup = (props) => {
             setCurrentPageDocId(nextPageDocId)
         }
         setPage(newPage)
-    }, [lastPage, page, currentPageDocId, nextPageDocId, prevPageDocId])
+    }, [lastPage, page, nextPageDocId, prevPageDocId])
 
     const handleChangeRowsPerPage = useCallback((event) => {
         setRowsPerPage(parseInt(event.target.value, 10))

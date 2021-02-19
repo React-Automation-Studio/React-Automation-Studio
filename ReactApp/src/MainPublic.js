@@ -27,16 +27,16 @@ const styles = theme => ({
     margin: 'auto',
 
     width: '15%',
-    height:'50%'
+    height: '50%'
 
   },
   button: {
-    width:'100%',
-    height:'100%',
-    marginTop:'auto',
-    marginBottom:'auto',
-    marginLeft:'auto',
-    marginRight:'auto',
+    width: '100%',
+    height: '100%',
+    marginTop: 'auto',
+    marginBottom: 'auto',
+    marginLeft: 'auto',
+    marginRight: 'auto',
 
 
   },
@@ -45,39 +45,32 @@ const styles = theme => ({
 });
 
 let pvServerBASEURL;
-if(typeof process.env.REACT_APP_PyEpicsServerBASEURL==='undefined'){
-  pvServerBASEURL= "http://127.0.0.1";
+if (typeof process.env.REACT_APP_PyEpicsServerBASEURL === 'undefined') {
+  pvServerBASEURL = "http://127.0.0.1";
 }
-else{
-  pvServerBASEURL=process.env.REACT_APP_PyEpicsServerBASEURL;
+else {
+  pvServerBASEURL = process.env.REACT_APP_PyEpicsServerBASEURL;
 }
 
 let port;
-if(typeof process.env.REACT_APP_StyleguideServerPORT==='undefined'){
-  port= 6060;
+if (typeof process.env.REACT_APP_StyleguideServerPORT === 'undefined') {
+  port = 6060;
 }
-else{
-  port=process.env.REACT_APP_StyleguideServerPORT;
+else {
+  port = process.env.REACT_APP_StyleguideServerPORT;
 }
 
-let AutomationStudioStyleGuideBuildURL=pvServerBASEURL+":"+port;
+let AutomationStudioStyleGuideBuildURL = pvServerBASEURL + ":" + port;
 
 
 class MainPublic extends Component {
   constructor(props) {
     super(props);
-    this.logout=this.logout.bind(this);
-    this.state={redirectToLoginPage:false}
+
+    this.state = { redirectToLoginPage: false }
   }
 
-  logout(){
-    localStorage.removeItem('jwt');
 
-  }
-  componentDidMount()
-  {
-    console.log('MainPublic mounted')
-  }
   render() {
 
 
@@ -85,23 +78,23 @@ class MainPublic extends Component {
 
     return (
       <TraditionalLayout
-      title="React Automation Studio V2.2.0"
-      denseAppBar
-      alignTitle="center"
-    >
+        title="React Automation Studio V2.2.0"
+        denseAppBar
+        alignTitle="center"
+      >
 
 
-      <RedirectToLogIn/>
-      <div style={{textAlign:'center',paddingTop:'50vh'}}><CircularProgress /></div>
-
-
-
+        <RedirectToLogIn />
+        <div style={{ textAlign: 'center', paddingTop: '50vh' }}><CircularProgress /></div>
 
 
 
-</TraditionalLayout>
-          )
-          }
-          }
 
-          export default withRouter(withStyles(styles)(MainPublic));
+
+
+      </TraditionalLayout>
+    )
+  }
+}
+
+export default withRouter(withStyles(styles)(MainPublic));

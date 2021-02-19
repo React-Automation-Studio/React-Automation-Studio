@@ -30,9 +30,9 @@ class RedirectToLogIn extends Component {
     socket.on('redirectToLogIn', this.handleRedirectToLogIn);
 
     if (process.env.REACT_APP_EnableLogin==='true'){
-    let jwt = JSON.parse(localStorage.getItem('jwt'));
-
-    if(jwt){
+      let loggedIn = this.context.userData.loggedIn;
+      console.log(loggedIn)
+    if(loggedIn){
       this.setState({'redirectToLoginPage':false});
 
 
@@ -43,9 +43,7 @@ class RedirectToLogIn extends Component {
     }
   }
 
-    //  let jwt = JSON.parse(localStorage.getItem('jwt'));
-    //  console.log('jwt',jwt);
-    //  socket.emit('AuthoriseClient', jwt);
+
   }
   componentWillUnmount() {
     let socket=this.context.socket;

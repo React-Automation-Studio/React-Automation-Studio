@@ -108,7 +108,7 @@ class RasAppCore extends Component {
         roles: [],
         loggedIn: false,
       };
-      let userTokens = { accessToken: null };
+      let userTokens = { accessToken: "unauthenticated" };
       system.userData = userData;
       system.userTokens = userTokens;
       this.setState({ system: system })
@@ -126,10 +126,15 @@ class RasAppCore extends Component {
     };
     let userData = {
       username: '',
-      roles: []
+      roles: [],
+      loggedIn:false,
     };
+    let jwt =JSON.parse(localStorage.getItem('jwt'));
+    if (jwt===null){
+      jwt='unauthenticated'
+    }
     let userTokens = {
-      accessToken: JSON.parse(localStorage.getItem('jwt'))
+      accessToken:jwt 
     }
     let localVariables = {};
     let system = { socket: socket, changeTheme: this.changeTheme, themeStyles: themeKeys, themeStyle: themeStyle, localVariables: localVariables, updateLocalVariable: this.updateLocalVariable, userData: userData, userTokens: userTokens, setUserTokens: this.setUserTokens, setUserData: this.setUserData, logout: this.logout, enableProbe: true, styleGuideRedirect: true }
@@ -161,8 +166,12 @@ class RasAppCore extends Component {
 
   }
   handleClientAuthorisation(msg) {
-
+    if (msg.successful){
     this.state.system.setUserData(msg.username, msg.roles);
+    }
+    else{
+      this.state.system.logout()
+    }
     this.setState({ 'Authorised': msg.successful, 'AuthorisationFailed': msg.successful !== true });
 
 

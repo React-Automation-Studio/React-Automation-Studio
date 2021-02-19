@@ -325,9 +325,8 @@ const AlarmSetup = (props) => {
     const dbConfigData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:config:Parameters:{}` }).data
     const dbGlobData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:glob:Parameters:{}` }).data
 
-    const [currentPageDocId, setCurrentPageDocId] = useState('')
-    const [nextPageDocId, setNextPageDocId] = useState('')
-    const [prevPageDocId, setPrevPageDocId] = useState('')
+    const [currentPageDocId, setCurrentPageDocId] = useState(undefined)
+    const [nextPageDocId, setNextPageDocId] = useState(undefined)
 
     const [historyQuery, setHistoryQuery] = useState({
         singleEntry: true,
@@ -343,9 +342,9 @@ const AlarmSetup = (props) => {
         query: { ...historyQuery },
         count: true
     })
-    const [firstDocIdParams, setFirstDocIdParams] = useState({
-        query: { ...historyQuery },
-        sort: [['_id', -1]],
+    const [prevPageDocIdParams, setPrevPageDocIdParams] = useState({
+        sort: [['_id', 1]],
+        skip: rowsPerPage,
         limit: 1
     })
     const [lastDocIdParams, setLastDocIdParams] = useState({
@@ -354,14 +353,17 @@ const AlarmSetup = (props) => {
         limit: 1
     })
 
-    console.log(JSON.stringify(historyDataParams))
+    // console.clear()
+    // console.log(JSON.stringify(prevPageDocIdParams))
     const dbHistoryData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history:Parameters:${JSON.stringify(historyDataParams)}` }).data
     const totalDocs = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history:Parameters:${JSON.stringify(totalDocsParams)}` }).data ?? 0
-    const firstDocId = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history:Parameters:${JSON.stringify(firstDocIdParams)}` }).data?.[0]?._id.$oid
+    const prevPageDocId = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history:Parameters:${JSON.stringify(prevPageDocIdParams)}` }).data?.[0]?._id.$oid
     const lastDocId = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history:Parameters:${JSON.stringify(lastDocIdParams)}` }).data?.[0]?._id.$oid
     // console.log('dbHistoryData', dbHistoryData)
     // console.log('totalDocs', totalDocs)
-    // console.log('firstDocId', firstDocId)
+    // console.log('currentPageDocId', currentPageDocId)
+    // console.log('nextPageDocId', nextPageDocId)
+    // console.log('prevPageDocId', prevPageDocId)
     // console.log('lastDocId', lastDocId)
 
 
@@ -490,17 +492,9 @@ const AlarmSetup = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dbPVDataRaw])
 
-    // update totalDocsParams, firstDocIdParams and lastDocIdParams
+    // update totalDocsParams and lastDocIdParams
     useEffect(() => {
         setTotalDocsParams(prevState => ({
-            ...prevState,
-            query: {
-                ...prevState.query,
-                id: historyQuery.id,
-                entry: historyQuery.entry
-            }
-        }))
-        setFirstDocIdParams(prevState => ({
             ...prevState,
             query: {
                 ...prevState.query,
@@ -584,6 +578,21 @@ const AlarmSetup = (props) => {
     useEffect(() => {
         setLastPage(Math.floor(totalDocs / rowsPerPage))
     }, [totalDocs, rowsPerPage])
+
+    // update prevPageDocIdParams based on currentPageDocId
+    useEffect(() => {
+        setPrevPageDocIdParams(prevState => ({
+            ...prevState,
+            ...(currentPageDocId
+                ? {
+                    query: {
+                        _id: { $gte: currentPageDocId }
+                    }
+                }
+                : { query: undefined }
+            )
+        }))
+    }, [currentPageDocId])
 
     // handleNewDbLogReadWatchBroadcast
     useEffect(() => {

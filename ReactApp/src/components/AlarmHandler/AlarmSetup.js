@@ -583,6 +583,7 @@ const AlarmSetup = (props) => {
     useEffect(() => {
         setPrevPageDocIdParams(prevState => ({
             ...prevState,
+            skip: rowsPerPage,
             ...(currentPageDocId
                 ? {
                     query: {
@@ -592,7 +593,7 @@ const AlarmSetup = (props) => {
                 : { query: undefined }
             )
         }))
-    }, [currentPageDocId])
+    }, [currentPageDocId, rowsPerPage])
 
     // update page based on alarmLogSearchString, alarmLogSelectedKey and rowsPerPage
     useEffect(() => {

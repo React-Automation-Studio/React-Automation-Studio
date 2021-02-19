@@ -232,12 +232,13 @@ def dbWatchThread(watchEventName):
                             query = clientDbWatchList[watchEventName]['query']
                             projection = clientDbWatchList[watchEventName]['projection']
                             sort = clientDbWatchList[watchEventName]['sort']
+                            skip = clientDbWatchList[watchEventName]['skip']
                             limit = clientDbWatchList[watchEventName]['limit']
                             count = clientDbWatchList[watchEventName]['count']
                             if(count):
                                 doc = clientDbWatchList[watchEventName]['collection'].count_documents(query)
                             else:
-                                doc = clientDbWatchList[watchEventName]['collection'].find(query,projection).sort(sort).limit(limit)
+                                doc = clientDbWatchList[watchEventName]['collection'].find(query,projection).sort(sort).skip(skip).limit(limit)
                   #         print(str(change))
                             #print("documentKey: ",documentKey)
                             #print(watchEventName,change)
@@ -914,6 +915,7 @@ def databaseBroadcastRead(message):
                                     sort.append((sortItem[0],sortItem[1]))
                             else:
                                 sort=[('$natural', 1)]
+                            skip=parameters['skip'] if ('skip' in parameters) else 0
                             limit=parameters['limit'] if ('limit' in parameters) else 0
                             count=parameters['count'] if ('count' in parameters) else False
 
@@ -921,13 +923,14 @@ def databaseBroadcastRead(message):
                             # print('query',query)
                             # print('projection',projection)
                             # print('sort',sort)
+                            # print('skip',skip)
                             # print('limit',limit)
                             # print('count',count)
                             
                             if(count):
                                 X=mycol.count_documents(query)
                             else:
-                                X=mycol.find(query,projection).sort(sort).limit(limit)
+                                X=mycol.find(query,projection).sort(sort).skip(skip).limit(limit)
                             
 
 
@@ -961,6 +964,7 @@ def databaseBroadcastRead(message):
                                 dbWatch['query']=query
                                 dbWatch['projection']=projection
                                 dbWatch['sort']=sort
+                                dbWatch['skip']=skip
                                 dbWatch['limit']=limit
                                 dbWatch['count']=count
                                 dbWatch['sockets']={

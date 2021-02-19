@@ -31,7 +31,7 @@ class RedirectToLogIn extends Component {
 
     if (process.env.REACT_APP_EnableLogin==='true'){
       let loggedIn = this.context.userData.loggedIn;
-      console.log(loggedIn)
+     
     if(loggedIn){
       this.setState({'redirectToLoginPage':false});
 

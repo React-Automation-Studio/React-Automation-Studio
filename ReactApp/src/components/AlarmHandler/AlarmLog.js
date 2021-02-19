@@ -15,7 +15,7 @@ const AlarmLog = (props) => {
 
     useEffect(() => {
         myRef.current.scrollTo(0, 0)
-    }, [props.alarmLogDisplayArray.length])
+    }, [props.scrollReset])
 
     return (
         <TableContainer style={{ height: props.height, overflow: 'auto' }} ref={myRef}>

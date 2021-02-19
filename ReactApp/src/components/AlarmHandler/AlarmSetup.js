@@ -594,6 +594,12 @@ const AlarmSetup = (props) => {
         }))
     }, [currentPageDocId])
 
+    // update page based on alarmLogSearchString, alarmLogSelectedKey and rowsPerPage
+    useEffect(() => {
+        setPage(0)
+        setCurrentPageDocId(undefined)
+    }, [alarmLogSearchString, alarmLogSelectedKey, rowsPerPage])
+
     // handleNewDbLogReadWatchBroadcast
     useEffect(() => {
         if (dbHistoryData !== null) {
@@ -1225,7 +1231,6 @@ const AlarmSetup = (props) => {
 
     const handleChangeRowsPerPage = useCallback((event) => {
         setRowsPerPage(parseInt(event.target.value, 10))
-        setPage(0)
     }, [])
 
     const handleChangePageAT = useCallback((event, newPage) => {
@@ -1657,6 +1662,12 @@ const AlarmSetup = (props) => {
                                         tableItemRightClick={handleTableItemRightClick}
                                         tableRowClick={handleTableRowClick}
                                         fadeTU={fadeTU}
+                                        scrollReset={{
+                                            page: pageAT,
+                                            rowsPerPage: rowsPerPageAT,
+                                            alarmTableSearchString: alarmTableSearchString,
+                                            areaSelectedIndex: areaSelectedIndex
+                                        }}
                                     />
                                     : "No data from database"}
                             </AccordionDetails>
@@ -1731,6 +1742,12 @@ const AlarmSetup = (props) => {
                                 <AlarmLog
                                     height={alarmLogHeight}
                                     alarmLogDisplayArray={alarmLogDisplayArray}
+                                    scrollReset={{
+                                        page: page,
+                                        rowsPerPage: rowsPerPage,
+                                        alarmLogSearchString: alarmLogSearchString,
+                                        alarmLogSelectedKey: alarmLogSelectedKey
+                                    }}
                                 />
                             </AccordionDetails>
                         </Accordion>

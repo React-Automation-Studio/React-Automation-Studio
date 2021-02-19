@@ -578,7 +578,7 @@ const AlarmSetup = (props) => {
 
     // update lastPage based on totalDocs
     useEffect(() => {
-        setLastPage(Math.floor(totalDocs / rowsPerPage) - 1)
+        setLastPage(Math.ceil(totalDocs / rowsPerPage) - 1)
     }, [totalDocs, rowsPerPage])
 
     // update prevPageDocIdParams based on currentPageDocId and rowsPerPage
@@ -1253,6 +1253,7 @@ const AlarmSetup = (props) => {
     }, [lastPage, page, nextPageDocId, prevPageDocId, lastPageDocId])
 
     const handleChangeRowsPerPage = useCallback((event) => {
+        setPage(0)
         setRowsPerPage(parseInt(event.target.value, 10))
     }, [])
 

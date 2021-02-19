@@ -70,10 +70,7 @@ const useArchiverDataHook = (props) => {
             setWriteAccess(msg.write_access)
         }
         let socket = context.socket;
-        let jwt = JSON.parse(localStorage.getItem('jwt'));
-        if (jwt === null) {
-            jwt = 'unauthenticated'
-        }
+        let jwt = context.userTokens.accessToken;
         if (props.archiverURL) {
             socket.emit('archiverRead', { 'archiverURL': props.archiverURL, 'clientAuthorisation': jwt },handleAck)
             socket.on('archiverReadData:' + props.archiverURL, handleArchiverReadData);

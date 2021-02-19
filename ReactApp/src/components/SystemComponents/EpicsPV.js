@@ -94,10 +94,7 @@ export const useEpicsPV = (props) => {
       let socket = context.socket;
 
 
-      let jwt = JSON.parse(localStorage.getItem('jwt'));
-      if (jwt === null) {
-        jwt = 'unauthenticated'
-      }
+      let jwt = context.userTokens.accessToken;
       socket.emit('request_pv_info', { data: pv.pvname, 'clientAuthorisation': jwt });
     }
     // const handleInitialConnection=()=>{
@@ -118,10 +115,7 @@ export const useEpicsPV = (props) => {
     }
 
     let socket = context.socket;
-    let jwt = JSON.parse(localStorage.getItem('jwt'));
-    if (jwt === null) {
-      jwt = 'unauthenticated'
-    }
+    let jwt = context.userTokens.accessToken;
     socket.emit('request_pv_info', { data: pv.pvname, 'clientAuthorisation': jwt },handleRequestPvInfoAck);
     socket.on(pv.pvname, updatePVData);
     socket.on('connect_error', connectError);
@@ -131,7 +125,7 @@ export const useEpicsPV = (props) => {
     return () => {
 
       if (pvConnectionId !== null) {
-        let jwt = JSON.parse(localStorage.getItem('jwt'));
+        let jwt = context.userTokens.accessToken;
         if (jwt === null) {
           jwt = 'unauthenticated'
         }
@@ -150,7 +144,7 @@ export const useEpicsPV = (props) => {
 
     if (props.newValueTrigger > 0) {
       let socket = context.socket;
-      let jwt = JSON.parse(localStorage.getItem('jwt'));
+      let jwt = context.userTokens.accessToken;
       if (jwt === null) {
         jwt = 'unauthenticated'
       }

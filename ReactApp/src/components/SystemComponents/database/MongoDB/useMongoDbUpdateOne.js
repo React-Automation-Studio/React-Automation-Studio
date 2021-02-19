@@ -3,13 +3,14 @@ import { useContext, useCallback } from 'react';
 import AutomationStudioContext from '../../AutomationStudioContext';
 const useMongoDbUpdateOne = (props) => {
 
-    const { socket } = useContext(AutomationStudioContext);
+    const context=useContext(AutomationStudioContext);
+    const { socket } = context;
 
     const dbUpdateOne = useCallback((props) => {
 
         if (props.dbURL && props.update&&props.id) {
 
-            let jwt = JSON.parse(localStorage.getItem('jwt'));
+            let jwt = context.userTokens.accessToken;
             if (jwt === null) {
                 jwt = 'unauthenticated'
             }

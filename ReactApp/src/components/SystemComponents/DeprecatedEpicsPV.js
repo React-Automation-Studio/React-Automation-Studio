@@ -161,7 +161,8 @@ class DeprecatedEpicsPV extends React.Component {
       let socket=this.context.socket;
 
       //      console.log('epicsPV user: ',user)
-      let jwt = JSON.parse(localStorage.getItem('jwt'));
+      
+      let jwt = this.context.userTokens.accessToken;
       if (jwt===null){
         jwt='unauthenticated'
       }
@@ -180,7 +181,7 @@ class DeprecatedEpicsPV extends React.Component {
 
 
 
-      let jwt = JSON.parse(localStorage.getItem('jwt'));
+      let jwt = this.context.userTokens.accessToken;
       if (jwt===null){
         jwt='unauthenticated'
       }
@@ -219,7 +220,7 @@ class DeprecatedEpicsPV extends React.Component {
       //  clearTimeout(this.timeout)
       //  this.timeout = null
       //}
-      let jwt = JSON.parse(localStorage.getItem('jwt'));
+      let jwt = this.context.userTokens.accessToken;
       if (jwt===null){
         jwt='unauthenticated'
       }
@@ -258,7 +259,7 @@ class DeprecatedEpicsPV extends React.Component {
             //        console.log('componentDidUpdate internal Epics value:', value)
 
             let socket=this.context.socket;
-            let jwt = JSON.parse(localStorage.getItem('jwt'));
+            let jwt = this.context.userTokens.accessToken;
             if (jwt===null){
               jwt='unauthenticated'
             }
@@ -275,7 +276,7 @@ class DeprecatedEpicsPV extends React.Component {
               {
 
                 let socket=this.context.socket;
-                let jwt = JSON.parse(localStorage.getItem('jwt'));
+                let jwt = this.context.userTokens.accessToken;
                 if (jwt===null){
                   jwt='unauthenticated'
                 }

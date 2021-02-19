@@ -27,7 +27,8 @@ const useArchiverData = (props) => {
 
       
         let socket = context.socket;
-        let jwt = JSON.parse(localStorage.getItem('jwt'));
+        
+        let jwt = context.userTokens.accessToken;
         if (jwt === null) {
             jwt = 'unauthenticated'
         }

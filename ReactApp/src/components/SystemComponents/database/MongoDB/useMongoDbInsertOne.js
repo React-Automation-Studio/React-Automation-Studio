@@ -2,13 +2,14 @@ import { useContext, useCallback } from 'react';
 import AutomationStudioContext from '../../AutomationStudioContext';
 export const useMongoDbInsertOne = (props) => {
 
-    const { socket } = useContext(AutomationStudioContext);
+    const context=useContext(AutomationStudioContext);
+    const { socket } = context;
 
     const dbInsertOne = useCallback((props) => {
 
         if (props.dbURL && props.newEntry) {
 
-            let jwt = JSON.parse(localStorage.getItem('jwt'));
+            let jwt = context.userTokens.accessToken;
             if (jwt === null) {
                 jwt = 'unauthenticated'
             }

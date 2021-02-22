@@ -11,6 +11,7 @@ import InputBase from '@material-ui/core/InputBase';
 import PV from '../SystemComponents/PV';
 import useMongoDbWatch from '../SystemComponents/database/MongoDB/useMongoDbWatch';
 import useMongoDbUpdateOne from '../SystemComponents/database/MongoDB/useMongoDbUpdateOne';
+import useMongoDbUpdateMany from '../SystemComponents/database/MongoDB/useMongoDbUpdateMany';
 import Typography from '@material-ui/core/Typography';
 
 import Menu from '@material-ui/core/Menu';
@@ -376,6 +377,7 @@ const AlarmSetup = (props) => {
 
 
     const dbUpdateOne = useMongoDbUpdateOne({})
+    const dbUpdateMany = useMongoDbUpdateMany({})
 
     const [alarmTableHeight, setAlarmTableHeight] = useState('40vh')
     const [alarmLogHeight, setAlarmLogHeight] = useState('32vh')
@@ -1153,6 +1155,7 @@ const AlarmSetup = (props) => {
         const { index, newName } = renameDialogData
         const id = areaMongoId[index]
         let subAreaId = ''
+        let query = {}
         if (index.includes("=")) {
             subAreaId = areaSubAreaMongoId[index]
         }
@@ -1168,9 +1171,122 @@ const AlarmSetup = (props) => {
             id: id,
             update: newvalues
         })
+        if (index.includes("=")) {
+            const newIndex = `${index.split("=")[0]}=${newName}`
+            query = {
+                id: { '$regex': `^${index}\\*` }
+            }
+            newvalues = { '$set': { id: `^${newIndex}\\*` } }
+            dbUpdateMany({
+                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history`,
+                query: query,
+                update: newvalues
+            })
+            query = {
+                id: { '$regex': `^${index}$` }
+            }
+            newvalues = { '$set': { id: `^${newIndex}$` } }
+            dbUpdateMany({
+                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history`,
+                query: query,
+                update: newvalues
+            })
+        }
+        else {
+            const newIndex = newName
+            query = {
+                id: { '$regex': `^${index}=` }
+            }
+            let aggregation = {
+                '$set': {
+                    'id': {
+                        '$concat': [{
+                            '$arrayElemAt': [{
+                                '$split': ['$id', `${index}=`]
+                            }, 0]
+                        },
+                        `${newIndex}=`,
+                        {
+                            '$arrayElemAt': [{
+                                '$split': ['$id', `${index}=`]
+                            }, 1]
+                        }]
+                    }
+                }
+            }
+            dbUpdateMany({
+                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history`,
+                query: query,
+                aggregation: aggregation
+            })
+            query = {
+                id: { '$regex': `^${index}\\*` }
+            }
+            aggregation = {
+                '$set': {
+                    'id': {
+                        '$concat': [{
+                            '$arrayElemAt': [{
+                                '$split': ['$id', `${index}\*`]
+                            }, 0]
+                        },
+                        `${newIndex}\*`,
+                        {
+                            '$arrayElemAt': [{
+                                '$split': ['$id', `${index}\*`]
+                            }, 1]
+                        }]
+                    }
+                }
+            }
+            dbUpdateMany({
+                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history`,
+                query: query,
+                aggregation: aggregation
+            })
+            query = {
+                id: { '$regex': `^${index}$` }
+            }
+            aggregation = {
+                '$set': {
+                    'id': {
+                        '$concat': [{
+                            '$arrayElemAt': [{
+                                '$split': ['$id', `${index}`]
+                            }, 0]
+                        },
+                        `${newIndex}`,
+                        {
+                            '$arrayElemAt': [{
+                                '$split': ['$id', `${index}`]
+                            }, 1]
+                        }]
+                    },
+                    // Update entry as well for enable/disable area
+                    'entry': {
+                        '$concat': [{
+                            '$arrayElemAt': [{
+                                '$split': ['$entry', `${index}`]
+                            }, 0]
+                        },
+                        `${newIndex}`,
+                        {
+                            '$arrayElemAt': [{
+                                '$split': ['$entry', `${index}`]
+                            }, 1]
+                        }]
+                    }
+                }
+            }
+            dbUpdateMany({
+                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history`,
+                query: query,
+                aggregation: aggregation
+            })
+        }
         setRenameDialogOpen(false)
         setbackDropOpen(true)
-    }, [renameDialogData, areaMongoId, areaSubAreaMongoId, dbUpdateOne, props.dbName])
+    }, [renameDialogData, areaMongoId, areaSubAreaMongoId, dbUpdateOne, props.dbName, dbUpdateMany])
 
     const handleAppendNewPVInfo = useCallback(() => {
         setNewPVInfo({

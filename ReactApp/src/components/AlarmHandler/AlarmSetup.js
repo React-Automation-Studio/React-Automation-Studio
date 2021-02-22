@@ -44,6 +44,7 @@ import TablePagination from '@material-ui/core/TablePagination';
 
 import AddPVDialog from './AddPVDialog';
 import EnableDialog from './EnableDialog';
+import RenameDialog from './RenameDialog';
 
 import { format, parseISO } from 'date-fns';
 
@@ -259,6 +260,9 @@ const AlarmSetup = (props) => {
 
     const [enableDialogOpen, setEnableDialogOpen] = useState(false)
     const [enableDialogData, setEnableDialogData] = useState({})
+
+    const [renameDialogOpen, setRenameDialogOpen] = useState(false)
+    const [renameDialogData, setRenameDialogData] = useState({})
 
     const [backdropOpen, setbackDropOpen] = useState(false)
     const [ASRestartProgress, setASRestartProgress] = useState(0)
@@ -1131,6 +1135,33 @@ const AlarmSetup = (props) => {
         setAddPVDialogOpen(true)
     }, [lastPVKey, newPVInfo])
 
+    const handleRenameArea = useCallback((event, index) => {
+        const currentName = index.includes("=")
+            ? index.split("=")[1]
+            : index
+        const prefix = index.includes("=")
+            ? index.split("=")[0]
+            : ''
+        setRenameDialogData({
+            index: index,
+            currentName: currentName,
+            newName: '',
+            prefix: prefix
+        })
+        setAreaContextOpen({})
+        setAlarmAdminListExpand(false)
+        setRenameDialogOpen(true)
+    }, [])
+
+    const handleExecuteRenameArea = useCallback(() => {
+        const { index, newName, prefix } = renameDialogData
+        const newIndex = prefix
+            ? `${prefix}=${newName}`
+            : newName
+        console.log(index, newIndex)
+        setRenameDialogOpen(false)
+    }, [renameDialogData])
+
     const handleAppendNewPVInfo = useCallback(() => {
         setNewPVInfo({
             ...newPVInfo,
@@ -1510,6 +1541,15 @@ const AlarmSetup = (props) => {
                 }}
 
             />
+            <RenameDialog
+                open={renameDialogOpen}
+                data={renameDialogData}
+                setRenameDialogData={setRenameDialogData}
+                handleClose={() => {
+                    setRenameDialogOpen(false)
+                }}
+                executeRenameArea={handleExecuteRenameArea}
+            />
             <Grid
                 container
                 direction="row"
@@ -1602,6 +1642,7 @@ const AlarmSetup = (props) => {
                                             listItemRightClick={handleListItemRightClick}
                                             listItemContextClose={handleListItemContextClose}
                                             addNewPV={handleAddNewPV}
+                                            renameArea={handleRenameArea}
                                             setAlarmAdminListExpand={setAlarmAdminListExpand}
                                         />
                                         : "No data from database"}

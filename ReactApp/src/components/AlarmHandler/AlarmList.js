@@ -20,6 +20,7 @@ import NotificationsOffIcon from '@material-ui/icons/NotificationsOff';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import AddIcon from '@material-ui/icons/Add';
+import EditIcon from '@material-ui/icons/Edit';
 
 import { fade } from '@material-ui/core/styles/colorManipulator';
 
@@ -270,6 +271,16 @@ const AlarmList = props => {
                                                                 </ListItemIcon>
                                                                 <ListItemText primary="Add new pv" />
                                                             </ListItem>
+                                                            <ListItem
+                                                                button
+                                                                className={classes.nested}
+                                                                onClick={event => props.renameArea(event, `${area["area"]}`)}
+                                                            >
+                                                                <ListItemIcon >
+                                                                    <EditIcon fontSize="small" />
+                                                                </ListItemIcon>
+                                                                <ListItemText primary="Rename area" />
+                                                            </ListItem>
                                                         </List>
                                                     </Collapse>
                                                 </Menu>
@@ -354,6 +365,16 @@ const AlarmList = props => {
                                                                                                         <AddIcon fontSize="small" />
                                                                                                     </ListItemIcon>
                                                                                                     <ListItemText primary="Add new pv" />
+                                                                                                </ListItem>
+                                                                                                <ListItem
+                                                                                                    button
+                                                                                                    className={classes.nested}
+                                                                                                    onClick={event => props.renameArea(event, `${area["area"]}=${subArea}`)}
+                                                                                                >
+                                                                                                    <ListItemIcon >
+                                                                                                        <EditIcon fontSize="small" />
+                                                                                                    </ListItemIcon>
+                                                                                                    <ListItemText primary="Rename subArea" />
                                                                                                 </ListItem>
                                                                                             </List>
                                                                                         </Collapse>

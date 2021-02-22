@@ -1153,7 +1153,8 @@ def databaseUpdateMany(message):
                             mydb = myclient[dbName]
 
                             mycol=mydb[colName]
-                            query=message['query']
+                            query=message['query'] if ('query' in message) else {}
+                            aggregation=message['aggregation'] if ('aggregation' in message) else {}
                             if("_id" in query):
                                 try:
                                     for key,value in query["_id"].items():
@@ -1161,9 +1162,12 @@ def databaseUpdateMany(message):
                                 except:
                                     pass
 
-                            newvalues=message['newvalues']
+                            newvalues=message['newvalues'] if ('newvalues' in message) else None
                             try:
-                                mydb[colName].update_many(query,newvalues)
+                                if('aggregation' in message):
+                                    mydb[colName].update_many(query,[aggregation])
+                                else:
+                                    mydb[colName].update_many(query,newvalues)
 
                             except Exception as e:
                                 log.info(e)

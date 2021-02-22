@@ -1139,14 +1139,10 @@ const AlarmSetup = (props) => {
         const currentName = index.includes("=")
             ? index.split("=")[1]
             : index
-        const prefix = index.includes("=")
-            ? index.split("=")[0]
-            : ''
         setRenameDialogData({
             index: index,
             currentName: currentName,
-            newName: '',
-            prefix: prefix
+            newName: ''
         })
         setAreaContextOpen({})
         setAlarmAdminListExpand(false)
@@ -1154,13 +1150,27 @@ const AlarmSetup = (props) => {
     }, [])
 
     const handleExecuteRenameArea = useCallback(() => {
-        const { index, newName, prefix } = renameDialogData
-        const newIndex = prefix
-            ? `${prefix}=${newName}`
-            : newName
-        console.log(index, newIndex)
+        const { index, newName } = renameDialogData
+        const id = areaMongoId[index]
+        let subAreaId = ''
+        if (index.includes("=")) {
+            subAreaId = areaSubAreaMongoId[index]
+        }
+        let newvalues = {}
+        if (subAreaId) {
+            newvalues = { '$set': { [`${subAreaId}.name`]: newName } }
+        }
+        else {
+            newvalues = { '$set': { [`area`]: newName } }
+        }
+        dbUpdateOne({
+            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
+            id: id,
+            update: newvalues
+        })
         setRenameDialogOpen(false)
-    }, [renameDialogData])
+        setbackDropOpen(true)
+    }, [renameDialogData, areaMongoId, areaSubAreaMongoId, dbUpdateOne, props.dbName])
 
     const handleAppendNewPVInfo = useCallback(() => {
         setNewPVInfo({

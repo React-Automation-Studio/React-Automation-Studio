@@ -1328,6 +1328,9 @@ def pvCollectionWatch():
                     elif (key == "pvs" or key.endswith(".pvs")):
                         # New pvs added
                         watchRestartAlarmServer = True
+                    elif (key == "area" or key.endswith(".name")):
+                        # Name change
+                        watchRestartAlarmServer = True
             except:
                 if(AH_DEBUG):
                     print("no relevant updates")

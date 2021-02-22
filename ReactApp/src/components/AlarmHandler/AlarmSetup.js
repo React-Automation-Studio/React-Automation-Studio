@@ -344,6 +344,7 @@ const AlarmSetup = (props) => {
         count: true
     })
     const [prevPageDocIdParams, setPrevPageDocIdParams] = useState({
+        query: { ...historyQuery },
         sort: [['_id', 1]],
         skip: rowsPerPage,
         limit: 1
@@ -367,6 +368,7 @@ const AlarmSetup = (props) => {
     // console.log('nextPageDocId', nextPageDocId)
     // console.log('prevPageDocId', prevPageDocId)
     // console.log('lastPageDocId', lastPageDocId)
+    // console.log(lastPageSkip)
 
 
     const dbUpdateOne = useMongoDbUpdateOne({})
@@ -494,7 +496,7 @@ const AlarmSetup = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dbPVDataRaw])
 
-    // update totalDocsParams and setLastPageDocIdParams
+    // update totalDocsParams and lastPageDocIdParams
     useEffect(() => {
         setTotalDocsParams(prevState => ({
             ...prevState,
@@ -581,7 +583,7 @@ const AlarmSetup = (props) => {
         setLastPage(Math.ceil(totalDocs / rowsPerPage) - 1)
     }, [totalDocs, rowsPerPage])
 
-    // update prevPageDocIdParams based on currentPageDocId and rowsPerPage
+    // update prevPageDocIdParams based on currentPageDocId, rowsPerPage and historyQuery
     useEffect(() => {
         setPrevPageDocIdParams(prevState => ({
             ...prevState,
@@ -589,13 +591,21 @@ const AlarmSetup = (props) => {
             ...(currentPageDocId
                 ? {
                     query: {
-                        _id: { $gte: currentPageDocId }
+                        _id: { $gte: currentPageDocId },
+                        id: historyQuery.id,
+                        entry: historyQuery.entry
                     }
                 }
-                : { query: undefined }
+                : {
+                    query: {
+                        _id: undefined,
+                        id: historyQuery.id,
+                        entry: historyQuery.entry
+                    }
+                }
             )
         }))
-    }, [currentPageDocId, rowsPerPage])
+    }, [currentPageDocId, rowsPerPage, historyQuery])
 
     // update page and currentPageDocId based on alarmLogSearchString, alarmLogSelectedKey and rowsPerPage
     useEffect(() => {

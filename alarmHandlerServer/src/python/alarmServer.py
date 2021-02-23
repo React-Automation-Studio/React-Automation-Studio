@@ -1343,6 +1343,14 @@ def pvCollectionWatch():
                             restart = dbGetFieldGlobal("restart")
                             dbSetFieldGlobal("restart", restart*-1)
                             watchRestartAlarmServer = True
+                        elif(bool(re.search(r"^subArea\d+$", key))):
+                            # New subArea added
+                            entry = {
+                                "timestamp": timestamp, "entry": "New subArea added, restarting alarm server..."}
+                            dbUpdateHistory("_GLOBAL", entry)
+                            restart = dbGetFieldGlobal("restart")
+                            dbSetFieldGlobal("restart", restart*-1)
+                            watchRestartAlarmServer = True
                 except:
                     if(AH_DEBUG):
                         print("no relevant updates")

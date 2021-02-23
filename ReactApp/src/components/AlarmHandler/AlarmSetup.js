@@ -282,6 +282,8 @@ const AlarmSetup = (props) => {
     const [addAreaName, setAddAreaName] = useState('')
 
     const [backdropOpen, setBackDropOpen] = useState(false)
+    const [restartId, setRestartId] = useState(undefined)
+    const [firstStart, setFirstStart] = useState(true)
     const [ASRestartProgress, setASRestartProgress] = useState(0)
 
     const [alarmAdminListExpand, setAlarmAdminListExpand] = useState(false)
@@ -700,6 +702,7 @@ const AlarmSetup = (props) => {
             const data = dbGlobData[0];
             setEnableAllAreas(data["enableAllAreas"])
             setEnableAllAreasId(data["_id"]["$oid"])
+            setRestartId(data["restart"])
         }
     }, [dbGlobData])
 
@@ -1374,7 +1377,7 @@ const AlarmSetup = (props) => {
         })
         setAddAreaDialogOpen(false)
         setAddAreaName('')
-    }, [addAreaName])
+    }, [addAreaName, dbInsertOne, props.dbName])
 
     const handleAppendNewPVInfo = useCallback(() => {
         setNewPVInfo({
@@ -1688,10 +1691,10 @@ const AlarmSetup = (props) => {
         if (backdropOpen) {
             timer1 = setInterval(() => {
                 setASRestartProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 10))
-            }, 800)
+            }, 500)
             timer2 = setInterval(() => {
                 setBackDropOpen(false)
-            }, 8 * 1000)
+            }, 1 * 5000)
         }
         return () => {
             clearInterval(timer1)
@@ -1699,9 +1702,22 @@ const AlarmSetup = (props) => {
         }
     }, [backdropOpen])
 
+    useEffect(() => {
+        if (restartId) {
+            if (firstStart) {
+                setFirstStart(false)
+            }
+            else {
+                setBackDropOpen(true)
+            }
+        }
+        // disable useEffect dependencies for "firstStart"
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [restartId])
+
     // console.log('Top render')
 
-    // console.log(alarmLogSelectedKey)
+
 
     return (
         <React.Fragment>

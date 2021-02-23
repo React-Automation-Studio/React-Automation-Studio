@@ -104,12 +104,14 @@ const AlarmTable = props => {
                         const areaAlarmName = entry[0]
                         const value = entry[1]
 
-                        const hostname = props.alarmPVDict[value["name"]].reduce((acc, entry, index) => {
-                            if (index > 1) {
-                                return `${acc}${entry}`
-                            }
-                            return acc
-                        }, '')
+                        const hostname = props.alarmPVDict[value["name"]]
+                            ? props.alarmPVDict[value["name"]].reduce((acc, entry, index) => {
+                                if (index > 1) {
+                                    return `${acc}${entry}`
+                                }
+                                return acc
+                            }, '')
+                            : 'Error connecting to pv'
 
                         const areaAlarmNameArray = areaAlarmName.split('=')
                         let areaName = null

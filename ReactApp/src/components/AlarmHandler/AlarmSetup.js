@@ -11,6 +11,7 @@ import InputBase from '@material-ui/core/InputBase';
 import PV from '../SystemComponents/PV';
 import useMongoDbWatch from '../SystemComponents/database/MongoDB/useMongoDbWatch';
 import useMongoDbUpdateOne from '../SystemComponents/database/MongoDB/useMongoDbUpdateOne';
+import useMongoDbInsertOne from '../SystemComponents/database/MongoDB/useMongoDbInsertOne';
 import useMongoDbUpdateMany from '../SystemComponents/database/MongoDB/useMongoDbUpdateMany';
 import Typography from '@material-ui/core/Typography';
 
@@ -393,6 +394,7 @@ const AlarmSetup = (props) => {
 
 
     const dbUpdateOne = useMongoDbUpdateOne({})
+    const dbInsertOne = useMongoDbInsertOne({})
     const dbUpdateMany = useMongoDbUpdateMany({})
 
     const [alarmTableHeight, setAlarmTableHeight] = useState('40vh')
@@ -1360,7 +1362,17 @@ const AlarmSetup = (props) => {
     }, [renameDialogData, areaMongoId, areaSubAreaMongoId, dbUpdateOne, props.dbName, dbUpdateMany])
 
     const handleAddNewArea = useCallback(() => {
-        console.log(addAreaName)
+        const newEntry = {
+            area: addAreaName,
+            enable: true,
+            bridge: false,
+            bridgeTime: '',
+            pvs: {}
+        }
+        dbInsertOne({
+            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
+            newEntry: newEntry
+        })
         setAddAreaDialogOpen(false)
         setAddAreaName('')
     }, [addAreaName])

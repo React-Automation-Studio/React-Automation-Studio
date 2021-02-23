@@ -1163,12 +1163,12 @@ def pvCollectionWatch():
         for change in stream:
             # os.system('cls' if os.name == 'nt' else 'clear')
             # print(change)
+            timestamp = datetime.now(utc).isoformat()
             if(change["operationType"] == "update"):
                 try:
                     documentKey = change["documentKey"]
                     doc = dbFindOne("pvs", documentKey)
                     change = change["updateDescription"]["updatedFields"]
-                    timestamp = datetime.now(utc).isoformat()
                     for key in change.keys():
                         # print('#####')
                         # print(key)
@@ -1328,18 +1328,33 @@ def pvCollectionWatch():
                                 dbUpdateHistory(areaKey, entry)
                         elif (key == "pvs" or key.endswith(".pvs")):
                             # New pvs added
+                            entry = {
+                                "timestamp": timestamp, "entry": "New pvs added, restarting alarm server..."}
+                            dbUpdateHistory("_GLOBAL", entry)
                             watchRestartAlarmServer = True
                         elif (key == "area" or key.endswith(".name")):
                             # Name change
+                            entry = {
+                                "timestamp": timestamp, "entry": "Area name changed, restarting alarm server..."}
+                            dbUpdateHistory("_GLOBAL", entry)
                             watchRestartAlarmServer = True
                 except:
                     if(AH_DEBUG):
                         print("no relevant updates")
             elif(change["operationType"] == "replace"):
+                entry = {
+                    "timestamp": timestamp, "entry": "Database editted on the back end, restarting alarm server..."}
+                dbUpdateHistory("_GLOBAL", entry)
                 watchRestartAlarmServer = True
             elif(change["operationType"] == "insert"):
+                entry = {
+                    "timestamp": timestamp, "entry": "New area added, restarting alarm server..."}
+                dbUpdateHistory("_GLOBAL", entry)
                 watchRestartAlarmServer = True
             elif(change["operationType"] == "delete"):
+                entry = {
+                    "timestamp": timestamp, "entry": "Database editted on the back end, restarting alarm server..."}
+                dbUpdateHistory("_GLOBAL", entry)
                 watchRestartAlarmServer = True
 
 

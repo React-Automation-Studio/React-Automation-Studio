@@ -1340,6 +1340,7 @@ const AlarmSetup = (props) => {
         setAreaSelectedIndex(newIndex)
         setAlarmLogSelectedKey(newIndex)
         setAlarmLogSelectedName(newLogName)
+        setAreaSelectedName(newLogName)
     }, [renameDialogData, areaMongoId, areaSubAreaMongoId, dbUpdateOne, props.dbName, dbUpdateMany])
 
     const handleAppendNewPVInfo = useCallback(() => {

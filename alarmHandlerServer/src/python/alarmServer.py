@@ -1162,178 +1162,183 @@ def pvCollectionWatch():
     with dbGetCollection("pvs").watch() as stream:
         for change in stream:
             # os.system('cls' if os.name == 'nt' else 'clear')
-            # print(change)
-            try:
-                documentKey = change["documentKey"]
-                doc = dbFindOne("pvs", documentKey)
-                change = change["updateDescription"]["updatedFields"]
-                timestamp = datetime.now(utc).isoformat()
-                for key in change.keys():
-                    # print('#####')
-                    # print(key)
-                    if(key == "bridge"):
-                        bridgeEvent = change[key]
-                        topArea = doc.get("area")
-                        if(not bridgeEvent):
-                            bridgeMessage = topArea+" area BRIDGE cleared to area DISABLED"
+            print(change)
+            if(change["operationType"] == "update" or change["operationType"] == "replace"):
+                try:
+                    documentKey = change["documentKey"]
+                    doc = dbFindOne("pvs", documentKey)
+                    change = change["updateDescription"]["updatedFields"]
+                    timestamp = datetime.now(utc).isoformat()
+                    for key in change.keys():
+                        # print('#####')
+                        # print(key)
+                        if(key == "bridge"):
+                            bridgeEvent = change[key]
+                            topArea = doc.get("area")
+                            if(not bridgeEvent):
+                                bridgeMessage = topArea+" area BRIDGE cleared to area DISABLED"
+                                entry = {"timestamp": timestamp,
+                                         "entry": bridgeMessage}
+                                dbUpdateHistory(topArea, entry)
+                            else:
+                                bridgeMessage = topArea+" area BRIDGED until "
+                        elif(key == "bridgeTime"):
+                            # Time zone localisation
+                            if(localtz):
+                                str_time = datetime.fromisoformat(change[key]).astimezone(localtz).strftime(
+                                    "%d %b %Y %H:%M:%S")
+                            else:
+                                str_time = datetime.fromisoformat(change[key]).strftime(
+                                    "%d %b %Y %H:%M:%S")+" (UTC)"
+                            # Time zone localisation
+                            bridgeMessage = bridgeMessage+str_time
                             entry = {"timestamp": timestamp,
                                      "entry": bridgeMessage}
-                            dbUpdateHistory(topArea, entry)
-                        else:
-                            bridgeMessage = topArea+" area BRIDGED until "
-                    elif(key == "bridgeTime"):
-                        # Time zone localisation
-                        if(localtz):
-                            str_time = datetime.fromisoformat(change[key]).astimezone(localtz).strftime(
-                                "%d %b %Y %H:%M:%S")
-                        else:
-                            str_time = datetime.fromisoformat(change[key]).strftime(
-                                "%d %b %Y %H:%M:%S")+" (UTC)"
-                        # Time zone localisation
-                        bridgeMessage = bridgeMessage+str_time
-                        entry = {"timestamp": timestamp,
-                                 "entry": bridgeMessage}
-                        if(bridgeEvent):
-                            dbUpdateHistory(topArea, entry)
-                            _thread.start_new_thread(
-                                bridgeWatchThread, (topArea, change[key],))
-                    elif(key == "enable"):
-                        # area enable
-                        topArea = doc.get("area")
-                        # print(areaKey, "area enable changed!")
-                        for area in areaList:
-                            if ("=" in area):
-                                if (area.split("=")[0] == topArea):
-                                    areaKey = area
-                                    evaluateAreaPVs(areaKey, True)
-                        # Log to history
-                        msg = "ENABLED" if change[key] else "DISABLED"
-                        entry = {"timestamp": timestamp, "entry": " ".join(
-                            [topArea, "area", msg])}
-                        # print(timestamp, topArea,
-                        #   "area", msg)
-                        if(not bridgeEvent):
-                            dbUpdateHistory(topArea, entry)
-                    elif ("pvs." in key and (key.endswith(".bridge"))):
-                        bridgeEvent = change[key]
-                        pvname = None
-                        keys = key.split(".")
-                        for one_key in keys:
-                            if (one_key not in ["bridge"]):
-                                doc = doc.get(one_key)
-                            else:
-                                doc = doc.get("name")
-                                pvname = doc
-                        if(not bridgeEvent):
-                            bridgeMessage = pvname+" - Alarm BRIDGE cleared to DISABLED"
-                            entry = {"timestamp": timestamp,
-                                     "entry": bridgeMessage}
-                            areaKey = getKeys(pvname)[0]
-                            dbUpdateHistory(areaKey, entry, pvname)
-                        else:
-                            bridgeMessage = pvname+" - Alarm BRIDGED until "
-                    elif ("pvs." in key and (key.endswith(".bridgeTime"))):
-                        # Time zone localisation
-                        if(localtz):
-                            str_time = datetime.fromisoformat(change[key]).astimezone(localtz).strftime(
-                                "%d %b %Y %H:%M:%S")
-                        else:
-                            str_time = datetime.fromisoformat(change[key]).strftime(
-                                "%d %b %Y %H:%M:%S")+" (UTC)"
-                        # Time zone localisation
-                        bridgeMessage = bridgeMessage+str_time
-                        entry = {"timestamp": timestamp,
-                                 "entry": bridgeMessage}
-                        if(bridgeEvent):
-                            areaKey, pvKey = getKeys(pvname)
-                            dbUpdateHistory(areaKey, entry, pvname)
-                            if ("=" in areaKey):
-                                subAreaKey = subAreaDict[areaKey]
-                                areaKey = areaKey.split("=")[0]
-                            else:
-                                subAreaKey = None
-                            _thread.start_new_thread(
-                                bridgeWatchThread, (areaKey, change[key], subAreaKey, pvKey,))
-                    elif ("pvs." in key and (key.endswith(".enable") or key.endswith(".latch") or key.endswith(".notify"))):
-                        # pv enable/latch/notify
-                        # print("enable/latch/notify of pv changed!")
-                        pvname = None
-                        keys = key.split(".")
-                        for one_key in keys:
-                            if (one_key not in ["enable", "latch", "notify"]):
-                                doc = doc.get(one_key)
-                            else:
-                                doc = doc.get("name")
-                                pvname = doc
-                        areaKey = getKeys(pvname)[0]
-                        if(key.endswith(".enable")):
-                            evaluateAreaPVs(areaKey, True)
-                        # Log to history
-                        if(key.endswith(".enable")):
+                            if(bridgeEvent):
+                                dbUpdateHistory(topArea, entry)
+                                _thread.start_new_thread(
+                                    bridgeWatchThread, (topArea, change[key],))
+                        elif(key == "enable"):
+                            # area enable
+                            topArea = doc.get("area")
+                            # print(areaKey, "area enable changed!")
+                            for area in areaList:
+                                if ("=" in area):
+                                    if (area.split("=")[0] == topArea):
+                                        areaKey = area
+                                        evaluateAreaPVs(areaKey, True)
+                            # Log to history
                             msg = "ENABLED" if change[key] else "DISABLED"
-                        elif(key.endswith(".latch")):
-                            msg = "latch ENABLED" if change[key] else "latch DISABLED"
-                        elif(key.endswith(".notify")):
-                            msg = "notify ENABLED" if change[key] else "notify DISABLED"
-                        entry = {"timestamp": timestamp, "entry": " ".join(
-                            [pvname, '-', "Alarm", msg])}
-                        # print(timestamp, pvname,
-                        #       "alarm", msg)
-                        if((key.endswith(".enable") and not bridgeEvent) or key.endswith(".latch") or key.endswith(".notify")):
-                            dbUpdateHistory(areaKey, entry, pvname)
-                    elif (key.endswith(".bridge")):
-                        # subArea bridge
-                        bridgeEvent = change[key]
-                        areaKey = doc.get("area") + "=" + doc.get(
-                            key.split(".")[0])["name"]
-                        areaName = areaKey.replace("=", " > ")
-                        if(not bridgeEvent):
-                            bridgeMessage = areaName+" area BRIDGE cleared to area DISABLED"
+                            entry = {"timestamp": timestamp, "entry": " ".join(
+                                [topArea, "area", msg])}
+                            # print(timestamp, topArea,
+                            #   "area", msg)
+                            if(not bridgeEvent):
+                                dbUpdateHistory(topArea, entry)
+                        elif ("pvs." in key and (key.endswith(".bridge"))):
+                            bridgeEvent = change[key]
+                            pvname = None
+                            keys = key.split(".")
+                            for one_key in keys:
+                                if (one_key not in ["bridge"]):
+                                    doc = doc.get(one_key)
+                                else:
+                                    doc = doc.get("name")
+                                    pvname = doc
+                            if(not bridgeEvent):
+                                bridgeMessage = pvname+" - Alarm BRIDGE cleared to DISABLED"
+                                entry = {"timestamp": timestamp,
+                                         "entry": bridgeMessage}
+                                areaKey = getKeys(pvname)[0]
+                                dbUpdateHistory(areaKey, entry, pvname)
+                            else:
+                                bridgeMessage = pvname+" - Alarm BRIDGED until "
+                        elif ("pvs." in key and (key.endswith(".bridgeTime"))):
+                            # Time zone localisation
+                            if(localtz):
+                                str_time = datetime.fromisoformat(change[key]).astimezone(localtz).strftime(
+                                    "%d %b %Y %H:%M:%S")
+                            else:
+                                str_time = datetime.fromisoformat(change[key]).strftime(
+                                    "%d %b %Y %H:%M:%S")+" (UTC)"
+                            # Time zone localisation
+                            bridgeMessage = bridgeMessage+str_time
                             entry = {"timestamp": timestamp,
                                      "entry": bridgeMessage}
-                            dbUpdateHistory(areaKey, entry)
-                        else:
-                            bridgeMessage = areaName+" area BRIDGED until "
-                    elif (key.endswith(".bridgeTime")):
-                        # subArea bridgeTime
-                        # Time zone localisation
-                        if(localtz):
-                            str_time = datetime.fromisoformat(change[key]).astimezone(localtz).strftime(
-                                "%d %b %Y %H:%M:%S")
-                        else:
-                            str_time = datetime.fromisoformat(change[key]).strftime(
-                                "%d %b %Y %H:%M:%S")+" (UTC)"
-                        # Time zone localisation
-                        bridgeMessage = bridgeMessage+str_time
-                        entry = {"timestamp": timestamp,
-                                 "entry": bridgeMessage}
-                        if(bridgeEvent):
-                            dbUpdateHistory(areaKey, entry)
-                            _thread.start_new_thread(
-                                bridgeWatchThread, (areaKey, change[key], key.split(".")[0],))
-                    elif (key.endswith(".enable")):
-                        # subArea enable
-                        areaKey = doc.get("area") + "=" + doc.get(
-                            key.split(".")[0])["name"]
-                        # print(areaKey, "area enable changed!")
-                        evaluateAreaPVs(areaKey, True)
-                        # Log to history
-                        msg = "ENABLED" if change[key] else "DISABLED"
-                        entry = {"timestamp": timestamp, "entry": " ".join(
-                            [areaKey.replace("=", " > "), "sub area", msg])}
-                        # print(timestamp, areaKey.replace("=", " > "),
-                        #       "sub area", msg)
-                        if(not bridgeEvent):
-                            dbUpdateHistory(areaKey, entry)
-                    elif (key == "pvs" or key.endswith(".pvs")):
-                        # New pvs added
-                        watchRestartAlarmServer = True
-                    elif (key == "area" or key.endswith(".name")):
-                        # Name change
-                        watchRestartAlarmServer = True
-            except:
-                if(AH_DEBUG):
-                    print("no relevant updates")
+                            if(bridgeEvent):
+                                areaKey, pvKey = getKeys(pvname)
+                                dbUpdateHistory(areaKey, entry, pvname)
+                                if ("=" in areaKey):
+                                    subAreaKey = subAreaDict[areaKey]
+                                    areaKey = areaKey.split("=")[0]
+                                else:
+                                    subAreaKey = None
+                                _thread.start_new_thread(
+                                    bridgeWatchThread, (areaKey, change[key], subAreaKey, pvKey,))
+                        elif ("pvs." in key and (key.endswith(".enable") or key.endswith(".latch") or key.endswith(".notify"))):
+                            # pv enable/latch/notify
+                            # print("enable/latch/notify of pv changed!")
+                            pvname = None
+                            keys = key.split(".")
+                            for one_key in keys:
+                                if (one_key not in ["enable", "latch", "notify"]):
+                                    doc = doc.get(one_key)
+                                else:
+                                    doc = doc.get("name")
+                                    pvname = doc
+                            areaKey = getKeys(pvname)[0]
+                            if(key.endswith(".enable")):
+                                evaluateAreaPVs(areaKey, True)
+                            # Log to history
+                            if(key.endswith(".enable")):
+                                msg = "ENABLED" if change[key] else "DISABLED"
+                            elif(key.endswith(".latch")):
+                                msg = "latch ENABLED" if change[key] else "latch DISABLED"
+                            elif(key.endswith(".notify")):
+                                msg = "notify ENABLED" if change[key] else "notify DISABLED"
+                            entry = {"timestamp": timestamp, "entry": " ".join(
+                                [pvname, '-', "Alarm", msg])}
+                            # print(timestamp, pvname,
+                            #       "alarm", msg)
+                            if((key.endswith(".enable") and not bridgeEvent) or key.endswith(".latch") or key.endswith(".notify")):
+                                dbUpdateHistory(areaKey, entry, pvname)
+                        elif (key.endswith(".bridge")):
+                            # subArea bridge
+                            bridgeEvent = change[key]
+                            areaKey = doc.get("area") + "=" + doc.get(
+                                key.split(".")[0])["name"]
+                            areaName = areaKey.replace("=", " > ")
+                            if(not bridgeEvent):
+                                bridgeMessage = areaName+" area BRIDGE cleared to area DISABLED"
+                                entry = {"timestamp": timestamp,
+                                         "entry": bridgeMessage}
+                                dbUpdateHistory(areaKey, entry)
+                            else:
+                                bridgeMessage = areaName+" area BRIDGED until "
+                        elif (key.endswith(".bridgeTime")):
+                            # subArea bridgeTime
+                            # Time zone localisation
+                            if(localtz):
+                                str_time = datetime.fromisoformat(change[key]).astimezone(localtz).strftime(
+                                    "%d %b %Y %H:%M:%S")
+                            else:
+                                str_time = datetime.fromisoformat(change[key]).strftime(
+                                    "%d %b %Y %H:%M:%S")+" (UTC)"
+                            # Time zone localisation
+                            bridgeMessage = bridgeMessage+str_time
+                            entry = {"timestamp": timestamp,
+                                     "entry": bridgeMessage}
+                            if(bridgeEvent):
+                                dbUpdateHistory(areaKey, entry)
+                                _thread.start_new_thread(
+                                    bridgeWatchThread, (areaKey, change[key], key.split(".")[0],))
+                        elif (key.endswith(".enable")):
+                            # subArea enable
+                            areaKey = doc.get("area") + "=" + doc.get(
+                                key.split(".")[0])["name"]
+                            # print(areaKey, "area enable changed!")
+                            evaluateAreaPVs(areaKey, True)
+                            # Log to history
+                            msg = "ENABLED" if change[key] else "DISABLED"
+                            entry = {"timestamp": timestamp, "entry": " ".join(
+                                [areaKey.replace("=", " > "), "sub area", msg])}
+                            # print(timestamp, areaKey.replace("=", " > "),
+                            #       "sub area", msg)
+                            if(not bridgeEvent):
+                                dbUpdateHistory(areaKey, entry)
+                        elif (key == "pvs" or key.endswith(".pvs")):
+                            # New pvs added
+                            watchRestartAlarmServer = True
+                        elif (key == "area" or key.endswith(".name")):
+                            # Name change
+                            watchRestartAlarmServer = True
+                except:
+                    if(AH_DEBUG):
+                        print("no relevant updates")
+            elif(change["operationType"] == "insert"):
+                watchRestartAlarmServer = True
+            elif(change["operationType"] == "delete"):
+                watchRestartAlarmServer = True
 
 
 def globalCollectionWatch():

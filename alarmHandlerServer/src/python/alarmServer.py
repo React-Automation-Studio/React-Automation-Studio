@@ -10,6 +10,7 @@ from pytz import utc, timezone
 
 from notifyServer import startNotifyServer, restartNotifyServer, notify
 from dbMongo import dbGetCollection, dbGetEnables, dbGetListOfPVNames, dbGetField, dbSetField, dbFindOne, dbUpdateHistory
+from dbMongo import dbGetFieldGlobal, dbSetFieldGlobal
 
 try:
     AH_DEBUG = bool(os.environ['AH_DEBUG'])
@@ -1331,12 +1332,16 @@ def pvCollectionWatch():
                             entry = {
                                 "timestamp": timestamp, "entry": "New pvs added, restarting alarm server..."}
                             dbUpdateHistory("_GLOBAL", entry)
+                            restart = dbGetFieldGlobal("restart")
+                            dbSetFieldGlobal("restart", restart*-1)
                             watchRestartAlarmServer = True
                         elif (key == "area" or key.endswith(".name")):
                             # Name change
                             entry = {
                                 "timestamp": timestamp, "entry": "Area name changed, restarting alarm server..."}
                             dbUpdateHistory("_GLOBAL", entry)
+                            restart = dbGetFieldGlobal("restart")
+                            dbSetFieldGlobal("restart", restart*-1)
                             watchRestartAlarmServer = True
                 except:
                     if(AH_DEBUG):
@@ -1345,16 +1350,22 @@ def pvCollectionWatch():
                 entry = {
                     "timestamp": timestamp, "entry": "Database editted on the back end, restarting alarm server..."}
                 dbUpdateHistory("_GLOBAL", entry)
+                restart = dbGetFieldGlobal("restart")
+                dbSetFieldGlobal("restart", restart*-1)
                 watchRestartAlarmServer = True
             elif(change["operationType"] == "insert"):
                 entry = {
                     "timestamp": timestamp, "entry": "New area added, restarting alarm server..."}
                 dbUpdateHistory("_GLOBAL", entry)
+                restart = dbGetFieldGlobal("restart")
+                dbSetFieldGlobal("restart", restart*-1)
                 watchRestartAlarmServer = True
             elif(change["operationType"] == "delete"):
                 entry = {
                     "timestamp": timestamp, "entry": "Database editted on the back end, restarting alarm server..."}
                 dbUpdateHistory("_GLOBAL", entry)
+                restart = dbGetFieldGlobal("restart")
+                dbSetFieldGlobal("restart", restart*-1)
                 watchRestartAlarmServer = True
 
 
@@ -1421,6 +1432,10 @@ def main():
     # print('pvDict', pvDict)
 
     print("Alarm server running...")
+
+    # initial set of restart field in global collection
+    # Backwards compatible
+    dbSetFieldGlobal("restart", -1)
 
     global alarmDictInitialised
     alarmDictInitialised = True

@@ -152,6 +152,17 @@ def dbSetField(field, value, areaKey, pvKey=None, subAreaKey=None):
                 }})
 
 
+def dbGetFieldGlobal(field):
+    doc = alarmDB.glob.find_one({})
+    return doc[field]
+
+
+def dbSetFieldGlobal(field, value):
+    alarmDB.glob.update_one({}, {
+        '$set': {field: value}
+    })
+
+
 def dbFindOne(collection, documentKey=None):
     if(documentKey):
         doc = alarmDB[collection].find_one(

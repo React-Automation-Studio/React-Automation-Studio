@@ -22,6 +22,10 @@ import AlarmTable from './AlarmTable';
 import AlarmLog from './AlarmLog';
 
 import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from "@material-ui/core/ListItemText";
+import Collapse from '@material-ui/core/Collapse';
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
 
@@ -36,6 +40,10 @@ import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
 
 import PublicIcon from '@material-ui/icons/Public';
+import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import AddIcon from '@material-ui/icons/Add';
 
 import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
@@ -46,6 +54,7 @@ import TablePagination from '@material-ui/core/TablePagination';
 import AddPVDialog from './AddPVDialog';
 import EnableDialog from './EnableDialog';
 import RenameDialog from './RenameDialog';
+import AddAreaDialog from './AddAreaDialog';
 
 import { format, parseISO } from 'date-fns';
 
@@ -118,6 +127,9 @@ const useStyles = makeStyles(theme => ({
         },
     },
     expanded: {},
+    nested: {
+        paddingLeft: theme.spacing(4),
+    },
     verticalMiddle: {
         display: "flex",
         flexDirection: "column",
@@ -265,10 +277,14 @@ const AlarmSetup = (props) => {
     const [renameDialogOpen, setRenameDialogOpen] = useState(false)
     const [renameDialogData, setRenameDialogData] = useState({})
 
+    const [addAreaDialogOpen, setAddAreaDialogOpen] = useState(false)
+    const [addAreaName, setAddAreaName] = useState('')
+
     const [backdropOpen, setbackDropOpen] = useState(false)
     const [ASRestartProgress, setASRestartProgress] = useState(0)
 
     const [alarmAdminListExpand, setAlarmAdminListExpand] = useState(false)
+    const [alarmAdminGListExpand, setAlarmAdminGListExpand] = useState(false)
 
     const [dbPVData, setDbPVData] = useState({})
 
@@ -1343,6 +1359,12 @@ const AlarmSetup = (props) => {
         setAreaSelectedName(newLogName)
     }, [renameDialogData, areaMongoId, areaSubAreaMongoId, dbUpdateOne, props.dbName, dbUpdateMany])
 
+    const handleAddNewArea = useCallback(() => {
+        console.log(addAreaName)
+        setAddAreaDialogOpen(false)
+        setAddAreaName('')
+    }, [addAreaName])
+
     const handleAppendNewPVInfo = useCallback(() => {
         setNewPVInfo({
             ...newPVInfo,
@@ -1731,6 +1753,16 @@ const AlarmSetup = (props) => {
                 }}
                 executeRenameArea={handleExecuteRenameArea}
             />
+            <AddAreaDialog
+                open={addAreaDialogOpen}
+                addAreaName={addAreaName}
+                setAddAreaName={setAddAreaName}
+                handleClose={() => {
+                    setAddAreaDialogOpen(false)
+                    setAddAreaName('')
+                }}
+                addNewArea={handleAddNewArea}
+            />
             <Grid
                 container
                 direction="row"
@@ -1796,6 +1828,35 @@ const AlarmSetup = (props) => {
                                             </ListItemIcon>
                                             <Typography variant="inherit">ACK ALL AREAS' alarms</Typography>
                                         </MenuItem>
+                                        {isAlarmAdmin &&
+                                            <MenuItem
+                                                onClick={() => setAlarmAdminGListExpand(!alarmAdminGListExpand)}
+                                            >
+                                                <ListItemIcon >
+                                                    <SupervisorAccountIcon fontSize="small" />
+                                                </ListItemIcon>
+                                                <ListItemText primary="Alarm admin actions" />
+                                                {alarmAdminGListExpand ? <ExpandLess style={{ marginLeft: 16 }} /> : <ExpandMore style={{ marginLeft: 16 }} />}
+                                            </MenuItem>
+                                        }
+                                        <Collapse in={alarmAdminGListExpand} timeout="auto" unmountOnExit>
+                                            <List component="div" disablePadding >
+                                                <ListItem
+                                                    button
+                                                    className={classes.nested}
+                                                    onClick={() => {
+                                                        setAddAreaDialogOpen(true)
+                                                        setAlarmAdminGListExpand(false)
+                                                        setGlobalContextOpen(false)
+                                                    }}
+                                                >
+                                                    <ListItemIcon >
+                                                        <AddIcon fontSize="small" />
+                                                    </ListItemIcon>
+                                                    <ListItemText primary="Add new area" />
+                                                </ListItem>
+                                            </List>
+                                        </Collapse>
 
                                     </Menu>
                                 </Grid>

@@ -75,12 +75,12 @@ const AddAreaDialog = (props) => {
                             <Grid item xs={1} className={classes.centerInBlock}>
                                 <Domain />
                             </Grid>
-                            <Grid item xs={2} className={classes.verticalMiddle} style={{ marginRight: '2rem' }}>
+                            <Grid item xs={3} className={classes.verticalMiddle} style={{ marginRight: '1rem' }}>
                                 <Typography className={classes.boldText} >
-                                    AREA NAME
+                                    NEW AREA NAME
                                 </Typography>
                             </Grid>
-                            <Grid item xs={8} className={classes.verticalMiddle}>
+                            <Grid item xs={7} className={classes.verticalMiddle}>
                                 <TextField
                                     type='text'
                                     value={props.addAreaName}

@@ -20,6 +20,7 @@ import NotificationsOffIcon from '@material-ui/icons/NotificationsOff';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import AddIcon from '@material-ui/icons/Add';
+import PlaylistAddOutlinedIcon from '@material-ui/icons/PlaylistAddOutlined';
 import EditIcon from '@material-ui/icons/Edit';
 
 import { fade } from '@material-ui/core/styles/colorManipulator';
@@ -270,6 +271,16 @@ const AlarmList = props => {
                                                                     <AddIcon fontSize="small" />
                                                                 </ListItemIcon>
                                                                 <ListItemText primary="Add new pv" />
+                                                            </ListItem>
+                                                            <ListItem
+                                                                button
+                                                                className={classes.nested}
+                                                                onClick={event => props.addNewSubArea(event, `${area["area"]}`)}
+                                                            >
+                                                                <ListItemIcon >
+                                                                    <PlaylistAddOutlinedIcon fontSize="small" />
+                                                                </ListItemIcon>
+                                                                <ListItemText primary="Add new subArea" />
                                                             </ListItem>
                                                             <ListItem
                                                                 button

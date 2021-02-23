@@ -56,6 +56,7 @@ import AddPVDialog from './AddPVDialog';
 import EnableDialog from './EnableDialog';
 import RenameDialog from './RenameDialog';
 import AddAreaDialog from './AddAreaDialog';
+import AddSubAreaDialog from './AddSubAreaDialog';
 
 import { format, parseISO } from 'date-fns';
 
@@ -281,6 +282,10 @@ const AlarmSetup = (props) => {
     const [addAreaDialogOpen, setAddAreaDialogOpen] = useState(false)
     const [addAreaName, setAddAreaName] = useState('')
 
+    const [addSubAreaDialogOpen, setAddSubAreaDialogOpen] = useState(false)
+    const [addSubAreaData, setAddSubAreaData] = useState({})
+    const [lastSubAreaKey, setLastSubAreaKey] = useState({})
+
     const [backdropOpen, setBackDropOpen] = useState(false)
     const [restartId, setRestartId] = useState(undefined)
     const [firstStart, setFirstStart] = useState(true)
@@ -412,6 +417,7 @@ const AlarmSetup = (props) => {
             const localAreaEnabled = {}
             const localAreaBridged = {}
             const localLastPVKey = {}
+            const localLastSubAreaKey = {}
             let localLastAlarm = ""
             let localLastArea = ""
 
@@ -446,6 +452,7 @@ const AlarmSetup = (props) => {
                         localAreaNames.push({ "area": area[areaKey] })
                     }
                     else if (areaKey.includes("subArea")) {
+                        localLastSubAreaKey[`${area["area"]}`] = parseInt(areaKey.replace("subArea", ""))
                         areaSubAreaMongoId[`${area["area"]}=${area[areaKey]["name"]}`] = areaKey
                         areaMongoId[`${area["area"]}=${area[areaKey]["name"]}`] = area["_id"]["$oid"]
                         // Area enabled for subArea includes parent area
@@ -497,6 +504,7 @@ const AlarmSetup = (props) => {
             setAreaBridged(localAreaBridged)
             setLastArea(localLastArea)
             setLastPVKey(localLastPVKey)
+            setLastSubAreaKey(localLastSubAreaKey)
 
             setDbPVData(dbPVDataRaw)
 
@@ -1158,6 +1166,17 @@ const AlarmSetup = (props) => {
         setAddPVDialogOpen(true)
     }, [lastPVKey, newPVInfo])
 
+    const handleAddNewSubArea = useCallback((event, index) => {
+        setAddSubAreaData({
+            areaIndex: index,
+            areaNextSubAreaKey: isNaN(lastSubAreaKey[index]) ? 0 : lastSubAreaKey[index] + 1,
+            subArea: ''
+        })
+        setAreaContextOpen({})
+        setAlarmAdminListExpand(false)
+        setAddSubAreaDialogOpen(true)
+    }, [lastSubAreaKey])
+
     const handleRenameArea = useCallback((event, index) => {
         const currentName = index.includes("=")
             ? index.split("=")[1]
@@ -1362,6 +1381,28 @@ const AlarmSetup = (props) => {
         setAlarmLogSelectedName(newLogName)
         setAreaSelectedName(newLogName)
     }, [renameDialogData, areaMongoId, areaSubAreaMongoId, dbUpdateOne, props.dbName, dbUpdateMany])
+
+    const handleExecuteAddNewSubArea = useCallback(() => {
+        const { areaIndex, subArea, areaNextSubAreaKey } = addSubAreaData
+        const id = areaMongoId[areaIndex]
+        const newvalues = {
+            '$set': {
+                [`subArea${areaNextSubAreaKey}`]: {
+                    name: subArea,
+                    enable: true,
+                    bridge: false,
+                    bridgeTime: '',
+                    pvs: {}
+                }
+            }
+        }
+        dbUpdateOne({
+            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
+            id: id,
+            update: newvalues
+        })
+        setAddSubAreaDialogOpen(false)
+    }, [addSubAreaData, areaMongoId, dbUpdateOne, props.dbName])
 
     const handleAddNewArea = useCallback(() => {
         const newEntry = {
@@ -1786,6 +1827,16 @@ const AlarmSetup = (props) => {
                 }}
                 addNewArea={handleAddNewArea}
             />
+            <AddSubAreaDialog
+                open={addSubAreaDialogOpen}
+                addSubAreaData={addSubAreaData}
+                setAddSubAreaData={setAddSubAreaData}
+                handleClose={() => {
+                    setAddSubAreaDialogOpen(false)
+                    setAddSubAreaData({})
+                }}
+                executeAddNewSubArea={handleExecuteAddNewSubArea}
+            />
             <Grid
                 container
                 direction="row"
@@ -1907,6 +1958,7 @@ const AlarmSetup = (props) => {
                                             listItemRightClick={handleListItemRightClick}
                                             listItemContextClose={handleListItemContextClose}
                                             addNewPV={handleAddNewPV}
+                                            addNewSubArea={handleAddNewSubArea}
                                             renameArea={handleRenameArea}
                                             setAlarmAdminListExpand={setAlarmAdminListExpand}
                                         />

@@ -544,7 +544,7 @@ const AlarmSetup = (props) => {
     // update historyQuery regex
     useEffect(() => {
         let regex = ``
-        if (alarmLogSelectedKey === "ALLAREAS") {
+        if (areaSelectedIndex === "ALLAREAS") {
             // ALL AREAS
             regex = '.*'
             setHistoryQuery(prevState => ({
@@ -553,27 +553,27 @@ const AlarmSetup = (props) => {
                 entry: { '$regex': `(?i)${alarmLogSearchString}` }
             }))
         }
-        else if (alarmLogSelectedKey.includes("*")) {
+        else if (areaSelectedIndex.includes("*")) {
             // pv
-            regex = `^${alarmLogSelectedKey.replace("*", "\\*")}$`
+            regex = `^${areaSelectedIndex.replace("*", "\\*")}$`
             setHistoryQuery(prevState => ({
                 ...prevState,
                 id: { '$regex': regex },
                 entry: { '$regex': `(?i)${alarmLogSearchString}` }
             }))
         }
-        else if (alarmLogSelectedKey.includes("=")) {
+        else if (areaSelectedIndex.includes("=")) {
             // subArea
-            regex = `(^${alarmLogSelectedKey}\\*)|(^${alarmLogSelectedKey}$)`
+            regex = `(^${areaSelectedIndex}\\*)|(^${areaSelectedIndex}$)`
             setHistoryQuery(prevState => ({
                 ...prevState,
                 id: { '$regex': regex },
                 entry: { '$regex': `(?i)${alarmLogSearchString}` }
             }))
         }
-        else if (alarmLogSelectedKey) {
+        else if (areaSelectedIndex) {
             // Area
-            regex = `(^${alarmLogSelectedKey}(=|\\*))|(^${alarmLogSelectedKey}$)`
+            regex = `(^${areaSelectedIndex}(=|\\*))|(^${areaSelectedIndex}$)`
             setHistoryQuery(prevState => ({
                 ...prevState,
                 id: { '$regex': regex },
@@ -581,7 +581,7 @@ const AlarmSetup = (props) => {
             }))
         }
 
-    }, [alarmLogSelectedKey, alarmLogSearchString])
+    }, [areaSelectedIndex, alarmLogSearchString])
 
 
     // update lastPage based on totalDocs
@@ -613,11 +613,11 @@ const AlarmSetup = (props) => {
         }))
     }, [currentPageDocId, rowsPerPage, historyQuery])
 
-    // update page and currentPageDocId based on alarmLogSearchString, alarmLogSelectedKey and rowsPerPage
+    // update page and currentPageDocId based on alarmLogSearchString, areaSelectedIndex and rowsPerPage
     useEffect(() => {
         setPage(0)
         setCurrentPageDocId(undefined)
-    }, [alarmLogSearchString, alarmLogSelectedKey, rowsPerPage])
+    }, [alarmLogSearchString, areaSelectedIndex, rowsPerPage])
 
     // update lastPageSkip based on totalDocs
     useEffect(() => {
@@ -1171,8 +1171,11 @@ const AlarmSetup = (props) => {
             id: id,
             update: newvalues
         })
+        let newIndex = ''
+        let newLogName = ''
         if (index.includes("=")) {
-            const newIndex = `${index.split("=")[0]}=${newName}`
+            newIndex = `${index.split("=")[0]}=${newName}`
+            newLogName = `${index.split("=")[0]} > ${newName}`
             query = {
                 id: { '$regex': `^${index}\\*` }
             }
@@ -1193,7 +1196,8 @@ const AlarmSetup = (props) => {
             })
         }
         else {
-            const newIndex = newName
+            newIndex = newName
+            newLogName = newName
             query = {
                 id: { '$regex': `^${index}=` }
             }
@@ -1286,6 +1290,9 @@ const AlarmSetup = (props) => {
         }
         setRenameDialogOpen(false)
         setbackDropOpen(true)
+        setAreaSelectedIndex(newIndex)
+        setAlarmLogSelectedKey(newIndex)
+        setAlarmLogSelectedName(newLogName)
     }, [renameDialogData, areaMongoId, areaSubAreaMongoId, dbUpdateOne, props.dbName, dbUpdateMany])
 
     const handleAppendNewPVInfo = useCallback(() => {

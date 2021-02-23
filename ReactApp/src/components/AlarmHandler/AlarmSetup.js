@@ -1231,13 +1231,13 @@ const AlarmSetup = (props) => {
                     'id': {
                         '$concat': [{
                             '$arrayElemAt': [{
-                                '$split': ['$id', `${index}\*`]
+                                '$split': ['$id', `${index}*`]
                             }, 0]
                         },
-                        `${newIndex}\*`,
+                        `${newIndex}*`,
                         {
                             '$arrayElemAt': [{
-                                '$split': ['$id', `${index}\*`]
+                                '$split': ['$id', `${index}*`]
                             }, 1]
                         }]
                     }

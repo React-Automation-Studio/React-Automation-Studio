@@ -1162,8 +1162,8 @@ def pvCollectionWatch():
     with dbGetCollection("pvs").watch() as stream:
         for change in stream:
             # os.system('cls' if os.name == 'nt' else 'clear')
-            print(change)
-            if(change["operationType"] == "update" or change["operationType"] == "replace"):
+            # print(change)
+            if(change["operationType"] == "update"):
                 try:
                     documentKey = change["documentKey"]
                     doc = dbFindOne("pvs", documentKey)
@@ -1335,6 +1335,8 @@ def pvCollectionWatch():
                 except:
                     if(AH_DEBUG):
                         print("no relevant updates")
+            elif(change["operationType"] == "replace"):
+                watchRestartAlarmServer = True
             elif(change["operationType"] == "insert"):
                 watchRestartAlarmServer = True
             elif(change["operationType"] == "delete"):

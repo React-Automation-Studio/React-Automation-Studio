@@ -1173,26 +1173,73 @@ const AlarmSetup = (props) => {
         })
         let newIndex = ''
         let newLogName = ''
+        let aggregation = {}
         if (index.includes("=")) {
             newIndex = `${index.split("=")[0]}=${newName}`
             newLogName = `${index.split("=")[0]} > ${newName}`
             query = {
                 id: { '$regex': `^${index}\\*` }
             }
-            newvalues = { '$set': { id: `^${newIndex}\\*` } }
+            aggregation = {
+                '$set': {
+                    'id': {
+                        '$concat': [{
+                            '$arrayElemAt': [{
+                                '$split': ['$id', `${index}*`]
+                            }, 0]
+                        },
+                        `${newIndex}*`,
+                        {
+                            '$arrayElemAt': [{
+                                '$split': ['$id', `${index}*`]
+                            }, 1]
+                        }]
+                    }
+                }
+            }
             dbUpdateMany({
                 dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history`,
                 query: query,
-                update: newvalues
+                aggregation: aggregation
             })
             query = {
                 id: { '$regex': `^${index}$` }
             }
-            newvalues = { '$set': { id: `^${newIndex}$` } }
+            aggregation = {
+                '$set': {
+                    'id': {
+                        '$concat': [{
+                            '$arrayElemAt': [{
+                                '$split': ['$id', `${index}`]
+                            }, 0]
+                        },
+                        `${newIndex}`,
+                        {
+                            '$arrayElemAt': [{
+                                '$split': ['$id', `${index}`]
+                            }, 1]
+                        }]
+                    },
+                    // Update entry as well for enable/disable area
+                    'entry': {
+                        '$concat': [{
+                            '$arrayElemAt': [{
+                                '$split': ['$entry', `${index.split("=")[1]}`]
+                            }, 0]
+                        },
+                        `${newName}`,
+                        {
+                            '$arrayElemAt': [{
+                                '$split': ['$entry', `${index.split("=")[1]}`]
+                            }, 1]
+                        }]
+                    }
+                }
+            }
             dbUpdateMany({
                 dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history`,
                 query: query,
-                update: newvalues
+                aggregation: aggregation
             })
         }
         else {
@@ -1201,7 +1248,7 @@ const AlarmSetup = (props) => {
             query = {
                 id: { '$regex': `^${index}=` }
             }
-            let aggregation = {
+            aggregation = {
                 '$set': {
                     'id': {
                         '$concat': [{

@@ -281,7 +281,7 @@ const AlarmSetup = (props) => {
     const [addAreaDialogOpen, setAddAreaDialogOpen] = useState(false)
     const [addAreaName, setAddAreaName] = useState('')
 
-    const [backdropOpen, setbackDropOpen] = useState(false)
+    const [backdropOpen, setBackDropOpen] = useState(false)
     const [ASRestartProgress, setASRestartProgress] = useState(0)
 
     const [alarmAdminListExpand, setAlarmAdminListExpand] = useState(false)
@@ -1354,7 +1354,6 @@ const AlarmSetup = (props) => {
             })
         }
         setRenameDialogOpen(false)
-        setbackDropOpen(true)
         setAreaSelectedIndex(newIndex)
         setAlarmLogSelectedKey(newIndex)
         setAlarmLogSelectedName(newLogName)
@@ -1452,9 +1451,6 @@ const AlarmSetup = (props) => {
             else {
                 newvalues = { '$set': { [`pvs`]: newPvs } }
             }
-
-            // console.log(newvalues)
-            setbackDropOpen(true)
             dbUpdateOne({
                 dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
                 id: id,
@@ -1694,7 +1690,7 @@ const AlarmSetup = (props) => {
                 setASRestartProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 10))
             }, 800)
             timer2 = setInterval(() => {
-                setbackDropOpen(false)
+                setBackDropOpen(false)
             }, 8 * 1000)
         }
         return () => {
@@ -1716,7 +1712,6 @@ const AlarmSetup = (props) => {
             <Backdrop
                 className={classes.backdrop}
                 open={backdropOpen}
-                onClick={() => setbackDropOpen(false)}
                 style={{
                     display: 'flex',
                     flexDirection: 'column',

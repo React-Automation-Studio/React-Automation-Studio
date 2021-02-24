@@ -62,6 +62,7 @@ notifyBuffer = {}
 pvDict = {}
 pvInitDict = {}
 pvDescDict = {}
+pvDescDictConn = {}
 alarmDict = {}
 areaDict = {}
 subAreaDict = {}
@@ -379,7 +380,13 @@ def ackAlarm(ackIdentifier, timestamp, username):
         alarmDict[pvname]["A"].value = 7    # set to DISCONN_ACKED state
 
 
+def pvConnDesc(pvname=None, conn=None, **kw):
+    global pvDescDictConn
+    pvDescDictConn[pvname.split(".DESC")[0]] = conn
+
+
 def pvConnFE(pvname=None, conn=None, **kw):
+    global frontEndConnDict
     frontEndConnDict[pvname] = conn
 
 
@@ -439,7 +446,9 @@ def pvDisconn(pvname, conn):
             curr_desc = pv.value
             curr_desc[0] = 'abcdefghijklmnopqrstuvwxyzAbcdefghijk_0'
         except:
-            pass
+            if(AH_DEBUG):
+                print('[Warning]', pv.pvname)
+                print('[Warning]', 'Unable to get pv.value or write to curr_desc')
         pv.put(np.array(curr_desc))
         # set current alarm status to DISCONNECTED
         if(disconnAlarm and (alarmState < 7 or (transparent and alarmState != 7))):
@@ -482,6 +491,9 @@ def pvDisconn(pvname, conn):
                     notifyContent = True
     else:
         try:
+            while(not pvDescDictConn[pvname]):
+                if(AH_DEBUG):
+                    print("Waiting to connect to desc pv of", pvname)
             description = pvDescDict[pvname].value
             hostname = pvDescDict[pvname].host
             # hostname = "AAbcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyZZ"
@@ -490,7 +502,9 @@ def pvDisconn(pvname, conn):
             curr_desc = ['abcdefghijklmnopqrstuvwxyzAbcdefghijk_1',
                          description] + hostchunks
         except:
-            pass
+            if(AH_DEBUG):
+                print('[Warning]', pvname)
+                print('[Warning]', 'Unable to get pv.value or pv.host')
         pv.put(np.array(curr_desc))
 
 
@@ -957,10 +971,13 @@ def initialiseAlarmIOC():
 
 def initDescDict():
     global pvDescDict
+    global pvDescDictConn
     for pvname in pvNameList:
         desc = pvname + ".DESC"
-        pv = PV(pvname=desc, connection_timeout=0.001)
+        pv = PV(pvname=desc, connection_timeout=0.001,
+                connection_callback=pvConnDesc)
         pvDescDict[pvname] = pv
+        pvDescDictConn[pvname] = False
 
 
 def initAreaPVDict():
@@ -1401,7 +1418,7 @@ def globalCollectionWatch():
 
             except:
                 if(AH_DEBUG):
-                    print("No relevant lobal var updates")
+                    print("No relevant global var updates")
 
 
 def main():

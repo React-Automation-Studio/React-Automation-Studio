@@ -766,6 +766,7 @@ const AlarmSetup = (props) => {
 
     const handleAlarmGlobalContextClose = useCallback(() => {
         setGlobalContextOpen(false)
+        setAlarmAdminGListExpand(false)
     }, [])
 
     const handleSearchAlarmTable = useCallback((event) => {

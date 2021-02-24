@@ -410,14 +410,61 @@ const AlarmSetup = (props) => {
     // handleNewDbPVsList
     useEffect(() => {
         if (dbPVDataRaw !== null) {
-            // Sort by area always
+            const localLastSubAreaKey = {}
+            // Sort by AREA always
             dbPVDataRaw.sort((a, b) => (a.area > b.area) ? 1 : ((b.area > a.area) ? -1 : 0))
+            // Sort subAreas
+            const subAreas = []
+            let areaIndex = -1
+            // Extract subAreas
+            dbPVDataRaw.map(area => {
+                Object.entries(area).map(entry => {
+                    const key = entry[0]
+                    const value = entry[1]
+                    if (key === "area") {
+                        subAreas.push([])
+                        areaIndex = areaIndex + 1
+                    }
+                    else if (key.includes("subArea")) {
+                        subAreas[areaIndex].push({ [key]: value })
+                    }
+                    return null
+                })
+                return null
+            })
+            // Formulate localLastSubAreaKey
+            subAreas.map((subArea, index) => {
+                try {
+                    localLastSubAreaKey[dbPVDataRaw[index]["area"]] = parseInt(Object.keys(subArea.slice(-1)[0])[0].replace("subArea", ""))
+                }
+                catch (err) { }
+                return null
+            })
+            // Sort subAreas
+            subAreas.map(subArea => {
+                subArea.sort((a, b) => {
+                    const aKey = Object.keys(a)[0]
+                    const bKey = Object.keys(b)[0]
+                    return (a[aKey].name > b[bKey].name) ? 1 : ((b[bKey].name > a[aKey].name) ? -1 : 0)
+                })
+                return null
+            })
+            // Replace all previous subAreas
+            dbPVDataRaw.map((area, index) => {
+                subAreas[index].map(subArea => {
+                    const subAreaKey = Object.keys(subArea)[0]
+                    delete dbPVDataRaw[index][subAreaKey]
+                    dbPVDataRaw[index][subAreaKey] = subArea[subAreaKey]
+                    return null
+                })
+                return null
+            })
+            //
             const localAreaNames = []
             const localAreaAlarms = []
             const localAreaEnabled = {}
             const localAreaBridged = {}
             const localLastPVKey = {}
-            const localLastSubAreaKey = {}
             let localLastAlarm = ""
             let localLastArea = ""
 
@@ -452,7 +499,6 @@ const AlarmSetup = (props) => {
                         localAreaNames.push({ "area": area[areaKey] })
                     }
                     else if (areaKey.includes("subArea")) {
-                        localLastSubAreaKey[`${area["area"]}`] = parseInt(areaKey.replace("subArea", ""))
                         areaSubAreaMongoId[`${area["area"]}=${area[areaKey]["name"]}`] = areaKey
                         areaMongoId[`${area["area"]}=${area[areaKey]["name"]}`] = area["_id"]["$oid"]
                         // Area enabled for subArea includes parent area

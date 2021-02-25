@@ -490,10 +490,22 @@ def pvDisconn(pvname, conn):
                     notifyBuffer[areaKey][pvname].append(entry)
                     notifyContent = True
     else:
-        try:
-            while(not pvDescDictConn[pvname]):
+        curr_desc = []
+        timeout = 0
+        while(not pvDescDictConn[pvname]):
+            if(AH_DEBUG):
+                print("Waiting to connect to desc pv of", pvname)
+            sleep(0.5)
+            timeout += 1
+            # 30 second timeout to connect to desc pv
+            # once pv is connected
+            if(timeout > 60):
                 if(AH_DEBUG):
-                    print("Waiting to connect to desc pv of", pvname)
+                    print('[Warning]',
+                          'Unable to connect to desc pv of', pvname)
+                    print('[Warning]', 'timeout!')
+                break
+        if(pvDescDictConn[pvname]):
             description = pvDescDict[pvname].value
             hostname = pvDescDict[pvname].host
             # hostname = "AAbcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyZZ"
@@ -501,10 +513,7 @@ def pvDisconn(pvname, conn):
             hostchunks = [hostname[i:i+n] for i in range(0, len(hostname), n)]
             curr_desc = ['abcdefghijklmnopqrstuvwxyzAbcdefghijk_1',
                          description] + hostchunks
-        except:
-            if(AH_DEBUG):
-                print('[Warning]', pvname)
-                print('[Warning]', 'Unable to get pv.value or pv.host')
+
         pv.put(np.array(curr_desc))
 
 

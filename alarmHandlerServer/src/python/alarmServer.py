@@ -871,94 +871,91 @@ def initialiseAlarmIOC():
         pv = alarmDict[pvname]["D"]
         val = pv.get()
         pvDisconnected = False
-        try:
-            # actual pv did not connect during server initialisation
-            if (val.size == 0):
-                pvDisconnected = True
-                # status initially 39 char string for memory
-                pv.put(
-                    np.array([
-                        'abcdefghijklmnopqrstuvwxyzAbcdefghijk_0',
-                        "[Disconnected]", "[Disconnected]"
-                    ]))
-                pvDisconn(pvname, False)
-            else:
-                # if alarm was activated when server initialised
-                try:
-                    units = pvInitDict[pvname][3]
-                    enum_strs = pvInitDict[pvname][4]
-                    value = pvInitDict[pvname][0]
-                    if(enum_strs):
-                        if(enum_strs[value] != ''):
-                            lastAlarmVal = enum_strs[value]
-                        else:
-                            if(units):
-                                lastAlarmVal = str(value)+" "+units
-                            else:
-                                lastAlarmVal = str(value)
+
+        # actual pv did not connect during server initialisation
+        if (val.size == 0):
+            pvDisconnected = True
+            # status initially 39 char string for memory
+            pv.put(
+                np.array([
+                    'abcdefghijklmnopqrstuvwxyzAbcdefghijk_0',
+                    "[Disconnected]", "[Disconnected]"
+                ]))
+            pvDisconn(pvname, False)
+        else:
+            # if alarm was activated when server initialised
+            if(pvname in pvInitDict):
+                units = pvInitDict[pvname][3]
+                enum_strs = pvInitDict[pvname][4]
+                value = pvInitDict[pvname][0]
+                if(enum_strs):
+                    if(enum_strs[value] != ''):
+                        lastAlarmVal = enum_strs[value]
                     else:
                         if(units):
                             lastAlarmVal = str(value)+" "+units
                         else:
                             lastAlarmVal = str(value)
-                    if(not alarmServerRestart):
-                        lastAlarmTime = pvInitDict[pvname][2]
-                    # set current alarm status
-                    sev = pvInitDict[pvname][1]
-                    if(sev == 1):     # MINOR alarm
-                        if(alarmServerRestart):
-                            alarmDict[pvname]["A"].value = 1
-                        else:
-                            alarmDict[pvname]["A"].value = 2
-                        # Log to history
-                        entry = {"timestamp": pvInitDict[pvname][2], "entry": " ".join(
-                            [pvname, "-", "MINOR_ALARM triggered, alarm value =", str(lastAlarmVal)])}
-                        # print(pvInitDict[pvname][2], pvname,
-                        #       "MINOR_ALARM triggered, alarm value =", lastAlarmVal)
-                    elif(sev == 2):     # MAJOR alarm
-                        if(alarmServerRestart):
-                            alarmDict[pvname]["A"].value = 3
-                        else:
-                            alarmDict[pvname]["A"].value = 4
-                        # Log to history
-                        entry = {"timestamp": pvInitDict[pvname][2], "entry": " ".join(
-                            [pvname, "-", "MAJOR_ALARM triggered, alarm value =", str(lastAlarmVal)])}
-                        # print(pvInitDict[pvname][2], pvname,
-                        #       "MAJOR_ALARM triggered, alarm value =", lastAlarmVal)
-                    elif(sev == 3):     # INVALID alarm
-                        if(alarmServerRestart):
-                            alarmDict[pvname]["A"].value = 5
-                        else:
-                            alarmDict[pvname]["A"].value = 6
-                        # Log to history
-                        entry = {"timestamp": pvInitDict[pvname][2], "entry": " ".join(
-                            [pvname, "-", "INVALID_ALARM triggered, alarm value =", str(lastAlarmVal)])}
-                        # print(pvInitDict[pvname][2], pvname,
-                        #       "INVALID_ALARM triggered, alarm value =", lastAlarmVal)
-                    # write to db
-                    areaKey, pvKey = getKeys(pvname)
-                    if ("=" in areaKey):
-                        subAreaKey = subAreaDict[areaKey]
-                        topArea = areaKey.split("=")[0]
-                        dbSetField('lastAlarmVal', lastAlarmVal,
-                                   topArea, pvKey, subAreaKey)
-                        dbSetField('lastAlarmTime', lastAlarmTime,
-                                   topArea, pvKey, subAreaKey)
+                else:
+                    if(units):
+                        lastAlarmVal = str(value)+" "+units
                     else:
-                        dbSetField('lastAlarmVal', lastAlarmVal,
-                                   areaKey, pvKey)
-                        dbSetField('lastAlarmTime', lastAlarmTime,
-                                   areaKey, pvKey)
-                    # Write entry to database for alarms that were active on startup
-                    # Only if not a controlled alarm server restart
-                    if(not alarmServerRestart):
-                        dbUpdateHistory(areaKey, entry, pvname)
-                except:
-                    # set current alarm status to NO_ALARM
-                    alarmDict[pvname]["A"].value = 0
-        except:
-            if(AH_DEBUG):
-                print('[Warning]', 'Unable to connect to pv:', pvname)
+                        lastAlarmVal = str(value)
+                if(not alarmServerRestart):
+                    lastAlarmTime = pvInitDict[pvname][2]
+                # set current alarm status
+                sev = pvInitDict[pvname][1]
+                if(sev == 1):     # MINOR alarm
+                    if(alarmServerRestart):
+                        alarmDict[pvname]["A"].value = 1
+                    else:
+                        alarmDict[pvname]["A"].value = 2
+                    # Log to history
+                    entry = {"timestamp": pvInitDict[pvname][2], "entry": " ".join(
+                        [pvname, "-", "MINOR_ALARM triggered, alarm value =", str(lastAlarmVal)])}
+                    # print(pvInitDict[pvname][2], pvname,
+                    #       "MINOR_ALARM triggered, alarm value =", lastAlarmVal)
+                elif(sev == 2):     # MAJOR alarm
+                    if(alarmServerRestart):
+                        alarmDict[pvname]["A"].value = 3
+                    else:
+                        alarmDict[pvname]["A"].value = 4
+                    # Log to history
+                    entry = {"timestamp": pvInitDict[pvname][2], "entry": " ".join(
+                        [pvname, "-", "MAJOR_ALARM triggered, alarm value =", str(lastAlarmVal)])}
+                    # print(pvInitDict[pvname][2], pvname,
+                    #       "MAJOR_ALARM triggered, alarm value =", lastAlarmVal)
+                elif(sev == 3):     # INVALID alarm
+                    if(alarmServerRestart):
+                        alarmDict[pvname]["A"].value = 5
+                    else:
+                        alarmDict[pvname]["A"].value = 6
+                    # Log to history
+                    entry = {"timestamp": pvInitDict[pvname][2], "entry": " ".join(
+                        [pvname, "-", "INVALID_ALARM triggered, alarm value =", str(lastAlarmVal)])}
+                    # print(pvInitDict[pvname][2], pvname,
+                    #       "INVALID_ALARM triggered, alarm value =", lastAlarmVal)
+                # write to db
+                areaKey, pvKey = getKeys(pvname)
+                if ("=" in areaKey):
+                    subAreaKey = subAreaDict[areaKey]
+                    topArea = areaKey.split("=")[0]
+                    dbSetField('lastAlarmVal', lastAlarmVal,
+                               topArea, pvKey, subAreaKey)
+                    dbSetField('lastAlarmTime', lastAlarmTime,
+                               topArea, pvKey, subAreaKey)
+                else:
+                    dbSetField('lastAlarmVal', lastAlarmVal,
+                               areaKey, pvKey)
+                    dbSetField('lastAlarmTime', lastAlarmTime,
+                               areaKey, pvKey)
+                # Write entry to database for alarms that were active on startup
+                # Only if not a controlled alarm server restart
+                if(not alarmServerRestart):
+                    dbUpdateHistory(areaKey, entry, pvname)
+            else:
+                # set current alarm status to NO_ALARM
+                alarmDict[pvname]["A"].value = 0
 
         if(not pvDisconnected):
             # set alarm value

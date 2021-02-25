@@ -153,7 +153,7 @@ const TraditionalLayout = (props) => {
                     {notInStyleGuide && <div style={{ marginBottom: props.footerHeight }} />}
                 </React.Fragment>
             }
-            {notInStyleGuide && <RedirectToLogIn />}
+     
         </React.Fragment>
     );
 };

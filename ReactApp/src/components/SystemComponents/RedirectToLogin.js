@@ -18,9 +18,10 @@ class RedirectToLogIn extends Component {
   }
 
   handleRedirectToLogIn=()=>{
-    //console.log('redirectToLogIn')
+    console.log('redirectToLogIn')
 
     //setTimeout(() => {
+    this.context.logout();
     this.setState({redirectToLoginPage:true});
     //      }, 1000)
   }

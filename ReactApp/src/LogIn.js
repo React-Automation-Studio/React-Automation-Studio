@@ -155,13 +155,21 @@ const Login = (props) => {
             const { data } = response;
            
             if (mounted.current) {
-
-              if (typeof data.jwt !== 'undefined') {
-                context.setUserTokens(data.jwt);
+              console.log(data) 
+              if (typeof data.accessToken !== 'undefined') {
+                context.setUserTokens(data.accessToken);
                 
               }
               else {
                 context.setUserTokens(data.null);
+              }
+              if (typeof data.refreshTokenConfig !== 'undefined') {
+                console.log("setting")
+                context.setRefreshTokenConfig(data.refreshTokenConfig);
+                
+              }
+              else {
+                context.setRefreshTokenTimeout(data.null);
               }
               setAuthorisationFailed(data.login !== true);
             }

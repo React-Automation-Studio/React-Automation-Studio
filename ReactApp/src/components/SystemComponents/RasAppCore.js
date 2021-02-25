@@ -12,7 +12,8 @@ import AutomationStudioContext from './AutomationStudioContext';
 import { io } from 'socket.io-client';
 import RasCssBaseline from './RasCssBaseline';
 import PropTypes from 'prop-types';
-
+// import RedirectToLogIn from './RedirectToLogin';
+import { Redirect } from 'react-router-dom';
 
 
 
@@ -67,6 +68,12 @@ class RasAppCore extends Component {
       this.setState({ system: system, theme: theme })
       localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
     }
+    this.setRefreshTokenConfig = (config) => {
+      let system = this.state.system;
+      system.refreshTokenConfig = config;
+      localStorage.setItem('refreshTokenConfig', JSON.stringify(config));
+      this.setState({ system: system })
+    }
     this.setUserTokens = (accessToken) => {
 
       let system = this.state.system;
@@ -74,7 +81,7 @@ class RasAppCore extends Component {
         accessToken: accessToken,
       };
       system.userTokens = userTokens;
-      localStorage.setItem('jwt', JSON.stringify(userTokens.accessToken))
+     // localStorage.setItem('jwt', JSON.stringify(userTokens.accessToken))
       if (system.socket.disconnected) {
         system.socket.open();
 
@@ -95,7 +102,7 @@ class RasAppCore extends Component {
         username: username,
         roles: roles,
         loggedIn: true,
-        loggingIn:false,
+        loggingIn: false,
       };
       system.userData = userData;
 
@@ -108,16 +115,17 @@ class RasAppCore extends Component {
         username: '',
         roles: [],
         loggedIn: false,
-        loggingIn:false,
+        loggingIn: false,
       };
       let userTokens = { accessToken: "unauthenticated" };
       system.userData = userData;
       system.userTokens = userTokens;
       this.setState({ system: system })
     }
-    this.clearLoggingIn=()=>{
+    this.clearLoggingIn = () => {
+      console.log("clear logging in")
       let system = this.state.system;
-      system.userData.loggingIn=false;
+      system.userData.loggingIn = false;
       this.setState({ system: system })
 
 
@@ -136,18 +144,35 @@ class RasAppCore extends Component {
     let userData = {
       username: '',
       roles: [],
-      loggedIn:false,
-      loggingIn:true,
+      loggedIn: false,
+      loggingIn: true,
     };
-    let jwt =JSON.parse(localStorage.getItem('jwt'));
-    if (jwt===null){
-      jwt='unauthenticated'
-    }
+    // let jwt = JSON.parse(localStorage.getItem('jwt'));
+    // if (jwt === null) {
+    //   jwt = 'unauthenticated'
+    // }
+    // let userTokens = {
+    //   accessToken: jwt
+    // }
     let userTokens = {
-      accessToken:jwt 
+      accessToken: 'unauthenticated'
     }
     let localVariables = {};
-    let system = { socket: socket, changeTheme: this.changeTheme, themeStyles: themeKeys, themeStyle: themeStyle, localVariables: localVariables, updateLocalVariable: this.updateLocalVariable, userData: userData, userTokens: userTokens, setUserTokens: this.setUserTokens, setUserData: this.setUserData, logout: this.logout, enableProbe: true, styleGuideRedirect: true }
+    let system = {
+      socket: socket,
+      changeTheme: this.changeTheme,
+      themeStyles: themeKeys,
+      themeStyle: themeStyle,
+      localVariables: localVariables,
+      updateLocalVariable: this.updateLocalVariable,
+      userData: userData, userTokens: userTokens,
+      setUserTokens: this.setUserTokens,
+      setRefreshTokenConfig: this.setRefreshTokenConfig,
+      setUserData: this.setUserData,
+      logout: this.logout,
+      enableProbe: true,
+      styleGuideRedirect: true
+    }
     this.state = {
       theme: theme,
       system: system,
@@ -160,14 +185,15 @@ class RasAppCore extends Component {
     this.handleConnect = this.handleConnect.bind(this);
 
     this.handleClientAuthorisation = this.handleClientAuthorisation.bind(this);
+    this.handleRedirectToLogIn=this.handleRedirectToLogIn.bind(this);
   }
 
 
   handleConnect() {
 
-    
+
     let jwt = this.state.system.userTokens.accessToken;
-   
+
     if (jwt) {
       let socket = this.state.system.socket;
       socket.emit('AuthoriseClient', jwt);
@@ -176,10 +202,10 @@ class RasAppCore extends Component {
 
   }
   handleClientAuthorisation(msg) {
-    if (msg.successful){
-    this.state.system.setUserData(msg.username, msg.roles);
+    if (msg.successful) {
+      this.state.system.setUserData(msg.username, msg.roles);
     }
-    else{
+    else {
       this.state.system.logout()
     }
     this.setState({ 'Authorised': msg.successful, 'AuthorisationFailed': msg.successful !== true });
@@ -187,16 +213,36 @@ class RasAppCore extends Component {
 
 
   }
-  componentDidMount() {
-    setTimeout(this.state.system.clearLoggingIn, this.props.loginTimeout)
-    let jwt = this.state.system.userTokens.accessToken;
-    if (jwt) {
-      this.setState({ 'redirectToLoginPage': false });
-      let socket = this.state.system.socket;
-      socket.on('clientAuthorisation', this.handleClientAuthorisation);
-      socket.on('connect', this.handleConnect);
+  handleRedirectToLogIn(){
+    console.log('redirectToLogIn')
 
+    //setTimeout(() => {
+      this.state.system.socket.close()
+    this.logout();
+   // this.setState({redirectToLoginPage:true});
+    //      }, 1000)
+  }
+  componentDidMount() {
+    setTimeout(this.clearLoggingIn, this.props.loginTimeout)
+    let refreshTokenConfig = JSON.parse(localStorage.getItem('refreshTokenConfig'));
+    if (refreshTokenConfig !== null) {
+      this.setRefreshTokenConfig(refreshTokenConfig)
+      this.setState({ 'redirectToLoginPage': false });
     }
+    else{
+      this.setState({ 'redirectToLoginPage': true });
+    }
+    let socket = this.state.system.socket;
+    socket.on('redirectToLogIn', this.handleRedirectToLogIn);
+    
+    // let jwt = this.state.system.userTokens.accessToken;
+    // if (jwt) {
+       
+    
+       socket.on('clientAuthorisation', this.handleClientAuthorisation);
+     //  socket.on('connect', this.handleConnect);
+
+    // }
 
 
 
@@ -205,33 +251,37 @@ class RasAppCore extends Component {
     let socket = this.state.system.socket;
     socket.removeListener('connect', this.handleConnect);
     socket.removeListener('clientAuthorisation', this.handleClientAuthorisation);
+    socket.removeListener('redirectToLogIn', this.handleRedirectToLogIn)
   }
   render() {
 
     const { system } = this.state;
-    console.log("loggingIn",system.userData.loggingIn)
-    console.log("loggedIn",system.userData.loggedIn)
+    console.log("loggingIn", system.userData.loggingIn)
+    console.log("loggedIn", system.userData.loggedIn)
+    console.log("refresh token config", system.refreshTokenConfig)
+    console.log("redirect to login",this.state.redirectToLoginPage)
     return (
 
-      <AutomationStudioContext.Provider value={{ ...system }}>
+      <AutomationStudioContext.Provider value={ {...system} }>
         <MuiThemeProvider theme={this.state.theme}>
           <CssBaseline />
           <ReactVisCssBaseline />
           <RasCssBaseline />
           {this.props.children}
+         
         </MuiThemeProvider>
       </AutomationStudioContext.Provider>
     );
   }
 }
 RasAppCore.propTypes = {
-  
+
   /** login Timeout */
   loginTimeout: PropTypes.number,
-  
+
 }
 
 RasAppCore.defaultProps = {
-  loginTimeout:10000
+  loginTimeout: 10000
 }
 export default RasAppCore

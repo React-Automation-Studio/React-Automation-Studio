@@ -54,7 +54,7 @@ const AlarmTable = props => {
 
     useEffect(() => {
         myRef.current.scrollTo(0, 0)
-    }, [props.scrollReset])
+    }, [props.areaSelectedIndex, props.alarmTableSearchString, props.page, props.rowsPerPage])
 
     const { areaAlarms } = props;
 

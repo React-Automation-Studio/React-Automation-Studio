@@ -2110,12 +2110,8 @@ const AlarmSetup = (props) => {
                                         tableItemRightClick={handleTableItemRightClick}
                                         tableRowClick={handleTableRowClick}
                                         fadeTU={fadeTU}
-                                        scrollReset={{
-                                            page: pageAT,
-                                            rowsPerPage: rowsPerPageAT,
-                                            alarmTableSearchString: alarmTableSearchString,
-                                            areaSelectedIndex: areaSelectedIndex
-                                        }}
+                                        page={pageAT}
+                                        rowsPerPage={rowsPerPageAT}
                                     />
                                     : "No data from database"}
                             </AccordionDetails>

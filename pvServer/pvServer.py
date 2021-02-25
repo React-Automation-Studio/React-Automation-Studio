@@ -7,7 +7,7 @@ import pymongo
 import threading
 import uuid
 import flask
-from flask import Flask, render_template, session, request, jsonify, send_from_directory, redirect
+from flask import Flask, render_template, session, request, jsonify, send_from_directory, redirect, make_response
 from flask_socketio import SocketIO, emit, join_room, leave_room, \
     close_room, rooms, disconnect
 from werkzeug.routing import BaseConverter
@@ -23,7 +23,7 @@ from bson.objectid import ObjectId
 sys.path.insert(0, '../')
 sys.path.insert(0, 'userAuthentication/')
 
-from authenticate import  AuthoriseUser,AutheriseUserAndPermissions, LocalAuthenticateUser, ExternalAuthenticateUser, decodeTokenGoogle
+from authenticate import  AuthoriseUser,AutheriseUserAndPermissions, LocalAuthenticateUser, ExternalAuthenticateUser, decodeTokenGoogle, createRefreshToken, createAccessToken
 from dotenv import load_dotenv
 import ldap
 
@@ -64,6 +64,24 @@ print('REACT_APP_EnableGoogleLogin: '+ str(os.environ['REACT_APP_EnableGoogleLog
 REACT_APP_EnableActiveDirectoryLogin=(os.getenv('REACT_APP_EnableActiveDirectoryLogin')=='true')
 REACT_APP_EnableGoogleLogin=(os.getenv('REACT_APP_EnableGoogleLogin')=='true')
 REACT_APP_DisableStandardLogin=(os.getenv('REACT_APP_DisableStandardLogin')=='true')
+try:
+    REFRESH_COOKIE_MAX_AGE_SECS = int(
+        os.environ['REFRESH_COOKIE_MAX_AGE_SECS'])
+except:
+    print('Refresh cookie max age not set - defaulting to 5 seconds')
+    REFRESH_COOKIE_MAX_AGE_SECS = 30
+try:
+    REFRESH_TOKEN_TIMEOUT = int(
+        os.environ['REFRESH_TOKEN_TIMEOUT'])
+except:
+    print('Refresh cookie max age not set - defaulting to 5 seconds')
+    REFRESH_TOKEN_TIMEOUT = 15
+try:
+    STORE_REFRESH_TOKEN_IN_COOKIE = bool(
+        os.environ['STORE_REFRESH_TOKEN_IN_COOKIE'])
+except:
+    print('STORE_REFRESH_TOKEN_IN_COOKIE - False')
+    STORE_REFRESH_TOKEN_IN_COOKIE = False
 
 print("")
 app = flask.Flask(__name__, static_folder="./build/static", template_folder="./build")
@@ -92,6 +110,7 @@ def localLogin():
 
 @app.route('/api/login/ldap', methods=['POST'])
 def ldapLogin():
+    print("request ip:",request.remote_addr)
     global REACT_APP_EnableActiveDirectoryLogin
     if REACT_APP_EnableActiveDirectoryLogin :
         user = request.json.get('user', None)
@@ -112,13 +131,31 @@ def ldapLogin():
                 username=userData['username']
                 roles=userData['roles']
                 jwt=userData['JWT']
-                resp= jsonify({'login': True, 'jwt':jwt,'username':username,'roles':roles})
+                refreshToken=createRefreshToken(username,REFRESH_COOKIE_MAX_AGE_SECS)
+                accessToken=createAccessToken(username,REFRESH_COOKIE_MAX_AGE_SECS,roles)
+                resp= make_response(jsonify({
+                    'login': True, 
+                    'jwt':jwt,
+                    'username':username,
+                    'roles':roles,
+                    'accessToken':accessToken,
+                    'refreshTokenConfig':{
+                    # 'refreshToken':refreshToken,
+                    'refreshTimeout':REFRESH_TOKEN_TIMEOUT,
+                    'useCookie':True,
+                    }
+                    }))
+                resp.set_cookie(key='refreshToken', value=refreshToken, max_age=REFRESH_COOKIE_MAX_AGE_SECS,
+                   secure=True, httponly=True, samesite=None)
                 log.info("User logged in: {} ",username)
                 return resp, 200
             else:
                 log.info("Ldap login failed: {} ",username)
                 jsonify({'login': False}), 401
-        except:
+        except Exception as e:
+            print("Ldap login error",e)
+            print("username",LDAP_USER_DN)
+            print("password",LDAP_USER_PW)
             log.info("Ldap login failed: {} ",LDAP_USER_DN)
             jsonify({'login': False}), 401
             return jsonify({'login': False}), 401
@@ -158,6 +195,20 @@ def googleLogin():
         log.info("Forbiddden google login")
         return jsonify({'login': False}), 401
 
+@app.route('/refresh', methods=['GET'])
+def refresh():
+    refreshToken = request.cookies.get('refreshToken')
+    # jwtValue will be None if cookie expired
+    if(refreshToken):
+        res = make_response({
+            'accessToken': 'jwt'
+        })
+        res.set_cookie(key='refreshToken', value='jwt', max_age=REFRESH_COOKIE_MAX_AGE_SECS,
+                       secure=True, httponly=True, samesite=None)
+    else:
+        res = make_response('session expired')
+        return res, 401
+    return res
 
 
 

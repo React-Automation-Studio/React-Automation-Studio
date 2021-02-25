@@ -7,6 +7,7 @@ import os
 import bcrypt
 from google.oauth2 import id_token
 from google.auth.transport import requests
+from datetime import datetime ,timedelta
 
 def randomString(stringLength=10):
     """Generate a random string of fixed length """
@@ -24,6 +25,7 @@ def loadFileSecretKey(filename):
 SECRET_PWD_KEY = loadFileSecretKey('userAuthentication/users/SECRET_PWD_KEY')
 
 def createJTWUserIDs(UAGS):
+    global SECRET_PWD_KEY
     try:
         users=UAGS['users']
         timestamp=UAGS['timestamp']
@@ -35,6 +37,21 @@ def createJTWUserIDs(UAGS):
     except:
         print("Error Cant load file USERS")
         return None
+
+def createRefreshToken(username,max_age):
+    global SECRET_PWD_KEY
+    now=datetime.utcnow()
+    advanced=timedelta(seconds=max_age)
+    exp=now+advanced
+    refreshToken=str(jwt.encode({'username':username,'exp':exp}, SECRET_PWD_KEY, algorithm='HS256').decode('utf-8'))
+    return refreshToken
+def createAccessToken(username,max_age,roles):
+    global SECRET_PWD_KEY
+    now=datetime.utcnow()
+    advanced=timedelta(seconds=max_age)
+    exp=now+advanced
+    accessToken=str(jwt.encode({'username':username,'exp':exp,'roles':str(roles)}, SECRET_PWD_KEY, algorithm='HS256').decode('utf-8'))
+    return accessToken
 
 def loadPvAccess():
     try:
@@ -97,29 +114,42 @@ def checkUserRole(username):
                         roles.append(role)
     return roles
 
-def AutheriseUserAndPermissions(JWT,pvname):
-    global knownUsers
+def checkUser(username):
+    global UAGS
+    
+    for user in UAGS['users']:
+        print(user)
+        if username==user['username'] :
+            print("found")
+            return True
+
+                
+    return False
+
+def AutheriseUserAndPermissions(encodedJWT,pvname):
+    global SECRET_PWD_KEY, UAGS
     try:
-        if JWT in knownUsers:
-            username=knownUsers[JWT]['username']
-            permissions=checkPermissions(pvname,username)
-            d={'userAuthorised':True,'permissions':permissions}
-            return d
-        else:
-            return {'userAuthorised':False}
+        decoded=jwt.decode(encodedJWT,SECRET_PWD_KEY)
+        username=decoded['username']
+        permissions=checkPermissions(pvname,username)
+        d={'userAuthorised':True,'permissions':permissions}
+        return d
+        
     except:
         return {'userAuthorised':False}
 
-def  AuthoriseUser(JWT):
-    global knownUsers
+def  AuthoriseUser(encodedJWT):
+    global SECRET_PWD_KEY, UAGS
     try:
-        if JWT in knownUsers:
-            username=knownUsers[JWT]['username']
+        decoded=jwt.decode(encodedJWT,SECRET_PWD_KEY)
+        username=decoded['username']
+        if checkUser(username):
             roles=checkUserRole(username)
             return {'authorised':True,'username':username,'roles':roles}
         else:
             return {'authorised':False}
-    except:
+    except Exception as e:
+        print("AuthoriseUser",e)
         return {'authorised':False}
 
 def LocalAuthenticateUser(user):

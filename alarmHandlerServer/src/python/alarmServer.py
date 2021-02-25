@@ -75,12 +75,8 @@ def initPreSuffix():
     global alarmIOCPVPrefix
     global alarmIOCPVSuffix
     doc = dbFindOne("config")
-    try:
-        alarmIOCPVPrefix = doc["alarmIOCPVPrefix"]
-        alarmIOCPVSuffix = doc["alarmIOCPVSuffix"]
-    except:
-        if(AH_DEBUG):
-            print('[Warning]', 'alarmIOCPVPrefix not instantiated')
+    alarmIOCPVPrefix = doc["alarmIOCPVPrefix"]
+    alarmIOCPVSuffix = doc["alarmIOCPVSuffix"]
 
 
 def printVal(**kw):
@@ -442,13 +438,10 @@ def pvDisconn(pvname, conn):
         alarmState = alarmDict[pvname]["A"].value
         disconnAlarm = alarmState != 8
         # status initially 39 char string for memory
-        try:
-            curr_desc = pv.value
-            curr_desc[0] = 'abcdefghijklmnopqrstuvwxyzAbcdefghijk_0'
-        except:
-            if(AH_DEBUG):
-                print('[Warning]', pv.pvname)
-                print('[Warning]', 'Unable to get pv.value or write to curr_desc')
+        curr_desc = [
+            'abcdefghijklmnopqrstuvwxyzAbcdefghijk_0',
+            "[Disconnected]", "[Disconnected]"
+        ]
         pv.put(np.array(curr_desc))
         # set current alarm status to DISCONNECTED
         if(disconnAlarm and (alarmState < 7 or (transparent and alarmState != 7))):

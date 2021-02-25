@@ -1194,7 +1194,7 @@ def pvCollectionWatch():
                         if(not bridgeEvent):
                             bridgeMessage = topArea+" area BRIDGE cleared to area DISABLED"
                             entry = {"timestamp": timestamp,
-                                        "entry": bridgeMessage}
+                                     "entry": bridgeMessage}
                             dbUpdateHistory(topArea, entry)
                         else:
                             bridgeMessage = topArea+" area BRIDGED until "
@@ -1209,7 +1209,7 @@ def pvCollectionWatch():
                         # Time zone localisation
                         bridgeMessage = bridgeMessage+str_time
                         entry = {"timestamp": timestamp,
-                                    "entry": bridgeMessage}
+                                 "entry": bridgeMessage}
                         if(bridgeEvent):
                             dbUpdateHistory(topArea, entry)
                             _thread.start_new_thread(
@@ -1244,7 +1244,7 @@ def pvCollectionWatch():
                         if(not bridgeEvent):
                             bridgeMessage = pvname+" - Alarm BRIDGE cleared to DISABLED"
                             entry = {"timestamp": timestamp,
-                                        "entry": bridgeMessage}
+                                     "entry": bridgeMessage}
                             areaKey = getKeys(pvname)[0]
                             dbUpdateHistory(areaKey, entry, pvname)
                         else:
@@ -1260,7 +1260,7 @@ def pvCollectionWatch():
                         # Time zone localisation
                         bridgeMessage = bridgeMessage+str_time
                         entry = {"timestamp": timestamp,
-                                    "entry": bridgeMessage}
+                                 "entry": bridgeMessage}
                         if(bridgeEvent):
                             areaKey, pvKey = getKeys(pvname)
                             dbUpdateHistory(areaKey, entry, pvname)
@@ -1307,7 +1307,7 @@ def pvCollectionWatch():
                         if(not bridgeEvent):
                             bridgeMessage = areaName+" area BRIDGE cleared to area DISABLED"
                             entry = {"timestamp": timestamp,
-                                        "entry": bridgeMessage}
+                                     "entry": bridgeMessage}
                             dbUpdateHistory(areaKey, entry)
                         else:
                             bridgeMessage = areaName+" area BRIDGED until "
@@ -1323,7 +1323,7 @@ def pvCollectionWatch():
                         # Time zone localisation
                         bridgeMessage = bridgeMessage+str_time
                         entry = {"timestamp": timestamp,
-                                    "entry": bridgeMessage}
+                                 "entry": bridgeMessage}
                         if(bridgeEvent):
                             dbUpdateHistory(areaKey, entry)
                             _thread.start_new_thread(
@@ -1400,7 +1400,7 @@ def globalCollectionWatch():
     with dbGetCollection("glob").watch() as stream:
         for change in stream:
             # print(change)
-            try:
+            if(change["operationType"] == "update"):
                 change = change["updateDescription"]["updatedFields"]
                 timestamp = datetime.now(utc).isoformat()
                 for key in change.keys():
@@ -1417,10 +1417,6 @@ def globalCollectionWatch():
                         # print(timestamp, topArea,
                         #   "area", msg)
                         dbUpdateHistory("_GLOBAL", entry)
-
-            except:
-                if(AH_DEBUG):
-                    print("No relevant global var updates")
 
 
 def main():

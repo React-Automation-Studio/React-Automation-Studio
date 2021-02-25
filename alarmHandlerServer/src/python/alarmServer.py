@@ -1387,6 +1387,13 @@ def pvCollectionWatch():
                 restart = dbGetFieldGlobal("restart")
                 dbSetFieldGlobal("restart", restart*-1)
                 watchRestartAlarmServer = True
+            else:
+                entry = {
+                    "timestamp": timestamp, "entry": "Unknown database edit on the back end, restarting alarm server..."}
+                dbUpdateHistory("_GLOBAL", entry)
+                restart = dbGetFieldGlobal("restart")
+                dbSetFieldGlobal("restart", restart*-1)
+                watchRestartAlarmServer = True
 
 
 def globalCollectionWatch():

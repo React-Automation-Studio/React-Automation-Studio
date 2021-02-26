@@ -13,6 +13,7 @@ import useMongoDbWatch from '../SystemComponents/database/MongoDB/useMongoDbWatc
 import useMongoDbUpdateOne from '../SystemComponents/database/MongoDB/useMongoDbUpdateOne';
 import useMongoDbInsertOne from '../SystemComponents/database/MongoDB/useMongoDbInsertOne';
 import useMongoDbUpdateMany from '../SystemComponents/database/MongoDB/useMongoDbUpdateMany';
+import useMongoDbDeleteOne from '../SystemComponents/database/MongoDB/useMongoDbDeleteOne';
 import Typography from '@material-ui/core/Typography';
 
 import Menu from '@material-ui/core/Menu';
@@ -57,6 +58,7 @@ import EnableDialog from './EnableDialog';
 import RenameDialog from './RenameDialog';
 import AddAreaDialog from './AddAreaDialog';
 import AddSubAreaDialog from './AddSubAreaDialog';
+import DeleteAreaDialog from './DeleteAreaDialog';
 
 import { format, parseISO } from 'date-fns';
 
@@ -286,6 +288,9 @@ const AlarmSetup = (props) => {
     const [addSubAreaData, setAddSubAreaData] = useState({})
     const [lastSubAreaKey, setLastSubAreaKey] = useState({})
 
+    const [deleteAreaDialogOpen, setDeleteAreaDialogOpen] = useState(false)
+    const [deleteAreaDialogData, setDeleteAreaDialogData] = useState({})
+
     const [backdropOpen, setBackDropOpen] = useState(false)
     const [restartId, setRestartId] = useState(undefined)
     const [firstStart, setFirstStart] = useState(true)
@@ -403,6 +408,7 @@ const AlarmSetup = (props) => {
     const dbUpdateOne = useMongoDbUpdateOne({})
     const dbInsertOne = useMongoDbInsertOne({})
     const dbUpdateMany = useMongoDbUpdateMany({})
+    const dbDeleteOne = useMongoDbDeleteOne({})
 
     const [alarmTableHeight, setAlarmTableHeight] = useState('40vh')
     const [alarmLogHeight, setAlarmLogHeight] = useState('32vh')
@@ -1238,6 +1244,19 @@ const AlarmSetup = (props) => {
         setRenameDialogOpen(true)
     }, [])
 
+    const handleDeleteArea = useCallback((event, index) => {
+        const areaName = index.includes("=")
+            ? index.split("=")[1]
+            : index
+        setDeleteAreaDialogData({
+            index: index,
+            areaName: areaName
+        })
+        setAreaContextOpen({})
+        setAlarmAdminListExpand(false)
+        setDeleteAreaDialogOpen(true)
+    }, [])
+
     const handleExecuteRenameArea = useCallback(() => {
         const { index, newName } = renameDialogData
         const id = areaMongoId[index]
@@ -1428,6 +1447,20 @@ const AlarmSetup = (props) => {
         setAlarmLogSelectedName(newLogName)
         setAreaSelectedName(newLogName)
     }, [renameDialogData, areaMongoId, areaSubAreaMongoId, dbUpdateOne, props.dbName, dbUpdateMany])
+
+    const handleExecuteDeleteArea = useCallback(() => {
+        const { index } = deleteAreaDialogData
+        const id = areaMongoId[index]
+        dbDeleteOne({
+            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
+            id: id,
+        })
+        setAreaSelectedIndex('ALLAREAS')
+        setAlarmLogSelectedKey('ALLAREAS')
+        setAlarmLogSelectedName('ALL AREAS')
+        setAreaSelectedName('ALL AREAS')
+        setDeleteAreaDialogOpen(false)
+    }, [deleteAreaDialogData, areaMongoId, dbDeleteOne, props.dbName])
 
     const handleExecuteAddNewSubArea = useCallback(() => {
         const { areaIndex, subArea, areaNextSubAreaKey } = addSubAreaData
@@ -1884,6 +1917,15 @@ const AlarmSetup = (props) => {
                 }}
                 executeAddNewSubArea={handleExecuteAddNewSubArea}
             />
+            <DeleteAreaDialog
+                open={deleteAreaDialogOpen}
+                data={deleteAreaDialogData}
+                handleClose={() => {
+                    setDeleteAreaDialogOpen(false)
+                    setDeleteAreaDialogData({})
+                }}
+                handleDelete={handleExecuteDeleteArea}
+            />
             <Grid
                 container
                 direction="row"
@@ -2007,6 +2049,7 @@ const AlarmSetup = (props) => {
                                             addNewPV={handleAddNewPV}
                                             addNewSubArea={handleAddNewSubArea}
                                             renameArea={handleRenameArea}
+                                            deleteArea={handleDeleteArea}
                                             setAlarmAdminListExpand={setAlarmAdminListExpand}
                                         />
                                         : "No data from database"}

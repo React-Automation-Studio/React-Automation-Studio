@@ -22,6 +22,7 @@ import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import AddIcon from '@material-ui/icons/Add';
 import PlaylistAddOutlinedIcon from '@material-ui/icons/PlaylistAddOutlined';
 import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import { fade } from '@material-ui/core/styles/colorManipulator';
 
@@ -291,6 +292,16 @@ const AlarmList = props => {
                                                                     <EditIcon fontSize="small" />
                                                                 </ListItemIcon>
                                                                 <ListItemText primary="Rename area" />
+                                                            </ListItem>
+                                                            <ListItem
+                                                                button
+                                                                className={classes.nested}
+                                                                onClick={event => props.deleteArea(event, `${area["area"]}`)}
+                                                            >
+                                                                <ListItemIcon >
+                                                                    <DeleteIcon fontSize="small" />
+                                                                </ListItemIcon>
+                                                                <ListItemText primary="Delete area" />
                                                             </ListItem>
                                                         </List>
                                                     </Collapse>

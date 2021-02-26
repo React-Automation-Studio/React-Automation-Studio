@@ -1382,7 +1382,7 @@ def pvCollectionWatch():
                 watchRestartAlarmServer = True
             elif(change["operationType"] == "delete"):
                 entry = {
-                    "timestamp": timestamp, "entry": "Database editted on the back end, restarting alarm server..."}
+                    "timestamp": timestamp, "entry": "Area deleted, restarting alarm server..."}
                 dbUpdateHistory("_GLOBAL", entry)
                 restart = dbGetFieldGlobal("restart")
                 dbSetFieldGlobal("restart", restart*-1)

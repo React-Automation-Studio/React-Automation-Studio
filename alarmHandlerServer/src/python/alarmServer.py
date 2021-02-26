@@ -1195,12 +1195,13 @@ def pvCollectionWatch():
             if(change["operationType"] == "update"):
                 documentKey = change["documentKey"]
                 doc = dbFindOne("pvs", documentKey)
-                change = change["updateDescription"]["updatedFields"]
-                for key in change.keys():
+                # removedFields = change["updateDescription"]["removedFields"]
+                updatedFields = change["updateDescription"]["updatedFields"]
+                for key in updatedFields.keys():
                     # print('#####')
                     # print(key)
                     if(key == "bridge"):
-                        bridgeEvent = change[key]
+                        bridgeEvent = updatedFields[key]
                         topArea = doc.get("area")
                         if(not bridgeEvent):
                             bridgeMessage = topArea+" area BRIDGE cleared to area DISABLED"
@@ -1212,10 +1213,10 @@ def pvCollectionWatch():
                     elif(key == "bridgeTime"):
                         # Time zone localisation
                         if(localtz):
-                            str_time = datetime.fromisoformat(change[key]).astimezone(localtz).strftime(
+                            str_time = datetime.fromisoformat(updatedFields[key]).astimezone(localtz).strftime(
                                 "%d %b %Y %H:%M:%S")
                         else:
-                            str_time = datetime.fromisoformat(change[key]).strftime(
+                            str_time = datetime.fromisoformat(updatedFields[key]).strftime(
                                 "%d %b %Y %H:%M:%S")+" (UTC)"
                         # Time zone localisation
                         bridgeMessage = bridgeMessage+str_time
@@ -1224,7 +1225,7 @@ def pvCollectionWatch():
                         if(bridgeEvent):
                             dbUpdateHistory(topArea, entry)
                             _thread.start_new_thread(
-                                bridgeWatchThread, (topArea, change[key],))
+                                bridgeWatchThread, (topArea, updatedFields[key],))
                     elif(key == "enable"):
                         # area enable
                         topArea = doc.get("area")
@@ -1235,7 +1236,7 @@ def pvCollectionWatch():
                                     areaKey = area
                                     evaluateAreaPVs(areaKey, True)
                         # Log to history
-                        msg = "ENABLED" if change[key] else "DISABLED"
+                        msg = "ENABLED" if updatedFields[key] else "DISABLED"
                         entry = {"timestamp": timestamp, "entry": " ".join(
                             [topArea, "area", msg])}
                         # print(timestamp, topArea,
@@ -1243,7 +1244,7 @@ def pvCollectionWatch():
                         if(not bridgeEvent):
                             dbUpdateHistory(topArea, entry)
                     elif ("pvs." in key and (key.endswith(".bridge"))):
-                        bridgeEvent = change[key]
+                        bridgeEvent = updatedFields[key]
                         pvname = None
                         keys = key.split(".")
                         for one_key in keys:
@@ -1263,10 +1264,10 @@ def pvCollectionWatch():
                     elif ("pvs." in key and (key.endswith(".bridgeTime"))):
                         # Time zone localisation
                         if(localtz):
-                            str_time = datetime.fromisoformat(change[key]).astimezone(localtz).strftime(
+                            str_time = datetime.fromisoformat(updatedFields[key]).astimezone(localtz).strftime(
                                 "%d %b %Y %H:%M:%S")
                         else:
-                            str_time = datetime.fromisoformat(change[key]).strftime(
+                            str_time = datetime.fromisoformat(updatedFields[key]).strftime(
                                 "%d %b %Y %H:%M:%S")+" (UTC)"
                         # Time zone localisation
                         bridgeMessage = bridgeMessage+str_time
@@ -1281,7 +1282,7 @@ def pvCollectionWatch():
                             else:
                                 subAreaKey = None
                             _thread.start_new_thread(
-                                bridgeWatchThread, (areaKey, change[key], subAreaKey, pvKey,))
+                                bridgeWatchThread, (areaKey, updatedFields[key], subAreaKey, pvKey,))
                     elif ("pvs." in key and (key.endswith(".enable") or key.endswith(".latch") or key.endswith(".notify"))):
                         # pv enable/latch/notify
                         # print("enable/latch/notify of pv changed!")
@@ -1298,11 +1299,11 @@ def pvCollectionWatch():
                             evaluateAreaPVs(areaKey, True)
                         # Log to history
                         if(key.endswith(".enable")):
-                            msg = "ENABLED" if change[key] else "DISABLED"
+                            msg = "ENABLED" if updatedFields[key] else "DISABLED"
                         elif(key.endswith(".latch")):
-                            msg = "latch ENABLED" if change[key] else "latch DISABLED"
+                            msg = "latch ENABLED" if updatedFields[key] else "latch DISABLED"
                         elif(key.endswith(".notify")):
-                            msg = "notify ENABLED" if change[key] else "notify DISABLED"
+                            msg = "notify ENABLED" if updatedFields[key] else "notify DISABLED"
                         entry = {"timestamp": timestamp, "entry": " ".join(
                             [pvname, '-', "Alarm", msg])}
                         # print(timestamp, pvname,
@@ -1311,7 +1312,7 @@ def pvCollectionWatch():
                             dbUpdateHistory(areaKey, entry, pvname)
                     elif (key.endswith(".bridge")):
                         # subArea bridge
-                        bridgeEvent = change[key]
+                        bridgeEvent = updatedFields[key]
                         areaKey = doc.get("area") + "=" + doc.get(
                             key.split(".")[0])["name"]
                         areaName = areaKey.replace("=", " > ")
@@ -1326,10 +1327,10 @@ def pvCollectionWatch():
                         # subArea bridgeTime
                         # Time zone localisation
                         if(localtz):
-                            str_time = datetime.fromisoformat(change[key]).astimezone(localtz).strftime(
+                            str_time = datetime.fromisoformat(updatedFields[key]).astimezone(localtz).strftime(
                                 "%d %b %Y %H:%M:%S")
                         else:
-                            str_time = datetime.fromisoformat(change[key]).strftime(
+                            str_time = datetime.fromisoformat(updatedFields[key]).strftime(
                                 "%d %b %Y %H:%M:%S")+" (UTC)"
                         # Time zone localisation
                         bridgeMessage = bridgeMessage+str_time
@@ -1338,7 +1339,7 @@ def pvCollectionWatch():
                         if(bridgeEvent):
                             dbUpdateHistory(areaKey, entry)
                             _thread.start_new_thread(
-                                bridgeWatchThread, (areaKey, change[key], key.split(".")[0],))
+                                bridgeWatchThread, (areaKey, updatedFields[key], key.split(".")[0],))
                     elif (key.endswith(".enable")):
                         # subArea enable
                         areaKey = doc.get("area") + "=" + doc.get(
@@ -1346,7 +1347,7 @@ def pvCollectionWatch():
                         # print(areaKey, "area enable changed!")
                         evaluateAreaPVs(areaKey, True)
                         # Log to history
-                        msg = "ENABLED" if change[key] else "DISABLED"
+                        msg = "ENABLED" if updatedFields[key] else "DISABLED"
                         entry = {"timestamp": timestamp, "entry": " ".join(
                             [areaKey.replace("=", " > "), "sub area", msg])}
                         # print(timestamp, areaKey.replace("=", " > "),
@@ -1365,10 +1366,10 @@ def pvCollectionWatch():
                     elif (key.endswith(".pvs")):
                         # New pvs added subArea
                         topArea = docIDDict[documentKey["_id"]]
-                        areaKey = list(change.keys())[0].split(".")[0]
+                        areaKey = list(updatedFields.keys())[0].split(".")[0]
                         subAreaName = subAreaKeyDict[topArea+"="+areaKey]
                         entry = {
-                            "timestamp": timestamp, "entry": " ".join(["New pvs added to area", topArea,">",subAreaName, ", restarting alarm server..."])}
+                            "timestamp": timestamp, "entry": " ".join(["New pvs added to area", topArea, ">", subAreaName, ", restarting alarm server..."])}
                         dbUpdateHistory("_GLOBAL", entry)
                         restart = dbGetFieldGlobal("restart")
                         dbSetFieldGlobal("restart", restart*-1)
@@ -1376,7 +1377,7 @@ def pvCollectionWatch():
                     elif (key == "area"):
                         # Area name change
                         oldName = docIDDict[documentKey["_id"]]
-                        newName = change['area']
+                        newName = updatedFields['area']
                         entry = {
                             "timestamp": timestamp, "entry": " ".join(["Area name changed from ", oldName, "to", newName, ", restarting alarm server..."])}
                         dbUpdateHistory("_GLOBAL", entry)
@@ -1386,9 +1387,9 @@ def pvCollectionWatch():
                     elif (key.endswith(".name")):
                         # subArea name change
                         topArea = docIDDict[documentKey["_id"]]
-                        areaKey = list(change.keys())[0].split(".")[0]
+                        areaKey = list(updatedFields.keys())[0].split(".")[0]
                         oldName = subAreaKeyDict[topArea+"="+areaKey]
-                        newName = list(change.values())[0]
+                        newName = list(updatedFields.values())[0]
                         entry = {
                             "timestamp": timestamp, "entry": " ".join(["SubArea of", topArea, "name changed from ", oldName, "to", newName, ", restarting alarm server..."])}
                         dbUpdateHistory("_GLOBAL", entry)
@@ -1398,31 +1399,31 @@ def pvCollectionWatch():
                     elif(bool(re.search(r"^subArea\d+$", key))):
                         # New subArea added
                         topArea = docIDDict[documentKey["_id"]]
-                        newSubArea = change[key]["name"]
+                        newSubArea = updatedFields[key]["name"]
                         entry = {
                             "timestamp": timestamp, "entry": " ".join(["New subArea", newSubArea, "added to area", topArea, ", restarting alarm server..."])}
                         dbUpdateHistory("_GLOBAL", entry)
                         restart = dbGetFieldGlobal("restart")
                         dbSetFieldGlobal("restart", restart*-1)
                         watchRestartAlarmServer = True
-            elif(change["operationType"] == "replace"):
-                replacedArea = docIDDict[change["fullDocument"]["_id"]]
+            elif(updatedFields["operationType"] == "replace"):
+                replacedArea = docIDDict[updatedFields["fullDocument"]["_id"]]
                 entry = {
                     "timestamp": timestamp, "entry": " ".join(["Area", replacedArea, "editted in the database, restarting alarm server..."])}
                 dbUpdateHistory("_GLOBAL", entry)
                 restart = dbGetFieldGlobal("restart")
                 dbSetFieldGlobal("restart", restart*-1)
                 watchRestartAlarmServer = True
-            elif(change["operationType"] == "insert"):
-                newArea = change["fullDocument"]["area"]
+            elif(updatedFields["operationType"] == "insert"):
+                newArea = updatedFields["fullDocument"]["area"]
                 entry = {
                     "timestamp": timestamp, "entry": " ".join(["New area", newArea, "added, restarting alarm server..."])}
                 dbUpdateHistory("_GLOBAL", entry)
                 restart = dbGetFieldGlobal("restart")
                 dbSetFieldGlobal("restart", restart*-1)
                 watchRestartAlarmServer = True
-            elif(change["operationType"] == "delete"):
-                deletedArea = docIDDict[change["documentKey"]["_id"]]
+            elif(updatedFields["operationType"] == "delete"):
+                deletedArea = docIDDict[updatedFields["documentKey"]["_id"]]
                 entry = {
                     "timestamp": timestamp, "entry": " ".join(["Area", deletedArea, "deleted, restarting alarm server..."])}
                 dbUpdateHistory("_GLOBAL", entry)

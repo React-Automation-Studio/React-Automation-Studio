@@ -68,14 +68,20 @@ try:
     REFRESH_COOKIE_MAX_AGE_SECS = int(
         os.environ['REFRESH_COOKIE_MAX_AGE_SECS'])
 except:
-    print('Refresh cookie max age not set - defaulting to 5 seconds')
-    REFRESH_COOKIE_MAX_AGE_SECS = 30
+    print('Refresh cookie max age not set - defaulting to 1 week seconds')
+    REFRESH_COOKIE_MAX_AGE_SECS =604800
+try:
+    ACCESS_TOKEN_MAX_AGE_SECS = int(
+        os.environ['ACCESS_TOKEN_MAX_AGE_SECS'])
+except:
+    print('Access token max age not set - defaulting to 30 seconds')
+    ACCESS_TOKEN_MAX_AGE_SECS = 300
 try:
     REFRESH_TOKEN_TIMEOUT = int(
         os.environ['REFRESH_TOKEN_TIMEOUT'])
 except:
-    print('Refresh cookie max age not set - defaulting to 5 seconds')
-    REFRESH_TOKEN_TIMEOUT = 15
+    print('Refresh cookie max age not set - defaulting to 15 seconds')
+    REFRESH_TOKEN_TIMEOUT = 60
 try:
     STORE_REFRESH_TOKEN_IN_COOKIE = bool(
         os.environ['STORE_REFRESH_TOKEN_IN_COOKIE'])
@@ -83,11 +89,63 @@ except:
     print('STORE_REFRESH_TOKEN_IN_COOKIE - False')
     STORE_REFRESH_TOKEN_IN_COOKIE = False
 
+
+
 print("")
 app = flask.Flask(__name__, static_folder="./build/static", template_folder="./build")
 app.url_map.converters['regex'] = RegexConverter
 
 CORS(app)
+
+@app.route('/api/logout', methods=['GET'])
+def logout():
+    res = make_response(jsonify({"logout":True}))
+    res.set_cookie('refreshToken', '', max_age=0)
+    return res,200
+
+
+
+def createLoginReponse(userData):
+    global REFRESH_COOKIE_MAX_AGE_SECS, ACCESS_TOKEN_MAX_AGE_SECS, REFRESH_TOKEN_TIMEOUT
+    if (userData is None):
+        log.info("Unknown user login: {} ",user['username'])
+        return jsonify({'login': False}), 401
+    username=userData['username']
+    roles=userData['roles']
+    refreshToken=createRefreshToken(username,REFRESH_COOKIE_MAX_AGE_SECS)
+    accessToken=createAccessToken(username,ACCESS_TOKEN_MAX_AGE_SECS,roles)
+    resp= make_response(jsonify({
+        'login': True, 
+        'username':username,
+        'roles':roles,
+        'accessToken':accessToken,
+        'refreshTokenConfig':{
+        # 'refreshToken':refreshToken,
+        'refreshTimeout':REFRESH_TOKEN_TIMEOUT,
+        'useCookie':True,
+        }
+        }))
+    resp.set_cookie(key='refreshToken', value=refreshToken, max_age=REFRESH_COOKIE_MAX_AGE_SECS,
+        secure=True, httponly=True, samesite=None)
+    return resp, 200
+
+@app.route('/api/refresh', methods=['GET'])
+def refresh():
+    refreshToken = request.cookies.get('refreshToken')
+    print("refreshToken",refreshToken)
+    if not (refreshToken is None):
+        print("in ifrefreshToken",refreshToken)
+        userData=AuthoriseUser(refreshToken)
+        print("userData",userData)
+        if userData['authorised']:
+            resp=createLoginReponse(userData)
+            return resp
+        else:
+            return jsonify({'login': False}), 401
+    else:
+        return jsonify({'login': False}), 401
+
+
 
 @app.route('/api/login/local', methods=['POST'])
 def localLogin():
@@ -95,15 +153,8 @@ def localLogin():
     if not REACT_APP_DisableStandardLogin:
         user = request.json.get('user', None)
         userData=LocalAuthenticateUser(user)
-        if (userData is None):
-            log.info("Unknown user login: {} ",user['username'])
-            return jsonify({'login': False}), 401
-        username=userData['username']
-        roles=userData['roles']
-        jwt=userData['JWT']
-        resp= jsonify({'login': True, 'jwt':jwt,'username':username,'roles':roles})
-        log.info("User logged in: {} ",username)
-        return resp, 200
+        resp=createLoginReponse(userData)
+        return resp
     else:
        log.info("Standard login not allowed: {} ",user['username'])
        return jsonify({'login': False}), 401 
@@ -125,30 +176,9 @@ def ldapLogin():
             if con.result():
             
                 userData=ExternalAuthenticateUser(user)
-                if (userData is None):
-                    log.info("Unknown user login: {} ",user['username'])
-                    return jsonify({'login': False}), 401
-                username=userData['username']
-                roles=userData['roles']
-                jwt=userData['JWT']
-                refreshToken=createRefreshToken(username,REFRESH_COOKIE_MAX_AGE_SECS)
-                accessToken=createAccessToken(username,REFRESH_COOKIE_MAX_AGE_SECS,roles)
-                resp= make_response(jsonify({
-                    'login': True, 
-                    'jwt':jwt,
-                    'username':username,
-                    'roles':roles,
-                    'accessToken':accessToken,
-                    'refreshTokenConfig':{
-                    # 'refreshToken':refreshToken,
-                    'refreshTimeout':REFRESH_TOKEN_TIMEOUT,
-                    'useCookie':True,
-                    }
-                    }))
-                resp.set_cookie(key='refreshToken', value=refreshToken, max_age=REFRESH_COOKIE_MAX_AGE_SECS,
-                   secure=True, httponly=True, samesite=None)
-                log.info("User logged in: {} ",username)
-                return resp, 200
+                resp=createLoginReponse(userData)
+                return resp
+
             else:
                 log.info("Ldap login failed: {} ",username)
                 jsonify({'login': False}), 401
@@ -177,15 +207,8 @@ def googleLogin():
             if decoded:
                 if decoded['email'] and (decoded['email_verified']==True):
                     userData=ExternalAuthenticateUser({'username':decoded['email']})
-                    if (userData is None):
-                        log.info("Unknown user login: {} ",decoded['email'])
-                        return jsonify({'login': False}), 401
-                    username=userData['username']
-                    roles=userData['roles']
-                    jwt=userData['JWT']
-                    resp= jsonify({'login': True, 'jwt':jwt,'username':username,'roles':roles})
-                    log.info("User logged in: {} ",username)
-                    return resp, 200
+                    resp=createLoginReponse(userData)
+                    return resp
         else :
             return jsonify({'login': False}), 401
         
@@ -195,20 +218,7 @@ def googleLogin():
         log.info("Forbiddden google login")
         return jsonify({'login': False}), 401
 
-@app.route('/refresh', methods=['GET'])
-def refresh():
-    refreshToken = request.cookies.get('refreshToken')
-    # jwtValue will be None if cookie expired
-    if(refreshToken):
-        res = make_response({
-            'accessToken': 'jwt'
-        })
-        res.set_cookie(key='refreshToken', value='jwt', max_age=REFRESH_COOKIE_MAX_AGE_SECS,
-                       secure=True, httponly=True, samesite=None)
-    else:
-        res = make_response('session expired')
-        return res, 401
-    return res
+
 
 
 

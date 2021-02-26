@@ -10,9 +10,17 @@ const ProtectedRoute=(props)=>{
     let loggedIn = context.userData.loggedIn || process.env.REACT_APP_EnableLogin !== 'true';
     return(
      
-         <Route  path={props.path}  render={()=>( 
-          loggedIn?<Component />:(loggingIn?<BusyLoggingIn/>:<Redirect to="/logIn" />)
-          )}/>
+        //  <Route  path={props.path}  render={()=>( 
+        //   loggedIn?<Component />:(loggingIn?<BusyLoggingIn/>:<Redirect to="/logIn" />)
+        //   )}/>
+        <Route  path={props.path}  >
+
+        {     
+        (routeProps) => (
+        loggedIn?<Component {...routeProps}/>:(loggingIn?<BusyLoggingIn/>:<Redirect to="/logIn" />)
+        )
+        }
+      </Route>
         
     )
 }

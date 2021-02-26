@@ -70,6 +70,7 @@ areaPVDict = {}
 frontEndConnDict = {}
 
 docIDDict = {}
+subAreaKeyDict = {}
 
 
 def initPreSuffix():
@@ -776,6 +777,7 @@ def initPVDict():
     global areaDict
     global subAreaDict
     global docIDDict
+    global subAreaKeyDict
     # loop through each document = area
     for area in dbGetCollection("pvs").find():
         docIDDict[area["_id"]] = area["area"]
@@ -794,6 +796,7 @@ def initPVDict():
                     areaDict[areaName + "=" + pvKey] = area[key][pvKey]["name"]
             if ("subArea" in key):
                 subAreaDict[areaName + "=" + area[key]["name"]] = key
+                subAreaKeyDict[areaName+"="+key] = area[key]["name"]
                 initSubPVDict(area[key], areaName)
 
 
@@ -1079,6 +1082,10 @@ def clearGlobalDicts():
     alarmDict.clear()
     global frontEndConnDict
     frontEndConnDict.clear()
+    global docIDDict
+    docIDDict.clear()
+    global subAreaKeyDict
+    subAreaKeyDict.clear()
 
 
 def restartAlarmServer():
@@ -1183,7 +1190,7 @@ def pvCollectionWatch():
     with dbGetCollection("pvs").watch() as stream:
         for change in stream:
             # os.system('cls' if os.name == 'nt' else 'clear')
-            print(change)
+            # print(change)
             timestamp = datetime.now(utc).isoformat()
             if(change["operationType"] == "update"):
                 documentKey = change["documentKey"]
@@ -1346,18 +1353,44 @@ def pvCollectionWatch():
                         #       "sub area", msg)
                         if(not bridgeEvent):
                             dbUpdateHistory(areaKey, entry)
-                    elif (key == "pvs" or key.endswith(".pvs")):
-                        # New pvs added
+                    elif (key == "pvs"):
+                        # New pvs added area
+                        topArea = docIDDict[documentKey["_id"]]
                         entry = {
-                            "timestamp": timestamp, "entry": "New pvs added, restarting alarm server..."}
+                            "timestamp": timestamp, "entry": " ".join(["New pvs added to area", topArea, ", restarting alarm server..."])}
                         dbUpdateHistory("_GLOBAL", entry)
                         restart = dbGetFieldGlobal("restart")
                         dbSetFieldGlobal("restart", restart*-1)
                         watchRestartAlarmServer = True
-                    elif (key == "area" or key.endswith(".name")):
-                        # Name change
+                    elif (key.endswith(".pvs")):
+                        # New pvs added subArea
+                        topArea = docIDDict[documentKey["_id"]]
+                        areaKey = list(change.keys())[0].split(".")[0]
+                        subAreaName = subAreaKeyDict[topArea+"="+areaKey]
                         entry = {
-                            "timestamp": timestamp, "entry": "Area name changed, restarting alarm server..."}
+                            "timestamp": timestamp, "entry": " ".join(["New pvs added to area", topArea,">",subAreaName, ", restarting alarm server..."])}
+                        dbUpdateHistory("_GLOBAL", entry)
+                        restart = dbGetFieldGlobal("restart")
+                        dbSetFieldGlobal("restart", restart*-1)
+                        watchRestartAlarmServer = True
+                    elif (key == "area"):
+                        # Area name change
+                        oldName = docIDDict[documentKey["_id"]]
+                        newName = change['area']
+                        entry = {
+                            "timestamp": timestamp, "entry": " ".join(["Area name changed from ", oldName, "to", newName, ", restarting alarm server..."])}
+                        dbUpdateHistory("_GLOBAL", entry)
+                        restart = dbGetFieldGlobal("restart")
+                        dbSetFieldGlobal("restart", restart*-1)
+                        watchRestartAlarmServer = True
+                    elif (key.endswith(".name")):
+                        # subArea name change
+                        topArea = docIDDict[documentKey["_id"]]
+                        areaKey = list(change.keys())[0].split(".")[0]
+                        oldName = subAreaKeyDict[topArea+"="+areaKey]
+                        newName = list(change.values())[0]
+                        entry = {
+                            "timestamp": timestamp, "entry": " ".join(["SubArea of", topArea, "name changed from ", oldName, "to", newName, ", restarting alarm server..."])}
                         dbUpdateHistory("_GLOBAL", entry)
                         restart = dbGetFieldGlobal("restart")
                         dbSetFieldGlobal("restart", restart*-1)

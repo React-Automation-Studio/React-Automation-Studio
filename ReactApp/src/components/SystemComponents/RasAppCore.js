@@ -13,7 +13,8 @@ import { io } from 'socket.io-client';
 import RasCssBaseline from './RasCssBaseline';
 import PropTypes from 'prop-types';
 // import RedirectToLogIn from './RedirectToLogin';
-import { Redirect } from 'react-router-dom';
+
+import axios from 'axios';
 
 
 
@@ -110,17 +111,36 @@ class RasAppCore extends Component {
     }
     this.logout = () => {
       localStorage.removeItem('jwt');
-      let system = this.state.system;
-      let userData = {
-        username: '',
-        roles: [],
-        loggedIn: false,
-        loggingIn: false,
-      };
-      let userTokens = { accessToken: "unauthenticated" };
-      system.userData = userData;
-      system.userTokens = userTokens;
-      this.setState({ system: system })
+      axios.get('/api/logout')
+        .then(response=> {
+          // handle success
+          console.log(response);
+          let system = this.state.system;
+          let userData = {
+            username: '',
+            roles: [],
+            loggedIn: false,
+            loggingIn: false,
+          };
+          let userTokens = { accessToken: "unauthenticated" };
+          system.userData = userData;
+          system.userTokens = userTokens;
+          this.setState({ system: system })
+
+        })
+        .catch((error)=> {
+          // handle error
+          console.log(error);
+          this.handleRedirectToLogIn()
+        })
+        .then(function () {
+          // always executed
+        });
+          
+    
+    
+        
+    
     }
     this.clearLoggingIn = () => {
       console.log("clear logging in")
@@ -186,6 +206,8 @@ class RasAppCore extends Component {
 
     this.handleClientAuthorisation = this.handleClientAuthorisation.bind(this);
     this.handleRedirectToLogIn=this.handleRedirectToLogIn.bind(this);
+    this.getInitialRefreshToken=this.getInitialRefreshToken.bind(this);
+    this.getRefreshToken=this.getRefreshToken.bind(this);
   }
 
 
@@ -222,16 +244,64 @@ class RasAppCore extends Component {
    // this.setState({redirectToLoginPage:true});
     //      }, 1000)
   }
-  componentDidMount() {
-    setTimeout(this.clearLoggingIn, this.props.loginTimeout)
+
+  
+
+  getRefreshToken(){
+    axios.get('/api/refresh')
+    .then(response=> {
+      // handle success
+      console.log(response);
+      const { data } = response;
+      if (typeof data.accessToken !== 'undefined') {
+        this.state.system.setUserTokens(data.accessToken);
+        
+      }
+      else {
+        this.state.system.setUserTokens(data.null);
+      }
+      if (typeof data.refreshTokenConfig !== 'undefined') {
+        console.log("setting")
+        this.state.system.setRefreshTokenConfig(data.refreshTokenConfig);
+        const timer = setTimeout(this.getRefreshToken,data.refreshTokenConfig.refreshTimeout*1000)
+        this.setState({refreshTimer:timer})
+      }
+      else {
+        this.state.system.setRefreshTokenTimeout(data.null);
+      }
+    })
+    .catch((error)=> {
+      // handle error
+      console.log(error);
+      this.handleRedirectToLogIn()
+    })
+    .then(function () {
+      // always executed
+    });
+      this.setState({ 'redirectToLoginPage': false });
+
+
+    }
+   
+
+  
+  getInitialRefreshToken(){
     let refreshTokenConfig = JSON.parse(localStorage.getItem('refreshTokenConfig'));
     if (refreshTokenConfig !== null) {
       this.setRefreshTokenConfig(refreshTokenConfig)
-      this.setState({ 'redirectToLoginPage': false });
+      this.getRefreshToken();
     }
     else{
       this.setState({ 'redirectToLoginPage': true });
     }
+
+    
+    
+
+  }
+  componentDidMount() {
+    setTimeout(this.clearLoggingIn, this.props.loginTimeout)
+    this.getInitialRefreshToken();
     let socket = this.state.system.socket;
     socket.on('redirectToLogIn', this.handleRedirectToLogIn);
     
@@ -252,6 +322,9 @@ class RasAppCore extends Component {
     socket.removeListener('connect', this.handleConnect);
     socket.removeListener('clientAuthorisation', this.handleClientAuthorisation);
     socket.removeListener('redirectToLogIn', this.handleRedirectToLogIn)
+    if (this.state.refreshTimer){
+      clearTimeout(this.state.refreshTimer)
+    }
   }
   render() {
 

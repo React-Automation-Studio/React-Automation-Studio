@@ -398,6 +398,16 @@ const AlarmList = props => {
                                                                                                     </ListItemIcon>
                                                                                                     <ListItemText primary="Rename subArea" />
                                                                                                 </ListItem>
+                                                                                                <ListItem
+                                                                                                    button
+                                                                                                    className={classes.nested}
+                                                                                                    onClick={event => props.deleteArea(event, `${area["area"]}=${subArea}`)}
+                                                                                                >
+                                                                                                    <ListItemIcon >
+                                                                                                        <DeleteIcon fontSize="small" />
+                                                                                                    </ListItemIcon>
+                                                                                                    <ListItemText primary="Delete subArea" />
+                                                                                                </ListItem>
                                                                                             </List>
                                                                                         </Collapse>
                                                                                     </div>

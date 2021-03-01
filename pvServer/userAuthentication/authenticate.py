@@ -118,9 +118,9 @@ def checkUser(username):
     global UAGS
     
     for user in UAGS['users']:
-        print(user)
+     #   print(user)
         if username==user['username'] :
-            print("found")
+      #      print("found")
             return True
 
                 
@@ -135,7 +135,9 @@ def AutheriseUserAndPermissions(encodedJWT,pvname):
         d={'userAuthorised':True,'permissions':permissions}
         return d
         
-    except:
+    except Exception as e:
+        #print("AutheriseUserAndPermissions",e)
+        #print("encodedJWT",encodedJWT)
         return {'userAuthorised':False}
 
 def  AuthoriseUser(encodedJWT):

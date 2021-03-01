@@ -1,5 +1,5 @@
 
-import React, { Component } from 'react';
+import React, { Component} from 'react';
 
 
 
@@ -70,13 +70,18 @@ class RasAppCore extends Component {
       localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
     }
     this.setRefreshTokenConfig = (config) => {
+ //     console.log("setRefreshTokenConfig",config)
       let system = this.state.system;
       system.refreshTokenConfig = config;
       localStorage.setItem('refreshTokenConfig', JSON.stringify(config));
-      this.setState({ system: system })
+      const timeout=system.refreshTokenConfig.refreshTimeout*1000;
+     // console.log("timeout",timeout)
+      const timer = setTimeout(this.getRefreshToken,system.refreshTokenConfig.refreshTimeout*1000)
+  
+      this.setState({ system: system,refreshTimer:timer })
     }
     this.setUserTokens = (accessToken) => {
-
+  //    console.log("set User tokens",accessToken)
       let system = this.state.system;
       let userTokens = {
         accessToken: accessToken,
@@ -110,11 +115,12 @@ class RasAppCore extends Component {
       this.setState({ system: system })
     }
     this.logout = () => {
+ //     console.log("This one logged out!")
       localStorage.removeItem('jwt');
       axios.get('/api/logout')
         .then(response=> {
           // handle success
-          console.log(response);
+    //      console.log(response);
           let system = this.state.system;
           let userData = {
             username: '',
@@ -143,7 +149,7 @@ class RasAppCore extends Component {
     
     }
     this.clearLoggingIn = () => {
-      console.log("clear logging in")
+      // console.log("clear logging in")
       let system = this.state.system;
       system.userData.loggingIn = false;
       this.setState({ system: system })
@@ -248,23 +254,25 @@ class RasAppCore extends Component {
   
 
   getRefreshToken(){
+    let d = new Date();
+    let n = d.toTimeString();
+  //  console.log("refreshing at:",n)
     axios.get('/api/refresh')
     .then(response=> {
       // handle success
-      console.log(response);
+      // console.log(response);
       const { data } = response;
       if (typeof data.accessToken !== 'undefined') {
-        this.state.system.setUserTokens(data.accessToken);
+        this.setUserTokens(data.accessToken);
         
       }
       else {
-        this.state.system.setUserTokens(data.null);
+        this.setUserTokens(data.null);
       }
       if (typeof data.refreshTokenConfig !== 'undefined') {
-        console.log("setting")
+        // console.log("setting")
         this.state.system.setRefreshTokenConfig(data.refreshTokenConfig);
-        const timer = setTimeout(this.getRefreshToken,data.refreshTokenConfig.refreshTimeout*1000)
-        this.setState({refreshTimer:timer})
+      
       }
       else {
         this.state.system.setRefreshTokenTimeout(data.null);
@@ -286,10 +294,12 @@ class RasAppCore extends Component {
 
   
   getInitialRefreshToken(){
+   // console.log("get initial refresh token")
     let refreshTokenConfig = JSON.parse(localStorage.getItem('refreshTokenConfig'));
     if (refreshTokenConfig !== null) {
-      this.setRefreshTokenConfig(refreshTokenConfig)
       this.getRefreshToken();
+      // this.setRefreshTokenConfig(refreshTokenConfig)
+      
     }
     else{
       this.setState({ 'redirectToLoginPage': true });
@@ -301,6 +311,7 @@ class RasAppCore extends Component {
   }
   componentDidMount() {
     setTimeout(this.clearLoggingIn, this.props.loginTimeout)
+  //  console.log("mounted")
     this.getInitialRefreshToken();
     let socket = this.state.system.socket;
     socket.on('redirectToLogIn', this.handleRedirectToLogIn);
@@ -329,19 +340,21 @@ class RasAppCore extends Component {
   render() {
 
     const { system } = this.state;
-    console.log("loggingIn", system.userData.loggingIn)
-    console.log("loggedIn", system.userData.loggedIn)
-    console.log("refresh token config", system.refreshTokenConfig)
-    console.log("redirect to login",this.state.redirectToLoginPage)
+    // console.log("loggingIn", system.userData.loggingIn)
+    // console.log("loggedIn", system.userData.loggedIn)
+    // console.log("refresh token config", system.refreshTokenConfig)
+    // console.log("redirect to login",this.state.redirectToLoginPage)
+    
     return (
 
       <AutomationStudioContext.Provider value={ {...system} }>
+
         <MuiThemeProvider theme={this.state.theme}>
           <CssBaseline />
           <ReactVisCssBaseline />
           <RasCssBaseline />
           {this.props.children}
-         
+        
         </MuiThemeProvider>
       </AutomationStudioContext.Provider>
     );

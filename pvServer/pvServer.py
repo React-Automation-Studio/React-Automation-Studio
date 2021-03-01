@@ -132,11 +132,11 @@ def createLoginReponse(userData):
 @app.route('/api/refresh', methods=['GET'])
 def refresh():
     refreshToken = request.cookies.get('refreshToken')
-    print("refreshToken",refreshToken)
+    #print("refreshToken",refreshToken)
     if not (refreshToken is None):
-        print("in ifrefreshToken",refreshToken)
+     #   print("in ifrefreshToken",refreshToken)
         userData=AuthoriseUser(refreshToken)
-        print("userData",userData)
+      #  print("userData",userData)
         if userData['authorised']:
             resp=createLoginReponse(userData)
             return resp

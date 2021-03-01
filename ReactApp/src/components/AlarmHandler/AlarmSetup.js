@@ -788,6 +788,7 @@ const AlarmSetup = (props) => {
         setAlarmAckField(localAlarmAckField)
         setAlarmAckFieldTrig(alarmAckFieldTrig + 1)
         setGlobalContextOpen(false)
+        setAlarmAdminGListExpand(false)
     }, [alarmAckFieldTrig, username])
 
     const handleDisableEnableGlobal = useCallback((value) => {

@@ -1119,6 +1119,16 @@ const AlarmSetup = (props) => {
 
         let newvalues = null
         let subAreaId = null
+
+        // set activeUser
+        newvalues = { '$set': { activeUser: username } }
+        dbUpdateOne({
+            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:glob`,
+            id: globalDocId,
+            update: newvalues
+        })
+        //
+
         // Check if it is a subArea
         if (index.includes("=")) {
             // bridge
@@ -1172,7 +1182,7 @@ const AlarmSetup = (props) => {
 
         setEnableDialogOpen(false)
 
-    }, [enableDialogData, areaMongoId, areaSubAreaMongoId, dbUpdateOne, props.dbName])
+    }, [enableDialogData, areaMongoId, areaSubAreaMongoId, dbUpdateOne, props.dbName, globalDocId, username])
 
 
 

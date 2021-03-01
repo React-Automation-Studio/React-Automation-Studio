@@ -1209,7 +1209,7 @@ def pvCollectionWatch():
                                      "entry": bridgeMessage}
                             dbUpdateHistory(topArea, entry)
                         else:
-                            bridgeMessage = topArea+" area BRIDGED until "
+                            bridgeMessage = activeUser+" BRIDGED area "+topArea+" until "
                     elif(key == "bridgeTime"):
                         # Time zone localisation
                         if(localtz):
@@ -1238,7 +1238,7 @@ def pvCollectionWatch():
                         # Log to history
                         msg = "ENABLED" if updatedFields[key] else "DISABLED"
                         entry = {"timestamp": timestamp, "entry": " ".join(
-                            [topArea, "area", msg])}
+                            [activeUser, msg, "area", topArea])}
                         # print(timestamp, topArea,
                         #   "area", msg)
                         if(not bridgeEvent):

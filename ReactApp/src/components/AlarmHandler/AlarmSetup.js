@@ -215,7 +215,7 @@ const AlarmSetup = (props) => {
 
 
     const [enableAllAreas, setEnableAllAreas] = useState(true)
-    const [enableAllAreasId, setEnableAllAreasId] = useState(null)
+    const [globalDocId, setGlobalDocId] = useState(null)
     const [globalContextOpen, setGlobalContextOpen] = useState(false)
     const [alarmLogSearchString, setAlarmLogSearchString] = useState('')
     const [alarmLogSearchStringStore, setAlarmLogSearchStringStore] = useState('')
@@ -761,7 +761,7 @@ const AlarmSetup = (props) => {
             // ["_id"]["$oid"]
             const data = dbGlobData[0];
             setEnableAllAreas(data["enableAllAreas"])
-            setEnableAllAreasId(data["_id"]["$oid"])
+            setGlobalDocId(data["_id"]["$oid"])
             setRestartId(data["restart"])
         }
     }, [dbGlobData])
@@ -792,7 +792,7 @@ const AlarmSetup = (props) => {
 
     const handleDisableEnableGlobal = useCallback((value) => {
         // console.log(value)
-        const id = enableAllAreasId
+        const id = globalDocId
         const newvalues = { '$set': { "enableAllAreas": value } }
 
         // console.log(newvalues)
@@ -804,7 +804,7 @@ const AlarmSetup = (props) => {
         })
 
         setGlobalContextOpen(false)
-    }, [dbUpdateOne, enableAllAreasId, props.dbName])
+    }, [dbUpdateOne, globalDocId, props.dbName])
 
     const handleIconClick = useCallback((event) => {
         // console.log("right click")
@@ -903,6 +903,16 @@ const AlarmSetup = (props) => {
 
         // Check if it is a subArea
         // console.log(index)
+
+        // set activeUser
+        newvalues = { '$set': { activeUser: username } }
+        dbUpdateOne({
+            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:glob`,
+            id: globalDocId,
+            update: newvalues
+        })
+        //
+
         if (index.includes("=")) {
             const subAreaId = areaSubAreaMongoId[index] + ".pvs." + alarm + "." + field
             newvalues = { '$set': { [subAreaId]: value } }
@@ -920,7 +930,7 @@ const AlarmSetup = (props) => {
             update: newvalues
         })
 
-    }, [areaMongoId, areaSubAreaMongoId, dbUpdateOne, props.dbName])
+    }, [areaMongoId, areaSubAreaMongoId, dbUpdateOne, props.dbName, globalDocId, username])
 
     const handleTableEnableCheck = useCallback((event, areaName, alarm, entryIndex) => {
         // to prevent re render of alarm log table?
@@ -947,6 +957,16 @@ const AlarmSetup = (props) => {
 
         // Check if it is a subArea
         // console.log(index)
+
+        // set activeUser
+        newvalues = { '$set': { activeUser: username } }
+        dbUpdateOne({
+            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:glob`,
+            id: globalDocId,
+            update: newvalues
+        })
+        //
+
         if (index.includes("=")) {
             // bridge
             subAreaId = areaSubAreaMongoId[index] + ".pvs." + alarm + ".bridge"
@@ -1000,7 +1020,7 @@ const AlarmSetup = (props) => {
             })
         }
         setEnableDialogOpen(false)
-    }, [enableDialogData, areaMongoId, areaSubAreaMongoId, dbUpdateOne, props.dbName])
+    }, [enableDialogData, areaMongoId, areaSubAreaMongoId, dbUpdateOne, props.dbName, username, globalDocId])
 
     const handleTableRowClick = useCallback((event, alarmName, index) => {
         event.preventDefault()

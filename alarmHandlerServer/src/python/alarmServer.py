@@ -1260,7 +1260,7 @@ def pvCollectionWatch():
                             areaKey = getKeys(pvname)[0]
                             dbUpdateHistory(areaKey, entry, pvname)
                         else:
-                            bridgeMessage = pvname+" - Alarm BRIDGED until "
+                            bridgeMessage = pvname+" - "+activeUser+" BRIDGED alarm until "
                     elif ("pvs." in key and (key.endswith(".bridgeTime"))):
                         # Time zone localisation
                         if(localtz):

@@ -1658,6 +1658,16 @@ const AlarmSetup = (props) => {
         if (restartAlarmServer) {
             // console.log('newPvs', newPvs)
             let newvalues = {}
+
+            // set activeUser
+            newvalues = { '$set': { activeUser: username } }
+            dbUpdateOne({
+                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:glob`,
+                id: globalDocId,
+                update: newvalues
+            })
+            //
+
             if (subAreaId) {
                 newvalues = { '$set': { [`${subAreaId}.pvs`]: newPvs } }
             }
@@ -1673,7 +1683,7 @@ const AlarmSetup = (props) => {
 
         setAddPVDialogOpen(false)
 
-    }, [dbPVData, newPVInfo, areaMongoId, areaSubAreaMongoId, dbUpdateOne, props.dbName])
+    }, [dbPVData, newPVInfo, areaMongoId, areaSubAreaMongoId, dbUpdateOne, props.dbName, globalDocId, username])
 
     const autoLoadAlarmTable = useCallback(() => {
         const timer = setTimeout(() => {

@@ -1126,6 +1126,8 @@ def restartAlarmServer():
 
     print("Alarm server restarted...")
 
+    dbSetFieldGlobal("restartCount", 0)
+
     alarmDictInitialised = True
     alarmServerRestart = False
 
@@ -1204,8 +1206,8 @@ def pvCollectionWatch():
                     entry = {
                         "timestamp": timestamp, "entry": " ".join([activeUser, "deleted subArea", topArea, ">", subAreaName, ", restarting alarm server..."])}
                     dbUpdateHistory(topArea, entry)
-                    restart = dbGetFieldGlobal("restart")
-                    dbSetFieldGlobal("restart", restart*-1)
+                    restartCount = dbGetFieldGlobal("restartCount")
+                    dbSetFieldGlobal("restartCount", restartCount+1)
                     watchRestartAlarmServer = True
                 else:
                     updatedFields = change["updateDescription"]["updatedFields"]
@@ -1371,8 +1373,8 @@ def pvCollectionWatch():
                             entry = {
                                 "timestamp": timestamp, "entry": " ".join([activeUser, "added new pvs to area", topArea, ", restarting alarm server..."])}
                             dbUpdateHistory(topArea, entry)
-                            restart = dbGetFieldGlobal("restart")
-                            dbSetFieldGlobal("restart", restart*-1)
+                            restartCount = dbGetFieldGlobal("restartCount")
+                            dbSetFieldGlobal("restartCount", restartCount+1)
                             watchRestartAlarmServer = True
                         elif (key.endswith(".pvs")):
                             # New pvs added subArea
@@ -1383,8 +1385,8 @@ def pvCollectionWatch():
                             entry = {
                                 "timestamp": timestamp, "entry": " ".join([activeUser, "added new pvs to subArea", topArea, ">", subAreaName, ", restarting alarm server..."])}
                             dbUpdateHistory(topArea+"="+subAreaName, entry)
-                            restart = dbGetFieldGlobal("restart")
-                            dbSetFieldGlobal("restart", restart*-1)
+                            restartCount = dbGetFieldGlobal("restartCount")
+                            dbSetFieldGlobal("restartCount", restartCount+1)
                             watchRestartAlarmServer = True
                         elif (key == "area"):
                             # Area name change
@@ -1393,8 +1395,8 @@ def pvCollectionWatch():
                             entry = {
                                 "timestamp": timestamp, "entry": " ".join([activeUser, "changed area name from", oldName, "to", newName, ", restarting alarm server..."])}
                             dbUpdateHistory(newName, entry)
-                            restart = dbGetFieldGlobal("restart")
-                            dbSetFieldGlobal("restart", restart*-1)
+                            restartCount = dbGetFieldGlobal("restartCount")
+                            dbSetFieldGlobal("restartCount", restartCount+1)
                             watchRestartAlarmServer = True
                         elif (key.endswith(".name")):
                             # subArea name change
@@ -1406,8 +1408,8 @@ def pvCollectionWatch():
                             entry = {
                                 "timestamp": timestamp, "entry": " ".join([activeUser, "changed name of subArea of", topArea, "from", oldName, "to", newName, ", restarting alarm server..."])}
                             dbUpdateHistory(topArea+"="+newName, entry)
-                            restart = dbGetFieldGlobal("restart")
-                            dbSetFieldGlobal("restart", restart*-1)
+                            restartCount = dbGetFieldGlobal("restartCount")
+                            dbSetFieldGlobal("restartCount", restartCount+1)
                             watchRestartAlarmServer = True
                         elif(bool(re.search(r"^subArea\d+$", key))):
                             # New subArea added
@@ -1416,39 +1418,39 @@ def pvCollectionWatch():
                             entry = {
                                 "timestamp": timestamp, "entry": " ".join([activeUser, "added new subArea", newSubArea, "to area", topArea, ", restarting alarm server..."])}
                             dbUpdateHistory(topArea+"="+newSubArea, entry)
-                            restart = dbGetFieldGlobal("restart")
-                            dbSetFieldGlobal("restart", restart*-1)
+                            restartCount = dbGetFieldGlobal("restartCount")
+                            dbSetFieldGlobal("restartCount", restartCount+1)
                             watchRestartAlarmServer = True
             elif(change["operationType"] == "replace"):
                 replacedArea = docIDDict[change["fullDocument"]["_id"]]
                 entry = {
                     "timestamp": timestamp, "entry": " ".join(["Area", replacedArea, "editted in the database, restarting alarm server..."])}
                 dbUpdateHistory(replacedArea, entry)
-                restart = dbGetFieldGlobal("restart")
-                dbSetFieldGlobal("restart", restart*-1)
+                restartCount = dbGetFieldGlobal("restartCount")
+                dbSetFieldGlobal("restartCount", restartCount+1)
                 watchRestartAlarmServer = True
             elif(change["operationType"] == "insert"):
                 newArea = change["fullDocument"]["area"]
                 entry = {
                     "timestamp": timestamp, "entry": " ".join([activeUser, "added new area", newArea, ", restarting alarm server..."])}
                 dbUpdateHistory(newArea, entry)
-                restart = dbGetFieldGlobal("restart")
-                dbSetFieldGlobal("restart", restart*-1)
+                restartCount = dbGetFieldGlobal("restartCount")
+                dbSetFieldGlobal("restartCount", restartCount+1)
                 watchRestartAlarmServer = True
             elif(change["operationType"] == "delete"):
                 deletedArea = docIDDict[change["documentKey"]["_id"]]
                 entry = {
                     "timestamp": timestamp, "entry": " ".join([activeUser, "deleted area", deletedArea, ", restarting alarm server..."])}
                 dbUpdateHistory("_GLOBAL", entry)
-                restart = dbGetFieldGlobal("restart")
-                dbSetFieldGlobal("restart", restart*-1)
+                restartCount = dbGetFieldGlobal("restartCount")
+                dbSetFieldGlobal("restartCount", restartCount+1)
                 watchRestartAlarmServer = True
             else:
                 entry = {
                     "timestamp": timestamp, "entry": "Unknown database edit, restarting alarm server..."}
                 dbUpdateHistory("_GLOBAL", entry)
-                restart = dbGetFieldGlobal("restart")
-                dbSetFieldGlobal("restart", restart*-1)
+                restartCount = dbGetFieldGlobal("restartCount")
+                dbSetFieldGlobal("restartCount", restartCount+1)
                 watchRestartAlarmServer = True
 
 
@@ -1478,7 +1480,6 @@ def globalCollectionWatch():
                         activeUser = change[key].capitalize()
                         if(activeUser == ''):
                             activeUser = 'Anonymous'
-                        print('activeUser', activeUser)
 
 
 def main():
@@ -1520,7 +1521,7 @@ def main():
 
     # initial set of global collection fields
     # Backwards compatible
-    dbSetFieldGlobal("restart", -1)
+    dbSetFieldGlobal("restartCount", 0)
     dbSetFieldGlobal("activeUser", "")
 
     global alarmDictInitialised

@@ -292,7 +292,7 @@ const AlarmSetup = (props) => {
     const [deleteAreaDialogData, setDeleteAreaDialogData] = useState({})
 
     const [backdropOpen, setBackDropOpen] = useState(false)
-    const [restartId, setRestartId] = useState(undefined)
+    const [restartCount, setRestartCount] = useState(undefined)
     const [firstStart, setFirstStart] = useState(true)
     const [ASRestartProgress, setASRestartProgress] = useState(0)
 
@@ -762,7 +762,7 @@ const AlarmSetup = (props) => {
             const data = dbGlobData[0];
             setEnableAllAreas(data["enableAllAreas"])
             setGlobalDocId(data["_id"]["$oid"])
-            setRestartId(data["restart"])
+            setRestartCount(data["restartCount"])
         }
     }, [dbGlobData])
 
@@ -1966,7 +1966,7 @@ const AlarmSetup = (props) => {
     }, [backdropOpen])
 
     useEffect(() => {
-        if (restartId) {
+        if (restartCount !== undefined) {
             if (firstStart) {
                 setFirstStart(false)
             }
@@ -1976,7 +1976,7 @@ const AlarmSetup = (props) => {
         }
         // disable useEffect dependencies for "firstStart"
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [restartId])
+    }, [restartCount])
 
     // console.log('Top render')
 

@@ -1368,19 +1368,19 @@ const AlarmSetup = (props) => {
                         }]
                     },
                     // Update entry as well for enable/disable area
-                    'entry': {
-                        '$concat': [{
-                            '$arrayElemAt': [{
-                                '$split': ['$entry', `${index.split("=")[1]}`]
-                            }, 0]
-                        },
-                        `${newName}`,
-                        {
-                            '$arrayElemAt': [{
-                                '$split': ['$entry', `${index.split("=")[1]}`]
-                            }, 1]
-                        }]
-                    }
+                    // 'entry': {
+                    //     '$concat': [{
+                    //         '$arrayElemAt': [{
+                    //             '$split': ['$entry', `${index.split("=")[1]}`]
+                    //         }, 0]
+                    //     },
+                    //     `${newName}`,
+                    //     {
+                    //         '$arrayElemAt': [{
+                    //             '$split': ['$entry', `${index.split("=")[1]}`]
+                    //         }, 1]
+                    //     }]
+                    // }
                 }
             }
             dbUpdateMany({
@@ -1461,19 +1461,19 @@ const AlarmSetup = (props) => {
                         }]
                     },
                     // Update entry as well for enable/disable area
-                    'entry': {
-                        '$concat': [{
-                            '$arrayElemAt': [{
-                                '$split': ['$entry', `${index}`]
-                            }, 0]
-                        },
-                        `${newIndex}`,
-                        {
-                            '$arrayElemAt': [{
-                                '$split': ['$entry', `${index}`]
-                            }, 1]
-                        }]
-                    }
+                    // 'entry': {
+                    //     '$concat': [{
+                    //         '$arrayElemAt': [{
+                    //             '$split': ['$entry', `${index}`]
+                    //         }, 0]
+                    //     },
+                    //     `${newIndex}`,
+                    //     {
+                    //         '$arrayElemAt': [{
+                    //             '$split': ['$entry', `${index}`]
+                    //         }, 1]
+                    //     }]
+                    // }
                 }
             }
             dbUpdateMany({

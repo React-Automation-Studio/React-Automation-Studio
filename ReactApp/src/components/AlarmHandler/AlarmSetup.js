@@ -1606,6 +1606,16 @@ const AlarmSetup = (props) => {
     }, [addSubAreaData, areaMongoId, dbUpdateOne, props.dbName, globalDocId, username])
 
     const handleAddNewArea = useCallback(() => {
+
+        // set activeUser
+        const newvalues = { '$set': { activeUser: username } }
+        dbUpdateOne({
+            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:glob`,
+            id: globalDocId,
+            update: newvalues
+        })
+        //
+
         const newEntry = {
             area: addAreaName,
             enable: true,
@@ -1619,7 +1629,7 @@ const AlarmSetup = (props) => {
         })
         setAddAreaDialogOpen(false)
         setAddAreaName('')
-    }, [addAreaName, dbInsertOne, props.dbName])
+    }, [addAreaName, dbInsertOne, props.dbName, dbUpdateOne, globalDocId, username])
 
     const handleAppendNewPVInfo = useCallback(() => {
         setNewPVInfo({

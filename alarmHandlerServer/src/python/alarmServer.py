@@ -1417,7 +1417,7 @@ def pvCollectionWatch():
             elif(change["operationType"] == "insert"):
                 newArea = change["fullDocument"]["area"]
                 entry = {
-                    "timestamp": timestamp, "entry": " ".join(["New area", newArea, "added, restarting alarm server..."])}
+                    "timestamp": timestamp, "entry": " ".join([activeUser, "added new area", newArea, ", restarting alarm server..."])}
                 dbUpdateHistory(newArea, entry)
                 restart = dbGetFieldGlobal("restart")
                 dbSetFieldGlobal("restart", restart*-1)

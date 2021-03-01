@@ -1554,7 +1554,19 @@ const AlarmSetup = (props) => {
     const handleExecuteAddNewSubArea = useCallback(() => {
         const { areaIndex, subArea, areaNextSubAreaKey } = addSubAreaData
         const id = areaMongoId[areaIndex]
-        const newvalues = {
+
+        let newvalues = {}
+
+        // set activeUser
+        newvalues = { '$set': { activeUser: username } }
+        dbUpdateOne({
+            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:glob`,
+            id: globalDocId,
+            update: newvalues
+        })
+        //
+
+        newvalues = {
             '$set': {
                 [`subArea${areaNextSubAreaKey}`]: {
                     name: subArea,
@@ -1571,7 +1583,7 @@ const AlarmSetup = (props) => {
             update: newvalues
         })
         setAddSubAreaDialogOpen(false)
-    }, [addSubAreaData, areaMongoId, dbUpdateOne, props.dbName])
+    }, [addSubAreaData, areaMongoId, dbUpdateOne, props.dbName, globalDocId, username])
 
     const handleAddNewArea = useCallback(() => {
         const newEntry = {

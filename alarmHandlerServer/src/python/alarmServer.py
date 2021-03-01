@@ -1401,7 +1401,7 @@ def pvCollectionWatch():
                         topArea = docIDDict[documentKey["_id"]]
                         newSubArea = updatedFields[key]["name"]
                         entry = {
-                            "timestamp": timestamp, "entry": " ".join(["New subArea", newSubArea, "added to area", topArea, ", restarting alarm server..."])}
+                            "timestamp": timestamp, "entry": " ".join([activeUser, "added new subArea", newSubArea, "to area", topArea, ", restarting alarm server..."])}
                         dbUpdateHistory(topArea+"="+newSubArea, entry)
                         restart = dbGetFieldGlobal("restart")
                         dbSetFieldGlobal("restart", restart*-1)

@@ -1192,10 +1192,9 @@ def pvCollectionWatch():
             # os.system('cls' if os.name == 'nt' else 'clear')
             # print(change)
             timestamp = datetime.now(utc).isoformat()
+            documentKey = change["documentKey"]
+            doc = dbFindOne("pvs", documentKey)
             if(change["operationType"] == "update"):
-                documentKey = change["documentKey"]
-                doc = dbFindOne("pvs", documentKey)
-                # removedFields = change["updateDescription"]["removedFields"]
                 updatedFields = change["updateDescription"]["updatedFields"]
                 for key in updatedFields.keys():
                     # print('#####')
@@ -1359,7 +1358,7 @@ def pvCollectionWatch():
                         topArea = docIDDict[documentKey["_id"]]
                         entry = {
                             "timestamp": timestamp, "entry": " ".join(["New pvs added to area", topArea, ", restarting alarm server..."])}
-                        dbUpdateHistory("_GLOBAL", entry)
+                        dbUpdateHistory(topArea, entry)
                         restart = dbGetFieldGlobal("restart")
                         dbSetFieldGlobal("restart", restart*-1)
                         watchRestartAlarmServer = True
@@ -1370,7 +1369,7 @@ def pvCollectionWatch():
                         subAreaName = subAreaKeyDict[topArea+"="+areaKey]
                         entry = {
                             "timestamp": timestamp, "entry": " ".join(["New pvs added to area", topArea, ">", subAreaName, ", restarting alarm server..."])}
-                        dbUpdateHistory("_GLOBAL", entry)
+                        dbUpdateHistory(topArea+"="+subAreaName, entry)
                         restart = dbGetFieldGlobal("restart")
                         dbSetFieldGlobal("restart", restart*-1)
                         watchRestartAlarmServer = True
@@ -1380,7 +1379,7 @@ def pvCollectionWatch():
                         newName = updatedFields['area']
                         entry = {
                             "timestamp": timestamp, "entry": " ".join(["Area name changed from ", oldName, "to", newName, ", restarting alarm server..."])}
-                        dbUpdateHistory("_GLOBAL", entry)
+                        dbUpdateHistory(newName, entry)
                         restart = dbGetFieldGlobal("restart")
                         dbSetFieldGlobal("restart", restart*-1)
                         watchRestartAlarmServer = True
@@ -1392,7 +1391,7 @@ def pvCollectionWatch():
                         newName = list(updatedFields.values())[0]
                         entry = {
                             "timestamp": timestamp, "entry": " ".join(["SubArea of", topArea, "name changed from ", oldName, "to", newName, ", restarting alarm server..."])}
-                        dbUpdateHistory("_GLOBAL", entry)
+                        dbUpdateHistory(topArea+"="+newName, entry)
                         restart = dbGetFieldGlobal("restart")
                         dbSetFieldGlobal("restart", restart*-1)
                         watchRestartAlarmServer = True
@@ -1402,28 +1401,28 @@ def pvCollectionWatch():
                         newSubArea = updatedFields[key]["name"]
                         entry = {
                             "timestamp": timestamp, "entry": " ".join(["New subArea", newSubArea, "added to area", topArea, ", restarting alarm server..."])}
-                        dbUpdateHistory("_GLOBAL", entry)
+                        dbUpdateHistory(topArea+"="+newSubArea, entry)
                         restart = dbGetFieldGlobal("restart")
                         dbSetFieldGlobal("restart", restart*-1)
                         watchRestartAlarmServer = True
-            elif(updatedFields["operationType"] == "replace"):
-                replacedArea = docIDDict[updatedFields["fullDocument"]["_id"]]
+            elif(change["operationType"] == "replace"):
+                replacedArea = docIDDict[change["fullDocument"]["_id"]]
                 entry = {
                     "timestamp": timestamp, "entry": " ".join(["Area", replacedArea, "editted in the database, restarting alarm server..."])}
-                dbUpdateHistory("_GLOBAL", entry)
+                dbUpdateHistory(replacedArea, entry)
                 restart = dbGetFieldGlobal("restart")
                 dbSetFieldGlobal("restart", restart*-1)
                 watchRestartAlarmServer = True
-            elif(updatedFields["operationType"] == "insert"):
-                newArea = updatedFields["fullDocument"]["area"]
+            elif(change["operationType"] == "insert"):
+                newArea = change["fullDocument"]["area"]
                 entry = {
                     "timestamp": timestamp, "entry": " ".join(["New area", newArea, "added, restarting alarm server..."])}
-                dbUpdateHistory("_GLOBAL", entry)
+                dbUpdateHistory(newArea, entry)
                 restart = dbGetFieldGlobal("restart")
                 dbSetFieldGlobal("restart", restart*-1)
                 watchRestartAlarmServer = True
-            elif(updatedFields["operationType"] == "delete"):
-                deletedArea = docIDDict[updatedFields["documentKey"]["_id"]]
+            elif(change["operationType"] == "delete"):
+                deletedArea = docIDDict[change["documentKey"]["_id"]]
                 entry = {
                     "timestamp": timestamp, "entry": " ".join(["Area", deletedArea, "deleted, restarting alarm server..."])}
                 dbUpdateHistory("_GLOBAL", entry)

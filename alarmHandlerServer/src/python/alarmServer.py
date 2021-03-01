@@ -1425,7 +1425,7 @@ def pvCollectionWatch():
             elif(change["operationType"] == "delete"):
                 deletedArea = docIDDict[change["documentKey"]["_id"]]
                 entry = {
-                    "timestamp": timestamp, "entry": " ".join(["Area", deletedArea, "deleted, restarting alarm server..."])}
+                    "timestamp": timestamp, "entry": " ".join([activeUser, "deleted area", deletedArea, ", restarting alarm server..."])}
                 dbUpdateHistory("_GLOBAL", entry)
                 restart = dbGetFieldGlobal("restart")
                 dbSetFieldGlobal("restart", restart*-1)

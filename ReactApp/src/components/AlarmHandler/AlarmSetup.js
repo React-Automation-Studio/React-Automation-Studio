@@ -1491,11 +1491,21 @@ const AlarmSetup = (props) => {
     const handleExecuteDeleteArea = useCallback(() => {
         const { index } = deleteAreaDialogData
         const id = areaMongoId[index]
+        let newvalues = {}
+
+        // set activeUser
+        newvalues = { '$set': { activeUser: username } }
+        dbUpdateOne({
+            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:glob`,
+            id: globalDocId,
+            update: newvalues
+        })
+        //
+
         if (index.includes("=")) {
             const subAreaId = areaSubAreaMongoId[index]
             const topArea = index.split("=")[0]
             const lastSubAreaId = `subArea${lastSubAreaKey[topArea]}`
-            let newvalues = {}
             if (subAreaId === lastSubAreaId) {
                 // last subArea is to be removed
                 newvalues = { '$unset': { [subAreaId]: "" } }
@@ -1559,7 +1569,7 @@ const AlarmSetup = (props) => {
             setAreaSelectedName('ALL AREAS')
         }
         setDeleteAreaDialogOpen(false)
-    }, [deleteAreaDialogData, areaMongoId, dbDeleteOne, props.dbName, areaSubAreaMongoId, dbPVData, lastSubAreaKey, dbUpdateOne])
+    }, [deleteAreaDialogData, areaMongoId, dbDeleteOne, props.dbName, areaSubAreaMongoId, dbPVData, lastSubAreaKey, dbUpdateOne, globalDocId, username])
 
     const handleExecuteAddNewSubArea = useCallback(() => {
         const { areaIndex, subArea, areaNextSubAreaKey } = addSubAreaData

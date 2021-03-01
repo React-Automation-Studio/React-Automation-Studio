@@ -46,6 +46,7 @@ alarmPVSevDict = {
 alarmIOCPVPrefix = ""
 alarmIOCPVSuffix = ""
 bridgeMessage = ""
+activeUser = ""
 
 notifyTimeout = 0
 
@@ -1439,6 +1440,7 @@ def pvCollectionWatch():
 
 
 def globalCollectionWatch():
+    global activeUser
     with dbGetCollection("glob").watch() as stream:
         for change in stream:
             # print(change)
@@ -1459,6 +1461,11 @@ def globalCollectionWatch():
                         # print(timestamp, topArea,
                         #   "area", msg)
                         dbUpdateHistory("_GLOBAL", entry)
+                    elif(key == "activeUser"):
+                        activeUser = change[key].capitalize()
+                        if(activeUser == ''):
+                            activeUser = 'Anonymous'
+                        print('activeUser', activeUser)
 
 
 def main():
@@ -1498,9 +1505,10 @@ def main():
 
     print("Alarm server running...")
 
-    # initial set of restart field in global collection
+    # initial set of global collection fields
     # Backwards compatible
     dbSetFieldGlobal("restart", -1)
+    dbSetFieldGlobal("activeUser", "")
 
     global alarmDictInitialised
     alarmDictInitialised = True

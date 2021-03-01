@@ -1299,13 +1299,13 @@ def pvCollectionWatch():
                             evaluateAreaPVs(areaKey, True)
                         # Log to history
                         if(key.endswith(".enable")):
-                            msg = "ENABLED" if updatedFields[key] else "DISABLED"
+                            msg = "ENABLED alarm" if updatedFields[key] else "DISABLED alarm"
                         elif(key.endswith(".latch")):
-                            msg = "latch ENABLED" if updatedFields[key] else "latch DISABLED"
+                            msg = "ENABLED alarm latch" if updatedFields[key] else "DISABLED alarm latch"
                         elif(key.endswith(".notify")):
-                            msg = "notify ENABLED" if updatedFields[key] else "notify DISABLED"
+                            msg = "ENABLED alarm notify" if updatedFields[key] else "DISABLED alarm notify"
                         entry = {"timestamp": timestamp, "entry": " ".join(
-                            [pvname, '-', "Alarm", msg])}
+                            [pvname, '-', activeUser, msg])}
                         # print(timestamp, pvname,
                         #       "alarm", msg)
                         if((key.endswith(".enable") and not bridgeEvent) or key.endswith(".latch") or key.endswith(".notify")):

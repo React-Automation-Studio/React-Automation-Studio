@@ -1379,7 +1379,7 @@ def pvCollectionWatch():
                         oldName = docIDDict[documentKey["_id"]]
                         newName = updatedFields['area']
                         entry = {
-                            "timestamp": timestamp, "entry": " ".join(["Area name changed from ", oldName, "to", newName, ", restarting alarm server..."])}
+                            "timestamp": timestamp, "entry": " ".join([activeUser, "changed area name from", oldName, "to", newName, ", restarting alarm server..."])}
                         dbUpdateHistory(newName, entry)
                         restart = dbGetFieldGlobal("restart")
                         dbSetFieldGlobal("restart", restart*-1)
@@ -1391,7 +1391,7 @@ def pvCollectionWatch():
                         oldName = subAreaKeyDict[topArea+"="+areaKey]
                         newName = list(updatedFields.values())[0]
                         entry = {
-                            "timestamp": timestamp, "entry": " ".join(["SubArea of", topArea, "name changed from ", oldName, "to", newName, ", restarting alarm server..."])}
+                            "timestamp": timestamp, "entry": " ".join([activeUser, "changed name of subArea of", topArea, "from", oldName, "to", newName, ", restarting alarm server..."])}
                         dbUpdateHistory(topArea+"="+newName, entry)
                         restart = dbGetFieldGlobal("restart")
                         dbSetFieldGlobal("restart", restart*-1)

@@ -27,6 +27,8 @@ export const useEpicsPV = (props) => {
   const [pv, setPv] = useState(initPV());
   const [pvConnectionId, setPvConnectionId] = useState(null);
   const context = useContext(ReactAutomationStudioContext);
+  const socket = context.socket;
+  const jwt=context.userTokens.accessToken;
 
 
 
@@ -87,16 +89,7 @@ export const useEpicsPV = (props) => {
       setPv(pv => ({ ...pv, initialized: false }))
     }
 
-    const reconnect = () => {
-      if (props.debug) {
-        console.log(pv.pvname, 'client: reconnect');
-      }
-      let socket = context.socket;
-
-
-      let jwt = context.userTokens.accessToken;
-      socket.emit('request_pv_info', { data: pv.pvname, 'clientAuthorisation': jwt });
-    }
+    
     // const handleInitialConnection=()=>{
 
     //   if (pv.initialized===false){
@@ -120,7 +113,7 @@ export const useEpicsPV = (props) => {
     socket.on(pv.pvname, updatePVData);
     socket.on('connect_error', connectError);
     socket.on('disconnect', disconnect);
-    socket.on('connect', reconnect);
+    
 
     return () => {
 
@@ -134,12 +127,28 @@ export const useEpicsPV = (props) => {
       socket.removeListener(pv.pvname, updatePVData);
       socket.removeListener('connect_error', connectError);
       socket.removeListener('disconnect', disconnect);
-      socket.removeListener('connect', reconnect);
+     
 
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  useEffect(()=>{
+    const reconnect = () => {
+      if (props.debug) {
+        console.log(pv.pvname, 'client: reconnect');
+      }
+      let socket = context.socket;
+
+
+      let jwt = context.userTokens.accessToken;
+      socket.emit('request_pv_info', { data: pv.pvname, 'clientAuthorisation': jwt });
+    }
+    socket.on('connect', reconnect);
+    return()=>{
+      socket.removeListener('connect', reconnect);
+    }
+  },[jwt,socket])
   useEffect(() => {
 
     if (props.newValueTrigger > 0) {

@@ -1127,6 +1127,7 @@ def restartAlarmServer():
     print("Alarm server restarted...")
 
     dbSetFieldGlobal("restartCount", 0)
+    dbSetFieldGlobal("activeUser", "")
 
     alarmDictInitialised = True
     alarmServerRestart = False

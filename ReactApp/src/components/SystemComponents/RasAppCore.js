@@ -29,6 +29,7 @@ class RasAppCore extends Component {
     super(props);
 
     let theme = null
+    localStorage.removeItem('logoutFlag');
     let storedThemeStyle = localStorage.getItem('themeStyle')
     console.log(storedThemeStyle)
     const { defaultTheme } = this.props;
@@ -116,7 +117,7 @@ class RasAppCore extends Component {
     }
     this.logout = () => {
  //     console.log("This one logged out!")
-      localStorage.removeItem('jwt');
+      localStorage.removeItem("loggedIn")
       axios.get('/api/logout')
         .then(response=> {
           // handle success
@@ -133,6 +134,7 @@ class RasAppCore extends Component {
           system.userTokens = userTokens;
           this.setState({ system: system })
 
+          localStorage.removeItem('loggedIn');
         })
         .catch((error)=> {
           // handle error
@@ -214,6 +216,7 @@ class RasAppCore extends Component {
     this.handleRedirectToLogIn=this.handleRedirectToLogIn.bind(this);
     this.getInitialRefreshToken=this.getInitialRefreshToken.bind(this);
     this.getRefreshToken=this.getRefreshToken.bind(this);
+    this.handleLocalStorageChange=this.handleLocalStorageChange.bind(this);
   }
 
 
@@ -232,6 +235,7 @@ class RasAppCore extends Component {
   handleClientAuthorisation(msg) {
     if (msg.successful) {
       this.state.system.setUserData(msg.username, msg.roles);
+      localStorage.setItem("loggedIn",'true')
     }
     else {
       this.state.system.logout()
@@ -309,7 +313,22 @@ class RasAppCore extends Component {
     
 
   }
+  handleLocalStorageChange(event){
+    
+    if (event.key=="loggedIn"){
+      if(event.newValue===null){
+        // console.log(event)
+        this.logout();
+      }else if(event.newValue==='true'){
+        this.getInitialRefreshToken();
+      }
+
+      
+      
+    }
+  }
   componentDidMount() {
+    window.addEventListener('storage',this.handleLocalStorageChange)
     setTimeout(this.clearLoggingIn, this.props.loginTimeout)
   //  console.log("mounted")
     this.getInitialRefreshToken();
@@ -329,6 +348,7 @@ class RasAppCore extends Component {
 
   }
   componentWillUnmount() {
+    window.removeEventListener('storage',this.handleLocalStorageChange)
     let socket = this.state.system.socket;
     socket.removeListener('connect', this.handleConnect);
     socket.removeListener('clientAuthorisation', this.handleClientAuthorisation);

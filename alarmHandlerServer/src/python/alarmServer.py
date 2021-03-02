@@ -1473,7 +1473,7 @@ def globalCollectionWatch():
                         # Log to history
                         msg = "ENABLED" if change[key] else "DISABLED"
                         entry = {"timestamp": timestamp, "entry": " ".join(
-                            ["ALL AREAS", msg])}
+                            [activeUser, msg, "ALL AREAS"])}
                         # print(timestamp, topArea,
                         #   "area", msg)
                         dbUpdateHistory("_GLOBAL", entry)

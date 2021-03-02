@@ -804,7 +804,12 @@ const AlarmSetup = (props) => {
     const handleDisableEnableGlobal = useCallback((value) => {
         // console.log(value)
         const id = globalDocId
-        const newvalues = { '$set': { "enableAllAreas": value } }
+        const newvalues = {
+            '$set': {
+                enableAllAreas: value,
+                activeUser: username
+            }
+        }
 
         // console.log(newvalues)
 
@@ -815,7 +820,7 @@ const AlarmSetup = (props) => {
         })
 
         setGlobalContextOpen(false)
-    }, [dbUpdateOne, globalDocId, props.dbName])
+    }, [dbUpdateOne, globalDocId, props.dbName, username])
 
     const handleIconClick = useCallback((event) => {
         // console.log("right click")

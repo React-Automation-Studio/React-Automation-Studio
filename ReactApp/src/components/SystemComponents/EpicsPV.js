@@ -148,6 +148,7 @@ export const useEpicsPV = (props) => {
     return()=>{
       socket.removeListener('connect', reconnect);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[jwt,socket])
   useEffect(() => {
 

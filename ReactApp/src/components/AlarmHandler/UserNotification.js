@@ -132,6 +132,7 @@ const UserNotification = (props) => {
     const [alarmPVDict, setAlarmPVDict] = useState({})
     const [backupUserList, setBackupUserList] = useState({})
     const [regexError, setRegexError] = useState({})
+    const [emailError, setEmailError] = useState({})
     const [addRegexVal, setAddRegexVal] = useState({})
 
     const [dialogOpen, setDialogOpen] = useState(false)
@@ -492,19 +493,40 @@ const UserNotification = (props) => {
 
     }, [backupUserList, handleSetUserEdit, addRegexVal, userList])
 
+    const validateEmail = useCallback((email) => {
+        if (/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/.test(email)) {
+            return false
+        }
+        else {
+            return true
+        }
+    }, [])
+
+
     const updateUserEmail = useCallback((event, name, username) => {
         // Find match and note it's index in userList
         const match = userList.filter(el => el.name === name && el.username === username)[0]
         const userIndex = userList.indexOf(match)
 
-        match.email = event.target.value
+        const { value } = event.target
+
+        match.email = value
 
         // Create new userList
         const newUserList = [...userList]
         newUserList[userIndex] = match
 
+        // email error
+        setEmailError(prevState => {
+            return {
+                ...prevState,
+                [`${username}-${name}`]: validateEmail(value)
+            }
+        })
+        //
+
         setUserList(newUserList)
-    }, [userList])
+    }, [userList, validateEmail])
 
     const updateUserMobile = useCallback((event, name, username) => {
         // Find match and note it's index in userList
@@ -1057,6 +1079,7 @@ const UserNotification = (props) => {
                                 isAlarmAdmin={isAlarmAdmin}
                                 filterUser={filterUser}
                                 filterUserRegex={filterUserRegex}
+                                emailError={emailError}
                                 setUserEdit={handleSetUserEdit}
                                 setFilterUser={handleSetFilterUser}
                                 setFilterUserRegex={handleSetFilterUserRegex}

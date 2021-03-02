@@ -175,6 +175,8 @@ const UserTable = (props) => {
                                                     readOnly: props.userEdit[`${user.username}-${user.name}`] ? false : true,
                                                     disableUnderline: props.userEdit[`${user.username}-${user.name}`] ? false : true
                                                 }}
+                                                error={props.emailError[`${user.username}-${user.name}`]}
+                                                label={props.emailError[`${user.username}-${user.name}`] ? "Invalid Email" : undefined}
                                             />
                                         </Grid>
                                         <Grid item xs={2} className={classes.verticalMiddle}>

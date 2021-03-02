@@ -207,7 +207,7 @@ const Login = (props) => {
   }, [submit]
   )
   useEffect(() => {
-    if (loggedIn){
+    if (loggedIn===true){
       setAuthorised(loggedIn)
       let { from } = location.state || { from: { pathname: "/" } };
       history.replace(from);

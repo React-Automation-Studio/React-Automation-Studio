@@ -39,7 +39,8 @@ const Routes = (props) => {
 
         {process.env.REACT_APP_EnableLogin === 'true' &&
           <Route
-            exact path="/LogIn"
+            exact 
+            path="/LogIn"
             component={() =>
               <LogIn 
                 //standardLoginUsernameDisplayText={"custom"}

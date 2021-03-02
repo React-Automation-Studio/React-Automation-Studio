@@ -75,8 +75,7 @@ class RasAppCore extends Component {
       let system = this.state.system;
       system.refreshTokenConfig = config;
       localStorage.setItem('refreshTokenConfig', JSON.stringify(config));
-      const timeout=system.refreshTokenConfig.refreshTimeout*1000;
-     // console.log("timeout",timeout)
+     
       const timer = setTimeout(this.getRefreshToken,system.refreshTokenConfig.refreshTimeout*1000)
   
       this.setState({ system: system,refreshTimer:timer })
@@ -238,7 +237,7 @@ class RasAppCore extends Component {
       localStorage.setItem("loggedIn",'true')
     }
     else {
-      this.state.system.logout()
+      this.logout()
     }
     this.setState({ 'Authorised': msg.successful, 'AuthorisationFailed': msg.successful !== true });
 
@@ -361,7 +360,7 @@ class RasAppCore extends Component {
 
     const { system } = this.state;
     // console.log("loggingIn", system.userData.loggingIn)
-    // console.log("loggedIn", system.userData.loggedIn)
+   //  console.log("loggedIn", system.userData.loggedIn)
     // console.log("refresh token config", system.refreshTokenConfig)
     // console.log("redirect to login",this.state.redirectToLoginPage)
     

@@ -5,7 +5,7 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import { withRouter } from 'react-router-dom';
 
 
-import RedirectToLogIn from './components/SystemComponents/RedirectToLogin.js';
+
 
 import TraditionalLayout from './components/UI/Layout/ComposedLayouts/TraditionalLayout.js';
 
@@ -84,7 +84,7 @@ class MainPublic extends Component {
       >
 
 
-        <RedirectToLogIn />
+     
         <div style={{ textAlign: 'center', paddingTop: '50vh' }}><CircularProgress /></div>
 
 

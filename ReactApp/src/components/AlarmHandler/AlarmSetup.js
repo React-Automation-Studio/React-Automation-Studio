@@ -420,8 +420,8 @@ const AlarmSetup = (props) => {
     const dbUpdateMany = useMongoDbUpdateMany({})
     const dbDeleteOne = useMongoDbDeleteOne({})
 
-    const [alarmTableHeight, setAlarmTableHeight] = useState('40vh')
-    const [alarmLogHeight, setAlarmLogHeight] = useState('32vh')
+    const [alarmTableHeight, setAlarmTableHeight] = useState('43vh')
+    const [alarmLogHeight, setAlarmLogHeight] = useState('33vh')
 
     // handleNewDbPVsList
     useEffect(() => {
@@ -1900,14 +1900,14 @@ const AlarmSetup = (props) => {
 
     useEffect(() => {
         if (alarmTableExpand && !alarmLogExpand && !alarmLogIsExpanded) {
-            setAlarmTableHeight('76vh')
+            setAlarmTableHeight('80vh')
         }
         else if (!alarmTableExpand && !alarmTableIsExpanded && alarmLogExpand) {
-            setAlarmLogHeight('76vh')
+            setAlarmLogHeight('80vh')
         }
         else {
-            setAlarmTableHeight('40vh')
-            setAlarmLogHeight('32vh')
+            setAlarmTableHeight('43vh')
+            setAlarmLogHeight('33vh')
         }
     }, [alarmTableExpand, alarmLogExpand, alarmLogIsExpanded, alarmTableIsExpanded])
 

@@ -915,13 +915,13 @@ const UserNotification = (props) => {
                 : filterUserRegex[0]
             : filterUser.name
 
-    let userTableHeight = '40vh'
-    let pvListHeight = '32vh'
+    let userTableHeight = '43vh'
+    let pvListHeight = '33vh'
     if (userTableExpand && !pvListExpand && !pvListIsExpanded) {
-        userTableHeight = '76vh'
+        userTableHeight = '80vh'
     }
     else if (!userTableExpand && pvListExpand && !userTableIsExpanded) {
-        pvListHeight = '76vh'
+        pvListHeight = '80vh'
     }
 
     const warnAdminMessageAdd = "Only alarmAdmin role users can add users"

@@ -331,7 +331,7 @@ const UserNotification = (props) => {
 
         // still connecting to pvs
         if (!loadPVList) {
-            firstAlarmPVDict[epicsPVName] = [value[1], value[2]]
+            firstAlarmPVDict[epicsPVName] = value
             if (epicsPVName === lastAlarm) {
                 setLoadPVList(true)
                 setAlarmPVDict(firstAlarmPVDict)

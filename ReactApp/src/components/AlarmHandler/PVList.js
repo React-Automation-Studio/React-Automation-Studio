@@ -45,6 +45,15 @@ const PVList = (props) => {
             }, false)
         }
 
+        const hostname = props.alarmPVDict[alarmName]
+            ? props.alarmPVDict[alarmName].reduce((acc, entry, index) => {
+                if (index > 1) {
+                    return `${acc}${entry}`
+                }
+                return acc
+            }, '')
+            : 'Error connecting to pv'
+
         return (
             visible
                 ? <TableRow
@@ -55,8 +64,8 @@ const PVList = (props) => {
                     hover
                     key={alarmName}>
                     <TableCell>{alarmName}</TableCell>
-                    <TableCell>{props.alarmPVDict[alarmName][0]}</TableCell>
                     <TableCell>{props.alarmPVDict[alarmName][1]}</TableCell>
+                    <TableCell>{hostname}</TableCell>
                 </TableRow>
                 : null
         )

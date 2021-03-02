@@ -223,7 +223,7 @@ const UserNotification = (props) => {
             else if ((userObject.alarmDisconn ?? true)) {
                 sumString = sumString.concat("DISCONN alarm types on ")
             }
-            else{
+            else {
                 sumString = sumString.concat("no alarm types on ")
             }
             //
@@ -353,7 +353,7 @@ const UserNotification = (props) => {
         return () => clearTimeout(timer);
     }
 
-    const handleSetAddRegexVal = (event, username, name) => {
+    const handleSetAddRegexVal = useCallback((event, username, name) => {
 
         const localAddRegexVal = { ...addRegexVal }
         localAddRegexVal[`${username}-${name}`] = event.target.value
@@ -372,7 +372,7 @@ const UserNotification = (props) => {
             setRegexError(localRegexError)
         }
 
-    }
+    }, [addRegexVal, regexError])
 
     const handleSetFilterUser = useCallback((name, username) => {
         setFilterUser({
@@ -604,23 +604,23 @@ const UserNotification = (props) => {
         setFilterUserRegex(newFilterUserRegex)
     }, [userList])
 
-    const handleExpansionComplete = (panelName, isExpanded) => {
+    const handleExpansionComplete = useCallback((panelName, isExpanded) => {
         if (panelName === 'userTable') {
             setUserTableIsExpanded(isExpanded)
         }
         else if (panelName === 'pvList') {
             setPvListIsExpanded(isExpanded)
         }
-    }
+    }, [])
 
-    const handleExpandPanel = (panelName) => {
+    const handleExpandPanel = useCallback((panelName) => {
         if (panelName === 'userTable') {
             setUserTableExpand(userTableExpand ? false : true)
         }
         else if (panelName === 'pvList') {
             setPvListExpand(pvListExpand ? false : true)
         }
-    }
+    }, [pvListExpand, userTableExpand])
 
     const handleOpenDialog = useCallback((event, name, username) => {
         event.preventDefault()
@@ -688,7 +688,7 @@ const UserNotification = (props) => {
         setSnackMessage("")
     }
 
-    const handleSearchUserTable = (event) => {
+    const handleSearchUserTable = useCallback((event) => {
         const srch = event.target.value
         if (userTableSearchTimer) {
             clearTimeout(userTableSearchTimer)
@@ -699,9 +699,9 @@ const UserNotification = (props) => {
             setFilterUserRegex([])
             setFilterUser({})
         }, 300))
-    }
+    }, [userTableSearchTimer])
 
-    const handleAddNewUser = () => {
+    const handleAddNewUser = useCallback(() => {
         const newEntry = {
             "name": newName,
             "username": newUsername,
@@ -739,7 +739,7 @@ const UserNotification = (props) => {
         setNewName('')
         setNewUsername('')
         setAddDialogOpen(false)
-    }
+    }, [dbInsertOne, newName, newUsername, props.dbName])
 
     // handleNewDbPVsList
     useEffect(() => {

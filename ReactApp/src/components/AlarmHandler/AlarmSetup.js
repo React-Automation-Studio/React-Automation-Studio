@@ -212,6 +212,13 @@ const AlarmSetup = (props) => {
             : false
     }, [context.userData.username, context.userData.roles])
 
+    const isAlarmUser = useMemo(() => {
+        const isLoggedIn = context.userData.username !== undefined
+        const alarmUser = isLoggedIn
+            ? context.userData.roles.includes("alarmUser")
+            : false
+        return isAlarmAdmin || alarmUser
+    }, [context.userData.roles, context.userData.username, isAlarmAdmin])
 
 
     const [enableAllAreas, setEnableAllAreas] = useState(true)
@@ -2097,7 +2104,7 @@ const AlarmSetup = (props) => {
                                             ? <PublicIcon color="secondary" />
                                             : <PublicIcon />}
                                     </IconButton>
-                                    <Menu
+                                    {isAlarmUser && <Menu
                                         keepMounted
                                         open={globalContextOpen}
                                         onClose={() => handleAlarmGlobalContextClose()}
@@ -2163,7 +2170,7 @@ const AlarmSetup = (props) => {
                                             </List>
                                         </Collapse>
 
-                                    </Menu>
+                                    </Menu>}
                                 </Grid>
                                 <Grid item xs={10}>
                                     <div style={{ paddingTop: 0, fontSize: 16, fontWeight: 'bold' }}>{`ALARM AREAS ${enableAllAreas ? "" : "[DISABLED]"}`}</div>
@@ -2182,6 +2189,7 @@ const AlarmSetup = (props) => {
                                             contextMouseY={contextMouseY}
                                             fadeList={fadeList}
                                             isAlarmAdmin={isAlarmAdmin}
+                                            isAlarmUser={isAlarmUser}
                                             alarmAdminListExpand={alarmAdminListExpand}
                                             ackAllAreaAlarms={handleAckAllAreaAlarms}
                                             enableDisableArea={handleEnableDisableArea}
@@ -2288,6 +2296,7 @@ const AlarmSetup = (props) => {
                                         areaEnabled={areaEnabled}
                                         height={alarmTableHeight}
                                         alarmTableSearchString={alarmTableSearchString}
+                                        isAlarmUser={isAlarmUser}
                                         alarmAcknowledge={handleAlarmAcknowledge}
                                         alarmContextClose={handleAlarmContextClose}
                                         itemChecked={handleTableItemCheck}

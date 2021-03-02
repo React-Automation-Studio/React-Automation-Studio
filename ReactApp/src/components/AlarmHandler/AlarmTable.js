@@ -205,7 +205,7 @@ const AlarmTable = props => {
                                     selected={props.alarmRowSelected[areaAlarmName]}
                                     onClick={event => props.tableRowClick(event, `${areaName}*${value["name"]}`, areaAlarmName)}
                                 >
-                                    <Menu
+                                    {props.isAlarmUser && < Menu
                                         keepMounted
                                         open={props.alarmContextOpen[areaAlarmName] ? true : false}
                                         onClose={event => props.alarmContextClose(event, areaAlarmName)}
@@ -223,7 +223,7 @@ const AlarmTable = props => {
 
                                         </MenuItem>
 
-                                    </Menu>
+                                    </Menu>}
                                     {props.debug
                                         ? <TableCell>
                                             <TextInput
@@ -295,7 +295,7 @@ const AlarmTable = props => {
                                     <TableCell align="center">
                                         <Checkbox
                                             style={{ padding: 0, margin: 0 }}
-                                            disabled={!props.areaEnabled[areaName] || !props.enableAllAreas}
+                                            disabled={!props.areaEnabled[areaName] || !props.enableAllAreas || !props.isAlarmUser}
                                             value={value["enable"]}
                                             color="secondary"
                                             checked={value["enable"]}
@@ -305,7 +305,7 @@ const AlarmTable = props => {
                                     <TableCell align="center">
                                         <Checkbox
                                             style={{ padding: 0, margin: 0 }}
-                                            disabled={!props.areaEnabled[areaName] || !props.enableAllAreas}
+                                            disabled={!props.areaEnabled[areaName] || !props.enableAllAreas || !props.isAlarmUser}
                                             value={value["latch"]}
                                             color="secondary"
                                             checked={value["latch"]}
@@ -315,7 +315,7 @@ const AlarmTable = props => {
                                     <TableCell align="center">
                                         <Checkbox
                                             style={{ padding: 0, margin: 0 }}
-                                            disabled={!props.areaEnabled[areaName] || !props.enableAllAreas}
+                                            disabled={!props.areaEnabled[areaName] || !props.enableAllAreas || !props.isAlarmUser}
                                             value={value["notify"]}
                                             color="secondary"
                                             checked={value["notify"]}

@@ -217,7 +217,7 @@ const AlarmList = props => {
 
                                         </ListItem>
                                         {
-                                            props.areaContextOpen[`${area["area"]}`]
+                                            props.areaContextOpen[`${area["area"]}`] && props.isAlarmUser
                                                 ? <Menu
                                                     keepMounted
                                                     open={props.areaContextOpen[`${area["area"]}`]}
@@ -339,7 +339,7 @@ const AlarmList = props => {
                                                                         <ListItemText primary={`- ${subArea}`} />
 
                                                                     </ListItem>
-                                                                    <Menu
+                                                                    {props.isAlarmUser && <Menu
                                                                         keepMounted
                                                                         open={props.areaContextOpen[`${area["area"]}=${subArea}`] ? true : false}
                                                                         onClose={event => props.listItemContextClose(event, `${area["area"]}=${subArea}`)}
@@ -424,7 +424,7 @@ const AlarmList = props => {
                                                                             :
                                                                             <MenuItem >Enable All Areas First!</MenuItem>
                                                                         }
-                                                                    </Menu>
+                                                                    </Menu>}
                                                                 </React.Fragment>
                                                             )
                                                         })}

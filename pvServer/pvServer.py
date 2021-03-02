@@ -68,26 +68,30 @@ try:
     REFRESH_COOKIE_MAX_AGE_SECS = int(
         os.environ['REFRESH_COOKIE_MAX_AGE_SECS'])
 except:
-    print('Refresh cookie max age not set - defaulting to 1 week seconds')
     REFRESH_COOKIE_MAX_AGE_SECS =604800
+print('Refresh cookie max age not set - defaulting to {} seconds'.format(REFRESH_COOKIE_MAX_AGE_SECS))
+    
 try:
     ACCESS_TOKEN_MAX_AGE_SECS = int(
         os.environ['ACCESS_TOKEN_MAX_AGE_SECS'])
 except:
-    print('Access token max age not set - defaulting to 30 seconds')
+    
     ACCESS_TOKEN_MAX_AGE_SECS = 300
+print('Access token max age not set - defaulting to {} seconds'.format(ACCESS_TOKEN_MAX_AGE_SECS))
 try:
-    REFRESH_TOKEN_TIMEOUT = int(
-        os.environ['REFRESH_TOKEN_TIMEOUT'])
+    REFRESH_TIMEOUT = int(
+        os.environ['REFRESH_TIMEOUT'])
 except:
-    print('Refresh cookie max age not set - defaulting to 15 seconds')
-    REFRESH_TOKEN_TIMEOUT = 60
+    REFRESH_TIMEOUT = 60
+print('Refresh time out not set - defaulting to {} seconds'.format(REFRESH_TIMEOUT))
+    
 try:
-    STORE_REFRESH_TOKEN_IN_COOKIE = bool(
-        os.environ['STORE_REFRESH_TOKEN_IN_COOKIE'])
+    SECURE=(os.getenv('SECURE')=='true')
+   
 except:
-    print('STORE_REFRESH_TOKEN_IN_COOKIE - False')
-    STORE_REFRESH_TOKEN_IN_COOKIE = False
+     SECURE = False
+print('SECURE - {}'.format(SECURE))
+   
 
 
 
@@ -106,7 +110,7 @@ def logout():
 
 
 def createLoginReponse(userData):
-    global REFRESH_COOKIE_MAX_AGE_SECS, ACCESS_TOKEN_MAX_AGE_SECS, REFRESH_TOKEN_TIMEOUT
+    global REFRESH_COOKIE_MAX_AGE_SECS, ACCESS_TOKEN_MAX_AGE_SECS, REFRESH_TIMEOUT, SECURE
     if (userData is None):
         log.info("Unknown user login: {} ",user['username'])
         return jsonify({'login': False}), 401
@@ -114,25 +118,36 @@ def createLoginReponse(userData):
     roles=userData['roles']
     refreshToken=createRefreshToken(username,REFRESH_COOKIE_MAX_AGE_SECS)
     accessToken=createAccessToken(username,ACCESS_TOKEN_MAX_AGE_SECS,roles)
-    resp= make_response(jsonify({
+    d={
         'login': True, 
         'username':username,
         'roles':roles,
         'accessToken':accessToken,
         'refreshTokenConfig':{
-        # 'refreshToken':refreshToken,
-        'refreshTimeout':REFRESH_TOKEN_TIMEOUT,
-        'useCookie':True,
+        
+        'refreshTimeout':REFRESH_TIMEOUT,
+        'useCookie':SECURE,
         }
-        }))
-    resp.set_cookie(key='refreshToken', value=refreshToken, max_age=REFRESH_COOKIE_MAX_AGE_SECS,
+    }
+    if not SECURE:
+        d['refreshTokenConfig']['refreshToken']=refreshToken
+    resp= make_response(jsonify(d))
+    if SECURE:
+       
+        resp.set_cookie(key='refreshToken', value=refreshToken, max_age=REFRESH_COOKIE_MAX_AGE_SECS,
         secure=True, httponly=True, samesite=None)
+    
     return resp, 200
 
-@app.route('/api/refresh', methods=['GET'])
+@app.route('/api/refresh', methods=['POST'])
 def refresh():
-    refreshToken = request.cookies.get('refreshToken')
-    #print("refreshToken",refreshToken)
+    global SECURE
+    if SECURE:
+        refreshToken = request.cookies.get('refreshToken')
+    else:
+        refreshToken = request.json.get('refreshToken')
+
+    print("refreshToken",refreshToken)
     if not (refreshToken is None):
      #   print("in ifrefreshToken",refreshToken)
         userData=AuthoriseUser(refreshToken)

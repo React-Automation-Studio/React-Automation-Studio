@@ -134,6 +134,8 @@ class RasAppCore extends Component {
           this.setState({ system: system })
 
           localStorage.removeItem('loggedIn');
+          localStorage.removeItem('refreshTokenConfig');
+          
         })
         .catch((error)=> {
           // handle error
@@ -184,6 +186,12 @@ class RasAppCore extends Component {
     let userTokens = {
       accessToken: 'unauthenticated'
     }
+    
+    let refreshTokenConfig = JSON.parse(localStorage.getItem('refreshTokenConfig'));
+   
+    if (refreshTokenConfig===null){
+      refreshTokenConfig={}
+    }
     let localVariables = {};
     let system = {
       socket: socket,
@@ -195,6 +203,7 @@ class RasAppCore extends Component {
       userData: userData, userTokens: userTokens,
       setUserTokens: this.setUserTokens,
       setRefreshTokenConfig: this.setRefreshTokenConfig,
+      refreshTokenConfig:refreshTokenConfig,
       setUserData: this.setUserData,
       logout: this.logout,
       enableProbe: true,
@@ -260,7 +269,22 @@ class RasAppCore extends Component {
     let d = new Date();
     let n = d.toTimeString();
   //  console.log("refreshing at:",n)
-    axios.get('/api/refresh')
+  const options = {
+    headers: { 'Content-Type': 'application/json' },
+   // timeout: props.timeout,
+  };
+  let body; 
+ 
+  const {useCookie} =this.state.system.refreshTokenConfig;
+  if (useCookie===true){
+    body= JSON.stringify({  })
+  }
+  else{
+    console.warn("React Automation Studio SECURE mode is not in use, and as a consequence the refresh token will stored in local storage. This mode should not be used in production, see styleguide for correct implementation")
+    const {refreshToken}=this.state.system.refreshTokenConfig;
+    body= JSON.stringify({"refreshToken":refreshToken  })
+  }
+    axios.post('/api/refresh',body,options)
     .then(response=> {
       // handle success
       // console.log(response);
@@ -297,8 +321,9 @@ class RasAppCore extends Component {
 
   
   getInitialRefreshToken(){
-   // console.log("get initial refresh token")
+   
     let refreshTokenConfig = JSON.parse(localStorage.getItem('refreshTokenConfig'));
+  
     if (refreshTokenConfig !== null) {
       this.getRefreshToken();
       // this.setRefreshTokenConfig(refreshTokenConfig)

@@ -112,7 +112,6 @@ def logout():
 def createLoginReponse(userData):
     global REFRESH_COOKIE_MAX_AGE_SECS, ACCESS_TOKEN_MAX_AGE_SECS, REFRESH_TIMEOUT, SECURE
     if (userData is None):
-        log.info("Unknown user login: {} ",user['username'])
         return jsonify({'login': False}), 401
     username=userData['username']
     roles=userData['roles']
@@ -146,8 +145,6 @@ def refresh():
         refreshToken = request.cookies.get('refreshToken')
     else:
         refreshToken = request.json.get('refreshToken')
-
-    print("refreshToken",refreshToken)
     if not (refreshToken is None):
      #   print("in ifrefreshToken",refreshToken)
         userData=AuthoriseUser(refreshToken)

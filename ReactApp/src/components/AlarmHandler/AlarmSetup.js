@@ -398,7 +398,7 @@ const AlarmSetup = (props) => {
     })
 
     // console.clear()
-    // console.log(JSON.stringify(historyDataParams))
+    // console.log('historyDataParams', JSON.stringify(historyDataParams))
     const dbHistoryData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history:Parameters:${JSON.stringify(historyDataParams)}` }).data
     const totalDocs = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history:Parameters:${JSON.stringify(totalDocsParams)}` }).data ?? 0
     const prevPageDocId = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history:Parameters:${JSON.stringify(prevPageDocIdParams)}` }).data?.[0]?._id.$oid
@@ -409,7 +409,10 @@ const AlarmSetup = (props) => {
     // console.log('nextPageDocId', nextPageDocId)
     // console.log('prevPageDocId', prevPageDocId)
     // console.log('lastPageDocId', lastPageDocId)
-    // console.log(lastPageSkip)
+    // console.log('lastPageSkip', lastPageSkip)
+    // console.log('totalDocsParams', JSON.stringify(totalDocsParams))
+    // console.log('prevPageDocIdParams', JSON.stringify(prevPageDocIdParams))
+    // console.log('lastPageDocIdParams', JSON.stringify(lastPageDocIdParams))
 
 
     const dbUpdateOne = useMongoDbUpdateOne({})

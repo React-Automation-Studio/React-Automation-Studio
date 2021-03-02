@@ -791,6 +791,7 @@ const AlarmSetup = (props) => {
         setPageAT(0)
         setAlarmTableSearchStringStore('')
         setAlarmTableSearchString('')
+        setAlarmRowSelected({})
     }, [])
 
     const handleAckGlobal = useCallback(() => {

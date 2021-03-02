@@ -366,7 +366,10 @@ const UserNotification = (props) => {
             const localRegexError = { ...regexError }
             localRegexError[`${username}-${name}`] = false
             setRegexError(localRegexError)
-            setFilterUserRegex([event.target.value])
+            setFilterUserRegex([{
+                index: -1,
+                regEx: event.target.value
+            }])
         }
         catch (e) {
             const localRegexError = { ...regexError }
@@ -381,16 +384,25 @@ const UserNotification = (props) => {
             name: name,
             username: username
         })
-        const newFilterUserRegex = Object.values(dictUserRegex[`${username}-${name}`]).map(entry =>
-            entry.regEx
-        )
+        const newFilterUserRegex = Object.values(dictUserRegex[`${username}-${name}`]).reduce((acc, entry, index) => {
+            acc.push({
+                index: index,
+                regEx: entry.regEx
+            })
+            return acc
+        }, [])
         setFilterUserRegex(newFilterUserRegex)
     }, [dictUserRegex])
 
     const handleSetFilterUserRegex = useCallback((event, expression, index) => {
         event.preventDefault()
         event.stopPropagation()
-        setFilterUserRegex([expression])
+        setFilterUserRegex([
+            {
+                index: index,
+                regEx: expression
+            }
+        ])
         setFilterUser({})
         setDialogUserNotifyIndex(index)
     }, [])
@@ -400,9 +412,14 @@ const UserNotification = (props) => {
         event.stopPropagation()
 
         const match = userList.filter(el => el.name === name && el.username === username)[0]
-        const newFilterUserRegex = Object.values(match.notifyPVs).map(entry =>
-            entry.regEx
-        )
+        const newFilterUserRegex = Object.values(match.notifyPVs).reduce((acc, entry, index) => {
+            acc.push({
+                index: index,
+                regEx: entry.regEx
+            })
+            return acc
+        }, [])
+
         setFilterUserRegex(newFilterUserRegex)
         setFilterUser({
             name: match.name,
@@ -440,9 +457,13 @@ const UserNotification = (props) => {
 
         const id = match['_id']['$oid']
 
-        const newFilterUserRegex = Object.values(match.notifyPVs).map(entry =>
-            entry.regEx
-        )
+        const newFilterUserRegex = Object.values(match.notifyPVs).reduce((acc, entry, index) => {
+            acc.push({
+                index: index,
+                regEx: entry.regEx
+            })
+            return acc
+        }, [])
         setFilterUserRegex(newFilterUserRegex)
 
         let newvalues = { '$set': { "email": match.email } }
@@ -487,9 +508,13 @@ const UserNotification = (props) => {
         localAddRegexVal[`${username}-${name}`] = ''
         setAddRegexVal(localAddRegexVal)
 
-        const newFilterUserRegex = Object.values(backupUserList[`${username}-${name}`].notifyPVs).map(entry =>
-            entry.regEx
-        )
+        const newFilterUserRegex = Object.values(backupUserList[`${username}-${name}`].notifyPVs).reduce((acc, entry, index) => {
+            acc.push({
+                index: index,
+                regEx: entry.regEx
+            })
+            return acc
+        }, [])
         setFilterUserRegex(newFilterUserRegex)
 
         // Clear email and mobile errors
@@ -626,9 +651,13 @@ const UserNotification = (props) => {
 
             setUserList(newUserList)
 
-            const newFilterUserRegex = Object.values(newNotifyPVs).map(entry =>
-                entry.regEx
-            )
+            const newFilterUserRegex = Object.values(newNotifyPVs).reduce((acc, entry, index) => {
+                acc.push({
+                    index: index,
+                    regEx: entry.regEx
+                })
+                return acc
+            }, [])
             setFilterUserRegex(newFilterUserRegex)
         }
     }, [userList, addRegexVal])
@@ -656,9 +685,13 @@ const UserNotification = (props) => {
 
         setUserList(newUserList)
 
-        const newFilterUserRegex = Object.values(newNotifyPVs).map(entry =>
-            entry.regEx
-        )
+        const newFilterUserRegex = Object.values(newNotifyPVs).reduce((acc, entry, index) => {
+            acc.push({
+                index: index,
+                regEx: entry.regEx
+            })
+            return acc
+        }, [])
         setFilterUserRegex(newFilterUserRegex)
     }, [userList])
 
@@ -910,9 +943,9 @@ const UserNotification = (props) => {
     const filterName = filterUserRegex.length === 0
         ? 'ALL'
         : filterUserRegex.length === 1
-            ? filterUserRegex[0] === ""
+            ? filterUserRegex[0].regEx === ""
                 ? 'ALL'
-                : filterUserRegex[0]
+                : filterUserRegex[0].regEx
             : filterUser.name
 
     let userTableHeight = '43vh'

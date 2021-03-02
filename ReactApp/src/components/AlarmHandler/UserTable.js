@@ -62,7 +62,8 @@ const UserTable = (props) => {
     }, false)
 
     const { filterUserRegex } = props
-    const fillChipName = filterUserRegex.length === 1 ? filterUserRegex[0] : null
+    const fillChipIndex = filterUserRegex.length === 1 ? filterUserRegex[0].index : null
+    const fillChipName = filterUserRegex.length === 1 ? filterUserRegex[0].regEx : null
 
     return (
         <TableContainer component={Paper} style={{ height: props.height }} elevation={theme.palette.type === 'dark' ? undefined : 5}>
@@ -131,10 +132,10 @@ const UserTable = (props) => {
 
                         let scheduleIndex
                         const chipSelected = user.notifyPVs.reduce((acc, area, index) => {
-                            if (area.regEx === fillChipName) {
+                            if ((area.regEx === fillChipName) && (index === fillChipIndex)) {
                                 scheduleIndex = index
                             }
-                            return acc || area.regEx === fillChipName
+                            return acc || ((area.regEx === fillChipName) && (index === fillChipIndex))
                         }, false)
 
                         const isDemoUser = user.username === 'user1' || user.username === 'user2' || user.username === 'user3'
@@ -202,7 +203,7 @@ const UserTable = (props) => {
                                 <TableCell>
                                     {user.notifyPVs.map((expressionObject, index) => {
                                         const expression = expressionObject.regEx
-                                        const filledChip = expression === fillChipName || (!showAddHeader && (user.name === props.filterUser.name && user.username === props.filterUser.username))
+                                        const filledChip = ((expression === fillChipName) && (index === fillChipIndex)) || (!showAddHeader && (user.name === props.filterUser.name && user.username === props.filterUser.username))
                                         return (
                                             <Chip
                                                 classes={{ outlinedSecondary: classes.chipOutlinedSecondary }}

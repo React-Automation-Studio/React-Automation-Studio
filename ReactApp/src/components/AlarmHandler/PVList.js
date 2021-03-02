@@ -39,8 +39,8 @@ const PVList = (props) => {
         let visible = true
 
         if (props.filterUserRegex.length > 0) {
-            visible = props.filterUserRegex.reduce((acc, expression) => {
-                let myRe = new RegExp(expression)
+            visible = props.filterUserRegex.reduce((acc, entry) => {
+                let myRe = new RegExp(entry.regEx)
                 return acc || myRe.test(alarmName)
             }, false)
         }

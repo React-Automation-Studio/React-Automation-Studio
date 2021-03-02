@@ -858,7 +858,7 @@ const ScheduleDialog = (props) => {
                                 return (
                                     <Chip
                                         classes={{ outlinedSecondary: classes.chipOutlinedSecondary }}
-                                        key={area.regEx}
+                                        key={`${index}-${area.regEx}`}
                                         label={area.regEx}
                                         variant={index === props.dialogUserNotifyIndex || global ? undefined : "outlined"}
                                         color="secondary"

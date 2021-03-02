@@ -9,7 +9,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import { Redirect } from 'react-router-dom';
+import { Redirect,useHistory,useLocation } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -82,6 +82,8 @@ const Login = (props) => {
   const enableStandardLogin = !(process.env.REACT_APP_DisableStandardLogin === 'true');
   const enableActiveDirectoryLogin = process.env.REACT_APP_EnableActiveDirectoryLogin === 'true';
   const enableGoogleLogin = process.env.REACT_APP_EnableGoogleLogin === 'true';
+  const history = useHistory();
+  const location = useLocation();
 
   const responseGoogle = (response) => {
     const token = response.tokenId;
@@ -207,6 +209,8 @@ const Login = (props) => {
   useEffect(() => {
     if (loggedIn){
       setAuthorised(loggedIn)
+      let { from } = location.state || { from: { pathname: "/" } };
+      history.replace(from);
     }
   }, [loggedIn])
 
@@ -362,7 +366,7 @@ const Login = (props) => {
           </Typography>}
         </Paper>
       </main>
-      {authorised && <Redirect to='/' />}
+      {/* {authorised && <Redirect to='/' />} */}
     </React.Fragment>
   );
 }

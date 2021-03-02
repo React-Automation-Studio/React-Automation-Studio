@@ -3,25 +3,37 @@ import AutomationStudioContext from './AutomationStudioContext';
 import BusyLoggingIn from './BusyLoggingIn';
 import { Route, Redirect } from 'react-router-dom'
 import LogIn from '../../LogIn';
-const ProtectedRoute=(props)=>{
-    const Component=props.component;
-    const context = useContext(AutomationStudioContext);
-    const loggingIn=context.userData.loggingIn;
-    let loggedIn = context.userData.loggedIn || process.env.REACT_APP_EnableLogin !== 'true';
-    return(
-     
-        //  <Route  path={props.path}  render={()=>( 
-        //   loggedIn?<Component />:(loggingIn?<BusyLoggingIn/>:<Redirect to="/logIn" />)
-        //   )}/>
-        <Route  path={props.path}  >
+const ProtectedRoute = (props) => {
+  const Component = props.component;
+  const context = useContext(AutomationStudioContext);
+  const loggingIn = context.userData.loggingIn;
+  let loggedIn = context.userData.loggedIn || process.env.REACT_APP_EnableLogin !== 'true';
+  return (
 
-        {     
+    //  <Route  path={props.path}  render={()=>( 
+    //   loggedIn?<Component />:(loggingIn?<BusyLoggingIn/>:<Redirect to="/logIn" />)
+    //   )}/>
+    <Route path={props.path}  >
+
+      {
         (routeProps) => (
-        loggedIn?<Component {...routeProps}/>:(loggingIn?<BusyLoggingIn/>:<Redirect to="/logIn" />)
+          loggedIn ?
+            <Component {...routeProps} /> :
+            (loggingIn ?
+              <BusyLoggingIn />
+              :
+              <Redirect
+              
+                to={{
+                  pathname: "/logIn",
+                  state: { from: routeProps.location }
+                }}
+              />
+            )
         )
-        }
-      </Route>
-        
-    )
+      }
+    </Route>
+
+  )
 }
 export default ProtectedRoute;

@@ -492,6 +492,21 @@ const UserNotification = (props) => {
         )
         setFilterUserRegex(newFilterUserRegex)
 
+        // Clear email and mobile errors
+        setEmailError(prevState => {
+            return {
+                ...prevState,
+                [`${username}-${name}`]: false
+            }
+        })
+        setMobileError(prevState => {
+            return {
+                ...prevState,
+                [`${username}-${name}`]: false
+            }
+        })
+        //
+
     }, [backupUserList, handleSetUserEdit, addRegexVal, userList])
 
     const validateEmail = useCallback((email) => {

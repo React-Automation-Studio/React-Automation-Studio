@@ -139,6 +139,7 @@ const UserTable = (props) => {
 
                         const isDemoUser = user.username === 'user1' || user.username === 'user2' || user.username === 'user3'
                         const allowEdit = isDemoUser || user.username === props.username || props.isAlarmAdmin
+                        const invalidContact = props.emailError[`${user.username}-${user.name}`] || props.mobileError[`${user.username}-${user.name}`]
 
                         return (
                             < TableRow
@@ -254,13 +255,19 @@ const UserTable = (props) => {
                                         allowEdit
                                             ? props.userEdit[`${user.username}-${user.name}`]
                                                 ? <React.Fragment>
-                                                    <Tooltip title="Apply" placement="bottom">
-                                                        <IconButton
-                                                            onClick={(event) => { props.applyEdit(event, user.name, user.username) }}
+                                                    {invalidContact
+                                                        ? <IconButton
+                                                            disabled={true}
                                                         >
-                                                            <DoneIcon className={classes.icon} />
+                                                            <BlockIcon />
                                                         </IconButton>
-                                                    </Tooltip>
+                                                        : <Tooltip title="Apply" placement="bottom">
+                                                            <IconButton
+                                                                onClick={(event) => { props.applyEdit(event, user.name, user.username) }}
+                                                            >
+                                                                <DoneIcon className={classes.icon} />
+                                                            </IconButton>
+                                                        </Tooltip>}
                                                     <Tooltip title="Cancel" placement="bottom">
                                                         <IconButton
                                                             onClick={(event) => { props.cancelEdit(event, user.name, user.username) }}

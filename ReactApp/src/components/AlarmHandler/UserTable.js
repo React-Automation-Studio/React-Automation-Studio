@@ -176,7 +176,7 @@ const UserTable = (props) => {
                                                     disableUnderline: props.userEdit[`${user.username}-${user.name}`] ? false : true
                                                 }}
                                                 error={props.emailError[`${user.username}-${user.name}`]}
-                                                label={props.emailError[`${user.username}-${user.name}`] ? "Invalid Email" : undefined}
+                                                label={props.emailError[`${user.username}-${user.name}`] ? "Invalid email" : undefined}
                                             />
                                         </Grid>
                                         <Grid item xs={2} className={classes.verticalMiddle}>
@@ -192,6 +192,8 @@ const UserTable = (props) => {
                                                     readOnly: props.userEdit[`${user.username}-${user.name}`] ? false : true,
                                                     disableUnderline: props.userEdit[`${user.username}-${user.name}`] ? false : true
                                                 }}
+                                                error={props.mobileError[`${user.username}-${user.name}`]}
+                                                label={props.mobileError[`${user.username}-${user.name}`] ? "Invalid number" : undefined}
                                             />
                                         </Grid>
                                     </Grid>
@@ -223,7 +225,7 @@ const UserTable = (props) => {
                                                 fullWidth={true}
                                                 autoFocus={true}
                                                 error={props.regexError[`${user.username}-${user.name}`]}
-                                                label={props.regexError[`${user.username}-${user.name}`] ? "Invalid Regex" : undefined}
+                                                label={props.regexError[`${user.username}-${user.name}`] ? "Invalid regex" : undefined}
                                                 InputProps={
                                                     props.regexError[`${user.username}-${user.name}`]
                                                         ? {

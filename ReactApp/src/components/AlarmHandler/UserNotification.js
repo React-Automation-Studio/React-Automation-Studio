@@ -133,6 +133,7 @@ const UserNotification = (props) => {
     const [backupUserList, setBackupUserList] = useState({})
     const [regexError, setRegexError] = useState({})
     const [emailError, setEmailError] = useState({})
+    const [mobileError, setMobileError] = useState({})
     const [addRegexVal, setAddRegexVal] = useState({})
 
     const [dialogOpen, setDialogOpen] = useState(false)
@@ -528,19 +529,39 @@ const UserNotification = (props) => {
         setUserList(newUserList)
     }, [userList, validateEmail])
 
+    const validateMobile = useCallback((mobile) => {
+        if (/^\+?[1-9]\d{1,14}$/.test(mobile)) {
+            return false
+        }
+        else {
+            return true
+        }
+    }, [])
+
     const updateUserMobile = useCallback((event, name, username) => {
         // Find match and note it's index in userList
         const match = userList.filter(el => el.name === name && el.username === username)[0]
         const userIndex = userList.indexOf(match)
 
-        match.mobile = event.target.value
+        const { value } = event.target
+
+        match.mobile = value
 
         // Create new userList
         const newUserList = [...userList]
         newUserList[userIndex] = match
 
+        // mobile error
+        setMobileError(prevState => {
+            return {
+                ...prevState,
+                [`${username}-${name}`]: validateMobile(value)
+            }
+        })
+        //
+
         setUserList(newUserList)
-    }, [userList])
+    }, [userList, validateMobile])
 
     const addChip = useCallback((event, name, username, expression) => {
         event.stopPropagation()
@@ -1080,6 +1101,7 @@ const UserNotification = (props) => {
                                 filterUser={filterUser}
                                 filterUserRegex={filterUserRegex}
                                 emailError={emailError}
+                                mobileError={mobileError}
                                 setUserEdit={handleSetUserEdit}
                                 setFilterUser={handleSetFilterUser}
                                 setFilterUserRegex={handleSetFilterUserRegex}

@@ -9,7 +9,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import { Redirect,useHistory,useLocation } from 'react-router-dom';
+import { useHistory,useLocation } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -207,7 +207,7 @@ const Login = (props) => {
   }, [submit]
   )
   useEffect(() => {
-    if (loggedIn===true){
+    if (loggedIn){
       setAuthorised(loggedIn)
       let { from } = location.state || { from: { pathname: "/" } };
       history.replace(from);

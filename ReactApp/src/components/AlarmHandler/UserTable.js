@@ -206,7 +206,7 @@ const UserTable = (props) => {
                                         return (
                                             <Chip
                                                 classes={{ outlinedSecondary: classes.chipOutlinedSecondary }}
-                                                key={expression}
+                                                key={`${index}-${expression}`}
                                                 label={expression}
                                                 variant={filledChip ? undefined : "outlined"}
                                                 color="secondary"

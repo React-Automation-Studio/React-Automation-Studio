@@ -27,7 +27,7 @@ export const useMongoDbInsertOne = (props) => {
            
             
             socketRef.current.emit('databaseInsertOne', { dbURL: props.dbURL, 'newEntry': props.newEntry, 'clientAuthorisation': jwtRef.current }, (data) => {
-                console.log("ackdata", data);
+                //console.log("ackdata", data);
                 if (data !== "OK") {
 
                     console.log("InsertOne  unsuccessful")

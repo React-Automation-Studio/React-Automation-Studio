@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect, useRef } from 'react'
 import ReactAutomationStudioContext from './AutomationStudioContext';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from "prop-types";
@@ -25,10 +25,27 @@ export const useEpicsPV = (props) => {
     return pv;
   }
   const [pv, setPv] = useState(initPV());
+  const pvName=pv.pvname;
   const [pvConnectionId, setPvConnectionId] = useState(null);
   const context = useContext(ReactAutomationStudioContext);
   const socket = context.socket;
-  const jwt=context.userTokens.accessToken;
+  const jwt = context.userTokens.accessToken;
+  const jwtRef = useRef(jwt);
+  const socketRef = useRef(socket);
+  useEffect(() => {
+    if (jwt === null) {
+      jwtRef.current = 'unauthenticated'
+    }
+    else {
+      jwtRef.current = jwt;
+    }
+  }, [jwt])
+
+
+  useEffect(() => {
+
+    socketRef.current = socket;
+  }, [socket])
 
 
 
@@ -89,7 +106,7 @@ export const useEpicsPV = (props) => {
       setPv(pv => ({ ...pv, initialized: false }))
     }
 
-    
+
     // const handleInitialConnection=()=>{
 
     //   if (pv.initialized===false){
@@ -99,7 +116,7 @@ export const useEpicsPV = (props) => {
     // }
 
     const handleRequestPvInfoAck = (msg) => {
-    //  console.log(pv.pvname, "msg: ", msg)
+      //  console.log(pv.pvname, "msg: ", msg)
       if (typeof msg !== 'undefined') {
         //console.log(this.state['pvname'], "pvConnectionId: ",msg.pvConnectionId)
         setPvConnectionId(msg.pvConnectionId)
@@ -107,58 +124,51 @@ export const useEpicsPV = (props) => {
 
     }
 
-    let socket = context.socket;
-    let jwt = context.userTokens.accessToken;
-    socket.emit('request_pv_info', { data: pv.pvname, 'clientAuthorisation': jwt },handleRequestPvInfoAck);
-    socket.on(pv.pvname, updatePVData);
-    socket.on('connect_error', connectError);
-    socket.on('disconnect', disconnect);
     
+
+    socketRef.current.emit('request_pv_info', { data: pv.pvname, 'clientAuthorisation': jwtRef.current }, handleRequestPvInfoAck);
+    socketRef.current.on(pv.pvname, updatePVData);
+    socketRef.current.on('connect_error', connectError);
+    socketRef.current.on('disconnect', disconnect);
+
 
     return () => {
 
       if (pvConnectionId !== null) {
-        let jwt = context.userTokens.accessToken;
-        if (jwt === null) {
-          jwt = 'unauthenticated'
-        }
-        socket.emit('remove_pv_connection', { pvname: pv.pvname, pvConnectionId: pvConnectionId, 'clientAuthorisation': jwt });
+       
+        socketRef.current.emit('remove_pv_connection', { pvname: pv.pvname, pvConnectionId: pvConnectionId, 'clientAuthorisation': jwtRef.current });
       }
-      socket.removeListener(pv.pvname, updatePVData);
-      socket.removeListener('connect_error', connectError);
-      socket.removeListener('disconnect', disconnect);
-     
+      socketRef.current.removeListener(pv.pvname, updatePVData);
+      socketRef.current.removeListener('connect_error', connectError);
+      socketRef.current.removeListener('disconnect', disconnect);
+
 
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [pvName])
 
-  useEffect(()=>{
+  useEffect(() => {
     const reconnect = () => {
       if (props.debug) {
         console.log(pv.pvname, 'client: reconnect');
       }
-      let socket = context.socket;
+      
 
 
-      let jwt = context.userTokens.accessToken;
-      socket.emit('request_pv_info', { data: pv.pvname, 'clientAuthorisation': jwt });
+      
+      socketRef.current.emit('request_pv_info', { data: pv.pvname, 'clientAuthorisation': jwtRef.current });
     }
-    socket.on('connect', reconnect);
-    return()=>{
-      socket.removeListener('connect', reconnect);
+    socketRef.current.on('connect', reconnect);
+    return () => {
+      socketRef.current.removeListener('connect', reconnect);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[jwt,socket])
+  }, [pvName])
   useEffect(() => {
 
     if (props.newValueTrigger > 0) {
-      let socket = context.socket;
-      let jwt = context.userTokens.accessToken;
-      if (jwt === null) {
-        jwt = 'unauthenticated'
-      }
-      socket.emit('write_to_pv', { pvname: pv.pvname, data: props.outputValue, 'clientAuthorisation': jwt });
+     
+      socketRef.current.emit('write_to_pv', { pvname: pv.pvname, data: props.outputValue, 'clientAuthorisation': jwtRef.current });
 
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

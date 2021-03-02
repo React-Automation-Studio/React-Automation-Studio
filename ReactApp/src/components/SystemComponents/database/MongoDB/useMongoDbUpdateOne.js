@@ -1,21 +1,31 @@
 
-import { useContext, useCallback } from 'react';
+import { useContext, useCallback,useRef,useEffect } from 'react';
 import AutomationStudioContext from '../../AutomationStudioContext';
 const useMongoDbUpdateOne = (props) => {
-
     const context=useContext(AutomationStudioContext);
-    const { socket } = context;
+    const socket = context.socket;
+    const jwt = context.userTokens.accessToken;
+    const jwtRef = useRef(jwt);
+    const socketRef = useRef(socket);
+    useEffect(() => {
+        if (jwt === null) {
+          jwtRef.current = 'unauthenticated'
+        }
+        else {
+          jwtRef.current = jwt;
+        }
+      }, [jwt])
+      useEffect(() => {
+  
+          socketRef.current = socket;
+        }, [socket])
 
     const dbUpdateOne = useCallback((props) => {
 
         if (props.dbURL && props.update&&props.id) {
 
-            let jwt = context.userTokens.accessToken;
-            if (jwt === null) {
-                jwt = 'unauthenticated'
-            }
-  
-                    socket.emit('databaseUpdateOne', { dbURL: props.dbURL, 'id': props.id, 'newvalues': props.update, 'clientAuthorisation': jwt }, (data) => {
+           
+            socketRef.current.emit('databaseUpdateOne', { dbURL: props.dbURL, 'id': props.id, 'newvalues': props.update, 'clientAuthorisation': jwtRef.current }, (data) => {
   
             if (data !== "OK") {
 

@@ -1,10 +1,27 @@
-import  { useContext, useState, useEffect } from 'react';
+import  { useContext, useState, useEffect,useRef } from 'react';
 import AutomationStudioContext from '../../AutomationStudioContext';
 
 
 const useMongoDbWatch = (props) => {
 
-    const context = useContext(AutomationStudioContext);
+    const context=useContext(AutomationStudioContext);
+    const socket = context.socket;
+    const jwt = context.userTokens.accessToken;
+    const jwtRef = useRef(jwt);
+    const socketRef = useRef(socket);
+    useEffect(() => {
+        if (jwt === null) {
+          jwtRef.current = 'unauthenticated'
+        }
+        else {
+          jwtRef.current = jwt;
+        }
+      }, [jwt])
+      useEffect(() => {
+  
+          socketRef.current = socket;
+        }, [socket])
+
     const [dbWatchId, setDbWatchId] = useState(null);
     const [data, setData] = useState(null);
     const [writeAccess, setWriteAccess] = useState(false);
@@ -25,20 +42,14 @@ const useMongoDbWatch = (props) => {
         }
 
       
-        let socket = context.socket;
-       
-        let jwt = context.userTokens.accessToken;
-        if (jwt === null) {
-            jwt = 'unauthenticated'
-        }
         if (props.dbURL) {
-            socket.emit('databaseReadWatchAndBroadcast', { 'dbURL': props.dbURL, 'clientAuthorisation': jwt }, handleDatabaseReadWatchAndBroadcastAck)
-            socket.on('databaseWatchData:' + props.dbURL, handleNewDbLogReadWatchBroadcast);
+            socketRef.current.emit('databaseReadWatchAndBroadcast', { 'dbURL': props.dbURL, 'clientAuthorisation': jwtRef.current }, handleDatabaseReadWatchAndBroadcastAck)
+            socketRef.current.on('databaseWatchData:' + props.dbURL, handleNewDbLogReadWatchBroadcast);
         }
 
         const reconnect = () => {
             if (props.dbURL) {
-                socket.emit('databaseReadWatchAndBroadcast', { 'dbURL': props.dbURL, 'clientAuthorisation': jwt }, handleDatabaseReadWatchAndBroadcastAck)
+                socketRef.current.emit('databaseReadWatchAndBroadcast', { 'dbURL': props.dbURL, 'clientAuthorisation': jwtRef.current }, handleDatabaseReadWatchAndBroadcastAck)
             }
         }
         const disconnect = () => {
@@ -47,17 +58,17 @@ const useMongoDbWatch = (props) => {
                 setData(null)
             }
         }
-        socket.on('disconnect', disconnect);
-        socket.on('connect', reconnect);
+        socketRef.current.on('disconnect', disconnect);
+        socketRef.current.on('connect', reconnect);
         return () => {
 
             if (props.dbURL) {
                 if (dbWatchId !== null) {
-                    socket.emit('remove_dbWatch', { dbURL: props.dbURL, dbWatchId: dbWatchId, 'clientAuthorisation': jwt });
+                    socketRef.current.emit('remove_dbWatch', { dbURL: props.dbURL, dbWatchId: dbWatchId, 'clientAuthorisation': jwtRef.current });
                 }
-                socket.removeListener('databaseWatchData:' + props.dbURL, handleNewDbLogReadWatchBroadcast);
-                socket.removeListener('connect', reconnect);
-                socket.removeListener('disconnect', disconnect);
+                socketRef.current.removeListener('databaseWatchData:' + props.dbURL, handleNewDbLogReadWatchBroadcast);
+                socketRef.current.removeListener('connect', reconnect);
+                socketRef.current.removeListener('disconnect', disconnect);
             }
 
         }

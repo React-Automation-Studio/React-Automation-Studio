@@ -631,7 +631,7 @@ const AlarmSetup = (props) => {
     // update historyQuery regex
     useEffect(() => {
         let regex = ``
-        if (areaSelectedIndex === "ALLAREAS") {
+        if (alarmLogSelectedKey === "ALLAREAS") {
             // ALL AREAS
             regex = '.*'
             setHistoryQuery(prevState => ({
@@ -640,27 +640,27 @@ const AlarmSetup = (props) => {
                 entry: { '$regex': `(?i)${alarmLogSearchString}` }
             }))
         }
-        else if (areaSelectedIndex.includes("*")) {
+        else if (alarmLogSelectedKey.includes("*")) {
             // pv
-            regex = `^${areaSelectedIndex.replace("*", "\\*")}$`
+            regex = `^${alarmLogSelectedKey.replace("*", "\\*")}$`
             setHistoryQuery(prevState => ({
                 ...prevState,
                 id: { '$regex': regex },
                 entry: { '$regex': `(?i)${alarmLogSearchString}` }
             }))
         }
-        else if (areaSelectedIndex.includes("=")) {
+        else if (alarmLogSelectedKey.includes("=")) {
             // subArea
-            regex = `(^${areaSelectedIndex}\\*)|(^${areaSelectedIndex}$)`
+            regex = `(^${alarmLogSelectedKey}\\*)|(^${alarmLogSelectedKey}$)`
             setHistoryQuery(prevState => ({
                 ...prevState,
                 id: { '$regex': regex },
                 entry: { '$regex': `(?i)${alarmLogSearchString}` }
             }))
         }
-        else if (areaSelectedIndex) {
+        else if (alarmLogSelectedKey) {
             // Area
-            regex = `(^${areaSelectedIndex}(=|\\*))|(^${areaSelectedIndex}$)`
+            regex = `(^${alarmLogSelectedKey}(=|\\*))|(^${alarmLogSelectedKey}$)`
             setHistoryQuery(prevState => ({
                 ...prevState,
                 id: { '$regex': regex },
@@ -668,7 +668,7 @@ const AlarmSetup = (props) => {
             }))
         }
 
-    }, [areaSelectedIndex, alarmLogSearchString])
+    }, [alarmLogSelectedKey, alarmLogSearchString])
 
 
     // update lastPage based on totalDocs
@@ -700,11 +700,11 @@ const AlarmSetup = (props) => {
         }))
     }, [currentPageDocId, rowsPerPage, historyQuery])
 
-    // update page and currentPageDocId based on alarmLogSearchString, areaSelectedIndex and rowsPerPage
+    // update page and currentPageDocId based on alarmLogSearchString, alarmLogSelectedKey and rowsPerPage
     useEffect(() => {
         setPage(0)
         setCurrentPageDocId(undefined)
-    }, [alarmLogSearchString, areaSelectedIndex, rowsPerPage])
+    }, [alarmLogSearchString, alarmLogSelectedKey, rowsPerPage])
 
     // update lastPageSkip based on totalDocs
     useEffect(() => {

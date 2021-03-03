@@ -487,72 +487,92 @@ const AlarmSetup = (props) => {
             const localLastPVKey = {}
             let localLastAlarm = ""
             let localLastArea = ""
-
-            dbPVDataRaw.map((area, index) => {
-                areaMongoId[area["area"]] = area["_id"]["$oid"]
-                localAreaEnabled[area["area"]] = area["enable"]
+            let areaNamesIndex = -1
+            // console.clear()
+            dbPVDataRaw.map(area => {
+                areaNamesIndex = ++areaNamesIndex
                 // Backwards compatible
-                localAreaBridged[area["area"]] = {
-                    bridge: (area["bridge"] ?? false),
-                    bridgeTime: (area["bridgeTime"] ?? '')
-                }
-                localLastArea = area["area"]
-                Object.keys(area).map(areaKey => {
-                    if (areaKey === "pvs") {
-                        // Map alarms in area
-                        const items = Object.entries(area[areaKey]).map(value => {
-                            localLastPVKey[area["area"]] = parseInt(value[0].replace("pv", ""))
-                            return value
-                        })
-                        items.sort((A, B) => {
-                            const nameA = A[1]["name"]
-                            const nameB = B[1]["name"]
-                            return (nameA < nameB) ? -1 : (nameA > nameB) ? 1 : 0
-                        })
-                        items.map(item => {
-                            localAreaAlarms.push([`${area["area"]}=${item[0]}`, item[1]])
-                            localLastAlarm = item[1]["name"]
-                            return null
-                        })
+                const areaHasRoles = area?.roles
+                    ? area.roles.length > 0
+                    : false
+                const areaMatchesRole = areaHasRoles
+                    ? isAlarmAdmin
+                        ? true
+                        : roles.some(r => area.roles.includes(r))
+                    : true
+                // console.log(area.area, area?.roles)
+                // console.log("user roles", roles)
+                // console.log('areaMatchesRole', areaMatchesRole)
+                if (areaMatchesRole) {
+                    areaMongoId[area["area"]] = area["_id"]["$oid"]
+                    localAreaEnabled[area["area"]] = area["enable"]
+                    // Backwards compatible
+                    localAreaBridged[area["area"]] = {
+                        bridge: (area["bridge"] ?? false),
+                        bridgeTime: (area["bridgeTime"] ?? '')
                     }
-                    else if (areaKey === "area") {
-                        localAreaNames.push({ "area": area[areaKey] })
-                    }
-                    else if (areaKey.includes("subArea")) {
-                        areaSubAreaMongoId[`${area["area"]}=${area[areaKey]["name"]}`] = areaKey
-                        areaMongoId[`${area["area"]}=${area[areaKey]["name"]}`] = area["_id"]["$oid"]
-                        // Area enabled for subArea includes parent area
-                        localAreaEnabled[`${area["area"]}=${area[areaKey]["name"]}`] = area[areaKey]["enable"] && localAreaEnabled[area["area"]]
-                        // Backwards compatible
-                        localAreaBridged[`${area["area"]}=${area[areaKey]["name"]}`] = {
-                            bridge: (area[areaKey]["bridge"] ?? false),
-                            bridgeTime: (area[areaKey]["bridgeTime"] ?? '')
+                    localLastArea = area["area"]
+                    Object.keys(area).map(areaKey => {
+                        if (areaKey === "pvs") {
+                            // Map alarms in area
+                            const items = Object.entries(area[areaKey]).map(value => {
+                                localLastPVKey[area["area"]] = parseInt(value[0].replace("pv", ""))
+                                return value
+                            })
+                            items.sort((A, B) => {
+                                const nameA = A[1]["name"]
+                                const nameB = B[1]["name"]
+                                return (nameA < nameB) ? -1 : (nameA > nameB) ? 1 : 0
+                            })
+                            items.map(item => {
+                                localAreaAlarms.push([`${area["area"]}=${item[0]}`, item[1]])
+                                localLastAlarm = item[1]["name"]
+                                return null
+                            })
                         }
-                        localLastArea = `${area["area"]}=${area[areaKey]["name"]}`
-                        if (localAreaNames[index]["subAreas"]) {
-                            localAreaNames[index]["subAreas"].push(area[areaKey]["name"])
+                        else if (areaKey === "area") {
+                            localAreaNames.push({ "area": area[areaKey] })
                         }
-                        else {
-                            localAreaNames[index]["subAreas"] = [area[areaKey]["name"]]
+                        else if (areaKey.includes("subArea")) {
+                            areaSubAreaMongoId[`${area["area"]}=${area[areaKey]["name"]}`] = areaKey
+                            areaMongoId[`${area["area"]}=${area[areaKey]["name"]}`] = area["_id"]["$oid"]
+                            // Area enabled for subArea includes parent area
+                            localAreaEnabled[`${area["area"]}=${area[areaKey]["name"]}`] = area[areaKey]["enable"] && localAreaEnabled[area["area"]]
+                            // Backwards compatible
+                            localAreaBridged[`${area["area"]}=${area[areaKey]["name"]}`] = {
+                                bridge: (area[areaKey]["bridge"] ?? false),
+                                bridgeTime: (area[areaKey]["bridgeTime"] ?? '')
+                            }
+                            localLastArea = `${area["area"]}=${area[areaKey]["name"]}`
+                            if (localAreaNames[areaNamesIndex]["subAreas"]) {
+                                localAreaNames[areaNamesIndex]["subAreas"].push(area[areaKey]["name"])
+                            }
+                            else {
+                                localAreaNames[areaNamesIndex]["subAreas"] = [area[areaKey]["name"]]
+                            }
+                            // map all alarms in subArea
+                            const items = Object.entries(area[areaKey]["pvs"]).map(value => {
+                                localLastPVKey[`${area["area"]}=${area[areaKey]["name"]}`] = parseInt(value[0].replace("pv", ""))
+                                return value
+                            })
+                            items.sort((A, B) => {
+                                const nameA = A[1]["name"]
+                                const nameB = B[1]["name"]
+                                return (nameA < nameB) ? -1 : (nameA > nameB) ? 1 : 0
+                            })
+                            items.map(item => {
+                                localAreaAlarms.push([`${area["area"]}=${area[areaKey]["name"]}=${item[0]}`, item[1]])
+                                localLastAlarm = item[1]["name"]
+                                return null
+                            })
                         }
-                        // map all alarms in subArea
-                        const items = Object.entries(area[areaKey]["pvs"]).map(value => {
-                            localLastPVKey[`${area["area"]}=${area[areaKey]["name"]}`] = parseInt(value[0].replace("pv", ""))
-                            return value
-                        })
-                        items.sort((A, B) => {
-                            const nameA = A[1]["name"]
-                            const nameB = B[1]["name"]
-                            return (nameA < nameB) ? -1 : (nameA > nameB) ? 1 : 0
-                        })
-                        items.map(item => {
-                            localAreaAlarms.push([`${area["area"]}=${area[areaKey]["name"]}=${item[0]}`, item[1]])
-                            localLastAlarm = item[1]["name"]
-                            return null
-                        })
-                    }
+                        return null
+                    })
                     return null
-                })
+                }
+                else {
+                    areaNamesIndex = --areaNamesIndex
+                }
                 return null
             })
             if (!areaSelectedIndex) {

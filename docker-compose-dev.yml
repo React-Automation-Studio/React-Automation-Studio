@@ -81,6 +81,21 @@ services:
     volumes:
       - ./certificates:/certificates/
 
+  signalcli:
+    build:
+      context: ./
+      dockerfile: docker/signalcli/Dockerfile
+    hostname: signalcli
+    restart: always
+    network_mode: "host"
+    stdin_open: true
+    tty: true
+    env_file: .env
+    environment:
+      - SIGNAL_CLI_PORT=${SIGNAL_CLI_PORT-8000}
+    volumes:
+      - "./signalcli/signal-cli-config:/srv/signal/.local/share/signal-cli"
+
   initializealarmhandlerdb:
     build:
       context: ./

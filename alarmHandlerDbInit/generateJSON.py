@@ -24,6 +24,7 @@ for area in pvData:
                 "enable": True,
                 "bridge": False,
                 "bridgeTime": "",
+                "roles": area["roles"],
                 "pvs": {}
             }
         elif(areaKey == "pvs"):
@@ -47,6 +48,7 @@ for area in pvData:
                 "enable": True,
                 "bridge": False,
                 "bridgeTime": "",
+                "roles": areaValue["roles"],
                 "pvs": {}
             }
             # subArea pvs

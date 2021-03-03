@@ -17,9 +17,19 @@ except:
     localtz = None
 
 try:
-    SIGNAL_CLI_REST_ENDPOINT = os.environ['SIGNAL_CLI_REST_ENDPOINT']
+    SIGNAL_CLI_PORT = os.environ['SIGNAL_CLI_PORT']
 except:
-    print("Signal CLI endpoint not configured!")
+    print("SIGNAL_CLI_PORT not defined, defaulting to port 8000")
+    SIGNAL_CLI_PORT = str(8000)
+
+try:
+    SIGNAL_ACC_NUMBER = os.environ['SIGNAL_ACC_NUMBER']
+    SIGNAL_ACC_NUMBER = SIGNAL_ACC_NUMBER.replace('+', '%2B')
+    SIGNAL_CLI_REST_ENDPOINT = 'http://localhost:' + \
+        SIGNAL_CLI_PORT+'/messages/'+SIGNAL_ACC_NUMBER
+    print(SIGNAL_CLI_REST_ENDPOINT)
+except:
+    print("Signal account number not configured!")
     print("Signal notifications will not be sent")
     SIGNAL_CLI_REST_ENDPOINT = ''
 
@@ -154,7 +164,7 @@ def notifySignal(timestamp, mobile, userNotifyDict):
                 }
             ]
         }
-        
+
         try:
             r = requests.post(SIGNAL_CLI_REST_ENDPOINT, json=data)
             return r.ok

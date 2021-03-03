@@ -581,7 +581,6 @@ const AlarmSetup = (props) => {
                         }
                         return null
                     })
-                    return null
                 }
                 else {
                     areaNamesIndex = --areaNamesIndex

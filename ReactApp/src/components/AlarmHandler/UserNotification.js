@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useContext, useCallback, useMemo, useRef } from 'react';
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { fade } from '@material-ui/core/styles';
@@ -105,12 +105,21 @@ const UserNotification = (props) => {
     const theme = useTheme()
 
     const context = useContext(AutomationStudioContext)
-    const username = context.userData.username
 
-    const isLoggedIn = context.userData.username !== undefined
-    const isAlarmAdmin = isLoggedIn
-        ? context.userData.roles.includes("alarmAdmin")
-        : false
+    const username = useMemo(() => {
+        return context.userData.username
+    }, [context.userData.username])
+
+    const roles = useMemo(() => {
+        return context.userData.roles
+    }, [context.userData.roles])
+
+    const isAlarmAdmin = useMemo(() => {
+        const isLoggedIn = username !== undefined
+        return isLoggedIn
+            ? roles.includes("alarmAdmin")
+            : false
+    }, [username, roles])
 
     // to connect to all PVs before updating state
     const firstAlarmPVDict = {}

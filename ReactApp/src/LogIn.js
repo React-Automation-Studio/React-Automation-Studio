@@ -174,7 +174,7 @@ const Login = (props) => {
                 context.setUserTokens(data.null);
               }
               if (typeof data.refreshTokenConfig !== 'undefined') {
-                console.log("setting")
+               // console.log("setting")
                 context.setRefreshTokenConfig(data.refreshTokenConfig);
                 
               }

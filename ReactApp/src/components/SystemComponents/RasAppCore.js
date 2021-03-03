@@ -1,5 +1,5 @@
 
-import React, { Component} from 'react';
+import React, { Component } from 'react';
 
 
 
@@ -71,23 +71,23 @@ class RasAppCore extends Component {
       localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
     }
     this.setRefreshTokenConfig = (config) => {
- //     console.log("setRefreshTokenConfig",config)
+      //     console.log("setRefreshTokenConfig",config)
       let system = this.state.system;
       system.refreshTokenConfig = config;
       localStorage.setItem('refreshTokenConfig', JSON.stringify(config));
-     
-      const timer = setTimeout(this.getRefreshToken,system.refreshTokenConfig.refreshTimeout*1000)
-  
-      this.setState({ system: system,refreshTimer:timer })
+
+      const timer = setTimeout(this.getRefreshToken, system.refreshTokenConfig.refreshTimeout * 1000)
+
+      this.setState({ system: system, refreshTimer: timer })
     }
     this.setUserTokens = (accessToken) => {
-  //    console.log("set User tokens",accessToken)
+     // console.log("set User tokens", accessToken)
       let system = this.state.system;
       let userTokens = {
         accessToken: accessToken,
       };
       system.userTokens = userTokens;
-     // localStorage.setItem('jwt', JSON.stringify(userTokens.accessToken))
+      // localStorage.setItem('jwt', JSON.stringify(userTokens.accessToken))
       if (system.socket.disconnected) {
         system.socket.open();
 
@@ -115,12 +115,11 @@ class RasAppCore extends Component {
       this.setState({ system: system })
     }
     this.logout = () => {
- //     console.log("This one logged out!")
-      localStorage.removeItem("loggedIn")
+      
+      // localStorage.clear();
+      
       axios.get('/api/logout')
-        .then(response=> {
-          // handle success
-    //      console.log(response);
+        .then(response => {
           let system = this.state.system;
           let userData = {
             username: '',
@@ -131,13 +130,18 @@ class RasAppCore extends Component {
           let userTokens = { accessToken: "unauthenticated" };
           system.userData = userData;
           system.userTokens = userTokens;
+          system.refreshTokenConfig = {};
+          if (this.state.refreshTimer) {
+            clearTimeout(this.state.refreshTimer)
+          }
           this.setState({ system: system })
 
           localStorage.removeItem('loggedIn');
           localStorage.removeItem('refreshTokenConfig');
-          
+          localStorage.clear();
+
         })
-        .catch((error)=> {
+        .catch((error) => {
           // handle error
           console.log(error);
           this.handleRedirectToLogIn()
@@ -145,11 +149,11 @@ class RasAppCore extends Component {
         .then(function () {
           // always executed
         });
-          
-    
-    
-        
-    
+
+
+
+
+
     }
     this.clearLoggingIn = () => {
       // console.log("clear logging in")
@@ -186,11 +190,11 @@ class RasAppCore extends Component {
     let userTokens = {
       accessToken: 'unauthenticated'
     }
-    
+
     let refreshTokenConfig = JSON.parse(localStorage.getItem('refreshTokenConfig'));
-   
-    if (refreshTokenConfig===null){
-      refreshTokenConfig={}
+
+    if (refreshTokenConfig === null) {
+      refreshTokenConfig = {}
     }
     let localVariables = {};
     let system = {
@@ -203,7 +207,7 @@ class RasAppCore extends Component {
       userData: userData, userTokens: userTokens,
       setUserTokens: this.setUserTokens,
       setRefreshTokenConfig: this.setRefreshTokenConfig,
-      refreshTokenConfig:refreshTokenConfig,
+      refreshTokenConfig: refreshTokenConfig,
       setUserData: this.setUserData,
       logout: this.logout,
       enableProbe: true,
@@ -221,10 +225,10 @@ class RasAppCore extends Component {
     this.handleConnect = this.handleConnect.bind(this);
 
     this.handleClientAuthorisation = this.handleClientAuthorisation.bind(this);
-    this.handleRedirectToLogIn=this.handleRedirectToLogIn.bind(this);
-    this.getInitialRefreshToken=this.getInitialRefreshToken.bind(this);
-    this.getRefreshToken=this.getRefreshToken.bind(this);
-    this.handleLocalStorageChange=this.handleLocalStorageChange.bind(this);
+    this.handleRedirectToLogIn = this.handleRedirectToLogIn.bind(this);
+    this.getInitialRefreshToken = this.getInitialRefreshToken.bind(this);
+    this.getRefreshToken = this.getRefreshToken.bind(this);
+    this.handleLocalStorageChange = this.handleLocalStorageChange.bind(this);
   }
 
 
@@ -243,7 +247,7 @@ class RasAppCore extends Component {
   handleClientAuthorisation(msg) {
     if (msg.successful) {
       this.state.system.setUserData(msg.username, msg.roles);
-      localStorage.setItem("loggedIn",'true')
+      localStorage.setItem("loggedIn", 'true')
     }
     else {
       this.logout()
@@ -253,118 +257,125 @@ class RasAppCore extends Component {
 
 
   }
-  handleRedirectToLogIn(){
+  handleRedirectToLogIn() {
     console.log('redirectToLogIn')
 
     //setTimeout(() => {
-      this.state.system.socket.close()
+    this.state.system.socket.close()
     this.logout();
-   // this.setState({redirectToLoginPage:true});
+    // this.setState({redirectToLoginPage:true});
     //      }, 1000)
   }
 
-  
 
-  getRefreshToken(){
+
+  getRefreshToken() {
     let d = new Date();
     let n = d.toTimeString();
-  //  console.log("refreshing at:",n)
-  const options = {
-    headers: { 'Content-Type': 'application/json' },
-   // timeout: props.timeout,
-  };
-  let body; 
- 
-  const {useCookie} =this.state.system.refreshTokenConfig;
-  if (useCookie===true){
-    body= JSON.stringify({  })
-  }
-  else{
-    console.warn("React Automation Studio SECURE mode is not in use, and as a consequence the refresh token will stored in local storage. This mode should not be used in production, see styleguide for correct implementation")
-    const {refreshToken}=this.state.system.refreshTokenConfig;
-    body= JSON.stringify({"refreshToken":refreshToken  })
-  }
-    axios.post('/api/refresh',body,options)
-    .then(response=> {
-      // handle success
-      // console.log(response);
-      const { data } = response;
-      if (typeof data.accessToken !== 'undefined') {
-        this.setUserTokens(data.accessToken);
-        
-      }
-      else {
-        this.setUserTokens(data.null);
-      }
-      if (typeof data.refreshTokenConfig !== 'undefined') {
-        // console.log("setting")
-        this.state.system.setRefreshTokenConfig(data.refreshTokenConfig);
-      
-      }
-      else {
-        this.state.system.setRefreshTokenTimeout(data.null);
-      }
-    })
-    .catch((error)=> {
-      // handle error
-      console.log(error);
-      this.handleRedirectToLogIn()
-    })
-    .then(function () {
-      // always executed
-    });
-      this.setState({ 'redirectToLoginPage': false });
+    //  console.log("refreshing at:",n)
+    const options = {
+      headers: { 'Content-Type': 'application/json' },
+      // timeout: props.timeout,
+    };
+    let body;
 
-
+    const { useCookie } = this.state.system.refreshTokenConfig;
+    if (useCookie === true) {
+      body = JSON.stringify({})
     }
-   
+    else {
+      console.warn("React Automation Studio SECURE mode is not in use, and as a consequence the refresh token will stored in local storage. This mode should not be used in production, see styleguide for correct implementation")
+      const { refreshToken } = this.state.system.refreshTokenConfig;
+      body = JSON.stringify({ "refreshToken": refreshToken })
+    }
+    axios.post('/api/refresh', body, options)
+      .then(response => {
+        // handle success
+        // console.log(response);
+        const { data } = response;
+        if (typeof data.accessToken !== 'undefined') {
+          this.setUserTokens(data.accessToken);
 
-  
-  getInitialRefreshToken(){
-   
+        }
+        else {
+          this.setUserTokens(data.null);
+        }
+        if (typeof data.refreshTokenConfig !== 'undefined') {
+          // console.log("setting")
+          this.state.system.setRefreshTokenConfig(data.refreshTokenConfig);
+
+        }
+        else {
+          this.state.system.setRefreshTokenTimeout(data.null);
+        }
+      })
+      .catch((error) => {
+        // handle error
+        console.log(error);
+        this.handleRedirectToLogIn()
+      })
+      .then(function () {
+        // always executed
+      });
+    this.setState({ 'redirectToLoginPage': false });
+
+
+  }
+
+
+
+  getInitialRefreshToken() {
+
     let refreshTokenConfig = JSON.parse(localStorage.getItem('refreshTokenConfig'));
-  
+
     if (refreshTokenConfig !== null) {
       this.getRefreshToken();
       // this.setRefreshTokenConfig(refreshTokenConfig)
-      
+
     }
-    else{
+    else {
+      this.clearLoggingIn();
       this.setState({ 'redirectToLoginPage': true });
+
     }
 
-    
-    
+
+
 
   }
-  handleLocalStorageChange(event){
-    
-    if (event.key=="loggedIn"){
-      if(event.newValue===null){
+  handleLocalStorageChange(event) {
+
+    if (event.key == "loggedIn") {
+      if (event.newValue === null) {
         // console.log(event)
         this.logout();
-      }else if(event.newValue==='true'){
-        this.getInitialRefreshToken();
+      } else if (event.newValue === 'true') {
+        let refreshTokenConfig = JSON.parse(localStorage.getItem('refreshTokenConfig'));
+        let system = this.state.system;
+        if (refreshTokenConfig !== null) {
+          system.refreshTokenConfig = refreshTokenConfig;
+          this.setState({ system: system }, this.getInitialRefreshToken())
+        }
       }
 
-      
-      
+
+
     }
   }
   componentDidMount() {
-    window.addEventListener('storage',this.handleLocalStorageChange)
+    window.addEventListener('storage', this.handleLocalStorageChange)
     setTimeout(this.clearLoggingIn, this.props.loginTimeout)
-  //  console.log("mounted")
+    //  console.log("mounted")
     this.getInitialRefreshToken();
     let socket = this.state.system.socket;
     socket.on('redirectToLogIn', this.handleRedirectToLogIn);
-    
+
     // let jwt = this.state.system.userTokens.accessToken;
     // if (jwt) {
-       
-    
-       socket.on('clientAuthorisation', this.handleClientAuthorisation);
-     //  socket.on('connect', this.handleConnect);
+
+
+    socket.on('clientAuthorisation', this.handleClientAuthorisation);
+    //  socket.on('connect', this.handleConnect);
 
     // }
 
@@ -372,12 +383,12 @@ class RasAppCore extends Component {
 
   }
   componentWillUnmount() {
-    window.removeEventListener('storage',this.handleLocalStorageChange)
+    window.removeEventListener('storage', this.handleLocalStorageChange)
     let socket = this.state.system.socket;
     socket.removeListener('connect', this.handleConnect);
     socket.removeListener('clientAuthorisation', this.handleClientAuthorisation);
     socket.removeListener('redirectToLogIn', this.handleRedirectToLogIn)
-    if (this.state.refreshTimer){
+    if (this.state.refreshTimer) {
       clearTimeout(this.state.refreshTimer)
     }
   }
@@ -385,20 +396,20 @@ class RasAppCore extends Component {
 
     const { system } = this.state;
     // console.log("loggingIn", system.userData.loggingIn)
-   //  console.log("loggedIn", system.userData.loggedIn)
+    //  console.log("loggedIn", system.userData.loggedIn)
     // console.log("refresh token config", system.refreshTokenConfig)
     // console.log("redirect to login",this.state.redirectToLoginPage)
-    
+
     return (
 
-      <AutomationStudioContext.Provider value={ {...system} }>
+      <AutomationStudioContext.Provider value={{ ...system }}>
 
         <MuiThemeProvider theme={this.state.theme}>
           <CssBaseline />
           <ReactVisCssBaseline />
           <RasCssBaseline />
           {this.props.children}
-        
+
         </MuiThemeProvider>
       </AutomationStudioContext.Provider>
     );

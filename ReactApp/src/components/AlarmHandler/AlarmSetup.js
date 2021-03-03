@@ -205,20 +205,24 @@ const AlarmSetup = (props) => {
         return context.userData.username
     }, [context.userData.username])
 
+    const roles = useMemo(() => {
+        return context.userData.roles
+    }, [context.userData.roles])
+
     const isAlarmAdmin = useMemo(() => {
-        const isLoggedIn = context.userData.username !== undefined
+        const isLoggedIn = username !== undefined
         return isLoggedIn
-            ? context.userData.roles.includes("alarmAdmin")
+            ? roles.includes("alarmAdmin")
             : false
-    }, [context.userData.username, context.userData.roles])
+    }, [username, roles])
 
     const isAlarmUser = useMemo(() => {
-        const isLoggedIn = context.userData.username !== undefined
+        const isLoggedIn = username !== undefined
         const alarmUser = isLoggedIn
-            ? context.userData.roles.includes("alarmUser")
+            ? roles.includes("alarmUser")
             : false
         return isAlarmAdmin || alarmUser
-    }, [context.userData.roles, context.userData.username, isAlarmAdmin])
+    }, [roles, username, isAlarmAdmin])
 
 
     const [enableAllAreas, setEnableAllAreas] = useState(true)

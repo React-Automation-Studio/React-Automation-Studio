@@ -338,7 +338,7 @@ class DeprecatedEpicsPV extends React.Component {
       else{
       return( <React.Fragment  >
 
-        {/*redirectToLogInPage&&<Redirect  push={true} to='/LogIn' />*/}
+        {/*redirectToLogInPage&&<Redirect  push={true} to='/Login' />*/}
         {/* {this.context.styleGuideRedirect&&<RedirectToLogIn/>} */}
       </React.Fragment>
     )}

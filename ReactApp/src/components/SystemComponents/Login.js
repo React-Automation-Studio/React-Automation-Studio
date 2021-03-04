@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
-import AutomationStudioContext from './components/SystemComponents/AutomationStudioContext';
+import AutomationStudioContext from './AutomationStudioContext';
 import PropTypes from 'prop-types';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -63,9 +63,48 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const Header = (props) => {
+  const classes=useStyles();
+  return (
+    <React.Fragment>
+      {props.title1 && <Typography component="h1" variant="h3">
+        {props.title1}
+      </Typography>}
+      {props.title2 && <Typography component="h1" variant="h3">
+        {props.title2}
+      </Typography>}
+      {props.title3 && <Typography component="h1" variant="h3">
+        {props.title3}
+      </Typography>}
+      {props.image}
+      {props.logoIcon && <Avatar className={classes.avatar}>
+        {props.logoIcon}
 
+      </Avatar>}
+      {props.signInText &&
+        <Typography component="h1" variant="h5" style={{ paddingBottom: 16 }}>
+          {props.signInText}
+        </Typography>}
+    </React.Fragment>
+  )
+}
+const Footer = (props) => {
+  return (
+    <React.Fragment>
+      {props.footerString && <Typography style={{ paddingTop: 24 }} align="left" variant="caption">
+        {props.footerString}
+      </Typography>}
 
+      {props.version && <Typography style={{ paddingTop: 16 }} align="left" variant="caption">
+        {props.version}
 
+      </Typography>}
+    </React.Fragment>)
+}
+/**
+ * The login component can be fully customized either by using the individual props or by overriding the header and footer portions using the customHeader or customFooter components.
+ * The login component and pvServer support multiple login modes. See below to enable login, disable standard login, enable active directory and Google login
+ * */
 const Login = (props) => {
   const classes = useStyles();
   const context = useContext(AutomationStudioContext);
@@ -84,7 +123,7 @@ const Login = (props) => {
   const enableActiveDirectoryLogin = process.env.REACT_APP_EnableActiveDirectoryLogin === 'true';
   const enableGoogleLogin = process.env.REACT_APP_EnableGoogleLogin === 'true';
   const history = useHistory();
-  const location = useLocation();
+  const location =useLocation();
 
   const responseGoogle = (response) => {
     const token = response.tokenId;
@@ -221,6 +260,8 @@ const Login = (props) => {
       ? props.activeDirectoryLoginUsernameDisplayText
       : ""
 
+
+
   return (
     <React.Fragment>
       <Dialog
@@ -265,25 +306,12 @@ const Login = (props) => {
           </Button>
         </DialogActions>
       </Dialog>
-      <main className={classes.main}>
-        <Paper className={classes.paper}>
-          {props.title1 && <Typography component="h1" variant="h3">
-            {props.title1}
-          </Typography>}
-          {props.title2 && <Typography component="h1" variant="h3">
-            {props.title2}
-          </Typography>}
-          {props.title3 && <Typography component="h1" variant="h3">
-            {props.title3}
-          </Typography>}
-          {props.logoIcon && <Avatar className={classes.avatar}>
-            {props.logoIcon}
 
-          </Avatar>}
-          {props.signInText &&
-            <Typography component="h1" variant="h5" style={{ paddingBottom: 16 }}>
-              {props.signInText}
-            </Typography>}
+      <main className={classes.main}>
+
+        <Paper className={classes.paper}>
+          {props.customHeader ? props.customHeader : <Header {...props} />}
+
           {(loginModes.length > 1) && <AppBar position="static" color='inherit' >
             <Tabs value={loginTabValue} onChange={(event, newValue) => setLoginTabValue(newValue)} aria-label="simple tabs example"
               indicatorColor="primary"
@@ -299,7 +327,6 @@ const Login = (props) => {
           {(enableStandardLogin || enableActiveDirectoryLogin) && <form className={classes.form}>
             <FormControl margin="normal" required fullWidth>
               <TextField
-
                 label={usernameText}
                 id="email" name="email" autoComplete="email" autoFocus onChange={(event) => (setUsername(event.target.value))}
                 onKeyPress={(event) => {
@@ -312,7 +339,6 @@ const Login = (props) => {
             </FormControl>
             <FormControl margin="normal" required fullWidth>
               <TextField
-
                 label={"Password"}
                 type={showPassword ? "text" : "password"}
 
@@ -361,14 +387,7 @@ const Login = (props) => {
                 cookiePolicy={'single_host_origin'}
               />
             </div>}
-          {props.footer && <Typography style={{ paddingTop: 24 }} align="left" variant="caption">
-            {props.footer}
-          </Typography>}
-
-          {props.version && <Typography style={{ paddingTop: 16 }} align="left" variant="caption">
-            {props.version}
-
-          </Typography>}
+          {props.customFooter ? props.customFooter : <Footer {...props} />}
         </Paper>
       </main>
       {/* {authorised && <Redirect to='/' />} */}
@@ -382,10 +401,16 @@ Login.propTypes = {
   title2: PropTypes.string,
   /** Title text bottom row.*/
   title3: PropTypes.string,
+  /** An image than can be display*/
+  image: PropTypes.element,
+
+  /** Login Icon. Must be of type @material-ui/icons/...*/
+  logoIcon: PropTypes.element,
+
   /** Sign in text.*/
   signInText: PropTypes.string,
-  /** Footer.*/
-  footer: PropTypes.string,
+  /** Footer string.*/
+  footerString: PropTypes.string,
   /** Version.*/
   version: PropTypes.string,
   /** Standard Login Username display string.*/
@@ -394,8 +419,12 @@ Login.propTypes = {
   activeDirectoryLoginUsernameDisplayText: PropTypes.string,
   /** Login timeout.*/
   timeout: PropTypes.number,
-  /** Login Icon. Must be of type @material-ui/icons/...*/
-  logoIcon: PropTypes.element,
+  /** Custom Header Component overides all the components above the username Textfield*/
+  customHeader: PropTypes.element,
+  /** Custom Footer Component overides all the components below the sign in buttons*/
+  customFooter: PropTypes.element,
+  
+
 
 
 };
@@ -403,13 +432,15 @@ Login.defaultProps = {
   title1: "React",
   title2: "Automation",
   title3: "Studio",
+  logoIcon: <LockOutlinedIcon />,
   signInText: "Sign In",
-  footer: "Login is now customizable",
-  version: "V2.2.0",
+  // footerString: "Login is now customizable",
+  // version: "V2.2.0",
   standardLoginUsernameDisplayText: "Username",
   activeDirectoryLoginUsernameDisplayText: "Email Address",
-  logoIcon: <LockOutlinedIcon />,
+
   timeout: 15000,
+  
 
 };
 

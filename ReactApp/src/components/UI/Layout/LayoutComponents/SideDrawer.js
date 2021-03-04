@@ -64,7 +64,7 @@ const SideDrawer = (props) => {
                             <ListItemIcon><AccountCircle /></ListItemIcon>
                             <ListItemText style={{ textOverflow: 'ellipsis' }} primary={username} />
                         </ListItem>
-                        <ListItem button onClick={handleLogout} component={notInStyleGuide ? Link : 'div'} to="/LogIn" >
+                        <ListItem button onClick={handleLogout} component={notInStyleGuide ? Link : 'div'} to="/Login" >
                             <ListItemIcon><Logout /></ListItemIcon>
                             <ListItemText primary={"Log Out"} />
                         </ListItem>

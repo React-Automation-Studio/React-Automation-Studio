@@ -23,7 +23,7 @@ import Example2 from './components/staging/Example/Example2';
 import Example3 from './components/staging/Example/Example3';
 //system
 import MainDashboard from './components/UI/MainDashboard';
-import LogIn from './LogIn';
+import Login from './components/SystemComponents/Login';
 import Probe from './components/SettingsPages/Probe';
 import Vault from './components/AlarmHandler/Vault';
 import Help from './components/docs/Help';
@@ -40,11 +40,13 @@ const Routes = (props) => {
         {process.env.REACT_APP_EnableLogin === 'true' &&
           <Route
             exact 
-            path="/LogIn"
+            path="/Login"
             component={() =>
-              <LogIn 
-                //standardLoginUsernameDisplayText={"custom"}
-                timeout={5000}
+              <Login 
+               
+               footerString= "Login is now customizable"
+               version="V2.2.0"
+               timeout={5000}
                />
             }
           />

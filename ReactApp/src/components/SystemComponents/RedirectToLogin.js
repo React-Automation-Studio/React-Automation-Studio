@@ -60,7 +60,7 @@ class RedirectToLogIn extends Component {
 
     return (
       <React.Fragment>
-        {this.state.redirectToLoginPage&&<Redirect  to='/LogIn' />}
+        {this.state.redirectToLoginPage&&<Redirect  to='/Login' />}
 
       </React.Fragment>
     )

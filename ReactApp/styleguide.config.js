@@ -164,6 +164,17 @@ module.exports = {
 
         },
         {
+          name: 'Routes and Login Components',
+          content: 'src/docs/login/login.md',
+          components: ['src/components/SystemComponents/Login.js','src/components/SystemComponents/ProtectedRoutes.js'], 
+          exampleMode: 'expand', // 'hide' | 'collapse' | 'expand'
+          usageMode: 'expand', // 'hide' | 'collapse' | 'expand'
+
+
+
+
+        },
+        {
           name: 'Database Hooks',
           content: 'src/components/SystemComponents/database/MongoDB/MongoDb.md',
           //components: 'src/components/SystemComponents/database/MongoDB/*.js',

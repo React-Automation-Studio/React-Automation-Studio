@@ -2,7 +2,6 @@ FROM python:3.8-slim
 
 # Create signal-cli user
 ENV HOME /srv/signal
-RUN addgroup --system --gid 1000 sgn && adduser --system --home $HOME --gid 1000 --uid 1000 sgn
 
 # Install java
 RUN set -eux; \
@@ -24,7 +23,7 @@ gnal-cli
 
 WORKDIR $HOME
 # Copy poetry.lock* in case it doesn't exist in the repo
-COPY --chown=sgn:sgn ./signalcli/pyproject.toml ./signalcli/poetry.lock* ./
+COPY ./signalcli/pyproject.toml ./signalcli/poetry.lock* ./
 
 # Install Poetry & disable virtualenv creation
 RUN pip install --no-cache poetry && \
@@ -34,12 +33,10 @@ RUN poetry install --no-root --no-dev && \
     rm -rf ~/.cache/{pip,pypoetry}
 
 # Copy app
-COPY --chown=sgn:sgn ./signalcli/signal_cli_rest_api/ signal_cli_rest_api/
+COPY ./signalcli/signal_cli_rest_api/ signal_cli_rest_api/
 
 # Prepare mount point for signal-cli 
 RUN mkdir -p $HOME/.local/share/signal-cli
-RUN chown -R sgn:sgn $HOME/.local/share/signal-cli
 
-USER sgn
 
-CMD uvicorn signal_cli_rest_api.app.main:app --host "0.0.0.0" --port $SIGNAL_CLI_PORT
+CMD python ./signal_cli_rest_api/main.py

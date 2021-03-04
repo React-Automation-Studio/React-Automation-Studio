@@ -17,16 +17,16 @@ except:
     localtz = None
 
 try:
-    SIGNAL_CLI_PORT = os.environ['SIGNAL_CLI_PORT']
+    SIGNAL_CLI_REST_API_PORT = os.environ['SIGNAL_CLI_REST_API_PORT']
 except:
-    print("SIGNAL_CLI_PORT not defined, defaulting to port 8000")
-    SIGNAL_CLI_PORT = str(8000)
+    print("SIGNAL_CLI_REST_API_PORT not defined, defaulting to port 8000")
+    SIGNAL_CLI_REST_API_PORT = str(8000)
 
 try:
     SIGNAL_ACC_NUMBER = os.environ['SIGNAL_ACC_NUMBER']
     SIGNAL_ACC_NUMBER = SIGNAL_ACC_NUMBER.replace('+', '%2B')
     SIGNAL_CLI_REST_ENDPOINT = 'http://localhost:' + \
-        SIGNAL_CLI_PORT+'/messages/'+SIGNAL_ACC_NUMBER
+        SIGNAL_CLI_REST_API_PORT+'/messages/'+SIGNAL_ACC_NUMBER
     print(SIGNAL_CLI_REST_ENDPOINT)
 except:
     print("Signal account number not configured!")

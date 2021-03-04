@@ -9,7 +9,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import { useHistory,useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -24,6 +24,7 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
+import TextField from '@material-ui/core/TextField';
 import axios from 'axios';
 import { GoogleLogin } from 'react-google-login';
 
@@ -96,26 +97,26 @@ const Login = (props) => {
     let endpoint = '/api/login/google';
     if (endpoint) {
       axios.post(endpoint, body, options)
-        .then(response => { 
+        .then(response => {
           const { data } = response;
-         
+
           if (typeof data.accessToken !== 'undefined') {
             context.setUserTokens(data.accessToken);
-            
+
           }
           else {
             context.setUserTokens(data.null);
           }
           if (typeof data.refreshTokenConfig !== 'undefined') {
-       //     console.log("setting")
+            //     console.log("setting")
             context.setRefreshTokenConfig(data.refreshTokenConfig);
-            
+
           }
           else {
             context.setRefreshTokenTimeout(data.null);
           }
           setAuthorisationFailed(data.login !== true);
-            }
+        }
 
         )
         .catch(err => {
@@ -163,20 +164,20 @@ const Login = (props) => {
           // .then(response => response.json())
           .then(response => {
             const { data } = response;
-           
+
             if (mounted.current) {
-           //   console.log(data) 
+              //   console.log(data) 
               if (typeof data.accessToken !== 'undefined') {
                 context.setUserTokens(data.accessToken);
-                
+
               }
               else {
                 context.setUserTokens(data.null);
               }
               if (typeof data.refreshTokenConfig !== 'undefined') {
-               // console.log("setting")
+                // console.log("setting")
                 context.setRefreshTokenConfig(data.refreshTokenConfig);
-                
+
               }
               else {
                 context.setRefreshTokenTimeout(data.null);
@@ -207,7 +208,7 @@ const Login = (props) => {
   }, [submit]
   )
   useEffect(() => {
-    if (loggedIn){
+    if (loggedIn) {
       setAuthorised(loggedIn)
       let { from } = location.state || { from: { pathname: "/" } };
       history.replace(from);
@@ -219,7 +220,7 @@ const Login = (props) => {
     : loginModes[loginTabValue] === 'Active Directory'
       ? props.activeDirectoryLoginUsernameDisplayText
       : ""
- 
+
   return (
     <React.Fragment>
       <Dialog
@@ -297,8 +298,10 @@ const Login = (props) => {
           </AppBar>}
           {(enableStandardLogin || enableActiveDirectoryLogin) && <form className={classes.form}>
             <FormControl margin="normal" required fullWidth>
-              <InputLabel htmlFor="email">{usernameText}</InputLabel>
-              <Input id="email" name="email" autoComplete="email" autoFocus onChange={(event) => (setUsername(event.target.value))}
+              <TextField
+
+                label={usernameText}
+                id="email" name="email" autoComplete="email" autoFocus onChange={(event) => (setUsername(event.target.value))}
                 onKeyPress={(event) => {
                   if (event.key === 'Enter') {
                     setUsername(event.target.value)
@@ -308,11 +311,11 @@ const Login = (props) => {
               />
             </FormControl>
             <FormControl margin="normal" required fullWidth>
-              <InputLabel htmlFor="password">Password</InputLabel>
-              <Input
-                name="password"
+              <TextField
+
+                label={"Password"}
                 type={showPassword ? "text" : "password"}
-                id="password"
+
                 autoComplete="current-password"
                 onChange={(event) => (setPassword(event.target.value))}
                 onKeyPress={(event) => {
@@ -321,18 +324,20 @@ const Login = (props) => {
                     setSubmit(true)
                   }
                 }}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={() => (setShowPassword(prev => (!prev)))}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={() => (setShowPassword(prev => (!prev)))}
 
-                      edge="end"
-                    >
-                      {showPassword ? <Visibility /> : <VisibilityOff />}
-                    </IconButton>
-                  </InputAdornment>
-                }
+                        edge="end"
+                      >
+                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    </InputAdornment>
+                  )
+                }}
 
               />
             </FormControl>

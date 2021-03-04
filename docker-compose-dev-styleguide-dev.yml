@@ -66,6 +66,19 @@ services:
     restart: always
     network_mode: host
 
+  signalcli:
+    build:
+      context: ./
+      dockerfile: docker/signalcli/Dockerfile
+    hostname: signalcli
+    restart: always
+    network_mode: "host"
+    stdin_open: true
+    tty: true
+    env_file: .env
+    volumes:
+      - "./signalcli/signal-cli-config:/srv/signal/.local/share/signal-cli"
+      
   initializealarmhandlerdb:
     build:
       context: ./

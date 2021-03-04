@@ -361,6 +361,25 @@ class RasAppCore extends Component {
 
 
     }
+    else if (event.key == "themeStyle"){
+      console.log(event)
+      
+        
+        let storedThemeStyle = localStorage.getItem('themeStyle')
+       console.log(storedThemeStyle)
+       const { defaultTheme } = this.props;
+        let themeStyle = storedThemeStyle === null ? defaultTheme : JSON.parse(storedThemeStyle);
+        let theme = null
+        let themeStyles = this.state.system.themeStyles;
+        if (themeStyles.includes(themeStyle)) {
+          theme = createMuiTheme(this.props.themes[themeStyle])
+          let system = this.state.system;
+        system.themeStyle = themeStyle;
+        this.setState({ system: system, theme: theme })
+        }
+    
+
+    }
   }
   componentDidMount() {
     window.addEventListener('storage', this.handleLocalStorageChange)

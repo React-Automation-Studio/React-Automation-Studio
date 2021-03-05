@@ -105,30 +105,62 @@ def dbGetListOfPVNames():
     return areaList, list(set(pvNameList))
 
 
-def dbGetPVField(field, areaKey, pvKey, subAreaKey=None):
+def dbGetField(field, areaKey, pvKey=None, subAreaKey=None):
     doc = alarmDB.pvs.find_one(
         {"area": areaKey})
     if (subAreaKey):
-        fieldValue = doc[subAreaKey]["pvs"][pvKey][field]
+        if(pvKey):
+            fieldValue = doc[subAreaKey]["pvs"][pvKey][field]
+        else:
+            fieldValue = doc[subAreaKey][field]
     else:
-        fieldValue = doc["pvs"][pvKey][field]
+        if(pvKey):
+            fieldValue = doc["pvs"][pvKey][field]
+        else:
+            fieldValue = doc[field]
     return fieldValue
 
 
-def dbSetPVField(field, value, areaKey, pvKey, subAreaKey=None):
+def dbSetField(field, value, areaKey, pvKey=None, subAreaKey=None):
     if (subAreaKey):
-        alarmDB.pvs.update_many(
-            {'area': areaKey},
-            {'$set': {
-                subAreaKey + '.pvs.' + pvKey + '.'+field:
-                value
-            }})
+        if(pvKey):
+            alarmDB.pvs.update_many(
+                {'area': areaKey},
+                {'$set': {
+                    subAreaKey + '.pvs.' + pvKey + '.'+field:
+                    value
+                }})
+        else:
+            alarmDB.pvs.update_many(
+                {'area': areaKey},
+                {'$set': {
+                    subAreaKey + '.'+field:
+                    value
+                }})
     else:
-        alarmDB.pvs.update_many(
-            {'area': areaKey},
-            {'$set': {
-                'pvs.' + pvKey + '.'+field: value
-            }})
+        if(pvKey):
+            alarmDB.pvs.update_many(
+                {'area': areaKey},
+                {'$set': {
+                    'pvs.' + pvKey + '.'+field: value
+                }})
+        else:
+            alarmDB.pvs.update_many(
+                {'area': areaKey},
+                {'$set': {
+                    field: value
+                }})
+
+
+def dbGetFieldGlobal(field):
+    doc = alarmDB.glob.find_one({})
+    return doc[field]
+
+
+def dbSetFieldGlobal(field, value):
+    alarmDB.glob.update_one({}, {
+        '$set': {field: value}
+    })
 
 
 def dbFindOne(collection, documentKey=None):
@@ -140,15 +172,16 @@ def dbFindOne(collection, documentKey=None):
     return doc
 
 
-def dbUpdateHistory(id, entry):
-    alarmDB.history.update_many(
-        {'id': id},
-        {'$push': {
-            'history': {
-                '$each': [entry],
-                '$position': 0
-            }
-        }})
+def dbUpdateHistory(areaKey, entry, pvname=None):
+    id = areaKey
+    if(pvname):
+        id = id+"*"+pvname
+    alarmDB.history.insert_one({
+        'singleEntry': True,
+        'id': id,
+        'timestamp': entry["timestamp"],
+        'entry': entry["entry"]
+    })
 
 
 def main():

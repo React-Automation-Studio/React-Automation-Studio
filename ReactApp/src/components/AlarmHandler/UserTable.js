@@ -62,7 +62,8 @@ const UserTable = (props) => {
     }, false)
 
     const { filterUserRegex } = props
-    const fillChipName = filterUserRegex.length === 1 ? filterUserRegex[0] : null
+    const fillChipIndex = filterUserRegex.length === 1 ? filterUserRegex[0].index : null
+    const fillChipName = filterUserRegex.length === 1 ? filterUserRegex[0].regEx : null
 
     return (
         <TableContainer component={Paper} style={{ height: props.height }} elevation={theme.palette.type === 'dark' ? undefined : 5}>
@@ -131,14 +132,15 @@ const UserTable = (props) => {
 
                         let scheduleIndex
                         const chipSelected = user.notifyPVs.reduce((acc, area, index) => {
-                            if (area.regEx === fillChipName) {
+                            if ((area.regEx === fillChipName) && (index === fillChipIndex)) {
                                 scheduleIndex = index
                             }
-                            return acc || area.regEx === fillChipName
+                            return acc || ((area.regEx === fillChipName) && (index === fillChipIndex))
                         }, false)
 
                         const isDemoUser = user.username === 'user1' || user.username === 'user2' || user.username === 'user3'
                         const allowEdit = isDemoUser || user.username === props.username || props.isAlarmAdmin
+                        const invalidContact = props.emailError[`${user.username}-${user.name}`] || props.mobileError[`${user.username}-${user.name}`]
 
                         return (
                             < TableRow
@@ -175,6 +177,8 @@ const UserTable = (props) => {
                                                     readOnly: props.userEdit[`${user.username}-${user.name}`] ? false : true,
                                                     disableUnderline: props.userEdit[`${user.username}-${user.name}`] ? false : true
                                                 }}
+                                                error={props.emailError[`${user.username}-${user.name}`]}
+                                                label={props.emailError[`${user.username}-${user.name}`] ? "Invalid email" : undefined}
                                             />
                                         </Grid>
                                         <Grid item xs={2} className={classes.verticalMiddle}>
@@ -190,6 +194,8 @@ const UserTable = (props) => {
                                                     readOnly: props.userEdit[`${user.username}-${user.name}`] ? false : true,
                                                     disableUnderline: props.userEdit[`${user.username}-${user.name}`] ? false : true
                                                 }}
+                                                error={props.mobileError[`${user.username}-${user.name}`]}
+                                                label={props.mobileError[`${user.username}-${user.name}`] ? "Invalid number" : undefined}
                                             />
                                         </Grid>
                                     </Grid>
@@ -197,11 +203,11 @@ const UserTable = (props) => {
                                 <TableCell>
                                     {user.notifyPVs.map((expressionObject, index) => {
                                         const expression = expressionObject.regEx
-                                        const filledChip = expression === fillChipName || (!showAddHeader && (user.name === props.filterUser.name && user.username === props.filterUser.username))
+                                        const filledChip = ((expression === fillChipName) && (index === fillChipIndex)) || (!showAddHeader && (user.name === props.filterUser.name && user.username === props.filterUser.username))
                                         return (
                                             <Chip
                                                 classes={{ outlinedSecondary: classes.chipOutlinedSecondary }}
-                                                key={expression}
+                                                key={`${index}-${expression}`}
                                                 label={expression}
                                                 variant={filledChip ? undefined : "outlined"}
                                                 color="secondary"
@@ -221,7 +227,7 @@ const UserTable = (props) => {
                                                 fullWidth={true}
                                                 autoFocus={true}
                                                 error={props.regexError[`${user.username}-${user.name}`]}
-                                                label={props.regexError[`${user.username}-${user.name}`] ? "Invalid Regex" : undefined}
+                                                label={props.regexError[`${user.username}-${user.name}`] ? "Invalid regex" : undefined}
                                                 InputProps={
                                                     props.regexError[`${user.username}-${user.name}`]
                                                         ? {
@@ -250,13 +256,19 @@ const UserTable = (props) => {
                                         allowEdit
                                             ? props.userEdit[`${user.username}-${user.name}`]
                                                 ? <React.Fragment>
-                                                    <Tooltip title="Apply" placement="bottom">
-                                                        <IconButton
-                                                            onClick={(event) => { props.applyEdit(event, user.name, user.username) }}
+                                                    {invalidContact
+                                                        ? <IconButton
+                                                            disabled={true}
                                                         >
-                                                            <DoneIcon className={classes.icon} />
+                                                            <BlockIcon />
                                                         </IconButton>
-                                                    </Tooltip>
+                                                        : <Tooltip title="Apply" placement="bottom">
+                                                            <IconButton
+                                                                onClick={(event) => { props.applyEdit(event, user.name, user.username) }}
+                                                            >
+                                                                <DoneIcon className={classes.icon} />
+                                                            </IconButton>
+                                                        </Tooltip>}
                                                     <Tooltip title="Cancel" placement="bottom">
                                                         <IconButton
                                                             onClick={(event) => { props.cancelEdit(event, user.name, user.username) }}

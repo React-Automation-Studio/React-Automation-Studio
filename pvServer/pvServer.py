@@ -422,7 +422,16 @@ def dbWatchThread(watchEventName):
                     if change is not None:
                         try:
                             #documentKey = change["documentKey"]
-                            doc = clientDbWatchList[watchEventName]['collection'].find(clientDbWatchList[watchEventName]['query'])
+                            query = clientDbWatchList[watchEventName]['query']
+                            projection = clientDbWatchList[watchEventName]['projection']
+                            sort = clientDbWatchList[watchEventName]['sort']
+                            skip = clientDbWatchList[watchEventName]['skip']
+                            limit = clientDbWatchList[watchEventName]['limit']
+                            count = clientDbWatchList[watchEventName]['count']
+                            if(count):
+                                doc = clientDbWatchList[watchEventName]['collection'].count_documents(query)
+                            else:
+                                doc = clientDbWatchList[watchEventName]['collection'].find(query,projection).sort(sort).skip(skip).limit(limit)
                   #         print(str(change))
                             #print("documentKey: ",documentKey)
                             #print(watchEventName,change)
@@ -1082,13 +1091,40 @@ def databaseBroadcastRead(message):
                             mydb = myclient[dbName]
 
                             mycol=mydb[colName]
-                            try:
-                                query=parameters['query']
-                    #            print("using query:",query)
-                                X=mycol.find(query)
-                            except:
-                                X=mycol.find()
-                                query=None
+                            
+                            query=parameters['query'] if ('query' in parameters) else None
+                            # Convert string ObjectId's to valid ObjectId objects
+                            if(query):
+                                if("_id" in query):
+                                    try:
+                                        for key,value in query["_id"].items():
+                                            query["_id"][key]=ObjectId(value)
+                                    except:
+                                        pass
+                            projection=parameters['projection'] if ('projection' in parameters) else None
+                            if('sort' in parameters):
+                                sort=[]
+                                for sortItem in parameters['sort']:
+                                    sort.append((sortItem[0],sortItem[1]))
+                            else:
+                                sort=[('$natural', 1)]
+                            skip=parameters['skip'] if ('skip' in parameters) else 0
+                            limit=parameters['limit'] if ('limit' in parameters) else 0
+                            count=parameters['count'] if ('count' in parameters) else False
+
+                            # print('dbURL',dbURL)
+                            # print('query',query)
+                            # print('projection',projection)
+                            # print('sort',sort)
+                            # print('skip',skip)
+                            # print('limit',limit)
+                            # print('count',count)
+                            
+                            if(count):
+                                X=mycol.count_documents(query)
+                            else:
+                                X=mycol.find(query,projection).sort(sort).skip(skip).limit(limit)
+                            
 
 
                             #for x in X:
@@ -1119,6 +1155,11 @@ def databaseBroadcastRead(message):
                                 dbWatch['watch']=mycol.watch()
                                 dbWatch['dbURL']=dbURL
                                 dbWatch['query']=query
+                                dbWatch['projection']=projection
+                                dbWatch['sort']=sort
+                                dbWatch['skip']=skip
+                                dbWatch['limit']=limit
+                                dbWatch['count']=count
                                 dbWatch['sockets']={
                                     str(request.sid):{
                                         "dbWatchIds":{
@@ -1225,6 +1266,101 @@ def databaseUpdateOne(message):
                             newvalues=message['newvalues']
                             try:
                                 mydb[colName].update_one({'_id':ObjectId(str(id))},newvalues)
+
+                            except Exception as e:
+                                log.info(e)
+
+
+
+#                            print("done: "+dbURL)
+
+                            try:
+                                responseID=message['responseID']
+                            except:
+                                responseID="";
+
+                            #eventName='databaseUpdateOne';
+    #                        print("eventName",eventName)
+                            return 'OK'
+                        except:
+                            log.error("Could not connect to MongoDB: {}",dbURL)
+                            return "Ack: Could not connect to MongoDB: "+str(dbURL)
+
+                else:
+                    log.error("Malformed database URL, must be in format: mongodb://databaseID:database:collection")
+            else:
+                log.error("Unknown URL schema ({})",dbURL)
+        else:
+            log.warning("Write access denied to database URL: {}",dbURL)
+
+    else:
+        socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
+
+@socketio.on('databaseUpdateMany', namespace='/pvServer')
+def databaseUpdateMany(message):
+    global clientPVlist,REACT_APP_DisableLogin
+    dbURL= str(message['dbURL'])
+
+#    print("databaseUpdate: SSID: ",request.sid,' dbURL: ', dbURL)
+#    print("message:",str(message))
+    authenticated=False
+    if REACT_APP_DisableLogin:
+        authenticated=True
+        accessControl={'userAuthorised':True,'permissions':{'read':True,'write':True}}
+    else :
+        accessControl=AutheriseUserAndPermissions(message['clientAuthorisation'],dbURL)
+        authenticated=accessControl['userAuthorised']
+
+    if accessControl['userAuthorised'] :
+        if accessControl['permissions']['write']:
+            if "mongodb://" in dbURL:
+
+#                print("mongodb database connection request: ",dbURL)
+                str1=dbURL.replace("mongodb://","")
+                strings=  str1.split(':')
+                if(len(strings)==3):
+                    database= strings[0];
+                    dbName=   strings[1];
+                    colName=  strings[2];
+#                    print("database: ", database, "length: ", len(database))
+#                    print("dbName: "  ,   dbName, "length: ", len(dbName))
+#                    print("colName: " ,  colName, "length: ", len(colName))
+                    ### must insert a better error detection here
+
+                    if ((len(database)>0) and (len(dbName)>0) and (len(colName)>0)):
+
+
+                        try:
+                            #print("connecting: "+dbURL)
+                            try:
+                                databaseString="mongodb://"+ str(os.environ[database])+"/"
+                                replicaSetName=str(os.environ[database+"_REPLICA_SET_NAME"])
+                                myclient = pymongo.MongoClient(databaseString,serverSelectionTimeoutMS=10,replicaSet=replicaSetName)
+                                # Wait for MongoClient to discover the whole replica set and identify MASTER!
+                                time.sleep(0.1)
+                                #myclient.server_info()
+                            except pymongo.errors.ServerSelectionTimeoutError as err:
+                                log.info(err)
+                                return "Ack: Could not connect to MongoDB: "+str(dbURL)
+
+                            mydb = myclient[dbName]
+
+                            mycol=mydb[colName]
+                            query=message['query'] if ('query' in message) else {}
+                            aggregation=message['aggregation'] if ('aggregation' in message) else {}
+                            if("_id" in query):
+                                try:
+                                    for key,value in query["_id"].items():
+                                        query["_id"][key]=ObjectId(value)
+                                except:
+                                    pass
+
+                            newvalues=message['newvalues'] if ('newvalues' in message) else None
+                            try:
+                                if('aggregation' in message):
+                                    mydb[colName].update_many(query,[aggregation])
+                                else:
+                                    mydb[colName].update_many(query,newvalues)
 
                             except Exception as e:
                                 log.info(e)

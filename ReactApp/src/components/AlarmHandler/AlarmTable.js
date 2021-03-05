@@ -54,7 +54,7 @@ const AlarmTable = props => {
 
     useEffect(() => {
         myRef.current.scrollTo(0, 0)
-    }, [props.areaSelectedIndex])
+    }, [props.areaSelectedIndex, props.alarmTableSearchString, props.page, props.rowsPerPage])
 
     const { areaAlarms } = props;
 
@@ -104,12 +104,14 @@ const AlarmTable = props => {
                         const areaAlarmName = entry[0]
                         const value = entry[1]
 
-                        const hostname = props.alarmPVDict[value["name"]].reduce((acc, entry, index) => {
-                            if (index > 1) {
-                                return `${acc}${entry}`
-                            }
-                            return acc
-                        }, '')
+                        const hostname = props.alarmPVDict[value["name"]]
+                            ? props.alarmPVDict[value["name"]].reduce((acc, entry, index) => {
+                                if (index > 1) {
+                                    return `${acc}${entry}`
+                                }
+                                return acc
+                            }, '')
+                            : 'Error connecting to pv'
 
                         const areaAlarmNameArray = areaAlarmName.split('=')
                         let areaName = null
@@ -203,7 +205,7 @@ const AlarmTable = props => {
                                     selected={props.alarmRowSelected[areaAlarmName]}
                                     onClick={event => props.tableRowClick(event, `${areaName}*${value["name"]}`, areaAlarmName)}
                                 >
-                                    <Menu
+                                    {props.isAlarmUser && < Menu
                                         keepMounted
                                         open={props.alarmContextOpen[areaAlarmName] ? true : false}
                                         onClose={event => props.alarmContextClose(event, areaAlarmName)}
@@ -221,7 +223,7 @@ const AlarmTable = props => {
 
                                         </MenuItem>
 
-                                    </Menu>
+                                    </Menu>}
                                     {props.debug
                                         ? <TableCell>
                                             <TextInput
@@ -293,19 +295,19 @@ const AlarmTable = props => {
                                     <TableCell align="center">
                                         <Checkbox
                                             style={{ padding: 0, margin: 0 }}
-                                            disabled={!props.areaEnabled[areaName] || !props.enableAllAreas}
+                                            disabled={!props.areaEnabled[areaName] || !props.enableAllAreas || !props.isAlarmUser}
                                             value={value["enable"]}
-                                            color="primary"
+                                            color="secondary"
                                             checked={value["enable"]}
-                                            onClick={event => props.itemChecked(event, areaName, alarm, "enable", !value["enable"])}
+                                            onClick={event => props.enableChecked(event, areaName, alarm, entryIndex)}
                                         />
                                     </TableCell>
                                     <TableCell align="center">
                                         <Checkbox
                                             style={{ padding: 0, margin: 0 }}
-                                            disabled={!props.areaEnabled[areaName] || !props.enableAllAreas}
+                                            disabled={!props.areaEnabled[areaName] || !props.enableAllAreas || !props.isAlarmUser}
                                             value={value["latch"]}
-                                            color="primary"
+                                            color="secondary"
                                             checked={value["latch"]}
                                             onClick={event => props.itemChecked(event, areaName, alarm, "latch", !value["latch"])}
                                         />
@@ -313,9 +315,9 @@ const AlarmTable = props => {
                                     <TableCell align="center">
                                         <Checkbox
                                             style={{ padding: 0, margin: 0 }}
-                                            disabled={!props.areaEnabled[areaName] || !props.enableAllAreas}
+                                            disabled={!props.areaEnabled[areaName] || !props.enableAllAreas || !props.isAlarmUser}
                                             value={value["notify"]}
-                                            color="primary"
+                                            color="secondary"
                                             checked={value["notify"]}
                                             onClick={event => props.itemChecked(event, areaName, alarm, "notify", !value["notify"])}
                                         />

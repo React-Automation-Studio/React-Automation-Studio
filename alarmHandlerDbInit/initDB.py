@@ -46,14 +46,6 @@ if (RUN_DEMO_ALARMS_IOC):
     fin.write(data)
     fin.close()
 
-    fin = open("./initDBData/history.json", "rt")
-    data = fin.read()
-    data = data.replace('$(DEMO_ALARMS_IOC)', DEMO_ALARMS_IOC)
-    fin.close()
-    fin = open("./initDBData/history.json", "wt")
-    fin.write(data)
-    fin.close()
-
 if (mongoAuth):
     client = MongoClient(
         'mongodb://%s:%s@%s' %
@@ -71,12 +63,14 @@ dbnames = client.list_database_names()
 if (MONGO_INITDB_ALARM_DATABASE not in dbnames):
     db = client[MONGO_INITDB_ALARM_DATABASE]
     print("Instantiating database:", MONGO_INITDB_ALARM_DATABASE)
-    colnames = ['config', 'history', 'pvs', 'users']
+    colnames = ['config', 'pvs', 'users']
     for col in colnames:
         collection = db[col]
         with open('./initDBData/' + col + '.json') as f:
             jsonData = json.load(f)
         collection.insert_many(jsonData)
+    # Create empty history collection
+    db.create_collection('history')
     collection = db['glob']
     collection.insert_many(
         [{

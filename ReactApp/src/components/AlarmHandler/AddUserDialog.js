@@ -7,7 +7,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 
-const AddDialog = (props) => {
+const AddUserDialog = (props) => {
     const addEnabled = props.name.length !== 0 && props.username.length !== 0
     return (
         <Dialog
@@ -59,4 +59,4 @@ const AddDialog = (props) => {
     )
 }
 
-export default React.memo(AddDialog);
+export default React.memo(AddUserDialog);

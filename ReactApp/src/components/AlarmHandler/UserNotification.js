@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useContext, useCallback, useMemo, useRef } from 'react';
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { fade } from '@material-ui/core/styles';
@@ -21,8 +21,8 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 import DataConnection from '../SystemComponents/DataConnection';
 import ScheduleDialog from './ScheduleDialog';
-import DeleteDialog from './DeleteDialog';
-import AddDialog from './AddDialog';
+import DeleteUserDialog from './DeleteUserDialog';
+import AddUserDialog from './AddUserDialog';
 import UserTable from './UserTable';
 import PVList from './PVList';
 import useMongoDbWatch from '../SystemComponents/database/MongoDB/useMongoDbWatch';
@@ -105,12 +105,21 @@ const UserNotification = (props) => {
     const theme = useTheme()
 
     const context = useContext(AutomationStudioContext)
-    const username = context.userData.username
 
-    const isLoggedIn = context.userData.username !== undefined
-    const isAlarmAdmin = isLoggedIn
-        ? context.userData.roles.includes("alarmAdmin")
-        : false
+    const username = useMemo(() => {
+        return context.userData.username
+    }, [context.userData.username])
+
+    const roles = useMemo(() => {
+        return context.userData.roles
+    }, [context.userData.roles])
+
+    const isAlarmAdmin = useMemo(() => {
+        const isLoggedIn = username !== undefined
+        return isLoggedIn
+            ? roles.includes("alarmAdmin")
+            : false
+    }, [username, roles])
 
     // to connect to all PVs before updating state
     const firstAlarmPVDict = {}
@@ -132,6 +141,8 @@ const UserNotification = (props) => {
     const [alarmPVDict, setAlarmPVDict] = useState({})
     const [backupUserList, setBackupUserList] = useState({})
     const [regexError, setRegexError] = useState({})
+    const [emailError, setEmailError] = useState({})
+    const [mobileError, setMobileError] = useState({})
     const [addRegexVal, setAddRegexVal] = useState({})
 
     const [dialogOpen, setDialogOpen] = useState(false)
@@ -172,13 +183,79 @@ const UserNotification = (props) => {
         }
         if (userObject.notify) {
             if (userObject.isGlobal) {
-                sumString = "Global - Notify me on "
+                sumString = "Global - Notify me about "
             }
             else {
-                sumString = "Notify me on "
+                sumString = "Notify me about "
             }
-            if (userObject.email && userObject.sms && userObject.whatsapp) {
+            // alarm types - Backwards compatible
+            if ((userObject.alarmMinor ?? true) && (userObject.alarmMajor ?? true) && (userObject.alarmInvalid ?? true) && (userObject.alarmDisconn ?? true)) {
+                sumString = sumString.concat("all alarm types on ")
+            }
+            else if ((userObject.alarmMinor ?? true) && (userObject.alarmMajor ?? true) && (userObject.alarmInvalid ?? true)) {
+                sumString = sumString.concat("MINOR, MAJOR and INVALID alarm types on ")
+            }
+            else if ((userObject.alarmMinor ?? true) && (userObject.alarmMajor ?? true) && (userObject.alarmDisconn ?? true)) {
+                sumString = sumString.concat("MINOR, MAJOR and DISCONN alarm types on ")
+            }
+            else if ((userObject.alarmMinor ?? true) && (userObject.alarmInvalid ?? true) && (userObject.alarmDisconn ?? true)) {
+                sumString = sumString.concat("MINOR, INVALID and DISCONN alarm types on ")
+            }
+            else if ((userObject.alarmMajor ?? true) && (userObject.alarmInvalid ?? true) && (userObject.alarmDisconn ?? true)) {
+                sumString = sumString.concat("MAJOR, INVALID and DISCONN alarm types on ")
+            }
+            else if ((userObject.alarmMinor ?? true) && (userObject.alarmMajor ?? true)) {
+                sumString = sumString.concat("MINOR and MAJOR alarm types on ")
+            }
+            else if ((userObject.alarmMinor ?? true) && (userObject.alarmInvalid ?? true)) {
+                sumString = sumString.concat("MINOR and INVALID alarm types on ")
+            }
+            else if ((userObject.alarmMinor ?? true) && (userObject.alarmDisconn ?? true)) {
+                sumString = sumString.concat("MINOR and DISCONN alarm types on ")
+            }
+            else if ((userObject.alarmMajor ?? true) && (userObject.alarmInvalid ?? true)) {
+                sumString = sumString.concat("MAJOR and INVALID alarm types on ")
+            }
+            else if ((userObject.alarmMajor ?? true) && (userObject.alarmDisconn ?? true)) {
+                sumString = sumString.concat("MAJOR and DISCONN alarm types on ")
+            }
+            else if ((userObject.alarmInvalid ?? true) && (userObject.alarmDisconn ?? true)) {
+                sumString = sumString.concat("INVALID and DISCONN alarm types on ")
+            }
+            else if ((userObject.alarmMinor ?? true)) {
+                sumString = sumString.concat("MINOR alarm types on ")
+            }
+            else if ((userObject.alarmMajor ?? true)) {
+                sumString = sumString.concat("MAJOR alarm types on ")
+            }
+            else if ((userObject.alarmInvalid ?? true)) {
+                sumString = sumString.concat("INVALID alarm types on ")
+            }
+            else if ((userObject.alarmDisconn ?? true)) {
+                sumString = sumString.concat("DISCONN alarm types on ")
+            }
+            else {
+                sumString = sumString.concat("no alarm types on ")
+            }
+            //
+            // Backwards compatible
+            if (userObject.email && userObject.sms && userObject.whatsapp && (userObject.signal ?? false)) {
+                sumString = sumString.concat("email, SMS, WhatsApp and Signal ")
+            }
+            else if (userObject.email && userObject.sms && userObject.whatsapp) {
                 sumString = sumString.concat("email, SMS and WhatsApp ")
+            }
+            // Backwards compatible
+            else if (userObject.email && userObject.sms && (userObject.signal ?? false)) {
+                sumString = sumString.concat("email, SMS and Signal ")
+            }
+            // Backwards compatible
+            else if (userObject.email && userObject.whatsapp && (userObject.signal ?? false)) {
+                sumString = sumString.concat("email, WhatsApp and Signal ")
+            }
+            // Backwards compatible
+            else if (userObject.sms && userObject.whatsapp && (userObject.signal ?? false)) {
+                sumString = sumString.concat("SMS, WhatsApp and Signal ")
             }
             else if (userObject.email && userObject.sms) {
                 sumString = sumString.concat("email and SMS ")
@@ -186,17 +263,33 @@ const UserNotification = (props) => {
             else if (userObject.email && userObject.whatsapp) {
                 sumString = sumString.concat("email and WhatsApp ")
             }
-            else if (userObject.email) {
-                sumString = sumString.concat("email ")
+            // Backwards compatible
+            else if (userObject.email && (userObject.signal ?? false)) {
+                sumString = sumString.concat("email and Signal ")
             }
             else if (userObject.sms && userObject.whatsapp) {
                 sumString = sumString.concat("SMS and WhatsApp ")
+            }
+            // Backwards compatible
+            else if (userObject.sms && (userObject.signal ?? false)) {
+                sumString = sumString.concat("SMS and Signal ")
+            }
+            // Backwards compatible
+            else if (userObject.whatsapp && (userObject.signal ?? false)) {
+                sumString = sumString.concat("WhatsApp and Signal ")
+            }
+            else if (userObject.email) {
+                sumString = sumString.concat("email ")
             }
             else if (userObject.sms) {
                 sumString = sumString.concat("SMS ")
             }
             else if (userObject.whatsapp) {
                 sumString = sumString.concat("WhatsApp ")
+            }
+            // Backwards compatible
+            else if (userObject.signal ?? false) {
+                sumString = sumString.concat("Signal ")
             }
             if (userObject.allDay) {
                 sumString = sumString.concat("all day ")
@@ -247,7 +340,7 @@ const UserNotification = (props) => {
 
         // still connecting to pvs
         if (!loadPVList) {
-            firstAlarmPVDict[epicsPVName] = [value[1], value[2]]
+            firstAlarmPVDict[epicsPVName] = value
             if (epicsPVName === lastAlarm) {
                 setLoadPVList(true)
                 setAlarmPVDict(firstAlarmPVDict)
@@ -271,7 +364,7 @@ const UserNotification = (props) => {
         return () => clearTimeout(timer);
     }
 
-    const handleSetAddRegexVal = (event, username, name) => {
+    const handleSetAddRegexVal = useCallback((event, username, name) => {
 
         const localAddRegexVal = { ...addRegexVal }
         localAddRegexVal[`${username}-${name}`] = event.target.value
@@ -282,7 +375,10 @@ const UserNotification = (props) => {
             const localRegexError = { ...regexError }
             localRegexError[`${username}-${name}`] = false
             setRegexError(localRegexError)
-            setFilterUserRegex([event.target.value])
+            setFilterUserRegex([{
+                index: -1,
+                regEx: event.target.value
+            }])
         }
         catch (e) {
             const localRegexError = { ...regexError }
@@ -290,23 +386,32 @@ const UserNotification = (props) => {
             setRegexError(localRegexError)
         }
 
-    }
+    }, [addRegexVal, regexError])
 
     const handleSetFilterUser = useCallback((name, username) => {
         setFilterUser({
             name: name,
             username: username
         })
-        const newFilterUserRegex = Object.values(dictUserRegex[`${username}-${name}`]).map(entry =>
-            entry.regEx
-        )
+        const newFilterUserRegex = Object.values(dictUserRegex[`${username}-${name}`]).reduce((acc, entry, index) => {
+            acc.push({
+                index: index,
+                regEx: entry.regEx
+            })
+            return acc
+        }, [])
         setFilterUserRegex(newFilterUserRegex)
     }, [dictUserRegex])
 
     const handleSetFilterUserRegex = useCallback((event, expression, index) => {
         event.preventDefault()
         event.stopPropagation()
-        setFilterUserRegex([expression])
+        setFilterUserRegex([
+            {
+                index: index,
+                regEx: expression
+            }
+        ])
         setFilterUser({})
         setDialogUserNotifyIndex(index)
     }, [])
@@ -316,9 +421,14 @@ const UserNotification = (props) => {
         event.stopPropagation()
 
         const match = userList.filter(el => el.name === name && el.username === username)[0]
-        const newFilterUserRegex = Object.values(match.notifyPVs).map(entry =>
-            entry.regEx
-        )
+        const newFilterUserRegex = Object.values(match.notifyPVs).reduce((acc, entry, index) => {
+            acc.push({
+                index: index,
+                regEx: entry.regEx
+            })
+            return acc
+        }, [])
+
         setFilterUserRegex(newFilterUserRegex)
         setFilterUser({
             name: match.name,
@@ -356,9 +466,13 @@ const UserNotification = (props) => {
 
         const id = match['_id']['$oid']
 
-        const newFilterUserRegex = Object.values(match.notifyPVs).map(entry =>
-            entry.regEx
-        )
+        const newFilterUserRegex = Object.values(match.notifyPVs).reduce((acc, entry, index) => {
+            acc.push({
+                index: index,
+                regEx: entry.regEx
+            })
+            return acc
+        }, [])
         setFilterUserRegex(newFilterUserRegex)
 
         let newvalues = { '$set': { "email": match.email } }
@@ -403,40 +517,100 @@ const UserNotification = (props) => {
         localAddRegexVal[`${username}-${name}`] = ''
         setAddRegexVal(localAddRegexVal)
 
-        const newFilterUserRegex = Object.values(backupUserList[`${username}-${name}`].notifyPVs).map(entry =>
-            entry.regEx
-        )
+        const newFilterUserRegex = Object.values(backupUserList[`${username}-${name}`].notifyPVs).reduce((acc, entry, index) => {
+            acc.push({
+                index: index,
+                regEx: entry.regEx
+            })
+            return acc
+        }, [])
         setFilterUserRegex(newFilterUserRegex)
 
+        // Clear email and mobile errors
+        setEmailError(prevState => {
+            return {
+                ...prevState,
+                [`${username}-${name}`]: false
+            }
+        })
+        setMobileError(prevState => {
+            return {
+                ...prevState,
+                [`${username}-${name}`]: false
+            }
+        })
+        //
+
     }, [backupUserList, handleSetUserEdit, addRegexVal, userList])
+
+    const validateEmail = useCallback((email) => {
+        if (/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/.test(email)) {
+            return false
+        }
+        else {
+            return true
+        }
+    }, [])
+
 
     const updateUserEmail = useCallback((event, name, username) => {
         // Find match and note it's index in userList
         const match = userList.filter(el => el.name === name && el.username === username)[0]
         const userIndex = userList.indexOf(match)
 
-        match.email = event.target.value
+        const { value } = event.target
+
+        match.email = value
 
         // Create new userList
         const newUserList = [...userList]
         newUserList[userIndex] = match
 
+        // email error
+        setEmailError(prevState => {
+            return {
+                ...prevState,
+                [`${username}-${name}`]: validateEmail(value)
+            }
+        })
+        //
+
         setUserList(newUserList)
-    }, [userList])
+    }, [userList, validateEmail])
+
+    const validateMobile = useCallback((mobile) => {
+        if (/^\+?[1-9]\d{1,14}$/.test(mobile)) {
+            return false
+        }
+        else {
+            return true
+        }
+    }, [])
 
     const updateUserMobile = useCallback((event, name, username) => {
         // Find match and note it's index in userList
         const match = userList.filter(el => el.name === name && el.username === username)[0]
         const userIndex = userList.indexOf(match)
 
-        match.mobile = event.target.value
+        const { value } = event.target
+
+        match.mobile = value
 
         // Create new userList
         const newUserList = [...userList]
         newUserList[userIndex] = match
 
+        // mobile error
+        setMobileError(prevState => {
+            return {
+                ...prevState,
+                [`${username}-${name}`]: validateMobile(value)
+            }
+        })
+        //
+
         setUserList(newUserList)
-    }, [userList])
+    }, [userList, validateMobile])
 
     const addChip = useCallback((event, name, username, expression) => {
         event.stopPropagation()
@@ -486,9 +660,13 @@ const UserNotification = (props) => {
 
             setUserList(newUserList)
 
-            const newFilterUserRegex = Object.values(newNotifyPVs).map(entry =>
-                entry.regEx
-            )
+            const newFilterUserRegex = Object.values(newNotifyPVs).reduce((acc, entry, index) => {
+                acc.push({
+                    index: index,
+                    regEx: entry.regEx
+                })
+                return acc
+            }, [])
             setFilterUserRegex(newFilterUserRegex)
         }
     }, [userList, addRegexVal])
@@ -516,29 +694,33 @@ const UserNotification = (props) => {
 
         setUserList(newUserList)
 
-        const newFilterUserRegex = Object.values(newNotifyPVs).map(entry =>
-            entry.regEx
-        )
+        const newFilterUserRegex = Object.values(newNotifyPVs).reduce((acc, entry, index) => {
+            acc.push({
+                index: index,
+                regEx: entry.regEx
+            })
+            return acc
+        }, [])
         setFilterUserRegex(newFilterUserRegex)
     }, [userList])
 
-    const handleExpansionComplete = (panelName, isExpanded) => {
+    const handleExpansionComplete = useCallback((panelName, isExpanded) => {
         if (panelName === 'userTable') {
             setUserTableIsExpanded(isExpanded)
         }
         else if (panelName === 'pvList') {
             setPvListIsExpanded(isExpanded)
         }
-    }
+    }, [])
 
-    const handleExpandPanel = (panelName) => {
+    const handleExpandPanel = useCallback((panelName) => {
         if (panelName === 'userTable') {
             setUserTableExpand(userTableExpand ? false : true)
         }
         else if (panelName === 'pvList') {
             setPvListExpand(pvListExpand ? false : true)
         }
-    }
+    }, [pvListExpand, userTableExpand])
 
     const handleOpenDialog = useCallback((event, name, username) => {
         event.preventDefault()
@@ -606,7 +788,7 @@ const UserNotification = (props) => {
         setSnackMessage("")
     }
 
-    const handleSearchUserTable = (event) => {
+    const handleSearchUserTable = useCallback((event) => {
         const srch = event.target.value
         if (userTableSearchTimer) {
             clearTimeout(userTableSearchTimer)
@@ -617,9 +799,9 @@ const UserNotification = (props) => {
             setFilterUserRegex([])
             setFilterUser({})
         }, 300))
-    }
+    }, [userTableSearchTimer])
 
-    const handleAddNewUser = () => {
+    const handleAddNewUser = useCallback(() => {
         const newEntry = {
             "name": newName,
             "username": newUsername,
@@ -657,7 +839,7 @@ const UserNotification = (props) => {
         setNewName('')
         setNewUsername('')
         setAddDialogOpen(false)
-    }
+    }, [dbInsertOne, newName, newUsername, props.dbName])
 
     // handleNewDbPVsList
     useEffect(() => {
@@ -770,18 +952,18 @@ const UserNotification = (props) => {
     const filterName = filterUserRegex.length === 0
         ? 'ALL'
         : filterUserRegex.length === 1
-            ? filterUserRegex[0] === ""
+            ? filterUserRegex[0].regEx === ""
                 ? 'ALL'
-                : filterUserRegex[0]
+                : filterUserRegex[0].regEx
             : filterUser.name
 
-    let userTableHeight = '40vh'
-    let pvListHeight = '32vh'
+    let userTableHeight = '43vh'
+    let pvListHeight = '33vh'
     if (userTableExpand && !pvListExpand && !pvListIsExpanded) {
-        userTableHeight = '76vh'
+        userTableHeight = '80vh'
     }
     else if (!userTableExpand && pvListExpand && !userTableIsExpanded) {
-        pvListHeight = '76vh'
+        pvListHeight = '80vh'
     }
 
     const warnAdminMessageAdd = "Only alarmAdmin role users can add users"
@@ -810,13 +992,13 @@ const UserNotification = (props) => {
                     </React.Fragment>
                 }
             />
-            <DeleteDialog
+            <DeleteUserDialog
                 open={deleteDialogOpen}
                 handleClose={() => setDeleteDialogOpen(false)}
                 user={filterUser.name}
                 handleDelete={handleDeleteUser}
             />
-            <AddDialog
+            <AddUserDialog
                 open={addDialogOpen}
                 handleClose={() => {
                     setNewName('')
@@ -975,6 +1157,8 @@ const UserNotification = (props) => {
                                 isAlarmAdmin={isAlarmAdmin}
                                 filterUser={filterUser}
                                 filterUserRegex={filterUserRegex}
+                                emailError={emailError}
+                                mobileError={mobileError}
                                 setUserEdit={handleSetUserEdit}
                                 setFilterUser={handleSetFilterUser}
                                 setFilterUserRegex={handleSetFilterUserRegex}

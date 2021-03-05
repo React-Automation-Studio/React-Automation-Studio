@@ -20,6 +20,9 @@ import NotificationsOffIcon from '@material-ui/icons/NotificationsOff';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import AddIcon from '@material-ui/icons/Add';
+import PlaylistAddOutlinedIcon from '@material-ui/icons/PlaylistAddOutlined';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import { fade } from '@material-ui/core/styles/colorManipulator';
 
@@ -214,7 +217,7 @@ const AlarmList = props => {
 
                                         </ListItem>
                                         {
-                                            props.areaContextOpen[`${area["area"]}`]
+                                            props.areaContextOpen[`${area["area"]}`] && props.isAlarmUser
                                                 ? <Menu
                                                     keepMounted
                                                     open={props.areaContextOpen[`${area["area"]}`]}
@@ -270,6 +273,36 @@ const AlarmList = props => {
                                                                 </ListItemIcon>
                                                                 <ListItemText primary="Add new pv" />
                                                             </ListItem>
+                                                            <ListItem
+                                                                button
+                                                                className={classes.nested}
+                                                                onClick={event => props.addNewSubArea(event, `${area["area"]}`)}
+                                                            >
+                                                                <ListItemIcon >
+                                                                    <PlaylistAddOutlinedIcon fontSize="small" />
+                                                                </ListItemIcon>
+                                                                <ListItemText primary="Add new subArea" />
+                                                            </ListItem>
+                                                            <ListItem
+                                                                button
+                                                                className={classes.nested}
+                                                                onClick={event => props.renameArea(event, `${area["area"]}`)}
+                                                            >
+                                                                <ListItemIcon >
+                                                                    <EditIcon fontSize="small" />
+                                                                </ListItemIcon>
+                                                                <ListItemText primary="Rename area" />
+                                                            </ListItem>
+                                                            <ListItem
+                                                                button
+                                                                className={classes.nested}
+                                                                onClick={event => props.deleteArea(event, `${area["area"]}`)}
+                                                            >
+                                                                <ListItemIcon >
+                                                                    <DeleteIcon fontSize="small" />
+                                                                </ListItemIcon>
+                                                                <ListItemText primary="Delete area" />
+                                                            </ListItem>
                                                         </List>
                                                     </Collapse>
                                                 </Menu>
@@ -306,7 +339,7 @@ const AlarmList = props => {
                                                                         <ListItemText primary={`- ${subArea}`} />
 
                                                                     </ListItem>
-                                                                    <Menu
+                                                                    {props.isAlarmUser && <Menu
                                                                         keepMounted
                                                                         open={props.areaContextOpen[`${area["area"]}=${subArea}`] ? true : false}
                                                                         onClose={event => props.listItemContextClose(event, `${area["area"]}=${subArea}`)}
@@ -355,6 +388,26 @@ const AlarmList = props => {
                                                                                                     </ListItemIcon>
                                                                                                     <ListItemText primary="Add new pv" />
                                                                                                 </ListItem>
+                                                                                                <ListItem
+                                                                                                    button
+                                                                                                    className={classes.nested}
+                                                                                                    onClick={event => props.renameArea(event, `${area["area"]}=${subArea}`)}
+                                                                                                >
+                                                                                                    <ListItemIcon >
+                                                                                                        <EditIcon fontSize="small" />
+                                                                                                    </ListItemIcon>
+                                                                                                    <ListItemText primary="Rename subArea" />
+                                                                                                </ListItem>
+                                                                                                <ListItem
+                                                                                                    button
+                                                                                                    className={classes.nested}
+                                                                                                    onClick={event => props.deleteArea(event, `${area["area"]}=${subArea}`)}
+                                                                                                >
+                                                                                                    <ListItemIcon >
+                                                                                                        <DeleteIcon fontSize="small" />
+                                                                                                    </ListItemIcon>
+                                                                                                    <ListItemText primary="Delete subArea" />
+                                                                                                </ListItem>
                                                                                             </List>
                                                                                         </Collapse>
                                                                                     </div>
@@ -371,7 +424,7 @@ const AlarmList = props => {
                                                                             :
                                                                             <MenuItem >Enable All Areas First!</MenuItem>
                                                                         }
-                                                                    </Menu>
+                                                                    </Menu>}
                                                                 </React.Fragment>
                                                             )
                                                         })}

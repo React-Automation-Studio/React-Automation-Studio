@@ -29,7 +29,7 @@ const useMongoDbWatch = (props) => {
     useEffect(() => {
         const handleDatabaseReadWatchAndBroadcastAck = (msg) => {
          
-            if (typeof msg !== 'undefined') {
+            if (msg?.dbWatchId) {
                 setDbWatchId(msg.dbWatchId)
             }
         }

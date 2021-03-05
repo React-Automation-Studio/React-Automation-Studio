@@ -1,8 +1,9 @@
 import subprocess
 import _thread
-from os import listdir, environ
-from os.path import isfile, join
+from os import environ
 from time import sleep
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
 
 from app.config import settings
 
@@ -18,17 +19,23 @@ def startUvicornThread():
         "uvicorn signal_cli_rest_api.app.main:app --host \"0.0.0.0\" --port "+SIGNAL_CLI_REST_API_PORT, shell=True)
 
 
+class ChangeHandler(FileSystemEventHandler):
+    def on_created(self, event):
+        filepath = event.src_path
+        subprocess.call("chmod 777 "+filepath, shell=True)
+
+
 _thread.start_new_thread(startUvicornThread, ())
 
-onlyNumbersStart = [f for f in listdir(settings.signal_config_path+"/data")
-                    if (isfile(join(settings.signal_config_path+"/data", f)) and (f.startswith('+')))]
+event_handler = ChangeHandler()
+observer = Observer()
+observer.schedule(event_handler, settings.signal_config_path +
+                  "/data", recursive=False)
+observer.start()
 
-while(True):
-    sleep(1)
-    onlyNumbers = [f for f in listdir(settings.signal_config_path+"/data")
-                   if (isfile(join(settings.signal_config_path+"/data", f)) and (f.startswith('+')))]
-    if(onlyNumbers != onlyNumbersStart):
-        onlyNumbersStart = onlyNumbers
-        for number in onlyNumbers:
-            filePath = settings.signal_config_path+"/data/"+number
-            subprocess.call("chmod 777 "+filePath, shell=True)
+try:
+    while True:
+        sleep(1)
+finally:
+    observer.stop()
+    observer.join()

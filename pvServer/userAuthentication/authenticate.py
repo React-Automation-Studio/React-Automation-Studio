@@ -20,23 +20,29 @@ def loadFileSecretKey(filename):
             line=f.readline()
         return line
     except:
-        return randomString(16)
+        print("Warning SECRET_PWD_KEY not set using the default key, please set the SECRET_PWD_KEY in the file users/SECRET_PWD_KEY")
+        return "ugZnU^E3Fr4gapj^?zH%V5&H}A]*{mC]#>/nY_?ceSt$?99PL[md+29]:$dn)3#X" # can no longer user randomized string due to load balancing
+        #return randomString(16)
 
 SECRET_PWD_KEY = loadFileSecretKey('userAuthentication/users/SECRET_PWD_KEY')
 
-def createJTWUserIDs(UAGS):
+
+def createKnownUsers(UAGS):
     global SECRET_PWD_KEY
     try:
         users=UAGS['users']
         timestamp=UAGS['timestamp']
         knownUsers={}
+        index=0
         for userid in users:
-            JWTid=str(jwt.encode({'id':str(userid)+str(timestamp)}, SECRET_PWD_KEY, algorithm='HS256').decode('utf-8'))
-            knownUsers[JWTid]={'username':userid['username'],'password':userid['password']}
+            knownUsers["user "+str(index)]={'username':userid['username'],'password':userid['password']}
+            index=index+1
         return knownUsers
-    except:
+    except Exception as e:
+        print(e)
         print("Error Cant load file USERS")
         return None
+
 
 def createRefreshToken(username,max_age):
     global SECRET_PWD_KEY
@@ -85,7 +91,8 @@ if (not REACT_APP_DisableLogin) :
     UAGS['users']=users['users']
     UAGS['userGroups']=access['userGroups']
     UAGS['timestamp']=str(users['timestamp'])+str(access['timestamp'])
-    knownUsers=createJTWUserIDs(UAGS)
+    knownUsers=createKnownUsers(UAGS)
+    
 
 def checkPermissions(pvname,username):
     global UAGS
@@ -157,14 +164,14 @@ def  AuthoriseUser(encodedJWT):
 def LocalAuthenticateUser(user):
     global knownUsers
     if knownUsers!= None:
-        keys=list(knownUsers.keys())
-        for JWT in knownUsers:
-            username=knownUsers[JWT]['username']
+     
+        for id in knownUsers:
+            username=knownUsers[id]['username']
             if user['username']==username:
                 try :
-                    if bcrypt.checkpw( user['password'].encode('utf-8'), knownUsers[JWT]['password'].encode('utf-8')):
+                    if bcrypt.checkpw( user['password'].encode('utf-8'), knownUsers[id]['password'].encode('utf-8')):
                         roles=checkUserRole(username)
-                        return {'JWT':JWT,'username':username,'roles':roles}
+                        return {'username':username,'roles':roles}
                 except :
                     return None
         else:
@@ -174,13 +181,13 @@ def LocalAuthenticateUser(user):
 def ExternalAuthenticateUser(user):
     global knownUsers
     if knownUsers!= None:
-        keys=list(knownUsers.keys())
-        for JWT in knownUsers:
-            username=knownUsers[JWT]['username']
+        # keys=list(knownUsers.keys())
+        for id in knownUsers:
+            username=knownUsers[id]['username']
             
             if user['username']==username:
                 roles=checkUserRole(username)
-                return {'JWT':JWT,'username':username,'roles':roles}
+                return {'username':username,'roles':roles}
             
         else:
             print('Uknown user:' + str(user['username']))

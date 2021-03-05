@@ -1,26 +1,26 @@
-import  { useContext, useState, useEffect,useRef } from 'react';
+import { useContext, useState, useEffect, useRef } from 'react';
 import AutomationStudioContext from '../../AutomationStudioContext';
 
 
 const useMongoDbWatch = (props) => {
 
-    const context=useContext(AutomationStudioContext);
+    const context = useContext(AutomationStudioContext);
     const socket = context.socket;
     const jwt = context.userTokens.accessToken;
     const jwtRef = useRef(jwt);
     const socketRef = useRef(socket);
     useEffect(() => {
         if (jwt === null) {
-          jwtRef.current = 'unauthenticated'
+            jwtRef.current = 'unauthenticated'
         }
         else {
-          jwtRef.current = jwt;
+            jwtRef.current = jwt;
         }
-      }, [jwt])
-      useEffect(() => {
-  
-          socketRef.current = socket;
-        }, [socket])
+    }, [jwt])
+    useEffect(() => {
+
+        socketRef.current = socket;
+    }, [socket])
 
     const [dbWatchId, setDbWatchId] = useState(null);
     const [data, setData] = useState(null);
@@ -28,20 +28,20 @@ const useMongoDbWatch = (props) => {
     const [initialized, setInitialized] = useState(false);
     useEffect(() => {
         const handleDatabaseReadWatchAndBroadcastAck = (msg) => {
-         
+
             if (msg?.dbWatchId) {
                 setDbWatchId(msg.dbWatchId)
             }
         }
         const handleNewDbLogReadWatchBroadcast = (msg) => {
-         
+
             const newData = JSON.parse(msg.data);
             setData(newData);
             setInitialized(true)
             setWriteAccess(msg.write_access)
         }
 
-      
+
         if (props.dbURL) {
             socketRef.current.emit('databaseReadWatchAndBroadcast', { 'dbURL': props.dbURL, 'clientAuthorisation': jwtRef.current }, handleDatabaseReadWatchAndBroadcastAck)
             socketRef.current.on('databaseWatchData:' + props.dbURL, handleNewDbLogReadWatchBroadcast);
@@ -72,12 +72,12 @@ const useMongoDbWatch = (props) => {
             }
 
         }
-// eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.dbURL])
 
-    return ({ data: data, writeAccess: writeAccess,initialized:initialized, dbURl: props.dbURL })
+    return ({ data: data, writeAccess: writeAccess, initialized: initialized, dbURl: props.dbURL })
 }
 
 
-  
+
 export default useMongoDbWatch

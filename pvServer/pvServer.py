@@ -173,34 +173,36 @@ def localLogin():
 
 @app.route('/api/login/ldap', methods=['POST'])
 def ldapLogin():
-    print("request ip:",request.remote_addr)
+    # print("request ip:",request.remote_addr)
     global REACT_APP_EnableActiveDirectoryLogin
     if REACT_APP_EnableActiveDirectoryLogin :
         user = request.json.get('user', None)
         LDAP_HOST=os.getenv('LDAP_HOST')
         LDAP_PORT=os.getenv('LDAP_PORT')
-        
         LDAP_USER_DN=user['username']
         LDAP_USER_PW=user['password']
-        try:
-            con=ldap.initialize(LDAP_HOST+":"+LDAP_PORT)
-            con.bind(LDAP_USER_DN,LDAP_USER_PW,ldap.AUTH_SIMPLE)
-            if con.result():
-            
-                userData=ExternalAuthenticateUser(user)
-                resp=createLoginReponse(userData)
-                return resp
+        for aDLoginAttempts in range(3):
+            # print("AD login attempt:",aDLoginAttempts)
+            try:
+                con=ldap.initialize(LDAP_HOST+":"+LDAP_PORT)
+                con.bind(LDAP_USER_DN,LDAP_USER_PW,ldap.AUTH_SIMPLE)
+                if con.result():
+                
+                    userData=ExternalAuthenticateUser(user)
+                    resp=createLoginReponse(userData)
+                    return resp
 
-            else:
-                log.info("Ldap login failed: {} ",username)
+                else:
+                    log.info("Ldap login failed: {} ",LDAP_USER_DN)
+                    jsonify({'login': False}), 401
+            except Exception as e:
+                print("Ldap login error",e)
+                print("username",LDAP_USER_DN)
+                print("password",LDAP_USER_PW)
+                log.info("Ldap login failed: {} ",LDAP_USER_DN)
                 jsonify({'login': False}), 401
-        except Exception as e:
-            print("Ldap login error",e)
-            print("username",LDAP_USER_DN)
-            print("password",LDAP_USER_PW)
-            log.info("Ldap login failed: {} ",LDAP_USER_DN)
-            jsonify({'login': False}), 401
-            return jsonify({'login': False}), 401
+                return jsonify({'login': False}), 401
+
        
     else:
         log.info("Forbiddden Active Directory login login: {} ",user['username'])

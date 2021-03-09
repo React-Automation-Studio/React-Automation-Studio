@@ -308,7 +308,7 @@ const AlarmSetup = (props) => {
     const [ASRestartProgress, setASRestartProgress] = useState(0)
 
     const [clientAHDBVer] = useState(props.AHDBVer)
-    const [serverAHDBVer, setServerAHDBVer] = useState(0)
+    const [serverAHDBVer, setServerAHDBVer] = useState(props.AHDBVer)
 
     const [alarmAdminListExpand, setAlarmAdminListExpand] = useState(false)
     const [alarmAdminGListExpand, setAlarmAdminGListExpand] = useState(false)

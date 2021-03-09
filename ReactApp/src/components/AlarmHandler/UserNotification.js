@@ -3,6 +3,7 @@ import React, { useState, useEffect, useContext, useCallback, useMemo, useRef } 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { fade } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
 
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
@@ -50,6 +51,13 @@ const useStyles = makeStyles(theme => ({
         },
     },
     expanded: {},
+    paper: {
+        padding: theme.spacing(2),
+        margin: 0,
+        height: "100%",
+        overflowX: "default",
+        overflowY: "default",
+    },
     search: {
         position: 'relative',
         borderRadius: theme.shape.borderRadius,
@@ -161,9 +169,13 @@ const UserNotification = (props) => {
     const [newName, setNewName] = useState("")
     const [newUsername, setNewUsername] = useState("")
 
+    const [clientAHDBVer] = useState(props.AHDBVer)
+    const [serverAHDBVer, setServerAHDBVer] = useState(props.AHDBVer)
+
     const dbPVData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs:Parameters:{}` }).data
     const dbUsersData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:users:Parameters:{}` }).data
     const dbConfigData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:config:Parameters:{}` }).data
+    const dbGlobData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:glob:Parameters:{}` }).data
 
     const dbUpdateOne = useMongoDbUpdateOne({})
     const dbInsertOne = useMongoDbInsertOne({})
@@ -927,6 +939,15 @@ const UserNotification = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dbConfigData])
 
+    // handleDbGlobal
+    useEffect(() => {
+        if (dbGlobData !== null) {
+            const data = dbGlobData[0]
+            // Backwards compatible
+            setServerAHDBVer(data["AHDBVer"] ?? 0)
+        }
+    }, [dbGlobData])
+
     useEffect(() => {
         const filteredUsers = userList.reduce((acc, entry) => {
             const visible = entry["name"].toLowerCase().includes(userTableSearchString.toLowerCase())
@@ -1026,193 +1047,212 @@ const UserNotification = (props) => {
                     />
                     : null
             }
-            <Grid
-                container
-                direction="column"
-                justify="flex-start"
-                alignItems="stretch"
-                className={classes.root}
-                spacing={2}
-            >
-                <Grid item xs={12}>
-                    <Accordion
-                        elevation={theme.palette.paperElevation}
-                        expanded={userTableExpand}
-                        onClick={() => handleExpandPanel('userTable')}
-                        TransitionProps={{
-                            onEntered: () => handleExpansionComplete('userTable', true),
-                            onExited: () => handleExpansionComplete('userTable', false)
-                        }}
-                    >
-                        <AccordionSummary
-                            expandIcon={<ExpandMoreIcon />}
-                            aria-controls="panel1bh-content"
-                            id="panel1bh-header"
-                            classes={{ content: classes.expansionPanelSummaryContent, expanded: classes.expanded }}
+            {clientAHDBVer === serverAHDBVer
+                ? <Grid
+                    container
+                    direction="column"
+                    justify="flex-start"
+                    alignItems="stretch"
+                    className={classes.root}
+                    spacing={2}
+                >
+                    <Grid item xs={12}>
+                        <Accordion
+                            elevation={theme.palette.paperElevation}
+                            expanded={userTableExpand}
+                            onClick={() => handleExpandPanel('userTable')}
+                            TransitionProps={{
+                                onEntered: () => handleExpansionComplete('userTable', true),
+                                onExited: () => handleExpansionComplete('userTable', false)
+                            }}
                         >
-                            <div style={{ display: 'flex', width: '100%' }}>
-                                <div className={classes.verticalMiddle} style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 20 }}>Alarm Handler Users</div>
-                                {
-                                    userTableExpand
-                                        ? <Tooltip
-                                            title={isAlarmAdmin ? "Add user" : warnAdminMessageAdd}
-                                            placement="bottom"
-                                            classes={{ tooltip: classes.tooltipWidth }}
-                                        >
-                                            <div
-                                                onClick={(event) => {
-                                                    event.preventDefault()
-                                                    event.stopPropagation()
-                                                    isAlarmAdmin && setAddDialogOpen(true)
-                                                }}
-                                            >
-                                                <Button
-                                                    variant="contained"
-                                                    color="secondary"
-                                                    size="small"
-                                                    className={classes.button}
-                                                    startIcon={<PersonAddIcon />}
-                                                    style={{ marginRight: 20 }}
-                                                    // onClick={(event) => {
-                                                    //     event.preventDefault()
-                                                    //     event.stopPropagation()
-                                                    //     setAddDialogOpen(true)
-                                                    // }}
-                                                    disabled={!isAlarmAdmin}
-                                                >
-                                                    Add
-                                                </Button>
-                                            </div>
-                                        </Tooltip>
-                                        : null
-                                }
-                                {
-                                    userTableExpand
-                                        ? <Tooltip
-                                            title={isAlarmAdmin ? filterUser.name ? "Delete user" : warnAdminMessageSelect : warnAdminMessageDelete}
-                                            placement="bottom"
-                                            classes={{ tooltip: classes.tooltipWidth }}
-                                        >
-                                            <div
-                                                onClick={(event) => {
-                                                    event.preventDefault()
-                                                    event.stopPropagation()
-                                                    isAlarmAdmin && filterUser.name && setDeleteDialogOpen(true)
-                                                }}
-                                            >
-                                                <Button
-                                                    variant="contained"
-                                                    color="primary"
-                                                    size="small"
-                                                    className={classes.button}
-                                                    startIcon={<AccountRemove />}
-                                                    style={{ marginRight: 20 }}
-                                                    // onClick={(event) => {
-                                                    //     event.preventDefault()
-                                                    //     event.stopPropagation()
-                                                    //     setDeleteDialogOpen(true)
-                                                    // }}
-                                                    disabled={!isAlarmAdmin || !filterUser.name}
-                                                >
-                                                    Delete
-                                                 </Button>
-                                            </div>
-                                        </Tooltip>
-                                        : null
-                                }
-                                <div className={classes.verticalMiddle} style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 1 }}>
+                            <AccordionSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-controls="panel1bh-content"
+                                id="panel1bh-header"
+                                classes={{ content: classes.expansionPanelSummaryContent, expanded: classes.expanded }}
+                            >
+                                <div style={{ display: 'flex', width: '100%' }}>
+                                    <div className={classes.verticalMiddle} style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 20 }}>Alarm Handler Users</div>
                                     {
                                         userTableExpand
-                                            ? <div className={classes.search}>
-                                                <div className={classes.searchIcon}>
-                                                    <SearchIcon />
-                                                </div>
-                                                <InputBase
-                                                    placeholder="Search user table…"
-                                                    classes={{
-                                                        root: classes.inputRoot,
-                                                        input: classes.inputInput,
+                                            ? <Tooltip
+                                                title={isAlarmAdmin ? "Add user" : warnAdminMessageAdd}
+                                                placement="bottom"
+                                                classes={{ tooltip: classes.tooltipWidth }}
+                                            >
+                                                <div
+                                                    onClick={(event) => {
+                                                        event.preventDefault()
+                                                        event.stopPropagation()
+                                                        isAlarmAdmin && setAddDialogOpen(true)
                                                     }}
-                                                    inputProps={{ 'aria-label': 'search' }}
-                                                    onClick={event => event.stopPropagation()}
-                                                    onFocus={event => event.stopPropagation()}
-                                                    onChange={event => handleSearchUserTable(event)}
-                                                    // onBlur={() => { setUserTableSearchStringStore(''); setUserTableSearchString('') }}
-                                                    value={userTableSearchStringStore}
-                                                />
-                                            </div>
-                                            : '[click to show]'
+                                                >
+                                                    <Button
+                                                        variant="contained"
+                                                        color="secondary"
+                                                        size="small"
+                                                        className={classes.button}
+                                                        startIcon={<PersonAddIcon />}
+                                                        style={{ marginRight: 20 }}
+                                                        // onClick={(event) => {
+                                                        //     event.preventDefault()
+                                                        //     event.stopPropagation()
+                                                        //     setAddDialogOpen(true)
+                                                        // }}
+                                                        disabled={!isAlarmAdmin}
+                                                    >
+                                                        Add
+                                                </Button>
+                                                </div>
+                                            </Tooltip>
+                                            : null
                                     }
-                                </div>
-                            </div>
-
-                        </AccordionSummary>
-                        <AccordionDetails>
-                            <UserTable
-                                regexError={regexError}
-                                addRegexVal={addRegexVal}
-                                userList={searchedUsers}
-                                userEdit={userEdit}
-                                username={username}
-                                isAlarmAdmin={isAlarmAdmin}
-                                filterUser={filterUser}
-                                filterUserRegex={filterUserRegex}
-                                emailError={emailError}
-                                mobileError={mobileError}
-                                setUserEdit={handleSetUserEdit}
-                                setFilterUser={handleSetFilterUser}
-                                setFilterUserRegex={handleSetFilterUserRegex}
-                                setAddRegexVal={handleSetAddRegexVal}
-                                addChip={addChip}
-                                deleteChip={deleteChip}
-                                cancelEdit={cancelEdit}
-                                applyEdit={applyEdit}
-                                updateUserEmail={updateUserEmail}
-                                updateUserMobile={updateUserMobile}
-                                openDialog={handleOpenDialog}
-                                height={userTableHeight}
-                                userScheduleString={userScheduleString}
-                            />
-                        </AccordionDetails>
-                    </Accordion>
-                </Grid>
-                <Grid item xs={12}>
-                    <Accordion
-                        elevation={theme.palette.paperElevation}
-                        expanded={pvListExpand}
-                        onClick={() => handleExpandPanel('pvList')}
-                        TransitionProps={{
-                            onEntered: () => handleExpansionComplete('pvList', true),
-                            onExited: () => handleExpansionComplete('pvList', false)
-                        }}
-                    >
-                        <AccordionSummary
-                            expandIcon={<ExpandMoreIcon />}
-                            aria-controls="panel1bh-content"
-                            id="panel1bh-header"
-                            classes={{ content: classes.expansionPanelSummaryContent, expanded: classes.expanded }}
-                        >
-                            <div style={{ display: 'flex', width: '100%' }}>
-                                <div style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 20 }}>{`Filtered PVs: ${filterName}`}</div>
-                                <div style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 1 }}>
                                     {
-                                        pvListExpand
-                                            ? null
-                                            : '[click to show]'
+                                        userTableExpand
+                                            ? <Tooltip
+                                                title={isAlarmAdmin ? filterUser.name ? "Delete user" : warnAdminMessageSelect : warnAdminMessageDelete}
+                                                placement="bottom"
+                                                classes={{ tooltip: classes.tooltipWidth }}
+                                            >
+                                                <div
+                                                    onClick={(event) => {
+                                                        event.preventDefault()
+                                                        event.stopPropagation()
+                                                        isAlarmAdmin && filterUser.name && setDeleteDialogOpen(true)
+                                                    }}
+                                                >
+                                                    <Button
+                                                        variant="contained"
+                                                        color="primary"
+                                                        size="small"
+                                                        className={classes.button}
+                                                        startIcon={<AccountRemove />}
+                                                        style={{ marginRight: 20 }}
+                                                        // onClick={(event) => {
+                                                        //     event.preventDefault()
+                                                        //     event.stopPropagation()
+                                                        //     setDeleteDialogOpen(true)
+                                                        // }}
+                                                        disabled={!isAlarmAdmin || !filterUser.name}
+                                                    >
+                                                        Delete
+                                                 </Button>
+                                                </div>
+                                            </Tooltip>
+                                            : null
                                     }
+                                    <div className={classes.verticalMiddle} style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 1 }}>
+                                        {
+                                            userTableExpand
+                                                ? <div className={classes.search}>
+                                                    <div className={classes.searchIcon}>
+                                                        <SearchIcon />
+                                                    </div>
+                                                    <InputBase
+                                                        placeholder="Search user table…"
+                                                        classes={{
+                                                            root: classes.inputRoot,
+                                                            input: classes.inputInput,
+                                                        }}
+                                                        inputProps={{ 'aria-label': 'search' }}
+                                                        onClick={event => event.stopPropagation()}
+                                                        onFocus={event => event.stopPropagation()}
+                                                        onChange={event => handleSearchUserTable(event)}
+                                                        // onBlur={() => { setUserTableSearchStringStore(''); setUserTableSearchString('') }}
+                                                        value={userTableSearchStringStore}
+                                                    />
+                                                </div>
+                                                : '[click to show]'
+                                        }
+                                    </div>
                                 </div>
-                            </div>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                            {loadPVList && <PVList
-                                alarmPVDict={alarmPVDict}
-                                filterUserRegex={filterUserRegex}
-                                height={pvListHeight}
-                            />}
-                        </AccordionDetails>
-                    </Accordion>
+
+                            </AccordionSummary>
+                            <AccordionDetails>
+                                <UserTable
+                                    regexError={regexError}
+                                    addRegexVal={addRegexVal}
+                                    userList={searchedUsers}
+                                    userEdit={userEdit}
+                                    username={username}
+                                    isAlarmAdmin={isAlarmAdmin}
+                                    filterUser={filterUser}
+                                    filterUserRegex={filterUserRegex}
+                                    emailError={emailError}
+                                    mobileError={mobileError}
+                                    setUserEdit={handleSetUserEdit}
+                                    setFilterUser={handleSetFilterUser}
+                                    setFilterUserRegex={handleSetFilterUserRegex}
+                                    setAddRegexVal={handleSetAddRegexVal}
+                                    addChip={addChip}
+                                    deleteChip={deleteChip}
+                                    cancelEdit={cancelEdit}
+                                    applyEdit={applyEdit}
+                                    updateUserEmail={updateUserEmail}
+                                    updateUserMobile={updateUserMobile}
+                                    openDialog={handleOpenDialog}
+                                    height={userTableHeight}
+                                    userScheduleString={userScheduleString}
+                                />
+                            </AccordionDetails>
+                        </Accordion>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Accordion
+                            elevation={theme.palette.paperElevation}
+                            expanded={pvListExpand}
+                            onClick={() => handleExpandPanel('pvList')}
+                            TransitionProps={{
+                                onEntered: () => handleExpansionComplete('pvList', true),
+                                onExited: () => handleExpansionComplete('pvList', false)
+                            }}
+                        >
+                            <AccordionSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-controls="panel1bh-content"
+                                id="panel1bh-header"
+                                classes={{ content: classes.expansionPanelSummaryContent, expanded: classes.expanded }}
+                            >
+                                <div style={{ display: 'flex', width: '100%' }}>
+                                    <div style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 20 }}>{`Filtered PVs: ${filterName}`}</div>
+                                    <div style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 1 }}>
+                                        {
+                                            pvListExpand
+                                                ? null
+                                                : '[click to show]'
+                                        }
+                                    </div>
+                                </div>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                                {loadPVList && <PVList
+                                    alarmPVDict={alarmPVDict}
+                                    filterUserRegex={filterUserRegex}
+                                    height={pvListHeight}
+                                />}
+                            </AccordionDetails>
+                        </Accordion>
+                    </Grid>
                 </Grid>
-            </Grid>
+                : <Grid
+                    container
+                    direction="row"
+                    justify="flex-start"
+                    alignItems="stretch"
+                    spacing={2}
+                    className={classes.root}
+                >
+                    <Grid item xs={12}>
+                        <Paper className={classes.paper} elevation={theme.palette.paperElevation}>
+                            <div style={{ fontSize: 16, fontWeight: 'bold', textAlign: 'center' }}>
+                                Alarm Handler database version is not current. Please prune
+                                the database and restart the Alarm Handler server.
+                        </div>
+                        </Paper>
+                    </Grid>
+                </Grid>
+            }
         </React.Fragment >
     );
 };

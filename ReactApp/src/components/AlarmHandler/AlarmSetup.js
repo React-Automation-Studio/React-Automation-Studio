@@ -307,6 +307,9 @@ const AlarmSetup = (props) => {
     const [firstStart, setFirstStart] = useState(true)
     const [ASRestartProgress, setASRestartProgress] = useState(0)
 
+    const [clientAHDBVer] = useState(props.AHDBVer)
+    const [serverAHDBVer, setServerAHDBVer] = useState(0)
+
     const [alarmAdminListExpand, setAlarmAdminListExpand] = useState(false)
     const [alarmAdminGListExpand, setAlarmAdminGListExpand] = useState(false)
 
@@ -809,6 +812,8 @@ const AlarmSetup = (props) => {
             setEnableAllAreas(data["enableAllAreas"])
             setGlobalDocId(data["_id"]["$oid"])
             setRestartCount(data["restartCount"])
+            // Backwards compatible
+            setServerAHDBVer(data["AHDBVer"] ?? 0)
         }
     }, [dbGlobData])
 
@@ -2120,333 +2125,352 @@ const AlarmSetup = (props) => {
                 }}
                 handleDelete={handleExecuteDeleteArea}
             />
-            <Grid
-                container
-                direction="row"
-                justify="flex-start"
-                alignItems="stretch"
-                spacing={2}
-                className={classes.root}
-            >
-                {displayAlarmList && !backdropOpen
-                    ? <Grid item xs={2}>
-                        <Paper className={classes.paper} elevation={theme.palette.paperElevation}>
-                            <Grid
-                                container
-                                direction="row"
-                                justify="center"
-                                alignItems="center"
-                                spacing={1}
-                            >
-                                <Grid item xs={2} style={{ textAlign: 'right' }}>
-                                    <IconButton
-                                        aria-label="global_alarms"
-                                        style={{ padding: 0 }}
-                                        onClick={() => handleGlobalArea()}
-                                        onContextMenu={(event) => handleIconClick(event)}
-                                    >
-                                        {areaSelectedIndex === 'ALLAREAS'
-                                            ? <PublicIcon color="secondary" />
-                                            : <PublicIcon />}
-                                    </IconButton>
-                                    {isAlarmUser && <Menu
-                                        keepMounted
-                                        open={globalContextOpen}
-                                        onClose={() => handleAlarmGlobalContextClose()}
-                                        anchorReference="anchorPosition"
-                                        anchorPosition={contextMouseY !== null && contextMouseX !== null ?
-                                            { top: contextMouseY, left: contextMouseX } : null}
-                                    >
-                                        <MenuItem disabled>GLOBAL</MenuItem>
-                                        <hr />
-                                        {enableAllAreas ?
-                                            <MenuItem
-                                                onClick={() => handleDisableEnableGlobal(false)}
-                                            >
-                                                <ListItemIcon >
-                                                    <NotificationsOffIcon fontSize="small" />
-                                                </ListItemIcon>
-                                                <Typography variant="inherit">Disable ALL AREAS</Typography>
-                                            </MenuItem> :
-                                            <MenuItem
-                                                onClick={() => handleDisableEnableGlobal(true)}
-                                            >
-                                                <ListItemIcon >
-                                                    <NotificationsActiveIcon fontSize="small" />
-                                                </ListItemIcon>
-                                                <Typography variant="inherit">Enable ALL AREAS</Typography>
-                                            </MenuItem>
-                                        }
-                                        <MenuItem
-                                            onClick={handleAckGlobal}
+            {clientAHDBVer === serverAHDBVer
+                ? <Grid
+                    container
+                    direction="row"
+                    justify="flex-start"
+                    alignItems="stretch"
+                    spacing={2}
+                    className={classes.root}
+                >
+                    {displayAlarmList && !backdropOpen
+                        ? <Grid item xs={2}>
+                            <Paper className={classes.paper} elevation={theme.palette.paperElevation}>
+                                <Grid
+                                    container
+                                    direction="row"
+                                    justify="center"
+                                    alignItems="center"
+                                    spacing={1}
+                                >
+                                    <Grid item xs={2} style={{ textAlign: 'right' }}>
+                                        <IconButton
+                                            aria-label="global_alarms"
+                                            style={{ padding: 0 }}
+                                            onClick={() => handleGlobalArea()}
+                                            onContextMenu={(event) => handleIconClick(event)}
                                         >
-                                            <ListItemIcon >
-                                                <DoneAllIcon fontSize="small" />
-                                            </ListItemIcon>
-                                            <Typography variant="inherit">ACK ALL AREAS' alarms</Typography>
-                                        </MenuItem>
-                                        {isAlarmAdmin &&
-                                            <MenuItem
-                                                onClick={() => setAlarmAdminGListExpand(!alarmAdminGListExpand)}
-                                            >
-                                                <ListItemIcon >
-                                                    <SupervisorAccountIcon fontSize="small" />
-                                                </ListItemIcon>
-                                                <ListItemText primary="Alarm admin actions" />
-                                                {alarmAdminGListExpand ? <ExpandLess style={{ marginLeft: 16 }} /> : <ExpandMore style={{ marginLeft: 16 }} />}
-                                            </MenuItem>
-                                        }
-                                        <Collapse in={alarmAdminGListExpand} timeout="auto" unmountOnExit>
-                                            <List component="div" disablePadding >
-                                                <ListItem
-                                                    button
-                                                    className={classes.nested}
-                                                    onClick={() => {
-                                                        setAddAreaDialogOpen(true)
-                                                        setAlarmAdminGListExpand(false)
-                                                        setGlobalContextOpen(false)
-                                                    }}
+                                            {areaSelectedIndex === 'ALLAREAS'
+                                                ? <PublicIcon color="secondary" />
+                                                : <PublicIcon />}
+                                        </IconButton>
+                                        {isAlarmUser && <Menu
+                                            keepMounted
+                                            open={globalContextOpen}
+                                            onClose={() => handleAlarmGlobalContextClose()}
+                                            anchorReference="anchorPosition"
+                                            anchorPosition={contextMouseY !== null && contextMouseX !== null ?
+                                                { top: contextMouseY, left: contextMouseX } : null}
+                                        >
+                                            <MenuItem disabled>GLOBAL</MenuItem>
+                                            <hr />
+                                            {enableAllAreas ?
+                                                <MenuItem
+                                                    onClick={() => handleDisableEnableGlobal(false)}
                                                 >
                                                     <ListItemIcon >
-                                                        <AddIcon fontSize="small" />
+                                                        <NotificationsOffIcon fontSize="small" />
                                                     </ListItemIcon>
-                                                    <ListItemText primary="Add new area" />
-                                                </ListItem>
-                                            </List>
-                                        </Collapse>
+                                                    <Typography variant="inherit">Disable ALL AREAS</Typography>
+                                                </MenuItem> :
+                                                <MenuItem
+                                                    onClick={() => handleDisableEnableGlobal(true)}
+                                                >
+                                                    <ListItemIcon >
+                                                        <NotificationsActiveIcon fontSize="small" />
+                                                    </ListItemIcon>
+                                                    <Typography variant="inherit">Enable ALL AREAS</Typography>
+                                                </MenuItem>
+                                            }
+                                            <MenuItem
+                                                onClick={handleAckGlobal}
+                                            >
+                                                <ListItemIcon >
+                                                    <DoneAllIcon fontSize="small" />
+                                                </ListItemIcon>
+                                                <Typography variant="inherit">ACK ALL AREAS' alarms</Typography>
+                                            </MenuItem>
+                                            {isAlarmAdmin &&
+                                                <MenuItem
+                                                    onClick={() => setAlarmAdminGListExpand(!alarmAdminGListExpand)}
+                                                >
+                                                    <ListItemIcon >
+                                                        <SupervisorAccountIcon fontSize="small" />
+                                                    </ListItemIcon>
+                                                    <ListItemText primary="Alarm admin actions" />
+                                                    {alarmAdminGListExpand ? <ExpandLess style={{ marginLeft: 16 }} /> : <ExpandMore style={{ marginLeft: 16 }} />}
+                                                </MenuItem>
+                                            }
+                                            <Collapse in={alarmAdminGListExpand} timeout="auto" unmountOnExit>
+                                                <List component="div" disablePadding >
+                                                    <ListItem
+                                                        button
+                                                        className={classes.nested}
+                                                        onClick={() => {
+                                                            setAddAreaDialogOpen(true)
+                                                            setAlarmAdminGListExpand(false)
+                                                            setGlobalContextOpen(false)
+                                                        }}
+                                                    >
+                                                        <ListItemIcon >
+                                                            <AddIcon fontSize="small" />
+                                                        </ListItemIcon>
+                                                        <ListItemText primary="Add new area" />
+                                                    </ListItem>
+                                                </List>
+                                            </Collapse>
 
-                                    </Menu>}
+                                        </Menu>}
+                                    </Grid>
+                                    <Grid item xs={10}>
+                                        <div style={{ paddingTop: 0, fontSize: 16, fontWeight: 'bold' }}>{`ALARM AREAS ${enableAllAreas ? "" : "[DISABLED]"}`}</div>
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        {areaNames ?
+                                            <AlarmList
+                                                enableAllAreas={enableAllAreas}
+                                                areaPVDict={areaPVDict}
+                                                areaContextOpen={areaContextOpen}
+                                                areaEnabled={areaEnabled}
+                                                areaNames={areaNames}
+                                                areaSubAreaOpen={areaSubAreaOpen}
+                                                areaSelectedIndex={areaSelectedIndex}
+                                                contextMouseX={contextMouseX}
+                                                contextMouseY={contextMouseY}
+                                                fadeList={fadeList}
+                                                isAlarmAdmin={isAlarmAdmin}
+                                                isAlarmUser={isAlarmUser}
+                                                alarmAdminListExpand={alarmAdminListExpand}
+                                                ackAllAreaAlarms={handleAckAllAreaAlarms}
+                                                enableDisableArea={handleEnableDisableArea}
+                                                listItemClick={handleListItemClick}
+                                                listItemRightClick={handleListItemRightClick}
+                                                listItemContextClose={handleListItemContextClose}
+                                                addNewPV={handleAddNewPV}
+                                                addNewSubArea={handleAddNewSubArea}
+                                                renameArea={handleRenameArea}
+                                                deleteArea={handleDeleteArea}
+                                                setAlarmAdminListExpand={setAlarmAdminListExpand}
+                                            />
+                                            : "No data from database"}
+                                    </Grid>
                                 </Grid>
-                                <Grid item xs={10}>
-                                    <div style={{ paddingTop: 0, fontSize: 16, fontWeight: 'bold' }}>{`ALARM AREAS ${enableAllAreas ? "" : "[DISABLED]"}`}</div>
-                                </Grid>
-                                <Grid item xs={12}>
-                                    {areaNames ?
-                                        <AlarmList
+                            </Paper>
+                        </Grid>
+                        : <Grid item xs={2}>
+                            <Paper className={classes.paper} elevation={theme.palette.paperElevation}>
+                                <div style={{ fontSize: 16, fontWeight: 'bold' }}>
+                                    CONNECTING TO PVs...
+                                    </div>
+                            </Paper>
+                        </Grid>}
+                    {displayAlarmTable && !backdropOpen ?
+                        <Grid item xs={10} >
+                            <Accordion
+                                elevation={theme.palette.paperElevation}
+                                expanded={alarmTableExpand}
+                                onClick={(event) => handleExpandPanel(event, 'alarmTable')}
+                                TransitionProps={{
+                                    onEntered: () => handleExpansionComplete('alarmTable', true),
+                                    onExited: () => handleExpansionComplete('alarmTable', false)
+                                }}
+                            >
+                                <AccordionSummary
+                                    expandIcon={<ExpandMoreIcon />}
+                                    aria-controls="panel1bh-content"
+                                    id="panel1bh-header"
+                                    classes={{ content: classes.expansionPanelSummaryContent, expanded: classes.expanded }}
+                                >
+                                    <div style={{ display: 'flex', width: '100%' }}>
+                                        <div className={classes.verticalMiddle} style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 20 }}>{`ALARM TABLE: ${areaSelectedName}`}</div>
+                                        {
+                                            alarmTableExpand
+                                                ? <TablePagination
+                                                    component="div"
+                                                    onClick={(event) => {
+                                                        event.preventDefault()
+                                                        event.stopPropagation()
+                                                    }}
+                                                    rowsPerPageOptions={[25, 50]}
+                                                    colSpan={3}
+                                                    count={preSliceAreaAlarms.length}
+                                                    rowsPerPage={rowsPerPageAT}
+                                                    page={pageAT}
+                                                    SelectProps={{
+                                                        inputProps: { 'aria-label': 'rows per page' },
+                                                        native: true,
+                                                    }}
+                                                    onChangePage={handleChangePageAT}
+                                                    onChangeRowsPerPage={handleChangeRowsPerPageAT}
+                                                    ActionsComponent={TablePaginationActions}
+                                                />
+                                                : null
+                                        }
+                                        <div className={classes.verticalMiddle} style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 1 }}>{
+                                            alarmTableExpand
+                                                ? <div className={classes.search}>
+                                                    <div className={classes.searchIcon}>
+                                                        <SearchIcon />
+                                                    </div>
+                                                    <InputBase
+                                                        placeholder="Search alarm table…"
+                                                        classes={{
+                                                            root: classes.inputRoot,
+                                                            input: classes.inputInput,
+                                                        }}
+                                                        inputProps={{ 'aria-label': 'search' }}
+                                                        onClick={event => event.stopPropagation()}
+                                                        onFocus={event => event.stopPropagation()}
+                                                        onChange={event => handleSearchAlarmTable(event)}
+                                                        // onBlur={() => { setAlarmTableSearchStringStore(''); setAlarmTableSearchString('') }}
+                                                        value={alarmTableSearchStringStore}
+                                                    />
+                                                </div>
+                                                : '[click to show]'
+                                        }</div>
+                                    </div>
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                    {areaNames
+                                        ? <AlarmTable
+                                            alarmIOCPVPrefix={alarmIOCPVPrefix}
                                             enableAllAreas={enableAllAreas}
-                                            areaPVDict={areaPVDict}
-                                            areaContextOpen={areaContextOpen}
-                                            areaEnabled={areaEnabled}
-                                            areaNames={areaNames}
-                                            areaSubAreaOpen={areaSubAreaOpen}
+                                            debug={alarmDebug}
+                                            alarmPVDict={alarmPVDict}
+                                            alarmRowSelected={alarmRowSelected}
+                                            alarmContextOpen={alarmContextOpen}
                                             areaSelectedIndex={areaSelectedIndex}
+                                            areaAlarms={filteredAreaAlarms}
                                             contextMouseX={contextMouseX}
                                             contextMouseY={contextMouseY}
-                                            fadeList={fadeList}
-                                            isAlarmAdmin={isAlarmAdmin}
+                                            areaEnabled={areaEnabled}
+                                            height={alarmTableHeight}
+                                            alarmTableSearchString={alarmTableSearchString}
                                             isAlarmUser={isAlarmUser}
-                                            alarmAdminListExpand={alarmAdminListExpand}
-                                            ackAllAreaAlarms={handleAckAllAreaAlarms}
-                                            enableDisableArea={handleEnableDisableArea}
-                                            listItemClick={handleListItemClick}
-                                            listItemRightClick={handleListItemRightClick}
-                                            listItemContextClose={handleListItemContextClose}
-                                            addNewPV={handleAddNewPV}
-                                            addNewSubArea={handleAddNewSubArea}
-                                            renameArea={handleRenameArea}
-                                            deleteArea={handleDeleteArea}
-                                            setAlarmAdminListExpand={setAlarmAdminListExpand}
+                                            alarmAcknowledge={handleAlarmAcknowledge}
+                                            alarmContextClose={handleAlarmContextClose}
+                                            itemChecked={handleTableItemCheck}
+                                            enableChecked={handleTableEnableCheck}
+                                            tableItemRightClick={handleTableItemRightClick}
+                                            tableRowClick={handleTableRowClick}
+                                            fadeTU={fadeTU}
+                                            page={pageAT}
+                                            rowsPerPage={rowsPerPageAT}
                                         />
                                         : "No data from database"}
-                                </Grid>
-                            </Grid>
-                        </Paper>
-                    </Grid>
-                    : <Grid item xs={2}>
-                        <Paper className={classes.paper} elevation={theme.palette.paperElevation}>
-                            <div style={{ fontSize: 16, fontWeight: 'bold' }}>
-                                CONNECTING TO PVs...
-                                    </div>
-                        </Paper>
-                    </Grid>}
-                {displayAlarmTable && !backdropOpen ?
-                    <Grid item xs={10} >
-                        <Accordion
-                            elevation={theme.palette.paperElevation}
-                            expanded={alarmTableExpand}
-                            onClick={(event) => handleExpandPanel(event, 'alarmTable')}
-                            TransitionProps={{
-                                onEntered: () => handleExpansionComplete('alarmTable', true),
-                                onExited: () => handleExpansionComplete('alarmTable', false)
-                            }}
-                        >
-                            <AccordionSummary
-                                expandIcon={<ExpandMoreIcon />}
-                                aria-controls="panel1bh-content"
-                                id="panel1bh-header"
-                                classes={{ content: classes.expansionPanelSummaryContent, expanded: classes.expanded }}
+                                </AccordionDetails>
+                            </Accordion>
+
+                            <Accordion
+                                elevation={theme.palette.paperElevation}
+                                expanded={alarmLogExpand}
+                                onClick={(event) => handleExpandPanel(event, 'alarmLog')}
+                                TransitionProps={{
+                                    onEntered: () => handleExpansionComplete('alarmLog', true),
+                                    onExited: () => handleExpansionComplete('alarmLog', false)
+                                }}
                             >
-                                <div style={{ display: 'flex', width: '100%' }}>
-                                    <div className={classes.verticalMiddle} style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 20 }}>{`ALARM TABLE: ${areaSelectedName}`}</div>
-                                    {
-                                        alarmTableExpand
-                                            ? <TablePagination
-                                                component="div"
-                                                onClick={(event) => {
-                                                    event.preventDefault()
-                                                    event.stopPropagation()
-                                                }}
-                                                rowsPerPageOptions={[25, 50]}
-                                                colSpan={3}
-                                                count={preSliceAreaAlarms.length}
-                                                rowsPerPage={rowsPerPageAT}
-                                                page={pageAT}
-                                                SelectProps={{
-                                                    inputProps: { 'aria-label': 'rows per page' },
-                                                    native: true,
-                                                }}
-                                                onChangePage={handleChangePageAT}
-                                                onChangeRowsPerPage={handleChangeRowsPerPageAT}
-                                                ActionsComponent={TablePaginationActions}
-                                            />
-                                            : null
-                                    }
-                                    <div className={classes.verticalMiddle} style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 1 }}>{
-                                        alarmTableExpand
-                                            ? <div className={classes.search}>
-                                                <div className={classes.searchIcon}>
-                                                    <SearchIcon />
-                                                </div>
-                                                <InputBase
-                                                    placeholder="Search alarm table…"
-                                                    classes={{
-                                                        root: classes.inputRoot,
-                                                        input: classes.inputInput,
+                                <AccordionSummary
+                                    expandIcon={<ExpandMoreIcon />}
+                                    aria-controls="panel1bh-content"
+                                    id="panel1bh-header"
+                                    classes={{ content: classes.expansionPanelSummaryContent, expanded: classes.expanded }}
+                                >
+                                    <div style={{ display: 'flex', width: '100%' }}>
+                                        <div className={classes.verticalMiddle} style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 20 }}>{`ALARM LOG: ${alarmLogSelectedName}`}</div>
+                                        {
+                                            alarmLogExpand
+                                                ? <TablePagination
+                                                    component="div"
+                                                    onClick={(event) => {
+                                                        event.preventDefault()
+                                                        event.stopPropagation()
                                                     }}
-                                                    inputProps={{ 'aria-label': 'search' }}
-                                                    onClick={event => event.stopPropagation()}
-                                                    onFocus={event => event.stopPropagation()}
-                                                    onChange={event => handleSearchAlarmTable(event)}
-                                                    // onBlur={() => { setAlarmTableSearchStringStore(''); setAlarmTableSearchString('') }}
-                                                    value={alarmTableSearchStringStore}
+                                                    rowsPerPageOptions={[25, 50, 100]}
+                                                    colSpan={3}
+                                                    count={totalDocs}
+                                                    rowsPerPage={rowsPerPage}
+                                                    page={page}
+                                                    SelectProps={{
+                                                        inputProps: { 'aria-label': 'rows per page' },
+                                                        native: true,
+                                                    }}
+                                                    onChangePage={handleChangePage}
+                                                    onChangeRowsPerPage={handleChangeRowsPerPage}
+                                                    ActionsComponent={TablePaginationActions}
                                                 />
-                                            </div>
-                                            : '[click to show]'
-                                    }</div>
-                                </div>
-                            </AccordionSummary>
-                            <AccordionDetails>
-                                {areaNames
-                                    ? <AlarmTable
-                                        alarmIOCPVPrefix={alarmIOCPVPrefix}
-                                        enableAllAreas={enableAllAreas}
-                                        debug={alarmDebug}
-                                        alarmPVDict={alarmPVDict}
-                                        alarmRowSelected={alarmRowSelected}
-                                        alarmContextOpen={alarmContextOpen}
-                                        areaSelectedIndex={areaSelectedIndex}
-                                        areaAlarms={filteredAreaAlarms}
-                                        contextMouseX={contextMouseX}
-                                        contextMouseY={contextMouseY}
-                                        areaEnabled={areaEnabled}
-                                        height={alarmTableHeight}
-                                        alarmTableSearchString={alarmTableSearchString}
-                                        isAlarmUser={isAlarmUser}
-                                        alarmAcknowledge={handleAlarmAcknowledge}
-                                        alarmContextClose={handleAlarmContextClose}
-                                        itemChecked={handleTableItemCheck}
-                                        enableChecked={handleTableEnableCheck}
-                                        tableItemRightClick={handleTableItemRightClick}
-                                        tableRowClick={handleTableRowClick}
-                                        fadeTU={fadeTU}
-                                        page={pageAT}
-                                        rowsPerPage={rowsPerPageAT}
+                                                : null
+                                        }
+                                        <div className={classes.verticalMiddle} style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 1 }}>{
+                                            alarmLogExpand
+                                                ? <div className={classes.search}>
+                                                    <div className={classes.searchIcon}>
+                                                        <SearchIcon />
+                                                    </div>
+                                                    <InputBase
+                                                        placeholder="Search alarm log…"
+                                                        classes={{
+                                                            root: classes.inputRoot,
+                                                            input: classes.inputInput,
+                                                        }}
+                                                        inputProps={{ 'aria-label': 'search' }}
+                                                        onClick={event => event.stopPropagation()}
+                                                        onFocus={event => event.stopPropagation()}
+                                                        onChange={event => handleSearchAlarmLog(event)}
+                                                        // onBlur={() => { setAlarmLogSearchStringStore(''); setAlarmLogSearchString('') }}
+                                                        value={alarmLogSearchStringStore}
+                                                    />
+                                                </div>
+                                                : '[click to show]'
+                                        }
+                                        </div>
+                                    </div>
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                    <AlarmLog
+                                        height={alarmLogHeight}
+                                        alarmLogDisplayArray={alarmLogDisplayArray}
+                                        scrollReset={{
+                                            page: page,
+                                            rowsPerPage: rowsPerPage,
+                                            alarmLogSearchString: alarmLogSearchString,
+                                            alarmLogSelectedKey: alarmLogSelectedKey
+                                        }}
                                     />
-                                    : "No data from database"}
-                            </AccordionDetails>
-                        </Accordion>
+                                </AccordionDetails>
+                            </Accordion>
 
-                        <Accordion
-                            elevation={theme.palette.paperElevation}
-                            expanded={alarmLogExpand}
-                            onClick={(event) => handleExpandPanel(event, 'alarmLog')}
-                            TransitionProps={{
-                                onEntered: () => handleExpansionComplete('alarmLog', true),
-                                onExited: () => handleExpansionComplete('alarmLog', false)
-                            }}
-                        >
-                            <AccordionSummary
-                                expandIcon={<ExpandMoreIcon />}
-                                aria-controls="panel1bh-content"
-                                id="panel1bh-header"
-                                classes={{ content: classes.expansionPanelSummaryContent, expanded: classes.expanded }}
-                            >
-                                <div style={{ display: 'flex', width: '100%' }}>
-                                    <div className={classes.verticalMiddle} style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 20 }}>{`ALARM LOG: ${alarmLogSelectedName}`}</div>
-                                    {
-                                        alarmLogExpand
-                                            ? <TablePagination
-                                                component="div"
-                                                onClick={(event) => {
-                                                    event.preventDefault()
-                                                    event.stopPropagation()
-                                                }}
-                                                rowsPerPageOptions={[25, 50, 100]}
-                                                colSpan={3}
-                                                count={totalDocs}
-                                                rowsPerPage={rowsPerPage}
-                                                page={page}
-                                                SelectProps={{
-                                                    inputProps: { 'aria-label': 'rows per page' },
-                                                    native: true,
-                                                }}
-                                                onChangePage={handleChangePage}
-                                                onChangeRowsPerPage={handleChangeRowsPerPage}
-                                                ActionsComponent={TablePaginationActions}
-                                            />
-                                            : null
-                                    }
-                                    <div className={classes.verticalMiddle} style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 1 }}>{
-                                        alarmLogExpand
-                                            ? <div className={classes.search}>
-                                                <div className={classes.searchIcon}>
-                                                    <SearchIcon />
-                                                </div>
-                                                <InputBase
-                                                    placeholder="Search alarm log…"
-                                                    classes={{
-                                                        root: classes.inputRoot,
-                                                        input: classes.inputInput,
-                                                    }}
-                                                    inputProps={{ 'aria-label': 'search' }}
-                                                    onClick={event => event.stopPropagation()}
-                                                    onFocus={event => event.stopPropagation()}
-                                                    onChange={event => handleSearchAlarmLog(event)}
-                                                    // onBlur={() => { setAlarmLogSearchStringStore(''); setAlarmLogSearchString('') }}
-                                                    value={alarmLogSearchStringStore}
-                                                />
-                                            </div>
-                                            : '[click to show]'
-                                    }
+                        </Grid>
+                        :
+                        <Grid item xs={10} >
+                            <Paper className={classes.paper} elevation={theme.palette.paperElevation}>
+                                <div style={{ fontSize: 16, fontWeight: 'bold' }}>
+                                    CONNECTING TO PVs...
                                     </div>
-                                </div>
-                            </AccordionSummary>
-                            <AccordionDetails>
-                                <AlarmLog
-                                    height={alarmLogHeight}
-                                    alarmLogDisplayArray={alarmLogDisplayArray}
-                                    scrollReset={{
-                                        page: page,
-                                        rowsPerPage: rowsPerPage,
-                                        alarmLogSearchString: alarmLogSearchString,
-                                        alarmLogSelectedKey: alarmLogSelectedKey
-                                    }}
-                                />
-                            </AccordionDetails>
-                        </Accordion>
+                            </Paper>
+                        </Grid>
+                    }
 
-                    </Grid>
-                    :
-                    <Grid item xs={10} >
+                </Grid>
+                : <Grid
+                    container
+                    direction="row"
+                    justify="flex-start"
+                    alignItems="stretch"
+                    spacing={2}
+                    className={classes.root}
+                >
+                    <Grid item xs={12}>
                         <Paper className={classes.paper} elevation={theme.palette.paperElevation}>
-                            <div style={{ fontSize: 16, fontWeight: 'bold' }}>
-                                CONNECTING TO PVs...
-                                    </div>
+                            <div style={{ fontSize: 16, fontWeight: 'bold', textAlign: 'center' }}>
+                                Alarm Handler database version is not current. Please prune
+                                the database and restart the Alarm Handler server.
+                            </div>
                         </Paper>
                     </Grid>
-                }
-
-            </Grid>
+                </Grid>
+            }
             {/* </div> */}
         </React.Fragment>
     )

@@ -56,9 +56,11 @@ const AlarmHandler = (props) => {
             {userSetup
                 ? <UserNotification
                     dbName={props.alarmDatabaseName}
+                    AHDBVer={props.alarmDatabaseVersion}
                 />
                 : <AlarmSetup
                     dbName={props.alarmDatabaseName}
+                    AHDBVer={props.alarmDatabaseVersion}
                 />
             }
 
@@ -69,6 +71,8 @@ const AlarmHandler = (props) => {
 AlarmHandler.propTypes = {
     /** Name of the MongoDB alarm database to connect to */
     alarmDatabaseName: PropTypes.string,
+    /** Version of the MongoDB alarm database configuration */
+    alarmDatabaseVersion: PropTypes.number,
     /** Props passed to the underlying TraditionalLayout component and style the title displayed in the app bar.
      * See TraditionalLayout component for more information.
     */
@@ -77,7 +81,8 @@ AlarmHandler.propTypes = {
 
 AlarmHandler.defaultProps = {
     titleProps: {},
-    alarmDatabaseName: ''
+    alarmDatabaseName: '',
+    alarmDatabaseVersion: 1.0
 }
 
 export default React.memo(AlarmHandler);

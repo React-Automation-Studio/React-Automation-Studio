@@ -808,7 +808,7 @@ const AlarmSetup = (props) => {
     useEffect(() => {
         if (dbGlobData !== null) {
             // ["_id"]["$oid"]
-            const data = dbGlobData[0];
+            const data = dbGlobData[0]
             setEnableAllAreas(data["enableAllAreas"])
             setGlobalDocId(data["_id"]["$oid"])
             setRestartCount(data["restartCount"])

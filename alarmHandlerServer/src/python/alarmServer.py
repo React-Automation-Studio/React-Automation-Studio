@@ -1146,16 +1146,16 @@ def bridgeWatchThread(areaKey, bridgeTime, subAreaKey=None, pvKey=None):
         if(subAreaKey):
             topAreaKey = areaKey.split("=")[0]
             if(pvKey):
-                enable = dbGetField('enable', topAreaKey, pvKey, subAreaKey)
+                bridge = dbGetField('bridge', topAreaKey, pvKey, subAreaKey)
             else:
-                enable = dbGetField('enable', topAreaKey,
+                bridge = dbGetField('bridge', topAreaKey,
                                     subAreaKey=subAreaKey)
         else:
             if(pvKey):
-                enable = dbGetField('enable', areaKey, pvKey)
+                bridge = dbGetField('bridge', areaKey, pvKey)
             else:
-                enable = dbGetField('enable', areaKey)
-        if(enable):
+                bridge = dbGetField('bridge', areaKey)
+        if(not bridge):
             break
         elif(datetime.now(utc).isoformat() > bridgeTime):
             if(AH_DEBUG):

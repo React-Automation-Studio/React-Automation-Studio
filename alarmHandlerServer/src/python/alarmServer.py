@@ -1225,24 +1225,21 @@ def pvCollectionWatch():
                                          "entry": bridgeMessage}
                                 dbUpdateHistory(topArea, entry)
                             else:
-                                bridgeMessage = activeUser+" BRIDGED area "+topArea+" until "
-                        elif(key == "bridgeTime"):
-                            if(updatedFields[key] != ''):
+                                bridgeTime = dbGetField("bridgeTime", topArea)
                                 # Time zone localisation
                                 if(localtz):
-                                    str_time = datetime.fromisoformat(updatedFields[key]).astimezone(localtz).strftime(
+                                    str_time = datetime.fromisoformat(bridgeTime).astimezone(localtz).strftime(
                                         "%d %b %Y %H:%M:%S")
                                 else:
-                                    str_time = datetime.fromisoformat(updatedFields[key]).strftime(
+                                    str_time = datetime.fromisoformat(bridgeTime).strftime(
                                         "%d %b %Y %H:%M:%S")+" (UTC)"
                                 # Time zone localisation
-                                bridgeMessage = bridgeMessage+str_time
+                                bridgeMessage = activeUser+" BRIDGED area "+topArea+" until "+str_time
                                 entry = {"timestamp": timestamp,
                                          "entry": bridgeMessage}
-                                if(bridgeEvent):
-                                    dbUpdateHistory(topArea, entry)
-                                    _thread.start_new_thread(
-                                        bridgeWatchThread, (topArea, updatedFields[key],))
+                                dbUpdateHistory(topArea, entry)
+                                _thread.start_new_thread(
+                                    bridgeWatchThread, (topArea, bridgeTime,))
                         elif(key == "enable"):
                             # area enable
                             topArea = doc.get("area")
@@ -1278,30 +1275,35 @@ def pvCollectionWatch():
                                 areaKey = getKeys(pvname)[0]
                                 dbUpdateHistory(areaKey, entry, pvname)
                             else:
-                                bridgeMessage = pvname+" - "+activeUser+" BRIDGED alarm until "
-                        elif ("pvs." in key and (key.endswith(".bridgeTime"))):
-                            if(updatedFields[key] != ''):
+                                areaKey, pvKey = getKeys(pvname)
+                                if("=" in areaKey):
+                                    subAreaKey = subAreaDict[areaKey]
+                                    areaKey = areaKey.split("=")[0]
+                                else:
+                                    subAreaKey = None
+                                bridgeTime = dbGetField(
+                                    "bridgeTime", areaKey, pvKey, subAreaKey)
                                 # Time zone localisation
                                 if(localtz):
-                                    str_time = datetime.fromisoformat(updatedFields[key]).astimezone(localtz).strftime(
+                                    str_time = datetime.fromisoformat(bridgeTime).astimezone(localtz).strftime(
                                         "%d %b %Y %H:%M:%S")
                                 else:
-                                    str_time = datetime.fromisoformat(updatedFields[key]).strftime(
+                                    str_time = datetime.fromisoformat(bridgeTime).strftime(
                                         "%d %b %Y %H:%M:%S")+" (UTC)"
                                 # Time zone localisation
-                                bridgeMessage = bridgeMessage+str_time
+                                bridgeMessage = pvname+" - "+activeUser+" BRIDGED alarm until "+str_time
                                 entry = {"timestamp": timestamp,
                                          "entry": bridgeMessage}
-                                if(bridgeEvent):
-                                    areaKey, pvKey = getKeys(pvname)
-                                    dbUpdateHistory(areaKey, entry, pvname)
-                                    if ("=" in areaKey):
-                                        subAreaKey = subAreaDict[areaKey]
-                                        areaKey = areaKey.split("=")[0]
-                                    else:
-                                        subAreaKey = None
-                                    _thread.start_new_thread(
-                                        bridgeWatchThread, (areaKey, updatedFields[key], subAreaKey, pvKey,))
+
+                                areaKey, pvKey = getKeys(pvname)
+                                dbUpdateHistory(areaKey, entry, pvname)
+                                if ("=" in areaKey):
+                                    subAreaKey = subAreaDict[areaKey]
+                                    areaKey = areaKey.split("=")[0]
+                                else:
+                                    subAreaKey = None
+                                _thread.start_new_thread(
+                                    bridgeWatchThread, (areaKey, bridgeTime, subAreaKey, pvKey,))
                         elif ("pvs." in key and (key.endswith(".enable") or key.endswith(".latch") or key.endswith(".notify"))):
                             # pv enable/latch/notify
                             # print("enable/latch/notify of pv changed!")
@@ -1331,7 +1333,7 @@ def pvCollectionWatch():
                             #       "alarm", msg)
                             if((key.endswith(".enable") and not bridgeEvent) or key.endswith(".latch") or key.endswith(".notify")):
                                 dbUpdateHistory(areaKey, entry, pvname)
-                        elif (key.endswith(".bridge")):
+                        elif ("pvs." not in key and key.endswith(".bridge")):
                             # subArea bridge
                             bridgeEvent = updatedFields[key]
                             areaKey = doc.get("area") + "=" + doc.get(
@@ -1343,25 +1345,26 @@ def pvCollectionWatch():
                                          "entry": bridgeMessage}
                                 dbUpdateHistory(areaKey, entry)
                             else:
-                                bridgeMessage = activeUser+" BRIDGED subArea "+areaName+" until "
-                        elif (key.endswith(".bridgeTime")):
-                            # subArea bridgeTime
-                            # Time zone localisation
-                            if(localtz):
-                                str_time = datetime.fromisoformat(updatedFields[key]).astimezone(localtz).strftime(
-                                    "%d %b %Y %H:%M:%S")
-                            else:
-                                str_time = datetime.fromisoformat(updatedFields[key]).strftime(
-                                    "%d %b %Y %H:%M:%S")+" (UTC)"
-                            # Time zone localisation
-                            bridgeMessage = bridgeMessage+str_time
-                            entry = {"timestamp": timestamp,
-                                     "entry": bridgeMessage}
-                            if(bridgeEvent):
+                                areaKey = doc.get("area")
+                                subAreaKey = key.split(".")[0]
+                                bridgeTime = dbGetField(
+                                    "bridgeTime", areaKey, None, subAreaKey)
+                                # Time zone localisation
+                                if(localtz):
+                                    str_time = datetime.fromisoformat(bridgeTime).astimezone(localtz).strftime(
+                                        "%d %b %Y %H:%M:%S")
+                                else:
+                                    str_time = datetime.fromisoformat(bridgeTime).strftime(
+                                        "%d %b %Y %H:%M:%S")+" (UTC)"
+                                # Time zone localisation
+                                bridgeMessage = bridgeMessage = activeUser + \
+                                    " BRIDGED subArea "+areaName+" until "+str_time
+                                entry = {"timestamp": timestamp,
+                                         "entry": bridgeMessage}
                                 dbUpdateHistory(areaKey, entry)
                                 _thread.start_new_thread(
-                                    bridgeWatchThread, (areaKey, updatedFields[key], key.split(".")[0],))
-                        elif (key.endswith(".enable")):
+                                    bridgeWatchThread, (areaKey, bridgeTime, subAreaKey,))
+                        elif ("pvs." not in key and key.endswith(".enable")):
                             # subArea enable
                             areaKey = doc.get("area") + "=" + doc.get(
                                 key.split(".")[0])["name"]

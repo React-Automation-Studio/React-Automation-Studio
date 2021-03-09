@@ -298,7 +298,8 @@ const AlarmTable = props => {
                                             disabled={!props.areaEnabled[areaName] || !props.enableAllAreas || !props.isAlarmUser}
                                             value={value["enable"]}
                                             color="secondary"
-                                            checked={value["enable"]}
+                                            // Backwards compatible
+                                            checked={value["enable"] && !(value["bridge"] ?? false)}
                                             onClick={event => props.enableChecked(event, areaName, alarm, entryIndex)}
                                         />
                                     </TableCell>

@@ -1011,7 +1011,6 @@ const AlarmSetup = (props) => {
 
         const id = areaMongoId[index]
         let newvalues = null
-        let subAreaId = null
 
         // Check if it is a subArea
         // console.log(index)
@@ -1027,30 +1026,13 @@ const AlarmSetup = (props) => {
 
         if (index.includes("=")) {
             // bridge
-            subAreaId = areaSubAreaMongoId[index] + ".pvs." + alarm + ".bridge"
-            newvalues = { '$set': { [subAreaId]: enableDialogData.bridge } }
-            dbUpdateOne({
-                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
-                id: id,
-                update: newvalues
-            })
-            // bridgeTime
-            subAreaId = areaSubAreaMongoId[index] + ".pvs." + alarm + ".bridgeTime"
-            newvalues = { '$set': { [subAreaId]: '' } }
-            dbUpdateOne({
-                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
-                id: id,
-                update: newvalues
-            })
-            newvalues = { '$set': { [subAreaId]: enableDialogData.bridgeTime } }
-            dbUpdateOne({
-                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
-                id: id,
-                update: newvalues
-            })
-            // enable
-            subAreaId = areaSubAreaMongoId[index] + ".pvs." + alarm + ".enable"
-            newvalues = { '$set': { [subAreaId]: enableDialogData.enable } }
+            newvalues = {
+                '$set': {
+                    [areaSubAreaMongoId[index] + ".pvs." + alarm + ".bridge"]: enableDialogData.bridge,
+                    [areaSubAreaMongoId[index] + ".pvs." + alarm + ".bridgeTime"]: enableDialogData.bridgeTime,
+                    [areaSubAreaMongoId[index] + ".pvs." + alarm + ".enable"]: enableDialogData.enable
+                }
+            }
             dbUpdateOne({
                 dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
                 id: id,
@@ -1059,30 +1041,13 @@ const AlarmSetup = (props) => {
         }
         else {
             // bridge
-            subAreaId = "pvs." + alarm + ".bridge"
-            newvalues = { '$set': { [subAreaId]: enableDialogData.bridge } }
-            dbUpdateOne({
-                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
-                id: id,
-                update: newvalues
-            })
-            // bridgeTime
-            subAreaId = "pvs." + alarm + ".bridgeTime"
-            newvalues = { '$set': { [subAreaId]: '' } }
-            dbUpdateOne({
-                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
-                id: id,
-                update: newvalues
-            })
-            newvalues = { '$set': { [subAreaId]: enableDialogData.bridgeTime } }
-            dbUpdateOne({
-                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
-                id: id,
-                update: newvalues
-            })
-            // enable
-            subAreaId = "pvs." + alarm + ".enable"
-            newvalues = { '$set': { [subAreaId]: enableDialogData.enable } }
+            newvalues = {
+                '$set': {
+                    ["pvs." + alarm + ".bridge"]: enableDialogData.bridge,
+                    ["pvs." + alarm + ".bridgeTime"]: enableDialogData.bridgeTime,
+                    ["pvs." + alarm + ".enable"]: enableDialogData.enable
+                }
+            }
             dbUpdateOne({
                 dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
                 id: id,
@@ -1188,7 +1153,6 @@ const AlarmSetup = (props) => {
         const id = areaMongoId[index]
 
         let newvalues = null
-        let subAreaId = null
 
         // set activeUser
         newvalues = { '$set': { activeUser: username } }
@@ -1202,30 +1166,13 @@ const AlarmSetup = (props) => {
         // Check if it is a subArea
         if (index.includes("=")) {
             // bridge
-            subAreaId = areaSubAreaMongoId[index] + ".bridge"
-            newvalues = { '$set': { [subAreaId]: enableDialogData.bridge } }
-            dbUpdateOne({
-                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
-                id: id,
-                update: newvalues
-            })
-            // bridgeTime
-            subAreaId = areaSubAreaMongoId[index] + ".bridgeTime"
-            newvalues = { '$set': { [subAreaId]: '' } }
-            dbUpdateOne({
-                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
-                id: id,
-                update: newvalues
-            })
-            newvalues = { '$set': { [subAreaId]: enableDialogData.bridgeTime } }
-            dbUpdateOne({
-                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
-                id: id,
-                update: newvalues
-            })
-            // enable
-            subAreaId = areaSubAreaMongoId[index] + ".enable"
-            newvalues = { '$set': { [subAreaId]: enableDialogData.enable } }
+            newvalues = {
+                '$set': {
+                    [areaSubAreaMongoId[index] + ".bridge"]: enableDialogData.bridge,
+                    [areaSubAreaMongoId[index] + ".bridgeTime"]: enableDialogData.bridgeTime,
+                    [areaSubAreaMongoId[index] + ".enable"]: enableDialogData.enable
+                }
+            }
             dbUpdateOne({
                 dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
                 id: id,
@@ -1234,27 +1181,13 @@ const AlarmSetup = (props) => {
         }
         else {
             // bridge
-            newvalues = { '$set': { "bridge": enableDialogData.bridge } }
-            dbUpdateOne({
-                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
-                id: id,
-                update: newvalues
-            })
-            // bridgeTime
-            newvalues = { '$set': { "bridgeTime": '' } }
-            dbUpdateOne({
-                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
-                id: id,
-                update: newvalues
-            })
-            newvalues = { '$set': { "bridgeTime": enableDialogData.bridgeTime } }
-            dbUpdateOne({
-                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
-                id: id,
-                update: newvalues
-            })
-            // enable
-            newvalues = { '$set': { "enable": enableDialogData.enable } }
+            newvalues = {
+                '$set': {
+                    "bridge": enableDialogData.bridge,
+                    "bridgeTime": enableDialogData.bridgeTime,
+                    "enable": enableDialogData.enable
+                }
+            }
             dbUpdateOne({
                 dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
                 id: id,

@@ -8,6 +8,80 @@ import bcrypt
 from google.oauth2 import id_token
 from google.auth.transport import requests
 from datetime import datetime ,timedelta
+import threading
+from time import sleep
+from pymongo import MongoClient
+from bson.json_util import dumps
+global dbKnownUsers
+
+def knownUsersDbWatchThread():
+    while (True):
+        print("knownUsersDbWatchThread")
+        sleep(1)
+
+print("hello")  
+threading.Thread(target=knownUsersDbWatchThread).start()
+
+def loadKnownDbUsers():
+    try:
+        MONGO_ROOT_USERNAME = os.environ['MONGO_ROOT_USERNAME']
+        MONGO_ROOT_PASSWORD = os.environ['MONGO_ROOT_PASSWORD']
+        MONGO_ROOT_USERNAME = urllib.parse.quote_plus(
+            MONGO_ROOT_USERNAME)
+        MONGO_ROOT_PASSWORD = urllib.parse.quote_plus(
+            MONGO_ROOT_PASSWORD)
+        mongoAuth = True
+    except:
+        mongoAuth = False
+
+    try:
+        ADMIN_PW_SALT_ROUNDS = int(
+            os.environ['ADMIN_PW_SALT_ROUNDS'])
+    except:
+        ADMIN_PW_SALT_ROUNDS =12
+
+    MONGO_INITDB_ADMIN_DATABASE='rasAdminDb'
+    ADMIN_DATABASE=os.getenv('ADMIN_DATABASE')
+    ADMIN_DATABASE_REPLICA_SET_NAME=str(os.getenv('ADMIN_DATABASE_REPLICA_SET_NAME'))
+    if (ADMIN_DATABASE is None) :
+        print("Enviroment variable ADMIN_DATABASE is not defined, can't intialize: ",MONGO_INITDB_ADMIN_DATABASE)
+    else:
+        if (mongoAuth):
+            client = MongoClient('mongodb://%s:%s@%s' %(MONGO_ROOT_USERNAME, MONGO_ROOT_PASSWORD, ADMIN_DATABASE), replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
+            # Wait for MongoClient to discover the whole replica set and identify MASTER!
+            sleep(0.1)
+        else:
+            client = MongoClient('mongodb://%s' % (ADMIN_DATABASE),replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
+            # Wait for MongoClient to discover the whole replica set and identify MASTER!
+            sleep(0.1)
+        dbnames = client.list_database_names()
+        if (MONGO_INITDB_ADMIN_DATABASE not in dbnames):
+            print("Error cant connect to admin db",MONGO_INITDB_ADMIN_DATABASE)
+        else:
+            print("connected to adminDb",MONGO_INITDB_ADMIN_DATABASE)
+
+            mydb = client[MONGO_INITDB_ADMIN_DATABASE]
+            mycol=mydb['users']
+            doc=mycol.find({},{"_id":0})
+           
+            print(list(doc))
+            mycol=mydb['pvAccess']
+            doc=mycol.find_one()
+            print(doc['userGroups'])
+            #     for key in items.keys():
+            #         if key='userGroups':
+            #             userGroups= item[key]
+            #         else:
+
+            #     print(x.key)
+            # userGroups=doc['userGroups']
+            # users=doc['users']
+            # d=users
+            # for i in d:
+            #     print(i, d[i])
+                # print(data[0]['users'])
+               
+            
 
 def randomString(stringLength=10):
     """Generate a random string of fixed length """
@@ -92,6 +166,8 @@ if (not REACT_APP_DisableLogin) :
     UAGS['userGroups']=access['userGroups']
     UAGS['timestamp']=str(users['timestamp'])+str(access['timestamp'])
     knownUsers=createKnownUsers(UAGS)
+    loadKnownDbUsers()
+
     
 
 def checkPermissions(pvname,username):

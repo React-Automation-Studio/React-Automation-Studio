@@ -1147,15 +1147,25 @@ def bridgeWatchThread(areaKey, bridgeTime, subAreaKey=None, pvKey=None):
             topAreaKey = areaKey.split("=")[0]
             if(pvKey):
                 bridge = dbGetField('bridge', topAreaKey, pvKey, subAreaKey)
+                mongoBridgeTime = datetime.isoformat(
+                    datetime.fromisoformat(dbGetField(
+                        'bridgeTime', topAreaKey, pvKey, subAreaKey)).astimezone(utc))
             else:
                 bridge = dbGetField('bridge', topAreaKey,
                                     subAreaKey=subAreaKey)
+                mongoBridgeTime = datetime.isoformat(
+                    datetime.fromisoformat(dbGetField('bridgeTime', topAreaKey,
+                                                      subAreaKey=subAreaKey)).astimezone(utc))
         else:
             if(pvKey):
                 bridge = dbGetField('bridge', areaKey, pvKey)
+                mongoBridgeTime = datetime.isoformat(
+                    datetime.fromisoformat(dbGetField('bridgeTime', areaKey, pvKey)).astimezone(utc))
             else:
                 bridge = dbGetField('bridge', areaKey)
-        if(not bridge):
+                mongoBridgeTime = datetime.isoformat(
+                    datetime.fromisoformat(dbGetField('bridgeTime', areaKey)).astimezone(utc))
+        if((not bridge)or(bridgeTime != mongoBridgeTime)):
             break
         elif(datetime.now(utc).isoformat() > bridgeTime):
             if(AH_DEBUG):

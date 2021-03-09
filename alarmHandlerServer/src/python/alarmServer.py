@@ -1214,7 +1214,7 @@ def pvCollectionWatch():
                     updatedFields = change["updateDescription"]["updatedFields"]
                     for key in updatedFields.keys():
                         # print('#####')
-                        # print(key)
+                        # print(key, updatedFields[key])
                         if(key == "bridge"):
                             bridgeEvent = updatedFields[key]
                             topArea = doc.get("area")

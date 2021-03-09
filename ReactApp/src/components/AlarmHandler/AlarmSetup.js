@@ -1036,6 +1036,12 @@ const AlarmSetup = (props) => {
             })
             // bridgeTime
             subAreaId = areaSubAreaMongoId[index] + ".pvs." + alarm + ".bridgeTime"
+            newvalues = { '$set': { [subAreaId]: '' } }
+            dbUpdateOne({
+                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
+                id: id,
+                update: newvalues
+            })
             newvalues = { '$set': { [subAreaId]: enableDialogData.bridgeTime } }
             dbUpdateOne({
                 dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
@@ -1062,6 +1068,12 @@ const AlarmSetup = (props) => {
             })
             // bridgeTime
             subAreaId = "pvs." + alarm + ".bridgeTime"
+            newvalues = { '$set': { [subAreaId]: '' } }
+            dbUpdateOne({
+                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
+                id: id,
+                update: newvalues
+            })
             newvalues = { '$set': { [subAreaId]: enableDialogData.bridgeTime } }
             dbUpdateOne({
                 dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
@@ -1199,6 +1211,12 @@ const AlarmSetup = (props) => {
             })
             // bridgeTime
             subAreaId = areaSubAreaMongoId[index] + ".bridgeTime"
+            newvalues = { '$set': { [subAreaId]: '' } }
+            dbUpdateOne({
+                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
+                id: id,
+                update: newvalues
+            })
             newvalues = { '$set': { [subAreaId]: enableDialogData.bridgeTime } }
             dbUpdateOne({
                 dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
@@ -1223,6 +1241,12 @@ const AlarmSetup = (props) => {
                 update: newvalues
             })
             // bridgeTime
+            newvalues = { '$set': { "bridgeTime": '' } }
+            dbUpdateOne({
+                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
+                id: id,
+                update: newvalues
+            })
             newvalues = { '$set': { "bridgeTime": enableDialogData.bridgeTime } }
             dbUpdateOne({
                 dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,

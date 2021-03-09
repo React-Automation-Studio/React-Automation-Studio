@@ -1524,7 +1524,6 @@ def main():
     # Backwards compatible
     dbSetFieldGlobal("restartCount", 0)
     dbSetFieldGlobal("activeUser", "")
-    dbSetFieldGlobal("AHDBVer", 1.0)
 
     global alarmDictInitialised
     alarmDictInitialised = True

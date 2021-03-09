@@ -74,6 +74,7 @@ if (MONGO_INITDB_ALARM_DATABASE not in dbnames):
     collection = db['glob']
     collection.insert_many(
         [{
+            "AHDBVer": 1.0,
             "enableAllAreas": True
         }]
     )

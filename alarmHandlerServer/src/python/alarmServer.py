@@ -45,7 +45,6 @@ alarmPVSevDict = {
 
 alarmIOCPVPrefix = ""
 alarmIOCPVSuffix = ""
-bridgeMessage = ""
 activeUser = ""
 
 notifyTimeout = 0
@@ -1199,7 +1198,6 @@ def bridgeWatchThread(areaKey, bridgeTime, subAreaKey=None, pvKey=None):
 
 def pvCollectionWatch():
     global watchRestartAlarmServer
-    global bridgeMessage
     global bridgeEvent
     with dbGetCollection("pvs").watch() as stream:
         for change in stream:
@@ -1367,8 +1365,7 @@ def pvCollectionWatch():
                                     str_time = datetime.fromisoformat(bridgeTime).strftime(
                                         "%d %b %Y %H:%M:%S")+" (UTC)"
                                 # Time zone localisation
-                                bridgeMessage = bridgeMessage = activeUser + \
-                                    " BRIDGED subArea "+areaName+" until "+str_time
+                                bridgeMessage = activeUser + " BRIDGED subArea "+areaName+" until "+str_time
                                 entry = {"timestamp": timestamp,
                                          "entry": bridgeMessage}
                                 dbUpdateHistory(areaKey, entry)

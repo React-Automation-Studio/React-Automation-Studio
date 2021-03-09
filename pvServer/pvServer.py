@@ -181,27 +181,25 @@ def ldapLogin():
         LDAP_PORT=os.getenv('LDAP_PORT')
         LDAP_USER_DN=user['username']
         LDAP_USER_PW=user['password']
-        for aDLoginAttempts in range(3):
-            # print("AD login attempt:",aDLoginAttempts)
-            try:
-                con=ldap.initialize(LDAP_HOST+":"+LDAP_PORT)
-                con.bind(LDAP_USER_DN,LDAP_USER_PW,ldap.AUTH_SIMPLE)
-                if con.result():
-                
-                    userData=ExternalAuthenticateUser(user)
-                    resp=createLoginReponse(userData)
-                    return resp
+        try:
+            con=ldap.initialize(LDAP_HOST+":"+LDAP_PORT)
+            con.bind(LDAP_USER_DN,LDAP_USER_PW,ldap.AUTH_SIMPLE)
+            if con.result():
+            
+                userData=ExternalAuthenticateUser(user)
+                resp=createLoginReponse(userData)
+                return resp
 
-                else:
-                    log.info("Ldap login failed: {} ",LDAP_USER_DN)
-                    jsonify({'login': False}), 401
-            except Exception as e:
-                print("Ldap login error",e)
-                print("username",LDAP_USER_DN)
-                print("password",LDAP_USER_PW)
+            else:
                 log.info("Ldap login failed: {} ",LDAP_USER_DN)
                 jsonify({'login': False}), 401
-                return jsonify({'login': False}), 401
+        except Exception as e:
+            print("Ldap login error",e)
+            print("username",LDAP_USER_DN)
+            print("password",LDAP_USER_PW)
+            log.info("Ldap login failed: {} ",LDAP_USER_DN)
+            jsonify({'login': False}), 401
+            return jsonify({'login': False}), 401
 
        
     else:

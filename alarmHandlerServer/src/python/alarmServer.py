@@ -55,6 +55,7 @@ notifyContent = False
 watchRestartAlarmServer = False
 bridgeEvent = False
 
+runningBridgeThreads = []
 pvNameList = []
 areaList = []
 notifyBuffer = {}
@@ -1133,6 +1134,10 @@ def restartAlarmServer():
 
 
 def bridgeWatchThread(areaKey, bridgeTime, subAreaKey=None, pvKey=None):
+
+    global runningBridgeThreads
+    runningBridgeThreads.append(areaKey+str(subAreaKey)+str(pvKey)+bridgeTime)
+
     if(AH_DEBUG):
         print("Thread STARTED "+areaKey)
         print("Bridge until "+bridgeTime)
@@ -1234,6 +1239,27 @@ def pvCollectionWatch():
                                 dbUpdateHistory(topArea, entry)
                             else:
                                 bridgeTime = dbGetField("bridgeTime", topArea)
+                                # Time zone localisation
+                                if(localtz):
+                                    str_time = datetime.fromisoformat(bridgeTime).astimezone(localtz).strftime(
+                                        "%d %b %Y %H:%M:%S")
+                                else:
+                                    str_time = datetime.fromisoformat(bridgeTime).strftime(
+                                        "%d %b %Y %H:%M:%S")+" (UTC)"
+                                # Time zone localisation
+                                bridgeMessage = activeUser+" BRIDGED area "+topArea+" until "+str_time
+                                entry = {"timestamp": timestamp,
+                                         "entry": bridgeMessage}
+                                dbUpdateHistory(topArea, entry)
+                                _thread.start_new_thread(
+                                    bridgeWatchThread, (topArea, bridgeTime,))
+                        elif(key == "bridgeTime"):
+                            topArea = doc.get("area")
+                            bridgeTime = updatedFields[key]
+                            threadName = topArea+str(None)+str(None)+bridgeTime
+                            # allow time for thread to write to runningBridgeThreads
+                            sleep(0.01)
+                            if(threadName not in runningBridgeThreads):
                                 # Time zone localisation
                                 if(localtz):
                                     str_time = datetime.fromisoformat(bridgeTime).astimezone(localtz).strftime(

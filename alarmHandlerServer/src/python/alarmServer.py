@@ -1195,6 +1195,7 @@ def pvCollectionWatch():
         for change in stream:
             # os.system('cls' if os.name == 'nt' else 'clear')
             # print(change)
+            # print('#####')
             timestamp = datetime.now(utc).isoformat()
             documentKey = change["documentKey"]
             doc = dbFindOne("pvs", documentKey)
@@ -1262,13 +1263,14 @@ def pvCollectionWatch():
                         elif ("pvs." in key and (key.endswith(".bridge"))):
                             bridgeEvent = updatedFields[key]
                             pvname = None
+                            stripDict = doc
                             keys = key.split(".")
                             for one_key in keys:
                                 if (one_key not in ["bridge"]):
-                                    doc = doc.get(one_key)
+                                    stripDict = stripDict.get(one_key)
                                 else:
-                                    doc = doc.get("name")
-                                    pvname = doc
+                                    stripDict = stripDict.get("name")
+                                    pvname = stripDict
                             if(not bridgeEvent):
                                 bridgeMessage = pvname+" - Alarm BRIDGE cleared to DISABLED"
                                 entry = {"timestamp": timestamp,
@@ -1304,13 +1306,14 @@ def pvCollectionWatch():
                             # pv enable/latch/notify
                             # print("enable/latch/notify of pv changed!")
                             pvname = None
+                            stripDict = doc
                             keys = key.split(".")
                             for one_key in keys:
                                 if (one_key not in ["enable", "latch", "notify"]):
-                                    doc = doc.get(one_key)
+                                    stripDict = stripDict.get(one_key)
                                 else:
-                                    doc = doc.get("name")
-                                    pvname = doc
+                                    stripDict = stripDict.get("name")
+                                    pvname = stripDict
                             areaKey = getKeys(pvname)[0]
                             if(key.endswith(".enable")):
                                 evaluateAreaPVs(areaKey, True)

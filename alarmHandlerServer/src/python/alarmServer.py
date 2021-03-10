@@ -1036,6 +1036,23 @@ def initAlarmDict():
     alarmDict["ACK_PV"] = pv
 
 
+def startPastBridgeThreads():
+    for area in dbGetCollection("pvs").find():
+        print(area["area"], area["bridge"])
+        for key in area.keys():
+            if (key == "pvs"):
+                for pvKey in area[key].keys():
+                    pvname = area[key][pvKey]["name"]
+                    print(pvname, area[key][pvKey]["bridge"])
+            if ("subArea" in key):
+                print(area[key]["name"], area[key]["bridge"])
+                for subAreaKey in area[key].keys():
+                    if (subAreaKey == "pvs"):
+                        for pvKey in area[key][subAreaKey].keys():
+                            pvname = area[key][subAreaKey][pvKey]["name"]
+                            print(pvname, area[key][subAreaKey][pvKey]["bridge"])
+
+
 def disconnectAllPVs():
 
     for pv in pvDict.values():
@@ -1645,6 +1662,8 @@ def main():
     sleep(2.0)
     # Initialiase saved string PVs from database
     initialiseAlarmIOC()
+    # Start any past bridge threads
+    startPastBridgeThreads()
     # Initialise database collection watch on pvs
     # For enable change on pv to reevaluate area pvs
     _thread.start_new_thread(pvCollectionWatch, ())

@@ -1427,14 +1427,14 @@ def pvCollectionWatch():
                         elif ("pvs." not in key and key.endswith(".bridge")):
                             # subArea bridge
                             bridgeEvent = updatedFields[key]
-                            areaKey = doc.get("area") + "=" + doc.get(
+                            areaKeyHist = doc.get("area") + "=" + doc.get(
                                 key.split(".")[0])["name"]
-                            areaName = areaKey.replace("=", " > ")
+                            areaName = areaKeyHist.replace("=", " > ")
                             if(not bridgeEvent):
                                 bridgeMessage = areaName+" subArea BRIDGE cleared to area DISABLED"
                                 entry = {"timestamp": timestamp,
                                          "entry": bridgeMessage}
-                                dbUpdateHistory(areaKey, entry)
+                                dbUpdateHistory(areaKeyHist, entry)
                             else:
                                 areaKey = doc.get("area")
                                 subAreaKey = key.split(".")[0]
@@ -1451,7 +1451,7 @@ def pvCollectionWatch():
                                 bridgeMessage = activeUser + " BRIDGED subArea "+areaName+" until "+str_time
                                 entry = {"timestamp": timestamp,
                                          "entry": bridgeMessage}
-                                dbUpdateHistory(areaKey, entry)
+                                dbUpdateHistory(areaKeyHist, entry)
                                 _thread.start_new_thread(
                                     bridgeWatchThread, (areaKey, bridgeTime, subAreaKey,))
                                 # threadName = areaKey+str(subAreaKey)+str(pvKey)+bridgeTime
@@ -1459,9 +1459,9 @@ def pvCollectionWatch():
                                     str(subAreaKey)+str(None)+bridgeTime
                                 runningBridgeThreads.append(threadName)
                         elif ("pvs." not in key and key.endswith(".bridgeTime")):
-                            areaKey = doc.get("area") + "=" + doc.get(
+                            areaKeyHist = doc.get("area") + "=" + doc.get(
                                 key.split(".")[0])["name"]
-                            areaName = areaKey.replace("=", " > ")
+                            areaName = areaKeyHist.replace("=", " > ")
                             areaKey = doc.get("area")
                             subAreaKey = key.split(".")[0]
                             bridgeTime = updatedFields[key]
@@ -1480,7 +1480,7 @@ def pvCollectionWatch():
                                 bridgeMessage = activeUser + " BRIDGED subArea "+areaName+" until "+str_time
                                 entry = {"timestamp": timestamp,
                                          "entry": bridgeMessage}
-                                dbUpdateHistory(areaKey, entry)
+                                dbUpdateHistory(areaKeyHist, entry)
                                 _thread.start_new_thread(
                                     bridgeWatchThread, (areaKey, bridgeTime, subAreaKey,))
                                 # threadName = areaKey+str(subAreaKey)+str(pvKey)+bridgeTime

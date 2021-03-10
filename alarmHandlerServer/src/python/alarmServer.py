@@ -1136,11 +1136,11 @@ def restartAlarmServer():
 def bridgeWatchThread(areaKey, bridgeTime, subAreaKey=None, pvKey=None):
 
     global runningBridgeThreads
-    runningBridgeThreads.append(areaKey+str(subAreaKey)+str(pvKey)+bridgeTime)
+
+    threadName = areaKey+str(subAreaKey)+str(pvKey)+bridgeTime
 
     if(AH_DEBUG):
-        print("Thread STARTED "+areaKey)
-        print("Bridge until "+bridgeTime)
+        print("Thread STARTED "+threadName)
 
     bridgeTime = datetime.isoformat(
         datetime.fromisoformat(bridgeTime).astimezone(utc))
@@ -1170,6 +1170,7 @@ def bridgeWatchThread(areaKey, bridgeTime, subAreaKey=None, pvKey=None):
                 mongoBridgeTime = datetime.isoformat(
                     datetime.fromisoformat(dbGetField('bridgeTime', areaKey)).astimezone(utc))
         if((not bridge)or(bridgeTime != mongoBridgeTime)):
+            runningBridgeThreads.remove(threadName)
             break
         elif(datetime.now(utc).isoformat() > bridgeTime):
             if(AH_DEBUG):
@@ -1190,6 +1191,7 @@ def bridgeWatchThread(areaKey, bridgeTime, subAreaKey=None, pvKey=None):
                 else:
                     dbSetField('bridge', False, areaKey)
                     dbSetField('enable', True, areaKey)
+            runningBridgeThreads.remove(threadName)
             break
         else:
             pass
@@ -1198,12 +1200,13 @@ def bridgeWatchThread(areaKey, bridgeTime, subAreaKey=None, pvKey=None):
             #     print(bridgeTime)
 
     if(AH_DEBUG):
-        print("Thread ENDED "+areaKey)
+        print("Thread ENDED "+threadName)
 
 
 def pvCollectionWatch():
     global watchRestartAlarmServer
     global bridgeEvent
+    global runningBridgeThreads
     with dbGetCollection("pvs").watch() as stream:
         for change in stream:
             # os.system('cls' if os.name == 'nt' else 'clear')
@@ -1253,12 +1256,16 @@ def pvCollectionWatch():
                                 dbUpdateHistory(topArea, entry)
                                 _thread.start_new_thread(
                                     bridgeWatchThread, (topArea, bridgeTime,))
+                                # threadName = areaKey+str(subAreaKey)+str(pvKey)+bridgeTime
+                                threadName = topArea + \
+                                    str(None)+str(None)+bridgeTime
+                                runningBridgeThreads.append(threadName)
                         elif(key == "bridgeTime"):
                             topArea = doc.get("area")
                             bridgeTime = updatedFields[key]
-                            threadName = topArea+str(None)+str(None)+bridgeTime
-                            # allow time for thread to write to runningBridgeThreads
-                            sleep(0.01)
+                            # threadName = areaKey+str(subAreaKey)+str(pvKey)+bridgeTime
+                            threadName = topArea + \
+                                str(None)+str(None)+bridgeTime
                             if(threadName not in runningBridgeThreads):
                                 # Time zone localisation
                                 if(localtz):
@@ -1274,6 +1281,7 @@ def pvCollectionWatch():
                                 dbUpdateHistory(topArea, entry)
                                 _thread.start_new_thread(
                                     bridgeWatchThread, (topArea, bridgeTime,))
+                                runningBridgeThreads.append(threadName)
                         elif(key == "enable"):
                             # area enable
                             topArea = doc.get("area")

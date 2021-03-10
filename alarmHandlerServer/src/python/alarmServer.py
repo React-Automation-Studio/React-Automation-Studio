@@ -1454,6 +1454,39 @@ def pvCollectionWatch():
                                 dbUpdateHistory(areaKey, entry)
                                 _thread.start_new_thread(
                                     bridgeWatchThread, (areaKey, bridgeTime, subAreaKey,))
+                                # threadName = areaKey+str(subAreaKey)+str(pvKey)+bridgeTime
+                                threadName = areaKey + \
+                                    str(subAreaKey)+str(None)+bridgeTime
+                                runningBridgeThreads.append(threadName)
+                        elif ("pvs." not in key and key.endswith(".bridgeTime")):
+                            areaKey = doc.get("area") + "=" + doc.get(
+                                key.split(".")[0])["name"]
+                            areaName = areaKey.replace("=", " > ")
+                            areaKey = doc.get("area")
+                            subAreaKey = key.split(".")[0]
+                            bridgeTime = updatedFields[key]
+                            # threadName = areaKey+str(subAreaKey)+str(pvKey)+bridgeTime
+                            threadName = areaKey + \
+                                str(subAreaKey)+str(None)+bridgeTime
+                            if(threadName not in runningBridgeThreads):
+                                # Time zone localisation
+                                if(localtz):
+                                    str_time = datetime.fromisoformat(bridgeTime).astimezone(localtz).strftime(
+                                        "%d %b %Y %H:%M:%S")
+                                else:
+                                    str_time = datetime.fromisoformat(bridgeTime).strftime(
+                                        "%d %b %Y %H:%M:%S")+" (UTC)"
+                                # Time zone localisation
+                                bridgeMessage = activeUser + " BRIDGED subArea "+areaName+" until "+str_time
+                                entry = {"timestamp": timestamp,
+                                         "entry": bridgeMessage}
+                                dbUpdateHistory(areaKey, entry)
+                                _thread.start_new_thread(
+                                    bridgeWatchThread, (areaKey, bridgeTime, subAreaKey,))
+                                # threadName = areaKey+str(subAreaKey)+str(pvKey)+bridgeTime
+                                threadName = areaKey + \
+                                    str(subAreaKey)+str(None)+bridgeTime
+                                runningBridgeThreads.append(threadName)
                         elif ("pvs." not in key and key.endswith(".enable")):
                             # subArea enable
                             areaKey = doc.get("area") + "=" + doc.get(

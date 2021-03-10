@@ -1305,6 +1305,7 @@ def pvCollectionWatch():
                                 dbUpdateHistory(topArea, entry)
                         elif ("pvs." in key and (key.endswith(".bridge"))):
                             bridgeEvent = updatedFields[key]
+                            writeEnableHistory = False
                             pvname = None
                             stripDict = doc
                             keys = key.split(".")
@@ -1315,7 +1316,9 @@ def pvCollectionWatch():
                                     stripDict = stripDict.get("name")
                                     pvname = stripDict
                             if(not bridgeEvent):
-                                bridgeMessage = pvname+" - Alarm BRIDGE cleared to DISABLED"
+                                enableKey = key.replace("bridge", "enable")
+                                msg = "ENABLED" if enableKey in updatedFields else "DISABLED"
+                                bridgeMessage = pvname+" - Alarm BRIDGE cleared to "+msg
                                 entry = {"timestamp": timestamp,
                                          "entry": bridgeMessage}
                                 areaKey = getKeys(pvname)[0]

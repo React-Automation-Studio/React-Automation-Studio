@@ -1346,6 +1346,55 @@ def pvCollectionWatch():
                                     subAreaKey = None
                                 _thread.start_new_thread(
                                     bridgeWatchThread, (areaKey, bridgeTime, subAreaKey, pvKey,))
+                                # threadName = areaKey+str(subAreaKey)+str(pvKey)+bridgeTime
+                                threadName = areaKey + \
+                                    str(subAreaKey)+str(pvKey)+bridgeTime
+                                runningBridgeThreads.append(threadName)
+                        elif ("pvs." in key and (key.endswith(".bridgeTime"))):
+                            pvname = None
+                            stripDict = doc
+                            keys = key.split(".")
+                            for one_key in keys:
+                                if (one_key not in ["bridgeTime"]):
+                                    stripDict = stripDict.get(one_key)
+                                else:
+                                    stripDict = stripDict.get("name")
+                                    pvname = stripDict
+                            areaKey, pvKey = getKeys(pvname)
+                            if("=" in areaKey):
+                                subAreaKey = subAreaDict[areaKey]
+                                areaKey = areaKey.split("=")[0]
+                            else:
+                                subAreaKey = None
+                            bridgeTime = updatedFields[key]
+                            # threadName = areaKey+str(subAreaKey)+str(pvKey)+bridgeTime
+                            threadName = areaKey + \
+                                str(subAreaKey)+str(pvKey)+bridgeTime
+                            if(threadName not in runningBridgeThreads):
+                                # Time zone localisation
+                                if(localtz):
+                                    str_time = datetime.fromisoformat(bridgeTime).astimezone(localtz).strftime(
+                                        "%d %b %Y %H:%M:%S")
+                                else:
+                                    str_time = datetime.fromisoformat(bridgeTime).strftime(
+                                        "%d %b %Y %H:%M:%S")+" (UTC)"
+                                # Time zone localisation
+                                bridgeMessage = pvname+" - "+activeUser+" BRIDGED alarm until "+str_time
+                                entry = {"timestamp": timestamp,
+                                         "entry": bridgeMessage}
+                                areaKey, pvKey = getKeys(pvname)
+                                dbUpdateHistory(areaKey, entry, pvname)
+                                if ("=" in areaKey):
+                                    subAreaKey = subAreaDict[areaKey]
+                                    areaKey = areaKey.split("=")[0]
+                                else:
+                                    subAreaKey = None
+                                _thread.start_new_thread(
+                                    bridgeWatchThread, (areaKey, bridgeTime, subAreaKey, pvKey,))
+                                # threadName = areaKey+str(subAreaKey)+str(pvKey)+bridgeTime
+                                threadName = areaKey + \
+                                    str(subAreaKey)+str(pvKey)+bridgeTime
+                                runningBridgeThreads.append(threadName)
                         elif ("pvs." in key and (key.endswith(".enable") or key.endswith(".latch") or key.endswith(".notify"))):
                             # pv enable/latch/notify
                             # print("enable/latch/notify of pv changed!")

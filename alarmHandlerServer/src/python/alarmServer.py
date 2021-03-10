@@ -43,6 +43,8 @@ alarmPVSevDict = {
     8: "DISCONNECTED"
 }
 
+pvCollection = dbGetCollection("pvs")
+
 alarmIOCPVPrefix = ""
 alarmIOCPVSuffix = ""
 activeUser = ""
@@ -774,13 +776,14 @@ def initSubPVDict(subArea, areaName):
 
 
 def initPVDict():
+    global pvCollection
     global pvDict
     global areaDict
     global subAreaDict
     global docIDDict
     global subAreaKeyDict
     # loop through each document = area
-    for area in dbGetCollection("pvs").find():
+    for area in pvCollection.find():
         docIDDict[area["_id"]] = area["area"]
         for key in area.keys():
             if (key == "area"):
@@ -1037,7 +1040,8 @@ def initAlarmDict():
 
 
 def startPastBridgeThreads():
-    for area in dbGetCollection("pvs").find():
+    global pvCollection
+    for area in pvCollection.find():
         topArea = area["area"]
         if(area["bridge"]):
             bridgeTime = area["bridgeTime"]
@@ -1181,6 +1185,7 @@ def restartAlarmServer():
 def bridgeWatchThread(areaKey, bridgeTime, subAreaKey=None, pvKey=None):
 
     global runningBridgeThreads
+    global pvCollection
 
     threadName = areaKey+str(subAreaKey)+str(pvKey)+bridgeTime
 
@@ -1222,20 +1227,48 @@ def bridgeWatchThread(areaKey, bridgeTime, subAreaKey=None, pvKey=None):
                 print("Bridge timeout "+threadName)
             if(subAreaKey):
                 if(pvKey):
-                    dbSetField('bridge', False, topAreaKey, pvKey, subAreaKey)
-                    dbSetField('enable', True, topAreaKey, pvKey, subAreaKey)
+                    pvCollection.update_many(
+                        {'area': topAreaKey},
+                        {'$set': {
+                            subAreaKey + '.pvs.' + pvKey + '.bridge': False,
+                            subAreaKey + '.pvs.' + pvKey + '.enable': True
+                        }}
+                    )
+                    # dbSetField('bridge', False, topAreaKey, pvKey, subAreaKey)
+                    # dbSetField('enable', True, topAreaKey, pvKey, subAreaKey)
                 else:
-                    dbSetField('bridge', False, topAreaKey,
-                               subAreaKey=subAreaKey)
-                    dbSetField('enable', True, topAreaKey,
-                               subAreaKey=subAreaKey)
+                    pvCollection.update_many(
+                        {'area': topAreaKey},
+                        {'$set': {
+                            subAreaKey + '.bridge': False,
+                            subAreaKey + '.enable': True,
+                        }}
+                    )
+                    # dbSetField('bridge', False, topAreaKey,
+                    #            subAreaKey=subAreaKey)
+                    # dbSetField('enable', True, topAreaKey,
+                    #            subAreaKey=subAreaKey)
             else:
                 if(pvKey):
-                    dbSetField('bridge', False, areaKey, pvKey)
-                    dbSetField('enable', True, areaKey, pvKey)
+                    pvCollection.update_many(
+                        {'area': areaKey},
+                        {'$set': {
+                            'pvs.' + pvKey + '.bridge': False,
+                            'pvs.' + pvKey + '.enable': True,
+                        }}
+                    )
+                    # dbSetField('bridge', False, areaKey, pvKey)
+                    # dbSetField('enable', True, areaKey, pvKey)
                 else:
-                    dbSetField('bridge', False, areaKey)
-                    dbSetField('enable', True, areaKey)
+                    pvCollection.update_many(
+                        {'area': areaKey},
+                        {'$set': {
+                            'bridge': False,
+                            'enable': True
+                        }}
+                    )
+                    # dbSetField('bridge', False, areaKey)
+                    # dbSetField('enable', True, areaKey)
             runningBridgeThreads.remove(threadName)
             break
         else:
@@ -1249,10 +1282,11 @@ def bridgeWatchThread(areaKey, bridgeTime, subAreaKey=None, pvKey=None):
 
 
 def pvCollectionWatch():
+    global pvCollection
     global watchRestartAlarmServer
     global writeEnableHistory
     global runningBridgeThreads
-    with dbGetCollection("pvs").watch() as stream:
+    with pvCollection.watch() as stream:
         for change in stream:
             # os.system('cls' if os.name == 'nt' else 'clear')
             # print(change)

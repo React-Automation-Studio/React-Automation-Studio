@@ -12,6 +12,8 @@ from notifyServer import startNotifyServer, restartNotifyServer, notify
 from dbMongo import dbGetCollection, dbGetEnables, dbGetListOfPVNames, dbGetField, dbSetField, dbFindOne, dbUpdateHistory
 from dbMongo import dbGetFieldGlobal, dbSetFieldGlobal
 
+from log import app_log
+
 try:
     AH_DEBUG = bool(os.environ['AH_DEBUG'])
 except:
@@ -86,7 +88,6 @@ def initPreSuffix():
 
 
 def printVal(**kw):
-    # print(kw)
     pass
 
 
@@ -172,12 +173,11 @@ def evaluateAreaPVs(areaKey, fromColWatch=False):
                     elif(val == 6):
                         invalidAlarm = True
                 except:
-                    if(AH_DEBUG):
-                        print('[Warning]', 'val =', val,
-                              'alarmState =', alarmState)
+                    msg = 'val = ' + str(val) + \
+                        ' alarmState = '+str(alarmState)
+                    app_log.warning(msg)
     except:
-        if(AH_DEBUG):
-            print('[Warning]', 'pvDict changed size during iteration')
+        app_log.warning('pvDict changed size during iteration')
 
     # active alarm always supercedes acked state alarm
     if alarmState in ackStates:
@@ -253,7 +253,6 @@ def getNotify(pvname):
 
 def ackPVChange(**kw):
     timestamp = datetime.now(utc).isoformat()
-    # print("ack pv:", value)
     if(kw["value"]):
         if (kw["value"][0] != ''):
             _thread.start_new_thread(ackProcess, (
@@ -492,17 +491,14 @@ def pvDisconn(pvname, conn):
         curr_desc = []
         timeout = 0
         while(not pvDescDictConn[pvname]):
-            if(AH_DEBUG):
-                print("Waiting to connect to desc pv of", pvname)
+            app_log.info("Waiting to connect to desc pv of "+pvname)
             sleep(0.5)
             timeout += 1
             # 30 second timeout to connect to desc pv
             # once pv is connected
             if(timeout > 60):
-                if(AH_DEBUG):
-                    print('[Warning]',
-                          'Unable to connect to desc pv of', pvname)
-                    print('[Warning]', 'timeout!')
+                app_log.error('Unable to connect to desc pv of '+pvname)
+                app_log.error('Timeout!')
                 break
         if(pvDescDictConn[pvname]):
             description = pvDescDict[pvname].value
@@ -631,7 +627,6 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
         # Log to history
         entry = {"timestamp": timestamp, "entry": " ".join(
             [pvname, "-", "Alarm cleared to NO_ALARM"])}
-        # print(timestamp, pvname, "Alarm cleared to NO_ALARM")
         logToHistory = True
     elif(minorAlarm and alarmState == 3):
         # set current alarm status to MINOR_ACKED
@@ -639,7 +634,6 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
         # Log to history
         entry = {"timestamp": timestamp, "entry": " ".join(
             [pvname, "-", "MAJOR_ACKED alarm demoted to MINOR_ACKED"])}
-        # print(timestamp, pvname, "MAJOR_ACKED alarm demoted to MINOR_ACKED")
         logToHistory = True
     elif(minorAlarm and alarmState == 5):
         # set current alarm status to MINOR_ACKED
@@ -647,7 +641,6 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
         # Log to history
         entry = {"timestamp": timestamp, "entry": " ".join(
             [pvname, "-", "INVALID_ACKED alarm demoted to MINOR_ACKED"])}
-        # print(timestamp, pvname, "INVALID_ACKED alarm demoted to MINOR_ACKED")
         logToHistory = True
     elif(minorAlarm and alarmState == 7):
         # set current alarm status to MINOR_ACKED
@@ -655,7 +648,6 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
         # Log to history
         entry = {"timestamp": timestamp, "entry": " ".join(
             [pvname, "-", "DISCONN_ACKED alarm demoted to MINOR_ACKED"])}
-        # print(timestamp, pvname, "DISCONN_ACKED alarm demoted to MINOR_ACKED")
         logToHistory = True
     elif(minorAlarm and (alarmState < 1 or (transparent and alarmState != 1))):
         # set current alarm status to MINOR
@@ -664,7 +656,6 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
         # Log to history
         entry = {"timestamp": timestamp, "entry": " ".join(
             [pvname, "-", "MINOR_ALARM triggered, alarm value =", str(value)])}
-        # print(timestamp, pvname, "MINOR_ALARM triggered, alarm value =", value)
         logToHistory = True
     elif(majorAlarm and alarmState == 5):
         # set current alarm status to MAJOR_ACKED
@@ -672,7 +663,6 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
         # Log to history
         entry = {"timestamp": timestamp, "entry": " ".join(
             [pvname, "-", "INVALID_ACKED alarm demoted to MAJOR_ACKED"])}
-        # print(timestamp, pvname, "INVALID_ACKED alarm demoted to MAJOR_ACKED")
         logToHistory = True
     elif(majorAlarm and alarmState == 7):
         # set current alarm status to MAJOR_ACKED
@@ -680,7 +670,6 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
         # Log to history
         entry = {"timestamp": timestamp, "entry": " ".join(
             [pvname, "-", "DISCONN_ACKED alarm demoted to MAJOR_ACKED"])}
-        # print(timestamp, pvname, "DISCONN_ACKED alarm demoted to MAJOR_ACKED")
         logToHistory = True
     elif(majorAlarm and (alarmState < 3 or (transparent and alarmState != 3))):
         # set current alarm status to MAJOR
@@ -689,7 +678,6 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
         # Log to history
         entry = {"timestamp": timestamp, "entry": " ".join(
             [pvname, "-", "MAJOR_ALARM triggered, alarm value =", str(value)])}
-        # print(timestamp, pvname, "MAJOR_ALARM triggered, alarm value =", value)
         logToHistory = True
     elif(invalidAlarm and alarmState == 7):
         # set current alarm status to INVALID_ACKED
@@ -697,7 +685,6 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
         # Log to history
         entry = {"timestamp": timestamp, "entry": " ".join(
             [pvname, "-", "DISCONN_ACKED alarm demoted to INVALID_ACKED"])}
-        # print(timestamp, pvname, "DISCONN_ACKED alarm demoted to INVALID_ACKED")
         logToHistory = True
     elif(invalidAlarm and (alarmState < 5 or (transparent and alarmState != 5))):
         # set current alarm status to INVALID
@@ -706,7 +693,6 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
         # Log to history
         entry = {"timestamp": timestamp, "entry": " ".join(
             [pvname, "-", "INVALID_ALARM triggered, alarm value =", str(value)])}
-        # print(timestamp, pvname, "INVALID_ALARM triggered, alarm value =", value)
         logToHistory = True
 
     if(alarmSet):
@@ -807,6 +793,7 @@ def initPVDict():
 def killAlarmIOC():
     subprocess.call("tmux kill-session -t ALARMIOC", shell=True)
     print("Alarm server IOC stopped")
+    app_log.info("Alarm server IOC stopped")
 
 
 def startAlarmIOC():
@@ -848,20 +835,23 @@ def startAlarmIOC():
         with open('/epics/alarmIOC/iocBoot/iocalarmIOC/st.cmd', 'w') as file:
             file.writelines(lines)
         print("Running alarm server IOC on port 8004")
+        app_log.info("Running alarm server IOC on port 8004")
     else:
         print("Running alarm server IOC on default port")
+        app_log.info("Running alarm server IOC on default port")
     subprocess.call("./startAlarmIOC.cmd", shell=True)
     sleep(0.1)
     print("Alarm server IOC running successfully")
+    app_log.info("Alarm server IOC running successfully")
 
 
 def initialiseAlarmIOC():
     global alarmDict
     print("Intilialising alarm server IOC from database")
+    app_log.info("Intilialising alarm server IOC from database")
 
     for pvname in pvNameList:
         areaKey, pvKey = getKeys(pvname)
-        # print(areaKey, pvKey)
 
         if ("=" in areaKey):
             subAreaKey = subAreaDict[areaKey]
@@ -924,8 +914,6 @@ def initialiseAlarmIOC():
                     # Log to history
                     entry = {"timestamp": pvInitDict[pvname][2], "entry": " ".join(
                         [pvname, "-", "MINOR_ALARM triggered, alarm value =", str(lastAlarmVal)])}
-                    # print(pvInitDict[pvname][2], pvname,
-                    #       "MINOR_ALARM triggered, alarm value =", lastAlarmVal)
                 elif(sev == 2):     # MAJOR alarm
                     if(alarmServerRestart):
                         alarmDict[pvname]["A"].value = 3
@@ -934,8 +922,6 @@ def initialiseAlarmIOC():
                     # Log to history
                     entry = {"timestamp": pvInitDict[pvname][2], "entry": " ".join(
                         [pvname, "-", "MAJOR_ALARM triggered, alarm value =", str(lastAlarmVal)])}
-                    # print(pvInitDict[pvname][2], pvname,
-                    #       "MAJOR_ALARM triggered, alarm value =", lastAlarmVal)
                 elif(sev == 3):     # INVALID alarm
                     if(alarmServerRestart):
                         alarmDict[pvname]["A"].value = 5
@@ -944,8 +930,6 @@ def initialiseAlarmIOC():
                     # Log to history
                     entry = {"timestamp": pvInitDict[pvname][2], "entry": " ".join(
                         [pvname, "-", "INVALID_ALARM triggered, alarm value =", str(lastAlarmVal)])}
-                    # print(pvInitDict[pvname][2], pvname,
-                    #       "INVALID_ALARM triggered, alarm value =", lastAlarmVal)
                 # write to db
                 areaKey, pvKey = getKeys(pvname)
                 if ("=" in areaKey):
@@ -977,6 +961,7 @@ def initialiseAlarmIOC():
         alarmDict[pvname]["K"].value = lastAlarmAckTime
 
     print("Alarm server IOC successfully initialised from database")
+    app_log.info("Alarm server IOC successfully initialised from database")
 
 
 def initDescDict():
@@ -1173,6 +1158,7 @@ def restartAlarmServer():
     restartNotifyServer()
 
     print("Alarm server restarted...")
+    app_log.info("Alarm server restarted...")
 
     dbSetFieldGlobal("restartCount", 0)
     # Don't reset user on auto-server restart
@@ -1189,8 +1175,7 @@ def bridgeWatchThread(areaKey, bridgeTime, subAreaKey=None, pvKey=None):
 
     threadName = areaKey+str(subAreaKey)+str(pvKey)+bridgeTime
 
-    if(AH_DEBUG):
-        print("Thread STARTED "+threadName)
+    app_log.info("Thread STARTED "+threadName)
 
     bridgeTime = datetime.isoformat(
         datetime.fromisoformat(bridgeTime).astimezone(utc))
@@ -1223,8 +1208,7 @@ def bridgeWatchThread(areaKey, bridgeTime, subAreaKey=None, pvKey=None):
             runningBridgeThreads.remove(threadName)
             break
         elif(datetime.now(utc).isoformat() > bridgeTime):
-            if(AH_DEBUG):
-                print("Bridge timeout "+threadName)
+            app_log.info("Bridge timeout "+threadName)
             if(subAreaKey):
                 if(pvKey):
                     pvCollection.update_many(
@@ -1273,12 +1257,7 @@ def bridgeWatchThread(areaKey, bridgeTime, subAreaKey=None, pvKey=None):
             break
         else:
             pass
-            # if(AH_DEBUG):
-            #     print(datetime.now().isoformat())
-            #     print(bridgeTime)
-
-    if(AH_DEBUG):
-        print("Thread ENDED "+threadName)
+    app_log.info("Thread ENDED "+threadName)
 
 
 def pvCollectionWatch():
@@ -1367,7 +1346,6 @@ def pvCollectionWatch():
                         elif(key == "enable"):
                             # area enable
                             topArea = doc.get("area")
-                            # print(areaKey, "area enable changed!")
                             for area in areaList:
                                 if ("=" in area):
                                     if (area.split("=")[0] == topArea):
@@ -1377,8 +1355,6 @@ def pvCollectionWatch():
                             msg = "ENABLED" if updatedFields[key] else "DISABLED"
                             entry = {"timestamp": timestamp, "entry": " ".join(
                                 [activeUser, msg, "area", topArea])}
-                            # print(timestamp, topArea,
-                            #   "area", msg)
                             if(writeEnableHistory):
                                 dbUpdateHistory(topArea, entry)
                         elif ("pvs." in key and (key.endswith(".bridge"))):
@@ -1482,7 +1458,6 @@ def pvCollectionWatch():
                                 runningBridgeThreads.append(threadName)
                         elif ("pvs." in key and (key.endswith(".enable") or key.endswith(".latch") or key.endswith(".notify"))):
                             # pv enable/latch/notify
-                            # print("enable/latch/notify of pv changed!")
                             pvname = None
                             stripDict = doc
                             keys = key.split(".")
@@ -1505,8 +1480,6 @@ def pvCollectionWatch():
                                     key] else "DISABLED alarm notify"
                             entry = {"timestamp": timestamp, "entry": " ".join(
                                 [pvname, '-', activeUser, msg])}
-                            # print(timestamp, pvname,
-                            #       "alarm", msg)
                             if((key.endswith(".enable") and writeEnableHistory) or key.endswith(".latch") or key.endswith(".notify")):
                                 dbUpdateHistory(areaKey, entry, pvname)
                         elif ("pvs." not in key and key.endswith(".bridge")):
@@ -1579,7 +1552,6 @@ def pvCollectionWatch():
                             # subArea enable
                             areaKey = doc.get("area") + "=" + doc.get(
                                 key.split(".")[0])["name"]
-                            # print(areaKey, "area enable changed!")
                             evaluateAreaPVs(areaKey, True)
                             # Log to history
                             msg = "ENABLED" if updatedFields[key] else "DISABLED"
@@ -1684,7 +1656,6 @@ def globalCollectionWatch():
                 timestamp = datetime.now(utc).isoformat()
                 for key in change.keys():
                     if (key == "enableAllAreas"):
-                        # print(areaKey, "area enable changed!")
                         for area in areaList:
                             if ("=" in area):
                                 areaKey = area
@@ -1693,8 +1664,6 @@ def globalCollectionWatch():
                         msg = "ENABLED" if change[key] else "DISABLED"
                         entry = {"timestamp": timestamp, "entry": " ".join(
                             [activeUser, msg, "ALL AREAS"])}
-                        # print(timestamp, topArea,
-                        #   "area", msg)
                         dbUpdateHistory("_GLOBAL", entry)
                     elif(key == "activeUser"):
                         activeUser = change[key].capitalize()
@@ -1734,12 +1703,8 @@ def main():
     # Start notify server
     startNotifyServer()
 
-    # Final debug outputs
-    # print('areaPVDict', areaPVDict)
-    # print('areaDict', areaDict)
-    # print('pvDict', pvDict)
-
     print("Alarm server running...")
+    app_log.info("Alarm server running...")
 
     # initial set of global collection fields
     # Backwards compatible

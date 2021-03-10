@@ -54,7 +54,9 @@ def initDatabase():
     alarmDB = client[MONGO_INITDB_ALARM_DATABASE]
 
     while(len(alarmDB.list_collection_names()) != 5):
-        app_log.info('Waiting for Pymongo to connect to all collections in alarm database')
+        sleep(1.0)
+        app_log.info(
+            'Waiting for Pymongo to connect to all collections in alarm database')
     app_log.info('Pymongo connected to alarm database')
     app_log.info(str(alarmDB.list_collection_names()))
 

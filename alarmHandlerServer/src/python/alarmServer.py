@@ -53,7 +53,7 @@ alarmDictInitialised = False
 alarmServerRestart = False
 notifyContent = False
 watchRestartAlarmServer = False
-bridgeEvent = False
+writeEnableHistory = False
 
 runningBridgeThreads = []
 pvNameList = []
@@ -1206,7 +1206,7 @@ def bridgeWatchThread(areaKey, bridgeTime, subAreaKey=None, pvKey=None):
 
 def pvCollectionWatch():
     global watchRestartAlarmServer
-    global bridgeEvent
+    global writeEnableHistory
     global runningBridgeThreads
     with dbGetCollection("pvs").watch() as stream:
         for change in stream:
@@ -1230,14 +1230,17 @@ def pvCollectionWatch():
                     watchRestartAlarmServer = True
                 else:
                     updatedFields = change["updateDescription"]["updatedFields"]
+                    writeEnableHistory = True
                     for key in updatedFields.keys():
                         # print('#####')
                         # print(key, updatedFields[key])
                         if(key == "bridge"):
                             bridgeEvent = updatedFields[key]
                             topArea = doc.get("area")
+                            writeEnableHistory = False
                             if(not bridgeEvent):
-                                bridgeMessage = topArea+" area BRIDGE cleared to area DISABLED"
+                                msg = "ENABLED" if "enable" in updatedFields else "DISABLED"
+                                bridgeMessage = topArea+" area BRIDGE cleared to area "+msg
                                 entry = {"timestamp": timestamp,
                                          "entry": bridgeMessage}
                                 dbUpdateHistory(topArea, entry)
@@ -1298,7 +1301,7 @@ def pvCollectionWatch():
                                 [activeUser, msg, "area", topArea])}
                             # print(timestamp, topArea,
                             #   "area", msg)
-                            if(not bridgeEvent):
+                            if(writeEnableHistory):
                                 dbUpdateHistory(topArea, entry)
                         elif ("pvs." in key and (key.endswith(".bridge"))):
                             bridgeEvent = updatedFields[key]
@@ -1423,7 +1426,7 @@ def pvCollectionWatch():
                                 [pvname, '-', activeUser, msg])}
                             # print(timestamp, pvname,
                             #       "alarm", msg)
-                            if((key.endswith(".enable") and not bridgeEvent) or key.endswith(".latch") or key.endswith(".notify")):
+                            if((key.endswith(".enable") and writeEnableHistory) or key.endswith(".latch") or key.endswith(".notify")):
                                 dbUpdateHistory(areaKey, entry, pvname)
                         elif ("pvs." not in key and key.endswith(".bridge")):
                             # subArea bridge
@@ -1498,7 +1501,7 @@ def pvCollectionWatch():
                             msg = "ENABLED" if updatedFields[key] else "DISABLED"
                             entry = {"timestamp": timestamp, "entry": " ".join(
                                 [activeUser, msg, "subArea", areaKey.replace("=", " > ")])}
-                            if(not bridgeEvent):
+                            if(writeEnableHistory):
                                 dbUpdateHistory(areaKey, entry)
                         elif (key == "pvs"):
                             # New pvs added area

@@ -1434,11 +1434,14 @@ def pvCollectionWatch():
                         elif ("pvs." not in key and key.endswith(".bridge")):
                             # subArea bridge
                             bridgeEvent = updatedFields[key]
+                            writeEnableHistory = False
                             areaKeyHist = doc.get("area") + "=" + doc.get(
                                 key.split(".")[0])["name"]
                             areaName = areaKeyHist.replace("=", " > ")
                             if(not bridgeEvent):
-                                bridgeMessage = areaName+" subArea BRIDGE cleared to area DISABLED"
+                                enableKey = key.replace("bridge", "enable")
+                                msg = "ENABLED" if enableKey in updatedFields else "DISABLED"
+                                bridgeMessage = areaName+" subArea BRIDGE cleared to area "+msg
                                 entry = {"timestamp": timestamp,
                                          "entry": bridgeMessage}
                                 dbUpdateHistory(areaKeyHist, entry)

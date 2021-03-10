@@ -16,6 +16,8 @@ from notificationMethods.notifySMS import notifySMS
 from notificationMethods.notifyWhatsApp import notifyWhatsApp
 from notificationMethods.notifySignal import notifySignal
 
+from log import app_log
+
 try:
     AH_DEBUG = bool(os.environ['AH_DEBUG'])
 except:
@@ -24,8 +26,11 @@ except:
 try:
     timezone(os.environ['AH_TZ'])
     print('Local timezone for alarm handler set to', os.environ['AH_TZ'])
+    app_log.info('Local timezone for alarm handler set to ' +
+                 os.environ['AH_TZ'])
 except:
     print('[Warning]', 'Local timezone for alarm handler not set!')
+    app_log.warning('Local timezone for alarm handler not set!')
 
 
 pvNameList = []
@@ -41,8 +46,7 @@ def initPreSuffix():
         alarmIOCPVPrefix = doc["alarmIOCPVPrefix"]
         alarmIOCPVSuffix = doc["alarmIOCPVSuffix"]
     except:
-        if(AH_DEBUG):
-            print('[Warning]', 'alarmIOCPVPrefix not instantiated')
+        app_log.warning('alarmIOCPVPrefix not instantiated')
 
 
 def getListOfPVNames():
@@ -88,51 +92,41 @@ def date_is_between(now, fromDate, toDate):
 def notifyValid(notifySetup):
     now = datetime.now(utc)
     if(notifySetup["notify"]):
-        if(AH_DEBUG):
-            print("Must notify")
+        app_log.info("Must notify")
         if(notifySetup["allDay"]):
-            if(AH_DEBUG):
-                print("All day")
+            app_log.info("All day")
         else:
-            if(AH_DEBUG):
-                print("Time restricted")
+            app_log.info("Time restricted")
             formatTime = "%H:%M"
             fromTime = datetime.fromisoformat(
                 notifySetup["fromTime"]).astimezone(utc).strftime(formatTime)
             toTime = datetime.fromisoformat(
                 notifySetup["toTime"]).astimezone(utc).strftime(formatTime)
             nowTime = now.strftime(formatTime)
-            if(AH_DEBUG):
-                print('fromTime UTC', fromTime)
-                print('toTime UTC', toTime)
-                print('nowTime UTC', nowTime)
+            app_log.info('fromTime UTC '+str(fromTime))
+            app_log.info('toTime UTC '+str(toTime))
+            app_log.info('nowTime UTC '+str(nowTime))
             if(time_is_between(nowTime, fromTime, toTime)):
-                if(AH_DEBUG):
-                    print("Current time between fromTime and toTime")
+                app_log.info("Current time between fromTime and toTime")
             else:
-                if(AH_DEBUG):
-                    print("Current time NOT between fromTime and toTime")
-                    print("!!Don't notify!!")
+                app_log.info("Current time NOT between fromTime and toTime")
+                app_log.info("!!Don't notify!!")
                 return False
         if(notifySetup["weekly"]):
             formatTime = "%A"
             dayToday = now.strftime(formatTime)
-            if(AH_DEBUG):
-                print("Notify weekly")
+            app_log.info("Notify weekly")
             daysToNotify = []
             for key, value in notifySetup["days"].items():
                 if(value):
                     daysToNotify.append(key)
-            if(AH_DEBUG):
-                print("Notify on", " ".join(daysToNotify))
-                print("Today is", dayToday)
+            app_log.info("Notify on "+" ".join(daysToNotify))
+            app_log.info("Today is " + dayToday)
             if(dayToday in daysToNotify):
-                if(AH_DEBUG):
-                    print("Notify today")
+                app_log.info("Notify today")
             else:
-                if(AH_DEBUG):
-                    print("Don't notify today")
-                    print("!!Don't notify!!")
+                app_log.info("Don't notify today")
+                app_log.info("!!Don't notify!!")
                 return False
         else:
             formatTime = "%d %B %Y"
@@ -140,24 +134,20 @@ def notifyValid(notifySetup):
                 notifySetup["fromDate"]).astimezone(utc)
             toDate = datetime.fromisoformat(
                 notifySetup["toDate"]).astimezone(utc)
-            if(AH_DEBUG):
-                print("Notify date range")
-                print('fromDate', fromDate.strftime(formatTime))
-                print('toDate', toDate.strftime(formatTime))
-                print("Today", now.strftime(formatTime))
+            app_log.info("Notify date range")
+            app_log.info('fromDate ' + fromDate.strftime(formatTime))
+            app_log.info('toDate ' + toDate.strftime(formatTime))
+            app_log.info("Today" + now.strftime(formatTime))
             if(date_is_between(now, fromDate, toDate)):
-                if(AH_DEBUG):
-                    print("Notify today")
+                app_log.info("Notify today")
             else:
-                if(AH_DEBUG):
-                    print("Don't notify today")
-                    print("!!Don't notify!!")
+                app_log.info("Don't notify today")
+                app_log.info("!!Don't notify!!")
                 return False
 
         return True
     else:
-        if(AH_DEBUG):
-            print("!!Don't notify!!")
+        app_log.info("!!Don't notify!!")
         return False
 
 
@@ -173,11 +163,10 @@ def notify(notifyBuffer):
         for notifyPV in user["notifyPVs"]:
             for area in notifyBuffer:
                 for pvname in notifyBuffer[area]:
-                    if(AH_DEBUG):
-                        print('##-START NOTIFY DEBUG-##')
-                        print(name)
-                        print(area)
-                        print(pvname)
+                    app_log.info('##-START NOTIFY DEBUG-##')
+                    app_log.info(name)
+                    app_log.info(area)
+                    app_log.info(pvname)
                     message = notifyBuffer[area][pvname]
                     minorAlarm = False
                     majorAlarm = False
@@ -192,15 +181,13 @@ def notify(notifyBuffer):
                             "INVALID_ALARM" in entry["entry"])
                         disconnAlarm = disconnAlarm or (
                             "DISCONNECTED" in entry["entry"])
-                    if(AH_DEBUG):
-                        print("minorAlarm", minorAlarm)
-                        print("majorAlarm", majorAlarm)
-                        print("invalidAlarm", invalidAlarm)
-                        print("disconnAlarm", disconnAlarm)
+                    app_log.info("minorAlarm " + str(minorAlarm))
+                    app_log.info("majorAlarm "+str(majorAlarm))
+                    app_log.info("invalidAlarm "+str(invalidAlarm))
+                    app_log.info("disconnAlarm "+str(disconnAlarm))
                     if(js_regex.compile(notifyPV["regEx"]).search(pvname)):
                         # Passes regEx check
-                        if(AH_DEBUG):
-                            print("Pass regEx", notifyPV["regEx"])
+                        app_log.info("Pass regEx " + notifyPV["regEx"])
                         notify = False
                         notifyAlarmType = False
                         notifyOnEmail = False
@@ -208,8 +195,7 @@ def notify(notifyBuffer):
                         notifyOnWhatsApp = False
                         notifyOnSignal = False
                         if(user["global"]):
-                            if(AH_DEBUG):
-                                print("Using global profile")
+                            app_log.info("Using global profile")
                             notify = notifyValid(user["globalSetup"])
                             notifyOnEmail = user["globalSetup"]["email"]
                             notifyOnSMS = user["globalSetup"]["sms"]
@@ -227,8 +213,7 @@ def notify(notifyBuffer):
                                 "alarmDisconn" in user["globalSetup"]) else True
                             #
                         else:
-                            if(AH_DEBUG):
-                                print("Using unique profile")
+                            app_log.info("Using unique profile")
                             notify = notifyValid(notifyPV["notifySetup"])
                             notifyOnEmail = notifyPV["notifySetup"]["email"]
                             notifyOnSMS = notifyPV["notifySetup"]["sms"]
@@ -245,11 +230,14 @@ def notify(notifyBuffer):
                             notifyDisconnAlarm = notifyPV["notifySetup"]["alarmDisconn"] if (
                                 "alarmDisconn" in notifyPV["notifySetup"]) else True
                             #
-                        if(AH_DEBUG):
-                            print("notifyMinorAlarm", notifyMinorAlarm)
-                            print("notifyMajorAlarm", notifyMajorAlarm)
-                            print("notifyInvalidAlarm", notifyInvalidAlarm)
-                            print("notifyDisconnAlarm", notifyDisconnAlarm)
+                        app_log.info("notifyMinorAlarm " +
+                                     str(notifyMinorAlarm))
+                        app_log.info("notifyMajorAlarm " +
+                                     str(notifyMajorAlarm))
+                        app_log.info("notifyInvalidAlarm " +
+                                     str(notifyInvalidAlarm))
+                        app_log.info("notifyDisconnAlarm " +
+                                     str(notifyDisconnAlarm))
                         if(minorAlarm and notifyMinorAlarm):
                             notifyAlarmType = True
                         elif(majorAlarm and notifyMajorAlarm):
@@ -260,44 +248,38 @@ def notify(notifyBuffer):
                             notifyAlarmType = True
                         if(notify and notifyAlarmType):
                             # Passes notifyValid check
-                            if(AH_DEBUG):
-                                print("Pass notifyValid and alarm type checks")
+                            app_log.info(
+                                "Pass notifyValid and alarm type checks")
                             if(notifyOnEmail):
                                 # Notify via email
-                                if(AH_DEBUG):
-                                    print("Notify via email")
+                                app_log.info("Notify via email")
                                 if(area not in notifyEmailDict):
                                     notifyEmailDict[area] = {}
                                 notifyEmailDict[area][pvname] = message
                             if(notifyOnSMS):
                                 # Notify via sms
-                                if(AH_DEBUG):
-                                    print("Notify via sms")
+                                app_log.info("Notify via sms")
                                 if(area not in notifySMSDict):
                                     notifySMSDict[area] = {}
                                 notifySMSDict[area][pvname] = message
                             if(notifyOnWhatsApp):
                                 # Notify via whatsapp
-                                if(AH_DEBUG):
-                                    print("Notify via whatsapp")
+                                app_log.info("Notify via whatsapp")
                                 if(area not in notifyWhatsAppDict):
                                     notifyWhatsAppDict[area] = {}
                                 notifyWhatsAppDict[area][pvname] = message
                             if(notifyOnSignal):
                                 # Notify via signal
-                                if(AH_DEBUG):
-                                    print("Notify via Signal")
+                                app_log.info("Notify via Signal")
                                 if(area not in notifySignalDict):
                                     notifySignalDict[area] = {}
                                 notifySignalDict[area][pvname] = message
                         else:
-                            if(AH_DEBUG):
-                                print("Fail notifyValid or alarm type check")
+                            app_log.info(
+                                "Fail notifyValid or alarm type check")
                     else:
-                        if(AH_DEBUG):
-                            print("Fail regEx", notifyPV["regEx"])
-                    if(AH_DEBUG):
-                        print('###-END NOTIFY DEBUG-###')
+                        app_log.info("Fail regEx " + notifyPV["regEx"])
+                    app_log.info('###-END NOTIFY DEBUG-###')
         timestamp = datetime.now(utc).isoformat()
         if(notifyEmailDict):
             if(notifyEmail(timestamp, email, notifyEmailDict)):
@@ -377,6 +359,7 @@ def restartNotifyServer():
     # getListOfPVNames()
     # initAlarmDict()
     print("Notify server restarted...")
+    app_log.info("Notify server restarted...")
 
 
 def startNotifyServer():
@@ -388,3 +371,4 @@ def startNotifyServer():
     # print(alarmDict)
 
     print("Notify server running...")
+    app_log.info("Notify server running...")

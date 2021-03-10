@@ -5,6 +5,8 @@ import imgkit
 from datetime import datetime
 from pytz import timezone
 
+from log import app_log
+
 try:
     AH_DEBUG = bool(os.environ['AH_DEBUG'])
 except:
@@ -20,6 +22,8 @@ try:
     SIGNAL_CLI_REST_API_PORT = os.environ['SIGNAL_CLI_REST_API_PORT']
 except:
     print("SIGNAL_CLI_REST_API_PORT not defined, defaulting to port 8000")
+    app_log.warning(
+        "SIGNAL_CLI_REST_API_PORT not defined, defaulting to port 8000")
     SIGNAL_CLI_REST_API_PORT = str(8000)
 
 try:
@@ -28,9 +32,12 @@ try:
     SIGNAL_CLI_REST_ENDPOINT = 'http://localhost:' + \
         SIGNAL_CLI_REST_API_PORT+'/messages/'+SIGNAL_ACC_NUMBER
     print(SIGNAL_CLI_REST_ENDPOINT)
+    app_log.info(SIGNAL_CLI_REST_ENDPOINT)
 except:
     print("Signal account number not configured!")
     print("Signal notifications will not be sent")
+    app_log.warning("Signal account number not configured!")
+    app_log.warning("Signal notifications will not be sent")
     SIGNAL_CLI_REST_ENDPOINT = ''
 
 
@@ -126,11 +133,10 @@ def notifySignal(timestamp, mobile, userNotifyDict):
 
     timestamp = datetime.fromisoformat(timestamp)
 
-    if(AH_DEBUG):
-        print("###-SIGNAL NOTIFY-###")
-        print(timestamp.strftime('%a, %d %b %Y at %H:%M:%S UTC'))
-        print(mobile)
-        print(userNotifyDict)
+    app_log.info("###-SIGNAL NOTIFY-###")
+    app_log.info(timestamp.strftime('%a, %d %b %Y at %H:%M:%S UTC'))
+    app_log.info(mobile)
+    # app_log.info(str(userNotifyDict))
 
     if(SIGNAL_CLI_REST_ENDPOINT != ''):
         # Time zone localisation
@@ -171,8 +177,12 @@ def notifySignal(timestamp, mobile, userNotifyDict):
         except:
             print("Failed to send Signal message to",
                   mobile, ". Verify Signal settings.")
+            app_log.info("Failed to send Signal message to " +
+                         mobile + ". Verify Signal settings.")
             return False
     else:
         print("Failed to send Signal message to",
               mobile, ". Verify Signal settings.")
+        app_log.info("Failed to send Signal message to " +
+                     mobile + ". Verify Signal settings.")
         return False

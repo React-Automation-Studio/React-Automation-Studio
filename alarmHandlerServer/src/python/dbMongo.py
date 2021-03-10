@@ -2,6 +2,8 @@ from pymongo import MongoClient
 import os
 from time import sleep
 
+from log import app_log
+
 try:
     AH_DEBUG = bool(os.environ['AH_DEBUG'])
 except:
@@ -52,11 +54,9 @@ def initDatabase():
     alarmDB = client[MONGO_INITDB_ALARM_DATABASE]
 
     while(len(alarmDB.list_collection_names()) != 5):
-        if(AH_DEBUG):
-            print('Waiting for Pymongo to connect to all collections in alarm database')
-    if(AH_DEBUG):
-        print('Pymongo connected to alarm database')
-        print(alarmDB.list_collection_names())
+        app_log.info('Waiting for Pymongo to connect to all collections in alarm database')
+    app_log.info('Pymongo connected to alarm database')
+    app_log.info(str(alarmDB.list_collection_names()))
 
 
 def dbGetCollection(collection):

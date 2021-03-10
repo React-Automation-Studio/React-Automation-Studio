@@ -1038,19 +1038,46 @@ def initAlarmDict():
 
 def startPastBridgeThreads():
     for area in dbGetCollection("pvs").find():
-        print(area["area"], area["bridge"])
+        topArea = area["area"]
+        if(area["bridge"]):
+            bridgeTime = area["bridgeTime"]
+            _thread.start_new_thread(
+                bridgeWatchThread, (topArea, bridgeTime,))
+            # threadName = areaKey+str(subAreaKey)+str(pvKey)+bridgeTime
+            threadName = topArea + \
+                str(None)+str(None)+bridgeTime
+            runningBridgeThreads.append(threadName)
         for key in area.keys():
             if (key == "pvs"):
                 for pvKey in area[key].keys():
-                    pvname = area[key][pvKey]["name"]
-                    print(pvname, area[key][pvKey]["bridge"])
+                    if(area[key][pvKey]["bridge"]):
+                        bridgeTime = area[key][pvKey]["bridgeTime"]
+                        _thread.start_new_thread(
+                            bridgeWatchThread, (topArea, bridgeTime, None, pvKey,))
+                        # threadName = areaKey+str(subAreaKey)+str(pvKey)+bridgeTime
+                        threadName = topArea + \
+                            str(None)+str(pvKey)+bridgeTime
+                        runningBridgeThreads.append(threadName)
             if ("subArea" in key):
-                print(area[key]["name"], area[key]["bridge"])
+                if(area[key]["bridge"]):
+                    bridgeTime = area[key]["bridgeTime"]
+                    _thread.start_new_thread(
+                        bridgeWatchThread, (topArea, bridgeTime, key,))
+                    # threadName = areaKey+str(subAreaKey)+str(pvKey)+bridgeTime
+                    threadName = topArea + \
+                        str(key)+str(None)+bridgeTime
+                    runningBridgeThreads.append(threadName)
                 for subAreaKey in area[key].keys():
                     if (subAreaKey == "pvs"):
                         for pvKey in area[key][subAreaKey].keys():
-                            pvname = area[key][subAreaKey][pvKey]["name"]
-                            print(pvname, area[key][subAreaKey][pvKey]["bridge"])
+                            if(area[key][subAreaKey][pvKey]["bridge"]):
+                                bridgeTime = area[key][subAreaKey][pvKey]["bridgeTime"]
+                                _thread.start_new_thread(
+                                    bridgeWatchThread, (topArea, bridgeTime, key, pvKey,))
+                                # threadName = areaKey+str(subAreaKey)+str(pvKey)+bridgeTime
+                                threadName = topArea + \
+                                    str(key)+str(pvKey)+bridgeTime
+                                runningBridgeThreads.append(threadName)
 
 
 def disconnectAllPVs():
@@ -1192,7 +1219,7 @@ def bridgeWatchThread(areaKey, bridgeTime, subAreaKey=None, pvKey=None):
             break
         elif(datetime.now(utc).isoformat() > bridgeTime):
             if(AH_DEBUG):
-                print("Bridge timeout "+areaKey)
+                print("Bridge timeout "+threadName)
             if(subAreaKey):
                 if(pvKey):
                     dbSetField('bridge', False, topAreaKey, pvKey, subAreaKey)

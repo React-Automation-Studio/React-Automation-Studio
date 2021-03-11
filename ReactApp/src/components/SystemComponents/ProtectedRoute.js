@@ -13,7 +13,7 @@ const ProtectedRoute = (props) => {
     //  <Route  path={props.path}  render={()=>( 
     //   loggedIn?<Component />:(loggingIn?<BusyLoggingIn/>:<Redirect to="/logIn" />)
     //   )}/>
-    <Route path={props.path}  >
+    <Route path={props.path} exact={props.exact}  >
 
       {
         (routeProps) => (

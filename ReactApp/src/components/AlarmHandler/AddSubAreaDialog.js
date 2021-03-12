@@ -7,7 +7,12 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
+import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
+import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
 
 import { Domain } from "mdi-material-ui/";
 
@@ -16,6 +21,9 @@ const useStyles = makeStyles(theme => ({
     boldText: {
         fontWeight: 500,
         textAlign: 'center',
+    },
+    button: {
+        margin: theme.spacing(1),
     },
     centerInBlock: {
         display: "flex",
@@ -43,13 +51,139 @@ const useStyles = makeStyles(theme => ({
 const AddSubAreaDialog = (props) => {
     const classes = useStyles()
 
-    const handleInput = (event) => {
+    const lastIndex = props.data?.roles?.length - 1
+
+    const hasEmptyRole = props.data?.roles?.reduce((acc, entry) => {
+        return acc || entry === ''
+    }, false)
+
+    const handleNameInput = (event) => {
         const { value } = event.target
         props.setAddSubAreaData(prevState => ({
             ...prevState,
             subArea: value
         }))
     }
+
+    const handleRoleInput = (event, index) => {
+        const { value } = event.target
+        props.setAddSubAreaData(prevState => ({
+            ...prevState,
+            roles: [...prevState.roles.slice(0, index), value, ...prevState.roles.slice(index + 1)]
+        }))
+    }
+
+    const handleAddRoles = () => {
+        props.setAddSubAreaData(prevState => ({
+            ...prevState,
+            addRoles: true,
+            roles: ['']
+        }))
+    }
+
+    const removeRole = (index) => {
+        const lastRole = props.data.roles.length === 1
+        if (lastRole) {
+            props.setAddSubAreaData(prevState => ({
+                ...prevState,
+                addRoles: false,
+                roles: []
+            }))
+        }
+        else {
+            const newRoles = props.data.roles.filter((item, itemIndex) => itemIndex !== index)
+            props.setAddSubAreaData(prevState => ({
+                ...prevState,
+                roles: newRoles
+            }))
+        }
+    }
+
+    const addRole = () => {
+        props.setAddSubAreaData(prevState => ({
+            ...prevState,
+            roles: [...prevState.roles, '']
+        }))
+    }
+
+    const rolesGrid = !props.data?.addRoles
+        ? <Grid item xs={12}>
+            <Grid
+
+                container
+                direction="row"
+                justify="flex-start"
+                alignItems="stretch"
+            >
+                <Grid item xs={4}>
+                </Grid>
+                <Grid item xs={4} className={classes.centerInBlock}>
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        size="small"
+                        className={classes.button}
+                        startIcon={<SupervisedUserCircleIcon />}
+                        onClick={handleAddRoles}
+                    >
+                        Add roles
+                    </Button>
+                </Grid>
+            </Grid>
+        </Grid>
+        : props.data?.roles?.map((role, index) => {
+            return <Grid
+                key={`${index}-${role}`}
+                item
+                xs={12}
+            >
+                <Grid
+
+                    container
+                    direction="row"
+                    justify="flex-start"
+                    alignItems="stretch"
+                >
+                    <Grid item xs={2} >
+                    </Grid>
+                    <Grid item xs={1} className={classes.centerInBlock}>
+                        <SupervisedUserCircleIcon />
+                    </Grid>
+                    <Grid item xs={1} className={classes.verticalMiddle} style={{ marginRight: '2rem' }}>
+                        <Typography className={classes.boldText} >
+                            Role
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={4} className={classes.verticalMiddle}>
+                        <TextField
+                            type='text'
+                            value={props.data.roles[index]}
+                            onChange={(event) => handleRoleInput(event, index)}
+                            fullWidth
+                            autoFocus
+                        />
+                    </Grid>
+                    <Grid item >
+                        <Tooltip title="Remove role" placement="bottom">
+                            <IconButton
+                                onClick={() => removeRole(index)}
+                                style={{ marginLeft: '0.5em' }}
+                            >
+                                <RemoveCircleIcon color="primary" />
+                            </IconButton>
+                        </Tooltip>
+                        {lastIndex === index && <Tooltip title="Add another role" placement="bottom">
+                            <IconButton
+                                onClick={addRole}
+                                style={{ marginLeft: '0.5em' }}
+                            >
+                                <AddCircleIcon color="secondary" />
+                            </IconButton>
+                        </Tooltip>}
+                    </Grid>
+                </Grid>
+            </Grid>
+        })
 
     return (
         <Dialog
@@ -85,7 +219,7 @@ const AddSubAreaDialog = (props) => {
                             </Grid>
                             <Grid item xs={7} className={classes.verticalMiddle}>
                                 <Typography style={{ textAlign: 'left' }}>
-                                    {props.addSubAreaData.areaIndex}
+                                    {props.data.areaIndex}
                                 </Typography>
                             </Grid>
                         </Grid>
@@ -106,11 +240,21 @@ const AddSubAreaDialog = (props) => {
                                 <TextField
                                     type='text'
                                     value={props.addAreaName}
-                                    onChange={handleInput}
+                                    onChange={handleNameInput}
                                     fullWidth
                                     autoFocus
                                 />
                             </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Grid
+                            container
+                            direction="row"
+                            justify="flex-start"
+                            alignItems="stretch"
+                        >
+                            {rolesGrid}
                         </Grid>
                     </Grid>
                 </Grid >
@@ -119,7 +263,7 @@ const AddSubAreaDialog = (props) => {
                 <Button onClick={props.handleClose} color="primary">
                     Cancel
                 </Button>
-                <Button onClick={props.executeAddNewSubArea} color="secondary" disabled={props.addSubAreaData.subArea === ''}>
+                <Button onClick={props.executeAddNewSubArea} color="secondary" disabled={props.data.subArea === '' || hasEmptyRole}>
                     Add
                 </Button>
             </DialogActions>

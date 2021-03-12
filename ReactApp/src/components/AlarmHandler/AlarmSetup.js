@@ -1274,7 +1274,9 @@ const AlarmSetup = (props) => {
         setAddSubAreaData({
             areaIndex: index,
             areaNextSubAreaKey: isNaN(lastSubAreaKey[index]) ? 0 : lastSubAreaKey[index] + 1,
-            subArea: ''
+            subArea: '',
+            addRoles: false,
+            roles: []
         })
         setAreaContextOpen({})
         setAlarmAdminListExpand(false)
@@ -2090,7 +2092,7 @@ const AlarmSetup = (props) => {
             />
             <AddSubAreaDialog
                 open={addSubAreaDialogOpen}
-                addSubAreaData={addSubAreaData}
+                data={addSubAreaData}
                 setAddSubAreaData={setAddSubAreaData}
                 handleClose={() => {
                     setAddSubAreaDialogOpen(false)

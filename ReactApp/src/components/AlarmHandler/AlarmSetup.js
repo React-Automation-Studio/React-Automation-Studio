@@ -1586,6 +1586,10 @@ const AlarmSetup = (props) => {
                 id: id,
                 update: newvalues
             })
+            setAreaSelectedIndex(index)
+            setAlarmLogSelectedKey(index)
+            setAlarmLogSelectedName(`${area} > ${subArea}`)
+            setAreaSelectedName(`${area} > ${subArea}`)
         }
         else {
             newvalues = {
@@ -1596,6 +1600,10 @@ const AlarmSetup = (props) => {
                 id: id,
                 update: newvalues
             })
+            setAreaSelectedIndex(index)
+            setAlarmLogSelectedKey(index)
+            setAlarmLogSelectedName(area)
+            setAreaSelectedName(area)
         }
         setDeletePVDialogOpen(false)
         setDeletePVDialogData({})

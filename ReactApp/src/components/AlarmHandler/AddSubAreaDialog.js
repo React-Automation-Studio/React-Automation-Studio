@@ -227,7 +227,7 @@ const AddSubAreaDialog = (props) => {
                         >
                             <Grid item xs={4} className={[classes.verticalMiddle, classes.horizontalRight].join(' ')} style={{ marginRight: '2rem' }}>
                                 <Typography className={classes.boldText} >
-                                    NEW SUBAREA NAME
+                                    {`${!props.data.fromEdit ? 'NEW ' : ''}SUBAREA NAME`}
                                 </Typography>
                             </Grid>
                             <Grid item xs={7} className={classes.verticalMiddle}>

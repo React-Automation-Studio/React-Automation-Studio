@@ -286,7 +286,7 @@ const AlarmList = props => {
                                                             <ListItem
                                                                 button
                                                                 className={classes.nested}
-                                                                onClick={event => props.renameArea(event, `${area["area"]}`)}
+                                                                onClick={event => props.editArea(event, `${area["area"]}`)}
                                                             >
                                                                 <ListItemIcon >
                                                                     <EditIcon fontSize="small" />
@@ -391,12 +391,12 @@ const AlarmList = props => {
                                                                                                 <ListItem
                                                                                                     button
                                                                                                     className={classes.nested}
-                                                                                                    onClick={event => props.renameArea(event, `${area["area"]}=${subArea}`)}
+                                                                                                    onClick={event => props.editArea(event, `${area["area"]}=${subArea}`)}
                                                                                                 >
                                                                                                     <ListItemIcon >
                                                                                                         <EditIcon fontSize="small" />
                                                                                                     </ListItemIcon>
-                                                                                                    <ListItemText primary="Rename subArea" />
+                                                                                                    <ListItemText primary="Edit subArea" />
                                                                                                 </ListItem>
                                                                                                 <ListItem
                                                                                                     button

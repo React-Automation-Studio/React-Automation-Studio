@@ -1287,6 +1287,7 @@ const AlarmSetup = (props) => {
         setAreaContextOpen({})
         setAlarmAdminListExpand(false)
         setAddSubAreaData({
+            fromEdit: false,
             areaIndex: index,
             areaNextSubAreaKey: isNaN(lastSubAreaKey[index]) ? 0 : lastSubAreaKey[index] + 1,
             subArea: '',
@@ -1296,18 +1297,23 @@ const AlarmSetup = (props) => {
         setAddSubAreaDialogOpen(true)
     }, [lastSubAreaKey])
 
-    const handleRenameArea = useCallback((event, index) => {
-        const currentName = index.includes("=")
-            ? index.split("=")[1]
-            : index
-        setRenameDialogData({
-            index: index,
-            currentName: currentName,
-            newName: ''
-        })
+    const handleEditArea = useCallback((event, index) => {
+        const isSubArea = index.includes("=")
+        if (isSubArea) {
+            setAddSubAreaData({
+                fromEdit: true,
+                areaIndex: index.split("=")[0],
+                subArea: index.split("=")[1],
+                addRoles: false,
+                roles: []
+            })
+            setAddSubAreaDialogOpen(true)
+        }
+        else {
+
+        }
         setAreaContextOpen({})
         setAlarmAdminListExpand(false)
-        setRenameDialogOpen(true)
     }, [])
 
     const handleDeleteArea = useCallback((event, index) => {
@@ -2254,7 +2260,7 @@ const AlarmSetup = (props) => {
                                                 listItemContextClose={handleListItemContextClose}
                                                 addNewPV={handleAddNewPV}
                                                 addNewSubArea={handleAddNewSubArea}
-                                                renameArea={handleRenameArea}
+                                                editArea={handleEditArea}
                                                 deleteArea={handleDeleteArea}
                                                 setAlarmAdminListExpand={setAlarmAdminListExpand}
                                             />

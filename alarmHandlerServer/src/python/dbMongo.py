@@ -53,7 +53,6 @@ def initDatabase():
                              replicaSet=ALARM_DATABASE_REPLICA_SET_NAME,
                              readPreference='secondaryPreferred')
 
-
     # Wait for MongoClient to discover the whole replica set and identify MASTER!
     while(len(list(client.nodes)) != REPLICA_SET_MEMBER_LENGTH):
         sleep(1.0)

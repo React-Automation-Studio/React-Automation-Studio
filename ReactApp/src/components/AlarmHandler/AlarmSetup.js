@@ -1520,54 +1520,12 @@ const AlarmSetup = (props) => {
         if (index.includes("=")) {
             const subAreaId = areaSubAreaMongoId[index]
             const topArea = index.split("=")[0]
-            const lastSubAreaId = `subArea${lastSubAreaKey[topArea]}`
-            if (subAreaId === lastSubAreaId) {
-                // last subArea is to be removed
-                newvalues = { '$unset': { [subAreaId]: "" } }
-                dbUpdateOne({
-                    dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
-                    id: id,
-                    update: newvalues
-                })
-
-            }
-            else {
-                const matchDoc = dbPVData.filter(el => el["_id"]["$oid"] === id)[0]
-                const newDoc = {}
-                let subAreaIndex = 0
-                Object.keys(matchDoc).map(key => {
-                    if (key !== '_id') {
-                        if (key.includes("subArea")) {
-                            if (key !== subAreaId) {
-                                newDoc[`subArea${subAreaIndex}`] = matchDoc[key]
-                                subAreaIndex++
-                            }
-                        }
-                        else {
-                            newDoc[key] = matchDoc[key]
-                        }
-                    }
-                    return null
-                })
-                // remove last subArea - to remove key
-                newvalues = { '$unset': { [lastSubAreaId]: "" } }
-                dbUpdateOne({
-                    dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
-                    id: id,
-                    update: newvalues
-                })
-                //
-                newvalues = { '$set': {} }
-                Object.keys(newDoc).map(key => {
-                    newvalues['$set'][key] = newDoc[key]
-                    return null
-                })
-                dbUpdateOne({
-                    dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
-                    id: id,
-                    update: newvalues
-                })
-            }
+            newvalues = { '$unset': { [subAreaId]: "" } }
+            dbUpdateOne({
+                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
+                id: id,
+                update: newvalues
+            })
             setAreaSelectedIndex(topArea)
             setAlarmLogSelectedKey(topArea)
             setAlarmLogSelectedName(topArea)
@@ -1584,7 +1542,7 @@ const AlarmSetup = (props) => {
             setAreaSelectedName('ALL AREAS')
         }
         setDeleteAreaDialogOpen(false)
-    }, [deleteAreaDialogData, areaMongoId, dbDeleteOne, props.dbName, areaSubAreaMongoId, dbPVData, lastSubAreaKey, dbUpdateOne, globalDocId, username])
+    }, [deleteAreaDialogData, areaMongoId, dbDeleteOne, props.dbName, areaSubAreaMongoId, dbUpdateOne, globalDocId, username])
 
     const handleExecuteAddNewSubArea = useCallback(() => {
         const { areaIndex, subArea, areaNextSubAreaKey } = addSubAreaData

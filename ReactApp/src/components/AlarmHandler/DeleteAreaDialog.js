@@ -15,7 +15,7 @@ const DeleteAreaDialog = (props) => {
             <DialogTitle >{"Confirm area deletion"}</DialogTitle>
             <DialogContent>
                 <DialogContentText id="alert-dialog-description">
-                    {`Are you sure you want to delete area ${props?.data?.areaName}?`}
+                    {`Are you sure you want to delete ${props?.data?.index?.includes("=") ? 'subArea' : 'area'} ${props?.data?.areaName}?`}
                 </DialogContentText>
             </DialogContent>
             <DialogActions>

@@ -1612,7 +1612,7 @@ const AlarmSetup = (props) => {
     }, [deletePVDialogData, areaMongoId, areaSubAreaMongoId, dbUpdateOne, globalDocId, props.dbName, username])
 
     const handleExecuteAddNewSubArea = useCallback(() => {
-        const { areaIndex, subArea, areaNextSubAreaKey } = addSubAreaData
+        const { areaIndex, subArea, areaNextSubAreaKey, roles } = addSubAreaData
         const id = areaMongoId[areaIndex]
 
         let newvalues = {}
@@ -1633,6 +1633,7 @@ const AlarmSetup = (props) => {
                     enable: true,
                     bridge: false,
                     bridgeTime: '',
+                    roles: roles,
                     pvs: {}
                 }
             }

@@ -1724,6 +1724,8 @@ const AlarmSetup = (props) => {
                     [`pv${key}`]: {
                         name: pvname,
                         enable: true,
+                        bridge: false,
+                        bridgeTime: '',
                         latch: true,
                         notify: true,
                         lastAlarmVal: "",

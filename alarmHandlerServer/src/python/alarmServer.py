@@ -393,11 +393,13 @@ def pvConnFE(pvname=None, conn=None, **kw):
 
 def waitConnFE():
     allConnected = False
+    app_log.info("Waiting for all front end pvs to connect...")
     while(not allConnected):
         sleep(0.1)
         allConnected = True
         for pvConnected in frontEndConnDict.values():
             allConnected &= pvConnected
+    app_log.info("All front end pvs to connected")
 
 
 def pvConn(pvname=None, conn=None, **kw):

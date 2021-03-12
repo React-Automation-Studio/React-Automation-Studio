@@ -59,6 +59,7 @@ import RenameDialog from './RenameDialog';
 import AddAreaDialog from './AddAreaDialog';
 import AddSubAreaDialog from './AddSubAreaDialog';
 import DeleteAreaDialog from './DeleteAreaDialog';
+import DeletePVDialog from './DeletePVDialog';
 
 import { format, parseISO } from 'date-fns';
 
@@ -302,6 +303,9 @@ const AlarmSetup = (props) => {
     const [deleteAreaDialogOpen, setDeleteAreaDialogOpen] = useState(false)
     const [deleteAreaDialogData, setDeleteAreaDialogData] = useState({})
 
+    const [deletePVDialogOpen, setDeletePVDialogOpen] = useState(false)
+    const [deletePVDialogData, setDeletePVDialogData] = useState({})
+
     const [backdropOpen, setBackDropOpen] = useState(false)
     const [restartCount, setRestartCount] = useState(undefined)
     const [firstStart, setFirstStart] = useState(true)
@@ -312,6 +316,7 @@ const AlarmSetup = (props) => {
 
     const [alarmAdminListExpand, setAlarmAdminListExpand] = useState(false)
     const [alarmAdminGListExpand, setAlarmAdminGListExpand] = useState(false)
+    const [alarmAdminPVExpand, setAlarmAdminPVExpand] = useState(false)
 
     const [dbPVData, setDbPVData] = useState({})
 
@@ -1094,7 +1099,7 @@ const AlarmSetup = (props) => {
         }
     }, [areaEnabled, areaAlarms])
 
-    const handleAlarmContextClose = useCallback((event, index) => {
+    const handleAlarmContextClose = useCallback(() => {
         setAlarmRowSelected({})
         setAlarmContextOpen({})
     }, [])
@@ -1115,7 +1120,8 @@ const AlarmSetup = (props) => {
 
         // console.log(alarmAckField)
 
-        handleAlarmContextClose(event, index)
+        handleAlarmContextClose()
+        setAlarmAdminPVExpand(false)
 
         setAlarmAckField(localAlarmAckField)
         setAlarmAckFieldTrig(alarmAckFieldTrig + 1)
@@ -1300,6 +1306,19 @@ const AlarmSetup = (props) => {
         setAreaContextOpen({})
         setAlarmAdminListExpand(false)
         setDeleteAreaDialogOpen(true)
+    }, [])
+
+    const handleDeletePV = useCallback((event, index, pvname) => {
+        const parts = index.split("=")
+        const isSubArea = parts.length === 3
+        const pvKey = isSubArea ? parts[2] : parts[1]
+        setDeletePVDialogData({
+            area: parts[0],
+            subArea: isSubArea ? parts[1] : undefined,
+            pvKey: pvKey,
+            pvname: pvname
+        })
+        setDeletePVDialogOpen(true)
     }, [])
 
     const handleExecuteRenameArea = useCallback(() => {
@@ -1543,6 +1562,44 @@ const AlarmSetup = (props) => {
         }
         setDeleteAreaDialogOpen(false)
     }, [deleteAreaDialogData, areaMongoId, dbDeleteOne, props.dbName, areaSubAreaMongoId, dbUpdateOne, globalDocId, username])
+
+    const handleExecuteDeletePV = useCallback(() => {
+        const { area, subArea, pvKey } = deletePVDialogData
+        const index = subArea ? `${area}=${subArea}` : area
+        const id = areaMongoId[index]
+        const subAreaId = subArea ? areaSubAreaMongoId[index] : undefined
+        let newvalues
+        // set activeUser
+        newvalues = { '$set': { activeUser: username } }
+        dbUpdateOne({
+            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:glob`,
+            id: globalDocId,
+            update: newvalues
+        })
+        //
+        if (subAreaId) {
+            newvalues = {
+                '$unset': { [`${subAreaId}.pvs.${pvKey}`]: "" }
+            }
+            dbUpdateOne({
+                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
+                id: id,
+                update: newvalues
+            })
+        }
+        else {
+            newvalues = {
+                '$unset': { [`pvs.${pvKey}`]: "" }
+            }
+            dbUpdateOne({
+                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
+                id: id,
+                update: newvalues
+            })
+        }
+        setDeletePVDialogOpen(false)
+        setDeletePVDialogData({})
+    }, [deletePVDialogData, areaMongoId, areaSubAreaMongoId, dbUpdateOne, globalDocId, props.dbName, username])
 
     const handleExecuteAddNewSubArea = useCallback(() => {
         const { areaIndex, subArea, areaNextSubAreaKey } = addSubAreaData
@@ -2040,6 +2097,15 @@ const AlarmSetup = (props) => {
                 }}
                 handleDelete={handleExecuteDeleteArea}
             />
+            <DeletePVDialog
+                open={deletePVDialogOpen}
+                data={deletePVDialogData}
+                handleClose={() => {
+                    setDeletePVDialogOpen(false)
+                    setDeletePVDialogData({})
+                }}
+                handleDelete={handleExecuteDeletePV}
+            />
             {clientAHDBVer === serverAHDBVer
                 ? <Grid
                     container
@@ -2263,12 +2329,16 @@ const AlarmSetup = (props) => {
                                             height={alarmTableHeight}
                                             alarmTableSearchString={alarmTableSearchString}
                                             isAlarmUser={isAlarmUser}
+                                            isAlarmAdmin={isAlarmAdmin}
+                                            alarmAdminPVExpand={alarmAdminPVExpand}
                                             alarmAcknowledge={handleAlarmAcknowledge}
                                             alarmContextClose={handleAlarmContextClose}
                                             itemChecked={handleTableItemCheck}
                                             enableChecked={handleTableEnableCheck}
                                             tableItemRightClick={handleTableItemRightClick}
                                             tableRowClick={handleTableRowClick}
+                                            setAlarmAdminPVExpand={setAlarmAdminPVExpand}
+                                            deletePV={handleDeletePV}
                                             fadeTU={fadeTU}
                                             page={pageAT}
                                             rowsPerPage={rowsPerPageAT}

@@ -31,12 +31,6 @@ const useStyles = makeStyles(theme => ({
         justifyContent: "center",
         alignItems: 'center'
     },
-    connected: {
-        color: theme.palette.ok.main
-    },
-    disconnected: {
-        color: theme.palette.error.main
-    },
     horizontalRight: {
         alignItems: "flex-end"
     },
@@ -157,7 +151,7 @@ const AddSubAreaDialog = (props) => {
                     <Grid item xs={4} className={classes.verticalMiddle}>
                         <TextField
                             type='text'
-                            value={props.data.roles[index]}
+                            value={props.data.roles[index] || ''}
                             onChange={(event) => handleRoleInput(event, index)}
                             fullWidth
                             autoFocus
@@ -239,7 +233,7 @@ const AddSubAreaDialog = (props) => {
                             <Grid item xs={7} className={classes.verticalMiddle}>
                                 <TextField
                                     type='text'
-                                    value={props.addAreaName}
+                                    value={props.data.subArea || ''}
                                     onChange={handleNameInput}
                                     fullWidth
                                     autoFocus

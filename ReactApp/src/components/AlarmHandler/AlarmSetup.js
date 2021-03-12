@@ -294,7 +294,7 @@ const AlarmSetup = (props) => {
     const [renameDialogData, setRenameDialogData] = useState({})
 
     const [addAreaDialogOpen, setAddAreaDialogOpen] = useState(false)
-    const [addAreaName, setAddAreaName] = useState('')
+    const [addAreaDialogData, setAddAreaDialogData] = useState({})
 
     const [addSubAreaDialogOpen, setAddSubAreaDialogOpen] = useState(false)
     const [addSubAreaData, setAddSubAreaData] = useState({})
@@ -1270,7 +1270,22 @@ const AlarmSetup = (props) => {
         setAddPVDialogOpen(true)
     }, [lastPVKey, newPVInfo])
 
+
+    const handleAddNewArea = useCallback(() => {
+        setAlarmAdminGListExpand(false)
+        setGlobalContextOpen(false)
+        setAddAreaDialogData({
+            area: '',
+            addRoles: false,
+            roles: []
+        })
+        setAddAreaDialogOpen(true)
+    }, [])
+
+
     const handleAddNewSubArea = useCallback((event, index) => {
+        setAreaContextOpen({})
+        setAlarmAdminListExpand(false)
         setAddSubAreaData({
             areaIndex: index,
             areaNextSubAreaKey: isNaN(lastSubAreaKey[index]) ? 0 : lastSubAreaKey[index] + 1,
@@ -1278,8 +1293,6 @@ const AlarmSetup = (props) => {
             addRoles: false,
             roles: []
         })
-        setAreaContextOpen({})
-        setAlarmAdminListExpand(false)
         setAddSubAreaDialogOpen(true)
     }, [lastSubAreaKey])
 
@@ -1646,8 +1659,9 @@ const AlarmSetup = (props) => {
         setAddSubAreaDialogOpen(false)
     }, [addSubAreaData, areaMongoId, dbUpdateOne, props.dbName, globalDocId, username])
 
-    const handleAddNewArea = useCallback(() => {
+    const handleExecuteAddNewArea = useCallback(() => {
 
+        const { area, roles } = addAreaDialogData
         // set activeUser
         const newvalues = { '$set': { activeUser: username } }
         dbUpdateOne({
@@ -1658,10 +1672,11 @@ const AlarmSetup = (props) => {
         //
 
         const newEntry = {
-            area: addAreaName,
+            area: area,
             enable: true,
             bridge: false,
             bridgeTime: '',
+            roles: roles,
             pvs: {}
         }
         dbInsertOne({
@@ -1669,8 +1684,8 @@ const AlarmSetup = (props) => {
             newEntry: newEntry
         })
         setAddAreaDialogOpen(false)
-        setAddAreaName('')
-    }, [addAreaName, dbInsertOne, props.dbName, dbUpdateOne, globalDocId, username])
+        setAddAreaDialogData({})
+    }, [addAreaDialogData, dbInsertOne, props.dbName, dbUpdateOne, globalDocId, username])
 
     const handleAppendNewPVInfo = useCallback(() => {
         setNewPVInfo({
@@ -2083,13 +2098,13 @@ const AlarmSetup = (props) => {
             />
             <AddAreaDialog
                 open={addAreaDialogOpen}
-                addAreaName={addAreaName}
-                setAddAreaName={setAddAreaName}
+                data={addAreaDialogData}
+                setAddAreaDialogData={setAddAreaDialogData}
                 handleClose={() => {
                     setAddAreaDialogOpen(false)
-                    setAddAreaName('')
+                    setAddAreaDialogData({})
                 }}
-                addNewArea={handleAddNewArea}
+                addNewArea={handleExecuteAddNewArea}
             />
             <AddSubAreaDialog
                 open={addSubAreaDialogOpen}
@@ -2201,11 +2216,7 @@ const AlarmSetup = (props) => {
                                                     <ListItem
                                                         button
                                                         className={classes.nested}
-                                                        onClick={() => {
-                                                            setAddAreaDialogOpen(true)
-                                                            setAlarmAdminGListExpand(false)
-                                                            setGlobalContextOpen(false)
-                                                        }}
+                                                        onClick={handleAddNewArea}
                                                     >
                                                         <ListItemIcon >
                                                             <AddIcon fontSize="small" />

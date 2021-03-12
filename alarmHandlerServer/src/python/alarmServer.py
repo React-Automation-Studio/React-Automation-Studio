@@ -1275,13 +1275,29 @@ def pvCollectionWatch():
             doc = dbFindOne("pvs", documentKey)
             if(change["operationType"] == "update"):
                 if(len(change["updateDescription"]["removedFields"]) > 0):
-                    removedFields = change["updateDescription"]["removedFields"]
+                    removedFields = change["updateDescription"]["removedFields"][0]
                     topArea = docIDDict[documentKey["_id"]]
-                    areaKey = removedFields[0]
-                    subAreaName = subAreaKeyDict[topArea+"="+areaKey]
-                    entry = {
-                        "timestamp": timestamp, "entry": " ".join([activeUser, "deleted subArea", topArea, ">", subAreaName, ", restarting alarm server..."])}
-                    dbUpdateHistory(topArea, entry)
+                    if('pvs' in removedFields):
+                        if('subArea' in removedFields):
+                            subAreaName = subAreaKeyDict[topArea +
+                                                         "="+removedFields.split(".")[0]]
+                            pvname = areaDict[topArea + "="+subAreaName +
+                                              "="+removedFields.split(".")[2]]
+                            entry = {"timestamp": timestamp, "entry": " ".join(
+                                [activeUser, "deleted PV", pvname, "from area", topArea, ">", subAreaName, ", restarting alarm server..."])}
+                            dbUpdateHistory(topArea+"="+subAreaName, entry)
+                        else:
+                            pvname = areaDict[topArea +
+                                              "="+removedFields.split(".")[1]]
+                            entry = {"timestamp": timestamp, "entry": " ".join(
+                                [activeUser, "deleted PV", pvname, "from area", topArea, ", restarting alarm server..."])}
+                            dbUpdateHistory(topArea, entry)
+                    else:
+                        areaKey = removedFields
+                        subAreaName = subAreaKeyDict[topArea+"="+areaKey]
+                        entry = {
+                            "timestamp": timestamp, "entry": " ".join([activeUser, "deleted subArea", topArea, ">", subAreaName, ", restarting alarm server..."])}
+                        dbUpdateHistory(topArea, entry)
                     restartCount = dbGetFieldGlobal("restartCount")
                     dbSetFieldGlobal("restartCount", restartCount+1)
                     watchRestartAlarmServer = True

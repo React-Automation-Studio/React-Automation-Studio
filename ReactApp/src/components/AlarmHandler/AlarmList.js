@@ -315,7 +315,7 @@ const AlarmList = props => {
                                                     <List component="div" disablePadding >
                                                         {area["subAreas"].map((subArea, subAreaIndex) => {
                                                             return (
-                                                                <React.Fragment key={`${area["area"]}=${subArea}`}>
+                                                                <React.Fragment key={`${area["area"]}=${subAreaIndex}=${subArea}`}>
                                                                     <ListItem
                                                                         button
                                                                         divider

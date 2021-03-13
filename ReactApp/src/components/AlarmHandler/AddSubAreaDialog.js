@@ -186,7 +186,7 @@ const AddSubAreaDialog = (props) => {
             fullWidth
             maxWidth={"sm"}
         >
-            <DialogTitle >{`Add new subArea`}</DialogTitle>
+            <DialogTitle >{`${!props.data.edit ? 'Add new ' : 'Edit '}subArea`}</DialogTitle>
             <DialogContent>
                 <Grid
                     container
@@ -227,7 +227,7 @@ const AddSubAreaDialog = (props) => {
                         >
                             <Grid item xs={4} className={[classes.verticalMiddle, classes.horizontalRight].join(' ')} style={{ marginRight: '2rem' }}>
                                 <Typography className={classes.boldText} >
-                                    {`${!props.data.fromEdit ? 'NEW ' : ''}SUBAREA NAME`}
+                                    {`${!props.data.edit ? 'NEW ' : ''}SUBAREA NAME`}
                                 </Typography>
                             </Grid>
                             <Grid item xs={7} className={classes.verticalMiddle}>
@@ -258,7 +258,7 @@ const AddSubAreaDialog = (props) => {
                     Cancel
                 </Button>
                 <Button onClick={props.executeAddNewSubArea} color="secondary" disabled={props.data.subArea === '' || hasEmptyRole}>
-                    Add
+                    {props.data.edit ? 'Apply' : 'Add'}
                 </Button>
             </DialogActions>
         </Dialog >

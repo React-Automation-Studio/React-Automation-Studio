@@ -300,6 +300,8 @@ const AlarmSetup = (props) => {
     const [addSubAreaData, setAddSubAreaData] = useState({})
     const [lastSubAreaKey, setLastSubAreaKey] = useState({})
 
+    const [areaRoles, setAreaRoles] = useState({})
+
     const [deleteAreaDialogOpen, setDeleteAreaDialogOpen] = useState(false)
     const [deleteAreaDialogData, setDeleteAreaDialogData] = useState({})
 
@@ -493,6 +495,7 @@ const AlarmSetup = (props) => {
             const localAreaEnabled = {}
             const localAreaBridged = {}
             const localLastPVKey = {}
+            const localAreaRoles = {}
             let localLastAlarm = ""
             let localLastArea = ""
             let areaNamesIndex = -1
@@ -509,6 +512,7 @@ const AlarmSetup = (props) => {
                         ? true
                         : roles.some(r => area.roles.includes(r))
                     : true
+                localAreaRoles[area["area"]] = areaHasRoles ? area.roles : []
                 // console.log(area.area, area?.roles)
                 // console.log('areaMatchesRole', areaMatchesRole)
                 if (areaMatchesRole) {
@@ -551,6 +555,7 @@ const AlarmSetup = (props) => {
                                     ? true
                                     : roles.some(r => area[areaKey].roles.includes(r))
                                 : true
+                            localAreaRoles[`${area["area"]}=${area[areaKey]["name"]}`] = subAreaHasRoles ? area[areaKey].roles : []
                             // console.log(`${area["area"]}=${area[areaKey]["name"]}`, area[areaKey]?.roles)
                             // console.log('subAreaMatchesRole', subAreaMatchesRole)
                             if (subAreaMatchesRole) {
@@ -611,6 +616,7 @@ const AlarmSetup = (props) => {
             setLastArea(localLastArea)
             setLastPVKey(localLastPVKey)
             setLastSubAreaKey(localLastSubAreaKey)
+            setAreaRoles(localAreaRoles)
 
             setDbPVData(dbPVDataRaw)
 
@@ -1287,7 +1293,7 @@ const AlarmSetup = (props) => {
         setAreaContextOpen({})
         setAlarmAdminListExpand(false)
         setAddSubAreaData({
-            fromEdit: false,
+            edit: false,
             areaIndex: index,
             areaNextSubAreaKey: isNaN(lastSubAreaKey[index]) ? 0 : lastSubAreaKey[index] + 1,
             subArea: '',
@@ -1301,11 +1307,12 @@ const AlarmSetup = (props) => {
         const isSubArea = index.includes("=")
         if (isSubArea) {
             setAddSubAreaData({
-                fromEdit: true,
+                edit: true,
                 areaIndex: index.split("=")[0],
+                areaNextSubAreaKey: areaSubAreaMongoId[index].split("subArea")[1],
                 subArea: index.split("=")[1],
-                addRoles: false,
-                roles: []
+                addRoles: areaRoles[index].length !== 0,
+                roles: areaRoles[index]
             })
             setAddSubAreaDialogOpen(true)
         }
@@ -1314,7 +1321,7 @@ const AlarmSetup = (props) => {
         }
         setAreaContextOpen({})
         setAlarmAdminListExpand(false)
-    }, [])
+    }, [areaRoles, areaSubAreaMongoId])
 
     const handleDeleteArea = useCallback((event, index) => {
         const areaName = index.includes("=")

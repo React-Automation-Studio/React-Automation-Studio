@@ -291,7 +291,7 @@ const AlarmList = props => {
                                                                 <ListItemIcon >
                                                                     <EditIcon fontSize="small" />
                                                                 </ListItemIcon>
-                                                                <ListItemText primary="Rename area" />
+                                                                <ListItemText primary="Edit area" />
                                                             </ListItem>
                                                             <ListItem
                                                                 button

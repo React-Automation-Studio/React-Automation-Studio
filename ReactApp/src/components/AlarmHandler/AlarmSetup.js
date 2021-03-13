@@ -1281,6 +1281,7 @@ const AlarmSetup = (props) => {
         setAlarmAdminGListExpand(false)
         setGlobalContextOpen(false)
         setAddAreaDialogData({
+            edit: false,
             area: '',
             addRoles: false,
             roles: []
@@ -1317,7 +1318,13 @@ const AlarmSetup = (props) => {
             setAddSubAreaDialogOpen(true)
         }
         else {
-
+            setAddAreaDialogData({
+                edit: true,
+                area: index,
+                addRoles: areaRoles[index].length !== 0,
+                roles: areaRoles[index]
+            })
+            setAddAreaDialogOpen(true)
         }
         setAreaContextOpen({})
         setAlarmAdminListExpand(false)
@@ -1638,7 +1645,7 @@ const AlarmSetup = (props) => {
     }, [deletePVDialogData, areaMongoId, areaSubAreaMongoId, dbUpdateOne, globalDocId, props.dbName, username])
 
     const handleExecuteAddNewSubArea = useCallback(() => {
-        const { areaIndex, subArea, areaNextSubAreaKey, roles } = addSubAreaData
+        const { edit, areaIndex, subArea, areaNextSubAreaKey, roles } = addSubAreaData
         const id = areaMongoId[areaIndex]
 
         let newvalues = {}
@@ -1651,16 +1658,20 @@ const AlarmSetup = (props) => {
             update: newvalues
         })
         //
-
-        newvalues = {
-            '$set': {
-                [`subArea${areaNextSubAreaKey}`]: {
-                    name: subArea,
-                    enable: true,
-                    bridge: false,
-                    bridgeTime: '',
-                    roles: roles,
-                    pvs: {}
+        if (edit) {
+            console.log("editted subArea")
+        }
+        else {
+            newvalues = {
+                '$set': {
+                    [`subArea${areaNextSubAreaKey}`]: {
+                        name: subArea,
+                        enable: true,
+                        bridge: false,
+                        bridgeTime: '',
+                        roles: roles,
+                        pvs: {}
+                    }
                 }
             }
         }
@@ -1674,7 +1685,7 @@ const AlarmSetup = (props) => {
 
     const handleExecuteAddNewArea = useCallback(() => {
 
-        const { area, roles } = addAreaDialogData
+        const { edit, area, roles } = addAreaDialogData
         // set activeUser
         const newvalues = { '$set': { activeUser: username } }
         dbUpdateOne({
@@ -1684,18 +1695,23 @@ const AlarmSetup = (props) => {
         })
         //
 
-        const newEntry = {
-            area: area,
-            enable: true,
-            bridge: false,
-            bridgeTime: '',
-            roles: roles,
-            pvs: {}
+        if (edit) {
+            console.log("editted area")
         }
-        dbInsertOne({
-            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
-            newEntry: newEntry
-        })
+        else {
+            const newEntry = {
+                area: area,
+                enable: true,
+                bridge: false,
+                bridgeTime: '',
+                roles: roles,
+                pvs: {}
+            }
+            dbInsertOne({
+                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
+                newEntry: newEntry
+            })
+        }
         setAddAreaDialogOpen(false)
         setAddAreaDialogData({})
     }, [addAreaDialogData, dbInsertOne, props.dbName, dbUpdateOne, globalDocId, username])

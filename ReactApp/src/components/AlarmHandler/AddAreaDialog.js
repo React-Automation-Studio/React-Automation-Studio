@@ -187,7 +187,7 @@ const AddAreaDialog = (props) => {
             fullWidth
             maxWidth={"sm"}
         >
-            <DialogTitle >{`Add new area`}</DialogTitle>
+            <DialogTitle >{`${!props.data.edit ? 'Add new ' : 'Edit '}area`}</DialogTitle>
             <DialogContent>
                 <Grid
                     container
@@ -209,7 +209,7 @@ const AddAreaDialog = (props) => {
                             </Grid>
                             <Grid item xs={3} className={classes.verticalMiddle} style={{ marginRight: '1rem' }}>
                                 <Typography className={classes.boldText} >
-                                    NEW AREA NAME
+                                    {`${props.data.edit ? '' : 'NEW '}AREA NAME`}
                                 </Typography>
                             </Grid>
                             <Grid item xs={7} className={classes.verticalMiddle}>
@@ -240,7 +240,7 @@ const AddAreaDialog = (props) => {
                     Cancel
                 </Button>
                 <Button onClick={props.addNewArea} color="secondary" disabled={props.data.area === '' || hasEmptyRole}>
-                    Add
+                    {`${props.data.edit ? 'Apply' : 'Add'}`}
                 </Button>
             </DialogActions>
         </Dialog >

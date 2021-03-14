@@ -68,11 +68,17 @@ def initDatabase():
     alarmDB = client[MONGO_INITDB_ALARM_DATABASE]
 
     while(len(alarmDB.list_collection_names()) != 5):
-        sleep(1.0)
         app_log.info(
             'Waiting for Pymongo to connect to all collections in alarm database')
+        sleep(1.0)
     app_log.info('Pymongo connected to all collections in alarm database')
     app_log.info(str(alarmDB.list_collection_names()))
+    while(len(list(alarmDB['glob'].find({}))) == 0):
+        app_log.info('Alarm database '+MONGO_INITDB_ALARM_DATABASE +
+                     ' still being instantiated')
+        sleep(1.0)
+    app_log.info('Alarm database '+MONGO_INITDB_ALARM_DATABASE +
+                 ' instantiated')
 
 
 def dbGetCollection(collection):

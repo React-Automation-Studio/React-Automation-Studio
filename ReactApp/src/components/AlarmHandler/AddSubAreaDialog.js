@@ -257,7 +257,7 @@ const AddSubAreaDialog = (props) => {
                 <Button onClick={props.handleClose} color="primary">
                     Cancel
                 </Button>
-                <Button onClick={props.executeAddNewSubArea} color="secondary" disabled={props.data.subArea === '' || hasEmptyRole}>
+                <Button onClick={props.data.edit ? props.executeEditSubArea : props.executeAddNewSubArea} color="secondary" disabled={props.data.subArea === '' || hasEmptyRole}>
                     {props.data.edit ? 'Apply' : 'Add'}
                 </Button>
             </DialogActions>

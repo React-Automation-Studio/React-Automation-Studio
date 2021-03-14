@@ -1309,8 +1309,8 @@ const AlarmSetup = (props) => {
         if (isSubArea) {
             setAddSubAreaData({
                 edit: true,
+                oldIndex: index,
                 areaIndex: index.split("=")[0],
-                areaNextSubAreaKey: areaSubAreaMongoId[index].split("subArea")[1],
                 subArea: index.split("=")[1],
                 addRoles: areaRoles[index].length !== 0,
                 roles: areaRoles[index]
@@ -1329,7 +1329,7 @@ const AlarmSetup = (props) => {
         }
         setAreaContextOpen({})
         setAlarmAdminListExpand(false)
-    }, [areaRoles, areaSubAreaMongoId])
+    }, [areaRoles])
 
     const handleDeleteArea = useCallback((event, index) => {
         const areaName = index.includes("=")
@@ -1473,6 +1473,98 @@ const AlarmSetup = (props) => {
         setAlarmLogSelectedName(newLogName)
         setAreaSelectedName(newLogName)
     }, [addAreaDialogData, areaMongoId, dbUpdateOne, props.dbName, dbUpdateMany, globalDocId, username])
+
+    const handleExecuteEditSubArea = useCallback(() => {
+        const { oldIndex, subArea, roles } = addSubAreaData
+        const id = areaMongoId[oldIndex]
+        const subAreaId = areaSubAreaMongoId[oldIndex]
+
+        let query = {}
+        let newvalues = {}
+        let aggregation = {}
+
+        // set activeUser
+        newvalues = { '$set': { activeUser: username } }
+        dbUpdateOne({
+            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:glob`,
+            id: globalDocId,
+            update: newvalues
+        })
+        //
+
+        newvalues = {
+            '$set': {
+                [`${subAreaId}.name`]: subArea,
+                [`${subAreaId}.roles`]: roles
+            }
+        }
+        dbUpdateOne({
+            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
+            id: id,
+            update: newvalues
+        })
+
+        const index = oldIndex
+        const newIndex = `${index.split("=")[0]}=${subArea}`
+        const newLogName = `${index.split("=")[0]} > ${subArea}`
+
+        query = {
+            id: { '$regex': `^${index}\\*` }
+        }
+        aggregation = {
+            '$set': {
+                'id': {
+                    '$concat': [{
+                        '$arrayElemAt': [{
+                            '$split': ['$id', `${index}*`]
+                        }, 0]
+                    },
+                    `${newIndex}*`,
+                    {
+                        '$arrayElemAt': [{
+                            '$split': ['$id', `${index}*`]
+                        }, 1]
+                    }]
+                }
+            }
+        }
+        dbUpdateMany({
+            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history`,
+            query: query,
+            aggregation: aggregation
+        })
+        query = {
+            id: { '$regex': `^${index}$` }
+        }
+        aggregation = {
+            '$set': {
+                'id': {
+                    '$concat': [{
+                        '$arrayElemAt': [{
+                            '$split': ['$id', `${index}`]
+                        }, 0]
+                    },
+                    `${newIndex}`,
+                    {
+                        '$arrayElemAt': [{
+                            '$split': ['$id', `${index}`]
+                        }, 1]
+                    }]
+                },
+            }
+        }
+        dbUpdateMany({
+            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history`,
+            query: query,
+            aggregation: aggregation
+        })
+
+        setAddSubAreaDialogOpen(false)
+        setAreaSelectedIndex(newIndex)
+        setAlarmLogSelectedKey(newIndex)
+        setAlarmLogSelectedName(newLogName)
+        setAreaSelectedName(newLogName)
+    }, [addSubAreaData, areaMongoId, areaSubAreaMongoId, dbUpdateOne, props.dbName, dbUpdateMany, globalDocId, username])
 
     const handleExecuteRenameArea = useCallback(() => {
         const { index, newName } = renameDialogData
@@ -2255,6 +2347,7 @@ const AlarmSetup = (props) => {
                     setAddSubAreaData({})
                 }}
                 executeAddNewSubArea={handleExecuteAddNewSubArea}
+                executeEditSubArea={handleExecuteEditSubArea}
             />
             <DeleteAreaDialog
                 open={deleteAreaDialogOpen}

@@ -239,7 +239,7 @@ const AddAreaDialog = (props) => {
                 <Button onClick={props.handleClose} color="primary">
                     Cancel
                 </Button>
-                <Button onClick={props.addNewArea} color="secondary" disabled={props.data.area === '' || hasEmptyRole}>
+                <Button onClick={props.data.edit ? props.editArea : props.addNewArea} color="secondary" disabled={props.data.area === '' || hasEmptyRole}>
                     {`${props.data.edit ? 'Apply' : 'Add'}`}
                 </Button>
             </DialogActions>

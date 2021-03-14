@@ -1030,7 +1030,8 @@ def startPastBridgeThreads():
     global pvCollection
     for area in pvCollection.find():
         topArea = area["area"]
-        if(area["bridge"]):
+        # Backwards compatible
+        if(area["bridge"] if ("bridge" in area) else False):
             bridgeTime = area["bridgeTime"]
             _thread.start_new_thread(
                 bridgeWatchThread, (topArea, bridgeTime,))
@@ -1041,7 +1042,8 @@ def startPastBridgeThreads():
         for key in area.keys():
             if (key == "pvs"):
                 for pvKey in area[key].keys():
-                    if(area[key][pvKey]["bridge"]):
+                    # Backwards compatible
+                    if(area[key][pvKey]["bridge"] if ("bridge" in area[key][pvKey]) else False):
                         bridgeTime = area[key][pvKey]["bridgeTime"]
                         _thread.start_new_thread(
                             bridgeWatchThread, (topArea, bridgeTime, None, pvKey,))
@@ -1050,7 +1052,8 @@ def startPastBridgeThreads():
                             str(None)+str(pvKey)+bridgeTime
                         runningBridgeThreads.append(threadName)
             if ("subArea" in key):
-                if(area[key]["bridge"]):
+                # Backwards compatible
+                if(area[key]["bridge"] if ("bridge" in area[key]) else False):
                     bridgeTime = area[key]["bridgeTime"]
                     _thread.start_new_thread(
                         bridgeWatchThread, (topArea, bridgeTime, key,))
@@ -1061,7 +1064,8 @@ def startPastBridgeThreads():
                 for subAreaKey in area[key].keys():
                     if (subAreaKey == "pvs"):
                         for pvKey in area[key][subAreaKey].keys():
-                            if(area[key][subAreaKey][pvKey]["bridge"]):
+                            # Backwards compatible
+                            if(area[key][subAreaKey][pvKey]["bridge"] if ("bridge" in area[key][subAreaKey][pvKey]) else False):
                                 bridgeTime = area[key][subAreaKey][pvKey]["bridgeTime"]
                                 _thread.start_new_thread(
                                     bridgeWatchThread, (topArea, bridgeTime, key, pvKey,))

@@ -1379,6 +1379,11 @@ def pvCollectionWatch():
                                 [activeUser, msg, "area", topArea])}
                             if(writeEnableHistory):
                                 dbUpdateHistory(topArea, entry)
+                        elif(key == "roles"):
+                            topArea = doc.get("area")
+                            entry = {"timestamp": timestamp, "entry": " ".join(
+                                [activeUser, "edited roles of area", topArea])}
+                            dbUpdateHistory(topArea, entry)
                         elif ("pvs." in key and (key.endswith(".bridge"))):
                             bridgeEvent = updatedFields[key]
                             writeEnableHistory = False
@@ -1581,6 +1586,12 @@ def pvCollectionWatch():
                                 [activeUser, msg, "subArea", areaKey.replace("=", " > ")])}
                             if(writeEnableHistory):
                                 dbUpdateHistory(areaKey, entry)
+                        elif ("pvs." not in key and key.endswith(".roles")):
+                            areaKey = doc.get("area") + "=" + doc.get(
+                                key.split(".")[0])["name"]
+                            entry = {"timestamp": timestamp, "entry": " ".join(
+                                [activeUser, "edited roles of subArea", areaKey.replace("=", " > ")])}
+                            dbUpdateHistory(areaKey, entry)
                         elif (key == "pvs"):
                             # New pvs added area
                             topArea = docIDDict[documentKey["_id"]]

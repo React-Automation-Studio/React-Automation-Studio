@@ -148,36 +148,28 @@ def evaluateAreaPVs(areaKey, fromColWatch=False):
     invalidAlarm = False
     ackStates = [1, 3, 5, 7]
 
-    try:
-        for key in pvDict.keys():
-            if (re.sub(r"pv\d+", "", key).startswith(areaKey+"=")):
-                val = alarmDict[pvDict[key].pvname]["A"].value
-                globalEnable, areaEnable, subAreaEnable, pvEnable = getEnables(
-                    pvDict[key].pvname)
-                if (subAreaEnable != None):
-                    enable = globalEnable and areaEnable and subAreaEnable and pvEnable
-                else:
-                    enable = globalEnable and areaEnable and pvEnable
-                if (not enable):
-                    # pv not enabled
-                    # force NO_ALARM state so neither alarm nor acked passed
-                    # to areas
-                    val = 0
-                try:
-                    if (val > alarmState):
-                        alarmState = val
-                    if(val == 2):
-                        minorAlarm = True
-                    elif(val == 4):
-                        majorAlarm = True
-                    elif(val == 6):
-                        invalidAlarm = True
-                except:
-                    msg = 'val = ' + str(val) + \
-                        ' alarmState = '+str(alarmState)
-                    app_log.warning(msg)
-    except:
-        app_log.warning('pvDict changed size during iteration')
+    for key in pvDict.keys():
+        if (re.sub(r"pv\d+", "", key).startswith(areaKey+"=")):
+            val = alarmDict[pvDict[key].pvname]["A"].value
+            globalEnable, areaEnable, subAreaEnable, pvEnable = getEnables(
+                pvDict[key].pvname)
+            if (subAreaEnable != None):
+                enable = globalEnable and areaEnable and subAreaEnable and pvEnable
+            else:
+                enable = globalEnable and areaEnable and pvEnable
+            if (not enable):
+                # pv not enabled
+                # force NO_ALARM state so neither alarm nor acked passed
+                # to areas
+                val = 0
+            if (val > alarmState):
+                alarmState = val
+            if(val == 2):
+                minorAlarm = True
+            elif(val == 4):
+                majorAlarm = True
+            elif(val == 6):
+                invalidAlarm = True
 
     # active alarm always supercedes acked state alarm
     if alarmState in ackStates:

@@ -42,11 +42,8 @@ def initPreSuffix():
     global alarmIOCPVPrefix
     global alarmIOCPVSuffix
     doc = dbFindOne("config")
-    try:
-        alarmIOCPVPrefix = doc["alarmIOCPVPrefix"]
-        alarmIOCPVSuffix = doc["alarmIOCPVSuffix"]
-    except:
-        app_log.warning('alarmIOCPVPrefix not instantiated')
+    alarmIOCPVPrefix = doc["alarmIOCPVPrefix"]
+    alarmIOCPVSuffix = doc["alarmIOCPVSuffix"]
 
 
 def getListOfPVNames():

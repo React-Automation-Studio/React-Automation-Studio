@@ -47,19 +47,21 @@ def initDatabase():
     if (mongoAuth):
         client = MongoClient(
             'mongodb://%s:%s@%s' %
-            (MONGO_ROOT_USERNAME, MONGO_ROOT_PASSWORD, ALARM_DATABASE), replicaSet=ALARM_DATABASE_REPLICA_SET_NAME)
+            (MONGO_ROOT_USERNAME, MONGO_ROOT_PASSWORD, ALARM_DATABASE),
+            replicaSet=ALARM_DATABASE_REPLICA_SET_NAME,
+            readPreference='secondaryPreferred')
     else:
         client = MongoClient('mongodb://%s' % (ALARM_DATABASE),
                              replicaSet=ALARM_DATABASE_REPLICA_SET_NAME,
                              readPreference='secondaryPreferred')
 
     # Wait for MongoClient to discover the whole replica set and identify MASTER!
-    while(len(list(client.nodes)) != REPLICA_SET_MEMBER_LENGTH):
-        sleep(1.0)
-        app_log.info(
-            'Waiting for Pymongo to discover the whole replica set and identify MASTER')
-    app_log.info('Pymongo connected to all replica set members')
-    app_log.info(str(list(client.nodes)))
+    # while(len(list(client.nodes)) != REPLICA_SET_MEMBER_LENGTH):
+    #     sleep(1.0)
+    #     app_log.info(
+    #         'Waiting for Pymongo to discover the whole replica set and identify MASTER')
+    # app_log.info('Pymongo connected to all replica set members')
+    # app_log.info(str(list(client.nodes)))
     #
 
     global alarmDB
@@ -69,7 +71,7 @@ def initDatabase():
         sleep(1.0)
         app_log.info(
             'Waiting for Pymongo to connect to all collections in alarm database')
-    app_log.info('Pymongo connected to alarm database')
+    app_log.info('Pymongo connected to all collections in alarm database')
     app_log.info(str(alarmDB.list_collection_names()))
 
 

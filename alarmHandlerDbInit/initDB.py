@@ -36,6 +36,11 @@ try:
     RUN_DEMO_ALARMS_IOC = bool(os.environ['RUN_DEMO_ALARMS_IOC'])
 except:
     RUN_DEMO_ALARMS_IOC = True
+try:
+    REPLICA_SET_MEMBERS = os.environ['REPLICA_SET_MEMBERS'].split(',')
+    REPLICA_SET_MEMBER_LENGTH = len(REPLICA_SET_MEMBERS)
+except:
+    REPLICA_SET_MEMBER_LENGTH = 3
 
 if (RUN_DEMO_ALARMS_IOC):
     fin = open("./initDBData/pvs.json", "rt")
@@ -49,14 +54,22 @@ if (RUN_DEMO_ALARMS_IOC):
 if (mongoAuth):
     client = MongoClient(
         'mongodb://%s:%s@%s' %
-        (MONGO_ROOT_USERNAME, MONGO_ROOT_PASSWORD, ALARM_DATABASE), replicaSet=ALARM_DATABASE_REPLICA_SET_NAME)
-    # Wait for MongoClient to discover the whole replica set and identify MASTER!
-    sleep(0.1)
+        (MONGO_ROOT_USERNAME, MONGO_ROOT_PASSWORD, ALARM_DATABASE),
+        replicaSet=ALARM_DATABASE_REPLICA_SET_NAME,
+        readPreference='secondaryPreferred')
 else:
     client = MongoClient('mongodb://%s' % (ALARM_DATABASE),
-                         replicaSet=ALARM_DATABASE_REPLICA_SET_NAME)
-    # Wait for MongoClient to discover the whole replica set and identify MASTER!
-    sleep(0.1)
+                         replicaSet=ALARM_DATABASE_REPLICA_SET_NAME,
+                         readPreference='secondaryPreferred')
+
+# Wait for MongoClient to discover the whole replica set and identify MASTER!
+# while(len(list(client.nodes)) != REPLICA_SET_MEMBER_LENGTH):
+#     sleep(1.0)
+#     print(
+#         'Waiting for Pymongo to discover the whole replica set and identify MASTER')
+# print('Pymongo connected to all replica set members')
+# print(str(list(client.nodes)))
+#
 
 dbnames = client.list_database_names()
 

@@ -280,17 +280,16 @@ def notify(notifyBuffer):
         timestamp = datetime.now(utc).isoformat()
         if(notifyEmailDict):
             if(notifyEmail(timestamp, email, notifyEmailDict)):
-                # Log to global db
                 timestamp = datetime.now(utc).isoformat()
                 entry = {"timestamp": timestamp, "entry": " ".join(
                     [name, "notified on email"])}
-                dbUpdateHistory("_GLOBAL", entry)
             else:
-                # Log to global db
                 timestamp = datetime.now(utc).isoformat()
                 entry = {"timestamp": timestamp, "entry": " ".join(
                     ["FAILED to notify", name, "on email!"])}
-                dbUpdateHistory("_GLOBAL", entry)
+            for area in notifyEmailDict:
+                for pvname in notifyEmailDict[area]:
+                    dbUpdateHistory(area, entry, pvname)
 
         if(notifySMSDict):
             if(notifySMS(timestamp, mobile, notifySMSDict)):

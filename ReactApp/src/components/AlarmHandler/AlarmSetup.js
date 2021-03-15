@@ -325,7 +325,7 @@ const AlarmSetup = (props) => {
     const alarmPVDictReducer = useCallback((state, action) => {
         switch (action.type) {
             case 'updatePVData':
-                if (action.pvData.initialized && !loadAlarmTable.alarmPV) {
+                if (action.pvData.initialized && (!loadAlarmTable.alarmPV || backdropOpen)) {
                     let epicsPVName = action.pvData.pvName.replace("pva://", "")
                     epicsPVName = epicsPVName.replace(alarmIOCPVPrefix, "")
                     epicsPVName = epicsPVName.replace(alarmIOCPVSuffix, "")
@@ -346,7 +346,7 @@ const AlarmSetup = (props) => {
             default:
                 throw new Error();
         }
-    }, [alarmIOCPVPrefix, alarmIOCPVSuffix, lastAlarm, loadAlarmTable])
+    }, [alarmIOCPVPrefix, alarmIOCPVSuffix, lastAlarm, loadAlarmTable, backdropOpen])
     const [alarmPVDict, dispatchAlarmPVDict] = useReducer(alarmPVDictReducer, {})
     const [alarmPVs, setAlarmPVs] = useState([])
 

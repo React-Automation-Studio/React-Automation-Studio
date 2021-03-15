@@ -293,17 +293,16 @@ def notify(notifyBuffer):
 
         if(notifySMSDict):
             if(notifySMS(timestamp, mobile, notifySMSDict)):
-                # Log to global db
                 timestamp = datetime.now(utc).isoformat()
                 entry = {"timestamp": timestamp, "entry": " ".join(
                     [name, "notified on SMS"])}
-                dbUpdateHistory("_GLOBAL", entry)
             else:
-                # Log to global db
                 timestamp = datetime.now(utc).isoformat()
                 entry = {"timestamp": timestamp, "entry": " ".join(
                     ["FAILED to notify", name, "on SMS!"])}
-                dbUpdateHistory("_GLOBAL", entry)
+            for area in notifySMSDict:
+                for pvname in notifySMSDict[area]:
+                    dbUpdateHistory(area, entry, pvname)
 
         if(notifyWhatsAppDict):
             if(notifyWhatsApp(timestamp, mobile, notifyWhatsAppDict)):

@@ -146,8 +146,12 @@ class Wrapper extends Component {
     };
 
     let localVariables = {};
+    let userTokens = {
+      accessToken: 'unauthenticated'
+    }
     let system = {
       socket: window.socket,
+      userTokens:userTokens,
       localVariables: localVariables,
       updateLocalVariable: this.updateLocalVariable,
       enableProbe: false,

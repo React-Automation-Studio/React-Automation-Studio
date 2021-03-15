@@ -27,6 +27,8 @@ import Login from './components/SystemComponents/Login';
 import Probe from './components/SettingsPages/Probe';
 import Vault from './components/AlarmHandler/Vault';
 import Help from './components/docs/Help';
+import Administrator from './components/Administrator/Administrator.js';
+import UserProfile from './components/SystemComponents/UserProfile';
 import ProtectedRoute from './components/SystemComponents/ProtectedRoute';
 const Routes = (props) => {
   return (
@@ -36,7 +38,8 @@ const Routes = (props) => {
         {/*system start*/}
         <ProtectedRoute exact path="/" component={MainDashboard} />
         <ProtectedRoute exact path="/MainDashboard" component={MainDashboard} />
-
+        <ProtectedRoute exact path="/Administrator" component={Administrator} />
+        <ProtectedRoute path="/UserProfile" component={UserProfile} />
         {process.env.REACT_APP_EnableLogin === 'true' &&
           <Route
             exact 

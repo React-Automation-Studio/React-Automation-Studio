@@ -3,7 +3,7 @@ import gevent
 from gevent import monkey; monkey.patch_all()
 import time
 import pymongo
-
+from pymongo import MongoClient
 import threading
 import uuid
 import flask
@@ -23,9 +23,10 @@ from bson.objectid import ObjectId
 sys.path.insert(0, '../')
 sys.path.insert(0, 'userAuthentication/')
 
-from authenticate import  AuthoriseUser,AutheriseUserAndPermissions, LocalAuthenticateUser, ExternalAuthenticateUser, decodeTokenGoogle, createRefreshToken, createAccessToken
+from authenticate import  AuthoriseUser,AutheriseUserAndPermissions,checkIfAdmin, LocalAuthenticateUser, ExternalAuthenticateUser, decodeTokenGoogle, createRefreshToken, createAccessToken
 from dotenv import load_dotenv
 import ldap
+from time import sleep
 
 
 from flask_cors import CORS
@@ -1639,6 +1640,240 @@ def archiverRead(message):
 
         else:
              log.info('Unkwown Archiver URL: : {}',archiverURL)
+    else:
+        socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
+
+
+
+@socketio.on('adminAllUsers', namespace='/pvServer')
+def adminAllUsers(message):
+    global clientPVlist,REACT_APP_DisableLogin,clientDbWatchList,myDbWatchUid
+    
+    # dbURL= str(message['dbURL'])
+
+    #print("databaseRead: SSID: ",request.sid,' dbURL: ', dbURL)
+    # print("message:",str(message))
+    # authenticated=False
+    # if REACT_APP_DisableLogin:
+    #     authenticated=True
+    #     accessControl={'userAuthorised':True,'permissions':{'read':True,'write':True}}
+    # else :
+    #     accessControl=AutheriseUserAndPermissions(message['clientAuthorisation'],"ADMIN_DATABASE")
+    #     authenticated=accessControl['userAuthorised']
+    isAdmin=checkIfAdmin(message['clientAuthorisation'])
+    if isAdmin :
+        join_room('adminAllUsers')
+        try:
+            MONGO_ROOT_USERNAME = os.environ['MONGO_ROOT_USERNAME']
+            MONGO_ROOT_PASSWORD = os.environ['MONGO_ROOT_PASSWORD']
+            MONGO_ROOT_USERNAME = urllib.parse.quote_plus(
+                MONGO_ROOT_USERNAME)
+            MONGO_ROOT_PASSWORD = urllib.parse.quote_plus(
+                MONGO_ROOT_PASSWORD)
+            mongoAuth = True
+        except:
+            mongoAuth = False
+
+        try:
+            ADMIN_PW_SALT_ROUNDS = int(
+                os.environ['ADMIN_PW_SALT_ROUNDS'])
+        except:
+            ADMIN_PW_SALT_ROUNDS =12
+
+        MONGO_INITDB_ADMIN_DATABASE='rasAdminDb'
+        ADMIN_DATABASE=os.getenv('ADMIN_DATABASE')
+        ADMIN_DATABASE_REPLICA_SET_NAME=str(os.getenv('ADMIN_DATABASE_REPLICA_SET_NAME'))
+        if (ADMIN_DATABASE is None) :
+            print("Enviroment variable ADMIN_DATABASE is not defined, can't intialize: ",MONGO_INITDB_ADMIN_DATABASE)
+        else:
+            if (mongoAuth):
+                client = MongoClient('mongodb://%s:%s@%s' %(MONGO_ROOT_USERNAME, MONGO_ROOT_PASSWORD, ADMIN_DATABASE), replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
+                # Wait for MongoClient to discover the whole replica set and identify MASTER!
+                sleep(0.1)
+            else:
+                client = MongoClient('mongodb://%s' % (ADMIN_DATABASE),replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
+                # Wait for MongoClient to discover the whole replica set and identify MASTER!
+                sleep(0.1)
+            dbnames = client.list_database_names()
+            if (MONGO_INITDB_ADMIN_DATABASE not in dbnames):
+                print("Error cant connect to admin db",MONGO_INITDB_ADMIN_DATABASE)
+            else:
+                print("connected to adminDb",MONGO_INITDB_ADMIN_DATABASE)
+
+                mydb = client[MONGO_INITDB_ADMIN_DATABASE]
+                mycol=mydb['users']
+                doc=mycol.find({},{"password":0})
+                data=dumps(doc)
+                eventName='databaseWatchData:'+'adminAllUsers'
+                d={'write_access':True,'data': data}
+                socketio.emit(eventName,d,room=str(request.sid),namespace='/pvServer')
+
+        # print("adminAllUsers authorised",)
+    #     if "mongodb://" in dbURL:
+
+    # #        print("mongodb database connection request: ",dbURL)
+    #         str1=dbURL.replace("mongodb://","")
+    #         strings=  str1.split(':')
+    #         try:
+    #             Parametersstr=str1.split("Parameters:")[1]
+    #             parameters=json.loads(Parametersstr)
+    #         except:
+    #             raise Exception("Parameters are not defined")
+
+    # #        print("Parameters:",str(parameters))
+    #         if(len(strings)>=3):
+    #             database= strings[0];
+    #             dbName=   strings[1];
+    #             colName=  strings[2];
+    # #            print("database: ", database, "length: ", len(database))
+    # #            print("dbName: "  ,   dbName, "length: ", len(dbName))
+    # #            print("colName: " ,  colName, "length: ", len(colName))
+    #             ### must insert a better error detection here
+
+    #             if ((len(database)>0) and (len(dbName)>0) and (len(colName)>0)):
+    #                 write_access=False
+    #                 if(accessControl['permissions']['read']):
+    #                     if(accessControl['permissions']['write']):
+    #                         join_room(str(dbURL)+'rw')
+    #                         write_access=True
+    #                         #join_room(str(dbURL))
+    #                     else:
+    #                         join_room(str(dbURL)+'ro')
+    #                         write_access=False
+    #                         #join_room(str(dbURL))
+    #                     try:
+    # #                        print("connecting: "+dbURL)
+    #                         try:
+    #                             databaseString="mongodb://"+ str(os.environ[database])+"/"
+    #                             replicaSetName=str(os.environ[database+"_REPLICA_SET_NAME"])
+    #                             myclient = pymongo.MongoClient(databaseString,replicaSet=replicaSetName)
+    #                             # Wait for MongoClient to discover the whole replica set and identify MASTER!
+    #                             time.sleep(0.1)
+    #                             #myclient.server_info()
+    #                         except pymongo.errors.ServerSelectionTimeoutError as err:
+    #                             log.error(err)
+    #                             return "Ack: Could not connect to MongoDB: "+str(dbURL)
+
+    #                         mydb = myclient[dbName]
+
+    #                         mycol=mydb[colName]
+                            
+    #                         query=parameters['query'] if ('query' in parameters) else None
+    #                         # Convert string ObjectId's to valid ObjectId objects
+    #                         if(query):
+    #                             if("_id" in query):
+    #                                 try:
+    #                                     for key,value in query["_id"].items():
+    #                                         query["_id"][key]=ObjectId(value)
+    #                                 except:
+    #                                     pass
+    #                         projection=parameters['projection'] if ('projection' in parameters) else None
+    #                         if('sort' in parameters):
+    #                             sort=[]
+    #                             for sortItem in parameters['sort']:
+    #                                 sort.append((sortItem[0],sortItem[1]))
+    #                         else:
+    #                             sort=[('$natural', 1)]
+    #                         skip=parameters['skip'] if ('skip' in parameters) else 0
+    #                         limit=parameters['limit'] if ('limit' in parameters) else 0
+    #                         count=parameters['count'] if ('count' in parameters) else False
+
+    #                         # print('dbURL',dbURL)
+    #                         # print('query',query)
+    #                         # print('projection',projection)
+    #                         # print('sort',sort)
+    #                         # print('skip',skip)
+    #                         # print('limit',limit)
+    #                         # print('count',count)
+                            
+    #                         if(count):
+    #                             X=mycol.count_documents(query)
+    #                         else:
+    #                             X=mycol.find(query,projection).sort(sort).skip(skip).limit(limit)
+                            
+
+
+    #                         #for x in X:
+    #                             #print(x)
+    # #                        print("done: "+dbURL)
+
+
+    #                         data=dumps(X)
+
+
+    #                         eventName='databaseWatchData:'+dbURL;
+    # #                        print("eventName",eventName)
+
+    #                         d={'dbURL': dbURL,'write_access':write_access,'data': data}
+    #                         socketio.emit(eventName,d,room=str(request.sid),namespace='/pvServer')
+
+
+
+    #                         watchEventName=eventName
+    #                         myDbWatchUid=myDbWatchUid+1
+    #                         dbWatchId=str(myDbWatchUid)
+    #                         if not (watchEventName in	clientDbWatchList):
+    #                             dbWatch={}
+    #                             dbWatch['watchEventName']=watchEventName
+    #                             dbWatch['client']=myclient
+    #                             dbWatch['db']=mydb
+    #                             dbWatch['collection']=mycol
+    #                             dbWatch['watch']=mycol.watch()
+    #                             dbWatch['dbURL']=dbURL
+    #                             dbWatch['query']=query
+    #                             dbWatch['projection']=projection
+    #                             dbWatch['sort']=sort
+    #                             dbWatch['skip']=skip
+    #                             dbWatch['limit']=limit
+    #                             dbWatch['count']=count
+    #                             dbWatch['sockets']={
+    #                                 str(request.sid):{
+    #                                     "dbWatchIds":{
+    #                                         str(dbWatchId):True
+    #                                     }
+    #                                 }
+    #                             }
+    #                             dbWatch['thread']=None
+    #                             dbWatch['threadStarted']=False
+    #                             dbWatch['closeWatch']=False
+    #                             dbWatch['threadClosed']=False
+
+
+    #                             clientDbWatchList[watchEventName]=dbWatch
+    #                             join_room(str(watchEventName))
+    #                         else:
+
+    #                             if request.sid in clientDbWatchList[watchEventName]['sockets']:
+    #                                 if 'dbWatchIds' in clientDbWatchList[watchEventName]['sockets'][request.sid]:
+    #                                     if  dbWatchIds in clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']:
+    #                                         log.info("not a unique id {} {}",dbWatchIds,watchEventName)
+    #                         #               print("allConnectionIds ",clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds'])
+    #                                     else:
+    #                                         clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds'][dbWatchIds]=True
+    #                                 else:
+    #                                     clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']={dbWatchIds:True}
+    #                             else:
+    #                                 clientDbWatchList[watchEventName]['sockets'][request.sid]={'dbWatchIds':{dbWatchId:True}}
+
+    #                             join_room(str(watchEventName))
+    #                             #print("watch already exists: ",watchEventName)
+
+    #                         return {"dbWatchId":dbWatchId}
+
+    #                     except:
+    #                       #  print("Could not connect to MongoDB: ",dbURL)
+    #                         return "Ack: Could not connect to MongoDB: "+str(dbURL)
+    #             else:
+    #                 log.error("Malformed database URL, must be in format: mongodb://databaseID:database:collection")
+    #         else:
+    #             log.error("Malformed database URL, must be in format: mongodb://databaseID:database:collection")
+
+
+
+
+
+    #     else:
+    #         log.error("Unknown URL schema ({})",dbURL)
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
 

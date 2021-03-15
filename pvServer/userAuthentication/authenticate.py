@@ -304,6 +304,7 @@ def checkPermissions(pvname,username):
                         d['roles'].append(roles)
     return d
 
+
 def checkUserRole(username):
     global UAGS
     roles=[]
@@ -340,6 +341,24 @@ def AutheriseUserAndPermissions(encodedJWT,pvname):
         #print("AutheriseUserAndPermissions",e)
         #print("encodedJWT",encodedJWT)
         return {'userAuthorised':False}
+
+def checkIfAdmin(encodedJWT):
+    global SECRET_PWD_KEY, UAGS
+    try:
+        decoded=jwt.decode(encodedJWT,SECRET_PWD_KEY)
+        username=decoded['username']
+        adminUsers=UAGS['userGroups']['ADMIN']['usernames']
+        if username in adminUsers:
+            return True
+        else:
+            return False
+       
+        
+    except Exception as e:
+        #print("AutheriseUserAndPermissions",e)
+        #print("encodedJWT",encodedJWT)
+        return False
+
 
 def  AuthoriseUser(encodedJWT):
     global SECRET_PWD_KEY, UAGS

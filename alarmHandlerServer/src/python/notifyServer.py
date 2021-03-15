@@ -309,7 +309,6 @@ def notify(notifyBuffer):
                 timestamp = datetime.now(utc).isoformat()
                 entry = {"timestamp": timestamp, "entry": " ".join(
                     [name, "notified on WhatsApp"])}
-                dbUpdateHistory("_GLOBAL", entry)
             else:
                 timestamp = datetime.now(utc).isoformat()
                 entry = {"timestamp": timestamp, "entry": " ".join(
@@ -320,17 +319,16 @@ def notify(notifyBuffer):
 
         if(notifySignalDict):
             if(notifySignal(timestamp, mobile, notifySignalDict)):
-                # Log to global db
                 timestamp = datetime.now(utc).isoformat()
                 entry = {"timestamp": timestamp, "entry": " ".join(
                     [name, "notified on Signal"])}
-                dbUpdateHistory("_GLOBAL", entry)
             else:
-                # Log to global db
                 timestamp = datetime.now(utc).isoformat()
                 entry = {"timestamp": timestamp, "entry": " ".join(
                     ["FAILED to notify", name, "on Signal!"])}
-                dbUpdateHistory("_GLOBAL", entry)
+            for area in notifySignalDict:
+                for pvname in notifySignalDict[area]:
+                    dbUpdateHistory(area, entry, pvname)
 
 
 def disconnectAllPVs():

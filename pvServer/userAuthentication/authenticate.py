@@ -14,15 +14,124 @@ from pymongo import MongoClient
 from bson.json_util import dumps
 global dbKnownUsers
 
-def knownUsersDbWatchThread():
-    while (True):
-        print("knownUsersDbWatchThread")
-        sleep(1)
+def usersDbWatchThread():
+    try:
+        MONGO_ROOT_USERNAME = os.environ['MONGO_ROOT_USERNAME']
+        MONGO_ROOT_PASSWORD = os.environ['MONGO_ROOT_PASSWORD']
+        MONGO_ROOT_USERNAME = urllib.parse.quote_plus(
+            MONGO_ROOT_USERNAME)
+        MONGO_ROOT_PASSWORD = urllib.parse.quote_plus(
+            MONGO_ROOT_PASSWORD)
+        mongoAuth = True
+    except:
+        mongoAuth = False
 
-print("hello")  
-threading.Thread(target=knownUsersDbWatchThread).start()
+    try:
+        ADMIN_PW_SALT_ROUNDS = int(
+            os.environ['ADMIN_PW_SALT_ROUNDS'])
+    except:
+        ADMIN_PW_SALT_ROUNDS =12
+
+    MONGO_INITDB_ADMIN_DATABASE='rasAdminDb'
+    ADMIN_DATABASE=os.getenv('ADMIN_DATABASE')
+    ADMIN_DATABASE_REPLICA_SET_NAME=str(os.getenv('ADMIN_DATABASE_REPLICA_SET_NAME'))
+    if (ADMIN_DATABASE is None) :
+        print("Enviroment variable ADMIN_DATABASE is not defined, can't intialize: ",MONGO_INITDB_ADMIN_DATABASE)
+    else:
+        if (mongoAuth):
+            client = MongoClient('mongodb://%s:%s@%s' %(MONGO_ROOT_USERNAME, MONGO_ROOT_PASSWORD, ADMIN_DATABASE), replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
+            # Wait for MongoClient to discover the whole replica set and identify MASTER!
+            sleep(0.1)
+        else:
+            client = MongoClient('mongodb://%s' % (ADMIN_DATABASE),replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
+            # Wait for MongoClient to discover the whole replica set and identify MASTER!
+            sleep(0.1)
+        dbnames = client.list_database_names()
+        if (MONGO_INITDB_ADMIN_DATABASE not in dbnames):
+            print("Error cant connect to admin db",MONGO_INITDB_ADMIN_DATABASE)
+        else:
+            print("connected to adminDb",MONGO_INITDB_ADMIN_DATABASE)
+
+            mydb = client[MONGO_INITDB_ADMIN_DATABASE]
+            mycol=mydb['users']
+            with mycol.watch() as stream:
+                while stream.alive:
+                    change = stream.try_next()
+                    if change is not None:
+                        try:
+                            doc=mycol.find({})
+                            print("users watch",list(doc))
+                        except:
+                            log.error("Unexpected error: {}",sys.exc_info()[0])
+                            raise
+                    print("watching users")
+                    sleep(1)
+
+   
+
+
+
+def pvAccessDbWatchThread():
+    try:
+        MONGO_ROOT_USERNAME = os.environ['MONGO_ROOT_USERNAME']
+        MONGO_ROOT_PASSWORD = os.environ['MONGO_ROOT_PASSWORD']
+        MONGO_ROOT_USERNAME = urllib.parse.quote_plus(
+            MONGO_ROOT_USERNAME)
+        MONGO_ROOT_PASSWORD = urllib.parse.quote_plus(
+            MONGO_ROOT_PASSWORD)
+        mongoAuth = True
+    except:
+        mongoAuth = False
+
+    try:
+        ADMIN_PW_SALT_ROUNDS = int(
+            os.environ['ADMIN_PW_SALT_ROUNDS'])
+    except:
+        ADMIN_PW_SALT_ROUNDS =12
+
+    MONGO_INITDB_ADMIN_DATABASE='rasAdminDb'
+    ADMIN_DATABASE=os.getenv('ADMIN_DATABASE')
+    ADMIN_DATABASE_REPLICA_SET_NAME=str(os.getenv('ADMIN_DATABASE_REPLICA_SET_NAME'))
+    if (ADMIN_DATABASE is None) :
+        print("Enviroment variable ADMIN_DATABASE is not defined, can't intialize: ",MONGO_INITDB_ADMIN_DATABASE)
+    else:
+        if (mongoAuth):
+            client = MongoClient('mongodb://%s:%s@%s' %(MONGO_ROOT_USERNAME, MONGO_ROOT_PASSWORD, ADMIN_DATABASE), replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
+            # Wait for MongoClient to discover the whole replica set and identify MASTER!
+            sleep(0.1)
+        else:
+            client = MongoClient('mongodb://%s' % (ADMIN_DATABASE),replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
+            # Wait for MongoClient to discover the whole replica set and identify MASTER!
+            sleep(0.1)
+        dbnames = client.list_database_names()
+        if (MONGO_INITDB_ADMIN_DATABASE not in dbnames):
+            print("Error cant connect to admin db",MONGO_INITDB_ADMIN_DATABASE)
+        else:
+            print("connected to adminDb",MONGO_INITDB_ADMIN_DATABASE)
+
+            mydb = client[MONGO_INITDB_ADMIN_DATABASE]
+            mycol=mydb['pvAccess']
+            with mycol.watch() as stream:
+                while stream.alive:
+                    change = stream.try_next()
+                    if change is not None:
+                        try:
+                            doc=mycol.find_one()
+                            print("pvAccess",doc['userGroups'])
+                        except:
+                            log.error("Unexpected error: {}",sys.exc_info()[0])
+                            raise
+                    print("watching pvAccess")
+                    sleep(1)
+
+
+
+
 
 def loadKnownDbUsers():
+    global UAGS
+    UAGS={}
+    
     try:
         MONGO_ROOT_USERNAME = os.environ['MONGO_ROOT_USERNAME']
         MONGO_ROOT_PASSWORD = os.environ['MONGO_ROOT_PASSWORD']
@@ -63,11 +172,18 @@ def loadKnownDbUsers():
             mydb = client[MONGO_INITDB_ADMIN_DATABASE]
             mycol=mydb['users']
             doc=mycol.find({},{"_id":0})
-           
-            print(list(doc))
+            users=list(doc)
+           # print("users",users)
+            UAGS['users']=users
+    
+    
             mycol=mydb['pvAccess']
             doc=mycol.find_one()
-            print(doc['userGroups'])
+            #print("userGroups",doc['userGroups'])
+            UAGS['userGroups']=doc['userGroups']
+            threading.Thread(target=pvAccessDbWatchThread).start()
+            threading.Thread(target=usersDbWatchThread).start()
+
             #     for key in items.keys():
             #         if key='userGroups':
             #             userGroups= item[key]
@@ -105,7 +221,7 @@ def createKnownUsers(UAGS):
     global SECRET_PWD_KEY
     try:
         users=UAGS['users']
-        timestamp=UAGS['timestamp']
+        #timestamp=UAGS['timestamp']
         knownUsers={}
         index=0
         for userid in users:
@@ -159,14 +275,16 @@ def loadUsers():
 
 REACT_APP_DisableLogin=not(os.getenv('REACT_APP_EnableLogin')=='true')
 if (not REACT_APP_DisableLogin) :
-    users=loadUsers()
-    access=loadPvAccess()
+    # users=loadUsers()
+    # access=loadPvAccess()
+    
+    # UAGS['users']=users['users']
+    # UAGS['userGroups']=access['userGroups']
+    # UAGS['timestamp']=str(users['timestamp'])+str(access['timestamp'])
     UAGS={}
-    UAGS['users']=users['users']
-    UAGS['userGroups']=access['userGroups']
-    UAGS['timestamp']=str(users['timestamp'])+str(access['timestamp'])
-    knownUsers=createKnownUsers(UAGS)
     loadKnownDbUsers()
+    print("UAGS",UAGS)
+    knownUsers=createKnownUsers(UAGS)
 
     
 

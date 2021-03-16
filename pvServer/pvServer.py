@@ -1648,18 +1648,7 @@ def archiverRead(message):
 @socketio.on('adminAllUsers', namespace='/pvServer')
 def adminAllUsers(message):
     global clientPVlist,REACT_APP_DisableLogin,clientDbWatchList,myDbWatchUid
-    
-    # dbURL= str(message['dbURL'])
 
-    #print("databaseRead: SSID: ",request.sid,' dbURL: ', dbURL)
-    # print("message:",str(message))
-    # authenticated=False
-    # if REACT_APP_DisableLogin:
-    #     authenticated=True
-    #     accessControl={'userAuthorised':True,'permissions':{'read':True,'write':True}}
-    # else :
-    #     accessControl=AutheriseUserAndPermissions(message['clientAuthorisation'],"ADMIN_DATABASE")
-    #     authenticated=accessControl['userAuthorised']
     isAdmin=checkIfAdmin(message['clientAuthorisation'])
     if isAdmin :
         
@@ -1769,112 +1758,70 @@ def adminAllUsers(message):
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
         return "Ack: not authorised"
-                
+
+
+@socketio.on('adminAddUser', namespace='/pvServer')
+def adminAllUsers(message):
+    global clientPVlist,REACT_APP_DisableLogin,clientDbWatchList,myDbWatchUid
+
+    isAdmin=checkIfAdmin(message['clientAuthorisation'])
+    if isAdmin :
+        
+        try:
+            MONGO_ROOT_USERNAME = os.environ['MONGO_ROOT_USERNAME']
+            MONGO_ROOT_PASSWORD = os.environ['MONGO_ROOT_PASSWORD']
+            MONGO_ROOT_USERNAME = urllib.parse.quote_plus(
+                MONGO_ROOT_USERNAME)
+            MONGO_ROOT_PASSWORD = urllib.parse.quote_plus(
+                MONGO_ROOT_PASSWORD)
+            mongoAuth = True
+        except:
+            mongoAuth = False
+
+        try:
+            ADMIN_PW_SALT_ROUNDS = int(
+                os.environ['ADMIN_PW_SALT_ROUNDS'])
+        except:
+            ADMIN_PW_SALT_ROUNDS =12
+
+        MONGO_INITDB_ADMIN_DATABASE='rasAdminDb'
+        ADMIN_DATABASE=os.getenv('ADMIN_DATABASE')
+        ADMIN_DATABASE_REPLICA_SET_NAME=str(os.getenv('ADMIN_DATABASE_REPLICA_SET_NAME'))
+        if (ADMIN_DATABASE is None) :
+            print("Enviroment variable ADMIN_DATABASE is not defined, can't intialize: ",MONGO_INITDB_ADMIN_DATABASE)
+        else:
+            try:
+                if (mongoAuth):
+                    client = MongoClient('mongodb://%s:%s@%s' %(MONGO_ROOT_USERNAME, MONGO_ROOT_PASSWORD, ADMIN_DATABASE), replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
+                    # Wait for MongoClient to discover the whole replica set and identify MASTER!
+                    sleep(0.1)
+                else:
+                    client = MongoClient('mongodb://%s' % (ADMIN_DATABASE),replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
+                    # Wait for MongoClient to discover the whole replica set and identify MASTER!
+                    sleep(0.1)
+                dbnames = client.list_database_names()
+                if (MONGO_INITDB_ADMIN_DATABASE not in dbnames):
+                    print("Error cant connect to admin db",MONGO_INITDB_ADMIN_DATABASE)
+                else:
+                    print("connected to adminDb",MONGO_INITDB_ADMIN_DATABASE)
+
+                    mydb = client[MONGO_INITDB_ADMIN_DATABASE]
+                    mycol=mydb['users']
+                    user=message("user")
+                    if user['password']:
+                        user['password']=(bcrypt.hashpw(user['password'].encode('utf-8'), bcrypt.gensalt(ADMIN_PW_SALT_ROUNDS))).decode('utf-8')
+                        collection.insert_one(user)
+                    else:
+                        return "Ack invalid user"
+            except:
+                return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
+        
+    else:
+        socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
+        return "Ack: not authorised"    
 
 
 
-
-
-        # print("adminAllUsers authorised",)
-    #     if "mongodb://" in dbURL:
-
-    # #        print("mongodb database connection request: ",dbURL)
-    #         str1=dbURL.replace("mongodb://","")
-    #         strings=  str1.split(':')
-    #         try:
-    #             Parametersstr=str1.split("Parameters:")[1]
-    #             parameters=json.loads(Parametersstr)
-    #         except:
-    #             raise Exception("Parameters are not defined")
-
-    # #        print("Parameters:",str(parameters))
-    #         if(len(strings)>=3):
-    #             database= strings[0];
-    #             dbName=   strings[1];
-    #             colName=  strings[2];
-    # #            print("database: ", database, "length: ", len(database))
-    # #            print("dbName: "  ,   dbName, "length: ", len(dbName))
-    # #            print("colName: " ,  colName, "length: ", len(colName))
-    #             ### must insert a better error detection here
-
-    #             if ((len(database)>0) and (len(dbName)>0) and (len(colName)>0)):
-    #                 write_access=False
-    #                 if(accessControl['permissions']['read']):
-    #                     if(accessControl['permissions']['write']):
-    #                         join_room(str(dbURL)+'rw')
-    #                         write_access=True
-    #                         #join_room(str(dbURL))
-    #                     else:
-    #                         join_room(str(dbURL)+'ro')
-    #                         write_access=False
-    #                         #join_room(str(dbURL))
-    #                     try:
-    # #                        print("connecting: "+dbURL)
-    #                         try:
-    #                             databaseString="mongodb://"+ str(os.environ[database])+"/"
-    #                             replicaSetName=str(os.environ[database+"_REPLICA_SET_NAME"])
-    #                             myclient = pymongo.MongoClient(databaseString,replicaSet=replicaSetName)
-    #                             # Wait for MongoClient to discover the whole replica set and identify MASTER!
-    #                             time.sleep(0.1)
-    #                             #myclient.server_info()
-    #                         except pymongo.errors.ServerSelectionTimeoutError as err:
-    #                             log.error(err)
-    #                             return "Ack: Could not connect to MongoDB: "+str(dbURL)
-
-    #                         mydb = myclient[dbName]
-
-    #                         mycol=mydb[colName]
-                            
-                            
-
-    #                         # print('dbURL',dbURL)
-    #                         # print('query',query)
-    #                         # print('projection',projection)
-    #                         # print('sort',sort)
-    #                         # print('skip',skip)
-    #                         # print('limit',limit)
-    #                         # print('count',count)
-                            
-    #                         if(count):
-    #                             X=mycol.count_documents(query)
-    #                         else:
-    #                             X=mycol.find(query,projection).sort(sort).skip(skip).limit(limit)
-                            
-
-
-    #                         #for x in X:
-    #                             #print(x)
-    # #                        print("done: "+dbURL)
-
-
-    #                         data=dumps(X)
-
-
-    #                         eventName='databaseWatchData:'+dbURL;
-    # #                        print("eventName",eventName)
-
-    #                         d={'dbURL': dbURL,'write_access':write_access,'data': data}
-    #                         socketio.emit(eventName,d,room=str(request.sid),namespace='/pvServer')
-
-
-
-    #                         
-
-    #                     except:
-    #                       #  print("Could not connect to MongoDB: ",dbURL)
-    #                         return "Ack: Could not connect to MongoDB: "+str(dbURL)
-    #             else:
-    #                 log.error("Malformed database URL, must be in format: mongodb://databaseID:database:collection")
-    #         else:
-    #             log.error("Malformed database URL, must be in format: mongodb://databaseID:database:collection")
-
-
-
-
-
-    #     else:
-    #         log.error("Unknown URL schema ({})",dbURL)
-    
 
 
 @socketio.on('AuthenticateClient', namespace='/pvServer')

@@ -1662,7 +1662,7 @@ def adminAllUsers(message):
     #     authenticated=accessControl['userAuthorised']
     isAdmin=checkIfAdmin(message['clientAuthorisation'])
     if isAdmin :
-        join_room('adminAllUsers')
+        
         try:
             MONGO_ROOT_USERNAME = os.environ['MONGO_ROOT_USERNAME']
             MONGO_ROOT_PASSWORD = os.environ['MONGO_ROOT_PASSWORD']
@@ -1686,27 +1686,94 @@ def adminAllUsers(message):
         if (ADMIN_DATABASE is None) :
             print("Enviroment variable ADMIN_DATABASE is not defined, can't intialize: ",MONGO_INITDB_ADMIN_DATABASE)
         else:
-            if (mongoAuth):
-                client = MongoClient('mongodb://%s:%s@%s' %(MONGO_ROOT_USERNAME, MONGO_ROOT_PASSWORD, ADMIN_DATABASE), replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
-                # Wait for MongoClient to discover the whole replica set and identify MASTER!
-                sleep(0.1)
-            else:
-                client = MongoClient('mongodb://%s' % (ADMIN_DATABASE),replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
-                # Wait for MongoClient to discover the whole replica set and identify MASTER!
-                sleep(0.1)
-            dbnames = client.list_database_names()
-            if (MONGO_INITDB_ADMIN_DATABASE not in dbnames):
-                print("Error cant connect to admin db",MONGO_INITDB_ADMIN_DATABASE)
-            else:
-                print("connected to adminDb",MONGO_INITDB_ADMIN_DATABASE)
+            try:
+                if (mongoAuth):
+                    client = MongoClient('mongodb://%s:%s@%s' %(MONGO_ROOT_USERNAME, MONGO_ROOT_PASSWORD, ADMIN_DATABASE), replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
+                    # Wait for MongoClient to discover the whole replica set and identify MASTER!
+                    sleep(0.1)
+                else:
+                    client = MongoClient('mongodb://%s' % (ADMIN_DATABASE),replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
+                    # Wait for MongoClient to discover the whole replica set and identify MASTER!
+                    sleep(0.1)
+                dbnames = client.list_database_names()
+                if (MONGO_INITDB_ADMIN_DATABASE not in dbnames):
+                    print("Error cant connect to admin db",MONGO_INITDB_ADMIN_DATABASE)
+                else:
+                    print("connected to adminDb",MONGO_INITDB_ADMIN_DATABASE)
 
-                mydb = client[MONGO_INITDB_ADMIN_DATABASE]
-                mycol=mydb['users']
-                doc=mycol.find({},{"password":0})
-                data=dumps(doc)
-                eventName='databaseWatchData:'+'adminAllUsers'
-                d={'write_access':True,'data': data}
-                socketio.emit(eventName,d,room=str(request.sid),namespace='/pvServer')
+                    mydb = client[MONGO_INITDB_ADMIN_DATABASE]
+                    mycol=mydb['users']
+                    query={}
+                    projection={"password":0}
+                    skip=0
+                    limit=0
+                    count=False
+                    doc=mycol.find(query,projection)
+                    data=dumps(doc)
+                    eventName='databaseWatchData:'+'adminAllUsers'
+                    d={'write_access':True,'data': data}
+                    socketio.emit(eventName,d,room=str(request.sid),namespace='/pvServer')
+                    watchEventName=eventName
+                    myDbWatchUid=myDbWatchUid+1
+                    dbWatchId=str(myDbWatchUid)
+                    if not (watchEventName in	clientDbWatchList):
+                        dbWatch={}
+                        dbWatch['watchEventName']=watchEventName
+                        dbWatch['client']=myclient
+                        dbWatch['db']=mydb
+                        dbWatch['collection']=mycol
+                        dbWatch['watch']=mycol.watch()
+                        dbWatch['dbURL']=dbURL
+                        dbWatch['query']=query
+                        dbWatch['projection']=projection
+                        dbWatch['sort']=sort
+                        dbWatch['skip']=skip
+                        dbWatch['limit']=limit
+                        dbWatch['count']=count
+                        dbWatch['sockets']={
+                            str(request.sid):{
+                                "dbWatchIds":{
+                                    str(dbWatchId):True
+                                }
+                            }
+                        }
+                        dbWatch['thread']=None
+                        dbWatch['threadStarted']=False
+                        dbWatch['closeWatch']=False
+                        dbWatch['threadClosed']=False
+
+
+                        clientDbWatchList[watchEventName]=dbWatch
+                        join_room(str(watchEventName))
+                    else:
+
+                        if request.sid in clientDbWatchList[watchEventName]['sockets']:
+                            if 'dbWatchIds' in clientDbWatchList[watchEventName]['sockets'][request.sid]:
+                                if  dbWatchIds in clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']:
+                                    log.info("not a unique id {} {}",dbWatchIds,watchEventName)
+                    #               print("allConnectionIds ",clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds'])
+                                else:
+                                    clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds'][dbWatchIds]=True
+                            else:
+                                clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']={dbWatchIds:True}
+                        else:
+                            clientDbWatchList[watchEventName]['sockets'][request.sid]={'dbWatchIds':{dbWatchId:True}}
+
+                        join_room(str(watchEventName))
+                        #print("watch already exists: ",watchEventName)
+
+                    return {"dbWatchId":dbWatchId}
+            except:
+                return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
+        
+    else:
+        socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
+        return "Ack: not authorised"
+                
+
+
+
+
 
         # print("adminAllUsers authorised",)
     #     if "mongodb://" in dbURL:
@@ -1758,25 +1825,7 @@ def adminAllUsers(message):
 
     #                         mycol=mydb[colName]
                             
-    #                         query=parameters['query'] if ('query' in parameters) else None
-    #                         # Convert string ObjectId's to valid ObjectId objects
-    #                         if(query):
-    #                             if("_id" in query):
-    #                                 try:
-    #                                     for key,value in query["_id"].items():
-    #                                         query["_id"][key]=ObjectId(value)
-    #                                 except:
-    #                                     pass
-    #                         projection=parameters['projection'] if ('projection' in parameters) else None
-    #                         if('sort' in parameters):
-    #                             sort=[]
-    #                             for sortItem in parameters['sort']:
-    #                                 sort.append((sortItem[0],sortItem[1]))
-    #                         else:
-    #                             sort=[('$natural', 1)]
-    #                         skip=parameters['skip'] if ('skip' in parameters) else 0
-    #                         limit=parameters['limit'] if ('limit' in parameters) else 0
-    #                         count=parameters['count'] if ('count' in parameters) else False
+                            
 
     #                         # print('dbURL',dbURL)
     #                         # print('query',query)
@@ -1809,56 +1858,7 @@ def adminAllUsers(message):
 
 
 
-    #                         watchEventName=eventName
-    #                         myDbWatchUid=myDbWatchUid+1
-    #                         dbWatchId=str(myDbWatchUid)
-    #                         if not (watchEventName in	clientDbWatchList):
-    #                             dbWatch={}
-    #                             dbWatch['watchEventName']=watchEventName
-    #                             dbWatch['client']=myclient
-    #                             dbWatch['db']=mydb
-    #                             dbWatch['collection']=mycol
-    #                             dbWatch['watch']=mycol.watch()
-    #                             dbWatch['dbURL']=dbURL
-    #                             dbWatch['query']=query
-    #                             dbWatch['projection']=projection
-    #                             dbWatch['sort']=sort
-    #                             dbWatch['skip']=skip
-    #                             dbWatch['limit']=limit
-    #                             dbWatch['count']=count
-    #                             dbWatch['sockets']={
-    #                                 str(request.sid):{
-    #                                     "dbWatchIds":{
-    #                                         str(dbWatchId):True
-    #                                     }
-    #                                 }
-    #                             }
-    #                             dbWatch['thread']=None
-    #                             dbWatch['threadStarted']=False
-    #                             dbWatch['closeWatch']=False
-    #                             dbWatch['threadClosed']=False
-
-
-    #                             clientDbWatchList[watchEventName]=dbWatch
-    #                             join_room(str(watchEventName))
-    #                         else:
-
-    #                             if request.sid in clientDbWatchList[watchEventName]['sockets']:
-    #                                 if 'dbWatchIds' in clientDbWatchList[watchEventName]['sockets'][request.sid]:
-    #                                     if  dbWatchIds in clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']:
-    #                                         log.info("not a unique id {} {}",dbWatchIds,watchEventName)
-    #                         #               print("allConnectionIds ",clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds'])
-    #                                     else:
-    #                                         clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds'][dbWatchIds]=True
-    #                                 else:
-    #                                     clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']={dbWatchIds:True}
-    #                             else:
-    #                                 clientDbWatchList[watchEventName]['sockets'][request.sid]={'dbWatchIds':{dbWatchId:True}}
-
-    #                             join_room(str(watchEventName))
-    #                             #print("watch already exists: ",watchEventName)
-
-    #                         return {"dbWatchId":dbWatchId}
+    #                         
 
     #                     except:
     #                       #  print("Could not connect to MongoDB: ",dbURL)
@@ -1874,8 +1874,7 @@ def adminAllUsers(message):
 
     #     else:
     #         log.error("Unknown URL schema ({})",dbURL)
-    else:
-        socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
+    
 
 
 @socketio.on('AuthenticateClient', namespace='/pvServer')

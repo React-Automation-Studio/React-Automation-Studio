@@ -196,8 +196,8 @@ def ldapLogin():
                 jsonify({'login': False}), 401
         except Exception as e:
             print("Ldap login error",e)
-            print("username",LDAP_USER_DN)
-            print("password",LDAP_USER_PW)
+            # print("username",LDAP_USER_DN)
+            # print("password",LDAP_USER_PW)
             log.info("Ldap login failed: {} ",LDAP_USER_DN)
             jsonify({'login': False}), 401
             return jsonify({'login': False}), 401

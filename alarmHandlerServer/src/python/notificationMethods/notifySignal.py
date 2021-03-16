@@ -1,4 +1,5 @@
 import os
+import sys
 import requests
 import base64
 import imgkit
@@ -176,8 +177,11 @@ def notifySignal(timestamp, mobile, userNotifyDict):
         try:
             r = requests.post(SIGNAL_CLI_REST_ENDPOINT, json=data)
             dbSetFieldGlobal('signalPostBusy', False)
+            app_log.info(
+                "Signal rest API response: [" + str(r.status_code)+"] "+r.reason)
             return r.ok
         except:
+            app_log.info("Exception raised: " + str(sys.exc_info()[0]))
             print("Failed to send Signal message to",
                   mobile, ". Verify Signal settings.")
             app_log.info("Failed to send Signal message to " +

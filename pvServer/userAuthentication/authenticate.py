@@ -181,6 +181,8 @@ def loadKnownDbUsers():
             doc=mycol.find_one()
             #print("userGroups",doc['userGroups'])
             UAGS['userGroups']=doc['userGroups']
+            defaultAccess=loadDefaultAccess()
+            UAGS['userGroups']['PREVENT']=defaultAccess['userGroups']['PREVENT']
             threading.Thread(target=pvAccessDbWatchThread).start()
             threading.Thread(target=usersDbWatchThread).start()
 
@@ -261,6 +263,18 @@ def loadPvAccess():
         print("Error Cant load file pvAccess.json")
         return None
 
+def loadDefaultAccess():
+    try:
+        path='userAuthentication/defaultAccess.json'
+        timestamp=os.path.getmtime(path)
+        with open(path) as json_file:
+            data = json.load(json_file)
+            data['timestamp']=str(timestamp)
+            return data
+    except:
+        print("Error Cant load file defaultAccess.json")
+        return None
+
 def loadUsers():
     try:
         path='userAuthentication/users/users.json'
@@ -283,7 +297,7 @@ if (not REACT_APP_DisableLogin) :
     # UAGS['timestamp']=str(users['timestamp'])+str(access['timestamp'])
     UAGS={}
     loadKnownDbUsers()
-    print("UAGS",UAGS)
+    print("UAGS",json.dumps(UAGS, indent=4,))
     knownUsers=createKnownUsers(UAGS)
 
     

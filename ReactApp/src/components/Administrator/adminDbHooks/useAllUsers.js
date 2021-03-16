@@ -61,7 +61,7 @@ const useAllUsers = (props) => {
 
             if (props.dbURL) {
                 if (dbWatchId !== null) {
-                    socketRef.current.emit('remove_dbWatch', { dbURL: props.dbURL, dbWatchId: dbWatchId, 'clientAuthorisation': jwtRef.current });
+                    socketRef.current.emit('remove_dbWatch', { dbURL: 'adminAllUsers', dbWatchId: dbWatchId, 'clientAuthorisation': jwtRef.current });
                 }
                 socketRef.current.removeListener('databaseWatchData:databaseWatchData:adminAllUsers', handleAdminAllUsersReadWatchBroadcast);
                 socketRef.current.removeListener('connect', reconnect);

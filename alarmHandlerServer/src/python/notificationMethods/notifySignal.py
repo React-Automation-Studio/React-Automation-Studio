@@ -5,6 +5,7 @@ import imgkit
 from datetime import datetime
 from pytz import timezone
 
+from dbMongo import dbSetFieldGlobal
 from log import app_log
 
 try:
@@ -131,6 +132,7 @@ def notifySignal(timestamp, mobile, userNotifyDict):
     # This function must return True as an acknowledgedment to the notification
     # server that the notification method executed successfully
 
+    dbSetFieldGlobal('signalPostBusy', True)
     timestamp = datetime.fromisoformat(timestamp)
 
     app_log.info("###-SIGNAL NOTIFY-###")
@@ -173,16 +175,19 @@ def notifySignal(timestamp, mobile, userNotifyDict):
 
         try:
             r = requests.post(SIGNAL_CLI_REST_ENDPOINT, json=data)
+            dbSetFieldGlobal('signalPostBusy', False)
             return r.ok
         except:
             print("Failed to send Signal message to",
                   mobile, ". Verify Signal settings.")
             app_log.info("Failed to send Signal message to " +
                          mobile + ". Verify Signal settings.")
+            dbSetFieldGlobal('signalPostBusy', False)
             return False
     else:
         print("Failed to send Signal message to",
               mobile, ". Verify Signal settings.")
         app_log.info("Failed to send Signal message to " +
                      mobile + ". Verify Signal settings.")
+        dbSetFieldGlobal('signalPostBusy', False)
         return False

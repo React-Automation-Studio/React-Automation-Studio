@@ -1753,7 +1753,7 @@ def main():
             notifyContent = False
             sleep(1.0)
             if((not notifyContent) or (notifyTimeout >= 2)):
-                notify(notifyBuffer)
+                _thread.start_new_thread(notify, (notifyBuffer,))
                 notifyBuffer = {}
                 notifyTimeout = 0
 

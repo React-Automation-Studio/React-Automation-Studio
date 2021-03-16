@@ -9,7 +9,7 @@ from epics import PV
 from datetime import datetime
 from pytz import utc, timezone
 
-from dbMongo import dbFindOne, dbGetCollection, dbUpdateHistory
+from dbMongo import dbFindOne, dbGetCollection, dbUpdateHistory, dbGetFieldGlobal
 
 from notificationMethods.notifyEmail import notifyEmail
 from notificationMethods.notifySMS import notifySMS
@@ -318,6 +318,9 @@ def notify(notifyBuffer):
                     dbUpdateHistory(area, entry, pvname)
 
         if(notifySignalDict):
+            while(dbGetFieldGlobal('signalPostBusy')):
+                sleep(1.0)
+                app_log.info("Waiting for signalPostBusy...")
             if(notifySignal(timestamp, mobile, notifySignalDict)):
                 timestamp = datetime.now(utc).isoformat()
                 entry = {"timestamp": timestamp, "entry": " ".join(

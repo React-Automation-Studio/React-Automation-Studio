@@ -88,7 +88,8 @@ if (MONGO_INITDB_ALARM_DATABASE not in dbnames):
     collection.insert_many(
         [{
             "AHDBVer": 1.0,
-            "enableAllAreas": True
+            "enableAllAreas": True,
+            "signalPostBusy": False,
         }]
     )
     print(MONGO_INITDB_ALARM_DATABASE, "database instantiated successfully.")

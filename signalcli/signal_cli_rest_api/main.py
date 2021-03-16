@@ -16,7 +16,7 @@ except:
 
 def startUvicornThread():
     subprocess.call(
-        "uvicorn signal_cli_rest_api.app.main:app --host \"0.0.0.0\" --port "+SIGNAL_CLI_REST_API_PORT, shell=True)
+        "uvicorn signal_cli_rest_api.app.main:app --host \"127.0.0.1\" --port "+SIGNAL_CLI_REST_API_PORT, shell=True)
 
 
 class ChangeHandler(FileSystemEventHandler):

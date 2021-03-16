@@ -31,7 +31,7 @@ except:
 try:
     SIGNAL_ACC_NUMBER = os.environ['SIGNAL_ACC_NUMBER']
     SIGNAL_ACC_NUMBER = SIGNAL_ACC_NUMBER.replace('+', '%2B')
-    SIGNAL_CLI_REST_ENDPOINT = 'http://localhost:' + \
+    SIGNAL_CLI_REST_ENDPOINT = 'http://127.0.0.1:' + \
         SIGNAL_CLI_REST_API_PORT+'/messages/'+SIGNAL_ACC_NUMBER
     print(SIGNAL_CLI_REST_ENDPOINT)
     app_log.info(SIGNAL_CLI_REST_ENDPOINT)

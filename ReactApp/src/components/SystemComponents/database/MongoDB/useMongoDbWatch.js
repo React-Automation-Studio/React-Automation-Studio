@@ -9,6 +9,7 @@ const useMongoDbWatch = (props) => {
     const jwt = context.userTokens.accessToken;
     const jwtRef = useRef(jwt);
     const socketRef = useRef(socket);
+    const dbWatchIdRef=useRef(null)
     useEffect(() => {
         if (jwt === null) {
             jwtRef.current = 'unauthenticated'
@@ -25,7 +26,12 @@ const useMongoDbWatch = (props) => {
     const [dbWatchId, setDbWatchId] = useState(null);
     const [data, setData] = useState(null);
     const [writeAccess, setWriteAccess] = useState(false);
+
     const [initialized, setInitialized] = useState(false);
+
+    useEffect(()=>{
+        dbWatchIdRef.current=dbWatchId;
+    },[dbWatchId])
     useEffect(() => {
         const handleDatabaseReadWatchAndBroadcastAck = (msg) => {
 
@@ -63,8 +69,8 @@ const useMongoDbWatch = (props) => {
         return () => {
 
             if (props.dbURL) {
-                if (dbWatchId !== null) {
-                    socketRef.current.emit('remove_dbWatch', { dbURL: props.dbURL, dbWatchId: dbWatchId, 'clientAuthorisation': jwtRef.current });
+                if (dbWatchIdRef.current !== null) {
+                    socketRef.current.emit('remove_dbWatch', { dbURL: props.dbURL, dbWatchId: dbWatchIdRef.current, 'clientAuthorisation': jwtRef.current });
                 }
                 socketRef.current.removeListener('databaseWatchData:' + props.dbURL, handleNewDbLogReadWatchBroadcast);
                 socketRef.current.removeListener('connect', reconnect);

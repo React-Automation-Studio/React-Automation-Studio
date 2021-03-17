@@ -12,7 +12,7 @@ from flask_socketio import SocketIO, emit, join_room, leave_room, \
     close_room, rooms, disconnect
 from werkzeug.routing import BaseConverter
 from bson.json_util import dumps
-
+import bcrypt
 from epics import PV
 import os
 import sys
@@ -365,14 +365,22 @@ def dbWatchControlThread():
 
     #print("dbWatchControlThread started")
     while (True):
-
+       
+        print("clientDbWatchList",clientDbWatchList)
         for watchEventName in list(clientDbWatchList) :
-            #print("clientDbWatchList[watchEventName]['sockets']",clientDbWatchList[watchEventName]['sockets'])
+            # print(clientDbWatchList[watchEventName])
+            # print("######")
+            # print("watchEventName",watchEventName)
+            # print("sockets",clientDbWatchList[watchEventName]['sockets'])
+            # print("closeWatch",clientDbWatchList[watchEventName]['closeWatch'])
+            # print("threadClosed",clientDbWatchList[watchEventName]['threadClosed'])
+
+
             if clientDbWatchList[watchEventName]['threadStarted'] is False:
                 clientDbWatchList[watchEventName]['thread']=threading.Thread(target=dbWatchThread,args=[watchEventName]).start()
                 clientDbWatchList[watchEventName]['threadStarted']=True
                 clientDbWatchList[watchEventName]['closeWatch']=False
-                #print("control thread starting thread",watchEventName)
+                # print("control thread starting thread",watchEventName)
             if len(clientDbWatchList[watchEventName]['sockets'])==0:
 
                 if clientDbWatchList[watchEventName]['closeWatch']==False:
@@ -380,7 +388,7 @@ def dbWatchControlThread():
 
                     clientDbWatchList[watchEventName]['closeWatch']=True
                     #print("after client close")
-            if clientDbWatchList[watchEventName]['threadClosed'] is True:
+            if clientDbWatchList[watchEventName]['threadClosed'] == True:
                  #print("watch thread closed",watchEventName)
                  clientDbWatchList.pop(watchEventName)
                  #print("control thread eventname popped",watchEventName)
@@ -1705,7 +1713,9 @@ def adminAllUsers(message):
                     watchEventName=eventName
                     myDbWatchUid=myDbWatchUid+1
                     dbWatchId=str(myDbWatchUid)
+                    print(clientDbWatchList)
                     if not (watchEventName in	clientDbWatchList):
+                        print("not in")
                         dbWatch={}
                         dbWatch['watchEventName']=watchEventName
                         dbWatch['client']=myclient
@@ -1733,6 +1743,7 @@ def adminAllUsers(message):
 
 
                         clientDbWatchList[watchEventName]=dbWatch
+                        
                         join_room(str(watchEventName))
                     else:
 
@@ -1749,7 +1760,7 @@ def adminAllUsers(message):
                             clientDbWatchList[watchEventName]['sockets'][request.sid]={'dbWatchIds':{dbWatchId:True}}
 
                         join_room(str(watchEventName))
-                        #print("watch already exists: ",watchEventName)
+                        print("watch already exists: ",watchEventName)
 
                     return {"dbWatchId":dbWatchId}
             except:
@@ -1761,12 +1772,12 @@ def adminAllUsers(message):
 
 
 @socketio.on('adminAddUser', namespace='/pvServer')
-def adminAllUsers(message):
+def adminAddUser(message):
     global clientPVlist,REACT_APP_DisableLogin,clientDbWatchList,myDbWatchUid
-
+    print("message",message)
     isAdmin=checkIfAdmin(message['clientAuthorisation'])
     if isAdmin :
-        
+        print("isAdmin",isAdmin)
         try:
             MONGO_ROOT_USERNAME = os.environ['MONGO_ROOT_USERNAME']
             MONGO_ROOT_PASSWORD = os.environ['MONGO_ROOT_PASSWORD']
@@ -1807,13 +1818,14 @@ def adminAllUsers(message):
 
                     mydb = client[MONGO_INITDB_ADMIN_DATABASE]
                     mycol=mydb['users']
-                    user=message("user")
+                    user=message["user"]
+                    print("user",user)
                     if user['password']:
                         user['password']=(bcrypt.hashpw(user['password'].encode('utf-8'), bcrypt.gensalt(ADMIN_PW_SALT_ROUNDS))).decode('utf-8')
-                        collection.insert_one(user)
-                    else:
-                        return "Ack invalid user"
-            except:
+                    mycol.insert_one(user)
+                    return "OK"
+            except Exception as e:
+                print("admin add user error",e)
                 return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
         
     else:
@@ -1869,6 +1881,8 @@ def test_connect():
 
 @socketio.on('disconnect', namespace='/pvServer')
 def test_disconnect():
+    global clientDbWatchList
+    print("disconnected",request.sid)
     log.info('Client disconnected: {}',request.sid)
     for pvname1 in	clientPVlist:
         if "pva://" in pvname1:
@@ -1897,9 +1911,15 @@ def test_disconnect():
         else:
             log.info("Unknown PV type ({})", pvname1)
     try:
+        print(list(clientDbWatchList))
         for watchEventName in list(clientDbWatchList) :
-            clientDbWatchList[watchEventName]['sockets'].pop(str(request.id))
-    except:
+            socketId=str(request.sid)
+            print("socketId ",socketId,watchEventName)
+            if socketId in list(clientDbWatchList[watchEventName]['sockets']):
+                print("socketId found",socketId,watchEventName)
+                clientDbWatchList[watchEventName]['sockets'].pop(str(request.sid),None)
+    except Exception as e:
+        print("disconnect",e)
         pass
     disconnect(request.sid,namespace='/pvServer')
 

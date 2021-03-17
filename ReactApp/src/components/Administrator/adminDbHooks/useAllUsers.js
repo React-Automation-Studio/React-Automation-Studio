@@ -59,20 +59,20 @@ const useAllUsers = (props) => {
         socketRef.current.on('connect', reconnect);
         return () => {
 
-            if (props.dbURL) {
                 if (dbWatchId !== null) {
+                    console.log("removing watch",dbWatchId,"adminAllUsers")
                     socketRef.current.emit('remove_dbWatch', { dbURL: 'adminAllUsers', dbWatchId: dbWatchId, 'clientAuthorisation': jwtRef.current });
                 }
                 socketRef.current.removeListener('databaseWatchData:databaseWatchData:adminAllUsers', handleAdminAllUsersReadWatchBroadcast);
                 socketRef.current.removeListener('connect', reconnect);
                 socketRef.current.removeListener('disconnect', disconnect);
-            }
+          
 
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [props.dbURL])
+    }, [])
 
-    return ({ data: data, writeAccess: writeAccess, initialized: initialized, dbURl: props.dbURL })
+    return ({ data: data, writeAccess: writeAccess, initialized: initialized})
 }
 
 

@@ -18,7 +18,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 // import AllUsers from "./AllUsers"
-// import AddUsers from "./AddUsers"
+import AddUsers from "./AddUsers"
 import TraditionalLayout from '../UI/Layout/ComposedLayouts/TraditionalLayout';
 import AllUsers from './AllUsers';
 const systemName = 'testIOC';
@@ -42,7 +42,7 @@ const styles = theme => ({
 
 const Administrator =(props)=>{
   const [tabValue,setTabValue]=useState(0);
-  const tabs=['All Users','Access Control'];
+  const tabs=['All Users','Access Control','Add User'];
 
 
 
@@ -55,7 +55,7 @@ const Administrator =(props)=>{
 
     <TraditionalLayout
         title="Admin Page"
-        tabs={['All Users','Access Control']}
+        tabs={tabs}
         handleTabChange={(event,value)=>setTabValue(value)}
         tabValue={tabValue}
     >
@@ -63,6 +63,9 @@ const Administrator =(props)=>{
         {tabs[tabValue]==='All Users'&&<AllUsers/>
         
         }
+        {tabs[tabValue]==='Add User'&&<AddUsers/>
+        
+      }
       </React.Fragment>
 
        

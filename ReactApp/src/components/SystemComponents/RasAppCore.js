@@ -118,7 +118,11 @@ class RasAppCore extends Component {
       
       // localStorage.clear();
       
-      axios.get('/api/logout')
+      axios({
+        url:'/api/logout',
+        method:'GET',
+        timeout: 15000
+      })
         .then(response => {
           let system = this.state.system;
           let userData = {
@@ -144,7 +148,7 @@ class RasAppCore extends Component {
         .catch((error) => {
           // handle error
           console.log(error);
-          this.handleRedirectToLogIn()
+         // this.handleRedirectToLogIn()
         })
         .then(function () {
           // always executed

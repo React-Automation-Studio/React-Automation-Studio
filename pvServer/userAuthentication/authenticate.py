@@ -15,6 +15,7 @@ from bson.json_util import dumps
 global dbKnownUsers
 
 def usersDbWatchThread():
+    global UAGS, knownUsers
     try:
         MONGO_ROOT_USERNAME = os.environ['MONGO_ROOT_USERNAME']
         MONGO_ROOT_PASSWORD = os.environ['MONGO_ROOT_PASSWORD']
@@ -59,12 +60,19 @@ def usersDbWatchThread():
                     change = stream.try_next()
                     if change is not None:
                         try:
-                            doc=mycol.find({})
-                            print("users watch",list(doc))
+                            doc=mycol.find({},{"_id":0})
+                            users=list(doc)
+                        
+                            UAGS['users']=users
+                    
+                    
+                          
+                            knownUsers=createKnownUsers(UAGS)
+                            print("users watchknownUsers",knownUsers)
                         except:
                             log.error("Unexpected error: {}",sys.exc_info()[0])
                             raise
-                    print("watching users")
+                    
                     sleep(1)
 
    
@@ -72,6 +80,7 @@ def usersDbWatchThread():
 
 
 def pvAccessDbWatchThread():
+    global UAGS, knownUsers
     try:
         MONGO_ROOT_USERNAME = os.environ['MONGO_ROOT_USERNAME']
         MONGO_ROOT_PASSWORD = os.environ['MONGO_ROOT_PASSWORD']
@@ -117,11 +126,13 @@ def pvAccessDbWatchThread():
                     if change is not None:
                         try:
                             doc=mycol.find_one()
-                            print("pvAccess",doc['userGroups'])
+                            UAGS['userGroups']=doc['userGroups']
+                            defaultAccess=loadDefaultAccess()
+                            UAGS['userGroups']['PREVENT']=defaultAccess['userGroups']['PREVENT']
+                            knownUsers=createKnownUsers(UAGS)
                         except:
                             log.error("Unexpected error: {}",sys.exc_info()[0])
                             raise
-                    print("watching pvAccess")
                     sleep(1)
 
 
@@ -129,7 +140,7 @@ def pvAccessDbWatchThread():
 
 
 def loadKnownDbUsers():
-    global UAGS
+    global UAGS, knownUsers
     UAGS={}
     
     try:
@@ -183,6 +194,8 @@ def loadKnownDbUsers():
             UAGS['userGroups']=doc['userGroups']
             defaultAccess=loadDefaultAccess()
             UAGS['userGroups']['PREVENT']=defaultAccess['userGroups']['PREVENT']
+            knownUsers=createKnownUsers(UAGS)
+
             threading.Thread(target=pvAccessDbWatchThread).start()
             threading.Thread(target=usersDbWatchThread).start()
 
@@ -225,6 +238,7 @@ def createKnownUsers(UAGS):
         users=UAGS['users']
         #timestamp=UAGS['timestamp']
         knownUsers={}
+        
         index=0
         for userid in users:
             knownUsers["user "+str(index)]={'username':userid['username'],'password':userid['password']}
@@ -232,7 +246,8 @@ def createKnownUsers(UAGS):
         return knownUsers
     except Exception as e:
         print(e)
-        print("Error Cant load file USERS")
+        print("createKnownUser UAGS['users']",UAGS['users'])
+        print("createKnownUsers:Error Cant load file USERS")
         return None
 
 
@@ -298,7 +313,7 @@ if (not REACT_APP_DisableLogin) :
     UAGS={}
     loadKnownDbUsers()
     print("UAGS",json.dumps(UAGS, indent=4,))
-    knownUsers=createKnownUsers(UAGS)
+    
 
     
 

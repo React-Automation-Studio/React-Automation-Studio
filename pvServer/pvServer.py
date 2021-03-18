@@ -1049,9 +1049,6 @@ def remove_dbWatch(message):
 def databaseBroadcastRead(message):
     global clientPVlist,REACT_APP_DisableLogin,clientDbWatchList,myDbWatchUid
     dbURL= str(message['dbURL'])
-
-    #print("databaseRead: SSID: ",request.sid,' dbURL: ', dbURL)
-    #print("message:",str(message))
     authenticated=False
     if REACT_APP_DisableLogin:
         authenticated=True
@@ -1059,11 +1056,8 @@ def databaseBroadcastRead(message):
     else :
         accessControl=AutheriseUserAndPermissions(message['clientAuthorisation'],dbURL)
         authenticated=accessControl['userAuthorised']
-
     if accessControl['userAuthorised'] :
         if "mongodb://" in dbURL:
-
-    #        print("mongodb database connection request: ",dbURL)
             str1=dbURL.replace("mongodb://","")
             strings=  str1.split(':')
             try:
@@ -1071,15 +1065,11 @@ def databaseBroadcastRead(message):
                 parameters=json.loads(Parametersstr)
             except:
                 raise Exception("Parameters are not defined")
-
-    #        print("Parameters:",str(parameters))
             if(len(strings)>=3):
                 database= strings[0];
                 dbName=   strings[1];
                 colName=  strings[2];
-    #            print("database: ", database, "length: ", len(database))
-    #            print("dbName: "  ,   dbName, "length: ", len(dbName))
-    #            print("colName: " ,  colName, "length: ", len(colName))
+
                 ### must insert a better error detection here
 
                 if ((len(database)>0) and (len(dbName)>0) and (len(colName)>0)):
@@ -1088,13 +1078,10 @@ def databaseBroadcastRead(message):
                         if(accessControl['permissions']['write']):
                             join_room(str(dbURL)+'rw')
                             write_access=True
-                            #join_room(str(dbURL))
                         else:
                             join_room(str(dbURL)+'ro')
                             write_access=False
-                            #join_room(str(dbURL))
                         try:
-    #                        print("connecting: "+dbURL)
                             try:
                                 databaseString="mongodb://"+ str(os.environ[database])+"/"
                                 replicaSetName=str(os.environ[database+"_REPLICA_SET_NAME"])
@@ -1105,11 +1092,8 @@ def databaseBroadcastRead(message):
                             except pymongo.errors.ServerSelectionTimeoutError as err:
                                 log.error(err)
                                 return "Ack: Could not connect to MongoDB: "+str(dbURL)
-
                             mydb = myclient[dbName]
-
                             mycol=mydb[colName]
-                            
                             query=parameters['query'] if ('query' in parameters) else None
                             # Convert string ObjectId's to valid ObjectId objects
                             if(query):
@@ -1129,37 +1113,12 @@ def databaseBroadcastRead(message):
                             skip=parameters['skip'] if ('skip' in parameters) else 0
                             limit=parameters['limit'] if ('limit' in parameters) else 0
                             count=parameters['count'] if ('count' in parameters) else False
-
-                            # print('dbURL',dbURL)
-                            # print('query',query)
-                            # print('projection',projection)
-                            # print('sort',sort)
-                            # print('skip',skip)
-                            # print('limit',limit)
-                            # print('count',count)
-                            
                             if(count):
                                 X=mycol.count_documents(query)
                             else:
                                 X=mycol.find(query,projection).sort(sort).skip(skip).limit(limit)
-                            
-
-
-                            #for x in X:
-                                #print(x)
-    #                        print("done: "+dbURL)
-
-
                             data=dumps(X)
-
-
                             eventName='databaseWatchData:'+dbURL;
-    #                        print("eventName",eventName)
-
-                          
-
-
-
                             watchEventName=eventName
                             myDbWatchUid=dbURL= str(message['dbWatchId']+str(request.sid))
                             dbWatchId=str(myDbWatchUid)
@@ -1190,8 +1149,6 @@ def databaseBroadcastRead(message):
                                 dbWatch['threadStarted']=False
                                 dbWatch['closeWatch']=False
                                 dbWatch['threadClosed']=False
-
-
                                 clientDbWatchList[watchEventName]=dbWatch
                                 join_room(str(watchEventName))
                             else:
@@ -1200,7 +1157,6 @@ def databaseBroadcastRead(message):
                                     if 'dbWatchIds' in clientDbWatchList[watchEventName]['sockets'][request.sid]:
                                         if  dbWatchIds in clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']:
                                             log.info("not a unique id {} {}",dbWatchIds,watchEventName)
-                            #               print("allConnectionIds ",clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds'])
                                         else:
                                             clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds'][dbWatchIds]=True
                                     else:
@@ -1209,35 +1165,22 @@ def databaseBroadcastRead(message):
                                     clientDbWatchList[watchEventName]['sockets'][request.sid]={'dbWatchIds':{dbWatchId:True}}
 
                                 join_room(str(watchEventName))
-                                #print("watch already exists: ",watchEventName)
-
                             return {"dbWatchId":dbWatchId}
-
                         except:
-                          #  print("Could not connect to MongoDB: ",dbURL)
                             return "Ack: Could not connect to MongoDB: "+str(dbURL)
                 else:
                     log.error("Malformed database URL, must be in format: mongodb://databaseID:database:collection")
             else:
                 log.error("Malformed database URL, must be in format: mongodb://databaseID:database:collection")
-
-
-
-
-
         else:
             log.error("Unknown URL schema ({})",dbURL)
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
 
-
 @socketio.on('databaseUpdateOne', namespace='/pvServer')
 def databaseUpdateOne(message):
     global clientPVlist,REACT_APP_DisableLogin
     dbURL= str(message['dbURL'])
-
-#    print("databaseUpdate: SSID: ",request.sid,' dbURL: ', dbURL)
-#    print("message:",str(message))
     authenticated=False
     if REACT_APP_DisableLogin:
         authenticated=True

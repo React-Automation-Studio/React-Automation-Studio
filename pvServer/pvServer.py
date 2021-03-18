@@ -366,8 +366,10 @@ def dbWatchControlThread():
     #print("dbWatchControlThread started")
     while (True):
        
-        print("clientDbWatchList",clientDbWatchList)
-        for watchEventName in list(clientDbWatchList) :
+        # print("clientDbWatchList",clientDbWatchList)
+        watchList=list(clientDbWatchList)
+        print("clientDbWatchList Lenghth",len(watchList))
+        for watchEventName in watchList:
             # print(clientDbWatchList[watchEventName])
             # print("######")
             # print("watchEventName",watchEventName)
@@ -988,7 +990,7 @@ def databaseBroadcastRead(message):
 
 
 @socketio.on('remove_dbWatch', namespace='/pvServer')
-def test_message(message):
+def remove_dbWatch(message):
     global clientPVlist,REACT_APP_DisableLogin, myuid
     dbURL= str(message['dbURL'])
     authenticated=False
@@ -1000,15 +1002,18 @@ def test_message(message):
         authenticated=accessControl['userAuthorised']
 
     if accessControl['userAuthorised'] :
-
+        dbWatchId=str(message['dbWatchId'])+str(request.sid)
         watchEventName='databaseWatchData:'+dbURL;
-        if watchEventName in	clientDbWatchList:
+       
+        def removeWatch():
             log.info("remove {}",watchEventName)
             #print(message)
-            dbWatchId=message['dbWatchId']
+            
+            print("remove dbWatchId",dbWatchId,watchEventName)
             try:
                 #print("before pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
                 if dbWatchId in clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']:
+                    print("found")
                     log.debug("debug1: {} {}",dbWatchId,watchEventName)
             #         #print("before pop",clientDbWatchList[watchEventName]['sockets'][request.sid]['pvConnectionIds'])
                     clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds'].pop(str(dbWatchId))
@@ -1019,14 +1024,20 @@ def test_message(message):
                         clientDbWatchList[watchEventName]['sockets'].pop(request.sid)
                     log.debug("debug4: {} {}",dbWatchId,watchEventName)
              #       print("after pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
+                else:
+                    print("not found")
             except:
                 log.info("Could not remove watchID")
                 pass
+        if watchEventName in	clientDbWatchList:
+            removeWatch()
+        else:
+            time.sleep(1)
+            removeWatch()
+        
 
 
 
-        #else:
-        #    print("Error watchEventName not in clientDbWatchList: ",watchEventName)
 
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
@@ -1145,14 +1156,15 @@ def databaseBroadcastRead(message):
                             eventName='databaseWatchData:'+dbURL;
     #                        print("eventName",eventName)
 
-                            d={'dbURL': dbURL,'write_access':write_access,'data': data}
-                            socketio.emit(eventName,d,room=str(request.sid),namespace='/pvServer')
+                          
 
 
 
                             watchEventName=eventName
-                            myDbWatchUid=myDbWatchUid+1
+                            myDbWatchUid=dbURL= str(message['dbWatchId']+str(request.sid))
                             dbWatchId=str(myDbWatchUid)
+                            d={'dbURL': dbURL,'write_access':write_access,'data': data}
+                            socketio.emit(eventName,d,room=str(request.sid),namespace='/pvServer')
                             if not (watchEventName in	clientDbWatchList):
                                 dbWatch={}
                                 dbWatch['watchEventName']=watchEventName

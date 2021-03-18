@@ -167,6 +167,7 @@ def localLogin():
         user = request.json.get('user', None)
         userData=LocalAuthenticateUser(user)
         resp=createLoginReponse(userData)
+        print(resp)
         return resp
     else:
        log.info("Standard login not allowed: {} ",user['username'])
@@ -1657,6 +1658,7 @@ def adminAllUsers(message):
                     mycol=mydb['users']
                     query={}
                     projection={"password":0}
+                    sort=[('$natural', 1)]
                     skip=0
                     limit=0
                     count=False
@@ -1666,18 +1668,20 @@ def adminAllUsers(message):
                     d={'write_access':True,'data': data}
                     socketio.emit(eventName,d,room=str(request.sid),namespace='/pvServer')
                     watchEventName=eventName
-                    myDbWatchUid=myDbWatchUid+1
+                    myDbWatchUid= str(message['dbWatchId']+str(request.sid))
                     dbWatchId=str(myDbWatchUid)
                     print(clientDbWatchList)
                     if not (watchEventName in	clientDbWatchList):
-                        print("not in")
+                        print("not in 1")
                         dbWatch={}
                         dbWatch['watchEventName']=watchEventName
-                        dbWatch['client']=myclient
+                        dbWatch['client']=client
                         dbWatch['db']=mydb
                         dbWatch['collection']=mycol
+                       
                         dbWatch['watch']=mycol.watch()
-                        dbWatch['dbURL']=dbURL
+                   
+                        dbWatch['dbURL']=watchEventName
                         dbWatch['query']=query
                         dbWatch['projection']=projection
                         dbWatch['sort']=sort
@@ -1698,8 +1702,9 @@ def adminAllUsers(message):
 
 
                         clientDbWatchList[watchEventName]=dbWatch
-                        
+                        print("adminallusers clientDbWatchList",clientDbWatchList)
                         join_room(str(watchEventName))
+                        join_room(str(watchEventName)+'rw')
                     else:
 
                         if request.sid in clientDbWatchList[watchEventName]['sockets']:
@@ -1715,10 +1720,12 @@ def adminAllUsers(message):
                             clientDbWatchList[watchEventName]['sockets'][request.sid]={'dbWatchIds':{dbWatchId:True}}
 
                         join_room(str(watchEventName))
+                        join_room(str(watchEventName)+'rw')
                         print("watch already exists: ",watchEventName)
 
                     return {"dbWatchId":dbWatchId}
-            except:
+            except Exception as e:
+                print("adminallusers",e)
                 return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
         
     else:
@@ -1774,10 +1781,13 @@ def adminAddUser(message):
                     mydb = client[MONGO_INITDB_ADMIN_DATABASE]
                     mycol=mydb['users']
                     user=message["user"]
-                    print("user",user)
-                    if user['password']:
-                        user['password']=(bcrypt.hashpw(user['password'].encode('utf-8'), bcrypt.gensalt(ADMIN_PW_SALT_ROUNDS))).decode('utf-8')
-                    mycol.insert_one(user)
+                    existingUser=mycol.find_one({'username':user['username']})
+                    if existingUser:
+                        return "Error: Username Exists"
+                    else:
+                        if user['password']:
+                            user['password']=(bcrypt.hashpw(user['password'].encode('utf-8'), bcrypt.gensalt(ADMIN_PW_SALT_ROUNDS))).decode('utf-8')
+                        mycol.insert_one(user)
                     return "OK"
             except Exception as e:
                 print("admin add user error",e)

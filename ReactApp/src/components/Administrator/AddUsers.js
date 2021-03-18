@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 
@@ -39,7 +39,7 @@ const AddUsers = (props) => {
 
   const [username, setUsername] = useState("");
   ;
-  const usernameHelperText = "Enter a username";
+  
   const [usernameError, setUsernameError] = useState(false);
   const [password, setPassword] = useState("");
   const [requirePassword, setRequirePassword] = useState(!(process.env.REACT_APP_DisableStandardLogin === 'true'))
@@ -50,9 +50,38 @@ const AddUsers = (props) => {
   const [familyName, setFamilyName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [officeLocation, setOfficeLocation] = useState("");
-  const [submit,setSubmit]=useState(false);
- const handleSubmit=useAddUSer({});
+  const [submit, setSubmit] = useState(false);
 
+  const {duplicateUser,userAdded} = useAddUSer({
+    submit: submit,
+    user: {
+      username: username,
+      password: requirePassword ? password : "",
+      email: email,
+      givenName: givenName,
+      familyName: familyName,
+      phoneNumber: phoneNumber,
+      officeLocation: officeLocation,
+    }
+  });
+  const usernameHelperText =duplicateUser?"Error: Username Exists": "Enter a username";
+  useEffect(() => {
+    if (submit) {
+
+      setSubmit(false)
+    }
+  }, [submit])
+
+  useEffect(()=>{
+    if (duplicateUser){
+      setUsernameError(true)
+      console.log("error duplicate user")
+    }
+    else{
+      setUsernameError(false)
+    }
+  
+  },[duplicateUser])
   const classes = useStyles();
 
   let passwordError;
@@ -221,32 +250,22 @@ const AddUsers = (props) => {
                 </Grid>
                 <Grid item xs={12}  >
                   <Button variant="contained" color="primary" disabled={addUserDisable}
-                  onClick={()=>handleSubmit({submit:true,
-                                        user:{
-                                          username:username,
-                                          password:requirePassword?password:"",
-                                          email:email,
-                                          givenName:givenName,
-                                          familyName:familyName,
-                                          phoneNumber:phoneNumber,
-                                          officeLocation:officeLocation,
-  
-                                        }})}
+                    onClick={() =>setSubmit(true)}
                   >
                     Add User
                     </Button>
-                </Grid>
+              </Grid>
               </Grid>
 
             </Card>
 
-          </Grid>
+        </Grid>
         </Grid>
 
 
 
       </div>
-    </React.Fragment>
+    </React.Fragment >
 
 
 

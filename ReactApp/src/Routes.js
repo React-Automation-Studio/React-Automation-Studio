@@ -38,7 +38,7 @@ const Routes = (props) => {
         {/*system start*/}
         <ProtectedRoute exact path="/" component={MainDashboard} />
         <ProtectedRoute exact path="/MainDashboard" component={MainDashboard} />
-        <ProtectedRoute exact path="/Administrator" component={Administrator} />
+        <ProtectedRoute exact path="/Administrator" component={Administrator} roles={['admin']} />
         <ProtectedRoute path="/UserProfile" component={UserProfile} />
         {process.env.REACT_APP_EnableLogin === 'true' &&
           <Route

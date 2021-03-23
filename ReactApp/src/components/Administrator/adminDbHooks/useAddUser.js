@@ -50,6 +50,7 @@ const useAddUSer = (props) => {
     },[submit])
     useEffect(()=>{
       setDuplicateUser(false)
+      setUserAdded(false)
     },[username])
      
     

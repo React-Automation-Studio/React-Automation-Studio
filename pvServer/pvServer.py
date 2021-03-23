@@ -1736,10 +1736,10 @@ def adminAllUsers(message):
 @socketio.on('adminAddUser', namespace='/pvServer')
 def adminAddUser(message):
     global clientPVlist,REACT_APP_DisableLogin,clientDbWatchList,myDbWatchUid
-    print("message",message)
+    # print("message",message)
     isAdmin=checkIfAdmin(message['clientAuthorisation'])
     if isAdmin :
-        print("isAdmin",isAdmin)
+        # print("isAdmin",isAdmin)
         try:
             MONGO_ROOT_USERNAME = os.environ['MONGO_ROOT_USERNAME']
             MONGO_ROOT_PASSWORD = os.environ['MONGO_ROOT_PASSWORD']
@@ -1796,6 +1796,133 @@ def adminAddUser(message):
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
         return "Ack: not authorised"    
+
+
+
+@socketio.on('adminDeleteUser', namespace='/pvServer')
+def adminAddUser(message):
+    global clientPVlist,REACT_APP_DisableLogin,clientDbWatchList,myDbWatchUid
+    # print("message",message)
+    isAdmin=checkIfAdmin(message['clientAuthorisation'])
+    if isAdmin :
+        # print("isAdmin",isAdmin)
+        try:
+            MONGO_ROOT_USERNAME = os.environ['MONGO_ROOT_USERNAME']
+            MONGO_ROOT_PASSWORD = os.environ['MONGO_ROOT_PASSWORD']
+            MONGO_ROOT_USERNAME = urllib.parse.quote_plus(
+                MONGO_ROOT_USERNAME)
+            MONGO_ROOT_PASSWORD = urllib.parse.quote_plus(
+                MONGO_ROOT_PASSWORD)
+            mongoAuth = True
+        except:
+            mongoAuth = False
+
+        try:
+            ADMIN_PW_SALT_ROUNDS = int(
+                os.environ['ADMIN_PW_SALT_ROUNDS'])
+        except:
+            ADMIN_PW_SALT_ROUNDS =12
+
+        MONGO_INITDB_ADMIN_DATABASE='rasAdminDb'
+        ADMIN_DATABASE=os.getenv('ADMIN_DATABASE')
+        ADMIN_DATABASE_REPLICA_SET_NAME=str(os.getenv('ADMIN_DATABASE_REPLICA_SET_NAME'))
+        if (ADMIN_DATABASE is None) :
+            print("Enviroment variable ADMIN_DATABASE is not defined, can't intialize: ",MONGO_INITDB_ADMIN_DATABASE)
+        else:
+            try:
+                if (mongoAuth):
+                    client = MongoClient('mongodb://%s:%s@%s' %(MONGO_ROOT_USERNAME, MONGO_ROOT_PASSWORD, ADMIN_DATABASE), replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
+                    # Wait for MongoClient to discover the whole replica set and identify MASTER!
+                    sleep(0.1)
+                else:
+                    client = MongoClient('mongodb://%s' % (ADMIN_DATABASE),replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
+                    # Wait for MongoClient to discover the whole replica set and identify MASTER!
+                    sleep(0.1)
+                dbnames = client.list_database_names()
+                if (MONGO_INITDB_ADMIN_DATABASE not in dbnames):
+                    print("Error cant connect to admin db",MONGO_INITDB_ADMIN_DATABASE)
+                else:
+                    print("connected to adminDb",MONGO_INITDB_ADMIN_DATABASE)
+
+                    mydb = client[MONGO_INITDB_ADMIN_DATABASE]
+                    mycol=mydb['users']
+                    
+                    try:
+                        id=message['id']
+                        mycol.delete_one({'_id':ObjectId(str(id))})
+
+                    except Exception as e:
+                        log.info(e)
+                        return 'Error:could not delete the user'
+
+                    return 'OK'
+            except Exception as e:
+                print("admin add user error",e)
+                return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
+        
+    else:
+        socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
+        return "Ack: not authorised"    
+
+@socketio.on('adminEnableUser', namespace='/pvServer')
+def adminAddUser(message):
+    global clientPVlist,REACT_APP_DisableLogin,clientDbWatchList,myDbWatchUid
+    # print("message",message)
+    isAdmin=checkIfAdmin(message['clientAuthorisation'])
+    if isAdmin :
+        # print("isAdmin",isAdmin)
+        try:
+            MONGO_ROOT_USERNAME = os.environ['MONGO_ROOT_USERNAME']
+            MONGO_ROOT_PASSWORD = os.environ['MONGO_ROOT_PASSWORD']
+            MONGO_ROOT_USERNAME = urllib.parse.quote_plus(
+                MONGO_ROOT_USERNAME)
+            MONGO_ROOT_PASSWORD = urllib.parse.quote_plus(
+                MONGO_ROOT_PASSWORD)
+            mongoAuth = True
+        except:
+            mongoAuth = False
+
+       
+
+        MONGO_INITDB_ADMIN_DATABASE='rasAdminDb'
+        ADMIN_DATABASE=os.getenv('ADMIN_DATABASE')
+        ADMIN_DATABASE_REPLICA_SET_NAME=str(os.getenv('ADMIN_DATABASE_REPLICA_SET_NAME'))
+        if (ADMIN_DATABASE is None) :
+            print("Enviroment variable ADMIN_DATABASE is not defined, can't intialize: ",MONGO_INITDB_ADMIN_DATABASE)
+        else:
+            try:
+                if (mongoAuth):
+                    client = MongoClient('mongodb://%s:%s@%s' %(MONGO_ROOT_USERNAME, MONGO_ROOT_PASSWORD, ADMIN_DATABASE), replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
+                    # Wait for MongoClient to discover the whole replica set and identify MASTER!
+                    sleep(0.1)
+                else:
+                    client = MongoClient('mongodb://%s' % (ADMIN_DATABASE),replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
+                    # Wait for MongoClient to discover the whole replica set and identify MASTER!
+                    sleep(0.1)
+                dbnames = client.list_database_names()
+                if (MONGO_INITDB_ADMIN_DATABASE not in dbnames):
+                    print("Error cant connect to admin db",MONGO_INITDB_ADMIN_DATABASE)
+                else:
+                    print("connected to adminDb",MONGO_INITDB_ADMIN_DATABASE)
+
+                    mydb = client[MONGO_INITDB_ADMIN_DATABASE]
+                    mycol=mydb['users']
+                    id=message['id']
+                    enabled=message['enabled']
+                    print(message)
+                    try:
+                        mycol.update_one({'_id':ObjectId(str(id))}, { "$set": { "enabled": enabled}})
+                    except Exception as e:
+                        log.info(e)
+                        return("error: can't update user ")
+                    return 'OK'
+            except Exception as e:
+                print("admin enable user error",e)
+                return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
+        
+    else:
+        socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
+        return "Ack: not authorised"
 
 
 

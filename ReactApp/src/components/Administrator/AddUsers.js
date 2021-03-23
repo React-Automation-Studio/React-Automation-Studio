@@ -17,6 +17,10 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import useAddUSer from './adminDbHooks/useAddUser';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import ErrorIcon from '@material-ui/icons/Error';
+
+
 const systemName = 'testIOC';
 
 
@@ -248,13 +252,30 @@ const AddUsers = (props) => {
                     fullWidth
                   />
                 </Grid>
-                <Grid item xs={12}  >
+                <Grid item xs={6}  >
                   <Button variant="contained" color="primary" disabled={addUserDisable}
                     onClick={() =>setSubmit(true)}
                   >
                     Add User
                     </Button>
               </Grid>
+              <Grid item xs={6}  >
+                 {userAdded&&<CheckCircleIcon
+                  fontSize="large"
+                  color="primary"
+                  style={{
+                   // color: theme.palette.error.main,
+                    verticalAlign: "middle",
+                  }}
+                 />}
+                 {usernameError&&<ErrorIcon   color="error" fontSize="large"
+                 style={{
+                  // color: theme.palette.error.main,
+                   verticalAlign: "middle",
+                 }}
+                 />}
+              </Grid>
+
               </Grid>
 
             </Card>

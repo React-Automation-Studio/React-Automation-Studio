@@ -27,6 +27,7 @@ from authenticate import  AuthoriseUser,AutheriseUserAndPermissions,checkIfAdmin
 from dotenv import load_dotenv
 import ldap
 from time import sleep
+from datetime import datetime
 
 
 from flask_cors import CORS
@@ -1785,6 +1786,10 @@ def adminAddUser(message):
                     if existingUser:
                         return "Error: Username Exists"
                     else:
+                        user['enabled']=True
+                        now = datetime.now()
+                        timestamp = datetime.timestamp(now)
+                        user['pwTimestamp']=timestamp
                         if user['password']:
                             user['password']=(bcrypt.hashpw(user['password'].encode('utf-8'), bcrypt.gensalt(ADMIN_PW_SALT_ROUNDS))).decode('utf-8')
                         mycol.insert_one(user)

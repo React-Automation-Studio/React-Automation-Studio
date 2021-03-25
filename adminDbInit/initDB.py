@@ -4,7 +4,7 @@ import os
 import json
 from time import sleep
 import bcrypt
-
+from datetime import datetime
 try:
     MONGO_ROOT_USERNAME = os.environ['MONGO_ROOT_USERNAME']
     MONGO_ROOT_PASSWORD = os.environ['MONGO_ROOT_PASSWORD']
@@ -52,6 +52,10 @@ else:
         users=userdata['users']
         print("users",users)
         for user in users:
+            user['enabled']=True
+            now = datetime.now()
+            timestamp = datetime.timestamp(now)
+            user['pwTimestamp']=timestamp
             if user['password']:
                 user['password']=(bcrypt.hashpw(user['password'].encode('utf-8'), bcrypt.gensalt(ADMIN_PW_SALT_ROUNDS))).decode('utf-8')
             collection.insert_one(user)

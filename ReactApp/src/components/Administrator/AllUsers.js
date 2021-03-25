@@ -19,9 +19,19 @@ import IconButton from '@material-ui/core/IconButton';
 import Checkbox from '@material-ui/core/Checkbox';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Button from '@material-ui/core/Button';
+import Slide from '@material-ui/core/Slide';
 import useDeleteUser from './adminDbHooks/useDeleteUser';
 import useEnableUser from './adminDbHooks/useEnableUser';
-const systemName = 'testIOC';
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 
 
@@ -50,11 +60,41 @@ const AllUsers = (props) => {
   const { data: users, writeAccess: usersWriteAccess, initialized: usersInitialized } = allUsers;
   const {deleteUser,deleteUserError} =useDeleteUser({});
   const {enableUser,enableUserError} =useEnableUser({});
+  const [currentUserId,setCurrentUserId]=useState(null);
+  const [currentUser,setCurrentUser]=useState(null);
+  const [showDeleteUserDialog,setShowDeleteUserDialog]=useState(false);
   console.log(users, usersWriteAccess, usersInitialized)
 
   return (
     <React.Fragment>
+      <Dialog
+        open={showDeleteUserDialog}
+        TransitionComponent={Transition}
+        keepMounted
+        aria-labelledby="alert-Login-title2"
+        aria-describedby="alert-Login-slide-description2"
+      >
+        <DialogTitle id="alert-Login-title2">
+          {"Caution!"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-Login-slide-description2">
+           {"Are you sure you want to delete the user: "+currentUser+" ?"}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() =>{ 
+            deleteUser(currentUserId)
+            setShowDeleteUserDialog(false)}}
 
+            color="primary">
+            Yes
+          </Button>
+          <Button onClick={() => setShowDeleteUserDialog(false)} color="primary">
+            No
+          </Button>
+        </DialogActions>
+      </Dialog>
       <div style={{ "overflowX": "hidden", 'overflowY': 'hidden' }}>
         <Grid
           style={{ marginTop: 0, padding: 8 }}
@@ -89,8 +129,16 @@ const AllUsers = (props) => {
                 </TableHead>
                 <TableBody>
                   {usersInitialized && <React.Fragment>
-                    {users.map((user, index) => (
-                      <TableRow key={index.toString()}>
+                    {users.map((user, index) => {
+                      let date;
+                      if (user.pwTimestamp){
+                      date = (new Date(user.pwTimestamp * 1000)).toLocaleString();
+                      }
+                      else{
+                        date=""
+                      }
+                      return(
+                     <TableRow key={index.toString()}>
                         <TableCell align="center">{index + 1}</TableCell>
                         <TableCell align="center">{user.username}</TableCell>
                         <TableCell align="center">
@@ -101,14 +149,14 @@ const AllUsers = (props) => {
                         <TableCell align="center">{user.familyName ? user.familyName : ""}</TableCell>
                         <TableCell align="center">{user.phoneNumber ? user.phoneNumber : ""}</TableCell>
                         <TableCell align="center">{user.officeLocation ? user.phoneLocation : ""}</TableCell>
-                        <TableCell align="center">{user.pwTimestamp ? user.pwTimeStamp : ""}</TableCell>
+                        <TableCell align="center">{date}</TableCell>
 
                         <TableCell align="center">
                         <Checkbox
                            checked={user.enabled?user.enabled:false}
 
                     onChange={(event)=>enableUser({id:user['_id']['$oid'],enabled:event.target.checked})}
-       
+                  
        
       />
                         </TableCell>
@@ -117,16 +165,20 @@ const AllUsers = (props) => {
                             <EditIcon />
                           </IconButton>
                           <IconButton aria-label="delete" onClick={()=>{
-                           
-                            deleteUser({id:user['_id']['$oid']})}}>
-                            <DeleteIcon/>
+                            setCurrentUser(user.username)
+                            setCurrentUserId({id:user['_id']['$oid']})
+                            setShowDeleteUserDialog(true)}}>
+                          <DeleteIcon/>
                           </IconButton>
 
                         </TableCell>
                         {/* <TableCell align="center">{this.getDateTime(user.timestamp)}</TableCell> */}
                       </TableRow>
+                    //  )
+                    // }
+                    )}
                     )
-                    )
+                    
                     }
                   </React.Fragment>}
                 </TableBody>

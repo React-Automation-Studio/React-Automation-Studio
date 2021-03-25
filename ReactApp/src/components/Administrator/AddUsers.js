@@ -110,9 +110,11 @@ const AddUsers = (props) => {
   let addUserDisable = ((username.length > 0) && (requirePassword == false || (confirmPasswordError == false) && (passwordError == false))) ? false : true;
   console.log(requirePassword)
   return (
-    <React.Fragment>
-
+    <form autoComplete="off">
+    
+     
       <div style={{ "overflowX": "hidden", 'overflowY': 'hidden' }}>
+    
         <Grid
           style={{ marginTop: 8, padding: 8 }}
           container
@@ -137,9 +139,11 @@ const AddUsers = (props) => {
               >
                 <Grid item xs={12}  >
                   <TextField
+                    id="field1"
                     inputProps={{
-                      autoComplete: 'off'
+                      autoComplete: "off",
                     }}
+                  
                     required
                     label="Username"
                     onChange={(event) => setUsername(event.target.value)}
@@ -167,9 +171,7 @@ const AddUsers = (props) => {
                 {requirePassword && <React.Fragment>
                   <Grid item xs={12}  >
                     <TextField
-                      inputProps={{
-                        autoComplete: 'off'
-                      }}
+                     
                       required
                       type="password"
                       label="Password"
@@ -178,13 +180,14 @@ const AddUsers = (props) => {
                       fullWidth
                       helperText={passwordHelperText}
                       error={passwordError}
+                      inputProps={{
+                        autoComplete: "off",
+                      }}
+                      autoComplete="new-password"
                     />
                   </Grid>
                   <Grid item xs={12}  >
                     <TextField
-                      inputProps={{
-                        autoComplete: 'off'
-                      }}
                       required
                       type="password"
                       label="Confirm Password"
@@ -193,6 +196,7 @@ const AddUsers = (props) => {
                       error={confirmPasswordError}
                       variant="outlined"
                       fullWidth
+                      autoComplete="off"
                     />
                   </Grid>
                 </React.Fragment>}
@@ -286,7 +290,7 @@ const AddUsers = (props) => {
 
 
       </div>
-    </React.Fragment >
+    </form >
 
 
 

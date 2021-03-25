@@ -241,7 +241,8 @@ def createKnownUsers(UAGS):
         
         index=0
         for userid in users:
-            knownUsers["user "+str(index)]={'username':userid['username'],'password':userid['password']}
+            # print(userid)
+            knownUsers["user "+str(index)]={'username':userid['username'],'password':userid['password'], 'enabled':userid['enabled']}
             index=index+1
         return knownUsers
     except Exception as e:
@@ -411,13 +412,16 @@ def LocalAuthenticateUser(user):
             username=knownUsers[id]['username']
             if user['username']==username:
                 try :
-                    if bcrypt.checkpw( user['password'].encode('utf-8'), knownUsers[id]['password'].encode('utf-8')):
-                        roles=checkUserRole(username)
-                        return {'username':username,'roles':roles}
+                    if knownUsers[id]['enabled']:
+                        if bcrypt.checkpw( user['password'].encode('utf-8'), knownUsers[id]['password'].encode('utf-8')):
+                            roles=checkUserRole(username)
+                            return {'username':username,'roles':roles}
+                    else:
+                        return None
                 except :
                     return None
         else:
-            print('Uknown user:' + str(user['username']))
+            print('Unknown user:' + str(user['username']))
             return None
     return None
 def ExternalAuthenticateUser(user):
@@ -428,8 +432,11 @@ def ExternalAuthenticateUser(user):
             username=knownUsers[id]['username']
             
             if user['username']==username:
-                roles=checkUserRole(username)
-                return {'username':username,'roles':roles}
+                if knownUsers[id]['enabled']:
+                    roles=checkUserRole(username)
+                    return {'username':username,'roles':roles}
+                else:
+                    return None
             
         else:
             print('Uknown user:' + str(user['username']))

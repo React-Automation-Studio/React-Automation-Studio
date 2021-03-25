@@ -221,6 +221,21 @@ services:
     #network_mode: host
     ports:
       - "6061:6060"
+  initializeadmindb:
+    env_file: .env
+    environment:
+      - ADMIN_DATABASE=localhost
+      - ADMIN_DATABASE_REPLICA_SET_NAME=devrs
+    build:
+      context: ./
+
+     
+      dockerfile: docker/adminDbInit/Dockerfile
+    network_mode: "host"
+    tty: true
+    stdin_open: true
+    depends_on:
+      - mongosetup
 
 
 volumes:

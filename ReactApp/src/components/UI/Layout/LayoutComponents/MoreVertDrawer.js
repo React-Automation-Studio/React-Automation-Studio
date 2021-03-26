@@ -6,12 +6,13 @@ import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-
+import { Link } from 'react-router-dom'
 import InvertColorsIcon from '@material-ui/icons/InvertColors';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import AutomationStudioContext from '../../../SystemComponents/AutomationStudioContext';
-
+import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
+import Button from '@material-ui/core/Button';
 const useStyles = makeStyles(theme => ({
     drawerItems: {
         minWidth: 250,
@@ -23,6 +24,8 @@ const MoreVertDrawer = (props) => {
     const classes = useStyles(props)
 
     const context = useContext(AutomationStudioContext)
+    const isAdmin = context.userData.roles.includes("admin");
+
     const { showMVDrawer, setShowMVDrawer } = props
 
     const moreVertDrawerItems = (
@@ -55,6 +58,15 @@ const MoreVertDrawer = (props) => {
                                 </MenuItem>
                             ))}
                         </TextField>
+                    </ListItem>
+                }
+                {(!props.hideAdminLinkListItem && isAdmin) &&
+                    <ListItem  >
+                        <ListItemIcon><SupervisorAccountIcon /></ListItemIcon>
+
+                        <Button component={Link} to="/administrator" >
+                            Administrator
+                        </Button>
                     </ListItem>
                 }
             </List>

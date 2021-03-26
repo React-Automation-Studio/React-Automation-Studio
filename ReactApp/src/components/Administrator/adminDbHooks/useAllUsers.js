@@ -66,7 +66,7 @@ const useAllUsers = (props) => {
                     console.log("removing watch",dbWatchIdRef.current,"adminAllUsers")
                     socketRef.current.emit('remove_dbWatch', { dbURL: 'adminAllUsers', dbWatchId: dbWatchIdRef.current, 'clientAuthorisation': jwtRef.current });
                 }
-                socketRef.current.removeListener('databaseWatchData:databaseWatchData:adminAllUsers', handleAdminAllUsersReadWatchBroadcast);
+                socketRef.current.removeListener('databaseWatchData:adminAllUsers', handleAdminAllUsersReadWatchBroadcast);
                 socketRef.current.removeListener('connect', reconnect);
                 socketRef.current.removeListener('disconnect', disconnect);
           

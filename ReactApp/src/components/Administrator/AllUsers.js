@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import useAllUsers from './adminDbHooks/useAllUsers'
-
+import useUAGs from './adminDbHooks/useUAGs'
 
 import Grid from '@material-ui/core/Grid';
 
@@ -58,13 +58,32 @@ const AllUsers = (props) => {
       dbURL: 'mongodb://ADMIN_DATABASE:rasAdminDb:users:Parameters:""'
     });
   const { data: users, writeAccess: usersWriteAccess, initialized: usersInitialized } = allUsers;
+  const { userGroups, writeAccess: uagsWriteAccess, initialized: uagsInitialized } = useUAGs({});
   const {deleteUser,deleteUserError} =useDeleteUser({});
   const {enableUser,enableUserError} =useEnableUser({});
   const [currentUserId,setCurrentUserId]=useState(null);
   const [currentUser,setCurrentUser]=useState(null);
   const [showDeleteUserDialog,setShowDeleteUserDialog]=useState(false);
-  console.log(users, usersWriteAccess, usersInitialized)
+  const getUserUags=(username,userGroups)=>{
+    let uags=[]
+    if (userGroups){
+      let uag;
+    for (uag in userGroups){
+      if (userGroups[uag].usernames.includes(username)||userGroups[uag].usernames.includes('*')){
+        uags.push(uag)
+      }
 
+
+      
+    }
+    return uags.toString();
+    }
+    else{
+      return ""
+    }
+  }
+  console.log(users, usersWriteAccess, usersInitialized)
+  console.log(userGroups, uagsWriteAccess, uagsWriteAccess)
   return (
     <React.Fragment>
       <Dialog
@@ -142,13 +161,14 @@ const AllUsers = (props) => {
                         <TableCell align="center">{index + 1}</TableCell>
                         <TableCell align="center">{user.username}</TableCell>
                         <TableCell align="center">
+                           {getUserUags(user.username,userGroups)}
                           {/* {this.getUAGs(userGroups,user.username)} */}
                         </TableCell>
                         <TableCell align="center">{user.email ? user.email : ""}</TableCell>
                         <TableCell align="center">{user.givenName ? user.givenName : ""}</TableCell>
                         <TableCell align="center">{user.familyName ? user.familyName : ""}</TableCell>
                         <TableCell align="center">{user.phoneNumber ? user.phoneNumber : ""}</TableCell>
-                        <TableCell align="center">{user.officeLocation ? user.phoneLocation : ""}</TableCell>
+                        <TableCell align="center">{user.officeLocation ? user.officeLocation : ""}</TableCell>
                         <TableCell align="center">{date}</TableCell>
 
                         <TableCell align="center">

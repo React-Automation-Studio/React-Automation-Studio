@@ -21,6 +21,7 @@ import AutomationStudioContext from '../SystemComponents/AutomationStudioContext
 import AddUsers from "./AddUsers"
 import TraditionalLayout from '../UI/Layout/ComposedLayouts/TraditionalLayout';
 import AllUsers from './AllUsers';
+import AccessControl from './AccessControl';
 const systemName = 'testIOC';
 
 
@@ -63,6 +64,9 @@ const Administrator =(props)=>{
         {tabs[tabValue]==='All Users'&&<AllUsers/>
         
         }
+         {tabs[tabValue]==='Access Control'&&<AccessControl/>
+        
+      }
         {tabs[tabValue]==='Add User'&&<AddUsers/>
         
       }

@@ -79,6 +79,7 @@ class DataConnection extends React.Component {
     useStringValue={this.props.useStringValue}
     debug={this.props.debug}
     newValueTrigger={this.props.newValueTrigger}
+    pollingRate={this.props.pollingRate}
     />
   }
   { (pv.includes('pva://')&&this.props.usePvLabel===true) && <DeprecatedEpicsPV

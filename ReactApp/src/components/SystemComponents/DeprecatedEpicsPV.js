@@ -84,6 +84,7 @@ class DeprecatedEpicsPV extends React.Component {
   updatePVData(msg){
     //  console.log("state: ",this.state);
     //  console.log("msg: ", msg)
+    if (msg === undefined || msg === null) return;
     if (this.props.debug===true){
       console.log('updateDate is active');
     }
@@ -189,8 +190,19 @@ class DeprecatedEpicsPV extends React.Component {
     //  this.handleInitialConnection();
       this.timeout=setTimeout(this.handleInitialConnection, 3000);
       //    console.log("this.state.pvname",this.state.pvname);
-
-      socket.on(this.state.pvname,this.updatePVData);
+      if (this.props.pollingRate === 0 || this.props.pollingRate === undefined || this.props.pollingRate === null) {
+        socket.on(this.state.pvname, this.updatePVData);
+      } else {
+        console.log(this.props.pollingRate)
+        this.timerId = setInterval(() => {
+          console.log("poll")
+          socket.emit(
+            "get_polled_value",
+            { data: this.state.pvname, 'clientAuthorisation': jwt },
+            this.updatePVData
+          );
+        }, this.props.pollingRate);
+      }
       socket.on("pv_conn_change", this.updatePVData);
       socket.on('connect_error',this.connectError);
       socket.on('disconnect', this.disconnect);
@@ -224,6 +236,9 @@ class DeprecatedEpicsPV extends React.Component {
       let jwt = this.context.userTokens.accessToken;
       if (jwt===null){
         jwt='unauthenticated'
+      }
+      if (typeof(this.timerId) !== "undefined") {
+        this.timerId.clearInterval();
       }
       if (typeof( this.state.pvConnectionId) !=='undefined'){
         socket.emit('remove_pv_connection', {pvname: this.state['pvname'],pvConnectionId:this.state.pvConnectionId,'clientAuthorisation':jwt});

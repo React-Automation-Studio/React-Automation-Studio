@@ -309,10 +309,10 @@ def check_pv_initialized_after_disconnect():
                                 d['chid']=str(d['chid'])
                                 try:
                                     rw_room=str(pvname)+'rw'
-                                    socketio.emit(pvname,d,room=rw_room,namespace='/pvServer')
+                                    socketio.emit("init_"+pvname,d,room=rw_room,namespace='/pvServer')
                                     d['write_access']=False
                                     ro_room=str(pvname)+'ro'
-                                    socketio.emit(pvname,d,room=ro_room,namespace='/pvServer')
+                                    socketio.emit("init_"+pvname,d,room=ro_room,namespace='/pvServer')
                                     clientPVlist[pvname]['isConnected']=True
                                     clientPVlist[pvname]['initialized']=True
                                 #
@@ -332,7 +332,7 @@ def check_pv_initialized_after_disconnect():
                                     d['pvname']= pvname
                                     d['connected']= '0'
 
-                                    socketio.emit(pvname,d,room=str(pvname),namespace='/pvServer')
+                                    socketio.emit("init_"+pvname,d,room=str(pvname),namespace='/pvServer')
                                 except:
                                     log.exception("Unexpected error")
                                     raise
@@ -467,19 +467,20 @@ def onValueChanges(pvname=None,count=None,char_value=None,severity=None,status=N
            if (len(new_char_value)==0):
                new_char_value=str(value)
 
-
-           socketio.emit(pvname1,
-              {'pvname': pvname1,'newmetadata': 'False','value': str(value),'char_value': new_char_value,'count':count, 'connected':'1', 'severity': severity,'timestamp':timestamp
-              },room='pva://'+str(pvname),namespace='/pvServer')
+           d = {'pvname': pvname1,'newmetadata': 'False','value': str(value),'char_value': new_char_value,
+                'count':count, 'connected':'1', 'severity': severity,'timestamp':timestamp}
+           clientPVlist[pvname1]['last_event'] = d
+           socketio.emit(pvname1, d, room='pva://'+str(pvname),namespace='/pvServer')
         else:
            d={'pvname': pvname1,'newmetadata': 'False','value': list((value)),'count':count, 'connected':'1', 'severity': severity,'timestamp':timestamp}
+           clientPVlist[pvname1]['last_event'] = d
            socketio.emit(pvname1,d,room='pva://'+str(pvname),namespace='/pvServer')
 
 
 def onConnectionChange(pvname=None, conn= None, value=None, **kws):
     global clientPVlist
     pvname1='pva://'+str(pvname)
-
+    
     if (conn==True):
         try:
             clientPVlist[pvname1]['isConnected']=True
@@ -499,7 +500,9 @@ def onConnectionChange(pvname=None, conn= None, value=None, **kws):
         try:
             clientPVlist[pvname1]['isConnected']=False
             clientPVlist[pvname1]['initialized']=False
-            socketio.emit(pvname1,d,room=str(pvname1),namespace='/pvServer')
+            if 'last_event' in clientPVlist[pvname1]:
+                del clientPVlist[pvname1]['last_event']
+            socketio.emit("init_"+pvname1,d,room=str(pvname1),namespace='/pvServer')
         except:
             error=2
 
@@ -769,6 +772,26 @@ def test_message(message):
                 log.error("Unknown PV type ({})",pvname1)
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
+
+# Get last observed value when asked (for polling)
+@socketio.on('get_polled_value', namespace='/pvServer')
+def getPolledValue(message):
+    global REACT_APP_DisableLogin
+    pvname = str(message["data"])
+    accessControl = {}
+    if REACT_APP_DisableLogin:
+        accessControl={'userAuthorised':True,'permissions':{'read':True,'write':True}}
+    else :
+        accessControl=AutheriseUserAndPermissions(message['clientAuthorisation'],pvname)
+    
+    if accessControl['userAuthorised'] and accessControl['permissions']['read']:
+        if pvname in clientPVlist and 'last_event' in clientPVlist[pvname] and clientPVlist[pvname]['initialized']:
+            # clientPVlist[pvname][last_event] is populated by onValueChange
+            return clientPVlist[pvname]['last_event']
+        return None
+
+    socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
+    return None
 
 @socketio.on('databaseRead', namespace='/pvServer')
 def databaseRead(message):

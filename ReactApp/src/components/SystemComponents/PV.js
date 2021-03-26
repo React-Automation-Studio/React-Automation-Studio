@@ -43,11 +43,11 @@ const PV = (props) => {
     }
     return pvname.includes('pva://')
       ?
-      EpicsPV({ ...props, pv:pvname })
+      <EpicsPV { ...props}  pv={pvname} />
       : (pvname.includes('loc://')
         ?
-        LocalPV({ ...props, pv:pvname })
-        : UnknownPV({ ...props, pv:pvname }))
+        <LocalPV { ...props} pv={pvname}/>
+        : <UnknownPV { ...props} pv={pvname} />)
   }
   const pvData = (name) => (pv) => {
 
@@ -63,6 +63,7 @@ const PV = (props) => {
     outputValue: props.outputValue,
     useStringValue: props.useStringValue,
     initialLocalVariableValue: props.initialLocalVariableValue,
+    pollingRate: props.pollingRate,
     debug: props.debug,
     pvData: pvData('data')
 
@@ -324,6 +325,12 @@ PV.propTypes = {
    */
   useStringValue: PropTypes.bool,
 
+  /**
+   * Read value from PV on specified period interval [ms].
+   * If set to zero, no polling is applied.
+   */
+  pollingRate: PropTypes.number,
+
 
 };
 
@@ -333,7 +340,7 @@ PV.propTypes = {
  */
 // static defaultProps=WrappedComponent.defaultProps;
 PV.defaultProps = {
-
+  pollingRate: 0,
   debug: false,
   useMetadata: true,
 

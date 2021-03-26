@@ -137,10 +137,9 @@ export const useEpicsPV = (props) => {
         );
       }, props.pollingRate);
     }
-    socketRef.current.on("init_" + pv.pvname, updatePVData);
+    socketRef.current.on("pv_conn_change", updatePVData);
     socketRef.current.on('connect_error', connectError);
     socketRef.current.on('disconnect', disconnect);
-    socketRef.current.on('reconnect', reconnect);
 
     return () => {
 
@@ -149,10 +148,9 @@ export const useEpicsPV = (props) => {
         socketRef.current.emit('remove_pv_connection', { pvname: pv.pvname, pvConnectionId: pvConnectionId, 'clientAuthorisation': jwtRef.current });
       }
       socketRef.current.removeListener(pv.pvname, updatePVData);
-      socketRef.current.removeListener("init_"+pv.pvname, updatePVData);
+      socketRef.current.removeListener("pv_conn_change", updatePVData);
       socketRef.current.removeListener('connect_error', connectError);
       socketRef.current.removeListener('disconnect', disconnect);
-      socketRef.current.removeListener('reconnect', reconnect);
       if (timerId !== undefined) {
         clearInterval(timerId);
       }

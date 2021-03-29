@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import useAllUsers from './adminDbHooks/useAllUsers'
@@ -20,6 +20,8 @@ import IconButton from '@material-ui/core/IconButton';
 import Checkbox from '@material-ui/core/Checkbox';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+import SaveIcon from '@material-ui/icons/Save';
+import ClearIcon from '@material-ui/icons/Clear';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -54,6 +56,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 const AccessControl = (props) => {
+  const [editMode,setEditMode]=useState(false);
   const [tabValue, setTabValue] = useState(0);
   const classes = useStyles();
   const allUsers = useAllUsers(
@@ -62,16 +65,23 @@ const AccessControl = (props) => {
     });
   const { data: users, writeAccess: usersWriteAccess, initialized: usersInitialized } = allUsers;
   const { userGroups, writeAccess: uagsWriteAccess, initialized: uagsInitialized } = useUAGs({});
-  let userGroupKeys = uagsInitialized ? Object.keys(userGroups) : [];
+  const [modifiedUserGroups,setModifiedUserGroups]=useState({});
+   useEffect(()=>{
+     if (editMode===false){
+      setModifiedUserGroups(userGroups)
+     } 
+   },[userGroups,editMode])
+   
+  let userGroupKeys = uagsInitialized ? Object.keys(modifiedUserGroups) : [];
   let usergroup = uagsInitialized ? userGroupKeys[tabValue] : undefined;
   console.log("users", users, usersWriteAccess, usersInitialized)
   console.log("userGroups", userGroups, uagsWriteAccess, uagsWriteAccess)
   return (
-    <React.Fragment>
+    <div >
 
       <div style={{ "overflowX": "hidden", 'overflowY': 'hidden' }}>
         {uagsInitialized &&
-          <React.Fragment>
+          <div style={{paddingTop:16}}>
             <Grid
               container
               direction="row"
@@ -80,6 +90,20 @@ const AccessControl = (props) => {
               spacing={2}
 
             >
+              <Grid item lg={2}></Grid>
+              <Grid item lg={6} style={{textAlign:'right'}}>
+                {editMode===false&&<IconButton onClick={()=>setEditMode(true)}>
+                  <EditIcon/>
+                </IconButton>}
+                {editMode===true&&<IconButton onClick={()=>setEditMode(false)}>
+                  <SaveIcon/>
+                </IconButton>}
+                {editMode===true&&<IconButton onClick={()=>setEditMode(false)}>
+                  <ClearIcon/>
+                </IconButton>}
+
+              </Grid>
+              <Grid item lg={4}></Grid>
               <Grid item lg={2}>
                 <Tabs
                   orientation="vertical"
@@ -99,9 +123,10 @@ const AccessControl = (props) => {
                 </Tabs>
               </Grid>
               <Grid item lg={6}>
-                <Card key={tabValue} style={{ maxHeight: "80vh", overflowY: "scroll", margin: 16 }}>
+              
+                <Card key={tabValue} style={{ maxHeight: "80vh", overflowY: "scroll", marginBottom: 16,marginRight:16,marginLeft:16 }}>
                   <Grid
-                    style={{ marginTop: 0, padding: 8 }}
+                    style={{ marginTop: 0, paddingRight: 8,paddingLeft:8,paddingBottom:8, paddingTop:0 }}
                     container
                     direction="row"
                     justify="flex-start"
@@ -128,7 +153,7 @@ const AccessControl = (props) => {
 
                         </TableHead>
                         <TableBody>
-                        {userGroups[usergroup].roles?.map((role,index)=>
+                        {modifiedUserGroups[usergroup].roles?.map((role,index)=>
                           <TableRow>
                             
                             <TableCell align="center">
@@ -164,7 +189,7 @@ const AccessControl = (props) => {
                             </TableRow>
                           </TableHead>
                           <TableBody>
-                            {userGroups[usergroup].rules?.map((rule, index) =>
+                            {modifiedUserGroups[usergroup].rules?.map((rule, index) =>
                               <TableRow>
 
                                 <TableCell align="center">{rule.rule?.toString()}</TableCell>
@@ -234,11 +259,11 @@ const AccessControl = (props) => {
 
 
 
-          </React.Fragment>}
+          </div>}
 
 
       </div>
-    </React.Fragment>
+    </div>
 
 
 

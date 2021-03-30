@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
 const AccessControl = (props) => {
   const [editMode,setEditMode]=useState(false);
   const [save,setSave]=useState(false);
- 
+  const [saveOkLatched,setSaveOkLatched]=useState(false);
   const [clear,setClear]=useState(false);
   const [tabValue, setTabValue] = useState(0);
   const validateRegex=(pattern)=>{
@@ -79,10 +79,17 @@ const AccessControl = (props) => {
     });
   const { data: users, writeAccess: usersWriteAccess, initialized: usersInitialized } = allUsers;
   const { userGroups, writeAccess: uagsWriteAccess, initialized: uagsInitialized,updateUAGs,updateUAGsError,updateUAGsOk:saveOk } = useUAGs({});
+  console.log("saveOk",saveOk,"safeOkLatched",saveOkLatched)
+  useEffect(()=>{
+   
+      
+    setSaveOkLatched(saveOk)
+  
+  },[saveOk])
   const [modifiedUserGroups,setModifiedUserGroups]=useState({});
    useEffect(()=>{
      if (editMode===false){
-       console.log("useEffect",userGroups)
+      
        const newUserGroups=JSON.parse(JSON.stringify(userGroups));
       setModifiedUserGroups(newUserGroups)
      }
@@ -95,13 +102,15 @@ const AccessControl = (props) => {
       updateUAGs({UAGs:modifiedUserGroups})
       setSave(false)
     }
-    else if (saveOk===true){
+    else if (saveOkLatched===true){
       setEditMode(false)
+      setSaveOkLatched(false)
       setSave(false)
+      setClear(false)
     }
 
 
-   },[userGroups,editMode,save,clear])
+   },[userGroups,editMode,save,clear,saveOkLatched])
    
   let userGroupKeys = uagsInitialized ? Object.keys(modifiedUserGroups) : [];
   let usergroup = uagsInitialized ? userGroupKeys[tabValue] : undefined;

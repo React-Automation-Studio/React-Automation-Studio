@@ -2096,15 +2096,16 @@ def adminAddUser(message):
                     print("connected to adminDb",MONGO_INITDB_ADMIN_DATABASE)
 
                     mydb = client[MONGO_INITDB_ADMIN_DATABASE]
-                    # mycol=mydb['users']
-                    # id=message['id']
+                    mycol=mydb['pvAccess']
+                    id=message['id']
                     # enabled=message['enabled']
+                    userGroups=message['UAGs']
                     print(message)
-                    # try:
-                    #     mycol.update_one({'_id':ObjectId(str(id))}, { "$set": { "enabled": enabled}})
-                    # except Exception as e:
-                    #     log.info(e)
-                    #     return("error: can't update user ")
+                    try:
+                        mycol.update_one({'_id':ObjectId(str(id))},{ "$set": { "userGroups":userGroups }})
+                    except Exception as e:
+                        log.info(e)
+                        return("error: can't update UAGs ")
                     return 'OK'
             except Exception as e:
                 print("admin enable user error",e)

@@ -85,7 +85,7 @@ const useUAGs = (props) => {
 
 
             
-            setUpdateUAGsError(false)
+            setUpdateUAGsOk(false)
             setUpdateUAGsError(false)
             socketRef.current.emit('adminUpdateUAGs', {UAGs: props.UAGs, id:userGroupsId, 'clientAuthorisation': jwtRef.current }, (data) => {
 
@@ -101,7 +101,7 @@ const useUAGs = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userGroupsId])
 
-    return ({ userGroups: userGroups, writeAccess: writeAccess, initialized: initialized,updateUAGs:updateUAGs,updateUAGsError:updateUAGsError,setUpdateUAGsOk:setUpdateUAGsOk})
+    return ({ userGroups: userGroups, writeAccess: writeAccess, initialized: initialized,updateUAGs:updateUAGs,updateUAGsError:updateUAGsError,updateUAGsOk:updateUAGsOk})
 }
 
 

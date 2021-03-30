@@ -568,7 +568,7 @@ Widget.propTypes = {
   tooltipProps:PropTypes.object,
 
   /**
-   * Activate pollingRate.
+   * Directive to sample the PV values on the client side at the polling rate.
    */
    usePolling: PropTypes.bool,
 

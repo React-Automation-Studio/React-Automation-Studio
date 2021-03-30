@@ -684,7 +684,7 @@ GraphXY.propTypes = {
   yUnits:PropTypes.string,
   /** Custom x axis units to be used*/
   xUnits:PropTypes.string,
-  /** Directive to sample the PV values, on the client side at the polling rate*/
+  /** Directive to sample the PV values on the client side at the polling rate*/
   usePolling:PropTypes.bool,
   /** Directive to scale the y-axis as a log base 10 value*/
   yScaleLog10:PropTypes.bool,

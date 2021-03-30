@@ -33,7 +33,7 @@ import useDeleteUser from './adminDbHooks/useDeleteUser';
 import useEnableUser from './adminDbHooks/useEnableUser';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-
+import TextField from '@material-ui/core/TextField';
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -57,25 +57,57 @@ const useStyles = makeStyles((theme) => ({
 
 const AccessControl = (props) => {
   const [editMode,setEditMode]=useState(false);
+  const [save,setSave]=useState(false);
+ 
+  const [clear,setClear]=useState(false);
   const [tabValue, setTabValue] = useState(0);
+  const validateRegex=(pattern)=>{
+      try{
+        new RegExp(pattern)
+        return true ;
+        }
+
+      catch(e){
+        return false;
+      }
+
+  }
   const classes = useStyles();
   const allUsers = useAllUsers(
     {
       dbURL: 'mongodb://ADMIN_DATABASE:rasAdminDb:users:Parameters:""'
     });
   const { data: users, writeAccess: usersWriteAccess, initialized: usersInitialized } = allUsers;
-  const { userGroups, writeAccess: uagsWriteAccess, initialized: uagsInitialized } = useUAGs({});
+  const { userGroups, writeAccess: uagsWriteAccess, initialized: uagsInitialized,updateUAGs,updateUAGsError,updateUAGsOk:saveOk } = useUAGs({});
   const [modifiedUserGroups,setModifiedUserGroups]=useState({});
    useEffect(()=>{
      if (editMode===false){
-      setModifiedUserGroups(userGroups)
-     } 
-   },[userGroups,editMode])
+       console.log("useEffect",userGroups)
+       const newUserGroups=JSON.parse(JSON.stringify(userGroups));
+      setModifiedUserGroups(newUserGroups)
+     }
+     else if (clear===true){
+       setSave(false)
+       setEditMode(false)
+       setClear(false)
+     }
+     else if (save===true){
+      updateUAGs({UAGs:modifiedUserGroups})
+      setSave(false)
+    }
+    else if (saveOk===true){
+      setEditMode(false)
+      setSave(false)
+    }
+
+
+   },[userGroups,editMode,save,clear])
    
   let userGroupKeys = uagsInitialized ? Object.keys(modifiedUserGroups) : [];
   let usergroup = uagsInitialized ? userGroupKeys[tabValue] : undefined;
-  console.log("users", users, usersWriteAccess, usersInitialized)
-  console.log("userGroups", userGroups, uagsWriteAccess, uagsWriteAccess)
+  //console.log("users", users, usersWriteAccess, usersInitialized)
+  console.log("userGroups", userGroups)
+  console.log("modifiedUserGroups", modifiedUserGroups)
   return (
     <div >
 
@@ -95,10 +127,10 @@ const AccessControl = (props) => {
                 {editMode===false&&<IconButton onClick={()=>setEditMode(true)}>
                   <EditIcon/>
                 </IconButton>}
-                {editMode===true&&<IconButton onClick={()=>setEditMode(false)}>
+                {editMode===true&&<IconButton onClick={()=>setSave(true)}>
                   <SaveIcon/>
                 </IconButton>}
-                {editMode===true&&<IconButton onClick={()=>setEditMode(false)}>
+                {editMode===true&&<IconButton onClick={()=>setClear(true)}>
                   <ClearIcon/>
                 </IconButton>}
 
@@ -189,17 +221,39 @@ const AccessControl = (props) => {
                             </TableRow>
                           </TableHead>
                           <TableBody>
-                            {modifiedUserGroups[usergroup].rules?.map((rule, index) =>
-                              <TableRow>
+                            {modifiedUserGroups[usergroup].rules?.map((rule, index) =>{
+                             const stringValue=rule.rule?.toString();
+                             return( <TableRow>
 
-                                <TableCell align="center">{rule.rule?.toString()}</TableCell>
+                                <TableCell align="center">
+                                  <TextField
+                                  value={stringValue}
+                                  disabled={editMode===false}
+                                  onChange={(event)=>{
+                                  
+                                    const value=event.target.value
+                                    
+                                    setModifiedUserGroups(prev=>{
+                                      const newUserGroups={...prev}
+                                      console.log(prev)
+                                      console.log( newUserGroups[usergroup].rules)
+                                      newUserGroups[usergroup].rules[index].rule=value
+                                      return newUserGroups
+                                    })
+                                  }}
+                                  error={validateRegex(stringValue) ===false}
+                                  />
+                                  
+                                  
+                                  </TableCell>
                                 <TableCell align="center">
                                   <Checkbox checked={rule.read==true}/>
                                   </TableCell>
                                   <TableCell align="center">
                                   <Checkbox checked={rule.write==true}/>
                                   </TableCell>
-                              </TableRow>
+                              </TableRow>)
+                            }
                             )}
                           </TableBody>
                         </Table>
@@ -229,7 +283,7 @@ const AccessControl = (props) => {
                             </TableRow>
                           </TableHead>
                           <TableBody>
-                          {userGroups[usergroup].usernames?.map((username,index)=>
+                          {modifiedUserGroups[usergroup].usernames?.map((username,index)=>
                           <TableRow>
                             
                             <TableCell align="center">

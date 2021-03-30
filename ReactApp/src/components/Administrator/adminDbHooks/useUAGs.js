@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect, useRef } from 'react';
+import { useContext, useState, useEffect, useRef,useCallback } from 'react';
 import AutomationStudioContext from '../../SystemComponents/AutomationStudioContext';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -28,6 +28,8 @@ const useUAGs = (props) => {
     const [userGroupsId, setUserGroupsId] = useState(null);
     const [writeAccess, setWriteAccess] = useState(false);
     const [initialized, setInitialized] = useState(false);
+    const [updateUAGsError, setUpdateUAGsError] = useState(false);
+    const [updateUAGsOk, setUpdateUAGsOk] = useState(false);
     useEffect(() => {
         dbWatchIdRef.current=uuidv4();
         const handleAdminWatchUAGsAck = (msg) => {
@@ -46,20 +48,20 @@ const useUAGs = (props) => {
         }
 
 
-        
+
             socketRef.current.emit('adminWatchUAGs', { 'clientAuthorisation': jwtRef.current,dbWatchId:dbWatchIdRef.current }, handleAdminWatchUAGsAck)
             socketRef.current.on('databaseWatchData:adminWatchUAGs',  handleAdminWatchUAGsReadWatchBroadcast);
-       
+
         const reconnect = () => {
             dbWatchIdRef.current=uuidv4();
             socketRef.current.emit('adminWatchUAGs', { 'clientAuthorisation': jwtRef.current,dbWatchId:dbWatchIdRef.current }, handleAdminWatchUAGsAck)
         }
         const disconnect = () => {
-           
+
                 setInitialized(false);
                 setUserGroups(null);
             setUserGroupsId(null);
-          
+
         }
         socketRef.current.on('disconnect', disconnect);
         socketRef.current.on('connect', reconnect);
@@ -72,13 +74,34 @@ const useUAGs = (props) => {
                 socketRef.current.removeListener('databaseWatchData:adminWatchUAGs', handleAdminWatchUAGsReadWatchBroadcast);
                 socketRef.current.removeListener('connect', reconnect);
                 socketRef.current.removeListener('disconnect', disconnect);
-          
+
 
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    return ({ userGroups: userGroups, writeAccess: writeAccess, initialized: initialized})
+    const updateUAGs = useCallback((props) => {
+
+
+
+            
+            setUpdateUAGsError(false)
+            setUpdateUAGsError(false)
+            socketRef.current.emit('adminUpdateUAGs', {UAGs: props.UAGs, id:userGroupsId, 'clientAuthorisation': jwtRef.current }, (data) => {
+
+            if (data !== "OK") {
+                setUpdateUAGsError(true)
+                console.log("updateUAGs  unsuccessful")
+            }
+            else{
+                setUpdateUAGsOk(true)
+            }
+        });
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [userGroupsId])
+
+    return ({ userGroups: userGroups, writeAccess: writeAccess, initialized: initialized,updateUAGs:updateUAGs,updateUAGsError:updateUAGsError,setUpdateUAGsOk:setUpdateUAGsOk})
 }
 
 

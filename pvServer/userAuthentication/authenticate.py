@@ -407,40 +407,38 @@ def  AuthoriseUser(encodedJWT):
 def LocalAuthenticateUser(user):
     global knownUsers
     if knownUsers!= None:
-     
-        for id in knownUsers:
-            username=knownUsers[id]['username']
+        for userId in knownUsers:
+            username=knownUsers[userId]['username']
             if user['username']==username:
                 try :
-                    if knownUsers[id]['enabled']:
-                        if bcrypt.checkpw( user['password'].encode('utf-8'), knownUsers[id]['password'].encode('utf-8')):
+                    if knownUsers[userId]['enabled']:
+                        if bcrypt.checkpw( user['password'].encode('utf-8'), knownUsers[userId]['password'].encode('utf-8')):
                             roles=checkUserRole(username)
+                            
                             return {'username':username,'roles':roles}
                     else:
                         return None
                 except :
                     return None
-        else:
-            print('Unknown user:' + str(user['username']))
-            return None
+        print('Unknown user:' + str(user['username']))
+        return None
     return None
 def ExternalAuthenticateUser(user):
     global knownUsers
     if knownUsers!= None:
         # keys=list(knownUsers.keys())
-        for id in knownUsers:
-            username=knownUsers[id]['username']
+        for userId in knownUsers:
+            username=knownUsers[userId]['username']
             
             if user['username']==username:
-                if knownUsers[id]['enabled']:
+                if knownUsers[userId]['enabled']:
                     roles=checkUserRole(username)
                     return {'username':username,'roles':roles}
                 else:
                     return None
             
-        else:
-            print('Uknown user:' + str(user['username']))
-            return None
+        print('Uknown user:' + str(user['username']))
+        return None
     return None
 
 def decodeTokenGoogle(token,CLIENT_ID):

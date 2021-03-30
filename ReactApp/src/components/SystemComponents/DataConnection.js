@@ -79,6 +79,7 @@ class DataConnection extends React.Component {
     useStringValue={this.props.useStringValue}
     debug={this.props.debug}
     newValueTrigger={this.props.newValueTrigger}
+    usePolling={this.props.usePolling}
     pollingRate={this.props.pollingRate}
     />
   }

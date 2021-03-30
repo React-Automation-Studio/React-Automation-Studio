@@ -190,12 +190,12 @@ class DeprecatedEpicsPV extends React.Component {
     //  this.handleInitialConnection();
       this.timeout=setTimeout(this.handleInitialConnection, 3000);
       //    console.log("this.state.pvname",this.state.pvname);
-      if (this.props.pollingRate === 0 || this.props.pollingRate === undefined || this.props.pollingRate === null) {
+      if (!this.props.usePolling || this.props.pollingRate === 0 || 
+        this.props.pollingRate === undefined || this.props.pollingRate === null) {
         socket.on(this.state.pvname, this.updatePVData);
       } else {
         console.log(this.props.pollingRate)
         this.timerId = setInterval(() => {
-          console.log("poll")
           socket.emit(
             "get_polled_value",
             { data: this.state.pvname, 'clientAuthorisation': jwt },

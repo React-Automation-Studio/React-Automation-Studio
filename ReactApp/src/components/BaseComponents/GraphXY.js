@@ -118,7 +118,6 @@ class GraphXY extends React.Component {
     state['xPVs']=xPVs;
     //  state['ymin']=1000000000000000000;
     //  state['ymax']=-1000000000000000000;
-    state['PollingTimerEnabled']=false;
     state['openContextMenu']= false;
     state['x0']=0;
     state['y0']=0;
@@ -138,274 +137,34 @@ class GraphXY extends React.Component {
 
 
 
-    this.handleInputValueY= this.handleInputValueY.bind(this);
-    this.handleInputValueYPolled= this.handleInputValueYPolled.bind(this);
-    this.handleInputValueYUnpolled= this.handleInputValueYUnpolled.bind(this);
+    this.handleInputValue= this.handleInputValue.bind(this);
     this.handleInputValueYLabel= this.handleInputValueYLabel.bind(this);
     this.handleMetadataY= this.handleMetadataY.bind(this);
 
-    this.handleInputValueX= this.handleInputValueX.bind(this);
-    this.handleInputValueXPolled= this.handleInputValueXPolled.bind(this);
-    //this.handleInputValueXUnpolled= this.handleInputValueXUnpolled.bind(this);
     this.handleInputValueXLabel= this.handleInputValueXLabel.bind(this);
     this.handleMetadataX= this.handleMetadataX.bind(this);
     this.multipleDataConnections=this.multipleDataConnections.bind(this);
     this.handleToggleContextMenu=this.handleToggleContextMenu.bind(this);
     this.multipleLineData=this.multipleLineData.bind(this);
   }
-  handleInputValueY =index=>(inputValue,pvname,initialized,severity,timestamp)=>{
-    //  console.log('handleInputValueY',pvname,index,inputValue)
-    if((this.props.updateMode=='updateOnXChange')||this.props.usePolling){
-      let yPVs=this.state.yPVs;
-      let xPVs=this.state.xPVs;
-      yPVs[pvname].initialized=initialized;
-      yPVs[pvname].lastValue=inputValue;
-      yPVs[pvname].severity=severity;
-      this.setState({yPVs:yPVs});
-    }
-    else if ((this.props.updateMode=='updateOnYChange')||(this.props.updateMode=='updateOnXOrYChange')){
-      let yPVs=this.state.yPVs;
-      let xPVs=this.state.xPVs;
-      yPVs[pvname].initialized=initialized;
-      yPVs[pvname].lastValue=inputValue;
-      yPVs[pvname].severity=severity;
-      this.setState({yPVs:yPVs});
-      if(xPVs[this.state.pvnamesX[index]].initialized){
-        this.handleLineDataUpdate(yPVs[this.state.pvnamesY[index]],xPVs[this.state.pvnamesX[index]]);
+
+  handleInputValue = (PVsStr, index, singleUpdateMode) => (inputValue, pvname, initialized, severity, timestamp)=>{
+    const PVs=this.state[PVsStr];
+    PVs[pvname].initialized=initialized;
+    PVs[pvname].lastValue=inputValue;
+    PVs[pvname].severity=severity;
+    this.setState({PVsStr:PVs});
+
+    const yPV = this.state.yPVs[this.state.pvnamesY[index]];
+    const xPV = this.state.xPVs[this.state.pvnamesX[index]];
+
+    if(yPV.initialized && xPV.initialized){
+      if (this.props.usePolling || (this.props.updateMode==singleUpdateMode) || (this.props.updateMode=='updateOnXOrYChange')) {
+        this.handleLineDataUpdate(yPV,xPV);
       }
     }
-
-
-    //  console.log("value: ",inputValue);
-    //  console.log("pvname:", pvname);
   }
 
-  handleInputValueX =index=>(inputValue,pvname,initialized,severity,timestamp)=>{
-    //console.log('handleInputValueX',pvname,index,inputValue)
-    if((this.props.updateMode=='updateOnYChange')||this.props.usePolling){
-      let xPVs=this.state.xPVs;
-      xPVs[pvname].initialized=initialized;
-      xPVs[pvname].lastValue=inputValue;
-      xPVs[pvname].severity=severity;
-      this.setState({xPVs:xPVs});
-    }
-    else if ((this.props.updateMode=='updateOnXChange')||(this.props.updateMode=='updateOnXOrYChange')){
-      let xPVs=this.state.xPVs;
-      let yPVs=this.state.yPVs;
-      xPVs[pvname].initialized=initialized;
-      xPVs[pvname].lastValue=inputValue;
-      xPVs[pvname].severity=severity;
-      this.setState({xPVs:xPVs});
-      if(yPVs[this.state.pvnamesY[index]].initialized){
-        this.handleLineDataUpdate(yPVs[this.state.pvnamesY[index]],xPVs[this.state.pvnamesX[index]]);
-      }
-    }
-
-
-    //  console.log("value: ",inputValue);
-    //  console.log("pvname:", pvname);
-  }
-
-
-  handleInputValueYPolled =()=>{
-    let pv;
-    let d = new Date();
-    let timestamp=d.getTime()/1000;
-    let index=0;
-    for(pv in this.state.pvnamesY){
-
-      if((this.state.yPVs[this.state.pvnamesY[index]].initialized)&&(this.state.xPVs[this.state.pvnamesX[index]].initialized)){
-
-        this.handleLineDataUpdate(this.state.yPVs[this.state.pvnamesY[index]],this.state.xPVs[this.state.pvnamesX[index]]);
-        //    console.log(timestamp,this.state.pvnamesY[pv],this.state.yPVs[this.state.pvnamesY[pv]].lastValue);
-        //  this.handleInputValueYUnpolled(this.state.yPVs[this.state.pvnamesY[pv]].lastValue,this.state.pvnamesY[pv],this.state.yPVs[this.state.pvnamesY[pv]].initialized,this.state.yPVs[this.state.pvnamesY[pv]].severity,timestamp)
-      }
-      index++;
-    }
-    //  console.log("value: ",inputValue);
-    //  console.log("pvname:", pvname);
-  }
-
-  handleInputValueXPolled = ()=>{
-    let pv;
-    let d = new Date();
-    let timestamp=d.getTime()/1000;
-
-    for(pv in this.state.pvnamesX){
-
-      if(this.state.xPVs[this.state.pvnamesX[pv]].initialized){
-
-        //    console.log(timestamp,this.state.pvnamesY[pv],this.state.xPVs[this.state.pvnamesY[pv]].lastValue);
-        //this.handleInputValueYUnpolled(this.state.xPVs[this.state.pvnamesX[pv]].lastValue,this.state.pvnamesX[pv],this.state.xPVs[this.state.pvnamesX[pv]].initialized,this.state.xPVs[this.state.pvnamesX[pv]].severity,timestamp)
-      }
-    }
-    //  console.log("value: ",inputValue);
-    //  console.log("pvname:", pvname);
-  }
-
-  handleInputValueYUnpolled = (inputValue,pvname,initialized,severity,timestamp)=>{
-    //console.log("unpolled");
-    //  console.log("test");
-    //  console.log("value: ",inputValue);
-    //  console.log("pvname:", pvname);
-    let yPVs=this.state.yPVs;
-    let yDataArray=[];
-    let yTimeStampArray=[];
-    //let ymax=parseFloat(this.state.ymax);
-    //  let ymin=parseFloat(this.state.ymin);
-    //  console.log('ymax init',this.state.ymax)
-    // console.log('ymin init',this.state.ymin)
-
-    //  console.log('yPVs[pvname].value', yPVs[pvname].value);
-    //   console.log('inputValue', inputValue);
-    let max;
-    if (initialized===true){
-      if (typeof this.props.maxLength !== 'undefined'){
-        max=this.props.maxLength;
-        if (Array.isArray(inputValue)===false){
-          //  console.log("not array")
-          if ((typeof this.props.triggerOnSingleValueChange !== 'undefined')){
-            if (yPVs[pvname].value.length>0){
-              if(inputValue!=yPVs[pvname].value[yPVs[pvname].value.length-1]){
-                yDataArray=yPVs[pvname].value.concat(inputValue);
-                yTimeStampArray=yPVs[pvname].timestamp.concat(timestamp);
-              }
-              else{
-                yDataArray=yPVs[pvname].value;
-                yTimeStampArray=yPVs[pvname].timestamp;
-              }
-            }
-            else {
-              yDataArray=[inputValue];
-              yTimeStampArray=[timestamp];
-            }
-
-          }
-          else {
-            //  console.log(pvname,timestamp)
-            if (yPVs[pvname].value.length>0){
-              yDataArray=yPVs[pvname].value.concat(inputValue);
-              yTimeStampArray=yPVs[pvname].timestamp.concat(timestamp);
-            }
-            else{
-              yDataArray=[inputValue];
-              yTimeStampArray=[timestamp];
-            }
-
-          }
-        }
-        else{
-          if (yPVs[pvname].value.length>0){
-            yDataArray=yPVs[pvname].value.concat(inputValue);
-          }
-          else{
-            yDataArray=inputValue;
-          }
-        }
-      }
-      else {
-        yDataArray=inputValue;
-        max=inputValue.length;
-      }
-
-
-
-
-      //  console.log('yDataArray=yPVs[pvname].value.concat(inputValue);', yDataArray);
-      yPVs[pvname].initialized=initialized;
-      yPVs[pvname].severity=severity;
-
-      let length= yDataArray.length;
-
-      if  (length> max){
-        yDataArray=yDataArray.slice(length-max);
-        if (this.props.useTimeStamp){
-          yTimeStampArray=yTimeStampArray.slice(length-max);
-
-        }
-      }
-      //    console.log('yDataArray=yDataArray.slice(length-max);', yDataArray);
-
-      let i=0;
-      let sample;
-      let data=[];
-      let n;
-      //	console.log("pv.value: ",this.state[this.props.pv].value);
-      let ymax=-1000000000000000000;
-      let ymin=1000000000000000000;
-
-      for(n in yDataArray){
-        let val;
-        if (this.props.yScaleLog10===true){
-          val=Math.log10(parseFloat(yDataArray[n]))
-        }
-        else{
-          val=yDataArray[n];
-        }
-        // console.log("value: ",this.state[this.props.pv].value[i]);
-        //console.log('n: ',n,' this.state.ymax: ',this.state.ymax,)
-        if(parseFloat(val)>ymax){
-
-
-
-          ymax=parseFloat(val);
-          //console.log('new Ymax',ymax)
-        }
-        if(parseFloat(val)<ymin){
-          ymin=parseFloat(val);
-        }
-
-
-        if (this.props.useTimeStamp){
-          sample={x:yTimeStampArray[n],y:val}
-        }
-        else{
-          sample={x:i,y:val}
-        }
-        // console.log("sample: ",sample)
-
-        data[i]=sample;
-        i++;
-
-      }
-
-
-      yPVs[pvname].value=yDataArray;
-      yPVs[pvname].timestamp=yTimeStampArray;
-      yPVs[pvname].linedata=data;
-      yPVs[pvname].ymin=ymin;
-      yPVs[pvname].ymax=ymax;
-      //console.log('yPVs[pvname].linedata', yPVs[pvname].linedata);
-      //console.log('yTimeStampArray',yTimeStampArray)
-      //  console.log('length3', yPVs[pvname].linedata.length);
-
-
-
-      /*  if ((typeof this.props.ymax) !=='undefined'){
-      ymax=this.props.ymax;
-
-    }
-
-    if ((typeof this.props.ymin)!=='undefined'){
-    ymin=this.props.ymin;
-
-  }
-  */
-  //   console.log('ymax end',ymax)
-  //   console.log('ymin end',ymin)
-
-  this.setState({yPVs:yPVs});//,ymax:ymax,ymin:ymin});
-
-
-  //state.yPVs[pvname].inputValue=inputValue;
-  //pvData.yPVs[pvname].initialized=initialized;
-  //pvData.yPVs[pvname].severity=severity;
-
-  //console.log("pvData:",pvData)
-
-  //this.setState(pvData);
-}
-}
 handleLineDataUpdate = (yPV,xPV)=>{
 
   //console.log(xPV)
@@ -576,33 +335,6 @@ handleInputValueXLabel=pvname=>(inputValue)=>{
 
 }
 
-componentDidMount() {
-  if (this.props.usePolling){
-    let intervalId = setInterval(this.handleInputValueYPolled, this.props.pollingRate);
-    // store intervalId in the state so it can be accessed later:
-    this.setState({'intervalId': intervalId});
-  }
-}
-
-
-componentWillUnmount() {
-  if (this.props.usePolling){
-    clearInterval(this.state.intervalId);
-  }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
 multipleDataConnections = () => {
   //this.test("test1");
   //this.handleInputValueY();
@@ -616,11 +348,13 @@ multipleDataConnections = () => {
       <div key= {pv.toString() +'y'+i}>
         <DataConnection
           pv={this.state.yPVs[pv].pvname }
-          handleInputValue={this.handleInputValueY(index)}
+          handleInputValue={this.handleInputValue('yPVs', index, 'updateOnYChange')}
           handleMetadata={this.handleMetadataY(this.state.yPVs[pv].pvname)}
           handleInputValueLabel={this.handleInputValueYLabel(this.state.yPVs[pv].pvname)}
           usePvLabel={this.props.usePvLabel}
           debug={this.props.debug}
+          usePolling={this.props.usePolling}
+          pollingRate={this.props.pollingRate}
         />
 
         {this.props.usePvLabel===true?this.state.yPVs[pv].label+': ':""}
@@ -637,11 +371,13 @@ multipleDataConnections = () => {
       <div key= {pv.toString() +'x'+i} >
         <DataConnection
           pv={this.state.xPVs[pv].pvname}
-          handleInputValue={this.handleInputValueX(index)}
+          handleInputValue={this.handleInputValue('xPVs', index, 'updateOnXChange')}
           handleMetadata={this.handleMetadataX(this.state.xPVs[pv].pvname)}
           handleInputValueLabel={this.handleInputValueXLabel(this.state.xPVs[pv].pvname)}
           usePvLabel={this.props.usePvLabel}
           debug={this.props.debug}
+          usePolling={this.props.usePolling}
+          pollingRate={this.props.pollingRate}
         />
 
         {this.props.usePvLabel===true?this.state.xPVs[pv].label+': ':""}

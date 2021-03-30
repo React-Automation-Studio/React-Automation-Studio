@@ -69,7 +69,6 @@ class GraphY extends React.Component {
     state['pvs']=pvs;
     //  state['ymin']=1000000000000000000;
     //  state['ymax']=-1000000000000000000;
-    state['PollingTimerEnabled']=false;
     state['openContextMenu']= false;
     state['x0']=0;
     state['y0']=0;
@@ -84,11 +83,7 @@ class GraphY extends React.Component {
 
 
 
-
-
     this.handleInputValue= this.handleInputValue.bind(this);
-    this.handleInputValuePolled= this.handleInputValuePolled.bind(this);
-    this.handleInputValueUnpolled= this.handleInputValueUnpolled.bind(this);
     this.handleInputValueLabel= this.handleInputValueLabel.bind(this);
     this.handleMetadata= this.handleMetadata.bind(this);
     this.multipleDataConnections=this.multipleDataConnections.bind(this);
@@ -123,45 +118,7 @@ class GraphY extends React.Component {
   }
 
   handleInputValue = (inputValue,pvname,initialized,severity,timestamp)=>{
-
-    if(this.props.usePolling){
-      let pvs=this.state.pvs;
-      pvs[pvname].initialized=initialized;
-      pvs[pvname].lastValue=inputValue;
-      pvs[pvname].severity=severity;
-      this.setState({pvs:pvs});
-    }
-    else{
-      let pvs=this.state.pvs;
-      pvs[pvname].initialized=initialized;
-      this.setState({pvs:pvs});
-      this.handleInputValueUnpolled(inputValue,pvname,initialized,severity,timestamp);
-    }
-
-
-    //  console.log("value: ",inputValue);
-    //  console.log("pvname:", pvname);
-  }
-
-
-
-  handleInputValuePolled = ()=>{
-    let pv;
-    let d = new Date();
-    let timestamp=d.getTime()/1000;
-
-    for(pv in this.state.pvnames){
-
-      if(this.state.pvs[this.state.pvnames[pv]].initialized){
-
-        //    console.log(timestamp,this.state.pvnames[pv],this.state.pvs[this.state.pvnames[pv]].lastValue);
-        this.handleInputValueUnpolled(this.state.pvs[this.state.pvnames[pv]].lastValue,this.state.pvnames[pv],this.state.pvs[this.state.pvnames[pv]].initialized,this.state.pvs[this.state.pvnames[pv]].severity,timestamp)
-      }
-    }
-    //  console.log("value: ",inputValue);
-    //  console.log("pvname:", pvname);
-  }
-  handleInputValueUnpolled = (inputValue,pvname,initialized,severity,timestamp)=>{
+  
     //console.log("unpolled");
     //  console.log("test");
     //  console.log("value: ",inputValue);
@@ -347,33 +304,6 @@ handleInputValueLabel=pvname=>(inputValue)=>{
 
 
 
-componentDidMount() {
-  if (this.props.usePolling){
-    let intervalId = setInterval(this.handleInputValuePolled, this.props.pollingRate);
-    // store intervalId in the state so it can be accessed later:
-    this.setState({'intervalId': intervalId});
-  }
-}
-
-
-componentWillUnmount() {
-  if (this.props.usePolling){
-    clearInterval(this.state.intervalId);
-  }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
 multipleDataConnections = () => {
   //this.test("test1");
   //this.handleInputValue();
@@ -390,6 +320,8 @@ multipleDataConnections = () => {
           handleInputValueLabel={this.handleInputValueLabel(this.state.pvs[pv].pvname)}
           usePvLabel={this.props.usePvLabel}
           debug={this.props.debug}
+          usePolling={this.props.usePolling}
+          pollingRate={this.props.pollingRate}
         />
 
         {this.props.usePvLabel===true?this.state.pvs[pv].label+': ':""}

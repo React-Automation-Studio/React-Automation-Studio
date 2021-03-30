@@ -126,7 +126,8 @@ export const useEpicsPV = (props) => {
 
     socketRef.current.emit('request_pv_info', { data: pv.pvname, 'clientAuthorisation': jwtRef.current },handleRequestPvInfoAck);
     let timerId;
-    if (props.pollingRate === 0) {
+    if (!props.usePolling || props.pollingRate === 0 || 
+      props.pollingRate === undefined || props.pollingRate === null) {
       socketRef.current.on(pv.pvname, updatePVData);
     } else {
       timerId = setInterval(() => {
@@ -256,6 +257,11 @@ EpicsPV.propTypes = {
   useStringValue: PropTypes.bool,
 
   /**
+   * Activate pollingRate.
+   */
+   usePolling: PropTypes.bool,
+
+  /**
    * Read value from PV on specified period interval [ms].
    * If set to zero, no polling is applied.
    */
@@ -269,7 +275,8 @@ EpicsPV.propTypes = {
  */
 // static defaultProps=WrappedComponent.defaultProps;
 EpicsPV.defaultProps = {
-  pollingRate: 0,
+  pollingRate: 100,
+  usePolling: false,
   debug: false,
 
 };

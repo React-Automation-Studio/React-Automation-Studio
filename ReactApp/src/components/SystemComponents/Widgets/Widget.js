@@ -274,6 +274,7 @@ import {
             outputValue={outputValue}
             useStringValue={props.useStringValue}
             initialLocalVariableValue={props.initialLocalVariableValue}
+            usePolling={props.usePolling}
             pollingRate={props.pollingRate}
             debug={props.debug}
             pvData={(data) => setState(prevState => {
@@ -318,6 +319,7 @@ import {
     outputValue={outputValue}
     useStringValue={props.useStringValue}
     initialLocalVariableValue={props.initialLocalVariableValue}
+    usePolling={props.usePolling}
     pollingRate={props.pollingRate}
     debug={props.debug}
     pvData={setPv}
@@ -566,6 +568,11 @@ Widget.propTypes = {
   tooltipProps:PropTypes.object,
 
   /**
+   * Activate pollingRate.
+   */
+   usePolling: PropTypes.bool,
+
+  /**
    * Read value from PV on specified period interval [ms].
    * If set to zero, no polling is applied.
    */
@@ -586,7 +593,8 @@ Widget.defaultProps = {
   useMetadata: true,
   tooltip:"",
   writeOutputValueToAllpvs:false,
-  pollingRate: 0,
+  usePolling: false,
+  pollingRate: 100,
 };
 
 export default Widget

@@ -194,7 +194,6 @@ class DeprecatedEpicsPV extends React.Component {
         this.props.pollingRate === undefined || this.props.pollingRate === null) {
         socket.on(this.state.pvname, this.updatePVData);
       } else {
-        console.log(this.props.pollingRate)
         this.timerId = setInterval(() => {
           socket.emit(
             "get_polled_value",

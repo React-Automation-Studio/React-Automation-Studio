@@ -327,7 +327,7 @@ PV.propTypes = {
   useStringValue: PropTypes.bool,
 
   /**
-   * Activate pollingRate.
+   * Directive to sample the PV values on the client side at the polling rate.
    */
    usePolling: PropTypes.bool,
 

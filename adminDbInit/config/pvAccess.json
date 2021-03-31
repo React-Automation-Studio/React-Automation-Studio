@@ -5,6 +5,7 @@
     "DEFAULT":
     {
       "usernames":["*"],
+      "roles":[],
       "rules":
       [
         { "rule":"[0-9].*",                   "read":true,  "write":false },

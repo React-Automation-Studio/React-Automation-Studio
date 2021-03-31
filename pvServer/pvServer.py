@@ -168,7 +168,6 @@ def localLogin():
         user = request.json.get('user', None)
         userData=LocalAuthenticateUser(user)
         resp=createLoginReponse(userData)
-        print(resp)
         return resp
     else:
        log.info("Standard login not allowed: {} ",user['username'])
@@ -363,76 +362,33 @@ def check_pv_initialized_after_disconnect():
         #                 raise
         time.sleep(0.1)
 def dbWatchControlThread():
-    global clientDbWatchList
-
-    #print("dbWatchControlThread started")
+    global clientDbWatchList, thread_lock
     while (True):
-       
-        # print("clientDbWatchList",clientDbWatchList)
         watchList=list(clientDbWatchList)
-        print("clientDbWatchList Lenghth",len(watchList))
+        # print("clientDbWatchList Lenghth",len(watchList))
         for watchEventName in watchList:
-            # print(clientDbWatchList[watchEventName])
-            # print("######")
-            # print("watchEventName",watchEventName)
-            # print("sockets",clientDbWatchList[watchEventName]['sockets'])
-            # print("closeWatch",clientDbWatchList[watchEventName]['closeWatch'])
-            # print("threadClosed",clientDbWatchList[watchEventName]['threadClosed'])
-
-
             if clientDbWatchList[watchEventName]['threadStarted'] is False:
                 clientDbWatchList[watchEventName]['thread']=threading.Thread(target=dbWatchThread,args=[watchEventName]).start()
                 clientDbWatchList[watchEventName]['threadStarted']=True
                 clientDbWatchList[watchEventName]['closeWatch']=False
-                # print("control thread starting thread",watchEventName)
-            if len(clientDbWatchList[watchEventName]['sockets'])==0:
-
-                if clientDbWatchList[watchEventName]['closeWatch']==False:
-                    #print("before client close")
-
-                    clientDbWatchList[watchEventName]['closeWatch']=True
-                    #print("after client close")
-            if clientDbWatchList[watchEventName]['threadClosed'] == True:
-                 #print("watch thread closed",watchEventName)
-                 clientDbWatchList.pop(watchEventName)
-                 #print("control thread eventname popped",watchEventName)
-            # with clientDbWatchList[watchEventName]['watch'] as stream:
-            #     for change in stream:
-            #         try:
-            #             #documentKey = change["documentKey"]
-            #             doc = clientDbWatchList[watchEventName]['collection'].find(clientDbWatchList[watchEventName]['query'])
-            #             #print(str(change))
-            #             #print("documentKey: ",documentKey)
-            #             #print(watchEventName,change)
-            #             data=dumps(doc)
-            #             eventName=watchEventName
-            #             dbURL=clientDbWatchList[watchEventName]['dbURL']
-            #             d={'dbURL': dbURL,'write_access':True,'data': data}
-            #             socketio.emit(eventName,d,str(dbURL)+'rw',namespace='/pvServer')
-            #             d={'dbURL': dbURL,'write_access':False,'data': data}
-            #             socketio.emit(eventName,d,str(dbURL)+'ro',namespace='/pvServer')
-
-            #         except:
-            #             print("Unexpected error:", sys.exc_info()[0])
-            #             raise
+            with thread_lock:           
+                if len(clientDbWatchList[watchEventName]['sockets'])==0:
+                    if clientDbWatchList[watchEventName]['closeWatch']==False:
+                        clientDbWatchList[watchEventName]['closeWatch']=True
+                if clientDbWatchList[watchEventName]['threadClosed'] == True:
+                    clientDbWatchList.pop(watchEventName)
         time.sleep(0.1)
 
 def dbWatchThread(watchEventName):
     global clientDbWatchList
-
-    #print("dbWatchThread started for:",watchEventName)
     exitThread=False
     while (exitThread==False):
-
         if watchEventName in clientDbWatchList :
-
             with clientDbWatchList[watchEventName]['watch'] as stream:
-                #for change in stream:
                 while stream.alive:
                     change = stream.try_next()
                     if change is not None:
                         try:
-                            #documentKey = change["documentKey"]
                             query = clientDbWatchList[watchEventName]['query']
                             projection = clientDbWatchList[watchEventName]['projection']
                             sort = clientDbWatchList[watchEventName]['sort']
@@ -443,9 +399,6 @@ def dbWatchThread(watchEventName):
                                 doc = clientDbWatchList[watchEventName]['collection'].count_documents(query)
                             else:
                                 doc = clientDbWatchList[watchEventName]['collection'].find(query,projection).sort(sort).skip(skip).limit(limit)
-                  #         print(str(change))
-                            #print("documentKey: ",documentKey)
-                            #print(watchEventName,change)
                             data=dumps(doc)
                             eventName=watchEventName
                             dbURL=clientDbWatchList[watchEventName]['dbURL']
@@ -453,23 +406,16 @@ def dbWatchThread(watchEventName):
                             socketio.emit(eventName,d,room=str(dbURL)+'rw',namespace='/pvServer')
                             d={'dbURL': dbURL,'write_access':False,'data': data}
                             socketio.emit(eventName,d,room=str(dbURL)+'ro',namespace='/pvServer')
-
                         except:
                             log.error("Unexpected error: {}",sys.exc_info()[0])
                             raise
-                    #print("dbWatchThread running:",watchEventName)
                     if clientDbWatchList[watchEventName]['closeWatch']==True:
-                        #print("clientDbWatchList[watchEventName]['closeWatch']",clientDbWatchList[watchEventName]['closeWatch'])
                         clientDbWatchList[watchEventName]['watch'].close()
-                       # print("dbWatchThread afterclose :",watchEventName)
 
                     time.sleep(0.1)
-                #print("clientDbWatchList[watchEventName]['clientClosed']",clientDbWatchList[watchEventName]['clientClosed'])
-                #print("dbWatchThread stream not alive :",watchEventName)
                 clientDbWatchList[watchEventName]['threadClosed']=True
                 exitThread=True
                 time.sleep(0.1)
-
 
 def onValueChanges(pvname=None,count=None,char_value=None,severity=None,status=None, value=None, timestamp=None, **kw):
     global clientPVList
@@ -993,7 +939,7 @@ def databaseBroadcastRead(message):
 
 @socketio.on('remove_dbWatch', namespace='/pvServer')
 def remove_dbWatch(message):
-    global clientPVlist,REACT_APP_DisableLogin, myuid
+    global clientPVlist,REACT_APP_DisableLogin, myuid, thread_lock
     dbURL= str(message['dbURL'])
     authenticated=False
     if REACT_APP_DisableLogin:
@@ -1002,22 +948,14 @@ def remove_dbWatch(message):
     else :
         accessControl=AutheriseUserAndPermissions(message['clientAuthorisation'],dbURL)
         authenticated=accessControl['userAuthorised']
-
     if accessControl['userAuthorised'] :
         dbWatchId=str(message['dbWatchId'])+str(request.sid)
         watchEventName='databaseWatchData:'+dbURL;
-       
         def removeWatch():
             log.info("remove {}",watchEventName)
-            #print(message)
-            
-            print("remove dbWatchId",dbWatchId,watchEventName)
             try:
-                #print("before pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
                 if dbWatchId in clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']:
-                    print("found")
                     log.debug("debug1: {} {}",dbWatchId,watchEventName)
-            #         #print("before pop",clientDbWatchList[watchEventName]['sockets'][request.sid]['pvConnectionIds'])
                     clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds'].pop(str(dbWatchId))
                     log.debug("debug2: {} {}",dbWatchId,watchEventName)
                     if len(clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds'])==0:
@@ -1025,16 +963,11 @@ def remove_dbWatch(message):
                         leave_room(str(watchEventName))
                         clientDbWatchList[watchEventName]['sockets'].pop(request.sid)
                     log.debug("debug4: {} {}",dbWatchId,watchEventName)
-             #       print("after pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
-                else:
-                    print("not found")
             except:
                 log.info("Could not remove watchID")
                 pass
-        if watchEventName in	clientDbWatchList:
-            removeWatch()
-        else:
-            time.sleep(1)
+        time.sleep(3) # wait for 3 seconds before removing a watch
+        with thread_lock:        
             removeWatch()
         
 
@@ -1048,8 +981,8 @@ def remove_dbWatch(message):
 
 
 @socketio.on('databaseReadWatchAndBroadcast', namespace='/pvServer')
-def databaseBroadcastRead(message):
-    global clientPVlist,REACT_APP_DisableLogin,clientDbWatchList,myDbWatchUid
+def databaseReadWatchAndBroadcast(message):
+    global clientPVlist,REACT_APP_DisableLogin,clientDbWatchList,myDbWatchUid,thread_lock
     dbURL= str(message['dbURL'])
     authenticated=False
     if REACT_APP_DisableLogin:
@@ -1126,48 +1059,49 @@ def databaseBroadcastRead(message):
                             dbWatchId=str(myDbWatchUid)
                             d={'dbURL': dbURL,'write_access':write_access,'data': data}
                             socketio.emit(eventName,d,room=str(request.sid),namespace='/pvServer')
-                            if not (watchEventName in	clientDbWatchList):
-                                dbWatch={}
-                                dbWatch['watchEventName']=watchEventName
-                                dbWatch['client']=myclient
-                                dbWatch['db']=mydb
-                                dbWatch['collection']=mycol
-                                dbWatch['watch']=mycol.watch()
-                                dbWatch['dbURL']=dbURL
-                                dbWatch['query']=query
-                                dbWatch['projection']=projection
-                                dbWatch['sort']=sort
-                                dbWatch['skip']=skip
-                                dbWatch['limit']=limit
-                                dbWatch['count']=count
-                                dbWatch['sockets']={
-                                    str(request.sid):{
-                                        "dbWatchIds":{
-                                            str(dbWatchId):True
+                            with thread_lock:
+                                if not (watchEventName in	clientDbWatchList):
+                                    dbWatch={}
+                                    dbWatch['watchEventName']=watchEventName
+                                    dbWatch['client']=myclient
+                                    dbWatch['db']=mydb
+                                    dbWatch['collection']=mycol
+                                    dbWatch['watch']=mycol.watch()
+                                    dbWatch['dbURL']=dbURL
+                                    dbWatch['query']=query
+                                    dbWatch['projection']=projection
+                                    dbWatch['sort']=sort
+                                    dbWatch['skip']=skip
+                                    dbWatch['limit']=limit
+                                    dbWatch['count']=count
+                                    dbWatch['sockets']={
+                                        str(request.sid):{
+                                            "dbWatchIds":{
+                                                str(dbWatchId):True
+                                            }
                                         }
                                     }
-                                }
-                                dbWatch['thread']=None
-                                dbWatch['threadStarted']=False
-                                dbWatch['closeWatch']=False
-                                dbWatch['threadClosed']=False
-                                clientDbWatchList[watchEventName]=dbWatch
-                                join_room(str(watchEventName))
-                            else:
-
-                                if request.sid in clientDbWatchList[watchEventName]['sockets']:
-                                    if 'dbWatchIds' in clientDbWatchList[watchEventName]['sockets'][request.sid]:
-                                        if  dbWatchIds in clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']:
-                                            log.info("not a unique id {} {}",dbWatchIds,watchEventName)
-                                        else:
-                                            clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds'][dbWatchIds]=True
-                                    else:
-                                        clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']={dbWatchIds:True}
+                                    dbWatch['thread']=None
+                                    dbWatch['threadStarted']=False
+                                    dbWatch['closeWatch']=False
+                                    dbWatch['threadClosed']=False
+                                    clientDbWatchList[watchEventName]=dbWatch
+                                    join_room(str(watchEventName))
                                 else:
-                                    clientDbWatchList[watchEventName]['sockets'][request.sid]={'dbWatchIds':{dbWatchId:True}}
 
-                                join_room(str(watchEventName))
-                            return {"dbWatchId":dbWatchId}
+                                    if request.sid in clientDbWatchList[watchEventName]['sockets']:
+                                        if 'dbWatchIds' in clientDbWatchList[watchEventName]['sockets'][request.sid]:
+                                            if  dbWatchId in clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']:
+                                                log.info("not a unique id {} {}",dbWatchId,watchEventName)
+                                            else:
+                                                clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds'][dbWatchId]=True
+                                        else:
+                                            clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']={dbWatchId:True}
+                                    else:
+                                        clientDbWatchList[watchEventName]['sockets'][request.sid]={'dbWatchIds':{dbWatchId:True}}
+
+                                    join_room(str(watchEventName))
+                                return {"dbWatchId":dbWatchId}
                         except:
                             return "Ack: Could not connect to MongoDB: "+str(dbURL)
                 else:
@@ -1612,7 +1546,7 @@ def archiverRead(message):
 
 @socketio.on('adminAllUsers', namespace='/pvServer')
 def adminAllUsers(message):
-    global clientPVlist,REACT_APP_DisableLogin,clientDbWatchList,myDbWatchUid
+    global clientPVlist,REACT_APP_DisableLogin,clientDbWatchList,myDbWatchUid,thread_lock
 
     isAdmin=checkIfAdmin(message['clientAuthorisation'])
     if isAdmin :
@@ -1653,8 +1587,6 @@ def adminAllUsers(message):
                 if (MONGO_INITDB_ADMIN_DATABASE not in dbnames):
                     print("Error cant connect to admin db",MONGO_INITDB_ADMIN_DATABASE)
                 else:
-                    print("connected to adminDb",MONGO_INITDB_ADMIN_DATABASE)
-
                     mydb = client[MONGO_INITDB_ADMIN_DATABASE]
                     mycol=mydb['users']
                     query={}
@@ -1671,60 +1603,51 @@ def adminAllUsers(message):
                     watchEventName=eventName
                     myDbWatchUid= str(message['dbWatchId']+str(request.sid))
                     dbWatchId=str(myDbWatchUid)
-                    print(clientDbWatchList)
-                    if not (watchEventName in	clientDbWatchList):
-                        print("not in 1")
-                        dbWatch={}
-                        dbWatch['watchEventName']=watchEventName
-                        dbWatch['client']=client
-                        dbWatch['db']=mydb
-                        dbWatch['collection']=mycol
-                       
-                        dbWatch['watch']=mycol.watch()
-                   
-                        dbWatch['dbURL']=watchEventName
-                        dbWatch['query']=query
-                        dbWatch['projection']=projection
-                        dbWatch['sort']=sort
-                        dbWatch['skip']=skip
-                        dbWatch['limit']=limit
-                        dbWatch['count']=count
-                        dbWatch['sockets']={
-                            str(request.sid):{
-                                "dbWatchIds":{
-                                    str(dbWatchId):True
+                    with thread_lock:
+                        if not (watchEventName in	clientDbWatchList):
+                            dbWatch={}
+                            dbWatch['watchEventName']=watchEventName
+                            dbWatch['client']=client
+                            dbWatch['db']=mydb
+                            dbWatch['collection']=mycol
+                            dbWatch['watch']=mycol.watch()
+                            dbWatch['dbURL']=watchEventName
+                            dbWatch['query']=query
+                            dbWatch['projection']=projection
+                            dbWatch['sort']=sort
+                            dbWatch['skip']=skip
+                            dbWatch['limit']=limit
+                            dbWatch['count']=count
+                            dbWatch['sockets']={
+                                str(request.sid):{
+                                    "dbWatchIds":{
+                                        str(dbWatchId):True
+                                    }
                                 }
                             }
-                        }
-                        dbWatch['thread']=None
-                        dbWatch['threadStarted']=False
-                        dbWatch['closeWatch']=False
-                        dbWatch['threadClosed']=False
-
-
-                        clientDbWatchList[watchEventName]=dbWatch
-                        print("adminallusers clientDbWatchList",clientDbWatchList)
-                        join_room(str(watchEventName))
-                        join_room(str(watchEventName)+'rw')
-                    else:
-
-                        if request.sid in clientDbWatchList[watchEventName]['sockets']:
-                            if 'dbWatchIds' in clientDbWatchList[watchEventName]['sockets'][request.sid]:
-                                if  dbWatchIds in clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']:
-                                    log.info("not a unique id {} {}",dbWatchIds,watchEventName)
-                    #               print("allConnectionIds ",clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds'])
-                                else:
-                                    clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds'][dbWatchIds]=True
-                            else:
-                                clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']={dbWatchIds:True}
+                            dbWatch['thread']=None
+                            dbWatch['threadStarted']=False
+                            dbWatch['closeWatch']=False
+                            dbWatch['threadClosed']=False
+                            clientDbWatchList[watchEventName]=dbWatch
+                            join_room(str(watchEventName))
+                            join_room(str(watchEventName)+'rw')
                         else:
-                            clientDbWatchList[watchEventName]['sockets'][request.sid]={'dbWatchIds':{dbWatchId:True}}
+                            if request.sid in clientDbWatchList[watchEventName]['sockets']:
+                                if 'dbWatchIds' in clientDbWatchList[watchEventName]['sockets'][request.sid]:
+                                    if  dbWatchId in clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']:
+                                        log.info("not a unique id {} {}",dbWatchId,watchEventName)
+                                    else:
+                                        clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds'][dbWatchId]=True
+                                else:
+                                    clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']={dbWatchId:True}
+                            else:
+                                clientDbWatchList[watchEventName]['sockets'][request.sid]={'dbWatchIds':{dbWatchId:True}}
 
-                        join_room(str(watchEventName))
-                        join_room(str(watchEventName)+'rw')
-                        print("watch already exists: ",watchEventName)
+                            join_room(str(watchEventName))
+                            join_room(str(watchEventName)+'rw')
 
-                    return {"dbWatchId":dbWatchId}
+                        return {"dbWatchId":dbWatchId}
             except Exception as e:
                 print("adminallusers",e)
                 return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
@@ -1735,7 +1658,7 @@ def adminAllUsers(message):
 
 @socketio.on('adminWatchUAGs', namespace='/pvServer')
 def adminWatchUAGs(message):
-    global clientPVlist,REACT_APP_DisableLogin,clientDbWatchList,myDbWatchUid
+    global clientPVlist,REACT_APP_DisableLogin,clientDbWatchList,myDbWatchUid,thread_lock
 
     isAdmin=checkIfAdmin(message['clientAuthorisation'])
     if isAdmin :
@@ -1776,11 +1699,8 @@ def adminWatchUAGs(message):
                 if (MONGO_INITDB_ADMIN_DATABASE not in dbnames):
                     print("Error cant connect to admin db",MONGO_INITDB_ADMIN_DATABASE)
                 else:
-                    print("connected to adminDb",MONGO_INITDB_ADMIN_DATABASE)
-
                     mydb = client[MONGO_INITDB_ADMIN_DATABASE]
                     mycol=mydb['pvAccess']
-                    
                     query={}
                     projection=None
                     sort=[('$natural', 1)]
@@ -1795,59 +1715,53 @@ def adminWatchUAGs(message):
                     watchEventName=eventName
                     myDbWatchUid= str(message['dbWatchId']+str(request.sid))
                     dbWatchId=str(myDbWatchUid)
-                    print(clientDbWatchList)
-                    if not (watchEventName in	clientDbWatchList):
-                        dbWatch={}
-                        dbWatch['watchEventName']=watchEventName
-                        dbWatch['client']=client
-                        dbWatch['db']=mydb
-                        dbWatch['collection']=mycol
-                       
-                        dbWatch['watch']=mycol.watch()
-                   
-                        dbWatch['dbURL']=watchEventName
-                        dbWatch['query']=query
-                        dbWatch['projection']=projection
-                        dbWatch['sort']=sort
-                        dbWatch['skip']=skip
-                        dbWatch['limit']=limit
-                        dbWatch['count']=count
-                        dbWatch['sockets']={
-                            str(request.sid):{
-                                "dbWatchIds":{
-                                    str(dbWatchId):True
+                    with thread_lock:
+                        if not (watchEventName in	clientDbWatchList):
+                            dbWatch={}
+                            dbWatch['watchEventName']=watchEventName
+                            dbWatch['client']=client
+                            dbWatch['db']=mydb
+                            dbWatch['collection']=mycol
+                            dbWatch['watch']=mycol.watch()
+                            dbWatch['dbURL']=watchEventName
+                            dbWatch['query']=query
+                            dbWatch['projection']=projection
+                            dbWatch['sort']=sort
+                            dbWatch['skip']=skip
+                            dbWatch['limit']=limit
+                            dbWatch['count']=count
+                            dbWatch['sockets']={
+                                str(request.sid):{
+                                    "dbWatchIds":{
+                                        str(dbWatchId):True
+                                    }
                                 }
                             }
-                        }
-                        dbWatch['thread']=None
-                        dbWatch['threadStarted']=False
-                        dbWatch['closeWatch']=False
-                        dbWatch['threadClosed']=False
-
-
-                        clientDbWatchList[watchEventName]=dbWatch
-                        print("adminWatchUAGs clientDbWatchList",clientDbWatchList)
-                        join_room(str(watchEventName))
-                        join_room(str(watchEventName)+'rw')
-                    else:
-
-                        if request.sid in clientDbWatchList[watchEventName]['sockets']:
-                            if 'dbWatchIds' in clientDbWatchList[watchEventName]['sockets'][request.sid]:
-                                if  dbWatchIds in clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']:
-                                    log.info("not a unique id {} {}",dbWatchIds,watchEventName)
-                    #               print("allConnectionIds ",clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds'])
-                                else:
-                                    clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds'][dbWatchIds]=True
-                            else:
-                                clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']={dbWatchIds:True}
+                            dbWatch['thread']=None
+                            dbWatch['threadStarted']=False
+                            dbWatch['closeWatch']=False
+                            dbWatch['threadClosed']=False
+                            clientDbWatchList[watchEventName]=dbWatch
+                            join_room(str(watchEventName))
+                            join_room(str(watchEventName)+'rw')
                         else:
-                            clientDbWatchList[watchEventName]['sockets'][request.sid]={'dbWatchIds':{dbWatchId:True}}
 
-                        join_room(str(watchEventName))
-                        join_room(str(watchEventName)+'rw')
-                        print("watch already exists: ",watchEventName)
+                            if request.sid in clientDbWatchList[watchEventName]['sockets']:
+                                if 'dbWatchIds' in clientDbWatchList[watchEventName]['sockets'][request.sid]:
+                                    if  dbWatchId in clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']:
+                                        log.info("not a unique id {} {}",dbWatchId,watchEventName)
+                        #               print("allConnectionIds ",clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds'])
+                                    else:
+                                        clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds'][dbWatchId]=True
+                                else:
+                                    clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']={dbWatchId:True}
+                            else:
+                                clientDbWatchList[watchEventName]['sockets'][request.sid]={'dbWatchIds':{dbWatchId:True}}
 
-                    return {"dbWatchId":dbWatchId}
+                            join_room(str(watchEventName))
+                            join_room(str(watchEventName)+'rw')
+
+                        return {"dbWatchId":dbWatchId}
             except Exception as e:
                 print("adminWatchUAGs",e)
                 return "Ack: Could not connect to MongoDB ADMIN_DATABASE"

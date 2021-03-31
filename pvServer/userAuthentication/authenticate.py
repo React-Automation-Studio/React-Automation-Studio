@@ -320,19 +320,29 @@ if (not REACT_APP_DisableLogin) :
 
 def checkPermissions(pvname,username):
     global UAGS
-    d={'read':False,'write':False,'roles':[]}
-    for uag in list(UAGS['userGroups'].keys()):
+    permissions={'read':False,'write':False,'roles':[]}
+    def checkUAGPermision(pvname,username,UAGS,uag,permissions):
         for usernames in UAGS['userGroups'][uag]['usernames']:
             if ((username==usernames)or (usernames=="*")) :
                 for rules in UAGS['userGroups'][uag]['rules']:
                     match=re.search(str(rules['rule']),str(pvname))
                     if (match):
-                        d['read']=rules['read']
-                        d['write']=rules['write']
+                        permissions['read']=rules['read']
+                        permissions['write']=rules['write']
                 if 'roles' in UAGS['userGroups'][uag]:
                     for roles in UAGS['userGroups'][uag]['roles']:
-                        d['roles'].append(roles)
-    return d
+                        permissions['roles'].append(roles)
+        return permissions
+    UAGslist=list(UAGS['userGroups'].keys())
+    # UAGsList.remove("DEFAULT")
+    # UAGsList.remove("ADMIN")
+    permissions=checkUAGPermision(pvname,username,UAGS,"DEFAULT",permissions) # apply default permission first
+
+    for uag in UAGslist:    # apply all other  permissions
+        if not (uag in ["ADMIN","DEFAULT"]):
+            permissions=checkUAGPermision(pvname,username,UAGS,uag,permissions)
+    permissions=checkUAGPermision(pvname,username,UAGS,"ADMIN",permissions) # apply applicable admin
+    return permissions
 
 
 def checkUserRole(username):

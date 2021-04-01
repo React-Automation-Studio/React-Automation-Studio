@@ -162,10 +162,34 @@ export const useLocalPV = (props) => {
  **/
 const LocalPV = (props) => {
   const pv = useLocalPV(props);
+  const [read, setRead] = useState(false);
   useEffect(() => {
-    props.pvData(pv);
+    if (
+      props.usePolling === false || 
+      props.pollingRate === 0 || 
+      props.pollingRate === undefined ||
+      props.pollingRate === null
+    ) {
+      props.pvData(pv);
+    } else if (read) {
+      props.pvData(pv);
+      setRead(false);  
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pv])
+  }, [pv, read]);
+  useEffect(() => {
+    let timer;
+    if (props.usePolling === true && props.pollingRate > 0) {
+      timer = setInterval(() => {
+        setRead(true);
+      }, props.pollingRate)
+    }
+    return () => { 
+      if (timer !== undefined) {
+        clearInterval(timer);
+      }
+    } 
+  }, []);
 
   return (
     <React.Fragment>
@@ -215,6 +239,16 @@ LocalPV.propTypes = {
    */
   useStringValue: PropTypes.bool,
 
+  /**
+   * Directive to sample the PV values on the client side at the polling rate.
+   */
+  usePolling: PropTypes.bool,
+
+  /**
+   * Read value from PV on specified period interval [ms].
+   * If set to zero, no polling is applied.
+   */
+  pollingRate: PropTypes.number,
 
 };
 
@@ -224,7 +258,8 @@ LocalPV.propTypes = {
  */
 // static defaultProps=WrappedComponent.defaultProps;
 LocalPV.defaultProps = {
-
+  pollingRate: 100,
+  usePolling: false,
   debug: false,
   
 };

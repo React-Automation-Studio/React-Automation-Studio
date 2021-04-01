@@ -65,7 +65,16 @@ class DeprecatedLocalPV extends React.Component {
           {
             initialized:false
           },
-          this.handleInputValue
+          () => {
+            if (
+              this.props.usePolling === false || 
+              this.props.pollingRate === 0 || 
+              this.props.pollingRate === undefined ||
+              this.props.pollingRate === null
+            ) {
+              this.handleInputValue();
+            }
+          }
         );
 
         if (this.props.debug===true){
@@ -76,7 +85,17 @@ class DeprecatedLocalPV extends React.Component {
         if (msg.newmetadata=='False'){
           this.setState({['internalValue']: this.props.useStringValue===true? msg.char_value:msg.value,
           severity: msg.severity},
-        this.handleInputValue);
+            () => {
+              if (
+                this.props.usePolling === false || 
+                this.props.pollingRate === 0 || 
+                this.props.pollingRate === undefined ||
+                this.props.pollingRate === null
+              ) {
+                this.handleInputValue();
+              }
+            }
+          );
           if (this.props.debug===true){
             console.log('no metadata');
           }
@@ -91,7 +110,16 @@ class DeprecatedLocalPV extends React.Component {
             ['internalValue']: this.props.useStringValue===true? msg.char_value:msg.value,
             initialized:true ,
             severity: msg.severity},
-            this.handleMetadata
+            () => {
+              if (
+                this.props.usePolling === false || 
+                this.props.pollingRate === 0 || 
+                this.props.pollingRate === undefined ||
+                this.props.pollingRate === null
+              ) {
+                this.handleMetadata();
+              }
+            }
           );
           //        if (typeof this.props.handleMetadata !== 'undefined'){
           //          this.props.handleMetadata(this.state['pv']);
@@ -150,13 +178,17 @@ class DeprecatedLocalPV extends React.Component {
 
         this.context.updateLocalVariable(this.state.pvname,msg);
         this.updatePVData(this.context.localVariables[this.state.pvname]);
+        if (this.props.usePolling === true && this.props.pollingRate > 0) {
+          this.timer = setInterval(() => this.handleMetadata(), this.props.pollingRate);
+        }
       }
       else{
-
         //this.context.localVariables[this.state.pvname].newmetadata='True';
         this.updatePVData(this.context.localVariables[this.state.pvname]);
       //  console.log(this.state)
-
+        if (this.props.usePolling === true && this.props.pollingRate > 0) {
+          this.timer = setInterval(() => this.handleMetadata(), this.props.pollingRate);
+        }
       }
 
 
@@ -169,7 +201,9 @@ class DeprecatedLocalPV extends React.Component {
   }
 
   componentWillUnmount(){
-
+    if (this.timer !== undefined) {
+     clearInterval(this.timer)
+    }
     //  socket.removeListener(this.state.pvname,this.testFunction);
 
     //    if (this.props.debug===true){

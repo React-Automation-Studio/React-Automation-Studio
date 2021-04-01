@@ -66,6 +66,8 @@ class DataConnection extends React.Component {
         outputValue=  {this.props.outputValue}
         useStringValue={this.props.useStringValue}
         debug={this.props.debug}
+        usePolling={this.props.usePolling}
+        pollingRate={this.props.pollingRate}
         />
       }
     {pv.includes('pva://')&&

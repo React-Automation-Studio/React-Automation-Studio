@@ -25,6 +25,8 @@ services:
       - ALARM_DATABASE_REPLICA_SET_NAME=devrs
       - LOADSAVE_DATABASE=localhost
       - LOADSAVE_DATABASE_REPLICA_SET_NAME=devrs
+      - ADMIN_DATABASE=localhost
+      - ADMIN_DATABASE_REPLICA_SET_NAME=devrs
       - WATCH_DEBUG_DATABASE=localhost
       - WATCH_DEBUG_DATABASE_REPLICA_SET_NAME=devrs
       - DEMO_ARCHIVER=http://localhost:17668
@@ -51,6 +53,8 @@ services:
       - ALARM_DATABASE_REPLICA_SET_NAME=devrs
       - LOADSAVE_DATABASE=localhost
       - LOADSAVE_DATABASE_REPLICA_SET_NAME=devrs
+      - ADMIN_DATABASE=localhost
+      - ADMIN_DATABASE_REPLICA_SET_NAME=devrs
       - WATCH_DEBUG_DATABASE=localhost
       - WATCH_DEBUG_DATABASE_REPLICA_SET_NAME=devrs
       - DEMO_ARCHIVER=http://localhost:17668
@@ -77,6 +81,8 @@ services:
       - ALARM_DATABASE_REPLICA_SET_NAME=devrs
       - LOADSAVE_DATABASE=localhost
       - LOADSAVE_DATABASE_REPLICA_SET_NAME=devrs
+      - ADMIN_DATABASE=localhost
+      - ADMIN_DATABASE_REPLICA_SET_NAME=devrs
       - WATCH_DEBUG_DATABASE=localhost
       - WATCH_DEBUG_DATABASE_REPLICA_SET_NAME=devrs
       - DEMO_ARCHIVER=http://localhost:17668
@@ -260,6 +266,21 @@ services:
     build:
       context: ./
       dockerfile: docker/loadSaveDbInit/Dockerfile
+    network_mode: "host"
+    tty: true
+    stdin_open: true
+    depends_on:
+      - mongosetup
+  initializeadmindb:
+    env_file: .env
+    environment:
+      - ADMIN_DATABASE=localhost
+      - ADMIN_DATABASE_REPLICA_SET_NAME=devrs
+    build:
+      context: ./
+
+     
+      dockerfile: docker/adminDbInit/Dockerfile
     network_mode: "host"
     tty: true
     stdin_open: true

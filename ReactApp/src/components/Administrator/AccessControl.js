@@ -1,17 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+
 import useAllUsers from './adminDbHooks/useAllUsers'
 import useUAGs from './adminDbHooks/useUAGs'
-
 import Grid from '@material-ui/core/Grid';
-
-
-import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 import Card from '@material-ui/core/Card';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
-import Typography from '@material-ui/core/Typography';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
@@ -29,8 +23,6 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import Slide from '@material-ui/core/Slide';
-import useDeleteUser from './adminDbHooks/useDeleteUser';
-import useEnableUser from './adminDbHooks/useEnableUser';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import TextField from '@material-ui/core/TextField';
@@ -69,10 +61,10 @@ const UagRename = (props) => {
     else {
       return false
     }
-  })
+  },[])
   useEffect(() => {
     setError(validateUagName(newName, allNames) === false)
-
+// eslint-disable-next-line react-hooks/exhaustive-deps
   }, [newName, allNames])
 
   return (
@@ -235,7 +227,7 @@ const AccessControl = (props) => {
     });
   const { data: users, writeAccess: usersWriteAccess, initialized: usersInitialized } = allUsers;
   const { userGroups, writeAccess: uagsWriteAccess, initialized: uagsInitialized, updateUAGs, updateUAGsError, updateUAGsOk: saveOk } = useUAGs({});
-  console.log("saveOk", saveOk, "safeOkLatched", saveOkLatched)
+  
   useEffect(() => {
 
 
@@ -269,10 +261,8 @@ const AccessControl = (props) => {
   }, [userGroups, editMode, save, clear, saveOkLatched])
 
   let userGroupKeys = uagsInitialized ? Object.keys(modifiedUserGroups) : [];
-  let usergroup = uagsInitialized ? userGroupKeys[tabValue] : undefined;
+  let usergroup = uagsInitialized ? userGroupKeys[tabValue] : 0;
   //console.log("users", users, usersWriteAccess, usersInitialized)
-  console.log("userGroups", userGroups)
-  console.log("modifiedUserGroups", modifiedUserGroups)
   useEffect(() => {
     const newErrors = [];
     if (modifiedUserGroups) {
@@ -571,8 +561,10 @@ const AccessControl = (props) => {
 
                       </TableHead>
                       <TableBody>
-                        {modifiedUserGroups[usergroup].roles?.map((role, index) =>
-                          <TableRow>
+                        {
+                        
+                        modifiedUserGroups[usergroup].roles?.map((role, index) =>
+                          <TableRow key={index.toString()}>
 
                             <TableCell align="center">
                               {index}
@@ -652,7 +644,9 @@ const AccessControl = (props) => {
                         {modifiedUserGroups[usergroup].rules?.map((rule, index) => {
                           const stringValue = rule.rule?.toString();
 
-                          return (<TableRow>
+                          return (<TableRow
+                          key={index.toString()}
+                          >
 
                             <TableCell align="center">
                             <div style={{display:"flex",direction:"row"}}>
@@ -763,7 +757,7 @@ const AccessControl = (props) => {
                       </TableHead>
                       <TableBody>
                         {modifiedUserGroups[usergroup].usernames?.map((username, index) =>
-                          <TableRow>
+                          <TableRow key={index.toString()}>
 
                             <TableCell align="center">
                               {index}

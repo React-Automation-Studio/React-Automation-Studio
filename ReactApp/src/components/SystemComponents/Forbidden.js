@@ -2,7 +2,6 @@ import React, { useEffect,useState } from 'react';
 
 
 import Typography from '@material-ui/core/Typography';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import { Redirect } from 'react-router-dom';
 
 
@@ -11,7 +10,7 @@ const Forbidden = (props) => {
 
 const [time,setTime]=useState(3);
 useEffect(()=>{
- 
+
     const timer = setTimeout(()=>setTime(prev=>prev-1), 1000)
     return()=>{
         clearTimeout(timer)
@@ -23,8 +22,8 @@ useEffect(()=>{
             <Typography variant="subtitle1">{"Redirecting in "+time+" seconds."}</Typography>
             {time===0&&<Redirect to={"/"} />}
             </div>
-            
-        
+
+
     )
 
 }

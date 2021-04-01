@@ -1,31 +1,8 @@
 import React,{useState} from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-
-
-
-import Grid from '@material-ui/core/Grid';
-
-import SideBar from '../SystemComponents/SideBar';
-
-import AppBar from '@material-ui/core/AppBar';
-
-
-import Toolbar from '@material-ui/core/Toolbar';
-
-import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
-// import AllUsers from "./AllUsers"
 import AddUsers from "./AddUsers"
 import TraditionalLayout from '../UI/Layout/ComposedLayouts/TraditionalLayout';
 import AllUsers from './AllUsers';
 import AccessControl from './AccessControl';
-const systemName = 'testIOC';
-
-
-
 
 const styles = theme => ({
   root: {

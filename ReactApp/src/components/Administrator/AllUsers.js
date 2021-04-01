@@ -1,13 +1,7 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
 import useAllUsers from './adminDbHooks/useAllUsers'
 import useUAGs from './adminDbHooks/useUAGs'
-
 import Grid from '@material-ui/core/Grid';
-
-
-import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 import Card from '@material-ui/core/Card';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -57,10 +51,15 @@ const AllUsers = (props) => {
     {
       dbURL: 'mongodb://ADMIN_DATABASE:rasAdminDb:users:Parameters:""'
     });
+  // eslint-disable-next-line no-unused-vars  
   const { data: users, writeAccess: usersWriteAccess, initialized: usersInitialized } = allUsers;
+  // eslint-disable-next-line no-unused-vars
   const { userGroups, writeAccess: uagsWriteAccess, initialized: uagsInitialized } = useUAGs({});
+  // eslint-disable-next-line no-unused-vars
   const {deleteUser,deleteUserError} =useDeleteUser({});
+  // eslint-disable-next-line no-unused-vars
   const {enableUser,enableUserError} =useEnableUser({});
+  // eslint-disable-next-line no-unused-vars
   const [currentUserId,setCurrentUserId]=useState(null);
   const [currentUser,setCurrentUser]=useState(null);
   const [showDeleteUserDialog,setShowDeleteUserDialog]=useState(false);
@@ -82,8 +81,8 @@ const AllUsers = (props) => {
       return ""
     }
   }
-  console.log(users, usersWriteAccess, usersInitialized)
-  console.log(userGroups, uagsWriteAccess, uagsWriteAccess)
+  //console.log(users, usersWriteAccess, usersInitialized)
+ // console.log(userGroups, uagsWriteAccess, uagsWriteAccess)
   return (
     <React.Fragment>
       <Dialog

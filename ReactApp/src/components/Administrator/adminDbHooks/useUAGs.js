@@ -23,7 +23,7 @@ const useUAGs = (props) => {
         socketRef.current = socket;
     }, [socket])
 
-    const [dbWatchId, setDbWatchId] = useState(null);
+    
     const [userGroups, setUserGroups] = useState(null);
     const [userGroupsId, setUserGroupsId] = useState(null);
     const [writeAccess, setWriteAccess] = useState(false);
@@ -68,7 +68,7 @@ const useUAGs = (props) => {
         return () => {
 
                 if (dbWatchIdRef.current !== null) {
-                    console.log("removing watch",dbWatchIdRef.current,"adminWatchUAGs")
+               //     console.log("removing watch",dbWatchIdRef.current,"adminWatchUAGs")
                     socketRef.current.emit('remove_dbWatch', { dbURL: 'adminWatchUAGs', dbWatchId: dbWatchIdRef.current, 'clientAuthorisation': jwtRef.current });
                 }
                 socketRef.current.removeListener('databaseWatchData:adminWatchUAGs', handleAdminWatchUAGsReadWatchBroadcast);

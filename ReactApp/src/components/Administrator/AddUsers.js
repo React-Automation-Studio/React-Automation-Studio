@@ -1,5 +1,4 @@
 import React, { useState,useEffect } from 'react';
-import PropTypes from 'prop-types';
 
 
 
@@ -10,7 +9,6 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 
 
-import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 import Card from '@material-ui/core/Card';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -20,8 +18,6 @@ import useAddUSer from './adminDbHooks/useAddUser';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
 
-
-const systemName = 'testIOC';
 
 
 
@@ -42,8 +38,6 @@ const useStyles = makeStyles((theme) => ({
 const AddUsers = (props) => {
 
   const [username, setUsername] = useState("");
-  ;
-  
   const [usernameError, setUsernameError] = useState(false);
   const [password, setPassword] = useState("");
   const [requirePassword, setRequirePassword] = useState(!(process.env.REACT_APP_DisableStandardLogin === 'true'))
@@ -107,8 +101,8 @@ const AddUsers = (props) => {
     confirmPasswordError = true;
     confirmPasswordHelperText = "Passwords do not match"
   }
-  let addUserDisable = ((username.length > 0) && (requirePassword == false || (confirmPasswordError == false) && (passwordError == false))) ? false : true;
-  console.log(requirePassword)
+  let addUserDisable = ((username.length > 0) && (requirePassword === false || (confirmPasswordError === false) && (passwordError === false))) ? false : true;
+  
   return (
     <form autoComplete="off">
     

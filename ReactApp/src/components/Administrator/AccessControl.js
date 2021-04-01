@@ -55,22 +55,148 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
+const UagRename = (props) => {
+  const [show, setShow] = useState(false);
+  const [error, setError] = useState(false);
+  const [newName, setNewName] = useState(props.usergroup);
+  const allNames = props.allUserGroups;
+  const validateUagName = useCallback((name, allNames) => {
+    const letterNumber = /^[0-9a-zA-Z_]+$/;
+    if ((name.length > 0) && (!allNames.includes(name)) && (name.match(letterNumber))) {
+
+      return true
+    }
+    else {
+      return false
+    }
+  })
+  useEffect(() => {
+    setError(validateUagName(newName, allNames) === false)
+
+  }, [newName, allNames])
+
+  return (
+
+    <React.Fragment>
+      <IconButton onClick={() => setShow(true)}>
+        <EditIcon />
+      </IconButton>
+      <Dialog
+        open={show}
+        TransitionComponent={Transition}
+        keepMounted
+        aria-labelledby="alert-Login-title2"
+        aria-describedby="alert-Login-slide-description2"
+      >
+        <DialogTitle id="alert-Login-title2">
+          {"Rename UAG: " + props.usergroup}
+        </DialogTitle>
+        <DialogContent>
+
+          <TextField
+            fullWidth
+            value={newName}
+
+            onChange={(event) => {
+
+              const value = event.target.value
+
+              setNewName(value.toUpperCase())
+            }}
+            error={error}
+          />
+        </DialogContent>
+        <DialogActions>
+
+          <Button
+            disabled={error === true}
+            onClick={() => {
+              props.updateUagNames(newName)
+              setShow(false)
+
+            }}
+            color="primary">
+            Save
+          </Button>
+          <Button
+            onClick={() => setShow(false)}
+            color="primary"
+          >
+            Cancel
+                        </Button>
+        </DialogActions>
+      </Dialog>
+    </React.Fragment>
+  )
+}
+
+const UagDelete = (props) => {
+  const [show, setShow] = useState(false);
+  return (
+
+    <React.Fragment>
+      <IconButton onClick={() => setShow(true)}>
+        <DeleteIcon />
+      </IconButton>
+      <Dialog
+        open={show}
+        TransitionComponent={Transition}
+        keepMounted
+        aria-labelledby="alert-Login-title2"
+        aria-describedby="alert-Login-slide-description2"
+      >
+        <DialogTitle id="alert-Login-title2">
+          {"Delete UAG: " + props.usergroup}
+        </DialogTitle>
+        <DialogContent>
+
+         <DialogContentText>
+           {"Are you sure you want to delete UAG: "+props.usergroup}
+         </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+
+          <Button
+            
+            onClick={() => {
+              props.deleteUAG(props.usergroup)
+              setShow(false)
+
+            }}
+            color="primary">
+           Yes
+          </Button>
+          <Button
+            onClick={() => setShow(false)}
+            color="primary"
+          >
+            No
+                        </Button>
+        </DialogActions>
+      </Dialog>
+    </React.Fragment>
+  )
+}
+
 
 const AccessControl = (props) => {
+  const [nonEditableUserGroups] = useState(["ADMIN", "DEFAULT"])
   const [editMode, setEditMode] = useState(false);
   const [editModeErrors, setEditModeErrors] = useState(false);
   const [save, setSave] = useState(false);
   const [saveOkLatched, setSaveOkLatched] = useState(false);
+  const [showDiscardChanges, setShowDiscardChanges] = useState(false);
+  const [showSaveChanges, setShowSaveChanges] = useState(false);
   const [clear, setClear] = useState(false);
   const [tabValue, setTabValue] = useState(0);
   const validateRegex = useCallback((pattern) => {
     try {
-      if (pattern.length>0){
-      new RegExp(pattern)
-      // setEditModeError(false)
-      return true;
+      if (pattern.length > 0) {
+        new RegExp(pattern)
+        // setEditModeError(false)
+        return true;
       }
-      else{
+      else {
         return false;
       }
     }
@@ -171,16 +297,16 @@ const AccessControl = (props) => {
 
         })
         const roles = modifiedUserGroups[usergroup].roles;
-        if  (roles){
-        roles.forEach((item, index) => {
+        if (roles) {
+          roles.forEach((item, index) => {
 
-          if (validateRole(item) === false) {
-            const ErrorId = "UAG: " + usergroup + ":Role:" + index + ": Invalid";
-            newErrors.push(ErrorId)
-          }
+            if (validateRole(item) === false) {
+              const ErrorId = "UAG: " + usergroup + ":Role:" + index + ": Invalid";
+              newErrors.push(ErrorId)
+            }
 
-        })
-      }
+          })
+        }
       });
     }
 
@@ -191,6 +317,62 @@ const AccessControl = (props) => {
     <div >
 
       <div style={{ "overflowX": "hidden", 'overflowY': 'hidden' }}>
+        <Dialog
+          open={showDiscardChanges}
+          TransitionComponent={Transition}
+          keepMounted
+          aria-labelledby="alert-Login-title2"
+          aria-describedby="alert-Login-slide-description2"
+        >
+          <DialogTitle id="alert-Login-title2">
+            {"Caution!"}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-Login-slide-description2">
+              {"Are you sure you want to discard all changes?"}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => {
+              setClear(true)
+              setShowDiscardChanges(false)
+            }}
+              color="primary">
+              Yes
+          </Button>
+            <Button onClick={() => setShowDiscardChanges(false)} color="primary">
+              No
+          </Button>
+          </DialogActions>
+        </Dialog>
+        <Dialog
+          open={showSaveChanges}
+          TransitionComponent={Transition}
+          keepMounted
+          aria-labelledby="alert-Login-title2"
+          aria-describedby="alert-Login-slide-description2"
+        >
+          <DialogTitle id="alert-Login-title2">
+            {"Caution!"}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-Login-slide-description2">
+              {"Are you sure you want to committ all changes?"}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => {
+              setSave(true)
+              setShowSaveChanges(false)
+            }}
+              color="primary">
+              Yes
+          </Button>
+            <Button onClick={() => setShowSaveChanges(false)} color="primary">
+              No
+          </Button>
+          </DialogActions>
+        </Dialog>
         {uagsInitialized &&
           <div style={{ paddingTop: 16 }}>
             <Grid
@@ -203,322 +385,432 @@ const AccessControl = (props) => {
             >
               <Grid item lg={2}></Grid>
               <Grid item lg={6} style={{ textAlign: 'right' }}>
+
                 {editMode === false && <IconButton onClick={() => setEditMode(true)}>
                   <EditIcon />
                 </IconButton>}
-                {editMode === true && <IconButton disabled={
-                  editModeErrors.length > 0
-                }
-                  onClick={() => setSave(true)}>
-                  <SaveIcon />
-                </IconButton>}
-                {editMode === true && <IconButton onClick={() => setClear(true)}>
-                  <ClearIcon />
-                </IconButton>}
+                {editMode === true && <IconButton onClick={() => setModifiedUserGroups(prev => {
+                  const newUserGroups = { ...prev }
+                  const newUserGroupsKeys = Object.keys(newUserGroups)
+                  let newName = "NEW"
+                  let index = 1;
+                  if (newUserGroupsKeys.includes(newName)) {
+                    newName = "NEW" + index;
+                    while (newUserGroupsKeys.includes(newName)) {
+                      index++;
+                      newName = "NEW" + index;
+                    }
 
-              </Grid>
-              <Grid item lg={4}></Grid>
-              <Grid item lg={2}>
-                <Tabs
-                  orientation="vertical"
-                  variant="scrollable"
-                  value={tabValue}
-                  onChange={(event, value) => setTabValue(value)}
-                  aria-label="Vertical tabs example"
-                //  className={classes.tabs}
-                >
-                  {userGroupKeys.map((usergroup, index) => (
-                    <Tab label={usergroup} key={index.toString()} />
-
-
-                  ))
                   }
+                  newUserGroups[newName] =
+                  {
+                    "usernames": [],
+                    "roles": [],
+                    "rules": []
+                  }
+                  return newUserGroups
 
-                </Tabs>
-              </Grid>
-              <Grid item lg={6}>
+                })
+               } >
+                  <AddIcon />
+                </IconButton>}
+                {editMode === true && <IconButton disabled={
+                editModeErrors.length > 0
+              }
+                onClick={() => setShowSaveChanges(true)}>
+                <SaveIcon />
+              </IconButton>}
+              {editMode === true && <IconButton onClick={() => setShowDiscardChanges(true)}>
+                <ClearIcon />
+              </IconButton>}
 
-                <Card key={tabValue} style={{ maxHeight: "80vh", overflowY: "scroll", marginBottom: 16, marginRight: 16, marginLeft: 16 }}>
-                  <Grid
-                    style={{ marginTop: 0, paddingRight: 8, paddingLeft: 8, paddingBottom: 8, paddingTop: 0 }}
-                    container
-                    direction="row"
-                    justify="flex-start"
-                    alignItems="flex-start"
-                    spacing={2}
-                  >
+            </Grid>
+            <Grid item lg={4}></Grid>
+            <Grid item lg={2}>
+              <Tabs
+                orientation="vertical"
+                variant="scrollable"
+                value={tabValue}
+                onChange={(event, value) => setTabValue(value)}
+                aria-label="Vertical tabs example"
+              //  className={classes.tabs}
+              >
+                {userGroupKeys.map((usergroup, index) => (
+                  <Tab label={usergroup} key={index.toString()} />
 
 
-                    <Grid item lg={12} >
+                ))
+                }
+
+              </Tabs>
+            </Grid>
+            <Grid item lg={6}>
+
+              <Card key={tabValue} style={{ maxHeight: "80vh", overflowY: "scroll", marginBottom: 16, marginRight: 16, marginLeft: 16 }}>
+                <Grid
+                  style={{ marginTop: 0, paddingRight: 8, paddingLeft: 8, paddingBottom: 8, paddingTop: 0 }}
+                  container
+                  direction="row"
+                  justify="flex-start"
+                  alignItems="flex-start"
+                  spacing={2}
+                >
+
+                  <Grid item lg={12} >
 
 
 
-                      <Table className={classes.table} stickyHeader size="small" aria-label="sticky table">
-                        <TableHead>
-                          <TableRow>
+                    <Table className={classes.table} stickyHeader size="small" aria-label="sticky table">
+                      <TableHead>
 
-                            <TableCell colSpan={1} align="left">Roles</TableCell>
-                            <TableCell colSpan={1} align="right">
-                              {editMode === true && <IconButton onClick={() =>
-                               setModifiedUserGroups(prev => {
-                                  const newUserGroups = { ...prev }
-                                  if (newUserGroups[usergroup].roles){
+                        <TableRow>
+
+                          <TableCell colSpan={1} align="left">UAG</TableCell>
+                          <TableCell colSpan={1} align="right">{
+                          (editMode === true && (!nonEditableUserGroups.includes(usergroup))) && 
+                       
+                            <UagDelete 
+                            usergroup={usergroup}
+                            deleteUAG={
+                              (usergroupToDelete)=>{setModifiedUserGroups(prev => {
+                                const newUserGroups = { ...prev}
+                                delete newUserGroups[usergroupToDelete]
+    
+                             
+                              const newUserGroupsKeys=Object.keys(newUserGroups);
+                              if (tabValue===newUserGroupsKeys.length){
+                                if (tabValue>1){
+                                  setTabValue(prev=>prev-1)
+                                }
+                                else{
+                                  setTabValue(0)
+                                }
+                              }
+                              return newUserGroups
+                            })
+                              
+                              
+                            }}
+                            />}
+                          </TableCell>
+
+                        </TableRow>
+
+
+                      </TableHead>
+                      <TableBody>
+
+                        <TableRow>
+
+
+
+                          <TableCell colSpan={2} align="left">
+                            {usergroup}
+
+
+                            {(editMode === true && (!nonEditableUserGroups.includes(usergroup))) && <UagRename
+                              usergroup={usergroup}
+                              allUserGroups={userGroupKeys}
+                              updateUagNames={(newName) => {
+                                setModifiedUserGroups(prev => {
+                                  const prevUsergroup = { ...prev[usergroup] }
+
+                                  const newUserGroups = { ...prev, [newName]: prevUsergroup }
+                                  delete newUserGroups[usergroup]
+
+                                  return newUserGroups
+                                })
+                              }
+                              }
+                            />}
+
+
+                          </TableCell>
+
+
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+
+                  </Grid>
+                  <Grid item lg={12} >
+
+
+
+                    <Table className={classes.table} stickyHeader size="small" aria-label="sticky table">
+                      <TableHead>
+
+                        <TableRow>
+
+                          <TableCell colSpan={1} align="left">Roles</TableCell>
+                          <TableCell colSpan={1} align="right">
+                            {editMode === true && <IconButton onClick={() =>
+                              setModifiedUserGroups(prev => {
+                                const newUserGroups = { ...prev }
+                                if (newUserGroups[usergroup].roles) {
                                   newUserGroups[usergroup].roles.push("")
-                                  }else{
-                                    newUserGroups[usergroup].roles=[]
-                                    newUserGroups[usergroup].roles.push("")
-                                  }
-
-                                  return newUserGroups
+                                } else {
+                                  newUserGroups[usergroup].roles = []
+                                  newUserGroups[usergroup].roles.push("")
                                 }
-                               )
-                              }>
-                                <AddIcon />
-                              </IconButton>}
+
+                                return newUserGroups
+                              }
+                              )
+                            }>
+                              <AddIcon />
+                            </IconButton>}
+
+                          </TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell align="center">Index</TableCell>
+                          <TableCell align="center">Role</TableCell>
+
+                        </TableRow>
+
+                      </TableHead>
+                      <TableBody>
+                        {modifiedUserGroups[usergroup].roles?.map((role, index) =>
+                          <TableRow>
+
+                            <TableCell align="center">
+                              {index}
 
                             </TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell align="center">Index</TableCell>
-                            <TableCell align="center">Role</TableCell>
 
-                          </TableRow>
+                            <TableCell align="center">
+                            <div style={{display:"flex",direction:"row"}}>
+                              <TextField
+                                value={role}
+                                fullWidth
+                                disabled={editMode === false}
+                                onChange={(event) => {
 
-                        </TableHead>
-                        <TableBody>
-                          {modifiedUserGroups[usergroup].roles?.map((role, index) =>
-                            <TableRow>
+                                  const value = event.target.value
 
-                              <TableCell align="center">
-                                {index}
-
-                              </TableCell>
-                              
-                              <TableCell align="center">
-                                <TextField
-                                  value={role}
-                                  disabled={editMode === false}
-                                  onChange={(event) => {
-
-                                    const value = event.target.value
-
-                                    setModifiedUserGroups(prev => {
-                                      const newUserGroups = { ...prev }
-                                      newUserGroups[usergroup].roles[index] = value
-                                      return newUserGroups
-                                    })
-                                  }}
-                                  error={validateRole(role) === false}
-                                />
-                                {editMode === true && <IconButton onClick={() =>
-                               setModifiedUserGroups(prev => {
-                                  const newUserGroups = { ...prev }
-                                  newUserGroups[usergroup].roles.splice(index,1)
-                                  return newUserGroups
-                                }
-                               )
-                              }>
-                                <DeleteIcon />
-                              </IconButton>}
-
-
-                              </TableCell>
-
-                              
-                            </TableRow>)}
-                        </TableBody>
-                      </Table>
-
-                    </Grid>
-                    <Grid item lg={12} >
-
-
-
-                      <Table className={classes.table} stickyHeader size="small" aria-label="sticky table">
-                        <TableHead>
-                          <TableRow>
-
-                            <TableCell colSpan={2} align="left">Rules</TableCell>
-                            <TableCell colSpan={1} align="right">
+                                  setModifiedUserGroups(prev => {
+                                    const newUserGroups = { ...prev }
+                                    newUserGroups[usergroup].roles[index] = value
+                                    return newUserGroups
+                                  })
+                                }}
+                                error={validateRole(role) === false}
+                              />
                               {editMode === true && <IconButton onClick={() =>
-                               setModifiedUserGroups(prev => {
+                                setModifiedUserGroups(prev => {
                                   const newUserGroups = { ...prev }
-                                  newUserGroups[usergroup].rules.push({rule:"",read:false,write:false})
+                                  newUserGroups[usergroup].roles.splice(index, 1)
                                   return newUserGroups
                                 }
-                               )
-                              }>
-                                <AddIcon />
-                              </IconButton>}
-
-                            </TableCell>
-
-                          </TableRow>
-                          <TableRow>
-
-                            <TableCell align="center">RegEx</TableCell>
-                            <TableCell align="center">Read Access</TableCell>
-                            <TableCell align="center">Write Access</TableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          {modifiedUserGroups[usergroup].rules?.map((rule, index) => {
-                            const stringValue = rule.rule?.toString();
-
-                            return (<TableRow>
-
-                              <TableCell align="center">
-                                <TextField
-                                  value={stringValue}
-                                  disabled={editMode === false}
-                                  onChange={(event) => {
-
-                                    const value = event.target.value
-
-                                    setModifiedUserGroups(prev => {
-                                      const newUserGroups = { ...prev }
-                                      newUserGroups[usergroup].rules[index].rule = value
-                                      return newUserGroups
-                                    })
-                                  }}
-                                  error={validateRegex(stringValue) === false}
-                                />
-                                {editMode === true && <IconButton onClick={() =>
-                               setModifiedUserGroups(prev => {
-                                  const newUserGroups = { ...prev }
-                                  newUserGroups[usergroup].rules.splice(index,1)
-                                  return newUserGroups
-                                }
-                               )
+                                )
                               }>
                                 <DeleteIcon />
                               </IconButton>}
 
+</div>
+                            </TableCell>
 
-                              </TableCell>
-                              <TableCell align="center">
-                                <Checkbox
-                                  checked={rule.read == true}
-                                  disabled={editMode === false}
-                                  onChange={(event) => {
 
-                                    const checked = event.target.checked
+                          </TableRow>)}
+                      </TableBody>
+                    </Table>
 
-                                    setModifiedUserGroups(prev => {
-                                      const newUserGroups = { ...prev }
-                                      newUserGroups[usergroup].rules[index].read = checked
-                                      return newUserGroups
-                                    })
-                                  }}
-
-                                />
-                              </TableCell>
-                              <TableCell align="center">
-                                <Checkbox
-                                  checked={rule.write == true}
-                                  disabled={editMode === false}
-                                  onChange={(event) => {
-
-                                    const checked = event.target.checked
-
-                                    setModifiedUserGroups(prev => {
-                                      const newUserGroups = { ...prev }
-                                      newUserGroups[usergroup].rules[index].write = checked
-                                      return newUserGroups
-                                    })
-                                  }}
-                                />
-                              </TableCell>
-                            </TableRow>)
-                          }
-                          )}
-                        </TableBody>
-                      </Table>
+                  </Grid>
+                  <Grid item lg={12} >
 
 
 
+                    <Table className={classes.table} stickyHeader size="small" aria-label="sticky table">
+                      <TableHead>
+                        <TableRow>
 
-                    </Grid>
+                          <TableCell colSpan={2} align="left">Rules</TableCell>
+                          <TableCell colSpan={1} align="right">
+                            {editMode === true && <IconButton onClick={() =>
+                              setModifiedUserGroups(prev => {
+                                const newUserGroups = { ...prev }
+                                newUserGroups[usergroup].rules.push({ rule: "", read: false, write: false })
+                                return newUserGroups
+                              }
+                              )
+                            }>
+                              <AddIcon />
+                            </IconButton>}
 
-                    <Grid item lg={12} >
+                          </TableCell>
 
+                        </TableRow>
+                        <TableRow>
 
+                          <TableCell align="center">RegEx</TableCell>
+                          <TableCell align="center">Read Access</TableCell>
+                          <TableCell align="center">Write Access</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {modifiedUserGroups[usergroup].rules?.map((rule, index) => {
+                          const stringValue = rule.rule?.toString();
 
-                      <Table className={classes.table} stickyHeader size="small" aria-label="sticky table">
-                        <TableHead>
-                          <TableRow>
+                          return (<TableRow>
 
-                            <TableCell colSpan={1} align="left">Usernames</TableCell>
-                            <TableCell colSpan={1} align="right">
+                            <TableCell align="center">
+                            <div style={{display:"flex",direction:"row"}}>
+                              <TextField
+                                fullWidth
+                                value={stringValue}
+                                disabled={editMode === false}
+                                onChange={(event) => {
+
+                                  const value = event.target.value
+
+                                  setModifiedUserGroups(prev => {
+                                    const newUserGroups = { ...prev }
+                                    newUserGroups[usergroup].rules[index].rule = value
+                                    return newUserGroups
+                                  })
+                                }}
+                                error={validateRegex(stringValue) === false}
+                              />
                               {editMode === true && <IconButton onClick={() =>
-                               setModifiedUserGroups(prev => {
+                                setModifiedUserGroups(prev => {
                                   const newUserGroups = { ...prev }
-                                  newUserGroups[usergroup].usernames.push("")
+                                  newUserGroups[usergroup].rules.splice(index, 1)
                                   return newUserGroups
                                 }
-                               )
-                              }>
-                                <AddIcon />
-                              </IconButton>}
-
-                            </TableCell>
-
-
-                          </TableRow>
-                          <TableRow>
-
-                            <TableCell align="center">Index</TableCell>
-                            <TableCell align="center">Username</TableCell>
-
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          {modifiedUserGroups[usergroup].usernames?.map((username, index) =>
-                            <TableRow>
-
-                              <TableCell align="center">
-                                {index}
-
-                              </TableCell>
-                              <TableCell align="center">
-                                <TextField
-                                  value={username}
-                                  disabled={editMode === false}
-                                  onChange={(event) => {
-
-                                    const value = event.target.value
-
-                                    setModifiedUserGroups(prev => {
-                                      const newUserGroups = { ...prev }
-                                      newUserGroups[usergroup].usernames[index] = value
-                                      return newUserGroups
-                                    })
-                                  }}
-                                  error={validateUsername(username) === false}
-                                />
-                                {editMode === true && <IconButton onClick={() =>
-                               setModifiedUserGroups(prev => {
-                                  const newUserGroups = { ...prev }
-                                  newUserGroups[usergroup].usernames.splice(index,1)
-                                  return newUserGroups
-                                }
-                               )
+                                )
                               }>
                                 <DeleteIcon />
                               </IconButton>}
 
+</div>
+                            </TableCell>
+                            <TableCell align="center">
+                              <Checkbox
+                                checked={rule.read == true}
+                                disabled={editMode === false}
+                                onChange={(event) => {
 
-                              </TableCell>
-                            </TableRow>)}
-                        </TableBody>
-                      </Table>
+                                  const checked = event.target.checked
 
-                    </Grid>
+                                  setModifiedUserGroups(prev => {
+                                    const newUserGroups = { ...prev }
+                                    newUserGroups[usergroup].rules[index].read = checked
+                                    return newUserGroups
+                                  })
+                                }}
+
+                              />
+                            </TableCell>
+                            <TableCell align="center">
+                              <Checkbox
+                                checked={rule.write == true}
+                                disabled={editMode === false}
+                                onChange={(event) => {
+
+                                  const checked = event.target.checked
+
+                                  setModifiedUserGroups(prev => {
+                                    const newUserGroups = { ...prev }
+                                    newUserGroups[usergroup].rules[index].write = checked
+                                    return newUserGroups
+                                  })
+                                }}
+                              />
+                            </TableCell>
+                          </TableRow>)
+                        }
+                        )}
+                      </TableBody>
+                    </Table>
+
+
+
 
                   </Grid>
 
-                </Card>
-              </Grid>
+                  <Grid item lg={12} >
+
+
+
+                    <Table className={classes.table} stickyHeader size="small" aria-label="sticky table">
+                      <TableHead>
+                        <TableRow>
+
+                          <TableCell colSpan={1} align="left">Usernames</TableCell>
+                          <TableCell colSpan={1} align="right">
+                            {editMode === true && <IconButton onClick={() =>
+                              setModifiedUserGroups(prev => {
+                                const newUserGroups = { ...prev }
+                                newUserGroups[usergroup].usernames.push("")
+                                return newUserGroups
+                              }
+                              )
+                            }>
+                              <AddIcon />
+                            </IconButton>}
+
+                          </TableCell>
+
+
+                        </TableRow>
+                        <TableRow>
+
+                          <TableCell align="center">Index</TableCell>
+                          <TableCell align="center">Username</TableCell>
+
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {modifiedUserGroups[usergroup].usernames?.map((username, index) =>
+                          <TableRow>
+
+                            <TableCell align="center">
+                              {index}
+
+                            </TableCell>
+                            <TableCell align="center">
+                              <div style={{display:"flex",direction:"row"}}>
+                              <TextField
+                                fullWidth
+                                value={username}
+                                disabled={editMode === false}
+                                onChange={(event) => {
+
+                                  const value = event.target.value
+
+                                  setModifiedUserGroups(prev => {
+                                    const newUserGroups = { ...prev }
+                                    newUserGroups[usergroup].usernames[index] = value
+                                    return newUserGroups
+                                  })
+                                }}
+                                error={validateUsername(username) === false}
+                              />
+                              {editMode === true && <IconButton onClick={() =>
+                                setModifiedUserGroups(prev => {
+                                  const newUserGroups = { ...prev }
+                                  newUserGroups[usergroup].usernames.splice(index, 1)
+                                  return newUserGroups
+                                }
+                                )
+                              }>
+                                <DeleteIcon />
+                              </IconButton>}
+                              </div>
+
+
+                            </TableCell>
+                          </TableRow>)}
+                      </TableBody>
+                    </Table>
+
+                  </Grid>
+
+                </Grid>
+
+              </Card>
+            </Grid>
             </Grid>
 
 
@@ -531,8 +823,8 @@ const AccessControl = (props) => {
           </div>}
 
 
-      </div>
     </div>
+    </div >
 
 
 

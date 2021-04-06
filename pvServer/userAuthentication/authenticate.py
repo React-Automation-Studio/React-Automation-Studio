@@ -362,8 +362,10 @@ def checkUser(username):
     for user in UAGS['users']:
      #   print(user)
         if username==user['username'] :
-      #      print("found")
-            return True
+            if user['enabled'] :
+                return True
+            else:
+                return False
 
                 
     return False
@@ -373,9 +375,12 @@ def AutheriseUserAndPermissions(encodedJWT,pvname):
     try:
         decoded=jwt.decode(encodedJWT,SECRET_PWD_KEY)
         username=decoded['username']
-        permissions=checkPermissions(pvname,username)
-        d={'userAuthorised':True,'permissions':permissions}
-        return d
+        if checkUser(username):
+            permissions=checkPermissions(pvname,username)
+            d={'userAuthorised':True,'permissions':permissions}
+            return d
+        else:
+            return {'userAuthorised':False}
         
     except Exception as e:
         #print("AutheriseUserAndPermissions",e)

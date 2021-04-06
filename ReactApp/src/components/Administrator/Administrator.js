@@ -1,5 +1,5 @@
 import React,{useState} from 'react';
-import AddUsers from "./AddUsers"
+
 import TraditionalLayout from '../UI/Layout/ComposedLayouts/TraditionalLayout';
 import AllUsers from './AllUsers';
 import AccessControl from './AccessControl';
@@ -20,7 +20,7 @@ const styles = theme => ({
 
 const Administrator =(props)=>{
   const [tabValue,setTabValue]=useState(0);
-  const tabs=['All Users','Access Control','Add User'];
+  const tabs=['All Users','Access Control'];
 
 
 
@@ -44,9 +44,9 @@ const Administrator =(props)=>{
          {tabs[tabValue]==='Access Control'&&<AccessControl/>
         
       }
-        {tabs[tabValue]==='Add User'&&<AddUsers/>
+       
         
-      }
+      
       </React.Fragment>
 
        

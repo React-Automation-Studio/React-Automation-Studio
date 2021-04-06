@@ -22,7 +22,14 @@ import Button from '@material-ui/core/Button';
 import Slide from '@material-ui/core/Slide';
 import useDeleteUser from './adminDbHooks/useDeleteUser';
 import useEnableUser from './adminDbHooks/useEnableUser';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import ErrorIcon from '@material-ui/icons/Error';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
+import AddUsers from './AddUsers'
+import ModifyUser from './ModifyUser'
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -41,7 +48,6 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
   },
 }));
-
 
 
 const AllUsers = (props) => {
@@ -126,12 +132,17 @@ const AllUsers = (props) => {
 
 
           <Grid item xs={12} sm={12} md={12} lg={12} >
-
+            
             <Card style={{maxHeight:"85vh",overflowY:"scroll"}}>
 
               <Table className={classes.table} stickyHeader size="small" aria-label="sticky table">
                 <TableHead>
+                <TableRow>
+                
+                  <TableCell colSpan={11} align="right"><AddUsers/></TableCell>
+                  </TableRow>
                   <TableRow>
+
                     <TableCell align="center">Index</TableCell>
                     <TableCell align="center">Username</TableCell>
                     <TableCell align="center">UAGS</TableCell>
@@ -180,9 +191,7 @@ const AllUsers = (props) => {
       />
                         </TableCell>
                         <TableCell align="center">
-                          <IconButton aria-label="edit">
-                            <EditIcon />
-                          </IconButton>
+                        <ModifyUser user={user}/>
                           <IconButton aria-label="delete" onClick={()=>{
                             setCurrentUser(user.username)
                             setCurrentUserId({id:user['_id']['$oid']})

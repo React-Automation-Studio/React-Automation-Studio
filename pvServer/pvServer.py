@@ -1825,12 +1825,15 @@ def adminAddUser(message):
                         return "Error: Username Exists"
                     else:
                         user['enabled']=True
-                        now = datetime.now()
-                        timestamp = datetime.timestamp(now)
-                        user['pwTimestamp']=timestamp
+                       
                         if user['password']:
                             user['password']=(bcrypt.hashpw(user['password'].encode('utf-8'), bcrypt.gensalt(ADMIN_PW_SALT_ROUNDS))).decode('utf-8')
+                            now = datetime.now()
+                            timestamp = datetime.timestamp(now)
+                            user['pwTimestamp']=timestamp
                         mycol.insert_one(user)
+                       
+                            
                     return "OK"
             except Exception as e:
                 print("admin add user error",e)

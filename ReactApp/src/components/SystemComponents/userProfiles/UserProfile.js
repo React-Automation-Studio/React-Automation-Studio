@@ -20,6 +20,7 @@ import AutomationStudioContext from '../../SystemComponents/AutomationStudioCont
 import useUserDetails from './userProfileHooks/useUserDetails';
 import Paper from '@material-ui/core/Paper';
 import EditUser from './EditUser'
+import ChangeUserPassword from './ChangeUserPassword';
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -94,6 +95,13 @@ const UserProfile = (props) => {
     const passwordHelperText = "Minimum length 12 characters";
     const [confirmPassword, setConfirmPassword] = useState("");
     const { email, givenName, familyName, phoneNumber, officeLocation, pwTimestamp } = userData;
+    let id;
+    if (userDataInitialized){
+        id =userData['_id']['$oid']
+    }
+    else{
+        id =null
+    }
     let pwDate;
     if (pwTimestamp) {
         pwDate = (new Date(pwTimestamp * 1000)).toLocaleString();
@@ -232,16 +240,8 @@ const UserProfile = (props) => {
                                 </Grid>}
 
                                 {!(process.env.REACT_APP_DisableStandardLogin === 'true') && <Grid item xs={6}>
-                                    <Button
-                                        onClick={() => setShow(false)}
-                                        color="primary"
-                                        variant="contained"
-                                        startIcon={<EditIcon />}
-                                    >
-
-                                        Change Password
-                                            </Button>
-                                </Grid>}
+                                  <ChangeUserPassword user={{id:id}}/>
+                                  </Grid>}
                                 {/* 
                                         {!(process.env.REACT_APP_DisableStandardLogin === 'true') && <Grid item xs={12}  >
                                             <FormControlLabel
@@ -383,7 +383,7 @@ const UserProfile = (props) => {
                                 <Grid item xs={4}>
                                     {userDataInitialized&&<EditUser
                                         user={{
-                                            id: null,
+                                            id: id,
                                             username: username,
                                             password: changePassword ? password : null,
                                             email: email,

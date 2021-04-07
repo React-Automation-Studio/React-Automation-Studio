@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const EditUser = (props) => {
+const ChangeUserPassword = (props) => {
 
     const [show, setShow] = useState(false);
     const [error, setError] = useState(false);
@@ -51,13 +51,9 @@ const EditUser = (props) => {
     const [officeLocation, setOfficeLocation] = useState(props.user.officeLocation);
     const [submit, setSubmit] = useState(false);
     const {modifyUser,modifyUserError,userModified} =useModifyUser({id:props.user.id,
-    username: username,
-    password: changePassword ? password : null,
-    email: email,
-    givenName: givenName,
-    familyName: familyName,
-    phoneNumber: phoneNumber,
-    officeLocation: officeLocation});
+   
+    password: password ,
+   });
 
     const classes = useStyles();
 
@@ -80,7 +76,7 @@ const EditUser = (props) => {
         confirmPasswordError = true;
         confirmPasswordHelperText = "Passwords do not match"
     }
-    let addUserDisable = ((username.length > 0) && (changePassword === false || (confirmPasswordError === false) && (passwordError === false))) ? false : true;
+    let addUserDisable = (((confirmPasswordError === false) && (passwordError === false))) ? false : true;
 
     const usernameHelperText = ""
     
@@ -88,7 +84,7 @@ const EditUser = (props) => {
 
         <React.Fragment>
             <Button onClick={() => setShow(true)} startIcon={<EditIcon/>}   color="primary"  variant="contained">
-                Edit User Profile
+               Change Password
                 
             </Button>
             <Dialog
@@ -130,39 +126,10 @@ const EditUser = (props) => {
                                         alignItems="flex-start"
                                         spacing={2}
                                     >
-                                        <Grid item xs={12}  >
-                                            <TextField
+                                       
 
-                                                inputProps={{
-                                                    autoComplete: "off",
-                                                }}
-                                                value={username}
-                                                // required
-                                                label="Username"
-                                                // onChange={(event) => setUsername(event.target.value)}
-                                                variant="outlined"
-                                                fullWidth
-                                                // helperText={usernameHelperText}
-                                                // error={usernameError}
-                                                disabled
-                                            />
-                                        </Grid>
-
-                                        {!(process.env.REACT_APP_DisableStandardLogin === 'true') && <Grid item xs={12}  >
-                                            <FormControlLabel
-                                                control={
-                                                    <Checkbox
-                                                        checked={changePassword === true}
-                                                        onChange={(event) => (setChangePassword(event.target.checked))}
-                                                        inputProps={{ 'aria-label': 'primary checkbox' }}
-                                                    />
-                                                }
-                                                label="Change Password"
-                                            />
-
-                                        </Grid>}
-
-                                        {changePassword && <React.Fragment>
+                                      
+                                        <React.Fragment>
                                             <Grid item xs={12}  >
                                                 <TextField
 
@@ -193,67 +160,8 @@ const EditUser = (props) => {
                                                     autoComplete="off"
                                                 />
                                             </Grid>
-                                        </React.Fragment>}
-                                        <Grid item xs={12}  >
-                                            <TextField
-                                                inputProps={{
-                                                    autoComplete: 'off'
-                                                }}
-                                                value={email}
-                                                label="Email"
-                                                onChange={(event) => setEmail(event.target.value)}
-                                                variant="outlined"
-                                                fullWidth
-                                            />
-                                        </Grid>
-                                        <Grid item xs={12}  >
-                                            <TextField
-                                                inputProps={{
-                                                    autoComplete: 'off'
-                                                }}
-                                                value={givenName}
-                                                label="Given Name"
-                                                onChange={(event) => setGivenName(event.target.value)}
-                                                variant="outlined"
-                                                fullWidth
-                                            />
-                                        </Grid>
-                                        <Grid item xs={12}  >
-                                            <TextField
-                                                inputProps={{
-                                                    autoComplete: 'off'
-                                                }}
-                                                label="Family Name"
-                                                value={familyName}
-                                                onChange={(event) => setFamilyName(event.target.value)}
-                                                variant="outlined"
-                                                fullWidth
-                                            />
-                                        </Grid>
-                                        <Grid item xs={12}  >
-                                            <TextField
-                                                inputProps={{
-                                                    autoComplete: 'off'
-                                                }}
-                                                value={phoneNumber}
-                                                label="Phone Number"
-                                                onChange={(event) => setPhoneNumber(event.target.value)}
-                                                variant="outlined"
-                                                fullWidth
-                                            />
-                                        </Grid>
-                                        <Grid item xs={12}  >
-                                            <TextField
-                                                value={officeLocation}
-                                                inputProps={{
-                                                    autoComplete: 'off'
-                                                }}
-                                                label="Office Location "
-                                                onChange={(event) => setOfficeLocation(event.target.value)}
-                                                variant="outlined"
-                                                fullWidth
-                                            />
-                                        </Grid>
+                                        </React.Fragment>
+                                        
                                         <Grid item xs={4}  >
                                             <Button variant="contained" color="primary" disabled={addUserDisable}
                                                 onClick={() =>modifyUser({
@@ -269,7 +177,7 @@ const EditUser = (props) => {
 
                                                 })}
                                             >
-                                                Modify User
+                                                Update Password
                     </Button>
                                         </Grid>
                                         <Grid item xs={4}  >
@@ -314,4 +222,4 @@ const EditUser = (props) => {
         </React.Fragment>
     )
 }
-export default EditUser;
+export default ChangeUserPassword;

@@ -26,17 +26,17 @@ const useModifyUser = (props) => {
         socketRef.current = socket;
       }, [socket])
     const modifyUser = useCallback((props) => {
-
+      console.log(props)
         if ( props.id) {
 
             console.log(props)
             setError(false)
-            socketRef.current.emit('adminModifyUser', {...props , 'clientAuthorisation': jwtRef.current }, (data) => {
+            socketRef.current.emit('ModifyUser', {...props , 'clientAuthorisation': jwtRef.current }, (data) => {
   
             if (data !== "OK") {
                 setError(true)
                 setUserModified(false)
-                console.log("adminModifyUser  unsuccessful")
+                console.log("ModifyUser  unsuccessful")
             }
             else{
               setUserModified(true)

@@ -1542,7 +1542,117 @@ def archiverRead(message):
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
 
+@socketio.on('UserDetailsWatch', namespace='/pvServer')
+def UserDetailsWatch(message):
+    global clientPVlist,REACT_APP_DisableLogin,clientDbWatchList,myDbWatchUid,thread_lock
+    print(message)
+    authorisation=AuthoriseUser(message['clientAuthorisation'])
+    if authorisation['authorised'] :
+        
+        try:
+            MONGO_ROOT_USERNAME = os.environ['MONGO_ROOT_USERNAME']
+            MONGO_ROOT_PASSWORD = os.environ['MONGO_ROOT_PASSWORD']
+            MONGO_ROOT_USERNAME = urllib.parse.quote_plus(
+                MONGO_ROOT_USERNAME)
+            MONGO_ROOT_PASSWORD = urllib.parse.quote_plus(
+                MONGO_ROOT_PASSWORD)
+            mongoAuth = True
+        except:
+            mongoAuth = False
 
+        try:
+            ADMIN_PW_SALT_ROUNDS = int(
+                os.environ['ADMIN_PW_SALT_ROUNDS'])
+        except:
+            ADMIN_PW_SALT_ROUNDS =12
+
+        MONGO_INITDB_ADMIN_DATABASE='rasAdminDb'
+        ADMIN_DATABASE=os.getenv('ADMIN_DATABASE')
+        ADMIN_DATABASE_REPLICA_SET_NAME=str(os.getenv('ADMIN_DATABASE_REPLICA_SET_NAME'))
+        if (ADMIN_DATABASE is None) :
+            print("Enviroment variable ADMIN_DATABASE is not defined, can't intialize: ",MONGO_INITDB_ADMIN_DATABASE)
+        else:
+            try:
+                if (mongoAuth):
+                    client = MongoClient('mongodb://%s:%s@%s' %(MONGO_ROOT_USERNAME, MONGO_ROOT_PASSWORD, ADMIN_DATABASE), replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
+                    # Wait for MongoClient to discover the whole replica set and identify MASTER!
+                    sleep(0.1)
+                else:
+                    client = MongoClient('mongodb://%s' % (ADMIN_DATABASE),replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
+                    # Wait for MongoClient to discover the whole replica set and identify MASTER!
+                    sleep(0.1)
+                dbnames = client.list_database_names()
+                if (MONGO_INITDB_ADMIN_DATABASE not in dbnames):
+                    print("Error cant connect to admin db",MONGO_INITDB_ADMIN_DATABASE)
+                else:
+                    mydb = client[MONGO_INITDB_ADMIN_DATABASE]
+                    mycol=mydb['users']
+                    query={"username":message["username"]}
+                    projection={"password":0}
+                    sort=[('$natural', 1)]
+                    skip=0
+                    limit=0
+                    count=False
+                    doc=mycol.find(query,projection)
+                    data=dumps(doc)
+                    eventName='databaseWatchData:'+'UserDetailsWatch:'+message['username']
+                    d={'write_access':True,'data': data}
+                    socketio.emit(eventName,d,room=str(request.sid),namespace='/pvServer')
+                    watchEventName=eventName
+                    myDbWatchUid= str(message['dbWatchId']+str(request.sid))
+                    dbWatchId=str(myDbWatchUid)
+                    with thread_lock:
+                        if not (watchEventName in	clientDbWatchList):
+                            dbWatch={}
+                            dbWatch['watchEventName']=watchEventName
+                            dbWatch['client']=client
+                            dbWatch['db']=mydb
+                            dbWatch['collection']=mycol
+                            dbWatch['watch']=mycol.watch()
+                            dbWatch['dbURL']=watchEventName
+                            dbWatch['query']=query
+                            dbWatch['projection']=projection
+                            dbWatch['sort']=sort
+                            dbWatch['skip']=skip
+                            dbWatch['limit']=limit
+                            dbWatch['count']=count
+                            dbWatch['sockets']={
+                                str(request.sid):{
+                                    "dbWatchIds":{
+                                        str(dbWatchId):True
+                                    }
+                                }
+                            }
+                            dbWatch['thread']=None
+                            dbWatch['threadStarted']=False
+                            dbWatch['closeWatch']=False
+                            dbWatch['threadClosed']=False
+                            clientDbWatchList[watchEventName]=dbWatch
+                            join_room(str(watchEventName))
+                            join_room(str(watchEventName)+'rw')
+                        else:
+                            if request.sid in clientDbWatchList[watchEventName]['sockets']:
+                                if 'dbWatchIds' in clientDbWatchList[watchEventName]['sockets'][request.sid]:
+                                    if  dbWatchId in clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']:
+                                        log.info("not a unique id {} {}",dbWatchId,watchEventName)
+                                    else:
+                                        clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds'][dbWatchId]=True
+                                else:
+                                    clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']={dbWatchId:True}
+                            else:
+                                clientDbWatchList[watchEventName]['sockets'][request.sid]={'dbWatchIds':{dbWatchId:True}}
+
+                            join_room(str(watchEventName))
+                            join_room(str(watchEventName)+'rw')
+
+                        return {"dbWatchId":dbWatchId}
+            except Exception as e:
+                print("adminallusers",e)
+                return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
+        
+    else:
+        socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
+        return "Ack: not authorised"
 
 @socketio.on('adminAllUsers', namespace='/pvServer')
 def adminAllUsers(message):

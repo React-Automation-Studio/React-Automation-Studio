@@ -28,7 +28,7 @@ import Probe from './components/SettingsPages/Probe';
 import Vault from './components/AlarmHandler/Vault';
 import Help from './components/docs/Help';
 import Administrator from './components/Administrator/Administrator.js';
-import UserProfile from './components/SystemComponents/UserProfile';
+import UserProfile from './components/SystemComponents/userProfiles/UserProfile';
 import ProtectedRoute from './components/SystemComponents/ProtectedRoute';
 const Routes = (props) => {
   return (

@@ -36,7 +36,7 @@ const SideDrawer = (props) => {
     const handleLogout = () => {
         if (notInStyleGuide) {
           //  socket.emit('disconnect', { "goodebye": "see you later" });
-            socket.close()
+        //    socket.close()
             context.logout();
         }
 
@@ -60,7 +60,7 @@ const SideDrawer = (props) => {
                 {process.env.REACT_APP_EnableLogin === 'true' &&
                     <React.Fragment>
                         <Divider />
-                        <ListItem>
+                        <ListItem button component={Link} to="userprofile">
                             <ListItemIcon><AccountCircle /></ListItemIcon>
                             <ListItemText style={{ textOverflow: 'ellipsis' }} primary={username} />
                         </ListItem>

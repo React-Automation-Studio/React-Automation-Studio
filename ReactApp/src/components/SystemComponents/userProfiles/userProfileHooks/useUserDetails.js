@@ -52,7 +52,7 @@ const useUserDetails = (props) => {
       const disconnect = () => {
          
               setInitialized(false);
-              setData(null)
+             
         
       }
         console.log(props.username)  

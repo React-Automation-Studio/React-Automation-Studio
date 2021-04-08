@@ -261,7 +261,7 @@ const AccessControl = (props) => {
   }, [userGroups, editMode, save, clear, saveOkLatched])
 
   let userGroupKeys = uagsInitialized ? Object.keys(modifiedUserGroups) : [];
-  let usergroup = uagsInitialized ? userGroupKeys[tabValue] : 0;
+  let usergroup = uagsInitialized ? (userGroupKeys[tabValue]?userGroupKeys[tabValue] : 0):0;
   //console.log("users", users, usersWriteAccess, usersInitialized)
   useEffect(() => {
     const newErrors = [];
@@ -302,7 +302,7 @@ const AccessControl = (props) => {
 
     setEditModeErrors(newErrors)
   }, [modifiedUserGroups])
-
+  //console.log(modifiedUserGroups)
   return (
     <div >
 

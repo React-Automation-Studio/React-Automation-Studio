@@ -166,13 +166,8 @@ const ChangeUserPassword = (props) => {
                                             <Button variant="contained" color="primary" disabled={addUserDisable}
                                                 onClick={() =>modifyUser({
                                                     id:props.user.id,
-                                                    username: username,
-                                                    password: changePassword ? password : null,
-                                                    email: email,
-                                                    givenName: givenName,
-                                                    familyName: familyName,
-                                                    phoneNumber: phoneNumber,
-                                                    officeLocation: officeLocation,
+                                                    password: password,
+                                                 
                                                    
 
                                                 })}

@@ -2167,7 +2167,6 @@ def adminModifyUser(message):
 @socketio.on('ModifyUser', namespace='/pvServer')
 def ModifyUser(message):
     global clientPVlist,REACT_APP_DisableLogin,clientDbWatchList,myDbWatchUid
-    # print("message",message)
     authorisation=AuthoriseUser(message['clientAuthorisation'])
     if authorisation['authorised'] :
         # print("isAdmin",isAdmin)

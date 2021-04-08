@@ -261,7 +261,7 @@ const AccessControl = (props) => {
   }, [userGroups, editMode, save, clear, saveOkLatched])
 
   let userGroupKeys = uagsInitialized ? Object.keys(modifiedUserGroups) : [];
-  let usergroup = uagsInitialized ? (userGroupKeys[tabValue]?userGroupKeys[tabValue] : 0):0;
+  let usergroup = uagsInitialized ? (userGroupKeys[tabValue]?userGroupKeys[tabValue] : undefined):undefined;
   //console.log("users", users, usersWriteAccess, usersInitialized)
   useEffect(() => {
     const newErrors = [];
@@ -434,7 +434,7 @@ const AccessControl = (props) => {
 
               </Tabs>
             </Grid>
-            <Grid item lg={6}>
+            {usergroup!==undefined&&<Grid item lg={6}>
 
               <Card key={tabValue} style={{ maxHeight: "80vh", overflowY: "scroll", marginBottom: 16, marginRight: 16, marginLeft: 16 }}>
                 <Grid
@@ -563,7 +563,7 @@ const AccessControl = (props) => {
                       <TableBody>
                         {
                         
-                        modifiedUserGroups[usergroup].roles?.map((role, index) =>
+                        modifiedUserGroups[usergroup]?.roles?.map((role, index) =>
                           <TableRow key={index.toString()}>
 
                             <TableCell align="center">
@@ -804,7 +804,7 @@ const AccessControl = (props) => {
                 </Grid>
 
               </Card>
-            </Grid>
+            </Grid>}
             </Grid>
 
 

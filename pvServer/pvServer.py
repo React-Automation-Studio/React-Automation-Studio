@@ -1711,6 +1711,11 @@ def adminAddUser(message):
                 user['enabled']=True
                 
                 if user['password']:
+                    try:
+                        ADMIN_PW_SALT_ROUNDS = int(
+                            os.environ['ADMIN_PW_SALT_ROUNDS'])
+                    except:
+                        ADMIN_PW_SALT_ROUNDS =12
                     user['password']=(bcrypt.hashpw(user['password'].encode('utf-8'), bcrypt.gensalt(ADMIN_PW_SALT_ROUNDS))).decode('utf-8')
                     now = datetime.now()
                     timestamp = datetime.timestamp(now)
@@ -1797,6 +1802,11 @@ def adminModifyUser(message):
             try:
                 update={ "$set": {}}
                 if message["password"]:
+                    try:
+                        ADMIN_PW_SALT_ROUNDS = int(
+                            os.environ['ADMIN_PW_SALT_ROUNDS'])
+                    except:
+                        ADMIN_PW_SALT_ROUNDS =12
                     password=(bcrypt.hashpw(message['password'].encode('utf-8'), bcrypt.gensalt(ADMIN_PW_SALT_ROUNDS))).decode('utf-8')
                     now = datetime.now()
                     timestamp = datetime.timestamp(now)
@@ -1842,6 +1852,11 @@ def ModifyUser(message):
             try:
                 update={ "$set": {}}
                 if message["password"]:
+                    try:
+                        ADMIN_PW_SALT_ROUNDS = int(
+                            os.environ['ADMIN_PW_SALT_ROUNDS'])
+                    except:
+                        ADMIN_PW_SALT_ROUNDS =12
                     password=(bcrypt.hashpw(message['password'].encode('utf-8'), bcrypt.gensalt(ADMIN_PW_SALT_ROUNDS))).decode('utf-8')
                     now = datetime.now()
                     timestamp = datetime.timestamp(now)

@@ -29,10 +29,13 @@ def OpenMongoDbClient(hostDatabaseName,databaseName):
             client = MongoClient('mongodb://%s' % (DATABASE),replicaSet=DATABASE_REPLICA_SET_NAME)
             # Wait for MongoClient to discover the whole replica set and identify MASTER!
             sleep(0.1)
-        dbnames = client.list_database_names()
-        if (databaseName not in dbnames):
-            raise Exception("Error can't connect to admin db",databaseName)
-        return client
+        if   (databaseName is None): #do not check for valid database
+            return client
+        else:
+            dbnames = client.list_database_names()
+            if (databaseName not in dbnames):
+                raise Exception("Error can't connect to admin db",databaseName)
+            return client
     except:
         raise Exception("Error can't connect to admin db",databaseName)
         

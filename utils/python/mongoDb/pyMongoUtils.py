@@ -3,7 +3,6 @@ import pymongo
 from pymongo import MongoClient
 from time import sleep
 def OpenMongoDbClient(hostDatabaseName,databaseName):
-    print("OpenMongoDbClient: hostDatabaseName",hostDatabaseName," :databaseName :",databaseName)
     try:
         MONGO_ROOT_USERNAME = os.environ['MONGO_ROOT_USERNAME']
         MONGO_ROOT_PASSWORD = os.environ['MONGO_ROOT_PASSWORD']

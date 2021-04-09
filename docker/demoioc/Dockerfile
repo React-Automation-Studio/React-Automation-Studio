@@ -44,11 +44,8 @@ ENV PYEPICS_LIBCA=/epics/base/lib/linux-x86_64/libca.so
 ENV PATH="/epics/base/bin/linux-x86_64/:${PATH}"
 RUN echo $PATH
 
-#RUN ls /epics/base/lib/linux-x86_64/
-
 
 WORKDIR /epics/testIOC/iocBoot/ioctestIOC/
 
-CMD ./st.cmd
-#CMD ["/epics/base/bin/linux-x86_64/caget","RFPA:IPA_TUNE_MOT:display_ENG"]
+CMD ../../bin/linux-x86_64/testIOC ./st.cmd
 EXPOSE 5000 5064 5065 8001

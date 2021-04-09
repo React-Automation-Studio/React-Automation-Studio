@@ -12,68 +12,27 @@ import threading
 from time import sleep
 from pymongo import MongoClient
 from bson.json_util import dumps
+from pyMongoUtils import OpenMongoDbClient
 global dbKnownUsers
 
 def usersDbWatchThread():
     global UAGS, knownUsers
-    try:
-        MONGO_ROOT_USERNAME = os.environ['MONGO_ROOT_USERNAME']
-        MONGO_ROOT_PASSWORD = os.environ['MONGO_ROOT_PASSWORD']
-        MONGO_ROOT_USERNAME = urllib.parse.quote_plus(
-            MONGO_ROOT_USERNAME)
-        MONGO_ROOT_PASSWORD = urllib.parse.quote_plus(
-            MONGO_ROOT_PASSWORD)
-        mongoAuth = True
-    except:
-        mongoAuth = False
-
-    try:
-        ADMIN_PW_SALT_ROUNDS = int(
-            os.environ['ADMIN_PW_SALT_ROUNDS'])
-    except:
-        ADMIN_PW_SALT_ROUNDS =12
-
-    MONGO_INITDB_ADMIN_DATABASE='rasAdminDb'
-    ADMIN_DATABASE=os.getenv('ADMIN_DATABASE')
-    ADMIN_DATABASE_REPLICA_SET_NAME=str(os.getenv('ADMIN_DATABASE_REPLICA_SET_NAME'))
-    if (ADMIN_DATABASE is None) :
-        print("Enviroment variable ADMIN_DATABASE is not defined, can't intialize: ",MONGO_INITDB_ADMIN_DATABASE)
-    else:
-        if (mongoAuth):
-            client = MongoClient('mongodb://%s:%s@%s' %(MONGO_ROOT_USERNAME, MONGO_ROOT_PASSWORD, ADMIN_DATABASE), replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
-            # Wait for MongoClient to discover the whole replica set and identify MASTER!
-            sleep(0.1)
-        else:
-            client = MongoClient('mongodb://%s' % (ADMIN_DATABASE),replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
-            # Wait for MongoClient to discover the whole replica set and identify MASTER!
-            sleep(0.1)
-        dbnames = client.list_database_names()
-        if (MONGO_INITDB_ADMIN_DATABASE not in dbnames):
-            print("Error cant connect to admin db",MONGO_INITDB_ADMIN_DATABASE)
-        else:
-            print("connected to adminDb",MONGO_INITDB_ADMIN_DATABASE)
-
-            mydb = client[MONGO_INITDB_ADMIN_DATABASE]
-            mycol=mydb['users']
-            with mycol.watch() as stream:
-                while stream.alive:
-                    change = stream.try_next()
-                    if change is not None:
-                        try:
-                            doc=mycol.find({},{"_id":0})
-                            users=list(doc)
-                        
-                            UAGS['users']=users
-                    
-                    
-                          
-                            knownUsers=createKnownUsers(UAGS)
-                            print("users watchknownUsers",knownUsers)
-                        except:
-                            log.error("Unexpected error: {}",sys.exc_info()[0])
-                            raise
-                    
-                    sleep(1)
+    client=OpenMongoDbClient("ADMIN_DATABASE","rasAdminDb")
+    mydb = client["rasAdminDb"]
+    mycol=mydb['users']
+    with mycol.watch() as stream:
+        while stream.alive:
+            change = stream.try_next()
+            if change is not None:
+                try:
+                    doc=mycol.find({},{"_id":0})
+                    users=list(doc)
+                    UAGS['users']=users
+                    knownUsers=createKnownUsers(UAGS)
+                except:
+                    log.error("Unexpected error: {}",sys.exc_info()[0])
+                    raise
+            sleep(1)
 
    
 
@@ -81,59 +40,23 @@ def usersDbWatchThread():
 
 def pvAccessDbWatchThread():
     global UAGS, knownUsers
-    try:
-        MONGO_ROOT_USERNAME = os.environ['MONGO_ROOT_USERNAME']
-        MONGO_ROOT_PASSWORD = os.environ['MONGO_ROOT_PASSWORD']
-        MONGO_ROOT_USERNAME = urllib.parse.quote_plus(
-            MONGO_ROOT_USERNAME)
-        MONGO_ROOT_PASSWORD = urllib.parse.quote_plus(
-            MONGO_ROOT_PASSWORD)
-        mongoAuth = True
-    except:
-        mongoAuth = False
-
-    try:
-        ADMIN_PW_SALT_ROUNDS = int(
-            os.environ['ADMIN_PW_SALT_ROUNDS'])
-    except:
-        ADMIN_PW_SALT_ROUNDS =12
-
-    MONGO_INITDB_ADMIN_DATABASE='rasAdminDb'
-    ADMIN_DATABASE=os.getenv('ADMIN_DATABASE')
-    ADMIN_DATABASE_REPLICA_SET_NAME=str(os.getenv('ADMIN_DATABASE_REPLICA_SET_NAME'))
-    if (ADMIN_DATABASE is None) :
-        print("Enviroment variable ADMIN_DATABASE is not defined, can't intialize: ",MONGO_INITDB_ADMIN_DATABASE)
-    else:
-        if (mongoAuth):
-            client = MongoClient('mongodb://%s:%s@%s' %(MONGO_ROOT_USERNAME, MONGO_ROOT_PASSWORD, ADMIN_DATABASE), replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
-            # Wait for MongoClient to discover the whole replica set and identify MASTER!
-            sleep(0.1)
-        else:
-            client = MongoClient('mongodb://%s' % (ADMIN_DATABASE),replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
-            # Wait for MongoClient to discover the whole replica set and identify MASTER!
-            sleep(0.1)
-        dbnames = client.list_database_names()
-        if (MONGO_INITDB_ADMIN_DATABASE not in dbnames):
-            print("Error cant connect to admin db",MONGO_INITDB_ADMIN_DATABASE)
-        else:
-            print("connected to adminDb",MONGO_INITDB_ADMIN_DATABASE)
-
-            mydb = client[MONGO_INITDB_ADMIN_DATABASE]
-            mycol=mydb['pvAccess']
-            with mycol.watch() as stream:
-                while stream.alive:
-                    change = stream.try_next()
-                    if change is not None:
-                        try:
-                            doc=mycol.find_one()
-                            UAGS['userGroups']=doc['userGroups']
-                            defaultAccess=loadDefaultAccess()
-                            UAGS['userGroups']['PREVENT']=defaultAccess['userGroups']['PREVENT']
-                            knownUsers=createKnownUsers(UAGS)
-                        except:
-                            log.error("Unexpected error: {}",sys.exc_info()[0])
-                            raise
-                    sleep(1)
+    client=OpenMongoDbClient("ADMIN_DATABASE","rasAdminDb")
+    mydb = client["rasAdminDb"]
+    mycol=mydb['pvAccess']
+    with mycol.watch() as stream:
+        while stream.alive:
+            change = stream.try_next()
+            if change is not None:
+                try:
+                    doc=mycol.find_one()
+                    UAGS['userGroups']=doc['userGroups']
+                    defaultAccess=loadDefaultAccess()
+                    UAGS['userGroups']['PREVENT']=defaultAccess['userGroups']['PREVENT']
+                    knownUsers=createKnownUsers(UAGS)
+                except:
+                    log.error("Unexpected error: {}",sys.exc_info()[0])
+                    raise
+            sleep(1)
 
 
 
@@ -142,75 +65,20 @@ def pvAccessDbWatchThread():
 def loadKnownDbUsers():
     global UAGS, knownUsers
     UAGS={}
-    
-    try:
-        MONGO_ROOT_USERNAME = os.environ['MONGO_ROOT_USERNAME']
-        MONGO_ROOT_PASSWORD = os.environ['MONGO_ROOT_PASSWORD']
-        MONGO_ROOT_USERNAME = urllib.parse.quote_plus(
-            MONGO_ROOT_USERNAME)
-        MONGO_ROOT_PASSWORD = urllib.parse.quote_plus(
-            MONGO_ROOT_PASSWORD)
-        mongoAuth = True
-    except:
-        mongoAuth = False
-
-    try:
-        ADMIN_PW_SALT_ROUNDS = int(
-            os.environ['ADMIN_PW_SALT_ROUNDS'])
-    except:
-        ADMIN_PW_SALT_ROUNDS =12
-
-    MONGO_INITDB_ADMIN_DATABASE='rasAdminDb'
-    ADMIN_DATABASE=os.getenv('ADMIN_DATABASE')
-    ADMIN_DATABASE_REPLICA_SET_NAME=str(os.getenv('ADMIN_DATABASE_REPLICA_SET_NAME'))
-    if (ADMIN_DATABASE is None) :
-        print("Enviroment variable ADMIN_DATABASE is not defined, can't intialize: ",MONGO_INITDB_ADMIN_DATABASE)
-    else:
-        if (mongoAuth):
-            client = MongoClient('mongodb://%s:%s@%s' %(MONGO_ROOT_USERNAME, MONGO_ROOT_PASSWORD, ADMIN_DATABASE), replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
-            # Wait for MongoClient to discover the whole replica set and identify MASTER!
-            sleep(0.1)
-        else:
-            client = MongoClient('mongodb://%s' % (ADMIN_DATABASE),replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
-            # Wait for MongoClient to discover the whole replica set and identify MASTER!
-            sleep(0.1)
-        dbnames = client.list_database_names()
-        if (MONGO_INITDB_ADMIN_DATABASE not in dbnames):
-            print("Error cant connect to admin db",MONGO_INITDB_ADMIN_DATABASE)
-        else:
-            print("connected to adminDb",MONGO_INITDB_ADMIN_DATABASE)
-
-            mydb = client[MONGO_INITDB_ADMIN_DATABASE]
-            mycol=mydb['users']
-            doc=mycol.find({},{"_id":0})
-            users=list(doc)
-           # print("users",users)
-            UAGS['users']=users
-    
-    
-            mycol=mydb['pvAccess']
-            doc=mycol.find_one()
-            #print("userGroups",doc['userGroups'])
-            UAGS['userGroups']=doc['userGroups']
-            defaultAccess=loadDefaultAccess()
-            UAGS['userGroups']['PREVENT']=defaultAccess['userGroups']['PREVENT']
-            knownUsers=createKnownUsers(UAGS)
-
-            threading.Thread(target=pvAccessDbWatchThread).start()
-            threading.Thread(target=usersDbWatchThread).start()
-
-            #     for key in items.keys():
-            #         if key='userGroups':
-            #             userGroups= item[key]
-            #         else:
-
-            #     print(x.key)
-            # userGroups=doc['userGroups']
-            # users=doc['users']
-            # d=users
-            # for i in d:
-            #     print(i, d[i])
-                # print(data[0]['users'])
+    client=OpenMongoDbClient("ADMIN_DATABASE","rasAdminDb")
+    mydb = client["rasAdminDb"]
+    mycol=mydb['users']
+    doc=mycol.find({},{"_id":0})
+    users=list(doc)
+    UAGS['users']=users
+    mycol=mydb['pvAccess']
+    doc=mycol.find_one()
+    UAGS['userGroups']=doc['userGroups']
+    defaultAccess=loadDefaultAccess()
+    UAGS['userGroups']['PREVENT']=defaultAccess['userGroups']['PREVENT']
+    knownUsers=createKnownUsers(UAGS)
+    threading.Thread(target=pvAccessDbWatchThread).start()
+    threading.Thread(target=usersDbWatchThread).start()
                
             
 
@@ -236,12 +104,9 @@ def createKnownUsers(UAGS):
     global SECRET_PWD_KEY
     try:
         users=UAGS['users']
-        #timestamp=UAGS['timestamp']
         knownUsers={}
-        
         index=0
         for userid in users:
-            # print(userid)
             knownUsers["user "+str(index)]={'username':userid['username'],'password':userid['password'], 'enabled':userid['enabled']}
             index=index+1
         return knownUsers
@@ -305,12 +170,6 @@ def loadUsers():
 
 REACT_APP_DisableLogin=not(os.getenv('REACT_APP_EnableLogin')=='true')
 if (not REACT_APP_DisableLogin) :
-    # users=loadUsers()
-    # access=loadPvAccess()
-    
-    # UAGS['users']=users['users']
-    # UAGS['userGroups']=access['userGroups']
-    # UAGS['timestamp']=str(users['timestamp'])+str(access['timestamp'])
     UAGS={}
     loadKnownDbUsers()
     print("UAGS",json.dumps(UAGS, indent=4,))
@@ -334,10 +193,7 @@ def checkPermissions(pvname,username):
                         permissions['roles'].append(roles)
         return permissions
     UAGslist=list(UAGS['userGroups'].keys())
-    # UAGsList.remove("DEFAULT")
-    # UAGsList.remove("ADMIN")
     permissions=checkUAGPermision(pvname,username,UAGS,"DEFAULT",permissions) # apply default permission first
-
     for uag in UAGslist:    # apply all other  permissions
         if not (uag in ["ADMIN","DEFAULT"]):
             permissions=checkUAGPermision(pvname,username,UAGS,uag,permissions)
@@ -358,9 +214,7 @@ def checkUserRole(username):
 
 def checkUser(username):
     global UAGS
-    
     for user in UAGS['users']:
-     #   print(user)
         if username==user['username'] :
             if user['enabled'] :
                 return True
@@ -383,8 +237,6 @@ def AutheriseUserAndPermissions(encodedJWT,pvname):
             return {'userAuthorised':False}
         
     except Exception as e:
-        #print("AutheriseUserAndPermissions",e)
-        #print("encodedJWT",encodedJWT)
         return {'userAuthorised':False}
 
 def checkIfAdmin(encodedJWT):
@@ -400,8 +252,6 @@ def checkIfAdmin(encodedJWT):
        
         
     except Exception as e:
-        #print("AutheriseUserAndPermissions",e)
-        #print("encodedJWT",encodedJWT)
         return False
 
 
@@ -441,7 +291,6 @@ def LocalAuthenticateUser(user):
 def ExternalAuthenticateUser(user):
     global knownUsers
     if knownUsers!= None:
-        # keys=list(knownUsers.keys())
         for userId in knownUsers:
             username=knownUsers[userId]['username']
             

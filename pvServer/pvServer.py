@@ -340,27 +340,6 @@ def check_pv_initialized_after_disconnect():
                                     log.exception("Unexpected error")
                                     raise
 
-        # for watchEventName in clientDbWatchList :
-        #     print("watchEventName")
-        #     with clientDbWatchList[watchEventName]['watch'] as stream:
-        #         for change in stream:
-        #             try:
-        #                 #documentKey = change["documentKey"]
-        #                 doc = clientDbWatchList[watchEventName]['collection'].find(clientDbWatchList[watchEventName]['query'])
-        #                 print(str(change))
-        #                 #print("documentKey: ",documentKey)
-        #                 #print(watchEventName,change)
-        #                 data=dumps(doc)
-        #                 eventName=watchEventName
-        #                 dbURL=clientDbWatchList[watchEventName]['dbURL']
-        #                 d={'dbURL': dbURL,'write_access':True,'data': data}
-        #                 socketio.emit(eventName,d,str(dbURL)+'rw',namespace='/pvServer')
-        #                 d={'dbURL': dbURL,'write_access':False,'data': data}
-        #                 socketio.emit(eventName,d,str(dbURL)+'ro',namespace='/pvServer')
-
-        #             except:
-        #                 print("Unexpected error:", sys.exc_info()[0])
-        #                 raise
         time.sleep(0.1)
 def dbWatchControlThread():
     global clientDbWatchList, thread_lock
@@ -1486,7 +1465,6 @@ def archiverRead(message):
 @socketio.on('UserDetailsWatch', namespace='/pvServer')
 def UserDetailsWatch(message):
     global clientPVlist,REACT_APP_DisableLogin,clientDbWatchList,myDbWatchUid,thread_lock
-    print(message)
     authorisation=AuthoriseUser(message['clientAuthorisation'])
     if authorisation['authorised'] :
         try:
@@ -1907,7 +1885,7 @@ def adminUpdateUAGs(message):
             mycol=mydb['pvAccess']
             id=message['id']
             userGroups=message['UAGs']
-            print(message)
+            # print(message)
             try:
                 mycol.update_one({'_id':ObjectId(str(id))},{ "$set": { "userGroups":userGroups }})
             except Exception as e:
@@ -1988,12 +1966,12 @@ def test_disconnect():
         else:
             log.info("Unknown PV type ({})", pvname1)
     try:
-        print(list(clientDbWatchList))
+        # print(list(clientDbWatchList))
         for watchEventName in list(clientDbWatchList) :
             socketId=str(request.sid)
-            print("socketId ",socketId,watchEventName)
+            # print("socketId ",socketId,watchEventName)
             if socketId in list(clientDbWatchList[watchEventName]['sockets']):
-                print("socketId found",socketId,watchEventName)
+                # print("socketId found",socketId,watchEventName)
                 clientDbWatchList[watchEventName]['sockets'].pop(str(request.sid),None)
     except Exception as e:
         print("disconnect",e)

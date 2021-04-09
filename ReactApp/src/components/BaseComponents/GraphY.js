@@ -124,6 +124,7 @@ class GraphY extends React.Component {
     //  console.log("value: ",inputValue);
     //  console.log("pvname:", pvname);
     let pvs=this.state.pvs;
+    pvs[pvname].initialized=initialized;
     let yDataArray=[];
     let yTimeStampArray=[];
     //let ymax=parseFloat(this.state.ymax);
@@ -269,9 +270,6 @@ class GraphY extends React.Component {
   //   console.log('ymax end',ymax)
   //   console.log('ymin end',ymin)
 
-  this.setState({pvs:pvs});//,ymax:ymax,ymin:ymin});
-
-
   //state.pvs[pvname].inputValue=inputValue;
   //pvData.pvs[pvname].initialized=initialized;
   //pvData.pvs[pvname].severity=severity;
@@ -280,6 +278,7 @@ class GraphY extends React.Component {
 
   //this.setState(pvData);
 }
+this.setState({pvs:pvs});
 }
 
 

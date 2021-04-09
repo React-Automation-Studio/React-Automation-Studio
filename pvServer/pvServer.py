@@ -22,13 +22,14 @@ import urllib.parse
 from bson.objectid import ObjectId
 sys.path.insert(0, '../')
 sys.path.insert(0, 'userAuthentication/')
+sys.path.insert(0, 'utils/')
 
 from authenticate import  AuthoriseUser,AutheriseUserAndPermissions,checkIfAdmin, LocalAuthenticateUser, ExternalAuthenticateUser, decodeTokenGoogle, createRefreshToken, createAccessToken
 from dotenv import load_dotenv
 import ldap
 from time import sleep
 from datetime import datetime
-
+from pyMongoUtils import OpenMongoDbClient
 
 from flask_cors import CORS
 class RegexConverter(BaseConverter):
@@ -1548,107 +1549,72 @@ def UserDetailsWatch(message):
     print(message)
     authorisation=AuthoriseUser(message['clientAuthorisation'])
     if authorisation['authorised'] :
-        
         try:
-            MONGO_ROOT_USERNAME = os.environ['MONGO_ROOT_USERNAME']
-            MONGO_ROOT_PASSWORD = os.environ['MONGO_ROOT_PASSWORD']
-            MONGO_ROOT_USERNAME = urllib.parse.quote_plus(
-                MONGO_ROOT_USERNAME)
-            MONGO_ROOT_PASSWORD = urllib.parse.quote_plus(
-                MONGO_ROOT_PASSWORD)
-            mongoAuth = True
-        except:
-            mongoAuth = False
-
-        try:
-            ADMIN_PW_SALT_ROUNDS = int(
-                os.environ['ADMIN_PW_SALT_ROUNDS'])
-        except:
-            ADMIN_PW_SALT_ROUNDS =12
-
-        MONGO_INITDB_ADMIN_DATABASE='rasAdminDb'
-        ADMIN_DATABASE=os.getenv('ADMIN_DATABASE')
-        ADMIN_DATABASE_REPLICA_SET_NAME=str(os.getenv('ADMIN_DATABASE_REPLICA_SET_NAME'))
-        if (ADMIN_DATABASE is None) :
-            print("Enviroment variable ADMIN_DATABASE is not defined, can't intialize: ",MONGO_INITDB_ADMIN_DATABASE)
-        else:
-            try:
-                if (mongoAuth):
-                    client = MongoClient('mongodb://%s:%s@%s' %(MONGO_ROOT_USERNAME, MONGO_ROOT_PASSWORD, ADMIN_DATABASE), replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
-                    # Wait for MongoClient to discover the whole replica set and identify MASTER!
-                    sleep(0.1)
-                else:
-                    client = MongoClient('mongodb://%s' % (ADMIN_DATABASE),replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
-                    # Wait for MongoClient to discover the whole replica set and identify MASTER!
-                    sleep(0.1)
-                dbnames = client.list_database_names()
-                if (MONGO_INITDB_ADMIN_DATABASE not in dbnames):
-                    print("Error cant connect to admin db",MONGO_INITDB_ADMIN_DATABASE)
-                else:
-                    mydb = client[MONGO_INITDB_ADMIN_DATABASE]
-                    mycol=mydb['users']
-                    query={"username":message["username"]}
-                    projection={"password":0}
-                    sort=[('$natural', 1)]
-                    skip=0
-                    limit=0
-                    count=False
-                    doc=mycol.find(query,projection)
-                    data=dumps(doc)
-                    eventName='databaseWatchData:'+'UserDetailsWatch:'+message['username']
-                    d={'write_access':True,'data': data}
-                    socketio.emit(eventName,d,room=str(request.sid),namespace='/pvServer')
-                    watchEventName=eventName
-                    myDbWatchUid= str(message['dbWatchId']+str(request.sid))
-                    dbWatchId=str(myDbWatchUid)
-                    with thread_lock:
-                        if not (watchEventName in	clientDbWatchList):
-                            dbWatch={}
-                            dbWatch['watchEventName']=watchEventName
-                            dbWatch['client']=client
-                            dbWatch['db']=mydb
-                            dbWatch['collection']=mycol
-                            dbWatch['watch']=mycol.watch()
-                            dbWatch['dbURL']=watchEventName
-                            dbWatch['query']=query
-                            dbWatch['projection']=projection
-                            dbWatch['sort']=sort
-                            dbWatch['skip']=skip
-                            dbWatch['limit']=limit
-                            dbWatch['count']=count
-                            dbWatch['sockets']={
-                                str(request.sid):{
-                                    "dbWatchIds":{
-                                        str(dbWatchId):True
-                                    }
-                                }
+            client=OpenMongoDbClient("ADMIN_DATABASE","rasAdminDb")
+            mydb = client["rasAdminDb"]
+            mycol=mydb['users']
+            query={"username":message["username"]}
+            projection={"password":0}
+            sort=[('$natural', 1)]
+            skip=0
+            limit=0
+            count=False
+            doc=mycol.find(query,projection)
+            data=dumps(doc)
+            eventName='databaseWatchData:'+'UserDetailsWatch:'+message['username']
+            d={'write_access':True,'data': data}
+            socketio.emit(eventName,d,room=str(request.sid),namespace='/pvServer')
+            watchEventName=eventName
+            myDbWatchUid= str(message['dbWatchId']+str(request.sid))
+            dbWatchId=str(myDbWatchUid)
+            with thread_lock:
+                if not (watchEventName in	clientDbWatchList):
+                    dbWatch={}
+                    dbWatch['watchEventName']=watchEventName
+                    dbWatch['client']=client
+                    dbWatch['db']=mydb
+                    dbWatch['collection']=mycol
+                    dbWatch['watch']=mycol.watch()
+                    dbWatch['dbURL']=watchEventName
+                    dbWatch['query']=query
+                    dbWatch['projection']=projection
+                    dbWatch['sort']=sort
+                    dbWatch['skip']=skip
+                    dbWatch['limit']=limit
+                    dbWatch['count']=count
+                    dbWatch['sockets']={
+                        str(request.sid):{
+                            "dbWatchIds":{
+                                str(dbWatchId):True
                             }
-                            dbWatch['thread']=None
-                            dbWatch['threadStarted']=False
-                            dbWatch['closeWatch']=False
-                            dbWatch['threadClosed']=False
-                            clientDbWatchList[watchEventName]=dbWatch
-                            join_room(str(watchEventName))
-                            join_room(str(watchEventName)+'rw')
-                        else:
-                            if request.sid in clientDbWatchList[watchEventName]['sockets']:
-                                if 'dbWatchIds' in clientDbWatchList[watchEventName]['sockets'][request.sid]:
-                                    if  dbWatchId in clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']:
-                                        log.info("not a unique id {} {}",dbWatchId,watchEventName)
-                                    else:
-                                        clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds'][dbWatchId]=True
-                                else:
-                                    clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']={dbWatchId:True}
+                        }
+                    }
+                    dbWatch['thread']=None
+                    dbWatch['threadStarted']=False
+                    dbWatch['closeWatch']=False
+                    dbWatch['threadClosed']=False
+                    clientDbWatchList[watchEventName]=dbWatch
+                    join_room(str(watchEventName))
+                    join_room(str(watchEventName)+'rw')
+                else:
+                    if request.sid in clientDbWatchList[watchEventName]['sockets']:
+                        if 'dbWatchIds' in clientDbWatchList[watchEventName]['sockets'][request.sid]:
+                            if  dbWatchId in clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']:
+                                log.info("not a unique id {} {}",dbWatchId,watchEventName)
                             else:
-                                clientDbWatchList[watchEventName]['sockets'][request.sid]={'dbWatchIds':{dbWatchId:True}}
+                                clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds'][dbWatchId]=True
+                        else:
+                            clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']={dbWatchId:True}
+                    else:
+                        clientDbWatchList[watchEventName]['sockets'][request.sid]={'dbWatchIds':{dbWatchId:True}}
 
-                            join_room(str(watchEventName))
-                            join_room(str(watchEventName)+'rw')
+                    join_room(str(watchEventName))
+                    join_room(str(watchEventName)+'rw')
 
-                        return {"dbWatchId":dbWatchId}
-            except Exception as e:
-                print("adminallusers",e)
-                return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
+                return {"dbWatchId":dbWatchId}
+        except Exception as e:
+            print("adminallusers",e)
+            return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
         
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
@@ -1657,110 +1623,75 @@ def UserDetailsWatch(message):
 @socketio.on('adminAllUsers', namespace='/pvServer')
 def adminAllUsers(message):
     global clientPVlist,REACT_APP_DisableLogin,clientDbWatchList,myDbWatchUid,thread_lock
-
     isAdmin=checkIfAdmin(message['clientAuthorisation'])
     if isAdmin :
-        
         try:
-            MONGO_ROOT_USERNAME = os.environ['MONGO_ROOT_USERNAME']
-            MONGO_ROOT_PASSWORD = os.environ['MONGO_ROOT_PASSWORD']
-            MONGO_ROOT_USERNAME = urllib.parse.quote_plus(
-                MONGO_ROOT_USERNAME)
-            MONGO_ROOT_PASSWORD = urllib.parse.quote_plus(
-                MONGO_ROOT_PASSWORD)
-            mongoAuth = True
-        except:
-            mongoAuth = False
-
-        try:
-            ADMIN_PW_SALT_ROUNDS = int(
-                os.environ['ADMIN_PW_SALT_ROUNDS'])
-        except:
-            ADMIN_PW_SALT_ROUNDS =12
-
-        MONGO_INITDB_ADMIN_DATABASE='rasAdminDb'
-        ADMIN_DATABASE=os.getenv('ADMIN_DATABASE')
-        ADMIN_DATABASE_REPLICA_SET_NAME=str(os.getenv('ADMIN_DATABASE_REPLICA_SET_NAME'))
-        if (ADMIN_DATABASE is None) :
-            print("Enviroment variable ADMIN_DATABASE is not defined, can't intialize: ",MONGO_INITDB_ADMIN_DATABASE)
-        else:
-            try:
-                if (mongoAuth):
-                    client = MongoClient('mongodb://%s:%s@%s' %(MONGO_ROOT_USERNAME, MONGO_ROOT_PASSWORD, ADMIN_DATABASE), replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
-                    # Wait for MongoClient to discover the whole replica set and identify MASTER!
-                    sleep(0.1)
-                else:
-                    client = MongoClient('mongodb://%s' % (ADMIN_DATABASE),replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
-                    # Wait for MongoClient to discover the whole replica set and identify MASTER!
-                    sleep(0.1)
-                dbnames = client.list_database_names()
-                if (MONGO_INITDB_ADMIN_DATABASE not in dbnames):
-                    print("Error cant connect to admin db",MONGO_INITDB_ADMIN_DATABASE)
-                else:
-                    mydb = client[MONGO_INITDB_ADMIN_DATABASE]
-                    mycol=mydb['users']
-                    query={}
-                    projection={"password":0}
-                    sort=[('$natural', 1)]
-                    skip=0
-                    limit=0
-                    count=False
-                    doc=mycol.find(query,projection)
-                    data=dumps(doc)
-                    eventName='databaseWatchData:'+'adminAllUsers'
-                    d={'write_access':True,'data': data}
-                    socketio.emit(eventName,d,room=str(request.sid),namespace='/pvServer')
-                    watchEventName=eventName
-                    myDbWatchUid= str(message['dbWatchId']+str(request.sid))
-                    dbWatchId=str(myDbWatchUid)
-                    with thread_lock:
-                        if not (watchEventName in	clientDbWatchList):
-                            dbWatch={}
-                            dbWatch['watchEventName']=watchEventName
-                            dbWatch['client']=client
-                            dbWatch['db']=mydb
-                            dbWatch['collection']=mycol
-                            dbWatch['watch']=mycol.watch()
-                            dbWatch['dbURL']=watchEventName
-                            dbWatch['query']=query
-                            dbWatch['projection']=projection
-                            dbWatch['sort']=sort
-                            dbWatch['skip']=skip
-                            dbWatch['limit']=limit
-                            dbWatch['count']=count
-                            dbWatch['sockets']={
-                                str(request.sid):{
-                                    "dbWatchIds":{
-                                        str(dbWatchId):True
-                                    }
-                                }
+            client=OpenMongoDbClient("ADMIN_DATABASE","rasAdminDb")
+            mydb = client["rasAdminDb"]
+            mycol=mydb['users']
+            query={}
+            projection={"password":0}
+            sort=[('$natural', 1)]
+            skip=0
+            limit=0
+            count=False
+            doc=mycol.find(query,projection)
+            data=dumps(doc)
+            eventName='databaseWatchData:'+'adminAllUsers'
+            d={'write_access':True,'data': data}
+            socketio.emit(eventName,d,room=str(request.sid),namespace='/pvServer')
+            watchEventName=eventName
+            myDbWatchUid= str(message['dbWatchId']+str(request.sid))
+            dbWatchId=str(myDbWatchUid)
+            with thread_lock:
+                if not (watchEventName in	clientDbWatchList):
+                    dbWatch={}
+                    dbWatch['watchEventName']=watchEventName
+                    dbWatch['client']=client
+                    dbWatch['db']=mydb
+                    dbWatch['collection']=mycol
+                    dbWatch['watch']=mycol.watch()
+                    dbWatch['dbURL']=watchEventName
+                    dbWatch['query']=query
+                    dbWatch['projection']=projection
+                    dbWatch['sort']=sort
+                    dbWatch['skip']=skip
+                    dbWatch['limit']=limit
+                    dbWatch['count']=count
+                    dbWatch['sockets']={
+                        str(request.sid):{
+                            "dbWatchIds":{
+                                str(dbWatchId):True
                             }
-                            dbWatch['thread']=None
-                            dbWatch['threadStarted']=False
-                            dbWatch['closeWatch']=False
-                            dbWatch['threadClosed']=False
-                            clientDbWatchList[watchEventName]=dbWatch
-                            join_room(str(watchEventName))
-                            join_room(str(watchEventName)+'rw')
-                        else:
-                            if request.sid in clientDbWatchList[watchEventName]['sockets']:
-                                if 'dbWatchIds' in clientDbWatchList[watchEventName]['sockets'][request.sid]:
-                                    if  dbWatchId in clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']:
-                                        log.info("not a unique id {} {}",dbWatchId,watchEventName)
-                                    else:
-                                        clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds'][dbWatchId]=True
-                                else:
-                                    clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']={dbWatchId:True}
+                        }
+                    }
+                    dbWatch['thread']=None
+                    dbWatch['threadStarted']=False
+                    dbWatch['closeWatch']=False
+                    dbWatch['threadClosed']=False
+                    clientDbWatchList[watchEventName]=dbWatch
+                    join_room(str(watchEventName))
+                    join_room(str(watchEventName)+'rw')
+                else:
+                    if request.sid in clientDbWatchList[watchEventName]['sockets']:
+                        if 'dbWatchIds' in clientDbWatchList[watchEventName]['sockets'][request.sid]:
+                            if  dbWatchId in clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']:
+                                log.info("not a unique id {} {}",dbWatchId,watchEventName)
                             else:
-                                clientDbWatchList[watchEventName]['sockets'][request.sid]={'dbWatchIds':{dbWatchId:True}}
+                                clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds'][dbWatchId]=True
+                        else:
+                            clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']={dbWatchId:True}
+                    else:
+                        clientDbWatchList[watchEventName]['sockets'][request.sid]={'dbWatchIds':{dbWatchId:True}}
 
-                            join_room(str(watchEventName))
-                            join_room(str(watchEventName)+'rw')
+                    join_room(str(watchEventName))
+                    join_room(str(watchEventName)+'rw')
 
-                        return {"dbWatchId":dbWatchId}
-            except Exception as e:
-                print("adminallusers",e)
-                return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
+                return {"dbWatchId":dbWatchId}
+        except Exception as e:
+            print("adminallusers",e)
+            return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
+        
         
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
@@ -1769,113 +1700,76 @@ def adminAllUsers(message):
 @socketio.on('adminWatchUAGs', namespace='/pvServer')
 def adminWatchUAGs(message):
     global clientPVlist,REACT_APP_DisableLogin,clientDbWatchList,myDbWatchUid,thread_lock
-
     isAdmin=checkIfAdmin(message['clientAuthorisation'])
     if isAdmin :
-        
         try:
-            MONGO_ROOT_USERNAME = os.environ['MONGO_ROOT_USERNAME']
-            MONGO_ROOT_PASSWORD = os.environ['MONGO_ROOT_PASSWORD']
-            MONGO_ROOT_USERNAME = urllib.parse.quote_plus(
-                MONGO_ROOT_USERNAME)
-            MONGO_ROOT_PASSWORD = urllib.parse.quote_plus(
-                MONGO_ROOT_PASSWORD)
-            mongoAuth = True
-        except:
-            mongoAuth = False
-
-        try:
-            ADMIN_PW_SALT_ROUNDS = int(
-                os.environ['ADMIN_PW_SALT_ROUNDS'])
-        except:
-            ADMIN_PW_SALT_ROUNDS =12
-
-        MONGO_INITDB_ADMIN_DATABASE='rasAdminDb'
-        ADMIN_DATABASE=os.getenv('ADMIN_DATABASE')
-        ADMIN_DATABASE_REPLICA_SET_NAME=str(os.getenv('ADMIN_DATABASE_REPLICA_SET_NAME'))
-        if (ADMIN_DATABASE is None) :
-            print("Enviroment variable ADMIN_DATABASE is not defined, can't intialize: ",MONGO_INITDB_ADMIN_DATABASE)
-        else:
-            try:
-                if (mongoAuth):
-                    client = MongoClient('mongodb://%s:%s@%s' %(MONGO_ROOT_USERNAME, MONGO_ROOT_PASSWORD, ADMIN_DATABASE), replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
-                    # Wait for MongoClient to discover the whole replica set and identify MASTER!
-                    sleep(0.1)
-                else:
-                    client = MongoClient('mongodb://%s' % (ADMIN_DATABASE),replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
-                    # Wait for MongoClient to discover the whole replica set and identify MASTER!
-                    sleep(0.1)
-                dbnames = client.list_database_names()
-                if (MONGO_INITDB_ADMIN_DATABASE not in dbnames):
-                    print("Error cant connect to admin db",MONGO_INITDB_ADMIN_DATABASE)
-                else:
-                    mydb = client[MONGO_INITDB_ADMIN_DATABASE]
-                    mycol=mydb['pvAccess']
-                    query={}
-                    projection=None
-                    sort=[('$natural', 1)]
-                    skip=0
-                    limit=0
-                    count=False
-                    doc=mycol.find(query,projection)
-                    data=dumps(doc)
-                    eventName='databaseWatchData:'+'adminWatchUAGs'
-                    d={'write_access':True,'data': data}
-                    socketio.emit(eventName,d,room=str(request.sid),namespace='/pvServer')
-                    watchEventName=eventName
-                    myDbWatchUid= str(message['dbWatchId']+str(request.sid))
-                    dbWatchId=str(myDbWatchUid)
-                    with thread_lock:
-                        if not (watchEventName in	clientDbWatchList):
-                            dbWatch={}
-                            dbWatch['watchEventName']=watchEventName
-                            dbWatch['client']=client
-                            dbWatch['db']=mydb
-                            dbWatch['collection']=mycol
-                            dbWatch['watch']=mycol.watch()
-                            dbWatch['dbURL']=watchEventName
-                            dbWatch['query']=query
-                            dbWatch['projection']=projection
-                            dbWatch['sort']=sort
-                            dbWatch['skip']=skip
-                            dbWatch['limit']=limit
-                            dbWatch['count']=count
-                            dbWatch['sockets']={
-                                str(request.sid):{
-                                    "dbWatchIds":{
-                                        str(dbWatchId):True
-                                    }
-                                }
+            client=OpenMongoDbClient("ADMIN_DATABASE","rasAdminDb")
+            mydb = client["rasAdminDb"]
+            mycol=mydb['pvAccess']
+            query={}
+            projection=None
+            sort=[('$natural', 1)]
+            skip=0
+            limit=0
+            count=False
+            doc=mycol.find(query,projection)
+            data=dumps(doc)
+            eventName='databaseWatchData:'+'adminWatchUAGs'
+            d={'write_access':True,'data': data}
+            socketio.emit(eventName,d,room=str(request.sid),namespace='/pvServer')
+            watchEventName=eventName
+            myDbWatchUid= str(message['dbWatchId']+str(request.sid))
+            dbWatchId=str(myDbWatchUid)
+            with thread_lock:
+                if not (watchEventName in	clientDbWatchList):
+                    dbWatch={}
+                    dbWatch['watchEventName']=watchEventName
+                    dbWatch['client']=client
+                    dbWatch['db']=mydb
+                    dbWatch['collection']=mycol
+                    dbWatch['watch']=mycol.watch()
+                    dbWatch['dbURL']=watchEventName
+                    dbWatch['query']=query
+                    dbWatch['projection']=projection
+                    dbWatch['sort']=sort
+                    dbWatch['skip']=skip
+                    dbWatch['limit']=limit
+                    dbWatch['count']=count
+                    dbWatch['sockets']={
+                        str(request.sid):{
+                            "dbWatchIds":{
+                                str(dbWatchId):True
                             }
-                            dbWatch['thread']=None
-                            dbWatch['threadStarted']=False
-                            dbWatch['closeWatch']=False
-                            dbWatch['threadClosed']=False
-                            clientDbWatchList[watchEventName]=dbWatch
-                            join_room(str(watchEventName))
-                            join_room(str(watchEventName)+'rw')
-                        else:
+                        }
+                    }
+                    dbWatch['thread']=None
+                    dbWatch['threadStarted']=False
+                    dbWatch['closeWatch']=False
+                    dbWatch['threadClosed']=False
+                    clientDbWatchList[watchEventName]=dbWatch
+                    join_room(str(watchEventName))
+                    join_room(str(watchEventName)+'rw')
+                else:
 
-                            if request.sid in clientDbWatchList[watchEventName]['sockets']:
-                                if 'dbWatchIds' in clientDbWatchList[watchEventName]['sockets'][request.sid]:
-                                    if  dbWatchId in clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']:
-                                        log.info("not a unique id {} {}",dbWatchId,watchEventName)
-                        #               print("allConnectionIds ",clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds'])
-                                    else:
-                                        clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds'][dbWatchId]=True
-                                else:
-                                    clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']={dbWatchId:True}
+                    if request.sid in clientDbWatchList[watchEventName]['sockets']:
+                        if 'dbWatchIds' in clientDbWatchList[watchEventName]['sockets'][request.sid]:
+                            if  dbWatchId in clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']:
+                                log.info("not a unique id {} {}",dbWatchId,watchEventName)
                             else:
-                                clientDbWatchList[watchEventName]['sockets'][request.sid]={'dbWatchIds':{dbWatchId:True}}
+                                clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds'][dbWatchId]=True
+                        else:
+                            clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']={dbWatchId:True}
+                    else:
+                        clientDbWatchList[watchEventName]['sockets'][request.sid]={'dbWatchIds':{dbWatchId:True}}
 
-                            join_room(str(watchEventName))
-                            join_room(str(watchEventName)+'rw')
+                    join_room(str(watchEventName))
+                    join_room(str(watchEventName)+'rw')
 
-                        return {"dbWatchId":dbWatchId}
-            except Exception as e:
-                print("adminWatchUAGs",e)
-                return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
-        
+                return {"dbWatchId":dbWatchId}
+        except Exception as e:
+            print("adminWatchUAGs",e)
+            return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
+            
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
         return "Ack: not authorised"
@@ -1885,69 +1779,31 @@ def adminWatchUAGs(message):
 @socketio.on('adminAddUser', namespace='/pvServer')
 def adminAddUser(message):
     global clientPVlist,REACT_APP_DisableLogin,clientDbWatchList,myDbWatchUid
-    # print("message",message)
     isAdmin=checkIfAdmin(message['clientAuthorisation'])
     if isAdmin :
-        # print("isAdmin",isAdmin)
         try:
-            MONGO_ROOT_USERNAME = os.environ['MONGO_ROOT_USERNAME']
-            MONGO_ROOT_PASSWORD = os.environ['MONGO_ROOT_PASSWORD']
-            MONGO_ROOT_USERNAME = urllib.parse.quote_plus(
-                MONGO_ROOT_USERNAME)
-            MONGO_ROOT_PASSWORD = urllib.parse.quote_plus(
-                MONGO_ROOT_PASSWORD)
-            mongoAuth = True
-        except:
-            mongoAuth = False
-
-        try:
-            ADMIN_PW_SALT_ROUNDS = int(
-                os.environ['ADMIN_PW_SALT_ROUNDS'])
-        except:
-            ADMIN_PW_SALT_ROUNDS =12
-
-        MONGO_INITDB_ADMIN_DATABASE='rasAdminDb'
-        ADMIN_DATABASE=os.getenv('ADMIN_DATABASE')
-        ADMIN_DATABASE_REPLICA_SET_NAME=str(os.getenv('ADMIN_DATABASE_REPLICA_SET_NAME'))
-        if (ADMIN_DATABASE is None) :
-            print("Enviroment variable ADMIN_DATABASE is not defined, can't intialize: ",MONGO_INITDB_ADMIN_DATABASE)
-        else:
-            try:
-                if (mongoAuth):
-                    client = MongoClient('mongodb://%s:%s@%s' %(MONGO_ROOT_USERNAME, MONGO_ROOT_PASSWORD, ADMIN_DATABASE), replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
-                    # Wait for MongoClient to discover the whole replica set and identify MASTER!
-                    sleep(0.1)
-                else:
-                    client = MongoClient('mongodb://%s' % (ADMIN_DATABASE),replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
-                    # Wait for MongoClient to discover the whole replica set and identify MASTER!
-                    sleep(0.1)
-                dbnames = client.list_database_names()
-                if (MONGO_INITDB_ADMIN_DATABASE not in dbnames):
-                    print("Error cant connect to admin db",MONGO_INITDB_ADMIN_DATABASE)
-                else:
-                    print("connected to adminDb",MONGO_INITDB_ADMIN_DATABASE)
-
-                    mydb = client[MONGO_INITDB_ADMIN_DATABASE]
-                    mycol=mydb['users']
-                    user=message["user"]
-                    existingUser=mycol.find_one({'username':user['username']})
-                    if existingUser:
-                        return "Error: Username Exists"
-                    else:
-                        user['enabled']=True
-                       
-                        if user['password']:
-                            user['password']=(bcrypt.hashpw(user['password'].encode('utf-8'), bcrypt.gensalt(ADMIN_PW_SALT_ROUNDS))).decode('utf-8')
-                            now = datetime.now()
-                            timestamp = datetime.timestamp(now)
-                            user['pwTimestamp']=timestamp
-                        mycol.insert_one(user)
-                       
-                            
-                    return "OK"
-            except Exception as e:
-                print("admin add user error",e)
-                return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
+            client=OpenMongoDbClient("ADMIN_DATABASE","rasAdminDb")
+            mydb = client["rasAdminDb"]
+            mycol=mydb['users']
+            user=message["user"]
+            existingUser=mycol.find_one({'username':user['username']})
+            if existingUser:
+                return "Error: Username Exists"
+            else:
+                user['enabled']=True
+                
+                if user['password']:
+                    user['password']=(bcrypt.hashpw(user['password'].encode('utf-8'), bcrypt.gensalt(ADMIN_PW_SALT_ROUNDS))).decode('utf-8')
+                    now = datetime.now()
+                    timestamp = datetime.timestamp(now)
+                    user['pwTimestamp']=timestamp
+                mycol.insert_one(user)
+                
+                    
+            return "OK"
+        except Exception as e:
+            print("admin add user error",e)
+            return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
         
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
@@ -1958,63 +1814,25 @@ def adminAddUser(message):
 @socketio.on('adminDeleteUser', namespace='/pvServer')
 def adminDeleteUser(message):
     global clientPVlist,REACT_APP_DisableLogin,clientDbWatchList,myDbWatchUid
-    # print("message",message)
     isAdmin=checkIfAdmin(message['clientAuthorisation'])
     if isAdmin :
-        # print("isAdmin",isAdmin)
         try:
-            MONGO_ROOT_USERNAME = os.environ['MONGO_ROOT_USERNAME']
-            MONGO_ROOT_PASSWORD = os.environ['MONGO_ROOT_PASSWORD']
-            MONGO_ROOT_USERNAME = urllib.parse.quote_plus(
-                MONGO_ROOT_USERNAME)
-            MONGO_ROOT_PASSWORD = urllib.parse.quote_plus(
-                MONGO_ROOT_PASSWORD)
-            mongoAuth = True
-        except:
-            mongoAuth = False
-
-        try:
-            ADMIN_PW_SALT_ROUNDS = int(
-                os.environ['ADMIN_PW_SALT_ROUNDS'])
-        except:
-            ADMIN_PW_SALT_ROUNDS =12
-
-        MONGO_INITDB_ADMIN_DATABASE='rasAdminDb'
-        ADMIN_DATABASE=os.getenv('ADMIN_DATABASE')
-        ADMIN_DATABASE_REPLICA_SET_NAME=str(os.getenv('ADMIN_DATABASE_REPLICA_SET_NAME'))
-        if (ADMIN_DATABASE is None) :
-            print("Enviroment variable ADMIN_DATABASE is not defined, can't intialize: ",MONGO_INITDB_ADMIN_DATABASE)
-        else:
+            client=OpenMongoDbClient("ADMIN_DATABASE","rasAdminDb")
+            mydb = client["rasAdminDb"]
+            mycol=mydb['users']
+            
             try:
-                if (mongoAuth):
-                    client = MongoClient('mongodb://%s:%s@%s' %(MONGO_ROOT_USERNAME, MONGO_ROOT_PASSWORD, ADMIN_DATABASE), replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
-                    # Wait for MongoClient to discover the whole replica set and identify MASTER!
-                    sleep(0.1)
-                else:
-                    client = MongoClient('mongodb://%s' % (ADMIN_DATABASE),replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
-                    # Wait for MongoClient to discover the whole replica set and identify MASTER!
-                    sleep(0.1)
-                dbnames = client.list_database_names()
-                if (MONGO_INITDB_ADMIN_DATABASE not in dbnames):
-                    print("Error cant connect to admin db",MONGO_INITDB_ADMIN_DATABASE)
-                else:
-                    print("connected to adminDb",MONGO_INITDB_ADMIN_DATABASE)
+                id=message['id']
+                mycol.delete_one({'_id':ObjectId(str(id))})
 
-                    mydb = client[MONGO_INITDB_ADMIN_DATABASE]
-                    mycol=mydb['users']
-                    
-                    try:
-                        id=message['id']
-                        mycol.delete_one({'_id':ObjectId(str(id))})
-
-                    except Exception as e:
-                        log.info(e)
-                        return 'Error:could not delete the user'
-
-                    return 'OK'
             except Exception as e:
-                print("admin add user error",e)
-                return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
+                log.info(e)
+                return 'Error:could not delete the user'
+
+            return 'OK'
+        except Exception as e:
+            print("admin add user error",e)
+            return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
         
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
@@ -2023,58 +1841,24 @@ def adminDeleteUser(message):
 @socketio.on('adminEnableUser', namespace='/pvServer')
 def adminEnableUser(message):
     global clientPVlist,REACT_APP_DisableLogin,clientDbWatchList,myDbWatchUid
-    # print("message",message)
     isAdmin=checkIfAdmin(message['clientAuthorisation'])
     if isAdmin :
-        # print("isAdmin",isAdmin)
         try:
-            MONGO_ROOT_USERNAME = os.environ['MONGO_ROOT_USERNAME']
-            MONGO_ROOT_PASSWORD = os.environ['MONGO_ROOT_PASSWORD']
-            MONGO_ROOT_USERNAME = urllib.parse.quote_plus(
-                MONGO_ROOT_USERNAME)
-            MONGO_ROOT_PASSWORD = urllib.parse.quote_plus(
-                MONGO_ROOT_PASSWORD)
-            mongoAuth = True
-        except:
-            mongoAuth = False
-
-       
-
-        MONGO_INITDB_ADMIN_DATABASE='rasAdminDb'
-        ADMIN_DATABASE=os.getenv('ADMIN_DATABASE')
-        ADMIN_DATABASE_REPLICA_SET_NAME=str(os.getenv('ADMIN_DATABASE_REPLICA_SET_NAME'))
-        if (ADMIN_DATABASE is None) :
-            print("Enviroment variable ADMIN_DATABASE is not defined, can't intialize: ",MONGO_INITDB_ADMIN_DATABASE)
-        else:
+            client=OpenMongoDbClient("ADMIN_DATABASE","rasAdminDb")
+            mydb = client["rasAdminDb"]
+            mycol=mydb['users']
+            id=message['id']
+            enabled=message['enabled']
+            print(message)
             try:
-                if (mongoAuth):
-                    client = MongoClient('mongodb://%s:%s@%s' %(MONGO_ROOT_USERNAME, MONGO_ROOT_PASSWORD, ADMIN_DATABASE), replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
-                    # Wait for MongoClient to discover the whole replica set and identify MASTER!
-                    sleep(0.1)
-                else:
-                    client = MongoClient('mongodb://%s' % (ADMIN_DATABASE),replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
-                    # Wait for MongoClient to discover the whole replica set and identify MASTER!
-                    sleep(0.1)
-                dbnames = client.list_database_names()
-                if (MONGO_INITDB_ADMIN_DATABASE not in dbnames):
-                    print("Error cant connect to admin db",MONGO_INITDB_ADMIN_DATABASE)
-                else:
-                    print("connected to adminDb",MONGO_INITDB_ADMIN_DATABASE)
-
-                    mydb = client[MONGO_INITDB_ADMIN_DATABASE]
-                    mycol=mydb['users']
-                    id=message['id']
-                    enabled=message['enabled']
-                    print(message)
-                    try:
-                        mycol.update_one({'_id':ObjectId(str(id))}, { "$set": { "enabled": enabled}})
-                    except Exception as e:
-                        log.info(e)
-                        return("error: can't update user ")
-                    return 'OK'
+                mycol.update_one({'_id':ObjectId(str(id))}, { "$set": { "enabled": enabled}})
             except Exception as e:
-                print("admin enable user error",e)
-                return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
+                log.info(e)
+                return("error: can't update user ")
+            return 'OK'
+        except Exception as e:
+            print("admin enable user error",e)
+            return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
         
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
@@ -2084,81 +1868,43 @@ def adminEnableUser(message):
 @socketio.on('adminModifyUser', namespace='/pvServer')
 def adminModifyUser(message):
     global clientPVlist,REACT_APP_DisableLogin,clientDbWatchList,myDbWatchUid
-    # print("message",message)
     isAdmin=checkIfAdmin(message['clientAuthorisation'])
     if isAdmin :
-        # print("isAdmin",isAdmin)
         try:
-            MONGO_ROOT_USERNAME = os.environ['MONGO_ROOT_USERNAME']
-            MONGO_ROOT_PASSWORD = os.environ['MONGO_ROOT_PASSWORD']
-            MONGO_ROOT_USERNAME = urllib.parse.quote_plus(
-                MONGO_ROOT_USERNAME)
-            MONGO_ROOT_PASSWORD = urllib.parse.quote_plus(
-                MONGO_ROOT_PASSWORD)
-            mongoAuth = True
-        except:
-            mongoAuth = False
-
-       
-        try:
-            ADMIN_PW_SALT_ROUNDS = int(
-                os.environ['ADMIN_PW_SALT_ROUNDS'])
-        except:
-            ADMIN_PW_SALT_ROUNDS =12
-        MONGO_INITDB_ADMIN_DATABASE='rasAdminDb'
-        ADMIN_DATABASE=os.getenv('ADMIN_DATABASE')
-        ADMIN_DATABASE_REPLICA_SET_NAME=str(os.getenv('ADMIN_DATABASE_REPLICA_SET_NAME'))
-        if (ADMIN_DATABASE is None) :
-            print("Enviroment variable ADMIN_DATABASE is not defined, can't intialize: ",MONGO_INITDB_ADMIN_DATABASE)
-        else:
+            client=OpenMongoDbClient("ADMIN_DATABASE","rasAdminDb")
+            mydb = client["rasAdminDb"]
+            mycol=mydb['users']
+            id=message['id']
+            
             try:
-                if (mongoAuth):
-                    client = MongoClient('mongodb://%s:%s@%s' %(MONGO_ROOT_USERNAME, MONGO_ROOT_PASSWORD, ADMIN_DATABASE), replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
-                    # Wait for MongoClient to discover the whole replica set and identify MASTER!
-                    sleep(0.1)
-                else:
-                    client = MongoClient('mongodb://%s' % (ADMIN_DATABASE),replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
-                    # Wait for MongoClient to discover the whole replica set and identify MASTER!
-                    sleep(0.1)
-                dbnames = client.list_database_names()
-                if (MONGO_INITDB_ADMIN_DATABASE not in dbnames):
-                    print("Error cant connect to admin db",MONGO_INITDB_ADMIN_DATABASE)
-                else:
-                    print("connected to adminDb",MONGO_INITDB_ADMIN_DATABASE)
+                update={ "$set": {}}
+                if message["password"]:
+                    password=(bcrypt.hashpw(message['password'].encode('utf-8'), bcrypt.gensalt(ADMIN_PW_SALT_ROUNDS))).decode('utf-8')
+                    now = datetime.now()
+                    timestamp = datetime.timestamp(now)
+                    update["$set"]["password"]=password
+                    update["$set"]['pwTimestamp']=timestamp
 
-                    mydb = client[MONGO_INITDB_ADMIN_DATABASE]
-                    mycol=mydb['users']
-                    id=message['id']
-                    
-                    try:
-                        update={ "$set": {}}
-                        if message["password"]:
-                            password=(bcrypt.hashpw(message['password'].encode('utf-8'), bcrypt.gensalt(ADMIN_PW_SALT_ROUNDS))).decode('utf-8')
-                            now = datetime.now()
-                            timestamp = datetime.timestamp(now)
-                            update["$set"]["password"]=password
-                            update["$set"]['pwTimestamp']=timestamp
+                if "email" in message:
+                    update["$set"]["email"]=message["email"]
+                if "givenName" in message:
+                    update["$set"]["givenName"]=message["givenName"]
+                if "familyName" in message:
+                    update["$set"]["familyName"]=message["familyName"]
+                if "phoneNumber" in message:
+                    update["$set"]["phoneNumber"]=message["phoneNumber"]
+                if "officeLocation" in message:
+                    update["$set"]["officeLocation"]=message["officeLocation"]
 
-                        if "email" in message:
-                            update["$set"]["email"]=message["email"]
-                        if "givenName" in message:
-                            update["$set"]["givenName"]=message["givenName"]
-                        if "familyName" in message:
-                            update["$set"]["familyName"]=message["familyName"]
-                        if "phoneNumber" in message:
-                            update["$set"]["phoneNumber"]=message["phoneNumber"]
-                        if "officeLocation" in message:
-                            update["$set"]["officeLocation"]=message["officeLocation"]
-
-                        
-                        mycol.update_one({'_id':ObjectId(str(id))}, update)
-                    except Exception as e:
-                        log.info(e)
-                        return("error: can't update user ")
-                    return 'OK'
+                
+                mycol.update_one({'_id':ObjectId(str(id))}, update)
             except Exception as e:
-                print("admin enable user error",e)
-                return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
+                log.info(e)
+                return("error: can't update user ")
+            return 'OK'
+        except Exception as e:
+            print("admin enable user error",e)
+            return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
         
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
@@ -2169,78 +1915,41 @@ def ModifyUser(message):
     global clientPVlist,REACT_APP_DisableLogin,clientDbWatchList,myDbWatchUid
     authorisation=AuthoriseUser(message['clientAuthorisation'])
     if authorisation['authorised'] :
-        # print("isAdmin",isAdmin)
         try:
-            MONGO_ROOT_USERNAME = os.environ['MONGO_ROOT_USERNAME']
-            MONGO_ROOT_PASSWORD = os.environ['MONGO_ROOT_PASSWORD']
-            MONGO_ROOT_USERNAME = urllib.parse.quote_plus(
-                MONGO_ROOT_USERNAME)
-            MONGO_ROOT_PASSWORD = urllib.parse.quote_plus(
-                MONGO_ROOT_PASSWORD)
-            mongoAuth = True
-        except:
-            mongoAuth = False
-
-       
-        try:
-            ADMIN_PW_SALT_ROUNDS = int(
-                os.environ['ADMIN_PW_SALT_ROUNDS'])
-        except:
-            ADMIN_PW_SALT_ROUNDS =12
-        MONGO_INITDB_ADMIN_DATABASE='rasAdminDb'
-        ADMIN_DATABASE=os.getenv('ADMIN_DATABASE')
-        ADMIN_DATABASE_REPLICA_SET_NAME=str(os.getenv('ADMIN_DATABASE_REPLICA_SET_NAME'))
-        if (ADMIN_DATABASE is None) :
-            print("Enviroment variable ADMIN_DATABASE is not defined, can't intialize: ",MONGO_INITDB_ADMIN_DATABASE)
-        else:
+            client=OpenMongoDbClient("ADMIN_DATABASE","rasAdminDb")
+            mydb = client["rasAdminDb"]
+            mycol=mydb['users']
+            id=message['id']
+            
             try:
-                if (mongoAuth):
-                    client = MongoClient('mongodb://%s:%s@%s' %(MONGO_ROOT_USERNAME, MONGO_ROOT_PASSWORD, ADMIN_DATABASE), replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
-                    # Wait for MongoClient to discover the whole replica set and identify MASTER!
-                    sleep(0.1)
-                else:
-                    client = MongoClient('mongodb://%s' % (ADMIN_DATABASE),replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
-                    # Wait for MongoClient to discover the whole replica set and identify MASTER!
-                    sleep(0.1)
-                dbnames = client.list_database_names()
-                if (MONGO_INITDB_ADMIN_DATABASE not in dbnames):
-                    print("Error cant connect to admin db",MONGO_INITDB_ADMIN_DATABASE)
-                else:
-                    print("connected to adminDb",MONGO_INITDB_ADMIN_DATABASE)
+                update={ "$set": {}}
+                if message["password"]:
+                    password=(bcrypt.hashpw(message['password'].encode('utf-8'), bcrypt.gensalt(ADMIN_PW_SALT_ROUNDS))).decode('utf-8')
+                    now = datetime.now()
+                    timestamp = datetime.timestamp(now)
+                    update["$set"]["password"]=password
+                    update["$set"]['pwTimestamp']=timestamp
 
-                    mydb = client[MONGO_INITDB_ADMIN_DATABASE]
-                    mycol=mydb['users']
-                    id=message['id']
-                    
-                    try:
-                        update={ "$set": {}}
-                        if message["password"]:
-                            password=(bcrypt.hashpw(message['password'].encode('utf-8'), bcrypt.gensalt(ADMIN_PW_SALT_ROUNDS))).decode('utf-8')
-                            now = datetime.now()
-                            timestamp = datetime.timestamp(now)
-                            update["$set"]["password"]=password
-                            update["$set"]['pwTimestamp']=timestamp
+                if "email" in message:
+                    update["$set"]["email"]=message["email"]
+                if "givenName" in message:
+                    update["$set"]["givenName"]=message["givenName"]
+                if "familyName" in message:
+                    update["$set"]["familyName"]=message["familyName"]
+                if "phoneNumber" in message:
+                    update["$set"]["phoneNumber"]=message["phoneNumber"]
+                if "officeLocation" in message:
+                    update["$set"]["officeLocation"]=message["officeLocation"]
 
-                        if "email" in message:
-                            update["$set"]["email"]=message["email"]
-                        if "givenName" in message:
-                            update["$set"]["givenName"]=message["givenName"]
-                        if "familyName" in message:
-                            update["$set"]["familyName"]=message["familyName"]
-                        if "phoneNumber" in message:
-                            update["$set"]["phoneNumber"]=message["phoneNumber"]
-                        if "officeLocation" in message:
-                            update["$set"]["officeLocation"]=message["officeLocation"]
-
-                        
-                        mycol.update_one({'_id':ObjectId(str(id))}, update)
-                    except Exception as e:
-                        log.info(e)
-                        return("error: can't update user ")
-                    return 'OK'
+                
+                mycol.update_one({'_id':ObjectId(str(id))}, update)
             except Exception as e:
-                print("admin enable user error",e)
-                return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
+                log.info(e)
+                return("error: can't update user ")
+            return 'OK'
+        except Exception as e:
+            print("admin enable user error",e)
+            return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
         
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
@@ -2250,59 +1959,24 @@ def ModifyUser(message):
 @socketio.on('adminUpdateUAGs', namespace='/pvServer')
 def adminUpdateUAGs(message):
     global clientPVlist,REACT_APP_DisableLogin,clientDbWatchList,myDbWatchUid
-    # print("message",message)
     isAdmin=checkIfAdmin(message['clientAuthorisation'])
     if isAdmin :
-        # print("isAdmin",isAdmin)
         try:
-            MONGO_ROOT_USERNAME = os.environ['MONGO_ROOT_USERNAME']
-            MONGO_ROOT_PASSWORD = os.environ['MONGO_ROOT_PASSWORD']
-            MONGO_ROOT_USERNAME = urllib.parse.quote_plus(
-                MONGO_ROOT_USERNAME)
-            MONGO_ROOT_PASSWORD = urllib.parse.quote_plus(
-                MONGO_ROOT_PASSWORD)
-            mongoAuth = True
-        except:
-            mongoAuth = False
-
-       
-
-        MONGO_INITDB_ADMIN_DATABASE='rasAdminDb'
-        ADMIN_DATABASE=os.getenv('ADMIN_DATABASE')
-        ADMIN_DATABASE_REPLICA_SET_NAME=str(os.getenv('ADMIN_DATABASE_REPLICA_SET_NAME'))
-        if (ADMIN_DATABASE is None) :
-            print("Enviroment variable ADMIN_DATABASE is not defined, can't intialize: ",MONGO_INITDB_ADMIN_DATABASE)
-        else:
+            client=OpenMongoDbClient("ADMIN_DATABASE","rasAdminDb")
+            mydb = client["rasAdminDb"]
+            mycol=mydb['pvAccess']
+            id=message['id']
+            userGroups=message['UAGs']
+            print(message)
             try:
-                if (mongoAuth):
-                    client = MongoClient('mongodb://%s:%s@%s' %(MONGO_ROOT_USERNAME, MONGO_ROOT_PASSWORD, ADMIN_DATABASE), replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
-                    # Wait for MongoClient to discover the whole replica set and identify MASTER!
-                    sleep(0.1)
-                else:
-                    client = MongoClient('mongodb://%s' % (ADMIN_DATABASE),replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME)
-                    # Wait for MongoClient to discover the whole replica set and identify MASTER!
-                    sleep(0.1)
-                dbnames = client.list_database_names()
-                if (MONGO_INITDB_ADMIN_DATABASE not in dbnames):
-                    print("Error cant connect to admin db",MONGO_INITDB_ADMIN_DATABASE)
-                else:
-                    print("connected to adminDb",MONGO_INITDB_ADMIN_DATABASE)
-
-                    mydb = client[MONGO_INITDB_ADMIN_DATABASE]
-                    mycol=mydb['pvAccess']
-                    id=message['id']
-                    # enabled=message['enabled']
-                    userGroups=message['UAGs']
-                    print(message)
-                    try:
-                        mycol.update_one({'_id':ObjectId(str(id))},{ "$set": { "userGroups":userGroups }})
-                    except Exception as e:
-                        log.info(e)
-                        return("error: can't update UAGs ")
-                    return 'OK'
+                mycol.update_one({'_id':ObjectId(str(id))},{ "$set": { "userGroups":userGroups }})
             except Exception as e:
-                print("admin enable user error",e)
-                return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
+                log.info(e)
+                return("error: can't update UAGs ")
+            return 'OK'
+        except Exception as e:
+            print("admin enable user error",e)
+            return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
         
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
@@ -2313,17 +1987,7 @@ def adminUpdateUAGs(message):
 @socketio.on('AuthenticateClient', namespace='/pvServer')
 def authenticate(message):
     print("Error, old socket io authentication is disabled")
-    # global REACT_APP_DisableLogin
-
-    # if (not REACT_APP_DisableLogin ):
-    #     userData=LocalAuthenticateUser(message['user'])
-    #     if not (userData is None) :
-    #         emit('clientAuthenticated', {'successful': True, 'jwt':userData['JWT'],'username':userData['username'],'roles':userData['roles']},room=request.sid,namespace='/pvServer')
-    #     else:
-    #         emit('clientAuthenticated', {'successful': False},room=request.sid,namespace='/pvServer')
-    #         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
-    # else:
-    #     emit('clientAuthenticated', {'successful': True, 'jwt':'anonomous'},room=request.sid,namespace='/pvServer')
+  
 
 @socketio.on('AuthoriseClient', namespace='/pvServer')
 def test_authenticate(message):
@@ -2331,7 +1995,6 @@ def test_authenticate(message):
 
     if (not REACT_APP_DisableLogin ):
         userData=AuthoriseUser(message)
-        #print(str(userData))
         if userData['authorised']:
             emit('clientAuthorisation', {'successful': True,'username':userData['username'],'roles':userData['roles']},room=request.sid,namespace='/pvServer')
         else:

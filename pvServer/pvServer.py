@@ -780,18 +780,7 @@ def databaseRead(message):
                             #join_room(str(dbURL))
                         try:
                             #print("connecting: "+dbURL)
-                            try:
-                                databaseString="mongodb://"+ str(os.environ[database])+"/"
-                                replicaSetName=str(os.environ[database+"_REPLICA_SET_NAME"])
-                                myclient = pymongo.MongoClient(databaseString,serverSelectionTimeoutMS=10,replicaSet=replicaSetName)
-                                # Wait for MongoClient to discover the whole replica set and identify MASTER!
-                                time.sleep(0.1)
-                                #myclient.server_info()
-                            except pymongo.errors.ServerSelectionTimeoutError as err:
-                                log.error(err)
-                                return "Ack: Could not connect to MongoDB: "+str(dbURL)
-
-
+                            myclient=OpenMongoDbClient(database,dbName)
                             mydb = myclient[dbName]
 
                             mycol=mydb[colName]
@@ -882,16 +871,7 @@ def databaseBroadcastRead(message):
                             #join_room(str(dbURL))
                         try:
     #                        print("connecting: "+dbURL)
-                            try:
-                                databaseString="mongodb://"+ str(os.environ[database])+"/"
-                                replicaSetName=str(os.environ[database+"_REPLICA_SET_NAME"])
-                                myclient = pymongo.MongoClient(databaseString,serverSelectionTimeoutMS=10,replicaSet=replicaSetName)
-                                # Wait for MongoClient to discover the whole replica set and identify MASTER!
-                                time.sleep(0.1)
-                                #myclient.server_info()
-                            except pymongo.errors.ServerSelectionTimeoutError as err:
-                                log.error(err)
-                                return "Ack: Could not connect to MongoDB: "+str(dbURL)
+                            myclient=OpenMongoDbClient(database,dbName)
 
                             mydb = myclient[dbName]
 
@@ -1144,16 +1124,7 @@ def databaseUpdateOne(message):
 
                         try:
                             #print("connecting: "+dbURL)
-                            try:
-                                databaseString="mongodb://"+ str(os.environ[database])+"/"
-                                replicaSetName=str(os.environ[database+"_REPLICA_SET_NAME"])
-                                myclient = pymongo.MongoClient(databaseString,serverSelectionTimeoutMS=10,replicaSet=replicaSetName)
-                                # Wait for MongoClient to discover the whole replica set and identify MASTER!
-                                time.sleep(0.1)
-                                #myclient.server_info()
-                            except pymongo.errors.ServerSelectionTimeoutError as err:
-                                log.info(err)
-                                return "Ack: Could not connect to MongoDB: "+str(dbURL)
+                            myclient=OpenMongoDbClient(database,dbName)
 
                             mydb = myclient[dbName]
 
@@ -1228,16 +1199,7 @@ def databaseUpdateMany(message):
 
                         try:
                             #print("connecting: "+dbURL)
-                            try:
-                                databaseString="mongodb://"+ str(os.environ[database])+"/"
-                                replicaSetName=str(os.environ[database+"_REPLICA_SET_NAME"])
-                                myclient = pymongo.MongoClient(databaseString,serverSelectionTimeoutMS=10,replicaSet=replicaSetName)
-                                # Wait for MongoClient to discover the whole replica set and identify MASTER!
-                                time.sleep(0.1)
-                                #myclient.server_info()
-                            except pymongo.errors.ServerSelectionTimeoutError as err:
-                                log.info(err)
-                                return "Ack: Could not connect to MongoDB: "+str(dbURL)
+                            myclient=OpenMongoDbClient(database,dbName)
 
                             mydb = myclient[dbName]
 
@@ -1323,17 +1285,7 @@ def databaseDeleteOne(message):
 
                         try:
                             #print("connecting: "+dbURL)
-                            try:
-                                databaseString="mongodb://"+ str(os.environ[database])+"/"
-                                replicaSetName=str(os.environ[database+"_REPLICA_SET_NAME"])
-                                myclient = pymongo.MongoClient(databaseString,serverSelectionTimeoutMS=10,replicaSet=replicaSetName)
-                                # Wait for MongoClient to discover the whole replica set and identify MASTER!
-                                time.sleep(0.1)
-                                #myclient.server_info()
-                            except pymongo.errors.ServerSelectionTimeoutError as err:
-                                log.info(err)
-                                return "Ack: Could not connect to MongoDB: "+str(dbURL)
-
+                            myclient=OpenMongoDbClient(database,dbName)
                             mydb = myclient[dbName]
 
                             mycol=mydb[colName]
@@ -1409,16 +1361,7 @@ def databaseInsertOne(message):
 
                         try:
 #                            print("connecting: "+dbURL)
-                            try:
-                                databaseString="mongodb://"+ str(os.environ[database])+"/"
-                                replicaSetName=str(os.environ[database+"_REPLICA_SET_NAME"])
-                                myclient = pymongo.MongoClient(databaseString,serverSelectionTimeoutMS=10,replicaSet=replicaSetName)
-                                # Wait for MongoClient to discover the whole replica set and identify MASTER!
-                                time.sleep(0.1)
-                                #myclient.server_info()
-                            except pymongo.errors.ServerSelectionTimeoutError as err:
-                                log.error(err)
-                                return "Ack: Could not connect to MongoDB: "+str(dbURL)
+                            myclient=OpenMongoDbClient(database,dbName)
 
                             mydb = myclient[dbName]
 

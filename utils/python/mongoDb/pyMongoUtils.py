@@ -14,19 +14,13 @@ def OpenMongoDbClient(hostDatabaseName,databaseName):
         mongoAuth = True
     except:
         mongoAuth = False
-
-    
-
-    MONGO_INITDB_ADMIN_DATABASE='rasAdminDb'
     DATABASE=os.getenv(str(hostDatabaseName))
     if (DATABASE is None):
         raise Exception("Environment variable: ",hostDatabaseName," not defined.")
     rsName=str(hostDatabaseName)+'_REPLICA_SET_NAME'
-    print(rsName)
     DATABASE_REPLICA_SET_NAME=str(os.getenv(rsName))
     if (DATABASE_REPLICA_SET_NAME is None):
         raise Exception("Environment variable: ",rsName," not defined.")
-    print("here")
     try:
         if (mongoAuth):
             client = MongoClient('mongodb://%s:%s@%s' %(MONGO_ROOT_USERNAME, MONGO_ROOT_PASSWORD, DATABASE), replicaSet=DATABASE_REPLICA_SET_NAME)
@@ -39,7 +33,6 @@ def OpenMongoDbClient(hostDatabaseName,databaseName):
         dbnames = client.list_database_names()
         if (databaseName not in dbnames):
             raise Exception("Error can't connect to admin db",databaseName)
-        print("connected to: "+databaseName)
         return client
     except:
         raise Exception("Error can't connect to admin db",databaseName)

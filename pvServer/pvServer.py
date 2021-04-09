@@ -1018,16 +1018,7 @@ def databaseReadWatchAndBroadcast(message):
                             join_room(str(dbURL)+'ro')
                             write_access=False
                         try:
-                            try:
-                                databaseString="mongodb://"+ str(os.environ[database])+"/"
-                                replicaSetName=str(os.environ[database+"_REPLICA_SET_NAME"])
-                                myclient = pymongo.MongoClient(databaseString,replicaSet=replicaSetName)
-                                # Wait for MongoClient to discover the whole replica set and identify MASTER!
-                                time.sleep(0.1)
-                                #myclient.server_info()
-                            except pymongo.errors.ServerSelectionTimeoutError as err:
-                                log.error(err)
-                                return "Ack: Could not connect to MongoDB: "+str(dbURL)
+                            myclient=OpenMongoDbClient(database,dbName)
                             mydb = myclient[dbName]
                             mycol=mydb[colName]
                             query=parameters['query'] if ('query' in parameters) else None
@@ -1056,7 +1047,7 @@ def databaseReadWatchAndBroadcast(message):
                             data=dumps(X)
                             eventName='databaseWatchData:'+dbURL;
                             watchEventName=eventName
-                            myDbWatchUid=dbURL= str(message['dbWatchId']+str(request.sid))
+                            myDbWatchUid=str(message['dbWatchId']+str(request.sid))
                             dbWatchId=str(myDbWatchUid)
                             d={'dbURL': dbURL,'write_access':write_access,'data': data}
                             socketio.emit(eventName,d,room=str(request.sid),namespace='/pvServer')
@@ -1087,7 +1078,10 @@ def databaseReadWatchAndBroadcast(message):
                                     dbWatch['closeWatch']=False
                                     dbWatch['threadClosed']=False
                                     clientDbWatchList[watchEventName]=dbWatch
-                                    join_room(str(watchEventName))
+                                    # if (write_access):
+                                    #     join_room(str(dbURL)+"rw")
+                                    # else:
+                                    #     join_room(str(dbURL)+"ro")
                                 else:
 
                                     if request.sid in clientDbWatchList[watchEventName]['sockets']:
@@ -1101,7 +1095,10 @@ def databaseReadWatchAndBroadcast(message):
                                     else:
                                         clientDbWatchList[watchEventName]['sockets'][request.sid]={'dbWatchIds':{dbWatchId:True}}
 
-                                    join_room(str(watchEventName))
+                                    # if (write_access):
+                                    #     join_room(str(dbURL)+"rw")
+                                    # else:
+                                    #     join_room(str(dbURL)+"ro")
                                 return {"dbWatchId":dbWatchId}
                         except:
                             return "Ack: Could not connect to MongoDB: "+str(dbURL)

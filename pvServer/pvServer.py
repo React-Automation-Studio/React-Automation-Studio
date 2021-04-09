@@ -309,10 +309,10 @@ def check_pv_initialized_after_disconnect():
                                 d['chid']=str(d['chid'])
                                 try:
                                     rw_room=str(pvname)+'rw'
-                                    socketio.emit("pv_conn_change",d,room=rw_room,namespace='/pvServer')
+                                    socketio.emit(pvname + "_conn_change",d,room=rw_room,namespace='/pvServer')
                                     d['write_access']=False
                                     ro_room=str(pvname)+'ro'
-                                    socketio.emit("pv_conn_change",d,room=ro_room,namespace='/pvServer')
+                                    socketio.emit(pvname + "_conn_change",d,room=ro_room,namespace='/pvServer')
                                     clientPVlist[pvname]['isConnected']=True
                                     clientPVlist[pvname]['initialized']=True
                                 #
@@ -332,7 +332,7 @@ def check_pv_initialized_after_disconnect():
                                     d['pvname']= pvname
                                     d['connected']= '0'
 
-                                    socketio.emit("pv_conn_change",d,room=str(pvname),namespace='/pvServer')
+                                    socketio.emit(pvname + "_conn_change",d,room=str(pvname),namespace='/pvServer')
                                 except:
                                     log.exception("Unexpected error")
                                     raise
@@ -502,7 +502,7 @@ def onConnectionChange(pvname=None, conn= None, value=None, **kws):
             clientPVlist[pvname1]['initialized']=False
             if 'last_event' in clientPVlist[pvname1]:
                 del clientPVlist[pvname1]['last_event']
-            socketio.emit("pv_conn_change",d,room=str(pvname1),namespace='/pvServer')
+            socketio.emit(pvname1 + "_conn_change",d,room=str(pvname1),namespace='/pvServer')
         except:
             error=2
 

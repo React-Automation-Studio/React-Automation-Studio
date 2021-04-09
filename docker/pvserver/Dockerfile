@@ -22,7 +22,7 @@ WORKDIR /epics
 
 
 ADD ./pvServer /pvServer
-
+ADD ./utils/python/mongoDb /pvServer/utils
 WORKDIR /pvServer
 
 

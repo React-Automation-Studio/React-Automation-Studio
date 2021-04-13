@@ -13,6 +13,7 @@ import TextOutput from '../../BaseComponents/TextOutput';
 
 import Slider from '../../BaseComponents/Slider';
 import GraphY from '../../BaseComponents/GraphY';
+import GraphYV2 from '../../BaseComponents/GraphYV2';
 import SelectionList from '../../BaseComponents/SelectionList';
 import ThumbWheel from '../../BaseComponents/ThumbWheel';
 
@@ -152,6 +153,13 @@ class MobileDemo1 extends React.Component {
                 <Grid item xs={12} >
                   <div style={{ height: graphVH, width:'96vw',}}>
                     <GraphY  pvs={['pva://testIOC:test4','pva://testIOC:test5'] } legend={['Sine Wave','Amplitude']}
+                     //lineColor={[this.props.theme.palette.secondary.main,lime['400']]}
+                     />
+                  </div>
+                </Grid>
+                <Grid item xs={12} >
+                  <div style={{ height: graphVH, width:'96vw',}}>
+                    <GraphYV2  pvs={['pva://testIOC:test4','pva://testIOC:test5'] } legend={['Sine Wave','Amplitude']}
                      //lineColor={[this.props.theme.palette.secondary.main,lime['400']]}
                      />
                   </div>

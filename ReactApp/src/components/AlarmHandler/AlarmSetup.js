@@ -59,6 +59,7 @@ import RenameDialog from './RenameDialog';
 import AddAreaDialog from './AddAreaDialog';
 import AddSubAreaDialog from './AddSubAreaDialog';
 import DeleteAreaDialog from './DeleteAreaDialog';
+import DeletePVDialog from './DeletePVDialog';
 
 import { format, parseISO } from 'date-fns';
 
@@ -293,29 +294,38 @@ const AlarmSetup = (props) => {
     const [renameDialogData, setRenameDialogData] = useState({})
 
     const [addAreaDialogOpen, setAddAreaDialogOpen] = useState(false)
-    const [addAreaName, setAddAreaName] = useState('')
+    const [addAreaDialogData, setAddAreaDialogData] = useState({})
 
     const [addSubAreaDialogOpen, setAddSubAreaDialogOpen] = useState(false)
     const [addSubAreaData, setAddSubAreaData] = useState({})
     const [lastSubAreaKey, setLastSubAreaKey] = useState({})
 
+    const [areaRoles, setAreaRoles] = useState({})
+
     const [deleteAreaDialogOpen, setDeleteAreaDialogOpen] = useState(false)
     const [deleteAreaDialogData, setDeleteAreaDialogData] = useState({})
+
+    const [deletePVDialogOpen, setDeletePVDialogOpen] = useState(false)
+    const [deletePVDialogData, setDeletePVDialogData] = useState({})
 
     const [backdropOpen, setBackDropOpen] = useState(false)
     const [restartCount, setRestartCount] = useState(undefined)
     const [firstStart, setFirstStart] = useState(true)
     const [ASRestartProgress, setASRestartProgress] = useState(0)
 
+    const [clientAHDBVer] = useState(props.AHDBVer)
+    const [serverAHDBVer, setServerAHDBVer] = useState(props.AHDBVer)
+
     const [alarmAdminListExpand, setAlarmAdminListExpand] = useState(false)
     const [alarmAdminGListExpand, setAlarmAdminGListExpand] = useState(false)
+    const [alarmAdminPVExpand, setAlarmAdminPVExpand] = useState(false)
 
     const [dbPVData, setDbPVData] = useState({})
 
     const alarmPVDictReducer = useCallback((state, action) => {
         switch (action.type) {
             case 'updatePVData':
-                if (action.pvData.initialized && !loadAlarmTable.alarmPV) {
+                if (action.pvData.initialized && (!loadAlarmTable.alarmPV || backdropOpen)) {
                     let epicsPVName = action.pvData.pvName.replace("pva://", "")
                     epicsPVName = epicsPVName.replace(alarmIOCPVPrefix, "")
                     epicsPVName = epicsPVName.replace(alarmIOCPVSuffix, "")
@@ -336,7 +346,7 @@ const AlarmSetup = (props) => {
             default:
                 throw new Error();
         }
-    }, [alarmIOCPVPrefix, alarmIOCPVSuffix, lastAlarm, loadAlarmTable])
+    }, [alarmIOCPVPrefix, alarmIOCPVSuffix, lastAlarm, loadAlarmTable, backdropOpen])
     const [alarmPVDict, dispatchAlarmPVDict] = useReducer(alarmPVDictReducer, {})
     const [alarmPVs, setAlarmPVs] = useState([])
 
@@ -485,6 +495,7 @@ const AlarmSetup = (props) => {
             const localAreaEnabled = {}
             const localAreaBridged = {}
             const localLastPVKey = {}
+            const localAreaRoles = {}
             let localLastAlarm = ""
             let localLastArea = ""
             let areaNamesIndex = -1
@@ -501,6 +512,7 @@ const AlarmSetup = (props) => {
                         ? true
                         : roles.some(r => area.roles.includes(r))
                     : true
+                localAreaRoles[area["area"]] = areaHasRoles ? area.roles : []
                 // console.log(area.area, area?.roles)
                 // console.log('areaMatchesRole', areaMatchesRole)
                 if (areaMatchesRole) {
@@ -543,6 +555,7 @@ const AlarmSetup = (props) => {
                                     ? true
                                     : roles.some(r => area[areaKey].roles.includes(r))
                                 : true
+                            localAreaRoles[`${area["area"]}=${area[areaKey]["name"]}`] = subAreaHasRoles ? area[areaKey].roles : []
                             // console.log(`${area["area"]}=${area[areaKey]["name"]}`, area[areaKey]?.roles)
                             // console.log('subAreaMatchesRole', subAreaMatchesRole)
                             if (subAreaMatchesRole) {
@@ -603,6 +616,7 @@ const AlarmSetup = (props) => {
             setLastArea(localLastArea)
             setLastPVKey(localLastPVKey)
             setLastSubAreaKey(localLastSubAreaKey)
+            setAreaRoles(localAreaRoles)
 
             setDbPVData(dbPVDataRaw)
 
@@ -805,10 +819,12 @@ const AlarmSetup = (props) => {
     useEffect(() => {
         if (dbGlobData !== null) {
             // ["_id"]["$oid"]
-            const data = dbGlobData[0];
+            const data = dbGlobData[0]
             setEnableAllAreas(data["enableAllAreas"])
             setGlobalDocId(data["_id"]["$oid"])
             setRestartCount(data["restartCount"])
+            // Backwards compatible
+            setServerAHDBVer(data["AHDBVer"] ?? 0)
         }
     }, [dbGlobData])
 
@@ -1006,7 +1022,6 @@ const AlarmSetup = (props) => {
 
         const id = areaMongoId[index]
         let newvalues = null
-        let subAreaId = null
 
         // Check if it is a subArea
         // console.log(index)
@@ -1022,24 +1037,13 @@ const AlarmSetup = (props) => {
 
         if (index.includes("=")) {
             // bridge
-            subAreaId = areaSubAreaMongoId[index] + ".pvs." + alarm + ".bridge"
-            newvalues = { '$set': { [subAreaId]: enableDialogData.bridge } }
-            dbUpdateOne({
-                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
-                id: id,
-                update: newvalues
-            })
-            // bridgeTime
-            subAreaId = areaSubAreaMongoId[index] + ".pvs." + alarm + ".bridgeTime"
-            newvalues = { '$set': { [subAreaId]: enableDialogData.bridgeTime } }
-            dbUpdateOne({
-                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
-                id: id,
-                update: newvalues
-            })
-            // enable
-            subAreaId = areaSubAreaMongoId[index] + ".pvs." + alarm + ".enable"
-            newvalues = { '$set': { [subAreaId]: enableDialogData.enable } }
+            newvalues = {
+                '$set': {
+                    [areaSubAreaMongoId[index] + ".pvs." + alarm + ".bridge"]: enableDialogData.bridge,
+                    [areaSubAreaMongoId[index] + ".pvs." + alarm + ".bridgeTime"]: enableDialogData.bridgeTime,
+                    [areaSubAreaMongoId[index] + ".pvs." + alarm + ".enable"]: enableDialogData.enable
+                }
+            }
             dbUpdateOne({
                 dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
                 id: id,
@@ -1048,24 +1052,13 @@ const AlarmSetup = (props) => {
         }
         else {
             // bridge
-            subAreaId = "pvs." + alarm + ".bridge"
-            newvalues = { '$set': { [subAreaId]: enableDialogData.bridge } }
-            dbUpdateOne({
-                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
-                id: id,
-                update: newvalues
-            })
-            // bridgeTime
-            subAreaId = "pvs." + alarm + ".bridgeTime"
-            newvalues = { '$set': { [subAreaId]: enableDialogData.bridgeTime } }
-            dbUpdateOne({
-                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
-                id: id,
-                update: newvalues
-            })
-            // enable
-            subAreaId = "pvs." + alarm + ".enable"
-            newvalues = { '$set': { [subAreaId]: enableDialogData.enable } }
+            newvalues = {
+                '$set': {
+                    ["pvs." + alarm + ".bridge"]: enableDialogData.bridge,
+                    ["pvs." + alarm + ".bridgeTime"]: enableDialogData.bridgeTime,
+                    ["pvs." + alarm + ".enable"]: enableDialogData.enable
+                }
+            }
             dbUpdateOne({
                 dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
                 id: id,
@@ -1112,7 +1105,7 @@ const AlarmSetup = (props) => {
         }
     }, [areaEnabled, areaAlarms])
 
-    const handleAlarmContextClose = useCallback((event, index) => {
+    const handleAlarmContextClose = useCallback(() => {
         setAlarmRowSelected({})
         setAlarmContextOpen({})
     }, [])
@@ -1133,7 +1126,8 @@ const AlarmSetup = (props) => {
 
         // console.log(alarmAckField)
 
-        handleAlarmContextClose(event, index)
+        handleAlarmContextClose()
+        setAlarmAdminPVExpand(false)
 
         setAlarmAckField(localAlarmAckField)
         setAlarmAckFieldTrig(alarmAckFieldTrig + 1)
@@ -1171,7 +1165,6 @@ const AlarmSetup = (props) => {
         const id = areaMongoId[index]
 
         let newvalues = null
-        let subAreaId = null
 
         // set activeUser
         newvalues = { '$set': { activeUser: username } }
@@ -1185,24 +1178,13 @@ const AlarmSetup = (props) => {
         // Check if it is a subArea
         if (index.includes("=")) {
             // bridge
-            subAreaId = areaSubAreaMongoId[index] + ".bridge"
-            newvalues = { '$set': { [subAreaId]: enableDialogData.bridge } }
-            dbUpdateOne({
-                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
-                id: id,
-                update: newvalues
-            })
-            // bridgeTime
-            subAreaId = areaSubAreaMongoId[index] + ".bridgeTime"
-            newvalues = { '$set': { [subAreaId]: enableDialogData.bridgeTime } }
-            dbUpdateOne({
-                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
-                id: id,
-                update: newvalues
-            })
-            // enable
-            subAreaId = areaSubAreaMongoId[index] + ".enable"
-            newvalues = { '$set': { [subAreaId]: enableDialogData.enable } }
+            newvalues = {
+                '$set': {
+                    [areaSubAreaMongoId[index] + ".bridge"]: enableDialogData.bridge,
+                    [areaSubAreaMongoId[index] + ".bridgeTime"]: enableDialogData.bridgeTime,
+                    [areaSubAreaMongoId[index] + ".enable"]: enableDialogData.enable
+                }
+            }
             dbUpdateOne({
                 dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
                 id: id,
@@ -1211,21 +1193,13 @@ const AlarmSetup = (props) => {
         }
         else {
             // bridge
-            newvalues = { '$set': { "bridge": enableDialogData.bridge } }
-            dbUpdateOne({
-                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
-                id: id,
-                update: newvalues
-            })
-            // bridgeTime
-            newvalues = { '$set': { "bridgeTime": enableDialogData.bridgeTime } }
-            dbUpdateOne({
-                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
-                id: id,
-                update: newvalues
-            })
-            // enable
-            newvalues = { '$set': { "enable": enableDialogData.enable } }
+            newvalues = {
+                '$set': {
+                    "bridge": enableDialogData.bridge,
+                    "bridgeTime": enableDialogData.bridgeTime,
+                    "enable": enableDialogData.enable
+                }
+            }
             dbUpdateOne({
                 dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
                 id: id,
@@ -1302,30 +1276,60 @@ const AlarmSetup = (props) => {
         setAddPVDialogOpen(true)
     }, [lastPVKey, newPVInfo])
 
-    const handleAddNewSubArea = useCallback((event, index) => {
-        setAddSubAreaData({
-            areaIndex: index,
-            areaNextSubAreaKey: isNaN(lastSubAreaKey[index]) ? 0 : lastSubAreaKey[index] + 1,
-            subArea: ''
+
+    const handleAddNewArea = useCallback(() => {
+        setAlarmAdminGListExpand(false)
+        setGlobalContextOpen(false)
+        setAddAreaDialogData({
+            edit: false,
+            area: '',
+            addRoles: false,
+            roles: []
         })
+        setAddAreaDialogOpen(true)
+    }, [])
+
+
+    const handleAddNewSubArea = useCallback((event, index) => {
         setAreaContextOpen({})
         setAlarmAdminListExpand(false)
+        setAddSubAreaData({
+            edit: false,
+            areaIndex: index,
+            areaNextSubAreaKey: isNaN(lastSubAreaKey[index]) ? 0 : lastSubAreaKey[index] + 1,
+            subArea: '',
+            addRoles: false,
+            roles: []
+        })
         setAddSubAreaDialogOpen(true)
     }, [lastSubAreaKey])
 
-    const handleRenameArea = useCallback((event, index) => {
-        const currentName = index.includes("=")
-            ? index.split("=")[1]
-            : index
-        setRenameDialogData({
-            index: index,
-            currentName: currentName,
-            newName: ''
-        })
+    const handleEditArea = useCallback((event, index) => {
+        const isSubArea = index.includes("=")
+        if (isSubArea) {
+            setAddSubAreaData({
+                edit: true,
+                oldIndex: index,
+                areaIndex: index.split("=")[0],
+                subArea: index.split("=")[1],
+                addRoles: areaRoles[index].length !== 0,
+                roles: areaRoles[index]
+            })
+            setAddSubAreaDialogOpen(true)
+        }
+        else {
+            setAddAreaDialogData({
+                edit: true,
+                area: index,
+                oldArea: index,
+                addRoles: areaRoles[index].length !== 0,
+                roles: areaRoles[index]
+            })
+            setAddAreaDialogOpen(true)
+        }
         setAreaContextOpen({})
         setAlarmAdminListExpand(false)
-        setRenameDialogOpen(true)
-    }, [])
+    }, [areaRoles])
 
     const handleDeleteArea = useCallback((event, index) => {
         const areaName = index.includes("=")
@@ -1339,6 +1343,228 @@ const AlarmSetup = (props) => {
         setAlarmAdminListExpand(false)
         setDeleteAreaDialogOpen(true)
     }, [])
+
+    const handleDeletePV = useCallback((event, index, pvname) => {
+        const parts = index.split("=")
+        const isSubArea = parts.length === 3
+        const pvKey = isSubArea ? parts[2] : parts[1]
+        setDeletePVDialogData({
+            area: parts[0],
+            subArea: isSubArea ? parts[1] : undefined,
+            pvKey: pvKey,
+            pvname: pvname
+        })
+        setDeletePVDialogOpen(true)
+    }, [])
+
+    const handleExecuteEditArea = useCallback(() => {
+        const { area, oldArea, roles } = addAreaDialogData
+        const id = areaMongoId[oldArea]
+
+        let query = {}
+        let newvalues = {}
+        let aggregation = {}
+
+        // set activeUser
+        newvalues = { '$set': { activeUser: username } }
+        dbUpdateOne({
+            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:glob`,
+            id: globalDocId,
+            update: newvalues
+        })
+        //
+
+        newvalues = {
+            '$set': {
+                area: area,
+                roles: roles
+            }
+        }
+
+        dbUpdateOne({
+            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
+            id: id,
+            update: newvalues
+        })
+
+        const index = oldArea
+        const newIndex = area
+        const newLogName = area
+
+        query = {
+            id: { '$regex': `^${index}=` }
+        }
+        aggregation = {
+            '$set': {
+                'id': {
+                    '$concat': [{
+                        '$arrayElemAt': [{
+                            '$split': ['$id', `${index}=`]
+                        }, 0]
+                    },
+                    `${newIndex}=`,
+                    {
+                        '$arrayElemAt': [{
+                            '$split': ['$id', `${index}=`]
+                        }, 1]
+                    }]
+                }
+            }
+        }
+        dbUpdateMany({
+            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history`,
+            query: query,
+            aggregation: aggregation
+        })
+        query = {
+            id: { '$regex': `^${index}\\*` }
+        }
+        aggregation = {
+            '$set': {
+                'id': {
+                    '$concat': [{
+                        '$arrayElemAt': [{
+                            '$split': ['$id', `${index}*`]
+                        }, 0]
+                    },
+                    `${newIndex}*`,
+                    {
+                        '$arrayElemAt': [{
+                            '$split': ['$id', `${index}*`]
+                        }, 1]
+                    }]
+                }
+            }
+        }
+        dbUpdateMany({
+            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history`,
+            query: query,
+            aggregation: aggregation
+        })
+        query = {
+            id: { '$regex': `^${index}$` }
+        }
+        aggregation = {
+            '$set': {
+                'id': {
+                    '$concat': [{
+                        '$arrayElemAt': [{
+                            '$split': ['$id', `${index}`]
+                        }, 0]
+                    },
+                    `${newIndex}`,
+                    {
+                        '$arrayElemAt': [{
+                            '$split': ['$id', `${index}`]
+                        }, 1]
+                    }]
+                },
+            }
+        }
+        dbUpdateMany({
+            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history`,
+            query: query,
+            aggregation: aggregation
+        })
+
+        setAddAreaDialogOpen(false)
+        setAreaSelectedIndex(newIndex)
+        setAlarmLogSelectedKey(newIndex)
+        setAlarmLogSelectedName(newLogName)
+        setAreaSelectedName(newLogName)
+    }, [addAreaDialogData, areaMongoId, dbUpdateOne, props.dbName, dbUpdateMany, globalDocId, username])
+
+    const handleExecuteEditSubArea = useCallback(() => {
+        const { oldIndex, subArea, roles } = addSubAreaData
+        const id = areaMongoId[oldIndex]
+        const subAreaId = areaSubAreaMongoId[oldIndex]
+
+        let query = {}
+        let newvalues = {}
+        let aggregation = {}
+
+        // set activeUser
+        newvalues = { '$set': { activeUser: username } }
+        dbUpdateOne({
+            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:glob`,
+            id: globalDocId,
+            update: newvalues
+        })
+        //
+
+        newvalues = {
+            '$set': {
+                [`${subAreaId}.name`]: subArea,
+                [`${subAreaId}.roles`]: roles
+            }
+        }
+        dbUpdateOne({
+            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
+            id: id,
+            update: newvalues
+        })
+
+        const index = oldIndex
+        const newIndex = `${index.split("=")[0]}=${subArea}`
+        const newLogName = `${index.split("=")[0]} > ${subArea}`
+
+        query = {
+            id: { '$regex': `^${index}\\*` }
+        }
+        aggregation = {
+            '$set': {
+                'id': {
+                    '$concat': [{
+                        '$arrayElemAt': [{
+                            '$split': ['$id', `${index}*`]
+                        }, 0]
+                    },
+                    `${newIndex}*`,
+                    {
+                        '$arrayElemAt': [{
+                            '$split': ['$id', `${index}*`]
+                        }, 1]
+                    }]
+                }
+            }
+        }
+        dbUpdateMany({
+            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history`,
+            query: query,
+            aggregation: aggregation
+        })
+        query = {
+            id: { '$regex': `^${index}$` }
+        }
+        aggregation = {
+            '$set': {
+                'id': {
+                    '$concat': [{
+                        '$arrayElemAt': [{
+                            '$split': ['$id', `${index}`]
+                        }, 0]
+                    },
+                    `${newIndex}`,
+                    {
+                        '$arrayElemAt': [{
+                            '$split': ['$id', `${index}`]
+                        }, 1]
+                    }]
+                },
+            }
+        }
+        dbUpdateMany({
+            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history`,
+            query: query,
+            aggregation: aggregation
+        })
+
+        setAddSubAreaDialogOpen(false)
+        setAreaSelectedIndex(newIndex)
+        setAlarmLogSelectedKey(newIndex)
+        setAlarmLogSelectedName(newLogName)
+        setAreaSelectedName(newLogName)
+    }, [addSubAreaData, areaMongoId, areaSubAreaMongoId, dbUpdateOne, props.dbName, dbUpdateMany, globalDocId, username])
 
     const handleExecuteRenameArea = useCallback(() => {
         const { index, newName } = renameDialogData
@@ -1558,54 +1784,12 @@ const AlarmSetup = (props) => {
         if (index.includes("=")) {
             const subAreaId = areaSubAreaMongoId[index]
             const topArea = index.split("=")[0]
-            const lastSubAreaId = `subArea${lastSubAreaKey[topArea]}`
-            if (subAreaId === lastSubAreaId) {
-                // last subArea is to be removed
-                newvalues = { '$unset': { [subAreaId]: "" } }
-                dbUpdateOne({
-                    dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
-                    id: id,
-                    update: newvalues
-                })
-
-            }
-            else {
-                const matchDoc = dbPVData.filter(el => el["_id"]["$oid"] === id)[0]
-                const newDoc = {}
-                let subAreaIndex = 0
-                Object.keys(matchDoc).map(key => {
-                    if (key !== '_id') {
-                        if (key.includes("subArea")) {
-                            if (key !== subAreaId) {
-                                newDoc[`subArea${subAreaIndex}`] = matchDoc[key]
-                                subAreaIndex++
-                            }
-                        }
-                        else {
-                            newDoc[key] = matchDoc[key]
-                        }
-                    }
-                    return null
-                })
-                // remove last subArea - to remove key
-                newvalues = { '$unset': { [lastSubAreaId]: "" } }
-                dbUpdateOne({
-                    dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
-                    id: id,
-                    update: newvalues
-                })
-                //
-                newvalues = { '$set': {} }
-                Object.keys(newDoc).map(key => {
-                    newvalues['$set'][key] = newDoc[key]
-                    return null
-                })
-                dbUpdateOne({
-                    dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
-                    id: id,
-                    update: newvalues
-                })
-            }
+            newvalues = { '$unset': { [subAreaId]: "" } }
+            dbUpdateOne({
+                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
+                id: id,
+                update: newvalues
+            })
             setAreaSelectedIndex(topArea)
             setAlarmLogSelectedKey(topArea)
             setAlarmLogSelectedName(topArea)
@@ -1622,10 +1806,56 @@ const AlarmSetup = (props) => {
             setAreaSelectedName('ALL AREAS')
         }
         setDeleteAreaDialogOpen(false)
-    }, [deleteAreaDialogData, areaMongoId, dbDeleteOne, props.dbName, areaSubAreaMongoId, dbPVData, lastSubAreaKey, dbUpdateOne, globalDocId, username])
+    }, [deleteAreaDialogData, areaMongoId, dbDeleteOne, props.dbName, areaSubAreaMongoId, dbUpdateOne, globalDocId, username])
+
+    const handleExecuteDeletePV = useCallback(() => {
+        const { area, subArea, pvKey } = deletePVDialogData
+        const index = subArea ? `${area}=${subArea}` : area
+        const id = areaMongoId[index]
+        const subAreaId = subArea ? areaSubAreaMongoId[index] : undefined
+        let newvalues
+        // set activeUser
+        newvalues = { '$set': { activeUser: username } }
+        dbUpdateOne({
+            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:glob`,
+            id: globalDocId,
+            update: newvalues
+        })
+        //
+        if (subAreaId) {
+            newvalues = {
+                '$unset': { [`${subAreaId}.pvs.${pvKey}`]: "" }
+            }
+            dbUpdateOne({
+                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
+                id: id,
+                update: newvalues
+            })
+            setAreaSelectedIndex(index)
+            setAlarmLogSelectedKey(index)
+            setAlarmLogSelectedName(`${area} > ${subArea}`)
+            setAreaSelectedName(`${area} > ${subArea}`)
+        }
+        else {
+            newvalues = {
+                '$unset': { [`pvs.${pvKey}`]: "" }
+            }
+            dbUpdateOne({
+                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:pvs`,
+                id: id,
+                update: newvalues
+            })
+            setAreaSelectedIndex(index)
+            setAlarmLogSelectedKey(index)
+            setAlarmLogSelectedName(area)
+            setAreaSelectedName(area)
+        }
+        setDeletePVDialogOpen(false)
+        setDeletePVDialogData({})
+    }, [deletePVDialogData, areaMongoId, areaSubAreaMongoId, dbUpdateOne, globalDocId, props.dbName, username])
 
     const handleExecuteAddNewSubArea = useCallback(() => {
-        const { areaIndex, subArea, areaNextSubAreaKey } = addSubAreaData
+        const { areaIndex, subArea, areaNextSubAreaKey, roles } = addSubAreaData
         const id = areaMongoId[areaIndex]
 
         let newvalues = {}
@@ -1646,6 +1876,7 @@ const AlarmSetup = (props) => {
                     enable: true,
                     bridge: false,
                     bridgeTime: '',
+                    roles: roles,
                     pvs: {}
                 }
             }
@@ -1658,7 +1889,9 @@ const AlarmSetup = (props) => {
         setAddSubAreaDialogOpen(false)
     }, [addSubAreaData, areaMongoId, dbUpdateOne, props.dbName, globalDocId, username])
 
-    const handleAddNewArea = useCallback(() => {
+    const handleExecuteAddNewArea = useCallback(() => {
+
+        const { area, roles } = addAreaDialogData
 
         // set activeUser
         const newvalues = { '$set': { activeUser: username } }
@@ -1670,10 +1903,11 @@ const AlarmSetup = (props) => {
         //
 
         const newEntry = {
-            area: addAreaName,
+            area: area,
             enable: true,
             bridge: false,
             bridgeTime: '',
+            roles: roles,
             pvs: {}
         }
         dbInsertOne({
@@ -1681,8 +1915,8 @@ const AlarmSetup = (props) => {
             newEntry: newEntry
         })
         setAddAreaDialogOpen(false)
-        setAddAreaName('')
-    }, [addAreaName, dbInsertOne, props.dbName, dbUpdateOne, globalDocId, username])
+        setAddAreaDialogData({})
+    }, [addAreaDialogData, dbInsertOne, props.dbName, dbUpdateOne, globalDocId, username])
 
     const handleAppendNewPVInfo = useCallback(() => {
         setNewPVInfo({
@@ -1739,6 +1973,8 @@ const AlarmSetup = (props) => {
                     [`pv${key}`]: {
                         name: pvname,
                         enable: true,
+                        bridge: false,
+                        bridgeTime: '',
                         latch: true,
                         notify: true,
                         lastAlarmVal: "",
@@ -2093,23 +2329,25 @@ const AlarmSetup = (props) => {
             />
             <AddAreaDialog
                 open={addAreaDialogOpen}
-                addAreaName={addAreaName}
-                setAddAreaName={setAddAreaName}
+                data={addAreaDialogData}
+                setAddAreaDialogData={setAddAreaDialogData}
                 handleClose={() => {
                     setAddAreaDialogOpen(false)
-                    setAddAreaName('')
+                    setAddAreaDialogData({})
                 }}
-                addNewArea={handleAddNewArea}
+                addNewArea={handleExecuteAddNewArea}
+                editArea={handleExecuteEditArea}
             />
             <AddSubAreaDialog
                 open={addSubAreaDialogOpen}
-                addSubAreaData={addSubAreaData}
+                data={addSubAreaData}
                 setAddSubAreaData={setAddSubAreaData}
                 handleClose={() => {
                     setAddSubAreaDialogOpen(false)
                     setAddSubAreaData({})
                 }}
                 executeAddNewSubArea={handleExecuteAddNewSubArea}
+                executeEditSubArea={handleExecuteEditSubArea}
             />
             <DeleteAreaDialog
                 open={deleteAreaDialogOpen}
@@ -2120,333 +2358,361 @@ const AlarmSetup = (props) => {
                 }}
                 handleDelete={handleExecuteDeleteArea}
             />
-            <Grid
-                container
-                direction="row"
-                justify="flex-start"
-                alignItems="stretch"
-                spacing={2}
-                className={classes.root}
-            >
-                {displayAlarmList && !backdropOpen
-                    ? <Grid item xs={2}>
-                        <Paper className={classes.paper} elevation={theme.palette.paperElevation}>
-                            <Grid
-                                container
-                                direction="row"
-                                justify="center"
-                                alignItems="center"
-                                spacing={1}
-                            >
-                                <Grid item xs={2} style={{ textAlign: 'right' }}>
-                                    <IconButton
-                                        aria-label="global_alarms"
-                                        style={{ padding: 0 }}
-                                        onClick={() => handleGlobalArea()}
-                                        onContextMenu={(event) => handleIconClick(event)}
-                                    >
-                                        {areaSelectedIndex === 'ALLAREAS'
-                                            ? <PublicIcon color="secondary" />
-                                            : <PublicIcon />}
-                                    </IconButton>
-                                    {isAlarmUser && <Menu
-                                        keepMounted
-                                        open={globalContextOpen}
-                                        onClose={() => handleAlarmGlobalContextClose()}
-                                        anchorReference="anchorPosition"
-                                        anchorPosition={contextMouseY !== null && contextMouseX !== null ?
-                                            { top: contextMouseY, left: contextMouseX } : null}
-                                    >
-                                        <MenuItem disabled>GLOBAL</MenuItem>
-                                        <hr />
-                                        {enableAllAreas ?
-                                            <MenuItem
-                                                onClick={() => handleDisableEnableGlobal(false)}
-                                            >
-                                                <ListItemIcon >
-                                                    <NotificationsOffIcon fontSize="small" />
-                                                </ListItemIcon>
-                                                <Typography variant="inherit">Disable ALL AREAS</Typography>
-                                            </MenuItem> :
-                                            <MenuItem
-                                                onClick={() => handleDisableEnableGlobal(true)}
-                                            >
-                                                <ListItemIcon >
-                                                    <NotificationsActiveIcon fontSize="small" />
-                                                </ListItemIcon>
-                                                <Typography variant="inherit">Enable ALL AREAS</Typography>
-                                            </MenuItem>
-                                        }
-                                        <MenuItem
-                                            onClick={handleAckGlobal}
+            <DeletePVDialog
+                open={deletePVDialogOpen}
+                data={deletePVDialogData}
+                handleClose={() => {
+                    setDeletePVDialogOpen(false)
+                    setDeletePVDialogData({})
+                }}
+                handleDelete={handleExecuteDeletePV}
+            />
+            {clientAHDBVer === serverAHDBVer
+                ? <Grid
+                    container
+                    direction="row"
+                    justify="flex-start"
+                    alignItems="stretch"
+                    spacing={2}
+                    className={classes.root}
+                >
+                    {displayAlarmList && !backdropOpen
+                        ? <Grid item xs={2}>
+                            <Paper className={classes.paper} elevation={theme.palette.paperElevation}>
+                                <Grid
+                                    container
+                                    direction="row"
+                                    justify="center"
+                                    alignItems="center"
+                                    spacing={1}
+                                >
+                                    <Grid item xs={2} style={{ textAlign: 'right' }}>
+                                        <IconButton
+                                            aria-label="global_alarms"
+                                            style={{ padding: 0 }}
+                                            onClick={() => handleGlobalArea()}
+                                            onContextMenu={(event) => handleIconClick(event)}
                                         >
-                                            <ListItemIcon >
-                                                <DoneAllIcon fontSize="small" />
-                                            </ListItemIcon>
-                                            <Typography variant="inherit">ACK ALL AREAS' alarms</Typography>
-                                        </MenuItem>
-                                        {isAlarmAdmin &&
-                                            <MenuItem
-                                                onClick={() => setAlarmAdminGListExpand(!alarmAdminGListExpand)}
-                                            >
-                                                <ListItemIcon >
-                                                    <SupervisorAccountIcon fontSize="small" />
-                                                </ListItemIcon>
-                                                <ListItemText primary="Alarm admin actions" />
-                                                {alarmAdminGListExpand ? <ExpandLess style={{ marginLeft: 16 }} /> : <ExpandMore style={{ marginLeft: 16 }} />}
-                                            </MenuItem>
-                                        }
-                                        <Collapse in={alarmAdminGListExpand} timeout="auto" unmountOnExit>
-                                            <List component="div" disablePadding >
-                                                <ListItem
-                                                    button
-                                                    className={classes.nested}
-                                                    onClick={() => {
-                                                        setAddAreaDialogOpen(true)
-                                                        setAlarmAdminGListExpand(false)
-                                                        setGlobalContextOpen(false)
-                                                    }}
+                                            {areaSelectedIndex === 'ALLAREAS'
+                                                ? <PublicIcon color="secondary" />
+                                                : <PublicIcon />}
+                                        </IconButton>
+                                        {isAlarmUser && <Menu
+                                            keepMounted
+                                            open={globalContextOpen}
+                                            onClose={() => handleAlarmGlobalContextClose()}
+                                            anchorReference="anchorPosition"
+                                            anchorPosition={contextMouseY !== null && contextMouseX !== null ?
+                                                { top: contextMouseY, left: contextMouseX } : null}
+                                        >
+                                            <MenuItem disabled>GLOBAL</MenuItem>
+                                            <hr />
+                                            {enableAllAreas ?
+                                                <MenuItem
+                                                    onClick={() => handleDisableEnableGlobal(false)}
                                                 >
                                                     <ListItemIcon >
-                                                        <AddIcon fontSize="small" />
+                                                        <NotificationsOffIcon fontSize="small" />
                                                     </ListItemIcon>
-                                                    <ListItemText primary="Add new area" />
-                                                </ListItem>
-                                            </List>
-                                        </Collapse>
+                                                    <Typography variant="inherit">Disable ALL AREAS</Typography>
+                                                </MenuItem> :
+                                                <MenuItem
+                                                    onClick={() => handleDisableEnableGlobal(true)}
+                                                >
+                                                    <ListItemIcon >
+                                                        <NotificationsActiveIcon fontSize="small" />
+                                                    </ListItemIcon>
+                                                    <Typography variant="inherit">Enable ALL AREAS</Typography>
+                                                </MenuItem>
+                                            }
+                                            <MenuItem
+                                                onClick={handleAckGlobal}
+                                            >
+                                                <ListItemIcon >
+                                                    <DoneAllIcon fontSize="small" />
+                                                </ListItemIcon>
+                                                <Typography variant="inherit">ACK ALL AREAS' alarms</Typography>
+                                            </MenuItem>
+                                            {isAlarmAdmin &&
+                                                <MenuItem
+                                                    onClick={() => setAlarmAdminGListExpand(!alarmAdminGListExpand)}
+                                                >
+                                                    <ListItemIcon >
+                                                        <SupervisorAccountIcon fontSize="small" />
+                                                    </ListItemIcon>
+                                                    <ListItemText primary="Alarm admin actions" />
+                                                    {alarmAdminGListExpand ? <ExpandLess style={{ marginLeft: 16 }} /> : <ExpandMore style={{ marginLeft: 16 }} />}
+                                                </MenuItem>
+                                            }
+                                            <Collapse in={alarmAdminGListExpand} timeout="auto" unmountOnExit>
+                                                <List component="div" disablePadding >
+                                                    <ListItem
+                                                        button
+                                                        className={classes.nested}
+                                                        onClick={handleAddNewArea}
+                                                    >
+                                                        <ListItemIcon >
+                                                            <AddIcon fontSize="small" />
+                                                        </ListItemIcon>
+                                                        <ListItemText primary="Add new area" />
+                                                    </ListItem>
+                                                </List>
+                                            </Collapse>
 
-                                    </Menu>}
+                                        </Menu>}
+                                    </Grid>
+                                    <Grid item xs={10}>
+                                        <div style={{ paddingTop: 0, fontSize: 16, fontWeight: 'bold' }}>{`ALARM AREAS ${enableAllAreas ? "" : "[DISABLED]"}`}</div>
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        {areaNames ?
+                                            <AlarmList
+                                                enableAllAreas={enableAllAreas}
+                                                areaPVDict={areaPVDict}
+                                                areaContextOpen={areaContextOpen}
+                                                areaEnabled={areaEnabled}
+                                                areaNames={areaNames}
+                                                areaSubAreaOpen={areaSubAreaOpen}
+                                                areaSelectedIndex={areaSelectedIndex}
+                                                contextMouseX={contextMouseX}
+                                                contextMouseY={contextMouseY}
+                                                fadeList={fadeList}
+                                                isAlarmAdmin={isAlarmAdmin}
+                                                isAlarmUser={isAlarmUser}
+                                                alarmAdminListExpand={alarmAdminListExpand}
+                                                ackAllAreaAlarms={handleAckAllAreaAlarms}
+                                                enableDisableArea={handleEnableDisableArea}
+                                                listItemClick={handleListItemClick}
+                                                listItemRightClick={handleListItemRightClick}
+                                                listItemContextClose={handleListItemContextClose}
+                                                addNewPV={handleAddNewPV}
+                                                addNewSubArea={handleAddNewSubArea}
+                                                editArea={handleEditArea}
+                                                deleteArea={handleDeleteArea}
+                                                setAlarmAdminListExpand={setAlarmAdminListExpand}
+                                            />
+                                            : "No data from database"}
+                                    </Grid>
                                 </Grid>
-                                <Grid item xs={10}>
-                                    <div style={{ paddingTop: 0, fontSize: 16, fontWeight: 'bold' }}>{`ALARM AREAS ${enableAllAreas ? "" : "[DISABLED]"}`}</div>
-                                </Grid>
-                                <Grid item xs={12}>
-                                    {areaNames ?
-                                        <AlarmList
+                            </Paper>
+                        </Grid>
+                        : <Grid item xs={2}>
+                            <Paper className={classes.paper} elevation={theme.palette.paperElevation}>
+                                <div style={{ fontSize: 16, fontWeight: 'bold' }}>
+                                    CONNECTING TO PVs...
+                                    </div>
+                            </Paper>
+                        </Grid>}
+                    {displayAlarmTable && !backdropOpen ?
+                        <Grid item xs={10} >
+                            <Accordion
+                                elevation={theme.palette.paperElevation}
+                                expanded={alarmTableExpand}
+                                onClick={(event) => handleExpandPanel(event, 'alarmTable')}
+                                TransitionProps={{
+                                    onEntered: () => handleExpansionComplete('alarmTable', true),
+                                    onExited: () => handleExpansionComplete('alarmTable', false)
+                                }}
+                            >
+                                <AccordionSummary
+                                    expandIcon={<ExpandMoreIcon />}
+                                    aria-controls="panel1bh-content"
+                                    id="panel1bh-header"
+                                    classes={{ content: classes.expansionPanelSummaryContent, expanded: classes.expanded }}
+                                >
+                                    <div style={{ display: 'flex', width: '100%' }}>
+                                        <div className={classes.verticalMiddle} style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 20 }}>{`ALARM TABLE: ${areaSelectedName}`}</div>
+                                        {
+                                            alarmTableExpand
+                                                ? <TablePagination
+                                                    component="div"
+                                                    onClick={(event) => {
+                                                        event.preventDefault()
+                                                        event.stopPropagation()
+                                                    }}
+                                                    rowsPerPageOptions={[25, 50]}
+                                                    colSpan={3}
+                                                    count={preSliceAreaAlarms.length}
+                                                    rowsPerPage={rowsPerPageAT}
+                                                    page={pageAT}
+                                                    SelectProps={{
+                                                        inputProps: { 'aria-label': 'rows per page' },
+                                                        native: true,
+                                                    }}
+                                                    onChangePage={handleChangePageAT}
+                                                    onChangeRowsPerPage={handleChangeRowsPerPageAT}
+                                                    ActionsComponent={TablePaginationActions}
+                                                />
+                                                : null
+                                        }
+                                        <div className={classes.verticalMiddle} style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 1 }}>{
+                                            alarmTableExpand
+                                                ? <div className={classes.search}>
+                                                    <div className={classes.searchIcon}>
+                                                        <SearchIcon />
+                                                    </div>
+                                                    <InputBase
+                                                        placeholder="Search alarm table…"
+                                                        classes={{
+                                                            root: classes.inputRoot,
+                                                            input: classes.inputInput,
+                                                        }}
+                                                        inputProps={{ 'aria-label': 'search' }}
+                                                        onClick={event => event.stopPropagation()}
+                                                        onFocus={event => event.stopPropagation()}
+                                                        onChange={event => handleSearchAlarmTable(event)}
+                                                        // onBlur={() => { setAlarmTableSearchStringStore(''); setAlarmTableSearchString('') }}
+                                                        value={alarmTableSearchStringStore}
+                                                    />
+                                                </div>
+                                                : '[click to show]'
+                                        }</div>
+                                    </div>
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                    {areaNames
+                                        ? <AlarmTable
+                                            alarmIOCPVPrefix={alarmIOCPVPrefix}
                                             enableAllAreas={enableAllAreas}
-                                            areaPVDict={areaPVDict}
-                                            areaContextOpen={areaContextOpen}
-                                            areaEnabled={areaEnabled}
-                                            areaNames={areaNames}
-                                            areaSubAreaOpen={areaSubAreaOpen}
+                                            debug={alarmDebug}
+                                            alarmPVDict={alarmPVDict}
+                                            alarmRowSelected={alarmRowSelected}
+                                            alarmContextOpen={alarmContextOpen}
                                             areaSelectedIndex={areaSelectedIndex}
+                                            areaAlarms={filteredAreaAlarms}
                                             contextMouseX={contextMouseX}
                                             contextMouseY={contextMouseY}
-                                            fadeList={fadeList}
-                                            isAlarmAdmin={isAlarmAdmin}
+                                            areaEnabled={areaEnabled}
+                                            height={alarmTableHeight}
+                                            alarmTableSearchString={alarmTableSearchString}
                                             isAlarmUser={isAlarmUser}
-                                            alarmAdminListExpand={alarmAdminListExpand}
-                                            ackAllAreaAlarms={handleAckAllAreaAlarms}
-                                            enableDisableArea={handleEnableDisableArea}
-                                            listItemClick={handleListItemClick}
-                                            listItemRightClick={handleListItemRightClick}
-                                            listItemContextClose={handleListItemContextClose}
-                                            addNewPV={handleAddNewPV}
-                                            addNewSubArea={handleAddNewSubArea}
-                                            renameArea={handleRenameArea}
-                                            deleteArea={handleDeleteArea}
-                                            setAlarmAdminListExpand={setAlarmAdminListExpand}
+                                            isAlarmAdmin={isAlarmAdmin}
+                                            alarmAdminPVExpand={alarmAdminPVExpand}
+                                            alarmAcknowledge={handleAlarmAcknowledge}
+                                            alarmContextClose={handleAlarmContextClose}
+                                            itemChecked={handleTableItemCheck}
+                                            enableChecked={handleTableEnableCheck}
+                                            tableItemRightClick={handleTableItemRightClick}
+                                            tableRowClick={handleTableRowClick}
+                                            setAlarmAdminPVExpand={setAlarmAdminPVExpand}
+                                            deletePV={handleDeletePV}
+                                            fadeTU={fadeTU}
+                                            page={pageAT}
+                                            rowsPerPage={rowsPerPageAT}
                                         />
                                         : "No data from database"}
-                                </Grid>
-                            </Grid>
-                        </Paper>
-                    </Grid>
-                    : <Grid item xs={2}>
-                        <Paper className={classes.paper} elevation={theme.palette.paperElevation}>
-                            <div style={{ fontSize: 16, fontWeight: 'bold' }}>
-                                CONNECTING TO PVs...
-                                    </div>
-                        </Paper>
-                    </Grid>}
-                {displayAlarmTable && !backdropOpen ?
-                    <Grid item xs={10} >
-                        <Accordion
-                            elevation={theme.palette.paperElevation}
-                            expanded={alarmTableExpand}
-                            onClick={(event) => handleExpandPanel(event, 'alarmTable')}
-                            TransitionProps={{
-                                onEntered: () => handleExpansionComplete('alarmTable', true),
-                                onExited: () => handleExpansionComplete('alarmTable', false)
-                            }}
-                        >
-                            <AccordionSummary
-                                expandIcon={<ExpandMoreIcon />}
-                                aria-controls="panel1bh-content"
-                                id="panel1bh-header"
-                                classes={{ content: classes.expansionPanelSummaryContent, expanded: classes.expanded }}
+                                </AccordionDetails>
+                            </Accordion>
+
+                            <Accordion
+                                elevation={theme.palette.paperElevation}
+                                expanded={alarmLogExpand}
+                                onClick={(event) => handleExpandPanel(event, 'alarmLog')}
+                                TransitionProps={{
+                                    onEntered: () => handleExpansionComplete('alarmLog', true),
+                                    onExited: () => handleExpansionComplete('alarmLog', false)
+                                }}
                             >
-                                <div style={{ display: 'flex', width: '100%' }}>
-                                    <div className={classes.verticalMiddle} style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 20 }}>{`ALARM TABLE: ${areaSelectedName}`}</div>
-                                    {
-                                        alarmTableExpand
-                                            ? <TablePagination
-                                                component="div"
-                                                onClick={(event) => {
-                                                    event.preventDefault()
-                                                    event.stopPropagation()
-                                                }}
-                                                rowsPerPageOptions={[25, 50]}
-                                                colSpan={3}
-                                                count={preSliceAreaAlarms.length}
-                                                rowsPerPage={rowsPerPageAT}
-                                                page={pageAT}
-                                                SelectProps={{
-                                                    inputProps: { 'aria-label': 'rows per page' },
-                                                    native: true,
-                                                }}
-                                                onChangePage={handleChangePageAT}
-                                                onChangeRowsPerPage={handleChangeRowsPerPageAT}
-                                                ActionsComponent={TablePaginationActions}
-                                            />
-                                            : null
-                                    }
-                                    <div className={classes.verticalMiddle} style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 1 }}>{
-                                        alarmTableExpand
-                                            ? <div className={classes.search}>
-                                                <div className={classes.searchIcon}>
-                                                    <SearchIcon />
-                                                </div>
-                                                <InputBase
-                                                    placeholder="Search alarm table…"
-                                                    classes={{
-                                                        root: classes.inputRoot,
-                                                        input: classes.inputInput,
+                                <AccordionSummary
+                                    expandIcon={<ExpandMoreIcon />}
+                                    aria-controls="panel1bh-content"
+                                    id="panel1bh-header"
+                                    classes={{ content: classes.expansionPanelSummaryContent, expanded: classes.expanded }}
+                                >
+                                    <div style={{ display: 'flex', width: '100%' }}>
+                                        <div className={classes.verticalMiddle} style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 20 }}>{`ALARM LOG: ${alarmLogSelectedName}`}</div>
+                                        {
+                                            alarmLogExpand
+                                                ? <TablePagination
+                                                    component="div"
+                                                    onClick={(event) => {
+                                                        event.preventDefault()
+                                                        event.stopPropagation()
                                                     }}
-                                                    inputProps={{ 'aria-label': 'search' }}
-                                                    onClick={event => event.stopPropagation()}
-                                                    onFocus={event => event.stopPropagation()}
-                                                    onChange={event => handleSearchAlarmTable(event)}
-                                                    // onBlur={() => { setAlarmTableSearchStringStore(''); setAlarmTableSearchString('') }}
-                                                    value={alarmTableSearchStringStore}
+                                                    rowsPerPageOptions={[25, 50, 100]}
+                                                    colSpan={3}
+                                                    count={totalDocs}
+                                                    rowsPerPage={rowsPerPage}
+                                                    page={page}
+                                                    SelectProps={{
+                                                        inputProps: { 'aria-label': 'rows per page' },
+                                                        native: true,
+                                                    }}
+                                                    onChangePage={handleChangePage}
+                                                    onChangeRowsPerPage={handleChangeRowsPerPage}
+                                                    ActionsComponent={TablePaginationActions}
                                                 />
-                                            </div>
-                                            : '[click to show]'
-                                    }</div>
-                                </div>
-                            </AccordionSummary>
-                            <AccordionDetails>
-                                {areaNames
-                                    ? <AlarmTable
-                                        alarmIOCPVPrefix={alarmIOCPVPrefix}
-                                        enableAllAreas={enableAllAreas}
-                                        debug={alarmDebug}
-                                        alarmPVDict={alarmPVDict}
-                                        alarmRowSelected={alarmRowSelected}
-                                        alarmContextOpen={alarmContextOpen}
-                                        areaSelectedIndex={areaSelectedIndex}
-                                        areaAlarms={filteredAreaAlarms}
-                                        contextMouseX={contextMouseX}
-                                        contextMouseY={contextMouseY}
-                                        areaEnabled={areaEnabled}
-                                        height={alarmTableHeight}
-                                        alarmTableSearchString={alarmTableSearchString}
-                                        isAlarmUser={isAlarmUser}
-                                        alarmAcknowledge={handleAlarmAcknowledge}
-                                        alarmContextClose={handleAlarmContextClose}
-                                        itemChecked={handleTableItemCheck}
-                                        enableChecked={handleTableEnableCheck}
-                                        tableItemRightClick={handleTableItemRightClick}
-                                        tableRowClick={handleTableRowClick}
-                                        fadeTU={fadeTU}
-                                        page={pageAT}
-                                        rowsPerPage={rowsPerPageAT}
+                                                : null
+                                        }
+                                        <div className={classes.verticalMiddle} style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 1 }}>{
+                                            alarmLogExpand
+                                                ? <div className={classes.search}>
+                                                    <div className={classes.searchIcon}>
+                                                        <SearchIcon />
+                                                    </div>
+                                                    <InputBase
+                                                        placeholder="Search alarm log…"
+                                                        classes={{
+                                                            root: classes.inputRoot,
+                                                            input: classes.inputInput,
+                                                        }}
+                                                        inputProps={{ 'aria-label': 'search' }}
+                                                        onClick={event => event.stopPropagation()}
+                                                        onFocus={event => event.stopPropagation()}
+                                                        onChange={event => handleSearchAlarmLog(event)}
+                                                        // onBlur={() => { setAlarmLogSearchStringStore(''); setAlarmLogSearchString('') }}
+                                                        value={alarmLogSearchStringStore}
+                                                    />
+                                                </div>
+                                                : '[click to show]'
+                                        }
+                                        </div>
+                                    </div>
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                    <AlarmLog
+                                        height={alarmLogHeight}
+                                        alarmLogDisplayArray={alarmLogDisplayArray}
+                                        scrollReset={{
+                                            page: page,
+                                            rowsPerPage: rowsPerPage,
+                                            alarmLogSearchString: alarmLogSearchString,
+                                            alarmLogSelectedKey: alarmLogSelectedKey
+                                        }}
                                     />
-                                    : "No data from database"}
-                            </AccordionDetails>
-                        </Accordion>
+                                </AccordionDetails>
+                            </Accordion>
 
-                        <Accordion
-                            elevation={theme.palette.paperElevation}
-                            expanded={alarmLogExpand}
-                            onClick={(event) => handleExpandPanel(event, 'alarmLog')}
-                            TransitionProps={{
-                                onEntered: () => handleExpansionComplete('alarmLog', true),
-                                onExited: () => handleExpansionComplete('alarmLog', false)
-                            }}
-                        >
-                            <AccordionSummary
-                                expandIcon={<ExpandMoreIcon />}
-                                aria-controls="panel1bh-content"
-                                id="panel1bh-header"
-                                classes={{ content: classes.expansionPanelSummaryContent, expanded: classes.expanded }}
-                            >
-                                <div style={{ display: 'flex', width: '100%' }}>
-                                    <div className={classes.verticalMiddle} style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 20 }}>{`ALARM LOG: ${alarmLogSelectedName}`}</div>
-                                    {
-                                        alarmLogExpand
-                                            ? <TablePagination
-                                                component="div"
-                                                onClick={(event) => {
-                                                    event.preventDefault()
-                                                    event.stopPropagation()
-                                                }}
-                                                rowsPerPageOptions={[25, 50, 100]}
-                                                colSpan={3}
-                                                count={totalDocs}
-                                                rowsPerPage={rowsPerPage}
-                                                page={page}
-                                                SelectProps={{
-                                                    inputProps: { 'aria-label': 'rows per page' },
-                                                    native: true,
-                                                }}
-                                                onChangePage={handleChangePage}
-                                                onChangeRowsPerPage={handleChangeRowsPerPage}
-                                                ActionsComponent={TablePaginationActions}
-                                            />
-                                            : null
-                                    }
-                                    <div className={classes.verticalMiddle} style={{ fontSize: 16, fontWeight: 'bold', flexGrow: 1 }}>{
-                                        alarmLogExpand
-                                            ? <div className={classes.search}>
-                                                <div className={classes.searchIcon}>
-                                                    <SearchIcon />
-                                                </div>
-                                                <InputBase
-                                                    placeholder="Search alarm log…"
-                                                    classes={{
-                                                        root: classes.inputRoot,
-                                                        input: classes.inputInput,
-                                                    }}
-                                                    inputProps={{ 'aria-label': 'search' }}
-                                                    onClick={event => event.stopPropagation()}
-                                                    onFocus={event => event.stopPropagation()}
-                                                    onChange={event => handleSearchAlarmLog(event)}
-                                                    // onBlur={() => { setAlarmLogSearchStringStore(''); setAlarmLogSearchString('') }}
-                                                    value={alarmLogSearchStringStore}
-                                                />
-                                            </div>
-                                            : '[click to show]'
-                                    }
+                        </Grid>
+                        :
+                        <Grid item xs={10} >
+                            <Paper className={classes.paper} elevation={theme.palette.paperElevation}>
+                                <div style={{ fontSize: 16, fontWeight: 'bold' }}>
+                                    CONNECTING TO PVs...
                                     </div>
-                                </div>
-                            </AccordionSummary>
-                            <AccordionDetails>
-                                <AlarmLog
-                                    height={alarmLogHeight}
-                                    alarmLogDisplayArray={alarmLogDisplayArray}
-                                    scrollReset={{
-                                        page: page,
-                                        rowsPerPage: rowsPerPage,
-                                        alarmLogSearchString: alarmLogSearchString,
-                                        alarmLogSelectedKey: alarmLogSelectedKey
-                                    }}
-                                />
-                            </AccordionDetails>
-                        </Accordion>
+                            </Paper>
+                        </Grid>
+                    }
 
-                    </Grid>
-                    :
-                    <Grid item xs={10} >
+                </Grid>
+                : <Grid
+                    container
+                    direction="row"
+                    justify="flex-start"
+                    alignItems="stretch"
+                    spacing={2}
+                    className={classes.root}
+                >
+                    <Grid item xs={12}>
                         <Paper className={classes.paper} elevation={theme.palette.paperElevation}>
-                            <div style={{ fontSize: 16, fontWeight: 'bold' }}>
-                                CONNECTING TO PVs...
-                                    </div>
+                            <div style={{ fontSize: 16, fontWeight: 'bold', textAlign: 'center' }}>
+                                Alarm Handler database version is not current. Please prune
+                                the database and restart the Alarm Handler server.
+                            </div>
                         </Paper>
                     </Grid>
-                }
-
-            </Grid>
+                </Grid>
+            }
             {/* </div> */}
         </React.Fragment>
     )

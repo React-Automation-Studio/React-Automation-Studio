@@ -9,6 +9,12 @@ import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
+import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
+import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
+
 import { Domain } from "mdi-material-ui/";
 
 // Styles
@@ -17,17 +23,14 @@ const useStyles = makeStyles(theme => ({
         fontWeight: 500,
         textAlign: 'center',
     },
+    button: {
+        margin: theme.spacing(1),
+    },
     centerInBlock: {
         display: "flex",
         flexDirection: "row",
         justifyContent: "center",
         alignItems: 'center'
-    },
-    connected: {
-        color: theme.palette.ok.main
-    },
-    disconnected: {
-        color: theme.palette.error.main
     },
     horizontalRight: {
         alignItems: "flex-end"
@@ -43,10 +46,139 @@ const useStyles = makeStyles(theme => ({
 const AddAreaDialog = (props) => {
     const classes = useStyles()
 
-    const handleInput = (event) => {
+    const lastIndex = props.data?.roles?.length - 1
+
+    const hasEmptyRole = props.data?.roles?.reduce((acc, entry) => {
+        return acc || entry === ''
+    }, false)
+
+    const handleNameInput = (event) => {
         const { value } = event.target
-        props.setAddAreaName(value)
+        props.setAddAreaDialogData(prevState => ({
+            ...prevState,
+            area: value
+        }))
     }
+
+    const handleRoleInput = (event, index) => {
+        const { value } = event.target
+        props.setAddAreaDialogData(prevState => ({
+            ...prevState,
+            roles: [...prevState.roles.slice(0, index), value, ...prevState.roles.slice(index + 1)]
+        }))
+    }
+
+    const handleAddRoles = () => {
+        props.setAddAreaDialogData(prevState => ({
+            ...prevState,
+            addRoles: true,
+            roles: ['']
+        }))
+    }
+
+    const removeRole = (index) => {
+        const lastRole = props.data.roles.length === 1
+        if (lastRole) {
+            props.setAddAreaDialogData(prevState => ({
+                ...prevState,
+                addRoles: false,
+                roles: []
+            }))
+        }
+        else {
+            const newRoles = props.data.roles.filter((item, itemIndex) => itemIndex !== index)
+            props.setAddAreaDialogData(prevState => ({
+                ...prevState,
+                roles: newRoles
+            }))
+        }
+    }
+
+    const addRole = () => {
+        props.setAddAreaDialogData(prevState => ({
+            ...prevState,
+            roles: [...prevState.roles, '']
+        }))
+    }
+
+    const rolesGrid = !props.data?.addRoles
+        ? <Grid item xs={12}>
+            <Grid
+
+                container
+                direction="row"
+                justify="flex-start"
+                alignItems="stretch"
+            >
+                <Grid item xs={4} style={{ marginRight: '1em' }}>
+                </Grid>
+                <Grid item xs={4}>
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        size="small"
+                        className={classes.button}
+                        startIcon={<SupervisedUserCircleIcon />}
+                        onClick={handleAddRoles}
+                    >
+                        Add roles
+                    </Button>
+                </Grid>
+            </Grid>
+        </Grid>
+        : props.data?.roles?.map((role, index) => {
+            return <Grid
+                key={`${index}-${role}`}
+                item
+                xs={12}
+            >
+                <Grid
+
+                    container
+                    direction="row"
+                    justify="flex-start"
+                    alignItems="stretch"
+                >
+                    <Grid item xs={2} >
+                    </Grid>
+                    <Grid item xs={1} className={classes.centerInBlock}>
+                        <SupervisedUserCircleIcon />
+                    </Grid>
+                    <Grid item xs={1} className={classes.verticalMiddle} style={{ marginRight: '1rem' }}>
+                        <Typography className={classes.boldText} >
+                            Role
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={4} className={classes.verticalMiddle}>
+                        <TextField
+                            type='text'
+                            value={props.data.roles[index] || ''}
+                            onChange={(event) => handleRoleInput(event, index)}
+                            fullWidth
+                            autoFocus
+                        />
+                    </Grid>
+                    <Grid item >
+                        <Tooltip title="Remove role" placement="bottom">
+                            <IconButton
+                                onClick={() => removeRole(index)}
+                                style={{ marginLeft: '0.5em' }}
+                            >
+                                <RemoveCircleIcon color="primary" />
+                            </IconButton>
+                        </Tooltip>
+                        {lastIndex === index && <Tooltip title="Add another role" placement="bottom">
+                            <IconButton
+                                onClick={addRole}
+                                style={{ marginLeft: '0.5em' }}
+                            >
+                                <AddCircleIcon color="secondary" />
+                            </IconButton>
+                        </Tooltip>}
+                    </Grid>
+                </Grid>
+            </Grid>
+        })
 
     return (
         <Dialog
@@ -55,7 +187,7 @@ const AddAreaDialog = (props) => {
             fullWidth
             maxWidth={"sm"}
         >
-            <DialogTitle >{`Add new area`}</DialogTitle>
+            <DialogTitle >{`${!props.data.edit ? 'Add new ' : 'Edit '}area`}</DialogTitle>
             <DialogContent>
                 <Grid
                     container
@@ -77,18 +209,28 @@ const AddAreaDialog = (props) => {
                             </Grid>
                             <Grid item xs={3} className={classes.verticalMiddle} style={{ marginRight: '1rem' }}>
                                 <Typography className={classes.boldText} >
-                                    NEW AREA NAME
+                                    {`${props.data.edit ? '' : 'NEW '}AREA NAME`}
                                 </Typography>
                             </Grid>
                             <Grid item xs={7} className={classes.verticalMiddle}>
                                 <TextField
                                     type='text'
-                                    value={props.addAreaName}
-                                    onChange={handleInput}
+                                    value={props.data.area || ''}
+                                    onChange={handleNameInput}
                                     fullWidth
                                     autoFocus
                                 />
                             </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Grid
+                            container
+                            direction="row"
+                            justify="flex-start"
+                            alignItems="stretch"
+                        >
+                            {rolesGrid}
                         </Grid>
                     </Grid>
                 </Grid >
@@ -97,8 +239,8 @@ const AddAreaDialog = (props) => {
                 <Button onClick={props.handleClose} color="primary">
                     Cancel
                 </Button>
-                <Button onClick={props.addNewArea} color="secondary" disabled={props.addAreaName === ''}>
-                    Add
+                <Button onClick={props.data.edit ? props.editArea : props.addNewArea} color="secondary" disabled={props.data.area === '' || hasEmptyRole}>
+                    {`${props.data.edit ? 'Apply' : 'Add'}`}
                 </Button>
             </DialogActions>
         </Dialog >

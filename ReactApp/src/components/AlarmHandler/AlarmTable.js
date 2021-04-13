@@ -14,6 +14,10 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import Collapse from '@material-ui/core/Collapse';
 
 import Checkbox from '@material-ui/core/Checkbox';
 
@@ -23,11 +27,18 @@ import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Typography from '@material-ui/core/Typography';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
+import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import Tooltip from '@material-ui/core/Tooltip';
 
 // Styles
 const useStyles = makeStyles(theme => ({
+    nested: {
+        paddingLeft: theme.spacing(4),
+    },
     root: {
         width: '100%',
         overflowY: 'auto',
@@ -208,7 +219,10 @@ const AlarmTable = props => {
                                     {props.isAlarmUser && < Menu
                                         keepMounted
                                         open={props.alarmContextOpen[areaAlarmName] ? true : false}
-                                        onClose={event => props.alarmContextClose(event, areaAlarmName)}
+                                        onClose={() => {
+                                            props.alarmContextClose()
+                                            props.setAlarmAdminPVExpand(false)
+                                        }}
                                         anchorReference="anchorPosition"
                                         anchorPosition={props.contextMouseY !== null && props.contextMouseX !== null ?
                                             { top: props.contextMouseY, left: props.contextMouseX } : null}
@@ -222,7 +236,39 @@ const AlarmTable = props => {
                                             <Typography variant="inherit">Acknowledge Alarm</Typography>
 
                                         </MenuItem>
-
+                                        {props.isAlarmAdmin && <MenuItem
+                                            onClick={(event) => {
+                                                event.preventDefault()
+                                                event.stopPropagation()
+                                                props.setAlarmAdminPVExpand(!props.alarmAdminPVExpand)
+                                            }}
+                                        >
+                                            <ListItemIcon >
+                                                <SupervisorAccountIcon fontSize="small" />
+                                            </ListItemIcon>
+                                            <ListItemText primary="Alarm admin actions" />
+                                            {props.alarmAdminPVExpand ? <ExpandLess style={{ marginLeft: 16 }} /> : <ExpandMore style={{ marginLeft: 16 }} />}
+                                        </MenuItem>}
+                                        <Collapse in={props.alarmAdminPVExpand} timeout="auto" unmountOnExit>
+                                            <List component="div" disablePadding >
+                                                <ListItem
+                                                    button
+                                                    className={classes.nested}
+                                                    onClick={(event) => {
+                                                        event.preventDefault()
+                                                        event.stopPropagation()
+                                                        props.setAlarmAdminPVExpand(false)
+                                                        props.alarmContextClose()
+                                                        props.deletePV(event, areaAlarmName, value["name"])
+                                                    }}
+                                                >
+                                                    <ListItemIcon >
+                                                        <DeleteIcon fontSize="small" />
+                                                    </ListItemIcon>
+                                                    <ListItemText primary="Delete pv" />
+                                                </ListItem>
+                                            </List>
+                                        </Collapse>
                                     </Menu>}
                                     {props.debug
                                         ? <TableCell>
@@ -298,7 +344,8 @@ const AlarmTable = props => {
                                             disabled={!props.areaEnabled[areaName] || !props.enableAllAreas || !props.isAlarmUser}
                                             value={value["enable"]}
                                             color="secondary"
-                                            checked={value["enable"]}
+                                            // Backwards compatible
+                                            checked={value["enable"] && !(value["bridge"] ?? false)}
                                             onClick={event => props.enableChecked(event, areaName, alarm, entryIndex)}
                                         />
                                     </TableCell>

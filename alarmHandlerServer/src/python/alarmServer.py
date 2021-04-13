@@ -12,6 +12,8 @@ from notifyServer import startNotifyServer, restartNotifyServer, notify
 from dbMongo import dbGetCollection, dbGetEnables, dbGetListOfPVNames, dbGetField, dbSetField, dbFindOne, dbUpdateHistory
 from dbMongo import dbGetFieldGlobal, dbSetFieldGlobal
 
+from log import app_log
+
 try:
     AH_DEBUG = bool(os.environ['AH_DEBUG'])
 except:
@@ -43,9 +45,10 @@ alarmPVSevDict = {
     8: "DISCONNECTED"
 }
 
+pvCollection = dbGetCollection("pvs")
+
 alarmIOCPVPrefix = ""
 alarmIOCPVSuffix = ""
-bridgeMessage = ""
 activeUser = ""
 
 notifyTimeout = 0
@@ -54,8 +57,9 @@ alarmDictInitialised = False
 alarmServerRestart = False
 notifyContent = False
 watchRestartAlarmServer = False
-bridgeEvent = False
+writeEnableHistory = False
 
+runningBridgeThreads = []
 pvNameList = []
 areaList = []
 notifyBuffer = {}
@@ -84,7 +88,6 @@ def initPreSuffix():
 
 
 def printVal(**kw):
-    # print(kw)
     pass
 
 
@@ -145,37 +148,28 @@ def evaluateAreaPVs(areaKey, fromColWatch=False):
     invalidAlarm = False
     ackStates = [1, 3, 5, 7]
 
-    try:
-        for key in pvDict.keys():
-            if (re.sub(r"pv\d+", "", key).startswith(areaKey+"=")):
-                val = alarmDict[pvDict[key].pvname]["A"].value
-                globalEnable, areaEnable, subAreaEnable, pvEnable = getEnables(
-                    pvDict[key].pvname)
-                if (subAreaEnable != None):
-                    enable = globalEnable and areaEnable and subAreaEnable and pvEnable
-                else:
-                    enable = globalEnable and areaEnable and pvEnable
-                if (not enable):
-                    # pv not enabled
-                    # force NO_ALARM state so neither alarm nor acked passed
-                    # to areas
-                    val = 0
-                try:
-                    if (val > alarmState):
-                        alarmState = val
-                    if(val == 2):
-                        minorAlarm = True
-                    elif(val == 4):
-                        majorAlarm = True
-                    elif(val == 6):
-                        invalidAlarm = True
-                except:
-                    if(AH_DEBUG):
-                        print('[Warning]', 'val =', val,
-                              'alarmState =', alarmState)
-    except:
-        if(AH_DEBUG):
-            print('[Warning]', 'pvDict changed size during iteration')
+    for key in pvDict.keys():
+        if (re.sub(r"pv\d+", "", key).startswith(areaKey+"=")):
+            val = alarmDict[pvDict[key].pvname]["A"].value
+            globalEnable, areaEnable, subAreaEnable, pvEnable = getEnables(
+                pvDict[key].pvname)
+            if (subAreaEnable != None):
+                enable = globalEnable and areaEnable and subAreaEnable and pvEnable
+            else:
+                enable = globalEnable and areaEnable and pvEnable
+            if (not enable):
+                # pv not enabled
+                # force NO_ALARM state so neither alarm nor acked passed
+                # to areas
+                val = 0
+            if (val > alarmState):
+                alarmState = val
+            if(val == 2):
+                minorAlarm = True
+            elif(val == 4):
+                majorAlarm = True
+            elif(val == 6):
+                invalidAlarm = True
 
     # active alarm always supercedes acked state alarm
     if alarmState in ackStates:
@@ -251,7 +245,6 @@ def getNotify(pvname):
 
 def ackPVChange(**kw):
     timestamp = datetime.now(utc).isoformat()
-    # print("ack pv:", value)
     if(kw["value"]):
         if (kw["value"][0] != ''):
             _thread.start_new_thread(ackProcess, (
@@ -392,11 +385,13 @@ def pvConnFE(pvname=None, conn=None, **kw):
 
 def waitConnFE():
     allConnected = False
+    app_log.info("Waiting for all front end pvs to connect...")
     while(not allConnected):
         sleep(0.1)
         allConnected = True
         for pvConnected in frontEndConnDict.values():
             allConnected &= pvConnected
+    app_log.info("All front end pvs to connected")
 
 
 def pvConn(pvname=None, conn=None, **kw):
@@ -490,17 +485,14 @@ def pvDisconn(pvname, conn):
         curr_desc = []
         timeout = 0
         while(not pvDescDictConn[pvname]):
-            if(AH_DEBUG):
-                print("Waiting to connect to desc pv of", pvname)
+            app_log.info("Waiting to connect to desc pv of "+pvname)
             sleep(0.5)
             timeout += 1
             # 30 second timeout to connect to desc pv
             # once pv is connected
             if(timeout > 60):
-                if(AH_DEBUG):
-                    print('[Warning]',
-                          'Unable to connect to desc pv of', pvname)
-                    print('[Warning]', 'timeout!')
+                app_log.error('Unable to connect to desc pv of '+pvname)
+                app_log.error('Timeout!')
                 break
         if(pvDescDictConn[pvname]):
             description = pvDescDict[pvname].value
@@ -629,7 +621,6 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
         # Log to history
         entry = {"timestamp": timestamp, "entry": " ".join(
             [pvname, "-", "Alarm cleared to NO_ALARM"])}
-        # print(timestamp, pvname, "Alarm cleared to NO_ALARM")
         logToHistory = True
     elif(minorAlarm and alarmState == 3):
         # set current alarm status to MINOR_ACKED
@@ -637,7 +628,6 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
         # Log to history
         entry = {"timestamp": timestamp, "entry": " ".join(
             [pvname, "-", "MAJOR_ACKED alarm demoted to MINOR_ACKED"])}
-        # print(timestamp, pvname, "MAJOR_ACKED alarm demoted to MINOR_ACKED")
         logToHistory = True
     elif(minorAlarm and alarmState == 5):
         # set current alarm status to MINOR_ACKED
@@ -645,7 +635,6 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
         # Log to history
         entry = {"timestamp": timestamp, "entry": " ".join(
             [pvname, "-", "INVALID_ACKED alarm demoted to MINOR_ACKED"])}
-        # print(timestamp, pvname, "INVALID_ACKED alarm demoted to MINOR_ACKED")
         logToHistory = True
     elif(minorAlarm and alarmState == 7):
         # set current alarm status to MINOR_ACKED
@@ -653,7 +642,6 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
         # Log to history
         entry = {"timestamp": timestamp, "entry": " ".join(
             [pvname, "-", "DISCONN_ACKED alarm demoted to MINOR_ACKED"])}
-        # print(timestamp, pvname, "DISCONN_ACKED alarm demoted to MINOR_ACKED")
         logToHistory = True
     elif(minorAlarm and (alarmState < 1 or (transparent and alarmState != 1))):
         # set current alarm status to MINOR
@@ -662,7 +650,6 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
         # Log to history
         entry = {"timestamp": timestamp, "entry": " ".join(
             [pvname, "-", "MINOR_ALARM triggered, alarm value =", str(value)])}
-        # print(timestamp, pvname, "MINOR_ALARM triggered, alarm value =", value)
         logToHistory = True
     elif(majorAlarm and alarmState == 5):
         # set current alarm status to MAJOR_ACKED
@@ -670,7 +657,6 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
         # Log to history
         entry = {"timestamp": timestamp, "entry": " ".join(
             [pvname, "-", "INVALID_ACKED alarm demoted to MAJOR_ACKED"])}
-        # print(timestamp, pvname, "INVALID_ACKED alarm demoted to MAJOR_ACKED")
         logToHistory = True
     elif(majorAlarm and alarmState == 7):
         # set current alarm status to MAJOR_ACKED
@@ -678,7 +664,6 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
         # Log to history
         entry = {"timestamp": timestamp, "entry": " ".join(
             [pvname, "-", "DISCONN_ACKED alarm demoted to MAJOR_ACKED"])}
-        # print(timestamp, pvname, "DISCONN_ACKED alarm demoted to MAJOR_ACKED")
         logToHistory = True
     elif(majorAlarm and (alarmState < 3 or (transparent and alarmState != 3))):
         # set current alarm status to MAJOR
@@ -687,7 +672,6 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
         # Log to history
         entry = {"timestamp": timestamp, "entry": " ".join(
             [pvname, "-", "MAJOR_ALARM triggered, alarm value =", str(value)])}
-        # print(timestamp, pvname, "MAJOR_ALARM triggered, alarm value =", value)
         logToHistory = True
     elif(invalidAlarm and alarmState == 7):
         # set current alarm status to INVALID_ACKED
@@ -695,7 +679,6 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
         # Log to history
         entry = {"timestamp": timestamp, "entry": " ".join(
             [pvname, "-", "DISCONN_ACKED alarm demoted to INVALID_ACKED"])}
-        # print(timestamp, pvname, "DISCONN_ACKED alarm demoted to INVALID_ACKED")
         logToHistory = True
     elif(invalidAlarm and (alarmState < 5 or (transparent and alarmState != 5))):
         # set current alarm status to INVALID
@@ -704,7 +687,6 @@ def processPVAlarm(pvname, value, severity, timestamp, timestamp_string, pvELN):
         # Log to history
         entry = {"timestamp": timestamp, "entry": " ".join(
             [pvname, "-", "INVALID_ALARM triggered, alarm value =", str(value)])}
-        # print(timestamp, pvname, "INVALID_ALARM triggered, alarm value =", value)
         logToHistory = True
 
     if(alarmSet):
@@ -774,13 +756,14 @@ def initSubPVDict(subArea, areaName):
 
 
 def initPVDict():
+    global pvCollection
     global pvDict
     global areaDict
     global subAreaDict
     global docIDDict
     global subAreaKeyDict
     # loop through each document = area
-    for area in dbGetCollection("pvs").find():
+    for area in pvCollection.find():
         docIDDict[area["_id"]] = area["area"]
         for key in area.keys():
             if (key == "area"):
@@ -804,6 +787,7 @@ def initPVDict():
 def killAlarmIOC():
     subprocess.call("tmux kill-session -t ALARMIOC", shell=True)
     print("Alarm server IOC stopped")
+    app_log.info("Alarm server IOC stopped")
 
 
 def startAlarmIOC():
@@ -845,20 +829,23 @@ def startAlarmIOC():
         with open('/epics/alarmIOC/iocBoot/iocalarmIOC/st.cmd', 'w') as file:
             file.writelines(lines)
         print("Running alarm server IOC on port 8004")
+        app_log.info("Running alarm server IOC on port 8004")
     else:
         print("Running alarm server IOC on default port")
+        app_log.info("Running alarm server IOC on default port")
     subprocess.call("./startAlarmIOC.cmd", shell=True)
     sleep(0.1)
     print("Alarm server IOC running successfully")
+    app_log.info("Alarm server IOC running successfully")
 
 
 def initialiseAlarmIOC():
     global alarmDict
     print("Intilialising alarm server IOC from database")
+    app_log.info("Intilialising alarm server IOC from database")
 
     for pvname in pvNameList:
         areaKey, pvKey = getKeys(pvname)
-        # print(areaKey, pvKey)
 
         if ("=" in areaKey):
             subAreaKey = subAreaDict[areaKey]
@@ -921,8 +908,6 @@ def initialiseAlarmIOC():
                     # Log to history
                     entry = {"timestamp": pvInitDict[pvname][2], "entry": " ".join(
                         [pvname, "-", "MINOR_ALARM triggered, alarm value =", str(lastAlarmVal)])}
-                    # print(pvInitDict[pvname][2], pvname,
-                    #       "MINOR_ALARM triggered, alarm value =", lastAlarmVal)
                 elif(sev == 2):     # MAJOR alarm
                     if(alarmServerRestart):
                         alarmDict[pvname]["A"].value = 3
@@ -931,8 +916,6 @@ def initialiseAlarmIOC():
                     # Log to history
                     entry = {"timestamp": pvInitDict[pvname][2], "entry": " ".join(
                         [pvname, "-", "MAJOR_ALARM triggered, alarm value =", str(lastAlarmVal)])}
-                    # print(pvInitDict[pvname][2], pvname,
-                    #       "MAJOR_ALARM triggered, alarm value =", lastAlarmVal)
                 elif(sev == 3):     # INVALID alarm
                     if(alarmServerRestart):
                         alarmDict[pvname]["A"].value = 5
@@ -941,8 +924,6 @@ def initialiseAlarmIOC():
                     # Log to history
                     entry = {"timestamp": pvInitDict[pvname][2], "entry": " ".join(
                         [pvname, "-", "INVALID_ALARM triggered, alarm value =", str(lastAlarmVal)])}
-                    # print(pvInitDict[pvname][2], pvname,
-                    #       "INVALID_ALARM triggered, alarm value =", lastAlarmVal)
                 # write to db
                 areaKey, pvKey = getKeys(pvname)
                 if ("=" in areaKey):
@@ -974,6 +955,7 @@ def initialiseAlarmIOC():
         alarmDict[pvname]["K"].value = lastAlarmAckTime
 
     print("Alarm server IOC successfully initialised from database")
+    app_log.info("Alarm server IOC successfully initialised from database")
 
 
 def initDescDict():
@@ -1034,6 +1016,55 @@ def initAlarmDict():
     frontEndConnDict[alarmIOCPVPrefix + "ACK_PV"] = False
     # pv.wait_for_connection(timeout=5)
     alarmDict["ACK_PV"] = pv
+
+
+def startPastBridgeThreads():
+    global pvCollection
+    for area in pvCollection.find():
+        topArea = area["area"]
+        # Backwards compatible
+        if(area["bridge"] if ("bridge" in area) else False):
+            bridgeTime = area["bridgeTime"]
+            _thread.start_new_thread(
+                bridgeWatchThread, (topArea, bridgeTime,))
+            # threadName = areaKey+str(subAreaKey)+str(pvKey)+bridgeTime
+            threadName = topArea + \
+                str(None)+str(None)+bridgeTime
+            runningBridgeThreads.append(threadName)
+        for key in area.keys():
+            if (key == "pvs"):
+                for pvKey in area[key].keys():
+                    # Backwards compatible
+                    if(area[key][pvKey]["bridge"] if ("bridge" in area[key][pvKey]) else False):
+                        bridgeTime = area[key][pvKey]["bridgeTime"]
+                        _thread.start_new_thread(
+                            bridgeWatchThread, (topArea, bridgeTime, None, pvKey,))
+                        # threadName = areaKey+str(subAreaKey)+str(pvKey)+bridgeTime
+                        threadName = topArea + \
+                            str(None)+str(pvKey)+bridgeTime
+                        runningBridgeThreads.append(threadName)
+            if ("subArea" in key):
+                # Backwards compatible
+                if(area[key]["bridge"] if ("bridge" in area[key]) else False):
+                    bridgeTime = area[key]["bridgeTime"]
+                    _thread.start_new_thread(
+                        bridgeWatchThread, (topArea, bridgeTime, key,))
+                    # threadName = areaKey+str(subAreaKey)+str(pvKey)+bridgeTime
+                    threadName = topArea + \
+                        str(key)+str(None)+bridgeTime
+                    runningBridgeThreads.append(threadName)
+                for subAreaKey in area[key].keys():
+                    if (subAreaKey == "pvs"):
+                        for pvKey in area[key][subAreaKey].keys():
+                            # Backwards compatible
+                            if(area[key][subAreaKey][pvKey]["bridge"] if ("bridge" in area[key][subAreaKey][pvKey]) else False):
+                                bridgeTime = area[key][subAreaKey][pvKey]["bridgeTime"]
+                                _thread.start_new_thread(
+                                    bridgeWatchThread, (topArea, bridgeTime, key, pvKey,))
+                                # threadName = areaKey+str(subAreaKey)+str(pvKey)+bridgeTime
+                                threadName = topArea + \
+                                    str(key)+str(pvKey)+bridgeTime
+                                runningBridgeThreads.append(threadName)
 
 
 def disconnectAllPVs():
@@ -1125,18 +1156,24 @@ def restartAlarmServer():
     restartNotifyServer()
 
     print("Alarm server restarted...")
+    app_log.info("Alarm server restarted...")
 
     dbSetFieldGlobal("restartCount", 0)
-    dbSetFieldGlobal("activeUser", "")
+    # Don't reset user on auto-server restart
+    # dbSetFieldGlobal("activeUser", "")
 
     alarmDictInitialised = True
     alarmServerRestart = False
 
 
 def bridgeWatchThread(areaKey, bridgeTime, subAreaKey=None, pvKey=None):
-    if(AH_DEBUG):
-        print("Thread STARTED "+areaKey)
-        print("Bridge until "+bridgeTime)
+
+    global runningBridgeThreads
+    global pvCollection
+
+    threadName = areaKey+str(subAreaKey)+str(pvKey)+bridgeTime
+
+    app_log.info("Thread STARTED "+threadName)
 
     bridgeTime = datetime.isoformat(
         datetime.fromisoformat(bridgeTime).astimezone(utc))
@@ -1146,105 +1183,183 @@ def bridgeWatchThread(areaKey, bridgeTime, subAreaKey=None, pvKey=None):
         if(subAreaKey):
             topAreaKey = areaKey.split("=")[0]
             if(pvKey):
-                enable = dbGetField('enable', topAreaKey, pvKey, subAreaKey)
+                bridge = dbGetField('bridge', topAreaKey, pvKey, subAreaKey)
+                mongoBridgeTime = datetime.isoformat(
+                    datetime.fromisoformat(dbGetField(
+                        'bridgeTime', topAreaKey, pvKey, subAreaKey)).astimezone(utc))
             else:
-                enable = dbGetField('enable', topAreaKey,
+                bridge = dbGetField('bridge', topAreaKey,
                                     subAreaKey=subAreaKey)
+                mongoBridgeTime = datetime.isoformat(
+                    datetime.fromisoformat(dbGetField('bridgeTime', topAreaKey,
+                                                      subAreaKey=subAreaKey)).astimezone(utc))
         else:
             if(pvKey):
-                enable = dbGetField('enable', areaKey, pvKey)
+                bridge = dbGetField('bridge', areaKey, pvKey)
+                mongoBridgeTime = datetime.isoformat(
+                    datetime.fromisoformat(dbGetField('bridgeTime', areaKey, pvKey)).astimezone(utc))
             else:
-                enable = dbGetField('enable', areaKey)
-        if(enable):
+                bridge = dbGetField('bridge', areaKey)
+                mongoBridgeTime = datetime.isoformat(
+                    datetime.fromisoformat(dbGetField('bridgeTime', areaKey)).astimezone(utc))
+        if((not bridge)or(bridgeTime != mongoBridgeTime)):
+            runningBridgeThreads.remove(threadName)
             break
         elif(datetime.now(utc).isoformat() > bridgeTime):
-            if(AH_DEBUG):
-                print("Bridge timeout "+areaKey)
+            app_log.info("Bridge timeout "+threadName)
             if(subAreaKey):
                 if(pvKey):
-                    dbSetField('bridge', False, topAreaKey, pvKey, subAreaKey)
-                    dbSetField('enable', True, topAreaKey, pvKey, subAreaKey)
+                    pvCollection.update_many(
+                        {'area': topAreaKey},
+                        {'$set': {
+                            subAreaKey + '.pvs.' + pvKey + '.bridge': False,
+                            subAreaKey + '.pvs.' + pvKey + '.enable': True
+                        }}
+                    )
+                    # dbSetField('bridge', False, topAreaKey, pvKey, subAreaKey)
+                    # dbSetField('enable', True, topAreaKey, pvKey, subAreaKey)
                 else:
-                    dbSetField('bridge', False, topAreaKey,
-                               subAreaKey=subAreaKey)
-                    dbSetField('enable', True, topAreaKey,
-                               subAreaKey=subAreaKey)
+                    pvCollection.update_many(
+                        {'area': topAreaKey},
+                        {'$set': {
+                            subAreaKey + '.bridge': False,
+                            subAreaKey + '.enable': True,
+                        }}
+                    )
+                    # dbSetField('bridge', False, topAreaKey,
+                    #            subAreaKey=subAreaKey)
+                    # dbSetField('enable', True, topAreaKey,
+                    #            subAreaKey=subAreaKey)
             else:
                 if(pvKey):
-                    dbSetField('bridge', False, areaKey, pvKey)
-                    dbSetField('enable', True, areaKey, pvKey)
+                    pvCollection.update_many(
+                        {'area': areaKey},
+                        {'$set': {
+                            'pvs.' + pvKey + '.bridge': False,
+                            'pvs.' + pvKey + '.enable': True,
+                        }}
+                    )
+                    # dbSetField('bridge', False, areaKey, pvKey)
+                    # dbSetField('enable', True, areaKey, pvKey)
                 else:
-                    dbSetField('bridge', False, areaKey)
-                    dbSetField('enable', True, areaKey)
+                    pvCollection.update_many(
+                        {'area': areaKey},
+                        {'$set': {
+                            'bridge': False,
+                            'enable': True
+                        }}
+                    )
+                    # dbSetField('bridge', False, areaKey)
+                    # dbSetField('enable', True, areaKey)
+            runningBridgeThreads.remove(threadName)
             break
         else:
             pass
-            # if(AH_DEBUG):
-            #     print(datetime.now().isoformat())
-            #     print(bridgeTime)
-
-    if(AH_DEBUG):
-        print("Thread ENDED "+areaKey)
+    app_log.info("Thread ENDED "+threadName)
 
 
 def pvCollectionWatch():
+    global pvCollection
     global watchRestartAlarmServer
-    global bridgeMessage
-    global bridgeEvent
-    with dbGetCollection("pvs").watch() as stream:
+    global writeEnableHistory
+    global runningBridgeThreads
+    with pvCollection.watch() as stream:
         for change in stream:
             # os.system('cls' if os.name == 'nt' else 'clear')
             # print(change)
+            # print('#####')
             timestamp = datetime.now(utc).isoformat()
             documentKey = change["documentKey"]
             doc = dbFindOne("pvs", documentKey)
             if(change["operationType"] == "update"):
                 if(len(change["updateDescription"]["removedFields"]) > 0):
-                    removedFields = change["updateDescription"]["removedFields"]
+                    removedFields = change["updateDescription"]["removedFields"][0]
                     topArea = docIDDict[documentKey["_id"]]
-                    areaKey = removedFields[0]
-                    subAreaName = subAreaKeyDict[topArea+"="+areaKey]
-                    entry = {
-                        "timestamp": timestamp, "entry": " ".join([activeUser, "deleted subArea", topArea, ">", subAreaName, ", restarting alarm server..."])}
-                    dbUpdateHistory(topArea, entry)
+                    if('pvs' in removedFields):
+                        if('subArea' in removedFields):
+                            subAreaName = subAreaKeyDict[topArea +
+                                                         "="+removedFields.split(".")[0]]
+                            pvname = areaDict[topArea + "="+subAreaName +
+                                              "="+removedFields.split(".")[2]]
+                            entry = {"timestamp": timestamp, "entry": " ".join(
+                                [activeUser, "deleted PV", pvname, "from area", topArea, ">", subAreaName, ", restarting alarm server..."])}
+                            dbUpdateHistory(topArea+"="+subAreaName, entry)
+                        else:
+                            pvname = areaDict[topArea +
+                                              "="+removedFields.split(".")[1]]
+                            entry = {"timestamp": timestamp, "entry": " ".join(
+                                [activeUser, "deleted PV", pvname, "from area", topArea, ", restarting alarm server..."])}
+                            dbUpdateHistory(topArea, entry)
+                    else:
+                        areaKey = removedFields
+                        subAreaName = subAreaKeyDict[topArea+"="+areaKey]
+                        entry = {
+                            "timestamp": timestamp, "entry": " ".join([activeUser, "deleted subArea", topArea, ">", subAreaName, ", restarting alarm server..."])}
+                        dbUpdateHistory(topArea, entry)
                     restartCount = dbGetFieldGlobal("restartCount")
                     dbSetFieldGlobal("restartCount", restartCount+1)
                     watchRestartAlarmServer = True
                 else:
                     updatedFields = change["updateDescription"]["updatedFields"]
+                    writeEnableHistory = True
                     for key in updatedFields.keys():
                         # print('#####')
-                        # print(key)
+                        # print(key, updatedFields[key])
                         if(key == "bridge"):
                             bridgeEvent = updatedFields[key]
                             topArea = doc.get("area")
+                            writeEnableHistory = False
                             if(not bridgeEvent):
-                                bridgeMessage = topArea+" area BRIDGE cleared to area DISABLED"
+                                msg = "ENABLED" if "enable" in updatedFields else "DISABLED"
+                                bridgeMessage = topArea+" area BRIDGE cleared to area "+msg
                                 entry = {"timestamp": timestamp,
                                          "entry": bridgeMessage}
                                 dbUpdateHistory(topArea, entry)
                             else:
-                                bridgeMessage = activeUser+" BRIDGED area "+topArea+" until "
-                        elif(key == "bridgeTime"):
-                            # Time zone localisation
-                            if(localtz):
-                                str_time = datetime.fromisoformat(updatedFields[key]).astimezone(localtz).strftime(
-                                    "%d %b %Y %H:%M:%S")
-                            else:
-                                str_time = datetime.fromisoformat(updatedFields[key]).strftime(
-                                    "%d %b %Y %H:%M:%S")+" (UTC)"
-                            # Time zone localisation
-                            bridgeMessage = bridgeMessage+str_time
-                            entry = {"timestamp": timestamp,
-                                     "entry": bridgeMessage}
-                            if(bridgeEvent):
+                                bridgeTime = dbGetField("bridgeTime", topArea)
+                                # Time zone localisation
+                                if(localtz):
+                                    str_time = datetime.fromisoformat(bridgeTime).astimezone(localtz).strftime(
+                                        "%d %b %Y %H:%M:%S")
+                                else:
+                                    str_time = datetime.fromisoformat(bridgeTime).strftime(
+                                        "%d %b %Y %H:%M:%S")+" (UTC)"
+                                # Time zone localisation
+                                bridgeMessage = activeUser+" BRIDGED area "+topArea+" until "+str_time
+                                entry = {"timestamp": timestamp,
+                                         "entry": bridgeMessage}
                                 dbUpdateHistory(topArea, entry)
                                 _thread.start_new_thread(
-                                    bridgeWatchThread, (topArea, updatedFields[key],))
+                                    bridgeWatchThread, (topArea, bridgeTime,))
+                                # threadName = areaKey+str(subAreaKey)+str(pvKey)+bridgeTime
+                                threadName = topArea + \
+                                    str(None)+str(None)+bridgeTime
+                                runningBridgeThreads.append(threadName)
+                        elif(key == "bridgeTime"):
+                            topArea = doc.get("area")
+                            bridgeTime = updatedFields[key]
+                            # threadName = areaKey+str(subAreaKey)+str(pvKey)+bridgeTime
+                            threadName = topArea + \
+                                str(None)+str(None)+bridgeTime
+                            if(threadName not in runningBridgeThreads):
+                                # Time zone localisation
+                                if(localtz):
+                                    str_time = datetime.fromisoformat(bridgeTime).astimezone(localtz).strftime(
+                                        "%d %b %Y %H:%M:%S")
+                                else:
+                                    str_time = datetime.fromisoformat(bridgeTime).strftime(
+                                        "%d %b %Y %H:%M:%S")+" (UTC)"
+                                # Time zone localisation
+                                bridgeMessage = activeUser+" BRIDGED area "+topArea+" until "+str_time
+                                entry = {"timestamp": timestamp,
+                                         "entry": bridgeMessage}
+                                dbUpdateHistory(topArea, entry)
+                                _thread.start_new_thread(
+                                    bridgeWatchThread, (topArea, bridgeTime,))
+                                runningBridgeThreads.append(threadName)
                         elif(key == "enable"):
                             # area enable
                             topArea = doc.get("area")
-                            # print(areaKey, "area enable changed!")
                             for area in areaList:
                                 if ("=" in area):
                                     if (area.split("=")[0] == topArea):
@@ -1254,41 +1369,54 @@ def pvCollectionWatch():
                             msg = "ENABLED" if updatedFields[key] else "DISABLED"
                             entry = {"timestamp": timestamp, "entry": " ".join(
                                 [activeUser, msg, "area", topArea])}
-                            # print(timestamp, topArea,
-                            #   "area", msg)
-                            if(not bridgeEvent):
+                            if(writeEnableHistory):
                                 dbUpdateHistory(topArea, entry)
+                        elif(key == "roles"):
+                            topArea = doc.get("area")
+                            entry = {"timestamp": timestamp, "entry": " ".join(
+                                [activeUser, "edited roles of area", topArea])}
+                            dbUpdateHistory(topArea, entry)
                         elif ("pvs." in key and (key.endswith(".bridge"))):
                             bridgeEvent = updatedFields[key]
+                            writeEnableHistory = False
                             pvname = None
+                            stripDict = doc
                             keys = key.split(".")
                             for one_key in keys:
                                 if (one_key not in ["bridge"]):
-                                    doc = doc.get(one_key)
+                                    stripDict = stripDict.get(one_key)
                                 else:
-                                    doc = doc.get("name")
-                                    pvname = doc
+                                    stripDict = stripDict.get("name")
+                                    pvname = stripDict
                             if(not bridgeEvent):
-                                bridgeMessage = pvname+" - Alarm BRIDGE cleared to DISABLED"
+                                enableKey = key.replace("bridge", "enable")
+                                msg = "ENABLED" if enableKey in updatedFields else "DISABLED"
+                                bridgeMessage = pvname+" - Alarm BRIDGE cleared to "+msg
                                 entry = {"timestamp": timestamp,
                                          "entry": bridgeMessage}
                                 areaKey = getKeys(pvname)[0]
                                 dbUpdateHistory(areaKey, entry, pvname)
                             else:
-                                bridgeMessage = pvname+" - "+activeUser+" BRIDGED alarm until "
-                        elif ("pvs." in key and (key.endswith(".bridgeTime"))):
-                            # Time zone localisation
-                            if(localtz):
-                                str_time = datetime.fromisoformat(updatedFields[key]).astimezone(localtz).strftime(
-                                    "%d %b %Y %H:%M:%S")
-                            else:
-                                str_time = datetime.fromisoformat(updatedFields[key]).strftime(
-                                    "%d %b %Y %H:%M:%S")+" (UTC)"
-                            # Time zone localisation
-                            bridgeMessage = bridgeMessage+str_time
-                            entry = {"timestamp": timestamp,
-                                     "entry": bridgeMessage}
-                            if(bridgeEvent):
+                                areaKey, pvKey = getKeys(pvname)
+                                if("=" in areaKey):
+                                    subAreaKey = subAreaDict[areaKey]
+                                    areaKey = areaKey.split("=")[0]
+                                else:
+                                    subAreaKey = None
+                                bridgeTime = dbGetField(
+                                    "bridgeTime", areaKey, pvKey, subAreaKey)
+                                # Time zone localisation
+                                if(localtz):
+                                    str_time = datetime.fromisoformat(bridgeTime).astimezone(localtz).strftime(
+                                        "%d %b %Y %H:%M:%S")
+                                else:
+                                    str_time = datetime.fromisoformat(bridgeTime).strftime(
+                                        "%d %b %Y %H:%M:%S")+" (UTC)"
+                                # Time zone localisation
+                                bridgeMessage = pvname+" - "+activeUser+" BRIDGED alarm until "+str_time
+                                entry = {"timestamp": timestamp,
+                                         "entry": bridgeMessage}
+
                                 areaKey, pvKey = getKeys(pvname)
                                 dbUpdateHistory(areaKey, entry, pvname)
                                 if ("=" in areaKey):
@@ -1297,18 +1425,67 @@ def pvCollectionWatch():
                                 else:
                                     subAreaKey = None
                                 _thread.start_new_thread(
-                                    bridgeWatchThread, (areaKey, updatedFields[key], subAreaKey, pvKey,))
+                                    bridgeWatchThread, (areaKey, bridgeTime, subAreaKey, pvKey,))
+                                # threadName = areaKey+str(subAreaKey)+str(pvKey)+bridgeTime
+                                threadName = areaKey + \
+                                    str(subAreaKey)+str(pvKey)+bridgeTime
+                                runningBridgeThreads.append(threadName)
+                        elif ("pvs." in key and (key.endswith(".bridgeTime"))):
+                            pvname = None
+                            stripDict = doc
+                            keys = key.split(".")
+                            for one_key in keys:
+                                if (one_key not in ["bridgeTime"]):
+                                    stripDict = stripDict.get(one_key)
+                                else:
+                                    stripDict = stripDict.get("name")
+                                    pvname = stripDict
+                            areaKey, pvKey = getKeys(pvname)
+                            if("=" in areaKey):
+                                subAreaKey = subAreaDict[areaKey]
+                                areaKey = areaKey.split("=")[0]
+                            else:
+                                subAreaKey = None
+                            bridgeTime = updatedFields[key]
+                            # threadName = areaKey+str(subAreaKey)+str(pvKey)+bridgeTime
+                            threadName = areaKey + \
+                                str(subAreaKey)+str(pvKey)+bridgeTime
+                            if(threadName not in runningBridgeThreads):
+                                # Time zone localisation
+                                if(localtz):
+                                    str_time = datetime.fromisoformat(bridgeTime).astimezone(localtz).strftime(
+                                        "%d %b %Y %H:%M:%S")
+                                else:
+                                    str_time = datetime.fromisoformat(bridgeTime).strftime(
+                                        "%d %b %Y %H:%M:%S")+" (UTC)"
+                                # Time zone localisation
+                                bridgeMessage = pvname+" - "+activeUser+" BRIDGED alarm until "+str_time
+                                entry = {"timestamp": timestamp,
+                                         "entry": bridgeMessage}
+                                areaKey, pvKey = getKeys(pvname)
+                                dbUpdateHistory(areaKey, entry, pvname)
+                                if ("=" in areaKey):
+                                    subAreaKey = subAreaDict[areaKey]
+                                    areaKey = areaKey.split("=")[0]
+                                else:
+                                    subAreaKey = None
+                                _thread.start_new_thread(
+                                    bridgeWatchThread, (areaKey, bridgeTime, subAreaKey, pvKey,))
+                                # threadName = areaKey+str(subAreaKey)+str(pvKey)+bridgeTime
+                                threadName = areaKey + \
+                                    str(subAreaKey)+str(pvKey)+bridgeTime
+                                runningBridgeThreads.append(threadName)
                         elif ("pvs." in key and (key.endswith(".enable") or key.endswith(".latch") or key.endswith(".notify"))):
                             # pv enable/latch/notify
-                            # print("enable/latch/notify of pv changed!")
                             pvname = None
+                            stripDict = doc
                             keys = key.split(".")
                             for one_key in keys:
                                 if (one_key not in ["enable", "latch", "notify"]):
-                                    doc = doc.get(one_key)
+                                    stripDict = stripDict.get(one_key)
                                 else:
-                                    doc = doc.get("name")
-                                    pvname = doc
+                                    stripDict = stripDict.get("name")
+                                    pvname = stripDict
                             areaKey = getKeys(pvname)[0]
                             if(key.endswith(".enable")):
                                 evaluateAreaPVs(areaKey, True)
@@ -1322,52 +1499,91 @@ def pvCollectionWatch():
                                     key] else "DISABLED alarm notify"
                             entry = {"timestamp": timestamp, "entry": " ".join(
                                 [pvname, '-', activeUser, msg])}
-                            # print(timestamp, pvname,
-                            #       "alarm", msg)
-                            if((key.endswith(".enable") and not bridgeEvent) or key.endswith(".latch") or key.endswith(".notify")):
+                            if((key.endswith(".enable") and writeEnableHistory) or key.endswith(".latch") or key.endswith(".notify")):
                                 dbUpdateHistory(areaKey, entry, pvname)
-                        elif (key.endswith(".bridge")):
+                        elif ("pvs." not in key and key.endswith(".bridge")):
                             # subArea bridge
                             bridgeEvent = updatedFields[key]
-                            areaKey = doc.get("area") + "=" + doc.get(
+                            writeEnableHistory = False
+                            areaKeyHist = doc.get("area") + "=" + doc.get(
                                 key.split(".")[0])["name"]
-                            areaName = areaKey.replace("=", " > ")
+                            areaName = areaKeyHist.replace("=", " > ")
                             if(not bridgeEvent):
-                                bridgeMessage = areaName+" subArea BRIDGE cleared to area DISABLED"
+                                enableKey = key.replace("bridge", "enable")
+                                msg = "ENABLED" if enableKey in updatedFields else "DISABLED"
+                                bridgeMessage = areaName+" subArea BRIDGE cleared to area "+msg
                                 entry = {"timestamp": timestamp,
                                          "entry": bridgeMessage}
-                                dbUpdateHistory(areaKey, entry)
+                                dbUpdateHistory(areaKeyHist, entry)
                             else:
-                                bridgeMessage = activeUser+" BRIDGED subArea "+areaName+" until "
-                        elif (key.endswith(".bridgeTime")):
-                            # subArea bridgeTime
-                            # Time zone localisation
-                            if(localtz):
-                                str_time = datetime.fromisoformat(updatedFields[key]).astimezone(localtz).strftime(
-                                    "%d %b %Y %H:%M:%S")
-                            else:
-                                str_time = datetime.fromisoformat(updatedFields[key]).strftime(
-                                    "%d %b %Y %H:%M:%S")+" (UTC)"
-                            # Time zone localisation
-                            bridgeMessage = bridgeMessage+str_time
-                            entry = {"timestamp": timestamp,
-                                     "entry": bridgeMessage}
-                            if(bridgeEvent):
-                                dbUpdateHistory(areaKey, entry)
+                                areaKey = doc.get("area")
+                                subAreaKey = key.split(".")[0]
+                                bridgeTime = dbGetField(
+                                    "bridgeTime", areaKey, None, subAreaKey)
+                                # Time zone localisation
+                                if(localtz):
+                                    str_time = datetime.fromisoformat(bridgeTime).astimezone(localtz).strftime(
+                                        "%d %b %Y %H:%M:%S")
+                                else:
+                                    str_time = datetime.fromisoformat(bridgeTime).strftime(
+                                        "%d %b %Y %H:%M:%S")+" (UTC)"
+                                # Time zone localisation
+                                bridgeMessage = activeUser + " BRIDGED subArea "+areaName+" until "+str_time
+                                entry = {"timestamp": timestamp,
+                                         "entry": bridgeMessage}
+                                dbUpdateHistory(areaKeyHist, entry)
                                 _thread.start_new_thread(
-                                    bridgeWatchThread, (areaKey, updatedFields[key], key.split(".")[0],))
-                        elif (key.endswith(".enable")):
+                                    bridgeWatchThread, (areaKey, bridgeTime, subAreaKey,))
+                                # threadName = areaKey+str(subAreaKey)+str(pvKey)+bridgeTime
+                                threadName = areaKey + \
+                                    str(subAreaKey)+str(None)+bridgeTime
+                                runningBridgeThreads.append(threadName)
+                        elif ("pvs." not in key and key.endswith(".bridgeTime")):
+                            areaKeyHist = doc.get("area") + "=" + doc.get(
+                                key.split(".")[0])["name"]
+                            areaName = areaKeyHist.replace("=", " > ")
+                            areaKey = doc.get("area")
+                            subAreaKey = key.split(".")[0]
+                            bridgeTime = updatedFields[key]
+                            # threadName = areaKey+str(subAreaKey)+str(pvKey)+bridgeTime
+                            threadName = areaKey + \
+                                str(subAreaKey)+str(None)+bridgeTime
+                            if(threadName not in runningBridgeThreads):
+                                # Time zone localisation
+                                if(localtz):
+                                    str_time = datetime.fromisoformat(bridgeTime).astimezone(localtz).strftime(
+                                        "%d %b %Y %H:%M:%S")
+                                else:
+                                    str_time = datetime.fromisoformat(bridgeTime).strftime(
+                                        "%d %b %Y %H:%M:%S")+" (UTC)"
+                                # Time zone localisation
+                                bridgeMessage = activeUser + " BRIDGED subArea "+areaName+" until "+str_time
+                                entry = {"timestamp": timestamp,
+                                         "entry": bridgeMessage}
+                                dbUpdateHistory(areaKeyHist, entry)
+                                _thread.start_new_thread(
+                                    bridgeWatchThread, (areaKey, bridgeTime, subAreaKey,))
+                                # threadName = areaKey+str(subAreaKey)+str(pvKey)+bridgeTime
+                                threadName = areaKey + \
+                                    str(subAreaKey)+str(None)+bridgeTime
+                                runningBridgeThreads.append(threadName)
+                        elif ("pvs." not in key and key.endswith(".enable")):
                             # subArea enable
                             areaKey = doc.get("area") + "=" + doc.get(
                                 key.split(".")[0])["name"]
-                            # print(areaKey, "area enable changed!")
                             evaluateAreaPVs(areaKey, True)
                             # Log to history
                             msg = "ENABLED" if updatedFields[key] else "DISABLED"
                             entry = {"timestamp": timestamp, "entry": " ".join(
                                 [activeUser, msg, "subArea", areaKey.replace("=", " > ")])}
-                            if(not bridgeEvent):
+                            if(writeEnableHistory):
                                 dbUpdateHistory(areaKey, entry)
+                        elif ("pvs." not in key and key.endswith(".roles")):
+                            areaKey = doc.get("area") + "=" + doc.get(
+                                key.split(".")[0])["name"]
+                            entry = {"timestamp": timestamp, "entry": " ".join(
+                                [activeUser, "edited roles of subArea", areaKey.replace("=", " > ")])}
+                            dbUpdateHistory(areaKey, entry)
                         elif (key == "pvs"):
                             # New pvs added area
                             topArea = docIDDict[documentKey["_id"]]
@@ -1465,7 +1681,6 @@ def globalCollectionWatch():
                 timestamp = datetime.now(utc).isoformat()
                 for key in change.keys():
                     if (key == "enableAllAreas"):
-                        # print(areaKey, "area enable changed!")
                         for area in areaList:
                             if ("=" in area):
                                 areaKey = area
@@ -1474,8 +1689,6 @@ def globalCollectionWatch():
                         msg = "ENABLED" if change[key] else "DISABLED"
                         entry = {"timestamp": timestamp, "entry": " ".join(
                             [activeUser, msg, "ALL AREAS"])}
-                        # print(timestamp, topArea,
-                        #   "area", msg)
                         dbUpdateHistory("_GLOBAL", entry)
                     elif(key == "activeUser"):
                         activeUser = change[key].capitalize()
@@ -1504,6 +1717,8 @@ def main():
     sleep(2.0)
     # Initialiase saved string PVs from database
     initialiseAlarmIOC()
+    # Start any past bridge threads
+    startPastBridgeThreads()
     # Initialise database collection watch on pvs
     # For enable change on pv to reevaluate area pvs
     _thread.start_new_thread(pvCollectionWatch, ())
@@ -1513,12 +1728,8 @@ def main():
     # Start notify server
     startNotifyServer()
 
-    # Final debug outputs
-    # print('areaPVDict', areaPVDict)
-    # print('areaDict', areaDict)
-    # print('pvDict', pvDict)
-
     print("Alarm server running...")
+    app_log.info("Alarm server running...")
 
     # initial set of global collection fields
     # Backwards compatible
@@ -1542,7 +1753,7 @@ def main():
             notifyContent = False
             sleep(1.0)
             if((not notifyContent) or (notifyTimeout >= 2)):
-                notify(notifyBuffer)
+                _thread.start_new_thread(notify, (notifyBuffer,))
                 notifyBuffer = {}
                 notifyTimeout = 0
 

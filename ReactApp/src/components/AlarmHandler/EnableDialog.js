@@ -106,7 +106,8 @@ const EnableDialog = (props) => {
                             control={
                                 <Radio
                                     color="secondary"
-                                    checked={props.data.enable}
+                                    // Backwards compatible
+                                    checked={props.data.enable && !(props.data.bridge ?? false)}
                                     onChange={handleEnable}
                                 />
                             }

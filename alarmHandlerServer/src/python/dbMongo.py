@@ -2,10 +2,18 @@ from pymongo import MongoClient
 import os
 from time import sleep
 
+from log import app_log
+
 try:
     AH_DEBUG = bool(os.environ['AH_DEBUG'])
 except:
     AH_DEBUG = False
+
+try:
+    REPLICA_SET_MEMBERS = os.environ['REPLICA_SET_MEMBERS'].split(',')
+    REPLICA_SET_MEMBER_LENGTH = len(REPLICA_SET_MEMBERS)
+except:
+    REPLICA_SET_MEMBER_LENGTH = 3
 
 alarmDB = None
 
@@ -39,24 +47,38 @@ def initDatabase():
     if (mongoAuth):
         client = MongoClient(
             'mongodb://%s:%s@%s' %
-            (MONGO_ROOT_USERNAME, MONGO_ROOT_PASSWORD, ALARM_DATABASE), replicaSet=ALARM_DATABASE_REPLICA_SET_NAME)
-        # Wait for MongoClient to discover the whole replica set and identify MASTER!
-        # sleep(0.5)
+            (MONGO_ROOT_USERNAME, MONGO_ROOT_PASSWORD, ALARM_DATABASE),
+            replicaSet=ALARM_DATABASE_REPLICA_SET_NAME,
+            readPreference='secondaryPreferred')
     else:
         client = MongoClient('mongodb://%s' % (ALARM_DATABASE),
-                             replicaSet=ALARM_DATABASE_REPLICA_SET_NAME)
-        # Wait for MongoClient to discover the whole replica set and identify MASTER!
-        # sleep(0.5)
+                             replicaSet=ALARM_DATABASE_REPLICA_SET_NAME,
+                             readPreference='secondaryPreferred')
+
+    # Wait for MongoClient to discover the whole replica set and identify MASTER!
+    # while(len(list(client.nodes)) != REPLICA_SET_MEMBER_LENGTH):
+    #     sleep(1.0)
+    #     app_log.info(
+    #         'Waiting for Pymongo to discover the whole replica set and identify MASTER')
+    # app_log.info('Pymongo connected to all replica set members')
+    # app_log.info(str(list(client.nodes)))
+    #
 
     global alarmDB
     alarmDB = client[MONGO_INITDB_ALARM_DATABASE]
 
     while(len(alarmDB.list_collection_names()) != 5):
-        if(AH_DEBUG):
-            print('Waiting for Pymongo to connect to all collections in alarm database')
-    if(AH_DEBUG):
-        print('Pymongo connected to alarm database')
-        print(alarmDB.list_collection_names())
+        app_log.info(
+            'Waiting for Pymongo to connect to all collections in alarm database')
+        sleep(1.0)
+    app_log.info('Pymongo connected to all collections in alarm database')
+    app_log.info(str(alarmDB.list_collection_names()))
+    while(len(list(alarmDB['glob'].find({}))) == 0):
+        app_log.info('Alarm database '+MONGO_INITDB_ALARM_DATABASE +
+                     ' still being instantiated')
+        sleep(1.0)
+    app_log.info('Alarm database '+MONGO_INITDB_ALARM_DATABASE +
+                 ' instantiated')
 
 
 def dbGetCollection(collection):

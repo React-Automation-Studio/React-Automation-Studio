@@ -5,6 +5,9 @@ import imgkit
 from datetime import datetime
 from pytz import timezone
 
+from dbMongo import dbSetFieldGlobal
+from log import app_log
+
 try:
     AH_DEBUG = bool(os.environ['AH_DEBUG'])
 except:
@@ -20,17 +23,22 @@ try:
     SIGNAL_CLI_REST_API_PORT = os.environ['SIGNAL_CLI_REST_API_PORT']
 except:
     print("SIGNAL_CLI_REST_API_PORT not defined, defaulting to port 8000")
+    app_log.warning(
+        "SIGNAL_CLI_REST_API_PORT not defined, defaulting to port 8000")
     SIGNAL_CLI_REST_API_PORT = str(8000)
 
 try:
     SIGNAL_ACC_NUMBER = os.environ['SIGNAL_ACC_NUMBER']
     SIGNAL_ACC_NUMBER = SIGNAL_ACC_NUMBER.replace('+', '%2B')
-    SIGNAL_CLI_REST_ENDPOINT = 'http://localhost:' + \
+    SIGNAL_CLI_REST_ENDPOINT = 'http://127.0.0.1:' + \
         SIGNAL_CLI_REST_API_PORT+'/messages/'+SIGNAL_ACC_NUMBER
     print(SIGNAL_CLI_REST_ENDPOINT)
+    app_log.info(SIGNAL_CLI_REST_ENDPOINT)
 except:
     print("Signal account number not configured!")
     print("Signal notifications will not be sent")
+    app_log.warning("Signal account number not configured!")
+    app_log.warning("Signal notifications will not be sent")
     SIGNAL_CLI_REST_ENDPOINT = ''
 
 
@@ -124,55 +132,79 @@ def notifySignal(timestamp, mobile, userNotifyDict):
     # This function must return True as an acknowledgedment to the notification
     # server that the notification method executed successfully
 
+    dbSetFieldGlobal('signalPostBusy', True)
     timestamp = datetime.fromisoformat(timestamp)
 
-    if(AH_DEBUG):
-        print("###-SIGNAL NOTIFY-###")
-        print(timestamp.strftime('%a, %d %b %Y at %H:%M:%S UTC'))
-        print(mobile)
-        print(userNotifyDict)
+    app_log.info("###-SIGNAL NOTIFY-###")
+    app_log.info(timestamp.strftime('%a, %d %b %Y at %H:%M:%S UTC'))
+    app_log.info(mobile)
+    # app_log.info(str(userNotifyDict))
 
     if(SIGNAL_CLI_REST_ENDPOINT != ''):
-        # Time zone localisation
-        if(localtz):
-            str_time = timestamp.astimezone(localtz).strftime(
-                '%a, %d %b %Y at %H:%M:%S')
-        else:
-            str_time = timestamp.strftime(
-                '%a, %d %b %Y at %H:%M:%S')+" (UTC)"
-        # Time zone localisation
-        message = "You have new alarm notifications"
-        message = message.replace(" ", "\ ")
-        message.encode('unicode_escape')
-        html = composeEmailBody(userNotifyDict, str_time)
-
-        imgkit.from_string(html, 'alarms.jpg')
-
-        with open("alarms.jpg", "rb") as image_file:
-            encoded_image = base64.b64encode(image_file.read())
-
-        data = {
-            "text": message,
-            "receivers": [mobile],
-            "group": False,
-            "groupId": "",
-            "attachments": [
-                {
-                    "url": "",
-                    "filename": "alarms.jpg",
-                    "content": encoded_image.decode()
-                }
-            ]
-        }
-
         try:
-            r = requests.post(SIGNAL_CLI_REST_ENDPOINT, json=data)
-            return r.ok
-        except:
+            # Time zone localisation
+            if(localtz):
+                str_time = timestamp.astimezone(localtz).strftime(
+                    '%a, %d %b %Y at %H:%M:%S')
+            else:
+                str_time = timestamp.strftime(
+                    '%a, %d %b %Y at %H:%M:%S')+" (UTC)"
+            # Time zone localisation
+            message = "You have new alarm notifications"
+            message = message.replace(" ", "\ ")
+            message.encode('unicode_escape')
+            html = composeEmailBody(userNotifyDict, str_time)
+
+            imgkit.from_string(html, 'alarms.jpg')
+
+            with open("alarms.jpg", "rb") as image_file:
+                encoded_image = base64.b64encode(image_file.read())
+
+            data = {
+                "text": message,
+                "receivers": [mobile],
+                "group": False,
+                "groupId": "",
+                "attachments": [
+                    {
+                        "url": "",
+                        "filename": "alarms.jpg",
+                        "content": encoded_image.decode()
+                    }
+                ]
+            }
+
+            try:
+                r = requests.post(SIGNAL_CLI_REST_ENDPOINT, json=data)
+                app_log.info(
+                    "Signal rest API response: [" + str(r.status_code)+"] "+r.reason)
+                dbSetFieldGlobal('signalPostBusy', False)
+                return r.ok
+            except Exception as e:
+                app_log.error("Exception raised: " + str(e))
+                app_log.error("Exception type: " + str(type(e)))
+                app_log.error("Exception args: " + str(e.args))
+                print("Failed to send Signal message to",
+                      mobile, ". Verify Signal settings.")
+                app_log.error("Failed to send Signal message to " +
+                              mobile + ". Verify Signal settings.")
+                dbSetFieldGlobal('signalPostBusy', False)
+                return False
+        except Exception as e:
+            app_log.error("Exception raised: " + str(e))
+            app_log.error("Exception type: " + str(type(e)))
+            app_log.error("Exception args: " + str(e.args))
             print("Failed to send Signal message to",
                   mobile, ". Verify Signal settings.")
+            app_log.error("Failed to send Signal message to " +
+                          mobile + ". Verify Signal settings.")
+            dbSetFieldGlobal('signalPostBusy', False)
             return False
+
     else:
         print("Failed to send Signal message to",
               mobile, ". Verify Signal settings.")
+        app_log.error("Failed to send Signal message to " +
+                      mobile + ". Verify Signal settings.")
+        dbSetFieldGlobal('signalPostBusy', False)
         return False

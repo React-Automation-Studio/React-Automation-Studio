@@ -6,16 +6,16 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-const DeleteAreaDialog = (props) => {
+const DeletePVDialog = (props) => {
     return (
         <Dialog
             open={props.open}
             onClose={props.handleClose}
         >
-            <DialogTitle >{"Confirm area deletion"}</DialogTitle>
+            <DialogTitle >{"Confirm PV deletion"}</DialogTitle>
             <DialogContent>
                 <DialogContentText id="alert-dialog-description">
-                    {`Are you sure you want to delete ${props?.data?.index?.includes("=") ? 'subArea' : 'area'} ${props?.data?.areaName}?`}
+                    {`Are you sure you want to delete PV ${props?.data?.pvname}?`}
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
@@ -30,4 +30,4 @@ const DeleteAreaDialog = (props) => {
     )
 }
 
-export default React.memo(DeleteAreaDialog);
+export default React.memo(DeletePVDialog);

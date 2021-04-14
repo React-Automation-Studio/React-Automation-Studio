@@ -43,7 +43,7 @@ const PV = (props) => {
     }
     return pvname.includes('pva://')
       ?
-      EpicsPV({ ...props, pv:pvname })
+      EpicsPV({ ...props, pv:pvname})
       : (pvname.includes('loc://')
         ?
         LocalPV({ ...props, pv:pvname })
@@ -63,6 +63,7 @@ const PV = (props) => {
     outputValue: props.outputValue,
     useStringValue: props.useStringValue,
     initialLocalVariableValue: props.initialLocalVariableValue,
+    makeNewSocketIoConnection:props.makeNewSocketIoConnection,
     debug: props.debug,
     pvData: pvData('data')
 
@@ -201,6 +202,10 @@ const PV = (props) => {
 }
 PV.propTypes = {
   /**
+   * If defined, then the DataConnection  will be over a new socketIO  connection, otherwise the global socketIO connection
+   */
+  makeNewSocketIoConnection: PropTypes.bool,
+  /**
    * Directive to use the  alarm severity status to alter the fields backgorund color.
    */
 
@@ -336,7 +341,7 @@ PV.defaultProps = {
 
   debug: false,
   useMetadata: true,
-
+  makeNewSocketIoConnection:false
 };
 
 

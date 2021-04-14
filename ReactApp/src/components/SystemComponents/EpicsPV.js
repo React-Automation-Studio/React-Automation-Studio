@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect, useRef } from 'react'
 import ReactAutomationStudioContext from './AutomationStudioContext';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from "prop-types";
-
+import { io } from 'socket.io-client';
 
 export const useEpicsPV = (props) => {
   const initPV = () => {
@@ -28,7 +28,21 @@ export const useEpicsPV = (props) => {
   const pvName=pv.pvname;
   const [pvConnectionId, setPvConnectionId] = useState(null);
   const context = useContext(ReactAutomationStudioContext);
-  const socket = context.socket;
+  const [socket,setSocket] = useState(null)
+  useEffect(()=>{
+    if(props.makeNewSocketIoConnection===true){
+      let newSocket = io("/pvServer", {
+        transports: ['websocket'],
+        forceNew:true,
+      })
+      console.log("make new socket")
+      setSocket(newSocket)
+    }
+    else{
+      setSocket(context.socket)
+    }
+  },[props.makeNewSocketIoConnection,context.socket])
+   
   const jwt = context.userTokens.accessToken;
   const jwtRef = useRef(jwt);
   const socketRef = useRef(socket);
@@ -125,15 +139,15 @@ export const useEpicsPV = (props) => {
     }
 
     
-
+    if (socket){
     socketRef.current.emit('request_pv_info', { data: pv.pvname, 'clientAuthorisation': jwtRef.current }, handleRequestPvInfoAck);
     socketRef.current.on(pv.pvname, updatePVData);
     socketRef.current.on('connect_error', connectError);
     socketRef.current.on('disconnect', disconnect);
-
+    }
 
     return () => {
-
+      if(socket){
       if (pvConnectionId !== null) {
        
         socketRef.current.emit('remove_pv_connection', { pvname: pv.pvname, pvConnectionId: pvConnectionId, 'clientAuthorisation': jwtRef.current });
@@ -141,11 +155,11 @@ export const useEpicsPV = (props) => {
       socketRef.current.removeListener(pv.pvname, updatePVData);
       socketRef.current.removeListener('connect_error', connectError);
       socketRef.current.removeListener('disconnect', disconnect);
-
+    }
 
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pvName])
+  }, [pvName,socket])
 
   useEffect(() => {
     const reconnect = () => {
@@ -157,13 +171,18 @@ export const useEpicsPV = (props) => {
 
       
       socketRef.current.emit('request_pv_info', { data: pv.pvname, 'clientAuthorisation': jwtRef.current });
+    
     }
-    socketRef.current.on('connect', reconnect);
+    if(socket){
+    socketRef.current.on('connect', reconnect);}
+
     return () => {
+      if(socket){
       socketRef.current.removeListener('connect', reconnect);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pvName])
+  }, [pvName,socket])
   useEffect(() => {
 
     if (props.newValueTrigger > 0) {
@@ -218,7 +237,10 @@ EpicsPV.propTypes = {
    * the widget debugging information will be displayed.
    */
   debug: PropTypes.bool,
-
+/**
+   * If defined, then the DataConnection  will be over a new socketIO  connection, otherwise the global socketIO connection
+   */
+  makeNewSocketIoConnection: PropTypes.bool,
 
   /**
    * when writing to the  pv's output value, increment newValueTrigger to tell the pv component emit the output value to the process variable.
@@ -255,6 +277,7 @@ EpicsPV.propTypes = {
 EpicsPV.defaultProps = {
 
   debug: false,
+  makeNewSocketIoConnection:true,
 
 };
 

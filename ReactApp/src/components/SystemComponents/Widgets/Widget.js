@@ -253,6 +253,7 @@ import {
         pvs.push(
           <PV
             key={index.toString()}
+            makeNewSocketIoConnection={props.makeNewSocketIoConnection}
             pv={pv}
             maxPv={props.maxPv}
             minPv={props.minPv}
@@ -297,6 +298,7 @@ import {
 
   const childPv = typeof props.pv !== 'undefined' && <PV
     pv={props.pv}
+    makeNewSocketIoConnection={props.makeNewSocketIoConnection}
     maxPv={props.maxPv}
     minPv={props.minPv}
     min={props.min}
@@ -401,6 +403,10 @@ import {
  * analog values.
  */
 Widget.propTypes = {
+  /**
+   * If defined, then the DataConnection  will be over a new socketIO  connection, otherwise the global socketIO connection
+   */
+  makeNewSocketIoConnection: PropTypes.bool,
   /**
    * Directive to use the  alarm severity status to alter the fields background color.
    */

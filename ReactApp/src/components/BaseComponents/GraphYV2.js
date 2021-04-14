@@ -8,6 +8,7 @@ import ContextMenu from '../SystemComponents/ContextMenu';
 import PV from '../SystemComponents/PV'
 import Plot from 'react-plotly.js';
 import { isMobile } from 'react-device-detect';
+import debounce from "lodash.debounce";
 
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */
@@ -650,21 +651,68 @@ const useStyles = makeStyles((theme) => ({
 //   }
 
 const PlotData = (props) => {
-  const theme= useTheme()
+  const theme = useTheme()
+
+
   const reducer = (pvs, newData) => {
-    
+
     let newPvs = [...pvs];
     let { initialized } = newData.pvData;
     let value = initialized ? newData.pvData.value : [];
-    let x = [];
-    let y = [];
+    if (!Array.isArray(value)) {
+      value = [value]
+    }
+    let newX = [];
+    let newY = [];
+    let oldY;
+    let oldX;
     if (initialized) {
-      x = Array.from(value.keys());
-      y = value;
+     
+      if (newPvs[newData.index]) {
+        if (newPvs[newData.index].y) {
+          oldY = newPvs[newData.index].y;
+          if (newPvs[newData.index].x) {
+            oldX = newPvs[newData.index].x;
+          }
+          else {
+            oldX = [];
+          }
+        }
+        else {
+          oldY = [];
+          oldX = [];
+        }
+        
+        if (typeof props.maxLength !== "undefined") {
+          // console.log("maxLength defined")
+          newY = oldY.concat(value)
+          if (newY.length > props.maxLength) {
+            newY.splice(0, (newY.length - props.maxLength))
+          }
+        
+        }
+        else{
+          newY=value;
+        }
+        if (oldX.length !== newY.length) {
+          newX = Array.from(newY.keys());
+        }
+        else {
+          newX = oldX
+        }
+      
+
+
+      }
+      else {
+        newX = Array.from(value.keys());
+        newY = value;
+      }
+      
     }
     newPvs[newData.index] = {
-      x: x,
-      y: y,
+      x: newX,
+      y: newY,
       type: 'scatter',
       mode: 'lines',
       marker: { color: theme.palette.reactVis.lineColors[newData.index] },
@@ -672,6 +720,17 @@ const PlotData = (props) => {
     return newPvs;
   }
   const [data, updateData] = useReducer(reducer, []);
+  const [delayedData,setDelayedData]=useState([])
+  // const updateDataDebounced = useRef(debounce(value => setDelayedData(value), 50)).current;
+  const [trigger,setTrigger]=useState(0);
+  useEffect(()=>{
+    setTimeout(()=>setTrigger(prev=>prev+1),props.updateRate)
+    setDelayedData(data)
+  },[trigger])
+  // useEffect(()=>{
+  //   updateDataDebounced(data)
+
+  // },[data])
   const pvConnections = () => {
     let pvs = [];
     props.pvs.map((item, index) => {
@@ -681,7 +740,7 @@ const PlotData = (props) => {
           pv={item}
           macros={props.macros}
           pvData={(pvData) => updateData({ index, pvData })}
-          makeNewSocketIoConnection={true}
+          makeNewSocketIoConnection={props.makeNewSocketIoConnection}
         />)
     })
     return pvs
@@ -689,7 +748,7 @@ const PlotData = (props) => {
   return (
     <React.Fragment>
       {pvConnections()}
-      {props.children(data)}
+      {props.children(delayedData)}
     </React.Fragment>
   )
 }
@@ -697,7 +756,7 @@ const PlotData = (props) => {
 const GraphYV2 = (props) => {
   const classes = useStyles();
   const theme = useTheme()
-  console.log(theme)
+ 
   const paperRef = useRef(null);
   const [width, setWidth] = useState(null);
   const [height, setHeight] = useState(null);
@@ -843,11 +902,11 @@ const GraphYV2 = (props) => {
 
   return (
     <div ref={paperRef} style={{ width: props.width, height: props.height, padding: 8 }}>
-      <PlotData pvs={props.pvs}>
+      <PlotData {...props}>
         {(data) => {
-         
+
           return (
-          
+
             <Plot
               config={props.displayModeBar ? {
                 "displaylogo": false,
@@ -923,10 +982,14 @@ GraphYV2.propTypes = {
   triggerOnSingleValueChange: PropTypes.bool,
   /** Directive to use PV timestamp on x-axis*/
   useTimeStamp: PropTypes.bool,
+  /** Graph update perdiod in ms */
+  updateRate: PropTypes.number,
+
 };
 
 GraphYV2.defaultProps = {
-
+  updateRate:100,
+  makeNewSocketIoConnection:false,
   debug: false,
   displayModeBar: false,
   yAxisTitle: 'Y-axis',
@@ -936,7 +999,7 @@ GraphYV2.defaultProps = {
   usePolling: false,
   pollingRate: 100,
   width: '100%',
-  height: '35vh',
+  height: '30vh',
 
 };
 

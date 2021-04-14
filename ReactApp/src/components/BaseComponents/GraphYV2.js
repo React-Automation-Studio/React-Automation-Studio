@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef, useReducer } from 'react'
 import DataConnection from '../SystemComponents/DataConnection';
 
 import PropTypes from 'prop-types';
@@ -649,9 +649,55 @@ const useStyles = makeStyles((theme) => ({
 //     )
 //   }
 
+const PlotData = (props) => {
+  const theme= useTheme()
+  const reducer = (pvs, newData) => {
+    
+    let newPvs = [...pvs];
+    let { initialized } = newData.pvData;
+    let value = initialized ? newData.pvData.value : [];
+    let x = [];
+    let y = [];
+    if (initialized) {
+      x = Array.from(value.keys());
+      y = value;
+    }
+    newPvs[newData.index] = {
+      x: x,
+      y: y,
+      type: 'scatter',
+      mode: 'lines',
+      marker: { color: theme.palette.reactVis.lineColors[newData.index] },
+    };
+    return newPvs;
+  }
+  const [data, updateData] = useReducer(reducer, []);
+  const pvConnections = () => {
+    let pvs = [];
+    props.pvs.map((item, index) => {
+      pvs.push(
+        <PV
+          key={index.toString()}
+          pv={item}
+          macros={props.macros}
+          pvData={(pvData) => updateData({ index, pvData })}
+          makeNewSocketIoConnection={true}
+        />)
+    })
+    return pvs
+  }
+  return (
+    <React.Fragment>
+      {pvConnections()}
+      {props.children(data)}
+    </React.Fragment>
+  )
+}
+
 const GraphYV2 = (props) => {
   const classes = useStyles();
   const theme = useTheme()
+  console.log(theme)
   const paperRef = useRef(null);
   const [width, setWidth] = useState(null);
   const [height, setHeight] = useState(null);
@@ -673,95 +719,57 @@ const GraphYV2 = (props) => {
   }, [paperRef]);
 
   const [domain, setDomain] = useState([0, 1])
-    const [yPositions, setYPositions] = useState([0, 0, 0])
-    useEffect(() => {
-        if (props.yAxes !== undefined) {
-            let numberOfyAxes = props.yAxes.length;
-            let newYPositions = [];
-            let increment = 100 / width;
-            let newDomain = [increment * (numberOfyAxes - 1), 1]
-            let index = 0;
-            for (let i = numberOfyAxes - 1; i >= 0; i--) {
-                newYPositions[index] = i * increment;
-                index++;
-            }
-            setYPositions(newYPositions)
-            setDomain(newDomain)
-        }
-        else {
-            setYPositions([0])
-            setDomain([0, 1])
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [width])
-  let yAxes = {};
+  const [yPositions, setYPositions] = useState([0, 0, 0])
+  useEffect(() => {
     if (props.yAxes !== undefined) {
-        props.yAxes.forEach((item, index) => {
-            let key = index === 0 ? 'yaxis' : 'yaxis' + (index + 1)
-            if (index > 0) {
-                yAxes[key] = {
-                    title: item.title ? item.title : "Y-Axis " + (index + 1),
-                    titlefont: { color: props.yAxes.length > 1 ? theme.palette.reactVis.lineColors[index] : theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke },
-                    tickfont: { color: props.yAxes.length > 1 ? theme.palette.reactVis.lineColors[index] : theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke },
-                    gridcolor: theme.palette.reactVis[".rv-xy-plot__grid-lines__line"].stroke,
-                    tickcolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
-                    zerolinecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
-                    linecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
-                    zeroline: true,
-                    showline: true,
-                    showgrid: item.showGrid ? item.showGrid : true,
-                    side: 'left',
-                    position: yPositions[index],
-                    anchor: 'free',
-                    overlaying: 'y',
-                    type: item.type === 'log' ? 'log' : 'linear',
-                    tickformat: item.tickFormat ? item.tickFormat : ''
-                }
-            }
-            else {
-                yAxes['yaxis'] = {
-                    title: item.title ? item.title : "Y-Axis " + (index + 1),
-                    titlefont: { color: theme.palette.reactVis.lineColors[index], },
-                    tickfont: { color: theme.palette.reactVis.lineColors[index], },
-                    gridcolor: theme.palette.reactVis[".rv-xy-plot__grid-lines__line"].stroke,
-                    tickcolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
-                    zerolinecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
-                    linecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
-                    zeroline: true,
-                    showline: true,
-                    showgrid: true,
-                    type: item.type === 'log' ? 'log' : 'linear',
-                    tickformat: item.tickFormat ? item.tickFormat : ''
-                }
-            }
-        })
+      let numberOfyAxes = props.yAxes.length;
+      let newYPositions = [];
+      let increment = 100 / width;
+      let newDomain = [increment * (numberOfyAxes - 1), 1]
+      let index = 0;
+      for (let i = numberOfyAxes - 1; i >= 0; i--) {
+        newYPositions[index] = i * increment;
+        index++;
+      }
+      setYPositions(newYPositions)
+      setDomain(newDomain)
     }
     else {
-        yAxes['yaxis'] = {
-            title: "Y-Axis ",
+      setYPositions([0])
+      setDomain([0, 1])
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [width])
+  const [yAxes, setYAxes] = useState(() => {
+    let yAxesInit = {};
+    if (props.yAxes !== undefined) {
+      props.yAxes.forEach((item, index) => {
+        let key = index === 0 ? 'yaxis' : 'yaxis' + (index + 1)
+        if (index > 0) {
+          yAxesInit[key] = {
+            title: item.title ? item.title : "Y-Axis " + (index + 1),
+            titlefont: { color: props.yAxes.length > 1 ? theme.palette.reactVis.lineColors[index] : theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke },
+            tickfont: { color: props.yAxes.length > 1 ? theme.palette.reactVis.lineColors[index] : theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke },
             gridcolor: theme.palette.reactVis[".rv-xy-plot__grid-lines__line"].stroke,
             tickcolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
             zerolinecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
             linecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
             zeroline: true,
             showline: true,
-            showgrid: true,
+            showgrid: item.showGrid ? item.showGrid : true,
+            side: 'left',
+            position: yPositions[index],
+            anchor: 'free',
+            overlaying: 'y',
+            type: item.type === 'log' ? 'log' : 'linear',
+            tickformat: item.tickFormat ? item.tickFormat : ''
+          }
         }
-    }
-    let legend = props.showLegend === true ? {
-        legend: isMobile ? {
-            orientation: 'h',
-            x: 0,
-            y: 1.1
-        } : undefined
-    } : {}
-    let layout =
-    {
-        title: props.title,
-        plot_bgcolor: theme.palette.background.paper,
-        xaxis: {
-            domain: domain,
-            title: props.xAxisTitle ? props.xAxisTitle : '',
+        else {
+          yAxesInit['yaxis'] = {
+            title: item.title ? item.title : "Y-Axis " + (index + 1),
+            titlefont: { color: theme.palette.reactVis.lineColors[index], },
+            tickfont: { color: theme.palette.reactVis.lineColors[index], },
             gridcolor: theme.palette.reactVis[".rv-xy-plot__grid-lines__line"].stroke,
             tickcolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
             zerolinecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
@@ -769,73 +777,109 @@ const GraphYV2 = (props) => {
             zeroline: true,
             showline: true,
             showgrid: true,
-          //  range: [selectedFromDate, selectedToDate],
-        },
-        ...yAxes,
-        font: {
-            family: 'Roboto,Arial',
-            color: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke
-        },
-        paper_bgcolor: theme.palette.background.paper,
-        ...legend,
-        showlegend: props.showLegend,
+            type: item.type === 'log' ? 'log' : 'linear',
+            tickformat: item.tickFormat ? item.tickFormat : ''
+          }
+        }
+      })
     }
+    else {
+      yAxesInit['yaxis'] = {
+        title: props.yAxisTitle,
+        gridcolor: theme.palette.reactVis[".rv-xy-plot__grid-lines__line"].stroke,
+        tickcolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
+        zerolinecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
+        linecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
+        zeroline: true,
+        showline: true,
+        showgrid: true,
+      }
+    }
+    return (yAxesInit)
+  })
+  const [legend, setLegend] = useState(() => {
+    let legendInit = props.showLegend === true ? {
+      legend: isMobile ? {
+        orientation: 'h',
+        x: 0,
+        y: 1.1
+      } : undefined
+    } : {}
+    return legendInit
+  })
+
+  const [layout, setLayout] = useState({})
+
+  useEffect(() => {
+    setLayout({
+      title: {
+        text: props.title,
+      },
+      plot_bgcolor: theme.palette.background.default,
+      xaxis: {
+        domain: domain,
+        title: props.xAxisTitle,
+        gridcolor: theme.palette.reactVis[".rv-xy-plot__grid-lines__line"].stroke,
+        tickcolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
+        zerolinecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
+        linecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
+        zeroline: true,
+        showline: true,
+        showgrid: true,
+        //  range: [selectedFromDate, selectedToDate],
+      },
+      ...yAxes,
+      font: {
+        family: 'Roboto,Arial',
+        color: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke
+      },
+      paper_bgcolor: theme.palette.background.default,
+      ...legend,
+      showlegend: props.showLegend,
+      margin: { t: props.title ? 32 : 16, r: 32, l: 48, b: 48 }
+    })
+  }, [theme, props.showLegend, props.xAxisTitle, props.title])
+
 
   return (
-    <div ref={paperRef} style={{ width: props.width,height: props.height }}>
-      <PV pv='pva://$(device):test$(id)' macros={{ '$(device)': 'testIOC', '$(id)': '4' }} >
-        {
-          (pv) => {
-            let { initialized } = pv;
-            let value = initialized ? pv.value : "value is not initialized";
-            let x = [];
-            let y = [];
-            if (initialized) {
-              x = Array.from(value.keys());
-              y = value;
-            }
-            let content = <div>{value}</div>;
-            return (
-              <Plot
-                config={props.displayModeBar ? {
+    <div ref={paperRef} style={{ width: props.width, height: props.height, padding: 8 }}>
+      <PlotData pvs={props.pvs}>
+        {(data) => {
+         
+          return (
+          
+            <Plot
+              config={props.displayModeBar ? {
+                "displaylogo": false,
+                scrollZoom: false,
+                doubleclick: false,
+                displayModeBar: props.displayModeBar,
+                toImageButtonOptions: {
+                  format: 'svg'
+                }
+              } : {
                   "displaylogo": false,
                   scrollZoom: false,
-                  doubleclick: false,
-                  displayModeBar: props.displayModeBar,
                   toImageButtonOptions: {
                     format: 'svg'
                   }
-                } : {
-                    "displaylogo": false,
-                    scrollZoom: false,
-                    toImageButtonOptions: {
-                      format: 'svg'
-                    }
-                  }
                 }
-                useResizeHandler={true}
-                style={{
-                  position: 'relative',
-                  display: 'inline-block',
-                  width: '100%', height: '100%', paddingBottom: 8
-                }}
-                data={[
-                  {
-                    x: x,
-                    y: y,
-                    type: 'scatter',
-                    mode: 'lines',
-                    marker: { color: theme.palette.reactVis.lineColors[0] },
-                  },
+              }
+              useResizeHandler={true}
+              style={{
+                position: 'relative',
+                display: 'inline-block',
+                width: '100%', height: '100%', paddingBottom: 8
+              }}
+              data={data}
+              layout={{ ...layout, }}
+            />
 
-                ]}
-                layout={{ ...layout, }}
-              />
-
-            )
-          }
+          )
         }
-      </PV>
+        }
+
+      </PlotData>
     </div>
   )
 
@@ -884,6 +928,7 @@ GraphYV2.propTypes = {
 GraphYV2.defaultProps = {
 
   debug: false,
+  displayModeBar: false,
   yAxisTitle: 'Y-axis',
   xAxisTitle: 'X-axis',
   yUnits: "",
@@ -891,7 +936,7 @@ GraphYV2.defaultProps = {
   usePolling: false,
   pollingRate: 100,
   width: '100%',
-  height: '40vh',
+  height: '35vh',
 
 };
 

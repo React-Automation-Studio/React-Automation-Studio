@@ -150,19 +150,20 @@ class MobileDemo1 extends React.Component {
               >
 
 
-                <Grid item xs={12} >
+                {/* <Grid item xs={12} >
                   <div style={{ height: graphVH, width:'96vw',}}>
                     <GraphY  pvs={['pva://testIOC:test4','pva://testIOC:test5'] } legend={['Sine Wave','Amplitude']}
                      //lineColor={[this.props.theme.palette.secondary.main,lime['400']]}
                      />
                   </div>
-                </Grid>
+                </Grid> */}
                 <Grid item xs={12} >
-                  <div style={{ height: graphVH, width:'96vw',}}>
+                  
                     <GraphYV2  pvs={['pva://testIOC:test4','pva://testIOC:test5'] } legend={['Sine Wave','Amplitude']}
+                     // title={"Test"}
                      //lineColor={[this.props.theme.palette.secondary.main,lime['400']]}
                      />
-                  </div>
+                
                 </Grid>
                 <Grid item xs={12}>
                   <Grid container direction="row" item justify="center" spacing={2} alignItems="stretch">

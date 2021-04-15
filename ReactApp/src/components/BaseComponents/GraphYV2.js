@@ -9,7 +9,8 @@ import PV from '../SystemComponents/PV'
 import Plot from 'react-plotly.js';
 import { isMobile } from 'react-device-detect';
 import debounce from "lodash.debounce";
-
+import { replaceMacros } from '../SystemComponents/Utils/macroReplacement';
+import { ContinuousColorLegend } from 'react-vis';
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */
 
@@ -656,7 +657,7 @@ const PlotData = (props) => {
 
   const reducer = (pvs, newData) => {
 
-    let newPvs = [...pvs];
+    let newPvs = { ...pvs };
     let { initialized } = newData.pvData;
     let value = initialized ? newData.pvData.value : [];
     if (!Array.isArray(value)) {
@@ -667,66 +668,107 @@ const PlotData = (props) => {
     let oldY;
     let oldX;
     if (initialized) {
-     
-      if (newPvs[newData.index]) {
-        if (newPvs[newData.index].y) {
-          oldY = newPvs[newData.index].y;
-          if (newPvs[newData.index].x) {
-            oldX = newPvs[newData.index].x;
+      if (newPvs.lineData) {
+        if (newPvs.lineData[newData.index]) {
+          if (newPvs.lineData[newData.index].y) {
+            oldY = newPvs.lineData[newData.index].y;
+            if (newPvs.lineData[newData.index].x) {
+              oldX = newPvs.lineData[newData.index].x;
+            }
+            else {
+              oldX = [];
+            }
           }
           else {
+            oldY = [];
             oldX = [];
           }
-        }
-        else {
-          oldY = [];
-          oldX = [];
-        }
-        
-        if (typeof props.maxLength !== "undefined") {
-          // console.log("maxLength defined")
-          newY = oldY.concat(value)
-          if (newY.length > props.maxLength) {
-            newY.splice(0, (newY.length - props.maxLength))
+
+          if (typeof props.maxLength !== "undefined") {
+            // console.log("maxLength defined")
+            newY = oldY.concat(value)
+            if (newY.length > props.maxLength) {
+              newY.splice(0, (newY.length - props.maxLength))
+            }
+
           }
-        
-        }
-        else{
-          newY=value;
-        }
-        if (oldX.length !== newY.length) {
-          newX = Array.from(newY.keys());
+          else {
+            newY = value;
+          }
+          if (oldX.length !== newY.length) {
+            newX = Array.from(newY.keys());
+          }
+          else {
+            newX = oldX
+          }
+
+
+
         }
         else {
-          newX = oldX
+          newX = Array.from(value.keys());
+          newY = value;
+
         }
-      
-
-
       }
       else {
         newX = Array.from(value.keys());
         newY = value;
+        // newPvs = {
+        //   lineData: [],
+        //   pvData: []
+        // }
       }
-      
+
     }
-    newPvs[newData.index] = {
+    // else {
+    //   newPvs.lineData = []
+    //   newPvs.pvData = []
+
+    // }
+    newPvs.lineData[newData.index] = {
       x: newX,
       y: newY,
       type: 'scatter',
       mode: 'lines',
       marker: { color: theme.palette.reactVis.lineColors[newData.index] },
+
+      name: props.legend
+        ?
+        props.legend[newData.index]
+          ?
+          props.legend[newData.index]
+          :
+          replaceMacros(props.pvs[newData.index], props.macros)
+        :
+        replaceMacros(props.pvs[newData.index], props.macros),
     };
+    newPvs.pvData[newData.index] ={...newPvs.pvData[newData.index],... newData.pvData};
     return newPvs;
   }
-  const [data, updateData] = useReducer(reducer, []);
-  const [delayedData,setDelayedData]=useState([])
+  const reducerInit=()=>{
+    let pvData=[];
+    props.pvs.forEach((pv,index)=>{
+      pvData.push({pvname:replaceMacros(pv,props.macros),initialized:false})
+    })
+    let data= {lineData:[],
+      pvData:pvData
+
+    }
+    // console.log(data)
+    return(
+     data
+    )
+  }
+  const [init,setInit]=useState(reducerInit());
+  const [data, updateData] = useReducer(reducer, init);
+  const [delayedData, setDelayedData] = useState({})
   // const updateDataDebounced = useRef(debounce(value => setDelayedData(value), 50)).current;
-  const [trigger,setTrigger]=useState(0);
-  useEffect(()=>{
-    setTimeout(()=>setTrigger(prev=>prev+1),props.updateRate)
+  const [trigger, setTrigger] = useState(0);
+  useEffect(() => {
+    setTimeout(() => setTrigger(prev => prev + 1), props.updateRate)
     setDelayedData(data)
-  },[trigger])
+  }, [trigger])
   // useEffect(()=>{
   //   updateDataDebounced(data)
 
@@ -756,10 +798,22 @@ const PlotData = (props) => {
 const GraphYV2 = (props) => {
   const classes = useStyles();
   const theme = useTheme()
- 
+
   const paperRef = useRef(null);
   const [width, setWidth] = useState(null);
   const [height, setHeight] = useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const handleToggleContextMenu = (event) => {
+    console.log("contextmenu")
+    event.preventDefault();
+    event.stopPropagation();
+    setAnchorEl(event.target);
+    setOpenContextMenu(!openContextMenu);
+}
+const handleContextMenuClose = () => {
+  setOpenContextMenu(false);
+}
+  const [openContextMenu, setOpenContextMenu] = useState(false);
   useEffect(() => {
     const handleResize = () => {
       if (paperRef.current) {
@@ -902,11 +956,41 @@ const GraphYV2 = (props) => {
 
   return (
     <div ref={paperRef} style={{ width: props.width, height: props.height, padding: 8 }}>
+      
       <PlotData {...props}>
         {(data) => {
-
+       
           return (
+            <div style={{width:"100%",height:"100%"}}  onContextMenu={
+              props.disableContextMenu ? undefined : handleToggleContextMenu
+            }
+            
+              onPointerDownCapture={(event) => {
+                  if (event.button !== 0) {
+                      event.preventDefault()
+                      return;
+                  }
+              }}
+            >
+                {data.pvData&&openContextMenu&&<ContextMenu
+                    disableProbe={props.disableProbe}
+                    open={openContextMenu}
+                    pvs={data.pvData}
+                    handleClose={handleContextMenuClose}
+                    probeType={'readOnly'}
+                    anchorEl={anchorEl}
+                    anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "center",
+                    }}
+                    transformOrigin={{
+                        vertical: "top",
+                        horizontal: "center",
+                    }}
+                   
+                />}
 
+           
             <Plot
               config={props.displayModeBar ? {
                 "displaylogo": false,
@@ -917,12 +1001,12 @@ const GraphYV2 = (props) => {
                   format: 'svg'
                 }
               } : {
-                  "displaylogo": false,
-                  scrollZoom: false,
-                  toImageButtonOptions: {
-                    format: 'svg'
-                  }
+                "displaylogo": false,
+                scrollZoom: false,
+                toImageButtonOptions: {
+                  format: 'svg'
                 }
+              }
               }
               useResizeHandler={true}
               style={{
@@ -930,15 +1014,21 @@ const GraphYV2 = (props) => {
                 display: 'inline-block',
                 width: '100%', height: '100%', paddingBottom: 8
               }}
-              data={data}
+              data={data.lineData}
               layout={{ ...layout, }}
-            />
+             
 
+            
+            
+            
+            />
+  </div>
           )
         }
         }
-
+      
       </PlotData>
+
     </div>
   )
 
@@ -988,8 +1078,8 @@ GraphYV2.propTypes = {
 };
 
 GraphYV2.defaultProps = {
-  updateRate:100,
-  makeNewSocketIoConnection:false,
+  updateRate: 100,
+  makeNewSocketIoConnection: false,
   debug: false,
   displayModeBar: false,
   yAxisTitle: 'Y-axis',

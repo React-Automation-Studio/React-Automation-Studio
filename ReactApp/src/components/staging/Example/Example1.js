@@ -11,7 +11,7 @@ import TextInput from '../../BaseComponents/TextInput';
 import TextOutput from '../../BaseComponents/TextOutput';
 
 import Slider from '../../BaseComponents/Slider';
-import GraphYV2 from '../../BaseComponents/GraphYV2';
+import GraphY from '../../BaseComponents/GraphY';
 import SelectionList from '../../BaseComponents/SelectionList';
 import ThumbWheel from '../../BaseComponents/ThumbWheel';
 
@@ -126,8 +126,8 @@ const Example1 = (props) => {
     let i = 0;
     for (i = 0; i < noOfGraphs; i++) {
       graphs.push(
-        <Grid item xs={width} key= {i.toString()}>
-          <GraphYV2 pvs={['pva://testIOC:test4', 'pva://testIOC:test5',
+        <Grid item xs={width} key={i.toString()}>
+          <GraphY pvs={['pva://testIOC:test4', 'pva://testIOC:test5',
             'pva://testIOC:test3'
           ]} legend={['Sine Wave', 'Amplitude']}
             maxLength={maxLength}
@@ -135,6 +135,32 @@ const Example1 = (props) => {
             makeNewSocketIoConnection={makeNewSocketIoConnection === true}
           // title={"Test"}
           //lineColor={[this.props.theme.palette.secondary.main,lime['400']]}
+          />
+          <GraphY
+
+            pvs={[
+              'pva://testIOC:MTextUpdate1',
+              'pva://testIOC:MTextUpdate2',
+              'pva://testIOC:MTextUpdate3',
+              'pva://testIOC:MTextUpdate4',
+              'pva://testIOC:MTextUpdate5'
+
+            ]}
+            maxLength={256}
+            useTimeStamp
+          />
+          <GraphY
+            pvs={['pva://testIOC:PS1:Readback', 'pva://testIOC:PS2:Readback', 'pva://testIOC:PS3:Readback']}
+            maxLength={600}
+            legend={[
+              'Q1 readback',
+              'Q2 readback',
+              'Q3 readback',
+            ]}
+            yUnits={' A'}
+            useTimeStamp={true}
+            usePolling={true}
+            pollingRate={100}
           />
         </Grid>
       )
@@ -193,16 +219,16 @@ const Example1 = (props) => {
                   <TextField value={noOfGraphs} onChange={(event) => setNoOfGraphs(event.target.value)} label={"noOfGraphs"} />
                 </Grid>
                 <Grid item xs={2}>
-                
+
                 </Grid>
-              
+
 
                 {
                   getGraphs(noOfGraphs, graphWidth)
                 }
                 {/* <Grid item xs={4} >
                   
-                    <GraphYV2  pvs={['pva://testIOC:test4','pva://testIOC:test5',
+                    <GraphY  pvs={['pva://testIOC:test4','pva://testIOC:test5',
                     'pva://testIOC:test3'
                   ] } legend={['Sine Wave','Amplitude']}
                     maxLength={maxLength}
@@ -215,7 +241,7 @@ const Example1 = (props) => {
                 </Grid>
                 <Grid item xs={4} >
                   
-                    <GraphYV2  pvs={['pva://testIOC:test4','pva://testIOC:test5',
+                    <GraphY  pvs={['pva://testIOC:test4','pva://testIOC:test5',
                     'pva://testIOC:test3'
                   ] } legend={['Sine Wave','Amplitude']}
                     maxLength={maxLength}
@@ -228,7 +254,7 @@ const Example1 = (props) => {
                 </Grid>
                 <Grid item xs={4} >
                   
-                    <GraphYV2  pvs={['pva://testIOC:test4','pva://testIOC:test5',
+                    <GraphY  pvs={['pva://testIOC:test4','pva://testIOC:test5',
                     'pva://testIOC:test3'
                   ] } legend={['Sine Wave','Amplitude']}
                     maxLength={maxLength}
@@ -241,7 +267,7 @@ const Example1 = (props) => {
                 </Grid>
                 <Grid item xs={4} >
                   
-                    <GraphYV2  pvs={['pva://testIOC:test4','pva://testIOC:test5',
+                    <GraphY  pvs={['pva://testIOC:test4','pva://testIOC:test5',
                     'pva://testIOC:test3'
                   ] } legend={['Sine Wave','Amplitude']}
                     maxLength={maxLength}
@@ -254,7 +280,7 @@ const Example1 = (props) => {
                 </Grid>
                 <Grid item xs={4} >
                   
-                    <GraphYV2  pvs={['pva://testIOC:test4','pva://testIOC:test5',
+                    <GraphY  pvs={['pva://testIOC:test4','pva://testIOC:test5',
                     'pva://testIOC:test3'
                   ] } legend={['Sine Wave','Amplitude']}
                     maxLength={maxLength}
@@ -267,7 +293,7 @@ const Example1 = (props) => {
                 </Grid>
                 <Grid item xs={4} >
                   
-                    <GraphYV2  pvs={['pva://testIOC:test4','pva://testIOC:test5',
+                    <GraphY  pvs={['pva://testIOC:test4','pva://testIOC:test5',
                     'pva://testIOC:test3'
                   ] } legend={['Sine Wave','Amplitude']}
                     maxLength={maxLength}

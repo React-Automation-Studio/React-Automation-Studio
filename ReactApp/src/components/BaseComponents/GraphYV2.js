@@ -652,12 +652,14 @@ const useStyles = makeStyles((theme) => ({
 //   }
 
 const PlotData = (props) => {
+
+  
   const theme = useTheme()
 
 
   const reducer = (pvs, newData) => {
 
-    let newPvs = { ...pvs };
+    let newPvs = [...pvs];
     let { initialized } = newData.pvData;
     let value = initialized ? newData.pvData.value : [];
     if (!Array.isArray(value)) {
@@ -668,12 +670,11 @@ const PlotData = (props) => {
     let oldY;
     let oldX;
     if (initialized) {
-      if (newPvs.lineData) {
-        if (newPvs.lineData[newData.index]) {
-          if (newPvs.lineData[newData.index].y) {
-            oldY = newPvs.lineData[newData.index].y;
-            if (newPvs.lineData[newData.index].x) {
-              oldX = newPvs.lineData[newData.index].x;
+        if (newPvs[newData.index]) {
+          if (newPvs[newData.index].y) {
+            oldY = newPvs[newData.index].y;
+            if (newPvs[newData.index].x) {
+              oldX = newPvs[newData.index].x;
             }
             else {
               oldX = [];
@@ -711,22 +712,15 @@ const PlotData = (props) => {
 
         }
       }
-      else {
-        newX = Array.from(value.keys());
-        newY = value;
-        // newPvs = {
-        //   lineData: [],
-        //   pvData: []
-        // }
-      }
+    
 
-    }
+    
     // else {
-    //   newPvs.lineData = []
+    //   newPvs = []
     //   newPvs.pvData = []
 
     // }
-    newPvs.lineData[newData.index] = {
+    newPvs[newData.index] = {
       x: newX,
       y: newY,
       type: 'scatter',
@@ -743,32 +737,41 @@ const PlotData = (props) => {
         :
         replaceMacros(props.pvs[newData.index], props.macros),
     };
-    newPvs.pvData[newData.index] ={...newPvs.pvData[newData.index],... newData.pvData};
+    // newPvs.pvData[newData.index] ={...newPvs.pvData[newData.index],... newData.pvData};
     return newPvs;
   }
-  const reducerInit=()=>{
-    let pvData=[];
-    props.pvs.forEach((pv,index)=>{
-      pvData.push({pvname:replaceMacros(pv,props.macros),initialized:false})
-    })
-    let data= {lineData:[],
-      pvData:pvData
+ 
 
-    }
-    // console.log(data)
-    return(
-     data
-    )
+  const [data, updateData] = useReducer(reducer, []);
+  const reducer2=(oldPvs,newData)=>{
+    let pvs=[...oldPvs];
+    pvs[newData.index]=newData.pvs[0];
+   
+    return(pvs)
+    
   }
-  const [init,setInit]=useState(reducerInit());
-  const [data, updateData] = useReducer(reducer, init);
-  const [delayedData, setDelayedData] = useState({})
+  const [contextInfo, updateContextInfo] = useReducer(reducer2, []);
+  const [delayedData, setDelayedData] = useState([])
+  const [delayedContextInfo, setDelayedContextInfo] = useState([])
   // const updateDataDebounced = useRef(debounce(value => setDelayedData(value), 50)).current;
   const [trigger, setTrigger] = useState(0);
+  const {updateRate}=props;
+ 
   useEffect(() => {
-    setTimeout(() => setTrigger(prev => prev + 1), props.updateRate)
+    
+    setTimeout(() => setTrigger(prev => prev + 1),parseInt(updateRate))
     setDelayedData(data)
-  }, [trigger])
+  }, [trigger,updateRate])
+
+  const [trigger2, setTrigger2] = useState(0);
+ 
+ 
+  useEffect(() => {
+    
+    setTimeout(() => setTrigger2(prev => prev + 1),parseInt(1000))
+    setDelayedContextInfo(contextInfo)
+  }, [trigger2])
+
   // useEffect(()=>{
   //   updateDataDebounced(data)
 
@@ -782,6 +785,7 @@ const PlotData = (props) => {
           pv={item}
           macros={props.macros}
           pvData={(pvData) => updateData({ index, pvData })}
+          contextInfo={(pvs) => updateContextInfo({index, pvs })}
           makeNewSocketIoConnection={props.makeNewSocketIoConnection}
         />)
     })
@@ -790,7 +794,7 @@ const PlotData = (props) => {
   return (
     <React.Fragment>
       {pvConnections()}
-      {props.children(delayedData)}
+      {props.children({data:delayedData,contextInfo:delayedContextInfo})}
     </React.Fragment>
   )
 }
@@ -804,7 +808,7 @@ const GraphYV2 = (props) => {
   const [height, setHeight] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
   const handleToggleContextMenu = (event) => {
-    console.log("contextmenu")
+   
     event.preventDefault();
     event.stopPropagation();
     setAnchorEl(event.target);
@@ -958,8 +962,7 @@ const handleContextMenuClose = () => {
     <div ref={paperRef} style={{ width: props.width, height: props.height, padding: 8 }}>
       
       <PlotData {...props}>
-        {(data) => {
-       
+        {({data,contextInfo}) => {
           return (
             <div style={{width:"100%",height:"100%"}}  onContextMenu={
               props.disableContextMenu ? undefined : handleToggleContextMenu
@@ -972,10 +975,10 @@ const handleContextMenuClose = () => {
                   }
               }}
             >
-                {data.pvData&&openContextMenu&&<ContextMenu
+                {contextInfo&&openContextMenu&&<ContextMenu
                     disableProbe={props.disableProbe}
                     open={openContextMenu}
-                    pvs={data.pvData}
+                    pvs={contextInfo}
                     handleClose={handleContextMenuClose}
                     probeType={'readOnly'}
                     anchorEl={anchorEl}
@@ -1014,7 +1017,7 @@ const handleContextMenuClose = () => {
                 display: 'inline-block',
                 width: '100%', height: '100%', paddingBottom: 8
               }}
-              data={data.lineData}
+              data={data}
               layout={{ ...layout, }}
              
 

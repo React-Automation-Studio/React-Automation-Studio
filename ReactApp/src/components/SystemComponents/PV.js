@@ -179,6 +179,13 @@ const PV = (props) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pv])
+  const contextPVs=pv.PVs;
+  useEffect(() => {
+    if (typeof props.contextInfo !=='undefined'){
+      props.contextInfo(contextPVs)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [contextPVs])
   if (props.debug) {
     console.log(props)
     console.log(props.name, " Debug:", "PV Render States: ", "pvs:", pvs)

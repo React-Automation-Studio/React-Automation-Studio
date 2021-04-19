@@ -38,7 +38,10 @@ const styles = (theme) => {
       horizontalSliderLabel: {
         width: "100%",
     
-        padding: theme.spacing(0),
+        paddingTop: theme.spacing(1),
+        paddingLeft: theme.spacing(0),
+        paddingRight: theme.spacing(0),
+        paddingBottom: theme.spacing(0),
     
       },
       horizontalSliderValue: {

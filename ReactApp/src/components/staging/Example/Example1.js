@@ -12,6 +12,8 @@ import TextOutput from '../../BaseComponents/TextOutput';
 
 import Slider from '../../BaseComponents/Slider';
 import GraphY from '../../BaseComponents/GraphY';
+import GraphXY from '../../BaseComponents/GraphXY';
+import GraphXY2 from '../../BaseComponents/GraphXY2';
 import SelectionList from '../../BaseComponents/SelectionList';
 import ThumbWheel from '../../BaseComponents/ThumbWheel';
 
@@ -136,7 +138,65 @@ const Example1 = (props) => {
           // title={"Test"}
           //lineColor={[this.props.theme.palette.secondary.main,lime['400']]}
           />
-          <GraphY
+
+<div style={{height:'25vh',width:'25vh'}}>
+  <GraphXY  
+    xPVs={
+      ['pva://testIOC:BeamSweepSim:x.AVAL',
+       'pva://testIOC:BeamSweepSim:x1.AVAL',
+       'pva://testIOC:BeamSweepSim:x2.AVAL'
+      ]
+    }  
+    yPVs={
+      ['pva://testIOC:BeamSweepSim:y.AVAL',
+       'pva://testIOC:BeamSweepSim:y1.AVAL',
+       'pva://testIOC:BeamSweepSim:y2.AVAL'
+      ]
+   }  
+
+     yPVs={
+      ['pva://testIOC:BeamSweepSim:y.AVAL',
+       'pva://testIOC:BeamSweepSim:y1.AVAL',
+       'pva://testIOC:BeamSweepSim:y2.AVAL'
+      ]
+   }  
+    xmax={10000}
+    ymax={10000}
+    xmin={-10000}
+    ymin={-10000}
+    updateMode={'updateOnYChange'}
+  />
+</div>
+
+<div style={{height:'50vh',width:'50vh'}}>
+  <GraphXY2  
+    xPVs={
+      ['pva://testIOC:BeamSweepSim:x.AVAL',
+       'pva://testIOC:BeamSweepSim:x1.AVAL',
+       'pva://testIOC:BeamSweepSim:x2.AVAL'
+      ]
+    }  
+    yPVs={
+      ['pva://testIOC:BeamSweepSim:y.AVAL',
+       'pva://testIOC:BeamSweepSim:y1.AVAL',
+       'pva://testIOC:BeamSweepSim:y2.AVAL'
+      ]
+   }  
+
+   pvs={
+    ['pva://testIOC:BeamSweepSim:y.AVAL',
+     'pva://testIOC:BeamSweepSim:y1.AVAL',
+     'pva://testIOC:BeamSweepSim:y2.AVAL'
+    ]
+ }  
+    xmax={10000}
+    ymax={10000}
+    xmin={-10000}
+    ymin={-10000}
+    updateMode={'updateOnYChange'}
+  />
+</div>
+          {/* <GraphY
 
             pvs={[
               'pva://testIOC:MTextUpdate1',
@@ -161,7 +221,7 @@ const Example1 = (props) => {
             useTimeStamp={true}
             usePolling={true}
             pollingRate={100}
-          />
+          /> */}
         </Grid>
       )
     }

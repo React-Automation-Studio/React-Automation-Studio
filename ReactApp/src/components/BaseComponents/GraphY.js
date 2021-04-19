@@ -563,7 +563,7 @@ GraphY.propTypes = {
   /**
    * Use this prop to make a seperate socket connection for the graph. It is experimental and can be possbily improve performace and for high data rate pv's and prevent slowing down the user interface
    */
-  makeNewSocketIoConnection: false,  
+  makeNewSocketIoConnection: PropTypes.bool,  
   /** Polling interval in ms used in polling mode*/
   
 

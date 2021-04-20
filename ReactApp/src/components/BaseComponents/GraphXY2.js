@@ -7,7 +7,7 @@ import { useTheme } from '@material-ui/core/styles';
 import ContextMenu from '../SystemComponents/ContextMenu';
 import PV from '../SystemComponents/PV'
 import Plot from 'react-plotly.js';
-import { isMobile } from 'react-device-detect';
+import { isMobileOnly } from 'react-device-detect';
 import debounce from "lodash.debounce";
 import { replaceMacros } from '../SystemComponents/Utils/macroReplacement';
 import { ContinuousColorLegend } from 'react-vis';
@@ -289,13 +289,18 @@ const PlotData = (props) => {
   )
 }
 /**
-* The GraphXY2 Component has been updated to Plotly.js scatter and line plot. The GraphXY2 component is implemented with zero margins and enabled to grow to the width and height of its parent container.<br/><br/>
-* The width and height must be controlled from the parent component.<br/><br/>
+* The GraphXY Component has been updated to Plotly.js scatter and line plot. 
   https://plotly.com/javascript/
 
 */
 
 const GraphXY2 = (props) => {
+  if(typeof props.ymin!=="undefined"){
+    console.warn("Prop ymin is deprecated, use yMin instead")
+  }
+  if(typeof props.ymax!=="undefined"){
+    console.warn("Prop ymax is deprecated, use yMax instead")
+  }
   const classes = useStyles();
   const theme = useTheme()
   const createTraces = (data) => {
@@ -440,8 +445,9 @@ const GraphXY2 = (props) => {
       zeroline: true,
       showline: true,
       showgrid: true,
+      automargin:true,
       range: [typeof props.yMin !== "undefined" ? props.yMin : null, typeof props.yMax !== "undefined" ? props.yMax : null]
-      //  auotmargin:true,
+      
     }
     // }
     return (yAxesInit)
@@ -480,7 +486,7 @@ const GraphXY2 = (props) => {
         zeroline: true,
         showline: true,
         showgrid: true,
-        automargin: true,
+        automargin:true,
         range: [typeof props.xMin !== "undefined" ? props.xMin : null, typeof props.xMax !== "undefined" ? props.xMax : null],
 
 
@@ -494,11 +500,10 @@ const GraphXY2 = (props) => {
       paper_bgcolor: theme.palette.background.default,
       ...legend,
       showlegend: props.showLegend,
-      margin: {
-        t: props.title ? 32 : 16, r: 32,
-        //l: 48, 
-        b: 48
-      },
+      margin: { t: props.title ? 32 : 16, r: 16,
+        l: 48, 
+        b: 32 
+       },
       annotations: [props.yAxisTitle && {
         xref: 'paper',
         yref: 'paper',
@@ -622,9 +627,9 @@ GraphXY2.propTypes = {
    */
   displayModeBar: PropTypes.bool,
   /** Custom y axis minimum to be used,if not defined the graph will auto-scale */
-  ymin: PropTypes.number,
+  yMin: PropTypes.number,
   /** Custom y axis maximum to be used,if not defined the graph will auto-scale */
-  ymax: PropTypes.number,
+  yMax: PropTypes.number,
 
   /** If defined, then the DataConnection debugging information will be displayed*/
   debug: PropTypes.bool,
@@ -686,7 +691,7 @@ GraphXY2.defaultProps = {
   xAxisTitle: 'X-axis',
   usePolling: false,
   pollingRate: 100,
-  width: '100%',
+  width: '30vh',
   height: '30vh',
   updateMode: 'updateOnXOrYChange',
 

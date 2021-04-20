@@ -2,7 +2,7 @@ GraphXY2 EPICS variable example, drag the slider to modulate the amplitude of th
 ```js
 import Slider from './Slider';
 <div>
-<div style={{height:'25vh',width:'25vh'}}>
+
   <GraphXY2  
     xPVs={
       ['pva://testIOC:BeamSweepSim:x.AVAL',
@@ -20,9 +20,13 @@ import Slider from './Slider';
     yMax={10000}
     xMin={-10000}
     yMin={-10000}
+    showLegend={false}
     updateMode={'updateOnYChange'}
+    width={'25vh'}
+    height={'25vh'}
+   
   />
-</div>
+
   <Slider  pv='pva://testIOC:BeamSweepSim:Amplitude'   label='Circle Radius' usePvMinMax={true}/>
   <Slider  pv='pva://testIOC:BeamSweepSim:modAmp'   label='Modulation Amplitude' usePvMinMax={true}/>
   <Slider  

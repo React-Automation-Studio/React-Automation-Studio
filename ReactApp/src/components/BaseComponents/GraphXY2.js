@@ -42,7 +42,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-
 const PlotData = (props) => {
 
 
@@ -74,7 +73,8 @@ const PlotData = (props) => {
     return value;
   }
   const updateDataReducer = (pvs, newData) => {
-
+    const { axis } = newData;
+    console.log(axis)
     let newPvs = [...pvs];
     let { initialized } = newData.pvData;
     let value = initialized ? newData.pvData.value : [];
@@ -89,15 +89,16 @@ const PlotData = (props) => {
       if (newPvs[newData.index]) {
         if (newPvs[newData.index].y) {
           oldY = newPvs[newData.index].y;
-          if (newPvs[newData.index].x) {
-            oldX = newPvs[newData.index].x;
-          }
-          else {
-            oldX = [];
-          }
+
         }
         else {
           oldY = [];
+
+        }
+        if (newPvs[newData.index].x) {
+          oldX = newPvs[newData.index].x;
+        }
+        else {
           oldX = [];
         }
 
@@ -113,25 +114,39 @@ const PlotData = (props) => {
 
         }
         else {
-          newY = value;
-        }
-        if (props.useTimeStamp !== true) {
-          if ((oldX.length !== newY.length)) {
-
-            newX = Array.from(newY.keys());
+          if (axis === 'y') {
+            newY = value;
+            newX = (oldX.length === value.length) ? oldX : value;
           }
           else {
-            newX = oldX
+            newX = value;
+            newY = (oldY.length === value.length) ? oldY : value;
           }
         }
+        // if (props.useTimeStamp !== true) {
+        //   if ((oldX.length !== newY.length)) {
+
+        //     newX = Array.from(newY.keys());
+        //   }
+        //   else {
+        //     newX = oldX
+        //   }
+        // }
 
 
 
       }
       else {
-        newX = props.useTimeStamp ? new Date(newData.pvData.timestamp * 1000) : Array.from(value.keys());
-        newY = value;
-
+        // newX = props.useTimeStamp ? new Date(newData.pvData.timestamp * 1000) : Array.from(value.keys());
+        // newY = value;
+        if (axis === 'y') {
+          newY = value;
+          newX = (oldX.length === value.length) ? oldX : value;
+        }
+        else {
+          newX = value;
+          newY = (oldY.length === value.length) ? oldY : value;
+        }
       }
     }
 
@@ -145,22 +160,22 @@ const PlotData = (props) => {
     newPvs[newData.index] = {
       x: newX,
       y: newY,
-      type: 'scatter',
-      mode: 'lines',
-      marker: { color: props.lineColor ? props.lineColor[newData.index] : theme.palette.reactVis.lineColors[newData.index] },
+      // type: 'scatter',
+      // mode: 'lines',
+      // marker: { color: props.lineColor ? props.lineColor[newData.index] : theme.palette.reactVis.lineColors[newData.index] },
 
-      name: typeof props.legend !=="undefined"
-        ?
-        props.legend[newData.index]
-          ?
-          props.legend[newData.index]
-          :
-          replaceMacros(props.pvs[newData.index], props.macros)
-        :
-        replaceMacros(props.pvs[newData.index], props.macros),
-      hovertemplate: props.yHoverFormat ?
-        "(%{y:" + props.yHoverFormat + "}) %{x}<extra>%{fullData.name}</extra>"
-        : "(%{y}) %{x}<extra>%{fullData.name}</extra>"
+      // name: typeof props.legend !=="undefined"
+      //   ?
+      //   props.legend[newData.index]
+      //     ?
+      //     props.legend[newData.index]
+      //     :
+      //     replaceMacros(props.pvs[newData.index], props.macros)
+      //   :
+      //   replaceMacros(props.pvs[newData.index], props.macros),
+      // hovertemplate: props.yHoverFormat ?
+      //   "(%{y:" + props.yHoverFormat + "}) %{x}<extra>%{fullData.name}</extra>"
+      //   : "(%{y}) %{x}<extra>%{fullData.name}</extra>"
     };
     // newPvs.pvData[newData.index] ={...newPvs.pvData[newData.index],... newData.pvData};
     return newPvs;
@@ -175,34 +190,34 @@ const PlotData = (props) => {
     return (pvs)
 
   }
-  
+
   const [polledData, updatePolledData] = useReducer(updatePolledDataReducer, []);
-  const polledDataRef=useRef(polledData);
-  useEffect(()=>{
-    polledDataRef.current=polledData;
-  },[polledData])
+  const polledDataRef = useRef(polledData);
+  useEffect(() => {
+    polledDataRef.current = polledData;
+  }, [polledData])
   const [trigger3, setTrigger3] = useState(0);
-  const {usePolling, pollingRate } = props;
+  const { usePolling, pollingRate } = props;
 
   useEffect(() => {
-   let timer;
-   const update=()=>{
-   // console.log(polledDataRef.current)
-    polledDataRef.current.forEach((item,index)=>{
-      // console.log(index,item)
-      item.timestamp=Date.now()/1000;
-      updateData({index,pvData:item})
-    })
-   }
-   if (usePolling){
-    timer=setInterval(update,pollingRate)
-   }
-   return ()=>{
-    if (usePolling){
-      clearInterval(timer)
-     }
-   }
-  }, [usePolling,pollingRate])
+    let timer;
+    const update = () => {
+      // console.log(polledDataRef.current)
+      polledDataRef.current.forEach((item, index) => {
+        // console.log(index,item)
+        item.timestamp = Date.now() / 1000;
+        updateData({ index, pvData: item })
+      })
+    }
+    if (usePolling) {
+      timer = setInterval(update, pollingRate)
+    }
+    return () => {
+      if (usePolling) {
+        clearInterval(timer)
+      }
+    }
+  }, [usePolling, pollingRate])
 
 
   const contextInfoReducer = (oldPvs, newData) => {
@@ -240,18 +255,29 @@ const PlotData = (props) => {
   // },[data])
   const pvConnections = () => {
     let pvs = [];
-    props.yPVs.map((item, index) => {
+    props.xPVs.map((item, index) => {
       pvs.push(
         <PV
-          key={index.toString()}
+          key={"x" + index.toString()}
           pv={item}
           macros={props.macros}
-          pvData={(pvData) => props.usePolling?updatePolledData({ index, pvData }):updateData({ index, pvData })}
-          contextInfo={(pvs) => updateContextInfo({ index, pvs })}
+          pvData={(pvData) => props.usePolling ? updatePolledData({ index, pvData, axis: "x" }) : updateData({ index, pvData, axis: "x" })}
+          contextInfo={(pvs) => updateContextInfo({ index, pvs, axis: "x" })}
           makeNewSocketIoConnection={props.makeNewSocketIoConnection}
         />)
     })
-    
+    props.yPVs.map((item, index) => {
+      pvs.push(
+        <PV
+          key={"y" + index.toString()}
+          pv={item}
+          macros={props.macros}
+          pvData={(pvData) => props.usePolling ? updatePolledData({ index, pvData, axis: "y" }) : updateData({ index, pvData, axis: "y" })}
+          contextInfo={(pvs) => updateContextInfo({ index, pvs, axis: "y" })}
+          makeNewSocketIoConnection={props.makeNewSocketIoConnection}
+        />)
+    })
+
 
     return pvs
   }
@@ -263,15 +289,44 @@ const PlotData = (props) => {
   )
 }
 /**
-* The GraphY Component has been updated to Plotly.js scatter and line plot. The GraphY component is implemented with zero margins and enabled to grow to the width and height of its parent container.<br/><br/>
+* The GraphXY2 Component has been updated to Plotly.js scatter and line plot. The GraphXY2 component is implemented with zero margins and enabled to grow to the width and height of its parent container.<br/><br/>
 * The width and height must be controlled from the parent component.<br/><br/>
   https://plotly.com/javascript/
 
 */
 
-const GraphY = (props) => {
+const GraphXY2 = (props) => {
   const classes = useStyles();
   const theme = useTheme()
+  const createTraces = (data) => {
+    let traces = [];
+
+    data.forEach((item, index) => {
+      const traceProps = {
+        type: 'scatter',
+        mode: 'lines',
+        marker: { color: props.lineColor ? props.lineColor[index] : theme.palette.reactVis.lineColors[index] },
+
+        name: typeof props.legend !== "undefined"
+          ?
+          props.legend[index]
+            ?
+            props.legend[index]
+            :
+            replaceMacros(props.yPVs[index], props.macros)
+          :
+          replaceMacros(props.yPVs[index], props.macros),
+        hovertemplate: props.yHoverFormat ?
+          "(%{y:" + props.yHoverFormat + "}) %{x}<extra>%{fullData.name}</extra>"
+          : "(%{y}) %{x}<extra>%{fullData.name}</extra>"
+      }
+      traces.push({ ...item, ...traceProps })
+
+    })
+
+    return (traces)
+
+  }
 
   const paperRef = useRef(null);
   const [width, setWidth] = useState(null);
@@ -371,34 +426,34 @@ const GraphY = (props) => {
     //   })
     // }
     // else {
-      yAxesInit['yaxis'] = {
-        title: {
-          text:props.yAxisTitle,
-        //  standoff:1,
-        },
-        gridcolor: theme.palette.reactVis[".rv-xy-plot__grid-lines__line"].stroke,
-        tickcolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
-        zerolinecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
-        linecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
-        type: props.yScaleLog10 === true ? 'log' : 'linear',
-        tickformat: props.yTickFormat ? props.yTickFormat : '',
-        zeroline: true,
-        showline: true,
-        showgrid: true,
-        range: [typeof props.yMin !=="undefined"?props.yMin:null, typeof props.yMax !=="undefined"?props.yMax:null]
+    yAxesInit['yaxis'] = {
+      // title: {
+      //   text:props.yAxisTitle,
+      // //  standoff:1,
+      // },
+      gridcolor: theme.palette.reactVis[".rv-xy-plot__grid-lines__line"].stroke,
+      tickcolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
+      zerolinecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
+      linecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
+      type: props.yScaleLog10 === true ? 'log' : 'linear',
+      tickformat: props.yTickFormat ? props.yTickFormat : '',
+      zeroline: true,
+      showline: true,
+      showgrid: true,
+      range: [typeof props.yMin !== "undefined" ? props.yMin : null, typeof props.yMax !== "undefined" ? props.yMax : null]
       //  auotmargin:true,
-      }
+    }
     // }
     return (yAxesInit)
   })
   const [legend, setLegend] = useState(() => {
     let legendInit = props.showLegend === true ? {
-      legend:{
+      legend: {
         orientation: 'h',
         x: 1,
         xanchor: 'right',
         y: 0.975,
-        bgcolor:"#00000000"
+        bgcolor: "#00000000"
       }
     } : {}
     return legendInit
@@ -414,10 +469,10 @@ const GraphY = (props) => {
       plot_bgcolor: theme.palette.background.default,
       xaxis: {
         domain: domain,
-        title: {
-          text:props.xAxisTitle,
-          standoff:8,
-        },
+        // title: {
+        //   text:props.xAxisTitle,
+        //   standoff:8,
+        // },
         gridcolor: theme.palette.reactVis[".rv-xy-plot__grid-lines__line"].stroke,
         tickcolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
         zerolinecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
@@ -425,6 +480,9 @@ const GraphY = (props) => {
         zeroline: true,
         showline: true,
         showgrid: true,
+        automargin: true,
+        range: [typeof props.xMin !== "undefined" ? props.xMin : null, typeof props.xMax !== "undefined" ? props.xMax : null],
+
 
         //  range: [selectedFromDate, selectedToDate],
       },
@@ -436,9 +494,32 @@ const GraphY = (props) => {
       paper_bgcolor: theme.palette.background.default,
       ...legend,
       showlegend: props.showLegend,
-      margin: { t: props.title ? 32 : 16, r: 32,
-         //l: 48, 
-         b: 48 }
+      margin: {
+        t: props.title ? 32 : 16, r: 32,
+        //l: 48, 
+        b: 48
+      },
+      annotations: [props.yAxisTitle && {
+        xref: 'paper',
+        yref: 'paper',
+        x: 0,
+        xanchor: 'left',
+        y: 1,
+        yanchor: 'top',
+        text: props.yAxisTitle,
+        textangle: 270,
+        showarrow: false,
+      }, props.xAxisTitle && {
+        xref: 'paper',
+        yref: 'paper',
+        x: 1,
+        xanchor: 'right',
+        y: 0,
+        yanchor: 'bottom',
+        text: props.xAxisTitle,
+        showarrow: false
+      }]
+
 
     })
   }, [theme, props.showLegend, props.xAxisTitle, props.title])
@@ -449,6 +530,8 @@ const GraphY = (props) => {
 
       <PlotData {...props}>
         {({ data, contextInfo }) => {
+          const traces = createTraces(data);
+
           return (
             <div style={{ width: "100%", height: "100%", paddingBottom: 32, }} onContextMenu={
               props.disableContextMenu ? undefined : handleToggleContextMenu
@@ -491,12 +574,12 @@ const GraphY = (props) => {
                   }
                 } : {
 
-                  "displaylogo": false,
-                  scrollZoom: false,
-                  toImageButtonOptions: {
-                    format: 'svg'
+                    "displaylogo": false,
+                    scrollZoom: false,
+                    toImageButtonOptions: {
+                      format: 'svg'
+                    }
                   }
-                }
                 }
                 useResizeHandler={true}
                 style={{
@@ -504,7 +587,7 @@ const GraphY = (props) => {
                   display: 'inline-block',
                   width: '100%', height: '100%', paddingBottom: 8
                 }}
-                data={data}
+                data={traces}
                 layout={{ ...layout, }}
 
 
@@ -523,7 +606,7 @@ const GraphY = (props) => {
   )
 
 }
-GraphY.propTypes = {
+GraphXY2.propTypes = {
 
   /** Array of the process variables, NB must contain correct prefix ie: pva://  eg. ['pva://$(device):test$(id0)','pva://$(device):test$(id1)']*/
   pvs: PropTypes.array.isRequired,
@@ -551,29 +634,29 @@ GraphY.propTypes = {
   lineColor: PropTypes.array,
   /** If defined then the length of the line graphs will grow up until the value defined*/
   maxLength: PropTypes.number,
-  
+
   /** Directive to sample the PV value, on the client side at the polling rate*/
   usePolling: PropTypes.bool,
   /** Directive to scale the y-axis as a log base 10 value*/
   yScaleLog10: PropTypes.bool,
-    /**
-         * The plotjs format overide for the tick format. This is derived from the <a href="https://github.com/d3/d3-format/blob/v2.0.0/README.md#format">d3 format specification</a>
-         * Example: ".3e" : exponential notaion with 3 digits.
-         *
-         */
-  yTickFormat:PropTypes.string,
+  /**
+       * The plotjs format overide for the tick format. This is derived from the <a href="https://github.com/d3/d3-format/blob/v2.0.0/README.md#format">d3 format specification</a>
+       * Example: ".3e" : exponential notaion with 3 digits.
+       *
+       */
+  yTickFormat: PropTypes.string,
   /**
    * Use this prop to make a seperate socket connection for the graph. It is experimental and can be possbily improve performace and for high data rate pv's and prevent slowing down the user interface
    */
-  makeNewSocketIoConnection: PropTypes.bool,  
+  makeNewSocketIoConnection: PropTypes.bool,
   /** Polling interval in ms used in polling mode*/
-  
 
-  
+
+
   pollingRate: PropTypes.number,
   // /** If defined then the graph will only update on a value change*/
   // triggerOnSingleValueChange: PropTypes.bool,
-  
+
   /** Directive to use PV timestamp on x-axis*/
   useTimeStamp: PropTypes.bool,
   /** Graph update perdiod in ms, set this higher for larger number of data points */
@@ -588,24 +671,27 @@ GraphY.propTypes = {
   /**
    * Directive to show the legend
    */
-  showLegend:PropTypes.bool
+  showLegend: PropTypes.bool,
+  /** Update mode of the graph, Note polling mode will override these settings*/
+  updateMode: PropTypes.oneOf(['updateOnXOrYChange', 'updateOnYChange', 'updateOnXChange']),
 
 };
 
-GraphY.defaultProps = {
+GraphXY2.defaultProps = {
   updateRate: 100,
   makeNewSocketIoConnection: false,
   debug: false,
-  showLegend:true,
+  showLegend: true,
   yAxisTitle: 'Y-axis',
   xAxisTitle: 'X-axis',
   usePolling: false,
   pollingRate: 100,
   width: '100%',
   height: '30vh',
+  updateMode: 'updateOnXOrYChange',
 
 };
 
 
 
-export default GraphY
+export default GraphXY2

@@ -1,9 +1,9 @@
-GraphXY EPICS variable example, drag the slider to modulate the amplitude of the Sine Wave:
+GraphXY2 EPICS variable example, drag the slider to modulate the amplitude of the Sine Wave:
 ```js
 import Slider from './Slider';
 <div>
 <div style={{height:'25vh',width:'25vh'}}>
-  <GraphXY  
+  <GraphXY2  
     xPVs={
       ['pva://testIOC:BeamSweepSim:x.AVAL',
        'pva://testIOC:BeamSweepSim:x1.AVAL',
@@ -16,10 +16,10 @@ import Slider from './Slider';
        'pva://testIOC:BeamSweepSim:y2.AVAL'
       ]
    }  
-    xmax={10000}
-    ymax={10000}
-    xmin={-10000}
-    ymin={-10000}
+    xMax={10000}
+    yMax={10000}
+    xMin={-10000}
+    yMin={-10000}
     updateMode={'updateOnYChange'}
   />
 </div>

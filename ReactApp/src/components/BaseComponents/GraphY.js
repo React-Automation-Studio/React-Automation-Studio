@@ -423,7 +423,8 @@ const GraphY = (props) => {
         zeroline: true,
         showline: true,
         showgrid: true,
-        auotmargin:true,
+        automargin:true,
+        range: [typeof props.xMin !=="undefined"?props.xMin:null, typeof props.xMax !=="undefined"?props.xMax:null],
 
         //  range: [selectedFromDate, selectedToDate],
       },

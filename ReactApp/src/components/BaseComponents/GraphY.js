@@ -370,10 +370,10 @@ const GraphY = (props) => {
     // }
     // else {
       yAxesInit['yaxis'] = {
-        title: {
-          text:props.yAxisTitle,
-        //  standoff:1,
-        },
+        // title: {
+        //   text:props.yAxisTitle,
+        // //  standoff:1,
+        // },
         gridcolor: theme.palette.reactVis[".rv-xy-plot__grid-lines__line"].stroke,
         tickcolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
         zerolinecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
@@ -383,8 +383,8 @@ const GraphY = (props) => {
         zeroline: true,
         showline: true,
         showgrid: true,
-        range: [typeof props.yMin !=="undefined"?props.yMin:null, typeof props.yMax !=="undefined"?props.yMax:null]
-      //  auotmargin:true,
+        range: [typeof props.yMin !=="undefined"?props.yMin:null, typeof props.yMax !=="undefined"?props.yMax:null],
+        automargin:true,
       }
     // }
     return (yAxesInit)
@@ -412,10 +412,10 @@ const GraphY = (props) => {
       plot_bgcolor: theme.palette.background.default,
       xaxis: {
         domain: domain,
-        title: {
-          text:props.xAxisTitle,
-          standoff:8,
-        },
+        // title: {
+        //   text:props.xAxisTitle,
+        //   standoff:32,
+        // },
         gridcolor: theme.palette.reactVis[".rv-xy-plot__grid-lines__line"].stroke,
         tickcolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
         zerolinecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
@@ -423,6 +423,7 @@ const GraphY = (props) => {
         zeroline: true,
         showline: true,
         showgrid: true,
+        auotmargin:true,
 
         //  range: [selectedFromDate, selectedToDate],
       },
@@ -434,16 +435,37 @@ const GraphY = (props) => {
       paper_bgcolor: theme.palette.background.default,
       ...legend,
       showlegend: props.showLegend,
-      margin: { t: props.title ? 32 : 16, r: 32,
-         //l: 48, 
-         b: 48 }
+      margin: { t: props.title ? 32 : 16, r: isMobile?16:0,
+         l: 0, 
+         b: 32 
+        },
+        annotations: [props.yAxisTitle&&{
+          xref: 'paper',
+          yref: 'paper',
+          x: 0,
+          xanchor: 'left',
+          y: 1,
+          yanchor: 'top',
+          text: props.yAxisTitle,
+          textangle:270,
+          showarrow: false,
+        }, props.xAxisTitle&&{
+          xref: 'paper',
+          yref: 'paper',
+          x: 1,
+          xanchor: 'right',
+          y: 0,
+          yanchor: 'bottom',
+          text: props.xAxisTitle,
+          showarrow: false
+        }]
 
     })
   }, [theme, props.showLegend, props.xAxisTitle, props.title])
 
 
   return (
-    <div ref={paperRef} style={{ width: props.width, height: props.height, padding: 8, }}>
+    <div ref={paperRef} style={{ width: props.width, height: props.height, }}>
 
       <PlotData {...props}>
         {({ data, contextInfo }) => {
@@ -452,12 +474,12 @@ const GraphY = (props) => {
               props.disableContextMenu ? undefined : handleToggleContextMenu
             }
 
-              onPointerDownCapture={(event) => {
-                if (event.button !== 0) {
-                  event.preventDefault()
-                  return;
-                }
-              }}
+              // onPointerDownCapture={(event) => {
+              //   if (event.button !== 0) {
+              //     event.preventDefault()
+              //     return;
+              //   }
+              // }}
             >
               {contextInfo && openContextMenu && <ContextMenu
                 disableProbe={props.disableProbe}
@@ -482,8 +504,9 @@ const GraphY = (props) => {
                 config={typeof props.displayModeBar !== "undefined" ? {
                   "displaylogo": false,
                   scrollZoom: false,
-                  //     doubleclick: false,
+                  doubleclick: false,
                   displayModeBar: props.displayModeBar,
+                  staticPlot:isMobile?true:false,
                   toImageButtonOptions: {
                     format: 'svg'
                   }
@@ -491,6 +514,8 @@ const GraphY = (props) => {
 
                   "displaylogo": false,
                   scrollZoom: false,
+            
+                  staticPlot:(isMobile&&(props.disableMobileStatic===false))?true:false,
                   toImageButtonOptions: {
                     format: 'svg'
                   }
@@ -504,6 +529,7 @@ const GraphY = (props) => {
                 }}
                 data={data}
                 layout={{ ...layout, }}
+                
 
 
 
@@ -586,7 +612,11 @@ GraphY.propTypes = {
   /**
    * Directive to show the legend
    */
-  showLegend:PropTypes.bool
+  showLegend:PropTypes.bool,
+  /**
+   * Disable Static Graph mode on mobile
+   */
+  disableMobileStatic:PropTypes.bool
 
 };
 
@@ -601,6 +631,7 @@ GraphY.defaultProps = {
   pollingRate: 100,
   width: '100%',
   height: '30vh',
+  disableMobileStatic:false,
 
 };
 

@@ -7,7 +7,7 @@ import { useTheme } from '@material-ui/core/styles';
 import ContextMenu from '../SystemComponents/ContextMenu';
 import PV from '../SystemComponents/PV'
 import Plot from 'react-plotly.js';
-import { isMobile } from 'react-device-detect';
+import { isMobileOnly } from 'react-device-detect';
 import debounce from "lodash.debounce";
 import { replaceMacros } from '../SystemComponents/Utils/macroReplacement';
 import { ContinuousColorLegend } from 'react-vis';
@@ -435,7 +435,7 @@ const GraphY = (props) => {
       paper_bgcolor: theme.palette.background.default,
       ...legend,
       showlegend: props.showLegend,
-      margin: { t: props.title ? 32 : 16, r: isMobile?16:0,
+      margin: { t: props.title ? 32 : 16, r: isMobileOnly?16:0,
          l: 0, 
          b: 32 
         },
@@ -506,7 +506,7 @@ const GraphY = (props) => {
                   scrollZoom: false,
                   doubleclick: false,
                   displayModeBar: props.displayModeBar,
-                  staticPlot:isMobile?true:false,
+                  staticPlot:isMobileOnly?true:false,
                   toImageButtonOptions: {
                     format: 'svg'
                   }
@@ -515,7 +515,7 @@ const GraphY = (props) => {
                   "displaylogo": false,
                   scrollZoom: false,
             
-                  staticPlot:(isMobile&&(props.disableMobileStatic===false))?true:false,
+                  staticPlot:(isMobileOnly&&(props.disableMobileStatic===false))?true:false,
                   toImageButtonOptions: {
                     format: 'svg'
                   }

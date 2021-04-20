@@ -190,8 +190,8 @@ const PlotData = (props) => {
    // console.log(polledDataRef.current)
     polledDataRef.current.forEach((item,index)=>{
       // console.log(index,item)
-      item.timestamp=Date.now()/1000;
-      updateData({index,pvData:item})
+      const timestamp=Date.now()/1000;
+      updateData({index,pvData:{...item,timestamp:timestamp}})
     })
    }
    if (usePolling){

@@ -265,13 +265,13 @@ const PlotData = (props) => {
       // console.log(polledDataRef.current)
       polledDataRefX.current.forEach((item, index) => {
         // console.log(index,item)
-        item.timestamp = Date.now() / 1000;
-        updateData({ index, pvData: item,axis:"x" })
+        const timestamp=Date.now()/1000;
+        updateData({ index, pvData: {...item,timestamp:timestamp},axis:"x" })
       })
       polledDataRefY.current.forEach((item, index) => {
         // console.log(index,item)
-        item.timestamp = Date.now() / 1000;
-        updateData({ index, pvData: item,axis:"y" })
+        const timestamp=Date.now()/1000;
+        updateData({ index, pvData: {...item,timestamp:timestamp},axis:"y" })
       })
     }
     if (usePolling) {

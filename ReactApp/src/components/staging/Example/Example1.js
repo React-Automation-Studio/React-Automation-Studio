@@ -168,6 +168,7 @@ const Example1 = (props) => {
               height={'50vh'}
               width={'50vh'}
               showLegend={false}
+             
             />
          
           <GraphY

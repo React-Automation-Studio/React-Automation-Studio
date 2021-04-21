@@ -104,12 +104,16 @@ const PlotData = (props) => {
         if (typeof props.maxLength !== "undefined") {
           // console.log("maxLength defined")
           newY = oldY.concat(value)
+          if (props.useTimeStamp) {
+            newX = oldX.concat(new Date(newData.pvData.timestamp * 1000))
+            if (newX.length > props.maxLength) {
+              newX.splice(0, (newX.length - props.maxLength))
+            }
+          }
           if (newY.length > props.maxLength) {
             newY.splice(0, (newY.length - props.maxLength))
           }
-          if (props.useTimeStamp) {
-            newX = oldX.concat(new Date(newData.pvData.timestamp * 1000))
-          }
+         
 
         }
         else {

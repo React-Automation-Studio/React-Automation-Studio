@@ -537,7 +537,7 @@ const GraphXY = (props) => {
       title: {
         text: props.title,
       },
-      plot_bgcolor: theme.palette.background.default,
+      plot_bgcolor: props.backgroundColor?props.backgroundColor:"#00000000",
       xaxis: {
         domain: domain,
         // title: {
@@ -562,7 +562,7 @@ const GraphXY = (props) => {
         family: 'Roboto,Arial',
         color: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke
       },
-      paper_bgcolor: theme.palette.background.default,
+      paper_bgcolor:  props.backgroundColor?props.backgroundColor:"#00000000",
       ...legend,
       showlegend: props.showLegend,
       margin: { t: props.title ? 32 : 16, r: 16,
@@ -756,8 +756,8 @@ GraphXY.defaultProps = {
   xAxisTitle: 'X-axis',
   usePolling: false,
   pollingRate: 100,
-  width: '30vh',
-  height: '30vh',
+  width: '100%',
+  height: '100%',
   updateMode: 'updateOnXOrYChange',
 
 };

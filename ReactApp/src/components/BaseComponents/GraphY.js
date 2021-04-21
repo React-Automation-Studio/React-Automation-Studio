@@ -164,7 +164,9 @@ const PlotData = (props) => {
         replaceMacros(props.pvs[newData.index], props.macros),
       hovertemplate: props.yHoverFormat ?
         "(%{y:" + props.yHoverFormat + "}) %{x}<extra>%{fullData.name}</extra>"
-        : "(%{y}) %{x}<extra>%{fullData.name}</extra>"
+        : "(%{y}) %{x}<extra>%{fullData.name}</extra>",
+     
+      
     };
     // newPvs.pvData[newData.index] ={...newPvs.pvData[newData.index],... newData.pvData};
     return newPvs;
@@ -413,7 +415,7 @@ const GraphY = (props) => {
       title: {
         text: props.title,
       },
-      plot_bgcolor: theme.palette.background.default,
+      plot_bgcolor:  props.backgroundColor?props.backgroundColor:theme.palette.background.default,
       xaxis: {
         domain: domain,
         // title: {
@@ -437,7 +439,7 @@ const GraphY = (props) => {
         family: 'Roboto,Arial',
         color: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke
       },
-      paper_bgcolor: theme.palette.background.default,
+      paper_bgcolor:  props.backgroundColor?props.backgroundColor:theme.palette.background.default,
       ...legend,
       showlegend: props.showLegend,
       margin: { t: props.title ? 32 : 16, r: isMobileOnly?16:0,
@@ -475,7 +477,7 @@ const GraphY = (props) => {
       <PlotData {...props}>
         {({ data, contextInfo }) => {
           return (
-            <div style={{ width: "100%", height: "100%", paddingBottom: 32, }} onContextMenu={
+            <div style={{ width: "100%", height: "100%",  }} onContextMenu={
               props.disableContextMenu ? undefined : handleToggleContextMenu
             }
 
@@ -530,7 +532,8 @@ const GraphY = (props) => {
                 style={{
                   position: 'relative',
                   display: 'inline-block',
-                  width: '100%', height: '100%', paddingBottom: 8
+                  width: '100%', height: '100%',
+                  //  paddingBottom: 8
                 }}
                 data={data}
                 layout={{ ...layout, }}
@@ -635,7 +638,7 @@ GraphY.defaultProps = {
   usePolling: false,
   pollingRate: 100,
   width: '100%',
-  height: '30vh',
+  height: '100%',
   disableMobileStatic:false,
 
 };

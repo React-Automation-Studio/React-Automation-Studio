@@ -138,11 +138,9 @@ const MobileDemo1 =(props)=> {
 
 
                 <Grid item xs={12} >
-                  <div style={{ height: graphVH, width:'96vw',}}>
-                    <GraphY  pvs={['pva://testIOC:test4','pva://testIOC:test5'] } legend={['Sine Wave','Amplitude']}
-                     //lineColor={[this.props.theme.palette.secondary.main,lime['400']]}
-                     />
-                  </div>
+                  
+                    <GraphY height={graphVH} width='100%' pvs={['pva://testIOC:test4','pva://testIOC:test5'] } legend={['Sine Wave','Amplitude']}/>
+                  
                 </Grid>
                 <Grid item xs={12}>
                   <Grid container direction="row" item justify="center" spacing={2} alignItems="stretch">

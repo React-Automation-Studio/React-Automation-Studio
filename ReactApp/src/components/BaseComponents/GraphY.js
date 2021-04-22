@@ -276,7 +276,7 @@ const PlotData = (props) => {
 const GraphY = (props) => {
   const classes = useStyles();
   const theme = useTheme()
-
+  const backgroundColor=props.backgroundColor?props.backgroundColor:theme.palette.background.default;
   const paperRef = useRef(null);
   const [width, setWidth] = useState(null);
   const [height, setHeight] = useState(null);
@@ -295,19 +295,20 @@ const GraphY = (props) => {
   useEffect(() => {
     const handleResize = () => {
       if (paperRef.current) {
-        setHeight(paperRef.current.offsetHeight)
+        setHeight(props.height?props.height:props.aspectRatio?paperRef.current.offsetWidth*props.aspectRatio:paperRef.current.offsetHeight)
         setWidth(paperRef.current.offsetWidth)
       }
     }
     // The 'current' property contains info of the reference:
     // align, title, ... , width, height, etc.
     if (paperRef.current) {
-      setHeight(paperRef.current.offsetHeight)
+      setHeight(props.height?props.height:paperRef.current.offsetWidth)
       setWidth(paperRef.current.offsetWidth)
     }
     window.addEventListener("resize", handleResize)
     return () => window.removeEventListener("resize", handleResize);
-  }, [paperRef]);
+    
+  }, [paperRef,props.width,props.height]);
 
   const [domain, setDomain] = useState([0, 1])
   const [yPositions, setYPositions] = useState([0, 0, 0])
@@ -391,6 +392,7 @@ const GraphY = (props) => {
         showgrid: true,
         range: [typeof props.yMin !=="undefined"?props.yMin:null, typeof props.yMax !=="undefined"?props.yMax:null],
         automargin:true,
+        ticksuffix:props.yUnits?props.yUnits:""
       }
     // }
     return (yAxesInit)
@@ -402,7 +404,7 @@ const GraphY = (props) => {
         x: 1,
         xanchor: 'right',
         y: 0.975,
-        bgcolor:"#00000000"
+        bgcolor: "00000000"
       }
     } : {}
     return legendInit
@@ -411,11 +413,12 @@ const GraphY = (props) => {
   const [layout, setLayout] = useState({})
 
   useEffect(() => {
+    console.log(backgroundColor)
     setLayout({
       title: {
         text: props.title,
       },
-      plot_bgcolor:  props.backgroundColor?props.backgroundColor:theme.palette.background.default,
+      plot_bgcolor:  backgroundColor,
       xaxis: {
         domain: domain,
         // title: {
@@ -431,6 +434,7 @@ const GraphY = (props) => {
         showgrid: true,
         automargin:true,
         range: [typeof props.xMin !=="undefined"?props.xMin:null, typeof props.xMax !=="undefined"?props.xMax:null],
+        ticksuffix:props.xUnits?props.xUnits:""
 
         //  range: [selectedFromDate, selectedToDate],
       },
@@ -439,7 +443,7 @@ const GraphY = (props) => {
         family: 'Roboto,Arial',
         color: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke
       },
-      paper_bgcolor:  props.backgroundColor?props.backgroundColor:theme.palette.background.default,
+      paper_bgcolor:  backgroundColor,
       ...legend,
       showlegend: props.showLegend,
       margin: { t: props.title ? 32 : 16, r: isMobileOnly?16:0,
@@ -468,13 +472,13 @@ const GraphY = (props) => {
         }]
 
     })
-  }, [theme, props.showLegend, props.xAxisTitle, props.title])
-
-
+  }, [theme, props.showLegend, props.xAxisTitle, props.title,backgroundColor])
+  
+  
   return (
-    <div ref={paperRef} style={{ width: props.width, height: props.height, }}>
+    <div ref={paperRef} style={{ width: props.width?props.width:width, height: props.height?props.height:height,backgroundColor:backgroundColor,margin:8}}>
 
-      <PlotData {...props}>
+<PlotData {...props} backgroundColor={backgroundColor}>
         {({ data, contextInfo }) => {
           return (
             <div style={{ width: "100%", height: "100%",  }} onContextMenu={
@@ -624,7 +628,27 @@ GraphY.propTypes = {
   /**
    * Disable Static Graph mode on mobile
    */
-  disableMobileStatic:PropTypes.bool
+  disableMobileStatic:PropTypes.bool,
+  /** If the height is undefined then the height will be set to parents height, but if the aspectRatio is defined the the height will be set to the width multplied by the aspect ratio*/
+  aspectRatio: PropTypes.number,
+   /**
+   * The backgorund color defaults to ```theme.palette.background.default```
+   * For a Paper or a Card component set it to ```theme.palette.background.paper```
+   */
+  backgroundColor:PropTypes.string,
+  /**
+   * Set the width.
+   */
+  width:PropTypes.string,
+   /**
+   * Set the height. 
+   */
+  height:PropTypes.string,
+  /** Custom y axis units to be used*/
+  yUnits:PropTypes.string,
+  /** Custom x axis units to be used*/
+  xUnits:PropTypes.string,
+
 
 };
 

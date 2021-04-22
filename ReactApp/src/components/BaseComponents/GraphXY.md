@@ -22,8 +22,8 @@ import Slider from './Slider';
     yMin={-10000}
     showLegend={false}
     updateMode={'updateOnYChange'}
-    width={'25vh'}
-    height={'25vh'}
+    width={'50%'}
+    
     
    
   />

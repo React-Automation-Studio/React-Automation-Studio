@@ -347,10 +347,10 @@ const PlotData = (props) => {
     return pvs
   }
   return (
-    <React.Fragment>
+    <div style={{width:'100%',height:'100%',backgroundColor:'inherit'}}>
       {pvConnections()}
       {props.children({ data: delayedData, contextInfo: delayedContextInfo })}
-    </React.Fragment>
+    </div>
   )
 }
 /**
@@ -360,14 +360,16 @@ const PlotData = (props) => {
 */
 
 const GraphXY = (props) => {
+  const classes = useStyles();
+  const theme = useTheme();
+  const backgroundColor=props.backgroundColor?props.backgroundColor:theme.palette.background.default;
   if(typeof props.ymin!=="undefined"){
     console.warn("Prop ymin is deprecated, use yMin instead")
   }
   if(typeof props.ymax!=="undefined"){
     console.warn("Prop ymax is deprecated, use yMax instead")
   }
-  const classes = useStyles();
-  const theme = useTheme()
+  
   const createTraces = (data) => {
     let traces = [];
 
@@ -416,20 +418,21 @@ const GraphXY = (props) => {
   useEffect(() => {
     const handleResize = () => {
       if (paperRef.current) {
-        setHeight(paperRef.current.offsetHeight)
+        setHeight(props.height?props.height:paperRef.current.offsetWidth*props.aspectRatio)
         setWidth(paperRef.current.offsetWidth)
       }
     }
     // The 'current' property contains info of the reference:
     // align, title, ... , width, height, etc.
     if (paperRef.current) {
-      setHeight(paperRef.current.offsetHeight)
+      setHeight(props.height?props.height:paperRef.current.offsetWidth)
       setWidth(paperRef.current.offsetWidth)
     }
     window.addEventListener("resize", handleResize)
     return () => window.removeEventListener("resize", handleResize);
-  }, [paperRef]);
-
+    
+  }, [paperRef,props.width,props.height]);
+  console.log(height,width)
   const [domain, setDomain] = useState([0, 1])
   const [yPositions, setYPositions] = useState([0, 0, 0])
   useEffect(() => {
@@ -511,7 +514,10 @@ const GraphXY = (props) => {
       showline: true,
       showgrid: true,
       automargin:true,
-      range: [typeof props.yMin !== "undefined" ? props.yMin : null, typeof props.yMax !== "undefined" ? props.yMax : null]
+      range: [typeof props.yMin !== "undefined" ? props.yMin : null, typeof props.yMax !== "undefined" ? props.yMax : null],
+      tickmode:props.yTickValues?"array":"auto",
+      tickvals:props.yTickValues?props.yTickValues:[],
+      ticktext:props.yTickValues?(props.yTickLabels?props.yTickLabels:props.yTickValues):[],
       
     }
     // }
@@ -524,7 +530,7 @@ const GraphXY = (props) => {
         x: 1,
         xanchor: 'right',
         y: 0.975,
-        bgcolor: "#00000000"
+        bgcolor: "00000000"
       }
     } : {}
     return legendInit
@@ -533,11 +539,12 @@ const GraphXY = (props) => {
   const [layout, setLayout] = useState({})
 
   useEffect(() => {
+    console.log(backgroundColor)
     setLayout({
       title: {
         text: props.title,
       },
-      plot_bgcolor: props.backgroundColor?props.backgroundColor:"#00000000",
+      plot_bgcolor: backgroundColor,
       xaxis: {
         domain: domain,
         // title: {
@@ -553,6 +560,9 @@ const GraphXY = (props) => {
         showgrid: true,
         automargin:true,
         range: [typeof props.xMin !== "undefined" ? props.xMin : null, typeof props.xMax !== "undefined" ? props.xMax : null],
+        tickmode:props.xTickValues?"array":"auto",
+        tickvals:props.xTickValues?props.xTickValues:[],
+        ticktext:props.xTickValues?(props.xTickLabels?props.xTickLabels:props.xTickValues):[],
 
 
         //  range: [selectedFromDate, selectedToDate],
@@ -562,7 +572,7 @@ const GraphXY = (props) => {
         family: 'Roboto,Arial',
         color: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke
       },
-      paper_bgcolor:  props.backgroundColor?props.backgroundColor:"#00000000",
+      paper_bgcolor:  backgroundColor,
       ...legend,
       showlegend: props.showLegend,
       margin: { t: props.title ? 32 : 16, r: 16,
@@ -592,18 +602,20 @@ const GraphXY = (props) => {
 
 
     })
-  }, [theme, props.showLegend, props.xAxisTitle, props.title])
+  }, [theme, props.showLegend, props.xAxisTitle, props.title,backgroundColor])
 
-
+  
   return (
-    <div ref={paperRef} style={{ width: props.width, height: props.height, padding: 8, }}>
+    <div ref={paperRef} style={{ width: props.width?props.width:width, height: props.height?props.height:height, margin: 8,
+      backgroundColor:backgroundColor 
+      }}>
 
-      <PlotData {...props}>
+     <PlotData {...props} backgroundColor={backgroundColor}>
         {({ data, contextInfo }) => {
           const traces = createTraces(data);
 
           return (
-            <div style={{ width: "100%", height: "100%", paddingBottom: 32, }} onContextMenu={
+            <div style={{ width: "100%", height: "100%",backgroundColor:'inherit',padding:8 }} onContextMenu={
               props.disableContextMenu ? undefined : handleToggleContextMenu
             }
 
@@ -655,7 +667,8 @@ const GraphXY = (props) => {
                 style={{
                   position: 'relative',
                   display: 'inline-block',
-                  width: '100%', height: '100%', paddingBottom: 8
+                  width: '100%', height: '100%', paddingBottom: 8,
+                 
                 }}
                 data={traces}
                 layout={{ ...layout, }}
@@ -744,6 +757,22 @@ GraphXY.propTypes = {
   showLegend: PropTypes.bool,
   /** Update mode of the graph, Note polling mode will override these settings*/
   updateMode: PropTypes.oneOf(['updateOnXOrYChange', 'updateOnYChange', 'updateOnXChange']),
+  /** If the height is undefined then the height will be set to parents width multplied by the aspect ratio*/
+  aspectRatio: PropTypes.number,
+   /**
+   * The backgorund color defaults to ```theme.palette.background.default```
+   * For a Paper or a Card component set it to ```theme.palette.background.paper```
+   */
+  backgroundColor:PropTypes.string,
+  /**
+   * Set the width
+   */
+  width:PropTypes.string,
+   /**
+   * Set the height, by default it is calculated from the width X aspectRatio. 
+   */
+  height:PropTypes.string,
+
 
 };
 
@@ -757,7 +786,7 @@ GraphXY.defaultProps = {
   usePolling: false,
   pollingRate: 100,
   width: '100%',
-  height: '100%',
+  aspectRatio:1,
   updateMode: 'updateOnXOrYChange',
 
 };

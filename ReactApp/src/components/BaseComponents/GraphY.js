@@ -16,29 +16,22 @@ import { forEach } from 'mathjs';
 /* eslint-disable no-unused-vars */
 
 const useStyles = makeStyles((theme) => ({
-  container: {
-    display: 'flex',
-    flexWrap: 'wrap',
+  root:{
+    paddingRight:8,
+    paddingLeft:8,
+    paddingTop:8,
+    // marginBottom:0,
+    // paddingBottom:0,
   },
-  textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: 200,
+  title:{
+    margin:8
   },
-  buttonRoot: {
-    textTransform: 'none',
-  },
-  accordianRoot: {
-    '&:before': {
-      background: 'rgba(0,0,0,0)',
-    }
-  },
-  '@global': {
-    '.js-plotly-plot .plotly .modebar': {
-      // left: '50%',
-      transform: 'translateX(-50%)',
-    }
-  },
+  // '@global': {
+  //   '.js-plotly-plot .plotly .modebar': {
+  //     // left: '50%',
+  //     transform: 'translateX(-50%)',
+  //   }
+  // },
 }));
 
 
@@ -392,7 +385,8 @@ const GraphY = (props) => {
         showgrid: true,
         range: [typeof props.yMin !=="undefined"?props.yMin:null, typeof props.yMax !=="undefined"?props.yMax:null],
         automargin:true,
-        ticksuffix:props.yUnits?props.yUnits:""
+        ticksuffix:props.yUnits?props.yUnits:"",
+        nticks:props.yNoOfTicks?props.yNoOfTicks:0
       }
     // }
     return (yAxesInit)
@@ -434,7 +428,9 @@ const GraphY = (props) => {
         showgrid: true,
         automargin:true,
         range: [typeof props.xMin !=="undefined"?props.xMin:null, typeof props.xMax !=="undefined"?props.xMax:null],
-        ticksuffix:props.xUnits?props.xUnits:""
+        ticksuffix:props.xUnits?props.xUnits:"",
+        nticks:props.xNoOfTicks?props.xNoOfTicks:0,
+        tickformat:props.xTickFormat?props.xTickFormat:""
 
         //  range: [selectedFromDate, selectedToDate],
       },
@@ -446,9 +442,9 @@ const GraphY = (props) => {
       paper_bgcolor:  backgroundColor,
       ...legend,
       showlegend: props.showLegend,
-      margin: { t: props.title ? 32 : 16, r: isMobileOnly?16:0,
+      margin: { t: props.title ?24 : 16, r: isMobileOnly?16:0,
          l: 0, 
-         b: 32 
+         b: 0, 
         },
         annotations: [props.yAxisTitle&&{
           xref: 'paper',
@@ -472,11 +468,11 @@ const GraphY = (props) => {
         }]
 
     })
-  }, [theme, props.showLegend, props.xAxisTitle, props.title,backgroundColor])
+  }, [theme, props.showLegend, props.xAxisTitle, props.title,backgroundColor,classes])
   
   
   return (
-    <div ref={paperRef} style={{ width: props.width?props.width:width, height: props.height?props.height:height,backgroundColor:backgroundColor,margin:8}}>
+    <div ref={paperRef} className={classes.root} style={{ width: props.width?props.width:width, height: props.height?props.height:height,backgroundColor:backgroundColor}}>
 
 <PlotData {...props} backgroundColor={backgroundColor}>
         {({ data, contextInfo }) => {
@@ -537,7 +533,7 @@ const GraphY = (props) => {
                   position: 'relative',
                   display: 'inline-block',
                   width: '100%', height: '100%',
-                  //  paddingBottom: 8
+                  
                 }}
                 data={data}
                 layout={{ ...layout, }}
@@ -664,6 +660,8 @@ GraphY.defaultProps = {
   width: '100%',
   height: '100%',
   disableMobileStatic:false,
+ 
+  
 
 };
 

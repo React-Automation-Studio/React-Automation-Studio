@@ -11,7 +11,7 @@ from pytz import utc, timezone
 from notifyServer import startNotifyServer, restartNotifyServer, notify
 from dbMongo import dbGetCollection, dbGetEnables, dbGetListOfPVNames, dbGetField, dbSetField, dbFindOne, dbUpdateHistory
 from dbMongo import dbGetFieldGlobal, dbSetFieldGlobal
-from dbMongo import dbGetAdminCollection, dbGetAdminUsers
+from dbMongo import dbGetAdminCollection, dbGetAdminUsers, dbIsNewUser
 
 from log import app_log
 
@@ -1723,7 +1723,10 @@ def userCollectionWatch():
 
 
 def initSeedUserData():
-    print(dbGetAdminUsers())
+    for user in dbGetAdminUsers():
+        if(dbIsNewUser(user['_id'])):
+            givenName = user['givenName'] if ('givenName' in user) else ''
+
     print("Seeded user data from admin DB successfully...")
     app_log.info("Seeded user data from admin DB successfully...")
 

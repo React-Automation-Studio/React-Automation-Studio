@@ -89,12 +89,19 @@ def dbGetAdminCollection(collection):
 
 def dbGetAdminUsers():
     return list(adminDB['users'].find({}, {
+        '_id': 1,
         'username': 1,
         'givenName': 1,
         'familyName': 1,
         'email': 1,
         'phoneNumber': 1,
     }))
+
+
+def dbIsNewUser(id):
+    doc = alarmDB.users.find_one(
+        {"adminID": id})
+    return not bool(doc)
 
 
 def dbGetCollection(collection):

@@ -55,7 +55,7 @@ AlarmHandler.propTypes = {
 AlarmHandler.defaultProps = {
     titleProps: {},
     alarmDatabaseName: '',
-    alarmDatabaseVersion: 1.0
+    alarmDatabaseVersion: 1.5
 }
 
 export default React.memo(AlarmHandler);

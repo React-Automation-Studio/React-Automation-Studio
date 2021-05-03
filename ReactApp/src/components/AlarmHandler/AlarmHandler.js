@@ -2,12 +2,6 @@ import React, { useState } from 'react';
 
 import PropTypes from 'prop-types';
 
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ContactPhoneIcon from '@material-ui/icons/ContactPhone';
-import TableChartIcon from '@material-ui/icons/TableChart';
-
 import Layout from '../UI/Layout/ComposedLayouts/TraditionalLayout';
 import AlarmSetup from './AlarmSetup';
 import UserNotification from './UserNotification';
@@ -22,38 +16,17 @@ import UserNotification from './UserNotification';
 */
 const AlarmHandler = (props) => {
 
-    const [userSetup, setUserSetup] = useState(false)
-
-    const moreVertDrawerItems = (
-        <React.Fragment>
-            <ListItem button onClick={() => setUserSetup(!userSetup)} >
-                {userSetup
-                    ? <React.Fragment>
-                        <ListItemIcon >
-                            <TableChartIcon fontSize="small" />
-                        </ListItemIcon>
-                        <ListItemText primary={"Alarm Table"} />
-                    </React.Fragment>
-
-                    : <React.Fragment>
-                        <ListItemIcon >
-                            <ContactPhoneIcon fontSize="small" />
-                        </ListItemIcon>
-                        <ListItemText primary={"Configure user notification"} />
-                    </React.Fragment>
-                }
-            </ListItem>
-        </React.Fragment>
-    )
+    const [tabVal, setTabVal] = useState(0)
 
     return (
         <Layout
             {...props.titleProps}
             denseAppBar
-            moreVertDrawerItems={moreVertDrawerItems}
-            hideMoreVertDrawerAfterItemClick
+            tabs={['Alarm Table', 'Notification Setup']}
+            tabValue={tabVal}
+            handleTabChange={(event, value) => setTabVal(value)}
         >
-            {userSetup
+            {tabVal === 1
                 ? <UserNotification
                     dbName={props.alarmDatabaseName}
                     AHDBVer={props.alarmDatabaseVersion}

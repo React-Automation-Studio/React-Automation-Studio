@@ -11,6 +11,7 @@ from pytz import utc, timezone
 from notifyServer import startNotifyServer, restartNotifyServer, notify
 from dbMongo import dbGetCollection, dbGetEnables, dbGetListOfPVNames, dbGetField, dbSetField, dbFindOne, dbUpdateHistory
 from dbMongo import dbGetFieldGlobal, dbSetFieldGlobal
+from dbMongo import dbGetAdminCollection, dbGetAdminUsers
 
 from log import app_log
 
@@ -46,6 +47,7 @@ alarmPVSevDict = {
 }
 
 pvCollection = dbGetCollection("pvs")
+userCollection = dbGetAdminCollection("users")
 
 alarmIOCPVPrefix = ""
 alarmIOCPVSuffix = ""
@@ -1206,7 +1208,7 @@ def bridgeWatchThread(areaKey, bridgeTime, subAreaKey=None, pvKey=None):
                 bridge = dbGetField('bridge', areaKey)
                 mongoBridgeTime = datetime.isoformat(
                     datetime.fromisoformat(dbGetField('bridgeTime', areaKey)).astimezone(utc))
-        if((not bridge)or(bridgeTime != mongoBridgeTime)):
+        if((not bridge) or (bridgeTime != mongoBridgeTime)):
             runningBridgeThreads.remove(threadName)
             break
         elif(datetime.now(utc).isoformat() > bridgeTime):
@@ -1713,6 +1715,19 @@ def globalCollectionWatch():
                             activeUser = 'Anonymous'
 
 
+def userCollectionWatch():
+    global userCollection
+    with userCollection.watch() as stream:
+        for change in stream:
+            print(change)
+
+
+def initSeedUserData():
+    print(dbGetAdminUsers())
+    print("Seeded user data from admin DB successfully...")
+    app_log.info("Seeded user data from admin DB successfully...")
+
+
 def main():
     initPreSuffix()
     getListOfPVNames()
@@ -1741,9 +1756,14 @@ def main():
     _thread.start_new_thread(pvCollectionWatch, ())
     # For change to global enable to reevaluate area pvs
     _thread.start_new_thread(globalCollectionWatch, ())
+    # For change to user data to update alarm handler users
+    _thread.start_new_thread(userCollectionWatch, ())
 
     # Start notify server
     startNotifyServer()
+
+    # Get user data from admin database
+    initSeedUserData()
 
     print("Alarm server running...")
     app_log.info("Alarm server running...")

@@ -104,6 +104,39 @@ def dbIsNewUser(id):
     return not bool(doc)
 
 
+def dbInsertNewUser(user):
+    user["global"] = True
+    user["globalSetup"] = {
+        "notify": True,
+        "alarmMinor": True,
+        "alarmMajor": True,
+        "alarmInvalid": True,
+        "alarmDisconn": True,
+        "email": True,
+        "sms": False,
+        "whatsapp": False,
+        "signal": False,
+        "allDay": True,
+        "fromTime": "",
+        "toTime": "",
+        "weekly": True,
+        "days": {
+            "Monday": True,
+            "Tuesday": True,
+            "Wednesday": True,
+            "Thursday": True,
+            "Friday": True,
+            "Saturday": True,
+            "Sunday": True
+        },
+        "dateRange": False,
+        "fromDate": "",
+        "toDate": ""
+    }
+    user["notifyPVs"] = []
+    alarmDB.users.insert_one(user)
+
+
 def dbGetCollection(collection):
     return alarmDB[collection]
 

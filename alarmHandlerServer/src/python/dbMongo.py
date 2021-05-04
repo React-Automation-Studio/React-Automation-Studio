@@ -137,6 +137,13 @@ def dbInsertNewUser(user):
     alarmDB.users.insert_one(user)
 
 
+def dbUpdateExistingUser(id, userData):
+    alarmDB.users.update_one(
+        {'adminID': id},
+        {'$set': userData}
+    )
+
+
 def dbGetCollection(collection):
     return alarmDB[collection]
 

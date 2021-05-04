@@ -11,7 +11,7 @@ from pytz import utc, timezone
 from notifyServer import startNotifyServer, restartNotifyServer, notify
 from dbMongo import dbGetCollection, dbGetEnables, dbGetListOfPVNames, dbGetField, dbSetField, dbFindOne, dbUpdateHistory
 from dbMongo import dbGetFieldGlobal, dbSetFieldGlobal
-from dbMongo import dbGetAdminCollection, dbGetAdminUsers, dbIsNewUser, dbInsertNewUser
+from dbMongo import dbGetAdminCollection, dbGetAdminUsers, dbIsNewUser, dbInsertNewUser, dbUpdateExistingUser
 
 from log import app_log
 
@@ -1730,15 +1730,18 @@ def initSeedUserData():
         familyName = user['familyName'] if ('familyName' in user) else ''
         email = user['email'] if ('email' in user) else ''
         phoneNumber = user['phoneNumber'] if ('phoneNumber' in user) else ''
+        userData = {
+            'username': username,
+            'name': givenName+' '+familyName,
+            'email': email,
+            'mobile': phoneNumber
+        }
         if(dbIsNewUser(user['_id'])):
-            dbInsertNewUser({
-                'adminID': _id,
-                'isAHUser': False,
-                'username': username,
-                'name': givenName+' '+familyName,
-                'email': email,
-                'mobile': phoneNumber
-            })
+            userData['adminID'] = _id
+            userData['isAHUser'] = False
+            dbInsertNewUser(userData)
+        else:
+            dbUpdateExistingUser(_id, userData)
 
     print("Seeded user data from admin DB successfully...")
     app_log.info("Seeded user data from admin DB successfully...")

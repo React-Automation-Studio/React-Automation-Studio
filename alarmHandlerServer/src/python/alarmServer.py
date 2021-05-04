@@ -1719,7 +1719,9 @@ def userCollectionWatch():
     global userCollection
     with userCollection.watch() as stream:
         for change in stream:
-            print(change)
+            if(change['operationType'] == 'update'):
+                print(change['documentKey']['_id'])
+                print(change['updateDescription']['updatedFields'])
 
 
 def initSeedUserData():
@@ -1732,9 +1734,10 @@ def initSeedUserData():
         phoneNumber = user['phoneNumber'] if ('phoneNumber' in user) else ''
         userData = {
             'username': username,
-            'name': givenName+' '+familyName,
+            'givenName': givenName,
+            'familyName': familyName,
             'email': email,
-            'mobile': phoneNumber
+            'phoneNumber': phoneNumber
         }
         if(dbIsNewUser(user['_id'])):
             userData['adminID'] = _id

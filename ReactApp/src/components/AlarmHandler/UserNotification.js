@@ -16,22 +16,19 @@ import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import CloseIcon from '@material-ui/icons/Close';
 import SearchIcon from '@material-ui/icons/Search';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
 
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 import DataConnection from '../SystemComponents/DataConnection';
 import ScheduleDialog from './ScheduleDialog';
-import DeleteUserDialog from './DeleteUserDialog';
-import AddUserDialog from './AddUserDialog';
+import EditUsersDialog from './EditUsersDialog';
 import UserTable from './UserTable';
 import PVList from './PVList';
 import useMongoDbWatch from '../SystemComponents/database/MongoDB/useMongoDbWatch';
 import useMongoDbUpdateOne from '../SystemComponents/database/MongoDB/useMongoDbUpdateOne';
-import useMongoDbInsertOne from '../SystemComponents/database/MongoDB/useMongoDbInsertOne';
-import useMongoDbDeleteOne from '../SystemComponents/database/MongoDB/useMongoDbDeleteOne';
 
-import { AccountRemove } from "mdi-material-ui/";
+import { AccountCog } from "mdi-material-ui/";
+
 import { format, parseISO } from 'date-fns';
 
 const useStyles = makeStyles(theme => ({
@@ -163,11 +160,10 @@ const UserNotification = (props) => {
     const [userTableSearchTimer, setUserTableSearchTimer] = useState(null)
     const [searchedUsers, setSearchedUsers] = useState([])
 
-    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
-    const [addDialogOpen, setAddDialogOpen] = useState(false)
-
-    const [newName, setNewName] = useState("")
-    const [newUsername, setNewUsername] = useState("")
+    const [editUsersDialogOpen, setEditUsersDialogOpen] = useState(false)
+    const [editUsersList, setEditUsersList] = useState({})
+    const [forwardBDisabled, setForwardBDisabled] = useState(true)
+    const [backwardBDisabled, setBackwardBDisabled] = useState(true)
 
     const [clientAHDBVer] = useState(props.AHDBVer)
     const [serverAHDBVer, setServerAHDBVer] = useState(props.AHDBVer)
@@ -178,8 +174,6 @@ const UserNotification = (props) => {
     const dbGlobData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:glob:Parameters:{}` }).data
 
     const dbUpdateOne = useMongoDbUpdateOne({})
-    const dbInsertOne = useMongoDbInsertOne({})
-    const dbDeleteOne = useMongoDbDeleteOne({})
 
 
     const loadPVListRef = useRef(loadPVList);
@@ -784,18 +778,6 @@ const UserNotification = (props) => {
         setDialogUserNotifyIndex(0)
     }, [])
 
-    const handleDeleteUser = useCallback(() => {
-        // Find match and note it's index in userList
-        const match = userList.filter(el => el.name === filterUser.name && el.username === filterUser.username)[0]
-        const id = match['_id']['$oid']
-        dbDeleteOne({
-            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:users`,
-            id: id,
-        })
-        setFilterUser({})
-        setDeleteDialogOpen(false)
-    }, [filterUser.name, filterUser.username, userList, dbDeleteOne, props.dbName])
-
     const handleSnackClose = () => {
         setSnackMessage("")
     }
@@ -813,46 +795,61 @@ const UserNotification = (props) => {
         }, 300))
     }, [userTableSearchTimer])
 
-    const handleAddNewUser = useCallback(() => {
-        const newEntry = {
-            "name": newName,
-            "username": newUsername,
-            "email": "",
-            "mobile": "",
-            "global": true,
-            "globalSetup": {
-                "notify": true,
-                "email": true,
-                "sms": false,
-                "whatsapp": false,
-                "signal": false,
-                "allDay": true,
-                "fromTime": "",
-                "toTime": "",
-                "weekly": true,
-                "days": {
-                    "Monday": true,
-                    "Tuesday": true,
-                    "Wednesday": true,
-                    "Thursday": true,
-                    "Friday": true,
-                    "Saturday": true,
-                    "Sunday": true
-                },
-                "dateRange": false,
-                "fromDate": "",
-                "toDate": ""
-            },
-            "notifyPVs": []
-        }
-        dbInsertOne({
-            dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:users`,
-            newEntry: newEntry
+    const clearAllUserSelects = useCallback(() => {
+        Object.values(editUsersList).map(user => {
+            setEditUsersList(prevState => ({
+                ...prevState,
+                [`${user.username}-${user.name}`]: {
+                    ...prevState[`${user.username}-${user.name}`],
+                    isSelected: false
+                }
+            }))
         })
-        setNewName('')
-        setNewUsername('')
-        setAddDialogOpen(false)
-    }, [dbInsertOne, newName, newUsername, props.dbName])
+    }, [editUsersList])
+
+    const applyEditUsers = useCallback(() => {
+        Object.values(editUsersList).map(user => {
+            const id = user['id']['$oid']
+            const newvalues = { '$set': { "isAHUser": user.isAHUser } }
+            dbUpdateOne({
+                dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:users`,
+                id: id,
+                update: newvalues
+            })
+        })
+        setEditUsersDialogOpen(false)
+        clearAllUserSelects()
+    }, [clearAllUserSelects, editUsersList])
+
+    const pushToAlarmUsers = useCallback(() => {
+        Object.values(editUsersList).map(entry => {
+            if (entry.adminDB_en && !entry.isAHUser && entry.isSelected) {
+                setEditUsersList(prevState => ({
+                    ...prevState,
+                    [`${entry.username}-${entry.name}`]: {
+                        ...prevState[`${entry.username}-${entry.name}`],
+                        isSelected: false,
+                        isAHUser: true
+                    }
+                }))
+            }
+        })
+    }, [editUsersList])
+
+    const pushToRASUsers = useCallback(() => {
+        Object.values(editUsersList).map(entry => {
+            if (entry.adminDB_en && entry.isAHUser && entry.isSelected) {
+                setEditUsersList(prevState => ({
+                    ...prevState,
+                    [`${entry.username}-${entry.name}`]: {
+                        ...prevState[`${entry.username}-${entry.name}`],
+                        isSelected: false,
+                        isAHUser: false
+                    }
+                }))
+            }
+        })
+    }, [editUsersList])
 
     // handleNewDbPVsList
     useEffect(() => {
@@ -902,6 +899,7 @@ const UserNotification = (props) => {
             const localBackupUserList = {}
             const localRegexError = {}
             const localAddRegexVal = {}
+            const localEditUsersList = {}
 
             dbUsersData.map((user, index) => {
                 localDictUserRegex[`${user.username}-${user.name}`] = user.notifyPVs
@@ -909,6 +907,14 @@ const UserNotification = (props) => {
                 localUserEdit[`${user.username}-${user.name}`] = false
                 localRegexError[`${user.username}-${user.name}`] = false
                 localAddRegexVal[`${user.username}-${user.name}`] = ''
+                localEditUsersList[`${user.username}-${user.name}`] = {
+                    id: user._id,
+                    name: user.name,
+                    username: user.username,
+                    adminDB_en: user.adminDB_en,
+                    isAHUser: user.isAHUser,
+                    isSelected: false
+                }
                 return null
             })
 
@@ -924,6 +930,7 @@ const UserNotification = (props) => {
             dbUsersData.sort((a, b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0))
             //
             setUserList(dbUsersData)
+            setEditUsersList(localEditUsersList)
         }
         // disable useEffect dependencies for "dbUsersData"
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -960,6 +967,17 @@ const UserNotification = (props) => {
         setSearchedUsers(filteredUsers)
     }, [userList, userTableSearchString])
 
+    useEffect(() => {
+        const enableForwardButton = Object.values(editUsersList).reduce((acc, entry) => {
+            return acc || (entry.adminDB_en && !entry.isAHUser && entry.isSelected)
+        }, false)
+        const enableBackwardButton = Object.values(editUsersList).reduce((acc, entry) => {
+            return acc || (entry.adminDB_en && entry.isAHUser && entry.isSelected)
+        }, false)
+        setForwardBDisabled(!enableForwardButton)
+        setBackwardBDisabled(!enableBackwardButton)
+    }, [editUsersList])
+
     let alarmPVs = null
     if (alarmIOCPVPrefix !== null && alarmIOCPVSuffix !== null) {
         alarmPVs = alarmList.map(alarm => (
@@ -988,9 +1006,7 @@ const UserNotification = (props) => {
         pvListHeight = '80vh'
     }
 
-    const warnAdminMessageAdd = "Only alarmAdmin role users can add users"
-    const warnAdminMessageDelete = "Only alarmAdmin role users can delete users"
-    const warnAdminMessageSelect = "Select a user to delete first"
+    const warnAdminMessageEdit = "Only alarmAdmin role users can edit users"
 
     // console.table(showDeleteButton)
 
@@ -1014,24 +1030,19 @@ const UserNotification = (props) => {
                     </React.Fragment>
                 }
             />
-            <DeleteUserDialog
-                open={deleteDialogOpen}
-                handleClose={() => setDeleteDialogOpen(false)}
-                user={filterUser.name}
-                handleDelete={handleDeleteUser}
-            />
-            <AddUserDialog
-                open={addDialogOpen}
+            <EditUsersDialog
+                open={editUsersDialogOpen}
+                editUsersList={editUsersList}
+                forwardBDisabled={forwardBDisabled}
+                backwardBDisabled={backwardBDisabled}
                 handleClose={() => {
-                    setNewName('')
-                    setNewUsername('')
-                    setAddDialogOpen(false)
+                    setEditUsersDialogOpen(false)
+                    clearAllUserSelects()
                 }}
-                name={newName}
-                username={newUsername}
-                setNewName={(event) => setNewName(event.target.value)}
-                setNewUsername={(event) => setNewUsername(event.target.value)}
-                handleAddNewUser={handleAddNewUser}
+                setEditUsersList={setEditUsersList}
+                pushToAlarmUsers={pushToAlarmUsers}
+                pushToRASUsers={pushToRASUsers}
+                handleApplyEditUsers={applyEditUsers}
             />
             {
                 Object.entries(dialogUserObject).length !== 0
@@ -1078,7 +1089,7 @@ const UserNotification = (props) => {
                                     {
                                         userTableExpand
                                             ? <Tooltip
-                                                title={isAlarmAdmin ? "Add user" : warnAdminMessageAdd}
+                                                title={isAlarmAdmin ? "Edit users" : warnAdminMessageEdit}
                                                 placement="bottom"
                                                 classes={{ tooltip: classes.tooltipWidth }}
                                             >
@@ -1086,7 +1097,7 @@ const UserNotification = (props) => {
                                                     onClick={(event) => {
                                                         event.preventDefault()
                                                         event.stopPropagation()
-                                                        isAlarmAdmin && setAddDialogOpen(true)
+                                                        isAlarmAdmin && setEditUsersDialogOpen(true)
                                                     }}
                                                 >
                                                     <Button
@@ -1094,51 +1105,17 @@ const UserNotification = (props) => {
                                                         color="secondary"
                                                         size="small"
                                                         className={classes.button}
-                                                        startIcon={<PersonAddIcon />}
+                                                        startIcon={<AccountCog />}
                                                         style={{ marginRight: 20 }}
                                                         // onClick={(event) => {
                                                         //     event.preventDefault()
                                                         //     event.stopPropagation()
-                                                        //     setAddDialogOpen(true)
+                                                        //     setEditUsersDialogOpen(true)
                                                         // }}
                                                         disabled={!isAlarmAdmin}
                                                     >
-                                                        Add
+                                                        Edit Alarm Users
                                                 </Button>
-                                                </div>
-                                            </Tooltip>
-                                            : null
-                                    }
-                                    {
-                                        userTableExpand
-                                            ? <Tooltip
-                                                title={isAlarmAdmin ? filterUser.name ? "Delete user" : warnAdminMessageSelect : warnAdminMessageDelete}
-                                                placement="bottom"
-                                                classes={{ tooltip: classes.tooltipWidth }}
-                                            >
-                                                <div
-                                                    onClick={(event) => {
-                                                        event.preventDefault()
-                                                        event.stopPropagation()
-                                                        isAlarmAdmin && filterUser.name && setDeleteDialogOpen(true)
-                                                    }}
-                                                >
-                                                    <Button
-                                                        variant="contained"
-                                                        color="primary"
-                                                        size="small"
-                                                        className={classes.button}
-                                                        startIcon={<AccountRemove />}
-                                                        style={{ marginRight: 20 }}
-                                                        // onClick={(event) => {
-                                                        //     event.preventDefault()
-                                                        //     event.stopPropagation()
-                                                        //     setDeleteDialogOpen(true)
-                                                        // }}
-                                                        disabled={!isAlarmAdmin || !filterUser.name}
-                                                    >
-                                                        Delete
-                                                 </Button>
                                                 </div>
                                             </Tooltip>
                                             : null

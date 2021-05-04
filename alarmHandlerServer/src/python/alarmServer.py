@@ -1721,13 +1721,45 @@ def userCollectionWatch():
         for change in stream:
             opType = change['operationType']
             if(opType == 'update'):
-                print("###updated user")
-                print(change['documentKey']['_id'])
-                print(change['updateDescription']['updatedFields'])
+                _id = change['documentKey']['_id']
+                oldUser = dbFindOne('users', {'adminDB_id': _id})
+                updateDict = change['updateDescription']['updatedFields']
+                userData = {}
+                if ('email' in updateDict):
+                    userData['email'] = updateDict['email']
+                if ('phoneNumber' in updateDict):
+                    userData['mobile'] = updateDict['phoneNumber']
+                if ('enabled' in updateDict):
+                    userData['adminDB_en'] = updateDict['enabled']
+                if('givenName' in updateDict):
+                    userData['givenName'] = updateDict['givenName']
+                    if('familyName' in updateDict):
+                        userData['name'] = updateDict['givenName'] + \
+                            " "+updateDict['familyName']
+                    else:
+                        userData['name'] = updateDict['givenName'] + \
+                            " "+oldUser['familyName']
+                if('familyName' in updateDict):
+                    userData['familyName'] = updateDict['familyName']
+                    if('givenName' not in updateDict):
+                        userData['name'] = oldUser['givenName'] + \
+                            " "+updateDict['familyName']
+                if(bool(userData)):
+                    dbUpdateExistingUser(_id, userData)
             elif(opType == 'insert'):
-                print("###new user")
                 fullDoc = change['fullDocument']
-                print(fullDoc)
+                userData = {
+                    'username': fullDoc['username'],
+                    'adminDB_en': fullDoc['enabled'],
+                    'givenName': fullDoc['givenName'],
+                    'familyName': fullDoc['familyName'],
+                    'name': fullDoc['givenName']+" "+fullDoc['familyName'],
+                    'email': fullDoc['email'],
+                    'mobile': fullDoc['phoneNumber'],
+                    'adminDB_id': fullDoc['_id'],
+                    'isAHUser': False
+                }
+                dbInsertNewUser(userData)
             elif(opType == 'delete'):
                 print("###deleted user")
                 print(change['documentKey']['_id'])
@@ -1745,6 +1777,8 @@ def initSeedUserData():
         userData = {
             'username': username,
             'adminDB_en': enabled,
+            'givenName': givenName,
+            'familyName': familyName,
             'name': givenName+" "+familyName,
             'email': email,
             'mobile': phoneNumber

@@ -1719,27 +1719,38 @@ def userCollectionWatch():
     global userCollection
     with userCollection.watch() as stream:
         for change in stream:
-            if(change['operationType'] == 'update'):
+            opType = change['operationType']
+            if(opType == 'update'):
+                print("###updated user")
                 print(change['documentKey']['_id'])
                 print(change['updateDescription']['updatedFields'])
+            elif(opType == 'insert'):
+                print("###new user")
+                fullDoc = change['fullDocument']
+                print(fullDoc)
+            elif(opType == 'delete'):
+                print("###deleted user")
+                print(change['documentKey']['_id'])
 
 
 def initSeedUserData():
     for user in dbGetAdminUsers():
         _id = user['_id']
         username = user['username']
+        enabled = user['enabled']
         givenName = user['givenName'] if ('givenName' in user) else ''
         familyName = user['familyName'] if ('familyName' in user) else ''
         email = user['email'] if ('email' in user) else ''
         phoneNumber = user['phoneNumber'] if ('phoneNumber' in user) else ''
         userData = {
             'username': username,
+            'adminDB_en': enabled,
             'name': givenName+" "+familyName,
             'email': email,
             'mobile': phoneNumber
         }
         if(dbIsNewUser(user['_id'])):
-            userData['adminID'] = _id
+            userData['adminDB_id'] = _id
             userData['isAHUser'] = False
             dbInsertNewUser(userData)
         else:

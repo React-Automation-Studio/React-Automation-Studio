@@ -95,12 +95,13 @@ def dbGetAdminUsers():
         'familyName': 1,
         'email': 1,
         'phoneNumber': 1,
+        'enabled': 1
     }))
 
 
 def dbIsNewUser(id):
     doc = alarmDB.users.find_one(
-        {"adminID": id})
+        {"adminDB_id": id})
     return not bool(doc)
 
 
@@ -139,7 +140,7 @@ def dbInsertNewUser(user):
 
 def dbUpdateExistingUser(id, userData):
     alarmDB.users.update_one(
-        {'adminID': id},
+        {'adminDB_id': id},
         {'$set': userData}
     )
 

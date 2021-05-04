@@ -11,7 +11,7 @@ from pytz import utc, timezone
 from notifyServer import startNotifyServer, restartNotifyServer, notify
 from dbMongo import dbGetCollection, dbGetEnables, dbGetListOfPVNames, dbGetField, dbSetField, dbFindOne, dbUpdateHistory
 from dbMongo import dbGetFieldGlobal, dbSetFieldGlobal
-from dbMongo import dbGetAdminCollection, dbGetAdminUsers, dbIsNewUser, dbInsertNewUser, dbUpdateExistingUser
+from dbMongo import dbGetAdminCollection, dbGetAdminUsers, dbIsNewUser, dbInsertNewUser, dbUpdateExistingUser, dbDeleteUser
 
 from log import app_log
 
@@ -1761,8 +1761,7 @@ def userCollectionWatch():
                 }
                 dbInsertNewUser(userData)
             elif(opType == 'delete'):
-                print("###deleted user")
-                print(change['documentKey']['_id'])
+                dbDeleteUser({'adminDB_id': change['documentKey']['_id']})
 
 
 def initSeedUserData():

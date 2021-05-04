@@ -145,6 +145,10 @@ def dbUpdateExistingUser(id, userData):
     )
 
 
+def dbDeleteUser(query):
+    alarmDB.users.delete_one(query)
+
+
 def dbGetCollection(collection):
     return alarmDB[collection]
 

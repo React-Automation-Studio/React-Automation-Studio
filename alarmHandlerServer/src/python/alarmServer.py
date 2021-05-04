@@ -1734,10 +1734,9 @@ def initSeedUserData():
         phoneNumber = user['phoneNumber'] if ('phoneNumber' in user) else ''
         userData = {
             'username': username,
-            'givenName': givenName,
-            'familyName': familyName,
+            'name': givenName+" "+familyName,
             'email': email,
-            'phoneNumber': phoneNumber
+            'mobile': phoneNumber
         }
         if(dbIsNewUser(user['_id'])):
             userData['adminID'] = _id

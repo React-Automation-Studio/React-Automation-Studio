@@ -12,7 +12,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import Checkbox from '@material-ui/core/Checkbox';
 import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -22,12 +21,6 @@ import Button from '@material-ui/core/Button';
 import Slide from '@material-ui/core/Slide';
 import useDeleteUser from './adminDbHooks/useDeleteUser';
 import useEnableUser from './adminDbHooks/useEnableUser';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import ErrorIcon from '@material-ui/icons/Error';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-
 import AddUsers from './AddUsers'
 import ModifyUser from './ModifyUser'
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -237,4 +230,3 @@ AllUsers.propTypes = {
 };
 
 export default AllUsers;
-//export default AllUsers;

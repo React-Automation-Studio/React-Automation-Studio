@@ -1,20 +1,8 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
-import Checkbox from '@material-ui/core/Checkbox';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Button from '@material-ui/core/Button';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import IconButton from '@material-ui/core/IconButton';
-import EditIcon from '@material-ui/icons/Edit';
-import ErrorIcon from '@material-ui/icons/Error';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-//import useModifyUser from './userProfileHooks/useModifyUser'
 import TraditionalLayout from '../../UI/Layout/ComposedLayouts/TraditionalLayout';
 import AutomationStudioContext from '../../SystemComponents/AutomationStudioContext';
 import useUserDetails from './userProfileHooks/useUserDetails';
@@ -43,28 +31,16 @@ const useStyles = makeStyles((theme) => ({
 const UserProfile = (props) => {
     const context = useContext(AutomationStudioContext);
     const theme = useTheme()
-   
-    // useEffect(() => {
-
-
-    //     setSaveOkLatched(saveOk)
-
-    //   }, [saveOk])
- 
     const { username } = context.userData;
     const { roles } = context.userData;
     const { userData, initialized: userDataInitialized } = useUserDetails({ username: username });
-
-
-    
-   
     const { email, givenName, familyName, phoneNumber, officeLocation, pwTimestamp } = userData;
     let id;
-    if (userDataInitialized){
-        id =userData['_id']['$oid']
+    if (userDataInitialized) {
+        id = userData['_id']['$oid']
     }
-    else{
-        id =null
+    else {
+        id = null
     }
     let pwDate;
     if (pwTimestamp) {
@@ -73,26 +49,20 @@ const UserProfile = (props) => {
     else {
         pwDate = ""
     }
-    
+
 
     const classes = useStyles();
 
-   
 
-   
+
+
 
     return (
 
         <TraditionalLayout
             title={"User Profile"}
         >
-
-
             <form autoComplete="off">
-
-
-
-
                 <Grid
                     style={{ marginTop: 16, padding: 32 }}
                     container
@@ -101,13 +71,8 @@ const UserProfile = (props) => {
                     alignItems="flex-start"
                     spacing={0}
                 >
-
-
-
-
                     <Grid item xs={12} sm={12} md={12} lg={4} >
                         <Paper elevation={theme.palette.paperElevation} >
-
                             <Grid
                                 style={{ padding: 16 }}
                                 container
@@ -153,20 +118,20 @@ const UserProfile = (props) => {
                                             disabled: true
                                         }}
                                         value={pwDate ? pwDate : ""}
-                                       
+
                                         label="Password last changed"
-                                     
+
                                         variant="outlined"
                                         fullWidth
                                         multiline
-                                
+
                                     />
                                 </Grid>}
 
                                 {!(process.env.REACT_APP_DisableStandardLogin === 'true') && <Grid item xs={6}>
-                                  <ChangeUserPassword user={{id:id}}/>
-                                  </Grid>}
-                            
+                                    <ChangeUserPassword user={{ id: id }} />
+                                </Grid>}
+
                                 <Grid item xs={12}  >
                                     <TextField
                                         inputProps={{
@@ -175,7 +140,7 @@ const UserProfile = (props) => {
                                         }}
                                         value={email ? email : ""}
                                         label="Email"
-                                    
+
                                         variant="outlined"
                                         fullWidth
 
@@ -189,7 +154,7 @@ const UserProfile = (props) => {
                                         }}
                                         value={givenName ? givenName : ""}
                                         label="Given Name"
-                                      
+
                                         variant="outlined"
                                         fullWidth
 
@@ -203,7 +168,7 @@ const UserProfile = (props) => {
                                         }}
                                         label="Family Name"
                                         value={familyName ? familyName : ""}
-                                      
+
                                         variant="outlined"
                                         fullWidth
                                     />
@@ -217,7 +182,7 @@ const UserProfile = (props) => {
 
                                         label="Phone Number"
                                         value={phoneNumber ? phoneNumber : ""}
-                                       
+
                                         variant="outlined"
                                         fullWidth
                                     />
@@ -231,7 +196,7 @@ const UserProfile = (props) => {
                                         }}
                                         label="Office Location "
                                         value={officeLocation ? officeLocation : ""}
-                                       
+
                                         variant="outlined"
                                         fullWidth
                                     />
@@ -239,7 +204,7 @@ const UserProfile = (props) => {
                                 <Grid item xs={4}></Grid>
                                 <Grid item xs={4}></Grid>
                                 <Grid item xs={4}>
-                                    {userDataInitialized&&<EditUser
+                                    {userDataInitialized && <EditUser
                                         user={{
                                             id: id,
                                             username: username,

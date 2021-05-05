@@ -1,15 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
-import Checkbox from '@material-ui/core/Checkbox';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
-import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import ErrorIcon from '@material-ui/icons/Error';
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
@@ -37,19 +33,9 @@ const useStyles = makeStyles((theme) => ({
 const ChangeUserPassword = (props) => {
 
     const [show, setShow] = useState(false);
-    const [error, setError] = useState(false);
-    const [username, setUsername] = useState(props.user.username);
-    const [usernameError, setUsernameError] = useState(false);
     const [password, setPassword] = useState("");
-    const [changePassword, setChangePassword] = useState(false)
     const passwordHelperText = "Minimum length 12 characters";
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [email, setEmail] = useState(props.user.email);
-    const [givenName, setGivenName] = useState(props.user.givenName);
-    const [familyName, setFamilyName] = useState(props.user.familyName);
-    const [phoneNumber, setPhoneNumber] = useState(props.user.phoneNumber);
-    const [officeLocation, setOfficeLocation] = useState(props.user.officeLocation);
-    const [submit, setSubmit] = useState(false);
     const {modifyUser,modifyUserError,userModified} =useModifyUser({id:props.user.id,
    
     password: password ,

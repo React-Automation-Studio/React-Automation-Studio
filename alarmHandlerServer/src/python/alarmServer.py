@@ -11,6 +11,7 @@ from pytz import utc, timezone
 from notifyServer import startNotifyServer, restartNotifyServer, notify
 from dbMongo import dbGetCollection, dbGetEnables, dbGetListOfPVNames, dbGetField, dbSetField, dbFindOne, dbUpdateHistory
 from dbMongo import dbGetFieldGlobal, dbSetFieldGlobal
+from dbMongo import dbGetAdminCollection, dbGetAdminUsers, dbIsNewUser, dbInsertNewUser, dbUpdateExistingUser, dbDeleteUser
 
 from log import app_log
 
@@ -46,10 +47,12 @@ alarmPVSevDict = {
 }
 
 pvCollection = dbGetCollection("pvs")
+userCollection = dbGetAdminCollection("users")
 
 alarmIOCPVPrefix = ""
 alarmIOCPVSuffix = ""
 activeUser = ""
+restartAlarmServerArea = ""
 
 notifyTimeout = 0
 
@@ -1157,6 +1160,9 @@ def restartAlarmServer():
 
     print("Alarm server restarted...")
     app_log.info("Alarm server restarted...")
+    entry = {
+        "timestamp": datetime.now(utc).isoformat(), "entry": "Alarm server restarted successfully..."}
+    dbUpdateHistory(restartAlarmServerArea, entry)
 
     dbSetFieldGlobal("restartCount", 0)
     # Don't reset user on auto-server restart
@@ -1202,7 +1208,7 @@ def bridgeWatchThread(areaKey, bridgeTime, subAreaKey=None, pvKey=None):
                 bridge = dbGetField('bridge', areaKey)
                 mongoBridgeTime = datetime.isoformat(
                     datetime.fromisoformat(dbGetField('bridgeTime', areaKey)).astimezone(utc))
-        if((not bridge)or(bridgeTime != mongoBridgeTime)):
+        if((not bridge) or (bridgeTime != mongoBridgeTime)):
             runningBridgeThreads.remove(threadName)
             break
         elif(datetime.now(utc).isoformat() > bridgeTime):
@@ -1261,6 +1267,7 @@ def bridgeWatchThread(areaKey, bridgeTime, subAreaKey=None, pvKey=None):
 def pvCollectionWatch():
     global pvCollection
     global watchRestartAlarmServer
+    global restartAlarmServerArea
     global writeEnableHistory
     global runningBridgeThreads
     with pvCollection.watch() as stream:
@@ -1284,18 +1291,21 @@ def pvCollectionWatch():
                             entry = {"timestamp": timestamp, "entry": " ".join(
                                 [activeUser, "deleted PV", pvname, "from area", topArea, ">", subAreaName, ", restarting alarm server..."])}
                             dbUpdateHistory(topArea+"="+subAreaName, entry)
+                            restartAlarmServerArea = topArea+"="+subAreaName
                         else:
                             pvname = areaDict[topArea +
                                               "="+removedFields.split(".")[1]]
                             entry = {"timestamp": timestamp, "entry": " ".join(
                                 [activeUser, "deleted PV", pvname, "from area", topArea, ", restarting alarm server..."])}
                             dbUpdateHistory(topArea, entry)
+                            restartAlarmServerArea = topArea
                     else:
                         areaKey = removedFields
                         subAreaName = subAreaKeyDict[topArea+"="+areaKey]
                         entry = {
                             "timestamp": timestamp, "entry": " ".join([activeUser, "deleted subArea", topArea, ">", subAreaName, ", restarting alarm server..."])}
                         dbUpdateHistory(topArea, entry)
+                        restartAlarmServerArea = topArea
                     restartCount = dbGetFieldGlobal("restartCount")
                     dbSetFieldGlobal("restartCount", restartCount+1)
                     watchRestartAlarmServer = True
@@ -1593,6 +1603,7 @@ def pvCollectionWatch():
                             restartCount = dbGetFieldGlobal("restartCount")
                             dbSetFieldGlobal("restartCount", restartCount+1)
                             watchRestartAlarmServer = True
+                            restartAlarmServerArea = topArea
                         elif (key.endswith(".pvs")):
                             # New pvs added subArea
                             topArea = docIDDict[documentKey["_id"]]
@@ -1605,6 +1616,7 @@ def pvCollectionWatch():
                             restartCount = dbGetFieldGlobal("restartCount")
                             dbSetFieldGlobal("restartCount", restartCount+1)
                             watchRestartAlarmServer = True
+                            restartAlarmServerArea = topArea+"="+subAreaName
                         elif (key == "area"):
                             # Area name change
                             oldName = docIDDict[documentKey["_id"]]
@@ -1615,6 +1627,7 @@ def pvCollectionWatch():
                             restartCount = dbGetFieldGlobal("restartCount")
                             dbSetFieldGlobal("restartCount", restartCount+1)
                             watchRestartAlarmServer = True
+                            restartAlarmServerArea = newName
                         elif (key.endswith(".name")):
                             # subArea name change
                             topArea = docIDDict[documentKey["_id"]]
@@ -1628,6 +1641,7 @@ def pvCollectionWatch():
                             restartCount = dbGetFieldGlobal("restartCount")
                             dbSetFieldGlobal("restartCount", restartCount+1)
                             watchRestartAlarmServer = True
+                            restartAlarmServerArea = topArea+"="+newName
                         elif(bool(re.search(r"^subArea\d+$", key))):
                             # New subArea added
                             topArea = docIDDict[documentKey["_id"]]
@@ -1638,6 +1652,7 @@ def pvCollectionWatch():
                             restartCount = dbGetFieldGlobal("restartCount")
                             dbSetFieldGlobal("restartCount", restartCount+1)
                             watchRestartAlarmServer = True
+                            restartAlarmServerArea = topArea+"="+newSubArea
             elif(change["operationType"] == "replace"):
                 replacedArea = docIDDict[change["fullDocument"]["_id"]]
                 entry = {
@@ -1646,6 +1661,7 @@ def pvCollectionWatch():
                 restartCount = dbGetFieldGlobal("restartCount")
                 dbSetFieldGlobal("restartCount", restartCount+1)
                 watchRestartAlarmServer = True
+                restartAlarmServerArea = replacedArea
             elif(change["operationType"] == "insert"):
                 newArea = change["fullDocument"]["area"]
                 entry = {
@@ -1654,6 +1670,7 @@ def pvCollectionWatch():
                 restartCount = dbGetFieldGlobal("restartCount")
                 dbSetFieldGlobal("restartCount", restartCount+1)
                 watchRestartAlarmServer = True
+                restartAlarmServerArea = newArea
             elif(change["operationType"] == "delete"):
                 deletedArea = docIDDict[change["documentKey"]["_id"]]
                 entry = {
@@ -1662,6 +1679,7 @@ def pvCollectionWatch():
                 restartCount = dbGetFieldGlobal("restartCount")
                 dbSetFieldGlobal("restartCount", restartCount+1)
                 watchRestartAlarmServer = True
+                restartAlarmServerArea = "_GLOBAL"
             else:
                 entry = {
                     "timestamp": timestamp, "entry": "Unknown database edit, restarting alarm server..."}
@@ -1669,6 +1687,7 @@ def pvCollectionWatch():
                 restartCount = dbGetFieldGlobal("restartCount")
                 dbSetFieldGlobal("restartCount", restartCount+1)
                 watchRestartAlarmServer = True
+                restartAlarmServerArea = "_GLOBAL"
 
 
 def globalCollectionWatch():
@@ -1694,6 +1713,94 @@ def globalCollectionWatch():
                         activeUser = change[key].capitalize()
                         if(activeUser == ''):
                             activeUser = 'Anonymous'
+
+
+def userCollectionWatch():
+    global userCollection
+    with userCollection.watch() as stream:
+        for change in stream:
+            opType = change['operationType']
+            if(opType == 'update'):
+                _id = change['documentKey']['_id']
+                oldUser = dbFindOne('users', {'adminDB_id': _id})
+                updateDict = change['updateDescription']['updatedFields']
+                userData = {}
+                if ('email' in updateDict):
+                    userData['email'] = updateDict['email']
+                if ('phoneNumber' in updateDict):
+                    userData['mobile'] = updateDict['phoneNumber']
+                if ('enabled' in updateDict):
+                    userData['adminDB_en'] = updateDict['enabled']
+                if('givenName' in updateDict):
+                    userData['givenName'] = updateDict['givenName']
+                    if('familyName' in updateDict):
+                        userData['name'] = updateDict['givenName'] + \
+                            " "+updateDict['familyName']
+                    else:
+                        userData['name'] = updateDict['givenName'] + \
+                            " "+oldUser['familyName']
+                if('familyName' in updateDict):
+                    userData['familyName'] = updateDict['familyName']
+                    if('givenName' not in updateDict):
+                        userData['name'] = oldUser['givenName'] + \
+                            " "+updateDict['familyName']
+                if(bool(userData)):
+                    dbUpdateExistingUser(_id, userData)
+                    app_log.info("Updated user _id "+str(_id)+" from adminDB")
+                    app_log.info("Updated fields "+str(userData.keys()))
+            elif(opType == 'insert'):
+                fullDoc = change['fullDocument']
+                userData = {
+                    'username': fullDoc['username'],
+                    'adminDB_en': fullDoc['enabled'],
+                    'givenName': fullDoc['givenName'],
+                    'familyName': fullDoc['familyName'],
+                    'name': fullDoc['givenName']+" "+fullDoc['familyName'],
+                    'email': fullDoc['email'],
+                    'mobile': fullDoc['phoneNumber'],
+                    'adminDB_id': fullDoc['_id'],
+                    'isAHUser': False
+                }
+                dbInsertNewUser(userData)
+                app_log.info("New user _id " +
+                             str(fullDoc['_id'])+" added from adminDB")
+            elif(opType == 'delete'):
+                dbDeleteUser({'adminDB_id': change['documentKey']['_id']})
+                app_log.warning(
+                    "User _id "+str(change['documentKey']['_id'])+" deleted from adminDB")
+
+
+def initSeedUserData():
+    for user in dbGetAdminUsers():
+        _id = user['_id']
+        username = user['username']
+        enabled = user['enabled']
+        givenName = user['givenName'] if ('givenName' in user) else ''
+        familyName = user['familyName'] if ('familyName' in user) else ''
+        email = user['email'] if ('email' in user) else ''
+        phoneNumber = user['phoneNumber'] if ('phoneNumber' in user) else ''
+        userData = {
+            'username': username,
+            'adminDB_en': enabled,
+            'givenName': givenName,
+            'familyName': familyName,
+            'name': givenName+" "+familyName,
+            'email': email,
+            'mobile': phoneNumber
+        }
+        if(dbIsNewUser(user['_id'])):
+            userData['adminDB_id'] = _id
+            userData['isAHUser'] = False
+            dbInsertNewUser(userData)
+            app_log.info(
+                "New user "+userData["name"]+"_id "+str(_id)+" added from adminDB")
+        else:
+            dbUpdateExistingUser(_id, userData)
+            app_log.info(
+                "Existing user "+userData["name"]+"_id "+str(_id)+" updated from adminDB")
+
+    print("Seeded user data from admin DB successfully...")
+    app_log.info("Seeded user data from admin DB successfully...")
 
 
 def main():
@@ -1724,9 +1831,14 @@ def main():
     _thread.start_new_thread(pvCollectionWatch, ())
     # For change to global enable to reevaluate area pvs
     _thread.start_new_thread(globalCollectionWatch, ())
+    # For change to user data to update alarm handler users
+    _thread.start_new_thread(userCollectionWatch, ())
 
     # Start notify server
     startNotifyServer()
+
+    # Get user data from admin database
+    initSeedUserData()
 
     print("Alarm server running...")
     app_log.info("Alarm server running...")
@@ -1751,7 +1863,7 @@ def main():
         if(notifyContent):
             notifyTimeout += 1
             notifyContent = False
-            sleep(1.0)
+            sleep(2.0)
             if((not notifyContent) or (notifyTimeout >= 2)):
                 _thread.start_new_thread(notify, (notifyBuffer,))
                 notifyBuffer = {}

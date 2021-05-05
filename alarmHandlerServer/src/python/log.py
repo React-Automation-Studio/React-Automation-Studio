@@ -21,8 +21,8 @@ if(localtz):
 
 logFile = './log/AHLogFile'
 
-my_handler = RotatingFileHandler(logFile, mode='a', maxBytes=16*1024*1024,
-                                 backupCount=0, encoding=None, delay=0)
+my_handler = RotatingFileHandler(logFile, mode='a', maxBytes=8*1024*1024,
+                                 backupCount=2, encoding=None, delay=0)
 my_handler.setFormatter(log_formatter)
 my_handler.setLevel(logging.INFO)
 

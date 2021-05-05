@@ -142,190 +142,192 @@ const UserTable = (props) => {
                         const allowEdit = isDemoUser || user.username === props.username || props.isAlarmAdmin
                         const invalidContact = props.emailError[`${user.username}-${user.name}`] || props.mobileError[`${user.username}-${user.name}`]
 
-                        return (
-                            < TableRow
-                                key={`${user.username}-${user.name}`}
-                                hover
-                                selected={rowSelected}
-                                onClick={(event) => {
-                                    event.preventDefault()
-                                    event.stopPropagation()
-                                    props.setFilterUser(user.name, user.username)
+                        if (user.adminDB_en && user.isAHUser) {
+                            return (
+                                < TableRow
+                                    key={`${user.username}-${user.name}`}
+                                    hover
+                                    selected={rowSelected}
+                                    onClick={(event) => {
+                                        event.preventDefault()
+                                        event.stopPropagation()
+                                        props.setFilterUser(user.name, user.username)
 
-                                }}
-                            >
-                                <TableCell>
-                                    {user.name}
-                                </TableCell>
-                                <TableCell>
-                                    <Grid
-                                        container
-                                        direction="row"
-                                        justify="center"
-                                        alignItems="center"
-                                    >
-                                        <Grid item xs={2} className={classes.verticalMiddle}>
-                                            <EmailIcon />
+                                    }}
+                                >
+                                    <TableCell>
+                                        {user.name}
+                                    </TableCell>
+                                    <TableCell>
+                                        <Grid
+                                            container
+                                            direction="row"
+                                            justify="center"
+                                            alignItems="center"
+                                        >
+                                            <Grid item xs={2} className={classes.verticalMiddle}>
+                                                <EmailIcon />
+                                            </Grid>
+                                            <Grid item xs={10}>
+                                                <TextField
+                                                    type={allowEdit ? 'text' : 'password'}
+                                                    value={user.email}
+                                                    onChange={(event) => props.updateUserEmail(event, user.name, user.username)}
+                                                    InputProps={{
+                                                        classes: { input: classes.emailInputField },
+                                                        readOnly: true,
+                                                        disableUnderline: true
+                                                    }}
+                                                    error={props.emailError[`${user.username}-${user.name}`]}
+                                                    label={props.emailError[`${user.username}-${user.name}`] ? "Invalid email" : undefined}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={2} className={classes.verticalMiddle}>
+                                                <CallIcon />
+                                            </Grid>
+                                            <Grid item xs={10}>
+                                                <TextField
+                                                    type={allowEdit ? 'text' : 'password'}
+                                                    value={user.mobile}
+                                                    onChange={(event) => props.updateUserMobile(event, user.name, user.username)}
+                                                    InputProps={{
+                                                        classes: { input: classes.emailInputField },
+                                                        readOnly: true,
+                                                        disableUnderline: true
+                                                    }}
+                                                    error={props.mobileError[`${user.username}-${user.name}`]}
+                                                    label={props.mobileError[`${user.username}-${user.name}`] ? "Invalid number" : undefined}
+                                                />
+                                            </Grid>
                                         </Grid>
-                                        <Grid item xs={10}>
-                                            <TextField
-                                                type={allowEdit ? 'text' : 'password'}
-                                                value={user.email}
-                                                onChange={(event) => props.updateUserEmail(event, user.name, user.username)}
-                                                InputProps={{
-                                                    classes: { input: classes.emailInputField },
-                                                    readOnly: props.userEdit[`${user.username}-${user.name}`] ? false : true,
-                                                    disableUnderline: props.userEdit[`${user.username}-${user.name}`] ? false : true
-                                                }}
-                                                error={props.emailError[`${user.username}-${user.name}`]}
-                                                label={props.emailError[`${user.username}-${user.name}`] ? "Invalid email" : undefined}
-                                            />
-                                        </Grid>
-                                        <Grid item xs={2} className={classes.verticalMiddle}>
-                                            <CallIcon />
-                                        </Grid>
-                                        <Grid item xs={10}>
-                                            <TextField
-                                                type={allowEdit ? 'text' : 'password'}
-                                                value={user.mobile}
-                                                onChange={(event) => props.updateUserMobile(event, user.name, user.username)}
-                                                InputProps={{
-                                                    classes: { input: classes.emailInputField },
-                                                    readOnly: props.userEdit[`${user.username}-${user.name}`] ? false : true,
-                                                    disableUnderline: props.userEdit[`${user.username}-${user.name}`] ? false : true
-                                                }}
-                                                error={props.mobileError[`${user.username}-${user.name}`]}
-                                                label={props.mobileError[`${user.username}-${user.name}`] ? "Invalid number" : undefined}
-                                            />
-                                        </Grid>
-                                    </Grid>
-                                </TableCell>
-                                <TableCell>
-                                    {user.notifyPVs.map((expressionObject, index) => {
-                                        const expression = expressionObject.regEx
-                                        const filledChip = ((expression === fillChipName) && (index === fillChipIndex)) || (!showAddHeader && (user.name === props.filterUser.name && user.username === props.filterUser.username))
-                                        return (
-                                            <Chip
-                                                classes={{ outlinedSecondary: classes.chipOutlinedSecondary }}
-                                                key={`${index}-${expression}`}
-                                                label={expression}
-                                                variant={filledChip ? undefined : "outlined"}
-                                                color="secondary"
-                                                className={classes.chip}
-                                                onClick={(event) => props.setFilterUserRegex(event, expression, index)}
-                                                onDelete={props.userEdit[`${user.username}-${user.name}`] ? (event) => { props.deleteChip(event, user.name, user.username, expression) } : undefined}
-                                            />
-                                        )
-                                    })}
-                                </TableCell>
-                                {showAddHeader && <TableCell>
-                                    {
-                                        props.userEdit[`${user.username}-${user.name}`]
-                                            ? <TextField
-                                                value={props.addRegexVal[`${user.username}-${user.name}`]}
-                                                onChange={(event) => props.setAddRegexVal(event, user.username, user.name)}
-                                                fullWidth={true}
-                                                autoFocus={true}
-                                                error={props.regexError[`${user.username}-${user.name}`]}
-                                                label={props.regexError[`${user.username}-${user.name}`] ? "Invalid regex" : undefined}
-                                                InputProps={
-                                                    props.regexError[`${user.username}-${user.name}`]
-                                                        ? {
-                                                            endAdornment: (
-                                                                <InputAdornment position="end"  >
-                                                                    <BlockIcon />
-                                                                </InputAdornment >
-                                                            )
-                                                        }
-                                                        : {
-                                                            endAdornment: (
-                                                                <InputAdornment position="end" onClick={(event) => props.addChip(event, user.name, user.username, props.addRegexVal[`${user.username}-${user.name}`])} >
-                                                                    <Tooltip title="Add" placement="bottom">
-                                                                        <AddIcon style={{ cursor: 'pointer' }} className={classes.icon} />
-                                                                    </Tooltip>
-                                                                </InputAdornment >
-                                                            ),
-                                                        }
-                                                }
-                                            />
-                                            : null
-                                    }
-                                </TableCell>}
-                                <TableCell align="center">
-                                    {
-                                        allowEdit
-                                            ? props.userEdit[`${user.username}-${user.name}`]
-                                                ? <React.Fragment>
-                                                    {invalidContact
-                                                        ? <IconButton
-                                                            disabled={true}
-                                                        >
-                                                            <BlockIcon />
-                                                        </IconButton>
-                                                        : <Tooltip title="Apply" placement="bottom">
-                                                            <IconButton
-                                                                onClick={(event) => { props.applyEdit(event, user.name, user.username) }}
+                                    </TableCell>
+                                    <TableCell>
+                                        {user.notifyPVs.map((expressionObject, index) => {
+                                            const expression = expressionObject.regEx
+                                            const filledChip = ((expression === fillChipName) && (index === fillChipIndex)) || (!showAddHeader && (user.name === props.filterUser.name && user.username === props.filterUser.username))
+                                            return (
+                                                <Chip
+                                                    classes={{ outlinedSecondary: classes.chipOutlinedSecondary }}
+                                                    key={`${index}-${expression}`}
+                                                    label={expression}
+                                                    variant={filledChip ? undefined : "outlined"}
+                                                    color="secondary"
+                                                    className={classes.chip}
+                                                    onClick={(event) => props.setFilterUserRegex(event, expression, index)}
+                                                    onDelete={props.userEdit[`${user.username}-${user.name}`] ? (event) => { props.deleteChip(event, user.name, user.username, expression) } : undefined}
+                                                />
+                                            )
+                                        })}
+                                    </TableCell>
+                                    {showAddHeader && <TableCell>
+                                        {
+                                            props.userEdit[`${user.username}-${user.name}`]
+                                                ? <TextField
+                                                    value={props.addRegexVal[`${user.username}-${user.name}`]}
+                                                    onChange={(event) => props.setAddRegexVal(event, user.username, user.name)}
+                                                    fullWidth={true}
+                                                    autoFocus={true}
+                                                    error={props.regexError[`${user.username}-${user.name}`]}
+                                                    label={props.regexError[`${user.username}-${user.name}`] ? "Invalid regex" : undefined}
+                                                    InputProps={
+                                                        props.regexError[`${user.username}-${user.name}`]
+                                                            ? {
+                                                                endAdornment: (
+                                                                    <InputAdornment position="end"  >
+                                                                        <BlockIcon />
+                                                                    </InputAdornment >
+                                                                )
+                                                            }
+                                                            : {
+                                                                endAdornment: (
+                                                                    <InputAdornment position="end" onClick={(event) => props.addChip(event, user.name, user.username, props.addRegexVal[`${user.username}-${user.name}`])} >
+                                                                        <Tooltip title="Add" placement="bottom">
+                                                                            <AddIcon style={{ cursor: 'pointer' }} className={classes.icon} />
+                                                                        </Tooltip>
+                                                                    </InputAdornment >
+                                                                ),
+                                                            }
+                                                    }
+                                                />
+                                                : null
+                                        }
+                                    </TableCell>}
+                                    <TableCell align="center">
+                                        {
+                                            allowEdit
+                                                ? props.userEdit[`${user.username}-${user.name}`]
+                                                    ? <React.Fragment>
+                                                        {invalidContact
+                                                            ? <IconButton
+                                                                disabled={true}
                                                             >
-                                                                <DoneIcon className={classes.icon} />
+                                                                <BlockIcon />
                                                             </IconButton>
-                                                        </Tooltip>}
-                                                    <Tooltip title="Cancel" placement="bottom">
-                                                        <IconButton
-                                                            onClick={(event) => { props.cancelEdit(event, user.name, user.username) }}
-                                                            style={{ marginLeft: '1em' }}
-                                                        >
-                                                            <ClearIcon className={classes.icon} />
+                                                            : <Tooltip title="Apply" placement="bottom">
+                                                                <IconButton
+                                                                    onClick={(event) => { props.applyEdit(event, user.name, user.username) }}
+                                                                >
+                                                                    <DoneIcon className={classes.icon} />
+                                                                </IconButton>
+                                                            </Tooltip>}
+                                                        <Tooltip title="Cancel" placement="bottom">
+                                                            <IconButton
+                                                                onClick={(event) => { props.cancelEdit(event, user.name, user.username) }}
+                                                                style={{ marginLeft: '1em' }}
+                                                            >
+                                                                <ClearIcon className={classes.icon} />
+                                                            </IconButton>
+                                                        </Tooltip>
+                                                    </React.Fragment>
+                                                    : <Tooltip title="Edit expressions" placement="bottom">
+                                                        <IconButton onClick={(event) => { props.setUserEdit(event, user.name, user.username, true) }}>
+                                                            <EditIcon className={classes.icon} />
                                                         </IconButton>
                                                     </Tooltip>
-                                                </React.Fragment>
-                                                : <Tooltip title="Edit expressions" placement="bottom">
-                                                    <IconButton onClick={(event) => { props.setUserEdit(event, user.name, user.username, true) }}>
-                                                        <EditIcon className={classes.icon} />
-                                                    </IconButton>
-                                                </Tooltip>
-                                            : null
-                                    }
-                                </TableCell>
-                                <TableCell>
-                                    <div
-                                        style={{
-                                            display: 'flex',
-                                            alignItems: 'center'
-                                        }}
-                                    >
+                                                : null
+                                        }
+                                    </TableCell>
+                                    <TableCell>
                                         <div
-                                            style={{ paddingRight: '0.5em' }}
-                                        >
-                                            {
-                                                rowSelected || !chipSelected
-                                                    ? user.global
-                                                        ? props.userScheduleString({ isGlobal: true, ...user.globalSetup })
-                                                        : "Global schedule not enabled. Click notification expressions to see its unique notification schedule."
-                                                    : user.global
-                                                        ? props.userScheduleString({ isGlobal: true, ...user.globalSetup })
-                                                        : props.userScheduleString({ isGlobal: false, ...user.notifyPVs[scheduleIndex].notifySetup })
-                                            }
-                                        </div>
-                                        <div
-                                            className={classes.verticalMiddle}
                                             style={{
-                                                marginLeft: 'auto'
+                                                display: 'flex',
+                                                alignItems: 'center'
                                             }}
                                         >
-                                            {
-                                                allowEdit
-                                                    ? <Tooltip title="Edit schedule" placement="left">
-                                                        <IconButton onClick={(event) => { props.openDialog(event, user.name, user.username) }}>
-                                                            <EventIcon className={classes.icon} />
-                                                        </IconButton>
-                                                    </Tooltip>
-                                                    : null
-                                            }
+                                            <div
+                                                style={{ paddingRight: '0.5em' }}
+                                            >
+                                                {
+                                                    rowSelected || !chipSelected
+                                                        ? user.global
+                                                            ? props.userScheduleString({ isGlobal: true, ...user.globalSetup })
+                                                            : "Global schedule not enabled. Click notification expressions to see its unique notification schedule."
+                                                        : user.global
+                                                            ? props.userScheduleString({ isGlobal: true, ...user.globalSetup })
+                                                            : props.userScheduleString({ isGlobal: false, ...user.notifyPVs[scheduleIndex].notifySetup })
+                                                }
+                                            </div>
+                                            <div
+                                                className={classes.verticalMiddle}
+                                                style={{
+                                                    marginLeft: 'auto'
+                                                }}
+                                            >
+                                                {
+                                                    allowEdit
+                                                        ? <Tooltip title="Edit schedule" placement="left">
+                                                            <IconButton onClick={(event) => { props.openDialog(event, user.name, user.username) }}>
+                                                                <EventIcon className={classes.icon} />
+                                                            </IconButton>
+                                                        </Tooltip>
+                                                        : null
+                                                }
+                                            </div>
                                         </div>
-                                    </div>
-                                </TableCell>
-                            </TableRow>
-                        )
+                                    </TableCell>
+                                </TableRow>
+                            )
+                        }
                     })}
 
                 </TableBody>

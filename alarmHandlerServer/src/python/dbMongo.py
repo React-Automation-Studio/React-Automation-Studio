@@ -4,30 +4,18 @@ from time import sleep
 
 from log import app_log
 
-try:
-    AH_DEBUG = bool(os.environ['AH_DEBUG'])
-except:
-    AH_DEBUG = False
-
-try:
-    REPLICA_SET_MEMBERS = os.environ['REPLICA_SET_MEMBERS'].split(',')
-    REPLICA_SET_MEMBER_LENGTH = len(REPLICA_SET_MEMBERS)
-except:
-    REPLICA_SET_MEMBER_LENGTH = 3
+AH_DEBUG = bool(os.getenv('AH_DEBUG', False))
 
 alarmDB = None
+adminDB = None
 
 
-def initDatabase():
-    try:
-        ALARM_DATABASE = os.environ['ALARM_DATABASE']
-    except:
-        ALARM_DATABASE = "localhost"
-    try:
-        ALARM_DATABASE_REPLICA_SET_NAME = os.environ['ALARM_DATABASE_REPLICA_SET_NAME']
-    except:
-        ALARM_DATABASE_REPLICA_SET_NAME = "devrs"
-
+def initAlarmDatabase():
+    ALARM_DATABASE = os.getenv('ALARM_DATABASE', 'localhost')
+    ALARM_DATABASE_REPLICA_SET_NAME = os.getenv(
+        'ALARM_DATABASE_REPLICA_SET_NAME', 'devrs')
+    MONGO_INITDB_ALARM_DATABASE = os.getenv(
+        'MONGO_INITDB_ALARM_DATABASE', 'demoAlarmDatabase')
     try:
         MONGO_ROOT_USERNAME = os.environ['MONGO_ROOT_USERNAME']
         MONGO_ROOT_PASSWORD = os.environ['MONGO_ROOT_PASSWORD']
@@ -38,12 +26,6 @@ def initDatabase():
         mongoAuth = True
     except:
         mongoAuth = False
-
-    try:
-        MONGO_INITDB_ALARM_DATABASE = os.environ['MONGO_INITDB_ALARM_DATABASE']
-    except:
-        MONGO_INITDB_ALARM_DATABASE = "demoAlarmDatabase"
-
     if (mongoAuth):
         client = MongoClient(
             'mongodb://%s:%s@%s' %
@@ -54,15 +36,6 @@ def initDatabase():
         client = MongoClient('mongodb://%s' % (ALARM_DATABASE),
                              replicaSet=ALARM_DATABASE_REPLICA_SET_NAME,
                              readPreference='secondaryPreferred')
-
-    # Wait for MongoClient to discover the whole replica set and identify MASTER!
-    # while(len(list(client.nodes)) != REPLICA_SET_MEMBER_LENGTH):
-    #     sleep(1.0)
-    #     app_log.info(
-    #         'Waiting for Pymongo to discover the whole replica set and identify MASTER')
-    # app_log.info('Pymongo connected to all replica set members')
-    # app_log.info(str(list(client.nodes)))
-    #
 
     global alarmDB
     alarmDB = client[MONGO_INITDB_ALARM_DATABASE]
@@ -79,6 +52,101 @@ def initDatabase():
         sleep(1.0)
     app_log.info('Alarm database '+MONGO_INITDB_ALARM_DATABASE +
                  ' instantiated')
+
+
+def initAdminDatabase():
+    ADMIN_DATABASE = os.getenv('ADMIN_DATABASE', 'localhost')
+    ADMIN_DATABASE_REPLICA_SET_NAME = os.getenv(
+        'ADMIN_DATABASE_REPLICA_SET_NAME', 'devrs')
+    try:
+        MONGO_ROOT_USERNAME = os.environ['MONGO_ROOT_USERNAME']
+        MONGO_ROOT_PASSWORD = os.environ['MONGO_ROOT_PASSWORD']
+        MONGO_ROOT_USERNAME = urllib.parse.quote_plus(
+            MONGO_ROOT_USERNAME)
+        MONGO_ROOT_PASSWORD = urllib.parse.quote_plus(
+            MONGO_ROOT_PASSWORD)
+        mongoAuth = True
+    except:
+        mongoAuth = False
+    if (mongoAuth):
+        client = MongoClient(
+            'mongodb://%s:%s@%s' %
+            (MONGO_ROOT_USERNAME, MONGO_ROOT_PASSWORD, ADMIN_DATABASE),
+            replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME,
+            readPreference='secondaryPreferred')
+    else:
+        client = MongoClient('mongodb://%s' % (ADMIN_DATABASE),
+                             replicaSet=ADMIN_DATABASE_REPLICA_SET_NAME,
+                             readPreference='secondaryPreferred')
+
+    global adminDB
+    adminDB = client['rasAdminDb']
+
+
+def dbGetAdminCollection(collection):
+    return adminDB[collection]
+
+
+def dbGetAdminUsers():
+    return list(adminDB['users'].find({}, {
+        '_id': 1,
+        'username': 1,
+        'givenName': 1,
+        'familyName': 1,
+        'email': 1,
+        'phoneNumber': 1,
+        'enabled': 1
+    }))
+
+
+def dbIsNewUser(id):
+    doc = alarmDB.users.find_one(
+        {"adminDB_id": id})
+    return not bool(doc)
+
+
+def dbInsertNewUser(user):
+    user["global"] = True
+    user["globalSetup"] = {
+        "notify": True,
+        "alarmMinor": True,
+        "alarmMajor": True,
+        "alarmInvalid": True,
+        "alarmDisconn": True,
+        "email": True,
+        "sms": False,
+        "whatsapp": False,
+        "signal": False,
+        "allDay": True,
+        "fromTime": "",
+        "toTime": "",
+        "weekly": True,
+        "days": {
+            "Monday": True,
+            "Tuesday": True,
+            "Wednesday": True,
+            "Thursday": True,
+            "Friday": True,
+            "Saturday": True,
+            "Sunday": True
+        },
+        "dateRange": False,
+        "fromDate": "",
+        "toDate": ""
+    }
+    user["notifyPVs"] = []
+    alarmDB.users.insert_one(user)
+
+
+def dbUpdateExistingUser(id, userData):
+    alarmDB.users.update_one(
+        {'adminDB_id': id},
+        {'$set': userData}
+    )
+
+
+def dbDeleteUser(query):
+    alarmDB.users.delete_one(query)
 
 
 def dbGetCollection(collection):
@@ -207,7 +275,8 @@ def dbUpdateHistory(areaKey, entry, pvname=None):
 
 
 def main():
-    initDatabase()
+    initAlarmDatabase()
+    initAdminDatabase()
 
 
 main()

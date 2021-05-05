@@ -150,188 +150,192 @@ def notifyValid(notifySetup):
 
 def notify(notifyBuffer):
     for user in dbGetCollection("users").find():
-        notifyEmailDict = {}
-        notifySMSDict = {}
-        notifyWhatsAppDict = {}
-        notifySignalDict = {}
-        name = user["name"]
-        email = user["email"]
-        mobile = user["mobile"]
-        for notifyPV in user["notifyPVs"]:
-            for area in notifyBuffer:
-                for pvname in notifyBuffer[area]:
-                    app_log.info('##-START NOTIFY DEBUG-##')
-                    app_log.info(name)
-                    app_log.info(area)
-                    app_log.info(pvname)
-                    message = notifyBuffer[area][pvname]
-                    minorAlarm = False
-                    majorAlarm = False
-                    invalidAlarm = False
-                    disconnAlarm = False
-                    for entry in message:
-                        minorAlarm = minorAlarm or (
-                            "MINOR_ALARM" in entry["entry"])
-                        majorAlarm = majorAlarm or (
-                            "MAJOR_ALARM" in entry["entry"])
-                        invalidAlarm = invalidAlarm or (
-                            "INVALID_ALARM" in entry["entry"])
-                        disconnAlarm = disconnAlarm or (
-                            "DISCONNECTED" in entry["entry"])
-                    app_log.info("minorAlarm " + str(minorAlarm))
-                    app_log.info("majorAlarm "+str(majorAlarm))
-                    app_log.info("invalidAlarm "+str(invalidAlarm))
-                    app_log.info("disconnAlarm "+str(disconnAlarm))
-                    if(js_regex.compile(notifyPV["regEx"]).search(pvname)):
-                        # Passes regEx check
-                        app_log.info("Pass regEx " + notifyPV["regEx"])
-                        notify = False
-                        notifyAlarmType = False
-                        notifyOnEmail = False
-                        notifyOnSMS = False
-                        notifyOnWhatsApp = False
-                        notifyOnSignal = False
-                        if(user["global"]):
-                            app_log.info("Using global profile")
-                            notify = notifyValid(user["globalSetup"])
-                            notifyOnEmail = user["globalSetup"]["email"]
-                            notifyOnSMS = user["globalSetup"]["sms"]
-                            notifyOnWhatsApp = user["globalSetup"]["whatsapp"]
-                            # Backwards compatible
-                            notifyOnSignal = user["globalSetup"]["signal"] if (
-                                "signal" in user["globalSetup"]) else False
-                            notifyMinorAlarm = user["globalSetup"]["alarmMinor"] if (
-                                "alarmMinor" in user["globalSetup"]) else True
-                            notifyMajorAlarm = user["globalSetup"]["alarmMajor"] if (
-                                "alarmMajor" in user["globalSetup"]) else True
-                            notifyInvalidAlarm = user["globalSetup"]["alarmInvalid"] if (
-                                "alarmInvalid" in user["globalSetup"]) else True
-                            notifyDisconnAlarm = user["globalSetup"]["alarmDisconn"] if (
-                                "alarmDisconn" in user["globalSetup"]) else True
-                            #
+        if(user["adminDB_en"] and user["isAHUser"]):
+            app_log.info("User "+user["name"]+" is a valid alarm user")
+            notifyEmailDict = {}
+            notifySMSDict = {}
+            notifyWhatsAppDict = {}
+            notifySignalDict = {}
+            name = user["name"]
+            email = user["email"]
+            mobile = user["mobile"]
+            for notifyPV in user["notifyPVs"]:
+                for area in notifyBuffer:
+                    for pvname in notifyBuffer[area]:
+                        app_log.info('##-START NOTIFY DEBUG-##')
+                        app_log.info(name)
+                        app_log.info(area)
+                        app_log.info(pvname)
+                        message = notifyBuffer[area][pvname]
+                        minorAlarm = False
+                        majorAlarm = False
+                        invalidAlarm = False
+                        disconnAlarm = False
+                        for entry in message:
+                            minorAlarm = minorAlarm or (
+                                "MINOR_ALARM" in entry["entry"])
+                            majorAlarm = majorAlarm or (
+                                "MAJOR_ALARM" in entry["entry"])
+                            invalidAlarm = invalidAlarm or (
+                                "INVALID_ALARM" in entry["entry"])
+                            disconnAlarm = disconnAlarm or (
+                                "DISCONNECTED" in entry["entry"])
+                        app_log.info("minorAlarm " + str(minorAlarm))
+                        app_log.info("majorAlarm "+str(majorAlarm))
+                        app_log.info("invalidAlarm "+str(invalidAlarm))
+                        app_log.info("disconnAlarm "+str(disconnAlarm))
+                        if(js_regex.compile(notifyPV["regEx"]).search(pvname)):
+                            # Passes regEx check
+                            app_log.info("Pass regEx " + notifyPV["regEx"])
+                            notify = False
+                            notifyAlarmType = False
+                            notifyOnEmail = False
+                            notifyOnSMS = False
+                            notifyOnWhatsApp = False
+                            notifyOnSignal = False
+                            if(user["global"]):
+                                app_log.info("Using global profile")
+                                notify = notifyValid(user["globalSetup"])
+                                notifyOnEmail = user["globalSetup"]["email"]
+                                notifyOnSMS = user["globalSetup"]["sms"]
+                                notifyOnWhatsApp = user["globalSetup"]["whatsapp"]
+                                # Backwards compatible
+                                notifyOnSignal = user["globalSetup"]["signal"] if (
+                                    "signal" in user["globalSetup"]) else False
+                                notifyMinorAlarm = user["globalSetup"]["alarmMinor"] if (
+                                    "alarmMinor" in user["globalSetup"]) else True
+                                notifyMajorAlarm = user["globalSetup"]["alarmMajor"] if (
+                                    "alarmMajor" in user["globalSetup"]) else True
+                                notifyInvalidAlarm = user["globalSetup"]["alarmInvalid"] if (
+                                    "alarmInvalid" in user["globalSetup"]) else True
+                                notifyDisconnAlarm = user["globalSetup"]["alarmDisconn"] if (
+                                    "alarmDisconn" in user["globalSetup"]) else True
+                                #
+                            else:
+                                app_log.info("Using unique profile")
+                                notify = notifyValid(notifyPV["notifySetup"])
+                                notifyOnEmail = notifyPV["notifySetup"]["email"]
+                                notifyOnSMS = notifyPV["notifySetup"]["sms"]
+                                notifyOnWhatsApp = notifyPV["notifySetup"]["whatsapp"]
+                                # Backwards compatible
+                                notifyOnSignal = notifyPV["notifySetup"]["signal"] if (
+                                    "signal" in notifyPV["notifySetup"]) else False
+                                notifyMinorAlarm = notifyPV["notifySetup"]["alarmMinor"] if (
+                                    "alarmMinor" in notifyPV["notifySetup"]) else True
+                                notifyMajorAlarm = notifyPV["notifySetup"]["alarmMajor"] if (
+                                    "alarmMajor" in notifyPV["notifySetup"]) else True
+                                notifyInvalidAlarm = notifyPV["notifySetup"]["alarmInvalid"] if (
+                                    "alarmInvalid" in notifyPV["notifySetup"]) else True
+                                notifyDisconnAlarm = notifyPV["notifySetup"]["alarmDisconn"] if (
+                                    "alarmDisconn" in notifyPV["notifySetup"]) else True
+                                #
+                            app_log.info("notifyMinorAlarm " +
+                                         str(notifyMinorAlarm))
+                            app_log.info("notifyMajorAlarm " +
+                                         str(notifyMajorAlarm))
+                            app_log.info("notifyInvalidAlarm " +
+                                         str(notifyInvalidAlarm))
+                            app_log.info("notifyDisconnAlarm " +
+                                         str(notifyDisconnAlarm))
+                            if(minorAlarm and notifyMinorAlarm):
+                                notifyAlarmType = True
+                            elif(majorAlarm and notifyMajorAlarm):
+                                notifyAlarmType = True
+                            elif(invalidAlarm and notifyInvalidAlarm):
+                                notifyAlarmType = True
+                            elif(disconnAlarm and notifyDisconnAlarm):
+                                notifyAlarmType = True
+                            if(notify and notifyAlarmType):
+                                # Passes notifyValid check
+                                app_log.info(
+                                    "Pass notifyValid and alarm type checks")
+                                if(notifyOnEmail):
+                                    # Notify via email
+                                    app_log.info("Notify via email")
+                                    if(area not in notifyEmailDict):
+                                        notifyEmailDict[area] = {}
+                                    notifyEmailDict[area][pvname] = message
+                                if(notifyOnSMS):
+                                    # Notify via sms
+                                    app_log.info("Notify via sms")
+                                    if(area not in notifySMSDict):
+                                        notifySMSDict[area] = {}
+                                    notifySMSDict[area][pvname] = message
+                                if(notifyOnWhatsApp):
+                                    # Notify via whatsapp
+                                    app_log.info("Notify via whatsapp")
+                                    if(area not in notifyWhatsAppDict):
+                                        notifyWhatsAppDict[area] = {}
+                                    notifyWhatsAppDict[area][pvname] = message
+                                if(notifyOnSignal):
+                                    # Notify via signal
+                                    app_log.info("Notify via Signal")
+                                    if(area not in notifySignalDict):
+                                        notifySignalDict[area] = {}
+                                    notifySignalDict[area][pvname] = message
+                            else:
+                                app_log.info(
+                                    "Fail notifyValid or alarm type check")
                         else:
-                            app_log.info("Using unique profile")
-                            notify = notifyValid(notifyPV["notifySetup"])
-                            notifyOnEmail = notifyPV["notifySetup"]["email"]
-                            notifyOnSMS = notifyPV["notifySetup"]["sms"]
-                            notifyOnWhatsApp = notifyPV["notifySetup"]["whatsapp"]
-                            # Backwards compatible
-                            notifyOnSignal = notifyPV["notifySetup"]["signal"] if (
-                                "signal" in notifyPV["notifySetup"]) else False
-                            notifyMinorAlarm = notifyPV["notifySetup"]["alarmMinor"] if (
-                                "alarmMinor" in notifyPV["notifySetup"]) else True
-                            notifyMajorAlarm = notifyPV["notifySetup"]["alarmMajor"] if (
-                                "alarmMajor" in notifyPV["notifySetup"]) else True
-                            notifyInvalidAlarm = notifyPV["notifySetup"]["alarmInvalid"] if (
-                                "alarmInvalid" in notifyPV["notifySetup"]) else True
-                            notifyDisconnAlarm = notifyPV["notifySetup"]["alarmDisconn"] if (
-                                "alarmDisconn" in notifyPV["notifySetup"]) else True
-                            #
-                        app_log.info("notifyMinorAlarm " +
-                                     str(notifyMinorAlarm))
-                        app_log.info("notifyMajorAlarm " +
-                                     str(notifyMajorAlarm))
-                        app_log.info("notifyInvalidAlarm " +
-                                     str(notifyInvalidAlarm))
-                        app_log.info("notifyDisconnAlarm " +
-                                     str(notifyDisconnAlarm))
-                        if(minorAlarm and notifyMinorAlarm):
-                            notifyAlarmType = True
-                        elif(majorAlarm and notifyMajorAlarm):
-                            notifyAlarmType = True
-                        elif(invalidAlarm and notifyInvalidAlarm):
-                            notifyAlarmType = True
-                        elif(disconnAlarm and notifyDisconnAlarm):
-                            notifyAlarmType = True
-                        if(notify and notifyAlarmType):
-                            # Passes notifyValid check
-                            app_log.info(
-                                "Pass notifyValid and alarm type checks")
-                            if(notifyOnEmail):
-                                # Notify via email
-                                app_log.info("Notify via email")
-                                if(area not in notifyEmailDict):
-                                    notifyEmailDict[area] = {}
-                                notifyEmailDict[area][pvname] = message
-                            if(notifyOnSMS):
-                                # Notify via sms
-                                app_log.info("Notify via sms")
-                                if(area not in notifySMSDict):
-                                    notifySMSDict[area] = {}
-                                notifySMSDict[area][pvname] = message
-                            if(notifyOnWhatsApp):
-                                # Notify via whatsapp
-                                app_log.info("Notify via whatsapp")
-                                if(area not in notifyWhatsAppDict):
-                                    notifyWhatsAppDict[area] = {}
-                                notifyWhatsAppDict[area][pvname] = message
-                            if(notifyOnSignal):
-                                # Notify via signal
-                                app_log.info("Notify via Signal")
-                                if(area not in notifySignalDict):
-                                    notifySignalDict[area] = {}
-                                notifySignalDict[area][pvname] = message
-                        else:
-                            app_log.info(
-                                "Fail notifyValid or alarm type check")
-                    else:
-                        app_log.info("Fail regEx " + notifyPV["regEx"])
-                    app_log.info('###-END NOTIFY DEBUG-###')
-        timestamp = datetime.now(utc).isoformat()
-        if(notifyEmailDict):
-            if(notifyEmail(timestamp, email, notifyEmailDict)):
-                timestamp = datetime.now(utc).isoformat()
-                entry = {"timestamp": timestamp, "entry": " ".join(
-                    [name, "notified on email"])}
-            else:
-                timestamp = datetime.now(utc).isoformat()
-                entry = {"timestamp": timestamp, "entry": " ".join(
-                    ["FAILED to notify", name, "on email!"])}
-            for area in notifyEmailDict:
-                for pvname in notifyEmailDict[area]:
-                    dbUpdateHistory(area, entry, pvname)
+                            app_log.info("Fail regEx " + notifyPV["regEx"])
+                        app_log.info('###-END NOTIFY DEBUG-###')
+            timestamp = datetime.now(utc).isoformat()
+            if(notifyEmailDict):
+                if(notifyEmail(timestamp, email, notifyEmailDict)):
+                    timestamp = datetime.now(utc).isoformat()
+                    entry = {"timestamp": timestamp, "entry": " ".join(
+                        [name, "notified on email"])}
+                else:
+                    timestamp = datetime.now(utc).isoformat()
+                    entry = {"timestamp": timestamp, "entry": " ".join(
+                        ["FAILED to notify", name, "on email!"])}
+                for area in notifyEmailDict:
+                    for pvname in notifyEmailDict[area]:
+                        dbUpdateHistory(area, entry, pvname)
 
-        if(notifySMSDict):
-            if(notifySMS(timestamp, mobile, notifySMSDict)):
-                timestamp = datetime.now(utc).isoformat()
-                entry = {"timestamp": timestamp, "entry": " ".join(
-                    [name, "notified on SMS"])}
-            else:
-                timestamp = datetime.now(utc).isoformat()
-                entry = {"timestamp": timestamp, "entry": " ".join(
-                    ["FAILED to notify", name, "on SMS!"])}
-            for area in notifySMSDict:
-                for pvname in notifySMSDict[area]:
-                    dbUpdateHistory(area, entry, pvname)
+            if(notifySMSDict):
+                if(notifySMS(timestamp, mobile, notifySMSDict)):
+                    timestamp = datetime.now(utc).isoformat()
+                    entry = {"timestamp": timestamp, "entry": " ".join(
+                        [name, "notified on SMS"])}
+                else:
+                    timestamp = datetime.now(utc).isoformat()
+                    entry = {"timestamp": timestamp, "entry": " ".join(
+                        ["FAILED to notify", name, "on SMS!"])}
+                for area in notifySMSDict:
+                    for pvname in notifySMSDict[area]:
+                        dbUpdateHistory(area, entry, pvname)
 
-        if(notifyWhatsAppDict):
-            if(notifyWhatsApp(timestamp, mobile, notifyWhatsAppDict)):
-                timestamp = datetime.now(utc).isoformat()
-                entry = {"timestamp": timestamp, "entry": " ".join(
-                    [name, "notified on WhatsApp"])}
-            else:
-                timestamp = datetime.now(utc).isoformat()
-                entry = {"timestamp": timestamp, "entry": " ".join(
-                    ["FAILED to notify", name, "on WhatsApp!"])}
-            for area in notifyWhatsAppDict:
-                for pvname in notifyWhatsAppDict[area]:
-                    dbUpdateHistory(area, entry, pvname)
+            if(notifyWhatsAppDict):
+                if(notifyWhatsApp(timestamp, mobile, notifyWhatsAppDict)):
+                    timestamp = datetime.now(utc).isoformat()
+                    entry = {"timestamp": timestamp, "entry": " ".join(
+                        [name, "notified on WhatsApp"])}
+                else:
+                    timestamp = datetime.now(utc).isoformat()
+                    entry = {"timestamp": timestamp, "entry": " ".join(
+                        ["FAILED to notify", name, "on WhatsApp!"])}
+                for area in notifyWhatsAppDict:
+                    for pvname in notifyWhatsAppDict[area]:
+                        dbUpdateHistory(area, entry, pvname)
 
-        if(notifySignalDict):
-            while(dbGetFieldGlobal('signalPostBusy')):
-                sleep(1.0)
-                app_log.info("Waiting for signalPostBusy...")
-            if(notifySignal(timestamp, mobile, notifySignalDict)):
-                timestamp = datetime.now(utc).isoformat()
-                entry = {"timestamp": timestamp, "entry": " ".join(
-                    [name, "notified on Signal"])}
-            else:
-                timestamp = datetime.now(utc).isoformat()
-                entry = {"timestamp": timestamp, "entry": " ".join(
-                    ["FAILED to notify", name, "on Signal!"])}
-            for area in notifySignalDict:
-                for pvname in notifySignalDict[area]:
-                    dbUpdateHistory(area, entry, pvname)
+            if(notifySignalDict):
+                while(dbGetFieldGlobal('signalPostBusy')):
+                    sleep(1.0)
+                    app_log.info("Waiting for signalPostBusy...")
+                if(notifySignal(timestamp, mobile, notifySignalDict)):
+                    timestamp = datetime.now(utc).isoformat()
+                    entry = {"timestamp": timestamp, "entry": " ".join(
+                        [name, "notified on Signal"])}
+                else:
+                    timestamp = datetime.now(utc).isoformat()
+                    entry = {"timestamp": timestamp, "entry": " ".join(
+                        ["FAILED to notify", name, "on Signal!"])}
+                for area in notifySignalDict:
+                    for pvname in notifySignalDict[area]:
+                        dbUpdateHistory(area, entry, pvname)
+        else:
+            app_log.info("User "+user["name"]+" is NOT a valid alarm user")
 
 
 def disconnectAllPVs():

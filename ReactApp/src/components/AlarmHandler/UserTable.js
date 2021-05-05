@@ -175,8 +175,8 @@ const UserTable = (props) => {
                                                     onChange={(event) => props.updateUserEmail(event, user.name, user.username)}
                                                     InputProps={{
                                                         classes: { input: classes.emailInputField },
-                                                        readOnly: props.userEdit[`${user.username}-${user.name}`] ? false : true,
-                                                        disableUnderline: props.userEdit[`${user.username}-${user.name}`] ? false : true
+                                                        readOnly: true,
+                                                        disableUnderline: true
                                                     }}
                                                     error={props.emailError[`${user.username}-${user.name}`]}
                                                     label={props.emailError[`${user.username}-${user.name}`] ? "Invalid email" : undefined}
@@ -192,8 +192,8 @@ const UserTable = (props) => {
                                                     onChange={(event) => props.updateUserMobile(event, user.name, user.username)}
                                                     InputProps={{
                                                         classes: { input: classes.emailInputField },
-                                                        readOnly: props.userEdit[`${user.username}-${user.name}`] ? false : true,
-                                                        disableUnderline: props.userEdit[`${user.username}-${user.name}`] ? false : true
+                                                        readOnly: true,
+                                                        disableUnderline: true
                                                     }}
                                                     error={props.mobileError[`${user.username}-${user.name}`]}
                                                     label={props.mobileError[`${user.username}-${user.name}`] ? "Invalid number" : undefined}

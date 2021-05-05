@@ -1746,6 +1746,8 @@ def userCollectionWatch():
                             " "+updateDict['familyName']
                 if(bool(userData)):
                     dbUpdateExistingUser(_id, userData)
+                    app_log.info("Updated user _id "+str(_id)+" from adminDB")
+                    app_log.info("Updated fields "+str(userData.keys()))
             elif(opType == 'insert'):
                 fullDoc = change['fullDocument']
                 userData = {
@@ -1760,8 +1762,10 @@ def userCollectionWatch():
                     'isAHUser': False
                 }
                 dbInsertNewUser(userData)
+                app_log.info("New user _id "+str(fullDoc['_id'])+" added from adminDB")
             elif(opType == 'delete'):
                 dbDeleteUser({'adminDB_id': change['documentKey']['_id']})
+                app_log.warning("User _id "+str(change['documentKey']['_id'])+" deleted from adminDB")
 
 
 def initSeedUserData():

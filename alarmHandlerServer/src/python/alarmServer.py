@@ -1762,10 +1762,12 @@ def userCollectionWatch():
                     'isAHUser': False
                 }
                 dbInsertNewUser(userData)
-                app_log.info("New user _id "+str(fullDoc['_id'])+" added from adminDB")
+                app_log.info("New user _id " +
+                             str(fullDoc['_id'])+" added from adminDB")
             elif(opType == 'delete'):
                 dbDeleteUser({'adminDB_id': change['documentKey']['_id']})
-                app_log.warning("User _id "+str(change['documentKey']['_id'])+" deleted from adminDB")
+                app_log.warning(
+                    "User _id "+str(change['documentKey']['_id'])+" deleted from adminDB")
 
 
 def initSeedUserData():
@@ -1790,8 +1792,12 @@ def initSeedUserData():
             userData['adminDB_id'] = _id
             userData['isAHUser'] = False
             dbInsertNewUser(userData)
+            app_log.info(
+                "New user "+userData["name"]+"_id "+str(_id)+" added from adminDB")
         else:
             dbUpdateExistingUser(_id, userData)
+            app_log.info(
+                "Existing user "+userData["name"]+"_id "+str(_id)+" updated from adminDB")
 
     print("Seeded user data from admin DB successfully...")
     app_log.info("Seeded user data from admin DB successfully...")

@@ -24,31 +24,18 @@ const useMongoDbWatch = (props) => {
         socketRef.current = socket;
     }, [socket])
 
-    // const [dbWatchId, setDbWatchId] = useState(null);
     const [data, setData] = useState(null);
     const [writeAccess, setWriteAccess] = useState(false);
 
     const [initialized, setInitialized] = useState(false);
 
-    // useEffect(()=>{
-    //     dbWatchIdRef.current=dbWatchId;
-    // },[dbWatchId])
     useEffect(() => {
-        console.log(dbURL)
         dbWatchIdRef.current=uuidv4();
         const handleDatabaseReadWatchAndBroadcastAck = (msg) => {
-            console.log("ack",msg)
-            // if (msg?.dbWatchId) {
-            //     setDbWatchId(msg.dbWatchId)
-            // }
         }
         const handleNewDbLogReadWatchBroadcast = (msg) => {
 
             const newData = JSON.parse(msg.data);
-            console.log(msg)
-            // if (msg?.dbWatchId) {
-            //     setDbWatchId(msg.dbWatchId)
-            // }
             setData(newData);
             setInitialized(true)
             setWriteAccess(msg.write_access)
@@ -79,12 +66,9 @@ const useMongoDbWatch = (props) => {
             
            
                 if (dbWatchIdRef.current !== null) {
-                    console.log("removing watch id",dbWatchIdRef.current)
                     socketRef.current.emit('remove_dbWatch', { dbURL: dbURL, dbWatchId: dbWatchIdRef.current, 'clientAuthorisation': jwtRef.current });
                 }
-                else{
-                    console.log("return null")
-                }
+      
                 socketRef.current.removeListener('databaseWatchData:' + dbURL, handleNewDbLogReadWatchBroadcast);
                 socketRef.current.removeListener('connect', reconnect);
                 socketRef.current.removeListener('disconnect', disconnect);

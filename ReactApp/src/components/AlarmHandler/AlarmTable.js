@@ -1,5 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 
+// import { Link } from 'react-router-dom'
+
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import TextInput from '../BaseComponents/TextInput';
 import TextUpdateStatus from './TextUpdateStatus';
@@ -239,7 +241,17 @@ const AlarmTable = props => {
 
                                         </MenuItem>
                                         <MenuItem
-                                            onClick={(event) => props.probePV(event, value["name"])}
+                                            onClick={() => {
+                                                window.open("/Probe?" + JSON.stringify({ pvname: 'pva://' + value["name"], probeType: 'readOnly' }),
+                                                    "_blank")
+                                                props.alarmContextClose()
+                                                props.setAlarmAdminPVExpand(false)
+                                            }}
+                                        // component={Link} to={{
+                                        //     pathname: "/Probe",
+                                        //     search: JSON.stringify({ pvname: 'pva://' + value["name"], probeType: 'readOnly' }),
+                                        // }}
+                                        // target="_blank"
                                         >
                                             <ListItemIcon >
                                                 <Coffee fontSize="small" />

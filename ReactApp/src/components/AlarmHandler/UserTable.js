@@ -328,6 +328,7 @@ const UserTable = (props) => {
                                 </TableRow>
                             )
                         }
+                        return null
                     })}
 
                 </TableBody>

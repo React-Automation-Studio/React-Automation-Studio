@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import useAllUsers from './adminDbHooks/useAllUsers'
+
 import useUAGs from './adminDbHooks/useUAGs'
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
@@ -221,12 +221,8 @@ const AccessControl = (props) => {
 
   }, [])
   const classes = useStyles();
-  const allUsers = useAllUsers(
-    {
-      dbURL: 'mongodb://ADMIN_DATABASE:rasAdminDb:users:Parameters:""'
-    });
-  const { data: users, writeAccess: usersWriteAccess, initialized: usersInitialized } = allUsers;
-  const { userGroups, writeAccess: uagsWriteAccess, initialized: uagsInitialized, updateUAGs, updateUAGsError, updateUAGsOk: saveOk } = useUAGs({});
+
+  const { userGroups, initialized: uagsInitialized, updateUAGs, updateUAGsOk: saveOk } = useUAGs({});
   
   useEffect(() => {
 
@@ -257,7 +253,7 @@ const AccessControl = (props) => {
       setClear(false)
     }
 
-
+// eslint-disable-next-line  react-hooks/exhaustive-deps
   }, [userGroups, editMode, save, clear, saveOkLatched])
 
   let userGroupKeys = uagsInitialized ? Object.keys(modifiedUserGroups) : [];
@@ -681,7 +677,7 @@ const AccessControl = (props) => {
                             </TableCell>
                             <TableCell align="center">
                               <Checkbox
-                                checked={rule.read == true}
+                                checked={rule.read === true}
                                 disabled={editMode === false}
                                 onChange={(event) => {
 
@@ -698,7 +694,7 @@ const AccessControl = (props) => {
                             </TableCell>
                             <TableCell align="center">
                               <Checkbox
-                                checked={rule.write == true}
+                                checked={rule.write === true}
                                 disabled={editMode === false}
                                 onChange={(event) => {
 

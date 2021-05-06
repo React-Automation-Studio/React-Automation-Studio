@@ -4,7 +4,6 @@ import Grid from '@material-ui/core/Grid';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Button from '@material-ui/core/Button';
-import { makeStyles } from '@material-ui/core/styles';
 import EditIcon from '@material-ui/icons/Edit';
 import ErrorIcon from '@material-ui/icons/Error';
 import Dialog from '@material-ui/core/Dialog';
@@ -20,22 +19,11 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        flexGrow: 1,
-        padding: theme.spacing(2)
-    },
-    paper: {
-        padding: theme.spacing(2),
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
-    },
-}));
 
 const EditUser = (props) => {
 
     const [show, setShow] = useState(false);
-    const [username, setUsername] = useState(props.user.username);
+    const [username] = useState(props.user.username);
     const [password, setPassword] = useState("");
     const [changePassword, setChangePassword] = useState(false)
     const passwordHelperText = "Minimum length 12 characters";
@@ -54,8 +42,7 @@ const EditUser = (props) => {
     phoneNumber: phoneNumber,
     officeLocation: officeLocation});
 
-    const classes = useStyles();
-
+ 
     let passwordError;
 
     if (password.length < 12) {
@@ -67,7 +54,7 @@ const EditUser = (props) => {
     let confirmPasswordError;
     let confirmPasswordHelperText;
 
-    if (password == confirmPassword) {
+    if (password === confirmPassword) {
         confirmPasswordError = false;
         confirmPasswordHelperText = "Passwords match"
     }
@@ -75,10 +62,10 @@ const EditUser = (props) => {
         confirmPasswordError = true;
         confirmPasswordHelperText = "Passwords do not match"
     }
+    // eslint-disable-next-line no-mixed-operators
     let addUserDisable = ((username.length > 0) && (changePassword === false || (confirmPasswordError === false) && (passwordError === false))) ? false : true;
 
-    const usernameHelperText = ""
-    
+   
     return (
 
         <React.Fragment>

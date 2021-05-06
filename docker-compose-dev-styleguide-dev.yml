@@ -11,8 +11,8 @@ services:
       - ./ReactApp/src:/frontendserverAppDev/src
       - ./ReactApp/public:/frontendserverAppDev/public
     restart: always
-    logging:
-      driver: "none"
+    # logging:
+    #   driver: "none"
     #network_mode: host
     ports:
       - "3001:3000"

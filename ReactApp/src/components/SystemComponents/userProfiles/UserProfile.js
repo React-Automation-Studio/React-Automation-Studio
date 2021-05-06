@@ -1,32 +1,17 @@
 import React, { useContext } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import Slide from '@material-ui/core/Slide';
+import { useTheme } from '@material-ui/core/styles';
 import TraditionalLayout from '../../UI/Layout/ComposedLayouts/TraditionalLayout';
 import AutomationStudioContext from '../../SystemComponents/AutomationStudioContext';
 import useUserDetails from './userProfileHooks/useUserDetails';
 import Paper from '@material-ui/core/Paper';
 import EditUser from './EditUser'
 import ChangeUserPassword from './ChangeUserPassword';
-const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
-});
 
 
 
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        flexGrow: 1,
-        padding: theme.spacing(2)
-    },
-    paper: {
-        padding: theme.spacing(2),
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
-    },
-}));
 
 const UserProfile = (props) => {
     const context = useContext(AutomationStudioContext);
@@ -51,9 +36,7 @@ const UserProfile = (props) => {
     }
 
 
-    const classes = useStyles();
-
-
+    
 
 
 

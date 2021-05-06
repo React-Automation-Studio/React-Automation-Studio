@@ -275,8 +275,6 @@ class RasAppCore extends Component {
 
   getRefreshToken() {
     let d = new Date();
-    let n = d.toTimeString();
-    //  console.log("refreshing at:",n)
     const options = {
       headers: { 'Content-Type': 'application/json' },
       // timeout: props.timeout,

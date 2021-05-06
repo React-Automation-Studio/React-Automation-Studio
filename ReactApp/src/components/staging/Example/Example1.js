@@ -8,7 +8,7 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 
 import TextInput from '../../BaseComponents/TextInput';
-import TextOutput from '../../BaseComponents/TextOutput';
+
 
 import Slider from '../../BaseComponents/Slider';
 import GraphY from '../../BaseComponents/GraphY';

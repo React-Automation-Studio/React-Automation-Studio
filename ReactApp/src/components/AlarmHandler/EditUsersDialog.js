@@ -105,6 +105,7 @@ const EditUsersDialog = (props) => {
                                                             </ TableRow>
                                                         )
                                                     }
+                                                    return null
                                                 })}
                                             </TableBody>
                                         </Table>
@@ -191,6 +192,7 @@ const EditUsersDialog = (props) => {
                                                             </ TableRow>
                                                         )
                                                     }
+                                                    return null
                                                 })}
                                             </TableBody>
                                         </Table>

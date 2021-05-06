@@ -804,6 +804,7 @@ const UserNotification = (props) => {
                     isSelected: false
                 }
             }))
+            return null
         })
     }, [editUsersList])
 
@@ -816,10 +817,11 @@ const UserNotification = (props) => {
                 id: id,
                 update: newvalues
             })
+            return null
         })
         setEditUsersDialogOpen(false)
         clearAllUserSelects()
-    }, [clearAllUserSelects, editUsersList])
+    }, [clearAllUserSelects, editUsersList, dbUpdateOne, props.dbName])
 
     const pushToAlarmUsers = useCallback(() => {
         Object.values(editUsersList).map(entry => {
@@ -833,6 +835,7 @@ const UserNotification = (props) => {
                     }
                 }))
             }
+            return null
         })
     }, [editUsersList])
 
@@ -848,6 +851,7 @@ const UserNotification = (props) => {
                     }
                 }))
             }
+            return null
         })
     }, [editUsersList])
 

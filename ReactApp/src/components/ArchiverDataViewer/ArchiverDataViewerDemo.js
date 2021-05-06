@@ -16,7 +16,7 @@ const ArchiverDataViewerDemo = (props) => {
         <Typography>
           This demo requires the <a style={{ color: 'inherit' }} href="https://github.com/wduckitt/React-Automation-Studio-Demo-Archiver" 
           target="_blank"
-          rel="noopener"
+          rel="noopener noreferrer"
           > demo EPICS archiver</a> to be running.
             </Typography>
       </Grid>

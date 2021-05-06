@@ -346,7 +346,7 @@ class RasAppCore extends Component {
   }
   handleLocalStorageChange(event) {
 
-    if (event.key == "loggedIn") {
+    if (event.key === "loggedIn") {
       if (event.newValue === null) {
         // console.log(event)
         this.logout();
@@ -362,8 +362,8 @@ class RasAppCore extends Component {
 
 
     }
-    else if (event.key == "themeStyle"){
-      console.log(event)
+    else if (event.key === "themeStyle"){
+      // console.log(event)
       
         
         let storedThemeStyle = localStorage.getItem('themeStyle')

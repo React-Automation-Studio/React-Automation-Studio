@@ -242,10 +242,10 @@ const AlarmTable = props => {
                                         </MenuItem>
                                         <MenuItem
                                             onClick={() => {
-                                                window.open("/Probe?" + JSON.stringify({ pvname: 'pva://' + value["name"], probeType: 'readOnly' }),
-                                                    "_blank")
                                                 props.alarmContextClose()
                                                 props.setAlarmAdminPVExpand(false)
+                                                window.open("/Probe?" + JSON.stringify({ pvname: 'pva://' + value["name"], probeType: 'readOnly' }),
+                                                    "_blank", "noreferrer")
                                             }}
                                         // component={Link} to={{
                                         //     pathname: "/Probe",

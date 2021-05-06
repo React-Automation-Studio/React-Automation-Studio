@@ -297,6 +297,7 @@ const AccessControl = (props) => {
     }
 
     setEditModeErrors(newErrors)
+    // eslint-disable-next-line  react-hooks/exhaustive-deps
   }, [modifiedUserGroups])
   //console.log(modifiedUserGroups)
   return (

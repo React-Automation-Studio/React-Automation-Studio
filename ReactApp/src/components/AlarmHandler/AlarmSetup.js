@@ -1081,6 +1081,7 @@ const AlarmSetup = (props) => {
 
     const handleTableItemRightClick = useCallback((event, index, entryIndex) => {
         event.preventDefault();
+        const alarmName = `${index.replace(/=pv\d+/g, "")}*${areaAlarms[entryIndex][1]["name"]}`
         const areaAlarmNameArray = index.split('=')
         let areaName = null
         if (areaAlarmNameArray.length > 2) {
@@ -1099,6 +1100,8 @@ const AlarmSetup = (props) => {
             setAlarmRowSelected({
                 [index]: true
             })
+            setAlarmLogSelectedName(alarmName.replace(/[=*]/g, " > "))
+            setAlarmLogSelectedKey(alarmName)
             setContextMouseX(localContextMouseX)
             setContextMouseY(localContextMouseY)
 

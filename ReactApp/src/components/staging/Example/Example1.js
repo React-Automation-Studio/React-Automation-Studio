@@ -134,6 +134,7 @@ const Example1 = (props) => {
             maxLength={maxLength}
             updateRate={updateRate}
             makeNewSocketIoConnection={makeNewSocketIoConnection === true}
+            height={graphVH}
           // title={"Test"}
           //lineColor={[this.props.theme.palette.secondary.main,lime['400']]}
           />
@@ -165,8 +166,8 @@ const Example1 = (props) => {
               xMin={-10000}
               yMin={-10000}
               updateMode={'updateOnYChange'}
-              height={'50vh'}
-              width={'50vh'}
+              height={graphVH}
+              width={graphVH}
               showLegend={false}
              
             />
@@ -183,6 +184,7 @@ const Example1 = (props) => {
             ]}
             maxLength={256}
             useTimeStamp
+            height={graphVH}
           />
           <GraphY
             pvs={['pva://testIOC:PS1:Readback', 'pva://testIOC:PS2:Readback', 'pva://testIOC:PS3:Readback']}
@@ -196,6 +198,7 @@ const Example1 = (props) => {
             useTimeStamp={true}
             usePolling={true}
             pollingRate={100}
+            height={graphVH}
           />
         </Grid>
       )

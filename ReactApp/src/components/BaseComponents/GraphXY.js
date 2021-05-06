@@ -33,12 +33,12 @@ const useStyles = makeStyles((theme) => ({
       background: 'rgba(0,0,0,0)',
     }
   },
-  '@global': {
-    '.js-plotly-plot .plotly .modebar': {
-      // left: '50%',
-      transform: 'translateX(-50%)',
-    }
-  },
+  // '@global': {
+  //   '.js-plotly-plot .plotly .modebar': {
+  //     // left: '50%',
+  //     transform: 'translateX(-50%)',
+  //   }
+  // },
 }));
 
 

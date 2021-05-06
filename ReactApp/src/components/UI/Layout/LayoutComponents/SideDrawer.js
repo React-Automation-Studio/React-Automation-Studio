@@ -27,7 +27,6 @@ const SideDrawer = (props) => {
 
     const context = useContext(AutomationStudioContext)
     const notInStyleGuide = context.styleGuideRedirect
-    const socket = context.socket
 
     const username = notInStyleGuide ? context.userData.username : "Guest"
 

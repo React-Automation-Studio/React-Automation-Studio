@@ -32,6 +32,8 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import DeleteIcon from '@material-ui/icons/Delete';
 
+import { Coffee, ContentCopy } from 'mdi-material-ui/'
+
 import Tooltip from '@material-ui/core/Tooltip';
 
 // Styles
@@ -233,8 +235,24 @@ const AlarmTable = props => {
                                             <ListItemIcon >
                                                 <DoneAllIcon fontSize="small" />
                                             </ListItemIcon>
-                                            <Typography variant="inherit">Acknowledge Alarm</Typography>
+                                            <Typography variant="inherit">Acknowledge alarm</Typography>
 
+                                        </MenuItem>
+                                        <MenuItem
+                                            onClick={(event) => props.probePV(event, value["name"])}
+                                        >
+                                            <ListItemIcon >
+                                                <Coffee fontSize="small" />
+                                            </ListItemIcon>
+                                            <Typography variant="inherit">Probe PV</Typography>
+                                        </MenuItem>
+                                        <MenuItem
+                                            onClick={event => console.log("copy me")}
+                                        >
+                                            <ListItemIcon >
+                                                <ContentCopy fontSize="small" />
+                                            </ListItemIcon>
+                                            <Typography variant="inherit">Copy PV name to clipboard</Typography>
                                         </MenuItem>
                                         {props.isAlarmAdmin && <MenuItem
                                             onClick={(event) => {
@@ -301,6 +319,7 @@ const AlarmTable = props => {
                                             pv={'pva://' + value["name"]}
                                             useStringValue={true}
                                             usePvUnits={true}
+                                            disableContextMenu={true}
                                         />
                                     </TableCell>
                                     <TableCell align="center">

@@ -366,7 +366,6 @@ const GraphY = (props) => {
   const [layout, setLayout] = useState({})
 
   useEffect(() => {
-    console.log(backgroundColor)
     setLayout({
       title: {
         text: props.title,

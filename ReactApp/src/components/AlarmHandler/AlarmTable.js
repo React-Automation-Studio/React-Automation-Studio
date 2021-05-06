@@ -259,7 +259,11 @@ const AlarmTable = props => {
                                             <Typography variant="inherit">Probe PV</Typography>
                                         </MenuItem>
                                         <MenuItem
-                                            onClick={event => console.log("copy me")}
+                                            onClick={() => {
+                                                props.alarmContextClose()
+                                                props.setAlarmAdminPVExpand(false)
+                                                navigator.clipboard.writeText(value["name"])
+                                            }}
                                         >
                                             <ListItemIcon >
                                                 <ContentCopy fontSize="small" />

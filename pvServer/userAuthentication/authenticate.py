@@ -112,8 +112,8 @@ def createKnownUsers(UAGS):
         return knownUsers
     except Exception as e:
         print(e)
-        print("createKnownUser UAGS['users']",UAGS['users'])
-        print("createKnownUsers:Error Cant load file USERS")
+        # print("createKnownUser UAGS['users']",UAGS['users'])
+        # print("createKnownUsers:Error Cant load file USERS")
         return None
 
 
@@ -172,7 +172,7 @@ REACT_APP_DisableLogin=not(os.getenv('REACT_APP_EnableLogin')=='true')
 if (not REACT_APP_DisableLogin) :
     UAGS={}
     loadKnownDbUsers()
-    print("UAGS",json.dumps(UAGS, indent=4,))
+    # print("UAGS",json.dumps(UAGS, indent=4,))
     
 
     
@@ -322,6 +322,7 @@ def decodeTokenGoogle(token,CLIENT_ID):
         # ID token is valid. Get the user's Google Account ID from the decoded token.
        
         return idinfo
-    except ValueError:
+    except Exception as e:
+        print(e)
         # Invalid token
         return None

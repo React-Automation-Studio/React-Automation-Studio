@@ -3,7 +3,6 @@ import AutomationStudioContext from './AutomationStudioContext';
 import { withStyles } from '@material-ui/core/styles';
 
 import { v4 as uuidv4 } from 'uuid';
-import RedirectToLogIn from './RedirectToLogin.js';
 const styles = theme => ({
   body1: theme.typography.body1,
 

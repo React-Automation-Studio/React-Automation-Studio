@@ -374,7 +374,6 @@ const GraphXY = (props) => {
     return () => window.removeEventListener("resize", handleResize);
     
   }, [paperRef,props.width,props.height,props.aspectRatio]);
-  console.log(height,width)
   const [domain, setDomain] = useState([0, 1])
   // const [yPositions, setYPositions] = useState([0, 0, 0])
   useEffect(() => {
@@ -481,7 +480,6 @@ const GraphXY = (props) => {
   const [layout, setLayout] = useState({})
 
   useEffect(() => {
-    console.log(backgroundColor)
     setLayout({
       title: {
         text: props.title,
@@ -633,8 +631,10 @@ const GraphXY = (props) => {
 }
 GraphXY.propTypes = {
 
-  /** Array of the process variables, NB must contain correct prefix ie: pva://  eg. ['pva://$(device):test$(id0)','pva://$(device):test$(id1)']*/
-  pvs: PropTypes.array.isRequired,
+  /** X Array of the process variables, NB must contain correct prefix ie: pva://  eg. ['pva://$(device):test$(id0)','pva://$(device):test$(id1)']*/
+  xPVs: PropTypes.array.isRequired,
+  /** Y Array of the process variables, NB must contain correct prefix ie: pva://  eg. ['pva://$(device):test$(id0)','pva://$(device):test$(id1)']*/
+  yPVs: PropTypes.array.isRequired,
   /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id0)':'1','$(id1)':'2'}}*/
   macros: PropTypes.object,
   /** Y axis title. */

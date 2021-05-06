@@ -4,8 +4,6 @@ import PropTypes from 'prop-types';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -111,7 +109,6 @@ const Login = (props) => {
   const loggedIn = context.userData.loggedIn;
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
-  const [authorised, setAuthorised] = useState(false)
   const [authorisationFailed, setAuthorisationFailed] = useState(false)
   const [authenticationFailed, setAuthenticationFailed] = useState(false)
   const [submit, setSubmit] = useState(false);
@@ -186,7 +183,7 @@ const Login = (props) => {
   }, [enableStandardLogin, enableActiveDirectoryLogin])
   useEffect(() => {
     mounted.current = true;
-    if (submit == true) {
+    if (submit === true) {
 
       const options = {
         headers: { 'Content-Type': 'application/json' },
@@ -244,14 +241,15 @@ const Login = (props) => {
       setPassword("")
     }
     return () => mounted.current = false;
+   // eslint-disable-next-line  react-hooks/exhaustive-deps
   }, [submit]
   )
   useEffect(() => {
     if (loggedIn) {
-      setAuthorised(loggedIn)
       let { from } = location.state || { from: { pathname: "/" } };
       history.replace(from);
     }
+      // eslint-disable-next-line  react-hooks/exhaustive-deps
   }, [loggedIn])
 
   let usernameText = loginModes[loginTabValue] === 'Standard Login'

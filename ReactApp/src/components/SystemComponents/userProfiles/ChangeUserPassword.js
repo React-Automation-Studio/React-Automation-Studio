@@ -2,7 +2,6 @@ import React, { useState} from 'react';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-import { makeStyles } from '@material-ui/core/styles';
 import EditIcon from '@material-ui/icons/Edit';
 import ErrorIcon from '@material-ui/icons/Error';
 import Dialog from '@material-ui/core/Dialog';
@@ -18,17 +17,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        flexGrow: 1,
-        padding: theme.spacing(2)
-    },
-    paper: {
-        padding: theme.spacing(2),
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
-    },
-}));
+
 
 const ChangeUserPassword = (props) => {
 
@@ -41,7 +30,7 @@ const ChangeUserPassword = (props) => {
     password: password ,
    });
 
-    const classes = useStyles();
+   
 
     let passwordError;
 
@@ -54,7 +43,7 @@ const ChangeUserPassword = (props) => {
     let confirmPasswordError;
     let confirmPasswordHelperText;
 
-    if (password == confirmPassword) {
+    if (password === confirmPassword) {
         confirmPasswordError = false;
         confirmPasswordHelperText = "Passwords match"
     }
@@ -64,7 +53,6 @@ const ChangeUserPassword = (props) => {
     }
     let addUserDisable = (((confirmPasswordError === false) && (passwordError === false))) ? false : true;
 
-    const usernameHelperText = ""
     
     return (
 

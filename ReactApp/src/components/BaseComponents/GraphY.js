@@ -427,7 +427,7 @@ const GraphY = (props) => {
         }]
 
     })
-  }, [theme, props.showLegend, props.xAxisTitle, props.title,backgroundColor,classes])
+  }, [theme, props.showLegend, props.xAxisTitle, props.title,backgroundColor,classes, props.xMin,props.xTickLabels,props.xTickValues,props.yAxisTitle,yAxes,domain,legend,props.xMax,props.xNoOfTicks,props.xTickFormat,props.xUnits])
   
   
   return (

@@ -1,77 +1,18 @@
 import React, { useEffect, useState, useRef, useReducer } from 'react'
-import DataConnection from '../SystemComponents/DataConnection';
-
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
 import { useTheme } from '@material-ui/core/styles';
 import ContextMenu from '../SystemComponents/ContextMenu';
 import PV from '../SystemComponents/PV'
 import Plot from 'react-plotly.js';
-import { isMobileOnly } from 'react-device-detect';
-import debounce from "lodash.debounce";
 import { replaceMacros } from '../SystemComponents/Utils/macroReplacement';
-import { ContinuousColorLegend } from 'react-vis';
-import { forEach } from 'mathjs';
-/* eslint-disable eqeqeq */
-/* eslint-disable no-unused-vars */
 
-const useStyles = makeStyles((theme) => ({
-  container: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: 200,
-  },
-  buttonRoot: {
-    textTransform: 'none',
-  },
-  accordianRoot: {
-    '&:before': {
-      background: 'rgba(0,0,0,0)',
-    }
-  },
-  // '@global': {
-  //   '.js-plotly-plot .plotly .modebar': {
-  //     // left: '50%',
-  //     transform: 'translateX(-50%)',
-  //   }
-  // },
-}));
 
 
 const PlotData = (props) => {
 
 
-  const theme = useTheme()
-
-  const calcTimeFormat = (timestamp) => {
-    let mydate = new Date(timestamp * 1000);
-    //  let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    //  let year = mydate.getFullYear();
-    // let month = months[mydate.getMonth()];
-    //let date = mydate.getDate();
-    let hour = mydate.getHours();
-    let min = mydate.getMinutes();
-    let sec = mydate.getSeconds();
-    //let ms = mydate.getMilliseconds()
-    //let value= hour + ':' + min + ':' + sec +':' + ms;
-    let value;
-    if (min < 10) {
-      min = '0' + min;
-
-    }
-
-    if (sec < 10) {
-      sec = '0' + sec;
-
-    }
-    value = hour + ':' + min + ':' + sec;
-
-    return value;
-  }
+ 
+  
   const updateDataReducer = (pvs, newData) => {
     const { axis } = newData;
     const {updateMode}= props;
@@ -256,7 +197,6 @@ const PlotData = (props) => {
   useEffect(() => {
     polledDataRefY.current = polledDataY;
   }, [polledDataY])
-  const [trigger3, setTrigger3] = useState(0);
   const { usePolling, pollingRate } = props;
 
   useEffect(() => {
@@ -303,6 +243,7 @@ const PlotData = (props) => {
 
     setTimeout(() => setTrigger(prev => prev + 1), parseInt(updateRate))
     setDelayedData(data)
+    // eslint-disable-next-line  react-hooks/exhaustive-deps
   }, [trigger, updateRate])
 
   const [trigger2, setTrigger2] = useState(0);
@@ -311,7 +252,9 @@ const PlotData = (props) => {
   useEffect(() => {
 
     setTimeout(() => setTrigger2(prev => prev + 1), parseInt(1000))
+    
     setDelayedContextInfo(contextInfo)
+    // eslint-disable-next-line  react-hooks/exhaustive-deps
   }, [trigger2])
 
   // useEffect(()=>{
@@ -320,7 +263,7 @@ const PlotData = (props) => {
   // },[data])
   const pvConnections = () => {
     let pvs = [];
-    props.xPVs.map((item, index) => {
+    props.xPVs.forEach((item, index) => {
       pvs.push(
         <PV
           key={"x" + index.toString()}
@@ -331,7 +274,7 @@ const PlotData = (props) => {
           makeNewSocketIoConnection={props.makeNewSocketIoConnection}
         />)
     })
-    props.yPVs.map((item, index) => {
+    props.yPVs.forEach((item, index) => {
       pvs.push(
         <PV
           key={"y" + index.toString()}
@@ -360,7 +303,6 @@ const PlotData = (props) => {
 */
 
 const GraphXY = (props) => {
-  const classes = useStyles();
   const theme = useTheme();
   const backgroundColor=props.backgroundColor?props.backgroundColor:theme.palette.background.default;
   if(typeof props.ymin!=="undefined"){
@@ -431,10 +373,10 @@ const GraphXY = (props) => {
     window.addEventListener("resize", handleResize)
     return () => window.removeEventListener("resize", handleResize);
     
-  }, [paperRef,props.width,props.height]);
+  }, [paperRef,props.width,props.height,props.aspectRatio]);
   console.log(height,width)
   const [domain, setDomain] = useState([0, 1])
-  const [yPositions, setYPositions] = useState([0, 0, 0])
+  // const [yPositions, setYPositions] = useState([0, 0, 0])
   useEffect(() => {
     if (props.yAxes !== undefined) {
       let numberOfyAxes = props.yAxes.length;
@@ -446,16 +388,16 @@ const GraphXY = (props) => {
         newYPositions[index] = i * increment;
         index++;
       }
-      setYPositions(newYPositions)
+      // setYPositions(newYPositions)
       setDomain(newDomain)
     }
     else {
-      setYPositions([0])
+      // setYPositions([0])
       setDomain([0, 1])
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [width])
-  const [yAxes, setYAxes] = useState(() => {
+  const [yAxes] = useState(() => {
     let yAxesInit = {};
     // if (props.yAxes !== undefined) {
     //   props.yAxes.forEach((item, index) => {
@@ -523,7 +465,7 @@ const GraphXY = (props) => {
     // }
     return (yAxesInit)
   })
-  const [legend, setLegend] = useState(() => {
+  const [legend] = useState(() => {
     let legendInit = props.showLegend === true ? {
       legend: {
         orientation: 'h',
@@ -602,7 +544,7 @@ const GraphXY = (props) => {
 
 
     })
-  }, [theme, props.showLegend, props.xAxisTitle, props.title,backgroundColor])
+  }, [theme, props.showLegend, props.xAxisTitle, props.title,backgroundColor, props.xMin,props.xTickLabels,props.xTickValues,props.yAxisTitle,yAxes,domain,legend,props.xMax])
 
   
   return (

@@ -1,43 +1,21 @@
 import React, { useState, useEffect } from 'react';
-
-
-
 import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
-
-
 import Grid from '@material-ui/core/Grid';
-
-
-import Card from '@material-ui/core/Card';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Button from '@material-ui/core/Button';
-import { makeStyles } from '@material-ui/core/styles';
 import useAddUSer from './adminDbHooks/useAddUser';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
 import IconButton from '@material-ui/core/IconButton';
-import EditIcon from '@material-ui/icons/Edit';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 import AddIcon from '@material-ui/icons/Add';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    padding: theme.spacing(2)
-  },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-  },
-}));
+
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -89,7 +67,7 @@ const AddUsers = (props) => {
     }
 
   }, [duplicateUser])
-  const classes = useStyles();
+
 
   let passwordError;
 
@@ -102,7 +80,7 @@ const AddUsers = (props) => {
   let confirmPasswordError;
   let confirmPasswordHelperText;
 
-  if (password == confirmPassword) {
+  if (password === confirmPassword) {
     confirmPasswordError = false;
     confirmPasswordHelperText = "Passwords match"
   }
@@ -110,6 +88,7 @@ const AddUsers = (props) => {
     confirmPasswordError = true;
     confirmPasswordHelperText = "Passwords do not match"
   }
+  // eslint-disable-next-line no-mixed-operators
   let addUserDisable = ((username.length > 0) && (requirePassword === false || (confirmPasswordError === false) && (passwordError === false))) ? false : true;
 
   return (

@@ -25,7 +25,6 @@ const useUserDetails = (props) => {
 
     
     const [data, setData] = useState({});
-    const [writeAccess, setWriteAccess] = useState(false);
     const [initialized, setInitialized] = useState(false);
     useEffect(() => {
         dbWatchIdRef.current=uuidv4();
@@ -42,7 +41,6 @@ const useUserDetails = (props) => {
             if (userData){
             setData(userData);
             setInitialized(true)
-            setWriteAccess(msg.write_access)
             }
         }
         const reconnect = () => {

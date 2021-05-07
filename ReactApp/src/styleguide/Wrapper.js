@@ -26,19 +26,19 @@ import ReactVisCssBaseline from '../components/SystemComponents/ReactVisCssBasel
 // }
 
 // let pvServerBASEURL;
-// if (typeof process.env.REACT_APP_PyEpicsServerBASEURL === 'undefined') {
+// if (typeof process.env.pvServerURL === 'undefined') {
 //   pvServerBASEURL = "http://127.0.0.1";
 // }
 // else {
-//   pvServerBASEURL = process.env.REACT_APP_PyEpicsServerBASEURL;
+//   pvServerBASEURL = process.env.pvServerURL;
 // }
 
 // let pvServerNamespace;
-// if (typeof process.env.REACT_APP_PyEpicsServerNamespace === 'undefined') {
+// if (typeof process.env.pvServerNameSpace === 'undefined') {
 //   pvServerNamespace = "pvServer";
 // }
 // else {
-//   pvServerNamespace = process.env.REACT_APP_PyEpicsServerNamespace;
+//   pvServerNamespace = process.env.pvServerNameSpace;
 // }
 
 // let PyEpicsServerURL = pvServerBASEURL + ":" + port + "/" + pvServerNamespace;

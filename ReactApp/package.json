@@ -1,6 +1,6 @@
 {
     "name": "react-automation-studio",
-    "version": "2.2.0",
+    "version": "3.0.0",
     "private": true,
     "dependencies": {
         "@material-ui/core": "4.11.2",
@@ -11,7 +11,6 @@
         "mdi-material-ui": "6.21.0",
         "react": "16.13.1",
         "react-dom": "16.13.1",
-
         "react-router-dom": "5.2.0",
         "react-scripts": "3.4.0",
         "react-vis": "1.11.6",
@@ -29,11 +28,6 @@
         "react-plotly.js": "2.5.1",
         "axios":"0.21.1",
         "react-google-login":"5.2.2"
-
-
-
-
-
     },
     "scripts": {
         "start": "react-scripts start",

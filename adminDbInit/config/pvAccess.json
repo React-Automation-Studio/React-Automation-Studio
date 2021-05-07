@@ -18,7 +18,7 @@
     "ADMIN":
     {
       "usernames":["admin"],
-      "roles":["admin"],
+      "roles":["admin, alarmAdmin"],
       "rules":
       [
         { "rule":"[0-9].*",                   "read":true,  "write":true },

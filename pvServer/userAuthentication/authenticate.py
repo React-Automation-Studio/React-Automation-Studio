@@ -87,18 +87,13 @@ def randomString(stringLength=10):
     letters = string.ascii_lowercase
     return ''.join(random.choice(letters) for i in range(stringLength))
 
-def loadFileSecretKey(filename):
-    try:
-        with open(filename, 'r') as f:
-            line=f.readline()
-        return line
-    except:
-        print("Warning SECRET_PWD_KEY not set using the default key, please set the SECRET_PWD_KEY in the file users/SECRET_PWD_KEY")
-        return "ugZnU^E3Fr4gapj^?zH%V5&H}A]*{mC]#>/nY_?ceSt$?99PL[md+29]:$dn)3#X" # can no longer user randomized string due to load balancing
-        #return randomString(16)
+try:
+    SECRET_PWD_KEY =  str(os.environ['SECRET_PWD_KEY'])
+except:
+    print("Warning SECRET_PWD_KEY not set using the default key, please set the SECRET_PWD_KEY in the .env file")
+    SECRET_PWD_KEY="ugZnU^E3Fr4gapj^?zH%V5&H}A]*{mC]#>/nY_?ceSt$?99PL[md+29]:$dn)3#X" # can no longer user randomized string due to load balancing
 
-SECRET_PWD_KEY = loadFileSecretKey('userAuthentication/users/SECRET_PWD_KEY')
-
+   
 
 def createKnownUsers(UAGS):
     global SECRET_PWD_KEY

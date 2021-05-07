@@ -54,9 +54,9 @@ print("")
 print('PYEPICS_LIBCA: '+ str(os.environ['PYEPICS_LIBCA']))
 print('EPICS_BASE: '+ str(os.environ['EPICS_BASE']))
 print('EPICS_CA_ADDR_LIST: '+ str(os.environ['EPICS_CA_ADDR_LIST']))
-print('REACT_APP_PyEpicsServerBASEURL: '+ str(os.environ['REACT_APP_PyEpicsServerBASEURL']))
-print('REACT_APP_PyEpicsServerPORT: '+ str(os.environ['REACT_APP_PyEpicsServerPORT']))
-print('REACT_APP_PyEpicsServerNamespace: '+ str(os.environ['REACT_APP_PyEpicsServerNamespace']))
+print('pvServerURL: '+ str(os.environ['pvServerURL']))
+print('pvServerPort: '+ str(os.environ['pvServerPort']))
+print('pvServerNameSpace: '+ str(os.environ['pvServerNameSpace']))
 print('REACT_APP_EnableLogin: '+ str(os.environ['REACT_APP_EnableLogin']))
 print('pvServerLogLevel: {}'.format(os.environ.get('pvServerLogLevel', None)))
 print('pvServerLogFile: {}'.format(os.environ.get('pvServerLogFile', None)))
@@ -1995,18 +1995,18 @@ def test_disconnect():
 
 
 if __name__ == '__main__':
-    REACT_APP_PyEpicsServerURL=os.getenv('REACT_APP_PyEpicsServerBASEURL')
-    REACT_APP_PyEpicsServerPORT=os.getenv('REACT_APP_PyEpicsServerPORT')
-    if (REACT_APP_PyEpicsServerPORT is None):
-        REACT_APP_PyEpicsServerPORT='5000'
+    REACT_APP_PyEpicsServerURL=os.getenv('pvServerURL')
+    pvServerPort=os.getenv('pvServerPort')
+    if (pvServerPort is None):
+        pvServerPort='5000'
 
-    REACT_APP_PyEpicsServerURL=REACT_APP_PyEpicsServerURL+':'+REACT_APP_PyEpicsServerPORT+'/'+'pvServer'
+    REACT_APP_PyEpicsServerURL=REACT_APP_PyEpicsServerURL+':'+pvServerPort+'/'+'pvServer'
     print("pvServer URL: ",REACT_APP_PyEpicsServerURL)
     print("")
     if not (REACT_APP_PyEpicsServerURL is None):
         if 'https' in REACT_APP_PyEpicsServerURL:
-            socketio.run(app, host='0.0.0.0', debug=True, port=int(REACT_APP_PyEpicsServerPORT,10), keyfile='../certificates/server.key', certfile='../certificates/server.cer',use_reloader=False)
+            socketio.run(app, host='0.0.0.0', debug=True, port=int(pvServerPort,10), keyfile='../certificates/server.key', certfile='../certificates/server.cer',use_reloader=False)
         else:
-            socketio.run(app,host='0.0.0.0',port=int(REACT_APP_PyEpicsServerPORT,10),  debug=True,use_reloader=False)
+            socketio.run(app,host='0.0.0.0',port=int(pvServerPort,10),  debug=True,use_reloader=False)
     else:
         socketio.run(app,host='127.0.0.1',  debug=True,use_reloader=False)

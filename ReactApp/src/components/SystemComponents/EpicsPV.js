@@ -5,7 +5,9 @@ import PropTypes from "prop-types";
 import { io } from 'socket.io-client';
 
 export const useEpicsPV = (props) => {
-  const initPV = () => {
+ 
+ 
+  const [pv, setPv] = useState(() => {
     let pvname = props.pv;
     if (props.macros) {
       let macro;
@@ -13,6 +15,11 @@ export const useEpicsPV = (props) => {
         pvname = pvname.replace(macro.toString(), props.macros[macro].toString());
       }
     }
+    if(pvname.includes('pva://')){
+      console.info("It is no longer necessary to provide the prefix `pva://` for EPICS V3 PVs.\n Perform a global text replace to update.\n For convenience the `pva://` prefix is automatically removed when displayed\n and will be deprecated in a future release",pvname)
+      pvname=pvname.replace('pva://',"")    
+    }
+    // console.log(pvname)
     let pv = {
       initialized: false,
       pvname: pvname,
@@ -20,12 +27,13 @@ export const useEpicsPV = (props) => {
       severity: undefined,
       timestamp: undefined,
       metadata: { initialized: false, pvname: "", value: "", char_value: "", alarmColor: "", lower_disp_limit: "", upper_disp_limit: "", lower_warning_limit: "", upper_warning_limit: "", units: "", precision: 0, enum_strs: [] }
+    
     }
 
     return pv;
-  }
-  const [pv, setPv] = useState(initPV());
+  });
   const pvName=pv.pvname;
+ 
   const [pvConnectionId, setPvConnectionId] = useState(null);
   const context = useContext(ReactAutomationStudioContext);
   const [socket,setSocket] = useState(null)

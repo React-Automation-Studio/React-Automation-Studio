@@ -25,6 +25,7 @@ class DeprecatedEpicsPV extends React.Component {
       for (macro in this.props.macros){
         pvname=pvname.replace(macro.toString(),this.props.macros[macro].toString());
       }
+     
       this.state ={
         'id': uuidv4(),
         'initialized':false,
@@ -40,6 +41,7 @@ class DeprecatedEpicsPV extends React.Component {
     }
     else{
       pvname=this.props.pv;
+     
       this.state ={ 'initialized':false,
       'pvname':pvname,
       'interalValue':' ',
@@ -184,12 +186,12 @@ class DeprecatedEpicsPV extends React.Component {
       if (jwt===null){
         jwt='unauthenticated'
       }
-      socket.emit('request_pv_info', {data: this.state.pvname,'clientAuthorisation':jwt},this.handleRequestPvInfoAck);
+      socket.emit('request_pv_info', {data: this.state.pvname.replace("pva://",""),'clientAuthorisation':jwt},this.handleRequestPvInfoAck);
     //  this.handleInitialConnection();
       this.timeout=setTimeout(this.handleInitialConnection, 3000);
       //    console.log("this.state.pvname",this.state.pvname);
 
-      socket.on(this.state.pvname,this.updatePVData);
+      socket.on(this.state.pvname.replace("pva://",""),this.updatePVData);
       socket.on('connect_error',this.connectError);
       socket.on('disconnect', this.disconnect);
       socket.on('connect', this.reconnect);
@@ -296,9 +298,11 @@ class DeprecatedEpicsPV extends React.Component {
 
 
     render() {
+
       const {classes} =this.props;
       const value =this.state.internalValue
       const pvname =this.state.pvname
+      // console.log(pvname)
       const initialized= this.state.initialized;
       const redirectToLogInPage=this.state.redirectToLogInPage;
       if (this.props.debug===true){

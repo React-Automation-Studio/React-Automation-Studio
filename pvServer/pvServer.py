@@ -399,30 +399,30 @@ def dbWatchThread(watchEventName):
 
 def onValueChanges(pvname=None,count=None,char_value=None,severity=None,status=None, value=None, timestamp=None, **kw):
     global clientPVList
-    pvname1='pva://'+str(pvname)
-    if(clientPVlist[pvname1]['initialized']==True):
+    # pvname1='pva://'+str(pvname)
+    if(clientPVlist[pvname]['initialized']==True):
         if (float(count)== 1):
            new_char_value=str(char_value)
            if (len(new_char_value)==0):
                new_char_value=str(value)
 
 
-           socketio.emit(pvname1,
-              {'pvname': pvname1,'newmetadata': 'False','value': str(value),'char_value': new_char_value,'count':count, 'connected':'1', 'severity': severity,'timestamp':timestamp
-              },room='pva://'+str(pvname),namespace='/pvServer')
+           socketio.emit(pvname,
+              {'pvname': pvname,'newmetadata': 'False','value': str(value),'char_value': new_char_value,'count':count, 'connected':'1', 'severity': severity,'timestamp':timestamp
+              },room=str(pvname),namespace='/pvServer')
         else:
-           d={'pvname': pvname1,'newmetadata': 'False','value': list((value)),'count':count, 'connected':'1', 'severity': severity,'timestamp':timestamp}
-           socketio.emit(pvname1,d,room='pva://'+str(pvname),namespace='/pvServer')
+           d={'pvname': pvname,'newmetadata': 'False','value': list((value)),'count':count, 'connected':'1', 'severity': severity,'timestamp':timestamp}
+           socketio.emit(pvname,d,room=str(pvname),namespace='/pvServer')
 
 
 def onConnectionChange(pvname=None, conn= None, value=None, **kws):
     global clientPVlist
-    pvname1='pva://'+str(pvname)
+    # pvname1='pva://'+str(pvname)
 
     if (conn==True):
         try:
-            clientPVlist[pvname1]['isConnected']=True
-            clientPVlist[pvname1]['initialized']=False
+            clientPVlist[pvname]['isConnected']=True
+            clientPVlist[pvname]['initialized']=False
 
         except:
            error=1
@@ -436,9 +436,9 @@ def onConnectionChange(pvname=None, conn= None, value=None, **kws):
         d['connected']= '0'
         d['emitter']="onConnectionChange: disconnected"
         try:
-            clientPVlist[pvname1]['isConnected']=False
-            clientPVlist[pvname1]['initialized']=False
-            socketio.emit(pvname1,d,room=str(pvname1),namespace='/pvServer')
+            clientPVlist[pvname]['isConnected']=False
+            clientPVlist[pvname]['initialized']=False
+            socketio.emit(pvname,d,room=str(pvname),namespace='/pvServer')
         except:
             error=2
 
@@ -471,19 +471,19 @@ def test_write(message):
     if accessControl['userAuthorised']:
         if accessControl['permissions']['write']:
             pvname1= str(message['pvname'])
-            if "pva://" in pvname1:
-                pvname2=pvname1.replace("pva://","")
-                try:
-                    clientPVlist[pvname1]['pv'].put(message['data']);
-                except Exception as e:
-                    log.error("***EPICS PV put error: ")
-                    log.error("PV name: {}",pvname2)
-                    log.error("Value to put: {}",message['data'])
-                    log.error("Exception: {}",e)
+            # if "pva://" in pvname1:
+            pvname2=pvname1.replace("pva://","")
+            try:
+                clientPVlist[pvname1]['pv'].put(message['data']);
+            except Exception as e:
+                log.error("***EPICS PV put error: ")
+                log.error("PV name: {}",pvname2)
+                log.error("Value to put: {}",message['data'])
+                log.error("Exception: {}",e)
 
 
 
-            else: log.error("Unknown PV type ({})", pvname1)
+            # else: log.error("Unknown PV type ({})", pvname1)
         else:
             log.warning("***PV put error: write access denied ")
             log.warning("PV name: {}",message['pvname'])
@@ -509,57 +509,57 @@ def test_message(message):
 
         if pvname1 in	clientPVlist:
 
-            if "pva://" in pvname1:
-                pvConnectionId= str(message['pvConnectionId'])
-                #print("remove_pv_connection id: ",pvConnectionId, pvname1)
-                try:
+            # if "pva://" in pvname1:
+            pvConnectionId= str(message['pvConnectionId'])
+            #print("remove_pv_connection id: ",pvConnectionId, pvname1)
+            try:
+                #print("before pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
+                if pvConnectionId in clientPVlist[pvname1]['socketsRW'][request.sid]['pvConnectionIds']:
+                    #print("debug1: ",pvConnectionId, pvname1)
                     #print("before pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
-                    if pvConnectionId in clientPVlist[pvname1]['socketsRW'][request.sid]['pvConnectionIds']:
-                        #print("debug1: ",pvConnectionId, pvname1)
-                        #print("before pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
-                        clientPVlist[pvname1]['socketsRW'][request.sid]['pvConnectionIds'].pop(str(pvConnectionId))
-                        #print("length ",len(clientPVlist[pvname1]['socketsRW'][request.sid]['pvConnectionIds']))
-                        if len(clientPVlist[pvname1]['socketsRW'][request.sid]['pvConnectionIds'])==0:
-                            leave_room(str(pvname1)+'rw')
-                            clientPVlist[pvname1]['socketsRW'].pop(request.sid)
+                    clientPVlist[pvname1]['socketsRW'][request.sid]['pvConnectionIds'].pop(str(pvConnectionId))
+                    #print("length ",len(clientPVlist[pvname1]['socketsRW'][request.sid]['pvConnectionIds']))
+                    if len(clientPVlist[pvname1]['socketsRW'][request.sid]['pvConnectionIds'])==0:
+                        leave_room(str(pvname1)+'rw')
+                        clientPVlist[pvname1]['socketsRW'].pop(request.sid)
 
-                        #print("after pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
-                except:
-                    pass
-                    #print("remove_pv_connection id not in socketsRW: ",pvConnectionId, pvname1)
+                    #print("after pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
+            except:
+                pass
+                #print("remove_pv_connection id not in socketsRW: ",pvConnectionId, pvname1)
 
-                try:
+            try:
+                #print("before pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
+                if pvConnectionId in clientPVlist[pvname1]['socketsRO'][request.sid]['pvConnectionIds']:
+                    clientPVlist[pvname1]['socketsRO'][request.sid]['pvConnectionIds'].pop(str(pvConnectionId))
+                    if len(clientPVlist[pvname1]['socketsRO'][request.sid]['pvConnectionIds'])==0:
+                        leave_room(str(pvname1)+'ro')
+                        clientPVlist[pvname1]['socketsRO'].pop(request.sid)
+                    #print("after pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
+            except:
+                pass
+                #print("remove_pv_connection id not in socketsRO: ",pvConnectionId, pvname1)
+            try:
+                #print("before pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
+                if pvConnectionId in clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds']:
+                    #print("debug1: ",pvConnectionId, pvname1)
                     #print("before pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
-                    if pvConnectionId in clientPVlist[pvname1]['socketsRO'][request.sid]['pvConnectionIds']:
-                        clientPVlist[pvname1]['socketsRO'][request.sid]['pvConnectionIds'].pop(str(pvConnectionId))
-                        if len(clientPVlist[pvname1]['socketsRO'][request.sid]['pvConnectionIds'])==0:
-                            leave_room(str(pvname1)+'ro')
-                            clientPVlist[pvname1]['socketsRO'].pop(request.sid)
-                        #print("after pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
-                except:
-                    pass
-                    #print("remove_pv_connection id not in socketsRO: ",pvConnectionId, pvname1)
-                try:
-                    #print("before pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
-                    if pvConnectionId in clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds']:
-                        #print("debug1: ",pvConnectionId, pvname1)
-                        #print("before pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
-                        clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'].pop(str(pvConnectionId))
-                        if len(clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])==0:
-                            leave_room(str(pvname1))
-                            clientPVlist[pvname1]['sockets'].pop(request.sid)
-                        #print("after pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
-                except:
-                    pass
-                    #print("remove_pv_connection id not in sockets: ",pvConnectionId, pvname1)
+                    clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'].pop(str(pvConnectionId))
+                    if len(clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])==0:
+                        leave_room(str(pvname1))
+                        clientPVlist[pvname1]['sockets'].pop(request.sid)
+                    #print("after pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
+            except:
+                pass
+                #print("remove_pv_connection id not in sockets: ",pvConnectionId, pvname1)
 
-                #print("sockets",clientPVlist[pvname1]['sockets'])
-                #print("socketsRO",clientPVlist[pvname1]['socketsRO'])
-                #print("socketsRW",clientPVlist[pvname1]['socketsRW'])
+            #print("sockets",clientPVlist[pvname1]['sockets'])
+            #print("socketsRO",clientPVlist[pvname1]['socketsRO'])
+            #print("socketsRW",clientPVlist[pvname1]['socketsRW'])
 
 
-            else:
-                log.error("Unknown PV type ({})",pvname1)
+            # else:
+            #     log.error("Unknown PV type ({})",pvname1)
 
 
         else:
@@ -575,6 +575,7 @@ def test_message(message):
 def test_message(message):
     global clientPVlist,REACT_APP_DisableLogin, myuid
     pvname1= str(message['data'])
+    pvname1=pvname1.replace("pva://","") #work around for old prefix
     authenticated=False
     if REACT_APP_DisableLogin:
         authenticated=True
@@ -588,124 +589,124 @@ def test_message(message):
 
         if not (pvname1 in	clientPVlist):
 
-            if "pva://" in pvname1:
+            # if "pva://" in pvname1:
 
 
-                if(accessControl['permissions']['read']):
+            if(accessControl['permissions']['read']):
 
-                    pvname2=pvname1.replace("pva://","")
-                    pv= PV(pvname2,connection_timeout=0.002,connection_callback= onConnectionChange)
-                    pvlist={}
-                    pvlist['pv']=pv
-                    pvlist['isConnected']=False
-                    pvlist['initialized']=False
+               
+                pv= PV(pvname1,connection_timeout=0.002,connection_callback= onConnectionChange)
+                pvlist={}
+                pvlist['pv']=pv
+                pvlist['isConnected']=False
+                pvlist['initialized']=False
 
-                    #pvConnectionId=str(uuid.uuid1())
-                    myuid=myuid+1
-                    pvConnectionId=str(myuid)
-                    if(accessControl['permissions']['write']):
-                        join_room(str(pvname1)+'rw')
-                        join_room(str(pvname1))
-
-
-
-                        pvlist['sockets']={request.sid:{'pvConnectionIds':{pvConnectionId:True}}}
-                        pvlist['socketsRW']={request.sid:{'pvConnectionIds':{pvConnectionId:True}}}
-                        pvlist['socketsRO']={}
-                    else:
-                        join_room(str(pvname1)+'ro')
-                        join_room(str(pvname1))
+                #pvConnectionId=str(uuid.uuid1())
+                myuid=myuid+1
+                pvConnectionId=str(myuid)
+                if(accessControl['permissions']['write']):
+                    join_room(str(pvname1)+'rw')
+                    join_room(str(pvname1))
 
 
 
-                        pvlist['sockets']={request.sid:{'pvConnectionIds':{pvConnectionId:True}}}
-                        pvlist['socketsRO']={request.sid:{'pvConnectionIds':{pvConnectionId:True}}}
-                        pvlist['socketsRW']={}
-                    clientPVlist[pvname1]=pvlist
-                    clientPVlist[pvname1]['pv'].add_callback(onValueChanges,index=0)
-                    #print("new pv", pvname1," generated pvConnectionId: ",pvConnectionId)
-                    return {"pvConnectionId":pvConnectionId}
+                    pvlist['sockets']={request.sid:{'pvConnectionIds':{pvConnectionId:True}}}
+                    pvlist['socketsRW']={request.sid:{'pvConnectionIds':{pvConnectionId:True}}}
+                    pvlist['socketsRO']={}
+                else:
+                    join_room(str(pvname1)+'ro')
+                    join_room(str(pvname1))
 
 
 
-            else:
-                log.error("Unknown PV type ({})",pvname1)
+                    pvlist['sockets']={request.sid:{'pvConnectionIds':{pvConnectionId:True}}}
+                    pvlist['socketsRO']={request.sid:{'pvConnectionIds':{pvConnectionId:True}}}
+                    pvlist['socketsRW']={}
+                clientPVlist[pvname1]=pvlist
+                clientPVlist[pvname1]['pv'].add_callback(onValueChanges,index=0)
+                #print("new pv", pvname1," generated pvConnectionId: ",pvConnectionId)
+                return {"pvConnectionId":pvConnectionId}
+
+
+
+            # else:
+            #     log.error("Unknown PV type ({})",pvname1)
 
 
         else:
 
-            if "pva://" in pvname1:
-                if(accessControl['permissions']['read']):
+            # if "pva://" in pvname1:
+            if(accessControl['permissions']['read']):
 
-                    pvname2=pvname1.replace("pva://","")
-                    clientPVlist[pvname1]['initialized']=False
-                    myuid=myuid+1
-                    pvConnectionId=str(myuid)
-                    #pvConnectionId=str(uuid.uuid4())
-                    #print("pv exists", pvname1," generated pvConnectionId: ",pvConnectionId)
-                    #print("all sockets ",clientPVlist[pvname1]['sockets'])
-                    #print("all sockets rw",clientPVlist[pvname1]['socketsRW'])
-                    if(accessControl['permissions']['write']):
-                        join_room(str(pvname1)+'rw')
-                        join_room(str(pvname1))
-                        if request.sid in clientPVlist[pvname1]['sockets']:
+                # pvname2=pvname1.replace("pva://","")
+                clientPVlist[pvname1]['initialized']=False
+                myuid=myuid+1
+                pvConnectionId=str(myuid)
+                #pvConnectionId=str(uuid.uuid4())
+                #print("pv exists", pvname1," generated pvConnectionId: ",pvConnectionId)
+                #print("all sockets ",clientPVlist[pvname1]['sockets'])
+                #print("all sockets rw",clientPVlist[pvname1]['socketsRW'])
+                if(accessControl['permissions']['write']):
+                    join_room(str(pvname1)+'rw')
+                    join_room(str(pvname1))
+                    if request.sid in clientPVlist[pvname1]['sockets']:
 
-                            if 'pvConnectionIds' in clientPVlist[pvname1]['sockets'][request.sid]:
-                                if  pvConnectionId in clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds']:
-                                    log.info("not a unique id {} {}",pvConnectionId,pvname1)
-                     #               print("allConnectionIds ",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
-                                else:
-                                    clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'][pvConnectionId]=True
+                        if 'pvConnectionIds' in clientPVlist[pvname1]['sockets'][request.sid]:
+                            if  pvConnectionId in clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds']:
+                                log.info("not a unique id {} {}",pvConnectionId,pvname1)
+                    #               print("allConnectionIds ",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
                             else:
-                                clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds']={pvConnectionId:True}
+                                clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'][pvConnectionId]=True
                         else:
-                            clientPVlist[pvname1]['sockets'][request.sid]={'pvConnectionIds':{pvConnectionId:True}}
-                        if request.sid in clientPVlist[pvname1]['socketsRW']:
-                            if 'pvConnectionIds' in clientPVlist[pvname1]['socketsRW'][request.sid]:
-                                if  pvConnectionId in clientPVlist[pvname1]['socketsRW'][request.sid]['pvConnectionIds']:
-                                     log.info("not a unique id RW {} {}",pvConnectionId,pvname1)
-                      #              print("allConnectionIds RW ",clientPVlist[pvname1]['socketsRW'][request.sid]['pvConnectionIds'])
-                                else:
-                                    clientPVlist[pvname1]['socketsRW'][request.sid]['pvConnectionIds'][pvConnectionId]=True
-                            else:
-                                clientPVlist[pvname1]['socketsRW'][request.sid]['pvConnectionIds']={pvConnectionId:True}
-                        else:
-                            clientPVlist[pvname1]['socketsRW'][request.sid]={'pvConnectionIds':{pvConnectionId:True}}
-
-
-
+                            clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds']={pvConnectionId:True}
                     else:
-                        join_room(str(pvname1)+'ro')
-                        join_room(str(pvname1))
-                        if request.sid in clientPVlist[pvname1]['sockets']:
-                            if 'pvConnectionIds' in clientPVlist[pvname1]['sockets'][request.sid]:
-                                if  pvConnectionId in clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds']:
-                                    log.info("not a unique id {} {}",pvConnectionId,pvname1)
-                       #             print("allConnectionIds",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
-                                else:
-                                    clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'][pvConnectionId]=True
+                        clientPVlist[pvname1]['sockets'][request.sid]={'pvConnectionIds':{pvConnectionId:True}}
+                    if request.sid in clientPVlist[pvname1]['socketsRW']:
+                        if 'pvConnectionIds' in clientPVlist[pvname1]['socketsRW'][request.sid]:
+                            if  pvConnectionId in clientPVlist[pvname1]['socketsRW'][request.sid]['pvConnectionIds']:
+                                    log.info("not a unique id RW {} {}",pvConnectionId,pvname1)
+                    #              print("allConnectionIds RW ",clientPVlist[pvname1]['socketsRW'][request.sid]['pvConnectionIds'])
                             else:
-                                clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds']={pvConnectionId:True}
+                                clientPVlist[pvname1]['socketsRW'][request.sid]['pvConnectionIds'][pvConnectionId]=True
                         else:
-                            clientPVlist[pvname1]['sockets'][request.sid]={'pvConnectionIds':{pvConnectionId:True}}
+                            clientPVlist[pvname1]['socketsRW'][request.sid]['pvConnectionIds']={pvConnectionId:True}
+                    else:
+                        clientPVlist[pvname1]['socketsRW'][request.sid]={'pvConnectionIds':{pvConnectionId:True}}
 
-                        if request.sid in clientPVlist[pvname1]['socketsRO']:
-                            if 'pvConnectionIds' in clientPVlist[pvname1]['socketsRO'][request.sid]:
-                                if  pvConnectionId in clientPVlist[pvname1]['socketsRO'][request.sid]['pvConnectionIds']:
-                                    log.info("not a unique id ro {} {}",pvConnectionId,pvname1)
-                         #           print("allConnectionIds ro",clientPVlist[pvname1]['socketsRO'][request.sid]['pvConnectionIds'])
-                                else:
-                                    clientPVlist[pvname1]['socketsRO'][request.sid]['pvConnectionIds'][pvConnectionId]=True
+
+
+                else:
+                    join_room(str(pvname1)+'ro')
+                    join_room(str(pvname1))
+                    if request.sid in clientPVlist[pvname1]['sockets']:
+                        if 'pvConnectionIds' in clientPVlist[pvname1]['sockets'][request.sid]:
+                            if  pvConnectionId in clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds']:
+                                log.info("not a unique id {} {}",pvConnectionId,pvname1)
+                    #             print("allConnectionIds",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
                             else:
-                                clientPVlist[pvname1]['socketsRO'][request.sid]['pvConnectionIds']={pvConnectionId:True}
+                                clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'][pvConnectionId]=True
                         else:
-                            clientPVlist[pvname1]['socketsRO'][request.sid]={'pvConnectionIds':{pvConnectionId:True}}
+                            clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds']={pvConnectionId:True}
+                    else:
+                        clientPVlist[pvname1]['sockets'][request.sid]={'pvConnectionIds':{pvConnectionId:True}}
 
-                    return {"pvConnectionId":pvConnectionId}
+                    if request.sid in clientPVlist[pvname1]['socketsRO']:
+                        if 'pvConnectionIds' in clientPVlist[pvname1]['socketsRO'][request.sid]:
+                            if  pvConnectionId in clientPVlist[pvname1]['socketsRO'][request.sid]['pvConnectionIds']:
+                                log.info("not a unique id ro {} {}",pvConnectionId,pvname1)
+                        #           print("allConnectionIds ro",clientPVlist[pvname1]['socketsRO'][request.sid]['pvConnectionIds'])
+                            else:
+                                clientPVlist[pvname1]['socketsRO'][request.sid]['pvConnectionIds'][pvConnectionId]=True
+                        else:
+                            clientPVlist[pvname1]['socketsRO'][request.sid]['pvConnectionIds']={pvConnectionId:True}
+                    else:
+                        clientPVlist[pvname1]['socketsRO'][request.sid]={'pvConnectionIds':{pvConnectionId:True}}
+
+                return {"pvConnectionId":pvConnectionId}
 
 
-            else:
-                log.error("Unknown PV type ({})",pvname1)
+            # else:
+            #     log.error("Unknown PV type ({})",pvname1)
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
 
@@ -1955,31 +1956,31 @@ def test_disconnect():
     print("disconnected",request.sid)
     log.info('Client disconnected: {}',request.sid)
     for pvname1 in	clientPVlist:
-        if "pva://" in pvname1:
+        # if "pva://" in pvname1:
 
-            try:
-                leave_room(str(pvname1)+'rw')
-                clientPVlist[pvname1]['socketsRW'].pop(request.sid)
-            except:
-                pass
-            try:
-                leave_room(str(pvname1)+'ro')
-                clientPVlist[pvname1]['socketsRO'].pop(request.sid)
-            except:
-                pass
-            try:
-                leave_room(str(pvname1))
-                clientPVlist[pvname1]['sockets'].pop(request.sid)
-            except:
-                pass
+        try:
+            leave_room(str(pvname1)+'rw')
+            clientPVlist[pvname1]['socketsRW'].pop(request.sid)
+        except:
+            pass
+        try:
+            leave_room(str(pvname1)+'ro')
+            clientPVlist[pvname1]['socketsRO'].pop(request.sid)
+        except:
+            pass
+        try:
+            leave_room(str(pvname1))
+            clientPVlist[pvname1]['sockets'].pop(request.sid)
+        except:
+            pass
 
             #print("disconn sockets",clientPVlist[pvname1]['sockets'])
             #print("disconn socketsRO",clientPVlist[pvname1]['socketsRO'])
             #print("disconn socketsRW",clientPVlist[pvname1]['socketsRW'])
 
 
-        else:
-            log.info("Unknown PV type ({})", pvname1)
+        # else:
+        #     log.info("Unknown PV type ({})", pvname1)
     try:
         # print(list(clientDbWatchList))
         for watchEventName in list(clientDbWatchList) :

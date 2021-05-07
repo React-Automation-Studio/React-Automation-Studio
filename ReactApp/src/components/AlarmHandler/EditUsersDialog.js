@@ -16,8 +16,8 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
 import IconButton from '@material-ui/core/IconButton';
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 
 // Styles
 const useStyles = makeStyles(theme => ({
@@ -128,7 +128,7 @@ const EditUsersDialog = (props) => {
                                     className={classes.margin}
                                     onClick={() => props.pushToAlarmUsers()}
                                 >
-                                    <ArrowForwardIosIcon fontSize="large" />
+                                    <ArrowForwardIcon fontSize="large" />
                                 </IconButton>
                             </Grid>
                             <Grid item className={classes.centerInBlock}>
@@ -138,7 +138,7 @@ const EditUsersDialog = (props) => {
                                     className={classes.margin}
                                     onClick={() => props.pushToRASUsers()}
                                 >
-                                    <ArrowBackIosIcon fontSize="large" />
+                                    <ArrowBackIcon fontSize="large" />
                                 </IconButton>
                             </Grid>
                         </Grid>

@@ -16,12 +16,14 @@ import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import CloseIcon from '@material-ui/icons/Close';
 import SearchIcon from '@material-ui/icons/Search';
+import HelpIcon from '@material-ui/icons/Help';
 
 
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 import DataConnection from '../SystemComponents/DataConnection';
 import ScheduleDialog from './ScheduleDialog';
 import EditUsersDialog from './EditUsersDialog';
+import HelpDialog from './HelpDialog';
 import UserTable from './UserTable';
 import PVList from './PVList';
 import useMongoDbWatch from '../SystemComponents/database/MongoDB/useMongoDbWatch';
@@ -164,6 +166,8 @@ const UserNotification = (props) => {
     const [editUsersList, setEditUsersList] = useState({})
     const [forwardBDisabled, setForwardBDisabled] = useState(true)
     const [backwardBDisabled, setBackwardBDisabled] = useState(true)
+
+    const [helpDialogOpen, setHelpDialogOpen] = useState(true)
 
     const [clientAHDBVer] = useState(props.AHDBVer)
     const [serverAHDBVer, setServerAHDBVer] = useState(props.AHDBVer)
@@ -1048,6 +1052,12 @@ const UserNotification = (props) => {
                 pushToRASUsers={pushToRASUsers}
                 handleApplyEditUsers={applyEditUsers}
             />
+            <HelpDialog
+                open={helpDialogOpen}
+                handleClose={() => {
+                    setHelpDialogOpen(false)
+                }}
+            />
             {
                 Object.entries(dialogUserObject).length !== 0
                     ? <ScheduleDialog
@@ -1103,11 +1113,12 @@ const UserNotification = (props) => {
                                                         event.stopPropagation()
                                                         isAlarmAdmin && setEditUsersDialogOpen(true)
                                                     }}
+                                                    className={classes.verticalMiddle}
                                                 >
                                                     <Button
                                                         variant="contained"
                                                         color="secondary"
-                                                        size="small"
+                                                        size="medium"
                                                         className={classes.button}
                                                         startIcon={<AccountCog />}
                                                         style={{ marginRight: 20 }}
@@ -1120,6 +1131,49 @@ const UserNotification = (props) => {
                                                     >
                                                         Edit Alarm Users
                                                 </Button>
+                                                </div>
+                                            </Tooltip>
+                                            : null
+                                    }
+                                    {
+                                        userTableExpand
+                                            ? <Tooltip
+                                                title={"Help"}
+                                                placement="bottom"
+                                                classes={{ tooltip: classes.tooltipWidth }}
+                                            >
+                                                <div
+                                                    onClick={(event) => {
+                                                        event.preventDefault()
+                                                        event.stopPropagation()
+                                                        setHelpDialogOpen(true)
+                                                    }}
+                                                    className={classes.verticalMiddle}
+                                                >
+                                                    <IconButton
+                                                        size="small"
+                                                        aria-label="close"
+                                                        color="secondary"
+                                                        className={classes.button}
+                                                        style={{ marginRight: 20 }}
+                                                    >
+                                                        <HelpIcon fontSize="large" />
+                                                    </IconButton>
+                                                    {/* <Button
+                                                        variant="contained"
+                                                        color="secondary"
+                                                        size="small"
+                                                        className={classes.button}
+                                                        startIcon={<AccountCog />}
+                                                        style={{ marginRight: 20 }}
+                                                    // onClick={(event) => {
+                                                    //     event.preventDefault()
+                                                    //     event.stopPropagation()
+                                                    //     setEditUsersDialogOpen(true)
+                                                    // }}
+                                                    >
+                                                        Help
+                                                    </Button> */}
                                                 </div>
                                             </Tooltip>
                                             : null

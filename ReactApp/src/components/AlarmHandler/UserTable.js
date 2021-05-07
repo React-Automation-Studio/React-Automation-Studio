@@ -65,6 +65,10 @@ const UserTable = (props) => {
     const fillChipIndex = filterUserRegex.length === 1 ? filterUserRegex[0].index : null
     const fillChipName = filterUserRegex.length === 1 ? filterUserRegex[0].regEx : null
 
+    const regExURL = "https://www.tutorialspoint.com/javascript/javascript_regexp_object.htm"
+    const styleguideSection = '#/Style%20Guide/Experimental%20Alarm%20Handler/Alarm%20Handler%20User%20Guide/User%20notification%20view?id=section-alarm-handler-user-table'
+    const styleguideURL = window.location.protocol + "//" + window.location.hostname + ':6060/' + styleguideSection
+
     return (
         <TableContainer component={Paper} style={{ height: props.height }} elevation={theme.palette.type === 'dark' ? undefined : 5}>
             <Table aria-label="User Table" stickyHeader size="small">
@@ -89,7 +93,7 @@ const UserTable = (props) => {
                 <TableHead>
                     <TableRow
                         onClick={(event) => {
-                            event.preventDefault()
+                            // event.preventDefault()
                             event.stopPropagation()
                         }}
                     >
@@ -101,12 +105,20 @@ const UserTable = (props) => {
                                 title={
                                     <React.Fragment>
                                         <p>
+                                            <b><u>To configure notifications follow the steps below:</u></b>
+                                            <br />
+                                            <br />
+                                            <b>1. Add alarm handler users using the [EDIT ALARM USERS] button (this can only be done by an alarmAdmin role user</b>
+                                            <br />
+                                            <br />
                                             <b>The notification expressions are composed using Javascript regular expressions.</b>
                                             <br />
                                             <br />
                                             <b>For more information on JS regular expressions see: </b>
                                             <br />
-                                            <b><a href="https://www.tutorialspoint.com/javascript/javascript_regexp_object.htm" target="_blank" rel="noopener noreferrer">www.tutorialspoint.com</a></b>
+                                            <b><a href={regExURL} target="_blank" rel="noopener noreferrer">www.tutorialspoint.com</a></b>
+                                            <br />
+                                            <b><a href={styleguideURL} target="_blank" rel="noopener noreferrer">RAS Styleguide</a></b>
                                         </p>
                                     </React.Fragment>
                                 }

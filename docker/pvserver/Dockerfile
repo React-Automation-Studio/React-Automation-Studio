@@ -26,9 +26,9 @@ ADD ./utils/python/mongoDb /pvServer/utils
 WORKDIR /pvServer
 
 
-ENV REACT_APP_PyEpicsServerBASEURL=http://127.0.0.1
-ENV REACT_APP_PyEpicsServerPORT=5000
-ENV REACT_APP_PyEpicsServerNamespace=pvServer
+ENV pvServerURL=http://127.0.0.1
+ENV pvServerPort=5000
+ENV pvServerNameSpace=pvServer
 ENV REACT_APP_EnableLogin=false
 ENV REACT_APP_DisableStandardLogin=false
 ENV REACT_APP_EnableActiveDirectoryLogin=false
@@ -38,9 +38,9 @@ ENV PYEPICS_LIBCA=/epics/base/lib/linux-x86_64/libca.so
 
 ENV PATH="/epics/base/bin/linux-x86_64/:${PATH}"
 #RUN echo $PATH
-RUN echo $REACT_APP_PyEpicsServerBASEURL
-RUN echo $REACT_APP_PyEpicsServerPORT
-RUN echo $REACT_APP_PyEpicsServerNamespace
+RUN echo $pvServerURL
+RUN echo $pvServerPort
+RUN echo $pvServerNameSpace
 
 #RUN ls /epics/base/lib/linux-x86_64/
 

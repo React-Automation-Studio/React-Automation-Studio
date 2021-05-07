@@ -12,10 +12,10 @@ If it exists edit the .env file, otherwise copy example.env to .env and set
 
 ```bash
 
-REACT_APP_PyEpicsServerBASEURL=https://customURL
+pvServerURL=https://customURL
 REACT_APP_EnableLogin=false
 REACT_APP_FrontendServerPORT=9000
-REACT_APP_PyEpicsServerPORT=5000
+pvServerPort=5000
 REACT_APP_PyEpicsServerStyleguidePORT=5001
 REACT_APP_StyleguideServerPORT=6060
 REACT_APP_EnableLoginStyleguide=false

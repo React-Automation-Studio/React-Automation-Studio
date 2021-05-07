@@ -8,7 +8,6 @@ services:
     volumes:
       - ./certificates:/certificates/
       - ./build/frontend:/build
-    #restart: always
     network_mode: host
     env_file: .env
   pvserver1:
@@ -36,9 +35,7 @@ services:
       - REACT_APP_PyEpicsServerBASEURL=http://127.0.0.1
     volumes:
       - ./certificates:/certificates/
-      - ./users:/pvServer/userAuthentication/users
       - ./log/:/pvServer/log
-      # - ./build:/pvServer/build
   pvserver2:
     build:
       context: ./
@@ -64,9 +61,7 @@ services:
       - REACT_APP_PyEpicsServerBASEURL=http://127.0.0.1
     volumes:
       - ./certificates:/certificates/
-      - ./users:/pvServer/userAuthentication/users
       - ./log/:/pvServer/log
-      # - ./build:/pvServer/build
   pvserver3:
     build:
       context: ./
@@ -92,9 +87,7 @@ services:
       - REACT_APP_PyEpicsServerBASEURL=http://127.0.0.1
     volumes:
       - ./certificates:/certificates/
-      - ./users:/pvServer/userAuthentication/users
       - ./log/:/pvServer/log
-      # - ./build:/pvServer/build
   nginx:
     image: nginx:1.19.6
     restart: always

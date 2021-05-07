@@ -41,7 +41,6 @@ services:
       - REACT_APP_PyEpicsServerBASEURL=http://127.0.0.1
     volumes:
       - ./certificates:/certificates/
-      - ./users:/pvServer/userAuthentication/users
       - ./log/:/pvServer/log
       - ./build:/pvServer/build
   nginx:

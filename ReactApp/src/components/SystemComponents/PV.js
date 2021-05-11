@@ -41,13 +41,17 @@ const PV = (props) => {
         pvname = pvname.replace(macro.toString(), props.macros[macro].toString());
       }
     }
-    return pvname.includes('pva://')
-      ?
-      EpicsPV({ ...props, pv:pvname})
-      : (pvname.includes('loc://')
-        ?
-        LocalPV({ ...props, pv:pvname })
-        : UnknownPV({ ...props, pv:pvname }))
+    return pvname.includes('loc://')?
+      LocalPV({ ...props, pv:pvname })
+      :EpicsPV({ ...props, pv:pvname})
+    //     : UnknownPV({ ...props, pv:pvname }))
+    // return pvname.includes('pva://')
+    //   ?
+    //   EpicsPV({ ...props, pv:pvname})
+    //   : (pvname.includes('loc://')
+    //     ?
+    //     LocalPV({ ...props, pv:pvname })
+    //     : UnknownPV({ ...props, pv:pvname }))
   }
   const pvData = (name) => (pv) => {
 

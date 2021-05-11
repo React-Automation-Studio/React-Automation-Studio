@@ -54,7 +54,7 @@ class DataConnection extends React.Component {
     return (
 
       <React.Fragment  >
-      {pv.includes('loc://')&&
+      {pv.includes('loc://')?
         <DeprecatedLocalPV
         localVariable={this.context.localVariables[pv]}
         value={typeof this.context.localVariables[pv]==='undefined'?undefined:this.context.localVariables[pv].value}
@@ -67,8 +67,30 @@ class DataConnection extends React.Component {
         useStringValue={this.props.useStringValue}
         debug={this.props.debug}
         />
+        :
+          <React.Fragment>
+          <DeprecatedEpicsPV
+    pv={pv}
+    macros={this.props.macros}
+    usePrecision={this.props.usePrecision}
+    handleInputValue={this.props.handleInputValue}
+    handleMetadata={this.props.handleMetadata}
+    outputValue=  {this.props.outputValue}
+    useStringValue={this.props.useStringValue}
+    debug={this.props.debug}
+    newValueTrigger={this.props.newValueTrigger}
+    />
+    {this.props.usePvLabel===true&&<DeprecatedEpicsPV
+
+  pv={pv.toString()+".DESC"}
+  macros={this.props.macros}
+  handleInputValue={this.props.handleInputValueLabel}
+
+  /> }
+  </React.Fragment>
+       
       }
-    {pv.includes('pva://')&&
+    {/* {pv.includes('pva://')&&
     <DeprecatedEpicsPV
     pv={pv}
     macros={this.props.macros}
@@ -80,6 +102,7 @@ class DataConnection extends React.Component {
     debug={this.props.debug}
     newValueTrigger={this.props.newValueTrigger}
     />
+
   }
   { (pv.includes('pva://')&&this.props.usePvLabel===true) && <DeprecatedEpicsPV
 
@@ -87,7 +110,7 @@ class DataConnection extends React.Component {
   macros={this.props.macros}
   handleInputValue={this.props.handleInputValueLabel}
 
-  />    }
+  />    } */}
 
   </React.Fragment>
 )

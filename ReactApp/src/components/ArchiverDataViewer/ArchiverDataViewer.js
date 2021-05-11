@@ -198,11 +198,12 @@ const ArchiverDataViewer = (props) => {
     const pvConnections = () => {
         let newPvs = [];
         props.traces.forEach((item, index) => {
+            const pvName=replaceMacros(item.pv, props.macros);
             newPvs.push(
                 <PV
                     key={index.toString()}
-                    pv={item.pv}
-                    macros={props.macros}
+                    pv={pvName}
+                    
                     pvData={(pv) => {
                         if (pvs[index]) {
                             if (pvs[index].initialized !== pv.initialized) {
@@ -210,7 +211,7 @@ const ArchiverDataViewer = (props) => {
                                     let newPvs = [...prePvs]
                                     newPvs[index] = {};
                                     newPvs[index]['initialized'] = pv.initialized;
-                                    newPvs[index]['pvname'] = replaceMacros(item.pv, props.macros);
+                                    newPvs[index]['pvname'] = pvName.replace("pva://","")
                                     return newPvs
                                 }
                                 )
@@ -717,7 +718,7 @@ const ArchiverDataViewer = (props) => {
                             return ({
                                 x: pvData.x,
                                 y: pvData.y,
-                                name: props.traces[index].name ? props.traces[index].name : replaceMacros(props.traces[index].pv, props.macros),
+                                name: props.traces[index].name ? props.traces[index].name : replaceMacros(props.traces[index].pv, props.macros).replace("pva://",""),
                                 type: props.traces[index].type ? props.traces[index].type : 'scatter',
                                 mode: props.traces[index].mode ? props.traces[index].mode : 'lines',
                                 marker: { color: props.traces[index].color ? props.traces[index].color : theme.palette.reactVis.lineColors[index] },
@@ -731,7 +732,7 @@ const ArchiverDataViewer = (props) => {
                             return ({
                                 x: pvData.x,
                                 y: pvData.y,
-                                name: props.traces[index].name ? props.traces[index].name : replaceMacros(props.traces[index].pv, props.macros),
+                                name: props.traces[index].name ? props.traces[index].name : replaceMacros(props.traces[index].pv, props.macros).replace("pva://",""),
                                 type: props.traces[index].type ? props.traces[index].type : 'scatter',
                                 mode: props.traces[index].mode ? props.traces[index].mode : 'lines',
                                 marker: { color: props.traces[index].color ? props.traces[index].color : theme.palette.reactVis.lineColors[index] },

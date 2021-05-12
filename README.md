@@ -55,7 +55,11 @@ Similarly for writes to an EPICS variable, depending on the access rights, the c
 
 *2. React frontend*
 
-React was chosen to develop the frontend for the PWA as it enables us to develop the frontend in a single language, i.e JavaScript  as opposed to conventional web development in HTML, JavaScript and CSS. The UI interfaces that we have created are highly responsive and offer a real-time experience as is shown in the example of a mobile view in in Fig. 1.
+React was chosen to develop the frontend for the PWA as it enables us to develop the frontend in a single language, i.e JavaScript  as opposed to conventional web development in HTML, JavaScript and CSS. The UI interfaces that we have created are highly responsive and offer a real-time experience as is shown in the example of a mobile view in in Fig. 2.
+
+<img src="./ReactApp/img/MobileView.png" alt="drawing" width="35%"/>
+
+*Fig 2. An example of a Mobile View.
 
 We have integrated selected components from the Material-UI React component framework and the React-vis graphing framework with our system to create user interfaces with the same features that we use in our current CS-Studio operator interfaces. These components have been integrated with a data connection layer which handles, input and output, meta-data for labels, limits, precision, alarm sensitivity and initialization from the pvServer.
 
@@ -66,15 +70,15 @@ Some components can handle multiple PVs such as the graph or single PVs such as 
 <img src="./ReactApp/img/contextMenu.png" alt="drawing" width="90%"/>
 
 
-*Fig 2. An example of a context menu and a diagnostic probe user interface*
+*Fig 3. An example of a context menu and a diagnostic probe user interface*
 
-Many of the components such as TextInputs and TextOutputs have embedded diagnostic features such as a context menu and diagnostic probe as shown in figure 2.
+Many of the components such as TextInputs and TextOutputs have embedded diagnostic features such as a context menu and diagnostic probe as shown in figure 3.
 
 ![picture](./ReactApp/img/beamline.png)
 
-*Fig 3. An example of a desktop beamline control system ui*
+*Fig 4. An example of a desktop beamline control system ui*
 
-Apart form mobile UIs complex UIs suitable for desktop systems can also be created as is shown in figure 3.
+Apart form mobile UIs complex UIs suitable for desktop systems can also be created as is shown in figure 4.
 
 
 *3. Styleguide*

@@ -445,7 +445,13 @@ The installation folder is referenced below  as:
 ```bash
 ./
 ```
-`./administrator`contains the source files for the user administration utility
+`./adminDbInit`contains the seed configuration for the administrator.
+
+`./alarmHandlerDbInit`contains the seed configuration for demo alarm handler.
+
+`./alarmHandlerServer`contains the source files for the Alarm Handler  server.
+
+`./build` contains the static files for the web app and styleguide, once they are built.
 
 Inside: `./certificates`the certificates according to 3.3 are placed.
 
@@ -453,17 +459,21 @@ Inside: `./docker`the docker files that build the conatiners that are used by th
 
 Inside: `./epics`the demo  IOC that interacts with the Demo react screens is located.
 
-`./frontendServer`contains the source files for Node Express serves that serves the client UIs.
+`./loadSaveDbInit`contains the cofiguration for the load/save demo .
+
+`./log`contains the log outputs from the pvServer.
+
+`./mongoSetup`contains the source that sets up the mongoDb replica set.
+
+`./nginx`contains the configuartion file for nginx.
 
 `./pvServer`contains the source files for EPICS process variable server.
 
-`./alarmHandlerServer`contains the source files for the Alarm Halnder  server.
-
 `./ReactApp`contains the source files for the web app. They can be edited as is described in Section 2.
 
-`./styleguideServer`contains the source files for Node Express serves that serves the style guide.
+`./signalcli`contains the configuration files for signal.
 
-`./users` contains the user access configuration files as per section 3.
+`./utils` contains utilities usedin different apps.
 
 # 5 Running the web app as PWA
 

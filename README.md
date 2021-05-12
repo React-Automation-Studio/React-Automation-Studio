@@ -62,7 +62,9 @@ We have integrated selected components from the Material-UI React component fram
 Some components can handle multiple PVs such as the graph or single PVs such as text inputs. For each of the components the PVs name can be declared using macros. The macros are replaced at component instantiation. This allows the  design of complex user interfaces that can be reused by simply grouping the components and changing the global macro to point to another system.
 
 
-![picture](./ReactApp/img/contextMenu.png)
+
+<img src="./ReactApp/img/contextMenu.png" alt="drawing" width="90%"/>
+
 
 *Fig 2. An example of a context menu and a diagnostic probe user interface*
 

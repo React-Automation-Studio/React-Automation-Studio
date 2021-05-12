@@ -155,12 +155,6 @@ Will launch the development version with the demoIOC's and styleguide.
 
 
 
-```bash
-docker-compose -f docker-compose-administator.yml run administrator
-
-```
-will launch the username, login and password administration functions environment.
-
 
 And:
 
@@ -184,7 +178,7 @@ docker-compose  up
 
 This installation process of all the docker images may take a while (20-30min) the first time. There after it is fast as all the repeated build and up commands uses cached installations. The longest process is the installation of the node modules. Do not be deterred by the red warnings.
 
-This default installation will serve the  app at http://127.0.0.1:9000 and the style guide at http://127.0.0.1:6060.
+This default installation will serve the  app at http://127.0.0.1:5000 and the style guide at http://127.0.0.1:6060.
 
 
 To launch the development environment make sure the production version is stopped,and the run :
@@ -421,7 +415,7 @@ If it exists edit the .env file, otherwise copy example.env to .env and set
 
 ```bash
 
-pvServerURL=https://customURL
+
 REACT_APP_EnableLogin=false
 REACT_APP_FrontendServerPORT=9000
 pvServerPort=5000

@@ -15,7 +15,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const styleguideSection = '#/Style%20Guide/Experimental%20Alarm%20Handler/Alarm%20Handler%20User%20Guide'
+const styleguideSection = '#/Style%20Guide/Experimental%20Alarm%20Handler'
 const styleguideURL = window.location.protocol + "//" + window.location.hostname + ':6060/' + styleguideSection
 
 const HelpDialog = (props) => {

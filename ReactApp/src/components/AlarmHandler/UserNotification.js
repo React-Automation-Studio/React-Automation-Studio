@@ -167,7 +167,7 @@ const UserNotification = (props) => {
     const [forwardBDisabled, setForwardBDisabled] = useState(true)
     const [backwardBDisabled, setBackwardBDisabled] = useState(true)
 
-    const [helpDialogOpen, setHelpDialogOpen] = useState(true)
+    const [helpDialogOpen, setHelpDialogOpen] = useState(false)
 
     const [clientAHDBVer] = useState(props.AHDBVer)
     const [serverAHDBVer, setServerAHDBVer] = useState(props.AHDBVer)

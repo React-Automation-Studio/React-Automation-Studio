@@ -29,11 +29,11 @@ If you wish to customize the project and create user interfaces for your EPICS c
 
 Each of the Docker containers are deployed as micro services and environment variables can be configured to deploy the system on different ports, or to enable user authentication and authorisation or to serve the application on a unique URL or on the localhost. Separate Docker commands exist to load the development and production version. These containerised environments allows for precise versioning of packages used and prevents deployment dependency issues.
 
-The software stack for React Automation Studio is shown in Fig. 1 and an overview of the system components are give below:
+The microservices that form part of React Automation Studio are shown in Fig. 1 and an overview of the system components are give below:
 
-![picture](./ReactApp/img/softwareStack.png)
+![picture](./ReactApp/img/microServices.png)
 
-*Fig 1. The current software stack and an example mobile layout*
+*Fig 1. The microservices that form part of React Automation Studio*
 
 An overview of the system components are give below:
 
@@ -55,7 +55,11 @@ Similarly for writes to an EPICS variable, depending on the access rights, the c
 
 *2. React frontend*
 
-React was chosen to develop the frontend for the PWA as it enables us to develop the frontend in a single language, i.e JavaScript  as opposed to conventional web development in HTML, JavaScript and CSS. The UI interfaces that we have created are highly responsive and offer a real-time experience as is shown in the example of a mobile view in in Fig. 1.
+React was chosen to develop the frontend for the PWA as it enables us to develop the frontend in a single language, i.e JavaScript  as opposed to conventional web development in HTML, JavaScript and CSS. The UI interfaces that we have created are highly responsive and offer a real-time experience as is shown in the example of a mobile view in in Fig. 2.
+
+<img src="./ReactApp/img/MobileView.png" alt="drawing" width="35%"/>
+
+*Fig 2. An example of a Mobile View.
 
 We have integrated selected components from the Material-UI React component framework and the React-vis graphing framework with our system to create user interfaces with the same features that we use in our current CS-Studio operator interfaces. These components have been integrated with a data connection layer which handles, input and output, meta-data for labels, limits, precision, alarm sensitivity and initialization from the pvServer.
 
@@ -66,15 +70,15 @@ Some components can handle multiple PVs such as the graph or single PVs such as 
 <img src="./ReactApp/img/contextMenu.png" alt="drawing" width="90%"/>
 
 
-*Fig 2. An example of a context menu and a diagnostic probe user interface*
+*Fig 3. An example of a context menu and a diagnostic probe user interface*
 
-Many of the components such as TextInputs and TextOutputs have embedded diagnostic features such as a context menu and diagnostic probe as shown in figure 2.
+Many of the components such as TextInputs and TextOutputs have embedded diagnostic features such as a context menu and diagnostic probe as shown in figure 3.
 
 ![picture](./ReactApp/img/beamline.png)
 
-*Fig 3. An example of a desktop beamline control system ui*
+*Fig 4. An example of a desktop beamline control system ui*
 
-Apart form mobile UIs complex UIs suitable for desktop systems can also be created as is shown in figure 3.
+Apart form mobile UIs complex UIs suitable for desktop systems can also be created as is shown in figure 4.
 
 
 *3. Styleguide*
@@ -445,7 +449,13 @@ The installation folder is referenced below  as:
 ```bash
 ./
 ```
-`./administrator`contains the source files for the user administration utility
+`./adminDbInit`contains the seed configuration for the administrator.
+
+`./alarmHandlerDbInit`contains the seed configuration for demo alarm handler.
+
+`./alarmHandlerServer`contains the source files for the Alarm Handler  server.
+
+`./build` contains the static files for the web app and styleguide, once they are built.
 
 Inside: `./certificates`the certificates according to 3.3 are placed.
 
@@ -453,17 +463,21 @@ Inside: `./docker`the docker files that build the conatiners that are used by th
 
 Inside: `./epics`the demo  IOC that interacts with the Demo react screens is located.
 
-`./frontendServer`contains the source files for Node Express serves that serves the client UIs.
+`./loadSaveDbInit`contains the cofiguration for the load/save demo .
+
+`./log`contains the log outputs from the pvServer.
+
+`./mongoSetup`contains the source that sets up the mongoDb replica set.
+
+`./nginx`contains the configuartion file for nginx.
 
 `./pvServer`contains the source files for EPICS process variable server.
 
-`./alarmHandlerServer`contains the source files for the Alarm Halnder  server.
-
 `./ReactApp`contains the source files for the web app. They can be edited as is described in Section 2.
 
-`./styleguideServer`contains the source files for Node Express serves that serves the style guide.
+`./signalcli`contains the configuration files for signal.
 
-`./users` contains the user access configuration files as per section 3.
+`./utils` contains utilities usedin different apps.
 
 # 5 Running the web app as PWA
 

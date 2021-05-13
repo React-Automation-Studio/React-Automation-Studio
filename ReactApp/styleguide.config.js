@@ -234,6 +234,14 @@ module.exports = {
                   content: 'src/docs/alarmHandler/environment.md',
                 },
                 {
+                  name: 'Setting up email notifications',
+                  content: 'src/docs/alarmHandler/emailNotification.md',
+                },
+                {
+                  name: 'Setting up Signal notifications',
+                  content: 'src/docs/alarmHandler/signalNotification.md',
+                },
+                {
                   name: 'MongoDB seed data',
                   content: 'src/docs/alarmHandler/seedData.md',
                   sections: [
@@ -246,8 +254,8 @@ module.exports = {
                       content: 'src/docs/alarmHandler/pvListJson.md',
                     },
                     {
-                      name: 'users.json',
-                      content: 'src/docs/alarmHandler/usersJson.md',
+                      name: 'Users',
+                      content: 'src/docs/alarmHandler/Users.md',
                     },
                   ]
                 },

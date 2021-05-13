@@ -1,12 +1,4 @@
-The remainder of the user guide addresses the alarm handler user interface. This is comprised of two views - an alarm setup view and a user notification view.
-
-Use the moreVert drawer menu (three dots on top right) to switch between the alarm setup and user notification views as shown below.
-
-<center>
-<img src="img/alarmHandler/alarmSetup_userNotification_click2.png" alt="alarmSetup_userNotification_click" width="100%"/>
-</center>
-<center>*Navigating between alarm setup and user notification views using moreVert drawer menu*</center>
-<br/><br/>
+The remainder of the user guide addresses the alarm handler user interface. This is comprised of two views - an alarm table view and a notification setup view. Use the tabs on top to switch between the alarm table view and notification setup views.
 
 The alarm setup view comprises of three areas - the **ALARM AREAS** menu list, the **ALARM TABLE** and the **ALARM LOG** as shown below.
 

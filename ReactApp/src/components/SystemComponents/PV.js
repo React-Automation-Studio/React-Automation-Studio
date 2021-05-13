@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import EpicsPV from './EpicsPV'
 import LocalPV from './LocalPV'
-import UnknownPV from './UnknownPV'
 import PropTypes from "prop-types";
 
 /**
  * The PV component handles connections to EPICS process variables and local process vairable.
- * This is done by defining the pv name in the pv prop and using a prefix to define protocol ie "pva://" for EPICs and "loc://" for local variable.
+ * This is done by defining the pv name in the pv prop and using a prefix "loc://" for local variable.
  * The PV component also performs macro substitution on the pv prop using the macros prop.
  * The pv state can be raised as an object using the pvData callback or passed to child function component. All the data in this pv object is valid when pv.initialized===true
  * 

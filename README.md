@@ -108,6 +108,10 @@ Currently the Alarm Handler component  and LoadSave component make use of the Mo
 *6. AlarmHandler
 
 
+
+*7. Since Release 3.0.0, Nginx serves the static files for ReactApp and the styleguide, it also handles the transport layer security and performs load balancing. Scripts were created to dynamically configure Nginx based on the enviroment variables in Section 3.
+For load balancing, Nginx balances between 3 pvServers in the production versions and 1 in the dev versions.
+
 ## YouTube Channel:
 [![React Automation Studio Youtube](http://img.youtube.com/vi/djTPrkRxgAo/0.jpg)](https://www.youtube.com/playlist?list=PL7x0LbUrw5BIgc2PUN3h1D0QRRqRuGzEO "React Automation Studio")
 
@@ -258,7 +262,7 @@ SECURE=true
 HTTP_REDIRECT_TO_HTTPS=true
 
 ```
-Alternatley set SERVER_PORT to 443 which is the standard ssl port.
+Alternately set SERVER_PORT to 443 which is the standard ssl port.
 
 The certificates need to be placed in the the React Automation Studio installation folder under the certificates folder.
 
@@ -309,7 +313,30 @@ The default username and password  will be admin / admin
 
 The admin user will have full read and write access, whilst any other user will have read access by default.
 
+To enable Active Directory Authentication opent the .env and add, (You will need to rebuild the docker images):
+```bash
+REACT_APP_EnableActiveDirectoryLogin=true
+LDAP_HOST=ldap://xxxxxx
+LDAP_PORT=389
+
 ```
+
+To enable Active Directory Authentication opent the .env and add, (You will need to rebuild the docker images):
+```bash
+Set REACT_APP_EnableGoogleLogin=true
+REACT_APP_EnableGoogleLoginId= xxxxx
+```
+Set REACT_APP_EnableGoogleLoginId to your google client id for your domain
+at https://console.developers.google.com/apis/credentials/           
+click create new credenitals and the create a new oAuth id  for the web app
+It needs an https domain. 
+you can enter multiple domains:
+for example: https://mydomain
+https://mydomain:5000
+https://mydomain:3000
+
+
+
 ## 3.3 Default user access rights
 
 The access rights for each user are managed in the web administrator. If logged in as admin, the administrator link is via the more options in the right corner.
@@ -439,7 +466,7 @@ Inside: `./epics`the demo  IOC that interacts with the Demo react screens is loc
 
 `./mongoSetup`contains the source that sets up the mongoDb replica set.
 
-`./nginx`contains the configuartion file for nginx.
+`./nginx`contains the configuration files for nginx.
 
 `./pvServer`contains the source files for EPICS process variable server.
 
@@ -447,7 +474,7 @@ Inside: `./epics`the demo  IOC that interacts with the Demo react screens is loc
 
 `./signalcli`contains the configuration files for signal.
 
-`./utils` contains utilities usedin different apps.
+`./utils` contains utilities used in different apps.
 
 # 5 Running the web app as PWA
 

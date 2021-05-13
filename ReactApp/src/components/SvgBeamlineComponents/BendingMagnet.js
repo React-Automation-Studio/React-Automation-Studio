@@ -305,7 +305,7 @@ BendingMagnet.propTypes = {
   numberFormat: PropTypes.object,
 
 
-  /** Name of the pv process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+  /** Name of the pv process variable, eg. '$(device):test$(id)'*/
   pv: PropTypes.string,
 
 

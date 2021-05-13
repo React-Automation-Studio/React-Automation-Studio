@@ -845,7 +845,7 @@ LoadSave.propTypes = {
    * eg. {{'$(device)':'testIOC','$(id)':'2'}}
    */
   macros: PropTypes.object,
-  /** Name of the load enable process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+  /** Name of the load enable process variable, eg. '$(device):test$(id)'*/
 
   loadEnablePV: PropTypes.string,
   /**

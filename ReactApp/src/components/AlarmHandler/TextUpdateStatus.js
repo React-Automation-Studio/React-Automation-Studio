@@ -242,7 +242,7 @@ TextUpdateStatus.propTypes = {
  
  /** Name of the process variable,  eg. '$(device):test$(id)'*/
  pv: PropTypes.string,
- /** Array of the process variables, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+ /** Array of the process variables, eg. '$(device):test$(id)'*/
  pvs: PropTypes.arrayOf(PropTypes.string),
  /**
   * Object with a string and the corresponding severity value.

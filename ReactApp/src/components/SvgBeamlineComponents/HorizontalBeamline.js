@@ -171,7 +171,7 @@ HorizontalBeamline.propTypes = {
   */
  initialLocalVariableValue: PropTypes.string,
  
- /** Name of the  process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'
+ /** Name of the  process variable, eg. '$(device):test$(id)'
   * 
   * If undefined then the beam line component will render with no animations or context menu
  */

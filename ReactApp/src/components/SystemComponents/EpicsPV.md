@@ -35,7 +35,7 @@ Example using the Hook `useEpicsPV` :
 import React from 'react';
 import {useEpicsPV} from './EpicsPV'
 const Example1=(props)=>{
-    const pv=useEpicsPV({pv:'pva://$(device):test$(id)', macros:{'$(device)':'testIOC','$(id)':'2'}})
+    const pv=useEpicsPV({pv:'$(device):test$(id)', macros:{'$(device)':'testIOC','$(id)':'2'}})
     const {initialized}=pv;
     const value=initialized?pv.value:"value is not initialized";
 

@@ -991,7 +991,7 @@ const UserNotification = (props) => {
         alarmPVs = alarmList.map(alarm => (
             <DataConnection
                 key={alarm}
-                pv={`pva://${alarmIOCPVPrefix}${alarm}${alarmIOCPVSuffix}`}
+                pv={`${alarmIOCPVPrefix}${alarm}${alarmIOCPVSuffix}`}
                 handleInputValue={constructDESC_HOST}
             />
         ))

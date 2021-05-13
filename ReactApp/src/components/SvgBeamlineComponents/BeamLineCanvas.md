@@ -12,19 +12,19 @@ import SteererXYMagnet from './SteererXYMagnet';
 	<HorizontalBeamline 
 		x={0}
 		y={50}
-		pv={'pva://testIOC:BeamlineA:BeamOn'}
+		pv={'testIOC:BeamlineA:BeamOn'}
 		width={'113px'}
 	/>
 	<HorizontalBeamline 
 		x={'113px'}
 		y={50}
-		pv={'pva://testIOC:BeamlineB:BeamOn'}
+		pv={'testIOC:BeamlineB:BeamOn'}
 		width={'148px'}
 	/>
 	<HorizontalBeamline 
 		x={'261px'}
 		y={50}
-		pv={'pva://testIOC:BeamlineC:BeamOn'}
+		pv={'testIOC:BeamlineC:BeamOn'}
 		width={'10px'}
 	/>
 	
@@ -35,7 +35,7 @@ import SteererXYMagnet from './SteererXYMagnet';
         pv= '$(IOC):$(device):Readback'
         macros=
          {{
-           '$(IOC)': 'pva://testIOC',
+           '$(IOC)': 'testIOC',
            '$(device)': 'PS3',
           }}
 	  	usePvUnits={true}
@@ -53,7 +53,7 @@ import SteererXYMagnet from './SteererXYMagnet';
        	pv= '$(IOC):$(device):Readback'
         macros=
           {{
-          '$(IOC)': 'pva://testIOC',
+          '$(IOC)': 'testIOC',
           '$(device)': 'PS4',
           }}
 		usePvUnits={true}
@@ -72,7 +72,7 @@ import SteererXYMagnet from './SteererXYMagnet';
           yPv={'$(IOC):$(device):Y:Readback'}  
           label='STRXY2'
           macros= {{
-              '$(IOC)': 'pva://testIOC',
+              '$(IOC)': 'testIOC',
               '$(device)': 'STR2',
               
           }
@@ -90,7 +90,7 @@ import SteererXYMagnet from './SteererXYMagnet';
 		pv={'$(IOC):$(device):$(XorY):Readback'}
         label='STR2'
         macros= {{
-              '$(IOC)': 'pva://testIOC',
+              '$(IOC)': 'testIOC',
               '$(device)': 'STR2',
               '$(XorY)': 'Y'
           }

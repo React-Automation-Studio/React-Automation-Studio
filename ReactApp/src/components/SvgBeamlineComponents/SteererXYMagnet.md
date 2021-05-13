@@ -30,7 +30,7 @@ const [displayEditor,setDisplayEditor]=useState(false);
           yPv={'$(IOC):$(device):Y:Readback'}  
           label='STRXY2'
           macros= {{
-              '$(IOC)': 'pva://testIOC',
+              '$(IOC)': 'testIOC',
               '$(device)': 'STR2',
               
           }
@@ -58,7 +58,7 @@ const [displayEditor,setDisplayEditor]=useState(false);
             xReadbackPv: '$(IOC):$(device):X:Readback',
             xOnPv: '$(IOC):$(device):X:On',
             macros: {
-              '$(IOC)': 'pva://testIOC',
+              '$(IOC)': 'testIOC',
               '$(device)': 'STR2',
             },
             disableLink:true

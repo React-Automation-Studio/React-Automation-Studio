@@ -29,7 +29,7 @@ const [displayEditor,setDisplayEditor]=useState(false);
           pv= '$(IOC):$(device):Readback'
           macros=
             {{
-            '$(IOC)': 'pva://testIOC',
+            '$(IOC)': 'testIOC',
             '$(device)': 'PS4',
             }}
           
@@ -60,7 +60,7 @@ const [displayEditor,setDisplayEditor]=useState(false);
             rampRatePv: '$(IOC):$(device):RampRate',
             macros:
             {
-              '$(IOC)': 'pva://testIOC',
+              '$(IOC)': 'testIOC',
               '$(device)': 'PS4',
             },
             disableLink:true

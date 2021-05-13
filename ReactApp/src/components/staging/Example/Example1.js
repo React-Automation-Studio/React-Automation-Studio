@@ -128,8 +128,8 @@ const Example1 = (props) => {
     for (i = 0; i < noOfGraphs; i++) {
       graphs.push(
         <Grid item xs={width} key={i.toString()}>
-          <GraphY pvs={['pva://testIOC:test4', 'pva://testIOC:test5',
-            'pva://testIOC:test3'
+          <GraphY pvs={['testIOC:test4', 'testIOC:test5',
+            'testIOC:test3'
           ]} legend={['Sine Wave', 'Amplitude']}
             maxLength={maxLength}
             updateRate={updateRate}
@@ -143,22 +143,22 @@ const Example1 = (props) => {
        
             <GraphXY
               xPVs={
-                ['pva://testIOC:BeamSweepSim:x.AVAL',
-                  'pva://testIOC:BeamSweepSim:x1.AVAL',
-                  'pva://testIOC:BeamSweepSim:x2.AVAL'
+                ['testIOC:BeamSweepSim:x.AVAL',
+                  'testIOC:BeamSweepSim:x1.AVAL',
+                  'testIOC:BeamSweepSim:x2.AVAL'
                 ]
               }
               yPVs={
-                ['pva://testIOC:BeamSweepSim:y.AVAL',
-                  'pva://testIOC:BeamSweepSim:y1.AVAL',
-                  'pva://testIOC:BeamSweepSim:y2.AVAL'
+                ['testIOC:BeamSweepSim:y.AVAL',
+                  'testIOC:BeamSweepSim:y1.AVAL',
+                  'testIOC:BeamSweepSim:y2.AVAL'
                 ]
               }
 
               // pvs={
-              //   ['pva://testIOC:BeamSweepSim:y.AVAL',
-              //     'pva://testIOC:BeamSweepSim:y1.AVAL',
-              //     'pva://testIOC:BeamSweepSim:y2.AVAL'
+              //   ['testIOC:BeamSweepSim:y.AVAL',
+              //     'testIOC:BeamSweepSim:y1.AVAL',
+              //     'testIOC:BeamSweepSim:y2.AVAL'
               //   ]
               // }
               xMax={10000}
@@ -175,11 +175,11 @@ const Example1 = (props) => {
           <GraphY
 
             pvs={[
-              'pva://testIOC:MTextUpdate1',
-              'pva://testIOC:MTextUpdate2',
-              'pva://testIOC:MTextUpdate3',
-              'pva://testIOC:MTextUpdate4',
-              'pva://testIOC:MTextUpdate5'
+              'testIOC:MTextUpdate1',
+              'testIOC:MTextUpdate2',
+              'testIOC:MTextUpdate3',
+              'testIOC:MTextUpdate4',
+              'testIOC:MTextUpdate5'
 
             ]}
             maxLength={256}
@@ -187,7 +187,7 @@ const Example1 = (props) => {
             height={graphVH}
           />
           <GraphY
-            pvs={['pva://testIOC:PS1:Readback', 'pva://testIOC:PS2:Readback', 'pva://testIOC:PS3:Readback']}
+            pvs={['testIOC:PS1:Readback', 'testIOC:PS2:Readback', 'testIOC:PS3:Readback']}
             maxLength={600}
             legend={[
               'Q1 readback',
@@ -266,8 +266,8 @@ const Example1 = (props) => {
                 }
                 {/* <Grid item xs={4} >
                   
-                    <GraphY  pvs={['pva://testIOC:test4','pva://testIOC:test5',
-                    'pva://testIOC:test3'
+                    <GraphY  pvs={['testIOC:test4','testIOC:test5',
+                    'testIOC:test3'
                   ] } legend={['Sine Wave','Amplitude']}
                     maxLength={maxLength}
                     updateRate={updateRate}
@@ -279,8 +279,8 @@ const Example1 = (props) => {
                 </Grid>
                 <Grid item xs={4} >
                   
-                    <GraphY  pvs={['pva://testIOC:test4','pva://testIOC:test5',
-                    'pva://testIOC:test3'
+                    <GraphY  pvs={['testIOC:test4','testIOC:test5',
+                    'testIOC:test3'
                   ] } legend={['Sine Wave','Amplitude']}
                     maxLength={maxLength}
                     updateRate={updateRate}
@@ -292,8 +292,8 @@ const Example1 = (props) => {
                 </Grid>
                 <Grid item xs={4} >
                   
-                    <GraphY  pvs={['pva://testIOC:test4','pva://testIOC:test5',
-                    'pva://testIOC:test3'
+                    <GraphY  pvs={['testIOC:test4','testIOC:test5',
+                    'testIOC:test3'
                   ] } legend={['Sine Wave','Amplitude']}
                     maxLength={maxLength}
                     updateRate={updateRate}
@@ -305,8 +305,8 @@ const Example1 = (props) => {
                 </Grid>
                 <Grid item xs={4} >
                   
-                    <GraphY  pvs={['pva://testIOC:test4','pva://testIOC:test5',
-                    'pva://testIOC:test3'
+                    <GraphY  pvs={['testIOC:test4','testIOC:test5',
+                    'testIOC:test3'
                   ] } legend={['Sine Wave','Amplitude']}
                     maxLength={maxLength}
                     updateRate={updateRate}
@@ -318,8 +318,8 @@ const Example1 = (props) => {
                 </Grid>
                 <Grid item xs={4} >
                   
-                    <GraphY  pvs={['pva://testIOC:test4','pva://testIOC:test5',
-                    'pva://testIOC:test3'
+                    <GraphY  pvs={['testIOC:test4','testIOC:test5',
+                    'testIOC:test3'
                   ] } legend={['Sine Wave','Amplitude']}
                     maxLength={maxLength}
                     updateRate={updateRate}
@@ -331,8 +331,8 @@ const Example1 = (props) => {
                 </Grid>
                 <Grid item xs={4} >
                   
-                    <GraphY  pvs={['pva://testIOC:test4','pva://testIOC:test5',
-                    'pva://testIOC:test3'
+                    <GraphY  pvs={['testIOC:test4','testIOC:test5',
+                    'testIOC:test3'
                   ] } legend={['Sine Wave','Amplitude']}
                     maxLength={maxLength}
                     updateRate={updateRate}
@@ -345,24 +345,24 @@ const Example1 = (props) => {
 
                 <Grid item xs={6} sm={4} lg={3} >
 
-                  <Gauge pv='pva://$(device):amplitude' macros={{ '$(device)': 'testIOC' }} prec={3} usePvMinMax={true} />
+                  <Gauge pv='$(device):amplitude' macros={{ '$(device)': 'testIOC' }} prec={3} usePvMinMax={true} />
 
                 </Grid>
 
                 <Grid item xs={2} sm={4} lg={5} >
                   <Grid container direction="column" justify="space-evenly" spacing={2} alignItems="stretch">
                     <Grid item>
-                      <StyledIconIndicator pv='pva://$(device)' macros={{ '$(device)': 'testIOC:BO1' }} onColor={props.theme.palette.ok.main} offColor='default' label={'On'} labelPlacement={'end'} />
+                      <StyledIconIndicator pv='$(device)' macros={{ '$(device)': 'testIOC:BO1' }} onColor={props.theme.palette.ok.main} offColor='default' label={'On'} labelPlacement={'end'} />
 
                     </Grid>
                     <Grid item>
-                      <StyledIconIndicator pv='pva://$(device)' macros={{ '$(device)': 'testIOC:BO1' }} onColor='default' offColor={props.theme.palette.error.main} label={'Off'} labelPlacement={'end'} />
+                      <StyledIconIndicator pv='$(device)' macros={{ '$(device)': 'testIOC:BO1' }} onColor='default' offColor={props.theme.palette.error.main} label={'Off'} labelPlacement={'end'} />
                     </Grid>
                   </Grid>
                 </Grid>
                 <Grid item xs={4} sm={4} lg={4} >
 
-                  <ToggleButton pv='pva://$(device)' macros={{ '$(device)': 'testIOC:BO1' }} custom_selection_strings={["OFF", "ON"]} />
+                  <ToggleButton pv='$(device)' macros={{ '$(device)': 'testIOC:BO1' }} custom_selection_strings={["OFF", "ON"]} />
                 </Grid>
 
 
@@ -390,7 +390,7 @@ const Example1 = (props) => {
                       <Grid item xs={12}>
                         <div style={{ textAlign: 'center', marginTop: '16px', }}>
                           <ThumbWheel
-                            pv='pva://$(device)'
+                            pv='$(device)'
                             macros={{ '$(device)': 'testIOC:amplitude' }}
                             prec_integer={3}
                             prec_decimal={1}
@@ -402,7 +402,7 @@ const Example1 = (props) => {
                     <div style={{ marginTop: '16px' }}>
                       <Grid container direction="row" item xs={12} spacing={2}>
                         <Grid item xs={12}  >
-                          <Slider pv='pva://$(device):amplitude' macros={{ '$(device)': 'testIOC' }} usePvMinMax={true} />
+                          <Slider pv='$(device):amplitude' macros={{ '$(device)': 'testIOC' }} usePvMinMax={true} />
                         </Grid>
                       </Grid>
                     </div>}
@@ -422,10 +422,10 @@ const Example1 = (props) => {
                   <div style={{ marginBottom: 8 }}>Settings</div>
                   <Grid container spacing={2} alignItems={'stretch'} direction={'row'} justify={'flex-start'}>
                     <Grid item xs={12} lg={4}>
-                      <TextInput pv='pva://$(device):frequency' macros={{ '$(device)': 'testIOC' }} usePvUnits={true} prec={1} usePvLabel={true} />
+                      <TextInput pv='$(device):frequency' macros={{ '$(device)': 'testIOC' }} usePvUnits={true} prec={1} usePvLabel={true} />
                     </Grid>
                     <Grid item xs={12} lg={4}>
-                      <TextInput pv='pva://$(device):amplitude' macros={{ '$(device)': 'testIOC' }} usePvUnits={true} usePvLabel={true} />
+                      <TextInput pv='$(device):amplitude' macros={{ '$(device)': 'testIOC' }} usePvUnits={true} usePvLabel={true} />
                     </Grid>
                   </Grid>
 

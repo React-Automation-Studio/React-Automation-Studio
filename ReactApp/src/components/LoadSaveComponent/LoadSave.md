@@ -23,7 +23,7 @@ const LoadSaveExample = (props) => {
         host='LOADSAVE_DATABASE'
         database='testIOCSystems'
         macros={{ '$(systemName)': 'testIOC' }}
-        loadEnablePV={'pva://$(systemName):loadSaveEnable'}
+        loadEnablePV={'$(systemName):loadSaveEnable'}
         loadEnableLabel={'System On/Off'}
         showLoadEnableButton={true}
         useLoadEnable={true}
@@ -54,7 +54,7 @@ Configure the metadataConfig.json in the following format for example with your 
         {
             "component": "TextOutput",
             "props": {
-                "pv": "pva://testIOC:rf_frequency",
+                "pv": "testIOC:rf_frequency",
                 "label": "RF Frequency",
                 "usePvUnits": true
             }
@@ -62,7 +62,7 @@ Configure the metadataConfig.json in the following format for example with your 
         {
             "component": "TextInput",
             "props": {
-                "pv": "pva://testIOC:energy",
+                "pv": "testIOC:energy",
                 "label": "Energy",
                 "usePvUnits": true
             }
@@ -70,7 +70,7 @@ Configure the metadataConfig.json in the following format for example with your 
         {
             "component": "TextInput",
             "props": {
-                "pv": "pva://testIOC:description",
+                "pv": "testIOC:description",
                 "label": "Description"
             }
         }

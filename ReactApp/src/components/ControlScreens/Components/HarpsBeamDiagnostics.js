@@ -231,24 +231,24 @@ const HarpsBeamDiagnostics = (props) => {
                                     <HarpRangeSelection onlyX={harpGraphsState.onlyX0} onlyY={harpGraphsState.onlyY0} key={'harpRangeSelectionx0' + harpGraphsState.x0SystemName} systemName={harpGraphsState.x0SystemName} label={'Range'} />
                                     <div style={{ marginBottom: 8 }}>
                                         {((harpGraphsState.onlyY0 === false) && (harpGraphsState.onlyX0 === false)) &&
-                                            <ActionButton key={'storex0' + harpGraphsState.x0SystemName} pvs={['pva://$(device):x_store_offset', 'pva://$(device):y_store_offset']} macros={{ '$(device)': harpGraphsState.x0SystemName }} actionValue={"1"} actionString={"Store Offset"} />
+                                            <ActionButton key={'storex0' + harpGraphsState.x0SystemName} pvs={['$(device):x_store_offset', '$(device):y_store_offset']} macros={{ '$(device)': harpGraphsState.x0SystemName }} actionValue={"1"} actionString={"Store Offset"} />
                                         }
                                         {((harpGraphsState.onlyY0 === true) && (harpGraphsState.onlyX0 === false)) &&
-                                            <ActionButton key={'storex0' + harpGraphsState.x0SystemName} pvs={['pva://$(device):y_store_offset']} macros={{ '$(device)': harpGraphsState.x0SystemName }} actionValue={"1"} actionString={"Store Offset"} />
+                                            <ActionButton key={'storex0' + harpGraphsState.x0SystemName} pvs={['$(device):y_store_offset']} macros={{ '$(device)': harpGraphsState.x0SystemName }} actionValue={"1"} actionString={"Store Offset"} />
                                         }
                                         {((harpGraphsState.onlyY0 === false) && (harpGraphsState.onlyX0 === true)) &&
-                                            <ActionButton key={'storex0' + harpGraphsState.x0SystemName} pvs={['pva://$(device):x_store_offset']} macros={{ '$(device)': harpGraphsState.x0SystemName }} actionValue={"1"} actionString={"Store Offset"} />
+                                            <ActionButton key={'storex0' + harpGraphsState.x0SystemName} pvs={['$(device):x_store_offset']} macros={{ '$(device)': harpGraphsState.x0SystemName }} actionValue={"1"} actionString={"Store Offset"} />
                                         }
                                     </div>
                                     <div style={{ marginBottom: 8 }}>
                                         {((harpGraphsState.onlyY0 === false) && (harpGraphsState.onlyX0 === false)) &&
-                                            <ActionButton key={'clearx0' + harpGraphsState.x0SystemName} pvs={['pva://$(device):x_store_offset', 'pva://$(device):y_store_offset']} macros={{ '$(device)': harpGraphsState.x0SystemName }} actionValue={"0"} actionString={"Clear Offset"} />
+                                            <ActionButton key={'clearx0' + harpGraphsState.x0SystemName} pvs={['$(device):x_store_offset', '$(device):y_store_offset']} macros={{ '$(device)': harpGraphsState.x0SystemName }} actionValue={"0"} actionString={"Clear Offset"} />
                                         }
                                         {((harpGraphsState.onlyY0 === true) && (harpGraphsState.onlyX0 === false)) &&
-                                            <ActionButton key={'clearx0' + harpGraphsState.x0SystemName} pvs={['pva://$(device):y_store_offset']} macros={{ '$(device)': harpGraphsState.x0SystemName }} actionValue={"0"} actionString={"Clear Offset"} />
+                                            <ActionButton key={'clearx0' + harpGraphsState.x0SystemName} pvs={['$(device):y_store_offset']} macros={{ '$(device)': harpGraphsState.x0SystemName }} actionValue={"0"} actionString={"Clear Offset"} />
                                         }
                                         {((harpGraphsState.onlyY0 === false) && (harpGraphsState.onlyX0 === true)) &&
-                                            <ActionButton key={'clearx0' + harpGraphsState.x0SystemName} pvs={['pva://$(device):x_store_offset']} macros={{ '$(device)': harpGraphsState.x0SystemName }} actionValue={"0"} actionString={"Clear Offset"} />
+                                            <ActionButton key={'clearx0' + harpGraphsState.x0SystemName} pvs={['$(device):x_store_offset']} macros={{ '$(device)': harpGraphsState.x0SystemName }} actionValue={"0"} actionString={"Clear Offset"} />
                                         }
                                     </div>
                                 </React.Fragment>}
@@ -274,7 +274,7 @@ const HarpsBeamDiagnostics = (props) => {
                                             ymaxFromOtherGraph={topXgraphYmax}
                                             ylabel="X Axis"
                                         />}
-                                        {/*}<GraphTest style pv='pva://testIOC:test4'  />*/}
+                                        {/*}<GraphTest style pv='testIOC:test4'  />*/}
                                     </div>
                                 </Grid>
                                 <Grid item sm={6}>
@@ -311,24 +311,24 @@ const HarpsBeamDiagnostics = (props) => {
                                         <HarpRangeSelection onlyX={harpGraphsState.onlyX1} onlyY={harpGraphsState.onlyY1} key={'harpRangeSelectionx1' + harpGraphsState.x1SystemName} systemName={harpGraphsState.x1SystemName} label={'Range'} />
                                         <div style={{ marginBottom: 8 }}>
                                             {((harpGraphsState.onlyY1 === false) && (harpGraphsState.onlyX1 === false)) &&
-                                                <ActionButton key={'storex1' + harpGraphsState.x1SystemName} pvs={['pva://$(device):x_store_offset', 'pva://$(device):y_store_offset']} macros={{ '$(device)': harpGraphsState.x1SystemName }} actionValue={"1"} actionString={"Store Offset"} />
+                                                <ActionButton key={'storex1' + harpGraphsState.x1SystemName} pvs={['$(device):x_store_offset', '$(device):y_store_offset']} macros={{ '$(device)': harpGraphsState.x1SystemName }} actionValue={"1"} actionString={"Store Offset"} />
                                             }
                                             {((harpGraphsState.onlyY1 === true) && (harpGraphsState.onlyX1 === false)) &&
-                                                <ActionButton key={'storex1' + harpGraphsState.x1SystemName} pvs={['pva://$(device):y_store_offset']} macros={{ '$(device)': harpGraphsState.x1SystemName }} actionValue={"1"} actionString={"Store Offset"} />
+                                                <ActionButton key={'storex1' + harpGraphsState.x1SystemName} pvs={['$(device):y_store_offset']} macros={{ '$(device)': harpGraphsState.x1SystemName }} actionValue={"1"} actionString={"Store Offset"} />
                                             }
                                             {((harpGraphsState.onlyY1 === false) && (harpGraphsState.onlyX1 === true)) &&
-                                                <ActionButton key={'storex1' + harpGraphsState.x1SystemName} pvs={['pva://$(device):x_store_offset']} macros={{ '$(device)': harpGraphsState.x1SystemName }} actionValue={"1"} actionString={"Store Offset"} />
+                                                <ActionButton key={'storex1' + harpGraphsState.x1SystemName} pvs={['$(device):x_store_offset']} macros={{ '$(device)': harpGraphsState.x1SystemName }} actionValue={"1"} actionString={"Store Offset"} />
                                             }
                                         </div>
                                         <div style={{ marginBottom: 8 }}>
                                             {((harpGraphsState.onlyY1 === false) && (harpGraphsState.onlyX1 === false)) &&
-                                                <ActionButton key={'clearx1' + harpGraphsState.x1SystemName} pvs={['pva://$(device):x_store_offset', 'pva://$(device):y_store_offset']} macros={{ '$(device)': harpGraphsState.x1SystemName }} actionValue={"0"} actionString={"Clear Offset"} />
+                                                <ActionButton key={'clearx1' + harpGraphsState.x1SystemName} pvs={['$(device):x_store_offset', '$(device):y_store_offset']} macros={{ '$(device)': harpGraphsState.x1SystemName }} actionValue={"0"} actionString={"Clear Offset"} />
                                             }
                                             {((harpGraphsState.onlyY1 === true) && (harpGraphsState.onlyX1 === false)) &&
-                                                <ActionButton key={'clearx1' + harpGraphsState.x1SystemName} pvs={['pva://$(device):y_store_offset']} macros={{ '$(device)': harpGraphsState.x1SystemName }} actionValue={"0"} actionString={"Clear Offset"} />
+                                                <ActionButton key={'clearx1' + harpGraphsState.x1SystemName} pvs={['$(device):y_store_offset']} macros={{ '$(device)': harpGraphsState.x1SystemName }} actionValue={"0"} actionString={"Clear Offset"} />
                                             }
                                             {((harpGraphsState.onlyY1 === false) && (harpGraphsState.onlyX1 === true)) &&
-                                                <ActionButton key={'clearx1' + harpGraphsState.x1SystemName} pvs={['pva://$(device):x_store_offset']} macros={{ '$(device)': harpGraphsState.x1SystemName }} actionValue={"0"} actionString={"Clear Offset"} />
+                                                <ActionButton key={'clearx1' + harpGraphsState.x1SystemName} pvs={['$(device):x_store_offset']} macros={{ '$(device)': harpGraphsState.x1SystemName }} actionValue={"0"} actionString={"Clear Offset"} />
                                             }
                                         </div>
                                     </React.Fragment>}

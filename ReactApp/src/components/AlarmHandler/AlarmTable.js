@@ -340,7 +340,7 @@ const AlarmTable = props => {
                                     </TableCell>
                                     <TableCell align="center">
                                         <TextUpdateStatus
-                                            pv={`pva://${props.alarmIOCPVPrefix}${value["name"]}A`}
+                                            pv={`${props.alarmIOCPVPrefix}${value["name"]}A`}
                                             useStringValue={true}
                                             alarmSensitive={true}
                                             disableContextMenu={true}
@@ -355,20 +355,20 @@ const AlarmTable = props => {
 
                                     <TableCell align="center">
                                         <TextUpdate
-                                            pv={`pva://${props.alarmIOCPVPrefix}${value["name"]}V`}
+                                            pv={`${props.alarmIOCPVPrefix}${value["name"]}V`}
                                             disableContextMenu={true}
                                         />
                                     </TableCell>
                                     <TableCell align="center">
                                         <TextUpdateDate
-                                            pv={`pva://${props.alarmIOCPVPrefix}${value["name"]}T`}
+                                            pv={`${props.alarmIOCPVPrefix}${value["name"]}T`}
                                             disableContextMenu={true}
                                             dateFormat="E, dd LLL yyyy 'at' HH:mm:ss"
                                         />
                                     </TableCell>
                                     <TableCell align="center">
                                         <TextUpdateDate
-                                            pv={`pva://${props.alarmIOCPVPrefix}${value["name"]}K`}
+                                            pv={`${props.alarmIOCPVPrefix}${value["name"]}K`}
                                             disableContextMenu={true}
                                             dateFormat="E, dd LLL yyyy 'at' HH:mm:ss"
                                         />

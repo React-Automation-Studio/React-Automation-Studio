@@ -45,7 +45,7 @@ class Example2 extends React.Component {
         >
           <Grid item xs={6}  >
             <TextInput
-                pv='pva://$(device):amplitude'
+                pv='$(device):amplitude'
                 macros={{'$(device)':'testIOC'}}
                 usePvLabel={true}
                 
@@ -55,7 +55,7 @@ class Example2 extends React.Component {
           </Grid>
           <Grid item  xs={6}>
             <TextOutput
-              pv='pva://$(device):test3'
+              pv='$(device):test3'
               macros={{'$(device)':'testIOC'}}
               usePvLabel={true} 
               prec={3} alarmSensitive={true}
@@ -63,7 +63,7 @@ class Example2 extends React.Component {
           </Grid>
           <Grid item xs={3}  >
             <TextInput
-                pv='pva://$(device):amplitude'
+                pv='$(device):amplitude'
                 macros={{'$(device)':'testIOC'}}
                 usePvLabel={true}
                 
@@ -73,7 +73,7 @@ class Example2 extends React.Component {
           </Grid>
           <Grid item  xs={3}>
             <TextOutput
-              pv='pva://$(device):test3'
+              pv='$(device):test3'
               macros={{'$(device)':'testIOC'}}
               usePvLabel={true} 
               prec={3} alarmSensitive={true}
@@ -82,7 +82,7 @@ class Example2 extends React.Component {
 
           <Grid item xs={3}  >
             <TextInput
-                pv='pva://$(device):amplitude'
+                pv='$(device):amplitude'
                 macros={{'$(device)':'testIOC'}}
                 usePvLabel={true}
                 
@@ -92,7 +92,7 @@ class Example2 extends React.Component {
           </Grid>
           <Grid item  xs={3}>
             <TextOutput
-              pv='pva://$(device):test3'
+              pv='$(device):test3'
               macros={{'$(device)':'testIOC'}}
               usePvLabel={true} 
               prec={3} alarmSensitive={true}
@@ -103,12 +103,12 @@ class Example2 extends React.Component {
 
           <Grid item xs={12} >
             <div style={{ height: '50vh', width:'96vw',}}>
-              <GraphY  pvs={['pva://testIOC:test4','pva://testIOC:test5'] } legend={['Sine Wave','Amplitude']} lineColor={[this.props.theme.palette.secondary.main,lime['400']]}/>
+              <GraphY  pvs={['testIOC:test4','testIOC:test5'] } legend={['Sine Wave','Amplitude']} lineColor={[this.props.theme.palette.secondary.main,lime['400']]}/>
             </div>
           </Grid>
           <Grid item xs={12}  >
             <Slider
-              pv='pva://$(device):amplitude'
+              pv='$(device):amplitude'
               macros={{'$(device)':'testIOC'}}
               usePvMinMax={true}
               min={1000}

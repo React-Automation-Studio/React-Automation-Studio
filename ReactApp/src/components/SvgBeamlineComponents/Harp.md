@@ -13,10 +13,10 @@ import HorizontalBeamline from './HorizontalBeamline';
        
         <Harp
 
-          pv={'pva://$(IOC):$(actuatorName):put-outIn'}
-          isMovingPv = {'pva://$(IOC):$(actuatorName):get-status.B5'}
-          inLimitPv = {'pva://$(IOC):$(actuatorName):get-status.B6'}
-          outLimitPv = {'pva://$(IOC):$(actuatorName):get-status.B7'}
+          pv={'$(IOC):$(actuatorName):put-outIn'}
+          isMovingPv = {'$(IOC):$(actuatorName):get-status.B5'}
+          inLimitPv = {'$(IOC):$(actuatorName):get-status.B6'}
+          outLimitPv = {'$(IOC):$(actuatorName):get-status.B7'}
           inLimitValue={1}
           outLimitValue={1}
           isMovingValue={1}

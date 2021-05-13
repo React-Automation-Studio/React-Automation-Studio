@@ -38,26 +38,26 @@ class ControlBottomEx1 extends React.Component {
 
 
           <div style={{height:'60px','width':'100px'}}>
-            <ToggleButton pv='pva://testIOC:Harp1old:InOut'   label={"Harp1"} labelPlacement={"top"}/>
+            <ToggleButton pv='testIOC:Harp1old:InOut'   label={"Harp1"} labelPlacement={"top"}/>
           </div>
           <div style={{height:'60px','width':'100px'}}>
-            <ToggleButton pv='pva://testIOC:Harp2old:InOut'  label={"Harp2"} labelPlacement={"top"}/>
+            <ToggleButton pv='testIOC:Harp2old:InOut'  label={"Harp2"} labelPlacement={"top"}/>
           </div>
           <div style={{height:'60px','width':'100px'}}>
-            <ToggleButton pv='pva://testIOC:Harp3old:InOut'  label={"Harp3"} labelPlacement={"top"}/>
+            <ToggleButton pv='testIOC:Harp3old:InOut'  label={"Harp3"} labelPlacement={"top"}/>
           </div>
         </Grid>
         <Grid item xs={3} sm={2}>
 
 
           <div style={{height:'60px','width':'100px'}}>
-            <ToggleButton pv='pva://testIOC:FC1:InOut'  label={"FC1"} labelPlacement={"top"}/>
+            <ToggleButton pv='testIOC:FC1:InOut'  label={"FC1"} labelPlacement={"top"}/>
           </div>
           <div style={{height:'60px','width':'100px'}}>
-            <ToggleButton pv='pva://testIOC:FC2:InOut'  label={"FC2"} labelPlacement={"top"}/>
+            <ToggleButton pv='testIOC:FC2:InOut'  label={"FC2"} labelPlacement={"top"}/>
           </div>
           <div style={{height:'60px','width':'100px'}}>
-            <ToggleButton pv='pva://testIOC:FC3:InOut'  label={"FC3"} labelPlacement={"top"}/>
+            <ToggleButton pv='testIOC:FC3:InOut'  label={"FC3"} labelPlacement={"top"}/>
           </div>
         </Grid>
 
@@ -65,7 +65,7 @@ class ControlBottomEx1 extends React.Component {
 
 
           <div style={{height:'60px','width':'100px'}}>
-            <ToggleButton pv='pva://testIOC:BeamlineA:BeamOn'  label={"Beam On"} labelPlacement={"top"}/>
+            <ToggleButton pv='testIOC:BeamlineA:BeamOn'  label={"Beam On"} labelPlacement={"top"}/>
           </div>
 
 

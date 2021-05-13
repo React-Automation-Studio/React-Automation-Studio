@@ -40,41 +40,41 @@ class Mobile extends React.Component {
         <Grid item xs={12}>
           <div style={{height:'15vh'}}>
             <GraphY
-              pvs={['pva://testIOC:test4','pva://testIOC:test5'] }
+              pvs={['testIOC:test4','testIOC:test5'] }
               legend={['Sine Wave ','Amplitude ']}
             />
           </div>
         </Grid>
         <Grid item xs={6}>
-          <ToggleButton  pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}}  custom_selection_strings={["OFF","ON"]} />
+          <ToggleButton  pv='$(device)' macros={{'$(device)':'testIOC:BO1'}}  custom_selection_strings={["OFF","ON"]} />
         </Grid>
         <Grid item xs={1}>
         </Grid>
         <Grid item xs={1}>
-          <StyledIconIndicator  pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}}  onColor='lime' offColor='grey'>
+          <StyledIconIndicator  pv='$(device)' macros={{'$(device)':'testIOC:BO1'}}  onColor='lime' offColor='grey'>
             <CheckCircle/>
           </StyledIconIndicator>
         </Grid>
         <Grid item xs={1}>
         </Grid>
         <Grid item xs={1}>
-          <StyledIconIndicator  pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}}  onColor='grey' offColor='red'>
+          <StyledIconIndicator  pv='$(device)' macros={{'$(device)':'testIOC:BO1'}}  onColor='grey' offColor='red'>
             <Cancel/>
           </StyledIconIndicator>
         </Grid>
 
 
         <Grid item xs={6}>
-          <TextOutput   pv='pva://$(device)'  macros={{'$(device)':'testIOC:mbboTest1'}}/>
+          <TextOutput   pv='$(device)'  macros={{'$(device)':'testIOC:mbboTest1'}}/>
         </Grid>
         <Grid item xs={6}>
-          <SelectionInput  pv='pva://$(device)'  macros={{'$(device)':'testIOC:mbboTest1'}}  />
+          <SelectionInput  pv='$(device)'  macros={{'$(device)':'testIOC:mbboTest1'}}  />
         </Grid>
 
 
         <Grid item xs={12}>
           <Gauge
-            pv='pva://$(device)'
+            pv='$(device)'
             macros={{'$(device)':'testIOC:amplitude'}}
             usePvMinMax={true}/>
         </Grid>
@@ -82,7 +82,7 @@ class Mobile extends React.Component {
 
         <Grid item xs={12}>   {/* FIFTH ROW */}
           <ThumbWheel
-            pv='pva://$(device)'
+            pv='$(device)'
             macros={{'$(device)':'testIOC:amplitude'}}
             prec_integer={3}
             prec_decimal={1}
@@ -90,7 +90,7 @@ class Mobile extends React.Component {
           />
         </Grid>
         <Grid item xs={12}>  {/* SIXTH ROW */}
-          <Slider pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}} usePvMinMax={true}  usePvLabel={true}  />
+          <Slider pv='$(device):amplitude' macros={{'$(device)':'testIOC'}} usePvMinMax={true}  usePvLabel={true}  />
         </Grid>
 
       </Grid>

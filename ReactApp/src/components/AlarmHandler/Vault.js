@@ -171,7 +171,7 @@ const Vault = () => {
                                         </Grid>
                                         <Grid item xs={12} lg={5}>
                                             <SelectionList
-                                                pv='pva://$(device):building_fire'
+                                                pv='$(device):building_fire'
                                                 macros={{ '$(device)': 'demoAlarmsIOC' }}
                                                 horizontal={true}
                                                 usePvLabel={true}
@@ -179,7 +179,7 @@ const Vault = () => {
                                         </Grid>
                                         <Grid item xs={12} lg={5}>
                                             <SelectionList
-                                                pv='pva://$(device):building_security'
+                                                pv='$(device):building_security'
                                                 macros={{ '$(device)': 'demoAlarmsIOC' }}
                                                 horizontal={true}
                                                 usePvLabel={true}
@@ -187,7 +187,7 @@ const Vault = () => {
                                         </Grid>
                                         <Grid item xs={12} lg={6}>
                                             <SimpleSlider
-                                                pv='pva://$(device):building_airtemp'
+                                                pv='$(device):building_airtemp'
                                                 macros={{ '$(device)': 'demoAlarmsIOC' }}
                                                 usePvLabel={true}
                                                 usePvMinMax={true}
@@ -197,7 +197,7 @@ const Vault = () => {
                                         </Grid>
                                         <Grid item xs={12} lg={6}>
                                             <SimpleSlider
-                                                pv='pva://$(device):building_airhumidity'
+                                                pv='$(device):building_airhumidity'
                                                 macros={{ '$(device)': 'demoAlarmsIOC' }}
                                                 usePvLabel={true}
                                                 usePvMinMax={true}
@@ -207,7 +207,7 @@ const Vault = () => {
                                         </Grid>
                                         <Grid item xs={12} lg={6}>
                                             <SimpleSlider
-                                                pv='pva://$(device):building_airpressure_diff'
+                                                pv='$(device):building_airpressure_diff'
                                                 macros={{ '$(device)': 'demoAlarmsIOC' }}
                                                 usePvLabel={true}
                                                 usePvMinMax={true}
@@ -233,7 +233,7 @@ const Vault = () => {
                                         </Grid>
                                         <Grid item xs={12} lg={6}>
                                             <SelectionList
-                                                pv='pva://$(device):vault_door'
+                                                pv='$(device):vault_door'
                                                 macros={{ '$(device)': 'demoAlarmsIOC' }}
                                                 horizontal={true}
                                                 usePvLabel={true}
@@ -241,7 +241,7 @@ const Vault = () => {
                                         </Grid>
                                         <Grid item xs={12} lg={6}>
                                             <SelectionList
-                                                pv='pva://$(device):vault_clear'
+                                                pv='$(device):vault_clear'
                                                 macros={{ '$(device)': 'demoAlarmsIOC' }}
                                                 horizontal={true}
                                                 usePvLabel={true}
@@ -249,7 +249,7 @@ const Vault = () => {
                                         </Grid>
                                         <Grid item xs={12} >
                                             <SimpleSlider
-                                                pv='pva://$(device):vault_radiation'
+                                                pv='$(device):vault_radiation'
                                                 macros={{ '$(device)': 'demoAlarmsIOC' }}
                                                 usePvLabel={true}
                                                 usePvMinMax={true}
@@ -277,7 +277,7 @@ const Vault = () => {
                                         </Grid>
                                         <Grid item xs={12} lg={3}>
                                             <SelectionList
-                                                pv='pva://$(device):cyclotron_interlocks'
+                                                pv='$(device):cyclotron_interlocks'
                                                 macros={{ '$(device)': 'demoAlarmsIOC' }}
                                                 horizontal={true}
                                                 usePvLabel={true}
@@ -285,7 +285,7 @@ const Vault = () => {
                                         </Grid>
                                         <Grid item xs={12} lg={3}>
                                             <SelectionList
-                                                pv='pva://$(device):cyclotron_safety'
+                                                pv='$(device):cyclotron_safety'
                                                 macros={{ '$(device)': 'demoAlarmsIOC' }}
                                                 horizontal={true}
                                                 usePvLabel={true}
@@ -293,7 +293,7 @@ const Vault = () => {
                                         </Grid>
                                         <Grid item xs={12} lg={3}>
                                             <SimpleSlider
-                                                pv='pva://$(device):cyclotron_water_flow'
+                                                pv='$(device):cyclotron_water_flow'
                                                 macros={{ '$(device)': 'demoAlarmsIOC' }}
                                                 usePvLabel={true}
                                                 usePvMinMax={true}
@@ -303,7 +303,7 @@ const Vault = () => {
                                         </Grid>
                                         <Grid item xs={12} lg={3}>
                                             <SimpleSlider
-                                                pv='pva://$(device):cyclotron_water_temp'
+                                                pv='$(device):cyclotron_water_temp'
                                                 macros={{ '$(device)': 'demoAlarmsIOC' }}
                                                 usePvLabel={true}
                                                 usePvMinMax={true}
@@ -313,7 +313,7 @@ const Vault = () => {
                                         </Grid>
                                         <Grid item xs={12} lg={4}>
                                             <SelectionList
-                                                pv='pva://$(device):cyclotron_RF1'
+                                                pv='$(device):cyclotron_RF1'
                                                 macros={{ '$(device)': 'demoAlarmsIOC' }}
                                                 horizontal={true}
                                                 usePvLabel={true}
@@ -321,7 +321,7 @@ const Vault = () => {
                                         </Grid>
                                         <Grid item xs={12} lg={4}>
                                             <SelectionList
-                                                pv='pva://$(device):cyclotron_RF2'
+                                                pv='$(device):cyclotron_RF2'
                                                 macros={{ '$(device)': 'demoAlarmsIOC' }}
                                                 horizontal={true}
                                                 usePvLabel={true}
@@ -329,7 +329,7 @@ const Vault = () => {
                                         </Grid>
                                         <Grid item xs={12} lg={4}>
                                             <SimpleSlider
-                                                pv='pva://$(device):cyclotron_RF_pickup'
+                                                pv='$(device):cyclotron_RF_pickup'
                                                 macros={{ '$(device)': 'demoAlarmsIOC' }}
                                                 usePvLabel={true}
                                                 usePvMinMax={true}
@@ -339,7 +339,7 @@ const Vault = () => {
                                         </Grid>
                                         <Grid item xs={12} lg={4}>
                                             <SimpleSlider
-                                                pv='pva://$(device):cyclotron_airpressure'
+                                                pv='$(device):cyclotron_airpressure'
                                                 macros={{ '$(device)': 'demoAlarmsIOC' }}
                                                 usePvLabel={true}
                                                 usePvMinMax={true}
@@ -349,7 +349,7 @@ const Vault = () => {
                                         </Grid>
                                         <Grid item xs={12} lg={4}>
                                             <SimpleSlider
-                                                pv='pva://$(device):cyclotron_vacuum'
+                                                pv='$(device):cyclotron_vacuum'
                                                 macros={{ '$(device)': 'demoAlarmsIOC' }}
                                                 usePvLabel={true}
                                                 usePvMinMax={true}

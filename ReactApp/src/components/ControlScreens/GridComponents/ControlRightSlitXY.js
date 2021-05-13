@@ -146,7 +146,7 @@ class ControlRightSlitXY extends React.Component {
         <div className={classes.body1} style={{ marginTop: 12 }}>
 
           {system.displayName + ": Y"}
-          {/*<TextUpdate  pv='pva://$(device):Setpoint.NAME' macros={this.props['macros']}  />*/}
+          {/*<TextUpdate  pv='$(device):Setpoint.NAME' macros={this.props['macros']}  />*/}
 
 
           <Paper style={{ padding: 12 }} elevation={this.props.theme.palette.paperElevation}>

@@ -61,27 +61,27 @@ class ControlTopHarpEx1 extends React.Component {
 
         <HorizontalBeamline cx={0}
           cy={99}
-          pv={'pva://testIOC:BeamlineA:BeamOn'}
+          pv={'testIOC:BeamlineA:BeamOn'}
           width={'113px'}
         />
         <HorizontalBeamline cx={'113px'}
           cy={99}
-          pv={'pva://testIOC:BeamlineB:BeamOn'}
+          pv={'testIOC:BeamlineB:BeamOn'}
           width={'148px'}
         />
         <HorizontalBeamline cx={'261px'}
           cy={99}
-          pv={'pva://testIOC:BeamlineC:BeamOn'}
+          pv={'testIOC:BeamlineC:BeamOn'}
           width={'150px'}
         />
         <HorizontalBeamline cx={'411px'}
           cy={99}
-          pv={'pva://testIOC:BeamlineD:BeamOn'}
+          pv={'testIOC:BeamlineD:BeamOn'}
           width={'150px'}
         />
         <HorizontalBeamline cx={'561px'}
           cy={99}
-          pv={'pva://testIOC:BeamlineE:BeamOn'}
+          pv={'testIOC:BeamlineE:BeamOn'}
           width={'850px'}
         />
 
@@ -101,7 +101,7 @@ class ControlTopHarpEx1 extends React.Component {
           handleOnClick={this.handleOnClick}
           cx={150}
           cy={100}
-          pv={'pva://$(device):$(pv_suffix)'}
+          pv={'$(device):$(pv_suffix)'}
           macros={{'$(device)':'testIOC:PS1','$(pv_suffix)':'Readback'}}
           usePvUnits={true}
           usePvLabel={false}
@@ -141,7 +141,7 @@ class ControlTopHarpEx1 extends React.Component {
           handleOnClick={this.handleOnClick}
           cx={300}
           cy={100}
-          pv={'pva://$(device):$(pv_suffix)'}
+          pv={'$(device):$(pv_suffix)'}
           macros={{'$(device)':'testIOC:PS2','$(pv_suffix)':'Readback'}}
           usePvUnits={true}
           alarmSensitive={true}
@@ -180,7 +180,7 @@ class ControlTopHarpEx1 extends React.Component {
           handleOnClick={this.handleOnClick}
           cx={450}
           cy={100}
-          pv={'pva://$(device):$(pv_suffix)'}
+          pv={'$(device):$(pv_suffix)'}
           macros={{'$(device)':'testIOC:PS3','$(pv_suffix)':'Readback'}}
           usePvUnits={true}
           alarmSensitive={true}
@@ -343,7 +343,7 @@ class ControlTopHarpEx1 extends React.Component {
         handleOnClick={this.handleOnClick}
         cx={600}
         cy={101}
-        pv={'pva://$(device):$(pv_suffix)'}
+        pv={'$(device):$(pv_suffix)'}
         macros={{'$(device)':'testIOC:PS4','$(pv_suffix)':'Readback'}}
         usePvUnits={true}
         usePvLabel={false}

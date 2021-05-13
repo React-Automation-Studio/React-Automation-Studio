@@ -4,13 +4,13 @@ Example trace prop:
  traces={
             [
                 {
-                    pv:'pva://testIOC:BO1',
+                    pv:'testIOC:BO1',
                     yAxis:0
                 },
-                {   pv:'pva://testIOC:amplitude',
+                {   pv:'testIOC:amplitude',
                     yAxis:1
                 },
-                {   pv:'pva://testIOC:BO2',
+                {   pv:'testIOC:BO2',
                     yAxis:2
                 }
             ]
@@ -56,13 +56,13 @@ import ThumbWheel from '../../components/BaseComponents/ThumbWheel.js';
         traces={
             [
                 {
-                    pv:'pva://testIOC:BO1',
+                    pv:'testIOC:BO1',
                     yAxis:0
                 },
-                {   pv:'pva://testIOC:amplitude',
+                {   pv:'testIOC:amplitude',
                     yAxis:1
                 },
-                {   pv:'pva://testIOC:BO2',
+                {   pv:'testIOC:BO2',
                     yAxis:2
                 },
             ]}
@@ -84,17 +84,17 @@ import ThumbWheel from '../../components/BaseComponents/ThumbWheel.js';
     <ToggleButton
         style={{paddingTop:32}}
         usePvLabel={true}
-        pv='pva://testIOC:BO1'
+        pv='testIOC:BO1'
     />
     <ToggleButton
         style={{paddingTop:32}}
         usePvLabel={true}
-        pv='pva://testIOC:BO2'
+        pv='testIOC:BO2'
     />
     <div style={{paddingTop:32}}>
         <ThumbWheel
             usePvLabel={true}
-            pv='pva://testIOC:amplitude'
+            pv='testIOC:amplitude'
             usePvMinMax={true}
         />
     </div>

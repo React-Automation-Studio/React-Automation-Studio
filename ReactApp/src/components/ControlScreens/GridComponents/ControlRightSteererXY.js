@@ -49,7 +49,7 @@ class ControlRightSteererXY extends React.Component {
       <div className={classes.body1} style={{ paddingRight: 12 }}>
 
 
-        {/*<TextUpdate  pv='pva://$(device):Setpoint.NAME' macros={this.props['macros']}  />*/}
+        {/*<TextUpdate  pv='$(device):Setpoint.NAME' macros={this.props['macros']}  />*/}
         <Grid style={{ paddingLeft: 12, paddingRight: 24, }} container spacing={2}>
           <Grid item xs={11}>
 
@@ -144,7 +144,7 @@ class ControlRightSteererXY extends React.Component {
         <div className={classes.body1} style={{ marginTop: 12 }}>
 
           {system.displayName + ": Y-Steerer"}
-          {/*<TextUpdate  pv='pva://$(device):Setpoint.NAME' macros={this.props['macros']}  />*/}
+          {/*<TextUpdate  pv='$(device):Setpoint.NAME' macros={this.props['macros']}  />*/}
 
           <Card style={{ padding: 12 }} >
 

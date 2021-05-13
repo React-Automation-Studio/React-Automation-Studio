@@ -39,7 +39,7 @@ import React, { useState } from 'react'
 const Example1=(props)=>{
 const [pv,setPv]=useState({initialized:false});
 const pvConnection=<PV
-   pv='pva://$(device):test$(id)'
+   pv='$(device):test$(id)'
    macros={{'$(device)':'testIOC','$(id)':'2'}} 
    pvData={setPv}
  />
@@ -62,7 +62,7 @@ import React, { useState } from 'react'
 const Example2=(props)=>{
     
     return(
-        <PV     pv='pva://$(device):test$(id)'       macros={{'$(device)':'testIOC','$(id)':'2'}} >
+        <PV     pv='$(device):test$(id)'       macros={{'$(device)':'testIOC','$(id)':'2'}} >
            { 
             (pv)=>{
                let {initialized}=pv;
@@ -92,7 +92,7 @@ const Content=(props)=>{
 const Example3=(props)=>{
     
     return(
-        <PV pv='pva://$(device):test$(id)'  macros={{'$(device)':'testIOC','$(id)':'2'}} >
+        <PV pv='$(device):test$(id)'  macros={{'$(device)':'testIOC','$(id)':'2'}} >
            {Content}
        </PV>
     )
@@ -107,7 +107,7 @@ import React, { useState } from 'react'
 const Example4=(props)=>{
     
     return(
-        <PV     pv='pva://$(device):test$(id)'       macros={{'$(device)':'testIOC','$(id)':'2'}} >
+        <PV     pv='$(device):test$(id)'       macros={{'$(device)':'testIOC','$(id)':'2'}} >
            { 
             ({initialized,value})=>{
                return <div>{initialized?value:"value is not initialized"}</div>
@@ -166,11 +166,11 @@ return(
 
 <Example5
     pvs={[
-        'pva://$(device):MTextUpdate1',
-        'pva://$(device):MTextUpdate2',
-        'pva://$(device):MTextUpdate3',
-        'pva://$(device):MTextUpdate4',
-        'pva://$(device):MTextUpdate5'
+        '$(device):MTextUpdate1',
+        '$(device):MTextUpdate2',
+        '$(device):MTextUpdate3',
+        '$(device):MTextUpdate4',
+        '$(device):MTextUpdate5'
     ]}
     macros={{'$(device)':'testIOC'}} 
 />
@@ -220,11 +220,11 @@ return(
 }
 <Example6
     pvs={[
-        'pva://$(device):MTextUpdate1',
-        'pva://$(device):MTextUpdate2',
-        'pva://$(device):MTextUpdate3',
-        'pva://$(device):MTextUpdate4',
-        'pva://$(device):MTextUpdate5'
+        '$(device):MTextUpdate1',
+        '$(device):MTextUpdate2',
+        '$(device):MTextUpdate3',
+        '$(device):MTextUpdate4',
+        '$(device):MTextUpdate5'
     ]}
     macros={{'$(device)':'testIOC'}} 
 />
@@ -282,11 +282,11 @@ return(
  )
 }
 <Example7
-    pvs={{pv1:'pva://$(device):MTextUpdate1',
-          pv2:'pva://$(device):MTextUpdate2',
-          pv3:'pva://$(device):MTextUpdate3',
-          pv4: 'pva://$(device):MTextUpdate4',
-          pv5:'pva://$(device):MTextUpdate5',
+    pvs={{pv1:'$(device):MTextUpdate1',
+          pv2:'$(device):MTextUpdate2',
+          pv3:'$(device):MTextUpdate3',
+          pv4: '$(device):MTextUpdate4',
+          pv5:'$(device):MTextUpdate5',
     }}
     macros={{'$(device)':'testIOC'}} 
 />

@@ -13,12 +13,12 @@ import TextInput from "../BaseComponents/TextInput";
 <Grid container spacing={5}>
   <Grid item xs={12}>
     <Typography algin="center">Standard behavior</Typography>
-    <TextInput pv="pva://testIOC:binaryWaveform" />
+    <TextInput pv="testIOC:binaryWaveform" />
   </Grid>
   <Grid item xs={12}>
     <Typography algin="center">ArrayContainer behavior</Typography>
     <ArrayContainer maxItemsCount={10}>
-      <TextInput pv="pva://testIOC:binaryWaveform" />
+      <TextInput pv="testIOC:binaryWaveform" />
     </ArrayContainer>
   </Grid>
 </Grid>;
@@ -39,7 +39,7 @@ let labels = indexes.map((num) => num.toString());
   maxItemsCount={10}
   visibleItemsCount={3}
 >
-  <TextInput pv="pva://testIOC:binaryWaveform" />
+  <TextInput pv="testIOC:binaryWaveform" />
 </ArrayContainer>;
 ```
 
@@ -58,7 +58,7 @@ import TextInput from "../BaseComponents/TextInput";
       registers={[0, 1, 4, 8, 9]}
       registersLabel={["zero", "one", "four", "eight", "nine"]}
     >
-      <TextInput pv="pva://testIOC:binaryWaveform" />
+      <TextInput pv="testIOC:binaryWaveform" />
     </ArrayContainer>
   </Grid>
   <Grid item xs={12}>
@@ -70,7 +70,7 @@ import TextInput from "../BaseComponents/TextInput";
       registersLabel={["zero", "one", "four", "eight", "nine"]}
       visibleItemsCount={3}
     >
-      <TextInput pv="pva://testIOC:binaryWaveform" />
+      <TextInput pv="testIOC:binaryWaveform" />
     </ArrayContainer>
   </Grid>
 </Grid>;
@@ -94,7 +94,7 @@ let labels = indexes.map((num) => num.toString());
       direction="horizontal"
       maxItemsCount={10}
     >
-      <StyledIconButton pv="pva://testIOC:binaryWaveform">
+      <StyledIconButton pv="testIOC:binaryWaveform">
         <EmojiEmotions />
       </StyledIconButton>
     </ArrayContainer>
@@ -109,7 +109,7 @@ let labels = indexes.map((num) => num.toString());
       itemMinWidth={20}
       maxItemsCount={10}
     >
-      <StyledIconButton pv="pva://testIOC:binaryWaveform">
+      <StyledIconButton pv="testIOC:binaryWaveform">
         <EmojiEmotions />
       </StyledIconButton>
     </ArrayContainer>
@@ -128,6 +128,6 @@ import TextInput from "../BaseComponents/TextInput";
   visibleItemsCount={3}
   maxItemsCount={10}
 >
-  <TextInput pv="pva://testIOC:binaryWaveform" />
+  <TextInput pv="testIOC:binaryWaveform" />
 </ArrayContainer>;
 ```

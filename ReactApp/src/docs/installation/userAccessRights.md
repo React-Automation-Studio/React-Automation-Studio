@@ -41,7 +41,7 @@ To enable write access for everyone one could change the default to as follows.
     }
 ```
 
-Although it is more ingenious to create separate user access groups and to define access for specific users. The example below first denies user1 and user2 access to all process variables and enables read access to all pvs that start with "pva://testIOC:Harp1", "pva://testIOC:FC2" and "pva://testIOC:amplitude". And only enables write access for "pva://testIOC:amplitude".
+Although it is more ingenious to create separate user access groups and to define access for specific users. The example below first denies user1 and user2 access to all process variables and enables read access to all pvs that start with "testIOC:Harp1", "testIOC:FC2" and "testIOC:amplitude". And only enables write access for "testIOC:amplitude".
 
 ```json
 "UAG1":
@@ -53,9 +53,9 @@ Although it is more ingenious to create separate user access groups and to defin
     { "rule":"[0-9].*",                   "read":false,  "write":false },
     { "rule":"[a-z].*",                   "read":false,  "write":false },
     { "rule":"[A-Z].*",                   "read":false,  "write":false },
-    { "rule":"^pva://testIOC:Harp1",      "read":true, "write":false },
-    { "rule":"^pva://testIOC:FC2",        "read":true,  "write":false },
-    { "rule":"^pva://testIOC:amplitude",  "read":true,  "write":true }
+    { "rule":"^testIOC:Harp1",      "read":true, "write":false },
+    { "rule":"^testIOC:FC2",        "read":true,  "write":false },
+    { "rule":"^testIOC:amplitude",  "read":true,  "write":true }
 
   ]
 }
@@ -89,8 +89,8 @@ In theory, all regular expression allowed by Python regex can be used although t
     { "rule":"[0-9].*",                   "read":true,  "write":false },
     { "rule":"[a-z].*",                   "read":true,  "write":false },
     { "rule":"[A-Z].*",                   "read":true,  "write":false },
-    { "rule":"^pva://testIOC:Harp1",      "read":true, "write":true },
-    { "rule":"^pva://testIOC:FC2",        "read":true,  "write":true },
+    { "rule":"^testIOC:Harp1",      "read":true, "write":true },
+    { "rule":"^testIOC:FC2",        "read":true,  "write":true },
 
   ]
 }

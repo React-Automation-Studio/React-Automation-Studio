@@ -6,7 +6,7 @@ The documentation is still a work in progress,so let us know if spot something t
 
 Of all the properties for the components the `pv`  property is  always required. Macros can be used and must be defined in the `macros` property.
 
-To connect to EPICS, the `pv` property must contain the prefix `pva://` eg. `pva://$(device):test$(id)`
+To connect to EPICS, define the pv as eg. `$(device):test$(id)`
 
 Local variables are supported by using the prefix `loc://`.
 

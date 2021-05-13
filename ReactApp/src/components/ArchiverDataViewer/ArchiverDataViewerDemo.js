@@ -52,7 +52,7 @@ const ArchiverDataViewerDemo = (props) => {
               traces={
                 [
                   {
-                    pv: 'pva://testIOC:BO1',
+                    pv: 'testIOC:BO1',
                     yAxis: 0
 
 
@@ -60,11 +60,11 @@ const ArchiverDataViewerDemo = (props) => {
 
 
                   {
-                    pv: 'pva://testIOC:BO2',
+                    pv: 'testIOC:BO2',
                     yAxis: 1
                   },
                   {
-                    pv: 'pva://testIOC:amplitude',
+                    pv: 'testIOC:amplitude',
                     yAxis: 2
                   },
                 ]}
@@ -110,20 +110,20 @@ const ArchiverDataViewerDemo = (props) => {
               <Grid item xs={6} lg={3}>
                 <ToggleButton
                   usePvLabel={true}
-                  pv='pva://testIOC:BO1'
+                  pv='testIOC:BO1'
                 />
               </Grid>
               <Grid item xs={6} lg={3}>
                 <ToggleButton
                   usePvLabel={true}
-                  pv='pva://testIOC:BO2'
+                  pv='testIOC:BO2'
                 />
               </Grid>
               <Grid item xs={12} style={{ textAlign: 'center' }}>
 
                 <ThumbWheel
                   usePvLabel={true}
-                  pv='pva://testIOC:amplitude'
+                  pv='testIOC:amplitude'
                   usePvMinMax={true}
                   labelPlacement='top'
                 />

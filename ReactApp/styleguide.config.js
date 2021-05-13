@@ -40,6 +40,10 @@ module.exports = {
           content: 'src/docs/installation/userloginOverview.md',
           sections: [
             {
+              name: ' Enabling HTTPS',
+              content: 'src/docs/installation/https.md',
+            },
+            {
               name: ' Enabling login and authentication',
               content: 'src/docs/installation/userlogin.md',
             },
@@ -47,10 +51,7 @@ module.exports = {
               name: ' Enabling user access rights',
               content: 'src/docs/installation/userAccessRights.md',
             },
-            {
-              name: ' Enabling HTTPS',
-              content: 'src/docs/installation/https.md',
-            },
+            
           ]
         },
         {

@@ -515,7 +515,7 @@ const GraphY = (props) => {
 }
 GraphY.propTypes = {
 
-  /** Array of the process variables, NB must contain correct prefix ie: pva://  eg. ['pva://$(device):test$(id0)','pva://$(device):test$(id1)']*/
+  /** Array of the process variables, eg. ['$(device):test$(id0)','$(device):test$(id1)']*/
   pvs: PropTypes.array.isRequired,
   /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id0)':'1','$(id1)':'2'}}*/
   macros: PropTypes.object,

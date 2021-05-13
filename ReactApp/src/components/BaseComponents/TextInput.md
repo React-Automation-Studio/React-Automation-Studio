@@ -3,7 +3,7 @@ TextInput example connection to an SoftChannel EPICS AI pv:
 
 ```js
     <TextInput  
-       pv='pva://$(device):test$(id)'
+       pv='$(device):test$(id)'
        macros={{'$(device)':'testIOC','$(id)':'2'}}
        usePvLabel={true}
        usePvPrecision={true}
@@ -16,7 +16,7 @@ TextInput example connection to a SoftChannel EPICS AI pv with example overrides
 
 ```js
     <TextInput  
-       pv='pva://$(device):test$(id)'
+       pv='$(device):test$(id)'
        macros={{'$(device)':'testIOC','$(id)':'2'}}
        label={'Custom Label'}
        usePvPrecision={true}
@@ -32,7 +32,7 @@ TextInput example connection to an SoftChannel EPICS MBBO pv using the string va
 
 ```js
     <TextInput  
-       pv='pva://$(device):mbboTest$(id)'
+       pv='$(device):mbboTest$(id)'
        macros={{'$(device)':'testIOC','$(id)':'1'}}
        usePvLabel={true}
        useStringValue={true}
@@ -46,7 +46,7 @@ TextInput example connection to an SoftChannel EPICS MBBO pv using the numerical
 
 ```js
     <TextInput  
-       pv='pva://$(device):mbboTest$(id)'
+       pv='$(device):mbboTest$(id)'
        macros={{'$(device)':'testIOC','$(id)':'1'}}
        usePvLabel={true}
        usePvUnits={true}
@@ -60,7 +60,7 @@ TextInput example :
 
 ```js
     <TextInput  
-       pv='pva://$(device):test$(id)'
+       pv='$(device):test$(id)'
        macros={{'$(device)':'testIOC','$(id)':'2'}}
        alarmSensitive={true}
        usePvPrecision={true}
@@ -73,7 +73,7 @@ TextInput number format example :
 
 ```js
     <TextInput  
-       pv='pva://$(device):test$(id)'
+       pv='$(device):test$(id)'
        macros={{'$(device)':'testIOC','$(id)':'2'}}
        alarmSensitive={true}
        usePvPrecision={true}

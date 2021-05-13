@@ -13,11 +13,11 @@ ProgressBar example connection to a SoftChannel EPICS AI pv with usePvMinMax:
 
   {/*###############*/}  
 
-  <ProgressBar  pv='pva://$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}} usePvMinMax={true}/>
+  <ProgressBar  pv='$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}} usePvMinMax={true}/>
 
   {/*###############*/}
 
 
-<Slider pv='pva://$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}}   label='Value:' usePvMinMax={true} step={1}/>
+<Slider pv='$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}}   label='Value:' usePvMinMax={true} step={1}/>
 </div>
 ```

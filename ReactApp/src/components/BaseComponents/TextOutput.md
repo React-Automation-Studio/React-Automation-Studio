@@ -3,7 +3,7 @@ TextOutput example connection to an SoftChannel EPICS AI pv:
 
 ```js
     <TextOutput  
-       pv='pva://$(device):test$(id)'
+       pv='$(device):test$(id)'
        macros={{'$(device)':'testIOC','$(id)':'2'}}
        usePvLabel={true}
        usePvPrecision={true}
@@ -16,7 +16,7 @@ TextOutput example connection to a SoftChannel EPICS AI pv with example override
 
 ```js
     <TextOutput  
-       pv='pva://$(device):test$(id)'
+       pv='$(device):test$(id)'
        macros={{'$(device)':'testIOC','$(id)':'2'}}
        label={'Custom Label'}
        usePvPrecision={true}
@@ -32,7 +32,7 @@ TextOutput example connection to an SoftChannel EPICS MBBO pv using the string v
 
 ```js
     <TextOutput  
-       pv='pva://$(device):mbboTest$(id)'
+       pv='$(device):mbboTest$(id)'
        macros={{'$(device)':'testIOC','$(id)':'1'}}
        usePvLabel={true}
        useStringValue={true}
@@ -46,7 +46,7 @@ TextOutput example connection to an SoftChannel EPICS MBBO pv using the numerica
 
 ```js
     <TextOutput  
-       pv='pva://$(device):mbboTest$(id)'
+       pv='$(device):mbboTest$(id)'
        macros={{'$(device)':'testIOC','$(id)':'1'}}
        usePvLabel={true}
        usePvUnits={true}
@@ -60,7 +60,7 @@ TextOutput example :
 
 ```js
     <TextOutput  
-       pv='pva://$(device):test$(id)'
+       pv='$(device):test$(id)'
        macros={{'$(device)':'testIOC','$(id)':'2'}}
        alarmSensitive={true}
        usePvPrecision={true}
@@ -72,7 +72,7 @@ TextOutput number format example :
 
 ```js
     <TextOutput  
-       pv='pva://$(device):test$(id)'
+       pv='$(device):test$(id)'
        macros={{'$(device)':'testIOC','$(id)':'2'}}
        alarmSensitive={true}
        usePvPrecision={true}

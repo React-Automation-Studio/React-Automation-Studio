@@ -7,16 +7,16 @@
   import TextOutput from './TextOutput';
   <div>
   <div style={{marginBottom:8}}>
-    <TextOutput  pv='pva://testIOC:BO1'   label='Value of pva://testIOC:BO1'/>
+    <TextOutput  pv='testIOC:BO1'   label='Value of testIOC:BO1'/>
   </div>
 
 
   <ActionButton
-    pv='pva://testIOC:BO1'
-    label={"pva://testIOC:BO1"}
+    pv='testIOC:BO1'
+    label={"testIOC:BO1"}
     labelPlacement={"top"}
     actionValue={"1"}
-    actionString={"write 1 to pva://testIOC:BO1"}
+    actionString={"write 1 to testIOC:BO1"}
     tooltip={
       'Click button to write action value'
     }
@@ -25,11 +25,11 @@
   />
 
   <ActionButton
-    pv='pva://testIOC:BO1'
-    label={"pva://testIOC:BO1"}
+    pv='testIOC:BO1'
+    label={"testIOC:BO1"}
     labelPlacement={"top"}
     actionValue={"0"}
-    actionString={"write 0 to pva://testIOC:BO1"}
+    actionString={"write 0 to testIOC:BO1"}
     tooltip={
       'Click button to write action value'
     }
@@ -48,15 +48,15 @@ ActionButton to multi variable example:
     import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
   <div>
   <div style={{marginBottom:8}}>
-    <TextOutput  pv='pva://testIOC:BO1'   label='Value of pva://testIOC:BO1 '/>
+    <TextOutput  pv='testIOC:BO1'   label='Value of testIOC:BO1 '/>
   </div>
   <div style={{marginBottom:8}}>
-    <TextOutput  pv='pva://testIOC:BO2'   label='Value of pva://testIOC:BO2 '/>
+    <TextOutput  pv='testIOC:BO2'   label='Value of testIOC:BO2 '/>
   </div>
 
 {/*###############*/}  
 <ActionButton
-  pvs={['pva://testIOC:BO1','pva://testIOC:BO2']}
+  pvs={['testIOC:BO1','testIOC:BO2']}
   label={"write '1' to multiple PVS "}
   labelPlacement={"top"}
   actionValue={"1"}
@@ -65,7 +65,7 @@ ActionButton to multi variable example:
 />
 
 <ActionButton
-  pvs={['pva://testIOC:BO1','pva://testIOC:BO2']}
+  pvs={['testIOC:BO1','testIOC:BO2']}
   label={"write '0' to multiple PVS "}
   labelPlacement={"top"}
   actionValue={"0"}

@@ -9,7 +9,7 @@ StyledIconIndicator with custom icon EPICS variable example:
   import Face from '@material-ui/icons/Face';
   <div style={{textAlign:'center'}}>
   <ToggleButton
-  pv='pva://$(device):BO$(id)'
+  pv='$(device):BO$(id)'
     macros={{'$(device)':'testIOC','$(id)':'1'}}
   label={"write '1' or '0'"}
   labelPlacement={"top"}
@@ -18,7 +18,7 @@ StyledIconIndicator with custom icon EPICS variable example:
   <br/><br/>
   {/*###############*/}  
 
-  <StyledIconIndicator  pv='pva://$(device):BO$(id)'
+  <StyledIconIndicator  pv='$(device):BO$(id)'
     macros={{'$(device)':'testIOC','$(id)':'1'}} label='Test Label'>
   <Face/>
   </StyledIconIndicator>
@@ -36,7 +36,7 @@ StyledIconIndicator EPICS variable example:
   import ToggleButton from './ToggleButton';
   <div style={{textAlign:'center'}}>
   <ToggleButton
-  pv='pva://$(device):BO$(id)'
+  pv='$(device):BO$(id)'
     macros={{'$(device)':'testIOC','$(id)':'1'}}
   label={"write '1' or '0'"}
   labelPlacement={"top"}
@@ -45,7 +45,7 @@ StyledIconIndicator EPICS variable example:
   <br/><br/>
   {/*###############*/}  
 
-  <StyledIconIndicator pv='pva://$(device):BO$(id)'
+  <StyledIconIndicator pv='$(device):BO$(id)'
     macros={{'$(device)':'testIOC','$(id)':'1'}} label='Test Label' onColor='lime' offColor='red'/>
 
   {/*###############*/}
@@ -63,7 +63,7 @@ StyledIconIndicator with custom icon EPICS variable example:
   import Face from '@material-ui/icons/Face';
   <div style={{textAlign:'center'}}>
   <ToggleButton
-  pv='pva://$(device):BO$(id)'
+  pv='$(device):BO$(id)'
     macros={{'$(device)':'testIOC','$(id)':'1'}}
   label={"write '1' or '0'"}
   labelPlacement={"top"}
@@ -72,7 +72,7 @@ StyledIconIndicator with custom icon EPICS variable example:
   <br/><br/>
   {/*###############*/}  
 
-  <StyledIconIndicator  pv='pva://$(device):BO$(id)'
+  <StyledIconIndicator  pv='$(device):BO$(id)'
     macros={{'$(device)':'testIOC','$(id)':'1'}} label='Test Label' offColor='secondary'>
   <Face/>
   </StyledIconIndicator>
@@ -89,7 +89,7 @@ StyledIconIndicator with custom icon EPICS variable example:
   import Face from '@material-ui/icons/Face';
   <div style={{textAlign:'center'}}>
   <ToggleButton
-  pv='pva://$(device):BO$(id)'
+  pv='$(device):BO$(id)'
     macros={{'$(device)':'testIOC','$(id)':'1'}}
   label={"write '1' or '0'"}
   labelPlacement={"top"}
@@ -98,7 +98,7 @@ StyledIconIndicator with custom icon EPICS variable example:
   <br/><br/>
   {/*###############*/}  
 
-  <StyledIconIndicator  pv='pva://$(device):BO$(id)'
+  <StyledIconIndicator  pv='$(device):BO$(id)'
     macros={{'$(device)':'testIOC','$(id)':'1'}} label='Test Label' onColor='lime' offColor='red'>
   <Face/>
   </StyledIconIndicator>
@@ -116,7 +116,7 @@ StyledIconIndicator example connection to a SoftChannel EPICS AI pv with example
   import ToggleButton from './ToggleButton';
   <div style={{textAlign:'center'}}>
   <ToggleButton
-   pv='pva://$(device):BO$(id)'
+   pv='$(device):BO$(id)'
   macros={{'$(device)':'testIOC','$(id)':'1'}}
   label={"write '1' or '0'"}
   labelPlacement={"top"}
@@ -125,7 +125,7 @@ StyledIconIndicator example connection to a SoftChannel EPICS AI pv with example
   <br/><br/>
   {/*###############*/}  
 
-  <StyledIconIndicator  pv='pva://$(device):BO$(id)'
+  <StyledIconIndicator  pv='$(device):BO$(id)'
     macros={{'$(device)':'testIOC','$(id)':'1'}} label='My Label' labelPlacement='end' onColor='yellow' offColor='cyan'/>
 
   {/*###############*/}

@@ -9,7 +9,7 @@ SelectionList example connection to a SoftChannel EPICS MBBO pv with horizontal 
   <div style={{textAlign:'center'}}>
   <div style={{marginBottom:8}}>
     <TextOutput
-    pv='pva://$(device):mbboTest$(id)'
+    pv='$(device):mbboTest$(id)'
     macros={{'$(device)':'testIOC','$(id)':'1'}}
     usePvLabel={true}
     useStringValue={true}/>
@@ -17,7 +17,7 @@ SelectionList example connection to a SoftChannel EPICS MBBO pv with horizontal 
 
   {/*###############*/}  
 
-  <SelectionList  pv='pva://$(device):mbboTest$(id)'       macros={{'$(device)':'testIOC','$(id)':'1'}}
+  <SelectionList  pv='$(device):mbboTest$(id)'       macros={{'$(device)':'testIOC','$(id)':'1'}}
   horizontal={true}  
   usePvLabel={true}/>
 
@@ -35,7 +35,7 @@ SelectionList example connection to a SoftChannel EPICS MBBO pv with vertical or
   <div style={{textAlign:'center'}}>
   <div style={{marginBottom:8}}>
     <TextOutput
-    pv='pva://$(device):mbboTest$(id)'
+    pv='$(device):mbboTest$(id)'
     macros={{'$(device)':'testIOC','$(id)':'1'}}
     label={'Custom Label'}
     useStringValue={true}
@@ -44,7 +44,7 @@ SelectionList example connection to a SoftChannel EPICS MBBO pv with vertical or
 
   {/*###############*/}  
 
-  <SelectionList  pv='pva://$(device):mbboTest$(id)' macros={{'$(device)':'testIOC','$(id)':'1'}}    usePvLabel={true} labelPlacement='bottom' custom_selection_strings={['text 1','text 3']}/>
+  <SelectionList  pv='$(device):mbboTest$(id)' macros={{'$(device)':'testIOC','$(id)':'1'}}    usePvLabel={true} labelPlacement='bottom' custom_selection_strings={['text 1','text 3']}/>
 
   {/*###############*/}
 

@@ -4,7 +4,7 @@ TextUpdate example connection to a SoftChannel EPICS AI pv with custom label, pr
 
 ```js
 <TextUpdate  
-   pv='pva://$(device):test$(id)'
+   pv='$(device):test$(id)'
    macros={{'$(device)':'testIOC','$(id)':'1'}}
    label={"My value is "}
    units={"mA"}
@@ -17,7 +17,7 @@ TextUpdate example connection to a SoftChannel EPICS AI pv with EPICS label, pre
 
 ```js
 <TextUpdate  
-   pv='pva://$(device):test$(id)'
+   pv='$(device):test$(id)'
    macros={{'$(device)':'testIOC','$(id)':'2'}}
    usePvLabel={true}
    usePvUnits={true}
@@ -29,7 +29,7 @@ TextUpdate example connection to a SoftChannel EPICS AI pv with EPICS label, pre
 
 ```js
 <TextUpdate  
-   pv='pva://$(device):test$(id)'
+   pv='$(device):test$(id)'
    macros={{'$(device)':'testIOC','$(id)':'2'}}
    usePvLabel={true}
    usePvUnits={true}

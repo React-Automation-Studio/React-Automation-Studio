@@ -5,15 +5,15 @@ import Slider from './Slider';
 
   <GraphXY  
     xPVs={
-      ['pva://testIOC:BeamSweepSim:x.AVAL',
-      'pva://testIOC:BeamSweepSim:x1.AVAL',
-      'pva://testIOC:BeamSweepSim:x2.AVAL'
+      ['testIOC:BeamSweepSim:x.AVAL',
+      'testIOC:BeamSweepSim:x1.AVAL',
+      'testIOC:BeamSweepSim:x2.AVAL'
       ]
     }  
     yPVs={
-      ['pva://testIOC:BeamSweepSim:y.AVAL',
-      'pva://testIOC:BeamSweepSim:y1.AVAL',
-      'pva://testIOC:BeamSweepSim:y2.AVAL'
+      ['testIOC:BeamSweepSim:y.AVAL',
+      'testIOC:BeamSweepSim:y1.AVAL',
+      'testIOC:BeamSweepSim:y2.AVAL'
       ]
    }  
     xMax={10000}
@@ -28,10 +28,10 @@ import Slider from './Slider';
    
   />
 
-  <Slider  pv='pva://testIOC:BeamSweepSim:Amplitude'   label='Circle Radius' usePvMinMax={true}/>
-  <Slider  pv='pva://testIOC:BeamSweepSim:modAmp'   label='Modulation Amplitude' usePvMinMax={true}/>
+  <Slider  pv='testIOC:BeamSweepSim:Amplitude'   label='Circle Radius' usePvMinMax={true}/>
+  <Slider  pv='testIOC:BeamSweepSim:modAmp'   label='Modulation Amplitude' usePvMinMax={true}/>
   <Slider  
-    pv='pva://testIOC:BeamSweepSim:frequency'  
+    pv='testIOC:BeamSweepSim:frequency'  
     label='Frequency'
     min={0.1}
     max={1}

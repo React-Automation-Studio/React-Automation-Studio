@@ -631,9 +631,9 @@ const GraphXY = (props) => {
 }
 GraphXY.propTypes = {
 
-  /** X Array of the process variables, NB must contain correct prefix ie: pva://  eg. ['pva://$(device):test$(id0)','pva://$(device):test$(id1)']*/
+  /** X Array of the process variables,eg. ['$(device):test$(id0)','$(device):test$(id1)']*/
   xPVs: PropTypes.array.isRequired,
-  /** Y Array of the process variables, NB must contain correct prefix ie: pva://  eg. ['pva://$(device):test$(id0)','pva://$(device):test$(id1)']*/
+  /** Y Array of the process variables,  eg. ['$(device):test$(id0)','$(device):test$(id1)']*/
   yPVs: PropTypes.array.isRequired,
   /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id0)':'1','$(id1)':'2'}}*/
   macros: PropTypes.object,

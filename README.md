@@ -91,11 +91,11 @@ The URL, protocol selection for HTTPS or HTTP , authentication and server ports 
 
 If React Automation Studio is installed on the localhost then there is no need to enable authentication as the host authentication system will protect access.
 
-In this release, and with authentication enabled, the user name and password are managed through an administrator Docker environment through the command line. Passwords are stored on the server in encrypted format using Bcrypt. In future releases this may be replaced by a web based administration page. The default authentication procedure can easily be modified to suite a different environment and point to an authentication server. The client is kept authenticated using an encrypted Jason Web Token (JWT). This JWT is used to check authorisation and access rights for every PV request and write. If the JWT is invalidated by the server then user will be required to login.
+Since Release V3.0.0 React-Automation-Studio supports web based administration of user access rights. It also supports  external authentication through Active Directory and Google and local authentication. For the local authentication passwords are stored in the database using encrypted format using Bcrypt. The client is kept authenticated using an encrypted Jason Web Token (JWT) resfresh and access tokens. When serve over HTTPS, the refresh tokens are store in cookie with http only mode and the access tokens are kep in memory. This access token is used to check authorisation and access rights for every PV request and write. If the JWT is invalidated by the server then user will be required to login.
 
-Access rights can be controlled though a JSON file which contains user access groups and rules for defining PV access using regular expressions in the same way that the EPICS Gatewayaccess is defined. All of the components in React Automation studio currently indicate access rights to the PV.
+Access rights can be controlled though web based administrator which contains user access groups,roles and rules for defining PV access using regular expressions in the same way that the EPICS Gatewayaccess is defined. All of the components in React Automation studio currently indicate access rights to the PV.
 
-*4. MongoDB*
+*5. MongoDB*
 
 Since V2.0.0, React-Automation-Studio is integrated with MongoDB to store persistent data. The PyMongo driver is used within the pvServer to connect to a MongoDB replica set.
 
@@ -103,7 +103,10 @@ React hooks are available that setup a watch, perform an update or an insert to 
 
 See the documentation in the style guide.
 
-Currently the Alarm Handler component  and LoadSave component make use of the MongoDB database. In a future release more hooks will be included and the command line administrator will be replaced with a web based administrator.
+Currently the Alarm Handler component  and LoadSave component make use of the MongoDB database.
+
+*6. AlarmHandler
+
 
 ## YouTube Channel:
 [![React Automation Studio Youtube](http://img.youtube.com/vi/djTPrkRxgAo/0.jpg)](https://www.youtube.com/playlist?list=PL7x0LbUrw5BIgc2PUN3h1D0QRRqRuGzEO "React Automation Studio")

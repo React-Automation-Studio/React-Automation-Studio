@@ -13,7 +13,7 @@ const LoadSaveExample = (props) => {
         host='LOADSAVE_DATABASE'
         database='testIOCSystems'
         macros={{ '$(systemName)': 'testIOC' }}
-        loadEnablePV={'pva://$(systemName):loadSaveEnable'}
+        loadEnablePV={'$(systemName):loadSaveEnable'}
         loadEnableLabel={'System On/Off'}
         showLoadEnableButton={true}
         useLoadEnable={true}

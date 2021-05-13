@@ -97,7 +97,7 @@ class DynamicPvFieldExample extends React.Component {
                 <Grid item xs={12}>
 
                   <TextInput
-                    pv='pva://$(device):dynamicPvFields'
+                    pv='$(device):dynamicPvFields'
                     macros={{ '$(device)': 'testIOC' }}
                     label={'edas'}
                     usePvUnits={true}
@@ -112,7 +112,7 @@ class DynamicPvFieldExample extends React.Component {
                 </Grid>
                 <Grid item xs={12}  >
                   <Slider
-                    pv='pva://$(device):dynamicPvFields'
+                    pv='$(device):dynamicPvFields'
                     macros={{ '$(device)': 'testIOC' }}
                     label={'edas'}
                     usePvUnits={true}
@@ -137,7 +137,7 @@ class DynamicPvFieldExample extends React.Component {
                 <Grid item xs={12}>
 
                   <TextInput
-                    pv='pva://$(device):dynamicPvFields'
+                    pv='$(device):dynamicPvFields'
                     macros={{ '$(device)': 'testIOC' }}
                     label={'edas'}
                     usePvUnits={true}
@@ -150,7 +150,7 @@ class DynamicPvFieldExample extends React.Component {
                 </Grid>
                 <Grid item xs={12}  >
                   <Slider
-                    pv='pva://$(device):dynamicPvFields'
+                    pv='$(device):dynamicPvFields'
                     macros={{ '$(device)': 'testIOC' }}
                     label={'edas'}
                     usePvUnits={true}
@@ -164,7 +164,7 @@ class DynamicPvFieldExample extends React.Component {
                 </Grid>
                 <Grid item xs={6}>
                   <TextInput
-                    pv='pva://$(device):dynamicPvFields:LOPR'
+                    pv='$(device):dynamicPvFields:LOPR'
                     macros={{ '$(device)': 'testIOC' }}
                     usePvMinMax={true}
                     usePvLabel={true}
@@ -173,7 +173,7 @@ class DynamicPvFieldExample extends React.Component {
                 </Grid>
                 <Grid item xs={6}>
                   <TextInput
-                    pv='pva://$(device):dynamicPvFields:HOPR'
+                    pv='$(device):dynamicPvFields:HOPR'
                     macros={{ '$(device)': 'testIOC' }}
                     usePvMinMax={true}
                     usePvLabel={true}
@@ -183,7 +183,7 @@ class DynamicPvFieldExample extends React.Component {
                 <Grid item xs={6}>
 
                   <TextInput
-                    pv='pva://$(device):dynamicPvFields:EGU'
+                    pv='$(device):dynamicPvFields:EGU'
                     macros={{ '$(device)': 'testIOC' }}
                     usePvLabel={true}
                     useMetadata={true}
@@ -192,7 +192,7 @@ class DynamicPvFieldExample extends React.Component {
 
                 <Grid item xs={6}>
                   <TextInput
-                    pv='pva://$(device):dynamicPvFields:PREC'
+                    pv='$(device):dynamicPvFields:PREC'
                     macros={{ '$(device)': 'testIOC' }}
                     usePvMinMax={true}
                     usePvLabel={true}
@@ -205,7 +205,7 @@ class DynamicPvFieldExample extends React.Component {
                 <Grid item xs={6}>
 
                   <TextInput
-                    pv='pva://$(device):dynamicPvFields:DESC'
+                    pv='$(device):dynamicPvFields:DESC'
                     macros={{ '$(device)': 'testIOC' }}
 
                     usePvLabel={true}

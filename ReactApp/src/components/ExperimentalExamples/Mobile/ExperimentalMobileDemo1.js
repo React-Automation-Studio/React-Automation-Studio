@@ -188,40 +188,40 @@ class ExperimentalMobileDemo1 extends React.Component {
 
                 <Grid item xs={12} >
                   <div style={{ height: graphVH, width:'96vw',}}>
-                    <GraphY  pvs={['pva://testIOC:test4','pva://testIOC:test5'] } legend={['Sine Wave','Amplitude']} lineColor={[this.props.theme.palette.secondary.main,lime['400']]}/>
+                    <GraphY  pvs={['testIOC:test4','testIOC:test5'] } legend={['Sine Wave','Amplitude']} lineColor={[this.props.theme.palette.secondary.main,lime['400']]}/>
                   </div>
                 </Grid>
                 <Grid item xs={12}>
                   <Grid container direction="row" item justify="center" spacing={2} alignItems="stretch">
                     <Grid item xs={6}  >
-                      <TextInput  pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}   usePvLabel={true} usePvPrecision={true} prec={3} alarmSensitive={true} />
+                      <TextInput  pv='$(device):amplitude' macros={{'$(device)':'testIOC'}}   usePvLabel={true} usePvPrecision={true} prec={3} alarmSensitive={true} />
                     </Grid>
                     <Grid item  xs={6}>
-                      <TextOutput  pv='pva://$(device):test3' macros={{'$(device)':'testIOC'}}   usePvLabel={true} usePvPrecision={true} prec={3} alarmSensitive={true}/>
+                      <TextOutput  pv='$(device):test3' macros={{'$(device)':'testIOC'}}   usePvLabel={true} usePvPrecision={true} prec={3} alarmSensitive={true}/>
                     </Grid>
                   </Grid>
                 </Grid>
 
                 <Grid item xs={6} sm={4} lg={3} >
 
-                  <Gauge  pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}     prec={3} usePvMinMax={true} />
+                  <Gauge  pv='$(device):amplitude' macros={{'$(device)':'testIOC'}}     prec={3} usePvMinMax={true} />
 
                 </Grid>
 
                 <Grid item xs={2} sm={4}  lg={5} >
                   <Grid container direction="column" justify="space-evenly" spacing={2} alignItems="stretch">
                     <Grid item>
-                      <StyledIconIndicator  pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}} onColor='primary' offColor='default' label={'On'} labelPlacement={'end'}/>
+                      <StyledIconIndicator  pv='$(device)' macros={{'$(device)':'testIOC:BO1'}} onColor='primary' offColor='default' label={'On'} labelPlacement={'end'}/>
 
                     </Grid>
                     <Grid item>
-                      <StyledIconIndicator  pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}} onColor='default' offColor='secondary' label={'Off'} labelPlacement={'end'}/>
+                      <StyledIconIndicator  pv='$(device)' macros={{'$(device)':'testIOC:BO1'}} onColor='default' offColor='secondary' label={'Off'} labelPlacement={'end'}/>
                     </Grid>
                   </Grid>
                 </Grid>
                 <Grid item xs={4} sm={4} lg={4} >
 
-                  <ToggleButton  pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}}  custom_selection_strings={["OFF","ON"]}  />
+                  <ToggleButton  pv='$(device)' macros={{'$(device)':'testIOC:BO1'}}  custom_selection_strings={["OFF","ON"]}  />
                 </Grid>
                 
 
@@ -247,7 +247,7 @@ class ExperimentalMobileDemo1 extends React.Component {
                       <Grid item xs={12}>
                         <div style={{textAlign:'center',marginTop:'16px',}}>
                           <ThumbWheel
-                            pv='pva://$(device)'
+                            pv='$(device)'
                             macros={{'$(device)':'testIOC:amplitude'}}
                             prec_integer={3}
                             prec_decimal={1}
@@ -266,7 +266,7 @@ class ExperimentalMobileDemo1 extends React.Component {
                       <Grid container direction="row" item xs={12} spacing={2}>
                         <Grid item xs={12}  >
                           <Slider 
-                          pv='pva://$(device):amplitude' 
+                          pv='$(device):amplitude' 
                           macros={{'$(device)':'testIOC'}} 
                           usePvMinMax={true} 
                           usePvUnits={true}
@@ -298,10 +298,10 @@ class ExperimentalMobileDemo1 extends React.Component {
                   <div style={{marginBottom:8}}>Settings</div>
                   <Grid container spacing={2} alignItems={'stretch'} direction={'row'} justify={'flex-start'}>
                     <Grid item xs={12} lg={4}>
-                      <TextInput   pv='pva://$(device):frequency' macros={{'$(device)':'testIOC'}}    usePvUnits={true}  prec={1} usePvLabel={true}/>
+                      <TextInput   pv='$(device):frequency' macros={{'$(device)':'testIOC'}}    usePvUnits={true}  prec={1} usePvLabel={true}/>
                     </Grid>
                     <Grid item xs={12} lg={4}>
-                      <TextInput   pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}    usePvUnits={true} usePvPrecision={true} usePvLabel={true}/>
+                      <TextInput   pv='$(device):amplitude' macros={{'$(device)':'testIOC'}}    usePvUnits={true} usePvPrecision={true} usePvLabel={true}/>
                     </Grid>
                   </Grid>
 

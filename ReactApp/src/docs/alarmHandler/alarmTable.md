@@ -94,3 +94,13 @@ This checkbox will be disabled (greyed out) if the subArea/area to which the ala
 The NTFY checkbox allows a user to configure whether alarms from the pv should notify users.
 
 This checkbox will be disabled (greyed out) if the subArea/area to which the alarm pv belongs in disabled.
+
+<br/>
+**ADMINISTRATOR ACTIONS**
+
+Pvs can be deleted from the **ALARM TABLE**. Only alarmAdmin role users can execute these actions.
+
+<br/>
+**Admin action - Delete pv**
+
+To delete a pv right click the relevant pv row in the **ALARM TABLE** and under the `Alarm admin actions` menu click on `Delete pv`.

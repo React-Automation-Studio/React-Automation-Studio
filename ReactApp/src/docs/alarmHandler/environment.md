@@ -11,11 +11,16 @@ The alarm server is deployed with the following default parameters:
 | AH\_DEBUG | false | Directive to print additional data useful for debugging the alarm handler to the terminal
 | AH\_TZ | Etc\/UTC (Canonical +00:00) | Time zone setting for alarm handler server. This is used when dates are formatted to strings for notification. Set as per https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 | | |
+| | |
 | SMTP_HOST | | SMTP server hostname. Required for alarm handler to notify alarm events via email
 | SMTP_PORT | | SMTP server port number. Required for alarm handler to notify alarm events via email
 | SMTP_SENDER | | SMTP sender email address. Required for alarm handler to notify alarm events via email
 | SMTP_USER | | Username to log into SMTP server. Optional - leave blank if no login required
 | SMTP_PASS | | Password to log into SMTP server. Optional - leave blank if no login required
+| | |
+| | |
+| SIGNAL\_CLI\_REST\_API\_PORT | 8000 | Python signal-cli-rest-api port
+| SIGNAL\_ACC\_NUMBER |  | Mobile number used for Signal account. Must be in E.164 format as per https://en.wikipedia.org/wiki/E.164
 </center>
 <center>*Table 1: Default alarm server configuration*</center>
 <br/><br/>
@@ -58,14 +63,6 @@ Edit .env file and set new timezone (as per https://en.wikipedia.org/wiki/List_o
 ```
 
 <br/>
-**Configuring SMTP server settings for email notification:**
-
-Edit .env file and set server settings (in this example login credentials have been omitted as the server does not require login):
-```bash
-    SMTP_HOST=smtpserver.lab.edu
-    SMTP_PORT=12345
-    SMTP_SENDER=alarmnotifier@lab.edu
-```
 
 **NOTE:** If the alarm database name is changed, upon restart of the alarm handler, a new database with the set name is created and initialised with seed data (see next section for details on seed data). **The alarm server will no longer point to the previous alarm database and historical alarm data will not be accessible!** For this reason it is recommended that the alarm database name is set as desired before deploying into production or saving critical data onto the database.
 

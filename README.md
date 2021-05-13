@@ -221,37 +221,70 @@ The current authentication method works as follows:
 
 _Note: The administrator must first enable login ability and setup the users and access rights as described in 3.1._
 
-The administration utility in 3.1 is used to create users and store the passwords in an encrypted format using Bcrypt.
+The administrator page in 3.1 is used to create users or link with an external authenticator.
 
-The usernames and passwords are stored in json format in USERS/users.json file.
-
-Only the administration utility should be used to edit this file.
-
-The access rights for each user are managed in the USERS/pvAccess.json file.
-Configuring this file is described in 3.2.
 
 If the system is configured correctly then the user will be directed to the login page initially.
 
-They will be prompted to enter the username and password.
+They will be prompted to enter the username and password or authenticate useing the external authenticator.
 
-The username and password is then  transmitted to the backend for authentication. If authenticated, the server returns an encrypted Jason web token (JWT). This is used to keep the user logged in between session. No username or password is stored in the browser. The user must logout in order cancel the session.
+The username and password or token is then  transmitted to the backend for authentication. If authenticated, the server returns  encrypted Jason web token (JWT) in the form on an access and refresh token. This is used to keep the user logged in between session. No username or password is stored in the browser. The user must logout in order cancel the session.
 
-The JWT can also be invalidated by changing the username/ password in the administration utility.
 
-If the JWT is invalid the user will be redirected tot he login screen.
+If the access token is invalid the user will be redirected to the login screen. The default access, and refresh token expiry is 300 seconds and 1 week. By default the access token and refresh tokens are rfreshed once a minute.
 
-All JWT's of all users can also be invalidated by declaring a new secret key in the USERS/SECRET_PWD_KEY file. If the SECRET_PWD_KEY file is not defined then a random key will be used and the JWTs will change everytime the server restarts.
+All tokens of all users can also be invalidated by declaring a new secret key in the  environment variable: SECRET_PWD_KEY . If the SECRET_PWD_KEY  is not defined then a predefined key will be used .
 
 For every process variable write the access rights are first checked to confirm if the process variable can be written to. And for every user at the initial data connection to each process variable the read access rights are checked.
 
 If no read access rights are granted the widget on the client will display "connecting" permanently. And if no write access is granted the widget is indicated as read only.
 
+## 3.1 Enabling https
+The system is by default configured to serve the socket connections and client webserver over HTTP on localhost.
+
+To enable secure login and installation as a PWA, a certificate and key needs to be installed that is bound to your hostname and the .env environment variables needs to be edited to serve overs HTTPS .
+
+Inside the React Automation Studio installation folder:
+
+```bash
+ls .env
+```
+If it exists edit the .env file, otherwise copy example.env to .env and set
+
+```bash
+
+SERVER_PORT=5000
+SECURE=true
+HTTP_REDIRECT_TO_HTTPS=true
+
+```
+Alternatley set SERVER_PORT to 443 which is the standard ssl port.
+
+The certificates need to be placed in the the React Automation Studio installation folder under the certificates folder.
+
+The certificate needs to be called: server.cer And the key needs to be called: server.key The .gitignore will prevent them from being copied to the repository
+
+It is recommended to use a CA signed certificate, otherwise you can generate a self signed certificate using:
+
+ openssl req -x509 -newkey rsa:4096 -sha256 -days 3650 -nodes -keyout server.key -out server.cer -subj "/CN=selfsigned" -addext "subjectAltName=DNS:localhost,IP:xxx.xxx.xxx.xxx"
+
+In chrome you will need to add the certificate manually:
+In Chrome go to
+chrome://settings/security
+Navigate to Manage certificates > Authorities and click on Import
+Browse to where the self signed certificate and key and stored (certificates) and click OPEN
+Ensure all Trust settings for the Certificate authority is ticked
+
+The docker-compose  environment, will need to be restarted. Nginx will detect the change and serve the app over https.
+
+
+The built client will be then served  https://(hostname or ip):SERVER_PORT/, the styleguide at https://(hostname or ip):6060/ and the dev client at https://(hostname or ip):3000
 
 
 
-## 3.1 Enabling login and authentication
+## 3.2 Enabling login and authentication
 
-First cd to React Automation Studio installation directory
+After enabling HTTPS 
 
 Set up the .env to enable login:
 ```bash
@@ -272,62 +305,29 @@ REACT_APP_EnableLogin=true
 ```
 Make sure that the other parameters in the file are correct. Or see 4.1:
 
-The administration utility is used to create users and store the passwords in an encrypted format using Bcrypt.
+The default username and password  will be admin / admin
 
-The usernames and passwords are stored in json format in USERS/users.json file.
+The admin user will have full read and write access, whilst any other user will have read access by default.
 
-Only the administration utility should be used to edit this file.
-
-
-To launch the admin utility:
-```bash
-docker-compose -f docker-compose-administator.yml run administrator
 ```
+## 3.3 Default user access rights
 
-There are five scripts than can be run:
+The access rights for each user are managed in the web administrator. If logged in as admin, the administrator link is via the more options in the right corner.
 
-To add a user launch:
-```bash
-admin-add-user
-```
-To change a user password:
-```bash
-admin-change-user-password
-```
-To confirm a user password:
-```bash
-admin-check-user-password
-```
-To delete a user launch:
-```bash
-admin-del-user
-```
-To list all users launch:
-```bash
-admin-list-users
-```
-## 3.2 Enabling user access rights
-
-The access rights for each user are managed in the USERS/pvAccess.json file.
-
-The pvAccess.json file an be created by placing the contents of the example.pvAccess.json in a new pvAccess.json file.
-
-The rules defined in the pvAccess.json file are loaded each time pv Server is restarted.
-
-For every process variable write, the access rights are first checked to confirm if the process variable can be written to. And for every user at the initial data connection to each process variable the read access rights are checked.
-
-If no read access rights are granted the widget on the client will display "connecting" permanently. And if no write access is granted the widget is indicated as read only.
+The default access rights are seeded only once by the adminDbInit mirco service.
 
 Regular expression rules are used to evaluate the read and write access rights.
 
-The order in which the user access groups and rules are defined are important. The lowest priority is at the top  and highest priority which can overwrite the previously defined rules is at the bottom.
+The order in which the user access groups and rules are defined are important. The first rule applied is the DEFAULT, all user will get this. The final access group rules to be applied are the ADMIN rules to the applicable user groups.
 
 For example in the default user access group, the rules disables write access and enable read access for all usernames and process variables:
 
+The table display in the user interface allows one ot edit the evivalent object in the database.
 ```json
 "DEFAULT":
     {
       "usernames":["*"],
+      "roles":[],
       "rules":
       [
         { "rule":"[0-9].*",                   "read":true,  "write":false },
@@ -343,6 +343,7 @@ To enable write access for everyone one could change the default to as follows.
 "DEFAULT":
     {
       "usernames":["*"],
+      "roles":[],
       "rules":
       [
         { "rule":"[0-9].*",                   "read":true,  "write":true },
@@ -360,6 +361,7 @@ Although it is more ingenious to create separate user access groups and to defin
 "UAG1":
 {
   "usernames":["user1","user2"],
+  "roles":[],
   "rules":
   [
     { "rule":"[0-9].*",                   "read":false,  "write":false },
@@ -375,7 +377,7 @@ Although it is more ingenious to create separate user access groups and to defin
 
 In theory, all regular expression allowed by Python regex can be used although this has not been tested. More examples are available at: https://www.w3schools.com/python/python_regex.asp
 
-** New** to release 2.0.0 are the definition of roles, by defining a role dynamic routes can be created using the role. This now enables portions of your app to isolated from other users.
+** New** to release 3.0.0 are the protected routes which uses the role and roles array prop to protect the route. This now enables portions of your app to isolated from other users.
 
 
 ```json
@@ -408,41 +410,6 @@ In theory, all regular expression allowed by Python regex can be used although t
 }
 ```
 
-## 3.3 Enabling https
-The system is by default configured to serve the socket connections and client webserver over HTTP on localhost.
-
-To enable secure login and installation as a PWA, a certificate and key needs to be installed that is bound to your hostname and the .env environment variables need to be edited to serve overs HTTPS and via the correct hostname.
-
-Inside the React Automation Studio installation folder:
-
-```bash
-ls .env
-```
-If it exists edit the .env file, otherwise copy example.env to .env and set
-
-```bash
-
-
-REACT_APP_EnableLogin=false
-REACT_APP_FrontendServerPORT=9000
-pvServerPort=5000
-REACT_APP_PyEpicsServerStyleguidePORT=5001
-REACT_APP_StyleguideServerPORT=6060
-REACT_APP_EnableLoginStyleguide=false
-```
-to https and the correct hostname
-
-The certificates need to be placed in the the React Automation Studio installation folder under the certificates folder.
-
-The certificate needs to be called: server.cer And the key needs to be called: server.key The .gitignore will prevent them from being copied to the repository
-
-
-
-The pvServer and node development environment, will need to be restarted, and the production environments will need to be rebuilt.
-
-Both the pvServer and the node clientserver will automatically detect the change.
-
-The built client will be then served  https://customURL:9000/, the styleguide at https://customURL:6060/ and the dev client at http://127.0.0.1:3000/ or http://hostip:3000/
 
 
 # 4 Folder structure

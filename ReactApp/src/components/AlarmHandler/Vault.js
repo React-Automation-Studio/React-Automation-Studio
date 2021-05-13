@@ -113,7 +113,7 @@ const Vault = () => {
         return (
             <DataConnection
                 key={pv}
-                pv={'pva://' + pv}
+                pv={ pv}
                 handleInputValue={handlePVChange}
             />
         )

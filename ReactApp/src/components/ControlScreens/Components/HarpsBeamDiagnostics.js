@@ -113,13 +113,13 @@ const HarpsBeamDiagnostics = (props) => {
                     if (numberOfInsertedGraphs === 0) {
                         if (typeof currentHarp.onlyY !== 'undefined') {
 
-                            x0GraphPVs.push('pva://' + systemName + ':ycur');
-                            x0RangePV = 'pva://' + systemName + ':yrange';
+                            x0GraphPVs.push( systemName + ':ycur');
+                            x0RangePV =  systemName + ':yrange';
                             onlyY0 = true;
                         }
                         else {
-                            x0GraphPVs.push('pva://' + systemName + ':xcur');
-                            x0RangePV = 'pva://' + systemName + ':xrange';
+                            x0GraphPVs.push( systemName + ':xcur');
+                            x0RangePV =  systemName + ':xrange';
                             onlyY0 = false;
                         }
                         x0legend.push(label);
@@ -127,13 +127,13 @@ const HarpsBeamDiagnostics = (props) => {
                         x0SystemName = systemName;
                         //    }
                         if (typeof currentHarp.onlyX !== 'undefined') {
-                            y0GraphPVs.push('pva://' + systemName + ':xcur');
-                            y0RangePV = 'pva://' + systemName + ':xrange';
+                            y0GraphPVs.push( systemName + ':xcur');
+                            y0RangePV =  systemName + ':xrange';
                             onlyX0 = true;
                         }
                         else {
-                            y0GraphPVs.push('pva://' + systemName + ':ycur');
-                            y0RangePV = 'pva://' + systemName + ':yrange';
+                            y0GraphPVs.push( systemName + ':ycur');
+                            y0RangePV =  systemName + ':yrange';
                             onlyX0 = false;
                         }
                         y0GraphKey = y0GraphKey + systemName;
@@ -141,23 +141,23 @@ const HarpsBeamDiagnostics = (props) => {
                         numberOfInsertedGraphs++;
                     } else {
                         if (typeof currentHarp.onlyY !== 'undefined') {
-                            x1GraphPVs.push('pva://' + systemName + ':ycur');
-                            x1RangePV = 'pva://' + systemName + ':yrange';
+                            x1GraphPVs.push( systemName + ':ycur');
+                            x1RangePV =  systemName + ':yrange';
                             onlyY1 = true;
                         }
                         else {
-                            x1GraphPVs.push('pva://' + systemName + ':xcur');
-                            x1RangePV = 'pva://' + systemName + ':xrange';
+                            x1GraphPVs.push( systemName + ':xcur');
+                            x1RangePV =  systemName + ':xrange';
                             onlyY1 = false;
                         }
                         if (typeof currentHarp.onlyX !== 'undefined') {
-                            y1GraphPVs.push('pva://' + systemName + ':xcur');
-                            y1RangePV = 'pva://' + systemName + ':xrange';
+                            y1GraphPVs.push( systemName + ':xcur');
+                            y1RangePV =  systemName + ':xrange';
                             onlyX1 = true;
                         }
                         else {
-                            y1GraphPVs.push('pva://' + systemName + ':ycur');
-                            y1RangePV = 'pva://' + systemName + ':yrange';
+                            y1GraphPVs.push( systemName + ':ycur');
+                            y1RangePV =  systemName + ':yrange';
                             onlyX1 = false;
                         }
                         x1legend.push(label);

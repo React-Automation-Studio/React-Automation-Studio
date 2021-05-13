@@ -244,12 +244,12 @@ const AlarmTable = props => {
                                             onClick={() => {
                                                 props.alarmContextClose()
                                                 props.setAlarmAdminPVExpand(false)
-                                                window.open("/Probe?" + JSON.stringify({ pvname: 'pva://' + value["name"], probeType: 'readOnly' }),
+                                                window.open("/Probe?" + JSON.stringify({ pvname:  value["name"], probeType: 'readOnly' }),
                                                     "_blank", "noreferrer")
                                             }}
                                         // component={Link} to={{
                                         //     pathname: "/Probe",
-                                        //     search: JSON.stringify({ pvname: 'pva://' + value["name"], probeType: 'readOnly' }),
+                                        //     search: JSON.stringify({ pvname:  value["name"], probeType: 'readOnly' }),
                                         // }}
                                         // target="_blank"
                                         >
@@ -307,7 +307,7 @@ const AlarmTable = props => {
                                     {props.debug
                                         ? <TableCell>
                                             <TextInput
-                                                pv={'pva://' + value["name"]}
+                                                pv={ value["name"]}
                                                 usePvLabel={true}
                                                 usePvPrecision={true}
                                                 usePvUnits={true}
@@ -332,7 +332,7 @@ const AlarmTable = props => {
                                     </Tooltip>
                                     <TableCell align="center">
                                         <TextUpdateStateful
-                                            pv={'pva://' + value["name"]}
+                                            pv={ value["name"]}
                                             useStringValue={true}
                                             usePvUnits={true}
                                             disableContextMenu={true}

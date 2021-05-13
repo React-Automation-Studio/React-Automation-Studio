@@ -27,10 +27,10 @@ class SlitXY extends React.Component {
   constructor(props) {
     super(props);
     let pvs={};
-    pvs['xGapReadback']={initialized: false, pvname:'pva://'+props.system.devices.xGapDevice.deviceName+":"+props.system.devices.xGapDevice.readback,value:"",char_value:"",metadata:{}};
-    pvs['xOffsetReadback']={initialized: false, pvname:'pva://'+props.system.devices.xOffsetDevice.deviceName+":"+props.system.devices.xOffsetDevice.readback,value:"",char_value:"",metadata:{}};
-    pvs['yGapReadback']={initialized: false, pvname:'pva://'+props.system.devices.yGapDevice.deviceName+":"+props.system.devices.yGapDevice.readback,value:"",char_value:"",metadata:{}};
-    pvs['yOffsetReadback']={initialized: false, pvname:'pva://'+props.system.devices.yOffsetDevice.deviceName+":"+props.system.devices.yOffsetDevice.readback,value:"",char_value:"",metadata:{}};
+    pvs['xGapReadback']={initialized: false, pvname:props.system.devices.xGapDevice.deviceName+":"+props.system.devices.xGapDevice.readback,value:"",char_value:"",metadata:{}};
+    pvs['xOffsetReadback']={initialized: false, pvname:props.system.devices.xOffsetDevice.deviceName+":"+props.system.devices.xOffsetDevice.readback,value:"",char_value:"",metadata:{}};
+    pvs['yGapReadback']={initialized: false, pvname:props.system.devices.yGapDevice.deviceName+":"+props.system.devices.yGapDevice.readback,value:"",char_value:"",metadata:{}};
+    pvs['yOffsetReadback']={initialized: false, pvname:props.system.devices.yOffsetDevice.deviceName+":"+props.system.devices.yOffsetDevice.readback,value:"",char_value:"",metadata:{}};
     let contextPVs=[];
     for (let item in pvs){
       contextPVs.push(pvs[item]);

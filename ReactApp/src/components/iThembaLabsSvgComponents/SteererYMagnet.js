@@ -27,7 +27,7 @@ class SteererYMagnet extends React.Component {
     super(props);
     let pvs={};
 
-    pvs['readback']={initialized: false, pvname:'pva://'+props.system.devices.device.deviceName+":"+props.system.devices.device.readback,value:"",char_value:"",metadata:{}};
+    pvs['readback']={initialized: false, pvname:props.system.devices.device.deviceName+":"+props.system.devices.device.readback,value:"",char_value:"",metadata:{}};
 
     let contextPVs=[];
     for (let item in pvs){

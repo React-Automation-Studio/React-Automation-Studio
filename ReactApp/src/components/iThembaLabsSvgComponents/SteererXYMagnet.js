@@ -28,8 +28,8 @@ class SteererXYMagnet extends React.Component {
     super(props);
     let pvs={};
 
-    pvs['xReadback']={initialized: false, pvname:'pva://'+props.system.devices.xDevice.deviceName+":"+props.system.devices.xDevice.readback,value:"",char_value:"",metadata:{}};
-    pvs['yReadback']={initialized: false, pvname:'pva://'+props.system.devices.yDevice.deviceName+":"+props.system.devices.yDevice.readback,value:"",char_value:"",metadata:{}};
+    pvs['xReadback']={initialized: false, pvname:props.system.devices.xDevice.deviceName+":"+props.system.devices.xDevice.readback,value:"",char_value:"",metadata:{}};
+    pvs['yReadback']={initialized: false, pvname:props.system.devices.yDevice.deviceName+":"+props.system.devices.yDevice.readback,value:"",char_value:"",metadata:{}};
     let contextPVs=[];
     for (let item in pvs){
       contextPVs.push(pvs[item]);

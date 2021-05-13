@@ -36,17 +36,17 @@ class Harp extends React.Component {
     super(props);
     let xrawScanPV;
     if(typeof this.props.onlyY==='undefined'){
-      xrawScanPV='pva://'+this.props.systemName+':xraw.SCAN';
+      xrawScanPV=this.props.systemName+':xraw.SCAN';
     }
     else{
-      xrawScanPV='pva://'+this.props.systemName+':yraw.SCAN';
+      xrawScanPV=this.props.systemName+':yraw.SCAN';
     }
     let yrawScanPV;
     if(typeof this.props.onlyX==='undefined'){
-      yrawScanPV='pva://'+this.props.systemName+':yraw.SCAN';
+      yrawScanPV=this.props.systemName+':yraw.SCAN';
     }
     else{
-      yrawScanPV='pva://'+this.props.systemName+':xraw.SCAN';
+      yrawScanPV=this.props.systemName+':xraw.SCAN';
     }
     let actuatorName;
     if (typeof this.props.actuatorName==='undefined'){
@@ -58,16 +58,16 @@ class Harp extends React.Component {
     }
 
     //console.log(actuatorName)
-    const statusPV='pva://'+actuatorName+':get-statusText';
-    const commandPV='pva://'+actuatorName+':put-outIn';
-    const safetyOkPV='pva://'+actuatorName+':get-status.B1';
-    const safetyAlarmPV='pva://'+actuatorName+':get-status.B0';
-    const airPressurePV='pva://'+actuatorName+':get-status.B2';
-    const HvPV='pva://'+actuatorName+':get-status.B3';
-    const opActInPV='pva://'+actuatorName+':get-status.B4';
-    const movingPV='pva://'+actuatorName+':get-status.B5';
-    const inPV='pva://'+actuatorName+':get-status.B6';
-    const outPV='pva://'+actuatorName+':get-status.B7';
+    const statusPV=actuatorName+':get-statusText';
+    const commandPV=actuatorName+':put-outIn';
+    const safetyOkPV=actuatorName+':get-status.B1';
+    const safetyAlarmPV=actuatorName+':get-status.B0';
+    const airPressurePV=actuatorName+':get-status.B2';
+    const HvPV=actuatorName+':get-status.B3';
+    const opActInPV=actuatorName+':get-status.B4';
+    const movingPV=actuatorName+':get-status.B5';
+    const inPV=actuatorName+':get-status.B6';
+    const outPV=actuatorName+':get-status.B7';
     let pvs={};
     pvs['xrawScanPV']={initialized: false,pvname:xrawScanPV,value:"",char_value:""}
     pvs['yrawScanPV']={initialized: false,pvname:yrawScanPV,value:"",char_value:""}

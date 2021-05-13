@@ -42,18 +42,18 @@ class FC extends React.Component {
   constructor(props) {
     super(props);
 
-    //  const  xrawScanPV='pva://'+this.props.systemName+':xraw.SCAN';
-    //    const yrawScanPV='pva://'+this.props.systemName+':yraw.SCAN';
-    const safetyOkPV='pva://'+this.props.systemName+':get-status.B1';
-    const safetyAlarmPV='pva://'+this.props.systemName+':get-status.B0';
-    const airPressurePV='pva://'+this.props.systemName+':get-status.B2';
-    const HvPV='pva://'+this.props.systemName+':get-status.B3';
-    const opActInPV='pva://'+this.props.systemName+':get-status.B4';
-    const movingPV='pva://'+this.props.systemName+':get-status.B5';
-    const inPV='pva://'+this.props.systemName+':get-status.B6';
-    const outPV='pva://'+this.props.systemName+':get-status.B7';
-    const statusPV='pva://'+this.props.systemName+':get-statusText';
-    const commandPV='pva://'+this.props.systemName+':put-outIn';
+    //  const  xrawScanPV=this.props.systemName+':xraw.SCAN';
+    //    const yrawScanPV=this.props.systemName+':yraw.SCAN';
+    const safetyOkPV=this.props.systemName+':get-status.B1';
+    const safetyAlarmPV=this.props.systemName+':get-status.B0';
+    const airPressurePV=this.props.systemName+':get-status.B2';
+    const HvPV=this.props.systemName+':get-status.B3';
+    const opActInPV=this.props.systemName+':get-status.B4';
+    const movingPV=this.props.systemName+':get-status.B5';
+    const inPV=this.props.systemName+':get-status.B6';
+    const outPV=this.props.systemName+':get-status.B7';
+    const statusPV=this.props.systemName+':get-statusText';
+    const commandPV=this.props.systemName+':put-outIn';
     let pvs={};
     //    pvs['xrawScanPV']={initialized: false,pvname:xrawScanPV,value:"",char_value:""}
     //    pvs['yrawScanPV']={initialized: false,pvname:yrawScanPV,value:"",char_value:""}

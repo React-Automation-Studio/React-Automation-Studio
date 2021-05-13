@@ -329,13 +329,13 @@ class ControlTestHarp1 extends React.Component {
       if (displayHarps[harp].inserted===true){
         if(numberOfInsertedGraphs===0){
           if(typeof displayHarps[harp].onlyY!=='undefined'){
-            x0GraphPVs.push('pva://'+displayHarps[harp].systemName+':ycur');
-            x0RangePV='pva://'+displayHarps[harp].systemName+':yrange';
+            x0GraphPVs.push(displayHarps[harp].systemName+':ycur');
+            x0RangePV=displayHarps[harp].systemName+':yrange';
             onlyY0=true;
           }
           else {
-            x0GraphPVs.push('pva://'+displayHarps[harp].systemName+':xcur');
-            x0RangePV='pva://'+displayHarps[harp].systemName+':xrange';
+            x0GraphPVs.push(displayHarps[harp].systemName+':xcur');
+            x0RangePV=displayHarps[harp].systemName+':xrange';
             onlyY0=false;
           }
 
@@ -345,13 +345,13 @@ class ControlTestHarp1 extends React.Component {
           x0SystemName=displayHarps[harp].systemName;
           //    }
           if(typeof displayHarps[harp].onlyX!=='undefined'){
-            y0GraphPVs.push('pva://'+displayHarps[harp].systemName+':xcur');
-            y0RangePV='pva://'+displayHarps[harp].systemName+':xrange';
+            y0GraphPVs.push(displayHarps[harp].systemName+':xcur');
+            y0RangePV=displayHarps[harp].systemName+':xrange';
             onlyX0=true;
           }
           else{
-            y0GraphPVs.push('pva://'+displayHarps[harp].systemName+':ycur');
-            y0RangePV='pva://'+displayHarps[harp].systemName+':yrange';
+            y0GraphPVs.push(displayHarps[harp].systemName+':ycur');
+            y0RangePV=displayHarps[harp].systemName+':yrange';
             onlyX0=false;
           }
           y0GraphKey=y0GraphKey+displayHarps[harp].systemName;
@@ -360,24 +360,24 @@ class ControlTestHarp1 extends React.Component {
           numberOfInsertedGraphs++;
         }else{
           if(typeof displayHarps[harp].onlyY!=='undefined'){
-            x1GraphPVs.push('pva://'+displayHarps[harp].systemName+':ycur');
-            x1RangePV='pva://'+displayHarps[harp].systemName+':yrange';
+            x1GraphPVs.push(displayHarps[harp].systemName+':ycur');
+            x1RangePV=displayHarps[harp].systemName+':yrange';
             onlyY1=true;
           }
           else {
-            x1GraphPVs.push('pva://'+displayHarps[harp].systemName+':xcur');
-            x1RangePV='pva://'+displayHarps[harp].systemName+':xrange';
+            x1GraphPVs.push(displayHarps[harp].systemName+':xcur');
+            x1RangePV=displayHarps[harp].systemName+':xrange';
             onlyY1=false;
           }
 
           if(typeof displayHarps[harp].onlyX!=='undefined'){
-            y1GraphPVs.push('pva://'+displayHarps[harp].systemName+':xcur');
-            y1RangePV='pva://'+displayHarps[harp].systemName+':xrange';
+            y1GraphPVs.push(displayHarps[harp].systemName+':xcur');
+            y1RangePV=displayHarps[harp].systemName+':xrange';
             onlyX1=true;
           }
           else{
-            y1GraphPVs.push('pva://'+displayHarps[harp].systemName+':ycur');
-            y1RangePV='pva://'+displayHarps[harp].systemName+':yrange';
+            y1GraphPVs.push(displayHarps[harp].systemName+':ycur');
+            y1RangePV=displayHarps[harp].systemName+':yrange';
             onlyX1=false;
           }
 

@@ -159,7 +159,7 @@ class HarpRangeSelection extends React.Component {
   render() {
     //   console.log(this.state)
     //   console.log(this.props.systemName)
-    //   const xrangePV='pva://'+this.props.systemName+':xrange';
+    //   const xrangePV=this.props.systemName+':xrange';
     let yrangePV;
     if (this.props.onlyX === true) {
       yrangePV = 'pva://' + this.props.systemName + ':xrange';

@@ -59,18 +59,18 @@ class SettingsSteererXY extends React.Component {
                 justify="flex-start"
                 alignItems="center" spacing={1}>
                 <Grid item xs={6}  >
-                  <TextInput   pv={'pva://'+system.devices.xDevice.deviceName+":"+system.devices.xDevice.setpoint}      prec={3}  label={'X Setpoint:'} alarmSensitive={true}  usePvUnits={true} usePvMinMax={true}/>
+                  <TextInput   pv={system.devices.xDevice.deviceName+":"+system.devices.xDevice.setpoint}      prec={3}  label={'X Setpoint:'} alarmSensitive={true}  usePvUnits={true} usePvMinMax={true}/>
 
                 </Grid>
                 <Grid item xs={6}  >
-                  <TextOutput style={{marginRight:10}} pv={'pva://'+system.devices.xDevice.deviceName+":"+system.devices.xDevice.readback}         prec={3} usePvUnits={true} alarmSensitive={true} label={'X Readback'}/>
+                  <TextOutput style={{marginRight:10}} pv={system.devices.xDevice.deviceName+":"+system.devices.xDevice.readback}         prec={3} usePvUnits={true} alarmSensitive={true} label={'X Readback'}/>
 
 
                 </Grid>
 
                 <Grid item xs={12}  >
 
-                  <Slider   pv={'pva://'+system.devices.xDevice.deviceName+":"+system.devices.xDevice.setpoint}      prec={3}  label={'X Setpoint:'} alarmSensitive={true}  usePvUnits={true} usePvMinMax={true}/>
+                  <Slider   pv={system.devices.xDevice.deviceName+":"+system.devices.xDevice.setpoint}      prec={3}  label={'X Setpoint:'} alarmSensitive={true}  usePvUnits={true} usePvMinMax={true}/>
                 </Grid>
 
 
@@ -83,7 +83,7 @@ class SettingsSteererXY extends React.Component {
                   <Grid   container  justify="flex-start" direction="row"    alignItems="center" spacing={1}>
                     <Grid item xs={12} sm={12} >
                       <ThumbWheel
-                        pv={'pva://'+system.devices.xDevice.deviceName+":"+system.devices.xDevice.setpoint}
+                        pv={system.devices.xDevice.deviceName+":"+system.devices.xDevice.setpoint}
                         macros={this.props['macros']}
                         prec_integer={2}
                         prec_decimal={2}
@@ -93,7 +93,7 @@ class SettingsSteererXY extends React.Component {
                   </Grid>
                 </Grid>
                 <Grid item xs={4}  >
-                  <ToggleButton pv={'pva://'+system.devices.xDevice.deviceName+':On'} macros={this.props['macros']}  labelPlacement={"top"}  />
+                  <ToggleButton pv={system.devices.xDevice.deviceName+':On'} macros={this.props['macros']}  labelPlacement={"top"}  />
 
 
 
@@ -145,18 +145,18 @@ class SettingsSteererXY extends React.Component {
                 justify="flex-start"
                 alignItems="center" spacing={1}>
                 <Grid item xs={6}  >
-                  <TextInput   pv={'pva://'+system.devices.yDevice.deviceName+":"+system.devices.yDevice.setpoint}      prec={3}  label={'X Setpoint:'} alarmSensitive={true}  usePvUnits={true} usePvMinMax={true}/>
+                  <TextInput   pv={system.devices.yDevice.deviceName+":"+system.devices.yDevice.setpoint}      prec={3}  label={'X Setpoint:'} alarmSensitive={true}  usePvUnits={true} usePvMinMax={true}/>
 
                 </Grid>
                 <Grid item xs={6}  >
-                  <TextOutput style={{marginRight:10}} pv={'pva://'+system.devices.yDevice.deviceName+":"+system.devices.yDevice.readback}         prec={3} usePvUnits={true} alarmSensitive={true} label={'X Readback'}/>
+                  <TextOutput style={{marginRight:10}} pv={system.devices.yDevice.deviceName+":"+system.devices.yDevice.readback}         prec={3} usePvUnits={true} alarmSensitive={true} label={'X Readback'}/>
 
 
                 </Grid>
 
                 <Grid item xs={12}  >
 
-                  <Slider   pv={'pva://'+system.devices.yDevice.deviceName+":"+system.devices.yDevice.setpoint}      prec={3}  label={'X Setpoint:'} alarmSensitive={true}  usePvUnits={true} usePvMinMax={true}/>
+                  <Slider   pv={system.devices.yDevice.deviceName+":"+system.devices.yDevice.setpoint}      prec={3}  label={'X Setpoint:'} alarmSensitive={true}  usePvUnits={true} usePvMinMax={true}/>
                 </Grid>
 
 
@@ -169,7 +169,7 @@ class SettingsSteererXY extends React.Component {
                   <Grid   container  justify="flex-start" direction="row"    alignItems="center" spacing={1}>
                     <Grid item xs={12} sm={12} >
                       <ThumbWheel
-                        pv={'pva://'+system.devices.yDevice.deviceName+":"+system.devices.yDevice.setpoint}
+                        pv={system.devices.yDevice.deviceName+":"+system.devices.yDevice.setpoint}
                         macros={this.props['macros']}
                         prec_integer={2}
                         prec_decimal={2}
@@ -179,7 +179,7 @@ class SettingsSteererXY extends React.Component {
                   </Grid>
                 </Grid>
                 <Grid item xs={4}  >
-                  <ToggleButton pv={'pva://'+system.devices.yDevice.deviceName+':On'} macros={this.props['macros']}  labelPlacement={"top"}  />
+                  <ToggleButton pv={system.devices.yDevice.deviceName+':On'} macros={this.props['macros']}  labelPlacement={"top"}  />
 
 
 

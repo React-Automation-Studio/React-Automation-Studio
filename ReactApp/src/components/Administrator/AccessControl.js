@@ -31,6 +31,8 @@ import HelpIcon from '@material-ui/icons/Help';
 import Popover from '@material-ui/core/Popover';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
+import { ArrowUp,ArrowDown } from "mdi-material-ui/";
+
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -476,24 +478,27 @@ In theory, all regular expression searches allowed by Python regex can be used a
                   <EditIcon />
                 </IconButton>}
                 {editMode === true && <IconButton onClick={() => setModifiedUserGroups(prev => {
-                  const newUserGroups = { ...prev }
-                  const newUserGroupsKeys = Object.keys(newUserGroups)
+                  
+                  const{DEFAULT,ADMIN,...rest}={...prev};
+                  const restKeys = Object.keys(rest)
                   let newName = "NEW"
                   let index = 1;
-                  if (newUserGroupsKeys.includes(newName)) {
+                  if (restKeys.includes(newName)) {
                     newName = "NEW" + index;
-                    while (newUserGroupsKeys.includes(newName)) {
+                    while (restKeys.includes(newName)) {
                       index++;
                       newName = "NEW" + index;
                     }
 
                   }
-                  newUserGroups[newName] =
+                  rest[newName] =
                   {
                     "usernames": [],
                     "roles": [],
                     "rules": []
                   }
+                  const newUserGroups={DEFAULT,...rest,ADMIN}
+            
                   return newUserGroups
 
                 })
@@ -522,7 +527,80 @@ In theory, all regular expression searches allowed by Python regex can be used a
                 //  className={classes.tabs}
                 >
                   {userGroupKeys.map((usergroup, index) => (
-                    <Tab label={usergroup} key={index.toString()} />
+                    <Tab label={<div style={{display: 'flex','flex-direction': 'row',verticalAlign:'middle'}} >
+                      {usergroup}
+                      {editMode === true &&(!((usergroup==='ADMIN')||(usergroup==='DEFAULT')))&&<div> 
+                      {(index>1)&&<IconButton 
+                      
+                      onClick={()=>{
+                       
+                        setModifiedUserGroups(prev=>{
+                          const{DEFAULT,ADMIN,...rest}={...prev};
+                          let restKeys = Object.keys(rest)
+                          const index=restKeys.indexOf(usergroup)
+                          if(index>0){
+                            var temp = restKeys[index-1];
+                                restKeys[index-1] = restKeys[index];
+                                restKeys[index]=temp;
+                          }
+                          const newUserGroups={}
+                          newUserGroups["DEFAULT"]=DEFAULT
+                          restKeys.forEach((key,index)=>{
+                            newUserGroups[key]=rest[key];
+                          })
+                          newUserGroups["ADMIN"]=ADMIN;
+                          return newUserGroups
+
+                        })
+                      }}
+                      
+                      style={
+                        {
+                          marginTop: 0,
+                          marginBottom:0,
+                          position: 'absolute',
+                          top: '50%',
+                          
+                          transform: 'translate(0, -50%)'}
+  }>
+    <ArrowUp/>
+    </IconButton>
+    }
+                      {(index<(userGroupKeys.length-2))&&<IconButton  style={{marginTop: 0,marginBottom:0,marginLeft:24,
+  position: 'absolute',
+  top: '50%',
+ 
+  
+  transform: 'translate(0, -50%)'}}
+  
+  onClick={()=>{
+                       
+    setModifiedUserGroups(prev=>{
+      const{DEFAULT,ADMIN,...rest}={...prev};
+      let restKeys = Object.keys(rest)
+      const index=restKeys.indexOf(usergroup)
+      if(index<restKeys.length-1){
+        var temp = restKeys[index+1];
+            restKeys[index+1] = restKeys[index];
+            restKeys[index]=temp;
+      }
+      const newUserGroups={}
+      newUserGroups["DEFAULT"]=DEFAULT
+      restKeys.forEach((key,index)=>{
+        newUserGroups[key]=rest[key];
+      })
+      newUserGroups["ADMIN"]=ADMIN;
+      return newUserGroups
+
+    })
+  }}
+  
+  
+  ><ArrowDown/></IconButton>}
+                      </div>}
+                    </div>} key={index.toString()} component={'div'}>
+                      
+                      </Tab>
 
 
                   ))

@@ -7,14 +7,12 @@ The alarm handler users table lists all the users that can be configured to be n
 <br/>
 **Name**
 
-Name of the user - as configured in alarm handler MongoDB database.
+Name of the user - as configured through the user profile.
 
 <br/>
 **Contact**
 
-The contact details on which the user will be notified - as configured in alarm handler MongoDB database.
-
-These details can be updated from the UI as described below in the **Actions** section.
+The contact details on which the user will be notified - as configured through the user profile.
 
 NOTE: The UI will only display the contact details of the currently logged in user. Other users' contact details will be hidden to prevent unnecessary exposure of user info.
 
@@ -31,7 +29,7 @@ The notification expressions can be updated from the UI as described below in th
 
 A user will be notified on alarm events on pvs that match any of the notification expressions of that particular user.
 
-As an example see the screenshot below where the notification expression "SLIT.*2" of "Demo User One" is selected. The filtered pvs list shows the pvs that matches this notification expression. This means "Demo User One" will be notified whenever alarm events occur on any of these pvs. The same applies for all of "Demo User One's" notification expressions.
+As an example see the screenshot below where the notification expression "STR1:" of "User2 Demo" is selected. The filtered pvs list shows the pvs that matches this notification expression. This means "User2 Demo" will be notified whenever alarm events occur on any of these pvs. The same applies for all of "User2 Demo's" notification expressions.
 
 <img src="img/alarmHandler/userNotification_regex_click2.png" alt="userNotification_regex_click" width="100%"/>
 <center>*Example notification expression chip click*</center>
@@ -40,7 +38,7 @@ As an example see the screenshot below where the notification expression "SLIT.*
 <br/>
 **Actions**
 
-The actions column allows a user to edit the contact details and notification expressions of a user by clicking the edit button (*pencil icon* on the right).
+The actions column allows a user to edit the notification expressions of a user by clicking the edit button (*pencil icon* on the right).
 
 NOTE: The UI will only display the edit icon next to the currently logged in user. You will be unable to edit other users' details.
 
@@ -48,15 +46,13 @@ NOTE: You will not be able to edit any user information if you use React Automat
 
 NOTE: A user with alarmAdmin role can edit all users' details.
 
-Once the edit icon has been clicked, the user is presented with the edit user view as shown below (example shown for "Demo User One").
+Once the edit icon has been clicked, the user is presented with the edit user view as shown below (example shown for "User1 Demo").
 
 <img src="img/alarmHandler/userNotification_edit_details.png" alt="userNotification_edit_details" width="100%"/>
 <center>*Editing User One user details*</center>
 <br/><br/>
 
 In edit more, the following actions can be done:
-
-**Edit contact details**: The email and mobile fields can be edited like a regular form input.
 
 **Delete notification expressions**: Notification expressions can be deleted by clicking on the cancel button (*x icon* on top right of chip) of the relevant expression chip.
 
@@ -83,7 +79,7 @@ NOTE: You will not be able to edit any user information if you use React Automat
 
 NOTE: A user with alarmAdmin role can edit all users' details.
 
-Once the calendar icon has been clicked, the user is presented with the notification schedule dialog as shown below (example shown for "Demo User One").
+Once the calendar icon has been clicked, the user is presented with the notification schedule dialog as shown below (example shown for "User1 Demo").
 
 <center>
 <img src="img/alarmHandler/userNotification_notification_dialog.png" alt="userNotification_notification_dialog" width="50%"/>
@@ -99,7 +95,7 @@ If the user chooses a unique schedule for each notification expression, these ex
 
 The notify checkbox sets whether the user must be notified. This can be a global or per notification expression setting.
 
-A user can then set which medium they would like to be notified on. At least one medium one be selected. **Currently the alarm handler can only notify via email. In future we hope to expand this to SMS and WhatsApp.**
+A user can then set which medium they would like to be notified on. At least one medium one be selected. **Currently the alarm handler can notify via email and Signal messenger. In future we hope to expand this to SMS and WhatsApp.**
 
 The `All-day` toggle switch sets whether a user would like to be notified all day or between set time intervals. This can be a global or per notification expression setting.
 
@@ -110,6 +106,19 @@ The `Weekly` and `Date range` settings can to configured for a user to be notifi
 **Cancel changes**: Clicking the `CANCEL` will undo all changes made and **NOT** update the MongoDB alarm database.
 
 <br/>
-**Adding and removing users**
+**ADMINISTRATOR ACTIONS**
 
-An alarmAdmin role user can add and remove users using the `ADD` and `DELETE` buttons above the alarm handler user table.
+An alarmAdmin role user can add or remove alarm users using the `EDIT ALARM USERS` button above the alarm handler user table.
+
+<br/>
+**Admin action - Add or remove alarm users**
+
+To add or remove alarm users click the `EDIT ALARM USERS` button above the alarm handler user table and the dialog below will appear.
+
+<center>
+<img src="img/alarmHandler/userNotification_editusers_dialog.png" alt="userNotification_editusers_dialog" width="100%"/>
+</center>
+<center>*Edit users dialog*</center>
+<br/><br/>
+
+This dialog allows an alarmAdmin to add/remove users from the list of all available RAS users.

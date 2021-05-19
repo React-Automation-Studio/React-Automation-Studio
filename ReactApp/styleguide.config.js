@@ -260,6 +260,24 @@ module.exports = {
                     },
                   ]
                 },
+                {
+                  name: 'Alarm users role configuration',
+                  content: 'src/docs/alarmHandler/alarmRoleConfig.md',
+                  sections: [
+                    {
+                      name: 'alarmAdmin',
+                      content: 'src/docs/alarmHandler/alarmAdmin.md',
+                    },
+                    {
+                      name: 'alarmUser',
+                      content: 'src/docs/alarmHandler/alarmUser.md',
+                    },
+                    {
+                      name: 'alarmObserver',
+                      content: 'src/docs/alarmHandler/alarmObserver.md',
+                    }
+                  ]
+                }
               ]
             },
             {

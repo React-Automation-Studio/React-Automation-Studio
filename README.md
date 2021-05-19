@@ -105,9 +105,15 @@ See the documentation in the style guide.
 
 Currently the Alarm Handler component  and LoadSave component make use of the MongoDB database.
 
-*6. AlarmHandler
+*6. AlarmHandler*
 
+As of Release 3.0.0 the RAS AlarmHandler component is considered production ready.
 
+The alarm handler is seeded through JSON files that populate the MongoDB alarm handler database. This database is also used to persist all alarm events and activity logs.
+
+The alarm handler front end UI allows users to configure all aspects of the alarms and search through the entire alarm log. Alarm areas, subAreas and pvs can also be added/removed from the front end by alarmAdmin role users. 
+
+A user notification platform has also been created for the alarm handler. This platform allows a user to target specific pvs to be notified about using javascript regular expressions. At present users can be notified via email and Signal messenger. In future we hope to expand this to SMS and WhatsApp.
 
 *7. Since Release 3.0.0, Nginx serves the static files for ReactApp and the styleguide, it also handles the transport layer security and performs load balancing. Scripts were created to dynamically configure Nginx based on the enviroment variables in Section 3.
 For load balancing, Nginx balances between 3 pvServers in the production versions and 1 in the dev versions.

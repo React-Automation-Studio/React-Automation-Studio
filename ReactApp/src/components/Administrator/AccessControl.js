@@ -929,7 +929,7 @@ The fifth rule enables read and write access for all PV names starting with test
                 //  className={classes.tabs}
                 >
                   {userGroupKeys.map((usergroup, index) => (
-                    <Tab label={<div style={{display: 'flex','flex-direction': 'row',verticalAlign:'middle'}} >
+                    <Tab label={<div style={{display: 'flex','flexDirection': 'row',verticalAlign:'middle'}} >
                      
                       <div style={{flexGrow: 1,minWidth:'100px',margin:'auto'}}> {usergroup}</div>
                       {editMode === true &&(!((usergroup==='ADMIN')||(usergroup==='DEFAULT')))&&<div> 

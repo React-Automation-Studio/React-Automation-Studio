@@ -181,8 +181,10 @@ const UagDelete = (props) => {
 const AccessControl = (props) => {
   const [showRolesHelp, setShowRolesHelp] = useState(false);
   const [showRulesHelp, setShowRulesHelp] = useState(false);
+  const [showUagHelp, setShowUagHelp] = useState(false);
   const [rolesHelpAnchorEl, setRolesHelpAnchorEl] = React.useState(null);
   const [rulesHelpAnchorEl, setRulesHelpAnchorEl] = React.useState(null);
+  const [uagHelpAnchorEl, setUagHelpAnchorEl] = React.useState(null);
   const [nonEditableUserGroups] = useState(["ADMIN", "DEFAULT"])
   const [editMode, setEditMode] = useState(false);
   const [editModeErrors, setEditModeErrors] = useState(false);
@@ -314,6 +316,327 @@ const AccessControl = (props) => {
   return (
     <div >
       <Popover
+        anchorEl={uagHelpAnchorEl}
+        open={showUagHelp}
+        onClose={() => {
+          setShowUagHelp(false)
+          setUagHelpAnchorEl(null)
+        }
+        }
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+      >
+        <Box p={4} style={{ maxWidth: 600,maxHeight:800, overflowY: "scroll",  textAlign: 'justify' }}>
+          <Typography variant="body2">
+          Access rights can be controlled by the User Access Groups (UAGS). Access is controlled
+          
+           through rules by defining PV access using regular expressions in the same way that the EPICS Gateway access is defined
+            
+            <br />
+  <br/> 
+              The order in which the UAGs and rules are defined are important. 
+  <br />
+  <br/> 
+   The first UAG rule with the lowest priority applied is the DEFAULT UAG, all users will get this. The final access group rules to be applied are the ADMIN. 
+   ADMIN has the highest priority and rules defined in previous UAGs will overridden.
+   All other UAG rules are applied from top to bottom as displayed on the tab. You can change the order of any of the groups except the DEFAULT and ADMIN.
+   <br />
+  <br/> 
+  For example in the DEFAULT UAG, the rules disable write access and enable read access for all process variables and usernames beacuse the username is set to: *  
+  <br/>
+  <br/>
+  And the ADMIN UAG, the rules enable write access and  read access for all the admin usernames.
+  
+  <br />
+  <br/> 
+  
+  In the pvServer, the read and write access of the rules in the UAG are applied if the username is defined in the UAG and the following match function is satisfied:<br/><br/>
+   match=re.search(rule,pv)
+   <br/>
+   <br/>
+   If the match is true, then the rule is applied.
+   <br/>
+    
+  <br/>
+  In theory, all regular expression searches allowed by Python regex can be used although this has not been tested. More examples are available at:<br/>
+
+   <a style={{ color: 'inherit' }} href="https://www.w3schools.com/python/python_regex.asp" 
+            target="_blank"
+            rel="noopener noreferrer"
+            >https://www.w3schools.com/python/python_regex.asp</a>
+  
+   <br/>
+   <br/>
+   In the two examples below the ENGINEERS UAG, with roles as 'engineers' and user name user1 get read and write access to every pv, whilst the OPERATORS UAG, with roles as operators and username operator1 only gets read access for all pvs and write access for the two setpoint pvs.
+   In this way the same userinterface can be used for different roles and the operators will have different rights to the enigneers.
+   {[
+     
+     {"ENGINEERS":
+{
+  "usernames":["user1"],
+  "roles":["engineer"],
+  "rules":
+  [
+    { "rule":"[0-9].*",                   "read":true,  "write":true },
+    { "rule":"[a-z].*",                   "read":true,  "write":true },
+    { "rule":"[A-Z].*",                   "read":true,  "write":true },
+
+
+  ]
+}
+
+},
+{
+"OPERATORS":
+{
+  "usernames":["operator1"],
+  "roles":["operator"],
+  "rules":
+  [
+    { "rule":"[0-9].*",                   "read":true,  "write":false },
+    { "rule":"[a-z].*",                   "read":true,  "write":false },
+    { "rule":"[A-Z].*",                   "read":true,  "write":false },
+    { "rule":"System1:SetPoint",          "read":true,  "write":true },
+    { "rule":"System2:Setpoint",          "read":true,  "write":true },
+
+  ]
+}
+}
+].map((userGroups,index1)=>{
+   
+    const userGroupKeys=Object.keys(userGroups)
+    return(
+      
+    userGroupKeys.map((usergroup,index2)=>(
+   <Grid key={index1.toString()+':'+index2.toString()}
+                    style={{ marginTop: 0, paddingRight: 8, paddingLeft: 8, paddingBottom: 8, paddingTop: 0 }}
+                    container
+                    direction="row"
+                    justify="flex-start"
+                    alignItems="flex-start"
+                    spacing={2}
+                  >
+
+                    <Grid item lg={12} >
+
+
+
+                      <Table className={classes.table} stickyHeader size="small" aria-label="sticky table">
+                        <TableHead>
+
+                          <TableRow>
+
+                            <TableCell colSpan={1} align="left">UAG</TableCell>
+                            <TableCell colSpan={1} align="right">
+                             
+                            </TableCell>
+
+                          </TableRow>
+
+
+                        </TableHead>
+                        <TableBody>
+
+                          <TableRow>
+
+
+
+                            <TableCell colSpan={2} align="left">
+                              {userGroupKeys[index2]}
+
+
+                              
+
+
+                            </TableCell>
+
+
+                          </TableRow>
+                        </TableBody>
+                      </Table>
+
+                    </Grid>
+                    <Grid item lg={12} >
+
+
+
+                      <Table className={classes.table} stickyHeader size="small" aria-label="sticky table">
+                        <TableHead>
+
+                          <TableRow>
+
+                            <TableCell colSpan={1} align="left">Roles
+                         </TableCell>
+                            <TableCell colSpan={1} align="right">
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell align="center">Index</TableCell>
+                            <TableCell align="center">Role</TableCell>
+
+                          </TableRow>
+
+                        </TableHead>
+                        <TableBody>
+                          {
+
+                           userGroups[usergroup].roles?.map((role, index) =>
+                              <TableRow key={index.toString()}>
+
+                                <TableCell align="center">
+                                  {index}
+
+                                </TableCell>
+
+                                <TableCell align="center">
+                                  <div style={{ display: "flex", direction: "row" }}>
+                                    <TextField
+                                      value={role}
+                                      fullWidth
+                                      disabled={true}
+                                     
+                                      error={validateRole(role) === false}
+                                    />
+                                    
+
+                                  </div>
+                                </TableCell>
+
+
+                              </TableRow>)}
+                        </TableBody>
+                      </Table>
+
+                    </Grid>
+                    <Grid item lg={12} >
+
+
+
+                      <Table className={classes.table} stickyHeader size="small" aria-label="sticky table">
+                        <TableHead>
+                          <TableRow>
+
+                            <TableCell colSpan={2} align="left">Rules</TableCell>
+                            <TableCell colSpan={1} align="right">
+                            </TableCell>
+
+                          </TableRow>
+                          <TableRow>
+
+                            <TableCell align="center">RegEx</TableCell>
+                            <TableCell align="center">Read Access</TableCell>
+                            <TableCell align="center">Write Access</TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          { userGroups[usergroup].rules?.map((rule, index) => {
+                            const stringValue = rule.rule?.toString();
+
+                            return (<TableRow
+                              key={index.toString()}
+                            >
+
+                              <TableCell align="center">
+                                <div style={{ display: "flex", direction: "row" }}>
+                                  <TextField
+                                    fullWidth
+                                    value={stringValue}
+                                    disabled={true}
+                                    error={validateRegex(stringValue) === false}
+                                  />
+                                </div>
+                              </TableCell>
+                              <TableCell align="center">
+                                <Checkbox
+                                  checked={rule.read === true}
+                                  disabled={true}
+                                />
+                              </TableCell>
+                              <TableCell align="center">
+                                <Checkbox
+                                  checked={rule.write === true}
+                                  disabled={true}
+                                />
+                              </TableCell>
+                            </TableRow>)
+                          }
+                          )}
+                        </TableBody>
+                      </Table>
+
+
+
+
+                    </Grid>
+
+                    <Grid item lg={12} >
+
+
+
+                      <Table className={classes.table} stickyHeader size="small" aria-label="sticky table">
+                        <TableHead>
+                          <TableRow>
+
+                            <TableCell colSpan={1} align="left">Usernames</TableCell>
+                            <TableCell colSpan={1} align="right">
+                            </TableCell>
+
+
+                          </TableRow>
+                          <TableRow>
+
+                            <TableCell align="center">Index</TableCell>
+                            <TableCell align="center">Username</TableCell>
+
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          { userGroups[usergroup].usernames?.map((username, index) =>
+                            <TableRow key={index.toString()}>
+
+                              <TableCell align="center">
+                                {index}
+
+                              </TableCell>
+                              <TableCell align="center">
+                                <div style={{ display: "flex", direction: "row" }}>
+                                  <TextField
+                                    fullWidth
+                                    value={username}
+                                    disabled={true}
+                                    error={validateUsername(username) === false}
+                                  />
+                                </div>
+
+
+                              </TableCell>
+                            </TableRow>)}
+                        </TableBody>
+                      </Table>
+
+                    </Grid>
+
+                  </Grid>
+    ))
+                          
+    )
+                          })}
+     
+  
+  
+  
+                  See the styleguide for more examples.
+                 </Typography>
+        </Box>
+
+      </Popover>
+      <Popover
         anchorEl={rolesHelpAnchorEl}
         open={showRolesHelp}
         onClose={() => {
@@ -330,11 +653,15 @@ const AccessControl = (props) => {
           horizontal: 'left',
         }}
       >
-        <Box p={4} style={{ maxWidth: 600 }}>
+        <Box p={4} style={{ maxWidth: 600, overflowY: "scroll",  textAlign: 'justify' }}>
           <Typography variant="body2">
             Assign roles to a User Access Groups.
             This enables portions of your app to isolated from other users.
                 <br />
+                <br/>
+                For the ADMIN UAG, valid roles are 'admin' for nomral admin permisions and 'alarmAdmin' for the AlarmHandler permissions.
+                <br/>
+                <br/>
                 See the styleguide on how the protected routes components use the role and roles array prop to protect the route.</Typography>
         </Box>
 
@@ -384,7 +711,8 @@ In the pvServer, the read and write access of the rules in the UAG is applied if
  <br/>
  <br/>
  If the match is true, then the rule is applied.
-
+ <br/>
+ <br/>
 In theory, all regular expression searches allowed by Python regex can be used although this has not been tested. More examples are available at:<br/>
 
  <a style={{ color: 'inherit' }} href="https://www.w3schools.com/python/python_regex.asp" 
@@ -393,13 +721,80 @@ In theory, all regular expression searches allowed by Python regex can be used a
           >https://www.w3schools.com/python/python_regex.asp</a>
 
  <br/>
+<br/>
+Example RegEx rules:
+<br/>
+<br/>
+
+
  
 
 
-
-                See the styleguide for more examples.
-               
                 </Typography>
+
+
+                <Table className={classes.table} stickyHeader size="small" aria-label="sticky table">
+                        <TableHead>
+                         
+                          <TableRow>
+
+                            <TableCell align="center">RegEx</TableCell>
+                            <TableCell align="center">Read Access</TableCell>
+                            <TableCell align="center">Write Access</TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                         {[
+    { "rule":"[0-9].*",                   "read":true,  "write":false },
+    { "rule":"[a-z].*",                   "read":true,  "write":false },
+    { "rule":"[A-Z].*",                   "read":true,  "write":false },
+    { "rule":"^testIOC",                  "read":true,  "write":false },
+    { "rule":"^testIOC:FC",              "read":true,  "write":true },
+
+  ].map((rules,index)=>(<TableRow key={index.toString()}>
+                           
+                            <TableCell align="center">
+                                <div style={{ display: "flex", direction: "row" }}>
+                                  <TextField
+                                    fullWidth
+                                    value={rules.rule}
+                                    disabled={true}
+                
+                                  />
+                                
+                                
+                                </div>
+                              </TableCell>
+                              <TableCell align="center">
+                                <Checkbox
+                                  checked={rules.read=true}
+                                  disabled={true}
+                                />
+                              </TableCell>
+                              <TableCell align="center">
+                                <Checkbox
+                                  checked={rules.write=true}
+                                  disabled={true}
+                                 
+                                />
+                              </TableCell>
+                            </TableRow>))}
+                          
+                          
+                        </TableBody>
+                       
+               
+                        </Table>
+                        <br/>
+                        In the example above, the first, second, and third rule enables read access and disables write access for all PV names starting with integer, lowercase and uppercase letters respectively.
+
+The fourth rule enables read access and disables write access for all PV names starting with testIOC.
+
+The fifth rule enables read and write access for all PV names starting with testIOC:FC. This then implies that this UAG would able to control an write to all faraday cup pvs (FC) on the testIOC.
+<br/><br/>
+                
+                <br/>
+                <br/>
         </Box>
 
       </Popover>
@@ -477,6 +872,7 @@ In theory, all regular expression searches allowed by Python regex can be used a
                 {editMode === false && <IconButton onClick={() => setEditMode(true)}>
                   <EditIcon />
                 </IconButton>}
+               
                 {editMode === true && <IconButton onClick={() => setModifiedUserGroups(prev => {
                   
                   const{DEFAULT,ADMIN,...rest}={...prev};
@@ -514,6 +910,12 @@ In theory, all regular expression searches allowed by Python regex can be used a
                 {editMode === true && <IconButton onClick={() => setShowDiscardChanges(true)}>
                   <ClearIcon />
                 </IconButton>}
+                <IconButton onClick={(event) => {
+                                setUagHelpAnchorEl(event.currentTarget);
+                                setShowUagHelp(true)
+                              }}>
+                                <HelpIcon />
+                              </IconButton>
 
               </Grid>
               <Grid item lg={4}></Grid>

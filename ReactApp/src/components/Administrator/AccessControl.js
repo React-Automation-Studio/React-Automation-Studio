@@ -333,7 +333,7 @@ const AccessControl = (props) => {
         }}
       >
         <Box p={4} style={{ maxWidth: 600,maxHeight:800, overflowY: "scroll",  textAlign: 'justify' }}>
-          <Typography variant="body2">
+          <Typography variant="body2" component='div'>
           Access rights can be controlled by the User Access Groups (UAGS). Access is controlled
           
            through rules by defining PV access using regular expressions in the same way that the EPICS Gateway access is defined
@@ -654,7 +654,7 @@ const AccessControl = (props) => {
         }}
       >
         <Box p={4} style={{ maxWidth: 600, overflowY: "scroll",  textAlign: 'justify' }}>
-          <Typography variant="body2">
+          <Typography variant="body2" component='div'>
             Assign roles to a User Access Groups.
             This enables portions of your app to isolated from other users.
                 <br />
@@ -685,7 +685,7 @@ const AccessControl = (props) => {
         }}
       >
         <Box p={4} style={{ maxWidth: 600, maxHeight: 600, overflowY: "scroll",  textAlign: 'justify' }}>
-          <Typography variant="body2">
+          <Typography variant="body2" component='div'>
             
           Access rights can be controlled through rules by defining PV access using regular expressions in the same way that the EPICS Gateway access is defined
             

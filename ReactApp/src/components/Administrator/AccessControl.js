@@ -919,7 +919,7 @@ The fifth rule enables read and write access for all PV names starting with test
 
               </Grid>
               <Grid item lg={4}></Grid>
-              <Grid item lg={2}>
+              <Grid item md={3} lg={2}>
                 <Tabs
                   orientation="vertical"
                   variant="scrollable"
@@ -930,7 +930,8 @@ The fifth rule enables read and write access for all PV names starting with test
                 >
                   {userGroupKeys.map((usergroup, index) => (
                     <Tab label={<div style={{display: 'flex','flex-direction': 'row',verticalAlign:'middle'}} >
-                      {usergroup}
+                     
+                      <div style={{flexGrow: 1,minWidth:'100px',margin:'auto'}}> {usergroup}</div>
                       {editMode === true &&(!((usergroup==='ADMIN')||(usergroup==='DEFAULT')))&&<div> 
                       {(index>1)&&<IconButton 
                       
@@ -1010,7 +1011,7 @@ The fifth rule enables read and write access for all PV names starting with test
 
                 </Tabs>
               </Grid>
-              {usergroup !== undefined && <Grid item lg={6}>
+              {usergroup !== undefined && <Grid item md={5} lg={6}>
 
                 <Card key={tabValue} style={{ maxHeight: "80vh", overflowY: "scroll", marginBottom: 16, marginRight: 16, marginLeft: 16 }}>
                   <Grid

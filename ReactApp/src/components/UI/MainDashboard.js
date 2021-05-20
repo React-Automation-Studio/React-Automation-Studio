@@ -238,9 +238,10 @@ Improvements and new features:
         <li>GraphY is now based on Plotly</li>
         <li>GraphXY is now based on Plotly</li>
     </ul>
+    </li>
     <li>Package updates</li>
     <li>Minor Bug Fixes</li>
-    </li>
+   
   </ul>
 Breaking changes:
 <ul>

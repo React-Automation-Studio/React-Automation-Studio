@@ -678,11 +678,20 @@ In theory, all regular expression searches allowed by Python regex can be used a
                                 allUserGroups={userGroupKeys}
                                 updateUagNames={(newName) => {
                                   setModifiedUserGroups(prev => {
-                                    const prevUsergroup = { ...prev[usergroup] }
+                                    const prevUsergroups = { ...prev}
+                                    const prevUsergroupKeys=Object.keys(prevUsergroups)
+                                    // const keyIndex=prevUsergroupKeys.indexOf(usergroup)
+                                    const newUserGroups={}
+                                    prevUsergroupKeys.forEach((key,index)=>{
+                                      if (key===usergroup){
+                                        newUserGroups[newName]=prevUsergroups[key]
 
-                                    const newUserGroups = { ...prev, [newName]: prevUsergroup }
-                                    delete newUserGroups[usergroup]
-
+                                      }
+                                      else{
+                                        newUserGroups[key]=prevUsergroups[key]
+                                      }
+                                    })
+                                    
                                     return newUserGroups
                                   })
                                 }

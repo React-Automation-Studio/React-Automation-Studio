@@ -26,10 +26,10 @@ const useModifyUser = (props) => {
         socketRef.current = socket;
       }, [socket])
     const modifyUser = useCallback((props) => {
-      console.log(props)
+
         if ( props.id) {
 
-            console.log(props)
+           
             setError(false)
             socketRef.current.emit('ModifyUser', {...props , 'clientAuthorisation': jwtRef.current }, (data) => {
   

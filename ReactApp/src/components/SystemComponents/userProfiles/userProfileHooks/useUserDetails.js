@@ -53,7 +53,7 @@ const useUserDetails = (props) => {
              
         
       }
-        console.log(props.username)  
+     
         if (props.username){
             socketRef.current.emit('UserDetailsWatch', {username:props.username,'clientAuthorisation': jwtRef.current,dbWatchId:dbWatchIdRef.current }, handleUserDetailsAck)
             socketRef.current.on('databaseWatchData:UserDetailsWatch:'+props.username,  handleUserDetailsReadWatchBroadcast);

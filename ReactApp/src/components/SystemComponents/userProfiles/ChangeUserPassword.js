@@ -10,6 +10,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import useModifyUser from './userProfileHooks/useModifyUser'
+import {usePasswordValidator} from '../Utils/passwordValidator'
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -23,7 +24,8 @@ const ChangeUserPassword = (props) => {
 
     const [show, setShow] = useState(false);
     const [password, setPassword] = useState("");
-    const passwordHelperText = "Minimum length 12 characters";
+    const {passwordError,passwordHelperText}=usePasswordValidator(password);
+   
     const [confirmPassword, setConfirmPassword] = useState("");
     const {modifyUser,modifyUserError,userModified} =useModifyUser({id:props.user.id,
    
@@ -32,14 +34,7 @@ const ChangeUserPassword = (props) => {
 
    
 
-    let passwordError;
-
-    if (password.length < 12) {
-        passwordError = true;
-    }
-    else {
-        passwordError = false;
-    }
+    
     let confirmPasswordError;
     let confirmPasswordHelperText;
 

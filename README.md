@@ -91,9 +91,9 @@ The URL, protocol selection for HTTPS or HTTP , authentication and server ports 
 
 If React Automation Studio is installed on the localhost then there is no need to enable authentication as the host authentication system will protect access.
 
-Since Release V3.0.0 React-Automation-Studio supports web based administration of user access rights. It also supports  external authentication through Active Directory and Google and local authentication. For the local authentication passwords are stored in the database using encrypted format using Bcrypt. The client is kept authenticated using an encrypted Jason Web Token (JWT) resfresh and access tokens. When serve over HTTPS, the refresh tokens are store in cookie with http only mode and the access tokens are kep in memory. This access token is used to check authorisation and access rights for every PV request and write. If the JWT is invalidated by the server then user will be required to login.
+Since Release V3.0.0 React-Automation-Studio supports web based administration of user access rights. It also supports  external authentication through Active Directory and Google and local authentication. For the local authentication passwords are stored in the database using encrypted format using Bcrypt. The client is kept authenticated using an encrypted Jason Web Token (JWT) refresh and access tokens. When served over HTTPS, the refresh tokens are store in cookie with http only mode and the access tokens are kept in memory. This access token is used to check authorisation and access rights for every PV request and write. If the JWT is invalidated by the server then user will be required to login.
 
-Access rights can be controlled though web based administrator which contains user access groups,roles and rules for defining PV access using regular expressions in the same way that the EPICS Gatewayaccess is defined. All of the components in React Automation studio currently indicate access rights to the PV.
+Access rights can be controlled though web based administrator which contains user access groups,roles and rules for defining PV access using regular expressions in the same way that the EPICS Gateway access is defined. All of the components in React Automation studio currently indicate access rights to the PV.
 
 *5. MongoDB*
 
@@ -115,7 +115,7 @@ The alarm handler front end UI allows users to configure all aspects of the alar
 
 A user notification platform has also been created for the alarm handler. This platform allows a user to target specific pvs to be notified about using javascript regular expressions. At present users can be notified via email and Signal messenger. In future we hope to expand this to SMS and WhatsApp.
 
-*7. Since Release 3.0.0, Nginx serves the static files for ReactApp and the styleguide, it also handles the transport layer security and performs load balancing. Scripts were created to dynamically configure Nginx based on the enviroment variables in Section 3.
+*7. Since Release 3.0.0, Nginx serves the static files for ReactApp and the styleguide, it also handles the transport layer security and performs load balancing. Scripts were created to dynamically configure Nginx based on the environment variables in Section 3.
 For load balancing, Nginx balances between 3 pvServers in the production versions and 1 in the dev versions.
 
 ## YouTube Channel:
@@ -206,7 +206,7 @@ This will launch the pvServer, demo IOC ,style guide and the React Development e
 
 The react development environment app will be served on http://127.0.0.1:3000 and the styleguide at http://127.0.0.1:6060.
 
-The source can then be edited using your favorite editor like Atom, when the file is saved the project automatically recompiles and the web page is refreshed. It is recommended to only work in the
+The source can then be edited using your favorite editor like Atom, when the file is saved the project automatically re-compiles and the web page is refreshed. It is recommended to only work in the
 /src/components/staging/ folders.
 
 Bug fixes and contributions can be submitted via pull requests.
@@ -236,12 +236,12 @@ The administrator page in 3.1 is used to create users or link with an external a
 
 If the system is configured correctly then the user will be directed to the login page initially.
 
-They will be prompted to enter the username and password or authenticate useing the external authenticator.
+They will be prompted to enter the username and password or authenticate using the external authenticator.
 
 The username and password or token is then  transmitted to the backend for authentication. If authenticated, the server returns  encrypted Jason web token (JWT) in the form on an access and refresh token. This is used to keep the user logged in between session. No username or password is stored in the browser. The user must logout in order cancel the session.
 
 
-If the access token is invalid the user will be redirected to the login screen. The default access, and refresh token expiry is 300 seconds and 1 week. By default the access token and refresh tokens are rfreshed once a minute.
+If the access token is invalid the user will be redirected to the login screen. The default access, and refresh token expiry is 300 seconds and 1 week. By default the access token and refresh tokens are refreshed once a minute.
 
 All tokens of all users can also be invalidated by declaring a new secret key in the  environment variable: SECRET_PWD_KEY . If the SECRET_PWD_KEY  is not defined then a predefined key will be used .
 
@@ -319,7 +319,7 @@ The default username and password  will be admin / admin
 
 The admin user will have full read and write access, whilst any other user will have read access by default.
 
-To enable Active Directory Authentication opent the .env and add, (You will need to rebuild the docker images):
+To enable Active Directory Authentication open the .env and add, (You will need to rebuild the docker images):
 ```bash
 REACT_APP_EnableActiveDirectoryLogin=true
 LDAP_HOST=ldap://xxxxxx
@@ -327,14 +327,14 @@ LDAP_PORT=389
 
 ```
 
-To enable Active Directory Authentication opent the .env and add, (You will need to rebuild the docker images):
+To enable Active Directory Authentication open the .env and add, (You will need to rebuild the docker images):
 ```bash
 Set REACT_APP_EnableGoogleLogin=true
 REACT_APP_EnableGoogleLoginId= xxxxx
 ```
 Set REACT_APP_EnableGoogleLoginId to your google client id for your domain
 at https://console.developers.google.com/apis/credentials/           
-click create new credenitals and the create a new oAuth id  for the web app
+click create new credentials and the create a new oAuth id  for the web app
 It needs an https domain. 
 you can enter multiple domains:
 for example: https://mydomain
@@ -347,7 +347,7 @@ https://mydomain:3000
 
 The access rights for each user are managed in the web administrator. If logged in as admin, the administrator link is via the more options in the right corner.
 
-The default access rights are seeded only once by the adminDbInit mirco service.
+The default access rights are seeded only once by the adminDbInit mircoservice.
 
 Regular expression rules are used to evaluate the read and write access rights.
 
@@ -355,7 +355,7 @@ The order in which the user access groups and rules are defined are important. T
 
 For example in the default user access group, the rules disables write access and enable read access for all usernames and process variables:
 
-The table display in the user interface allows one ot edit the evivalent object in the database.
+The table display in the user interface allows one ot edit the equivalent object in the database.
 ```json
 "DEFAULT":
     {
@@ -462,11 +462,11 @@ The installation folder is referenced below  as:
 
 Inside: `./certificates`the certificates according to 3.3 are placed.
 
-Inside: `./docker`the docker files that build the conatiners that are used by the docker-compose files are placed.
+Inside: `./docker`the docker files that build the containers that are used by the docker-compose files are placed.
 
 Inside: `./epics`the demo  IOC that interacts with the Demo react screens is located.
 
-`./loadSaveDbInit`contains the cofiguration for the load/save demo .
+`./loadSaveDbInit`contains the configuration for the load/save demo .
 
 `./log`contains the log outputs from the pvServer.
 
@@ -490,7 +490,7 @@ On a mobile running Chrome, whilst viewing the website, click on the 3 dots at t
 
 On a desktop running Chrome, whilst viewing the website, click on the 3 dots at the top right and the click more tools and then create shortcut. Tick open as window and then create and the PWA will be installed on your desktop.
 
-**Note**: Unless HTTPS is enabled then when viewing the PWA, a banner at the top stating that the webapp is unsecure will appear,
+**Note**: Unless HTTPS is enabled then when viewing the PWA, a banner at the top stating that the webapp is insecure will appear,
 
 # 6 Theme and color scheme
 Refer to theme section in the style guide.
@@ -529,9 +529,9 @@ Improvements and new features:
 Breaking changes:
 <ul>
     <li>Removal of the old file based administration</li>
-    <li>Enviroment variable names have been simplified</li>
-    <li>GraphY and GraphXY backround now defaults to the theme.palette.background.default value</li>
-    <li>Simplification of enviroment variables</li>
+    <li>Environment variable names have been simplified</li>
+    <li>GraphY and GraphXY background now defaults to the theme.palette.background.default value</li>
+    <li>Simplification of environment variables</li>
 </ul>
 
 

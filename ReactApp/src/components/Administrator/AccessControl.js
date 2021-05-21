@@ -348,7 +348,7 @@ const AccessControl = (props) => {
    All other UAG rules are applied from top to bottom as displayed on the tab. You can change the order of any of the groups except the DEFAULT and ADMIN.
    <br />
   <br/> 
-  For example in the DEFAULT UAG, the rules disable write access and enable read access for all process variables and usernames beacuse the username is set to: *  
+  For example in the DEFAULT UAG, the rules disable write access and enable read access for all process variables and usernames because the username is set to: *  
   <br/>
   <br/>
   And the ADMIN UAG, the rules enable write access and  read access for all the admin usernames.
@@ -374,7 +374,7 @@ const AccessControl = (props) => {
    <br/>
    <br/>
    In the two examples below the ENGINEERS UAG, with roles as 'engineers' and user name user1 get read and write access to every pv, whilst the OPERATORS UAG, with roles as operators and username operator1 only gets read access for all pvs and write access for the two setpoint pvs.
-   In this way the same userinterface can be used for different roles and the operators will have different rights to the enigneers.
+   In this way the same user interface can be used for different roles and the operators will have different rights to the engineers.
    {[
      
      {"ENGINEERS":
@@ -659,7 +659,7 @@ const AccessControl = (props) => {
             This enables portions of your app to isolated from other users.
                 <br />
                 <br/>
-                For the ADMIN UAG, valid roles are 'admin' for nomral admin permisions and 'alarmAdmin' for the AlarmHandler permissions.
+                For the ADMIN UAG, valid roles are 'admin' for normal admin permissions and 'alarmAdmin' for the AlarmHandler permissions.
                 <br/>
                 <br/>
                 See the styleguide on how the protected routes components use the role and roles array prop to protect the route.</Typography>

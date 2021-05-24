@@ -219,20 +219,20 @@ class MainDashboard extends Component {
                 </Grid>
                 <Grid item lg={12} sm={12} xs={12}  >
                   <Typography className={classes.WhatsNew} component='div'>
-                  V3.0.0 Wednesday 12 May 2021
+                  V3.0.0 Wednesday 24 May 2021
 <br />
 <br />
 Improvements and new features:
   <br />
   <ul>
     <li>New web based administration</li>
-    <li>Nginx now serves the stactic files, performs the transport layer security and load balancing</li>
+    <li>Nginx now serves the static files, performs the transport layer security and load balancing</li>
     <li>AlarmHandler now supports Signal notifications, improvements to the user interface</li>
-    <li>Simplification of enviroment variables</li>
+    <li>Simplification of environment variables</li>
     <li>Improvement of security features, with move from Access tokens, to short lived Access tokens with Refresh tokens</li>
     <li>External Authentication via Active Directory or Google Authentication</li>
-    <li>Removal of the requirement for the '' prefix for EPICS process variables</li>
-    <li>improvement of the MongoDb hooks</li>
+    <li>Removal of the requirement for the prefix for EPICS process variables</li>
+    <li>Improvement of the MongoDb hooks</li>
     <li>Component updates:
     <ul>
         <li>GraphY is now based on Plotly</li>
@@ -246,8 +246,8 @@ Improvements and new features:
 Breaking changes:
 <ul>
     <li>Removal of the old file based administration</li>
-    <li>Enviroment variable names have been simplified</li>
-    <li>GraphY and GraphXY backround now defaults to the theme.palette.background.default value</li>
+    <li>Environment variable names have been simplified</li>
+    <li>GraphY and GraphXY background now defaults to the theme.palette.background.default value</li>
     
 </ul>
 

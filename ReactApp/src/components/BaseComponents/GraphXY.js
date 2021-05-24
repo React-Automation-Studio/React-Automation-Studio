@@ -5,7 +5,7 @@ import ContextMenu from '../SystemComponents/ContextMenu';
 import PV from '../SystemComponents/PV'
 import Plot from 'react-plotly.js';
 import { replaceMacros } from '../SystemComponents/Utils/macroReplacement';
-
+import { isMobileOnly } from 'react-device-detect';
 
 
 const PlotData = (props) => {
@@ -297,8 +297,8 @@ const PlotData = (props) => {
   )
 }
 /**
-* The GraphXY Component has been updated to Plotly.js scatter and line plot. 
-  https://plotly.com/javascript/
+* The GraphXY Component has been updated to Plotly.js scatter and line plot. **Note**: The update includes a small breaking change. See the backgroundColor prop for the workaround. 
+
 
 */
 
@@ -591,6 +591,7 @@ const GraphXY = (props) => {
                   scrollZoom: false,
                   //     doubleclick: false,
                   displayModeBar: props.displayModeBar,
+                  staticPlot:isMobileOnly?true:false,
                   toImageButtonOptions: {
                     format: 'svg'
                   }
@@ -598,6 +599,7 @@ const GraphXY = (props) => {
 
                     "displaylogo": false,
                     scrollZoom: false,
+                    staticPlot:(isMobileOnly&&(props.disableMobileStatic===false))?true:false,
                     toImageButtonOptions: {
                       format: 'svg'
                     }
@@ -714,6 +716,10 @@ GraphXY.propTypes = {
    * Set the height, by default it is calculated from the width X aspectRatio. 
    */
   height:PropTypes.string,
+  /**
+   * **Note**: the zoom feature is disabled on a mobile device. To enable set this prop to true.
+   */
+   disableMobileStatic:PropTypes.bool,
 
 
 };
@@ -730,6 +736,7 @@ GraphXY.defaultProps = {
   width: '100%',
   aspectRatio:1,
   updateMode: 'updateOnXOrYChange',
+  disableMobileStatic:false,
 
 };
 

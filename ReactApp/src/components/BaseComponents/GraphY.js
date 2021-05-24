@@ -219,9 +219,7 @@ const PlotData = (props) => {
   )
 }
 /**
-* The GraphY Component has been updated to Plotly.js scatter and line plot. The GraphY component is implemented with zero margins and enabled to grow to the width and height of its parent container.<br/><br/>
-* The width and height must be controlled from the parent component.<br/><br/>
-  https://plotly.com/javascript/
+* The GraphY Component has been updated to Plotly.js scatter and line plot. **Note**: The update includes a small breaking change. See the backgroundColor prop for the workaround. 
 
 */
 
@@ -439,12 +437,12 @@ const GraphY = (props) => {
               props.disableContextMenu ? undefined : handleToggleContextMenu
             }
 
-              // onPointerDownCapture={(event) => {
-              //   if (event.button !== 0) {
-              //     event.preventDefault()
-              //     return;
-              //   }
-              // }}
+              onPointerDownCapture={(event) => {
+                if (event.button !== 0) {
+                  event.preventDefault()
+                  return;
+                }
+              }}
             >
               {contextInfo && openContextMenu && <ContextMenu
                 disableProbe={props.disableProbe}
@@ -580,7 +578,7 @@ GraphY.propTypes = {
    */
   showLegend:PropTypes.bool,
   /**
-   * Disable Static Graph mode on mobile
+   * **Note**: the zoom feature is disabled on a mobile device. To enable set this prop to true.
    */
   disableMobileStatic:PropTypes.bool,
   /** If the height is undefined then the height will be set to parents height, but if the aspectRatio is defined the the height will be set to the width multplied by the aspect ratio*/

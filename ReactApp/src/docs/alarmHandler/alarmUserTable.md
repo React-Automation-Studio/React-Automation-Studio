@@ -21,9 +21,21 @@ NOTE: A user with alarmAdmin role can view all users' contact details.
 <br/>
 **Notification Expressions**
 
-The notification expressions column lists a series of javascript regular expressions in the form of "chips" - list as configured in alarm handler MongoDB database.
+The notification expressions column lists a series of javascript regular expressions in the form of "chips" - list as configured in alarm handler MongoDB database. Some examples of javascript regular expressions are shown in the table below:
 
-***If you are unfamiliar with regular expressions we highly recommend you check out [this JS Regexp tutorial](https://www.tutorialspoint.com/javascript/javascript_regexp_object.htm) as a start.**
+<br/>
+<center>
+| Expression       | Description                                                |
+|:----------------:|:----------------------------------------------------------:|
+| [...]            | Match any character between the brackets                   |
+| ^p               | Match any string with p at the beginning of it             |
+| p$               | Match any string with p at the end of it                   |
+| (foo\|bar\|baz)  | Match any of the alternatives specified                    |
+</center>
+<center>*Table 5: Example javascript regular expressions*</center>
+<br/><br/>
+
+***For more examples and information we highly recommend you check out [this JS Regexp tutorial](https://www.tutorialspoint.com/javascript/javascript_regexp_object.htm) as a start.**
 
 The notification expressions can be updated from the UI as described below in the **Actions** section.
 

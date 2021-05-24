@@ -12,12 +12,12 @@ A hierarchy of authority can be established for the alarm handler using roles. T
 | Enable/disable areas and subAreas                                    | [x]           | [x]          |                  |
 | Acknowledge alarms and area/subArea alarms                           | [x]           | [x]          |                  |
 | View and edit own notification expressions and schedules             | [x]           | [x]          | [x]              |
-| View and edit others notification expressions and schedule           | [x]           |              |                  |
+| View and edit other users' notification expressions and schedule     | [x]           |              |                  |
 | Add/remove alarms                                                    | [x]           |              |                  |
 | Add/remove areas and subAreas                                        | [x]           |              |                  |
 | Add/remove alarm users                                               | [x]           |              |                  |
 </center>
-<center>*Table 1: Alarm handler hierarchy of authority*</center>
+<center>*Table 2: Alarm handler hierarchy of authority*</center>
 <br/><br/>
 
 The screenshots below show the user access control group (UAG) configurations for each of the roles described above. **These settings assume that the alarm handler EPICS record prefix is `alarmIOC:` and that the alarm handler MongoDB database is named `demoAlarmDatabase`**.

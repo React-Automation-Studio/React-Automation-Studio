@@ -767,13 +767,13 @@ Example RegEx rules:
                               </TableCell>
                               <TableCell align="center">
                                 <Checkbox
-                                  checked={rules.read=true}
+                                  checked={rules.read===true}
                                   disabled={true}
                                 />
                               </TableCell>
                               <TableCell align="center">
                                 <Checkbox
-                                  checked={rules.write=true}
+                                  checked={rules.write===true}
                                   disabled={true}
                                  
                                 />

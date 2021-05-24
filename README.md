@@ -24,7 +24,11 @@ If you wish to customize the project and create user interfaces for your EPICS c
 
  https://github.com/wduckitt/React-Automation-Studio-Example-Project-1
 
+If you wish to create a standalone AlarmHandler project you should clone this project:
 
+**AlarmHandler Boiler plate repository:**
+
+https://github.com/wduckitt/React-Automation-Studio-Alarm-Handler-Standalone
 
 
 Each of the Docker containers are deployed as micro services and environment variables can be configured to deploy the system on different ports, or to enable user authentication and authorisation or to serve the application on a unique URL or on the localhost. Separate Docker commands exist to load the development and production version. These containerised environments allows for precise versioning of packages used and prevents deployment dependency issues.

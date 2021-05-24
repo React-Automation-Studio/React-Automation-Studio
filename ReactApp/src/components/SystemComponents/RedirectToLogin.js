@@ -18,9 +18,10 @@ class RedirectToLogIn extends Component {
   }
 
   handleRedirectToLogIn=()=>{
-    //console.log('redirectToLogIn')
+    console.log('redirectToLogIn')
 
     //setTimeout(() => {
+    this.context.logout();
     this.setState({redirectToLoginPage:true});
     //      }, 1000)
   }
@@ -30,9 +31,10 @@ class RedirectToLogIn extends Component {
     socket.on('redirectToLogIn', this.handleRedirectToLogIn);
 
     if (process.env.REACT_APP_EnableLogin==='true'){
-    let jwt = JSON.parse(localStorage.getItem('jwt'));
-
-    if(jwt){
+      let jwt=this.context.userTokens.accessToken;
+      let loggedIn = this.context.userData.loggedIn;
+      let loggingIn = this.context.userData.loggingIn;
+    if(loggedIn||loggingIn){
       this.setState({'redirectToLoginPage':false});
 
 
@@ -43,9 +45,7 @@ class RedirectToLogIn extends Component {
     }
   }
 
-    //  let jwt = JSON.parse(localStorage.getItem('jwt'));
-    //  console.log('jwt',jwt);
-    //  socket.emit('AuthoriseClient', jwt);
+
   }
   componentWillUnmount() {
     let socket=this.context.socket;
@@ -60,7 +60,7 @@ class RedirectToLogIn extends Component {
 
     return (
       <React.Fragment>
-        {this.state.redirectToLoginPage&&<Redirect  to='/LogIn' />}
+        {this.state.redirectToLoginPage&&<Redirect  to='/Login' />}
 
       </React.Fragment>
     )

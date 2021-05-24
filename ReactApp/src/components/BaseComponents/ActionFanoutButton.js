@@ -292,7 +292,7 @@ render() {
 }
 
 ActionFanoutButton.propTypes = {
-  /** Names of the process variables, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+  /** Names of the process variables, eg. '$(device):test$(id)'*/
   dataPVs: PropTypes.array.isRequired,
   /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
   macros:PropTypes.object,

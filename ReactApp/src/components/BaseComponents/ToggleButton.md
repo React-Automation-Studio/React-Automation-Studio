@@ -6,13 +6,13 @@ import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
   import TextOutput from './TextOutput';
   <div>
   <div style={{marginBottom:8}}>
-    <TextOutput  pv='pva://testIOC:BO1'   label={'Value of: pva://testIOC:BO1 '} useStringValue={true}/>
+    <TextOutput  pv='testIOC:BO1'   label={'Value of: testIOC:BO1 '} useStringValue={true}/>
   </div>
 
 {/*###############*/}  
 <ToggleButton
-  pv='pva://testIOC:BO1'
-  label={'pva://testIOC:BO1 '}
+  pv='testIOC:BO1'
+  label={'testIOC:BO1 '}
   labelPlacement={"top"}
   muiButtonProps={{startIcon:<PowerSettingsNewIcon />}}
 />
@@ -31,13 +31,13 @@ import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
   import TextOutput from './TextOutput';
   <div>
   <div style={{marginBottom:8}}>
-    <TextOutput  pv='pva://testIOC:BO1'   label={'Value of: pva://testIOC:BO1 '} useStringValue={true}/>
+    <TextOutput  pv='testIOC:BO1'   label={'Value of: testIOC:BO1 '} useStringValue={true}/>
   </div>
 
 {/*###############*/}  
 <ToggleButton
-  pv='pva://testIOC:BO1'
-  label={'pva://testIOC:BO1 '}
+  pv='testIOC:BO1'
+  label={'testIOC:BO1 '}
   labelPlacement={"top"}
   momentary
   muiButtonProps={{startIcon:<PowerSettingsNewIcon />}}

@@ -7,15 +7,15 @@ ActionButton EPICS variable example:
   import TextOutput from './TextOutput';
   <div>
   <div style={{marginBottom:8}}>
-    <TextOutput  pv='pva://testIOC:BO1'   label='Value of pva://testIOC:BO1 '/>
+    <TextOutput  pv='testIOC:BO1'   label='Value of testIOC:BO1 '/>
   </div>
   <div style={{marginBottom:8}}>
-    <TextOutput  pv='pva://testIOC:BO2'   label='Value of pva://testIOC:BO2 '/>
+    <TextOutput  pv='testIOC:BO2'   label='Value of testIOC:BO2 '/>
   </div>
 
 {/*###############*/}  
 <ActionFanoutButton
-  dataPVs={['pva://testIOC:BO1','pva://testIOC:BO2']}
+  dataPVs={['testIOC:BO1','testIOC:BO2']}
   label={"write '1' to multiple PVS "}
   labelPlacement={"top"}
   actionValue={"1"}
@@ -23,7 +23,7 @@ ActionButton EPICS variable example:
 />
 
 <ActionFanoutButton
-  dataPVs={['pva://testIOC:BO1','pva://testIOC:BO2']}
+  dataPVs={['testIOC:BO1','testIOC:BO2']}
   label={"write '0' to multiple PVS "}
   labelPlacement={"top"}
   actionValue={"0"}

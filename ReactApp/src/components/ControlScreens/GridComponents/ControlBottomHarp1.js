@@ -40,19 +40,19 @@ class ControlBottomHarp1 extends React.Component {
 
           <div style={{ height: '60px', 'width': '200px' }}>
 
-            <ToggleButton pv='pva://$(device)$(number)$(line):put-outIn' macros={{ '$(device)': 'harp', '$(number)': '5', '$(line)': 'p' }} usePvLabel={true} labelPlacement={"top"} />
+            <ToggleButton pv='$(device)$(number)$(line):put-outIn' macros={{ '$(device)': 'harp', '$(number)': '5', '$(line)': 'p' }} usePvLabel={true} labelPlacement={"top"} />
             <br />
-            <ActionButton pv='pva://$(device)$(number)$(line):$(xOrY)_store_offset' macros={{ '$(device)': 'harp', '$(number)': '5', '$(line)': 'p', '$(xOrY)': 'x' }} label={"Store Offset"} labelPlacement={"top"} actionValue={"1"} actionString={"Store Offset"} />
-            <SelectionInput pv='pva://$(device)$(number)$(line):$(xOrY)raw.SCAN' macros={{ '$(device)': 'harp', '$(number)': '5', '$(line)': 'p', '$(xOrY)': 'x' }} label={'Scan rate'} useStringValue={true} />
+            <ActionButton pv='$(device)$(number)$(line):$(xOrY)_store_offset' macros={{ '$(device)': 'harp', '$(number)': '5', '$(line)': 'p', '$(xOrY)': 'x' }} label={"Store Offset"} labelPlacement={"top"} actionValue={"1"} actionString={"Store Offset"} />
+            <SelectionInput pv='$(device)$(number)$(line):$(xOrY)raw.SCAN' macros={{ '$(device)': 'harp', '$(number)': '5', '$(line)': 'p', '$(xOrY)': 'x' }} label={'Scan rate'} useStringValue={true} />
             <br />
-            <TextInput pv='pva://$(device)$(number)$(line):$(xOrY)range' macros={{ '$(device)': 'harp', '$(number)': '5', '$(line)': 'p', '$(xOrY)': 'x' }} usePvLabel={true} />
-            <SelectionInput pv='pva://$(device)$(number)$(line):$(xOrY)range' macros={{ '$(device)': 'harp', '$(number)': '5', '$(line)': 'p', '$(xOrY)': 'x' }} useStringValue={true} custom_selection_strings={['1', '2', '3', '4', '5', '6']} />
+            <TextInput pv='$(device)$(number)$(line):$(xOrY)range' macros={{ '$(device)': 'harp', '$(number)': '5', '$(line)': 'p', '$(xOrY)': 'x' }} usePvLabel={true} />
+            <SelectionInput pv='$(device)$(number)$(line):$(xOrY)range' macros={{ '$(device)': 'harp', '$(number)': '5', '$(line)': 'p', '$(xOrY)': 'x' }} useStringValue={true} custom_selection_strings={['1', '2', '3', '4', '5', '6']} />
             <br />
             <div>
               Command:
-              <TextUpdate pv='pva://$(device)$(number)$(line):put-outIn' macros={{ '$(device)': 'harp', '$(number)': '5', '$(line)': 'p' }} usePvLabel={true} useStringValue={true} />
+              <TextUpdate pv='$(device)$(number)$(line):put-outIn' macros={{ '$(device)': 'harp', '$(number)': '5', '$(line)': 'p' }} usePvLabel={true} useStringValue={true} />
               Status:
-              <TextUpdate pv='pva://$(device)$(number)$(line):get-statusText' macros={{ '$(device)': 'harp', '$(number)': '5', '$(line)': 'p' }} usePvLabel={true} useStringValue={true} />
+              <TextUpdate pv='$(device)$(number)$(line):get-statusText' macros={{ '$(device)': 'harp', '$(number)': '5', '$(line)': 'p' }} usePvLabel={true} useStringValue={true} />
             </div>
           </div>
 
@@ -60,18 +60,18 @@ class ControlBottomHarp1 extends React.Component {
         <Grid item xs={3} sm={2}>
 
           <div style={{ height: '60px', 'width': '200px' }}>
-            <ToggleButton pv='pva://$(device)$(number)$(line):put-outIn' macros={{ '$(device)': 'harp', '$(number)': '5', '$(line)': 'p' }} usePvLabel={true} labelPlacement={"top"} />
+            <ToggleButton pv='$(device)$(number)$(line):put-outIn' macros={{ '$(device)': 'harp', '$(number)': '5', '$(line)': 'p' }} usePvLabel={true} labelPlacement={"top"} />
             <br />
-            <SelectionInput pv='pva://$(device)$(number)$(line):$(xOrY)raw.SCAN' macros={{ '$(device)': 'harp', '$(number)': '5', '$(line)': 'p', '$(xOrY)': 'y' }} label={'Scan rate'} useStringValue={true} />
+            <SelectionInput pv='$(device)$(number)$(line):$(xOrY)raw.SCAN' macros={{ '$(device)': 'harp', '$(number)': '5', '$(line)': 'p', '$(xOrY)': 'y' }} label={'Scan rate'} useStringValue={true} />
             <br />
-            <TextInput pv='pva://$(device)$(number)$(line):$(xOrY)range' macros={{ '$(device)': 'harp', '$(number)': '5', '$(line)': 'p', '$(xOrY)': 'y' }} usePvLabel={true} />
-            <SelectionInput pv='pva://$(device)$(number)$(line):$(xOrY)range' macros={{ '$(device)': 'harp', '$(number)': '5', '$(line)': 'p', '$(xOrY)': 'y' }} useStringValue={true} custom_selection_strings={['1', '2', '3', '4', '5', '6']} />
+            <TextInput pv='$(device)$(number)$(line):$(xOrY)range' macros={{ '$(device)': 'harp', '$(number)': '5', '$(line)': 'p', '$(xOrY)': 'y' }} usePvLabel={true} />
+            <SelectionInput pv='$(device)$(number)$(line):$(xOrY)range' macros={{ '$(device)': 'harp', '$(number)': '5', '$(line)': 'p', '$(xOrY)': 'y' }} useStringValue={true} custom_selection_strings={['1', '2', '3', '4', '5', '6']} />
             <br />
             <div>
               Command:
-            <TextUpdate pv='pva://$(device)$(number)$(line):put-outIn' macros={{ '$(device)': 'harp', '$(number)': '5', '$(line)': 'p' }} usePvLabel={true} useStringValue={true} />
+            <TextUpdate pv='$(device)$(number)$(line):put-outIn' macros={{ '$(device)': 'harp', '$(number)': '5', '$(line)': 'p' }} usePvLabel={true} useStringValue={true} />
             Status:
-            <TextUpdate pv='pva://$(device)$(number)$(line):get-statusText' macros={{ '$(device)': 'harp', '$(number)': '5', '$(line)': 'p' }} usePvLabel={true} useStringValue={true} />
+            <TextUpdate pv='$(device)$(number)$(line):get-statusText' macros={{ '$(device)': 'harp', '$(number)': '5', '$(line)': 'p' }} usePvLabel={true} useStringValue={true} />
             </div>
           </div>
 
@@ -80,23 +80,23 @@ class ControlBottomHarp1 extends React.Component {
 
 
           <div style={{ height: '60px', 'width': '100px' }}>
-            <ToggleButton pv='pva://testIOC:BeamlineA:InUse' label={"BL A in use"} labelPlacement={"top"} />
+            <ToggleButton pv='testIOC:BeamlineA:InUse' label={"BL A in use"} labelPlacement={"top"} />
           </div>
           <div style={{ height: '60px', 'width': '100px' }}>
-            <ToggleButton pv='pva://testIOC:BeamlineB:InUse' label={"BL B in use"} labelPlacement={"top"} />
+            <ToggleButton pv='testIOC:BeamlineB:InUse' label={"BL B in use"} labelPlacement={"top"} />
           </div>
           <div style={{ height: '60px', 'width': '100px' }}>
-            <ToggleButton pv='pva://testIOC:BeamlineC:InUse' label={"BL C in use"} labelPlacement={"top"} />
+            <ToggleButton pv='testIOC:BeamlineC:InUse' label={"BL C in use"} labelPlacement={"top"} />
           </div>
           <div style={{ height: '60px', 'width': '100px' }}>
-            <ToggleButton pv='pva://testIOC:BeamlineD:InUse' label={"BL D in use"} labelPlacement={"top"} />
+            <ToggleButton pv='testIOC:BeamlineD:InUse' label={"BL D in use"} labelPlacement={"top"} />
           </div>
         </Grid>
         <Grid item xs={3} sm={2}>
 
 
           <div style={{ height: '60px', 'width': '100px' }}>
-            <ToggleButton pv='pva://testIOC:BeamlineA:BeamOn' label={"Beam On"} labelPlacement={"top"} />
+            <ToggleButton pv='testIOC:BeamlineA:BeamOn' label={"Beam On"} labelPlacement={"top"} />
           </div>
 
 

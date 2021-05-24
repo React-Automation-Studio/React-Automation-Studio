@@ -27,7 +27,6 @@ const SideDrawer = (props) => {
 
     const context = useContext(AutomationStudioContext)
     const notInStyleGuide = context.styleGuideRedirect
-    const socket = context.socket
 
     const username = notInStyleGuide ? context.userData.username : "Guest"
 
@@ -36,7 +35,7 @@ const SideDrawer = (props) => {
     const handleLogout = () => {
         if (notInStyleGuide) {
           //  socket.emit('disconnect', { "goodebye": "see you later" });
-            socket.close()
+        //    socket.close()
             context.logout();
         }
 
@@ -60,11 +59,11 @@ const SideDrawer = (props) => {
                 {process.env.REACT_APP_EnableLogin === 'true' &&
                     <React.Fragment>
                         <Divider />
-                        <ListItem>
+                        <ListItem button component={Link} to="userprofile">
                             <ListItemIcon><AccountCircle /></ListItemIcon>
                             <ListItemText style={{ textOverflow: 'ellipsis' }} primary={username} />
                         </ListItem>
-                        <ListItem button onClick={handleLogout} component={notInStyleGuide ? Link : 'div'} to="/LogIn" >
+                        <ListItem button onClick={handleLogout} component={notInStyleGuide ? Link : 'div'} to="/Login" >
                             <ListItemIcon><Logout /></ListItemIcon>
                             <ListItemText primary={"Log Out"} />
                         </ListItem>

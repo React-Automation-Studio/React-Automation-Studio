@@ -54,17 +54,17 @@ class ControlCenterTable extends React.Component {
       //console.log(rowProps)
       let setpointPV={initialized: false,pvname:"",value:"",char_value:"",alarmColor:"",lower_disp_limit: 0,upper_disp_limit: 10000,lower_warning_limit: 4000,upper_warning_limit: 6000,
       units: "V",precision: 0,metadata:{}};
-      setpointPV.pvname='pva://'+systems[sys].devices.device.deviceName+":"+systems[sys].devices.device.setpoint;
+      setpointPV.pvname=systems[sys].devices.device.deviceName+":"+systems[sys].devices.device.setpoint;
 
       let readbackPV={initialized: false,pvname:"",value:"",char_value:"",alarmColor:"",lower_disp_limit: 0,upper_disp_limit: 10000,lower_warning_limit: 4000,upper_warning_limit: 6000,
       units: "V",precision: 0,metadata:{}};
 
-      readbackPV.pvname='pva://'+systems[sys].devices.device.deviceName+":"+systems[sys].devices.device.readback;
+      readbackPV.pvname=systems[sys].devices.device.deviceName+":"+systems[sys].devices.device.readback;
 
       let statusPV={initialized: false,pvname:"",value:"",char_value:"",alarmColor:"",lower_disp_limit: 0,upper_disp_limit: 10000,lower_warning_limit: 4000,upper_warning_limit: 6000,
       units: "V",precision: 0,metadata:{}};
 
-      statusPV.pvname='pva://'+systems[sys].devices.device.deviceName+":"+systems[sys].devices.device.statusText;
+      statusPV.pvname=systems[sys].devices.device.deviceName+":"+systems[sys].devices.device.statusText;
       rowPVs.push({id:id,displayName:displayName,setpointPV:setpointPV,readbackPV:readbackPV,statusPV:statusPV,rowProps});
       id++;
     }

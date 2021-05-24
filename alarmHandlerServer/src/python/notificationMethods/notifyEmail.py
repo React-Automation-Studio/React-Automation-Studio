@@ -5,6 +5,8 @@ from email.mime.text import MIMEText
 from datetime import datetime
 from pytz import timezone
 
+from log import app_log
+
 smtpAuth = False
 
 try:
@@ -23,20 +25,25 @@ try:
     SMTP_PORT = os.environ['SMTP_PORT']
     SMTP_SENDER = os.environ['SMTP_SENDER']
     print("Email SMTP settings configured")
+    app_log.info("Email SMTP settings configured")
 except:
     SMTP_HOST = ''
     SMTP_PORT = ''
     SMTP_SENDER = ''
     print("Email SMTP settings not configured!")
     print("Email notifications will not be sent")
+    app_log.warning("Email SMTP settings not configured!")
+    app_log.warning("Email notifications will not be sent")
 
 try:
     SMTP_USER = os.environ['SMTP_USER']
     SMTP_PASS = os.environ['SMTP_PASS']
     smtpAuth = True
     print("SMTP user/password set, login required")
+    app_log.info("SMTP user/password set, login required")
 except:
     print("SMTP user/password not set, login not required")
+    app_log.warning("SMTP user/password not set, login not required")
 
 
 def composeEmailBody(userNotifyDict):
@@ -125,43 +132,57 @@ def notifyEmail(timestamp, email, userNotifyDict):
 
     timestamp = datetime.fromisoformat(timestamp)
 
-    if(AH_DEBUG):
-        print("###-EMAIL NOTIFY-###")
-        print(timestamp.strftime('%a, %d %b %Y at %H:%M:%S UTC'))
-        print(email)
-        print(userNotifyDict)
-
-    msg = MIMEMultipart()
-    msg['From'] = SMTP_SENDER
-    msg['To'] = email
-    # Time zone localisation
-    if(localtz):
-        str_time = timestamp.astimezone(localtz).strftime(
-            '%a, %d %b %Y at %H:%M:%S')
-    else:
-        str_time = timestamp.strftime(
-            '%a, %d %b %Y at %H:%M:%S')+" (UTC)"
-    # Time zone localisation
-    msg['Subject'] = "Alarm Notification: " + str_time
-    email_body = composeEmailBody(userNotifyDict)
-    msg.attach(MIMEText(email_body, 'html', 'utf-8'))
+    app_log.info("###-EMAIL NOTIFY-###")
+    app_log.info(timestamp.strftime('%a, %d %b %Y at %H:%M:%S UTC'))
+    app_log.info(email)
+    # app_log.info(str(userNotifyDict))
 
     try:
-        with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
-            if(AH_DEBUG):
-                server.set_debuglevel(2)
-            # identify ourselves, prompting server for supported features
-            server.ehlo()
-            # If we can encrypt this session, do it
-            if server.has_extn('STARTTLS'):
-                server.starttls()
-                server.ehlo()  # re-identify ourselves over TLS connection
-            if(smtpAuth):
-                server.login(SMTP_USER, SMTP_PASS)
-            server.sendmail(msg['From'], msg['To'], msg.as_string())
-            server.quit()
-        print("Successfully sent email to", email)
-        return True
-    except:
+        msg = MIMEMultipart()
+        msg['From'] = SMTP_SENDER
+        msg['To'] = email
+        # Time zone localisation
+        if(localtz):
+            str_time = timestamp.astimezone(localtz).strftime(
+                '%a, %d %b %Y at %H:%M:%S')
+        else:
+            str_time = timestamp.strftime(
+                '%a, %d %b %Y at %H:%M:%S')+" (UTC)"
+        # Time zone localisation
+        msg['Subject'] = "Alarm Notification: " + str_time
+        email_body = composeEmailBody(userNotifyDict)
+        msg.attach(MIMEText(email_body, 'html', 'utf-8'))
+
+        try:
+            with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
+                if(AH_DEBUG):
+                    server.set_debuglevel(2)
+                # identify ourselves, prompting server for supported features
+                server.ehlo()
+                # If we can encrypt this session, do it
+                if server.has_extn('STARTTLS'):
+                    server.starttls()
+                    server.ehlo()  # re-identify ourselves over TLS connection
+                if(smtpAuth):
+                    server.login(SMTP_USER, SMTP_PASS)
+                server.sendmail(msg['From'], msg['To'], msg.as_string())
+                server.quit()
+            print("Successfully sent email to", email)
+            app_log.info("Successfully sent email to " + email)
+            return True
+        except Exception as e:
+            app_log.error("Exception raised: " + str(e))
+            app_log.error("Exception type: " + str(type(e)))
+            app_log.error("Exception args: " + str(e.args))
+            print("Failed to send email to", email, ". Verify SMTP settings.")
+            app_log.error("Failed to send email to " +
+                      email + ". Verify SMTP settings.")
+            return False
+    except Exception as e:
+        app_log.error("Exception raised: " + str(e))
+        app_log.error("Exception type: " + str(type(e)))
+        app_log.error("Exception args: " + str(e.args))
         print("Failed to send email to", email, ". Verify SMTP settings.")
+        app_log.error("Failed to send email to " +
+                      email + ". Verify SMTP settings.")
         return False

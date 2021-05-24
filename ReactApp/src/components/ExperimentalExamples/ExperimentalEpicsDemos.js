@@ -181,33 +181,33 @@ class ExperimentalEpicsDemos extends React.Component {
       <Grid container spacing={3}>
         <Grid item xs={12} sm={12} >
           <div style={{height:'25vh'}}>
-            <GraphY  pvs={['pva://testIOC:test4','pva://testIOC:test5'] } legend={['Sine Wave ','Amplitude']} lineColor={[this.props.theme.palette.secondary.main,lime['400']]}/>
+            <GraphY  pvs={['testIOC:test4','testIOC:test5'] } legend={['Sine Wave ','Amplitude']} lineColor={[this.props.theme.palette.secondary.main,lime['400']]}/>
           </div>
 
         </Grid>
         <Grid item xs={12} sm={6} >
           <div style={{height:'25vh'}}>
-            <GraphY  pvs={['pva://testIOC:test4'] } legend={['Sine Wave']} lineColor={[this.props.theme.palette.secondary.main]}/>
+            <GraphY  pvs={['testIOC:test4'] } legend={['Sine Wave']} lineColor={[this.props.theme.palette.secondary.main]}/>
           </div>
 
         </Grid>
         <Grid item xs={12} sm={6}>
           <div style={{height:'25vh'}}>
-            <GraphY  pvs={['pva://testIOC:test5'] } legend={['Amplitude of Sine Wave Circular Buffer']} lineColor={[lime['400']]} />
+            <GraphY  pvs={['testIOC:test5'] } legend={['Amplitude of Sine Wave Circular Buffer']} lineColor={[lime['400']]} />
           </div>
 
         </Grid>
         <Grid item xs={12} sm={6}>
-          <TextOutput  pv='pva://$(device):test4' macros={{'$(device)':'testIOC'}} label={'Sine Wave Circular Buffer'}   />
+          <TextOutput  pv='$(device):test4' macros={{'$(device)':'testIOC'}} label={'Sine Wave Circular Buffer'}   />
 
         </Grid>
         <Grid item xs={12} sm={6} >
 
-          <TextOutput  pv='pva://$(device):test5' macros={{'$(device)':'testIOC'}}label={'Amplitude of Sine Wave Circular Buffer'}  />
+          <TextOutput  pv='$(device):test5' macros={{'$(device)':'testIOC'}}label={'Amplitude of Sine Wave Circular Buffer'}  />
         </Grid>
 
         <Grid item xs={12} >
-          <Slider  pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}} usePvMinMax={true} min={1000} max={500} usePvLabel={true}  />
+          <Slider  pv='$(device):amplitude' macros={{'$(device)':'testIOC'}} usePvMinMax={true} min={1000} max={500} usePvLabel={true}  />
         </Grid>
         <Grid item xs={6} >
 

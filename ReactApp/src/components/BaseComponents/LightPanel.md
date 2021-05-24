@@ -5,7 +5,7 @@ import Switch from "./Switch";
 <React.Fragment>
   <div style={{ marginBottom: 8 }}>
     <Switch
-      pv="pva://$(device):BO$(id)"
+      pv="$(device):BO$(id)"
       macros={{ "$(device)": "testIOC", "$(id)": "1" }}
       usePvLabel
       labelPlacement="end"
@@ -15,7 +15,7 @@ import Switch from "./Switch";
   {/*###############*/}
 
   <LightPanel
-    pv="pva://$(device):BO$(id)"
+    pv="$(device):BO$(id)"
     macros={{ "$(device)": "testIOC", "$(id)": "1" }}
     colors={{ 0: "red", 1: "lime" }}
     usePvLabel
@@ -33,7 +33,7 @@ import RadioButtonGroup from "./RadioButtonGroup";
 <React.Fragment>
   <div style={{ marginBottom: 8 }}>
     <RadioButtonGroup
-      pv="pva://$(device):mbboTest$(id)"
+      pv="$(device):mbboTest$(id)"
       macros={{ "$(device)": "testIOC", "$(id)": "1" }}
       horizontal={true}
       usePvLabel={true}
@@ -43,7 +43,7 @@ import RadioButtonGroup from "./RadioButtonGroup";
   {/*###############*/}
 
   <LightPanel
-    pv="pva://$(device):mbboTest$(id)"
+    pv="$(device):mbboTest$(id)"
     macros={{ "$(device)": "testIOC", "$(id)": "1" }}
     colors={{
       0: "red",
@@ -68,7 +68,7 @@ import TextInput from "./TextInput";
 <React.Fragment>
   <div style={{ marginBottom: 8 }}>
     <TextInput
-      pv="pva://$(device):test$(id)"
+      pv="$(device):test$(id)"
       macros={{ "$(device)": "testIOC", "$(id)": "2" }}
       usePvLabel={true}
       usePvPrecision={true}
@@ -81,7 +81,7 @@ import TextInput from "./TextInput";
   {/*###############*/}
 
   <LightPanel
-    pv="pva://$(device):test$(id)"
+    pv="$(device):test$(id)"
     macros={{ "$(device)": "testIOC", "$(id)": "2" }}
     colors={{
       0: "red",

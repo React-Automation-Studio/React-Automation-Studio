@@ -2,13 +2,34 @@ React Automation Studio is a new software platform to enable the control of larg
 
 The system has been containerized with Docker and version controlled as a mono-repository using Git.
 
-Each of the Docker containers are deployed as micro services and environment variables can be configured to deploy the system on different ports, or to enable user authentication and authorization or to serve the application on a unique URL or on the localhost. Separate Docker commands exist to load the development and production version. These containerized environments allows for precise versioning of packages used and prevents deployment dependency issues.
 
-The software stack for React Automation Studio is shown in Fig. 1 and an overview of the system components are give below:
+This repository is the master repository which  contains the code base and demos for each the component and interactive UI's that depend on the demo IOC micro service.
 
-<img src="img/softwareStack.png"  width="75%">
 
-*Fig 1. The current software stack and an example mobile layout.*
+
+The repository can be checked out and the demos can be explored. Contributors can also add components and add in features. The master repository is available at:
+
+**Master repository:**
+
+https://github.com/wduckitt/React-Automation-Studio
+
+
+If you wish to customize the project and create user interfaces for your EPICS control system then you should clone the boiler plate repository at which pulls in this code base as a Git submodule:
+
+**Boiler plate repository:**
+
+ https://github.com/wduckitt/React-Automation-Studio-Example-Project-1
+
+
+
+
+Each of the Docker containers are deployed as micro services and environment variables can be configured to deploy the system on different ports, or to enable user authentication and authorisation or to serve the application on a unique URL or on the localhost. Separate Docker commands exist to load the development and production version. These containerised environments allows for precise versioning of packages used and prevents deployment dependency issues.
+
+The microservices that form part of React Automation Studio are shown in Fig. 1 and an overview of the system components are give below:
+
+<img src="img/microServices.png"  width="75%">
+
+*Fig 1. The microservices that form part of React Automation Studio*
 
 An overview of the system components are give below:
 
@@ -30,11 +51,30 @@ Similarly for writes to an EPICS variable, depending on the access rights, the c
 
 *2. React frontend*
 
-React was chosen to develop the frontend for the PWA as it enables us to develop the frontend in a single language, i.e JavaScript  as opposed to conventional web development in HTML, JavaScript and CSS. The UI interfaces that we have created are highly responsive and offer a real-time experience as is shown in the example of a mobile view in in Fig. 1.
+React was chosen to develop the frontend for the PWA as it enables us to develop the frontend in a single language, i.e JavaScript  as opposed to conventional web development in HTML, JavaScript and CSS. The UI interfaces that we have created are highly responsive and offer a real-time experience as is shown in the example of a mobile view in in Fig. 2.
+
+<img src="img/MobileView.png" alt="drawing" width="35%"/>
+
+*Fig 2. An example of a Mobile View.
 
 We have integrated selected components from the Material-UI React component framework and the React-vis graphing framework with our system to create user interfaces with the same features that we use in our current CS-Studio operator interfaces. These components have been integrated with a data connection layer which handles, input and output, meta-data for labels, limits, precision, alarm sensitivity and initialization from the pvServer.
 
 Some components can handle multiple PVs such as the graph or single PVs such as text inputs. For each of the components the PVs name can be declared using macros. The macros are replaced at component instantiation. This allows the  design of complex user interfaces that can be reused by simply grouping the components and changing the global macro to point to another system.
+
+
+
+<img src="img/contextMenu.png" alt="drawing" width="90%"/>
+
+
+*Fig 3. An example of a context menu and a diagnostic probe user interface*
+
+Many of the components such as TextInputs and TextOutputs have embedded diagnostic features such as a context menu and diagnostic probe as shown in figure 3.
+
+<img src="img/beamline.png" alt="drawing" width="90%"/>
+
+*Fig 4. An example of a desktop beamline control system ui*
+
+Apart form mobile UIs complex UIs suitable for desktop systems can also be created as is shown in figure 4.
 
 
 *3. Styleguide*
@@ -47,16 +87,29 @@ The URL, protocol selection for HTTPS or HTTP , authentication and server ports 
 
 If React Automation Studio is installed on the localhost then there is no need to enable authentication as the host authentication system will protect access.
 
-In this release, and with authentication enabled, the user name and password are managed through an administrator Docker environment through the command line. Passwords are stored on the server in encrypted format using Bcrypt. In future releases this may be replaced by a web based administration page. The default authentication procedure can easily be modified to suite a different environment and point to an authentication server. The client is kept authenticated using an encrypted Jason Web Token (JWT). This JWT is used to check authorization and access rights for every PV request and write. If the JWT is invalidated by the server then user will be required to login.
+Since Release V3.0.0 React-Automation-Studio supports web based administration of user access rights. It also supports  external authentication through Active Directory and Google and local authentication. For the local authentication passwords are stored in the database using encrypted format using Bcrypt. The client is kept authenticated using an encrypted Jason Web Token (JWT) resfresh and access tokens. When serve over HTTPS, the refresh tokens are store in cookie with http only mode and the access tokens are kep in memory. This access token is used to check authorisation and access rights for every PV request and write. If the JWT is invalidated by the server then user will be required to login.
 
-Access rights can be controlled though a JSON file which contains user access groups and rules for defining PV access using regular expressions in the same way that the EPICS Gatewayaccess is defined. All of the components in React Automation studio currently indicate access rights to the PV.
+Access rights can be controlled though web based administrator which contains user access groups,roles and rules for defining PV access using regular expressions in the same way that the EPICS Gatewayaccess is defined. All of the components in React Automation studio currently indicate access rights to the PV.
 
 *5. MongoDB*
 
 Since V2.0.0, React-Automation-Studio is integrated with MongoDB to store persistent data. The PyMongo driver is used within the pvServer to connect to a MongoDB replica set.
 
-React hooks are available that setup a watch, perform an update or an insert to MongoDB replica set within the pvServer. 
+React hooks are available that setup a watch, perform an update or an insert to MongoDB replica set within the pvServer.
 
 See the documentation in the style guide.
 
-Currently the Alarm Handler component  and LoadSave component make use of the MongoDB database. In a future release more hooks will be included and the command line administrator will be replaced with a web based administrator.
+Currently the Alarm Handler component  and LoadSave component make use of the MongoDB database.
+
+*6. AlarmHandler*
+
+As of Release 3.0.0 the RAS AlarmHandler component is considered production ready.
+
+The alarm handler is seeded through JSON files that populate the MongoDB alarm handler database. This database is also used to persist all alarm events and activity logs.
+
+The alarm handler front end UI allows users to configure all aspects of the alarms and search through the entire alarm log. Alarm areas, subAreas and pvs can also be added/removed from the front end by alarmAdmin role users. 
+
+A user notification platform has also been created for the alarm handler. This platform allows a user to target specific pvs to be notified about using javascript regular expressions. At present users can be notified via email and Signal messenger. In future we hope to expand this to SMS and WhatsApp.
+
+*7. Since Release 3.0.0, Nginx serves the static files for ReactApp and the styleguide, it also handles the transport layer security and performs load balancing. Scripts were created to dynamically configure Nginx based on the enviroment variables in Section 3.
+For load balancing, Nginx balances between 3 pvServers in the production versions and 1 in the dev versions.

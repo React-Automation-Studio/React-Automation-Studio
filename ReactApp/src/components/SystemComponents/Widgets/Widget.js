@@ -253,6 +253,7 @@ import {
         pvs.push(
           <PV
             key={index.toString()}
+            makeNewSocketIoConnection={props.makeNewSocketIoConnection}
             pv={pv}
             maxPv={props.maxPv}
             minPv={props.minPv}
@@ -297,6 +298,7 @@ import {
 
   const childPv = typeof props.pv !== 'undefined' && <PV
     pv={props.pv}
+    makeNewSocketIoConnection={props.makeNewSocketIoConnection}
     maxPv={props.maxPv}
     minPv={props.minPv}
     min={props.min}
@@ -402,12 +404,16 @@ import {
  */
 Widget.propTypes = {
   /**
+   * If defined, then the DataConnection  will be over a new socketIO  connection, otherwise the global socketIO connection
+   */
+  makeNewSocketIoConnection: PropTypes.bool,
+  /**
    * Directive to use the  alarm severity status to alter the fields background color.
    */
 
   alarmSensitive: PropTypes.bool,
   /**
-   * Custom PV to define the alarm severity to be used, alarmSensitive must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+   * Custom PV to define the alarm severity to be used, alarmSensitive must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
   alarmPv: PropTypes.string,
   /**
@@ -429,7 +435,7 @@ Widget.propTypes = {
    */
   label: PropTypes.string,
   /**
-  * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+  * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
   */
   labelPv: PropTypes.string,
   /**
@@ -442,7 +448,7 @@ Widget.propTypes = {
    */
   max: PropTypes.number,
   /**
-   * Custom PV to define the maximum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+   * Custom PV to define the maximum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
   maxPv: PropTypes.string,
   /**
@@ -450,7 +456,7 @@ Widget.propTypes = {
    */
   min: PropTypes.number,
   /**
-   * Custom PV to define the minimum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+   * Custom PV to define the minimum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
   minPv: PropTypes.string,
   /**
@@ -459,7 +465,7 @@ Widget.propTypes = {
 
   prec: PropTypes.number,
   /**
-   * Custom PV to define the precision to be used, usePvPrecision must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+   * Custom PV to define the precision to be used, usePvPrecision must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
   precPv: PropTypes.string,
 
@@ -471,7 +477,7 @@ Widget.propTypes = {
 
   units: PropTypes.string,
   /**
-   * Custom PV to define the units to be used, usePvUnits must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+   * Custom PV to define the units to be used, usePvUnits must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
   unitsPv: PropTypes.string,
   /**
@@ -534,9 +540,9 @@ Widget.propTypes = {
    */
   offColor: PropTypes.string,
 
-  /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+  /** Name of the process variable,  eg. '$(device):test$(id)'*/
   pv: PropTypes.string,
-  /** Array of the process variables, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+  /** Array of the process variables, eg. '$(device):test$(id)'*/
   pvs: PropTypes.arrayOf(PropTypes.string),
   /**
    * Object with a string and the corresponding severity value.

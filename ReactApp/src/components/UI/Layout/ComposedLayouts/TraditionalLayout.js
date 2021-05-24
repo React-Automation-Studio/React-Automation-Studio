@@ -19,7 +19,6 @@ import SideDrawer from '../LayoutComponents/SideDrawer'
 import MoreVertDrawer from '../LayoutComponents/MoreVertDrawer'
 
 import AutomationStudioContext from '../../../SystemComponents/AutomationStudioContext';
-import RedirectToLogIn from '../../../SystemComponents/RedirectToLogin.js';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
@@ -153,7 +152,7 @@ const TraditionalLayout = (props) => {
                     {notInStyleGuide && <div style={{ marginBottom: props.footerHeight }} />}
                 </React.Fragment>
             }
-            {notInStyleGuide && <RedirectToLogIn />}
+     
         </React.Fragment>
     );
 };

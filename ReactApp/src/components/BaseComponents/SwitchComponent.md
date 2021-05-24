@@ -9,7 +9,7 @@ SwitchComponent example connection to a SoftChannel EPICS AI pv with use of EPIC
   <React.Fragment>
   <div style={{marginBottom:8}}>
     <TextOutput
-      pv='pva://$(device):BO$(id)'
+      pv='$(device):BO$(id)'
       macros={{'$(device)':'testIOC','$(id)':'1'}}
       usePvLabel={true}
       usePvPrecision={true}
@@ -23,7 +23,7 @@ SwitchComponent example connection to a SoftChannel EPICS AI pv with use of EPIC
 {/*###############*/}  
 
   <SwitchComponent
-    pv='pva://$(device):BO$(id)'
+    pv='$(device):BO$(id)'
     macros={{'$(device)':'testIOC','$(id)':'1'}}
     usePvLabel={true}
     labelPosition={"end"}

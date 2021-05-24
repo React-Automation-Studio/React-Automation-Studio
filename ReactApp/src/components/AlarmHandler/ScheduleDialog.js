@@ -19,6 +19,7 @@ import ScheduleIcon from '@material-ui/icons/Schedule';
 import EmailOutlinedIcon from '@material-ui/icons/EmailOutlined';
 import SmsOutlinedIcon from '@material-ui/icons/SmsOutlined';
 import WhatsAppIcon from '@material-ui/icons/WhatsApp';
+import SignalIcon from './SignalIcon';
 // import Slide from '@material-ui/core/Slide';
 
 import DateFnsUtils from '@date-io/date-fns';
@@ -151,7 +152,8 @@ const ScheduleDialog = (props) => {
         if (global) {
             // Check oneMedium is checked
             const oneMedium = !event.target.checked
-                ? props.dialogUserObject.globalSetup.sms || props.dialogUserObject.globalSetup.whatsapp
+                // Backwards compatible
+                ? props.dialogUserObject.globalSetup.sms || props.dialogUserObject.globalSetup.whatsapp || (props.dialogUserObject.globalSetup.signal ?? false)
                 : true
             //
             if (oneMedium) {
@@ -176,7 +178,8 @@ const ScheduleDialog = (props) => {
                 else {
                     // Check oneMedium is checked
                     const oneMedium = !event.target.checked
-                        ? area.notifySetup.sms || area.notifySetup.whatsapp
+                        // Backwards compatible
+                        ? area.notifySetup.sms || area.notifySetup.whatsapp || (area.notifySetup.signal ?? false)
                         : true
                     //
                     if (oneMedium) {
@@ -206,7 +209,8 @@ const ScheduleDialog = (props) => {
         if (global) {
             // Check oneMedium is checked
             const oneMedium = !event.target.checked
-                ? props.dialogUserObject.globalSetup.email || props.dialogUserObject.globalSetup.whatsapp
+                // Backwards compatible
+                ? props.dialogUserObject.globalSetup.email || props.dialogUserObject.globalSetup.whatsapp || (props.dialogUserObject.globalSetup.signal ?? false)
                 : true
             //
             if (oneMedium) {
@@ -230,7 +234,8 @@ const ScheduleDialog = (props) => {
                 else {
                     // Check oneMedium is checked
                     const oneMedium = !event.target.checked
-                        ? area.notifySetup.email || area.notifySetup.whatsapp
+                        // Backwards compatible
+                        ? area.notifySetup.email || area.notifySetup.whatsapp || (area.notifySetup.signal ?? false)
                         : true
                     //
                     if (oneMedium) {
@@ -261,7 +266,8 @@ const ScheduleDialog = (props) => {
         if (global) {
             // Check oneMedium is checked
             const oneMedium = !event.target.checked
-                ? props.dialogUserObject.globalSetup.email || props.dialogUserObject.globalSetup.sms
+                // Backwards compatible
+                ? props.dialogUserObject.globalSetup.email || props.dialogUserObject.globalSetup.sms || (props.dialogUserObject.globalSetup.signal ?? false)
                 : true
             //
             if (oneMedium) {
@@ -285,7 +291,8 @@ const ScheduleDialog = (props) => {
                 else {
                     // Check oneMedium is checked
                     const oneMedium = !event.target.checked
-                        ? area.notifySetup.email || area.notifySetup.sms
+                        // Backwards compatible
+                        ? area.notifySetup.email || area.notifySetup.sms || (area.notifySetup.signal ?? false)
                         : true
                     //
                     if (oneMedium) {
@@ -294,6 +301,62 @@ const ScheduleDialog = (props) => {
                             notifySetup: {
                                 ...area.notifySetup,
                                 whatsapp: event.target.checked
+                            }
+                        }
+                        return newArea
+                    }
+                    else {
+                        props.setSnackMessage("At least one notification medium must be set!")
+                        return area
+                    }
+
+                }
+            })
+            props.setDialogUserObject({
+                ...props.dialogUserObject,
+                notifyPVs: newNotifyPVs
+            })
+        }
+    }
+
+    const handleSignal = (event) => {
+        if (global) {
+            // Check oneMedium is checked
+            const oneMedium = !event.target.checked
+                ? props.dialogUserObject.globalSetup.email || props.dialogUserObject.globalSetup.sms || props.dialogUserObject.globalSetup.whatsapp
+                : true
+            //
+            if (oneMedium) {
+                props.setDialogUserObject({
+                    ...props.dialogUserObject,
+                    globalSetup: {
+                        ...props.dialogUserObject.globalSetup,
+                        signal: event.target.checked
+                    }
+                })
+            }
+            else {
+                props.setSnackMessage("At least one notification medium must be set!")
+            }
+        }
+        else {
+            const newNotifyPVs = props.dialogUserObject.notifyPVs.map((area, index) => {
+                if (props.dialogUserNotifyIndex !== index) {
+                    return area
+                }
+                else {
+                    // Check oneMedium is checked
+                    const oneMedium = !event.target.checked
+                        // Backwards compatible
+                        ? area.notifySetup.email || area.notifySetup.sms || area.notifySetup.whatsapp
+                        : true
+                    //
+                    if (oneMedium) {
+                        const newArea = {
+                            ...area,
+                            notifySetup: {
+                                ...area.notifySetup,
+                                signal: event.target.checked
                             }
                         }
                         return newArea
@@ -702,6 +765,39 @@ const ScheduleDialog = (props) => {
         }
     }
 
+    const handleAlarmType = (event, alarmType) => {
+        if (global) {
+            props.setDialogUserObject({
+                ...props.dialogUserObject,
+                globalSetup: {
+                    ...props.dialogUserObject.globalSetup,
+                    [alarmType]: event.target.checked
+                }
+            })
+        }
+        else {
+            const newNotifyPVs = props.dialogUserObject.notifyPVs.map((area, index) => {
+                if (props.dialogUserNotifyIndex !== index) {
+                    return area
+                }
+                else {
+                    const newArea = {
+                        ...area,
+                        notifySetup: {
+                            ...area.notifySetup,
+                            [alarmType]: event.target.checked
+                        }
+                    }
+                    return newArea
+                }
+            })
+            props.setDialogUserObject({
+                ...props.dialogUserObject,
+                notifyPVs: newNotifyPVs
+            })
+        }
+    }
+
     return (
         <Dialog
             // TransitionComponent={Transition}
@@ -762,7 +858,7 @@ const ScheduleDialog = (props) => {
                                 return (
                                     <Chip
                                         classes={{ outlinedSecondary: classes.chipOutlinedSecondary }}
-                                        key={area.regEx}
+                                        key={`${index}-${area.regEx}`}
                                         label={area.regEx}
                                         variant={index === props.dialogUserNotifyIndex || global ? undefined : "outlined"}
                                         color="secondary"
@@ -796,6 +892,102 @@ const ScheduleDialog = (props) => {
                                     checked={displayUserObject.notify}
                                     onChange={handleNotify}
                                 />
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid item xs={12} style={{ marginTop: '0.75em', marginBottom: '0.75em' }}>
+                        <Divider variant="middle" />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Grid
+                            container
+                            direction="row"
+                            justify="flex-start"
+                            alignItems="stretch"
+                            style={{
+                                paddingLeft: '1em',
+                                paddingRight: '1em'
+                            }}
+                        >
+                            <Grid item xs={3}>
+                                <Grid
+                                    container
+                                    direction="row"
+                                    justify="center"
+                                    alignItems="stretch"
+                                >
+                                    <Grid item className={classes.verticalCenter}>
+                                        <span style={{ fontSize: '1rem', marginRight: 'auto' }}>MINOR</span>
+                                    </Grid>
+                                    <Grid item >
+                                        <Checkbox
+                                            // Backwards compatible
+                                            checked={displayUserObject.alarmMinor ?? true}
+                                            onChange={(event) => handleAlarmType(event, 'alarmMinor')}
+                                            disabled={!displayUserObject.notify}
+                                        />
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                            <Grid item xs={3}>
+                                <Grid
+                                    container
+                                    direction="row"
+                                    justify="center"
+                                    alignItems="stretch"
+                                >
+                                    <Grid item className={classes.verticalCenter}>
+                                        <span style={{ fontSize: '1rem' }}>MAJOR</span>
+                                    </Grid>
+                                    <Grid item >
+                                        <Checkbox
+                                            // Backwards compatible
+                                            checked={displayUserObject.alarmMajor ?? true}
+                                            onChange={(event) => handleAlarmType(event, 'alarmMajor')}
+                                            disabled={!displayUserObject.notify}
+                                        />
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                            <Grid item xs={3}>
+                                <Grid
+                                    container
+                                    direction="row"
+                                    justify="center"
+                                    alignItems="stretch"
+                                >
+                                    <Grid item className={classes.verticalCenter}>
+                                        <span style={{ fontSize: '1rem' }}>INVALID</span>
+                                    </Grid>
+                                    <Grid item >
+                                        <Checkbox
+                                            // Backwards compatible
+                                            checked={displayUserObject.alarmInvalid ?? true}
+                                            onChange={(event) => handleAlarmType(event, 'alarmInvalid')}
+                                            disabled={!displayUserObject.notify}
+                                        />
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                            <Grid item xs={3}>
+                                <Grid
+                                    container
+                                    direction="row"
+                                    justify="center"
+                                    alignItems="stretch"
+                                >
+                                    <Grid item className={classes.verticalCenter}>
+                                        <span style={{ fontSize: '1rem' }}>DISCONN</span>
+                                    </Grid>
+                                    <Grid item >
+                                        <Checkbox
+                                            // Backwards compatible
+                                            checked={displayUserObject.alarmDisconn ?? true}
+                                            onChange={(event) => handleAlarmType(event, 'alarmDisconn')}
+                                            disabled={!displayUserObject.notify}
+                                        />
+                                    </Grid>
+                                </Grid>
                             </Grid>
                         </Grid>
                     </Grid>
@@ -870,6 +1062,29 @@ const ScheduleDialog = (props) => {
                                         <Checkbox
                                             checked={displayUserObject.sms}
                                             onChange={handleSMS}
+                                            disabled={!displayUserObject.notify}
+                                        />
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Grid
+                                    container
+                                    direction="row"
+                                    justify="center"
+                                    alignItems="stretch"
+                                >
+                                    <Grid item xs={3} className={classes.centerInBlock}>
+                                        <SignalIcon />
+                                    </Grid>
+                                    <Grid item xs={4} className={classes.verticalCenter}>
+                                        <span style={{ fontSize: '1rem' }}>Signal</span>
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                        <Checkbox
+                                            // Backwards compatible
+                                            checked={displayUserObject.signal ?? false}
+                                            onChange={handleSignal}
                                             disabled={!displayUserObject.notify}
                                         />
                                     </Grid>

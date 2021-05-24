@@ -1,0 +1,16 @@
+{
+  "userGroups":
+
+  {
+    "PREVENT":
+    {
+      "usernames":["*"],
+      "rules":
+      [
+        { "rule":"ADMIN_DATABASE",                   "read":false,  "write":false },
+        { "rule":"rasAdminDb",                   "read":false,  "write":false }
+      ]
+   
+  }
+}
+}

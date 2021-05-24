@@ -120,4 +120,4 @@ and each subArea{k} object is defined as:
 
 From these definitions it is clear that a user can define a custom number of areas, each with a custom number of pvs and subAreas.
 
-**NOTE:** It is currently only possible to add new pvs from the front end (user interface). It is not possible to add or remove areas nor subAreas in a controlled manner from the front end. It is envisaged that this will be done in a future release.
+**NOTE:** It is possible to add/remove pvs, areas and subAreas from the front end (user interface) in a controlled manner.

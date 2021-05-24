@@ -1,20 +1,33 @@
-import { useContext, useCallback } from 'react';
+import { useContext, useCallback,useRef,useEffect } from 'react';
 import AutomationStudioContext from '../../AutomationStudioContext';
 export const useMongoDbInsertOne = (props) => {
 
-    const { socket } = useContext(AutomationStudioContext);
+    const context=useContext(AutomationStudioContext);
+    const socket = context.socket;
+    const jwt = context.userTokens.accessToken;
+    const jwtRef = useRef(jwt);
+    const socketRef = useRef(socket);
+    useEffect(() => {
+      if (jwt === null) {
+        jwtRef.current = 'unauthenticated'
+      }
+      else {
+        jwtRef.current = jwt;
+      }
+    }, [jwt])
+    useEffect(() => {
+
+        socketRef.current = socket;
+      }, [socket])
 
     const dbInsertOne = useCallback((props) => {
 
         if (props.dbURL && props.newEntry) {
 
-            let jwt = JSON.parse(localStorage.getItem('jwt'));
-            if (jwt === null) {
-                jwt = 'unauthenticated'
-            }
+           
             
-            socket.emit('databaseInsertOne', { dbURL: props.dbURL, 'newEntry': props.newEntry, 'clientAuthorisation': jwt }, (data) => {
-                console.log("ackdata", data);
+            socketRef.current.emit('databaseInsertOne', { dbURL: props.dbURL, 'newEntry': props.newEntry, 'clientAuthorisation': jwtRef.current }, (data) => {
+                //console.log("ackdata", data);
                 if (data !== "OK") {
 
                     console.log("InsertOne  unsuccessful")

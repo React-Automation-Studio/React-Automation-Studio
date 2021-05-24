@@ -11,21 +11,21 @@ import BeamLineCanvas from './BeamLineCanvas';
        <HorizontalBeamline 
           x={0}
           y={50}
-          pv={'pva://testIOC:BeamlineA:BeamOn'}
+          pv={'testIOC:BeamlineA:BeamOn'}
           width={'113px'}
       //    debugBorder={true}
         />
         <HorizontalBeamline 
           x={'113px'}
           y={50}
-          pv={'pva://testIOC:BeamlineB:BeamOn'}
+          pv={'testIOC:BeamlineB:BeamOn'}
           width={'148px'}
      //     debugBorder={true}
         />
         <HorizontalBeamline 
           x={'261px'}
           y={50}
-          pv={'pva://testIOC:BeamlineC:BeamOn'}
+          pv={'testIOC:BeamlineC:BeamOn'}
           width={'150px'}
     //      debugBorder={true}
         />
@@ -45,21 +45,21 @@ import BeamLineCanvas from './BeamLineCanvas';
           x={0}
           y={50}
        
-         // pv={'pva://testIOC:BeamlineA:BeamOn'}
+         // pv={'testIOC:BeamlineA:BeamOn'}
           width={'113px'}
       //    debugBorder={true}
         />
         <HorizontalBeamline 
           x={'113px'}
           y={50}
-        //  pv={'pva://testIOC:BeamlineB:BeamOn'}
+        //  pv={'testIOC:BeamlineB:BeamOn'}
           width={'148px'}
      //     debugBorder={true}
         />
         <HorizontalBeamline 
           x={'261px'}
           y={50}
-        //  pv={'pva://testIOC:BeamlineC:BeamOn'}
+        //  pv={'testIOC:BeamlineC:BeamOn'}
           width={'150px'}
     //      debugBorder={true}
         />

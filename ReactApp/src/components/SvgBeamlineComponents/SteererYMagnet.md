@@ -28,7 +28,7 @@ const [displayEditor,setDisplayEditor]=useState(false);
           pv={'$(IOC):$(device):$(XorY):Readback'}
           label='$(device)$(XorY)'
           macros= {{
-              '$(IOC)': 'pva://testIOC',
+              '$(IOC)': 'testIOC',
               '$(device)': 'STR2',
               '$(XorY)': 'Y'
           }
@@ -63,7 +63,7 @@ const [displayEditor,setDisplayEditor]=useState(false);
 
             onOffPv: '$(IOC):$(device):$(XorY):On',
             macros: {
-              '$(IOC)': 'pva://testIOC',
+              '$(IOC)': 'testIOC',
               '$(device)': 'STR2',
               '$(XorY)': 'Y'
             },

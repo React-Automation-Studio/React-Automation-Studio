@@ -1,0 +1,119 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/frontendServer/node_modules
+/styleguideServer/node_modules
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# production
+!/build/
+/build/*
+/venv
+/epics/base
+/epics/support
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Prerequisites
+*.d
+
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
+
+# Linker output
+*.ilk
+*.map
+*.exp
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Libraries
+*.lib
+*.a
+*.la
+*.lo
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+*.pyc
+*.crt
+*.pem
+*.secure
+*.csr
+*.cer
+*.key
+
+epics/testIOC/configure/O.linux-x86_64/
+epics/testIOC/iocBoot/iocexample/envPaths
+epics/testIOC/iocBoot/ioctestIOC/envPaths
+epics/testIOC/dbd/testIOC.dbd
+epics/testIOC/testIOCApp/Db/O.linux-x86_64/
+epics/testIOC/testIOCApp/src/O.Common/
+epics/testIOC/testIOCApp/src/O.linux-x86_64/
+epics/testIOC/bin/
+epics/testIOC/bin/
+
+epics/stagingHarpsTestIOC/configure/O.linux-x86_64/
+epics/stagingHarpsTestIOC/iocBoot/iocexample/envPaths
+epics/stagingHarpsTestIOC/iocBoot/iocstagingHarpsTestIOC/envPaths
+epics/stagingHarpsTestIOC/dbd/stagingHarpsTestIOC.dbd
+epics/stagingHarpsTestIOC/stagingHarpsTestIOCApp/Db/O.linux-x86_64/
+epics/stagingHarpsTestIOC/stagingHarpsTestIOCApp/src/O.Common/
+epics/stagingHarpsTestIOC/stagingHarpsTestIOCApp/src/O.linux-x86_64/
+epics/stagingHarpsTestIOC/bin/
+epics/stagingHarpsTestIOC/bin/
+
+epics/stagingTestIOC/configure/O.linux-x86_64/
+epics/stagingTestIOC/iocBoot/iocexample/envPaths
+epics/stagingTestIOC/iocBoot/iocstagingTestIOC/envPaths
+epics/stagingTestIOC/dbd/stagingTestIOC.dbd
+epics/stagingTestIOC/stagingTestIOCApp/Db/O.linux-x86_64/
+epics/stagingTestIOC/stagingTestIOCApp/src/O.Common/
+epics/stagingTestIOC/stagingTestIOCApp/src/O.linux-x86_64/
+epics/stagingTestIOC/bin/
+epics/stagingTestIOC/bin/
+
+epics/*.gz
+
+__pycache__/
+/styleguide/build/
+!/styleguide/
+
+.env
+pvServer/userAuthentication/SECRET_PWD_KEY
+pvServer/userAuthentication/SECRET_KEY
+pvServer/userAuthentication/USERS
+
+users/users.json
+users/pvAccess.json
+users/SECRET_PWD_KEY

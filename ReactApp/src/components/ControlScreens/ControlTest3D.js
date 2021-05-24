@@ -93,7 +93,7 @@ render() {
           >
             <Grid item sm={12}>
               <div style={{height:'50vh',marginLeft:'25px'}}>
-                {/*}<GraphTest style pv='pva://testIOC:test4'  />*/}
+                {/*}<GraphTest style pv='testIOC:test4'  />*/}
                 <ThreeScene/>
               </div>
             </Grid>
@@ -101,8 +101,8 @@ render() {
           </Grid>
           <div style={{height:'25vh',marginLeft:'25px'}}>
             <div style={{height:'50px',width:'400px'}}>
-              <Slider  pv='pva://testIOC:Cube1:xRotation'      macros={this.props['macros']} usePvMinMax={true} min={1000} max={500} usePvLabel={true}  step={0.1} prec={3} />
-              <Slider  pv='pva://testIOC:Cube1:yRotation'      macros={this.props['macros']} usePvMinMax={true} min={1000} max={500} usePvLabel={true}  step={0.1} prec={3} />
+              <Slider  pv='testIOC:Cube1:xRotation'      macros={this.props['macros']} usePvMinMax={true} min={1000} max={500} usePvLabel={true}  step={0.1} prec={3} />
+              <Slider  pv='testIOC:Cube1:yRotation'      macros={this.props['macros']} usePvMinMax={true} min={1000} max={500} usePvLabel={true}  step={0.1} prec={3} />
             </div>
           </div>
         </Grid>

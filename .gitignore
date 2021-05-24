@@ -12,8 +12,11 @@
 /coverage
 
 # production
-!/build/.gitkeep
-/build/*
+
+!/build/frontend/
+/build/frontend/*
+!/build/styleguide/
+/build/styleguide/*
 package-lock.json
 /venv
 /epics/base

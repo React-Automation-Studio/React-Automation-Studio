@@ -337,7 +337,7 @@ const handleYes = () => {
 
     alarmSensitive: PropTypes.bool,
     /**
-     * Custom PV to define the alarm severity to be used, alarmSensitive must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+     * Custom PV to define the alarm severity to be used, alarmSensitive must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
      */
     alarmPv: PropTypes.string,
     /**
@@ -356,7 +356,7 @@ const handleYes = () => {
      */
     label: PropTypes.string,
     /**
-    * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+    * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
     */
     labelPv: PropTypes.string,
     /**
@@ -402,17 +402,17 @@ const handleYes = () => {
 
 
 
-    /** Name of the pv process variable that sends the command 1 for out and 0 for in, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+    /** Name of the pv process variable that sends the command 1 for out and 0 for in, eg. '$(device):test$(id)'*/
     pv: PropTypes.string,
-    /** Name of the `in` limit pv process variable, if not defined the pv value==0 is used , NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+    /** Name of the `in` limit pv process variable, if not defined the pv value==0 is used , eg. '$(device):test$(id)'*/
     inLimitPv: PropTypes.string,
     /** Value to override the default value inLimitPv value is compared too. Valid values: `1` or `0` */
     inLimitValue: PropTypes.number,
-    /** Name of the `out` limit pv process variable, if not defined the pv value==1 is used , NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+    /** Name of the `out` limit pv process variable, if not defined the pv value==1 is used , eg. '$(device):test$(id)'*/
     outLimitPv: PropTypes.string,
     /** Value to override the default value outLimitPv value is compared too. Valid values: `1` or `0` */
     outLimitValue: PropTypes.number,
-    /** Name of the `is Moving` pv process variable, if not defined it is not used , NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+    /** Name of the `is Moving` pv process variable, if not defined it is not used , eg. '$(device):test$(id)'*/
     isMovingPv: PropTypes.string,
     /** Value to override the default value isMovingPv value is compared too. Valid values: `1` or `0` */
     isMovingValue: PropTypes.number,

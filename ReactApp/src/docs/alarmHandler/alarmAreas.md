@@ -7,6 +7,7 @@ Each area can be expanded/contracted to reveal/hide the subAreas within that are
 |                                        BEAMLINE DEMO Area (subAreas hidden)                                         |                                       BEAMLINE DEMO Area (subAreas shown)                                       |
 | :-----------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------: |
 | <img src="img/alarmHandler/alarmSetup_AlarmList_Contracted.png" alt="alarmSetup_AlarmList_Contracted" width="80%"/> | <img src="img/alarmHandler/alarmSetup_AlarmList_Expanded.png" alt="alarmSetup_AlarmList_Expanded" width="80%"/> |
+
 <center>*Area with subAreas hidden or shown*</center>
 
 <br/>
@@ -35,7 +36,25 @@ A disabled area/subArea is reflected with a grey colour as shown below. This fol
 <br/><br/>
 
 <br/>
-**Admin actions - Adding a new pv**
+**Global actions**
+
+The **ALARM AREAS** section also has a global button (_`world icon`_ on the top left) that a user can click (left click) to select all the areas (complete alarm handler). Right clicking this icon enables a user to acknowledge or enable/disable all the areas. This is shown below.
+
+<center><img src="img/alarmHandler/alarmSetup_AlarmList_Global.png" alt="alarmSetup_AlarmList_Global" width="35%"/></center>  
+<center>*Global alarm handler actions*</center>
+<br/><br/>
+
+<br/>
+**ADMINISTRATOR ACTIONS**
+
+A set of admin actions can also be executed from the **ALARM AREAS** list as shown below. Only alarmAdmin role users can execute these actions.
+
+<center><img src="img/alarmHandler/alarmSetup_AlarmList_Admin.png" alt="alarmSetup_AlarmList_Admin" width="35%"/></center>  
+<center>*Alarm admin actions on ALARM AREAS list*</center>
+<br/><br/>
+
+<br/>
+**Admin action - Add new pv**
 
 To add a new pv right click the relevant area/subArea and under the `Alarm admin actions` menu click on `Add new pv`. This opens up the add pv dialog as shown below. The `ADD` button of the dialog is disabled until a valid live pv name is typed in. Multiple pvs can be added simultaneously by clicking the `+` icon next to the pv name.
 
@@ -43,13 +62,18 @@ To add a new pv right click the relevant area/subArea and under the `Alarm admin
 <center>*Add pv dialog*</center>
 <br/><br/>
 
-**NOTE:** Only alarmAdmin role users can execute any alarm admin actions. 
+Pvs can be deleted through the **ALARM TABLE** as shown in the next section.
 
 <br/>
-**Global actions**
+**Admin action - Add new subArea**
 
-The **ALARM AREAS** section also has a global button (*`world icon`* on the top left) that a user can click (left click) to select all the areas (complete alarm handler). Right clicking this icon enables a user to acknowledge or enable/disable all the areas. This is shown below.
+To add a new subArea right click the relevant area and under the `Alarm admin actions` menu click on `Add new subArea`. This opens up the add subArea dialog as shown below. Roles can also be added to a given subArea. If roles are not defined the subArea is visible to all alarm users, if defined they're only visible to the roles specified.
 
-<center><img src="img/alarmHandler/alarmSetup_AlarmList_Global.png" alt="alarmSetup_AlarmList_Global" width="35%"/></center>  
-<center>*Global alarm handler actions*</center>
+<center><img src="img/alarmHandler/alarmSetup_addsubArea_dialog.png" alt="alarmSetup_addsubArea_dialog" width="60%"/></center>  
+<center>*Add subArea dialog*</center>
 <br/><br/>
+
+<br/>
+**Admin action - Edit/Delete subArea**
+
+To edit/delete an existing subArea click the relevant menu item under the `Alarm admin actions` menu.

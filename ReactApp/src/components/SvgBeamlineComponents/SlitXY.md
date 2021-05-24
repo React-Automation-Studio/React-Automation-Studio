@@ -33,7 +33,7 @@ const [displayEditor,setDisplayEditor]=useState(false);
           yOffsetPv={'$(IOC):$(device):Y:Offset:Readback'}  
           label='$(device)'
           macros= {{
-              '$(IOC)': 'pva://testIOC',
+              '$(IOC)': 'testIOC',
               '$(device)': 'SLITXY1',
               
           }
@@ -67,7 +67,7 @@ const [displayEditor,setDisplayEditor]=useState(false);
           yOffsetSetpointPv: '$(IOC):$(device):Y:Offset:Setpoint',
           label: '$(device)',
           macros: {
-            '$(IOC)': 'pva://testIOC',
+            '$(IOC)': 'testIOC',
             '$(device)': 'SLITXY1',
           },
               disableLink:true

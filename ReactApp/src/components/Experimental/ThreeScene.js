@@ -5,8 +5,8 @@ import DataConnection from '../SystemComponents/DataConnection';
 import { pink} from '@material-ui/core/colors';
 import { withStyles } from '@material-ui/core/styles';
 
-const pv1='pva://testIOC:Cube1:xRotation';
-const pv2='pva://testIOC:Cube1:yRotation';
+const pv1='testIOC:Cube1:xRotation';
+const pv2='testIOC:Cube1:yRotation';
 const styles = theme => ({
   root: {
 

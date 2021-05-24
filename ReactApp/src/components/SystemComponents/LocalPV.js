@@ -200,7 +200,7 @@ LocalPV.propTypes = {
    */
   outputValue:PropTypes.any,
  
-  /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+  /** Name of the process variable,  eg. '$(device):test$(id)'*/
 
   pv: PropTypes.string,
 

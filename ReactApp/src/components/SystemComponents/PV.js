@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import EpicsPV from './EpicsPV'
 import LocalPV from './LocalPV'
-import UnknownPV from './UnknownPV'
 import PropTypes from "prop-types";
 
 /**
  * The PV component handles connections to EPICS process variables and local process vairable.
- * This is done by defining the pv name in the pv prop and using a prefix to define protocol ie "pva://" for EPICs and "loc://" for local variable.
+ * This is done by defining the pv name in the pv prop and using a prefix "loc://" for local variable.
  * The PV component also performs macro substitution on the pv prop using the macros prop.
  * The pv state can be raised as an object using the pvData callback or passed to child function component. All the data in this pv object is valid when pv.initialized===true
  * 
@@ -41,13 +40,17 @@ const PV = (props) => {
         pvname = pvname.replace(macro.toString(), props.macros[macro].toString());
       }
     }
-    return pvname.includes('pva://')
-      ?
-      EpicsPV({ ...props, pv:pvname })
-      : (pvname.includes('loc://')
-        ?
-        LocalPV({ ...props, pv:pvname })
-        : UnknownPV({ ...props, pv:pvname }))
+    return pvname.includes('loc://')?
+      LocalPV({ ...props, pv:pvname })
+      :EpicsPV({ ...props, pv:pvname})
+    //     : UnknownPV({ ...props, pv:pvname }))
+    // return pvname.includes('pva://')
+    //   ?
+    //   EpicsPV({ ...props, pv:pvname})
+    //   : (pvname.includes('loc://')
+    //     ?
+    //     LocalPV({ ...props, pv:pvname })
+    //     : UnknownPV({ ...props, pv:pvname }))
   }
   const pvData = (name) => (pv) => {
 
@@ -63,6 +66,7 @@ const PV = (props) => {
     outputValue: props.outputValue,
     useStringValue: props.useStringValue,
     initialLocalVariableValue: props.initialLocalVariableValue,
+    makeNewSocketIoConnection:props.makeNewSocketIoConnection,
     debug: props.debug,
     pvData: pvData('data')
 
@@ -178,6 +182,13 @@ const PV = (props) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pv])
+  const contextPVs=pv.PVs;
+  useEffect(() => {
+    if (typeof props.contextInfo !=='undefined'){
+      props.contextInfo(contextPVs)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [contextPVs])
   if (props.debug) {
     console.log(props)
     console.log(props.name, " Debug:", "PV Render States: ", "pvs:", pvs)
@@ -201,12 +212,16 @@ const PV = (props) => {
 }
 PV.propTypes = {
   /**
+   * If defined, then the DataConnection  will be over a new socketIO  connection, otherwise the global socketIO connection
+   */
+  makeNewSocketIoConnection: PropTypes.bool,
+  /**
    * Directive to use the  alarm severity status to alter the fields backgorund color.
    */
 
   alarmSensitive: PropTypes.bool,
   /**
-   * Custom PV to define the alarm severity to be used, alarmSensitive must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+   * Custom PV to define the alarm severity to be used, alarmSensitive must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
   alarmPv: PropTypes.string,
   /**
@@ -225,7 +240,7 @@ PV.propTypes = {
    */
   label: PropTypes.string,
   /**
-  * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+  * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
   */
   labelPv: PropTypes.string,
   /**
@@ -238,7 +253,7 @@ PV.propTypes = {
    */
   max: PropTypes.number,
   /**
-   * Custom PV to define the maximum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+   * Custom PV to define the maximum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
   maxPv: PropTypes.string,
   /**
@@ -246,7 +261,7 @@ PV.propTypes = {
    */
   min: PropTypes.number,
   /**
-   * Custom PV to define the minimum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+   * Custom PV to define the minimum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
   minPv: PropTypes.string,
   /**
@@ -262,10 +277,10 @@ PV.propTypes = {
    */
   prec: PropTypes.number,
   /**
-   * Custom PV to define the precision to be used, usePvPrecision must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+   * Custom PV to define the precision to be used, usePvPrecision must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
   precPv: PropTypes.string,
-  /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+  /** Name of the process variable,  eg. '$(device):test$(id)'*/
 
   pv: PropTypes.string,
 
@@ -280,7 +295,7 @@ PV.propTypes = {
 
   units: PropTypes.string,
   /**
-   * Custom PV to define the units to be used, usePvUnits must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+   * Custom PV to define the units to be used, usePvUnits must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
   unitsPv: PropTypes.string,
   /**
@@ -336,7 +351,7 @@ PV.defaultProps = {
 
   debug: false,
   useMetadata: true,
-
+  makeNewSocketIoConnection:false
 };
 
 

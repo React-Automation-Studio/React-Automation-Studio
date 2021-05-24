@@ -6,7 +6,7 @@ import { withRouter } from 'react-router-dom';
 
 import { Link } from 'react-router-dom'
 import Button from '@material-ui/core/Button';
-import RedirectToLogIn from '../SystemComponents/RedirectToLogin.js';
+
 
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -105,31 +105,7 @@ const styles = theme => ({
 
 
 
-let pvServerBASEURL;
-if (typeof process.env.REACT_APP_PyEpicsServerBASEURL === 'undefined') {
-  pvServerBASEURL = "http://127.0.0.1";
-}
-else {
-  pvServerBASEURL = process.env.REACT_APP_PyEpicsServerBASEURL;
-}
 
-let port;
-if (typeof process.env.REACT_APP_StyleguideServerPORT === 'undefined') {
-  port = 6060;
-}
-else {
-  port = process.env.REACT_APP_StyleguideServerPORT;
-}
-
-
-let AutomationStudioStyleGuideBuildURL;
-
-if (typeof process.env.REACT_APP_StyleguideServerURL === 'undefined') {
-  AutomationStudioStyleGuideBuildURL = pvServerBASEURL + ":" + port;
-}
-else {
-  AutomationStudioStyleGuideBuildURL = process.env.REACT_APP_StyleguideServerURL + ":" + port;
-}
 
 class MainDashboard extends Component {
   constructor(props) {
@@ -159,6 +135,8 @@ class MainDashboard extends Component {
       },
       variant: "h5"
     };
+
+    const styleguideURL = window.location.protocol + "//" + window.location.hostname + ':6060/';
     return (
       <TraditionalLayout
         title="React Automation Studio"
@@ -241,6 +219,40 @@ class MainDashboard extends Component {
                 </Grid>
                 <Grid item lg={12} sm={12} xs={12}  >
                   <Typography className={classes.WhatsNew} component='div'>
+                  V3.0.0 Wednesday 24 May 2021
+<br />
+<br />
+Improvements and new features:
+  <br />
+  <ul>
+    <li>New web based administration</li>
+    <li>Nginx now serves the static files, performs the transport layer security and load balancing</li>
+    <li>AlarmHandler now supports Signal notifications, improvements to the user interface</li>
+    <li>Simplification of environment variables</li>
+    <li>Improvement of security features, with move from Access tokens, to short lived Access tokens with Refresh tokens</li>
+    <li>External Authentication via Active Directory or Google Authentication</li>
+    <li>Removal of the requirement for the prefix for EPICS process variables</li>
+    <li>Improvement of the MongoDb hooks</li>
+    <li>Component updates:
+    <ul>
+        <li>GraphY is now based on Plotly</li>
+        <li>GraphXY is now based on Plotly</li>
+    </ul>
+    </li>
+    <li>Package updates</li>
+    <li>Minor Bug Fixes</li>
+   
+  </ul>
+Breaking changes:
+<ul>
+    <li>Removal of the old file based administration</li>
+    <li>Environment variable names have been simplified</li>
+    <li>GraphY and GraphXY background now defaults to the theme.palette.background.default value</li>
+    
+</ul>
+
+
+<br />
                     V2.2.0 Wednesday 20 January 2021
 <br />
 Improvements and new features:
@@ -248,14 +260,15 @@ Improvements and new features:
                     <ul>
                       <li>AlarmHandler now supports email notifications</li>
                       <li>New Components:
-    <ul>
+                        <ul>
                           <li>New ArrayContainer</li>
                           <li>New LightPanel</li>
                         </ul>
-                        <li>Upgraded to Socket.IO 3.1.0</li>
-                        <li>Upgraded pvServer to Flask-SocketIO 5.0.1</li>
-                        <li>Package updates</li>
                       </li>
+                      <li>Upgraded to Socket.IO 3.1.0</li>
+                      <li>Upgraded pvServer to Flask-SocketIO 5.0.1</li>
+                      <li>Package updates</li>
+
                     </ul>
                   V2.1.0 Tuesday 20 October 2020
                   <br />
@@ -411,7 +424,9 @@ Improvements and new features:
                   <Typography {...typographyProps}><HelpIcon className={classes.Icon} /> Help</Typography>
                 </Grid>
                 <Grid item lg={6} sm={12} xs={12}>
-                  <Button fullWidth className={classes.button} target="_blank" href={AutomationStudioStyleGuideBuildURL} color="default" variant={buttonVariant}> Help and Style Guide </Button>
+
+                  <Button fullWidth className={classes.button} target="_blank" href={styleguideURL} color="default" variant={buttonVariant}> Help and Style Guide </Button>
+
                 </Grid>
 
               </Grid>
@@ -429,7 +444,7 @@ Improvements and new features:
 
 
 
-        <RedirectToLogIn />
+       
       </TraditionalLayout >
     )
   }

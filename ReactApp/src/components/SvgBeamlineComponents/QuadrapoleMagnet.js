@@ -175,7 +175,7 @@ QuadrapoleMagnet.propTypes = {
 
   alarmSensitive: PropTypes.bool,
   /**
-   * Custom PV to define the alarm severity to be used, alarmSensitive must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+   * Custom PV to define the alarm severity to be used, alarmSensitive must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
   alarmPv: PropTypes.string,
   /**
@@ -194,7 +194,7 @@ QuadrapoleMagnet.propTypes = {
    */
   label: PropTypes.string,
   /**
-  * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+  * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
   */
   labelPv: PropTypes.string,
   /**
@@ -207,7 +207,7 @@ QuadrapoleMagnet.propTypes = {
    */
   max: PropTypes.number,
   /**
-   * Custom PV to define the maximum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+   * Custom PV to define the maximum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
   maxPv: PropTypes.string,
   /**
@@ -215,7 +215,7 @@ QuadrapoleMagnet.propTypes = {
    */
   min: PropTypes.number,
   /**
-   * Custom PV to define the minimum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+   * Custom PV to define the minimum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
   minPv: PropTypes.string,
 
@@ -224,7 +224,7 @@ QuadrapoleMagnet.propTypes = {
    */
   prec: PropTypes.number,
   /**
-   * Custom PV to define the precision to be used, usePvPrecision must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+   * Custom PV to define the precision to be used, usePvPrecision must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
   precPv: PropTypes.string,
 
@@ -236,7 +236,7 @@ QuadrapoleMagnet.propTypes = {
 
   units: PropTypes.string,
   /**
-   * Custom PV to define the units to be used, usePvUnits must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+   * Custom PV to define the units to be used, usePvUnits must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
   unitsPv: PropTypes.string,
   /**
@@ -292,7 +292,7 @@ QuadrapoleMagnet.propTypes = {
   numberFormat: PropTypes.object,
 
 
-  /** Name of the pv process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+  /** Name of the pv process variable, eg. '$(device):test$(id)'*/
   pv: PropTypes.string,
 
 

@@ -337,12 +337,23 @@ const LoadSave = (props) => {
       
       let oldDbDataAndLiveData = dbDataAndLiveData;
       let newDbDataAndLiveData = {}
-      let metadataComponentsPVs = [];
+      let newMetadataComponentsPVs = [];
+      let oldMetadataComponentsPVs = metadataComponentsPVs;
       let component;
       let pv;
       for (component in metadataComponents) {
         pv = replaceMacros(metadataComponents[component].props.pv, props.macros)
-        metadataComponentsPVs.push({ label: "", initialized: false, pv: pv, value: "", metadata: {}, componentProps: metadataComponents[component].props });
+        if (oldMetadataComponentsPVs[component]){
+          if (oldMetadataComponentsPVs[component].pv===pv){
+            newMetadataComponentsPVs.push(oldMetadataComponentsPVs[component]);           
+          }
+          else{
+            newMetadataComponentsPVs.push({ label: "", initialized: false, pv: pv, key:component.toString()+pv, value: "", metadata: {}, componentProps: metadataComponents[component].props });    
+          }
+        }
+        else{
+        newMetadataComponentsPVs.push({ label: "", initialized: false, pv: pv, key:component.toString()+pv, value: "", metadata: {}, componentProps: metadataComponents[component].props });
+        }
       }
       let key;
       for (key in newProcessVariablesSchemaKeys) {
@@ -363,7 +374,7 @@ const LoadSave = (props) => {
       dispatchDbDataAndLiveData({ type: 'initPvList', data: newDbDataAndLiveData });
       setProcessVariables(processVariables);
       setMetadataComponents(metadataComponents);
-      setMetadataComponentsPVs(metadataComponentsPVs);
+      setMetadataComponentsPVs(newMetadataComponentsPVs);
     }
     else{
       dispatchDbDataAndLiveData({type:'reset'})
@@ -602,7 +613,7 @@ const LoadSave = (props) => {
                   <TableHead>
                     <TableRow>
                       {metadataComponentsPVs.map((item, index) =>
-                        <TableCell key={index.toString()} align="center">{item.componentProps.usePvLabel === true ? item.label : item.componentProps.label}  {item.componentProps.usePvUnits === true ? '[' + item.units + ']' : typeof item.componentProps.units !== 'undefined' ? '[' + item.componentProps.units + ']' : ""}</TableCell>
+                        <TableCell key={index.toString()+item.key} align="center">{item.componentProps.usePvLabel === true ? item.label : item.componentProps.label}  {item.componentProps.usePvUnits === true ? '[' + item.units + ']' : typeof item.componentProps.units !== 'undefined' ? '[' + item.componentProps.units + ']' : ""}</TableCell>
                       )}
                       <TableCell align="center">Date </TableCell>
                       <TableCell align="center">Status</TableCell>
@@ -834,7 +845,7 @@ LoadSave.propTypes = {
    * eg. {{'$(device)':'testIOC','$(id)':'2'}}
    */
   macros: PropTypes.object,
-  /** Name of the load enable process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+  /** Name of the load enable process variable, eg. '$(device):test$(id)'*/
 
   loadEnablePV: PropTypes.string,
   /**

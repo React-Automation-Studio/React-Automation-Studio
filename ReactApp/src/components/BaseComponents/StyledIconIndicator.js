@@ -115,7 +115,7 @@ const StyledIconIndicator = (props) => {
 }
 
 StyledIconIndicator.propTypes = {
-  /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+  /** Name of the process variable,  eg. '$(device):test$(id)'*/
   pv: PropTypes.string.isRequired,
   /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
   macros: PropTypes.object,
@@ -143,7 +143,7 @@ StyledIconIndicator.propTypes = {
    */
   usePvLabel: PropTypes.bool,
    /**
-  * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, NB must contain correct prefix ie: pva:// eg. 'pva://$(device):test$(id)'.
+  * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
   */
  labelPv: PropTypes.string,
  /**

@@ -16,37 +16,37 @@ import { io } from 'socket.io-client';
 import   lightTheme  from '../components/UI/Themes/lightTheme'
 import ReactVisCssBaseline from '../components/SystemComponents/ReactVisCssBaseline';
 
-console.log('process.env', process.env)
-let port;
-if (typeof process.env.REACT_APP_PyEpicsServerStyleguidePORT === 'undefined') {
-  port = 5001;
-}
-else {
-  port = process.env.REACT_APP_PyEpicsServerStyleguidePORT;
-}
+// console.log('process.env', process.env)
+// let port;
+// if (typeof process.env.REACT_APP_PyEpicsServerStyleguidePORT === 'undefined') {
+//   port = 5001;
+// }
+// else {
+//   port = process.env.REACT_APP_PyEpicsServerStyleguidePORT;
+// }
 
-let pvServerBASEURL;
-if (typeof process.env.REACT_APP_PyEpicsServerBASEURL === 'undefined') {
-  pvServerBASEURL = "http://127.0.0.1";
-}
-else {
-  pvServerBASEURL = process.env.REACT_APP_PyEpicsServerBASEURL;
-}
+// let pvServerBASEURL;
+// if (typeof process.env.pvServerURL === 'undefined') {
+//   pvServerBASEURL = "http://127.0.0.1";
+// }
+// else {
+//   pvServerBASEURL = process.env.pvServerURL;
+// }
 
-let pvServerNamespace;
-if (typeof process.env.REACT_APP_PyEpicsServerNamespace === 'undefined') {
-  pvServerNamespace = "pvServer";
-}
-else {
-  pvServerNamespace = process.env.REACT_APP_PyEpicsServerNamespace;
-}
+// let pvServerNamespace;
+// if (typeof process.env.pvServerNameSpace === 'undefined') {
+//   pvServerNamespace = "pvServer";
+// }
+// else {
+//   pvServerNamespace = process.env.pvServerNameSpace;
+// }
 
-let PyEpicsServerURL = pvServerBASEURL + ":" + port + "/" + pvServerNamespace;
+// let PyEpicsServerURL = pvServerBASEURL + ":" + port + "/" + pvServerNamespace;
 
-console.log('PyEpicsServerURL: ', PyEpicsServerURL)
+// console.log('PyEpicsServerURL: ', PyEpicsServerURL)
 
 if (typeof window.socket === 'undefined') {
-  window.socket = io(PyEpicsServerURL, {
+  window.socket = io("/pvServer", {
     transports: ['websocket'],
   })
 
@@ -146,8 +146,12 @@ class Wrapper extends Component {
     };
 
     let localVariables = {};
+    let userTokens = {
+      accessToken: 'unauthenticated'
+    }
     let system = {
       socket: window.socket,
+      userTokens:userTokens,
       localVariables: localVariables,
       updateLocalVariable: this.updateLocalVariable,
       enableProbe: false,

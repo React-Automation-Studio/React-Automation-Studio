@@ -1,5 +1,4 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, {useState} from 'react';
 import { withStyles } from '@material-ui/core/styles';
 
 import Grid from '@material-ui/core/Grid';
@@ -17,7 +16,6 @@ import SelectionList from '../../BaseComponents/SelectionList';
 import ThumbWheel from '../../BaseComponents/ThumbWheel';
 
 
-import DataConnection from '../../SystemComponents/DataConnection';
 
 
 import ToggleButton from '../../BaseComponents/ToggleButton';
@@ -41,6 +39,9 @@ import withWidth from '@material-ui/core/withWidth';
 import StyledIconIndicator from '../../BaseComponents/StyledIconIndicator';
 
 import TraditionalLayout from '../../UI/Layout/ComposedLayouts/TraditionalLayout.js';
+
+import {useLocalPV} from '../../SystemComponents/LocalPV'
+
 function TabContainer(props) {
   return (
     <Typography component="div" style={{ padding: 0, flexGrow:1 }}>
@@ -68,46 +69,33 @@ const styles = theme => ({
   },
 });
 
-class MobileDemo1 extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state={
-      value: 0,
-      stateValue:0,
+const Example1 =(props)=> {
+  //const [select,setSelect]=useState(null);
+  const [showAdvancedSettings,setShowAdvancedSettings]=useState(0);
+  const  editorType=useLocalPV({pv:'loc://editorType',})
 
-
-
-      showAdvancedSettings:0,
-    };
-    this.handleStateChange= this.handleStateChange.bind(this);
-
-  }
-
-
-  handleChange = (event, value) => {
-    this.setState({ value });
+  const handleChange = (event, value) => {
+    setShowAdvancedSettings( value );
   };
 
 
 
-  handleStateChange(stateValue){
-    //console.log(stateValue)
-    this.setState({ stateValue })
-  };
+  // const handleStateChange=(stateValue)=>{
+  //   //console.log(stateValue)
+  //   setSelect(stateValue)
+  // };
 
 
 
 
 
-  render() {
-    const { width } = this.props;
+  
+    const { width } = props;
     //console.log('width',width)
 
-    const { classes } = this.props;
+    const { classes } = props;
     // console.log('classes justin test1',classes)
-    const { value } = this.state;
-    const { stateValue } = this.state;
-
+    
 
 
     //console.log(softLim);
@@ -137,7 +125,7 @@ class MobileDemo1 extends React.Component {
       
         <div style={{paddingBottom:48}}>
 
-        {value === 0 && <TabContainer key={'tabContainer0'}>
+        {showAdvancedSettings === 0 && <TabContainer key={'tabContainer0'}>
           <Grid   container className={classes.root}>
             <Grid item xs={12}>
               <Grid
@@ -150,43 +138,41 @@ class MobileDemo1 extends React.Component {
 
 
                 <Grid item xs={12} >
-                  <div style={{ height: graphVH, width:'96vw',}}>
-                    <GraphY  pvs={['pva://testIOC:test4','pva://testIOC:test5'] } legend={['Sine Wave','Amplitude']}
-                     //lineColor={[this.props.theme.palette.secondary.main,lime['400']]}
-                     />
-                  </div>
+                  
+                    <GraphY height={graphVH} width='100%' pvs={['testIOC:test4','testIOC:test5'] } legend={['Sine Wave','Amplitude']}/>
+                  
                 </Grid>
                 <Grid item xs={12}>
                   <Grid container direction="row" item justify="center" spacing={2} alignItems="stretch">
                     <Grid item xs={6}  >
-                      <TextInput  pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}   usePvLabel={true} prec={3} alarmSensitive={true}/>
+                      <TextInput  pv='$(device):amplitude' macros={{'$(device)':'testIOC'}}   usePvLabel={true} prec={3} alarmSensitive={true}/>
                     </Grid>
                     <Grid item  xs={6}>
-                      <TextOutput  pv='pva://$(device):test3' macros={{'$(device)':'testIOC'}}   usePvLabel={true} prec={3} alarmSensitive={true}/>
+                      <TextOutput  pv='$(device):test3' macros={{'$(device)':'testIOC'}}   usePvLabel={true} prec={3} alarmSensitive={true}/>
                     </Grid>
                   </Grid>
                 </Grid>
 
                 <Grid item xs={6} sm={4} lg={3} >
 
-                  <Gauge  pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}    prec={3} usePvMinMax={true} />
+                  <Gauge  pv='$(device):amplitude' macros={{'$(device)':'testIOC'}}    prec={3} usePvMinMax={true} />
 
                 </Grid>
 
                 <Grid item xs={2} sm={4}  lg={5} >
                   <Grid container direction="column" justify="space-evenly" spacing={2} alignItems="stretch">
                     <Grid item>
-                      <StyledIconIndicator  pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}} onColor='primary' offColor='default' label={'On'} labelPlacement={'end'}/>
+                      <StyledIconIndicator  pv='$(device)' macros={{'$(device)':'testIOC:BO1'}} onColor={props.theme.palette.ok.main} offColor='default' label={'On'} labelPlacement={'end'}/>
 
                     </Grid>
                     <Grid item>
-                      <StyledIconIndicator  pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}} onColor='default' offColor='secondary' label={'Off'} labelPlacement={'end'}/>
+                      <StyledIconIndicator  pv='$(device)' macros={{'$(device)':'testIOC:BO1'}} onColor='default' offColor={props.theme.palette.error.main} label={'Off'} labelPlacement={'end'}/>
                     </Grid>
                   </Grid>
                 </Grid>
                 <Grid item xs={4} sm={4} lg={4} >
 
-                  <ToggleButton  pv='pva://$(device)' macros={{'$(device)':'testIOC:BO1'}}  custom_selection_strings={["OFF","ON"]}  />
+                  <ToggleButton  pv='$(device)' macros={{'$(device)':'testIOC:BO1'}}  custom_selection_strings={["OFF","ON"]}  />
                 </Grid>
                 
 
@@ -194,7 +180,9 @@ class MobileDemo1 extends React.Component {
                 <Grid item xs={12} sm={12} md={12}  lg={12}>
 
 
-                  <SelectionList horizontal={true} pv='loc://editorType'    useStringValue={true} custom_selection_strings={['ThumbWheel','Slider']} initialLocalVariableValue='ThumbWheel' />
+                  <SelectionList debug={false} horizontal={true} pv='loc://editorType'    useStringValue={true} custom_selection_strings={['ThumbWheel','Slider']} 
+                  initialLocalVariableValue='ThumbWheel' 
+                   />
 
 
 
@@ -202,17 +190,17 @@ class MobileDemo1 extends React.Component {
 
                 </Grid>
                 <Grid item  xs={12}>
-                  {stateValue === 'None'&&
+                  {editorType.value === 'None'&&
                     <Grid container direction="row" item xs={12} spacing={2}>
                       <Grid item xs={12} >
                       </Grid>
                     </Grid>}
-                  {stateValue === 'ThumbWheel'&&
+                  {editorType.value === 'ThumbWheel'&&
                     <Grid container direction="row" item xs={12} >
                       <Grid item xs={12}>
                         <div style={{textAlign:'center',marginTop:'16px',}}>
                           <ThumbWheel
-                            pv='pva://$(device)'
+                            pv='$(device)'
                             macros={{'$(device)':'testIOC:amplitude'}}
                             prec_integer={3}
                             prec_decimal={1}
@@ -220,11 +208,11 @@ class MobileDemo1 extends React.Component {
                         </div>
                       </Grid>
                     </Grid>}
-                  {stateValue === 'Slider'&&
+                  {editorType.value === 'Slider'&&
                     <div style={{marginTop:'16px'}}>
                       <Grid container direction="row" item xs={12} spacing={2}>
                         <Grid item xs={12}  >
-                          <Slider pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}} usePvMinMax={true} min={1000} max={500} usePvLabel={true}  />
+                          <Slider pv='$(device):amplitude' macros={{'$(device)':'testIOC'}} usePvMinMax={true}  />
                         </Grid>
                       </Grid>
                     </div>}
@@ -234,7 +222,7 @@ class MobileDemo1 extends React.Component {
 
           </Grid>
         </TabContainer>}
-        {value === 1 && <TabContainer key={'tabContainer1'}>
+        {showAdvancedSettings === 1 && <TabContainer key={'tabContainer1'}>
           <Grid   container className={classes.root}>
             <Grid item xs={12}>
               <Grid container spacing={2} alignItems={'stretch'} direction={'column'} justify={'flex-start'}>
@@ -244,10 +232,10 @@ class MobileDemo1 extends React.Component {
                   <div style={{marginBottom:8}}>Settings</div>
                   <Grid container spacing={2} alignItems={'stretch'} direction={'row'} justify={'flex-start'}>
                     <Grid item xs={12} lg={4}>
-                      <TextInput   pv='pva://$(device):frequency' macros={{'$(device)':'testIOC'}}    usePvUnits={true} prec={1} usePvLabel={true}/>
+                      <TextInput   pv='$(device):frequency' macros={{'$(device)':'testIOC'}}    usePvUnits={true} prec={1} usePvLabel={true}/>
                     </Grid>
                     <Grid item xs={12} lg={4}>
-                      <TextInput   pv='pva://$(device):amplitude' macros={{'$(device)':'testIOC'}}    usePvUnits={true} usePvLabel={true}/>
+                      <TextInput   pv='$(device):amplitude' macros={{'$(device)':'testIOC'}}    usePvUnits={true} usePvLabel={true}/>
                     </Grid>
                   </Grid>
 
@@ -261,26 +249,19 @@ class MobileDemo1 extends React.Component {
         </div>
 
         <AppBar className={classes.body1} style={{position:'fixed',bottom:0,top:'auto'}} color='inherit'>
-          <Tabs value={value} onChange={this.handleChange} variant="fullWidth" scrollButtons="off">
+          <Tabs value={showAdvancedSettings} onChange={handleChange} variant="fullWidth" scrollButtons="off">
             {/* <Tab icon={<SupervisorAccount />} /> */}
             <Tab icon={<AccountCircle />} />
             <Tab icon={<Settings />} />
           </Tabs>
         </AppBar>
-        <DataConnection
-          pv='loc://editorType'
-          initialLocalVariableValue='ThumbWheel'
-          useStringValue={true}
-          handleInputValue={this.handleStateChange}
-        />
+        
       </TraditionalLayout>
 
       );
     }
-  }
+  
 
-  MobileDemo1.propTypes = {
-    classes: PropTypes.object.isRequired,
-  };
+  
 
-  export default withWidth()(withStyles(styles,{withTheme:true})(MobileDemo1));
+  export default withWidth()(withStyles(styles,{withTheme:true})(Example1));

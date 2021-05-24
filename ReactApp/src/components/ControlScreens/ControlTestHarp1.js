@@ -329,13 +329,13 @@ class ControlTestHarp1 extends React.Component {
       if (displayHarps[harp].inserted===true){
         if(numberOfInsertedGraphs===0){
           if(typeof displayHarps[harp].onlyY!=='undefined'){
-            x0GraphPVs.push('pva://'+displayHarps[harp].systemName+':ycur');
-            x0RangePV='pva://'+displayHarps[harp].systemName+':yrange';
+            x0GraphPVs.push(displayHarps[harp].systemName+':ycur');
+            x0RangePV=displayHarps[harp].systemName+':yrange';
             onlyY0=true;
           }
           else {
-            x0GraphPVs.push('pva://'+displayHarps[harp].systemName+':xcur');
-            x0RangePV='pva://'+displayHarps[harp].systemName+':xrange';
+            x0GraphPVs.push(displayHarps[harp].systemName+':xcur');
+            x0RangePV=displayHarps[harp].systemName+':xrange';
             onlyY0=false;
           }
 
@@ -345,13 +345,13 @@ class ControlTestHarp1 extends React.Component {
           x0SystemName=displayHarps[harp].systemName;
           //    }
           if(typeof displayHarps[harp].onlyX!=='undefined'){
-            y0GraphPVs.push('pva://'+displayHarps[harp].systemName+':xcur');
-            y0RangePV='pva://'+displayHarps[harp].systemName+':xrange';
+            y0GraphPVs.push(displayHarps[harp].systemName+':xcur');
+            y0RangePV=displayHarps[harp].systemName+':xrange';
             onlyX0=true;
           }
           else{
-            y0GraphPVs.push('pva://'+displayHarps[harp].systemName+':ycur');
-            y0RangePV='pva://'+displayHarps[harp].systemName+':yrange';
+            y0GraphPVs.push(displayHarps[harp].systemName+':ycur');
+            y0RangePV=displayHarps[harp].systemName+':yrange';
             onlyX0=false;
           }
           y0GraphKey=y0GraphKey+displayHarps[harp].systemName;
@@ -360,24 +360,24 @@ class ControlTestHarp1 extends React.Component {
           numberOfInsertedGraphs++;
         }else{
           if(typeof displayHarps[harp].onlyY!=='undefined'){
-            x1GraphPVs.push('pva://'+displayHarps[harp].systemName+':ycur');
-            x1RangePV='pva://'+displayHarps[harp].systemName+':yrange';
+            x1GraphPVs.push(displayHarps[harp].systemName+':ycur');
+            x1RangePV=displayHarps[harp].systemName+':yrange';
             onlyY1=true;
           }
           else {
-            x1GraphPVs.push('pva://'+displayHarps[harp].systemName+':xcur');
-            x1RangePV='pva://'+displayHarps[harp].systemName+':xrange';
+            x1GraphPVs.push(displayHarps[harp].systemName+':xcur');
+            x1RangePV=displayHarps[harp].systemName+':xrange';
             onlyY1=false;
           }
 
           if(typeof displayHarps[harp].onlyX!=='undefined'){
-            y1GraphPVs.push('pva://'+displayHarps[harp].systemName+':xcur');
-            y1RangePV='pva://'+displayHarps[harp].systemName+':xrange';
+            y1GraphPVs.push(displayHarps[harp].systemName+':xcur');
+            y1RangePV=displayHarps[harp].systemName+':xrange';
             onlyX1=true;
           }
           else{
-            y1GraphPVs.push('pva://'+displayHarps[harp].systemName+':ycur');
-            y1RangePV='pva://'+displayHarps[harp].systemName+':yrange';
+            y1GraphPVs.push(displayHarps[harp].systemName+':ycur');
+            y1RangePV=displayHarps[harp].systemName+':yrange';
             onlyX1=false;
           }
 
@@ -495,24 +495,24 @@ class ControlTestHarp1 extends React.Component {
                               <HarpRangeSelection onlyX={this.state.onlyX0} onlyY={this.state.onlyY0} key={'harpRangeSelectionx0'+this.state.x0SystemName} systemName={this.state.x0SystemName} label={'Range'}/>
                               <div style={{marginBottom:8}}>
                                 {((this.state.onlyY0===false)&&(this.state.onlyX0===false))&&
-                                  <ActionButton  key={'storex0'+this.state.x0SystemName} pvs={['pva://$(device):x_store_offset','pva://$(device):y_store_offset']}  macros={{'$(device)':this.state.x0SystemName}}     actionValue={"1"} actionString={"Store Offset"}/>
+                                  <ActionButton  key={'storex0'+this.state.x0SystemName} pvs={['$(device):x_store_offset','$(device):y_store_offset']}  macros={{'$(device)':this.state.x0SystemName}}     actionValue={"1"} actionString={"Store Offset"}/>
                                 }
                                 {((this.state.onlyY0===true)&&(this.state.onlyX0===false))&&
-                                  <ActionButton  key={'storex0'+this.state.x0SystemName} pvs={['pva://$(device):y_store_offset']}  macros={{'$(device)':this.state.x0SystemName}}     actionValue={"1"} actionString={"Store Offset"}/>
+                                  <ActionButton  key={'storex0'+this.state.x0SystemName} pvs={['$(device):y_store_offset']}  macros={{'$(device)':this.state.x0SystemName}}     actionValue={"1"} actionString={"Store Offset"}/>
                                 }
                                 {((this.state.onlyY0===false)&&(this.state.onlyX0===true))&&
-                                  <ActionButton  key={'storex0'+this.state.x0SystemName} pvs={['pva://$(device):x_store_offset']}  macros={{'$(device)':this.state.x0SystemName}}     actionValue={"1"} actionString={"Store Offset"}/>
+                                  <ActionButton  key={'storex0'+this.state.x0SystemName} pvs={['$(device):x_store_offset']}  macros={{'$(device)':this.state.x0SystemName}}     actionValue={"1"} actionString={"Store Offset"}/>
                                 }
                               </div>
                               <div style={{marginBottom:8}}>
                               {((this.state.onlyY0===false)&&(this.state.onlyX0===false))&&
-                                <ActionButton key={'clearx0'+this.state.x0SystemName}  pvs={['pva://$(device):x_store_offset','pva://$(device):y_store_offset']}  macros={{'$(device)':this.state.x0SystemName}}     actionValue={"0"} actionString={"Clear Offset"}/>
+                                <ActionButton key={'clearx0'+this.state.x0SystemName}  pvs={['$(device):x_store_offset','$(device):y_store_offset']}  macros={{'$(device)':this.state.x0SystemName}}     actionValue={"0"} actionString={"Clear Offset"}/>
                               }
                               {((this.state.onlyY0===true)&&(this.state.onlyX0===false))&&
-                                <ActionButton key={'clearx0'+this.state.x0SystemName}  pvs={['pva://$(device):y_store_offset']}  macros={{'$(device)':this.state.x0SystemName}}     actionValue={"0"} actionString={"Clear Offset"}/>
+                                <ActionButton key={'clearx0'+this.state.x0SystemName}  pvs={['$(device):y_store_offset']}  macros={{'$(device)':this.state.x0SystemName}}     actionValue={"0"} actionString={"Clear Offset"}/>
                               }
                               {((this.state.onlyY0===false)&&(this.state.onlyX0===true))&&
-                                <ActionButton key={'clearx0'+this.state.x0SystemName}  pvs={['pva://$(device):x_store_offset']}  macros={{'$(device)':this.state.x0SystemName}}     actionValue={"0"} actionString={"Clear Offset"}/>
+                                <ActionButton key={'clearx0'+this.state.x0SystemName}  pvs={['$(device):x_store_offset']}  macros={{'$(device)':this.state.x0SystemName}}     actionValue={"0"} actionString={"Clear Offset"}/>
                               }
                               </div>
 
@@ -544,7 +544,7 @@ class ControlTestHarp1 extends React.Component {
                                   ylabel="X Axis"
                                                                                                 />}
 
-                                {/*}<GraphTest style pv='pva://testIOC:test4'  />*/}
+                                {/*}<GraphTest style pv='testIOC:test4'  />*/}
                               </div>
                             </Grid>
                             <Grid item sm={6}>
@@ -562,7 +562,7 @@ class ControlTestHarp1 extends React.Component {
                                   ylabel="Y Axis"
 
                                                                                                 />}
-                                {/*  <GraphTest style pv='pva://testIOC:PS1:Readback:History'  />*/}
+                                {/*  <GraphTest style pv='testIOC:PS1:Readback:History'  />*/}
                               </div>
                             </Grid>
                           </Grid>
@@ -586,24 +586,24 @@ class ControlTestHarp1 extends React.Component {
                                 <HarpRangeSelection onlyX={this.state.onlyX1} onlyY={this.state.onlyY1} key={'harpRangeSelectionx1'+this.state.x1SystemName} systemName={this.state.x1SystemName} label={'Range'}/>
                                 <div style={{marginBottom:8}}>
                                   {((this.state.onlyY1===false)&&(this.state.onlyX1===false))&&
-                                    <ActionButton  key={'storex1'+this.state.x1SystemName} pvs={['pva://$(device):x_store_offset','pva://$(device):y_store_offset']}  macros={{'$(device)':this.state.x1SystemName}}     actionValue={"1"} actionString={"Store Offset"}/>
+                                    <ActionButton  key={'storex1'+this.state.x1SystemName} pvs={['$(device):x_store_offset','$(device):y_store_offset']}  macros={{'$(device)':this.state.x1SystemName}}     actionValue={"1"} actionString={"Store Offset"}/>
                                   }
                                   {((this.state.onlyY1===true)&&(this.state.onlyX1===false))&&
-                                    <ActionButton  key={'storex1'+this.state.x1SystemName} pvs={['pva://$(device):y_store_offset']}  macros={{'$(device)':this.state.x1SystemName}}     actionValue={"1"} actionString={"Store Offset"}/>
+                                    <ActionButton  key={'storex1'+this.state.x1SystemName} pvs={['$(device):y_store_offset']}  macros={{'$(device)':this.state.x1SystemName}}     actionValue={"1"} actionString={"Store Offset"}/>
                                   }
                                   {((this.state.onlyY1===false)&&(this.state.onlyX1===true))&&
-                                    <ActionButton  key={'storex1'+this.state.x1SystemName} pvs={['pva://$(device):x_store_offset']}  macros={{'$(device)':this.state.x1SystemName}}     actionValue={"1"} actionString={"Store Offset"}/>
+                                    <ActionButton  key={'storex1'+this.state.x1SystemName} pvs={['$(device):x_store_offset']}  macros={{'$(device)':this.state.x1SystemName}}     actionValue={"1"} actionString={"Store Offset"}/>
                                   }
                                 </div>
                                 <div style={{marginBottom:8}}>
                                 {((this.state.onlyY1===false)&&(this.state.onlyX1===false))&&
-                                  <ActionButton key={'clearx1'+this.state.x1SystemName}  pvs={['pva://$(device):x_store_offset','pva://$(device):y_store_offset']}  macros={{'$(device)':this.state.x1SystemName}}     actionValue={"0"} actionString={"Clear Offset"}/>
+                                  <ActionButton key={'clearx1'+this.state.x1SystemName}  pvs={['$(device):x_store_offset','$(device):y_store_offset']}  macros={{'$(device)':this.state.x1SystemName}}     actionValue={"0"} actionString={"Clear Offset"}/>
                                 }
                                 {((this.state.onlyY1===true)&&(this.state.onlyX1===false))&&
-                                  <ActionButton key={'clearx1'+this.state.x1SystemName}  pvs={['pva://$(device):y_store_offset']}  macros={{'$(device)':this.state.x1SystemName}}     actionValue={"0"} actionString={"Clear Offset"}/>
+                                  <ActionButton key={'clearx1'+this.state.x1SystemName}  pvs={['$(device):y_store_offset']}  macros={{'$(device)':this.state.x1SystemName}}     actionValue={"0"} actionString={"Clear Offset"}/>
                                 }
                                 {((this.state.onlyY1===false)&&(this.state.onlyX1===true))&&
-                                  <ActionButton key={'clearx1'+this.state.x1SystemName}  pvs={['pva://$(device):x_store_offset']}  macros={{'$(device)':this.state.x1SystemName}}     actionValue={"0"} actionString={"Clear Offset"}/>
+                                  <ActionButton key={'clearx1'+this.state.x1SystemName}  pvs={['$(device):x_store_offset']}  macros={{'$(device)':this.state.x1SystemName}}     actionValue={"0"} actionString={"Clear Offset"}/>
                                 }
                                 </div>
                               </React.Fragment>}
@@ -639,7 +639,7 @@ class ControlTestHarp1 extends React.Component {
                                       ymaxFromOtherGraph={this.state.BottomXgraphYmax}
                                                                                                     />}
 
-                                    {/*}<GraphTest style pv='pva://testIOC:test4'  />*/}
+                                    {/*}<GraphTest style pv='testIOC:test4'  />*/}
                                   </div>
                                 </Grid>
                                 <Grid item sm={6}>
@@ -656,7 +656,7 @@ class ControlTestHarp1 extends React.Component {
                                       changeOtherGraphYmax={this.changeBottomXgraphYmax}
                                       ymaxFromOtherGraph={this.state.BottomYgraphYmax}
                                                                                                     />}
-                                    {/*  <GraphTest style pv='pva://testIOC:PS1:Readback:History'  />*/}
+                                    {/*  <GraphTest style pv='testIOC:PS1:Readback:History'  />*/}
                                   </div>
                                 </Grid>
                               </Grid>
@@ -677,7 +677,7 @@ class ControlTestHarp1 extends React.Component {
                       <Grid item sm={6}>
                         <div style={{height:'50vh',marginLeft:10,marginRight:10,marginTop:20}}>
                           <GraphY
-                            pvs={['pva://testIOC:PS1:Readback','pva://testIOC:PS2:Readback','pva://testIOC:PS3:Readback'  ]}
+                            pvs={['testIOC:PS1:Readback','testIOC:PS2:Readback','testIOC:PS3:Readback'  ]}
                             maxLength={600}
                             legend = {[
                               'Q1 readback',
@@ -689,18 +689,18 @@ class ControlTestHarp1 extends React.Component {
                             usePolling={true}
                             pollingRate={100}
                           />
-                          {/*}<GraphTest style pv='pva://testIOC:test4'  />*/}
+                          {/*}<GraphTest style pv='testIOC:test4'  />*/}
                         </div>
                       </Grid>
                       <Grid item sm={6}>
                         <div style={{height:'50vh',marginLeft:10,marginRight:10,marginTop:20}}>
                           {/*}  <GraphY
                             pvs={[
-                            'pva://testIOC:PS1:Readback:History',
-                            'pva://testIOC:PS2:Readback:History',
-                            'pva://testIOC:PS3:Readback:History',
-                            'pva://testIOC:PS4:Readback:History',
-                            'pva://testIOC:STR1:X:Readback:History'
+                            'testIOC:PS1:Readback:History',
+                            'testIOC:PS2:Readback:History',
+                            'testIOC:PS3:Readback:History',
+                            'testIOC:PS4:Readback:History',
+                            'testIOC:STR1:X:Readback:History'
 
                             ]}
 
@@ -716,9 +716,9 @@ class ControlTestHarp1 extends React.Component {
                           />*/}
                           <GraphY
                             pvs={[
-                              'pva://testIOC:PS1:Setpoint',
-                              'pva://testIOC:PS2:Setpoint',
-                              'pva://testIOC:PS3:Setpoint',
+                              'testIOC:PS1:Setpoint',
+                              'testIOC:PS2:Setpoint',
+                              'testIOC:PS3:Setpoint',
 
                             ]}
 
@@ -736,7 +736,7 @@ class ControlTestHarp1 extends React.Component {
                             useTimeStamp={true}
 
                           />
-                          {/*  <GraphTest style pv='pva://testIOC:PS1:Readback:History'  />*/}
+                          {/*  <GraphTest style pv='testIOC:PS1:Readback:History'  />*/}
                         </div>
                       </Grid>
                     </Grid>
@@ -754,7 +754,7 @@ class ControlTestHarp1 extends React.Component {
 
                       >
                         <Grid item sm={2} style={{marginLeft:10}}>
-                          <ToggleButton pv='pva://testIOC:BeamlineA:BeamOn'  label={"Beam On"} labelPlacement={"top"}/>
+                          <ToggleButton pv='testIOC:BeamlineA:BeamOn'  label={"Beam On"} labelPlacement={"top"}/>
                         </Grid>
                       </Grid>
                     </Grid>

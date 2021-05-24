@@ -6,7 +6,7 @@ BitIndicators EPICS variable example:
   import TextInput from './TextInput';
   <div style={{textAlign:'center'}}>
   <TextInput
-  pv='pva://$(device):mbboTest1' macros={{'$(device)':'testIOC','$(id)':'2'}}
+  pv='$(device):mbboTest1' macros={{'$(device)':'testIOC','$(id)':'2'}}
   label={"Byte Value"}
   labelPlacement={"top"}
   
@@ -14,7 +14,7 @@ BitIndicators EPICS variable example:
   <br/><br/>
   {/*###############*/}  
 
-  <BitIndicators pv='pva://$(device):mbboTest1' macros={{'$(device)':'testIOC','$(id)':'2'}}label='My Label' labelPlacement='top' bitLabelPlacement='end' usePvBitLabels={true} numberOfBits={5}/>
+  <BitIndicators pv='$(device):mbboTest1' macros={{'$(device)':'testIOC','$(id)':'2'}}label='My Label' labelPlacement='top' bitLabelPlacement='end' usePvBitLabels={true} numberOfBits={5}/>
 
   {/*###############*/}
 
@@ -28,7 +28,7 @@ BitIndicators EPICS variable example:
   import TextInput from './TextInput';
   <div style={{textAlign:'center'}}>
   <TextInput
-  pv='pva://$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}}
+  pv='$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}}
   label={"Byte Value"}
   labelPlacement={"top"}
   
@@ -36,7 +36,7 @@ BitIndicators EPICS variable example:
   <br/><br/>
   {/*###############*/}  
 
-  <BitIndicators pv='pva://$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}}label='My Label' labelPlacement='top' bitLabelPlacement='end'  />
+  <BitIndicators pv='$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}}label='My Label' labelPlacement='top' bitLabelPlacement='end'  />
 
   {/*###############*/}
 
@@ -52,7 +52,7 @@ BitIndicators with custom icon EPICS variable example:
   import Face from '@material-ui/icons/Face';
   <div style={{textAlign:'center'}}>
   <TextInput
-  pv='pva://$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}}
+  pv='$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}}
   label={"Byte Value"}
   labelPlacement={"top"}
   
@@ -60,7 +60,7 @@ BitIndicators with custom icon EPICS variable example:
   <br/><br/>
   {/*###############*/}  
 
-  <BitIndicators  pv='pva://$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}} label='My Label' labelPlacement='top' bitLabelPlacement='end' onColor='lime' offColor='red'>
+  <BitIndicators  pv='$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}} label='My Label' labelPlacement='top' bitLabelPlacement='end' onColor='lime' offColor='red'>
   <Face/>
   </BitIndicators>
 
@@ -77,7 +77,7 @@ BitIndicators example connection to a SoftChannel EPICS AI pv with example overr
   import TextInput from './TextInput';
   <div style={{textAlign:'center'}}>
   <TextInput
-  pv='pva://$(device):test$(id)'
+  pv='$(device):test$(id)'
   macros={{'$(device)':'testIOC','$(id)':'2'}}
   label={"Byte Value"}
   labelPlacement={"top"}
@@ -88,7 +88,7 @@ BitIndicators example connection to a SoftChannel EPICS AI pv with example overr
 
   <BitIndicators
     horizontal={true}
-    pv='pva://$(device):test$(id)'
+    pv='$(device):test$(id)'
     macros={{'$(device)':'testIOC','$(id)':'2'}}
     label='My Label'
     bitLabelPlacement='end'
@@ -107,7 +107,7 @@ BitIndicators example connection to a SoftChannel EPICS AI pv with example overr
   import TextInput from './TextInput';
   <div style={{textAlign:'center'}}>
   <TextInput
-  pv='pva://$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}}
+  pv='$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}}
   label={"Byte Value"}
   labelPlacement={"top"}
   
@@ -116,7 +116,7 @@ BitIndicators example connection to a SoftChannel EPICS AI pv with example overr
   {/*###############*/}  
   <div style={{float: 'left'}}>
   <BitIndicators 
-    pv='pva://$(device):test$(id)'
+    pv='$(device):test$(id)'
     macros={{'$(device)':'testIOC','$(id)':'2'}}
     label='Byte 1' 
     labelPlacement='top' 
@@ -129,7 +129,7 @@ BitIndicators example connection to a SoftChannel EPICS AI pv with example overr
     </div>
     <div style={{float: 'left',paddingLeft:8}}>
     <BitIndicators 
-    pv='pva://$(device):test$(id)'
+    pv='$(device):test$(id)'
     macros={{'$(device)':'testIOC','$(id)':'2'}}
     label='Byte 2' 
     labelPlacement='top' 

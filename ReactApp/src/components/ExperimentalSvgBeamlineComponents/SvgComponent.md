@@ -9,7 +9,7 @@ import HorizontalBeamline from '../SvgBeamlineComponents/HorizontalBeamline';
     <HorizontalBeamline 
       x={0}
       y={50}
-      pv={'pva://testIOC:BeamlineA:BeamOn'}
+      pv={'testIOC:BeamlineA:BeamOn'}
       width={'600px'}
     />
   
@@ -19,7 +19,7 @@ import HorizontalBeamline from '../SvgBeamlineComponents/HorizontalBeamline';
       pv={'$(IOC):$(device):Readback'}
       macros=
         {{
-          '$(IOC)': 'pva://testIOC',
+          '$(IOC)': 'testIOC',
           '$(device)': 'PS3',
         }}
       usePvUnits={true}
@@ -43,7 +43,7 @@ import HorizontalBeamline from '../SvgBeamlineComponents/HorizontalBeamline';
       pv={'$(IOC):$(device):Readback'}
       macros=
         {{
-          '$(IOC)': 'pva://testIOC',
+          '$(IOC)': 'testIOC',
           '$(device)': 'PS3',
         }}
       usePvUnits={true}
@@ -67,7 +67,7 @@ import HorizontalBeamline from '../SvgBeamlineComponents/HorizontalBeamline';
       pv={'$(IOC):$(device):Readback'}
       macros=
         {{
-          '$(IOC)': 'pva://testIOC',
+          '$(IOC)': 'testIOC',
           '$(device)': 'PS3',
         }}
       usePvUnits={true}

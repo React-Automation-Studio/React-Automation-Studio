@@ -40,6 +40,10 @@ module.exports = {
           content: 'src/docs/installation/userloginOverview.md',
           sections: [
             {
+              name: ' Enabling HTTPS',
+              content: 'src/docs/installation/https.md',
+            },
+            {
               name: ' Enabling login and authentication',
               content: 'src/docs/installation/userlogin.md',
             },
@@ -47,10 +51,7 @@ module.exports = {
               name: ' Enabling user access rights',
               content: 'src/docs/installation/userAccessRights.md',
             },
-            {
-              name: ' Enabling HTTPS',
-              content: 'src/docs/installation/https.md',
-            },
+            
           ]
         },
         {
@@ -164,6 +165,17 @@ module.exports = {
 
         },
         {
+          name: 'Routes and Login Components',
+          content: 'src/docs/login/login.md',
+          components: ['src/components/SystemComponents/Login.js','src/components/SystemComponents/ProtectedRoutes.js'], 
+          exampleMode: 'expand', // 'hide' | 'collapse' | 'expand'
+          usageMode: 'expand', // 'hide' | 'collapse' | 'expand'
+
+
+
+
+        },
+        {
           name: 'Database Hooks',
           content: 'src/components/SystemComponents/database/MongoDB/MongoDb.md',
           //components: 'src/components/SystemComponents/database/MongoDB/*.js',
@@ -223,6 +235,14 @@ module.exports = {
                   content: 'src/docs/alarmHandler/environment.md',
                 },
                 {
+                  name: 'Setting up email notifications',
+                  content: 'src/docs/alarmHandler/emailNotification.md',
+                },
+                {
+                  name: 'Setting up Signal notifications',
+                  content: 'src/docs/alarmHandler/signalNotification.md',
+                },
+                {
                   name: 'MongoDB seed data',
                   content: 'src/docs/alarmHandler/seedData.md',
                   sections: [
@@ -235,11 +255,29 @@ module.exports = {
                       content: 'src/docs/alarmHandler/pvListJson.md',
                     },
                     {
-                      name: 'users.json',
-                      content: 'src/docs/alarmHandler/usersJson.md',
+                      name: 'Users',
+                      content: 'src/docs/alarmHandler/Users.md',
                     },
                   ]
                 },
+                {
+                  name: 'Alarm users role configuration',
+                  content: 'src/docs/alarmHandler/alarmRoleConfig.md',
+                  sections: [
+                    {
+                      name: 'alarmAdmin',
+                      content: 'src/docs/alarmHandler/alarmAdmin.md',
+                    },
+                    {
+                      name: 'alarmUser',
+                      content: 'src/docs/alarmHandler/alarmUser.md',
+                    },
+                    {
+                      name: 'alarmObserver',
+                      content: 'src/docs/alarmHandler/alarmObserver.md',
+                    }
+                  ]
+                }
               ]
             },
             {

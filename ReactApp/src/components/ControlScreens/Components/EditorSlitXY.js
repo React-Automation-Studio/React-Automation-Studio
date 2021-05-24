@@ -134,7 +134,7 @@ const EditorSlitXY =(props)=>
         <div className={classes.body1} style={{ marginTop: 12 }}>
 
           {system.displayName + ": Y"}
-          {/*<TextUpdate  pv='pva://$(device):Setpoint.NAME' macros={props['macros']}  />*/}
+          {/*<TextUpdate  pv='$(device):Setpoint.NAME' macros={props['macros']}  />*/}
 
 
           <Paper style={{ padding: 12 }} elevation={props.theme.palette.paperElevation}>

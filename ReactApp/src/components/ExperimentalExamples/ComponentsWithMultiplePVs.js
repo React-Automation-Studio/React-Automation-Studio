@@ -40,11 +40,11 @@ const {classes} =this.props;
           </h2>
           <TextUpdateMultiplePVs
             pvs={[
-              'pva://testIOC:MTextUpdate1',
-              'pva://testIOC:MTextUpdate2',
-              'pva://testIOC:MTextUpdate3',
-              'pva://testIOC:MTextUpdate4',
-              'pva://testIOC:MTextUpdate5'
+              'testIOC:MTextUpdate1',
+              'testIOC:MTextUpdate2',
+              'testIOC:MTextUpdate3',
+              'testIOC:MTextUpdate4',
+              'testIOC:MTextUpdate5'
             ]} usePvLabel={true} macros={this.props['macros']}   />
           <br/>
           <h2>
@@ -53,11 +53,11 @@ const {classes} =this.props;
           <div style={{width:'800px', height: '400px'}}>
             <GraphY
               pvs={[
-                'pva://testIOC:MTextUpdate1',
-                'pva://testIOC:MTextUpdate2',
-                'pva://testIOC:MTextUpdate3',
-                'pva://testIOC:MTextUpdate4',
-                'pva://testIOC:MTextUpdate5'
+                'testIOC:MTextUpdate1',
+                'testIOC:MTextUpdate2',
+                'testIOC:MTextUpdate3',
+                'testIOC:MTextUpdate4',
+                'testIOC:MTextUpdate5'
 
               ]}
                 maxLength={256}/>
@@ -67,15 +67,15 @@ const {classes} =this.props;
 
 
 
-            {/*}  <TextUpdateMultiplePVs  pv='pva://testIOC:MTextUpdate1' macros={this.props['macros']} usePvLabel={true}  />
+            {/*}  <TextUpdateMultiplePVs  pv='testIOC:MTextUpdate1' macros={this.props['macros']} usePvLabel={true}  />
             <br/>
-            <TextUpdateMultiplePVs  pv='pva://testIOC:MTextUpdate2.NAME' macros={this.props['macros']}   />
+            <TextUpdateMultiplePVs  pv='testIOC:MTextUpdate2.NAME' macros={this.props['macros']}   />
             <br/>
-            <TextUpdateMultiplePVs  pv='pva://testIOC:MTextUpdate2' macros={this.props['macros']} usePvLabel={true}  />
+            <TextUpdateMultiplePVs  pv='testIOC:MTextUpdate2' macros={this.props['macros']} usePvLabel={true}  />
             <br/>
-            <TextUpdateMultiplePVs  pv='pva://testIOC:MTextUpdate3.NAME' macros={this.props['macros']}   />
+            <TextUpdateMultiplePVs  pv='testIOC:MTextUpdate3.NAME' macros={this.props['macros']}   />
             <br/>
-            <TextUpdateMultiplePVs  pv='pva://testIOC:MTextUpdate3' macros={this.props['macros']} usePvLabel={true}  />
+            <TextUpdateMultiplePVs  pv='testIOC:MTextUpdate3' macros={this.props['macros']} usePvLabel={true}  />
             <br/>
           */}
 

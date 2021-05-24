@@ -25,25 +25,25 @@ class EpicsAnalogOutDebug extends React.Component {
 
       <Grid container direction='row' spacing={2}>
         <Grid item  xs={12}>
-      <TextOutput  pv='pva://$(device).NAME' macros={this.props['macros']}  label={'EPICS PV Name:'}/>
+      <TextOutput  pv='$(device).NAME' macros={this.props['macros']}  label={'EPICS PV Name:'}/>
       </Grid>
         <Grid item  xs={12}>
-            <TextOutput  pv='pva://$(device)'      macros={this.props['macros']}  label={'EPICS PV Value:'} alarmSensitive={true}/>
+            <TextOutput  pv='$(device)'      macros={this.props['macros']}  label={'EPICS PV Value:'} alarmSensitive={true}/>
       </Grid>
         <Grid item  xs={12}>
-      <TextInput   pv='pva://$(device)'      macros={this.props['macros']}  label={'EPICS PV Setpoint:'} alarmSensitive={true}/>
+      <TextInput   pv='$(device)'      macros={this.props['macros']}  label={'EPICS PV Setpoint:'} alarmSensitive={true}/>
       </Grid>
         <Grid item  xs={12}>
-            <TextOutput  pv='pva://$(device).DRVH'      macros={this.props['macros']}  label={'EPICS PV DRVH:'}/>
+            <TextOutput  pv='$(device).DRVH'      macros={this.props['macros']}  label={'EPICS PV DRVH:'}/>
       </Grid>
         <Grid item  xs={12}>
-      <TextOutput  pv='pva://$(device).DRVL'      macros={this.props['macros']}  label={'EPICS PV DRVL:'}/>
+      <TextOutput  pv='$(device).DRVL'      macros={this.props['macros']}  label={'EPICS PV DRVL:'}/>
       </Grid>
       <Grid item xs={12}  >
-        <TextOutput  pv='pva://$(device)'      macros={this.props['macros']}  label={'EPICS PV Timestamp:'} displayTimeStamp />
+        <TextOutput  pv='$(device)'      macros={this.props['macros']}  label={'EPICS PV Timestamp:'} displayTimeStamp />
       </Grid>
       <Grid item xs={12} >
-        <TextOutput  pv='pva://$(device)'      macros={this.props['macros']}  label={'EPICS PV Host:'} displayMetaData={'host'} />
+        <TextOutput  pv='$(device)'      macros={this.props['macros']}  label={'EPICS PV Host:'} displayMetaData={'host'} />
       </Grid>
 
       </Grid>

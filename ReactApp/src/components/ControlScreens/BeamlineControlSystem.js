@@ -89,7 +89,7 @@ const BeamlineControlSystem = (props) => {
           rampRatePv: '$(IOC):$(device):RampRate',
           macros:
           {
-            '$(IOC)': 'pva://testIOC',
+            '$(IOC)': 'testIOC',
             '$(device)': 'PS1',
           },
           svgProps: {
@@ -119,7 +119,7 @@ const BeamlineControlSystem = (props) => {
           rampRatePv: '$(IOC):$(device):RampRate',
           macros:
           {
-            '$(IOC)': 'pva://testIOC',
+            '$(IOC)': 'testIOC',
             '$(device)': 'PS2',
           },
           svgProps: {
@@ -149,7 +149,7 @@ const BeamlineControlSystem = (props) => {
           rampRatePv: '$(IOC):$(device):RampRate',
           macros:
           {
-            '$(IOC)': 'pva://testIOC',
+            '$(IOC)': 'testIOC',
             '$(device)': 'PS3',
           },
           svgProps: {
@@ -179,7 +179,7 @@ const BeamlineControlSystem = (props) => {
           rampRatePv: '$(IOC):$(device):RampRate',
           macros:
           {
-            '$(IOC)': 'pva://testIOC',
+            '$(IOC)': 'testIOC',
             '$(device)': 'PS4',
           },
           svgProps: {
@@ -208,7 +208,7 @@ const BeamlineControlSystem = (props) => {
           xReadbackPv: '$(IOC):$(device):X:Readback',
           xOnPv: '$(IOC):$(device):X:On',
           macros: {
-            '$(IOC)': 'pva://testIOC',
+            '$(IOC)': 'testIOC',
             '$(device)': 'STR1',
           },
           svgProps: {
@@ -233,7 +233,7 @@ const BeamlineControlSystem = (props) => {
           xReadbackPv: '$(IOC):$(device):X:Readback',
           xOnPv: '$(IOC):$(device):X:On',
           macros: {
-            '$(IOC)': 'pva://testIOC',
+            '$(IOC)': 'testIOC',
             '$(device)': 'STR2',
           },
           svgProps: {
@@ -260,7 +260,7 @@ const BeamlineControlSystem = (props) => {
 
           onOffPv: '$(IOC):$(device):$(XorY):On',
           macros: {
-            '$(IOC)': 'pva://testIOC',
+            '$(IOC)': 'testIOC',
             '$(device)': 'STR2',
             '$(XorY)': 'Y'
           },
@@ -285,7 +285,7 @@ const BeamlineControlSystem = (props) => {
 
           onOffPv: '$(IOC):$(device):$(XorY):On',
           macros: {
-            '$(IOC)': 'pva://testIOC',
+            '$(IOC)': 'testIOC',
             '$(device)': 'STR3',
             '$(XorY)': 'Y'
           },
@@ -318,7 +318,7 @@ const BeamlineControlSystem = (props) => {
           yOffsetSetpointPv: '$(IOC):$(device):Y:Offset:Setpoint',
           label: '$(device)',
           macros: {
-            '$(IOC)': 'pva://testIOC',
+            '$(IOC)': 'testIOC',
             '$(device)': 'SLITXY1',
           },
           svgProps: {
@@ -348,7 +348,7 @@ const BeamlineControlSystem = (props) => {
           yOffsetSetpointPv: '$(IOC):$(device):Y:Offset:Setpoint',
           label: '$(device)',
           macros: {
-            '$(IOC)': 'pva://testIOC',
+            '$(IOC)': 'testIOC',
             '$(device)': 'SLITXY2',
           },
           svgProps: {
@@ -370,10 +370,10 @@ const BeamlineControlSystem = (props) => {
           alarmSensitive: true,
           textShadow: false,
           componentGradient: true,
-          pv: 'pva://$(IOC):$(actuatorName):put-outIn',
-          isMovingPv: 'pva://$(IOC):$(actuatorName):get-status.B5',
-          inLimitPv: 'pva://$(IOC):$(actuatorName):get-status.B6',
-          outLimitPv: 'pva://$(IOC):$(actuatorName):get-status.B7',
+          pv: '$(IOC):$(actuatorName):put-outIn',
+          isMovingPv: '$(IOC):$(actuatorName):get-status.B5',
+          inLimitPv: '$(IOC):$(actuatorName):get-status.B6',
+          outLimitPv: '$(IOC):$(actuatorName):get-status.B7',
           inLimitValue: 1,
           outLimitValue: 1,
           isMovingValue: 1,
@@ -391,10 +391,10 @@ const BeamlineControlSystem = (props) => {
           alarmSensitive: true,
           textShadow: false,
           componentGradient: true,
-          pv: 'pva://$(IOC):$(actuatorName):put-outIn',
-          isMovingPv: 'pva://$(IOC):$(actuatorName):get-status.B5',
-          inLimitPv: 'pva://$(IOC):$(actuatorName):get-status.B6',
-          outLimitPv: 'pva://$(IOC):$(actuatorName):get-status.B7',
+          pv: '$(IOC):$(actuatorName):put-outIn',
+          isMovingPv: '$(IOC):$(actuatorName):get-status.B5',
+          inLimitPv: '$(IOC):$(actuatorName):get-status.B6',
+          outLimitPv: '$(IOC):$(actuatorName):get-status.B7',
           inLimitValue: 1,
           outLimitValue: 1,
           isMovingValue: 1,
@@ -412,10 +412,10 @@ const BeamlineControlSystem = (props) => {
           alarmSensitive: true,
           textShadow: false,
           componentGradient: true,
-          pv: 'pva://$(IOC):$(actuatorName):put-outIn',
-          isMovingPv: 'pva://$(IOC):$(actuatorName):get-status.B5',
-          inLimitPv: 'pva://$(IOC):$(actuatorName):get-status.B6',
-          outLimitPv: 'pva://$(IOC):$(actuatorName):get-status.B7',
+          pv: '$(IOC):$(actuatorName):put-outIn',
+          isMovingPv: '$(IOC):$(actuatorName):get-status.B5',
+          inLimitPv: '$(IOC):$(actuatorName):get-status.B6',
+          outLimitPv: '$(IOC):$(actuatorName):get-status.B7',
           inLimitValue: 1,
           outLimitValue: 1,
           isMovingValue: 1,
@@ -433,10 +433,10 @@ const BeamlineControlSystem = (props) => {
           alarmSensitive: true,
           textShadow: false,
           componentGradient: true,
-          pv: 'pva://$(IOC):$(actuatorName):put-outIn',
-          isMovingPv: 'pva://$(IOC):$(actuatorName):get-status.B5',
-          inLimitPv: 'pva://$(IOC):$(actuatorName):get-status.B6',
-          outLimitPv: 'pva://$(IOC):$(actuatorName):get-status.B7',
+          pv: '$(IOC):$(actuatorName):put-outIn',
+          isMovingPv: '$(IOC):$(actuatorName):get-status.B5',
+          inLimitPv: '$(IOC):$(actuatorName):get-status.B6',
+          outLimitPv: '$(IOC):$(actuatorName):get-status.B7',
           inLimitValue: 1,
           outLimitValue: 1,
           isMovingValue: 1,
@@ -450,10 +450,10 @@ const BeamlineControlSystem = (props) => {
       },
       FCs: {
         FC1: {
-          pv: 'pva://$(IOC):$(actuatorName)$(sim):put-outIn',
-          isMovingPv: 'pva://$(IOC):$(actuatorName)$(sim):get-status.B5',
-          inLimitPv: 'pva://$(IOC):$(actuatorName)$(sim):get-status.B6',
-          outLimitPv: 'pva://$(IOC):$(actuatorName)$(sim):get-status.B7',
+          pv: '$(IOC):$(actuatorName)$(sim):put-outIn',
+          isMovingPv: '$(IOC):$(actuatorName)$(sim):get-status.B5',
+          inLimitPv: '$(IOC):$(actuatorName)$(sim):get-status.B6',
+          outLimitPv: '$(IOC):$(actuatorName)$(sim):get-status.B7',
           inLimitValue: 1,
           outLimitValue: 1,
           isMovingValue: 1,
@@ -470,10 +470,10 @@ const BeamlineControlSystem = (props) => {
           componentGradient: true,
         },
         FC2: {
-          pv: 'pva://$(IOC):$(actuatorName)$(sim):put-outIn',
-          isMovingPv: 'pva://$(IOC):$(actuatorName)$(sim):get-status.B5',
-          inLimitPv: 'pva://$(IOC):$(actuatorName)$(sim):get-status.B6',
-          outLimitPv: 'pva://$(IOC):$(actuatorName)$(sim):get-status.B7',
+          pv: '$(IOC):$(actuatorName)$(sim):put-outIn',
+          isMovingPv: '$(IOC):$(actuatorName)$(sim):get-status.B5',
+          inLimitPv: '$(IOC):$(actuatorName)$(sim):get-status.B6',
+          outLimitPv: '$(IOC):$(actuatorName)$(sim):get-status.B7',
           inLimitValue: 1,
           outLimitValue: 1,
           isMovingValue: 1,
@@ -490,10 +490,10 @@ const BeamlineControlSystem = (props) => {
           componentGradient: true,
         },
         FC3: {
-          pv: 'pva://$(IOC):$(actuatorName)$(sim):put-outIn',
-          isMovingPv: 'pva://$(IOC):$(actuatorName)$(sim):get-status.B5',
-          inLimitPv: 'pva://$(IOC):$(actuatorName)$(sim):get-status.B6',
-          outLimitPv: 'pva://$(IOC):$(actuatorName)$(sim):get-status.B7',
+          pv: '$(IOC):$(actuatorName)$(sim):put-outIn',
+          isMovingPv: '$(IOC):$(actuatorName)$(sim):get-status.B5',
+          inLimitPv: '$(IOC):$(actuatorName)$(sim):get-status.B6',
+          outLimitPv: '$(IOC):$(actuatorName)$(sim):get-status.B7',
           inLimitValue: 1,
           outLimitValue: 1,
           isMovingValue: 1,
@@ -510,10 +510,10 @@ const BeamlineControlSystem = (props) => {
           componentGradient: true,
         },
         FC4: {
-          pv: 'pva://$(IOC):$(actuatorName)$(sim):put-outIn',
-          isMovingPv: 'pva://$(IOC):$(actuatorName)$(sim):get-status.B5',
-          inLimitPv: 'pva://$(IOC):$(actuatorName)$(sim):get-status.B6',
-          outLimitPv: 'pva://$(IOC):$(actuatorName)$(sim):get-status.B7',
+          pv: '$(IOC):$(actuatorName)$(sim):put-outIn',
+          isMovingPv: '$(IOC):$(actuatorName)$(sim):get-status.B5',
+          inLimitPv: '$(IOC):$(actuatorName)$(sim):get-status.B6',
+          outLimitPv: '$(IOC):$(actuatorName)$(sim):get-status.B7',
           inLimitValue: 1,
           outLimitValue: 1,
           isMovingValue: 1,
@@ -624,31 +624,31 @@ const BeamlineControlSystem = (props) => {
                   <HorizontalBeamline
                     x={0}
                     y={yOffset}
-                    pv={'pva://testIOC:BeamlineA:BeamOn'}
+                    pv={'testIOC:BeamlineA:BeamOn'}
                     width={'113px'}
                   />
                   <HorizontalBeamline
                     x={'113px'}
                     y={yOffset}
-                    pv={'pva://testIOC:BeamlineB:BeamOn'}
+                    pv={'testIOC:BeamlineB:BeamOn'}
                     width={'148px'}
                   />
                   <HorizontalBeamline
                     x={'261px'}
                     y={yOffset}
-                    pv={'pva://testIOC:BeamlineC:BeamOn'}
+                    pv={'testIOC:BeamlineC:BeamOn'}
                     width={'150px'}
                   />
                   <HorizontalBeamline
                     x={'411px'}
                     y={yOffset}
-                    pv={'pva://testIOC:BeamlineD:BeamOn'}
+                    pv={'testIOC:BeamlineD:BeamOn'}
                     width={'150px'}
                   />
                   <HorizontalBeamline
                     x={'561px'}
                     y={yOffset}
-                    pv={'pva://testIOC:BeamlineE:BeamOn'}
+                    pv={'testIOC:BeamlineE:BeamOn'}
                     width={'850px'}
                   />
                   <FC
@@ -812,7 +812,7 @@ const BeamlineControlSystem = (props) => {
                     <Grid item sm={6}>
                       <div style={{ height: '50vh', marginLeft: 10, marginRight: 10, marginTop: 20 }}>
                         <GraphY
-                          pvs={['pva://testIOC:PS1:Readback', 'pva://testIOC:PS2:Readback', 'pva://testIOC:PS3:Readback']}
+                          pvs={['testIOC:PS1:Readback', 'testIOC:PS2:Readback', 'testIOC:PS3:Readback']}
                           maxLength={600}
                           legend={[
                             'Q1 readback',
@@ -824,7 +824,7 @@ const BeamlineControlSystem = (props) => {
                           usePolling={true}
                           pollingRate={100}
                         />
-                        {/*}<GraphTest style pv='pva://testIOC:test4'  />*/}
+                        {/*}<GraphTest style pv='testIOC:test4'  />*/}
                       </div>
                     </Grid>
                     <Grid item sm={6}>
@@ -832,9 +832,9 @@ const BeamlineControlSystem = (props) => {
 
                         <GraphY
                           pvs={[
-                            'pva://testIOC:PS1:Setpoint',
-                            'pva://testIOC:PS2:Setpoint',
-                            'pva://testIOC:PS3:Setpoint',
+                            'testIOC:PS1:Setpoint',
+                            'testIOC:PS2:Setpoint',
+                            'testIOC:PS3:Setpoint',
                           ]}
                           maxLength={600}
                           usePolling={true}
@@ -862,7 +862,7 @@ const BeamlineControlSystem = (props) => {
                       alignItems="center"
                     >
                       <Grid item sm={2} style={{ marginLeft: 10 }}>
-                        <ToggleButton pv='pva://testIOC:BeamlineA:BeamOn' label={"Beam On"} labelPlacement={"top"} />
+                        <ToggleButton pv='testIOC:BeamlineA:BeamOn' label={"Beam On"} labelPlacement={"top"} />
                       </Grid>
                     </Grid>
                   </Grid>

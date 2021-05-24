@@ -1,11 +1,13 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect, useRef } from 'react'
 import ReactAutomationStudioContext from './AutomationStudioContext';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from "prop-types";
-
+import { io } from 'socket.io-client';
 
 export const useEpicsPV = (props) => {
-  const initPV = () => {
+ 
+ 
+  const [pv, setPv] = useState(() => {
     let pvname = props.pv;
     if (props.macros) {
       let macro;
@@ -13,6 +15,11 @@ export const useEpicsPV = (props) => {
         pvname = pvname.replace(macro.toString(), props.macros[macro].toString());
       }
     }
+    if(pvname.includes('pva://')){
+      console.info("It is no longer necessary to provide the prefix `pva://` for EPICS V3 PVs.\n Perform a global text replace to update.\n For convenience the `pva://` prefix is automatically removed when displayed\n and will be deprecated in a future release",pvname)
+      pvname=pvname.replace('pva://',"")    
+    }
+    // console.log(pvname)
     let pv = {
       initialized: false,
       pvname: pvname,
@@ -20,13 +27,47 @@ export const useEpicsPV = (props) => {
       severity: undefined,
       timestamp: undefined,
       metadata: { initialized: false, pvname: "", value: "", char_value: "", alarmColor: "", lower_disp_limit: "", upper_disp_limit: "", lower_warning_limit: "", upper_warning_limit: "", units: "", precision: 0, enum_strs: [] }
+    
     }
 
     return pv;
-  }
-  const [pv, setPv] = useState(initPV());
+  });
+  const pvName=pv.pvname;
+ 
   const [pvConnectionId, setPvConnectionId] = useState(null);
   const context = useContext(ReactAutomationStudioContext);
+  const [socket,setSocket] = useState(null)
+  useEffect(()=>{
+    if(props.makeNewSocketIoConnection===true){
+      let newSocket = io("/pvServer", {
+        transports: ['websocket'],
+        forceNew:true,
+      })
+      console.log("make new socket")
+      setSocket(newSocket)
+    }
+    else{
+      setSocket(context.socket)
+    }
+  },[props.makeNewSocketIoConnection,context.socket])
+   
+  const jwt = context.userTokens.accessToken;
+  const jwtRef = useRef(jwt);
+  const socketRef = useRef(socket);
+  useEffect(() => {
+    if (jwt === null) {
+      jwtRef.current = 'unauthenticated'
+    }
+    else {
+      jwtRef.current = jwt;
+    }
+  }, [jwt])
+
+
+  useEffect(() => {
+
+    socketRef.current = socket;
+  }, [socket])
 
 
 
@@ -87,19 +128,7 @@ export const useEpicsPV = (props) => {
       setPv(pv => ({ ...pv, initialized: false }))
     }
 
-    const reconnect = () => {
-      if (props.debug) {
-        console.log(pv.pvname, 'client: reconnect');
-      }
-      let socket = context.socket;
 
-
-      let jwt = JSON.parse(localStorage.getItem('jwt'));
-      if (jwt === null) {
-        jwt = 'unauthenticated'
-      }
-      socket.emit('request_pv_info', { data: pv.pvname, 'clientAuthorisation': jwt });
-    }
     // const handleInitialConnection=()=>{
 
     //   if (pv.initialized===false){
@@ -109,7 +138,7 @@ export const useEpicsPV = (props) => {
     // }
 
     const handleRequestPvInfoAck = (msg) => {
-    //  console.log(pv.pvname, "msg: ", msg)
+      //  console.log(pv.pvname, "msg: ", msg)
       if (typeof msg !== 'undefined') {
         //console.log(this.state['pvname'], "pvConnectionId: ",msg.pvConnectionId)
         setPvConnectionId(msg.pvConnectionId)
@@ -117,44 +146,56 @@ export const useEpicsPV = (props) => {
 
     }
 
-    let socket = context.socket;
-    let jwt = JSON.parse(localStorage.getItem('jwt'));
-    if (jwt === null) {
-      jwt = 'unauthenticated'
+    
+    if (socket){
+    socketRef.current.emit('request_pv_info', { data: pv.pvname, 'clientAuthorisation': jwtRef.current }, handleRequestPvInfoAck);
+    socketRef.current.on(pv.pvname, updatePVData);
+    socketRef.current.on('connect_error', connectError);
+    socketRef.current.on('disconnect', disconnect);
     }
-    socket.emit('request_pv_info', { data: pv.pvname, 'clientAuthorisation': jwt },handleRequestPvInfoAck);
-    socket.on(pv.pvname, updatePVData);
-    socket.on('connect_error', connectError);
-    socket.on('disconnect', disconnect);
-    socket.on('connect', reconnect);
 
     return () => {
-
+      if(socket){
       if (pvConnectionId !== null) {
-        let jwt = JSON.parse(localStorage.getItem('jwt'));
-        if (jwt === null) {
-          jwt = 'unauthenticated'
-        }
-        socket.emit('remove_pv_connection', { pvname: pv.pvname, pvConnectionId: pvConnectionId, 'clientAuthorisation': jwt });
+       
+        socketRef.current.emit('remove_pv_connection', { pvname: pv.pvname, pvConnectionId: pvConnectionId, 'clientAuthorisation': jwtRef.current });
       }
-      socket.removeListener(pv.pvname, updatePVData);
-      socket.removeListener('connect_error', connectError);
-      socket.removeListener('disconnect', disconnect);
-      socket.removeListener('connect', reconnect);
+      socketRef.current.removeListener(pv.pvname, updatePVData);
+      socketRef.current.removeListener('connect_error', connectError);
+      socketRef.current.removeListener('disconnect', disconnect);
+    }
 
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [pvName,socket])
 
+  useEffect(() => {
+    const reconnect = () => {
+      if (props.debug) {
+        console.log(pv.pvname, 'client: reconnect');
+      }
+      
+
+
+      
+      socketRef.current.emit('request_pv_info', { data: pv.pvname, 'clientAuthorisation': jwtRef.current });
+    
+    }
+    if(socket){
+    socketRef.current.on('connect', reconnect);}
+
+    return () => {
+      if(socket){
+      socketRef.current.removeListener('connect', reconnect);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pvName,socket])
   useEffect(() => {
 
     if (props.newValueTrigger > 0) {
-      let socket = context.socket;
-      let jwt = JSON.parse(localStorage.getItem('jwt'));
-      if (jwt === null) {
-        jwt = 'unauthenticated'
-      }
-      socket.emit('write_to_pv', { pvname: pv.pvname, data: props.outputValue, 'clientAuthorisation': jwt });
+     
+      socketRef.current.emit('write_to_pv', { pvname: pv.pvname, data: props.outputValue, 'clientAuthorisation': jwtRef.current });
 
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -204,7 +245,10 @@ EpicsPV.propTypes = {
    * the widget debugging information will be displayed.
    */
   debug: PropTypes.bool,
-
+/**
+   * If defined, then the DataConnection  will be over a new socketIO  connection, otherwise the global socketIO connection
+   */
+  makeNewSocketIoConnection: PropTypes.bool,
 
   /**
    * when writing to the  pv's output value, increment newValueTrigger to tell the pv component emit the output value to the process variable.
@@ -215,7 +259,7 @@ EpicsPV.propTypes = {
    */
   outputValue: PropTypes.any,
 
-  /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+  /** Name of the process variable,  eg. '$(device):test$(id)'*/
 
   pv: PropTypes.string,
 
@@ -241,6 +285,7 @@ EpicsPV.propTypes = {
 EpicsPV.defaultProps = {
 
   debug: false,
+  makeNewSocketIoConnection:true,
 
 };
 

@@ -1,8 +1,10 @@
 [{
         "area": "BEAMLINE DEMO",
+        "roles": [],
         "pvs": {},
         "subArea0": {
             "name": "POWER SUPPLIES",
+            "roles": [],
             "pvs": {
                 "pv0": "testIOC:PS1:Readback",
                 "pv1": "testIOC:PS2:Readback",
@@ -18,6 +20,7 @@
         },
         "subArea1": {
             "name": "SLITS",
+            "roles": [],
             "pvs": {
                 "pv0": "testIOC:SLITXY1:X:Gap:Readback",
                 "pv1": "testIOC:SLITXY1:X:Offset:Readback",
@@ -36,15 +39,18 @@
     },
     {
         "area": "BUILDING DEMO",
+        "roles": [],
         "pvs": {},
         "subArea0": {
             "name": "FIRE",
+            "roles": [],
             "pvs": {
                 "pv0": "$(DEMO_ALARMS_IOC):building_fire"
             }
         },
         "subArea1": {
             "name": "HVAC",
+            "roles": [],
             "pvs": {
                 "pv0": "$(DEMO_ALARMS_IOC):building_airtemp",
                 "pv1": "$(DEMO_ALARMS_IOC):building_airhumidity",
@@ -53,6 +59,7 @@
         },
         "subArea2": {
             "name": "SECURITY",
+            "roles": [],
             "pvs": {
                 "pv0": "$(DEMO_ALARMS_IOC):building_security"
             }
@@ -60,17 +67,20 @@
     },
     {
         "area": "CYCLOTRON DEMO",
+        "roles": [],
         "pvs": {
             "pv0": "$(DEMO_ALARMS_IOC):cyclotron_interlocks"
         },
         "subArea0": {
             "name": "AIR",
+            "roles": [],
             "pvs": {
                 "pv0": "$(DEMO_ALARMS_IOC):cyclotron_airpressure"
             }
         },
         "subArea1": {
             "name": "RF",
+            "roles": [],
             "pvs": {
                 "pv0": "$(DEMO_ALARMS_IOC):cyclotron_RF1",
                 "pv1": "$(DEMO_ALARMS_IOC):cyclotron_RF2",
@@ -79,18 +89,21 @@
         },
         "subArea2": {
             "name": "SAFETY",
+            "roles": [],
             "pvs": {
                 "pv0": "$(DEMO_ALARMS_IOC):cyclotron_safety"
             }
         },
         "subArea3": {
             "name": "VACUUM",
+            "roles": [],
             "pvs": {
                 "pv0": "$(DEMO_ALARMS_IOC):cyclotron_vacuum"
             }
         },
         "subArea4": {
             "name": "WATER",
+            "roles": [],
             "pvs": {
                 "pv0": "$(DEMO_ALARMS_IOC):cyclotron_water_flow",
                 "pv1": "$(DEMO_ALARMS_IOC):cyclotron_water_temp"
@@ -99,15 +112,18 @@
     },
     {
         "area": "VAULT DEMO",
+        "roles": [],
         "pvs": {},
         "subArea0": {
             "name": "ARMS",
+            "roles": [],
             "pvs": {
                 "pv0": "$(DEMO_ALARMS_IOC):vault_radiation"
             }
         },
         "subArea1": {
             "name": "CLEARANCE",
+            "roles": [],
             "pvs": {
                 "pv0": "$(DEMO_ALARMS_IOC):vault_door",
                 "pv1": "$(DEMO_ALARMS_IOC):vault_clear"
@@ -116,6 +132,7 @@
     },
     {
         "area": "EPICS PVS DEMO",
+        "roles": [],
         "pvs": {
             "pv0": "testIOC:amplitude"
         }

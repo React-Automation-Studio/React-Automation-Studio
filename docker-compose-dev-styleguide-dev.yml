@@ -3,7 +3,7 @@ services:
   frontendserverdev:
     env_file: .env
     build:
-      context: ./
+      context: ./     
       dockerfile: docker/frontendserverDev/Dockerfile
     volumes:
       - ./certificates:/certificates/
@@ -11,24 +11,12 @@ services:
       - ./ReactApp/src:/frontendserverAppDev/src
       - ./ReactApp/public:/frontendserverAppDev/public
     restart: always
-    logging:
-      driver: "none"
-    network_mode: host
-  pvserver:
-    env_file: .env
-    environment:
-      - ALARM_DATABASE=localhost
-      - ALARM_DATABASE_REPLICA_SET_NAME=devrs
-      - LOADSAVE_DATABASE=localhost
-      - LOADSAVE_DATABASE_REPLICA_SET_NAME=devrs
-      - WATCH_DEBUG_DATABASE=localhost
-      - WATCH_DEBUG_DATABASE_REPLICA_SET_NAME=devrs
-      - DEMO_ARCHIVER=http://localhost:17668
-      - pvServerLogLevel=INFO
-      - pvServerLogFile=/pvServer/log/pvServerLogFile
-      - http_proxy
-      - https_proxy
-      - no_proxy
+    # logging:
+    #   driver: "none"
+    #network_mode: host
+    ports:
+      - "3001:3000"
+  pvserver1:
     build:
       context: ./
       dockerfile: docker/pvserver/Dockerfile
@@ -36,27 +24,60 @@ services:
     network_mode: host
     tty: true
     stdin_open: true
-    volumes:
-      - ./certificates:/certificates/
-      - ./users:/pvServer/userAuthentication/users
-      - ./log/:/pvServer/log
-  unsecurestylguidepvserver:
     env_file: .env
     environment:
-          - REACT_APP_PyEpicsServerPORT=5001
-          - REACT_APP_EnableLogin=false
-          - DEMO_ARCHIVER=http://localhost:17668
-          - http_proxy
-          - https_proxy
-          - no_proxy
-
+      - ALARM_DATABASE=localhost
+      - ALARM_DATABASE_REPLICA_SET_NAME=devrs
+      - LOADSAVE_DATABASE=localhost
+      - LOADSAVE_DATABASE_REPLICA_SET_NAME=devrs
+      - ADMIN_DATABASE=localhost
+      - ADMIN_DATABASE_REPLICA_SET_NAME=devrs
+      - WATCH_DEBUG_DATABASE=localhost
+      - WATCH_DEBUG_DATABASE_REPLICA_SET_NAME=devrs
+      - DEMO_ARCHIVER=http://localhost:17668
+      - pvServerLogLevel=INFO
+      - pvServerLogFile=/pvServer/log/pvServerLogFile
+      - pvServerPort=9001
+      - pvServerURL=http://127.0.0.1
+    volumes:
+      - ./certificates:/certificates/
+      - ./log/:/pvServer/log
+      - ./build:/pvServer/build
+  nginx:
+    image: nginx:1.19.6
+    restart: always
+    network_mode: host
+    depends_on:
+      - pvserver1
+    entrypoint:
+      - /custom/setupNginx.styleguide.dev.sh
+      - /docker-entrypoint.sh
+    command: ["nginx", "-g", "daemon off;"] 
+    volumes:
+      - ./nginx/setupNginx.styleguide.dev.sh:/custom/setupNginx.styleguide.dev.sh
+      - ./nginx/nginx.styleguide.dev.conf:/custom/nginx.styleguide.dev.conf
+      - ./nginx/nginx.httpredirect.conf:/custom/nginx.httpredirect.conf
+      - ./build/styleguide:/var/www/styleguide
+      - ./certificates:/etc/nginx/certificates
+    env_file: .env
+  unsecurestylguidepvserver:
     build:
       context: ./
+ 
       dockerfile: docker/pvserver/Dockerfile
     restart: always
     network_mode: host
+    env_file: .env
+    environment:
+          - pvServerURL=http://127.0.0.1
+          - pvServerPort=5001
+          - REACT_APP_EnableLogin=false
+          - DEMO_ARCHIVER=http://localhost:17668
+          
+          
+          - no_proxy
     volumes:
-      - ./certificates:/certificates/
+          - ./certificates:/certificates/
   demoioc:
     build:
       context: ./
@@ -66,6 +87,19 @@ services:
     restart: always
     network_mode: host
 
+  signalcli:
+    build:
+      context: ./
+      dockerfile: docker/signalcli/Dockerfile
+    hostname: signalcli
+    restart: always
+    network_mode: "host"
+    stdin_open: true
+    tty: true
+    env_file: .env
+    volumes:
+      - "./signalcli/signal-cli-config:/srv/signal/.local/share/signal-cli"
+      
   initializealarmhandlerdb:
     build:
       context: ./
@@ -91,6 +125,8 @@ services:
     stdin_open: true
     tty: true
     env_file: .env
+    volumes:
+      - ./log/:/usr/src/app/log
 
   mongo1:
     image: mongo:4.2.3-bionic
@@ -183,7 +219,24 @@ services:
       - ./ReactApp/public:/frontendserverAppDev/public
       - ./ReactApp/styleguide.config.js:/frontendserverAppDev/styleguide.config.js
     restart: always
-    network_mode: host
+    #network_mode: host
+    ports:
+      - "6061:6060"
+  initializeadmindb:
+    env_file: .env
+    environment:
+      - ADMIN_DATABASE=localhost
+      - ADMIN_DATABASE_REPLICA_SET_NAME=devrs
+    build:
+      context: ./
+
+     
+      dockerfile: docker/adminDbInit/Dockerfile
+    network_mode: "host"
+    tty: true
+    stdin_open: true
+    depends_on:
+      - mongosetup
 
 
 volumes:

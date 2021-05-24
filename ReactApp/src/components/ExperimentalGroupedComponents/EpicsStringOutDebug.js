@@ -26,22 +26,22 @@ class EpicsStringOutDebug extends React.Component {
 
       <Grid container direction='row' spacing={2}>
         <Grid item  xs={12}>
-      <TextOutput  pv='pva://$(device).NAME' macros={this.props['macros']}  label={'EPICS PV Name:'}/>
+      <TextOutput  pv='$(device).NAME' macros={this.props['macros']}  label={'EPICS PV Name:'}/>
       </Grid>
         <Grid item  xs={12}>
-            <TextOutput  pv='pva://$(device)'      macros={this.props['macros']}  label={'EPICS PV Value:'} />
+            <TextOutput  pv='$(device)'      macros={this.props['macros']}  label={'EPICS PV Value:'} />
       </Grid>
         <Grid item  xs={12}>
-      <TextInput   pv='pva://$(device)'      macros={this.props['macros']}  label={'Type here to change:'}/>
+      <TextInput   pv='$(device)'      macros={this.props['macros']}  label={'Type here to change:'}/>
       </Grid>
       <Grid item xs={12}  >
-        <TextOutput  pv='pva://$(device)'      macros={this.props['macros']}  label={'EPICS PV Timestamp:'} displayTimeStamp />
+        <TextOutput  pv='$(device)'      macros={this.props['macros']}  label={'EPICS PV Timestamp:'} displayTimeStamp />
       </Grid>
       <Grid item xs={12} >
-        <TextOutput  pv='pva://$(device)'      macros={this.props['macros']}  label={'EPICS PV Host:'} displayMetaData={'host'} />
+        <TextOutput  pv='$(device)'      macros={this.props['macros']}  label={'EPICS PV Host:'} displayMetaData={'host'} />
       </Grid>
       <Grid item  xs={12}>
-          <TextUpdate  pv='pva://$(device)'      macros={this.props['macros']}  label={'Text Update: '} />
+          <TextUpdate  pv='$(device)'      macros={this.props['macros']}  label={'Text Update: '} />
     </Grid>
       </Grid>
 

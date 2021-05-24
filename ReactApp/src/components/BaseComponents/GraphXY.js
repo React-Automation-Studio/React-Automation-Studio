@@ -1,978 +1,745 @@
-import React from 'react'
-
-import DataConnection from '../SystemComponents/DataConnection';
-import { withStyles } from '@material-ui/core/styles';
-
+import React, { useEffect, useState, useRef, useReducer } from 'react'
 import PropTypes from 'prop-types';
-
-
+import { useTheme } from '@material-ui/core/styles';
 import ContextMenu from '../SystemComponents/ContextMenu';
-
-import {
-  XYPlot,
-  XAxis,
-  YAxis,
-  HorizontalGridLines,
-  VerticalGridLines,
-  LineSeries,
-  makeVisFlexible,
-
-  DiscreteColorLegend
-} from 'react-vis';
-const FlexibleXYPlot = makeVisFlexible(XYPlot);
-/* eslint-disable eqeqeq */
-/* eslint-disable no-unused-vars */
-function calcTimeFormat(timestamp) {
-  let mydate = new Date(timestamp * 1000);
-  //  let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  //  let year = mydate.getFullYear();
-  // let month = months[mydate.getMonth()];
-  //let date = mydate.getDate();
-  let hour = mydate.getHours();
-  let min = mydate.getMinutes();
-  let sec = mydate.getSeconds();
-  //let ms = mydate.getMilliseconds()
-  //let value= hour + ':' + min + ':' + sec +':' + ms;
-  let value;
-  if( min<10){
-    min='0'+min;
-
-  }
-
-  if( sec<10){
-    sec='0'+sec;
-
-  }
-  value=hour + ':' + min + ':' + sec ;
-
-  return value;
-}
-
-const styles = theme => ({
-
-  lineSeries: {
-
-    stroke:theme.palette.type==='dark'?'orange':'default'
+import PV from '../SystemComponents/PV'
+import Plot from 'react-plotly.js';
+import { replaceMacros } from '../SystemComponents/Utils/macroReplacement';
+import { isMobileOnly } from 'react-device-detect';
 
 
-  },
-});
+const PlotData = (props) => {
 
 
-/**
-* The GraphXY Component is a wrapper on Uber's React-Vis FlexibleXYPlot lineSeries graph component. The GraphXY component is implemented with zero margins and enabled to grow to the width and height of its parent container.<br/><br/>
-* The width and height must be controlled from the parent component.<br/><br/>
-* The compoment requires the that X and Y process variables must be defined. The X and Y process variable names are declared in the 'xPVs' and 'yPVs' array props.
-* Multiple traces can be plotted at the same time, the index of the 'xPVs' and 'yPVs' array elements define each trace.
-* PVs can be scalar or array variables.
-* React-vis Demos:
-* https://uber.github.io/react-vis/examples/showcases/plots<br/><br/>
-* React-vis API:
-* http://uber.github.io/react-vis/documentation/series-reference/line-series
+ 
+  
+  const updateDataReducer = (pvs, newData) => {
+    const { axis } = newData;
+    const {updateMode}= props;
+   
+    let newPvs = [...pvs];
+    let { initialized } = newData.pvData;
+    let value = initialized ? newData.pvData.value : [];
+    if (!Array.isArray(value)) {
+      value = [value]
+    }
+    let newX = [];
+    let newY = [];
+    let oldY;
+    let oldX;
+    let currentX=[];
+    let currentY=[];
 
-*/
-class GraphXY extends React.Component {
-  constructor(props) {const FlexibleXYPlot = makeVisFlexible(XYPlot);
-    super(props);
-    let state={}
-    let pv;
-    let pvname;
-    let pvnamesY=[];
-    let yPVs={};
-    for (pv in this.props.yPVs){
-      pvname=this.props.yPVs[pv];
-      if (typeof this.props.macros !== 'undefined'){
-
-        let macro;
-        for (macro in this.props.macros){
-          pvname=pvname.replace(macro.toString(),this.props.macros[macro].toString());
+    if (initialized) {
+      if (newPvs[newData.index]) {
+        if (axis==='y'){
+          currentY=value;
+          currentX=newPvs[newData.index].currentX?newPvs[newData.index].currentX:[]
+          oldX=newPvs[newData.index].x?newPvs[newData.index].x:[]
+          oldY=newPvs[newData.index].x?newPvs[newData.index].y:[]
         }
-      }
-      //    console.log(pvname)
+        else{
+          currentX=value;
+          currentY=newPvs[newData.index].currentY?newPvs[newData.index].currentY:[]
+          oldX=newPvs[newData.index].y?newPvs[newData.index].x:[]
+          oldY=newPvs[newData.index].y?newPvs[newData.index].y:[]
 
-      yPVs[pvname]={label:"", initialized: false,pvname:pvname,value:[],lastValue:"",timestamp:[],char_value:"",alarmColor:"",lower_disp_limit: 0,upper_disp_limit: 10000,lower_warning_limit: 4000,upper_warning_limit: 6000,
-      units: "V",precision: 0, ymin:1000000000000000000,ymax:-1000000000000000000 };
-      pvnamesY.push(pvname);
-    }
-    let xPVs={};
-    let pvnamesX=[];
-    for (pv in this.props.xPVs){
-      pvname=this.props.xPVs[pv];
-      if (typeof this.props.macros !== 'undefined'){
-
-        let macro;
-        for (macro in this.props.macros){
-          pvname=pvname.replace(macro.toString(),this.props.macros[macro].toString());
         }
-      }
-      //    console.log(pvname)
-
-      xPVs[pvname]={label:"", initialized: false,pvname:pvname,value:[],lastValue:"",timestamp:[],char_value:"",alarmColor:"",lower_disp_limit: 0,upper_disp_limit: 10000,lower_warning_limit: 4000,upper_warning_limit: 6000,
-      units: "V",precision: 0, xmin:1000000000000000000,xmax:-1000000000000000000 };
-      pvnamesX.push(pvname);
-    }
-
-    state['pvnamesY']=pvnamesY;
-    state['pvnamesX']=pvnamesX;
-    state['yPVs']=yPVs;
-    state['xPVs']=xPVs;
-    //  state['ymin']=1000000000000000000;
-    //  state['ymax']=-1000000000000000000;
-    state['PollingTimerEnabled']=false;
-    state['openContextMenu']= false;
-    state['x0']=0;
-    state['y0']=0;
-    const contextPVs=[];
-    for (const item in yPVs){
-      contextPVs.push(yPVs[item]);
-    }
-    for (const item in xPVs){
-      contextPVs.push(xPVs[item]);
-    }
-    state['contextPVs']=contextPVs;
-
-    this.state=state;
 
 
+       
+         
+          if (axis === 'y') {
+            
+            if (currentX.length===currentY.length){
+              if((updateMode==="updateOnXOrYChange")||(updateMode==="updateOnYChange")){
+                if (typeof props.maxLength !== "undefined") {
+                  // console.log("maxLength defined")
+                  newY = oldY.concat(currentY)
+                  newX = oldX.concat(currentX)
+                  if (newY.length > props.maxLength) {
+                    newY.splice(0, (newY.length - props.maxLength))
+                  }
+                  if (newX.length > props.maxLength) {
+                    newX.splice(0, (newX.length - props.maxLength))
+                  }
+        
+                }
+                else {
 
 
-
-
-    this.handleInputValueY= this.handleInputValueY.bind(this);
-    this.handleInputValueYPolled= this.handleInputValueYPolled.bind(this);
-    this.handleInputValueYUnpolled= this.handleInputValueYUnpolled.bind(this);
-    this.handleInputValueYLabel= this.handleInputValueYLabel.bind(this);
-    this.handleMetadataY= this.handleMetadataY.bind(this);
-
-    this.handleInputValueX= this.handleInputValueX.bind(this);
-    this.handleInputValueXPolled= this.handleInputValueXPolled.bind(this);
-    //this.handleInputValueXUnpolled= this.handleInputValueXUnpolled.bind(this);
-    this.handleInputValueXLabel= this.handleInputValueXLabel.bind(this);
-    this.handleMetadataX= this.handleMetadataX.bind(this);
-    this.multipleDataConnections=this.multipleDataConnections.bind(this);
-    this.handleToggleContextMenu=this.handleToggleContextMenu.bind(this);
-    this.multipleLineData=this.multipleLineData.bind(this);
-  }
-  handleInputValueY =index=>(inputValue,pvname,initialized,severity,timestamp)=>{
-    //  console.log('handleInputValueY',pvname,index,inputValue)
-    if((this.props.updateMode=='updateOnXChange')||this.props.usePolling){
-      let yPVs=this.state.yPVs;
-      let xPVs=this.state.xPVs;
-      yPVs[pvname].initialized=initialized;
-      yPVs[pvname].lastValue=inputValue;
-      yPVs[pvname].severity=severity;
-      this.setState({yPVs:yPVs});
-    }
-    else if ((this.props.updateMode=='updateOnYChange')||(this.props.updateMode=='updateOnXOrYChange')){
-      let yPVs=this.state.yPVs;
-      let xPVs=this.state.xPVs;
-      yPVs[pvname].initialized=initialized;
-      yPVs[pvname].lastValue=inputValue;
-      yPVs[pvname].severity=severity;
-      this.setState({yPVs:yPVs});
-      if(xPVs[this.state.pvnamesX[index]].initialized){
-        this.handleLineDataUpdate(yPVs[this.state.pvnamesY[index]],xPVs[this.state.pvnamesX[index]]);
-      }
-    }
-
-
-    //  console.log("value: ",inputValue);
-    //  console.log("pvname:", pvname);
-  }
-
-  handleInputValueX =index=>(inputValue,pvname,initialized,severity,timestamp)=>{
-    //console.log('handleInputValueX',pvname,index,inputValue)
-    if((this.props.updateMode=='updateOnYChange')||this.props.usePolling){
-      let xPVs=this.state.xPVs;
-      xPVs[pvname].initialized=initialized;
-      xPVs[pvname].lastValue=inputValue;
-      xPVs[pvname].severity=severity;
-      this.setState({xPVs:xPVs});
-    }
-    else if ((this.props.updateMode=='updateOnXChange')||(this.props.updateMode=='updateOnXOrYChange')){
-      let xPVs=this.state.xPVs;
-      let yPVs=this.state.yPVs;
-      xPVs[pvname].initialized=initialized;
-      xPVs[pvname].lastValue=inputValue;
-      xPVs[pvname].severity=severity;
-      this.setState({xPVs:xPVs});
-      if(yPVs[this.state.pvnamesY[index]].initialized){
-        this.handleLineDataUpdate(yPVs[this.state.pvnamesY[index]],xPVs[this.state.pvnamesX[index]]);
-      }
-    }
-
-
-    //  console.log("value: ",inputValue);
-    //  console.log("pvname:", pvname);
-  }
-
-
-  handleInputValueYPolled =()=>{
-    let pv;
-    let d = new Date();
-    let timestamp=d.getTime()/1000;
-    let index=0;
-    for(pv in this.state.pvnamesY){
-
-      if((this.state.yPVs[this.state.pvnamesY[index]].initialized)&&(this.state.xPVs[this.state.pvnamesX[index]].initialized)){
-
-        this.handleLineDataUpdate(this.state.yPVs[this.state.pvnamesY[index]],this.state.xPVs[this.state.pvnamesX[index]]);
-        //    console.log(timestamp,this.state.pvnamesY[pv],this.state.yPVs[this.state.pvnamesY[pv]].lastValue);
-        //  this.handleInputValueYUnpolled(this.state.yPVs[this.state.pvnamesY[pv]].lastValue,this.state.pvnamesY[pv],this.state.yPVs[this.state.pvnamesY[pv]].initialized,this.state.yPVs[this.state.pvnamesY[pv]].severity,timestamp)
-      }
-      index++;
-    }
-    //  console.log("value: ",inputValue);
-    //  console.log("pvname:", pvname);
-  }
-
-  handleInputValueXPolled = ()=>{
-    let pv;
-    let d = new Date();
-    let timestamp=d.getTime()/1000;
-
-    for(pv in this.state.pvnamesX){
-
-      if(this.state.xPVs[this.state.pvnamesX[pv]].initialized){
-
-        //    console.log(timestamp,this.state.pvnamesY[pv],this.state.xPVs[this.state.pvnamesY[pv]].lastValue);
-        //this.handleInputValueYUnpolled(this.state.xPVs[this.state.pvnamesX[pv]].lastValue,this.state.pvnamesX[pv],this.state.xPVs[this.state.pvnamesX[pv]].initialized,this.state.xPVs[this.state.pvnamesX[pv]].severity,timestamp)
-      }
-    }
-    //  console.log("value: ",inputValue);
-    //  console.log("pvname:", pvname);
-  }
-
-  handleInputValueYUnpolled = (inputValue,pvname,initialized,severity,timestamp)=>{
-    //console.log("unpolled");
-    //  console.log("test");
-    //  console.log("value: ",inputValue);
-    //  console.log("pvname:", pvname);
-    let yPVs=this.state.yPVs;
-    let yDataArray=[];
-    let yTimeStampArray=[];
-    //let ymax=parseFloat(this.state.ymax);
-    //  let ymin=parseFloat(this.state.ymin);
-    //  console.log('ymax init',this.state.ymax)
-    // console.log('ymin init',this.state.ymin)
-
-    //  console.log('yPVs[pvname].value', yPVs[pvname].value);
-    //   console.log('inputValue', inputValue);
-    let max;
-    if (initialized===true){
-      if (typeof this.props.maxLength !== 'undefined'){
-        max=this.props.maxLength;
-        if (Array.isArray(inputValue)===false){
-          //  console.log("not array")
-          if ((typeof this.props.triggerOnSingleValueChange !== 'undefined')){
-            if (yPVs[pvname].value.length>0){
-              if(inputValue!=yPVs[pvname].value[yPVs[pvname].value.length-1]){
-                yDataArray=yPVs[pvname].value.concat(inputValue);
-                yTimeStampArray=yPVs[pvname].timestamp.concat(timestamp);
+                newY=currentY;
+                newX=currentX;
+                }
               }
               else{
-                yDataArray=yPVs[pvname].value;
-                yTimeStampArray=yPVs[pvname].timestamp;
+                newY=oldY;
+                newX=oldX;
               }
             }
-            else {
-              yDataArray=[inputValue];
-              yTimeStampArray=[timestamp];
+            else{
+              newY=oldY;
+              newX=oldX;
             }
 
+            
           }
           else {
-            //  console.log(pvname,timestamp)
-            if (yPVs[pvname].value.length>0){
-              yDataArray=yPVs[pvname].value.concat(inputValue);
-              yTimeStampArray=yPVs[pvname].timestamp.concat(timestamp);
+            if (currentX.length===currentY.length){
+              if((updateMode==="updateOnXOrYChange")||(updateMode==="updateOnXChange")){
+                if (typeof props.maxLength !== "undefined") {
+                  // console.log("maxLength defined")
+                  newY = oldY.concat(currentY)
+                  newX = oldX.concat(currentX)
+                  if (newY.length > props.maxLength) {
+                    newY.splice(0, (newY.length - props.maxLength))
+                  }
+                  if (newX.length > props.maxLength) {
+                    newX.splice(0, (newX.length - props.maxLength))
+                  }
+        
+                }
+                else {
+                newY=currentY;
+                newX=currentX;
+                }
+              }
+              else{
+                newY=oldY;
+                newX=oldX;
+              }
             }
             else{
-              yDataArray=[inputValue];
-              yTimeStampArray=[timestamp];
+              newY=oldY;
+              newX=oldX;
             }
+          }
+        
+        // if (props.useTimeStamp !== true) {
+        //   if ((oldX.length !== newY.length)) {
 
-          }
-        }
-        else{
-          if (yPVs[pvname].value.length>0){
-            yDataArray=yPVs[pvname].value.concat(inputValue);
-          }
-          else{
-            yDataArray=inputValue;
-          }
-        }
+        //     newX = Array.from(newY.keys());
+        //   }
+        //   else {
+        //     newX = oldX
+        //   }
+        // }
+
+
+
       }
       else {
-        yDataArray=inputValue;
-        max=inputValue.length;
-      }
-
-
-
-
-      //  console.log('yDataArray=yPVs[pvname].value.concat(inputValue);', yDataArray);
-      yPVs[pvname].initialized=initialized;
-      yPVs[pvname].severity=severity;
-
-      let length= yDataArray.length;
-
-      if  (length> max){
-        yDataArray=yDataArray.slice(length-max);
-        if (this.props.useTimeStamp){
-          yTimeStampArray=yTimeStampArray.slice(length-max);
-
+        // newX = props.useTimeStamp ? new Date(newData.pvData.timestamp * 1000) : Array.from(value.keys());
+        // newY = value;
+        if (axis === 'y') {
+          currentY = value;
+          
+        }
+        else {
+          currentX = value;
         }
       }
-      //    console.log('yDataArray=yDataArray.slice(length-max);', yDataArray);
-
-      let i=0;
-      let sample;
-      let data=[];
-      let n;
-      //	console.log("pv.value: ",this.state[this.props.pv].value);
-      let ymax=-1000000000000000000;
-      let ymin=1000000000000000000;
-
-      for(n in yDataArray){
-        let val;
-        if (this.props.yScaleLog10===true){
-          val=Math.log10(parseFloat(yDataArray[n]))
-        }
-        else{
-          val=yDataArray[n];
-        }
-        // console.log("value: ",this.state[this.props.pv].value[i]);
-        //console.log('n: ',n,' this.state.ymax: ',this.state.ymax,)
-        if(parseFloat(val)>ymax){
-
-
-
-          ymax=parseFloat(val);
-          //console.log('new Ymax',ymax)
-        }
-        if(parseFloat(val)<ymin){
-          ymin=parseFloat(val);
-        }
-
-
-        if (this.props.useTimeStamp){
-          sample={x:yTimeStampArray[n],y:val}
-        }
-        else{
-          sample={x:i,y:val}
-        }
-        // console.log("sample: ",sample)
-
-        data[i]=sample;
-        i++;
-
-      }
-
-
-      yPVs[pvname].value=yDataArray;
-      yPVs[pvname].timestamp=yTimeStampArray;
-      yPVs[pvname].linedata=data;
-      yPVs[pvname].ymin=ymin;
-      yPVs[pvname].ymax=ymax;
-      //console.log('yPVs[pvname].linedata', yPVs[pvname].linedata);
-      //console.log('yTimeStampArray',yTimeStampArray)
-      //  console.log('length3', yPVs[pvname].linedata.length);
-
-
-
-      /*  if ((typeof this.props.ymax) !=='undefined'){
-      ymax=this.props.ymax;
-
     }
 
-    if ((typeof this.props.ymin)!=='undefined'){
-    ymin=this.props.ymin;
+
+
+    // else {
+    //   newPvs = []
+    //   newPvs.pvData = []
+
+    // }
+    // console.log(currentX.length,currentY.length,axis,newData.index)
+    // console.log(newX,newY,axis,newData.index)
+    // console.log(updateMode)
+    newPvs[newData.index] = {
+      x: newX,
+      y: newY,
+      currentX:currentX,
+      currentY:currentY,
+      // type: 'scatter',
+      // mode: 'lines',
+      // marker: { color: props.lineColor ? props.lineColor[newData.index] : theme.palette.reactVis.lineColors[newData.index] },
+
+      // name: typeof props.legend !=="undefined"
+      //   ?
+      //   props.legend[newData.index]
+      //     ?
+      //     props.legend[newData.index]
+      //     :
+      //     replaceMacros(props.pvs[newData.index], props.macros)
+      //   :
+      //   replaceMacros(props.pvs[newData.index], props.macros),
+      // hovertemplate: props.yHoverFormat ?
+      //   "(%{y:" + props.yHoverFormat + "}) %{x}<extra>%{fullData.name}</extra>"
+      //   : "(%{y}) %{x}<extra>%{fullData.name}</extra>"
+    };
+    // newPvs.pvData[newData.index] ={...newPvs.pvData[newData.index],... newData.pvData};
+    return newPvs;
+  }
+
+
+  const [data, updateData] = useReducer(updateDataReducer, []);
+  const updatePolledDataReducer = (oldPvs, newData) => {
+    let pvs = [...oldPvs];
+    pvs[newData.index] = newData.pvData;
+
+    return (pvs)
 
   }
-  */
-  //   console.log('ymax end',ymax)
-  //   console.log('ymin end',ymin)
 
-  this.setState({yPVs:yPVs});//,ymax:ymax,ymin:ymin});
+  const [polledDataX, updatePolledDataX] = useReducer(updatePolledDataReducer, []);
+  const [polledDataY, updatePolledDataY] = useReducer(updatePolledDataReducer, []);
+  const polledDataRefX = useRef(polledDataX);
+  useEffect(() => {
+    polledDataRefX.current = polledDataX;
+  }, [polledDataX])
+  const polledDataRefY = useRef(polledDataY);
+  useEffect(() => {
+    polledDataRefY.current = polledDataY;
+  }, [polledDataY])
+  const { usePolling, pollingRate } = props;
 
-
-  //state.yPVs[pvname].inputValue=inputValue;
-  //pvData.yPVs[pvname].initialized=initialized;
-  //pvData.yPVs[pvname].severity=severity;
-
-  //console.log("pvData:",pvData)
-
-  //this.setState(pvData);
-}
-}
-handleLineDataUpdate = (yPV,xPV)=>{
-
-  //console.log(xPV)
-  //console.log(yPV)
-  //  let yPVs=this.state.yPVs;
-  let yDataArray=[];
-  let xDataArray=[];
-  let max;
-  if (yPV.initialized===true){
-    if (typeof this.props.maxLength !== 'undefined'){
-      max=this.props.maxLength;
-      if (Array.isArray(yPV.lastValue)===false){
-
-          //  console.log(pvname,timestamp)
-          if (yPV.value.length>0){
-            yDataArray=yPV.value.concat(yPV.lastValue);
-            xDataArray=xPV.Value.concat(xPV.lastValue);
-          }
-          else{
-            yDataArray=[yPV.lastValue];
-            xDataArray=[xPV.lastValue];
-          }
-
-
+  useEffect(() => {
+    let timer;
+    const update = () => {
+      // console.log(polledDataRef.current)
+      polledDataRefX.current.forEach((item, index) => {
+        // console.log(index,item)
+        const timestamp=Date.now()/1000;
+        updateData({ index, pvData: {...item,timestamp:timestamp},axis:"x" })
+      })
+      polledDataRefY.current.forEach((item, index) => {
+        // console.log(index,item)
+        const timestamp=Date.now()/1000;
+        updateData({ index, pvData: {...item,timestamp:timestamp},axis:"y" })
+      })
+    }
+    if (usePolling) {
+      timer = setInterval(update, pollingRate)
+    }
+    return () => {
+      if (usePolling) {
+        clearInterval(timer)
       }
-      else{
-        if (yPV.value.length>0){
-          yDataArray=yPV.value.concat(yPV.lastValue);
-          xDataArray=xPV.value.concat(xPV.lastValue);
-        }
-        else{
-          yDataArray=yPV.lastValue;
-          xDataArray=xPV.lastValue;
-        }
+    }
+  }, [usePolling, pollingRate])
+
+
+  const contextInfoReducer = (oldPvs, newData) => {
+    let pvs = [...oldPvs];
+    pvs[newData.index] = newData.pvs[0];
+
+    return (pvs)
+
+  }
+  const [contextInfo, updateContextInfo] = useReducer(contextInfoReducer, []);
+  const [delayedData, setDelayedData] = useState([])
+  const [delayedContextInfo, setDelayedContextInfo] = useState([])
+  // const updateDataDebounced = useRef(debounce(value => setDelayedData(value), 50)).current;
+  const [trigger, setTrigger] = useState(0);
+  const { updateRate } = props;
+
+  useEffect(() => {
+
+    setTimeout(() => setTrigger(prev => prev + 1), parseInt(updateRate))
+    setDelayedData(data)
+    // eslint-disable-next-line  react-hooks/exhaustive-deps
+  }, [trigger, updateRate])
+
+  const [trigger2, setTrigger2] = useState(0);
+
+
+  useEffect(() => {
+
+    setTimeout(() => setTrigger2(prev => prev + 1), parseInt(1000))
+    
+    setDelayedContextInfo(contextInfo)
+    // eslint-disable-next-line  react-hooks/exhaustive-deps
+  }, [trigger2])
+
+  // useEffect(()=>{
+  //   updateDataDebounced(data)
+
+  // },[data])
+  const pvConnections = () => {
+    let pvs = [];
+    props.xPVs.forEach((item, index) => {
+      pvs.push(
+        <PV
+          key={"x" + index.toString()}
+          pv={item}
+          macros={props.macros}
+          pvData={(pvData) => props.usePolling ? updatePolledDataX({ index, pvData, axis: "x" }) : updateData({ index, pvData, axis: "x" })}
+          contextInfo={(pvs) => updateContextInfo({ index, pvs, axis: "x" })}
+          makeNewSocketIoConnection={props.makeNewSocketIoConnection}
+        />)
+    })
+    props.yPVs.forEach((item, index) => {
+      pvs.push(
+        <PV
+          key={"y" + index.toString()}
+          pv={item}
+          macros={props.macros}
+          pvData={(pvData) => props.usePolling ? updatePolledDataY({ index, pvData, axis: "y" }) : updateData({ index, pvData, axis: "y" })}
+          contextInfo={(pvs) => updateContextInfo({ index, pvs, axis: "y" })}
+          makeNewSocketIoConnection={props.makeNewSocketIoConnection}
+        />)
+    })
+
+
+    return pvs
+  }
+  return (
+    <div style={{width:'100%',height:'100%',backgroundColor:'inherit'}}>
+      {pvConnections()}
+      {props.children({ data: delayedData, contextInfo: delayedContextInfo })}
+    </div>
+  )
+}
+/**
+* The GraphXY Component has been updated to Plotly.js scatter and line plot. **Note**: The update includes a small breaking change. See the backgroundColor prop for the workaround. 
+
+
+*/
+
+const GraphXY = (props) => {
+  const theme = useTheme();
+  const backgroundColor=props.backgroundColor?props.backgroundColor:theme.palette.background.default;
+  if(typeof props.ymin!=="undefined"){
+    console.warn("Prop ymin is deprecated, use yMin instead")
+  }
+  if(typeof props.ymax!=="undefined"){
+    console.warn("Prop ymax is deprecated, use yMax instead")
+  }
+  
+  const createTraces = (data) => {
+    let traces = [];
+
+    data.forEach((item, index) => {
+      const traceProps = {
+        type: 'scatter',
+        mode: 'lines',
+        marker: { color: props.lineColor ? props.lineColor[index] : theme.palette.reactVis.lineColors[index] },
+
+        name: typeof props.legend !== "undefined"
+          ?
+          props.legend[index]
+            ?
+            props.legend[index]
+            :
+            replaceMacros(props.yPVs[index], props.macros)
+          :
+          replaceMacros(props.yPVs[index], props.macros),
+        hovertemplate: props.yHoverFormat ?
+          "(%{y:" + props.yHoverFormat + "}) %{x}<extra>%{fullData.name}</extra>"
+          : "(%{y}) %{x}<extra>%{fullData.name}</extra>"
       }
+      traces.push({ ...item, ...traceProps })
+
+    })
+
+    return (traces)
+
+  }
+
+  const paperRef = useRef(null);
+  const [width, setWidth] = useState(null);
+  const [height, setHeight] = useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const handleToggleContextMenu = (event) => {
+
+    event.preventDefault();
+    event.stopPropagation();
+    setAnchorEl(event.target);
+    setOpenContextMenu(!openContextMenu);
+  }
+  const handleContextMenuClose = () => {
+    setOpenContextMenu(false);
+  }
+  const [openContextMenu, setOpenContextMenu] = useState(false);
+  useEffect(() => {
+    const handleResize = () => {
+      if (paperRef.current) {
+        setHeight(props.height?props.height:paperRef.current.offsetWidth*props.aspectRatio)
+        setWidth(paperRef.current.offsetWidth)
+      }
+    }
+    // The 'current' property contains info of the reference:
+    // align, title, ... , width, height, etc.
+    if (paperRef.current) {
+      setHeight(props.height?props.height:paperRef.current.offsetWidth)
+      setWidth(paperRef.current.offsetWidth)
+    }
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize);
+    
+  }, [paperRef,props.width,props.height,props.aspectRatio]);
+  const [domain, setDomain] = useState([0, 1])
+  // const [yPositions, setYPositions] = useState([0, 0, 0])
+  useEffect(() => {
+    if (props.yAxes !== undefined) {
+      let numberOfyAxes = props.yAxes.length;
+      let newYPositions = [];
+      let increment = 100 / width;
+      let newDomain = [increment * (numberOfyAxes - 1), 1]
+      let index = 0;
+      for (let i = numberOfyAxes - 1; i >= 0; i--) {
+        newYPositions[index] = i * increment;
+        index++;
+      }
+      // setYPositions(newYPositions)
+      setDomain(newDomain)
     }
     else {
-      yDataArray=yPV.lastValue;
-      xDataArray=xPV.lastValue;
-      max=yPV.lastValue.length;
+      // setYPositions([0])
+      setDomain([0, 1])
     }
-
-
-
-
-
-
-
-
-
-    if  (yDataArray.length> max){
-      yDataArray=yDataArray.slice(yDataArray.length-max);
-
-
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [width])
+  const [yAxes] = useState(() => {
+    let yAxesInit = {};
+    // if (props.yAxes !== undefined) {
+    //   props.yAxes.forEach((item, index) => {
+    //     let key = index === 0 ? 'yaxis' : 'yaxis' + (index + 1)
+    //     if (index > 0) {
+    //       yAxesInit[key] = {
+    //         title: item.title ? item.title : "Y-Axis " + (index + 1),
+    //         titlefont: { color: props.yAxes.length > 1 ? theme.palette.reactVis.lineColors[index] : theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke },
+    //         tickfont: { color: props.yAxes.length > 1 ? theme.palette.reactVis.lineColors[index] : theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke },
+    //         gridcolor: theme.palette.reactVis[".rv-xy-plot__grid-lines__line"].stroke,
+    //         tickcolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
+    //         zerolinecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
+    //         linecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
+    //         zeroline: true,
+    //         showline: true,
+    //         showgrid: item.showGrid ? item.showGrid : true,
+    //         side: 'left',
+    //         position: yPositions[index],
+    //         anchor: 'free',
+    //         overlaying: 'y',
+    //         type: item.type === 'log' ? 'log' : 'linear',
+    //         tickformat: item.tickFormat ? item.tickFormat : ''
+    //       }
+    //     }
+    //     else {
+    //       yAxesInit['yaxis'] = {
+    //         title: item.title ? item.title : "Y-Axis " + (index + 1),
+    //         titlefont: { color: theme.palette.reactVis.lineColors[index], },
+    //         tickfont: { color: theme.palette.reactVis.lineColors[index], },
+    //         gridcolor: theme.palette.reactVis[".rv-xy-plot__grid-lines__line"].stroke,
+    //         tickcolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
+    //         zerolinecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
+    //         linecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
+    //         zeroline: true,
+    //         showline: true,
+    //         showgrid: true,
+    //         type: item.type === 'log' ? 'log' : 'linear',
+    //         tickformat: item.tickFormat ? item.tickFormat : ''
+    //       }
+    //     }
+    //   })
+    // }
+    // else {
+    yAxesInit['yaxis'] = {
+      // title: {
+      //   text:props.yAxisTitle,
+      // //  standoff:1,
+      // },
+      gridcolor: theme.palette.reactVis[".rv-xy-plot__grid-lines__line"].stroke,
+      tickcolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
+      zerolinecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
+      linecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
+      type: props.yScaleLog10 === true ? 'log' : 'linear',
+      tickformat: props.yTickFormat ? props.yTickFormat : '',
+      zeroline: true,
+      showline: true,
+      showgrid: true,
+      automargin:true,
+      range: [typeof props.yMin !== "undefined" ? props.yMin : null, typeof props.yMax !== "undefined" ? props.yMax : null],
+      tickmode:props.yTickValues?"array":"auto",
+      tickvals:props.yTickValues?props.yTickValues:[],
+      ticktext:props.yTickValues?(props.yTickLabels?props.yTickLabels:props.yTickValues):[],
+      
     }
-    if  (xDataArray.length> max){
-      xDataArray=xDataArray.slice(xDataArray.length-max);
-
-
-
-    }
-
-    let i=0;
-    let sample;
-    let data=[];
-    let n;
-
-    let ymax=-1000000000000000000;
-    let ymin=1000000000000000000;
-    let xmax=-1000000000000000000;
-    let xmin=1000000000000000000;
-    for(n in yDataArray){
-      let val;
-      let valX;
-      if (this.props.yScaleLog10===true){
-        val=Math.log10(parseFloat(yDataArray[n]))
+    // }
+    return (yAxesInit)
+  })
+  const [legend] = useState(() => {
+    let legendInit = props.showLegend === true ? {
+      legend: {
+        orientation: 'h',
+        x: 1,
+        xanchor: 'right',
+        y: 0.975,
+        bgcolor: "00000000"
       }
-      else{
-        val=yDataArray[n];
-      }
-      if (this.props.xScaleLog10===true){
-        valX=Math.log10(parseFloat(xDataArray[n]))
-      }
-      else{
-        valX=xDataArray[n];
-      }
+    } : {}
+    return legendInit
+  })
+
+  const [layout, setLayout] = useState({})
+
+  useEffect(() => {
+    setLayout({
+      title: {
+        text: props.title,
+      },
+      plot_bgcolor: backgroundColor,
+      xaxis: {
+        domain: domain,
+        // title: {
+        //   text:props.xAxisTitle,
+        //   standoff:8,
+        // },
+        gridcolor: theme.palette.reactVis[".rv-xy-plot__grid-lines__line"].stroke,
+        tickcolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
+        zerolinecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
+        linecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
+        zeroline: true,
+        showline: true,
+        showgrid: true,
+        automargin:true,
+        range: [typeof props.xMin !== "undefined" ? props.xMin : null, typeof props.xMax !== "undefined" ? props.xMax : null],
+        tickmode:props.xTickValues?"array":"auto",
+        tickvals:props.xTickValues?props.xTickValues:[],
+        ticktext:props.xTickValues?(props.xTickLabels?props.xTickLabels:props.xTickValues):[],
+
+
+        //  range: [selectedFromDate, selectedToDate],
+      },
+      ...yAxes,
+      font: {
+        family: 'Roboto,Arial',
+        color: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke
+      },
+      paper_bgcolor:  backgroundColor,
+      ...legend,
+      showlegend: props.showLegend,
+      margin: { t: props.title ? 32 : 16, r: 16,
+        l: 48, 
+        b: 32 
+       },
+      annotations: [props.yAxisTitle && {
+        xref: 'paper',
+        yref: 'paper',
+        x: 0,
+        xanchor: 'left',
+        y: 1,
+        yanchor: 'top',
+        text: props.yAxisTitle,
+        textangle: 270,
+        showarrow: false,
+      }, props.xAxisTitle && {
+        xref: 'paper',
+        yref: 'paper',
+        x: 1,
+        xanchor: 'right',
+        y: 0,
+        yanchor: 'bottom',
+        text: props.xAxisTitle,
+        showarrow: false
+      }]
+
+
+    })
+  }, [theme, props.showLegend, props.xAxisTitle, props.title,backgroundColor, props.xMin,props.xTickLabels,props.xTickValues,props.yAxisTitle,yAxes,domain,legend,props.xMax])
+
+  
+  return (
+    <div ref={paperRef} style={{ width: props.width?props.width:width, height: props.height?props.height:height, margin: 8,
+      backgroundColor:backgroundColor 
+      }}>
+
+     <PlotData {...props} backgroundColor={backgroundColor}>
+        {({ data, contextInfo }) => {
+          const traces = createTraces(data);
+
+          return (
+            <div style={{ width: "100%", height: "100%",backgroundColor:'inherit',padding:8 }} onContextMenu={
+              props.disableContextMenu ? undefined : handleToggleContextMenu
+            }
+
+              onPointerDownCapture={(event) => {
+                if (event.button !== 0) {
+                  event.preventDefault()
+                  return;
+                }
+              }}
+            >
+              {contextInfo && openContextMenu && <ContextMenu
+                disableProbe={props.disableProbe}
+                open={openContextMenu}
+                pvs={contextInfo}
+                handleClose={handleContextMenuClose}
+                probeType={'readOnly'}
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "center",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "center",
+                }}
+
+              />}
+
+
+              <Plot
+                config={typeof props.displayModeBar !== "undefined" ? {
+                  "displaylogo": false,
+                  scrollZoom: false,
+                  //     doubleclick: false,
+                  displayModeBar: props.displayModeBar,
+                  staticPlot:isMobileOnly?true:false,
+                  toImageButtonOptions: {
+                    format: 'svg'
+                  }
+                } : {
+
+                    "displaylogo": false,
+                    scrollZoom: false,
+                    staticPlot:(isMobileOnly&&(props.disableMobileStatic===false))?true:false,
+                    toImageButtonOptions: {
+                      format: 'svg'
+                    }
+                  }
+                }
+                useResizeHandler={true}
+                style={{
+                  position: 'relative',
+                  display: 'inline-block',
+                  width: '100%', height: '100%', paddingBottom: 8,
+                 
+                }}
+                data={traces}
+                layout={{ ...layout, }}
+
+
+
+
+
+              />
+            </div>
+          )
+        }
+        }
+
+      </PlotData>
 
-      if(parseFloat(val)>ymax){
-
-
-
-        ymax=parseFloat(val);
-
-      }
-      if(parseFloat(val)<ymin){
-        ymin=parseFloat(val);
-      }
-      if(parseFloat(valX)>xmax){
-
-
-
-        xmax=parseFloat(valX);
-
-      }
-      if(parseFloat(valX)<xmin){
-        xmin=parseFloat(valX);
-      }
-
-
-      sample={x:xDataArray[n],y:val}
-
-
-
-      data[i]=sample;
-      i++;
-
-    }
-
-
-    yPV.value=yDataArray;
-    xPV.Value=xDataArray;
-    yPV.linedata=data;
-
-    yPV.ymin=ymin;
-    yPV.ymax=ymax;
-    xPV.xmin=xmin;
-    xPV.xmax=xmax;
-    let yPVs=this.state.yPVs;
-    let xPVs=this.state.xPVs;
-    yPVs[yPV.pvname]=yPV;
-    xPVs[xPV.pvname]=xPV;
-    this.setState({yPVs:yPVs,xPVs:xPVs});
-  }
-}
-
-handleMetadataY =  pvname=>(metadata) =>{
-
-  let yPVs=this.state.yPVs;
-  yPVs[pvname].metadata=metadata;
-  this.setState({yPVs:yPVs});
-  //  console.log("metadata",metadata)
-
-}
-
-handleMetadataX =  pvname=>(metadata) =>{
-
-  let xPVs=this.state.xPVs;
-  xPVs[pvname].metadata=metadata;
-  this.setState({xPVs:xPVs});
-  //  console.log("metadata",metadata)
-
-}
-
-handleInputValueYLabel=pvname=>(inputValue)=>{
-
-  let yPVs=this.state.yPVs;
-  yPVs[pvname].label=inputValue;
-  this.setState({yPVs:yPVs});
-
-}
-
-handleInputValueXLabel=pvname=>(inputValue)=>{
-
-  let xPVs=this.state.xPVs;
-  xPVs[pvname].label=inputValue;
-  this.setState({xPVs:xPVs});
-
-}
-
-componentDidMount() {
-  if (this.props.usePolling){
-    let intervalId = setInterval(this.handleInputValueYPolled, this.props.pollingRate);
-    // store intervalId in the state so it can be accessed later:
-    this.setState({'intervalId': intervalId});
-  }
-}
-
-
-componentWillUnmount() {
-  if (this.props.usePolling){
-    clearInterval(this.state.intervalId);
-  }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-multipleDataConnections = () => {
-  //this.test("test1");
-  //this.handleInputValueY();
-  let pv;
-  let DataConnections=[];
-  let i=0;
-  for (pv in this.state.yPVs){
-    const index=i;
-    //console.log("linedata: ", this.state.yPVs[pv].linedata);
-    DataConnections.push(
-      <div key= {pv.toString() +'y'+i}>
-        <DataConnection
-          pv={this.state.yPVs[pv].pvname }
-          handleInputValue={this.handleInputValueY(index)}
-          handleMetadata={this.handleMetadataY(this.state.yPVs[pv].pvname)}
-          handleInputValueLabel={this.handleInputValueYLabel(this.state.yPVs[pv].pvname)}
-          usePvLabel={this.props.usePvLabel}
-          debug={this.props.debug}
-        />
-
-        {this.props.usePvLabel===true?this.state.yPVs[pv].label+': ':""}
-        {/*this.state.yPVs[pv].value*/}
-      </div>
-    )
-    i++;
-  }
-  i=0;
-  for (pv in this.state.xPVs){
-    const index=i;
-    //console.log("linedata: ", this.state.yPVs[pv].linedata);
-    DataConnections.push(
-      <div key= {pv.toString() +'x'+i} >
-        <DataConnection
-          pv={this.state.xPVs[pv].pvname}
-          handleInputValue={this.handleInputValueX(index)}
-          handleMetadata={this.handleMetadataX(this.state.xPVs[pv].pvname)}
-          handleInputValueLabel={this.handleInputValueXLabel(this.state.xPVs[pv].pvname)}
-          usePvLabel={this.props.usePvLabel}
-          debug={this.props.debug}
-        />
-
-        {this.props.usePvLabel===true?this.state.xPVs[pv].label+': ':""}
-        {/*this.state.yPVs[pv].value*/}
-      </div>
-
-    )
-    i++;
-  }
-  //console.log(DataConnections[0]);
-  return DataConnections;
-}
-
-multipleLineData = () => {
-  //this.test("test1");
-  //this.handleInputValueY();
-  let pv;
-  let lines=[];
-  let i=0;
-  let lineColor;
-  let theme=this.props.theme;
-  //    console.log(theme);
-  for (pv in this.state.yPVs){
-    if(typeof this.props.lineColor !=='undefined'){
-      lineColor=this.props.lineColor;
-    }
-    else{
-      lineColor=theme.palette.reactVis.lineColors;
-
-    }
-    //console.log("linedata: ", this.state.yPVs[pv].linedata);
-    if (this.state.yPVs[pv].initialized===true){
-      lines.push(
-
-        <LineSeries
-
-          key={pv.toString()}
-          color={lineColor[i]}
-
-          data={this.state.yPVs[this.state.yPVs[pv].pvname].linedata}
-          style={{
-            strokeLinejoin: 'round',
-            strokeWidth: 2
-
-          }}
-        />
-
-      )
-    }
-    else{
-      //const data=this.state.yPVs[this.state.yPVs[pv].pvname].linedata;
-      const sample={x:0,y:0}
-      const data=[];
-      data[0]=sample;
-      //console.log(data)
-      lines.push(
-
-        <LineSeries
-
-          key={pv.toString()}
-          color={'grey'}
-
-          data={typeof this.state.yPVs[this.state.yPVs[pv].pvname].linedata==='undefined'?data:this.state.yPVs[this.state.yPVs[pv].pvname].linedata}
-          style={{
-            strokeLinejoin: 'round',
-            strokeWidth: 2
-
-          }}
-        />
-
-      )
-
-    }
-
-    i++;
-  }
-  //console.log(DataConnections[0]);
-  return lines;
-}
-
-handleContextMenuClose = event => {
-
-
-  this.setState({ openContextMenu: false });
-};
-
-handleToggleContextMenu = (event) => {
-  console.log(event.type)
-
-  event.persist()
-  this.setState(state => ({ openContextMenu: !state.openContextMenu,x0:event.pageX,y0:event.pageY }));
-
-  event.preventDefault();
-}
-
-
-
-render() {
-  const {classes}= this.props;
-  const theme=this.props.theme;
-  //  console.log(this.props.theme);
-  //  console.log(this.state.ymax)
-  //  console.log(this.state.ymin)
-  //  console.log(this.state.rangeUnits)
-
-  let legendTitle="";
-  let legendItem;
-  let legendItems=[];
-  let legendColor=[];
-  let pv;
-  let i=0;
-  let yPVs=this.state.yPVs;
-  let xPVs=this.state.xPVs;
-  let ymax=-1000000000000000000;
-  let ymin=1000000000000000000;
-  let xmax=-1000000000000000000;
-  let xmin=1000000000000000000;
-
-  for (pv in yPVs){
-    if(typeof this.props.lineColor !=='undefined'){
-      legendColor=this.props.lineColor;
-    }
-    else{
-
-      legendColor=theme.palette.reactVis.lineColors;
-
-    }
-    //console.log("linedata: ", this.state.yPVs[pv].linedata);
-
-    i++;
-    //console.log(yPVs[pv].ymin)
-    if(yPVs[pv].ymin<ymin){
-      ymin=yPVs[pv].ymin;
-
-    }
-    if(yPVs[pv].ymax>ymax){
-      ymax=yPVs[pv].ymax
-    }
-
-  }
-  for (pv in xPVs){
-
-    if(xPVs[pv].xmin<xmin){
-      xmin=xPVs[pv].xmin;
-    }
-    if(xPVs[pv].xmax>xmax){
-      xmax=xPVs[pv].xmax
-    }
-
-  }
-
-  /*  if (ymin>0){
-  ymin=0.99*ymin;
-}
-else{
-ymin=1.01*ymin;
-}
-if(ymax>0){
-ymax=1.01*ymax;
-
-}
-else{
-ymax=0.99*ymax;
-}*/
-
-
-
-
-if (typeof this.props.legend !=='undefined'){
-  let i=0;
-  for(legendItem in this.props.legend){
-
-
-    legendItems.push({title:this.props.legend[legendItem].toString() ,color:legendColor[i], stroke:theme.palette.type=='dark'?'#80deea':'#dbdbe0'});
-
-    i++
-  }
-}
-//   console.log('ymax: ',this.state.ymax)
-//     console.log('ymin: ',this.state.ymin)
-let yDomain;
-if ((typeof this.props.ymax) !=='undefined'){
-
-
-  if ((typeof this.props.ymin)!=='undefined'){
-
-    yDomain=[this.props.ymin, this.props.ymax]
-  }
-  else {
-    yDomain=[ymin, ymax];
-  }
-}
-else {
-  yDomain=[ymin, ymax];
-}
-
-let xDomain;
-if ((typeof this.props.xmax) !=='undefined'){
-
-
-  if ((typeof this.props.xmin)!=='undefined'){
-
-    xDomain=[this.props.xmin, this.props.xmax]
-  }
-  else {
-    //xDomain=[xmin, xmax];
-    xDomain=[xmin,xmax];
-  }
-}
-else {
-  //xDomain=[xmin, xmax];
-  xDomain=[xmin, xmax];
-}
-// console.log('ymax',ymax)
-//   console.log('ymin',ymin)
-return (
-
-  <React.Fragment >
-      {/* <ReactVisLightDarkTheme/> */}
-    {this.multipleDataConnections()}
-    <div style={{width:'100%',height:'100%'}} onContextMenu={this.handleToggleContextMenu}>
-      <FlexibleXYPlot yDomain={yDomain} xDomain={xDomain} margin={{left: 60}} >
-        <ContextMenu
-          disableProbe={this.props.disableProbe}
-          open={this.state.openContextMenu}
-          anchorReference="anchorPosition"
-          anchorPosition={{ top: +this.state.y0, left: +this.state.x0 }}
-          probeType={'readOnly'}
-          pvs={this.state.contextPVs}
-          handleClose={this.handleContextMenuClose}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'left',
-          }}
-        />
-        <HorizontalGridLines tickValues={this.props.yTickValues}
-
-        />
-        <VerticalGridLines  tickValues={this.props.xTickValues} />
-        <XAxis
-          title={(typeof this.props.xAxisTitle !== 'undefined')?this.props.xAxisTitle:"X Axis"}
-          color="white"
-          tickFormat={v => typeof this.props.useTimeStamp!=='undefined'? calcTimeFormat(v):(v)+ this.props.xUnits}
-          tickTotal={this.props.xTickTotal}
-         // tickTotal={4}
-
-        />
-        {this.props.children}
-        <YAxis
-          title={(typeof this.props.yAxisTitle !== 'undefined')?this.props.yAxisTitle:"Y Axis"}
-          left={9} tickFormat={this.props.yScaleLog10===true?v => "10E"+(v)+ " "+this.props.yUnits :v => (v)+ " "+this.props.yUnits} tickSize={20}  tickPadding={2}
-          tickTotal={this.props.yTickTotal}
-          />
-        {this.multipleLineData()}
-
-
-        {(typeof this.props.legend !== 'undefined')&&<DiscreteColorLegend
-          color='#e89b02'
-          style={{position: 'absolute', right: '50px', top: '10px',}}
-          orientation="horizontal" items= {legendItems}/>}
-
-      </FlexibleXYPlot>
     </div>
-  </React.Fragment>
-
-
-
-    )
-  }
+  )
 
 }
 GraphXY.propTypes = {
 
-  /** Array of the Y process variables, NB must contain correct prefix ie: pva://  eg. ['pva://$(device):test$(id0)','pva://$(device):test$(id1)']*/
-  yPVs: PropTypes.array.isRequired,
-  /** Array of the X process variables, NB must contain correct prefix ie: pva://  eg. ['pva://$(device):test$(id0)','pva://$(device):test$(id1)']*/
+  /** X Array of the process variables,eg. ['$(device):test$(id0)','$(device):test$(id1)']*/
   xPVs: PropTypes.array.isRequired,
+  /** Y Array of the process variables,  eg. ['$(device):test$(id0)','$(device):test$(id1)']*/
+  yPVs: PropTypes.array.isRequired,
   /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id0)':'1','$(id1)':'2'}}*/
-  macros:PropTypes.object,
+  macros: PropTypes.object,
   /** Y axis title. */
-  yAxisTitle:PropTypes.string,
+  yAxisTitle: PropTypes.string,
   /** X axis title. */
-  xAxisTitle:PropTypes.string,
+  xAxisTitle: PropTypes.string,
 
-
+  /**
+   * Show the plotly mode bar: if true, display permanently, if false hide permanently, if undefined it will display on hover.
+   */
+  displayModeBar: PropTypes.bool,
   /** Custom y axis minimum to be used,if not defined the graph will auto-scale */
-  ymin:PropTypes.number,
+  yMin: PropTypes.number,
   /** Custom y axis maximum to be used,if not defined the graph will auto-scale */
-  ymax:PropTypes.number,
-  /** Custom x axis minimum to be used,if not defined the graph will auto-scale */
-  xmin:PropTypes.number,
-  /** Custom x axis maximum to be used,if not defined the graph will auto-scale */
-  xmax:PropTypes.number,
+  yMax: PropTypes.number,
 
   /** If defined, then the DataConnection debugging information will be displayed*/
-  debug:PropTypes.bool,
+  debug: PropTypes.bool,
   /** If defined, then a legend will be displayed,using the string items defined in the array*/
-  legend:PropTypes.array,
-  /** If defined, then the default React-Vis line colors will be overridden using the string items defined in the array*/
-  lineColor:PropTypes.array,
+  legend: PropTypes.array,
+  /** If defined, then the default line colors will be overridden using the string items defined in the array*/
+  lineColor: PropTypes.array,
   /** If defined then the length of the line graphs will grow up until the value defined*/
-  maxLength:PropTypes.number,
-  /** Custom y axis units to be used*/
-  yUnits:PropTypes.string,
-  /** Custom x axis units to be used*/
-  xUnits:PropTypes.string,
-  /** Directive to sample the PV values, on the client side at the polling rate*/
-  usePolling:PropTypes.bool,
+  maxLength: PropTypes.number,
+
+  /** Directive to sample the PV value, on the client side at the polling rate*/
+  usePolling: PropTypes.bool,
   /** Directive to scale the y-axis as a log base 10 value*/
-  yScaleLog10:PropTypes.bool,
+  yScaleLog10: PropTypes.bool,
+  /**
+       * The plotjs format overide for the tick format. This is derived from the <a href="https://github.com/d3/d3-format/blob/v2.0.0/README.md#format">d3 format specification</a>
+       * Example: ".3e" : exponential notaion with 3 digits.
+       *
+       */
+  yTickFormat: PropTypes.string,
+  /**
+   * Use this prop to make a seperate socket connection for the graph. It is experimental and can be possbily improve performace and for high data rate pv's and prevent slowing down the user interface
+   */
+  makeNewSocketIoConnection: PropTypes.bool,
   /** Polling interval in ms used in polling mode*/
-  pollingRate:PropTypes.number,
+
+
+
+  pollingRate: PropTypes.number,
+  // /** If defined then the graph will only update on a value change*/
+  // triggerOnSingleValueChange: PropTypes.bool,
 
   /** Directive to use PV timestamp on x-axis*/
-  useTimeStamp:PropTypes.bool,
+  useTimeStamp: PropTypes.bool,
+  /** Graph update perdiod in ms, set this higher for larger number of data points */
+  updateRate: PropTypes.number,
+
+  /**
+         * The plotjs format overide for the y value. This is derived from the <a href="https://github.com/d3/d3-format/blob/v2.0.0/README.md#format">d3 format specification</a>
+         * Example: ".3e" : exponential notation with 3 digits.
+         *
+         */
+  yHoverFormat: PropTypes.string,
+  /**
+   * Directive to show the legend
+   */
+  showLegend: PropTypes.bool,
   /** Update mode of the graph, Note polling mode will override these settings*/
-  updateMode: PropTypes.oneOf(['updateOnXOrYChange', 'updateOnYChange','updateOnXChange']),
+  updateMode: PropTypes.oneOf(['updateOnXOrYChange', 'updateOnYChange', 'updateOnXChange']),
+  /** If the height is undefined then the height will be set to parents width multplied by the aspect ratio*/
+  aspectRatio: PropTypes.number,
+   /**
+   * The backgorund color defaults to ```theme.palette.background.default```
+   * For a Paper or a Card component set it to ```theme.palette.background.paper```
+   */
+  backgroundColor:PropTypes.string,
+  /**
+   * Set the width
+   */
+  width:PropTypes.string,
+   /**
+   * Set the height, by default it is calculated from the width X aspectRatio. 
+   */
+  height:PropTypes.string,
+  /**
+   * **Note**: the zoom feature is disabled on a mobile device. To enable set this prop to true.
+   */
+   disableMobileStatic:PropTypes.bool,
+
+
 };
 
 GraphXY.defaultProps = {
-  updateMode:'updateOnXOrYChange',
-  debug:false,
-  yAxisTitle:'Y-axis',
-  xAxisTitle:'X-axis',
-  yUnits:"",
-  xUnits:"",
-  usePolling:false,
-  pollingRate:100,
+  updateRate: 100,
+  makeNewSocketIoConnection: false,
+  debug: false,
+  showLegend: true,
+  yAxisTitle: 'Y-axis',
+  xAxisTitle: 'X-axis',
+  usePolling: false,
+  pollingRate: 100,
+  width: '100%',
+  aspectRatio:1,
+  updateMode: 'updateOnXOrYChange',
+  disableMobileStatic:false,
 
 };
 
 
 
-export default withStyles(styles,{withTheme:true})(GraphXY)
+export default GraphXY

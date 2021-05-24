@@ -2,31 +2,36 @@ GraphXY EPICS variable example, drag the slider to modulate the amplitude of the
 ```js
 import Slider from './Slider';
 <div>
-<div style={{height:'25vh',width:'25vh'}}>
+
   <GraphXY  
     xPVs={
-      ['pva://testIOC:BeamSweepSim:x.AVAL',
-       'pva://testIOC:BeamSweepSim:x1.AVAL',
-       'pva://testIOC:BeamSweepSim:x2.AVAL'
+      ['testIOC:BeamSweepSim:x.AVAL',
+      'testIOC:BeamSweepSim:x1.AVAL',
+      'testIOC:BeamSweepSim:x2.AVAL'
       ]
     }  
     yPVs={
-      ['pva://testIOC:BeamSweepSim:y.AVAL',
-       'pva://testIOC:BeamSweepSim:y1.AVAL',
-       'pva://testIOC:BeamSweepSim:y2.AVAL'
+      ['testIOC:BeamSweepSim:y.AVAL',
+      'testIOC:BeamSweepSim:y1.AVAL',
+      'testIOC:BeamSweepSim:y2.AVAL'
       ]
    }  
-    xmax={10000}
-    ymax={10000}
-    xmin={-10000}
-    ymin={-10000}
+    xMax={10000}
+    yMax={10000}
+    xMin={-10000}
+    yMin={-10000}
+    showLegend={false}
     updateMode={'updateOnYChange'}
+    width={'50%'}
+    
+    
+   
   />
-</div>
-  <Slider  pv='pva://testIOC:BeamSweepSim:Amplitude'   label='Circle Radius' usePvMinMax={true}/>
-  <Slider  pv='pva://testIOC:BeamSweepSim:modAmp'   label='Modulation Amplitude' usePvMinMax={true}/>
+
+  <Slider  pv='testIOC:BeamSweepSim:Amplitude'   label='Circle Radius' usePvMinMax={true}/>
+  <Slider  pv='testIOC:BeamSweepSim:modAmp'   label='Modulation Amplitude' usePvMinMax={true}/>
   <Slider  
-    pv='pva://testIOC:BeamSweepSim:frequency'  
+    pv='testIOC:BeamSweepSim:frequency'  
     label='Frequency'
     min={0.1}
     max={1}

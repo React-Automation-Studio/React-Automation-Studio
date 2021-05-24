@@ -44,7 +44,7 @@ class ControlRightSinglePS extends React.Component {
       <div style={{ paddingRight: 12 }} >
 
 
-        {/*<TextUpdate  pv='pva://$(device):Setpoint.NAME' macros={this.props['macros']}  />*/}
+        {/*<TextUpdate  pv='$(device):Setpoint.NAME' macros={this.props['macros']}  />*/}
         <Grid style={{ paddingLeft: 12, paddingRight: 24, }} container spacing={2}>
           <Grid item xs={11}>
 
@@ -68,18 +68,18 @@ class ControlRightSinglePS extends React.Component {
             justify="flex-start"
             alignItems="center" spacing={1}>
             <Grid item xs={6}  >
-              <TextInput pv={'pva://' + system.devices.device.deviceName + ":" + system.devices.device.setpoint}  prec={3} label={'Setpoint:'} alarmSensitive={true} usePvUnits={true} usePvMinMax={true} />
+              <TextInput pv={ system.devices.device.deviceName + ":" + system.devices.device.setpoint}  prec={3} label={'Setpoint:'} alarmSensitive={true} usePvUnits={true} usePvMinMax={true} />
 
             </Grid>
             <Grid item xs={6}  >
-              <TextOutput style={{ marginRight: 10 }} pv={'pva://' + system.devices.device.deviceName + ":" + system.devices.device.readback}  prec={3} usePvUnits={true} alarmSensitive={true} label={'Readback'} />
+              <TextOutput style={{ marginRight: 10 }} pv={ system.devices.device.deviceName + ":" + system.devices.device.readback}  prec={3} usePvUnits={true} alarmSensitive={true} label={'Readback'} />
 
 
             </Grid>
 
             <Grid item xs={12}  >
 
-              <Slider pv={'pva://' + system.devices.device.deviceName + ":" + system.devices.device.setpoint}  prec={3} label={'Setpoint:'} alarmSensitive={true} usePvUnits={true} usePvMinMax={true} />
+              <Slider pv={ system.devices.device.deviceName + ":" + system.devices.device.setpoint}  prec={3} label={'Setpoint:'} alarmSensitive={true} usePvUnits={true} usePvMinMax={true} />
             </Grid>
             <Grid item xs={6}  >
 
@@ -97,7 +97,7 @@ class ControlRightSinglePS extends React.Component {
               <Grid container justify="flex-start" direction="row" alignItems="center" spacing={1}>
                 <Grid item xs={12} sm={12} >
                   <ThumbWheel
-                    pv={'pva://' + system.devices.device.deviceName + ":" + system.devices.device.setpoint}
+                    pv={ system.devices.device.deviceName + ":" + system.devices.device.setpoint}
                     macros={this.props['macros']}
                     prec_integer={2}
                     prec_decimal={2}
@@ -107,7 +107,7 @@ class ControlRightSinglePS extends React.Component {
               </Grid>
             </Grid>
             <Grid item xs={4}  >
-              <ToggleButton pv={'pva://' + system.devices.device.deviceName + ':On'} macros={this.props['macros']} labelPlacement={"top"} />
+              <ToggleButton pv={ system.devices.device.deviceName + ':On'} macros={this.props['macros']} labelPlacement={"top"} />
 
 
 

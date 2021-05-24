@@ -179,7 +179,7 @@ class ExperimentalMobileDemo1 extends React.Component {
         <Grid container className={classes.root} spacing={2}>
           {/* <Grid item xs={12}>
             <HooksWidget
-              pv='pva://$(device):amplitude'
+              pv='$(device):amplitude'
               macros={{ '$(device)': 'testIOC' }}
               usePvLabel={true}
               usePvPrecision={true}
@@ -190,7 +190,7 @@ class ExperimentalMobileDemo1 extends React.Component {
           </Grid> */}
           <Grid item xs={6}>
             <TextInput
-              pv='pva://$(device):amplitude'
+              pv='$(device):amplitude'
               macros={{ '$(device)': 'testIOC' }}
               label={'edas'}
               usePvUnits={true}
@@ -208,7 +208,7 @@ class ExperimentalMobileDemo1 extends React.Component {
           </Grid>
           <Grid item xs={6}>
             <TextOutput
-              pv='pva://$(device):amplitude'
+              pv='$(device):amplitude'
               macros={{ '$(device)': 'testIOC' }}
               label={'edas'}
               //usePvUnits={true}
@@ -227,7 +227,7 @@ class ExperimentalMobileDemo1 extends React.Component {
           </Grid>
           <Grid item xs={6}  >
             <Slider
-              pv='pva://$(device):amplitude'
+              pv='$(device):amplitude'
               macros={{ '$(device)': 'testIOC' }}
               usePvMinMax={true}
               units={"V"}
@@ -242,7 +242,7 @@ class ExperimentalMobileDemo1 extends React.Component {
           </Grid>
           <Grid item xs={6}  >
             <Slider
-              pv='pva://$(device):amplitude'
+              pv='$(device):amplitude'
               macros={{ '$(device)': 'testIOC' }}
               // usePvMinMax={true} 
               units={"V"}
@@ -257,7 +257,7 @@ class ExperimentalMobileDemo1 extends React.Component {
           </Grid>
           {/* <Grid item xs={12}>
             <HooksWidget
-              pv='pva://$(device):BO1'
+              pv='$(device):BO1'
               macros={{ '$(device)': 'testIOC' }}
               usePvLabel={true}
               usePvPrecision={true}

@@ -87,9 +87,9 @@ ActionButton.propTypes = {
   actionString: PropTypes.string,
   /**  Define the value to write into the PV.*/
   actionValue: PropTypes.any,
-  /** Name of the process variable, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+  /** Name of the process variable,  eg. '$(device):test$(id)'*/
   pv: PropTypes.string,
-  /** Array of the process variables, NB must contain correct prefix ie: pva://  eg. 'pva://$(device):test$(id)'*/
+  /** Array of the process variables, eg. '$(device):test$(id)'*/
   pvs: PropTypes.arrayOf(PropTypes.string),
   /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
   macros: PropTypes.object,

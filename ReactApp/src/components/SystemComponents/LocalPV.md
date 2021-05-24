@@ -35,7 +35,7 @@ Example using the Hook `useLocalPV` :
 import React from 'react';
 import {useLocalPV} from './LocalPV'
 const Example1=(props)=>{
-    const pv=useLocalPV({pv:'pva://$(device):test$(id)', macros:{'$(device)':'testIOC','$(id)':'2'}})
+    const pv=useLocalPV({pv:'$(device):test$(id)', macros:{'$(device)':'testIOC','$(id)':'2'}})
     const {initialized}=pv;
     const value=initialized?pv.value:"value is not initialized";
 

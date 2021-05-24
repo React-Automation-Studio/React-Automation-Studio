@@ -23,56 +23,71 @@ import Example2 from './components/staging/Example/Example2';
 import Example3 from './components/staging/Example/Example3';
 //system
 import MainDashboard from './components/UI/MainDashboard';
-import LogIn from './LogIn';
+import Login from './components/SystemComponents/Login';
 import Probe from './components/SettingsPages/Probe';
 import Vault from './components/AlarmHandler/Vault';
 import Help from './components/docs/Help';
+import Administrator from './components/Administrator/Administrator.js';
+import UserProfile from './components/SystemComponents/userProfiles/UserProfile';
+import ProtectedRoute from './components/SystemComponents/ProtectedRoute';
 const Routes = (props) => {
   return (
     <BrowserRouter >
 
       <Switch>
         {/*system start*/}
-        <Route exact path="/" component={MainDashboard} />
-        <Route exact path="/MainDashboard" component={MainDashboard} />
-
+        <ProtectedRoute exact path="/" component={MainDashboard} />
+        <ProtectedRoute exact path="/MainDashboard" component={MainDashboard} />
+        <ProtectedRoute exact path="/Administrator" component={Administrator} roles={['admin']} />
+        <ProtectedRoute path="/UserProfile" component={UserProfile} />
         {process.env.REACT_APP_EnableLogin === 'true' &&
-          <Route exact path="/LogIn" component={LogIn} />
+          <Route
+            exact 
+            path="/Login"
+            component={() =>
+              <Login 
+               
+               footerString= "Login is now customizable"
+               version="V2.2.0"
+               timeout={5000}
+               />
+            }
+          />
         }
 
-        <Route path="/Probe" component={Probe} />
-        <Route path="/Help" component={Help} />
+        <ProtectedRoute path="/Probe" component={Probe} />
+        <ProtectedRoute path="/Help" component={Help} />
         {/*system end*/}
 
         {/*demos start*/}
-        <Route path="/MobileDemo1" component={MobileDemo1} />
-        <Route path="/MobileDemo2" component={MobileDemo2} />
-        <Route path="/EpicsDemos" component={EpicsDemos} />
-        <Route path="/Test3D" component={Test3D} />
-        <Route path="/AlarmHandlerDemo" component={AlarmHandlerDemo} />
-        <Route path="/ArchiverDataViewerDemo" component={ArchiverDataViewerDemo}/>
-        <Route path="/VaultDemo" component={Vault} />
-        <Route path="/LoadSaveExample" component={LoadSaveExample} />
+        <ProtectedRoute path="/MobileDemo1" component={MobileDemo1} />
+        <ProtectedRoute path="/MobileDemo2" component={MobileDemo2} />
+        <ProtectedRoute path="/EpicsDemos" component={EpicsDemos} />
+        <ProtectedRoute path="/Test3D" component={Test3D} />
+        <ProtectedRoute path="/AlarmHandlerDemo" component={AlarmHandlerDemo} />
+        <ProtectedRoute path="/ArchiverDataViewerDemo" component={ArchiverDataViewerDemo} />
+        <ProtectedRoute path="/VaultDemo" component={Vault} />
+        <ProtectedRoute path="/LoadSaveExample" component={LoadSaveExample} />
         {/* new Beamline and table control System routes start*/}
-        <Route path="/BeamlineControlSystem" component={BeamlineControlSystem} />
-        <Route path="/AdvancedSettingsSinglePS" component={AdvancedSettingsSinglePS} />
-        <Route path="/TableControlSystem" component={TableControlSystem} />
-        <Route path="/SettingsSinglePS" component={SettingsSinglePS} />
-        <Route path="/SettingsSteererXY" component={SettingsSteererXY} />
+        <ProtectedRoute path="/BeamlineControlSystem" component={BeamlineControlSystem} />
+        <ProtectedRoute path="/AdvancedSettingsSinglePS" component={AdvancedSettingsSinglePS} />
+        <ProtectedRoute path="/TableControlSystem" component={TableControlSystem} />
+        <ProtectedRoute path="/SettingsSinglePS" component={SettingsSinglePS} />
+        <ProtectedRoute path="/SettingsSteererXY" component={SettingsSteererXY} />
         {/* new Beamline and table control System routes end*/}
 
         {/*demos end*/}
 
         {/*staging start*/}
-        <Route path="/Staging" component={Staging} />
-        <Route path="/Example" component={Example} />
-        <Route path="/Example1" component={Example1} />
-        <Route path="/Example2" component={Example2} />
-        <Route path="/Example3" component={Example3} />
+        <ProtectedRoute path="/Staging" component={Staging} />
+        <ProtectedRoute path="/Example" component={Example} />
+        <ProtectedRoute path="/Example1" component={Example1} />
+        <ProtectedRoute path="/Example2" component={Example2} />
+        <ProtectedRoute path="/Example3" component={Example3} />
         {/*staging end*/}
 
 
-        
+
 
       </Switch>
 

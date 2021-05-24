@@ -35,7 +35,7 @@ const EditorSteererXY =(props)=>{
       <div className={classes.body1} style={{ paddingRight: 12 }}>
 
 
-        {/*<TextUpdate  pv='pva://$(device):Setpoint.NAME' macros={props['macros']}  />*/}
+        {/*<TextUpdate  pv='$(device):Setpoint.NAME' macros={props['macros']}  />*/}
         <Grid style={{ paddingLeft: 12, paddingRight: 24, }} container spacing={2}>
           <Grid item xs={11}>
 
@@ -130,7 +130,7 @@ const EditorSteererXY =(props)=>{
         <div className={classes.body1} style={{ marginTop: 12 }}>
 
           {system.displayName + ": Y-Steerer"}
-          {/*<TextUpdate  pv='pva://$(device):Setpoint.NAME' macros={props['macros']}  />*/}
+          {/*<TextUpdate  pv='$(device):Setpoint.NAME' macros={props['macros']}  />*/}
 
           <Paper style={{ padding: 12 }} elevation={props.theme.palette.paperElevation} >
 

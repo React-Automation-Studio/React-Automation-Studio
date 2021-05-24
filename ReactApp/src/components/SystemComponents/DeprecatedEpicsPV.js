@@ -3,7 +3,6 @@ import AutomationStudioContext from './AutomationStudioContext';
 import { withStyles } from '@material-ui/core/styles';
 
 import { v4 as uuidv4 } from 'uuid';
-import RedirectToLogIn from './RedirectToLogin.js';
 const styles = theme => ({
   body1: theme.typography.body1,
 
@@ -26,6 +25,7 @@ class DeprecatedEpicsPV extends React.Component {
       for (macro in this.props.macros){
         pvname=pvname.replace(macro.toString(),this.props.macros[macro].toString());
       }
+     
       this.state ={
         'id': uuidv4(),
         'initialized':false,
@@ -41,6 +41,7 @@ class DeprecatedEpicsPV extends React.Component {
     }
     else{
       pvname=this.props.pv;
+     
       this.state ={ 'initialized':false,
       'pvname':pvname,
       'interalValue':' ',
@@ -161,7 +162,8 @@ class DeprecatedEpicsPV extends React.Component {
       let socket=this.context.socket;
 
       //      console.log('epicsPV user: ',user)
-      let jwt = JSON.parse(localStorage.getItem('jwt'));
+      
+      let jwt = this.context.userTokens.accessToken;
       if (jwt===null){
         jwt='unauthenticated'
       }
@@ -180,16 +182,16 @@ class DeprecatedEpicsPV extends React.Component {
 
 
 
-      let jwt = JSON.parse(localStorage.getItem('jwt'));
+      let jwt = this.context.userTokens.accessToken;
       if (jwt===null){
         jwt='unauthenticated'
       }
-      socket.emit('request_pv_info', {data: this.state.pvname,'clientAuthorisation':jwt},this.handleRequestPvInfoAck);
+      socket.emit('request_pv_info', {data: this.state.pvname.replace("pva://",""),'clientAuthorisation':jwt},this.handleRequestPvInfoAck);
     //  this.handleInitialConnection();
       this.timeout=setTimeout(this.handleInitialConnection, 3000);
       //    console.log("this.state.pvname",this.state.pvname);
 
-      socket.on(this.state.pvname,this.updatePVData);
+      socket.on(this.state.pvname.replace("pva://",""),this.updatePVData);
       socket.on('connect_error',this.connectError);
       socket.on('disconnect', this.disconnect);
       socket.on('connect', this.reconnect);
@@ -219,7 +221,7 @@ class DeprecatedEpicsPV extends React.Component {
       //  clearTimeout(this.timeout)
       //  this.timeout = null
       //}
-      let jwt = JSON.parse(localStorage.getItem('jwt'));
+      let jwt = this.context.userTokens.accessToken;
       if (jwt===null){
         jwt='unauthenticated'
       }
@@ -258,7 +260,7 @@ class DeprecatedEpicsPV extends React.Component {
             //        console.log('componentDidUpdate internal Epics value:', value)
 
             let socket=this.context.socket;
-            let jwt = JSON.parse(localStorage.getItem('jwt'));
+            let jwt = this.context.userTokens.accessToken;
             if (jwt===null){
               jwt='unauthenticated'
             }
@@ -275,7 +277,7 @@ class DeprecatedEpicsPV extends React.Component {
               {
 
                 let socket=this.context.socket;
-                let jwt = JSON.parse(localStorage.getItem('jwt'));
+                let jwt = this.context.userTokens.accessToken;
                 if (jwt===null){
                   jwt='unauthenticated'
                 }
@@ -296,9 +298,11 @@ class DeprecatedEpicsPV extends React.Component {
 
 
     render() {
+
       const {classes} =this.props;
       const value =this.state.internalValue
       const pvname =this.state.pvname
+      // console.log(pvname)
       const initialized= this.state.initialized;
       const redirectToLogInPage=this.state.redirectToLogInPage;
       if (this.props.debug===true){
@@ -337,8 +341,8 @@ class DeprecatedEpicsPV extends React.Component {
       else{
       return( <React.Fragment  >
 
-        {/*redirectToLogInPage&&<Redirect  push={true} to='/LogIn' />*/}
-        {this.context.styleGuideRedirect&&<RedirectToLogIn/>}
+        {/*redirectToLogInPage&&<Redirect  push={true} to='/Login' />*/}
+        {/* {this.context.styleGuideRedirect&&<RedirectToLogIn/>} */}
       </React.Fragment>
     )}
 

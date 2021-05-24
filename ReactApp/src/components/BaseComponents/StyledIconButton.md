@@ -9,7 +9,7 @@ StyledIconButton example connection to a SoftChannel EPICS AI pv with example of
   <div style={{textAlign:'center'}}>
   <div style={{marginBottom:8}}>
     <TextOutput   
-     pv='pva://$(device):BO$(id)'
+     pv='$(device):BO$(id)'
      macros={{'$(device)':'testIOC','$(id)':'1'}} 
      usePvLabel={true} 
      usePvPrecision={true} />
@@ -17,7 +17,7 @@ StyledIconButton example connection to a SoftChannel EPICS AI pv with example of
   {/*###############*/}  
 
   <StyledIconButton    
-    pv='pva://$(device):BO$(id)'
+    pv='$(device):BO$(id)'
     macros={{'$(device)':'testIOC','$(id)':'1'}} 
     usePvLabel={true}>
     <Face/>
@@ -36,7 +36,7 @@ StyledIconButton example connection to a SoftChannel EPICS AI pv with example of
   <div style={{textAlign:'center'}}>
   <div style={{marginBottom:8}}>
     <TextOutput
-      pv='pva://$(device):BO$(id)'
+      pv='$(device):BO$(id)'
       macros={{'$(device)':'testIOC','$(id)':'1'}} 
       usePvLabel={true}
       usePvPrecision={true}
@@ -48,7 +48,7 @@ StyledIconButton example connection to a SoftChannel EPICS AI pv with example of
   {/*###############*/}  
 
   <StyledIconButton  
-    pv='pva://$(device):BO$(id)'
+    pv='$(device):BO$(id)'
     macros={{'$(device)':'testIOC','$(id)':'1'}} 
     usePvLabel={true} 
     labelPlacement='end' 

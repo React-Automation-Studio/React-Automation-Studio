@@ -144,7 +144,11 @@ function ArrayContainer(props) {
     } else {
       additionalProps["index"] = index;
     }
-    if (registersLabel !== undefined && Array.isArray(registersLabel)) {
+    if (
+      registersLabel !== undefined &&
+      Array.isArray(registersLabel) &&
+      registersLabel[index]
+    ) {
       additionalProps["label"] = registersLabel[index].toString();
     }
     return (

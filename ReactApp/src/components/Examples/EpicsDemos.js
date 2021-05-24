@@ -177,7 +177,7 @@ class EpicsDemos extends React.Component {
             <Grid item xs={12} sm={6} >
               <ArrayContainer
                 label="First 3 samples of Sine Wave Circular Buffer using ArrayContainer"
-                registersLabel={['1','2','3']}
+                registersLabel={["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]}
                 spacing={1}
                 visibleItemsCount={3}
                 maxItemsCount={10}

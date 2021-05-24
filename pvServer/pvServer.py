@@ -47,7 +47,7 @@ load_dotenv()
 async_mode = 'gevent'
 print("")
 print('**************************************')
-print("React Automation Studio V2.2.0")
+print("React Automation Studio V3.0.0")
 print("")
 print("pvServer Environment Variables:")
 print("")

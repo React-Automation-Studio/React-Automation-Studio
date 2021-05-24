@@ -48,7 +48,7 @@ const Routes = (props) => {
               <Login 
                
                footerString= "Login is now customizable"
-               version="V2.2.0"
+               version="V3.0.0"
                timeout={5000}
                />
             }

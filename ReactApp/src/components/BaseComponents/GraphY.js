@@ -180,8 +180,11 @@ const PlotData = (props) => {
 
   useEffect(() => {
 
-    setTimeout(() => setTrigger(prev => prev + 1), parseInt(updateRate))
+    const timeout=setTimeout(() => setTrigger(prev => prev + 1), parseInt(updateRate))
     setDelayedData(data)
+    return ()=>{
+      clearTimeout(timeout)
+    }
     // eslint-disable-next-line  react-hooks/exhaustive-deps
   }, [trigger, updateRate])
 
@@ -190,8 +193,12 @@ const PlotData = (props) => {
 
   useEffect(() => {
 
-    setTimeout(() => setTrigger2(prev => prev + 1), parseInt(1000))
+    const timeout=setTimeout(() => setTrigger2(prev => prev + 1), parseInt(1000))
+
     setDelayedContextInfo(contextInfo)
+    return ()=>{
+      clearTimeout(timeout)
+    }
       // eslint-disable-next-line  react-hooks/exhaustive-deps
   }, [trigger2])
 

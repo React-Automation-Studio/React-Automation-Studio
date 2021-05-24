@@ -21,7 +21,7 @@ They will be prompted to enter the username and password or authenticate useing 
 The username and password or token is then  transmitted to the backend for authentication. If authenticated, the server returns  encrypted Jason web token (JWT) in the form on an access and refresh token. This is used to keep the user logged in between session. No username or password is stored in the browser. The user must logout in order cancel the session.
 
 
-If the access token is invalid the user will be redirected to the login screen. The default access, and refresh token expiry is 300 seconds and 1 week. By default the access token and refresh tokens are rfreshed once a minute.
+If the access token is invalid the user will be redirected to the login screen. The default access, and refresh token expiry is 300 seconds and 1 week. By default the access token and refresh tokens are refreshed once a minute.
 
 All tokens of all users can also be invalidated by declaring a new secret key in the  environment variable: `SECRET_PWD_KEY` . If the `SECRET_PWD_KEY`  is not defined then a predefined key will be used .
 

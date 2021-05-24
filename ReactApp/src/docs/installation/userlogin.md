@@ -23,7 +23,7 @@ The default username and password  will be admin / admin
 
 The admin user will have full read and write access, whilst any other user will have read access by default.
 
-To enable Active Directory Authentication opent the .env and add, (You will need to rebuild the docker images):
+To enable Active Directory Authentication open the .env and add, (You will need to rebuild the docker images):
 ```bash
 REACT_APP_EnableActiveDirectoryLogin=true
 LDAP_HOST=ldap://xxxxxx
@@ -31,16 +31,24 @@ LDAP_PORT=389
 
 ```
 
-To enable Active Directory Authentication opent the .env and add, (You will need to rebuild the docker images):
+To enable Active Directory Authentication open the .env and add, (You will need to rebuild the docker images):
 ```bash
 Set REACT_APP_EnableGoogleLogin=true
 REACT_APP_EnableGoogleLoginId= xxxxx
 ```
-Set REACT_APP_EnableGoogleLoginId to your google client id for your domain
+Set `REACT_APP_EnableGoogleLoginId` to your google client id for your domain
 at https://console.developers.google.com/apis/credentials/           
-click create new credenitals and the create a new oAuth id  for the web app
+click create new credentials and the create a new oAuth id  for the web app
 It needs an https domain. 
 you can enter multiple domains:
 for example: https://mydomain
 https://mydomain:5000
 https://mydomain:3000
+
+
+It is envisioned that in the future more external authentication mechanisms will be added. In this case one may want to disable the standard authentication. This can be done by setting:
+
+```bash
+REACT_APP_DisableStandardLogin=true
+```
+in the .env file.

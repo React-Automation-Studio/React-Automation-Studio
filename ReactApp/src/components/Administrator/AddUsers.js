@@ -14,7 +14,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 import AddIcon from '@material-ui/icons/Add';
-
+import {usePasswordValidator} from '../SystemComponents/Utils/passwordValidator'
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -28,7 +28,7 @@ const AddUsers = (props) => {
   const [usernameError, setUsernameError] = useState(false);
   const [password, setPassword] = useState("");
   const [requirePassword, setRequirePassword] = useState(!(process.env.REACT_APP_DisableStandardLogin === 'true'))
-  const passwordHelperText = "Minimum length 12 characters";
+  const {passwordError,passwordHelperText}=usePasswordValidator(password);
   const [confirmPassword, setConfirmPassword] = useState("");
   const [email, setEmail] = useState("");
   const [givenName, setGivenName] = useState("");
@@ -69,14 +69,7 @@ const AddUsers = (props) => {
   }, [duplicateUser])
 
 
-  let passwordError;
-
-  if (password.length < 12) {
-    passwordError = true;
-  }
-  else {
-    passwordError = false;
-  }
+  
   let confirmPasswordError;
   let confirmPasswordHelperText;
 

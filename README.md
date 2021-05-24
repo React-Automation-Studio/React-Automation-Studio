@@ -364,7 +364,7 @@ For example in the default user access group, the rules disables write access an
 
 The table display in the user interface allows one ot edit the access rights in the database and the DEFAULT UAG is shown in Fig 3.3.1
 
-<img src="./ReactApp/img/UAGSdefault.png" alt="drawing" width="60%"/>
+<img src="./ReactApp/img/UAGSdefault.png" alt="drawing" width="80%"/>
 
 *Fig 3.3.1. The administrator access control page showing the default UAG*
 
@@ -388,13 +388,13 @@ https://www.w3schools.com/python/python_regex.asp
    In this way the same user interface can be used for different roles and the operators will have different rights to the engineers.
    <br/>
    <br/>
-   <img src="./ReactApp/img/UAGengineers.png" alt="drawing" width="40%"/>
+   <img src="./ReactApp/img/UAGengineers.png" alt="drawing" width="60%"/>
    <br/>
   
    *Fig 3.3.2. An example UAG for Engineers*
   <br/>
    <br/>
-  <img src="./ReactApp/img/UAGoperators.png" alt="drawing" width="40%"/>
+  <img src="./ReactApp/img/UAGoperators.png" alt="drawing" width="60%"/>
    <br/>
    *Fig 3.3.3. An example UAG for Operators*
 

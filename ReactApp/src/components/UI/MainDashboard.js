@@ -1,13 +1,6 @@
-import React, { Component } from 'react';
-
-
-import withStyles from '@material-ui/core/styles/withStyles';
-import { withRouter } from 'react-router-dom';
-
+import React  from 'react';
 import { Link } from 'react-router-dom'
 import Button from '@material-ui/core/Button';
-
-
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -29,23 +22,15 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
-
-
-
   },
   center: {
     margin: 'auto',
-
     width: '15%',
     height: '50%'
-
   },
   Paper: {
     padding: theme.spacing(4),
     height: '100%',
-
-
-
   },
   MainGrid: {
     paddingTop: theme.spacing(4),
@@ -68,24 +53,10 @@ const useStyles = makeStyles((theme) => ({
     'overflow-y':
       'scroll',
     paddingRight: 8,
-    // '&::-webkit-scrollbar': {
-    //   width: '0.2em'
-    // },
-    // '&::-webkit-scrollbar-track': {
-    //   boxShadow: theme.palette.type==='light'?'inset 0 0 6px rgba(0,0,0,0.075)':'inset 0 0 6px rgba(255,255,255,0.075)',
-    //   webkitBoxShadow: theme.palette.type==='light'?'inset 0 0 6px rgba(0,0,0,0.075)':'inset 0 0 6px rgba(255,255,255,0.075)'
-    // },
-    // '&::-webkit-scrollbar-thumb': {
-    //   backgroundColor: theme.palette.type==='light'?'rgba(0,0,0,.15)':'rgba(255,255,255,.1)',
-    //   outline: '1px solid slategrey'
-    // }
   },
   Icon: {
     marginRight: theme.spacing(1),
     fontSize: 'inherit',
-    //display: 'inline-flex',
-    // alignSelf: 'center',
-    //verticalAlign:'middle',
 
   },
   Button: {
@@ -95,11 +66,6 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: 'auto',
     marginLeft: 'auto',
     marginRight: 'auto',
-    //  width:'100%',
-    //    marginTop:'auto',
-    //    marginLeft:'auto',
-    //    marginRight:'auto',
-    //    marginBottom:'auto',
 
   },
 

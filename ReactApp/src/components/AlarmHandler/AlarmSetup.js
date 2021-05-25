@@ -1081,7 +1081,7 @@ const AlarmSetup = (props) => {
 
     const handleTableItemRightClick = useCallback((event, index, entryIndex) => {
         event.preventDefault();
-        const alarmName = `${index.replace(/=pv\d+/g, "")}*${areaAlarms[entryIndex][1]["name"]}`
+        const alarmName = `${index.replace(/=pv\d+/g, "")}*${filteredAreaAlarms[entryIndex][1]["name"]}`
         const areaAlarmNameArray = index.split('=')
         let areaName = null
         if (areaAlarmNameArray.length > 2) {
@@ -1090,7 +1090,7 @@ const AlarmSetup = (props) => {
         else {
             areaName = areaAlarmNameArray[0]
         }
-        if (areaEnabled[areaName] && areaAlarms[entryIndex][1]["enable"]) {
+        if (areaEnabled[areaName] && filteredAreaAlarms[entryIndex][1]["enable"]) {
             const localContextMouseX = event.clientX - 2
             const localContextMouseY = event.clientY - 2
 
@@ -1106,7 +1106,7 @@ const AlarmSetup = (props) => {
             setContextMouseY(localContextMouseY)
 
         }
-    }, [areaEnabled, areaAlarms])
+    }, [areaEnabled, filteredAreaAlarms])
 
     const handleAlarmContextClose = useCallback(() => {
         setAlarmRowSelected({})
@@ -2125,7 +2125,7 @@ const AlarmSetup = (props) => {
                 const pvObject =
                     <PV
                         key={key}
-                        pv={ alarmIOCPVPrefix + value["name"] + alarmIOCPVSuffix}
+                        pv={alarmIOCPVPrefix + value["name"] + alarmIOCPVSuffix}
                         pvData={(pvData) => dispatchAlarmPVDict({ type: 'updatePVData', pvData: pvData })}
                     />
                 localAlarmPVs = [...localAlarmPVs, pvObject]
@@ -2139,7 +2139,7 @@ const AlarmSetup = (props) => {
         if (alarmIOCPVPrefix !== null) {
             const localAckPV = (
                 <PV
-                    pv={ alarmIOCPVPrefix + "ACK_PV"}
+                    pv={alarmIOCPVPrefix + "ACK_PV"}
                     outputValue={alarmAckField}
                     debug={false}
                     newValueTrigger={alarmAckFieldTrig}
@@ -2156,7 +2156,7 @@ const AlarmSetup = (props) => {
             Object.keys(areaEnabled).map(areaName => {
                 const pvObject = <PV
                     key={areaName}
-                    pv={ alarmIOCPVPrefix + areaName}
+                    pv={alarmIOCPVPrefix + areaName}
                     pvData={(pvData) => dispatchAreaPVDict({ type: 'updatePVData', pvData: pvData })}
                 />
                 localAreaPVs = [...localAreaPVs, pvObject]
@@ -2226,7 +2226,7 @@ const AlarmSetup = (props) => {
                 const pvObject = pv.pvname !== ""
                     ? <PV
                         key={`${pv.pvname}-${index}`}
-                        pv={ pv.pvname}
+                        pv={pv.pvname}
                         pvData={setDialogPvData}
                     />
                     : null

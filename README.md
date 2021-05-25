@@ -488,7 +488,7 @@ Site specific components and app screens should be kept in your repository. If y
 Contact us at rasadmin@tlabs.ac.za
 
 # Changelog
-                  V3.0.0 Monday 24 May 2021
+V3.0.0 Monday 24 May 2021
 <br />
 <br />
 Improvements and new features:

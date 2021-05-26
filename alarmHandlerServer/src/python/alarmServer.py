@@ -1164,7 +1164,8 @@ def restartAlarmServer():
         "timestamp": datetime.now(utc).isoformat(), "entry": "Alarm server restarted successfully..."}
     dbUpdateHistory(restartAlarmServerArea, entry)
 
-    dbSetFieldGlobal("restartCount", 0)
+    # Don't reset restartCount on auto-server restart
+    # dbSetFieldGlobal("restartCount", 0)
     # Don't reset user on auto-server restart
     # dbSetFieldGlobal("activeUser", "")
 

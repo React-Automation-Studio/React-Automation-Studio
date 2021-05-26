@@ -1151,7 +1151,7 @@ def restartAlarmServer():
     # External PVs
     initPVDict()
     # Sleep to allow all external PV connects
-    sleep(2.0)
+    sleep(4.0)
     # Initialiase saved string PVs from database
     initialiseAlarmIOC()
 
@@ -1821,7 +1821,7 @@ def main():
     # External PVs
     initPVDict()
     # Sleep to allow all external PV connects
-    sleep(2.0)
+    sleep(4.0)
     # Initialiase saved string PVs from database
     initialiseAlarmIOC()
     # Start any past bridge threads

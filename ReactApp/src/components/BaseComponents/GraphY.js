@@ -9,13 +9,13 @@ import { isMobileOnly } from 'react-device-detect';
 import { replaceMacros } from '../SystemComponents/Utils/macroReplacement';
 
 const useStyles = makeStyles((theme) => ({
-  root:{
-    paddingRight:8,
-    paddingLeft:8,
-    paddingTop:8,
+  root: {
+    paddingRight: 8,
+    paddingLeft: 8,
+    paddingTop: 8,
   },
-  title:{
-    margin:8
+  title: {
+    margin: 8
   },
 }));
 
@@ -26,7 +26,7 @@ const PlotData = (props) => {
 
   const theme = useTheme()
 
- 
+
   const updateDataReducer = (pvs, newData) => {
 
     let newPvs = [...pvs];
@@ -54,11 +54,12 @@ const PlotData = (props) => {
           oldY = [];
           oldX = [];
         }
-
+       
         if (typeof props.maxLength !== "undefined") {
           // console.log("maxLength defined")
           newY = oldY.concat(value)
           if (props.useTimeStamp) {
+            
             newX = oldX.concat(new Date(newData.pvData.timestamp * 1000))
             if (newX.length > props.maxLength) {
               newX.splice(0, (newX.length - props.maxLength))
@@ -67,7 +68,7 @@ const PlotData = (props) => {
           if (newY.length > props.maxLength) {
             newY.splice(0, (newY.length - props.maxLength))
           }
-         
+
 
         }
         else {
@@ -87,7 +88,7 @@ const PlotData = (props) => {
 
       }
       else {
-        newX = props.useTimeStamp ? new Date(newData.pvData.timestamp * 1000) : Array.from(value.keys());
+        newX = props.useTimeStamp ? [new Date(newData.pvData.timestamp * 1000)] : Array.from(value.keys());
         newY = value;
 
       }
@@ -107,7 +108,7 @@ const PlotData = (props) => {
       mode: 'lines',
       marker: { color: props.lineColor ? props.lineColor[newData.index] : theme.palette.reactVis.lineColors[newData.index] },
 
-      name: typeof props.legend !=="undefined"
+      name: typeof props.legend !== "undefined"
         ?
         props.legend[newData.index]
           ?
@@ -119,8 +120,8 @@ const PlotData = (props) => {
       hovertemplate: props.yHoverFormat ?
         "(%{y:" + props.yHoverFormat + "}) %{x}<extra>%{fullData.name}</extra>"
         : "(%{y}) %{x}<extra>%{fullData.name}</extra>",
-     
-      
+
+
     };
     // newPvs.pvData[newData.index] ={...newPvs.pvData[newData.index],... newData.pvData};
     return newPvs;
@@ -135,33 +136,33 @@ const PlotData = (props) => {
     return (pvs)
 
   }
-  
+
   const [polledData, updatePolledData] = useReducer(updatePolledDataReducer, []);
-  const polledDataRef=useRef(polledData);
-  useEffect(()=>{
-    polledDataRef.current=polledData;
-  },[polledData])
-  const {usePolling, pollingRate } = props;
+  const polledDataRef = useRef(polledData);
+  useEffect(() => {
+    polledDataRef.current = polledData;
+  }, [polledData])
+  const { usePolling, pollingRate } = props;
 
   useEffect(() => {
-   let timer;
-   const update=()=>{
-   // console.log(polledDataRef.current)
-    polledDataRef.current.forEach((item,index)=>{
-      // console.log(index,item)
-      const timestamp=Date.now()/1000;
-      updateData({index,pvData:{...item,timestamp:timestamp}})
-    })
-   }
-   if (usePolling){
-    timer=setInterval(update,pollingRate)
-   }
-   return ()=>{
-    if (usePolling){
-      clearInterval(timer)
-     }
-   }
-  }, [usePolling,pollingRate])
+    let timer;
+    const update = () => {
+      // console.log(polledDataRef.current)
+      polledDataRef.current.forEach((item, index) => {
+        // console.log(index,item)
+        const timestamp = Date.now() / 1000;
+        updateData({ index, pvData: { ...item, timestamp: timestamp } })
+      })
+    }
+    if (usePolling) {
+      timer = setInterval(update, pollingRate)
+    }
+    return () => {
+      if (usePolling) {
+        clearInterval(timer)
+      }
+    }
+  }, [usePolling, pollingRate])
 
 
   const contextInfoReducer = (oldPvs, newData) => {
@@ -180,9 +181,9 @@ const PlotData = (props) => {
 
   useEffect(() => {
 
-    const timeout=setTimeout(() => setTrigger(prev => prev + 1), parseInt(updateRate))
+    const timeout = setTimeout(() => setTrigger(prev => prev + 1), parseInt(updateRate))
     setDelayedData(data)
-    return ()=>{
+    return () => {
       clearTimeout(timeout)
     }
     // eslint-disable-next-line  react-hooks/exhaustive-deps
@@ -193,16 +194,16 @@ const PlotData = (props) => {
 
   useEffect(() => {
 
-    const timeout=setTimeout(() => setTrigger2(prev => prev + 1), parseInt(1000))
+    const timeout = setTimeout(() => setTrigger2(prev => prev + 1), parseInt(1000))
 
     setDelayedContextInfo(contextInfo)
-    return ()=>{
+    return () => {
       clearTimeout(timeout)
     }
-      // eslint-disable-next-line  react-hooks/exhaustive-deps
+    // eslint-disable-next-line  react-hooks/exhaustive-deps
   }, [trigger2])
 
- 
+
   const pvConnections = () => {
     let pvs = [];
     props.pvs.forEach((item, index) => {
@@ -211,7 +212,7 @@ const PlotData = (props) => {
           key={index.toString()}
           pv={item}
           macros={props.macros}
-          pvData={(pvData) => props.usePolling?updatePolledData({ index, pvData }):updateData({ index, pvData })}
+          pvData={(pvData) => props.usePolling ? updatePolledData({ index, pvData }) : updateData({ index, pvData })}
           contextInfo={(pvs) => updateContextInfo({ index, pvs })}
           makeNewSocketIoConnection={props.makeNewSocketIoConnection}
         />)
@@ -233,7 +234,7 @@ const PlotData = (props) => {
 const GraphY = (props) => {
   const classes = useStyles();
   const theme = useTheme()
-  const backgroundColor=props.backgroundColor?props.backgroundColor:theme.palette.background.default;
+  const backgroundColor = props.backgroundColor ? props.backgroundColor : theme.palette.background.default;
   const paperRef = useRef(null);
   const [width, setWidth] = useState(null);
   const [height, setHeight] = useState(null);
@@ -252,20 +253,20 @@ const GraphY = (props) => {
   useEffect(() => {
     const handleResize = () => {
       if (paperRef.current) {
-        setHeight(props.height?props.height:props.aspectRatio?paperRef.current.offsetWidth*props.aspectRatio:paperRef.current.offsetHeight)
+        setHeight(props.height ? props.height : props.aspectRatio ? paperRef.current.offsetWidth * props.aspectRatio : paperRef.current.offsetHeight)
         setWidth(paperRef.current.offsetWidth)
       }
     }
     // The 'current' property contains info of the reference:
     // align, title, ... , width, height, etc.
     if (paperRef.current) {
-      setHeight(props.height?props.height:paperRef.current.offsetWidth)
+      setHeight(props.height ? props.height : paperRef.current.offsetWidth)
       setWidth(paperRef.current.offsetWidth)
     }
     window.addEventListener("resize", handleResize)
     return () => window.removeEventListener("resize", handleResize);
-    
-  }, [paperRef,props.width,props.height,props.aspectRatio]);
+
+  }, [paperRef, props.width, props.height, props.aspectRatio]);
 
   const [domain, setDomain] = useState([0, 1])
   // const [yPositions, setYPositions] = useState([0, 0, 0])
@@ -333,31 +334,31 @@ const GraphY = (props) => {
     //   })
     // }
     // else {
-      yAxesInit['yaxis'] = {
-        // title: {
-        //   text:props.yAxisTitle,
-        // //  standoff:1,
-        // },
-        gridcolor: theme.palette.reactVis[".rv-xy-plot__grid-lines__line"].stroke,
-        tickcolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
-        zerolinecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
-        linecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
-        type: props.yScaleLog10 === true ? 'log' : 'linear',
-        tickformat: props.yTickFormat ? props.yTickFormat : '',
-        zeroline: true,
-        showline: true,
-        showgrid: true,
-        range: [typeof props.yMin !=="undefined"?props.yMin:null, typeof props.yMax !=="undefined"?props.yMax:null],
-        automargin:true,
-        ticksuffix:props.yUnits?props.yUnits:"",
-        nticks:props.yNoOfTicks?props.yNoOfTicks:0
-      }
+    yAxesInit['yaxis'] = {
+      // title: {
+      //   text:props.yAxisTitle,
+      // //  standoff:1,
+      // },
+      gridcolor: theme.palette.reactVis[".rv-xy-plot__grid-lines__line"].stroke,
+      tickcolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
+      zerolinecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
+      linecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
+      type: props.yScaleLog10 === true ? 'log' : 'linear',
+      tickformat: props.yTickFormat ? props.yTickFormat : '',
+      zeroline: true,
+      showline: true,
+      showgrid: true,
+      range: [typeof props.yMin !== "undefined" ? props.yMin : null, typeof props.yMax !== "undefined" ? props.yMax : null],
+      automargin: true,
+      ticksuffix: props.yUnits ? props.yUnits : "",
+      nticks: props.yNoOfTicks ? props.yNoOfTicks : 0
+    }
     // }
     return (yAxesInit)
   })
   const [legend] = useState(() => {
     let legendInit = props.showLegend === true ? {
-      legend:{
+      legend: {
         orientation: 'h',
         x: 1,
         xanchor: 'right',
@@ -375,7 +376,7 @@ const GraphY = (props) => {
       title: {
         text: props.title,
       },
-      plot_bgcolor:  backgroundColor,
+      plot_bgcolor: backgroundColor,
       xaxis: {
         domain: domain,
         // title: {
@@ -389,11 +390,11 @@ const GraphY = (props) => {
         zeroline: true,
         showline: true,
         showgrid: true,
-        automargin:true,
-        range: [typeof props.xMin !=="undefined"?props.xMin:null, typeof props.xMax !=="undefined"?props.xMax:null],
-        ticksuffix:props.xUnits?props.xUnits:"",
-        nticks:props.xNoOfTicks?props.xNoOfTicks:0,
-        tickformat:props.xTickFormat?props.xTickFormat:""
+        automargin: true,
+        range: [typeof props.xMin !== "undefined" ? props.xMin : null, typeof props.xMax !== "undefined" ? props.xMax : null],
+        ticksuffix: props.xUnits ? props.xUnits : "",
+        nticks: props.xNoOfTicks ? props.xNoOfTicks : 0,
+        tickformat: props.xTickFormat ? props.xTickFormat : ""
 
         //  range: [selectedFromDate, selectedToDate],
       },
@@ -402,45 +403,46 @@ const GraphY = (props) => {
         family: 'Roboto,Arial',
         color: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke
       },
-      paper_bgcolor:  backgroundColor,
+      paper_bgcolor: backgroundColor,
       ...legend,
       showlegend: props.showLegend,
-      margin: { t: props.title ?24 : 16, r: isMobileOnly?16:0,
-         l: 0, 
-         b: 0, 
-        },
-        annotations: [props.yAxisTitle&&{
-          xref: 'paper',
-          yref: 'paper',
-          x: 0,
-          xanchor: 'left',
-          y: 1,
-          yanchor: 'top',
-          text: props.yAxisTitle,
-          textangle:270,
-          showarrow: false,
-        }, props.xAxisTitle&&{
-          xref: 'paper',
-          yref: 'paper',
-          x: 1,
-          xanchor: 'right',
-          y: 0,
-          yanchor: 'bottom',
-          text: props.xAxisTitle,
-          showarrow: false
-        }]
+      margin: {
+        t: props.title ? 24 : 16, r: isMobileOnly ? 16 : 0,
+        l: 0,
+        b: 0,
+      },
+      annotations: [props.yAxisTitle && {
+        xref: 'paper',
+        yref: 'paper',
+        x: 0,
+        xanchor: 'left',
+        y: 1,
+        yanchor: 'top',
+        text: props.yAxisTitle,
+        textangle: 270,
+        showarrow: false,
+      }, props.xAxisTitle && {
+        xref: 'paper',
+        yref: 'paper',
+        x: 1,
+        xanchor: 'right',
+        y: 0,
+        yanchor: 'bottom',
+        text: props.xAxisTitle,
+        showarrow: false
+      }]
 
     })
-  }, [theme, props.showLegend, props.xAxisTitle, props.title,backgroundColor,classes, props.xMin,props.xTickLabels,props.xTickValues,props.yAxisTitle,yAxes,domain,legend,props.xMax,props.xNoOfTicks,props.xTickFormat,props.xUnits])
-  
-  
-  return (
-    <div ref={paperRef} className={classes.root} style={{ width: props.width?props.width:width, height: props.height?props.height:height,backgroundColor:backgroundColor}}>
+  }, [theme, props.showLegend, props.xAxisTitle, props.title, backgroundColor, classes, props.xMin, props.xTickLabels, props.xTickValues, props.yAxisTitle, yAxes, domain, legend, props.xMax, props.xNoOfTicks, props.xTickFormat, props.xUnits])
 
-<PlotData {...props} backgroundColor={backgroundColor}>
+
+  return (
+    <div ref={paperRef} className={classes.root} style={{ width: props.width ? props.width : width, height: props.height ? props.height : height, backgroundColor: backgroundColor }}>
+
+      <PlotData {...props} backgroundColor={backgroundColor}>
         {({ data, contextInfo }) => {
           return (
-            <div style={{ width: "100%", height: "100%",  }} onContextMenu={
+            <div style={{ width: "100%", height: "100%", }} onContextMenu={
               props.disableContextMenu ? undefined : handleToggleContextMenu
             }
 
@@ -476,7 +478,7 @@ const GraphY = (props) => {
                   scrollZoom: false,
                   doubleclick: false,
                   displayModeBar: props.displayModeBar,
-                  staticPlot:isMobileOnly?true:false,
+                  staticPlot: isMobileOnly ? true : false,
                   toImageButtonOptions: {
                     format: 'svg'
                   }
@@ -484,8 +486,8 @@ const GraphY = (props) => {
 
                   "displaylogo": false,
                   scrollZoom: false,
-            
-                  staticPlot:(isMobileOnly&&(props.disableMobileStatic===false))?true:false,
+
+                  staticPlot: (isMobileOnly && (props.disableMobileStatic === false)) ? true : false,
                   toImageButtonOptions: {
                     format: 'svg'
                   }
@@ -496,11 +498,11 @@ const GraphY = (props) => {
                   position: 'relative',
                   display: 'inline-block',
                   width: '100%', height: '100%',
-                  
+
                 }}
                 data={data}
                 layout={{ ...layout, }}
-                
+
 
 
 
@@ -546,29 +548,29 @@ GraphY.propTypes = {
   lineColor: PropTypes.array,
   /** If defined then the length of the line graphs will grow up until the value defined*/
   maxLength: PropTypes.number,
-  
+
   /** Directive to sample the PV value, on the client side at the polling rate*/
   usePolling: PropTypes.bool,
   /** Directive to scale the y-axis as a log base 10 value*/
   yScaleLog10: PropTypes.bool,
-    /**
-         * The plotjs format overide for the tick format. This is derived from the <a href="https://github.com/d3/d3-format/blob/v2.0.0/README.md#format">d3 format specification</a>
-         * Example: ".3e" : exponential notaion with 3 digits.
-         *
-         */
-  yTickFormat:PropTypes.string,
+  /**
+       * The plotjs format overide for the tick format. This is derived from the <a href="https://github.com/d3/d3-format/blob/v2.0.0/README.md#format">d3 format specification</a>
+       * Example: ".3e" : exponential notaion with 3 digits.
+       *
+       */
+  yTickFormat: PropTypes.string,
   /**
    * Use this prop to make a seperate socket connection for the graph. It is experimental and can be possbily improve performace and for high data rate pv's and prevent slowing down the user interface
    */
-  makeNewSocketIoConnection: PropTypes.bool,  
+  makeNewSocketIoConnection: PropTypes.bool,
   /** Polling interval in ms used in polling mode*/
-  
 
-  
+
+
   pollingRate: PropTypes.number,
   // /** If defined then the graph will only update on a value change*/
   // triggerOnSingleValueChange: PropTypes.bool,
-  
+
   /** Directive to use PV timestamp on x-axis*/
   useTimeStamp: PropTypes.bool,
   /** Graph update perdiod in ms, set this higher for larger number of data points */
@@ -583,30 +585,30 @@ GraphY.propTypes = {
   /**
    * Directive to show the legend
    */
-  showLegend:PropTypes.bool,
+  showLegend: PropTypes.bool,
   /**
    * **Note**: the zoom feature is disabled on a mobile device. To enable set this prop to true.
    */
-  disableMobileStatic:PropTypes.bool,
+  disableMobileStatic: PropTypes.bool,
   /** If the height is undefined then the height will be set to parents height, but if the aspectRatio is defined the the height will be set to the width multplied by the aspect ratio*/
   aspectRatio: PropTypes.number,
-   /**
-   * The backgorund color defaults to ```theme.palette.background.default```
-   * For a Paper or a Card component set it to ```theme.palette.background.paper```
-   */
-  backgroundColor:PropTypes.string,
+  /**
+  * The backgorund color defaults to ```theme.palette.background.default```
+  * For a Paper or a Card component set it to ```theme.palette.background.paper```
+  */
+  backgroundColor: PropTypes.string,
   /**
    * Set the width.
    */
-  width:PropTypes.string,
-   /**
-   * Set the height. 
-   */
-  height:PropTypes.string,
+  width: PropTypes.string,
+  /**
+  * Set the height. 
+  */
+  height: PropTypes.string,
   /** Custom y axis units to be used*/
-  yUnits:PropTypes.string,
+  yUnits: PropTypes.string,
   /** Custom x axis units to be used*/
-  xUnits:PropTypes.string,
+  xUnits: PropTypes.string,
 
 
 };
@@ -615,16 +617,16 @@ GraphY.defaultProps = {
   updateRate: 100,
   makeNewSocketIoConnection: false,
   debug: false,
-  showLegend:true,
+  showLegend: true,
   yAxisTitle: 'Y-axis',
   xAxisTitle: 'X-axis',
   usePolling: false,
   pollingRate: 100,
   width: '100%',
   height: '100%',
-  disableMobileStatic:false,
- 
-  
+  disableMobileStatic: false,
+
+
 
 };
 

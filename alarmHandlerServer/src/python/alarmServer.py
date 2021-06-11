@@ -1151,7 +1151,7 @@ def restartAlarmServer():
     # External PVs
     initPVDict()
     # Sleep to allow all external PV connects
-    sleep(2.0)
+    sleep(4.0)
     # Initialiase saved string PVs from database
     initialiseAlarmIOC()
 
@@ -1164,7 +1164,8 @@ def restartAlarmServer():
         "timestamp": datetime.now(utc).isoformat(), "entry": "Alarm server restarted successfully..."}
     dbUpdateHistory(restartAlarmServerArea, entry)
 
-    dbSetFieldGlobal("restartCount", 0)
+    # Don't reset restartCount on auto-server restart
+    # dbSetFieldGlobal("restartCount", 0)
     # Don't reset user on auto-server restart
     # dbSetFieldGlobal("activeUser", "")
 
@@ -1821,7 +1822,7 @@ def main():
     # External PVs
     initPVDict()
     # Sleep to allow all external PV connects
-    sleep(2.0)
+    sleep(4.0)
     # Initialiase saved string PVs from database
     initialiseAlarmIOC()
     # Start any past bridge threads

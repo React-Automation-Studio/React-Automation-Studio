@@ -3,10 +3,14 @@ import requests
 import base64
 import imgkit
 from datetime import datetime
-from pytz import timezone
+from pytz import timezone, utc
 
-from dbMongo import dbSetFieldGlobal
+
+import threading
+import queue
+
 from log import app_log
+from dbMongo import dbUpdateHistory
 
 try:
     AH_DEBUG = bool(os.environ['AH_DEBUG'])
@@ -40,6 +44,8 @@ except:
     app_log.warning("Signal account number not configured!")
     app_log.warning("Signal notifications will not be sent")
     SIGNAL_CLI_REST_ENDPOINT = ''
+
+q = queue.Queue()
 
 
 def composeEmailBody(userNotifyDict, sent_time):
@@ -128,58 +134,75 @@ def composeEmailBody(userNotifyDict, sent_time):
             </html>""".format(**locals())
 
 
-def notifySignal(timestamp, mobile, userNotifyDict):
-    # This function must return True as an acknowledgedment to the notification
-    # server that the notification method executed successfully
+def worker():
+    while True:
+        item = q.get()
 
-    dbSetFieldGlobal('signalPostBusy', True)
-    timestamp = datetime.fromisoformat(timestamp)
+        timestamp = item['timestamp']
+        mobile = item['mobile']
+        name = item['name']
+        userNotifyDict = item['userNotifyDict']
 
-    app_log.info("###-SIGNAL NOTIFY-###")
-    app_log.info(timestamp.strftime('%a, %d %b %Y at %H:%M:%S UTC'))
-    app_log.info(mobile)
-    # app_log.info(str(userNotifyDict))
+        timestamp = datetime.fromisoformat(timestamp)
 
-    if(SIGNAL_CLI_REST_ENDPOINT != ''):
-        try:
-            # Time zone localisation
-            if(localtz):
-                str_time = timestamp.astimezone(localtz).strftime(
-                    '%a, %d %b %Y at %H:%M:%S')
-            else:
-                str_time = timestamp.strftime(
-                    '%a, %d %b %Y at %H:%M:%S')+" (UTC)"
-            # Time zone localisation
-            message = "You have new alarm notifications"
-            message = message.replace(" ", "\ ")
-            message.encode('unicode_escape')
-            html = composeEmailBody(userNotifyDict, str_time)
+        app_log.info("###-SIGNAL NOTIFY-###")
+        app_log.info(timestamp.strftime('%a, %d %b %Y at %H:%M:%S UTC'))
+        app_log.info(mobile)
+        # app_log.info(str(userNotifyDict))
 
-            imgkit.from_string(html, 'alarms.jpg')
-
-            with open("alarms.jpg", "rb") as image_file:
-                encoded_image = base64.b64encode(image_file.read())
-
-            data = {
-                "text": message,
-                "receivers": [mobile],
-                "group": False,
-                "groupId": "",
-                "attachments": [
-                    {
-                        "url": "",
-                        "filename": "alarms.jpg",
-                        "content": encoded_image.decode()
-                    }
-                ]
-            }
-
+        if(SIGNAL_CLI_REST_ENDPOINT != ''):
             try:
-                r = requests.post(SIGNAL_CLI_REST_ENDPOINT, json=data)
-                app_log.info(
-                    "Signal rest API response: [" + str(r.status_code)+"] "+r.reason)
-                dbSetFieldGlobal('signalPostBusy', False)
-                return r.ok
+                # Time zone localisation
+                if(localtz):
+                    str_time = timestamp.astimezone(localtz).strftime(
+                        '%a, %d %b %Y at %H:%M:%S')
+                else:
+                    str_time = timestamp.strftime(
+                        '%a, %d %b %Y at %H:%M:%S')+" (UTC)"
+                # Time zone localisation
+                message = "You have new alarm notifications"
+                message = message.replace(" ", "\ ")
+                message.encode('unicode_escape')
+                html = composeEmailBody(userNotifyDict, str_time)
+
+                imgkit.from_string(html, 'alarms.jpg')
+
+                with open("alarms.jpg", "rb") as image_file:
+                    encoded_image = base64.b64encode(image_file.read())
+
+                data = {
+                    "text": message,
+                    "receivers": [mobile],
+                    "group": False,
+                    "groupId": "",
+                    "attachments": [
+                        {
+                            "url": "",
+                            "filename": "alarms.jpg",
+                            "content": encoded_image.decode()
+                        }
+                    ]
+                }
+
+                try:
+                    r = requests.post(SIGNAL_CLI_REST_ENDPOINT, json=data)
+                    app_log.info(
+                        "Signal rest API response: [" + str(r.status_code)+"] "+r.reason)
+                    if(r.ok):
+                        timestamp = datetime.now(utc).isoformat()
+                        entry = {"timestamp": timestamp, "entry": " ".join(
+                            [name, "notified on Signal"])}
+                except Exception as e:
+                    app_log.error("Exception raised: " + str(e))
+                    app_log.error("Exception type: " + str(type(e)))
+                    app_log.error("Exception args: " + str(e.args))
+                    print("Failed to send Signal message to",
+                          mobile, ". Verify Signal settings.")
+                    app_log.error("Failed to send Signal message to " +
+                                  mobile + ". Verify Signal settings.")
+                    timestamp = datetime.now(utc).isoformat()
+                    entry = {"timestamp": timestamp, "entry": " ".join(
+                        ["FAILED to notify", name, "on Signal!"])}
             except Exception as e:
                 app_log.error("Exception raised: " + str(e))
                 app_log.error("Exception type: " + str(type(e)))
@@ -188,23 +211,36 @@ def notifySignal(timestamp, mobile, userNotifyDict):
                       mobile, ". Verify Signal settings.")
                 app_log.error("Failed to send Signal message to " +
                               mobile + ". Verify Signal settings.")
-                dbSetFieldGlobal('signalPostBusy', False)
-                return False
-        except Exception as e:
-            app_log.error("Exception raised: " + str(e))
-            app_log.error("Exception type: " + str(type(e)))
-            app_log.error("Exception args: " + str(e.args))
+                timestamp = datetime.now(utc).isoformat()
+                entry = {"timestamp": timestamp, "entry": " ".join(
+                    ["FAILED to notify", name, "on Signal!"])}
+        else:
             print("Failed to send Signal message to",
                   mobile, ". Verify Signal settings.")
             app_log.error("Failed to send Signal message to " +
                           mobile + ". Verify Signal settings.")
-            dbSetFieldGlobal('signalPostBusy', False)
-            return False
+            timestamp = datetime.now(utc).isoformat()
+            entry = {"timestamp": timestamp, "entry": " ".join(
+                ["FAILED to notify", name, "on Signal!"])}
 
-    else:
-        print("Failed to send Signal message to",
-              mobile, ". Verify Signal settings.")
-        app_log.error("Failed to send Signal message to " +
-                      mobile + ". Verify Signal settings.")
-        dbSetFieldGlobal('signalPostBusy', False)
-        return False
+        for area in userNotifyDict:
+            for pvname in userNotifyDict[area]:
+                dbUpdateHistory(area, entry, pvname)
+        q.task_done()
+
+
+# turn-on the worker thread
+threading.Thread(target=worker, daemon=True).start()
+
+
+def notifySignal(timestamp, mobile, name, userNotifyDict):
+
+    item = {
+        'timestamp': timestamp,
+        'mobile': mobile,
+        'name': name,
+        'userNotifyDict': userNotifyDict
+    }
+
+    q.put(item)
+    q.join()

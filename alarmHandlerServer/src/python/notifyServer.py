@@ -320,20 +320,7 @@ def notify(notifyBuffer):
                         dbUpdateHistory(area, entry, pvname)
 
             if(notifySignalDict):
-                while(dbGetFieldGlobal('signalPostBusy')):
-                    sleep(1.0)
-                    app_log.info("Waiting for signalPostBusy...")
-                if(notifySignal(timestamp, mobile, notifySignalDict)):
-                    timestamp = datetime.now(utc).isoformat()
-                    entry = {"timestamp": timestamp, "entry": " ".join(
-                        [name, "notified on Signal"])}
-                else:
-                    timestamp = datetime.now(utc).isoformat()
-                    entry = {"timestamp": timestamp, "entry": " ".join(
-                        ["FAILED to notify", name, "on Signal!"])}
-                for area in notifySignalDict:
-                    for pvname in notifySignalDict[area]:
-                        dbUpdateHistory(area, entry, pvname)
+                notifySignal(timestamp, mobile, name, notifySignalDict)
         else:
             app_log.info("User "+user["name"]+" is NOT a valid alarm user")
 

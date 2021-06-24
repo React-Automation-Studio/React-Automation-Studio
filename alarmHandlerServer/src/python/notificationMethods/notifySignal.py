@@ -233,8 +233,7 @@ def worker():
 threading.Thread(target=worker, daemon=True).start()
 
 
-def notifySignal(timestamp, mobile, name, userNotifyDict):
-
+def populateQueue(timestamp, mobile, name, userNotifyDict):
     item = {
         'timestamp': timestamp,
         'mobile': mobile,
@@ -244,3 +243,8 @@ def notifySignal(timestamp, mobile, name, userNotifyDict):
 
     q.put(item)
     q.join()
+
+
+def notifySignal(timestamp, mobile, name, userNotifyDict):
+    threading.Thread(target=populateQueue, args=(
+        timestamp, mobile, name, userNotifyDict,), daemon=True).start()

@@ -3,7 +3,7 @@ echo "exporting dynamic enviroment variable"
 
 mkdir -p /etc/nginx/templates
 cp /custom/nginx.styleguide.dev.conf /etc/nginx/templates/default.conf.template
-if [ $SECURE == "true" ]
+if [[ $SECURE == "true" ]]
 then
     export listen="3000 ssl"
     export styleguidelisten="6060 ssl"

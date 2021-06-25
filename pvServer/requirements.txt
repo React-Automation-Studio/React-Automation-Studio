@@ -17,6 +17,6 @@ six==1.11.0
 Werkzeug==0.14.1
 bcrypt==3.1.7
 pymongo==3.11.2
-flask-cors
-python-ldap
-google-api-python-client
+flask-cors==3.0.10
+python-ldap==3.3.1
+google-api-python-client==1.12.0

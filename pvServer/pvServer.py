@@ -171,7 +171,7 @@ def localLogin():
         resp=createLoginReponse(userData)
         return resp
     else:
-       log.info("Standard login not allowed: {} ",user['username'])
+       log.info("Standard login not allowed")
        return jsonify({'login': False}), 401 
 
 @app.route('/api/login/ldap', methods=['POST'])
@@ -206,7 +206,7 @@ def ldapLogin():
 
        
     else:
-        log.info("Forbiddden Active Directory login login: {} ",user['username'])
+        log.info("Forbiddden Active Directory login login")
         return jsonify({'login': False}), 401
 
 

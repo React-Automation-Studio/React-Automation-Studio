@@ -95,4 +95,4 @@ except OperationFailure as err:
                 else:
                     print(err)
     else:
-        print(err)
+        raise

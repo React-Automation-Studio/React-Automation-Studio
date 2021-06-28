@@ -503,14 +503,14 @@ Contact us at rasadmin@tlabs.ac.za
 V3.0.1 Monday 28 June 2021
 <br />
 <br />
-<li>Minor Bug Fixes and Updates:
+Minor Bug Fixes and Updates:
     <ul>
         <li>GraphY: Fixed timestamp issue</li>
         <li>Alarmhandler:  Minor bug fixes- Implemented non blocking queue to improve Signal notification throughput</li>
         <li>Nginx: Fixed a waring on a script</li>
         <li>pvServer: minor bug fix</li>
     </ul>
-    </li>
+
 
 <br />
 

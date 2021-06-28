@@ -1,4 +1,4 @@
-Current Release: V3.0.0
+Current Release: V3.0.1
 
 # Introduction
 
@@ -128,7 +128,7 @@ For load balancing, Nginx balances between 3 pvServers in the production version
 # 1 Installation
 The development and production versions of React Automation Studio have been containerized with Docker.
 
-It is advised to only use the containerized version.
+It is advised to only use the containerized version with a Linux environment. (See the FAQ section on other operating systems).
 
 
 
@@ -487,7 +487,34 @@ Site specific components and app screens should be kept in your repository. If y
 
 Contact us at rasadmin@tlabs.ac.za
 
+# FAQ
+
+### 1.   Which operating systems are supported?
+
+  The client is web based and can be accessed from any modern browser on any modern OS..
+
+  We currently only build and test on Ubuntu and Chrome. We unfortunately don't have the time to test on the other systems. In theory all up to date Linux systems should be supported.
+
+### 2.  Are other systems such as  Windows or Mac OS supported?
+  
+  The docker containers for RAS run in network  mode host. This is done to enable EPICS to communicate seamlessly with any IOC's on the same subnet as the host. Other OSes such as Windows may not support the host mode and will run in the bridged mode. This may break the communication between the micro services. It is therefore recommended to run the RAS containers on a Linux VM that is minimally running Ubuntu Server. Please ensure the the VM network interface is assigned an IP on the same subnet as your EPICS network in order for communication with the IOC's to occur seamlessly.
+
 # Changelog
+V3.0.1 Monday 28 June 2021
+<br />
+<br />
+<li>Minor Bug Fixes and Updates:
+    <ul>
+        <li>GraphY: Fixed timestamp issue</li>
+        <li>Alarmhandler:  Minor bug fixes- Implemented non blocking queue to improve Signal notification throughput</li>
+        <li>Nginx: Fixed a waring on a script</li>
+        <li>pvServer: minor bug fix</li>
+    </ul>
+    </li>
+
+<br />
+
+
 V3.0.0 Monday 24 May 2021
 <br />
 <br />

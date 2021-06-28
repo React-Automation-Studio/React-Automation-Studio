@@ -1,4 +1,4 @@
-import React  from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom'
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -77,7 +77,7 @@ const useStyles = makeStyles((theme) => ({
 
 const MainDashboard = (props) => {
   const classes = useStyles();
-  const theme= useTheme();
+  const theme = useTheme();
   const paperElevation = theme.palette.paperElevation;
   const buttonVariant = "contained";
   const typographyProps = {
@@ -172,6 +172,20 @@ const MainDashboard = (props) => {
               </Grid>
               <Grid item lg={12} sm={12} xs={12}  >
                 <Typography className={classes.WhatsNew} component='div'>
+                  V3.0.1 Monday 28 June 2021
+<br />
+                  <br />
+                  Minor Bug Fixes and Updates:
+    <ul>
+                      <li>GraphY: Fixed timestamp issue</li>
+                      <li>Alarmhandler:  Minor bug fixes- Implemented non blocking queue to improve Signal notification throughput</li>
+                      <li>Nginx: Fixed a waring on a script</li>
+                      <li>pvServer: minor bug fix</li>
+                    </ul>
+                 
+
+                  <br />
+
                   V3.0.0 Monday 24 May 2021
 <br />
                   <br />

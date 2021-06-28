@@ -126,11 +126,14 @@ For load balancing, Nginx balances between 3 pvServers in the production version
 [![React Automation Studio Youtube](http://img.youtube.com/vi/djTPrkRxgAo/0.jpg)](https://www.youtube.com/playlist?list=PL7x0LbUrw5BIgc2PUN3h1D0QRRqRuGzEO "React Automation Studio")
 
 # 1 Installation
+React Automation Studio supports **Linux only**. Other OS may not work due to
+subtle differences in behaviour of used 3rd party tools and packages.
 The development and production versions of React Automation Studio have been containerized with Docker.
 
 It is advised to only use the containerized version.
-
-
+Please, use a **Linux host**. It has been reported the Windows host does not
+allow pvServer container to connect with the EPICS network due to behavior of
+the host network mode on Windows.
 
 Prerequisites: git , latest version of docker-ce and docker compose
 
@@ -263,7 +266,7 @@ Inside the React Automation Studio installation folder:
 ```bash
 ls .env
 ```
-If it exists edit the .env file, otherwise copy example.env to .env and set
+If it exists edit the .env file, otherwise copy [example.env](example.env) to .env and set
 
 ```bash
 

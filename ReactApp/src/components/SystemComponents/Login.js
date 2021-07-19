@@ -258,7 +258,7 @@ const Login = (props) => {
       ? props.activeDirectoryLoginUsernameDisplayText
       : ""
 
-
+  const adLoginMode=loginModes[loginTabValue] === 'Active Directory';
 
   return (
     <React.Fragment>
@@ -386,6 +386,7 @@ const Login = (props) => {
               />
             </div>}
           {props.customFooter ? props.customFooter : <Footer {...props} />}
+          {enableActiveDirectoryLogin&&adLoginMode&&props.adFooter}
         </Paper>
       </main>
       {/* {authorised && <Redirect to='/' />} */}
@@ -409,6 +410,8 @@ Login.propTypes = {
   signInText: PropTypes.string,
   /** Footer string.*/
   footerString: PropTypes.string,
+  /** custom AD footer.*/
+  adFooter: PropTypes.element,
   /** Version.*/
   version: PropTypes.string,
   /** Standard Login Username display string.*/

@@ -74,7 +74,7 @@ function StyledIconIndicatorComponent(props) {
 /* eslint-disable eqeqeq */
   let color = !props.initialized
     ? props.theme.palette.action.disabled
-    : props.value == 1
+    : props.value != 0
       ? onColor
       : offColor;
 

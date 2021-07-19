@@ -243,7 +243,7 @@ class DeprecatedEpicsPV extends React.Component {
     }
     componentDidUpdate(prevProps) {
       const value =this.state.internalValue
-      const pvname =this.state.pvname
+      const pvname =   this.state.pvname.replace("pva://","");
       const initialized= this.state.initialized;
       if(this.props.debug){
         console.log('componentDidUpdate this.props.outputValue:', this.props.outputValue)
@@ -282,6 +282,9 @@ class DeprecatedEpicsPV extends React.Component {
                   jwt='unauthenticated'
                 }
                 if(! this.state.redirectToLogInPage){
+                  if(this.props.debug){
+                    console.log("emmiting to:",pvname,"value:",this.props.outputValue)
+                  }
                 socket.emit('write_to_pv', {pvname:pvname, data: this.props.outputValue,'clientAuthorisation':jwt});
               }
               }
@@ -327,6 +330,7 @@ class DeprecatedEpicsPV extends React.Component {
               <div>{"Current Value: " +this.state.internalValue }</div>
               <div>{"Timestamp: " +time }</div>
               <div>{"New Value from parent component: " +this.props.outputValue }</div>
+              <div>{"new value trigger: " +this.props.newValueTrigger }</div>
               {/*<RedirectToLogIn/>*/}
             </div>
 

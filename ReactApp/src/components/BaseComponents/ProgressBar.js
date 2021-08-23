@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 
 import { withStyles } from '@material-ui/core/styles';
 
@@ -8,16 +8,12 @@ import { v4 as uuidv4 } from 'uuid';
 
 
 import Widget from "../SystemComponents/Widgets/Widget";
+
 import { FormControlLabel } from "@material-ui/core";
 
-import {
-
-  makeVisFlexible,
-
-} from 'react-vis';
 
 import { create, all } from 'mathjs';
-const config = { }
+const config = {}
 const math = create(all, config)
 /* eslint-disable eqeqeq */
 
@@ -60,11 +56,11 @@ function getTickValues(props, min, max, numberOfTicks, x0, x1, x2, y1, y2, xOffs
   if (typeof props.disabled === 'undefined') {
     if (props.showTicks === true) {
       for (i = 0; i < (numberOfTicks); i++) {
-        
+
         let tickValue = i * (max - min) / (numberOfTicks - 1) + min;
-        if (typeof props.numberFormat !== 'undefined'){
-          tickValue=math.format(parseFloat(tickValue),props.numberFormat)
-         
+        if (typeof props.numberFormat !== 'undefined') {
+          tickValue = math.format(parseFloat(tickValue), props.numberFormat)
+
         }
 
         ticks.push(
@@ -98,7 +94,7 @@ function getTickValues(props, min, max, numberOfTicks, x0, x1, x2, y1, y2, xOffs
           y={yOffset - 4}
           textAnchor={'start'}
         >
-          {typeof props.disabled === 'undefined' ? value + props.units : ""}{}
+          {typeof props.disabled === 'undefined' ? value + props.units : ""}{ }
         </text>
       </g>
 
@@ -131,7 +127,7 @@ const ProgressBarComponent = (props) => {
   }
 
 
-  
+
   const width = props.width;
   const aspectRatio = props.aspectRatio;
   let height;
@@ -222,10 +218,27 @@ ProgressBarComponent.propTypes = {
   height: PropTypes.number,
   width: PropTypes.number,
 }
-const FlexibleProgressBarComponent = makeVisFlexible(withStyles(styles, { withTheme: true })(ProgressBarComponent));
+
 
 
 const ProgressBarInternalComponent = (props) => {
+
+  const ref = useRef(null);
+  const [width, setWidth] = useState(null);
+  const [height, setHeight] = useState(null);
+  useEffect(() => {
+    const handleResize = () => {
+      if (ref.current) {
+        setHeight(props.height ? props.height :props.lockAspectRatio?(props.aspectRatio ? ref.current.offsetWidth * props.aspectRatio : ref.current.offsetHeight): ref.current.offsetHeight)
+        setWidth(props.width?props.width:ref.current.offsetWidth)
+      }
+    }
+    handleResize();
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize);
+
+  }, [ref, props.width, props.height, props.aspectRatio]);
+
   const { initialized } = props;
   const { classes } = props;
   let units;
@@ -276,19 +289,25 @@ const ProgressBarInternalComponent = (props) => {
       label={props.formControlLabel}
       labelPlacement={props.labelPlacement}
       control={
-        <FlexibleProgressBarComponent
-          {...props} 
-          min={min}
-          max={max}
-          units={units}
-          value={value}
-          lockAspectRatio={props.lockAspectRatio}
-          aspectRatio={props.aspectRatio}
-          color={color}
-          showValue={props.showValue}
-          showTicks={props.showTicks}
-          disabled={props.initialized === true ? undefined : true}
-        />
+        <div ref={ref} style={{ height: '100%', width: '100%' }}>
+
+
+          <ProgressBarComponent
+            {...props}
+            min={min}
+            max={max}
+            width={width}
+            height={height}
+            units={units}
+            value={value}
+            lockAspectRatio={props.lockAspectRatio}
+            aspectRatio={props.aspectRatio}
+            color={color}
+            showValue={props.showValue}
+            showTicks={props.showTicks}
+            disabled={props.initialized === true ? undefined : true}
+          />
+        </div>
       }
     />
 
@@ -307,7 +326,7 @@ const ProgressBar = (props) => {
 
 
 ProgressBar.propTypes = {
- 
+
   showValue: PropTypes.bool,
   /** Directive to show the tick values */
   showTicks: PropTypes.bool,
@@ -315,9 +334,9 @@ ProgressBar.propTypes = {
   lockAspectRatio: PropTypes.bool,
   /** Width to height aspect ratio, */
   aspectRatio: PropTypes.number,
-   /**
-   * Directive to use the  alarm severity status to alter the fields background color.
-   */
+  /**
+  * Directive to use the  alarm severity status to alter the fields background color.
+  */
 
   alarmSensitive: PropTypes.bool,
   /**
@@ -364,7 +383,7 @@ ProgressBar.propTypes = {
    * Custom PV to define the minimum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
   minPv: PropTypes.string,
-  
+
   /**
    * Custom precision to round the value.
    */
@@ -373,9 +392,9 @@ ProgressBar.propTypes = {
    * Custom PV to define the precision to be used, usePvPrecision must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
   precPv: PropTypes.string,
- 
 
-  
+
+
   /**
    * Custom units to be used, if usePvUnits is not defined.
    */
@@ -421,11 +440,11 @@ ProgressBar.propTypes = {
 
 
   usePvUnits: PropTypes.bool,
-  
 
 
 
-  
+
+
   /**
    * If defined, then the string representation of the number can be formatted
    * using the mathjs format function
@@ -441,25 +460,25 @@ ProgressBar.propTypes = {
    * Custom off color to be used, must be derived from Material UI theme color's.
    */
   offColor: PropTypes.string,
-  
+
   /** Name of the process variable,  eg. '$(device):test$(id)'*/
   pv: PropTypes.string,
   /**
    * Tooltip Text
    */
-  tooltip:PropTypes.string,
+  tooltip: PropTypes.string,
   /**
    * Directive to show the tooltip
    */
-  showTooltip:PropTypes.bool,
+  showTooltip: PropTypes.bool,
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
 
-  tooltipProps:PropTypes.object,
-  
-  
- 
+  tooltipProps: PropTypes.object,
+
+
+
 
 };
 
@@ -474,7 +493,7 @@ ProgressBar.defaultProps = {
   aspectRatio: 1.75,
   lockAspectRatio: true,
   labelPlacement: 'top',
-  showTooltip:false
+  showTooltip: false
 
 };
 

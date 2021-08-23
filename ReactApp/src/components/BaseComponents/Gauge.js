@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 
 import { withStyles } from '@material-ui/core/styles';
 
@@ -8,11 +8,7 @@ import PropTypes from 'prop-types';
 import { v4 as uuidv4 } from 'uuid';
 import Widget from "../SystemComponents/Widgets/Widget";
 import { FormControlLabel } from "@material-ui/core";
-import {
 
-  makeVisFlexible,
-
-} from 'react-vis';
 
 
 
@@ -169,15 +165,31 @@ GaugeComponent.propTypes = {
   height: PropTypes.number,
   width: PropTypes.number,
 }
-const FlexibleGaugeComponent = makeVisFlexible(withStyles(styles, { withTheme: true })(GaugeComponent));
+// const FlexibleGaugeComponent = makeVisFlexible(withStyles(styles, { withTheme: true })(GaugeComponent));
 
 /**
 * The Gauge Component is an Automation-studio component.
 */
 
 const GaugeInternalComponent = (props) => {
+  const {classes,theme}=props;
+  const ref = useRef(null);
+  const [width, setWidth] = useState(null);
+  
+  useEffect(() => {
+    const handleResize = () => {
+      if (ref.current) {
+  
+        setWidth(props.width?props.width:ref.current.offsetWidth)
+      }
+    }
+    handleResize();
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize);
+
+  }, [ref, props.width, props.height, props.aspectRatio]);
   const { initialized } = props;
-  const {classes}=props;
+ 
   let units;
   let value;
   let min;
@@ -207,7 +219,12 @@ const GaugeInternalComponent = (props) => {
       label={props.formControlLabel}
       labelPlacement={props.labelPlacement}
       control={
-        <FlexibleGaugeComponent
+        <div ref={ref} style={{ height: '100%', width: '100%' }}>
+        <GaugeComponent
+          classes={classes}
+          theme={theme}
+          width={width}
+  
           min={min}
           max={max}
           units={units}
@@ -216,6 +233,7 @@ const GaugeInternalComponent = (props) => {
           //disabled={props.disabled}
           disabled={props.initialized === true ? undefined : true}
         />
+        </div>
       }
     />
 

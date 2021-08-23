@@ -237,7 +237,7 @@ const ProgressBarInternalComponent = (props) => {
     window.addEventListener("resize", handleResize)
     return () => window.removeEventListener("resize", handleResize);
 
-  }, [ref, props.width, props.height, props.aspectRatio]);
+  }, [ref, props.width, props.height, props.aspectRatio, props.lockAspectRatio]);
 
   const { initialized } = props;
   const { classes } = props;

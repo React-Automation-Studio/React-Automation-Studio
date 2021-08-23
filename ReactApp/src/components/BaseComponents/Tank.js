@@ -121,7 +121,7 @@ const TankComponent= (props)=> {
     window.addEventListener("resize", handleResize)
     return () => window.removeEventListener("resize", handleResize);
 
-  }, [ref, props.width, props.height, props.aspectRatio]);
+  }, [ref, props.width, props.height, props.aspectRatio,props.lockAspectRatio]);
 
   const gradientId = uuidv4();
   const { classes } = props;

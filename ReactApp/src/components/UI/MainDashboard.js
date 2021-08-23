@@ -172,6 +172,17 @@ const MainDashboard = (props) => {
               </Grid>
               <Grid item lg={12} sm={12} xs={12}  >
                 <Typography className={classes.WhatsNew} component='div'>
+                V3.0.2 Monday 23 August 2021
+                <br />
+                <br />
+                Minor Bug Fixes and Updates:
+                    <ul>
+                        <li>pvServer: minor bug fix</li>
+                        <li>StyledIconIndicator: non zero values default to onColor</li>
+                        <li>Docker: standardised to Python 3.8.7 in all Python images</li>
+                    </ul>
+                <br />
+
                   V3.0.1 Monday 28 June 2021
 <br />
                   <br />

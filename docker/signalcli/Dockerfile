@@ -1,4 +1,4 @@
-FROM python:3.8-slim
+FROM python:3.8.7
 
 # Create signal-cli user
 ENV HOME /srv/signal

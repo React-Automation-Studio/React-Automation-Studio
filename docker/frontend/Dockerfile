@@ -2,7 +2,7 @@ FROM node:14.15.3
 WORKDIR /frontend
 ENV PATH /frontend/node_modules/.bin:$PATH
 ADD ./ReactApp/package.json /frontend/package.json
-RUN npm set registry http://registry.npmjs.org/
+
 RUN npm install
 ADD ./ReactApp/public /frontend/public
 ADD ./ReactApp/src /frontend/src

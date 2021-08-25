@@ -1447,9 +1447,10 @@ def archiverRead(message):
                             d={'archiverURL': archiverURL,'write_access':False,'data': data}
                             socketio.emit(eventName,d,room=str(archiverURL)+'ro',namespace='/pvServer')
                             return {'initialized':True}
-                        except:
+                        except Exception as e:
 
                             log.info('could not connect to Archiver: : {}',archiverURL)
+                            log.info('could not connect to Archiver exception: : {}',e)
                             return {'initialized':False}
 
 

@@ -1,4 +1,4 @@
-FROM node:14.15.3
+FROM node:14.17.5
 
 
 
@@ -6,7 +6,7 @@ ADD ./ReactApp/package.json /frontendserverAppDev/package.json
 
 WORKDIR /frontendserverAppDev
 ENV PATH /frontendserverAppDev/node_modules/.bin:$PATH
-RUN npm set registry http://registry.npmjs.org/
+
 RUN npm install
 
 ADD ./.env /frontendserverAppDev/

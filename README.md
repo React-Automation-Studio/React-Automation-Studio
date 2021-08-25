@@ -132,16 +132,28 @@ It is advised to only use the containerized version with a Linux environment. (S
 
 
 
+
 Prerequisites: git , latest version of docker-ce and docker compose
 
-To install docker-ce on Unbuntu 18.04 follow:
+To install docker-ce follow:
 
-https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04
+https://docs.docker.com/engine/install/
 
 And docker-compose:
 
 https://docs.docker.com/compose/install/
 
+
+**On Linux only:** 
+
+With the latest version of docker and docker-compose installed we recommend using docker buildkit ( https://docs.docker.com/develop/develop-images/build_enhancements/ ):
+
+set the following enviroment variables:
+
+```bash
+export DOCKER_BUILDKIT=1 
+export COMPOSE_DOCKER_CLI_BUILD=1
+```
 
 1st clone this repo:
 

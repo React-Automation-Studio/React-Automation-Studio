@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 
 
 import 'typeface-roboto';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import ReactVisCssBaseline from './ReactVisCssBaseline';
 import AutomationStudioContext from './AutomationStudioContext';
@@ -39,12 +39,12 @@ class RasAppCore extends Component {
       transports: ['websocket'],
     })
     if (themeKeys.includes(themeStyle)) {
-      theme = createMuiTheme(this.props.themes[themeStyle])
+      theme = createTheme(this.props.themes[themeStyle])
 
     }
     else {
       themeStyle = defaultTheme;
-      theme = createMuiTheme(this.props.themes[themeStyle])
+      theme = createTheme(this.props.themes[themeStyle])
       localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
     }
 
@@ -55,13 +55,13 @@ class RasAppCore extends Component {
       let theme = null
       let themeStyles = this.state.system.themeStyles;
       if (themeStyles.includes(themeStyle)) {
-        theme = createMuiTheme(this.props.themes[themeStyle])
+        theme = createTheme(this.props.themes[themeStyle])
 
       }
       else {
         const { defaultTheme } = props.defaultTheme;
         themeStyle = defaultTheme;
-        theme = createMuiTheme(this.props.themes[themeStyle])
+        theme = createTheme(this.props.themes[themeStyle])
         localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
       }
 
@@ -373,7 +373,7 @@ class RasAppCore extends Component {
         let theme = null
         let themeStyles = this.state.system.themeStyles;
         if (themeStyles.includes(themeStyle)) {
-          theme = createMuiTheme(this.props.themes[themeStyle])
+          theme = createTheme(this.props.themes[themeStyle])
           let system = this.state.system;
         system.themeStyle = themeStyle;
         this.setState({ system: system, theme: theme })

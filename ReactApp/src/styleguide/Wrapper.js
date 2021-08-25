@@ -7,7 +7,7 @@ import React, { Component } from 'react';
 //import io from 'socket.io-client';
 
 import 'typeface-roboto';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 import AutomationStudioContext from '../components/SystemComponents/AutomationStudioContext';
@@ -70,12 +70,12 @@ class Wrapper extends Component {
     let themeStyle = storedThemeStyle===null?defaultTheme:JSON.parse(storedThemeStyle);
     let themeKeys = Object.keys(themes);
     if (themeKeys.includes(themeStyle)) {
-      theme = createMuiTheme(themes[themeStyle])
+      theme = createTheme(themes[themeStyle])
       //   localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
     }
     else {
       themeStyle = themeKeys[0];
-      theme = createMuiTheme(themes[themeStyle])
+      theme = createTheme(themes[themeStyle])
       localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
     }
     this.changeTheme = (event) => {
@@ -84,12 +84,12 @@ class Wrapper extends Component {
       let theme = null
       let themeStyles = this.state.system.themeStyles;
       if (themeStyles.includes(themeStyle)) {
-        theme = createMuiTheme(themes[themeStyle])
+        theme = createTheme(themes[themeStyle])
         //   localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
       }
       else {
         themeStyle = themeStyles[0];
-        theme = createMuiTheme(themes[themeStyle])
+        theme = createTheme(themes[themeStyle])
         localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
       }
 
@@ -98,7 +98,7 @@ class Wrapper extends Component {
       this.setState({ system: system, theme: theme })
       localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
     }
-    // let theme = createMuiTheme({
+    // let theme = createTheme({
     //   palette: {
     //     type:'light',
     //     primary: indigo,

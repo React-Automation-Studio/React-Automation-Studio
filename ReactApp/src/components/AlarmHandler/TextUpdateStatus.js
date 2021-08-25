@@ -1,6 +1,6 @@
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
-import { fade } from '@material-ui/core/styles/colorManipulator';
+import { alpha } from '@material-ui/core/styles/colorManipulator';
 import Widget from "../SystemComponents/Widgets/Widget";
 import grey from '@material-ui/core/colors/grey';
 import { Typography } from '@material-ui/core';
@@ -26,7 +26,7 @@ const styles = (theme) => ({
 
     padding: 1,
     //background:theme.palette.alarm.minor.main,
-    background: 'linear-gradient(45deg,' + fade(theme.palette.alarm.minor.dark, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minor.dark) + ' 100%)'
+    background: 'linear-gradient(45deg,' + alpha(theme.palette.alarm.minor.dark, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minor.dark) + ' 100%)'
     //  background:'linear-gradient(45deg, '+ theme.palette.background.default+ ' 1%, '+deepOrange['400'] +' 99%)'
   },
   TextFieldSeverity2: {
@@ -37,7 +37,7 @@ const styles = (theme) => ({
 
     padding: 1,
     //background:theme.palette.alarm.major.main,
-    background: 'linear-gradient(45deg,' + fade(theme.palette.alarm.major.dark, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.major.dark) + ' 100%)'
+    background: 'linear-gradient(45deg,' + alpha(theme.palette.alarm.major.dark, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.major.dark) + ' 100%)'
     //  backgroundColor:'linear-gradient(45deg, #FFFFFF 1%, #FF8E53 99%)'
     //  background:'linear-gradient(45deg, '+ theme.palette.background.default+ ' 1%, '+red['800'] +' 99%)'
   },
@@ -46,7 +46,7 @@ const styles = (theme) => ({
     borderWidth: 1,
     borderStyle: 'solid',
     background: props.fadeTU
-      ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.major.dark, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.major.dark) + ' 100%)'
+      ? 'linear-gradient(45deg,' + alpha(theme.palette.alarm.major.dark, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.major.dark) + ' 100%)'
       : theme.palette.alarm.major.main,
     borderRadius: 2,
     padding: 1,
@@ -59,7 +59,7 @@ const styles = (theme) => ({
     borderWidth: 1,
     borderStyle: 'solid',
     background: props.fadeTU
-      ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.majorAcked.dark, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.majorAcked.dark) + ' 100%)'
+      ? 'linear-gradient(45deg,' + alpha(theme.palette.alarm.majorAcked.dark, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.majorAcked.dark) + ' 100%)'
       : theme.palette.alarm.majorAcked.main,
     borderRadius: 2,
     padding: 1,
@@ -72,7 +72,7 @@ const styles = (theme) => ({
     borderWidth: 1,
     borderStyle: 'solid',
     background: props.fadeTU
-      ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.minor.dark, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minor.dark) + ' 100%)'
+      ? 'linear-gradient(45deg,' + alpha(theme.palette.alarm.minor.dark, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minor.dark) + ' 100%)'
       : theme.palette.alarm.minor.main,
     borderRadius: 2,
     padding: 1,
@@ -85,7 +85,7 @@ const styles = (theme) => ({
     borderWidth: 1,
     borderStyle: 'solid',
     background: props.fadeTU
-      ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.minorAcked.dark, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minorAcked.dark) + ' 100%)'
+      ? 'linear-gradient(45deg,' + alpha(theme.palette.alarm.minorAcked.dark, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minorAcked.dark) + ' 100%)'
       : theme.palette.alarm.minorAcked.main,
     borderRadius: 2,
     padding: 1,

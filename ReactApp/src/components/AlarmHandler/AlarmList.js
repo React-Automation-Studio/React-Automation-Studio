@@ -24,7 +24,7 @@ import PlaylistAddOutlinedIcon from '@material-ui/icons/PlaylistAddOutlined';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-import { fade } from '@material-ui/core/styles/colorManipulator';
+import { alpha } from '@material-ui/core/styles/colorManipulator';
 
 // Styles
 const useStyles = makeStyles(theme => ({
@@ -38,92 +38,92 @@ const useStyles = makeStyles(theme => ({
     },
     majorAlarm: props => ({
         background: props.fadeList
-            ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.major.main, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.major.main) + ' 100%)'
+            ? 'linear-gradient(45deg,' + alpha(theme.palette.alarm.major.main, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.major.main) + ' 100%)'
             : theme.palette.alarm.major.main,
         '&:hover': {
             background: props.fadeList
-                ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.major.light, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.major.light) + ' 100%)'
+                ? 'linear-gradient(45deg,' + alpha(theme.palette.alarm.major.light, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.major.light) + ' 100%)'
                 : theme.palette.alarm.major.light,
         },
         "&.Mui-selected": {
             background: props.fadeList
-                ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.major.light, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.major.light) + ' 100%)'
+                ? 'linear-gradient(45deg,' + alpha(theme.palette.alarm.major.light, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.major.light) + ' 100%)'
                 : theme.palette.alarm.major.light,
             borderStyle: "solid",
             borderWidth: "thin",
             borderColor: theme.palette.primary.main,
             '&:hover': {
                 background: props.fadeList
-                    ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.major.dark, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.major.dark) + ' 100%)'
+                    ? 'linear-gradient(45deg,' + alpha(theme.palette.alarm.major.dark, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.major.dark) + ' 100%)'
                     : theme.palette.alarm.major.dark,
             },
         }
     }),
     majorAlarmAcked: props => ({
         background: props.fadeList
-            ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.majorAcked.main, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.majorAcked.main) + ' 100%)'
+            ? 'linear-gradient(45deg,' + alpha(theme.palette.alarm.majorAcked.main, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.majorAcked.main) + ' 100%)'
             : theme.palette.alarm.majorAcked.main,
         '&:hover': {
             background: props.fadeList
-                ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.majorAcked.light, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.majorAcked.light) + ' 100%)'
+                ? 'linear-gradient(45deg,' + alpha(theme.palette.alarm.majorAcked.light, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.majorAcked.light) + ' 100%)'
                 : theme.palette.alarm.majorAcked.light,
         },
         "&.Mui-selected": {
             background: props.fadeList
-                ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.majorAcked.light, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.majorAcked.light) + ' 100%)'
+                ? 'linear-gradient(45deg,' + alpha(theme.palette.alarm.majorAcked.light, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.majorAcked.light) + ' 100%)'
                 : theme.palette.alarm.majorAcked.light,
             borderStyle: "solid",
             borderWidth: "thin",
             borderColor: theme.palette.primary.main,
             '&:hover': {
                 background: props.fadeList
-                    ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.majorAcked.dark, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.majorAcked.dark) + ' 100%)'
+                    ? 'linear-gradient(45deg,' + alpha(theme.palette.alarm.majorAcked.dark, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.majorAcked.dark) + ' 100%)'
                     : theme.palette.alarm.majorAcked.dark,
             },
         }
     }),
     minorAlarm: props => ({
         background: props.fadeList
-            ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.minor.main, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minor.main) + ' 100%)'
+            ? 'linear-gradient(45deg,' + alpha(theme.palette.alarm.minor.main, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minor.main) + ' 100%)'
             : theme.palette.alarm.minor.main,
         '&:hover': {
             background: props.fadeList
-                ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.minor.light, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minor.light) + ' 100%)'
+                ? 'linear-gradient(45deg,' + alpha(theme.palette.alarm.minor.light, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minor.light) + ' 100%)'
                 : theme.palette.alarm.minor.light,
         },
         "&.Mui-selected": {
             background: props.fadeList
-                ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.minor.light, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minor.light) + ' 100%)'
+                ? 'linear-gradient(45deg,' + alpha(theme.palette.alarm.minor.light, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minor.light) + ' 100%)'
                 : theme.palette.alarm.minor.light,
             borderStyle: "solid",
             borderWidth: "thin",
             borderColor: theme.palette.primary.main,
             '&:hover': {
                 background: props.fadeList
-                    ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.minor.dark, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minor.dark) + ' 100%)'
+                    ? 'linear-gradient(45deg,' + alpha(theme.palette.alarm.minor.dark, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minor.dark) + ' 100%)'
                     : theme.palette.alarm.minor.dark,
             },
         }
     }),
     minorAlarmAcked: props => ({
         background: props.fadeList
-            ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.minorAcked.main, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minorAcked.main) + ' 100%)'
+            ? 'linear-gradient(45deg,' + alpha(theme.palette.alarm.minorAcked.main, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minorAcked.main) + ' 100%)'
             : theme.palette.alarm.minorAcked.main,
         '&:hover': {
             background: props.fadeList
-                ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.minorAcked.light, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minorAcked.light) + ' 100%)'
+                ? 'linear-gradient(45deg,' + alpha(theme.palette.alarm.minorAcked.light, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minorAcked.light) + ' 100%)'
                 : theme.palette.alarm.minorAcked.light,
         },
         "&.Mui-selected": {
             background: props.fadeList
-                ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.minorAcked.light, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minorAcked.light) + ' 100%)'
+                ? 'linear-gradient(45deg,' + alpha(theme.palette.alarm.minorAcked.light, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minorAcked.light) + ' 100%)'
                 : theme.palette.alarm.minorAcked.light,
             borderStyle: "solid",
             borderWidth: "thin",
             borderColor: theme.palette.primary.main,
             '&:hover': {
                 background: props.fadeList
-                    ? 'linear-gradient(45deg,' + fade(theme.palette.alarm.minorAcked.dark, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minorAcked.dark) + ' 100%)'
+                    ? 'linear-gradient(45deg,' + alpha(theme.palette.alarm.minorAcked.dark, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minorAcked.dark) + ' 100%)'
                     : theme.palette.alarm.minorAcked.dark,
             },
         }

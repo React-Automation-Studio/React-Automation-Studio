@@ -1,6 +1,6 @@
 React-Automation-Studio provides several themes.
 
-It uses createMuiTheme from https://material-ui.com/customization/theming/ to create the  themes.
+It uses createTheme from https://material-ui.com/customization/theming/ to create the  themes.
 
 The object that is passed to the create the themes is an extended version of the palette they recommend. We have added in extra definitions for the React-Vis graph library and other situations.
 

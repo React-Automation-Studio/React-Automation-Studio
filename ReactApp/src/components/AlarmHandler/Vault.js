@@ -129,7 +129,7 @@ const Vault = () => {
             <Grid
                 container
                 direction="row"
-                justify="flex-start"
+                justifyContent="flex-start"
                 alignItems="stretch"
                 spacing={2}
                 className={classes.root}
@@ -152,7 +152,7 @@ const Vault = () => {
                         <Grid
                             container
                             direction="row"
-                            justify="flex-start"
+                            justifyContent="flex-start"
                             alignItems="stretch"
                             spacing={2}
                         >
@@ -161,7 +161,7 @@ const Vault = () => {
                                     <Grid
                                         container
                                         direction="row"
-                                        justify="flex-start"
+                                        justifyContent="flex-start"
                                         alignItems="stretch"
                                         spacing={2}
 
@@ -223,7 +223,7 @@ const Vault = () => {
                                     <Grid
                                         container
                                         direction="row"
-                                        justify="flex-start"
+                                        justifyContent="flex-start"
                                         alignItems="stretch"
                                         spacing={2}
 
@@ -267,7 +267,7 @@ const Vault = () => {
                                     <Grid
                                         container
                                         direction="row"
-                                        justify="flex-start"
+                                        justifyContent="flex-start"
                                         alignItems="stretch"
                                         spacing={2}
 

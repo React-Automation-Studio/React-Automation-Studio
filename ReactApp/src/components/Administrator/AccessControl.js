@@ -418,7 +418,7 @@ const AccessControl = (props) => {
                     style={{ marginTop: 0, paddingRight: 8, paddingLeft: 8, paddingBottom: 8, paddingTop: 0 }}
                     container
                     direction="row"
-                    justify="flex-start"
+                    justifyContent="flex-start"
                     alignItems="flex-start"
                     spacing={2}
                   >
@@ -861,7 +861,7 @@ The fifth rule enables read and write access for all PV names starting with test
             <Grid
               container
               direction="row"
-              justify="flex-start"
+              justifyContent="flex-start"
               alignItems="flex-start"
               spacing={2}
 
@@ -1018,7 +1018,7 @@ The fifth rule enables read and write access for all PV names starting with test
                     style={{ marginTop: 0, paddingRight: 8, paddingLeft: 8, paddingBottom: 8, paddingTop: 0 }}
                     container
                     direction="row"
-                    justify="flex-start"
+                    justifyContent="flex-start"
                     alignItems="flex-start"
                     spacing={2}
                   >

@@ -33,7 +33,7 @@ class ControlBottomEx1 extends React.Component {
 
 
     return (
-      <Grid   container  justify="flex-start" direction="row"    alignItems="center" spacing={0}>
+      <Grid   container  justifyContent="flex-start" direction="row"    alignItems="center" spacing={0}>
         <Grid item xs={3} sm={2}>
 
 

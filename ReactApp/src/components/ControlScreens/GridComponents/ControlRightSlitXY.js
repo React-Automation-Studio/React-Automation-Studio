@@ -65,7 +65,7 @@ class ControlRightSlitXY extends React.Component {
 
           <Grid container
             direction="row"
-            justify="flex-start"
+            justifyContent="flex-start"
             alignItems="center" spacing={1}>
             <Grid item xs={3}  >
               <TextInput pv={ system.devices.xGapDevice.deviceName + ":" + system.devices.xGapDevice.setpoint}  prec={2} label={'X Gap Setpoint'} alarmSensitive={true} usePvUnits={true} usePvMinMax={true} />
@@ -105,7 +105,7 @@ class ControlRightSlitXY extends React.Component {
         <Paper style={{ marginTop: 6, padding: 8 }} elevation={this.props.theme.palette.paperElevation} >
           <Grid container
             direction="row"
-            justify="flex-start"
+            justifyContent="flex-start"
             alignItems="center" spacing={1}>
 
             <Grid item xs={3}  >
@@ -155,7 +155,7 @@ class ControlRightSlitXY extends React.Component {
 
             <Grid container
               direction="row"
-              justify="flex-start"
+              justifyContent="flex-start"
               alignItems="center" spacing={1}>
               <Grid item xs={3}  >
                 <TextInput pv={ system.devices.yGapDevice.deviceName + ":" + system.devices.yGapDevice.setpoint}  prec={2} label={'Y Gap Setpoint'} alarmSensitive={true} usePvUnits={true} usePvMinMax={true} />
@@ -195,7 +195,7 @@ class ControlRightSlitXY extends React.Component {
           <Paper style={{ marginTop: 6, padding: 12 }} elevation={this.props.theme.palette.paperElevation}>
             <Grid container
               direction="row"
-              justify="flex-start"
+              justifyContent="flex-start"
               alignItems="center" spacing={1}>
 
               <Grid item xs={3}  >

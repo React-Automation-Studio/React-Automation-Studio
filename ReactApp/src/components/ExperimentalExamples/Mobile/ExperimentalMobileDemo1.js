@@ -231,7 +231,7 @@ const Example1 = (props) => {
                 spacing={2}
                 alignItems={'stretch'}
                 direction={'row'}
-                justify={'flex-start'}
+                justifyContent={'flex-start'}
               >
 
                 <Grid item xs={2}>
@@ -350,7 +350,7 @@ const Example1 = (props) => {
                 </Grid>
 
                 <Grid item xs={2} sm={4} lg={5} >
-                  <Grid container direction="column" justify="space-evenly" spacing={2} alignItems="stretch">
+                  <Grid container direction="column" justifyContent="space-evenly" spacing={2} alignItems="stretch">
                     <Grid item>
                       <StyledIconIndicator pv='$(device)' macros={{ '$(device)': 'testIOC:BO1' }} onColor={props.theme.palette.ok.main} offColor='default' label={'On'} labelPlacement={'end'} />
 
@@ -415,12 +415,12 @@ const Example1 = (props) => {
         {showAdvancedSettings === 1 && <TabContainer key={'tabContainer1'}>
           <Grid container className={classes.root}>
             <Grid item xs={12}>
-              <Grid container spacing={2} alignItems={'stretch'} direction={'column'} justify={'flex-start'}>
+              <Grid container spacing={2} alignItems={'stretch'} direction={'column'} justifyContent={'flex-start'}>
 
 
                 <Grid item >
                   <div style={{ marginBottom: 8 }}>Settings</div>
-                  <Grid container spacing={2} alignItems={'stretch'} direction={'row'} justify={'flex-start'}>
+                  <Grid container spacing={2} alignItems={'stretch'} direction={'row'} justifyContent={'flex-start'}>
                     <Grid item xs={12} lg={4}>
                       <TextInput pv='$(device):frequency' macros={{ '$(device)': 'testIOC' }} usePvUnits={true} prec={1} usePvLabel={true} />
                     </Grid>

@@ -23,7 +23,7 @@ const LayoutContent = () => {
         <Grid
             container
             direction="row"
-            justify="flex-start"
+            justifyContent="flex-start"
             alignItems="stretch"
             spacing={2}
         >
@@ -43,7 +43,7 @@ const LayoutContent = () => {
                 item
                 xs={4}
                 container
-                justify="space-around"
+                justifyContent="space-around"
                 alignItems="center"
             >
                 <Grid item>
@@ -68,7 +68,7 @@ const LayoutContent = () => {
                 item
                 xs={12}
                 container
-                justify="center"
+                justifyContent="center"
             >
                 <Grid item>
                     <ThumbWheel

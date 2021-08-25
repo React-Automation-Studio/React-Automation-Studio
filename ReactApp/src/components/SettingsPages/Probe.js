@@ -50,14 +50,14 @@ class Probe extends React.Component {
 <React.Fragment>
   {probetype==='normal'&&<Grid   container
     direction="column"
-    justify="center"
+    justifyContent="center"
     spacing={2}>
     <Grid item xs={12} sm ={6} lg={4} >
       <div style={{"overflowX": "hidden"}} >
         <div style={{ padding: 24}}>
           <Grid   container
             direction="row"
-            justify="space-evenly"
+            justifyContent="space-evenly"
             spacing={2}>
             <Grid item xs={12}  >
               <TextOutput  pv='$(device).NAME' macros={{'$(device)':probeObject.pvname.toString()}}  label={'EPICS PV Name:'} debug={false}/>
@@ -114,14 +114,14 @@ class Probe extends React.Component {
   }
   {probetype==='readOnly'&&<Grid   container
     direction="column"
-    justify="center"
+    justifyContent="center"
     spacing={2}>
     <Grid item xs={12} sm ={6} lg={4} >
       <div style={{"overflowX": "hidden"}} >
         <div style={{ padding: 24}}>
           <Grid   container
             direction="row"
-            justify="space-evenly"
+            justifyContent="space-evenly"
             spacing={2}>
             <Grid item xs={12}  >
               <TextOutput  pv='$(device).NAME' macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV Name:'}/>
@@ -168,14 +168,14 @@ class Probe extends React.Component {
   }
   {probetype==='simple'&&<Grid   container
     direction="column"
-    justify="stretch"
+    justifyContent="stretch"
     spacing={2}>
     <Grid item xs={12} sm ={6} lg={4} >
       <div style={{"overflowX": "hidden"}} >
         <div style={{ padding: 24}}>
           <Grid   container
             direction="row"
-            justify="space-evenly"
+            justifyContent="space-evenly"
             spacing={2}>
             <Grid item xs={12}>
               <TextField

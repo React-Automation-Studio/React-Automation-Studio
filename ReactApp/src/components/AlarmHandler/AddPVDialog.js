@@ -62,7 +62,7 @@ const AddPVDialog = (props) => {
 
                         container
                         direction="row"
-                        justify="flex-start"
+                        justifyContent="flex-start"
                         alignItems="stretch"
                     >
                         <Grid item xs={1} className={classes.centerInBlock}>
@@ -132,7 +132,7 @@ const AddPVDialog = (props) => {
                 <Grid
                     container
                     direction="row"
-                    justify="flex-start"
+                    justifyContent="flex-start"
                     alignItems="stretch"
                     spacing={2}
                 >
@@ -140,7 +140,7 @@ const AddPVDialog = (props) => {
                         <Grid
                             container
                             direction="row"
-                            justify="flex-start"
+                            justifyContent="flex-start"
                             alignItems="stretch"
                         >
                             <Grid item xs={1} className={classes.centerInBlock}>
@@ -162,7 +162,7 @@ const AddPVDialog = (props) => {
                         <Grid
                             container
                             direction="row"
-                            justify="flex-start"
+                            justifyContent="flex-start"
                             alignItems="stretch"
                         >
                             {pvGrid}

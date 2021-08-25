@@ -109,7 +109,7 @@ const AddUsers = (props) => {
                 style={{ marginTop: 8, padding: 8 }}
                 container
                 direction="row"
-                justify="center"
+                justifyContent="center"
                 alignItems="flex-start"
                 spacing={0}
               >
@@ -123,7 +123,7 @@ const AddUsers = (props) => {
                     style={{ padding: 8 }}
                     container
                     direction="row"
-                    justify="flex-start"
+                    justifyContent="flex-start"
                     alignItems="flex-start"
                     spacing={2}
                   >

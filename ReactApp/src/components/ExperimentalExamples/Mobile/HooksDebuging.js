@@ -161,7 +161,7 @@ class ExperimentalMobileDemo1 extends React.Component {
 
       <React.Fragment>
         <AppBar style={{ position: 'fixed', bottom: 'auto', top: '0' }} color='inherit' >
-          <Grid container direction="row" item justify="center" spacing={2} alignItems="center">
+          <Grid container direction="row" item justifyContent="center" spacing={2} alignItems="center">
             <Grid item xs={2}  >
 
               <SideBar />

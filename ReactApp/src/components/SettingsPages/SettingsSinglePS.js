@@ -37,7 +37,7 @@ class SettingsSinglePS extends React.Component {
 
           <Grid   container
             direction="row"
-            justify="flex-start"
+            justifyContent="flex-start"
             alignItems="center" spacing={1}>
             <Grid item xs={3}  >
               <div style={{ paddingRight: 12}}>
@@ -52,7 +52,7 @@ class SettingsSinglePS extends React.Component {
 
                   <Grid   container
                     direction="row"
-                    justify="flex-start"
+                    justifyContent="flex-start"
                     alignItems="center" spacing={1}>
                     <Grid item xs={6}  >
                       <TextInput   pv={system.devices.device.deviceName+":"+system.devices.device.setpoint}      prec={3}  label={'Setpoint:'} alarmSensitive={true}  usePvUnits={true} usePvMinMax={true}/>
@@ -104,7 +104,7 @@ class SettingsSinglePS extends React.Component {
 
 
                     <Grid item xs={12}  >
-                      <Grid   container  justify="flex-start" direction="row"    alignItems="center" spacing={4}>
+                      <Grid   container  justifyContent="flex-start" direction="row"    alignItems="center" spacing={4}>
                         <Grid item xs={12} sm={12} >
                         <ThumbWheel
                           pv={system.devices.device.deviceName+":"+system.devices.device.setpoint}

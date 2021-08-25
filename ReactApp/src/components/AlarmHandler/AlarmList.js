@@ -165,7 +165,7 @@ const AlarmList = props => {
                 <Grid
                     container
                     direction="row"
-                    justify="flex-start"
+                    justifyContent="flex-start"
                     alignItems="stretch"
                     spacing={2}>
                     <Grid item xs={12}>

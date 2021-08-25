@@ -587,7 +587,7 @@ const BeamlineControlSystem = (props) => {
   }, [harpPvs])
 
   const footerContents = (
-    <Grid container direction="row" justify="flex-start" alignItems="center" >
+    <Grid container direction="row" justifyContent="flex-start" alignItems="center" >
       <Grid item xs={12} style={{ paddingLeft: "1em" }}>
         <Typography>
           All the components are now reusable hooks components. See the style guide Beamline Components
@@ -806,7 +806,7 @@ const BeamlineControlSystem = (props) => {
                   <Grid
                     container
                     direction="row"
-                    justify="flex-start"
+                    justifyContent="flex-start"
                     alignItems="center"
                   >
                     <Grid item sm={6}>
@@ -858,7 +858,7 @@ const BeamlineControlSystem = (props) => {
                     <Grid
                       container
                       direction="row"
-                      justify="flex-start"
+                      justifyContent="flex-start"
                       alignItems="center"
                     >
                       <Grid item sm={2} style={{ marginLeft: 10 }}>
@@ -872,7 +872,7 @@ const BeamlineControlSystem = (props) => {
                   <Grid
                     container
                     direction="row"
-                    justify="flex-start"
+                    justifyContent="flex-start"
                     alignItems="flex-start"
                     spacing={2}
                   >

@@ -570,7 +570,7 @@ const LoadSave = (props) => {
       {showTable&&<Grid
         container
         direction="row"
-        justify="flex-start"
+        justifyContent="flex-start"
         alignItems="flex-start"
         spacing={2}
         style={{ padding: 8 }}
@@ -582,7 +582,7 @@ const LoadSave = (props) => {
             <Grid
               container
               direction="row"
-              justify="flex-start"
+              justifyContent="flex-start"
               alignItems="flex-start"
               spacing={2}
             > {metadataComponents.map((item, index) => (
@@ -702,7 +702,7 @@ const LoadSave = (props) => {
               <Grid
                 container
                 direction="row"
-                justify="flex-start"
+                justifyContent="flex-start"
                 alignItems="flex-start"
                 spacing={1}
               >
@@ -767,7 +767,7 @@ const LoadSave = (props) => {
               <Grid
                 container
                 direction="row"
-                justify="flex-start"
+                justifyContent="flex-start"
                 alignItems="flex-start"
                 spacing={1}
               >

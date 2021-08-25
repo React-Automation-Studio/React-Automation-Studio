@@ -53,7 +53,7 @@ const EditorSlitXY =(props)=>
 
           <Grid container
             direction="row"
-            justify="flex-start"
+            justifyContent="flex-start"
             alignItems="center" spacing={1}>
             <Grid item xs={3}  >
               <TextInput pv={system.xGapSetpointPv}  prec={2} label={'X Gap Setpoint'} alarmSensitive={true} usePvUnits={true} usePvMinMax={true} />
@@ -93,7 +93,7 @@ const EditorSlitXY =(props)=>
         <Paper style={{ marginTop: 6, padding: 8 }} elevation={props.theme.palette.paperElevation} >
           <Grid container
             direction="row"
-            justify="flex-start"
+            justifyContent="flex-start"
             alignItems="center" spacing={1}>
 
             <Grid item xs={3}  >
@@ -142,7 +142,7 @@ const EditorSlitXY =(props)=>
 
           <Grid container
             direction="row"
-            justify="flex-start"
+            justifyContent="flex-start"
             alignItems="center" spacing={1}>
             <Grid item xs={3}  >
               <TextInput pv={system.yGapSetpointPv}  prec={2} label={'Y Gap Setpoint'} alarmSensitive={true} usePvUnits={true} usePvMinMax={true} />
@@ -182,7 +182,7 @@ const EditorSlitXY =(props)=>
         <Paper style={{ marginTop: 6, padding: 8 }} elevation={props.theme.palette.paperElevation} >
           <Grid container
             direction="row"
-            justify="flex-start"
+            justifyContent="flex-start"
             alignItems="center" spacing={1}>
 
             <Grid item xs={3}  >

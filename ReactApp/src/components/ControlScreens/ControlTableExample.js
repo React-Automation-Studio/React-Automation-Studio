@@ -259,7 +259,7 @@ class ControlTableExample extends React.Component {
         <Grid
           container
           direction="row"
-          justify="flex-start"
+          justifyContent="flex-start"
           alignItems="flex-start"
           spacing={2}
           className={classes.root}

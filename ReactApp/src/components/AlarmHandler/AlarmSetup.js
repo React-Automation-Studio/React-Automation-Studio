@@ -2375,7 +2375,7 @@ const AlarmSetup = (props) => {
                 ? <Grid
                     container
                     direction="row"
-                    justify="flex-start"
+                    justifyContent="flex-start"
                     alignItems="stretch"
                     spacing={2}
                     className={classes.root}
@@ -2386,7 +2386,7 @@ const AlarmSetup = (props) => {
                                 <Grid
                                     container
                                     direction="row"
-                                    justify="center"
+                                    justifyContent="center"
                                     alignItems="center"
                                     spacing={1}
                                 >
@@ -2702,7 +2702,7 @@ const AlarmSetup = (props) => {
                 : <Grid
                     container
                     direction="row"
-                    justify="flex-start"
+                    justifyContent="flex-start"
                     alignItems="stretch"
                     spacing={2}
                     className={classes.root}

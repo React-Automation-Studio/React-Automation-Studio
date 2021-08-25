@@ -56,7 +56,7 @@ const EditorSteererXY =(props)=>{
 
           <Grid container
             direction="row"
-            justify="flex-start"
+            justifyContent="flex-start"
             alignItems="center" spacing={1}>
             <Grid item xs={6}  >
               <TextInput pv={system.xSetpointPv} prec={3} label={'X Setpoint:'} alarmSensitive={true} usePvUnits={true} usePvMinMax={true} />
@@ -85,7 +85,7 @@ const EditorSteererXY =(props)=>{
 
 
             <Grid item xs={12}  >
-              <Grid container justify="flex-start" direction="row" alignItems="center" spacing={1}>
+              <Grid container justifyContent="flex-start" direction="row" alignItems="center" spacing={1}>
                 <Grid item xs={12} sm={12} >
                   <ThumbWheel
                     pv={system.xSetpointPv}
@@ -138,7 +138,7 @@ const EditorSteererXY =(props)=>{
 
             <Grid container
               direction="row"
-              justify="flex-start"
+              justifyContent="flex-start"
               alignItems="center" spacing={1}>
               <Grid item xs={6}  >
                 <TextInput pv={system.ySetpointPv} prec={3} label={'Y Setpoint:'} alarmSensitive={true} usePvUnits={true} usePvMinMax={true} />
@@ -167,7 +167,7 @@ const EditorSteererXY =(props)=>{
 
 
               <Grid item xs={12}  >
-                <Grid container justify="flex-start" direction="row" alignItems="center" spacing={1}>
+                <Grid container justifyContent="flex-start" direction="row" alignItems="center" spacing={1}>
                   <Grid item xs={12} sm={12} >
                     <ThumbWheel
                       pv={system.ySetpointPv}

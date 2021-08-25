@@ -481,7 +481,7 @@ class ControlTestHarp1 extends React.Component {
                       <Grid
                         container
                         direction="row"
-                        justify="center"
+                        justifyContent="center"
                         alignItems="center"
 
                       >
@@ -526,7 +526,7 @@ class ControlTestHarp1 extends React.Component {
                           <Grid
                             container
                             direction="row"
-                            justify="flex-start"
+                            justifyContent="flex-start"
                             alignItems="center"
                           >
                             <Grid item sm={6}>
@@ -574,7 +574,7 @@ class ControlTestHarp1 extends React.Component {
                         <Grid
                           container
                           direction="row"
-                          justify="flex-start"
+                          justifyContent="flex-start"
                           alignItems="center"
                         >
                           <Grid item sm={2}>
@@ -615,13 +615,13 @@ class ControlTestHarp1 extends React.Component {
                             <Grid
                               container
                               direction="row"
-                              justify="flex-start"
+                              justifyContent="flex-start"
                               alignItems="center"
                             >
                               <Grid
                                 container
                                 direction="row"
-                                justify="flex-start"
+                                justifyContent="flex-start"
                                 alignItems="center"
                               >
                                 <Grid item sm={6}>
@@ -671,7 +671,7 @@ class ControlTestHarp1 extends React.Component {
                     <Grid
                       container
                       direction="row"
-                      justify="flex-start"
+                      justifyContent="flex-start"
                       alignItems="center"
                     >
                       <Grid item sm={6}>
@@ -749,7 +749,7 @@ class ControlTestHarp1 extends React.Component {
                       <Grid
                         container
                         direction="row"
-                        justify="flex-start"
+                        justifyContent="flex-start"
                         alignItems="center"
 
                       >
@@ -768,7 +768,7 @@ class ControlTestHarp1 extends React.Component {
                     <Grid
                       container
                       direction="row"
-                      justify="flex-start"
+                      justifyContent="flex-start"
                       alignItems="flex-start"
 
                     >

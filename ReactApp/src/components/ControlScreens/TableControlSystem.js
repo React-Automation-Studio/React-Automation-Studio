@@ -529,7 +529,7 @@ const BeamlineControlSystem = (props) => {
 
  
   const footerContents = (
-    <Grid container direction="row" justify="flex-start" alignItems="center" >
+    <Grid container direction="row" justifyContent="flex-start" alignItems="center" >
       <Grid item xs={12} style={{ paddingLeft: "1em" }}>
         <Typography>
           This demo now uses hooks components !
@@ -561,7 +561,7 @@ const BeamlineControlSystem = (props) => {
                   <Grid
                     container
                     direction="row"
-                    justify="flex-start"
+                    justifyContent="flex-start"
                     alignItems="flex-start"
                     spacing={2}
                   >

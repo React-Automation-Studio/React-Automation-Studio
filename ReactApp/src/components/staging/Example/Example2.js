@@ -39,7 +39,7 @@ class Example2 extends React.Component {
            style={{padding:8}}
            container item
            direction="row"
-           justify="center"
+           justifyContent="center"
            spacing={1}
            alignItems="stretch"
         >

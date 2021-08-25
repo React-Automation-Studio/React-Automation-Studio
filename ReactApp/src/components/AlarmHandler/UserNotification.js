@@ -1077,7 +1077,7 @@ const UserNotification = (props) => {
                 ? <Grid
                     container
                     direction="column"
-                    justify="flex-start"
+                    justifyContent="flex-start"
                     alignItems="stretch"
                     className={classes.root}
                     spacing={2}
@@ -1274,7 +1274,7 @@ const UserNotification = (props) => {
                 : <Grid
                     container
                     direction="row"
-                    justify="flex-start"
+                    justifyContent="flex-start"
                     alignItems="stretch"
                     spacing={2}
                     className={classes.root}

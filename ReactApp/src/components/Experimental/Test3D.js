@@ -52,7 +52,7 @@ const Test3D =(props)=> {
           <Grid
             container
             direction="row"
-            justify="flex-start"
+            justifyContent="flex-start"
             alignItems="center"
             spacing={1}
             style={{ paddingTop: 16 }}
@@ -73,7 +73,7 @@ const Test3D =(props)=> {
                 <Grid
                   container
                   direction="row"
-                  justify="flex-start"
+                  justifyContent="flex-start"
                   alignItems="center"
                   spacing={2}
                 >  <Grid item xs={6}  >

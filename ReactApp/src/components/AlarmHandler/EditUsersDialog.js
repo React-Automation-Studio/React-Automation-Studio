@@ -53,7 +53,7 @@ const EditUsersDialog = (props) => {
                 <Grid
                     container
                     direction="row"
-                    justify="center"
+                    justifyContent="center"
                     alignItems="stretch"
                 >
                     <Grid item xs={5}>
@@ -61,7 +61,7 @@ const EditUsersDialog = (props) => {
                             <Grid
                                 container
                                 direction="column"
-                                justify="center"
+                                justifyContent="center"
                                 alignItems="stretch"
                             >
                                 <Grid item className={classes.centerInBlock}>
@@ -118,7 +118,7 @@ const EditUsersDialog = (props) => {
                         <Grid
                             container
                             direction="column"
-                            justify="center"
+                            justifyContent="center"
                             alignItems="stretch"
                         >
                             <Grid item className={classes.centerInBlock}>
@@ -148,7 +148,7 @@ const EditUsersDialog = (props) => {
                             <Grid
                                 container
                                 direction="column"
-                                justify="center"
+                                justifyContent="center"
                                 alignItems="stretch"
                             >
                                 <Grid item className={classes.centerInBlock}>

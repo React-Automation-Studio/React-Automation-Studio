@@ -67,7 +67,7 @@ const RenameDialog = (props) => {
                 <Grid
                     container
                     direction="row"
-                    justify="flex-start"
+                    justifyContent="flex-start"
                     alignItems="stretch"
                     spacing={2}
                 >
@@ -75,7 +75,7 @@ const RenameDialog = (props) => {
                         <Grid
                             container
                             direction="row"
-                            justify="flex-start"
+                            justifyContent="flex-start"
                             alignItems="stretch"
                         >
                             <Grid item xs={3} className={[classes.verticalMiddle, classes.horizontalRight].join(' ')}>
@@ -94,7 +94,7 @@ const RenameDialog = (props) => {
                         <Grid
                             container
                             direction="row"
-                            justify="flex-start"
+                            justifyContent="flex-start"
                             alignItems="stretch"
                         >
                             <Grid item xs={3} className={[classes.verticalMiddle, classes.horizontalRight].join(' ')}>

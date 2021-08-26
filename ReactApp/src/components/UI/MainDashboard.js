@@ -172,36 +172,44 @@ const MainDashboard = (props) => {
               </Grid>
               <Grid item lg={12} sm={12} xs={12}  >
                 <Typography className={classes.WhatsNew} component='div'>
-                V3.0.2 Monday 23 August 2021
-                <br />
-                <br />
-                Minor Bug Fixes and Updates:
-                    <ul>
-                        <li>pvServer: minor bug fix</li>
-                        <li>StyledIconIndicator: non zero values default to onColor</li>
-                        <li>Docker: standardised to Python 3.8.7 in all Python images</li>
-                    </ul>
-                <br />
-
-                  V3.0.1 Monday 28 June 2021
-<br />
+                  V3.1.0 Wednesday 25 August 2021
+                  <br />
                   <br />
                   Minor Bug Fixes and Updates:
-    <ul>
-                      <li>GraphY: Fixed timestamp issue</li>
-                      <li>Alarmhandler:  Minor bug fixes- Implemented non blocking queue to improve Signal notification throughput</li>
-                      <li>Nginx: Fixed a waring on a script</li>
-                      <li>pvServer: minor bug fix</li>
-                    </ul>
-                 
+                  <ul>
+                    <li>Hot fix in NodeJs Docker files for new npm registry requirements, previous releases will fail after 1 October 2021 </li>
+                  </ul>
+                  <br />
+                  V3.0.2 Monday 23 August 2021
+                  <br />
+                  <br />
+                  Minor Bug Fixes and Updates:
+                  <ul>
+                    <li>pvServer: minor bug fix</li>
+                    <li>StyledIconIndicator: non zero values default to onColor</li>
+                    <li>Docker: standardised to Python 3.8.7 in all Python images</li>
+                  </ul>
+                  <br />
+
+                  V3.0.1 Monday 28 June 2021
+                  <br />
+                  <br />
+                  Minor Bug Fixes and Updates:
+                  <ul>
+                    <li>GraphY: Fixed timestamp issue</li>
+                    <li>Alarmhandler:  Minor bug fixes- Implemented non blocking queue to improve Signal notification throughput</li>
+                    <li>Nginx: Fixed a waring on a script</li>
+                    <li>pvServer: minor bug fix</li>
+                  </ul>
+
 
                   <br />
 
                   V3.0.0 Monday 24 May 2021
-<br />
                   <br />
-Improvements and new features:
-  <br />
+                  <br />
+                  Improvements and new features:
+                  <br />
                   <ul>
                     <li>New web based administration</li>
                     <li>Nginx now serves the static files, performs the transport layer security and load balancing</li>
@@ -212,7 +220,7 @@ Improvements and new features:
                     <li>Removal of the requirement for the prefix for EPICS process variables</li>
                     <li>Improvement of the MongoDb hooks</li>
                     <li>Component updates:
-    <ul>
+                      <ul>
                         <li>GraphY is now based on Plotly</li>
                         <li>GraphXY is now based on Plotly</li>
                       </ul>
@@ -221,8 +229,8 @@ Improvements and new features:
                     <li>Minor Bug Fixes</li>
 
                   </ul>
-Breaking changes:
-<ul>
+                  Breaking changes:
+                  <ul>
                     <li>Removal of the old file based administration</li>
                     <li>Environment variable names have been simplified</li>
                     <li>GraphY and GraphXY background now defaults to the theme.palette.background.default value</li>
@@ -231,14 +239,14 @@ Breaking changes:
 
 
                   <br />
-                    V2.2.0 Wednesday 20 January 2021
-<br />
-Improvements and new features:
-  <br />
+                  V2.2.0 Wednesday 20 January 2021
+                  <br />
+                  Improvements and new features:
+                  <br />
                   <ul>
                     <li>AlarmHandler now supports email notifications</li>
                     <li>New Components:
-                        <ul>
+                      <ul>
                         <li>New ArrayContainer</li>
                         <li>New LightPanel</li>
                       </ul>
@@ -251,7 +259,7 @@ Improvements and new features:
                   V2.1.0 Tuesday 20 October 2020
                   <br />
                   Improvements and new features:
-                    <br />
+                  <br />
                   <ul>
                     <li>Added Epics Archiver Viewer component</li>
                     <li>Package updates</li>
@@ -260,17 +268,17 @@ Improvements and new features:
                   V2.0.1 Tuesday 29 September 2020
                   <br />
                   Improvements and new features:
-                    <br />
+                  <br />
                   <ul>
                     <li>Added logging to pvServer</li>
                     <li>Minor bug fix to pvServer</li>
                   </ul>
 
                   V2.0.0 Wednesday 5 August 2020
-                    <br />
+                  <br />
 
-                    Improvements and new features:
-                    <br />
+                  Improvements and new features:
+                  <br />
                   <ul>
                     <li>Updated to React Hooks based  components</li>
                     <li>Introduction of new RasAppCore component, the logic in App.js is replaced by this component</li>
@@ -287,13 +295,13 @@ Improvements and new features:
                     <li>Update of all beam line components to Hooks based components, with new documentation</li>
                     <li>Create new experimental sections to hose previews of new components</li>
                     <li>Preview Components
-                        <ul>
+                      <ul>
                         <li>
                           Preview release of the Alarm Handler server and client UI
-                          </li>
+                        </li>
                         <li>
                           Preview release of the Load/Save client UI
-                          </li>
+                        </li>
                       </ul>
                     </li>
 
@@ -302,13 +310,13 @@ Improvements and new features:
                       <ul>
                         <li>
                           SimpleSlider -> Use Slider
-                          </li>
+                        </li>
                         <li>
                           ActionFanoutButton -> Use ActionButton
-                          </li>
+                        </li>
                         <li>
                           SwitchComponent -> Use Switch
-                          </li>
+                        </li>
                       </ul>
                     </li>
                     <li>

@@ -28,6 +28,7 @@ class DeprecatedEpicsPV extends React.Component {
      
       this.state ={
         'id': uuidv4(),
+        'pvConnectionId':uuidv4(),
         'initialized':false,
         'pvname':pvname,
         'interalValue':' ',
@@ -44,6 +45,7 @@ class DeprecatedEpicsPV extends React.Component {
      
       this.state ={ 'initialized':false,
       'pvname':pvname,
+      'pvConnectionId':uuidv4(),
       'interalValue':' ',
       'pv':{initialized: false,pvname:"",value:"",char_value:"",alarmColor:"",lower_disp_limit: 0,upper_disp_limit: 10000,lower_warning_limit: 4000,upper_warning_limit: 6000,
       units: "V",precision: 0},
@@ -73,13 +75,13 @@ class DeprecatedEpicsPV extends React.Component {
 
   handleRequestPvInfoAck=(msg)=>{
     //console.log(this.state['pvname'], "msg: ",msg)
-    if ( typeof msg !=='undefined'){
-    //  console.log(this.state['pvname'], "pvConnectionId: ",msg.pvConnectionId)
-      this.setState({pvConnectionId:msg.pvConnectionId})
-    }
-    else{
+    // if ( typeof msg !=='undefined'){
+    // //  console.log(this.state['pvname'], "pvConnectionId: ",msg.pvConnectionId)
+    //   this.setState({pvConnectionId:msg.pvConnectionId})
+    // }
+    // else{
       
-    }
+    // }
   }
 
   updatePVData(msg){
@@ -167,7 +169,7 @@ class DeprecatedEpicsPV extends React.Component {
       if (jwt===null){
         jwt='unauthenticated'
       }
-      socket.emit('request_pv_info', {data: this.state.pvname,'clientAuthorisation':jwt});
+      socket.emit('request_pv_info', {data: this.state.pvname,pvConnectionId:this.state.pvConnectionId,'clientAuthorisation':jwt});
     }
     handleInitialConnection(){
 
@@ -186,7 +188,7 @@ class DeprecatedEpicsPV extends React.Component {
       if (jwt===null){
         jwt='unauthenticated'
       }
-      socket.emit('request_pv_info', {data: this.state.pvname.replace("pva://",""),'clientAuthorisation':jwt},this.handleRequestPvInfoAck);
+      socket.emit('request_pv_info', {data: this.state.pvname.replace("pva://",""),pvConnectionId:this.state.pvConnectionId,'clientAuthorisation':jwt},this.handleRequestPvInfoAck);
     //  this.handleInitialConnection();
       this.timeout=setTimeout(this.handleInitialConnection, 3000);
       //    console.log("this.state.pvname",this.state.pvname);
@@ -211,7 +213,7 @@ class DeprecatedEpicsPV extends React.Component {
     }
 
     componentWillUnmount(){
-
+  
       let socket=this.context.socket;
       //    console.log("this.state.pvname unmount",this.state.pvname);
       //  if (this.props.debug===true){
@@ -226,7 +228,7 @@ class DeprecatedEpicsPV extends React.Component {
         jwt='unauthenticated'
       }
       if (typeof( this.state.pvConnectionId) !=='undefined'){
-        socket.emit('remove_pv_connection', {pvname: this.state['pvname'],pvConnectionId:this.state.pvConnectionId,'clientAuthorisation':jwt});
+        socket.emit('remove_pv_connection', {pvname: this.state.pvname.replace("pva://",""),pvConnectionId:this.state.pvConnectionId,'clientAuthorisation':jwt});
       }
       socket.removeListener('redirectToLogIn',this.handleRedirectToLogIn);
       socket.removeListener(this.state.pvname,this.updatePVData);

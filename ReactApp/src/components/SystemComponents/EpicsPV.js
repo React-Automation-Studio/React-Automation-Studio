@@ -3,7 +3,7 @@ import ReactAutomationStudioContext from './AutomationStudioContext';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from "prop-types";
 import { io } from 'socket.io-client';
-
+import { v4 as uuidv4 } from 'uuid';
 export const useEpicsPV = (props) => {
  
  
@@ -68,8 +68,11 @@ export const useEpicsPV = (props) => {
 
     socketRef.current = socket;
   }, [socket])
+  const pvConnectionIdRef = useRef(pvConnectionId);
+  // useEffect(() => {
 
-
+  //   pvConnectionIdRef.current = pvConnectionId;
+  // }, [pvConnectionId])
 
 
 
@@ -141,14 +144,15 @@ export const useEpicsPV = (props) => {
       //  console.log(pv.pvname, "msg: ", msg)
       if (typeof msg !== 'undefined') {
         //console.log(this.state['pvname'], "pvConnectionId: ",msg.pvConnectionId)
-        setPvConnectionId(msg.pvConnectionId)
+        // setPvConnectionId(msg.pvConnectionId)
       }
 
     }
 
     
     if (socket){
-    socketRef.current.emit('request_pv_info', { data: pv.pvname, 'clientAuthorisation': jwtRef.current }, handleRequestPvInfoAck);
+      pvConnectionIdRef.current=uuidv4();
+    socketRef.current.emit('request_pv_info', { data: pv.pvname,pvConnectionId: pvConnectionIdRef.current, 'clientAuthorisation': jwtRef.current }, handleRequestPvInfoAck);
     socketRef.current.on(pv.pvname, updatePVData);
     socketRef.current.on('connect_error', connectError);
     socketRef.current.on('disconnect', disconnect);
@@ -156,9 +160,9 @@ export const useEpicsPV = (props) => {
 
     return () => {
       if(socket){
-      if (pvConnectionId !== null) {
+      if (pvConnectionIdRef.current !== null) {
        
-        socketRef.current.emit('remove_pv_connection', { pvname: pv.pvname, pvConnectionId: pvConnectionId, 'clientAuthorisation': jwtRef.current });
+        socketRef.current.emit('remove_pv_connection', { pvname: pv.pvname, pvConnectionId: pvConnectionIdRef.current, 'clientAuthorisation': jwtRef.current });
       }
       socketRef.current.removeListener(pv.pvname, updatePVData);
       socketRef.current.removeListener('connect_error', connectError);
@@ -177,8 +181,8 @@ export const useEpicsPV = (props) => {
       
 
 
-      
-      socketRef.current.emit('request_pv_info', { data: pv.pvname, 'clientAuthorisation': jwtRef.current });
+      pvConnectionIdRef.current=uuidv4();
+      socketRef.current.emit('request_pv_info', { data: pv.pvname,pvConnectionId: pvConnectionIdRef.current, 'clientAuthorisation': jwtRef.current });
     
     }
     if(socket){

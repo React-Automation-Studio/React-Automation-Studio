@@ -19,7 +19,6 @@ export const useEpicsPV = (props) => {
       console.info("It is no longer necessary to provide the prefix `pva://` for EPICS V3 PVs.\n Perform a global text replace to update.\n For convenience the `pva://` prefix is automatically removed when displayed\n and will be deprecated in a future release",pvname)
       pvname=pvname.replace('pva://',"")    
     }
-    // console.log(pvname)
     let pv = {
       initialized: false,
       pvname: pvname,
@@ -34,7 +33,7 @@ export const useEpicsPV = (props) => {
   });
   const pvName=pv.pvname;
  
-  const [pvConnectionId, setPvConnectionId] = useState(null);
+  const [pvConnectionId] = useState(null);
   const context = useContext(ReactAutomationStudioContext);
   const [socket,setSocket] = useState(null)
   useEffect(()=>{
@@ -69,10 +68,6 @@ export const useEpicsPV = (props) => {
     socketRef.current = socket;
   }, [socket])
   const pvConnectionIdRef = useRef(pvConnectionId);
-  // useEffect(() => {
-
-  //   pvConnectionIdRef.current = pvConnectionId;
-  // }, [pvConnectionId])
 
 
 
@@ -132,27 +127,11 @@ export const useEpicsPV = (props) => {
     }
 
 
-    // const handleInitialConnection=()=>{
-
-    //   if (pv.initialized===false){
-    //     updatePVData({connected:'0'});
-    //   }
-
-    // }
-
-    const handleRequestPvInfoAck = (msg) => {
-      //  console.log(pv.pvname, "msg: ", msg)
-      if (typeof msg !== 'undefined') {
-        //console.log(this.state['pvname'], "pvConnectionId: ",msg.pvConnectionId)
-        // setPvConnectionId(msg.pvConnectionId)
-      }
-
-    }
 
     
     if (socket){
       pvConnectionIdRef.current=uuidv4();
-    socketRef.current.emit('request_pv_info', { data: pv.pvname,pvConnectionId: pvConnectionIdRef.current, 'clientAuthorisation': jwtRef.current }, handleRequestPvInfoAck);
+    socketRef.current.emit('request_pv_info', { data: pv.pvname,pvConnectionId: pvConnectionIdRef.current, 'clientAuthorisation': jwtRef.current });
     socketRef.current.on(pv.pvname, updatePVData);
     socketRef.current.on('connect_error', connectError);
     socketRef.current.on('disconnect', disconnect);

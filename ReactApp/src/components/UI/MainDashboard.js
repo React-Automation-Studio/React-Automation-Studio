@@ -172,12 +172,22 @@ const MainDashboard = (props) => {
               </Grid>
               <Grid item lg={12} sm={12} xs={12}  >
                 <Typography className={classes.WhatsNew} component='div'>
+                  V3.2.0 Monday 30 August 2021
+                  <br />
+                  <br />
+                  Minor Bug Fixes and Updates:
+                  <ul>
+                    <li>Package updates to all NodeJs and Python packages</li>
+                    <li>Updates to  Material-UI 4.12.3 requires prop changes to the Grid component and theme imports</li>
+                    <li>Minor bug fix to pvServer</li>
+                  </ul>
+                  <br />
                   V3.1.0 Wednesday 25 August 2021
                   <br />
                   <br />
                   Minor Bug Fixes and Updates:
                   <ul>
-                    <li>Hot fix in NodeJs Docker files for new npm registry requirements, previous releases will fail after 1 October 2021 </li>
+                    <li>Hot fix in NodeJs Docker files for new npm registry requirements, previous releases will fail to build after 1 October 2021 </li>
                   </ul>
                   <br />
                   V3.0.2 Monday 23 August 2021

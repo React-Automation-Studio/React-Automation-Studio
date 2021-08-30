@@ -512,6 +512,17 @@ Contact us at rasadmin@tlabs.ac.za
   The docker containers for RAS run in network  mode host. This is done to enable EPICS to communicate seamlessly with any IOC's on the same subnet as the host. Other OSes such as Windows may not support the host mode and will run in the bridged mode. This may break the communication between the micro services. It is therefore recommended to run the RAS containers on a Linux VM that is minimally running Ubuntu Server. Please ensure the the VM network interface is assigned an IP on the same subnet as your EPICS network in order for communication with the IOC's to occur seamlessly.
 
 # Changelog
+V3.2.0 Monday 30 August 2021
+<br />
+<br />
+Minor Bug Fixes and Updates:
+    <ul>
+        <li>Package updates to all NodeJs and Python packages</li>
+        <li>Updates to  Material-UI 4.12.3 requires prop changes to the Grid component and theme imports</li>
+        <li>Minor bug fix to pvServer</li>
+    </ul>
+<br />
+
 V3.1.0 Wednesday 25 August 2021
 <br />
 <br />

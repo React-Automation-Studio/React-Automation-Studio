@@ -536,9 +536,9 @@ GraphY.propTypes = {
    */
   displayModeBar: PropTypes.bool,
   /** Custom y axis minimum to be used,if not defined the graph will auto-scale */
-  ymin: PropTypes.number,
+  yMin: PropTypes.number,
   /** Custom y axis maximum to be used,if not defined the graph will auto-scale */
-  ymax: PropTypes.number,
+  yMax: PropTypes.number,
 
   /** If defined, then the DataConnection debugging information will be displayed*/
   debug: PropTypes.bool,

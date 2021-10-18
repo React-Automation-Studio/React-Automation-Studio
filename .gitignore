@@ -109,3 +109,6 @@ epics/gateway/GATEWAY.pvlist
 users/users.json
 users/pvAccess.json
 users/SECRET_PWD_KEY
+
+#IDE
+/.vscode

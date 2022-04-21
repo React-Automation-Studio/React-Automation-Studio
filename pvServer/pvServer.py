@@ -27,7 +27,7 @@ from authenticate import (
     ExternalAuthenticateUser, 
     decodeTokenGoogle, 
     createRefreshToken, 
-    createAccessToken
+    createAccessToken,
 )
 from pyMongoUtils import OpenMongoDbClient
 
@@ -43,67 +43,91 @@ load_dotenv()
 # the best option based on installed packages.
 
 async_mode = 'gevent'
+
+EPICS_LIBCA = os.getenv('PYEPICS_LIBCA', None)
+EPICS_BASE = os.getenv('EPICS_BASE', None)
+EPICS_CA_ADDR_LIST = os.getenv('EPICS_CA_ADDR_LIST', None)
+PV_SERVER_URL = os.getenv('pvServerURL', None)
+PV_SERVER_PORT = os.getenv('pvServerPort', None)
+PV_SERVER_NAME_SPACE = os.getenv('pvServerNameSpace', None)
+PV_SERVER_LOG_LEVEL = os.getenv('pvServerLogLevel', None)
+PV_SERVER_LOG_FILE = os.getenv('pvServerLogFile', None)
+PV_SERVER_LOG_FILE_SIZE = os.getenv('pvServerLogFileSize', None)
+PV_SERVER_LOG_FILE_BACKUP = os.getenv('pvServerLogFileBackup', None)
+REACT_ENABLE_LOGIN = os.getenv('REACT_APP_EnableLogin', None)
+REACT_ENABLE_LOGIN_AD = os.getenv('REACT_APP_EnableActiveDirectoryLogin', None)
+REACT_ENABLE_LOGIN_GOOGLE = os.getenv('REACT_APP_EnableGoogleLogin', None)
+
 log.info("")
 log.info('**************************************')
 log.info("React Automation Studio V3.1.0")
 log.info("")
 log.info("pvServer Environment Variables:")
 log.info("")
-log.info('PYEPICS_LIBCA: '+ str(os.environ['PYEPICS_LIBCA']))
-log.info('EPICS_BASE: '+ str(os.environ['EPICS_BASE']))
-log.info('EPICS_CA_ADDR_LIST: '+ str(os.environ['EPICS_CA_ADDR_LIST']))
-log.info('pvServerURL: '+ str(os.environ['pvServerURL']))
-log.info('pvServerPort: '+ str(os.environ['pvServerPort']))
-log.info('pvServerNameSpace: '+ str(os.environ['pvServerNameSpace']))
-log.info('REACT_APP_EnableLogin: '+ str(os.environ['REACT_APP_EnableLogin']))
-log.info('pvServerLogLevel: {}'.format(os.environ.get('pvServerLogLevel', None)))
-log.info('pvServerLogFile: {}'.format(os.environ.get('pvServerLogFile', None)))
-log.info('pvServerLogFileSize: {}'.format(os.environ.get('pvServerLogFileSize', None)))
-log.info('pvServerLogFileBackup: {}'.format(os.environ.get('pvServerLogFileBackup', None)))
-log.info('REACT_APP_EnableActiveDirectoryLogin: '+ str(os.environ['REACT_APP_EnableActiveDirectoryLogin']))
-log.info('REACT_APP_EnableGoogleLogin: '+ str(os.environ['REACT_APP_EnableGoogleLogin']))
-REACT_APP_EnableActiveDirectoryLogin=(os.getenv('REACT_APP_EnableActiveDirectoryLogin')=='true')
-REACT_APP_EnableGoogleLogin=(os.getenv('REACT_APP_EnableGoogleLogin')=='true')
-REACT_APP_DisableStandardLogin=(os.getenv('REACT_APP_DisableStandardLogin')=='true')
+log.info(f'PYEPICS_LIBCA: {EPICS_LIBCA}')
+log.info(f'EPICS_BASE: {EPICS_BASE}')
+log.info(f'EPICS_CA_ADDR_LIST: {EPICS_CA_ADDR_LIST}')
+log.info(f'pvServerURL: {PV_SERVER_URL}')
+log.info(f'pvServerPort: {PV_SERVER_PORT}')
+log.info(f'pvServerNameSpace: {PV_SERVER_NAME_SPACE}')
+log.info(f'pvServerLogLevel: {PV_SERVER_LOG_LEVEL}')
+log.info(f'pvServerLogFile: {PV_SERVER_LOG_FILE}')
+log.info(f'pvServerLogFileSize: {PV_SERVER_LOG_FILE_SIZE}')
+log.info(f'pvServerLogFileBackup: {PV_SERVER_LOG_FILE_BACKUP}')
+log.info(f'REACT_APP_EnableLogin: {REACT_ENABLE_LOGIN}')
+log.info(f'REACT_APP_EnableActiveDirectoryLogin: {REACT_ENABLE_LOGIN_AD}')
+log.info(f'REACT_APP_EnableGoogleLogin: {REACT_ENABLE_LOGIN_GOOGLE}')
 
 try:
     REFRESH_COOKIE_MAX_AGE_SECS = int(
         os.environ['REFRESH_COOKIE_MAX_AGE_SECS'])
 except:
     REFRESH_COOKIE_MAX_AGE_SECS =604800
-log.info('Refresh cookie max age not set - defaulting to {} seconds'.format(REFRESH_COOKIE_MAX_AGE_SECS))
+    log.info('Refresh cookie max age not set - defaulting to {} seconds'.format(REFRESH_COOKIE_MAX_AGE_SECS))
     
 try:
     ACCESS_TOKEN_MAX_AGE_SECS = int(
         os.environ['ACCESS_TOKEN_MAX_AGE_SECS'])
 except:
     ACCESS_TOKEN_MAX_AGE_SECS = 300
-log.info('Access token max age not set - defaulting to {} seconds'.format(ACCESS_TOKEN_MAX_AGE_SECS))
+    log.info('Access token max age not set - defaulting to {} seconds'.format(ACCESS_TOKEN_MAX_AGE_SECS))
 
 try:
     REFRESH_TIMEOUT = int(
         os.environ['REFRESH_TIMEOUT'])
 except:
     REFRESH_TIMEOUT = 60
-log.info('Refresh time out not set - defaulting to {} seconds'.format(REFRESH_TIMEOUT))
+    log.info('Refresh time out not set - defaulting to {} seconds'.format(REFRESH_TIMEOUT))
     
 try:
-    SECURE=(os.getenv('SECURE')=='true')
+    SECURE =(os.getenv('SECURE')=='true')
 except:
     SECURE = False
 log.info('SECURE - {}'.format(SECURE))
-
 log.info("")
+
+REACT_APP_DisableLogin=not(REACT_ENABLE_LOGIN=='true')
+REACT_APP_EnableActiveDirectoryLogin=(REACT_ENABLE_LOGIN_AD=='true')
+REACT_APP_EnableGoogleLogin=(REACT_ENABLE_LOGIN_GOOGLE=='true')
+REACT_APP_DisableStandardLogin=(os.getenv('REACT_APP_DisableStandardLogin')=='true')
+if (REACT_APP_DisableLogin) :
+    log.info("Authenitcation and Authorisation is DISABLED")
+else:
+    log.info("Authenitcation and Authorisation is ENABLED")
+log.info("")
+
 app = Flask(__name__, static_folder="./build/static", template_folder="./build")
 app.url_map.converters['regex'] = RegexConverter
-
 CORS(app)
+socketio = SocketIO(app, async_mode=async_mode, cors_allowed_origins='*')
+thread = None
+thread_lock = threading.Lock()
+clientPVlist={}
+clientDbWatchList={}
+myuid=0
+myDbWatchUid=0
 
-@app.route('/api/logout', methods=['GET'])
-def logout():
-    res = make_response(jsonify({"logout":True}))
-    res.set_cookie('refreshToken', '', max_age=0)
-    return res,200
+# AUTH ENDPOINTS AND FUNCTIONS
 
 def createLoginReponse(userData):
     global REFRESH_COOKIE_MAX_AGE_SECS, ACCESS_TOKEN_MAX_AGE_SECS, REFRESH_TIMEOUT, SECURE
@@ -119,7 +143,6 @@ def createLoginReponse(userData):
         'roles':roles,
         'accessToken':accessToken,
         'refreshTokenConfig':{
-        
         'refreshTimeout':REFRESH_TIMEOUT,
         'useCookie':SECURE,
         }
@@ -131,6 +154,12 @@ def createLoginReponse(userData):
         resp.set_cookie(key='refreshToken', value=refreshToken, max_age=REFRESH_COOKIE_MAX_AGE_SECS,
         secure=True, httponly=True, samesite=None)
     return resp, 200
+
+@app.route('/api/logout', methods=['GET'])
+def logout():
+    res = make_response(jsonify({"logout":True}))
+    res.set_cookie('refreshToken', '', max_age=0)
+    return res,200
 
 @app.route('/api/refresh', methods=['POST'])
 def refresh():
@@ -214,20 +243,7 @@ def googleLogin():
         log.info("Forbiddden google login")
         return jsonify({'login': False}), 401
 
-REACT_APP_DisableLogin=not(os.getenv('REACT_APP_EnableLogin')=='true')
-if (REACT_APP_DisableLogin) :
-    log.info("Authenitcation and Authorisation is DISABLED")
-else:
-    log.info("Authenitcation and Authorisation is ENABLED")
-log.info("")
-
-socketio = SocketIO(app,async_mode=async_mode,cors_allowed_origins='*')
-thread = None
-thread_lock = threading.Lock()
-clientPVlist={}
-clientDbWatchList={}
-myuid=0
-myDbWatchUid=0
+# PV CONNECTION ENDPOINTS AND EVENTS
 
 def check_pv_initialized_after_disconnect():
     global clientPVlist,clientDbWatchList
@@ -575,6 +591,54 @@ def test_message(message):
                 return {"pvConnectionId":pvConnectionId}
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
+
+@socketio.on('connect', namespace='/pvServer')
+def test_connect():
+    global thread
+    log.info('Client Connected: {}',request.sid)
+    with thread_lock:
+        if thread is None:
+            thread = socketio.start_background_task(background_thread)
+    emit('my_response', {'data': 'Connected', 'count': 0})
+
+@socketio.on('disconnect', namespace='/pvServer')
+def test_disconnect():
+    global clientDbWatchList
+    log.info("disconnected",request.sid)
+    log.info('Client disconnected: {}',request.sid)
+    for pvname1 in	clientPVlist:
+        try:
+            leave_room(str(pvname1)+'rw')
+            clientPVlist[pvname1]['socketsRW'].pop(request.sid)
+        except:
+            pass
+        try:
+            leave_room(str(pvname1)+'ro')
+            clientPVlist[pvname1]['socketsRO'].pop(request.sid)
+        except:
+            pass
+        try:
+            leave_room(str(pvname1))
+            clientPVlist[pvname1]['sockets'].pop(request.sid)
+        except:
+            pass
+            log.debug("disconn sockets",clientPVlist[pvname1]['sockets'])
+            log.debug("disconn socketsRO",clientPVlist[pvname1]['socketsRO'])
+            log.debug("disconn socketsRW",clientPVlist[pvname1]['socketsRW'])
+    try:
+        log.debug(list(clientDbWatchList))
+        for watchEventName in list(clientDbWatchList) :
+            socketId=str(request.sid)
+            log.debug("socketId ",socketId,watchEventName)
+            if socketId in list(clientDbWatchList[watchEventName]['sockets']):
+                log.debug("socketId found",socketId,watchEventName)
+                clientDbWatchList[watchEventName]['sockets'].pop(str(request.sid),None)
+    except Exception as e:
+        log.info("disconnect",e)
+        pass
+    disconnect(request.sid,namespace='/pvServer')
+
+# DATABASE FUNCTIONS AND EVENTS
 
 @socketio.on('databaseRead', namespace='/pvServer')
 def databaseRead(message):
@@ -1602,51 +1666,6 @@ def test_authenticate(message):
     else:
         emit('clientAuthorisation', {'successful': True},room=request.sid,namespace='/pvServer')
 
-@socketio.on('connect', namespace='/pvServer')
-def test_connect():
-    global thread
-    log.info('Client Connected: {}',request.sid)
-    with thread_lock:
-        if thread is None:
-            thread = socketio.start_background_task(background_thread)
-    emit('my_response', {'data': 'Connected', 'count': 0})
-
-@socketio.on('disconnect', namespace='/pvServer')
-def test_disconnect():
-    global clientDbWatchList
-    log.info("disconnected",request.sid)
-    log.info('Client disconnected: {}',request.sid)
-    for pvname1 in	clientPVlist:
-        try:
-            leave_room(str(pvname1)+'rw')
-            clientPVlist[pvname1]['socketsRW'].pop(request.sid)
-        except:
-            pass
-        try:
-            leave_room(str(pvname1)+'ro')
-            clientPVlist[pvname1]['socketsRO'].pop(request.sid)
-        except:
-            pass
-        try:
-            leave_room(str(pvname1))
-            clientPVlist[pvname1]['sockets'].pop(request.sid)
-        except:
-            pass
-            log.debug("disconn sockets",clientPVlist[pvname1]['sockets'])
-            log.debug("disconn socketsRO",clientPVlist[pvname1]['socketsRO'])
-            log.debug("disconn socketsRW",clientPVlist[pvname1]['socketsRW'])
-    try:
-        log.debug(list(clientDbWatchList))
-        for watchEventName in list(clientDbWatchList) :
-            socketId=str(request.sid)
-            log.debug("socketId ",socketId,watchEventName)
-            if socketId in list(clientDbWatchList[watchEventName]['sockets']):
-                log.debug("socketId found",socketId,watchEventName)
-                clientDbWatchList[watchEventName]['sockets'].pop(str(request.sid),None)
-    except Exception as e:
-        log.info("disconnect",e)
-        pass
-    disconnect(request.sid,namespace='/pvServer')
 
 if __name__ == '__main__':
     REACT_APP_PyEpicsServerURL=os.getenv('pvServerURL')

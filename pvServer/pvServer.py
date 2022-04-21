@@ -129,7 +129,7 @@ myDbWatchUid=0
 
 # AUTH ENDPOINTS AND FUNCTIONS
 
-def createLoginReponse(userData):
+def createLoginResponse(userData):
     global REFRESH_COOKIE_MAX_AGE_SECS, ACCESS_TOKEN_MAX_AGE_SECS, REFRESH_TIMEOUT, SECURE
     if (userData is None):
         return jsonify({'login': False}), 401
@@ -173,7 +173,7 @@ def refresh():
         userData=AuthoriseUser(refreshToken)
         log.debug("userData",userData)
         if userData['authorised']:
-            resp=createLoginReponse(userData)
+            resp=createLoginResponse(userData)
             return resp
         else:
             return jsonify({'login': False}), 401
@@ -186,7 +186,7 @@ def localLogin():
     if not REACT_APP_DisableStandardLogin:
         user = request.json.get('user', None)
         userData=LocalAuthenticateUser(user)
-        resp=createLoginReponse(userData)
+        resp=createLoginResponse(userData)
         return resp
     else:
        log.info("Standard login not allowed")
@@ -207,7 +207,7 @@ def ldapLogin():
             con.bind(LDAP_USER_DN,LDAP_USER_PW,ldap.AUTH_SIMPLE)
             if con.result():
                 userData=ExternalAuthenticateUser(user)
-                resp=createLoginReponse(userData)
+                resp=createLoginResponse(userData)
                 return resp
             else:
                 log.info("Ldap login failed: {} ",LDAP_USER_DN)
@@ -234,7 +234,7 @@ def googleLogin():
             if decoded:
                 if decoded['email'] and (decoded['email_verified']==True):
                     userData=ExternalAuthenticateUser({'username':decoded['email']})
-                    resp=createLoginReponse(userData)
+                    resp=createLoginResponse(userData)
                     return resp
         else :
             return jsonify({'login': False}), 401

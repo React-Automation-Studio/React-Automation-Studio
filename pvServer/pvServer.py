@@ -227,28 +227,6 @@ def googleLogin():
         log.info("Forbiddden google login")
         return jsonify({'login': False}), 401
 
-
-
-
-
-# @app.route("/<regex(r'(.*?)\.(json|txt|png|ico|js)$'):file>", methods=["GET"])
-# def public(file):
-#     return flask.send_from_directory('./build', file)
-
-
-
-# @app.route('/', defaults={'path': ''})
-# @app.route('/<path:path>')
-
-# def index(path):
-#     try :
-#         return render_template('index.html', async_mode=socketio.async_mode)
-#     except :
-#         return "", 404
-
-
-
-
 REACT_APP_DisableLogin=not(os.getenv('REACT_APP_EnableLogin')=='true')
 if (REACT_APP_DisableLogin) :
     print("Authenitcation and Authorisation is DISABLED")
@@ -312,7 +290,6 @@ def check_pv_initialized_after_disconnect():
                                     socketio.emit(pvname,d,room=ro_room,namespace='/pvServer')
                                     clientPVlist[pvname]['isConnected']=True
                                     clientPVlist[pvname]['initialized']=True
-                                #
                                 except TypeError as e:
                                     #"A type error exists in metadata dictionary and can't be converted into JSON format, previously this was caused by in CHID of type c_long(), a work arround exits, if CHID is not a c_long then try debugging")
                                     log.error("***EPICS PV info initial request info error: ")
@@ -393,7 +370,6 @@ def dbWatchThread(watchEventName):
 
 def onValueChanges(pvname=None,count=None,char_value=None,severity=None,status=None, value=None, timestamp=None, **kw):
     global clientPVList
-    # pvname1='pva://'+str(pvname)
     if(clientPVlist[pvname]['initialized']==True):
         if (float(count)== 1):
            new_char_value=str(char_value)
@@ -411,8 +387,6 @@ def onValueChanges(pvname=None,count=None,char_value=None,severity=None,status=N
 
 def onConnectionChange(pvname=None, conn= None, value=None, **kws):
     global clientPVlist
-    # pvname1='pva://'+str(pvname)
-
     if (conn==True):
         try:
             clientPVlist[pvname]['isConnected']=True
@@ -465,7 +439,6 @@ def test_write(message):
     if accessControl['userAuthorised']:
         if accessControl['permissions']['write']:
             pvname1= str(message['pvname'])
-            # if "pva://" in pvname1:
             pvname2=pvname1.replace("pva://","")
             try:
                 clientPVlist[pvname1]['pv'].put(message['data']);
@@ -503,7 +476,6 @@ def test_message(message):
 
         if pvname1 in	clientPVlist:
 
-            # if "pva://" in pvname1:
             pvConnectionId= str(message['pvConnectionId'])
             #print("remove_pv_connection id: ",pvConnectionId, pvname1)
             try:
@@ -552,9 +524,6 @@ def test_message(message):
             #print("socketsRW",clientPVlist[pvname1]['socketsRW'])
 
 
-            # else:
-            #     log.error("Unknown PV type ({})",pvname1)
-
 
         else:
             log.error("Pvname ({}) not in clientPVlist",pvname1)
@@ -582,10 +551,6 @@ def test_message(message):
 
 
         if not (pvname1 in	clientPVlist):
-
-            # if "pva://" in pvname1:
-
-
             if(accessControl['permissions']['read']):
 
                
@@ -595,7 +560,6 @@ def test_message(message):
                 pvlist['isConnected']=False
                 pvlist['initialized']=False
 
-                #pvConnectionId=str(uuid.uuid1())
                 myuid=myuid+1
                 pvConnectionId=str(myuid)
                 if(accessControl['permissions']['write']):
@@ -623,20 +587,14 @@ def test_message(message):
 
 
 
-            # else:
-            #     log.error("Unknown PV type ({})",pvname1)
-
 
         else:
 
-            # if "pva://" in pvname1:
             if(accessControl['permissions']['read']):
 
-                # pvname2=pvname1.replace("pva://","")
                 clientPVlist[pvname1]['initialized']=False
                 myuid=myuid+1
                 pvConnectionId=str(myuid)
-                #pvConnectionId=str(uuid.uuid4())
                 #print("pv exists", pvname1," generated pvConnectionId: ",pvConnectionId)
                 #print("all sockets ",clientPVlist[pvname1]['sockets'])
                 #print("all sockets rw",clientPVlist[pvname1]['socketsRW'])
@@ -699,8 +657,6 @@ def test_message(message):
                 return {"pvConnectionId":pvConnectionId}
 
 
-            # else:
-            #     log.error("Unknown PV type ({})",pvname1)
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
 
@@ -747,11 +703,9 @@ def databaseRead(message):
                         if(accessControl['permissions']['write']):
                             join_room(str(dbURL)+'rw')
                             write_access=True
-                            #join_room(str(dbURL))
                         else:
                             join_room(str(dbURL)+'ro')
                             write_access=False
-                            #join_room(str(dbURL))
                         try:
                             #print("connecting: "+dbURL)
                             myclient=OpenMongoDbClient(database,dbName)
@@ -766,8 +720,6 @@ def databaseRead(message):
                                 X=mycol.find()
 
 
-                            #for x in X:
-                                #print(x)
                             log.info("done: {}",dbURL)
 
 
@@ -838,11 +790,9 @@ def databaseBroadcastRead(message):
                         if(accessControl['permissions']['write']):
                             join_room(str(dbURL)+'rw')
                             write_access=True
-                            #join_room(str(dbURL))
                         else:
                             join_room(str(dbURL)+'ro')
                             write_access=False
-                            #join_room(str(dbURL))
                         try:
     #                        print("connecting: "+dbURL)
                             myclient=OpenMongoDbClient(database,dbName)
@@ -858,8 +808,6 @@ def databaseBroadcastRead(message):
                                 X=mycol.find()
 
 
-                            #for x in X:
-                                #print(x)
     #                        print("done: "+dbURL)
 
 
@@ -1032,10 +980,6 @@ def databaseReadWatchAndBroadcast(message):
                                     dbWatch['closeWatch']=False
                                     dbWatch['threadClosed']=False
                                     clientDbWatchList[watchEventName]=dbWatch
-                                    # if (write_access):
-                                    #     join_room(str(dbURL)+"rw")
-                                    # else:
-                                    #     join_room(str(dbURL)+"ro")
                                 else:
 
                                     if request.sid in clientDbWatchList[watchEventName]['sockets']:
@@ -1049,10 +993,6 @@ def databaseReadWatchAndBroadcast(message):
                                     else:
                                         clientDbWatchList[watchEventName]['sockets'][request.sid]={'dbWatchIds':{dbWatchId:True}}
 
-                                    # if (write_access):
-                                    #     join_room(str(dbURL)+"rw")
-                                    # else:
-                                    #     join_room(str(dbURL)+"ro")
                                 return {"dbWatchId":dbWatchId}
                         except:
                             return "Ack: Could not connect to MongoDB: "+str(dbURL)
@@ -1120,8 +1060,6 @@ def databaseUpdateOne(message):
                             except:
                                 responseID="";
 
-                            #eventName='databaseUpdateOne';
-    #                        print("eventName",eventName)
                             return 'OK'
                         except:
                             log.error("Could not connect to MongoDB: {}",dbURL)
@@ -1206,8 +1144,6 @@ def databaseUpdateMany(message):
                             except:
                                 responseID="";
 
-                            #eventName='databaseUpdateOne';
-    #                        print("eventName",eventName)
                             return 'OK'
                         except:
                             log.error("Could not connect to MongoDB: {}",dbURL)
@@ -1264,7 +1200,6 @@ def databaseDeleteOne(message):
 
                             mycol=mydb[colName]
                             id=message['id']
-                            # newvalues=message['newvalues']
                             try:
                                 mydb[colName].delete_one({'_id':ObjectId(str(id))})
 
@@ -1280,8 +1215,6 @@ def databaseDeleteOne(message):
                             except:
                                 responseID="";
 
-                            #eventName='databaseUpdateOne';
-    #                        print("eventName",eventName)
                             return 'OK'
                         except:
                             log.error("Could not connect to MongoDB: {}",dbURL)
@@ -1341,7 +1274,6 @@ def databaseInsertOne(message):
 
                             mycol=mydb[colName]
 
-                            # id=message['id']
                             newEntry=message['newEntry']
 
 #                            print("newEntry",str(newEntry))
@@ -1950,8 +1882,6 @@ def test_disconnect():
     print("disconnected",request.sid)
     log.info('Client disconnected: {}',request.sid)
     for pvname1 in	clientPVlist:
-        # if "pva://" in pvname1:
-
         try:
             leave_room(str(pvname1)+'rw')
             clientPVlist[pvname1]['socketsRW'].pop(request.sid)
@@ -1972,9 +1902,6 @@ def test_disconnect():
             #print("disconn socketsRO",clientPVlist[pvname1]['socketsRO'])
             #print("disconn socketsRW",clientPVlist[pvname1]['socketsRW'])
 
-
-        # else:
-        #     log.info("Unknown PV type ({})", pvname1)
     try:
         # print(list(clientDbWatchList))
         for watchEventName in list(clientDbWatchList) :

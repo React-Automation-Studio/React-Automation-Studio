@@ -42,8 +42,6 @@ load_dotenv()
 # different async modes, or leave it set to None for the application to choose
 # the best option based on installed packages.
 
-
-
 async_mode = 'gevent'
 print("")
 print('**************************************')
@@ -67,6 +65,7 @@ print('REACT_APP_EnableGoogleLogin: '+ str(os.environ['REACT_APP_EnableGoogleLog
 REACT_APP_EnableActiveDirectoryLogin=(os.getenv('REACT_APP_EnableActiveDirectoryLogin')=='true')
 REACT_APP_EnableGoogleLogin=(os.getenv('REACT_APP_EnableGoogleLogin')=='true')
 REACT_APP_DisableStandardLogin=(os.getenv('REACT_APP_DisableStandardLogin')=='true')
+
 try:
     REFRESH_COOKIE_MAX_AGE_SECS = int(
         os.environ['REFRESH_COOKIE_MAX_AGE_SECS'])
@@ -78,9 +77,9 @@ try:
     ACCESS_TOKEN_MAX_AGE_SECS = int(
         os.environ['ACCESS_TOKEN_MAX_AGE_SECS'])
 except:
-    
     ACCESS_TOKEN_MAX_AGE_SECS = 300
 print('Access token max age not set - defaulting to {} seconds'.format(ACCESS_TOKEN_MAX_AGE_SECS))
+
 try:
     REFRESH_TIMEOUT = int(
         os.environ['REFRESH_TIMEOUT'])
@@ -90,13 +89,9 @@ print('Refresh time out not set - defaulting to {} seconds'.format(REFRESH_TIMEO
     
 try:
     SECURE=(os.getenv('SECURE')=='true')
-   
 except:
-     SECURE = False
+    SECURE = False
 print('SECURE - {}'.format(SECURE))
-   
-
-
 
 print("")
 app = Flask(__name__, static_folder="./build/static", template_folder="./build")
@@ -109,8 +104,6 @@ def logout():
     res = make_response(jsonify({"logout":True}))
     res.set_cookie('refreshToken', '', max_age=0)
     return res,200
-
-
 
 def createLoginReponse(userData):
     global REFRESH_COOKIE_MAX_AGE_SECS, ACCESS_TOKEN_MAX_AGE_SECS, REFRESH_TIMEOUT, SECURE
@@ -135,10 +128,8 @@ def createLoginReponse(userData):
         d['refreshTokenConfig']['refreshToken']=refreshToken
     resp= make_response(jsonify(d))
     if SECURE:
-       
         resp.set_cookie(key='refreshToken', value=refreshToken, max_age=REFRESH_COOKIE_MAX_AGE_SECS,
         secure=True, httponly=True, samesite=None)
-    
     return resp, 200
 
 @app.route('/api/refresh', methods=['POST'])
@@ -159,8 +150,6 @@ def refresh():
             return jsonify({'login': False}), 401
     else:
         return jsonify({'login': False}), 401
-
-
 
 @app.route('/api/login/local', methods=['POST'])
 def localLogin():
@@ -188,11 +177,9 @@ def ldapLogin():
             con=ldap.initialize(LDAP_HOST+":"+LDAP_PORT)
             con.bind(LDAP_USER_DN,LDAP_USER_PW,ldap.AUTH_SIMPLE)
             if con.result():
-            
                 userData=ExternalAuthenticateUser(user)
                 resp=createLoginReponse(userData)
                 return resp
-
             else:
                 log.info("Ldap login failed: {} ",LDAP_USER_DN)
                 jsonify({'login': False}), 401
@@ -203,18 +190,14 @@ def ldapLogin():
             log.info("Ldap login failed: {} ",LDAP_USER_DN)
             jsonify({'login': False}), 401
             return jsonify({'login': False}), 401
-
-       
     else:
         log.info("Forbiddden Active Directory login login")
         return jsonify({'login': False}), 401
-
 
 @app.route('/api/login/google', methods=['POST'])
 def googleLogin():
     global REACT_APP_EnableGoogleLogin
     if REACT_APP_EnableGoogleLogin :
-        
         jwt = request.json.get('jwt', None)
         REACT_APP_EnableGoogleLoginId=(os.getenv('REACT_APP_EnableGoogleLoginId') if os.getenv('REACT_APP_EnableGoogleLoginId') else None)
         if REACT_APP_EnableGoogleLoginId :
@@ -226,9 +209,7 @@ def googleLogin():
                     return resp
         else :
             return jsonify({'login': False}), 401
-        
         return jsonify({'login': False}), 401
-       
     else:
         log.info("Forbiddden google login")
         return jsonify({'login': False}), 401
@@ -247,13 +228,13 @@ clientPVlist={};
 clientDbWatchList={};
 myuid=0
 myDbWatchUid=0
+
 def check_pv_initialized_after_disconnect():
     global clientPVlist,clientDbWatchList
     while (True):
         for pvname in list(clientPVlist) :
             if not((len(clientPVlist[pvname]['sockets'])>0 ) or (len(clientPVlist[pvname]['socketsRW'])>0 )or (len(clientPVlist[pvname]['socketsRO'])>0 )):
                 #print(pvname, " has no listening clients, removing")
-
                 clientPVlist[pvname]['pv'].disconnect()
                 clientPVlist.pop(pvname)
             else:
@@ -267,7 +248,6 @@ def check_pv_initialized_after_disconnect():
                                 for keys in d:
                                     if(str(d[keys])=='nan'):
                                         d[keys]=None
-
                                 if(clientPVlist[pvname]['pv'].count >1):
                                     d['value']=list(d['value'])
                                 if(clientPVlist[pvname]['pv'].count==0):
@@ -277,7 +257,6 @@ def check_pv_initialized_after_disconnect():
                                     if (len(new_char_value)==0):
                                         new_char_value=str(d['value'])
                                     d['char_value']=new_char_value
-
                                 d['pvname']= pvname
                                 d['newmetadata']= 'True'
                                 d['connected']= '1'
@@ -306,13 +285,12 @@ def check_pv_initialized_after_disconnect():
                                     d={}
                                     d['pvname']= pvname
                                     d['connected']= '0'
-
                                     socketio.emit(pvname,d,room=str(pvname),namespace='/pvServer')
                                 except:
                                     log.exception("Unexpected error")
                                     raise
-
         time.sleep(0.1)
+
 def dbWatchControlThread():
     global clientDbWatchList, thread_lock
     while (True):
@@ -363,7 +341,6 @@ def dbWatchThread(watchEventName):
                             raise
                     if clientDbWatchList[watchEventName]['closeWatch']==True:
                         clientDbWatchList[watchEventName]['watch'].close()
-
                     time.sleep(0.1)
                 clientDbWatchList[watchEventName]['threadClosed']=True
                 exitThread=True
@@ -376,8 +353,6 @@ def onValueChanges(pvname=None,count=None,char_value=None,severity=None,status=N
            new_char_value=str(char_value)
            if (len(new_char_value)==0):
                new_char_value=str(value)
-
-
            socketio.emit(pvname,
               {'pvname': pvname,'newmetadata': 'False','value': str(value),'char_value': new_char_value,'count':count, 'connected':'1', 'severity': severity,'timestamp':timestamp
               },room=str(pvname),namespace='/pvServer')
@@ -385,21 +360,15 @@ def onValueChanges(pvname=None,count=None,char_value=None,severity=None,status=N
            d={'pvname': pvname,'newmetadata': 'False','value': list((value)),'count':count, 'connected':'1', 'severity': severity,'timestamp':timestamp}
            socketio.emit(pvname,d,room=str(pvname),namespace='/pvServer')
 
-
 def onConnectionChange(pvname=None, conn= None, value=None, **kws):
     global clientPVlist
     if (conn==True):
         try:
             clientPVlist[pvname]['isConnected']=True
             clientPVlist[pvname]['initialized']=False
-
         except:
            error=1
-
-
-
     else:
-
         d={}
         d['pvname']= pvname
         d['connected']= '0'
@@ -411,19 +380,12 @@ def onConnectionChange(pvname=None, conn= None, value=None, **kws):
         except:
             error=2
 
-
-
 def background_thread():
-
     count = 0
     threading.Thread(target=check_pv_initialized_after_disconnect).start()
     threading.Thread(target=dbWatchControlThread).start()
     while True:
         socketio.sleep(0.1)
-
-
-
-
 
 @socketio.on('write_to_pv', namespace='/pvServer')
 def test_write(message):
@@ -431,12 +393,10 @@ def test_write(message):
     #print("Test")
     authenticated=False
     if REACT_APP_DisableLogin:
-
         accessControl={'userAuthorised':True,'permissions':{'read':True,'write':True}}
     else :
         accessControl=AutheriseUserAndPermissions(message['clientAuthorisation'],message['pvname'])
         authenticated=accessControl['userAuthorised']
-
     if accessControl['userAuthorised']:
         if accessControl['permissions']['write']:
             pvname1= str(message['pvname'])
@@ -448,9 +408,6 @@ def test_write(message):
                 log.error("PV name: {}",pvname2)
                 log.error("Value to put: {}",message['data'])
                 log.error("Exception: {}",e)
-
-
-
             # else: log.error("Unknown PV type ({})", pvname1)
         else:
             log.warning("***PV put error: write access denied ")
@@ -458,7 +415,6 @@ def test_write(message):
             log.warning("Value to put: {}",message['data'])
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
-
 
 @socketio.on('remove_pv_connection', namespace='/pvServer')
 def test_message(message):
@@ -471,12 +427,8 @@ def test_message(message):
     else :
         accessControl=AutheriseUserAndPermissions(message['clientAuthorisation'],pvname1)
         authenticated=accessControl['userAuthorised']
-
     if accessControl['userAuthorised'] :
-
-
         if pvname1 in	clientPVlist:
-
             pvConnectionId= str(message['pvConnectionId'])
             #print("remove_pv_connection id: ",pvConnectionId, pvname1)
             try:
@@ -489,12 +441,10 @@ def test_message(message):
                     if len(clientPVlist[pvname1]['socketsRW'][request.sid]['pvConnectionIds'])==0:
                         leave_room(str(pvname1)+'rw')
                         clientPVlist[pvname1]['socketsRW'].pop(request.sid)
-
                     #print("after pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
             except:
                 pass
                 #print("remove_pv_connection id not in socketsRW: ",pvConnectionId, pvname1)
-
             try:
                 #print("before pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
                 if pvConnectionId in clientPVlist[pvname1]['socketsRO'][request.sid]['pvConnectionIds']:
@@ -519,21 +469,13 @@ def test_message(message):
             except:
                 pass
                 #print("remove_pv_connection id not in sockets: ",pvConnectionId, pvname1)
-
             #print("sockets",clientPVlist[pvname1]['sockets'])
             #print("socketsRO",clientPVlist[pvname1]['socketsRO'])
             #print("socketsRW",clientPVlist[pvname1]['socketsRW'])
-
-
-
         else:
             log.error("Pvname ({}) not in clientPVlist",pvname1)
-
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
-
-
-
 
 @socketio.on('request_pv_info', namespace='/pvServer')
 def test_message(message):
@@ -547,37 +489,25 @@ def test_message(message):
     else :
         accessControl=AutheriseUserAndPermissions(message['clientAuthorisation'],pvname1)
         authenticated=accessControl['userAuthorised']
-
     if accessControl['userAuthorised'] :
-
-
         if not (pvname1 in	clientPVlist):
             if(accessControl['permissions']['read']):
-
-               
                 pv= PV(pvname1,connection_timeout=0.002,connection_callback= onConnectionChange)
                 pvlist={}
                 pvlist['pv']=pv
                 pvlist['isConnected']=False
                 pvlist['initialized']=False
-
                 myuid=myuid+1
                 pvConnectionId=str(myuid)
                 if(accessControl['permissions']['write']):
                     join_room(str(pvname1)+'rw')
                     join_room(str(pvname1))
-
-
-
                     pvlist['sockets']={request.sid:{'pvConnectionIds':{pvConnectionId:True}}}
                     pvlist['socketsRW']={request.sid:{'pvConnectionIds':{pvConnectionId:True}}}
                     pvlist['socketsRO']={}
                 else:
                     join_room(str(pvname1)+'ro')
                     join_room(str(pvname1))
-
-
-
                     pvlist['sockets']={request.sid:{'pvConnectionIds':{pvConnectionId:True}}}
                     pvlist['socketsRO']={request.sid:{'pvConnectionIds':{pvConnectionId:True}}}
                     pvlist['socketsRW']={}
@@ -585,14 +515,8 @@ def test_message(message):
                 clientPVlist[pvname1]['pv'].add_callback(onValueChanges,index=0)
                 #print("new pv", pvname1," generated pvConnectionId: ",pvConnectionId)
                 return {"pvConnectionId":pvConnectionId}
-
-
-
-
         else:
-
             if(accessControl['permissions']['read']):
-
                 clientPVlist[pvname1]['initialized']=False
                 myuid=myuid+1
                 pvConnectionId=str(myuid)
@@ -603,9 +527,8 @@ def test_message(message):
                     join_room(str(pvname1)+'rw')
                     join_room(str(pvname1))
                     if request.sid in clientPVlist[pvname1]['sockets']:
-
                         if 'pvConnectionIds' in clientPVlist[pvname1]['sockets'][request.sid]:
-                            if  pvConnectionId in clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds']:
+                            if pvConnectionId in clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds']:
                                 log.info("not a unique id {} {}",pvConnectionId,pvname1)
                     #               print("allConnectionIds ",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
                             else:
@@ -616,8 +539,8 @@ def test_message(message):
                         clientPVlist[pvname1]['sockets'][request.sid]={'pvConnectionIds':{pvConnectionId:True}}
                     if request.sid in clientPVlist[pvname1]['socketsRW']:
                         if 'pvConnectionIds' in clientPVlist[pvname1]['socketsRW'][request.sid]:
-                            if  pvConnectionId in clientPVlist[pvname1]['socketsRW'][request.sid]['pvConnectionIds']:
-                                    log.info("not a unique id RW {} {}",pvConnectionId,pvname1)
+                            if pvConnectionId in clientPVlist[pvname1]['socketsRW'][request.sid]['pvConnectionIds']:
+                                log.info("not a unique id RW {} {}",pvConnectionId,pvname1)
                     #              print("allConnectionIds RW ",clientPVlist[pvname1]['socketsRW'][request.sid]['pvConnectionIds'])
                             else:
                                 clientPVlist[pvname1]['socketsRW'][request.sid]['pvConnectionIds'][pvConnectionId]=True
@@ -625,9 +548,6 @@ def test_message(message):
                             clientPVlist[pvname1]['socketsRW'][request.sid]['pvConnectionIds']={pvConnectionId:True}
                     else:
                         clientPVlist[pvname1]['socketsRW'][request.sid]={'pvConnectionIds':{pvConnectionId:True}}
-
-
-
                 else:
                     join_room(str(pvname1)+'ro')
                     join_room(str(pvname1))
@@ -642,7 +562,6 @@ def test_message(message):
                             clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds']={pvConnectionId:True}
                     else:
                         clientPVlist[pvname1]['sockets'][request.sid]={'pvConnectionIds':{pvConnectionId:True}}
-
                     if request.sid in clientPVlist[pvname1]['socketsRO']:
                         if 'pvConnectionIds' in clientPVlist[pvname1]['socketsRO'][request.sid]:
                             if  pvConnectionId in clientPVlist[pvname1]['socketsRO'][request.sid]['pvConnectionIds']:
@@ -654,10 +573,7 @@ def test_message(message):
                             clientPVlist[pvname1]['socketsRO'][request.sid]['pvConnectionIds']={pvConnectionId:True}
                     else:
                         clientPVlist[pvname1]['socketsRO'][request.sid]={'pvConnectionIds':{pvConnectionId:True}}
-
                 return {"pvConnectionId":pvConnectionId}
-
-
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
 
@@ -665,7 +581,6 @@ def test_message(message):
 def databaseRead(message):
     global clientPVlist,REACT_APP_DisableLogin
     dbURL= str(message['dbURL'])
-
     #print("databaseRead: SSID: ",request.sid,' dbURL: ', dbURL)
     #print("message:",str(message))
     authenticated=False
@@ -675,10 +590,8 @@ def databaseRead(message):
     else :
         accessControl=AutheriseUserAndPermissions(message['clientAuthorisation'],dbURL)
         authenticated=accessControl['userAuthorised']
-
     if accessControl['userAuthorised'] :
         if "mongodb://" in dbURL:
-
             #print("mongodb database connection request: ",dbURL)
             str1=dbURL.replace("mongodb://","")
             strings=  str1.split(':')
@@ -687,7 +600,6 @@ def databaseRead(message):
                 parameters=json.loads(Parametersstr)
             except:
                 raise Exception("Parameters are not defined")
-
             #print("Parameters:",str(parameters))
             if(len(strings)>=3):
                 database= strings[0];
@@ -697,7 +609,6 @@ def databaseRead(message):
                 #print("dbName: "  ,   dbName, "length: ", len(dbName))
                 #print("colName: " ,  colName, "length: ", len(colName))
                 ### must insert a better error detection here
-
                 if ((len(database)>0) and (len(dbName)>0) and (len(colName)>0)):
                     write_access=False
                     if(accessControl['permissions']['read']):
@@ -711,7 +622,6 @@ def databaseRead(message):
                             #print("connecting: "+dbURL)
                             myclient=OpenMongoDbClient(database,dbName)
                             mydb = myclient[dbName]
-
                             mycol=mydb[colName]
                             try:
                                 query=parameters['query']
@@ -719,14 +629,9 @@ def databaseRead(message):
                                 X=mycol.find(query)
                             except:
                                 X=mycol.find()
-
-
                             log.info("done: {}",dbURL)
-
-
                             data=dumps(X)
                             d={'dbURL': dbURL,'write_access':write_access,'data': data}
-
                             eventName='databaseData:'+dbURL;
                 #            print("eventName",eventName)
                             socketio.emit(eventName,d,room=request.sid,namespace='/pvServer')
@@ -738,11 +643,6 @@ def databaseRead(message):
                     log.error("Malformed database URL, must be in format: mongodb://databaseID:database:collection")
             else:
                 log.error("Malformed database URL, must be in format: mongodb://databaseID:database:collection")
-
-
-
-
-
         else:
             log.error("Unknown URL schema ({})",dbURL)
     else:
@@ -752,7 +652,6 @@ def databaseRead(message):
 def databaseBroadcastRead(message):
     global clientPVlist,REACT_APP_DisableLogin
     dbURL= str(message['dbURL'])
-
     #print("databaseRead: SSID: ",request.sid,' dbURL: ', dbURL)
     #print("message:",str(message))
     authenticated=False
@@ -762,10 +661,8 @@ def databaseBroadcastRead(message):
     else :
         accessControl=AutheriseUserAndPermissions(message['clientAuthorisation'],dbURL)
         authenticated=accessControl['userAuthorised']
-
     if accessControl['userAuthorised'] :
         if "mongodb://" in dbURL:
-
     #        print("mongodb database connection request: ",dbURL)
             str1=dbURL.replace("mongodb://","")
             strings=  str1.split(':')
@@ -774,7 +671,6 @@ def databaseBroadcastRead(message):
                 parameters=json.loads(Parametersstr)
             except:
                 raise Exception("Parameters are not defined")
-
     #        print("Parameters:",str(parameters))
             if(len(strings)>=3):
                 database= strings[0];
@@ -784,7 +680,6 @@ def databaseBroadcastRead(message):
     #            print("dbName: "  ,   dbName, "length: ", len(dbName))
     #            print("colName: " ,  colName, "length: ", len(colName))
                 ### must insert a better error detection here
-
                 if ((len(database)>0) and (len(dbName)>0) and (len(colName)>0)):
                     write_access=False
                     if(accessControl['permissions']['read']):
@@ -797,9 +692,7 @@ def databaseBroadcastRead(message):
                         try:
     #                        print("connecting: "+dbURL)
                             myclient=OpenMongoDbClient(database,dbName)
-
                             mydb = myclient[dbName]
-
                             mycol=mydb[colName]
                             try:
                                 query=parameters['query']
@@ -807,14 +700,8 @@ def databaseBroadcastRead(message):
                                 X=mycol.find(query)
                             except:
                                 X=mycol.find()
-
-
     #                        print("done: "+dbURL)
-
-
                             data=dumps(X)
-
-
                             eventName='databaseData:'+dbURL;
     #                        print("eventName",eventName)
                             d={'dbURL': dbURL,'write_access':write_access,'data': data}
@@ -829,17 +716,10 @@ def databaseBroadcastRead(message):
                     log.error("Malformed database URL, must be in format: mongodb://databaseID:database:collection")
             else:
                 log.error("Malformed database URL, must be in format: mongodb://databaseID:database:collection")
-
-
-
-
-
         else:
             log.error("Unknown URL schema ({})",dbURL)
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
-
-
 
 @socketio.on('remove_dbWatch', namespace='/pvServer')
 def remove_dbWatch(message):
@@ -873,16 +753,8 @@ def remove_dbWatch(message):
         time.sleep(3) # wait for 3 seconds before removing a watch
         with thread_lock:        
             removeWatch()
-        
-
-
-
-
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
-
-
-
 
 @socketio.on('databaseReadWatchAndBroadcast', namespace='/pvServer')
 def databaseReadWatchAndBroadcast(message):
@@ -908,9 +780,7 @@ def databaseReadWatchAndBroadcast(message):
                 database= strings[0];
                 dbName=   strings[1];
                 colName=  strings[2];
-
                 ### must insert a better error detection here
-
                 if ((len(database)>0) and (len(dbName)>0) and (len(colName)>0)):
                     write_access=False
                     if(accessControl['permissions']['read']):
@@ -982,7 +852,6 @@ def databaseReadWatchAndBroadcast(message):
                                     dbWatch['threadClosed']=False
                                     clientDbWatchList[watchEventName]=dbWatch
                                 else:
-
                                     if request.sid in clientDbWatchList[watchEventName]['sockets']:
                                         if 'dbWatchIds' in clientDbWatchList[watchEventName]['sockets'][request.sid]:
                                             if  dbWatchId in clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']:
@@ -993,7 +862,6 @@ def databaseReadWatchAndBroadcast(message):
                                             clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']={dbWatchId:True}
                                     else:
                                         clientDbWatchList[watchEventName]['sockets'][request.sid]={'dbWatchIds':{dbWatchId:True}}
-
                                 return {"dbWatchId":dbWatchId}
                         except:
                             return "Ack: Could not connect to MongoDB: "+str(dbURL)
@@ -1017,11 +885,9 @@ def databaseUpdateOne(message):
     else :
         accessControl=AutheriseUserAndPermissions(message['clientAuthorisation'],dbURL)
         authenticated=accessControl['userAuthorised']
-
     if accessControl['userAuthorised'] :
         if accessControl['permissions']['write']:
             if "mongodb://" in dbURL:
-
 #                print("mongodb database connection request: ",dbURL)
                 str1=dbURL.replace("mongodb://","")
                 strings=  str1.split(':')
@@ -1033,46 +899,33 @@ def databaseUpdateOne(message):
 #                    print("dbName: "  ,   dbName, "length: ", len(dbName))
 #                    print("colName: " ,  colName, "length: ", len(colName))
                     ### must insert a better error detection here
-
                     if ((len(database)>0) and (len(dbName)>0) and (len(colName)>0)):
-
-
                         try:
                             #print("connecting: "+dbURL)
                             myclient=OpenMongoDbClient(database,dbName)
-
                             mydb = myclient[dbName]
-
                             mycol=mydb[colName]
                             id=message['id']
                             newvalues=message['newvalues']
                             try:
                                 mydb[colName].update_one({'_id':ObjectId(str(id))},newvalues)
-
                             except Exception as e:
                                 log.info(e)
-
-
-
 #                            print("done: "+dbURL)
-
                             try:
                                 responseID=message['responseID']
                             except:
                                 responseID="";
-
                             return 'OK'
                         except:
                             log.error("Could not connect to MongoDB: {}",dbURL)
                             return "Ack: Could not connect to MongoDB: "+str(dbURL)
-
                 else:
                     log.error("Malformed database URL, must be in format: mongodb://databaseID:database:collection")
             else:
                 log.error("Unknown URL schema ({})",dbURL)
         else:
             log.warning("Write access denied to database URL: {}",dbURL)
-
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
 
@@ -1080,7 +933,6 @@ def databaseUpdateOne(message):
 def databaseUpdateMany(message):
     global clientPVlist,REACT_APP_DisableLogin
     dbURL= str(message['dbURL'])
-
 #    print("databaseUpdate: SSID: ",request.sid,' dbURL: ', dbURL)
 #    print("message:",str(message))
     authenticated=False
@@ -1090,11 +942,9 @@ def databaseUpdateMany(message):
     else :
         accessControl=AutheriseUserAndPermissions(message['clientAuthorisation'],dbURL)
         authenticated=accessControl['userAuthorised']
-
     if accessControl['userAuthorised'] :
         if accessControl['permissions']['write']:
             if "mongodb://" in dbURL:
-
 #                print("mongodb database connection request: ",dbURL)
                 str1=dbURL.replace("mongodb://","")
                 strings=  str1.split(':')
@@ -1106,16 +956,11 @@ def databaseUpdateMany(message):
 #                    print("dbName: "  ,   dbName, "length: ", len(dbName))
 #                    print("colName: " ,  colName, "length: ", len(colName))
                     ### must insert a better error detection here
-
                     if ((len(database)>0) and (len(dbName)>0) and (len(colName)>0)):
-
-
                         try:
                             #print("connecting: "+dbURL)
                             myclient=OpenMongoDbClient(database,dbName)
-
                             mydb = myclient[dbName]
-
                             mycol=mydb[colName]
                             query=message['query'] if ('query' in message) else {}
                             aggregation=message['aggregation'] if ('aggregation' in message) else {}
@@ -1125,38 +970,29 @@ def databaseUpdateMany(message):
                                         query["_id"][key]=ObjectId(value)
                                 except:
                                     pass
-
                             newvalues=message['newvalues'] if ('newvalues' in message) else None
                             try:
                                 if('aggregation' in message):
                                     mydb[colName].update_many(query,[aggregation])
                                 else:
                                     mydb[colName].update_many(query,newvalues)
-
                             except Exception as e:
                                 log.info(e)
-
-
-
 #                            print("done: "+dbURL)
-
                             try:
                                 responseID=message['responseID']
                             except:
                                 responseID="";
-
                             return 'OK'
                         except:
                             log.error("Could not connect to MongoDB: {}",dbURL)
                             return "Ack: Could not connect to MongoDB: "+str(dbURL)
-
                 else:
                     log.error("Malformed database URL, must be in format: mongodb://databaseID:database:collection")
             else:
                 log.error("Unknown URL schema ({})",dbURL)
         else:
             log.warning("Write access denied to database URL: {}",dbURL)
-
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
 
@@ -1164,7 +1000,6 @@ def databaseUpdateMany(message):
 def databaseDeleteOne(message):
     global clientPVlist,REACT_APP_DisableLogin
     dbURL= str(message['dbURL'])
-
 #    print("databaseUpdate: SSID: ",request.sid,' dbURL: ', dbURL)
 #    print("message:",str(message))
     authenticated=False
@@ -1174,11 +1009,9 @@ def databaseDeleteOne(message):
     else :
         accessControl=AutheriseUserAndPermissions(message['clientAuthorisation'],dbURL)
         authenticated=accessControl['userAuthorised']
-
     if accessControl['userAuthorised'] :
         if accessControl['permissions']['write']:
             if "mongodb://" in dbURL:
-
 #                print("mongodb database connection request: ",dbURL)
                 str1=dbURL.replace("mongodb://","")
                 strings=  str1.split(':')
@@ -1190,54 +1023,40 @@ def databaseDeleteOne(message):
 #                    print("dbName: "  ,   dbName, "length: ", len(dbName))
 #                    print("colName: " ,  colName, "length: ", len(colName))
                     ### must insert a better error detection here
-
                     if ((len(database)>0) and (len(dbName)>0) and (len(colName)>0)):
-
-
                         try:
                             #print("connecting: "+dbURL)
                             myclient=OpenMongoDbClient(database,dbName)
                             mydb = myclient[dbName]
-
                             mycol=mydb[colName]
                             id=message['id']
                             try:
                                 mydb[colName].delete_one({'_id':ObjectId(str(id))})
-
                             except Exception as e:
                                 log.info(e)
-
-
-
 #                            print("done: "+dbURL)
-
                             try:
                                 responseID=message['responseID']
                             except:
                                 responseID="";
-
                             return 'OK'
                         except:
                             log.error("Could not connect to MongoDB: {}",dbURL)
                             return "Ack: Could not connect to MongoDB: "+str(dbURL)
-
                 else:
                     log.error("Malformed database URL, must be in format: mongodb://databaseID:database:collection")
             else:
                 log.error("Unknown URL schema ({})",dbURL)
         else:
             log.warning("Write access denied to database URL: {}",dbURL)
-
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
-
 
 @socketio.on('databaseInsertOne', namespace='/pvServer')
 def databaseInsertOne(message):
     global clientPVlist,REACT_APP_DisableLogin
 #    print("databaseInsertOne")
     dbURL= str(message['dbURL'])
-
 #    print("databaseInsertOne: SSID: ",request.sid,' dbURL: ', dbURL)
 #    print("message:",str(message))
     authenticated=False
@@ -1247,11 +1066,9 @@ def databaseInsertOne(message):
     else :
         accessControl=AutheriseUserAndPermissions(message['clientAuthorisation'],dbURL)
         authenticated=accessControl['userAuthorised']
-
     if accessControl['userAuthorised'] :
         if accessControl['permissions']['write']:
             if "mongodb://" in dbURL:
-
 #                print("mongodb database connection request: ",dbURL)
                 str1=dbURL.replace("mongodb://","")
                 strings=  str1.split(':')
@@ -1263,45 +1080,33 @@ def databaseInsertOne(message):
 #                    print("dbName: "  ,   dbName, "length: ", len(dbName))
 #                    print("colName: " ,  colName, "length: ", len(colName))
                     ### must insert a better error detection here
-
                     if ((len(database)>0) and (len(dbName)>0) and (len(colName)>0)):
-
-
                         try:
 #                            print("connecting: "+dbURL)
                             myclient=OpenMongoDbClient(database,dbName)
-
                             mydb = myclient[dbName]
-
                             mycol=mydb[colName]
-
                             newEntry=message['newEntry']
-
 #                            print("newEntry",str(newEntry))
                             try:
                                 # print("add newEntry")
                                 # print("dbName:",dbName)
                                 # print("colName:",colName)
-
-                                 mydb[colName].insert_one(newEntry)
+                                mydb[colName].insert_one(newEntry)
                             #
                             except Exception as e:
                                 log.info(e)
 #                            print("done: "+dbURL)
-
-
                             return 'OK'
                         except:
                             log.error("Could not connect to MongoDB: {}",dbURL)
                             return "Ack: Could not connect to MongoDB: "+str(dbURL)
-
                 else:
                     log.error("Malformed database URL, must be in format: mongodb://databaseID:database:collection")
             else:
                 log.error("Unknown URL schema ({})",dbURL)
         else:
             log.warning("Write access denied to database URL: {}",dbURL)
-
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
 
@@ -1309,7 +1114,6 @@ def databaseInsertOne(message):
 def archiverRead(message):
     global clientPVlist,REACT_APP_DisableLogin
     archiverURL= str(message['archiverURL'])
-
     #print("databaseRead: SSID: ",request.sid,' dbURL: ', dbURL)
     #print("message:",str(message))
     authenticated=False
@@ -1319,10 +1123,8 @@ def archiverRead(message):
     else :
         accessControl=AutheriseUserAndPermissions(message['clientAuthorisation'],archiverURL)
         authenticated=accessControl['userAuthorised']
-
     if accessControl['userAuthorised'] :
         if "arch://" in archiverURL:
-
             str1=archiverURL.replace("arch://","")
             strings=  str1.split(':')
             try:
@@ -1330,63 +1132,40 @@ def archiverRead(message):
                 request=json.loads(requestStr)
             except:
                 raise Exception("Request not defined")
-
-
             if(len(strings)>=1):
                 archiver= strings[0];
-
-
                 if ((len(archiver)>0)):
                     write_access=False
                     if(accessControl['permissions']['read']):
                         if(accessControl['permissions']['write']):
                             join_room(str(archiverURL)+'rw')
                             write_access=True
-
                         else:
                             join_room(str(archiverURL)+'ro')
                             write_access=False
-
                         try:
                             pv=request['pv']
                             pv=pv.replace("pva://","")
                             pv=parse.quote(pv)
-
                             fromOptions=request['options']['from']
-
                             fromOptions=parse.quote(fromOptions)
                             toOptions=request['options']['to']
-
                             toOptions=parse.quote(toOptions)
                             parameters=request['options']['parameters']
-
-
                             URL=str(os.environ[archiver])+'/retrieval/data/getData.json?pv='+pv+'&from='+fromOptions+'&to='+toOptions+parameters
-
                             req = urlrequest.urlopen(URL)
                             data = json.load(req)
-
-
                             eventName='archiverReadData:'+archiverURL;
-
                             d={'archiverURL': archiverURL,'write_access':write_access,'data': data}
                             socketio.emit(eventName,d,room=str(archiverURL)+'rw',namespace='/pvServer')
                             d={'archiverURL': archiverURL,'write_access':False,'data': data}
                             socketio.emit(eventName,d,room=str(archiverURL)+'ro',namespace='/pvServer')
                             return {'initialized':True}
                         except:
-
                             log.info('could not connect to Archiver: : {}',archiverURL)
                             return {'initialized':False}
-
-
-
-
-
-
-
         else:
-             log.info('Unkwown Archiver URL: : {}',archiverURL)
+            log.info('Unkwown Archiver URL: : {}',archiverURL)
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
 
@@ -1453,15 +1232,12 @@ def UserDetailsWatch(message):
                             clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']={dbWatchId:True}
                     else:
                         clientDbWatchList[watchEventName]['sockets'][request.sid]={'dbWatchIds':{dbWatchId:True}}
-
                     join_room(str(watchEventName))
                     join_room(str(watchEventName)+'rw')
-
                 return {"dbWatchId":dbWatchId}
         except Exception as e:
             print("adminallusers",e)
             return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
-        
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
         return "Ack: not authorised"
@@ -1529,16 +1305,12 @@ def adminAllUsers(message):
                             clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']={dbWatchId:True}
                     else:
                         clientDbWatchList[watchEventName]['sockets'][request.sid]={'dbWatchIds':{dbWatchId:True}}
-
                     join_room(str(watchEventName))
                     join_room(str(watchEventName)+'rw')
-
                 return {"dbWatchId":dbWatchId}
         except Exception as e:
             print("adminallusers",e)
             return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
-        
-        
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
         return "Ack: not authorised"
@@ -1596,7 +1368,6 @@ def adminWatchUAGs(message):
                     join_room(str(watchEventName))
                     join_room(str(watchEventName)+'rw')
                 else:
-
                     if request.sid in clientDbWatchList[watchEventName]['sockets']:
                         if 'dbWatchIds' in clientDbWatchList[watchEventName]['sockets'][request.sid]:
                             if  dbWatchId in clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']:
@@ -1607,20 +1378,15 @@ def adminWatchUAGs(message):
                             clientDbWatchList[watchEventName]['sockets'][request.sid]['dbWatchIds']={dbWatchId:True}
                     else:
                         clientDbWatchList[watchEventName]['sockets'][request.sid]={'dbWatchIds':{dbWatchId:True}}
-
                     join_room(str(watchEventName))
                     join_room(str(watchEventName)+'rw')
-
                 return {"dbWatchId":dbWatchId}
         except Exception as e:
             print("adminWatchUAGs",e)
             return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
-            
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
         return "Ack: not authorised"
-
-
 
 @socketio.on('adminAddUser', namespace='/pvServer')
 def adminAddUser(message):
@@ -1649,18 +1415,13 @@ def adminAddUser(message):
                     timestamp = datetime.timestamp(now)
                     user['pwTimestamp']=timestamp
                 mycol.insert_one(user)
-                
-                    
             return "OK"
         except Exception as e:
             print("admin add user error",e)
             return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
-        
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
         return "Ack: not authorised"    
-
-
 
 @socketio.on('adminDeleteUser', namespace='/pvServer')
 def adminDeleteUser(message):
@@ -1671,20 +1432,16 @@ def adminDeleteUser(message):
             client=OpenMongoDbClient("ADMIN_DATABASE","rasAdminDb")
             mydb = client["rasAdminDb"]
             mycol=mydb['users']
-            
             try:
                 id=message['id']
                 mycol.delete_one({'_id':ObjectId(str(id))})
-
             except Exception as e:
                 log.info(e)
                 return 'Error:could not delete the user'
-
             return 'OK'
         except Exception as e:
             print("admin add user error",e)
             return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
-        
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
         return "Ack: not authorised"    
@@ -1710,11 +1467,9 @@ def adminEnableUser(message):
         except Exception as e:
             print("admin enable user error",e)
             return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
-        
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
         return "Ack: not authorised"
-
 
 @socketio.on('adminModifyUser', namespace='/pvServer')
 def adminModifyUser(message):
@@ -1726,7 +1481,6 @@ def adminModifyUser(message):
             mydb = client["rasAdminDb"]
             mycol=mydb['users']
             id=message['id']
-            
             try:
                 update={ "$set": {}}
                 if message["password"]:
@@ -1740,7 +1494,6 @@ def adminModifyUser(message):
                     timestamp = datetime.timestamp(now)
                     update["$set"]["password"]=password
                     update["$set"]['pwTimestamp']=timestamp
-
                 if "email" in message:
                     update["$set"]["email"]=message["email"]
                 if "givenName" in message:
@@ -1751,8 +1504,6 @@ def adminModifyUser(message):
                     update["$set"]["phoneNumber"]=message["phoneNumber"]
                 if "officeLocation" in message:
                     update["$set"]["officeLocation"]=message["officeLocation"]
-
-                
                 mycol.update_one({'_id':ObjectId(str(id))}, update)
             except Exception as e:
                 log.info(e)
@@ -1761,7 +1512,6 @@ def adminModifyUser(message):
         except Exception as e:
             print("admin enable user error",e)
             return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
-        
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
         return "Ack: not authorised"
@@ -1776,7 +1526,6 @@ def ModifyUser(message):
             mydb = client["rasAdminDb"]
             mycol=mydb['users']
             id=message['id']
-            
             try:
                 update={ "$set": {}}
                 if message["password"]:
@@ -1790,7 +1539,6 @@ def ModifyUser(message):
                     timestamp = datetime.timestamp(now)
                     update["$set"]["password"]=password
                     update["$set"]['pwTimestamp']=timestamp
-
                 if "email" in message:
                     update["$set"]["email"]=message["email"]
                 if "givenName" in message:
@@ -1801,8 +1549,6 @@ def ModifyUser(message):
                     update["$set"]["phoneNumber"]=message["phoneNumber"]
                 if "officeLocation" in message:
                     update["$set"]["officeLocation"]=message["officeLocation"]
-
-                
                 mycol.update_one({'_id':ObjectId(str(id))}, update)
             except Exception as e:
                 log.info(e)
@@ -1811,11 +1557,9 @@ def ModifyUser(message):
         except Exception as e:
             print("admin enable user error",e)
             return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
-        
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
         return "Ack: not authorised"
-
 
 @socketio.on('adminUpdateUAGs', namespace='/pvServer')
 def adminUpdateUAGs(message):
@@ -1838,22 +1582,17 @@ def adminUpdateUAGs(message):
         except Exception as e:
             print("admin enable user error",e)
             return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
-        
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
         return "Ack: not authorised"
 
-
-
 @socketio.on('AuthenticateClient', namespace='/pvServer')
 def authenticate(message):
     print("Error, old socket io authentication is disabled")
-  
 
 @socketio.on('AuthoriseClient', namespace='/pvServer')
 def test_authenticate(message):
     global REACT_APP_DisableLogin
-
     if (not REACT_APP_DisableLogin ):
         userData=AuthoriseUser(message)
         if userData['authorised']:
@@ -1865,8 +1604,6 @@ def test_authenticate(message):
     else:
         emit('clientAuthorisation', {'successful': True},room=request.sid,namespace='/pvServer')
 
-
-
 @socketio.on('connect', namespace='/pvServer')
 def test_connect():
     global thread
@@ -1875,7 +1612,6 @@ def test_connect():
         if thread is None:
             thread = socketio.start_background_task(background_thread)
     emit('my_response', {'data': 'Connected', 'count': 0})
-
 
 @socketio.on('disconnect', namespace='/pvServer')
 def test_disconnect():
@@ -1898,11 +1634,9 @@ def test_disconnect():
             clientPVlist[pvname1]['sockets'].pop(request.sid)
         except:
             pass
-
             #print("disconn sockets",clientPVlist[pvname1]['sockets'])
             #print("disconn socketsRO",clientPVlist[pvname1]['socketsRO'])
             #print("disconn socketsRW",clientPVlist[pvname1]['socketsRW'])
-
     try:
         # print(list(clientDbWatchList))
         for watchEventName in list(clientDbWatchList) :
@@ -1916,13 +1650,11 @@ def test_disconnect():
         pass
     disconnect(request.sid,namespace='/pvServer')
 
-
 if __name__ == '__main__':
     REACT_APP_PyEpicsServerURL=os.getenv('pvServerURL')
     pvServerPort=os.getenv('pvServerPort')
     if (pvServerPort is None):
         pvServerPort='5000'
-
     REACT_APP_PyEpicsServerURL=REACT_APP_PyEpicsServerURL+':'+pvServerPort+'/'+'pvServer'
     print("pvServer URL: ",REACT_APP_PyEpicsServerURL)
     print("")

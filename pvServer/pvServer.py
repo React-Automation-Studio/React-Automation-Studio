@@ -18,6 +18,7 @@ sys.path.insert(0, '../')
 sys.path.insert(0, 'userAuthentication/')
 sys.path.insert(0, 'utils/')
 
+import log
 from authenticate import (
     AuthoriseUser,
     AutheriseUserAndPermissions,
@@ -242,11 +243,6 @@ print("")
 socketio = SocketIO(app,async_mode=async_mode,cors_allowed_origins='*')
 thread = None
 thread_lock = threading.Lock()
-
-import log
-
-
-
 clientPVlist={};
 clientDbWatchList={};
 myuid=0

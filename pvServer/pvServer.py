@@ -224,8 +224,8 @@ log.info("")
 socketio = SocketIO(app,async_mode=async_mode,cors_allowed_origins='*')
 thread = None
 thread_lock = threading.Lock()
-clientPVlist={};
-clientDbWatchList={};
+clientPVlist={}
+clientDbWatchList={}
 myuid=0
 myDbWatchUid=0
 
@@ -402,7 +402,7 @@ def test_write(message):
             pvname1= str(message['pvname'])
             pvname2=pvname1.replace("pva://","")
             try:
-                clientPVlist[pvname1]['pv'].put(message['data']);
+                clientPVlist[pvname1]['pv'].put(message['data'])
             except Exception as e:
                 log.error("***EPICS PV put error: ")
                 log.error("PV name: {}",pvname2)
@@ -601,9 +601,9 @@ def databaseRead(message):
                 raise Exception("Parameters are not defined")
             log.debug("Parameters:",str(parameters))
             if(len(strings)>=3):
-                database= strings[0];
-                dbName=   strings[1];
-                colName=  strings[2];
+                database= strings[0]
+                dbName=   strings[1]
+                colName=  strings[2]
                 log.debug("database: ", database, "length: ", len(database))
                 log.debug("dbName: "  ,   dbName, "length: ", len(dbName))
                 log.debug("colName: " ,  colName, "length: ", len(colName))
@@ -631,7 +631,7 @@ def databaseRead(message):
                             log.info("done: {}",dbURL)
                             data=dumps(X)
                             d={'dbURL': dbURL,'write_access':write_access,'data': data}
-                            eventName='databaseData:'+dbURL;
+                            eventName='databaseData:'+dbURL
                             log.debug("eventName",eventName)
                             socketio.emit(eventName,d,room=request.sid,namespace='/pvServer')
                             return "OK"
@@ -672,9 +672,9 @@ def databaseBroadcastRead(message):
                 raise Exception("Parameters are not defined")
             log.debug("Parameters:",str(parameters))
             if(len(strings)>=3):
-                database= strings[0];
-                dbName=   strings[1];
-                colName=  strings[2];
+                database= strings[0]
+                dbName=   strings[1]
+                colName=  strings[2]
                 log.debug("database: ", database, "length: ", len(database))
                 log.debug("dbName: "  ,   dbName, "length: ", len(dbName))
                 log.debug("colName: " ,  colName, "length: ", len(colName))
@@ -701,7 +701,7 @@ def databaseBroadcastRead(message):
                                 X=mycol.find()
                             log.debug("done: "+dbURL)
                             data=dumps(X)
-                            eventName='databaseData:'+dbURL;
+                            eventName='databaseData:'+dbURL
                             log.debug("eventName",eventName)
                             d={'dbURL': dbURL,'write_access':write_access,'data': data}
                             socketio.emit(eventName,d,room=str(dbURL)+'rw',namespace='/pvServer')
@@ -733,7 +733,7 @@ def remove_dbWatch(message):
         authenticated=accessControl['userAuthorised']
     if accessControl['userAuthorised'] :
         dbWatchId=str(message['dbWatchId'])+str(request.sid)
-        watchEventName='databaseWatchData:'+dbURL;
+        watchEventName='databaseWatchData:'+dbURL
         def removeWatch():
             log.info("remove {}",watchEventName)
             try:
@@ -776,9 +776,9 @@ def databaseReadWatchAndBroadcast(message):
             except:
                 raise Exception("Parameters are not defined")
             if(len(strings)>=3):
-                database= strings[0];
-                dbName=   strings[1];
-                colName=  strings[2];
+                database= strings[0]
+                dbName=   strings[1]
+                colName=  strings[2]
                 ### must insert a better error detection here
                 if ((len(database)>0) and (len(dbName)>0) and (len(colName)>0)):
                     write_access=False
@@ -817,7 +817,7 @@ def databaseReadWatchAndBroadcast(message):
                             else:
                                 X=mycol.find(query,projection).sort(sort).skip(skip).limit(limit)
                             data=dumps(X)
-                            eventName='databaseWatchData:'+dbURL;
+                            eventName='databaseWatchData:'+dbURL
                             watchEventName=eventName
                             myDbWatchUid=str(message['dbWatchId']+str(request.sid))
                             dbWatchId=str(myDbWatchUid)
@@ -891,9 +891,9 @@ def databaseUpdateOne(message):
                 str1=dbURL.replace("mongodb://","")
                 strings=  str1.split(':')
                 if(len(strings)==3):
-                    database= strings[0];
-                    dbName=   strings[1];
-                    colName=  strings[2];
+                    database= strings[0]
+                    dbName=   strings[1]
+                    colName=  strings[2]
                     log.debug("database: ", database, "length: ", len(database))
                     log.debug("dbName: "  ,   dbName, "length: ", len(dbName))
                     log.debug("colName: " ,  colName, "length: ", len(colName))
@@ -914,7 +914,7 @@ def databaseUpdateOne(message):
                             try:
                                 responseID=message['responseID']
                             except:
-                                responseID="";
+                                responseID=""
                             return 'OK'
                         except:
                             log.error("Could not connect to MongoDB: {}",dbURL)
@@ -948,9 +948,9 @@ def databaseUpdateMany(message):
                 str1=dbURL.replace("mongodb://","")
                 strings=  str1.split(':')
                 if(len(strings)==3):
-                    database= strings[0];
-                    dbName=   strings[1];
-                    colName=  strings[2];
+                    database= strings[0]
+                    dbName=   strings[1]
+                    colName=  strings[2]
                     log.debug("database: ", database, "length: ", len(database))
                     log.debug("dbName: "  ,   dbName, "length: ", len(dbName))
                     log.debug("colName: " ,  colName, "length: ", len(colName))
@@ -981,7 +981,7 @@ def databaseUpdateMany(message):
                             try:
                                 responseID=message['responseID']
                             except:
-                                responseID="";
+                                responseID=""
                             return 'OK'
                         except:
                             log.error("Could not connect to MongoDB: {}",dbURL)
@@ -1015,9 +1015,9 @@ def databaseDeleteOne(message):
                 str1=dbURL.replace("mongodb://","")
                 strings=  str1.split(':')
                 if(len(strings)==3):
-                    database= strings[0];
-                    dbName=   strings[1];
-                    colName=  strings[2];
+                    database= strings[0]
+                    dbName=   strings[1]
+                    colName=  strings[2]
                     log.debug("database: ", database, "length: ", len(database))
                     log.debug("dbName: "  ,   dbName, "length: ", len(dbName))
                     log.debug("colName: " ,  colName, "length: ", len(colName))
@@ -1037,7 +1037,7 @@ def databaseDeleteOne(message):
                             try:
                                 responseID=message['responseID']
                             except:
-                                responseID="";
+                                responseID=""
                             return 'OK'
                         except:
                             log.error("Could not connect to MongoDB: {}",dbURL)
@@ -1072,9 +1072,9 @@ def databaseInsertOne(message):
                 str1=dbURL.replace("mongodb://","")
                 strings=  str1.split(':')
                 if(len(strings)==3):
-                    database= strings[0];
-                    dbName=   strings[1];
-                    colName=  strings[2];
+                    database= strings[0]
+                    dbName=   strings[1]
+                    colName=  strings[2]
                     log.debug("database: ", database, "length: ", len(database))
                     log.debug("dbName: "  ,   dbName, "length: ", len(dbName))
                     log.debug("colName: " ,  colName, "length: ", len(colName))
@@ -1131,7 +1131,7 @@ def archiverRead(message):
             except:
                 raise Exception("Request not defined")
             if(len(strings)>=1):
-                archiver= strings[0];
+                archiver= strings[0]
                 if ((len(archiver)>0)):
                     write_access=False
                     if(accessControl['permissions']['read']):
@@ -1153,7 +1153,7 @@ def archiverRead(message):
                             URL=str(os.environ[archiver])+'/retrieval/data/getData.json?pv='+pv+'&from='+fromOptions+'&to='+toOptions+parameters
                             req = urlrequest.urlopen(URL)
                             data = json.load(req)
-                            eventName='archiverReadData:'+archiverURL;
+                            eventName='archiverReadData:'+archiverURL
                             d={'archiverURL': archiverURL,'write_access':write_access,'data': data}
                             socketio.emit(eventName,d,room=str(archiverURL)+'rw',namespace='/pvServer')
                             d={'archiverURL': archiverURL,'write_access':False,'data': data}

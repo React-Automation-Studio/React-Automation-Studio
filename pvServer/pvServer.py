@@ -1,31 +1,36 @@
 #!/usr/bin/env python
-from gevent import monkey; monkey.patch_all()
-import time
-import threading
-import flask
-from flask import request, jsonify, make_response
-from flask_socketio import SocketIO, emit, join_room, leave_room, disconnect
-from werkzeug.routing import BaseConverter
+from gevent import monkey
+monkey.patch_all()
+
+import bcrypt, json, ldap, os, time, threading, sys
 from bson.json_util import dumps
-import bcrypt
-from epics import PV
-import os
-import sys
-import json
-import urllib.request
-import urllib.parse
 from bson.objectid import ObjectId
+from datetime import datetime
+from dotenv import load_dotenv
+from epics import PV
+from flask import Flask, request, jsonify, make_response
+from flask_cors import CORS
+from flask_socketio import SocketIO, emit, join_room, leave_room, disconnect
+from urllib import parse, request as urlrequest
+from werkzeug.routing import BaseConverter
+
 sys.path.insert(0, '../')
 sys.path.insert(0, 'userAuthentication/')
 sys.path.insert(0, 'utils/')
 
-from authenticate import  AuthoriseUser,AutheriseUserAndPermissions,checkIfAdmin, LocalAuthenticateUser, ExternalAuthenticateUser, decodeTokenGoogle, createRefreshToken, createAccessToken
-from dotenv import load_dotenv
-import ldap
-from datetime import datetime
+from authenticate import (
+    AuthoriseUser,
+    AutheriseUserAndPermissions,
+    checkIfAdmin, 
+    LocalAuthenticateUser, 
+    ExternalAuthenticateUser, 
+    decodeTokenGoogle, 
+    createRefreshToken, 
+    createAccessToken
+)
 from pyMongoUtils import OpenMongoDbClient
 
-from flask_cors import CORS
+
 class RegexConverter(BaseConverter):
     def __init__(self, url_map, *items):
         super(RegexConverter, self).__init__(url_map)
@@ -93,7 +98,7 @@ print('SECURE - {}'.format(SECURE))
 
 
 print("")
-app = flask.Flask(__name__, static_folder="./build/static", template_folder="./build")
+app = Flask(__name__, static_folder="./build/static", template_folder="./build")
 app.url_map.converters['regex'] = RegexConverter
 
 CORS(app)
@@ -1349,20 +1354,20 @@ def archiverRead(message):
                         try:
                             pv=request['pv']
                             pv=pv.replace("pva://","")
-                            pv=urllib.parse.quote(pv)
+                            pv=parse.quote(pv)
 
                             fromOptions=request['options']['from']
 
-                            fromOptions=urllib.parse.quote(fromOptions)
+                            fromOptions=parse.quote(fromOptions)
                             toOptions=request['options']['to']
 
-                            toOptions=urllib.parse.quote(toOptions)
+                            toOptions=parse.quote(toOptions)
                             parameters=request['options']['parameters']
 
 
                             URL=str(os.environ[archiver])+'/retrieval/data/getData.json?pv='+pv+'&from='+fromOptions+'&to='+toOptions+parameters
 
-                            req = urllib.request.urlopen(URL)
+                            req = urlrequest.urlopen(URL)
                             data = json.load(req)
 
 

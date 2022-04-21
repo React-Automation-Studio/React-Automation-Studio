@@ -43,25 +43,25 @@ load_dotenv()
 # the best option based on installed packages.
 
 async_mode = 'gevent'
-print("")
-print('**************************************')
-print("React Automation Studio V3.1.0")
-print("")
-print("pvServer Environment Variables:")
-print("")
-print('PYEPICS_LIBCA: '+ str(os.environ['PYEPICS_LIBCA']))
-print('EPICS_BASE: '+ str(os.environ['EPICS_BASE']))
-print('EPICS_CA_ADDR_LIST: '+ str(os.environ['EPICS_CA_ADDR_LIST']))
-print('pvServerURL: '+ str(os.environ['pvServerURL']))
-print('pvServerPort: '+ str(os.environ['pvServerPort']))
-print('pvServerNameSpace: '+ str(os.environ['pvServerNameSpace']))
-print('REACT_APP_EnableLogin: '+ str(os.environ['REACT_APP_EnableLogin']))
-print('pvServerLogLevel: {}'.format(os.environ.get('pvServerLogLevel', None)))
-print('pvServerLogFile: {}'.format(os.environ.get('pvServerLogFile', None)))
-print('pvServerLogFileSize: {}'.format(os.environ.get('pvServerLogFileSize', None)))
-print('pvServerLogFileBackup: {}'.format(os.environ.get('pvServerLogFileBackup', None)))
-print('REACT_APP_EnableActiveDirectoryLogin: '+ str(os.environ['REACT_APP_EnableActiveDirectoryLogin']))
-print('REACT_APP_EnableGoogleLogin: '+ str(os.environ['REACT_APP_EnableGoogleLogin']))
+log.info("")
+log.info('**************************************')
+log.info("React Automation Studio V3.1.0")
+log.info("")
+log.info("pvServer Environment Variables:")
+log.info("")
+log.info('PYEPICS_LIBCA: '+ str(os.environ['PYEPICS_LIBCA']))
+log.info('EPICS_BASE: '+ str(os.environ['EPICS_BASE']))
+log.info('EPICS_CA_ADDR_LIST: '+ str(os.environ['EPICS_CA_ADDR_LIST']))
+log.info('pvServerURL: '+ str(os.environ['pvServerURL']))
+log.info('pvServerPort: '+ str(os.environ['pvServerPort']))
+log.info('pvServerNameSpace: '+ str(os.environ['pvServerNameSpace']))
+log.info('REACT_APP_EnableLogin: '+ str(os.environ['REACT_APP_EnableLogin']))
+log.info('pvServerLogLevel: {}'.format(os.environ.get('pvServerLogLevel', None)))
+log.info('pvServerLogFile: {}'.format(os.environ.get('pvServerLogFile', None)))
+log.info('pvServerLogFileSize: {}'.format(os.environ.get('pvServerLogFileSize', None)))
+log.info('pvServerLogFileBackup: {}'.format(os.environ.get('pvServerLogFileBackup', None)))
+log.info('REACT_APP_EnableActiveDirectoryLogin: '+ str(os.environ['REACT_APP_EnableActiveDirectoryLogin']))
+log.info('REACT_APP_EnableGoogleLogin: '+ str(os.environ['REACT_APP_EnableGoogleLogin']))
 REACT_APP_EnableActiveDirectoryLogin=(os.getenv('REACT_APP_EnableActiveDirectoryLogin')=='true')
 REACT_APP_EnableGoogleLogin=(os.getenv('REACT_APP_EnableGoogleLogin')=='true')
 REACT_APP_DisableStandardLogin=(os.getenv('REACT_APP_DisableStandardLogin')=='true')
@@ -71,29 +71,29 @@ try:
         os.environ['REFRESH_COOKIE_MAX_AGE_SECS'])
 except:
     REFRESH_COOKIE_MAX_AGE_SECS =604800
-print('Refresh cookie max age not set - defaulting to {} seconds'.format(REFRESH_COOKIE_MAX_AGE_SECS))
+log.info('Refresh cookie max age not set - defaulting to {} seconds'.format(REFRESH_COOKIE_MAX_AGE_SECS))
     
 try:
     ACCESS_TOKEN_MAX_AGE_SECS = int(
         os.environ['ACCESS_TOKEN_MAX_AGE_SECS'])
 except:
     ACCESS_TOKEN_MAX_AGE_SECS = 300
-print('Access token max age not set - defaulting to {} seconds'.format(ACCESS_TOKEN_MAX_AGE_SECS))
+log.info('Access token max age not set - defaulting to {} seconds'.format(ACCESS_TOKEN_MAX_AGE_SECS))
 
 try:
     REFRESH_TIMEOUT = int(
         os.environ['REFRESH_TIMEOUT'])
 except:
     REFRESH_TIMEOUT = 60
-print('Refresh time out not set - defaulting to {} seconds'.format(REFRESH_TIMEOUT))
+log.info('Refresh time out not set - defaulting to {} seconds'.format(REFRESH_TIMEOUT))
     
 try:
     SECURE=(os.getenv('SECURE')=='true')
 except:
     SECURE = False
-print('SECURE - {}'.format(SECURE))
+log.info('SECURE - {}'.format(SECURE))
 
-print("")
+log.info("")
 app = Flask(__name__, static_folder="./build/static", template_folder="./build")
 app.url_map.converters['regex'] = RegexConverter
 
@@ -140,9 +140,9 @@ def refresh():
     else:
         refreshToken = request.json.get('refreshToken')
     if not (refreshToken is None):
-     #   print("in ifrefreshToken",refreshToken)
+        log.debug("in ifrefreshToken",refreshToken)
         userData=AuthoriseUser(refreshToken)
-      #  print("userData",userData)
+        log.debug("userData",userData)
         if userData['authorised']:
             resp=createLoginReponse(userData)
             return resp
@@ -165,7 +165,7 @@ def localLogin():
 
 @app.route('/api/login/ldap', methods=['POST'])
 def ldapLogin():
-    # print("request ip:",request.remote_addr)
+    log.debug("request ip:",request.remote_addr)
     global REACT_APP_EnableActiveDirectoryLogin
     if REACT_APP_EnableActiveDirectoryLogin :
         user = request.json.get('user', None)
@@ -184,9 +184,9 @@ def ldapLogin():
                 log.info("Ldap login failed: {} ",LDAP_USER_DN)
                 jsonify({'login': False}), 401
         except Exception as e:
-            print("Ldap login error",e)
-            # print("username",LDAP_USER_DN)
-            # print("password",LDAP_USER_PW)
+            log.info("Ldap login error",e)
+            log.debug("username",LDAP_USER_DN)
+            log.debug("password",LDAP_USER_PW)
             log.info("Ldap login failed: {} ",LDAP_USER_DN)
             jsonify({'login': False}), 401
             return jsonify({'login': False}), 401
@@ -216,10 +216,10 @@ def googleLogin():
 
 REACT_APP_DisableLogin=not(os.getenv('REACT_APP_EnableLogin')=='true')
 if (REACT_APP_DisableLogin) :
-    print("Authenitcation and Authorisation is DISABLED")
+    log.info("Authenitcation and Authorisation is DISABLED")
 else:
-    print("Authenitcation and Authorisation is ENABLED")
-print("")
+    log.info("Authenitcation and Authorisation is ENABLED")
+log.info("")
 
 socketio = SocketIO(app,async_mode=async_mode,cors_allowed_origins='*')
 thread = None
@@ -234,11 +234,11 @@ def check_pv_initialized_after_disconnect():
     while (True):
         for pvname in list(clientPVlist) :
             if not((len(clientPVlist[pvname]['sockets'])>0 ) or (len(clientPVlist[pvname]['socketsRW'])>0 )or (len(clientPVlist[pvname]['socketsRO'])>0 )):
-                #print(pvname, " has no listening clients, removing")
+                log.debug(pvname, " has no listening clients, removing")
                 clientPVlist[pvname]['pv'].disconnect()
                 clientPVlist.pop(pvname)
             else:
-                #print(pvname)
+                log.debug(pvname)
                 if (clientPVlist[pvname]['initialized']==False):
                     if (clientPVlist[pvname]['isConnected']):
                         clientPVlist[pvname]['pv'].get(as_string=True)
@@ -295,7 +295,7 @@ def dbWatchControlThread():
     global clientDbWatchList, thread_lock
     while (True):
         watchList=list(clientDbWatchList)
-        # print("clientDbWatchList Lenghth",len(watchList))
+        log.debug("clientDbWatchList Lenghth",len(watchList))
         for watchEventName in watchList:
             if clientDbWatchList[watchEventName]['threadStarted'] is False:
                 clientDbWatchList[watchEventName]['thread']=threading.Thread(target=dbWatchThread,args=[watchEventName]).start()
@@ -390,7 +390,7 @@ def background_thread():
 @socketio.on('write_to_pv', namespace='/pvServer')
 def test_write(message):
     global clientPVlist,thread_lock2,REACT_APP_DisableLogin
-    #print("Test")
+    log.debug("Test")
     authenticated=False
     if REACT_APP_DisableLogin:
         accessControl={'userAuthorised':True,'permissions':{'read':True,'write':True}}
@@ -408,7 +408,6 @@ def test_write(message):
                 log.error("PV name: {}",pvname2)
                 log.error("Value to put: {}",message['data'])
                 log.error("Exception: {}",e)
-            # else: log.error("Unknown PV type ({})", pvname1)
         else:
             log.warning("***PV put error: write access denied ")
             log.warning("PV name: {}",message['pvname'])
@@ -430,48 +429,48 @@ def test_message(message):
     if accessControl['userAuthorised'] :
         if pvname1 in	clientPVlist:
             pvConnectionId= str(message['pvConnectionId'])
-            #print("remove_pv_connection id: ",pvConnectionId, pvname1)
+            log.debug("remove_pv_connection id: ",pvConnectionId, pvname1)
             try:
-                #print("before pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
+                log.debug("before pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
                 if pvConnectionId in clientPVlist[pvname1]['socketsRW'][request.sid]['pvConnectionIds']:
-                    #print("debug1: ",pvConnectionId, pvname1)
-                    #print("before pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
+                    log.debug("debug1: ",pvConnectionId, pvname1)
+                    log.debug("before pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
                     clientPVlist[pvname1]['socketsRW'][request.sid]['pvConnectionIds'].pop(str(pvConnectionId))
-                    #print("length ",len(clientPVlist[pvname1]['socketsRW'][request.sid]['pvConnectionIds']))
+                    log.debug("length ",len(clientPVlist[pvname1]['socketsRW'][request.sid]['pvConnectionIds']))
                     if len(clientPVlist[pvname1]['socketsRW'][request.sid]['pvConnectionIds'])==0:
                         leave_room(str(pvname1)+'rw')
                         clientPVlist[pvname1]['socketsRW'].pop(request.sid)
-                    #print("after pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
+                    log.debug("after pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
             except:
                 pass
-                #print("remove_pv_connection id not in socketsRW: ",pvConnectionId, pvname1)
+                log.debug("remove_pv_connection id not in socketsRW: ",pvConnectionId, pvname1)
             try:
-                #print("before pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
+                log.debug("before pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
                 if pvConnectionId in clientPVlist[pvname1]['socketsRO'][request.sid]['pvConnectionIds']:
                     clientPVlist[pvname1]['socketsRO'][request.sid]['pvConnectionIds'].pop(str(pvConnectionId))
                     if len(clientPVlist[pvname1]['socketsRO'][request.sid]['pvConnectionIds'])==0:
                         leave_room(str(pvname1)+'ro')
                         clientPVlist[pvname1]['socketsRO'].pop(request.sid)
-                    #print("after pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
+                    log.debug("after pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
             except:
                 pass
-                #print("remove_pv_connection id not in socketsRO: ",pvConnectionId, pvname1)
+                log.debug("remove_pv_connection id not in socketsRO: ",pvConnectionId, pvname1)
             try:
-                #print("before pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
+                log.debug("before pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
                 if pvConnectionId in clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds']:
-                    #print("debug1: ",pvConnectionId, pvname1)
-                    #print("before pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
+                    log.debug("debug1: ",pvConnectionId, pvname1)
+                    log.debug("before pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
                     clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'].pop(str(pvConnectionId))
                     if len(clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])==0:
                         leave_room(str(pvname1))
                         clientPVlist[pvname1]['sockets'].pop(request.sid)
-                    #print("after pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
+                    log.debug("after pop",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
             except:
                 pass
-                #print("remove_pv_connection id not in sockets: ",pvConnectionId, pvname1)
-            #print("sockets",clientPVlist[pvname1]['sockets'])
-            #print("socketsRO",clientPVlist[pvname1]['socketsRO'])
-            #print("socketsRW",clientPVlist[pvname1]['socketsRW'])
+                log.debug("remove_pv_connection id not in sockets: ",pvConnectionId, pvname1)
+            log.debug("sockets",clientPVlist[pvname1]['sockets'])
+            log.debug("socketsRO",clientPVlist[pvname1]['socketsRO'])
+            log.debug("socketsRW",clientPVlist[pvname1]['socketsRW'])
         else:
             log.error("Pvname ({}) not in clientPVlist",pvname1)
     else:
@@ -513,16 +512,16 @@ def test_message(message):
                     pvlist['socketsRW']={}
                 clientPVlist[pvname1]=pvlist
                 clientPVlist[pvname1]['pv'].add_callback(onValueChanges,index=0)
-                #print("new pv", pvname1," generated pvConnectionId: ",pvConnectionId)
+                log.debug("new pv", pvname1," generated pvConnectionId: ",pvConnectionId)
                 return {"pvConnectionId":pvConnectionId}
         else:
             if(accessControl['permissions']['read']):
                 clientPVlist[pvname1]['initialized']=False
                 myuid=myuid+1
                 pvConnectionId=str(myuid)
-                #print("pv exists", pvname1," generated pvConnectionId: ",pvConnectionId)
-                #print("all sockets ",clientPVlist[pvname1]['sockets'])
-                #print("all sockets rw",clientPVlist[pvname1]['socketsRW'])
+                log.debug("pv exists", pvname1," generated pvConnectionId: ",pvConnectionId)
+                log.debug("all sockets ",clientPVlist[pvname1]['sockets'])
+                log.debug("all sockets rw",clientPVlist[pvname1]['socketsRW'])
                 if(accessControl['permissions']['write']):
                     join_room(str(pvname1)+'rw')
                     join_room(str(pvname1))
@@ -530,7 +529,7 @@ def test_message(message):
                         if 'pvConnectionIds' in clientPVlist[pvname1]['sockets'][request.sid]:
                             if pvConnectionId in clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds']:
                                 log.info("not a unique id {} {}",pvConnectionId,pvname1)
-                    #               print("allConnectionIds ",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
+                                log.debug("allConnectionIds ",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
                             else:
                                 clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'][pvConnectionId]=True
                         else:
@@ -541,7 +540,7 @@ def test_message(message):
                         if 'pvConnectionIds' in clientPVlist[pvname1]['socketsRW'][request.sid]:
                             if pvConnectionId in clientPVlist[pvname1]['socketsRW'][request.sid]['pvConnectionIds']:
                                 log.info("not a unique id RW {} {}",pvConnectionId,pvname1)
-                    #              print("allConnectionIds RW ",clientPVlist[pvname1]['socketsRW'][request.sid]['pvConnectionIds'])
+                                log.debug("allConnectionIds RW ",clientPVlist[pvname1]['socketsRW'][request.sid]['pvConnectionIds'])
                             else:
                                 clientPVlist[pvname1]['socketsRW'][request.sid]['pvConnectionIds'][pvConnectionId]=True
                         else:
@@ -555,7 +554,7 @@ def test_message(message):
                         if 'pvConnectionIds' in clientPVlist[pvname1]['sockets'][request.sid]:
                             if  pvConnectionId in clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds']:
                                 log.info("not a unique id {} {}",pvConnectionId,pvname1)
-                    #             print("allConnectionIds",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
+                                log.debug("allConnectionIds",clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])
                             else:
                                 clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'][pvConnectionId]=True
                         else:
@@ -566,7 +565,7 @@ def test_message(message):
                         if 'pvConnectionIds' in clientPVlist[pvname1]['socketsRO'][request.sid]:
                             if  pvConnectionId in clientPVlist[pvname1]['socketsRO'][request.sid]['pvConnectionIds']:
                                 log.info("not a unique id ro {} {}",pvConnectionId,pvname1)
-                        #           print("allConnectionIds ro",clientPVlist[pvname1]['socketsRO'][request.sid]['pvConnectionIds'])
+                                log.debug("allConnectionIds ro",clientPVlist[pvname1]['socketsRO'][request.sid]['pvConnectionIds'])
                             else:
                                 clientPVlist[pvname1]['socketsRO'][request.sid]['pvConnectionIds'][pvConnectionId]=True
                         else:
@@ -581,8 +580,8 @@ def test_message(message):
 def databaseRead(message):
     global clientPVlist,REACT_APP_DisableLogin
     dbURL= str(message['dbURL'])
-    #print("databaseRead: SSID: ",request.sid,' dbURL: ', dbURL)
-    #print("message:",str(message))
+    log.debug("databaseRead: SSID: ",request.sid,' dbURL: ', dbURL)
+    log.debug("message:",str(message))
     authenticated=False
     if REACT_APP_DisableLogin:
         authenticated=True
@@ -592,7 +591,7 @@ def databaseRead(message):
         authenticated=accessControl['userAuthorised']
     if accessControl['userAuthorised'] :
         if "mongodb://" in dbURL:
-            #print("mongodb database connection request: ",dbURL)
+            log.debug("mongodb database connection request: ",dbURL)
             str1=dbURL.replace("mongodb://","")
             strings=  str1.split(':')
             try:
@@ -600,14 +599,14 @@ def databaseRead(message):
                 parameters=json.loads(Parametersstr)
             except:
                 raise Exception("Parameters are not defined")
-            #print("Parameters:",str(parameters))
+            log.debug("Parameters:",str(parameters))
             if(len(strings)>=3):
                 database= strings[0];
                 dbName=   strings[1];
                 colName=  strings[2];
-                #print("database: ", database, "length: ", len(database))
-                #print("dbName: "  ,   dbName, "length: ", len(dbName))
-                #print("colName: " ,  colName, "length: ", len(colName))
+                log.debug("database: ", database, "length: ", len(database))
+                log.debug("dbName: "  ,   dbName, "length: ", len(dbName))
+                log.debug("colName: " ,  colName, "length: ", len(colName))
                 ### must insert a better error detection here
                 if ((len(database)>0) and (len(dbName)>0) and (len(colName)>0)):
                     write_access=False
@@ -619,13 +618,13 @@ def databaseRead(message):
                             join_room(str(dbURL)+'ro')
                             write_access=False
                         try:
-                            #print("connecting: "+dbURL)
+                            log.debug("connecting: "+dbURL)
                             myclient=OpenMongoDbClient(database,dbName)
                             mydb = myclient[dbName]
                             mycol=mydb[colName]
                             try:
                                 query=parameters['query']
-                #                print("using query:",query)
+                                log.debug("using query:",query)
                                 X=mycol.find(query)
                             except:
                                 X=mycol.find()
@@ -633,7 +632,7 @@ def databaseRead(message):
                             data=dumps(X)
                             d={'dbURL': dbURL,'write_access':write_access,'data': data}
                             eventName='databaseData:'+dbURL;
-                #            print("eventName",eventName)
+                            log.debug("eventName",eventName)
                             socketio.emit(eventName,d,room=request.sid,namespace='/pvServer')
                             return "OK"
                         except:
@@ -652,8 +651,8 @@ def databaseRead(message):
 def databaseBroadcastRead(message):
     global clientPVlist,REACT_APP_DisableLogin
     dbURL= str(message['dbURL'])
-    #print("databaseRead: SSID: ",request.sid,' dbURL: ', dbURL)
-    #print("message:",str(message))
+    log.debug("databaseRead: SSID: ",request.sid,' dbURL: ', dbURL)
+    log.debug("message:",str(message))
     authenticated=False
     if REACT_APP_DisableLogin:
         authenticated=True
@@ -663,7 +662,7 @@ def databaseBroadcastRead(message):
         authenticated=accessControl['userAuthorised']
     if accessControl['userAuthorised'] :
         if "mongodb://" in dbURL:
-    #        print("mongodb database connection request: ",dbURL)
+            log.debug("mongodb database connection request: ",dbURL)
             str1=dbURL.replace("mongodb://","")
             strings=  str1.split(':')
             try:
@@ -671,14 +670,14 @@ def databaseBroadcastRead(message):
                 parameters=json.loads(Parametersstr)
             except:
                 raise Exception("Parameters are not defined")
-    #        print("Parameters:",str(parameters))
+            log.debug("Parameters:",str(parameters))
             if(len(strings)>=3):
                 database= strings[0];
                 dbName=   strings[1];
                 colName=  strings[2];
-    #            print("database: ", database, "length: ", len(database))
-    #            print("dbName: "  ,   dbName, "length: ", len(dbName))
-    #            print("colName: " ,  colName, "length: ", len(colName))
+                log.debug("database: ", database, "length: ", len(database))
+                log.debug("dbName: "  ,   dbName, "length: ", len(dbName))
+                log.debug("colName: " ,  colName, "length: ", len(colName))
                 ### must insert a better error detection here
                 if ((len(database)>0) and (len(dbName)>0) and (len(colName)>0)):
                     write_access=False
@@ -690,20 +689,20 @@ def databaseBroadcastRead(message):
                             join_room(str(dbURL)+'ro')
                             write_access=False
                         try:
-    #                        print("connecting: "+dbURL)
+                            log.debug("connecting: "+dbURL)
                             myclient=OpenMongoDbClient(database,dbName)
                             mydb = myclient[dbName]
                             mycol=mydb[colName]
                             try:
                                 query=parameters['query']
-                    #            print("using query:",query)
+                                log.debug("using query:",query)
                                 X=mycol.find(query)
                             except:
                                 X=mycol.find()
-    #                        print("done: "+dbURL)
+                            log.debug("done: "+dbURL)
                             data=dumps(X)
                             eventName='databaseData:'+dbURL;
-    #                        print("eventName",eventName)
+                            log.debug("eventName",eventName)
                             d={'dbURL': dbURL,'write_access':write_access,'data': data}
                             socketio.emit(eventName,d,room=str(dbURL)+'rw',namespace='/pvServer')
                             d={'dbURL': dbURL,'write_access':False,'data': data}
@@ -888,20 +887,20 @@ def databaseUpdateOne(message):
     if accessControl['userAuthorised'] :
         if accessControl['permissions']['write']:
             if "mongodb://" in dbURL:
-#                print("mongodb database connection request: ",dbURL)
+                log.debug("mongodb database connection request: ",dbURL)
                 str1=dbURL.replace("mongodb://","")
                 strings=  str1.split(':')
                 if(len(strings)==3):
                     database= strings[0];
                     dbName=   strings[1];
                     colName=  strings[2];
-#                    print("database: ", database, "length: ", len(database))
-#                    print("dbName: "  ,   dbName, "length: ", len(dbName))
-#                    print("colName: " ,  colName, "length: ", len(colName))
+                    log.debug("database: ", database, "length: ", len(database))
+                    log.debug("dbName: "  ,   dbName, "length: ", len(dbName))
+                    log.debug("colName: " ,  colName, "length: ", len(colName))
                     ### must insert a better error detection here
                     if ((len(database)>0) and (len(dbName)>0) and (len(colName)>0)):
                         try:
-                            #print("connecting: "+dbURL)
+                            log.debug("connecting: "+dbURL)
                             myclient=OpenMongoDbClient(database,dbName)
                             mydb = myclient[dbName]
                             mycol=mydb[colName]
@@ -911,7 +910,7 @@ def databaseUpdateOne(message):
                                 mydb[colName].update_one({'_id':ObjectId(str(id))},newvalues)
                             except Exception as e:
                                 log.info(e)
-#                            print("done: "+dbURL)
+                            log.debug("done: "+dbURL)
                             try:
                                 responseID=message['responseID']
                             except:
@@ -933,8 +932,8 @@ def databaseUpdateOne(message):
 def databaseUpdateMany(message):
     global clientPVlist,REACT_APP_DisableLogin
     dbURL= str(message['dbURL'])
-#    print("databaseUpdate: SSID: ",request.sid,' dbURL: ', dbURL)
-#    print("message:",str(message))
+    log.debug("databaseUpdate: SSID: ",request.sid,' dbURL: ', dbURL)
+    log.debug("message:",str(message))
     authenticated=False
     if REACT_APP_DisableLogin:
         authenticated=True
@@ -945,20 +944,20 @@ def databaseUpdateMany(message):
     if accessControl['userAuthorised'] :
         if accessControl['permissions']['write']:
             if "mongodb://" in dbURL:
-#                print("mongodb database connection request: ",dbURL)
+                log.debug("mongodb database connection request: ",dbURL)
                 str1=dbURL.replace("mongodb://","")
                 strings=  str1.split(':')
                 if(len(strings)==3):
                     database= strings[0];
                     dbName=   strings[1];
                     colName=  strings[2];
-#                    print("database: ", database, "length: ", len(database))
-#                    print("dbName: "  ,   dbName, "length: ", len(dbName))
-#                    print("colName: " ,  colName, "length: ", len(colName))
+                    log.debug("database: ", database, "length: ", len(database))
+                    log.debug("dbName: "  ,   dbName, "length: ", len(dbName))
+                    log.debug("colName: " ,  colName, "length: ", len(colName))
                     ### must insert a better error detection here
                     if ((len(database)>0) and (len(dbName)>0) and (len(colName)>0)):
                         try:
-                            #print("connecting: "+dbURL)
+                            log.debug("connecting: "+dbURL)
                             myclient=OpenMongoDbClient(database,dbName)
                             mydb = myclient[dbName]
                             mycol=mydb[colName]
@@ -978,7 +977,7 @@ def databaseUpdateMany(message):
                                     mydb[colName].update_many(query,newvalues)
                             except Exception as e:
                                 log.info(e)
-#                            print("done: "+dbURL)
+                            log.debug("done: "+dbURL)
                             try:
                                 responseID=message['responseID']
                             except:
@@ -1000,8 +999,8 @@ def databaseUpdateMany(message):
 def databaseDeleteOne(message):
     global clientPVlist,REACT_APP_DisableLogin
     dbURL= str(message['dbURL'])
-#    print("databaseUpdate: SSID: ",request.sid,' dbURL: ', dbURL)
-#    print("message:",str(message))
+    log.debug("databaseUpdate: SSID: ",request.sid,' dbURL: ', dbURL)
+    log.debug("message:",str(message))
     authenticated=False
     if REACT_APP_DisableLogin:
         authenticated=True
@@ -1012,20 +1011,20 @@ def databaseDeleteOne(message):
     if accessControl['userAuthorised'] :
         if accessControl['permissions']['write']:
             if "mongodb://" in dbURL:
-#                print("mongodb database connection request: ",dbURL)
+                log.debug("mongodb database connection request: ",dbURL)
                 str1=dbURL.replace("mongodb://","")
                 strings=  str1.split(':')
                 if(len(strings)==3):
                     database= strings[0];
                     dbName=   strings[1];
                     colName=  strings[2];
-#                    print("database: ", database, "length: ", len(database))
-#                    print("dbName: "  ,   dbName, "length: ", len(dbName))
-#                    print("colName: " ,  colName, "length: ", len(colName))
+                    log.debug("database: ", database, "length: ", len(database))
+                    log.debug("dbName: "  ,   dbName, "length: ", len(dbName))
+                    log.debug("colName: " ,  colName, "length: ", len(colName))
                     ### must insert a better error detection here
                     if ((len(database)>0) and (len(dbName)>0) and (len(colName)>0)):
                         try:
-                            #print("connecting: "+dbURL)
+                            log.debug("connecting: "+dbURL)
                             myclient=OpenMongoDbClient(database,dbName)
                             mydb = myclient[dbName]
                             mycol=mydb[colName]
@@ -1034,7 +1033,7 @@ def databaseDeleteOne(message):
                                 mydb[colName].delete_one({'_id':ObjectId(str(id))})
                             except Exception as e:
                                 log.info(e)
-#                            print("done: "+dbURL)
+                            log.debug("done: "+dbURL)
                             try:
                                 responseID=message['responseID']
                             except:
@@ -1055,10 +1054,10 @@ def databaseDeleteOne(message):
 @socketio.on('databaseInsertOne', namespace='/pvServer')
 def databaseInsertOne(message):
     global clientPVlist,REACT_APP_DisableLogin
-#    print("databaseInsertOne")
+    log.debug("databaseInsertOne")
     dbURL= str(message['dbURL'])
-#    print("databaseInsertOne: SSID: ",request.sid,' dbURL: ', dbURL)
-#    print("message:",str(message))
+    log.debug("databaseInsertOne: SSID: ",request.sid,' dbURL: ', dbURL)
+    log.debug("message:",str(message))
     authenticated=False
     if REACT_APP_DisableLogin:
         authenticated=True
@@ -1069,34 +1068,33 @@ def databaseInsertOne(message):
     if accessControl['userAuthorised'] :
         if accessControl['permissions']['write']:
             if "mongodb://" in dbURL:
-#                print("mongodb database connection request: ",dbURL)
+                log.debug("mongodb database connection request: ",dbURL)
                 str1=dbURL.replace("mongodb://","")
                 strings=  str1.split(':')
                 if(len(strings)==3):
                     database= strings[0];
                     dbName=   strings[1];
                     colName=  strings[2];
-#                    print("database: ", database, "length: ", len(database))
-#                    print("dbName: "  ,   dbName, "length: ", len(dbName))
-#                    print("colName: " ,  colName, "length: ", len(colName))
+                    log.debug("database: ", database, "length: ", len(database))
+                    log.debug("dbName: "  ,   dbName, "length: ", len(dbName))
+                    log.debug("colName: " ,  colName, "length: ", len(colName))
                     ### must insert a better error detection here
                     if ((len(database)>0) and (len(dbName)>0) and (len(colName)>0)):
                         try:
-#                            print("connecting: "+dbURL)
+                            log.debug("connecting: "+dbURL)
                             myclient=OpenMongoDbClient(database,dbName)
                             mydb = myclient[dbName]
                             mycol=mydb[colName]
                             newEntry=message['newEntry']
-#                            print("newEntry",str(newEntry))
+                            log.debug("newEntry",str(newEntry))
                             try:
-                                # print("add newEntry")
-                                # print("dbName:",dbName)
-                                # print("colName:",colName)
+                                log.debug("add newEntry")
+                                log.debug("dbName:",dbName)
+                                log.debug("colName:",colName)
                                 mydb[colName].insert_one(newEntry)
-                            #
                             except Exception as e:
                                 log.info(e)
-#                            print("done: "+dbURL)
+                            log.debug("done: "+dbURL)
                             return 'OK'
                         except:
                             log.error("Could not connect to MongoDB: {}",dbURL)
@@ -1114,8 +1112,8 @@ def databaseInsertOne(message):
 def archiverRead(message):
     global clientPVlist,REACT_APP_DisableLogin
     archiverURL= str(message['archiverURL'])
-    #print("databaseRead: SSID: ",request.sid,' dbURL: ', dbURL)
-    #print("message:",str(message))
+    log.debug("databaseRead: SSID: ",request.sid)
+    log.debug("message:",str(message))
     authenticated=False
     if REACT_APP_DisableLogin:
         authenticated=True
@@ -1236,7 +1234,7 @@ def UserDetailsWatch(message):
                     join_room(str(watchEventName)+'rw')
                 return {"dbWatchId":dbWatchId}
         except Exception as e:
-            print("adminallusers",e)
+            log.info("adminallusers",e)
             return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
@@ -1309,7 +1307,7 @@ def adminAllUsers(message):
                     join_room(str(watchEventName)+'rw')
                 return {"dbWatchId":dbWatchId}
         except Exception as e:
-            print("adminallusers",e)
+            log.info("adminallusers",e)
             return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
@@ -1382,7 +1380,7 @@ def adminWatchUAGs(message):
                     join_room(str(watchEventName)+'rw')
                 return {"dbWatchId":dbWatchId}
         except Exception as e:
-            print("adminWatchUAGs",e)
+            log.info("adminWatchUAGs",e)
             return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
@@ -1417,7 +1415,7 @@ def adminAddUser(message):
                 mycol.insert_one(user)
             return "OK"
         except Exception as e:
-            print("admin add user error",e)
+            log.info("admin add user error",e)
             return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
@@ -1440,7 +1438,7 @@ def adminDeleteUser(message):
                 return 'Error:could not delete the user'
             return 'OK'
         except Exception as e:
-            print("admin add user error",e)
+            log.info("admin add user error",e)
             return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
@@ -1457,7 +1455,7 @@ def adminEnableUser(message):
             mycol=mydb['users']
             id=message['id']
             enabled=message['enabled']
-            print(message)
+            log.info(message)
             try:
                 mycol.update_one({'_id':ObjectId(str(id))}, { "$set": { "enabled": enabled}})
             except Exception as e:
@@ -1465,7 +1463,7 @@ def adminEnableUser(message):
                 return("error: can't update user ")
             return 'OK'
         except Exception as e:
-            print("admin enable user error",e)
+            log.info("admin enable user error",e)
             return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
@@ -1510,7 +1508,7 @@ def adminModifyUser(message):
                 return("error: can't update user ")
             return 'OK'
         except Exception as e:
-            print("admin enable user error",e)
+            log.info("admin enable user error",e)
             return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
@@ -1555,7 +1553,7 @@ def ModifyUser(message):
                 return("error: can't update user ")
             return 'OK'
         except Exception as e:
-            print("admin enable user error",e)
+            log.info("admin enable user error",e)
             return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
@@ -1572,7 +1570,7 @@ def adminUpdateUAGs(message):
             mycol=mydb['pvAccess']
             id=message['id']
             userGroups=message['UAGs']
-            # print(message)
+            log.debug(message)
             try:
                 mycol.update_one({'_id':ObjectId(str(id))},{ "$set": { "userGroups":userGroups }})
             except Exception as e:
@@ -1580,7 +1578,7 @@ def adminUpdateUAGs(message):
                 return("error: can't update UAGs ")
             return 'OK'
         except Exception as e:
-            print("admin enable user error",e)
+            log.info("admin enable user error",e)
             return "Ack: Could not connect to MongoDB ADMIN_DATABASE"
     else:
         socketio.emit('redirectToLogIn',room=request.sid,namespace='/pvServer')
@@ -1588,7 +1586,7 @@ def adminUpdateUAGs(message):
 
 @socketio.on('AuthenticateClient', namespace='/pvServer')
 def authenticate(message):
-    print("Error, old socket io authentication is disabled")
+    log.info("Error, old socket io authentication is disabled")
 
 @socketio.on('AuthoriseClient', namespace='/pvServer')
 def test_authenticate(message):
@@ -1616,7 +1614,7 @@ def test_connect():
 @socketio.on('disconnect', namespace='/pvServer')
 def test_disconnect():
     global clientDbWatchList
-    print("disconnected",request.sid)
+    log.info("disconnected",request.sid)
     log.info('Client disconnected: {}',request.sid)
     for pvname1 in	clientPVlist:
         try:
@@ -1634,19 +1632,19 @@ def test_disconnect():
             clientPVlist[pvname1]['sockets'].pop(request.sid)
         except:
             pass
-            #print("disconn sockets",clientPVlist[pvname1]['sockets'])
-            #print("disconn socketsRO",clientPVlist[pvname1]['socketsRO'])
-            #print("disconn socketsRW",clientPVlist[pvname1]['socketsRW'])
+            log.debug("disconn sockets",clientPVlist[pvname1]['sockets'])
+            log.debug("disconn socketsRO",clientPVlist[pvname1]['socketsRO'])
+            log.debug("disconn socketsRW",clientPVlist[pvname1]['socketsRW'])
     try:
-        # print(list(clientDbWatchList))
+        log.debug(list(clientDbWatchList))
         for watchEventName in list(clientDbWatchList) :
             socketId=str(request.sid)
-            # print("socketId ",socketId,watchEventName)
+            log.debug("socketId ",socketId,watchEventName)
             if socketId in list(clientDbWatchList[watchEventName]['sockets']):
-                # print("socketId found",socketId,watchEventName)
+                log.debug("socketId found",socketId,watchEventName)
                 clientDbWatchList[watchEventName]['sockets'].pop(str(request.sid),None)
     except Exception as e:
-        print("disconnect",e)
+        log.info("disconnect",e)
         pass
     disconnect(request.sid,namespace='/pvServer')
 
@@ -1656,8 +1654,8 @@ if __name__ == '__main__':
     if (pvServerPort is None):
         pvServerPort='5000'
     REACT_APP_PyEpicsServerURL=REACT_APP_PyEpicsServerURL+':'+pvServerPort+'/'+'pvServer'
-    print("pvServer URL: ",REACT_APP_PyEpicsServerURL)
-    print("")
+    log.info("pvServer URL: ",REACT_APP_PyEpicsServerURL)
+    log.info("")
     if not (REACT_APP_PyEpicsServerURL is None):
         if 'https' in REACT_APP_PyEpicsServerURL:
             socketio.run(app, host='0.0.0.0', debug=True, port=int(pvServerPort,10), keyfile='../certificates/server.key', certfile='../certificates/server.cer',use_reloader=False)

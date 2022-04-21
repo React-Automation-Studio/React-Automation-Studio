@@ -1,15 +1,10 @@
 #!/usr/bin/env python
-import gevent
 from gevent import monkey; monkey.patch_all()
 import time
-import pymongo
-from pymongo import MongoClient
 import threading
-import uuid
 import flask
-from flask import Flask, render_template, session, request, jsonify, send_from_directory, redirect, make_response
-from flask_socketio import SocketIO, emit, join_room, leave_room, \
-    close_room, rooms, disconnect
+from flask import request, jsonify, make_response
+from flask_socketio import SocketIO, emit, join_room, leave_room, disconnect
 from werkzeug.routing import BaseConverter
 from bson.json_util import dumps
 import bcrypt
@@ -27,7 +22,6 @@ sys.path.insert(0, 'utils/')
 from authenticate import  AuthoriseUser,AutheriseUserAndPermissions,checkIfAdmin, LocalAuthenticateUser, ExternalAuthenticateUser, decodeTokenGoogle, createRefreshToken, createAccessToken
 from dotenv import load_dotenv
 import ldap
-from time import sleep
 from datetime import datetime
 from pyMongoUtils import OpenMongoDbClient
 

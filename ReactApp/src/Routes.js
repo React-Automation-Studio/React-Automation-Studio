@@ -33,7 +33,6 @@ import ProtectedRoute from './components/SystemComponents/ProtectedRoute';
 const Routes = (props) => {
   return (
     <BrowserRouter >
-
       <Switch>
         {/*system start*/}
         <ProtectedRoute exact path="/" component={MainDashboard} />
@@ -85,12 +84,7 @@ const Routes = (props) => {
         <ProtectedRoute path="/Example2" component={Example2} />
         <ProtectedRoute path="/Example3" component={Example3} />
         {/*staging end*/}
-
-
-
-
       </Switch>
-
     </BrowserRouter>
   )
 }

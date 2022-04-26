@@ -50,9 +50,9 @@ const AddUsers = (props) => {
     }
   });
   const usernameHelperText = duplicateUser ? "Error: Username Exists" : "Enter a username";
+
   useEffect(() => {
     if (submit) {
-
       setSubmit(false)
     }
   }, [submit])
@@ -65,10 +65,7 @@ const AddUsers = (props) => {
     else {
       setUsernameError(false)
     }
-
   }, [duplicateUser])
-
-
   
   let confirmPasswordError;
   let confirmPasswordHelperText;
@@ -101,10 +98,7 @@ const AddUsers = (props) => {
         </DialogTitle>
         <DialogContent>
           <form autoComplete="off">
-
-
             <div style={{ "overflowX": "hidden", 'overflowY': 'hidden' }}>
-
               <Grid
                 style={{ marginTop: 8, padding: 8 }}
                 container
@@ -113,12 +107,7 @@ const AddUsers = (props) => {
                 alignItems="flex-start"
                 spacing={0}
               >
-
-
-
                 <Grid item xs={12}  >
-
-
                   <Grid
                     style={{ padding: 8 }}
                     container
@@ -133,7 +122,6 @@ const AddUsers = (props) => {
                         inputProps={{
                           autoComplete: "off",
                         }}
-
                         required
                         label="Username"
                         onChange={(event) => setUsername(event.target.value)}
@@ -155,13 +143,11 @@ const AddUsers = (props) => {
                         }
                         label="Require Password"
                       />
-
                     </Grid>
 
                     {requirePassword && <React.Fragment>
                       <Grid item xs={12}  >
                         <TextField
-
                           required
                           type="password"
                           label="Password"
@@ -195,7 +181,6 @@ const AddUsers = (props) => {
                         inputProps={{
                           autoComplete: 'off'
                         }}
-
                         label="Email"
                         onChange={(event) => setEmail(event.target.value)}
                         variant="outlined"
@@ -278,32 +263,17 @@ const AddUsers = (props) => {
                         {userAdded ? "Close" : "Cancel"}
                       </Button>
                     </Grid>
-
                   </Grid>
                 </Grid>
               </Grid>
-
             </div>
           </form >
-
-
-
         </DialogContent>
         <DialogActions>
-
-
-
         </DialogActions>
       </Dialog>
     </React.Fragment>
-
-
-
-
   )
-
 }
 
-
 export default AddUsers;
-//export default AddUsers;

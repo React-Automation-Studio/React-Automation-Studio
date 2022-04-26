@@ -1,11 +1,5 @@
 import React, { Component } from 'react';
 
-//import AutomationStudioContext from './api/AutomationStudioContext';
-
-
-//import './Wrapper.css';
-//import io from 'socket.io-client';
-
 import 'typeface-roboto';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -16,48 +10,11 @@ import { io } from 'socket.io-client';
 import   lightTheme  from '../components/UI/Themes/lightTheme'
 import ReactVisCssBaseline from '../components/SystemComponents/ReactVisCssBaseline';
 
-// console.log('process.env', process.env)
-// let port;
-// if (typeof process.env.REACT_APP_PyEpicsServerStyleguidePORT === 'undefined') {
-//   port = 5001;
-// }
-// else {
-//   port = process.env.REACT_APP_PyEpicsServerStyleguidePORT;
-// }
-
-// let pvServerBASEURL;
-// if (typeof process.env.pvServerURL === 'undefined') {
-//   pvServerBASEURL = "http://127.0.0.1";
-// }
-// else {
-//   pvServerBASEURL = process.env.pvServerURL;
-// }
-
-// let pvServerNamespace;
-// if (typeof process.env.pvServerNameSpace === 'undefined') {
-//   pvServerNamespace = "pvServer";
-// }
-// else {
-//   pvServerNamespace = process.env.pvServerNameSpace;
-// }
-
-// let PyEpicsServerURL = pvServerBASEURL + ":" + port + "/" + pvServerNamespace;
-
-// console.log('PyEpicsServerURL: ', PyEpicsServerURL)
-
 if (typeof window.socket === 'undefined') {
   window.socket = io("/pvServer", {
     transports: ['websocket'],
   })
-
 }
-
-
-
-/*
-const socket = io('127.0.0.1:5000/test',{
-transports: ['websocket']
-})*/
 
 const themes={Light:lightTheme};
 class Wrapper extends Component {
@@ -71,13 +28,13 @@ class Wrapper extends Component {
     let themeKeys = Object.keys(themes);
     if (themeKeys.includes(themeStyle)) {
       theme = createMuiTheme(themes[themeStyle])
-      //   localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
     }
     else {
       themeStyle = themeKeys[0];
       theme = createMuiTheme(themes[themeStyle])
       localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
     }
+
     this.changeTheme = (event) => {
       let themeStyle = event.target.value;
 
@@ -85,7 +42,6 @@ class Wrapper extends Component {
       let themeStyles = this.state.system.themeStyles;
       if (themeStyles.includes(themeStyle)) {
         theme = createMuiTheme(themes[themeStyle])
-        //   localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
       }
       else {
         themeStyle = themeStyles[0];
@@ -98,37 +54,6 @@ class Wrapper extends Component {
       this.setState({ system: system, theme: theme })
       localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
     }
-    // let theme = createMuiTheme({
-    //   palette: {
-    //     type:'light',
-    //     primary: indigo,
-    //     secondary: red,
-    //     error: pink,
-    //     action:green,
-    //     // Used by `getContrastText()` to maximize the contrast between the background and
-    //     // the text.
-    //     contrastThreshold: 3,
-    //     // Used to shift a color's luminance by Wrapperroximately
-    //     // two indexes within its tonal palette.
-    //     // E.g., shift from Red 500 to Red 300 or Red 700.
-    //     tonalOffset: 0.2,
-
-
-
-    //   },
-    //   lightLineColors:['#12939A', '#79C7E3', '#1A3177', '#FF9833', '#EF5D28'],
-    //   darkLineColors:['#ff9800', '#f44336', '#9c27b0', '#3f51b5', '#e91e63'],
-    //   typography: {
-    //     useNextVariants: true,
-    //     fontFamily: [
-
-    //       'Roboto',
-
-
-    //     ].join(','),
-    //   },
-    // });
-
 
     this.updateLocalVariable = (name, data) => {
       let system = this.state.system;
@@ -141,8 +66,6 @@ class Wrapper extends Component {
         system: system,
         key: this.state.key + 1
       });
-      //console.log('name',name)
-      //console.log('data',data)
     };
 
     let localVariables = {};
@@ -164,19 +87,13 @@ class Wrapper extends Component {
       system: system,
       key: 1,
     }
-
-
   }
   render() {
-    //console.log(this.state.theme)
-
     return (
-
       <AutomationStudioContext.Provider value={this.state.system}>
         <MuiThemeProvider theme={this.state.theme}>
           <CssBaseline >
             <ReactVisCssBaseline>
-
               {this.props.children}
             </ReactVisCssBaseline>
           </CssBaseline>
@@ -185,6 +102,5 @@ class Wrapper extends Component {
     );
   }
 }
-
 
 export default Wrapper;

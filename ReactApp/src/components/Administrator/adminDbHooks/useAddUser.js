@@ -52,10 +52,8 @@ const useAddUSer = (props) => {
       setDuplicateUser(false)
       setUserAdded(false)
     },[username])
-     
-    
     
     return {userAdded:userAdded,duplicateUser:duplicateUser};
-   
 }
+
 export default useAddUSer

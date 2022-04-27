@@ -14,7 +14,6 @@ import Floor from './SVG Components/Floor'
 const useStyles = makeStyles(theme => ({
     root: {
         padding: theme.spacing(4),
-        // paddingLeft: theme.spacing(8),
         overflowX: "hidden",
         overflowY: "hidden",
         width: '100%',
@@ -372,26 +371,3 @@ const Vault = () => {
 };
 
 export default Vault;
-
-
-
-//     
-
-//     render() {
-//         const { classes } = this.props;
-
-//         
-
-//         return (
-//             <Layout
-//                 title="VAULT DEMO"
-//                 denseAppBar
-//             >
-//                 {pvs}
-//                 
-//             </Layout>
-//         );
-//     }
-// }
-
-// export default withStyles(styles, { withTheme: true })(Vault);

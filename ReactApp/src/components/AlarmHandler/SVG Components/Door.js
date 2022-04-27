@@ -2,11 +2,8 @@ import React from 'react';
 import { withTheme } from '@material-ui/core/styles';
 
 
-
 const Door = (props) => {
-
     const darkTheme = props.theme.palette.type === 'dark'
-
     let rotate = null
     if (!props.rotate) {
         rotate = 0
@@ -16,8 +13,6 @@ const Door = (props) => {
     }
 
     return (
-        // <Button className={classes.containerButton}>
-
         <g
             id='layer1'
             fill='none'
@@ -92,7 +87,7 @@ const Door = (props) => {
             ></path>
             <text
                 xmlSpace='preserve'
-                style={{ lineHeight: "1.25" }}
+                style={{ lineHeight: "1.25", fontFamily: "Roboto" }}
                 id='text877'
                 x='15.545'
                 y='38.458'
@@ -106,17 +101,12 @@ const Door = (props) => {
                 fontWeight='normal'
                 letterSpacing='0'
                 wordSpacing='0'
-                style={{ fontFamily: 'Roboto', }}
             >
                 <tspan id='tspan875' x='0' y='45.458' strokeWidth='0.265'>
                     {`${props.id}`}
                 </tspan>
             </text>
         </g>
-
-
-        // </Button>
-
     );
 };
 

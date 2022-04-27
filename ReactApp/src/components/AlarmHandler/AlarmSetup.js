@@ -194,9 +194,6 @@ const TablePaginationActions = (props) => {
 }
 
 const AlarmSetup = (props) => {
-
-    // console.log("AlarmSetup rendered")
-
     const classes = useStyles()
     const theme = useTheme()
 
@@ -411,23 +408,10 @@ const AlarmSetup = (props) => {
         limit: 1
     })
 
-    // console.clear()
-    // console.log('historyDataParams', JSON.stringify(historyDataParams))
     const dbHistoryData = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history:Parameters:${JSON.stringify(historyDataParams)}` }).data
     const totalDocs = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history:Parameters:${JSON.stringify(totalDocsParams)}` }).data ?? 0
     const prevPageDocId = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history:Parameters:${JSON.stringify(prevPageDocIdParams)}` }).data?.[0]?._id.$oid
     const lastPageDocId = useMongoDbWatch({ dbURL: `mongodb://ALARM_DATABASE:${props.dbName}:history:Parameters:${JSON.stringify(lastPageDocIdParams)}` }).data?.[0]?._id.$oid
-    // console.log('dbHistoryData', dbHistoryData)
-    // console.log('totalDocs', totalDocs)
-    // console.log('currentPageDocId', currentPageDocId)
-    // console.log('nextPageDocId', nextPageDocId)
-    // console.log('prevPageDocId', prevPageDocId)
-    // console.log('lastPageDocId', lastPageDocId)
-    // console.log('lastPageSkip', lastPageSkip)
-    // console.log('totalDocsParams', JSON.stringify(totalDocsParams))
-    // console.log('prevPageDocIdParams', JSON.stringify(prevPageDocIdParams))
-    // console.log('lastPageDocIdParams', JSON.stringify(lastPageDocIdParams))
-
 
     const dbUpdateOne = useMongoDbUpdateOne({})
     const dbInsertOne = useMongoDbInsertOne({})
@@ -499,8 +483,6 @@ const AlarmSetup = (props) => {
             let localLastAlarm = ""
             let localLastArea = ""
             let areaNamesIndex = -1
-            // console.clear()
-            // console.log("User roles", roles)
             dbPVDataRaw.map(area => {
                 areaNamesIndex = ++areaNamesIndex
                 // Backwards compatible
@@ -513,8 +495,6 @@ const AlarmSetup = (props) => {
                         : roles.some(r => area.roles.includes(r))
                     : true
                 localAreaRoles[area["area"]] = areaHasRoles ? area.roles : []
-                // console.log(area.area, area?.roles)
-                // console.log('areaMatchesRole', areaMatchesRole)
                 if (areaMatchesRole) {
                     areaMongoId[area["area"]] = area["_id"]["$oid"]
                     localAreaEnabled[area["area"]] = area["enable"]
@@ -556,8 +536,6 @@ const AlarmSetup = (props) => {
                                     : roles.some(r => area[areaKey].roles.includes(r))
                                 : true
                             localAreaRoles[`${area["area"]}=${area[areaKey]["name"]}`] = subAreaHasRoles ? area[areaKey].roles : []
-                            // console.log(`${area["area"]}=${area[areaKey]["name"]}`, area[areaKey]?.roles)
-                            // console.log('subAreaMatchesRole', subAreaMatchesRole)
                             if (subAreaMatchesRole) {
                                 areaSubAreaMongoId[`${area["area"]}=${area[areaKey]["name"]}`] = areaKey
                                 areaMongoId[`${area["area"]}=${area[areaKey]["name"]}`] = area["_id"]["$oid"]
@@ -622,7 +600,6 @@ const AlarmSetup = (props) => {
 
             let displayAlarmTable = true
             for (const [, value] of Object.entries(loadAlarmTable)) {
-                // console.log(key, value)
                 displayAlarmTable = displayAlarmTable && value
             }
             if (!displayAlarmTable) {
@@ -631,7 +608,6 @@ const AlarmSetup = (props) => {
 
             let displayAlarmList = true
             for (const [, value] of Object.entries(loadAlarmList)) {
-                // console.log(key, value)
                 displayAlarmList = displayAlarmList && value
             }
             if (!displayAlarmList) {

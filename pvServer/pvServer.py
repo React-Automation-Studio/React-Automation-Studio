@@ -85,7 +85,8 @@ try:
 except:
     REFRESH_COOKIE_MAX_AGE_SECS = 604800
     log.info(
-        f"Refresh cookie max age not set - defaulting to {REFRESH_COOKIE_MAX_AGE_SECS} seconds"
+        "Refresh cookie max age not set - defaulting to"
+        f" {REFRESH_COOKIE_MAX_AGE_SECS} seconds"
     )
 
 try:
@@ -93,7 +94,8 @@ try:
 except:
     ACCESS_TOKEN_MAX_AGE_SECS = 300
     log.info(
-        f"Access token max age not set - defaulting to {ACCESS_TOKEN_MAX_AGE_SECS} seconds"
+        "Access token max age not set - defaulting to"
+        f" {ACCESS_TOKEN_MAX_AGE_SECS} seconds"
     )
 
 try:
@@ -146,7 +148,10 @@ def createLoginResponse(userData):
         "username": username,
         "roles": roles,
         "accessToken": accessToken,
-        "refreshTokenConfig": {"refreshTimeout": REFRESH_TIMEOUT, "useCookie": SECURE,},
+        "refreshTokenConfig": {
+            "refreshTimeout": REFRESH_TIMEOUT,
+            "useCookie": SECURE,
+        },
     }
     if not SECURE:
         d["refreshTokenConfig"]["refreshToken"] = refreshToken
@@ -225,8 +230,6 @@ def ldapLogin():
                 jsonify({"login": False}), 401
         except Exception as e:
             log.info("Ldap login error", e)
-            log.debug("username", LDAP_USER_DN)
-            log.debug("password", LDAP_USER_PW)
             log.info("Ldap login failed: {} ", LDAP_USER_DN)
             jsonify({"login": False}), 401
             return jsonify({"login": False}), 401
@@ -276,7 +279,6 @@ def check_pv_initialized_after_disconnect():
                 clientPVlist[pvname]["pv"].disconnect()
                 clientPVlist.pop(pvname)
             else:
-                log.debug(pvname)
                 if clientPVlist[pvname]["initialized"] == False:
                     if clientPVlist[pvname]["isConnected"]:
                         clientPVlist[pvname]["pv"].get(as_string=True)
@@ -315,7 +317,11 @@ def check_pv_initialized_after_disconnect():
                                     clientPVlist[pvname]["isConnected"] = True
                                     clientPVlist[pvname]["initialized"] = True
                                 except TypeError as e:
-                                    # "A type error exists in metadata dictionary and can't be converted into JSON format, previously this was caused by in CHID of type c_long(), a work arround exits, if CHID is not a c_long then try debugging")
+                                    # A type error exists in metadata dictionary
+                                    # and can't be converted into JSON format,
+                                    # previously this was caused by in CHID
+                                    # of type c_long(), a work arround exits,
+                                    # if CHID is not a c_long then try debugging
                                     log.error(
                                         "***EPICS PV info initial request info error: "
                                     )
@@ -323,7 +329,11 @@ def check_pv_initialized_after_disconnect():
                                     log.error("PyEpics PV metadata: {}", d)
                                     log.error("Exception: {}", e)
                                     log.error(
-                                        "A type error exists in metadata dictionary and can't be converted into JSON format, previously this was caused by in CHID of type c_long(), a work arround exits, if CHID is not a c_long then try debugging"
+                                        "A type error exists in metadata dictionary and"
+                                        " can't be converted into JSON format,"
+                                        " previously this was caused by in CHID of type"
+                                        " c_long(), a work around exits, if CHID is not"
+                                        " a c_long then try debugging"
                                     )
                                     clientPVlist[pvname]["isConnected"] = True
                                     clientPVlist[pvname]["initialized"] = False
@@ -500,7 +510,6 @@ def background_thread():
 @socketio.on("write_to_pv", namespace="/pvServer")
 def test_write(message):
     global clientPVlist, thread_lock2, REACT_APP_DisableLogin
-    log.debug("Test")
     authenticated = False
     if REACT_APP_DisableLogin:
         accessControl = {
@@ -597,7 +606,6 @@ def test_message(message):
                         ],
                     )
             except:
-                pass
                 log.debug(
                     "remove_pv_connection id not in socketsRW: ",
                     pvConnectionId,
@@ -634,7 +642,6 @@ def test_message(message):
                         ],
                     )
             except:
-                pass
                 log.debug(
                     "remove_pv_connection id not in socketsRO: ",
                     pvConnectionId,
@@ -676,7 +683,6 @@ def test_message(message):
                         ],
                     )
             except:
-                pass
                 log.debug(
                     "remove_pv_connection id not in sockets: ", pvConnectionId, pvname1
                 )
@@ -951,7 +957,6 @@ def databaseRead(message):
     global clientPVlist, REACT_APP_DisableLogin
     dbURL = str(message["dbURL"])
     log.debug("databaseRead: SSID: ", request.sid, " dbURL: ", dbURL)
-    log.debug("message:", str(message))
     authenticated = False
     if REACT_APP_DisableLogin:
         authenticated = True
@@ -999,7 +1004,6 @@ def databaseRead(message):
                             mycol = mydb[colName]
                             try:
                                 query = parameters["query"]
-                                log.debug("using query:", query)
                                 X = mycol.find(query)
                             except:
                                 X = mycol.find()
@@ -1021,11 +1025,13 @@ def databaseRead(message):
                             return "Ack: Could not connect to MongoDB: " + str(dbURL)
                 else:
                     log.error(
-                        "Malformed database URL, must be in format: mongodb://databaseID:database:collection"
+                        "Malformed database URL, must be in format:"
+                        " mongodb://databaseID:database:collection"
                     )
             else:
                 log.error(
-                    "Malformed database URL, must be in format: mongodb://databaseID:database:collection"
+                    "Malformed database URL, must be in format:"
+                    " mongodb://databaseID:database:collection"
                 )
         else:
             log.error("Unknown URL schema ({})", dbURL)
@@ -1038,7 +1044,6 @@ def databaseBroadcastRead(message):
     global clientPVlist, REACT_APP_DisableLogin
     dbURL = str(message["dbURL"])
     log.debug("databaseRead: SSID: ", request.sid, " dbURL: ", dbURL)
-    log.debug("message:", str(message))
     authenticated = False
     if REACT_APP_DisableLogin:
         authenticated = True
@@ -1061,7 +1066,6 @@ def databaseBroadcastRead(message):
                 parameters = json.loads(Parametersstr)
             except:
                 raise Exception("Parameters are not defined")
-            log.debug("Parameters:", str(parameters))
             if len(strings) >= 3:
                 database = strings[0]
                 dbName = strings[1]
@@ -1086,7 +1090,6 @@ def databaseBroadcastRead(message):
                             mycol = mydb[colName]
                             try:
                                 query = parameters["query"]
-                                log.debug("using query:", query)
                                 X = mycol.find(query)
                             except:
                                 X = mycol.find()
@@ -1118,11 +1121,13 @@ def databaseBroadcastRead(message):
                             return "Ack: Could not connect to MongoDB: " + str(dbURL)
                 else:
                     log.error(
-                        "Malformed database URL, must be in format: mongodb://databaseID:database:collection"
+                        "Malformed database URL, must be in format:"
+                        " mongodb://databaseID:database:collection"
                     )
             else:
                 log.error(
-                    "Malformed database URL, must be in format: mongodb://databaseID:database:collection"
+                    "Malformed database URL, must be in format:"
+                    " mongodb://databaseID:database:collection"
                 )
         else:
             log.error("Unknown URL schema ({})", dbURL)
@@ -1178,7 +1183,6 @@ def remove_dbWatch(message):
                     log.debug("debug4: {} {}", dbWatchId, watchEventName)
             except:
                 log.info("Could not remove watchID")
-                pass
 
         time.sleep(3)  # wait for 3 seconds before removing a watch
         with thread_lock:
@@ -1354,11 +1358,13 @@ def databaseReadWatchAndBroadcast(message):
                             return "Ack: Could not connect to MongoDB: " + str(dbURL)
                 else:
                     log.error(
-                        "Malformed database URL, must be in format: mongodb://databaseID:database:collection"
+                        "Malformed database URL, must be in format:"
+                        " mongodb://databaseID:database:collection"
                     )
             else:
                 log.error(
-                    "Malformed database URL, must be in format: mongodb://databaseID:database:collection"
+                    "Malformed database URL, must be in format:"
+                    " mongodb://databaseID:database:collection"
                 )
         else:
             log.error("Unknown URL schema ({})", dbURL)
@@ -1421,7 +1427,8 @@ def databaseUpdateOne(message):
                             return "Ack: Could not connect to MongoDB: " + str(dbURL)
                 else:
                     log.error(
-                        "Malformed database URL, must be in format: mongodb://databaseID:database:collection"
+                        "Malformed database URL, must be in format:"
+                        " mongodb://databaseID:database:collection"
                     )
             else:
                 log.error("Unknown URL schema ({})", dbURL)
@@ -1504,7 +1511,8 @@ def databaseUpdateMany(message):
                             return "Ack: Could not connect to MongoDB: " + str(dbURL)
                 else:
                     log.error(
-                        "Malformed database URL, must be in format: mongodb://databaseID:database:collection"
+                        "Malformed database URL, must be in format:"
+                        " mongodb://databaseID:database:collection"
                     )
             else:
                 log.error("Unknown URL schema ({})", dbURL)
@@ -1568,7 +1576,8 @@ def databaseDeleteOne(message):
                             return "Ack: Could not connect to MongoDB: " + str(dbURL)
                 else:
                     log.error(
-                        "Malformed database URL, must be in format: mongodb://databaseID:database:collection"
+                        "Malformed database URL, must be in format:"
+                        " mongodb://databaseID:database:collection"
                     )
             else:
                 log.error("Unknown URL schema ({})", dbURL)
@@ -1584,7 +1593,6 @@ def databaseInsertOne(message):
     log.debug("databaseInsertOne")
     dbURL = str(message["dbURL"])
     log.debug("databaseInsertOne: SSID: ", request.sid, " dbURL: ", dbURL)
-    log.debug("message:", str(message))
     authenticated = False
     if REACT_APP_DisableLogin:
         authenticated = True
@@ -1633,7 +1641,8 @@ def databaseInsertOne(message):
                             return "Ack: Could not connect to MongoDB: " + str(dbURL)
                 else:
                     log.error(
-                        "Malformed database URL, must be in format: mongodb://databaseID:database:collection"
+                        "Malformed database URL, must be in format:"
+                        " mongodb://databaseID:database:collection"
                     )
             else:
                 log.error("Unknown URL schema ({})", dbURL)
@@ -1648,7 +1657,6 @@ def archiverRead(message):
     global clientPVlist, REACT_APP_DisableLogin
     archiverURL = str(message["archiverURL"])
     log.debug("databaseRead: SSID: ", request.sid)
-    log.debug("message:", str(message))
     authenticated = False
     if REACT_APP_DisableLogin:
         authenticated = True
@@ -2196,7 +2204,6 @@ def adminUpdateUAGs(message):
             mycol = mydb["pvAccess"]
             id = message["id"]
             userGroups = message["UAGs"]
-            log.debug(message)
             try:
                 mycol.update_one(
                     {"_id": ObjectId(str(id))}, {"$set": {"userGroups": userGroups}}
@@ -2283,4 +2290,3 @@ if __name__ == "__main__":
             )
     else:
         socketio.run(app, host="127.0.0.1", debug=True, use_reloader=False)
-

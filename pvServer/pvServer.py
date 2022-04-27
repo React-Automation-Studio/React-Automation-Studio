@@ -2220,11 +2220,6 @@ def adminUpdateUAGs(message):
         return "Ack: not authorised"
 
 
-@socketio.on("AuthenticateClient", namespace="/pvServer")
-def authenticate(message):
-    log.info("Error, old socket io authentication is disabled")
-
-
 @socketio.on("AuthoriseClient", namespace="/pvServer")
 def test_authenticate(message):
     global REACT_APP_DisableLogin

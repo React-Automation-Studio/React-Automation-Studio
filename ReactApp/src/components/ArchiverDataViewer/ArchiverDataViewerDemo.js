@@ -8,6 +8,7 @@ import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography';
 import AppBar from '@material-ui/core/AppBar';
 import { useTheme } from '@material-ui/core/styles';
+
 const ArchiverDataViewerDemo = (props) => {
   const theme = useTheme();
   const footerContents = (
@@ -21,14 +22,12 @@ const ArchiverDataViewerDemo = (props) => {
             </Typography>
       </Grid>
     </Grid>
-
   )
   return (
     <TraditionalLayout
       title="Archiver Viewer Examples"
       denseAppBar
       alignTitle="center"
-
     >
       <Grid
         container
@@ -37,12 +36,10 @@ const ArchiverDataViewerDemo = (props) => {
         direction={'row'}
         justify={'center'}
         style={{ paddingTop: 32, paddingLeft: 8, paddingRight: 8 }}
-
       >
         <Grid item xs={12} >
           <Paper elevation={theme.palette.paperElevation}>
             <ArchiverDataViewer
-
               archiver={"DEMO_ARCHIVER"}
               title={"Archived Data"}
               showButtons={true}
@@ -54,11 +51,7 @@ const ArchiverDataViewerDemo = (props) => {
                   {
                     pv: 'testIOC:BO1',
                     yAxis: 0
-
-
                   },
-
-
                   {
                     pv: 'testIOC:BO2',
                     yAxis: 1
@@ -80,15 +73,7 @@ const ArchiverDataViewerDemo = (props) => {
                     title: "Amplitude",
                   },
                 ]}
-
-
-
-
-
-
-
               showLegend={true}
-
             />
           </Paper>
         </Grid>
@@ -103,10 +88,7 @@ const ArchiverDataViewerDemo = (props) => {
               alignItems={'center'}
               direction={'row'}
               justify={'center'}
-
-
             >
-
               <Grid item xs={6} lg={3}>
                 <ToggleButton
                   usePvLabel={true}
@@ -120,16 +102,13 @@ const ArchiverDataViewerDemo = (props) => {
                 />
               </Grid>
               <Grid item xs={12} style={{ textAlign: 'center' }}>
-
                 <ThumbWheel
                   usePvLabel={true}
                   pv='testIOC:amplitude'
                   usePvMinMax={true}
                   labelPlacement='top'
                 />
-
               </Grid>
-
             </Grid>
           </Paper>
         </Grid>
@@ -140,6 +119,6 @@ const ArchiverDataViewerDemo = (props) => {
       </AppBar>
     </TraditionalLayout>
   )
-
 }
+
 export default ArchiverDataViewerDemo

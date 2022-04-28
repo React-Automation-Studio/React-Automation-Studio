@@ -1,18 +1,16 @@
-import  React,{useContext,  useState, useEffect } from 'react';
+import {useContext,  useState, useEffect } from 'react';
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 
 
-
 const useArchiverData = (props) => {
-  
     const context = useContext(AutomationStudioContext);
     const [dbWatchId, setDbWatchId] = useState(null);
     const [data, setData] = useState(null);
     const [writeAccess, setWriteAccess] = useState(false);
     const [initialized, setInitialized] = useState(false);
+
     useEffect(() => {
         const handleArchiverReadAck = (msg) => {
-         
             if (typeof msg !== 'undefined') {
                 setDbWatchId(msg.dbWatchId)
             }
@@ -24,7 +22,6 @@ const useArchiverData = (props) => {
             setInitialized(true)
             setWriteAccess(msg.write_access)
         }
-
       
         let socket = context.socket;
         
@@ -66,9 +63,6 @@ const useArchiverData = (props) => {
     }, [props.archiverURL])
 
     return ({ data: data, writeAccess: writeAccess,initialized:initialized, archiverURL: props.archiverURL })
-    
 }
 
-
-  
 export default useArchiverData

@@ -1,7 +1,4 @@
-import os
-import queue
-import logging
-import logging.handlers
+import logging, os, queue
 
 
 def _convert_to_int(value, min_value, default_value):

@@ -3,7 +3,13 @@ from gevent import monkey
 
 monkey.patch_all()
 
-import bcrypt, json, ldap, os, time, threading, sys
+import bcrypt
+import json
+import ldap
+import os
+import time
+import threading
+import sys
 from bson.json_util import dumps
 from bson.objectid import ObjectId
 from datetime import datetime

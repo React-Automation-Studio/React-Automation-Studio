@@ -10,14 +10,14 @@ from google.oauth2 import id_token
 from google.auth.transport import requests
 from datetime import datetime, timedelta
 from time import sleep
-from pyMongoUtils import OpenMongoDbClient
+from pyMongoUtils import open_mongo_db_client
 
 global dbKnownUsers
 
 
 def usersDbWatchThread():
     global UAGS, knownUsers
-    client = OpenMongoDbClient("ADMIN_DATABASE", "rasAdminDb")
+    client = open_mongo_db_client("ADMIN_DATABASE", "rasAdminDb")
     mydb = client["rasAdminDb"]
     mycol = mydb["users"]
     with mycol.watch() as stream:
@@ -37,7 +37,7 @@ def usersDbWatchThread():
 
 def pvAccessDbWatchThread():
     global UAGS, knownUsers
-    client = OpenMongoDbClient("ADMIN_DATABASE", "rasAdminDb")
+    client = open_mongo_db_client("ADMIN_DATABASE", "rasAdminDb")
     mydb = client["rasAdminDb"]
     mycol = mydb["pvAccess"]
     with mycol.watch() as stream:
@@ -61,7 +61,7 @@ def pvAccessDbWatchThread():
 def loadKnownDbUsers():
     global UAGS, knownUsers
     UAGS = {}
-    client = OpenMongoDbClient("ADMIN_DATABASE", "rasAdminDb")
+    client = open_mongo_db_client("ADMIN_DATABASE", "rasAdminDb")
     mydb = client["rasAdminDb"]
     mycol = mydb["users"]
     doc = mycol.find({}, {"_id": 0})

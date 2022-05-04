@@ -1,8 +1,9 @@
 import os
-import pymongo
+import urllib
 from pymongo import MongoClient
 from time import sleep
-import urllib
+
+
 def OpenMongoDbClient(hostDatabaseName,databaseName):
     try:
         MONGO_ROOT_USERNAME = os.environ['MONGO_ROOT_USERNAME']

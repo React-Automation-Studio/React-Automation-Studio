@@ -1,42 +1,30 @@
 import React, {useState} from 'react';
 import { withStyles } from '@material-ui/core/styles';
+import { 
+  AppBar, 
+  Divider, 
+  Grid, 
+  Tab, 
+  Tabs, 
+  Typography 
+} from '@material-ui/core';
+import { 
+  Gauge, 
+  GraphY, 
+  SelectionList, 
+  Slider, 
+  StyledIconIndicator, 
+  TextInput, 
+  TextOutput, 
+  ThumbWheel, 
+  ToggleButton 
+} from "../../BaseComponents"
 
-import Grid from '@material-ui/core/Grid';
-
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
-
-import TextInput from '../../BaseComponents/TextInput';
-import TextOutput from '../../BaseComponents/TextOutput';
-
-import Slider from '../../BaseComponents/Slider';
-import GraphY from '../../BaseComponents/GraphY';
-import SelectionList from '../../BaseComponents/SelectionList';
-import ThumbWheel from '../../BaseComponents/ThumbWheel';
-
-
-
-
-import ToggleButton from '../../BaseComponents/ToggleButton';
-
-
-import Gauge from '../../BaseComponents/Gauge';
-
-import AppBar from '@material-ui/core/AppBar';
 
 import AccountCircle from '@material-ui/icons/AccountCircleOutlined';
 import Settings from '@material-ui/icons/SettingsOutlined';
 
-import Divider from '@material-ui/core/Divider';
-
-
-
-
 import withWidth from '@material-ui/core/withWidth';
-
-
-import StyledIconIndicator from '../../BaseComponents/StyledIconIndicator';
 
 import TraditionalLayout from '../../UI/Layout/ComposedLayouts/TraditionalLayout.js';
 

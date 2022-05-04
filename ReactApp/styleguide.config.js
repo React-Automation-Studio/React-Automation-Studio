@@ -144,7 +144,8 @@ module.exports = {
           content: 'src/docs/WorkingWithComponents.md',
           components: 'src/components/BaseComponents/*.js',
           exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
-          usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
+          usageMode: 'expand', // 'hide' | 'collapse' | 'expand'
+          ignore: 'src/components/BaseComponents/index.js'
         },
         {
           name: 'Compound Components',

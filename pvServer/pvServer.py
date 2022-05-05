@@ -23,7 +23,6 @@ from werkzeug.routing import BaseConverter
 
 sys.path.insert(0, "../")
 sys.path.insert(0, "userAuthentication/")
-sys.path.insert(0, "utils/")
 
 import log
 from authenticate import (

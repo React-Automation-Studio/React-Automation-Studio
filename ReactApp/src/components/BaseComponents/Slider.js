@@ -9,71 +9,49 @@ import RCSlider  from 'rc-slider';
 import { FormControlLabel } from "@material-ui/core";
 
 
-
-
-
 const styles = (theme) => {
   const backgroundColor = theme.palette.type === 'light' ? 'rgba(0, 0, 0, 0.23)' : 'rgba(255, 255, 255, 0.23)'; //copied from material ui textfield 
   return (
-
     {
       root: {
         width: 300,
       },
       input: {textAlign:'center',marginBottom:8,background:'green'},
       slider: {
-        
         color: "primary",
-      },
-     
+      },     
       horizontalSlider: {
         width: "100%",
-     
         paddingBottom: theme.spacing(3),
         paddingRight: theme.spacing(3),
-        //paddingLeft: theme.spacing(3),
-    
-      
       },
       horizontalSliderLabel: {
         width: "100%",
-    
         paddingTop: theme.spacing(1),
         paddingLeft: theme.spacing(0),
         paddingRight: theme.spacing(0),
         paddingBottom: theme.spacing(0),
-    
       },
       horizontalSliderValue: {
         width: "100%",
-     
-        
         padding: theme.spacing(0),
-       
-      },
-      
+      },      
       verticalSliderLabel: {
         width: "100%",
         textAlign: 'center',
         height:'100%', 
-   
         padding: theme.spacing(1),
-    
       },
       verticalSliderValue: {
         width: "100%",
         textAlign: 'center',
         height:'100%', 
-    
-        },
-        verticalSlider: {
-        
-          textAlign: 'center',
-          height:'100%', 
-        
-            padding: theme.spacing(1),
-       
-          },
+      },
+      verticalSlider: {
+        textAlign: 'center',
+        height:'100%', 
+        padding: theme.spacing(1),
+      },
       '@global': {
         '.rc-slider': {
           position: 'relative',
@@ -118,7 +96,7 @@ const styles = (theme) => {
           ],
           marginTop: -5,
           borderRadius: '50%',
-        
+
           border: 'solid 2px ' + theme.palette.primary.main,
           backgroundColor: theme.palette.primary.main,
           touchAction: 'pan-x'
@@ -334,7 +312,6 @@ const styles = (theme) => {
           borderTopColor: '#6c6c6c'
         }
       }
-
     })
 };
 
@@ -352,21 +329,19 @@ function SliderComponent(props) {
    * @param {float} value
    */
   function handleChange(value) {
-    props.handleFocus();
-    
-   emitChangeDebounced(value);
-
+    props.handleFocus();    
+    emitChangeDebounced(value);
   }
 
   function handleBlur(){
     props.handleBlur();
   }
+
   /**
    * Save value on the state.
    * @param {string} value
    */
   function emitChange(value) {
-
     props.handleImmediateChange(value)
   }
 
@@ -381,10 +356,7 @@ function SliderComponent(props) {
    
     //props.handleBlur();
     emitBlurDebounced();
- 
-
   }
-
 
   let content, marks;
   if (props.initialized) {
@@ -397,7 +369,6 @@ function SliderComponent(props) {
         {props.units?" "+props.units:""} 
       </Typography>
     ):undefined;
-    
   } else {
     content = undefined
   }
@@ -410,82 +381,65 @@ function SliderComponent(props) {
     marks = props.marks;
   } else {
     marks = {
-
       [min]: min + " " + units,
-
       [max]: max + " " + units,
-
     }
   }
-  function handleOnClickCapture(event){
   
-   if (event.button !== 0) {
-     event.preventDefault()
-    return;
+  function handleOnClickCapture(event) {
+    if (event.button !== 0) {
+      event.preventDefault()
+      return;
+    }
   }
-  }
-
   
   return (
-    <div  style={{height:'100%', width:'100%',padding:props.theme.spacing(1)}} onPointerDownCapture={handleOnClickCapture}  
- 
-    
-    
+    <div
+      style={{ height: '100%', width: '100%', padding: props.theme.spacing(1) }}
+      onPointerDownCapture={handleOnClickCapture}
     >
-    <FormControlLabel
-    key={props.pvName + props.initialized}
-    className={props.vertical?props.classes.verticalSliderLabel:props.classes.horizontalSliderLabel}
-    
-    label={props.formControlLabel}
-    labelPlacement={props.labelPlacement}
-    control={
-    <FormControlLabel
-      key={props.pvName + props.initialized}
-      className={props.vertical?props.classes.verticalSliderValue:props.classes.horizontalSliderValue}
-      label={content}
-      labelPlacement={props.valuePlacement}
-      control={
-        <div
-        className={props.vertical?props.classes.verticalSlider:props.classes.horizontalSlider}
-      
-
-        >
-        <RCSlider
-
-        
-        disabled={props.disabled}
-        vertical={props.vertical}
-        value={props.initialized ? parseFloat(props.value) : 0}
-        min={props.initialized ? parseFloat(min) : undefined}
-        max={props.initialized ? parseFloat(max) : undefined}
-        marks={props.initialized ? marks : undefined}
-      // eslint-disable-next-line eqeqeq 
-        step={props.step !== undefined ? props.step!=0?props.step:undefined : undefined}
-        onChange={handleChange}
-        onAfterChange={handleChangeCommited}
+      <FormControlLabel
+        key={props.pvName + props.initialized}
+        className={props.vertical ? props.classes.verticalSliderLabel : props.classes.horizontalSliderLabel}
+        label={props.formControlLabel}
+        labelPlacement={props.labelPlacement}
+        control={
+          <FormControlLabel
+            key={props.pvName + props.initialized}
+            className={props.vertical ? props.classes.verticalSliderValue : props.classes.horizontalSliderValue}
+            label={content}
+            labelPlacement={props.valuePlacement}
+            control={
+              <div
+                className={props.vertical ? props.classes.verticalSlider : props.classes.horizontalSlider}
+              >
+                <RCSlider
+                  disabled={props.disabled}
+                  vertical={props.vertical}
+                  value={props.initialized ? parseFloat(props.value) : 0}
+                  min={props.initialized ? parseFloat(min) : undefined}
+                  max={props.initialized ? parseFloat(max) : undefined}
+                  marks={props.initialized ? marks : undefined}
+                  // eslint-disable-next-line eqeqeq 
+                  step={props.step !== undefined ? props.step != 0 ? props.step : undefined : undefined}
+                  onChange={handleChange}
+                  onAfterChange={handleChangeCommited}
+                />
+              </div>
+            }
+          />
+        }
       />
-      </div>
-      }
-    />
-    }
-    />
-   </div>
-
-
+    </div>
   );
-
-
-
 }
 
 /**
-* The Slider Component is a wrapper on the rc-slider contained Slider component. The Slider component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
-* The margins and spacing must be controlled from the parent component.<br/><br/>
-* For the vertical slider, the parent container must have a fixed height.
-*
-*/
+ * The Slider Component is a wrapper on the rc-slider contained Slider component. The Slider component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
+ * The margins and spacing must be controlled from the parent component.<br/><br/>
+ * For the vertical slider, the parent container must have a fixed height.
+ */
 const Slider = (props) => {
-
   return (
     <Widget  {...props} component={SliderComponent} name={"Slider"} />
   )
@@ -501,8 +455,6 @@ Slider.propTypes = {
    * If defined, then the DataConnection and
    * the widget debugging information will be displayed.
    */
-
-
   debug: PropTypes.bool,
 
   /**
@@ -540,7 +492,6 @@ Slider.propTypes = {
    */
   minPv: PropTypes.string,
 
-
   /**
    * Custom precision to round the value.
    */
@@ -550,12 +501,9 @@ Slider.propTypes = {
    */
   precPv: PropTypes.string,
 
-
-
   /**
    * Custom units to be used, if usePvUnits is not defined.
    */
-
   units: PropTypes.string,
   /**
    * Custom PV to define the units to be used, usePvUnits must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
@@ -594,11 +542,7 @@ Slider.propTypes = {
    * Directive to use the units contained in the   pv metadata's EGU field or unitsPv.
    *  If not defined it uses the custom units as defined by the units prop.
    */
-
-
   usePvUnits: PropTypes.bool,
-
-
 
   /**
    * If defined, then the string representation of the number can be formatted
@@ -608,27 +552,25 @@ Slider.propTypes = {
    */
   numberFormat: PropTypes.object,
 
-
   /** Name of the process variable,  eg. '$(device):test$(id)'*/
   pv: PropTypes.string,
 
   /**  Custom markers in format:
   {value1: label1,value2...:label2...}*/
   marks: PropTypes.object,
+
   /** The value will be increment or decremented
    * in the define step intervals
    */
-
   step: PropTypes.number,
   /** label placement position*/
   labelPlacement:PropTypes.oneOf(['start', 'top','bottom','end']),
   /** value placement position*/
   valuePlacement:PropTypes.oneOf(['start', 'top','bottom','end']),
+
   /**
    * Directive to show the value
    */
-
-
   showValue: PropTypes.bool,
    /**
    * Tooltip Text
@@ -641,18 +583,14 @@ Slider.propTypes = {
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-
   tooltipProps:PropTypes.object,
   /**
    * Directive to use a vertical slider
    */
-
-
   vertical: PropTypes.bool,
 };
 
 Slider.defaultProps = {
-//  showThumbValue: false,
   step: 1,
   labelPlacement: 'top',
   valuePlacement:'top',

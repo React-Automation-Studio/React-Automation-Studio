@@ -80,10 +80,8 @@ const styles = (theme) => ({
   }
 });
 
-
 function TextOutputComponent(props) {
   const { classes } = props;
-
 
   let inputProps = {
     classes: {
@@ -112,17 +110,13 @@ function TextOutputComponent(props) {
     if (props.alarmSensitive === true) {
       if (props.alarmSeverity === 1) {
         textFieldClassName = classes.TextFieldSeverity1;
-
       }
       else if (props.alarmSeverity === 2) {
         textFieldClassName = classes.TextFieldSeverity2;
-
       }
       else {
         textFieldClassName = classes.TextFieldSeverity0;
-
       }
-
     }
   }
 
@@ -130,7 +124,6 @@ function TextOutputComponent(props) {
 
   const { initialized } = props;
   if (initialized) {
-
     if (typeof props.displayMetaData === 'undefined') {
       if (typeof props.displayTimeStamp !== 'undefined') {
         let mydate = new Date(props.pvData.timestamp * 1000);
@@ -143,38 +136,26 @@ function TextOutputComponent(props) {
         let sec = mydate.getSeconds();
         let ms = mydate.getMilliseconds()
 
-
         if (min < 10) {
           min = '0' + min;
-
         }
-
         if (sec < 10) {
           sec = '0' + sec;
-
         }
         value = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec + ':' + ms;
-
-
-
       }
       else {
         value = props.value;
       }
     } else {
-
       value = props.pvData.metadata[props.displayMetaData];
-
     }
   }
 
   return (
-
     <TextField
       className={textFieldClassName}
-
       key={props.pvName}
-      //aria-owns={state.openContextMenu ? 'menu-list-grow' : undefined}
       aria-haspopup="true"
       label={!props.initialized ? props.disconnectedIcon : props.label}
       fullWidth={true}
@@ -183,18 +164,12 @@ function TextOutputComponent(props) {
       value={!props.initialized ? props.pvName : value}
       margin={props.margin}
       variant={props.variant}
-      //disabled={props.disabled}
       InputLabelProps={inputLabelProps}
       InputProps={inputProps}
       {...props.muiTextFieldProps}
     />
   )
-
-
-
-
 }
-
 
 /**
  *  The TextOutput Component is a wrapper on the Material-UI contained TextField component in read-only mode.
@@ -208,17 +183,13 @@ function TextOutputComponent(props) {
 const TextOutput = (props) => {
   return (
     <Widget {...props} component={TextOutputComponent} pvs={undefined} />
-
-
   )
 }
-
 
 TextOutput.propTypes = {
   /**
   * Directive to use the  alarm severity status to alter the fields background color.
   */
-
   alarmSensitive: PropTypes.bool,
   /**
    * Custom PV to define the alarm severity to be used, alarmSensitive must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
@@ -258,12 +229,9 @@ TextOutput.propTypes = {
    */
   precPv: PropTypes.string,
 
-
-
   /**
    * Custom units to be used, if usePvUnits is not defined.
    */
-
   units: PropTypes.string,
   /**
    * Custom PV to define the units to be used, usePvUnits must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
@@ -296,16 +264,11 @@ TextOutput.propTypes = {
    * Directive to use the units contained in the   pv metdata's EGU field or unitsPv.
    *  If not defined it uses the custom units as defined by the units prop.
    */
-
-
   usePvUnits: PropTypes.bool,
   /**
    * Directive to use PV's string values.
    */
   useStringValue: PropTypes.bool,
-
-
-
 
   /**
    * If defined, then the string representation of the number can be formatted
@@ -344,17 +307,17 @@ TextOutput.propTypes = {
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-
   tooltipProps: PropTypes.object,
   /** If defined, then the timestamp of the PV will be displayed instead of its value*/
   displayTimeStamp: PropTypes.bool,
   /** If defined, then the Metadata property of the pyEPICS PV will be displayed instead of its value as defined by the input string eg. displayMetaData={'lower\_disp\_limit'} 
    * Valid options are
-  */
+   */
   displayMetaData: PropTypes.oneOf(
     ['pvname', 'value', 'char_value', 'enum_strs', 'lower_disp_limit', 'upper_disp_limit',
       'lower_warning_limit', 'upper_warning_limit', 'lower_ctrl_limit', 'upper_ctrl_limit', 'units', 'precision', 'severity', 'write_access', 'read_access', 'host'])
 };
+
 TextOutput.defaultProps = {
   debug: false,
   variant: "outlined",

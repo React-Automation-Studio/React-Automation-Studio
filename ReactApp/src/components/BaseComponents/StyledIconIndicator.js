@@ -22,9 +22,6 @@ const styles = (theme) => ({
 
 
 function StyledIconIndicatorComponent(props) {
-
-
-
   let onColor = props.theme.palette.primary.main;
   let offColor = props.theme.palette.grey[300];
   if (typeof props.onColor !== 'undefined') {
@@ -106,7 +103,6 @@ function StyledIconIndicatorComponent(props) {
  * https://material-ui.com/api/svg-icon/<br/><br/>
  * A custom Icon can used by importing it in the parent and assigning it as a child <br/><br/>
  */
-
 const StyledIconIndicator = (props) => {
 
   return (
@@ -129,8 +125,8 @@ StyledIconIndicator.propTypes = {
   /** Custom label to be used, if  `usePvLabel` is not defined. */
   label: PropTypes.string,
   /**
- * Custom on color to be used, must be derived from Material UI theme color's or can be a standard color.
- */
+   * Custom on color to be used, must be derived from Material UI theme color's or can be a standard color.
+   */
   onColor: PropTypes.string,
   /**
    * Custom off color to be used, must be derived from Material UI theme color's or can be a standard color.
@@ -142,11 +138,11 @@ StyledIconIndicator.propTypes = {
    * If not defined it uses the custom label as defined by the label prop.
    */
   usePvLabel: PropTypes.bool,
-   /**
-  * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
-  */
- labelPv: PropTypes.string,
- /**
+  /**
+   * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
+   */
+   labelPv: PropTypes.string,
+  /**
    * Tooltip Text
    */
   tooltip:PropTypes.string,
@@ -157,14 +153,14 @@ StyledIconIndicator.propTypes = {
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-
   tooltipProps:PropTypes.object,
-
 };
+
 StyledIconIndicator.defaultProps = {
   onColor: 'primary',
   offColor: 'default',
   debug: false,
   showTooltip:false
 }
+
 export default withStyles(styles, { withTheme: true })(StyledIconIndicator);

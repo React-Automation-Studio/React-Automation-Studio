@@ -4,6 +4,7 @@ import { FormControlLabel} from "@material-ui/core";
 import MuiSwitch from "@material-ui/core/Switch";
 import Widget from "../SystemComponents/Widgets/Widget";
 import PropTypes from 'prop-types';
+
 const styles = (theme) => ({
   root: {
     display: "flex",
@@ -21,37 +22,35 @@ const styles = (theme) => ({
 
 /* eslint-disable eqeqeq */
 const SwitchInternalComponent = (props) => {
-  
-
   /**
    * Save switch state.
    * @param {Event} event
    */
- const handleButtonChange=(event)=> {
+  const handleButtonChange=(event)=> {
     let value = event.target.checked ? 1 : 0;
     props.handleImmediateChange(value);
   }
 
- 
-    return (
-      <FormControlLabel
-        key={props.pvName}
-        className={props.classes.FormControl}
-        disabled={props.disabled}
-        label={props.formControlLabel}
-        labelPlacement={props.labelPlacement}
-        control={
-          <MuiSwitch
-            onChange={handleButtonChange}
-            checked={props.value == 1}
-            color={props.onColor}
-            {... props.muiSwitchProps}
-          />
-        }
-      />
-    );
-  }
-  /* eslint-disable eqeqeq */
+  return (
+    <FormControlLabel
+      key={props.pvName}
+      className={props.classes.FormControl}
+      disabled={props.disabled}
+      label={props.formControlLabel}
+      labelPlacement={props.labelPlacement}
+      control={
+        <MuiSwitch
+          onChange={handleButtonChange}
+          checked={props.value == 1}
+          color={props.onColor}
+          {...props.muiSwitchProps}
+        />
+      }
+    />
+  );
+}
+
+/* eslint-disable eqeqeq */
 /**
  * The Switch component is a wrapper on a Material-UI Switch component.
  * The Switch component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
@@ -64,8 +63,6 @@ const SwitchInternalComponent = (props) => {
 const Switch =(props)=>{
   return (
     <Widget {...props} component={SwitchInternalComponent} usePvMinMax={false} usePvPrecision={false} min={undefined} max={undefined} prec={undefined} />
-       
-    
   )
 }
 
@@ -84,8 +81,8 @@ Switch.propTypes = {
   /** Custom label to be used, if  `usePvLabel` is not defined. */
   label: PropTypes.string,
   /**
- * Custom on color to be used, must be derived from Material UI theme color's.
- */
+   * Custom on color to be used, must be derived from Material UI theme color's.
+   */
   onColor: PropTypes.string,
   /**
    * Directive to fill the component's label with
@@ -93,11 +90,11 @@ Switch.propTypes = {
    * If not defined it uses the custom label as defined by the label prop.
    */
   usePvLabel: PropTypes.bool,
-   /**
-  * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
-  */
- labelPv: PropTypes.string,
- /** Any of the MUI Switch Props can applied by defining them as an object
+  /**
+   * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
+   */
+  labelPv: PropTypes.string,
+  /** Any of the MUI Switch Props can applied by defining them as an object
    * 
    */
   muiSwitchProps: PropTypes.object,
@@ -112,16 +109,13 @@ Switch.propTypes = {
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-
   tooltipProps:PropTypes.object,
-  
-
 }
+
 Switch.defaultProps = {
   onColor: 'primary',
   debug: false,
   showTooltip:false
-
 }
-export default withStyles(styles, { withTheme: true })(Switch)
 
+export default withStyles(styles, { withTheme: true })(Switch)

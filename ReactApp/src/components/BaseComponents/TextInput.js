@@ -28,8 +28,6 @@ const styles = (theme) => ({
 });
 
 const TextInputComponent=(props)=> {
-
- 
   const handleChange=(event)=>{
     let value=event.target.value;
     props.handleChange(value);
@@ -39,13 +37,8 @@ const TextInputComponent=(props)=> {
       props.handleCommitChange();
     }
   }
-
-
-
- 
   const { classes } = props;
   const { initialized } = props;
-  
   const { value } = props;
 
   let textFieldClassName;
@@ -53,20 +46,15 @@ const TextInputComponent=(props)=> {
     if (props.alarmSensitive === true) {
       if (props.alarmSeverity ===1) {
         textFieldClassName = classes.TextFieldSeverity1;
-
       }
       else if (props.alarmSeverity ===2) {
         textFieldClassName = classes.TextFieldSeverity2;
-
       }
       else {
         textFieldClassName = classes.TextFieldSeverity0;
-
       }
-
     }
   }
-
 
   let inputProps;
 
@@ -83,13 +71,10 @@ const TextInputComponent=(props)=> {
     inputProps = { readOnly: true };
   }
 
-  
   return (
     <TextField
       className={textFieldClassName}
-
       key={props.pvName}
-      //aria-owns={this.state.openContextMenu ? 'menu-list-grow' : undefined}
       aria-haspopup="true"
       value={!props.initialized?props.pvName:value}
       onKeyPress={handleCatchReturn}
@@ -103,8 +88,6 @@ const TextInputComponent=(props)=> {
       disabled={props.disabled}
       InputProps={inputProps}
       {...props.muiTextFieldProps}
-      
-      
     />
   );
 }
@@ -117,9 +100,6 @@ const TextInputComponent=(props)=> {
  * https://material-ui.com/demos/text-fields<br/><br/>
  * Material-UI TextField API:
  * https://material-ui.com/api/text-field
- * 
- * 
- * 
  */
 const TextInput =(props)=>{
     return (
@@ -127,8 +107,7 @@ const TextInput =(props)=>{
     )
 }
 
-TextInput.propTypes = {
-  
+TextInput.propTypes = {  
   /** Material-UI TextField variant*/
   variant: PropTypes.string,
   /** Material-UI TextField margin*/
@@ -136,7 +115,6 @@ TextInput.propTypes = {
    /**
    * Directive to use the  alarm severity status to alter the fields background color.
    */
-
   alarmSensitive: PropTypes.bool,
   /**
    * Custom PV to define the alarm severity to be used, alarmSensitive must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
@@ -191,13 +169,10 @@ TextInput.propTypes = {
    * Custom PV to define the precision to be used, usePvPrecision must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
   precPv: PropTypes.string,
- 
 
-  
   /**
    * Custom units to be used, if usePvUnits is not defined.
    */
-
   units: PropTypes.string,
   /**
    * Custom PV to define the units to be used, usePvUnits must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
@@ -237,15 +212,11 @@ TextInput.propTypes = {
    *  If not defined it uses the custom units as defined by the units prop.
    */
 
-
   usePvUnits: PropTypes.bool,
   /**
    * Directive to use PV's string values.
    */
   useStringValue: PropTypes.bool,
-
-
-
   
   /**
    * If defined, then the string representation of the number can be formatted
@@ -254,8 +225,7 @@ TextInput.propTypes = {
    * See https://mathjs.org/docs/reference/functions/format.html for more examples
    */
   numberFormat: PropTypes.object,
-  
-  
+    
   /** Name of the process variable,  eg. '$(device):test$(id)'*/
   pv: PropTypes.string,
   
@@ -285,13 +255,9 @@ TextInput.propTypes = {
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-
   tooltipProps:PropTypes.object,
-
-  
-
-
 };
+
 TextInput.defaultProps = {
   debug: false,
   variant: "outlined",

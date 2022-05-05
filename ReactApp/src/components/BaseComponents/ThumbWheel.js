@@ -18,11 +18,7 @@ const styles = (theme) => ({
   },
 });
 
-
-
-
 const ThumbWheelComponent = (props) => {
-
   function handleButtonClick(incrementValue) {
     if (props.initialized) {
       let value = parseFloat(props.value) + parseFloat(incrementValue);
@@ -50,7 +46,6 @@ const ThumbWheelComponent = (props) => {
     {...props}
     disabled={props.disabled}
     label={props.label}
-    //labelPosition={props.labelPosition}
     num_array={num_array}
     prec_decimal_div={prec_decimal_div}
     onHandleButtonClick={handleButtonClick}
@@ -125,6 +120,7 @@ const SingleThumbWheelWidget = (props) => {
     </Button>
   );
 }
+
 /**
  *  The ThumbWheel component is a wrapper on an array of Material-UI Button components.
  *  The Button component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
@@ -140,9 +136,7 @@ const ThumbWheel = (props) => {
   )
 }
 
-
-ThumbWheel.propTypes = {
- 
+ThumbWheel.propTypes = { 
   /** If defined this sets the precision of the integer control values of the widget*/
   prec_integer: PropTypes.number,
   /** If defined this sets the precision of the decimal control values of the widget*/
@@ -199,13 +193,10 @@ ThumbWheel.propTypes = {
    * Custom PV to define the precision to be used, usePvPrecision must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
   precPv: PropTypes.string,
- 
 
-  
   /**
    * Custom units to be used, if usePvUnits is not defined.
    */
-
   units: PropTypes.string,
   /**
    * Custom PV to define the units to be used, usePvUnits must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
@@ -244,15 +235,8 @@ ThumbWheel.propTypes = {
    * Directive to use the units contained in the   pv metadata's EGU field or unitsPv.
    *  If not defined it uses the custom units as defined by the units prop.
    */
-
-
   usePvUnits: PropTypes.bool,
-  
 
-
-  
-  
-  
   /** Name of the process variable,  eg. '$(device):test$(id)'*/
   pv: PropTypes.string,
 
@@ -267,17 +251,15 @@ ThumbWheel.propTypes = {
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-
   tooltipProps:PropTypes.object,
-
-
 };
+
 ThumbWheel.defaultProps = {
   prec_integer: 4,
   prec_decimal: 3,
   usePvMinMax: false,
   debug: false,
   showTooltip:false
-  
 };
+
 export default withStyles(styles, { withTheme: true })(ThumbWheel);

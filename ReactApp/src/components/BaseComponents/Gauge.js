@@ -4,34 +4,23 @@ import { withStyles } from '@material-ui/core/styles';
 
 import PropTypes from 'prop-types';
 
-
 import { v4 as uuidv4 } from 'uuid';
 import Widget from "../SystemComponents/Widgets/Widget";
 import { FormControlLabel } from "@material-ui/core";
 import {
-
   makeVisFlexible,
-
 } from 'react-vis';
-
-
 
 const styles = theme => ({
   textTicks: {
     fill: theme.palette.type === 'dark' ? theme.palette.grey['300'] : theme.palette.grey['500']
-
   },
   textValue: {
     fill: theme.palette.type === 'dark' ? theme.palette.grey['300'] : theme.palette.grey['500']
-
   },
-
   root: {
-
     display: 'flex',
     flexWrap: 'wrap',
-
-
   },
   FormControl: {
     width: "100%",
@@ -41,19 +30,12 @@ const styles = theme => ({
     marginLeft: "auto",
     marginRight: "auto",
   },
-  
 });
 
 function getTickValues(props, min, max, numberOfTicks, x0, x1, y1, xOffset, radialTextOffset) {
   const { classes } = props;
-  //this.test("test1");
-  //this.handleInputValue();
-
   let ticks = [];
-
   let i = 0;
-
-
   for (i = 0; i < (numberOfTicks); i++) {
     const rotation = i * 180 / (numberOfTicks - 1);
     const value = i * (max - min) / (numberOfTicks - 1) + min;
@@ -71,20 +53,10 @@ function getTickValues(props, min, max, numberOfTicks, x0, x1, y1, xOffset, radi
           {parseFloat(value).toFixed(0)}
         </text>
       </g>
-
     )
   }
-
-
-
-
-
-  //console.log(DataConnections[0]);
   return ticks;
 }
-
-
-
 
 function GaugeComponent(props) {
   const gradientId = uuidv4();
@@ -105,12 +77,8 @@ function GaugeComponent(props) {
   const y1 = y0;
   const valueOffsetY = 18;
   const needleRotation = 180 * (value - min) / (max - min);
-  //console.log('props.width',props.width)
-  //onsole.log('props.height',props.height)
-  //console.log(props)
   return (
     <svg width={props.width} height={xOffset + props.width / 2}>
-
       {<text
         x={(x0 + x1) / 2}
         y={y1 + valueOffsetY}
@@ -118,16 +86,11 @@ function GaugeComponent(props) {
         className={classes.textValue}
       >
         {typeof props.disabled === 'undefined' ? value.toString() + units : ""}
-
       </text>}
-
-
       <linearGradient id={gradientId} >
-
         <stop offset="0%" stopColor={typeof props.disabled === 'undefined' ? props.theme.palette.primary.main : 'default'} />
         <stop offset="100%" stopColor={props.theme.palette.type === 'dark' ? props.theme.palette.grey['300'] : props.theme.palette.grey['200']} />
       </linearGradient>
-
       <path
         style={{
           opacity: 1,
@@ -139,29 +102,14 @@ function GaugeComponent(props) {
           strokeDasharray: 'none',
           strokeOpacity: 1
         }}
-
-
-
         d={"M " + x0 + " " + y0 + " A " + radius + " " + radius + " 0 0 1 " + x1 + " " + y1} />
-
-
-
       <path
         fill={props.theme.palette.svgComponentSecondary.main}
-
-
-
         transform={'rotate(' + needleRotation + " " + (x0 + x1) / 2 + ' ' + y1 + ')'}
-
         d={"M " + (xOffset - 6) + " " + (y0 - 1) + " " + (xOffset + y1 - yOffset) + " " + (y0 - 4) + " " + (xOffset + y1 - yOffset) + " " + (y0 + 4) + " " + (xOffset - 6) + " " + (y0 + 1)
           + " " + (xOffset - 6) + " " + (y0 - 1)} />
-
-
-
-
       {getTickValues(props, min, max, 6, x0, x1, y1, xOffset, radialTextOffset)}
     </svg>
-
   );
 }
 
@@ -169,12 +117,12 @@ GaugeComponent.propTypes = {
   height: PropTypes.number,
   width: PropTypes.number,
 }
+
 const FlexibleGaugeComponent = makeVisFlexible(withStyles(styles, { withTheme: true })(GaugeComponent));
 
 /**
 * The Gauge Component is an Automation-studio component.
 */
-
 const GaugeInternalComponent = (props) => {
   const { initialized } = props;
   const {classes}=props;
@@ -203,7 +151,6 @@ const GaugeInternalComponent = (props) => {
     <FormControlLabel
       key={props.pvName}
       className={classes.FormControl}
-      //disabled={props.disabled}
       label={props.formControlLabel}
       labelPlacement={props.labelPlacement}
       control={
@@ -213,17 +160,12 @@ const GaugeInternalComponent = (props) => {
           units={units}
           value={value}
           ringWidth={props.ringWidth}
-          //disabled={props.disabled}
           disabled={props.initialized === true ? undefined : true}
         />
       }
     />
-
-
   )
-
 }
-
 
 const Gauge = (props) => {
   return (
@@ -232,16 +174,14 @@ const Gauge = (props) => {
 }
 
 Gauge.propTypes = {
- /**
-  * Custom gauge ring withd to be used
-  */
+  /**
+   * Custom gauge ring withd to be used
+   */
   ringWidth: PropTypes.number,
   /**
    * If defined, then the DataConnection and
    * the widget debugging information will be displayed.
    */
- 
- 
   debug: PropTypes.bool,
 
   /**
@@ -279,7 +219,6 @@ Gauge.propTypes = {
    */
   minPv: PropTypes.string,
   
-  
   /**
    * Custom precision to round the value.
    */
@@ -288,13 +227,10 @@ Gauge.propTypes = {
    * Custom PV to define the precision to be used, usePvPrecision must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
   precPv: PropTypes.string,
- 
 
-  
   /**
    * Custom units to be used, if usePvUnits is not defined.
    */
-
   units: PropTypes.string,
   /**
    * Custom PV to define the units to be used, usePvUnits must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
@@ -333,11 +269,7 @@ Gauge.propTypes = {
    * Directive to use the units contained in the   pv metdata's EGU field or unitsPv.
    *  If not defined it uses the custom units as defined by the units prop.
    */
-
-
   usePvUnits: PropTypes.bool,
-  
-
   
   /**
    * If defined, then the string representaion of the number can be formatted
@@ -346,8 +278,7 @@ Gauge.propTypes = {
    * See https://mathjs.org/docs/reference/functions/format.html for more examples
    */
   numberFormat: PropTypes.object,
-  
-  
+    
   /** Name of the process variable,  eg. '$(device):test$(id)'*/
   pv: PropTypes.string,
  
@@ -362,17 +293,13 @@ Gauge.propTypes = {
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-
   tooltipProps:PropTypes.object,
   /** label placement*/
   labelPlacement: PropTypes.oneOf(['start', 'top', 'bottom', 'end']),
-
-
 };
 
 Gauge.defaultProps = {
   debug: false,
-  
   min: 0,
   max: 100,
   usePvPrecision: false,

@@ -140,7 +140,7 @@ myDbWatchUid = 0
 # AUTH ENDPOINTS AND FUNCTIONS
 
 
-def createLoginResponse(userData):
+def create_login_response(userData):
     global REFRESH_COOKIE_MAX_AGE_SECS, ACCESS_TOKEN_MAX_AGE_SECS, REFRESH_TIMEOUT, SECURE
     if userData is None:
         return jsonify({"login": False}), 401
@@ -192,7 +192,7 @@ def refresh():
         userData = AuthoriseUser(refreshToken)
         log.debug("userData", userData)
         if userData["authorised"]:
-            resp = createLoginResponse(userData)
+            resp = create_login_response(userData)
             return resp
         else:
             return jsonify({"login": False}), 401
@@ -201,12 +201,12 @@ def refresh():
 
 
 @app.route("/api/login/local", methods=["POST"])
-def localLogin():
+def login_local():
     global REACT_APP_DisableStandardLogin
     if not REACT_APP_DisableStandardLogin:
         user = request.json.get("user", None)
         userData = LocalAuthenticateUser(user)
-        resp = createLoginResponse(userData)
+        resp = create_login_response(userData)
         return resp
     else:
         log.info("Standard login not allowed")
@@ -214,7 +214,7 @@ def localLogin():
 
 
 @app.route("/api/login/ldap", methods=["POST"])
-def ldapLogin():
+def login_ldap():
     log.debug("request ip:", request.remote_addr)
     global REACT_APP_EnableActiveDirectoryLogin
     if REACT_APP_EnableActiveDirectoryLogin:
@@ -228,7 +228,7 @@ def ldapLogin():
             con.bind(LDAP_USER_DN, LDAP_USER_PW, ldap.AUTH_SIMPLE)
             if con.result():
                 userData = ExternalAuthenticateUser(user)
-                resp = createLoginResponse(userData)
+                resp = create_login_response(userData)
                 return resp
             else:
                 log.info("Ldap login failed: {} ", LDAP_USER_DN)
@@ -244,7 +244,7 @@ def ldapLogin():
 
 
 @app.route("/api/login/google", methods=["POST"])
-def googleLogin():
+def login_google():
     global REACT_APP_EnableGoogleLogin
     if REACT_APP_EnableGoogleLogin:
         jwt = request.json.get("jwt", None)
@@ -258,7 +258,7 @@ def googleLogin():
             if decoded:
                 if decoded["email"] and (decoded["email_verified"] == True):
                     userData = ExternalAuthenticateUser({"username": decoded["email"]})
-                    resp = createLoginResponse(userData)
+                    resp = create_login_response(userData)
                     return resp
         else:
             return jsonify({"login": False}), 401
@@ -362,7 +362,7 @@ def check_pv_initialized_after_disconnect():
         time.sleep(0.1)
 
 
-def dbWatchControlThread():
+def db_watch_control_thread():
     global clientDbWatchList, thread_lock
     while True:
         watchList = list(clientDbWatchList)
@@ -370,7 +370,7 @@ def dbWatchControlThread():
         for watchEventName in watchList:
             if clientDbWatchList[watchEventName]["threadStarted"] is False:
                 clientDbWatchList[watchEventName]["thread"] = threading.Thread(
-                    target=dbWatchThread, args=[watchEventName]
+                    target=db_watch_thread, args=[watchEventName]
                 ).start()
                 clientDbWatchList[watchEventName]["threadStarted"] = True
                 clientDbWatchList[watchEventName]["closeWatch"] = False
@@ -383,7 +383,7 @@ def dbWatchControlThread():
         time.sleep(0.1)
 
 
-def dbWatchThread(watchEventName):
+def db_watch_thread(watchEventName):
     global clientDbWatchList
     exitThread = False
     while exitThread == False:
@@ -439,7 +439,7 @@ def dbWatchThread(watchEventName):
                 time.sleep(0.1)
 
 
-def onValueChanges(
+def on_change_value(
     pvname=None,
     count=None,
     char_value=None,
@@ -483,7 +483,7 @@ def onValueChanges(
             socketio.emit(pvname, d, room=str(pvname), namespace="/pvServer")
 
 
-def onConnectionChange(pvname=None, conn=None, value=None, **kws):
+def on_change_conn(pvname=None, conn=None, value=None, **kws):
     global clientPVlist
     if conn == True:
         try:
@@ -507,13 +507,13 @@ def onConnectionChange(pvname=None, conn=None, value=None, **kws):
 def background_thread():
     count = 0
     threading.Thread(target=check_pv_initialized_after_disconnect).start()
-    threading.Thread(target=dbWatchControlThread).start()
+    threading.Thread(target=db_watch_control_thread).start()
     while True:
         socketio.sleep(0.1)
 
 
 @socketio.on("write_to_pv", namespace="/pvServer")
-def test_write(message):
+def write_to_pv(message):
     global clientPVlist, thread_lock2, REACT_APP_DisableLogin
     authenticated = False
     if REACT_APP_DisableLogin:
@@ -546,7 +546,7 @@ def test_write(message):
 
 
 @socketio.on("remove_pv_connection", namespace="/pvServer")
-def test_message(message):
+def remove_pv_connection(message):
     global clientPVlist, REACT_APP_DisableLogin, myuid
     pvname1 = str(message["pvname"])
     authenticated = False
@@ -701,7 +701,7 @@ def test_message(message):
 
 
 @socketio.on("request_pv_info", namespace="/pvServer")
-def test_message(message):
+def request_pv_info(message):
     global clientPVlist, REACT_APP_DisableLogin, myuid
     pvname1 = str(message["data"])
     pvname1 = pvname1.replace("pva://", "")  # work around for old prefix
@@ -723,7 +723,7 @@ def test_message(message):
                 pv = PV(
                     pvname1,
                     connection_timeout=0.002,
-                    connection_callback=onConnectionChange,
+                    connection_callback=on_change_conn,
                 )
                 pvlist = {}
                 pvlist["pv"] = pv
@@ -752,7 +752,7 @@ def test_message(message):
                     }
                     pvlist["socketsRW"] = {}
                 clientPVlist[pvname1] = pvlist
-                clientPVlist[pvname1]["pv"].add_callback(onValueChanges, index=0)
+                clientPVlist[pvname1]["pv"].add_callback(on_change_value, index=0)
                 log.debug(
                     "new pv", pvname1, " generated pvConnectionId: ", pvConnectionId
                 )
@@ -907,7 +907,7 @@ def test_message(message):
 
 
 @socketio.on("connect", namespace="/pvServer")
-def test_connect():
+def client_connect():
     global thread
     log.info("Client Connected: {}", request.sid)
     with thread_lock:
@@ -917,7 +917,7 @@ def test_connect():
 
 
 @socketio.on("disconnect", namespace="/pvServer")
-def test_disconnect():
+def client_disconnect():
     global clientDbWatchList
     log.info("disconnected", request.sid)
     log.info("Client disconnected: {}", request.sid)
@@ -958,7 +958,7 @@ def test_disconnect():
 
 
 @socketio.on("databaseRead", namespace="/pvServer")
-def databaseRead(message):
+def db_read(message):
     global clientPVlist, REACT_APP_DisableLogin
     dbURL = str(message["dbURL"])
     log.debug("databaseRead: SSID: ", request.sid, " dbURL: ", dbURL)
@@ -1045,7 +1045,7 @@ def databaseRead(message):
 
 
 @socketio.on("databaseBroadcastRead", namespace="/pvServer")
-def databaseBroadcastRead(message):
+def db_read_broadcast(message):
     global clientPVlist, REACT_APP_DisableLogin
     dbURL = str(message["dbURL"])
     log.debug("databaseRead: SSID: ", request.sid, " dbURL: ", dbURL)
@@ -1141,7 +1141,7 @@ def databaseBroadcastRead(message):
 
 
 @socketio.on("remove_dbWatch", namespace="/pvServer")
-def remove_dbWatch(message):
+def db_remove_watch(message):
     global clientPVlist, REACT_APP_DisableLogin, myuid, thread_lock
     dbURL = str(message["dbURL"])
     authenticated = False
@@ -1160,7 +1160,7 @@ def remove_dbWatch(message):
         dbWatchId = str(message["dbWatchId"]) + str(request.sid)
         watchEventName = "databaseWatchData:" + dbURL
 
-        def removeWatch():
+        def remove_watch():
             log.info("remove {}", watchEventName)
             try:
                 if (
@@ -1191,13 +1191,13 @@ def remove_dbWatch(message):
 
         time.sleep(3)  # wait for 3 seconds before removing a watch
         with thread_lock:
-            removeWatch()
+            remove_watch()
     else:
         socketio.emit("redirectToLogIn", room=request.sid, namespace="/pvServer")
 
 
 @socketio.on("databaseReadWatchAndBroadcast", namespace="/pvServer")
-def databaseReadWatchAndBroadcast(message):
+def db_read_watch_broadcast(message):
     global clientPVlist, REACT_APP_DisableLogin, clientDbWatchList, myDbWatchUid, thread_lock
     dbURL = str(message["dbURL"])
     authenticated = False
@@ -1378,7 +1378,7 @@ def databaseReadWatchAndBroadcast(message):
 
 
 @socketio.on("databaseUpdateOne", namespace="/pvServer")
-def databaseUpdateOne(message):
+def db_update_one(message):
     global clientPVlist, REACT_APP_DisableLogin
     dbURL = str(message["dbURL"])
     authenticated = False
@@ -1444,7 +1444,7 @@ def databaseUpdateOne(message):
 
 
 @socketio.on("databaseUpdateMany", namespace="/pvServer")
-def databaseUpdateMany(message):
+def db_update_many(message):
     global clientPVlist, REACT_APP_DisableLogin
     dbURL = str(message["dbURL"])
     log.debug("databaseUpdate: SSID: ", request.sid, " dbURL: ", dbURL)
@@ -1528,7 +1528,7 @@ def databaseUpdateMany(message):
 
 
 @socketio.on("databaseDeleteOne", namespace="/pvServer")
-def databaseDeleteOne(message):
+def db_delete_one(message):
     global clientPVlist, REACT_APP_DisableLogin
     dbURL = str(message["dbURL"])
     log.debug("databaseUpdate: SSID: ", request.sid, " dbURL: ", dbURL)
@@ -1593,7 +1593,7 @@ def databaseDeleteOne(message):
 
 
 @socketio.on("databaseInsertOne", namespace="/pvServer")
-def databaseInsertOne(message):
+def db_insert_one(message):
     global clientPVlist, REACT_APP_DisableLogin
     log.debug("databaseInsertOne")
     dbURL = str(message["dbURL"])
@@ -1658,7 +1658,7 @@ def databaseInsertOne(message):
 
 
 @socketio.on("archiverRead", namespace="/pvServer")
-def archiverRead(message):
+def archiver_read(message):
     global clientPVlist, REACT_APP_DisableLogin
     archiverURL = str(message["archiverURL"])
     log.debug("databaseRead: SSID: ", request.sid)
@@ -1749,7 +1749,7 @@ def archiverRead(message):
 
 
 @socketio.on("UserDetailsWatch", namespace="/pvServer")
-def UserDetailsWatch(message):
+def watch_user_details(message):
     global clientPVlist, REACT_APP_DisableLogin, clientDbWatchList, myDbWatchUid, thread_lock
     authorisation = AuthoriseUser(message["clientAuthorisation"])
     if authorisation["authorised"]:
@@ -1835,7 +1835,7 @@ def UserDetailsWatch(message):
 
 
 @socketio.on("adminAllUsers", namespace="/pvServer")
-def adminAllUsers(message):
+def admin_all_users(message):
     global clientPVlist, REACT_APP_DisableLogin, clientDbWatchList, myDbWatchUid, thread_lock
     isAdmin = checkIfAdmin(message["clientAuthorisation"])
     if isAdmin:
@@ -1921,7 +1921,7 @@ def adminAllUsers(message):
 
 
 @socketio.on("adminWatchUAGs", namespace="/pvServer")
-def adminWatchUAGs(message):
+def admin_watch_uags(message):
     global clientPVlist, REACT_APP_DisableLogin, clientDbWatchList, myDbWatchUid, thread_lock
     isAdmin = checkIfAdmin(message["clientAuthorisation"])
     if isAdmin:
@@ -2007,7 +2007,7 @@ def adminWatchUAGs(message):
 
 
 @socketio.on("adminAddUser", namespace="/pvServer")
-def adminAddUser(message):
+def admin_add_user(message):
     global clientPVlist, REACT_APP_DisableLogin, clientDbWatchList, myDbWatchUid
     isAdmin = checkIfAdmin(message["clientAuthorisation"])
     if isAdmin:
@@ -2047,7 +2047,7 @@ def adminAddUser(message):
 
 
 @socketio.on("adminDeleteUser", namespace="/pvServer")
-def adminDeleteUser(message):
+def admin_delete_user(message):
     global clientPVlist, REACT_APP_DisableLogin, clientDbWatchList, myDbWatchUid
     isAdmin = checkIfAdmin(message["clientAuthorisation"])
     if isAdmin:
@@ -2071,7 +2071,7 @@ def adminDeleteUser(message):
 
 
 @socketio.on("adminEnableUser", namespace="/pvServer")
-def adminEnableUser(message):
+def admin_enable_user(message):
     global clientPVlist, REACT_APP_DisableLogin, clientDbWatchList, myDbWatchUid
     isAdmin = checkIfAdmin(message["clientAuthorisation"])
     if isAdmin:
@@ -2099,7 +2099,7 @@ def adminEnableUser(message):
 
 
 @socketio.on("adminModifyUser", namespace="/pvServer")
-def adminModifyUser(message):
+def admin_modify_user(message):
     global clientPVlist, REACT_APP_DisableLogin, clientDbWatchList, myDbWatchUid
     isAdmin = checkIfAdmin(message["clientAuthorisation"])
     if isAdmin:
@@ -2149,7 +2149,7 @@ def adminModifyUser(message):
 
 
 @socketio.on("ModifyUser", namespace="/pvServer")
-def ModifyUser(message):
+def modify_user(message):
     global clientPVlist, REACT_APP_DisableLogin, clientDbWatchList, myDbWatchUid
     authorisation = AuthoriseUser(message["clientAuthorisation"])
     if authorisation["authorised"]:
@@ -2199,7 +2199,7 @@ def ModifyUser(message):
 
 
 @socketio.on("adminUpdateUAGs", namespace="/pvServer")
-def adminUpdateUAGs(message):
+def admin_update_uags(message):
     global clientPVlist, REACT_APP_DisableLogin, clientDbWatchList, myDbWatchUid
     isAdmin = checkIfAdmin(message["clientAuthorisation"])
     if isAdmin:
@@ -2226,7 +2226,7 @@ def adminUpdateUAGs(message):
 
 
 @socketio.on("AuthoriseClient", namespace="/pvServer")
-def test_authenticate(message):
+def authorize_client(message):
     global REACT_APP_DisableLogin
     if not REACT_APP_DisableLogin:
         userData = AuthoriseUser(message)

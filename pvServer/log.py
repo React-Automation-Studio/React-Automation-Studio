@@ -1,6 +1,7 @@
 import logging
 import os
 import queue
+from logging.handlers import QueueHandler, QueueListener, RotatingFileHandler
 
 
 def _convert_to_int(value, min_value, default_value):
@@ -44,14 +45,14 @@ else:
 print("")
 
 log_queue = queue.Queue(512)
-queue_handler = logging.handlers.QueueHandler(log_queue)
+queue_handler = QueueHandler(log_queue)
 if log_file is None:
     log_handler = logging.StreamHandler()
 else:
-    log_handler = logging.handlers.RotatingFileHandler(
+    log_handler = RotatingFileHandler(
         log_file, maxBytes=log_file_max_size, backupCount=log_file_backup
     )
-queue_listener = logging.handlers.QueueListener(log_queue, log_handler)
+queue_listener = QueueListener(log_queue, log_handler)
 log_handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)-7s %(message)s"))
 
 queue_listener.start()

@@ -23,7 +23,6 @@ from werkzeug.routing import BaseConverter
 
 sys.path.insert(0, "../")
 sys.path.insert(0, "userAuthentication/")
-sys.path.insert(0, "utils/")
 
 import log
 from authenticate import (
@@ -36,7 +35,7 @@ from authenticate import (
     createRefreshToken,
     createAccessToken,
 )
-from pyMongoUtils import OpenMongoDbClient
+from pyMongoUtils import open_mongo_db_client
 
 
 class RegexConverter(BaseConverter):
@@ -1005,7 +1004,7 @@ def databaseRead(message):
                             write_access = False
                         try:
                             log.debug("connecting: " + dbURL)
-                            myclient = OpenMongoDbClient(database, dbName)
+                            myclient = open_mongo_db_client(database, dbName)
                             mydb = myclient[dbName]
                             mycol = mydb[colName]
                             try:
@@ -1091,7 +1090,7 @@ def databaseBroadcastRead(message):
                             write_access = False
                         try:
                             log.debug("connecting: " + dbURL)
-                            myclient = OpenMongoDbClient(database, dbName)
+                            myclient = open_mongo_db_client(database, dbName)
                             mydb = myclient[dbName]
                             mycol = mydb[colName]
                             try:
@@ -1237,7 +1236,7 @@ def databaseReadWatchAndBroadcast(message):
                             join_room(str(dbURL) + "ro")
                             write_access = False
                         try:
-                            myclient = OpenMongoDbClient(database, dbName)
+                            myclient = open_mongo_db_client(database, dbName)
                             mydb = myclient[dbName]
                             mycol = mydb[colName]
                             query = (
@@ -1411,7 +1410,7 @@ def databaseUpdateOne(message):
                     if (len(database) > 0) and (len(dbName) > 0) and (len(colName) > 0):
                         try:
                             log.debug("connecting: " + dbURL)
-                            myclient = OpenMongoDbClient(database, dbName)
+                            myclient = open_mongo_db_client(database, dbName)
                             mydb = myclient[dbName]
                             mycol = mydb[colName]
                             id = message["id"]
@@ -1479,7 +1478,7 @@ def databaseUpdateMany(message):
                     if (len(database) > 0) and (len(dbName) > 0) and (len(colName) > 0):
                         try:
                             log.debug("connecting: " + dbURL)
-                            myclient = OpenMongoDbClient(database, dbName)
+                            myclient = open_mongo_db_client(database, dbName)
                             mydb = myclient[dbName]
                             mycol = mydb[colName]
                             query = message["query"] if ("query" in message) else {}
@@ -1563,7 +1562,7 @@ def databaseDeleteOne(message):
                     if (len(database) > 0) and (len(dbName) > 0) and (len(colName) > 0):
                         try:
                             log.debug("connecting: " + dbURL)
-                            myclient = OpenMongoDbClient(database, dbName)
+                            myclient = open_mongo_db_client(database, dbName)
                             mydb = myclient[dbName]
                             mycol = mydb[colName]
                             id = message["id"]
@@ -1628,7 +1627,7 @@ def databaseInsertOne(message):
                     if (len(database) > 0) and (len(dbName) > 0) and (len(colName) > 0):
                         try:
                             log.debug("connecting: " + dbURL)
-                            myclient = OpenMongoDbClient(database, dbName)
+                            myclient = open_mongo_db_client(database, dbName)
                             mydb = myclient[dbName]
                             mycol = mydb[colName]
                             newEntry = message["newEntry"]
@@ -1755,7 +1754,7 @@ def UserDetailsWatch(message):
     authorisation = AuthoriseUser(message["clientAuthorisation"])
     if authorisation["authorised"]:
         try:
-            client = OpenMongoDbClient("ADMIN_DATABASE", "rasAdminDb")
+            client = open_mongo_db_client("ADMIN_DATABASE", "rasAdminDb")
             mydb = client["rasAdminDb"]
             mycol = mydb["users"]
             query = {"username": message["username"]}
@@ -1841,7 +1840,7 @@ def adminAllUsers(message):
     isAdmin = checkIfAdmin(message["clientAuthorisation"])
     if isAdmin:
         try:
-            client = OpenMongoDbClient("ADMIN_DATABASE", "rasAdminDb")
+            client = open_mongo_db_client("ADMIN_DATABASE", "rasAdminDb")
             mydb = client["rasAdminDb"]
             mycol = mydb["users"]
             query = {}
@@ -1927,7 +1926,7 @@ def adminWatchUAGs(message):
     isAdmin = checkIfAdmin(message["clientAuthorisation"])
     if isAdmin:
         try:
-            client = OpenMongoDbClient("ADMIN_DATABASE", "rasAdminDb")
+            client = open_mongo_db_client("ADMIN_DATABASE", "rasAdminDb")
             mydb = client["rasAdminDb"]
             mycol = mydb["pvAccess"]
             query = {}
@@ -2013,7 +2012,7 @@ def adminAddUser(message):
     isAdmin = checkIfAdmin(message["clientAuthorisation"])
     if isAdmin:
         try:
-            client = OpenMongoDbClient("ADMIN_DATABASE", "rasAdminDb")
+            client = open_mongo_db_client("ADMIN_DATABASE", "rasAdminDb")
             mydb = client["rasAdminDb"]
             mycol = mydb["users"]
             user = message["user"]
@@ -2053,7 +2052,7 @@ def adminDeleteUser(message):
     isAdmin = checkIfAdmin(message["clientAuthorisation"])
     if isAdmin:
         try:
-            client = OpenMongoDbClient("ADMIN_DATABASE", "rasAdminDb")
+            client = open_mongo_db_client("ADMIN_DATABASE", "rasAdminDb")
             mydb = client["rasAdminDb"]
             mycol = mydb["users"]
             try:
@@ -2077,7 +2076,7 @@ def adminEnableUser(message):
     isAdmin = checkIfAdmin(message["clientAuthorisation"])
     if isAdmin:
         try:
-            client = OpenMongoDbClient("ADMIN_DATABASE", "rasAdminDb")
+            client = open_mongo_db_client("ADMIN_DATABASE", "rasAdminDb")
             mydb = client["rasAdminDb"]
             mycol = mydb["users"]
             id = message["id"]
@@ -2105,7 +2104,7 @@ def adminModifyUser(message):
     isAdmin = checkIfAdmin(message["clientAuthorisation"])
     if isAdmin:
         try:
-            client = OpenMongoDbClient("ADMIN_DATABASE", "rasAdminDb")
+            client = open_mongo_db_client("ADMIN_DATABASE", "rasAdminDb")
             mydb = client["rasAdminDb"]
             mycol = mydb["users"]
             id = message["id"]
@@ -2155,7 +2154,7 @@ def ModifyUser(message):
     authorisation = AuthoriseUser(message["clientAuthorisation"])
     if authorisation["authorised"]:
         try:
-            client = OpenMongoDbClient("ADMIN_DATABASE", "rasAdminDb")
+            client = open_mongo_db_client("ADMIN_DATABASE", "rasAdminDb")
             mydb = client["rasAdminDb"]
             mycol = mydb["users"]
             id = message["id"]
@@ -2205,7 +2204,7 @@ def adminUpdateUAGs(message):
     isAdmin = checkIfAdmin(message["clientAuthorisation"])
     if isAdmin:
         try:
-            client = OpenMongoDbClient("ADMIN_DATABASE", "rasAdminDb")
+            client = open_mongo_db_client("ADMIN_DATABASE", "rasAdminDb")
             mydb = client["rasAdminDb"]
             mycol = mydb["pvAccess"]
             id = message["id"]

@@ -33,7 +33,6 @@ const styles = theme => ({
 });
 
 
-
 const ControlTable = (props) => {
   const { systems } = props;
   const [rowPvs, setRowPvs] = useState([]);
@@ -73,32 +72,13 @@ const ControlTable = (props) => {
     setRowPvs(rowPvs);
   }, [systems])
 
-
-
-
-
-
-
-
-
-
-
-
   const handleOnClick = (id) => () => {
-
     props.handleOnSystemClick(rowPvs[id].system);
   }
 
-  
-
-
-
   const { classes } = props;
 
-
-
   return (
-
     <Paper className={classes.root} elevation={props.theme.palette.paperElevation} style={props.style}>
       <Table className={classes.table} size={'small'} stickyHeader={true} >
         <TableHead className={classes.tableHead} >
@@ -113,7 +93,6 @@ const ControlTable = (props) => {
         <TableBody>
           {rowPvs.map((row,index) => (
             <TableRow key={index.toString()} onClick={handleOnClick(row.id)} >
-
               <TableCell className={classes.tableCell} align="left" component="th" scope="row" >
                 <Typography variant={'body2'}>{row.displayName}</Typography>
               </TableCell>
@@ -126,7 +105,6 @@ const ControlTable = (props) => {
                   units={(typeof row.rowProps) === 'undefined' ? undefined : (typeof row.rowProps.units) === 'undefined' ? 'undefined' : row.rowProps.units}
                   alarmSensitive={true}
                 />
-
               </TableCell>
               <TableCell className={classes.tableCell} align="center">
                 <TextUpdate
@@ -141,7 +119,6 @@ const ControlTable = (props) => {
               <TableCell className={classes.tableCell} align="center">{"N/A"}</TableCell>
               <TableCell className={classes.tableCell} align="center">
                 {(typeof row.rowProps) === 'undefined' ? undefined : (typeof row.rowProps.useStatus) === 'undefined' ? '-' : row.rowProps.useStatus === true ?
-                  
                   <TextUpdate
                     pv={row.statusTextPv}
                     useStringValue={true}
@@ -153,11 +130,7 @@ const ControlTable = (props) => {
         </TableBody>
       </Table>
     </Paper>
-
   );
 }
-
-
-
 
 export default withStyles(styles, { withTheme: true })(ControlTable);

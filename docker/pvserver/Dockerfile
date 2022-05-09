@@ -3,11 +3,15 @@ FROM python:3.8.7
 RUN apt-get update && apt-get install -y build-essential python3-dev python2.7-dev \
     libldap2-dev libsasl2-dev ldap-utils tox \
     lcov valgrind
-ADD ./pvServer/requirements.txt /pvServer/requirements.txt
+
+COPY ./pvServer/poetry.lock .
+COPY ./pvServer/pyproject.toml .
+
+RUN pip install --upgrade pip && pip --no-cache-dir install poetry
+RUN poetry config virtualenvs.create false
+RUN poetry install --no-dev
+
 WORKDIR /pvServer
-
-RUN pip install -r requirements.txt
-
 
 ENV EPICS_BASE=/epics/base/
 

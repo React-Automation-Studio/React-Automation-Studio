@@ -4,32 +4,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
-import EpicsBinaryOutDebug from '../GroupedComponents/EpicsBinaryOutDebug';
-import EpicsAnalogOutDebug from '../GroupedComponents/EpicsAnalogOutDebug';
-import EpicsMbboDebug from '../GroupedComponents/EpicsMbboDebug';
-import TextUpdate from '../BaseComponents/TextUpdate';
-import TextInput from '../BaseComponents/TextInput';
-import TextOutput from '../BaseComponents/TextOutput';
 import Slider from '../BaseComponents/Slider';
-
-
 import Grid from '@material-ui/core/Grid';
 
-
-import Switch from '../BaseComponents/Switch';
-import SelectionInput from '../BaseComponents/SelectionInput';
-import ToggleButton from '../BaseComponents/ToggleButton';
-import ActionButton from '../BaseComponents/ActionButton';
-import ThumbWheel from '../BaseComponents/ThumbWheel';
 import ControlRightEx1 from '../ControlScreens/GridComponents/ControlRightEx1'
 import ControlTopEx1 from '../ControlScreens/GridComponents/ControlTopEx1'
-import ControlBottomEx1 from '../ControlScreens/GridComponents/ControlBottomEx1'
 import SideBar from '../SystemComponents/SideBar';
 import ThreeScene from '../..//api/ThreeScene';
-import AppBar from '@material-ui/core/AppBar';
+
 console.warn("This example is deprecated and will be removed in a future release")
 const styles = theme => ({
   root: {
@@ -53,27 +35,18 @@ class ControlTest3D extends React.Component {
 }
 
 handlePsOnClick(name){
-
-  //  console.log("in control test1 clicked "+name.toString());
   this.setState({editorType:'PS',
   displayEditor:true,
   editorMacros:{'$(device)':name}});
-
-  //  this.setState({ ['clicked']: 1});
 }
+
 render() {
-  //  console.log("state: ",this.state);
-  const { classes } = this.props;
   return (
     <div>
       <SideBar/>
       <Grid container spacing={3}>
-
         <Grid item sm={9}>
           <div style={{height:'25vh'}}>
-
-
-
             <ControlTopEx1
               macros={{
                 '$(PS1)':'testIOC:PS1',
@@ -82,8 +55,6 @@ render() {
               }}
               handlePsOnClick={this.handlePsOnClick}
             />
-
-
           </div>
           <Grid
             container
@@ -97,7 +68,6 @@ render() {
                 <ThreeScene/>
               </div>
             </Grid>
-
           </Grid>
           <div style={{height:'25vh',marginLeft:'25px'}}>
             <div style={{height:'50px',width:'400px'}}>
@@ -106,30 +76,19 @@ render() {
             </div>
           </div>
         </Grid>
-
         <Grid item sm={3} >
           {((this.state.displayEditor===true) &&(this.state.editorMacros['$(device)']==='testIOC:PS1'))&&<ControlRightEx1 macros={this.state.editorMacros}/>}
           {((this.state.displayEditor===true) &&(this.state.editorMacros['$(device)']==='testIOC:PS2'))&&<ControlRightEx1 macros={this.state.editorMacros}/>}
           {((this.state.displayEditor===true) &&(this.state.editorMacros['$(device)']==='testIOC:PS3'))&&<ControlRightEx1 macros={this.state.editorMacros}/>}
         </Grid>
       </Grid>
-
-
-
-
     </div>
+    );
+  }
+}
 
+ControlTest3D.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
 
-
-
-
-        );
-        }
-        }
-
-        ControlTest3D.propTypes = {
-          classes: PropTypes.object.isRequired,
-        };
-
-        export default withStyles(styles)(ControlTest3D);
-        //export default ControlTest3D;
+export default withStyles(styles)(ControlTest3D);

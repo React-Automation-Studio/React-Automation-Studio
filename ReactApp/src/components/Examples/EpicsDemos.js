@@ -43,7 +43,6 @@ const styles = theme => ({
 });
 
 
-
 class EpicsDemos extends React.Component {
   state = {
     value: 0,
@@ -58,8 +57,6 @@ class EpicsDemos extends React.Component {
     const { value } = this.state;
 
     return (
-
-
       <div >
         <TraditionalLayout
           title="EPICS PV Demos"
@@ -68,18 +65,12 @@ class EpicsDemos extends React.Component {
           tabs={['Main', 'Analog PVs', 'Binary PVs', "MBBO/I PVs", "Array PVs", "String PVs"]}
           handleTabChange={this.handleChange}
           tabValue={value}
-
         />
-
         {value === 0 &&
-
           <MobileDemo2 nosidebar />
-
         }
-
         {value === 1 && <TabContainer key='TabContainer1'>
           <Grid container spacing={1}>
-
             <Grid item xs={12} sm={6} lg={3}>
               <Card className={classes.card}>
                 <EpicsAnalogOutDebug macros={{ '$(device)': 'testIOC:amplitude' }} />
@@ -117,19 +108,15 @@ class EpicsDemos extends React.Component {
               </Card>
             </Grid>
             <Grid item xs={12} sm={6} lg={3}>
-
             </Grid>
             <Grid item xs={12} sm={6} lg={3}>
-
             </Grid>
-
           </Grid>
-
         </TabContainer>
         }
+
         {value === 3 && <TabContainer key='TabContainer3'>
           <Grid container spacing={3}>
-
             <Grid item xs={12} sm={6} lg={3}>
               <Card className={classes.card}>
                 <EpicsMbboDebug macros={{ '$(device)': 'testIOC:mbboTest1' }} />
@@ -140,38 +127,31 @@ class EpicsDemos extends React.Component {
                 <EpicsMbboDebug macros={{ '$(device)': 'testIOC:mbboTest1' }} custom_selection_strings={['text 1', 'text 4']} />
               </Card>
             </Grid>
-
-
           </Grid>
-
         </TabContainer>
         }
+
         {value === 4 && <TabContainer key='TabContainer4'>
           <Grid container spacing={3}>
             <Grid item xs={12} sm={12} >
               <div style={{ height: '25vh' }}>
                 <GraphY pvs={['testIOC:test4', 'testIOC:test5']} legend={['Sine Wave ', 'Amplitude']} />
               </div>
-
             </Grid>
             <Grid item xs={12} sm={6} >
               <div style={{ height: '25vh' }}>
                 <GraphY pvs={['testIOC:test4']} legend={['Sine Wave']} lineColor={[this.props.theme.palette.reactVis.lineColors[1]]} />
               </div>
-
             </Grid>
             <Grid item xs={12} sm={6}>
               <div style={{ height: '25vh' }}>
                 <GraphY pvs={['testIOC:test5']} legend={['Amplitude of Sine Wave Circular Buffer']} lineColor={[this.props.theme.palette.reactVis.lineColors[1]]} />
               </div>
-
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextOutput pv='$(device):test4' macros={{ '$(device)': 'testIOC' }} label={'Sine Wave Circular Buffer'} />
-
             </Grid>
             <Grid item xs={12} sm={6} >
-
               <TextOutput pv='$(device):test5' macros={{ '$(device)': 'testIOC' }} label={'Amplitude of Sine Wave Circular Buffer'} />
             </Grid>
             <Grid item xs={12} sm={6} >
@@ -185,7 +165,6 @@ class EpicsDemos extends React.Component {
                 <TextOutput pv='$(device):test4' macros={{ '$(device)': 'testIOC' }}/>
               </ArrayContainer>
             </Grid>
-            
 
             <Grid item xs={12} >
               <Slider pv='$(device):amplitude' macros={{ '$(device)': 'testIOC' }} usePvMinMax={true} min={1000} max={500} usePvLabel={true} />
@@ -197,33 +176,22 @@ class EpicsDemos extends React.Component {
 
         </TabContainer>
         }
+
         {value === 5 && <TabContainer key='TabContainer5'>
-
           <Grid container spacing={3}>
-
             <Grid item xs={12} sm={6} lg={3}>
               <Card className={classes.card}>
-
                 <EpicsStringOutDebug macros={{ '$(device)': 'testIOC:stringtest1' }} />
               </Card>
             </Grid>
             <Grid item xs={12} sm={6} lg={3}>
               <Card className={classes.card}>
-
                 <EpicsStringOutDebug macros={{ '$(device)': 'testIOC:stringtest2' }} />
               </Card>
             </Grid>
           </Grid>
-
         </TabContainer>
         }
-
-
-
-
-
-
-
       </div>
     );
   }

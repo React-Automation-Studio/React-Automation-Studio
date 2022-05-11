@@ -11,10 +11,6 @@ import Container from '@material-ui/core/Container';
 
 import SideBar from '../SystemComponents/SideBar';
 
-//var docs = require("!!react-docgen!../BaseComponents/MyComponent.js");
-
-
-//const componentDocs = parse(txt);
 function TabContainer(props) {
   return (
     <Typography component="div" style={{ padding: 8 * 3 }}>
@@ -46,12 +42,7 @@ class Help extends React.Component {
   };
 
   render() {
-    
-
-    //  console.log('txt',txt);
-    //  console.log('componentDocs',componentDocs);
     return (
-
       <React.Fragment>
         <SideBar/>
         <Paper>
@@ -92,10 +83,8 @@ class Help extends React.Component {
               <li>Demo Epics IOC</li>
               <p style={{textAlign:'justify'}}>
                 The repository comes with a demonstration IOC that enables the frontend demos to connect live to a real time system.
-
               </p>
             </ul>
-
           </Container>
         </Paper>
       </React.Fragment>

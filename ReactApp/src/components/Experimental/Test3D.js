@@ -9,17 +9,16 @@ import Slider from '../BaseComponents/Slider';
 
 import Grid from '@material-ui/core/Grid';
 
-
 import ThreeScene from '../Experimental/ThreeScene';
 
 import Card from '@material-ui/core/Card';
 import TraditionalLayout from '../UI/Layout/ComposedLayouts/TraditionalLayout.js';
 import {
-
   makeVisFlexible,
-
 } from 'react-vis';
+
 const FlexibleThreeScene = makeVisFlexible(ThreeScene);
+
 const styles = theme => ({
   root: {
     flexGrow: 1,
@@ -31,12 +30,9 @@ const styles = theme => ({
     color: theme.palette.text.secondary,
   },
 });
-class Test3D extends React.Component {
-  
 
-  
+class Test3D extends React.Component {
   render() {
-   
     return (
       <div>
         <TraditionalLayout
@@ -51,16 +47,9 @@ class Test3D extends React.Component {
             spacing={1}
             style={{ paddingTop: 16 }}
           >
-
             <Grid item xs={12} sm={12} md={12} lg={12} style={{ width: '100%', height: '100%' }} >
-
-
-
-
               <FlexibleThreeScene />
-
             </Grid>
-
             <Grid item xs={12} sm={12} md={12} lg={12} >
               <Card style={{ padding: 12 }} >
                 <Grid
@@ -71,16 +60,13 @@ class Test3D extends React.Component {
                   spacing={2}
                 >  <Grid item xs={6}  >
                     <TextInput pv='testIOC:Cube1:xRotation' macros={this.props['macros']} usePvMinMax={true} label="xRotation" step={0.01} prec={3} units={'rad'} />
-
                   </Grid>
                   <Grid item xs={6}  >
                     <TextInput pv='testIOC:Cube1:yRotation' macros={this.props['macros']} usePvMinMax={true} label="yRotation" step={0.01} prec={3} units={'rad'} />
-
                   </Grid>
                   <Grid item xs={6} >
                     <Slider pv='testIOC:Cube1:xRotation' macros={this.props['macros']} usePvMinMax={true} label="xRotation:" step={0.01} prec={3} />
                   </Grid>
-
                   <Grid item xs={6} >
                     <Slider pv='testIOC:Cube1:yRotation' macros={this.props['macros']} usePvMinMax={true} label="yRotation:" step={0.01} prec={3} />
                   </Grid>
@@ -88,16 +74,8 @@ class Test3D extends React.Component {
               </Card>
             </Grid>
           </Grid>
-
-
-
         </TraditionalLayout>
       </div>
-
-
-
-
-
     );
   }
 }
@@ -107,4 +85,3 @@ Test3D.propTypes = {
 };
 
 export default withStyles(styles)(Test3D);
-      //export default Test3D;

@@ -2,34 +2,24 @@ import React from 'react'
 
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 
-import Grid from '@material-ui/core/Grid';
 import GraphY from '../BaseComponents/GraphY';
 import TextUpdateMultiplePVs from '../BaseComponents/TextUpdateMultiplePVs';
-import TextOutput from '../BaseComponents/TextOutput'
 import { withStyles } from '@material-ui/core/styles';
-import { v4 as uuidv4 } from 'uuid';
+
 const styles = theme => ({
   body1: theme.typography.body1,
-
-
-
 });
 
 class ComponentsWithMultiplePVs extends React.Component {
   constructor(props) {
     super(props);
     this.state={}
-
   }
 
-
-
-
   render() {
-const {classes} =this.props;
+    const {classes} = this.props;
 
     return (
-
       <div className={classes.body1} style={{padding:24}}>
         <div >
           <h1>
@@ -58,35 +48,16 @@ const {classes} =this.props;
                 'testIOC:MTextUpdate3',
                 'testIOC:MTextUpdate4',
                 'testIOC:MTextUpdate5'
-
               ]}
-                maxLength={256}/>
-
-
+              maxLength={256}
+            />
           </div>
-
-
-
-            {/*}  <TextUpdateMultiplePVs  pv='testIOC:MTextUpdate1' macros={this.props['macros']} usePvLabel={true}  />
-            <br/>
-            <TextUpdateMultiplePVs  pv='testIOC:MTextUpdate2.NAME' macros={this.props['macros']}   />
-            <br/>
-            <TextUpdateMultiplePVs  pv='testIOC:MTextUpdate2' macros={this.props['macros']} usePvLabel={true}  />
-            <br/>
-            <TextUpdateMultiplePVs  pv='testIOC:MTextUpdate3.NAME' macros={this.props['macros']}   />
-            <br/>
-            <TextUpdateMultiplePVs  pv='testIOC:MTextUpdate3' macros={this.props['macros']} usePvLabel={true}  />
-            <br/>
-          */}
-
-
-
         </div>
       </div>
+    );
+  }
+}
 
-          );
-          }
-          }
+ComponentsWithMultiplePVs.contextType=AutomationStudioContext;
 
-          ComponentsWithMultiplePVs.contextType=AutomationStudioContext;
 export default withStyles(styles)(ComponentsWithMultiplePVs)

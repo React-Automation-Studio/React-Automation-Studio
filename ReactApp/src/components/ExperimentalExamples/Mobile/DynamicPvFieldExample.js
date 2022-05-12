@@ -13,18 +13,15 @@ import Slider from '../../BaseComponents/Slider';
 import Card from '@material-ui/core/Card';
 
 
-
 const styles = theme => ({
   body1: theme.typography.body1,
   root: {
     flexGrow: 1,
     padding: theme.spacing(1),
-    //width:'100%',
     overflowX: "hidden",
     overflowY: "hidden",
     marginTop: 40,
     marginBottom: 100,
-
   },
   paper: {
     padding: theme.spacing(1) * 0,
@@ -43,59 +40,29 @@ class DynamicPvFieldExample extends React.Component {
     this.state = {
       value: 0,
       stateValue: 0,
-
-
-
       showAdvancedSettings: 0,
     };
     this.handleStateChange = this.handleStateChange.bind(this);
-
   }
-
 
   handleChange = (event, value) => {
     this.setState({ value });
   };
 
-
-
   handleStateChange(stateValue) {
-    //console.log(stateValue)
     this.setState({ stateValue })
   };
 
-
-
-
-
   render() {
-  
- 
-
     const { classes } = this.props;
-   
-
-
- 
-
-
-    //console.log('window.innerHeight',window.innerHeight)
     return (
-
       <React.Fragment>
-       
-
-
-
         <Grid container className={classes.root} spacing={2}>
-
           <Grid item xs={6}>
             <Typography style={{ paddingBottom: 0 }}> Example with prop useMetadata=true</Typography>
             <Card>
               <Grid container className={classes.root} spacing={2}>
-                
                 <Grid item xs={12}>
-
                   <TextInput
                     pv='$(device):dynamicPvFields'
                     macros={{ '$(device)': 'testIOC' }}
@@ -105,8 +72,6 @@ class DynamicPvFieldExample extends React.Component {
                     usePvMinMax={true}
                     usePvPrecision={true}
                     alarmSensitive={true}
-                    //debug={true}
-
                     useMetadata={true}
                   />
                 </Grid>
@@ -121,9 +86,7 @@ class DynamicPvFieldExample extends React.Component {
                     usePvPrecision={true}
                     alarmSensitive={true}
                     useMetadata={true}
-
                   />
-
                 </Grid>
               </Grid>
             </Card>
@@ -133,9 +96,7 @@ class DynamicPvFieldExample extends React.Component {
             <Typography style={{ paddingBottom: 0 }}> Dynamic example with prop useMetadata=false</Typography>
             <Card>
               <Grid container className={classes.root} spacing={2}>
-              
                 <Grid item xs={12}>
-
                   <TextInput
                     pv='$(device):dynamicPvFields'
                     macros={{ '$(device)': 'testIOC' }}
@@ -160,7 +121,6 @@ class DynamicPvFieldExample extends React.Component {
                     alarmSensitive={true}
                     useMetadata={false}
                   />
-
                 </Grid>
                 <Grid item xs={6}>
                   <TextInput
@@ -181,7 +141,6 @@ class DynamicPvFieldExample extends React.Component {
                   />
                 </Grid>
                 <Grid item xs={6}>
-
                   <TextInput
                     pv='$(device):dynamicPvFields:EGU'
                     macros={{ '$(device)': 'testIOC' }}
@@ -197,41 +156,24 @@ class DynamicPvFieldExample extends React.Component {
                     usePvMinMax={true}
                     usePvLabel={true}
                     usePvPrecision={true}
-
-
                     useMetadata={true}
                   />
                 </Grid>
                 <Grid item xs={6}>
-
                   <TextInput
                     pv='$(device):dynamicPvFields:DESC'
                     macros={{ '$(device)': 'testIOC' }}
-
                     usePvLabel={true}
-                    
-
-
                     useMetadata={true}
                   />
                 </Grid>
               </Grid>
             </Card>
           </Grid>
-          
-
-
-
         </Grid>
-
-
-
       </React.Fragment>
-
     );
   }
 }
-
-
 
 export default withStyles(styles, { withTheme: true })(DynamicPvFieldExample);

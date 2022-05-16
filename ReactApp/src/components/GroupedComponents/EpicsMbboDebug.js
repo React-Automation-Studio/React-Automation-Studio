@@ -8,7 +8,6 @@ import TextOutput from '../BaseComponents/TextOutput';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 import RadioButtonGroup from '../BaseComponents/RadioButtonGroup';
-//import MenuItem from '@material-ui/core/MenuItem';
 
 
 const styles = theme => ({
@@ -28,19 +27,11 @@ class EpicsMbboDebug extends React.Component {
   constructor(props) {
     super(props);
     this.state={}
-
-    }
-
-
-
-
+  }
 
   render() {
-
-
     return (
       <Grid container   spacing={2}       direction="row"  justify="flex-start"  alignItems="center"       >
-
         <Grid item  xs={12}>
           <TextOutput  pv='$(device).NAME' macros={this.props['macros']}  label={'EPICS PV Name:'}/>
         </Grid>
@@ -77,19 +68,7 @@ class EpicsMbboDebug extends React.Component {
         <Grid item  xs={12}>
           <SelectionList horizontal  pv='$(device)'      macros={this.props['macros']}    usePvLabel={true} useStringValue={true} custom_selection_strings={this.props.custom_selection_strings}/>
         </Grid>
-        </Grid>
-
-
-
-
-
-
-
-
-
-
-
-
+      </Grid>
     );
   }
 }

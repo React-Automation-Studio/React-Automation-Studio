@@ -6,32 +6,26 @@ import { withStyles } from '@material-ui/core/styles';
 import { v4 as uuidv4 } from 'uuid';
 import {svgCenterY, svgCenterX } from "../SystemComponents/svgConstants";
 import PropTypes from 'prop-types';
+
 const styles = theme => ({
-
-
   Label: {
     fill: theme.palette.text.primary
-
   },
   Value: {
     fill: theme.palette.text.primary
-
   },
   textBMLabelDisconneted: {
     fill: 'dimgrey'
-
   },
 });
+
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */
 const SvgComponentComponent = (props) => {
-
-
   const handleOnClick = device => event => {
     if (typeof props.handleOnClick !== 'undefined') {
       props.handleOnClick(device);
     }
-
   };
 
   const { classes } = props;
@@ -69,26 +63,18 @@ const SvgComponentComponent = (props) => {
         color = props.theme.palette.beamLineComponent.main;
       }
     }
-   
-
   }
   else {
     color = 'grey';
   }
+
   let xOffset = 0;
   const componentId = uuidv4();
   return (
-
-
-
     <svg
       x={props.x}
       y={props.y}
-
-    // width={svgWidth}
-    // height={svgHeight}
     >
-
       <g transform={'translate(' + svgCenterX + ',' + (svgCenterY) + ')'}
         onClick={handleOnClick(props.system)}
       >
@@ -125,10 +111,9 @@ const SvgComponentComponent = (props) => {
           textAnchor='middle'
           filter={props.textShadow === true ? "url(#" + componentId + "componentShadow)" : ""}
         >
-
           {value + " " + props.units}
-
         </text>}
+
         {props.showLabel&&<text className={classes.Label}
           x={typeof props.labelOffsetX !== 'undefined' ? props.labelOffsetX : 0}
           y={typeof props.labelOffsetY !== 'undefined' ? props.labelOffsetY - 40 : -40}
@@ -138,40 +123,25 @@ const SvgComponentComponent = (props) => {
           {props.label}
         </text>}
       </g>
-
-
-
-
-
-
     </svg>
   );
 }
 
-
-
-
 /**
-* This component accepts an svg image as child
-* 
-* The label, min, max, units, pv and tooltip all accept macros that can be replaced by the values defined in the macros prop.  
- * */
-
+ * This component accepts an svg image as child
+ * 
+ * The label, min, max, units, pv and tooltip all accept macros that can be replaced by the values defined in the macros prop.  
+ */
 const SvgComponent = (props) => {
-
   return (
     <Widget svgWidget={true}  {...props} component={SvgComponentComponent} pv={props.pv} label={props.label} />
-
   )
 }
 
 SvgComponent.propTypes = {
-
-
   /**
-  * Directive to use the  alarm severity status to alter the fields background color.
-  */
-
+   * Directive to use the  alarm severity status to alter the fields background color.
+   */
   alarmSensitive: PropTypes.bool,
   /**
    * Custom PV to define the alarm severity to be used, alarmSensitive must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
@@ -227,12 +197,9 @@ SvgComponent.propTypes = {
    */
   precPv: PropTypes.string,
 
-
-
   /**
    * Custom units to be used, if usePvUnits is not defined.
    */
-
   units: PropTypes.string,
   /**
    * Custom PV to define the units to be used, usePvUnits must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
@@ -271,16 +238,11 @@ SvgComponent.propTypes = {
    * Directive to use the units contained in the   pv metdata's EGU field or unitsPv.
    *  If not defined it uses the custom units as defined by the units prop.
    */
-
-
   usePvUnits: PropTypes.bool,
   /**
    * Directive to use PV's string values.
    */
   useStringValue: PropTypes.bool,
-
-
-
 
   /**
    * If defined, then the string representation of the number can be formatted
@@ -290,16 +252,12 @@ SvgComponent.propTypes = {
    */
   numberFormat: PropTypes.object,
 
-
   /** Name of the pv process variable, eg. '$(device):test$(id)'*/
   pv: PropTypes.string,
 
-
-
-
   /**
-  * Tooltip Text
-  */
+   * Tooltip Text
+   */
   tooltip: PropTypes.string,
   /**
    * Directive to show the tooltip
@@ -308,17 +266,14 @@ SvgComponent.propTypes = {
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-
   tooltipProps: PropTypes.object,
   /**
    *  A System description object the passed to the callback function when the item is clicked on
    */
-
   system: PropTypes.object,
   /**
    *  A callback function when the item is clicked on, returns the system object
    */
-
   handleOnClick: PropTypes.func,
   /**
    * Y Offset for the label
@@ -329,8 +284,8 @@ SvgComponent.propTypes = {
    */
   labelOffsetX: PropTypes.number,
   /**
-  * Y Offset for the pv value
-  */
+   * Y Offset for the pv value
+   */
   valueOffsetY: PropTypes.number,
   /**
    * X Offset for the pv value
@@ -356,14 +311,8 @@ SvgComponent.propTypes = {
    * Direct to show the value
    */
   showValue: PropTypes.bool,
-  
-
-
-
-
-
-
 };
+
 SvgComponent.defaultProps = {
   debug: false,
   showLabel:true,
@@ -379,7 +328,4 @@ SvgComponent.defaultProps = {
   componentGradient: true,
 };
 
-
 export default withStyles(styles, { withTheme: true })(SvgComponent)
-
-

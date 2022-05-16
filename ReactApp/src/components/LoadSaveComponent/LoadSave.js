@@ -26,6 +26,7 @@ import PV from '../SystemComponents/PV';
 import useMongoDbWatch from '../SystemComponents/database/MongoDB/useMongoDbWatch'
 import useMongoDbUpdateOne from '../SystemComponents/database/MongoDB/useMongoDbUpdateOne';
 import useMongoDbInsertOne from '../SystemComponents/database/MongoDB/useMongoDbInsertOne';
+
 const styles = theme => ({
   root: {
     width: '100%',
@@ -84,9 +85,9 @@ const styles = theme => ({
   tableCellObselete: {
     width: "20%",
     backgroundColor: red[500],
-  },
-  
+  },  
 });
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
   return (
@@ -102,11 +103,13 @@ function TabPanel(props) {
     </Typography>
   );
 }
+
 function compare(a, b) {
   if (a.beam_setup.Frequency > b.beam_setup.Frequency) return 1;
   if (b.beam_setup.Frequency > a.beam_setup.Frequency) return -1;
   return 0;
 }
+
 function compareValues(a, b, initialized) {
   if (initialized === true) {
     
@@ -137,6 +140,7 @@ function compareValues(a, b, initialized) {
     return false
   }
 }
+
 /**
 * This is a preview LoadSave component. This component is built on a React Automation Studio based front end that connects 
 * to MongoDB database that contains the saved settings data. The saved settings data can then be written to live processes variables in a controlled way by first loading the saved values to new values and then finally writing the new values to pv values.
@@ -177,8 +181,8 @@ const LoadSave = (props) => {
   const dbDataInitialized=dbDataObject.initialized;
   const [loadTimedOut,setLoadTimedOut]=useState(false);
   const {theme}=props;
+
   useEffect(() => {
-   
       let data = dbDataObject.data;
       if(data!==null){
       let sortedData = data.sort(compare);
@@ -190,9 +194,9 @@ const LoadSave = (props) => {
     let newState = {};
     let newProcessVariables;
     switch (action.type) {
-      case 'initPvList':
-        
+      case 'initPvList':        
         return { ...action.data }
+
       case 'initDbDataList':
         let key;
         let pvValue;
@@ -269,8 +273,8 @@ const LoadSave = (props) => {
             }
         }
         return newState
+
       case 'initDbDataListNoData':
-     
         for (let key in processVariablesSchemaKeys) {
           if (typeof state[processVariablesSchemaKeys[key]] !== 'undefined') {
             newState[processVariablesSchemaKeys[key]] = state[processVariablesSchemaKeys[key]];
@@ -288,6 +292,7 @@ const LoadSave = (props) => {
         newState[action.key].severity = action.pvData.severity;
         newState[action.key].metadata = action.pvData.metadata;
         return newState
+
       case 'changeRowIndex':
         newProcessVariables = dbList[action.index].process_variables;
         newState = { ...state };
@@ -299,6 +304,7 @@ const LoadSave = (props) => {
         }
         setDisplayIndex(action.index);
         return (newState)
+
       case 'loadSavedValueToNewValues':
         newProcessVariables = dbList[displayIndex].process_variables;
         newState = { ...state };
@@ -310,6 +316,7 @@ const LoadSave = (props) => {
         }
         setNewValuesLoaded(true);
         return (newState)
+
       case 'writeNewValuesToPvValues':
         newProcessVariables = dbList[displayIndex].process_variables;
         newState = { ...state };
@@ -327,7 +334,9 @@ const LoadSave = (props) => {
     }
     return (newState)
   }
+  
   const [dbDataAndLiveData, dispatchDbDataAndLiveData] = useReducer(dbDataAndLiveDataReducer, {});
+
   useEffect(() => {
     if (dbPVsList !== null) {
      
@@ -388,7 +397,7 @@ const LoadSave = (props) => {
  
   useEffect(() => {
     if (typeof dbList[0] !== 'undefined') {
-  
+
       if (dbList[0]) {
         dispatchDbDataAndLiveData({ type: 'initDbDataList' });
       }
@@ -399,9 +408,8 @@ const LoadSave = (props) => {
   }, [dbList, processVariablesSchemaKeys])
   
   const handleSavedValues = () => {
-    
     let key;
-   
+  
     let newEntry = {};
     newEntry['process_variables'] = {}
     newEntry['beam_setup'] = {}
@@ -446,32 +454,27 @@ const LoadSave = (props) => {
     }
     
     dbInsertOne({dbURL:dbListInsertOneURL,newEntry:newEntry});
-    
-   
   }
  
   const handleOnClickWorking = () => {
-  
-   
     let id = dbList[displayIndex]['_id']['$oid'];
     let update = { '$set': { "beam_setup.Status": "Working" } }
     dbUpdateOne({dbURL:dbListUpdateOneURL,id:id,update:update});
   }
+
   const handleOnClickPending = () => {
-  
     let id = dbList[displayIndex]['_id']['$oid'];
     let update = { '$set': { "beam_setup.Status": "Pending" } }
-    dbUpdateOne({dbURL:dbListUpdateOneURL,id:id,update:update});
-    
+    dbUpdateOne({dbURL:dbListUpdateOneURL,id:id,update:update});    
   }
+
   const handleOnClickObselete = () => {
-   
     let id = dbList[displayIndex]['_id']['$oid'];
     let update = { '$set': { "beam_setup.Status": "Obselete" } }
     dbUpdateOne({dbURL:dbListUpdateOneURL,id:id,update:update});
   }
-  const handleOnClickDelete = () => {
-   
+
+  const handleOnClickDelete = () => {   
     let id = dbList[displayIndex]['_id']['$oid'];
     let update = { '$set': { "beam_setup.Status": "Delete" } }
     if (displayIndex >= 1) {
@@ -500,6 +503,7 @@ const LoadSave = (props) => {
     ))
     return pvs
   }
+
   const SystemsDataConnections = () => {
     const pvs = [];
     let id = 0;
@@ -521,12 +525,11 @@ const LoadSave = (props) => {
     }
     return pvs;
   }
+  
   const showTable=(!loadTimedOut||(dbPVsInitialized&&dbDataInitialized));
   useEffect(()=>{
     const timer=setTimeout(()=>{
-     
       if(!(dbPVsInitialized&&dbDataInitialized)){
-
         setLoadTimedOut(true)
       }
     }
@@ -563,10 +566,10 @@ const LoadSave = (props) => {
       {metadataPvsConnections()}
       {SystemsDataConnections()}
       {!showTable&&
-                        <Typography style={{padding:8,paddingBottom:16}}>
-                          {host +" database is not available"}
-                        </Typography>
-                    }
+        <Typography style={{padding:8,paddingBottom:16}}>
+          {host +" database is not available"}
+        </Typography>
+      }
       {showTable&&<Grid
         container
         direction="row"
@@ -575,7 +578,6 @@ const LoadSave = (props) => {
         spacing={2}
         style={{ padding: 8 }}
       >
-        
         <Grid item xs={12} sm={12} md={12} lg={12} >
           <Paper elevation={theme.palette.paperElevation} style={{ padding: 8 ,marginTop:8}}>
         
@@ -672,13 +674,10 @@ const LoadSave = (props) => {
                           {dbDataAndLiveData[item].newValue}
                         </TableCell>
                         <TableCell className={classes.tableCellValues} style={{ backgroundColor: (compareValues(dbDataAndLiveData[item].newValue, dbDataAndLiveData[item].pvValue, dbDataAndLiveData[item].initialized) || compareValues(dbDataAndLiveData[item].dbValue, dbDataAndLiveData[item].pvValue, dbDataAndLiveData[item].initialized)) ? green[500] : undefined }} align="center">
-                          
                           <TextUpdate pv={dbDataAndLiveData[item].pv} alarmSensitive={true} {...dbDataAndLiveData[item]} usePvLabel={false} label={undefined} units={""} usePvUnits={false} />
-                          
                         </TableCell>
                         <TableCell className={classes.tableCellUnits} style={{ backgroundColor: (compareValues(dbDataAndLiveData[item].newValue, dbDataAndLiveData[item].pvValue, dbDataAndLiveData[item].initialized) || compareValues(dbDataAndLiveData[item].dbValue, dbDataAndLiveData[item].pvValue, dbDataAndLiveData[item].initialized)) ? green[500] : undefined }} align="center">
                         {dbDataAndLiveData[item].usePvUnits?dbDataAndLiveData[item].metadata.units:dbDataAndLiveData[item].units}
-                    
                         </TableCell>
                       </TableRow>
                     ))}
@@ -757,7 +756,7 @@ const LoadSave = (props) => {
                     disabled={disableSaveButton}
                   >
                     Save Values
-                        </Button>
+                  </Button>
                 </Grid>
                 <Grid item xs={12} sm={6} md={6} lg={3} >
                 </Grid>
@@ -779,7 +778,7 @@ const LoadSave = (props) => {
                     disabled={!dbListWriteAccess||disableButtons}
                   >
                     Working
-                        </Button>
+                  </Button>
                 </Grid>
                 <Grid item xs={12} sm={6} md={6} lg={3} >
                   <Button
@@ -789,7 +788,7 @@ const LoadSave = (props) => {
                     disabled={!dbListWriteAccess||disableButtons}
                   >
                     Pending
-                        </Button>
+                  </Button>
                 </Grid>
                 <Grid item xs={12} sm={6} md={6} lg={3} >
                   <Button
@@ -799,7 +798,7 @@ const LoadSave = (props) => {
                     disabled={!dbListWriteAccess||disableButtons}
                   >
                     Obselete
-                        </Button>
+                  </Button>
                 </Grid>
                 <Grid item xs={12} sm={6} md={6} lg={3} >
                   <Button
@@ -810,7 +809,7 @@ const LoadSave = (props) => {
                     disabled={disableDeleteButton ||disableButtons|| !dbListWriteAccess}
                   >
                     Delete
-                        </Button>
+                  </Button>
                 </Grid>
               </Grid>
             </TabPanel>
@@ -829,6 +828,7 @@ const LoadSave = (props) => {
     </React.Fragment>
   );
 }
+
 LoadSave.propTypes = {
   /** if true, when the value of loadEnablePV does not equal 0, then the new values can **not** be loaded into the pv values*/
   useLoadEnable: PropTypes.bool,
@@ -846,7 +846,6 @@ LoadSave.propTypes = {
    */
   macros: PropTypes.object,
   /** Name of the load enable process variable, eg. '$(device):test$(id)'*/
-
   loadEnablePV: PropTypes.string,
   /**
    * Custom loadEnable button label to be used
@@ -854,10 +853,10 @@ LoadSave.propTypes = {
   loadEnableLabel: PropTypes.string,
   /** if true, then the button to enable loading of new values will be shown*/
   showLoadEnableButton: PropTypes.bool,
-  
-  
 };
+
 LoadSave.defaultProps = {
   useLoadEnable: false
 }
+
 export default withStyles(styles, { withTheme: true })(LoadSave);

@@ -7,39 +7,22 @@ import { Link } from 'react-router-dom'
 import Button from '@material-ui/core/Button';
 import TraditionalLayout from '../../../components/UI/Layout/ComposedLayouts/TraditionalLayout.js';
 import Grid from '@material-ui/core/Grid';
-// Styles
-
-
-
 
 const styles = theme => ({
   root: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
-
-
-
   },
   center: {
     margin: 'auto',
-
     width: '15%',
     height: '50%'
-
   },
   button: {
     marginTop: '10px',
     paddingTop: '10px'
   }
-
 });
-
-
-
-
-
-
-
 
 class Example extends Component {
   constructor(props) {
@@ -49,12 +32,9 @@ class Example extends Component {
 
   logout() {
     localStorage.removeItem('jwt');
-
   }
 
   render() {
-
-
     const { classes } = this.props;
 
     return (
@@ -70,7 +50,6 @@ class Example extends Component {
             <Grid container direction="row" justify="center" spacing={3} alignItems="stretch">
               <Grid item xs={12}  >
                 <Button fullWidth className={classes.button} component={Link} to="/Example1" color="primary" variant='contained'>  Example1 </Button>
-
               </Grid>
               <Grid item xs={12}  >
                 <Button fullWidth className={classes.button} component={Link} to="/Example2" color="primary" variant='contained'>  Example2 </Button>
@@ -84,12 +63,6 @@ class Example extends Component {
           </Grid>
         </Grid>
       </TraditionalLayout>
-
-
-
-
-
-
     )
   }
 }

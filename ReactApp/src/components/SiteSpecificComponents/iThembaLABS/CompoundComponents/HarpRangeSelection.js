@@ -10,10 +10,8 @@ import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 
 
-
 /* eslint-disable eqeqeq */
 const styles = theme => ({
-
   TextField: {
     width: '100%',
     marginLeft: 'auto',
@@ -23,7 +21,6 @@ const styles = theme => ({
     fontWeight: 500,
     borderRadius: 4
   }
-
 });
 
 class HarpRangeSelection extends React.Component {
@@ -36,12 +33,9 @@ class HarpRangeSelection extends React.Component {
     this.handleInputValue = this.handleInputValue.bind(this);
     this.handleInputValueLabel = this.handleInputValueLabel.bind(this);
     this.handleMetadata = this.handleMetadata.bind(this);
-
   }
 
-
   handleInputValue = name => (inputValue, pvname, initialized, severity) => {
-    //  console.log("name: ",name,pvname,inputValue);
     let pv = this.state[name];
     pv.inputValue = inputValue;
     pv.pvname = pvname;
@@ -49,42 +43,23 @@ class HarpRangeSelection extends React.Component {
     pv.severity = severity;
 
     this.setState({ [name]: pv });
-
   }
-
 
   handleMetadata = name => (metadata) => {
     let pv = this.state[name];
     pv.metadata = metadata;
     this.setState({ [name]: pv });
-
   }
-
-
 
   handleInputValueLabel(inputValue) {
-
     this.setState({ label: inputValue });
-
   }
-
-
 
   componentDidMount() {
   }
 
-
   componentWillUnmount() {
-
   }
-
-
-
-
-
-
-
-
 
   handleOnFocus = event => {
     this.setState({ hasFocus: true });
@@ -95,7 +70,6 @@ class HarpRangeSelection extends React.Component {
       this.setState({ outputValue: this.state.value });
     }
   }
-
 
   handleOnBlur = event => {
     this.setState({
@@ -111,8 +85,6 @@ class HarpRangeSelection extends React.Component {
     let yRangePV = this.state['yrange'];
     let value;
     switch (event.target.value) {
-
-
       case ' 20 -  200 uA':
         value = 1;
 
@@ -132,12 +104,8 @@ class HarpRangeSelection extends React.Component {
       case '200 - 2000 pA':
         value = 6;
         break;
-      default :
-        //
-
-
-      // code block
     }
+
     console.log(value)
     xRangePV.inputValue = value;
     yRangePV.inputValue = value;
@@ -145,21 +113,9 @@ class HarpRangeSelection extends React.Component {
       xrange: xRangePV,
       yrange: yRangePV
     });
-
   };
 
-
-
-
-
-
-
-
-
   render() {
-    //   console.log(this.state)
-    //   console.log(this.props.systemName)
-    //   const xrangePV=this.props.systemName+':xrange';
     let yrangePV;
     if (this.props.onlyX === true) {
       yrangePV =  this.props.systemName + ':xrange';
@@ -176,24 +132,17 @@ class HarpRangeSelection extends React.Component {
       xrangePV =  this.props.systemName + ':xrange';
     }
 
-    //   console.log(xrangePV)
     const { classes } = this.props;
 
     const initialized = this.state.xrange.initialized && this.state.yrange.initialized;
-
 
     let value = this.state.xrange.inputValue;
     let enum_strings = {};
 
     if (initialized) {
-
-
       switch (parseInt(this.state.xrange.inputValue)) {
-
-
         case 1:
           value = ' 20 -  200 uA';
-
           break;
         case 2:
           value = '  2 -   20 uA';
@@ -210,17 +159,8 @@ class HarpRangeSelection extends React.Component {
         case 6:
           value = '200 - 2000 pA';
           break;
-
-        default:
-
-
-        // code block
       }
-
-
     }
-    // console.log(this.state.metadata.enum_strs)
-
 
     enum_strings = [
       ' 20 -  200 uA',
@@ -231,23 +171,9 @@ class HarpRangeSelection extends React.Component {
       '200 - 2000 pA',
     ];
 
-
-
-    //   console.log("this.state.metadata.enum_strs",this.state.metadata.enum_strs)
-    //   console.log("enum_strings",enum_strings)
-
-
-
-
-
-
-
-
-
     let write_access = false;
     
     if (initialized) {
-
       if (typeof this.state.xrange.metadata !== 'undefined') {
         if (typeof this.state.xrange.metadata.write_access !== 'undefined') {
           write_access = this.state.xrange.metadata.write_access;
@@ -256,11 +182,8 @@ class HarpRangeSelection extends React.Component {
       }
     }
 
-
     return (
-
       <React.Fragment>
-
         <DataConnection
           pv={xrangePV}
           handleInputValue={this.handleInputValue('xrange')}
@@ -273,7 +196,6 @@ class HarpRangeSelection extends React.Component {
           handleMetadata={this.handleMetadata('yrange')}
           outputValue={this.state['yrange'].inputValue}
         />
-
 
         {initialized === true &&
           <TextField
@@ -289,14 +211,11 @@ class HarpRangeSelection extends React.Component {
             label={this.props.label}
             margin="normal"
             variant="outlined"
-
           >
             {enum_strings.map((item, index) =>
               <MenuItem key={item.toString()} value={item}> {item} </MenuItem>
             )}
           </TextField>
-
-
         }
 
         {(initialized === false || initialized === 'undefined') &&
@@ -307,11 +226,7 @@ class HarpRangeSelection extends React.Component {
             margin="normal"
             variant="outlined"
           />}
-
-
-
       </React.Fragment>
-
     )
   }
 }
@@ -322,4 +237,5 @@ HarpRangeSelection.propTypes = {
 
 HarpRangeSelection.contextType = AutomationStudioContext;
 export default withStyles(styles)(HarpRangeSelection)
+
   /* eslint-disable eqeqeq */

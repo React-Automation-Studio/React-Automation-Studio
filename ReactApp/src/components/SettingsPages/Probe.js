@@ -12,7 +12,6 @@ import { withStyles } from '@material-ui/core/styles';
 
 import GraphY from '../BaseComponents/GraphY';
 import TextField from '@material-ui/core/TextField';
-//import MenuItem from '@material-ui/core/MenuItem';
 
 const styles = theme => ({
   body1: theme.typography.body1,
@@ -21,17 +20,10 @@ const styles = theme => ({
 
     fontWeight: 500,
     borderRadius: 4,
-    //marginTop:theme.spacing(1),
   },
-
 });
 
 class Probe extends React.Component {
- 
-
-
-
-
   render() {
     const {classes}= this.props;
     const probeObject=JSON.parse(decodeURIComponent(this.props.location.search.substr(1))) ;
@@ -44,9 +36,7 @@ class Probe extends React.Component {
       probetype=probeObject.probeType;
     }
 
-  return (
-
-
+    return (
 <React.Fragment>
   {probetype==='normal'&&<Grid   container
     direction="column"
@@ -71,7 +61,6 @@ class Probe extends React.Component {
                   pvs={['$(device)']}  macros={{'$(device)':probeObject.pvname}}
                   maxLength={1000}
                   triggerOnSingleValueChange
-
                 />
               </div>
             </Grid>
@@ -82,11 +71,11 @@ class Probe extends React.Component {
               <TextOutput  pv='$(device)'       macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV Timestamp:'} displayTimeStamp />
             </Grid>
             <Grid item xs={6} >
-                <TextOutput  pv='$(device)'       macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV Write Access:'} displayMetaData={'write_access'} />
+              <TextOutput  pv='$(device)'       macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV Write Access:'} displayMetaData={'write_access'} />
             </Grid>
             <Grid item xs={12} >
               <TextOutput  pv='$(device)'       macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV Host:'} displayMetaData={'host'} />
-              </Grid>
+            </Grid>
 
             <Grid item xs={12}  >
               <TextInput   pv='$(device)'       macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV Setpoint:'} alarmSensitive={true}/>
@@ -135,7 +124,6 @@ class Probe extends React.Component {
                   pvs={['$(device)']}  macros={{'$(device)':probeObject.pvname}}
                   maxLength={1000}
                   triggerOnSingleValueChange
-
                 />
               </div>
             </Grid>
@@ -150,10 +138,8 @@ class Probe extends React.Component {
             </Grid>
             <Grid item xs={12} >
               <TextOutput  pv='$(device)'       macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV Host:'} displayMetaData={'host'} />
-              </Grid>
+            </Grid>
 
-
-          
             <Grid item xs={6} >
               <TextOutput  pv='$(device).HOPR'       macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV HOPR:'}/>
             </Grid>
@@ -179,7 +165,6 @@ class Probe extends React.Component {
             spacing={2}>
             <Grid item xs={12}>
               <TextField
-
                 color='secondary'
                 className={classes.textField}
                 value={probeObject.pvname}
@@ -202,9 +187,7 @@ class Probe extends React.Component {
                     input:classes.input,
                     notchedOutline: classes.notchedOutline,
                   },
-                    readOnly: true,
-
-
+                  readOnly: true,
                 }}
               />
             </Grid>
@@ -238,13 +221,9 @@ class Probe extends React.Component {
   </Grid>
   }
 </React.Fragment>
-
-
-
-
-  );
+    );
   }
-  }
+}
 
-  Probe.contextType=AutomationStudioContext;
+Probe.contextType=AutomationStudioContext;
 export default withStyles(styles,{withTheme:true})(Probe)

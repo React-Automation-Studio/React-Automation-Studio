@@ -10,9 +10,6 @@ import EditUser from './EditUser'
 import ChangeUserPassword from './ChangeUserPassword';
 
 
-
-
-
 const UserProfile = (props) => {
     const context = useContext(AutomationStudioContext);
     const theme = useTheme()
@@ -20,6 +17,7 @@ const UserProfile = (props) => {
     const { roles } = context.userData;
     const { userData, initialized: userDataInitialized } = useUserDetails({ username: username });
     const { email, givenName, familyName, phoneNumber, officeLocation, pwTimestamp } = userData;
+
     let id;
     if (userDataInitialized) {
         id = userData['_id']['$oid']
@@ -27,6 +25,7 @@ const UserProfile = (props) => {
     else {
         id = null
     }
+
     let pwDate;
     if (pwTimestamp) {
         pwDate = (new Date(pwTimestamp * 1000)).toLocaleString();
@@ -35,13 +34,7 @@ const UserProfile = (props) => {
         pwDate = ""
     }
 
-
-    
-
-
-
     return (
-
         <TraditionalLayout
             title={"User Profile"}
         >
@@ -66,7 +59,6 @@ const UserProfile = (props) => {
                             >
                                 <Grid item xs={12}  >
                                     <TextField
-
                                         inputProps={{
                                             autoComplete: "off",
                                             disabled: true
@@ -75,12 +67,10 @@ const UserProfile = (props) => {
                                         label="Username"
                                         variant="outlined"
                                         fullWidth
-
                                     />
                                 </Grid>
                                 <Grid item xs={12}  >
                                     <TextField
-
                                         inputProps={{
                                             autoComplete: "off",
                                             disabled: true
@@ -95,7 +85,6 @@ const UserProfile = (props) => {
 
                                 {!(process.env.REACT_APP_DisableStandardLogin === 'true') && <Grid item xs={6}  >
                                     < TextField
-
                                         inputProps={{
                                             autoComplete: "off",
                                             disabled: true
@@ -107,7 +96,6 @@ const UserProfile = (props) => {
                                         variant="outlined"
                                         fullWidth
                                         multiline
-
                                     />
                                 </Grid>}
 
@@ -126,7 +114,6 @@ const UserProfile = (props) => {
 
                                         variant="outlined"
                                         fullWidth
-
                                     />
                                 </Grid>
                                 <Grid item xs={12}  >
@@ -140,7 +127,6 @@ const UserProfile = (props) => {
 
                                         variant="outlined"
                                         fullWidth
-
                                     />
                                 </Grid>
                                 <Grid item xs={12}  >
@@ -172,7 +158,6 @@ const UserProfile = (props) => {
                                 </Grid>
                                 <Grid item xs={12}  >
                                     <TextField
-
                                         inputProps={{
                                             autoComplete: 'off',
                                             disabled: true
@@ -199,20 +184,13 @@ const UserProfile = (props) => {
                                         }}
                                     />}
                                 </Grid>
-
                             </Grid>
-
-
                         </Paper>
                     </Grid>
                 </Grid>
-
-
-
-
             </form >
-
         </TraditionalLayout>
     )
 }
+
 export default UserProfile;

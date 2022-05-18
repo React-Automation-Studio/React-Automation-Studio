@@ -11,29 +11,20 @@ import Slide from '@material-ui/core/Slide';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import useModifyUser from './userProfileHooks/useModifyUser'
 import {usePasswordValidator} from '../Utils/passwordValidator'
+
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-
-
-
-
-
 const ChangeUserPassword = (props) => {
-
     const [show, setShow] = useState(false);
     const [password, setPassword] = useState("");
     const {passwordError,passwordHelperText}=usePasswordValidator(password);
    
     const [confirmPassword, setConfirmPassword] = useState("");
-    const {modifyUser,modifyUserError,userModified} =useModifyUser({id:props.user.id,
-   
-    password: password ,
-   });
-
-   
-
+    const {modifyUser,modifyUserError,userModified} =useModifyUser({id:props.user.id,   
+        password: password
+    });
     
     let confirmPasswordError;
     let confirmPasswordHelperText;
@@ -47,14 +38,11 @@ const ChangeUserPassword = (props) => {
         confirmPasswordHelperText = "Passwords do not match"
     }
     let addUserDisable = (((confirmPasswordError === false) && (passwordError === false))) ? false : true;
-
     
     return (
-
         <React.Fragment>
             <Button onClick={() => setShow(true)} startIcon={<EditIcon/>}   color="primary"  variant="contained">
                Change Password
-                
             </Button>
             <Dialog
                 open={show}
@@ -67,12 +55,8 @@ const ChangeUserPassword = (props) => {
                     {"Modify User"}
                 </DialogTitle>
                 <DialogContent>
-
                     <form autoComplete="off">
-
-
                         <div >
-
                             <Grid
                                 style={{ marginTop: 8, padding: 8 }}
                                 container
@@ -81,12 +65,7 @@ const ChangeUserPassword = (props) => {
                                 alignItems="flex-start"
                                 spacing={0}
                             >
-
-
-
                                 <Grid item xs={12} sm={12} md={12} lg={12} >
-
-
                                     <Grid
                                         style={{ padding: 8 }}
                                         container
@@ -95,13 +74,9 @@ const ChangeUserPassword = (props) => {
                                         alignItems="flex-start"
                                         spacing={2}
                                     >
-                                       
-
-                                      
                                         <React.Fragment>
                                             <Grid item xs={12}  >
                                                 <TextField
-
                                                     required
                                                     type="password"
                                                     label="New Password"
@@ -136,13 +111,10 @@ const ChangeUserPassword = (props) => {
                                                 onClick={() =>modifyUser({
                                                     id:props.user.id,
                                                     password: password,
-                                                 
-                                                   
-
                                                 })}
                                             >
                                                 Update Password
-                    </Button>
+                                            </Button>
                                         </Grid>
                                         <Grid item xs={4}  >
                                             {userModified && <CheckCircleIcon
@@ -154,11 +126,10 @@ const ChangeUserPassword = (props) => {
                                                 }}
                                             />}
                                             {modifyUserError && <ErrorIcon color="error" fontSize="large"
-                        style={{
-                          // color: theme.palette.error.main,
-                          verticalAlign: "middle",
-                        }}
-                      />}
+                                                style={{
+                                                verticalAlign: "middle",
+                                                }}
+                                            />}
                                         </Grid>
                                         <Grid item xs={4}>
                                             <Button
@@ -168,16 +139,9 @@ const ChangeUserPassword = (props) => {
                                                 {userModified ? "Close" : "Cancel"}
                                             </Button>
                                         </Grid>
-
                                     </Grid>
-
-
-
                                 </Grid>
                             </Grid>
-
-
-
                         </div>
                     </form >
                 </DialogContent>
@@ -186,4 +150,5 @@ const ChangeUserPassword = (props) => {
         </React.Fragment>
     )
 }
+
 export default ChangeUserPassword;

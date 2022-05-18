@@ -5,29 +5,23 @@ import { withStyles } from '@material-ui/core/styles';
 import { svgHeight, svgCenterY, svgWidth, svgCenterX } from "../SystemComponents/svgConstants";
 import { v4 as uuidv4 } from 'uuid';
 import PropTypes from 'prop-types';
+
 const styles = theme => ({
-
-
   Label: {
     fill: theme.palette.text.primary
-
   },
   Value: {
     fill: theme.palette.text.primary
-
   },
-
 });
+
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */
 const SlitXYComponent = (props) => {
-
-
   const handleOnClick = device => event => {
     if (typeof props.handleOnClick !== 'undefined') {
       props.handleOnClick(device);
     }
-
   };
   const checkPrecision = (value, prec) => {
     if (props.usePvPrecision === true || (typeof props.prec !== 'undefined')) {
@@ -35,7 +29,6 @@ const SlitXYComponent = (props) => {
       let tempvalue = parseFloat(value);
       if (!isNaN(tempvalue)) {
         return tempvalue.toFixed(precision);
-
       }
       else {
         return value;
@@ -45,11 +38,6 @@ const SlitXYComponent = (props) => {
       return (value)
     }
   }
-  // const handleContextMenu = event => {
-  //   props.handleToggleContextMenu(event);
-
-  // };
-
 
   const { classes } = props;
   const { initialized } = props;
@@ -69,7 +57,7 @@ const SlitXYComponent = (props) => {
   let unitsOffsetY = ""
   let xOffsetReadback;
   let yOffsetReadback;
-// console.log(props)
+
   if (initialized) {
     let precGapX = props.usePvPrecision ? xGapPv.prec : props.prec;
     let precGapY = props.usePvPrecision ? yGapPv.prec : props.prec;
@@ -86,9 +74,9 @@ const SlitXYComponent = (props) => {
     xOffsetReadback = 0;
     yOffsetReadback = 0;
   }
+
   let color = '';
   if (initialized) {
-
     unitsGapX = props.usePvUnits === true ? xGapPv.units : props.unitsGapX ? props.unitsGapX : "";
     unitsGapY = props.usePvUnits === true ? yGapPv.units : props.unitsGapY ? props.unitsGapY : "";
     unitsOffsetX = props.usePvUnits === true ? xOffsetPv.units : props.unitsOffsetX ? props.unitsOffsetX : "";
@@ -98,22 +86,15 @@ const SlitXYComponent = (props) => {
         alarmSeverity = xGapPv.severity == 2 || yGapPv.severity == 2||xOffsetPv.severity == 2 || yOffsetPv.severity == 2 ? 2 : xGapPv.severity == 1 || yGapPv.severity == 1||xOffsetPv.severity == 1 || yOffsetPv.severity == 1 ? 1 : 0
         if (alarmSeverity == 2) {
           color = props.theme.palette.alarm.major.main;
-
         }
         else if (alarmSeverity == 1) {
           color = props.theme.palette.alarm.minor.main;
-
         }
         else {
           color = props.theme.palette.beamLineComponent.main;
-
         }
-
-
       }
-
     }
-
   }
   else {
     color = 'grey';
@@ -122,9 +103,6 @@ const SlitXYComponent = (props) => {
   const componentId = uuidv4();
 
   return (
-
-
-
     <svg
       x={props.x}
       y={props.y}
@@ -132,10 +110,8 @@ const SlitXYComponent = (props) => {
       width={svgWidth}
       height={svgHeight}
     >
-
       <g transform={'translate(' + svgCenterX + ',' + (svgCenterY) + ')'}
         onClick={handleOnClick(props.system)}
-      // onContextMenu={handleContextMenu}
       >
         <linearGradient id={componentId + 'elipse-gradient'} gradientTransform="rotate(0)">
           <stop offset="0%" stopOpacity="30" stopColor={'silver'} />
@@ -153,7 +129,6 @@ const SlitXYComponent = (props) => {
         <g filter={props.componentShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
         >
           <g>
-
             <g transform="translate(-10,-1092.5)"
               fill={props.componentGradient === true ? 'url(#' + componentId + 'elipse-gradient)' : color}
               style={{
@@ -161,68 +136,57 @@ const SlitXYComponent = (props) => {
                 'stroke': 'black'
               }}
             >
-
               <g>
                 <path
                   d="m 15.05893,1085.0254 -1.776617,20.1381 0.759263,0.6179 0.51536,-5.8416 5.003912,4.0722 0.745906,-8.4549 -5.003912,-4.0722 0.515351,-5.8416 z"
-
                 />
                 <path
                   d="m 7.9498012,1076.2957 6.6301368,5.3958 0.203442,-2.3062 -1.923241,-1.565 1.340787,-15.198 -2.783656,-2.2654 -1.340787,15.1979 -1.9232398,-1.5651 z"
                 />
                 <path
                   d="m 6.2770152,1077.8803 -0.513672,5.8398 -5.00390605,-4.0723 -0.728516,8.2461 6.16796905,-0.018 0.837891,-9.3789 z"
-
                 />
                 <path
                   d="m 5.7589222,1101.1294 6.6301368,5.3958 -0.203451,2.3061 -1.92324,-1.5652 -1.3407868,15.1979 -2.783656,-2.2654 1.340787,-15.1979 -1.92324,-1.5651 z"
-
                 />
               </g>
             </g>
-
           </g>
         </g>
 
-
-
-{props.showValue&&<g>
-        <text className={classes.Value}
-          x={typeof props.valueOffsetX !== 'undefined' ? props.valueOffsetX : 0}
-          y={typeof props.valueOffsetY !== 'undefined' ? props.valueOffsetY + 57.5 : 57.5}
-          textAnchor='middle'
-          filter={props.textShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
-        >
-          {"XGap: " + xGapReadback + " " + unitsGapX}
-
-        </text>
-        <text className={classes.Value}
-          x={typeof props.valueOffsetX !== 'undefined' ? props.valueOffsetX  : 0}
-          y={typeof props.valueOffsetY !== 'undefined' ? props.valueOffsetY + 72.5 : 72.5}
-          textAnchor='middle'
-          filter={props.textShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
-        >
-          {"YGap: " + yGapReadback + " " + unitsGapY}
-
-        </text>
-        <text className={classes.Value}
-          x={typeof props.valueOffsetX !== 'undefined' ? props.valueOffsetX : 0}
-          y={typeof props.valueOffsetY !== 'undefined' ? props.valueOffsetY + 87.5 : 87.5}
-          textAnchor='middle'
-          filter={props.textShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
-        >
-          {"XOffset: " + xOffsetReadback + " " + unitsOffsetX}
-
-        </text>
-        <text className={classes.Value}
-          x={typeof props.valueOffsetX !== 'undefined' ? props.valueOffsetX  : 0}
-          y={typeof props.valueOffsetY !== 'undefined' ? props.valueOffsetY + 102.5 : 102.5}
-          textAnchor='middle'
-          filter={props.textShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
-        >
-          {"YOffset: " + yOffsetReadback + " " + unitsOffsetY}
-
-        </text>
+        {props.showValue&&<g>
+          <text className={classes.Value}
+            x={typeof props.valueOffsetX !== 'undefined' ? props.valueOffsetX : 0}
+            y={typeof props.valueOffsetY !== 'undefined' ? props.valueOffsetY + 57.5 : 57.5}
+            textAnchor='middle'
+            filter={props.textShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
+          >
+            {"XGap: " + xGapReadback + " " + unitsGapX}
+          </text>
+          <text className={classes.Value}
+            x={typeof props.valueOffsetX !== 'undefined' ? props.valueOffsetX  : 0}
+            y={typeof props.valueOffsetY !== 'undefined' ? props.valueOffsetY + 72.5 : 72.5}
+            textAnchor='middle'
+            filter={props.textShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
+          >
+            {"YGap: " + yGapReadback + " " + unitsGapY}
+          </text>
+          <text className={classes.Value}
+            x={typeof props.valueOffsetX !== 'undefined' ? props.valueOffsetX : 0}
+            y={typeof props.valueOffsetY !== 'undefined' ? props.valueOffsetY + 87.5 : 87.5}
+            textAnchor='middle'
+            filter={props.textShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
+          >
+            {"XOffset: " + xOffsetReadback + " " + unitsOffsetX}
+          </text>
+          <text className={classes.Value}
+            x={typeof props.valueOffsetX !== 'undefined' ? props.valueOffsetX  : 0}
+            y={typeof props.valueOffsetY !== 'undefined' ? props.valueOffsetY + 102.5 : 102.5}
+            textAnchor='middle'
+            filter={props.textShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
+          >
+            {"YOffset: " + yOffsetReadback + " " + unitsOffsetY}
+          </text>
         </g>}
 
         {props.showLabel&&<text className={classes.Label}
@@ -234,40 +198,25 @@ const SlitXYComponent = (props) => {
           {props.label}
         </text>}
       </g>
-
     </svg>
-
-
-
-
-
   );
 }
 
-
-
-
 /**
-* SlitXY Beam line component
-*
-*  The label, min, max, units, pv and tooltip all accept macros that can be replaced by the values defined in the macros prop.  
-*/
-
+ * SlitXY Beam line component
+ *
+ *  The label, min, max, units, pv and tooltip all accept macros that can be replaced by the values defined in the macros prop.  
+ */
 const SlitXY = (props) => {
-
-
   return (
     <Widget svgWidget={true}  {...props} component={SlitXYComponent} pvs={[props.xGapPv, props.yGapPv,props.xOffsetPv, props.yOffsetPv]} label={props.label} />
-
   )
 }
+
 SlitXY.propTypes = {
-
-
   /**
-  * Directive to use the  alarm severity status to alter the fields background color.
-  */
-
+   * Directive to use the  alarm severity status to alter the fields background color.
+   */
   alarmSensitive: PropTypes.bool,
   /**
    * Custom PV to define the alarm severity to be used, alarmSensitive must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
@@ -289,8 +238,8 @@ SlitXY.propTypes = {
    */
   label: PropTypes.string,
   /**
-  * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
-  */
+   * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
+   */
   labelPv: PropTypes.string,
   /**
    * Values of macros that will be substituted in the pv name.
@@ -323,12 +272,9 @@ SlitXY.propTypes = {
    */
   precPv: PropTypes.string,
 
-
-
   /**
    * Custom units to be used, if usePvUnits is not defined.
    */
-
   units: PropTypes.string,
   /**
    * Custom PV to define the units to be used, usePvUnits must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
@@ -367,16 +313,11 @@ SlitXY.propTypes = {
    * Directive to use the units contained in the   pv metdata's EGU field or unitsPv.
    *  If not defined it uses the custom units as defined by the units prop.
    */
-
-
   usePvUnits: PropTypes.bool,
   /**
    * Directive to use PV's string values.
    */
   useStringValue: PropTypes.bool,
-
-
-
 
   /**
    * If defined, then the string representation of the number can be formatted
@@ -386,16 +327,12 @@ SlitXY.propTypes = {
    */
   numberFormat: PropTypes.object,
 
-
   /** Name of the pv process variable, eg. '$(device):test$(id)'*/
   pv: PropTypes.string,
 
-
-
-
   /**
-  * Tooltip Text
-  */
+   * Tooltip Text
+   */
   tooltip: PropTypes.string,
   /**
    * Directive to show the tooltip
@@ -404,17 +341,14 @@ SlitXY.propTypes = {
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-
   tooltipProps: PropTypes.object,
   /**
    *  A System description object the passed to the callback function when the item is clicked on
    */
-
   system: PropTypes.object,
   /**
    *  A callback function when the item is clicked on, returns the system object
    */
-
   handleOnClick: PropTypes.func,
   /**
    * Y Offset for the label
@@ -452,10 +386,8 @@ SlitXY.propTypes = {
    * Direct to show the value
    */
   showValue: PropTypes.bool,
-
-
-
 };
+
 SlitXY.defaultProps = {
   debug: false,
   showLabel: true,
@@ -471,7 +403,4 @@ SlitXY.defaultProps = {
   componentGradient: true,
 };
 
-
 export default withStyles(styles, { withTheme: true })(SlitXY)
-
-

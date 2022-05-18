@@ -5,34 +5,24 @@ import { withStyles } from '@material-ui/core/styles';
 import  {svgHeight,svgCenterY,svgWidth,svgCenterX} from "../SystemComponents/svgConstants";
 import { v4 as uuidv4 } from 'uuid';
 import PropTypes from 'prop-types';
+
 const styles = theme => ({
-
-
   Label: {
     fill: theme.palette.text.primary
-
   },
   Value: {
     fill: theme.palette.text.primary
-
   },
-
 });
+
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */
 const SteererYMagnetComponent = (props) => {
-
-
   const handleOnClick = device => event => {
     if (typeof props.handleOnClick !== 'undefined') {
       props.handleOnClick(device);
     }
-
   };
-  // const handleContextMenu = event => {
-  //   props.handleToggleContextMenu(event);
-
-  // };
 
   const { classes } = props;
   const { initialized } = props;
@@ -46,38 +36,29 @@ const SteererYMagnetComponent = (props) => {
   else {
     value = 0;
   }
+
   let color = '';
   if (initialized) {
     if (props.alarmSensitive !== 'undefined') {
       if (props.alarmSensitive == true) {
         if (alarmSeverity == 1) {
           color = props.theme.palette.alarm.minor.main;
-
         }
         else if (alarmSeverity == 2) {
           color = props.theme.palette.alarm.major.main;
-
         }
         else {
           color = props.theme.palette.beamLineComponent.main;
-
         }
-
-
       }
-
     }
-
   }
   else {
     color = 'grey';
   }
-  let xOffset = 40;
+
   const componentId = uuidv4();
   return (
-
-
-
     <svg
       x={props.x}
       y={props.y}
@@ -85,10 +66,8 @@ const SteererYMagnetComponent = (props) => {
       width={svgWidth}
       height={svgHeight}
     >
-
       <g transform={'translate(' + svgCenterX + ',' + (svgCenterY) + ')'}
         onClick={handleOnClick(props.system)}
-    //    onContextMenu={handleContextMenu}
       >
         <linearGradient id={componentId + 'elipse-gradient'} gradientTransform="rotate(0)">
           <stop offset="0%" stopOpacity="30" stopColor={'silver'} />
@@ -106,7 +85,6 @@ const SteererYMagnetComponent = (props) => {
         <g filter={props.componentShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
         >
           <g>
-
             <g transform="translate(-10,-1097)"
               fill={props.componentGradient === true ? 'url(#' + componentId + 'elipse-gradient)' : color}
               style={{
@@ -139,91 +117,6 @@ const SteererYMagnetComponent = (props) => {
               fill={'#b87333'}
               style={{ 'strokeWidth': '0.3', 'stroke': 'orange' }}
             >
-              {/* <path
-                id="path9504-2"
-                d="m 13.978012,1108.8976 c -1.261676,-0.2824 -2.797214,-1.6683 -4.4811427,-3.6527 v 0" />
-
-              <path
-                id="path9504-7-1"
-                d="m 14.113735,1107.3567 c -1.261716,-0.2823 -2.797214,-1.6683 -4.4811427,-3.6527 v 0"
-              />
-              <path
-                id="path9504-5-6"
-                d="m 14.24945,1105.8159 c -1.261708,-0.2824 -2.797206,-1.6684 -4.4811432,-3.6527 v 0"
-              />
-              <path
-                id="path9504-7-9-4"
-                d="m 14.385141,1104.2749 c -1.261676,-0.2823 -2.797174,-1.6683 -4.4811111,-3.6526 v 0"
-              />
-              <path
-
-                id="path9504-0-4"
-                d="m 14.520864,1102.734 c -1.261684,-0.2823 -2.79715,-1.6682 -4.481143,-3.6527 v 0"
-              /> 
-              <path
-                id="path9504-7-5-3"
-                d="m 14.656579,1101.1932 c -1.261676,-0.2824 -2.797142,-1.6683 -4.481143,-3.6527 v 0"
-              />
-              <path
-                id="path9504-6-2"
-                d="m 14.792302,1099.6523 c -1.261676,-0.2824 -2.797142,-1.6683 -4.481143,-3.6527 v 0"
-              />
-              <path
-                id="path9504-7-91-7"
-                d="m 14.928025,1098.1114 c -1.261676,-0.2824 -2.797151,-1.6682 -4.481143,-3.6527 v 0"
-              />
-              <path
-                id="path9504-0-4-0-8"
-                d="m 19.997828,1098.1255 c -1.850938,0.1788 -2.983041,0.2052 -5.135825,0 v 0"
-              />
-              <path
-                id="path9504-0-4-0-8-4"
-                d="m 19.880923,1099.6494 c -1.850938,0.1974 -2.983041,0.2265 -5.135825,0 v 0"
-              />
-              <path
-                id="path9504-0-4-0-8-5"
-                d="m 19.699703,1101.221 c -1.845863,0.1819 -2.974862,0.2088 -5.121742,0 v 0"
-              />
-              <path
-                id="path9504-0-4-0-8-2"
-                d="m 19.546426,1102.7243 c -1.848374,0.2345 -2.97891,0.2691 -5.128711,0 v 0"
-              />
-              <path
-                id="path9504-0-4-0-8-3"
-                d="m 19.358384,1104.2616 c -1.850938,0.2233 -2.983041,0.2563 -5.135825,0 v 0"
-              />
-              <path
-                id="path9504-0-4-0-8-35"
-                d="m 19.382817,1105.8159 c -1.850052,0.2272 -2.981613,0.2607 -5.133367,0 v 0"
-              />
-              <path
-                id="path9504-0-4-0-8-35-3"
-                d="m 19.223154,1107.2827 c -1.853798,0.2132 -2.987651,0.2446 -5.143761,0 v 0"
-              />
-              <path
-                id="path9504-0-4-0-8-35-9"
-                d="m 19.075285,1108.9595 c -1.853745,0.2113 -2.987565,0.2425 -5.143614,0 v 0"
-              />
-              
-              <path
-                d="m 2.7316557,1092.9946 c -0.2156088,-0.2387 -0.6311204,-0.686 -0.8521282,-0.9464 v 0"
-                id="path9504-0-4-1"
-              />
-
-              <path
-                d="m 4.4126497,1092.9301 c -0.3135113,-0.2605 -0.6014918,-0.4885 -0.9323105,-0.819 -0.5592372,-0.5586 -1.3069859,-1.3559 -1.4651117,-1.6037 l -0.1393435,-0.1742"
-                id="path9504-7-5-3-4"
-              />
-
-              <path
-                d="m 6.6321275,1092.6192 c -1.2617,-0.2824 -2.7972,-1.6684 -4.4812,-3.6527 l -0.1393435,-0.1742"
-                id="path9504-6-2-6"
-              />
-              <path
-                d="m 6.7678275,1091.0783 c -1.2617,-0.2824 -2.7971,-1.6683 -4.4811,-3.6527 l -0.1393435,-0.2439"
-                id="path9504-7-91-7-3"
-              />
-*/}
               <path
                 d="m 6.7825803,1090.448 c 0.092819,-3.8381 0.5484134,-8.5093 1.2007186,-13.6321 v 0"
                 id="path9504"
@@ -357,15 +250,9 @@ const SteererYMagnetComponent = (props) => {
                 d="m 7.834583,1102.6648 c -0.1727024,0.061 -0.35059,0.1296 -0.5336938,0.2075 -0.1417264,0.06 -0.2865778,0.1261 -0.4345687,0.1979 v 0"
                 id="path9504-7-91-2-9-9"
               />
-
             </g>
-
           </g>
-
         </g>
-
-
-
 
         <text className={classes.Value}
           x={typeof props.valueOffsetX !== 'undefined' ? props.valueOffsetX : 0}
@@ -374,7 +261,6 @@ const SteererYMagnetComponent = (props) => {
           filter={props.textShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
         >
           {value + " " + props.units}
-
         </text>
         <text className={classes.Label}
           x={typeof props.labelOffsetX !== 'undefined' ? props.labelOffsetX : 0}
@@ -385,40 +271,25 @@ const SteererYMagnetComponent = (props) => {
           {props.label}
         </text>
       </g>
-
-
-
-
-
-
     </svg>
   );
 }
 
-
-
-
 /**
-* SteererYMagnet Beam line component
-*
-*  The label, min, max, units, pv and tooltip all accept macros that can be replaced by the values defined in the macros prop.  
-*/
-
+ * SteererYMagnet Beam line component
+ *
+ * The label, min, max, units, pv and tooltip all accept macros that can be replaced by the values defined in the macros prop.  
+ */
 const SteererYMagnet = (props) => {
-
-
   return (
     <Widget svgWidget={true}  {...props} component={SteererYMagnetComponent} pv={props.pv} label={props.label} />
-
   )
 }
+
 SteererYMagnet.propTypes = {
-
-
   /**
-  * Directive to use the  alarm severity status to alter the fields background color.
-  */
-
+   * Directive to use the  alarm severity status to alter the fields background color.
+   */
   alarmSensitive: PropTypes.bool,
   /**
    * Custom PV to define the alarm severity to be used, alarmSensitive must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
@@ -474,12 +345,9 @@ SteererYMagnet.propTypes = {
    */
   precPv: PropTypes.string,
 
-
-
   /**
    * Custom units to be used, if usePvUnits is not defined.
    */
-
   units: PropTypes.string,
   /**
    * Custom PV to define the units to be used, usePvUnits must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
@@ -518,16 +386,11 @@ SteererYMagnet.propTypes = {
    * Directive to use the units contained in the   pv metdata's EGU field or unitsPv.
    *  If not defined it uses the custom units as defined by the units prop.
    */
-
-
   usePvUnits: PropTypes.bool,
   /**
    * Directive to use PV's string values.
    */
   useStringValue: PropTypes.bool,
-
-
-
 
   /**
    * If defined, then the string representation of the number can be formatted
@@ -537,12 +400,8 @@ SteererYMagnet.propTypes = {
    */
   numberFormat: PropTypes.object,
 
-
   /** Name of the pv process variable, eg. '$(device):test$(id)'*/
   pv: PropTypes.string,
-
-
-
 
   /**
   * Tooltip Text
@@ -603,10 +462,8 @@ SteererYMagnet.propTypes = {
    * Direct to show the value
    */
   showValue: PropTypes.bool,
-
-
-
 };
+
 SteererYMagnet.defaultProps = {
   debug: false,
   showLabel:true,
@@ -622,7 +479,4 @@ SteererYMagnet.defaultProps = {
   componentGradient: true,
 };
 
-
 export default withStyles(styles, { withTheme: true })(SteererYMagnet)
-
-

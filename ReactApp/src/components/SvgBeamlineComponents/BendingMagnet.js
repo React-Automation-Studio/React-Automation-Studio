@@ -6,9 +6,8 @@ import { withStyles } from '@material-ui/core/styles';
 import { v4 as uuidv4 } from 'uuid';
 import  {svgHeight,svgCenterY,svgWidth,svgCenterX} from "../SystemComponents/svgConstants";
 import PropTypes from 'prop-types';
+
 const styles = theme => ({
-
-
   textBMLabel: {
     fill: theme.palette.text.primary
 
@@ -22,18 +21,15 @@ const styles = theme => ({
 
   },
 });
+
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */
 const BendingMagnetComponent = (props) => {
-
-
   const handleOnClick = device => event => {
     if (typeof props.handleOnClick !== 'undefined') {
       props.handleOnClick(device);
     }
-
   };
-
 
   const { classes } = props;
   const { initialized } = props;
@@ -48,144 +44,119 @@ const BendingMagnetComponent = (props) => {
     value=0;
   }
   let color_side = '';
+
   if (initialized ){
     if (props.alarmSensitive !== 'undefined') {
       if (props.alarmSensitive == true) {
         if (alarmSeverity == 1) {
           color_side = props.theme.palette.alarm.minor.main;
-
         }
         else if (alarmSeverity == 2) {
           color_side = props.theme.palette.alarm.major.main;
-
         }
         else {
           color_side =props.theme.palette.beamLineComponent.main;
-
         }
-
       }
-
     }
-
   }
   else{
     color_side = 'grey';
   }
+
   const componentId = uuidv4();
   return (
-
-
-
     <svg
-    x={props.x}
-    y={props.y}
+      x={props.x}
+      y={props.y}
 
-    width={svgWidth}
-    height={svgHeight}
-  >
-
+      width={svgWidth}
+      height={svgHeight}
+    >
       <g transform={'translate(' + svgCenterX + ',' + (svgCenterY) + ')'}
          onClick={handleOnClick(props.system)}
       >
-            <linearGradient id={componentId + 'elipse-gradient'} gradientTransform="rotate(0)">
-              <stop offset="0%" stopOpacity="30" stopColor={'silver'} />
-              <stop offset="75%" stopColor={color_side} />
-            </linearGradient>
-            <defs>
-              <filter id={componentId + "elipseShadow"} x="0" y="0" width="600%" height="500%">
-                <feOffset result="offOut" in="SourceGraphic" dx="2.5" dy="2.5" />
-                <feColorMatrix result="matrixOut" in="offOut" type="matrix"
-                  values="0.2 0 0 0 0 0 0.2 0 0 0 0 0 0.2 0 0 0 0 0 1 0" />
-                <feGaussianBlur result="blurOut" in="matrixOut" stdDeviation="2.5" />
-                <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
-              </filter>
-            </defs>
-            <g transform="translate(-10,-1086)"
-              fill={props.componentGradient === true ? 'url(#' + componentId + 'elipse-gradient)' : color_side}
-              style={{
-                'strokeWidth': '0.3',
-                'stroke': 'black'
-              }}
-            >
-              <g filter={props.componentShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}>
-                <path
-                  id="path8478"
-                  d="M 24.149959,1064.5524 5.135178,1049.0529 h 10.000004 l 19.014781,15.4995 z"
-                />
-                <path
-                  id="path8480"
-                  d="m 0.04018281,1106.8979 1.41294219,-16.1439 10.578125,-0.016 1.208307,1.0171 0.837821,-9.512 -3.126797,-2.5487 -0.106831,1.0124 h -8.5625 l 2.853928,-31.6543 19.014781,15.4995 -5.094995,57.845 z"
-                />
-                <path
-                  id="path8484"
-                  d="m 12.03125,1090.738 1.34375,0.032 -0.135443,0.9854 -1.208307,-1.0171"
-                />
-                <path
-                  id="path8486"
-                  d="m 10.950581,1079.6944 1.268169,0.9815 -1.375,0.031 z" />
+        <linearGradient id={componentId + 'elipse-gradient'} gradientTransform="rotate(0)">
+          <stop offset="0%" stopOpacity="30" stopColor={'silver'} />
+          <stop offset="75%" stopColor={color_side} />
+        </linearGradient>
+        <defs>
+          <filter id={componentId + "elipseShadow"} x="0" y="0" width="600%" height="500%">
+            <feOffset result="offOut" in="SourceGraphic" dx="2.5" dy="2.5" />
+            <feColorMatrix result="matrixOut" in="offOut" type="matrix"
+              values="0.2 0 0 0 0 0 0.2 0 0 0 0 0 0.2 0 0 0 0 0 1 0" />
+            <feGaussianBlur result="blurOut" in="matrixOut" stdDeviation="2.5" />
+            <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+          </filter>
+        </defs>
+        <g transform="translate(-10,-1086)"
+          fill={props.componentGradient === true ? 'url(#' + componentId + 'elipse-gradient)' : color_side}
+          style={{
+            'strokeWidth': '0.3',
+            'stroke': 'black'
+          }}
+        >
+          <g filter={props.componentShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}>
+            <path
+              id="path8478"
+              d="M 24.149959,1064.5524 5.135178,1049.0529 h 10.000004 l 19.014781,15.4995 z"
+            />
+            <path
+              id="path8480"
+              d="m 0.04018281,1106.8979 1.41294219,-16.1439 10.578125,-0.016 1.208307,1.0171 0.837821,-9.512 -3.126797,-2.5487 -0.106831,1.0124 h -8.5625 l 2.853928,-31.6543 19.014781,15.4995 -5.094995,57.845 z"
+            />
+            <path
+              id="path8484"
+              d="m 12.03125,1090.738 1.34375,0.032 -0.135443,0.9854 -1.208307,-1.0171"
+            />
+            <path
+              id="path8486"
+              d="m 10.950581,1079.6944 1.268169,0.9815 -1.375,0.031 z" />
 
-                <path
-                  id="path8488"
-                  d="m 24.149959,1064.5524 h 10.000004 l -5.094995,57.845 -10.000004,-4e-4 z"
-                />
+            <path
+              id="path8488"
+              d="m 24.149959,1064.5524 h 10.000004 l -5.094995,57.845 -10.000004,-4e-4 z"
+            />
 
-              </g>
-            </g>
+          </g>
+        </g>
 
-
-            <text className={classes.textBMValue}
+        <text className={classes.textBMValue}
            x={typeof props.valueOffsetX !== 'undefined' ? props.valueOffsetX +7.5:7.5}
            y={typeof props.valueOffsetY !== 'undefined' ? props.valueOffsetY +57.5:57.5}
               textAnchor='middle'
               filter={props.textShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
-            >
-              {value + " " + props.units}
-
-            </text>
-            <text className={classes.textBMLabel}
-             x={typeof props.labelOffsetX !== 'undefined' ? props.labelOffsetX +7.5:7.5}
-             y={typeof props.labelOffsetY !== 'undefined' ? props.labelOffsetY -40:-40}
-              textAnchor='middle'
-              filter={props.textShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
-            >
-              {props.label}
-            </text>
-          </g>
-        
-
-      
-     
-
-
-      </svg>
+        >
+          {value + " " + props.units}
+        </text>
+        <text className={classes.textBMLabel}
+          x={typeof props.labelOffsetX !== 'undefined' ? props.labelOffsetX +7.5:7.5}
+          y={typeof props.labelOffsetY !== 'undefined' ? props.labelOffsetY -40:-40}
+          textAnchor='middle'
+          filter={props.textShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
+        >
+          {props.label}
+        </text>
+      </g>
+    </svg>
   );
 }
-
-
-
 
 /**
 * BendingMagnet Beam line component
 * 
 * The label, min, max, units, pv and tooltip all accept macros that can be replaced by the values defined in the macros prop.  
- * */
-
+*/
 const BendingMagnet = (props) => {
-
   return (
     <Widget svgWidget={true}  {...props} component={BendingMagnetComponent}  pv={props.pv} />
-
   )
 }
 
 BendingMagnet.propTypes = {
-
-
   /**
-  * Directive to use the  alarm severity status to alter the fields background color.
-  */
-
+   * Directive to use the  alarm severity status to alter the fields background color.
+   */
   alarmSensitive: PropTypes.bool,
   /**
    * Custom PV to define the alarm severity to be used, alarmSensitive must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
@@ -241,12 +212,9 @@ BendingMagnet.propTypes = {
    */
   precPv: PropTypes.string,
 
-
-
   /**
    * Custom units to be used, if usePvUnits is not defined.
    */
-
   units: PropTypes.string,
   /**
    * Custom PV to define the units to be used, usePvUnits must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
@@ -286,15 +254,11 @@ BendingMagnet.propTypes = {
    *  If not defined it uses the custom units as defined by the units prop.
    */
 
-
   usePvUnits: PropTypes.bool,
   /**
    * Directive to use PV's string values.
    */
   useStringValue: PropTypes.bool,
-
-
-
 
   /**
    * If defined, then the string representation of the number can be formatted
@@ -304,16 +268,12 @@ BendingMagnet.propTypes = {
    */
   numberFormat: PropTypes.object,
 
-
   /** Name of the pv process variable, eg. '$(device):test$(id)'*/
   pv: PropTypes.string,
 
-
-
-
   /**
-  * Tooltip Text
-  */
+   * Tooltip Text
+   */
   tooltip: PropTypes.string,
   /**
    * Directive to show the tooltip
@@ -322,17 +282,14 @@ BendingMagnet.propTypes = {
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-
   tooltipProps: PropTypes.object,
   /**
    *  A System description object the passed to the callback function when the item is clicked on
    */
-
   system: PropTypes.object,
   /**
    *  A callback function when the item is clicked on, returns the system object
    */
-
   handleOnClick: PropTypes.func,
   /**
    * Y Offset for the label
@@ -362,7 +319,7 @@ BendingMagnet.propTypes = {
    * enable a shadow behind the component
    */
   componentShadow: PropTypes.bool,
-/**
+  /**
    * Direct to show the label
    */
   showLabel: PropTypes.bool,
@@ -370,10 +327,8 @@ BendingMagnet.propTypes = {
    * Direct to show the value
    */
   showValue: PropTypes.bool,
-  
-
-
 };
+
 BendingMagnet.defaultProps = {
   debug: false,
   showLabel:true,
@@ -390,5 +345,3 @@ BendingMagnet.defaultProps = {
 };
 
 export default withStyles(styles,{withTheme:true})(BendingMagnet)
-
-

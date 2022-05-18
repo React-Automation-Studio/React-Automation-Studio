@@ -13,47 +13,35 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 
 
-
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 const styles = theme => ({
-
-
   Label: {
     fill: theme.palette.text.primary
-
   },
   Value: {
     fill: theme.palette.text.primary
-
   },
-
 });
+
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */
 const FCComponent = (props) => {
-
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const handleYes = () => {
     let newValue = props.value == 1 ? 0 : 1;
     props.handleImmediateChange(newValue);
     setDialogOpen(false);
-
   };
 
   const handleOnClick = () => {
-
     let newValue = props.value == 1 ? 0 : 1;
-
     props.handleImmediateChange(newValue)
   };
-  // const handleContextMenu = event => {
-  //   props.handleToggleContextMenu(event);
 
-  // };
   let yOffset = 0;
   const { classes } = props;
   const { initialized } = props;
@@ -73,6 +61,7 @@ const FCComponent = (props) => {
   else {
     inLimitPvIndex = -1;
   }
+
   let outLimitPvIndex;
   let outLimitPv;
   if (props.inLimitPv) {
@@ -82,6 +71,7 @@ const FCComponent = (props) => {
   else {
     outLimitPvIndex = -1;
   }
+
   let isMovingPvIndex;
   let isMovingPv;
   if (props.inLimitPv) {
@@ -91,39 +81,35 @@ const FCComponent = (props) => {
   else {
     outLimitPvIndex = -1;
   }
+
   if (initialized) {
     let inValue = props.inLimitPv ? inLimitPv.value : value;
     let inLimitValue = props.inLimitValue ? props.inLimitValue : 1;
 
     isIn = inValue == inLimitValue;
-    //  console.log(inValue,inLimitValue,isIn,inLimitPv)
     let outValue = props.outLimitPv ? outLimitPv.value : value;
     let outLimitValue = props.outLimitValue ? props.outLimitValue : 1;
     isOut = outValue == outLimitValue;
-    //isIn = value=='0';
 
     let isMovingValue = props.isMovingPv ? isMovingPv.value : value;
     let isMovingValueValid = props.isMovingValue ? props.isMovingValue : 1;
 
-
     isMoving = props.isMovingValue ? isMovingValue == isMovingValueValid : (!(isIn || isOut));
     yOffset = isIn ? 0 : -35;
-
   }
   else {
     yOffset = 0;
   }
+
   let color = '';
   if (initialized) {
     if (props.alarmSensitive !== 'undefined') {
       if (props.alarmSensitive == true) {
         if (alarmSeverity == 1) {
           color = props.theme.palette.alarm.minor.main;
-
         }
         else if (alarmSeverity == 2) {
           color = props.theme.palette.alarm.major.main;
-
         }
         else {
           if (isMoving) {
@@ -132,26 +118,17 @@ const FCComponent = (props) => {
           else {
             color = props.theme.palette.beamLineComponent.main;
           }
-
         }
-
-
       }
-
     }
-
   }
   else {
     color = 'grey';
   }
 
   const componentId = uuidv4();
-  //console.log(isIn)
 
   return (
-
-
-
     <svg
       x={props.x}
       y={props.y}
@@ -159,17 +136,10 @@ const FCComponent = (props) => {
       width={svgWidth}
       height={svgHeight}
     >
-
       <g
         transform={'translate(' + svgCenterX + ',' + (svgCenterY - 2.5) + ')'}
-
-      //    onContextMenu={handleContextMenu}
       >
-
-
         <g>
-
-
           <Dialog
             open={dialogOpen}
             TransitionComponent={Transition}
@@ -196,11 +166,9 @@ const FCComponent = (props) => {
             </DialogActions>
           </Dialog>
 
-
-
           <linearGradient id={componentId + 'FC-gradient'} gradientTransform="rotate(0)">
-          <stop offset="0%" stopColor={'silver'} />
-                        <stop offset="65%" stopColor={color} />
+            <stop offset="0%" stopColor={'silver'} />
+            <stop offset="65%" stopColor={color} />
           </linearGradient>
           <defs>
             <filter id={componentId + "FCShadow"} x="0" y="0" width="600%" height="500%">
@@ -211,8 +179,6 @@ const FCComponent = (props) => {
               <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
             </filter>
           </defs>
-
-
           <g
             fill={props.componentGradient === true ? 'url(#' + componentId + 'FC-gradient)' : color}
             filter={props.componentShadow === true ? "url(#" + componentId + "FCShadow)" : ""}
@@ -227,13 +193,8 @@ const FCComponent = (props) => {
                 cy="1104.5706"
                 rx="5.3938155"
                 ry="17.737566" />
-
-
-
-
             </g>
             }
-
             {yOffset === 0 && <g transform={'translate(-11,-1102.5)'}>
               <path
                 d="m 3.2879796,1122.4204 c -1.2852323,-0.084 -1.5029316,-0.1209 -1.1719195,-0.2014 0.1791184,-0.043 0.5666595,-0.2704 0.7975976,-0.4662 1.6785753,-1.4252 3.0788061,-5.7048 3.6656823,-11.2038 0.195042,-1.8277 0.2763907,-3.29 0.297677,-5.351 0.036502,-3.535 -0.1932037,-6.6349 -0.7107832,-9.5922 -0.3826264,-2.1864 -0.8317616,-3.8473 -1.4551449,-5.3815 -0.7283328,-1.7928 -1.587264,-2.9311 -2.4746797,-3.2803 -0.1952031,-0.078 -0.2017864,-0.084 -0.1106923,-0.1093 0.1205222,-0.035 1.2221931,-0.1066 2.1584862,-0.1411 1.1404741,-0.043 2.8140282,0.053 4.2616262,0.2503 5.8683487,0.7943 11.1733747,3.604 14.5144387,7.6873 0.570693,0.6973 0.880617,1.1339 1.370907,1.931 1.558755,2.5337 2.323424,5.1761 2.323424,8.0286 0,2.2956 -0.525865,4.5248 -1.575169,6.6774 -0.209551,0.4298 -0.747136,1.3504 -1.095266,1.8757 -2.376667,3.5854 -6.32174,6.4653 -10.9765,8.0124 -2.645862,0.8797 -5.4712766,1.3212 -8.3253487,1.3007 -0.5555337,0 -1.2279842,-0.029 -1.4943364,-0.037 z"
@@ -246,8 +207,6 @@ const FCComponent = (props) => {
                 d="m 0.8923237,1122.0693 c -1.9504533,-0.9228 -3.6344723,-5.5142 -4.280598,-11.6711 l -0.080348,-0.7656 h 5.082547 5.0825471 l -5.625e-4,0.2031 c -3.125e-4,0.1117 -0.043324,0.5688 -0.095583,1.0156 -0.7019438,6.0025 -2.2939508,10.2889 -4.1370302,11.1386 -0.1798115,0.083 -0.34319,0.1771 -0.3630636,0.2092 -0.019874,0.032 -0.210255,0.058 -0.42307,0.058 -0.3004544,0 -0.4758687,-0.042 -0.7848344,-0.1882 z"
               />
             </g>
-
-
             }
           </g>
           <text className={classes.Label}
@@ -260,16 +219,9 @@ const FCComponent = (props) => {
           </text>
         </g>
       </g>
-
-
-
-
-
     </svg>
   );
 }
-
-
 
 
 /**
@@ -277,9 +229,7 @@ const FCComponent = (props) => {
 *
 *  The label, min, max, units, pv and tooltip all accept macros that can be replaced by the values defined in the macros prop.
 */
-
 const FC = (props) => {
-
   let pvs=[];
   if( typeof props.isMovingPv!=='undefined'){
     pvs=[props.inLimitPv, props.outLimitPv, props.isMovingPv]
@@ -287,20 +237,18 @@ const FC = (props) => {
   else{
     pvs=[props.inLimitPv, props.outLimitPv]
   }
+  
   return (
     <Widget svgWidget={true}  {...props} component={FCComponent}
       pvs={pvs}
       label={props.label} />
-
   )
 }
+
 FC.propTypes = {
-
-
   /**
-  * Directive to use the  alarm severity status to alter the fields background color.
-  */
-
+   * Directive to use the  alarm severity status to alter the fields background color.
+   */
   alarmSensitive: PropTypes.bool,
   /**
    * Custom PV to define the alarm severity to be used, alarmSensitive must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
@@ -322,8 +270,8 @@ FC.propTypes = {
    */
   label: PropTypes.string,
   /**
-  * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
-  */
+   * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
+   */
   labelPv: PropTypes.string,
   /**
    * Values of macros that will be substituted in the pv name.
@@ -335,10 +283,6 @@ FC.propTypes = {
    * Directive to prevent more FCs being inserted if the maximum is reached.
    */
   maxFCsReached: PropTypes.bool,
-
-
-
-
 
   /**
    * Directive to fill the component's label with
@@ -363,11 +307,6 @@ FC.propTypes = {
    */
   useStringValue: PropTypes.bool,
 
-
-
-
-
-
   /** Name of the pv process variable that sends the command 1 for out and 0 for in, eg. '$(device):test$(id)'*/
   pv: PropTypes.string,
   /** Name of the `in` limit pv process variable, if not defined the pv value==0 is used , eg. '$(device):test$(id)'*/
@@ -383,8 +322,8 @@ FC.propTypes = {
   /** Value to override the default value isMovingPv value is compared too. Valid values: `1` or `0` */
   isMovingValue: PropTypes.number,
   /**
-  * Tooltip Text
-  */
+   * Tooltip Text
+   */
   tooltip: PropTypes.string,
   /**
    * Directive to show the tooltip
@@ -393,7 +332,6 @@ FC.propTypes = {
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-
   tooltipProps: PropTypes.object,
   /**
    *  A System description object the passed to the callback function when the item is clicked on
@@ -403,8 +341,8 @@ FC.propTypes = {
   /**
    *  A callback function when the item is clicked on, returns the system object
    */
-
   handleOnClick: PropTypes.func,
+
   /**
    * Y Offset for the label
    */
@@ -441,10 +379,8 @@ FC.propTypes = {
    * Direct to show the value
    */
   showValue: PropTypes.bool,
-
-
-
 };
+
 FC.defaultProps = {
   debug: false,
   showLabel: true,
@@ -460,7 +396,4 @@ FC.defaultProps = {
   componentGradient: true,
 };
 
-
 export default withStyles(styles, { withTheme: true })(FC)
-
-

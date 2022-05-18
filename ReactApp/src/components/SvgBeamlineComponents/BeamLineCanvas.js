@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
 /**
-* SVG Canvas for the SVG beamline components
-*/
+ * SVG Canvas for the SVG beamline components
+ */
 const BeamLineCanvas = (props) => {
     return (
-
         <svg
             height={props.height}
             width={props.width}
@@ -13,22 +13,17 @@ const BeamLineCanvas = (props) => {
         >
             {props.children}
         </svg>
-
     )
 }
 
 BeamLineCanvas.propTypes = {
-
-
- 
-   
     /**
      * SVG Canvas height
      */
     height: PropTypes.oneOfType([
         PropTypes.number,
         PropTypes.string,
-     ]).isRequired,
+    ]).isRequired,
 
     /**
      * SVG Canvas width
@@ -50,18 +45,9 @@ BeamLineCanvas.propTypes = {
      * Any SVG props can passed to the canvas as an object
      */
     svgProps: PropTypes.object,
+};
 
-   
-   
-   
-   
-   
-   
-   };
-   BeamLineCanvas.defaultProps = {
-    
-   
-    
-   };
+BeamLineCanvas.defaultProps = {
+};
 
 export default BeamLineCanvas

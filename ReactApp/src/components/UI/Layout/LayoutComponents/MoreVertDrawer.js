@@ -50,7 +50,6 @@ const MoreVertDrawer = (props) => {
                             label="Theme"
                             value={context.themeStyle}
                             onChange={context.changeTheme}
-
                         >
                             {context.themeStyles.map((option, index) => (
                                 <MenuItem key={index.toString()} value={option}>

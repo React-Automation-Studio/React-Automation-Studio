@@ -73,18 +73,11 @@ const defaultPalette = () => {
         beamLineComponent:beamLineComponent,
         svgComponentPrimary:svgComponentPrimary,
         svgComponentSecondary:svgComponentSecondary,
-
-
     })
 }
 
-
-
-
- const defaultTheme = {
-    
+const defaultTheme = {
     palette: { ...defaultPalette() },
-
 }
 
 export default defaultTheme;

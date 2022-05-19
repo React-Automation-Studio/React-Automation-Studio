@@ -13,9 +13,6 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import EditIcon from '@material-ui/icons/Edit';
 import { makeStyles } from '@material-ui/core/styles';
 import { useTheme } from '@material-ui/core/styles';
-// Styles
-
-
 
 
 const useStyles = makeStyles((theme) => ({
@@ -45,8 +42,6 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: theme.spacing(2),
     paddingBottom: theme.spacing(2),
     marginBottom: theme.spacing(2),
-
-
   },
   WhatsNew: {
     maxHeight: '35vh',
@@ -68,11 +63,7 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 'auto',
 
   },
-
 }));
-
-
-
 
 
 const MainDashboard = (props) => {
@@ -96,14 +87,8 @@ const MainDashboard = (props) => {
       denseAppBar
       alignTitle="center"
     >
-
-
-
       <Grid className={classes.MainGrid} container direction="row" item justify="center" spacing={2} alignItems="stretch" >
-
-
         <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem} >
-
           <Paper className={classes.Paper} elevation={paperElevation}>
             <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
               <Grid item lg={6} sm={12} xs={12}>
@@ -126,12 +111,10 @@ const MainDashboard = (props) => {
                 </Grid>
               </Grid>
             </Grid>
-
           </Paper>
         </Grid>
 
         <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem}>
-
           <Paper className={classes.Paper} elevation={paperElevation}>
             <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
               <Grid item lg={6} sm={12} xs={12}>
@@ -164,7 +147,6 @@ const MainDashboard = (props) => {
         </Grid>
 
         <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem} >
-
           <Paper className={classes.Paper} elevation={paperElevation}>
             <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
               <Grid item lg={12} sm={12} xs={12} style={{ textAlign: 'center' }}>
@@ -180,6 +162,7 @@ const MainDashboard = (props) => {
                     <li>Hot fix in NodeJs Docker files for new npm registry requirements, previous releases will fail after 1 October 2021 </li>
                   </ul>
                   <br />
+
                   V3.0.2 Monday 23 August 2021
                   <br />
                   <br />
@@ -201,8 +184,6 @@ const MainDashboard = (props) => {
                     <li>Nginx: Fixed a waring on a script</li>
                     <li>pvServer: minor bug fix</li>
                   </ul>
-
-
                   <br />
 
                   V3.0.0 Monday 24 May 2021
@@ -227,18 +208,15 @@ const MainDashboard = (props) => {
                     </li>
                     <li>Package updates</li>
                     <li>Minor Bug Fixes</li>
-
                   </ul>
                   Breaking changes:
                   <ul>
                     <li>Removal of the old file based administration</li>
                     <li>Environment variable names have been simplified</li>
                     <li>GraphY and GraphXY background now defaults to the theme.palette.background.default value</li>
-
                   </ul>
-
-
                   <br />
+
                   V2.2.0 Wednesday 20 January 2021
                   <br />
                   Improvements and new features:
@@ -254,8 +232,8 @@ const MainDashboard = (props) => {
                     <li>Upgraded to Socket.IO 3.1.0</li>
                     <li>Upgraded pvServer to Flask-SocketIO 5.0.1</li>
                     <li>Package updates</li>
-
                   </ul>
+
                   V2.1.0 Tuesday 20 October 2020
                   <br />
                   Improvements and new features:
@@ -276,7 +254,6 @@ const MainDashboard = (props) => {
 
                   V2.0.0 Wednesday 5 August 2020
                   <br />
-
                   Improvements and new features:
                   <br />
                   <ul>
@@ -305,23 +282,21 @@ const MainDashboard = (props) => {
                       </ul>
                     </li>
 
-
                     <li> Deprecated Components: These components will be removed in future releases                  <br />
                       <ul>
                         <li>
-                          SimpleSlider -> Use Slider
+                          SimpleSlider -&gt; Use Slider
                         </li>
                         <li>
-                          ActionFanoutButton -> Use ActionButton
+                          ActionFanoutButton -&gt; Use ActionButton
                         </li>
                         <li>
-                          SwitchComponent -> Use Switch
+                          SwitchComponent -&gt; Use Switch
                         </li>
                       </ul>
                     </li>
                     <li>
                       Removed Component:
-
                       <ul>
                         <li>
                           GraphMultiplePVs
@@ -330,7 +305,6 @@ const MainDashboard = (props) => {
                     </li>
                     <li>
                       Breaking Changes:
-
                       <ul>
                         <li>
                           routes.js was renamed Routes.js and now contains extra logic to enable dynamic or isolated routes based on the use role.
@@ -341,40 +315,31 @@ const MainDashboard = (props) => {
                       </ul>
                     </li>
                     <li>Packages updated in both RAS and RAS-Example-Project-1</li>
-
                   </ul>
-
-
-
                 </Typography>
               </Grid>
-
             </Grid>
           </Paper>
         </Grid>
-        <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem} >
 
+        <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem} >
           <Paper className={classes.Paper} elevation={paperElevation}>
             <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
               <Grid item lg={12} sm={12} xs={12} style={{ textAlign: 'center' }}>
                 <Typography {...typographyProps}><EditIcon className={classes.Icon} /> Staging</Typography>
               </Grid>
               <Grid item lg={6} sm={12} xs={12}>
-
                 <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
                   <Grid item lg={12} sm={12} xs={12}>
                     <Button fullWidth className={classes.button} component={Link} to="/Staging" color="primary" variant={buttonVariant}>  Staging </Button>
                   </Grid>
                 </Grid>
               </Grid>
-
-
-
             </Grid>
           </Paper>
         </Grid>
-        <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem} >
 
+        <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem} >
           <Paper className={classes.Paper} elevation={paperElevation} style={{ textAlign: 'center' }}>
             <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
               <Grid item lg={12} sm={12} xs={12}>
@@ -382,7 +347,6 @@ const MainDashboard = (props) => {
               </Grid>
               <Grid item lg={6} sm={12} xs={12}>
                 <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
-
                   <Grid item lg={12} sm={12} xs={12}>
                     <Button fullWidth className={classes.button} component={Link} to="/AlarmHandlerDemo" color="primary" variant={buttonVariant}>  Alarm Handler Demo </Button>
                   </Grid>
@@ -395,45 +359,27 @@ const MainDashboard = (props) => {
                   <Grid item lg={12} sm={12} xs={12} >
                     <Button fullWidth className={classes.button} component={Link} to="/ArchiverDataViewerDemo" color="primary" variant={buttonVariant}> Archiver Data Viewer Demo </Button>
                   </Grid>
-
-
                 </Grid>
               </Grid>
             </Grid>
           </Paper>
         </Grid>
-        <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem} >
 
+        <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem} >
           <Paper className={classes.Paper} elevation={paperElevation}>
             <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
               <Grid item lg={12} sm={12} xs={12} style={{ textAlign: 'center' }}>
                 <Typography {...typographyProps}><HelpIcon className={classes.Icon} /> Help</Typography>
               </Grid>
               <Grid item lg={6} sm={12} xs={12}>
-
                 <Button fullWidth className={classes.button} target="_blank" href={styleguideURL} color="default" variant={buttonVariant}> Help and Style Guide </Button>
-
               </Grid>
-
             </Grid>
           </Paper>
         </Grid>
-
-
-
-
-
-
       </Grid>
-
-
-
-
-
-
     </TraditionalLayout >
   )
 }
-
 
 export default MainDashboard;

@@ -24,7 +24,6 @@ const navyPalette = () => {
             main: minor['200'],
             dark: minor['300']
         },
-
     };
     const background = {
         paper: "#282C34",
@@ -60,9 +59,10 @@ const navyPalette = () => {
             fill: 'none',
             strokeWidth: '2px',
             stroke: grey[500]
-          },
-          lineColors: [lightBlue[100], lime[300], pink[200], deepOrange[200], blue[200]],
-        };
+        },
+        lineColors: [lightBlue[100], lime[300], pink[200], deepOrange[200], blue[200]],
+    };
+
     return ({
         type: type,
         primary: primary,
@@ -80,16 +80,11 @@ const navyPalette = () => {
         beamLineComponent:beamLineComponent,
         svgComponentPrimary:svgComponentPrimary,
         svgComponentSecondary:svgComponentSecondary,
-
-
     })
 }
 
-
- const navyTheme = {
-    
+const navyTheme = {
     palette: { ...defaultTheme, ...navyPalette() },
-
 }
 
 export default navyTheme;

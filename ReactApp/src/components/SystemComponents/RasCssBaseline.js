@@ -2,11 +2,7 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 
 
-const styles = theme => {
-
-return({
-
-  
+const styles = theme => ({
   '@global':{
     '::-webkit-scrollbar': {
       width: '0.2em',
@@ -22,8 +18,7 @@ return({
       outline: '1px solid slategrey'
     }
   }
-})
-};
+});
 
 /**
  * This component injects CSS baseline for the React-Vis graph librbary.
@@ -37,4 +32,5 @@ const RasCssBaseline=(props)=> {
   /* eslint-enable no-unused-vars */
   return <React.Fragment>{children}</React.Fragment>;
 }
+
 export default withStyles(styles,{withTheme:true})(RasCssBaseline)

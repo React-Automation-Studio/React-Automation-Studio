@@ -12,8 +12,8 @@ const ProtectedRoute = (props) => {
   const userRoles= context.userData.roles;
   const {roles}=props;
   let forbidden;
-  if (roles){
-    
+
+  if (roles){    
     if (roles.length>0){
       let found=userRoles.some(r=> roles.includes(r));
       forbidden=!found;
@@ -23,16 +23,11 @@ const ProtectedRoute = (props) => {
     }
   }
   else{
-  forbidden=false;
+    forbidden=false;
   }
  
   return (
-
-    //  <Route  path={props.path}  render={()=>( 
-    //   loggedIn?<Component />:(loggingIn?<BusyLoggingIn/>:<Redirect to="/logIn" />)
-    //   )}/>
     <Route path={props.path} exact={props.exact}  >
-
       {
         (routeProps) => (
           loggedIn ?
@@ -43,7 +38,6 @@ const ProtectedRoute = (props) => {
               <BusyLoggingIn />
               :
               <Redirect
-              
                 to={{
                   pathname: "/login",
                   state: { from: routeProps.location }
@@ -53,7 +47,7 @@ const ProtectedRoute = (props) => {
         )
       }
     </Route>
-
   )
 }
+
 export default ProtectedRoute;

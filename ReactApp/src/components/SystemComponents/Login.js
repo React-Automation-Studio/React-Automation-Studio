@@ -29,6 +29,7 @@ import { GoogleLogin } from 'react-google-login';
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
+
 const useStyles = makeStyles((theme) => ({
   main: {
     width: 'auto',
@@ -77,7 +78,6 @@ const Header = (props) => {
       {props.image}
       {props.logoIcon && <Avatar className={classes.avatar}>
         {props.logoIcon}
-
       </Avatar>}
       {props.signInText &&
         <Typography component="h1" variant="h5" style={{ paddingBottom: 16 }}>
@@ -86,23 +86,23 @@ const Header = (props) => {
     </React.Fragment>
   )
 }
+
 const Footer = (props) => {
   return (
     <React.Fragment>
       {props.footerString && <Typography style={{ paddingTop: 24 }} align="left" variant="caption">
         {props.footerString}
       </Typography>}
-
       {props.version && <Typography style={{ paddingTop: 16 }} align="left" variant="caption">
         {props.version}
-
       </Typography>}
     </React.Fragment>)
 }
+
 /**
  * The login component can be fully customized either by using the individual props or by overriding the header and footer portions using the customHeader or customFooter components.
  * The login component and pvServer support multiple login modes. See below to enable login, disable standard login, enable active directory and Google login
- * */
+ */
 const Login = (props) => {
   const classes = useStyles();
   const context = useContext(AutomationStudioContext);
@@ -138,22 +138,18 @@ const Login = (props) => {
 
           if (typeof data.accessToken !== 'undefined') {
             context.setUserTokens(data.accessToken);
-
           }
           else {
             context.setUserTokens(data.null);
           }
           if (typeof data.refreshTokenConfig !== 'undefined') {
-            //     console.log("setting")
             context.setRefreshTokenConfig(data.refreshTokenConfig);
-
           }
           else {
             context.setRefreshTokenTimeout(data.null);
           }
           setAuthorisationFailed(data.login !== true);
         }
-
         )
         .catch(err => {
           let str = err.toString();
@@ -164,10 +160,7 @@ const Login = (props) => {
           else {
             setAuthorisationFailed(true);
           }
-
-
         })
-
     }
   }
 
@@ -181,6 +174,7 @@ const Login = (props) => {
     }
     setLoginModes(modes);
   }, [enableStandardLogin, enableActiveDirectoryLogin])
+
   useEffect(() => {
     mounted.current = true;
     if (submit === true) {
@@ -197,23 +191,18 @@ const Login = (props) => {
           : null
       if (endpoint) {
         axios.post(endpoint, body, options)
-          // .then(response => response.json())
           .then(response => {
             const { data } = response;
 
             if (mounted.current) {
-              //   console.log(data) 
               if (typeof data.accessToken !== 'undefined') {
                 context.setUserTokens(data.accessToken);
-
               }
               else {
                 context.setUserTokens(data.null);
               }
               if (typeof data.refreshTokenConfig !== 'undefined') {
-                // console.log("setting")
                 context.setRefreshTokenConfig(data.refreshTokenConfig);
-
               }
               else {
                 context.setRefreshTokenTimeout(data.null);
@@ -223,7 +212,6 @@ const Login = (props) => {
           }
           )
           .catch(err => {
-            //setAuthenticationFailed(true);
             let str = err.toString();
             console.log(str)
             if (!(str.includes("401"))) {
@@ -233,8 +221,6 @@ const Login = (props) => {
             else {
               setAuthorisationFailed(true);
             }
-
-
           })
       }
       setSubmit(false)
@@ -244,6 +230,7 @@ const Login = (props) => {
    // eslint-disable-next-line  react-hooks/exhaustive-deps
   }, [submit]
   )
+
   useEffect(() => {
     if (loggedIn) {
       let { from } = location.state || { from: { pathname: "/" } };
@@ -306,7 +293,6 @@ const Login = (props) => {
       </Dialog>
 
       <main className={classes.main}>
-
         <Paper className={classes.paper}>
           {props.customHeader ? props.customHeader : <Header {...props} />}
 
@@ -318,7 +304,6 @@ const Login = (props) => {
               {loginModes.map((item, index) =>
                 <Tab label={item} style={{ textTransform: 'capitalize' }} key={index.toString()} />
               )
-
               }
             </Tabs>
           </AppBar>}
@@ -362,7 +347,6 @@ const Login = (props) => {
                     </InputAdornment>
                   )
                 }}
-
               />
             </FormControl>
             <Button
@@ -389,10 +373,10 @@ const Login = (props) => {
           {enableActiveDirectoryLogin&&adLoginMode&&props.adFooter}
         </Paper>
       </main>
-      {/* {authorised && <Redirect to='/' />} */}
     </React.Fragment>
   );
 }
+
 Login.propTypes = {
   /** Title text top row.*/
   title1: PropTypes.string,
@@ -424,26 +408,17 @@ Login.propTypes = {
   customHeader: PropTypes.element,
   /** Custom Footer Component overides all the components below the sign in buttons*/
   customFooter: PropTypes.element,
-  
-
-
-
 };
+
 Login.defaultProps = {
   title1: "React",
   title2: "Automation",
   title3: "Studio",
   logoIcon: <LockOutlinedIcon />,
   signInText: "Sign In",
-  // footerString: "Login is now customizable",
-  // version: "V2.2.0",
   standardLoginUsernameDisplayText: "Username",
   activeDirectoryLoginUsernameDisplayText: "Email Address",
-
   timeout: 15000,
-  
-
 };
-
 
 export default Login;

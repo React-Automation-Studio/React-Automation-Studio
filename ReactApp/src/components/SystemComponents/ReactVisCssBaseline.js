@@ -2,11 +2,7 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 
 
-const styles = theme => {
-
-return({
-
-  
+const styles = theme => ({
   '@global':{
     '.react-vis-magic-css-import-rule': { display: 'inherit' },
     '.rv-treemap': { fontSize: '12px', position: 'relative' },
@@ -147,8 +143,7 @@ return({
     },
     '.rv-legend-titles__right': { right: '0' },
     '.rv-radial-chart .rv-xy-plot__series--label': { pointerEvents: 'none' }}
-})
-};
+});
 
 /**
  * This component injects CSS baseline for the React-Vis graph librbary.
@@ -162,4 +157,5 @@ const ReactVisCssBaseline=(props)=> {
   /* eslint-enable no-unused-vars */
   return <React.Fragment>{children}</React.Fragment>;
 }
+
 export default withStyles(styles,{withTheme:true})(ReactVisCssBaseline)

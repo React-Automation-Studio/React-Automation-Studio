@@ -180,8 +180,8 @@ BitIndicators.propTypes = {
   /** Directive to use the  PV Bit Labels. */
   usePvBitLabels: PropTypes.bool,
   /**
-  * Tooltip Text
-  */
+   * Tooltip Text
+   */
   tooltip: PropTypes.string,
   /**
    * Directive to show the tooltip

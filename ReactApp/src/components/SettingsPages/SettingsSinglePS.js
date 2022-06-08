@@ -26,7 +26,7 @@ class SettingsSinglePS extends React.Component {
     const {classes}= this.props;
     const system=JSON.parse(decodeURIComponent(this.props.location.search.substr(1))) ;
     return (
-      <Grid   container
+      <Grid container
         direction="row"
         justify="flex-start"
         alignItems="center" spacing={1}>
@@ -36,7 +36,7 @@ class SettingsSinglePS extends React.Component {
               {system.displayName}
             </body1>
             <Card style={{ padding: 12}} >
-              <Grid   container
+              <Grid container
                 direction="row"
                 justify="flex-start"
                 alignItems="center" spacing={1}>
@@ -69,7 +69,7 @@ class SettingsSinglePS extends React.Component {
                   }} target="_blank" color="primary" variant='contained'>  Settings </Button>
                 </Grid>
                 <Grid item xs={12}  >
-                  <Grid   container  justify="flex-start" direction="row"    alignItems="center" spacing={4}>
+                  <Grid container justify="flex-start" direction="row" alignItems="center" spacing={4}>
                     <Grid item xs={12} sm={12} >
                       <ThumbWheel
                         pv={system.devices.device.deviceName+":"+system.devices.device.setpoint}

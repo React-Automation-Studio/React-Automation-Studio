@@ -113,10 +113,10 @@ const HarpComponent = (props) => {
           color = props.theme.palette.alarm.major.main;
         }
         else {
-          if (isMoving){
+          if (isMoving) {
             color='#f9e500';
           }
-          else{
+          else {
             color = props.theme.palette.beamLineComponent.main;
           }
         }

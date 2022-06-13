@@ -21,8 +21,6 @@ const styles = (theme) => ({
 
 
 const CheckBoxComponent = (props) => {
-
-
   /**
    * Send checkbox value to the PV.
    * @param {Event} event
@@ -31,7 +29,6 @@ const CheckBoxComponent = (props) => {
     let value = event.target.checked ? 1 : 0;
     props.handleImmediateChange(value);
   }
-
 
   return (
     /* eslint-disable eqeqeq */
@@ -52,8 +49,8 @@ const CheckBoxComponent = (props) => {
     />
     /* eslint-enable eqeqeq */
   );
-
 }
+
 /**
  * The CheckBox component is a wrapper on a Material-UI CheckBox component.
  https://material-ui.com/api/checkbox/
@@ -61,7 +58,6 @@ const CheckBoxComponent = (props) => {
 const CheckBox = (props) => {
   return (
     <Widget {...props} component={CheckBoxComponent} usePvMinMax={false} usePvPrecision={false} min={undefined} max={undefined} prec={undefined}/>
-
   )
 }
 
@@ -80,8 +76,8 @@ CheckBox.propTypes = {
   /** Custom label to be used, if  `usePvLabel` is not defined. */
   label: PropTypes.string,
   /**
- * Custom on color to be used, must be derived from Material UI theme color's.
- */
+   * Custom on color to be used, must be derived from Material UI theme color's.
+   */
   onColor: PropTypes.string,
   /**
    * Directive to fill the component's label with
@@ -92,8 +88,8 @@ CheckBox.propTypes = {
    /**
   * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
   */
- labelPv: PropTypes.string,
- /** Any of the MUI Checkbox Props can applied by defining them as an object
+  labelPv: PropTypes.string,
+  /** Any of the MUI Checkbox Props can applied by defining them as an object
    * 
    */
   muiCheckBoxProps: PropTypes.object,
@@ -108,13 +104,13 @@ CheckBox.propTypes = {
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-
   tooltipProps:PropTypes.object,
-
 }
+
 CheckBox.defaultProps = {
   onColor: 'primary',
   debug: false,
   showTooltip:false
 }
+
 export default withStyles(styles, { withTheme: true })(CheckBox);

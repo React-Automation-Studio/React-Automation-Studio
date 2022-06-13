@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from 'react'
 import ReactAutomationStudioContext from './AutomationStudioContext';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from "prop-types";
+
 export const useLocalPV = (props) => {
   const initPV = () => {
     let pvname = props.pv;
@@ -27,10 +28,8 @@ export const useLocalPV = (props) => {
 
   let contextPv=context.localVariables[pv.pvname]?context.localVariables[pv.pvname]:undefined;
   let contextPvValue=contextPv?contextPv.value:undefined;
-
   
   const updatePVData = (msg) => {
-
     if (msg.connected === '0') {
       setPv(pv => ({ ...pv, initialized: false }))
     }
@@ -45,7 +44,6 @@ export const useLocalPV = (props) => {
           }
         ))
       }
-
       else {
         setPv(pv => (
           {
@@ -60,19 +58,12 @@ export const useLocalPV = (props) => {
             },
           }
         ))
-
-
       }
-
-
     }
   }
 
   useEffect(() => {
-
-
     if (typeof context.localVariables[pv.pvname] === 'undefined') {
-
       let msg = {
         value: typeof props.initialLocalVariableValue === 'undefined' ? 0 : props.initialLocalVariableValue,
         connected: '1',
@@ -91,40 +82,26 @@ export const useLocalPV = (props) => {
         severity: 0,
         write_access: true,
         read_access: true,
-
       };
-
 
       context.updateLocalVariable(pv.pvname, msg);
       updatePVData(context.localVariables[pv.pvname]);
     }
     else {
-
-      //this.context.localVariables[this.state.pvname].newmetadata='True';
       updatePVData(context.localVariables[pv.pvname]);
-      //  console.log(this.state)
-
     }
-
-
- 
-
 // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(()=>{
     if (props.debug){
-
-     
-    console.log(contextPv)
+      console.log(contextPv)
     }
     updatePVData(context.localVariables[pv.pvname]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[contextPvValue])
-
   
   useEffect(() => {
-
     if (props.newValueTrigger > 0) {
       let msg = context.localVariables[pv.pvname];
       if (props.useStringValue) {
@@ -135,7 +112,6 @@ export const useLocalPV = (props) => {
       }
       context.updateLocalVariable(pv.pvname, msg);
       updatePVData(context.localVariables[pv.pvname]);
-
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.newValueTrigger])
@@ -144,7 +120,6 @@ export const useLocalPV = (props) => {
     console.log(pv,contextPv)
   }
   return (pv)
-
 }
 
 /**
@@ -154,12 +129,7 @@ export const useLocalPV = (props) => {
  * The pv state can be raised as an object using the pvData callback or passed to child function component. All the data in this pv object is valid when pv.initialized===true
  * 
  * A hook called `useLocalPV` is also exported which returns the pv object.
- * 
- * 
- * 
- * 
- * 
- **/
+ */
 const LocalPV = (props) => {
   const pv = useLocalPV(props);
   useEffect(() => {
@@ -175,11 +145,9 @@ const LocalPV = (props) => {
       </Typography>}
     </React.Fragment>
   )
-
 }
 
 LocalPV.propTypes = {
- 
   /**
    * If defined, then the DataConnection and
    * the widget debugging information will be displayed.
@@ -201,32 +169,23 @@ LocalPV.propTypes = {
   outputValue:PropTypes.any,
  
   /** Name of the process variable,  eg. '$(device):test$(id)'*/
-
   pv: PropTypes.string,
 
-   /** A function that returns the pv object */
-
-   pvData: PropTypes.func,
-
-  
+  /** A function that returns the pv object */
+  pvData: PropTypes.func,
   
   /**
    * Directive to use PV's string values.
    */
   useStringValue: PropTypes.bool,
-
-
 };
 
 /**
  * Default props.definition for all widgets linked to
  * PVs storing analog values.
  */
-// static defaultProps=WrappedComponent.defaultProps;
 LocalPV.defaultProps = {
-
   debug: false,
-  
 };
 
 export default LocalPV

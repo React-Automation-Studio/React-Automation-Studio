@@ -20,7 +20,6 @@ import EmailOutlinedIcon from '@material-ui/icons/EmailOutlined';
 import SmsOutlinedIcon from '@material-ui/icons/SmsOutlined';
 import WhatsAppIcon from '@material-ui/icons/WhatsApp';
 import SignalIcon from './SignalIcon';
-// import Slide from '@material-ui/core/Slide';
 
 import DateFnsUtils from '@date-io/date-fns';
 import { formatISO, isSameDay, isAfter, parseISO, setSeconds, startOfDay, endOfDay } from 'date-fns';
@@ -78,8 +77,6 @@ const ScheduleDialog = (props) => {
 
     const classes = useStyles(props)
 
-    // console.table(theme)
-
     const { global } = props.dialogUserObject
 
     const displayUserObject = global
@@ -99,17 +96,6 @@ const ScheduleDialog = (props) => {
     const toDate = displayUserObject.toDate
         ? parseISO(displayUserObject.toDate)
         : endOfDay(new Date())
-
-    // console.clear()
-    // global
-    //     ? console.log('Global')
-    //     : console.log(props.dialogUserObject.notifyPVs[props.dialogUserNotifyIndex].regEx)
-
-    // console.table(displayUserObject)
-
-    // const Transition = React.forwardRef(function Transition(props, ref) {
-    //     return <Slide direction="left" ref={ref} {...props} />
-    // })
 
     const handleNotifyGlobal = (event) => {
         props.setDialogUserObject({ ...props.dialogUserObject, global: event.target.checked })

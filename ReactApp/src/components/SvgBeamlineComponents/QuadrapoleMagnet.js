@@ -5,32 +5,26 @@ import { withStyles } from '@material-ui/core/styles';
 import { v4 as uuidv4 } from 'uuid';
 import  {svgHeight,svgCenterY,svgWidth,svgCenterX} from "../SystemComponents/svgConstants";
 import PropTypes from 'prop-types';
+
 const styles = theme => ({
-
-
   Label: {
     fill: theme.palette.text.primary
-
   },
   Value: {
     fill: theme.palette.text.primary
-
   },
   textBMLabelDisconneted: {
     fill: 'dimgrey'
-
   },
 });
+
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */
 const QuadrapoleMagnetComponent = (props) => {
-
-
   const handleOnClick = device => event => {
     if (typeof props.handleOnClick !== 'undefined') {
       props.handleOnClick(device);
     }
-
   };
 
   const { classes } = props;
@@ -45,6 +39,7 @@ const QuadrapoleMagnetComponent = (props) => {
   else{
     value=0;
   }
+
   let color = '';
   
   if (initialized ){
@@ -52,128 +47,102 @@ const QuadrapoleMagnetComponent = (props) => {
       if (props.alarmSensitive == true) {
         if (alarmSeverity == 1) {
           color = props.theme.palette.alarm.minor.main;
-
         }
         else if (alarmSeverity == 2) {
           color = props.theme.palette.alarm.major.main;
-
         }
         else {
           color = props.theme.palette.beamLineComponent.main;
-
         }
-
       }
-
     }
-
   }
   else{
     color = 'grey';
   }
   let xOffset=0;
   const componentId = uuidv4();
+
   return (
-
-
-
     <svg
-    x={props.x}
-    y={props.y}
+      x={props.x}
+      y={props.y}
 
-    width={svgWidth}
-    height={svgHeight}
-  >
-
+      width={svgWidth}
+      height={svgHeight}
+    >
       <g transform={'translate(' + svgCenterX + ',' + (svgCenterY) + ')'}
        onClick={handleOnClick(props.system)}
       >
-          <linearGradient id={componentId + 'elipse-gradient'} gradientTransform="rotate(0)">
-              <stop offset="0%" stopOpacity="0.5" stopColor='silver' />
-              <stop offset="65%" stopColor={color} />
-            </linearGradient>
-            <defs>
-              <filter id={componentId + "elipseShadow"} x="0" y="0" width="600%" height="500%">
-                <feOffset result="offOut" in="SourceGraphic" dx="2.5" dy="2.5" />
-                <feColorMatrix result="matrixOut" in="offOut" type="matrix"
-                  values="0.2 0 0 0 0 0 0.2 0 0 0 0 0 0.2 0 0 0 0 0 1 0" />
-                <feGaussianBlur result="blurOut" in="matrixOut" stdDeviation="2.5" />
-                <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
-              </filter>
-            </defs>
-            <ellipse
-              fill={props.componentGradient === true ? 'url(#' + componentId + 'elipse-gradient)' : color}
+        <linearGradient id={componentId + 'elipse-gradient'} gradientTransform="rotate(0)">
+          <stop offset="0%" stopOpacity="0.5" stopColor='silver' />
+          <stop offset="65%" stopColor={color} />
+        </linearGradient>
+        <defs>
+          <filter id={componentId + "elipseShadow"} x="0" y="0" width="600%" height="500%">
+            <feOffset result="offOut" in="SourceGraphic" dx="2.5" dy="2.5" />
+            <feColorMatrix result="matrixOut" in="offOut" type="matrix"
+              values="0.2 0 0 0 0 0 0.2 0 0 0 0 0 0.2 0 0 0 0 0 1 0" />
+            <feGaussianBlur result="blurOut" in="matrixOut" stdDeviation="2.5" />
+            <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+          </filter>
+        </defs>
+        <ellipse
+          fill={props.componentGradient === true ? 'url(#' + componentId + 'elipse-gradient)' : color}
+          cx={xOffset + 15}
+          cy={0}
+          rx="10"
+          ry="30"
+          filter={props.componentShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
+        />
+        <ellipse
+          fill={props.componentGradient === true ? 'url(#' + componentId + 'elipse-gradient)' : color}
+          cx={xOffset}
+          cy={0}
+          rx="10"
+          ry="30"
+          filter={props.componentShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
+        />
 
-
-              cx={xOffset + 15}
-              cy={0}
-              rx="10"
-              ry="30"
-              filter={props.componentShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
-            />
-            <ellipse
-              fill={props.componentGradient === true ? 'url(#' + componentId + 'elipse-gradient)' : color}
-              cx={xOffset}
-              cy={0}
-              rx="10"
-              ry="30"
-              filter={props.componentShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
-            />
-
-            <text className={classes.Value}
-               x={typeof props.valueOffsetX !== 'undefined' ? props.valueOffsetX +7.5:7.5}
-               y={typeof props.valueOffsetY !== 'undefined' ? props.valueOffsetY +57.5:57.5}
-          
-              textAnchor='middle'
-              filter={props.textShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
-            >
-              {value + " " + props.units}
-
-            </text>
-            <text className={classes.Label}
-              x={typeof props.labelOffsetX !== 'undefined' ? props.labelOffsetX +7.5:7.5}
-              y={typeof props.labelOffsetY !== 'undefined' ? props.labelOffsetY -40:-40}
-              textAnchor='middle'
-              filter={props.textShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
-            >
-              {props.label}
-            </text>
-          </g>
-        
-
+        <text className={classes.Value}
+            x={typeof props.valueOffsetX !== 'undefined' ? props.valueOffsetX +7.5:7.5}
+            y={typeof props.valueOffsetY !== 'undefined' ? props.valueOffsetY +57.5:57.5}
       
-     
-
-
-      </svg>
+          textAnchor='middle'
+          filter={props.textShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
+        >
+          {value + " " + props.units}
+        </text>
+        <text className={classes.Label}
+          x={typeof props.labelOffsetX !== 'undefined' ? props.labelOffsetX +7.5:7.5}
+          y={typeof props.labelOffsetY !== 'undefined' ? props.labelOffsetY -40:-40}
+          textAnchor='middle'
+          filter={props.textShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
+        >
+          {props.label}
+        </text>
+      </g>
+    </svg>
   );
 }
 
-
-
-
 /**
-* Quadrapole Magnet Beam line component
-* 
-* The label, min, max, units, pv and tooltip all accept macros that can be replaced by the values defined in the macros prop.  
- * */
-
+ * Quadrapole Magnet Beam line component
+ * 
+ * The label, min, max, units, pv and tooltip all accept macros that can be replaced by the values defined in the macros prop.  
+ */
 const QuadrapoleMagnet = (props) => {
-
   return (
     <Widget svgWidget={true}  {...props} component={QuadrapoleMagnetComponent}  pv={props.pv} />
-
   )
 }
 
 QuadrapoleMagnet.propTypes = {
-
-
   /**
-  * Directive to use the  alarm severity status to alter the fields background color.
-  */
-
+   * Directive to use the  alarm severity status to alter the fields background color.
+   */
   alarmSensitive: PropTypes.bool,
+
   /**
    * Custom PV to define the alarm severity to be used, alarmSensitive must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
@@ -228,12 +197,9 @@ QuadrapoleMagnet.propTypes = {
    */
   precPv: PropTypes.string,
 
-
-
   /**
    * Custom units to be used, if usePvUnits is not defined.
    */
-
   units: PropTypes.string,
   /**
    * Custom PV to define the units to be used, usePvUnits must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
@@ -273,15 +239,11 @@ QuadrapoleMagnet.propTypes = {
    *  If not defined it uses the custom units as defined by the units prop.
    */
 
-
   usePvUnits: PropTypes.bool,
   /**
    * Directive to use PV's string values.
    */
   useStringValue: PropTypes.bool,
-
-
-
 
   /**
    * If defined, then the string representation of the number can be formatted
@@ -291,35 +253,29 @@ QuadrapoleMagnet.propTypes = {
    */
   numberFormat: PropTypes.object,
 
-
   /** Name of the pv process variable, eg. '$(device):test$(id)'*/
   pv: PropTypes.string,
 
-
-
-
   /**
-  * Tooltip Text
-  */
+   * Tooltip Text
+   */
   tooltip: PropTypes.string,
   /**
    * Directive to show the tooltip
    */
   showTooltip: PropTypes.bool,
+
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-
   tooltipProps: PropTypes.object,
   /**
    *  A System description object the passed to the callback function when the item is clicked on
    */
-
   system: PropTypes.object,
   /**
    *  A callback function when the item is clicked on, returns the system object
    */
-
   handleOnClick: PropTypes.func,
   /**
    * Y Offset for the label
@@ -357,10 +313,8 @@ QuadrapoleMagnet.propTypes = {
    * Direct to show the value
    */
   showValue: PropTypes.bool,
-
-
-
 };
+
 QuadrapoleMagnet.defaultProps = {
   debug: false,
   showLabel:true,
@@ -376,7 +330,4 @@ QuadrapoleMagnet.defaultProps = {
   componentGradient: true,
 };
 
-
 export default withStyles(styles,{withTheme:true})(QuadrapoleMagnet)
-
-

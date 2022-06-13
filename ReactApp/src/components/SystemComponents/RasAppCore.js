@@ -1,9 +1,6 @@
 
 import React, { Component } from 'react';
 
-
-
-
 import 'typeface-roboto';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,17 +9,8 @@ import AutomationStudioContext from './AutomationStudioContext';
 import { io } from 'socket.io-client';
 import RasCssBaseline from './RasCssBaseline';
 import PropTypes from 'prop-types';
-// import RedirectToLogIn from './RedirectToLogin';
 
 import axios from 'axios';
-
-
-
-
-
-
-
-
 
 class RasAppCore extends Component {
   constructor(props) {
@@ -48,7 +36,6 @@ class RasAppCore extends Component {
       localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
     }
 
-
     this.changeTheme = (event) => {
       let themeStyle = event.target.value;
 
@@ -56,7 +43,6 @@ class RasAppCore extends Component {
       let themeStyles = this.state.system.themeStyles;
       if (themeStyles.includes(themeStyle)) {
         theme = createMuiTheme(this.props.themes[themeStyle])
-
       }
       else {
         const { defaultTheme } = props.defaultTheme;
@@ -71,7 +57,6 @@ class RasAppCore extends Component {
       localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
     }
     this.setRefreshTokenConfig = (config) => {
-      //     console.log("setRefreshTokenConfig",config)
       let system = this.state.system;
       system.refreshTokenConfig = config;
       localStorage.setItem('refreshTokenConfig', JSON.stringify(config));
@@ -81,16 +66,13 @@ class RasAppCore extends Component {
       this.setState({ system: system, refreshTimer: timer })
     }
     this.setUserTokens = (accessToken) => {
-     // console.log("set User tokens", accessToken)
       let system = this.state.system;
       let userTokens = {
         accessToken: accessToken,
       };
       system.userTokens = userTokens;
-      // localStorage.setItem('jwt', JSON.stringify(userTokens.accessToken))
       if (system.socket.disconnected) {
         system.socket.open();
-
         system.socket.emit('AuthoriseClient', system.userTokens.accessToken); //must authorise client over socket io too
       }
       else {
@@ -98,11 +80,9 @@ class RasAppCore extends Component {
       }
 
       this.setState({ system: system })
-
     }
 
     this.setUserData = (username, roles) => {
-
       let system = this.state.system;
       let userData = {
         username: username,
@@ -114,10 +94,8 @@ class RasAppCore extends Component {
 
       this.setState({ system: system })
     }
+
     this.logout = () => {
-      
-      // localStorage.clear();
-      
       axios({
         url:'/api/logout',
         method:'GET',
@@ -143,30 +121,22 @@ class RasAppCore extends Component {
           localStorage.removeItem('loggedIn');
           localStorage.removeItem('refreshTokenConfig');
           localStorage.clear();
-
         })
         .catch((error) => {
           // handle error
           console.log(error);
-         // this.handleRedirectToLogIn()
         })
         .then(function () {
           // always executed
         });
-
-
-
-
-
     }
+
     this.clearLoggingIn = () => {
-      // console.log("clear logging in")
       let system = this.state.system;
       system.userData.loggingIn = false;
       this.setState({ system: system })
-
-
     }
+
     this.updateLocalVariable = (name, data) => {
       let system = this.state.system;
       let localVariables = system.localVariables;
@@ -175,22 +145,15 @@ class RasAppCore extends Component {
       system.localVariables = localVariables
       this.setState({
         system: system,
-
       });
     };
+
     let userData = {
       username: '',
       roles: [],
       loggedIn: false,
       loggingIn: true,
     };
-    // let jwt = JSON.parse(localStorage.getItem('jwt'));
-    // if (jwt === null) {
-    //   jwt = 'unauthenticated'
-    // }
-    // let userTokens = {
-    //   accessToken: jwt
-    // }
     let userTokens = {
       accessToken: 'unauthenticated'
     }
@@ -223,8 +186,6 @@ class RasAppCore extends Component {
       redirectToLoginPage: false,
       Authenticated: false,
       AuthenticationFailed: false,
-
-
     }
     this.handleConnect = this.handleConnect.bind(this);
 
@@ -235,19 +196,15 @@ class RasAppCore extends Component {
     this.handleLocalStorageChange = this.handleLocalStorageChange.bind(this);
   }
 
-
   handleConnect() {
-
-
     let jwt = this.state.system.userTokens.accessToken;
 
     if (jwt) {
       let socket = this.state.system.socket;
       socket.emit('AuthoriseClient', jwt);
     }
-
-
   }
+
   handleClientAuthorisation(msg) {
     if (msg.successful) {
       this.state.system.setUserData(msg.username, msg.roles);
@@ -257,26 +214,17 @@ class RasAppCore extends Component {
       this.logout()
     }
     this.setState({ 'Authorised': msg.successful, 'AuthorisationFailed': msg.successful !== true });
-
-
-
   }
+
   handleRedirectToLogIn() {
     console.log('redirectToLogIn')
-
-    //setTimeout(() => {
     this.state.system.socket.close()
     this.logout();
-    // this.setState({redirectToLoginPage:true});
-    //      }, 1000)
   }
-
-
 
   getRefreshToken() {
     const options = {
       headers: { 'Content-Type': 'application/json' },
-      // timeout: props.timeout,
     };
     let body;
 
@@ -292,19 +240,15 @@ class RasAppCore extends Component {
     axios.post('/api/refresh', body, options)
       .then(response => {
         // handle success
-        // console.log(response);
         const { data } = response;
         if (typeof data.accessToken !== 'undefined') {
           this.setUserTokens(data.accessToken);
-
         }
         else {
           this.setUserTokens(data.null);
         }
         if (typeof data.refreshTokenConfig !== 'undefined') {
-          // console.log("setting")
           this.state.system.setRefreshTokenConfig(data.refreshTokenConfig);
-
         }
         else {
           this.state.system.setRefreshTokenTimeout(data.null);
@@ -319,36 +263,23 @@ class RasAppCore extends Component {
         // always executed
       });
     this.setState({ 'redirectToLoginPage': false });
-
-
   }
 
-
-
   getInitialRefreshToken() {
-
     let refreshTokenConfig = JSON.parse(localStorage.getItem('refreshTokenConfig'));
 
     if (refreshTokenConfig !== null) {
       this.getRefreshToken();
-      // this.setRefreshTokenConfig(refreshTokenConfig)
-
     }
     else {
       this.clearLoggingIn();
       this.setState({ 'redirectToLoginPage': true });
-
     }
-
-
-
-
   }
-  handleLocalStorageChange(event) {
 
+  handleLocalStorageChange(event) {
     if (event.key === "loggedIn") {
       if (event.newValue === null) {
-        // console.log(event)
         this.logout();
       } else if (event.newValue === 'true') {
         let refreshTokenConfig = JSON.parse(localStorage.getItem('refreshTokenConfig'));
@@ -358,50 +289,32 @@ class RasAppCore extends Component {
           this.setState({ system: system }, this.getInitialRefreshToken())
         }
       }
-
-
-
     }
     else if (event.key === "themeStyle"){
-      // console.log(event)
-      
-        
-        let storedThemeStyle = localStorage.getItem('themeStyle')
-       console.log(storedThemeStyle)
-       const { defaultTheme } = this.props;
-        let themeStyle = storedThemeStyle === null ? defaultTheme : JSON.parse(storedThemeStyle);
-        let theme = null
-        let themeStyles = this.state.system.themeStyles;
-        if (themeStyles.includes(themeStyle)) {
-          theme = createMuiTheme(this.props.themes[themeStyle])
-          let system = this.state.system;
+      let storedThemeStyle = localStorage.getItem('themeStyle')
+      console.log(storedThemeStyle)
+      const { defaultTheme } = this.props;
+      let themeStyle = storedThemeStyle === null ? defaultTheme : JSON.parse(storedThemeStyle);
+      let theme = null
+      let themeStyles = this.state.system.themeStyles;
+      if (themeStyles.includes(themeStyle)) {
+        theme = createMuiTheme(this.props.themes[themeStyle])
+        let system = this.state.system;
         system.themeStyle = themeStyle;
         this.setState({ system: system, theme: theme })
-        }
-    
-
+      }
     }
   }
+
   componentDidMount() {
     window.addEventListener('storage', this.handleLocalStorageChange)
     setTimeout(this.clearLoggingIn, this.props.loginTimeout)
-    //  console.log("mounted")
     this.getInitialRefreshToken();
     let socket = this.state.system.socket;
     socket.on('redirectToLogIn', this.handleRedirectToLogIn);
-
-    // let jwt = this.state.system.userTokens.accessToken;
-    // if (jwt) {
-
-
     socket.on('clientAuthorisation', this.handleClientAuthorisation);
-    //  socket.on('connect', this.handleConnect);
-
-    // }
-
-
-
   }
+
   componentWillUnmount() {
     window.removeEventListener('storage', this.handleLocalStorageChange)
     let socket = this.state.system.socket;
@@ -412,37 +325,30 @@ class RasAppCore extends Component {
       clearTimeout(this.state.refreshTimer)
     }
   }
+  
   render() {
-
     const { system } = this.state;
-    // console.log("loggingIn", system.userData.loggingIn)
-    //  console.log("loggedIn", system.userData.loggedIn)
-    // console.log("refresh token config", system.refreshTokenConfig)
-    // console.log("redirect to login",this.state.redirectToLoginPage)
 
     return (
-
       <AutomationStudioContext.Provider value={{ ...system }}>
-
         <MuiThemeProvider theme={this.state.theme}>
           <CssBaseline />
           <ReactVisCssBaseline />
           <RasCssBaseline />
           {this.props.children}
-
         </MuiThemeProvider>
       </AutomationStudioContext.Provider>
     );
   }
 }
-RasAppCore.propTypes = {
 
+RasAppCore.propTypes = {
   /** login Timeout */
   loginTimeout: PropTypes.number,
-
 }
 
 RasAppCore.defaultProps = {
   loginTimeout: 10000
 }
+
 export default RasAppCore

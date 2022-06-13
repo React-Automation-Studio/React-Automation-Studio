@@ -24,7 +24,6 @@ const oceanPalette = () => {
             main: minor['200'],
             dark: minor['300']
         },
-
     };
     const background = {
         paper: blueGrey[800],
@@ -60,9 +59,10 @@ const oceanPalette = () => {
             fill: 'none',
             strokeWidth: '2px',
             stroke: grey[500]
-          },
-          lineColors: [lightBlue[100], lime[300], pink[200], deepOrange[200], blue[200]],
-        };
+        },
+        lineColors: [lightBlue[100], lime[300], pink[200], deepOrange[200], blue[200]],
+    };
+
     return ({
         type: type,
         primary: primary,
@@ -80,16 +80,11 @@ const oceanPalette = () => {
         beamLineComponent:beamLineComponent,
         svgComponentPrimary:svgComponentPrimary,
         svgComponentSecondary:svgComponentSecondary,
-
-
     })
 }
 
-
- const oceanTheme = {
-    
+const oceanTheme = {
     palette: { ...defaultTheme, ...oceanPalette() },
-
 }
 
 export default oceanTheme;

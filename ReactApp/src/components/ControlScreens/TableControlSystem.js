@@ -24,6 +24,7 @@ const VerticalTabs = withStyles(theme => ({
     display: 'none',
   }
 }))(Tabs)
+
 const styles = theme => ({
   root: {
     flexGrow: 1,
@@ -35,6 +36,7 @@ const styles = theme => ({
     color: theme.palette.text.secondary,
   },
 });
+
 function TabContainer(props) {
   return (
     <Typography component="div" style={{ padding: 8 * 0, ...props.style }}>
@@ -42,20 +44,19 @@ function TabContainer(props) {
     </Typography>
   );
 }
+
 TabContainer.propTypes = {
   children: PropTypes.node.isRequired,
 };
+
 const BeamlineControlSystem = (props) => {
-  const [tabValue, setTabValue] = useState(0);
   const [sideTabValue, setSideTabValue] = useState(0);
   const [editorType, setEditorType] = useState("");
   const [displayEditor, setDisplayEditor] = useState(false);
   const [editorSystem, setEditorSystem] = useState({});
   
   const yOffset = 0;
-  const handleTabChange = (event, value) => {
-    setTabValue(value)
-  };
+
   const handleOnSystemClick = (system) => {
     setEditorType(system.editorType)
     setDisplayEditor(true)
@@ -518,15 +519,10 @@ const BeamlineControlSystem = (props) => {
           alarmSensitive: true,
           componentGradient: true,
         }
-
-
       }
-
-
     }
   });
   const allSystems = { ...systems.BeamLine.PowerSupplies, ...systems.BeamLine.Slits }
-
  
   const footerContents = (
     <Grid container direction="row" justify="flex-start" alignItems="center" >
@@ -536,7 +532,6 @@ const BeamlineControlSystem = (props) => {
         </Typography>
       </Grid>
     </Grid>
-
   )
 
   const handleSideTabChange = (event, value) => {
@@ -545,47 +540,42 @@ const BeamlineControlSystem = (props) => {
 
   return (
     <div style={{ "overflowX": "hidden", 'overflowY': 'hidden' }}>
-
       <TraditionalLayout
         title="Table Control System Example"
         denseAppBar
-
-
       >
-        
         <Grid container spacing={3} style={{ paddingTop: 16 }}>
           <Grid item sm={9}>
             <Grid container spacing={3}>
-          
-                <Grid item sm={12}>
-                  <Grid
-                    container
-                    direction="row"
-                    justify="flex-start"
-                    alignItems="flex-start"
-                    spacing={2}
-                  >
-                    <Grid item sm={2}>
-                      <AppBar position="static" color="inherit" >
-                        <VerticalTabs
-                          value={sideTabValue}
-                          onChange={handleSideTabChange}
-                          indicatorColor="primary"
-                          textColor="primary"
-                        >
-                          <Tab label="All" />    {/* side Tab 0*/}
-                          <Tab label="Power Supplies" />    {/* side Tab 1*/}
-                          <Tab label="Slits" />  {/* side Tab 2*/}
-                        </VerticalTabs>
-                      </AppBar>
-                    </Grid>
-                    <Grid item sm={10}>
-                      {sideTabValue === 0 && <TabContainer> <ControlTable style={{ overflowY: 'scroll', maxHeight: '85vh' }} handleOnSystemClick={handleOnSystemClick} systems={allSystems} />                            </TabContainer>}
-                      {sideTabValue === 1 && <TabContainer> <ControlTable handleOnSystemClick={handleOnSystemClick} systems={systems['BeamLine']['PowerSupplies']} />  </TabContainer>}
-                      {sideTabValue === 2 && <TabContainer> <ControlTable handleOnSystemClick={handleOnSystemClick} systems={systems['BeamLine']['Slits']} />         </TabContainer>}
-                    </Grid>
+              <Grid item sm={12}>
+                <Grid
+                  container
+                  direction="row"
+                  justify="flex-start"
+                  alignItems="flex-start"
+                  spacing={2}
+                >
+                  <Grid item sm={2}>
+                    <AppBar position="static" color="inherit" >
+                      <VerticalTabs
+                        value={sideTabValue}
+                        onChange={handleSideTabChange}
+                        indicatorColor="primary"
+                        textColor="primary"
+                      >
+                        <Tab label="All" />    {/* side Tab 0*/}
+                        <Tab label="Power Supplies" />    {/* side Tab 1*/}
+                        <Tab label="Slits" />  {/* side Tab 2*/}
+                      </VerticalTabs>
+                    </AppBar>
+                  </Grid>
+                  <Grid item sm={10}>
+                    {sideTabValue === 0 && <TabContainer> <ControlTable style={{ overflowY: 'scroll', maxHeight: '85vh' }} handleOnSystemClick={handleOnSystemClick} systems={allSystems} />                            </TabContainer>}
+                    {sideTabValue === 1 && <TabContainer> <ControlTable handleOnSystemClick={handleOnSystemClick} systems={systems['BeamLine']['PowerSupplies']} />  </TabContainer>}
+                    {sideTabValue === 2 && <TabContainer> <ControlTable handleOnSystemClick={handleOnSystemClick} systems={systems['BeamLine']['Slits']} />         </TabContainer>}
                   </Grid>
                 </Grid>
+              </Grid>
             </Grid>
           </Grid>
           <Grid item sm={3} >
@@ -603,4 +593,3 @@ const BeamlineControlSystem = (props) => {
 }
 
 export default withStyles(styles, { withTheme: true })(BeamlineControlSystem);
-

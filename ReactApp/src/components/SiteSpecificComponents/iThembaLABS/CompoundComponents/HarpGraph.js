@@ -8,9 +8,6 @@ import PropTypes from 'prop-types';
 
 import ContextMenu from '../../../SystemComponents/ContextMenu';
 
-
-
-
 import {
   XAxis,
   YAxis,
@@ -25,18 +22,13 @@ const wireSpacing = [-42, -39, -36, -33, -30, -27, -24, -22, -20, -18, -16, -14,
 
 
 const styles = theme => ({
-
   lineSeries: {
-
     stroke: theme.palette.type === 'dark' ? 'orange' : 'default'
-
-
   },
 });
 
 
 /* eslint-disable eqeqeq */
-
 class HarpGraph extends React.Component {
   constructor(props) {
     super(props);
@@ -47,19 +39,18 @@ class HarpGraph extends React.Component {
     for (pv in this.props.dataPVs) {
       pvname = this.props.dataPVs[pv];
       if (typeof this.props.macros !== 'undefined') {
-
         let macro;
         for (macro in this.props.macros) {
           pvname = pvname.replace(macro.toString(), this.props.macros[macro].toString());
         }
       }
 
-
       dataPVs[pvname] = {
         label: "", initialized: false, pvname: pvname, value: [], char_value: "", alarmColor: "", lower_disp_limit: 0, upper_disp_limit: 10000, lower_warning_limit: 4000, upper_warning_limit: 6000,
         units: "V", precision: 0
       };
     }
+
     state['rangeUnits'] = "";
     state['ymax'] = "";
     state['ymax'] = 2000;
@@ -77,16 +68,11 @@ class HarpGraph extends React.Component {
 
     this.state = state;
 
-    this.testRef = React.createRef()
-
-
-
     this.handleRangeInputValue = this.handleRangeInputValue.bind(this);
     this.handleInputValue = this.handleInputValue.bind(this);
     this.handleInputValueLabel = this.handleInputValueLabel.bind(this);
     this.handleMetadata = this.handleMetadata.bind(this);
     this.multipleDataConnections = this.multipleDataConnections.bind(this);
-    this.test = this.test.bind(this);
     this.multipleLineData = this.multipleLineData.bind(this);
     this.changeOtherGraphYmax = this.changeOtherGraphYmax.bind(this);
     this.changeThisGraphYmax = this.changeThisGraphYmax.bind(this);
@@ -94,7 +80,6 @@ class HarpGraph extends React.Component {
 
 
   handleRangeInputValue = (inputValue, pvname, initialized, severity) => {
-
     if (initialized === true) {
       switch (parseInt(inputValue)) {
         case 1:
@@ -128,21 +113,14 @@ class HarpGraph extends React.Component {
           }
           break;
         default:
-
-
-
       }
     }
-
   }
 
-
   handleInputValue = (inputValue, pvname, initialized, severity) => {
-
     if (initialized === true) {
       let dataPVs = this.state.dataPVs;
       let newArray = [];
-
 
       let max;
       if (typeof this.props.maxLength !== 'undefined') {
@@ -154,10 +132,6 @@ class HarpGraph extends React.Component {
         max = inputValue.length;
       }
 
-
-
-
-
       dataPVs[pvname].initialized = initialized;
       dataPVs[pvname].severity = severity;
 
@@ -165,17 +139,13 @@ class HarpGraph extends React.Component {
 
       if (length > max) {
         newArray = newArray.slice(length - max);
-
       }
-
 
       let i = 0;
       let sample;
       let data = [];
       let n;
-
       for (n in newArray) {
-
         if (newArray[n] > 0) {
           sample = { x: wireSpacing[i], y: newArray[n] }
         }
@@ -183,101 +153,57 @@ class HarpGraph extends React.Component {
           sample = { x: wireSpacing[i], y: this.state.ymin }
         }
 
-
-
         data[i] = sample;
 
         i++;
-
       }
-
 
       dataPVs[pvname].value = newArray;
       dataPVs[pvname].linedata = data;
 
-
-
-
       this.setState({ dataPVs: dataPVs });
-
 
     }
     else {
       let dataPVs = this.state.dataPVs;
       dataPVs[pvname].initialized = false;
 
-
       let i;
       let sample;
       let data = [];
 
       for (i in wireSpacing) {
-
-
         sample = { x: wireSpacing[i], y: 0 }
-
-
-
-
         data[i] = sample;
-
-
-
       }
 
-
       dataPVs[pvname].linedata = data;
-
-
 
       this.setState({ dataPVs: dataPVs });
     }
   }
 
-
   handleMetadata = pvname => (metadata) => {
-
     let dataPVs = this.state.dataPVs;
     dataPVs[pvname].metadata = metadata;
     this.setState({ dataPVs: dataPVs });
-
-
   }
 
-
-
   handleInputValueLabel = pvname => (inputValue) => {
-
     let dataPVs = this.state.dataPVs;
     dataPVs[pvname].label = inputValue;
     this.setState({ dataPVs: dataPVs });
-
   }
 
-
-
-
-
-
-
-
-
   handleContextMenuClose = event => {
-
-
     this.setState({ openContextMenu: false });
   };
 
   handleToggleContextMenu = (event) => {
-
-
     event.persist()
     this.setState(state => ({ openContextMenu: !state.openContextMenu, x0: event.pageX, y0: event.pageY }));
-
     event.preventDefault();
   }
-
-
 
   handleOnFocus = event => {
     this.setState({ hasFocus: true });
@@ -288,7 +214,6 @@ class HarpGraph extends React.Component {
       this.setState({ outputValue: this.state.value });
     }
   }
-
 
   handleOnBlur = event => {
     this.setState({
@@ -305,12 +230,10 @@ class HarpGraph extends React.Component {
   };
 
   handleWheel = (event) => {
-
     const adjust = this.state.ymax / 5;
     let ymax = this.state.ymax;
     if (event.deltaY < 0) {
       ymax = this.state.ymax - adjust;
-
     }
     else {
       ymax = this.state.ymax + adjust;
@@ -322,42 +245,19 @@ class HarpGraph extends React.Component {
   };
 
   changeOtherGraphYmax = (ymax) => {
-
-
     this.props.changeOtherGraphYmax(ymax);
-
   };
   changeThisGraphYmax = (ymax) => {
-
-
-
   };
 
   handleOnClick = (event) => {
-
-
     if (event.nativeEvent.which === 1) {
-
-
-
       this.setState({ ymax: this.state.rangeYmax })
       this.changeOtherGraphYmax(this.state.rangeYmax);
     }
-
   };
 
-
-  test() {
-  }
-
-
-  test = testvalue => {
-
-  }
-
   multipleDataConnections = () => {
-
-
     let pv;
     let DataConnections = [];
     for (pv in this.state.dataPVs) {
@@ -371,14 +271,10 @@ class HarpGraph extends React.Component {
             handleMetadata={this.handleMetadata(this.state.dataPVs[pv].pvname)}
           />
           {this.props.usePvLabel === true && <DataConnection
-
             pv={pv.toString() + ".DESC"}
-
             handleInputValue={this.handleInputValueLabel(this.state.dataPVs[pv].pvname)}
-
           />}
           {this.props.usePvLabel === true ? this.state.dataPVs[pv].label + ': ' : ""}
-
         </div>
       )
     }
@@ -395,40 +291,29 @@ class HarpGraph extends React.Component {
 
       if (theme.palette.type === 'dark') {
         lines.push(
-
           <LineSeries
             key={pv.toString()}
 
             color={this.state.dataPVs[pv].initialized === true ? '#e89b02' : 'grey'}
             data={this.state.dataPVs[this.state.dataPVs[pv].pvname].linedata}
             style={{
-
               strokeLinejoin: 'round',
               strokeWidth: 3
             }}
-
           />
-
-
         )
       } else {
         lines.push(
           <LineSeries
             key={pv.toString()}
-
-
             data={this.state.dataPVs[this.state.dataPVs[pv].pvname].linedata}
             style={{
-
               strokeLinejoin: 'round',
               strokeWidth: 3
             }}
-
           />
         )
       }
-
-
     }
 
     return lines;
@@ -439,15 +324,10 @@ class HarpGraph extends React.Component {
       if (prevProps.ymaxFromOtherGraph != this.props.ymaxFromOtherGraph) {
         this.setState({ ymax: this.props.ymaxFromOtherGraph });
       }
-
     }
   }
 
   render() {
-
-
-
-    
     const theme = this.props.theme;
 
     const ymax = this.state.ymax;
@@ -456,11 +336,8 @@ class HarpGraph extends React.Component {
       legendTitle = this.props.legend[0].toString();
     }
 
-
     return (
-
       <React.Fragment>
-
         {(typeof this.props.rangePV !== 'undefined') && <DataConnection
           key={'pv' + this.props.rangePV.toString()}
           pv={this.props.rangePV}
@@ -490,33 +367,28 @@ class HarpGraph extends React.Component {
             <XAxis
               title="mm"
               color="white"
-
             />
 
             <YAxis title={this.props.ylabel} left={9} tickFormat={v => (v + ' ' + this.state.rangeUnits)} tickSize={20} tickPadding={2}
-
             />
 
             {this.multipleLineData()}
 
             {(typeof this.props.legend !== 'undefined') && <DiscreteColorLegend
-
               style={{ position: 'absolute', right: '50px', top: '10px', }}
               orientation="horizontal" items={[{ title: legendTitle, color: theme.palette.type === 'dark' ? '#e89b02' : '#80deea', stroke: theme.palette.type === 'dark' ? '#80deea' : '#dbdbe0', fontSize: 24 }]} />}
           </FlexibleXYPlot>
         </div>
       </React.Fragment>
-
-
-
     )
   }
-
 }
+
 HarpGraph.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
 HarpGraph.contextType = AutomationStudioContext;
 export default withStyles(styles, { withTheme: true })(HarpGraph)
+
   /* eslint-disable eqeqeq */

@@ -12,25 +12,19 @@ ReactDOM.render(<App />, document.getElementById('root'));
 
 switch(process.env.NODE_ENV){
   case 'production':
-  if(typeof process.env.REACT_APP_PyEpicsServerURL==='undefined'){
-
-  serviceWorker.unregister();
-  }
-  else{
-    serviceWorker.unregister();
-  }
-
-
-
-
-  break;
+    if(typeof process.env.REACT_APP_PyEpicsServerURL==='undefined'){
+      serviceWorker.unregister();
+    }
+    else{
+      serviceWorker.unregister();
+    }
+    break;
   case 'development':
-  serviceWorker.unregister();
-  break;
-
+    serviceWorker.unregister();
+    break;
   case 'test':
-  serviceWorker.unregister();
-  break;
+    serviceWorker.unregister();
+    break;
   default:
     // do nothing
 }

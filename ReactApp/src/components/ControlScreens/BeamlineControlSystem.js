@@ -25,6 +25,7 @@ import FC from '../SvgBeamlineComponents/FC';
 import PV from '../SystemComponents/PV'
 
 import HarpsBeamDiagnostics from './Components/HarpsBeamDiagnostics'
+
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */
 const VerticalTabs = withStyles(theme => ({
@@ -35,6 +36,7 @@ const VerticalTabs = withStyles(theme => ({
     display: 'none',
   }
 }))(Tabs)
+
 const styles = theme => ({
   root: {
     flexGrow: 1,
@@ -46,6 +48,7 @@ const styles = theme => ({
     color: theme.palette.text.secondary,
   },
 });
+
 function TabContainer(props) {
   return (
     <Typography component="div" style={{ padding: 8 * 0, ...props.style }}>
@@ -53,9 +56,11 @@ function TabContainer(props) {
     </Typography>
   );
 }
+
 TabContainer.propTypes = {
   children: PropTypes.node.isRequired,
 };
+
 const BeamlineControlSystem = (props) => {
   const [tabValue, setTabValue] = useState(0);
   const [sideTabValue, setSideTabValue] = useState(0);
@@ -529,13 +534,10 @@ const BeamlineControlSystem = (props) => {
           alarmSensitive: true,
           componentGradient: true,
         }
-
-
       }
-
-
     }
   });
+
   const allSystems = { ...systems.BeamLine.PowerSupplies, ...systems.BeamLine.Slits }
 
   const [harpPvs, setHarpPvs] = useState({});
@@ -543,33 +545,27 @@ const BeamlineControlSystem = (props) => {
     let pvs = [];
     let index = 0;
     for (let harp in harpSystems) {
-
       pvs.push(
         <PV
-
           key={index.toString()}
           pv={harpSystems[harp].inLimitPv}
           macros={harpSystems[harp].macros}
           pvData={(pv) => setHarpPvs(prePvs => {
             let pvs = { ...prePvs }
-
             pvs[harp] = pv;
             return pvs
-
           }
           )}
         />)
       index++;
     }
-
     return pvs
   }
+  
   useEffect(() => {
-
     let harp;
     let numberOfInsertedHarps = 0;
     for (harp in harpPvs) {
-
       if (harpPvs[harp]) {
         if (harpPvs[harp].value == 1) {
           numberOfInsertedHarps++;
@@ -582,8 +578,6 @@ const BeamlineControlSystem = (props) => {
     else {
       setMaxHarpsReached(false);
     }
-
-
   }, [harpPvs])
 
   const footerContents = (
@@ -595,7 +589,6 @@ const BeamlineControlSystem = (props) => {
         </Typography>
       </Grid>
     </Grid>
-
   )
 
   const handleSideTabChange = (event, value) => {
@@ -604,12 +597,9 @@ const BeamlineControlSystem = (props) => {
 
   return (
     <div style={{ "overflowX": "hidden", 'overflowY': 'hidden' }}>
-
       <TraditionalLayout
         title="Beamline Control System Example"
         denseAppBar
-
-
       >
         {harpPvConnections(systems.BeamLine.Harps)}
         <Grid container spacing={3} style={{ paddingTop: 16 }}>
@@ -655,7 +645,6 @@ const BeamlineControlSystem = (props) => {
                     {...systems.BeamLine.FCs.FC1}
                   />
                   <Harp
-
                     handleOnClick={handleOnSystemClick}
                     system={systems.BeamLine.Harps.Harp1}
                     {...systems.BeamLine.Harps.Harp1}
@@ -797,7 +786,6 @@ const BeamlineControlSystem = (props) => {
               </Grid>
               {tabValue === 3 &&
                 <div style={{ padding: 8, width: '100%' }}>
-
                   <HarpsBeamDiagnostics harps={systems.BeamLine.Harps} />
                 </div>
               }
@@ -847,7 +835,6 @@ const BeamlineControlSystem = (props) => {
                           yUnits={' A'}
                           useTimeStamp={true}
                         />
-
                       </div>
                     </Grid>
                   </Grid>
@@ -914,4 +901,3 @@ const BeamlineControlSystem = (props) => {
 }
 
 export default withStyles(styles, { withTheme: true })(BeamlineControlSystem);
-

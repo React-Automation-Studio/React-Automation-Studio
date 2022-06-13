@@ -152,11 +152,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const AlarmList = props => {
-
-    // console.log("AlarmList rendered")
-
-    // console.log(props.areaContextOpen)
-
     const classes = useStyles(props);
 
     return (
@@ -175,9 +170,7 @@ const AlarmList = props => {
                             className={classes.root}
                         >
                             {props.areaNames.map((area, areaIndex) => {
-                                // console.log(`${area["area"]}`, props.areaPVDict[`${area["area"]}`])
                                 return (
-
                                     < React.Fragment key={`${area["area"]}`
                                     }>
                                         <ListItem
@@ -186,17 +179,6 @@ const AlarmList = props => {
                                             selected={props.areaSelectedIndex === `${area["area"]}`}
                                             onClick={event => props.listItemClick(event, `${area["area"]}`)}
                                             onContextMenu={event => props.listItemRightClick(event, `${area["area"]}`)}
-
-                                            // field(ZRST, "NO_ALARM")
-                                            // field(ONST, "MINOR_ACKED")
-                                            // field(TWST, "MINOR")
-                                            // field(THST, "MAJOR_ACKED")
-                                            // field(FRST, "MAJOR")
-                                            // field(FVST, "INVALID_ACKED")
-                                            // field(SXST, "INVALID")
-                                            // field(SVST, "DISCONN_ACKED")
-                                            // field(EIST, "DISCONNECTED")
-
                                             classes={(props.areaEnabled[`${area["area"]}`] && props.enableAllAreas
                                                 ? parseInt(props.areaPVDict[`${area["area"]}`]) === 8 || parseInt(props.areaPVDict[`${area["area"]}`]) === 6 || parseInt(props.areaPVDict[`${area["area"]}`]) === 4
                                                     ? { root: classes.majorAlarm }
@@ -347,10 +329,7 @@ const AlarmList = props => {
                                                                         anchorPosition={props.contextMouseY !== null && props.contextMouseX !== null ?
                                                                             { top: props.contextMouseY, left: props.contextMouseX } : null}
                                                                     >
-
                                                                         {props.areaEnabled[`${area["area"]}`] ? <MenuItem disabled>{`${area["area"]} > ${subArea}`}</MenuItem> : null}
-                                                                        {/* {props.areaEnabled[`${area["area"]}`] ? <hr /> : null} */}
-
                                                                         {props.enableAllAreas ?
                                                                             props.areaEnabled[`${area["area"]}`] ?
                                                                                 props.areaEnabled[`${area["area"]}=${subArea}`]
@@ -435,14 +414,12 @@ const AlarmList = props => {
                                     </React.Fragment >
                                 )
                             })}
-
                         </List>
                     </Grid>
                 </Grid>
             </div >
         </React.Fragment >
     )
-
 }
 
 export default React.memo(AlarmList);

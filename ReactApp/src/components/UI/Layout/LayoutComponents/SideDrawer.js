@@ -34,11 +34,8 @@ const SideDrawer = (props) => {
 
     const handleLogout = () => {
         if (notInStyleGuide) {
-          //  socket.emit('disconnect', { "goodebye": "see you later" });
-        //    socket.close()
             context.logout();
         }
-
     }
 
     const drawerItems = (

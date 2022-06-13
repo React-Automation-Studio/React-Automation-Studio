@@ -16,105 +16,64 @@ class DataConnection extends React.Component {
         pvname=pvname.replace(macro.toString(),this.props.macros[macro].toString());
       }
       this.state ={
-
         'pvname':pvname,
-
       };
     }
     else{
       pvname=this.props.pv;
       this.state ={
-
         'pvname':pvname,
-
       };
     }
   }
 
-
-
   componentDidMount() {
-
   }
 
   componentWillUnmount(){
-
   }
 
-
-
-
-
   render() {
-   
-
-
     const pv =this.state.pvname;
 
     return (
-
       <React.Fragment  >
       {pv.includes('loc://')?
         <DeprecatedLocalPV
-        localVariable={this.context.localVariables[pv]}
-        value={typeof this.context.localVariables[pv]==='undefined'?undefined:this.context.localVariables[pv].value}
-        initialValue={this.props.initialLocalVariableValue}
-        pv={pv}
-        usePrecision={this.props.usePrecision}
-        handleInputValue={this.props.handleInputValue}
-        handleMetadata={this.props.handleMetadata}
-        outputValue=  {this.props.outputValue}
-        useStringValue={this.props.useStringValue}
-        debug={this.props.debug}
+          localVariable={this.context.localVariables[pv]}
+          value={typeof this.context.localVariables[pv]==='undefined'?undefined:this.context.localVariables[pv].value}
+          initialValue={this.props.initialLocalVariableValue}
+          pv={pv}
+          usePrecision={this.props.usePrecision}
+          handleInputValue={this.props.handleInputValue}
+          handleMetadata={this.props.handleMetadata}
+          outputValue=  {this.props.outputValue}
+          useStringValue={this.props.useStringValue}
+          debug={this.props.debug}
         />
         :
           <React.Fragment>
-          <DeprecatedEpicsPV
-    pv={pv}
-    macros={this.props.macros}
-    usePrecision={this.props.usePrecision}
-    handleInputValue={this.props.handleInputValue}
-    handleMetadata={this.props.handleMetadata}
-    outputValue=  {this.props.outputValue}
-    useStringValue={this.props.useStringValue}
-    debug={this.props.debug}
-    newValueTrigger={this.props.newValueTrigger}
-    />
-    {this.props.usePvLabel===true&&<DeprecatedEpicsPV
-
-  pv={pv.toString()+".DESC"}
-  macros={this.props.macros}
-  handleInputValue={this.props.handleInputValueLabel}
-
-  /> }
-  </React.Fragment>
-       
+            <DeprecatedEpicsPV
+              pv={pv}
+              macros={this.props.macros}
+              usePrecision={this.props.usePrecision}
+              handleInputValue={this.props.handleInputValue}
+              handleMetadata={this.props.handleMetadata}
+              outputValue=  {this.props.outputValue}
+              useStringValue={this.props.useStringValue}
+              debug={this.props.debug}
+              newValueTrigger={this.props.newValueTrigger}
+              />
+            {this.props.usePvLabel===true&&<DeprecatedEpicsPV
+              pv={pv.toString()+".DESC"}
+              macros={this.props.macros}
+              handleInputValue={this.props.handleInputValueLabel}
+            /> }
+          </React.Fragment>
       }
-    {/* {pv.includes('pva://')&&
-    <DeprecatedEpicsPV
-    pv={pv}
-    macros={this.props.macros}
-    usePrecision={this.props.usePrecision}
-    handleInputValue={this.props.handleInputValue}
-    handleMetadata={this.props.handleMetadata}
-    outputValue=  {this.props.outputValue}
-    useStringValue={this.props.useStringValue}
-    debug={this.props.debug}
-    newValueTrigger={this.props.newValueTrigger}
-    />
-
+      </React.Fragment>
+    )
   }
-  { (pv.includes('pva://')&&this.props.usePvLabel===true) && <DeprecatedEpicsPV
-
-  pv={pv.toString()+".DESC"}
-  macros={this.props.macros}
-  handleInputValue={this.props.handleInputValueLabel}
-
-  />    } */}
-
-  </React.Fragment>
-)
-}
 }
 
 DataConnection.contextType=AutomationStudioContext;

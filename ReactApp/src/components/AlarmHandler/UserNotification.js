@@ -18,7 +18,6 @@ import CloseIcon from '@material-ui/icons/Close';
 import SearchIcon from '@material-ui/icons/Search';
 import HelpIcon from '@material-ui/icons/Help';
 
-
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 import DataConnection from '../SystemComponents/DataConnection';
 import ScheduleDialog from './ScheduleDialog';
@@ -339,7 +338,6 @@ const UserNotification = (props) => {
         }
         else {
             return sumString
-
         }
     }, [])
 
@@ -1016,8 +1014,6 @@ const UserNotification = (props) => {
 
     const warnAdminMessageEdit = "Only alarmAdmin role users can edit users"
 
-    // console.table(showDeleteButton)
-
     return (
         <React.Fragment>
             {alarmPVs}
@@ -1122,11 +1118,6 @@ const UserNotification = (props) => {
                                                         className={classes.button}
                                                         startIcon={<AccountCog />}
                                                         style={{ marginRight: 20 }}
-                                                        // onClick={(event) => {
-                                                        //     event.preventDefault()
-                                                        //     event.stopPropagation()
-                                                        //     setEditUsersDialogOpen(true)
-                                                        // }}
                                                         disabled={!isAlarmAdmin}
                                                     >
                                                         Edit Alarm Users
@@ -1159,21 +1150,6 @@ const UserNotification = (props) => {
                                                     >
                                                         <HelpIcon fontSize="large" />
                                                     </IconButton>
-                                                    {/* <Button
-                                                        variant="contained"
-                                                        color="secondary"
-                                                        size="small"
-                                                        className={classes.button}
-                                                        startIcon={<AccountCog />}
-                                                        style={{ marginRight: 20 }}
-                                                    // onClick={(event) => {
-                                                    //     event.preventDefault()
-                                                    //     event.stopPropagation()
-                                                    //     setEditUsersDialogOpen(true)
-                                                    // }}
-                                                    >
-                                                        Help
-                                                    </Button> */}
                                                 </div>
                                             </Tooltip>
                                             : null
@@ -1195,7 +1171,6 @@ const UserNotification = (props) => {
                                                         onClick={event => event.stopPropagation()}
                                                         onFocus={event => event.stopPropagation()}
                                                         onChange={event => handleSearchUserTable(event)}
-                                                        // onBlur={() => { setUserTableSearchStringStore(''); setUserTableSearchString('') }}
                                                         value={userTableSearchStringStore}
                                                     />
                                                 </div>

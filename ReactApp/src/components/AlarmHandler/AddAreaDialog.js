@@ -133,7 +133,6 @@ const AddAreaDialog = (props) => {
                 xs={12}
             >
                 <Grid
-
                     container
                     direction="row"
                     justify="flex-start"

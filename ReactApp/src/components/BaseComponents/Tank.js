@@ -8,32 +8,22 @@ import { create, all } from 'mathjs';
 
 
 import {
-
   makeVisFlexible,
-
 } from 'react-vis';
 const config = { }
 const math = create(all, config)
 
-
 const styles = theme => ({
   textTicks: {
     fill: theme.palette.type === 'dark' ? theme.palette.grey['300'] : theme.palette.grey['500']
-
   },
   textValue: {
     fill: theme.palette.type === 'dark' ? theme.palette.grey['300'] : theme.palette.grey['500']
-
   },
-
   root: {
-
     display: 'flex',
     flexWrap: 'wrap',
-
-
   },
-  
   FormControl: {
     width: "100%",
     height: "100%",
@@ -42,27 +32,21 @@ const styles = theme => ({
     marginLeft: "auto",
     marginRight: "auto",
   },
-
 });
 
 function getTickValues(props, min, max, numberOfTicks, x0, y0, x1, x2, y1, y2, xOffset, yOffset, value) {
   const { classes } = props;
   let units = props.units ?" "+ props.units : "";
 
-  //this.test("test1");
-  //this.handleInputValue();
-  //console.log(props)
   let ticks = [];
 
   let i = 0;
   if (props.initialized===true) {
     if (props.showTicks === true) {
       for (i = 0; i < (numberOfTicks); i++) {
-
         let tickValue = i * (max - min) / (numberOfTicks - 1) + min;
         if (typeof props.numberFormat !== 'undefined'){
           tickValue=math.format(parseFloat(tickValue),props.numberFormat)
-         
         }
         ticks.push(
           <g key={i}
@@ -76,11 +60,9 @@ function getTickValues(props, min, max, numberOfTicks, x0, y0, x1, x2, y1, y2, x
               {tickValue + units}
             </text>
           </g>
-
         )
       }
     }
-
   }
 
   if (props.showValue === true) {
@@ -96,18 +78,10 @@ function getTickValues(props, min, max, numberOfTicks, x0, y0, x1, x2, y1, y2, x
           {props.disabled === false ? value + units : ''}{}
         </text>
       </g>
-
     )
   }
-
-
-
-  //console.log(DataConnections[0]);
   return ticks;
 }
-
-
-
 
 function TankComponent(props) {
   const gradientId = uuidv4();
@@ -118,11 +92,9 @@ function TankComponent(props) {
   let min = initialized?props.min:0;
   let max = initialized?props.max:100;
 
-
   let yOffset;
   if (props.width > 16) {
     yOffset = 16;
-
   }
   else {
     yOffset = 0;
@@ -130,7 +102,6 @@ function TankComponent(props) {
   let xOffset;
   if (props.width > 80) {
     xOffset = 80;
-
   }
   else {
     xOffset = 0;
@@ -158,7 +129,6 @@ function TankComponent(props) {
   if (props.initialized) {
     if (props.alarmSensitive === true) {
       if (props.alarmSeverity === 1) {
-
         color = props.theme.palette.alarm.minor.dark;
       }
       else if (props.alarmSeverity === 2) {
@@ -166,7 +136,6 @@ function TankComponent(props) {
       }
       else {
         color = props.theme.palette.primary.main;
-
       }
     }
     else {
@@ -183,30 +152,22 @@ function TankComponent(props) {
       labelPlacement={props.labelPlacement}
       control={
         <svg width={width} height={height}>
-
-
           <linearGradient id={gradientId + 'baseleft1'}  >
             <stop offset="0%" stopColor={props.theme.palette.type === 'dark' ? props.theme.palette.grey['300'] : props.theme.palette.grey['200']} />
             <stop offset="100%" stopColor={props.initialized===true ? props.theme.palette.grey['200'] : 'default'} />
-
           </linearGradient>
           <linearGradient id={gradientId + 'baseright1'}  >
-
             <stop offset="0%" stopColor={props.initialized===true ? props.theme.palette.grey['200'] : 'default'} />
             <stop offset="100%" stopColor={props.theme.palette.type === 'dark' ? props.theme.palette.grey['300'] : props.theme.palette.grey['200']} />
           </linearGradient>
-
           <linearGradient id={gradientId + 'right1'} >
             <stop offset="0%" stopColor={props.theme.palette.type === 'dark' ? props.theme.palette.grey['300'] : props.theme.palette.grey['200']} />
             <stop offset="100%" stopColor={props.initialized===true ? color : 'default'} />
-
           </linearGradient>
           <linearGradient id={gradientId + 'left1'}  >
-
             <stop offset="0%" stopColor={props.initialized===true ? color : 'default'} />
             <stop offset="100%" stopColor={props.theme.palette.type === 'dark' ? props.theme.palette.grey['300'] : props.theme.palette.grey['200']} />
           </linearGradient>
-
           <g >
             <rect x={x1 - 1} y={y0} width={x2 - x1} height={y2 - y0}
               style={{
@@ -221,10 +182,7 @@ function TankComponent(props) {
                 strokeWidth: "0",
                 fill: 'url(#' + gradientId + 'baseleft1)',
               }}
-
             />
-
-
             <rect x={x0} y={y2 - level} width={x1 - x0} height={level}
               style={{
                 opacity: 1,
@@ -238,14 +196,11 @@ function TankComponent(props) {
                 strokeWidth: "0",
                 fill: 'url(#' + gradientId + 'right1)',
               }}
-
             />
-
             {getTickValues(props, min, max, 3, x0, y0, x1, x2, y1, y2, xOffset, yOffset, value)}
           </g>
         </svg>}
     />
-
   );
 }
 
@@ -254,19 +209,16 @@ TankComponent.propTypes = {
   width: PropTypes.number,
 }
 
-
 /**
 * The Tank Component is an Automation-studio component.
 */
-
-
 const Tank = (props) => {
   return (
     <Widget {...props} component={makeVisFlexible(TankComponent)} />
   )
 }
-Tank.propTypes = {
- 
+
+Tank.propTypes = { 
   showValue: PropTypes.bool,
   /** Directive to show the tick values */
   showTicks: PropTypes.bool,
@@ -274,11 +226,11 @@ Tank.propTypes = {
   lockAspectRatio: PropTypes.bool,
   /** Width to height aspect ratio, */
   aspectRatio: PropTypes.number,
-   /**
+  /**
    * Directive to use the  alarm severity status to alter the fields backgorund color.
    */
-
   alarmSensitive: PropTypes.bool,
+
   /**
    * Custom PV to define the alarm severity to be used, alarmSensitive must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
@@ -332,13 +284,10 @@ Tank.propTypes = {
    * Custom PV to define the precision to be used, usePvPrecision must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
   precPv: PropTypes.string,
- 
-
   
   /**
    * Custom units to be used, if usePvUnits is not defined.
    */
-
   units: PropTypes.string,
   /**
    * Custom PV to define the units to be used, usePvUnits must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
@@ -377,13 +326,7 @@ Tank.propTypes = {
    * Directive to use the units contained in the   pv metdata's EGU field or unitsPv.
    *  If not defined it uses the custom units as defined by the units prop.
    */
-
-
   usePvUnits: PropTypes.bool,
-  
-
-
-
   
   /**
    * If defined, then the string representaion of the number can be formatted
@@ -392,7 +335,6 @@ Tank.propTypes = {
    * See https://mathjs.org/docs/reference/functions/format.html for more examples
    */
   numberFormat: PropTypes.object,
-  
   
   /** Name of the process variable,  eg. '$(device):test$(id)'*/
   pv: PropTypes.string,
@@ -407,16 +349,12 @@ Tank.propTypes = {
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-
   tooltipProps:PropTypes.object,
   /** label placement*/
   labelPlacement: PropTypes.oneOf(['start', 'top', 'bottom', 'end']),
-  
-
 };
 
 Tank.defaultProps = {
-
   debug: false,
   alarmSensitive: false,
   min: 0,
@@ -429,9 +367,6 @@ Tank.defaultProps = {
   showTicks: true,
   labelPlacement:'top',
   showTooltip:false
-  
-
 };
-
 
 export default withStyles(styles, { withTheme: true })(Tank)

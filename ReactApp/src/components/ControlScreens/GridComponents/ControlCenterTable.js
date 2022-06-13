@@ -11,6 +11,7 @@ import Paper from '@material-ui/core/Paper';
 import DataConnection from '../../SystemComponents/DataConnection';
 import TextUpdate from '../../BaseComponents/TextUpdate';
 import { Typography } from '@material-ui/core';
+
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */
 const styles = theme => ({
@@ -32,16 +33,9 @@ const styles = theme => ({
   }
 });
 
-
-
-
 class ControlCenterTable extends React.Component {
-
   constructor(props) {
     super(props);
-
-    let pv;
-    let DataConnections=[];
     let sys;
     let rowPVs=[];
     let id=0;
@@ -69,17 +63,11 @@ class ControlCenterTable extends React.Component {
       id++;
     }
     this.state={rowPVs:rowPVs};
-  //    console.log(rowPVs)
-
-
-
-
 
     this.SystemsDataConnections= this.SystemsDataConnections.bind(this);
     this.handleInputValue= this.handleInputValue.bind(this);
     this.handleMetadata= this.handleMetadata.bind(this);
     this.handleOnClick= this.handleOnClick.bind(this);
-
   }
 
   handleInputValue = (id,name)=>(inputValue,pvname,initialized,severity)=>{
@@ -88,111 +76,75 @@ class ControlCenterTable extends React.Component {
     rowPVs[id][name].initialized=initialized;
     rowPVs[id][name].severity=severity;
       this.setState({rowPVs:rowPVs});
-//console.log('handleInputValue',id,name,inputValue,pvname,initialized,severity)
-//console.log(rowPVs)
   }
 
   handleMetadata = (id,name)=>(metadata) =>{
     let rowPVs=this.state.rowPVs;
     rowPVs[id][name].metadata=metadata;
     this.setState({rowPVs:rowPVs});
-
-//console.log('handleMetaData',id,name,metadata)
-
-
-
   }
 
-MultiplePVs
-
   handleOnClick = (id)=>()=> {
-  //  console.log('row id clicked',this.props.systems[id]);
     this.props.handleOnSystemClick(this.props.systems[id]);
   }
   SystemsDataConnections = () => {
-    //this.test("test1");
-    //this.handleInputValue();
-    let pv;
     let DataConnections=[];
-    let sys;
     let rowPVs=this.state.rowPVs;
     let id=0;
     let row;
     let useStatus;
 
-  //  console.log(rowPVs)
-    let index=0;
     for (row in rowPVs){
-
-      //console.log("linedata: ", this.state.pvs[pv].linedata);
-  //    console.log(row)
-
-    if (typeof rowPVs[row].rowProps !== 'undefined'){
-      if (typeof rowPVs[row].rowProps.useStatus !== 'undefined'){
-        useStatus=rowPVs[row].rowProps.useStatus;
+      if (typeof rowPVs[row].rowProps !== 'undefined'){
+        if (typeof rowPVs[row].rowProps.useStatus !== 'undefined'){
+          useStatus=rowPVs[row].rowProps.useStatus;
+          }
+        else{
+          useStatus=true;
         }
-      else{
-        useStatus=true;
       }
-    }
-    else{
-      useStatus=false;
-    }
+      else{
+        useStatus=false;
+      }
       DataConnections.push(
-
         <DataConnection
           key={id.toString() +rowPVs[row].setpointPV.pvname}
           pv={rowPVs[row].setpointPV.pvname}
           handleInputValue={this.handleInputValue(id,'setpointPV')}
           handleMetadata={this.handleMetadata(id,'setpointPV')}
-
         />
-
       );
 
       DataConnections.push(
-
         <DataConnection
           key={id.toString()+ rowPVs[row].readbackPV.pvname }
           pv={rowPVs[row].readbackPV.pvname}
           handleInputValue={this.handleInputValue(id,'readbackPV')}
           handleMetadata={this.handleMetadata(id,'readbackPV')}
-
         />
-
       );
+
       if (useStatus){
-      DataConnections.push(
-
-        <DataConnection
-          key={id.toString()+ rowPVs[row].statusPV.pvname}
-          pv={rowPVs[row].statusPV.pvname}
-          handleInputValue={this.handleInputValue(id,'statusPV')}
-          handleMetadata={this.handleMetadata(id,'statusPV')}
-          useStringValue={true}
-
-        />
-
-      );
-    }
-
+        DataConnections.push(
+          <DataConnection
+            key={id.toString()+ rowPVs[row].statusPV.pvname}
+            pv={rowPVs[row].statusPV.pvname}
+            handleInputValue={this.handleInputValue(id,'statusPV')}
+            handleMetadata={this.handleMetadata(id,'statusPV')}
+            useStringValue={true}
+          />
+        );
+      }
 
       id++;
     }
-    //console.log(DataConnections[0]);
-
-    //  this.setState({rows:rows});
     return DataConnections;
   }
-
-
 
   render(){
     const { classes } = this.props;
 
-
     const rowPVs=this.state.rowPVs;
-  //  console.log("render rowPVs",rowPVs)
   
     return (
       <React.Fragment>
@@ -224,7 +176,6 @@ MultiplePVs
                       units={(typeof row.rowProps)==='undefined'?undefined:(typeof row.rowProps.units)==='undefined'?'undefined':row.rowProps.units}
                       alarmSensitive={true}
                     />
-
                   </TableCell>
                   <TableCell className={classes.tableCell} align="center">
                     <TextUpdate

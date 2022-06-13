@@ -35,22 +35,17 @@ const styles = theme => ({
     color: theme.palette.text.secondary,
   },
 });
+
 class MobileDemo2 extends React.Component {
-
-
   render() {
     const { classes } = this.props;
     return (
-
-
-
       <div style={{"overflowX": "hidden"}} >
-     
         {typeof this.props.nosidebar==='undefined' &&    <TraditionalLayout
-      title="Mobile Demo 2"
-      denseAppBar
-      alignTitle="center"
-    ></TraditionalLayout>}
+          title="Mobile Demo 2"
+          denseAppBar
+          alignTitle="center"
+        ></TraditionalLayout>}
         <div style={{ padding: 24}}>
           <div >
             <Grid container spacing={2}>
@@ -64,13 +59,9 @@ class MobileDemo2 extends React.Component {
                   <GraphY
                     pvs={[
                         'testIOC:amplitude',
-
-
-
                     ]}
                     legend={['Instantaneous Amplitude']}
                     maxLength={1000}
-
                     lineColor={[this.props.theme.palette.reactVis.lineColors[1]]}
                   />
                 </div>
@@ -78,7 +69,6 @@ class MobileDemo2 extends React.Component {
               <Grid item xs={12} lg={12}>
                 <Slider pv='$(device):amplitude' macros={{'$(device)':'testIOC'}} usePvMinMax={true} min={1000} max={500} usePvLabel={true}  />
               </Grid>
-
             </Grid>
           </div>
         </div>
@@ -129,11 +119,9 @@ class MobileDemo2 extends React.Component {
               <Switch pv='$(device)' macros={{'$(device)':'testIOC:BO1'}} usePvLabel={true}/>
             </Grid>
             <Grid item xs={6} lg={1}>
-
               <CheckBox pv='$(device)' macros={{'$(device)':'testIOC:BO1'}} usePvLabel={true}/>
             </Grid>
             <Grid item xs={6} lg={1}>
-
               <RadioButton pv='$(device)' macros={{'$(device)':'testIOC:BO1'}} usePvLabel={true}/>
             </Grid>
             <Grid item xs={6} lg={1}>
@@ -169,17 +157,9 @@ class MobileDemo2 extends React.Component {
             <Grid item xs={12} lg={4}>
               <SelectionList   pv='$(device)'  macros={{'$(device)':'testIOC:mbboTest1'}} usePvLabel={true} horizontal={true} />
             </Grid>
-
           </Grid>
-
         </div>
       </div>
-
-
-
-
-
-
     );
   }
 }
@@ -189,4 +169,3 @@ MobileDemo2.propTypes = {
 };
 
 export default withStyles(styles,{withTheme:true})(MobileDemo2);
-//export default MobileDemo2;

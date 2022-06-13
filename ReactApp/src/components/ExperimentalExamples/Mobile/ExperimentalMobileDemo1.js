@@ -17,9 +17,7 @@ import SelectionList from '../../BaseComponents/SelectionList';
 import ThumbWheel from '../../BaseComponents/ThumbWheel';
 
 
-
 import ToggleButton from '../../BaseComponents/ToggleButton';
-
 
 import Gauge from '../../BaseComponents/Gauge';
 
@@ -30,11 +28,7 @@ import Settings from '@material-ui/icons/SettingsOutlined';
 
 import Divider from '@material-ui/core/Divider';
 
-
-
-
 import withWidth from '@material-ui/core/withWidth';
-
 
 import StyledIconIndicator from '../../BaseComponents/StyledIconIndicator';
 
@@ -44,6 +38,7 @@ import { useLocalPV } from '../../SystemComponents/LocalPV'
 import TextField from '@material-ui/core/TextField';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+
 function TabContainer(props) {
   return (
     <Typography component="div" style={{ padding: 0, flexGrow: 1 }}>
@@ -72,7 +67,6 @@ const styles = theme => ({
 });
 
 const Example1 = (props) => {
-  //const [select,setSelect]=useState(null);
   const [showAdvancedSettings, setShowAdvancedSettings] = useState(0);
   const editorType = useLocalPV({ pv: 'loc://editorType', })
 
@@ -80,30 +74,10 @@ const Example1 = (props) => {
     setShowAdvancedSettings(value);
   };
 
-
-
-  // const handleStateChange=(stateValue)=>{
-  //   //console.log(stateValue)
-  //   setSelect(stateValue)
-  // };
-
-
-
-
-
-
   const { width } = props;
-  //console.log('width',width)
-
   const { classes } = props;
-  // console.log('classes justin test1',classes)
-
-
-
-  //console.log(softLim);
 
   let graphVH;
-
 
   if (width === 'xs') {
     graphVH = '25vh';
@@ -119,7 +93,6 @@ const Example1 = (props) => {
   const [makeNewSocketIoConnection, setMakeNewSocketIoConnection] = useState(false);
   const [noOfGraphs, setNoOfGraphs] = useState(1);
   const [graphWidth, setGraphWidth] = useState(12);
-  //console.log('window.innerHeight',window.innerHeight)
 
   const getGraphs = (noOfGraphs, width) => {
     const graphs = [];
@@ -135,12 +108,7 @@ const Example1 = (props) => {
             updateRate={updateRate}
             makeNewSocketIoConnection={makeNewSocketIoConnection === true}
             height={graphVH}
-          // title={"Test"}
-          //lineColor={[this.props.theme.palette.secondary.main,lime['400']]}
           />
-
-
-       
             <GraphXY
               xPVs={
                 ['testIOC:BeamSweepSim:x.AVAL',
@@ -155,12 +123,6 @@ const Example1 = (props) => {
                 ]
               }
 
-              // pvs={
-              //   ['testIOC:BeamSweepSim:y.AVAL',
-              //     'testIOC:BeamSweepSim:y1.AVAL',
-              //     'testIOC:BeamSweepSim:y2.AVAL'
-              //   ]
-              // }
               xMax={10000}
               yMax={10000}
               xMin={-10000}
@@ -173,7 +135,6 @@ const Example1 = (props) => {
             />
          
           <GraphY
-
             pvs={[
               'testIOC:MTextUpdate1',
               'testIOC:MTextUpdate2',
@@ -186,6 +147,7 @@ const Example1 = (props) => {
             useTimeStamp
             height={graphVH}
           />
+
           <GraphY
             pvs={['testIOC:PS1:Readback', 'testIOC:PS2:Readback', 'testIOC:PS3:Readback']}
             maxLength={600}
@@ -208,21 +170,13 @@ const Example1 = (props) => {
     )
   }
 
-
-
-
-
   return (
-
     <TraditionalLayout
       title="Mobile Layout Example"
       denseAppBar
       alignTitle="center"
     >
-
-
       <div style={{ paddingBottom: 48 }}>
-
         {showAdvancedSettings === 0 && <TabContainer key={'tabContainer0'}>
           <Grid container className={classes.root}>
             <Grid item xs={12}>
@@ -233,7 +187,6 @@ const Example1 = (props) => {
                 direction={'row'}
                 justify={'flex-start'}
               >
-
                 <Grid item xs={2}>
                   <TextField value={maxLength} onChange={(event) => setMaxLength(event.target.value)} label={"maxLength"} />
                 </Grid>
@@ -244,7 +197,6 @@ const Example1 = (props) => {
                 <Grid item xs={2}>
                   <FormControlLabel
                     control={
-
                       <Checkbox checked={makeNewSocketIoConnection} onChange={(event) => setMakeNewSocketIoConnection(event.target.checked)} label={"updatmakeNewSocketIoConnectioneRate"} />
                     }
                     label={"New socket"}
@@ -257,103 +209,18 @@ const Example1 = (props) => {
                   <TextField value={noOfGraphs} onChange={(event) => setNoOfGraphs(event.target.value)} label={"noOfGraphs"} />
                 </Grid>
                 <Grid item xs={2}>
-
                 </Grid>
-
-
                 {
                   getGraphs(noOfGraphs, graphWidth)
                 }
-                {/* <Grid item xs={4} >
-                  
-                    <GraphY  pvs={['testIOC:test4','testIOC:test5',
-                    'testIOC:test3'
-                  ] } legend={['Sine Wave','Amplitude']}
-                    maxLength={maxLength}
-                    updateRate={updateRate}
-                    makeNewSocketIoConnection={makeNewSocketIoConnection===true}
-                     // title={"Test"}
-                     //lineColor={[this.props.theme.palette.secondary.main,lime['400']]}
-                     />
-                
-                </Grid>
-                <Grid item xs={4} >
-                  
-                    <GraphY  pvs={['testIOC:test4','testIOC:test5',
-                    'testIOC:test3'
-                  ] } legend={['Sine Wave','Amplitude']}
-                    maxLength={maxLength}
-                    updateRate={updateRate}
-                    makeNewSocketIoConnection={makeNewSocketIoConnection===true}
-                     // title={"Test"}
-                     //lineColor={[this.props.theme.palette.secondary.main,lime['400']]}
-                     />
-                
-                </Grid>
-                <Grid item xs={4} >
-                  
-                    <GraphY  pvs={['testIOC:test4','testIOC:test5',
-                    'testIOC:test3'
-                  ] } legend={['Sine Wave','Amplitude']}
-                    maxLength={maxLength}
-                    updateRate={updateRate}
-                    makeNewSocketIoConnection={makeNewSocketIoConnection===true}
-                     // title={"Test"}
-                     //lineColor={[this.props.theme.palette.secondary.main,lime['400']]}
-                     />
-                
-                </Grid>
-                <Grid item xs={4} >
-                  
-                    <GraphY  pvs={['testIOC:test4','testIOC:test5',
-                    'testIOC:test3'
-                  ] } legend={['Sine Wave','Amplitude']}
-                    maxLength={maxLength}
-                    updateRate={updateRate}
-                    makeNewSocketIoConnection={makeNewSocketIoConnection===true}
-                     // title={"Test"}
-                     //lineColor={[this.props.theme.palette.secondary.main,lime['400']]}
-                     />
-                
-                </Grid>
-                <Grid item xs={4} >
-                  
-                    <GraphY  pvs={['testIOC:test4','testIOC:test5',
-                    'testIOC:test3'
-                  ] } legend={['Sine Wave','Amplitude']}
-                    maxLength={maxLength}
-                    updateRate={updateRate}
-                    makeNewSocketIoConnection={makeNewSocketIoConnection===true}
-                     // title={"Test"}
-                     //lineColor={[this.props.theme.palette.secondary.main,lime['400']]}
-                     />
-                
-                </Grid>
-                <Grid item xs={4} >
-                  
-                    <GraphY  pvs={['testIOC:test4','testIOC:test5',
-                    'testIOC:test3'
-                  ] } legend={['Sine Wave','Amplitude']}
-                    maxLength={maxLength}
-                    updateRate={updateRate}
-                    makeNewSocketIoConnection={makeNewSocketIoConnection===true}
-                     // title={"Test"}
-                     //lineColor={[this.props.theme.palette.secondary.main,lime['400']]}
-                     />
-                
-                </Grid> */}
-
                 <Grid item xs={6} sm={4} lg={3} >
-
                   <Gauge pv='$(device):amplitude' macros={{ '$(device)': 'testIOC' }} prec={3} usePvMinMax={true} />
-
                 </Grid>
 
                 <Grid item xs={2} sm={4} lg={5} >
                   <Grid container direction="column" justify="space-evenly" spacing={2} alignItems="stretch">
                     <Grid item>
                       <StyledIconIndicator pv='$(device)' macros={{ '$(device)': 'testIOC:BO1' }} onColor={props.theme.palette.ok.main} offColor='default' label={'On'} labelPlacement={'end'} />
-
                     </Grid>
                     <Grid item>
                       <StyledIconIndicator pv='$(device)' macros={{ '$(device)': 'testIOC:BO1' }} onColor='default' offColor={props.theme.palette.error.main} label={'Off'} labelPlacement={'end'} />
@@ -361,23 +228,13 @@ const Example1 = (props) => {
                   </Grid>
                 </Grid>
                 <Grid item xs={4} sm={4} lg={4} >
-
                   <ToggleButton pv='$(device)' macros={{ '$(device)': 'testIOC:BO1' }} custom_selection_strings={["OFF", "ON"]} />
                 </Grid>
 
-
-
                 <Grid item xs={12} sm={12} md={12} lg={12}>
-
-
                   <SelectionList debug={false} horizontal={true} pv='loc://editorType' useStringValue={true} custom_selection_strings={['ThumbWheel', 'Slider']}
                     initialLocalVariableValue='ThumbWheel'
                   />
-
-
-
-
-
                 </Grid>
                 <Grid item xs={12}>
                   {editorType.value === 'None' &&
@@ -416,8 +273,6 @@ const Example1 = (props) => {
           <Grid container className={classes.root}>
             <Grid item xs={12}>
               <Grid container spacing={2} alignItems={'stretch'} direction={'column'} justify={'flex-start'}>
-
-
                 <Grid item >
                   <div style={{ marginBottom: 8 }}>Settings</div>
                   <Grid container spacing={2} alignItems={'stretch'} direction={'row'} justify={'flex-start'}>
@@ -428,8 +283,6 @@ const Example1 = (props) => {
                       <TextInput pv='$(device):amplitude' macros={{ '$(device)': 'testIOC' }} usePvUnits={true} usePvLabel={true} />
                     </Grid>
                   </Grid>
-
-
                 </Grid>
                 <Grid item ><Divider /></Grid>
               </Grid>
@@ -440,18 +293,12 @@ const Example1 = (props) => {
 
       <AppBar className={classes.body1} style={{ position: 'fixed', bottom: 0, top: 'auto' }} color='inherit'>
         <Tabs value={showAdvancedSettings} onChange={handleChange} variant="fullWidth" scrollButtons="off">
-          {/* <Tab icon={<SupervisorAccount />} /> */}
           <Tab icon={<AccountCircle />} />
           <Tab icon={<Settings />} />
         </Tabs>
       </AppBar>
-
     </TraditionalLayout>
-
   );
 }
-
-
-
 
 export default withWidth()(withStyles(styles, { withTheme: true })(Example1));

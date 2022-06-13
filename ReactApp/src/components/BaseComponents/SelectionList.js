@@ -64,11 +64,9 @@ const styles = (theme) => {
         borderStyle: "solid",
         borderColor: theme.palette.text.main,
         border: 1,
-     
       },
     },
     buttonMiddleHorizontal: {
-     
       borderRight: '1px solid '+ borderColor ,
       borderTop: '1px solid '+ borderColor ,
       borderBottom: '1px solid '+ borderColor ,
@@ -79,7 +77,6 @@ const styles = (theme) => {
         borderStyle: "solid",
         borderColor: theme.palette.text.main,
         border: 1,
-      
       },
     },
     buttonLastVertical: {
@@ -95,7 +92,6 @@ const styles = (theme) => {
         borderStyle: "solid",
         borderColor: theme.palette.text.main,
         border: 1,
-      
       },
     },
     buttonFirstVertical: {
@@ -109,7 +105,6 @@ const styles = (theme) => {
         borderStyle: "solid",
         borderColor: theme.palette.text.main,
         border: 1,
-       
       },
     },
     buttonMiddleVertical: {
@@ -123,7 +118,6 @@ const styles = (theme) => {
         borderStyle: "solid",
         borderColor: theme.palette.text.main,
         border: 1,
-       
       },
     },
     listVertical: {
@@ -137,11 +131,9 @@ const styles = (theme) => {
       width: "100%",
       height: "100%",
       padding: theme.spacing(1),
-      
     },
   }
   )
-
 };
 
 /**
@@ -202,8 +194,6 @@ const SelectionListComponent = (props) => {
     return listItems;
   }
 
-
-
   let itemList = getListItems(props.initialized ? props.enumStrs : ["N/A", "Disconnected"], props.initialized ? props.value : "Disconnected");
 
   return (
@@ -219,7 +209,6 @@ const SelectionListComponent = (props) => {
               : props.classes.listVertical
           }
           component="nav"
-
           variant="outlined"
           disablePadding={true}
         >
@@ -236,7 +225,6 @@ const SelectionList = (props) => {
   return (
     <Widget {...props} useStringValue={true} component={SelectionListComponent} usePvMinMax={false} usePvPrecision={false} min={undefined} max={undefined} prec={undefined} />
   )
-
 }
 
 /**
@@ -248,14 +236,11 @@ SelectionList.propTypes = {
   pv: PropTypes.string.isRequired,
   /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
   macros: PropTypes.object,
-  
 
   /**  Display list horizontally.*/
   horizontal: PropTypes.bool,
 
-
   /** If defined, this array of strings overrides the default EPICS MBBI/O pv strings and are displayed as the choices in the RadioButtonGroup component*/
-
   custom_selection_strings: PropTypes.array,
   /** label placement*/
   labelPlacement: PropTypes.oneOf(['start', 'top', 'bottom', 'end']),
@@ -266,8 +251,8 @@ SelectionList.propTypes = {
    */
   usePvLabel: PropTypes.bool,
   /**
- * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
- */
+   * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
+   */
   labelPv: PropTypes.string,
   /**
    * Tooltip Text
@@ -280,10 +265,7 @@ SelectionList.propTypes = {
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-
   tooltipProps:PropTypes.object,
-  
-
 };
 
 SelectionList.defaultProps = {
@@ -291,6 +273,5 @@ SelectionList.defaultProps = {
   labelPlacement: 'top',
   showTooltip:false
 };
-
 
 export default withStyles(styles, { withTheme: true })(SelectionList);

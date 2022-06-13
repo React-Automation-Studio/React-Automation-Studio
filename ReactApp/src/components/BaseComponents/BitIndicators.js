@@ -18,11 +18,7 @@ const styles = (theme) => ({
   },
 });
 
-
 const BitIndicatorsComponent = (props) => {
-
-
-
   let onColor = props.theme.palette.primary.main;
   let offColor = props.theme.palette.grey[300];
   if (typeof props.onColor !== 'undefined') {
@@ -59,7 +55,6 @@ const BitIndicatorsComponent = (props) => {
   let bitLabels = [];
   let bitStyles = [];
 
-
   let bitLabelPos =
     props.bitLabelPlacement !== undefined
       ? props.bitLabelPlacement
@@ -74,13 +69,9 @@ const BitIndicatorsComponent = (props) => {
     );
     if (props.usePvBitLabels === false) {
       bitLabels.push(
-
         props.bitLabels === undefined
           ? "Bit " + n
           : props.bitLabels[n]
-
-
-
       );
     }
     else {
@@ -143,7 +134,6 @@ const BitIndicatorsComponent = (props) => {
 }
 
 
-
 /**
  * The BitIndicators Component is a wrapper on multiple SvgIcon components.
  * Each SvgIcon component indicates the value of each of the bits of the PV Value.
@@ -159,7 +149,6 @@ const BitIndicators = (props) => {
     <Widget {...props} component={BitIndicatorsComponent} />
   )
 }
-
 
 BitIndicators.propTypes = {
   /** Name of the process variable,  eg. '$(device):test$(id)'*/
@@ -188,13 +177,11 @@ BitIndicators.propTypes = {
   /** Any of the MUI Svg Icon can applied by defining them as an object*/
 
   muiSvgIconProps: PropTypes.object,
-  /** Directive to use the  PV Bit Labels .
-   * 
-   */
+  /** Directive to use the  PV Bit Labels. */
   usePvBitLabels: PropTypes.bool,
   /**
-  * Tooltip Text
-  */
+   * Tooltip Text
+   */
   tooltip: PropTypes.string,
   /**
    * Directive to show the tooltip
@@ -203,7 +190,6 @@ BitIndicators.propTypes = {
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-
   tooltipProps: PropTypes.object,
 };
 
@@ -215,4 +201,5 @@ BitIndicators.defaultProps = {
   offColor: 'default',
   usePvBitLabels: false
 };
+
 export default withStyles(styles, { withTheme: true })(BitIndicators);

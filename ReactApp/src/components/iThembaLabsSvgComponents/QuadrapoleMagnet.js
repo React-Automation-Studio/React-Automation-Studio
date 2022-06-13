@@ -3,18 +3,14 @@ import AutomationStudioContext from '../SystemComponents/AutomationStudioContext
 import DataConnection from '../SystemComponents/DataConnection';
 import { withStyles } from '@material-ui/core/styles';
 import ContextMenu from '../SystemComponents/ContextMenu';
-//import MenuItem from '@material-ui/core/MenuItem';
+
 /* eslint-disable eqeqeq */
 const styles = theme => ({
-
-
   textQuadrapoleLabel: {
     fill: theme.palette.text.primary
-
   },
   textQuadrapoleValue: {
     fill: theme.palette.text.primary
-
   }
 });
 
@@ -32,7 +28,6 @@ class QuadrapoleMagnet extends React.Component {
     }
     else {
       pvname = this.props.pv;
-
     }
 
     this.state = {
@@ -54,65 +49,41 @@ class QuadrapoleMagnet extends React.Component {
     this.handleMetadata = this.handleMetadata.bind(this);
   }
 
-
-
   componentDidMount() {
   }
 
-
   componentWillUnmount() {
-
   }
 
-
-
   handleContextMenuClose = (event) => {
-
-
     this.setState({ openContextMenu: false });
-
   };
 
   handleToggleContextMenu = (event) => {
-    //   console.log(event.type)
     event.persist()
     this.setState(state => ({ openContextMenu: !state.openContextMenu, x0: event.pageX, y0: event.pageY }));
-
     event.preventDefault();
   }
 
   handleMetadata(metadata) {
-
-
     this.setState({ metadata: metadata });
-
-
   }
 
-
   handleInputValue(inputValue, pvname, initialized, severity) {
-
     this.setState({
       value: inputValue,
       pvname: pvname,
       initialized: initialized,
       severity: severity
     });
-
   }
-
 
   handleInputValueLabel(inputValue) {
-
     this.setState({ label: inputValue });
-
   }
 
-
   handleOnClick = () => {
-    //console.log("In quad: clicked "+device.toString());
     this.props.handleOnClick(this.props.macros['$(device)']);
-    //  this.setState({ ['clicked']: 1});
   };
 
   render() {
@@ -128,9 +99,6 @@ class QuadrapoleMagnet extends React.Component {
     const initialized = this.state.initialized;
     let value = this.state.value;
     if (initialized) {
-
-
-
       if (typeof this.props.usePrecision !== 'undefined') {
         if (this.props.usePrecision == true) {
           if (typeof this.props.prec !== 'undefined') {
@@ -138,16 +106,9 @@ class QuadrapoleMagnet extends React.Component {
           }
           else
             value = parseFloat(value).toFixed(parseInt(this.state.metadata.precision));
-
         }
-
       }
-
     }
-
-
-
-
 
     let color = '';
     if (typeof this.props.alarmSensitive !== 'undefined') {
@@ -160,19 +121,7 @@ class QuadrapoleMagnet extends React.Component {
         }
         else color = '#133C99';
       }
-
     }
-
-
-
-
-
-
-
-
-
-
-
 
     return (
       <g onContextMenu={this.handleToggleContextMenu}>
@@ -202,11 +151,9 @@ class QuadrapoleMagnet extends React.Component {
         />
 
         {usePvLabel === true && <DataConnection
-
           pv={pv.toString() + ".DESC"}
           macros={macros}
           handleInputValue={this.handleInputValueLabel}
-
         />}
 
         {initialized === true &&
@@ -226,8 +173,6 @@ class QuadrapoleMagnet extends React.Component {
             </defs>
             <ellipse
               fill={this.props.componentGradient === true ? 'url(#' + this.state.pvname + 'elipse-gradient)' : color}
-
-
               cx={this.props.cx + 15}
               cy={this.props.cy}
               rx="10"
@@ -266,10 +211,7 @@ class QuadrapoleMagnet extends React.Component {
           <g  >
             <linearGradient id="elipse-gradient">
               <stop offset="0%" stopOpacity="0" />
-
               <stop offset="75%" stopColor={'grey'} />
-
-              {/*}<stop offset="100%" stopOpacity="0" />*/}
             </linearGradient>
             <linearGradient id={this.state.pvname + 'elipse-gradient'} gradientTransform="rotate(0)">
               <stop offset="0%" stopOpacity="0" />
@@ -307,10 +249,6 @@ class QuadrapoleMagnet extends React.Component {
           </g>
         }
       </g>
-
-
-
-
     );
   }
 }

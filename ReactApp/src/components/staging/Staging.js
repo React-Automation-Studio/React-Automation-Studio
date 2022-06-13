@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 
-
 import withStyles from '@material-ui/core/styles/withStyles';
 import { withRouter } from 'react-router-dom';
 
@@ -8,39 +7,23 @@ import { Link } from 'react-router-dom'
 import Button from '@material-ui/core/Button';
 import TraditionalLayout from '../../components/UI/Layout/ComposedLayouts/TraditionalLayout.js';
 import Grid from '@material-ui/core/Grid';
-// Styles
-
-
-
 
 const styles = theme => ({
   root: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
-
-
-
   },
   center: {
     margin: 'auto',
 
     width: '15%',
     height: '50%'
-
   },
   button: {
     marginTop: '10px',
     paddingTop: '10px'
   }
-
 });
-
-
-
-
-
-
-
 
 class Staging extends Component {
   constructor(props) {
@@ -50,12 +33,9 @@ class Staging extends Component {
 
   logout() {
     localStorage.removeItem('jwt');
-
   }
 
   render() {
-
-
     const { classes } = this.props;
 
     return (

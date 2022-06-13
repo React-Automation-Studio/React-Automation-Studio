@@ -4,14 +4,6 @@ import { withStyles } from '@material-ui/core/styles';
 
 import SideBar from '../../../components/SystemComponents/SideBar';
 
-
-
-
-
-
-
-
-
 const styles = theme => ({
   root: {
     padding: 0,
@@ -22,14 +14,10 @@ const styles = theme => ({
     overflowX: "hidden",
     overflowY: "hidden",
   },
-
 });
+
 class Example3 extends React.Component {
-
-
   render() {
-    //  console.log("state: ",this.state);
-
     return (
       <React.Fragment>
         <SideBar/>
@@ -44,4 +32,3 @@ Example3.propTypes = {
 };
 
 export default withStyles(styles,{withTheme:true})(Example3);
-//export default Example3;

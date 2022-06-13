@@ -3,21 +3,16 @@ import AutomationStudioContext from '../SystemComponents/AutomationStudioContext
 import DataConnection from '../SystemComponents/DataConnection';
 import { withStyles } from '@material-ui/core/styles';
 import ContextMenu from '../SystemComponents/ContextMenu';
-//import MenuItem from '@material-ui/core/MenuItem';
+
 const styles = theme => ({
-
-
   textBMLabel: {
     fill: theme.palette.text.primary
-
   },
   textBMValue: {
     fill: theme.palette.text.primary
-
   },
   textBMLabelDisconneted: {
     fill: 'dimgrey'
-
   },
 });
 
@@ -35,8 +30,8 @@ class BendingMagnet extends React.Component {
     }
     else {
       pvname = this.props.pv;
-
     }
+
     this.state = {
       'value': "",
       'inputValue': "",
@@ -56,66 +51,42 @@ class BendingMagnet extends React.Component {
     this.handleMetadata = this.handleMetadata.bind(this);
   }
 
-
-
   componentDidMount() {
   }
 
-
   componentWillUnmount() {
-
   }
 
   handleContextMenuClose = (event) => {
-
-
     this.setState({ openContextMenu: false });
-
   };
 
   handleToggleContextMenu = (event) => {
-    //   console.log(event.type)
     event.persist()
     this.setState(state => ({ openContextMenu: !state.openContextMenu, x0: event.pageX, y0: event.pageY }));
 
     event.preventDefault();
   }
 
-
-
-
   handleMetadata(metadata) {
-
-
     this.setState({ metadata: metadata });
-
-
   }
 
-
   handleInputValue(inputValue, pvname, initialized, severity) {
-
     this.setState({
       value: inputValue,
       pvname: pvname,
       initialized: initialized,
       severity: severity
     });
-
   }
-
 
   handleInputValueLabel(inputValue) {
-
     this.setState({ label: inputValue });
-
   }
 
-
   handleOnClick = device => event => {
-    //console.log("In quad: clicked "+device.toString());
     this.props.handleOnClick(device);
-    //  this.setState({ ['clicked']: 1});
   };
 
   render() {
@@ -130,10 +101,8 @@ class BendingMagnet extends React.Component {
   
     const initialized = this.state.initialized;
     let value = this.state.value;
+
     if (initialized) {
-
-
-
       if (typeof this.props.usePrecision !== 'undefined') {
         if (this.props.usePrecision == true) {
           if (typeof this.props.prec !== 'undefined') {
@@ -141,16 +110,9 @@ class BendingMagnet extends React.Component {
           }
           else
             value = parseFloat(value).toFixed(parseInt(this.state.metadata.precision));
-
         }
-
       }
-
     }
-
-
-
-    
 
     let color_side = '';
 
@@ -158,30 +120,15 @@ class BendingMagnet extends React.Component {
       if (this.props.alarmSensitive == true) {
         if (severity == 1) {
           color_side = '#FF8E53';
-
         }
         else if (severity == 2) {
           color_side = '#E20101';
-
         }
         else {
           color_side = '#133CA9';
-
         }
-
       }
-
     }
-
-
-
-
-
-
-
-
-
-
 
     return (
       <g onContextMenu={this.handleToggleContextMenu}>
@@ -211,11 +158,9 @@ class BendingMagnet extends React.Component {
         />
 
         {usePvLabel === true && <DataConnection
-
           pv={pv.toString() + ".DESC"}
           macros={macros}
           handleInputValue={this.handleInputValueLabel}
-
         />}
 
         {initialized === true &&
@@ -261,10 +206,8 @@ class BendingMagnet extends React.Component {
                   id="path8488"
                   d="m 24.149959,1064.5524 h 10.000004 l -5.094995,57.845 -10.000004,-4e-4 z"
                 />
-
               </g>
             </g>
-
 
             <text className={classes.textBMValue}
               x={7.5}
@@ -273,7 +216,6 @@ class BendingMagnet extends React.Component {
               filter={this.props.textShadow === true ? "url(#" + this.state.pvname + "elipseShadow)" : ""}
             >
               {this.props.usePvUnits === true ? value + " " + this.state.metadata.units : value + " " + this.props.units}
-
             </text>
             <text className={classes.textBMLabel}
               x={7.5}
@@ -303,14 +245,12 @@ class BendingMagnet extends React.Component {
             <g filter={this.props.componentShadow === true ? "url(#" + this.state.pvname + "elipseShadow)" : ""}
             >
               <g>
-
                 <path d="M 10 25 L 10 25 L 23 25 L 23 -25 L 10 -25 L 10 25 "
                   fill={'grey'}
                   style={{
                     'strokeWidth': '0.5',
                     'stroke': 'dimgrey'
                   }}
-
                 />
                 <path d="M -10 -5  L 0, -5   A 2.5 5  0 1,1 0,5 L -10 5 L -10 20 L 10 25 L 10 -25 L -10 -30 L -10 -5"
                   fill={this.props.componentGradient === true ? 'url(#' + this.state.pvname + 'elipse-gradient)' : 'grey'}
@@ -320,22 +260,15 @@ class BendingMagnet extends React.Component {
                   }}
                 />
 
-
                 <path d="M 23 -25 L 23 -25 L 8 -30 L -10 -30 L 10 -25 L 23 -25"
                   fill={'grey'}
                   style={{
                     'strokeWidth': '0.3',
                     'stroke': 'dimgrey'
                   }}
-
                 />
-
-
-
               </g>
             </g>
-
-
 
             <text className={classes.textBMLabelDisconneted}
               x={7.5}
@@ -348,10 +281,6 @@ class BendingMagnet extends React.Component {
           </g>
         }
       </g>
-
-
-
-
     );
   }
 }

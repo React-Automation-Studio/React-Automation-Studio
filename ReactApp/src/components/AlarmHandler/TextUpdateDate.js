@@ -28,9 +28,7 @@ const styles = (theme) => ({
     borderStyle: 'solid',
 
     padding: 1,
-    //background:theme.palette.alarm.minor.main,
     background: 'linear-gradient(45deg,' + fade(theme.palette.alarm.minor.dark, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minor.dark) + ' 100%)'
-    //  background:'linear-gradient(45deg, '+ theme.palette.background.default+ ' 1%, '+deepOrange['400'] +' 99%)'
   },
   TextFieldSeverity2: {
     borderColor: theme.palette.type === 'dark' ? grey[700] : grey[300],
@@ -39,10 +37,7 @@ const styles = (theme) => ({
     borderRadius: 2,
 
     padding: 1,
-    //background:theme.palette.alarm.major.main,
     background: 'linear-gradient(45deg,' + fade(theme.palette.alarm.major.dark, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.major.dark) + ' 100%)'
-    //  backgroundColor:'linear-gradient(45deg, #FFFFFF 1%, #FF8E53 99%)'
-    //  background:'linear-gradient(45deg, '+ theme.palette.background.default+ ' 1%, '+red['800'] +' 99%)'
   }
 });
 
@@ -55,15 +50,12 @@ const TextUpdateComponent = (props) => {
     if (props.alarmSensitive === true) {
       if (props.alarmSeverity === 1) {
         textFieldClassName = classes.TextFieldSeverity1;
-        //  background_color='linear-gradient(45deg, #FFFFFF 1%, #FF8E53 99%)';
       }
       else if (props.alarmSeverity === 2) {
         textFieldClassName = classes.TextFieldSeverity2;
-        //  background_color='linear-gradient(45deg, #FFFFFF 1%, #E20101 99%)';
       }
       else {
         textFieldClassName = classes.TextFieldSeverity0;
-        //  background_color='white';
       }
     }
 
@@ -78,11 +70,11 @@ const TextUpdateComponent = (props) => {
   }
   return <div>{content}</div>;
 }
+
 /**
  * The TextUpdateDate Component is a wrapper on the  <b>Typography</b> container tag.
  * The component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
  * The margins and spacing must be controlled from the parent component.<br/><br/>
- 
  */
 const TextUpdateDate = (props) => {
   return (
@@ -96,7 +88,6 @@ TextUpdateDate.propTypes = {
   /**
   * Directive to use the  alarm severity status to alter the fields background color.
   */
-
   alarmSensitive: PropTypes.bool,
   /**
    * Custom PV to define the alarm severity to be used, alarmSensitive must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
@@ -127,7 +118,7 @@ TextUpdateDate.propTypes = {
    */
   macros: PropTypes.object,
 
-
+  
   /**
    * Custom precision to round the value.
    */
@@ -138,11 +129,9 @@ TextUpdateDate.propTypes = {
   precPv: PropTypes.string,
 
 
-
   /**
    * Custom units to be used, if usePvUnits is not defined.
    */
-
   units: PropTypes.string,
   /**
    * Custom PV to define the units to be used, usePvUnits must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
@@ -184,10 +173,6 @@ TextUpdateDate.propTypes = {
   useStringValue: PropTypes.bool,
 
 
-
-
-
-
   /** Name of the process variable,  eg. '$(device):test$(id)'*/
   pv: PropTypes.string,
   /** Array of the process variables, eg. '$(device):test$(id)'*/
@@ -202,8 +187,6 @@ TextUpdateDate.propTypes = {
   /**
    * Directive to override alarm severity with the rules defined in the stringSeverity
    */
-
-
   useStringSeverityMatch: PropTypes.bool,
   /**
    * Material UI Typography variant.
@@ -220,14 +203,14 @@ TextUpdateDate.propTypes = {
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-
   tooltipProps: PropTypes.object,
-
 };
+
 TextUpdateDate.defaultProps = {
   debug: false,
   variant: 'body2',
   alarmSensitive: false,
   showTooltip: false
 };
+
 export default withStyles(styles, { withTheme: true })(TextUpdateDate)

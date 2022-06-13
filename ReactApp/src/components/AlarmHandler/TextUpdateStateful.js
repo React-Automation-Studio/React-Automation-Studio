@@ -87,7 +87,6 @@ TextUpdateStateful.propTypes = {
   /**
   * Directive to use the  alarm severity status to alter the fields background color.
   */
-
   alarmSensitive: PropTypes.bool,
   /**
    * Custom PV to define the alarm severity to be used, alarmSensitive must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
@@ -129,11 +128,9 @@ TextUpdateStateful.propTypes = {
   precPv: PropTypes.string,
 
 
-
   /**
    * Custom units to be used, if usePvUnits is not defined.
    */
-
   units: PropTypes.string,
   /**
    * Custom PV to define the units to be used, usePvUnits must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
@@ -175,10 +172,6 @@ TextUpdateStateful.propTypes = {
   useStringValue: PropTypes.bool,
 
 
-
-
-
-
   /** Name of the process variable,  eg. '$(device):test$(id)'*/
   pv: PropTypes.string,
   /** Array of the process variables, eg. '$(device):test$(id)'*/
@@ -193,8 +186,6 @@ TextUpdateStateful.propTypes = {
   /**
    * Directive to override alarm severity with the rules defined in the stringSeverity
    */
-
-
   useStringSeverityMatch: PropTypes.bool,
   /**
    * Material UI Typography variant.
@@ -211,14 +202,14 @@ TextUpdateStateful.propTypes = {
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-
   tooltipProps: PropTypes.object,
-
 };
+
 TextUpdateStateful.defaultProps = {
   debug: false,
   variant: 'body2',
   alarmSensitive: false,
   showTooltip: false
 };
+
 export default withStyles(styles, { withTheme: true })(TextUpdateStateful)

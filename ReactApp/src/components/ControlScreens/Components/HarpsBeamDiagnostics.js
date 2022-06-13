@@ -12,10 +12,7 @@ import PV from '../../SystemComponents/PV'
 import { replaceMacros } from '../../SystemComponents/Utils/macroReplacement';
 
 
-
-const HarpsBeamDiagnostics = (props) => {
-
-    
+const HarpsBeamDiagnostics = (props) => {    
     const [harpGraphsState, setHarpGraphsState] = useState({
         x0GraphPVs: [],
         y0GraphPVs: [],
@@ -49,33 +46,29 @@ const HarpsBeamDiagnostics = (props) => {
     const [bottomYgraphYmax, setBottomYgraphYmax] = useState(0);
     const [bottomXgraphYmax, setBottomXgraphYmax] = useState(0);
 
-
     const [harpPvs, setHarpPvs] = useState({});
+
     const harpPvConnections = (harpSystems) => {
         let pvs = [];
         let index = 0;
         for (let harp in harpSystems) {
-
             pvs.push(
                 <PV
-
                     key={index.toString()}
                     pv={harpSystems[harp].inLimitPv}
                     macros={harpSystems[harp].macros}
                     pvData={(pv) => setHarpPvs(prePvs => {
                         let pvs = { ...prePvs }
-
                         pvs[harp] = pv;
                         return pvs
-
                     }
                     )}
                 />)
             index++;
         }
-
         return pvs
     }
+
     useEffect(() => {
         let harp;
         let x0GraphPVs = [];
@@ -103,7 +96,6 @@ const HarpsBeamDiagnostics = (props) => {
         let numberOfInsertedGraphs = 0;
         
         for (harp in harpPvs) {
-
             if (harpPvs[harp]) {
                 let currentHarp = props.harps[harp];
                 let systemName = replaceMacros(currentHarp.systemName, currentHarp.macros);
@@ -125,7 +117,6 @@ const HarpsBeamDiagnostics = (props) => {
                         x0legend.push(label);
                         x0GraphKey = x0GraphKey + systemName;
                         x0SystemName = systemName;
-                        //    }
                         if (typeof currentHarp.onlyX !== 'undefined') {
                             y0GraphPVs.push( systemName + ':xcur');
                             y0RangePV =  systemName + ':xrange';
@@ -167,18 +158,11 @@ const HarpsBeamDiagnostics = (props) => {
                         x1SystemName = systemName;
                         numberOfInsertedGraphs++;
                     }
-
-
-
-
-                  
                 }
             }
         }
-       
 
         setHarpGraphsState({
-
             x0GraphPVs: x0GraphPVs,
             y0GraphPVs: y0GraphPVs,
             x0legend: x0legend,
@@ -205,13 +189,9 @@ const HarpsBeamDiagnostics = (props) => {
 
     }, [harpPvs, props.harps])
 
-
-
     return (
         <React.Fragment>
             {harpPvConnections(props.harps)}
-
-
             <Grid
                 container
                 direction="row"
@@ -274,7 +254,6 @@ const HarpsBeamDiagnostics = (props) => {
                                             ymaxFromOtherGraph={topXgraphYmax}
                                             ylabel="X Axis"
                                         />}
-                                        {/*}<GraphTest style pv='testIOC:test4'  />*/}
                                     </div>
                                 </Grid>
                                 <Grid item sm={6}>
@@ -290,7 +269,6 @@ const HarpsBeamDiagnostics = (props) => {
                                             ymaxFromOtherGraph={topYgraphYmax}
                                             ylabel="Y Axis"
                                         />}
-
                                     </div>
                                 </Grid>
                             </Grid>
@@ -376,7 +354,6 @@ const HarpsBeamDiagnostics = (props) => {
                                                     changeOtherGraphYmax={setBottomXgraphYmax}
                                                     ymaxFromOtherGraph={bottomYgraphYmax}
                                                 />}
-
                                             </div>
                                         </Grid>
                                     </Grid>
@@ -387,10 +364,7 @@ const HarpsBeamDiagnostics = (props) => {
                 </Grid>
             </Grid>
         </React.Fragment>
-
-
     );
 }
 
 export default HarpsBeamDiagnostics;
-

@@ -32,8 +32,6 @@ const PVList = (props) => {
         return obj;
     }, {})
 
-    // console.log(props.alarmPVDict)
-
     const logData = Object.keys(orderedData).map((alarmName) => {
 
         let visible = true
@@ -74,11 +72,6 @@ const PVList = (props) => {
     return (
         <TableContainer component={Paper} style={{ height: props.height }} elevation={theme.palette.type === 'dark' ? undefined : 5} ref={myRef}>
             <Table aria-label="PV List" stickyHeader size="small">
-                {/* <colgroup>
-                    <col style={{ width: '30%' }} />
-                    <col style={{ width: '40%' }} />
-                    <col style={{ width: '30%' }} />
-                </colgroup> */}
                 <TableHead>
                     <TableRow
                         onClick={(event) => {

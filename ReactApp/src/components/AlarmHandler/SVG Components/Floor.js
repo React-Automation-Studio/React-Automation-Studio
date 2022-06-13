@@ -2291,11 +2291,6 @@ const Floor = (props) => {
                     {`${vault_radiation_val}uSv/h`}
                 </tspan>
             </text>
-
-
-
-
-
         </g>
     )
 };

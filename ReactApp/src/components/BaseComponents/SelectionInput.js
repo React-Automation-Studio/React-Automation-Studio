@@ -19,20 +19,17 @@ const styles = (theme) => ({
 
 
 const SelectionInputComponent = (props) => {
-
   function handleChange(event) {
     let value = event.target.value;
     props.handleImmediateChange(value);
   }
 
-  
   let inputProps;
   let stringValues; 
   if (props.initialized) {
     stringValues= props.enumStrs.map((item, idx) => (
       <MenuItem
         key={item.toString()}
-
         value={props.useStringValue ? item : idx}
       >
         {item}
@@ -52,8 +49,6 @@ const SelectionInputComponent = (props) => {
     };
   }
   else{
-    
-    
     inputProps = {
       endAdornment: (
         <InputAdornment
@@ -68,7 +63,6 @@ const SelectionInputComponent = (props) => {
     };
     stringValues=props.pvName
   }
-  
 
   return (
     <TextField
@@ -90,9 +84,6 @@ const SelectionInputComponent = (props) => {
   );
 }
 
-
-
-
 /**
 * The SelectionInput Component is a wrapper on the Material-UI TextField component. 
 * The TextField component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
@@ -101,46 +92,38 @@ const SelectionInputComponent = (props) => {
 * https://material-ui.com/demos/text-fields<br/><br/>
 * Material-UI TextField API:
 * https://material-ui.com/api/text-field
-
 */
-
 const SelectionInput = (props) => {
   return (
     <Widget {...props} useStringValue={true} component={SelectionInputComponent} usePvMinMax={false} usePvPrecision={false} min={undefined} max={undefined} prec={undefined}/>
   )
 }
 
-
 SelectionInput.defaultProps = {
-
   debug: false,
   variant: "outlined",
   margin: "none",
-
 };
-
 
 SelectionInput.propTypes = {
   /** Name of the process variable,  eg. '$(device):test$(id)'*/
   pv: PropTypes.string.isRequired,
   /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
   macros: PropTypes.object,
- 
 
   /** If defined, this array of strings overrides the default EPICS MBBI/O pv strings and are displayed as the choices in the RadioButtonGroup component*/
-  
   custom_selection_strings: PropTypes.array,
 
   /** Material-UI TextField variant*/
   variant: PropTypes.string,
   /** Material-UI TextField margin*/
   margin: PropTypes.string,
-  
-   /**
-  * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
-  */
- labelPv: PropTypes.string,
- /**
+
+  /**
+   * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
+   */
+  labelPv: PropTypes.string,
+  /**
    * Directive to fill the component's label with
    * the value contained in the  pv metadata's DESC field or the labelPv value.
    * If not defined it uses the custom label as defined by the label prop.
@@ -149,16 +132,15 @@ SelectionInput.propTypes = {
   /**
    * Tooltip Text
    */
-  tooltip:PropTypes.string,
+  tooltip: PropTypes.string,
   /**
    * Directive to show the tooltip
    */
-  showTooltip:PropTypes.bool,
+  showTooltip: PropTypes.bool,
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-
-  tooltipProps:PropTypes.object,
+  tooltipProps: PropTypes.object,
 
   /** Any of the MUI TextField Props can applied by defining them as an object
    * 
@@ -168,27 +150,23 @@ SelectionInput.propTypes = {
   /**
    * Custom units to be used, if usePvUnits is not defined.
    */
-
   units: PropTypes.string,
+
   /**
    * Custom PV to define the units to be used, usePvUnits must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
   unitsPv: PropTypes.string,
-  
-  
+
   /**
    * Directive to use the units contained in the   pv metdata's EGU field or unitsPv.
    *  If not defined it uses the custom units as defined by the units prop.
    */
-
-
   usePvUnits: PropTypes.bool,
 };
 
 SelectionInput.defaultProps = {
-  
-  showTooltip:false,
-  variant:'outlined',
- };
+  showTooltip: false,
+  variant: 'outlined',
+};
 
 export default withStyles(styles, { withTheme: true })(SelectionInput);

@@ -4,8 +4,6 @@ import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
   body1: theme.typography.body1,
-
-
 });
 
 class MyWindowPortal extends React.PureComponent {

@@ -8,13 +8,7 @@ import PropTypes from "prop-types";
  * This is done by defining the pv name in the pv prop and using a prefix "loc://" for local variable.
  * The PV component also performs macro substitution on the pv prop using the macros prop.
  * The pv state can be raised as an object using the pvData callback or passed to child function component. All the data in this pv object is valid when pv.initialized===true
- * 
- * 
- * 
- * 
- * 
- **/
-
+ */
 const PV = (props) => {
   const [pvs, setPvs] = useState(null)
   const [pv, SetPv] = useState({
@@ -32,6 +26,7 @@ const PV = (props) => {
     readOnly: true,
     enum_strs: []
   })
+
   const pvConnection = (pv, props) => {
     let pvname = pv.toString();
     if (props.macros) {
@@ -43,17 +38,9 @@ const PV = (props) => {
     return pvname.includes('loc://')?
       LocalPV({ ...props, pv:pvname })
       :EpicsPV({ ...props, pv:pvname})
-    //     : UnknownPV({ ...props, pv:pvname }))
-    // return pvname.includes('pva://')
-    //   ?
-    //   EpicsPV({ ...props, pv:pvname})
-    //   : (pvname.includes('loc://')
-    //     ?
-    //     LocalPV({ ...props, pv:pvname })
-    //     : UnknownPV({ ...props, pv:pvname }))
   }
-  const pvData = (name) => (pv) => {
 
+  const pvData = (name) => (pv) => {
     setPvs(pvs => ({
       ...pvs,
       [name]: pv,
@@ -69,7 +56,6 @@ const PV = (props) => {
     makeNewSocketIoConnection:props.makeNewSocketIoConnection,
     debug: props.debug,
     pvData: pvData('data')
-
   });
 
   let maxPv = !props.useMetadata && props.usePvMinMax
@@ -132,11 +118,11 @@ const PV = (props) => {
         pvData: pvData('alarm')
       }
     ) : undefined;
+
   useEffect(() => {
     if (props.debug) {
       console.log("use effect PV render")
     }
-
 
     let pv = {};
     if (pvs) {
@@ -168,27 +154,27 @@ const PV = (props) => {
         pv.readOnly = true;
       }
       pv.PVs = pvArray;
-      // console.log(pv)
       SetPv(pv);
-
     }
-
-
  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pvs])
+
   useEffect(() => {
     if (typeof props.pvData !=='undefined'){
       props.pvData(pv)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pv])
+
   const contextPVs=pv.PVs;
+
   useEffect(() => {
     if (typeof props.contextInfo !=='undefined'){
       props.contextInfo(contextPVs)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contextPVs])
+
   if (props.debug) {
     console.log(props)
     console.log(props.name, " Debug:", "PV Render States: ", "pvs:", pvs)
@@ -206,10 +192,9 @@ const PV = (props) => {
       {alarmPv}
       {props.children?props.children(pv):null}    
     </React.Fragment>
-
   )
-
 }
+
 PV.propTypes = {
   /**
    * If defined, then the DataConnection  will be over a new socketIO  connection, otherwise the global socketIO connection
@@ -218,7 +203,6 @@ PV.propTypes = {
   /**
    * Directive to use the  alarm severity status to alter the fields backgorund color.
    */
-
   alarmSensitive: PropTypes.bool,
   /**
    * Custom PV to define the alarm severity to be used, alarmSensitive must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
@@ -281,14 +265,11 @@ PV.propTypes = {
    */
   precPv: PropTypes.string,
   /** Name of the process variable,  eg. '$(device):test$(id)'*/
-
   pv: PropTypes.string,
 
-   /** A function that returns the pv object */
+  /** A function that returns the pv object */
+  pvData: PropTypes.func,
 
-   pvData: PropTypes.func,
-
-  
   /**
    * Custom units to be used, if usePvUnits is not defined.
    */
@@ -332,29 +313,21 @@ PV.propTypes = {
    *  If not defined it uses the custom units as defined by the units prop.
    */
 
-
   usePvUnits: PropTypes.bool,
   /**
    * Directive to use PV's string values.
    */
   useStringValue: PropTypes.bool,
-
-
 };
 
 /**
  * Default props.definition for all widgets linked to
  * PVs storing analog values.
  */
-// static defaultProps=WrappedComponent.defaultProps;
 PV.defaultProps = {
-
   debug: false,
   useMetadata: true,
   makeNewSocketIoConnection:false
 };
 
-
-
 export default PV
-

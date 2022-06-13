@@ -24,7 +24,6 @@ const lightBlueGreyPalette = () => {
             main: minor['200'],
             dark: minor['300']
         },
-
     };
 
     alarm.majorAcked = {
@@ -57,9 +56,9 @@ const lightBlueGreyPalette = () => {
             fill: 'none',
             strokeWidth: '2px',
             stroke: blueGrey[400]
-          },
-          lineColors: ['#12939A', '#79C7E3', '#1A3177', '#FF9833', '#EF5D28'],
-        }
+        },
+        lineColors: ['#12939A', '#79C7E3', '#1A3177', '#FF9833', '#EF5D28'],
+    }
        
     return ({
         type: type,
@@ -77,14 +76,11 @@ const lightBlueGreyPalette = () => {
         beamLineComponent:beamLineComponent,
         svgComponentPrimary:svgComponentPrimary,
         svgComponentSecondary:svgComponentSecondary,
-
     })
 }
 
- const lightBlueGrey = {
-    
+const lightBlueGrey = {
     palette: { ...defaultTheme, ...lightBlueGreyPalette() },
-
 }
 
 export default lightBlueGrey;

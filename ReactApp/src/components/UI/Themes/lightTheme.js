@@ -24,9 +24,7 @@ const lightPalette = () => {
             main: minor['200'],
             dark: minor['300']
         },
-
     };
-
 
     alarm.majorAcked = {
         light: fade(alarm.major.light, 0.4),
@@ -55,12 +53,13 @@ const lightPalette = () => {
             padding: '9px 10px'
         },
         '.rv-xy-plot__axis__line': {
-            fill: 'none',
-            strokeWidth: '2px',
-            stroke: grey[400]
-          },
-          lineColors: [indigo[400], pink[400], lime[400], '#FF9833', '#EF5D28'],
+                fill: 'none',
+                strokeWidth: '2px',
+                stroke: grey[400]
+        },
+        lineColors: [indigo[400], pink[400], lime[400], '#FF9833', '#EF5D28'],
     }
+
     return ({
         type: type,
         primary: primary,
@@ -77,15 +76,11 @@ const lightPalette = () => {
         beamLineComponent:beamLineComponent,
         svgComponentPrimary:svgComponentPrimary,
         svgComponentSecondary:svgComponentSecondary,
-
     })
 }
 
-
- const lightTheme = {
-    
+const lightTheme = {
     palette: { ...defaultTheme, ...lightPalette() },
-
 }
 
 export default lightTheme;

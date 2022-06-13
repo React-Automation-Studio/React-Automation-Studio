@@ -9,9 +9,6 @@ module.exports = {
   },
   styleguideComponents: {
     Wrapper: path.join(__dirname, './src/styleguide/Wrapper'),
-
-
-
   },
   sections: [
     {
@@ -109,9 +106,6 @@ module.exports = {
         {
           name: 'Layout Wrapper Components',
           content: 'src/docs/WorkingWithLayouts.md',
-
-
-
           sections: [
             {
               name: 'Layout Components',
@@ -131,13 +125,11 @@ module.exports = {
               name: 'TraditionalLayout Example 3',
               content: 'src/components/UI/Layout/ComposedLayouts/TraditionalLayoutEx3.md',
             },
-
           ]
         },
         {
           name: 'Theming',
           content: 'src/docs/themes/themes.md',
-
         },
         {
           name: 'Base Components',
@@ -160,10 +152,6 @@ module.exports = {
           components: ['src/components/SystemComponents/Widgets/Widget.js', 'src/components/SystemComponents/PV.js', 'src/components/ExperimentalExamples/Mobile/DynamicPvFieldExample.js', 'src/components/SystemComponents/EpicsPV.js', 'src/components/SystemComponents/LocalPV.js',],
           exampleMode: 'expand', // 'hide' | 'collapse' | 'expand'
           usageMode: 'expand', // 'hide' | 'collapse' | 'expand'
-
-
-
-
         },
         {
           name: 'Routes and Login Components',
@@ -171,10 +159,6 @@ module.exports = {
           components: ['src/components/SystemComponents/Login.js','src/components/SystemComponents/ProtectedRoutes.js'], 
           exampleMode: 'expand', // 'hide' | 'collapse' | 'expand'
           usageMode: 'expand', // 'hide' | 'collapse' | 'expand'
-
-
-
-
         },
         {
           name: 'Database Hooks',
@@ -361,26 +345,5 @@ module.exports = {
       ],
       sectionDepth: 2
     },
-    // {
-    //   name: 'Documentation',
-    //   sections: [
-    //     {
-    //       name: 'Installation',
-    //       content: 'docs/installation.md',
-    //       description: 'The description for the installation section'
-    //     },
-    //     {
-    //       name: 'Configuration',
-    //       content: 'docs/configuration.md'
-    //     },
-    //     {
-    //       name: 'Live Demo',
-    //       external: true,
-    //       href: 'http://example.com'
-    //     }
-    //   ]
-    // },
-
-
   ]
 }

@@ -1,21 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
-import EpicsBinaryOutDebug from '../../ExperimentalGroupedComponents/EpicsBinaryOutDebug';
-import EpicsAnalogOutDebug from '../../ExperimentalGroupedComponents/EpicsAnalogOutDebug';
-import EpicsMbboDebug from '../../ExperimentalGroupedComponents/EpicsMbboDebug';
-import TextUpdate from '../../BaseComponents/TextUpdate';
 import TextInput from '../../BaseComponents/TextInput';
 import TextOutput from '../../BaseComponents/TextOutput';
 import Slider from '../../BaseComponents/Slider';
 import GraphY from '../../BaseComponents/GraphY';
 
 import Grid from '@material-ui/core/Grid';
-import DataConnection from '../../SystemComponents/DataConnection';
 import Switch from '../../BaseComponents/Switch';
 import SelectionInput from '../../BaseComponents/SelectionInput';
 import SelectionList from '../../BaseComponents/SelectionList';
@@ -31,6 +22,7 @@ import ProgressBar from '../../BaseComponents/ProgressBar';
 import StyledIconIndicator from '../../BaseComponents/StyledIconIndicator';
 import lime from '@material-ui/core/colors/lime';
 import SideBar from '../../SystemComponents/SideBar';
+
 const styles = theme => ({
   root: {
     flexGrow: 1,
@@ -42,15 +34,11 @@ const styles = theme => ({
     color: theme.palette.text.secondary,
   },
 });
+
 class MobileDemo2 extends React.Component {
-
-
   render() {
     const { classes } = this.props;
     return (
-
-
-
       <div style={{"overflowX": "hidden"}} >
         {typeof this.props.nosidebar==='undefined' &&<SideBar/>}
         <div style={{ padding: 24}}>
@@ -66,13 +54,9 @@ class MobileDemo2 extends React.Component {
                   <GraphY
                     pvs={[
                         'testIOC:amplitude',
-
-
-
                     ]}
                     legend={['Instantaneous Amplitude']}
                     maxLength={1000}
-
                     lineColor={[lime['400']]}
                   />
                 </div>
@@ -80,13 +64,11 @@ class MobileDemo2 extends React.Component {
               <Grid item xs={12} lg={12}>
                 <Slider pv='$(device):amplitude' macros={{'$(device)':'testIOC'}} usePvMinMax={true} min={1000} max={500} usePvLabel={true}  />
               </Grid>
-
             </Grid>
           </div>
         </div>
         <div className={classes.root}>
           <Grid container spacing={2}  direction="row"  justify="flex-start"  alignItems="center">
-
             <Grid item xs={12} lg={2}>
               <TextInput  pv='$(device):amplitude' macros={{'$(device)':'testIOC'}}   usePvLabel={true}  prec={3} alarmSensitive={true}/>
             </Grid>
@@ -127,15 +109,12 @@ class MobileDemo2 extends React.Component {
               <TextOutput pv='$(device)' macros={{'$(device)':'testIOC:BO1'}} usePvLabel={true}/>
             </Grid>
             <Grid item xs={6} lg={1}>
-
               <Switch pv='$(device)' macros={{'$(device)':'testIOC:BO1'}} usePvLabel={true}/>
             </Grid>
             <Grid item xs={6} lg={1}>
-
               <CheckBox pv='$(device)' macros={{'$(device)':'testIOC:BO1'}} usePvLabel={true}/>
             </Grid>
             <Grid item xs={6} lg={1}>
-
               <RadioButton pv='$(device)' macros={{'$(device)':'testIOC:BO1'}} usePvLabel={true}/>
             </Grid>
             <Grid item xs={6} lg={1}>
@@ -173,15 +152,8 @@ class MobileDemo2 extends React.Component {
             </Grid>
 
           </Grid>
-
         </div>
       </div>
-
-
-
-
-
-
     );
   }
 }
@@ -191,4 +163,3 @@ MobileDemo2.propTypes = {
 };
 
 export default withStyles(styles,{withTheme:true})(MobileDemo2);
-//export default MobileDemo2;

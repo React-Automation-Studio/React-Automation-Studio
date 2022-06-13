@@ -8,10 +8,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 
 const AlarmLog = (props) => {
-    // const classes = useStyles();
     const myRef = useRef()
-
-    // console.log('AlarmLog rendered')
 
     useEffect(() => {
         myRef.current.scrollTo(0, 0)

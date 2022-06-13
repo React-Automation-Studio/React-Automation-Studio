@@ -3,13 +3,13 @@ import AutomationStudioContext from '../../SystemComponents/AutomationStudioCont
 import { v4 as uuidv4 } from 'uuid';
 
 const useUAGs = (props) => {
-
     const context = useContext(AutomationStudioContext);
     const socket = context.socket;
     const jwt = context.userTokens.accessToken;
     const jwtRef = useRef(jwt);
     const socketRef = useRef(socket);
     const dbWatchIdRef=useRef(null)
+
     useEffect(() => {
         if (jwt === null) {
             jwtRef.current = 'unauthenticated'
@@ -18,28 +18,25 @@ const useUAGs = (props) => {
             jwtRef.current = jwt;
         }
     }, [jwt])
-    useEffect(() => {
 
+    useEffect(() => {
         socketRef.current = socket;
     }, [socket])
 
-    
     const [userGroups, setUserGroups] = useState(null);
     const [userGroupsId, setUserGroupsId] = useState(null);
     const [writeAccess, setWriteAccess] = useState(false);
     const [initialized, setInitialized] = useState(false);
     const [updateUAGsError, setUpdateUAGsError] = useState(false);
     const [updateUAGsOk, setUpdateUAGsOk] = useState(false);
+
     useEffect(() => {
         dbWatchIdRef.current=uuidv4();
+
         const handleAdminWatchUAGsAck = (msg) => {
-
-            // if (msg?.dbWatchId) {
-            //     setDbWatchId(msg.dbWatchId)
-            // }
         }
-        const handleAdminWatchUAGsReadWatchBroadcast = (msg) => {
 
+        const handleAdminWatchUAGsReadWatchBroadcast = (msg) => {
             const newData = JSON.parse(msg.data);
             setUserGroups(newData[0]['userGroups']);
             setUserGroupsId(newData[0]['_id']['$oid']);
@@ -47,53 +44,43 @@ const useUAGs = (props) => {
             setWriteAccess(msg.write_access)
         }
 
-
-
-            socketRef.current.emit('adminWatchUAGs', { 'clientAuthorisation': jwtRef.current,dbWatchId:dbWatchIdRef.current }, handleAdminWatchUAGsAck)
-            socketRef.current.on('databaseWatchData:adminWatchUAGs',  handleAdminWatchUAGsReadWatchBroadcast);
+        socketRef.current.emit('adminWatchUAGs', { 'clientAuthorisation': jwtRef.current,dbWatchId:dbWatchIdRef.current }, handleAdminWatchUAGsAck)
+        socketRef.current.on('databaseWatchData:adminWatchUAGs',  handleAdminWatchUAGsReadWatchBroadcast);
 
         const reconnect = () => {
             dbWatchIdRef.current=uuidv4();
             socketRef.current.emit('adminWatchUAGs', { 'clientAuthorisation': jwtRef.current,dbWatchId:dbWatchIdRef.current }, handleAdminWatchUAGsAck)
         }
+
         const disconnect = () => {
-
-                setInitialized(false);
-                setUserGroups(null);
+            setInitialized(false);
+            setUserGroups(null);
             setUserGroupsId(null);
-
         }
+        
         socketRef.current.on('disconnect', disconnect);
         socketRef.current.on('connect', reconnect);
-        return () => {
 
+        return () => {
                 if (dbWatchIdRef.current !== null) {
-               //     console.log("removing watch",dbWatchIdRef.current,"adminWatchUAGs")
                     socketRef.current.emit('remove_dbWatch', { dbURL: 'adminWatchUAGs', dbWatchId: dbWatchIdRef.current, 'clientAuthorisation': jwtRef.current });
                 }
                 socketRef.current.removeListener('databaseWatchData:adminWatchUAGs', handleAdminWatchUAGsReadWatchBroadcast);
                 socketRef.current.removeListener('connect', reconnect);
                 socketRef.current.removeListener('disconnect', disconnect);
-
-
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const updateUAGs = useCallback((props) => {
-
-
-
-            
-            setUpdateUAGsOk(false)
-            setUpdateUAGsError(false)
-            socketRef.current.emit('adminUpdateUAGs', {UAGs: props.UAGs, id:userGroupsId, 'clientAuthorisation': jwtRef.current }, (data) => {
-
+        setUpdateUAGsOk(false)
+        setUpdateUAGsError(false)
+        socketRef.current.emit('adminUpdateUAGs', { UAGs: props.UAGs, id: userGroupsId, 'clientAuthorisation': jwtRef.current }, (data) => {
             if (data !== "OK") {
                 setUpdateUAGsError(true)
                 console.log("updateUAGs  unsuccessful")
             }
-            else{
+            else {
                 setUpdateUAGsOk(true)
             }
         });
@@ -103,7 +90,5 @@ const useUAGs = (props) => {
 
     return ({ userGroups: userGroups, writeAccess: writeAccess, initialized: initialized,updateUAGs:updateUAGs,updateUAGsError:updateUAGsError,updateUAGsOk:updateUAGsOk})
 }
-
-
 
 export default useUAGs

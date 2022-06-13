@@ -60,9 +60,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const AlarmTable = props => {
-
-    // console.log("AlarmTable rendered")
-
     const classes = useStyles()
     const theme = useTheme()
     const myRef = useRef()
@@ -86,8 +83,6 @@ const AlarmTable = props => {
         majorAlarmAcked: classes.TextFieldSeverityDisabled,
         majorAlarm: classes.TextFieldSeverityDisabled,
     }
-
-    // console.log(props.alarmContextOpen)
 
     return (
         <TableContainer component={Paper} style={{ height: props.height }} ref={myRef} elevation={theme.palette.type === 'dark' ? undefined : 5}>
@@ -247,11 +242,6 @@ const AlarmTable = props => {
                                                 window.open("/Probe?" + JSON.stringify({ pvname:  value["name"], probeType: 'readOnly' }),
                                                     "_blank", "noreferrer")
                                             }}
-                                        // component={Link} to={{
-                                        //     pathname: "/Probe",
-                                        //     search: JSON.stringify({ pvname:  value["name"], probeType: 'readOnly' }),
-                                        // }}
-                                        // target="_blank"
                                         >
                                             <ListItemIcon >
                                                 <Coffee fontSize="small" />
@@ -407,7 +397,6 @@ const AlarmTable = props => {
                                 </TableRow>
                             </React.Fragment>
                         )
-
                     })}
                 </TableBody>
             </Table>

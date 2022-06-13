@@ -17,16 +17,8 @@ import {
  * The Widget component creates standard properties, state variables and callbacks to manage the behaviour of a component communicating with one or multiple PVs. It also provides the default RAS contextMenu to the child component.
  *
  * The label, min, max, units, pv and tooltip all accept macros that can be replaced by the values defined in the macros prop.
- *
- *
- *
- *
- *
- *
-
- *
- **/
-  const Widget = (props) => {
+ */
+const Widget = (props) => {
   const { disableProbe, index } = props;
   const theme = useTheme();
   const [value, setValue] = useState(0);
@@ -67,16 +59,16 @@ import {
   );
  
   useEffect(() => {
-  let ro=props.readOnly===true;
-  if (props.pv){
-    ro = ro || pv.readOnly;
-  }
+    let ro=props.readOnly===true;
+    if (props.pv){
+      ro = ro || pv.readOnly;
+    }
 
-  if (props.pvs) {
-    pvs.forEach((item) => {
-      ro = ro || item.readOnly;
-    })
-  }
+    if (props.pvs) {
+      pvs.forEach((item) => {
+        ro = ro || item.readOnly;
+      })
+    }
 
     setReadOnly(ro)
      // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -192,12 +184,11 @@ import {
       setEnumStrings(pv.enum_strs)
     }
   }, [props.custom_selection_strings, pv.enum_strs,props.macros])
-  useEffect(() => {
 
+  useEffect(() => {
     let init =
       (typeof props.pv !== 'undefined')
       || (typeof props.pvs !== 'undefined')
-
 
     if (props.pv) {
       init = init&&pv.initialized;
@@ -208,10 +199,11 @@ import {
       })
     }
 
-      setInitalized(init)
+    setInitalized(init)
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pv.initialized, pvs])
+
   useEffect(()=>{
     if (typeof props.usePrecision!=='undefined'){
       console.warn("prop usePrecision is deprecated, use the usePvPrecision and prec props instead")
@@ -221,10 +213,11 @@ import {
   const wrapComponent = (CustomComponent, props) => {
     return <CustomComponent {...props} />;
   }
+
   const disabled = !initialized || readOnly||props.disabled;
+
   const disconnectedIcon = () => {
     return (
-
       <LanDisconnect
         fontSize="inherit"
         style={{
@@ -236,7 +229,6 @@ import {
   }
 
   const getPvs = (pvArray, widgetProps, prevState, setState,newValueTrigger,outputValue) => {
-   // console.log(pvArray, widgetProps)
     let pvs = [];
     if (typeof pvArray !== 'undefined') {
       pvArray.forEach((item, index) => {
@@ -284,11 +276,8 @@ import {
             }
             )}
             name={props.name}
-
           />)
-
-      }
-      )
+      })
       return pvs
     }
     else {
@@ -322,8 +311,8 @@ import {
     debug={props.debug}
     pvData={setPv}
     name={props.name}
-
   />
+
   const childPvs = getPvs(props.pvs, props, pvs, setPvs,props.writeOutputValueToAllpvs?newValueTrigger:undefined,props.writeOutputValueToAllpvs?outputValue:undefined)
 
   const handleValue = (newValue, setFunction) => {
@@ -361,19 +350,18 @@ import {
       handleBlur: () => setFocus(false),
       pvData: pv,
       pvsData: pvs,
-
     })
+
   const divStyle = {
     width: "100%",
     height: "100%",
-
-
   }
 
   const Tag=props.svgWidget?"g":"div";
   if(props.debug){
     console.log("Widget PVs",props.pvs)
   }
+
   return (
     <Tooltip
       title={tooltip}
@@ -386,11 +374,7 @@ import {
       style={props.svgWidget?undefined:divStyle}
       onContextMenu={ props.disableContextMenu ? undefined : handleToggleContextMenu}
     >
-
-
-
       {child}
-
       {childPv}
       {childPvs}
       {contextMenu}
@@ -398,6 +382,7 @@ import {
    </Tooltip>
   )
 }
+
 /**
  * Props definition for all widgets linked to PVs storing
  * analog values.
@@ -410,7 +395,6 @@ Widget.propTypes = {
   /**
    * Directive to use the  alarm severity status to alter the fields background color.
    */
-
   alarmSensitive: PropTypes.bool,
   /**
    * Custom PV to define the alarm severity to be used, alarmSensitive must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
@@ -469,12 +453,9 @@ Widget.propTypes = {
    */
   precPv: PropTypes.string,
 
-
-
   /**
    * Custom units to be used, if usePvUnits is not defined.
    */
-
   units: PropTypes.string,
   /**
    * Custom PV to define the units to be used, usePvUnits must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
@@ -514,15 +495,11 @@ Widget.propTypes = {
    *  If not defined it uses the custom units as defined by the units prop.
    */
 
-
   usePvUnits: PropTypes.bool,
   /**
    * Directive to use PV's string values.
    */
   useStringValue: PropTypes.bool,
-
-
-
 
   /**
    * If defined, then the string representation of the number can be formatted
@@ -566,16 +543,13 @@ Widget.propTypes = {
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-
   tooltipProps:PropTypes.object,
-
 };
 
 /**
  * Default props.definition for all widgets linked to
  * PVs storing analog values.
  */
-// static defaultProps=WrappedComponent.defaultProps;
 Widget.defaultProps = {
   disabled: false,
   onColor: "primary",

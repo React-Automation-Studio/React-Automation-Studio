@@ -18,28 +18,17 @@ class ControlBottomHarp1 extends React.Component {
   constructor(props) {
     super(props);
     this.state = {}
-
-
     this.handleOnClick = this.handleOnClick.bind(this);
   }
 
-
   handleOnClick(device) {
-    //  console.log("in control top clicked "+device.toString());
     this.props.handlePsOnClick(device);
-    //this.props.handlePsOnClick(device);
-    //  this.setState({ ['clicked']: 1});
   };
   render() {
-
-
     return (
       <Grid container justify="flex-start" direction="row" alignItems="center" spacing={0}>
         <Grid item xs={3} sm={3}>
-
-
           <div style={{ height: '60px', 'width': '200px' }}>
-
             <ToggleButton pv='$(device)$(number)$(line):put-outIn' macros={{ '$(device)': 'harp', '$(number)': '5', '$(line)': 'p' }} usePvLabel={true} labelPlacement={"top"} />
             <br />
             <ActionButton pv='$(device)$(number)$(line):$(xOrY)_store_offset' macros={{ '$(device)': 'harp', '$(number)': '5', '$(line)': 'p', '$(xOrY)': 'x' }} label={"Store Offset"} labelPlacement={"top"} actionValue={"1"} actionString={"Store Offset"} />
@@ -55,10 +44,8 @@ class ControlBottomHarp1 extends React.Component {
               <TextUpdate pv='$(device)$(number)$(line):get-statusText' macros={{ '$(device)': 'harp', '$(number)': '5', '$(line)': 'p' }} usePvLabel={true} useStringValue={true} />
             </div>
           </div>
-
         </Grid>
         <Grid item xs={3} sm={2}>
-
           <div style={{ height: '60px', 'width': '200px' }}>
             <ToggleButton pv='$(device)$(number)$(line):put-outIn' macros={{ '$(device)': 'harp', '$(number)': '5', '$(line)': 'p' }} usePvLabel={true} labelPlacement={"top"} />
             <br />
@@ -74,11 +61,8 @@ class ControlBottomHarp1 extends React.Component {
             <TextUpdate pv='$(device)$(number)$(line):get-statusText' macros={{ '$(device)': 'harp', '$(number)': '5', '$(line)': 'p' }} usePvLabel={true} useStringValue={true} />
             </div>
           </div>
-
         </Grid>
         <Grid item xs={3} sm={2}>
-
-
           <div style={{ height: '60px', 'width': '100px' }}>
             <ToggleButton pv='testIOC:BeamlineA:InUse' label={"BL A in use"} labelPlacement={"top"} />
           </div>
@@ -93,16 +77,11 @@ class ControlBottomHarp1 extends React.Component {
           </div>
         </Grid>
         <Grid item xs={3} sm={2}>
-
-
           <div style={{ height: '60px', 'width': '100px' }}>
             <ToggleButton pv='testIOC:BeamlineA:BeamOn' label={"Beam On"} labelPlacement={"top"} />
           </div>
-
-
         </Grid>
       </Grid>
-
     );
   }
 }

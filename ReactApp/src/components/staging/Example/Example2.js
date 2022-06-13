@@ -23,14 +23,10 @@ const styles = theme => ({
     overflowX: "hidden",
     overflowY: "hidden",
   },
-
 });
+
 class Example2 extends React.Component {
-
-
   render() {
-    //  console.log("state: ",this.state);
-
     return (
       <React.Fragment>
         <SideBar/>
@@ -98,8 +94,6 @@ class Example2 extends React.Component {
               prec={3} alarmSensitive={true}
             />
           </Grid>
-
-
 
           <Grid item xs={12} >
             <div style={{ height: '50vh', width:'96vw',}}>

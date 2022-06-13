@@ -19,16 +19,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
-
 const PlotData = (props) => {
-
-
   const theme = useTheme()
 
-
   const updateDataReducer = (pvs, newData) => {
-
     let newPvs = [...pvs];
     let { initialized } = newData.pvData;
     let value = initialized ? newData.pvData.value : [];
@@ -56,7 +50,6 @@ const PlotData = (props) => {
         }
        
         if (typeof props.maxLength !== "undefined") {
-          // console.log("maxLength defined")
           newY = oldY.concat(value)
           if (props.useTimeStamp) {
             
@@ -68,8 +61,6 @@ const PlotData = (props) => {
           if (newY.length > props.maxLength) {
             newY.splice(0, (newY.length - props.maxLength))
           }
-
-
         }
         else {
           newY = value;
@@ -83,24 +74,13 @@ const PlotData = (props) => {
             newX = oldX
           }
         }
-
-
-
       }
       else {
         newX = props.useTimeStamp ? [new Date(newData.pvData.timestamp * 1000)] : Array.from(value.keys());
         newY = value;
-
       }
     }
 
-
-
-    // else {
-    //   newPvs = []
-    //   newPvs.pvData = []
-
-    // }
     newPvs[newData.index] = {
       x: newX,
       y: newY,
@@ -120,21 +100,15 @@ const PlotData = (props) => {
       hovertemplate: props.yHoverFormat ?
         "(%{y:" + props.yHoverFormat + "}) %{x}<extra>%{fullData.name}</extra>"
         : "(%{y}) %{x}<extra>%{fullData.name}</extra>",
-
-
     };
-    // newPvs.pvData[newData.index] ={...newPvs.pvData[newData.index],... newData.pvData};
     return newPvs;
   }
-
 
   const [data, updateData] = useReducer(updateDataReducer, []);
   const updatePolledDataReducer = (oldPvs, newData) => {
     let pvs = [...oldPvs];
     pvs[newData.index] = newData.pvData;
-
     return (pvs)
-
   }
 
   const [polledData, updatePolledData] = useReducer(updatePolledDataReducer, []);
@@ -147,9 +121,7 @@ const PlotData = (props) => {
   useEffect(() => {
     let timer;
     const update = () => {
-      // console.log(polledDataRef.current)
       polledDataRef.current.forEach((item, index) => {
-        // console.log(index,item)
         const timestamp = Date.now() / 1000;
         updateData({ index, pvData: { ...item, timestamp: timestamp } })
       })
@@ -164,7 +136,6 @@ const PlotData = (props) => {
     }
   }, [usePolling, pollingRate])
 
-
   const contextInfoReducer = (oldPvs, newData) => {
     let pvs = [...oldPvs];
     pvs[newData.index] = newData.pvs[0];
@@ -175,12 +146,10 @@ const PlotData = (props) => {
   const [contextInfo, updateContextInfo] = useReducer(contextInfoReducer, []);
   const [delayedData, setDelayedData] = useState([])
   const [delayedContextInfo, setDelayedContextInfo] = useState([])
-  // const updateDataDebounced = useRef(debounce(value => setDelayedData(value), 50)).current;
   const [trigger, setTrigger] = useState(0);
   const { updateRate } = props;
 
   useEffect(() => {
-
     const timeout = setTimeout(() => setTrigger(prev => prev + 1), parseInt(updateRate))
     setDelayedData(data)
     return () => {
@@ -191,18 +160,14 @@ const PlotData = (props) => {
 
   const [trigger2, setTrigger2] = useState(0);
 
-
   useEffect(() => {
-
     const timeout = setTimeout(() => setTrigger2(prev => prev + 1), parseInt(1000))
-
     setDelayedContextInfo(contextInfo)
     return () => {
       clearTimeout(timeout)
     }
     // eslint-disable-next-line  react-hooks/exhaustive-deps
   }, [trigger2])
-
 
   const pvConnections = () => {
     let pvs = [];
@@ -226,11 +191,12 @@ const PlotData = (props) => {
     </React.Fragment>
   )
 }
+
 /**
-* The GraphY Component has been updated to Plotly.js scatter and line plot. **Note**: The update includes a small breaking change. See the backgroundColor prop for the workaround. 
-
-*/
-
+ * The GraphY Component has been updated to Plotly.js scatter and line plot.
+ * **Note**: The update includes a small breaking change.
+ * See the backgroundColor prop for the workaround. 
+ */
 const GraphY = (props) => {
   const classes = useStyles();
   const theme = useTheme()
@@ -240,16 +206,18 @@ const GraphY = (props) => {
   const [height, setHeight] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
   const handleToggleContextMenu = (event) => {
-
     event.preventDefault();
     event.stopPropagation();
     setAnchorEl(event.target);
     setOpenContextMenu(!openContextMenu);
   }
+
   const handleContextMenuClose = () => {
     setOpenContextMenu(false);
   }
+
   const [openContextMenu, setOpenContextMenu] = useState(false);
+
   useEffect(() => {
     const handleResize = () => {
       if (paperRef.current) {
@@ -269,7 +237,7 @@ const GraphY = (props) => {
   }, [paperRef, props.width, props.height, props.aspectRatio]);
 
   const [domain, setDomain] = useState([0, 1])
-  // const [yPositions, setYPositions] = useState([0, 0, 0])
+
   useEffect(() => {
     if (props.yAxes !== undefined) {
       let numberOfyAxes = props.yAxes.length;
@@ -281,64 +249,17 @@ const GraphY = (props) => {
         newYPositions[index] = i * increment;
         index++;
       }
-      // setYPositions(newYPositions)
       setDomain(newDomain)
     }
     else {
-      // setYPositions([0])
       setDomain([0, 1])
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [width])
+
   const [yAxes] = useState(() => {
     let yAxesInit = {};
-    // if (props.yAxes !== undefined) {
-    //   props.yAxes.forEach((item, index) => {
-    //     let key = index === 0 ? 'yaxis' : 'yaxis' + (index + 1)
-    //     if (index > 0) {
-    //       yAxesInit[key] = {
-    //         title: item.title ? item.title : "Y-Axis " + (index + 1),
-    //         titlefont: { color: props.yAxes.length > 1 ? theme.palette.reactVis.lineColors[index] : theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke },
-    //         tickfont: { color: props.yAxes.length > 1 ? theme.palette.reactVis.lineColors[index] : theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke },
-    //         gridcolor: theme.palette.reactVis[".rv-xy-plot__grid-lines__line"].stroke,
-    //         tickcolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
-    //         zerolinecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
-    //         linecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
-    //         zeroline: true,
-    //         showline: true,
-    //         showgrid: item.showGrid ? item.showGrid : true,
-    //         side: 'left',
-    //         position: yPositions[index],
-    //         anchor: 'free',
-    //         overlaying: 'y',
-    //         type: item.type === 'log' ? 'log' : 'linear',
-    //         tickformat: item.tickFormat ? item.tickFormat : ''
-    //       }
-    //     }
-    //     else {
-    //       yAxesInit['yaxis'] = {
-    //         title: item.title ? item.title : "Y-Axis " + (index + 1),
-    //         titlefont: { color: theme.palette.reactVis.lineColors[index], },
-    //         tickfont: { color: theme.palette.reactVis.lineColors[index], },
-    //         gridcolor: theme.palette.reactVis[".rv-xy-plot__grid-lines__line"].stroke,
-    //         tickcolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
-    //         zerolinecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
-    //         linecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
-    //         zeroline: true,
-    //         showline: true,
-    //         showgrid: true,
-    //         type: item.type === 'log' ? 'log' : 'linear',
-    //         tickformat: item.tickFormat ? item.tickFormat : ''
-    //       }
-    //     }
-    //   })
-    // }
-    // else {
     yAxesInit['yaxis'] = {
-      // title: {
-      //   text:props.yAxisTitle,
-      // //  standoff:1,
-      // },
       gridcolor: theme.palette.reactVis[".rv-xy-plot__grid-lines__line"].stroke,
       tickcolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
       zerolinecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
@@ -353,9 +274,9 @@ const GraphY = (props) => {
       ticksuffix: props.yUnits ? props.yUnits : "",
       nticks: props.yNoOfTicks ? props.yNoOfTicks : 0
     }
-    // }
     return (yAxesInit)
   })
+
   const [legend] = useState(() => {
     let legendInit = props.showLegend === true ? {
       legend: {
@@ -379,10 +300,6 @@ const GraphY = (props) => {
       plot_bgcolor: backgroundColor,
       xaxis: {
         domain: domain,
-        // title: {
-        //   text:props.xAxisTitle,
-        //   standoff:32,
-        // },
         gridcolor: theme.palette.reactVis[".rv-xy-plot__grid-lines__line"].stroke,
         tickcolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
         zerolinecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
@@ -395,8 +312,6 @@ const GraphY = (props) => {
         ticksuffix: props.xUnits ? props.xUnits : "",
         nticks: props.xNoOfTicks ? props.xNoOfTicks : 0,
         tickformat: props.xTickFormat ? props.xTickFormat : ""
-
-        //  range: [selectedFromDate, selectedToDate],
       },
       ...yAxes,
       font: {
@@ -431,21 +346,19 @@ const GraphY = (props) => {
         text: props.xAxisTitle,
         showarrow: false
       }]
-
     })
   }, [theme, props.showLegend, props.xAxisTitle, props.title, backgroundColor, classes, props.xMin, props.xTickLabels, props.xTickValues, props.yAxisTitle, yAxes, domain, legend, props.xMax, props.xNoOfTicks, props.xTickFormat, props.xUnits])
 
-
   return (
     <div ref={paperRef} className={classes.root} style={{ width: props.width ? props.width : width, height: props.height ? props.height : height, backgroundColor: backgroundColor }}>
-
       <PlotData {...props} backgroundColor={backgroundColor}>
         {({ data, contextInfo }) => {
           return (
-            <div style={{ width: "100%", height: "100%", }} onContextMenu={
-              props.disableContextMenu ? undefined : handleToggleContextMenu
-            }
-
+            <div
+              style={{ width: "100%", height: "100%", }}
+              onContextMenu={
+                props.disableContextMenu ? undefined : handleToggleContextMenu
+              }
               onPointerDownCapture={(event) => {
                 if (event.button !== 0) {
                   event.preventDefault()
@@ -468,9 +381,7 @@ const GraphY = (props) => {
                   vertical: "top",
                   horizontal: "center",
                 }}
-
               />}
-
 
               <Plot
                 config={typeof props.displayModeBar !== "undefined" ? {
@@ -483,7 +394,6 @@ const GraphY = (props) => {
                     format: 'svg'
                   }
                 } : {
-
                   "displaylogo": false,
                   scrollZoom: false,
 
@@ -502,26 +412,17 @@ const GraphY = (props) => {
                 }}
                 data={data}
                 layout={{ ...layout, }}
-
-
-
-
-
-
               />
             </div>
           )
         }
         }
-
       </PlotData>
-
     </div>
   )
-
 }
-GraphY.propTypes = {
 
+GraphY.propTypes = {
   /** Array of the process variables, eg. ['$(device):test$(id0)','$(device):test$(id1)']*/
   pvs: PropTypes.array.isRequired,
   /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id0)':'1','$(id1)':'2'}}*/
@@ -554,33 +455,26 @@ GraphY.propTypes = {
   /** Directive to scale the y-axis as a log base 10 value*/
   yScaleLog10: PropTypes.bool,
   /**
-       * The plotjs format overide for the tick format. This is derived from the <a href="https://github.com/d3/d3-format/blob/v2.0.0/README.md#format">d3 format specification</a>
-       * Example: ".3e" : exponential notaion with 3 digits.
-       *
-       */
+   * The plotjs format overide for the tick format. This is derived from the <a href="https://github.com/d3/d3-format/blob/v2.0.0/README.md#format">d3 format specification</a>
+   * Example: ".3e" : exponential notaion with 3 digits.
+   */
   yTickFormat: PropTypes.string,
   /**
    * Use this prop to make a seperate socket connection for the graph. It is experimental and can be possbily improve performace and for high data rate pv's and prevent slowing down the user interface
    */
   makeNewSocketIoConnection: PropTypes.bool,
+  
   /** Polling interval in ms used in polling mode*/
-
-
-
   pollingRate: PropTypes.number,
-  // /** If defined then the graph will only update on a value change*/
-  // triggerOnSingleValueChange: PropTypes.bool,
-
   /** Directive to use PV timestamp on x-axis*/
   useTimeStamp: PropTypes.bool,
   /** Graph update perdiod in ms, set this higher for larger number of data points */
   updateRate: PropTypes.number,
 
   /**
-         * The plotjs format overide for the y value. This is derived from the <a href="https://github.com/d3/d3-format/blob/v2.0.0/README.md#format">d3 format specification</a>
-         * Example: ".3e" : exponential notation with 3 digits.
-         *
-         */
+   * The plotjs format overide for the y value. This is derived from the <a href="https://github.com/d3/d3-format/blob/v2.0.0/README.md#format">d3 format specification</a>
+   * Example: ".3e" : exponential notation with 3 digits.
+   */
   yHoverFormat: PropTypes.string,
   /**
    * Directive to show the legend
@@ -609,8 +503,6 @@ GraphY.propTypes = {
   yUnits: PropTypes.string,
   /** Custom x axis units to be used*/
   xUnits: PropTypes.string,
-
-
 };
 
 GraphY.defaultProps = {
@@ -625,11 +517,6 @@ GraphY.defaultProps = {
   width: '100%',
   height: '100%',
   disableMobileStatic: false,
-
-
-
 };
-
-
 
 export default GraphY

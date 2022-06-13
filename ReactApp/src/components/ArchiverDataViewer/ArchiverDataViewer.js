@@ -48,12 +48,11 @@ const useStyles = makeStyles((theme) => ({
         }
     },
 }));
+
 const useArchiverDataHook = (props) => {
     const context = useContext(AutomationStudioContext);
 
     const [data, setData] = useState(null);
-    // eslint-disable-next-line no-unused-vars
-    const [writeAccess, setWriteAccess] = useState(false);
     const [initialized, setInitialized] = useState(true);
     useEffect(() => {
         const handleAck=(msg) => {
@@ -67,7 +66,6 @@ const useArchiverDataHook = (props) => {
         const handleArchiverReadData = (msg) => {
             setData(msg.data);
             setInitialized(true)
-            setWriteAccess(msg.write_access)
         }
         let socket = context.socket;
         let jwt = context.userTokens.accessToken;
@@ -98,6 +96,7 @@ const useArchiverDataHook = (props) => {
     }, [props.archiverURL])
     return ({data:data,initialized:initialized})
 }
+
 const ArchiverData = (props) => {
     const theme =useTheme();
     const calcBin = (pv, from, to, maxNumberOfSamples, raw) => {
@@ -162,26 +161,25 @@ const ArchiverData = (props) => {
     }, [data])
     useEffect(() => {
         props.archData(dataXY);
-        //     console.log('data', dataXY)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dataXY])
 
     return (
         <React.Fragment>
-        <div />
-        {initialized===false&&<Typography>
-
-      <LanDisconnect
-        fontSize="inherit"
-        style={{
-          color: theme.palette.error.main,
-          verticalAlign: "middle",
-        }}
-      />{" "+props.archiver+" Not connected or no data for PV: "+props.pv}
-        </Typography>}
+            <div />
+            {initialized === false && <Typography>
+                <LanDisconnect
+                    fontSize="inherit"
+                    style={{
+                        color: theme.palette.error.main,
+                        verticalAlign: "middle",
+                    }}
+                />{" " + props.archiver + " Not connected or no data for PV: " + props.pv}
+            </Typography>}
         </React.Fragment>
     )
 }
+
 /**
  * The ArchiverDataViewer is an interface to display EPICS archived data. It uses plotly.js to display the the pv data.
  * The archiver needs to be declared as environment variable in order for the pvServer to connect to a valid archiver (see the archiver prop). For the DEMO_ARCHIVER, the environment variable declaration is:
@@ -533,6 +531,7 @@ const ArchiverDataViewer = (props) => {
         ...legend,
         showlegend: props.showLegend,
     }
+
     return (
         <div ref={paperRef} style={{ width: props.width}}>
             {pvConnections()}
@@ -547,7 +546,6 @@ const ArchiverDataViewer = (props) => {
                         alignItems={'center'}
                         direction={'row'}
                         justify={'center'}
-
                     >
                         <Grid item xl={6} lg={'auto'} md={12} sm={12} xs={12} >
                             <Grid
@@ -560,52 +558,52 @@ const ArchiverDataViewer = (props) => {
                                 <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
                                     <Button classes={{ root: classes.buttonRoot }} variant={'outlined'} color={fromButton === "30s" ? "secondary" : "default"} onClick={handleOnClick30s}>
                                         30s
-                    </Button>
+                                    </Button>
                                 </Grid>
                                 <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
                                     <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1m} variant={'outlined'} color={fromButton === "1m" ? "secondary" : "default"}>
                                         1m
-                    </Button>
+                                    </Button>
                                 </Grid>
                                 <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
                                     <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick5m} variant={'outlined'} color={fromButton === "5m" ? "secondary" : "default"}>
                                         5m
-                    </Button>
+                                    </Button>
                                 </Grid>
                                 <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
                                     <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick30m} variant={'outlined'} color={fromButton === "30m" ? "secondary" : "default"}>
                                         30m
-                    </Button>
+                                    </Button>
                                 </Grid>
                                 <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
                                     <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1h} variant={'outlined'} color={fromButton === "1h" ? "secondary" : "default"}>
                                         1h
-                    </Button>
+                                    </Button>
                                 </Grid>
                                 <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
                                     <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick2h} variant={'outlined'} color={fromButton === "2h" ? "secondary" : "default"}>
                                         2h
-                    </Button>
+                                    </Button>
                                 </Grid>
                                 <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
                                     <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick12h} variant={'outlined'} color={fromButton === "12h" ? "secondary" : "default"}>
                                         12h
-                    </Button>
+                                    </Button>
                                 </Grid>
                                 <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
                                     <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1d} variant={'outlined'} color={fromButton === "1d" ? "secondary" : "default"}>
                                         1d
-                    </Button>
+                                    </Button>
                                 </Grid>
                                 <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
                                     <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick2d} variant={'outlined'} color={fromButton === "2d" ? "secondary" : "default"}>
                                         2d
-                    </Button>
+                                    </Button>
                                 </Grid>
                                 <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
                                     <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1w} variant={'outlined'} color={fromButton === "1w" ? "secondary" : "default"}>
                                         1w
-                    </Button>
+                                    </Button>
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -623,8 +621,6 @@ const ArchiverDataViewer = (props) => {
                                             setFromButton("none")
                                         }
                                     }
-                                    //onError={console.log}
-                                    //disablePast
                                     format="yyyy/MM/dd HH:mm:ss"
                                 />
                             </MuiPickersUtilsProvider>
@@ -638,15 +634,11 @@ const ArchiverDataViewer = (props) => {
                                     value={selectedToDate}
                                     onChange={
                                         (newDate) => {
-                                            //   console.log("selectedToDate",newDate)
                                             setSelectedToDate(newDate)
                                             setFromButton("none")
                                             setLive(false)
-                                            //     setSelectedToDate
                                         }
                                     }
-                                    //onError={console.log}
-                                    //disablePast
                                     format="yyyy/MM/dd HH:mm:ss"
                                 />
                             </MuiPickersUtilsProvider>
@@ -662,7 +654,7 @@ const ArchiverDataViewer = (props) => {
                                 <Grid item xs={4} md={4} >
                                     <Button classes={{ root: classes.buttonRoot }} variant={'contained'} color={live ? 'primary' : 'default'} onClick={() => setLive(live === true ? false : true)}>
                                         Live
-                    </Button>
+                                    </Button>
                                 </Grid>
                                 <Grid item xs={8} md={8}>
                                     <TextField
@@ -762,7 +754,6 @@ const ArchiverDataViewer = (props) => {
                     }}
                     probeType={props.readOnly ? "readOnly" : undefined}
                 />
-
             </div>
             }
                {props.traces.map((trace, index) => (
@@ -784,6 +775,7 @@ const ArchiverDataViewer = (props) => {
         </div>
     )
 }
+
 ArchiverDataViewer.propTypes = {
     /**
      * 	Is name of the environment variable defined in your .env or docker-compose yaml file file and corresponds to hostname or ip of the archiver followed by `retrieval_url` port, eg DEMO_ARCHIVER
@@ -807,20 +799,20 @@ ArchiverDataViewer.propTypes = {
      */
     traces: PropTypes.arrayOf(PropTypes.shape({
         /**
-* The pv name
-*/
+         * The pv name
+         */
         pv: PropTypes.string.isRequired,
         /**
-     * The custom name of the trace
-     */
+         * The custom name of the trace
+         */
         name: PropTypes.string,
         /**
-  * The type of the trace i.e. `'scatter'`
-  */
+         * The type of the trace i.e. `'scatter'`
+         */
         type: PropTypes.string,
         /**
-* The mode of the trace i.e. `'lines'`
-*/
+         * The mode of the trace i.e. `'lines'`
+         */
         mode: PropTypes.string,
         /**
          * The custom color of the trace
@@ -836,12 +828,11 @@ ArchiverDataViewer.propTypes = {
          *
          */
         yHoverFormat: PropTypes.string,
-
     })),
+
     /**
-     *
-* An array of objects with shape that defines each Y Axis
-*/
+     * An array of objects with shape that defines each Y Axis
+     */
     yAxes: PropTypes.arrayOf(PropTypes.shape({
         /**
          * Axis title
@@ -867,29 +858,24 @@ ArchiverDataViewer.propTypes = {
         type: PropTypes.string,
     })),
     /**
-    *
-    * Expand the buttons accordion
-    */
+     * Expand the buttons accordion
+     */
     defaultButtonsExpanded: PropTypes.bool,
     /**
-    *
-    * Display mode bar, true= display permanently, false=permanently hidden, undefine= auto hide
-    */
+     * Display mode bar, true= display permanently, false=permanently hidden, undefine= auto hide
+     */
     displayModeBar: PropTypes.bool,
     /**
-    *
-    * Show buttons accordion
-    */
+     * Show buttons accordion
+     */
     showButtons: PropTypes.bool,
     /**
-    *
-    * When enabled, new data will be polled at 1Hz up to 12 hours of data. The polling rate period then increase linearly as to not overload the archiver
-    */
+     * When enabled, new data will be polled at 1Hz up to 12 hours of data. The polling rate period then increase linearly as to not overload the archiver
+     */
     livePolling: PropTypes.bool,
     /**
-    *
-    * Polling Rate Period in ms, minimum=1000 ms. This value will also override the linear scaling of the polling period for data queries of larger than 12 hours worth of data.
-    */
+     * Polling Rate Period in ms, minimum=1000 ms. This value will also override the linear scaling of the polling period for data queries of larger than 12 hours worth of data.
+     */
     pollingRatePeriod: PropTypes.number,
     /**
      * Sets fromTimeOffset button
@@ -905,6 +891,7 @@ ArchiverDataViewer.propTypes = {
     to:PropTypes.string,
 
 };
+
 /**
  * Default props.definition
  */
@@ -914,4 +901,5 @@ ArchiverDataViewer.defaultProps = {
     showLegend: false,
     defaultButtonsExpanded: true,
 };
+
 export default ArchiverDataViewer

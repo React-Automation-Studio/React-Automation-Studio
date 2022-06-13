@@ -1,6 +1,4 @@
 //This example is deprecated and will be removed in a future release 
-
-
 import React from 'react';
 
 import { withStyles } from '@material-ui/core/styles';
@@ -15,11 +13,11 @@ import ControlRightSinglePS from '../ControlScreens/GridComponents/ControlRightS
 import ControlCenterTable from '../ControlScreens/GridComponents/ControlCenterTable'
 import AppBar from '@material-ui/core/AppBar';
 import TraditionalLayout from '../UI/Layout/ComposedLayouts/TraditionalLayout.js';
+
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */
 console.warn("This example is deprecated and will be removed in a future release")
 const systems = {
-
   'BeamLine': {
     'PowerSupplies': [
       { systemName: 'testIOC:PS1', displayName: 'Q1', editorType: 'oldPS', devices: { device: { deviceName: 'testIOC:PS1', readback: 'Readback', setpoint: 'Setpoint', statusText: 'On' } }, props: { prec: 3, units: "A", useStatus: true } },
@@ -34,7 +32,6 @@ const systems = {
 
       { systemName: 'testIOC:STR3:Y', displayName: 'STR3:Y', editorType: 'singlePS', devices: { device: { deviceName: 'testIOC:STR3:Y', readback: 'Readback', setpoint: 'Setpoint', statusText: 'On' } }, props: { prec: 3, units: "A", useStatus: true } },
       { systemName: 'testIOC:STR4:X', displayName: 'STR4:X', editorType: 'singlePS', devices: { device: { deviceName: 'testIOC:STR4:X', readback: 'Readback', setpoint: 'Setpoint', statusText: 'On' } }, props: { prec: 3, units: "A", useStatus: true } },
-
     ],
     'Slits': [
       {
@@ -149,16 +146,9 @@ const systems = {
         },
         props: { prec: 2, units: "mm", useStatus: true },
       },
-
-
-
     ]
-
   },
-
-
 }
-
 
 const styles = theme => ({
   root: {
@@ -197,65 +187,49 @@ class ControlTableExample extends React.Component {
       'displayEditor': false,
       'editorMacros': { '$(device)': "" },
       'editorSystem': {},
-
       topTabValue: 0,
       sideTabValue: 0
-
-
     }
     this.handlePsOnClick = this.handlePsOnClick.bind(this);
     this.handleOnSystemClick = this.handleOnSystemClick.bind(this);
-
   }
 
   handlePsOnClick(name) {
-
-
     this.setState({
       editorType: 'PS',
       displayEditor: true,
       editorMacros: { '$(device)': name }
     });
-
-
   }
   handleOnSystemClick = (system) => {
-
     this.setState({
       editorType: system.editorType,
       displayEditor: true,
       editorSystem: system,
       editorMacros: { '$(device)': "" }
     });
-
   }
-
 
   handleSideTabChange = (event, value) => {
     this.setState({ sideTabValue: value, displayEditor: false });
   };
+
   handleCloseEditor = () => {
     this.setState({
       displayEditor: false,
     }
     );
-
-
   }
 
   render() {
-
     const { classes } = this.props;
 
     const sideTabValue = this.state.sideTabValue;
     return (
-
       <TraditionalLayout
         title="Control Table Example"
         denseAppBar
       >
-
-
         <Grid
           container
           direction="row"
@@ -269,26 +243,18 @@ class ControlTableExample extends React.Component {
               <VerticalTabs
                 value={sideTabValue}
                 onChange={this.handleSideTabChange}
-
                 indicatorColor="primary"
                 textColor="primary"
-
-
-
               >
                 <Tab label="Power Supplies" />    {/* side Tab 0*/}
                 <Tab label="Slits" />  {/* side Tab 1*/}
-
-
               </VerticalTabs>
-
             </AppBar>
           </Grid>
           <Grid item xs={12} sm={6} md={6} lg={7} style={{ paddingRight: 16}}>
             {sideTabValue == 0 && <TabContainer > <ControlCenterTable handleOnSystemClick={this.handleOnSystemClick} systems={systems['BeamLine']['PowerSupplies']} /> </TabContainer>}
             {sideTabValue == 1 && <TabContainer > <ControlCenterTable handleOnSystemClick={this.handleOnSystemClick} systems={systems['BeamLine']['Slits']} /> </TabContainer>}
           </Grid>
-
           <Grid item xs={12} sm={4} md={4} lg={3}>
             {((this.state.displayEditor === true) && (this.state.editorMacros['$(device)'] === 'testIOC:PS1')) && <ControlRightEx1 macros={this.state.editorMacros} handleCloseEditor={this.handleCloseEditor} />}
             {((this.state.displayEditor === true) && (this.state.editorMacros['$(device)'] === 'testIOC:PS2')) && <ControlRightEx1 macros={this.state.editorMacros} handleCloseEditor={this.handleCloseEditor} />}
@@ -301,22 +267,12 @@ class ControlTableExample extends React.Component {
             {((this.state.displayEditor === true) && (this.state.editorType === 'slitxy')) && <ControlRightSlitXY key={'editor-key' + this.state.editorSystem.systemName} system={this.state.editorSystem} handleCloseEditor={this.handleCloseEditor} />}
           </Grid>
         </Grid>
-
-
-
       </TraditionalLayout>
-
-
-
-
-
-
     );
   }
 }
 
 ControlTableExample.propTypes = {
-
 };
 
 export default withStyles(styles)(ControlTableExample);

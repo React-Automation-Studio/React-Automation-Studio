@@ -5,37 +5,31 @@ import { withStyles } from '@material-ui/core/styles';
 import  {svgHeight,svgCenterY,svgWidth,svgCenterX} from "../SystemComponents/svgConstants";
 import { v4 as uuidv4 } from 'uuid';
 import PropTypes from 'prop-types';
+
 const styles = theme => ({
-
-
   Label: {
     fill: theme.palette.text.primary
-
   },
   Value: {
     fill: theme.palette.text.primary
-
   },
-
 });
+
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */
 const SteererXYMagnetComponent = (props) => {
-
-
   const handleOnClick = device => event => {
     if (typeof props.handleOnClick !== 'undefined') {
       props.handleOnClick(device);
     }
-
   };
+
   const checkPrecision = (value,prec) => {
     if (props.usePvPrecision===true || (typeof props.prec!=='undefined')) {
       let precision = parseInt(prec);
       let tempvalue = parseFloat(value);
       if (!isNaN(tempvalue)) {
         return tempvalue.toFixed(precision);
-
       }
       else {
         return value;
@@ -45,11 +39,6 @@ const SteererXYMagnetComponent = (props) => {
       return (value)
     }
   }
-  // const handleContextMenu = event => {
-  //   props.handleToggleContextMenu(event);
-
-  // };
-
 
   const { classes } = props;
   const { initialized } = props;
@@ -73,55 +62,43 @@ const SteererXYMagnetComponent = (props) => {
     valueX = 0;
     valueY = 0;
   }
+
   let color = '';
-  if (initialized) {
-    
-      unitsX=props.usePvUnits===true?xPv.units:props.unitsX?props.unitsX:"";
-      unitsY=props.usePvUnits===true?yPv.units:props.unitsY?props.unitsY:"";
+  if (initialized) {    
+    unitsX=props.usePvUnits===true?xPv.units:props.unitsX?props.unitsX:"";
+    unitsY=props.usePvUnits===true?yPv.units:props.unitsY?props.unitsY:"";
     
     if (props.alarmSensitive !== 'undefined') {
       if (props.alarmSensitive == true) {
         alarmSeverity=xPv.severity==2||yPv.severity==2?2:xPv.severity==1||yPv.severity==1?1:0
         if (alarmSeverity == 2) {
           color = props.theme.palette.alarm.major.main;
-          
         }
         else if (alarmSeverity == 1) {
           color = props.theme.palette.alarm.minor.main;
-
         }
         else {
           color = props.theme.palette.beamLineComponent.main;
-
         }
-
-
       }
-
     }
-
   }
   else {
     color = 'grey';
   }
 
   const componentId = uuidv4();
-  //console.log(props,valueX,valueY)
+
   return (
-
-
-
     <svg
-    x={props.x}
-    y={props.y}
+      x={props.x}
+      y={props.y}
 
-    width={svgWidth}
-    height={svgHeight}
-  >
-
+      width={svgWidth}
+      height={svgHeight}
+    >
       <g transform={'translate(' + svgCenterX + ',' + (svgCenterY) + ')'}
         onClick={handleOnClick(props.system)}
-        // onContextMenu={handleContextMenu}
       >
         <linearGradient id={componentId + 'elipse-gradient'} gradientTransform="rotate(0)">
           <stop offset="0%" stopOpacity="30" stopColor={'silver'} />
@@ -139,7 +116,6 @@ const SteererXYMagnetComponent = (props) => {
         <g filter={props.componentShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
         >
           <g>
-
             <g transform="translate(-10,-1097)"
               fill={props.componentGradient === true ? 'url(#' + componentId + 'elipse-gradient)' : color}
               style={{
@@ -390,15 +366,9 @@ const SteererXYMagnetComponent = (props) => {
                 d="m 7.834583,1102.6648 c -0.1727024,0.061 -0.35059,0.1296 -0.5336938,0.2075 -0.1417264,0.06 -0.2865778,0.1261 -0.4345687,0.1979 v 0"
                 id="path9504-7-91-2-9-9"
               />
-
             </g>
-
           </g>
-
         </g>
-
-
-
 
         <text className={classes.Value} 
           x={typeof props.valueOffsetX !== 'undefined' ? props.valueOffsetX : 0}
@@ -407,7 +377,6 @@ const SteererXYMagnetComponent = (props) => {
           filter={props.textShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
         >
           {"X: "+valueX + " " + unitsX}
-
         </text>
         <text className={classes.Value}
           x={typeof props.valueOffsetX !== 'undefined' ? props.valueOffsetX +5: 5}
@@ -416,7 +385,6 @@ const SteererXYMagnetComponent = (props) => {
           filter={props.textShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
         >
           {"Y: "+valueY + " " + unitsY}
-
         </text>
         <text className={classes.Label}
           x={typeof props.labelOffsetX !== 'undefined' ? props.labelOffsetX : 0}
@@ -427,40 +395,25 @@ const SteererXYMagnetComponent = (props) => {
           {props.label}
         </text>
       </g>
-
-</svg>
-
-
-
-
-   
+    </svg>
   );
 }
 
-
-
-
 /**
-* SteererXYMagnet Beam line component
-*
-*  The label, min, max, units, pv and tooltip all accept macros that can be replaced by the values defined in the macros prop.  
-*/
-
+ * SteererXYMagnet Beam line component
+ *
+ *  The label, min, max, units, pv and tooltip all accept macros that can be replaced by the values defined in the macros prop.  
+ */
 const SteererXYMagnet = (props) => {
-
-
   return (
     <Widget svgWidget={true}  {...props} component={SteererXYMagnetComponent} pvs={[props.xPv,props.yPv]} label={props.label} />
-
   )
 }
+
 SteererXYMagnet.propTypes = {
-
-
   /**
-  * Directive to use the  alarm severity status to alter the fields background color.
-  */
-
+   * Directive to use the  alarm severity status to alter the fields background color.
+   */
   alarmSensitive: PropTypes.bool,
   /**
    * Custom PV to define the alarm severity to be used, alarmSensitive must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
@@ -516,12 +469,9 @@ SteererXYMagnet.propTypes = {
    */
   precPv: PropTypes.string,
 
-
-
   /**
    * Custom units to be used, if usePvUnits is not defined.
    */
-
   units: PropTypes.string,
   /**
    * Custom PV to define the units to be used, usePvUnits must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
@@ -560,16 +510,11 @@ SteererXYMagnet.propTypes = {
    * Directive to use the units contained in the   pv metdata's EGU field or unitsPv.
    *  If not defined it uses the custom units as defined by the units prop.
    */
-
-
   usePvUnits: PropTypes.bool,
   /**
    * Directive to use PV's string values.
    */
   useStringValue: PropTypes.bool,
-
-
-
 
   /**
    * If defined, then the string representation of the number can be formatted
@@ -579,12 +524,8 @@ SteererXYMagnet.propTypes = {
    */
   numberFormat: PropTypes.object,
 
-
   /** Name of the pv process variable, eg. '$(device):test$(id)'*/
   pv: PropTypes.string,
-
-
-
 
   /**
   * Tooltip Text
@@ -597,17 +538,14 @@ SteererXYMagnet.propTypes = {
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-
   tooltipProps: PropTypes.object,
   /**
    *  A System description object the passed to the callback function when the item is clicked on
    */
-
   system: PropTypes.object,
   /**
    *  A callback function when the item is clicked on, returns the system object
    */
-
   handleOnClick: PropTypes.func,
   /**
    * Y Offset for the label
@@ -645,10 +583,8 @@ SteererXYMagnet.propTypes = {
    * Direct to show the value
    */
   showValue: PropTypes.bool,
-
-
-
 };
+
 SteererXYMagnet.defaultProps = {
   debug: false,
   showLabel:true,
@@ -664,7 +600,4 @@ SteererXYMagnet.defaultProps = {
   componentGradient: true,
 };
 
-
 export default withStyles(styles, { withTheme: true })(SteererXYMagnet)
-
-

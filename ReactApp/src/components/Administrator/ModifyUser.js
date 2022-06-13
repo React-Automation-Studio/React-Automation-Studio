@@ -14,17 +14,13 @@ import Slide from '@material-ui/core/Slide';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import useModifyUser from './adminDbHooks/useModifyUser'
 import {usePasswordValidator} from '../SystemComponents/Utils/passwordValidator'
+
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
 
-
-
-
-
 const ModifyUser = (props) => {
-
     const [show, setShow] = useState(false);
     const [username] = useState(props.user.username);
     const [password, setPassword] = useState("");
@@ -37,15 +33,14 @@ const ModifyUser = (props) => {
     const [phoneNumber, setPhoneNumber] = useState(props.user.phoneNumber);
     const [officeLocation, setOfficeLocation] = useState(props.user.officeLocation);
     const {modifyUser,modifyUserError,userModified} =useModifyUser({id:props.user['_id']['$oid'],
-    username: username,
-    password: changePassword ? password : null,
-    email: email,
-    givenName: givenName,
-    familyName: familyName,
-    phoneNumber: phoneNumber,
-    officeLocation: officeLocation});
+        username: username,
+        password: changePassword ? password : null,
+        email: email,
+        givenName: givenName,
+        familyName: familyName,
+        phoneNumber: phoneNumber,
+        officeLocation: officeLocation});
 
-   
     let confirmPasswordError;
     let confirmPasswordHelperText;
 
@@ -59,11 +54,8 @@ const ModifyUser = (props) => {
     }
     // eslint-disable-next-line no-mixed-operators
     let addUserDisable = ((username.length > 0) && (changePassword === false || (confirmPasswordError === false) && (passwordError === false))) ? false : true;
-
-
     
     return (
-
         <React.Fragment>
             <IconButton onClick={() => setShow(true)}>
                 <EditIcon />
@@ -79,12 +71,8 @@ const ModifyUser = (props) => {
                     {"Modify User"}
                 </DialogTitle>
                 <DialogContent>
-
                     <form autoComplete="off">
-
-
                         <div >
-
                             <Grid
                                 style={{ marginTop: 8, padding: 8 }}
                                 container
@@ -93,12 +81,7 @@ const ModifyUser = (props) => {
                                 alignItems="flex-start"
                                 spacing={0}
                             >
-
-
-
                                 <Grid item xs={12} sm={12} md={12} lg={12} >
-
-
                                     <Grid
                                         style={{ padding: 8 }}
                                         container
@@ -109,22 +92,16 @@ const ModifyUser = (props) => {
                                     >
                                         <Grid item xs={12}  >
                                             <TextField
-
                                                 inputProps={{
                                                     autoComplete: "off",
                                                 }}
                                                 value={username}
-                                                // required
                                                 label="Username"
-                                                // onChange={(event) => setUsername(event.target.value)}
                                                 variant="outlined"
                                                 fullWidth
-                                                // helperText={usernameHelperText}
-                                                // error={usernameError}
                                                 disabled
                                             />
                                         </Grid>
-
                                         {!(process.env.REACT_APP_DisableStandardLogin === 'true') && <Grid item xs={12}  >
                                             <FormControlLabel
                                                 control={
@@ -136,13 +113,10 @@ const ModifyUser = (props) => {
                                                 }
                                                 label="Change Password"
                                             />
-
                                         </Grid>}
-
                                         {changePassword && <React.Fragment>
                                             <Grid item xs={12}  >
                                                 <TextField
-
                                                     required
                                                     type="password"
                                                     label="New Password"
@@ -247,23 +221,21 @@ const ModifyUser = (props) => {
                                                 })}
                                             >
                                                 Modify User
-                    </Button>
+                                            </Button>
                                         </Grid>
                                         <Grid item xs={4}  >
                                             {userModified && <CheckCircleIcon
                                                 fontSize="large"
                                                 color="primary"
                                                 style={{
-                                                    // color: theme.palette.error.main,
                                                     verticalAlign: "middle",
                                                 }}
                                             />}
                                             {modifyUserError && <ErrorIcon color="error" fontSize="large"
-                        style={{
-                          // color: theme.palette.error.main,
-                          verticalAlign: "middle",
-                        }}
-                      />}
+                                                style={{
+                                                    verticalAlign: "middle",
+                                                }}
+                                            />}
                                         </Grid>
                                         <Grid item xs={4}>
                                             <Button
@@ -273,22 +245,15 @@ const ModifyUser = (props) => {
                                                 {userModified ? "Close" : "Cancel"}
                                             </Button>
                                         </Grid>
-
                                     </Grid>
-
-
-
                                 </Grid>
                             </Grid>
-
-
-
                         </div>
                     </form >
                 </DialogContent>
-
             </Dialog>
         </React.Fragment>
     )
 }
+
 export default ModifyUser;

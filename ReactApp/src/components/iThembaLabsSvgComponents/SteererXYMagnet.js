@@ -5,19 +5,14 @@ import { withStyles } from '@material-ui/core/styles';
 import ContextMenu from '../SystemComponents/ContextMenu';
 
 const styles = theme => ({
-
-
   textSteererXYMagnetLabel: {
     fill:theme.palette.text.primary
-
   },
   textSteererXYMagnetValue: {
     fill:theme.palette.text.primary
-
   },
   textSteererXYMagnetDisconneted: {
     fill:'dimgrey'
-
   },
 });
 
@@ -38,31 +33,20 @@ class SteererXYMagnet extends React.Component {
       pvs:pvs,contextPVs:contextPVs,  openContextMenu: false,
       'open':false,x0:0,y0:0
     }
-    //  console.log(pvs);
     this.handleOnClick= this.handleOnClick.bind(this);
     this.handleInputValue= this.handleInputValue.bind(this);
 
     this.handleMetadata= this.handleMetadata.bind(this);
   }
 
-
-
   componentDidMount() {
   }
 
-
   componentWillUnmount() {
-
   }
 
-
-
-
   handleContextMenuClose = (event) => {
-
-
     this.setState({ openContextMenu: false });
-
   };
 
   handleToggleContextMenu = (event) => {
@@ -74,14 +58,10 @@ class SteererXYMagnet extends React.Component {
   }
 
   handleMetadata= readback => (metadata) => {
-
     let pvs=this.state.pvs;
     pvs[readback].metadata=metadata;
     this.setState({pvs	 :pvs});
-
-
   }
-
 
   handleInputValue= readback => (inputValue,pvname,initialized,severity)=>{
     let pvs=this.state.pvs;
@@ -92,25 +72,14 @@ class SteererXYMagnet extends React.Component {
     this.setState({pvs:pvs});
   }
 
-
-
   handleOnClick = system => event => {
-    //console.log("In quad: clicked "+device.toString());
     this.props.handleOnClick(system);
-    //  this.setState({ ['clicked']: 1});
   };
 
   render() {
-
     const {classes}= this.props;
     const pvs=this.state.pvs;
-    //  const pv = this.props.pv;
-    //  const macros=  this.props.macros;
-    //  const usePvLabel= this.props.usePvLabel;
-    const mylabel= this.props.label;
     const usePrecision= this.props.prec;
-
-    const useStringValue=this.props.useStringValue;
 
     let xUnits="";
     let yUnits="";
@@ -120,20 +89,13 @@ class SteererXYMagnet extends React.Component {
     let severity=0;
     if(initialized){
       if(this.props.usePvUnits===true){
-
         xUnits=pvs.xReadback.metadata.units;
         yUnits=pvs.yReadback.metadata.units;
       }
-
-
-
-
-
       else {
         xUnits=this.props.xUnits;
         yUnits=this.props.yUnits;
       }
-
 
       if (typeof this.props.usePrecision !== 'undefined'){
         if (this.props.usePrecision==true){
@@ -145,26 +107,16 @@ class SteererXYMagnet extends React.Component {
             xReadbackValue=parseFloat(xReadbackValue).toFixed(parseInt(pvs.xReadback.metadata.precision));
             yReadbackValue=parseFloat(yReadbackValue).toFixed(parseInt(pvs.yReadback.metadata.precision));
           }
-
         }
-
       }
 
-
-
-
-
-
-
       if((pvs.xReadback.severity==2)||(pvs.yReadback.severity==2)){
-
         severity=2;
       }
       else   if((pvs.xReadback.severity==1)||(pvs.yReadback.severity==1)){
         severity=1;
       }
     }
-
 
     let color_side='';
     let color_face='';
@@ -181,36 +133,13 @@ class SteererXYMagnet extends React.Component {
           color_face='#E20901';
           color_top='#E20111';
         }
-        // else {
-        //   if((pvs.xOffOn.value==1)||(pvs.yOffOn.value==1)){
-        //     color_side='#2e7d32';
-        //     color_face='#2e7d32';
-        //     color_top='#2e7d32';
-        //   }
         else{
           color_side='#133CA9';
           color_face='#133C99';
           color_top='#133CA3';
-
         }
-        // }
-
       }
-
     }
-
-
-
-
-
-
-
-
-
-
-
-  
-
 
     return (
       <g   onContextMenu={this.handleToggleContextMenu}>
@@ -258,7 +187,6 @@ class SteererXYMagnet extends React.Component {
             <g filter={this.props.componentShadow===true?"url(#"+this.props.system.systemName+"elipseShadow)":"" }
             >
               <g>
-
                 <g transform="translate(-10,-1097)"
                   fill={this.props.componentGradient===true?'url(#'+this.props.system.systemName+'elipse-gradient)':color_side}
                   style={{'strokeWidth':'0.3',
@@ -507,14 +435,9 @@ class SteererXYMagnet extends React.Component {
                     d="m 7.834583,1102.6648 c -0.1727024,0.061 -0.35059,0.1296 -0.5336938,0.2075 -0.1417264,0.06 -0.2865778,0.1261 -0.4345687,0.1979 v 0"
                     id="path9504-7-91-2-9-9"
                   />
-
                 </g>
-
               </g>
-
             </g>
-
-
 
             <text className={classes.textSteererXYMagnetValue}
               x={typeof this.props.valueOffsetX!=='undefined'?this.props.valueOffsetX:0}
@@ -523,7 +446,6 @@ class SteererXYMagnet extends React.Component {
               filter={this.props.textShadow===true?"url(#"+this.props.system.systemName+"elipseShadow)":"" }
             >
               {this.props.usePvUnits===true?'X: '+ xReadbackValue+" "+pvs.xReadback.metadata.units:'X: '+ xReadbackValue+" "+this.props.xUnits}
-
             </text>
             <text className={classes.textSteererXYMagnetValue}
               x={typeof this.props.valueOffsetX!=='undefined'?this.props.valueOffsetX:0}
@@ -532,7 +454,6 @@ class SteererXYMagnet extends React.Component {
               filter={this.props.textShadow===true?"url(#"+this.props.system.systemName+"elipseShadow)":"" }
             >
               {this.props.usePvUnits===true?'Y: '+ yReadbackValue+" "+pvs.yReadback.metadata.units:'Y: '+ yReadbackValue+" "+this.props.yUnits}
-
             </text>
             <text className={classes.textSteererXYMagnetLabel}
               x={typeof this.props.labelOffsetX!=='undefined'?this.props.labelOffsetX:0}
@@ -562,7 +483,6 @@ class SteererXYMagnet extends React.Component {
             <g filter={this.props.componentShadow===true?"url(#"+this.props.system.systemName+"elipseShadow)":"" }
             >
               <g>
-
                 <g transform="translate(-10,-1097)"
                   fill={this.props.componentGradient===true?'url(#'+this.props.system.systemName+'elipse-gradient)':'grey'}
                   style={{'strokeWidth':'0.3',
@@ -811,16 +731,9 @@ class SteererXYMagnet extends React.Component {
                     d="m 7.834583,1102.6648 c -0.1727024,0.061 -0.35059,0.1296 -0.5336938,0.2075 -0.1417264,0.06 -0.2865778,0.1261 -0.4345687,0.1979 v 0"
                     id="path9504-7-91-2-9-9"
                   />
-
                 </g>
-
               </g>
-
             </g>
-
-
-
-
             <text className={classes.textSteererXYMagnetDisconneted}
               x={typeof this.props.labelOffsetX!=='undefined'?this.props.labelOffsetX:0}
               y={typeof this.props.labelOffsetY!=='undefined'?this.props.labelOffsetY-40:-40}
@@ -830,15 +743,11 @@ class SteererXYMagnet extends React.Component {
               {this.props.system.displayName}
             </text>
           </g>
-        }*/}
+        }
       </g>
+    );
+  }
+}
 
-
-
-
-                                  );
-                                }
-                              }
-
-                              SteererXYMagnet.contextType=AutomationStudioContext;
-                              export default withStyles(styles)(SteererXYMagnet)
+SteererXYMagnet.contextType=AutomationStudioContext;
+export default withStyles(styles)(SteererXYMagnet)

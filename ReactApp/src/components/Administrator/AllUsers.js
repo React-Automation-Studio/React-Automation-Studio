@@ -28,8 +28,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 
-
-
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -44,7 +42,6 @@ const useStyles = makeStyles((theme) => ({
 
 
 const AllUsers = (props) => {
-
   const classes = useStyles();
   const allUsers = useAllUsers(
     {
@@ -70,9 +67,6 @@ const AllUsers = (props) => {
       if (userGroups[uag].usernames.includes(username)||userGroups[uag].usernames.includes('*')){
         uags.push(uag)
       }
-
-
-      
     }
     return uags.toString();
     }
@@ -80,8 +74,7 @@ const AllUsers = (props) => {
       return ""
     }
   }
-  //console.log(users, usersWriteAccess, usersInitialized)
- // console.log(userGroups, uagsWriteAccess, uagsWriteAccess)
+
   return (
     <React.Fragment>
       <Dialog
@@ -103,7 +96,6 @@ const AllUsers = (props) => {
           <Button onClick={() =>{ 
             deleteUser(currentUserId)
             setShowDeleteUserDialog(false)}}
-
             color="primary">
             Yes
           </Button>
@@ -121,21 +113,14 @@ const AllUsers = (props) => {
           alignItems="flex-start"
           spacing={0}
         >
-
-
-
           <Grid item xs={12} sm={12} md={12} lg={12} >
-            
             <Card style={{maxHeight:"85vh",overflowY:"scroll"}}>
-
               <Table className={classes.table} stickyHeader size="small" aria-label="sticky table">
                 <TableHead>
-                <TableRow>
-                
-                  <TableCell colSpan={11} align="right"><AddUsers/></TableCell>
+                  <TableRow>
+                    <TableCell colSpan={11} align="right"><AddUsers/></TableCell>
                   </TableRow>
                   <TableRow>
-
                     <TableCell align="center">Index</TableCell>
                     <TableCell align="center">Username</TableCell>
                     <TableCell align="center">UAGS</TableCell>
@@ -160,73 +145,47 @@ const AllUsers = (props) => {
                         date=""
                       }
                       return(
-                     <TableRow key={index.toString()}>
-                        <TableCell align="center">{index + 1}</TableCell>
-                        <TableCell align="center">{user.username}</TableCell>
-                        <TableCell align="center">
-                           {getUserUags(user.username,userGroups)}
-                          {/* {this.getUAGs(userGroups,user.username)} */}
-                        </TableCell>
-                        <TableCell align="center">{user.email ? user.email : ""}</TableCell>
-                        <TableCell align="center">{user.givenName ? user.givenName : ""}</TableCell>
-                        <TableCell align="center">{user.familyName ? user.familyName : ""}</TableCell>
-                        <TableCell align="center">{user.phoneNumber ? user.phoneNumber : ""}</TableCell>
-                        <TableCell align="center">{user.officeLocation ? user.officeLocation : ""}</TableCell>
-                        <TableCell align="center">{date}</TableCell>
-
-                        <TableCell align="center">
-                        <Checkbox
-                           checked={user.enabled?user.enabled:false}
-
-                    onChange={(event)=>enableUser({id:user['_id']['$oid'],enabled:event.target.checked})}
-                  
-       
-      />
-                        </TableCell>
-                        <TableCell align="center">
-                        <ModifyUser user={user}/>
-                          <IconButton aria-label="delete" onClick={()=>{
-                            setCurrentUser(user.username)
-                            setCurrentUserId({id:user['_id']['$oid']})
-                            setShowDeleteUserDialog(true)}}>
-                          <DeleteIcon/>
-                          </IconButton>
-
-                        </TableCell>
-                        {/* <TableCell align="center">{this.getDateTime(user.timestamp)}</TableCell> */}
-                      </TableRow>
-                    //  )
-                    // }
-                    )}
-                    )
-                    
-                    }
+                        <TableRow key={index.toString()}>
+                          <TableCell align="center">{index + 1}</TableCell>
+                          <TableCell align="center">{user.username}</TableCell>
+                          <TableCell align="center">
+                            {getUserUags(user.username,userGroups)}
+                          </TableCell>
+                          <TableCell align="center">{user.email ? user.email : ""}</TableCell>
+                          <TableCell align="center">{user.givenName ? user.givenName : ""}</TableCell>
+                          <TableCell align="center">{user.familyName ? user.familyName : ""}</TableCell>
+                          <TableCell align="center">{user.phoneNumber ? user.phoneNumber : ""}</TableCell>
+                          <TableCell align="center">{user.officeLocation ? user.officeLocation : ""}</TableCell>
+                          <TableCell align="center">{date}</TableCell>
+                          <TableCell align="center">
+                            <Checkbox
+                              checked={user.enabled?user.enabled:false}
+                              onChange={(event)=>enableUser({id:user['_id']['$oid'],enabled:event.target.checked})}/>
+                          </TableCell>
+                          <TableCell align="center">
+                            <ModifyUser user={user}/>
+                            <IconButton aria-label="delete" onClick={()=>{
+                              setCurrentUser(user.username)
+                              setCurrentUserId({id:user['_id']['$oid']})
+                              setShowDeleteUserDialog(true)}}>
+                              <DeleteIcon/>
+                            </IconButton>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
                   </React.Fragment>}
                 </TableBody>
               </Table>
             </Card>
-
-
-
           </Grid>
-
         </Grid>
-
-
-
-
       </div>
     </React.Fragment>
-
-
-
-
   );
 }
 
-
 AllUsers.propTypes = {
-
 };
 
 export default AllUsers;

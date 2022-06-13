@@ -15,6 +15,7 @@ import Menu from '@material-ui/icons/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import {Link} from 'react-router-dom'
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
+
 const styles = {
   list: {
     width: 250,
@@ -28,45 +29,45 @@ class SideBar extends React.Component {
   constructor(props) {
     super(props);
 
-  this.state = {
-    top: false,
-    left: false,
-    bottom: false,
-    right: false,
-  };
-  this.logout=this.logout.bind(this);
-}
+    this.state = {
+      top: false,
+      left: false,
+      bottom: false,
+      right: false,
+    };
+    this.logout=this.logout.bind(this);
+  }
+
   toggleDrawer = (side, open) => () => {
     this.setState({
       [side]: open,
     });
   };
+
   logout(){
     let socket=this.context.socket;
     socket.emit('disconnect', {"goodebye":"see you later"});
     socket.close()
     localStorage.removeItem('jwt');
-
   }
+
   render() {
     const { classes } = this.props;
 
     const sideList = (
       <div className={classes.list}>
         <List>
-
-            <ListItem button key={"Home"} component={Link} to="/" >
-              <ListItemIcon><Home/></ListItemIcon>
-              <ListItemText primary={"Home"} />
-            </ListItem>
-
+          <ListItem button key={"Home"} component={Link} to="/" >
+            <ListItemIcon><Home/></ListItemIcon>
+            <ListItemText primary={"Home"} />
+          </ListItem>
         </List>
-          {process.env.REACT_APP_EnableLogin==='true'&&<React.Fragment>
-        <Divider />
-        <ListItem button key={"Log Out"} onClick={this.logout} component={Link} to="/Login" >
-          <ListItemIcon><AccountCircle/></ListItemIcon>
-          <ListItemText primary={"Log Out"} />
-        </ListItem>
+        {process.env.REACT_APP_EnableLogin==='true'&&<React.Fragment>
+          <Divider />
+          <ListItem button key={"Log Out"} onClick={this.logout} component={Link} to="/Login" >
+            <ListItemIcon><AccountCircle/></ListItemIcon>
+            <ListItemText primary={"Log Out"} />
+          </ListItem>
         </React.Fragment>}
       </div>
     );
@@ -96,9 +97,6 @@ class SideBar extends React.Component {
     return (
       <div>
         <Button onClick={this.toggleDrawer('left', true)}><Menu/></Button>
-      {/*}  <Button onClick={this.toggleDrawer('right', true)}>Open Right</Button>
-        <Button onClick={this.toggleDrawer('top', true)}>Open Top</Button>
-        <Button onClick={this.toggleDrawer('bottom', true)}>Open Bottom</Button>*/}
         <Drawer open={this.state.left} onClose={this.toggleDrawer('left', false)}>
           <div
             tabIndex={0}
@@ -151,5 +149,7 @@ class SideBar extends React.Component {
 SideBar.propTypes = {
   classes: PropTypes.object.isRequired,
 };
+
 SideBar.contextType=AutomationStudioContext;
+
 export default withStyles(styles)(SideBar);

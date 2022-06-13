@@ -29,9 +29,7 @@ const styles = (theme) => ({
 });
 
 
-
 const ActionButtonComponent=(props)=> {
-
   /**
    * Send the predefined value to the PV.
    */
@@ -39,7 +37,6 @@ const ActionButtonComponent=(props)=> {
    
     props.handleImmediateChange(props.actionValue);
   }
-
 
   return (
     <FormControlLabel
@@ -73,12 +70,9 @@ const ActionButtonComponent=(props)=> {
  * Material-UI Button API:
  * https://material-ui.com/api/button/
  * */
-
 const ActionButton = (props)=> {
-  
     return (
       <Widget  {...props} component={ActionButtonComponent} writeOutputValueToAllpvs={true}/> 
-     
     )
   }
 
@@ -111,8 +105,8 @@ ActionButton.propTypes = {
   debug: PropTypes.bool,
   /** local variable initialization value*/
   initialLocalVariableValue: PropTypes.string,
-  /** Any of the MUI Button Props can applied by defining them as an object
-   * 
+  /**
+   * Any of the MUI Button Props can applied by defining them as an object
    */
   muiButtonProps: PropTypes.object,
   /**
@@ -126,13 +120,10 @@ ActionButton.propTypes = {
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-
   tooltipProps:PropTypes.object,
-
-
 };
-ActionButton.defaultProps = {
- 
+
+ActionButton.defaultProps = { 
   showTooltip:false,
   color:'primary',
 };

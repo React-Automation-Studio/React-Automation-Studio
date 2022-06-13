@@ -63,7 +63,6 @@ function SimpleSliderComponent(props) {
    
   }
 
-
   let content, marks;
   if (props.initialized) {
     content = (
@@ -90,7 +89,6 @@ function SimpleSliderComponent(props) {
       {
         value: min,
         label:
-
           min +
           " " +
           units,
@@ -98,21 +96,18 @@ function SimpleSliderComponent(props) {
       {
         value: max,
         label:
-
           max +
           " " +
          units,
       },
     ];
   }
- //console.log("SimpleSlider",props.value,min,max,marks,props.step)
- function handleOnClickCapture(event){
-  
-  if (event.button !== 0) {
-    event.preventDefault()
-   return;
- }
- }
+  function handleOnClickCapture(event) {
+    if (event.button !== 0) {
+      event.preventDefault()
+      return;
+    }
+  }
   return (
     <div  className={props.classes.sliderDiv}>
       {content}
@@ -132,9 +127,6 @@ function SimpleSliderComponent(props) {
       />
     </div>
   );
-
-
-
 }
 
 /**
@@ -153,17 +145,14 @@ const SimpleSlider = (props) => {
 }
 
 /**
-   * Specific props type and default values for this widgets.
-   * They extends the ones provided for a generic widget.
-   */
+ * Specific props type and default values for this widgets.
+ * They extends the ones provided for a generic widget.
+ */
 SimpleSlider.propTypes = {
-
   /**
    * If defined, then the DataConnection and
    * the widget debugging information will be displayed.
    */
- 
- 
   debug: PropTypes.bool,
 
   /**
@@ -200,8 +189,7 @@ SimpleSlider.propTypes = {
    * Custom PV to define the minimum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
   minPv: PropTypes.string,
-  
-  
+
   /**
    * Custom precision to round the value.
    */
@@ -210,13 +198,10 @@ SimpleSlider.propTypes = {
    * Custom PV to define the precision to be used, usePvPrecision must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
   precPv: PropTypes.string,
- 
 
-  
   /**
    * Custom units to be used, if usePvUnits is not defined.
    */
-
   units: PropTypes.string,
   /**
    * Custom PV to define the units to be used, usePvUnits must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
@@ -255,12 +240,8 @@ SimpleSlider.propTypes = {
    * Directive to use the units contained in the   pv metdata's EGU field or unitsPv.
    *  If not defined it uses the custom units as defined by the units prop.
    */
-
-
   usePvUnits: PropTypes.bool,
-  
 
-  
   /**
    * If defined, then the string representation of the number can be formatted
    * using the mathjs format function
@@ -268,25 +249,27 @@ SimpleSlider.propTypes = {
    * See https://mathjs.org/docs/reference/functions/format.html for more examples
    */
   numberFormat: PropTypes.object,
-  
-  
+
   /** Name of the process variable,  eg. '$(device):test$(id)'*/
   pv: PropTypes.string,
 
-  // Custom markers in format:
-  // [{value: uservalue1,label:userlabel1},{value: uservalue...,label:userlabel...}
+  /**
+   *  Custom markers in format:
+   * [{value: uservalue1,label:userlabel1},{value: uservalue...,label:userlabel...}
+   */
   marks: PropTypes.array,
-  // Show thumb with value
+  /** Show thumb with value */
   showThumbValue: PropTypes.bool,
-  // If defined, the value will be increment or decremented
-  // in the define step intervals
+  /**
+   * If defined, the value will be increment or decremented
+   * in the define step intervals.
+   */
   step: PropTypes.number,
 };
 
 SimpleSlider.defaultProps = {
   showThumbValue: false,
   step: 1,
-
 };
 
 export default withStyles(styles, { withTheme: true })(SimpleSlider);

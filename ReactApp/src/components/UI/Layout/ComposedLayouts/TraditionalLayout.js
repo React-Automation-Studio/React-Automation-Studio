@@ -25,12 +25,9 @@ import Tab from '@material-ui/core/Tab';
 
 const useStyles = makeStyles(theme => ({
     menuButton: {
-     //   marginRight: 20,
-        //flexGrow: 1
     },
     moreVert: {
         marginLeft: 'auto',
-      //  flexGrow: 1
     },
     titleText: props => ({
         textAlign: props.alignTitle,
@@ -51,10 +48,8 @@ const useStyles = makeStyles(theme => ({
 * The TraditionalLayout Component is a wrapper on the Material-UI AppBar, BottomNavigation and Drawer components. The TraditionalLayout is intended to wrap content to provide a consistent look and feel across all interfaces.<br/><br/>
 * The TraditionalLayout component is implemented with an elevated appbar (content scrolls under appbar), fixed footer (footer fixed to bottom of window) and swipeable drawers (swipe from left/right on touch devices).<br/><br/> 
 * When used outside of the styleguide the appbar and footer will span the entire window.<br/><br/>
-
 */
 const TraditionalLayout = (props) => {
-
     const classes = useStyles(props)
     const theme = useTheme()
 
@@ -66,12 +61,9 @@ const TraditionalLayout = (props) => {
     const [showDrawer, setShowDrawer] = useState(false)
     const [showMVDrawer, setShowMVDrawer] = useState(false)
 
-
-
     return (
         <React.Fragment>
             <CssBaseline />
-            {/* <ElevationScroll {...props}> */}
                 <AppBar color={themeType === 'dark' ? "inherit" : "primary"} position={notInStyleGuide ? undefined : "static"}  elevation={theme.palette.paperElevation}>
                     <Toolbar variant={props.denseAppBar ? "dense" : undefined} style={{ display: "flex" }}>
                         <IconButton
@@ -98,12 +90,10 @@ const TraditionalLayout = (props) => {
                         </Typography>}
                         {props.tabs&&
                         <Tabs
-                        style={{flexGrow: 1,}}
-                        value={props.tabValue}
-                        onChange={props.handleTabChange}
-                        {...props.tabProps}
-                        
-        
+                            style={{flexGrow: 1,}}
+                            value={props.tabValue}
+                            onChange={props.handleTabChange}
+                            {...props.tabProps}
                         >
                             {props.tabs.map((option,index)=>(
                                 <Tab key= {index.toString()} label={option}/>
@@ -130,7 +120,6 @@ const TraditionalLayout = (props) => {
                             </React.Fragment>}
                     </Toolbar>
                 </AppBar>
-            {/* </ElevationScroll> */}
             {notInStyleGuide && <div style={{ marginBottom: props.denseAppBar ? "3em" : "4em" }} />}
             <React.Fragment>
                 {/* ---Children--- */}
@@ -152,7 +141,6 @@ const TraditionalLayout = (props) => {
                     {notInStyleGuide && <div style={{ marginBottom: props.footerHeight }} />}
                 </React.Fragment>
             }
-     
         </React.Fragment>
     );
 };

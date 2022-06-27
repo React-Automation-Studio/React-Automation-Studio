@@ -1,3 +1,5 @@
+{% raw %}
+
 Example trace prop:
 ```js static
 
@@ -39,7 +41,6 @@ Example yAxes prop:
         }
 
 ```
-
 
 ```js
 import ToggleButton from '../../components/BaseComponents/ToggleButton.js';
@@ -100,6 +101,4 @@ import ThumbWheel from '../../components/BaseComponents/ThumbWheel.js';
     </div>
 </div>
 ```
-
-
-
+{% endraw %}

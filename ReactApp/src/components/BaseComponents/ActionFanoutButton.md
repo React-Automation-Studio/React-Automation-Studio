@@ -1,4 +1,4 @@
-
+{% raw %}
 
 ActionButton EPICS variable example:
 ```js
@@ -32,3 +32,4 @@ ActionButton EPICS variable example:
 {/*###############*/}
 </div>
 ```
+{% endraw %}

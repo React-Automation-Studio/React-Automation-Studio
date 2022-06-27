@@ -1,9 +1,10 @@
-
-<img src="img/loadSave/loadSave.png" alt="loadSave" width="100%"/> 
+<img src="../../../img/loadSave/loadSave.png" alt="loadSave" width="100%"/> 
 *Fig 1. A screenshot of the LoadSave component.*
 
-<img src="img/loadSave/loadSave2.png" alt="loadSave" width="100%"/> 
+<img src="../../../img/loadSave/loadSave2.png" alt="loadSave" width="100%"/> 
 *Fig 2. A screenshot of the LoadSave component showing the life cycle management buttons.*
+
+{% raw %}
 
 Example: 
 
@@ -87,7 +88,4 @@ Currently only the script can be used to seed the database, in future the client
 
 Once the database is seeded PVs and metadata can be removed or added using MongoDB compass.
 
-
-
-
-
+{% endraw %}

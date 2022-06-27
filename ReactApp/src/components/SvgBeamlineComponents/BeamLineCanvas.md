@@ -1,4 +1,4 @@
-
+{% raw %}
 
 ```js
 import HorizontalBeamline from './HorizontalBeamline';
@@ -111,3 +111,4 @@ import SteererXYMagnet from './SteererXYMagnet';
 	
 </BeamLineCanvas>
 ```
+{% endraw %}

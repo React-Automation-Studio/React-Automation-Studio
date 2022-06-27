@@ -1,4 +1,4 @@
-
+{% raw %}
 
 GraphY EPICS variable example, drag the slider to modulate the amplitude of the Sine Wave:
 ```js
@@ -91,12 +91,9 @@ import Slider from './Slider';
     legend={['Sine Wave Amplitude']}
     yMin={3000}
     yMax={6000}
-
-
   />
 </div>
   <Slider  pv='testIOC:amplitude'   label='Sine Wave Amplitude' usePvMinMax={true}/>
 </div>
-
-
 ```
+{% endraw %}

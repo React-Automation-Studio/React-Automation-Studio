@@ -1,4 +1,4 @@
-
+{% raw %}
 
 TextUpdate example connection to a SoftChannel EPICS AI pv with custom label, precision and units:
 
@@ -38,3 +38,4 @@ TextUpdate example connection to a SoftChannel EPICS AI pv with EPICS label, pre
    numberFormat={{notation: 'engineering',precision: 2}}
 />
 ```
+{% endraw %}

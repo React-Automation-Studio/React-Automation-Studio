@@ -1,4 +1,4 @@
-
+{% raw %}
 
 CheckBox example connection to a SoftChannel EPICS AI pv with use of EPICS label and a custom label position:
 
@@ -33,3 +33,4 @@ CheckBox example connection to a SoftChannel EPICS AI pv with use of EPICS label
 {/*###############*/}  
   </React.Fragment>
 ```
+{% endraw %}

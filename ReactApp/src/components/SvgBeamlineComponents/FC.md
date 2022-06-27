@@ -1,7 +1,7 @@
- ``` js
+{% raw %}
+``` js
 import BeamLineCanvas from './BeamLineCanvas';
 import HorizontalBeamline from './HorizontalBeamline';
-
 
 <BeamLineCanvas width={600} height={300} >
        <HorizontalBeamline 
@@ -77,13 +77,9 @@ import HorizontalBeamline from './HorizontalBeamline';
           }
           x={180}
           y={50}
-          
-          alarmSensitive={true}
-         
-        
+          alarmSensitive={true}        
           componentGradient={true}
         />
-      
-        </BeamLineCanvas>
-
+</BeamLineCanvas>
 ```
+{% endraw %}

@@ -1,3 +1,4 @@
+{% raw %}
  ``` js
 import BeamLineCanvas from './BeamLineCanvas';
 import HorizontalBeamline from './HorizontalBeamline';
@@ -8,11 +9,9 @@ import HorizontalBeamline from './HorizontalBeamline';
           x={0}
           y={50}
           width={'300px'}
-     
         />
        
         <Harp
-
           pv={'$(IOC):$(actuatorName):put-outIn'}
           isMovingPv = {'$(IOC):$(actuatorName):get-status.B5'}
           inLimitPv = {'$(IOC):$(actuatorName):get-status.B6'}
@@ -22,24 +21,17 @@ import HorizontalBeamline from './HorizontalBeamline';
           isMovingValue={1}
           maxHarpsReached={false}
    
-          label= {'$(actuatorName)'}
+          label = {'$(actuatorName)'}
 
-          macros= {{
+          macros = {{
               '$(IOC)': 'testIOC',
               '$(actuatorName)': 'Harp2',
-             
-          }
-          }
+          }}
           x={50}
           y={50}
-          
           alarmSensitive={true}
-         
-        
           componentGradient={true}
         />
-      
-      
-        </BeamLineCanvas>
-
+</BeamLineCanvas>
 ```
+{% endraw %}

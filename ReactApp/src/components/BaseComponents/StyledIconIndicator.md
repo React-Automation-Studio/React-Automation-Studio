@@ -1,6 +1,6 @@
+{% raw %}
 
 StyledIconIndicator with custom icon EPICS variable example:
-
 
 ```js
 {/*The ToggleButton code is included for demonstration purposes only*/}  
@@ -132,3 +132,4 @@ StyledIconIndicator example connection to a SoftChannel EPICS AI pv with example
 
   </div>
 ```
+{% endraw %}

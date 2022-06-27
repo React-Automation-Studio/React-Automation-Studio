@@ -1,4 +1,4 @@
-
+{% raw %}
 
 SelectionInput example connection to a SoftChannel EPICS MBBO pv with EPICS pv strings for choice:
 
@@ -63,3 +63,4 @@ SelectionInput example connection to a SoftChannel EPICS MBBO pv with custom str
 
 </div>
 ```
+{% endraw %}

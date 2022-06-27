@@ -1,4 +1,4 @@
-
+{% raw %}
 
 ThumbWheel example connection to a SoftChannel EPICS AI pv with custom precision:
 
@@ -19,7 +19,6 @@ ThumbWheel example connection to a SoftChannel EPICS AI pv with custom precision
       prec={3}
       />
   </div>
-
 
 {/*###############*/}  
 
@@ -46,3 +45,4 @@ custom increments example
     custom_increments={[500,50,5,0.5]}
     />
 ```
+{% endraw %}

@@ -1,6 +1,5 @@
-
-
- ``` js
+{% raw %}
+``` js
 import BeamLineCanvas from './BeamLineCanvas';
 import HorizontalBeamline from './HorizontalBeamline';
 import EditorSinglePS from '../ControlScreens/Components/EditorSinglePS';
@@ -75,6 +74,5 @@ const [displayEditor,setDisplayEditor]=useState(false);
         />}
       </Grid>
     </Grid>
-
-
 ```
+{% endraw %}

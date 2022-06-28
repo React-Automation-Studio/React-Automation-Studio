@@ -1,6 +1,5 @@
-{% raw %}
-
 BitIndicators EPICS variable example:
+
 ```js
 {/*The TextInput code is included for demonstration purposes only*/}  
 {/*Only the the JSX code between the hashes  is required to instantiate the BitIndicators */}  
@@ -10,6 +9,7 @@ BitIndicators EPICS variable example:
   pv='$(device):mbboTest1' macros={{'$(device)':'testIOC','$(id)':'2'}}
   label={"Byte Value"}
   labelPlacement={"top"}
+  
   />
   <br/><br/>
   {/*###############*/}  
@@ -143,4 +143,3 @@ BitIndicators example connection to a SoftChannel EPICS AI pv with example overr
 
   </div>
 ```
-{% endraw %}

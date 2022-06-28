@@ -1,4 +1,6 @@
-{% raw %}
+
+
+
 
 ProgressBar example connection to a SoftChannel EPICS AI pv with usePvMinMax:
 
@@ -19,4 +21,3 @@ ProgressBar example connection to a SoftChannel EPICS AI pv with usePvMinMax:
 <Slider pv='$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}}   label='Value:' usePvMinMax={true} step={1}/>
 </div>
 ```
-{% endraw %}

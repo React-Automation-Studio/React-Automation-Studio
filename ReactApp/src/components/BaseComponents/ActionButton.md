@@ -1,15 +1,15 @@
-{% raw %}
 
-ActionButton EPICS BO example:
+  ActionButton EPICS BO example:
 
 ```js
 {/*The TextOuput code is included for demonstration purposes only*/}  
 {/*Only the the JSX code between the hashes  is required to instantiate the ActionButton */}  
   import TextOutput from './TextOutput';
   <div>
-    <div style={{marginBottom:8}}>
-      <TextOutput  pv='testIOC:BO1'   label='Value of testIOC:BO1'/>
-    </div>
+  <div style={{marginBottom:8}}>
+    <TextOutput  pv='testIOC:BO1'   label='Value of testIOC:BO1'/>
+  </div>
+
 
   <ActionButton
     pv='testIOC:BO1'
@@ -75,4 +75,4 @@ ActionButton to multi variable example:
 {/*###############*/}
 </div>
 ```
-{% endraw %}
+

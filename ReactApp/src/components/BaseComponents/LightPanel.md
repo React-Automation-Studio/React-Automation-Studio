@@ -1,4 +1,3 @@
-{% raw %}
 LightPanel example:
 
 ```js
@@ -96,4 +95,3 @@ import TextInput from "./TextInput";
   {/*###############*/}
 </React.Fragment>;
 ```
-{% endraw %}

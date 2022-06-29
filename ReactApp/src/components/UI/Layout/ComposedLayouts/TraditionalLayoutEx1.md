@@ -1,4 +1,4 @@
-
+{% raw %}
 
 TraditionalLayout with styled app bar, footer and custom footerContent.
 ```js
@@ -23,9 +23,8 @@ const footerContents=(
             </Grid>
         </Grid>
     </Grid>
-)
+);
 
-;
 <TraditionalLayout
     title="My App Title"
     alignTitle="center"
@@ -37,3 +36,4 @@ const footerContents=(
     <Content/>   
 </TraditionalLayout>
 ```
+{% endraw %}

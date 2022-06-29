@@ -1,4 +1,4 @@
-
+{% raw %}
 
 SelectionList example connection to a SoftChannel EPICS MBBO pv with horizontal orientation and EPICS pv strings for choice:
 
@@ -50,3 +50,4 @@ SelectionList example connection to a SoftChannel EPICS MBBO pv with vertical or
 
 </div>
 ```
+{% endraw %}

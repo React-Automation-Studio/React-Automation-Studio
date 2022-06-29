@@ -1,3 +1,5 @@
+{% raw %}
+
 The pv object return through the pvData callback or passed to the child function has a default structure with the following properties:
 ```js static
 {
@@ -33,7 +35,6 @@ The pv object return through the pvData callback or passed to the child function
 |enum_strs|array|[]| An array of enumerator strings, if the pv is an enumerator type, valid after initialized===true
 
 Example 1: Raising the pv state using pvData function
-
 ```js
 import React, { useState } from 'react'
 const Example1=(props)=>{
@@ -291,3 +292,4 @@ return(
     macros={{'$(device)':'testIOC'}} 
 />
 ```
+{% endraw %}

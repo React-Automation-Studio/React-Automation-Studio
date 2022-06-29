@@ -1,4 +1,3 @@
-{% raw %}
 
 TextInput example connection to an SoftChannel EPICS AI pv:
 
@@ -51,7 +50,10 @@ TextInput example connection to an SoftChannel EPICS MBBO pv using the numerical
        macros={{'$(device)':'testIOC','$(id)':'1'}}
        usePvLabel={true}
        usePvUnits={true}
+
     />
+
+
 ```
 
 TextInput example :
@@ -80,4 +82,4 @@ TextInput number format example :
        numberFormat={{notation: 'engineering',precision: 5}}
     />
 ```
-{% endraw %}
+

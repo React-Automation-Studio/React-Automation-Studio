@@ -1,4 +1,3 @@
-{% raw %}
 
 StyledIconButton example connection to a SoftChannel EPICS AI pv with example of usePvLabel
 
@@ -60,4 +59,3 @@ StyledIconButton example connection to a SoftChannel EPICS AI pv with example of
 
   </div>
 ```
-{% endraw %}

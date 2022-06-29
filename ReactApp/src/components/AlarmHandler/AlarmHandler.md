@@ -1,6 +1,5 @@
 Sample usage:
 
-{% raw %}
 ```js static
 import React from 'react';
 import AlarmHandler from '../AlarmHandler/AlarmHandler'
@@ -21,4 +20,3 @@ const AlarmHandlerDemo = () => {
 
 export default AlarmHandlerDemo;
 ```
-{% endraw %}

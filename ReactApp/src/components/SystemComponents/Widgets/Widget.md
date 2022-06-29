@@ -1,9 +1,7 @@
-{% raw %}
-
 The props that are forwarded to he child component are detailed in the table below:
 
 | Forwarded Props |Type |Default | Description |
-| :-: | :- | :- | :- |
+|:-:|:-|
 |props|object|| all the props provided to the widget as describe in the props&methods section below.
 |initialized|bool|false|true if all the pvs specified in the pv and pvs props are initialized, and all the forwarded props are valid,
 |pvName|string|""| The name of the pv after the macros have been applied. Valid after initialization.
@@ -69,5 +67,5 @@ Example.defaultProps = {
 };
 
 export default withStyles(styles, { withTheme: true })(Example)
+
 ```
-{% endraw %}

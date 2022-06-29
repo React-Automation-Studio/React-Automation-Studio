@@ -1,5 +1,6 @@
-{% raw %}
-``` js
+
+
+ ``` js
 import BeamLineCanvas from './BeamLineCanvas';
 import HorizontalBeamline from './HorizontalBeamline';
 import EditorSlitXY from '../ControlScreens/Components/EditorSlitXY';
@@ -69,12 +70,14 @@ const [displayEditor,setDisplayEditor]=useState(false);
             '$(IOC)': 'testIOC',
             '$(device)': 'SLITXY1',
           },
-              disableLink:true          
+              disableLink:true
+          
           }
           }
           handleCloseEditor={() => setDisplayEditor(false)} 
         />}
       </Grid>
     </Grid>
+
+
 ```
-{% endraw %}

@@ -1,4 +1,4 @@
-{% raw %}
+
 
 RadioButton example connection to a SoftChannel EPICS AI pv with use of EPICS label and a custom label position:
 
@@ -19,14 +19,17 @@ RadioButton example connection to a SoftChannel EPICS AI pv with use of EPICS la
       />
   </div>
 
+
 {/*###############*/}  
+
   <RadioButton
     pv='$(device):BO$(id)'
     macros={{'$(device)':'testIOC','$(id)':'1'}}
     usePvLabel={true}
     labelPosition={"end"}
     />
+
+
 {/*###############*/}  
   </React.Fragment>
 ```
-{% endraw %}

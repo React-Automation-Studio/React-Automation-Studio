@@ -1,4 +1,4 @@
-{% raw %}
+
 
 Switch example connection to a SoftChannel EPICS AI pv with use of EPICS label and a custom label position:
 
@@ -32,4 +32,3 @@ Switch example connection to a SoftChannel EPICS AI pv with use of EPICS label a
 {/*###############*/}  
   </React.Fragment>
 ```
-{% endraw %}

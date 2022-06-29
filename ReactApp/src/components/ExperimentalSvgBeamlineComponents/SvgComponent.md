@@ -1,11 +1,10 @@
-{% raw %}
-
-``` js
+ ``` js
 import BeamLineCanvas from '../SvgBeamlineComponents/BeamLineCanvas';
 import HorizontalBeamline from '../SvgBeamlineComponents/HorizontalBeamline';
 <BeamLineCanvas 
   width={600} 
   height={300} 
+  //debugBorder={true}
   >
     <HorizontalBeamline 
       x={0}
@@ -88,8 +87,11 @@ import HorizontalBeamline from '../SvgBeamlineComponents/HorizontalBeamline';
          
         />
       </g>
+        
       </svg>
     </SvgComponent>
+
+    
   </BeamLineCanvas>
+
 ```
-{% endraw %}

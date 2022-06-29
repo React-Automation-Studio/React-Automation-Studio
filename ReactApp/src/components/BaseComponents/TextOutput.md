@@ -1,4 +1,3 @@
-{% raw %}
 
 TextOutput example connection to an SoftChannel EPICS AI pv:
 
@@ -82,4 +81,3 @@ TextOutput number format example :
        numberFormat={{notation: 'engineering',precision: 5}}
     />
 ```
-{% endraw %}

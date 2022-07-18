@@ -4,21 +4,21 @@ Sample usage:
 import React from 'react';
 import AlarmHandler from '../AlarmHandler/AlarmHandler'
 
-<div>
-    <AlarmHandler
-        titleProps={
-            {
-                title: "Demo Alarm Handler",
-                alignTitle: "center",
-                titleVariant: "h6",
-                titleTextStyle: { 
-                    textTransform: 'uppercase', 
-                },
+const AlarmHandlerDemo = () => {
+    return (
+        <AlarmHandler
+            titleProps={
+                {
+                    title: "Demo Alarm Handler",
+                    alignTitle: "center",
+                    titleVariant: "h6",
+                    titleTextStyle: { textTransform: 'uppercase' }
+                }
             }
-        }
-        
-        alarmDatabaseName="demoAlarmDatabase"
-    />
-</div>
+            alarmDatabaseName="demoAlarmDatabase"
+        />
+    );
+};
 
+export default AlarmHandlerDemo;
 ```

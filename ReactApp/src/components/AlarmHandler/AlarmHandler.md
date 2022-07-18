@@ -6,14 +6,17 @@ import AlarmHandler from '../AlarmHandler/AlarmHandler'
 
 <div>
     <AlarmHandler
-        titleProps={{
-            title: "Demo Alarm Handler",
-            alignTitle: "center",
-            titleVariant: "h6",
-            titleTextStyle: { 
-                textTransform: 'uppercase', 
-            },
-        }}
+        titleProps={
+            {
+                title: "Demo Alarm Handler",
+                alignTitle: "center",
+                titleVariant: "h6",
+                titleTextStyle: { 
+                    textTransform: 'uppercase', 
+                },
+            }
+        }
+        
         alarmDatabaseName="demoAlarmDatabase"
     />
 </div>

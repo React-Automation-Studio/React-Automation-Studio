@@ -11,8 +11,8 @@ import AlarmHandler from '../AlarmHandler/AlarmHandler'
             alignTitle: "center",
             titleVariant: "h6",
             titleTextStyle: { 
-                textTransform: 'uppercase' 
-            }
+                textTransform: 'uppercase', 
+            },
         }}
         alarmDatabaseName="demoAlarmDatabase"
     />

@@ -1679,8 +1679,8 @@ def archiver_read(message):
             str1 = archiverURL.replace("arch://", "")
             strings = str1.split(":")
             try:
-                requestStr = str1.split("request:")[1]
-                request = json.loads(requestStr)
+                reqStr = str1.split("request:")[1]
+                req = json.loads(reqStr)
             except:
                 raise Exception("Request not defined")
             if len(strings) >= 1:
@@ -1695,14 +1695,14 @@ def archiver_read(message):
                             join_room(str(archiverURL) + "ro")
                             write_access = False
                         try:
-                            pv = request["pv"]
+                            pv = req["pv"]
                             pv = pv.replace("pva://", "")
                             pv = parse.quote(pv)
-                            fromOptions = request["options"]["from"]
+                            fromOptions = req["options"]["from"]
                             fromOptions = parse.quote(fromOptions)
-                            toOptions = request["options"]["to"]
+                            toOptions = req["options"]["to"]
                             toOptions = parse.quote(toOptions)
-                            parameters = request["options"]["parameters"]
+                            parameters = req["options"]["parameters"]
                             URL = (
                                 str(os.environ[archiver])
                                 + "/retrieval/data/getData.json?pv="

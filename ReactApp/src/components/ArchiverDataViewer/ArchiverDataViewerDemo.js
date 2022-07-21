@@ -15,7 +15,7 @@ const ArchiverDataViewerDemo = (props) => {
     <Grid container direction="row" justify="flex-start" alignItems="center" >
       <Grid item xs={12} style={{ paddingLeft: "1em" }}>
         <Typography>
-          This demo requires the <a style={{ color: 'inherit' }} href="https://github.com/wduckitt/React-Automation-Studio-Demo-Archiver" 
+          This demo requires the <a style={{ color: 'inherit' }} href="https://github.com/React-Automation-Studio/React-Automation-Studio-Demo-Archiver" 
           target="_blank"
           rel="noopener noreferrer"
           > demo EPICS archiver</a> to be running.

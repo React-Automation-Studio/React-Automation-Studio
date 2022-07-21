@@ -152,7 +152,7 @@ https://docs.docker.com/compose/install/compose-plugin/#installing-compose-on-li
 1st clone this repo:
 
 ```bash
-git  clone https://github.com/wduckitt/React-Automation-Studio.git
+git  clone https://github.com/React-Automation-Studio/React-Automation-Studio
 
 ```
 
@@ -487,7 +487,7 @@ Refer to theme section in the style guide.
 
 # 7 Contributing
 
-Site specific components and app screens should be kept in your repository. If you wish to contribute to the main repository for bug fixes then this must be done in  the main repository at https://github.com/wduckitt/React-Automation-Studio. If you wish to add in new components then please create them in the staging folder. If the new component requires custom EPICS code then please add it to the demo IOC.
+Site specific components and app screens should be kept in your repository. If you wish to contribute to the main repository for bug fixes then this must be done in  the main repository at https://github.com/React-Automation-Studio/React-Automation-Studio. If you wish to add in new components then please create them in the staging folder. If the new component requires custom EPICS code then please add it to the demo IOC.
 
 # 8 Contact
 

@@ -11,14 +11,14 @@ The repository can be checked out and the demos can be explored. Contributors ca
 
 **Master repository:**
 
-https://github.com/wduckitt/React-Automation-Studio
+https://github.com/React-Automation-Studio/React-Automation-Studio
 
 
 If you wish to customize the project and create user interfaces for your EPICS control system then you should clone the boiler plate repository at which pulls in this code base as a Git submodule:
 
 **Boiler plate repository:**
 
- https://github.com/wduckitt/React-Automation-Studio-Example-Project-1
+ https://github.com/React-Automation-Studio/React-Automation-Studio-Example-Project-1
 
 
 

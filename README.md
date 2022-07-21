@@ -15,20 +15,20 @@ The repository can be checked out and the demos can be explored. Contributors ca
 
 **Master repository:**
 
-https://github.com/wduckitt/React-Automation-Studio
+https://github.com/React-Automation-Studio/React-Automation-Studio
 
 
 If you wish to customize the project and create user interfaces for your EPICS control system then you should clone the boiler plate repository at which pulls in this code base as a Git submodule:
 
 **Boiler plate repository:**
 
- https://github.com/wduckitt/React-Automation-Studio-Example-Project-1
+https://github.com/React-Automation-Studio/React-Automation-Studio-Example-Project-1
 
 If you wish to create a standalone AlarmHandler project you should clone this project:
 
 **AlarmHandler Boiler plate repository:**
 
-https://github.com/wduckitt/React-Automation-Studio-Alarm-Handler-Standalone
+https://github.com/React-Automation-Studio/React-Automation-Studio-Alarm-Handler-Standalone
 
 
 Each of the Docker containers are deployed as micro services and environment variables can be configured to deploy the system on different ports, or to enable user authentication and authorisation or to serve the application on a unique URL or on the localhost. Separate Docker commands exist to load the development and production version. These containerised environments allows for precise versioning of packages used and prevents deployment dependency issues.
@@ -131,16 +131,22 @@ The development and production versions of React Automation Studio have been con
 It is advised to only use the containerized version with a Linux environment. (See the FAQ section on other operating systems).
 
 
+Prerequisites: git, latest version of docker-ce and docker compose 
 
-Prerequisites: git , latest version of docker-ce and docker compose
+( At the time of writing the system used Docker V20.10.17 and docker compose V2.6.0 )
 
-To install docker-ce on Unbuntu 18.04 follow:
+To install docker-ce on Unbuntu follow:
 
-https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04
+https://docs.docker.com/engine/install/ubuntu/
 
-And docker-compose:
+It is advised to the follow the Post Installation steps for Linux:
 
-https://docs.docker.com/compose/install/
+https://docs.docker.com/engine/install/linux-postinstall/
+
+
+And docker compose (if it is not installed via the previous steps):
+
+https://docs.docker.com/compose/install/compose-plugin/#installing-compose-on-linux-systems
 
 
 1st clone this repo:
@@ -159,18 +165,18 @@ The systems uses Docker to create isolated production and development environmen
 
 
 ```bash
-docker-compose  up
+docker compose  up
 ```
 or
 ```bash
-docker-compose -f docker-compose.yml up
+docker compose -f docker-compose.yml up
 ```
 Will launch the compiled production version with the demoIOC's and styleguide
 
 
 
 ```bash
-docker-compose -f docker-compose-dev.yml up
+docker compose -f docker-compose-dev.yml up
 ```
 Will launch the development version with the demoIOC's and styleguide.
 
@@ -180,7 +186,7 @@ Will launch the development version with the demoIOC's and styleguide.
 And:
 
 ```bash
-docker-compose -f docker-compose-dev-styleguide-dev.yml up
+docker compose -f docker-compose-dev-styleguide-dev.yml up
 ```
 Will launch the development version of the styleguide.
 
@@ -194,7 +200,7 @@ Will launch the development version of the styleguide.
 **Initially to check that everything is working only bring up the production version by running**
 
 ```bash
-docker-compose  up
+docker compose  up
 ```
 
 This installation process of all the docker images may take a while (20-30min) the first time. There after it is fast as all the repeated build and up commands uses cached installations. The longest process is the installation of the node modules. Do not be deterred by the red warnings.
@@ -204,7 +210,7 @@ This default installation will serve the  app at http://127.0.0.1:5000 and the s
 
 To launch the development environment make sure the production version is stopped,and the run :
 ```bash
-docker-compose -f docker-compose-dev.yml up
+docker compose -f docker-compose-dev.yml up
 ```
 This will launch the pvServer, demo IOC ,style guide and the React Development environment. As with the production version the first run may take awhile. There after it is fast as all the repeated build and up commands uses cached installations.
 

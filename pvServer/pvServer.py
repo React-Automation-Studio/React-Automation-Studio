@@ -1680,7 +1680,7 @@ def archiver_read(message):
             strings = str1.split(":")
             try:
                 reqStr = str1.split("request:")[1]
-                req = json.loads(reqStr)
+                archiver_request = json.loads(reqStr)
             except:
                 raise Exception("Request not defined")
             if len(strings) >= 1:
@@ -1695,14 +1695,14 @@ def archiver_read(message):
                             join_room(str(archiverURL) + "ro")
                             write_access = False
                         try:
-                            pv = req["pv"]
+                            pv = archiver_request["pv"]
                             pv = pv.replace("pva://", "")
                             pv = parse.quote(pv)
-                            fromOptions = req["options"]["from"]
+                            fromOptions = archiver_request["options"]["from"]
                             fromOptions = parse.quote(fromOptions)
-                            toOptions = req["options"]["to"]
+                            toOptions = archiver_request["options"]["to"]
                             toOptions = parse.quote(toOptions)
-                            parameters = req["options"]["parameters"]
+                            parameters = archiver_request["options"]["parameters"]
                             URL = (
                                 str(os.environ[archiver])
                                 + "/retrieval/data/getData.json?pv="
@@ -1713,8 +1713,8 @@ def archiver_read(message):
                                 + toOptions
                                 + parameters
                             )
-                            req = urlrequest.urlopen(URL)
-                            data = json.load(req)
+                            archiver_request = urlrequest.urlopen(URL)
+                            data = json.load(archiver_request)
                             eventName = "archiverReadData:" + archiverURL
                             d = {
                                 "archiverURL": archiverURL,

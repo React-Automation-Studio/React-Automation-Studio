@@ -31,7 +31,6 @@ WORKDIR /pvServer
 
 ENV pvServerURL=http://127.0.0.1
 ENV pvServerPort=5000
-ENV pvServerNameSpace=pvServer
 ENV REACT_APP_EnableLogin=false
 ENV REACT_APP_DisableStandardLogin=false
 ENV REACT_APP_EnableActiveDirectoryLogin=false
@@ -43,7 +42,6 @@ ENV PATH="/epics/base/bin/linux-x86_64/:${PATH}"
 #RUN echo $PATH
 RUN echo $pvServerURL
 RUN echo $pvServerPort
-RUN echo $pvServerNameSpace
 
 #RUN ls /epics/base/lib/linux-x86_64/
 

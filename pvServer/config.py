@@ -60,8 +60,6 @@ def init():
     PV_SERVER_URL = os.getenv("pvServerURL", None)
     global PV_SERVER_PORT
     PV_SERVER_PORT = optional_int(os.getenv("pvServerPort"), PV_SERVER_PORT)
-    global PV_SERVER_NAME_SPACE
-    PV_SERVER_NAME_SPACE = os.getenv("pvServerNameSpace", PV_SERVER_NAME_SPACE)
 
 
     global PV_SERVER_LOG_LEVEL

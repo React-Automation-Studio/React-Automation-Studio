@@ -507,6 +507,15 @@ Contact us at rasadmin@tlabs.ac.za
 
 # Changelog
 
+ V3.2.0 Friday 22 July 2022
+<br />
+<br />
+Minor Bug Fixes and Updates:
+<ul>
+  <li>General clean up of code formatting </li>
+  <li>Addition of Poetry as Python package manager</li>
+</ul>
+<br />
 
 
 V3.1.0 Wednesday 25 August 2021

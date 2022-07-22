@@ -154,6 +154,16 @@ const MainDashboard = (props) => {
               </Grid>
               <Grid item lg={12} sm={12} xs={12}  >
                 <Typography className={classes.WhatsNew} component='div'>
+                V3.2.0 Friday 22 July 2022
+                  <br />
+                  <br />
+                  Minor Bug Fixes and Updates:
+                  <ul>
+                  <li>General clean up of code formatting </li>
+                  <li>Addition of Poetry as Python package manager</li>
+                  </ul>
+                  <br />
+
                   V3.1.0 Wednesday 25 August 2021
                   <br />
                   <br />

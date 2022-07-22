@@ -18,7 +18,7 @@ https://docs.docker.com/compose/install/
 1st clone this repo:
 
 ```bash
-git  clone https://github.com/wduckitt/React-Automation-Studio.git
+git  clone https://github.com/React-Automation-Studio/React-Automation-Studio.git
 
 ```
 

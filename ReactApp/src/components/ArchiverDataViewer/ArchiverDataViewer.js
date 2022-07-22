@@ -183,7 +183,7 @@ const ArchiverData = (props) => {
 /**
  * The ArchiverDataViewer is an interface to display EPICS archived data. It uses plotly.js to display the the pv data.
  * The archiver needs to be declared as environment variable in order for the pvServer to connect to a valid archiver (see the archiver prop). For the DEMO_ARCHIVER, the environment variable declaration is:
- * `DEMO_ARCHIVER=http://localhost:17668`. The demo archiver needs to built for the demos to work. It is available at: <a href="https://github.com/wduckitt/React-Automation-Studio-Demo-Archiver"> React-Automation-Studio-Demo-Archiver</a>
+ * `DEMO_ARCHIVER=http://localhost:17668`. The demo archiver needs to built for the demos to work. It is available at: <a href="https://github.com/React-Automation-Studio/React-Automation-Studio-Demo-Archiver"> React-Automation-Studio-Demo-Archiver</a>
  * <br/>The ArchiveDataViewer will indicate if connection can't be established to the pv's archived data.
  * @param {*} props
  */

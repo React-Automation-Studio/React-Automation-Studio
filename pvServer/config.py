@@ -61,7 +61,6 @@ def init():
     global PV_SERVER_PORT
     PV_SERVER_PORT = optional_int(os.getenv("pvServerPort"), PV_SERVER_PORT)
 
-
     global PV_SERVER_LOG_LEVEL
     PV_SERVER_LOG_LEVEL = os.getenv("pvServerLogLevel", PV_SERVER_LOG_LEVEL)
     global PV_SERVER_LOG_FILE
@@ -104,8 +103,8 @@ def init():
 
 
 def print(log):
-    """Print configuration to the log.
-    """
+    """Print configuration to the log."""
+
     def yesno(x):
         return "YES" if x else "no"
 

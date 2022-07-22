@@ -18,12 +18,11 @@ def _convert_to_int(value, min_value, default_value):
 
 
 def init():
-    """Initialize and configure logger.
-    """
+    """Initialize and configure logger."""
     global logger
     if logger is not None:
         return
-    
+
     config.init()
     initial_log_level = config.PV_SERVER_LOG_LEVEL
     if not hasattr(logging, initial_log_level.upper()):

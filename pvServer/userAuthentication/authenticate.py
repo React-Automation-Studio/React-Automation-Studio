@@ -6,13 +6,19 @@ import random
 import re
 import string
 import threading
+import sys
 from google.oauth2 import id_token
 from google.auth.transport import requests
 from datetime import datetime, timedelta
 from time import sleep
 from pyMongoUtils import open_mongo_db_client
 
-global dbKnownUsers
+import log
+import config
+
+
+knownUsers = None
+UAGS = {}
 
 
 def usersDbWatchThread():
@@ -83,20 +89,7 @@ def randomString(stringLength=10):
     return "".join(random.choice(letters) for i in range(stringLength))
 
 
-try:
-    SECRET_PWD_KEY = str(os.environ["SECRET_PWD_KEY"])
-except:
-    print(
-        "Warning SECRET_PWD_KEY not set using the default key, please set the"
-        " SECRET_PWD_KEY in the .env file"
-    )
-    SECRET_PWD_KEY = (  # can no longer user randomized string due to load balancing
-        "ugZnU^E3Fr4gapj^?zH%V5&H}A]*{mC]#>/nY_?ceSt$?99PL[md+29]:$dn)3#X"
-    )
-
-
 def createKnownUsers(UAGS):
-    global SECRET_PWD_KEY
     try:
         users = UAGS["users"]
         knownUsers = {}
@@ -117,27 +110,25 @@ def createKnownUsers(UAGS):
 
 
 def createRefreshToken(username, max_age):
-    global SECRET_PWD_KEY
     now = datetime.utcnow()
     advanced = timedelta(seconds=max_age)
     exp = now + advanced
     refreshToken = str(
         jwt.encode(
-            {"username": username, "exp": exp}, SECRET_PWD_KEY, algorithm="HS256"
+            {"username": username, "exp": exp}, config.SECRET_PWD_KEY, algorithm="HS256"
         ).decode("utf-8")
     )
     return refreshToken
 
 
 def createAccessToken(username, max_age, roles):
-    global SECRET_PWD_KEY
     now = datetime.utcnow()
     advanced = timedelta(seconds=max_age)
     exp = now + advanced
     accessToken = str(
         jwt.encode(
             {"username": username, "exp": exp, "roles": str(roles)},
-            SECRET_PWD_KEY,
+            config.SECRET_PWD_KEY,
             algorithm="HS256",
         ).decode("utf-8")
     )
@@ -245,9 +236,9 @@ def checkUser(username):
 
 
 def AutheriseUserAndPermissions(encodedJWT, pvname):
-    global SECRET_PWD_KEY, UAGS
+    global UAGS
     try:
-        decoded = jwt.decode(encodedJWT, SECRET_PWD_KEY)
+        decoded = jwt.decode(encodedJWT, config.SECRET_PWD_KEY)
         username = decoded["username"]
         if checkUser(username):
             permissions = checkPermissions(pvname, username)
@@ -261,9 +252,9 @@ def AutheriseUserAndPermissions(encodedJWT, pvname):
 
 
 def checkIfAdmin(encodedJWT):
-    global SECRET_PWD_KEY, UAGS
+    global UAGS
     try:
-        decoded = jwt.decode(encodedJWT, SECRET_PWD_KEY)
+        decoded = jwt.decode(encodedJWT, config.SECRET_PWD_KEY)
         username = decoded["username"]
         adminUsers = UAGS["userGroups"]["ADMIN"]["usernames"]
         if username in adminUsers:
@@ -276,9 +267,9 @@ def checkIfAdmin(encodedJWT):
 
 
 def AuthoriseUser(encodedJWT):
-    global SECRET_PWD_KEY, UAGS
+    global UAGS
     try:
-        decoded = jwt.decode(encodedJWT, SECRET_PWD_KEY)
+        decoded = jwt.decode(encodedJWT, config.SECRET_PWD_KEY)
         username = decoded["username"]
         if checkUser(username):
             roles = checkUserRole(username)

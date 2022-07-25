@@ -42,7 +42,7 @@ class RasAppCore extends Component {
       let theme = null
       let themeStyles = this.state.system.themeStyles;
       if (themeStyles.includes(themeStyle)) {
-        theme = createMuiTheme(this.props.themes[themeStyle])
+        theme = createTheme(this.props.themes[themeStyle])
       }
       else {
         const { defaultTheme } = props.defaultTheme;

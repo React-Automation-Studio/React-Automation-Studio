@@ -379,7 +379,7 @@ const AccessControl = (props) => {
                     style={{ marginTop: 0, paddingRight: 8, paddingLeft: 8, paddingBottom: 8, paddingTop: 0 }}
                     container
                     direction="row"
-                    justify="flex-start"
+                    justifyContent="flex-start"
                     alignItems="flex-start"
                     spacing={2}
                   >
@@ -715,7 +715,7 @@ const AccessControl = (props) => {
             <Grid
               container
               direction="row"
-              justify="flex-start"
+              justifyContent="flex-start"
               alignItems="flex-start"
               spacing={2}
             >
@@ -852,7 +852,7 @@ const AccessControl = (props) => {
                     style={{ marginTop: 0, paddingRight: 8, paddingLeft: 8, paddingBottom: 8, paddingTop: 0 }}
                     container
                     direction="row"
-                    justify="flex-start"
+                    justifyContent="flex-start"
                     alignItems="flex-start"
                     spacing={2}
                   >

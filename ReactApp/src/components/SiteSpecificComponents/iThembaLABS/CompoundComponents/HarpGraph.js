@@ -6,17 +6,11 @@ import { withStyles } from '@material-ui/core/styles';
 
 import PropTypes from 'prop-types';
 
-import ContextMenu from '../../../SystemComponents/ContextMenu';
 
-import {
-  XAxis,
-  YAxis,
-  HorizontalGridLines,
-  VerticalGridLines,
-  LineSeries,
-  FlexibleXYPlot,
-  DiscreteColorLegend
-} from 'react-vis';
+import HarpGraphY from './HarpGraphY'
+
+
+
 
 const wireSpacing = [-42, -39, -36, -33, -30, -27, -24, -22, -20, -18, -16, -14, -12, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20, 22, 24, 27, 30, 33, 36, 39, 42, 43];
 
@@ -73,7 +67,7 @@ class HarpGraph extends React.Component {
     this.handleInputValueLabel = this.handleInputValueLabel.bind(this);
     this.handleMetadata = this.handleMetadata.bind(this);
     this.multipleDataConnections = this.multipleDataConnections.bind(this);
-    this.multipleLineData = this.multipleLineData.bind(this);
+   
     this.changeOtherGraphYmax = this.changeOtherGraphYmax.bind(this);
     this.changeThisGraphYmax = this.changeThisGraphYmax.bind(this);
   }
@@ -282,42 +276,7 @@ class HarpGraph extends React.Component {
     return DataConnections;
   }
 
-  multipleLineData = () => {
-    const theme = this.props.theme;
-
-    let pv;
-    let lines = [];
-    for (pv in this.state.dataPVs) {
-
-      if (theme.palette.type === 'dark') {
-        lines.push(
-          <LineSeries
-            key={pv.toString()}
-
-            color={this.state.dataPVs[pv].initialized === true ? '#e89b02' : 'grey'}
-            data={this.state.dataPVs[this.state.dataPVs[pv].pvname].linedata}
-            style={{
-              strokeLinejoin: 'round',
-              strokeWidth: 3
-            }}
-          />
-        )
-      } else {
-        lines.push(
-          <LineSeries
-            key={pv.toString()}
-            data={this.state.dataPVs[this.state.dataPVs[pv].pvname].linedata}
-            style={{
-              strokeLinejoin: 'round',
-              strokeWidth: 3
-            }}
-          />
-        )
-      }
-    }
-
-    return lines;
-  }
+ 
 
   componentDidUpdate(prevProps) {
     if (prevProps.ymaxFromOtherGraph !== 'undefined') {
@@ -328,13 +287,14 @@ class HarpGraph extends React.Component {
   }
 
   render() {
-    const theme = this.props.theme;
+
+
+
+    
+    
 
     const ymax = this.state.ymax;
-    let legendTitle = "";
-    if (typeof this.props.legend[0] !== 'undefined') {
-      legendTitle = this.props.legend[0].toString();
-    }
+   
 
     return (
       <React.Fragment>
@@ -344,41 +304,20 @@ class HarpGraph extends React.Component {
           handleInputValue={this.handleRangeInputValue}
         />
         }
-        {this.multipleDataConnections()}
-        <div style={{ width: '100%', height: '100%' }} onContextMenu={this.handleToggleContextMenu}>
-          <FlexibleXYPlot yDomain={[0, ymax]} margin={{ left: 60 }} onWheel={this.handleWheel} onClick={this.handleOnClick}>
-            <ContextMenu
-              disableProbe={this.props.disableProbe}
-              open={this.state.openContextMenu}
-              anchorReference="anchorPosition"
-              anchorPosition={{ top: +this.state.y0, left: +this.state.x0 }}
-              probeType={'readOnly'}
-              pvs={this.state.contextPVs}
-              handleClose={this.handleContextMenuClose}
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-            />
-            <HorizontalGridLines />
-
-            <VerticalGridLines tickValues={wireSpacing} />
-            <VerticalGridLines tickValues={[0]} style={{ stroke: theme.palette.type === 'dark' ? 'white' : 'grey' }} />
-            <XAxis
-              title="mm"
-              color="white"
-            />
-
-            <YAxis title={this.props.ylabel} left={9} tickFormat={v => (v + ' ' + this.state.rangeUnits)} tickSize={20} tickPadding={2}
-            />
-
-            {this.multipleLineData()}
-
-            {(typeof this.props.legend !== 'undefined') && <DiscreteColorLegend
-              style={{ position: 'absolute', right: '50px', top: '10px', }}
-              orientation="horizontal" items={[{ title: legendTitle, color: theme.palette.type === 'dark' ? '#e89b02' : '#80deea', stroke: theme.palette.type === 'dark' ? '#80deea' : '#dbdbe0', fontSize: 24 }]} />}
-          </FlexibleXYPlot>
-        </div>
+      
+        <HarpGraphY
+        pvs={this.props.dataPVs}
+        macros={this.props.macros}
+        legend={this.props.legend}
+        lineColor={[ '#e89b02']}
+        yAxisTitle={this.props.ylabel}
+        xAxisTitle={'mm'}
+        yUnits={this.state.rangeUnits}
+        yMin={0}
+        yMax={ymax}
+        onWheel={this.handleWheel} 
+        onClick={this.handleOnClick}      
+        />
       </React.Fragment>
     )
   }

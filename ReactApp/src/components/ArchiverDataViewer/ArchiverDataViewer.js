@@ -545,7 +545,8 @@ const ArchiverDataViewer = (props) => {
                         spacing={2}
                         alignItems={'center'}
                         direction={'row'}
-                        justify={'center'}
+                        justifyContent={'center'}
+
                     >
                         <Grid item xl={6} lg={'auto'} md={12} sm={12} xs={12} >
                             <Grid
@@ -553,7 +554,7 @@ const ArchiverDataViewer = (props) => {
                                 spacing={2}
                                 alignItems={'center'}
                                 direction={'row'}
-                                justify={'center'}
+                                justifyContent={'center'}
                             >
                                 <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
                                     <Button classes={{ root: classes.buttonRoot }} variant={'outlined'} color={fromButton === "30s" ? "secondary" : "default"} onClick={handleOnClick30s}>
@@ -649,7 +650,7 @@ const ArchiverDataViewer = (props) => {
                                 spacing={2}
                                 alignItems={'center'}
                                 direction={'row'}
-                                justify={'center'}
+                                justifyContent={'center'}
                             >
                                 <Grid item xs={4} md={4} >
                                     <Button classes={{ root: classes.buttonRoot }} variant={'contained'} color={live ? 'primary' : 'default'} onClick={() => setLive(live === true ? false : true)}>

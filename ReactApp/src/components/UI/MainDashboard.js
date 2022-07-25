@@ -87,12 +87,17 @@ const MainDashboard = (props) => {
       denseAppBar
       alignTitle="center"
     >
-      <Grid className={classes.MainGrid} container direction="row" item justify="center" spacing={2} alignItems="stretch" >
+
+
+
+      <Grid className={classes.MainGrid} container direction="row" item justifyContent="center" spacing={2} alignItems="stretch" >
+
+
         <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem} >
           <Paper className={classes.Paper} elevation={paperElevation}>
-            <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
+            <Grid container direction="row" item justifyContent="center" spacing={4} alignItems="center">
               <Grid item lg={6} sm={12} xs={12}>
-                <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
+                <Grid container direction="row" item justifyContent="center" spacing={4} alignItems="center">
                   <Grid item lg={12} sm={12} xs={12} style={{ textAlign: 'center' }}>
                     <Typography {...typographyProps}><PhoneAndroidIcon className={classes.Icon} />Mobile Demos</Typography>
                   </Grid>
@@ -116,9 +121,9 @@ const MainDashboard = (props) => {
 
         <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem}>
           <Paper className={classes.Paper} elevation={paperElevation}>
-            <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
+            <Grid container direction="row" item justifyContent="center" spacing={4} alignItems="center">
               <Grid item lg={6} sm={12} xs={12}>
-                <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
+                <Grid container direction="row" item justifyContent="center" spacing={4} alignItems="center">
                   <Grid item lg={12} sm={12} xs={12} style={{ textAlign: 'center' }}>
                     <Typography {...typographyProps}><DesktopWindowsIcon className={classes.Icon} />  Desktop Demos</Typography>
                   </Grid>
@@ -148,7 +153,7 @@ const MainDashboard = (props) => {
 
         <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem} >
           <Paper className={classes.Paper} elevation={paperElevation}>
-            <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
+            <Grid container direction="row" item justifyContent="center" spacing={4} alignItems="center">
               <Grid item lg={12} sm={12} xs={12} style={{ textAlign: 'center' }}>
                 <Typography {...typographyProps}><NewReleasesIcon className={classes.Icon} /> Whats New</Typography>
               </Grid>
@@ -324,12 +329,13 @@ const MainDashboard = (props) => {
 
         <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem} >
           <Paper className={classes.Paper} elevation={paperElevation}>
-            <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
+            <Grid container direction="row" item justifyContent="center" spacing={4} alignItems="center">
               <Grid item lg={12} sm={12} xs={12} style={{ textAlign: 'center' }}>
                 <Typography {...typographyProps}><EditIcon className={classes.Icon} /> Staging</Typography>
               </Grid>
               <Grid item lg={6} sm={12} xs={12}>
-                <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
+
+                <Grid container direction="row" item justifyContent="center" spacing={4} alignItems="center">
                   <Grid item lg={12} sm={12} xs={12}>
                     <Button fullWidth className={classes.button} component={Link} to="/Staging" color="primary" variant={buttonVariant}>  Staging </Button>
                   </Grid>
@@ -341,12 +347,13 @@ const MainDashboard = (props) => {
 
         <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem} >
           <Paper className={classes.Paper} elevation={paperElevation} style={{ textAlign: 'center' }}>
-            <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
+            <Grid container direction="row" item justifyContent="center" spacing={4} alignItems="center">
               <Grid item lg={12} sm={12} xs={12}>
                 <Typography {...typographyProps}>  <VisibilityIcon className={classes.Icon} /> Preview</Typography>
               </Grid>
               <Grid item lg={6} sm={12} xs={12}>
-                <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
+                <Grid container direction="row" item justifyContent="center" spacing={4} alignItems="center">
+
                   <Grid item lg={12} sm={12} xs={12}>
                     <Button fullWidth className={classes.button} component={Link} to="/AlarmHandlerDemo" color="primary" variant={buttonVariant}>  Alarm Handler Demo </Button>
                   </Grid>
@@ -367,7 +374,7 @@ const MainDashboard = (props) => {
 
         <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem} >
           <Paper className={classes.Paper} elevation={paperElevation}>
-            <Grid container direction="row" item justify="center" spacing={4} alignItems="center">
+            <Grid container direction="row" item justifyContent="center" spacing={4} alignItems="center">
               <Grid item lg={12} sm={12} xs={12} style={{ textAlign: 'center' }}>
                 <Typography {...typographyProps}><HelpIcon className={classes.Icon} /> Help</Typography>
               </Grid>

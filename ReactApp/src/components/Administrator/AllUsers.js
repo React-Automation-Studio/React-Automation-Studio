@@ -109,7 +109,7 @@ const AllUsers = (props) => {
           style={{ marginTop: 0, padding: 8 }}
           container
           direction="row"
-          justify="flex-start"
+          justifyContent="flex-start"
           alignItems="flex-start"
           spacing={0}
         >

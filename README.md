@@ -149,6 +149,17 @@ And docker compose (if it is not installed via the previous steps):
 https://docs.docker.com/compose/install/compose-plugin/#installing-compose-on-linux-systems
 
 
+**On Linux only:** 
+
+With the latest version of docker and docker-compose installed we recommend using docker buildkit ( https://docs.docker.com/develop/develop-images/build_enhancements/ ):
+
+set the following enviroment variables:
+
+```bash
+export DOCKER_BUILDKIT=1 
+export COMPOSE_DOCKER_CLI_BUILD=1
+```
+
 1st clone this repo:
 
 ```bash

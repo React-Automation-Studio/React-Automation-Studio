@@ -31,7 +31,7 @@ Slider EPICS variable example with label and values at the top:
   <Grid
     container
     direction="row"
-    justify="space-between"
+    justifyContent="space-between"
     alignItems="stretch"
     style={{height:300}}
   >
@@ -63,7 +63,7 @@ Slider EPICS variable example with label and values at the top:
   <Grid
     container
     direction="row"
-    justify="space-between"
+    justifyContent="space-between"
     alignItems="stretch"
     style={{height:300}}
   >
@@ -94,7 +94,7 @@ Slider EPICS variable example with custom label and values at the top:
   <Grid
     container
     direction="row"
-    justify="space-around"
+    justifyContent="space-around"
     alignItems="stretch"
     style={{height:300}}
   >

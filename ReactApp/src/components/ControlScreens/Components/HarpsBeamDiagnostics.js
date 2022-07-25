@@ -195,14 +195,14 @@ const HarpsBeamDiagnostics = (props) => {
             <Grid
                 container
                 direction="row"
-                justify="center"
+                justifyContent="center"
                 alignItems="center"
             >
                 <Grid item sm={12}>
                     <Grid
                         container
                         direction="row"
-                        justify="center"
+                        justifyContent="center"
                         alignItems="center"
                     >
                         <Grid item sm={2} >
@@ -238,7 +238,7 @@ const HarpsBeamDiagnostics = (props) => {
                             <Grid
                                 container
                                 direction="row"
-                                justify="flex-start"
+                                justifyContent="flex-start"
                                 alignItems="center"
                             >
                                 <Grid item sm={6}>
@@ -280,7 +280,7 @@ const HarpsBeamDiagnostics = (props) => {
                         <Grid
                             container
                             direction="row"
-                            justify="flex-start"
+                            justifyContent="flex-start"
                             alignItems="center"
                         >
                             <Grid item sm={2}>
@@ -316,13 +316,13 @@ const HarpsBeamDiagnostics = (props) => {
                                 <Grid
                                     container
                                     direction="row"
-                                    justify="flex-start"
+                                    justifyContent="flex-start"
                                     alignItems="center"
                                 >
                                     <Grid
                                         container
                                         direction="row"
-                                        justify="flex-start"
+                                        justifyContent="flex-start"
                                         alignItems="center"
                                     >
                                         <Grid item sm={6}>

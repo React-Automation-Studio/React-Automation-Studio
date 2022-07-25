@@ -93,13 +93,13 @@ const Example1 =(props)=> {
                 spacing={2}
                 alignItems={'stretch'}
                 direction={'row'}
-                justify={'flex-start'}
+                justifyContent={'flex-start'}
               >
                 <Grid item xs={12} >
                   <GraphY height={graphVH} width='100%' pvs={['testIOC:test4','testIOC:test5'] } legend={['Sine Wave','Amplitude']}/>
                 </Grid>
                 <Grid item xs={12}>
-                  <Grid container direction="row" item justify="center" spacing={2} alignItems="stretch">
+                  <Grid container direction="row" item justifyContent="center" spacing={2} alignItems="stretch">
                     <Grid item xs={6}  >
                       <TextInput  pv='$(device):amplitude' macros={{'$(device)':'testIOC'}}   usePvLabel={true} prec={3} alarmSensitive={true}/>
                     </Grid>
@@ -114,7 +114,7 @@ const Example1 =(props)=> {
                 </Grid>
 
                 <Grid item xs={2} sm={4}  lg={5} >
-                  <Grid container direction="column" justify="space-evenly" spacing={2} alignItems="stretch">
+                  <Grid container direction="column" justifyContent="space-evenly" spacing={2} alignItems="stretch">
                     <Grid item>
                       <StyledIconIndicator  pv='$(device)' macros={{'$(device)':'testIOC:BO1'}} onColor={props.theme.palette.ok.main} offColor='default' label={'On'} labelPlacement={'end'}/>
                     </Grid>
@@ -168,10 +168,12 @@ const Example1 =(props)=> {
         {showAdvancedSettings === 1 && <TabContainer key={'tabContainer1'}>
           <Grid   container className={classes.root}>
             <Grid item xs={12}>
-              <Grid container spacing={2} alignItems={'stretch'} direction={'column'} justify={'flex-start'}>
+              <Grid container spacing={2} alignItems={'stretch'} direction={'column'} justifyContent={'flex-start'}>
+
+
                 <Grid item >
                   <div style={{marginBottom:8}}>Settings</div>
-                  <Grid container spacing={2} alignItems={'stretch'} direction={'row'} justify={'flex-start'}>
+                  <Grid container spacing={2} alignItems={'stretch'} direction={'row'} justifyContent={'flex-start'}>
                     <Grid item xs={12} lg={4}>
                       <TextInput   pv='$(device):frequency' macros={{'$(device)':'testIOC'}}    usePvUnits={true} prec={1} usePvLabel={true}/>
                     </Grid>

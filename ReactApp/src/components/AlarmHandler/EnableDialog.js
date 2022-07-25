@@ -97,7 +97,7 @@ const EnableDialog = (props) => {
                 <Grid
                     container
                     direction="row"
-                    justify="flex-start"
+                    justifyContent="flex-start"
                     alignItems="stretch"
                     spacing={2}
                 >

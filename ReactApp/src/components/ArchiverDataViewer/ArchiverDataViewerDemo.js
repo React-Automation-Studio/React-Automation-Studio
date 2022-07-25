@@ -12,7 +12,7 @@ import { useTheme } from '@material-ui/core/styles';
 const ArchiverDataViewerDemo = (props) => {
   const theme = useTheme();
   const footerContents = (
-    <Grid container direction="row" justify="flex-start" alignItems="center" >
+    <Grid container direction="row" justifyContent="flex-start" alignItems="center" >
       <Grid item xs={12} style={{ paddingLeft: "1em" }}>
         <Typography>
           This demo requires the <a style={{ color: 'inherit' }} href="https://github.com/React-Automation-Studio/React-Automation-Studio-Demo-Archiver" 
@@ -34,7 +34,7 @@ const ArchiverDataViewerDemo = (props) => {
         spacing={2}
         alignItems={'center'}
         direction={'row'}
-        justify={'center'}
+        justifyContent={'center'}
         style={{ paddingTop: 32, paddingLeft: 8, paddingRight: 8 }}
       >
         <Grid item xs={12} >
@@ -87,7 +87,9 @@ const ArchiverDataViewerDemo = (props) => {
               spacing={2}
               alignItems={'center'}
               direction={'row'}
-              justify={'center'}
+              justifyContent={'center'}
+
+
             >
               <Grid item xs={6} lg={3}>
                 <ToggleButton

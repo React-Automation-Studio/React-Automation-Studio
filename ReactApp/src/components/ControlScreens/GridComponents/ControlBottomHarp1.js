@@ -26,7 +26,7 @@ class ControlBottomHarp1 extends React.Component {
   };
   render() {
     return (
-      <Grid container justify="flex-start" direction="row" alignItems="center" spacing={0}>
+      <Grid container justifyContent="flex-start" direction="row" alignItems="center" spacing={0}>
         <Grid item xs={3} sm={3}>
           <div style={{ height: '60px', 'width': '200px' }}>
             <ToggleButton pv='$(device)$(number)$(line):put-outIn' macros={{ '$(device)': 'harp', '$(number)': '5', '$(line)': 'p' }} usePvLabel={true} labelPlacement={"top"} />

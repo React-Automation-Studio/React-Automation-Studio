@@ -43,7 +43,7 @@ const UserProfile = (props) => {
                     style={{ marginTop: 16, padding: 32 }}
                     container
                     direction="row"
-                    justify="center"
+                    justifyContent="center"
                     alignItems="flex-start"
                     spacing={0}
                 >
@@ -53,7 +53,7 @@ const UserProfile = (props) => {
                                 style={{ padding: 16 }}
                                 container
                                 direction="row"
-                                justify="flex-start"
+                                justifyContent="flex-start"
                                 alignItems="flex-start"
                                 spacing={4}
                             >

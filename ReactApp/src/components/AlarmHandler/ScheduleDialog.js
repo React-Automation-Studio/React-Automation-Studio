@@ -807,7 +807,7 @@ const ScheduleDialog = (props) => {
                 <Grid
                     container
                     direction="row"
-                    justify="flex-start"
+                    justifyContent="flex-start"
                     alignItems="stretch"
                 >
                     <Grid item xs={12} style={{ marginTop: '0.75em', marginBottom: '0.75em' }}>
@@ -817,7 +817,7 @@ const ScheduleDialog = (props) => {
                         <Grid
                             container
                             direction="row"
-                            justify="center"
+                            justifyContent="center"
                             alignItems="stretch"
                         >
                             <Grid item className={classes.centerInBlock}>
@@ -864,7 +864,7 @@ const ScheduleDialog = (props) => {
                         <Grid
                             container
                             direction="row"
-                            justify="flex-start"
+                            justifyContent="flex-start"
                             alignItems="stretch"
                         >
                             <Grid item xs={2} className={classes.centerInBlock}>
@@ -888,7 +888,7 @@ const ScheduleDialog = (props) => {
                         <Grid
                             container
                             direction="row"
-                            justify="flex-start"
+                            justifyContent="flex-start"
                             alignItems="stretch"
                             style={{
                                 paddingLeft: '1em',
@@ -899,7 +899,7 @@ const ScheduleDialog = (props) => {
                                 <Grid
                                     container
                                     direction="row"
-                                    justify="center"
+                                    justifyContent="center"
                                     alignItems="stretch"
                                 >
                                     <Grid item className={classes.verticalCenter}>
@@ -919,7 +919,7 @@ const ScheduleDialog = (props) => {
                                 <Grid
                                     container
                                     direction="row"
-                                    justify="center"
+                                    justifyContent="center"
                                     alignItems="stretch"
                                 >
                                     <Grid item className={classes.verticalCenter}>
@@ -939,7 +939,7 @@ const ScheduleDialog = (props) => {
                                 <Grid
                                     container
                                     direction="row"
-                                    justify="center"
+                                    justifyContent="center"
                                     alignItems="stretch"
                                 >
                                     <Grid item className={classes.verticalCenter}>
@@ -959,7 +959,7 @@ const ScheduleDialog = (props) => {
                                 <Grid
                                     container
                                     direction="row"
-                                    justify="center"
+                                    justifyContent="center"
                                     alignItems="stretch"
                                 >
                                     <Grid item className={classes.verticalCenter}>
@@ -984,14 +984,14 @@ const ScheduleDialog = (props) => {
                         <Grid
                             container
                             direction="row"
-                            justify="flex-start"
+                            justifyContent="flex-start"
                             alignItems="stretch"
                         >
                             <Grid item xs={6}>
                                 <Grid
                                     container
                                     direction="row"
-                                    justify="center"
+                                    justifyContent="center"
                                     alignItems="stretch"
                                 >
                                     <Grid item xs={3} className={classes.centerInBlock}>
@@ -1013,7 +1013,7 @@ const ScheduleDialog = (props) => {
                                 <Grid
                                     container
                                     direction="row"
-                                    justify="center"
+                                    justifyContent="center"
                                     alignItems="stretch"
                                 >
                                     <Grid item xs={3} className={classes.centerInBlock}>
@@ -1035,7 +1035,7 @@ const ScheduleDialog = (props) => {
                                 <Grid
                                     container
                                     direction="row"
-                                    justify="center"
+                                    justifyContent="center"
                                     alignItems="stretch"
                                 >
                                     <Grid item xs={3} className={classes.centerInBlock}>
@@ -1057,7 +1057,7 @@ const ScheduleDialog = (props) => {
                                 <Grid
                                     container
                                     direction="row"
-                                    justify="center"
+                                    justifyContent="center"
                                     alignItems="stretch"
                                 >
                                     <Grid item xs={3} className={classes.centerInBlock}>
@@ -1085,7 +1085,7 @@ const ScheduleDialog = (props) => {
                         <Grid
                             container
                             direction="row"
-                            justify="flex-start"
+                            justifyContent="flex-start"
                             alignItems="stretch"
                         >
                             <Grid item xs={2} className={classes.centerInBlock}>
@@ -1109,7 +1109,7 @@ const ScheduleDialog = (props) => {
                                     <Grid
                                         container
                                         direction="row"
-                                        justify="flex-start"
+                                        justifyContent="flex-start"
                                         alignItems="stretch"
                                     >
                                         <Grid item xs={3} className={classes.verticalCenter}>
@@ -1137,7 +1137,7 @@ const ScheduleDialog = (props) => {
                                     <Grid
                                         container
                                         direction="row"
-                                        justify="flex-start"
+                                        justifyContent="flex-start"
                                         alignItems="stretch"
                                     >
                                         <Grid item xs={3} className={classes.verticalCenter}>
@@ -1165,7 +1165,7 @@ const ScheduleDialog = (props) => {
                         <Grid
                             container
                             direction="row"
-                            justify="flex-start"
+                            justifyContent="flex-start"
                             alignItems="stretch"
                         >
                             <Grid item xs={2} className={classes.centerInBlock}>
@@ -1182,7 +1182,7 @@ const ScheduleDialog = (props) => {
                                 <Grid
                                     container
                                     direction="row"
-                                    justify="flex-start"
+                                    justifyContent="flex-start"
                                     alignItems="stretch"
                                 >
                                     <Grid item>
@@ -1218,7 +1218,7 @@ const ScheduleDialog = (props) => {
                         <Grid
                             container
                             direction="row"
-                            justify="flex-start"
+                            justifyContent="flex-start"
                             alignItems="stretch"
                         >
                             <Grid item xs={2} className={classes.centerInBlock}>
@@ -1235,7 +1235,7 @@ const ScheduleDialog = (props) => {
                                 <Grid
                                     container
                                     direction="row"
-                                    justify="flex-start"
+                                    justifyContent="flex-start"
                                     alignItems="stretch"
                                 >
                                     <Grid item xs={2} style={{ marginLeft: '1.5em' }} className={classes.verticalCenter}>

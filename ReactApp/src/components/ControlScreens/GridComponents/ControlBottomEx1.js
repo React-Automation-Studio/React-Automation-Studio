@@ -18,7 +18,7 @@ class ControlBottomEx1 extends React.Component {
   };
   render() {
     return (
-      <Grid   container  justify="flex-start" direction="row"    alignItems="center" spacing={0}>
+      <Grid   container  justifyContent="flex-start" direction="row"    alignItems="center" spacing={0}>
         <Grid item xs={3} sm={2}>
           <div style={{height:'60px','width':'100px'}}>
             <ToggleButton pv='testIOC:Harp1old:InOut'   label={"Harp1"} labelPlacement={"top"}/>

@@ -73,7 +73,7 @@ class MobileDemo2 extends React.Component {
           </div>
         </div>
         <div className={classes.root}>
-          <Grid container spacing={2}  direction="row"  justify="flex-start"  alignItems="center">
+          <Grid container spacing={2}  direction="row"  justifyContent="flex-start"  alignItems="center">
 
             <Grid item xs={12} lg={2}>
               <TextInput  pv='$(device):amplitude' macros={{'$(device)':'testIOC'}}   usePvLabel={true}  prec={3} alarmSensitive={true}/>

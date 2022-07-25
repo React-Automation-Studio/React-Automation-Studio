@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 
 import 'typeface-roboto';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import ReactVisCssBaseline from './ReactVisCssBaseline';
 import AutomationStudioContext from './AutomationStudioContext';
@@ -27,12 +27,12 @@ class RasAppCore extends Component {
       transports: ['websocket'],
     })
     if (themeKeys.includes(themeStyle)) {
-      theme = createMuiTheme(this.props.themes[themeStyle])
+      theme = createTheme(this.props.themes[themeStyle])
 
     }
     else {
       themeStyle = defaultTheme;
-      theme = createMuiTheme(this.props.themes[themeStyle])
+      theme = createTheme(this.props.themes[themeStyle])
       localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
     }
 
@@ -47,7 +47,7 @@ class RasAppCore extends Component {
       else {
         const { defaultTheme } = props.defaultTheme;
         themeStyle = defaultTheme;
-        theme = createMuiTheme(this.props.themes[themeStyle])
+        theme = createTheme(this.props.themes[themeStyle])
         localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
       }
 
@@ -97,8 +97,8 @@ class RasAppCore extends Component {
 
     this.logout = () => {
       axios({
-        url:'/api/logout',
-        method:'GET',
+        url: '/api/logout',
+        method: 'GET',
         timeout: 15000
       })
         .then(response => {
@@ -290,7 +290,7 @@ class RasAppCore extends Component {
         }
       }
     }
-    else if (event.key === "themeStyle"){
+    else if (event.key === "themeStyle") {
       let storedThemeStyle = localStorage.getItem('themeStyle')
       console.log(storedThemeStyle)
       const { defaultTheme } = this.props;
@@ -298,7 +298,7 @@ class RasAppCore extends Component {
       let theme = null
       let themeStyles = this.state.system.themeStyles;
       if (themeStyles.includes(themeStyle)) {
-        theme = createMuiTheme(this.props.themes[themeStyle])
+        theme = createTheme(this.props.themes[themeStyle])
         let system = this.state.system;
         system.themeStyle = themeStyle;
         this.setState({ system: system, theme: theme })
@@ -325,7 +325,7 @@ class RasAppCore extends Component {
       clearTimeout(this.state.refreshTimer)
     }
   }
-  
+
   render() {
     const { system } = this.state;
 

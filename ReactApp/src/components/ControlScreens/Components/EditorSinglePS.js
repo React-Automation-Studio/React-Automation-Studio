@@ -36,7 +36,7 @@ const EditorSinglePS = (props) => {
       <Paper style={{ padding: 12 }} elevation={props.theme.palette.paperElevation} >
         <Grid container
           direction="row"
-          justify="flex-start"
+          justifyContent="flex-start"
           alignItems="center" spacing={1}
         >
           <Grid item xs={6}>
@@ -89,7 +89,7 @@ const EditorSinglePS = (props) => {
           <Grid item xs={12}>
           </Grid>
           <Grid item xs={12}>
-            <Grid container justify="flex-start" direction="row" alignItems="center" spacing={1}>
+            <Grid container justifyContent="flex-start" direction="row" alignItems="center" spacing={1}>
               <Grid item xs={12} sm={12} >
                 <ThumbWheel
                   pv={system.setpointPv}

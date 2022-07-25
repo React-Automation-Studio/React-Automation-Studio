@@ -38,7 +38,7 @@ const EditorSteererXY = (props) => {
       <Paper style={{ padding: 12 }} elevation={props.theme.palette.paperElevation}>
         <Grid container
           direction="row"
-          justify="flex-start"
+          justifyContent="flex-start"
           alignItems="center" spacing={1}>
           <Grid item xs={6}>
             <TextInput
@@ -76,7 +76,7 @@ const EditorSteererXY = (props) => {
           </Grid>
           <Grid item xs={12}>
             <Grid container
-              justify="flex-start"
+              justifyContent="flex-start"
               direction="row"
               alignItems="center"
               spacing={1}
@@ -109,7 +109,7 @@ const EditorSteererXY = (props) => {
         <Paper style={{ padding: 12 }} elevation={props.theme.palette.paperElevation} >
           <Grid container
             direction="row"
-            justify="flex-start"
+            justifyContent="flex-start"
             alignItems="center" spacing={1}>
             <Grid item xs={6}>
               <TextInput
@@ -147,7 +147,7 @@ const EditorSteererXY = (props) => {
             </Grid>
             <Grid item xs={12}>
               <Grid container
-                justify="flex-start"
+                justifyContent="flex-start"
                 direction="row"
                 alignItems="center"
                 spacing={1}

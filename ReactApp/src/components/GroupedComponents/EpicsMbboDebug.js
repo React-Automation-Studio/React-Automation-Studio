@@ -31,7 +31,8 @@ class EpicsMbboDebug extends React.Component {
 
   render() {
     return (
-      <Grid container   spacing={2}       direction="row"  justify="flex-start"  alignItems="center"       >
+      <Grid container   spacing={2}       direction="row"  justifyContent="flex-start"  alignItems="center"       >
+
         <Grid item  xs={12}>
           <TextOutput  pv='$(device).NAME' macros={this.props['macros']}  label={'EPICS PV Name:'}/>
         </Grid>

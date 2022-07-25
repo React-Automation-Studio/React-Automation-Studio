@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { indigo, teal, lightBlue, blueGrey,deepPurple, pink, red, blue, green,lightGreen,  cyan, deepOrange, orange, amber, lime, grey } from '@material-ui/core/colors'
-import { fade } from '@material-ui/core/styles/colorManipulator';
+import { alpha } from '@material-ui/core/styles/colorManipulator';
 
 import defaultTheme from './defaultTheme'
 
@@ -30,14 +30,14 @@ const navyPalette = () => {
         default: "#1c2025",
     }
     alarm.majorAcked = {
-        light: fade(alarm.major.light, 0.4),
-        main: fade(alarm.major.main, 0.4),
-        dark: fade(alarm.major.dark, 0.4),
+        light: alpha(alarm.major.light, 0.4),
+        main: alpha(alarm.major.main, 0.4),
+        dark: alpha(alarm.major.dark, 0.4),
     };
     alarm.minorAcked = {
-        light: fade(alarm.minor.light, 0.4),
-        main: fade(alarm.minor.main, 0.4),
-        dark: fade(alarm.minor.dark, 0.4)
+        light: alpha(alarm.minor.light, 0.4),
+        main: alpha(alarm.minor.main, 0.4),
+        dark: alpha(alarm.minor.dark, 0.4)
     };
     const beamLineComponent={main:"#53697b" };
     const svgComponentPrimary={main:indigo[400]};

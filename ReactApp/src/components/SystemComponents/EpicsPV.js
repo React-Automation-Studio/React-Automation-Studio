@@ -3,7 +3,7 @@ import ReactAutomationStudioContext from './AutomationStudioContext';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from "prop-types";
 import { io } from 'socket.io-client';
-
+import { v4 as uuidv4 } from 'uuid';
 export const useEpicsPV = (props) => {
   const [pv, setPv] = useState(() => {
     let pvname = props.pv;
@@ -13,11 +13,10 @@ export const useEpicsPV = (props) => {
         pvname = pvname.replace(macro.toString(), props.macros[macro].toString());
       }
     }
-    if(pvname.includes('pva://')){
-      console.info("It is no longer necessary to provide the prefix `pva://` for EPICS V3 PVs.\n Perform a global text replace to update.\n For convenience the `pva://` prefix is automatically removed when displayed\n and will be deprecated in a future release",pvname)
-      pvname=pvname.replace('pva://',"")    
+    if (pvname.includes('pva://')) {
+      console.info("It is no longer necessary to provide the prefix `pva://` for EPICS V3 PVs.\n Perform a global text replace to update.\n For convenience the `pva://` prefix is automatically removed when displayed\n and will be deprecated in a future release", pvname)
+      pvname = pvname.replace('pva://', "")
     }
-
     let pv = {
       initialized: false,
       pvname: pvname,
@@ -30,26 +29,26 @@ export const useEpicsPV = (props) => {
     return pv;
   });
 
-  const pvName=pv.pvname;
- 
-  const [pvConnectionId, setPvConnectionId] = useState(null);
-  const context = useContext(ReactAutomationStudioContext);
-  const [socket,setSocket] = useState(null)
+  const pvName = pv.pvname;
 
-  useEffect(()=>{
-    if(props.makeNewSocketIoConnection===true){
+  const [pvConnectionId] = useState(null);
+  const context = useContext(ReactAutomationStudioContext);
+  const [socket, setSocket] = useState(null)
+
+  useEffect(() => {
+    if (props.makeNewSocketIoConnection === true) {
       let newSocket = io("/pvServer", {
         transports: ['websocket'],
-        forceNew:true,
+        forceNew: true,
       })
       console.log("make new socket")
       setSocket(newSocket)
     }
-    else{
+    else {
       setSocket(context.socket)
     }
-  },[props.makeNewSocketIoConnection,context.socket])
-   
+  }, [props.makeNewSocketIoConnection, context.socket])
+
   const jwt = context.userTokens.accessToken;
   const jwtRef = useRef(jwt);
   const socketRef = useRef(socket);
@@ -65,6 +64,10 @@ export const useEpicsPV = (props) => {
   useEffect(() => {
     socketRef.current = socket;
   }, [socket])
+  const pvConnectionIdRef = useRef(pvConnectionId);
+
+
+
 
   useEffect(() => {
     const updatePVData = (msg) => {
@@ -114,50 +117,46 @@ export const useEpicsPV = (props) => {
       setPv(pv => ({ ...pv, initialized: false }))
     }
 
-    const handleRequestPvInfoAck = (msg) => {
-      if (typeof msg !== 'undefined') {
-        setPvConnectionId(msg.pvConnectionId)
-      }
-    }
 
-    if (socket){
-      socketRef.current.emit('request_pv_info', { data: pv.pvname, 'clientAuthorisation': jwtRef.current }, handleRequestPvInfoAck);
+    if (socket) {
+      pvConnectionIdRef.current = uuidv4();
+      socketRef.current.emit('request_pv_info', { data: pv.pvname, pvConnectionId: pvConnectionIdRef.current, 'clientAuthorisation': jwtRef.current });
       socketRef.current.on(pv.pvname, updatePVData);
       socketRef.current.on('connect_error', connectError);
       socketRef.current.on('disconnect', disconnect);
     }
 
     return () => {
-      if(socket){
-        if (pvConnectionId !== null) {       
-          socketRef.current.emit('remove_pv_connection', { pvname: pv.pvname, pvConnectionId: pvConnectionId, 'clientAuthorisation': jwtRef.current });
+      if (socket) {
+        if (pvConnectionIdRef.current !== null) {
+
+          socketRef.current.emit('remove_pv_connection', { pvname: pv.pvname, pvConnectionId: pvConnectionIdRef.current, 'clientAuthorisation': jwtRef.current });
         }
-        socketRef.current.removeListener(pv.pvname, updatePVData);
-        socketRef.current.removeListener('connect_error', connectError);
-        socketRef.current.removeListener('disconnect', disconnect);
       }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pvName,socket])
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [pvName, socket])
 
   useEffect(() => {
     const reconnect = () => {
       if (props.debug) {
         console.log(pv.pvname, 'client: reconnect');
       }
-      socketRef.current.emit('request_pv_info', { data: pv.pvname, 'clientAuthorisation': jwtRef.current });
+      pvConnectionIdRef.current = uuidv4();
+      socketRef.current.emit('request_pv_info', { data: pv.pvname, pvConnectionId: pvConnectionIdRef.current, 'clientAuthorisation': jwtRef.current });
+
     }
 
-    if(socket){
-      socketRef.current.on('connect', reconnect);}
+    if (socket) {
+      socketRef.current.on('connect', reconnect);
+    }
 
     return () => {
-      if(socket){
+      if (socket) {
         socketRef.current.removeListener('connect', reconnect);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pvName,socket])
+  }, [pvName, socket])
 
   useEffect(() => {
     if (props.newValueTrigger > 0) {
@@ -179,17 +178,17 @@ export const useEpicsPV = (props) => {
  */
 const EpicsPV = (props) => {
   const pv = useEpicsPV(props);
- 
+
   useEffect(() => {
     props.pvData(pv);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pv])
- 
+
   if (props.debug) {
     console.log(props)
     console.log(pv)
   }
- 
+
   return (
     <React.Fragment>
       {props.debug && <Typography>
@@ -238,7 +237,7 @@ EpicsPV.propTypes = {
  */
 EpicsPV.defaultProps = {
   debug: false,
-  makeNewSocketIoConnection:true,
+  makeNewSocketIoConnection: true,
 };
 
 export default EpicsPV

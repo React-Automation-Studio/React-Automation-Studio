@@ -106,7 +106,7 @@ const AddSubAreaDialog = (props) => {
 
                 container
                 direction="row"
-                justify="flex-start"
+                justifyContent="flex-start"
                 alignItems="stretch"
             >
                 <Grid item xs={4}>
@@ -135,7 +135,7 @@ const AddSubAreaDialog = (props) => {
 
                     container
                     direction="row"
-                    justify="flex-start"
+                    justifyContent="flex-start"
                     alignItems="stretch"
                 >
                     <Grid item xs={2} >
@@ -191,7 +191,7 @@ const AddSubAreaDialog = (props) => {
                 <Grid
                     container
                     direction="row"
-                    justify="flex-start"
+                    justifyContent="flex-start"
                     alignItems="stretch"
                     spacing={2}
                     style={{ marginTop: '0.5rem' }}
@@ -200,7 +200,7 @@ const AddSubAreaDialog = (props) => {
                         <Grid
                             container
                             direction="row"
-                            justify="flex-start"
+                            justifyContent="flex-start"
                             alignItems="stretch"
                         >
                             <Grid item xs={1} className={classes.centerInBlock}>
@@ -222,7 +222,7 @@ const AddSubAreaDialog = (props) => {
                         <Grid
                             container
                             direction="row"
-                            justify="flex-start"
+                            justifyContent="flex-start"
                             alignItems="stretch"
                         >
                             <Grid item xs={4} className={[classes.verticalMiddle, classes.horizontalRight].join(' ')} style={{ marginRight: '2rem' }}>
@@ -245,7 +245,7 @@ const AddSubAreaDialog = (props) => {
                         <Grid
                             container
                             direction="row"
-                            justify="flex-start"
+                            justifyContent="flex-start"
                             alignItems="stretch"
                         >
                             {rolesGrid}

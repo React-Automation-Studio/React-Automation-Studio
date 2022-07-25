@@ -1,7 +1,7 @@
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import { InputAdornment, TextField } from "@material-ui/core";
-import { fade } from '@material-ui/core/styles/colorManipulator';
+import { alpha } from '@material-ui/core/styles/colorManipulator';
 import PropTypes from 'prop-types';
 import Widget from "../SystemComponents/Widgets/Widget";
 
@@ -71,12 +71,12 @@ const styles = (theme) => ({
   TextFieldSeverity1: {
     width: '100%',
     borderRadius: 4,
-    background: 'linear-gradient(45deg,' + fade(theme.palette.alarm.minor.dark, theme.palette.type === 'dark' ? 0.1 : 0.1) + ' 0%, ' + (theme.palette.alarm.minor.dark) + ' 100%)'
+    background: 'linear-gradient(45deg,' + alpha(theme.palette.alarm.minor.dark, theme.palette.type === 'dark' ? 0.1 : 0.1) + ' 0%, ' + (theme.palette.alarm.minor.dark) + ' 100%)'
   },
   TextFieldSeverity2: {
     width: '100%',
     borderRadius: 4,
-    background: 'linear-gradient(45deg,' + fade(theme.palette.alarm.major.dark, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.major.dark) + ' 100%)'
+    background: 'linear-gradient(45deg,' + alpha(theme.palette.alarm.major.dark, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.major.dark) + ' 100%)'
   }
 });
 

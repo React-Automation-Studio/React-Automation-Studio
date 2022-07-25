@@ -107,7 +107,7 @@ const AddAreaDialog = (props) => {
 
                 container
                 direction="row"
-                justify="flex-start"
+                justifyContent="flex-start"
                 alignItems="stretch"
             >
                 <Grid item xs={4} style={{ marginRight: '1em' }}>
@@ -135,7 +135,7 @@ const AddAreaDialog = (props) => {
                 <Grid
                     container
                     direction="row"
-                    justify="flex-start"
+                    justifyContent="flex-start"
                     alignItems="stretch"
                 >
                     <Grid item xs={2} >
@@ -191,7 +191,7 @@ const AddAreaDialog = (props) => {
                 <Grid
                     container
                     direction="row"
-                    justify="flex-start"
+                    justifyContent="flex-start"
                     alignItems="stretch"
                     spacing={2}
                     style={{ marginTop: '0.5rem' }}
@@ -200,7 +200,7 @@ const AddAreaDialog = (props) => {
                         <Grid
                             container
                             direction="row"
-                            justify="flex-start"
+                            justifyContent="flex-start"
                             alignItems="stretch"
                         >
                             <Grid item xs={1} className={classes.centerInBlock}>
@@ -226,7 +226,7 @@ const AddAreaDialog = (props) => {
                         <Grid
                             container
                             direction="row"
-                            justify="flex-start"
+                            justifyContent="flex-start"
                             alignItems="stretch"
                         >
                             {rolesGrid}

@@ -59,7 +59,7 @@ render() {
           <Grid
             container
             direction="row"
-            justify="flex-start"
+            justifyContent="flex-start"
             alignItems="center"
           >
             <Grid item sm={12}>

@@ -36,7 +36,7 @@ const EditorSlitXY = (props) => {
       <Paper style={{ padding: 8 }} elevation={props.theme.palette.paperElevation}>
         <Grid container
           direction="row"
-          justify="flex-start"
+          justifyContent="flex-start"
           alignItems="center" spacing={1}
         >
           <Grid item xs={3}>
@@ -97,7 +97,7 @@ const EditorSlitXY = (props) => {
       <Paper style={{ marginTop: 6, padding: 8 }} elevation={props.theme.palette.paperElevation} >
         <Grid container
           direction="row"
-          justify="flex-start"
+          justifyContent="flex-start"
           alignItems="center" spacing={1}>
           <Grid item xs={3}>
             <TextInput
@@ -151,7 +151,7 @@ const EditorSlitXY = (props) => {
         <Paper style={{ padding: 12 }} elevation={props.theme.palette.paperElevation}>
           <Grid container
             direction="row"
-            justify="flex-start"
+            justifyContent="flex-start"
             alignItems="center" spacing={1}>
             <Grid item xs={3}>
               <TextInput
@@ -206,7 +206,7 @@ const EditorSlitXY = (props) => {
         <Paper style={{ marginTop: 6, padding: 8 }} elevation={props.theme.palette.paperElevation} >
           <Grid container
             direction="row"
-            justify="flex-start"
+            justifyContent="flex-start"
             alignItems="center" spacing={1}>
             <Grid item xs={3}>
               <TextInput

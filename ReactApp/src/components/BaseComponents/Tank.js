@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { v4 as uuidv4 } from 'uuid';
@@ -7,9 +7,6 @@ import { FormControlLabel } from "@material-ui/core";
 import { create, all } from 'mathjs';
 
 
-import {
-  makeVisFlexible,
-} from 'react-vis';
 const config = { }
 const math = create(all, config)
 
@@ -83,7 +80,27 @@ function getTickValues(props, min, max, numberOfTicks, x0, y0, x1, x2, y1, y2, x
   return ticks;
 }
 
-function TankComponent(props) {
+
+
+
+const TankComponent= (props)=> {
+
+  const ref = useRef(null);
+  const [width, setWidth] = useState(null);
+  const [height, setHeight] = useState(null);
+  useEffect(() => {
+    const handleResize = () => {
+      if (ref.current) {
+        setHeight(props.height ? props.height :props.lockAspectRatio?(props.aspectRatio ? ref.current.offsetWidth * props.aspectRatio : ref.current.offsetHeight): ref.current.offsetHeight)
+        setWidth(props.width?props.width:ref.current.offsetWidth)
+      }
+    }
+    handleResize();
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize);
+
+  }, [ref, props.width, props.height, props.aspectRatio,props.lockAspectRatio]);
+
   const gradientId = uuidv4();
   const { classes } = props;
   const {initialized}=props;
@@ -107,15 +124,15 @@ function TankComponent(props) {
     xOffset = 0;
   }
 
-  const width = props.width;
-  const aspectRatio = props.aspectRatio;
-  let height;
-  if (props.lockAspectRatio === true) {
-    height = props.width / aspectRatio;
-  }
-  else {
-    height = props.height;
-  }
+  // const width = props.width;
+  // const aspectRatio = props.aspectRatio;
+  // let height;
+  // if (props.lockAspectRatio === true) {
+  //   height = props.width / aspectRatio;
+  // }
+  // else {
+  //   height = props.height;
+  // }
   const y0 = yOffset;
   const y2 = (height - yOffset);
   const y1 = yOffset + (y2 - y0) / 2;
@@ -144,6 +161,7 @@ function TankComponent(props) {
   }
 
   return (
+    <div ref={ref} styles={{width:'100%',height:'100%'}}>
     <FormControlLabel
       key={props.pvName}
       className={classes.FormControl}
@@ -151,6 +169,7 @@ function TankComponent(props) {
       label={props.formControlLabel}
       labelPlacement={props.labelPlacement}
       control={
+       
         <svg width={width} height={height}>
           <linearGradient id={gradientId + 'baseleft1'}  >
             <stop offset="0%" stopColor={props.theme.palette.type === 'dark' ? props.theme.palette.grey['300'] : props.theme.palette.grey['200']} />
@@ -199,8 +218,12 @@ function TankComponent(props) {
             />
             {getTickValues(props, min, max, 3, x0, y0, x1, x2, y1, y2, xOffset, yOffset, value)}
           </g>
-        </svg>}
+        </svg>
+        
+        }
     />
+  </div>
+
   );
 }
 
@@ -214,7 +237,7 @@ TankComponent.propTypes = {
 */
 const Tank = (props) => {
   return (
-    <Widget {...props} component={makeVisFlexible(TankComponent)} />
+    <Widget {...props} component={TankComponent} />
   )
 }
 

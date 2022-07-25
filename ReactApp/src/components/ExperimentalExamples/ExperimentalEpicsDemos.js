@@ -57,7 +57,7 @@ class ExperimentalEpicsDemos extends React.Component {
     return (
       <div >
         <AppBar position="static" color="default">
-          <Grid container direction="row" item justify="center" spacing={2} alignItems="center">
+          <Grid container direction="row" item justifyContent="center" spacing={2} alignItems="center">
             <Grid item xs={1}  >
               <SideBar/>
             </Grid>

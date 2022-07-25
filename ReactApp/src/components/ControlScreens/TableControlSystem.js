@@ -1,4 +1,4 @@
-import React, { useState,} from 'react';
+import React, { useState, } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
@@ -54,7 +54,7 @@ const BeamlineControlSystem = (props) => {
   const [editorType, setEditorType] = useState("");
   const [displayEditor, setDisplayEditor] = useState(false);
   const [editorSystem, setEditorSystem] = useState({});
-  
+
   const yOffset = 0;
 
   const handleOnSystemClick = (system) => {
@@ -523,9 +523,9 @@ const BeamlineControlSystem = (props) => {
     }
   });
   const allSystems = { ...systems.BeamLine.PowerSupplies, ...systems.BeamLine.Slits }
- 
+
   const footerContents = (
-    <Grid container direction="row" justify="flex-start" alignItems="center" >
+    <Grid container direction="row" justifyContent="flex-start" alignItems="center" >
       <Grid item xs={12} style={{ paddingLeft: "1em" }}>
         <Typography>
           This demo now uses hooks components !
@@ -547,11 +547,12 @@ const BeamlineControlSystem = (props) => {
         <Grid container spacing={3} style={{ paddingTop: 16 }}>
           <Grid item sm={9}>
             <Grid container spacing={3}>
+
               <Grid item sm={12}>
                 <Grid
                   container
                   direction="row"
-                  justify="flex-start"
+                  justifyContent="flex-start"
                   alignItems="flex-start"
                   spacing={2}
                 >

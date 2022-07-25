@@ -21,7 +21,8 @@ class EpicsBinaryOutDebug extends React.Component {
 
   render() {
     return (
-      <Grid spacing={2} container direction="row"  justify="flex-start"  alignItems="center" >
+
+      <Grid spacing={2} container direction="row"  justifyContent="flex-start"  alignItems="center" >
         <Grid item  xs={12}>
           <TextOutput  pv='$(device).NAME' macros={this.props['macros']}  label={'EPICS PV Name:'}/>
         </Grid>

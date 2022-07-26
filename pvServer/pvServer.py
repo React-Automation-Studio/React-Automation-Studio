@@ -919,39 +919,44 @@ def client_connect():
 @socketio.on("disconnect", namespace="/pvServer")
 def client_disconnect():
     global clientDbWatchList
+    disconnect(request.sid, namespace="/pvServer")
     log.info("disconnected", request.sid)
     log.info("Client disconnected: {}", request.sid)
-    for pvname1 in clientPVlist:
+    def remove_sockets():
+        log.info("removing sockets from pvs: {}", request.sid)
+        for pvname1 in clientPVlist:
+            try:
+                leave_room(str(pvname1) + "rw")
+                clientPVlist[pvname1]["socketsRW"].pop(request.sid)
+            except:
+                pass
+            try:
+                leave_room(str(pvname1) + "ro")
+                clientPVlist[pvname1]["socketsRO"].pop(request.sid)
+            except:
+                pass
+            try:
+                leave_room(str(pvname1))
+                clientPVlist[pvname1]["sockets"].pop(request.sid)
+            except:
+                pass
+                log.debug("disconn sockets", clientPVlist[pvname1]["sockets"])
+                log.debug("disconn socketsRO", clientPVlist[pvname1]["socketsRO"])
+                log.debug("disconn socketsRW", clientPVlist[pvname1]["socketsRW"])
         try:
-            leave_room(str(pvname1) + "rw")
-            clientPVlist[pvname1]["socketsRW"].pop(request.sid)
-        except:
+            log.debug(list(clientDbWatchList))
+            for watchEventName in list(clientDbWatchList):
+                socketId = str(request.sid)
+                log.debug("socketId ", socketId, watchEventName)
+                if socketId in list(clientDbWatchList[watchEventName]["sockets"]):
+                    log.debug("socketId found", socketId, watchEventName)
+                    clientDbWatchList[watchEventName]["sockets"].pop(str(request.sid), None)
+        except Exception as e:
+            log.info("disconnect", e)
             pass
-        try:
-            leave_room(str(pvname1) + "ro")
-            clientPVlist[pvname1]["socketsRO"].pop(request.sid)
-        except:
-            pass
-        try:
-            leave_room(str(pvname1))
-            clientPVlist[pvname1]["sockets"].pop(request.sid)
-        except:
-            pass
-            log.debug("disconn sockets", clientPVlist[pvname1]["sockets"])
-            log.debug("disconn socketsRO", clientPVlist[pvname1]["socketsRO"])
-            log.debug("disconn socketsRW", clientPVlist[pvname1]["socketsRW"])
-    try:
-        log.debug(list(clientDbWatchList))
-        for watchEventName in list(clientDbWatchList):
-            socketId = str(request.sid)
-            log.debug("socketId ", socketId, watchEventName)
-            if socketId in list(clientDbWatchList[watchEventName]["sockets"]):
-                log.debug("socketId found", socketId, watchEventName)
-                clientDbWatchList[watchEventName]["sockets"].pop(str(request.sid), None)
-    except Exception as e:
-        log.info("disconnect", e)
-        pass
-    disconnect(request.sid, namespace="/pvServer")
+       
+    time.sleep(5) # wait for 5 seconds before removing a socket
+    remove_sockets()
 
 
 # DATABASE FUNCTIONS AND EVENTS

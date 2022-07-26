@@ -30,6 +30,7 @@ import Help from './components/docs/Help';
 import Administrator from './components/Administrator/Administrator.js';
 import UserProfile from './components/SystemComponents/userProfiles/UserProfile';
 import ProtectedRoute from './components/SystemComponents/ProtectedRoute';
+import ServerStatistics from './components/SystemComponents/ServerStatistics';
 const Routes = (props) => {
   return (
     <BrowserRouter >
@@ -55,6 +56,7 @@ const Routes = (props) => {
         }
 
         <ProtectedRoute path="/Probe" component={Probe} />
+        <ProtectedRoute path="/ServerStatistics" component={ServerStatistics} />
         <ProtectedRoute path="/Help" component={Help} />
         {/*system end*/}
 

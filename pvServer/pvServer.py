@@ -906,6 +906,60 @@ def request_pv_info(message):
         socketio.emit("redirectToLogIn", room=request.sid, namespace="/pvServer")
 
 
+@socketio.on("request_server_statistics", namespace="/pvServer")
+def request_server_statistics(message):
+    global clientPVlist, REACT_APP_DisableLogin, myuid
+    authenticated = False
+    serverName="serverInfo://"
+    if REACT_APP_DisableLogin:
+        authenticated = True
+        accessControl = {
+            "userAuthorised": True,
+            "permissions": {"read": True, "write": True},
+        }
+    else:
+        accessControl = AutheriseUserAndPermissions(
+            message["clientAuthorisation"], serverName
+        )
+        authenticated = accessControl["userAuthorised"]
+    if accessControl["userAuthorised"]:
+        data=clientPVlist
+        stats={}
+        pvs={}
+        stats["pvs"]=pvs
+        stats["noOfPVs"]=len(clientPVlist)
+        print("############")
+        
+        for pv in clientPVlist:
+            
+            noOfSockets=len(clientPVlist[pv]["sockets"])
+            isConnected=clientPVlist[pv]["isConnected"]
+            # if (noOfSockets > 0):
+            #     for sock in  clientPVlist[pv]["sockets"]:
+
+                
+            # else:
+            #     noOfWidgetsOnSockets=0
+                
+            noOfSocketsRO=len(clientPVlist[pv]["socketsRO"])
+            noOfSocketsRW=len(clientPVlist[pv]["socketsRW"])
+            stats["pvs"][pv]={
+                "pyEpicsConnected":isConnected,
+                "noOfSockets":noOfSockets,
+                "noOfSocketsRO":noOfSocketsRO,
+                "noOfSocketsRW":noOfSocketsRW   
+            }
+                        
+        print(stats)
+        print("############")
+        join_room(serverName)
+        socketio.emit("server_statistics",{"raw_data": str(data),
+        "stats": stats},room=serverName, namespace="/pvServer")
+        
+    else:
+        socketio.emit("redirectToLogIn", room=request.sid, namespace="/pvServer")
+
+
 @socketio.on("connect", namespace="/pvServer")
 def client_connect():
     global thread

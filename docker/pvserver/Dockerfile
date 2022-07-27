@@ -4,7 +4,6 @@ RUN apt-get update && apt-get install -y build-essential python3-dev python2.7-d
     libldap2-dev libsasl2-dev ldap-utils tox \
     lcov valgrind
 
-COPY ./pvServer/poetry.lock .
 COPY ./pvServer/pyproject.toml .
 
 RUN pip install --upgrade pip && pip --no-cache-dir install poetry

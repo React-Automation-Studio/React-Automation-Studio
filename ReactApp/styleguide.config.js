@@ -1,5 +1,31 @@
+//////work around to get styleguide work with create react app 5
+//////https://github.com/styleguidist/react-styleguidist/issues/1910
+const webpack = require('webpack');
+//////
 const path = require('path')
 module.exports = {
+////// remove when bug is fixed
+  dangerouslyUpdateWebpackConfig(config) { 
+    config.module.rules.push({
+       test: /.\.md$/,
+       type: "javascript/auto"
+     });
+     config.plugins.push(
+       new webpack.NormalModuleReplacementPlugin(
+         /react-styleguidist\/lib\/loaders\/utils\/client\/requireInRuntime$/,
+         "react-styleguidist/lib/loaders/utils/client/requireInRuntime"
+       )
+     );
+     config.plugins.push(
+       new webpack.NormalModuleReplacementPlugin(
+         /react-styleguidist\/lib\/loaders\/utils\/client\/evalInContext$/,
+         "react-styleguidist/lib/loaders/utils/client/evalInContext"
+       )
+     );
+     return config;
+   },
+
+   //////
   pagePerSection: true,
   theme: {
 

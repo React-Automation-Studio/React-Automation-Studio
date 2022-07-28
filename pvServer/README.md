@@ -1,5 +1,22 @@
 # PV Server
 
+Prior to RAS V3.2.0 ,the pvServer dependencies was managed using a requirements.txt file.
+
+Since RAS V3.2.0 Poetry will be use to manage the dependencies.
+
+The strategy followed is to specify the precise version of each package in the pyproject.toml. 
+
+Primary usage of this software is in the docker container and orchestrated via docker compose.
+
+Since the docker file pulls a precises version of Python we get reproducible results by not committing a lock file.
+
+Note: this strategy may change in future.
+
+It is envisaged to produce the Python package of the pvServer. 
+
+To help aid development of a package a recipe to use the pvServer outside of the docker environment is detailed below:
+
+
 # Tools
 
 - [Poetry](https://python-poetry.org/) ^1.1.10

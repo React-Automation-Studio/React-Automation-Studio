@@ -28,7 +28,7 @@ package-lock.json
 /venv
 /epics/base
 /epics/support
-
+/pvServer/poetry.lock
 # misc
 .DS_Store
 .env.local

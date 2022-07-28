@@ -1,6 +1,6 @@
 # PV Server
 
-Prior to RAS V3.2.0 ,the pvServer dependencies was managed using a requirements.txt file.
+Prior to RAS V3.2.0 ,the pvServer dependencies were managed using a requirements.txt file.
 
 Since RAS V3.2.0 Poetry will be use to manage the dependencies.
 

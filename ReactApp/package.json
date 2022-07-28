@@ -14,7 +14,7 @@
         "@material-ui/icons": "4.11.2",
         "lodash.debounce": "4.0.8",
         "mdi-material-ui": "6.26.0",
-        "react-router-dom": "5.2.0",
+        "react-router-dom": "5.3.3",
         "react-vis": "1.11.6",
         "socket.io-client": "4.5.1",
         "three": "0.143.0",

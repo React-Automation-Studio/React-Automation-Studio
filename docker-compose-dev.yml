@@ -13,6 +13,8 @@ services:
     restart: always
     ports:
       - "3001:3000"
+    environment:
+      - FAST_REFRESH=false
   pvserver1:
     build:
       context: ./

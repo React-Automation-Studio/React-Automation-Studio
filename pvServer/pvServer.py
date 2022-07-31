@@ -305,7 +305,6 @@ def check_pv_initialized_after_disconnect():
                 or (len(clientPVlist[pvname]["socketsRO"]) > 0)
             ):
                 log.debug(pvname, " has no listening clients, removing")
-                print(pvname, " has no listening clients, removing")
                 clientPVlist[pvname]["pv"].disconnect()
                 clientPVlist.pop(pvname)
             else:
@@ -575,7 +574,6 @@ def remove_pv_connection(message):
    
     global clientPVlist, REACT_APP_DisableLogin, myuid
     pvname1 = str(message["pvname"])
-    print("remove_pv_connection:", str(pvname1))
     authenticated = False
     if REACT_APP_DisableLogin:
         authenticated=True
@@ -589,33 +587,26 @@ def remove_pv_connection(message):
                 pvConnectionId= str(message['pvConnectionId'])
                 try:
                     if pvConnectionId in clientPVlist[pvname1]['socketsRW'][request.sid]['pvConnectionIds']:
-                        print("socketsRW pop connectionid ",str(pvname1),str(pvConnectionId))
                         clientPVlist[pvname1]['socketsRW'][request.sid]['pvConnectionIds'].pop(str(pvConnectionId))
                         if len(clientPVlist[pvname1][''][request.sid]['pvConnectionIds'])==0:
                             leave_room(str(pvname1)+'rw')
                             clientPVlist[pvname1]['socketsRW'].pop(request.sid)
-                            print("socketsRW pop",str(pvname1),str(request.sid))
                 except:
                     pass
                 try:
                     if pvConnectionId in clientPVlist[pvname1]['socketsRO'][request.sid]['pvConnectionIds']:
-                        print("socketsRO pop connectionid ",str(pvname1),str(pvConnectionId))
                         clientPVlist[pvname1]['socketsRO'][request.sid]['pvConnectionIds'].pop(str(pvConnectionId))
                         if len(clientPVlist[pvname1]['socketsRO'][request.sid]['pvConnectionIds'])==0:
                             leave_room(str(pvname1)+'ro')
                             clientPVlist[pvname1]['socketsRO'].pop(request.sid)
-                            print("socketsRO pop",str(pvname1),str(request.sid))
                 except:
                     pass
                 try:
                     if pvConnectionId in clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds']:
                         clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'].pop(str(pvConnectionId))
-                        print("sockets pop connectionid ",str(pvname1),str(pvConnectionId))
-                       
                         if len(clientPVlist[pvname1]['sockets'][request.sid]['pvConnectionIds'])==0:
                             leave_room(str(pvname1))
                             clientPVlist[pvname1]['sockets'].pop(request.sid)
-                            print("sockets pop",str(pvname1),str(request.sid))
                 except:
                     pass
             time.sleep(3) # wait for 3 seconds before removing a watch
@@ -642,7 +633,6 @@ def request_pv_info(message):
         authenticated=accessControl['userAuthorised']
     if accessControl['userAuthorised'] :
         if not (pvname1 in	clientPVlist):
-            print(" request_pv_info PV not in clientPVlist:",str(pvname1))
             if(accessControl['permissions']['read']):
                 pv= PV(pvname1,connection_timeout=0.002,connection_callback= on_change_conn)
                 pvlist={}
@@ -681,7 +671,6 @@ def request_pv_info(message):
                 )
                 return {"pvConnectionId": pvConnectionId}
         else:
-            print(" request_pv_info PV INNN clientPVlist:",str(pvname1))
             if(accessControl['permissions']['read']):
                 clientPVlist[pvname1]['initialized']=False
                 if 'pvConnectionId' in message:

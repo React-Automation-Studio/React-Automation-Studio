@@ -17,7 +17,7 @@
         "react-router-dom": "5.3.3",
         "react-vis": "1.11.6",
         "socket.io-client": "4.5.1",
-        "three": "0.131.3",
+        "three": "0.143.0",
         "typeface-roboto": "1.1.13",
         "uuid": "8.3.2",
         "mathjs": "11.0.1",

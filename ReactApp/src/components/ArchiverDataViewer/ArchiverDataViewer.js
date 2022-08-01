@@ -1,26 +1,26 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 import ContextMenu from "../SystemComponents/ContextMenu";
-import Accordion from '@material-ui/core/Accordion';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
-import AccordionDetails from '@material-ui/core/AccordionDetails';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
 import DateFnsUtils from '@date-io/date-fns';
 import formatISO from 'date-fns/formatISO';
 import { subHours, subSeconds, subMinutes, subDays, subWeeks, differenceInSeconds } from 'date-fns';
 import PV from '../SystemComponents/PV'
 import { replaceMacros } from '../SystemComponents/Utils/macroReplacement';
-import { makeStyles } from '@material-ui/core/styles';
-import { useTheme } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
+import { useTheme } from '@mui/material/styles';
 import { DateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 import Plot from 'react-plotly.js';
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 import PropTypes from "prop-types";
 import { isMobile } from 'react-device-detect';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import TextField from '@material-ui/core/TextField';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import Typography from '@material-ui/core/Typography'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
+import Typography from '@mui/material/Typography'
 import { LanDisconnect } from "mdi-material-ui/";
 
 const useStyles = makeStyles((theme) => ({
@@ -557,52 +557,81 @@ const ArchiverDataViewer = (props) => {
                                 justifyContent={'center'}
                             >
                                 <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
-                                    <Button classes={{ root: classes.buttonRoot }} variant={'outlined'} color={fromButton === "30s" ? "secondary" : "default"} onClick={handleOnClick30s}>
+                                    <Button 
+                                        classes={{ root: classes.buttonRoot }} 
+                                        variant={'outlined'} 
+                                        color={fromButton === "30s" ? 
+                                            "secondary" : 
+                                            "primary"} //was default
+                                        onClick={handleOnClick30s}>
                                         30s
                                     </Button>
                                 </Grid>
                                 <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
-                                    <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1m} variant={'outlined'} color={fromButton === "1m" ? "secondary" : "default"}>
+                                    <Button 
+                                        classes={{ root: classes.buttonRoot }} 
+                                        onClick={handleOnClick1m} variant={'outlined'} 
+                                        color={fromButton === "1m" ? 
+                                        "secondary" : 
+                                        "primary"} //was default
+                                        >
                                         1m
                                     </Button>
                                 </Grid>
                                 <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
-                                    <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick5m} variant={'outlined'} color={fromButton === "5m" ? "secondary" : "default"}>
+                                    <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick5m} variant={'outlined'} 
+                                    color={fromButton === "5m" ? "secondary" : 
+                                    "primary"} //was default
+                                    >
                                         5m
                                     </Button>
                                 </Grid>
                                 <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
-                                    <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick30m} variant={'outlined'} color={fromButton === "30m" ? "secondary" : "default"}>
+                                    <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick30m} variant={'outlined'} color={fromButton === "30m" ? "secondary" :
+                                     "primary"} //was default
+                                     >
                                         30m
                                     </Button>
                                 </Grid>
                                 <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
-                                    <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1h} variant={'outlined'} color={fromButton === "1h" ? "secondary" : "default"}>
+                                    <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1h} variant={'outlined'} color={fromButton === "1h" ? "secondary" : 
+                                    "primary"} //was default
+                                    >
                                         1h
                                     </Button>
                                 </Grid>
                                 <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
-                                    <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick2h} variant={'outlined'} color={fromButton === "2h" ? "secondary" : "default"}>
+                                    <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick2h} variant={'outlined'} color={fromButton === "2h" ? "secondary" : 
+                                    "primary"} //was default
+                                    >
                                         2h
                                     </Button>
                                 </Grid>
                                 <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
-                                    <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick12h} variant={'outlined'} color={fromButton === "12h" ? "secondary" : "default"}>
+                                    <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick12h} variant={'outlined'} color={fromButton === "12h" ? "secondary" : 
+                                    "primary"} //was default
+                                    >
                                         12h
                                     </Button>
                                 </Grid>
                                 <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
-                                    <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1d} variant={'outlined'} color={fromButton === "1d" ? "secondary" : "default"}>
+                                    <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1d} variant={'outlined'} color={fromButton === "1d" ? "secondary" :
+                                     "primary"} //was default
+                                     >
                                         1d
                                     </Button>
                                 </Grid>
                                 <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
-                                    <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick2d} variant={'outlined'} color={fromButton === "2d" ? "secondary" : "default"}>
+                                    <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick2d} variant={'outlined'} color={fromButton === "2d" ? "secondary" : 
+                                    "primary"} //was default
+                                    >
                                         2d
                                     </Button>
                                 </Grid>
                                 <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
-                                    <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1w} variant={'outlined'} color={fromButton === "1w" ? "secondary" : "default"}>
+                                    <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1w} variant={'outlined'} color={fromButton === "1w" ? "secondary" : 
+                                    "primary"} //was default
+                                    >
                                         1w
                                     </Button>
                                 </Grid>

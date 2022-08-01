@@ -2,15 +2,15 @@ import React, {useState} from 'react'
 
 import TextInput from '../../BaseComponents/TextInput';
 import TextOutput from '../../BaseComponents/TextOutput';
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 import ToggleButton from '../../BaseComponents/ToggleButton';
 
-import Paper from '@material-ui/core/Paper';
+import Paper from '@mui/material/Paper';
 
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
 
 import ThumbWheel from '../../BaseComponents/ThumbWheel';
-import Close from '@material-ui/icons/Close';
+import Close from '@mui/icons-material/Close';
 import {replaceSystemMacros} from '../../SystemComponents/Utils/macroReplacement';
 
 const styles = theme => ({

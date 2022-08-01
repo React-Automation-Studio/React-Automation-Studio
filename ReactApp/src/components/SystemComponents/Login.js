@@ -1,28 +1,28 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
 import AutomationStudioContext from './AutomationStudioContext';
 import PropTypes from 'prop-types';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import FormControl from '@material-ui/core/FormControl';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import FormControl from '@mui/material/FormControl';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
 import { useHistory, useLocation } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Slide from '@material-ui/core/Slide';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import IconButton from '@material-ui/core/IconButton';
-import TextField from '@material-ui/core/TextField';
+import makeStyles from '@mui/styles/makeStyles';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Slide from '@mui/material/Slide';
+import AppBar from '@mui/material/AppBar';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
+import TextField from '@mui/material/TextField';
 import axios from 'axios';
 import { GoogleLogin } from 'react-google-login';
 
@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    padding: `${theme.spacing(1) * 2}px ${theme.spacing(1) * 3}px ${theme.spacing(1) * 3}px`,
+    padding: `calc(${theme.spacing(1) * 2}px ${theme.spacing(1) * 3}px ${theme.spacing(1)} * 3)`,
   },
   avatar: {
     margin: theme.spacing(1),
@@ -339,9 +339,8 @@ const Login = (props) => {
                       <IconButton
                         aria-label="toggle password visibility"
                         onClick={() => (setShowPassword(prev => (!prev)))}
-
                         edge="end"
-                      >
+                        size="large">
                         {showPassword ? <Visibility /> : <VisibilityOff />}
                       </IconButton>
                     </InputAdornment>
@@ -387,7 +386,7 @@ Login.propTypes = {
   /** An image than can be display*/
   image: PropTypes.element,
 
-  /** Login Icon. Must be of type @material-ui/icons/...*/
+  /** Login Icon. Must be of type @mui/icons-material/...*/
   logoIcon: PropTypes.element,
 
   /** Sign in text.*/

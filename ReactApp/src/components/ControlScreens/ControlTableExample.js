@@ -1,17 +1,17 @@
 //This example is deprecated and will be removed in a future release 
 import React from 'react';
 
-import { withStyles } from '@material-ui/core/styles';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
+import withStyles from '@mui/styles/withStyles';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
 import ControlRightEx1 from '../ControlScreens/GridComponents/ControlRightEx1'
 import ControlRightSteererXY from '../ControlScreens/GridComponents/ControlRightSteererXY'
 import ControlRightSlitXY from '../ControlScreens/GridComponents/ControlRightSlitXY'
 import ControlRightSinglePS from '../ControlScreens/GridComponents/ControlRightSinglePS'
 import ControlCenterTable from '../ControlScreens/GridComponents/ControlCenterTable'
-import AppBar from '@material-ui/core/AppBar';
+import AppBar from '@mui/material/AppBar';
 import TraditionalLayout from '../UI/Layout/ComposedLayouts/TraditionalLayout.js';
 
 /* eslint-disable eqeqeq */

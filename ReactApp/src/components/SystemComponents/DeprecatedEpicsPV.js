@@ -1,6 +1,6 @@
 import React from 'react'
 import AutomationStudioContext from './AutomationStudioContext';
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
 
 import { v4 as uuidv4 } from 'uuid';
 const styles = theme => ({

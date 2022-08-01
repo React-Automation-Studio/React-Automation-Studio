@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import * as THREE from 'three';
 import DataConnection from '../SystemComponents/DataConnection';
 
-import { pink} from '@material-ui/core/colors';
-import { withStyles } from '@material-ui/core/styles';
+import { pink} from '@mui/material/colors';
+import withStyles from '@mui/styles/withStyles';
 
 const pv1='testIOC:Cube1:xRotation';
 const pv2='testIOC:Cube1:yRotation';
@@ -63,7 +63,7 @@ class ThreeScene extends Component{
 
     //ADD RENDERER
     this.renderer = new THREE.WebGLRenderer({ antialias: true })
-    this.renderer.setClearColor(this.props.theme.palette.type=='dark'?'#80deea':'#dbdbe0')
+    this.renderer.setClearColor(this.props.theme.palette.mode=='dark'?'#80deea':'#dbdbe0')
     this.renderer.setSize(width, height)
     this.mount.appendChild(this.renderer.domElement)
 

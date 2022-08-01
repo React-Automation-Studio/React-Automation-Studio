@@ -1,6 +1,6 @@
 import React, {  useRef } from 'react';
-import { withStyles } from "@material-ui/core/styles";
-import { Slider, Typography } from "@material-ui/core";
+import withStyles from '@mui/styles/withStyles';
+import { Slider, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 import debounce from "lodash.debounce";
 import Widget from "../SystemComponents/Widgets/Widget";

@@ -1,12 +1,12 @@
 import React from "react";
-import { withStyles } from "@material-ui/core/styles";
-import { alpha } from '@material-ui/core/styles/colorManipulator';
+import { alpha } from "@mui/material/styles";
+import withStyles from '@mui/styles/withStyles';
 import Widget from "../SystemComponents/Widgets/Widget";
-import grey from '@material-ui/core/colors/grey';
-import { Typography } from '@material-ui/core';
+import { Typography } from '@mui/material';
 import PropTypes from 'prop-types';
-
 import { format, parseISO } from 'date-fns';
+
+import { grey } from '@mui/material/colors';
 
 const styles = (theme) => ({
   root: {
@@ -22,25 +22,25 @@ const styles = (theme) => ({
 
   },
   TextFieldSeverity1: {
-    borderColor: theme.palette.type === 'dark' ? grey[700] : grey[300],
+    borderColor: theme.palette.mode === 'dark' ? grey[700] : grey[300],
     borderRadius: 2,
     borderWidth: 1,
     borderStyle: 'solid',
 
     padding: 1,
     //background:theme.palette.alarm.minor.main,
-    background: 'linear-gradient(45deg,' + alpha(theme.palette.alarm.minor.dark, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minor.dark) + ' 100%)'
+    background: 'linear-gradient(45deg,' + alpha(theme.palette.alarm.minor.dark, theme.palette.mode === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minor.dark) + ' 100%)'
     //  background:'linear-gradient(45deg, '+ theme.palette.background.default+ ' 1%, '+deepOrange['400'] +' 99%)'
   },
   TextFieldSeverity2: {
-    borderColor: theme.palette.type === 'dark' ? grey[700] : grey[300],
+    borderColor: theme.palette.mode === 'dark' ? grey[700] : grey[300],
     borderWidth: 1,
     borderStyle: 'solid',
     borderRadius: 2,
 
     padding: 1,
     //background:theme.palette.alarm.major.main,
-    background: 'linear-gradient(45deg,' + alpha(theme.palette.alarm.major.dark, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.major.dark) + ' 100%)'
+    background: 'linear-gradient(45deg,' + alpha(theme.palette.alarm.major.dark, theme.palette.mode === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.major.dark) + ' 100%)'
     //  backgroundColor:'linear-gradient(45deg, #FFFFFF 1%, #FF8E53 99%)'
     //  background:'linear-gradient(45deg, '+ theme.palette.background.default+ ' 1%, '+red['800'] +' 99%)'
   }

@@ -2,35 +2,35 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 
 import useUAGs from './adminDbHooks/useUAGs'
-import Grid from '@material-ui/core/Grid';
-import Card from '@material-ui/core/Card';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import { makeStyles } from '@material-ui/core/styles';
-import IconButton from '@material-ui/core/IconButton';
-import Checkbox from '@material-ui/core/Checkbox';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
-import SaveIcon from '@material-ui/icons/Save';
-import ClearIcon from '@material-ui/icons/Clear';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Button from '@material-ui/core/Button';
-import Slide from '@material-ui/core/Slide';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import TextField from '@material-ui/core/TextField';
-import AddIcon from '@material-ui/icons/Add';
-import HelpIcon from '@material-ui/icons/Help';
-import Popover from '@material-ui/core/Popover';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
+import Grid from '@mui/material/Grid';
+import Card from '@mui/material/Card';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import makeStyles from '@mui/styles/makeStyles';
+import IconButton from '@mui/material/IconButton';
+import Checkbox from '@mui/material/Checkbox';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import SaveIcon from '@mui/icons-material/Save';
+import ClearIcon from '@mui/icons-material/Clear';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
+import Slide from '@mui/material/Slide';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import TextField from '@mui/material/TextField';
+import AddIcon from '@mui/icons-material/Add';
+import HelpIcon from '@mui/icons-material/Help';
+import Popover from '@mui/material/Popover';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 import { ArrowUp, ArrowDown } from "mdi-material-ui/";
 
 
@@ -73,7 +73,7 @@ const UagRename = (props) => {
 
   return (
     <React.Fragment>
-      <IconButton onClick={() => setShow(true)}>
+      <IconButton onClick={() => setShow(true)} size="large">
         <EditIcon />
       </IconButton>
       <Dialog
@@ -118,7 +118,7 @@ const UagRename = (props) => {
         </DialogActions>
       </Dialog>
     </React.Fragment>
-  )
+  );
 }
 
 const UagDelete = (props) => {
@@ -126,7 +126,7 @@ const UagDelete = (props) => {
 
   return (
     <React.Fragment>
-      <IconButton onClick={() => setShow(true)}>
+      <IconButton onClick={() => setShow(true)} size="large">
         <DeleteIcon />
       </IconButton>
       <Dialog
@@ -161,7 +161,7 @@ const UagDelete = (props) => {
         </DialogActions>
       </Dialog>
     </React.Fragment>
-  )
+  );
 }
 
 
@@ -721,47 +721,53 @@ const AccessControl = (props) => {
             >
               <Grid item lg={2}></Grid>
               <Grid item lg={6} style={{ textAlign: 'right' }}>
-                {editMode === false && <IconButton onClick={() => setEditMode(true)}>
+                {editMode === false && <IconButton onClick={() => setEditMode(true)} size="large">
                   <EditIcon />
                 </IconButton>
                 }
-                {editMode === true && <IconButton onClick={() => setModifiedUserGroups(prev => {
-                  const { DEFAULT, ADMIN, ...rest } = { ...prev };
-                  const restKeys = Object.keys(rest)
-                  let newName = "NEW"
-                  let index = 1;
-                  if (restKeys.includes(newName)) {
-                    newName = "NEW" + index;
-                    while (restKeys.includes(newName)) {
-                      index++;
+                {editMode === true && <IconButton
+                  onClick={() => setModifiedUserGroups(prev => {
+                    const { DEFAULT, ADMIN, ...rest } = { ...prev };
+                    const restKeys = Object.keys(rest)
+                    let newName = "NEW"
+                    let index = 1;
+                    if (restKeys.includes(newName)) {
                       newName = "NEW" + index;
+                      while (restKeys.includes(newName)) {
+                        index++;
+                        newName = "NEW" + index;
+                      }
                     }
+                    rest[newName] =
+                    {
+                      "usernames": [],
+                      "roles": [],
+                      "rules": []
+                    }
+                    const newUserGroups = { DEFAULT, ...rest, ADMIN }
+                    return newUserGroups
+                  })
                   }
-                  rest[newName] =
-                  {
-                    "usernames": [],
-                    "roles": [],
-                    "rules": []
-                  }
-                  const newUserGroups = { DEFAULT, ...rest, ADMIN }
-                  return newUserGroups
-                })
-                } >
+                  size="large">
                   <AddIcon />
                 </IconButton>}
-                {editMode === true && <IconButton disabled={
-                  editModeErrors.length > 0
-                }
-                  onClick={() => setShowSaveChanges(true)}>
+                {editMode === true && <IconButton
+                  disabled={
+                    editModeErrors.length > 0
+                  }
+                  onClick={() => setShowSaveChanges(true)}
+                  size="large">
                   <SaveIcon />
                 </IconButton>}
-                {editMode === true && <IconButton onClick={() => setShowDiscardChanges(true)}>
+                {editMode === true && <IconButton onClick={() => setShowDiscardChanges(true)} size="large">
                   <ClearIcon />
                 </IconButton>}
-                <IconButton onClick={(event) => {
-                  setUagHelpAnchorEl(event.currentTarget);
-                  setShowUagHelp(true)
-                }}>
+                <IconButton
+                  onClick={(event) => {
+                    setUagHelpAnchorEl(event.currentTarget);
+                    setShowUagHelp(true)
+                  }}
+                  size="large">
                   <HelpIcon />
                 </IconButton>
               </Grid>
@@ -807,16 +813,18 @@ const AccessControl = (props) => {
                                 top: '50%',
                                 transform: 'translate(0, -50%)'
                               }
-                            }>
+                            }
+                            size="large">
                             <ArrowUp />
                           </IconButton>
                           }
-                          {(index < (userGroupKeys.length - 2)) && <IconButton style={{
-                            marginTop: 0, marginBottom: 0, marginLeft: 24,
-                            position: 'absolute',
-                            top: '50%',
-                            transform: 'translate(0, -50%)'
-                          }}
+                          {(index < (userGroupKeys.length - 2)) && <IconButton
+                            style={{
+                              marginTop: 0, marginBottom: 0, marginLeft: 24,
+                              position: 'absolute',
+                              top: '50%',
+                              transform: 'translate(0, -50%)'
+                            }}
                             onClick={() => {
                               setModifiedUserGroups(prev => {
                                 const { DEFAULT, ADMIN, ...rest } = { ...prev };
@@ -836,7 +844,7 @@ const AccessControl = (props) => {
                                 return newUserGroups
                               })
                             }}
-                          >
+                            size="large">
                             <ArrowDown />
                           </IconButton>}
                         </div>}
@@ -924,25 +932,29 @@ const AccessControl = (props) => {
                             <TableCell colSpan={1} align="left">Roles
                             </TableCell>
                             <TableCell colSpan={1} align="right">
-                              <IconButton onClick={(event) => {
-                                setRolesHelpAnchorEl(event.currentTarget);
-                                setShowRolesHelp(true)
-                              }}>
+                              <IconButton
+                                onClick={(event) => {
+                                  setRolesHelpAnchorEl(event.currentTarget);
+                                  setShowRolesHelp(true)
+                                }}
+                                size="large">
                                 <HelpIcon />
                               </IconButton>
-                              {editMode === true && <IconButton onClick={() =>
-                                setModifiedUserGroups(prev => {
-                                  const newUserGroups = { ...prev }
-                                  if (newUserGroups[usergroup].roles) {
-                                    newUserGroups[usergroup].roles.push("")
-                                  } else {
-                                    newUserGroups[usergroup].roles = []
-                                    newUserGroups[usergroup].roles.push("")
+                              {editMode === true && <IconButton
+                                onClick={() =>
+                                  setModifiedUserGroups(prev => {
+                                    const newUserGroups = { ...prev }
+                                    if (newUserGroups[usergroup].roles) {
+                                      newUserGroups[usergroup].roles.push("")
+                                    } else {
+                                      newUserGroups[usergroup].roles = []
+                                      newUserGroups[usergroup].roles.push("")
+                                    }
+                                    return newUserGroups
                                   }
-                                  return newUserGroups
+                                  )
                                 }
-                                )
-                              }>
+                                size="large">
                                 <AddIcon />
                               </IconButton>}
                             </TableCell>
@@ -975,14 +987,16 @@ const AccessControl = (props) => {
                                       }}
                                       error={validateRole(role) === false}
                                     />
-                                    {editMode === true && <IconButton onClick={() =>
-                                      setModifiedUserGroups(prev => {
-                                        const newUserGroups = { ...prev }
-                                        newUserGroups[usergroup].roles.splice(index, 1)
-                                        return newUserGroups
+                                    {editMode === true && <IconButton
+                                      onClick={() =>
+                                        setModifiedUserGroups(prev => {
+                                          const newUserGroups = { ...prev }
+                                          newUserGroups[usergroup].roles.splice(index, 1)
+                                          return newUserGroups
+                                        }
+                                        )
                                       }
-                                      )
-                                    }>
+                                      size="large">
                                       <DeleteIcon />
                                     </IconButton>}
                                   </div>
@@ -997,20 +1011,24 @@ const AccessControl = (props) => {
                           <TableRow>
                             <TableCell colSpan={2} align="left">Rules</TableCell>
                             <TableCell colSpan={1} align="right">
-                              <IconButton onClick={(event) => {
-                                setRulesHelpAnchorEl(event.currentTarget);
-                                setShowRulesHelp(true)
-                              }}>
+                              <IconButton
+                                onClick={(event) => {
+                                  setRulesHelpAnchorEl(event.currentTarget);
+                                  setShowRulesHelp(true)
+                                }}
+                                size="large">
                                 <HelpIcon />
                               </IconButton>
-                              {editMode === true && <IconButton onClick={() =>
-                                setModifiedUserGroups(prev => {
-                                  const newUserGroups = { ...prev }
-                                  newUserGroups[usergroup].rules.push({ rule: "", read: false, write: false })
-                                  return newUserGroups
+                              {editMode === true && <IconButton
+                                onClick={() =>
+                                  setModifiedUserGroups(prev => {
+                                    const newUserGroups = { ...prev }
+                                    newUserGroups[usergroup].rules.push({ rule: "", read: false, write: false })
+                                    return newUserGroups
+                                  }
+                                  )
                                 }
-                                )
-                              }>
+                                size="large">
                                 <AddIcon />
                               </IconButton>}
                             </TableCell>
@@ -1024,69 +1042,73 @@ const AccessControl = (props) => {
                         <TableBody>
                           {modifiedUserGroups[usergroup].rules?.map((rule, index) => {
                             const stringValue = rule.rule?.toString();
-                            return (<TableRow
-                              key={index.toString()}
-                            >
-                              <TableCell align="center">
-                                <div style={{ display: "flex", direction: "row" }}>
-                                  <TextField
-                                    fullWidth
-                                    value={stringValue}
+                            return (
+                              <TableRow
+                                key={index.toString()}
+                              >
+                                <TableCell align="center">
+                                  <div style={{ display: "flex", direction: "row" }}>
+                                    <TextField
+                                      fullWidth
+                                      value={stringValue}
+                                      disabled={editMode === false}
+                                      onChange={(event) => {
+                                        const value = event.target.value
+
+                                        setModifiedUserGroups(prev => {
+                                          const newUserGroups = { ...prev }
+                                          newUserGroups[usergroup].rules[index].rule = value
+                                          return newUserGroups
+                                        })
+                                      }}
+                                      error={validateRegex(stringValue) === false}
+                                    />
+                                    {editMode === true && <IconButton
+                                      onClick={() =>
+                                        setModifiedUserGroups(prev => {
+                                          const newUserGroups = { ...prev }
+                                          newUserGroups[usergroup].rules.splice(index, 1)
+                                          return newUserGroups
+                                        }
+                                        )
+                                      }
+                                      size="large">
+                                      <DeleteIcon />
+                                    </IconButton>}
+                                  </div>
+                                </TableCell>
+                                <TableCell align="center">
+                                  <Checkbox
+                                    checked={rule.read === true}
                                     disabled={editMode === false}
                                     onChange={(event) => {
-                                      const value = event.target.value
+                                      const checked = event.target.checked
 
                                       setModifiedUserGroups(prev => {
                                         const newUserGroups = { ...prev }
-                                        newUserGroups[usergroup].rules[index].rule = value
+                                        newUserGroups[usergroup].rules[index].read = checked
                                         return newUserGroups
                                       })
                                     }}
-                                    error={validateRegex(stringValue) === false}
                                   />
-                                  {editMode === true && <IconButton onClick={() =>
-                                    setModifiedUserGroups(prev => {
-                                      const newUserGroups = { ...prev }
-                                      newUserGroups[usergroup].rules.splice(index, 1)
-                                      return newUserGroups
-                                    }
-                                    )
-                                  }>
-                                    <DeleteIcon />
-                                  </IconButton>}
-                                </div>
-                              </TableCell>
-                              <TableCell align="center">
-                                <Checkbox
-                                  checked={rule.read === true}
-                                  disabled={editMode === false}
-                                  onChange={(event) => {
-                                    const checked = event.target.checked
+                                </TableCell>
+                                <TableCell align="center">
+                                  <Checkbox
+                                    checked={rule.write === true}
+                                    disabled={editMode === false}
+                                    onChange={(event) => {
+                                      const checked = event.target.checked
 
-                                    setModifiedUserGroups(prev => {
-                                      const newUserGroups = { ...prev }
-                                      newUserGroups[usergroup].rules[index].read = checked
-                                      return newUserGroups
-                                    })
-                                  }}
-                                />
-                              </TableCell>
-                              <TableCell align="center">
-                                <Checkbox
-                                  checked={rule.write === true}
-                                  disabled={editMode === false}
-                                  onChange={(event) => {
-                                    const checked = event.target.checked
-
-                                    setModifiedUserGroups(prev => {
-                                      const newUserGroups = { ...prev }
-                                      newUserGroups[usergroup].rules[index].write = checked
-                                      return newUserGroups
-                                    })
-                                  }}
-                                />
-                              </TableCell>
-                            </TableRow>)
+                                      setModifiedUserGroups(prev => {
+                                        const newUserGroups = { ...prev }
+                                        newUserGroups[usergroup].rules[index].write = checked
+                                        return newUserGroups
+                                      })
+                                    }}
+                                  />
+                                </TableCell>
+                              </TableRow>
+                            );
                           }
                           )}
                         </TableBody>
@@ -1098,14 +1120,16 @@ const AccessControl = (props) => {
                           <TableRow>
                             <TableCell colSpan={1} align="left">Usernames</TableCell>
                             <TableCell colSpan={1} align="right">
-                              {editMode === true && <IconButton onClick={() =>
-                                setModifiedUserGroups(prev => {
-                                  const newUserGroups = { ...prev }
-                                  newUserGroups[usergroup].usernames.push("")
-                                  return newUserGroups
+                              {editMode === true && <IconButton
+                                onClick={() =>
+                                  setModifiedUserGroups(prev => {
+                                    const newUserGroups = { ...prev }
+                                    newUserGroups[usergroup].usernames.push("")
+                                    return newUserGroups
+                                  }
+                                  )
                                 }
-                                )
-                              }>
+                                size="large">
                                 <AddIcon />
                               </IconButton>}
                             </TableCell>
@@ -1138,14 +1162,16 @@ const AccessControl = (props) => {
                                     }}
                                     error={validateUsername(username) === false}
                                   />
-                                  {editMode === true && <IconButton onClick={() =>
-                                    setModifiedUserGroups(prev => {
-                                      const newUserGroups = { ...prev }
-                                      newUserGroups[usergroup].usernames.splice(index, 1)
-                                      return newUserGroups
+                                  {editMode === true && <IconButton
+                                    onClick={() =>
+                                      setModifiedUserGroups(prev => {
+                                        const newUserGroups = { ...prev }
+                                        newUserGroups[usergroup].usernames.splice(index, 1)
+                                        return newUserGroups
+                                      }
+                                      )
                                     }
-                                    )
-                                  }>
+                                    size="large">
                                     <DeleteIcon />
                                   </IconButton>}
                                 </div>

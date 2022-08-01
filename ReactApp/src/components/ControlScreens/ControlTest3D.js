@@ -2,10 +2,10 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
 
 import Slider from '../BaseComponents/Slider';
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 
 import ControlRightEx1 from '../ControlScreens/GridComponents/ControlRightEx1'
 import ControlTopEx1 from '../ControlScreens/GridComponents/ControlTopEx1'

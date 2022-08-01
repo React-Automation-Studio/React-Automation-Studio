@@ -5,8 +5,8 @@ import TextInput from '../BaseComponents/TextInput';
 import SelectionInput from '../BaseComponents/SelectionInput';
 import SelectionList from '../BaseComponents/SelectionList';
 import TextOutput from '../BaseComponents/TextOutput';
-import Grid from '@material-ui/core/Grid';
-import { withStyles } from '@material-ui/core/styles';
+import Grid from '@mui/material/Grid';
+import withStyles from '@mui/styles/withStyles';
 import RadioButtonGroup from '../BaseComponents/RadioButtonGroup';
 
 

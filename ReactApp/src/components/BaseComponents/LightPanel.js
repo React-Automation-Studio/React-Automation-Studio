@@ -1,10 +1,6 @@
 import React from "react";
-import {
-  Typography,
-  Paper,
-  makeStyles,
-  FormControlLabel,
-} from "@material-ui/core";
+import { Typography, Paper, FormControlLabel } from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 import PropTypes from "prop-types";
 import Widget from "../SystemComponents/Widgets/Widget";
 

@@ -1,13 +1,13 @@
 import React from 'react'
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 import DataConnection from '../SystemComponents/DataConnection';
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
 
 import PropTypes from 'prop-types';
 
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 import {LanDisconnect} from 'mdi-material-ui/';
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */

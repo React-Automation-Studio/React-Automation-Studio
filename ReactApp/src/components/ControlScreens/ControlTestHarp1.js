@@ -1,13 +1,13 @@
 //This example is deprecated and will be removed in a future release 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
 
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Typography from '@mui/material/Typography';
 
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 
 import HarpRangeSelection from '../SiteSpecificComponents/iThembaLABS/CompoundComponents/HarpRangeSelection';
 import ToggleButton from '../BaseComponents/ToggleButton';
@@ -21,7 +21,7 @@ import ControlTopHarpEx1 from '../ControlScreens/GridComponents/ControlTopHarpEx
 
 import HarpGraph from '../SiteSpecificComponents/iThembaLABS/CompoundComponents/HarpGraph';
 
-import AppBar from '@material-ui/core/AppBar';
+import AppBar from '@mui/material/AppBar';
 
 import GraphY from '../BaseComponents/GraphY';
 import ControlCenterTable from '../ControlScreens/GridComponents/ControlCenterTable'
@@ -400,10 +400,10 @@ class ControlTestHarp1 extends React.Component {
                       value={tabValue}
                       onChange={this.handleTabChange}
                       variant="scrollable"
-                      scrollButtons="on"
+                      scrollButtons
                       indicatorColor="primary"
                       textColor="primary"
-                    >
+                      allowScrollButtonsMobile>
                       <Tab label="Beam Diagnostics" />
                       <Tab label="Power Supplies Diagnostics" />
                       <Tab label="Ion Source" />
@@ -690,7 +690,7 @@ class ControlTestHarp1 extends React.Component {
           </Grid>
           </TraditionalLayout>
         </div>
-    );
+      );
   }
 }
 

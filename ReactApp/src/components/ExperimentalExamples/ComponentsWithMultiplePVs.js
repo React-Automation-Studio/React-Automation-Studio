@@ -4,7 +4,7 @@ import AutomationStudioContext from '../SystemComponents/AutomationStudioContext
 
 import GraphY from '../BaseComponents/GraphY';
 import TextUpdateMultiplePVs from '../BaseComponents/TextUpdateMultiplePVs';
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
 
 const styles = theme => ({
   body1: theme.typography.body1,

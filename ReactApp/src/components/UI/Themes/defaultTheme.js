@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
-import { indigo, teal, lightBlue, blueGrey, pink, red, blue, green,lightGreen,  cyan, deepOrange, orange, amber, lime, grey } from '@material-ui/core/colors'
-import { alpha } from '@material-ui/core/styles/colorManipulator';
+import { indigo, teal, lightBlue, blueGrey, pink, red, blue, green,lightGreen,  cyan, deepOrange, orange, amber, lime, grey } from '@mui/material/colors'
+import { alpha } from '@mui/material/styles';
 
 const defaultPalette = () => {
     const type = "dark";

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
 import 'typeface-roboto';
-import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import { ThemeProvider, StyledEngineProvider, createTheme, adaptV4Theme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 
 import AutomationStudioContext from '../components/SystemComponents/AutomationStudioContext';
 
@@ -27,12 +27,12 @@ class Wrapper extends Component {
     let themeStyle = storedThemeStyle===null?defaultTheme:JSON.parse(storedThemeStyle);
     let themeKeys = Object.keys(themes);
     if (themeKeys.includes(themeStyle)) {
-      theme = createTheme(themes[themeStyle])
+      theme = createTheme(adaptV4Theme(themes[themeStyle]))
       //   localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
     }
     else {
       themeStyle = themeKeys[0];
-      theme = createTheme(themes[themeStyle])
+      theme = createTheme(adaptV4Theme(themes[themeStyle]))
       localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
     }
 
@@ -42,12 +42,12 @@ class Wrapper extends Component {
       let theme = null
       let themeStyles = this.state.system.themeStyles;
       if (themeStyles.includes(themeStyle)) {
-        theme = createTheme(themes[themeStyle])
+        theme = createTheme(adaptV4Theme(themes[themeStyle]))
       
       }
       else {
         themeStyle = themeStyles[0];
-        theme = createTheme(themes[themeStyle])
+        theme = createTheme(adaptV4Theme(themes[themeStyle]))
         localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
       }
 
@@ -93,13 +93,15 @@ class Wrapper extends Component {
   render() {
     return (
       <AutomationStudioContext.Provider value={this.state.system}>
-        <MuiThemeProvider theme={this.state.theme}>
-          <CssBaseline >
-            <ReactVisCssBaseline>
-              {this.props.children}
-            </ReactVisCssBaseline>
-          </CssBaseline>
-        </MuiThemeProvider>
+        <StyledEngineProvider injectFirst>
+          <ThemeProvider theme={this.state.theme}>
+            <CssBaseline >
+              <ReactVisCssBaseline>
+                {this.props.children}
+              </ReactVisCssBaseline>
+            </CssBaseline>
+          </ThemeProvider>
+        </StyledEngineProvider>
       </AutomationStudioContext.Provider>
     );
   }

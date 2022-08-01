@@ -1,29 +1,30 @@
 import React from 'react';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import TableContainer from '@material-ui/core/TableContainer';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
+import { useTheme } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import TableContainer from '@mui/material/TableContainer';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
 
-import IconButton from '@material-ui/core/IconButton';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+import IconButton from '@mui/material/IconButton';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 // Styles
 const useStyles = makeStyles(theme => ({
     styledTableHeadCell: {
-        backgroundColor: theme.palette.type === 'dark' ? undefined : theme.palette.primary.light,
-        color: theme.palette.type === 'dark' ? undefined : 'white',
+        backgroundColor: theme.palette.mode === 'dark' ? undefined : theme.palette.primary.light,
+        color: theme.palette.mode === 'dark' ? undefined : 'white',
     },
     centerInBlock: {
         display: "flex",
@@ -68,7 +69,7 @@ const EditUsersDialog = (props) => {
                                     <Typography variant='button'>RAS Users (All)</Typography>
                                 </Grid>
                                 <Grid item>
-                                    <TableContainer component={Paper} elevation={theme.palette.type === 'dark' ? undefined : 5}>
+                                    <TableContainer component={Paper} elevation={theme.palette.mode === 'dark' ? undefined : 5}>
                                         <Table aria-label="User Table" stickyHeader size="small">
                                             <TableHead>
                                                 <TableRow
@@ -127,7 +128,7 @@ const EditUsersDialog = (props) => {
                                     disabled={props.forwardBDisabled}
                                     className={classes.margin}
                                     onClick={() => props.pushToAlarmUsers()}
-                                >
+                                    size="large">
                                     <ArrowForwardIcon fontSize="large" />
                                 </IconButton>
                             </Grid>
@@ -137,7 +138,7 @@ const EditUsersDialog = (props) => {
                                     disabled={props.backwardBDisabled}
                                     className={classes.margin}
                                     onClick={() => props.pushToRASUsers()}
-                                >
+                                    size="large">
                                     <ArrowBackIcon fontSize="large" />
                                 </IconButton>
                             </Grid>
@@ -155,7 +156,7 @@ const EditUsersDialog = (props) => {
                                     <Typography variant='button'>Alarm Users</Typography>
                                 </Grid>
                                 <Grid item>
-                                    <TableContainer component={Paper} elevation={theme.palette.type === 'dark' ? undefined : 5}>
+                                    <TableContainer component={Paper} elevation={theme.palette.mode === 'dark' ? undefined : 5}>
                                         <Table aria-label="User Table" stickyHeader size="small">
                                             <TableHead>
                                                 <TableRow
@@ -212,7 +213,7 @@ const EditUsersDialog = (props) => {
                 </Button>
             </DialogActions>
         </Dialog>
-    )
+    );
 }
 
 export default React.memo(EditUsersDialog);

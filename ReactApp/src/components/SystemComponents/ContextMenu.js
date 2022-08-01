@@ -2,19 +2,19 @@
 /* eslint-disable no-unused-vars */
 import React from 'react'
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
 import PropTypes from 'prop-types';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import Paper from '@material-ui/core/Paper';
-import Popover from '@material-ui/core/Popover';
-import MenuItem from '@material-ui/core/MenuItem';
-import MenuList from '@material-ui/core/MenuList';
-import Divider from '@material-ui/core/Divider';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import Paper from '@mui/material/Paper';
+import Popover from '@mui/material/Popover';
+import MenuItem from '@mui/material/MenuItem';
+import MenuList from '@mui/material/MenuList';
+import Divider from '@mui/material/Divider';
 import {Link} from 'react-router-dom'
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ViewList from '@material-ui/icons/ViewList';
-import Typography from '@material-ui/core/Typography';
-import Lock from '@material-ui/icons/Lock';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ViewList from '@mui/icons-material/ViewList';
+import Typography from '@mui/material/Typography';
+import Lock from '@mui/icons-material/Lock';
 import { Coffee,LanConnect,LanDisconnect,ContentCopy } from 'mdi-material-ui/'
 
 const styles = theme => ({

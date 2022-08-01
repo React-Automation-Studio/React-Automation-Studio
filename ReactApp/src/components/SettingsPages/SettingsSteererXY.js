@@ -4,11 +4,11 @@ import AutomationStudioContext from '../SystemComponents/AutomationStudioContext
 import TextInput from '../BaseComponents/TextInput';
 import TextOutput from '../BaseComponents/TextOutput';
 import Slider from '../BaseComponents/Slider';
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 import ToggleButton from '../BaseComponents/ToggleButton';
 import ThumbWheel from '../BaseComponents/ThumbWheel';
-import Card from '@material-ui/core/Card';
-import { withStyles } from '@material-ui/core/styles';
+import Card from '@mui/material/Card';
+import withStyles from '@mui/styles/withStyles';
 
 
 const styles = theme => ({

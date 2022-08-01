@@ -1,31 +1,30 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import { replaceMacros } from '../SystemComponents/Utils/macroReplacement';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
+import withStyles from '@mui/styles/withStyles';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
 import TextUpdate from '../BaseComponents/TextUpdate';
 import TextInput from '../BaseComponents/TextInput';
 import ToggleButton from '../BaseComponents/ToggleButton';
 import TextOutput from '../BaseComponents/TextOutput';
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import orange from '@material-ui/core/colors/orange';
-import green from '@material-ui/core/colors/green';
-import red from '@material-ui/core/colors/red';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
-import Paper from '@material-ui/core/Paper';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import AppBar from '@mui/material/AppBar';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
 import PV from '../SystemComponents/PV';
 import useMongoDbWatch from '../SystemComponents/database/MongoDB/useMongoDbWatch'
 import useMongoDbUpdateOne from '../SystemComponents/database/MongoDB/useMongoDbUpdateOne';
 import useMongoDbInsertOne from '../SystemComponents/database/MongoDB/useMongoDbInsertOne';
+
+import { orange, green, red } from '@mui/material/colors';
 
 const styles = theme => ({
   root: {
@@ -54,21 +53,21 @@ const styles = theme => ({
     overflow: 'auto',
   },
   workingButton: {
-    color: theme.palette.type === 'dark' ? 'white' : 'black',
+    color: theme.palette.mode === 'dark' ? 'white' : 'black',
     backgroundColor: green[500],
     '&:hover': {
       backgroundColor: green[700],
     },
   },
   pendingButton: {
-    color: theme.palette.type === 'dark' ? 'white' : 'black',
+    color: theme.palette.mode === 'dark' ? 'white' : 'black',
     backgroundColor: orange[500],
     '&:hover': {
       backgroundColor: orange[700],
     },
   },
   obseleteButton: {
-    color: theme.palette.type === 'dark' ? 'white' : 'black',
+    color: theme.palette.mode === 'dark' ? 'white' : 'black',
     backgroundColor: red[500],
     '&:hover': {
       backgroundColor: red[700],

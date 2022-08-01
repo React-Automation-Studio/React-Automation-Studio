@@ -1,13 +1,13 @@
 import React from 'react';
 import ArchiverDataViewer from '../ArchiverDataViewer/ArchiverDataViewer'
 import TraditionalLayout from '../UI/Layout/ComposedLayouts/TraditionalLayout.js';
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 import ToggleButton from '../BaseComponents/ToggleButton'
 import ThumbWheel from '../BaseComponents/ThumbWheel'
-import Paper from '@material-ui/core/Paper'
-import Typography from '@material-ui/core/Typography';
-import AppBar from '@material-ui/core/AppBar';
-import { useTheme } from '@material-ui/core/styles';
+import Paper from '@mui/material/Paper'
+import Typography from '@mui/material/Typography';
+import AppBar from '@mui/material/AppBar';
+import { useTheme } from '@mui/material/styles';
 
 const ArchiverDataViewerDemo = (props) => {
   const theme = useTheme();
@@ -116,7 +116,7 @@ const ArchiverDataViewerDemo = (props) => {
         </Grid>
       </Grid>
 
-      <AppBar style={{ position: 'fixed', bottom: 0, top: 'auto', height: 40 }} color={theme.palette.type === 'dark' ? "inherit" : "primary"}>
+      <AppBar style={{ position: 'fixed', bottom: 0, top: 'auto', height: 40 }} color={theme.palette.mode === 'dark' ? "inherit" : "primary"}>
         {footerContents}
       </AppBar>
     </TraditionalLayout>

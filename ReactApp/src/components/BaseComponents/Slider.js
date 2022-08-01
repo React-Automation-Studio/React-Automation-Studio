@@ -1,16 +1,16 @@
 import React, { useRef} from 'react';
-import { withStyles } from "@material-ui/core/styles";
-import { Typography } from "@material-ui/core";
+import withStyles from '@mui/styles/withStyles';
+import { Typography } from "@mui/material";
 import PropTypes from "prop-types";
 import debounce from "lodash.debounce";
 import Widget from "../SystemComponents/Widgets/Widget";
 import RCSlider  from 'rc-slider';
 
-import { FormControlLabel } from "@material-ui/core";
+import { FormControlLabel } from "@mui/material";
 
 
 const styles = (theme) => {
-  const backgroundColor = theme.palette.type === 'light' ? 'rgba(0, 0, 0, 0.23)' : 'rgba(255, 255, 255, 0.23)'; //copied from material ui textfield 
+  const backgroundColor = theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.23)' : 'rgba(255, 255, 255, 0.23)'; //copied from material ui textfield 
   return (
     {
       root: {

@@ -1,6 +1,6 @@
 import React from "react";
-import { withStyles } from "@material-ui/core/styles";
-import { Radio, FormControlLabel } from "@material-ui/core";
+import withStyles from '@mui/styles/withStyles';
+import { Radio, FormControlLabel } from "@mui/material";
 import Widget from "../SystemComponents/Widgets/Widget";
 import PropTypes from 'prop-types';
 const styles = (theme) => ({

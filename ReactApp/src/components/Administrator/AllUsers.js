@@ -1,24 +1,24 @@
 import React, { useState } from 'react';
 import useAllUsers from './adminDbHooks/useAllUsers'
 import useUAGs from './adminDbHooks/useUAGs'
-import Grid from '@material-ui/core/Grid';
-import Card from '@material-ui/core/Card';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import { makeStyles } from '@material-ui/core/styles';
-import IconButton from '@material-ui/core/IconButton';
-import Checkbox from '@material-ui/core/Checkbox';
-import DeleteIcon from '@material-ui/icons/Delete';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Button from '@material-ui/core/Button';
-import Slide from '@material-ui/core/Slide';
+import Grid from '@mui/material/Grid';
+import Card from '@mui/material/Card';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import makeStyles from '@mui/styles/makeStyles';
+import IconButton from '@mui/material/IconButton';
+import Checkbox from '@mui/material/Checkbox';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
+import Slide from '@mui/material/Slide';
 import useDeleteUser from './adminDbHooks/useDeleteUser';
 import useEnableUser from './adminDbHooks/useEnableUser';
 import AddUsers from './AddUsers'
@@ -144,7 +144,7 @@ const AllUsers = (props) => {
                       else{
                         date=""
                       }
-                      return(
+                      return (
                         <TableRow key={index.toString()}>
                           <TableCell align="center">{index + 1}</TableCell>
                           <TableCell align="center">{user.username}</TableCell>
@@ -164,10 +164,13 @@ const AllUsers = (props) => {
                           </TableCell>
                           <TableCell align="center">
                             <ModifyUser user={user}/>
-                            <IconButton aria-label="delete" onClick={()=>{
-                              setCurrentUser(user.username)
-                              setCurrentUserId({id:user['_id']['$oid']})
-                              setShowDeleteUserDialog(true)}}>
+                            <IconButton
+                              aria-label="delete"
+                              onClick={()=>{
+                                setCurrentUser(user.username)
+                                setCurrentUserId({id:user['_id']['$oid']})
+                                setShowDeleteUserDialog(true)}}
+                              size="large">
                               <DeleteIcon/>
                             </IconButton>
                           </TableCell>

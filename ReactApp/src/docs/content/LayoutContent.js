@@ -1,8 +1,8 @@
 import React from 'react';
 
-import Grid from '@material-ui/core/Grid';
-import CheckCircle from '@material-ui/icons/CheckCircle';
-import Cancel from '@material-ui/icons/Cancel';
+import Grid from '@mui/material/Grid';
+import CheckCircle from '@mui/icons-material/CheckCircle';
+import Cancel from '@mui/icons-material/Cancel';
 
 
 import TextOutput from '../../components/BaseComponents/TextOutput';

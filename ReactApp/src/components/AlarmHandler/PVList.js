@@ -1,18 +1,19 @@
 import React, { useRef, useEffect } from 'react';
 
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableRow from '@material-ui/core/TableRow';
-import TableHead from '@material-ui/core/TableHead';
-import Paper from '@material-ui/core/Paper';
+import { useTheme } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableRow from '@mui/material/TableRow';
+import TableHead from '@mui/material/TableHead';
+import Paper from '@mui/material/Paper';
 
 const useStyles = makeStyles(theme => ({
     styledTableHeadCell: {
-        backgroundColor: theme.palette.type === 'dark' ? undefined : theme.palette.primary.light,
-        color: theme.palette.type === 'dark' ? undefined : 'white',
+        backgroundColor: theme.palette.mode === 'dark' ? undefined : theme.palette.primary.light,
+        color: theme.palette.mode === 'dark' ? undefined : 'white',
     }
 }))
 
@@ -70,7 +71,7 @@ const PVList = (props) => {
     })
 
     return (
-        <TableContainer component={Paper} style={{ height: props.height }} elevation={theme.palette.type === 'dark' ? undefined : 5} ref={myRef}>
+        <TableContainer component={Paper} style={{ height: props.height }} elevation={theme.palette.mode === 'dark' ? undefined : 5} ref={myRef}>
             <Table aria-label="PV List" stickyHeader size="small">
                 <TableHead>
                     <TableRow

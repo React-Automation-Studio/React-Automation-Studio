@@ -1,16 +1,16 @@
 import React from 'react';
 
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
 
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 
 import TextInput from '../../BaseComponents/TextInput';
 
 import Slider from '../../BaseComponents/Slider';
 
-import Card from '@material-ui/core/Card';
+import Card from '@mui/material/Card';
 
 
 const styles = theme => ({

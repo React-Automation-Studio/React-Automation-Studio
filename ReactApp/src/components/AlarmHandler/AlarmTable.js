@@ -2,41 +2,42 @@ import React, { useRef, useEffect } from 'react';
 
 // import { Link } from 'react-router-dom'
 
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { useTheme } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import TextInput from '../BaseComponents/TextInput';
 import TextUpdateStatus from './TextUpdateStatus';
 import TextUpdateStateful from './TextUpdateStateful';
 import TextUpdateDate from './TextUpdateDate';
 import TextUpdate from '../BaseComponents/TextUpdate';
 
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import Collapse from '@material-ui/core/Collapse';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import Collapse from '@mui/material/Collapse';
 
-import Checkbox from '@material-ui/core/Checkbox';
+import Checkbox from '@mui/material/Checkbox';
 
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import Typography from '@material-ui/core/Typography';
-import DoneAllIcon from '@material-ui/icons/DoneAll';
-import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import DeleteIcon from '@material-ui/icons/Delete';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import Typography from '@mui/material/Typography';
+import DoneAllIcon from '@mui/icons-material/DoneAll';
+import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import { Coffee, ContentCopy } from 'mdi-material-ui/'
 
-import Tooltip from '@material-ui/core/Tooltip';
+import Tooltip from '@mui/material/Tooltip';
 
 // Styles
 const useStyles = makeStyles(theme => ({
@@ -50,11 +51,11 @@ const useStyles = makeStyles(theme => ({
     TextFieldSeverityDisabled: {
         borderRadius: 2,
         padding: 1,
-        backgroundColor: theme.palette.type === 'dark' ? theme.palette.grey[500] : theme.palette.grey[400]
+        backgroundColor: theme.palette.mode === 'dark' ? theme.palette.grey[500] : theme.palette.grey[400]
     },
     styledTableHeadCell: {
-        backgroundColor: theme.palette.type === 'dark' ? undefined : theme.palette.primary.light,
-        color: theme.palette.type === 'dark' ? undefined : 'white',
+        backgroundColor: theme.palette.mode === 'dark' ? undefined : theme.palette.primary.light,
+        color: theme.palette.mode === 'dark' ? undefined : 'white',
     }
 
 }));
@@ -85,7 +86,7 @@ const AlarmTable = props => {
     }
 
     return (
-        <TableContainer component={Paper} style={{ height: props.height }} ref={myRef} elevation={theme.palette.type === 'dark' ? undefined : 5}>
+        <TableContainer component={Paper} style={{ height: props.height }} ref={myRef} elevation={theme.palette.mode === 'dark' ? undefined : 5}>
             <Table aria-label="Alarm Table" stickyHeader size="small">
                 <TableHead>
                     <TableRow

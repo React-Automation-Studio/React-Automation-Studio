@@ -5,14 +5,14 @@ import AutomationStudioContext from '../../SystemComponents/AutomationStudioCont
 import TextInput from '../../BaseComponents/TextInput';
 import TextOutput from '../../BaseComponents/TextOutput';
 import Slider from '../../BaseComponents/Slider';
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 import ToggleButton from '../../BaseComponents/ToggleButton';
-import { withStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
+import withStyles from '@mui/styles/withStyles';
+import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom'
 import ThumbWheel from '../../BaseComponents/ThumbWheel';
-import Close from '@material-ui/icons/Close';
-import Paper from '@material-ui/core/Paper';
+import Close from '@mui/icons-material/Close';
+import Paper from '@mui/material/Paper';
 
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */

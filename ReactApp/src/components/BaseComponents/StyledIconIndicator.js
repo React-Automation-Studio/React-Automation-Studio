@@ -1,7 +1,7 @@
 import React from "react";
-import { withStyles } from "@material-ui/core/styles";
-import { FormControlLabel, SvgIcon } from "@material-ui/core";
-import { Lens } from "@material-ui/icons";
+import withStyles from '@mui/styles/withStyles';
+import { FormControlLabel, SvgIcon } from "@mui/material";
+import { Lens } from "@mui/icons-material";
 import PropTypes from 'prop-types';
 import Widget from "../SystemComponents/Widgets/Widget";
 

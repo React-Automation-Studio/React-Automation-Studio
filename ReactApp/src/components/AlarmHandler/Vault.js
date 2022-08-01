@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
+import { useTheme } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
+import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Grid';
 
 import Layout from '../UI/Layout/ComposedLayouts/TraditionalLayout'
 import SelectionList from '../BaseComponents/SelectionList';
@@ -141,7 +142,7 @@ const Vault = () => {
                             height='100%'
                             viewBox='0 0 1100 900'
                         >
-                            <Floor alarmDict={alarmDict} type={theme.palette.type} />
+                            <Floor alarmDict={alarmDict} type={theme.palette.mode} />
                         </svg>
                     </Paper>
                 </Grid>

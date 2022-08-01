@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
-import TextField from '@material-ui/core/TextField';
-import Grid from '@material-ui/core/Grid';
-import { useTheme } from '@material-ui/core/styles';
+import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
+import { useTheme } from '@mui/material/styles';
 import TraditionalLayout from '../../UI/Layout/ComposedLayouts/TraditionalLayout';
 import AutomationStudioContext from '../../SystemComponents/AutomationStudioContext';
 import useUserDetails from './userProfileHooks/useUserDetails';
-import Paper from '@material-ui/core/Paper';
+import Paper from '@mui/material/Paper';
 import EditUser from './EditUser'
 import ChangeUserPassword from './ChangeUserPassword';
 

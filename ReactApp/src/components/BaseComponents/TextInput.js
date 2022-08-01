@@ -1,10 +1,9 @@
 import React from "react";
-import { withStyles } from "@material-ui/core/styles";
-import { InputAdornment, TextField } from "@material-ui/core";
+import { alpha } from "@mui/material/styles";
+import withStyles from '@mui/styles/withStyles';
+import { InputAdornment, TextField } from "@mui/material";
 import PropTypes from 'prop-types';
 import Widget from "../SystemComponents/Widgets/Widget";
-
-import { alpha } from '@material-ui/core/styles/colorManipulator';
 
 const styles = (theme) => ({
   root: {
@@ -18,12 +17,12 @@ const styles = (theme) => ({
   TextFieldSeverity1: {
     width: '100%',
     borderRadius: 4,
-    background:'linear-gradient(45deg,'+  alpha(theme.palette.alarm.minor.dark,theme.palette.type==='dark'?0.1:0.1)+ ' 0%, '+ (theme.palette.alarm.minor.dark) +' 100%)'
+    background:'linear-gradient(45deg,'+  alpha(theme.palette.alarm.minor.dark,theme.palette.mode==='dark'?0.1:0.1)+ ' 0%, '+ (theme.palette.alarm.minor.dark) +' 100%)'
   },
   TextFieldSeverity2: {
     width: '100%',
     borderRadius: 4,
-    background:'linear-gradient(45deg,'+ alpha(theme.palette.alarm.major.dark,theme.palette.type==='dark'?0.2:0.1)+ ' 0%, '+ (theme.palette.alarm.major.dark) +' 100%)'
+    background:'linear-gradient(45deg,'+ alpha(theme.palette.alarm.major.dark,theme.palette.mode==='dark'?0.2:0.1)+ ' 0%, '+ (theme.palette.alarm.major.dark) +' 100%)'
   }
 });
 

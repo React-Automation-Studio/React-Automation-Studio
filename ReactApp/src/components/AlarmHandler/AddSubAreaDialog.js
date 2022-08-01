@@ -1,18 +1,18 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
-import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
-import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
+import makeStyles from '@mui/styles/makeStyles';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Grid from '@mui/material/Grid';
+import TextField from '@mui/material/TextField';
+import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
+import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 
 import { Domain } from "mdi-material-ui/";
 
@@ -126,57 +126,56 @@ const AddSubAreaDialog = (props) => {
             </Grid>
         </Grid>
         : props.data?.roles?.map((role, index) => {
-            return <Grid
-                key={`${index}-${role}`}
-                item
-                xs={12}
-            >
+            return (
                 <Grid
-
-                    container
-                    direction="row"
-                    justifyContent="flex-start"
-                    alignItems="stretch"
+                    key={`${index}-${role}`}
+                    item
+                    xs={12}
                 >
-                    <Grid item xs={2} >
-                    </Grid>
-                    <Grid item xs={1} className={classes.centerInBlock}>
-                        <SupervisedUserCircleIcon />
-                    </Grid>
-                    <Grid item xs={1} className={classes.verticalMiddle} style={{ marginRight: '2rem' }}>
-                        <Typography className={classes.boldText} >
-                            Role
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={4} className={classes.verticalMiddle}>
-                        <TextField
-                            type='text'
-                            value={props.data.roles[index] || ''}
-                            onChange={(event) => handleRoleInput(event, index)}
-                            fullWidth
-                            autoFocus
-                        />
-                    </Grid>
-                    <Grid item >
-                        <Tooltip title="Remove role" placement="bottom">
-                            <IconButton
-                                onClick={() => removeRole(index)}
-                                style={{ marginLeft: '0.5em' }}
-                            >
-                                <RemoveCircleIcon color="primary" />
-                            </IconButton>
-                        </Tooltip>
-                        {lastIndex === index && <Tooltip title="Add another role" placement="bottom">
-                            <IconButton
-                                onClick={addRole}
-                                style={{ marginLeft: '0.5em' }}
-                            >
-                                <AddCircleIcon color="secondary" />
-                            </IconButton>
-                        </Tooltip>}
+                    <Grid
+
+                        container
+                        direction="row"
+                        justifyContent="flex-start"
+                        alignItems="stretch"
+                    >
+                        <Grid item xs={2} >
+                        </Grid>
+                        <Grid item xs={1} className={classes.centerInBlock}>
+                            <SupervisedUserCircleIcon />
+                        </Grid>
+                        <Grid item xs={1} className={classes.verticalMiddle} style={{ marginRight: '2rem' }}>
+                            <Typography className={classes.boldText} >
+                                Role
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={4} className={classes.verticalMiddle}>
+                            <TextField
+                                type='text'
+                                value={props.data.roles[index] || ''}
+                                onChange={(event) => handleRoleInput(event, index)}
+                                fullWidth
+                                autoFocus
+                            />
+                        </Grid>
+                        <Grid item >
+                            <Tooltip title="Remove role" placement="bottom">
+                                <IconButton
+                                    onClick={() => removeRole(index)}
+                                    style={{ marginLeft: '0.5em' }}
+                                    size="large">
+                                    <RemoveCircleIcon color="primary" />
+                                </IconButton>
+                            </Tooltip>
+                            {lastIndex === index && <Tooltip title="Add another role" placement="bottom">
+                                <IconButton onClick={addRole} style={{ marginLeft: '0.5em' }} size="large">
+                                    <AddCircleIcon color="secondary" />
+                                </IconButton>
+                            </Tooltip>}
+                        </Grid>
                     </Grid>
                 </Grid>
-            </Grid>
+            );
         })
 
     return (

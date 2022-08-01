@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { withStyles } from "@material-ui/core/styles";
+import withStyles from '@mui/styles/withStyles';
 import Widget from "../SystemComponents/Widgets/Widget";
-import { Typography } from '@material-ui/core';
+import { Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 
 const styles = (theme) => ({
@@ -11,8 +11,8 @@ const styles = (theme) => ({
     padding: 1,
     borderStyle: "solid",
     borderWidth: "thin",
-    borderColor: theme.palette.type === 'dark' ? theme.palette.grey[500] : theme.palette.grey[400],
-    color: theme.palette.type === 'dark' ? theme.palette.grey[500] : theme.palette.grey[400],
+    borderColor: theme.palette.mode === 'dark' ? theme.palette.grey[500] : theme.palette.grey[400],
+    color: theme.palette.mode === 'dark' ? theme.palette.grey[500] : theme.palette.grey[400],
   },
   majorAlarmWarn: {
     background: 'transparent',

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
 import { 
   AppBar, 
   Divider, 
@@ -7,7 +7,7 @@ import {
   Tab, 
   Tabs, 
   Typography 
-} from '@material-ui/core';
+} from '@mui/material';
 import { 
   Gauge, 
   GraphY, 
@@ -21,14 +21,15 @@ import {
 } from "../../BaseComponents"
 
 
-import AccountCircle from '@material-ui/icons/AccountCircleOutlined';
-import Settings from '@material-ui/icons/SettingsOutlined';
-
-import withWidth from '@material-ui/core/withWidth';
+import AccountCircle from '@mui/icons-material/AccountCircleOutlined';
+import Settings from '@mui/icons-material/SettingsOutlined';
 
 import TraditionalLayout from '../../UI/Layout/ComposedLayouts/TraditionalLayout.js';
 
 import {useLocalPV} from '../../SystemComponents/LocalPV'
+
+// FIXME checkout https://mui.com/components/use-media-query/#migrating-from-withwidth
+const withWidth = () => (WrappedComponent) => (props) => <WrappedComponent {...props} width="xs" />;
 
 function TabContainer(props) {
   return (
@@ -190,7 +191,7 @@ const Example1 =(props)=> {
       </div>
 
       <AppBar className={classes.body1} style={{position:'fixed',bottom:0,top:'auto'}} color='inherit'>
-        <Tabs value={showAdvancedSettings} onChange={handleChange} variant="fullWidth" scrollButtons="off">
+        <Tabs value={showAdvancedSettings} onChange={handleChange} variant="fullWidth" scrollButtons={false}>
           <Tab icon={<AccountCircle />} />
           <Tab icon={<Settings />} />
         </Tabs>

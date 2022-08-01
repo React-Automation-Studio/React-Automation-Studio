@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect, useRef } from 'react'
 import ReactAutomationStudioContext from './AutomationStudioContext';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 import PropTypes from "prop-types";
 import { io } from 'socket.io-client';
 import { v4 as uuidv4 } from 'uuid';

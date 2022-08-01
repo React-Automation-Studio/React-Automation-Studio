@@ -7,7 +7,7 @@ import Switch from '../BaseComponents/Switch';
 import StyledIconButton from '../BaseComponents/StyledIconButton';
 import StyledIconIndicator from '../BaseComponents/StyledIconIndicator';
 import SelectionInput from '../BaseComponents/SelectionInput';
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 import ToggleButton from '../BaseComponents/ToggleButton';
 import RadioButton from '../BaseComponents/RadioButton';
 import CheckBox from '../BaseComponents/CheckBox';

@@ -2,7 +2,7 @@ import React from 'react'
 
 import AutomationStudioContext from '../../../SystemComponents/AutomationStudioContext';
 import DataConnection from '../../../SystemComponents/DataConnection';
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
 
 import PropTypes from 'prop-types';
 
@@ -17,7 +17,7 @@ const wireSpacing = [-42, -39, -36, -33, -30, -27, -24, -22, -20, -18, -16, -14,
 
 const styles = theme => ({
   lineSeries: {
-    stroke: theme.palette.type === 'dark' ? 'orange' : 'default'
+    stroke: theme.palette.mode === 'dark' ? 'orange' : 'default'
   },
 });
 

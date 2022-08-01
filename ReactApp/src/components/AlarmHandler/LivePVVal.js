@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
-import { makeStyles } from '@material-ui/core/styles';
-import { Typography } from '@material-ui/core';
+import makeStyles from '@mui/styles/makeStyles';
+import { Typography } from '@mui/material';
 
 import PV from '../SystemComponents/PV';
 
@@ -13,8 +13,8 @@ const useStyles = makeStyles(theme => ({
         padding: 1,
         borderStyle: "solid",
         borderWidth: "thin",
-        borderColor: theme.palette.type === 'dark' ? theme.palette.grey[500] : theme.palette.grey[400],
-        color: theme.palette.type === 'dark' ? theme.palette.grey[500] : theme.palette.grey[400],
+        borderColor: theme.palette.mode === 'dark' ? theme.palette.grey[500] : theme.palette.grey[400],
+        color: theme.palette.mode === 'dark' ? theme.palette.grey[500] : theme.palette.grey[400],
     },
     majorAlarmWarn: {
         background: 'transparent',

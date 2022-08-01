@@ -1,19 +1,19 @@
 import React, { useEffect, useState, useRef } from 'react'
 
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
 
 import PropTypes from 'prop-types';
 
 import { v4 as uuidv4 } from 'uuid';
 import Widget from "../SystemComponents/Widgets/Widget";
-import { FormControlLabel } from "@material-ui/core";
+import { FormControlLabel } from "@mui/material";
 
 const styles = theme => ({
   textTicks: {
-    fill: theme.palette.type === 'dark' ? theme.palette.grey['300'] : theme.palette.grey['500']
+    fill: theme.palette.mode === 'dark' ? theme.palette.grey['300'] : theme.palette.grey['500']
   },
   textValue: {
-    fill: theme.palette.type === 'dark' ? theme.palette.grey['300'] : theme.palette.grey['500']
+    fill: theme.palette.mode === 'dark' ? theme.palette.grey['300'] : theme.palette.grey['500']
   },
   root: {
     display: 'flex',
@@ -86,7 +86,7 @@ function GaugeComponent(props) {
       </text>}
       <linearGradient id={gradientId} >
         <stop offset="0%" stopColor={typeof props.disabled === 'undefined' ? props.theme.palette.primary.main : 'default'} />
-        <stop offset="100%" stopColor={props.theme.palette.type === 'dark' ? props.theme.palette.grey['300'] : props.theme.palette.grey['200']} />
+        <stop offset="100%" stopColor={props.theme.palette.mode === 'dark' ? props.theme.palette.grey['300'] : props.theme.palette.grey['200']} />
       </linearGradient>
       <path
         style={{

@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 
-import withStyles from '@material-ui/core/styles/withStyles';
+import withStyles from '@mui/styles/withStyles';
 import { withRouter } from 'react-router-dom';
 
 import { Link } from 'react-router-dom'
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 import TraditionalLayout from '../../components/UI/Layout/ComposedLayouts/TraditionalLayout.js';
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 
 const styles = theme => ({
   root: {

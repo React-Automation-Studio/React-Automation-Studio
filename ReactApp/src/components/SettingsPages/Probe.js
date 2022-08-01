@@ -6,12 +6,12 @@ import TextInput from '../BaseComponents/TextInput';
 import TextOutput from '../BaseComponents/TextOutput';
 import Slider from '../BaseComponents/Slider';
 
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
 
 import GraphY from '../BaseComponents/GraphY';
-import TextField from '@material-ui/core/TextField';
+import TextField from '@mui/material/TextField';
 
 const styles = theme => ({
   body1: theme.typography.body1,

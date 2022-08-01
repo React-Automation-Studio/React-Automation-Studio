@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useContext, useCallback, useMemo, useReducer } from 'react';
 
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { alpha } from '@material-ui/core/styles';
+import { useTheme } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
+import { alpha } from '@mui/material/styles';
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import InputBase from '@material-ui/core/InputBase';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import InputBase from '@mui/material/InputBase';
 
 
 import PV from '../SystemComponents/PV';
@@ -14,44 +15,44 @@ import useMongoDbUpdateOne from '../SystemComponents/database/MongoDB/useMongoDb
 import useMongoDbInsertOne from '../SystemComponents/database/MongoDB/useMongoDbInsertOne';
 import useMongoDbUpdateMany from '../SystemComponents/database/MongoDB/useMongoDbUpdateMany';
 import useMongoDbDeleteOne from '../SystemComponents/database/MongoDB/useMongoDbDeleteOne';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
 import AlarmList from './AlarmList';
 import AlarmTable from './AlarmTable';
 import AlarmLog from './AlarmLog';
 
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from "@material-ui/core/ListItemText";
-import Collapse from '@material-ui/core/Collapse';
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import SearchIcon from '@material-ui/icons/Search';
-import IconButton from '@material-ui/core/IconButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from "@mui/material/ListItemText";
+import Collapse from '@mui/material/Collapse';
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import SearchIcon from '@mui/icons-material/Search';
+import IconButton from '@mui/material/IconButton';
 
-import Accordion from '@material-ui/core/Accordion';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
-import AccordionDetails from '@material-ui/core/AccordionDetails';
-import Backdrop from '@material-ui/core/Backdrop';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import NotificationsOffIcon from '@material-ui/icons/NotificationsOff';
-import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
-import DoneAllIcon from '@material-ui/icons/DoneAll';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import NotificationsOffIcon from '@mui/icons-material/NotificationsOff';
+import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
+import DoneAllIcon from '@mui/icons-material/DoneAll';
 
-import PublicIcon from '@material-ui/icons/Public';
-import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import AddIcon from '@material-ui/icons/Add';
+import PublicIcon from '@mui/icons-material/Public';
+import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import AddIcon from '@mui/icons-material/Add';
 
-import FirstPageIcon from '@material-ui/icons/FirstPage';
-import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
-import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
-import LastPageIcon from '@material-ui/icons/LastPage';
-import TablePagination from '@material-ui/core/TablePagination';
+import FirstPageIcon from '@mui/icons-material/FirstPage';
+import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
+import LastPageIcon from '@mui/icons-material/LastPage';
+import TablePagination from '@mui/material/TablePagination';
 
 import AddPVDialog from './AddPVDialog';
 import EnableDialog from './EnableDialog';
@@ -88,9 +89,9 @@ const useStyles = makeStyles(theme => ({
     search: {
         position: 'relative',
         borderRadius: theme.shape.borderRadius,
-        backgroundColor: theme.palette.type === 'dark' ? alpha(theme.palette.common.white, 0.15) : alpha(theme.palette.common.black, 0.15),
+        backgroundColor: theme.palette.mode === 'dark' ? alpha(theme.palette.common.white, 0.15) : alpha(theme.palette.common.black, 0.15),
         '&:hover': {
-            backgroundColor: theme.palette.type === 'dark' ? alpha(theme.palette.common.white, 0.25) : alpha(theme.palette.common.black, 0.25),
+            backgroundColor: theme.palette.mode === 'dark' ? alpha(theme.palette.common.white, 0.25) : alpha(theme.palette.common.black, 0.25),
         },
         marginLeft: 0,
         width: '100%',
@@ -114,7 +115,7 @@ const useStyles = makeStyles(theme => ({
     inputInput: {
         padding: theme.spacing(1, 1, 1, 0),
         // // vertical padding + font size from searchIcon
-        paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
         transition: theme.transitions.create('width'),
         width: '100%',
         [theme.breakpoints.up('sm')]: {
@@ -169,28 +170,32 @@ const TablePaginationActions = (props) => {
                 onClick={handleFirstPageButtonClick}
                 disabled={page === 0}
                 aria-label="first page"
-            >
+                size="large">
                 {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
             </IconButton>
-            <IconButton onClick={handleBackButtonClick} disabled={page === 0} aria-label="previous page">
+            <IconButton
+                onClick={handleBackButtonClick}
+                disabled={page === 0}
+                aria-label="previous page"
+                size="large">
                 {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
             </IconButton>
             <IconButton
                 onClick={handleNextButtonClick}
                 disabled={page >= Math.ceil(count / rowsPerPage) - 1}
                 aria-label="next page"
-            >
+                size="large">
                 {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
             </IconButton>
             <IconButton
                 onClick={handleLastPageButtonClick}
                 disabled={page >= Math.ceil(count / rowsPerPage) - 1}
                 aria-label="last page"
-            >
+                size="large">
                 {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
             </IconButton>
         </div>
-    )
+    );
 }
 
 const AlarmSetup = (props) => {
@@ -2372,7 +2377,7 @@ const AlarmSetup = (props) => {
                                             style={{ padding: 0 }}
                                             onClick={() => handleGlobalArea()}
                                             onContextMenu={(event) => handleIconClick(event)}
-                                        >
+                                            size="large">
                                             {areaSelectedIndex === 'ALLAREAS'
                                                 ? <PublicIcon color="secondary" />
                                                 : <PublicIcon />}
@@ -2519,8 +2524,8 @@ const AlarmSetup = (props) => {
                                                         inputProps: { 'aria-label': 'rows per page' },
                                                         native: true,
                                                     }}
-                                                    onChangePage={handleChangePageAT}
-                                                    onChangeRowsPerPage={handleChangeRowsPerPageAT}
+                                                    onPageChange={handleChangePageAT}
+                                                    onRowsPerPageChange={handleChangeRowsPerPageAT}
                                                     ActionsComponent={TablePaginationActions}
                                                 />
                                                 : null
@@ -2618,8 +2623,8 @@ const AlarmSetup = (props) => {
                                                         inputProps: { 'aria-label': 'rows per page' },
                                                         native: true,
                                                     }}
-                                                    onChangePage={handleChangePage}
-                                                    onChangeRowsPerPage={handleChangeRowsPerPage}
+                                                    onPageChange={handleChangePage}
+                                                    onRowsPerPageChange={handleChangeRowsPerPage}
                                                     ActionsComponent={TablePaginationActions}
                                                 />
                                                 : null
@@ -2695,7 +2700,7 @@ const AlarmSetup = (props) => {
             }
             {/* </div> */}
         </React.Fragment>
-    )
+    );
 }
 
 

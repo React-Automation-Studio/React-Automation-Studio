@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
 
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Typography from '@mui/material/Typography';
 
 import TextInput from '../../BaseComponents/TextInput';
 
@@ -21,23 +21,24 @@ import ToggleButton from '../../BaseComponents/ToggleButton';
 
 import Gauge from '../../BaseComponents/Gauge';
 
-import AppBar from '@material-ui/core/AppBar';
+import AppBar from '@mui/material/AppBar';
 
-import AccountCircle from '@material-ui/icons/AccountCircleOutlined';
-import Settings from '@material-ui/icons/SettingsOutlined';
+import AccountCircle from '@mui/icons-material/AccountCircleOutlined';
+import Settings from '@mui/icons-material/SettingsOutlined';
 
-import Divider from '@material-ui/core/Divider';
-
-import withWidth from '@material-ui/core/withWidth';
+import Divider from '@mui/material/Divider';
 
 import StyledIconIndicator from '../../BaseComponents/StyledIconIndicator';
 
 import TraditionalLayout from '../../UI/Layout/ComposedLayouts/TraditionalLayout.js';
 
 import { useLocalPV } from '../../SystemComponents/LocalPV'
-import TextField from '@material-ui/core/TextField';
-import Checkbox from '@material-ui/core/Checkbox';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+import TextField from '@mui/material/TextField';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+
+// FIXME checkout https://mui.com/components/use-media-query/#migrating-from-withwidth
+const withWidth = () => (WrappedComponent) => (props) => <WrappedComponent {...props} width="xs" />;
 
 function TabContainer(props) {
   return (
@@ -294,7 +295,7 @@ const Example1 = (props) => {
       </div>
 
       <AppBar className={classes.body1} style={{ position: 'fixed', bottom: 0, top: 'auto' }} color='inherit'>
-        <Tabs value={showAdvancedSettings} onChange={handleChange} variant="fullWidth" scrollButtons="off">
+        <Tabs value={showAdvancedSettings} onChange={handleChange} variant="fullWidth" scrollButtons={false}>
           <Tab icon={<AccountCircle />} />
           <Tab icon={<Settings />} />
         </Tabs>

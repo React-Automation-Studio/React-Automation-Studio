@@ -1,7 +1,7 @@
 import React from "react";
-import { withStyles } from "@material-ui/core/styles";
-import { FormControlLabel} from "@material-ui/core";
-import MuiSwitch from "@material-ui/core/Switch";
+import withStyles from '@mui/styles/withStyles';
+import { FormControlLabel} from "@mui/material";
+import MuiSwitch from "@mui/material/Switch";
 import Widget from "../SystemComponents/Widgets/Widget";
 import PropTypes from 'prop-types';
 

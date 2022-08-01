@@ -1,6 +1,6 @@
 import React, { useEffect,useState } from 'react';
 
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 import { Redirect } from 'react-router-dom';
 
 

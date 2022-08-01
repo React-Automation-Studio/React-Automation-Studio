@@ -3,15 +3,15 @@ import { Link } from 'react-router-dom'
 
 import { Logout } from 'mdi-material-ui/'
 
-import { makeStyles} from '@material-ui/core/styles';
-import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import Home from '@material-ui/icons/Home';
+import makeStyles from '@mui/styles/makeStyles';
+import SwipeableDrawer from '@mui/material/SwipeableDrawer';
+import List from '@mui/material/List';
+import Divider from '@mui/material/Divider';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import Home from '@mui/icons-material/Home';
 
 import AutomationStudioContext from '../../../SystemComponents/AutomationStudioContext';
 

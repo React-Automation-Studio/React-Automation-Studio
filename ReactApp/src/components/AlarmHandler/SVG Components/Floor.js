@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTheme } from '@material-ui/core/styles';
+import { useTheme } from '@mui/material/styles';
 
 const sevFill = (severity, darkTheme, major, minor, primary) => {
     let fillColor = ""

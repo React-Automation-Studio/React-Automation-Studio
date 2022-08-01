@@ -1,7 +1,7 @@
 import React from 'react'
 
 import Widget from "../SystemComponents/Widgets/Widget";
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
 
 import { v4 as uuidv4 } from 'uuid';
 import  {svgHeight,svgCenterY,svgWidth,svgCenterX} from "../SystemComponents/svgConstants";

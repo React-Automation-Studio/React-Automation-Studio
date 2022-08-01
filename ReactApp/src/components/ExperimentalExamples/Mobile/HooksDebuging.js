@@ -1,14 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
 
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 import TextInput from '../../BaseComponents/TextInput';
 import TextOutput from '../../BaseComponents/TextOutput';
 import Slider from '../../BaseComponents/Slider';
 import SideBar from '../../SystemComponents/SideBar';
-import AppBar from '@material-ui/core/AppBar';
-import withWidth from '@material-ui/core/withWidth';
+import AppBar from '@mui/material/AppBar';
+
+// FIXME checkout https://mui.com/components/use-media-query/#migrating-from-withwidth
+const withWidth = () => (WrappedComponent) => (props) => <WrappedComponent {...props} width="xs" />;
 
 const styles = theme => ({
   body1: theme.typography.body1,

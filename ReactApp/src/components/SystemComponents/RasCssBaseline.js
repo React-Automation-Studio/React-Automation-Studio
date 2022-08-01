@@ -1,5 +1,5 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
 
 
 const styles = theme => ({
@@ -10,11 +10,11 @@ const styles = theme => ({
      
     },
     '::-webkit-scrollbar-track': {
-      boxShadow: theme.palette.type==='light'?'inset 0 0 6px rgba(0,0,0,0.075)':'inset 0 0 6px rgba(255,255,255,0.075)',
-      webkitBoxShadow: theme.palette.type==='light'?'inset 0 0 6px rgba(0,0,0,0.075)':'inset 0 0 6px rgba(255,255,255,0.075)'
+      boxShadow: theme.palette.mode==='light'?'inset 0 0 6px rgba(0,0,0,0.075)':'inset 0 0 6px rgba(255,255,255,0.075)',
+      webkitBoxShadow: theme.palette.mode==='light'?'inset 0 0 6px rgba(0,0,0,0.075)':'inset 0 0 6px rgba(255,255,255,0.075)'
     },
     '::-webkit-scrollbar-thumb': {
-      backgroundColor: theme.palette.type==='light'?'rgba(0,0,0,.15)':'rgba(255,255,255,.1)',
+      backgroundColor: theme.palette.mode==='light'?'rgba(0,0,0,.15)':'rgba(255,255,255,.1)',
       outline: '1px solid slategrey'
     }
   }

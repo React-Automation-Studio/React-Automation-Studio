@@ -1,18 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom'
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
 import TraditionalLayout from './Layout/ComposedLayouts/TraditionalLayout.js';
-import DesktopWindowsIcon from '@material-ui/icons/DesktopWindows';
-import PhoneAndroidIcon from '@material-ui/icons/PhoneAndroid';
-import NewReleasesIcon from '@material-ui/icons/NewReleases';
-import HelpIcon from '@material-ui/icons/Help';
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import EditIcon from '@material-ui/icons/Edit';
-import { makeStyles } from '@material-ui/core/styles';
-import { useTheme } from '@material-ui/core/styles';
+import DesktopWindowsIcon from '@mui/icons-material/DesktopWindows';
+import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
+import NewReleasesIcon from '@mui/icons-material/NewReleases';
+import HelpIcon from '@mui/icons-material/Help';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import EditIcon from '@mui/icons-material/Edit';
+import makeStyles from '@mui/styles/makeStyles';
+import { useTheme } from '@mui/material/styles';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -379,14 +379,19 @@ const MainDashboard = (props) => {
                 <Typography {...typographyProps}><HelpIcon className={classes.Icon} /> Help</Typography>
               </Grid>
               <Grid item lg={6} sm={12} xs={12}>
-                <Button fullWidth className={classes.button} target="_blank" href={styleguideURL} color="default" variant={buttonVariant}> Help and Style Guide </Button>
+                <Button
+                  fullWidth
+                  className={classes.button}
+                  target="_blank"
+                  href={styleguideURL}
+                  variant={buttonVariant}> Help and Style Guide </Button>
               </Grid>
             </Grid>
           </Paper>
         </Grid>
       </Grid>
     </TraditionalLayout >
-  )
+  );
 }
 
 export default MainDashboard;

@@ -1,7 +1,7 @@
 import React from "react";
-import { withStyles } from "@material-ui/core/styles";
-import { InputAdornment, TextField } from "@material-ui/core";
-import { alpha } from '@material-ui/core/styles/colorManipulator';
+import { alpha } from "@mui/material/styles";
+import withStyles from '@mui/styles/withStyles';
+import { InputAdornment, TextField } from "@mui/material";
 import PropTypes from 'prop-types';
 import Widget from "../SystemComponents/Widgets/Widget";
 
@@ -14,7 +14,7 @@ const styles = (theme) => ({
     margin: theme.spacing(1),
   },
   input: {
-    color: theme.palette.type === 'dark' ? theme.palette.grey[400] : theme.palette.grey[700],
+    color: theme.palette.mode === 'dark' ? theme.palette.grey[400] : theme.palette.grey[700],
   },
   cssLabel: {
     "&$cssFocused": {
@@ -71,12 +71,12 @@ const styles = (theme) => ({
   TextFieldSeverity1: {
     width: '100%',
     borderRadius: 4,
-    background: 'linear-gradient(45deg,' + alpha(theme.palette.alarm.minor.dark, theme.palette.type === 'dark' ? 0.1 : 0.1) + ' 0%, ' + (theme.palette.alarm.minor.dark) + ' 100%)'
+    background: 'linear-gradient(45deg,' + alpha(theme.palette.alarm.minor.dark, theme.palette.mode === 'dark' ? 0.1 : 0.1) + ' 0%, ' + (theme.palette.alarm.minor.dark) + ' 100%)'
   },
   TextFieldSeverity2: {
     width: '100%',
     borderRadius: 4,
-    background: 'linear-gradient(45deg,' + alpha(theme.palette.alarm.major.dark, theme.palette.type === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.major.dark) + ' 100%)'
+    background: 'linear-gradient(45deg,' + alpha(theme.palette.alarm.major.dark, theme.palette.mode === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.major.dark) + ' 100%)'
   }
 });
 

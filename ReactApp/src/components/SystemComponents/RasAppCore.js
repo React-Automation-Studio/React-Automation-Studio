@@ -2,8 +2,8 @@
 import React, { Component } from 'react';
 
 import 'typeface-roboto';
-import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import { ThemeProvider, StyledEngineProvider, createTheme, adaptV4Theme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 import ReactVisCssBaseline from './ReactVisCssBaseline';
 import AutomationStudioContext from './AutomationStudioContext';
 import { io } from 'socket.io-client';
@@ -27,12 +27,12 @@ class RasAppCore extends Component {
       transports: ['websocket'],
     })
     if (themeKeys.includes(themeStyle)) {
-      theme = createTheme(this.props.themes[themeStyle])
+      theme = createTheme(adaptV4Theme(this.props.themes[themeStyle]))
 
     }
     else {
       themeStyle = defaultTheme;
-      theme = createTheme(this.props.themes[themeStyle])
+      theme = createTheme(adaptV4Theme(this.props.themes[themeStyle]))
       localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
     }
 
@@ -42,12 +42,12 @@ class RasAppCore extends Component {
       let theme = null
       let themeStyles = this.state.system.themeStyles;
       if (themeStyles.includes(themeStyle)) {
-        theme = createTheme(this.props.themes[themeStyle])
+        theme = createTheme(adaptV4Theme(this.props.themes[themeStyle]))
       }
       else {
         const { defaultTheme } = props.defaultTheme;
         themeStyle = defaultTheme;
-        theme = createTheme(this.props.themes[themeStyle])
+        theme = createTheme(adaptV4Theme(this.props.themes[themeStyle]))
         localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
       }
 
@@ -298,7 +298,7 @@ class RasAppCore extends Component {
       let theme = null
       let themeStyles = this.state.system.themeStyles;
       if (themeStyles.includes(themeStyle)) {
-        theme = createTheme(this.props.themes[themeStyle])
+        theme = createTheme(adaptV4Theme(this.props.themes[themeStyle]))
         let system = this.state.system;
         system.themeStyle = themeStyle;
         this.setState({ system: system, theme: theme })
@@ -331,12 +331,14 @@ class RasAppCore extends Component {
 
     return (
       <AutomationStudioContext.Provider value={{ ...system }}>
-        <MuiThemeProvider theme={this.state.theme}>
-          <CssBaseline />
-          <ReactVisCssBaseline />
-          <RasCssBaseline />
-          {this.props.children}
-        </MuiThemeProvider>
+        <StyledEngineProvider injectFirst>
+          <ThemeProvider theme={this.state.theme}>
+            <CssBaseline />
+            <ReactVisCssBaseline />
+            <RasCssBaseline />
+            {this.props.children}
+          </ThemeProvider>
+        </StyledEngineProvider>
       </AutomationStudioContext.Provider>
     );
   }

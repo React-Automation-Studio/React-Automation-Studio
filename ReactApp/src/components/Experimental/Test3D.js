@@ -1,17 +1,17 @@
 import React, { useEffect, useState, useRef } from 'react'
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
 
 import TextInput from '../BaseComponents/TextInput';
 
 import Slider from '../BaseComponents/Slider';
 
 
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 
 import ThreeScene from '../Experimental/ThreeScene';
 
-import Card from '@material-ui/core/Card';
+import Card from '@mui/material/Card';
 import TraditionalLayout from '../UI/Layout/ComposedLayouts/TraditionalLayout.js';
 
 const styles = theme => ({

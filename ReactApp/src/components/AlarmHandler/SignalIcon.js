@@ -1,12 +1,12 @@
 import React from 'react';
-import { useTheme } from '@material-ui/core/styles';
-import SvgIcon from '@material-ui/core/SvgIcon';
+import { useTheme } from '@mui/material/styles';
+import SvgIcon from '@mui/material/SvgIcon';
 
 const SignalIcon = () => {
 
     const theme = useTheme()
 
-    const isDark = theme.palette.type === 'dark'
+    const isDark = theme.palette.mode === 'dark'
 
     return (
         <SvgIcon>

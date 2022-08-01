@@ -37,8 +37,8 @@ const useStyles = makeStyles((theme) => ({
         textTransform: 'none',
     },
     accordianRoot: {
-        '&:before':{
-        background:'rgba(0,0,0,0)',
+        '&:before': {
+            background: 'rgba(0,0,0,0)',
         }
     },
     '@global': {
@@ -55,7 +55,7 @@ const useArchiverDataHook = (props) => {
     const [data, setData] = useState(null);
     const [initialized, setInitialized] = useState(true);
     useEffect(() => {
-        const handleAck=(msg) => {
+        const handleAck = (msg) => {
 
             if (typeof msg !== 'undefined') {
 
@@ -70,12 +70,12 @@ const useArchiverDataHook = (props) => {
         let socket = context.socket;
         let jwt = context.userTokens.accessToken;
         if (props.archiverURL) {
-            socket.emit('archiverRead', { 'archiverURL': props.archiverURL, 'clientAuthorisation': jwt },handleAck)
+            socket.emit('archiverRead', { 'archiverURL': props.archiverURL, 'clientAuthorisation': jwt }, handleAck)
             socket.on('archiverReadData:' + props.archiverURL, handleArchiverReadData);
         }
         const reconnect = () => {
             if (props.archiverURL) {
-                socket.emit('archiverRead', { 'archiverURL': props.archiverURL, 'clientAuthorisation': jwt,handleAck })
+                socket.emit('archiverRead', { 'archiverURL': props.archiverURL, 'clientAuthorisation': jwt, handleAck })
             }
         }
         const disconnect = () => {
@@ -94,11 +94,11 @@ const useArchiverDataHook = (props) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.archiverURL])
-    return ({data:data,initialized:initialized})
+    return ({ data: data, initialized: initialized })
 }
 
 const ArchiverData = (props) => {
-    const theme =useTheme();
+    const theme = useTheme();
     const calcBin = (pv, from, to, maxNumberOfSamples, raw) => {
         let dif = differenceInSeconds(to, from);
         if (raw) {
@@ -112,7 +112,7 @@ const ArchiverData = (props) => {
             return (pv)
         }
     }
-    const {data,initialized} = useArchiverDataHook({
+    const { data, initialized } = useArchiverDataHook({
         archiverURL: 'arch://' + props.archiver + ':request:' + JSON.stringify({
             pv: calcBin(props.pv, props.from, props.to, props.maxNumberOfSamples),
             options: {
@@ -125,38 +125,38 @@ const ArchiverData = (props) => {
     const [dataXY, setDataXY] = useState({ x: [], y: [] })
     useEffect(() => {
 
-        if ((data !== null)&&(typeof data!=='undefined')) {
+        if ((data !== null) && (typeof data !== 'undefined')) {
             let newArchiverData = [];
             let x = [];
             let y = [];
-            if (data.length>0 ){
-            if (typeof data[0].data !== undefined) {
-                newArchiverData = data[0].data
-                let sample;
-                for (sample in newArchiverData) {
-                    // eslint-disable-next-line eqeqeq
-                    if (sample == 0) {
-                        x.push(props.from);
-                        y.push(newArchiverData[sample].val)
-                    }
-                    else {
-                        if (sample > 0) {
-                            x.push(new Date(newArchiverData[sample].secs * 1000));
-                            y.push(newArchiverData[sample - 1].val)
+            if (data.length > 0) {
+                if (typeof data[0].data !== undefined) {
+                    newArchiverData = data[0].data
+                    let sample;
+                    for (sample in newArchiverData) {
+                        // eslint-disable-next-line eqeqeq
+                        if (sample == 0) {
+                            x.push(props.from);
+                            y.push(newArchiverData[sample].val)
                         }
-                        x.push(new Date(newArchiverData[sample].secs * 1000));
-                        y.push(newArchiverData[sample].val)
+                        else {
+                            if (sample > 0) {
+                                x.push(new Date(newArchiverData[sample].secs * 1000));
+                                y.push(newArchiverData[sample - 1].val)
+                            }
+                            x.push(new Date(newArchiverData[sample].secs * 1000));
+                            y.push(newArchiverData[sample].val)
+                        }
+                        // eslint-disable-next-line eqeqeq
+                        if (sample == (newArchiverData.length - 1)) {
+                            x.push(props.to);
+                            y.push(newArchiverData[sample].val)
+                        }
                     }
-                    // eslint-disable-next-line eqeqeq
-                    if (sample == (newArchiverData.length - 1)) {
-                        x.push(props.to);
-                        y.push(newArchiverData[sample].val)
-                    }
+                    setDataXY({ x: x, y: y })
                 }
-                setDataXY({ x: x, y: y })
             }
         }
-    }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data])
     useEffect(() => {
@@ -196,12 +196,12 @@ const ArchiverDataViewer = (props) => {
     const pvConnections = () => {
         let newPvs = [];
         props.traces.forEach((item, index) => {
-            const pvName=replaceMacros(item.pv, props.macros);
+            const pvName = replaceMacros(item.pv, props.macros);
             newPvs.push(
                 <PV
                     key={index.toString()}
                     pv={pvName}
-                    
+
                     pvData={(pv) => {
                         if (pvs[index]) {
                             if (pvs[index].initialized !== pv.initialized) {
@@ -209,7 +209,7 @@ const ArchiverDataViewer = (props) => {
                                     let newPvs = [...prePvs]
                                     newPvs[index] = {};
                                     newPvs[index]['initialized'] = pv.initialized;
-                                    newPvs[index]['pvname'] = pvName.replace("pva://","")
+                                    newPvs[index]['pvname'] = pvName.replace("pva://", "")
                                     return newPvs
                                 }
                                 )
@@ -281,7 +281,7 @@ const ArchiverDataViewer = (props) => {
     const [selectedFromDate, setSelectedFromDate] = useState(initSelectedFromDate())
     const [selectedToDate, setSelectedToDate] = useState(props.to ? new Date(props.to) : new Date())
     const [live, setLive] = useState(props.livePolling === true);
-    const [livePollingRatePeriod, setLivePollingRatePeriod] = useState(props.pollingRatePeriod?parseInt(props.pollingRatePeriod):1000);
+    const [livePollingRatePeriod, setLivePollingRatePeriod] = useState(props.pollingRatePeriod ? parseInt(props.pollingRatePeriod) : 1000);
     const [fromButton, setFromButton] = useState(props.fromTimeOffset ? props.fromTimeOffset : 'none');
     useEffect(() => {
         const updateToDate = () => {
@@ -332,7 +332,7 @@ const ArchiverDataViewer = (props) => {
         return () => {
             clearInterval(intervalId)
         }
-         // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [live, fromButton, props.pollingRatePeriod])
     const handleOnClick30s = () => {
         let date = new Date();
@@ -533,10 +533,10 @@ const ArchiverDataViewer = (props) => {
     }
 
     return (
-        <div ref={paperRef} style={{ width: props.width}}>
+        <div ref={paperRef} style={{ width: props.width }}>
             {pvConnections()}
 
-            {props.showButtons && <Accordion classes={{root:classes.accordianRoot}} elevation={0} defaultExpanded={props.defaultButtonsExpanded}  style={{marginBottom:0}}>
+            {props.showButtons && <Accordion classes={{ root: classes.accordianRoot }} elevation={0} defaultExpanded={props.defaultButtonsExpanded} style={{ marginBottom: 0 }}>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />} >
                 </AccordionSummary>
                 <AccordionDetails>
@@ -557,80 +557,80 @@ const ArchiverDataViewer = (props) => {
                                 justifyContent={'center'}
                             >
                                 <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
-                                    <Button 
-                                        classes={{ root: classes.buttonRoot }} 
-                                        variant={'outlined'} 
-                                        color={fromButton === "30s" ? 
-                                            "secondary" : 
+                                    <Button
+                                        classes={{ root: classes.buttonRoot }}
+                                        variant={'outlined'}
+                                        color={fromButton === "30s" ?
+                                            "secondary" :
                                             "primary"} //was default
                                         onClick={handleOnClick30s}>
                                         30s
                                     </Button>
                                 </Grid>
                                 <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
-                                    <Button 
-                                        classes={{ root: classes.buttonRoot }} 
-                                        onClick={handleOnClick1m} variant={'outlined'} 
-                                        color={fromButton === "1m" ? 
-                                        "secondary" : 
-                                        "primary"} //was default
-                                        >
+                                    <Button
+                                        classes={{ root: classes.buttonRoot }}
+                                        onClick={handleOnClick1m} variant={'outlined'}
+                                        color={fromButton === "1m" ?
+                                            "secondary" :
+                                            "primary"} //was default
+                                    >
                                         1m
                                     </Button>
                                 </Grid>
                                 <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
-                                    <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick5m} variant={'outlined'} 
-                                    color={fromButton === "5m" ? "secondary" : 
-                                    "primary"} //was default
+                                    <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick5m} variant={'outlined'}
+                                        color={fromButton === "5m" ? "secondary" :
+                                            "primary"} //was default
                                     >
                                         5m
                                     </Button>
                                 </Grid>
                                 <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
                                     <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick30m} variant={'outlined'} color={fromButton === "30m" ? "secondary" :
-                                     "primary"} //was default
-                                     >
+                                        "primary"} //was default
+                                    >
                                         30m
                                     </Button>
                                 </Grid>
                                 <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
-                                    <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1h} variant={'outlined'} color={fromButton === "1h" ? "secondary" : 
-                                    "primary"} //was default
+                                    <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1h} variant={'outlined'} color={fromButton === "1h" ? "secondary" :
+                                        "primary"} //was default
                                     >
                                         1h
                                     </Button>
                                 </Grid>
                                 <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
-                                    <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick2h} variant={'outlined'} color={fromButton === "2h" ? "secondary" : 
-                                    "primary"} //was default
+                                    <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick2h} variant={'outlined'} color={fromButton === "2h" ? "secondary" :
+                                        "primary"} //was default
                                     >
                                         2h
                                     </Button>
                                 </Grid>
                                 <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
-                                    <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick12h} variant={'outlined'} color={fromButton === "12h" ? "secondary" : 
-                                    "primary"} //was default
+                                    <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick12h} variant={'outlined'} color={fromButton === "12h" ? "secondary" :
+                                        "primary"} //was default
                                     >
                                         12h
                                     </Button>
                                 </Grid>
                                 <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
                                     <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1d} variant={'outlined'} color={fromButton === "1d" ? "secondary" :
-                                     "primary"} //was default
-                                     >
+                                        "primary"} //was default
+                                    >
                                         1d
                                     </Button>
                                 </Grid>
                                 <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
-                                    <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick2d} variant={'outlined'} color={fromButton === "2d" ? "secondary" : 
-                                    "primary"} //was default
+                                    <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick2d} variant={'outlined'} color={fromButton === "2d" ? "secondary" :
+                                        "primary"} //was default
                                     >
                                         2d
                                     </Button>
                                 </Grid>
                                 <Grid item xs={2} sm={'auto'} md={1} lg={'auto'} >
-                                    <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1w} variant={'outlined'} color={fromButton === "1w" ? "secondary" : 
-                                    "primary"} //was default
+                                    <Button classes={{ root: classes.buttonRoot }} onClick={handleOnClick1w} variant={'outlined'} color={fromButton === "1w" ? "secondary" :
+                                        "primary"} //was default
                                     >
                                         1w
                                     </Button>
@@ -702,7 +702,7 @@ const ArchiverDataViewer = (props) => {
                     </Grid>
                 </AccordionDetails>
             </Accordion>}
-            {(width !== null) && (height !== null) && <div style={{ width: width, height: props.height, background: theme.palette.background.paper,  paddingBottom: 8 }}
+            {(width !== null) && (height !== null) && <div style={{ width: width, height: props.height, background: theme.palette.background.paper, paddingBottom: 8 }}
                 onContextMenu={props.disableContextMenu ? undefined : handleToggleContextMenu}
 
                 onPointerDownCapture={(event) => {
@@ -722,12 +722,12 @@ const ArchiverDataViewer = (props) => {
                             format: 'svg'
                         }
                     } : {
-                            "displaylogo": false,
-                            scrollZoom: false,
-                            toImageButtonOptions: {
-                                format: 'svg'
-                            }
+                        "displaylogo": false,
+                        scrollZoom: false,
+                        toImageButtonOptions: {
+                            format: 'svg'
                         }
+                    }
                     }
                     useResizeHandler={true}
                     style={{
@@ -740,12 +740,12 @@ const ArchiverDataViewer = (props) => {
                             return ({
                                 x: pvData.x,
                                 y: pvData.y,
-                                name: props.traces[index].name ? props.traces[index].name : replaceMacros(props.traces[index].pv, props.macros).replace("pva://",""),
+                                name: props.traces[index].name ? props.traces[index].name : replaceMacros(props.traces[index].pv, props.macros).replace("pva://", ""),
                                 type: props.traces[index].type ? props.traces[index].type : 'scatter',
                                 mode: props.traces[index].mode ? props.traces[index].mode : 'lines',
                                 marker: { color: props.traces[index].color ? props.traces[index].color : theme.palette.reactVis.lineColors[index] },
-                                hovertemplate:props.traces[index].yHoverFormat?
-                                    "(%{y:"+props.traces[index].yHoverFormat+"}) %{x}<extra>%{fullData.name}</extra>"
+                                hovertemplate: props.traces[index].yHoverFormat ?
+                                    "(%{y:" + props.traces[index].yHoverFormat + "}) %{x}<extra>%{fullData.name}</extra>"
                                     : "(%{y}) %{x}<extra>%{fullData.name}</extra>"
 
                             })
@@ -754,14 +754,14 @@ const ArchiverDataViewer = (props) => {
                             return ({
                                 x: pvData.x,
                                 y: pvData.y,
-                                name: props.traces[index].name ? props.traces[index].name : replaceMacros(props.traces[index].pv, props.macros).replace("pva://",""),
+                                name: props.traces[index].name ? props.traces[index].name : replaceMacros(props.traces[index].pv, props.macros).replace("pva://", ""),
                                 type: props.traces[index].type ? props.traces[index].type : 'scatter',
                                 mode: props.traces[index].mode ? props.traces[index].mode : 'lines',
                                 marker: { color: props.traces[index].color ? props.traces[index].color : theme.palette.reactVis.lineColors[index] },
                                 yaxis: typeof (props.traces[index].yAxis) !== 'undefined' ? (parseInt(props.traces[index].yAxis) === 0 ? undefined : 'y' + (parseInt(props.traces[index].yAxis) + 1)) : 'yaxis',
-                                hovertemplate:props.traces[index].yHoverFormat?
-                                "(%{y:"+props.traces[index].yHoverFormat+"}) %{x}<extra>%{fullData.name}</extra>"
-                                : "(%{y}) %{x}<extra>%{fullData.name}</extra>"
+                                hovertemplate: props.traces[index].yHoverFormat ?
+                                    "(%{y:" + props.traces[index].yHoverFormat + "}) %{x}<extra>%{fullData.name}</extra>"
+                                    : "(%{y}) %{x}<extra>%{fullData.name}</extra>"
 
                             })
                         }
@@ -786,7 +786,7 @@ const ArchiverDataViewer = (props) => {
                 />
             </div>
             }
-               {props.traces.map((trace, index) => (
+            {props.traces.map((trace, index) => (
                 (width !== null) && (height !== null) && <ArchiverData
                     key={index.toString()}
                     maxNumberOfSamples={width * 10}
@@ -876,12 +876,12 @@ ArchiverDataViewer.propTypes = {
          * show or hide the grid
          */
         showgrid: PropTypes.bool,
-         /**
-         * The plotjs format overide for the tick format. This is derived from the <a href="https://github.com/d3/d3-format/blob/v2.0.0/README.md#format">d3 format specification</a>
-         * Example: ".3e" : exponential notaion with 3 digits.
-         *
-         */
-        tickFormat:PropTypes.string,
+        /**
+        * The plotjs format overide for the tick format. This is derived from the <a href="https://github.com/d3/d3-format/blob/v2.0.0/README.md#format">d3 format specification</a>
+        * Example: ".3e" : exponential notaion with 3 digits.
+        *
+        */
+        tickFormat: PropTypes.string,
         /**
          * 'linear' or 'log' type
          */
@@ -914,11 +914,11 @@ ArchiverDataViewer.propTypes = {
     /**
      * From  time, ISO date format: (YYYY-MM-DDTHH:MM:SSZ), will override the fromTimeOffset
      */
-    from:PropTypes.string,
+    from: PropTypes.string,
     /**
      * To  time,  ISO date format: (YYYY-MM-DDTHH:MM:SSZ)
      */
-    to:PropTypes.string,
+    to: PropTypes.string,
 
 };
 

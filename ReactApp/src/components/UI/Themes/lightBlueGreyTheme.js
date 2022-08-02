@@ -41,7 +41,7 @@ const lightBlueGreyPalette = () => {
     const svgComponentSecondary={main:secondary['500']};
     const contrastThreshold = 3;
     const tonalOffset = 0.2;
-    const paperElevation = 10;
+    const paperElevation = 3;
     const reactVis= {
         '.rv-xy-plot__axis__tick__line': { stroke: blueGrey[400] },
         '.rv-xy-plot__axis__tick__text': { fill: blueGrey[400], fontSize: '11px' },

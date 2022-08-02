@@ -39,7 +39,7 @@ const defaultPalette = () => {
     const svgComponentSecondary={main:pink['500']};
     const contrastThreshold = 3;
     const tonalOffset = 0.2;
-    const paperElevation = 10;
+    const paperElevation = 1;
     const reactVis= {
     '.rv-xy-plot__axis__tick__line': { stroke: grey[500] },
     '.rv-xy-plot__axis__tick__text': { fill: grey[500], fontSize: '11px' },

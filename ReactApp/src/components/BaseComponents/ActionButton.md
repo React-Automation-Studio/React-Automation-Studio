@@ -44,8 +44,8 @@ ActionButton to multi variable example:
 {/*The TextOuput code is included for demonstration purposes only*/}  
 {/*Only the the JSX code between the hashes  is required to instantiate the ActionButton */}  
   import TextOutput from './TextOutput';
-  import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-    import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
+  import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+    import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
   <div>
   <div style={{marginBottom:8}}>
     <TextOutput  pv='testIOC:BO1'   label='Value of testIOC:BO1 '/>

@@ -4,10 +4,10 @@ TraditionalLayout with no moreVert drawer and custom items in side drawer
 ```js
 import Content from '../../../../docs/content/LayoutContent.js';
 import TraditionalLayout from './TraditionalLayout'
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import TouchAppIcon from '@material-ui/icons/TouchApp';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import TouchAppIcon from '@mui/icons-material/TouchApp';
 
 const username = 'Guest'
 

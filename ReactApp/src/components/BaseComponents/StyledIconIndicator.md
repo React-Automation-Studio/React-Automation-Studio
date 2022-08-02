@@ -6,7 +6,7 @@ StyledIconIndicator with custom icon EPICS variable example:
 {/*The ToggleButton code is included for demonstration purposes only*/}  
 {/*Only the the JSX code between the hashes  is required to instantiate the StyledIconIndicator */}  
   import ToggleButton from './ToggleButton';
-  import Face from '@material-ui/icons/Face';
+  import Face from '@mui/icons-material/Face';
   <div style={{textAlign:'center'}}>
   <ToggleButton
   pv='$(device):BO$(id)'
@@ -60,7 +60,7 @@ StyledIconIndicator with custom icon EPICS variable example:
 {/*The ToggleButton code is included for demonstration purposes only*/}  
 {/*Only the the JSX code between the hashes  is required to instantiate the StyledIconIndicator */}  
   import ToggleButton from './ToggleButton';
-  import Face from '@material-ui/icons/Face';
+  import Face from '@mui/icons-material/Face';
   <div style={{textAlign:'center'}}>
   <ToggleButton
   pv='$(device):BO$(id)'
@@ -86,7 +86,7 @@ StyledIconIndicator with custom icon EPICS variable example:
 {/*The ToggleButton code is included for demonstration purposes only*/}  
 {/*Only the the JSX code between the hashes  is required to instantiate the StyledIconIndicator */}  
   import ToggleButton from './ToggleButton';
-  import Face from '@material-ui/icons/Face';
+  import Face from '@mui/icons-material/Face';
   <div style={{textAlign:'center'}}>
   <ToggleButton
   pv='$(device):BO$(id)'

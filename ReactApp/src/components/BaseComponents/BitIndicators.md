@@ -49,7 +49,7 @@ BitIndicators with custom icon EPICS variable example:
 {/*The TextInput code is included for demonstration purposes only*/}  
 {/*Only the the JSX code between the hashes  is required to instantiate the BitIndicators */}  
   import TextInput from './TextInput';
-  import Face from '@material-ui/icons/Face';
+  import Face from '@mui/icons-material/Face';
   <div style={{textAlign:'center'}}>
   <TextInput
   pv='$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}}

@@ -29,7 +29,7 @@ For Examples on how to use the widget see the simple example below or have a loo
 Simple example usage:
 
 ```js static
- import { withStyles } from "@material-ui/core/styles";
+ import { withStyles } from "@mui/material/styles";
  import Widget from "path to Widget";
  const styles = (theme) => ({
   root: {

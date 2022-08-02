@@ -11,7 +11,11 @@ import PV from '../SystemComponents/PV'
 import { replaceMacros } from '../SystemComponents/Utils/macroReplacement';
 import makeStyles from '@mui/styles/makeStyles';
 import { useTheme } from '@mui/material/styles';
-import { DateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+
 import Button from '@mui/material/Button';
 import Plot from 'react-plotly.js';
 import Grid from '@mui/material/Grid';
@@ -638,9 +642,9 @@ const ArchiverDataViewer = (props) => {
                             </Grid>
                         </Grid>
                         <Grid item xl={2} lg={'auto'} md={4} sm={6} xs={6} style={{ textAlign: 'center' }}>
-                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
                                 <DateTimePicker
-                                    variant="inline"
+                                    
                                     ampm={false}
                                     label="From:"
                                     value={selectedFromDate}
@@ -651,14 +655,15 @@ const ArchiverDataViewer = (props) => {
                                             setFromButton("none")
                                         }
                                     }
-                                    format="yyyy/MM/dd HH:mm:ss"
+                                    renderInput={(params) => <TextField {...params} />}
+                                    // format="yyyy/MM/dd HH:mm:ss"
                                 />
-                            </MuiPickersUtilsProvider>
+                            </LocalizationProvider>
                         </Grid>
                         <Grid item xl={2} lg={'auto'} md={4} sm={6} xs={6} style={{ textAlign: 'center' }}>
-                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
                                 <DateTimePicker
-                                    variant="inline"
+                                    // variant="inline"
                                     ampm={false}
                                     label="To:"
                                     value={selectedToDate}
@@ -669,9 +674,10 @@ const ArchiverDataViewer = (props) => {
                                             setLive(false)
                                         }
                                     }
-                                    format="yyyy/MM/dd HH:mm:ss"
+                                    renderInput={(params) => <TextField {...params} />}
+                                    // format="yyyy/MM/dd HH:mm:ss"
                                 />
-                            </MuiPickersUtilsProvider>
+                           </LocalizationProvider>
                         </Grid>
                         <Grid item xl={3} lg={'auto'} md={4} sm={6} xs={12}>
                             <Grid

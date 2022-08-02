@@ -553,7 +553,7 @@ Widget.propTypes = {
 Widget.defaultProps = {
   disabled: false,
   onColor: "primary",
-  offColor: "primary", ///was default must find a fix
+  offColor: "default",
   showTooltip:false,
   useMetadata: true,
   tooltip:"",

@@ -6,7 +6,7 @@ import defaultTheme from './defaultTheme'
 
 
 const oceanPalette = () => {
-    const type = "dark";
+    const mode = "dark";
     const primary = { main: blueGrey[400] };
     const secondary = { main: lightBlue[100] };
     const error = pink;
@@ -64,7 +64,7 @@ const oceanPalette = () => {
     };
 
     return ({
-        type: type,
+        mode: mode,
         primary: primary,
         secondary: secondary,
         error: error,

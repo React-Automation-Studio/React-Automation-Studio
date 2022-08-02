@@ -3,7 +3,7 @@ import { indigo, teal, lightBlue, blueGrey, pink, red, blue, green,lightGreen,  
 import { alpha } from '@mui/material/styles';
 
 const defaultPalette = () => {
-    const type = "dark";
+    const mode = "dark";
     const primary = cyan;
     const secondary = pink;
     const ok={main:lime['400']}
@@ -58,7 +58,7 @@ const defaultPalette = () => {
       lineColors: [pink[500], lime[400], '#9c27b0', '#3f51b5', '#e91e63'],
     };
     return ({
-        type: type,
+        mode: mode,
         primary: primary,
         secondary: secondary,
         error: error,

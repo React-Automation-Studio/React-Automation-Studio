@@ -6,7 +6,7 @@ import defaultTheme from './defaultTheme'
 
 
 const navyPalette = () => {
-    const type = "dark";
+    const mode = "dark";
     const primary = { main: "#53697b" };
     const secondary = { main: lightBlue[100] };
     const error = pink;
@@ -64,7 +64,7 @@ const navyPalette = () => {
     };
 
     return ({
-        type: type,
+        mode: mode,
         primary: primary,
         secondary: secondary,
         error: error,

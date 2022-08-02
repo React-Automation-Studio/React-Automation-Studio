@@ -218,7 +218,6 @@ const AccessControl = (props) => {
   const classes = useStyles();
 
   const { userGroups, initialized: uagsInitialized, updateUAGs, updateUAGsOk: saveOk } = useUAGs({});
-
   useEffect(() => {
     setSaveOkLatched(saveOk)
   }, [saveOk])
@@ -226,8 +225,10 @@ const AccessControl = (props) => {
   const [modifiedUserGroups, setModifiedUserGroups] = useState({});
 
   useEffect(() => {
+    if(uagsInitialized){
     if (editMode === false) {
       const newUserGroups = JSON.parse(JSON.stringify(userGroups));
+    
       setModifiedUserGroups(newUserGroups)
     }
     else if (clear === true) {
@@ -245,9 +246,9 @@ const AccessControl = (props) => {
       setSave(false)
       setClear(false)
     }
+  }
     // eslint-disable-next-line  react-hooks/exhaustive-deps
-  }, [userGroups, editMode, save, clear, saveOkLatched])
-
+  }, [uagsInitialized,userGroups, editMode, save, clear, saveOkLatched])
   let userGroupKeys = uagsInitialized ? Object.keys(modifiedUserGroups) : [];
   let usergroup = uagsInitialized ? (userGroupKeys[tabValue] ? userGroupKeys[tabValue] : undefined) : undefined;
 

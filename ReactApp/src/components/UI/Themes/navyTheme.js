@@ -9,6 +9,7 @@ const navyPalette = () => {
     const mode = "dark";
     const primary = { main: "#53697b" };
     const secondary = { main: lightBlue[100] };
+    const defaultColor = { main: grey[600] };
     const error = pink;
     const major = red;
     const minor = deepOrange;
@@ -67,6 +68,7 @@ const navyPalette = () => {
         mode: mode,
         primary: primary,
         secondary: secondary,
+        default:defaultColor,
         error: error,
         ok:ok,
         major: major,

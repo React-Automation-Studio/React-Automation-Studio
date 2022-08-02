@@ -9,6 +9,8 @@ const oceanPalette = () => {
     const mode = "dark";
     const primary = { main: blueGrey[400] };
     const secondary = { main: lightBlue[100] };
+    const defaultColor = { main: grey[500] };
+    
     const error = pink;
     const major = red;
     const minor = deepOrange;
@@ -67,6 +69,7 @@ const oceanPalette = () => {
         mode: mode,
         primary: primary,
         secondary: secondary,
+        default:defaultColor,
         error: error,
         ok:ok,
         major: major,

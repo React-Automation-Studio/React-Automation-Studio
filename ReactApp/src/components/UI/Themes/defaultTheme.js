@@ -6,6 +6,7 @@ const defaultPalette = () => {
     const mode = "dark";
     const primary = cyan;
     const secondary = pink;
+    const defaultColor = { main: grey[600] };
     const ok={main:lime['400']}
     const error = pink;
     const major = red;
@@ -61,6 +62,7 @@ const defaultPalette = () => {
         mode: mode,
         primary: primary,
         secondary: secondary,
+        default:defaultColor,
         error: error,
         ok:ok,
         major: major,

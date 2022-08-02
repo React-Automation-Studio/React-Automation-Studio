@@ -9,6 +9,7 @@ const lightBlueGreyPalette = () => {
     const type = "light";
     const primary = blueGrey;
     const secondary = pink;
+    const defaultColor = { main: grey[300] };
     const error = pink;
     const ok={main:lightGreen['400']}
     const major = red;
@@ -64,6 +65,7 @@ const lightBlueGreyPalette = () => {
         type: type,
         primary: primary,
         secondary: secondary,
+        default:defaultColor,
         error: error,
         ok:ok,
         major: major,

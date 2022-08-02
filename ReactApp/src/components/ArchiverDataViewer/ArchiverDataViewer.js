@@ -14,7 +14,7 @@ import { useTheme } from '@mui/material/styles';
 
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 
 import Button from '@mui/material/Button';
 import Plot from 'react-plotly.js';
@@ -54,13 +54,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const useArchiverDataHook = (props) => {
-    const context = useContext(AutomationStudioContext);
+       const context = useContext(AutomationStudioContext);
 
     const [data, setData] = useState(null);
     const [initialized, setInitialized] = useState(true);
     useEffect(() => {
         const handleAck = (msg) => {
-
             if (typeof msg !== 'undefined') {
 
                 setInitialized(msg.initialized)
@@ -535,7 +534,7 @@ const ArchiverDataViewer = (props) => {
         ...legend,
         showlegend: props.showLegend,
     }
-
+  
     return (
         <div ref={paperRef} style={{ width: props.width }}>
             {pvConnections()}
@@ -643,30 +642,36 @@ const ArchiverDataViewer = (props) => {
                         </Grid>
                         <Grid item xl={2} lg={'auto'} md={4} sm={6} xs={6} style={{ textAlign: 'center' }}>
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                <DateTimePicker
+                                <MobileDateTimePicker
                                     
-                                    ampm={false}
+                                    // ampm={false}
                                     label="From:"
                                     value={selectedFromDate}
+                                    maxDateTime={selectedToDate}
                                     onChange={
                                         (newDate) => {
                                             setSelectedFromDate(newDate)
-                                            console.log("setSelectedFromDate", newDate)
+                                           
                                             setFromButton("none")
                                         }
                                     }
-                                    renderInput={(params) => <TextField {...params} />}
-                                    // format="yyyy/MM/dd HH:mm:ss"
+                                    renderInput={(params) => 
+                                    <TextField
+                                         {...params}
+                                         variant="standard"
+                                         />}
+                                    
                                 />
                             </LocalizationProvider>
                         </Grid>
                         <Grid item xl={2} lg={'auto'} md={4} sm={6} xs={6} style={{ textAlign: 'center' }}>
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                <DateTimePicker
-                                    // variant="inline"
-                                    ampm={false}
+                                <MobileDateTimePicker
+                                   
+                                    
                                     label="To:"
                                     value={selectedToDate}
+                                    minDateTime={selectedFromDate}
                                     onChange={
                                         (newDate) => {
                                             setSelectedToDate(newDate)
@@ -674,8 +679,12 @@ const ArchiverDataViewer = (props) => {
                                             setLive(false)
                                         }
                                     }
-                                    renderInput={(params) => <TextField {...params} />}
-                                    // format="yyyy/MM/dd HH:mm:ss"
+                                    renderInput={(params) => 
+                                        <TextField
+                                             {...params}
+                                             variant="standard"
+                                             />}
+                                    
                                 />
                            </LocalizationProvider>
                         </Grid>

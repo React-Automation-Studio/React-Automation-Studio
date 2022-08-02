@@ -93,6 +93,7 @@ const TraditionalLayout = (props) => {
                         <Tabs
                             style={{flexGrow: 1,}}
                             value={props.tabValue}
+                            textColor="inherit"
                             onChange={props.handleTabChange}
                             {...props.tabProps}
                         >

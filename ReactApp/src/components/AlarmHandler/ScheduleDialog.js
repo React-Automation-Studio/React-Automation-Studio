@@ -24,12 +24,17 @@ import SignalIcon from './SignalIcon';
 import DateFnsUtils from '@date-io/date-fns';
 import { formatISO, isSameDay, isAfter, parseISO, setSeconds, startOfDay, endOfDay } from 'date-fns';
 
-import {
-    MuiPickersUtilsProvider,
-    TimePicker,
-    DatePicker,
-} from '@material-ui/pickers';
+// import {
+//     MuiPickersUtilsProvider,
+//     TimePicker,
+//     DatePicker,
+// } from '@material-ui/pickers';
 
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { TextField } from '@mui/material';
 const useStyles = makeStyles(theme => ({
     root: {
         padding: theme.spacing(1),
@@ -1116,14 +1121,19 @@ const ScheduleDialog = (props) => {
                                             From
                                     </Grid>
                                         <Grid item xs={9} >
-                                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                        <LocalizationProvider dateAdapter={AdapterDateFns}>
                                                 <TimePicker
                                                     ampm={false}
                                                     value={fromTime}
                                                     onChange={handleFromTime}
                                                     disabled={!displayUserObject.notify}
+                                                    renderInput={(params) => 
+                                                        <TextField
+                                                             {...params}
+                                                             variant="standard"
+                                                             />}
                                                 />
-                                            </MuiPickersUtilsProvider>
+                                            </LocalizationProvider>
                                         </Grid>
                                     </Grid>
                                 </Grid>
@@ -1144,14 +1154,19 @@ const ScheduleDialog = (props) => {
                                             To
                                     </Grid>
                                         <Grid item xs={9} >
-                                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                        <LocalizationProvider dateAdapter={AdapterDateFns}>
                                                 <TimePicker
                                                     ampm={false}
                                                     value={toTime}
                                                     onChange={handleToTime}
                                                     disabled={!displayUserObject.notify}
+                                                    renderInput={(params) => 
+                                                        <TextField
+                                                             {...params}
+                                                             variant="standard"
+                                                             />}
                                                 />
-                                            </MuiPickersUtilsProvider>
+                                            </LocalizationProvider>
                                         </Grid>
                                     </Grid>
                                 </Grid>
@@ -1242,29 +1257,39 @@ const ScheduleDialog = (props) => {
                                         From
                                     </Grid>
                                     <Grid item xs={9}>
-                                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                    <LocalizationProvider dateAdapter={AdapterDateFns}>
                                             <DatePicker
-                                                format="dd MMMM yyyy"
+                                                inputFormat="dd MMMM yyyy"
                                                 value={fromDate}
                                                 onChange={handleFromDate}
                                                 disabled={displayUserObject.weekly || !displayUserObject.notify}
                                                 autoOk
+                                                renderInput={(params) => 
+                                                    <TextField
+                                                         {...params}
+                                                         variant="standard"
+                                                         />}
                                             />
-                                        </MuiPickersUtilsProvider>
+                                        </LocalizationProvider>
                                     </Grid>
                                     <Grid item xs={2} style={{ marginLeft: '1.5em' }} className={classes.verticalCenter}>
                                         To
                                     </Grid>
                                     <Grid item xs={9}>
-                                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                    <LocalizationProvider dateAdapter={AdapterDateFns}>
                                             <DatePicker
-                                                format="dd MMMM yyyy"
+                                                inputFormat="dd MMMM yyyy"
                                                 value={toDate}
                                                 onChange={handleToDate}
                                                 disabled={displayUserObject.weekly || !displayUserObject.notify}
                                                 autoOk
+                                                renderInput={(params) => 
+                                                    <TextField
+                                                         {...params}
+                                                         variant="standard"
+                                                         />}
                                             />
-                                        </MuiPickersUtilsProvider>
+                                        </LocalizationProvider>
                                     </Grid>
                                 </Grid>
                             </Grid>

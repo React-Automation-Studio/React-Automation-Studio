@@ -14,11 +14,12 @@ import Typography from '@mui/material/Typography';
 import DateFnsUtils from '@date-io/date-fns';
 import { formatISO, parseISO, setSeconds, addHours } from 'date-fns';
 
-import {
-    MuiPickersUtilsProvider,
-    DateTimePicker,
-} from '@material-ui/pickers';
 
+
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
+import { TextField } from '@mui/material';
 // Styles
 const useStyles = makeStyles(theme => ({
     boldText: {
@@ -146,7 +147,27 @@ const EnableDialog = (props) => {
                             marginRight: '1em'
                         }}
                         >until</Typography>
-                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                <MobileDateTimePicker
+                                    
+                                    format="dd MMMM yyyy HH:mm"
+                                    value={dateTime}
+                                    onChange={handleBridgeTime}
+                                    ampm={false}
+                                    disablePast
+                                    autoOk={false}
+                                    // Backwards compatible
+                                    disabled={!props.data.bridge ?? true}
+                                    renderInput={(params) => 
+                                    <TextField
+                                         {...params}
+                                         variant="standard"
+                                         />}
+                                    
+                                />
+                            </LocalizationProvider>
+
+                        {/* <MuiPickersUtilsProvider utils={DateFnsUtils}>
                             <DateTimePicker
                                 format="dd MMMM yyyy HH:mm"
                                 value={dateTime}
@@ -157,7 +178,7 @@ const EnableDialog = (props) => {
                                 // Backwards compatible
                                 disabled={!props.data.bridge ?? true}
                             />
-                        </MuiPickersUtilsProvider>
+                        </MuiPickersUtilsProvider> */}
                     </Grid>
                 </Grid>
             </DialogContent>

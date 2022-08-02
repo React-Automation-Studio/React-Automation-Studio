@@ -27,7 +27,7 @@ import TraditionalLayout from '../../UI/Layout/ComposedLayouts/TraditionalLayout
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    padding: theme.spacing(1) * 2
+    padding: 16
   },
   paper: {
     padding: theme.spacing(1) * 2,
@@ -46,7 +46,7 @@ class MobileDemo2 extends React.Component {
           denseAppBar
           alignTitle="center"
         ></TraditionalLayout>}
-        <div style={{ padding: 24}}>
+        <div style={{ padding: 16}}>
           <div >
             <Grid container spacing={2}>
               <Grid item xs={12} lg={6}>

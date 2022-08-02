@@ -25,23 +25,24 @@ import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
 import axios from 'axios';
 import { GoogleLogin } from 'react-google-login';
+import {Container} from '@mui/material'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 const useStyles = makeStyles((theme) => ({
-  main: {
-    width: 'auto',
-    display: 'block', // Fix IE 11 issue.
-    marginLeft: theme.spacing(1) * 3,
-    marginRight: theme.spacing(1) * 3,
-    [theme.breakpoints.up(400 + theme.spacing(1) * 3 * 2)]: {
-      width: 400,
-      marginLeft: 'auto',
-      marginRight: 'auto',
-    },
-  },
+  // main: {
+  //   width: 'auto',
+  //   display: 'block', // Fix IE 11 issue.
+  //   marginLeft: theme.spacing(1) * 3*8,
+  //   marginRight: theme.spacing(1) * 3*8,
+  //   [theme.breakpoints.up(400 + theme.spacing(1) *8* 3 * 2)]: {
+  //     width: 400,
+  //     marginLeft: 'auto',
+  //     marginRight: 'auto',
+  //   },
+  // },
   paper: {
     marginTop: theme.spacing(1) * 8,
     display: 'flex',
@@ -292,8 +293,8 @@ const Login = (props) => {
         </DialogActions>
       </Dialog>
 
-      <main className={classes.main}>
-        <Paper className={classes.paper}>
+      <Container maxWidth="sm" sx={{paddingTop:8}}>
+        <Paper className={classes.paper} sx={{padding:4}}>
           {props.customHeader ? props.customHeader : <Header {...props} />}
 
           {(loginModes.length > 1) && <AppBar position="static" color='inherit' >
@@ -371,7 +372,7 @@ const Login = (props) => {
           {props.customFooter ? props.customFooter : <Footer {...props} />}
           {enableActiveDirectoryLogin&&adLoginMode&&props.adFooter}
         </Paper>
-      </main>
+      </Container>
     </React.Fragment>
   );
 }

@@ -507,13 +507,16 @@ Contact us at rasadmin@tlabs.ac.za
 
 # Changelog
 
- V3.2.0 Friday 22 July 2022
+V3.2.0 Friday 22 July 2022
 <br />
 <br />
 Minor Bug Fixes and Updates:
 <ul>
-  <li>General clean up of code formatting </li>
+  <li>General clean up of code formatting in both pvServer and React (prior upgrading the MUI library)</li>
   <li>Addition of Poetry as Python package manager</li>
+  <li>Addition of Black as a formating tool for Python. A merge request will fail if Python is not formatted accordingly. The tool Black is included into development section of Poetry.</li>
+  <li>Restoration of GitHub pages build. The build excludes documents used with the style guide due to use of "{{" in examples.</li>
+  <li>Minor documentation clean up: links to repositories/projects up to date.</li>
 </ul>
 <br />
 

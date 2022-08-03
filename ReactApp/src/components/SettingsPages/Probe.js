@@ -37,9 +37,11 @@ class Probe extends React.Component {
     }
 
     return (
-<React.Fragment>
+<div>
+
+  
   {probetype==='normal'&&<Grid   container
-    direction="column"
+   
     justifyContent="center"
     spacing={2}>
     <Grid item xs={12} sm ={6} lg={4} >
@@ -102,7 +104,7 @@ class Probe extends React.Component {
   </Grid>
   }
   {probetype==='readOnly'&&<Grid   container
-    direction="column"
+    
     justifyContent="center"
     spacing={2}>
     <Grid item xs={12} sm ={6} lg={4} >
@@ -153,7 +155,7 @@ class Probe extends React.Component {
   </Grid>
   }
   {probetype==='simple'&&<Grid   container
-    direction="column"
+    
     justifyContent="stretch"
     spacing={2}>
     <Grid item xs={12} sm ={6} lg={4} >
@@ -220,7 +222,7 @@ class Probe extends React.Component {
     </Grid>
   </Grid>
   }
-</React.Fragment>
+</div>
     );
   }
 }

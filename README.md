@@ -519,17 +519,41 @@ Contact us at rasadmin@tlabs.ac.za
 # Changelog
 
 V4.0.0 Wednesday 3 August 2022
-<br />
-<br />
+
+Major Updates:
+<ul>
+  <li>Update to React 18.2.0 </li>
+  <li>Update to MUI 5.9.2- see the note on breaking changes</li>
+  <li>All NodeJs packages have been updated to latest versions except react-router-dom.</li>
+  <li>ReactVis was dropped and components have been updated to use Plotly.js </li>
+</ul>
+
 Minor Bug Fixes and Updates:
 <ul>
+  <li>Minor formatting and theme changes due  MUI update</li>
   <li>General clean up of code formatting in both pvServer and React (prior upgrading the MUI library)</li>
   <li>Addition of Poetry as Python package manager</li>
   <li>Addition of Black as a formating tool for Python. A merge request will fail if Python is not formatted accordingly. The tool Black is included into development section of Poetry.</li>
-  <li>Restoration of GitHub pages build. The build excludes documents used with the style guide due to use of "{{" in examples.</li>
-  <li>Minor documentation clean up: links to repositories/projects up to date.</li>
+  <li>Restoration of GitHub pages build. The build excludes documents used with the style guide due to use of "{{"
+    in examples.
+  </li>
+  <li>Minor documentation clean up: links to repositories/ projects up to date.</li>
 </ul>
-<br />
+
+Breaking Changes:
+<ul>
+  <li>ReactVis  was dropped  </li>
+  <li>Update to MUI 5.9.2 from  Material UI 4 <br/>
+  Follow the migration guide at: https://mui.com/material-ui/migration/migration-v4/
+  and apply  the preset-safe code mods https://mui.com/material-ui/migration/migration-v4/#preset-safe
+  </li>
+  <li>
+    If you customized any of the themes be sure to update in line with the base themes  that come with the master repo
+  </li>
+  <li>Removed Deprecated ActionFanoutButton - use ActionButton instead</li>
+  <li>Removed Deprecated SwitchComponent - use Switch instead</li>
+</ul>
+
 
 
 V3.1.0 Wednesday 25 August 2021

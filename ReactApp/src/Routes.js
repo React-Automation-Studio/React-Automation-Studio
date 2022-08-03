@@ -46,8 +46,8 @@ const Routes = (props) => {
             component={() =>
               <Login 
                
-               footerString= "Login is now customizable"
-               version="V3.0.1"
+              //  footerString= "Login is now customizable"
+               version="V4.0.0"
                timeout={5000}
                />
             }

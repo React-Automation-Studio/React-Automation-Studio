@@ -67,7 +67,7 @@ REACT_ENABLE_LOGIN_GOOGLE = os.getenv("REACT_APP_EnableGoogleLogin", None)
 
 log.info("")
 log.info("**************************************")
-log.info("React Automation Studio V3.1.0")
+log.info("React Automation Studio V4.0.0")
 log.info("")
 log.info("pvServer Environment Variables:")
 log.info("")

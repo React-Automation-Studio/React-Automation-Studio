@@ -353,7 +353,7 @@ const GraphXY = (props) => {
     return legendInit
   })
 
-  const [layout, setLayout] = useState({})
+  const [layout, setLayout] = useState({plot_bgcolor: backgroundColor,paper_bgcolor: backgroundColor})
 
   useEffect(() => {
     setLayout({

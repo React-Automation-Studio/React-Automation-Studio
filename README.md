@@ -552,6 +552,7 @@ Breaking Changes:
   </li>
   <li>Removed Deprecated ActionFanoutButton - use ActionButton instead</li>
   <li>Removed Deprecated SwitchComponent - use Switch instead</li>
+  <li>Removed Deprecated SimpleSlider - use Slider instead</li>
 </ul>
 
 

@@ -55,7 +55,7 @@ Slider EPICS variable example with label and values at the top:
 
 
 ```
-Slider EPICS variable example with label and values at the top:
+Slider EPICS variable example with label at the top  and values at the bottom:
 ```js
   import Grid from '@mui/material/Grid';
 

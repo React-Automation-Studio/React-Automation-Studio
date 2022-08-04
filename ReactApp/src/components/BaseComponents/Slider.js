@@ -13,10 +13,7 @@ const styles = (theme) => {
   const backgroundColor = theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.23)' : 'rgba(255, 255, 255, 0.23)'; //copied from material ui textfield 
   return (
     {
-      root: {
-        width: 300,
-      },
-      input: {textAlign:'center',marginBottom:8,background:'green'},
+    
       slider: {
         color: "primary",
       },     
@@ -24,6 +21,7 @@ const styles = (theme) => {
         width: "100%",
         paddingBottom: theme.spacing(3),
         paddingRight: theme.spacing(3),
+       
       },
       horizontalSliderLabel: {
         width: "100%",
@@ -42,15 +40,18 @@ const styles = (theme) => {
         height:'100%', 
         padding: theme.spacing(1),
       },
-      verticalSliderValue: {
-        width: "100%",
+      verticalSliderLabelValue: {
         textAlign: 'center',
-        height:'100%', 
+        height:'100%',
+      },
+      verticalSliderValue: {
+        textAlign: 'center',
       },
       verticalSlider: {
         textAlign: 'center',
-        height:'100%', 
+        height:'100%',
         padding: theme.spacing(1),
+       
       },
       '@global': {
         '.rc-slider': {
@@ -395,7 +396,7 @@ function SliderComponent(props) {
   
   return (
     <div
-      style={{ height: '100%', width: '100%', padding: props.theme.spacing(1) }}
+      style={{ height: '100%', width: '100%',  }}
       onPointerDownCapture={handleOnClickCapture}
     >
       <FormControlLabel
@@ -404,9 +405,9 @@ function SliderComponent(props) {
         label={props.formControlLabel}
         labelPlacement={props.labelPlacement}
         control={
-          <FormControlLabel
-            key={props.pvName + props.initialized}
-            className={props.vertical ? props.classes.verticalSliderValue : props.classes.horizontalSliderValue}
+         <FormControlLabel
+            key={props.pvName + props.initialized +props.vertical }
+            className={props.vertical ? props.classes.verticalSliderLabelValue : props.classes.horizontalSliderValue}
             label={content}
             labelPlacement={props.valuePlacement}
             control={
@@ -428,6 +429,7 @@ function SliderComponent(props) {
               </div>
             }
           />
+         
         }
       />
     </div>

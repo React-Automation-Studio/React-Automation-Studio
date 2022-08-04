@@ -7,7 +7,7 @@ import Grid from '@mui/material/Grid';
 
 import Layout from '../UI/Layout/ComposedLayouts/TraditionalLayout'
 import SelectionList from '../BaseComponents/SelectionList';
-import SimpleSlider from '../BaseComponents/SimpleSlider';
+import Slider from '../BaseComponents/Slider';
 import DataConnection from '../SystemComponents/DataConnection';
 
 import Floor from './SVG Components/Floor'
@@ -186,7 +186,7 @@ const Vault = () => {
                                             />
                                         </Grid>
                                         <Grid item xs={12} lg={6}>
-                                            <SimpleSlider
+                                            <Slider
                                                 pv='$(device):building_airtemp'
                                                 macros={{ '$(device)': 'demoAlarmsIOC' }}
                                                 usePvLabel={true}
@@ -196,7 +196,7 @@ const Vault = () => {
                                             />
                                         </Grid>
                                         <Grid item xs={12} lg={6}>
-                                            <SimpleSlider
+                                            <Slider
                                                 pv='$(device):building_airhumidity'
                                                 macros={{ '$(device)': 'demoAlarmsIOC' }}
                                                 usePvLabel={true}
@@ -206,7 +206,7 @@ const Vault = () => {
                                             />
                                         </Grid>
                                         <Grid item xs={12} lg={6}>
-                                            <SimpleSlider
+                                            <Slider
                                                 pv='$(device):building_airpressure_diff'
                                                 macros={{ '$(device)': 'demoAlarmsIOC' }}
                                                 usePvLabel={true}
@@ -248,7 +248,7 @@ const Vault = () => {
                                             />
                                         </Grid>
                                         <Grid item xs={12} >
-                                            <SimpleSlider
+                                            <Slider
                                                 pv='$(device):vault_radiation'
                                                 macros={{ '$(device)': 'demoAlarmsIOC' }}
                                                 usePvLabel={true}
@@ -292,7 +292,7 @@ const Vault = () => {
                                             />
                                         </Grid>
                                         <Grid item xs={12} lg={3}>
-                                            <SimpleSlider
+                                            <Slider
                                                 pv='$(device):cyclotron_water_flow'
                                                 macros={{ '$(device)': 'demoAlarmsIOC' }}
                                                 usePvLabel={true}
@@ -302,7 +302,7 @@ const Vault = () => {
                                             />
                                         </Grid>
                                         <Grid item xs={12} lg={3}>
-                                            <SimpleSlider
+                                            <Slider
                                                 pv='$(device):cyclotron_water_temp'
                                                 macros={{ '$(device)': 'demoAlarmsIOC' }}
                                                 usePvLabel={true}
@@ -328,7 +328,7 @@ const Vault = () => {
                                             />
                                         </Grid>
                                         <Grid item xs={12} lg={4}>
-                                            <SimpleSlider
+                                            <Slider
                                                 pv='$(device):cyclotron_RF_pickup'
                                                 macros={{ '$(device)': 'demoAlarmsIOC' }}
                                                 usePvLabel={true}
@@ -338,7 +338,7 @@ const Vault = () => {
                                             />
                                         </Grid>
                                         <Grid item xs={12} lg={4}>
-                                            <SimpleSlider
+                                            <Slider
                                                 pv='$(device):cyclotron_airpressure'
                                                 macros={{ '$(device)': 'demoAlarmsIOC' }}
                                                 usePvLabel={true}
@@ -348,7 +348,7 @@ const Vault = () => {
                                             />
                                         </Grid>
                                         <Grid item xs={12} lg={4}>
-                                            <SimpleSlider
+                                            <Slider
                                                 pv='$(device):cyclotron_vacuum'
                                                 macros={{ '$(device)': 'demoAlarmsIOC' }}
                                                 usePvLabel={true}

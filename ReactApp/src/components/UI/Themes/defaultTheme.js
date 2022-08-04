@@ -4,13 +4,19 @@ import { alpha } from '@mui/material/styles';
 
 const defaultPalette = () => {
     const mode = "dark";
-    const primary = cyan;
-    const secondary = pink;
+    const primary = { main: lightBlue[200] };
+    const secondary ={ main: pink[200] };
     const defaultColor = { main: grey[600] };
     const ok={main:lime['400']}
     const error = pink;
     const major = red;
     const minor = deepOrange;
+    const background = {
+
+        default: "#121212",
+
+        paper: "#1d1d1d",
+    }
     const alarm = {
         major: {
             light: major['400'],
@@ -63,6 +69,7 @@ const defaultPalette = () => {
         primary: primary,
         secondary: secondary,
         default:defaultColor,
+        background:background,
         error: error,
         ok:ok,
         major: major,

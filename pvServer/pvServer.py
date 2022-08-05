@@ -89,7 +89,7 @@ log.info(f"REACT_APP_EnableGoogleLogin: {REACT_ENABLE_LOGIN_GOOGLE}")
 async_mode = "gevent"
 print("")
 print("**************************************")
-print("React Automation Studio V3.2.0")
+print("React Automation Studio V4.0.0")
 print("")
 print("pvServer Environment Variables:")
 print("")

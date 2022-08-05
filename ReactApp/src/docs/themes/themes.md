@@ -1,6 +1,6 @@
 React-Automation-Studio provides several themes.
 
-It uses createTheme from https://material-ui.com/customization/theming/ to create the  themes.
+It uses createTheme from https://mui.com/material-ui/customization/theming/ to create the themes.
 
 The object that is passed to the create the themes is an extended version of the palette they recommend. We have added in extra definitions for the React-Vis graph library and other situations.
 
@@ -16,7 +16,7 @@ The themes can be changed by the user using the more vertical options icon in th
 
 The currently selected theme is provided to all the components as a context variable
 
-Follow any methods at https://material-ui.com/customization/theming/ to access the the theme object.
+Follow any methods at https://mui.com/material-ui/customization/theming/ to access the the theme object.
 
 To create a custom theme we recommend copying  one of the themes defined in the ReactApp/src/components/UI/Themes folder. and placing it in src for and call it customTheme.js for example.
 Import it into the App.js as follows to extend the themes:

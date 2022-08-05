@@ -1,25 +1,30 @@
-import React, { useEffect, useState, useRef } from 'react'
-import withStyles from '@mui/styles/withStyles';
-import PropTypes from 'prop-types';
-import { v4 as uuidv4 } from 'uuid';
+import React, { useEffect, useState, useRef } from "react";
+import withStyles from "@mui/styles/withStyles";
+import PropTypes from "prop-types";
+import { v4 as uuidv4 } from "uuid";
 import Widget from "../SystemComponents/Widgets/Widget";
 import { FormControlLabel } from "@mui/material";
-import { create, all } from 'mathjs';
+import { create, all } from "mathjs";
 
+const config = {};
+const math = create(all, config);
 
-const config = { }
-const math = create(all, config)
-
-const styles = theme => ({
+const styles = (theme) => ({
   textTicks: {
-    fill: theme.palette.mode === 'dark' ? theme.palette.grey['300'] : theme.palette.grey['500']
+    fill:
+      theme.palette.mode === "dark"
+        ? theme.palette.grey["300"]
+        : theme.palette.grey["500"],
   },
   textValue: {
-    fill: theme.palette.mode === 'dark' ? theme.palette.grey['300'] : theme.palette.grey['500']
+    fill:
+      theme.palette.mode === "dark"
+        ? theme.palette.grey["300"]
+        : theme.palette.grey["500"],
   },
   root: {
-    display: 'flex',
-    flexWrap: 'wrap',
+    display: "flex",
+    flexWrap: "wrap",
   },
   FormControl: {
     width: "100%",
@@ -31,217 +36,298 @@ const styles = theme => ({
   },
 });
 
-function getTickValues(props, min, max, numberOfTicks, x0, y0, x1, x2, y1, y2, xOffset, yOffset, value) {
+function getTickValues(
+  props,
+  min,
+  max,
+  numberOfTicks,
+  x0,
+  y0,
+  x1,
+  x2,
+  y1,
+  y2,
+  xOffset,
+  yOffset,
+  value
+) {
   const { classes } = props;
-  let units = props.units ?" "+ props.units : "";
+  let units = props.units ? " " + props.units : "";
 
   let ticks = [];
 
   let i = 0;
-  if (props.initialized===true) {
+  if (props.initialized === true) {
     if (props.showTicks === true) {
-      for (i = 0; i < (numberOfTicks); i++) {
-        let tickValue = i * (max - min) / (numberOfTicks - 1) + min;
-        if (typeof props.numberFormat !== 'undefined'){
-          tickValue=math.format(parseFloat(tickValue),props.numberFormat)
+      for (i = 0; i < numberOfTicks; i++) {
+        let tickValue = (i * (max - min)) / (numberOfTicks - 1) + min;
+        if (typeof props.numberFormat !== "undefined") {
+          tickValue = math.format(parseFloat(tickValue), props.numberFormat);
         }
         ticks.push(
-          <g key={i}
-          >
+          <g key={i}>
             <text
               className={classes.textTicks}
               x={xOffset - 3}
-              y={y2 - i * (y2 - y0 - yOffset) / (numberOfTicks - 1) - 3}
-              textAnchor={'end'}
+              y={y2 - (i * (y2 - y0 - yOffset)) / (numberOfTicks - 1) - 3}
+              textAnchor={"end"}
             >
               {tickValue + units}
             </text>
           </g>
-        )
+        );
       }
     }
   }
 
   if (props.showValue === true) {
     ticks.push(
-      <g key={i = i + 1}
-      >
+      <g key={(i = i + 1)}>
         <text
           className={classes.textTicks}
           x={x0 + (x2 - x0) / 2}
           y={yOffset - 4}
-          textAnchor={'middle'}
+          textAnchor={"middle"}
         >
-          {props.disabled === false ? value + units : ''}{}
+          {props.disabled === false ? value + units : ""}
+          {}
         </text>
       </g>
-    )
+    );
   }
   return ticks;
 }
 
-
-
-
-const TankComponent= (props)=> {
-
+const TankComponent = (props) => {
   const ref = useRef(null);
   const [width, setWidth] = useState(null);
   const [height, setHeight] = useState(null);
   useEffect(() => {
     const handleResize = () => {
       if (ref.current) {
-        setHeight(props.height ? props.height :props.lockAspectRatio?(props.aspectRatio ? ref.current.offsetWidth * props.aspectRatio : ref.current.offsetHeight): ref.current.offsetHeight)
-        setWidth(props.width?props.width:ref.current.offsetWidth)
+        setHeight(
+          props.height
+            ? props.height
+            : props.lockAspectRatio
+            ? props.aspectRatio
+              ? ref.current.offsetWidth * props.aspectRatio
+              : ref.current.offsetHeight
+            : ref.current.offsetHeight
+        );
+        setWidth(props.width ? props.width : ref.current.offsetWidth);
       }
-    }
+    };
     handleResize();
-    window.addEventListener("resize", handleResize)
+    window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-
-  }, [ref, props.width, props.height, props.aspectRatio,props.lockAspectRatio]);
+  }, [
+    ref,
+    props.width,
+    props.height,
+    props.aspectRatio,
+    props.lockAspectRatio,
+  ]);
 
   const gradientId = uuidv4();
   const { classes } = props;
-  const {initialized}=props;
-  let value = initialized?props.value:50;
-  
-  let min = initialized?props.min:0;
-  let max = initialized?props.max:100;
+  const { initialized } = props;
+  let value = initialized ? props.value : 50;
+
+  let min = initialized ? props.min : 0;
+  let max = initialized ? props.max : 100;
 
   let yOffset;
   if (props.width > 16) {
     yOffset = 16;
-  }
-  else {
+  } else {
     yOffset = 0;
   }
   let xOffset;
   if (props.width > 80) {
     xOffset = 80;
-  }
-  else {
+  } else {
     xOffset = 0;
   }
 
-  // const width = props.width;
-  // const aspectRatio = props.aspectRatio;
-  // let height;
-  // if (props.lockAspectRatio === true) {
-  //   height = props.width / aspectRatio;
-  // }
-  // else {
-  //   height = props.height;
-  // }
   const y0 = yOffset;
-  const y2 = (height - yOffset);
+  const y2 = height - yOffset;
   const y1 = yOffset + (y2 - y0) / 2;
   const x0 = xOffset;
-  const x2 = (width - xOffset * 0);
+  const x2 = width - xOffset * 0;
   const x1 = (x2 - x0) / 2 + x0;
 
-  const level = (y2 - y0) * (value - min) / (max - min);
+  const level = ((y2 - y0) * (value - min)) / (max - min);
 
   let color;
   if (props.initialized) {
     if (props.alarmSensitive === true) {
       if (props.alarmSeverity === 1) {
         color = props.theme.palette.alarm.minor.dark;
-      }
-      else if (props.alarmSeverity === 2) {
+      } else if (props.alarmSeverity === 2) {
         color = props.theme.palette.alarm.major.dark;
-      }
-      else {
+      } else {
         color = props.theme.palette.primary.main;
       }
-    }
-    else {
+    } else {
       color = props.theme.palette.primary.main;
     }
   }
 
   return (
-    <div ref={ref} styles={{width:'100%',height:'100%'}}>
-    <FormControlLabel
-      key={props.pvName}
-      className={classes.FormControl}
-      disabled={props.disabled}
-      label={props.formControlLabel}
-      labelPlacement={props.labelPlacement}
-      control={
-       
-        <svg width={width} height={height}>
-          <linearGradient id={gradientId + 'baseleft1'}  >
-            <stop offset="0%" stopColor={props.theme.palette.mode === 'dark' ? props.theme.palette.grey['300'] : props.theme.palette.grey['200']} />
-            <stop offset="100%" stopColor={props.initialized===true ? props.theme.palette.grey['200'] : 'default'} />
-          </linearGradient>
-          <linearGradient id={gradientId + 'baseright1'}  >
-            <stop offset="0%" stopColor={props.initialized===true ? props.theme.palette.grey['200'] : 'default'} />
-            <stop offset="100%" stopColor={props.theme.palette.mode === 'dark' ? props.theme.palette.grey['300'] : props.theme.palette.grey['200']} />
-          </linearGradient>
-          <linearGradient id={gradientId + 'right1'} >
-            <stop offset="0%" stopColor={props.theme.palette.mode === 'dark' ? props.theme.palette.grey['300'] : props.theme.palette.grey['200']} />
-            <stop offset="100%" stopColor={props.initialized===true ? color : 'default'} />
-          </linearGradient>
-          <linearGradient id={gradientId + 'left1'}  >
-            <stop offset="0%" stopColor={props.initialized===true ? color : 'default'} />
-            <stop offset="100%" stopColor={props.theme.palette.mode === 'dark' ? props.theme.palette.grey['300'] : props.theme.palette.grey['200']} />
-          </linearGradient>
-          <g >
-            <rect x={x1 - 1} y={y0} width={x2 - x1} height={y2 - y0}
-              style={{
-                opacity: 1,
-                strokeWidth: "0",
-                fill: 'url(#' + gradientId + 'baseright1)',
-              }}
-            />
-            <rect x={x0} y={y0} width={x2 - x1} height={y2 - y0}
-              style={{
-                opacity: 1,
-                strokeWidth: "0",
-                fill: 'url(#' + gradientId + 'baseleft1)',
-              }}
-            />
-            <rect x={x0} y={y2 - level} width={x1 - x0} height={level}
-              style={{
-                opacity: 1,
-                strokeWidth: "0",
-                fill: 'url(#' + gradientId + 'left1)',
-              }}
-            />
-            <rect x={x1 - 1} y={y2 - level} width={x2 - x1} height={level}
-              style={{
-                opacity: 1,
-                strokeWidth: "0",
-                fill: 'url(#' + gradientId + 'right1)',
-              }}
-            />
-            {getTickValues(props, min, max, 3, x0, y0, x1, x2, y1, y2, xOffset, yOffset, value)}
-          </g>
-        </svg>
-        
+    <div ref={ref} styles={{ width: "100%", height: "100%" }}>
+      <FormControlLabel
+        key={props.pvName}
+        className={classes.FormControl}
+        disabled={props.disabled}
+        label={props.formControlLabel}
+        labelPlacement={props.labelPlacement}
+        control={
+          <svg width={width} height={height}>
+            <linearGradient id={gradientId + "baseleft1"}>
+              <stop
+                offset="0%"
+                stopColor={
+                  props.theme.palette.mode === "dark"
+                    ? props.theme.palette.grey["300"]
+                    : props.theme.palette.grey["200"]
+                }
+              />
+              <stop
+                offset="100%"
+                stopColor={
+                  props.initialized === true
+                    ? props.theme.palette.grey["200"]
+                    : "default"
+                }
+              />
+            </linearGradient>
+            <linearGradient id={gradientId + "baseright1"}>
+              <stop
+                offset="0%"
+                stopColor={
+                  props.initialized === true
+                    ? props.theme.palette.grey["200"]
+                    : "default"
+                }
+              />
+              <stop
+                offset="100%"
+                stopColor={
+                  props.theme.palette.mode === "dark"
+                    ? props.theme.palette.grey["300"]
+                    : props.theme.palette.grey["200"]
+                }
+              />
+            </linearGradient>
+            <linearGradient id={gradientId + "right1"}>
+              <stop
+                offset="0%"
+                stopColor={
+                  props.theme.palette.mode === "dark"
+                    ? props.theme.palette.grey["300"]
+                    : props.theme.palette.grey["200"]
+                }
+              />
+              <stop
+                offset="100%"
+                stopColor={props.initialized === true ? color : "default"}
+              />
+            </linearGradient>
+            <linearGradient id={gradientId + "left1"}>
+              <stop
+                offset="0%"
+                stopColor={props.initialized === true ? color : "default"}
+              />
+              <stop
+                offset="100%"
+                stopColor={
+                  props.theme.palette.mode === "dark"
+                    ? props.theme.palette.grey["300"]
+                    : props.theme.palette.grey["200"]
+                }
+              />
+            </linearGradient>
+            <g>
+              <rect
+                x={x1 - 1}
+                y={y0}
+                width={x2 - x1}
+                height={y2 - y0}
+                style={{
+                  opacity: 1,
+                  strokeWidth: "0",
+                  fill: "url(#" + gradientId + "baseright1)",
+                }}
+              />
+              <rect
+                x={x0}
+                y={y0}
+                width={x2 - x1}
+                height={y2 - y0}
+                style={{
+                  opacity: 1,
+                  strokeWidth: "0",
+                  fill: "url(#" + gradientId + "baseleft1)",
+                }}
+              />
+              <rect
+                x={x0}
+                y={y2 - level}
+                width={x1 - x0}
+                height={level}
+                style={{
+                  opacity: 1,
+                  strokeWidth: "0",
+                  fill: "url(#" + gradientId + "left1)",
+                }}
+              />
+              <rect
+                x={x1 - 1}
+                y={y2 - level}
+                width={x2 - x1}
+                height={level}
+                style={{
+                  opacity: 1,
+                  strokeWidth: "0",
+                  fill: "url(#" + gradientId + "right1)",
+                }}
+              />
+              {getTickValues(
+                props,
+                min,
+                max,
+                3,
+                x0,
+                y0,
+                x1,
+                x2,
+                y1,
+                y2,
+                xOffset,
+                yOffset,
+                value
+              )}
+            </g>
+          </svg>
         }
-    />
-  </div>
-
+      />
+    </div>
   );
-}
+};
 
 TankComponent.propTypes = {
   height: PropTypes.number,
   width: PropTypes.number,
-}
+};
 
 /**
-* The Tank Component is an Automation-studio component.
-*/
+ * The Tank Component is an Automation-studio component.
+ */
 const Tank = (props) => {
-  return (
-    <Widget {...props} component={TankComponent} />
-  )
-}
+  return <Widget {...props} component={TankComponent} />;
+};
 
-Tank.propTypes = { 
+Tank.propTypes = {
   showValue: PropTypes.bool,
   /** Directive to show the tick values */
   showTicks: PropTypes.bool,
@@ -274,8 +360,8 @@ Tank.propTypes = {
    */
   label: PropTypes.string,
   /**
-  * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
-  */
+   * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
+   */
   labelPv: PropTypes.string,
   /**
    * Values of macros that will be substituted in the pv name.
@@ -298,7 +384,7 @@ Tank.propTypes = {
    * Custom PV to define the minimum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
   minPv: PropTypes.string,
-  
+
   /**
    * Custom precision to round the value.
    */
@@ -307,7 +393,7 @@ Tank.propTypes = {
    * Custom PV to define the precision to be used, usePvPrecision must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
   precPv: PropTypes.string,
-  
+
   /**
    * Custom units to be used, if usePvUnits is not defined.
    */
@@ -323,12 +409,12 @@ Tank.propTypes = {
    */
   usePvLabel: PropTypes.bool,
   /**
-   * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver. 
-   * The pyEpics metadata is unfortunately static and the values used will be the intial values that pvserver receives when it connects the first time. 
+   * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver.
+   * The pyEpics metadata is unfortunately static and the values used will be the intial values that pvserver receives when it connects the first time.
    * This is sufficient in most cases except when the user wants to dynamically update the metaData.
-   * In this case a direct connection can be made to all the pv fields by setting useMetadata to false. 
+   * In this case a direct connection can be made to all the pv fields by setting useMetadata to false.
    * If any of the metadata pvs are defined i.e unitsPv then the PV makes a new data  connection to this alternate pv and will
-   * use the value provided by this pv as the units. 
+   * use the value provided by this pv as the units.
    * The same is the case for the precPV, labelPv, alarmPv, unitsPv and minPv.
    * By setting useMetadata to false also enables connection to other variables as defined by different protocols.
    */
@@ -350,7 +436,7 @@ Tank.propTypes = {
    *  If not defined it uses the custom units as defined by the units prop.
    */
   usePvUnits: PropTypes.bool,
-  
+
   /**
    * If defined, then the string representaion of the number can be formatted
    * using the mathjs format function
@@ -358,23 +444,23 @@ Tank.propTypes = {
    * See https://mathjs.org/docs/reference/functions/format.html for more examples
    */
   numberFormat: PropTypes.object,
-  
+
   /** Name of the process variable,  eg. '$(device):test$(id)'*/
   pv: PropTypes.string,
   /**
    * Tooltip Text
    */
-  tooltip:PropTypes.string,
+  tooltip: PropTypes.string,
   /**
    * Directive to show the tooltip
    */
-  showTooltip:PropTypes.bool,
+  showTooltip: PropTypes.bool,
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-  tooltipProps:PropTypes.object,
+  tooltipProps: PropTypes.object,
   /** label placement*/
-  labelPlacement: PropTypes.oneOf(['start', 'top', 'bottom', 'end']),
+  labelPlacement: PropTypes.oneOf(["start", "top", "bottom", "end"]),
 };
 
 Tank.defaultProps = {
@@ -382,14 +468,14 @@ Tank.defaultProps = {
   alarmSensitive: false,
   min: 0,
   max: 100,
-  
+
   usePvPrecision: false,
   showValue: true,
   aspectRatio: 1,
   lockAspectRatio: true,
   showTicks: true,
-  labelPlacement:'top',
-  showTooltip:false
+  labelPlacement: "top",
+  showTooltip: false,
 };
 
-export default withStyles(styles, { withTheme: true })(Tank)
+export default withStyles(styles, { withTheme: true })(Tank);

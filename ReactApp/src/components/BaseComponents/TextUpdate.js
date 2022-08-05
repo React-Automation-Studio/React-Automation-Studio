@@ -1,10 +1,10 @@
 import React from "react";
 import { alpha } from "@mui/material/styles";
-import withStyles from '@mui/styles/withStyles';
+import withStyles from "@mui/styles/withStyles";
 import Widget from "../SystemComponents/Widgets/Widget";
-import { Typography } from '@mui/material';
-import PropTypes from 'prop-types';
-import { grey } from '@mui/material/colors';
+import { Typography } from "@mui/material";
+import PropTypes from "prop-types";
+import { grey } from "@mui/material/colors";
 const styles = (theme) => ({
   root: {
     display: "flex",
@@ -13,50 +13,58 @@ const styles = (theme) => ({
   TextFieldSeverity0: {
     borderRadius: 2,
     borderWidth: 1,
-    padding:1,
-    borderStyle:'solid',
-    borderColor:'rgba(0,0,0,0)',
+    padding: 1,
+    borderStyle: "solid",
+    borderColor: "rgba(0,0,0,0)",
   },
   TextFieldSeverity1: {
-    borderColor:theme.palette.mode==='dark'?grey[700]:grey[300],
+    borderColor: theme.palette.mode === "dark" ? grey[700] : grey[300],
     borderRadius: 2,
     borderWidth: 1,
-    borderStyle:'solid',
-    padding:1,
-    //background:theme.palette.alarm.minor.main,
-    background:'linear-gradient(45deg,'+  alpha(theme.palette.alarm.minor.dark,theme.palette.mode==='dark'?0.2:0.1)+ ' 0%, '+ (theme.palette.alarm.minor.dark) +' 100%)'
-    //  background:'linear-gradient(45deg, '+ theme.palette.background.default+ ' 1%, '+deepOrange['400'] +' 99%)'
+    borderStyle: "solid",
+    padding: 1,
+    background:
+      "linear-gradient(45deg," +
+      alpha(
+        theme.palette.alarm.minor.dark,
+        theme.palette.mode === "dark" ? 0.2 : 0.1
+      ) +
+      " 0%, " +
+      theme.palette.alarm.minor.dark +
+      " 100%)",
   },
   TextFieldSeverity2: {
-    borderColor:theme.palette.mode==='dark'?grey[700]:grey[300],
+    borderColor: theme.palette.mode === "dark" ? grey[700] : grey[300],
     borderWidth: 1,
-    borderStyle:'solid',
+    borderStyle: "solid",
     borderRadius: 2,
-    padding:1,
-    //background:theme.palette.alarm.major.main,
-    background:'linear-gradient(45deg,'+ alpha(theme.palette.alarm.major.dark,theme.palette.mode==='dark'?0.2:0.1)+ ' 0%, '+ (theme.palette.alarm.major.dark) +' 100%)'
-    //  backgroundColor:'linear-gradient(45deg, #FFFFFF 1%, #FF8E53 99%)'
-    //  background:'linear-gradient(45deg, '+ theme.palette.background.default+ ' 1%, '+red['800'] +' 99%)'
-  }
+    padding: 1,
+    background:
+      "linear-gradient(45deg," +
+      alpha(
+        theme.palette.alarm.major.dark,
+        theme.palette.mode === "dark" ? 0.2 : 0.1
+      ) +
+      " 0%, " +
+      theme.palette.alarm.major.dark +
+      " 100%)",
+  },
 });
 
-
-const TextUpdateComponent=(props)=> {
-  const {classes}=props;
+const TextUpdateComponent = (props) => {
+  const { classes } = props;
   let textFieldClassName;
   let label = props.label !== undefined ? props.label + ": " : "";
   let units = props.units !== undefined ? props.units + " " : "";
   let content;
   if (props.initialized) {
-    if (props.alarmSensitive===true){
-      if (props.alarmSeverity===1){
-        textFieldClassName=classes.TextFieldSeverity1;
-      }
-      else if(props.alarmSeverity===2){
-        textFieldClassName=classes.TextFieldSeverity2;
-      }
-      else {
-        textFieldClassName=classes.TextFieldSeverity0;
+    if (props.alarmSensitive === true) {
+      if (props.alarmSeverity === 1) {
+        textFieldClassName = classes.TextFieldSeverity1;
+      } else if (props.alarmSeverity === 2) {
+        textFieldClassName = classes.TextFieldSeverity2;
+      } else {
+        textFieldClassName = classes.TextFieldSeverity0;
       }
     }
 
@@ -74,18 +82,16 @@ const TextUpdateComponent=(props)=> {
     content = props.formControlLabel;
   }
   return <div>{content}</div>;
-}
+};
 
 /**
  * The TextUpdate Component is a wrapper on the  <b>Typography</b> container tag.
  * The component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
- * The margins and spacing must be controlled from the parent component.<br/><br/> 
+ * The margins and spacing must be controlled from the parent component.<br/><br/>
  */
-const TextUpdate =(props)=>{
-  return (
-    <Widget {...props} component={TextUpdateComponent}/>
-  )
-}
+const TextUpdate = (props) => {
+  return <Widget {...props} component={TextUpdateComponent} />;
+};
 
 TextUpdate.propTypes = {
   /**
@@ -112,8 +118,8 @@ TextUpdate.propTypes = {
    */
   label: PropTypes.string,
   /**
-  * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
-  */
+   * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
+   */
   labelPv: PropTypes.string,
   /**
    * Values of macros that will be substituted in the pv name.
@@ -145,12 +151,12 @@ TextUpdate.propTypes = {
    */
   usePvLabel: PropTypes.bool,
   /**
-   * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver. 
-   * The pyEpics metadata is unfortunately static and the values used will be the intial values that pvserver receives when it connects the first time. 
+   * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver.
+   * The pyEpics metadata is unfortunately static and the values used will be the intial values that pvserver receives when it connects the first time.
    * This is sufficient in most cases except when the user wants to dynamically update the metaData.
-   * In this case a direct connection can be made to all the pv fields by setting useMetadata to false. 
+   * In this case a direct connection can be made to all the pv fields by setting useMetadata to false.
    * If any of the metadata pvs are defined i.e unitsPv then the PV makes a new data  connection to this alternate pv and will
-   * use the value provided by this pv as the units. 
+   * use the value provided by this pv as the units.
    * The same is the case for the precPV, labelPv, alarmPv, unitsPv and minPv.
    * By setting useMetadata to false also enables connection to other variables as defined by different protocols.
    */
@@ -193,7 +199,7 @@ TextUpdate.propTypes = {
   /**
    * Material UI Typography align.
    */
-  align: PropTypes.oneOf(['inherit', 'left', 'center', 'right', 'justify']),
+  align: PropTypes.oneOf(["inherit", "left", "center", "right", "justify"]),
   /**
    * Any of the MUI Typography Props can applied by defining them as an object
    */
@@ -214,10 +220,10 @@ TextUpdate.propTypes = {
 
 TextUpdate.defaultProps = {
   debug: false,
-  align: 'inherit',
-  variant: 'body2',
+  align: "inherit",
+  variant: "body2",
   alarmSensitive: false,
-  showTooltip: false
+  showTooltip: false,
 };
 
-export default withStyles(styles, { withTheme: true })(TextUpdate)
+export default withStyles(styles, { withTheme: true })(TextUpdate);

@@ -1,10 +1,10 @@
 import React from "react";
 import { alpha } from "@mui/material/styles";
-import withStyles from '@mui/styles/withStyles';
+import withStyles from "@mui/styles/withStyles";
 import Widget from "../SystemComponents/Widgets/Widget";
-import { Typography } from '@mui/material';
-import PropTypes from 'prop-types';
-import { grey } from '@mui/material/colors';
+import { Typography } from "@mui/material";
+import PropTypes from "prop-types";
+import { grey } from "@mui/material/colors";
 
 const styles = (theme) => ({
   root: {
@@ -15,75 +15,111 @@ const styles = (theme) => ({
     borderRadius: 2,
     borderWidth: 1,
     padding: 1,
-    borderStyle: 'solid',
-    borderColor: 'rgba(0,0,0,0)',
-
+    borderStyle: "solid",
+    borderColor: "rgba(0,0,0,0)",
   },
   TextFieldSeverity1: {
-    borderColor: theme.palette.mode === 'dark' ? grey[700] : grey[300],
+    borderColor: theme.palette.mode === "dark" ? grey[700] : grey[300],
     borderRadius: 2,
     borderWidth: 1,
-    borderStyle: 'solid',
-
+    borderStyle: "solid",
     padding: 1,
-    //background:theme.palette.alarm.minor.main,
-    background: 'linear-gradient(45deg,' + alpha(theme.palette.alarm.minor.dark, theme.palette.mode === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minor.dark) + ' 100%)'
-    //  background:'linear-gradient(45deg, '+ theme.palette.background.default+ ' 1%, '+deepOrange['400'] +' 99%)'
+    background:
+      "linear-gradient(45deg," +
+      alpha(
+        theme.palette.alarm.minor.dark,
+        theme.palette.mode === "dark" ? 0.2 : 0.1
+      ) +
+      " 0%, " +
+      theme.palette.alarm.minor.dark +
+      " 100%)",
   },
   TextFieldSeverity2: {
-    borderColor: theme.palette.mode === 'dark' ? grey[700] : grey[300],
+    borderColor: theme.palette.mode === "dark" ? grey[700] : grey[300],
     borderWidth: 1,
-    borderStyle: 'solid',
+    borderStyle: "solid",
     borderRadius: 2,
-
     padding: 1,
-    //background:theme.palette.alarm.major.main,
-    background: 'linear-gradient(45deg,' + alpha(theme.palette.alarm.major.dark, theme.palette.mode === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.major.dark) + ' 100%)'
-    //  backgroundColor:'linear-gradient(45deg, #FFFFFF 1%, #FF8E53 99%)'
-    //  background:'linear-gradient(45deg, '+ theme.palette.background.default+ ' 1%, '+red['800'] +' 99%)'
+    background:
+      "linear-gradient(45deg," +
+      alpha(
+        theme.palette.alarm.major.dark,
+        theme.palette.mode === "dark" ? 0.2 : 0.1
+      ) +
+      " 0%, " +
+      theme.palette.alarm.major.dark +
+      " 100%)",
   },
-  majorAlarm: props => ({
-    borderColor: theme.palette.mode === 'dark' ? grey[700] : grey[300],
+  majorAlarm: (props) => ({
+    borderColor: theme.palette.mode === "dark" ? grey[700] : grey[300],
     borderWidth: 1,
-    borderStyle: 'solid',
+    borderStyle: "solid",
     background: props.fadeTU
-      ? 'linear-gradient(45deg,' + alpha(theme.palette.alarm.major.dark, theme.palette.mode === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.major.dark) + ' 100%)'
+      ? "linear-gradient(45deg," +
+        alpha(
+          theme.palette.alarm.major.dark,
+          theme.palette.mode === "dark" ? 0.2 : 0.1
+        ) +
+        " 0%, " +
+        theme.palette.alarm.major.dark +
+        " 100%)"
       : theme.palette.alarm.major.main,
     borderRadius: 2,
     padding: 1,
     paddingRight: 5,
     paddingLeft: 5,
   }),
-  majorAlarmAcked: props => ({
-    borderColor: theme.palette.mode === 'dark' ? grey[700] : grey[300],
+  majorAlarmAcked: (props) => ({
+    borderColor: theme.palette.mode === "dark" ? grey[700] : grey[300],
     borderWidth: 1,
-    borderStyle: 'solid',
+    borderStyle: "solid",
     background: props.fadeTU
-      ? 'linear-gradient(45deg,' + alpha(theme.palette.alarm.majorAcked.dark, theme.palette.mode === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.majorAcked.dark) + ' 100%)'
+      ? "linear-gradient(45deg," +
+        alpha(
+          theme.palette.alarm.majorAcked.dark,
+          theme.palette.mode === "dark" ? 0.2 : 0.1
+        ) +
+        " 0%, " +
+        theme.palette.alarm.majorAcked.dark +
+        " 100%)"
       : theme.palette.alarm.majorAcked.main,
     borderRadius: 2,
     padding: 1,
     paddingRight: 5,
     paddingLeft: 5,
   }),
-  minorAlarm: props => ({
-    borderColor: theme.palette.mode === 'dark' ? grey[700] : grey[300],
+  minorAlarm: (props) => ({
+    borderColor: theme.palette.mode === "dark" ? grey[700] : grey[300],
     borderWidth: 1,
-    borderStyle: 'solid',
+    borderStyle: "solid",
     background: props.fadeTU
-      ? 'linear-gradient(45deg,' + alpha(theme.palette.alarm.minor.dark, theme.palette.mode === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minor.dark) + ' 100%)'
+      ? "linear-gradient(45deg," +
+        alpha(
+          theme.palette.alarm.minor.dark,
+          theme.palette.mode === "dark" ? 0.2 : 0.1
+        ) +
+        " 0%, " +
+        theme.palette.alarm.minor.dark +
+        " 100%)"
       : theme.palette.alarm.minor.main,
     borderRadius: 2,
     padding: 1,
     paddingRight: 5,
     paddingLeft: 5,
   }),
-  minorAlarmAcked: props => ({
-    borderColor: theme.palette.mode === 'dark' ? grey[700] : grey[300],
+  minorAlarmAcked: (props) => ({
+    borderColor: theme.palette.mode === "dark" ? grey[700] : grey[300],
     borderWidth: 1,
-    borderStyle: 'solid',
+    borderStyle: "solid",
     background: props.fadeTU
-      ? 'linear-gradient(45deg,' + alpha(theme.palette.alarm.minorAcked.dark, theme.palette.mode === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minorAcked.dark) + ' 100%)'
+      ? "linear-gradient(45deg," +
+        alpha(
+          theme.palette.alarm.minorAcked.dark,
+          theme.palette.mode === "dark" ? 0.2 : 0.1
+        ) +
+        " 0%, " +
+        theme.palette.alarm.minorAcked.dark +
+        " 100%)"
       : theme.palette.alarm.minorAcked.main,
     borderRadius: 2,
     padding: 1,
@@ -94,12 +130,11 @@ const styles = (theme) => ({
     borderRadius: 2,
     padding: 1,
     borderColor: grey[50],
-    background: 'transparent',
+    background: "transparent",
     paddingRight: 5,
     paddingLeft: 5,
   },
 });
-
 
 const TextUpdateComponent = (props) => {
   const { classes } = props;
@@ -111,39 +146,43 @@ const TextUpdateComponent = (props) => {
     if (props.alarmSensitive === true) {
       if (props.value === "NO_ALARM") {
         textFieldClassName = classes.noAlarm;
-      }
-      else if (props.value === "MINOR_ACKED") {
+      } else if (props.value === "MINOR_ACKED") {
         textFieldClassName = classes.minorAlarmAcked;
-      }
-      else if (props.value === "MINOR_ALARM") {
+      } else if (props.value === "MINOR_ALARM") {
         textFieldClassName = classes.minorAlarm;
-      }
-      else if (props.value === "MAJOR_ACKED" || props.value === "INVALID_ACKED" || props.value === "DISCONN_ACKED") {
+      } else if (
+        props.value === "MAJOR_ACKED" ||
+        props.value === "INVALID_ACKED" ||
+        props.value === "DISCONN_ACKED"
+      ) {
         textFieldClassName = classes.majorAlarmAcked;
-      }
-      else if (props.value === "MAJOR_ALARM" || props.value === "INVALID" || props.value === "DISCONNECTED") {
+      } else if (
+        props.value === "MAJOR_ALARM" ||
+        props.value === "INVALID" ||
+        props.value === "DISCONNECTED"
+      ) {
         textFieldClassName = classes.majorAlarm;
       }
     }
 
     content = (
-      <Typography variant={props.variant} className={textFieldClassName} >{label + props.value + " " + units}</Typography>
+      <Typography variant={props.variant} className={textFieldClassName}>
+        {label + props.value + " " + units}
+      </Typography>
     );
   } else {
     content = props.formControlLabel;
   }
   return <div>{content}</div>;
-}
+};
 const TextUpdateStatus = (props) => {
-  return (
-    <Widget {...props} component={TextUpdateComponent} />
-  )
-}
+  return <Widget {...props} component={TextUpdateComponent} />;
+};
 
 TextUpdateStatus.propTypes = {
   /**
-  * Directive to use the  alarm severity status to alter the fields background color.
-  */
+   * Directive to use the  alarm severity status to alter the fields background color.
+   */
   alarmSensitive: PropTypes.bool,
   /**
    * Custom PV to define the alarm severity to be used, alarmSensitive must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
@@ -165,15 +204,14 @@ TextUpdateStatus.propTypes = {
    */
   label: PropTypes.string,
   /**
-  * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
-  */
+   * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
+   */
   labelPv: PropTypes.string,
   /**
    * Values of macros that will be substituted in the pv name.
    * eg. {{'$(device)':'testIOC','$(id)':'2'}}
    */
   macros: PropTypes.object,
-
 
   /**
    * Custom precision to round the value.
@@ -183,7 +221,6 @@ TextUpdateStatus.propTypes = {
    * Custom PV to define the precision to be used, usePvPrecision must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
   precPv: PropTypes.string,
-
 
   /**
    * Custom units to be used, if usePvUnits is not defined.
@@ -200,12 +237,12 @@ TextUpdateStatus.propTypes = {
    */
   usePvLabel: PropTypes.bool,
   /**
-   * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver. 
-   * The pyEpics metadata is unfortunately static and the values used will be the intial values that pvserver receives when it connects the first time. 
+   * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver.
+   * The pyEpics metadata is unfortunately static and the values used will be the intial values that pvserver receives when it connects the first time.
    * This is sufficient in most cases except when the user wants to dynamically update the metaData.
-   * In this case a direct connection can be made to all the pv fields by setting useMetadata to false. 
+   * In this case a direct connection can be made to all the pv fields by setting useMetadata to false.
    * If any of the metadata pvs are defined i.e unitsPv then the PV makes a new data  connection to this alternate pv and will
-   * use the value provided by this pv as the units. 
+   * use the value provided by this pv as the units.
    * The same is the case for the precPV, labelPv, alarmPv, unitsPv and minPv.
    * By setting useMetadata to false also enables connection to other variables as defined by different protocols.
    */
@@ -226,7 +263,6 @@ TextUpdateStatus.propTypes = {
    */
   useStringValue: PropTypes.bool,
 
-  
   /** Name of the process variable,  eg. '$(device):test$(id)'*/
   pv: PropTypes.string,
   /** Array of the process variables, eg. '$(device):test$(id)'*/
@@ -261,10 +297,10 @@ TextUpdateStatus.propTypes = {
 };
 
 TextUpdateStatus.defaultProps = {
- debug: false,
- variant:'body2',
- alarmSensitive: false,
- showTooltip:false
+  debug: false,
+  variant: "body2",
+  alarmSensitive: false,
+  showTooltip: false,
 };
 
-export default withStyles(styles, { withTheme: true })(TextUpdateStatus)
+export default withStyles(styles, { withTheme: true })(TextUpdateStatus);

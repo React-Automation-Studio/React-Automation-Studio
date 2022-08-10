@@ -1,104 +1,104 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import 'typeface-roboto';
-import { ThemeProvider, StyledEngineProvider, createTheme, adaptV4Theme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
+import "typeface-roboto";
+import {
+  ThemeProvider,
+  StyledEngineProvider,
+  createTheme,
+} from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
 
-import AutomationStudioContext from '../components/SystemComponents/AutomationStudioContext';
+import AutomationStudioContext from "../components/SystemComponents/AutomationStudioContext";
 
-import { io } from 'socket.io-client';
-import   lightTheme  from '../components/UI/Themes/lightTheme'
-import ReactVisCssBaseline from '../components/SystemComponents/ReactVisCssBaseline';
+import { io } from "socket.io-client";
+import lightTheme from "../components/UI/Themes/lightTheme";
+import ReactVisCssBaseline from "../components/SystemComponents/ReactVisCssBaseline";
 
-if (typeof window.socket === 'undefined') {
+if (typeof window.socket === "undefined") {
   window.socket = io("/pvServer", {
-    transports: ['websocket'],
-  })
+    transports: ["websocket"],
+  });
 }
 
-const themes={Light:lightTheme};
+const themes = { Light: lightTheme };
 class Wrapper extends Component {
   constructor(props) {
     super(props);
-    let theme = null
-    let storedThemeStyle=localStorage.getItem('themeStyle')
-    const defaultTheme='Light';
-    
-    let themeStyle = storedThemeStyle===null?defaultTheme:JSON.parse(storedThemeStyle);
+    let theme = null;
+    let storedThemeStyle = localStorage.getItem("themeStyle");
+    const defaultTheme = "Light";
+
+    let themeStyle =
+      storedThemeStyle === null ? defaultTheme : JSON.parse(storedThemeStyle);
     let themeKeys = Object.keys(themes);
     if (themeKeys.includes(themeStyle)) {
-      theme = createTheme(adaptV4Theme(themes[themeStyle]))
+      theme = createTheme(themes[themeStyle]);
       //   localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
-    }
-    else {
+    } else {
       themeStyle = themeKeys[0];
-      theme = createTheme(adaptV4Theme(themes[themeStyle]))
-      localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
+      theme = createTheme(themes[themeStyle]);
+      localStorage.setItem("themeStyle", JSON.stringify(themeStyle));
     }
 
     this.changeTheme = (event) => {
       let themeStyle = event.target.value;
 
-      let theme = null
+      let theme = null;
       let themeStyles = this.state.system.themeStyles;
       if (themeStyles.includes(themeStyle)) {
-        theme = createTheme(adaptV4Theme(themes[themeStyle]))
-      
-      }
-      else {
+        theme = createTheme(themes[themeStyle]);
+      } else {
         themeStyle = themeStyles[0];
-        theme = createTheme(adaptV4Theme(themes[themeStyle]))
-        localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
+        theme = createTheme(themes[themeStyle]);
+        localStorage.setItem("themeStyle", JSON.stringify(themeStyle));
       }
 
       let system = this.state.system;
-      system.themeStyle = themeStyle
-      this.setState({ system: system, theme: theme })
-      localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
-    }
-   
+      system.themeStyle = themeStyle;
+      this.setState({ system: system, theme: theme });
+      localStorage.setItem("themeStyle", JSON.stringify(themeStyle));
+    };
+
     this.updateLocalVariable = (name, data) => {
       let system = this.state.system;
       let localVariables = system.localVariables;
 
       localVariables[name] = data;
-      system.localVariables = localVariables
+      system.localVariables = localVariables;
 
       this.setState({
         system: system,
-        key: this.state.key + 1
+        key: this.state.key + 1,
       });
     };
 
     let localVariables = {};
     let userTokens = {
-      accessToken: 'unauthenticated'
-    }
+      accessToken: "unauthenticated",
+    };
     let system = {
       socket: window.socket,
-      userTokens:userTokens,
+      userTokens: userTokens,
       localVariables: localVariables,
       updateLocalVariable: this.updateLocalVariable,
       enableProbe: false,
       styleGuideRedirect: false,
       themeStyles: themeKeys,
       changeTheme: this.changeTheme,
-    }
+    };
     this.state = {
       theme: theme,
       system: system,
       key: 1,
-    }
+    };
   }
   render() {
     return (
       <AutomationStudioContext.Provider value={this.state.system}>
         <StyledEngineProvider injectFirst>
           <ThemeProvider theme={this.state.theme}>
-            <CssBaseline >
-              <ReactVisCssBaseline>
-                {this.props.children}
-              </ReactVisCssBaseline>
+            <CssBaseline>
+              <ReactVisCssBaseline>{this.props.children}</ReactVisCssBaseline>
             </CssBaseline>
           </ThemeProvider>
         </StyledEngineProvider>

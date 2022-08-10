@@ -523,7 +523,7 @@ V4.0.0 Wednesday 3 August 2022
 Major Updates:
 <ul>
   <li>Update to React 18.2.0 </li>
-  <li>Update to MUI 5.9.2- see the note on breaking changes</li>
+  <li>Update to MUI 5.9.2,  see the section on breaking changes below</li>
   <li>All NodeJs packages have been updated to latest versions except react-router-dom.</li>
   <li>ReactVis was dropped and components have been updated to use Plotly.js </li>
 </ul>
@@ -542,13 +542,13 @@ Minor Bug Fixes and Updates:
 
 Breaking Changes:
 <ul>
-  <li>ReactVis  was dropped  </li>
-  <li>Update to MUI 5.9.2 from  Material UI 4 <br/>
+  <li>ReactVis was dropped</li>
+  <li>Update to MUI 5.9.2 from Material UI 4<br/>
   Follow the migration guide at: https://mui.com/material-ui/migration/migration-v4/
-  and apply  the preset-safe code mods https://mui.com/material-ui/migration/migration-v4/#preset-safe
+  and apply the preset-safe code mods https://mui.com/material-ui/migration/migration-v4/#preset-safe
   </li>
   <li>
-    If you customized any of the themes be sure to update in line with the base themes  that come with the master repo
+    If you customized any of the themes be sure to update it in line with the base themes  that come with the master repo
   </li>
   <li>Removed Deprecated ActionFanoutButton - use ActionButton instead</li>
   <li>Removed Deprecated SwitchComponent - use Switch instead</li>

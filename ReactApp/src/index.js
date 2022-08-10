@@ -7,6 +7,8 @@ import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
+
+  // Strict mode should be permanently enabled once all code conversion to React 18.2 is complete
   // <React.StrictMode>
     <App />
   // </React.StrictMode>

@@ -33,7 +33,6 @@ class Wrapper extends Component {
     let themeKeys = Object.keys(themes);
     if (themeKeys.includes(themeStyle)) {
       theme = createTheme(themes[themeStyle]);
-      //   localStorage.setItem('themeStyle', JSON.stringify(themeStyle));
     } else {
       themeStyle = themeKeys[0];
       theme = createTheme(themes[themeStyle]);

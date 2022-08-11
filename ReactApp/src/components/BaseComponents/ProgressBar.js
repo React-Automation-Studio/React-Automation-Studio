@@ -342,11 +342,9 @@ const ProgressBarInternalComponent = (props) => {
         color = props.theme.palette.alarm.major.dark;
       } else {
         color = props.theme.palette.primary.main;
-        //  background_color='white';
       }
     }
   }
-  //console.log(value)
   return (
     <FormControlLabel
       key={props.pvName + props.initialized}
@@ -391,7 +389,6 @@ ProgressBar.propTypes = {
   /**
    * Directive to use the  alarm severity status to alter the fields background color.
    */
-
   alarmSensitive: PropTypes.bool,
   /**
    * Custom PV to define the alarm severity to be used, alarmSensitive must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
@@ -402,7 +399,6 @@ ProgressBar.propTypes = {
    * the widget debugging information will be displayed.
    */
   debug: PropTypes.bool,
-
   /**
    * Local variable initialization value.
    * When using loc:// type PVs.
@@ -446,11 +442,9 @@ ProgressBar.propTypes = {
    * Custom PV to define the precision to be used, usePvPrecision must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
   precPv: PropTypes.string,
-
   /**
    * Custom units to be used, if usePvUnits is not defined.
    */
-
   units: PropTypes.string,
   /**
    * Custom PV to define the units to be used, usePvUnits must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.

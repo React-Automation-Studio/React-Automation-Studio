@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
 
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 import EpicsBinaryOutDebug from '../GroupedComponents/EpicsBinaryOutDebug';
 import EpicsAnalogOutDebug from '../GroupedComponents/EpicsAnalogOutDebug';
 import EpicsStringOutDebug from '../GroupedComponents/EpicsStringOutDebug';
@@ -12,9 +12,9 @@ import TextOutput from '../BaseComponents/TextOutput';
 import Slider from '../BaseComponents/Slider';
 import GraphY from '../BaseComponents/GraphY';
 import ArrayContainer from '../CompoundComponents/ArrayContainer';
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 
-import Card from '@material-ui/core/Card';
+import Card from '@mui/material/Card';
 
 import MobileDemo2 from './Mobile/MobileDemo2';
 import TraditionalLayout from '../UI/Layout/ComposedLayouts/TraditionalLayout.js';

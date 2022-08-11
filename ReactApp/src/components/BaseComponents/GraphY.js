@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef, useReducer } from 'react'
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import { useTheme } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
+import { useTheme } from '@mui/material/styles';
 import ContextMenu from '../SystemComponents/ContextMenu';
 import PV from '../SystemComponents/PV'
 import Plot from 'react-plotly.js';
@@ -290,7 +290,7 @@ const GraphY = (props) => {
     return legendInit
   })
 
-  const [layout, setLayout] = useState({})
+  const [layout, setLayout] = useState({plot_bgcolor: backgroundColor,paper_bgcolor: backgroundColor,})
 
   useEffect(() => {
     setLayout({

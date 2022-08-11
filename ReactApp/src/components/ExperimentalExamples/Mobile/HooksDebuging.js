@@ -1,14 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
 
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 import TextInput from '../../BaseComponents/TextInput';
 import TextOutput from '../../BaseComponents/TextOutput';
 import Slider from '../../BaseComponents/Slider';
 import SideBar from '../../SystemComponents/SideBar';
-import AppBar from '@material-ui/core/AppBar';
-import withWidth from '@material-ui/core/withWidth';
+import AppBar from '@mui/material/AppBar';
+
+// FIXME checkout https://mui.com/components/use-media-query/#migrating-from-withwidth
+const withWidth = () => (WrappedComponent) => (props) => <WrappedComponent {...props} width="xs" />;
 
 const styles = theme => ({
   body1: theme.typography.body1,
@@ -68,7 +70,7 @@ class ExperimentalMobileDemo1 extends React.Component {
     return (
       <React.Fragment>
         <AppBar style={{ position: 'fixed', bottom: 'auto', top: '0' }} color='inherit' >
-          <Grid container direction="row" item justify="center" spacing={2} alignItems="center">
+          <Grid container direction="row" item justifyContent="center" spacing={2} alignItems="center">
             <Grid item xs={2}  >
               <SideBar />
             </Grid>

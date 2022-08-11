@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
 
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Typography from '@mui/material/Typography';
 
 import TextInput from '../../BaseComponents/TextInput';
 import TextOutput from '../../BaseComponents/TextOutput';
@@ -19,20 +19,21 @@ import ToggleButton from '../../BaseComponents/ToggleButton';
 
 import Gauge from '../../BaseComponents/Gauge';
 
-import AppBar from '@material-ui/core/AppBar';
+import AppBar from '@mui/material/AppBar';
 
-import AccountCircle from '@material-ui/icons/AccountCircleOutlined';
-import Settings from '@material-ui/icons/SettingsOutlined';
+import AccountCircle from '@mui/icons-material/AccountCircleOutlined';
+import Settings from '@mui/icons-material/SettingsOutlined';
 
-import Divider from '@material-ui/core/Divider';
-
-import withWidth from '@material-ui/core/withWidth';
+import Divider from '@mui/material/Divider';
 
 import StyledIconIndicator from '../../BaseComponents/StyledIconIndicator';
 
 import TraditionalLayout from '../../UI/Layout/ComposedLayouts/TraditionalLayout.js';
 
 import {useLocalPV} from '../../SystemComponents/LocalPV'
+
+// FIXME checkout https://mui.com/components/use-media-query/#migrating-from-withwidth
+const withWidth = () => (WrappedComponent) => (props) => <WrappedComponent {...props} width="xs" />;
 
 function TabContainer(props) {
   return (
@@ -98,13 +99,13 @@ const MobileDemo1 =(props)=> {
                 spacing={2}
                 alignItems={'stretch'}
                 direction={'row'}
-                justify={'flex-start'}
+                justifyContent={'flex-start'}
               >
                 <Grid item xs={12} >
                   <GraphY height={graphVH} width='100%' pvs={['testIOC:test4','testIOC:test5'] } legend={['Sine Wave','Amplitude']}/>
                 </Grid>
                 <Grid item xs={12}>
-                  <Grid container direction="row" item justify="center" spacing={2} alignItems="stretch">
+                  <Grid container direction="row" item justifyContent="center" spacing={2} alignItems="stretch">
                     <Grid item xs={6}  >
                       <TextInput  pv='$(device):amplitude' macros={{'$(device)':'testIOC'}}   usePvLabel={true} prec={3} alarmSensitive={true}/>
                     </Grid>
@@ -119,7 +120,7 @@ const MobileDemo1 =(props)=> {
                 </Grid>
 
                 <Grid item xs={2} sm={4}  lg={5} >
-                  <Grid container direction="column" justify="space-evenly" spacing={2} alignItems="stretch">
+                  <Grid container direction="column" justifyContent="space-evenly" spacing={2} alignItems="stretch">
                     <Grid item>
                       <StyledIconIndicator  pv='$(device)' macros={{'$(device)':'testIOC:BO1'}} onColor={props.theme.palette.ok.main} offColor='default' label={'On'} labelPlacement={'end'}/>
                     </Grid>
@@ -129,7 +130,7 @@ const MobileDemo1 =(props)=> {
                   </Grid>
                 </Grid>
                 <Grid item xs={4} sm={4} lg={4} >
-                  <ToggleButton  pv='$(device)' macros={{'$(device)':'testIOC:BO1'}}  custom_selection_strings={["OFF","ON"]}  />
+                  <ToggleButton  pv='$(device)' macros={{'$(device)':'testIOC:BO1'}}  custom_selection_strings={["OFF","ON"]}  /> 
                 </Grid>
 
                 <Grid item xs={12} sm={12} md={12}  lg={12}>
@@ -172,10 +173,12 @@ const MobileDemo1 =(props)=> {
         {showAdvancedSettings === 1 && <TabContainer key={'tabContainer1'}>
           <Grid   container className={classes.root}>
             <Grid item xs={12}>
-              <Grid container spacing={2} alignItems={'stretch'} direction={'column'} justify={'flex-start'}>
+              <Grid container spacing={2} alignItems={'stretch'} direction={'column'} justifyContent={'flex-start'}>
+
+
                 <Grid item >
                   <div style={{marginBottom:8}}>Settings</div>
-                  <Grid container spacing={2} alignItems={'stretch'} direction={'row'} justify={'flex-start'}>
+                  <Grid container spacing={2} alignItems={'stretch'} direction={'row'} justifyContent={'flex-start'}>
                     <Grid item xs={12} lg={4}>
                       <TextInput   pv='$(device):frequency' macros={{'$(device)':'testIOC'}}    usePvUnits={true} prec={1} usePvLabel={true}/>
                     </Grid>
@@ -191,7 +194,7 @@ const MobileDemo1 =(props)=> {
         </TabContainer>}
       </div>
       <AppBar className={classes.body1} style={{position:'fixed',bottom:0,top:'auto'}} color='inherit'>
-        <Tabs value={showAdvancedSettings} onChange={handleChange} variant="fullWidth" scrollButtons="off">
+        <Tabs value={showAdvancedSettings} onChange={handleChange} variant="fullWidth" scrollButtons={false}>
           <Tab icon={<AccountCircle />} />
           <Tab icon={<Settings />} />
         </Tabs>

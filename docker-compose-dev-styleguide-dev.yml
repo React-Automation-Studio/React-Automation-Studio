@@ -16,6 +16,9 @@ services:
     #network_mode: host
     ports:
       - "3001:3000"
+    environment:
+      - FAST_REFRESH=false
+      - NODE_OPTIONS=--max_old_space_size=4096
   pvserver1:
     build:
       context: ./
@@ -73,6 +76,7 @@ services:
           - pvServerPort=5001
           - REACT_APP_EnableLogin=false
           - DEMO_ARCHIVER=http://localhost:17668
+          - NODE_OPTIONS=--max_old_space_size=4096
           
           
           - no_proxy

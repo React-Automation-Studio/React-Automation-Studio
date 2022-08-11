@@ -1,17 +1,17 @@
 import React, { useState} from 'react';
-import TextField from '@material-ui/core/TextField';
-import Grid from '@material-ui/core/Grid';
-import Checkbox from '@material-ui/core/Checkbox';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import EditIcon from '@material-ui/icons/Edit';
-import ErrorIcon from '@material-ui/icons/Error';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Slide from '@material-ui/core/Slide';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import EditIcon from '@mui/icons-material/Edit';
+import ErrorIcon from '@mui/icons-material/Error';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Slide from '@mui/material/Slide';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import useModifyUser from './adminDbHooks/useModifyUser'
 import {usePasswordValidator} from '../SystemComponents/Utils/passwordValidator'
 
@@ -57,7 +57,7 @@ const ModifyUser = (props) => {
     
     return (
         <React.Fragment>
-            <IconButton onClick={() => setShow(true)}>
+            <IconButton onClick={() => setShow(true)} size="large">
                 <EditIcon />
             </IconButton>
             <Dialog
@@ -77,7 +77,7 @@ const ModifyUser = (props) => {
                                 style={{ marginTop: 8, padding: 8 }}
                                 container
                                 direction="row"
-                                justify="center"
+                                justifyContent="center"
                                 alignItems="flex-start"
                                 spacing={0}
                             >
@@ -86,7 +86,7 @@ const ModifyUser = (props) => {
                                         style={{ padding: 8 }}
                                         container
                                         direction="row"
-                                        justify="flex-start"
+                                        justifyContent="flex-start"
                                         alignItems="flex-start"
                                         spacing={2}
                                     >
@@ -253,7 +253,7 @@ const ModifyUser = (props) => {
                 </DialogContent>
             </Dialog>
         </React.Fragment>
-    )
+    );
 }
 
 export default ModifyUser;

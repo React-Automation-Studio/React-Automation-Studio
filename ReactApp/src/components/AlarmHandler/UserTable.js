@@ -1,27 +1,28 @@
 import React from 'react';
 
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import Chip from '@material-ui/core/Chip';
-import Tooltip from '@material-ui/core/Tooltip';
-import TextField from '@material-ui/core/TextField';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import IconButton from '@material-ui/core/IconButton';
-import EditIcon from '@material-ui/icons/Edit';
-import ClearIcon from '@material-ui/icons/Clear';
-import DoneIcon from '@material-ui/icons/Done';
-import AddIcon from '@material-ui/icons/Add';
-import BlockIcon from '@material-ui/icons/Block';
-import EventIcon from '@material-ui/icons/Event';
-import EmailIcon from '@material-ui/icons/Email';
-import CallIcon from '@material-ui/icons/Call';
+import { useTheme } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
+import Grid from '@mui/material/Grid';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import Chip from '@mui/material/Chip';
+import Tooltip from '@mui/material/Tooltip';
+import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
+import EditIcon from '@mui/icons-material/Edit';
+import ClearIcon from '@mui/icons-material/Clear';
+import DoneIcon from '@mui/icons-material/Done';
+import AddIcon from '@mui/icons-material/Add';
+import BlockIcon from '@mui/icons-material/Block';
+import EventIcon from '@mui/icons-material/Event';
+import EmailIcon from '@mui/icons-material/Email';
+import CallIcon from '@mui/icons-material/Call';
 
 const useStyles = makeStyles(theme => ({
     chip: {
@@ -41,8 +42,8 @@ const useStyles = makeStyles(theme => ({
         color: theme.palette.secondary.main
     },
     styledTableHeadCell: {
-        backgroundColor: theme.palette.type === 'dark' ? undefined : theme.palette.primary.light,
-        color: theme.palette.type === 'dark' ? undefined : 'white',
+        backgroundColor: theme.palette.mode === 'dark' ? undefined : theme.palette.primary.light,
+        color: theme.palette.mode === 'dark' ? undefined : 'white',
     },
     verticalMiddle: {
         display: "flex",
@@ -65,7 +66,7 @@ const UserTable = (props) => {
     const fillChipName = filterUserRegex.length === 1 ? filterUserRegex[0].regEx : null
 
     return (
-        <TableContainer component={Paper} style={{ height: props.height }} elevation={theme.palette.type === 'dark' ? undefined : 5}>
+        <TableContainer component={Paper} style={{ height: props.height }} elevation={theme.palette.mode === 'dark' ? undefined : 5}>
             <Table aria-label="User Table" stickyHeader size="small">
                 {
                     showAddHeader
@@ -141,7 +142,7 @@ const UserTable = (props) => {
                                         <Grid
                                             container
                                             direction="row"
-                                            justify="center"
+                                            justifyContent="center"
                                             alignItems="center"
                                         >
                                             <Grid item xs={2} className={classes.verticalMiddle}>
@@ -237,15 +238,13 @@ const UserTable = (props) => {
                                                 ? props.userEdit[`${user.username}-${user.name}`]
                                                     ? <React.Fragment>
                                                         {invalidContact
-                                                            ? <IconButton
-                                                                disabled={true}
-                                                            >
+                                                            ? <IconButton disabled={true} size="large">
                                                                 <BlockIcon />
                                                             </IconButton>
                                                             : <Tooltip title="Apply" placement="bottom">
                                                                 <IconButton
                                                                     onClick={(event) => { props.applyEdit(event, user.name, user.username) }}
-                                                                >
+                                                                    size="large">
                                                                     <DoneIcon className={classes.icon} />
                                                                 </IconButton>
                                                             </Tooltip>}
@@ -253,13 +252,15 @@ const UserTable = (props) => {
                                                             <IconButton
                                                                 onClick={(event) => { props.cancelEdit(event, user.name, user.username) }}
                                                                 style={{ marginLeft: '1em' }}
-                                                            >
+                                                                size="large">
                                                                 <ClearIcon className={classes.icon} />
                                                             </IconButton>
                                                         </Tooltip>
                                                     </React.Fragment>
                                                     : <Tooltip title="Edit expressions" placement="bottom">
-                                                        <IconButton onClick={(event) => { props.setUserEdit(event, user.name, user.username, true) }}>
+                                                        <IconButton
+                                                            onClick={(event) => { props.setUserEdit(event, user.name, user.username, true) }}
+                                                            size="large">
                                                             <EditIcon className={classes.icon} />
                                                         </IconButton>
                                                     </Tooltip>
@@ -295,7 +296,9 @@ const UserTable = (props) => {
                                                 {
                                                     allowEdit
                                                         ? <Tooltip title="Edit schedule" placement="left">
-                                                            <IconButton onClick={(event) => { props.openDialog(event, user.name, user.username) }}>
+                                                            <IconButton
+                                                                onClick={(event) => { props.openDialog(event, user.name, user.username) }}
+                                                                size="large">
                                                                 <EventIcon className={classes.icon} />
                                                             </IconButton>
                                                         </Tooltip>
@@ -305,7 +308,7 @@ const UserTable = (props) => {
                                         </div>
                                     </TableCell>
                                 </TableRow>
-                            )
+                            );
                         }
                         return null
                     })}

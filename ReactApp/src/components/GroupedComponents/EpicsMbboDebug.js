@@ -5,8 +5,8 @@ import TextInput from '../BaseComponents/TextInput';
 import SelectionInput from '../BaseComponents/SelectionInput';
 import SelectionList from '../BaseComponents/SelectionList';
 import TextOutput from '../BaseComponents/TextOutput';
-import Grid from '@material-ui/core/Grid';
-import { withStyles } from '@material-ui/core/styles';
+import Grid from '@mui/material/Grid';
+import withStyles from '@mui/styles/withStyles';
 import RadioButtonGroup from '../BaseComponents/RadioButtonGroup';
 
 
@@ -31,7 +31,8 @@ class EpicsMbboDebug extends React.Component {
 
   render() {
     return (
-      <Grid container   spacing={2}       direction="row"  justify="flex-start"  alignItems="center"       >
+      <Grid container   spacing={2}       direction="row"  justifyContent="flex-start"  alignItems="center"       >
+
         <Grid item  xs={12}>
           <TextOutput  pv='$(device).NAME' macros={this.props['macros']}  label={'EPICS PV Name:'}/>
         </Grid>

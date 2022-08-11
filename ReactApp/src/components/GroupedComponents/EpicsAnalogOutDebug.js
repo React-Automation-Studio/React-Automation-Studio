@@ -3,7 +3,7 @@ import React from 'react'
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 import TextInput from '../BaseComponents/TextInput';
 import TextOutput from '../BaseComponents/TextOutput';
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 
 
 class EpicsAnalogOutDebug extends React.Component {

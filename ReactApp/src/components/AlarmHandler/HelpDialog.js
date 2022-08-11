@@ -1,29 +1,30 @@
 import React from 'react';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import Typography from '@material-ui/core/Typography';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Slide from '@material-ui/core/Slide';
-import Link from '@material-ui/core/Link';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import EditIcon from '@material-ui/icons/Edit';
-import EventIcon from '@material-ui/icons/Event';
+import { useTheme } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import Typography from '@mui/material/Typography';
+import DialogTitle from '@mui/material/DialogTitle';
+import Slide from '@mui/material/Slide';
+import Link from '@mui/material/Link';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import EditIcon from '@mui/icons-material/Edit';
+import EventIcon from '@mui/icons-material/Event';
 
 // Styles
 const useStyles = makeStyles(theme => ({
     styledTableHeadCell: {
-        backgroundColor: theme.palette.type === 'dark' ? undefined : theme.palette.primary.light,
-        color: theme.palette.type === 'dark' ? undefined : 'white',
+        backgroundColor: theme.palette.mode === 'dark' ? undefined : theme.palette.primary.light,
+        color: theme.palette.mode === 'dark' ? undefined : 'white',
     }
 }))
 
@@ -67,7 +68,7 @@ const HelpDialog = (props) => {
                 <TableContainer
                     style={{ marginBottom: 10 }}
                     component={Paper}
-                    elevation={theme.palette.type === 'dark' ? undefined : 5}
+                    elevation={theme.palette.mode === 'dark' ? undefined : 5}
                 >
                     <Table stickyHeader size="small">
                         <TableHead>

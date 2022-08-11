@@ -7,7 +7,7 @@ import Switch from '../BaseComponents/Switch';
 import StyledIconButton from '../BaseComponents/StyledIconButton';
 import StyledIconIndicator from '../BaseComponents/StyledIconIndicator';
 import SelectionInput from '../BaseComponents/SelectionInput';
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 import ToggleButton from '../BaseComponents/ToggleButton';
 import RadioButton from '../BaseComponents/RadioButton';
 import CheckBox from '../BaseComponents/CheckBox';
@@ -21,7 +21,8 @@ class EpicsBinaryOutDebug extends React.Component {
 
   render() {
     return (
-      <Grid spacing={2} container direction="row"  justify="flex-start"  alignItems="center" >
+
+      <Grid spacing={2} container direction="row"  justifyContent="flex-start"  alignItems="center" >
         <Grid item  xs={12}>
           <TextOutput  pv='$(device).NAME' macros={this.props['macros']}  label={'EPICS PV Name:'}/>
         </Grid>

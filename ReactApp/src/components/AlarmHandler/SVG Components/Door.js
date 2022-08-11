@@ -1,9 +1,9 @@
 import React from 'react';
-import { withTheme } from '@material-ui/core/styles';
+import withTheme from '@mui/styles/withTheme';
 
 
 const Door = (props) => {
-    const darkTheme = props.theme.palette.type === 'dark'
+    const darkTheme = props.theme.palette.mode === 'dark'
     let rotate = null
     if (!props.rotate) {
         rotate = 0

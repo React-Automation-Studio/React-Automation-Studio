@@ -6,12 +6,12 @@ import TextInput from '../BaseComponents/TextInput';
 import TextOutput from '../BaseComponents/TextOutput';
 import Slider from '../BaseComponents/Slider';
 
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
 
 import GraphY from '../BaseComponents/GraphY';
-import TextField from '@material-ui/core/TextField';
+import TextField from '@mui/material/TextField';
 
 const styles = theme => ({
   body1: theme.typography.body1,
@@ -37,17 +37,19 @@ class Probe extends React.Component {
     }
 
     return (
-<React.Fragment>
+<div>
+
+  
   {probetype==='normal'&&<Grid   container
-    direction="column"
-    justify="center"
+   
+    justifyContent="center"
     spacing={2}>
     <Grid item xs={12} sm ={6} lg={4} >
       <div style={{"overflowX": "hidden"}} >
         <div style={{ padding: 24}}>
           <Grid   container
             direction="row"
-            justify="space-evenly"
+            justifyContent="space-evenly"
             spacing={2}>
             <Grid item xs={12}  >
               <TextOutput  pv='$(device).NAME' macros={{'$(device)':probeObject.pvname.toString()}}  label={'EPICS PV Name:'} debug={false}/>
@@ -102,15 +104,15 @@ class Probe extends React.Component {
   </Grid>
   }
   {probetype==='readOnly'&&<Grid   container
-    direction="column"
-    justify="center"
+    
+    justifyContent="center"
     spacing={2}>
     <Grid item xs={12} sm ={6} lg={4} >
       <div style={{"overflowX": "hidden"}} >
         <div style={{ padding: 24}}>
           <Grid   container
             direction="row"
-            justify="space-evenly"
+            justifyContent="space-evenly"
             spacing={2}>
             <Grid item xs={12}  >
               <TextOutput  pv='$(device).NAME' macros={{'$(device)':probeObject.pvname}}  label={'EPICS PV Name:'}/>
@@ -153,15 +155,15 @@ class Probe extends React.Component {
   </Grid>
   }
   {probetype==='simple'&&<Grid   container
-    direction="column"
-    justify="stretch"
+    
+    justifyContent="stretch"
     spacing={2}>
     <Grid item xs={12} sm ={6} lg={4} >
       <div style={{"overflowX": "hidden"}} >
         <div style={{ padding: 24}}>
           <Grid   container
             direction="row"
-            justify="space-evenly"
+            justifyContent="space-evenly"
             spacing={2}>
             <Grid item xs={12}>
               <TextField
@@ -220,7 +222,7 @@ class Probe extends React.Component {
     </Grid>
   </Grid>
   }
-</React.Fragment>
+</div>
     );
   }
 }

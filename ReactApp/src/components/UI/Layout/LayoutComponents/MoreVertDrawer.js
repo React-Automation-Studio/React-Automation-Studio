@@ -1,18 +1,18 @@
 import React, { useContext } from 'react';
 
-import { makeStyles } from '@material-ui/core/styles';
-import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
+import makeStyles from '@mui/styles/makeStyles';
+import SwipeableDrawer from '@mui/material/SwipeableDrawer';
+import List from '@mui/material/List';
+import Divider from '@mui/material/Divider';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
 import { Link } from 'react-router-dom'
-import InvertColorsIcon from '@material-ui/icons/InvertColors';
-import TextField from '@material-ui/core/TextField';
-import MenuItem from '@material-ui/core/MenuItem';
+import InvertColorsIcon from '@mui/icons-material/InvertColors';
+import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
 import AutomationStudioContext from '../../../SystemComponents/AutomationStudioContext';
-import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
-import Button from '@material-ui/core/Button';
+import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
+import Button from '@mui/material/Button';
 const useStyles = makeStyles(theme => ({
     drawerItems: {
         minWidth: 250,

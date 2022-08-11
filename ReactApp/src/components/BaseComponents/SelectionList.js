@@ -1,20 +1,20 @@
 import React from "react";
-import { withStyles } from "@material-ui/core/styles";
+import withStyles from '@mui/styles/withStyles';
 import {
   FormControlLabel,
   List,
   ListItem,
   ListItemText,
-} from "@material-ui/core";
+} from "@mui/material";
 import PropTypes from "prop-types";
 import Widget from "../SystemComponents/Widgets/Widget";
 
 
 const styles = (theme) => {
   const borderColor =
-    theme.palette.type === 'light' ? 'rgba(0, 0, 0, 0.23)' : 'rgba(255, 255, 255, 0.23)'; //copied from material ui textfield 
+    theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.23)' : 'rgba(255, 255, 255, 0.23)'; //copied from material ui textfield 
   const borderColorTop =
-    theme.palette.type === 'light' ? 'rgba(0, 0, 0,0)' : 'rgba(255, 255, 255, 0)';
+    theme.palette.mode === 'light' ? 'rgba(0, 0, 0,0)' : 'rgba(255, 255, 255, 0)';
   return ({
     root: {
       backgroundColor: theme.palette.background.paper,

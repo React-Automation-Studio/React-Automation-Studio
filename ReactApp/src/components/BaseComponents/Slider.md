@@ -25,13 +25,13 @@ Slider EPICS variable example with extra marks :
 ```
 Slider EPICS variable example with label and values at the top:
 ```js
-  import Grid from '@material-ui/core/Grid';
+  import Grid from '@mui/material/Grid';
 
  
   <Grid
     container
     direction="row"
-    justify="space-between"
+    justifyContent="space-between"
     alignItems="stretch"
     style={{height:300}}
   >
@@ -55,15 +55,15 @@ Slider EPICS variable example with label and values at the top:
 
 
 ```
-Slider EPICS variable example with label and values at the top:
+Slider EPICS variable example with label at the top  and values at the bottom:
 ```js
-  import Grid from '@material-ui/core/Grid';
+  import Grid from '@mui/material/Grid';
 
  
   <Grid
     container
     direction="row"
-    justify="space-between"
+    justifyContent="space-between"
     alignItems="stretch"
     style={{height:300}}
   >
@@ -88,13 +88,13 @@ Slider EPICS variable example with label and values at the top:
 ```
 Slider EPICS variable example with custom label and values at the top:
 ```js
-  import Grid from '@material-ui/core/Grid';
+  import Grid from '@mui/material/Grid';
 
  
   <Grid
     container
     direction="row"
-    justify="space-around"
+    justifyContent="space-around"
     alignItems="stretch"
     style={{height:300}}
   >

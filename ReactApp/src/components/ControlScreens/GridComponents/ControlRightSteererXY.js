@@ -7,18 +7,18 @@ import TextInput from '../../BaseComponents/TextInput';
 import TextOutput from '../../BaseComponents/TextOutput';
 import Slider from '../../BaseComponents/Slider';
 
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 
 import ToggleButton from '../../BaseComponents/ToggleButton';
 
-import Card from '@material-ui/core/Card';
+import Card from '@mui/material/Card';
 
-import { withStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
+import withStyles from '@mui/styles/withStyles';
+import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom'
 
 import ThumbWheel from '../../BaseComponents/ThumbWheel';
-import Close from '@material-ui/icons/Close';
+import Close from '@mui/icons-material/Close';
 
 console.warn("This example is deprecated and will be removed in a future release")
 const styles = theme => ({
@@ -52,7 +52,7 @@ class ControlRightSteererXY extends React.Component {
         <Card style={{ padding: 12 }} >
           <Grid container
             direction="row"
-            justify="flex-start"
+            justifyContent="flex-start"
             alignItems="center" spacing={1}>
             <Grid item xs={6}  >
               <TextInput pv={ system.devices.xDevice.deviceName + ":" + system.devices.xDevice.setpoint} prec={3} label={'X Setpoint:'} alarmSensitive={true} usePvUnits={true} usePvMinMax={true} />
@@ -68,7 +68,7 @@ class ControlRightSteererXY extends React.Component {
             <Grid item xs={12}  >
             </Grid>
             <Grid item xs={12}  >
-              <Grid container justify="flex-start" direction="row" alignItems="center" spacing={1}>
+              <Grid container justifyContent="flex-start" direction="row" alignItems="center" spacing={1}>
                 <Grid item xs={12} sm={12} >
                   <ThumbWheel
                     pv={ system.devices.xDevice.deviceName + ":" + system.devices.xDevice.setpoint}
@@ -99,7 +99,7 @@ class ControlRightSteererXY extends React.Component {
           <Card style={{ padding: 12 }} >
             <Grid container
               direction="row"
-              justify="flex-start"
+              justifyContent="flex-start"
               alignItems="center" spacing={1}>
               <Grid item xs={6}  >
                 <TextInput pv={ system.devices.yDevice.deviceName + ":" + system.devices.yDevice.setpoint} prec={3} label={'Y Setpoint:'} alarmSensitive={true} usePvUnits={true} usePvMinMax={true} />
@@ -115,7 +115,7 @@ class ControlRightSteererXY extends React.Component {
               <Grid item xs={12}  >
               </Grid>
               <Grid item xs={12}  >
-                <Grid container justify="flex-start" direction="row" alignItems="center" spacing={1}>
+                <Grid container justifyContent="flex-start" direction="row" alignItems="center" spacing={1}>
                   <Grid item xs={12} sm={12} >
                     <ThumbWheel
                       pv={ system.devices.yDevice.deviceName + ":" + system.devices.yDevice.setpoint}

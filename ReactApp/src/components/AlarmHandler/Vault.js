@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
+import { useTheme } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
+import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Grid';
 
 import Layout from '../UI/Layout/ComposedLayouts/TraditionalLayout'
 import SelectionList from '../BaseComponents/SelectionList';
-import SimpleSlider from '../BaseComponents/SimpleSlider';
-import DataConnection from '../SystemComponents/DataConnection';
+import Slider from '../BaseComponents/Slider';
+import PV from '../SystemComponents/PV';
 
 import Floor from './SVG Components/Floor'
 
@@ -37,57 +38,60 @@ const Vault = () => {
 
     const [alarmDict, setAlarmDict] = useState({})
 
-    const handlePVChange = (value, pvname, initialized, severity, timestamp) => {
-        let localAlarmDict = { ...alarmDict }
+    const handlePVChange = useCallback(({value, pvName, initialized, severity, timestamp}) => {
+        setAlarmDict(prev=>{
+        const localAlarmDict = {...prev}
 
-        if (pvname.includes("building_fire")) {
+        if (pvName.includes("building_fire")) {
             localAlarmDict["building_fire"] = severity > 0
         }
-        else if (pvname.includes("building_security")) {
+        else if (pvName.includes("building_security")) {
             localAlarmDict["building_security"] = severity > 0
         }
-        else if (pvname.includes("building_airtemp")) {
+        else if (pvName.includes("building_airtemp")) {
             localAlarmDict["building_airtemp_sev"] = severity
             localAlarmDict["building_airtemp_val"] = value
         }
-        else if (pvname.includes("building_airhumidity")) {
+        else if (pvName.includes("building_airhumidity")) {
             localAlarmDict["building_airhumidity_sev"] = severity
             localAlarmDict["building_airhumidity_val"] = value
         }
-        else if (pvname.includes("building_airpressure_diff")) {
+        else if (pvName.includes("building_airpressure_diff")) {
             localAlarmDict["building_airpressure_diff_sev"] = severity
             localAlarmDict["building_airpressure_diff_val"] = value
         }
-        else if (pvname.includes("vault_door")) {
+        else if (pvName.includes("vault_door")) {
             localAlarmDict["vault_door"] = severity > 0
         }
-        else if (pvname.includes("vault_clear")) {
+        else if (pvName.includes("vault_clear")) {
             localAlarmDict["vault_clear"] = severity > 0
         }
-        else if (pvname.includes("vault_radiation")) {
+        else if (pvName.includes("vault_radiation")) {
             localAlarmDict["vault_radiation_sev"] = severity
             localAlarmDict["vault_radiation_val"] = value
         }
-        else if (pvname.includes("cyclotron_interlocks")) {
+        else if (pvName.includes("cyclotron_interlocks")) {
             localAlarmDict["cyclotron_interlocks"] = severity > 0
         }
-        else if (pvname.includes("cyclotron_safety")) {
+        else if (pvName.includes("cyclotron_safety")) {
             localAlarmDict["cyclotron_safety"] = severity > 0
         }
-        else if (pvname.includes("cyclotron_RF_pickup")) {
+        else if (pvName.includes("cyclotron_RF_pickup")) {
             localAlarmDict["cyclotron_RF_pickup"] = severity > 0
             localAlarmDict["cyclotron_RF_pickup_sev"] = severity
         }
-        else if (pvname.includes("cyclotron_RF1")) {
+        else if (pvName.includes("cyclotron_RF1")) {
             localAlarmDict["cyclotron_RF1"] = severity > 0
         }
-        else if (pvname.includes("cyclotron_RF2")) {
+        else if (pvName.includes("cyclotron_RF2")) {
             localAlarmDict["cyclotron_RF2"] = severity > 0
         }
-
-        setAlarmDict(localAlarmDict)
+        return(localAlarmDict)
     }
-
+       
+        )
+    },[alarmDict])
+  
     const pvArray = [
         "demoAlarmsIOC:building_fire",
         "demoAlarmsIOC:building_airtemp",
@@ -110,10 +114,10 @@ const Vault = () => {
 
     const pvs = pvArray.map(pv => {
         return (
-            <DataConnection
+            <PV 
                 key={pv}
                 pv={ pv}
-                handleInputValue={handlePVChange}
+                pvData={(data)=>handlePVChange({...data,pvName:pv})}
             />
         )
     })
@@ -128,7 +132,7 @@ const Vault = () => {
             <Grid
                 container
                 direction="row"
-                justify="flex-start"
+                justifyContent="flex-start"
                 alignItems="stretch"
                 spacing={2}
                 className={classes.root}
@@ -141,7 +145,7 @@ const Vault = () => {
                             height='100%'
                             viewBox='0 0 1100 900'
                         >
-                            <Floor alarmDict={alarmDict} type={theme.palette.type} />
+                            <Floor alarmDict={alarmDict} type={theme.palette.mode} />
                         </svg>
                     </Paper>
                 </Grid>
@@ -151,7 +155,7 @@ const Vault = () => {
                         <Grid
                             container
                             direction="row"
-                            justify="flex-start"
+                            justifyContent="flex-start"
                             alignItems="stretch"
                             spacing={2}
                         >
@@ -160,7 +164,7 @@ const Vault = () => {
                                     <Grid
                                         container
                                         direction="row"
-                                        justify="flex-start"
+                                        justifyContent="flex-start"
                                         alignItems="stretch"
                                         spacing={2}
 
@@ -185,7 +189,7 @@ const Vault = () => {
                                             />
                                         </Grid>
                                         <Grid item xs={12} lg={6}>
-                                            <SimpleSlider
+                                            <Slider
                                                 pv='$(device):building_airtemp'
                                                 macros={{ '$(device)': 'demoAlarmsIOC' }}
                                                 usePvLabel={true}
@@ -195,7 +199,7 @@ const Vault = () => {
                                             />
                                         </Grid>
                                         <Grid item xs={12} lg={6}>
-                                            <SimpleSlider
+                                            <Slider
                                                 pv='$(device):building_airhumidity'
                                                 macros={{ '$(device)': 'demoAlarmsIOC' }}
                                                 usePvLabel={true}
@@ -205,7 +209,7 @@ const Vault = () => {
                                             />
                                         </Grid>
                                         <Grid item xs={12} lg={6}>
-                                            <SimpleSlider
+                                            <Slider
                                                 pv='$(device):building_airpressure_diff'
                                                 macros={{ '$(device)': 'demoAlarmsIOC' }}
                                                 usePvLabel={true}
@@ -222,7 +226,7 @@ const Vault = () => {
                                     <Grid
                                         container
                                         direction="row"
-                                        justify="flex-start"
+                                        justifyContent="flex-start"
                                         alignItems="stretch"
                                         spacing={2}
 
@@ -247,7 +251,7 @@ const Vault = () => {
                                             />
                                         </Grid>
                                         <Grid item xs={12} >
-                                            <SimpleSlider
+                                            <Slider
                                                 pv='$(device):vault_radiation'
                                                 macros={{ '$(device)': 'demoAlarmsIOC' }}
                                                 usePvLabel={true}
@@ -266,7 +270,7 @@ const Vault = () => {
                                     <Grid
                                         container
                                         direction="row"
-                                        justify="flex-start"
+                                        justifyContent="flex-start"
                                         alignItems="stretch"
                                         spacing={2}
 
@@ -291,7 +295,7 @@ const Vault = () => {
                                             />
                                         </Grid>
                                         <Grid item xs={12} lg={3}>
-                                            <SimpleSlider
+                                            <Slider
                                                 pv='$(device):cyclotron_water_flow'
                                                 macros={{ '$(device)': 'demoAlarmsIOC' }}
                                                 usePvLabel={true}
@@ -301,7 +305,7 @@ const Vault = () => {
                                             />
                                         </Grid>
                                         <Grid item xs={12} lg={3}>
-                                            <SimpleSlider
+                                            <Slider
                                                 pv='$(device):cyclotron_water_temp'
                                                 macros={{ '$(device)': 'demoAlarmsIOC' }}
                                                 usePvLabel={true}
@@ -327,7 +331,7 @@ const Vault = () => {
                                             />
                                         </Grid>
                                         <Grid item xs={12} lg={4}>
-                                            <SimpleSlider
+                                            <Slider
                                                 pv='$(device):cyclotron_RF_pickup'
                                                 macros={{ '$(device)': 'demoAlarmsIOC' }}
                                                 usePvLabel={true}
@@ -337,7 +341,7 @@ const Vault = () => {
                                             />
                                         </Grid>
                                         <Grid item xs={12} lg={4}>
-                                            <SimpleSlider
+                                            <Slider
                                                 pv='$(device):cyclotron_airpressure'
                                                 macros={{ '$(device)': 'demoAlarmsIOC' }}
                                                 usePvLabel={true}
@@ -347,7 +351,7 @@ const Vault = () => {
                                             />
                                         </Grid>
                                         <Grid item xs={12} lg={4}>
-                                            <SimpleSlider
+                                            <Slider
                                                 pv='$(device):cyclotron_vacuum'
                                                 macros={{ '$(device)': 'demoAlarmsIOC' }}
                                                 usePvLabel={true}

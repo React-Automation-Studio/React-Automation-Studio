@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
+import withStyles from '@mui/styles/withStyles';
+import AppBar from '@mui/material/AppBar';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Typography from '@mui/material/Typography';
 import EpicsBinaryOutDebug from '../ExperimentalGroupedComponents/EpicsBinaryOutDebug';
 import EpicsAnalogOutDebug from '../ExperimentalGroupedComponents/EpicsAnalogOutDebug';
 import EpicsStringOutDebug from '../ExperimentalGroupedComponents/EpicsStringOutDebug';
@@ -12,11 +12,11 @@ import EpicsMbboDebug from '../ExperimentalGroupedComponents/EpicsMbboDebug';
 import TextOutput from '../BaseComponents/TextOutput';
 import Slider from '../BaseComponents/Slider';
 import GraphY from '../BaseComponents/GraphY';
-import Grid from '@material-ui/core/Grid';
-import Card from '@material-ui/core/Card';
+import Grid from '@mui/material/Grid';
+import Card from '@mui/material/Card';
 import SideBar from '../SystemComponents/SideBar';
 import MobileDemo2 from './Mobile/MobileDemo2';
-import lime from '@material-ui/core/colors/lime';
+import { lime } from '@mui/material/colors';
 
 function TabContainer(props) {
   return (
@@ -57,7 +57,7 @@ class ExperimentalEpicsDemos extends React.Component {
     return (
       <div >
         <AppBar position="static" color="default">
-          <Grid container direction="row" item justify="center" spacing={2} alignItems="center">
+          <Grid container direction="row" item justifyContent="center" spacing={2} alignItems="center">
             <Grid item xs={1}  >
               <SideBar/>
             </Grid>
@@ -66,10 +66,10 @@ class ExperimentalEpicsDemos extends React.Component {
                 value={value}
                 onChange={this.handleChange}
                 variant="scrollable"
-                scrollButtons="on"
+                scrollButtons
                 indicatorColor="primary"
                 textColor="primary"
-              >
+                allowScrollButtonsMobile>
                 <Tab label="Main" />
                 <Tab label="Analog PVs" />
                 <Tab label="Binary PVs" />

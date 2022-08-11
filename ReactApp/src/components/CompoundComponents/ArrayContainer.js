@@ -1,6 +1,7 @@
 import React, { Children, cloneElement, useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { FormControlLabel, makeStyles } from "@material-ui/core";
+import { FormControlLabel } from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 import widgetProps from "../SystemComponents/Utils/widgetProps";
 
 const useStyles = makeStyles((theme) => ({

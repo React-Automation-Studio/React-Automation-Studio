@@ -1,18 +1,18 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import Typography from '@material-ui/core/Typography';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
-import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
+import makeStyles from '@mui/styles/makeStyles';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Grid from '@mui/material/Grid';
+import TextField from '@mui/material/TextField';
+import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import Typography from '@mui/material/Typography';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import { Domain, Lan, LanConnect, LanDisconnect } from "mdi-material-ui/";
 
 // Styles
@@ -62,7 +62,7 @@ const AddPVDialog = (props) => {
 
                         container
                         direction="row"
-                        justify="flex-start"
+                        justifyContent="flex-start"
                         alignItems="stretch"
                     >
                         <Grid item xs={1} className={classes.centerInBlock}>
@@ -98,7 +98,7 @@ const AddPVDialog = (props) => {
                                     <IconButton
                                         onClick={() => props.popNewPVInfo(index)}
                                         style={{ marginLeft: '0.5em' }}
-                                    >
+                                        size="large">
                                         <RemoveCircleIcon color="primary" />
                                     </IconButton>
                                 </Tooltip>
@@ -108,7 +108,7 @@ const AddPVDialog = (props) => {
                                     <IconButton
                                         onClick={props.appendNewPVInfo}
                                         style={{ marginLeft: lastIndex === 0 && '0.5em' }}
-                                    >
+                                        size="large">
                                         <AddCircleIcon color="secondary" />
                                     </IconButton>
                                 </Tooltip>
@@ -116,7 +116,7 @@ const AddPVDialog = (props) => {
                         </Grid>
                     </Grid>
                 </Grid>
-            )
+            );
         })
         : null
 
@@ -132,7 +132,7 @@ const AddPVDialog = (props) => {
                 <Grid
                     container
                     direction="row"
-                    justify="flex-start"
+                    justifyContent="flex-start"
                     alignItems="stretch"
                     spacing={2}
                 >
@@ -140,7 +140,7 @@ const AddPVDialog = (props) => {
                         <Grid
                             container
                             direction="row"
-                            justify="flex-start"
+                            justifyContent="flex-start"
                             alignItems="stretch"
                         >
                             <Grid item xs={1} className={classes.centerInBlock}>
@@ -162,7 +162,7 @@ const AddPVDialog = (props) => {
                         <Grid
                             container
                             direction="row"
-                            justify="flex-start"
+                            justifyContent="flex-start"
                             alignItems="stretch"
                         >
                             {pvGrid}

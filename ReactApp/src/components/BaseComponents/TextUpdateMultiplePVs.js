@@ -1,12 +1,12 @@
 import React from "react";
-import { withStyles } from "@material-ui/core/styles";
+import withStyles from '@mui/styles/withStyles';
 
 import Widget from "../SystemComponents/Widgets/Widget";
-import red from '@material-ui/core/colors/red';
-import deepOrange from '@material-ui/core/colors/deepOrange';
-import { Typography } from '@material-ui/core';
+import { Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import { create, all } from 'mathjs';
+
+import { red, deepOrange } from '@mui/material/colors';
 
 const config = { }
 

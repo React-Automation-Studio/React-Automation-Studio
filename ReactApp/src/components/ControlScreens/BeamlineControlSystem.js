@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
+import withStyles from '@mui/styles/withStyles';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
 import ToggleButton from '../BaseComponents/ToggleButton';
 import EditorSinglePS from './Components/EditorSinglePS'
 import EditorSlitXY from './Components/EditorSlitXY'
 import EditorSteererXY from './Components/EditorSteererXY'
-import AppBar from '@material-ui/core/AppBar';
+import AppBar from '@mui/material/AppBar';
 import GraphY from '../BaseComponents/GraphY';
 import ControlTable from './Components/ControlTable'
 import TraditionalLayout from '../UI/Layout/ComposedLayouts/TraditionalLayout.js';
@@ -581,7 +581,7 @@ const BeamlineControlSystem = (props) => {
   }, [harpPvs])
 
   const footerContents = (
-    <Grid container direction="row" justify="flex-start" alignItems="center" >
+    <Grid container direction="row" justifyContent="flex-start" alignItems="center" >
       <Grid item xs={12} style={{ paddingLeft: "1em" }}>
         <Typography>
           All the components are now reusable hooks components. See the style guide Beamline Components
@@ -773,10 +773,10 @@ const BeamlineControlSystem = (props) => {
                     value={tabValue}
                     onChange={handleTabChange}
                     variant="scrollable"
-                    scrollButtons="on"
+                    scrollButtons
                     indicatorColor="primary"
                     textColor="primary"
-                  >
+                    allowScrollButtonsMobile>
                     <Tab label="Table" />
                     <Tab label="Power Supplies Diagnostics" />
                     <Tab label="Ion Source" />
@@ -794,7 +794,7 @@ const BeamlineControlSystem = (props) => {
                   <Grid
                     container
                     direction="row"
-                    justify="flex-start"
+                    justifyContent="flex-start"
                     alignItems="center"
                   >
                     <Grid item sm={6}>
@@ -845,7 +845,7 @@ const BeamlineControlSystem = (props) => {
                     <Grid
                       container
                       direction="row"
-                      justify="flex-start"
+                      justifyContent="flex-start"
                       alignItems="center"
                     >
                       <Grid item sm={2} style={{ marginLeft: 10 }}>
@@ -859,7 +859,7 @@ const BeamlineControlSystem = (props) => {
                   <Grid
                     container
                     direction="row"
-                    justify="flex-start"
+                    justifyContent="flex-start"
                     alignItems="flex-start"
                     spacing={2}
                   >
@@ -892,7 +892,7 @@ const BeamlineControlSystem = (props) => {
             {((displayEditor === true) && (editorType === 'editorSlitXY')) && <EditorSlitXY key={'editor-key' + editorSystem.systemName} system={editorSystem} handleCloseEditor={() => setDisplayEditor(false)} />}
           </Grid>
         </Grid>
-        <AppBar style={{ position: 'fixed', bottom: 0, top: 'auto', height: 40 }} color={props.theme.palette.type === 'dark' ? "inherit" : "primary"}>
+        <AppBar style={{ position: 'fixed', bottom: 0, top: 'auto', height: 40 }} color={props.theme.palette.mode === 'dark' ? "inherit" : "primary"}>
           {footerContents}
         </AppBar>
       </TraditionalLayout>

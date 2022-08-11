@@ -1,7 +1,7 @@
 import React from 'react'
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 import DataConnection from '../SystemComponents/DataConnection';
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
 import ContextMenu from '../SystemComponents/ContextMenu';
 
 const styles = theme => ({

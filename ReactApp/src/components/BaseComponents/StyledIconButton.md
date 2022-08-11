@@ -5,7 +5,7 @@ StyledIconButton example connection to a SoftChannel EPICS AI pv with example of
 {/*The TextOutput code is included for demonstration purposes only*/}  
 {/*Only the the JSX code between the hashes  is required to instantiate the StyledIconButton */}  
   import TextOutput from './TextOutput';
-  import Face from '@material-ui/icons/Face';
+  import Face from '@mui/icons-material/Face';
   <div style={{textAlign:'center'}}>
   <div style={{marginBottom:8}}>
     <TextOutput   

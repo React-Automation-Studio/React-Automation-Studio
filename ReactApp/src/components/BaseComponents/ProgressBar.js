@@ -1,38 +1,37 @@
-import React from 'react'
+import React, { useEffect, useState, useRef } from "react";
 
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from "@mui/styles/withStyles";
 
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
-import { v4 as uuidv4 } from 'uuid';
-
+import { v4 as uuidv4 } from "uuid";
 
 import Widget from "../SystemComponents/Widgets/Widget";
-import { FormControlLabel } from "@material-ui/core";
 
-import {
+import { FormControlLabel } from "@mui/material";
 
-  makeVisFlexible,
-
-} from 'react-vis';
-
-import { create, all } from 'mathjs';
-const config = { }
-const math = create(all, config)
+import { create, all } from "mathjs";
+const config = {};
+const math = create(all, config);
 /* eslint-disable eqeqeq */
 
-const styles = theme => ({
+const styles = (theme) => ({
   textTicks: {
-    fill: theme.palette.type === 'dark' ? theme.palette.grey['300'] : theme.palette.grey['500']
-
+    fill:
+      theme.palette.mode === "dark"
+        ? theme.palette.grey["300"]
+        : theme.palette.grey["500"],
   },
   textValue: {
-    fill: theme.palette.type === 'dark' ? theme.palette.grey['300'] : theme.palette.grey['500']
-
+    fill:
+      theme.palette.mode === "dark"
+        ? theme.palette.grey["300"]
+        : theme.palette.grey["500"],
   },
+
   root: {
-    display: 'flex',
-    flexWrap: 'wrap',
+    display: "flex",
+    flexWrap: "wrap",
   },
   FormControl: {
     width: "100%",
@@ -44,55 +43,66 @@ const styles = theme => ({
   },
 });
 
-function getTickValues(props, min, max, numberOfTicks, x0, x1, x2, y1, y2, xOffset, yOffset, value) {
+function getTickValues(
+  props,
+  min,
+  max,
+  numberOfTicks,
+  x0,
+  x1,
+  x2,
+  y1,
+  y2,
+  xOffset,
+  yOffset,
+  value
+) {
   const { classes } = props;
-
   let ticks = [];
-
   let i = 0;
-  if (typeof props.disabled === 'undefined') {
+  if (typeof props.disabled === "undefined") {
     if (props.showTicks === true) {
-      for (i = 0; i < (numberOfTicks); i++) {
-        let tickValue = i * (max - min) / (numberOfTicks - 1) + min;
-        if (typeof props.numberFormat !== 'undefined'){
-          tickValue=math.format(parseFloat(tickValue),props.numberFormat)
+      for (i = 0; i < numberOfTicks; i++) {
+        let tickValue = (i * (max - min)) / (numberOfTicks - 1) + min;
+        if (typeof props.numberFormat !== "undefined") {
+          tickValue = math.format(parseFloat(tickValue), props.numberFormat);
         }
         ticks.push(
-          <g key={i}
-          >
+          <g key={i}>
             <text
               className={classes.textTicks}
-              x={i * (x2 - x0 + xOffset) / (numberOfTicks - 1) + xOffset}
+              x={(i * (x2 - x0 + xOffset)) / (numberOfTicks - 1) + xOffset}
               y={y2 + yOffset}
-              textAnchor={i == 0 ? 'start' : i == (numberOfTicks - 1) ? 'end' : 'middle'}
+              textAnchor={
+                i == 0 ? "start" : i == numberOfTicks - 1 ? "end" : "middle"
+              }
             >
               {tickValue + props.units}
             </text>
           </g>
-        )
+        );
       }
     }
-  }
-  else {
+  } else {
   }
   if (props.showValue === true) {
     ticks.push(
-      <g key={i = i + 1}
-      >
+      <g key={(i = i + 1)}>
         <text
           className={classes.textTicks}
           x={xOffset}
           y={yOffset - 4}
-          textAnchor={'start'}
+          textAnchor={"start"}
         >
-          {typeof props.disabled === 'undefined' ? value + props.units : ""}{}
+          {typeof props.disabled === "undefined" ? value + props.units : ""}
+          {}
         </text>
       </g>
-    )
+    );
   }
+
   return ticks;
 }
-
 
 const ProgressBarComponent = (props) => {
   const gradientId = uuidv4();
@@ -104,8 +114,7 @@ const ProgressBarComponent = (props) => {
   let yOffset;
   if (props.width > 16) {
     yOffset = 16;
-  }
-  else {
+  } else {
     yOffset = 0;
   }
 
@@ -114,79 +123,194 @@ const ProgressBarComponent = (props) => {
   let height;
   if (props.lockAspectRatio == true) {
     height = props.width / aspectRatio;
-  }
-  else {
+  } else {
     height = props.height;
   }
-
   const y0 = yOffset;
-  const y2 = (height - yOffset);
+  const y2 = height - yOffset;
   const y1 = yOffset + (y2 - y0) / 2;
   const x0 = xOffset;
   const x1 = (width - xOffset * 2) / 2;
-  const x2 = (width - xOffset * 2);
-  const level = x2 * (value - min) / (max - min);
+  const x2 = width - xOffset * 2;
+  const level = (x2 * (value - min)) / (max - min);
 
   const color = props.color;
   return (
     <svg width={width} height={height}>
-      <linearGradient id={gradientId + 'baseBottom1'} gradientTransform="rotate(90)" >
-        <stop offset="0%" stopColor={props.theme.palette.type === 'dark' ? props.theme.palette.grey['300'] : props.theme.palette.grey['200']} />
-        <stop offset="100%" stopColor={typeof props.disabled === 'undefined' ? props.theme.palette.grey['200'] : 'default'} />
+      <linearGradient
+        id={gradientId + "baseBottom1"}
+        gradientTransform="rotate(90)"
+      >
+        <stop
+          offset="0%"
+          stopColor={
+            props.theme.palette.mode === "dark"
+              ? props.theme.palette.grey["300"]
+              : props.theme.palette.grey["200"]
+          }
+        />
+        <stop
+          offset="100%"
+          stopColor={
+            typeof props.disabled === "undefined"
+              ? props.theme.palette.grey["200"]
+              : "default"
+          }
+        />
       </linearGradient>
-      <linearGradient id={gradientId + 'baseTop1'} gradientTransform="rotate(90)" >
-        <stop offset="0%" stopColor={typeof props.disabled === 'undefined' ? props.theme.palette.grey['200'] : 'default'} />
-        <stop offset="100%" stopColor={props.theme.palette.type === 'dark' ? props.theme.palette.grey['300'] : props.theme.palette.grey['200']} />
+      <linearGradient
+        id={gradientId + "baseTop1"}
+        gradientTransform="rotate(90)"
+      >
+        <stop
+          offset="0%"
+          stopColor={
+            typeof props.disabled === "undefined"
+              ? props.theme.palette.grey["200"]
+              : "default"
+          }
+        />
+        <stop
+          offset="100%"
+          stopColor={
+            props.theme.palette.mode === "dark"
+              ? props.theme.palette.grey["300"]
+              : props.theme.palette.grey["200"]
+          }
+        />
       </linearGradient>
-      <linearGradient id={gradientId + 'bottom1'} gradientTransform="rotate(90)" >
-        <stop offset="0%" stopColor={props.theme.palette.type === 'dark' ? props.theme.palette.grey['300'] : props.theme.palette.grey['200']} />
-        <stop offset="100%" stopColor={typeof props.disabled === 'undefined' ? color : 'default'} />
+
+      <linearGradient
+        id={gradientId + "bottom1"}
+        gradientTransform="rotate(90)"
+      >
+        <stop
+          offset="0%"
+          stopColor={
+            props.theme.palette.mode === "dark"
+              ? props.theme.palette.grey["300"]
+              : props.theme.palette.grey["200"]
+          }
+        />
+        <stop
+          offset="100%"
+          stopColor={typeof props.disabled === "undefined" ? color : "default"}
+        />
       </linearGradient>
-      <linearGradient id={gradientId + 'top1'} gradientTransform="rotate(90)" >
-        <stop offset="0%" stopColor={typeof props.disabled === 'undefined' ? color : 'default'} />
-        <stop offset="100%" stopColor={props.theme.palette.type === 'dark' ? props.theme.palette.grey['300'] : props.theme.palette.grey['200']} />
+      <linearGradient id={gradientId + "top1"} gradientTransform="rotate(90)">
+        <stop
+          offset="0%"
+          stopColor={typeof props.disabled === "undefined" ? color : "default"}
+        />
+        <stop
+          offset="100%"
+          stopColor={
+            props.theme.palette.mode === "dark"
+              ? props.theme.palette.grey["300"]
+              : props.theme.palette.grey["200"]
+          }
+        />
       </linearGradient>
-      <rect x={xOffset} y={y0} width={x2} height={y1 - y0}
+
+      <rect
+        x={xOffset}
+        y={y0}
+        width={x2}
+        height={y1 - y0}
         style={{
           opacity: 1,
           strokeWidth: "0",
-          fill: 'url(#' + gradientId + 'baseTop1)',
+          fill: "url(#" + gradientId + "baseTop1)",
         }}
       />
-      <rect x={xOffset} y={y1 - 1} width={x2} height={y2 - y1}
+      <rect
+        x={xOffset}
+        y={y1 - 1}
+        width={x2}
+        height={y2 - y1}
         style={{
           opacity: 1,
           strokeWidth: "0",
-          fill: 'url(#' + gradientId + 'baseBottom1)',
+          fill: "url(#" + gradientId + "baseBottom1)",
         }}
       />
-      <rect x={xOffset} y={y0} width={level} height={y1 - y0}
+
+      <rect
+        x={xOffset}
+        y={y0}
+        width={level}
+        height={y1 - y0}
         style={{
           opacity: 1,
           strokeWidth: "0",
-          fill: 'url(#' + gradientId + 'top1)',
+          fill: "url(#" + gradientId + "top1)",
         }}
       />
-      <rect x={xOffset} y={y1 - 1} width={level} height={y2 - y1}
+      <rect
+        x={xOffset}
+        y={y1 - 1}
+        width={level}
+        height={y2 - y1}
         style={{
           opacity: 1,
           strokeWidth: "0",
-          fill: 'url(#' + gradientId + 'bottom1)',
+          fill: "url(#" + gradientId + "bottom1)",
         }}
       />
-      {getTickValues(props, min, max, 2, x0, x1, x2, y1, y2, xOffset, yOffset, value)}
+
+      {getTickValues(
+        props,
+        min,
+        max,
+        2,
+        x0,
+        x1,
+        x2,
+        y1,
+        y2,
+        xOffset,
+        yOffset,
+        value
+      )}
     </svg>
   );
-}
+};
 
 ProgressBarComponent.propTypes = {
   height: PropTypes.number,
   width: PropTypes.number,
-}
-
-const FlexibleProgressBarComponent = makeVisFlexible(withStyles(styles, { withTheme: true })(ProgressBarComponent));
+};
 
 const ProgressBarInternalComponent = (props) => {
+  const ref = useRef(null);
+  const [width, setWidth] = useState(null);
+  const [height, setHeight] = useState(null);
+  useEffect(() => {
+    const handleResize = () => {
+      if (ref.current) {
+        setHeight(
+          props.height
+            ? props.height
+            : props.lockAspectRatio
+            ? props.aspectRatio
+              ? ref.current.offsetWidth * props.aspectRatio
+              : ref.current.offsetHeight
+            : ref.current.offsetHeight
+        );
+        setWidth(props.width ? props.width : ref.current.offsetWidth);
+      }
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [
+    ref,
+    props.width,
+    props.height,
+    props.aspectRatio,
+    props.lockAspectRatio,
+  ]);
+
   const { initialized } = props;
   const { classes } = props;
   let units;
@@ -195,30 +319,28 @@ const ProgressBarInternalComponent = (props) => {
   let max;
   if (initialized) {
     if (props.units) {
-      units = ' ' + props.units;
-    }
-    else {
-      units = '';
+      units = " " + props.units;
+    } else {
+      units = "";
     }
     value = props.value;
     min = props.min;
     max = props.max;
   } else {
-    units = '';
+    units = "";
     value = 500;
     min = 0;
     max = 1000;
   }
   let color = props.theme.palette.primary.main;
-  if (typeof props.alarmSensitive !== 'undefined') {
+
+  if (typeof props.alarmSensitive !== "undefined") {
     if (props.alarmSensitive == true) {
       if (props.alarmSeverity == 1) {
         color = props.theme.palette.alarm.minor.dark;
-      }
-      else if (props.alarmSeverity == 2) {
+      } else if (props.alarmSeverity == 2) {
         color = props.theme.palette.alarm.major.dark;
-      }
-      else {
+      } else {
         color = props.theme.palette.primary.main;
       }
     }
@@ -227,35 +349,36 @@ const ProgressBarInternalComponent = (props) => {
     <FormControlLabel
       key={props.pvName + props.initialized}
       className={classes.FormControl}
-      //disabled={props.disabled}
       label={props.formControlLabel}
       labelPlacement={props.labelPlacement}
       control={
-        <FlexibleProgressBarComponent
-          {...props} 
-          min={min}
-          max={max}
-          units={units}
-          value={value}
-          lockAspectRatio={props.lockAspectRatio}
-          aspectRatio={props.aspectRatio}
-          color={color}
-          showValue={props.showValue}
-          showTicks={props.showTicks}
-          disabled={props.initialized === true ? undefined : true}
-        />
+        <div ref={ref} style={{ height: "100%", width: "100%" }}>
+          <ProgressBarComponent
+            {...props}
+            min={min}
+            max={max}
+            width={width}
+            height={height}
+            units={units}
+            value={value}
+            lockAspectRatio={props.lockAspectRatio}
+            aspectRatio={props.aspectRatio}
+            color={color}
+            showValue={props.showValue}
+            showTicks={props.showTicks}
+            disabled={props.initialized === true ? undefined : true}
+          />
+        </div>
       }
     />
-  )
-}
+  );
+};
 
 const ProgressBar = (props) => {
-  return (
-    <Widget {...props} component={ProgressBarInternalComponent} />
-  )
-}
+  return <Widget {...props} component={ProgressBarInternalComponent} />;
+};
 
-ProgressBar.propTypes = { 
+ProgressBar.propTypes = {
   showValue: PropTypes.bool,
   /** Directive to show the tick values */
   showTicks: PropTypes.bool,
@@ -263,7 +386,6 @@ ProgressBar.propTypes = {
   lockAspectRatio: PropTypes.bool,
   /** Width to height aspect ratio, */
   aspectRatio: PropTypes.number,
-
   /**
    * Directive to use the  alarm severity status to alter the fields background color.
    */
@@ -277,7 +399,6 @@ ProgressBar.propTypes = {
    * the widget debugging information will be displayed.
    */
   debug: PropTypes.bool,
-
   /**
    * Local variable initialization value.
    * When using loc:// type PVs.
@@ -288,8 +409,8 @@ ProgressBar.propTypes = {
    */
   label: PropTypes.string,
   /**
-  * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
-  */
+   * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
+   */
   labelPv: PropTypes.string,
   /**
    * Values of macros that will be substituted in the pv name.
@@ -312,7 +433,7 @@ ProgressBar.propTypes = {
    * Custom PV to define the minimum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
   minPv: PropTypes.string,
-  
+
   /**
    * Custom precision to round the value.
    */
@@ -321,7 +442,6 @@ ProgressBar.propTypes = {
    * Custom PV to define the precision to be used, usePvPrecision must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
   precPv: PropTypes.string,
-   
   /**
    * Custom units to be used, if usePvUnits is not defined.
    */
@@ -337,12 +457,12 @@ ProgressBar.propTypes = {
    */
   usePvLabel: PropTypes.bool,
   /**
-   * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver. 
-   * The pyEpics metadata is unfortunately static and the values used will be the initial values that pvserver receives when it connects the first time. 
+   * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver.
+   * The pyEpics metadata is unfortunately static and the values used will be the initial values that pvserver receives when it connects the first time.
    * This is sufficient in most cases except when the user wants to dynamically update the metaData.
-   * In this case a direct connection can be made to all the pv fields by setting useMetadata to false. 
+   * In this case a direct connection can be made to all the pv fields by setting useMetadata to false.
    * If any of the metadata pvs are defined i.e unitsPv then the PV makes a new data  connection to this alternate pv and will
-   * use the value provided by this pv as the units. 
+   * use the value provided by this pv as the units.
    * The same is the case for the precPV, labelPv, alarmPv, unitsPv and minPv.
    * By setting useMetadata to false also enables connection to other variables as defined by different protocols.
    */
@@ -364,7 +484,6 @@ ProgressBar.propTypes = {
    *  If not defined it uses the custom units as defined by the units prop.
    */
   usePvUnits: PropTypes.bool,
-  
   /**
    * If defined, then the string representation of the number can be formatted
    * using the mathjs format function
@@ -380,21 +499,21 @@ ProgressBar.propTypes = {
    * Custom off color to be used, must be derived from Material UI theme color's.
    */
   offColor: PropTypes.string,
-  
+
   /** Name of the process variable,  eg. '$(device):test$(id)'*/
   pv: PropTypes.string,
   /**
    * Tooltip Text
    */
-  tooltip:PropTypes.string,
+  tooltip: PropTypes.string,
   /**
    * Directive to show the tooltip
    */
-  showTooltip:PropTypes.bool,
+  showTooltip: PropTypes.bool,
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-  tooltipProps:PropTypes.object,
+  tooltipProps: PropTypes.object,
 };
 
 ProgressBar.defaultProps = {
@@ -406,8 +525,8 @@ ProgressBar.defaultProps = {
   showTicks: true,
   aspectRatio: 1.75,
   lockAspectRatio: true,
-  labelPlacement: 'top',
-  showTooltip:false
+  labelPlacement: "top",
+  showTooltip: false,
 };
 
-export default withStyles(styles, { withTheme: true })(ProgressBar)
+export default withStyles(styles, { withTheme: true })(ProgressBar);

@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
 import TextInput from '../../BaseComponents/TextInput';
 import TextOutput from '../../BaseComponents/TextOutput';
 import Slider from '../../BaseComponents/Slider';
 import GraphY from '../../BaseComponents/GraphY';
 
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 import Switch from '../../BaseComponents/Switch';
 import SelectionInput from '../../BaseComponents/SelectionInput';
 import SelectionList from '../../BaseComponents/SelectionList';
@@ -20,8 +20,8 @@ import Gauge from '../../BaseComponents/Gauge';
 import Tank from '../../BaseComponents/Tank';
 import ProgressBar from '../../BaseComponents/ProgressBar';
 import StyledIconIndicator from '../../BaseComponents/StyledIconIndicator';
-import lime from '@material-ui/core/colors/lime';
 import SideBar from '../../SystemComponents/SideBar';
+import { lime } from '@mui/material/colors';
 
 const styles = theme => ({
   root: {
@@ -68,7 +68,8 @@ class MobileDemo2 extends React.Component {
           </div>
         </div>
         <div className={classes.root}>
-          <Grid container spacing={2}  direction="row"  justify="flex-start"  alignItems="center">
+          <Grid container spacing={2}  direction="row"  justifyContent="flex-start"  alignItems="center">
+
             <Grid item xs={12} lg={2}>
               <TextInput  pv='$(device):amplitude' macros={{'$(device)':'testIOC'}}   usePvLabel={true}  prec={3} alarmSensitive={true}/>
             </Grid>

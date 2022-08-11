@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { withStyles } from "@material-ui/core/styles";
-import { Button, FormControlLabel } from "@material-ui/core";
+import withStyles from '@mui/styles/withStyles';
+import { Button, FormControlLabel } from "@mui/material";
 import PropTypes from "prop-types";
 import {isMobile,isTablet} from 'react-device-detect';
 import Widget from "../SystemComponents/Widgets/Widget";
@@ -91,6 +91,7 @@ const ToggleButtonComponent = (props) => {
           variant="contained"
           disabled={props.disabled}
           color={value == 1 ? props.onColor : props.offColor}
+      
           onClick={momentary ? undefined : handleButtonClick}
           onPointerUp={momentary ? handleMouseUp : undefined}
           onPointerDown={momentary ? handleMouseDown : undefined}
@@ -210,7 +211,6 @@ ToggleButton.propTypes = {
 
 ToggleButton.defaultProps = {
   debug: false,
-  color: 'primary',
   labelPlacement: 'top',
   usePvLabel: false,
   showTooltip:false

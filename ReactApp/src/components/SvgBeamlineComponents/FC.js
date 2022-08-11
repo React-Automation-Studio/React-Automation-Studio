@@ -1,16 +1,16 @@
 import React, { useState } from 'react'
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 import Widget from "../SystemComponents/Widgets/Widget";
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
 import { svgHeight, svgCenterY, svgWidth, svgCenterX } from "../SystemComponents/svgConstants";
 import { v4 as uuidv4 } from 'uuid';
 import PropTypes from 'prop-types';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Slide from '@material-ui/core/Slide';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Slide from '@mui/material/Slide';
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {

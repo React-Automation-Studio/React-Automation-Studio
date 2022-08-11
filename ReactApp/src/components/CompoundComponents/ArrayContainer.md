@@ -7,7 +7,7 @@ By default the ArrayContainer shows only 10 elements per time but this value can
 The ArrayContainer does not know how many items there are in the PV value. For this reason it expects a props with the array length. By default the maxItemsCount is 100
 
 ```js
-import { Grid, Typography } from "@material-ui/core";
+import { Grid, Typography } from "@mui/material";
 import TextInput from "../BaseComponents/TextInput";
 
 <Grid container spacing={5}>
@@ -48,7 +48,7 @@ In some cases users want to show or consider only a subset of the array values. 
 When specifying the registers values, the `maxItemsCount` is overridden with the length of the array given to `registers`; in these cases `maxItemsCount can be overridden`. Instead the visibleItemsCount can be specified. If not the component shows all the elements given into the array.
 
 ```js
-import { Grid, Typography } from "@material-ui/core";
+import { Grid, Typography } from "@mui/material";
 import TextInput from "../BaseComponents/TextInput";
 
 <Grid container spacing={5}>
@@ -79,8 +79,8 @@ import TextInput from "../BaseComponents/TextInput";
 Horizontal direction without and with minimum width for each item
 
 ```js
-import { Grid, Typography } from "@material-ui/core";
-import { EmojiEmotions } from "@material-ui/icons";
+import { Grid, Typography } from "@mui/material";
+import { EmojiEmotions } from "@mui/icons-material";
 import StyledIconButton from "../BaseComponents/StyledIconButton";
 
 let indexes = Array.from(Array(48).keys());

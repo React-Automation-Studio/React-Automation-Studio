@@ -2,25 +2,26 @@ import React, { useState, useContext } from 'react';
 
 import PropTypes from 'prop-types';
 
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import { useTheme } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import CssBaseline from '@mui/material/CssBaseline';
 
 
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import BottomNavigation from '@material-ui/core/BottomNavigation';
-import Card from '@material-ui/core/Card';
-import MoreVertRoundedIcon from '@material-ui/icons/MoreVertRounded';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import BottomNavigation from '@mui/material/BottomNavigation';
+import Card from '@mui/material/Card';
+import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 
 import SideDrawer from '../LayoutComponents/SideDrawer'
 import MoreVertDrawer from '../LayoutComponents/MoreVertDrawer'
 
 import AutomationStudioContext from '../../../SystemComponents/AutomationStudioContext';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 
 
 const useStyles = makeStyles(theme => ({
@@ -53,7 +54,7 @@ const TraditionalLayout = (props) => {
     const classes = useStyles(props)
     const theme = useTheme()
 
-    const themeType = theme.palette.type
+    const themeType = theme.palette.mode
 
     const context = useContext(AutomationStudioContext)
     const notInStyleGuide = context.styleGuideRedirect
@@ -72,7 +73,7 @@ const TraditionalLayout = (props) => {
                             className={classes.menuButton}
                             color="inherit"
                             aria-label="menu"
-                        >
+                            size="large">
                             <MenuIcon />
                         </IconButton>
                         <SideDrawer
@@ -92,6 +93,7 @@ const TraditionalLayout = (props) => {
                         <Tabs
                             style={{flexGrow: 1,}}
                             value={props.tabValue}
+                            textColor="inherit"
                             onChange={props.handleTabChange}
                             {...props.tabProps}
                         >
@@ -107,7 +109,7 @@ const TraditionalLayout = (props) => {
                                     edge="end"
                                     color="inherit"
                                     onClick={() => setShowMVDrawer(true)}
-                                >
+                                    size="large">
                                     <MoreVertRoundedIcon />
                                 </IconButton>
                                 <MoreVertDrawer

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
 
 import TextInput from '../../../components/BaseComponents/TextInput';
 import TextOutput from '../../../components/BaseComponents/TextOutput';
@@ -8,11 +8,11 @@ import TextOutput from '../../../components/BaseComponents/TextOutput';
 import Slider from '../../BaseComponents/Slider';
 import GraphY from '../../../components/BaseComponents/GraphY';
 
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 
 import SideBar from '../../../components/SystemComponents/SideBar';
 
-import lime from '@material-ui/core/colors/lime';
+import { lime } from '@mui/material/colors';
 const styles = theme => ({
   root: {
     padding: 0,
@@ -35,7 +35,7 @@ class Example2 extends React.Component {
            style={{padding:8}}
            container item
            direction="row"
-           justify="center"
+           justifyContent="center"
            spacing={1}
            alignItems="stretch"
         >

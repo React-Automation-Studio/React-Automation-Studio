@@ -1,13 +1,13 @@
 import React from 'react'
 import AutomationStudioContext from '../../../SystemComponents/AutomationStudioContext';
 import DataConnection from '../../../SystemComponents/DataConnection';
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
 
 import PropTypes from 'prop-types';
 
-import TextField from '@material-ui/core/TextField';
+import TextField from '@mui/material/TextField';
 
-import MenuItem from '@material-ui/core/MenuItem';
+import MenuItem from '@mui/material/MenuItem';
 
 
 /* eslint-disable eqeqeq */

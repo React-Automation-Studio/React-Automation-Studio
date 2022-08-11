@@ -7,12 +7,12 @@ import SelectionInput from '../../BaseComponents/SelectionInput';
 import TextOutput from '../../BaseComponents/TextOutput';
 import Slider from '../../BaseComponents/Slider';
 import TextUpdate from '../../BaseComponents/TextUpdate';
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 import ToggleButton from '../../BaseComponents/ToggleButton';
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
 import ThumbWheel from '../../BaseComponents/ThumbWheel';
-import Paper from '@material-ui/core/Paper';
-import Close from '@material-ui/icons/Close';
+import Paper from '@mui/material/Paper';
+import Close from '@mui/icons-material/Close';
 console.warn("This example is deprecated and will be removed in a future release")
 const styles = theme => ({
   body1: theme.typography.body1,

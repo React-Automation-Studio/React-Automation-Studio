@@ -1,13 +1,13 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
 
-import Paper from '@material-ui/core/Paper';
+import Paper from '@mui/material/Paper';
 
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 
-import Container from '@material-ui/core/Container';
+import Container from '@mui/material/Container';
 
 import SideBar from '../SystemComponents/SideBar';
 

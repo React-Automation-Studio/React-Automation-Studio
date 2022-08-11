@@ -1,6 +1,6 @@
 ToggleButton EPICS example:
 ```js
-import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
+import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 {/*The TextOutput code is included for demonstration purposes only*/}  
 {/*Only the the JSX code between the hashes  is required to instantiate the ToggleButton */}  
   import TextOutput from './TextOutput';
@@ -25,7 +25,7 @@ import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 
 Momentary ToggleButton EPICS example:
 ```js
-import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
+import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 {/*The TextOutput code is included for demonstration purposes only*/}  
 {/*Only the the JSX code between the hashes  is required to instantiate the ToggleButton */}  
   import TextOutput from './TextOutput';

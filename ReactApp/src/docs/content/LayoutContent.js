@@ -1,8 +1,8 @@
 import React from 'react';
 
-import Grid from '@material-ui/core/Grid';
-import CheckCircle from '@material-ui/icons/CheckCircle';
-import Cancel from '@material-ui/icons/Cancel';
+import Grid from '@mui/material/Grid';
+import CheckCircle from '@mui/icons-material/CheckCircle';
+import Cancel from '@mui/icons-material/Cancel';
 
 
 import TextOutput from '../../components/BaseComponents/TextOutput';
@@ -23,7 +23,7 @@ const LayoutContent = () => {
         <Grid
             container
             direction="row"
-            justify="flex-start"
+            justifyContent="flex-start"
             alignItems="stretch"
             spacing={2}
         >
@@ -43,7 +43,7 @@ const LayoutContent = () => {
                 item
                 xs={4}
                 container
-                justify="space-around"
+                justifyContent="space-around"
                 alignItems="center"
             >
                 <Grid item>
@@ -68,7 +68,7 @@ const LayoutContent = () => {
                 item
                 xs={12}
                 container
-                justify="center"
+                justifyContent="center"
             >
                 <Grid item>
                     <ThumbWheel

@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 import PV from '../PV'
 import PropTypes from "prop-types";
 import { LanDisconnect } from "mdi-material-ui/";
-import { useTheme } from '@material-ui/core/styles';
-import Tooltip from '@material-ui/core/Tooltip';
+import { useTheme } from '@mui/material/styles';
+import Tooltip from '@mui/material/Tooltip';
 import {replaceMacros,replaceArrayMacros} from '../Utils/macroReplacement';
 import { useContextMenu } from "../Utils/widgetHooks";
 import { 

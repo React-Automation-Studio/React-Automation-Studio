@@ -1,18 +1,18 @@
 import React from 'react';
 import ArchiverDataViewer from '../ArchiverDataViewer/ArchiverDataViewer'
 import TraditionalLayout from '../UI/Layout/ComposedLayouts/TraditionalLayout.js';
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 import ToggleButton from '../BaseComponents/ToggleButton'
 import ThumbWheel from '../BaseComponents/ThumbWheel'
-import Paper from '@material-ui/core/Paper'
-import Typography from '@material-ui/core/Typography';
-import AppBar from '@material-ui/core/AppBar';
-import { useTheme } from '@material-ui/core/styles';
+import Paper from '@mui/material/Paper'
+import Typography from '@mui/material/Typography';
+import AppBar from '@mui/material/AppBar';
+import { useTheme } from '@mui/material/styles';
 
 const ArchiverDataViewerDemo = (props) => {
   const theme = useTheme();
   const footerContents = (
-    <Grid container direction="row" justify="flex-start" alignItems="center" >
+    <Grid container direction="row" justifyContent="flex-start" alignItems="center" >
       <Grid item xs={12} style={{ paddingLeft: "1em" }}>
         <Typography>
           This demo requires the <a style={{ color: 'inherit' }} href="https://github.com/React-Automation-Studio/React-Automation-Studio-Demo-Archiver" 
@@ -34,7 +34,7 @@ const ArchiverDataViewerDemo = (props) => {
         spacing={2}
         alignItems={'center'}
         direction={'row'}
-        justify={'center'}
+        justifyContent={'center'}
         style={{ paddingTop: 32, paddingLeft: 8, paddingRight: 8 }}
       >
         <Grid item xs={12} >
@@ -87,7 +87,9 @@ const ArchiverDataViewerDemo = (props) => {
               spacing={2}
               alignItems={'center'}
               direction={'row'}
-              justify={'center'}
+              justifyContent={'center'}
+
+
             >
               <Grid item xs={6} lg={3}>
                 <ToggleButton
@@ -114,7 +116,7 @@ const ArchiverDataViewerDemo = (props) => {
         </Grid>
       </Grid>
 
-      <AppBar style={{ position: 'fixed', bottom: 0, top: 'auto', height: 40 }} color={theme.palette.type === 'dark' ? "inherit" : "primary"}>
+      <AppBar style={{ position: 'fixed', bottom: 0, top: 'auto', height: 40 }} color={theme.palette.mode === 'dark' ? "inherit" : "primary"}>
         {footerContents}
       </AppBar>
     </TraditionalLayout>

@@ -67,7 +67,7 @@ REACT_ENABLE_LOGIN_GOOGLE = os.getenv("REACT_APP_EnableGoogleLogin", None)
 
 log.info("")
 log.info("**************************************")
-log.info("React Automation Studio V3.2.0")
+log.info("React Automation Studio V4.0.0")
 log.info("")
 log.info("pvServer Environment Variables:")
 log.info("")
@@ -85,6 +85,35 @@ log.info(f"REACT_APP_EnableLogin: {REACT_ENABLE_LOGIN}")
 log.info(f"REACT_APP_EnableActiveDirectoryLogin: {REACT_ENABLE_LOGIN_AD}")
 log.info(f"REACT_APP_EnableGoogleLogin: {REACT_ENABLE_LOGIN_GOOGLE}")
 
+
+async_mode = "gevent"
+print("")
+print("**************************************")
+print("React Automation Studio V4.0.0")
+print("")
+print("pvServer Environment Variables:")
+print("")
+print("PYEPICS_LIBCA: " + str(os.environ["PYEPICS_LIBCA"]))
+print("EPICS_BASE: " + str(os.environ["EPICS_BASE"]))
+print("EPICS_CA_ADDR_LIST: " + str(os.environ["EPICS_CA_ADDR_LIST"]))
+print("pvServerURL: " + str(os.environ["pvServerURL"]))
+print("pvServerPort: " + str(os.environ["pvServerPort"]))
+print("pvServerNameSpace: " + str(os.environ["pvServerNameSpace"]))
+print("REACT_APP_EnableLogin: " + str(os.environ["REACT_APP_EnableLogin"]))
+print("pvServerLogLevel: {}".format(os.environ.get("pvServerLogLevel", None)))
+print("pvServerLogFile: {}".format(os.environ.get("pvServerLogFile", None)))
+print("pvServerLogFileSize: {}".format(os.environ.get("pvServerLogFileSize", None)))
+print("pvServerLogFileBackup: {}".format(os.environ.get("pvServerLogFileBackup", None)))
+print(
+    "REACT_APP_EnableActiveDirectoryLogin: "
+    + str(os.environ["REACT_APP_EnableActiveDirectoryLogin"])
+)
+print("REACT_APP_EnableGoogleLogin: " + str(os.environ["REACT_APP_EnableGoogleLogin"]))
+REACT_APP_EnableActiveDirectoryLogin = (
+    os.getenv("REACT_APP_EnableActiveDirectoryLogin") == "true"
+)
+REACT_APP_EnableGoogleLogin = os.getenv("REACT_APP_EnableGoogleLogin") == "true"
+REACT_APP_DisableStandardLogin = os.getenv("REACT_APP_DisableStandardLogin") == "true"
 try:
     REFRESH_COOKIE_MAX_AGE_SECS = int(os.environ["REFRESH_COOKIE_MAX_AGE_SECS"])
 except:
@@ -547,6 +576,7 @@ def write_to_pv(message):
 
 @socketio.on("remove_pv_connection", namespace="/pvServer")
 def remove_pv_connection(message):
+
     global clientPVlist, REACT_APP_DisableLogin, myuid
     pvname1 = str(message["pvname"])
     authenticated = False
@@ -563,137 +593,80 @@ def remove_pv_connection(message):
         authenticated = accessControl["userAuthorised"]
     if accessControl["userAuthorised"]:
         if pvname1 in clientPVlist:
-            pvConnectionId = str(message["pvConnectionId"])
-            log.debug("remove_pv_connection id: ", pvConnectionId, pvname1)
-            try:
-                log.debug(
-                    "before pop",
-                    clientPVlist[pvname1]["sockets"][request.sid]["pvConnectionIds"],
-                )
-                if (
-                    pvConnectionId
-                    in clientPVlist[pvname1]["socketsRW"][request.sid][
-                        "pvConnectionIds"
-                    ]
-                ):
-                    log.debug("debug1: ", pvConnectionId, pvname1)
-                    log.debug(
-                        "before pop",
-                        clientPVlist[pvname1]["sockets"][request.sid][
-                            "pvConnectionIds"
-                        ],
-                    )
-                    clientPVlist[pvname1]["socketsRW"][request.sid][
-                        "pvConnectionIds"
-                    ].pop(str(pvConnectionId))
-                    log.debug(
-                        "length ",
-                        len(
-                            clientPVlist[pvname1]["socketsRW"][request.sid][
-                                "pvConnectionIds"
-                            ]
-                        ),
-                    )
+
+            def removePvId():
+                pvConnectionId = str(message["pvConnectionId"])
+                try:
                     if (
-                        len(
-                            clientPVlist[pvname1]["socketsRW"][request.sid][
-                                "pvConnectionIds"
-                            ]
-                        )
-                        == 0
-                    ):
-                        leave_room(str(pvname1) + "rw")
-                        clientPVlist[pvname1]["socketsRW"].pop(request.sid)
-                    log.debug(
-                        "after pop",
-                        clientPVlist[pvname1]["sockets"][request.sid][
+                        pvConnectionId
+                        in clientPVlist[pvname1]["socketsRW"][request.sid][
                             "pvConnectionIds"
-                        ],
-                    )
-            except:
-                log.debug(
-                    "remove_pv_connection id not in socketsRW: ",
-                    pvConnectionId,
-                    pvname1,
-                )
-            try:
-                log.debug(
-                    "before pop",
-                    clientPVlist[pvname1]["sockets"][request.sid]["pvConnectionIds"],
-                )
-                if (
-                    pvConnectionId
-                    in clientPVlist[pvname1]["socketsRO"][request.sid][
-                        "pvConnectionIds"
-                    ]
-                ):
-                    clientPVlist[pvname1]["socketsRO"][request.sid][
-                        "pvConnectionIds"
-                    ].pop(str(pvConnectionId))
+                        ]
+                    ):
+                        clientPVlist[pvname1]["socketsRW"][request.sid][
+                            "pvConnectionIds"
+                        ].pop(str(pvConnectionId))
+                        if (
+                            len(
+                                clientPVlist[pvname1][""][request.sid][
+                                    "pvConnectionIds"
+                                ]
+                            )
+                            == 0
+                        ):
+                            leave_room(str(pvname1) + "rw")
+                            clientPVlist[pvname1]["socketsRW"].pop(request.sid)
+                except:
+                    pass
+                try:
                     if (
-                        len(
-                            clientPVlist[pvname1]["socketsRO"][request.sid][
-                                "pvConnectionIds"
-                            ]
-                        )
-                        == 0
+                        pvConnectionId
+                        in clientPVlist[pvname1]["socketsRO"][request.sid][
+                            "pvConnectionIds"
+                        ]
                     ):
-                        leave_room(str(pvname1) + "ro")
-                        clientPVlist[pvname1]["socketsRO"].pop(request.sid)
-                    log.debug(
-                        "after pop",
-                        clientPVlist[pvname1]["sockets"][request.sid][
+                        clientPVlist[pvname1]["socketsRO"][request.sid][
                             "pvConnectionIds"
-                        ],
-                    )
-            except:
-                log.debug(
-                    "remove_pv_connection id not in socketsRO: ",
-                    pvConnectionId,
-                    pvname1,
-                )
-            try:
-                log.debug(
-                    "before pop",
-                    clientPVlist[pvname1]["sockets"][request.sid]["pvConnectionIds"],
-                )
-                if (
-                    pvConnectionId
-                    in clientPVlist[pvname1]["sockets"][request.sid]["pvConnectionIds"]
-                ):
-                    log.debug("debug1: ", pvConnectionId, pvname1)
-                    log.debug(
-                        "before pop",
-                        clientPVlist[pvname1]["sockets"][request.sid][
-                            "pvConnectionIds"
-                        ],
-                    )
-                    clientPVlist[pvname1]["sockets"][request.sid][
-                        "pvConnectionIds"
-                    ].pop(str(pvConnectionId))
+                        ].pop(str(pvConnectionId))
+                        if (
+                            len(
+                                clientPVlist[pvname1]["socketsRO"][request.sid][
+                                    "pvConnectionIds"
+                                ]
+                            )
+                            == 0
+                        ):
+                            leave_room(str(pvname1) + "ro")
+                            clientPVlist[pvname1]["socketsRO"].pop(request.sid)
+                except:
+                    pass
+                try:
                     if (
-                        len(
-                            clientPVlist[pvname1]["sockets"][request.sid][
-                                "pvConnectionIds"
-                            ]
-                        )
-                        == 0
+                        pvConnectionId
+                        in clientPVlist[pvname1]["sockets"][request.sid][
+                            "pvConnectionIds"
+                        ]
                     ):
-                        leave_room(str(pvname1))
-                        clientPVlist[pvname1]["sockets"].pop(request.sid)
-                    log.debug(
-                        "after pop",
                         clientPVlist[pvname1]["sockets"][request.sid][
                             "pvConnectionIds"
-                        ],
-                    )
-            except:
-                log.debug(
-                    "remove_pv_connection id not in sockets: ", pvConnectionId, pvname1
-                )
-            log.debug("sockets", clientPVlist[pvname1]["sockets"])
-            log.debug("socketsRO", clientPVlist[pvname1]["socketsRO"])
-            log.debug("socketsRW", clientPVlist[pvname1]["socketsRW"])
+                        ].pop(str(pvConnectionId))
+                        if (
+                            len(
+                                clientPVlist[pvname1]["sockets"][request.sid][
+                                    "pvConnectionIds"
+                                ]
+                            )
+                            == 0
+                        ):
+                            leave_room(str(pvname1))
+                            clientPVlist[pvname1]["sockets"].pop(request.sid)
+                except:
+                    pass
+
+            time.sleep(3)  # wait for 3 seconds before removing a watch
+            with thread_lock:
+                removePvId()
+
         else:
             log.error("Pvname ({}) not in clientPVlist", pvname1)
     else:
@@ -729,8 +702,11 @@ def request_pv_info(message):
                 pvlist["pv"] = pv
                 pvlist["isConnected"] = False
                 pvlist["initialized"] = False
-                myuid = myuid + 1
-                pvConnectionId = str(myuid)
+                if "pvConnectionId" in message:
+                    pvConnectionId = str(message["pvConnectionId"])
+                else:
+                    myuid = myuid + 1
+                    pvConnectionId = str(myuid)
                 if accessControl["permissions"]["write"]:
                     join_room(str(pvname1) + "rw")
                     join_room(str(pvname1))
@@ -760,13 +736,11 @@ def request_pv_info(message):
         else:
             if accessControl["permissions"]["read"]:
                 clientPVlist[pvname1]["initialized"] = False
-                myuid = myuid + 1
-                pvConnectionId = str(myuid)
-                log.debug(
-                    "pv exists", pvname1, " generated pvConnectionId: ", pvConnectionId
-                )
-                log.debug("all sockets ", clientPVlist[pvname1]["sockets"])
-                log.debug("all sockets rw", clientPVlist[pvname1]["socketsRW"])
+                if "pvConnectionId" in message:
+                    pvConnectionId = str(message["pvConnectionId"])
+                else:
+                    myuid = myuid + 1
+                    pvConnectionId = str(myuid)
                 if accessControl["permissions"]["write"]:
                     join_room(str(pvname1) + "rw")
                     join_room(str(pvname1))

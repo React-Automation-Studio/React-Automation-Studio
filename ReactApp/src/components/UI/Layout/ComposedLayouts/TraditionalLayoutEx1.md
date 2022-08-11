@@ -4,17 +4,17 @@ TraditionalLayout with styled app bar, footer and custom footerContent.
 ```js
 import Content from '../../../../docs/content/LayoutContent.js';
 import TraditionalLayout from './TraditionalLayout'
-import AccountCircle from '@material-ui/icons/AccountCircle'
-import Grid from '@material-ui/core/Grid';
+import AccountCircle from '@mui/icons-material/AccountCircle'
+import Grid from '@mui/material/Grid';
 
 const username = 'Guest'
 
 const footerContents=(
-    <Grid container direction="row" justify="flex-start" alignItems="center" style={{color:"white"}} >
+    <Grid container direction="row" justifyContent="flex-start" alignItems="center" style={{color:"white"}} >
         <Grid item xs={10} style={{paddingLeft:"1em"}}>
             React Automation Studio Style Guide
         </Grid>
-        <Grid item xs={2} container direction="row" justify="center" alignItems="center" style={{color:"white"}} >
+        <Grid item xs={2} container direction="row" justifyContent="center" alignItems="center" style={{color:"white"}} >
             <Grid item>
                 <AccountCircle/>
             </Grid>

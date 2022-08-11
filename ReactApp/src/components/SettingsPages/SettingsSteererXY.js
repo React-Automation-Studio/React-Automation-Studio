@@ -4,11 +4,11 @@ import AutomationStudioContext from '../SystemComponents/AutomationStudioContext
 import TextInput from '../BaseComponents/TextInput';
 import TextOutput from '../BaseComponents/TextOutput';
 import Slider from '../BaseComponents/Slider';
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 import ToggleButton from '../BaseComponents/ToggleButton';
 import ThumbWheel from '../BaseComponents/ThumbWheel';
-import Card from '@material-ui/core/Card';
-import { withStyles } from '@material-ui/core/styles';
+import Card from '@mui/material/Card';
+import withStyles from '@mui/styles/withStyles';
 
 
 const styles = theme => ({
@@ -22,7 +22,7 @@ class SettingsSteererXY extends React.Component {
     return (
       <Grid   container
         direction="row"
-        justify="flex-start"
+        justifyContent="flex-start"
         alignItems="center" spacing={1}>
         <Grid item xs={3}  >
           <div className={classes.body1} >
@@ -37,7 +37,7 @@ class SettingsSteererXY extends React.Component {
             <Card style={{ padding: 12}} >
               <Grid   container
                 direction="row"
-                justify="flex-start"
+                justifyContent="flex-start"
                 alignItems="center" spacing={1}>
                 <Grid item xs={6}  >
                   <TextInput   pv={system.devices.xDevice.deviceName+":"+system.devices.xDevice.setpoint}      prec={3}  label={'X Setpoint:'} alarmSensitive={true}  usePvUnits={true} usePvMinMax={true}/>
@@ -51,7 +51,7 @@ class SettingsSteererXY extends React.Component {
                 </Grid>
 
                 <Grid item xs={12}  >
-                  <Grid   container  justify="flex-start" direction="row"    alignItems="center" spacing={1}>
+                  <Grid   container  justifyContent="flex-start" direction="row"    alignItems="center" spacing={1}>
                     <Grid item xs={12} sm={12} >
                       <ThumbWheel
                         pv={system.devices.xDevice.deviceName+":"+system.devices.xDevice.setpoint}
@@ -85,7 +85,7 @@ class SettingsSteererXY extends React.Component {
             <Card style={{ padding: 12}} >
               <Grid   container
                 direction="row"
-                justify="flex-start"
+                justifyContent="flex-start"
                 alignItems="center" spacing={1}>
                 <Grid item xs={6}  >
                   <TextInput   pv={system.devices.yDevice.deviceName+":"+system.devices.yDevice.setpoint}      prec={3}  label={'X Setpoint:'} alarmSensitive={true}  usePvUnits={true} usePvMinMax={true}/>
@@ -99,7 +99,7 @@ class SettingsSteererXY extends React.Component {
                 </Grid>
 
                 <Grid item xs={12}  >
-                  <Grid   container  justify="flex-start" direction="row"    alignItems="center" spacing={1}>
+                  <Grid   container  justifyContent="flex-start" direction="row"    alignItems="center" spacing={1}>
                     <Grid item xs={12} sm={12} >
                       <ThumbWheel
                         pv={system.devices.yDevice.deviceName+":"+system.devices.yDevice.setpoint}

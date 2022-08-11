@@ -1,6 +1,6 @@
 import React from "react";
-import { withStyles } from "@material-ui/core/styles";
-import { InputAdornment, MenuItem, TextField } from "@material-ui/core";
+import withStyles from '@mui/styles/withStyles';
+import { InputAdornment, MenuItem, TextField } from "@mui/material";
 import PropTypes from 'prop-types';
 
 import Widget from "../SystemComponents/Widgets/Widget";

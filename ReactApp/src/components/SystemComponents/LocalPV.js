@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react'
 import ReactAutomationStudioContext from './AutomationStudioContext';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 import PropTypes from "prop-types";
 
 export const useLocalPV = (props) => {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef, useReducer } from 'react'
 import PropTypes from 'prop-types';
-import { useTheme } from '@material-ui/core/styles';
+import { useTheme } from '@mui/material/styles';
 import ContextMenu from '../SystemComponents/ContextMenu';
 import PV from '../SystemComponents/PV'
 import Plot from 'react-plotly.js';
@@ -353,7 +353,7 @@ const GraphXY = (props) => {
     return legendInit
   })
 
-  const [layout, setLayout] = useState({})
+  const [layout, setLayout] = useState({plot_bgcolor: backgroundColor,paper_bgcolor: backgroundColor})
 
   useEffect(() => {
     setLayout({

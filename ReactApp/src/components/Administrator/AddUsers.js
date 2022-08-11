@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import TextField from '@material-ui/core/TextField';
-import Grid from '@material-ui/core/Grid';
-import Checkbox from '@material-ui/core/Checkbox';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Button from '@material-ui/core/Button';
+import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Button from '@mui/material/Button';
 import useAddUSer from './adminDbHooks/useAddUser';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import ErrorIcon from '@material-ui/icons/Error';
-import IconButton from '@material-ui/core/IconButton';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Slide from '@material-ui/core/Slide';
-import AddIcon from '@material-ui/icons/Add';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import ErrorIcon from '@mui/icons-material/Error';
+import IconButton from '@mui/material/IconButton';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Slide from '@mui/material/Slide';
+import AddIcon from '@mui/icons-material/Add';
 import {usePasswordValidator} from '../SystemComponents/Utils/passwordValidator'
 
 
@@ -83,7 +83,7 @@ const AddUsers = (props) => {
 
   return (
     <React.Fragment>
-      <IconButton onClick={() => setShow(true)}>
+      <IconButton onClick={() => setShow(true)} size="large">
         <AddIcon />
       </IconButton>
       <Dialog
@@ -103,7 +103,7 @@ const AddUsers = (props) => {
                 style={{ marginTop: 8, padding: 8 }}
                 container
                 direction="row"
-                justify="center"
+                justifyContent="center"
                 alignItems="flex-start"
                 spacing={0}
               >
@@ -112,7 +112,7 @@ const AddUsers = (props) => {
                     style={{ padding: 8 }}
                     container
                     direction="row"
-                    justify="flex-start"
+                    justifyContent="flex-start"
                     alignItems="flex-start"
                     spacing={2}
                   >
@@ -273,7 +273,7 @@ const AddUsers = (props) => {
         </DialogActions>
       </Dialog>
     </React.Fragment>
-  )
+  );
 }
 
 export default AddUsers;

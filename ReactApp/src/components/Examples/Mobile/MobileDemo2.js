@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
 
 import TextInput from '../../BaseComponents/TextInput';
 import TextOutput from '../../BaseComponents/TextOutput';
 import Slider from '../../BaseComponents/Slider';
 import GraphY from '../../BaseComponents/GraphY';
 
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 
 import Switch from '../../BaseComponents/Switch';
 import SelectionInput from '../../BaseComponents/SelectionInput';
@@ -27,7 +27,7 @@ import TraditionalLayout from '../../UI/Layout/ComposedLayouts/TraditionalLayout
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    padding: theme.spacing(1) * 2
+    padding: 16
   },
   paper: {
     padding: theme.spacing(1) * 2,
@@ -46,7 +46,7 @@ class MobileDemo2 extends React.Component {
           denseAppBar
           alignTitle="center"
         ></TraditionalLayout>}
-        <div style={{ padding: 24}}>
+        <div style={{ padding: 16}}>
           <div >
             <Grid container spacing={2}>
               <Grid item xs={12} lg={6}>
@@ -73,7 +73,7 @@ class MobileDemo2 extends React.Component {
           </div>
         </div>
         <div className={classes.root}>
-          <Grid container spacing={2}  direction="row"  justify="flex-start"  alignItems="center">
+          <Grid container spacing={2}  direction="row"  justifyContent="flex-start"  alignItems="center">
 
             <Grid item xs={12} lg={2}>
               <TextInput  pv='$(device):amplitude' macros={{'$(device)':'testIOC'}}   usePvLabel={true}  prec={3} alarmSensitive={true}/>

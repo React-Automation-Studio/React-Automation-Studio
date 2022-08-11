@@ -5,10 +5,10 @@ import BeamLineCanvas from './BeamLineCanvas';
 import HorizontalBeamline from './HorizontalBeamline';
 import EditorSlitXY from '../ControlScreens/Components/EditorSlitXY';
 import React,{useState} from 'react';
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 const [displayEditor,setDisplayEditor]=useState(false);
 
-  <Grid container direction="row" justify="flex-start" alignItems="flex-start" >
+  <Grid container direction="row" justifyContent="flex-start" alignItems="flex-start" >
   <Grid item xs={12} lg={12}>
     <div>Click on the slit to open the editor</div>
   </Grid>

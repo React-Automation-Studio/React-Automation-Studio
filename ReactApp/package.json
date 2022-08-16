@@ -25,7 +25,7 @@
         "react-google-login": "5.2.2",
         "react-plotly.js": "2.5.1",
         "react-router-dom": "5.3.3",
-        "react-scripts": "5.0.1",
+        
         "socket.io-client": "4.5.1",
         "three": "0.143.0",
         "typeface-roboto": "1.1.13",
@@ -61,6 +61,7 @@
     "homepage": ".",
     "devDependencies": {
         "cross-env": "7.0.3",
-        "react-styleguidist": "11.2.0"
+        "react-styleguidist": "11.2.0",
+        "react-scripts": "5.0.1"
     }
 }

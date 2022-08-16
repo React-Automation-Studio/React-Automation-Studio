@@ -4,7 +4,7 @@ This document describes a minimal set of manual end-end tests that should be per
 
 The .env file in the project root folder is used to enable features. To simplify the repetition  of the manual testing process it is encouraged to clone the repository into multiple folders to create an individual .env that turns on separate features.
 
-Perquisites: 
+Prerequisites: 
 
 Bring up the demo archiver: https://github.com/React-Automation-Studio/React-Automation-Studio-Demo-Archiver
 
@@ -35,7 +35,6 @@ docker compose -f docker-compose-dev.yml up
 ```
   Checklist
 
-- [ ] check version numbers are correct
 - [ ] verify all the widgets work
 - [ ] verify all the demos work
 - [ ] verify that repeatedly refreshing the screen that widgets connect to their pvs
@@ -53,7 +52,6 @@ docker compose -f docker-compose-dev.yml up
 ```
   Checklist
 
-- [ ] check version numbers are correct
 - [ ] verify all the widgets work
 - [ ] verify all the demos work
 - [ ] verify that repeatedly refreshing the screen that widgets connect to their pvs

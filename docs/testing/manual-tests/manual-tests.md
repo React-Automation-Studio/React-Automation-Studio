@@ -28,7 +28,7 @@ docker compose  up
 - [ ] verify alarm handler demo works - note you need authentication enabled to verify all the features
 - [ ] verify styleguide works and that all the demo widgets work correctly in the styleguide
 
-##  dev build
+##  Dev build
 Bring up the compose environment:
 ```
 docker compose -f docker-compose-dev.yml up
@@ -45,7 +45,7 @@ docker compose -f docker-compose-dev.yml up
 - [ ] verify styleguide works and that all the demo widgets work correctly in the styleguide
 - [ ] verify that no errors are reported to the web apps console whilst performing the above checks in the styleguide
 
-##  styleguide dev build
+##  Styleguide dev build
 Bring up the compose environment:
 ```
 docker compose -f docker-compose-dev.yml up

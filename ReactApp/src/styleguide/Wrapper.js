@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-
+import { BrowserRouter } from "react-router-dom";
 import "typeface-roboto";
 import {
   ThemeProvider,
@@ -78,6 +78,12 @@ class Wrapper extends Component {
     let system = {
       socket: window.socket,
       userTokens: userTokens,
+      userData: {
+        username: "",
+        roles: [],
+        loggedIn: false,
+        loggingIn: false,
+      },
       localVariables: localVariables,
       updateLocalVariable: this.updateLocalVariable,
       enableProbe: false,
@@ -93,15 +99,17 @@ class Wrapper extends Component {
   }
   render() {
     return (
-      <AutomationStudioContext.Provider value={this.state.system}>
-        <StyledEngineProvider injectFirst>
-          <ThemeProvider theme={this.state.theme}>
-            <CssBaseline>
-              <ReactVisCssBaseline>{this.props.children}</ReactVisCssBaseline>
-            </CssBaseline>
-          </ThemeProvider>
-        </StyledEngineProvider>
-      </AutomationStudioContext.Provider>
+      <BrowserRouter>
+        <AutomationStudioContext.Provider value={this.state.system}>
+          <StyledEngineProvider injectFirst>
+            <ThemeProvider theme={this.state.theme}>
+              <CssBaseline>
+                <ReactVisCssBaseline>{this.props.children}</ReactVisCssBaseline>
+              </CssBaseline>
+            </ThemeProvider>
+          </StyledEngineProvider>
+        </AutomationStudioContext.Provider>
+      </BrowserRouter>
     );
   }
 }

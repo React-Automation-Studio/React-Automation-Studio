@@ -1,4 +1,4 @@
-FROM node:16.6.0
+FROM node:18.3.0
 WORKDIR /frontend
 ENV PATH /frontend/node_modules/.bin:$PATH
 ADD ./ReactApp/package.json /frontend/package.json

@@ -64,7 +64,7 @@ PV_SERVER_LOG_FILE_BACKUP = os.getenv("pvServerLogFileBackup", None)
 REACT_ENABLE_LOGIN = os.getenv("REACT_APP_EnableLogin", None)
 REACT_ENABLE_LOGIN_AD = os.getenv("REACT_APP_EnableActiveDirectoryLogin", None)
 REACT_ENABLE_LOGIN_GOOGLE = os.getenv("REACT_APP_EnableGoogleLogin", None)
-REACT_DISABLE_STANDARD_LOGIN = os.getenv("REACT_APP_DisableStandardLogin", None) 
+REACT_DISABLE_STANDARD_LOGIN = os.getenv("REACT_APP_DisableStandardLogin", None)
 
 log.info("")
 log.info("**************************************")
@@ -98,7 +98,7 @@ except:
         "Refresh cookie max age not set - defaulting to"
         f" {REFRESH_COOKIE_MAX_AGE_SECS} seconds"
     )
-log.info(f"REFRESH_COOKIE_MAX_AGE_SECS: {REFRESH_COOKIE_MAX_AGE_SECS}")    
+log.info(f"REFRESH_COOKIE_MAX_AGE_SECS: {REFRESH_COOKIE_MAX_AGE_SECS}")
 
 
 try:
@@ -109,14 +109,14 @@ except:
         "Access token max age not set - defaulting to"
         f" {ACCESS_TOKEN_MAX_AGE_SECS} seconds"
     )
-log.info(f"ACCESS_TOKEN_MAX_AGE_SECS: {ACCESS_TOKEN_MAX_AGE_SECS}")    
+log.info(f"ACCESS_TOKEN_MAX_AGE_SECS: {ACCESS_TOKEN_MAX_AGE_SECS}")
 
 try:
     REFRESH_TIMEOUT = int(os.environ["REFRESH_TIMEOUT"])
 except:
     REFRESH_TIMEOUT = 60
     log.info(f"Refresh time out not set - defaulting to {REFRESH_TIMEOUT} seconds")
-log.info(f"REFRESH_TIMEOUT: {REFRESH_TIMEOUT}")    
+log.info(f"REFRESH_TIMEOUT: {REFRESH_TIMEOUT}")
 
 try:
     SECURE = os.getenv("SECURE") == "true"

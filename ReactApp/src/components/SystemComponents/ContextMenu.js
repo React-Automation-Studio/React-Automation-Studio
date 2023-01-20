@@ -23,9 +23,6 @@ const styles = theme => ({
     display: 'flex',
     flexWrap: 'wrap',
   },
-  ConnecedIcon:{
-    backgroundColorcolor:theme.palette.primary.main,
-  },
 });
 
 class ContextMenu extends React.Component {

@@ -64,6 +64,7 @@ PV_SERVER_LOG_FILE_BACKUP = os.getenv("pvServerLogFileBackup", None)
 REACT_ENABLE_LOGIN = os.getenv("REACT_APP_EnableLogin", None)
 REACT_ENABLE_LOGIN_AD = os.getenv("REACT_APP_EnableActiveDirectoryLogin", None)
 REACT_ENABLE_LOGIN_GOOGLE = os.getenv("REACT_APP_EnableGoogleLogin", None)
+REACT_DISABLE_STANDARD_LOGIN = os.getenv("REACT_APP_DisableStandardLogin", None)
 
 log.info("")
 log.info("**************************************")
@@ -84,36 +85,11 @@ log.info(f"pvServerLogFileBackup: {PV_SERVER_LOG_FILE_BACKUP}")
 log.info(f"REACT_APP_EnableLogin: {REACT_ENABLE_LOGIN}")
 log.info(f"REACT_APP_EnableActiveDirectoryLogin: {REACT_ENABLE_LOGIN_AD}")
 log.info(f"REACT_APP_EnableGoogleLogin: {REACT_ENABLE_LOGIN_GOOGLE}")
+log.info(f"REACT_APP_DisableStandardLogin: {REACT_DISABLE_STANDARD_LOGIN}")
 
 
 async_mode = "gevent"
-print("")
-print("**************************************")
-print("React Automation Studio V4.0.0")
-print("")
-print("pvServer Environment Variables:")
-print("")
-print("PYEPICS_LIBCA: " + str(os.environ["PYEPICS_LIBCA"]))
-print("EPICS_BASE: " + str(os.environ["EPICS_BASE"]))
-print("EPICS_CA_ADDR_LIST: " + str(os.environ["EPICS_CA_ADDR_LIST"]))
-print("pvServerURL: " + str(os.environ["pvServerURL"]))
-print("pvServerPort: " + str(os.environ["pvServerPort"]))
-print("pvServerNameSpace: " + str(os.environ["pvServerNameSpace"]))
-print("REACT_APP_EnableLogin: " + str(os.environ["REACT_APP_EnableLogin"]))
-print("pvServerLogLevel: {}".format(os.environ.get("pvServerLogLevel", None)))
-print("pvServerLogFile: {}".format(os.environ.get("pvServerLogFile", None)))
-print("pvServerLogFileSize: {}".format(os.environ.get("pvServerLogFileSize", None)))
-print("pvServerLogFileBackup: {}".format(os.environ.get("pvServerLogFileBackup", None)))
-print(
-    "REACT_APP_EnableActiveDirectoryLogin: "
-    + str(os.environ["REACT_APP_EnableActiveDirectoryLogin"])
-)
-print("REACT_APP_EnableGoogleLogin: " + str(os.environ["REACT_APP_EnableGoogleLogin"]))
-REACT_APP_EnableActiveDirectoryLogin = (
-    os.getenv("REACT_APP_EnableActiveDirectoryLogin") == "true"
-)
-REACT_APP_EnableGoogleLogin = os.getenv("REACT_APP_EnableGoogleLogin") == "true"
-REACT_APP_DisableStandardLogin = os.getenv("REACT_APP_DisableStandardLogin") == "true"
+
 try:
     REFRESH_COOKIE_MAX_AGE_SECS = int(os.environ["REFRESH_COOKIE_MAX_AGE_SECS"])
 except:
@@ -122,6 +98,8 @@ except:
         "Refresh cookie max age not set - defaulting to"
         f" {REFRESH_COOKIE_MAX_AGE_SECS} seconds"
     )
+log.info(f"REFRESH_COOKIE_MAX_AGE_SECS: {REFRESH_COOKIE_MAX_AGE_SECS}")
+
 
 try:
     ACCESS_TOKEN_MAX_AGE_SECS = int(os.environ["ACCESS_TOKEN_MAX_AGE_SECS"])
@@ -131,12 +109,14 @@ except:
         "Access token max age not set - defaulting to"
         f" {ACCESS_TOKEN_MAX_AGE_SECS} seconds"
     )
+log.info(f"ACCESS_TOKEN_MAX_AGE_SECS: {ACCESS_TOKEN_MAX_AGE_SECS}")
 
 try:
     REFRESH_TIMEOUT = int(os.environ["REFRESH_TIMEOUT"])
 except:
     REFRESH_TIMEOUT = 60
     log.info(f"Refresh time out not set - defaulting to {REFRESH_TIMEOUT} seconds")
+log.info(f"REFRESH_TIMEOUT: {REFRESH_TIMEOUT}")
 
 try:
     SECURE = os.getenv("SECURE") == "true"
@@ -148,7 +128,7 @@ log.info("")
 REACT_APP_DisableLogin = not (REACT_ENABLE_LOGIN == "true")
 REACT_APP_EnableActiveDirectoryLogin = REACT_ENABLE_LOGIN_AD == "true"
 REACT_APP_EnableGoogleLogin = REACT_ENABLE_LOGIN_GOOGLE == "true"
-REACT_APP_DisableStandardLogin = os.getenv("REACT_APP_DisableStandardLogin") == "true"
+REACT_APP_DisableStandardLogin = REACT_DISABLE_STANDARD_LOGIN == "true"
 if REACT_APP_DisableLogin:
     log.info("Authentication and Authorization is DISABLED")
 else:
@@ -2241,7 +2221,7 @@ if __name__ == "__main__":
     REACT_APP_PyEpicsServerURL = (
         REACT_APP_PyEpicsServerURL + ":" + pvServerPort + "/" + "pvServer"
     )
-    log.info("pvServer URL: ", REACT_APP_PyEpicsServerURL)
+    log.info(f"pvServer URL: {REACT_APP_PyEpicsServerURL}")
     log.info("")
     if not (REACT_APP_PyEpicsServerURL is None):
         if "https" in REACT_APP_PyEpicsServerURL:

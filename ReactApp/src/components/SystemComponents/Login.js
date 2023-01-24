@@ -132,7 +132,6 @@ const Login = (props) => {
   const responseGoogle = (response) => {
    
     const token = response.credential;
-    console.log(token)
     const options = {
       headers: { "Content-Type": "application/json" },
       timeout: props.timeout,

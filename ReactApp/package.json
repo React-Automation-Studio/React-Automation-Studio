@@ -22,7 +22,7 @@
         "react": "18.2.0",
         "react-device-detect": "2.2.2",
         "react-dom": "18.2.0",
-        "react-google-login": "5.2.2",
+        "@react-oauth/google":"0.6.0",
         "react-plotly.js": "2.6.0",
         "react-router-dom": "5.3.3",
         

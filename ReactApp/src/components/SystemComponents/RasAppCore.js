@@ -9,7 +9,7 @@ import AutomationStudioContext from './AutomationStudioContext';
 import { io } from 'socket.io-client';
 import RasCssBaseline from './RasCssBaseline';
 import PropTypes from 'prop-types';
-
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import axios from 'axios';
 
 class RasAppCore extends Component {
@@ -330,6 +330,7 @@ class RasAppCore extends Component {
     const { system } = this.state;
 
     return (
+      <GoogleOAuthProvider clientId={process.env.REACT_APP_EnableGoogleLoginId}>
       <AutomationStudioContext.Provider value={{ ...system }}>
         <StyledEngineProvider injectFirst>
           <ThemeProvider theme={this.state.theme}>
@@ -340,6 +341,7 @@ class RasAppCore extends Component {
           </ThemeProvider>
         </StyledEngineProvider>
       </AutomationStudioContext.Provider>
+      </GoogleOAuthProvider>
     );
   }
 }

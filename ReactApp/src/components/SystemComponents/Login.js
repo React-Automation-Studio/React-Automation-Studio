@@ -24,7 +24,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
-import { GoogleLogin } from "react-google-login";
+import { GoogleLogin } from "@react-oauth/google";
 import { Container } from "@mui/material";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -130,7 +130,8 @@ const Login = (props) => {
   const location = useLocation();
 
   const responseGoogle = (response) => {
-    const token = response.tokenId;
+   
+    const token = response.credential;
     const options = {
       headers: { "Content-Type": "application/json" },
       timeout: props.timeout,
@@ -376,13 +377,11 @@ const Login = (props) => {
           {enableGoogleLogin && (
             <div style={{ paddingTop: 24 }}>
               <GoogleLogin
-                clientId={process.env.REACT_APP_EnableGoogleLoginId}
-                buttonText="Login"
+                
                 onSuccess={responseGoogle}
-                onFailure={(response) => {
-                  console.log("google login failed", response);
+                onError={() => {
+                  console.log('Login Failed');
                 }}
-                cookiePolicy={"single_host_origin"}
               />
             </div>
           )}

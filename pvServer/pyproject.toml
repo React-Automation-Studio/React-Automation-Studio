@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pvserver"
-version = "3.2.0"
+version = "4.0.1"
 description = "RAS Python backend. It mainly manages connections with PVs, through a websocket connection, authentication, authorization, plus other optional functionalities."
 authors = ["React Automation Studio Team <rasadmin@tlabs.ac.za>"]
 license = "MIT"

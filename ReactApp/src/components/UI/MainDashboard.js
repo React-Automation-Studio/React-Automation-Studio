@@ -318,6 +318,34 @@ const MainDashboard = (props) => {
               </Grid>
               <Grid item lg={12} sm={12} xs={12}>
                 <Typography className={classes.WhatsNew} component="div">
+                  V4.0.1 Friday 24 March 2022 Minor Updates:
+                  <ul>
+                    <li>Package updates to all Node modules</li>
+                    <li>Updated to the latest Node LTS</li>
+                    <li>MUI has been updated to the latest packages</li>
+                    <li>
+                      Changed the contact information to Github Discussions:
+                      https://github.com/React-Automation-Studio/React-Automation-Studio/discussions
+                    </li>
+                  </ul>
+                  Minor Bug Fixes and Updates:
+                  <ul>
+                    <li>
+                      A few minor bug fixes to the slider and the context menu
+                    </li>
+                  </ul>
+                  Minor Breaking Changes:
+                  <ul>
+                    <li>
+                      Previous version of google sign in is being deprecated
+                      (see
+                      https://developers.googleblog.com/2021/08/gsi-jsweb-deprecation.html
+                      )Solution is to replace "react-google-login" with
+                      @react-oauth/google
+                    </li>
+                  </ul>
+                  <br />
+                  <br />
                   V4.0.0 Wednesday 3 August 2022 Major Updates:
                   <ul>
                     <li>Update to React 18.2.0 </li>
@@ -336,7 +364,9 @@ const MainDashboard = (props) => {
                   </ul>
                   Minor Bug Fixes and Updates:
                   <ul>
-                    <li>Minor formatting and theme changes due to MUI update</li>
+                    <li>
+                      Minor formatting and theme changes due to MUI update
+                    </li>
                     <li>
                       General clean up of code formatting in both pvServer and
                       React (prior upgrading the MUI library)

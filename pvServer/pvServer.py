@@ -556,7 +556,6 @@ def write_to_pv(message):
 
 @socketio.on("remove_pv_connection", namespace="/pvServer")
 def remove_pv_connection(message):
-
     global clientPVlist, REACT_APP_DisableLogin, myuid
     pvname1 = str(message["pvname"])
     authenticated = False

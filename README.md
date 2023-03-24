@@ -518,7 +518,7 @@ Contact us at Github Discussions: https://github.com/React-Automation-Studio/Rea
 
 # Changelog
 
-V4.0.1 Friday 24 March 2022 Minor Updates:
+V4.0.1 Friday 24 March 2023 Minor Updates:
 
 <ul>
   <li>Package updates to all Node modules</li>

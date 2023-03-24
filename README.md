@@ -1,4 +1,4 @@
-Current Release: V4.0.0
+Current Release: V4.0.1
 
 # Introduction
 
@@ -517,6 +517,26 @@ Contact us at rasadmin@tlabs.ac.za
   The docker containers for RAS run in network  mode host. This is done to enable EPICS to communicate seamlessly with any IOC's on the same subnet as the host. Other OSes such as Windows may not support the host mode and will run in the bridged mode. This may break the communication between the micro services. It is therefore recommended to run the RAS containers on a Linux VM that is minimally running Ubuntu Server. Please ensure the the VM network interface is assigned an IP on the same subnet as your EPICS network in order for communication with the IOC's to occur seamlessly.
 
 # Changelog
+
+V4.0.1 Friday 24 March 2022 Minor Updates:
+
+<ul>
+  <li>Package updates to all Node modules</li>
+  <li>Updated to latest Node LTS</li>
+  <li>MUI has been updated to the latest packages</li>
+
+</ul>
+Minor Bug Fixes and Updates:
+<ul>
+  <li>A few minor bug fixes to the slider and context menu</li>
+  
+</ul>
+Minor Breaking Changes:
+<ul>
+  <li>Previous version of google sign in is being deprecated. https://developers.googleblog.com/2021/08/gsi-jsweb-deprecation.html Solution is to replace "react-google-login" with @react-oauth/google</li>
+  
+</ul>
+<br />
 
 V4.0.0 Wednesday 3 August 2022
 

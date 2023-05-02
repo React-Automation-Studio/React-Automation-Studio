@@ -197,9 +197,8 @@ def refresh():
     else:
         refreshToken = request.json.get("refreshToken")
     if not (refreshToken is None):
-        log.debug("in ifrefreshToken", refreshToken)
         userData = AuthoriseUser(refreshToken)
-        log.debug("userData", userData)
+        log.debug("userData {}", userData)
         if userData["authorised"]:
             resp = create_login_response(userData)
             return resp
@@ -224,7 +223,7 @@ def login_local():
 
 @app.route("/api/login/ldap", methods=["POST"])
 def login_ldap():
-    log.debug("request ip:", request.remote_addr)
+    log.debug("request ip: {}", request.remote_addr)
     global REACT_APP_EnableActiveDirectoryLogin
     if REACT_APP_EnableActiveDirectoryLogin:
         user = request.json.get("user", None)
@@ -289,7 +288,7 @@ def check_pv_initialized_after_disconnect():
                 or (len(clientPVlist[pvname]["socketsRW"]) > 0)
                 or (len(clientPVlist[pvname]["socketsRO"]) > 0)
             ):
-                log.debug(pvname, " has no listening clients, removing")
+                log.debug("{} has no listening clients, removing", pvname)
                 clientPVlist[pvname]["pv"].disconnect()
                 clientPVlist.pop(pvname)
             else:
@@ -715,7 +714,7 @@ def request_pv_info(message):
                 clientPVlist[pvname1] = pvlist
                 clientPVlist[pvname1]["pv"].add_callback(on_change_value, index=0)
                 log.debug(
-                    "new pv", pvname1, " generated pvConnectionId: ", pvConnectionId
+                    "new pv {} generated pvConnectionId: {}", pvname1, pvConnectionId
                 )
                 return {"pvConnectionId": pvConnectionId}
         else:
@@ -744,7 +743,7 @@ def request_pv_info(message):
                                     "not a unique id {} {}", pvConnectionId, pvname1
                                 )
                                 log.debug(
-                                    "allConnectionIds ",
+                                    "allConnectionIds {}",
                                     clientPVlist[pvname1]["sockets"][request.sid][
                                         "pvConnectionIds"
                                     ],
@@ -776,7 +775,7 @@ def request_pv_info(message):
                                     "not a unique id RW {} {}", pvConnectionId, pvname1
                                 )
                                 log.debug(
-                                    "allConnectionIds RW ",
+                                    "allConnectionIds RW {}",
                                     clientPVlist[pvname1]["socketsRW"][request.sid][
                                         "pvConnectionIds"
                                     ],
@@ -811,7 +810,7 @@ def request_pv_info(message):
                                     "not a unique id {} {}", pvConnectionId, pvname1
                                 )
                                 log.debug(
-                                    "allConnectionIds",
+                                    "allConnectionIds {}",
                                     clientPVlist[pvname1]["sockets"][request.sid][
                                         "pvConnectionIds"
                                     ],
@@ -843,7 +842,7 @@ def request_pv_info(message):
                                     "not a unique id ro {} {}", pvConnectionId, pvname1
                                 )
                                 log.debug(
-                                    "allConnectionIds ro",
+                                    "allConnectionIds ro {}",
                                     clientPVlist[pvname1]["socketsRO"][request.sid][
                                         "pvConnectionIds"
                                     ],
@@ -878,7 +877,6 @@ def client_connect():
 @socketio.on("disconnect", namespace="/pvServer")
 def client_disconnect():
     global clientDbWatchList
-    log.info("disconnected", request.sid)
     log.info("Client disconnected: {}", request.sid)
     for pvname1 in clientPVlist:
         try:
@@ -895,17 +893,16 @@ def client_disconnect():
             leave_room(str(pvname1))
             clientPVlist[pvname1]["sockets"].pop(request.sid)
         except:
-            pass
-            log.debug("disconn sockets", clientPVlist[pvname1]["sockets"])
-            log.debug("disconn socketsRO", clientPVlist[pvname1]["socketsRO"])
-            log.debug("disconn socketsRW", clientPVlist[pvname1]["socketsRW"])
+            log.debug("disconn sockets {}", clientPVlist[pvname1]["sockets"])
+            log.debug("disconn socketsRO {}", clientPVlist[pvname1]["socketsRO"])
+            log.debug("disconn socketsRW {}", clientPVlist[pvname1]["socketsRW"])
     try:
         log.debug(list(clientDbWatchList))
         for watchEventName in list(clientDbWatchList):
             socketId = str(request.sid)
-            log.debug("socketId ", socketId, watchEventName)
+            log.debug("socketId {} ({})", socketId, watchEventName)
             if socketId in list(clientDbWatchList[watchEventName]["sockets"]):
-                log.debug("socketId found", socketId, watchEventName)
+                log.debug("socketId found {} ({})", socketId, watchEventName)
                 clientDbWatchList[watchEventName]["sockets"].pop(str(request.sid), None)
     except Exception as e:
         log.info("disconnect", e)
@@ -920,7 +917,7 @@ def client_disconnect():
 def db_read(message):
     global clientPVlist, REACT_APP_DisableLogin
     dbURL = str(message["dbURL"])
-    log.debug("databaseRead: SSID: ", request.sid, " dbURL: ", dbURL)
+    log.debug("databaseRead: SSID: {} dbURL: {}", request.sid, dbURL)
     authenticated = False
     if REACT_APP_DisableLogin:
         authenticated = True
@@ -935,7 +932,7 @@ def db_read(message):
         authenticated = accessControl["userAuthorised"]
     if accessControl["userAuthorised"]:
         if "mongodb://" in dbURL:
-            log.debug("mongodb database connection request: ", dbURL)
+            log.debug("mongodb database connection request: {}")
             str1 = dbURL.replace("mongodb://", "")
             strings = str1.split(":")
             try:
@@ -943,14 +940,14 @@ def db_read(message):
                 parameters = json.loads(Parametersstr)
             except:
                 raise Exception("Parameters are not defined")
-            log.debug("Parameters:", str(parameters))
+            log.debug("Parameters: {}", str(parameters))
             if len(strings) >= 3:
                 database = strings[0]
                 dbName = strings[1]
                 colName = strings[2]
-                log.debug("database: ", database, "length: ", len(database))
-                log.debug("dbName: ", dbName, "length: ", len(dbName))
-                log.debug("colName: ", colName, "length: ", len(colName))
+                log.debug("database: {} length: {}", database, len(database))
+                log.debug("dbName: {} length: {}", dbName, len(dbName))
+                log.debug("colName: {} length: {}", colName, len(colName))
                 ### must insert a better error detection here
                 if (len(database) > 0) and (len(dbName) > 0) and (len(colName) > 0):
                     write_access = False
@@ -979,7 +976,7 @@ def db_read(message):
                                 "data": data,
                             }
                             eventName = "databaseData:" + dbURL
-                            log.debug("eventName", eventName)
+                            log.debug("eventName {}", eventName)
                             socketio.emit(
                                 eventName, d, room=request.sid, namespace="/pvServer"
                             )
@@ -1007,7 +1004,7 @@ def db_read(message):
 def db_read_broadcast(message):
     global clientPVlist, REACT_APP_DisableLogin
     dbURL = str(message["dbURL"])
-    log.debug("databaseRead: SSID: ", request.sid, " dbURL: ", dbURL)
+    log.debug("databaseRead: SSID: {} dbURL: {}", request.sid, dbURL)
     authenticated = False
     if REACT_APP_DisableLogin:
         authenticated = True
@@ -1022,7 +1019,7 @@ def db_read_broadcast(message):
         authenticated = accessControl["userAuthorised"]
     if accessControl["userAuthorised"]:
         if "mongodb://" in dbURL:
-            log.debug("mongodb database connection request: ", dbURL)
+            log.debug("mongodb database connection request: {}", dbURL)
             str1 = dbURL.replace("mongodb://", "")
             strings = str1.split(":")
             try:
@@ -1034,9 +1031,9 @@ def db_read_broadcast(message):
                 database = strings[0]
                 dbName = strings[1]
                 colName = strings[2]
-                log.debug("database: ", database, "length: ", len(database))
-                log.debug("dbName: ", dbName, "length: ", len(dbName))
-                log.debug("colName: ", colName, "length: ", len(colName))
+                log.debug("database: {} length: {}", database, len(database))
+                log.debug("dbName {} length: {}", dbName, len(dbName))
+                log.debug("colName: {} length: {}", colName, len(colName))
                 ### must insert a better error detection here
                 if (len(database) > 0) and (len(dbName) > 0) and (len(colName) > 0):
                     write_access = False
@@ -1060,7 +1057,7 @@ def db_read_broadcast(message):
                             log.debug("done: " + dbURL)
                             data = dumps(X)
                             eventName = "databaseData:" + dbURL
-                            log.debug("eventName", eventName)
+                            log.debug("eventName {}", eventName)
                             d = {
                                 "dbURL": dbURL,
                                 "write_access": write_access,
@@ -1355,16 +1352,16 @@ def db_update_one(message):
     if accessControl["userAuthorised"]:
         if accessControl["permissions"]["write"]:
             if "mongodb://" in dbURL:
-                log.debug("mongodb database connection request: ", dbURL)
+                log.debug("mongodb database connection request: {}", dbURL)
                 str1 = dbURL.replace("mongodb://", "")
                 strings = str1.split(":")
                 if len(strings) == 3:
                     database = strings[0]
                     dbName = strings[1]
                     colName = strings[2]
-                    log.debug("database: ", database, "length: ", len(database))
-                    log.debug("dbName: ", dbName, "length: ", len(dbName))
-                    log.debug("colName: ", colName, "length: ", len(colName))
+                    log.debug("database: {} length: {}", database, len(database))
+                    log.debug("dbName: {} length: {}", dbName, len(dbName))
+                    log.debug("colName: {} length: {}", colName, len(colName))
                     ### must insert a better error detection here
                     if (len(database) > 0) and (len(dbName) > 0) and (len(colName) > 0):
                         try:
@@ -1406,8 +1403,8 @@ def db_update_one(message):
 def db_update_many(message):
     global clientPVlist, REACT_APP_DisableLogin
     dbURL = str(message["dbURL"])
-    log.debug("databaseUpdate: SSID: ", request.sid, " dbURL: ", dbURL)
-    log.debug("message:", str(message))
+    log.debug("databaseUpdate: SSID: {} dbURL: {}", request.sid, dbURL)
+    log.debug("message: {}", str(message))
     authenticated = False
     if REACT_APP_DisableLogin:
         authenticated = True
@@ -1423,16 +1420,16 @@ def db_update_many(message):
     if accessControl["userAuthorised"]:
         if accessControl["permissions"]["write"]:
             if "mongodb://" in dbURL:
-                log.debug("mongodb database connection request: ", dbURL)
+                log.debug("mongodb database connection request: {}", dbURL)
                 str1 = dbURL.replace("mongodb://", "")
                 strings = str1.split(":")
                 if len(strings) == 3:
                     database = strings[0]
                     dbName = strings[1]
                     colName = strings[2]
-                    log.debug("database: ", database, "length: ", len(database))
-                    log.debug("dbName: ", dbName, "length: ", len(dbName))
-                    log.debug("colName: ", colName, "length: ", len(colName))
+                    log.debug("database: {} length: {}", database, len(database))
+                    log.debug("dbName: {} length: {}", dbName, len(dbName))
+                    log.debug("colName: {} length: {}", colName, len(colName))
                     ### must insert a better error detection here
                     if (len(database) > 0) and (len(dbName) > 0) and (len(colName) > 0):
                         try:
@@ -1490,8 +1487,8 @@ def db_update_many(message):
 def db_delete_one(message):
     global clientPVlist, REACT_APP_DisableLogin
     dbURL = str(message["dbURL"])
-    log.debug("databaseUpdate: SSID: ", request.sid, " dbURL: ", dbURL)
-    log.debug("message:", str(message))
+    log.debug("databaseUpdate: SSID: {} dbURL: {}", request.sid, dbURL)
+    log.debug("message: {}", str(message))
     authenticated = False
     if REACT_APP_DisableLogin:
         authenticated = True
@@ -1507,16 +1504,16 @@ def db_delete_one(message):
     if accessControl["userAuthorised"]:
         if accessControl["permissions"]["write"]:
             if "mongodb://" in dbURL:
-                log.debug("mongodb database connection request: ", dbURL)
+                log.debug("mongodb database connection request: {}", dbURL)
                 str1 = dbURL.replace("mongodb://", "")
                 strings = str1.split(":")
                 if len(strings) == 3:
                     database = strings[0]
                     dbName = strings[1]
                     colName = strings[2]
-                    log.debug("database: ", database, "length: ", len(database))
-                    log.debug("dbName: ", dbName, "length: ", len(dbName))
-                    log.debug("colName: ", colName, "length: ", len(colName))
+                    log.debug("database: {} length: {}", database, len(database))
+                    log.debug("dbName: {} length: {}", dbName, len(dbName))
+                    log.debug("colName: {} length: {}", colName, len(colName))
                     ### must insert a better error detection here
                     if (len(database) > 0) and (len(dbName) > 0) and (len(colName) > 0):
                         try:
@@ -1556,7 +1553,7 @@ def db_insert_one(message):
     global clientPVlist, REACT_APP_DisableLogin
     log.debug("databaseInsertOne")
     dbURL = str(message["dbURL"])
-    log.debug("databaseInsertOne: SSID: ", request.sid, " dbURL: ", dbURL)
+    log.debug("databaseInsertOne: SSID: {} dbURL: {}", request.sid, dbURL)
     authenticated = False
     if REACT_APP_DisableLogin:
         authenticated = True
@@ -1572,16 +1569,16 @@ def db_insert_one(message):
     if accessControl["userAuthorised"]:
         if accessControl["permissions"]["write"]:
             if "mongodb://" in dbURL:
-                log.debug("mongodb database connection request: ", dbURL)
+                log.debug("mongodb database connection request: {}", dbURL)
                 str1 = dbURL.replace("mongodb://", "")
                 strings = str1.split(":")
                 if len(strings) == 3:
                     database = strings[0]
                     dbName = strings[1]
                     colName = strings[2]
-                    log.debug("database: ", database, "length: ", len(database))
-                    log.debug("dbName: ", dbName, "length: ", len(dbName))
-                    log.debug("colName: ", colName, "length: ", len(colName))
+                    log.debug("database: {} length: {}", database, len(database))
+                    log.debug("dbName: {} length: {}", dbName, len(dbName))
+                    log.debug("colName: {} length: {}", colName, len(colName))
                     ### must insert a better error detection here
                     if (len(database) > 0) and (len(dbName) > 0) and (len(colName) > 0):
                         try:
@@ -1590,11 +1587,11 @@ def db_insert_one(message):
                             mydb = myclient[dbName]
                             mycol = mydb[colName]
                             newEntry = message["newEntry"]
-                            log.debug("newEntry", str(newEntry))
+                            log.debug("newEntry {}", str(newEntry))
                             try:
                                 log.debug("add newEntry")
-                                log.debug("dbName:", dbName)
-                                log.debug("colName:", colName)
+                                log.debug("dbName: {}", dbName)
+                                log.debug("colName: {}", colName)
                                 mydb[colName].insert_one(newEntry)
                             except Exception as e:
                                 log.info(e)
@@ -1620,7 +1617,7 @@ def db_insert_one(message):
 def archiver_read(message):
     global clientPVlist, REACT_APP_DisableLogin
     archiverURL = str(message["archiverURL"])
-    log.debug("databaseRead: SSID: ", request.sid)
+    log.debug("databaseRead: SSID: {}", request.sid)
     authenticated = False
     if REACT_APP_DisableLogin:
         authenticated = True

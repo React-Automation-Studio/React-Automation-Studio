@@ -373,9 +373,15 @@ def check_pv_initialized_after_disconnect():
 
 def db_watch_control_thread():
     global clientDbWatchList, thread_lock
+    last_watch_list_length = 0
     while True:
         watchList = list(clientDbWatchList)
-        log.debug("clientDbWatchList Lenghth", len(watchList))
+
+        watch_list_length = len(watchList)
+        if watch_list_length != last_watch_list_length:
+            last_watch_list_length = watch_list_length
+            log.debug("clientDbWatchList length is {}", watch_list_length)
+
         for watchEventName in watchList:
             if clientDbWatchList[watchEventName]["threadStarted"] is False:
                 clientDbWatchList[watchEventName]["thread"] = threading.Thread(

@@ -11,6 +11,7 @@ from google.auth.transport import requests
 from datetime import datetime, timedelta
 from time import sleep
 from pyMongoUtils import open_mongo_db_client
+import log
 
 global dbKnownUsers
 
@@ -86,7 +87,7 @@ def randomString(stringLength=10):
 try:
     SECRET_PWD_KEY = str(os.environ["SECRET_PWD_KEY"])
 except:
-    print(
+    log.warning(
         "Warning SECRET_PWD_KEY not set using the default key, please set the"
         " SECRET_PWD_KEY in the .env file"
     )
@@ -110,9 +111,7 @@ def createKnownUsers(UAGS):
             index = index + 1
         return knownUsers
     except Exception as e:
-        print(e)
-        # print("createKnownUser UAGS['users']",UAGS['users'])
-        # print("createKnownUsers:Error Cant load file USERS")
+        log.exception("Cannot create known users")
         return None
 
 
@@ -153,7 +152,7 @@ def loadPvAccess():
             data["timestamp"] = str(timestamp)
             return data
     except:
-        print("Error Cant load file pvAccess.json")
+        log.exception("Cannot load file pvAccess.json")
         return None
 
 
@@ -166,7 +165,7 @@ def loadDefaultAccess():
             data["timestamp"] = str(timestamp)
             return data
     except:
-        print("Error Cant load file defaultAccess.json")
+        log.exception("Cannot load file defaultAccess.json")
         return None
 
 
@@ -179,7 +178,7 @@ def loadUsers():
             data["timestamp"] = str(timestamp)
             return data
     except:
-        print("Error Cant load file users.json")
+        log.exception("Error Cant load file users.json")
         return None
 
 
@@ -286,7 +285,7 @@ def AuthoriseUser(encodedJWT):
         else:
             return {"authorised": False}
     except Exception as e:
-        print("AuthoriseUser", e)
+        log.exception("AuthoriseUser failed: {}", e)
         return {"authorised": False}
 
 
@@ -309,7 +308,7 @@ def LocalAuthenticateUser(user):
                         return None
                 except:
                     return None
-        print("Unknown user:" + str(user["username"]))
+        log.info("Unknown user: {}", str(user["username"]))
         return None
     return None
 
@@ -327,7 +326,7 @@ def ExternalAuthenticateUser(user):
                 else:
                     return None
 
-        print("Uknown user:" + str(user["username"]))
+        log.info("Unknown user: {}", str(user["username"]))
         return None
     return None
 
@@ -350,6 +349,6 @@ def decodeTokenGoogle(token, CLIENT_ID):
 
         return idinfo
     except Exception as e:
-        print(e)
+        log.exception(e)
         # Invalid token
         return None

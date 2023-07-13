@@ -528,7 +528,7 @@ V4.0.2 Thursday 13 July 2023 Minor Updates:
 Minor Bug Fixes and Updates:
 <ul>
   <li>
-    A few minor bug fixes pvServer
+    A few minor bug fixes to the pvServer
   </li>
 </ul>
 

@@ -328,7 +328,7 @@ const MainDashboard = (props) => {
                   Minor Bug Fixes and Updates:
                   <ul>
                     <li>
-                      A few minor bug fixes pvServer
+                    A few minor bug fixes to the pvServer
                     </li>
                   </ul>
     

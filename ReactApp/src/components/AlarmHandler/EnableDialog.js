@@ -164,9 +164,7 @@ const EnableDialog = (props) => {
                 autoOk={false}
                 // Backwards compatible
                 disabled={!props.data.bridge ?? true}
-                renderInput={(params) => (
-                  <TextField {...params} variant="standard" />
-                )}
+                slotProps={{ textField: { variant: 'standard' } }}
               />
             </LocalizationProvider>
           </Grid>

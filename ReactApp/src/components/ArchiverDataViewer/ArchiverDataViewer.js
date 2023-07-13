@@ -734,9 +734,7 @@ const ArchiverDataViewer = (props) => {
 
                       setFromButton("none");
                     }}
-                    renderInput={(params) => (
-                      <TextField {...params} variant="standard" />
-                    )}
+                    slotProps={{ textField: { variant: 'standard' } }}
                   />
                 </LocalizationProvider>
               </Grid>
@@ -759,9 +757,7 @@ const ArchiverDataViewer = (props) => {
                       setFromButton("none");
                       setLive(false);
                     }}
-                    renderInput={(params) => (
-                      <TextField {...params} variant="standard" />
-                    )}
+                    slotProps={{ textField: { variant: 'standard' } }}
                   />
                 </LocalizationProvider>
               </Grid>

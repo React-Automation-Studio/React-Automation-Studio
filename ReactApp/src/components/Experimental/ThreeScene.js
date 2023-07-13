@@ -89,13 +89,13 @@ class ThreeScene extends Component {
     this.mount.appendChild(this.renderer.domElement);
 
     //ADD CUBE
-    const geometry = new THREE.BoxBufferGeometry(200, 200, 200);
+    const geometry = new THREE.BoxGeometry(200, 200, 200);
     const material = new THREE.MeshPhongMaterial({
       ambient: 0x555555,
       color: pink[500],
       specular: 0xffffff,
       shininess: 30,
-      shading: THREE.SmoothShading,
+      
     });
 
     this.cube = new THREE.Mesh(geometry, material);

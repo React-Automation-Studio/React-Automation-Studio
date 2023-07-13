@@ -324,8 +324,10 @@ class HarpGraph extends React.Component {
           yUnits={this.state.rangeUnits}
           yMin={0}
           yMax={ymax}
+          yTickFormat={""}
           onWheel={this.handleWheel}
           onClick={this.handleOnClick}
+      
         />
       </React.Fragment>
     );

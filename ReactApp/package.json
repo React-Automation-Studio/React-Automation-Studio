@@ -61,7 +61,7 @@
     "homepage": ".",
     "devDependencies": {
         "cross-env": "7.0.3",
-        "react-styleguidist": "11.2.0",
+        "react-styleguidist": "13.1.1",
         "react-scripts": "5.0.1"
     }
 }

@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "pvserver"
-version = "4.0.1"
+version = "4.0.2"
 description = "RAS Python backend. It mainly manages connections with PVs, through a websocket connection, authentication, authorization, plus other optional functionalities."
-authors = ["React Automation Studio Team <rasadmin@tlabs.ac.za>"]
+authors = ["React Automation Studio Team https://github.com/React-Automation-Studio/React-Automation-Studio/discussions"]
 license = "MIT"
 readme = "README.md"
 repository = "https://github.com/React-Automation-Studio/React-Automation-Studio"

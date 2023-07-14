@@ -68,7 +68,7 @@ REACT_DISABLE_STANDARD_LOGIN = os.getenv("REACT_APP_DisableStandardLogin", None)
 
 log.info("")
 log.info("**************************************")
-log.info("React Automation Studio V4.0.0")
+log.info("React Automation Studio V4.0.2")
 log.info("")
 log.info("pvServer Environment Variables:")
 log.info("")

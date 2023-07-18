@@ -351,7 +351,8 @@ const HarpGraphY = (props) => {
         typeof props.yMin !== "undefined" ? props.yMin : null,
         typeof props.yMax !== "undefined" ? props.yMax : null,
       ],
-      automargin: true,
+      automargin: false,
+      
       ticksuffix: props.yUnits ? props.yUnits : "",
       nticks: props.yNoOfTicks ? props.yNoOfTicks : 0,
     };
@@ -425,7 +426,7 @@ const HarpGraphY = (props) => {
       margin: {
         t: props.title ? 24 : 16,
         r: isMobileOnly ? 16 : 0,
-        l: 0,
+        l: 64,
         b: 48,
       },
       annotations: [
@@ -471,7 +472,7 @@ const HarpGraphY = (props) => {
     props.xTickFormat,
     props.xUnits,
   ]);
-
+ 
   return (
     <div
       ref={paperRef}

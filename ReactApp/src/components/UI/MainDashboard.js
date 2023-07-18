@@ -318,6 +318,21 @@ const MainDashboard = (props) => {
               </Grid>
               <Grid item lg={12} sm={12} xs={12}>
                 <Typography className={classes.WhatsNew} component="div">
+                V4.0.2 Thursday 13 July 2023 Minor Updates:
+                  <ul>
+                    <li>Package updates to all Node modules</li>
+                    <li>Updated to the latest Node LTS</li>
+                    <li>MUI has been updated to the latest packages</li>
+                    
+                  </ul>
+                  Minor Bug Fixes and Updates:
+                  <ul>
+                    <li>
+                    A few minor bug fixes to the pvServer
+                    </li>
+                  </ul>
+    
+                  <br />
                   V4.0.1 Friday 24 March 2023 Minor Updates:
                   <ul>
                     <li>Package updates to all Node modules</li>

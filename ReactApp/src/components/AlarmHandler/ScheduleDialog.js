@@ -1460,9 +1460,8 @@ const ScheduleDialog = (props) => {
                           displayUserObject.weekly || !displayUserObject.notify
                         }
                         autoOk
-                        renderInput={(params) => (
-                          <TextField {...params} variant="standard" />
-                        )}
+                        slotProps={{ textField: { variant: 'standard' } }}
+                       
                       />
                     </LocalizationProvider>
                   </Grid>
@@ -1484,9 +1483,7 @@ const ScheduleDialog = (props) => {
                           displayUserObject.weekly || !displayUserObject.notify
                         }
                         autoOk
-                        renderInput={(params) => (
-                          <TextField {...params} variant="standard" />
-                        )}
+                        slotProps={{ textField: { variant: 'standard' } }}
                       />
                     </LocalizationProvider>
                   </Grid>

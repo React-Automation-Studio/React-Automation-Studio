@@ -470,11 +470,8 @@ const GraphXY = (props) => {
                 }
                 }
                 useResizeHandler={true}
-                style={{
-                  position: 'relative',
-                  display: 'inline-block',
-                  width: '100%', height: '100%', paddingBottom: 8,
-                }}
+                style={props.plotlyStyle}
+                
                 data={traces}
                 layout={{ ...layout, }}
               />
@@ -570,6 +567,8 @@ GraphXY.propTypes = {
    * **Note**: the zoom feature is disabled on a mobile device. To enable set this prop to true.
    */
   disableMobileStatic: PropTypes.bool,
+  /** Overide the plotly.js style*/
+  plotlyStyle: PropTypes.object,
 };
 
 GraphXY.defaultProps = {
@@ -585,6 +584,13 @@ GraphXY.defaultProps = {
   aspectRatio: 1,
   updateMode: 'updateOnXOrYChange',
   disableMobileStatic: false,
+  plotlyStyle:{
+    position: 'relative',
+    display: 'inline-block',
+    width: '100%', 
+    height: '100%', 
+    paddingBottom: 8,
+  }
 };
 
 export default GraphXY

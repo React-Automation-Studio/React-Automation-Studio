@@ -404,12 +404,7 @@ const GraphY = (props) => {
                 }
                 }
                 useResizeHandler={true}
-                style={{
-                  position: 'relative',
-                  display: 'inline-block',
-                  width: '100%', height: '100%',
-
-                }}
+                style={props.plotlyStyle}
                 data={data}
                 layout={{ ...layout, }}
               />
@@ -503,6 +498,8 @@ GraphY.propTypes = {
   yUnits: PropTypes.string,
   /** Custom x axis units to be used*/
   xUnits: PropTypes.string,
+  /** Overide the plotly.js style*/
+  plotlyStyle: PropTypes.object,
 };
 
 GraphY.defaultProps = {
@@ -517,6 +514,13 @@ GraphY.defaultProps = {
   width: '100%',
   height: '100%',
   disableMobileStatic: false,
+  plotlyStyle:{
+    position: 'relative',
+    display: 'inline-block',
+    width: '100%', 
+    height: '100%',
+
+  }
 };
 
 export default GraphY

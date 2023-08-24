@@ -272,7 +272,7 @@ ArrayContainer.defaultProps = {
   direction: "vertical",
   labelPlacement: "top",
   itemMinWidth: 2,
-  spacing: 0,
+  spacing: 1,
 };
 
 export default ArrayContainer;

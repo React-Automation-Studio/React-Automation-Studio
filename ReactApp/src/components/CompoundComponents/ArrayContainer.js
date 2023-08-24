@@ -61,6 +61,7 @@ function ArrayContainer(props) {
     maxItemsCount,
     itemMinWidth,
     spacing,
+    showIndices
   } = props;
   const [startIdx, setStartIdx] = useState(0);
   const [items, setItems] = useState([]);
@@ -140,6 +141,7 @@ function ArrayContainer(props) {
 
   const recreateSingleChild = (index) => {
     let additionalProps = {};
+    
     if (registers !== undefined && Array.isArray(registers)) {
       additionalProps["index"] = registers[index];
     } else {
@@ -151,7 +153,10 @@ function ArrayContainer(props) {
       registersLabel[index]
     ) {
       additionalProps["label"] = registersLabel[index].toString();
+    }else if(showIndices){
+      additionalProps["label"] = index.toString();
     }
+
     return (
       <div key={index.toString()} className={classes.item}>
         {Children.map(props.children, (child) =>
@@ -240,6 +245,10 @@ ArrayContainer.propTypes = {
    * or a subset of them.
    */
   registersLabel: PropTypes.arrayOf(PropTypes.string),
+   /**
+   * Directive to use the array indices as the labels,unless the registersLabel prop is defined
+   */
+   showIndices: PropTypes.bool,
   /**
    * Directive to display array elements horizontally or vertically aligned.
    */
@@ -247,6 +256,7 @@ ArrayContainer.propTypes = {
   /**
    * Min space width, in percentage, an item can occupy.
    */
+  
   itemMinWidth: (props, propName, componentName) => {
     if (!(props[propName] >= 0 && props[propName] <= 100)) {
       return new Error(
@@ -273,6 +283,7 @@ ArrayContainer.defaultProps = {
   labelPlacement: "top",
   itemMinWidth: 2,
   spacing: 1,
+  showIndices:true
 };
 
 export default ArrayContainer;

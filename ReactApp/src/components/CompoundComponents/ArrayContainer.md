@@ -1,4 +1,4 @@
-In this example the TextInput component receives a waveform PV.
+In this example the TextOutput component displays the raw contents of a waveform PV.
 
 Reading a binary waveform of 10 elements.
 
@@ -9,14 +9,15 @@ The ArrayContainer does not know how many items there are in the PV value. For t
 ```js
 import { Grid, Typography } from "@mui/material";
 import TextInput from "../BaseComponents/TextInput";
+import TextOutput from "../BaseComponents/TextOutput";
 
 <Grid container spacing={5}>
   <Grid item xs={12}>
-    <Typography algin="center">Standard behavior</Typography>
-    <TextInput pv="testIOC:binaryWaveform" />
+    <Typography algin="center">String Contents of the Waveform</Typography>
+    <TextOutput pv="testIOC:binaryWaveform" />
   </Grid>
   <Grid item xs={12}>
-    <Typography algin="center">ArrayContainer behavior</Typography>
+    <Typography algin="center">ArrayContainer Indexed TextInputs</Typography>
     <ArrayContainer maxItemsCount={10}>
       <TextInput pv="testIOC:binaryWaveform" />
     </ArrayContainer>

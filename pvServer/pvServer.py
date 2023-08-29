@@ -485,10 +485,14 @@ def on_change_value(
                 namespace="/pvServer",
             )
         else:
+            new_char_value = str(char_value)
+            if len(new_char_value) == 0:
+                new_char_value = str(value)
             d = {
                 "pvname": pvname,
                 "newmetadata": "False",
                 "value": list((value)),
+                "char_value": new_char_value,
                 "count": count,
                 "connected": "1",
                 "severity": severity,

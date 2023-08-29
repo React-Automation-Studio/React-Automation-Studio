@@ -246,7 +246,7 @@ ArrayContainer.propTypes = {
    */
   registersLabel: PropTypes.arrayOf(PropTypes.string),
    /**
-   * Directive to use the array indices as the labels,unless the registersLabel prop is defined
+   * Directive to use the array indices as the labels, unless the registersLabel prop is defined
    */
    showIndices: PropTypes.bool,
   /**
@@ -283,7 +283,7 @@ ArrayContainer.defaultProps = {
   labelPlacement: "top",
   itemMinWidth: 2,
   spacing: 1,
-  showIndices:true
+  showIndices: true
 };
 
 export default ArrayContainer;

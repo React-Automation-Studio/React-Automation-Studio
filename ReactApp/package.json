@@ -1,23 +1,26 @@
 {
-    "name": "react-automation-studio",
-    "version": "5.0.0",
-    "private": true,
-    "type": "module",
+  "name": "react-automation-studio",
+  "version": "5.0.0",
+  "private": true,
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "@date-io/date-fns": "2.16.0",
     "@emotion/react": "11.11.1",
     "@emotion/styled": "11.11.0",
     "@mui/icons-material": "5.14.0",
     "@mui/material": "5.14.0",
     "@mui/styles": "5.14.0",
-    "@mui/system":"5.14.0",
+    "@mui/system": "5.14.0",
+    "@mui/x-date-pickers": "6.9.2",
+    "@react-oauth/google": "0.11.0",
     "axios": "1.4.0",
     "date-fns": "2.30.0",
     "lodash.debounce": "4.0.8",
@@ -25,19 +28,25 @@
     "mdi-material-ui": "7.7.0",
     "plotly.js": "2.24.3",
     "rc-slider": "10.2.1",
+    "react": "^18.2.0",
     "react-device-detect": "2.2.3",
-    "@react-oauth/google":"0.11.0",
-        "react-plotly.js": "2.6.0",
-        "react-router-dom": "5.3.3",
-        "socket.io-client": "4.7.1",
-        "three": "0.154.0",
-        "typeface-roboto": "1.1.13",
-        "uuid": "9.0.0",
-     
-        "@mui/x-date-pickers":"6.9.2",
-        "@date-io/date-fns": "2.16.0"
+    "react-dom": "^18.2.0",
+    "react-plotly.js": "2.6.0",
+    "react-router-dom": "5.3.3",
+    "socket.io-client": "4.7.1",
+    "three": "0.154.0",
+    "typeface-roboto": "1.1.13",
+    "uuid": "9.0.0"
   },
   "devDependencies": {
+    "@storybook/addon-essentials": "^7.4.1",
+    "@storybook/addon-interactions": "^7.4.1",
+    "@storybook/addon-links": "^7.4.1",
+    "@storybook/addon-onboarding": "^1.0.8",
+    "@storybook/blocks": "^7.4.1",
+    "@storybook/react": "^7.4.1",
+    "@storybook/react-vite": "^7.4.1",
+    "@storybook/testing-library": "^0.2.0",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@vitejs/plugin-react": "^4.0.3",
@@ -45,9 +54,16 @@
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
-    "vite": "^4.4.5",
-    "react-styleguidist": "13.1.1"
+    "eslint-plugin-storybook": "^0.6.13",
+    "prop-types": "^15.8.1",
+    "react-styleguidist": "13.1.1",
+    "storybook": "^7.4.1",
+    "vite": "^4.4.5"
   },
-   
-    "homepage": "."
+  "homepage": ".",
+  "eslintConfig": {
+    "extends": [
+      "plugin:storybook/recommended"
+    ]
+  }
 }

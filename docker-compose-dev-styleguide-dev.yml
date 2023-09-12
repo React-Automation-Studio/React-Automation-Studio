@@ -9,16 +9,12 @@ services:
       - ./certificates:/certificates/
       - ./ReactApp/package.json:/frontendserverAppDev/package.json
       - ./ReactApp/src:/frontendserverAppDev/src
+      - ./ReactApp/index.html:/frontendserverAppDev/index.html
+      - ./ReactApp/vite.config.js:/frontendserverAppDev/vite.config.js
       - ./ReactApp/public:/frontendserverAppDev/public
     restart: always
-    # logging:
-    #   driver: "none"
-    #network_mode: host
     ports:
       - "3001:3000"
-    environment:
-      - FAST_REFRESH=false
-      - NODE_OPTIONS=--max_old_space_size=4096
   pvserver1:
     build:
       context: ./
@@ -210,22 +206,40 @@ services:
     stdin_open: true
     depends_on:
       - mongosetup
-  styleguideserverdev:
+  # styleguideserverdev:
+  #   env_file: .env
+  #   build:
+  #     context: ./
+     
+  #     dockerfile: docker/styleguideServerDev/Dockerfile
+  #   volumes:
+  #     - ./certificates:/certificates/
+  #     - ./ReactApp/package.json:/frontendserverAppDev/package.json
+  #     - ./ReactApp/src:/frontendserverAppDev/src
+  #     - ./ReactApp/public:/frontendserverAppDev/public
+  #     - ./ReactApp/styleguide.config.js:/frontendserverAppDev/styleguide.config.js
+  #   restart: always
+  #   #network_mode: host
+  #   ports:
+  #     - "6061:6060"
+  storybookserverdev:
     env_file: .env
     build:
       context: ./
      
-      dockerfile: docker/styleguideServerDev/Dockerfile
+      dockerfile: docker/storybookServerDev/Dockerfile
     volumes:
       - ./certificates:/certificates/
       - ./ReactApp/package.json:/frontendserverAppDev/package.json
       - ./ReactApp/src:/frontendserverAppDev/src
+      - ./ReactApp/index.html:/frontendserverAppDev/index.html
+      - ./ReactApp/vite.config.js:/frontendserverAppDev/vite.config.js
       - ./ReactApp/public:/frontendserverAppDev/public
-      - ./ReactApp/styleguide.config.js:/frontendserverAppDev/styleguide.config.js
+      - ./ReactApp/.storybook:/frontendserverAppDev/.storybook
     restart: always
     #network_mode: host
     ports:
-      - "6061:6060"
+      - "6061:6006"
   initializeadmindb:
     env_file: .env
     environment:

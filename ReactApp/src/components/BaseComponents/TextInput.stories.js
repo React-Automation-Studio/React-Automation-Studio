@@ -18,6 +18,13 @@ export default {
 // More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args
 export const Primary = {
   args: {
+    pv:'$(device):test$(id)',
+       macros:{'$(device)':'testIOC','$(id)':'2'},
+       usePvLabel:true,
+       usePvPrecision:true,
+       usePvUnits:true,
+       usePvMinMax:true,
+       alarmSensitive:true,
     
   },
 };

@@ -9,13 +9,13 @@ services:
       - ./certificates:/certificates/
       - ./ReactApp/package.json:/frontendserverAppDev/package.json
       - ./ReactApp/src:/frontendserverAppDev/src
+      - ./ReactApp/index.html:/frontendserverAppDev/index.html
+      - ./ReactApp/vite.config.js:/frontendserverAppDev/vite.config.js
       - ./ReactApp/public:/frontendserverAppDev/public
     restart: always
     ports:
       - "3001:3000"
-    environment:
-      - FAST_REFRESH=false
-      - NODE_OPTIONS=--max_old_space_size=4096
+
   pvserver1:
     build:
       context: ./
@@ -71,7 +71,7 @@ services:
     environment:
           - pvServerURL=http://127.0.0.1
           - pvServerPort=5001
-          - REACT_APP_EnableLogin=false
+          - VITE_EnableLogin=false
           - DEMO_ARCHIVER=http://localhost:17668
           
           
@@ -88,16 +88,16 @@ services:
     stdin_open: true
     restart: always
     network_mode: host
-  styleguide:
-    build:
-      context: ./
-      dockerfile: docker/styleguide/Dockerfile    
-    env_file: .env
-    environment:
-            - pvServerPort=5001
-            - REACT_APP_EnableLogin=false
-    volumes:
-      - ./build/styleguide:/build/
+  # styleguide:
+  #   build:
+  #     context: ./
+  #     dockerfile: docker/styleguide/Dockerfile    
+  #   env_file: .env
+  #   environment:
+  #           - pvServerPort=5001
+  #           - VITE_EnableLogin=false
+  #   volumes:
+  #     - ./build/styleguide:/build/
 
   signalcli:
     build:

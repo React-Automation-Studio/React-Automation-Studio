@@ -11,7 +11,7 @@ import Grid from "@mui/material/Grid";
 import ThreeScene from "../Experimental/ThreeScene";
 
 import Card from "@mui/material/Card";
-import TraditionalLayout from "../UI/Layout/ComposedLayouts/TraditionalLayout.js";
+import TraditionalLayout from "../UI/Layout/ComposedLayouts/TraditionalLayout";
 
 const styles = (theme) => ({
   root: {

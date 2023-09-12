@@ -27,7 +27,7 @@ const AddUsers = (props) => {
   const [username, setUsername] = useState("");
   const [usernameError, setUsernameError] = useState(false);
   const [password, setPassword] = useState("");
-  const [requirePassword, setRequirePassword] = useState(!(process.env.REACT_APP_DisableStandardLogin === 'true'))
+  const [requirePassword, setRequirePassword] = useState(!(import.meta.env.VITE_DisableStandardLogin === 'true'))
   const {passwordError,passwordHelperText}=usePasswordValidator(password);
   const [confirmPassword, setConfirmPassword] = useState("");
   const [email, setEmail] = useState("");

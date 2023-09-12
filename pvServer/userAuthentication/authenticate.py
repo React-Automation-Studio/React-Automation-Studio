@@ -182,8 +182,8 @@ def loadUsers():
         return None
 
 
-REACT_APP_DisableLogin = not (os.getenv("REACT_APP_EnableLogin") == "true")
-if not REACT_APP_DisableLogin:
+VITE_DisableLogin = not (os.getenv("VITE_EnableLogin") == "true")
+if not VITE_DisableLogin:
     UAGS = {}
     loadKnownDbUsers()
     # print("UAGS",json.dumps(UAGS, indent=4,))

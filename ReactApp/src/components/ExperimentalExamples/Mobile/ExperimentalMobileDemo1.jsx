@@ -30,7 +30,7 @@ import Divider from '@mui/material/Divider';
 
 import StyledIconIndicator from '../../BaseComponents/StyledIconIndicator';
 
-import TraditionalLayout from '../../UI/Layout/ComposedLayouts/TraditionalLayout.js';
+import TraditionalLayout from '../../UI/Layout/ComposedLayouts/TraditionalLayout';
 
 import { useLocalPV } from '../../SystemComponents/LocalPV'
 import TextField from '@mui/material/TextField';

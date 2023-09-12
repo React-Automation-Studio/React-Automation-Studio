@@ -1,68 +1,53 @@
 {
     "name": "react-automation-studio",
-    "version": "4.0.2",
+    "version": "5.0.0",
     "private": true,
-    "dependencies": {
-        "@emotion/react": "11.11.1",
-        "@emotion/styled": "11.11.0",
-        "@mui/icons-material": "5.14.0",
-        "@mui/material": "5.14.0",
-        "@mui/styles": "5.14.0",
-        "@mui/system":"5.14.0",
-        "@testing-library/jest-dom": "5.16.5",
-        "@testing-library/react": "13.4.0",
-        "@testing-library/user-event": "13.5.0",
-        "axios": "1.4.0",
-        "date-fns": "2.30.0",
-        "lodash.debounce": "4.0.8",
-        "mathjs": "11.8.2",
-        "mdi-material-ui": "7.7.0",
-        "plotly.js": "2.24.3",
-        "rc-slider": "10.2.1",
-        "react": "18.2.0",
-        "react-device-detect": "2.2.3",
-        "react-dom": "18.2.0",
-        "@react-oauth/google":"0.11.0",
+    "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "@emotion/react": "11.11.1",
+    "@emotion/styled": "11.11.0",
+    "@mui/icons-material": "5.14.0",
+    "@mui/material": "5.14.0",
+    "@mui/styles": "5.14.0",
+    "@mui/system":"5.14.0",
+    "axios": "1.4.0",
+    "date-fns": "2.30.0",
+    "lodash.debounce": "4.0.8",
+    "mathjs": "11.8.2",
+    "mdi-material-ui": "7.7.0",
+    "plotly.js": "2.24.3",
+    "rc-slider": "10.2.1",
+    "react-device-detect": "2.2.3",
+    "@react-oauth/google":"0.11.0",
         "react-plotly.js": "2.6.0",
         "react-router-dom": "5.3.3",
-        
         "socket.io-client": "4.7.1",
         "three": "0.154.0",
         "typeface-roboto": "1.1.13",
         "uuid": "9.0.0",
-        "web-vitals": "2.1.4",
+     
         "@mui/x-date-pickers":"6.9.2",
         "@date-io/date-fns": "2.16.0"
-    },
-    "scripts": {
-        "start": "react-scripts start",
-        "build": "react-scripts --max_old_space_size=4096 build",
-        "test": "react-scripts test",
-        "eject": "react-scripts eject",
-        "styleguide": "styleguidist server",
-        "styleguide:build": "styleguidist build",
-        "styleguidebuild": "cross-env NODE_ENV=production NODE_OPTIONS=--max-old-space-size=4096 GENERATE_SOURCEMAP=false styleguidist build "
-    },
-    "eslintConfig": {
-        "extends": "react-app"
-    },
-    "browserslist": {
-        "production": [
-            ">0.2%",
-            "not dead",
-            "not op_mini all"
-        ],
-        "development": [
-            "last 1 chrome version",
-            "last 1 firefox version",
-            "last 1 safari version"
-        ]
-    },
-    "homepage": ".",
-    "devDependencies": {
-        "@babel/plugin-proposal-private-property-in-object":"7.21.11",
-        "cross-env": "7.0.3",
-        "react-styleguidist": "13.1.1",
-        "react-scripts": "5.0.1"
-    }
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "@vitejs/plugin-react": "^4.0.3",
+    "eslint": "^8.45.0",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.3",
+    "vite": "^4.4.5",
+    "react-styleguidist": "13.1.1"
+  },
+   
+    "homepage": "."
 }

@@ -17,7 +17,7 @@ import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 
 import MobileDemo2 from './Mobile/MobileDemo2';
-import TraditionalLayout from '../UI/Layout/ComposedLayouts/TraditionalLayout.js';
+import TraditionalLayout from '../UI/Layout/ComposedLayouts/TraditionalLayout';
 
 function TabContainer(props) {
   return (

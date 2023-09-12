@@ -22,7 +22,7 @@ class RedirectToLogIn extends Component {
     let socket=this.context.socket;
     socket.on('redirectToLogIn', this.handleRedirectToLogIn);
 
-    if (process.env.REACT_APP_EnableLogin==='true'){
+    if (import.meta.env.VITE_EnableLogin==='true'){
       let loggedIn = this.context.userData.loggedIn;
       let loggingIn = this.context.userData.loggingIn;
       if(loggedIn||loggingIn){

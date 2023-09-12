@@ -12,7 +12,7 @@ import EditorSteererXY from './Components/EditorSteererXY'
 import AppBar from '@mui/material/AppBar';
 import GraphY from '../BaseComponents/GraphY';
 import ControlTable from './Components/ControlTable'
-import TraditionalLayout from '../UI/Layout/ComposedLayouts/TraditionalLayout.js';
+import TraditionalLayout from '../UI/Layout/ComposedLayouts/TraditionalLayout';
 import BeamLineCanvas from '../SvgBeamlineComponents/BeamLineCanvas';
 import HorizontalBeamline from '../SvgBeamlineComponents/HorizontalBeamline';
 import QuadrapoleMagnet from '../SvgBeamlineComponents/QuadrapoleMagnet';

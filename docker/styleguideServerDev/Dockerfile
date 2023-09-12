@@ -21,8 +21,8 @@ WORKDIR /
 
 WORKDIR /frontendserverAppDev
 ADD ./ReactApp/img /frontendserverAppDev/img
-ENV REACT_APP_StyleguideServerPORT=6060
-ENV REACT_APP_StyleguideServerURL=http://127.0.0.1
+ENV VITE_StyleguideServerPORT=6060
+ENV VITE_StyleguideServerURL=http://127.0.0.1
 CMD npm run styleguide
 
 EXPOSE 6060

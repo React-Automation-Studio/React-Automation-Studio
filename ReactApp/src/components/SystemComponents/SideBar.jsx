@@ -62,7 +62,7 @@ class SideBar extends React.Component {
             <ListItemText primary={"Home"} />
           </ListItem>
         </List>
-        {process.env.REACT_APP_EnableLogin==='true'&&<React.Fragment>
+        {import.meta.env.VITE_EnableLogin==='true'&&<React.Fragment>
           <Divider />
           <ListItem button key={"Log Out"} onClick={this.logout} component={Link} to="/Login" >
             <ListItemIcon><AccountCircle/></ListItemIcon>

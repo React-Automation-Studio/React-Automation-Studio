@@ -83,7 +83,7 @@ const UserProfile = (props) => {
                                     />
                                 </Grid>
 
-                                {!(process.env.REACT_APP_DisableStandardLogin === 'true') && <Grid item xs={6}  >
+                                {!(import.meta.env.VITE_DisableStandardLogin === 'true') && <Grid item xs={6}  >
                                     < TextField
                                         inputProps={{
                                             autoComplete: "off",
@@ -99,7 +99,7 @@ const UserProfile = (props) => {
                                     />
                                 </Grid>}
 
-                                {!(process.env.REACT_APP_DisableStandardLogin === 'true') && <Grid item xs={6}>
+                                {!(import.meta.env.VITE_DisableStandardLogin === 'true') && <Grid item xs={6}>
                                     <ChangeUserPassword user={{ id: id }} />
                                 </Grid>}
 

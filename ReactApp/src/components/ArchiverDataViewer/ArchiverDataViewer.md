@@ -42,8 +42,8 @@ Example yAxes prop:
 
 
 ```js
-import ToggleButton from '../../components/BaseComponents/ToggleButton.js';
-import ThumbWheel from '../../components/BaseComponents/ThumbWheel.js';
+import ToggleButton from '../../components/BaseComponents/ToggleButton';
+import ThumbWheel from '../../components/BaseComponents/ThumbWheel';
 <div>
     <ArchiverDataViewer
         debug={true}

@@ -12,7 +12,7 @@ import EditorSteererXY from './Components/EditorSteererXY'
 import AppBar from '@mui/material/AppBar';
 
 import ControlTable from './Components/ControlTable'
-import TraditionalLayout from '../UI/Layout/ComposedLayouts/TraditionalLayout.js';
+import TraditionalLayout from '../UI/Layout/ComposedLayouts/TraditionalLayout';
 
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */

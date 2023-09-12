@@ -24,7 +24,7 @@ import {
 import AccountCircle from '@mui/icons-material/AccountCircleOutlined';
 import Settings from '@mui/icons-material/SettingsOutlined';
 
-import TraditionalLayout from '../../UI/Layout/ComposedLayouts/TraditionalLayout.js';
+import TraditionalLayout from '../../UI/Layout/ComposedLayouts/TraditionalLayout';
 
 import {useLocalPV} from '../../SystemComponents/LocalPV'
 

@@ -31,10 +31,10 @@ WORKDIR /pvServer
 ENV pvServerURL=http://127.0.0.1
 ENV pvServerPort=5000
 ENV pvServerNameSpace=pvServer
-ENV REACT_APP_EnableLogin=false
-ENV REACT_APP_DisableStandardLogin=false
-ENV REACT_APP_EnableActiveDirectoryLogin=false
-ENV REACT_APP_EnableGoogleLogin=false
+ENV VITE_EnableLogin=false
+ENV VITE_DisableStandardLogin=false
+ENV VITE_EnableActiveDirectoryLogin=false
+ENV VITE_EnableGoogleLogin=false
 ENV EPICS_CA_ADDR_LIST="0.0.0.0:8001 0.0.0.0:8004"
 ENV PYEPICS_LIBCA=/epics/base/lib/linux-x86_64/libca.so
 

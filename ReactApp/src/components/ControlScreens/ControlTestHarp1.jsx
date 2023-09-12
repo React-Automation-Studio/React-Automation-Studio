@@ -25,7 +25,7 @@ import AppBar from '@mui/material/AppBar';
 
 import GraphY from '../BaseComponents/GraphY';
 import ControlCenterTable from '../ControlScreens/GridComponents/ControlCenterTable'
-import TraditionalLayout from '../UI/Layout/ComposedLayouts/TraditionalLayout.js';
+import TraditionalLayout from '../UI/Layout/ComposedLayouts/TraditionalLayout';
 
 console.warn("This example is deprecated and will be removed in a future release")
 

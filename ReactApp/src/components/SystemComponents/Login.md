@@ -8,24 +8,24 @@ To customize the footer text try the example below:
 ```
 Set the following in .env file to enable  Login and authentication
 ```bash
-REACT_APP_EnableLogin=true
+VITE_EnableLogin=true
 ```
 This will enable the standard login using local credentials by default.
 To disable the standard login set the following in .env file: 
 ```bash
-REACT_APP_DisableStandardLogin=true
+VITE_DisableStandardLogin=true
 ```
 Set the following in the .env file to enable Active Directory Login
 ```bash
-REACT_APP_EnableActiveDirectoryLogin=true
+VITE_EnableActiveDirectoryLogin=true
 LDAP_HOST=ldap://xxxxxx
 LDAP_PORT=389
 ```
 Set the following in .env file to enable  Google login:
 
 ``` bash
-REACT_APP_EnableGoogleLogin=true
-REACT_APP_EnableGoogleLoginId= "set this to your google client id for your domain"
+VITE_EnableGoogleLogin=true
+VITE_EnableGoogleLoginId= "set this to your google client id for your domain"
 ```
 Go to https://console.developers.google.com/apis/credentials/       
 and click create new credentials and the create a new oAuth id  for the web app

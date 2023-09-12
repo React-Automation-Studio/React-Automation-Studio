@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 
 import { Link } from 'react-router-dom'
 import Button from '@mui/material/Button';
-import TraditionalLayout from '../../components/UI/Layout/ComposedLayouts/TraditionalLayout.js';
+import TraditionalLayout from '../../components/UI/Layout/ComposedLayouts/TraditionalLayout';
 import Grid from '@mui/material/Grid';
 
 const styles = theme => ({

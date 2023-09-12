@@ -26,7 +26,7 @@ import Login from "./components/SystemComponents/Login";
 import Probe from "./components/SettingsPages/Probe";
 import Vault from "./components/AlarmHandler/Vault";
 import Help from "./components/docs/Help";
-import Administrator from "./components/Administrator/Administrator.js";
+import Administrator from "./components/Administrator/Administrator";
 import UserProfile from "./components/SystemComponents/userProfiles/UserProfile";
 import ProtectedRoute from "./components/SystemComponents/ProtectedRoute";
 const Routes = (props) => {
@@ -43,11 +43,11 @@ const Routes = (props) => {
           roles={["admin"]}
         />
         <ProtectedRoute path="/UserProfile" component={UserProfile} />
-        {process.env.REACT_APP_EnableLogin === "true" && (
+        {import.meta.env.VITE_EnableLogin === "true" && (
           <Route
             exact
             path="/Login"
-            component={() => <Login version="V4.0.1" timeout={5000} />}
+            component={() => <Login version="V5.0.0" timeout={5000} />}
           />
         )}
 

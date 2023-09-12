@@ -102,7 +102,7 @@ const ModifyUser = (props) => {
                                                 disabled
                                             />
                                         </Grid>
-                                        {!(process.env.REACT_APP_DisableStandardLogin === 'true') && <Grid item xs={12}  >
+                                        {!(import.meta.env.VITE_DisableStandardLogin === 'true') && <Grid item xs={12}  >
                                             <FormControlLabel
                                                 control={
                                                     <Checkbox

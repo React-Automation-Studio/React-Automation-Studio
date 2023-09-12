@@ -328,9 +328,9 @@ class RasAppCore extends Component {
 
   render() {
     const { system } = this.state;
-
+    console.log(import.meta.env.VITE_EnableLogin)
     return (
-      <GoogleOAuthProvider clientId={process.env.REACT_APP_EnableGoogleLoginId}>
+      <GoogleOAuthProvider clientId={import.meta.env.VITE_EnableGoogleLoginId}>
       <AutomationStudioContext.Provider value={{ ...system }}>
         <StyledEngineProvider injectFirst>
           <ThemeProvider theme={this.state.theme}>

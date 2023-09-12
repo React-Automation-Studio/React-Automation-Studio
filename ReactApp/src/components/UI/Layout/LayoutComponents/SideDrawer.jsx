@@ -53,7 +53,7 @@ const SideDrawer = (props) => {
                 {/* Drawer list items from user */}
                 {props.drawerItems}
                 {/* Drawer list items from user */}
-                {process.env.REACT_APP_EnableLogin === 'true' &&
+                {import.meta.env.VITE_EnableLogin === 'true' &&
                     <React.Fragment>
                         <Divider />
                         <ListItem button component={Link} to="userprofile">

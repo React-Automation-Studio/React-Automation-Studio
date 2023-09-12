@@ -23,7 +23,7 @@ import Tank from '../../BaseComponents/Tank';
 import ProgressBar from '../../BaseComponents/ProgressBar';
 import StyledIconIndicator from '../../BaseComponents/StyledIconIndicator';
 
-import TraditionalLayout from '../../UI/Layout/ComposedLayouts/TraditionalLayout.js';
+import TraditionalLayout from '../../UI/Layout/ComposedLayouts/TraditionalLayout';
 const styles = theme => ({
   root: {
     flexGrow: 1,

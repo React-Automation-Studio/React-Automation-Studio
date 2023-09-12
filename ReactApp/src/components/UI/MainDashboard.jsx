@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
-import TraditionalLayout from "./Layout/ComposedLayouts/TraditionalLayout.js";
+import TraditionalLayout from "./Layout/ComposedLayouts/TraditionalLayout";
 import DesktopWindowsIcon from "@mui/icons-material/DesktopWindows";
 import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
 import NewReleasesIcon from "@mui/icons-material/NewReleases";
@@ -318,6 +318,22 @@ const MainDashboard = (props) => {
               </Grid>
               <Grid item lg={12} sm={12} xs={12}>
                 <Typography className={classes.WhatsNew} component="div">
+                V5.0.0 Tuesday 12 September 2023 Major Updates:
+                  <ul>
+                    <li>Moved from Create-react-app to Vite</li>
+                    <li>Package updates to all Node modules</li>
+                    <li>Updated to the latest Node LTS</li>
+                    <li>MUI has been updated to the latest packages</li>
+                    
+                  </ul>
+                  Minor Bug Fixes and Updates:
+                  <ul>
+                    <li>
+                      A few minor bug fixes to the pvServer
+                    </li>
+                  </ul>
+    
+                  <br />
                 V4.0.2 Thursday 13 July 2023 Minor Updates:
                   <ul>
                     <li>Package updates to all Node modules</li>

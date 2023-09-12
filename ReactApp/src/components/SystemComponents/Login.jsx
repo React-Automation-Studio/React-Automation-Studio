@@ -121,11 +121,11 @@ const Login = (props) => {
   const [showPassword, setShowPassword] = useState(false);
   const mounted = useRef(true);
   const enableStandardLogin = !(
-    process.env.REACT_APP_DisableStandardLogin === "true"
+    import.meta.env.VITE_DisableStandardLogin === "true"
   );
   const enableActiveDirectoryLogin =
-    process.env.REACT_APP_EnableActiveDirectoryLogin === "true";
-  const enableGoogleLogin = process.env.REACT_APP_EnableGoogleLogin === "true";
+    import.meta.env.VITE_EnableActiveDirectoryLogin === "true";
+  const enableGoogleLogin = import.meta.env.VITE_EnableGoogleLogin === "true";
   const history = useHistory();
   const location = useLocation();
 

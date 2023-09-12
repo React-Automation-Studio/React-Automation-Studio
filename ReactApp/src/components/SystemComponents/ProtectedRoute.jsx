@@ -8,7 +8,7 @@ const ProtectedRoute = (props) => {
   const Component = props.component;
   const context = useContext(AutomationStudioContext);
   const loggingIn = context.userData.loggingIn;
-  const loggedIn = context.userData.loggedIn || process.env.REACT_APP_EnableLogin !== 'true';
+  const loggedIn = context.userData.loggedIn || import.meta.env.VITE_EnableLogin !== 'true';
   const userRoles= context.userData.roles;
   const {roles}=props;
   let forbidden;

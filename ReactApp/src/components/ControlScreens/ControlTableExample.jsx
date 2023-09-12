@@ -12,7 +12,7 @@ import ControlRightSlitXY from '../ControlScreens/GridComponents/ControlRightSli
 import ControlRightSinglePS from '../ControlScreens/GridComponents/ControlRightSinglePS'
 import ControlCenterTable from '../ControlScreens/GridComponents/ControlCenterTable'
 import AppBar from '@mui/material/AppBar';
-import TraditionalLayout from '../UI/Layout/ComposedLayouts/TraditionalLayout.js';
+import TraditionalLayout from '../UI/Layout/ComposedLayouts/TraditionalLayout';
 
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */

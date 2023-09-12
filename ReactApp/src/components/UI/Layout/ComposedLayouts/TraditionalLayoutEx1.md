@@ -2,7 +2,7 @@
 
 TraditionalLayout with styled app bar, footer and custom footerContent.
 ```js
-import Content from '../../../../docs/content/LayoutContent.js';
+import Content from '../../../../docs/content/LayoutContent';
 import TraditionalLayout from './TraditionalLayout'
 import AccountCircle from '@mui/icons-material/AccountCircle'
 import Grid from '@mui/material/Grid';

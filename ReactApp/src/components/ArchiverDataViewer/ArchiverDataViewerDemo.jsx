@@ -1,6 +1,6 @@
 import React from 'react';
 import ArchiverDataViewer from '../ArchiverDataViewer/ArchiverDataViewer'
-import TraditionalLayout from '../UI/Layout/ComposedLayouts/TraditionalLayout.js';
+import TraditionalLayout from '../UI/Layout/ComposedLayouts/TraditionalLayout';
 import Grid from '@mui/material/Grid';
 import ToggleButton from '../BaseComponents/ToggleButton'
 import ThumbWheel from '../BaseComponents/ThumbWheel'

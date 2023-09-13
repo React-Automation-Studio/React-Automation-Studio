@@ -88,16 +88,16 @@ services:
     stdin_open: true
     restart: always
     network_mode: host
-  # styleguide:
-  #   build:
-  #     context: ./
-  #     dockerfile: docker/styleguide/Dockerfile    
-  #   env_file: .env
-  #   environment:
-  #           - pvServerPort=5001
-  #           - VITE_EnableLogin=false
-  #   volumes:
-  #     - ./build/styleguide:/build/
+  styleguide:
+    build:
+      context: ./
+      dockerfile: docker/styleguide/Dockerfile    
+    env_file: .env
+    environment:
+            - pvServerPort=5001
+            - VITE_EnableLogin=false
+    volumes:
+      - ./build/styleguide:/build/
 
   signalcli:
     build:

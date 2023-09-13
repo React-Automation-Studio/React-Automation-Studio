@@ -53,7 +53,7 @@ class SideBar extends React.Component {
 
   render() {
     const { classes } = this.props;
-
+    const EnableLogin=import.meta.env?.VITE_EnableLogin?import.meta.env.VITE_EnableLogin==='true':false;
     const sideList = (
       <div className={classes.list}>
         <List>
@@ -62,7 +62,7 @@ class SideBar extends React.Component {
             <ListItemText primary={"Home"} />
           </ListItem>
         </List>
-        {import.meta.env.VITE_EnableLogin==='true'&&<React.Fragment>
+        {EnableLogin &&<React.Fragment>
           <Divider />
           <ListItem button key={"Log Out"} onClick={this.logout} component={Link} to="/Login" >
             <ListItemIcon><AccountCircle/></ListItemIcon>

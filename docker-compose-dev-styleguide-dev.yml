@@ -224,6 +224,9 @@ services:
       - ./ReactApp/styleguide.config.js:/frontendserverAppDev/styleguide.config.js
     restart: always
     #network_mode: host
+    environment:
+      - FAST_REFRESH=false
+      - NODE_OPTIONS=--max_old_space_size=4096
     ports:
       - "6061:6060"
   initializeadmindb:

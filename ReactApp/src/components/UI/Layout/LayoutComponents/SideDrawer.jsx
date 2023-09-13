@@ -31,7 +31,7 @@ const SideDrawer = (props) => {
     const username = notInStyleGuide ? context.userData.username : "Guest"
 
     const { showDrawer, setShowDrawer } = props
-
+    const EnableLogin=import.meta.env?.VITE_EnableLogin?import.meta.env.VITE_EnableLogin==='true':false;
     const handleLogout = () => {
         if (notInStyleGuide) {
             context.logout();
@@ -53,7 +53,7 @@ const SideDrawer = (props) => {
                 {/* Drawer list items from user */}
                 {props.drawerItems}
                 {/* Drawer list items from user */}
-                {import.meta.env.VITE_EnableLogin === 'true' &&
+                {EnableLogin &&
                     <React.Fragment>
                         <Divider />
                         <ListItem button component={Link} to="userprofile">

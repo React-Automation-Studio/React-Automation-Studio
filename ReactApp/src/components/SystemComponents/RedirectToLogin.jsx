@@ -21,8 +21,8 @@ class RedirectToLogIn extends Component {
   componentDidMount() {
     let socket=this.context.socket;
     socket.on('redirectToLogIn', this.handleRedirectToLogIn);
-
-    if (import.meta.env.VITE_EnableLogin==='true'){
+    const EnableLogin=import.meta.env?.VITE_EnableLogin?import.meta.env.VITE_EnableLogin==='true':false;
+    if (EnableLogin){
       let loggedIn = this.context.userData.loggedIn;
       let loggingIn = this.context.userData.loggingIn;
       if(loggedIn||loggingIn){

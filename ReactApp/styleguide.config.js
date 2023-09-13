@@ -125,7 +125,7 @@ module.exports = {
         {
           name: 'Sample Layouts',
           content: 'src/docs/layout/sampleLayouts.md',
-          components: 'src/docs/layout/layoutExamples/*.js',
+          components: 'src/docs/layout/layoutExamples/*.jsx',
           exampleMode: 'hide', // 'hide' | 'collapse' | 'expand'
           usageMode: 'hide' // 'hide' | 'collapse' | 'expand'
         },
@@ -135,7 +135,7 @@ module.exports = {
           sections: [
             {
               name: 'Layout Components',
-              components: 'src/components/UI/Layout/ComposedLayouts/*.js',
+              components: 'src/components/UI/Layout/ComposedLayouts/*.jsx',
               exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
               usageMode: 'expand', // 'hide' | 'collapse' | 'expand'
             },
@@ -160,7 +160,7 @@ module.exports = {
         {
           name: 'Base Components',
           content: 'src/docs/WorkingWithComponents.md',
-          components: 'src/components/BaseComponents/*.js',
+          components: 'src/components/BaseComponents/*.jsx',
           exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
           usageMode: 'expand', // 'hide' | 'collapse' | 'expand'
           ignore: 'src/components/BaseComponents/index.js'
@@ -168,21 +168,21 @@ module.exports = {
         {
           name: 'Compound Components',
           content: 'src/docs/CompoundComponents.md',
-          components: 'src/components/CompoundComponents/*.js',
+          components: 'src/components/CompoundComponents/*.jsx',
           exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
           usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
         },
         {
           name: 'Widget and PV Components',
           content: 'src/docs/widget/widget.md',
-          components: ['src/components/SystemComponents/Widgets/Widget.js', 'src/components/SystemComponents/PV.js', 'src/components/ExperimentalExamples/Mobile/DynamicPvFieldExample.js', 'src/components/SystemComponents/EpicsPV.js', 'src/components/SystemComponents/LocalPV.js',],
+          components: ['src/components/SystemComponents/Widgets/Widget.jsx', 'src/components/SystemComponents/PV.jsx', 'src/components/ExperimentalExamples/Mobile/DynamicPvFieldExample.jsx', 'src/components/SystemComponents/EpicsPV.jsx', 'src/components/SystemComponents/LocalPV.jsx',],
           exampleMode: 'expand', // 'hide' | 'collapse' | 'expand'
           usageMode: 'expand', // 'hide' | 'collapse' | 'expand'
         },
         {
           name: 'Routes and Login Components',
           content: 'src/docs/login/login.md',
-          components: ['src/components/SystemComponents/Login.js','src/components/SystemComponents/ProtectedRoutes.js'], 
+          components: ['src/components/SystemComponents/Login.jsx','src/components/SystemComponents/ProtectedRoutes.jsx'], 
           exampleMode: 'expand', // 'hide' | 'collapse' | 'expand'
           usageMode: 'expand', // 'hide' | 'collapse' | 'expand'
         },
@@ -214,7 +214,7 @@ module.exports = {
         {
           name: 'Beamline Components',
           content: 'src/docs/beamlineComponents/BeamlineComponents.md',
-          components: 'src/components/SvgBeamlineComponents/*.js',
+          components: 'src/components/SvgBeamlineComponents/*.jsx',
           exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
           usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
         },
@@ -222,14 +222,14 @@ module.exports = {
         {
           name: 'Experimental Base Components',
           content: 'src/docs/WorkingWithComponents.md',
-          components: 'src/components/ExperimentalBaseComponents/*.js',
+          components: 'src/components/ExperimentalBaseComponents/*.jsx',
           exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
           usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
         },
         {
           name: 'Experimental Beamline Components',
           content: 'src/docs/beamlineComponents/BeamlineComponents.md',
-          components: 'src/components/ExperimentalSvgBeamlineComponents/*.js',
+          components: 'src/components/ExperimentalSvgBeamlineComponents/*.jsx',
           exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
           usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
         },
@@ -348,14 +348,14 @@ module.exports = {
               ]
             }
           ],
-          components: 'src/components/AlarmHandler/AlarmHandler.js',
+          components: 'src/components/AlarmHandler/AlarmHandler.jsx',
           exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
           usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
         },
         {
           name: 'Experimental Load Save',
           content: 'src/docs/loadSave/loadSave.md',
-          components: 'src/components/LoadSaveComponent/LoadSave.js',
+          components: 'src/components/LoadSaveComponent/LoadSave.jsx',
           exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
           usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
          
@@ -363,7 +363,7 @@ module.exports = {
         {
           name: 'Experimental Archiver Data Viewer',
           content: 'src/components/ArchiverDataViewer/Archiver.md',
-          components: 'src/components/ArchiverDataViewer/ArchiverDataViewer.js',
+          components: 'src/components/ArchiverDataViewer/ArchiverDataViewer.jsx',
           exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
           usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
          

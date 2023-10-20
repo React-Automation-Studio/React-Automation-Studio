@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pvserver"
-version = "4.0.2"
+version = "4.0.3"
 description = "RAS Python backend. It mainly manages connections with PVs, through a websocket connection, authentication, authorization, plus other optional functionalities."
 authors = ["React Automation Studio Team https://github.com/React-Automation-Studio/React-Automation-Studio/discussions"]
 license = "MIT"
@@ -21,6 +21,7 @@ Flask-SocketIO = "5.1.2"
 PyJWT = "1.7.1"
 google-api-python-client = "2.73.0"
 gevent-websocket = "0.10.1"
+Werkzeug="2.3.7"
 
 [tool.poetry.dev-dependencies]
 black = "22.3.0"

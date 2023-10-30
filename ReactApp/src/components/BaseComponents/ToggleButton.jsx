@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import withStyles from '@mui/styles/withStyles';
 import { Button, FormControlLabel } from "@mui/material";
 import PropTypes from "prop-types";
 import {isMobile,isTablet} from 'react-device-detect';
 import Widget from "../SystemComponents/Widgets/Widget";
-
-const styles = (theme) => ({
+import makeStyles from "@mui/styles/makeStyles";
+const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     flexWrap: "wrap",
@@ -26,7 +25,7 @@ const styles = (theme) => ({
     marginLeft: "auto",
     marginRight: "auto",
   },
-});
+}));
 
 /* eslint-disable eqeqeq */
 const ToggleButtonComponent = (props) => {
@@ -66,7 +65,7 @@ const ToggleButtonComponent = (props) => {
     }
   }
 
-  const { classes } = props;
+  const classes =useStyles();
   const { value } = props;
   let momentary = props.momentary !== undefined ? props.momentary : false;
   let text;
@@ -216,4 +215,4 @@ ToggleButton.defaultProps = {
   showTooltip:false
 };
 
-export default withStyles(styles, { withTheme: true })(ToggleButton);
+export default ToggleButton;

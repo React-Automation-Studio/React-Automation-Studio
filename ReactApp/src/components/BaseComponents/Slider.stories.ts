@@ -50,7 +50,23 @@ export const Vertical = {
     maxPv:'testIOC:test2.HOPR',
     minPv:'testIOC:test2.LOPR',
     usePvMinMax:true,
+    usePvLabel:true,
+    step:1,
+    usePvUnits:true,
+    height:'60vh',
+  }
+};
+
+export const CustomLabel = {
+  args: {
+    vertical:true,
+    pv:'testIOC:test2',
+    showValue:true,
+    maxPv:'testIOC:test2.HOPR',
+    minPv:'testIOC:test2.LOPR',
+    usePvMinMax:true,
     usePvLabel:false,
+    label:'A',
     step:1,
     usePvUnits:true,
     height:'60vh',

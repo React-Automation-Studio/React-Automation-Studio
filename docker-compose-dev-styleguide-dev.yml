@@ -43,7 +43,7 @@ services:
       - ./log/:/pvServer/log
       - ./build:/pvServer/build
   nginx:
-    image: nginx:1.19.6
+    image: nginx:1.23
     restart: always
     network_mode: host
     depends_on:

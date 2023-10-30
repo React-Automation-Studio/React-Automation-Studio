@@ -1,59 +1,22 @@
 import React from "react";
 import { alpha } from "@mui/material/styles";
-import withStyles from '@mui/styles/withStyles';
 import { InputAdornment, TextField } from "@mui/material";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 import Widget from "../SystemComponents/Widgets/Widget";
 
-const styles = (theme) => ({
-  root: {
-    display: "flex",
-    flexWrap: "wrap",
-  },
-  TextFieldSeverity0: {
-    width: '100%',
-    borderRadius: 4,
-  },
-  TextFieldSeverity1: {
-    width: '100%',
-    borderRadius: 4,
-    background:'linear-gradient(45deg,'+  alpha(theme.palette.alarm.minor.dark,theme.palette.mode==='dark'?0.1:0.1)+ ' 0%, '+ (theme.palette.alarm.minor.dark) +' 100%)'
-  },
-  TextFieldSeverity2: {
-    width: '100%',
-    borderRadius: 4,
-    background:'linear-gradient(45deg,'+ alpha(theme.palette.alarm.major.dark,theme.palette.mode==='dark'?0.2:0.1)+ ' 0%, '+ (theme.palette.alarm.major.dark) +' 100%)'
-  }
-});
-
-const TextInputComponent=(props)=> {
-  const handleChange=(event)=>{
-    let value=event.target.value;
+const TextInputComponent = (props) => {
+  const handleChange = (event) => {
+    let value = event.target.value;
     props.handleChange(value);
-  }
-  const handleCatchReturn=(event)=> {
-    if (event.key === "Enter" ) {
+  };
+  const handleCatchReturn = (event) => {
+    if (event.key === "Enter") {
       props.handleCommitChange();
     }
-  }
+  };
   const { classes } = props;
   const { initialized } = props;
   const { value } = props;
-
-  let textFieldClassName;
-  if (typeof props.alarmSensitive !== 'undefined') {
-    if (props.alarmSensitive === true) {
-      if (props.alarmSeverity ===1) {
-        textFieldClassName = classes.TextFieldSeverity1;
-      }
-      else if (props.alarmSeverity ===2) {
-        textFieldClassName = classes.TextFieldSeverity2;
-      }
-      else {
-        textFieldClassName = classes.TextFieldSeverity0;
-      }
-    }
-  }
 
   let inputProps;
 
@@ -64,7 +27,7 @@ const TextInputComponent=(props)=> {
           {props.units} {props.children}
         </InputAdornment>
       ),
-      readOnly:props.readOnly
+      readOnly: props.readOnly,
     };
   } else {
     inputProps = { readOnly: true };
@@ -72,15 +35,54 @@ const TextInputComponent=(props)=> {
 
   return (
     <TextField
-      className={textFieldClassName}
+      sx={(theme) => {
+        let alarmSxProp = {
+          width: "100%",
+          borderRadius: 1.5,
+        };
+
+        if (typeof props.alarmSensitive !== "undefined") {
+          if (props.alarmSensitive === true) {
+            if (props.alarmSeverity === 1) {
+              alarmSxProp = {
+                ...alarmSxProp,
+                background:
+                  "linear-gradient(45deg," +
+                  alpha(
+                    theme.palette.alarm.minor.dark,
+                    theme.palette.mode === "dark" ? 0.1 : 0.1
+                  ) +
+                  " 0%, " +
+                  theme.palette.alarm.minor.dark +
+                  " 100%)",
+              };
+            } else if (props.alarmSeverity === 2) {
+              alarmSxProp = {
+                ...alarmSxProp,
+                background:
+                  "linear-gradient(45deg," +
+                  alpha(
+                    theme.palette.alarm.major.dark,
+                    theme.palette.mode === "dark" ? 0.2 : 0.1
+                  ) +
+                  " 0%, " +
+                  theme.palette.alarm.major.dark +
+                  " 100%)",
+              };
+            }
+          }
+        }
+        return;
+        alarmSxProp;
+      }}
       key={props.pvName}
       aria-haspopup="true"
-      value={!props.initialized?props.pvName:value}
+      value={!props.initialized ? props.pvName : value}
       onKeyPress={handleCatchReturn}
       onFocus={props.handleFocus}
       onBlur={props.handleBlur}
       onChange={handleChange}
-      label={!props.initialized?props.disconnectedIcon:props.label}
+      label={!props.initialized ? props.disconnectedIcon : props.label}
       fullWidth={true}
       margin={props.margin}
       variant={props.variant}
@@ -89,7 +91,7 @@ const TextInputComponent=(props)=> {
       {...props.muiTextFieldProps}
     />
   );
-}
+};
 
 /**
  * The TextInput Component is a wrapper on the Material-UI contained TextField component.
@@ -100,18 +102,16 @@ const TextInputComponent=(props)=> {
  * Material-UI TextField API:
  * https://material-ui.com/api/text-field
  */
-const TextInput =(props)=>{
-    return (
-      <Widget {...props} component={TextInputComponent} pvs={undefined}/>
-    )
-}
+const TextInput = (props) => {
+  return <Widget {...props} component={TextInputComponent} pvs={undefined} />;
+};
 
-TextInput.propTypes = {  
+TextInput.propTypes = {
   /** Material-UI TextField variant*/
   variant: PropTypes.string,
   /** Material-UI TextField margin*/
   margin: PropTypes.string,
-   /**
+  /**
    * Directive to use the  alarm severity status to alter the fields background color.
    */
   alarmSensitive: PropTypes.bool,
@@ -135,8 +135,8 @@ TextInput.propTypes = {
    */
   label: PropTypes.string,
   /**
-  * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
-  */
+   * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
+   */
   labelPv: PropTypes.string,
   /**
    * Values of macros that will be substituted in the pv name.
@@ -159,7 +159,7 @@ TextInput.propTypes = {
    * Custom PV to define the minimum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
   minPv: PropTypes.string,
-  
+
   /**
    * Custom precision to round the value.
    */
@@ -184,12 +184,12 @@ TextInput.propTypes = {
    */
   usePvLabel: PropTypes.bool,
   /**
-   * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver. 
-   * The pyEpics metadata is unfortunately static and the values used will be the initial values that pvserver receives when it connects the first time. 
+   * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver.
+   * The pyEpics metadata is unfortunately static and the values used will be the initial values that pvserver receives when it connects the first time.
    * This is sufficient in most cases except when the user wants to dynamically update the metaData.
-   * In this case a direct connection can be made to all the pv fields by setting useMetadata to false. 
+   * In this case a direct connection can be made to all the pv fields by setting useMetadata to false.
    * If any of the metadata pvs are defined i.e unitsPv then the PV makes a new data  connection to this alternate pv and will
-   * use the value provided by this pv as the units. 
+   * use the value provided by this pv as the units.
    * The same is the case for the precPV, labelPv, alarmPv, unitsPv and minPv.
    * By setting useMetadata to false also enables connection to other variables as defined by different protocols.
    */
@@ -216,7 +216,7 @@ TextInput.propTypes = {
    * Directive to use PV's string values.
    */
   useStringValue: PropTypes.bool,
-  
+
   /**
    * If defined, then the string representation of the number can be formatted
    * using the mathjs format function
@@ -224,10 +224,10 @@ TextInput.propTypes = {
    * See https://mathjs.org/docs/reference/functions/format.html for more examples
    */
   numberFormat: PropTypes.object,
-    
+
   /** Name of the process variable,  eg. '$(device):test$(id)'*/
   pv: PropTypes.string,
-  
+
   /**
    * Object with a string and the corresponding severity value.
    * When PV value is equal to the string, set the corresponding severity
@@ -240,21 +240,21 @@ TextInput.propTypes = {
    */
   useStringSeverityMatch: PropTypes.bool,
   /** Any of the MUI TextField Props can applied by defining them as an object
-   * 
+   *
    */
   muiTextFieldProps: PropTypes.object,
-   /**
+  /**
    * Tooltip Text
    */
-  tooltip:PropTypes.string,
+  tooltip: PropTypes.string,
   /**
    * Directive to show the tooltip
    */
-  showTooltip:PropTypes.bool,
+  showTooltip: PropTypes.bool,
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-  tooltipProps:PropTypes.object,
+  tooltipProps: PropTypes.object,
 };
 
 TextInput.defaultProps = {
@@ -262,7 +262,7 @@ TextInput.defaultProps = {
   variant: "outlined",
   margin: "none",
   alarmSensitive: false,
-  showTooltip:false
+  showTooltip: false,
 };
 
-export default withStyles(styles, { withTheme: true })(TextInput);
+export default TextInput;

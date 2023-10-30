@@ -1,5 +1,4 @@
-FROM node:18.17.1
-
+FROM node:18.18.2
 ADD ./ReactApp/package.json /frontendserverAppDev/package.json
 WORKDIR /frontendserverAppDev
 ENV PATH /frontendserverAppDev/node_modules/.bin:$PATH

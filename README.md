@@ -1,4 +1,4 @@
-Current Release: V4.0.3
+Current Release: V5.0.0
 
 # Introduction
 
@@ -517,6 +517,22 @@ Contact us at Github Discussions: https://github.com/React-Automation-Studio/Rea
   The docker containers for RAS run in network  mode host. This is done to enable EPICS to communicate seamlessly with any IOC's on the same subnet as the host. Other OSes such as Windows may not support the host mode and will run in the bridged mode. This may break the communication between the micro services. It is therefore recommended to run the RAS containers on a Linux VM that is minimally running Ubuntu Server. Please ensure the the VM network interface is assigned an IP on the same subnet as your EPICS network in order for communication with the IOC's to occur seamlessly.
 
 # Changelog
+ V5.0.0 Tuesday 30 October 2023 Major Updates:
+  <ul>
+    <li>Moved from Create-react-app to Vite</li>
+    <li>Package updates to all Node modules</li>
+    <li>Updated to the latest Node LTS</li>
+    <li>MUI has been updated to the latest packages</li>
+    
+  </ul>
+  Minor Bug Fixes and Updates:
+  <ul>
+    <li>
+      A few minor bug fixes to the pvServer
+    </li>
+  </ul>
+
+  <br />
 V4.0.3 Friday 20 October 2023 Minor Updates:
 <ul>
   <li>Package updates to all Node modules</li>

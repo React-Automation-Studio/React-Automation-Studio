@@ -89,7 +89,7 @@ services:
       - ./certificates:/certificates/
       - ./log/:/pvServer/log
   nginx:
-    image: nginx:1.19.6
+    image: nginx:1.23
     restart: always
     network_mode: host
     depends_on:
@@ -148,7 +148,16 @@ services:
   #           - VITE_EnableLogin=false
   #   volumes:
   #     - ./build/styleguide:/build/
-
+  storybook:
+    build:
+      context: ./
+      dockerfile: docker/storybook/Dockerfile    
+    env_file: .env
+    environment:
+            - pvServerPort=5001
+            - VITE_EnableLogin=false
+    volumes:
+      - ./build/styleguide:/build/
   signalcli:
     build:
       context: ./

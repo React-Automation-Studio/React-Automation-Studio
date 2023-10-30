@@ -27,3 +27,14 @@ export const Primary = {
   }
 };
 
+export const ExtraMarks = {
+  args: {
+    pv:'testIOC:test2',
+    marks:{0:0,2500:2500,5000:5000,7500:7500,10000:10000},
+    showValue:true,
+    usePvMinMax:true,
+    usePvLabel:true,
+    step:1,
+    usePvUnits:true
+  }
+};

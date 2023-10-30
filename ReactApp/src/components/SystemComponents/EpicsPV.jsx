@@ -173,11 +173,13 @@ export const useEpicsPV = (props) => {
       }
 
       pvConnectionIdRef.current = uuidv4();
+      if (socket) {
       socketRef.current.emit("request_pv_info", {
         data: pv.pvname,
         pvConnectionId: pvConnectionIdRef.current,
         clientAuthorisation: jwtRef.current,
       });
+    }
     };
     if (socket) {
       socketRef.current.on("connect", reconnect);

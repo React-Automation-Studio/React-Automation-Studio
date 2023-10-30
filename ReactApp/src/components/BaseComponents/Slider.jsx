@@ -404,7 +404,7 @@ function SliderComponent(props) {
 
   return (
     <div
-      style={{ height: "100%", width: "100%" }}
+      style={{ height: props.height?props.height:"100%", width: "100%" }}
       onPointerDownCapture={handleOnClickCapture}
     >
       <FormControlLabel
@@ -466,7 +466,7 @@ function SliderComponent(props) {
  * For the vertical slider, the parent container must have a fixed height.
  */
 const Slider = (props) => {
-  return <Widget {...props} component={SliderComponent} name={"Slider"} />;
+  return <Widget  {...props} component={SliderComponent} name={"Slider"} />;
 };
 
 /**
@@ -479,6 +479,11 @@ Slider.propTypes = {
    * the widget debugging information will be displayed.
    */
   debug: PropTypes.bool,
+
+  /**
+   * Height of the component.
+   */
+  height: PropTypes.string,
 
   /**
    * Local variable initialization value.
@@ -611,12 +616,18 @@ Slider.propTypes = {
    * Directive to use a vertical slider
    */
   vertical: PropTypes.bool,
+  /**
+   * Width of the component.
+   */
+  height: PropTypes.string,
 };
 
 Slider.defaultProps = {
   step: 1,
   labelPlacement: "top",
   valuePlacement: "top",
+  height:"100%",
+  width:"100%",
   showValue: true,
   showTooltip: false,
   vertical: false,

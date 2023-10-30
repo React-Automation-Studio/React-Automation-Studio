@@ -318,7 +318,7 @@ const MainDashboard = (props) => {
               </Grid>
               <Grid item lg={12} sm={12} xs={12}>
                 <Typography className={classes.WhatsNew} component="div">
-                V5.0.0 Tuesday 12 September 2023 Major Updates:
+                V5.0.0 Tuesday 30 October 2023 Major Updates:
                   <ul>
                     <li>Moved from Create-react-app to Vite</li>
                     <li>Package updates to all Node modules</li>
@@ -333,6 +333,18 @@ const MainDashboard = (props) => {
                     </li>
                   </ul>
     
+                  <br />
+                  V4.0.3 Friday 20 October 2023 Minor Updates:
+                  <ul>
+                    <li>Package updates to all Node modules</li>
+                    <li>Updated to the latest Node LTS</li>
+                    <li>MUI has been updated to the latest packages</li>
+                    <li>Package updates to pVServer Python packages</li>
+                  </ul>
+                  Minor Bug Fixes and Updates:
+                  <ul>
+                    <li>Fixed pvServer Flask, Werkzeug dependencies.</li>
+                  </ul>
                   <br />
                 V4.0.2 Thursday 13 July 2023 Minor Updates:
                   V4.0.3 Friday 20 October 2023 Minor Updates:

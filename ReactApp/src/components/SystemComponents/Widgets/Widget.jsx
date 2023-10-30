@@ -368,7 +368,10 @@ const Widget = (props) => {
       disableFocusListener={true}
       disableTouchListener={true}
       disableHoverListener={props.showTooltip===false}
-      {...props.tooltipProps}  >
+      {...props.tooltipProps}  
+      key={`${props.usePvLabel},${props.pvs},${props.pv}${props.usePvMinMax}${props.usePvPrecision}${props.usePvUnits}${props.useStringValue}`}
+      
+      >
 
     <Tag
       style={props.svgWidget?undefined:divStyle}

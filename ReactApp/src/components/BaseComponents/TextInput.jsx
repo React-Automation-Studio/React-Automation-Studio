@@ -77,7 +77,7 @@ const TextInputComponent = (props) => {
       key={props.pvName}
       aria-haspopup="true"
       value={!props.initialized ? props.pvName : value}
-      onKeyPress={handleCatchReturn}
+      onKeyDown={handleCatchReturn}
       onFocus={props.handleFocus}
       onBlur={props.handleBlur}
       onChange={handleChange}

@@ -72,8 +72,7 @@ const TextInputComponent = (props) => {
             }
           }
         }
-        return;
-        alarmSxProp;
+        return  alarmSxProp;
       }}
       key={props.pvName}
       aria-haspopup="true"

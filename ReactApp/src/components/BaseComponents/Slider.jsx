@@ -1,14 +1,14 @@
 import React, { useRef } from "react";
-import withStyles from "@mui/styles/withStyles";
+
 import { Typography } from "@mui/material";
 import PropTypes from "prop-types";
 import debounce from "lodash.debounce";
 import Widget from "../SystemComponents/Widgets/Widget";
 import RCSlider from "rc-slider";
-
+import makeStyles from "@mui/styles/makeStyles";
 import { FormControlLabel } from "@mui/material";
 
-const styles = (theme) => {
+const useStyles = makeStyles((theme) => {
   const backgroundColor =
     theme.palette.mode === "light"
       ? "rgba(0, 0, 0, 0.23)"
@@ -315,9 +315,10 @@ const styles = (theme) => {
       },
     },
   };
-};
+});
 
 function SliderComponent(props) {
+  const classes = useStyles();
   const emitChangeDebounced = useRef(
     debounce((value) => emitChange(value), 10)
   ).current;
@@ -368,8 +369,8 @@ function SliderComponent(props) {
         <Typography
           className={
             props.vertical
-              ? props.classes.verticalSliderValue
-              : props.classes.horizontalSliderValue
+              ? classes.verticalSliderValue
+              : classes.horizontalSliderValue
           }
           style={{ textAlign: "center" }}
         >
@@ -410,8 +411,8 @@ function SliderComponent(props) {
         key={props.pvName + props.initialized}
         className={
           props.vertical
-            ? props.classes.verticalSliderLabel
-            : props.classes.horizontalSliderLabel
+            ? classes.verticalSliderLabel
+            : classes.horizontalSliderLabel
         }
         label={props.formControlLabel}
         labelPlacement={props.labelPlacement}
@@ -420,8 +421,8 @@ function SliderComponent(props) {
             key={props.pvName + props.initialized + props.vertical}
             className={
               props.vertical
-                ? props.classes.verticalSliderLabelValue
-                : props.classes.horizontalSliderValue
+                ? classes.verticalSliderLabelValue
+                : classes.horizontalSliderValue
             }
             label={content}
             labelPlacement={props.valuePlacement}
@@ -429,8 +430,8 @@ function SliderComponent(props) {
               <div
                 className={
                   props.vertical
-                    ? props.classes.verticalSlider
-                    : props.classes.horizontalSlider
+                    ? classes.verticalSlider
+                    : classes.horizontalSlider
                 }
               >
                 <RCSlider
@@ -621,4 +622,4 @@ Slider.defaultProps = {
   vertical: false,
 };
 
-export default withStyles(styles, { withTheme: true })(Slider);
+export default Slider;

@@ -1,11 +1,11 @@
 import React from "react";
 import { alpha } from "@mui/material/styles";
-import withStyles from '@mui/styles/withStyles';
+import withStyles from "@mui/styles/withStyles";
 import { InputAdornment, TextField } from "@mui/material";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 import Widget from "../SystemComponents/Widgets/Widget";
-
-const styles = (theme) => ({
+import makeStyles from "@mui/styles/makeStyles";
+const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     flexWrap: "wrap",
@@ -14,7 +14,10 @@ const styles = (theme) => ({
     margin: theme.spacing(1),
   },
   input: {
-    color: theme.palette.mode === 'dark' ? theme.palette.grey[400] : theme.palette.grey[700],
+    color:
+      theme.palette.mode === "dark"
+        ? theme.palette.grey[400]
+        : theme.palette.grey[700],
   },
   cssLabel: {
     "&$cssFocused": {
@@ -65,23 +68,39 @@ const styles = (theme) => ({
     fontSize: 18,
   },
   TextFieldSeverity0: {
-    width: '100%',
+    width: "100%",
     borderRadius: 4,
   },
   TextFieldSeverity1: {
-    width: '100%',
+    width: "100%",
     borderRadius: 4,
-    background: 'linear-gradient(45deg,' + alpha(theme.palette.alarm.minor.dark, theme.palette.mode === 'dark' ? 0.1 : 0.1) + ' 0%, ' + (theme.palette.alarm.minor.dark) + ' 100%)'
+    background:
+      "linear-gradient(45deg," +
+      alpha(
+        theme.palette.alarm.minor.dark,
+        theme.palette.mode === "dark" ? 0.1 : 0.1
+      ) +
+      " 0%, " +
+      theme.palette.alarm.minor.dark +
+      " 100%)",
   },
   TextFieldSeverity2: {
-    width: '100%',
+    width: "100%",
     borderRadius: 4,
-    background: 'linear-gradient(45deg,' + alpha(theme.palette.alarm.major.dark, theme.palette.mode === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.major.dark) + ' 100%)'
-  }
-});
+    background:
+      "linear-gradient(45deg," +
+      alpha(
+        theme.palette.alarm.major.dark,
+        theme.palette.mode === "dark" ? 0.2 : 0.1
+      ) +
+      " 0%, " +
+      theme.palette.alarm.major.dark +
+      " 100%)",
+  },
+}));
 
 function TextOutputComponent(props) {
-  const { classes } = props;
+  const classes = useStyles();
 
   let inputProps = {
     classes: {
@@ -89,7 +108,6 @@ function TextOutputComponent(props) {
       focused: classes.cssFocused,
       input: classes.input,
       notchedOutline: classes.notchedOutline,
-
     },
     endAdornment: (
       <InputAdornment position="end">
@@ -106,15 +124,13 @@ function TextOutputComponent(props) {
   };
 
   let textFieldClassName;
-  if (typeof props.alarmSensitive !== 'undefined') {
+  if (typeof props.alarmSensitive !== "undefined") {
     if (props.alarmSensitive === true) {
       if (props.alarmSeverity === 1) {
         textFieldClassName = classes.TextFieldSeverity1;
-      }
-      else if (props.alarmSeverity === 2) {
+      } else if (props.alarmSeverity === 2) {
         textFieldClassName = classes.TextFieldSeverity2;
-      }
-      else {
+      } else {
         textFieldClassName = classes.TextFieldSeverity0;
       }
     }
@@ -124,27 +140,52 @@ function TextOutputComponent(props) {
 
   const { initialized } = props;
   if (initialized) {
-    if (typeof props.displayMetaData === 'undefined') {
-      if (typeof props.displayTimeStamp !== 'undefined') {
+    if (typeof props.displayMetaData === "undefined") {
+      if (typeof props.displayTimeStamp !== "undefined") {
         let mydate = new Date(props.pvData.timestamp * 1000);
-        let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        let months = [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ];
         let year = mydate.getFullYear();
         let month = months[mydate.getMonth()];
         let date = mydate.getDate();
         let hour = mydate.getHours();
         let min = mydate.getMinutes();
         let sec = mydate.getSeconds();
-        let ms = mydate.getMilliseconds()
+        let ms = mydate.getMilliseconds();
 
         if (min < 10) {
-          min = '0' + min;
+          min = "0" + min;
         }
         if (sec < 10) {
-          sec = '0' + sec;
+          sec = "0" + sec;
         }
-        value = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec + ':' + ms;
-      }
-      else {
+        value =
+          date +
+          " " +
+          month +
+          " " +
+          year +
+          " " +
+          hour +
+          ":" +
+          min +
+          ":" +
+          sec +
+          ":" +
+          ms;
+      } else {
         value = props.value;
       }
     } else {
@@ -168,7 +209,7 @@ function TextOutputComponent(props) {
       InputProps={inputProps}
       {...props.muiTextFieldProps}
     />
-  )
+  );
 }
 
 /**
@@ -181,15 +222,13 @@ function TextOutputComponent(props) {
  *  https://material-ui.com/api/text-field
  */
 const TextOutput = (props) => {
-  return (
-    <Widget {...props} component={TextOutputComponent} pvs={undefined} />
-  )
-}
+  return <Widget {...props} component={TextOutputComponent} pvs={undefined} />;
+};
 
 TextOutput.propTypes = {
   /**
-  * Directive to use the  alarm severity status to alter the fields background color.
-  */
+   * Directive to use the  alarm severity status to alter the fields background color.
+   */
   alarmSensitive: PropTypes.bool,
   /**
    * Custom PV to define the alarm severity to be used, alarmSensitive must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
@@ -211,8 +250,8 @@ TextOutput.propTypes = {
    */
   label: PropTypes.string,
   /**
-  * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
-  */
+   * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
+   */
   labelPv: PropTypes.string,
   /**
    * Values of macros that will be substituted in the pv name.
@@ -244,12 +283,12 @@ TextOutput.propTypes = {
    */
   usePvLabel: PropTypes.bool,
   /**
-   * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver. 
-   * The pyEpics metadata is unfortunately static and the values used will be the initial values that pvserver receives when it connects the first time. 
+   * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver.
+   * The pyEpics metadata is unfortunately static and the values used will be the initial values that pvserver receives when it connects the first time.
    * This is sufficient in most cases except when the user wants to dynamically update the metaData.
-   * In this case a direct connection can be made to all the pv fields by setting useMetadata to false. 
+   * In this case a direct connection can be made to all the pv fields by setting useMetadata to false.
    * If any of the metadata pvs are defined i.e unitsPv then the PV makes a new data  connection to this alternate pv and will
-   * use the value provided by this pv as the units. 
+   * use the value provided by this pv as the units.
    * The same is the case for the precPV, labelPv, alarmPv, unitsPv and minPv.
    * By setting useMetadata to false also enables connection to other variables as defined by different protocols.
    */
@@ -293,12 +332,12 @@ TextOutput.propTypes = {
    */
   useStringSeverityMatch: PropTypes.bool,
   /** Any of the MUI TextField Props can applied by defining them as an object
-   * 
+   *
    */
   muiTextFieldProps: PropTypes.object,
   /**
-    * Tooltip Text
-    */
+   * Tooltip Text
+   */
   tooltip: PropTypes.string,
   /**
    * Directive to show the tooltip
@@ -310,12 +349,27 @@ TextOutput.propTypes = {
   tooltipProps: PropTypes.object,
   /** If defined, then the timestamp of the PV will be displayed instead of its value*/
   displayTimeStamp: PropTypes.bool,
-  /** If defined, then the Metadata property of the pyEPICS PV will be displayed instead of its value as defined by the input string eg. displayMetaData={'lower\_disp\_limit'} 
+  /** If defined, then the Metadata property of the pyEPICS PV will be displayed instead of its value as defined by the input string eg. displayMetaData={'lower\_disp\_limit'}
    * Valid options are
    */
-  displayMetaData: PropTypes.oneOf(
-    ['pvname', 'value', 'char_value', 'enum_strs', 'lower_disp_limit', 'upper_disp_limit',
-      'lower_warning_limit', 'upper_warning_limit', 'lower_ctrl_limit', 'upper_ctrl_limit', 'units', 'precision', 'severity', 'write_access', 'read_access', 'host'])
+  displayMetaData: PropTypes.oneOf([
+    "pvname",
+    "value",
+    "char_value",
+    "enum_strs",
+    "lower_disp_limit",
+    "upper_disp_limit",
+    "lower_warning_limit",
+    "upper_warning_limit",
+    "lower_ctrl_limit",
+    "upper_ctrl_limit",
+    "units",
+    "precision",
+    "severity",
+    "write_access",
+    "read_access",
+    "host",
+  ]),
 };
 
 TextOutput.defaultProps = {
@@ -323,7 +377,7 @@ TextOutput.defaultProps = {
   variant: "outlined",
   margin: "none",
   alarmSensitive: false,
-  showTooltip: false
+  showTooltip: false,
 };
 
-export default withStyles(styles, { withTheme: true })(TextOutput);
+export default TextOutput;

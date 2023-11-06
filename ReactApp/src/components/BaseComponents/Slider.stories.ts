@@ -5,7 +5,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  title: 'Example/Slider',
+  
   component: Slider,
   parameters: {
    
@@ -72,16 +72,4 @@ export const CustomLabel = {
     height:'60vh',
   }
 };
-
-// const meta: Meta<typeof Slider> = {
-//   component: Slider,
-//   decorators: [
-//     (Story) => (
-//       <div style={{ margin: '3em' }}>
-//         {/* 👇 Decorators in Storybook also accept a function. Replace <Story/> with Story() to enable it  */}
-//         <Story />
-//       </div>
-//     ),
-//   ],
-// };
 

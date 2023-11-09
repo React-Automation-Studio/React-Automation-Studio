@@ -617,7 +617,7 @@ Slider.propTypes = {
    */
   vertical: PropTypes.bool,
   /**
-   * Width of the component.
+   * height of the component.
    */
   height: PropTypes.string,
 };

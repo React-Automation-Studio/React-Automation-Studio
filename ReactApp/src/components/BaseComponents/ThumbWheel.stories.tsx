@@ -13,7 +13,7 @@ export default {
 
 const Template: StoryObj = {
   render: ({ ...args }) => {
-    console.log(args);
+    
     return (
       <div>
         <TextOutput

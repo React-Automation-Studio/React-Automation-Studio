@@ -1,5 +1,4 @@
 import React from "react";
-import withStyles from '@mui/styles/withStyles';
 import {
   FormControlLabel,
   List,
@@ -8,9 +7,9 @@ import {
 } from "@mui/material";
 import PropTypes from "prop-types";
 import Widget from "../SystemComponents/Widgets/Widget";
+import makeStyles from "@mui/styles/makeStyles";
 
-
-const styles = (theme) => {
+const useStyles = makeStyles((theme) => {
   const borderColor =
     theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.23)' : 'rgba(255, 255, 255, 0.23)'; //copied from material ui textfield 
   const borderColorTop =
@@ -134,7 +133,7 @@ const styles = (theme) => {
     },
   }
   )
-};
+});
 
 /**
  * The SelectionList Component is a wrapper on the Material-UI List component.
@@ -146,7 +145,7 @@ const styles = (theme) => {
  * https://material-ui.com/api/list
  */
 const SelectionListComponent = (props) => {
-
+  const classes =useStyles();
   /**
    * Store the new item value in the correct PV's state.
    * @param {String} value
@@ -160,7 +159,7 @@ const SelectionListComponent = (props) => {
    * @param {array} enumStrs
    */
   const getListItems = (enumStrs, value) => {
-    let { classes } = props;
+  
     let listItems = enumStrs.map((item, idx) => {
       let className;
       if (props.horizontal) {
@@ -181,13 +180,16 @@ const SelectionListComponent = (props) => {
       return (
         <ListItem
           key={item.toString()}
+         
           className={className}
-          button
           value={item}
+          button
           selected={value === item}
           onClick={props.disabled ? undefined : () => handleListItemClick(item)}
         >
+          
           <ListItemText primary={item} />
+          
         </ListItem>
       );
     });
@@ -199,14 +201,14 @@ const SelectionListComponent = (props) => {
   return (
     <FormControlLabel
       key={props.pvName}
-      className={props.classes.FormControl}
+      className={classes.FormControl}
       disabled={props.disabled}
       control={
         <List
           className={
             props.horizontal
-              ? props.classes.listHorizontal
-              : props.classes.listVertical
+              ? classes.listHorizontal
+              : classes.listVertical
           }
           component="nav"
           variant="outlined"
@@ -274,4 +276,4 @@ SelectionList.defaultProps = {
   showTooltip:false
 };
 
-export default withStyles(styles, { withTheme: true })(SelectionList);
+export default SelectionList;

@@ -1,11 +1,10 @@
 import React from "react";
-import withStyles from '@mui/styles/withStyles';
 import { Button, FormControlLabel } from "@mui/material";
 import PropTypes from "prop-types";
 import Widget from "../SystemComponents/Widgets/Widget";
+import makeStyles from "@mui/styles/makeStyles";
 
-
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     flexWrap: "wrap",
@@ -26,10 +25,12 @@ const styles = (theme) => ({
     marginLeft: "auto",
     marginRight: "auto",
   },
-});
+}));
 
 
 const ActionButtonComponent=(props)=> {
+  const classes =useStyles();
+
   /**
    * Send the predefined value to the PV.
    */
@@ -41,13 +42,13 @@ const ActionButtonComponent=(props)=> {
   return (
     <FormControlLabel
       key={props.pvName}
-      className={props.classes.FormControl}
+      className={classes.FormControl}
       disabled={props.disabled}
       label={props.formControlLabel}
       labelPlacement={props.labelPlacement}
       control={
         <Button
-          className={props.classes.Button}
+          className={classes.Button}
           variant="contained"
           color={props.color}
           onClick={handleButtonClick}
@@ -128,4 +129,4 @@ ActionButton.defaultProps = {
   color:'primary',
 };
 
-export default withStyles(styles, { withTheme: true })(ActionButton);
+export default ActionButton;

@@ -1,11 +1,10 @@
 import React from "react";
-import withStyles from '@mui/styles/withStyles';
-import { InputAdornment, MenuItem, TextField } from "@mui/material";
-import PropTypes from 'prop-types';
-
+import { InputAdornment, MenuItem, TextField, useTheme } from "@mui/material";
+import PropTypes from "prop-types";
 import Widget from "../SystemComponents/Widgets/Widget";
+import makeStyles from "@mui/styles/makeStyles";
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     flexWrap: "wrap",
@@ -15,66 +14,61 @@ const styles = (theme) => ({
     fontWeight: 500,
     borderRadius: 4,
   },
-});
-
+}));
 
 const SelectionInputComponent = (props) => {
+  const classes = useStyles();
+  const theme = useTheme();
   function handleChange(event) {
     let value = event.target.value;
     props.handleImmediateChange(value);
   }
 
   let inputProps;
-  let stringValues; 
+  let stringValues;
   if (props.initialized) {
-    stringValues= props.enumStrs.map((item, idx) => (
-      <MenuItem
-        key={item.toString()}
-        value={props.useStringValue ? item : idx}
-      >
+    stringValues = props.enumStrs.map((item, idx) => (
+      <MenuItem key={item.toString()} value={props.useStringValue ? item : idx}>
         {item}
       </MenuItem>
     ));
     inputProps = {
       endAdornment: (
         <InputAdornment
-          style={{ marginRight: props.theme.spacing(1) }}
+          style={{ marginRight: theme.spacing(1) }}
           position="end"
         >
           {props.units} {props.children}
         </InputAdornment>
       ),
-      readOnly:props.readOnly,
-      
+      readOnly: props.readOnly,
     };
-  }
-  else{
+  } else {
     inputProps = {
       endAdornment: (
         <InputAdornment
-          style={{ marginRight: props.theme.spacing(1) }}
+          style={{ marginRight: theme.spacing(1) }}
           position="end"
         >
           {props.units} {props.children}
         </InputAdornment>
       ),
-      readOnly:props.readOnly,
-      
+      readOnly: props.readOnly,
     };
-    stringValues=props.pvName
+    stringValues = props.pvName;
   }
 
   return (
     <TextField
       key={props.pvName}
-      className={props.classes.TextField}
+      className={classes.TextField}
       select={props.initialized}
       disabled={props.disabled}
-      value={props.initialized?props.value:stringValues}
+      value={props.initialized ? props.value : stringValues}
       onFocus={props.onUpdateWidgetFocus}
       onBlur={props.onUpdateWidgetBlur}
       onChange={handleChange}
-      label={props.initialized?props.label:props.disconnectedIcon}
+      label={props.initialized ? props.label : props.disconnectedIcon}
       margin={props.margin}
       variant={props.variant}
       InputProps={inputProps}
@@ -82,22 +76,31 @@ const SelectionInputComponent = (props) => {
       {stringValues}
     </TextField>
   );
-}
+};
 
 /**
-* The SelectionInput Component is a wrapper on the Material-UI TextField component. 
-* The TextField component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
-* The margins and spacing must be controlled from the parent component.<br/><br/>
-* Material-UI TextField Demos:
-* https://material-ui.com/demos/text-fields<br/><br/>
-* Material-UI TextField API:
-* https://material-ui.com/api/text-field
-*/
+ * The SelectionInput Component is a wrapper on the Material-UI TextField component.
+ * The TextField component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
+ * The margins and spacing must be controlled from the parent component.<br/><br/>
+ * Material-UI TextField Demos:
+ * https://material-ui.com/demos/text-fields<br/><br/>
+ * Material-UI TextField API:
+ * https://material-ui.com/api/text-field
+ */
 const SelectionInput = (props) => {
   return (
-    <Widget {...props} useStringValue={true} component={SelectionInputComponent} usePvMinMax={false} usePvPrecision={false} min={undefined} max={undefined} prec={undefined}/>
-  )
-}
+    <Widget
+      {...props}
+      useStringValue={true}
+      component={SelectionInputComponent}
+      usePvMinMax={false}
+      usePvPrecision={false}
+      min={undefined}
+      max={undefined}
+      prec={undefined}
+    />
+  );
+};
 
 SelectionInput.defaultProps = {
   debug: false,
@@ -143,7 +146,7 @@ SelectionInput.propTypes = {
   tooltipProps: PropTypes.object,
 
   /** Any of the MUI TextField Props can applied by defining them as an object
-   * 
+   *
    */
   muiTextFieldProps: PropTypes.object,
 
@@ -166,7 +169,7 @@ SelectionInput.propTypes = {
 
 SelectionInput.defaultProps = {
   showTooltip: false,
-  variant: 'outlined',
+  variant: "outlined",
 };
 
-export default withStyles(styles, { withTheme: true })(SelectionInput);
+export default SelectionInput;

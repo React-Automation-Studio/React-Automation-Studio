@@ -1,15 +1,15 @@
 import React, { useEffect, useState, useRef } from "react";
-import withStyles from "@mui/styles/withStyles";
+
 import PropTypes from "prop-types";
 import { v4 as uuidv4 } from "uuid";
 import Widget from "../SystemComponents/Widgets/Widget";
-import { FormControlLabel } from "@mui/material";
+import { FormControlLabel, useTheme } from "@mui/material";
 import { create, all } from "mathjs";
-
+import makeStyles from "@mui/styles/makeStyles";
 const config = {};
 const math = create(all, config);
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   textTicks: {
     fill:
       theme.palette.mode === "dark"
@@ -34,7 +34,7 @@ const styles = (theme) => ({
     marginLeft: "auto",
     marginRight: "auto",
   },
-});
+}));
 
 function getTickValues(
   props,
@@ -51,7 +51,8 @@ function getTickValues(
   yOffset,
   value
 ) {
-  const { classes } = props;
+  const classes = useStyles();
+
   let units = props.units ? " " + props.units : "";
 
   let ticks = [];
@@ -100,6 +101,7 @@ function getTickValues(
 
 const TankComponent = (props) => {
   const ref = useRef(null);
+  const theme = useTheme();
   const [width, setWidth] = useState(null);
   const [height, setHeight] = useState(null);
   useEffect(() => {
@@ -129,7 +131,7 @@ const TankComponent = (props) => {
   ]);
 
   const gradientId = uuidv4();
-  const { classes } = props;
+  const classes = useStyles();
   const { initialized } = props;
   let value = initialized ? props.value : 50;
 
@@ -140,13 +142,13 @@ const TankComponent = (props) => {
   if (props.width > 16) {
     yOffset = 16;
   } else {
-    yOffset = 0;
+    yOffset = props.showTicks || props.showValue ? 16 : 0;
   }
   let xOffset;
   if (props.width > 80) {
     xOffset = 80;
   } else {
-    xOffset = 0;
+    xOffset = props.showTicks ? 80 : 0;
   }
 
   const y0 = yOffset;
@@ -162,14 +164,14 @@ const TankComponent = (props) => {
   if (props.initialized) {
     if (props.alarmSensitive === true) {
       if (props.alarmSeverity === 1) {
-        color = props.theme.palette.alarm.minor.dark;
+        color = theme.palette.alarm.minor.dark;
       } else if (props.alarmSeverity === 2) {
-        color = props.theme.palette.alarm.major.dark;
+        color = theme.palette.alarm.major.dark;
       } else {
-        color = props.theme.palette.primary.main;
+        color = theme.palette.primary.main;
       }
     } else {
-      color = props.theme.palette.primary.main;
+      color = theme.palette.primary.main;
     }
   }
 
@@ -187,16 +189,16 @@ const TankComponent = (props) => {
               <stop
                 offset="0%"
                 stopColor={
-                  props.theme.palette.mode === "dark"
-                    ? props.theme.palette.grey["300"]
-                    : props.theme.palette.grey["200"]
+                  theme.palette.mode === "dark"
+                    ? theme.palette.grey["300"]
+                    : theme.palette.grey["200"]
                 }
               />
               <stop
                 offset="100%"
                 stopColor={
                   props.initialized === true
-                    ? props.theme.palette.grey["200"]
+                    ? theme.palette.grey["200"]
                     : "default"
                 }
               />
@@ -206,16 +208,16 @@ const TankComponent = (props) => {
                 offset="0%"
                 stopColor={
                   props.initialized === true
-                    ? props.theme.palette.grey["200"]
+                    ? theme.palette.grey["200"]
                     : "default"
                 }
               />
               <stop
                 offset="100%"
                 stopColor={
-                  props.theme.palette.mode === "dark"
-                    ? props.theme.palette.grey["300"]
-                    : props.theme.palette.grey["200"]
+                  theme.palette.mode === "dark"
+                    ? theme.palette.grey["300"]
+                    : theme.palette.grey["200"]
                 }
               />
             </linearGradient>
@@ -223,9 +225,9 @@ const TankComponent = (props) => {
               <stop
                 offset="0%"
                 stopColor={
-                  props.theme.palette.mode === "dark"
-                    ? props.theme.palette.grey["300"]
-                    : props.theme.palette.grey["200"]
+                  theme.palette.mode === "dark"
+                    ? theme.palette.grey["300"]
+                    : theme.palette.grey["200"]
                 }
               />
               <stop
@@ -241,9 +243,9 @@ const TankComponent = (props) => {
               <stop
                 offset="100%"
                 stopColor={
-                  props.theme.palette.mode === "dark"
-                    ? props.theme.palette.grey["300"]
-                    : props.theme.palette.grey["200"]
+                  theme.palette.mode === "dark"
+                    ? theme.palette.grey["300"]
+                    : theme.palette.grey["200"]
                 }
               />
             </linearGradient>
@@ -321,13 +323,14 @@ TankComponent.propTypes = {
 };
 
 /**
- * The Tank Component is an Automation-studio component.
+ * The Tank Component is an React-Automation-studio component useful fo displaying levels.
  */
 const Tank = (props) => {
   return <Widget {...props} component={TankComponent} />;
 };
 
 Tank.propTypes = {
+  /** Directive to show the  value */
   showValue: PropTypes.bool,
   /** Directive to show the tick values */
   showTicks: PropTypes.bool,
@@ -470,12 +473,12 @@ Tank.defaultProps = {
   max: 100,
 
   usePvPrecision: false,
-  showValue: true,
+  showValue: false,
   aspectRatio: 1,
   lockAspectRatio: true,
-  showTicks: true,
+  showTicks: false,
   labelPlacement: "top",
   showTooltip: false,
 };
 
-export default withStyles(styles, { withTheme: true })(Tank);
+export default Tank;

@@ -1,11 +1,11 @@
 import React from "react";
-import withStyles from '@mui/styles/withStyles';
-import { FormControlLabel, SvgIcon } from "@mui/material";
-import { Lens } from "@mui/icons-material";
+import { FormControlLabel, SvgIcon, useTheme } from "@mui/material";
+import  Lens  from "@mui/icons-material/Lens";
 import PropTypes from 'prop-types';
 import Widget from "../SystemComponents/Widgets/Widget";
+import makeStyles from "@mui/styles/makeStyles";
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     flexWrap: "wrap",
@@ -18,21 +18,23 @@ const styles = (theme) => ({
     marginLeft: "auto",
     marginRight: "auto",
   },
-});
+}));
 
 
 function StyledIconIndicatorComponent(props) {
-  let onColor = props.theme.palette.primary.main;
-  let offColor = props.theme.palette.grey[300];
+  const theme=useTheme();
+  const classes=useStyles();
+  let onColor = theme.palette.primary.main;
+  let offColor = theme.palette.grey[300];
   if (typeof props.onColor !== 'undefined') {
     if (props.onColor === 'primary') {
-      onColor = props.theme.palette.primary.main;
+      onColor = theme.palette.primary.main;
     }
     else if (props.onColor === 'secondary') {
-      onColor = props.theme.palette.secondary.main;
+      onColor = theme.palette.secondary.main;
     }
     else if (props.onColor === 'default') {
-      onColor = props.theme.palette.grey[300];
+      onColor = theme.palette.grey[300];
     }
     else {
       onColor = props.onColor;
@@ -41,13 +43,13 @@ function StyledIconIndicatorComponent(props) {
 
   if (typeof props.offColor !== 'undefined') {
     if (props.offColor === 'primary') {
-      offColor = props.theme.palette.primary.main;
+      offColor = theme.palette.primary.main;
     }
     else if (props.offColor === 'secondary') {
-      offColor = props.theme.palette.secondary.main;
+      offColor = theme.palette.secondary.main;
     }
     else if (props.offColor === 'default') {
-      offColor = props.theme.palette.grey[300];
+      offColor = theme.palette.grey[300];
     }
     else {
       offColor = props.offColor;
@@ -56,21 +58,21 @@ function StyledIconIndicatorComponent(props) {
   let iconStyle = {};
   if (typeof props.labelPlacement !== 'undefined') {
     if (props.labelPlacement === "top") {
-      iconStyle['marginTop'] = props.theme.spacing(1);
+      iconStyle['marginTop'] = theme.spacing(1);
     } else if (props.labelPlacement === "end") {
-      iconStyle['marginRight'] = props.theme.spacing(1);
+      iconStyle['marginRight'] = theme.spacing(1);
     }
     else if (props.labelPlacement === "start") {
-      iconStyle['marginLeft'] = props.theme.spacing(1);
+      iconStyle['marginLeft'] = theme.spacing(1);
     }
     else if (props.labelPlacement === "bottom") {
-      iconStyle['marginBottom'] = props.theme.spacing(1);
+      iconStyle['marginBottom'] = theme.spacing(1);
     }
   }
 
 /* eslint-disable eqeqeq */
   let color = !props.initialized
-    ? props.theme.palette.action.disabled
+    ? theme.palette.action.disabled
     : props.value != 0
       ? onColor
       : offColor;
@@ -80,7 +82,7 @@ function StyledIconIndicatorComponent(props) {
   return (
     <FormControlLabel
       key={props.pvName}
-      className={props.classes.FormControl}
+      className={classes.FormControl}
       disabled={props.disabled}
       label={props.formControlLabel}
       labelPlacement={props.labelPlacement}
@@ -163,4 +165,4 @@ StyledIconIndicator.defaultProps = {
   showTooltip:false
 }
 
-export default withStyles(styles, { withTheme: true })(StyledIconIndicator);
+export default StyledIconIndicator;

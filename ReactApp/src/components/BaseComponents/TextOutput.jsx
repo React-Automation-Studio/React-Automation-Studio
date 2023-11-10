@@ -1,6 +1,5 @@
 import React from "react";
 import { alpha } from "@mui/material/styles";
-import withStyles from "@mui/styles/withStyles";
 import { InputAdornment, TextField } from "@mui/material";
 import PropTypes from "prop-types";
 import Widget from "../SystemComponents/Widgets/Widget";

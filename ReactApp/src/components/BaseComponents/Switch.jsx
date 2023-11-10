@@ -1,11 +1,11 @@
 import React from "react";
-import withStyles from '@mui/styles/withStyles';
-import { FormControlLabel} from "@mui/material";
+import { FormControlLabel } from "@mui/material";
 import MuiSwitch from "@mui/material/Switch";
 import Widget from "../SystemComponents/Widgets/Widget";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
+import makeStyles from "@mui/styles/makeStyles";
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     flexWrap: "wrap",
@@ -18,23 +18,24 @@ const styles = (theme) => ({
     marginLeft: "auto",
     marginRight: "auto",
   },
-});
+}));
 
 /* eslint-disable eqeqeq */
 const SwitchInternalComponent = (props) => {
+  const classes = useStyles();
   /**
    * Save switch state.
    * @param {Event} event
    */
-  const handleButtonChange=(event)=> {
+  const handleButtonChange = (event) => {
     let value = event.target.checked ? 1 : 0;
     props.handleImmediateChange(value);
-  }
+  };
 
   return (
     <FormControlLabel
       key={props.pvName}
-      className={props.classes.FormControl}
+      className={classes.FormControl}
       disabled={props.disabled}
       label={props.formControlLabel}
       labelPlacement={props.labelPlacement}
@@ -48,7 +49,7 @@ const SwitchInternalComponent = (props) => {
       }
     />
   );
-}
+};
 
 /* eslint-disable eqeqeq */
 /**
@@ -60,11 +61,19 @@ const SwitchInternalComponent = (props) => {
  * Material-UI Switch API:
  * https://material-ui.com/api/switch/
  */
-const Switch =(props)=>{
+const Switch = (props) => {
   return (
-    <Widget {...props} component={SwitchInternalComponent} usePvMinMax={false} usePvPrecision={false} min={undefined} max={undefined} prec={undefined} />
-  )
-}
+    <Widget
+      {...props}
+      component={SwitchInternalComponent}
+      usePvMinMax={false}
+      usePvPrecision={false}
+      min={undefined}
+      max={undefined}
+      prec={undefined}
+    />
+  );
+};
 
 Switch.propTypes = {
   /** Name of the process variable,  eg. '$(device):test$(id)'*/
@@ -77,7 +86,7 @@ Switch.propTypes = {
   /** If defined, then the DataConnection debugging information will be displayed*/
   debug: PropTypes.bool,
   /** label placement*/
-  labelPlacement: PropTypes.oneOf(['start', 'top', 'bottom', 'end']),
+  labelPlacement: PropTypes.oneOf(["start", "top", "bottom", "end"]),
   /** Custom label to be used, if  `usePvLabel` is not defined. */
   label: PropTypes.string,
   /**
@@ -95,27 +104,27 @@ Switch.propTypes = {
    */
   labelPv: PropTypes.string,
   /** Any of the MUI Switch Props can applied by defining them as an object
-   * 
+   *
    */
   muiSwitchProps: PropTypes.object,
-   /**
+  /**
    * Tooltip Text
    */
-  tooltip:PropTypes.string,
+  tooltip: PropTypes.string,
   /**
    * Directive to show the tooltip
    */
-  showTooltip:PropTypes.bool,
+  showTooltip: PropTypes.bool,
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-  tooltipProps:PropTypes.object,
-}
+  tooltipProps: PropTypes.object,
+};
 
 Switch.defaultProps = {
-  onColor: 'primary',
+  onColor: "primary",
   debug: false,
-  showTooltip:false
-}
+  showTooltip: false,
+};
 
-export default withStyles(styles, { withTheme: true })(Switch)
+export default Switch;

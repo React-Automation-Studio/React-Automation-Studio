@@ -1,93 +1,74 @@
 import React from "react";
 import { FormControlLabel, SvgIcon, useTheme } from "@mui/material";
-import  Lens  from "@mui/icons-material/Lens";
-import PropTypes from 'prop-types';
+import Lens from "@mui/icons-material/Lens";
+import PropTypes from "prop-types";
 import Widget from "../SystemComponents/Widgets/Widget";
-import makeStyles from "@mui/styles/makeStyles";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-    flexWrap: "wrap",
-  },
-  FormControl: {
-    width: "100%",
-    height: "100%",
-    marginTop: "auto",
-    marginBottom: "auto",
-    marginLeft: "auto",
-    marginRight: "auto",
-  },
-}));
-
 
 function StyledIconIndicatorComponent(props) {
-  const theme=useTheme();
-  const classes=useStyles();
+  const theme = useTheme();
   let onColor = theme.palette.primary.main;
   let offColor = theme.palette.grey[300];
-  if (typeof props.onColor !== 'undefined') {
-    if (props.onColor === 'primary') {
+  if (typeof props.onColor !== "undefined") {
+    if (props.onColor === "primary") {
       onColor = theme.palette.primary.main;
-    }
-    else if (props.onColor === 'secondary') {
+    } else if (props.onColor === "secondary") {
       onColor = theme.palette.secondary.main;
-    }
-    else if (props.onColor === 'default') {
+    } else if (props.onColor === "default") {
       onColor = theme.palette.grey[300];
-    }
-    else {
+    } else {
       onColor = props.onColor;
     }
   }
 
-  if (typeof props.offColor !== 'undefined') {
-    if (props.offColor === 'primary') {
+  if (typeof props.offColor !== "undefined") {
+    if (props.offColor === "primary") {
       offColor = theme.palette.primary.main;
-    }
-    else if (props.offColor === 'secondary') {
+    } else if (props.offColor === "secondary") {
       offColor = theme.palette.secondary.main;
-    }
-    else if (props.offColor === 'default') {
+    } else if (props.offColor === "default") {
       offColor = theme.palette.grey[300];
-    }
-    else {
+    } else {
       offColor = props.offColor;
     }
   }
   let iconStyle = {};
-  if (typeof props.labelPlacement !== 'undefined') {
+  if (typeof props.labelPlacement !== "undefined") {
     if (props.labelPlacement === "top") {
-      iconStyle['marginTop'] = theme.spacing(1);
+      iconStyle["marginTop"] = theme.spacing(1);
     } else if (props.labelPlacement === "end") {
-      iconStyle['marginRight'] = theme.spacing(1);
-    }
-    else if (props.labelPlacement === "start") {
-      iconStyle['marginLeft'] = theme.spacing(1);
-    }
-    else if (props.labelPlacement === "bottom") {
-      iconStyle['marginBottom'] = theme.spacing(1);
+      iconStyle["marginRight"] = theme.spacing(1);
+    } else if (props.labelPlacement === "start") {
+      iconStyle["marginLeft"] = theme.spacing(1);
+    } else if (props.labelPlacement === "bottom") {
+      iconStyle["marginBottom"] = theme.spacing(1);
     }
   }
 
-/* eslint-disable eqeqeq */
+  /* eslint-disable eqeqeq */
   let color = !props.initialized
     ? theme.palette.action.disabled
     : props.value != 0
-      ? onColor
-      : offColor;
+    ? onColor
+    : offColor;
 
-  iconStyle['color'] = color;
-/* eslint-enable eqeqeq */
+  iconStyle["color"] = color;
+  /* eslint-enable eqeqeq */
   return (
     <FormControlLabel
       key={props.pvName}
-      className={classes.FormControl}
+      sx={{
+        width: "100%",
+        height: "100%",
+        marginTop: "auto",
+        marginBottom: "auto",
+        marginLeft: "auto",
+        marginRight: "auto",
+      }}
       disabled={props.disabled}
       label={props.formControlLabel}
       labelPlacement={props.labelPlacement}
       control={
-        <SvgIcon size="small" style={iconStyle} >
+        <SvgIcon size="small" style={iconStyle}>
           {props.children === undefined ? <Lens /> : props.children}
         </SvgIcon>
       }
@@ -106,11 +87,8 @@ function StyledIconIndicatorComponent(props) {
  * A custom Icon can used by importing it in the parent and assigning it as a child <br/><br/>
  */
 const StyledIconIndicator = (props) => {
-
-  return (
-    <Widget {...props} component={StyledIconIndicatorComponent}  />
-  )
-}
+  return <Widget {...props} component={StyledIconIndicatorComponent} />;
+};
 
 StyledIconIndicator.propTypes = {
   /** Name of the process variable,  eg. '$(device):test$(id)'*/
@@ -123,7 +101,7 @@ StyledIconIndicator.propTypes = {
   /** If defined, then the DataConnection debugging information will be displayed*/
   debug: PropTypes.bool,
   /** label placement*/
-  labelPlacement: PropTypes.oneOf(['start', 'top', 'bottom', 'end']),
+  labelPlacement: PropTypes.oneOf(["start", "top", "bottom", "end"]),
   /** Custom label to be used, if  `usePvLabel` is not defined. */
   label: PropTypes.string,
   /**
@@ -143,26 +121,26 @@ StyledIconIndicator.propTypes = {
   /**
    * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
-   labelPv: PropTypes.string,
+  labelPv: PropTypes.string,
   /**
    * Tooltip Text
    */
-  tooltip:PropTypes.string,
+  tooltip: PropTypes.string,
   /**
    * Directive to show the tooltip
    */
-  showTooltip:PropTypes.bool,
+  showTooltip: PropTypes.bool,
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-  tooltipProps:PropTypes.object,
+  tooltipProps: PropTypes.object,
 };
 
 StyledIconIndicator.defaultProps = {
-  onColor: 'primary',
-  offColor: 'default',
+  onColor: "primary",
+  offColor: "default",
   debug: false,
-  showTooltip:false
-}
+  showTooltip: false,
+};
 
 export default StyledIconIndicator;

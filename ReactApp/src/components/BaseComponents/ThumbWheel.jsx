@@ -2,27 +2,14 @@ import React from "react";
 import { Button, FormControlLabel } from "@mui/material";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import PropTypes from "prop-types";
-import makeStyles from "@mui/styles/makeStyles";
 import Widget from "../SystemComponents/Widgets/Widget";
-import { useTheme } from '@mui/material/styles'
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-    flexWrap: "wrap",
-  },
-  Button: {
-    marginLeft: "auto",
-    marginRight: "auto",
-    marginTop: "auto",
-    marginBottom: "auto",
-  },
-}));
+import { useTheme } from "@mui/system";
 
 const ThumbWheelComponent = (props) => {
   function handleButtonClick(incrementValue) {
     if (props.initialized) {
       let value = parseFloat(props.value) + parseFloat(incrementValue);
-      props.handleImmediateChange(value);;
+      props.handleImmediateChange(value);
       window.navigator.vibrate(1);
     }
   }
@@ -37,33 +24,33 @@ const ThumbWheelComponent = (props) => {
       num_array.push(10 ** i);
     }
     for (let i = 1; i <= prec_decimal; i++) {
-      let value = 10 ** -i
-      value = value.toFixed(i)
+      let value = 10 ** -i;
+      value = value.toFixed(i);
       num_array.unshift(value);
     }
   }
-  return (<ThumbWheelWidget
-    {...props}
-    disabled={props.disabled}
-    label={props.label}
-    num_array={num_array}
-    prec_decimal_div={prec_decimal_div}
-    onHandleButtonClick={handleButtonClick}
-  />
-  )
-}
+  return (
+    <ThumbWheelWidget
+      {...props}
+      disabled={props.disabled}
+      label={props.label}
+      num_array={num_array}
+      prec_decimal_div={prec_decimal_div}
+      onHandleButtonClick={handleButtonClick}
+    />
+  );
+};
 
 /**
  * Function with the details of the graphic object
  * @param {any} props
  */
 const ThumbWheelWidget = (props) => {
-  const classes =useStyles();
-  const theme =useTheme();
+  const theme = useTheme();
   return (
     <FormControlLabel
       key={props.pvName}
-      className={classes.Button}
+      sx={{ ml: "auto", mr: "auto", mt: "auto", mb: "auto" }}
       disabled={props.disabled}
       control={
         <div
@@ -83,7 +70,7 @@ const ThumbWheelWidget = (props) => {
               }}
             >
               <FormControlLabel
-                className={classes.Button}
+                sx={{ ml: "auto", mr: "auto", mt: "auto", mb: "auto" }}
                 control={
                   <SingleThumbWheelWidget {...props} item={item} up={true} />
                 }
@@ -99,18 +86,17 @@ const ThumbWheelWidget = (props) => {
       labelPlacement={props.labelPlacement}
     />
   );
-}
+};
 
 /**
  * Single wheel element
  * @param {any} props
  */
 const SingleThumbWheelWidget = (props) => {
-  const classes =useStyles();
   return (
     <Button
       key={(props.up ? "top" : "bottom") + "rowbuttons" + props.index}
-      className={classes.Button}
+      sx={{ ml: "auto", mr: "auto", mt: "auto", mb: "auto" }}
       disabled={props.disabled}
       size={props.buttonSize !== undefined ? props.buttonSize : "small"}
       variant="contained"
@@ -122,7 +108,7 @@ const SingleThumbWheelWidget = (props) => {
       {props.up ? <ExpandLess /> : <ExpandMore />}
     </Button>
   );
-}
+};
 
 /**
  *  The ThumbWheel component is a wrapper on an array of Material-UI Button components.
@@ -134,19 +120,17 @@ const SingleThumbWheelWidget = (props) => {
  *  https://material-ui.com/api/button/
  */
 const ThumbWheel = (props) => {
-  return (
-    <Widget {...props} component={ThumbWheelComponent} />
-  )
-}
+  return <Widget {...props} component={ThumbWheelComponent} />;
+};
 
-ThumbWheel.propTypes = { 
+ThumbWheel.propTypes = {
   /** If defined this sets the precision of the integer control values of the widget*/
   prec_integer: PropTypes.number,
   /** If defined this sets the precision of the decimal control values of the widget*/
   prec_decimal: PropTypes.number,
   /** An array of custom increments. If defined, overrides any values in 'prec_integer','prec_decimal'*/
   custom_increments: PropTypes.array,
-  
+
   /**
    * If defined, then the DataConnection and
    * the widget debugging information will be displayed.
@@ -163,8 +147,8 @@ ThumbWheel.propTypes = {
    */
   label: PropTypes.string,
   /**
-  * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
-  */
+   * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
+   */
   labelPv: PropTypes.string,
   /**
    * Values of macros that will be substituted in the pv name.
@@ -187,7 +171,7 @@ ThumbWheel.propTypes = {
    * Custom PV to define the minimum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
   minPv: PropTypes.string,
-  
+
   /**
    * Custom precision to round the value.
    */
@@ -212,12 +196,12 @@ ThumbWheel.propTypes = {
    */
   usePvLabel: PropTypes.bool,
   /**
-   * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver. 
-   * The pyEpics metadata is unfortunately static and the values used will be the initial values that pvserver receives when it connects the first time. 
+   * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver.
+   * The pyEpics metadata is unfortunately static and the values used will be the initial values that pvserver receives when it connects the first time.
    * This is sufficient in most cases except when the user wants to dynamically update the metaData.
-   * In this case a direct connection can be made to all the pv fields by setting useMetadata to false. 
+   * In this case a direct connection can be made to all the pv fields by setting useMetadata to false.
    * If any of the metadata pvs are defined i.e unitsPv then the PV makes a new data  connection to this alternate pv and will
-   * use the value provided by this pv as the units. 
+   * use the value provided by this pv as the units.
    * The same is the case for the precPV, labelPv, alarmPv, unitsPv and minPv.
    * By setting useMetadata to false also enables connection to other variables as defined by different protocols.
    */
@@ -243,18 +227,18 @@ ThumbWheel.propTypes = {
   /** Name of the process variable,  eg. '$(device):test$(id)'*/
   pv: PropTypes.string,
 
-   /**
+  /**
    * Tooltip Text
    */
-  tooltip:PropTypes.string,
+  tooltip: PropTypes.string,
   /**
    * Directive to show the tooltip
    */
-  showTooltip:PropTypes.bool,
+  showTooltip: PropTypes.bool,
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-  tooltipProps:PropTypes.object,
+  tooltipProps: PropTypes.object,
 };
 
 ThumbWheel.defaultProps = {
@@ -262,7 +246,7 @@ ThumbWheel.defaultProps = {
   prec_decimal: 3,
   usePvMinMax: false,
   debug: false,
-  showTooltip:false
+  showTooltip: false,
 };
 
-export default  ThumbWheel;
+export default ThumbWheel;

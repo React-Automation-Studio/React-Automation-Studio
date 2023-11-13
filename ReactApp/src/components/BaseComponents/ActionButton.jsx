@@ -2,53 +2,39 @@ import React from "react";
 import { Button, FormControlLabel } from "@mui/material";
 import PropTypes from "prop-types";
 import Widget from "../SystemComponents/Widgets/Widget";
-import makeStyles from "@mui/styles/makeStyles";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-    flexWrap: "wrap",
-  },
-  FormControl: {
-    width: "100%",
-    height: "100%",
-    marginTop: "auto",
-    marginBottom: "auto",
-    marginLeft: "auto",
-    marginRight: "auto",
-  },
-  Button: {
-    width: "100%",
-    height: "100%",
-    marginTop: "auto",
-    marginBottom: "auto",
-    marginLeft: "auto",
-    marginRight: "auto",
-  },
-}));
-
-
-const ActionButtonComponent=(props)=> {
-  const classes =useStyles();
-
+const ActionButtonComponent = (props) => {
   /**
    * Send the predefined value to the PV.
    */
-  const handleButtonClick=()=> {
-   
+  const handleButtonClick = () => {
     props.handleImmediateChange(props.actionValue);
-  }
+  };
 
   return (
     <FormControlLabel
       key={props.pvName}
-      className={classes.FormControl}
+      sx={{
+        width: "100%",
+        height: "100%",
+        marginTop: "auto",
+        marginBottom: "auto",
+        marginLeft: "auto",
+        marginRight: "auto",
+      }}
       disabled={props.disabled}
       label={props.formControlLabel}
       labelPlacement={props.labelPlacement}
       control={
         <Button
-          className={classes.Button}
+          sx={{
+            width: "100%",
+            height: "100%",
+            marginTop: "auto",
+            marginBottom: "auto",
+            marginLeft: "auto",
+            marginRight: "auto",
+          }}
           variant="contained"
           color={props.color}
           onClick={handleButtonClick}
@@ -59,7 +45,7 @@ const ActionButtonComponent=(props)=> {
       }
     />
   );
-}
+};
 
 /**
  * The ActionButton Component is a wrapper on the Material-UI Button component.
@@ -71,11 +57,15 @@ const ActionButtonComponent=(props)=> {
  * Material-UI Button API:
  * https://material-ui.com/api/button/
  * */
-const ActionButton = (props)=> {
-    return (
-      <Widget  {...props} component={ActionButtonComponent} writeOutputValueToAllpvs={true}/> 
-    )
-  }
+const ActionButton = (props) => {
+  return (
+    <Widget
+      {...props}
+      component={ActionButtonComponent}
+      writeOutputValueToAllpvs={true}
+    />
+  );
+};
 
 ActionButton.propTypes = {
   /** Define the string on the button.*/
@@ -98,7 +88,7 @@ ActionButton.propTypes = {
   label: PropTypes.string,
 
   /** Position of label*/
-  labelPlacement: PropTypes.oneOf(['top', 'bottom', 'start', 'end']),
+  labelPlacement: PropTypes.oneOf(["top", "bottom", "start", "end"]),
 
   /** If defined, then the string value of the EPICS enumerator type will be forced to be used, if not defined the the enumerator index is used */
   useStringValue: PropTypes.bool,
@@ -113,20 +103,20 @@ ActionButton.propTypes = {
   /**
    * Tooltip Text
    */
-  tooltip:PropTypes.string,
+  tooltip: PropTypes.string,
   /**
    * Directive to show the tooltip
    */
-  showTooltip:PropTypes.bool,
+  showTooltip: PropTypes.bool,
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-  tooltipProps:PropTypes.object,
+  tooltipProps: PropTypes.object,
 };
 
-ActionButton.defaultProps = { 
-  showTooltip:false,
-  color:'primary',
+ActionButton.defaultProps = {
+  showTooltip: false,
+  color: "primary",
 };
 
 export default ActionButton;

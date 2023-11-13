@@ -14,7 +14,6 @@ const TextInputComponent = (props) => {
       props.handleCommitChange();
     }
   };
-  const { classes } = props;
   const { initialized } = props;
   const { value } = props;
 

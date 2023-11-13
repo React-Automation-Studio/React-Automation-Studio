@@ -1,5 +1,4 @@
 import React from "react";
-import withStyles from "@mui/styles/withStyles";
 
 import Widget from "../SystemComponents/Widgets/Widget";
 import { Typography } from "@mui/material";
@@ -12,40 +11,30 @@ const config = {};
 
 const math = create(all, config);
 
-const styles = (theme) => ({
-  root: {
-    display: "flex",
-    flexWrap: "wrap",
-  },
-  TextFieldSeverity0: {},
-  TextFieldSeverity1: {
-    borderRadius: 2,
-    padding: 1,
-    background: deepOrange["400"],
-  },
-  TextFieldSeverity2: {
-    borderRadius: 2,
-    padding: 1,
-    background: red["800"],
-  },
-});
-
 const TextUpdateMultiplePVsComponent = (props) => {
   const { classes } = props;
   const content = (props) => {
     let pvs = props.pvsData;
     let data = [];
     let pv;
-    let textFieldClassName;
+    let textFieldSx;
     for (pv in pvs) {
       if (pvs[pv].initialized) {
         if (props.alarmSensitive === true) {
           if (pvs[pv].severity === 1) {
-            textFieldClassName = classes.TextFieldSeverity1;
+            textFieldSx = {
+              borderRadius: 2,
+              padding: 1,
+              background: deepOrange["400"],
+            };
           } else if (pvs[pv].severity === 2) {
-            textFieldClassName = classes.TextFieldSeverity2;
+            textFieldSx = {
+              borderRadius: 2,
+              padding: 1,
+              background: red["800"],
+            };
           } else {
-            textFieldClassName = classes.TextFieldSeverity0;
+            textFieldSx = {};
           }
         }
 
@@ -58,7 +47,7 @@ const TextUpdateMultiplePVsComponent = (props) => {
         }
 
         data.push(
-          <Typography className={textFieldClassName}>
+          <Typography sx={textFieldSx}>
             {pvs[pv].label + ": " + value + units}
           </Typography>
         );
@@ -154,4 +143,4 @@ TextUpdateMultiplePVs.defaultProps = {
   showTooltip: false,
 };
 
-export default withStyles(styles, { withTheme: true })(TextUpdateMultiplePVs);
+export default TextUpdateMultiplePVs;

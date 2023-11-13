@@ -5,35 +5,16 @@ import { v4 as uuidv4 } from "uuid";
 import Widget from "../SystemComponents/Widgets/Widget";
 import { FormControlLabel, useTheme } from "@mui/material";
 import { create, all } from "mathjs";
-import makeStyles from "@mui/styles/makeStyles";
+import { styled } from "@mui/material/styles";
+
 const config = {};
 const math = create(all, config);
 
-const useStyles = makeStyles((theme) => ({
-  textTicks: {
-    fill:
-      theme.palette.mode === "dark"
-        ? theme.palette.grey["300"]
-        : theme.palette.grey["500"],
-  },
-  textValue: {
-    fill:
-      theme.palette.mode === "dark"
-        ? theme.palette.grey["300"]
-        : theme.palette.grey["500"],
-  },
-  root: {
-    display: "flex",
-    flexWrap: "wrap",
-  },
-  FormControl: {
-    width: "100%",
-    height: "100%",
-    marginTop: "auto",
-    marginBottom: "auto",
-    marginLeft: "auto",
-    marginRight: "auto",
-  },
+const TextTicks = styled("text")(({ theme }) => ({
+  fill:
+    theme.palette.mode === "dark"
+      ? theme.palette.grey["300"]
+      : theme.palette.grey["500"],
 }));
 
 function getTickValues(
@@ -51,8 +32,6 @@ function getTickValues(
   yOffset,
   value
 ) {
-  const classes = useStyles();
-
   let units = props.units ? " " + props.units : "";
 
   let ticks = [];
@@ -67,14 +46,13 @@ function getTickValues(
         }
         ticks.push(
           <g key={i}>
-            <text
-              className={classes.textTicks}
+            <TextTicks
               x={xOffset - 3}
               y={y2 - (i * (y2 - y0 - yOffset)) / (numberOfTicks - 1) - 3}
               textAnchor={"end"}
             >
               {tickValue + units}
-            </text>
+            </TextTicks>
           </g>
         );
       }
@@ -84,15 +62,10 @@ function getTickValues(
   if (props.showValue === true) {
     ticks.push(
       <g key={(i = i + 1)}>
-        <text
-          className={classes.textTicks}
-          x={x0 + (x2 - x0) / 2}
-          y={yOffset - 4}
-          textAnchor={"middle"}
-        >
+        <TextTicks x={x0 + (x2 - x0) / 2} y={yOffset - 4} textAnchor={"middle"}>
           {props.disabled === false ? value + units : ""}
           {}
-        </text>
+        </TextTicks>
       </g>
     );
   }
@@ -131,7 +104,6 @@ const TankComponent = (props) => {
   ]);
 
   const gradientId = uuidv4();
-  const classes = useStyles();
   const { initialized } = props;
   let value = initialized ? props.value : 50;
 
@@ -179,7 +151,14 @@ const TankComponent = (props) => {
     <div ref={ref} styles={{ width: "100%", height: "100%" }}>
       <FormControlLabel
         key={props.pvName}
-        className={classes.FormControl}
+        sx={{
+          width: "100%",
+          height: "100%",
+          marginTop: "auto",
+          marginBottom: "auto",
+          marginLeft: "auto",
+          marginRight: "auto",
+        }}
         disabled={props.disabled}
         label={props.formControlLabel}
         labelPlacement={props.labelPlacement}

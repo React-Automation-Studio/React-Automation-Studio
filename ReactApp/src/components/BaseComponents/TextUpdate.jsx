@@ -1,70 +1,60 @@
 import React from "react";
 import { alpha } from "@mui/material/styles";
-import withStyles from "@mui/styles/withStyles";
 import Widget from "../SystemComponents/Widgets/Widget";
 import { Typography } from "@mui/material";
 import PropTypes from "prop-types";
 import { grey } from "@mui/material/colors";
-const styles = (theme) => ({
-  root: {
-    display: "flex",
-    flexWrap: "wrap",
-  },
-  TextFieldSeverity0: {
-    borderRadius: 2,
-    borderWidth: 1,
-    padding: 1,
-    borderStyle: "solid",
-    borderColor: "rgba(0,0,0,0)",
-  },
-  TextFieldSeverity1: {
-    borderColor: theme.palette.mode === "dark" ? grey[700] : grey[300],
-    borderRadius: 2,
-    borderWidth: 1,
-    borderStyle: "solid",
-    padding: 1,
-    background:
-      "linear-gradient(45deg," +
-      alpha(
-        theme.palette.alarm.minor.dark,
-        theme.palette.mode === "dark" ? 0.2 : 0.1
-      ) +
-      " 0%, " +
-      theme.palette.alarm.minor.dark +
-      " 100%)",
-  },
-  TextFieldSeverity2: {
-    borderColor: theme.palette.mode === "dark" ? grey[700] : grey[300],
-    borderWidth: 1,
-    borderStyle: "solid",
-    borderRadius: 2,
-    padding: 1,
-    background:
-      "linear-gradient(45deg," +
-      alpha(
-        theme.palette.alarm.major.dark,
-        theme.palette.mode === "dark" ? 0.2 : 0.1
-      ) +
-      " 0%, " +
-      theme.palette.alarm.major.dark +
-      " 100%)",
-  },
-});
-
+import { useTheme } from "@mui/material";
 const TextUpdateComponent = (props) => {
-  const { classes } = props;
-  let textFieldClassName;
+  const theme = useTheme();
+  let textFieldSx;
   let label = props.label !== undefined ? props.label + ": " : "";
   let units = props.units !== undefined ? props.units + " " : "";
   let content;
   if (props.initialized) {
     if (props.alarmSensitive === true) {
       if (props.alarmSeverity === 1) {
-        textFieldClassName = classes.TextFieldSeverity1;
+        textFieldSx = {
+          borderColor: theme.palette.mode === "dark" ? grey[700] : grey[300],
+          borderRadius: 2,
+          borderWidth: 1,
+          borderStyle: "solid",
+          padding: 1,
+          background:
+            "linear-gradient(45deg," +
+            alpha(
+              theme.palette.alarm.minor.dark,
+              theme.palette.mode === "dark" ? 0.2 : 0.1
+            ) +
+            " 0%, " +
+            theme.palette.alarm.minor.dark +
+            " 100%)",
+        };
       } else if (props.alarmSeverity === 2) {
-        textFieldClassName = classes.TextFieldSeverity2;
+        textFieldSx = {
+          borderColor: theme.palette.mode === "dark" ? grey[700] : grey[300],
+          borderWidth: 1,
+          borderStyle: "solid",
+          borderRadius: 2,
+          padding: 1,
+          background:
+            "linear-gradient(45deg," +
+            alpha(
+              theme.palette.alarm.major.dark,
+              theme.palette.mode === "dark" ? 0.2 : 0.1
+            ) +
+            " 0%, " +
+            theme.palette.alarm.major.dark +
+            " 100%)",
+        };
       } else {
-        textFieldClassName = classes.TextFieldSeverity0;
+        textFieldSx = {
+          borderRadius: 2,
+          borderWidth: 1,
+          padding: 1,
+          borderStyle: "solid",
+          borderColor: "rgba(0,0,0,0)",
+        };
       }
     }
 
@@ -72,7 +62,7 @@ const TextUpdateComponent = (props) => {
       <Typography
         variant={props.variant}
         align={props.align}
-        className={textFieldClassName}
+        sx={textFieldSx}
         {...props.muiTypographyProps}
       >
         {label + props.value + " " + units}
@@ -226,4 +216,4 @@ TextUpdate.defaultProps = {
   showTooltip: false,
 };
 
-export default withStyles(styles, { withTheme: true })(TextUpdate);
+export default TextUpdate;

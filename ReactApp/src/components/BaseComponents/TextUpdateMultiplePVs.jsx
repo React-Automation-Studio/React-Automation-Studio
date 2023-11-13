@@ -4,15 +4,15 @@ import Widget from "../SystemComponents/Widgets/Widget";
 import { Typography } from "@mui/material";
 import PropTypes from "prop-types";
 import { create, all } from "mathjs";
-
-import { red, deepOrange } from "@mui/material/colors";
-
+import { useTheme } from "@mui/material";
+import { grey } from "@mui/material/colors";
+import { alpha } from "@mui/material/styles";
 const config = {};
 
 const math = create(all, config);
 
 const TextUpdateMultiplePVsComponent = (props) => {
-  const { classes } = props;
+  const theme = useTheme();
   const content = (props) => {
     let pvs = props.pvsData;
     let data = [];
@@ -23,18 +23,46 @@ const TextUpdateMultiplePVsComponent = (props) => {
         if (props.alarmSensitive === true) {
           if (pvs[pv].severity === 1) {
             textFieldSx = {
+              borderColor: theme.palette.mode === "dark" ? grey[700] : grey[300],
               borderRadius: 2,
+              borderWidth: 1,
+              borderStyle: "solid",
               padding: 1,
-              background: deepOrange["400"],
+              background:
+                "linear-gradient(45deg," +
+                alpha(
+                  theme.palette.alarm.minor.dark,
+                  theme.palette.mode === "dark" ? 0.2 : 0.1
+                ) +
+                " 0%, " +
+                theme.palette.alarm.minor.dark +
+                " 100%)",
             };
-          } else if (pvs[pv].severity === 2) {
+          }  else if (pvs[pv].severity === 2) {
             textFieldSx = {
+              borderColor: theme.palette.mode === "dark" ? grey[700] : grey[300],
+              borderWidth: 1,
+              borderStyle: "solid",
               borderRadius: 2,
               padding: 1,
-              background: red["800"],
+              background:
+                "linear-gradient(45deg," +
+                alpha(
+                  theme.palette.alarm.major.dark,
+                  theme.palette.mode === "dark" ? 0.2 : 0.1
+                ) +
+                " 0%, " +
+                theme.palette.alarm.major.dark +
+                " 100%)",
             };
           } else {
-            textFieldSx = {};
+            textFieldSx = {
+              borderRadius: 2,
+              borderWidth: 1,
+              padding: 1,
+              borderStyle: "solid",
+              borderColor: "rgba(0,0,0,0)",
+            };
           }
         }
 

@@ -2,22 +2,8 @@ import React from "react";
 import { InputAdornment, MenuItem, TextField, useTheme } from "@mui/material";
 import PropTypes from "prop-types";
 import Widget from "../SystemComponents/Widgets/Widget";
-import makeStyles from "@mui/styles/makeStyles";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-    flexWrap: "wrap",
-  },
-  TextField: {
-    width: "100%",
-    fontWeight: 500,
-    borderRadius: 4,
-  },
-}));
 
 const SelectionInputComponent = (props) => {
-  const classes = useStyles();
   const theme = useTheme();
   function handleChange(event) {
     let value = event.target.value;
@@ -61,7 +47,11 @@ const SelectionInputComponent = (props) => {
   return (
     <TextField
       key={props.pvName}
-      className={classes.TextField}
+      sx={{
+        width: "100%",
+        fontWeight: 500,
+        borderRadius: 4,
+      }}
       select={props.initialized}
       disabled={props.disabled}
       value={props.initialized ? props.value : stringValues}

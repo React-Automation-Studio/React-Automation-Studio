@@ -1,57 +1,46 @@
 import React from "react";
-import withStyles from '@mui/styles/withStyles';
 import { IconButton, FormControlLabel } from "@mui/material";
 import { Lens } from "@mui/icons-material";
 import Widget from "../SystemComponents/Widgets/Widget";
-import PropTypes from 'prop-types';
-const styles = (theme) => ({
-  root: {
-    display: "flex",
-    flexWrap: "wrap",
-  },
-  FormControl: {
-    width: "100%",
-    height: "100%",
-    marginTop: "auto",
-    marginBottom: "auto",
-    marginLeft: "auto",
-    marginRight: "auto",
-  },
-});
+import PropTypes from "prop-types";
 
 /* eslint-disable eqeqeq */
-const StyledIconButtonComponent=(props)=> {
- 
+const StyledIconButtonComponent = (props) => {
   /**
    * Write in the PV the oppisite value of the actual one.
    */
-  const handleButtonClick=()=> {
+  const handleButtonClick = () => {
     let value = props.value == 0 ? 1 : 0;
     //console.log(props.value,value)
     props.handleImmediateChange(value);
-  }
+  };
 
   return (
     <FormControlLabel
       key={props.pvName}
-      className={props.classes.FormControl}
+      sx={{
+        width: "100%",
+        height: "100%",
+        marginTop: "auto",
+        marginBottom: "auto",
+        marginLeft: "auto",
+        marginRight: "auto",
+      }}
       disabled={props.disabled}
       label={props.formControlLabel}
       labelPlacement={props.labelPlacement}
       control={
         <IconButton
           size="small"
-          color={
-            props.value == 1 ? props.onColor : props.offColor
-          }
+          color={props.value == 1 ? props.onColor : props.offColor}
           onClick={handleButtonClick}
         >
           {props.children === undefined ? <Lens /> : props.children}
         </IconButton>
       }
     />
-  )
-}
+  );
+};
 
 /* eslint-enable eqeqeq */
 /**
@@ -64,24 +53,32 @@ const StyledIconButtonComponent=(props)=> {
  * https://material-ui.com/api/svg-icon/<br/><br/>
  * A custom Icon can used by importing it in the parent and assigning it as a child <br/><br/>
  */
-const StyledIconButton =(props)=>{
-    return (
-      <Widget {...props} component={StyledIconButtonComponent} usePvMinMax={false} usePvPrecision={false} min={undefined} max={undefined} prec={undefined}/>
-    )
-  }
+const StyledIconButton = (props) => {
+  return (
+    <Widget
+      {...props}
+      component={StyledIconButtonComponent}
+      usePvMinMax={false}
+      usePvPrecision={false}
+      min={undefined}
+      max={undefined}
+      prec={undefined}
+    />
+  );
+};
 
 StyledIconButton.propTypes = {
   /** Name of the process variable,  eg. '$(device):test$(id)'*/
   pv: PropTypes.string.isRequired,
   /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
   macros: PropTypes.object,
- 
+
   /** local variable initialization value*/
   initialLocalVariableValue: PropTypes.string,
-   /** If defined, then the DataConnection debugging information will be displayed*/
-   debug: PropTypes.bool,
-    /** label placement*/
-  labelPlacement:PropTypes.oneOf(['start', 'top','bottom','end']),
+  /** If defined, then the DataConnection debugging information will be displayed*/
+  debug: PropTypes.bool,
+  /** label placement*/
+  labelPlacement: PropTypes.oneOf(["start", "top", "bottom", "end"]),
   /** Custom label to be used, if  `usePvLabel` is not defined. */
   label: PropTypes.string,
   /**
@@ -105,23 +102,22 @@ StyledIconButton.propTypes = {
   /**
    * Tooltip Text
    */
-  tooltip:PropTypes.string,
+  tooltip: PropTypes.string,
   /**
    * Directive to show the tooltip
    */
-  showTooltip:PropTypes.bool,
+  showTooltip: PropTypes.bool,
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-  tooltipProps:PropTypes.object,
+  tooltipProps: PropTypes.object,
 };
 
 StyledIconButton.defaultProps = {
-  onColor:'primary',
-  offColor:'default',
+  onColor: "primary",
+  offColor: "default",
   debug: false,
-  showTooltip:false
+  showTooltip: false,
+};
 
-}
-
-export default  withStyles(styles, { withTheme: true })(StyledIconButton);
+export default StyledIconButton;

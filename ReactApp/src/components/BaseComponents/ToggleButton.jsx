@@ -1,31 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { Button, FormControlLabel } from "@mui/material";
 import PropTypes from "prop-types";
-import {isMobile,isTablet} from 'react-device-detect';
+import { isMobile, isTablet } from "react-device-detect";
 import Widget from "../SystemComponents/Widgets/Widget";
-import makeStyles from "@mui/styles/makeStyles";
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-    flexWrap: "wrap",
-  },
-  FormControl: {
-    width: "100%",
-    height: "100%",
-    marginTop: "auto",
-    marginBottom: "auto",
-    marginLeft: "auto",
-    marginRight: "auto",
-  },
-  Button: {
-    width: "100%",
-    height: "100%",
-    marginTop: "auto",
-    marginBottom: "auto",
-    marginLeft: "auto",
-    marginRight: "auto",
-  },
-}));
 
 /* eslint-disable eqeqeq */
 const ToggleButtonComponent = (props) => {
@@ -36,18 +13,18 @@ const ToggleButtonComponent = (props) => {
     }
     setclicked(false);
     props.handleImmediateChange(0);
-  }
+  };
   const handleMouseUp = () => {
     if (props.debug) {
       console.log("mouseUp");
     }
     setTimeout(turnOff, 100);
-  }
+  };
   const handleButtonClick = () => {
     let value = props.value == 0 ? 1 : 0;
     props.handleImmediateChange(value);
     window.navigator.vibrate(1);
-  }
+  };
   const handleMouseDown = () => {
     if (props.debug) {
       console.log("mouseDown");
@@ -55,7 +32,7 @@ const ToggleButtonComponent = (props) => {
 
     setclicked(false);
     props.handleImmediateChange(1);
-  }
+  };
   const handlePointerLeave = () => {
     if (props.debug) {
       console.log("mouseLeave");
@@ -63,46 +40,57 @@ const ToggleButtonComponent = (props) => {
     if (clicked) {
       setTimeout(turnOff, 100);
     }
-  }
+  };
 
-  const classes =useStyles();
   const { value } = props;
   let momentary = props.momentary !== undefined ? props.momentary : false;
   let text;
-  if (props.initialized){
-    text=props.enumStrs[value == 1 ? 1 : 0]
-  }
-  else{
-    text="Disconnected";
+  if (props.initialized) {
+    text = props.enumStrs[value == 1 ? 1 : 0];
+  } else {
+    text = "Disconnected";
   }
 
   return (
     <FormControlLabel
       key={props.pvName}
-      className={classes.FormControl}
+      sx={{
+        width: "100%",
+        height: "100%",
+        marginTop: "auto",
+        marginBottom: "auto",
+        marginLeft: "auto",
+        marginRight: "auto",
+      }}
       disabled={props.disabled}
       label={props.formControlLabel}
       labelPlacement={props.labelPlacement}
       control={
         <Button
-          className={classes.Button}
+          sx={{
+            width: "100%",
+            height: "100%",
+            marginTop: "auto",
+            marginBottom: "auto",
+            marginLeft: "auto",
+            marginRight: "auto",
+          }}
           fullWidth={true}
           variant="contained"
           disabled={props.disabled}
           color={value == 1 ? props.onColor : props.offColor}
-      
           onClick={momentary ? undefined : handleButtonClick}
           onPointerUp={momentary ? handleMouseUp : undefined}
           onPointerDown={momentary ? handleMouseDown : undefined}
           onPointerLeave={momentary ? handlePointerLeave : undefined}
           {...props.muiButtonProps}
-        > 
+        >
           {text}
         </Button>
       }
     />
-  )
-}
+  );
+};
 
 /**
  * The ToggleButton Component is a wrapper on the Material-UI Button component. The ToggleButton will ouput a value of
@@ -118,22 +106,29 @@ const ToggleButtonComponent = (props) => {
 const ToggleButton = (props) => {
   let momentary = props.momentary !== undefined ? props.momentary : false;
   let disableContextMenu;
-  
-  if (isMobile||isTablet){
-    if(momentary===true){
-      disableContextMenu=true;
+
+  if (isMobile || isTablet) {
+    if (momentary === true) {
+      disableContextMenu = true;
+    } else {
+      disableContextMenu = props.disableContextMenu;
     }
-    else{
-      disableContextMenu=props.disableContextMenu;
-    }
-  }
-  else{
-    disableContextMenu=props.disableContextMenu;
+  } else {
+    disableContextMenu = props.disableContextMenu;
   }
   return (
-    <Widget {...props} component={ToggleButtonComponent} disableContextMenu={disableContextMenu} usePvMinMax={false} usePvPrecision={false} min={undefined} max={undefined} prec={undefined} />
-  )
-}
+    <Widget
+      {...props}
+      component={ToggleButtonComponent}
+      disableContextMenu={disableContextMenu}
+      usePvMinMax={false}
+      usePvPrecision={false}
+      min={undefined}
+      max={undefined}
+      prec={undefined}
+    />
+  );
+};
 
 /* eslint-disable eqeqeq */
 /**
@@ -195,12 +190,12 @@ ToggleButton.propTypes = {
   /** Name of the process variable,  eg. '$(device):test$(id)'*/
   pv: PropTypes.string,
   /** Any of the MUI Button Props can applied by defining them as an object
-   * 
+   *
    */
   muiButtonProps: PropTypes.object,
   /**
-  * Tooltip Text
-  */
+   * Tooltip Text
+   */
   tooltip: PropTypes.string,
   /**
    * Directive to show the tooltip
@@ -210,9 +205,9 @@ ToggleButton.propTypes = {
 
 ToggleButton.defaultProps = {
   debug: false,
-  labelPlacement: 'top',
+  labelPlacement: "top",
   usePvLabel: false,
-  showTooltip:false
+  showTooltip: false,
 };
 
 export default ToggleButton;

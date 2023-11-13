@@ -1,34 +1,15 @@
 import React from "react";
-import withStyles from '@mui/styles/withStyles';
 import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import PropTypes from "prop-types";
 import Widget from "../SystemComponents/Widgets/Widget";
+import { useTheme } from "@mui/material";
 
-const styles = (theme) => ({
-  root: {
-    backgroundColor: theme.palette.background.paper,
-    borderRadius: 4,
-    border: 1,
-  },
-  FormControl: {
-    width: "100%",
-    height: "100%",
-    marginTop: "auto",
-    marginBottom: "auto",
-    marginLeft: "auto",
-    marginRight: "auto",
-    
-  },
-  RadioGroup:{
-    padding:theme.spacing(1)
-  }
-});
-
-const RadioButtonGroupComponent=(props)=>{
-  const handleChange=(event)=> {
+const RadioButtonGroupComponent = (props) => {
+  const theme=useTheme();
+  const handleChange = (event) => {
     let value = event.target.value;
     props.handleImmediateChange(value);
-  }
+  };
   let radioButtons = props.enumStrs.map((item, index) => (
     <FormControlLabel
       key={item}
@@ -42,18 +23,30 @@ const RadioButtonGroupComponent=(props)=>{
   return (
     <FormControlLabel
       key={props.pvName}
-      className={props.classes.formControl}
+      sx={{
+        width: "100%",
+        height: "100%",
+        marginTop: "auto",
+        marginBottom: "auto",
+        marginLeft: "auto",
+        marginRight: "auto",
+      }}
       disabled={props.disabled}
       label={props.formControlLabel}
       labelPlacement={props.labelPlacement}
       control={
-        <RadioGroup className={props.classes.RadioGroup} value={props.value} onChange={handleChange} {...props.muiRadioGroupProps}>
+        <RadioGroup
+          sx={{ padding: theme.spacing(1) }}
+          value={props.value}
+          onChange={handleChange}
+          {...props.muiRadioGroupProps}
+        >
           {radioButtons}
         </RadioGroup>
       }
     />
   );
-}
+};
 
 /**
  * The RadioButtonGroup Component is a wrapper on the Material-UI List component.
@@ -66,14 +59,23 @@ const RadioButtonGroupComponent=(props)=>{
  */
 const RadioButtonGroup = (props) => {
   return (
-    <Widget {...props} useStringValue={true} component={RadioButtonGroupComponent} usePvMinMax={false} usePvPrecision={false} min={undefined} max={undefined} prec={undefined}/>
-  )
-}
+    <Widget
+      {...props}
+      useStringValue={true}
+      component={RadioButtonGroupComponent}
+      usePvMinMax={false}
+      usePvPrecision={false}
+      min={undefined}
+      max={undefined}
+      prec={undefined}
+    />
+  );
+};
 
 /**
-  * Specific props type and default values for this widgets.
-  * They extends the ones provided for a generic widget.
-  */
+ * Specific props type and default values for this widgets.
+ * They extends the ones provided for a generic widget.
+ */
 RadioButtonGroup.propTypes = {
   /**
    * If defined, this array of strings overrides the default EPICS MBBI/O
@@ -91,7 +93,7 @@ RadioButtonGroup.propTypes = {
   /** If defined, then the DataConnection debugging information will be displayed*/
   debug: PropTypes.bool,
   /** label placement*/
-  labelPlacement: PropTypes.oneOf(['start', 'top', 'bottom', 'end']),
+  labelPlacement: PropTypes.oneOf(["start", "top", "bottom", "end"]),
 
   /** local variable initialization value*/
   initialLocalVariableValue: PropTypes.string,
@@ -106,7 +108,7 @@ RadioButtonGroup.propTypes = {
    */
   labelPv: PropTypes.string,
   /** Any of the MUI RadioGroup Props can applied by defining them as an object
-   * 
+   *
    */
   muiRadioGroupProps: PropTypes.object,
   /**
@@ -128,9 +130,9 @@ RadioButtonGroup.propTypes = {
 };
 
 RadioButtonGroup.defaultProps = {
-  labelPlacement: 'top',
-  bitLabelPlacement: 'end',
-  showTooltip: false
+  labelPlacement: "top",
+  bitLabelPlacement: "end",
+  showTooltip: false,
 };
 
-export default withStyles(styles, { withTheme: true })(RadioButtonGroup);
+export default RadioButtonGroup;

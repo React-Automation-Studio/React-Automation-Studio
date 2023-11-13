@@ -3,26 +3,9 @@ import { FormControlLabel } from "@mui/material";
 import MuiSwitch from "@mui/material/Switch";
 import Widget from "../SystemComponents/Widgets/Widget";
 import PropTypes from "prop-types";
-import makeStyles from "@mui/styles/makeStyles";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-    flexWrap: "wrap",
-  },
-  FormControl: {
-    width: "100%",
-    height: "100%",
-    marginTop: "auto",
-    marginBottom: "auto",
-    marginLeft: "auto",
-    marginRight: "auto",
-  },
-}));
 
 /* eslint-disable eqeqeq */
 const SwitchInternalComponent = (props) => {
-  const classes = useStyles();
   /**
    * Save switch state.
    * @param {Event} event
@@ -35,7 +18,14 @@ const SwitchInternalComponent = (props) => {
   return (
     <FormControlLabel
       key={props.pvName}
-      className={classes.FormControl}
+      sx={{
+        width: "100%",
+        height: "100%",
+        marginTop: "auto",
+        marginBottom: "auto",
+        marginLeft: "auto",
+        marginRight: "auto",
+      }}
       disabled={props.disabled}
       label={props.formControlLabel}
       labelPlacement={props.labelPlacement}

@@ -1,6 +1,6 @@
 import React, { Children, cloneElement, useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { FormControlLabel,useTheme } from "@mui/material";
+import { FormControlLabel, useTheme } from "@mui/material";
 import widgetProps from "../SystemComponents/Utils/widgetProps";
 
 /**
@@ -35,7 +35,7 @@ function ArrayContainer(props) {
     maxItemsCount,
     itemMinWidth,
     spacing,
-    showIndices
+    showIndices,
   } = props;
   const theme = useTheme();
   const [startIdx, setStartIdx] = useState(0);
@@ -109,7 +109,7 @@ function ArrayContainer(props) {
 
   const recreateSingleChild = (index) => {
     let additionalProps = {};
-    
+
     if (registers !== undefined && Array.isArray(registers)) {
       additionalProps["index"] = registers[index];
     } else {
@@ -121,17 +121,24 @@ function ArrayContainer(props) {
       registersLabel[index]
     ) {
       additionalProps["label"] = registersLabel[index].toString();
-    }else if(showIndices){
+    } else if (showIndices) {
       additionalProps["label"] = index.toString();
     }
 
     return (
-      <div key={index.toString()} 
-      style={{
-        padding: theme.spacing(spacing),
-        display: direction === "horizontal"?"inline-block":undefined,
-        width:  direction === "horizontal"?Math.max(parseFloat(100 / numVisibleItems).toFixed(2), itemMinWidth) + "%":undefined,
-      }}
+      <div
+        key={index.toString()}
+        style={{
+          padding: theme.spacing(spacing),
+          display: direction === "horizontal" ? "inline-block" : undefined,
+          width:
+            direction === "horizontal"
+              ? Math.max(
+                  parseFloat(100 / numVisibleItems).toFixed(2),
+                  itemMinWidth
+                ) + "%"
+              : undefined,
+        }}
       >
         {Children.map(props.children, (child) =>
           cloneElement(child, additionalProps)
@@ -224,10 +231,10 @@ ArrayContainer.propTypes = {
    * or a subset of them.
    */
   registersLabel: PropTypes.arrayOf(PropTypes.string),
-   /**
+  /**
    * Directive to use the array indices as the labels, unless the registersLabel prop is defined
    */
-   showIndices: PropTypes.bool,
+  showIndices: PropTypes.bool,
   /**
    * Directive to display array elements horizontally or vertically aligned.
    */
@@ -235,7 +242,7 @@ ArrayContainer.propTypes = {
   /**
    * Min space width, in percentage, an item can occupy.
    */
-  
+
   itemMinWidth: (props, propName, componentName) => {
     if (!(props[propName] >= 0 && props[propName] <= 100)) {
       return new Error(
@@ -262,7 +269,7 @@ ArrayContainer.defaultProps = {
   labelPlacement: "top",
   itemMinWidth: 2,
   spacing: 1,
-  showIndices: true
+  showIndices: true,
 };
 
 export default ArrayContainer;

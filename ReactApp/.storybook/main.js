@@ -5,7 +5,7 @@ import { mergeConfig } from 'vite';
 export default {
   // Replace your-framework with the framework you are using (e.g., react-vite, vue3-vite)
   framework: '@storybook/react-vite',
-  stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
+  stories: ['../src/docs/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)','../src/components/**/*.mdx',],
   addons: [
     "@storybook/addon-links",
     "@storybook/addon-essentials",

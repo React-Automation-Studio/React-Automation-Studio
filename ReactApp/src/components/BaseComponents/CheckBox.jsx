@@ -1,40 +1,30 @@
 import React from "react";
-import withStyles from '@mui/styles/withStyles';
 import { Checkbox as MuiCheckBox, FormControlLabel } from "@mui/material";
 import Widget from "../SystemComponents/Widgets/Widget";
-import PropTypes from 'prop-types';
-
-const styles = (theme) => ({
-  root: {
-    display: "flex",
-    flexWrap: "wrap",
-  },
-  FormControl: {
-    width: "100%",
-    height: "100%",
-    marginTop: "auto",
-    marginBottom: "auto",
-    marginLeft: "auto",
-    marginRight: "auto",
-  },
-});
-
+import PropTypes from "prop-types";
 
 const CheckBoxComponent = (props) => {
   /**
    * Send checkbox value to the PV.
    * @param {Event} event
    */
-  const handleButtonChange=(event)=> {
+  const handleButtonChange = (event) => {
     let value = event.target.checked ? 1 : 0;
     props.handleImmediateChange(value);
-  }
+  };
 
   return (
     /* eslint-disable eqeqeq */
     <FormControlLabel
       key={props.pvName}
-      className={props.classes.FormControl}
+      sx={{
+        width: "100%",
+        height: "100%",
+        marginTop: "auto",
+        marginBottom: "auto",
+        marginLeft: "auto",
+        marginRight: "auto",
+      }}
       disabled={props.disabled}
       label={props.formControlLabel}
       labelPlacement={props.labelPlacement}
@@ -49,7 +39,7 @@ const CheckBoxComponent = (props) => {
     />
     /* eslint-enable eqeqeq */
   );
-}
+};
 
 /**
  * The CheckBox component is a wrapper on a Material-UI CheckBox component.
@@ -57,9 +47,17 @@ const CheckBoxComponent = (props) => {
  */
 const CheckBox = (props) => {
   return (
-    <Widget {...props} component={CheckBoxComponent} usePvMinMax={false} usePvPrecision={false} min={undefined} max={undefined} prec={undefined}/>
-  )
-}
+    <Widget
+      {...props}
+      component={CheckBoxComponent}
+      usePvMinMax={false}
+      usePvPrecision={false}
+      min={undefined}
+      max={undefined}
+      prec={undefined}
+    />
+  );
+};
 
 CheckBox.propTypes = {
   /** Name of the process variable,  eg. '$(device):test$(id)'*/
@@ -72,7 +70,7 @@ CheckBox.propTypes = {
   /** If defined, then the DataConnection debugging information will be displayed*/
   debug: PropTypes.bool,
   /** label placement*/
-  labelPlacement: PropTypes.oneOf(['start', 'top', 'bottom', 'end']),
+  labelPlacement: PropTypes.oneOf(["start", "top", "bottom", "end"]),
   /** Custom label to be used, if  `usePvLabel` is not defined. */
   label: PropTypes.string,
   /**
@@ -85,32 +83,32 @@ CheckBox.propTypes = {
    * If not defined it uses the custom label as defined by the label prop.
    */
   usePvLabel: PropTypes.bool,
-   /**
-  * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
-  */
+  /**
+   * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
+   */
   labelPv: PropTypes.string,
   /** Any of the MUI Checkbox Props can applied by defining them as an object
-   * 
+   *
    */
   muiCheckBoxProps: PropTypes.object,
   /**
    * Tooltip Text
    */
-  tooltip:PropTypes.string,
+  tooltip: PropTypes.string,
   /**
    * Directive to show the tooltip
    */
-  showTooltip:PropTypes.bool,
+  showTooltip: PropTypes.bool,
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-  tooltipProps:PropTypes.object,
-}
+  tooltipProps: PropTypes.object,
+};
 
 CheckBox.defaultProps = {
-  onColor: 'primary',
+  onColor: "primary",
   debug: false,
-  showTooltip:false
-}
+  showTooltip: false,
+};
 
-export default withStyles(styles, { withTheme: true })(CheckBox);
+export default CheckBox;

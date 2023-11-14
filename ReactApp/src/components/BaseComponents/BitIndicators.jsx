@@ -1,52 +1,34 @@
 import React from "react";
-import withStyles from '@mui/styles/withStyles';
-import { Grid, FormControlLabel, SvgIcon } from "@mui/material";
+import withStyles from "@mui/styles/withStyles";
+import { Grid, FormControlLabel, SvgIcon, useTheme } from "@mui/material";
 import { Lens } from "@mui/icons-material";
 import PropTypes from "prop-types";
 import Widget from "../SystemComponents/Widgets/Widget";
 
-const styles = (theme) => ({
-  root: {
-    display: "flex",
-    flexWrap: "wrap",
-  },
-  FormControl: {
-    marginTop: "auto",
-    marginBottom: "auto",
-    marginLeft: "auto",
-    marginRight: "auto",
-  },
-});
-
 const BitIndicatorsComponent = (props) => {
-  let onColor = props.theme.palette.primary.main;
-  let offColor = props.theme.palette.grey[300];
-  if (typeof props.onColor !== 'undefined') {
-    if (props.onColor === 'primary') {
-      onColor = props.theme.palette.primary.main;
-    }
-    else if (props.onColor === 'secondary') {
-      onColor = props.theme.palette.secondary.main;
-    }
-    else if (props.onColor === 'default') {
-      onColor = props.theme.palette.grey[300];
-    }
-    else {
+  const theme = useTheme();
+  let onColor = theme.palette.primary.main;
+  let offColor = theme.palette.grey[300];
+  if (typeof props.onColor !== "undefined") {
+    if (props.onColor === "primary") {
+      onColor = theme.palette.primary.main;
+    } else if (props.onColor === "secondary") {
+      onColor = theme.palette.secondary.main;
+    } else if (props.onColor === "default") {
+      onColor = theme.palette.grey[300];
+    } else {
       onColor = props.onColor;
     }
   }
 
-  if (typeof props.offColor !== 'undefined') {
-    if (props.offColor === 'primary') {
-      offColor = props.theme.palette.primary.main;
-    }
-    else if (props.offColor === 'secondary') {
-      offColor = props.theme.palette.secondary.main;
-    }
-    else if (props.offColor === 'default') {
-      offColor = props.theme.palette.grey[300];
-    }
-    else {
+  if (typeof props.offColor !== "undefined") {
+    if (props.offColor === "primary") {
+      offColor = theme.palette.primary.main;
+    } else if (props.offColor === "secondary") {
+      offColor = theme.palette.secondary.main;
+    } else if (props.offColor === "default") {
+      offColor = theme.palette.grey[300];
+    } else {
       offColor = props.offColor;
     }
   }
@@ -59,29 +41,24 @@ const BitIndicatorsComponent = (props) => {
     props.bitLabelPlacement !== undefined
       ? props.bitLabelPlacement
       : props.horizontal
-        ? "top"
-        : "end";
+      ? "top"
+      : "end";
   const place = bitLabelPos.charAt(0).toUpperCase() + bitLabelPos.slice(1);
 
   for (let n = 0; n < props.numberOfBits; n++) {
-    bitArray.push(
-      props.initialized ? props.value & Math.pow(2, n) : 0
-    );
+    bitArray.push(props.initialized ? props.value & Math.pow(2, n) : 0);
     if (props.usePvBitLabels === false) {
       bitLabels.push(
-        props.bitLabels === undefined
-          ? "Bit " + n
-          : props.bitLabels[n]
+        props.bitLabels === undefined ? "Bit " + n : props.bitLabels[n]
       );
-    }
-    else {
-      if (props.enumStrs!==null) {
+    } else {
+      if (props.enumStrs !== null) {
         if (n < props.enumStrs.length) {
           bitLabels[n] = props.enumStrs[n];
         }
       }
     }
-    bitStyles.push({ ["margin" + place]: props.theme.spacing(1) });
+    bitStyles.push({ ["margin" + place]: theme.spacing(1) });
   }
   if (props.reverseBits) {
     bitLabels = bitLabels.reverse();
@@ -90,26 +67,31 @@ const BitIndicatorsComponent = (props) => {
   }
 
   let bits = bitArray.map((value, index) => {
-    // eslint-disable-next-line eqeqeq 
-    let color = !props.initialized ? props.theme.palette.grey[300] : value != 0 ? onColor : offColor;
+    // eslint-disable-next-line eqeqeq
+    let color = !props.initialized
+      ? theme.palette.grey[300]
+      : value != 0
+      ? onColor
+      : offColor;
     return (
-      <Grid
-        item
-        key={index.toString()}
-        xs={!props.horizontal ? 12 : undefined}
-      >
+      <Grid item key={index.toString()} xs={!props.horizontal ? 12 : undefined}>
         <FormControlLabel
-          className={props.classes.FormControl}
+          sx={{
+            marginTop: "auto",
+            marginBottom: "auto",
+            marginLeft: "auto",
+            marginRight: "auto",
+          }}
           disabled={props.disabled}
           label={bitLabels[index]}
           labelPlacement={bitLabelPos}
           control={
-            <SvgIcon size="small" style={{ ...bitStyles[index], color: color }} {...props.muiSvgIconProps}>
-              {props.children === undefined ? (
-                <Lens />
-              ) : (
-                  props.children
-                )}
+            <SvgIcon
+              size="small"
+              style={{ ...bitStyles[index], color: color }}
+              {...props.muiSvgIconProps}
+            >
+              {props.children === undefined ? <Lens /> : props.children}
             </SvgIcon>
           }
         />
@@ -126,13 +108,19 @@ const BitIndicatorsComponent = (props) => {
       direction={props.horizontal ? "row" : "column"}
     >
       <Grid key={props.label} item xs={12}>
-        {props.initialized ? props.label : <span>{props.disconnectedIcon}{" " + props.pvName}</span>}
+        {props.initialized ? (
+          props.label
+        ) : (
+          <span>
+            {props.disconnectedIcon}
+            {" " + props.pvName}
+          </span>
+        )}
       </Grid>
       {bits}
     </Grid>
   );
-}
-
+};
 
 /**
  * The BitIndicators Component is a wrapper on multiple SvgIcon components.
@@ -145,10 +133,8 @@ const BitIndicatorsComponent = (props) => {
  * A custom Icon can used by importing it in the parent and assigning it as a child <br/><br/>
  */
 const BitIndicators = (props) => {
-  return (
-    <Widget {...props} component={BitIndicatorsComponent} />
-  )
-}
+  return <Widget {...props} component={BitIndicatorsComponent} />;
+};
 
 BitIndicators.propTypes = {
   /** Name of the process variable,  eg. '$(device):test$(id)'*/
@@ -161,7 +147,7 @@ BitIndicators.propTypes = {
   /** If defined, then the Data initialized debugging information will be displayed*/
   debug: PropTypes.bool,
   /** label placement*/
-  labelPlacement: PropTypes.oneOf(['start', 'top', 'bottom', 'end']),
+  labelPlacement: PropTypes.oneOf(["start", "top", "bottom", "end"]),
   /** Custom label to be used, if  `usePvLabel` is not defined. */
   label: PropTypes.string,
   // Array of custom bit labels.
@@ -197,9 +183,9 @@ BitIndicators.defaultProps = {
   numberOfBits: 8,
   horizontal: false,
   reverseBits: false,
-  onColor: 'primary',
-  offColor: 'default',
-  usePvBitLabels: false
+  onColor: "primary",
+  offColor: "default",
+  usePvBitLabels: false,
 };
 
-export default withStyles(styles, { withTheme: true })(BitIndicators);
+export default BitIndicators;

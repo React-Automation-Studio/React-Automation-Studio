@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 
-import withStyles from "@mui/styles/withStyles";
+
 
 import PropTypes from "prop-types";
 
@@ -8,41 +8,20 @@ import { v4 as uuidv4 } from "uuid";
 
 import Widget from "../SystemComponents/Widgets/Widget";
 
-import { FormControlLabel } from "@mui/material";
-
+import { FormControlLabel, useTheme } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import { create, all } from "mathjs";
 const config = {};
 const math = create(all, config);
 /* eslint-disable eqeqeq */
 
-const styles = (theme) => ({
-  textTicks: {
-    fill:
-      theme.palette.mode === "dark"
-        ? theme.palette.grey["300"]
-        : theme.palette.grey["500"],
-  },
-  textValue: {
-    fill:
-      theme.palette.mode === "dark"
-        ? theme.palette.grey["300"]
-        : theme.palette.grey["500"],
-  },
 
-  root: {
-    display: "flex",
-    flexWrap: "wrap",
-  },
-  FormControl: {
-    width: "100%",
-    height: "100%",
-    marginTop: "auto",
-    marginBottom: "auto",
-    marginLeft: "auto",
-    marginRight: "auto",
-  },
-});
-
+const TextTicks = styled("text")(({ theme }) => ({
+  fill:
+    theme.palette.mode === "dark"
+      ? theme.palette.grey["300"]
+      : theme.palette.grey["500"],
+}));
 function getTickValues(
   props,
   min,
@@ -69,8 +48,7 @@ function getTickValues(
         }
         ticks.push(
           <g key={i}>
-            <text
-              className={classes.textTicks}
+            <TextTicks
               x={(i * (x2 - x0 + xOffset)) / (numberOfTicks - 1) + xOffset}
               y={y2 + yOffset}
               textAnchor={
@@ -78,7 +56,7 @@ function getTickValues(
               }
             >
               {tickValue + props.units}
-            </text>
+            </TextTicks>
           </g>
         );
       }
@@ -88,15 +66,14 @@ function getTickValues(
   if (props.showValue === true) {
     ticks.push(
       <g key={(i = i + 1)}>
-        <text
-          className={classes.textTicks}
+         <TextTicks
           x={xOffset}
           y={yOffset - 4}
           textAnchor={"start"}
         >
           {typeof props.disabled === "undefined" ? value + props.units : ""}
           {}
-        </text>
+        </TextTicks>
       </g>
     );
   }
@@ -105,8 +82,8 @@ function getTickValues(
 }
 
 const ProgressBarComponent = (props) => {
+  const theme = useTheme();
   const gradientId = uuidv4();
-
   const value = props.value;
   const min = props.min;
   const max = props.max;
@@ -144,16 +121,16 @@ const ProgressBarComponent = (props) => {
         <stop
           offset="0%"
           stopColor={
-            props.theme.palette.mode === "dark"
-              ? props.theme.palette.grey["300"]
-              : props.theme.palette.grey["200"]
+            theme.palette.mode === "dark"
+              ? theme.palette.grey["300"]
+              : theme.palette.grey["200"]
           }
         />
         <stop
           offset="100%"
           stopColor={
             typeof props.disabled === "undefined"
-              ? props.theme.palette.grey["200"]
+              ? theme.palette.grey["200"]
               : "default"
           }
         />
@@ -166,16 +143,16 @@ const ProgressBarComponent = (props) => {
           offset="0%"
           stopColor={
             typeof props.disabled === "undefined"
-              ? props.theme.palette.grey["200"]
+              ? theme.palette.grey["200"]
               : "default"
           }
         />
         <stop
           offset="100%"
           stopColor={
-            props.theme.palette.mode === "dark"
-              ? props.theme.palette.grey["300"]
-              : props.theme.palette.grey["200"]
+            theme.palette.mode === "dark"
+              ? theme.palette.grey["300"]
+              : theme.palette.grey["200"]
           }
         />
       </linearGradient>
@@ -187,9 +164,9 @@ const ProgressBarComponent = (props) => {
         <stop
           offset="0%"
           stopColor={
-            props.theme.palette.mode === "dark"
-              ? props.theme.palette.grey["300"]
-              : props.theme.palette.grey["200"]
+            theme.palette.mode === "dark"
+              ? theme.palette.grey["300"]
+              : theme.palette.grey["200"]
           }
         />
         <stop
@@ -205,9 +182,9 @@ const ProgressBarComponent = (props) => {
         <stop
           offset="100%"
           stopColor={
-            props.theme.palette.mode === "dark"
-              ? props.theme.palette.grey["300"]
-              : props.theme.palette.grey["200"]
+            theme.palette.mode === "dark"
+              ? theme.palette.grey["300"]
+              : theme.palette.grey["200"]
           }
         />
       </linearGradient>
@@ -282,6 +259,7 @@ ProgressBarComponent.propTypes = {
 };
 
 const ProgressBarInternalComponent = (props) => {
+  const theme = useTheme();
   const ref = useRef(null);
   const [width, setWidth] = useState(null);
   const [height, setHeight] = useState(null);
@@ -332,23 +310,30 @@ const ProgressBarInternalComponent = (props) => {
     min = 0;
     max = 1000;
   }
-  let color = props.theme.palette.primary.main;
+  let color = theme.palette.primary.main;
 
   if (typeof props.alarmSensitive !== "undefined") {
     if (props.alarmSensitive == true) {
       if (props.alarmSeverity == 1) {
-        color = props.theme.palette.alarm.minor.dark;
+        color = theme.palette.alarm.minor.dark;
       } else if (props.alarmSeverity == 2) {
-        color = props.theme.palette.alarm.major.dark;
+        color = theme.palette.alarm.major.dark;
       } else {
-        color = props.theme.palette.primary.main;
+        color = theme.palette.primary.main;
       }
     }
   }
   return (
     <FormControlLabel
       key={props.pvName + props.initialized}
-      className={classes.FormControl}
+      sx={{
+        width: "100%",
+        height: "100%",
+        marginTop: "auto",
+        marginBottom: "auto",
+        marginLeft: "auto",
+        marginRight: "auto",
+      }}
       label={props.formControlLabel}
       labelPlacement={props.labelPlacement}
       control={
@@ -373,7 +358,9 @@ const ProgressBarInternalComponent = (props) => {
     />
   );
 };
-
+/**
+ * The Progress Bar is an React-Automation-studio component useful fo displaying levels or progress.
+ */
 const ProgressBar = (props) => {
   return <Widget {...props} component={ProgressBarInternalComponent} />;
 };
@@ -529,4 +516,4 @@ ProgressBar.defaultProps = {
   showTooltip: false,
 };
 
-export default withStyles(styles, { withTheme: true })(ProgressBar);
+export default ProgressBar;

@@ -1,9 +1,7 @@
 import React from "react";
 import { Typography, Paper, FormControlLabel } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
 import PropTypes from "prop-types";
 import Widget from "../SystemComponents/Widgets/Widget";
-
 const normalizeColors = (theme, color) => {
   if (color === "primary") {
     return theme.palette.primary.main;
@@ -14,50 +12,6 @@ const normalizeColors = (theme, color) => {
   }
   return color;
 };
-
-const useStyles = makeStyles((theme) => ({
-  FormControlLabel: {
-    cursor: "default",
-    width: "100%",
-    height: "100%",
-    marginTop: "auto",
-    marginBottom: "auto",
-    marginLeft: "auto",
-    marginRight: "auto",
-  },
-  Paper: {
-    width: "100%",
-    height: "100%",
-    padding: "0.5em 1em",
-    margin: "0em 0.5em",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    borderRadius: "10em",
-    background: (props) => {
-      if (theme === undefined) return "";
-      if (!props.initialized) return theme.palette.grey[500];
-      if (props.value === undefined) return "";
-      if (props.colors === undefined) return "";
-      let value = props.value;
-      if (
-        props.useStringValue &&
-        props.enumStrs !== undefined &&
-        props.enumStrs !== null
-      ) {
-        value = props.enumStrs.indexOf(props.value);
-      }
-      if (props.colors[value] !== undefined) {
-        return normalizeColors(theme, props.colors[value]);
-      }
-      return normalizeColors(theme, "default");
-    },
-  },
-  Typography: {
-    color: "rgba(0, 0, 0, 0.87)",
-    fontWeight: "500",
-  },
-}));
 
 function LightPanelComponent(props) {
   const {
@@ -83,13 +37,13 @@ function LightPanelComponent(props) {
     };
   }
 
-  const classes = useStyles({
-    value,
-    enumStrs,
-    colors,
-    useStringValue,
-    initialized,
-  });
+  // const classes = useStyles({
+  //   value,
+  //   enumStrs,
+  //   colors,
+  //   useStringValue,
+  //   initialized,
+  // });
 
   /* Try to use customValueStrings if defined */
   let val = value;
@@ -111,12 +65,53 @@ function LightPanelComponent(props) {
       key={props.pvName}
       label={formControlLabel}
       labelPlacement={labelPlacement}
-      className={classes.FormControlLabel}
+      sx={{
+        cursor: "default",
+        width: "100%",
+        height: "100%",
+        marginTop: "auto",
+        marginBottom: "auto",
+        marginLeft: "auto",
+        marginRight: "auto",
+      }}
       disabled={!initialized}
       control={
-        <Paper className={classes.Paper} variant="outlined">
+        <Paper
+          variant="outlined"
+          sx={{
+            width: "100%",
+            height: "100%",
+            padding: "0.5em 1em",
+            margin: "0em 0.5em",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            borderRadius: "10em",
+            background: (theme) => {
+              if (theme === undefined) return "";
+              if (!props.initialized) return theme.palette.grey[500];
+              if (props.value === undefined) return "";
+              if (props.colors === undefined) return "";
+              let value = props.value;
+              if (
+                props.useStringValue &&
+                props.enumStrs !== undefined &&
+                props.enumStrs !== null
+              ) {
+                value = props.enumStrs.indexOf(props.value);
+              }
+              if (props.colors[value] !== undefined) {
+                return normalizeColors(theme, props.colors[value]);
+              }
+              return normalizeColors(theme, "default");
+            },
+          }}
+        >
           <Typography
-            className={classes.Typography}
+            sx={{
+              color: "rgba(0, 0, 0, 0.87)",
+              fontWeight: "500",
+            }}
             align={align}
             variant={variant}
             {...props.muiTypographyProps}

@@ -1,39 +1,16 @@
 import React, { useEffect, useState, useRef } from "react";
-
-import withStyles from "@mui/styles/withStyles";
-
 import PropTypes from "prop-types";
-
 import { v4 as uuidv4 } from "uuid";
 import Widget from "../SystemComponents/Widgets/Widget";
-import { FormControlLabel } from "@mui/material";
+import { FormControlLabel, useTheme } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
-const styles = (theme) => ({
-  textTicks: {
-    fill:
-      theme.palette.mode === "dark"
-        ? theme.palette.grey["300"]
-        : theme.palette.grey["500"],
-  },
-  textValue: {
-    fill:
-      theme.palette.mode === "dark"
-        ? theme.palette.grey["300"]
-        : theme.palette.grey["500"],
-  },
-  root: {
-    display: "flex",
-    flexWrap: "wrap",
-  },
-  FormControl: {
-    width: "100%",
-    height: "100%",
-    marginTop: "auto",
-    marginBottom: "auto",
-    marginLeft: "auto",
-    marginRight: "auto",
-  },
-});
+const TextTicks = styled("text")(({ theme }) => ({
+  fill:
+    theme.palette.mode === "dark"
+      ? theme.palette.grey["300"]
+      : theme.palette.grey["500"],
+}));
 
 function getTickValues(
   props,
@@ -57,8 +34,7 @@ function getTickValues(
         key={i}
         transform={"rotate(" + rotation + " " + (x0 + x1) / 2 + " " + y1 + ")"}
       >
-        <text
-          className={classes.textTicks}
+        <TextTicks
           x={xOffset - radialTextOffset}
           y={y1}
           textAnchor="middle"
@@ -73,7 +49,7 @@ function getTickValues(
           }
         >
           {parseFloat(value).toFixed(0)}
-        </text>
+        </TextTicks>
       </g>
     );
   }
@@ -81,6 +57,7 @@ function getTickValues(
 }
 
 function GaugeComponent(props) {
+  const theme = useTheme();
   const gradientId = uuidv4();
   const { classes } = props;
   const units = props.units;
@@ -105,32 +82,27 @@ function GaugeComponent(props) {
   return (
     <svg width={props.width} height={xOffset + props.width / 2}>
       {
-        <text
-          x={(x0 + x1) / 2}
-          y={y1 + valueOffsetY}
-          textAnchor="middle"
-          className={classes.textValue}
-        >
+        <TextTicks x={(x0 + x1) / 2} y={y1 + valueOffsetY} textAnchor="middle">
           {typeof props.disabled === "undefined"
             ? value.toString() + units
             : ""}
-        </text>
+        </TextTicks>
       }
       <linearGradient id={gradientId}>
         <stop
           offset="0%"
           stopColor={
             typeof props.disabled === "undefined"
-              ? props.theme.palette.primary.main
+              ? theme.palette.primary.main
               : "default"
           }
         />
         <stop
           offset="100%"
           stopColor={
-            props.theme.palette.mode === "dark"
-              ? props.theme.palette.grey["300"]
-              : props.theme.palette.grey["200"]
+            theme.palette.mode === "dark"
+              ? theme.palette.grey["300"]
+              : theme.palette.grey["200"]
           }
         />
       </linearGradient>
@@ -161,7 +133,7 @@ function GaugeComponent(props) {
         }
       />
       <path
-        fill={props.theme.palette.svgComponentSecondary.main}
+        fill={theme.palette.svgComponentSecondary.main}
         transform={
           "rotate(" + needleRotation + " " + (x0 + x1) / 2 + " " + y1 + ")"
         }
@@ -202,7 +174,7 @@ GaugeComponent.propTypes = {
  * The Gauge Component is an Automation-studio component.
  */
 const GaugeInternalComponent = (props) => {
-  const { classes, theme } = props;
+  const theme = useTheme();
   const ref = useRef(null);
   const [width, setWidth] = useState(null);
   useEffect(() => {
@@ -239,13 +211,19 @@ const GaugeInternalComponent = (props) => {
   return (
     <FormControlLabel
       key={props.pvName}
-      className={classes.FormControl}
+      sx={{
+        width: "100%",
+        height: "100%",
+        marginTop: "auto",
+        marginBottom: "auto",
+        marginLeft: "auto",
+        marginRight: "auto",
+      }}
       label={props.formControlLabel}
       labelPlacement={props.labelPlacement}
       control={
         <div ref={ref} style={{ height: "100%", width: "100%" }}>
           <GaugeComponent
-            classes={classes}
             theme={theme}
             width={width}
             min={min}
@@ -260,7 +238,9 @@ const GaugeInternalComponent = (props) => {
     />
   );
 };
-
+/**
+ * The Gauge is an React-Automation-studio component useful for displaying levels or progress.
+ */
 const Gauge = (props) => {
   return <Widget {...props} component={GaugeInternalComponent} />;
 };
@@ -399,4 +379,4 @@ Gauge.defaultProps = {
   showTooltip: false,
 };
 
-export default withStyles(styles, { withTheme: true })(Gauge);
+export default Gauge;

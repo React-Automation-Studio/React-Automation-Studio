@@ -1,33 +1,7 @@
 import React, { Children, cloneElement, useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { FormControlLabel } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
+import { FormControlLabel,useTheme } from "@mui/material";
 import widgetProps from "../SystemComponents/Utils/widgetProps";
-
-const useStyles = makeStyles((theme) => ({
-  item: ({ direction, numVisibleItems, itemMinWidth, spacing }) => {
-    if (direction === "horizontal") {
-      let width = parseFloat(100 / numVisibleItems).toFixed(2);
-      width = Math.max(width, itemMinWidth) + "%";
-      return {
-        display: "inline-block",
-        width: width,
-        padding: theme.spacing(spacing),
-      };
-    } else {
-      return {
-        padding: theme.spacing(spacing),
-      };
-    }
-  },
-  container: {
-    width: "100%",
-  },
-  form: {
-    width: "100%",
-    paddingRight: "20px",
-  },
-}));
 
 /**
  * How can we display waveforms as list of BaseComponents?
@@ -63,6 +37,7 @@ function ArrayContainer(props) {
     spacing,
     showIndices
   } = props;
+  const theme = useTheme();
   const [startIdx, setStartIdx] = useState(0);
   const [items, setItems] = useState([]);
 
@@ -87,13 +62,6 @@ function ArrayContainer(props) {
   ) {
     numVisibleItems = visibleItemsCount;
   }
-
-  const classes = useStyles({
-    direction,
-    numVisibleItems,
-    itemMinWidth,
-    spacing,
-  });
 
   useEffect(() => {
     let newItems = [];
@@ -158,7 +126,13 @@ function ArrayContainer(props) {
     }
 
     return (
-      <div key={index.toString()} className={classes.item}>
+      <div key={index.toString()} 
+      style={{
+        padding: theme.spacing(spacing),
+        display: direction === "horizontal"?"inline-block":undefined,
+        width:  direction === "horizontal"?Math.max(parseFloat(100 / numVisibleItems).toFixed(2), itemMinWidth) + "%":undefined,
+      }}
+      >
         {Children.map(props.children, (child) =>
           cloneElement(child, additionalProps)
         )}
@@ -175,12 +149,17 @@ function ArrayContainer(props) {
 
   return (
     <FormControlLabel
-      className={classes.form}
+      sx={{
+        width: "100%",
+        paddingRight: "20px",
+      }}
       label={label}
       labelPlacement={labelPlacement}
       control={
         <div
-          className={classes.container}
+          style={{
+            width: "100%",
+          }}
           onWheelCapture={handleWheel}
           onClick={(e) => e.preventDefault()}
         >

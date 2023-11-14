@@ -1,12 +1,11 @@
-import React, { useEffect, useState, useRef, useReducer } from 'react'
-import PropTypes from 'prop-types';
-import { useTheme } from '@mui/material/styles';
-import ContextMenu from '../SystemComponents/ContextMenu';
-import PV from '../SystemComponents/PV'
-import Plot from 'react-plotly.js';
-import { replaceMacros } from '../SystemComponents/Utils/macroReplacement';
-import { isMobileOnly } from 'react-device-detect';
-
+import React, { useEffect, useState, useRef, useReducer } from "react";
+import PropTypes from "prop-types";
+import { useTheme } from "@mui/material/styles";
+import ContextMenu from "../SystemComponents/ContextMenu";
+import PV from "../SystemComponents/PV";
+import Plot from "react-plotly.js";
+import { replaceMacros } from "../SystemComponents/Utils/macroReplacement";
+import { isMobileOnly } from "react-device-detect";
 
 const PlotData = (props) => {
   const updateDataReducer = (pvs, newData) => {
@@ -17,7 +16,7 @@ const PlotData = (props) => {
     let { initialized } = newData.pvData;
     let value = initialized ? newData.pvData.value : [];
     if (!Array.isArray(value)) {
-      value = [value]
+      value = [value];
     }
     let newX = [];
     let newY = [];
@@ -28,82 +27,80 @@ const PlotData = (props) => {
 
     if (initialized) {
       if (newPvs[newData.index]) {
-        if (axis === 'y') {
+        if (axis === "y") {
           currentY = value;
-          currentX = newPvs[newData.index].currentX ? newPvs[newData.index].currentX : []
-          oldX = newPvs[newData.index].x ? newPvs[newData.index].x : []
-          oldY = newPvs[newData.index].x ? newPvs[newData.index].y : []
-        }
-        else {
+          currentX = newPvs[newData.index].currentX
+            ? newPvs[newData.index].currentX
+            : [];
+          oldX = newPvs[newData.index].x ? newPvs[newData.index].x : [];
+          oldY = newPvs[newData.index].x ? newPvs[newData.index].y : [];
+        } else {
           currentX = value;
-          currentY = newPvs[newData.index].currentY ? newPvs[newData.index].currentY : []
-          oldX = newPvs[newData.index].y ? newPvs[newData.index].x : []
-          oldY = newPvs[newData.index].y ? newPvs[newData.index].y : []
+          currentY = newPvs[newData.index].currentY
+            ? newPvs[newData.index].currentY
+            : [];
+          oldX = newPvs[newData.index].y ? newPvs[newData.index].x : [];
+          oldY = newPvs[newData.index].y ? newPvs[newData.index].y : [];
         }
-        if (axis === 'y') {
+        if (axis === "y") {
           if (currentX.length === currentY.length) {
-            if ((updateMode === "updateOnXOrYChange") || (updateMode === "updateOnYChange")) {
+            if (
+              updateMode === "updateOnXOrYChange" ||
+              updateMode === "updateOnYChange"
+            ) {
               if (typeof props.maxLength !== "undefined") {
-                newY = oldY.concat(currentY)
-                newX = oldX.concat(currentX)
+                newY = oldY.concat(currentY);
+                newX = oldX.concat(currentX);
                 if (newY.length > props.maxLength) {
-                  newY.splice(0, (newY.length - props.maxLength))
+                  newY.splice(0, newY.length - props.maxLength);
                 }
                 if (newX.length > props.maxLength) {
-                  newX.splice(0, (newX.length - props.maxLength))
+                  newX.splice(0, newX.length - props.maxLength);
                 }
-              }
-              else {
+              } else {
                 newY = currentY;
                 newX = currentX;
               }
-            }
-            else {
+            } else {
               newY = oldY;
               newX = oldX;
             }
+          } else {
+            newY = oldY;
+            newX = oldX;
           }
-          else {
+        } else {
+          if (currentX.length === currentY.length) {
+            if (
+              updateMode === "updateOnXOrYChange" ||
+              updateMode === "updateOnXChange"
+            ) {
+              if (typeof props.maxLength !== "undefined") {
+                newY = oldY.concat(currentY);
+                newX = oldX.concat(currentX);
+                if (newY.length > props.maxLength) {
+                  newY.splice(0, newY.length - props.maxLength);
+                }
+                if (newX.length > props.maxLength) {
+                  newX.splice(0, newX.length - props.maxLength);
+                }
+              } else {
+                newY = currentY;
+                newX = currentX;
+              }
+            } else {
+              newY = oldY;
+              newX = oldX;
+            }
+          } else {
             newY = oldY;
             newX = oldX;
           }
         }
-        else {
-          if (currentX.length === currentY.length) {
-            if ((updateMode === "updateOnXOrYChange") || (updateMode === "updateOnXChange")) {
-              if (typeof props.maxLength !== "undefined") {
-                newY = oldY.concat(currentY)
-                newX = oldX.concat(currentX)
-                if (newY.length > props.maxLength) {
-                  newY.splice(0, (newY.length - props.maxLength))
-                }
-                if (newX.length > props.maxLength) {
-                  newX.splice(0, (newX.length - props.maxLength))
-                }
-
-              }
-              else {
-                newY = currentY;
-                newX = currentX;
-              }
-            }
-            else {
-              newY = oldY;
-              newX = oldX;
-            }
-          }
-          else {
-            newY = oldY;
-            newX = oldX;
-          }
-        }
-      }
-      else {
-        if (axis === 'y') {
+      } else {
+        if (axis === "y") {
           currentY = value;
-
-        }
-        else {
+        } else {
           currentX = value;
         }
       }
@@ -116,76 +113,88 @@ const PlotData = (props) => {
       currentY: currentY,
     };
     return newPvs;
-  }
+  };
 
   const [data, updateData] = useReducer(updateDataReducer, []);
   const updatePolledDataReducer = (oldPvs, newData) => {
     let pvs = [...oldPvs];
     pvs[newData.index] = newData.pvData;
-    return (pvs)
-  }
+    return pvs;
+  };
 
-  const [polledDataX, updatePolledDataX] = useReducer(updatePolledDataReducer, []);
-  const [polledDataY, updatePolledDataY] = useReducer(updatePolledDataReducer, []);
+  const [polledDataX, updatePolledDataX] = useReducer(
+    updatePolledDataReducer,
+    []
+  );
+  const [polledDataY, updatePolledDataY] = useReducer(
+    updatePolledDataReducer,
+    []
+  );
   const polledDataRefX = useRef(polledDataX);
   useEffect(() => {
     polledDataRefX.current = polledDataX;
-  }, [polledDataX])
+  }, [polledDataX]);
   const polledDataRefY = useRef(polledDataY);
   useEffect(() => {
     polledDataRefY.current = polledDataY;
-  }, [polledDataY])
+  }, [polledDataY]);
   const { usePolling, pollingRate } = props;
 
   useEffect(() => {
     let timer;
     const update = () => {
       polledDataRefX.current.forEach((item, index) => {
-        const timestamp=Date.now()/1000;
-        updateData({ index, pvData: {...item,timestamp:timestamp},axis:"x" })
-      })
+        const timestamp = Date.now() / 1000;
+        updateData({
+          index,
+          pvData: { ...item, timestamp: timestamp },
+          axis: "x",
+        });
+      });
       polledDataRefY.current.forEach((item, index) => {
-        const timestamp=Date.now()/1000;
-        updateData({ index, pvData: {...item,timestamp:timestamp},axis:"y" })
-      })
-    }
+        const timestamp = Date.now() / 1000;
+        updateData({
+          index,
+          pvData: { ...item, timestamp: timestamp },
+          axis: "y",
+        });
+      });
+    };
     if (usePolling) {
-      timer = setInterval(update, pollingRate)
+      timer = setInterval(update, pollingRate);
     }
     return () => {
       if (usePolling) {
-        clearInterval(timer)
+        clearInterval(timer);
       }
-    }
-  }, [usePolling, pollingRate])
-
+    };
+  }, [usePolling, pollingRate]);
 
   const contextInfoReducer = (oldPvs, newData) => {
     let pvs = [...oldPvs];
     pvs[newData.index] = newData.pvs[0];
 
-    return (pvs)
-
-  }
+    return pvs;
+  };
   const [contextInfo, updateContextInfo] = useReducer(contextInfoReducer, []);
-  const [delayedData, setDelayedData] = useState([])
-  const [delayedContextInfo, setDelayedContextInfo] = useState([])
+  const [delayedData, setDelayedData] = useState([]);
+  const [delayedContextInfo, setDelayedContextInfo] = useState([]);
   const [trigger, setTrigger] = useState(0);
   const { updateRate } = props;
 
   useEffect(() => {
-    setTimeout(() => setTrigger(prev => prev + 1), parseInt(updateRate))
-    setDelayedData(data)
+    setTimeout(() => setTrigger((prev) => prev + 1), parseInt(updateRate));
+    setDelayedData(data);
     // eslint-disable-next-line  react-hooks/exhaustive-deps
-  }, [trigger, updateRate])
+  }, [trigger, updateRate]);
 
   const [trigger2, setTrigger2] = useState(0);
 
   useEffect(() => {
-    setTimeout(() => setTrigger2(prev => prev + 1), parseInt(1000))
-    setDelayedContextInfo(contextInfo)
+    setTimeout(() => setTrigger2((prev) => prev + 1), parseInt(1000));
+    setDelayedContextInfo(contextInfo);
     // eslint-disable-next-line  react-hooks/exhaustive-deps
-  }, [trigger2])
+  }, [trigger2]);
 
   const pvConnections = () => {
     let pvs = [];
@@ -195,45 +204,57 @@ const PlotData = (props) => {
           key={"x" + index.toString()}
           pv={item}
           macros={props.macros}
-          pvData={(pvData) => props.usePolling ? updatePolledDataX({ index, pvData, axis: "x" }) : updateData({ index, pvData, axis: "x" })}
+          pvData={(pvData) =>
+            props.usePolling
+              ? updatePolledDataX({ index, pvData, axis: "x" })
+              : updateData({ index, pvData, axis: "x" })
+          }
           contextInfo={(pvs) => updateContextInfo({ index, pvs, axis: "x" })}
           makeNewSocketIoConnection={props.makeNewSocketIoConnection}
-        />)
-    })
+        />
+      );
+    });
     props.yPVs.forEach((item, index) => {
       pvs.push(
         <PV
           key={"y" + index.toString()}
           pv={item}
           macros={props.macros}
-          pvData={(pvData) => props.usePolling ? updatePolledDataY({ index, pvData, axis: "y" }) : updateData({ index, pvData, axis: "y" })}
+          pvData={(pvData) =>
+            props.usePolling
+              ? updatePolledDataY({ index, pvData, axis: "y" })
+              : updateData({ index, pvData, axis: "y" })
+          }
           contextInfo={(pvs) => updateContextInfo({ index, pvs, axis: "y" })}
           makeNewSocketIoConnection={props.makeNewSocketIoConnection}
-        />)
-    })
-    return pvs
-  }
+        />
+      );
+    });
+    return pvs;
+  };
   return (
-    <div style={{width:'100%',height:'100%',backgroundColor:'inherit'}}>
+    <div style={{ width: "100%", height: "100%", backgroundColor: "inherit" }}>
       {pvConnections()}
       {props.children({ data: delayedData, contextInfo: delayedContextInfo })}
     </div>
-  )
-}
+  );
+};
 
 /**
  * The GraphXY Component has been updated to Plotly.js scatter and line plot.
  * **Note**: The update includes a small breaking change.
- * See the backgroundColor prop for the workaround. 
+ * See the backgroundColor prop for the workaround.
  */
 const GraphXY = (props) => {
   const theme = useTheme();
-  const backgroundColor=props.backgroundColor?props.backgroundColor:theme.palette.background.default;
-  if(typeof props.ymin!=="undefined"){
-    console.warn("Prop ymin is deprecated, use yMin instead")
+  const backgroundColor = props.backgroundColor
+    ? props.backgroundColor
+    : theme.palette.background.default;
+  if (typeof props.ymin !== "undefined") {
+    console.warn("Prop ymin is deprecated, use yMin instead");
   }
-  if(typeof props.ymax!=="undefined"){
-    console.warn("Prop ymax is deprecated, use yMax instead")
+  if (typeof props.ymax !== "undefined") {
+    console.warn("Prop ymax is deprecated, use yMax instead");
   }
 
   const createTraces = (data) => {
@@ -241,28 +262,30 @@ const GraphXY = (props) => {
 
     data.forEach((item, index) => {
       const traceProps = {
-        type: 'scatter',
-        mode: 'lines',
-        marker: { color: props.lineColor ? props.lineColor[index] : theme.palette.reactVis.lineColors[index] },
+        type: "scatter",
+        mode: "lines",
+        marker: {
+          color: props.lineColor
+            ? props.lineColor[index]
+            : theme.palette.reactVis.lineColors[index],
+        },
 
-        name: typeof props.legend !== "undefined"
-          ?
-          props.legend[index]
-            ?
-            props.legend[index]
-            :
-            replaceMacros(props.yPVs[index], props.macros)
-          :
-          replaceMacros(props.yPVs[index], props.macros),
-        hovertemplate: props.yHoverFormat ?
-          "(%{y:" + props.yHoverFormat + "}) %{x}<extra>%{fullData.name}</extra>"
-          : "(%{y}) %{x}<extra>%{fullData.name}</extra>"
-      }
-      traces.push({ ...item, ...traceProps })
-
-    })
-    return (traces)
-  }
+        name:
+          typeof props.legend !== "undefined"
+            ? props.legend[index]
+              ? props.legend[index]
+              : replaceMacros(props.yPVs[index], props.macros)
+            : replaceMacros(props.yPVs[index], props.macros),
+        hovertemplate: props.yHoverFormat
+          ? "(%{y:" +
+            props.yHoverFormat +
+            "}) %{x}<extra>%{fullData.name}</extra>"
+          : "(%{y}) %{x}<extra>%{fullData.name}</extra>",
+      };
+      traces.push({ ...item, ...traceProps });
+    });
+    return traces;
+  };
 
   const paperRef = useRef(null);
   const [width, setWidth] = useState(null);
@@ -274,86 +297,102 @@ const GraphXY = (props) => {
     event.stopPropagation();
     setAnchorEl(event.target);
     setOpenContextMenu(!openContextMenu);
-  }
+  };
 
   const handleContextMenuClose = () => {
     setOpenContextMenu(false);
-  }
+  };
 
   const [openContextMenu, setOpenContextMenu] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
       if (paperRef.current) {
-        setHeight(props.height ? props.height : paperRef.current.offsetWidth * props.aspectRatio)
-        setWidth(paperRef.current.offsetWidth)
+        setHeight(
+          props.height
+            ? props.height
+            : paperRef.current.offsetWidth * props.aspectRatio
+        );
+        setWidth(paperRef.current.offsetWidth);
       }
-    }
+    };
     // The 'current' property contains info of the reference:
     // align, title, ... , width, height, etc.
     if (paperRef.current) {
-      setHeight(props.height?props.height:paperRef.current.offsetWidth)
-      setWidth(paperRef.current.offsetWidth)
+      setHeight(props.height ? props.height : paperRef.current.offsetWidth);
+      setWidth(paperRef.current.offsetWidth);
     }
-    window.addEventListener("resize", handleResize)
+    window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
+  }, [paperRef, props.width, props.height, props.aspectRatio]);
 
-  }, [paperRef,props.width,props.height,props.aspectRatio]);
-
-  const [domain, setDomain] = useState([0, 1])
+  const [domain, setDomain] = useState([0, 1]);
 
   useEffect(() => {
     if (props.yAxes !== undefined) {
       let numberOfyAxes = props.yAxes.length;
       let newYPositions = [];
       let increment = 100 / width;
-      let newDomain = [increment * (numberOfyAxes - 1), 1]
+      let newDomain = [increment * (numberOfyAxes - 1), 1];
       let index = 0;
       for (let i = numberOfyAxes - 1; i >= 0; i--) {
         newYPositions[index] = i * increment;
         index++;
       }
-      setDomain(newDomain)
-    }
-    else {
-      setDomain([0, 1])
+      setDomain(newDomain);
+    } else {
+      setDomain([0, 1]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [width])
+  }, [width]);
   const [yAxes] = useState(() => {
     let yAxesInit = {};
-    yAxesInit['yaxis'] = {
+    yAxesInit["yaxis"] = {
       gridcolor: theme.palette.reactVis[".rv-xy-plot__grid-lines__line"].stroke,
       tickcolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
-      zerolinecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
+      zerolinecolor:
+        theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
       linecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
-      type: props.yScaleLog10 === true ? 'log' : 'linear',
-      tickformat: props.yTickFormat ? props.yTickFormat : '',
+      type: props.yScaleLog10 === true ? "log" : "linear",
+      tickformat: props.yTickFormat ? props.yTickFormat : "",
       zeroline: true,
       showline: true,
       showgrid: true,
-      automargin:true,
-      range: [typeof props.yMin !== "undefined" ? props.yMin : null, typeof props.yMax !== "undefined" ? props.yMax : null],
+      automargin: true,
+      range: [
+        typeof props.yMin !== "undefined" ? props.yMin : null,
+        typeof props.yMax !== "undefined" ? props.yMax : null,
+      ],
       tickmode: props.yTickValues ? "array" : "auto",
       tickvals: props.yTickValues ? props.yTickValues : [],
-      ticktext: props.yTickValues ? (props.yTickLabels ? props.yTickLabels : props.yTickValues) : [],
-    }
-    return (yAxesInit)
-  })
+      ticktext: props.yTickValues
+        ? props.yTickLabels
+          ? props.yTickLabels
+          : props.yTickValues
+        : [],
+    };
+    return yAxesInit;
+  });
   const [legend] = useState(() => {
-    let legendInit = props.showLegend === true ? {
-      legend: {
-        orientation: 'h',
-        x: 1,
-        xanchor: 'right',
-        y: 0.975,
-        bgcolor: "00000000"
-      }
-    } : {}
-    return legendInit
-  })
+    let legendInit =
+      props.showLegend === true
+        ? {
+            legend: {
+              orientation: "h",
+              x: 1,
+              xanchor: "right",
+              y: 0.975,
+              bgcolor: "00000000",
+            },
+          }
+        : {};
+    return legendInit;
+  });
 
-  const [layout, setLayout] = useState({plot_bgcolor: backgroundColor,paper_bgcolor: backgroundColor})
+  const [layout, setLayout] = useState({
+    plot_bgcolor: backgroundColor,
+    paper_bgcolor: backgroundColor,
+  });
 
   useEffect(() => {
     setLayout({
@@ -363,126 +402,170 @@ const GraphXY = (props) => {
       plot_bgcolor: backgroundColor,
       xaxis: {
         domain: domain,
-        gridcolor: theme.palette.reactVis[".rv-xy-plot__grid-lines__line"].stroke,
-        tickcolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
-        zerolinecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
-        linecolor: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
+        gridcolor:
+          theme.palette.reactVis[".rv-xy-plot__grid-lines__line"].stroke,
+        tickcolor:
+          theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
+        zerolinecolor:
+          theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
+        linecolor:
+          theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
         zeroline: true,
         showline: true,
         showgrid: true,
-        automargin:true,
-        range: [typeof props.xMin !== "undefined" ? props.xMin : null, typeof props.xMax !== "undefined" ? props.xMax : null],
+        automargin: true,
+        range: [
+          typeof props.xMin !== "undefined" ? props.xMin : null,
+          typeof props.xMax !== "undefined" ? props.xMax : null,
+        ],
         tickmode: props.xTickValues ? "array" : "auto",
         tickvals: props.xTickValues ? props.xTickValues : [],
-        ticktext: props.xTickValues ? (props.xTickLabels ? props.xTickLabels : props.xTickValues) : [],
+        ticktext: props.xTickValues
+          ? props.xTickLabels
+            ? props.xTickLabels
+            : props.xTickValues
+          : [],
       },
       ...yAxes,
       font: {
-        family: 'Roboto,Arial',
-        color: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke
+        family: "Roboto,Arial",
+        color: theme.palette.reactVis[".rv-xy-plot__axis__tick__line"].stroke,
       },
       paper_bgcolor: backgroundColor,
       ...legend,
       showlegend: props.showLegend,
       margin: {
-        t: props.title ? 32 : 16, r: 16,
+        t: props.title ? 32 : 16,
+        r: 16,
         l: 48,
-        b: 32
+        b: 32,
       },
-      annotations: [props.yAxisTitle && {
-        xref: 'paper',
-        yref: 'paper',
-        x: 0,
-        xanchor: 'left',
-        y: 1,
-        yanchor: 'top',
-        text: props.yAxisTitle,
-        textangle: 270,
-        showarrow: false,
-      }, props.xAxisTitle && {
-        xref: 'paper',
-        yref: 'paper',
-        x: 1,
-        xanchor: 'right',
-        y: 0,
-        yanchor: 'bottom',
-        text: props.xAxisTitle,
-        showarrow: false
-      }]
-    })
-  }, [theme, props.showLegend, props.xAxisTitle, props.title, backgroundColor, props.xMin, props.xTickLabels, props.xTickValues, props.yAxisTitle, yAxes, domain, legend, props.xMax])
+      annotations: [
+        props.yAxisTitle && {
+          xref: "paper",
+          yref: "paper",
+          x: 0,
+          xanchor: "left",
+          y: 1,
+          yanchor: "top",
+          text: props.yAxisTitle,
+          textangle: 270,
+          showarrow: false,
+        },
+        props.xAxisTitle && {
+          xref: "paper",
+          yref: "paper",
+          x: 1,
+          xanchor: "right",
+          y: 0,
+          yanchor: "bottom",
+          text: props.xAxisTitle,
+          showarrow: false,
+        },
+      ],
+    });
+  }, [
+    theme,
+    props.showLegend,
+    props.xAxisTitle,
+    props.title,
+    backgroundColor,
+    props.xMin,
+    props.xTickLabels,
+    props.xTickValues,
+    props.yAxisTitle,
+    yAxes,
+    domain,
+    legend,
+    props.xMax,
+  ]);
 
   return (
-    <div ref={paperRef} style={{
-      width: props.width ? props.width : width, height: props.height ? props.height : height, margin: 8,
-      backgroundColor: backgroundColor
-    }}>
-
+    <div
+      ref={paperRef}
+      style={{
+        width: props.width ? props.width : width,
+        height: props.height ? props.height : height,
+        margin: 8,
+        backgroundColor: backgroundColor,
+      }}
+    >
       <PlotData {...props} backgroundColor={backgroundColor}>
         {({ data, contextInfo }) => {
           const traces = createTraces(data);
 
           return (
             <div
-              style={{ width: "100%", height: "100%", backgroundColor: 'inherit', padding: 8 }}
+              style={{
+                width: "100%",
+                height: "100%",
+                backgroundColor: "inherit",
+                padding: 8,
+              }}
               onContextMenu={
                 props.disableContextMenu ? undefined : handleToggleContextMenu
               }
               onPointerDownCapture={(event) => {
                 if (event.button !== 0) {
-                  event.preventDefault()
+                  event.preventDefault();
                   return;
                 }
               }}
             >
-              {contextInfo && openContextMenu && <ContextMenu
-                disableProbe={props.disableProbe}
-                open={openContextMenu}
-                pvs={contextInfo}
-                handleClose={handleContextMenuClose}
-                probeType={'readOnly'}
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "center",
-                }}
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "center",
-                }}
-              />}
+              {contextInfo && openContextMenu && (
+                <ContextMenu
+                  disableProbe={props.disableProbe}
+                  open={openContextMenu}
+                  pvs={contextInfo}
+                  handleClose={handleContextMenuClose}
+                  probeType={"readOnly"}
+                  anchorEl={anchorEl}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "center",
+                  }}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "center",
+                  }}
+                />
+              )}
               <Plot
-                config={typeof props.displayModeBar !== "undefined" ? {
-                  "displaylogo": false,
-                  scrollZoom: false,
-                  displayModeBar: props.displayModeBar,
-                  staticPlot: isMobileOnly ? true : false,
-                  toImageButtonOptions: {
-                    format: 'svg'
-                  }
-                } : {
-                  "displaylogo": false,
-                  scrollZoom: false,
-                  staticPlot: (isMobileOnly && (props.disableMobileStatic === false)) ? true : false,
-                  toImageButtonOptions: {
-                    format: 'svg'
-                  }
-                }
+                config={
+                  typeof props.displayModeBar !== "undefined"
+                    ? {
+                        displaylogo: false,
+                        scrollZoom: false,
+                        displayModeBar: props.displayModeBar,
+                        staticPlot: isMobileOnly ? true : false,
+                        toImageButtonOptions: {
+                          format: "svg",
+                        },
+                      }
+                    : {
+                        displaylogo: false,
+                        scrollZoom: false,
+                        staticPlot:
+                          isMobileOnly && props.disableMobileStatic === false
+                            ? true
+                            : false,
+                        toImageButtonOptions: {
+                          format: "svg",
+                        },
+                      }
                 }
                 useResizeHandler={true}
                 style={props.plotlyStyle}
-                
                 data={traces}
-                layout={{ ...layout, }}
+                layout={{ ...layout }}
               />
             </div>
-          )
-        }
-        }
+          );
+        }}
       </PlotData>
     </div>
-  )
-}
+  );
+};
 
 GraphXY.propTypes = {
   /** X Array of the process variables,eg. ['$(device):test$(id0)','$(device):test$(id1)']*/
@@ -547,21 +630,25 @@ GraphXY.propTypes = {
    */
   showLegend: PropTypes.bool,
   /** Update mode of the graph, Note polling mode will override these settings*/
-  updateMode: PropTypes.oneOf(['updateOnXOrYChange', 'updateOnYChange', 'updateOnXChange']),
+  updateMode: PropTypes.oneOf([
+    "updateOnXOrYChange",
+    "updateOnYChange",
+    "updateOnXChange",
+  ]),
   /** If the height is undefined then the height will be set to parents width multplied by the aspect ratio*/
   aspectRatio: PropTypes.number,
   /**
-  * The backgorund color defaults to ```theme.palette.background.default```
-  * For a Paper or a Card component set it to ```theme.palette.background.paper```
-  */
+   * The backgorund color defaults to ```theme.palette.background.default```
+   * For a Paper or a Card component set it to ```theme.palette.background.paper```
+   */
   backgroundColor: PropTypes.string,
   /**
    * Set the width
    */
   width: PropTypes.string,
   /**
-  * Set the height, by default it is calculated from the width X aspectRatio. 
-  */
+   * Set the height, by default it is calculated from the width X aspectRatio.
+   */
   height: PropTypes.string,
   /**
    * **Note**: the zoom feature is disabled on a mobile device. To enable set this prop to true.
@@ -576,21 +663,21 @@ GraphXY.defaultProps = {
   makeNewSocketIoConnection: false,
   debug: false,
   showLegend: true,
-  yAxisTitle: 'Y-axis',
-  xAxisTitle: 'X-axis',
+  yAxisTitle: "Y-axis",
+  xAxisTitle: "X-axis",
   usePolling: false,
   pollingRate: 100,
-  width: '100%',
+  width: "100%",
   aspectRatio: 1,
-  updateMode: 'updateOnXOrYChange',
+  updateMode: "updateOnXOrYChange",
   disableMobileStatic: false,
-  plotlyStyle:{
-    position: 'relative',
-    display: 'inline-block',
-    width: '100%', 
-    height: '100%', 
+  plotlyStyle: {
+    position: "relative",
+    display: "inline-block",
+    width: "100%",
+    height: "100%",
     paddingBottom: 8,
-  }
+  },
 };
 
-export default GraphXY
+export default GraphXY;

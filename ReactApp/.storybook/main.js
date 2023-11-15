@@ -5,7 +5,24 @@ import { mergeConfig } from 'vite';
 export default {
   // Replace your-framework with the framework you are using (e.g., react-vite, vue3-vite)
   framework: '@storybook/react-vite',
-  stories: ['../src/docs/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)','../src/components/**/*.mdx',],
+  stories: [
+    
+    '../src/docs/Introduction.mdx',
+    '../src/docs/installation/installation.mdx',
+    '../src/docs/installation/launching.mdx',
+   '../src/docs/installation/userloginOverview.mdx',
+    '../src/docs/installation/*.mdx',
+    '../src/docs/MongoDB/MongoDB.mdx',
+    '../src/docs/MongoDB/MongoDB_Primer.mdx',
+    '../src/docs/MongoDB/MongoDB_Primer_Replication.mdx',
+    '../src/docs/MongoDB/MongoDB_Config.mdx',
+    '../src/docs/MongoDB/MongoDB_Config_Default.mdx',
+    '../src/docs/MongoDB/MongoDB_Config_Config.mdx',
+    '../src/docs/MongoDB/MongoDB_Compass.mdx',
+    // '../src/docs/**/*.mdx', 
+  '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+  // '../src/components/**/*.mdx',
+],
   addons: [
     "@storybook/addon-links",
     "@storybook/addon-essentials",

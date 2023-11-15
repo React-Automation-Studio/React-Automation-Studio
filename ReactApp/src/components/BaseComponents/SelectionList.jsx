@@ -140,9 +140,9 @@ const useStyles = makeStyles((theme) => {
  * The List component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
  * The margins and spacing must be controlled from the parent component.<br/><br/>
  * Material-UI List Demos:
- * https://material-ui.com/demos/lists<br/><br/>
+ * https://mui.com/demos/lists<br/><br/>
  * Material-UI List API:
- * https://material-ui.com/api/list
+ * https://mui.com/api/list
  */
 const SelectionListComponent = (props) => {
   const classes =useStyles();

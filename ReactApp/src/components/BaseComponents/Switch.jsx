@@ -47,9 +47,9 @@ const SwitchInternalComponent = (props) => {
  * The Switch component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
  * The margins and spacing must be controlled from the parent component.<br/><br/>
  * Material-UI Switch Demos:
- * https://material-ui.com/components/switches/#switch<br/><br/>
+ * https://mui.com/components/switches/#switch<br/><br/>
  * Material-UI Switch API:
- * https://material-ui.com/api/switch/
+ * https://mui.com/api/switch/
  */
 const Switch = (props) => {
   return (

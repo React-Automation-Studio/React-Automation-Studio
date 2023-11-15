@@ -43,7 +43,7 @@ const CheckBoxComponent = (props) => {
 
 /**
  * The CheckBox component is a wrapper on a Material-UI CheckBox component.
- https://material-ui.com/api/checkbox/
+ https://mui.com/api/checkbox/
  */
 const CheckBox = (props) => {
   return (

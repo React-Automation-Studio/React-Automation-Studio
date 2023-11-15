@@ -42,7 +42,7 @@ const RadioButtonComponent = (props) => {
 /* eslint-enable eqeqeq */
 /**
  * The RadioButton component is a wrapper on a Material-UI RadioButton component. <br/><br/>
- * https://material-ui.com/api/radio/
+ * https://mui.com/api/radio/
  */
 const RadioButton = (props) => {
   return (

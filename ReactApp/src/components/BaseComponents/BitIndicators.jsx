@@ -127,9 +127,9 @@ const BitIndicatorsComponent = (props) => {
  * Each SvgIcon component indicates the value of each of the bits of the PV Value.
  * <br/><br/>
  * Material-UI SvgIcon Demos:
- * https://material-ui.com/style/icons/<br/><br/>
+ * https://mui.com/style/icons/<br/><br/>
  * Material-UI SvgIcon API:
- * https://material-ui.com/api/svg-icon/<br/><br/>
+ * https://mui.com/api/svg-icon/<br/><br/>
  * A custom Icon can used by importing it in the parent and assigning it as a child <br/><br/>
  */
 const BitIndicators = (props) => {

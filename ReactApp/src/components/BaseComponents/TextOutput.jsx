@@ -216,9 +216,9 @@ function TextOutputComponent(props) {
  *  The TextField component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
  *  The margins and spacing must be controlled from the parent component.<br/><br/>
  *  Material-UI TextField Demos:
- *  https://material-ui.com/demos/text-fields<br/><br/>
+ *  https://mui.com/demos/text-fields<br/><br/>
  *  Material-UI TextField API:
- *  https://material-ui.com/api/text-field
+ *  https://mui.com/api/text-field
  */
 const TextOutput = (props) => {
   return <Widget {...props} component={TextOutputComponent} pvs={undefined} />;

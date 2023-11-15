@@ -53,9 +53,9 @@ const ActionButtonComponent = (props) => {
  * The ActionButton component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
  * The margins and spacing must be controlled from the parent component.<br/><br/>
  * Material-UI Button Demos:
- * https://material-ui.com/demos/buttons/<br/><br/>
+ * https://mui.com/demos/buttons/<br/><br/>
  * Material-UI Button API:
- * https://material-ui.com/api/button/
+ * https://mui.com/api/button/
  * */
 const ActionButton = (props) => {
   return (

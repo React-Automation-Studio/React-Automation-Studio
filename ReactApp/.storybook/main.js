@@ -24,6 +24,7 @@ export default {
     '../src/docs/layout/sampleLayouts.mdx',
     '../src/docs/layout/layoutExamples/BasicGrid.mdx',
     '../src/docs/layout/layoutExamples/Mobile.mdx',
+    '../src/docs/WorkingWithLayouts.mdx',
     // '../src/docs/**/*.mdx', 
   '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)',
   // '../src/components/**/*.mdx',

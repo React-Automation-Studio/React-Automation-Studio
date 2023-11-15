@@ -1,0 +1,22 @@
+import {
+  Canvas,
+  Meta,
+  Story,
+  Controls,
+  Description,
+  Title,
+} from "@storybook/blocks";
+import * as MobileStories from './Mobile.stories';
+import ImportPath from "../../../../.storybook/ImportPath";
+
+<Meta of={MobileStories} title="Documentation/Style Guide/Sample Layouts/Mobile" />
+
+# Mobile Layout
+When creating more complex layouts or mobile layouts we recommend you stack the grid as a column of rows. This ensures that each row expands to the height of the highest component in that row. This is illustrated below.
+<ImportPath libName={"src"} />
+<Story of={MobileStories.Primary} />
+
+
+
+
+

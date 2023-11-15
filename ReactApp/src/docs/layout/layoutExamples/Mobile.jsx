@@ -16,18 +16,10 @@ import StyledIconIndicator from '../../../components/BaseComponents/StyledIconIn
 import SelectionInput from '../../../components/BaseComponents/SelectionInput';
 import ThumbWheel from '../../../components/BaseComponents/ThumbWheel';
 
-const styles = theme => ({
-  root: {
-    flexGrow: 1,
-  },
-  paper: {
-    padding: theme.spacing(1) * 2,
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-  },
-});
+
 /**
-* @visibleName Mobile Layout
+* 
+*When creating more complex layouts or mobile layouts we recommend you stack the grid as a column of rows. This ensures that each row expands to the height of the highest component in that row. This is illustrated below.
 */
 class Mobile extends React.Component {
  
@@ -36,7 +28,7 @@ class Mobile extends React.Component {
     const { classes } = this.props;
     return (
       <React.Fragment>
-      <Grid container className={classes.root} spacing={2}>
+      <Grid container sx={{flexGrow: 1,}} spacing={2}>
         <Grid item xs={12}>
           <div style={{height:'15vh'}}>
             <GraphY
@@ -99,8 +91,5 @@ class Mobile extends React.Component {
   }
 }
 
-Mobile.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
 
-export default withStyles(styles)(Mobile);
+export default Mobile;

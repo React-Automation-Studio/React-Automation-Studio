@@ -30,7 +30,7 @@ const preview: Preview = {
           <Title />
           <Subtitle />
           <Description />
-          <ImportPath libName={"React-Automation-Studio"} />
+          <ImportPath libName={"src"} />
           <Primary />
           <Controls />
           <Stories />

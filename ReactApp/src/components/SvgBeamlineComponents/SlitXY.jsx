@@ -1,43 +1,43 @@
-import React from 'react'
+import React from "react";
 
 import Widget from "../SystemComponents/Widgets/Widget";
-import withStyles from '@mui/styles/withStyles';
-import { svgHeight, svgCenterY, svgWidth, svgCenterX } from "../SystemComponents/svgConstants";
-import { v4 as uuidv4 } from 'uuid';
-import PropTypes from 'prop-types';
-
-const styles = theme => ({
-  Label: {
-    fill: theme.palette.text.primary
-  },
-  Value: {
-    fill: theme.palette.text.primary
-  },
-});
+import withStyles from "@mui/styles/withStyles";
+import {
+  svgHeight,
+  svgCenterY,
+  svgWidth,
+  svgCenterX,
+} from "../SystemComponents/svgConstants";
+import { v4 as uuidv4 } from "uuid";
+import PropTypes from "prop-types";
+import { styled } from "@mui/material/styles";
+import { useTheme } from "@mui/system";
+const TextLabel = styled("text")(({ theme }) => ({
+  fill: theme.palette.text.primary,
+}));
 
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */
 const SlitXYComponent = (props) => {
-  const handleOnClick = device => event => {
-    if (typeof props.handleOnClick !== 'undefined') {
+  const theme = useTheme();
+  const handleOnClick = (device) => (event) => {
+    if (typeof props.handleOnClick !== "undefined") {
       props.handleOnClick(device);
     }
   };
   const checkPrecision = (value, prec) => {
-    if (props.usePvPrecision === true || (typeof props.prec !== 'undefined')) {
+    if (props.usePvPrecision === true || typeof props.prec !== "undefined") {
       let precision = parseInt(prec);
       let tempvalue = parseFloat(value);
       if (!isNaN(tempvalue)) {
         return tempvalue.toFixed(precision);
-      }
-      else {
+      } else {
         return value;
       }
+    } else {
+      return value;
     }
-    else {
-      return (value)
-    }
-  }
+  };
 
   const { classes } = props;
   const { initialized } = props;
@@ -49,12 +49,12 @@ const SlitXYComponent = (props) => {
   const xOffsetPv = props.pvsData[2];
   const yOffsetPv = props.pvsData[3];
   let unitsGapX = "";
-  let unitsGapY = ""
+  let unitsGapY = "";
   let xGapReadback;
   let yGapReadback;
 
   let unitsOffsetX = "";
-  let unitsOffsetY = ""
+  let unitsOffsetY = "";
   let xOffsetReadback;
   let yOffsetReadback;
 
@@ -63,155 +63,264 @@ const SlitXYComponent = (props) => {
     let precGapY = props.usePvPrecision ? yGapPv.prec : props.prec;
     let precOffsetX = props.usePvPrecision ? xOffsetPv.prec : props.prec;
     let precOffsetY = props.usePvPrecision ? yOffsetPv.prec : props.prec;
-    xGapReadback = checkPrecision(xGapPv.value, precGapX)
-    yGapReadback = checkPrecision(yGapPv.value, precGapY)
-    xOffsetReadback = checkPrecision(xOffsetPv.value, precOffsetX)
-    yOffsetReadback = checkPrecision(yOffsetPv.value, precOffsetY)
-  }
-  else {
+    xGapReadback = checkPrecision(xGapPv.value, precGapX);
+    yGapReadback = checkPrecision(yGapPv.value, precGapY);
+    xOffsetReadback = checkPrecision(xOffsetPv.value, precOffsetX);
+    yOffsetReadback = checkPrecision(yOffsetPv.value, precOffsetY);
+  } else {
     xGapReadback = 0;
     yGapReadback = 0;
     xOffsetReadback = 0;
     yOffsetReadback = 0;
   }
 
-  let color = '';
+  let color = "";
   if (initialized) {
-    unitsGapX = props.usePvUnits === true ? xGapPv.units : props.unitsGapX ? props.unitsGapX : "";
-    unitsGapY = props.usePvUnits === true ? yGapPv.units : props.unitsGapY ? props.unitsGapY : "";
-    unitsOffsetX = props.usePvUnits === true ? xOffsetPv.units : props.unitsOffsetX ? props.unitsOffsetX : "";
-    unitsOffsetY = props.usePvUnits === true ? yOffsetPv.units : props.unitsOffsetY ? props.unitsOffsetY : "";
-    if (props.alarmSensitive !== 'undefined') {
+    unitsGapX =
+      props.usePvUnits === true
+        ? xGapPv.units
+        : props.unitsGapX
+        ? props.unitsGapX
+        : "";
+    unitsGapY =
+      props.usePvUnits === true
+        ? yGapPv.units
+        : props.unitsGapY
+        ? props.unitsGapY
+        : "";
+    unitsOffsetX =
+      props.usePvUnits === true
+        ? xOffsetPv.units
+        : props.unitsOffsetX
+        ? props.unitsOffsetX
+        : "";
+    unitsOffsetY =
+      props.usePvUnits === true
+        ? yOffsetPv.units
+        : props.unitsOffsetY
+        ? props.unitsOffsetY
+        : "";
+    if (props.alarmSensitive !== "undefined") {
       if (props.alarmSensitive == true) {
-        alarmSeverity = xGapPv.severity == 2 || yGapPv.severity == 2||xOffsetPv.severity == 2 || yOffsetPv.severity == 2 ? 2 : xGapPv.severity == 1 || yGapPv.severity == 1||xOffsetPv.severity == 1 || yOffsetPv.severity == 1 ? 1 : 0
+        alarmSeverity =
+          xGapPv.severity == 2 ||
+          yGapPv.severity == 2 ||
+          xOffsetPv.severity == 2 ||
+          yOffsetPv.severity == 2
+            ? 2
+            : xGapPv.severity == 1 ||
+              yGapPv.severity == 1 ||
+              xOffsetPv.severity == 1 ||
+              yOffsetPv.severity == 1
+            ? 1
+            : 0;
         if (alarmSeverity == 2) {
-          color = props.theme.palette.alarm.major.main;
-        }
-        else if (alarmSeverity == 1) {
-          color = props.theme.palette.alarm.minor.main;
-        }
-        else {
-          color = props.theme.palette.beamLineComponent.main;
+          color = theme.palette.alarm.major.main;
+        } else if (alarmSeverity == 1) {
+          color = theme.palette.alarm.minor.main;
+        } else {
+          color = theme.palette.beamLineComponent.main;
         }
       }
     }
-  }
-  else {
-    color = 'grey';
+  } else {
+    color = "grey";
   }
 
   const componentId = uuidv4();
 
   return (
-    <svg
-      x={props.x}
-      y={props.y}
-
-      width={svgWidth}
-      height={svgHeight}
-    >
-      <g transform={'translate(' + svgCenterX + ',' + (svgCenterY) + ')'}
+    <svg x={props.x} y={props.y} width={svgWidth} height={svgHeight}>
+      <g
+        transform={"translate(" + svgCenterX + "," + svgCenterY + ")"}
         onClick={handleOnClick(props.system)}
       >
-        <linearGradient id={componentId + 'elipse-gradient'} gradientTransform="rotate(0)">
-          <stop offset="0%" stopOpacity="30" stopColor={'silver'} />
+        <linearGradient
+          id={componentId + "elipse-gradient"}
+          gradientTransform="rotate(0)"
+        >
+          <stop offset="0%" stopOpacity="30" stopColor={"silver"} />
           <stop offset="75%" stopColor={color} />
         </linearGradient>
         <defs>
-          <filter id={componentId + "elipseShadow"} x="0" y="0" width="600%" height="500%">
+          <filter
+            id={componentId + "elipseShadow"}
+            x="0"
+            y="0"
+            width="600%"
+            height="500%"
+          >
             <feOffset result="offOut" in="SourceGraphic" dx="2.5" dy="2.5" />
-            <feColorMatrix result="matrixOut" in="offOut" type="matrix"
-              values="0.2 0 0 0 0 0 0.2 0 0 0 0 0 0.2 0 0 0 0 0 1 0" />
-            <feGaussianBlur result="blurOut" in="matrixOut" stdDeviation="2.5" />
+            <feColorMatrix
+              result="matrixOut"
+              in="offOut"
+              type="matrix"
+              values="0.2 0 0 0 0 0 0.2 0 0 0 0 0 0.2 0 0 0 0 0 1 0"
+            />
+            <feGaussianBlur
+              result="blurOut"
+              in="matrixOut"
+              stdDeviation="2.5"
+            />
             <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
           </filter>
         </defs>
-        <g filter={props.componentShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
+        <g
+          filter={
+            props.componentShadow === true
+              ? "url(#" + componentId + "elipseShadow)"
+              : ""
+          }
         >
           <g>
-            <g transform="translate(-10,-1092.5)"
-              fill={props.componentGradient === true ? 'url(#' + componentId + 'elipse-gradient)' : color}
+            <g
+              transform="translate(-10,-1092.5)"
+              fill={
+                props.componentGradient === true
+                  ? "url(#" + componentId + "elipse-gradient)"
+                  : color
+              }
               style={{
-                'strokeWidth': '0.3',
-                'stroke': 'black'
+                strokeWidth: "0.3",
+                stroke: "black",
               }}
             >
               <g>
-                <path
-                  d="m 15.05893,1085.0254 -1.776617,20.1381 0.759263,0.6179 0.51536,-5.8416 5.003912,4.0722 0.745906,-8.4549 -5.003912,-4.0722 0.515351,-5.8416 z"
-                />
-                <path
-                  d="m 7.9498012,1076.2957 6.6301368,5.3958 0.203442,-2.3062 -1.923241,-1.565 1.340787,-15.198 -2.783656,-2.2654 -1.340787,15.1979 -1.9232398,-1.5651 z"
-                />
-                <path
-                  d="m 6.2770152,1077.8803 -0.513672,5.8398 -5.00390605,-4.0723 -0.728516,8.2461 6.16796905,-0.018 0.837891,-9.3789 z"
-                />
-                <path
-                  d="m 5.7589222,1101.1294 6.6301368,5.3958 -0.203451,2.3061 -1.92324,-1.5652 -1.3407868,15.1979 -2.783656,-2.2654 1.340787,-15.1979 -1.92324,-1.5651 z"
-                />
+                <path d="m 15.05893,1085.0254 -1.776617,20.1381 0.759263,0.6179 0.51536,-5.8416 5.003912,4.0722 0.745906,-8.4549 -5.003912,-4.0722 0.515351,-5.8416 z" />
+                <path d="m 7.9498012,1076.2957 6.6301368,5.3958 0.203442,-2.3062 -1.923241,-1.565 1.340787,-15.198 -2.783656,-2.2654 -1.340787,15.1979 -1.9232398,-1.5651 z" />
+                <path d="m 6.2770152,1077.8803 -0.513672,5.8398 -5.00390605,-4.0723 -0.728516,8.2461 6.16796905,-0.018 0.837891,-9.3789 z" />
+                <path d="m 5.7589222,1101.1294 6.6301368,5.3958 -0.203451,2.3061 -1.92324,-1.5652 -1.3407868,15.1979 -2.783656,-2.2654 1.340787,-15.1979 -1.92324,-1.5651 z" />
               </g>
             </g>
           </g>
         </g>
 
-        {props.showValue&&<g>
-          <text className={classes.Value}
-            x={typeof props.valueOffsetX !== 'undefined' ? props.valueOffsetX : 0}
-            y={typeof props.valueOffsetY !== 'undefined' ? props.valueOffsetY + 57.5 : 57.5}
-            textAnchor='middle'
-            filter={props.textShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
-          >
-            {"XGap: " + xGapReadback + " " + unitsGapX}
-          </text>
-          <text className={classes.Value}
-            x={typeof props.valueOffsetX !== 'undefined' ? props.valueOffsetX  : 0}
-            y={typeof props.valueOffsetY !== 'undefined' ? props.valueOffsetY + 72.5 : 72.5}
-            textAnchor='middle'
-            filter={props.textShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
-          >
-            {"YGap: " + yGapReadback + " " + unitsGapY}
-          </text>
-          <text className={classes.Value}
-            x={typeof props.valueOffsetX !== 'undefined' ? props.valueOffsetX : 0}
-            y={typeof props.valueOffsetY !== 'undefined' ? props.valueOffsetY + 87.5 : 87.5}
-            textAnchor='middle'
-            filter={props.textShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
-          >
-            {"XOffset: " + xOffsetReadback + " " + unitsOffsetX}
-          </text>
-          <text className={classes.Value}
-            x={typeof props.valueOffsetX !== 'undefined' ? props.valueOffsetX  : 0}
-            y={typeof props.valueOffsetY !== 'undefined' ? props.valueOffsetY + 102.5 : 102.5}
-            textAnchor='middle'
-            filter={props.textShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
-          >
-            {"YOffset: " + yOffsetReadback + " " + unitsOffsetY}
-          </text>
-        </g>}
+        {props.showValue && (
+          <g>
+            <TextLabel
+              x={
+                typeof props.valueOffsetX !== "undefined"
+                  ? props.valueOffsetX
+                  : 0
+              }
+              y={
+                typeof props.valueOffsetY !== "undefined"
+                  ? props.valueOffsetY + 57.5
+                  : 57.5
+              }
+              textAnchor="middle"
+              filter={
+                props.textShadow === true
+                  ? "url(#" + componentId + "elipseShadow)"
+                  : ""
+              }
+            >
+              {"XGap: " + xGapReadback + " " + unitsGapX}
+            </TextLabel>
+            <TextLabel
+              x={
+                typeof props.valueOffsetX !== "undefined"
+                  ? props.valueOffsetX
+                  : 0
+              }
+              y={
+                typeof props.valueOffsetY !== "undefined"
+                  ? props.valueOffsetY + 72.5
+                  : 72.5
+              }
+              textAnchor="middle"
+              filter={
+                props.textShadow === true
+                  ? "url(#" + componentId + "elipseShadow)"
+                  : ""
+              }
+            >
+              {"YGap: " + yGapReadback + " " + unitsGapY}
+            </TextLabel>
+            <TextLabel
+              x={
+                typeof props.valueOffsetX !== "undefined"
+                  ? props.valueOffsetX
+                  : 0
+              }
+              y={
+                typeof props.valueOffsetY !== "undefined"
+                  ? props.valueOffsetY + 87.5
+                  : 87.5
+              }
+              textAnchor="middle"
+              filter={
+                props.textShadow === true
+                  ? "url(#" + componentId + "elipseShadow)"
+                  : ""
+              }
+            >
+              {"XOffset: " + xOffsetReadback + " " + unitsOffsetX}
+            </TextLabel>
+            <TextLabel
+              x={
+                typeof props.valueOffsetX !== "undefined"
+                  ? props.valueOffsetX
+                  : 0
+              }
+              y={
+                typeof props.valueOffsetY !== "undefined"
+                  ? props.valueOffsetY + 102.5
+                  : 102.5
+              }
+              textAnchor="middle"
+              filter={
+                props.textShadow === true
+                  ? "url(#" + componentId + "elipseShadow)"
+                  : ""
+              }
+            >
+              {"YOffset: " + yOffsetReadback + " " + unitsOffsetY}
+            </TextLabel>
+          </g>
+        )}
 
-        {props.showLabel&&<text className={classes.Label}
-          x={typeof props.labelOffsetX !== 'undefined' ? props.labelOffsetX : 0}
-          y={typeof props.labelOffsetY !== 'undefined' ? props.labelOffsetY - 35 : -35}
-          textAnchor='middle'
-          filter={props.textShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
-        >
-          {props.label}
-        </text>}
+        {props.showLabel && (
+          <TextLabel
+            x={
+              typeof props.labelOffsetX !== "undefined" ? props.labelOffsetX : 0
+            }
+            y={
+              typeof props.labelOffsetY !== "undefined"
+                ? props.labelOffsetY - 35
+                : -35
+            }
+            textAnchor="middle"
+            filter={
+              props.textShadow === true
+                ? "url(#" + componentId + "elipseShadow)"
+                : ""
+            }
+          >
+            {props.label}
+          </TextLabel>
+        )}
       </g>
     </svg>
   );
-}
+};
 
 /**
  * SlitXY Beam line component
  *
- *  The label, min, max, units, pv and tooltip all accept macros that can be replaced by the values defined in the macros prop.  
+ *  The label, min, max, units, pv and tooltip all accept macros that can be replaced by the values defined in the macros prop.
  */
 const SlitXY = (props) => {
   return (
-    <Widget svgWidget={true}  {...props} component={SlitXYComponent} pvs={[props.xGapPv, props.yGapPv,props.xOffsetPv, props.yOffsetPv]} label={props.label} />
-  )
-}
+    <Widget
+      svgWidget={true}
+      {...props}
+      component={SlitXYComponent}
+      pvs={[props.xGapPv, props.yGapPv, props.xOffsetPv, props.yOffsetPv]}
+      label={props.label}
+    />
+  );
+};
 
 SlitXY.propTypes = {
   /**
@@ -287,12 +396,12 @@ SlitXY.propTypes = {
    */
   usePvLabel: PropTypes.bool,
   /**
-   * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver. 
-   * The pyEpics metadata is unfortunately static and the values used will be the initial values that pvserver receives when it connects the first time. 
+   * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver.
+   * The pyEpics metadata is unfortunately static and the values used will be the initial values that pvserver receives when it connects the first time.
    * This is sufficient in most cases except when the user wants to dynamically update the metaData.
-   * In this case a direct connection can be made to all the pv fields by setting useMetadata to false. 
+   * In this case a direct connection can be made to all the pv fields by setting useMetadata to false.
    * If any of the metadata pvs are defined i.e unitsPv then the PV makes a new data  connection to this alternate pv and will
-   * use the value provided by this pv as the units. 
+   * use the value provided by this pv as the units.
    * The same is the case for the precPV, labelPv, alarmPv, unitsPv and minPv.
    * By setting useMetadata to false also enables connection to other variables as defined by different protocols.
    */
@@ -359,8 +468,8 @@ SlitXY.propTypes = {
    */
   labelOffsetX: PropTypes.number,
   /**
-  * Y Offset for the pv value
-  */
+   * Y Offset for the pv value
+   */
   valueOffsetY: PropTypes.number,
   /**
    * X Offset for the pv value
@@ -403,4 +512,4 @@ SlitXY.defaultProps = {
   componentGradient: true,
 };
 
-export default withStyles(styles, { withTheme: true })(SlitXY)
+export default SlitXY;

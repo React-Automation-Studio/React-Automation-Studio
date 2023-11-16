@@ -1,126 +1,151 @@
-import React  from 'react'
+import React from "react";
 
 import Widget from "../SystemComponents/Widgets/Widget";
-import withStyles from '@mui/styles/withStyles';
-import  {svgHeight,svgCenterY,svgWidth,svgCenterX} from "../SystemComponents/svgConstants";
-import { v4 as uuidv4 } from 'uuid';
-import PropTypes from 'prop-types';
-
-const styles = theme => ({
-  Label: {
-    fill: theme.palette.text.primary
-  },
-  Value: {
-    fill: theme.palette.text.primary
-  },
-});
+import withStyles from "@mui/styles/withStyles";
+import {
+  svgHeight,
+  svgCenterY,
+  svgWidth,
+  svgCenterX,
+} from "../SystemComponents/svgConstants";
+import { v4 as uuidv4 } from "uuid";
+import PropTypes from "prop-types";
+import { styled } from "@mui/material/styles";
+import { useTheme } from "@mui/system";
+const TextLabel = styled("text")(({ theme }) => ({
+  fill: theme.palette.text.primary,
+}));
 
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */
 const SteererXYMagnetComponent = (props) => {
-  const handleOnClick = device => event => {
-    if (typeof props.handleOnClick !== 'undefined') {
+  const theme=useTheme();
+  const handleOnClick = (device) => (event) => {
+    if (typeof props.handleOnClick !== "undefined") {
       props.handleOnClick(device);
     }
   };
 
-  const checkPrecision = (value,prec) => {
-    if (props.usePvPrecision===true || (typeof props.prec!=='undefined')) {
+  const checkPrecision = (value, prec) => {
+    if (props.usePvPrecision === true || typeof props.prec !== "undefined") {
       let precision = parseInt(prec);
       let tempvalue = parseFloat(value);
       if (!isNaN(tempvalue)) {
         return tempvalue.toFixed(precision);
-      }
-      else {
+      } else {
         return value;
       }
+    } else {
+      return value;
     }
-    else {
-      return (value)
-    }
-  }
+  };
 
   const { classes } = props;
   const { initialized } = props;
 
-  let alarmSeverity=0;
+  let alarmSeverity = 0;
 
-  const xPv=props.pvsData[0];
-  const yPv=props.pvsData[1];
-  let unitsX="";
-  let unitsY=""
+  const xPv = props.pvsData[0];
+  const yPv = props.pvsData[1];
+  let unitsX = "";
+  let unitsY = "";
   let valueX;
   let valueY;
-  
+
   if (initialized) {
-    let precX=props.usePvPrecision?xPv.prec:props.prec;
-    let precY=props.usePvPrecision?yPv.prec:props.prec;
-    valueX = checkPrecision(xPv.value,precX)
-    valueY = checkPrecision(yPv.value,precY)
-  }
-  else {
+    let precX = props.usePvPrecision ? xPv.prec : props.prec;
+    let precY = props.usePvPrecision ? yPv.prec : props.prec;
+    valueX = checkPrecision(xPv.value, precX);
+    valueY = checkPrecision(yPv.value, precY);
+  } else {
     valueX = 0;
     valueY = 0;
   }
 
-  let color = '';
-  if (initialized) {    
-    unitsX=props.usePvUnits===true?xPv.units:props.unitsX?props.unitsX:"";
-    unitsY=props.usePvUnits===true?yPv.units:props.unitsY?props.unitsY:"";
-    
-    if (props.alarmSensitive !== 'undefined') {
+  let color = "";
+  if (initialized) {
+    unitsX =
+      props.usePvUnits === true ? xPv.units : props.unitsX ? props.unitsX : "";
+    unitsY =
+      props.usePvUnits === true ? yPv.units : props.unitsY ? props.unitsY : "";
+
+    if (props.alarmSensitive !== "undefined") {
       if (props.alarmSensitive == true) {
-        alarmSeverity=xPv.severity==2||yPv.severity==2?2:xPv.severity==1||yPv.severity==1?1:0
+        alarmSeverity =
+          xPv.severity == 2 || yPv.severity == 2
+            ? 2
+            : xPv.severity == 1 || yPv.severity == 1
+            ? 1
+            : 0;
         if (alarmSeverity == 2) {
-          color = props.theme.palette.alarm.major.main;
-        }
-        else if (alarmSeverity == 1) {
-          color = props.theme.palette.alarm.minor.main;
-        }
-        else {
-          color = props.theme.palette.beamLineComponent.main;
+          color = theme.palette.alarm.major.main;
+        } else if (alarmSeverity == 1) {
+          color = theme.palette.alarm.minor.main;
+        } else {
+          color = theme.palette.beamLineComponent.main;
         }
       }
     }
-  }
-  else {
-    color = 'grey';
+  } else {
+    color = "grey";
   }
 
   const componentId = uuidv4();
 
   return (
-    <svg
-      x={props.x}
-      y={props.y}
-
-      width={svgWidth}
-      height={svgHeight}
-    >
-      <g transform={'translate(' + svgCenterX + ',' + (svgCenterY) + ')'}
+    <svg x={props.x} y={props.y} width={svgWidth} height={svgHeight}>
+      <g
+        transform={"translate(" + svgCenterX + "," + svgCenterY + ")"}
         onClick={handleOnClick(props.system)}
       >
-        <linearGradient id={componentId + 'elipse-gradient'} gradientTransform="rotate(0)">
-          <stop offset="0%" stopOpacity="30" stopColor={'silver'} />
+        <linearGradient
+          id={componentId + "elipse-gradient"}
+          gradientTransform="rotate(0)"
+        >
+          <stop offset="0%" stopOpacity="30" stopColor={"silver"} />
           <stop offset="75%" stopColor={color} />
         </linearGradient>
         <defs>
-          <filter id={componentId + "elipseShadow"} x="0" y="0" width="600%" height="500%">
+          <filter
+            id={componentId + "elipseShadow"}
+            x="0"
+            y="0"
+            width="600%"
+            height="500%"
+          >
             <feOffset result="offOut" in="SourceGraphic" dx="2.5" dy="2.5" />
-            <feColorMatrix result="matrixOut" in="offOut" type="matrix"
-              values="0.2 0 0 0 0 0 0.2 0 0 0 0 0 0.2 0 0 0 0 0 1 0" />
-            <feGaussianBlur result="blurOut" in="matrixOut" stdDeviation="2.5" />
+            <feColorMatrix
+              result="matrixOut"
+              in="offOut"
+              type="matrix"
+              values="0.2 0 0 0 0 0 0.2 0 0 0 0 0 0.2 0 0 0 0 0 1 0"
+            />
+            <feGaussianBlur
+              result="blurOut"
+              in="matrixOut"
+              stdDeviation="2.5"
+            />
             <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
           </filter>
         </defs>
-        <g filter={props.componentShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
+        <g
+          filter={
+            props.componentShadow === true
+              ? "url(#" + componentId + "elipseShadow)"
+              : ""
+          }
         >
           <g>
-            <g transform="translate(-10,-1097)"
-              fill={props.componentGradient === true ? 'url(#' + componentId + 'elipse-gradient)' : color}
+            <g
+              transform="translate(-10,-1097)"
+              fill={
+                props.componentGradient === true
+                  ? "url(#" + componentId + "elipse-gradient)"
+                  : color
+              }
               style={{
-                'strokeWidth': '0.3',
-                'stroke': 'black'
+                strokeWidth: "0.3",
+                stroke: "black",
               }}
             >
               <path
@@ -129,7 +154,8 @@ const SteererXYMagnetComponent = (props) => {
               />
               <path
                 d="m 3.7272638,1073.1029 12.6612032,10.3458 -3.429518,38.5135 -12.81960547,-10.3114 1.02612037,-9.0872 8.8924011,0.049 0.886777,-9.4836 -0.665083,-0.5665 -8.3258489,-0.049 z"
-                id="side" />
+                id="side"
+              />
 
               <path
                 d="m 6.7324518,1089.7546 3.3993112,2.7589 -3.5963727,0.049 0.2955922,-2.6111"
@@ -144,13 +170,15 @@ const SteererXYMagnetComponent = (props) => {
                 id="top"
               />
             </g>
-            <g transform="translate(-10,-1097)"
-              fill={'#b87333'}
-              style={{ 'strokeWidth': '0.3', 'stroke': 'orange' }}
+            <g
+              transform="translate(-10,-1097)"
+              fill={"#b87333"}
+              style={{ strokeWidth: "0.3", stroke: "orange" }}
             >
               <path
                 id="path9504-2"
-                d="m 13.978012,1108.8976 c -1.261676,-0.2824 -2.797214,-1.6683 -4.4811427,-3.6527 v 0" />
+                d="m 13.978012,1108.8976 c -1.261676,-0.2824 -2.797214,-1.6683 -4.4811427,-3.6527 v 0"
+              />
 
               <path
                 id="path9504-7-1"
@@ -165,10 +193,9 @@ const SteererXYMagnetComponent = (props) => {
                 d="m 14.385141,1104.2749 c -1.261676,-0.2823 -2.797174,-1.6683 -4.4811111,-3.6526 v 0"
               />
               <path
-
                 id="path9504-0-4"
                 d="m 14.520864,1102.734 c -1.261684,-0.2823 -2.79715,-1.6682 -4.481143,-3.6527 v 0"
-              /> 
+              />
               <path
                 id="path9504-7-5-3"
                 d="m 14.656579,1101.1932 c -1.261676,-0.2824 -2.797142,-1.6683 -4.481143,-3.6527 v 0"
@@ -213,7 +240,7 @@ const SteererXYMagnetComponent = (props) => {
                 id="path9504-0-4-0-8-35-9"
                 d="m 19.075285,1108.9595 c -1.853745,0.2113 -2.987565,0.2425 -5.143614,0 v 0"
               />
-              
+
               <path
                 d="m 2.7316557,1092.9946 c -0.2156088,-0.2387 -0.6311204,-0.686 -0.8521282,-0.9464 v 0"
                 id="path9504-0-4-1"
@@ -370,45 +397,79 @@ const SteererXYMagnetComponent = (props) => {
           </g>
         </g>
 
-        <text className={classes.Value} 
-          x={typeof props.valueOffsetX !== 'undefined' ? props.valueOffsetX : 0}
-          y={typeof props.valueOffsetY !== 'undefined' ? props.valueOffsetY + 57.5 : 57.5}
-          textAnchor='middle'
-          filter={props.textShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
+        <TextLabel
+          x={typeof props.valueOffsetX !== "undefined" ? props.valueOffsetX : 0}
+          y={
+            typeof props.valueOffsetY !== "undefined"
+              ? props.valueOffsetY + 57.5
+              : 57.5
+          }
+          textAnchor="middle"
+          filter={
+            props.textShadow === true
+              ? "url(#" + componentId + "elipseShadow)"
+              : ""
+          }
         >
-          {"X: "+valueX + " " + unitsX}
-        </text>
-        <text className={classes.Value}
-          x={typeof props.valueOffsetX !== 'undefined' ? props.valueOffsetX +5: 5}
-          y={typeof props.valueOffsetY !== 'undefined' ? props.valueOffsetY + 72.5 : 72.5}
-          textAnchor='middle'
-          filter={props.textShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
+          {"X: " + valueX + " " + unitsX}
+        </TextLabel>
+        <TextLabel
+          x={
+            typeof props.valueOffsetX !== "undefined"
+              ? props.valueOffsetX + 5
+              : 5
+          }
+          y={
+            typeof props.valueOffsetY !== "undefined"
+              ? props.valueOffsetY + 72.5
+              : 72.5
+          }
+          textAnchor="middle"
+          filter={
+            props.textShadow === true
+              ? "url(#" + componentId + "elipseShadow)"
+              : ""
+          }
         >
-          {"Y: "+valueY + " " + unitsY}
-        </text>
-        <text className={classes.Label}
-          x={typeof props.labelOffsetX !== 'undefined' ? props.labelOffsetX : 0}
-          y={typeof props.labelOffsetY !== 'undefined' ? props.labelOffsetY - 30 : -30}
-          textAnchor='middle'
-          filter={props.textShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
+          {"Y: " + valueY + " " + unitsY}
+        </TextLabel>
+        <TextLabel
+          x={typeof props.labelOffsetX !== "undefined" ? props.labelOffsetX : 0}
+          y={
+            typeof props.labelOffsetY !== "undefined"
+              ? props.labelOffsetY - 30
+              : -30
+          }
+          textAnchor="middle"
+          filter={
+            props.textShadow === true
+              ? "url(#" + componentId + "elipseShadow)"
+              : ""
+          }
         >
           {props.label}
-        </text>
+        </TextLabel>
       </g>
     </svg>
   );
-}
+};
 
 /**
  * SteererXYMagnet Beam line component
  *
- *  The label, min, max, units, pv and tooltip all accept macros that can be replaced by the values defined in the macros prop.  
+ *  The label, min, max, units, pv and tooltip all accept macros that can be replaced by the values defined in the macros prop.
  */
 const SteererXYMagnet = (props) => {
   return (
-    <Widget svgWidget={true}  {...props} component={SteererXYMagnetComponent} pvs={[props.xPv,props.yPv]} label={props.label} />
-  )
-}
+    <Widget
+      svgWidget={true}
+      {...props}
+      component={SteererXYMagnetComponent}
+      pvs={[props.xPv, props.yPv]}
+      label={props.label}
+    />
+  );
+};
 
 SteererXYMagnet.propTypes = {
   /**
@@ -435,8 +496,8 @@ SteererXYMagnet.propTypes = {
    */
   label: PropTypes.string,
   /**
-  * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
-  */
+   * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
+   */
   labelPv: PropTypes.string,
   /**
    * Values of macros that will be substituted in the pv name.
@@ -484,12 +545,12 @@ SteererXYMagnet.propTypes = {
    */
   usePvLabel: PropTypes.bool,
   /**
-   * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver. 
-   * The pyEpics metadata is unfortunately static and the values used will be the initial values that pvserver receives when it connects the first time. 
+   * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver.
+   * The pyEpics metadata is unfortunately static and the values used will be the initial values that pvserver receives when it connects the first time.
    * This is sufficient in most cases except when the user wants to dynamically update the metaData.
-   * In this case a direct connection can be made to all the pv fields by setting useMetadata to false. 
+   * In this case a direct connection can be made to all the pv fields by setting useMetadata to false.
    * If any of the metadata pvs are defined i.e unitsPv then the PV makes a new data  connection to this alternate pv and will
-   * use the value provided by this pv as the units. 
+   * use the value provided by this pv as the units.
    * The same is the case for the precPV, labelPv, alarmPv, unitsPv and minPv.
    * By setting useMetadata to false also enables connection to other variables as defined by different protocols.
    */
@@ -528,8 +589,8 @@ SteererXYMagnet.propTypes = {
   pv: PropTypes.string,
 
   /**
-  * Tooltip Text
-  */
+   * Tooltip Text
+   */
   tooltip: PropTypes.string,
   /**
    * Directive to show the tooltip
@@ -556,8 +617,8 @@ SteererXYMagnet.propTypes = {
    */
   labelOffsetX: PropTypes.number,
   /**
-  * Y Offset for the pv value
-  */
+   * Y Offset for the pv value
+   */
   valueOffsetY: PropTypes.number,
   /**
    * X Offset for the pv value
@@ -587,8 +648,8 @@ SteererXYMagnet.propTypes = {
 
 SteererXYMagnet.defaultProps = {
   debug: false,
-  showLabel:true,
-  showValue:true,
+  showLabel: true,
+  showValue: true,
   alarmSensitive: false,
   showTooltip: false,
   labelOffsetY: 0,
@@ -600,4 +661,4 @@ SteererXYMagnet.defaultProps = {
   componentGradient: true,
 };
 
-export default withStyles(styles, { withTheme: true })(SteererXYMagnet)
+export default SteererXYMagnet;

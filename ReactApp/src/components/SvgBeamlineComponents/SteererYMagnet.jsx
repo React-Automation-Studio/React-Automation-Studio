@@ -5,19 +5,16 @@ import withStyles from '@mui/styles/withStyles';
 import  {svgHeight,svgCenterY,svgWidth,svgCenterX} from "../SystemComponents/svgConstants";
 import { v4 as uuidv4 } from 'uuid';
 import PropTypes from 'prop-types';
-
-const styles = theme => ({
-  Label: {
-    fill: theme.palette.text.primary
-  },
-  Value: {
-    fill: theme.palette.text.primary
-  },
-});
+import { styled } from "@mui/material/styles";
+import { useTheme } from "@mui/system";
+const TextLabel = styled("text")(({ theme }) => ({
+  fill: theme.palette.text.primary,
+}));
 
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */
 const SteererYMagnetComponent = (props) => {
+  const theme=useTheme();
   const handleOnClick = device => event => {
     if (typeof props.handleOnClick !== 'undefined') {
       props.handleOnClick(device);
@@ -42,13 +39,13 @@ const SteererYMagnetComponent = (props) => {
     if (props.alarmSensitive !== 'undefined') {
       if (props.alarmSensitive == true) {
         if (alarmSeverity == 1) {
-          color = props.theme.palette.alarm.minor.main;
+          color = theme.palette.alarm.minor.main;
         }
         else if (alarmSeverity == 2) {
-          color = props.theme.palette.alarm.major.main;
+          color = theme.palette.alarm.major.main;
         }
         else {
-          color = props.theme.palette.beamLineComponent.main;
+          color = theme.palette.beamLineComponent.main;
         }
       }
     }
@@ -254,22 +251,22 @@ const SteererYMagnetComponent = (props) => {
           </g>
         </g>
 
-        <text className={classes.Value}
+        <TextLabel
           x={typeof props.valueOffsetX !== 'undefined' ? props.valueOffsetX : 0}
           y={typeof props.valueOffsetY !== 'undefined' ? props.valueOffsetY + 57.5 : 57.5}
           textAnchor='middle'
           filter={props.textShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
         >
           {value + " " + props.units}
-        </text>
-        <text className={classes.Label}
+        </TextLabel>
+        <TextLabel
           x={typeof props.labelOffsetX !== 'undefined' ? props.labelOffsetX : 0}
           y={typeof props.labelOffsetY !== 'undefined' ? props.labelOffsetY - 30 : -30}
           textAnchor='middle'
           filter={props.textShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
         >
           {props.label}
-        </text>
+        </TextLabel>
       </g>
     </svg>
   );
@@ -479,4 +476,4 @@ SteererYMagnet.defaultProps = {
   componentGradient: true,
 };
 
-export default withStyles(styles, { withTheme: true })(SteererYMagnet)
+export default SteererYMagnet;

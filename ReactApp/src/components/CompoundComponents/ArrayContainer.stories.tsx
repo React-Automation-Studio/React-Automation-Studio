@@ -9,7 +9,7 @@ export default {
   component: ArrayContainer,
   parameters: {},
 
-  // tags: ["autodocs"],
+   tags: [],
 
   argTypes: {},
 } as Meta;

@@ -1,22 +1,26 @@
 
 To customize the footer text try the example below:
-```js static
+
+``` js
 <Login 
     footerString= "Login is now customizable"
-    version="V2.2.0"
+    version="V5.0.0"
     timeout={5000}/>
 ```
 Set the following in .env file to enable  Login and authentication
-```bash
+
+``` bash
 VITE_EnableLogin=true
 ```
 This will enable the standard login using local credentials by default.
 To disable the standard login set the following in .env file: 
-```bash
+
+``` bash
 VITE_DisableStandardLogin=true
 ```
 Set the following in the .env file to enable Active Directory Login
-```bash
+
+``` bash
 VITE_EnableActiveDirectoryLogin=true
 LDAP_HOST=ldap://xxxxxx
 LDAP_PORT=389

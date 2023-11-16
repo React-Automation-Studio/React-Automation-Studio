@@ -1,10 +1,4 @@
-We are currently in the progress of migrating iThemba LABS svg based beamline components to site independant components based on the widget component.
-
-when this is complete then the beamline control system demos will be updated to use these components.
-
-This section is only for preview.
-
-Recipe to 3d perspective component:
+Recipe to create 3d perspective Beamline component:
 <ol>
 <li>In Inkscape create document with canvas size 50x50 px</li>
 <li> Set the units to px</li>

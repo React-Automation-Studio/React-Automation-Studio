@@ -1,0 +1,27 @@
+import pv from './PV.md?raw';
+
+import {
+  Canvas,
+  Meta,
+  Story,
+  Controls,
+  Description,
+  Title,
+  Source,
+  Stories
+} from "@storybook/blocks";
+import { Markdown } from '@storybook/blocks';
+import * as PV from "./PV.stories";
+import ImportPath from "../../../.storybook/ImportPath";
+
+# PV
+<Meta  of={PV}/> 
+
+<Description />
+<ImportPath fullPath="import PV from 'src/components/SystemComponents/PV';"/>
+
+<Controls/>
+<Stories includePrimary={false}/>
+<Markdown>{pv}</Markdown>
+
+{/* <Markdown>{widgetable}</Markdown> */} 

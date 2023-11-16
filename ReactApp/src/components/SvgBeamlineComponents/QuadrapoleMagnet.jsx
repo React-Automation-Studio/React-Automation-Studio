@@ -5,22 +5,16 @@ import withStyles from '@mui/styles/withStyles';
 import { v4 as uuidv4 } from 'uuid';
 import  {svgHeight,svgCenterY,svgWidth,svgCenterX} from "../SystemComponents/svgConstants";
 import PropTypes from 'prop-types';
-
-const styles = theme => ({
-  Label: {
-    fill: theme.palette.text.primary
-  },
-  Value: {
-    fill: theme.palette.text.primary
-  },
-  textBMLabelDisconneted: {
-    fill: 'dimgrey'
-  },
-});
+import { styled } from "@mui/material/styles";
+import { useTheme } from '@mui/system';
+const TextLabel = styled("text")(({ theme }) => ({
+  fill: theme.palette.text.primary
+}));
 
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */
 const QuadrapoleMagnetComponent = (props) => {
+  const theme=useTheme(); 
   const handleOnClick = device => event => {
     if (typeof props.handleOnClick !== 'undefined') {
       props.handleOnClick(device);
@@ -46,13 +40,13 @@ const QuadrapoleMagnetComponent = (props) => {
     if (props.alarmSensitive !== 'undefined') {
       if (props.alarmSensitive == true) {
         if (alarmSeverity == 1) {
-          color = props.theme.palette.alarm.minor.main;
+          color = theme.palette.alarm.minor.main;
         }
         else if (alarmSeverity == 2) {
-          color = props.theme.palette.alarm.major.main;
+          color = theme.palette.alarm.major.main;
         }
         else {
-          color = props.theme.palette.beamLineComponent.main;
+          color = theme.palette.beamLineComponent.main;
         }
       }
     }
@@ -104,7 +98,7 @@ const QuadrapoleMagnetComponent = (props) => {
           filter={props.componentShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
         />
 
-        <text className={classes.Value}
+        <TextLabel
             x={typeof props.valueOffsetX !== 'undefined' ? props.valueOffsetX +7.5:7.5}
             y={typeof props.valueOffsetY !== 'undefined' ? props.valueOffsetY +57.5:57.5}
       
@@ -112,15 +106,15 @@ const QuadrapoleMagnetComponent = (props) => {
           filter={props.textShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
         >
           {value + " " + props.units}
-        </text>
-        <text className={classes.Label}
+        </TextLabel>
+        <TextLabel
           x={typeof props.labelOffsetX !== 'undefined' ? props.labelOffsetX +7.5:7.5}
           y={typeof props.labelOffsetY !== 'undefined' ? props.labelOffsetY -40:-40}
           textAnchor='middle'
           filter={props.textShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
         >
           {props.label}
-        </text>
+        </TextLabel>
       </g>
     </svg>
   );
@@ -330,4 +324,4 @@ QuadrapoleMagnet.defaultProps = {
   componentGradient: true,
 };
 
-export default withStyles(styles,{withTheme:true})(QuadrapoleMagnet)
+export default QuadrapoleMagnet

@@ -1,0 +1,27 @@
+import EpicsPV from './EpicsPV.md?raw';
+
+import {
+  Canvas,
+  Meta,
+  Story,
+  Controls,
+  Description,
+  Title,
+  Source,
+  Stories
+} from "@storybook/blocks";
+import { Markdown } from '@storybook/blocks';
+import * as EpicsPVStories from "./EpicsPV.stories";
+import ImportPath from "../../../.storybook/ImportPath";
+
+# EpicsPV
+<Meta  of={EpicsPVStories}/> 
+
+<Description />
+<ImportPath fullPath="import EpicsPV from 'src/components/SystemComponents/EpicsPV';"/>
+
+<Controls/>
+<Stories includePrimary={false}/>
+<Markdown>{EpicsPV}</Markdown>
+
+{/* <Markdown>{widgetable}</Markdown> */} 

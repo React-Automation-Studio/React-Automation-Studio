@@ -222,9 +222,11 @@ export const useEpicsPV = (props) => {
 const EpicsPV = (props) => {
   const pv = useEpicsPV(props);
   useEffect(() => {
+    if(props.pvData){
     props.pvData(pv);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pv]);
+  }, [pv,props.pvData]);
   if (props.debug) {
     console.log(props);
     console.log(pv);

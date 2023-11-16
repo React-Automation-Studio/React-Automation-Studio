@@ -14,14 +14,14 @@ import Close from '@mui/icons-material/Close';
 import Paper from '@mui/material/Paper';
 import {replaceSystemMacros} from '../../SystemComponents/Utils/macroReplacement';
 import SelectionInput from '../../BaseComponents/SelectionInput';
+import { useTheme } from '@mui/material';
 
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */
-const styles = theme => ({
-  body1: theme.typography.body1,
-});
+
 
 const EditorSinglePS = (props) => {
+  const theme=useTheme();
   const [system,setSystem]=useState(replaceSystemMacros(props.system,props.system.macros))
   return (
     <div style={{ paddingRight: 12 }} >
@@ -33,7 +33,7 @@ const EditorSinglePS = (props) => {
           <Close fontSize="small" onClick={props.handleCloseEditor} />
         </Grid>
       </Grid>
-      <Paper style={{ padding: 12 }} elevation={props.theme.palette.paperElevation} >
+      <Paper style={{ padding: 12 }} elevation={theme.palette.paperElevation} >
         <Grid container
           direction="row"
           justifyContent="flex-start"
@@ -150,4 +150,4 @@ const EditorSinglePS = (props) => {
   );
 }
 
-export default withStyles(styles, { withTheme: true })(EditorSinglePS)
+export default EditorSinglePS;

@@ -11,24 +11,22 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
-
+import { styled } from "@mui/material/styles";
+import { useTheme } from '@mui/system';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const styles = theme => ({
-  Label: {
-    fill: theme.palette.text.primary
-  },
-  Value: {
-    fill: theme.palette.text.primary
-  },
-});
+const TextLabel = styled("text")(({ theme }) => ({
+  fill: theme.palette.text.primary
+}));
+
 
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */
 const FCComponent = (props) => {
+  const theme = useTheme();
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const handleYes = () => {
@@ -106,17 +104,17 @@ const FCComponent = (props) => {
     if (props.alarmSensitive !== 'undefined') {
       if (props.alarmSensitive == true) {
         if (alarmSeverity == 1) {
-          color = props.theme.palette.alarm.minor.main;
+          color = theme.palette.alarm.minor.main;
         }
         else if (alarmSeverity == 2) {
-          color = props.theme.palette.alarm.major.main;
+          color = theme.palette.alarm.major.main;
         }
         else {
           if (isMoving) {
             color = '#f9e500';
           }
           else {
-            color = props.theme.palette.beamLineComponent.main;
+            color = theme.palette.beamLineComponent.main;
           }
         }
       }
@@ -209,14 +207,14 @@ const FCComponent = (props) => {
             </g>
             }
           </g>
-          <text className={classes.Label}
+          <TextLabel
             x={0}
             y={+yOffset - 30}
             textAnchor='middle'
             filter={props.textShadow === true ? "url(#" + componentId + "FCShadow)" : ""}
           >
             {props.label}
-          </text>
+          </TextLabel>
         </g>
       </g>
     </svg>
@@ -396,4 +394,4 @@ FC.defaultProps = {
   componentGradient: true,
 };
 
-export default withStyles(styles, { withTheme: true })(FC)
+export default FC;

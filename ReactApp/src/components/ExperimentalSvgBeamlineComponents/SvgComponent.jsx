@@ -6,22 +6,19 @@ import withStyles from '@mui/styles/withStyles';
 import { v4 as uuidv4 } from 'uuid';
 import {svgCenterY, svgCenterX } from "../SystemComponents/svgConstants";
 import PropTypes from 'prop-types';
+import { styled } from "@mui/material/styles";
+import { useTheme } from '@mui/system';
 
-const styles = theme => ({
-  Label: {
-    fill: theme.palette.text.primary
-  },
-  Value: {
-    fill: theme.palette.text.primary
-  },
-  textBMLabelDisconneted: {
-    fill: 'dimgrey'
-  },
-});
+
+const TextLabel = styled("text")(({ theme }) => ({
+  fill: theme.palette.text.primary
+}));
+
 
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */
 const SvgComponentComponent = (props) => {
+  const theme = useTheme();
   const handleOnClick = device => event => {
     if (typeof props.handleOnClick !== 'undefined') {
       props.handleOnClick(device);
@@ -46,21 +43,21 @@ const SvgComponentComponent = (props) => {
     if (props.alarmSensitive !== 'undefined') {
       if (props.alarmSensitive == true) {
         if (alarmSeverity == 1) {
-          color = props.theme.palette.alarm.minor.main;
+          color = theme.palette.alarm.minor.main;
 
         }
         else if (alarmSeverity == 2) {
-          color = props.theme.palette.alarm.major.main;
+          color = theme.palette.alarm.major.main;
 
         }
         else {
-          color = props.theme.palette.beamLineComponent.main;
+          color = theme.palette.beamLineComponent.main;
 
         }
 
       }
       else{
-        color = props.theme.palette.beamLineComponent.main;
+        color = theme.palette.beamLineComponent.main;
       }
     }
   }
@@ -104,7 +101,7 @@ const SvgComponentComponent = (props) => {
           {props.children}
         </g>
 
-        {props.showValue&&<text className={classes.Value}
+        {props.showValue&&<TextLabel
           x={typeof props.valueOffsetX !== 'undefined' ? props.valueOffsetX : 0}
           y={typeof props.valueOffsetY !== 'undefined' ? props.valueOffsetY + 57.5 : 57.5}
 
@@ -112,16 +109,16 @@ const SvgComponentComponent = (props) => {
           filter={props.textShadow === true ? "url(#" + componentId + "componentShadow)" : ""}
         >
           {value + " " + props.units}
-        </text>}
+        </TextLabel>}
 
-        {props.showLabel&&<text className={classes.Label}
+        {props.showLabel&&<TextLabel
           x={typeof props.labelOffsetX !== 'undefined' ? props.labelOffsetX : 0}
           y={typeof props.labelOffsetY !== 'undefined' ? props.labelOffsetY - 40 : -40}
           textAnchor='middle'
           filter={props.textShadow === true ? "url(#" + componentId + "componentShadow)" : ""}
         >
           {props.label}
-        </text>}
+        </TextLabel>}
       </g>
     </svg>
   );
@@ -328,4 +325,4 @@ SvgComponent.defaultProps = {
   componentGradient: true,
 };
 
-export default withStyles(styles, { withTheme: true })(SvgComponent)
+export default SvgComponent;

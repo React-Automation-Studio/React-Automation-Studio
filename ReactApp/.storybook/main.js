@@ -41,7 +41,13 @@ export default {
   '../src/components/SystemComponents/database/MongoDB/useMongoDbUpdateOne.mdx',
   '../src/components/SystemComponents/database/MongoDB/useMongoDbWatch.mdx',
   '../src/docs/beamlineComponents/BeamlineComponents.mdx',
+  '../src/docs/alarmHandler/alarmHandler.mdx',
+  '../src/docs/alarmHandler/setup.mdx',
+  '../src/docs/alarmHandler/environment.mdx',
+  '../src/docs/alarmHandler/emailNotification.mdx',
+  '../src/docs/alarmHandler/signalNotification.mdx',
   '../src/**/**/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+
   // '../src/components/SystemComponents/Widgets/Widget.stories.js',
   // '../src/components/**/*.mdx',
 ],

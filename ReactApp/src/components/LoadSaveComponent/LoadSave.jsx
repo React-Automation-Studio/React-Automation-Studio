@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import { replaceMacros } from '../SystemComponents/Utils/macroReplacement';
 import PropTypes from 'prop-types';
-import withStyles from '@mui/styles/withStyles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -23,10 +22,10 @@ import PV from '../SystemComponents/PV';
 import useMongoDbWatch from '../SystemComponents/database/MongoDB/useMongoDbWatch'
 import useMongoDbUpdateOne from '../SystemComponents/database/MongoDB/useMongoDbUpdateOne';
 import useMongoDbInsertOne from '../SystemComponents/database/MongoDB/useMongoDbInsertOne';
-
+import makeStyles from '@mui/styles/makeStyles';
 import { orange, green, red } from '@mui/material/colors';
-
-const styles = theme => ({
+import { useTheme } from '@mui/material/styles';
+const useStyles = makeStyles(theme => ({
   root: {
     width: '100%',
     marginTop: theme.spacing(1) * 0,
@@ -85,7 +84,7 @@ const styles = theme => ({
     width: "20%",
     backgroundColor: red[500],
   },  
-});
+}));
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -152,6 +151,7 @@ function compareValues(a, b, initialized) {
 */
 
 const LoadSave = (props) => {
+  const theme=useTheme();
   const systemName = props.macros['$(systemName)'];
   const dbListQueryParameters = { 'query': { "beam_setup.Status": { "$ne": "Delete" } } };
   const Parameters = JSON.stringify(dbListQueryParameters);
@@ -179,8 +179,7 @@ const LoadSave = (props) => {
   const dbDataObject=useMongoDbWatch({dbURL:dbListBroadcastReadDataURL});
   const dbDataInitialized=dbDataObject.initialized;
   const [loadTimedOut,setLoadTimedOut]=useState(false);
-  const {theme}=props;
-
+  
   useEffect(() => {
       let data = dbDataObject.data;
       if(data!==null){
@@ -537,7 +536,7 @@ const LoadSave = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
   
-  const { classes } = props;
+  const classes =useStyles();
   
   let disableDeleteButton = true;
   let disableLoadButton = true;
@@ -858,4 +857,4 @@ LoadSave.defaultProps = {
   useLoadEnable: false
 }
 
-export default withStyles(styles, { withTheme: true })(LoadSave);
+export default LoadSave;

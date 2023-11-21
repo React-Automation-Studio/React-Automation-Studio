@@ -76,10 +76,10 @@ export default {
   // '../src/components/**/*.mdx',
 ],
   addons: [
-    "@storybook/addon-links",
-    "@storybook/addon-essentials",
-    "@storybook/addon-onboarding",
-    "@storybook/addon-interactions",
+    // "@storybook/addon-links",
+    // "@storybook/addon-essentials",
+    // "@storybook/addon-onboarding",
+    // "@storybook/addon-interactions",
     "@storybook/addon-docs"
   ],
   async viteFinal(config, { configType }) {

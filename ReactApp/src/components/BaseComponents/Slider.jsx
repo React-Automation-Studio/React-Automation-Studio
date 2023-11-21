@@ -616,10 +616,7 @@ Slider.propTypes = {
    * Directive to use a vertical slider
    */
   vertical: PropTypes.bool,
-  /**
-   * height of the component.
-   */
-  height: PropTypes.string,
+ 
 };
 
 Slider.defaultProps = {

@@ -921,8 +921,9 @@ const UserNotification = (props) => {
             const localRegexError = {}
             const localAddRegexVal = {}
             const localEditUsersList = {}
-            const textEval2=`${user.username}-${user.name}`;
+            
             dbUsersData.map((user, index) => {
+                const textEval2=`${user.username}-${user.name}`;
                 localDictUserRegex[textEval2] = user.notifyPVs
                 localBackupUserList[textEval2] = user
                 localUserEdit[textEval2] = false
@@ -1030,7 +1031,7 @@ const UserNotification = (props) => {
     const warnAdminMessageEdit = "Only alarmAdmin role users can edit users"
 
     return (
-        <div>
+        <React.Fragment >
             {alarmPVs}
             <Snackbar
                 anchorOrigin={{
@@ -1042,11 +1043,11 @@ const UserNotification = (props) => {
                 onClose={handleSnackClose}
                 message={snackMessage}
                 action={
-                    <div>
+                    <React.Fragment>
                         <IconButton size="small" aria-label="close" color="inherit" onClick={handleSnackClose}>
                             <CloseIcon fontSize="small" />
                         </IconButton>
-                    </div>
+                    </React.Fragment>
                 }
             />
             <EditUsersDialog
@@ -1279,7 +1280,7 @@ const UserNotification = (props) => {
                     </Grid>
                 </Grid>
             }
-        </div >
+        </React.Fragment>
     );
 };
 

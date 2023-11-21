@@ -376,13 +376,14 @@ const UserNotification = (props) => {
     const handleSetAddRegexVal = useCallback((event, username, name) => {
 
         const localAddRegexVal = { ...addRegexVal }
-        localAddRegexVal[`${username}-${name}`] = event.target.value
+        const textEval=`${username}-${name}`;
+        localAddRegexVal[textEval] = event.target.value
         setAddRegexVal(localAddRegexVal)
 
         try {
             new RegExp(event.target.value)
             const localRegexError = { ...regexError }
-            localRegexError[`${username}-${name}`] = false
+            localRegexError[textEval] = false
             setRegexError(localRegexError)
             setFilterUserRegex([{
                 index: -1,
@@ -391,7 +392,7 @@ const UserNotification = (props) => {
         }
         catch (e) {
             const localRegexError = { ...regexError }
-            localRegexError[`${username}-${name}`] = true
+            localRegexError[textEval] = true
             setRegexError(localRegexError)
         }
 
@@ -402,7 +403,8 @@ const UserNotification = (props) => {
             name: name,
             username: username
         })
-        const newFilterUserRegex = Object.values(dictUserRegex[`${username}-${name}`]).reduce((acc, entry, index) => {
+        const textEval=`${username}-${name}`;
+        const newFilterUserRegex = Object.values(dictUserRegex[textEval]).reduce((acc, entry, index) => {
             acc.push({
                 index: index,
                 regEx: entry.regEx
@@ -447,19 +449,21 @@ const UserNotification = (props) => {
         if (value) {
             // only back up when starting to edit
             const localBackupUserList = { ...backupUserList }
-            localBackupUserList[`${username}-${name}`] = { ...match }
+            const textEval=`${username}-${name}`;
+            localBackupUserList[textEval] = { ...match }
             setBackupUserList(localBackupUserList)
         }
-
+        const textEval=`${username}-${name}`;
         let localUserEdit = { ...userEdit }
-        localUserEdit[`${username}-${name}`] = value
+        localUserEdit[textEval] = value
         setUserEdit(localUserEdit)
     }, [userEdit, userList, backupUserList])
 
     const applyEdit = useCallback((event, name, username) => {
 
         const localAddRegexVal = { ...addRegexVal }
-        localAddRegexVal[`${username}-${name}`] = ''
+        const textEval=`${username}-${name}`;
+        localAddRegexVal[textEval] = ''
         setAddRegexVal(localAddRegexVal)
 
         handleSetUserEdit(event, name, username, false)
@@ -470,7 +474,7 @@ const UserNotification = (props) => {
         // Reset userList to backup to guarantee 
         // new values propogate from dbwatch
         const newUserList = [...userList]
-        newUserList[userIndex] = backupUserList[`${username}-${name}`]
+        newUserList[userIndex] = backupUserList[textEval]
         setUserList(newUserList)
 
         const id = match['_id']['$oid']
@@ -519,14 +523,15 @@ const UserNotification = (props) => {
 
         // Create new userList
         const newUserList = [...userList]
-        newUserList[userIndex] = backupUserList[`${username}-${name}`]
+        const textEval=`${username}-${name}`;
+        newUserList[userIndex] = backupUserList[textEval]
         setUserList(newUserList)
 
         const localAddRegexVal = { ...addRegexVal }
-        localAddRegexVal[`${username}-${name}`] = ''
+        localAddRegexVal[textEval] = ''
         setAddRegexVal(localAddRegexVal)
 
-        const newFilterUserRegex = Object.values(backupUserList[`${username}-${name}`].notifyPVs).reduce((acc, entry, index) => {
+        const newFilterUserRegex = Object.values(backupUserList[textEval].notifyPVs).reduce((acc, entry, index) => {
             acc.push({
                 index: index,
                 regEx: entry.regEx
@@ -537,15 +542,18 @@ const UserNotification = (props) => {
 
         // Clear email and mobile errors
         setEmailError(prevState => {
+            const textEval=`${username}-${name}`;
             return {
                 ...prevState,
-                [`${username}-${name}`]: false
+                [textEval]: false
             }
         })
         setMobileError(prevState => {
+            const textEval=`${username}-${name}`;
             return {
+                
                 ...prevState,
-                [`${username}-${name}`]: false
+                [textEval]: false
             }
         })
         //
@@ -577,9 +585,10 @@ const UserNotification = (props) => {
 
         // email error
         setEmailError(prevState => {
+            const textEval=`${username}-${name}`;
             return {
                 ...prevState,
-                [`${username}-${name}`]: validateEmail(value)
+                [textEval]: validateEmail(value)
             }
         })
         //
@@ -611,9 +620,10 @@ const UserNotification = (props) => {
 
         // mobile error
         setMobileError(prevState => {
+            const textEval=`${username}-${name}`;
             return {
                 ...prevState,
-                [`${username}-${name}`]: validateMobile(value)
+                [textEval]: validateMobile(value)
             }
         })
         //
@@ -628,7 +638,8 @@ const UserNotification = (props) => {
         // Only add non blank chips
         if (expression !== '') {
             const localAddRegexVal = { ...addRegexVal }
-            localAddRegexVal[`${username}-${name}`] = ''
+            const textEval=`${username}-${name}`;
+            localAddRegexVal[textEval] = ''
             setAddRegexVal(localAddRegexVal)
 
             // Find match and note it's index in userList
@@ -800,13 +811,16 @@ const UserNotification = (props) => {
 
     const clearAllUserSelects = useCallback(() => {
         Object.values(editUsersList).map(user => {
-            setEditUsersList(prevState => ({
+            setEditUsersList(prevState => {
+                const textEval2=`${user.username}-${user.name}`;
+                return(
+                {
                 ...prevState,
-                [`${user.username}-${user.name}`]: {
-                    ...prevState[`${user.username}-${user.name}`],
+                [textEval2]: {
+                    ...prevState[textEval2],
                     isSelected: false
                 }
-            }))
+            })})
             return null
         })
     }, [editUsersList])
@@ -907,14 +921,14 @@ const UserNotification = (props) => {
             const localRegexError = {}
             const localAddRegexVal = {}
             const localEditUsersList = {}
-
+            const textEval2=`${user.username}-${user.name}`;
             dbUsersData.map((user, index) => {
-                localDictUserRegex[`${user.username}-${user.name}`] = user.notifyPVs
-                localBackupUserList[`${user.username}-${user.name}`] = user
-                localUserEdit[`${user.username}-${user.name}`] = false
-                localRegexError[`${user.username}-${user.name}`] = false
-                localAddRegexVal[`${user.username}-${user.name}`] = ''
-                localEditUsersList[`${user.username}-${user.name}`] = {
+                localDictUserRegex[textEval2] = user.notifyPVs
+                localBackupUserList[textEval2] = user
+                localUserEdit[textEval2] = false
+                localRegexError[textEval2] = false
+                localAddRegexVal[textEval2] = ''
+                localEditUsersList[textEval2] = {
                     id: user._id,
                     name: user.name,
                     username: user.username,
@@ -1016,7 +1030,7 @@ const UserNotification = (props) => {
     const warnAdminMessageEdit = "Only alarmAdmin role users can edit users"
 
     return (
-        <React.Fragment>
+        <div>
             {alarmPVs}
             <Snackbar
                 anchorOrigin={{
@@ -1028,11 +1042,11 @@ const UserNotification = (props) => {
                 onClose={handleSnackClose}
                 message={snackMessage}
                 action={
-                    <React.Fragment>
+                    <div>
                         <IconButton size="small" aria-label="close" color="inherit" onClick={handleSnackClose}>
                             <CloseIcon fontSize="small" />
                         </IconButton>
-                    </React.Fragment>
+                    </div>
                 }
             />
             <EditUsersDialog
@@ -1265,7 +1279,7 @@ const UserNotification = (props) => {
                     </Grid>
                 </Grid>
             }
-        </React.Fragment >
+        </div >
     );
 };
 

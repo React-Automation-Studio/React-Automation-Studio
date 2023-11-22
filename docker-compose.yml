@@ -1,4 +1,3 @@
-version: '3.4'
 services:
   frontend:
     build:
@@ -120,13 +119,18 @@ services:
     network_mode: host
     env_file: .env
     environment:
+          - ALARM_DATABASE=localhost
+          - ALARM_DATABASE_REPLICA_SET_NAME=devrs
+          - LOADSAVE_DATABASE=localhost
+          - LOADSAVE_DATABASE_REPLICA_SET_NAME=devrs
+          - ADMIN_DATABASE=localhost
+          - ADMIN_DATABASE_REPLICA_SET_NAME=devrs
+          - WATCH_DEBUG_DATABASE=localhost
+          - WATCH_DEBUG_DATABASE_REPLICA_SET_NAME=devrs
+          - DEMO_ARCHIVER=http://localhost:17668
           - pvServerURL=http://127.0.0.1
           - pvServerPort=5001
           - VITE_EnableLogin=false
-          - DEMO_ARCHIVER=http://localhost:17668
-          
-          
-          - no_proxy
     volumes:
           - ./certificates:/certificates/
 
@@ -138,16 +142,7 @@ services:
     stdin_open: true
     restart: always
     network_mode: host
-  # styleguide:
-  #   build:
-  #     context: ./
-  #     dockerfile: docker/styleguide/Dockerfile    
-  #   env_file: .env
-  #   environment:
-  #           - pvServerPort=5001
-  #           - VITE_EnableLogin=false
-  #   volumes:
-  #     - ./build/styleguide:/build/
+    
   storybook:
     build:
       context: ./

@@ -8,9 +8,9 @@ RUN apt-get update
 
 RUN apt-get install -y wget autoconf libtool check patch build-essential libreadline-gplv2-dev re2c libxml2-dev tmux
 
-RUN wget https://epics.anl.gov/download/base/base-3.15.6.tar.gz
-RUN tar -xvf base-3.15.6.tar.gz
-RUN ln -s /epics/base-3.15.6 /epics/base
+RUN wget https://epics-controls.org/download/base/base-7.0.7.tar.gz
+RUN tar -xvf base-7.0.7.tar.gz
+RUN ln -s /epics/base-7.0.7 /epics/base
 WORKDIR /epics/base
 RUN make
 WORKDIR /epics/

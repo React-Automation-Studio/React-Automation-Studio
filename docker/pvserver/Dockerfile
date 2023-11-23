@@ -16,9 +16,9 @@ ENV EPICS_BASE=/epics/base/
 
 WORKDIR /epics
 
-RUN wget https://epics.anl.gov/download/base/base-3.15.6.tar.gz
-RUN tar -xvf base-3.15.6.tar.gz
-RUN ln -s /epics/base-3.15.6 /epics/base
+RUN wget https://epics-controls.org/download/base/base-7.0.7.tar.gz
+RUN tar -xvf base-7.0.7.tar.gz
+RUN ln -s /epics/base-7.0.7 /epics/base
 WORKDIR /epics/base
 RUN make
 WORKDIR /epics

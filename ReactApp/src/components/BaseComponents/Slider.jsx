@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 
 import { Typography } from "@mui/material";
 import PropTypes from "prop-types";
-import debounce from "lodash.debounce";
+import { throttle, debounce } from 'lodash'
 import Widget from "../SystemComponents/Widgets/Widget";
 import RCSlider from "rc-slider";
 import makeStyles from "@mui/styles/makeStyles";
@@ -319,14 +319,14 @@ const useStyles = makeStyles((theme) => {
 
 function SliderComponent(props) {
   const classes = useStyles();
-  const emitChangeDebounced = useRef(
-    debounce((value) => emitChange(value), 10)
+  const emitChangeThrottled = useRef(
+    throttle((value) => emitChange(value), 10)
   ).current;
 
   const emitBlurDebounced = useRef(debounce(handleBlur, 500)).current;
 
   /**
-   * Write value on the PV using emitChangeDebounced function.
+   * Write value on the PV using emitChangeThrottled function.
    * This function store the value and then wait for 10ms
    * before it can be triggered again.
    * @param {Event} event
@@ -334,7 +334,7 @@ function SliderComponent(props) {
    */
   function handleChange(value) {
     props.handleFocus();
-    emitChangeDebounced(value);
+    emitChangeThrottled(value);
   }
 
   function handleBlur() {
@@ -354,11 +354,8 @@ function SliderComponent(props) {
    * @param {Event} event
    * @param {float} value
    */
-  function handleChangeCommited(value) {
+  function handleOnBlur(value) {
     props.handleFocus();
-    emitChangeDebounced(value);
-
-    //props.handleBlur();
     emitBlurDebounced();
   }
 
@@ -449,7 +446,7 @@ function SliderComponent(props) {
                       : undefined
                   }
                   onChange={handleChange}
-                  onAfterChange={handleChangeCommited}
+                  onBlur={handleOnBlur}
                 />
               </div>
             }

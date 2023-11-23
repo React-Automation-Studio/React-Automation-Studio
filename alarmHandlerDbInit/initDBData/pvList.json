@@ -1,9 +1,9 @@
 [{
-        "area": "BEAMLINE DEMO",
+        "area": "BEAMLINE_DEMO",
         "roles": [],
         "pvs": {},
         "subArea0": {
-            "name": "POWER SUPPLIES",
+            "name": "POWER_SUPPLIES",
             "roles": [],
             "pvs": {
                 "pv0": "testIOC:PS1:Readback",
@@ -38,7 +38,7 @@
         }
     },
     {
-        "area": "BUILDING DEMO",
+        "area": "BUILDING_DEMO",
         "roles": [],
         "pvs": {},
         "subArea0": {
@@ -66,7 +66,7 @@
         }
     },
     {
-        "area": "CYCLOTRON DEMO",
+        "area": "CYCLOTRON_DEMO",
         "roles": [],
         "pvs": {
             "pv0": "$(DEMO_ALARMS_IOC):cyclotron_interlocks"
@@ -111,7 +111,7 @@
         }
     },
     {
-        "area": "VAULT DEMO",
+        "area": "VAULT_DEMO",
         "roles": [],
         "pvs": {},
         "subArea0": {
@@ -131,7 +131,7 @@
         }
     },
     {
-        "area": "EPICS PVS DEMO",
+        "area": "EPICS_PVS_DEMO",
         "roles": [],
         "pvs": {
             "pv0": "testIOC:amplitude"

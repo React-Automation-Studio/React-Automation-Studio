@@ -37,14 +37,6 @@ function LightPanelComponent(props) {
     };
   }
 
-  // const classes = useStyles({
-  //   value,
-  //   enumStrs,
-  //   colors,
-  //   useStringValue,
-  //   initialized,
-  // });
-
   /* Try to use customValueStrings if defined */
   let val = value;
   if (initialized && customValueStrings !== undefined) {

@@ -42,7 +42,6 @@ export const CustomColors = {
     macros: { "$(device)": "testIOC", "$(id)": "1" },
     label: "Test Label",
     onColor: "secondary",
-    // offColor: "red",
   },
 };
 export const CustomIcon = {
@@ -52,6 +51,5 @@ export const CustomIcon = {
     macros: { "$(device)": "testIOC", "$(id)": "1" },
     label: "Test Label",
     onColor: "error",
-    // offColor: "red",
   },
 };

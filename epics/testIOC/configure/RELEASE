@@ -25,7 +25,7 @@
 # Variables and paths to dependent modules:
 #MODULES = /path/to/modules
 #MYMODULE = $(MODULES)/my-module
-CALC=/epics/support/calc-R3-7-1
+CALC=/epics/support/calc-R3-7-5
 # If using the sequencer, point SNCSEQ at its top directory:
 #SNCSEQ = $(MODULES)/seq-ver
 

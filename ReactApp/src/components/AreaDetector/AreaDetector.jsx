@@ -14,9 +14,16 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { styled } from '@mui/material/styles';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import  SelectionInput  from '../BaseComponents/SelectionInput';
+import { styled } from "@mui/material/styles";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import SelectionInput from "../BaseComponents/SelectionInput";
+import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
+import CardMedia from "@mui/material/CardMedia";
+import CardContent from "@mui/material/CardContent";
+import CardActions from "@mui/material/CardActions";
+import Box from "@mui/material/Box";
+import { useTheme } from "@mui/system";
 /**
  * This is a preview AreaDetector component. This component is built on a React Automation Studio based front end that connects
  * to an alarm server back end.
@@ -27,28 +34,33 @@ import  SelectionInput  from '../BaseComponents/SelectionInput';
  */
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-      backgroundColor: theme.palette.common.black,
-      color: theme.palette.common.white,
-    },
-    [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
-    },
-  }));
-  
-  const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    '&:nth-of-type(odd)': {
-      backgroundColor: theme.palette.action.hover,
-    },
-    // hide last border
-    '&:last-child td, &:last-child th': {
-      border: 0,
-    },
-  }));
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor:
+      theme.palette.mode == "light"
+        ? theme.palette.primary.light
+        : theme.palette.primary.dark,
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  "&:nth-of-type(odd)": {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  "&:last-child td, &:last-child th": {
+    border: 0,
+  },
+}));
 
 const AreaDetector = (props) => {
   const [tabVal, setTabVal] = useState(0);
   const muiTextFieldProps = { size: "small", variant: "standard" };
+  const theme = useTheme();
+  const paperElevation = theme.palette.paperElevation;
   return (
     <Layout
       {...props.titleProps}
@@ -58,89 +70,153 @@ const AreaDetector = (props) => {
       handleTabChange={(event, value) => setTabVal(value)}
     >
       {tabVal === 0 ? (
-        <div>
-          <TableContainer component={Paper}  sx={{maxWidth:600}}>
-            <Table size="small">
-              <TableHead>
-                <TableRow>
-                  <StyledTableCell align="left">Setting</StyledTableCell>
-                  <StyledTableCell align="left">Setpoint</StyledTableCell>
-                  <StyledTableCell align="left">Readback</StyledTableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                <TableRow>
-                  <TableCell align="left">Exposure time</TableCell>
-                  <TableCell align="left">
-                    <TextInput pv="$(P)$(R)AcquireTime" macros={props.macros} muiTextFieldProps={muiTextFieldProps}/>
-                  </TableCell>
-                  <TableCell align="left">
-                    <TextOutput  pv="$(P)$(R)AcquireTime_RBV"  macros={props.macros}  muiTextFieldProps={muiTextFieldProps}    />
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell align="left">Acquire period</TableCell>
-                  <TableCell align="left">
-                    <TextInput pv="$(P)$(R)AcquirePeriod" macros={props.macros} muiTextFieldProps={muiTextFieldProps}/>
-                  </TableCell>
-                  <TableCell align="left">
-                    <TextOutput  pv="$(P)$(R)AcquirePeriod_RBV"  macros={props.macros}  muiTextFieldProps={muiTextFieldProps}    />
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell align="left"># Images</TableCell>
-                  <TableCell align="left">
-                    <TextInput pv="$(P)$(R)NumImages" macros={props.macros} muiTextFieldProps={muiTextFieldProps}/>
-                  </TableCell>
-                  <TableCell align="left">
-                    <TextOutput  pv="$(P)$(R)NumImages_RBV"  macros={props.macros}  muiTextFieldProps={muiTextFieldProps}    />
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell align="left"># Images complete</TableCell>
-                  <TableCell align="left">
-                    {/* <TextInput pv="$(P)$(R)AcquireTime" macros={props.macros} muiTextFieldProps={muiTextFieldProps}/> */}
-                  </TableCell>
-                  <TableCell align="left">
-                    <TextOutput  pv="$(P)$(R)NumImagesCounter_RBV"  macros={props.macros}  muiTextFieldProps={muiTextFieldProps}    />
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell align="left"># Exp./image</TableCell>
-                  <TableCell align="left">
-                    <TextInput pv="$(P)$(R)NumExposures" macros={props.macros} muiTextFieldProps={muiTextFieldProps}/>
-                  </TableCell>
-                  <TableCell align="left">
-                    <TextOutput  pv="$(P)$(R)NumExposures_RBV"  macros={props.macros}  muiTextFieldProps={muiTextFieldProps}    />
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell align="left">Image mode</TableCell>
-                  <TableCell align="left">
-                    <SelectionInput pv="$(P)$(R)ImageMode" macros={props.macros} muiTextFieldProps={muiTextFieldProps}/>
-                  </TableCell>
-                  <TableCell align="left">
-                    <TextOutput  pv="$(P)$(R)ImageMode_RBV" useStringValue macros={props.macros}  muiTextFieldProps={muiTextFieldProps}    />
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell align="left">Trigger mode</TableCell>
-                  <TableCell align="left">
-                    <SelectionInput pv="$(P)$(R)TriggerMode" macros={props.macros} muiTextFieldProps={muiTextFieldProps}/>
-                  </TableCell>
-                  <TableCell align="left">
-                    <TextOutput  pv="$(P)$(R)TriggerMode_RBV" useStringValue  macros={props.macros}  muiTextFieldProps={muiTextFieldProps}    />
-                  </TableCell>
-                </TableRow>
-               
-
-              </TableBody>
-            </Table>
-          </TableContainer>
-         
-
-        
-        </div>
+        <Box sx={{ p: 2 }}>
+          <Grid container>
+            <Grid item xs={12} md={6} lg={4}></Grid>
+            <Grid item xs={12} md={6} lg={4}></Grid>
+            <Grid item xs={12} md={6} lg={4}>
+              <TableContainer
+                component={Paper}
+                elevation={paperElevation}
+                sx={{ p: 1 }}
+              >
+                <Table size="small">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell colSpan={3} align="left" size="medium">
+                        <Typography variant="h6">Collect</Typography>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <StyledTableCell align="left">Setting</StyledTableCell>
+                      <StyledTableCell align="left">Setpoint</StyledTableCell>
+                      <StyledTableCell align="left">Readback</StyledTableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell align="left">Exposure time</TableCell>
+                      <TableCell align="left">
+                        <TextInput
+                          pv="$(P)$(R)AcquireTime"
+                          macros={props.macros}
+                          muiTextFieldProps={muiTextFieldProps}
+                        />
+                      </TableCell>
+                      <TableCell align="left">
+                        <TextOutput
+                          pv="$(P)$(R)AcquireTime_RBV"
+                          macros={props.macros}
+                          muiTextFieldProps={muiTextFieldProps}
+                        />
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell align="left">Acquire period</TableCell>
+                      <TableCell align="left">
+                        <TextInput
+                          pv="$(P)$(R)AcquirePeriod"
+                          macros={props.macros}
+                          muiTextFieldProps={muiTextFieldProps}
+                        />
+                      </TableCell>
+                      <TableCell align="left">
+                        <TextOutput
+                          pv="$(P)$(R)AcquirePeriod_RBV"
+                          macros={props.macros}
+                          muiTextFieldProps={muiTextFieldProps}
+                        />
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell align="left"># Images</TableCell>
+                      <TableCell align="left">
+                        <TextInput
+                          pv="$(P)$(R)NumImages"
+                          macros={props.macros}
+                          muiTextFieldProps={muiTextFieldProps}
+                        />
+                      </TableCell>
+                      <TableCell align="left">
+                        <TextOutput
+                          pv="$(P)$(R)NumImages_RBV"
+                          macros={props.macros}
+                          muiTextFieldProps={muiTextFieldProps}
+                        />
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell align="left"># Images complete</TableCell>
+                      <TableCell align="left">
+                        {/* <TextInput pv="$(P)$(R)AcquireTime" macros={props.macros} muiTextFieldProps={muiTextFieldProps}/> */}
+                      </TableCell>
+                      <TableCell align="left">
+                        <TextOutput
+                          pv="$(P)$(R)NumImagesCounter_RBV"
+                          macros={props.macros}
+                          muiTextFieldProps={muiTextFieldProps}
+                        />
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell align="left"># Exp./image</TableCell>
+                      <TableCell align="left">
+                        <TextInput
+                          pv="$(P)$(R)NumExposures"
+                          macros={props.macros}
+                          muiTextFieldProps={muiTextFieldProps}
+                        />
+                      </TableCell>
+                      <TableCell align="left">
+                        <TextOutput
+                          pv="$(P)$(R)NumExposures_RBV"
+                          macros={props.macros}
+                          muiTextFieldProps={muiTextFieldProps}
+                        />
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell align="left">Image mode</TableCell>
+                      <TableCell align="left">
+                        <SelectionInput
+                          pv="$(P)$(R)ImageMode"
+                          macros={props.macros}
+                          muiTextFieldProps={muiTextFieldProps}
+                        />
+                      </TableCell>
+                      <TableCell align="left">
+                        <TextOutput
+                          pv="$(P)$(R)ImageMode_RBV"
+                          useStringValue
+                          macros={props.macros}
+                          muiTextFieldProps={muiTextFieldProps}
+                        />
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell align="left">Trigger mode</TableCell>
+                      <TableCell align="left">
+                        <SelectionInput
+                          pv="$(P)$(R)TriggerMode"
+                          macros={props.macros}
+                          muiTextFieldProps={muiTextFieldProps}
+                        />
+                      </TableCell>
+                      <TableCell align="left">
+                        <TextOutput
+                          pv="$(P)$(R)TriggerMode_RBV"
+                          useStringValue
+                          macros={props.macros}
+                          muiTextFieldProps={muiTextFieldProps}
+                        />
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Grid>
+          </Grid>
+        </Box>
       ) : (
         <div> setup </div>
       )}
@@ -151,7 +227,7 @@ const AreaDetector = (props) => {
 AreaDetector.propTypes = {
   /** macros */
   macros: PropTypes.string,
- 
+
   /** Props passed to the underlying TraditionalLayout component and style the title displayed in the app bar.
    * See TraditionalLayout component for more information.
    */
@@ -160,7 +236,6 @@ AreaDetector.propTypes = {
 
 AreaDetector.defaultProps = {
   titleProps: {},
-
 };
 
 export default React.memo(AreaDetector);

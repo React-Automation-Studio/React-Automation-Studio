@@ -62,6 +62,7 @@ const SelectionInputComponent = (props) => {
       margin={props.margin}
       variant={props.variant}
       InputProps={inputProps}
+      {...props.muiTextFieldProps}
     >
       {stringValues}
     </TextField>

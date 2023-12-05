@@ -239,6 +239,12 @@ services:
     stdin_open: true
     depends_on:
       - mongosetup
+  areadetectorsim:
+    image: prjemian/synapps
+    network_mode: host
+    environment:
+      - PREFIX="ras:adsim:" # OPI macro: P = ras:adsim: , R = cam1:
+    command: bash -c "/root/bin/adsim.sh start && tail -f /dev/null"
 
 volumes:
   mongo-db-data1:

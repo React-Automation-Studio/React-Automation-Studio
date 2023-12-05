@@ -9,6 +9,7 @@ import BeamlineControlSystem from "./components/ControlScreens/BeamlineControlSy
 import TableControlSystem from "./components/ControlScreens/TableControlSystem";
 import Test3D from "./components/Experimental/Test3D";
 import AlarmHandlerDemo from "./components/Examples/AlarmHandlerDemo";
+import AreaDetectorSimExample from "./components/Examples/AreaDetectorSimExample";
 import LoadSaveExample from "./components/ExperimentalExamples/LoadSaveExample";
 import ArchiverDataViewerDemo from "./components/ArchiverDataViewer/ArchiverDataViewerDemo";
 import SettingsSteererXY from "./components/SettingsPages/SettingsSteererXY";
@@ -61,6 +62,7 @@ const Routes = (props) => {
         <ProtectedRoute path="/EpicsDemos" component={EpicsDemos} />
         <ProtectedRoute path="/Test3D" component={Test3D} />
         <ProtectedRoute path="/AlarmHandlerDemo" component={AlarmHandlerDemo} />
+        <ProtectedRoute path="/AreaDetectorSimExample" component={AreaDetectorSimExample} />
         <ProtectedRoute
           path="/ArchiverDataViewerDemo"
           component={ArchiverDataViewerDemo}

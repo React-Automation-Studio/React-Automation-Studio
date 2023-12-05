@@ -820,6 +820,19 @@ const MainDashboard = (props) => {
                       Archiver Data Viewer Demo{" "}
                     </Button>
                   </Grid>
+                  <Grid item lg={12} sm={12} xs={12}>
+                    <Button
+                      fullWidth
+                      className={classes.button}
+                      component={Link}
+                      to="/AreaDetectorSimExample"
+                      color="primary"
+                      variant={buttonVariant}
+                    >
+                      {" "}
+                      Area Detector Sim Demo{" "}
+                    </Button>
+                  </Grid>
                 </Grid>
               </Grid>
             </Grid>

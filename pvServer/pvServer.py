@@ -685,6 +685,7 @@ def request_pv_info(message):
                     pvname1,
                     connection_timeout=0.002,
                     connection_callback=on_change_conn,
+                    auto_monitor=True,
                 )
                 pvlist = {}
                 pvlist["pv"] = pv

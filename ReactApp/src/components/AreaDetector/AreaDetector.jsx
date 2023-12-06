@@ -17,13 +17,16 @@ import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import SelectionInput from "../BaseComponents/SelectionInput";
+import ActionButton from "../BaseComponents/ActionButton";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 import Box from "@mui/material/Box";
+import Stack from "@mui/system/Stack";
 import { useTheme } from "@mui/system";
+import GraphY from "../BaseComponents/GraphY";
 /**
  * This is a preview AreaDetector component. This component is built on a React Automation Studio based front end that connects
  * to an alarm server back end.
@@ -72,7 +75,19 @@ const AreaDetector = (props) => {
       {tabVal === 0 ? (
         <Box sx={{ p: 2 }}>
           <Grid container>
-            <Grid item xs={12} md={6} lg={4}></Grid>
+            <Grid item xs={12} md={6} lg={4}>
+              <GraphY
+                // makeNewSocketIoConnection
+                legend={[
+                  "Modulated Sine Wave Amplitude",
+                  "Sine Wave Amplitude",
+                ]}
+                pvs={["ras:adsim:image1:ArrayData"]}
+                style={{
+                  height: "25vh",
+                }}
+              />
+            </Grid>
             <Grid item xs={12} md={6} lg={4}></Grid>
             <Grid item xs={12} md={6} lg={4}>
               <TableContainer
@@ -205,6 +220,141 @@ const AreaDetector = (props) => {
                       <TableCell align="left">
                         <TextOutput
                           pv="$(P)$(R)TriggerMode_RBV"
+                          useStringValue
+                          macros={props.macros}
+                          muiTextFieldProps={muiTextFieldProps}
+                        />
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell align="left">Acquire</TableCell>
+                      <TableCell align="left">
+                        <Stack direction="row" spacing={2}>
+                          <ActionButton
+                            actionString="Start"
+                            actionValue="1"
+                            macros={props.macros}
+                            labelPlacement="top"
+                            pv="$(P)$(R)Acquire"
+                          />
+                          <ActionButton
+                            actionString="Stop"
+                            actionValue="0"
+                            macros={props.macros}
+                            labelPlacement="top"
+                            pv="$(P)$(R)Acquire"
+                          />
+                        </Stack>
+                      </TableCell>
+                      <TableCell align="left">
+                        <TextOutput
+                          pv="$(P)$(R)Acquire"
+                          useStringValue
+                          macros={props.macros}
+                          muiTextFieldProps={muiTextFieldProps}
+                        />
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell align="left"># Queued arrays</TableCell>
+                      <TableCell align="left"></TableCell>
+                      <TableCell align="left">
+                        <TextOutput
+                          pv="$(P)$(R)NumQueuedArrays"
+                          useStringValue
+                          macros={props.macros}
+                          muiTextFieldProps={muiTextFieldProps}
+                        />
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell align="left">Wait for plugins</TableCell>
+                      <TableCell align="left">
+                        <SelectionInput
+                          pv="$(P)$(R)WaitForPlugins"
+                          macros={props.macros}
+                          muiTextFieldProps={muiTextFieldProps}
+                        />
+                      </TableCell>
+                      <TableCell align="left"></TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell align="left">Acquire busy</TableCell>
+                      <TableCell align="left"></TableCell>
+                      <TableCell align="left">
+                        <TextOutput
+                          pv="$(P)$(R)AcquireBusy"
+                          useStringValue
+                          macros={props.macros}
+                          muiTextFieldProps={muiTextFieldProps}
+                        />
+                      </TableCell>
+                    </TableRow>
+
+                    <TableRow>
+                      <TableCell align="left">Detector state</TableCell>
+                      <TableCell align="left"></TableCell>
+                      <TableCell align="left">
+                        <TextOutput
+                          pv="$(P)$(R)DetectorState_RBV"
+                          useStringValue
+                          macros={props.macros}
+                          muiTextFieldProps={muiTextFieldProps}
+                        />
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell align="left">Time remaining</TableCell>
+                      <TableCell align="left"></TableCell>
+                      <TableCell align="left">
+                        <TextOutput
+                          pv="$(P)$(R)TimeRemaining_RBV"
+                          useStringValue
+                          macros={props.macros}
+                          muiTextFieldProps={muiTextFieldProps}
+                        />
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell align="left">Image counter</TableCell>
+                      <TableCell align="left">
+                        <TextInput
+                          pv="$(P)$(R)ArrayCounter"
+                          macros={props.macros}
+                          muiTextFieldProps={muiTextFieldProps}
+                        />
+                      </TableCell>
+                      <TableCell align="left">
+                        <TextOutput
+                          pv="$(P)$(R)ArrayCounter_RBV"
+                          macros={props.macros}
+                          muiTextFieldProps={muiTextFieldProps}
+                        />
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell align="left">Image rate</TableCell>
+                      <TableCell align="left"></TableCell>
+                      <TableCell align="left">
+                        <TextOutput
+                          pv="$(P)$(R)ArrayRate_RBV"
+                          macros={props.macros}
+                          muiTextFieldProps={muiTextFieldProps}
+                        />
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell align="left">Array callbacks</TableCell>
+                      <TableCell align="left">
+                        <SelectionInput
+                          pv="$(P)$(R)ArrayCallbacks"
+                          macros={props.macros}
+                          muiTextFieldProps={muiTextFieldProps}
+                        />
+                      </TableCell>
+                      <TableCell align="left">
+                        <TextOutput
+                          pv="$(P)$(R)ArrayCallbacks_RBV"
                           useStringValue
                           macros={props.macros}
                           muiTextFieldProps={muiTextFieldProps}

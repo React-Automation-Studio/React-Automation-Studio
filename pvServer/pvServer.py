@@ -355,6 +355,10 @@ def check_pv_initialized_after_disconnect():
                                         type(d["value"])
                                     ):
                                         log.info("type is epics.dbr.c_float_Array_0")
+                                    elif "epics.dbr.c_ubyte_Array_1" in str(
+                                        type(d["value"])
+                                    ):
+                                        log.info("type is epics.dbr.c_ubyte_Array_1")
                                     d = {}
                                     d["pvname"] = pvname
                                     d["connected"] = "0"

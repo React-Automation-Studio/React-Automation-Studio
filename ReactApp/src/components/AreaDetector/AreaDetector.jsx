@@ -65,7 +65,7 @@ const AreaDetector = (props) => {
               lg={4}
               sx={{ overflowY: "scroll", maxHeight: "85vh" }}
             >
-              <Accordion elevation={paperElevation} defaultExpanded>
+              <Accordion TransitionProps={{ unmountOnExit: true }}  elevation={paperElevation} defaultExpanded>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1a-content"
@@ -78,7 +78,7 @@ const AreaDetector = (props) => {
                   <Info macros={props.macros} />
                 </AccordionDetails>
               </Accordion>
-              <Accordion elevation={paperElevation}>
+              <Accordion TransitionProps={{ unmountOnExit: true }}  elevation={paperElevation}>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1a-content"
@@ -92,7 +92,7 @@ const AreaDetector = (props) => {
                 </AccordionDetails>
               </Accordion>
 
-              <Accordion elevation={paperElevation}>
+              <Accordion TransitionProps={{ unmountOnExit: true }}  elevation={paperElevation}>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1a-content"
@@ -105,7 +105,7 @@ const AreaDetector = (props) => {
                   <ReadOut macros={props.macros} />
                 </AccordionDetails>
               </Accordion>
-              <Accordion elevation={paperElevation}>
+              <Accordion TransitionProps={{ unmountOnExit: true }}  elevation={paperElevation}>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1a-content"
@@ -118,7 +118,7 @@ const AreaDetector = (props) => {
                   <SimSetup macros={props.macros} />
                 </AccordionDetails>
               </Accordion>
-              <Accordion>
+              <Accordion TransitionProps={{ unmountOnExit: true }} >
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1a-content"
@@ -130,7 +130,7 @@ const AreaDetector = (props) => {
                   <Shutter macros={props.macros} />
                 </AccordionDetails>
               </Accordion>
-              <Accordion>
+              <Accordion TransitionProps={{ unmountOnExit: true }} >
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1a-content"
@@ -142,7 +142,7 @@ const AreaDetector = (props) => {
                   <Collect macros={props.macros} />
                 </AccordionDetails>
               </Accordion>
-              <Accordion>
+              <Accordion TransitionProps={{ unmountOnExit: true }} >
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1a-content"
@@ -154,7 +154,7 @@ const AreaDetector = (props) => {
                   <Attributes macros={props.macros} />
                 </AccordionDetails>
               </Accordion>
-              <Accordion>
+              <Accordion TransitionProps={{ unmountOnExit: true }} >
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1a-content"
@@ -176,7 +176,7 @@ const AreaDetector = (props) => {
               lg={8}
               sx={{ overflowY: "scroll", maxHeight: "85vh" }}
             >
-              <Accordion elevation={paperElevation} defaultExpanded>
+              <Accordion TransitionProps={{ unmountOnExit: true }}  elevation={paperElevation} defaultExpanded>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1a-content"

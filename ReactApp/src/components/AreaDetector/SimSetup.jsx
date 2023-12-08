@@ -203,7 +203,7 @@ const SimSetup = (props) => {
           sx={{ flexDirection: "row-reverse", mt: 2 }}
           expandIcon={<ExpandMore />}
         >
-          <Typography sx={{ pl: 1 }}>Gain, Offset and Noise</Typography>
+          <Typography sx={{ pl: 1 }}>Peak Mode</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Table size="small">
@@ -216,141 +216,404 @@ const SimSetup = (props) => {
             </TableHead>
             <TableBody>
               <TableRow>
-                <TableCell align="left">X</TableCell>
+                <TableCell align="left">Start X</TableCell>
                 <TableCell align="left">
                   <TextInput
-                    pv="$(P)$(R)GainX"
+                    pv="$(P)$(R)PeakStartX"
                     macros={props.macros}
                     muiTextFieldProps={muiTextFieldProps}
                   />
                 </TableCell>
                 <TableCell align="left">
                   <TextOutput
-                    pv="$(P)$(R)GainX_RBV"
+                    pv="$(P)$(R)PeakStartX_RBV"
                     macros={props.macros}
                     muiTextFieldProps={muiTextFieldProps}
                   />
                 </TableCell>
               </TableRow>
               <TableRow>
-                <TableCell align="left">Y</TableCell>
+                <TableCell align="left">Start Y</TableCell>
                 <TableCell align="left">
                   <TextInput
-                    pv="$(P)$(R)GainY"
+                    pv="$(P)$(R)PeakStartY"
                     macros={props.macros}
                     muiTextFieldProps={muiTextFieldProps}
                   />
                 </TableCell>
                 <TableCell align="left">
                   <TextOutput
-                    pv="$(P)$(R)GainY_RBV"
+                    pv="$(P)$(R)PeakStartY_RBV"
                     macros={props.macros}
                     muiTextFieldProps={muiTextFieldProps}
                   />
                 </TableCell>
               </TableRow>
               <TableRow>
-                <TableCell align="left">Overall</TableCell>
+                <TableCell align="left">Num X</TableCell>
                 <TableCell align="left">
                   <TextInput
-                    pv="$(P)$(R)Gain"
+                    pv="$(P)$(R)PeakNumX"
                     macros={props.macros}
                     muiTextFieldProps={muiTextFieldProps}
                   />
                 </TableCell>
                 <TableCell align="left">
                   <TextOutput
-                    pv="$(P)$(R)Gain_RBV"
+                    pv="$(P)$(R)PeakNumX_RBV"
                     macros={props.macros}
                     muiTextFieldProps={muiTextFieldProps}
                   />
                 </TableCell>
               </TableRow>
               <TableRow>
-                <TableCell align="left">Red</TableCell>
+                <TableCell align="left">Num Y</TableCell>
                 <TableCell align="left">
                   <TextInput
-                    pv="$(P)$(R)GainRed"
+                    pv="$(P)$(R)PeakNumY"
                     macros={props.macros}
                     muiTextFieldProps={muiTextFieldProps}
                   />
                 </TableCell>
                 <TableCell align="left">
                   <TextOutput
-                    pv="$(P)$(R)GainRed_RBV"
+                    pv="$(P)$(R)PeakNumY_RBV"
                     macros={props.macros}
                     muiTextFieldProps={muiTextFieldProps}
                   />
                 </TableCell>
               </TableRow>
               <TableRow>
-                <TableCell align="left">Green</TableCell>
+                <TableCell align="left">Step X</TableCell>
                 <TableCell align="left">
                   <TextInput
-                    pv="$(P)$(R)GainGreen"
+                    pv="$(P)$(R)PeakStepX"
                     macros={props.macros}
                     muiTextFieldProps={muiTextFieldProps}
                   />
                 </TableCell>
                 <TableCell align="left">
                   <TextOutput
-                    pv="$(P)$(R)GainGreen_RBV"
+                    pv="$(P)$(R)PeakStepX_RBV"
                     macros={props.macros}
                     muiTextFieldProps={muiTextFieldProps}
                   />
                 </TableCell>
               </TableRow>
               <TableRow>
-                <TableCell align="left">Blue</TableCell>
+                <TableCell align="left">Step Y</TableCell>
                 <TableCell align="left">
                   <TextInput
-                    pv="$(P)$(R)GainBlue"
+                    pv="$(P)$(R)PeakStepY"
                     macros={props.macros}
                     muiTextFieldProps={muiTextFieldProps}
                   />
                 </TableCell>
                 <TableCell align="left">
                   <TextOutput
-                    pv="$(P)$(R)GainBlue_RBV"
+                    pv="$(P)$(R)PeakStepY_RBV"
                     macros={props.macros}
                     muiTextFieldProps={muiTextFieldProps}
                   />
                 </TableCell>
               </TableRow>
               <TableRow>
-                <TableCell align="left">Offset</TableCell>
+                <TableCell align="left">Width X</TableCell>
                 <TableCell align="left">
                   <TextInput
-                    pv="$(P)$(R)Offset"
+                    pv="$(P)$(R)PeakWidthX"
                     macros={props.macros}
                     muiTextFieldProps={muiTextFieldProps}
                   />
                 </TableCell>
                 <TableCell align="left">
                   <TextOutput
-                    pv="$(P)$(R)Offset_RBV"
+                    pv="$(P)$(R)PeakWidthX_RBV"
                     macros={props.macros}
                     muiTextFieldProps={muiTextFieldProps}
                   />
                 </TableCell>
               </TableRow>
               <TableRow>
-                <TableCell align="left">Noise</TableCell>
+                <TableCell align="left">Width Y</TableCell>
                 <TableCell align="left">
                   <TextInput
-                    pv="$(P)$(R)Noise"
+                    pv="$(P)$(R)PeakWidthY"
                     macros={props.macros}
                     muiTextFieldProps={muiTextFieldProps}
                   />
                 </TableCell>
                 <TableCell align="left">
                   <TextOutput
-                    pv="$(P)$(R)Noise_RBV"
+                    pv="$(P)$(R)PeakWidthY_RBV"
                     macros={props.macros}
                     muiTextFieldProps={muiTextFieldProps}
                   />
                 </TableCell>
               </TableRow>
+              <TableRow>
+                <TableCell align="left">% Variat.</TableCell>
+                <TableCell align="left">
+                  <TextInput
+                    pv="$(P)$(R)PeakVariation"
+                    macros={props.macros}
+                    muiTextFieldProps={muiTextFieldProps}
+                  />
+                </TableCell>
+                <TableCell align="left">
+                  <TextOutput
+                    pv="$(P)$(R)PeakVariation"
+                    macros={props.macros}
+                    muiTextFieldProps={muiTextFieldProps}
+                  />
+                </TableCell>
+              </TableRow>
+
+
+            </TableBody>
+          </Table>
+        </AccordionDetails>
+      </Accordion>
+      <Accordion>
+        <AccordionSummary
+          sx={{ flexDirection: "row-reverse", mt: 2 }}
+          expandIcon={<ExpandMore />}
+        >
+          <Typography sx={{ pl: 1 }}>Sine Mode</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Table size="small">
+            <TableHead>
+              <TableRow>
+                <StyledTableCell align="left">Setting</StyledTableCell>
+                <StyledTableCell align="left" colSpan={2}>X Sine #1</StyledTableCell>
+                <StyledTableCell align="left" colSpan={2}>Y Sine #1</StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow>
+                <TableCell align="left">Amplitude</TableCell>
+                <TableCell align="left">
+                  <TextInput
+                    pv="$(P)$(R)XSine1Amplitude"
+                    macros={props.macros}
+                    muiTextFieldProps={muiTextFieldProps}
+                  />
+                </TableCell>
+                <TableCell align="left">
+                  <TextOutput
+                    pv="$(P)$(R)XSine1Amplitude_RBV"
+                    macros={props.macros}
+                    muiTextFieldProps={muiTextFieldProps}
+                  />
+                </TableCell>
+                <TableCell align="left">
+                  <TextInput
+                    pv="$(P)$(R)YSine1Amplitude"
+                    macros={props.macros}
+                    muiTextFieldProps={muiTextFieldProps}
+                  />
+                </TableCell>
+                <TableCell align="left">
+                  <TextOutput
+                    pv="$(P)$(R)YSine1Amplitude_RBV"
+                    macros={props.macros}
+                    muiTextFieldProps={muiTextFieldProps}
+                  />
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell align="left">Frequency</TableCell>
+                
+                <TableCell align="left">
+                  <TextInput
+                    pv="$(P)$(R)YSine1Frequency"
+                    macros={props.macros}
+                    muiTextFieldProps={muiTextFieldProps}
+                  />
+                </TableCell>
+                <TableCell align="left">
+                  <TextOutput
+                    pv="$(P)$(R)XSine1Frequency_RBV"
+                    macros={props.macros}
+                    muiTextFieldProps={muiTextFieldProps}
+                  />
+                </TableCell>
+                <TableCell align="left">
+                  <TextInput
+                    pv="$(P)$(R)YSine1Frequency"
+                    macros={props.macros}
+                    muiTextFieldProps={muiTextFieldProps}
+                  />
+                </TableCell>
+                <TableCell align="left">
+                  <TextOutput
+                    pv="$(P)$(R)YSine1Frequency_RBV"
+                    macros={props.macros}
+                    muiTextFieldProps={muiTextFieldProps}
+                  />
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell align="left">Phase</TableCell>
+                
+                <TableCell align="left">
+                  <TextInput
+                    pv="$(P)$(R)XSine1Phase"
+                    macros={props.macros}
+                    muiTextFieldProps={muiTextFieldProps}
+                  />
+                </TableCell>
+                <TableCell align="left">
+                  <TextOutput
+                    pv="$(P)$(R)XSine1Phase_RBV"
+                    macros={props.macros}
+                    muiTextFieldProps={muiTextFieldProps}
+                  />
+                </TableCell>
+                <TableCell align="left">
+                  <TextInput
+                    pv="$(P)$(R)YSine1Phase"
+                    macros={props.macros}
+                    muiTextFieldProps={muiTextFieldProps}
+                  />
+                </TableCell>
+                <TableCell align="left">
+                  <TextOutput
+                    pv="$(P)$(R)YSine1Phase_RBV"
+                    macros={props.macros}
+                    muiTextFieldProps={muiTextFieldProps}
+                  />
+                </TableCell>
+              </TableRow>
+             
+              
+
+            </TableBody>
+          </Table>
+          <Table size="small">
+            <TableHead>
+              <TableRow>
+                <StyledTableCell align="left">Setting</StyledTableCell>
+                <StyledTableCell align="left" colSpan={2}>X Sine #2</StyledTableCell>
+                <StyledTableCell align="left" colSpan={2}>Y Sine #2</StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow>
+                <TableCell align="left">Amplitude</TableCell>
+                <TableCell align="left">
+                  <TextInput
+                    pv="$(P)$(R)XSine2Amplitude"
+                    macros={props.macros}
+                    muiTextFieldProps={muiTextFieldProps}
+                  />
+                </TableCell>
+                <TableCell align="left">
+                  <TextOutput
+                    pv="$(P)$(R)XSine2Amplitude_RBV"
+                    macros={props.macros}
+                    muiTextFieldProps={muiTextFieldProps}
+                  />
+                </TableCell>
+                <TableCell align="left">
+                  <TextInput
+                    pv="$(P)$(R)YSine2Amplitude"
+                    macros={props.macros}
+                    muiTextFieldProps={muiTextFieldProps}
+                  />
+                </TableCell>
+                <TableCell align="left">
+                  <TextOutput
+                    pv="$(P)$(R)YSine2Amplitude_RBV"
+                    macros={props.macros}
+                    muiTextFieldProps={muiTextFieldProps}
+                  />
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell align="left">Frequency</TableCell>
+                
+                <TableCell align="left">
+                  <TextInput
+                    pv="$(P)$(R)YSine2Frequency"
+                    macros={props.macros}
+                    muiTextFieldProps={muiTextFieldProps}
+                  />
+                </TableCell>
+                <TableCell align="left">
+                  <TextOutput
+                    pv="$(P)$(R)XSine2Frequency_RBV"
+                    macros={props.macros}
+                    muiTextFieldProps={muiTextFieldProps}
+                  />
+                </TableCell>
+                <TableCell align="left">
+                  <TextInput
+                    pv="$(P)$(R)YSine2Frequency"
+                    macros={props.macros}
+                    muiTextFieldProps={muiTextFieldProps}
+                  />
+                </TableCell>
+                <TableCell align="left">
+                  <TextOutput
+                    pv="$(P)$(R)YSine2Frequency_RBV"
+                    macros={props.macros}
+                    muiTextFieldProps={muiTextFieldProps}
+                  />
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell align="left">Phase</TableCell>
+                
+                <TableCell align="left">
+                  <TextInput
+                    pv="$(P)$(R)XSine2Phase"
+                    macros={props.macros}
+                    muiTextFieldProps={muiTextFieldProps}
+                  />
+                </TableCell>
+                <TableCell align="left">
+                  <TextOutput
+                    pv="$(P)$(R)XSine2Phase_RBV"
+                    macros={props.macros}
+                    muiTextFieldProps={muiTextFieldProps}
+                  />
+                </TableCell>
+                <TableCell align="left">
+                  <TextInput
+                    pv="$(P)$(R)YSine2Phase"
+                    macros={props.macros}
+                    muiTextFieldProps={muiTextFieldProps}
+                  />
+                </TableCell>
+                <TableCell align="left">
+                  <TextOutput
+                    pv="$(P)$(R)YSine2Phase_RBV"
+                    macros={props.macros}
+                    muiTextFieldProps={muiTextFieldProps}
+                  />
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell align="left">Operation</TableCell>
+                
+                <TableCell align="left" colSpan={2}>
+                  <SelectionInput
+                    pv="$(P)$(R)XSineOperation"
+                    macros={props.macros}
+                    muiTextFieldProps={muiTextFieldProps}
+                  />
+                </TableCell>
+                <TableCell align="left" colSpan={2}>
+                  <SelectionInput
+                    pv="$(P)$(R)YSineOperation"
+                    macros={props.macros}
+                    muiTextFieldProps={muiTextFieldProps}
+                  />
+                </TableCell>
+              </TableRow>
+
             </TableBody>
           </Table>
         </AccordionDetails>

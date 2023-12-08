@@ -36,7 +36,8 @@
     "socket.io-client": "4.7.2",
     "three": "0.154.0",
     "typeface-roboto": "1.1.13",
-    "uuid": "9.0.1"
+    "uuid": "9.0.1",
+    "colormap":"2.3.2"
   },
   "devDependencies": {
     "cross-env": "7.0.3",

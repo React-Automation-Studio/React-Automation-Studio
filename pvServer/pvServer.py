@@ -655,7 +655,7 @@ def remove_pv_connection(message):
                 except:
                     pass
 
-            time.sleep(3)  # wait for 3 seconds before removing a watch
+            time.sleep(30)  # wait for 3 seconds before removing a watch
             with thread_lock:
                 removePvId()
 
@@ -2239,11 +2239,12 @@ if __name__ == "__main__":
             socketio.run(
                 app,
                 host="0.0.0.0",
-                debug=True,
+                debug=False,
                 port=int(pvServerPort, 10),
                 keyfile="../certificates/server.key",
                 certfile="../certificates/server.cer",
                 use_reloader=False,
+                
             )
         else:
             socketio.run(

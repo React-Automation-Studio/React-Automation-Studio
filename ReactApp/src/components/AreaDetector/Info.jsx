@@ -28,7 +28,14 @@ const Info = (props) => {
       detector.
       <br />
       <br />
-      Set the acquire period two 2 seconds in the Collect accordian.
+      Use the quick launch buttons to start the the 4 sim modes below with
+      settings based on the examples in the AreaDetectorSim documentation.
+      <br />
+      <br />
+      For any other modes set the acquire period two 2 seconds in the Collect
+      accordian. Otherwise in its current version it will overload the pvServer.
+      <br />
+      <br />
       <Stack direction="row" spacing={2}>
         <MultiActionButton
           macros={props.macros}
@@ -72,10 +79,10 @@ const Info = (props) => {
           simMode={"Sine"}
           gainX={1}
           gainY={1}
-          gain={200}
+          gain={100}
           gainRed={1}
-          gainGreen={2}
-          gainBlue={3}
+          gainGreen={1}
+          gainBlue={1}
           Offset={0}
           Noise={0}
           peakStartX={0}
@@ -87,17 +94,17 @@ const Info = (props) => {
           peakWidthX={10}
           peakWidthY={20}
           peakVariation={0}
-          xSine1Amplitude={10}
-          xSine1Frequency={200}
+          xSine1Amplitude={1}
+          xSine1Frequency={2}
           xSine1Phase={0}
-          xSine2Amplitude={0}
+          xSine2Amplitude={1}
           xSine2Frequency={50}
           xSine2Phase={0}
-          ySine1Amplitude={5}
-          ySine1Frequency={100}
+          ySine1Amplitude={1}
+          ySine1Frequency={2}
           ySine1Phase={0}
-          ySine2Amplitude={0}
-          ySine2Frequency={10}
+          ySine2Amplitude={1}
+          ySine2Frequency={20}
           ySine2Phase={0}
           xSineOperation={"Add"}
           ySineOperation={"Add"}
@@ -108,7 +115,7 @@ const Info = (props) => {
           simMode={"LinearRamp"}
           gainX={1}
           gainY={1}
-          gain={200}
+          gain={3}
           gainRed={1}
           gainGreen={2}
           gainBlue={3}
@@ -143,13 +150,13 @@ const Info = (props) => {
           actionString="Offset&Noise"
           simMode={"Offset&Noise"}
           gainX={1}
-          gainY={1}
+          gainY={5}
           gain={200}
           gainRed={1}
           gainGreen={2}
           gainBlue={3}
-          Offset={0}
-          Noise={0}
+          Offset={10}
+          Noise={255}
           peakStartX={0}
           peakStartY={0}
           peakNumX={20}

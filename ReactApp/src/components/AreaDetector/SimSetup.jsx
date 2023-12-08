@@ -429,7 +429,7 @@ const SimSetup = (props) => {
 
                 <TableCell align="left">
                   <TextInput
-                    pv="$(P)$(R)YSine1Frequency"
+                    pv="$(P)$(R)XSine1Frequency"
                     macros={props.macros}
                     muiTextFieldProps={muiTextFieldProps}
                   />
@@ -539,7 +539,7 @@ const SimSetup = (props) => {
 
                 <TableCell align="left">
                   <TextInput
-                    pv="$(P)$(R)YSine2Frequency"
+                    pv="$(P)$(R)XSine2Frequency"
                     macros={props.macros}
                     muiTextFieldProps={muiTextFieldProps}
                   />

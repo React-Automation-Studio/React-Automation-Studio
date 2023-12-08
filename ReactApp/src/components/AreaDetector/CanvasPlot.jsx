@@ -8,7 +8,7 @@ import { useEpicsPV } from "../SystemComponents/EpicsPV";
 import Plot from "react-plotly.js";
 import { isMobileOnly } from "react-device-detect";
 import { replaceMacros } from "../SystemComponents/Utils/macroReplacement";
-
+import { Typography } from "@mui/material";
 const ImageCanvas = ({ data, width, height, colormapName }) => {
   const [colors, setColors] = useState(null);
   useEffect(() => {
@@ -134,7 +134,13 @@ const CanvasPlot = (props) => {
 
   console.log(`{width: ${width}, height: ${height}}`);
   return (
-    <div style={{ width: "100%", height: "100%" }} ref={paperRef}>
+    <div
+      style={{ width: "100%", height: "100%", textAlign: "center" }}
+      ref={paperRef}
+    >
+      <Typography variant="h6" style={{ padding: 8 }}>
+        {`${pv.pvname}`}
+      </Typography>
       <div
         onContextMenu={
           props.disableContextMenu ? undefined : handleToggleContextMenu

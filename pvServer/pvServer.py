@@ -2244,7 +2244,6 @@ if __name__ == "__main__":
                 keyfile="../certificates/server.key",
                 certfile="../certificates/server.cer",
                 use_reloader=False,
-                
             )
         else:
             socketio.run(

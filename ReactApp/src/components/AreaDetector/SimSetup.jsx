@@ -368,8 +368,6 @@ const SimSetup = (props) => {
                   />
                 </TableCell>
               </TableRow>
-
-
             </TableBody>
           </Table>
         </AccordionDetails>
@@ -386,8 +384,12 @@ const SimSetup = (props) => {
             <TableHead>
               <TableRow>
                 <StyledTableCell align="left">Setting</StyledTableCell>
-                <StyledTableCell align="left" colSpan={2}>X Sine #1</StyledTableCell>
-                <StyledTableCell align="left" colSpan={2}>Y Sine #1</StyledTableCell>
+                <StyledTableCell align="left" colSpan={2}>
+                  X Sine #1
+                </StyledTableCell>
+                <StyledTableCell align="left" colSpan={2}>
+                  Y Sine #1
+                </StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -424,7 +426,7 @@ const SimSetup = (props) => {
               </TableRow>
               <TableRow>
                 <TableCell align="left">Frequency</TableCell>
-                
+
                 <TableCell align="left">
                   <TextInput
                     pv="$(P)$(R)YSine1Frequency"
@@ -456,7 +458,7 @@ const SimSetup = (props) => {
               </TableRow>
               <TableRow>
                 <TableCell align="left">Phase</TableCell>
-                
+
                 <TableCell align="left">
                   <TextInput
                     pv="$(P)$(R)XSine1Phase"
@@ -486,17 +488,18 @@ const SimSetup = (props) => {
                   />
                 </TableCell>
               </TableRow>
-             
-              
-
             </TableBody>
           </Table>
           <Table size="small">
             <TableHead>
               <TableRow>
                 <StyledTableCell align="left">Setting</StyledTableCell>
-                <StyledTableCell align="left" colSpan={2}>X Sine #2</StyledTableCell>
-                <StyledTableCell align="left" colSpan={2}>Y Sine #2</StyledTableCell>
+                <StyledTableCell align="left" colSpan={2}>
+                  X Sine #2
+                </StyledTableCell>
+                <StyledTableCell align="left" colSpan={2}>
+                  Y Sine #2
+                </StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -533,7 +536,7 @@ const SimSetup = (props) => {
               </TableRow>
               <TableRow>
                 <TableCell align="left">Frequency</TableCell>
-                
+
                 <TableCell align="left">
                   <TextInput
                     pv="$(P)$(R)YSine2Frequency"
@@ -565,7 +568,7 @@ const SimSetup = (props) => {
               </TableRow>
               <TableRow>
                 <TableCell align="left">Phase</TableCell>
-                
+
                 <TableCell align="left">
                   <TextInput
                     pv="$(P)$(R)XSine2Phase"
@@ -597,7 +600,7 @@ const SimSetup = (props) => {
               </TableRow>
               <TableRow>
                 <TableCell align="left">Operation</TableCell>
-                
+
                 <TableCell align="left" colSpan={2}>
                   <SelectionInput
                     pv="$(P)$(R)XSineOperation"
@@ -613,7 +616,6 @@ const SimSetup = (props) => {
                   />
                 </TableCell>
               </TableRow>
-
             </TableBody>
           </Table>
         </AccordionDetails>

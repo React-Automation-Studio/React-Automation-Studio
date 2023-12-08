@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import { useTheme } from "@mui/system";
-import GraphHeatmap from "../BaseComponents/GraphHeatmap";
+import GraphHeatmap from "./GraphHeatmap";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -21,6 +21,7 @@ import Attributes from "./Attributes";
 import Buffers from "./Buffers";
 import Info from "./Info";
 import Plugins from "./Plugins";
+import CanvasPlot from "./CanvasPlot";
 /**
  * This is a preview AreaDetector component. This component is built on a React Automation Studio based front end that connects
  * to an alarm server back end.
@@ -47,11 +48,17 @@ const AreaDetector = (props) => {
         <Grid container>
           {tabVal === 0 && <Grid item xs={12} md={6} lg={1} />}
           {tabVal === 0 && (
-            <Grid item xs={12} md={6} lg={6}>
-              <GraphHeatmap
+            <Grid item xs={12} md={6} lg={5}>
+              {/* <GraphHeatmap
                 makeNewSocketIoConnection
                 aspectRatio={0.8}
                 pvs={["$(P)image1:ArrayData"]}
+                macros={props.macros}
+              /> */}
+              <CanvasPlot
+                makeNewSocketIoConnection
+                aspectRatio={1}
+                pv={"$(P)image1:ArrayData"}
                 macros={props.macros}
               />
             </Grid>

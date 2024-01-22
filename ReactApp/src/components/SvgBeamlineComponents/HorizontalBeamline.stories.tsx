@@ -14,31 +14,24 @@ export default {
 const Template: StoryObj = {
   render: ({ ...args }) => {
     return (
-      <BeamLineCanvas
-        width={600}
-        height={300}
-        //debugBorder={true}
-      >
+      <BeamLineCanvas width={600} height={300}>
         <HorizontalBeamline
           x={0}
           y={50}
           pv={"testIOC:BeamlineA:BeamOn"}
           width={"113px"}
-          //    debugBorder={true}
         />
         <HorizontalBeamline
           x={"113px"}
           y={50}
           pv={"testIOC:BeamlineB:BeamOn"}
           width={"148px"}
-          //     debugBorder={true}
         />
         <HorizontalBeamline
           x={"261px"}
           y={50}
           pv={"testIOC:BeamlineC:BeamOn"}
           width={"150px"}
-          //      debugBorder={true}
         />
       </BeamLineCanvas>
     );

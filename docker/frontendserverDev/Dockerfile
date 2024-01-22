@@ -1,4 +1,4 @@
-FROM node:20.9.0
+FROM node:20.11.0
 ADD ./ReactApp/package.json /frontendserverAppDev/package.json
 WORKDIR /frontendserverAppDev
 ENV PATH /frontendserverAppDev/node_modules/.bin:$PATH

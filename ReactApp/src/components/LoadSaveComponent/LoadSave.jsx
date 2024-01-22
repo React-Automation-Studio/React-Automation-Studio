@@ -1,74 +1,73 @@
-import React, { useState, useEffect, useReducer } from 'react';
-import { replaceMacros } from '../SystemComponents/Utils/macroReplacement';
-import PropTypes from 'prop-types';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import TextUpdate from '../BaseComponents/TextUpdate';
-import TextInput from '../BaseComponents/TextInput';
-import ToggleButton from '../BaseComponents/ToggleButton';
-import TextOutput from '../BaseComponents/TextOutput';
-import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
-import AppBar from '@mui/material/AppBar';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-import PV from '../SystemComponents/PV';
-import useMongoDbWatch from '../SystemComponents/database/MongoDB/useMongoDbWatch'
-import useMongoDbUpdateOne from '../SystemComponents/database/MongoDB/useMongoDbUpdateOne';
-import useMongoDbInsertOne from '../SystemComponents/database/MongoDB/useMongoDbInsertOne';
-import makeStyles from '@mui/styles/makeStyles';
-import { orange, green, red } from '@mui/material/colors';
-import { useTheme } from '@mui/material/styles';
-const useStyles = makeStyles(theme => ({
+import React, { useState, useEffect, useReducer } from "react";
+import { replaceMacros } from "../SystemComponents/Utils/macroReplacement";
+import PropTypes from "prop-types";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TextUpdate from "../BaseComponents/TextUpdate";
+import TextInput from "../BaseComponents/TextInput";
+import ToggleButton from "../BaseComponents/ToggleButton";
+import TextOutput from "../BaseComponents/TextOutput";
+import Grid from "@mui/material/Grid";
+import Button from "@mui/material/Button";
+import AppBar from "@mui/material/AppBar";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
+import PV from "../SystemComponents/PV";
+import useMongoDbWatch from "../SystemComponents/database/MongoDB/useMongoDbWatch";
+import useMongoDbUpdateOne from "../SystemComponents/database/MongoDB/useMongoDbUpdateOne";
+import useMongoDbInsertOne from "../SystemComponents/database/MongoDB/useMongoDbInsertOne";
+import makeStyles from "@mui/styles/makeStyles";
+import { orange, green, red } from "@mui/material/colors";
+import { useTheme } from "@mui/material/styles";
+const useStyles = makeStyles((theme) => ({
   root: {
-    width: '100%',
+    width: "100%",
     marginTop: theme.spacing(1) * 0,
-    overflowX: 'auto',
+    overflowX: "auto",
   },
   paper: {
-    width: '100%',
+    width: "100%",
   },
   table: {
     minWidth: 500,
   },
   tableCellDescription: {
-    width: "30%"
+    width: "30%",
   },
   tableCellValues: {
-    width: "20%"
+    width: "20%",
   },
   tableCellUnits: {
     width: "10%",
-  
   },
   tableWrapper: {
     maxHeight: "70vh",
-    overflow: 'auto',
+    overflow: "auto",
   },
   workingButton: {
-    color: theme.palette.mode === 'dark' ? 'white' : 'black',
+    color: theme.palette.mode === "dark" ? "white" : "black",
     backgroundColor: green[500],
-    '&:hover': {
+    "&:hover": {
       backgroundColor: green[700],
     },
   },
   pendingButton: {
-    color: theme.palette.mode === 'dark' ? 'white' : 'black',
+    color: theme.palette.mode === "dark" ? "white" : "black",
     backgroundColor: orange[500],
-    '&:hover': {
+    "&:hover": {
       backgroundColor: orange[700],
     },
   },
   obseleteButton: {
-    color: theme.palette.mode === 'dark' ? 'white' : 'black',
+    color: theme.palette.mode === "dark" ? "white" : "black",
     backgroundColor: red[500],
-    '&:hover': {
+    "&:hover": {
       backgroundColor: red[700],
     },
   },
@@ -83,7 +82,7 @@ const useStyles = makeStyles(theme => ({
   tableCellObselete: {
     width: "20%",
     backgroundColor: red[500],
-  },  
+  },
 }));
 
 function TabPanel(props) {
@@ -110,32 +109,27 @@ function compare(a, b) {
 
 function compareValues(a, b, initialized) {
   if (initialized === true) {
-    
-    // eslint-disable-next-line eqeqeq 
+    // eslint-disable-next-line eqeqeq
     if (a == b) {
-      return true
-    }
-    else {
-      // eslint-disable-next-line use-isnan 
+      return true;
+    } else {
+      // eslint-disable-next-line use-isnan
       if (!(isNaN(a) || isNaN(b))) {
         let afloat = parseFloat(a);
         let bfloat = parseFloat(b);
-         // eslint-disable-next-line use-isnan 
-        if ((isNaN(afloat)) || (isNaN(bfloat))) {
-          return false
+        // eslint-disable-next-line use-isnan
+        if (isNaN(afloat) || isNaN(bfloat)) {
+          return false;
+        } else {
+          // eslint-disable-next-line eqeqeq
+          return afloat == bfloat;
         }
-        else {
-          // eslint-disable-next-line eqeqeq 
-          return (afloat == bfloat)
-        }
-      }
-      else {
-        return false
+      } else {
+        return false;
       }
     }
-  }
-  else {
-    return false
+  } else {
+    return false;
   }
 }
 
@@ -151,18 +145,43 @@ function compareValues(a, b, initialized) {
 */
 
 const LoadSave = (props) => {
-  const theme=useTheme();
-  const systemName = props.macros['$(systemName)'];
-  const dbListQueryParameters = { 'query': { "beam_setup.Status": { "$ne": "Delete" } } };
+  const theme = useTheme();
+  const systemName = props.macros["$(systemName)"];
+  const dbListQueryParameters = {
+    query: { "beam_setup.Status": { $ne: "Delete" } },
+  };
   const Parameters = JSON.stringify(dbListQueryParameters);
   const host = props.host;
   const database = props.database;
-  const [dbListBroadcastReadDataURL] = useState('mongodb://' + host + ':' + database + ':' + systemName + '_DATA:Parameters:' + Parameters)
-  const [dbListBroadcastReadPvsURL] = useState('mongodb://' + host + ':' + database + ':' + systemName + '_PVs:Parameters:""')
-  const [dbListUpdateOneURL] = useState('mongodb://' + host + ':' + database + ':' + systemName + '_DATA')
-  const [dbListInsertOneURL] = useState('mongodb://' + host + ':' + database + ':' + systemName + '_DATA')
+  const [dbListBroadcastReadDataURL] = useState(
+    "mongodb://" +
+      host +
+      ":" +
+      database +
+      ":" +
+      systemName +
+      "_DATA:Parameters:" +
+      Parameters
+  );
+  const [dbListBroadcastReadPvsURL] = useState(
+    "mongodb://" +
+      host +
+      ":" +
+      database +
+      ":" +
+      systemName +
+      '_PVs:Parameters:""'
+  );
+  const [dbListUpdateOneURL] = useState(
+    "mongodb://" + host + ":" + database + ":" + systemName + "_DATA"
+  );
+  const [dbListInsertOneURL] = useState(
+    "mongodb://" + host + ":" + database + ":" + systemName + "_DATA"
+  );
   const [dbList, setDbList] = useState([]);
-  const [processVariablesSchemaKeys, setProcessVariablesSchemaKeys] = useState([]);
+  const [processVariablesSchemaKeys, setProcessVariablesSchemaKeys] = useState(
+    []
+  );
   const [displayIndex, setDisplayIndex] = useState(0);
   const [tabValue, setTabValue] = useState(0);
   const [dbListWriteAccess, setDbListWriteAccess] = useState(false);
@@ -170,32 +189,33 @@ const LoadSave = (props) => {
   const [metadataComponents, setMetadataComponents] = useState([]);
   const [metadataComponentsPVs, setMetadataComponentsPVs] = useState([]);
   const [processVariables, setProcessVariables] = useState({});
-  const dbUpdateOne=useMongoDbUpdateOne({});
-  const dbInsertOne=useMongoDbInsertOne({});
-  const dbPVsObject=useMongoDbWatch({dbURL:dbListBroadcastReadPvsURL});
-  
-  const dbPVsList=dbPVsObject.data;
-  const dbPVsInitialized=dbPVsObject.initialized;
-  const dbDataObject=useMongoDbWatch({dbURL:dbListBroadcastReadDataURL});
-  const dbDataInitialized=dbDataObject.initialized;
-  const [loadTimedOut,setLoadTimedOut]=useState(false);
-  
+  const dbUpdateOne = useMongoDbUpdateOne({});
+  const dbInsertOne = useMongoDbInsertOne({});
+  const dbPVsObject = useMongoDbWatch({ dbURL: dbListBroadcastReadPvsURL });
+
+  const dbPVsList = dbPVsObject.data;
+  const dbPVsInitialized = dbPVsObject.initialized;
+  const dbDataObject = useMongoDbWatch({ dbURL: dbListBroadcastReadDataURL });
+  const dbDataInitialized = dbDataObject.initialized;
+  const [loadTimedOut, setLoadTimedOut] = useState(false);
+
   useEffect(() => {
-      let data = dbDataObject.data;
-      if(data!==null){
+    let data = dbDataObject.data;
+    if (data !== null) {
       let sortedData = data.sort(compare);
       setDbList(sortedData);
-      setDbListWriteAccess(dbDataObject.writeAccess);}
-    },[dbDataObject,dbDataInitialized]);
-  
+      setDbListWriteAccess(dbDataObject.writeAccess);
+    }
+  }, [dbDataObject, dbDataInitialized]);
+
   const dbDataAndLiveDataReducer = (state, action) => {
     let newState = {};
     let newProcessVariables;
     switch (action.type) {
-      case 'initPvList':        
-        return { ...action.data }
+      case "initPvList":
+        return { ...action.data };
 
-      case 'initDbDataList':
+      case "initDbDataList":
         let key;
         let pvValue;
         let newValue;
@@ -204,45 +224,57 @@ const LoadSave = (props) => {
         let severity;
         let metadata = {};
         for (key in processVariablesSchemaKeys) {
-          if (typeof state[processVariablesSchemaKeys[key]] !== 'undefined') {
-            if (typeof state[processVariablesSchemaKeys[key]].pvValue !== 'undefined') {
+          if (typeof state[processVariablesSchemaKeys[key]] !== "undefined") {
+            if (
+              typeof state[processVariablesSchemaKeys[key]].pvValue !==
+              "undefined"
+            ) {
               pvValue = state[processVariablesSchemaKeys[key]].pvValue;
-            }
-            else {
+            } else {
               pvValue = undefined;
             }
-            if (typeof state[processVariablesSchemaKeys[key]].newValue !== 'undefined') {
+            if (
+              typeof state[processVariablesSchemaKeys[key]].newValue !==
+              "undefined"
+            ) {
               newValue = state[processVariablesSchemaKeys[key]].newValue;
-            }
-            else {
+            } else {
               newValue = undefined;
             }
-            if (typeof state[processVariablesSchemaKeys[key]].newValueTrigger !== 'undefined') {
-              newValueTrigger = state[processVariablesSchemaKeys[key]].newValueTrigger;
-            }
-            else {
+            if (
+              typeof state[processVariablesSchemaKeys[key]].newValueTrigger !==
+              "undefined"
+            ) {
+              newValueTrigger =
+                state[processVariablesSchemaKeys[key]].newValueTrigger;
+            } else {
               newValueTrigger = 0;
             }
-            if (typeof state[processVariablesSchemaKeys[key]].initialized !== 'undefined') {
+            if (
+              typeof state[processVariablesSchemaKeys[key]].initialized !==
+              "undefined"
+            ) {
               initialized = state[processVariablesSchemaKeys[key]].initialized;
-            }
-            else {
+            } else {
               initialized = false;
             }
-            if (typeof state[processVariablesSchemaKeys[key]].severity !== 'undefined') {
+            if (
+              typeof state[processVariablesSchemaKeys[key]].severity !==
+              "undefined"
+            ) {
               severity = state[processVariablesSchemaKeys[key]].severity;
-            }
-            else {
+            } else {
               severity = 0;
             }
-            if (typeof state[processVariablesSchemaKeys[key]].metadata !== 'undefined') {
+            if (
+              typeof state[processVariablesSchemaKeys[key]].metadata !==
+              "undefined"
+            ) {
               metadata = state[processVariablesSchemaKeys[key]].metadata;
-            }
-            else {
+            } else {
               metadata = {};
             }
-          }
-          else {
+          } else {
             pvValue = undefined;
             newValue = undefined;
             newValueTrigger = 0;
@@ -252,173 +284,217 @@ const LoadSave = (props) => {
           }
           let label = processVariables[processVariablesSchemaKeys[key]].label;
           let pv = processVariables[processVariablesSchemaKeys[key]].pv;
-          let dbValue = dbList[displayIndex].process_variables[processVariablesSchemaKeys[key]].pvValue
+          let dbValue =
+            dbList[displayIndex].process_variables[
+              processVariablesSchemaKeys[key]
+            ].pvValue;
           newState[processVariablesSchemaKeys[key]] = {
-             label: label,
-             pv: pv,
-             pvValue: pvValue,
-             newValue: newValue,
-             newValueTrigger: newValueTrigger,
-             dbValue: dbValue,
-             metadata: metadata,
-             initialized: initialized,
-             severity: severity,
-             usePvLabel: processVariables[processVariablesSchemaKeys[key]].usePvLabel,
-             usePvUnits: processVariables[processVariablesSchemaKeys[key]].usePvUnits,
-             usePvPrecision: processVariables[processVariablesSchemaKeys[key]].usePvPrecision,
-             units:processVariables[processVariablesSchemaKeys[key]].units,
-             prec:processVariables[processVariablesSchemaKeys[key]].prec,
-            }
+            label: label,
+            pv: pv,
+            pvValue: pvValue,
+            newValue: newValue,
+            newValueTrigger: newValueTrigger,
+            dbValue: dbValue,
+            metadata: metadata,
+            initialized: initialized,
+            severity: severity,
+            usePvLabel:
+              processVariables[processVariablesSchemaKeys[key]].usePvLabel,
+            usePvUnits:
+              processVariables[processVariablesSchemaKeys[key]].usePvUnits,
+            usePvPrecision:
+              processVariables[processVariablesSchemaKeys[key]].usePvPrecision,
+            units: processVariables[processVariablesSchemaKeys[key]].units,
+            prec: processVariables[processVariablesSchemaKeys[key]].prec,
+          };
         }
-        return newState
+        return newState;
 
-      case 'initDbDataListNoData':
+      case "initDbDataListNoData":
         for (let key in processVariablesSchemaKeys) {
-          if (typeof state[processVariablesSchemaKeys[key]] !== 'undefined') {
-            newState[processVariablesSchemaKeys[key]] = state[processVariablesSchemaKeys[key]];
+          if (typeof state[processVariablesSchemaKeys[key]] !== "undefined") {
+            newState[processVariablesSchemaKeys[key]] =
+              state[processVariablesSchemaKeys[key]];
             newState[processVariablesSchemaKeys[key]].dbValue = undefined;
             newState[processVariablesSchemaKeys[key]].newValue = undefined;
           }
         }
-        return newState
-        
-      case 'updatePvData':
+        return newState;
+
+      case "updatePvData":
         newState = { ...state };
-     
+
         newState[action.key].initialized = action.pvData.initialized;
         newState[action.key].pvValue = action.pvData.value;
         newState[action.key].severity = action.pvData.severity;
         newState[action.key].metadata = action.pvData.metadata;
-        return newState
+        return newState;
 
-      case 'changeRowIndex':
+      case "changeRowIndex":
         newProcessVariables = dbList[action.index].process_variables;
         newState = { ...state };
         if (processVariablesSchemaKeys[0]) {
           let key;
           for (key in processVariablesSchemaKeys) {
-            newState[processVariablesSchemaKeys[key]].dbValue = newProcessVariables[processVariablesSchemaKeys[key]].pvValue;
+            newState[processVariablesSchemaKeys[key]].dbValue =
+              newProcessVariables[processVariablesSchemaKeys[key]].pvValue;
           }
         }
         setDisplayIndex(action.index);
-        return (newState)
+        return newState;
 
-      case 'loadSavedValueToNewValues':
+      case "loadSavedValueToNewValues":
         newProcessVariables = dbList[displayIndex].process_variables;
         newState = { ...state };
         if (processVariablesSchemaKeys[0]) {
           let key;
           for (key in processVariablesSchemaKeys) {
-            newState[processVariablesSchemaKeys[key]].newValue = newProcessVariables[processVariablesSchemaKeys[key]].pvValue;
+            newState[processVariablesSchemaKeys[key]].newValue =
+              newProcessVariables[processVariablesSchemaKeys[key]].pvValue;
           }
         }
         setNewValuesLoaded(true);
-        return (newState)
+        return newState;
 
-      case 'writeNewValuesToPvValues':
+      case "writeNewValuesToPvValues":
         newProcessVariables = dbList[displayIndex].process_variables;
         newState = { ...state };
         if (processVariablesSchemaKeys[0]) {
           let key;
           for (key in processVariablesSchemaKeys) {
-            newState[processVariablesSchemaKeys[key]].pvValue = newState[processVariablesSchemaKeys[key]].newValue;
-            newState[processVariablesSchemaKeys[key]].newValueTrigger++
+            newState[processVariablesSchemaKeys[key]].pvValue =
+              newState[processVariablesSchemaKeys[key]].newValue;
+            newState[processVariablesSchemaKeys[key]].newValueTrigger++;
           }
         }
         break;
-        case 'reset':
-          return {};
+      case "reset":
+        return {};
       default:
     }
-    return (newState)
-  }
-  
-  const [dbDataAndLiveData, dispatchDbDataAndLiveData] = useReducer(dbDataAndLiveDataReducer, {});
+    return newState;
+  };
+
+  const [dbDataAndLiveData, dispatchDbDataAndLiveData] = useReducer(
+    dbDataAndLiveDataReducer,
+    {}
+  );
 
   useEffect(() => {
     if (dbPVsList !== null) {
-     
       let processVariables = dbPVsList[0].process_variables;
-      let newProcessVariablesSchemaKeys = Object.keys(dbPVsList[0].process_variables);
+      let newProcessVariablesSchemaKeys = Object.keys(
+        dbPVsList[0].process_variables
+      );
       let metadataComponents = dbPVsList[0].metadata.components;
-      
+
       let oldDbDataAndLiveData = dbDataAndLiveData;
-      let newDbDataAndLiveData = {}
+      let newDbDataAndLiveData = {};
       let newMetadataComponentsPVs = [];
       let oldMetadataComponentsPVs = metadataComponentsPVs;
       let component;
       let pv;
       for (component in metadataComponents) {
-        pv = replaceMacros(metadataComponents[component].props.pv, props.macros)
-        if (oldMetadataComponentsPVs[component]){
-          if (oldMetadataComponentsPVs[component].pv===pv){
-            newMetadataComponentsPVs.push(oldMetadataComponentsPVs[component]);           
+        pv = replaceMacros(
+          metadataComponents[component].props.pv,
+          props.macros
+        );
+        if (oldMetadataComponentsPVs[component]) {
+          if (oldMetadataComponentsPVs[component].pv === pv) {
+            newMetadataComponentsPVs.push(oldMetadataComponentsPVs[component]);
+          } else {
+            newMetadataComponentsPVs.push({
+              label: "",
+              initialized: false,
+              pv: pv,
+              key: component.toString() + pv,
+              value: "",
+              metadata: {},
+              componentProps: metadataComponents[component].props,
+            });
           }
-          else{
-            newMetadataComponentsPVs.push({ label: "", initialized: false, pv: pv, key:component.toString()+pv, value: "", metadata: {}, componentProps: metadataComponents[component].props });    
-          }
-        }
-        else{
-        newMetadataComponentsPVs.push({ label: "", initialized: false, pv: pv, key:component.toString()+pv, value: "", metadata: {}, componentProps: metadataComponents[component].props });
+        } else {
+          newMetadataComponentsPVs.push({
+            label: "",
+            initialized: false,
+            pv: pv,
+            key: component.toString() + pv,
+            value: "",
+            metadata: {},
+            componentProps: metadataComponents[component].props,
+          });
         }
       }
       let key;
       for (key in newProcessVariablesSchemaKeys) {
         let label = processVariables[newProcessVariablesSchemaKeys[key]].label;
-        let pv = processVariables[newProcessVariablesSchemaKeys[key]].pv
+        let pv = processVariables[newProcessVariablesSchemaKeys[key]].pv;
         if (oldDbDataAndLiveData[newProcessVariablesSchemaKeys[key]]) {
-          if (oldDbDataAndLiveData[newProcessVariablesSchemaKeys[key]].pv === pv) {
-            newDbDataAndLiveData[newProcessVariablesSchemaKeys[key]] = oldDbDataAndLiveData[newProcessVariablesSchemaKeys[key]];
-            newDbDataAndLiveData[newProcessVariablesSchemaKeys[key]].label = label;
+          if (
+            oldDbDataAndLiveData[newProcessVariablesSchemaKeys[key]].pv === pv
+          ) {
+            newDbDataAndLiveData[newProcessVariablesSchemaKeys[key]] =
+              oldDbDataAndLiveData[newProcessVariablesSchemaKeys[key]];
+            newDbDataAndLiveData[newProcessVariablesSchemaKeys[key]].label =
+              label;
           }
-        }
-        else {
-          newDbDataAndLiveData[newProcessVariablesSchemaKeys[key]] = { label: label, pv: pv, pvValue: undefined, newValue: undefined, newValueTrigger: 0, dbValue: undefined, metadata: {}, initialized: false, severity: 0,props }
+        } else {
+          newDbDataAndLiveData[newProcessVariablesSchemaKeys[key]] = {
+            label: label,
+            pv: pv,
+            pvValue: undefined,
+            newValue: undefined,
+            newValueTrigger: 0,
+            dbValue: undefined,
+            metadata: {},
+            initialized: false,
+            severity: 0,
+            props,
+          };
         }
       }
-      
+
       setProcessVariablesSchemaKeys(newProcessVariablesSchemaKeys);
-      dispatchDbDataAndLiveData({ type: 'initPvList', data: newDbDataAndLiveData });
+      dispatchDbDataAndLiveData({
+        type: "initPvList",
+        data: newDbDataAndLiveData,
+      });
       setProcessVariables(processVariables);
       setMetadataComponents(metadataComponents);
       setMetadataComponentsPVs(newMetadataComponentsPVs);
-    }
-    else{
-      dispatchDbDataAndLiveData({type:'reset'})
-      setProcessVariablesSchemaKeys([])
-      setProcessVariables({})
-      setMetadataComponents([])
-      setMetadataComponentsPVs([])
+    } else {
+      dispatchDbDataAndLiveData({ type: "reset" });
+      setProcessVariablesSchemaKeys([]);
+      setProcessVariables({});
+      setMetadataComponents([]);
+      setMetadataComponentsPVs([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dbPVsList,props.macros,dbPVsInitialized])
- 
-  useEffect(() => {
-    if (typeof dbList[0] !== 'undefined') {
+  }, [dbPVsList, props.macros, dbPVsInitialized]);
 
+  useEffect(() => {
+    if (typeof dbList[0] !== "undefined") {
       if (dbList[0]) {
-        dispatchDbDataAndLiveData({ type: 'initDbDataList' });
+        dispatchDbDataAndLiveData({ type: "initDbDataList" });
       }
+    } else {
+      dispatchDbDataAndLiveData({ type: "initDbDataListNoData" });
     }
-    else {
-      dispatchDbDataAndLiveData({ type: 'initDbDataListNoData' });
-    }
-  }, [dbList, processVariablesSchemaKeys])
-  
+  }, [dbList, processVariablesSchemaKeys]);
+
   const handleSavedValues = () => {
     let key;
-  
+
     let newEntry = {};
-    newEntry['process_variables'] = {}
-    newEntry['beam_setup'] = {}
+    newEntry["process_variables"] = {};
+    newEntry["beam_setup"] = {};
     let component;
-    
+
     for (component in metadataComponentsPVs) {
       let key;
       if (metadataComponentsPVs[component].componentProps.usePvLabel === true) {
         key = metadataComponentsPVs[component].label;
-      }
-      else {
+      } else {
         key = metadataComponentsPVs[component].componentProps.label;
       }
       newEntry.beam_setup[key] = metadataComponentsPVs[component].value;
@@ -430,91 +506,98 @@ const LoadSave = (props) => {
     let hour = mydate.getHours();
     let min = mydate.getMinutes();
     let sec = mydate.getSeconds();
-    let ms = mydate.getMilliseconds()
+    let ms = mydate.getMilliseconds();
     if (hour < 10) {
-      hour = '0' + hour;
-    }
-    else if (ms < 100) {
-      ms = '0' + ms;
+      hour = "0" + hour;
+    } else if (ms < 100) {
+      ms = "0" + ms;
     }
     let value;
     if (min < 10) {
-      min = '0' + min;
+      min = "0" + min;
     }
     if (sec < 10) {
-      sec = '0' + sec;
+      sec = "0" + sec;
     }
-    value = day + "-" + month + "-" + year + " " + hour + ':' + min;
-    newEntry.beam_setup['DateTime'] = value;
-    newEntry.beam_setup['Status'] = "Pending";
+    value = day + "-" + month + "-" + year + " " + hour + ":" + min;
+    newEntry.beam_setup["DateTime"] = value;
+    newEntry.beam_setup["Status"] = "Pending";
     for (key in processVariablesSchemaKeys) {
-      newEntry.process_variables[processVariablesSchemaKeys[key]] = { pv: dbDataAndLiveData[processVariablesSchemaKeys[key]].pv, pvValue: dbDataAndLiveData[processVariablesSchemaKeys[key]].pvValue };
+      newEntry.process_variables[processVariablesSchemaKeys[key]] = {
+        pv: dbDataAndLiveData[processVariablesSchemaKeys[key]].pv,
+        pvValue: dbDataAndLiveData[processVariablesSchemaKeys[key]].pvValue,
+      };
     }
-    
-    dbInsertOne({dbURL:dbListInsertOneURL,newEntry:newEntry});
-  }
- 
+
+    dbInsertOne({ dbURL: dbListInsertOneURL, newEntry: newEntry });
+  };
+
   const handleOnClickWorking = () => {
-    let id = dbList[displayIndex]['_id']['$oid'];
-    let update = { '$set': { "beam_setup.Status": "Working" } }
-    dbUpdateOne({dbURL:dbListUpdateOneURL,id:id,update:update});
-  }
+    let id = dbList[displayIndex]["_id"]["$oid"];
+    let update = { $set: { "beam_setup.Status": "Working" } };
+    dbUpdateOne({ dbURL: dbListUpdateOneURL, id: id, update: update });
+  };
 
   const handleOnClickPending = () => {
-    let id = dbList[displayIndex]['_id']['$oid'];
-    let update = { '$set': { "beam_setup.Status": "Pending" } }
-    dbUpdateOne({dbURL:dbListUpdateOneURL,id:id,update:update});    
-  }
+    let id = dbList[displayIndex]["_id"]["$oid"];
+    let update = { $set: { "beam_setup.Status": "Pending" } };
+    dbUpdateOne({ dbURL: dbListUpdateOneURL, id: id, update: update });
+  };
 
   const handleOnClickObselete = () => {
-    let id = dbList[displayIndex]['_id']['$oid'];
-    let update = { '$set': { "beam_setup.Status": "Obselete" } }
-    dbUpdateOne({dbURL:dbListUpdateOneURL,id:id,update:update});
-  }
+    let id = dbList[displayIndex]["_id"]["$oid"];
+    let update = { $set: { "beam_setup.Status": "Obselete" } };
+    dbUpdateOne({ dbURL: dbListUpdateOneURL, id: id, update: update });
+  };
 
-  const handleOnClickDelete = () => {   
-    let id = dbList[displayIndex]['_id']['$oid'];
-    let update = { '$set': { "beam_setup.Status": "Delete" } }
+  const handleOnClickDelete = () => {
+    let id = dbList[displayIndex]["_id"]["$oid"];
+    let update = { $set: { "beam_setup.Status": "Delete" } };
     if (displayIndex >= 1) {
       setDisplayIndex(displayIndex - 1);
-    }
-    else {
+    } else {
       setDisplayIndex(0);
     }
-    dbUpdateOne({dbURL:dbListUpdateOneURL,id:id,update:update});
-  }
-  
+    dbUpdateOne({ dbURL: dbListUpdateOneURL, id: id, update: update });
+  };
+
   const metadataPvsConnections = () => {
     let pvs = [];
-    metadataComponentsPVs.map((item, index) => (
+    metadataComponentsPVs.map((item, index) =>
       pvs.push(
         <PV
           key={index.toString()}
           {...item.componentProps}
-          pvData={(pvData) => setMetadataComponentsPVs(prePvs => {
-            let pvs = [...prePvs]
-            pvs[index] = { ...pvs[index], ...pvData }
-            return pvs
+          pvData={(pvData) =>
+            setMetadataComponentsPVs((prePvs) => {
+              let pvs = [...prePvs];
+              pvs[index] = { ...pvs[index], ...pvData };
+              return pvs;
+            })
           }
-          )}
-        />)
-    ))
-    return pvs
-  }
+        />
+      )
+    );
+    return pvs;
+  };
 
   const SystemsDataConnections = () => {
     const pvs = [];
     let id = 0;
-    for (
-      const key in processVariablesSchemaKeys) {
+    for (const key in processVariablesSchemaKeys) {
       const item = processVariablesSchemaKeys[key];
-     
+
       pvs.push(
         <PV
           key={dbDataAndLiveData[item].pv + id.toString()}
           pv={dbDataAndLiveData[item].pv}
-        
-          pvData={(pvData) => dispatchDbDataAndLiveData({ type: 'updatePvData', pvData: pvData, key: item })}
+          pvData={(pvData) =>
+            dispatchDbDataAndLiveData({
+              type: "updatePvData",
+              pvData: pvData,
+              key: item,
+            })
+          }
           outputValue={dbDataAndLiveData[item].pvValue}
           newValueTrigger={dbDataAndLiveData[item].newValueTrigger}
         />
@@ -522,322 +605,492 @@ const LoadSave = (props) => {
       id++;
     }
     return pvs;
-  }
-  
-  const showTable=(!loadTimedOut||(dbPVsInitialized&&dbDataInitialized));
-  useEffect(()=>{
-    const timer=setTimeout(()=>{
-      if(!(dbPVsInitialized&&dbDataInitialized)){
-        setLoadTimedOut(true)
+  };
+
+  const showTable = !loadTimedOut || (dbPVsInitialized && dbDataInitialized);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!(dbPVsInitialized && dbDataInitialized)) {
+        setLoadTimedOut(true);
       }
-    }
-    ,3000  );
-    return()=>clearTimeout(timer)
+    }, 3000);
+    return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
-  
-  const classes =useStyles();
-  
+  }, []);
+
+  const classes = useStyles();
+
   let disableDeleteButton = true;
   let disableLoadButton = true;
-  let disableSaveButton=!dbListWriteAccess;
-  
-  let disableButtons=true;
-  if (typeof dbList[displayIndex] !== 'undefined') {
-    disableButtons=false;
-    disableLoadButton = false
+  let disableSaveButton = !dbListWriteAccess;
+
+  let disableButtons = true;
+  if (typeof dbList[displayIndex] !== "undefined") {
+    disableButtons = false;
+    disableLoadButton = false;
     if (dbList[displayIndex].beam_setup.Status === "Obselete") {
       disableDeleteButton = false;
-    }
-    else {
+    } else {
       disableDeleteButton = true;
     }
-  }
-  else {
+  } else {
     disableLoadButton = true;
   }
- 
+
   const dbDataAndLiveDataKeys = Object.keys(dbDataAndLiveData);
-  
+
   return (
     <React.Fragment>
       {metadataPvsConnections()}
       {SystemsDataConnections()}
-      {!showTable&&
-        <Typography style={{padding:8,paddingBottom:16}}>
-          {host +" database is not available"}
+      {!showTable && (
+        <Typography style={{ padding: 8, paddingBottom: 16 }}>
+          {host + " database is not available"}
         </Typography>
-      }
-      {showTable&&<Grid
-        container
-        direction="row"
-        justifyContent="flex-start"
-        alignItems="flex-start"
-        spacing={2}
-        style={{ padding: 8 }}
-      >
-        <Grid item xs={12} sm={12} md={12} lg={12} >
-          <Paper elevation={theme.palette.paperElevation} style={{ padding: 8 ,marginTop:8}}>
-        
-            <Grid
-              container
-              direction="row"
-              justifyContent="flex-start"
-              alignItems="flex-start"
-              spacing={2}
-            > {metadataComponents.map((item, index) => (
-              <Grid key={index.toString()} item xs={12} sm={12} md={3} lg={2} >
-                {item.component === "TextInput" &&
-                  <TextInput
-                    macros={props.macros}
-                    {...item.props}
-                  />
-                }
-                {item.component === "TextOutput" &&
-                  <TextOutput
-                    macros={props.macros}
-                    {...item.props}
-                  />}
-              </Grid>
-            )
-            )
-              }
-            </Grid>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} sm={12} md={6} lg={5} >
-          <Paper>
-            <Paper elevation={theme.palette.paperElevation} className={classes.root}>
-              <div className={classes.tableWrapper}>
-                <Table className={classes.table} stickyHeader size="small" aria-label="sticky table">
-                  <TableHead>
-                    <TableRow>
-                      {metadataComponentsPVs.map((item, index) =>
-                        <TableCell key={index.toString()+item.key} align="center">{item.componentProps.usePvLabel === true ? item.label : item.componentProps.label}  {item.componentProps.usePvUnits === true ? '[' + item.units + ']' : typeof item.componentProps.units !== 'undefined' ? '[' + item.componentProps.units + ']' : ""}</TableCell>
-                      )}
-                      <TableCell align="center">Date </TableCell>
-                      <TableCell align="center">Status</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                   
-                    {dbList.map((row, index) => (
-                      <TableRow key={index.toString()} hover role="checkbox"
-                        onClick={() => dispatchDbDataAndLiveData({ type: 'changeRowIndex', index: index })}
-                        // eslint-disable-next-line eqeqeq 
-                        selected={index == displayIndex}>
-                        {metadataComponentsPVs.map((item, index) =>
-                          <TableCell key={index.toString()} align="center">{row.beam_setup[item.componentProps.usePvLabel === true ? item.label : item.componentProps.label]}  </TableCell>
-                        )}
-                        <TableCell className={classes.tableCell} component="th" scope="row" align='center'>
-                          {row.beam_setup.DateTime}
-                        </TableCell>
-                        <TableCell className={row.beam_setup.Status === "Working" ? classes.tableCellWorking : row.beam_setup.Status === "Pending" ? classes.tableCellPending : row.beam_setup.Status === "Obselete" ? classes.tableCellObselete : classes.tableCell} component="th" scope="row" align='center'>
-                          <span >
-                            {row.beam_setup.Status}
-                          </span>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            </Paper>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} sm={12} md={6} lg={7} >
-          <Paper>
-            <Paper elevation={theme.palette.paperElevation} className={classes.root}>
-              <div className={classes.tableWrapper}>
-                <Table className={classes.table} stickyHeader size="small" aria-label="sticky table">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Device Description</TableCell>
-                      <TableCell align="center">Saved Value</TableCell>
-                      <TableCell align="center">New Value</TableCell>
-                      <TableCell align="center">PV Value</TableCell>
-                      <TableCell align="center">Units</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {dbDataAndLiveDataKeys.map((item, index) => (
-                      <TableRow key={index.toString()} hover role="checkbox" >
-                        <TableCell className={classes.tableCellDescription} component="th" scope="row" >
-                          {dbDataAndLiveData[item].label}
-                        </TableCell>
-                        <TableCell className={classes.tableCellValues} style={{ backgroundColor: compareValues(dbDataAndLiveData[item].dbValue, dbDataAndLiveData[item].pvValue, dbDataAndLiveData[item].initialized) ? green[500] : undefined }} align="center">
-                          {dbDataAndLiveData[item].dbValue}
-                        </TableCell>
-                        <TableCell className={classes.tableCellValues} style={{ backgroundColor: compareValues(dbDataAndLiveData[item].newValue, dbDataAndLiveData[item].pvValue, dbDataAndLiveData[item].initialized) ? green[500] : undefined }} align="center">
-                          {dbDataAndLiveData[item].newValue}
-                        </TableCell>
-                        <TableCell className={classes.tableCellValues} style={{ backgroundColor: (compareValues(dbDataAndLiveData[item].newValue, dbDataAndLiveData[item].pvValue, dbDataAndLiveData[item].initialized) || compareValues(dbDataAndLiveData[item].dbValue, dbDataAndLiveData[item].pvValue, dbDataAndLiveData[item].initialized)) ? green[500] : undefined }} align="center">
-                          <TextUpdate pv={dbDataAndLiveData[item].pv} alarmSensitive={true} {...dbDataAndLiveData[item]} usePvLabel={false} label={undefined} units={""} usePvUnits={false} />
-                        </TableCell>
-                        <TableCell className={classes.tableCellUnits} style={{ backgroundColor: (compareValues(dbDataAndLiveData[item].newValue, dbDataAndLiveData[item].pvValue, dbDataAndLiveData[item].initialized) || compareValues(dbDataAndLiveData[item].dbValue, dbDataAndLiveData[item].pvValue, dbDataAndLiveData[item].initialized)) ? green[500] : undefined }} align="center">
-                        {dbDataAndLiveData[item].usePvUnits?dbDataAndLiveData[item].metadata.units:dbDataAndLiveData[item].units}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            </Paper>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={5} >
-          <Paper>
-            <AppBar position="static" color="inherit">
-              <Tabs aria-label="simple tabs example" value={tabValue}
-                onChange={(event, value) => setTabValue(value)}
-              >
-                <Tab label="Operator" />
-                <Tab label="Advanced" />
-              </Tabs>
-            </AppBar>
-            <TabPanel value={tabValue} index={0}>
+      )}
+      {showTable && (
+        <Grid
+          container
+          direction="row"
+          justifyContent="flex-start"
+          alignItems="flex-start"
+          spacing={2}
+          style={{ padding: 8 }}
+        >
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+            <Paper
+              elevation={theme.palette.paperElevation}
+              style={{ padding: 8, marginTop: 8 }}
+            >
               <Grid
                 container
                 direction="row"
                 justifyContent="flex-start"
                 alignItems="flex-start"
-                spacing={1}
+                spacing={2}
               >
-                <Grid item xs={12} sm={6} md={6} lg={3} >
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    className={classes.Button}
-                    onClick={() => dispatchDbDataAndLiveData({ type: 'loadSavedValueToNewValues' })}
-                    disabled={disableLoadButton}
+                {" "}
+                {metadataComponents.map((item, index) => (
+                  <Grid
+                    key={index.toString()}
+                    item
+                    xs={12}
+                    sm={12}
+                    md={3}
+                    lg={2}
                   >
-                    Load New Values
-                        </Button>
-                </Grid>
-                <Grid item xs={12} sm={6} md={6} lg={3} >
-                  {props.useLoadEnable === true &&
-                    <PV
-                      pv={props.loadEnablePV}
-                      macros={props.macros}
-                    >
-                      {({ initialized, value }) => (
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          className={classes.Button}
-                          onClick={() => dispatchDbDataAndLiveData({ type: 'writeNewValuesToPvValues' })}
-                          // eslint-disable-next-line eqeqeq 
-                          disabled={(!newValuesLoaded) || (initialized === false) || (value != 0)||disableButtons}
+                    {item.component === "TextInput" && (
+                      <TextInput macros={props.macros} {...item.props} />
+                    )}
+                    {item.component === "TextOutput" && (
+                      <TextOutput macros={props.macros} {...item.props} />
+                    )}
+                  </Grid>
+                ))}
+              </Grid>
+            </Paper>
+          </Grid>
+          <Grid item xs={12} sm={12} md={6} lg={5}>
+            <Paper>
+              <Paper
+                elevation={theme.palette.paperElevation}
+                className={classes.root}
+              >
+                <div className={classes.tableWrapper}>
+                  <Table
+                    className={classes.table}
+                    stickyHeader
+                    size="small"
+                    aria-label="sticky table"
+                  >
+                    <TableHead>
+                      <TableRow>
+                        {metadataComponentsPVs.map((item, index) => (
+                          <TableCell
+                            key={index.toString() + item.key}
+                            align="center"
+                          >
+                            {item.componentProps.usePvLabel === true
+                              ? item.label
+                              : item.componentProps.label}{" "}
+                            {item.componentProps.usePvUnits === true
+                              ? "[" + item.units + "]"
+                              : typeof item.componentProps.units !== "undefined"
+                              ? "[" + item.componentProps.units + "]"
+                              : ""}
+                          </TableCell>
+                        ))}
+                        <TableCell align="center">Date </TableCell>
+                        <TableCell align="center">Status</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {dbList.map((row, index) => (
+                        <TableRow
+                          key={index.toString()}
+                          hover
+                          role="checkbox"
+                          onClick={() =>
+                            dispatchDbDataAndLiveData({
+                              type: "changeRowIndex",
+                              index: index,
+                            })
+                          }
+                          // eslint-disable-next-line eqeqeq
+                          selected={index == displayIndex}
                         >
-                          Write New Values
-                        </Button>
-                      )
-                      }
-                    </PV>
-                  }
-                  {props.useLoadEnable === false && <Button
-                    variant="contained"
-                    color="primary"
-                    className={classes.Button}
-                    onClick={() => dispatchDbDataAndLiveData({ type: 'writeNewValuesToPvValues' })}
-                    disabled={(!newValuesLoaded)||disableButtons}
-                  >
-                    Write New Values
-                    </Button>}
-                </Grid>
-                <Grid item xs={12} sm={6} md={6} lg={3} >
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    className={classes.Button}
-                    onClick={handleSavedValues}
-                    disabled={disableSaveButton}
-                  >
-                    Save Values
-                  </Button>
-                </Grid>
-                <Grid item xs={12} sm={6} md={6} lg={3} >
-                </Grid>
-              </Grid>
-            </TabPanel>
-            <TabPanel value={tabValue} index={1}>
-              <Grid
-                container
-                direction="row"
-                justifyContent="flex-start"
-                alignItems="flex-start"
-                spacing={1}
-              >
-                <Grid item xs={12} sm={6} md={6} lg={3} >
-                  <Button
-                    variant="contained"
-                    className={classes.workingButton}
-                    onClick={handleOnClickWorking}
-                    disabled={!dbListWriteAccess||disableButtons}
-                  >
-                    Working
-                  </Button>
-                </Grid>
-                <Grid item xs={12} sm={6} md={6} lg={3} >
-                  <Button
-                    variant="contained"
-                    className={classes.pendingButton}
-                    onClick={handleOnClickPending}
-                    disabled={!dbListWriteAccess||disableButtons}
-                  >
-                    Pending
-                  </Button>
-                </Grid>
-                <Grid item xs={12} sm={6} md={6} lg={3} >
-                  <Button
-                    variant="contained"
-                    className={classes.obseleteButton}
-                    onClick={handleOnClickObselete}
-                    disabled={!dbListWriteAccess||disableButtons}
-                  >
-                    Obselete
-                  </Button>
-                </Grid>
-                <Grid item xs={12} sm={6} md={6} lg={3} >
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    className={classes.button}
-                    onClick={handleOnClickDelete}
-                    disabled={disableDeleteButton ||disableButtons|| !dbListWriteAccess}
-                  >
-                    Delete
-                  </Button>
-                </Grid>
-              </Grid>
-            </TabPanel>
-          </Paper>
-        </Grid>
-        {props.useLoadEnable && <React.Fragment>
-          {(typeof props.loadEnablePV !== 'undefined' && props.showLoadEnableButton === true) && <Grid item xs={12} sm={12} md={12} lg={1} >
-            {typeof props.loadEnableLabel !== 'undefined' && <h4 style={{ margin: 0 }}>{props.loadEnableLabel}</h4>}
-            <Paper elevation={theme.palette.paperElevation} style={{ padding: 8 }}>
-              <ToggleButton pv={props.loadEnablePV} macros={props.macros} custom_selection_strings={["OFF", "ON"]} />
+                          {metadataComponentsPVs.map((item, index) => (
+                            <TableCell key={index.toString()} align="center">
+                              {
+                                row.beam_setup[
+                                  item.componentProps.usePvLabel === true
+                                    ? item.label
+                                    : item.componentProps.label
+                                ]
+                              }{" "}
+                            </TableCell>
+                          ))}
+                          <TableCell
+                            className={classes.tableCell}
+                            component="th"
+                            scope="row"
+                            align="center"
+                          >
+                            {row.beam_setup.DateTime}
+                          </TableCell>
+                          <TableCell
+                            className={
+                              row.beam_setup.Status === "Working"
+                                ? classes.tableCellWorking
+                                : row.beam_setup.Status === "Pending"
+                                ? classes.tableCellPending
+                                : row.beam_setup.Status === "Obselete"
+                                ? classes.tableCellObselete
+                                : classes.tableCell
+                            }
+                            component="th"
+                            scope="row"
+                            align="center"
+                          >
+                            <span>{row.beam_setup.Status}</span>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </Paper>
             </Paper>
-          </Grid>}
-        </React.Fragment>
-        }
-      </Grid>}
+          </Grid>
+          <Grid item xs={12} sm={12} md={6} lg={7}>
+            <Paper>
+              <Paper
+                elevation={theme.palette.paperElevation}
+                className={classes.root}
+              >
+                <div className={classes.tableWrapper}>
+                  <Table
+                    className={classes.table}
+                    stickyHeader
+                    size="small"
+                    aria-label="sticky table"
+                  >
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Device Description</TableCell>
+                        <TableCell align="center">Saved Value</TableCell>
+                        <TableCell align="center">New Value</TableCell>
+                        <TableCell align="center">PV Value</TableCell>
+                        <TableCell align="center">Units</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {dbDataAndLiveDataKeys.map((item, index) => (
+                        <TableRow key={index.toString()} hover role="checkbox">
+                          <TableCell
+                            className={classes.tableCellDescription}
+                            component="th"
+                            scope="row"
+                          >
+                            {dbDataAndLiveData[item].label}
+                          </TableCell>
+                          <TableCell
+                            className={classes.tableCellValues}
+                            style={{
+                              backgroundColor: compareValues(
+                                dbDataAndLiveData[item].dbValue,
+                                dbDataAndLiveData[item].pvValue,
+                                dbDataAndLiveData[item].initialized
+                              )
+                                ? green[500]
+                                : undefined,
+                            }}
+                            align="center"
+                          >
+                            {dbDataAndLiveData[item].dbValue}
+                          </TableCell>
+                          <TableCell
+                            className={classes.tableCellValues}
+                            style={{
+                              backgroundColor: compareValues(
+                                dbDataAndLiveData[item].newValue,
+                                dbDataAndLiveData[item].pvValue,
+                                dbDataAndLiveData[item].initialized
+                              )
+                                ? green[500]
+                                : undefined,
+                            }}
+                            align="center"
+                          >
+                            {dbDataAndLiveData[item].newValue}
+                          </TableCell>
+                          <TableCell
+                            className={classes.tableCellValues}
+                            style={{
+                              backgroundColor:
+                                compareValues(
+                                  dbDataAndLiveData[item].newValue,
+                                  dbDataAndLiveData[item].pvValue,
+                                  dbDataAndLiveData[item].initialized
+                                ) ||
+                                compareValues(
+                                  dbDataAndLiveData[item].dbValue,
+                                  dbDataAndLiveData[item].pvValue,
+                                  dbDataAndLiveData[item].initialized
+                                )
+                                  ? green[500]
+                                  : undefined,
+                            }}
+                            align="center"
+                          >
+                            <TextUpdate
+                              pv={dbDataAndLiveData[item].pv}
+                              alarmSensitive={true}
+                              {...dbDataAndLiveData[item]}
+                              usePvLabel={false}
+                              label={undefined}
+                              units={""}
+                              usePvUnits={false}
+                            />
+                          </TableCell>
+                          <TableCell
+                            className={classes.tableCellUnits}
+                            style={{
+                              backgroundColor:
+                                compareValues(
+                                  dbDataAndLiveData[item].newValue,
+                                  dbDataAndLiveData[item].pvValue,
+                                  dbDataAndLiveData[item].initialized
+                                ) ||
+                                compareValues(
+                                  dbDataAndLiveData[item].dbValue,
+                                  dbDataAndLiveData[item].pvValue,
+                                  dbDataAndLiveData[item].initialized
+                                )
+                                  ? green[500]
+                                  : undefined,
+                            }}
+                            align="center"
+                          >
+                            {dbDataAndLiveData[item].usePvUnits
+                              ? dbDataAndLiveData[item].metadata.units
+                              : dbDataAndLiveData[item].units}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </Paper>
+            </Paper>
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={5}>
+            <Paper>
+              <AppBar position="static" color="inherit">
+                <Tabs
+                  aria-label="simple tabs example"
+                  value={tabValue}
+                  onChange={(event, value) => setTabValue(value)}
+                >
+                  <Tab label="Operator" />
+                  <Tab label="Advanced" />
+                </Tabs>
+              </AppBar>
+              <TabPanel value={tabValue} index={0}>
+                <Grid
+                  container
+                  direction="row"
+                  justifyContent="flex-start"
+                  alignItems="flex-start"
+                  spacing={1}
+                >
+                  <Grid item xs={12} sm={6} md={6} lg={3}>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      className={classes.Button}
+                      onClick={() =>
+                        dispatchDbDataAndLiveData({
+                          type: "loadSavedValueToNewValues",
+                        })
+                      }
+                      disabled={disableLoadButton}
+                    >
+                      Load New Values
+                    </Button>
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={6} lg={3}>
+                    {props.useLoadEnable === true && (
+                      <PV pv={props.loadEnablePV} macros={props.macros}>
+                        {({ initialized, value }) => (
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            className={classes.Button}
+                            onClick={() =>
+                              dispatchDbDataAndLiveData({
+                                type: "writeNewValuesToPvValues",
+                              })
+                            }
+                            // eslint-disable-next-line eqeqeq
+                            disabled={
+                              !newValuesLoaded ||
+                              initialized === false ||
+                              value != 0 ||
+                              disableButtons
+                            }
+                          >
+                            Write New Values
+                          </Button>
+                        )}
+                      </PV>
+                    )}
+                    {props.useLoadEnable === false && (
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        className={classes.Button}
+                        onClick={() =>
+                          dispatchDbDataAndLiveData({
+                            type: "writeNewValuesToPvValues",
+                          })
+                        }
+                        disabled={!newValuesLoaded || disableButtons}
+                      >
+                        Write New Values
+                      </Button>
+                    )}
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={6} lg={3}>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      className={classes.Button}
+                      onClick={handleSavedValues}
+                      disabled={disableSaveButton}
+                    >
+                      Save Values
+                    </Button>
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={6} lg={3}></Grid>
+                </Grid>
+              </TabPanel>
+              <TabPanel value={tabValue} index={1}>
+                <Grid
+                  container
+                  direction="row"
+                  justifyContent="flex-start"
+                  alignItems="flex-start"
+                  spacing={1}
+                >
+                  <Grid item xs={12} sm={6} md={6} lg={3}>
+                    <Button
+                      variant="contained"
+                      className={classes.workingButton}
+                      onClick={handleOnClickWorking}
+                      disabled={!dbListWriteAccess || disableButtons}
+                    >
+                      Working
+                    </Button>
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={6} lg={3}>
+                    <Button
+                      variant="contained"
+                      className={classes.pendingButton}
+                      onClick={handleOnClickPending}
+                      disabled={!dbListWriteAccess || disableButtons}
+                    >
+                      Pending
+                    </Button>
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={6} lg={3}>
+                    <Button
+                      variant="contained"
+                      className={classes.obseleteButton}
+                      onClick={handleOnClickObselete}
+                      disabled={!dbListWriteAccess || disableButtons}
+                    >
+                      Obselete
+                    </Button>
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={6} lg={3}>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      className={classes.button}
+                      onClick={handleOnClickDelete}
+                      disabled={
+                        disableDeleteButton ||
+                        disableButtons ||
+                        !dbListWriteAccess
+                      }
+                    >
+                      Delete
+                    </Button>
+                  </Grid>
+                </Grid>
+              </TabPanel>
+            </Paper>
+          </Grid>
+          {props.useLoadEnable && (
+            <React.Fragment>
+              {typeof props.loadEnablePV !== "undefined" &&
+                props.showLoadEnableButton === true && (
+                  <Grid item xs={12} sm={12} md={12} lg={1}>
+                    {typeof props.loadEnableLabel !== "undefined" && (
+                      <h4 style={{ margin: 0 }}>{props.loadEnableLabel}</h4>
+                    )}
+                    <Paper
+                      elevation={theme.palette.paperElevation}
+                      style={{ padding: 8 }}
+                    >
+                      <ToggleButton
+                        pv={props.loadEnablePV}
+                        macros={props.macros}
+                        custom_selection_strings={["OFF", "ON"]}
+                      />
+                    </Paper>
+                  </Grid>
+                )}
+            </React.Fragment>
+          )}
+        </Grid>
+      )}
     </React.Fragment>
   );
-}
+};
 
 LoadSave.propTypes = {
   /** if true, when the value of loadEnablePV does not equal 0, then the new values can **not** be loaded into the pv values*/
   useLoadEnable: PropTypes.bool,
   /** Is name of the environment variable defined in your .env or docker-compose yaml file file and corresponds to hostname or ip and port of the mongoDB replica set, eg. `LOADSAVE_DATABASE`
-  *
-  */
-  host:PropTypes.string,
+   *
+   */
+  host: PropTypes.string,
   /** The internal MongoDB database name
-  *
-  */
-  database:PropTypes.string,
+   *
+   */
+  database: PropTypes.string,
   /**
    * Values of macros that will be substituted.
    * eg. {{'$(device)':'testIOC','$(id)':'2'}}
@@ -854,7 +1107,7 @@ LoadSave.propTypes = {
 };
 
 LoadSave.defaultProps = {
-  useLoadEnable: false
-}
+  useLoadEnable: false,
+};
 
 export default LoadSave;

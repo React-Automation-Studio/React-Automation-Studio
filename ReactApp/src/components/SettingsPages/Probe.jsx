@@ -93,7 +93,6 @@ const Probe = () => {
                       displayMetaData={"host"}
                     />
                   </Grid>
-
                   <Grid item xs={12}>
                     <TextInput
                       pv="$(device)"

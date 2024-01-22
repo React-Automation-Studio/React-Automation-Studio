@@ -3,9 +3,6 @@ import type { Meta, StoryObj } from "@storybook/react";
 
 export default {
   component: Mobile,
-  // parameters: {},
-  // title: "Documentation/Layout/Mobile",
-  // tags: [],
   title:"Documentation/Style Guide/Sample Layouts/Mobile",
 
   argTypes: {},

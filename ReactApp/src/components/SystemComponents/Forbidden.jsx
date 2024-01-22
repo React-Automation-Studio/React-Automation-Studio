@@ -1,7 +1,7 @@
 import React, { useEffect,useState } from 'react';
 
 import Typography from '@mui/material/Typography';
-import { Redirect } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 
 const Forbidden = (props) => {
@@ -18,7 +18,8 @@ const Forbidden = (props) => {
         <div style={{ textAlign: 'center', paddingTop: '50vh' }}>
             <Typography variant="h4">Access Forbidden</Typography>
             <Typography variant="subtitle1">{"Redirecting in "+time+" seconds."}</Typography>
-            {time===0&&<Redirect to={"/"} />}
+            {time===0&&<Navigate to={"/"} />}
+           
         </div>
     )
 }

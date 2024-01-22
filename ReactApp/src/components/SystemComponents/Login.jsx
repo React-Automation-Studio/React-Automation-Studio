@@ -7,7 +7,7 @@ import FormControl from "@mui/material/FormControl";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
-import { useHistory, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import makeStyles from "@mui/styles/makeStyles";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -126,7 +126,7 @@ const Login = (props) => {
   const enableActiveDirectoryLogin =
     import.meta.env.VITE_EnableActiveDirectoryLogin === "true";
   const enableGoogleLogin = import.meta.env.VITE_EnableGoogleLogin === "true";
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useLocation();
 
   const responseGoogle = (response) => {
@@ -236,7 +236,7 @@ const Login = (props) => {
   useEffect(() => {
     if (loggedIn) {
       let { from } = location.state || { from: { pathname: "/" } };
-      history.replace(from);
+      navigate(from,{replace:true});
     }
     // eslint-disable-next-line  react-hooks/exhaustive-deps
   }, [loggedIn]);

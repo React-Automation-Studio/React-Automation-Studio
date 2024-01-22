@@ -174,12 +174,12 @@ export const useEpicsPV = (props) => {
 
       pvConnectionIdRef.current = uuidv4();
       if (socket) {
-      socketRef.current.emit("request_pv_info", {
-        data: pv.pvname,
-        pvConnectionId: pvConnectionIdRef.current,
-        clientAuthorisation: jwtRef.current,
-      });
-    }
+        socketRef.current.emit("request_pv_info", {
+          data: pv.pvname,
+          pvConnectionId: pvConnectionIdRef.current,
+          clientAuthorisation: jwtRef.current,
+        });
+      }
     };
     if (socket) {
       socketRef.current.on("connect", reconnect);
@@ -222,11 +222,11 @@ export const useEpicsPV = (props) => {
 const EpicsPV = (props) => {
   const pv = useEpicsPV(props);
   useEffect(() => {
-    if(props.pvData){
-    props.pvData(pv);
+    if (props.pvData) {
+      props.pvData(pv);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pv,props.pvData]);
+  }, [pv, props.pvData]);
   if (props.debug) {
     console.log(props);
     console.log(pv);

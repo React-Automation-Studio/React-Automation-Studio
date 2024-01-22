@@ -15,11 +15,7 @@ export default {
 const Template: StoryObj = {
   render: ({ ...args }) => {
     return (
-      <BeamLineCanvas
-        width={600}
-        height={300}
-        //debugBorder={true}
-      >
+      <BeamLineCanvas width={600} height={300}>
         <HorizontalBeamline
           x={0}
           y={50}

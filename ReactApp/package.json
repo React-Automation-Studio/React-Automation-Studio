@@ -34,7 +34,9 @@
     "react-plotly.js": "2.6.0",
     "react-router-dom": "6.21.3",
     "socket.io-client": "4.7.4",
-    "three": "0.160.1",
+    "three": "0.160.0",
+    "@types/three": "0.160.0",
+    "@react-three/fiber": "8.15.14",
     "typeface-roboto": "1.1.13",
     "uuid": "9.0.1"
   },

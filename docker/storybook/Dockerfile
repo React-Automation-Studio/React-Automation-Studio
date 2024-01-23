@@ -14,6 +14,6 @@ ADD ./ReactApp/vite.config.js /app/vite.config.js
 ADD /ReactApp/.storybook /app/.storybook
 COPY ./ReactApp/img /app/img
 RUN npm run build-storybook
-# ADD ./ReactApp/img /app/storybook-static/img
+ADD ./ReactApp/img /app/storybook-static/img
 VOLUME /build
 CMD cp -R /app/storybook-static/* /build

@@ -55,7 +55,7 @@ const AddSubAreaDialog = (props) => {
         const { value } = event.target
         props.setAddSubAreaData(prevState => ({
             ...prevState,
-            subArea: value
+            subArea: value.replaceAll(" ","")
         }))
     }
 

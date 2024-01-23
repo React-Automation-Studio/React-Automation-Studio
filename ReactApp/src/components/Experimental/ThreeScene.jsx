@@ -91,22 +91,17 @@ class ThreeScene extends Component {
     //ADD CUBE
     const geometry = new THREE.BoxGeometry(200, 200, 200);
     const material = new THREE.MeshPhongMaterial({
-      ambient: 0x555555,
       color: pink[500],
       specular: 0xffffff,
       shininess: 30,
-      
     });
-
     this.cube = new THREE.Mesh(geometry, material);
     this.scene.add(this.cube);
 
-    this.light1 = new THREE.PointLight(0xfffffe, 0.25, 0);
-    this.light1.position.set(2000, 1000, 3000);
-    this.scene.add(this.light1);
-    this.light2 = new THREE.PointLight(0xfffffe, 0.8, 0);
-    this.light2.position.set(-2000, 1000, 3000);
-    this.scene.add(this.light2);
+    this.pointLight = new THREE.PointLight(0xffffff, 2.5, 0, 0);
+    this.camera.add(this.pointLight);
+    this.scene.add(this.camera);
+
     this.raycaster = new THREE.Raycaster();
     this.mouse = new THREE.Vector2();
     this.meshObjects = [this.cube];

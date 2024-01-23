@@ -9,7 +9,7 @@ from datetime import datetime
 from pytz import utc, timezone
 
 from notifyServer import startNotifyServer, restartNotifyServer, notify
-from dbMongo import dbGetCollection, dbGetEnables, dbGetListOfPVNames, dbGetField, dbSetField, dbFindOne, dbUpdateHistory
+from dbMongo import dbGetCollection, dbGetEnables, dbGetListOfPVNames, dbGetField, dbSetField, dbFindOne, dbUpdateHistory, dbFixWhiteSpacesInPVNames
 from dbMongo import dbGetFieldGlobal, dbSetFieldGlobal
 from dbMongo import dbGetAdminCollection, dbGetAdminUsers, dbIsNewUser, dbInsertNewUser, dbUpdateExistingUser, dbDeleteUser
 
@@ -1806,6 +1806,7 @@ def initSeedUserData():
 
 def main():
     initPreSuffix()
+    dbFixWhiteSpacesInPVNames()
     getListOfPVNames()
     startAlarmIOC()
     # Initialise string PVs for front end

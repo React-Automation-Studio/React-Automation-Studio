@@ -5,11 +5,11 @@ services:
       context: ./     
       dockerfile: docker/frontendserverDev/Dockerfile
     volumes:
-      - ./ReactApp/package.json:/frontendserverAppDev/package.json
-      - ./ReactApp/src:/frontendserverAppDev/src
-      - ./ReactApp/index.html:/frontendserverAppDev/index.html
-      - ./ReactApp/vite.config.js:/frontendserverAppDev/vite.config.js
-      - ./ReactApp/public:/frontendserverAppDev/public
+      - ./ReactApp/package.json:/ReactApp/package.json
+      - ./ReactApp/src:/ReactApp/src
+      - ./ReactApp/index.html:/ReactApp/index.html
+      - ./ReactApp/vite.config.js:/ReactApp/vite.config.js
+      - ./ReactApp/public:/ReactApp/public
     restart: always
     ports:
       - "3001:3000"
@@ -222,12 +222,12 @@ services:
      
       dockerfile: docker/storybookServerDev/Dockerfile
     volumes:
-      - ./ReactApp/package.json:/frontendserverAppDev/package.json
-      - ./ReactApp/src:/frontendserverAppDev/src
-      - ./ReactApp/index.html:/frontendserverAppDev/index.html
-      - ./ReactApp/vite.config.js:/frontendserverAppDev/vite.config.js
-      - ./ReactApp/public:/frontendserverAppDev/public
-      - ./ReactApp/.storybook:/frontendserverAppDev/.storybook
+      - ./ReactApp/package.json:/ReactApp/package.json
+      - ./ReactApp/src:/ReactApp/src
+      - ./ReactApp/index.html:/ReactApp/index.html
+      - ./ReactApp/vite.config.js:/ReactApp/vite.config.js
+      - ./ReactApp/public:/ReactApp/public
+      - ./ReactApp/.storybook:/ReactApp/.storybook
     restart: always
     ports:
       - "6061:6006"

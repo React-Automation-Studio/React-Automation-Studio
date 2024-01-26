@@ -1,11 +1,10 @@
 FROM node:20.11.0
-ADD ./ReactApp/package.json /frontendserverAppDev/package.json
-WORKDIR /frontendserverAppDev
-ENV PATH /frontendserverAppDev/node_modules/.bin:$PATH
+ADD ./ReactApp/package.json /ReactApp/package.json
+WORKDIR /ReactApp
+ENV PATH /ReactApp/node_modules/.bin:$PATH
 RUN npm install --legacy-peer-dep
-ADD ./.env /frontendserverAppDev/
-WORKDIR /
-WORKDIR /frontendserverAppDev
+ADD ./.env /ReactApp/
+WORKDIR /ReactApp
 CMD npm run dev -- --host
 
 EXPOSE 3000

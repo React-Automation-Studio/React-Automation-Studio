@@ -1,4 +1,3 @@
-version: '3.2'
 services:
   frontendserverdev:
     env_file: .env
@@ -6,7 +5,6 @@ services:
       context: ./     
       dockerfile: docker/frontendserverDev/Dockerfile
     volumes:
-      - ./certificates:/certificates/
       - ./ReactApp/package.json:/frontendserverAppDev/package.json
       - ./ReactApp/src:/frontendserverAppDev/src
       - ./ReactApp/index.html:/frontendserverAppDev/index.html
@@ -40,7 +38,6 @@ services:
       - pvServerPort=9001
       - pvServerURL=http://127.0.0.1
     volumes:
-      - ./certificates:/certificates/
       - ./log/:/pvServer/log
       - ./build:/pvServer/build
   nginx:
@@ -146,8 +143,15 @@ services:
     volumes:
       - ./log/:/usr/src/app/log
 
+  # As of RAS V5.0.0 MongoDB the mongodb version is now defined by the RAS_MONGODB_VERSION variable in the .env file
+  # This allows you customize the mongodb version, for example should you want to stay on an older version of mongodb
+
+  # In the volumes section, the mogodb volumes are now defined by the compose project name and mongodb version
+  # It allows for multiple RAS instances to be run on the same machine.
+  # In this case, make sure to set the COMPOSE_PROJECT_NAME variable in the .env file or make sure project folder names are unique between instances
+
   mongo1:
-    image: mongo:7.0.3
+    image: mongo:${RAS_MONGODB_VERSION-7.0.3}
     hostname: mongo1
     restart: always
     network_mode: "host"
@@ -163,7 +167,7 @@ services:
     command: "--bind_ip_all --port 27017 --replSet ${REPLICA_SET_NAME-devrs}"
 
   mongo2:
-    image: mongo:7.0.3
+    image: mongo:${RAS_MONGODB_VERSION-7.0.3}
     hostname: mongo2
     restart: always
     network_mode: "host"
@@ -179,7 +183,7 @@ services:
     command: "--bind_ip_all --port 27018 --replSet ${REPLICA_SET_NAME-devrs}"
 
   mongo3:
-    image: mongo:7.0.3
+    image: mongo:${RAS_MONGODB_VERSION-7.0.3}
     hostname: mongo3
     restart: always
     network_mode: "host"
@@ -240,10 +244,21 @@ services:
     depends_on:
       - mongosetup
 
+# As of RAS V5.0.0 MongoDB volumes are now defined by the compose project name and mongodb version
+# This allows you customize the mongodb version, for example should you want to stay on an older version of mongodb
+# It allows for multiple RAS instances to be run on the same machine.
+# In this case, make sure to set the COMPOSE_PROJECT_NAME variable in the .env file or make sure project folder names are unique between instances
+
 volumes:
   mongo-db-data1:
+    name: ${COMPOSE_PROJECT_NAME}-mongo-db-data1-mongo-${RAS_MONGODB_VERSION-7.0.3}
   mongo-db-configdb1:
+    name: ${COMPOSE_PROJECT_NAME}-mongo-db-configdb1-mongo-${RAS_MONGODB_VERSION-7.0.3}
   mongo-db-data2:
+    name: ${COMPOSE_PROJECT_NAME}-mongo-db-data2-mongo-${RAS_MONGODB_VERSION-7.0.3}
   mongo-db-configdb2:
+    name: ${COMPOSE_PROJECT_NAME}-mongo-db-configdb2-mongo-${RAS_MONGODB_VERSION-7.0.3}
   mongo-db-data3:
+    name: ${COMPOSE_PROJECT_NAME}-mongo-db-data3-mongo-${RAS_MONGODB_VERSION-7.0.3}
   mongo-db-configdb3:
+    name: ${COMPOSE_PROJECT_NAME}-mongo-db-configdb3-mongo-${RAS_MONGODB_VERSION-7.0.3}

@@ -187,19 +187,14 @@ def dbFixWhiteSpacesInPVNames():
             newName = oldName.replace(" ", "_")
             alarmDB.pvs.update_one({"area": oldName}, {"$set": {"area": newName}})
         keys = area.keys()
-        print(f"{keys}")
         for key in keys:
             if "subArea" in key:
                 print(f"key : {key}")
                 oldName = area[key]["name"]
-                print(f"oldName : {oldName}")
                 if " " in oldName:
-                    print(f"oldName : {oldName}")
                     newName = oldName.replace(" ", "_")
                     query = {f"{key}.name": oldName}
-                    print(f"query: {query}")
                     update = {"$set": {f"{key}.name": newName}}
-                    print(f"update: {update}")
                     alarmDB.pvs.update_one(query, update)
 
 

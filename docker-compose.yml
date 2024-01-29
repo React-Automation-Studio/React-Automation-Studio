@@ -1,4 +1,9 @@
 services:
+  node_cache:
+    image: node_cache
+    build:
+      context: ./
+      dockerfile: docker/node_cache/Dockerfile
   frontend:
     build:
       context: ./
@@ -8,6 +13,8 @@ services:
       - ./build/frontend:/build
     network_mode: host
     env_file: .env
+    depends_on:
+      - node_cache
   pvserver1:
     build:
       context: ./
@@ -148,6 +155,8 @@ services:
       - VITE_EnableLogin=false
     volumes:
       - ./build/styleguide:/build/
+    depends_on:
+      - node_cache
   signalcli:
     build:
       context: ./

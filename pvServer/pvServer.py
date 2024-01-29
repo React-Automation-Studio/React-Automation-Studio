@@ -298,8 +298,8 @@ def check_pv_initialized_after_disconnect():
                         d = clientPVlist[pvname]["pv"].get_with_metadata(
                             with_ctrlvars=True, use_monitor=True
                         )
-                        if (clientPVlist[pvname]["pv"].value) != None:
-                            if d != None:
+                        if (clientPVlist[pvname]["pv"].value) is not None:
+                            if d is not None:
                                 for keys in d:
                                     if str(d[keys]) == "nan":
                                         d[keys] = None

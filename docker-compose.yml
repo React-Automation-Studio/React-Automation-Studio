@@ -146,6 +146,8 @@ services:
       - pvServerURL=http://127.0.0.1
       - pvServerPort=5001
       - VITE_EnableLogin=false
+    depends_on:
+      - epicsbase
     
   
   demoioc:
@@ -204,6 +206,7 @@ services:
     hostname: alarmhandlerserver
     restart: always
     depends_on:
+      - epicsbase
       - initializealarmhandlerdb
     network_mode: "host"
     stdin_open: true
@@ -211,6 +214,7 @@ services:
     env_file: .env
     volumes:
       - ./log/:/usr/src/app/log
+ 
   # As of RAS V5.0.0 MongoDB the mongodb version is now defined by the RAS_MONGODB_VERSION variable in the .env file
   # This allows you customize the mongodb version, for example should you want to stay on an older version of mongodb
 

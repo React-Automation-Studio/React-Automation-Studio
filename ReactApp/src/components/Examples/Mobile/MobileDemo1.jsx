@@ -206,7 +206,7 @@ const MobileDemo1 = (props) => {
         )}
         {showAdvancedSettings === 1 && (
           <TabContainer key={"tabContainer1"}>
-            <Grid container className={classes.root}>
+            <Grid container>
               <Grid item xs={12}>
                 <Grid
                   container

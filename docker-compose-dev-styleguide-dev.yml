@@ -1,4 +1,9 @@
 services:
+  node_cache:
+    image: node_cache
+    build:
+      context: ./
+      dockerfile: docker/node_cache/Dockerfile
   frontendserverdev:
     env_file: .env
     build:
@@ -13,6 +18,8 @@ services:
     restart: always
     ports:
       - "3001:3000"
+    depends_on:
+      - node_cache
   pvserver1:
     build:
       context: ./
@@ -231,6 +238,8 @@ services:
     restart: always
     ports:
       - "6061:6006"
+    depends_on:
+      - node_cache
   initializeadmindb:
     env_file: .env
     environment:

@@ -1,4 +1,9 @@
 services:
+  epicsbase:
+    image: epicsbase
+    build:
+      context: ./
+      dockerfile: docker/epicsBase/Dockerfile
   node_cache:
     image: node_cache
     build:
@@ -40,6 +45,8 @@ services:
       - pvServerURL=http://127.0.0.1
     volumes:
       - ./log/:/pvServer/log
+    depends_on:
+      - epicsbase
   pvserver2:
     build:
       context: ./
@@ -65,6 +72,9 @@ services:
       - pvServerURL=http://127.0.0.1
     volumes:
       - ./log/:/pvServer/log
+    depends_on:
+      - epicsbase
+    
   pvserver3:
     build:
       context: ./
@@ -90,6 +100,8 @@ services:
       - pvServerURL=http://127.0.0.1
     volumes:
       - ./log/:/pvServer/log
+    depends_on:
+      - epicsbase
   nginx:
     image: nginx:1.23
     restart: always
@@ -135,7 +147,7 @@ services:
       - pvServerPort=5001
       - VITE_EnableLogin=false
     
-
+  
   demoioc:
     build:
       context: ./
@@ -144,6 +156,8 @@ services:
     stdin_open: true
     restart: always
     network_mode: host
+    depends_on:
+      - epicsbase
 
   storybook:
     build:

@@ -1,7 +1,7 @@
-imgkit==1.0.2
+imgkit==1.2.3
 js-regex==1.0.1
-numpy==1.18.1
-pyepics==3.4.3
+numpy==1.26.3
+pyepics==3.5.2
 pymongo==3.10.1
-pytz==2020.4
-requests==2.18.4
+pytz==2023.4
+requests==2.31.0

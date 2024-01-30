@@ -68,7 +68,7 @@ REACT_DISABLE_STANDARD_LOGIN = os.getenv("VITE_DisableStandardLogin", None)
 
 log.info("")
 log.info("**************************************")
-log.info("React Automation Studio V4.0.3")
+log.info("React Automation Studio V5.0.0")
 log.info("")
 log.info("pvServer Environment Variables:")
 log.info("")

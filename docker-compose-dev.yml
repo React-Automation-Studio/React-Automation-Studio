@@ -55,7 +55,7 @@ services:
     depends_on:
       - epicsbase
   nginx:
-    image: nginx:1.23
+    image: nginx:1.25.3
     restart: always
     network_mode: host
     depends_on:

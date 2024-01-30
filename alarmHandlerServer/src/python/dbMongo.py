@@ -189,7 +189,6 @@ def dbFixWhiteSpacesInPVNames():
         keys = area.keys()
         for key in keys:
             if "subArea" in key:
-                print(f"key : {key}")
                 oldName = area[key]["name"]
                 if " " in oldName:
                     newName = oldName.replace(" ", "_")

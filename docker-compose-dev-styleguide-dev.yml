@@ -1,4 +1,9 @@
 services:
+  epicsbase:
+    image: epicsbase
+    build:
+      context: ./
+      dockerfile: docker/epicsBase/Dockerfile
   node_cache:
     image: node_cache
     build:
@@ -46,6 +51,8 @@ services:
     volumes:
       - ./log/:/pvServer/log
       - ./build:/pvServer/build
+    depends_on:
+      - epicsbase
   nginx:
     image: nginx:1.23
     restart: always
@@ -86,6 +93,8 @@ services:
           - VITE_EnableLogin=false
     volumes:
           - ./certificates:/certificates/
+    depends_on:
+      - epicsbase
   demoioc:
     build:
       context: ./
@@ -94,6 +103,8 @@ services:
     stdin_open: true
     restart: always
     network_mode: host
+    depends_on:
+      - epicsbase
 
   signalcli:
     build:
@@ -128,6 +139,7 @@ services:
     hostname: alarmhandlerserver
     restart: always
     depends_on:
+      - epicsbase
       - initializealarmhandlerdb
     network_mode: "host"
     stdin_open: true

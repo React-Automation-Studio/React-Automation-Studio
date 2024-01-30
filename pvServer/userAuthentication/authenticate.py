@@ -123,7 +123,7 @@ def createRefreshToken(username, max_age):
     refreshToken = str(
         jwt.encode(
             {"username": username, "exp": exp}, SECRET_PWD_KEY, algorithm="HS256"
-        ).decode("utf-8")
+        )
     )
     return refreshToken
 
@@ -138,7 +138,7 @@ def createAccessToken(username, max_age, roles):
             {"username": username, "exp": exp, "roles": str(roles)},
             SECRET_PWD_KEY,
             algorithm="HS256",
-        ).decode("utf-8")
+        )
     )
     return accessToken
 
@@ -246,7 +246,7 @@ def checkUser(username):
 def AutheriseUserAndPermissions(encodedJWT, pvname):
     global SECRET_PWD_KEY, UAGS
     try:
-        decoded = jwt.decode(encodedJWT, SECRET_PWD_KEY)
+        decoded = jwt.decode(encodedJWT, SECRET_PWD_KEY, algorithms=["HS256"])
         username = decoded["username"]
         if checkUser(username):
             permissions = checkPermissions(pvname, username)
@@ -262,7 +262,7 @@ def AutheriseUserAndPermissions(encodedJWT, pvname):
 def checkIfAdmin(encodedJWT):
     global SECRET_PWD_KEY, UAGS
     try:
-        decoded = jwt.decode(encodedJWT, SECRET_PWD_KEY)
+        decoded = jwt.decode(encodedJWT, SECRET_PWD_KEY, algorithms=["HS256"])
         username = decoded["username"]
         adminUsers = UAGS["userGroups"]["ADMIN"]["usernames"]
         if username in adminUsers:
@@ -277,7 +277,7 @@ def checkIfAdmin(encodedJWT):
 def AuthoriseUser(encodedJWT):
     global SECRET_PWD_KEY, UAGS
     try:
-        decoded = jwt.decode(encodedJWT, SECRET_PWD_KEY)
+        decoded = jwt.decode(encodedJWT, SECRET_PWD_KEY, algorithms=["HS256"])
         username = decoded["username"]
         if checkUser(username):
             roles = checkUserRole(username)

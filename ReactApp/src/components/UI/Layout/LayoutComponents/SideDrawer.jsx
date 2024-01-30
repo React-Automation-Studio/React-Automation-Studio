@@ -56,7 +56,7 @@ const SideDrawer = (props) => {
                 {import.meta.env.VITE_EnableLogin === 'true' &&
                     <React.Fragment>
                         <Divider />
-                        <ListItem button component={Link} to="userprofile">
+                        <ListItem button component={Link} to="/userprofile">
                             <ListItemIcon><AccountCircle /></ListItemIcon>
                             <ListItemText style={{ textOverflow: 'ellipsis' }} primary={username} />
                         </ListItem>

@@ -68,7 +68,7 @@ REACT_DISABLE_STANDARD_LOGIN = os.getenv("VITE_DisableStandardLogin", None)
 
 log.info("")
 log.info("**************************************")
-log.info("React Automation Studio V4.0.3")
+log.info("React Automation Studio V5.0.0")
 log.info("")
 log.info("pvServer Environment Variables:")
 log.info("")
@@ -294,12 +294,13 @@ def check_pv_initialized_after_disconnect():
             else:
                 if clientPVlist[pvname]["initialized"] == False:
                     if clientPVlist[pvname]["isConnected"]:
+                        clientPVlist[pvname]["connectRetries"]=0
                         clientPVlist[pvname]["pv"].get(as_string=True)
                         d = clientPVlist[pvname]["pv"].get_with_metadata(
                             with_ctrlvars=True, use_monitor=True
                         )
-                        if (clientPVlist[pvname]["pv"].value) != None:
-                            if d != None:
+                        if (clientPVlist[pvname]["pv"].value) is not None:
+                            if d is not None:
                                 for keys in d:
                                     if str(d[keys]) == "nan":
                                         d[keys] = None
@@ -371,6 +372,10 @@ def check_pv_initialized_after_disconnect():
                                 except:
                                     log.exception("Unexpected error")
                                     raise
+                    else:
+                        if clientPVlist[pvname]["connectRetries"]>1:    # wait at least 0.2 seconds before reconnecting
+                            clientPVlist[pvname]["pv"].reconnect()
+                        clientPVlist[pvname]["connectRetries"]+=1
         time.sleep(0.1)
 
 
@@ -695,6 +700,7 @@ def request_pv_info(message):
                 pvlist["pv"] = pv
                 pvlist["isConnected"] = False
                 pvlist["initialized"] = False
+                pvlist["connectRetries"] = 0
                 if "pvConnectionId" in message:
                     pvConnectionId = str(message["pvConnectionId"])
                 else:

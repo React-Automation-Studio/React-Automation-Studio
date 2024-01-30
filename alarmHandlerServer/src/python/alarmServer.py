@@ -9,7 +9,7 @@ from datetime import datetime
 from pytz import utc, timezone
 
 from notifyServer import startNotifyServer, restartNotifyServer, notify
-from dbMongo import dbGetCollection, dbGetEnables, dbGetListOfPVNames, dbGetField, dbSetField, dbFindOne, dbUpdateHistory
+from dbMongo import dbGetCollection, dbGetEnables, dbGetListOfPVNames, dbGetField, dbSetField, dbFindOne, dbUpdateHistory, dbFixWhiteSpacesInPVNames
 from dbMongo import dbGetFieldGlobal, dbSetFieldGlobal
 from dbMongo import dbGetAdminCollection, dbGetAdminUsers, dbIsNewUser, dbInsertNewUser, dbUpdateExistingUser, dbDeleteUser
 
@@ -110,7 +110,7 @@ def propAreaAlarms(pvname, value):
         areaKey = getKeys(pvname)[0]
         globalEnable, areaEnable, subAreaEnable, pvEnable = getEnables(pvname)
 
-        if (subAreaEnable != None):
+        if (subAreaEnable is not None):
             enable = globalEnable and areaEnable and subAreaEnable and pvEnable
         else:
             enable = globalEnable and areaEnable and pvEnable
@@ -156,7 +156,7 @@ def evaluateAreaPVs(areaKey, fromColWatch=False):
             val = alarmDict[pvDict[key].pvname]["A"].value
             globalEnable, areaEnable, subAreaEnable, pvEnable = getEnables(
                 pvDict[key].pvname)
-            if (subAreaEnable != None):
+            if (subAreaEnable is not None):
                 enable = globalEnable and areaEnable and subAreaEnable and pvEnable
             else:
                 enable = globalEnable and areaEnable and pvEnable
@@ -428,7 +428,7 @@ def pvDisconn(pvname, conn):
             timestamp_string = timestamp
 
         globalEnable, areaEnable, subAreaEnable, pvEnable = getEnables(pvname)
-        if (subAreaEnable != None):
+        if (subAreaEnable is not None):
             enable = globalEnable and areaEnable and subAreaEnable and pvEnable
         else:
             enable = globalEnable and areaEnable and pvEnable
@@ -547,7 +547,7 @@ def pvPrepareData(pvname, value, severity, timestamp, units, enum_strs):
 
         globalEnable, areaEnable, subAreaEnable, pvEnable = getEnables(pvname)
 
-        if (subAreaEnable != None):
+        if (subAreaEnable is not None):
             enable = globalEnable and areaEnable and subAreaEnable and pvEnable
         else:
             enable = globalEnable and areaEnable and pvEnable
@@ -1806,6 +1806,7 @@ def initSeedUserData():
 
 def main():
     initPreSuffix()
+    dbFixWhiteSpacesInPVNames()
     getListOfPVNames()
     startAlarmIOC()
     # Initialise string PVs for front end

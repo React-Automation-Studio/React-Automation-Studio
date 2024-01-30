@@ -1,32 +1,32 @@
 [tool.poetry]
-name = "pvserver"
-version = "5.0.0"
-description = "RAS Python backend. It mainly manages connections with PVs, through a websocket connection, authentication, authorization, plus other optional functionalities."
 authors = ["React Automation Studio Team https://github.com/React-Automation-Studio/React-Automation-Studio/discussions"]
+description = "RAS Python backend. It mainly manages connections with PVs, through a websocket connection, authentication, authorization, plus other optional functionalities."
 license = "MIT"
+name = "pvserver"
 readme = "README.md"
 repository = "https://github.com/React-Automation-Studio/React-Automation-Studio"
+version = "5.0.0"
 
 [tool.poetry.dependencies]
-python = "3.8.7"
-Flask = "2.3.3"
-pyepics = "3.4.3"
-gevent = "21.12.0"
-bcrypt = "3.2.2"
-python-ldap = "3.4.3"
-pymongo = "4.5.0"
-python-dotenv = "0.20.0"
-Flask-Cors = "3.0.10"
+Flask = "3.0.1"
+Flask-Cors = "4.0.0"
 Flask-SocketIO = "5.3.6"
-PyJWT = "1.7.1"
-google-api-python-client = "2.104.0"
+PyJWT = "2.8.0"
+Werkzeug = "3.0.1"
+bcrypt = "4.1.2"
+gevent = "23.9.1"
 gevent-websocket = "0.10.1"
-Werkzeug="2.3.7"
+google-api-python-client = "2.115.0"
+pyepics = "3.5.2"
+pymongo = "4.6.1"
+python = "3.12.1"
+python-dotenv = "1.0.1"
+python-ldap = "3.4.4"
 
 [tool.poetry.dev-dependencies]
-black = "22.3.0"
-pytest = "7.1.2"
+black = "24.1.1"
+pytest = "8.0.0"
 
 [build-system]
-requires = ["poetry-core=1.0.8"]
 build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core=1.8.1"]

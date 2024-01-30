@@ -44,7 +44,15 @@ const AppRoutes = (props) => {
             </ProtectedRoute>
           }
         />
-        <Route exact path="/MainDashboard" element={<MainDashboard />} />
+        <Route
+          exact
+          path="/MainDashboard"
+          element={
+            <ProtectedRoute>
+              <MainDashboard />
+            </ProtectedRoute>
+          }
+        />
         <Route
           exact
           path="/Administrator"

@@ -1,19 +1,11 @@
-FROM node:20.9.0
-
-ADD ./ReactApp/package.json /app/package.json
-
-WORKDIR /app
-ENV PATH /app/node_modules/.bin:$PATH
-
-RUN npm install --legacy-peer-dep
-ADD ./ReactApp/public /app/public
-
-ADD  ./.env /app/
-ADD ./ReactApp/src /app/src
-ADD ./ReactApp/vite.config.js /app/vite.config.js
-ADD /ReactApp/.storybook /app/.storybook
-COPY ./ReactApp/img /app/img
+FROM node_cache
+ADD ./ReactApp/public /ReactApp/public
+ADD  ./.env /ReactApp/
+ADD ./ReactApp/src /ReactApp/src
+ADD ./ReactApp/vite.config.js /ReactApp/vite.config.js
+ADD /ReactApp/.storybook /ReactApp/.storybook
+COPY ./ReactApp/img /ReactApp/img
 RUN npm run build-storybook
-# ADD ./ReactApp/img /app/storybook-static/img
+ADD ./ReactApp/img /ReactApp/storybook-static/img
 VOLUME /build
-CMD cp -R /app/storybook-static/* /build
+CMD cp -R /ReactApp/storybook-static/* /build

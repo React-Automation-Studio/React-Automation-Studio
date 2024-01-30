@@ -4,7 +4,7 @@ import themes from "./components/UI/Themes/themes";
 import AppRoutes from "./AppRoutes";
 const App = (props) => {
   return (
-    <RasAppCore themes={themes} defaultTheme={"Ocean"}>
+    <RasAppCore themes={themes} defaultTheme={"Navy"}>
       <AppRoutes />
     </RasAppCore>
   );

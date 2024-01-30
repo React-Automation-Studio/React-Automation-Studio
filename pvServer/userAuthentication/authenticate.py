@@ -291,7 +291,7 @@ def AuthoriseUser(encodedJWT):
 
 def LocalAuthenticateUser(user):
     global knownUsers
-    if knownUsers != None:
+    if knownUsers is not None:
         for userId in knownUsers:
             username = knownUsers[userId]["username"]
             if user["username"] == username:
@@ -315,7 +315,7 @@ def LocalAuthenticateUser(user):
 
 def ExternalAuthenticateUser(user):
     global knownUsers
-    if knownUsers != None:
+    if knownUsers is not None:
         for userId in knownUsers:
             username = knownUsers[userId]["username"]
 

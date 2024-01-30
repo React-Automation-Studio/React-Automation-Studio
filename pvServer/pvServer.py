@@ -367,6 +367,8 @@ def check_pv_initialized_after_disconnect():
                                 except:
                                     log.exception("Unexpected error")
                                     raise
+                    else:
+                        clientPVlist[pvname]["pv"].reconnect()
         time.sleep(0.1)
 
 

@@ -110,7 +110,7 @@ def propAreaAlarms(pvname, value):
         areaKey = getKeys(pvname)[0]
         globalEnable, areaEnable, subAreaEnable, pvEnable = getEnables(pvname)
 
-        if (subAreaEnable != None):
+        if (subAreaEnable is not None):
             enable = globalEnable and areaEnable and subAreaEnable and pvEnable
         else:
             enable = globalEnable and areaEnable and pvEnable
@@ -156,7 +156,7 @@ def evaluateAreaPVs(areaKey, fromColWatch=False):
             val = alarmDict[pvDict[key].pvname]["A"].value
             globalEnable, areaEnable, subAreaEnable, pvEnable = getEnables(
                 pvDict[key].pvname)
-            if (subAreaEnable != None):
+            if (subAreaEnable is not None):
                 enable = globalEnable and areaEnable and subAreaEnable and pvEnable
             else:
                 enable = globalEnable and areaEnable and pvEnable
@@ -428,7 +428,7 @@ def pvDisconn(pvname, conn):
             timestamp_string = timestamp
 
         globalEnable, areaEnable, subAreaEnable, pvEnable = getEnables(pvname)
-        if (subAreaEnable != None):
+        if (subAreaEnable is not None):
             enable = globalEnable and areaEnable and subAreaEnable and pvEnable
         else:
             enable = globalEnable and areaEnable and pvEnable
@@ -547,7 +547,7 @@ def pvPrepareData(pvname, value, severity, timestamp, units, enum_strs):
 
         globalEnable, areaEnable, subAreaEnable, pvEnable = getEnables(pvname)
 
-        if (subAreaEnable != None):
+        if (subAreaEnable is not None):
             enable = globalEnable and areaEnable and subAreaEnable and pvEnable
         else:
             enable = globalEnable and areaEnable and pvEnable

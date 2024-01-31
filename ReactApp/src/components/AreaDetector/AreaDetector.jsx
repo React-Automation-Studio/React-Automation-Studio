@@ -86,7 +86,7 @@ const AreaDetector = (props) => {
                 </AccordionSummary>
 
                 <AccordionDetails>
-                  <Info macros={props.macros} />
+                  <Info macros={props.macros} acquirePeriod={0.5} />
                 </AccordionDetails>
               </Accordion>
               <Accordion

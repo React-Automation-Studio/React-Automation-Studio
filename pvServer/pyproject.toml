@@ -1,5 +1,7 @@
 [tool.poetry]
-authors = ["React Automation Studio Team https://github.com/React-Automation-Studio/React-Automation-Studio/discussions"]
+authors = [
+    "React Automation Studio Team https://github.com/React-Automation-Studio/React-Automation-Studio/discussions",
+]
 description = "RAS Python backend. It mainly manages connections with PVs, through a websocket connection, authentication, authorization, plus other optional functionalities."
 license = "MIT"
 name = "pvserver"
@@ -17,7 +19,8 @@ bcrypt = "4.1.2"
 gevent = "23.9.1"
 gevent-websocket = "0.10.1"
 google-api-python-client = "2.115.0"
-pyepics = "3.5.2"
+# pyepics = "3.5.2"
+caproto = "1.1.1"
 pymongo = "4.6.1"
 python = "3.12.1"
 python-dotenv = "1.0.1"

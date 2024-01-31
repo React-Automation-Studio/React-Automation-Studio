@@ -83,6 +83,8 @@ export const useEpicsPV = (props) => {
 
   useEffect(() => {
     const updatePVData = (msg) => {
+      console.log(msg);
+      msg = JSON.parse(msg);
       if (msg.connected === "0") {
         setPv((pv) => ({ ...pv, initialized: false }));
       } else {

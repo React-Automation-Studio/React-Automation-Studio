@@ -14,7 +14,9 @@ from bson.json_util import dumps
 from bson.objectid import ObjectId
 from datetime import datetime
 from dotenv import load_dotenv
-from epics import PV
+# from epics import PV
+import caproto.threading.pyepics_compat as epics
+from  caproto.threading.pyepics_compat import PV
 from flask import Flask, request, jsonify, make_response
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit, join_room, leave_room, disconnect
@@ -289,7 +291,7 @@ def check_pv_initialized_after_disconnect():
                 or (len(clientPVlist[pvname]["socketsRO"]) > 0)
             ):
                 log.debug("{} has no listening clients, removing", pvname)
-                clientPVlist[pvname]["pv"].disconnect()
+                # clientPVlist[pvname]["pv"].disconnect()
                 clientPVlist.pop(pvname)
             else:
                 if clientPVlist[pvname]["initialized"] == False:
@@ -309,6 +311,7 @@ def check_pv_initialized_after_disconnect():
                                 if clientPVlist[pvname]["pv"].count == 0:
                                     d["value"] = []
                                 if clientPVlist[pvname]["pv"].count == 1:
+                                    d["value"]=str(d["value"])
                                     new_char_value = str(d["char_value"])
                                     if len(new_char_value) == 0:
                                         new_char_value = str(d["value"])
@@ -321,12 +324,12 @@ def check_pv_initialized_after_disconnect():
                                 try:
                                     rw_room = str(pvname) + "rw"
                                     socketio.emit(
-                                        pvname, d, room=rw_room, namespace="/pvServer"
+                                        pvname,json.dumps(d,default=str), room=rw_room, namespace="/pvServer"
                                     )
                                     d["write_access"] = False
                                     ro_room = str(pvname) + "ro"
                                     socketio.emit(
-                                        pvname, d, room=ro_room, namespace="/pvServer"
+                                        pvname, json.dumps(d,default=str), room=ro_room, namespace="/pvServer"
                                     )
                                     clientPVlist[pvname]["isConnected"] = True
                                     clientPVlist[pvname]["initialized"] = True
@@ -339,6 +342,7 @@ def check_pv_initialized_after_disconnect():
                                     log.error(
                                         "***EPICS PV info initial request info error: "
                                     )
+
                                     log.error("PV name: {}", pvname)
                                     log.error("PyEpics PV metadata: {}", d)
                                     log.error("Exception: {}", e)
@@ -349,6 +353,10 @@ def check_pv_initialized_after_disconnect():
                                         " c_long(), a work around exits, if CHID is not"
                                         " a c_long then try debugging"
                                     )
+                                    for key in d:
+                                        log.error("key: {} type:{}", key, type(d[key]))
+
+
                                     clientPVlist[pvname]["isConnected"] = True
                                     clientPVlist[pvname]["initialized"] = False
                                     log.error("Type: {}", type(d["value"]))
@@ -478,7 +486,7 @@ def on_change_value(
                 new_char_value = str(value)
             socketio.emit(
                 pvname,
-                {
+                json.dumps({
                     "pvname": pvname,
                     "newmetadata": "False",
                     "value": str(value),
@@ -487,7 +495,7 @@ def on_change_value(
                     "connected": "1",
                     "severity": severity,
                     "timestamp": timestamp,
-                },
+                },default=str),
                 room=str(pvname),
                 namespace="/pvServer",
             )
@@ -505,7 +513,7 @@ def on_change_value(
                 "severity": severity,
                 "timestamp": timestamp,
             }
-            socketio.emit(pvname, d, room=str(pvname), namespace="/pvServer")
+            socketio.emit(pvname, json.dumps(d,default=str), room=str(pvname), namespace="/pvServer")
 
 
 def on_change_conn(pvname=None, conn=None, value=None, **kws):
@@ -524,7 +532,7 @@ def on_change_conn(pvname=None, conn=None, value=None, **kws):
         try:
             clientPVlist[pvname]["isConnected"] = False
             clientPVlist[pvname]["initialized"] = False
-            socketio.emit(pvname, d, room=str(pvname), namespace="/pvServer")
+            socketio.emit(pvname, json.dumps(d,default=str), room=str(pvname), namespace="/pvServer")
         except:
             error = 2
 
@@ -724,7 +732,7 @@ def request_pv_info(message):
                     }
                     pvlist["socketsRW"] = {}
                 clientPVlist[pvname1] = pvlist
-                clientPVlist[pvname1]["pv"].add_callback(on_change_value, index=0)
+                clientPVlist[pvname1]["pv"].add_callback(on_change_value)
                 log.debug(
                     "new pv {} generated pvConnectionId: {}", pvname1, pvConnectionId
                 )

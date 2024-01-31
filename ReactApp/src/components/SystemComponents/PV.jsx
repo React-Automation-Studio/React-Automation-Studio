@@ -55,6 +55,7 @@ const PV = (props) => {
     initialLocalVariableValue: props.initialLocalVariableValue,
     makeNewSocketIoConnection:props.makeNewSocketIoConnection,
     debug: props.debug,
+    useBinaryValue:props.useBinaryValue,
     pvData: pvData('data')
   });
 
@@ -318,6 +319,10 @@ PV.propTypes = {
    * Directive to use PV's string values.
    */
   useStringValue: PropTypes.bool,
+  /**
+   * Directive to use numpy binary value of the PV value.
+   */
+  useBinaryValue: PropTypes.bool,
 };
 
 /**
@@ -327,7 +332,8 @@ PV.propTypes = {
 PV.defaultProps = {
   debug: false,
   useMetadata: true,
-  makeNewSocketIoConnection:false
+  makeNewSocketIoConnection:false,
+  useBinaryValue:false
 };
 
 export default PV

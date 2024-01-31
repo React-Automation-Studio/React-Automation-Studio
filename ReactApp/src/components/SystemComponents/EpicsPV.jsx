@@ -141,6 +141,7 @@ export const useEpicsPV = (props) => {
       pvConnectionIdRef.current = uuidv4();
       socketRef.current.emit("request_pv_info", {
         data: pv.pvname,
+        useBinaryValue:props.useBinaryValue?true:false,
         pvConnectionId: pvConnectionIdRef.current,
         clientAuthorisation: jwtRef.current,
       });
@@ -176,6 +177,7 @@ export const useEpicsPV = (props) => {
       if (socket) {
         socketRef.current.emit("request_pv_info", {
           data: pv.pvname,
+          useBinaryValue:props.useBinaryValue?true:false,
           pvConnectionId: pvConnectionIdRef.current,
           clientAuthorisation: jwtRef.current,
         });
@@ -274,6 +276,10 @@ EpicsPV.propTypes = {
    * Directive to use PV's string values.
    */
   useStringValue: PropTypes.bool,
+  /**
+   * Directive to use numpy binary value of the PV value.
+   */
+  useBinaryValue: PropTypes.bool,
 };
 
 /**
@@ -284,6 +290,7 @@ EpicsPV.propTypes = {
 EpicsPV.defaultProps = {
   debug: false,
   makeNewSocketIoConnection: true,
+  useBinaryValue:false
 };
 
 export default EpicsPV;

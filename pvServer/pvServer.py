@@ -296,11 +296,11 @@ def check_pv_initialized_after_disconnect():
             else:
                 if clientPVlist[pvname]["initialized"] == False:
                     if clientPVlist[pvname]["isConnected"]:
-                        clientPVlist[pvname]["connectRetries"]=0
+                        clientPVlist[pvname]["connectRetries"] = 0
                         if clientPVlist[pvname]["useBinaryValue"]:
                             clientPVlist[pvname]["pv"].get(as_numpy=True)
-                            d = clientPVlist[pvname]["pv"].get_with_metadata(as_numpy=True,
-                                with_ctrlvars=True, use_monitor=True
+                            d = clientPVlist[pvname]["pv"].get_with_metadata(
+                                as_numpy=True, with_ctrlvars=True, use_monitor=True
                             )
                         else:
                             clientPVlist[pvname]["pv"].get(as_string=True)
@@ -314,7 +314,9 @@ def check_pv_initialized_after_disconnect():
                                         d[keys] = None
                                 if clientPVlist[pvname]["useBinaryValue"]:
                                     if isinstance(d["value"], np.ndarray):
-                                        d["value"] = d["value"].tobytes()  # convert numpy array to binary
+                                        d["value"] = d[
+                                            "value"
+                                        ].tobytes()  # convert numpy array to binary
                                 else:
                                     if clientPVlist[pvname]["pv"].count > 1:
                                         d["value"] = list(d["value"])
@@ -384,9 +386,11 @@ def check_pv_initialized_after_disconnect():
                                     log.exception("Unexpected error")
                                     raise
                     else:
-                        if clientPVlist[pvname]["connectRetries"]>1:    # wait at least 0.2 seconds before reconnecting
+                        if (
+                            clientPVlist[pvname]["connectRetries"] > 1
+                        ):  # wait at least 0.2 seconds before reconnecting
                             clientPVlist[pvname]["pv"].reconnect()
-                        clientPVlist[pvname]["connectRetries"]+=1
+                        clientPVlist[pvname]["connectRetries"] += 1
         time.sleep(0.1)
 
 
@@ -486,26 +490,26 @@ def on_change_value(
     global clientPVList
     if clientPVlist[pvname]["initialized"] == True:
         if clientPVlist[pvname]["useBinaryValue"]:
-            if isinstance(value, np.ndarray):   #new check for numpy array
+            if isinstance(value, np.ndarray):  # new check for numpy array
                 new_char_value = str(char_value)
                 if len(new_char_value) == 0:
                     new_char_value = str(value)
-              
+
                 socketio.emit(
-                pvname,
-                {
-                    "pvname": pvname,
-                    "newmetadata": "False",
-                    "value": value.tobytes(),
-                    "char_value": new_char_value,
-                    "count": count,
-                    "connected": "1",
-                    "severity": severity,
-                    "timestamp": timestamp,
-                },
-                room=str(pvname),
-                namespace="/pvServer",
-            )
+                    pvname,
+                    {
+                        "pvname": pvname,
+                        "newmetadata": "False",
+                        "value": value.tobytes(),
+                        "char_value": new_char_value,
+                        "count": count,
+                        "connected": "1",
+                        "severity": severity,
+                        "timestamp": timestamp,
+                    },
+                    room=str(pvname),
+                    namespace="/pvServer",
+                )
         elif float(count) == 1:
             new_char_value = str(char_value)
             if len(new_char_value) == 0:
@@ -706,7 +710,7 @@ def remove_pv_connection(message):
 def request_pv_info(message):
     global clientPVlist, VITE_DisableLogin, myuid
     pvname1 = str(message["data"])
-    useBinaryValue=message["useBinaryValue"]
+    useBinaryValue = message["useBinaryValue"]
     pvname1 = pvname1.replace("pva://", "")  # work around for old prefix
     authenticated = False
     if VITE_DisableLogin:

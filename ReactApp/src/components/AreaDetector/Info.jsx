@@ -16,6 +16,7 @@ import { StyledTableCell } from "./TableStyles";
 import { Typography } from "@mui/material";
 import Stack from "@mui/system/Stack";
 const Info = (props) => {
+  const {acquirePeriod}=props;
   const muiTextFieldProps = { size: "small", variant: "standard" };
   const theme = useTheme();
   const paperElevation = theme.palette.paperElevation;
@@ -32,12 +33,13 @@ const Info = (props) => {
       settings based on the examples in the AreaDetectorSim documentation.
       <br />
       <br />
-      For any other modes set the acquire period two 2 seconds in the Collect
-      accordian. Otherwise in its current version it will overload the pvServer.
+      {`For any other modes set the acquire period ${acquirePeriod} seconds in the Collect
+      accordian. Otherwise in its current version it will overload the client.`}
       <br />
       <br />
       <Stack direction="row" spacing={2}>
         <MultiActionButton
+          acquirePeriod={acquirePeriod}
           macros={props.macros}
           actionString="Peaks"
           simMode={"Peaks"}
@@ -74,6 +76,7 @@ const Info = (props) => {
           ySineOperation={"Add"}
         />
         <MultiActionButton
+          acquirePeriod={acquirePeriod}
           macros={props.macros}
           actionString="Sine"
           simMode={"Sine"}
@@ -110,6 +113,7 @@ const Info = (props) => {
           ySineOperation={"Add"}
         />
         <MultiActionButton
+          acquirePeriod={acquirePeriod}
           macros={props.macros}
           actionString="Linear Ramp"
           simMode={"LinearRamp"}
@@ -146,6 +150,7 @@ const Info = (props) => {
           ySineOperation={"Add"}
         />
         <MultiActionButton
+          acquirePeriod={acquirePeriod}
           macros={props.macros}
           actionString="Offset&Noise"
           simMode={"Offset&Noise"}

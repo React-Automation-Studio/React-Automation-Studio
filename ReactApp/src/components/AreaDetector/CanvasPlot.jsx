@@ -9,6 +9,7 @@ import Plot from "react-plotly.js";
 import { isMobileOnly } from "react-device-detect";
 import { replaceMacros } from "../SystemComponents/Utils/macroReplacement";
 import { Typography } from "@mui/material";
+
 const ImageCanvas = ({ data, width, height, colormapName }) => {
   const [colors, setColors] = useState(null);
   useEffect(() => {
@@ -30,10 +31,11 @@ const ImageCanvas = ({ data, width, height, colormapName }) => {
     const ctx = canvas.getContext("2d");
 
     const drawHeatmap = () => {
-      if (!Array.isArray(data) || !data.every(Array.isArray)) {
-        // console.error("Data must be a 2D array.");
-        return;
-      }
+   
+      // if (!Array.isArray(data) || !data.every(Array.isArray)) {
+      //   console.error("Data must be a 2D array.");
+      //   return;
+      // }
 
       for (let y = 0; y < data.length; y++) {
         for (let x = 0; x < data[0].length; x++) {
@@ -58,27 +60,26 @@ const ImageCanvas = ({ data, width, height, colormapName }) => {
 const CanvasPlot = (props) => {
   const pv = useEpicsPV(props);
   const { initialized, value } = pv;
+  
   const [data, setData] = useState(null);
   useEffect(() => {
-    const Z = [];
-    if (initialized) {
-      if (value) {
-        const { rows } = props;
-        const cols = value.length / rows;
+    let Z = [];
+    if (initialized && value) {
+      const array = new Uint8Array(value);
+      const { rows } = props;
+      const cols = array.length / rows;
 
-        // Initialize the 2D array Z
+      // Initialize the 2D array Z
+      Z = new Array(rows);
 
-        // Populate Z with sub-arrays
-        for (let i = 0; i < rows; i++) {
-          const start = i * cols;
-          const end = start + cols;
-          Z.push(value.slice(start, end));
-        }
+      // Populate Z with sub-arrays
+      for (let i = 0; i < rows; i++) {
+        Z[i] = new Uint8Array(array.buffer, i * cols, cols);
       }
     }
+
     setData(Z);
   }, [initialized, value]);
-
   const theme = useTheme();
   const backgroundColor = props.backgroundColor
     ? props.backgroundColor
@@ -132,12 +133,12 @@ const CanvasPlot = (props) => {
     return () => window.removeEventListener("resize", handleResize);
   }, [paperRef, props.width, props.height, props.aspectRatio]);
 
-  console.log(`{width: ${width}, height: ${height}}`);
   return (
     <div
       style={{ width: "100%", height: "100%", textAlign: "center" }}
       ref={paperRef}
     >
+     
       <Typography variant="h6" style={{ padding: 8 }}>
         {`${pv.pvname}`}
       </Typography>
@@ -233,6 +234,7 @@ CanvasPlot.defaultProps = {
   rows: 1024,
   colormapName: "inferno",
   makeNewSocketIoConnection: false,
+  useBinaryValue:true,
   debug: false,
 };
 

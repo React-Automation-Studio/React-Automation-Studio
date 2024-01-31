@@ -210,7 +210,7 @@ const MultiActionButtonComponent = (props) => {
     pv: "$(P)$(R)AcquirePeriod",
     macros: props.macros,
     newValueTrigger: newValueTrigger,
-    outputValue: 2,
+    outputValue: props.acquirePeriod,
   });
   const accquire = useEpicsPV({
     pv: "$(P)$(R)Acquire",

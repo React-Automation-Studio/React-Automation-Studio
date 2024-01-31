@@ -20,6 +20,8 @@ from flask_cors import CORS
 from flask_socketio import SocketIO, emit, join_room, leave_room, disconnect
 from urllib import parse, request as urlrequest
 from werkzeug.routing import BaseConverter
+import numpy as np
+
 
 sys.path.insert(0, "../")
 sys.path.insert(0, "userAuthentication/")
@@ -295,24 +297,34 @@ def check_pv_initialized_after_disconnect():
                 if clientPVlist[pvname]["initialized"] == False:
                     if clientPVlist[pvname]["isConnected"]:
                         clientPVlist[pvname]["connectRetries"]=0
-                        clientPVlist[pvname]["pv"].get(as_string=True)
-                        d = clientPVlist[pvname]["pv"].get_with_metadata(
-                            with_ctrlvars=True, use_monitor=True
-                        )
+                        if clientPVlist[pvname]["useBinaryValue"]:
+                            clientPVlist[pvname]["pv"].get(as_numpy=True)
+                            d = clientPVlist[pvname]["pv"].get_with_metadata(as_numpy=True,
+                                with_ctrlvars=True, use_monitor=True
+                            )
+                        else:
+                            clientPVlist[pvname]["pv"].get(as_string=True)
+                            d = clientPVlist[pvname]["pv"].get_with_metadata(
+                                with_ctrlvars=True, use_monitor=True
+                            )
                         if (clientPVlist[pvname]["pv"].value) is not None:
                             if d is not None:
                                 for keys in d:
                                     if str(d[keys]) == "nan":
                                         d[keys] = None
-                                if clientPVlist[pvname]["pv"].count > 1:
-                                    d["value"] = list(d["value"])
-                                if clientPVlist[pvname]["pv"].count == 0:
-                                    d["value"] = []
-                                if clientPVlist[pvname]["pv"].count == 1:
-                                    new_char_value = str(d["char_value"])
-                                    if len(new_char_value) == 0:
-                                        new_char_value = str(d["value"])
-                                    d["char_value"] = new_char_value
+                                if clientPVlist[pvname]["useBinaryValue"]:
+                                    if isinstance(d["value"], np.ndarray):
+                                        d["value"] = d["value"].tobytes()  # convert numpy array to binary
+                                else:
+                                    if clientPVlist[pvname]["pv"].count > 1:
+                                        d["value"] = list(d["value"])
+                                    if clientPVlist[pvname]["pv"].count == 0:
+                                        d["value"] = []
+                                    if clientPVlist[pvname]["pv"].count == 1:
+                                        new_char_value = str(d["char_value"])
+                                        if len(new_char_value) == 0:
+                                            new_char_value = str(d["value"])
+                                        d["char_value"] = new_char_value
                                 d["pvname"] = pvname
                                 d["newmetadata"] = "True"
                                 d["connected"] = "1"
@@ -340,7 +352,6 @@ def check_pv_initialized_after_disconnect():
                                         "***EPICS PV info initial request info error: "
                                     )
                                     log.error("PV name: {}", pvname)
-                                    log.error("PyEpics PV metadata: {}", d)
                                     log.error("Exception: {}", e)
                                     log.error(
                                         "A type error exists in metadata dictionary and"
@@ -474,7 +485,28 @@ def on_change_value(
 ):
     global clientPVList
     if clientPVlist[pvname]["initialized"] == True:
-        if float(count) == 1:
+        if clientPVlist[pvname]["useBinaryValue"]:
+            if isinstance(value, np.ndarray):   #new check for numpy array
+                new_char_value = str(char_value)
+                if len(new_char_value) == 0:
+                    new_char_value = str(value)
+              
+                socketio.emit(
+                pvname,
+                {
+                    "pvname": pvname,
+                    "newmetadata": "False",
+                    "value": value.tobytes(),
+                    "char_value": new_char_value,
+                    "count": count,
+                    "connected": "1",
+                    "severity": severity,
+                    "timestamp": timestamp,
+                },
+                room=str(pvname),
+                namespace="/pvServer",
+            )
+        elif float(count) == 1:
             new_char_value = str(char_value)
             if len(new_char_value) == 0:
                 new_char_value = str(value)
@@ -674,6 +706,7 @@ def remove_pv_connection(message):
 def request_pv_info(message):
     global clientPVlist, VITE_DisableLogin, myuid
     pvname1 = str(message["data"])
+    useBinaryValue=message["useBinaryValue"]
     pvname1 = pvname1.replace("pva://", "")  # work around for old prefix
     authenticated = False
     if VITE_DisableLogin:
@@ -701,6 +734,7 @@ def request_pv_info(message):
                 pvlist["isConnected"] = False
                 pvlist["initialized"] = False
                 pvlist["connectRetries"] = 0
+                pvlist["useBinaryValue"] = useBinaryValue
                 if "pvConnectionId" in message:
                     pvConnectionId = str(message["pvConnectionId"])
                 else:

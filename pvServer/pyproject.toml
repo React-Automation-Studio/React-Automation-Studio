@@ -22,6 +22,7 @@ pymongo = "4.6.1"
 python = "3.12.1"
 python-dotenv = "1.0.1"
 python-ldap = "3.4.4"
+numpy = "1.26.0"
 
 [tool.poetry.dev-dependencies]
 black = "24.1.1"

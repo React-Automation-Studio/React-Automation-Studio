@@ -370,7 +370,7 @@ def check_pv_initialized_after_disconnect():
                     else:
                         if clientPVlist[pvname]["pv"].connect(timeout=0.002):
                             clientPVlist[pvname]["isConnected"] = True
-                        
+
         time.sleep(0.1)
 
 

@@ -22,6 +22,7 @@ import Buffers from "./Buffers";
 import Info from "./Info";
 import Plugins from "./Plugins";
 import CanvasPlot from "./CanvasPlot";
+import PluginsMore from "./PluginsMore";
 /**
  * This is a preview AreaDetector component. This component is built on a React Automation Studio based front end that connects
  * to an alarm server back end.
@@ -33,6 +34,7 @@ import CanvasPlot from "./CanvasPlot";
 
 const AreaDetector = (props) => {
   const [tabVal, setTabVal] = useState(0);
+  const [morePluginsR, setMorePluginsR] = useState(null);
   const muiTextFieldProps = { size: "small", variant: "standard" };
   const theme = useTheme();
   const paperElevation = theme.palette.paperElevation;
@@ -45,16 +47,14 @@ const AreaDetector = (props) => {
       handleTabChange={(event, value) => setTabVal(value)}
     >
       <Box sx={{ p: 2 }}>
-        <Grid container>
-          {tabVal === 0 && <Grid item xs={12} md={6} lg={1} />}
+        <Grid
+          container
+          direction="row"
+          justifyContent="space-around"
+          alignItems="flex-start"
+        >
           {tabVal === 0 && (
-            <Grid item xs={12} md={6} lg={5}>
-              {/* <GraphHeatmap
-                makeNewSocketIoConnection
-                aspectRatio={0.8}
-                pvs={["$(P)image1:ArrayData"]}
-                macros={props.macros}
-              /> */}
+            <Grid item xs={12} sm={12} md={12} lg={5} xl={5}>
               <CanvasPlot
                 makeNewSocketIoConnection
                 aspectRatio={1}
@@ -63,13 +63,15 @@ const AreaDetector = (props) => {
               />
             </Grid>
           )}
-          {tabVal === 0 && <Grid item xs={12} md={6} lg={1} />}
+
           {tabVal === 0 && (
             <Grid
               item
               xs={12}
-              md={6}
-              lg={4}
+              sm={12}
+              md={12}
+              lg={7}
+              xl={4}
               sx={{ overflowY: "scroll", maxHeight: "85vh" }}
             >
               <Accordion
@@ -192,7 +194,7 @@ const AreaDetector = (props) => {
             <Grid
               item
               xs={12}
-              md={6}
+              md={12}
               lg={8}
               sx={{ overflowY: "scroll", maxHeight: "85vh" }}
             >
@@ -213,9 +215,33 @@ const AreaDetector = (props) => {
                   <Plugins
                     macros={props.macros}
                     pluginTypes={props.pluginTypes}
+                    handleMoreOnClick={(pluginType) => {
+                      setMorePluginsR(pluginType);
+                    }}
                   />
                 </AccordionDetails>
               </Accordion>
+            </Grid>
+          )}
+          {tabVal === 1 && (
+            <Grid
+              item
+              xs={12}
+              md={12}
+              lg={4}
+              sx={{ overflowY: "scroll", maxHeight: "85vh" }}
+            >
+              {morePluginsR && (
+                <PluginsMore
+                  macros={{
+                    "$(P)": props.macros["$(P)"],
+                    "$(R)": `${morePluginsR}:`,
+                  }}
+                  handleClose={() => {
+                    setMorePluginsR(null);
+                  }}
+                />
+              )}
             </Grid>
           )}
         </Grid>

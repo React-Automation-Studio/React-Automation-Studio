@@ -12,6 +12,8 @@ import { Typography } from "@mui/material";
 
 const ImageCanvas = ({ data, width, height, colormapName }) => {
   const [colors, setColors] = useState(null);
+  const theme = useTheme();
+  console.log(theme)
   useEffect(() => {
     setColors(
       colormap({
@@ -50,8 +52,18 @@ const ImageCanvas = ({ data, width, height, colormapName }) => {
     }
   }, [data, pixelSize, colors, width, height]);
 
-  return <canvas ref={canvasRef} width={width} height={height}></canvas>;
+  return (
+    <canvas
+      ref={canvasRef}
+      width={width}
+      height={height}
+      style={{ border: `1px solid ${theme.palette.grey[500]}` }}
+    ></canvas>
+  );
 };
+  
+  
+
 /**
  * The CanvasPlot Component has been updated to Plotly.js scatter and line plot.
  * **Note**: The update includes a small breaking change.

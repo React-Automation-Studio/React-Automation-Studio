@@ -15,6 +15,8 @@ import Stack from "@mui/system/Stack";
 import { useTheme } from "@mui/system";
 import { StyledTableCell } from "./TableStyles";
 import { Typography } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
 
 const PluginsMore = (props) => {
   const muiTextFieldProps = { size: "small", variant: "standard" };
@@ -23,6 +25,18 @@ const PluginsMore = (props) => {
   return (
     <Table size="small">
       <TableHead>
+        <TableRow>
+          <TableCell align="center" colSpan={2}>
+            <Typography>
+              {`${props.macros["$(P)"]}${props.macros["$(R)"]}`}
+            </Typography>
+          </TableCell>
+          <TableCell align="right">
+            <IconButton onClick={props.handleClose}>
+              <CloseIcon />
+            </IconButton>
+          </TableCell>
+        </TableRow>
         <TableRow>
           <StyledTableCell align="left">Setting</StyledTableCell>
           <StyledTableCell align="left">Setpoint</StyledTableCell>
@@ -42,75 +56,11 @@ const PluginsMore = (props) => {
           </TableCell>
         </TableRow>
         <TableRow>
-          <TableCell align="left">EPICS name</TableCell>
-          <TableCell align="left"></TableCell>
-          <TableCell align="left">
-            <Typography>
-              {`${props.macros["$(P)"]}${props.macros["$(R)"]}`}
-            </Typography>
-          </TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell align="left">Manufacturer</TableCell>
+          <TableCell align="left">Plugin Type</TableCell>
           <TableCell align="left"></TableCell>
           <TableCell align="left">
             <TextOutput
-              pv="$(P)$(R)Manufacturer_RBV"
-              macros={props.macros}
-              muiTextFieldProps={muiTextFieldProps}
-            />
-          </TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell align="left">Model</TableCell>
-          <TableCell align="left"></TableCell>
-          <TableCell align="left">
-            <TextOutput
-              pv="$(P)$(R)Model_RBV"
-              macros={props.macros}
-              muiTextFieldProps={muiTextFieldProps}
-            />
-          </TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell align="left">Serial number</TableCell>
-          <TableCell align="left"></TableCell>
-          <TableCell align="left">
-            <TextOutput
-              pv="$(P)$(R)SerialNumber_RBV"
-              macros={props.macros}
-              muiTextFieldProps={muiTextFieldProps}
-            />
-          </TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell align="left">Firmware version</TableCell>
-          <TableCell align="left"></TableCell>
-          <TableCell align="left">
-            <TextOutput
-              pv="$(P)$(R)FirmwareVersion_RBV"
-              macros={props.macros}
-              muiTextFieldProps={muiTextFieldProps}
-            />
-          </TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell align="left">SDK version</TableCell>
-          <TableCell align="left"></TableCell>
-          <TableCell align="left">
-            <TextOutput
-              pv="$(P)$(R)SDKVersion_RBV"
-              macros={props.macros}
-              muiTextFieldProps={muiTextFieldProps}
-            />
-          </TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell align="left">Driver version</TableCell>
-          <TableCell align="left"></TableCell>
-          <TableCell align="left">
-            <TextOutput
-              pv="$(P)$(R)DriverVersion_RBV"
+              pv="$(P)$(R)PluginType_RBV"
               macros={props.macros}
               muiTextFieldProps={muiTextFieldProps}
             />
@@ -128,35 +78,287 @@ const PluginsMore = (props) => {
           </TableCell>
         </TableRow>
         <TableRow>
-          <TableCell align="left">Connection</TableCell>
+          <TableCell align="left">Plugin version</TableCell>
+          <TableCell align="left"></TableCell>
           <TableCell align="left">
-          <Stack direction="row" spacing={2}>
-              <ActionButton
-                actionString="Connect"
-                actionValue="1"
-                macros={props.macros}
-                labelPlacement="top"
-                pv="$(P)$(R)AsynIO.CNCT"
-              />
-              <ActionButton
-                actionString="Disconnect"
-                actionValue="0"
-                macros={props.macros}
-                labelPlacement="top"
-                pv="$(P)$(R)AsynIO.CNCT"
-              />
-            </Stack>
+            <TextOutput
+              pv="$(P)$(R)DriverVersion_RBV"
+              macros={props.macros}
+              muiTextFieldProps={muiTextFieldProps}
+            />
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell align="left">Array port</TableCell>
+          <TableCell align="left">
+            <TextInput
+              pv="$(P)$(R)NDArrayPort"
+              macros={props.macros}
+              muiTextFieldProps={muiTextFieldProps}
+            />
           </TableCell>
           <TableCell align="left">
             <TextOutput
-              pv="$(P)$(R)AsynIO.CNCT"
+              pv="$(P)$(R)NDArrayPort_RBV"
+              macros={props.macros}
+              muiTextFieldProps={muiTextFieldProps}
+            />
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell align="left">Array address</TableCell>
+          <TableCell align="left">
+            <TextInput
+              pv="$(P)$(R)NDArrayAddress"
+              macros={props.macros}
+              muiTextFieldProps={muiTextFieldProps}
+            />
+          </TableCell>
+          <TableCell align="left">
+            <TextOutput
+              pv="$(P)$(R)NDArrayAddress_RBV"
+              macros={props.macros}
+              muiTextFieldProps={muiTextFieldProps}
+            />
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell align="left">Enable</TableCell>
+          <TableCell align="left">
+            <SelectionInput
+              // custom_selection_strings={["Enable", "Disable"]}
+              pv="$(P)$(R)EnableCallbacks"
+              macros={props.macros}
+              muiTextFieldProps={muiTextFieldProps}
+            />
+          </TableCell>
+          <TableCell align="left">
+            <TextOutput
+              // custom_selection_strings={["Enable", "Disable"]}
+              pv="$(P)$(R)EnableCallbacks_RBV"
               macros={props.macros}
               muiTextFieldProps={muiTextFieldProps}
               useStringValue
             />
           </TableCell>
         </TableRow>
-      
+        <TableRow>
+          <TableCell align="left">Min. time</TableCell>
+          <TableCell align="left">
+            <TextInput
+              pv="$(P)$(R)MinCallbackTime"
+              macros={props.macros}
+              muiTextFieldProps={muiTextFieldProps}
+            />
+          </TableCell>
+          <TableCell align="left">
+            <TextOutput
+              pv="$(P)$(R)MinCallbackTime_RBV"
+              macros={props.macros}
+              muiTextFieldProps={muiTextFieldProps}
+            />
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell align="left">Queue size/free</TableCell>
+          <TableCell align="left">
+            <TextInput
+              pv="$(P)$(R)QueueSize"
+              macros={props.macros}
+              muiTextFieldProps={muiTextFieldProps}
+            />
+          </TableCell>
+          <TableCell align="left">
+            <TextOutput
+              pv="$(P)$(R)QueueSize_RBV"
+              macros={props.macros}
+              muiTextFieldProps={muiTextFieldProps}
+            />
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell align="left">Array counter</TableCell>
+          <TableCell align="left">
+            <ActionButton
+              actionString="Reset to 0"
+              actionValue="0"
+              pv="$(P)$(R)ArrayCounter"
+              macros={props.macros}
+              muiTextFieldProps={muiTextFieldProps}
+            />
+          </TableCell>
+          <TableCell align="left">
+            <TextOutput
+              pv="$(P)$(R)ArrayCounter_RBV"
+              macros={props.macros}
+              muiTextFieldProps={muiTextFieldProps}
+            />
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell align="left">Array rate</TableCell>
+          <TableCell align="left"></TableCell>
+          <TableCell align="left">
+            <TextOutput
+              pv="$(P)$(R)ArrayRate_RBV"
+              macros={props.macros}
+              muiTextFieldProps={muiTextFieldProps}
+            />
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell align="left">Execution time</TableCell>
+          <TableCell align="left"></TableCell>
+          <TableCell align="left">
+            <TextOutput
+              pv="$(P)$(R)ExecutionTime_RBV"
+              macros={props.macros}
+              muiTextFieldProps={muiTextFieldProps}
+              prec={4}
+              units="ms"
+            />
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell align="left">Dropped arrays</TableCell>
+          <TableCell align="left">
+            <ActionButton
+              actionString="Reset to 0"
+              actionValue="0"
+              pv="$(P)$(R)DroppedArrays"
+              macros={props.macros}
+              muiTextFieldProps={muiTextFieldProps}
+            />
+          </TableCell>
+          <TableCell align="left">
+            <TextOutput
+              pv="$(P)$(R)DroppedArrays_RBV"
+              macros={props.macros}
+              muiTextFieldProps={muiTextFieldProps}
+            />
+          </TableCell>
+        </TableRow>
+
+        <TableRow>
+          <TableCell align="left"># dimensions</TableCell>
+          <TableCell align="left"></TableCell>
+          <TableCell align="left">
+            <TextOutput
+              pv="$(P)$(R)NDimensions_RBV"
+              macros={props.macros}
+              muiTextFieldProps={muiTextFieldProps}
+              prec={4}
+            />
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell align="left">Array Size</TableCell>
+
+          <TableCell align="left" colSpan={2}>
+            <Stack direction="row" spacing={2}>
+              <TextOutput
+                pv="$(P)$(R)ArraySize0_RBV"
+                macros={props.macros}
+                muiTextFieldProps={muiTextFieldProps}
+              />
+              <TextOutput
+                pv="$(P)$(R)ArraySize1_RBV"
+                macros={props.macros}
+                muiTextFieldProps={muiTextFieldProps}
+              />
+              <TextOutput
+                pv="$(P)$(R)ArraySize2_RBV"
+                macros={props.macros}
+                muiTextFieldProps={muiTextFieldProps}
+              />
+            </Stack>
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell align="left">Data type</TableCell>
+          <TableCell align="left"></TableCell>
+          <TableCell align="left">
+            <TextOutput
+              pv="$(P)$(R)DataType_RBV"
+              macros={props.macros}
+              muiTextFieldProps={muiTextFieldProps}
+            />
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell align="left">Color mode</TableCell>
+          <TableCell align="left"></TableCell>
+          <TableCell align="left">
+            <TextOutput
+              pv="$(P)$(R)ColorMode_RBV"
+              macros={props.macros}
+              muiTextFieldProps={muiTextFieldProps}
+            />
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell align="left">Unique ID</TableCell>
+          <TableCell align="left"></TableCell>
+          <TableCell align="left">
+            <TextOutput
+              pv="$(P)$(R)UniqueId_RBV"
+              macros={props.macros}
+              muiTextFieldProps={muiTextFieldProps}
+            />
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell align="left">Time stamp</TableCell>
+          <TableCell align="left"></TableCell>
+          <TableCell align="left">
+            <TextOutput
+              pv="$(P)$(R)TimeStamp_RBV"
+              macros={props.macros}
+              muiTextFieldProps={muiTextFieldProps}
+            />
+          </TableCell>
+        </TableRow>
+
+        <TableRow>
+          <TableCell align="left">Array callbacks</TableCell>
+          <TableCell align="left">
+            <SelectionInput
+              // custom_selection_strings={["Enable", "Disable"]}
+              pv="$(P)$(R)ArrayCallbacks"
+              macros={props.macros}
+              muiTextFieldProps={muiTextFieldProps}
+            />
+          </TableCell>
+          <TableCell align="left">
+            <TextOutput
+              // custom_selection_strings={["Enable", "Disable"]}
+              pv="$(P)$(R)ArrayCallbacks_RBV"
+              macros={props.macros}
+              muiTextFieldProps={muiTextFieldProps}
+              useStringValue
+            />
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell align="left">Dropped arrays</TableCell>
+          <TableCell align="left">
+            <ActionButton
+              actionString="Process"
+              actionValue="1"
+              pv="$(P)$(R)ProcessPlugin"
+              macros={props.macros}
+              muiTextFieldProps={muiTextFieldProps}
+            />
+          </TableCell>
+          <TableCell align="left"></TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell align="left">More</TableCell>
+          <TableCell align="left"></TableCell>
+          <TableCell align="left">
+            <Typography>For another day</Typography>
+          </TableCell>
+        </TableRow>
       </TableBody>
     </Table>
   );

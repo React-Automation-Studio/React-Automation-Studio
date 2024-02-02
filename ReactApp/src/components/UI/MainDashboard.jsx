@@ -690,7 +690,7 @@ const MainDashboard = (props) => {
           </Paper>
         </Grid>
 
-        <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem}>
+        <Grid item lg={3} sm={6} xs={12} className={classes.MainGridItem}>
           <Paper className={classes.Paper} elevation={paperElevation}>
             <Grid
               container
@@ -739,7 +739,7 @@ const MainDashboard = (props) => {
           </Paper>
         </Grid>
 
-        <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem}>
+        <Grid item lg={3} sm={6} xs={12} className={classes.MainGridItem}>
           <Paper
             className={classes.Paper}
             elevation={paperElevation}
@@ -756,7 +756,7 @@ const MainDashboard = (props) => {
               <Grid item lg={12} sm={12} xs={12}>
                 <Typography {...typographyProps}>
                   {" "}
-                  <VisibilityIcon className={classes.Icon} /> Preview
+                  <VisibilityIcon className={classes.Icon} /> Appliances
                 </Typography>
               </Grid>
               <Grid item lg={6} sm={12} xs={12}>
@@ -820,6 +820,43 @@ const MainDashboard = (props) => {
                       Archiver Data Viewer Demo{" "}
                     </Button>
                   </Grid>
+                  
+                </Grid>
+              </Grid>
+            </Grid>
+          </Paper>
+        </Grid>
+
+        <Grid item lg={3} sm={6} xs={12} className={classes.MainGridItem}>
+          <Paper
+            className={classes.Paper}
+            elevation={paperElevation}
+            style={{ textAlign: "center" }}
+          >
+            <Grid
+              container
+              direction="row"
+              item
+              justifyContent="center"
+              spacing={4}
+              alignItems="center"
+            >
+              <Grid item lg={12} sm={12} xs={12}>
+                <Typography {...typographyProps}>
+                  {" "}
+                  <VisibilityIcon className={classes.Icon} /> Preview
+                </Typography>
+              </Grid>
+              <Grid item lg={6} sm={12} xs={12}>
+                <Grid
+                  container
+                  direction="row"
+                  item
+                  justifyContent="center"
+                  spacing={4}
+                  alignItems="center"
+                >
+                 
                   <Grid item lg={12} sm={12} xs={12}>
                     <Button
                       fullWidth
@@ -838,8 +875,7 @@ const MainDashboard = (props) => {
             </Grid>
           </Paper>
         </Grid>
-
-        <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem}>
+        <Grid item lg={3} sm={6} xs={12} className={classes.MainGridItem}>
           <Paper className={classes.Paper} elevation={paperElevation}>
             <Grid
               container

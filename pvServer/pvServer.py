@@ -296,7 +296,6 @@ def check_pv_initialized_after_disconnect():
             else:
                 if clientPVlist[pvname]["initialized"] == False:
                     if clientPVlist[pvname]["isConnected"]:
-                        clientPVlist[pvname]["connectRetries"] = 0
                         if clientPVlist[pvname]["useBinaryValue"]:
                             clientPVlist[pvname]["pv"].get(as_numpy=True)
                             d = clientPVlist[pvname]["pv"].get_with_metadata(
@@ -386,11 +385,9 @@ def check_pv_initialized_after_disconnect():
                                     log.exception("Unexpected error")
                                     raise
                     else:
-                        if (
-                            clientPVlist[pvname]["connectRetries"] > 1
-                        ):  # wait at least 0.2 seconds before reconnecting
-                            clientPVlist[pvname]["pv"].reconnect()
-                        clientPVlist[pvname]["connectRetries"] += 1
+                        if clientPVlist[pvname]["pv"].connect(timeout=0.002):
+                            clientPVlist[pvname]["isConnected"] = True
+
         time.sleep(0.1)
 
 
@@ -737,7 +734,6 @@ def request_pv_info(message):
                 pvlist["pv"] = pv
                 pvlist["isConnected"] = False
                 pvlist["initialized"] = False
-                pvlist["connectRetries"] = 0
                 pvlist["useBinaryValue"] = useBinaryValue
                 if "pvConnectionId" in message:
                     pvConnectionId = str(message["pvConnectionId"])

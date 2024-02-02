@@ -267,9 +267,8 @@ services:
       - mongosetup
   areadetectorsim:
     image: prjemian/synapps
-
     ports:
-      - "8005:8005/tcp"
+      - "8005:8005/tcp" #areaDetector IOC is served on port 8005 so as not to conflict with other instances on the network, use the port number to access the IOC from other GUIS
       - "8005:8005/udp"
     environment:
       - PREFIX="ras:adsim:" # OPI macro: P = ras:adsim: , R = cam1:

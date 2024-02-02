@@ -318,19 +318,34 @@ const MainDashboard = (props) => {
               </Grid>
               <Grid item lg={12} sm={12} xs={12}>
                 <Typography className={classes.WhatsNew} component="div">
-                V5.0.0 Tuesday 30 October 2023 Major Updates:
+                V5.0.0 Friday 02 February 2024 Major Updates:
                   <ul>
+                    <li>Package updates to Backend modules</li>
+                    <li>Updated to Epics 7</li>
                     <li>Moved from Create-react-app to Vite</li>
                     <li>Package updates to all Node modules</li>
                     <li>Updated to the latest Node LTS</li>
                     <li>MUI has been updated to the latest packages</li>
                     
                   </ul>
-                  Minor Bug Fixes and Updates:
+                  New Features:
                   <ul>
                     <li>
-                      A few minor bug fixes to the pvServer
+                      Docker multi-stage builds for speed improvements
                     </li>
+                    <li>
+                      Preview of an AreaDector Appliance user interface with included simulation
+                    </li>
+                    <li>
+                      Named MongoDb volumes for easier management
+                    </li>
+                  </ul>
+                  Breaking Changes:
+                  <ul>
+                    <li>
+                     See the migration guide to migrate from V4.0.3 to V5.0.0
+                    </li>
+                    
                   </ul>
     
                   <br />

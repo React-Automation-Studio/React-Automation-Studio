@@ -29,7 +29,7 @@ ENV VITE_EnableLogin=false
 ENV VITE_DisableStandardLogin=false
 ENV VITE_EnableActiveDirectoryLogin=false
 ENV VITE_EnableGoogleLogin=false
-ENV EPICS_CA_ADDR_LIST="0.0.0.0:8001 0.0.0.0:8004"
+ENV EPICS_CA_ADDR_LIST="0.0.0.0:8001 0.0.0.0:8004 0.0.0.0:8005"
 ENV PYEPICS_LIBCA=/epics/base/lib/linux-x86_64/libca.so
 
 ENV PATH="/epics/base/bin/linux-x86_64/:${PATH}"

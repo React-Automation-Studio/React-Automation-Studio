@@ -135,7 +135,7 @@ It is advised to only use the containerized version with a Linux environment. (S
 
 Prerequisites: git, latest version of docker-ce and docker compose 
 
-( At the time of writing the system used Docker V20.10.17 and docker compose V2.6.0 )
+( At the time of writing the system used Docker V25.0.2 and docker compose V2.24.5 )
 
 To install docker-ce on Unbuntu follow:
 
@@ -146,27 +146,20 @@ It is advised to the follow the Post Installation steps for Linux:
 https://docs.docker.com/engine/install/linux-postinstall/
 
 
-And docker compose (if it is not installed via the previous steps):
-
-https://docs.docker.com/compose/install/compose-plugin/#installing-compose-on-linux-systems
 
 
-**On Linux only:** 
 
-With the latest version of docker and docker-compose installed we recommend using docker buildkit ( https://docs.docker.com/develop/develop-images/build_enhancements/ ):
-
-set the following enviroment variables:
-
-```bash
-export DOCKER_BUILDKIT=1 
-export COMPOSE_DOCKER_CLI_BUILD=1
-```
 
 1st clone this repo:
 
 ```bash
-git  clone https://github.com/React-Automation-Studio/React-Automation-Studio
+git clone https://github.com/React-Automation-Studio/React-Automation-Studio.git
 
+```
+or
+
+```bash 
+git clone git@github.com:React-Automation-Studio/React-Automation-Studio.git
 ```
 
 Then in React Automation Studio installation folder run:
@@ -213,10 +206,10 @@ Will launch the development version of the styleguide.
 **Initially to check that everything is working only bring up the production version by running**
 
 ```bash
-docker compose  up
+docker compose  up --build
 ```
 
-This installation process of all the docker images may take a while (20-30min) the first time. There after it is fast as all the repeated build and up commands uses cached installations. The longest process is the installation of the node modules. Do not be deterred by the red warnings.
+This installation process of all the docker images may take a while  the first time. There after it is fast as all the repeated build and up commands uses cached installations. The longest process is the installation of the node modules. Do not be deterred by the red warnings.
 
 This default installation will serve the  app at http://127.0.0.1:5000 and the style guide at http://127.0.0.1:6060.
 
@@ -506,6 +499,62 @@ Site specific components and app screens should be kept in your repository. If y
 
 Contact us at Github Discussions: https://github.com/React-Automation-Studio/React-Automation-Studio/discussions
 
+# Cite us
+
+If you use React Automation Studio in your research, please cite us as follows:
+
+```
+@inproceedings{duckitt:icalepcs2023-fr2bco01,
+  author       = {W. Duckitt and J.K. Abraham and D. Marcato and G. Savarese},
+  title        = {{React Automation Studio: Modern Scientific Control with the Web}},
+% booktitle    = {Proc. ICALEPCS'23},
+  booktitle    = {Proc. 19th Int. Conf. Accel. Large Exp. Phys. Control Syst. (ICALEPCS'23)},
+  eventdate    = {2023-10-09/2023-10-13},
+  pages        = {1643--1649},
+  paper        = {FR2BCO01},
+  language     = {english},
+  keywords     = {EPICS, controls, interface, GUI, framework},
+  venue        = {Cape Town, South Africa},
+  series       = {International Conference on Accelerator and Large Experimental Physics Control Systems},
+  number       = {19},
+  publisher    = {JACoW Publishing, Geneva, Switzerland},
+  month        = {01},
+  year         = {2024},
+  issn         = {2226-0358},
+  isbn         = {978-3-95450-238-7},
+  doi          = {10.18429/JACoW-ICALEPCS2023-FR2BCO01},
+  url          = {https://jacow.org/icalepcs2023/papers/fr2bco01.pdf},
+  abstract     = {{React Automation Studio is a progressive web application framework that enables the control of large scientific equipment through EPICS from any smart device connected to a network. With built-in advanced features such as reusable widgets and components, macro substitution, OAuth 2.0 authentication, access rights administration, alarm-handing with notifications, diagnostic probes and archived data viewing, it allows one to build modern, secure and fully responsive control user interfaces and overview screens for the desktop, web browser, TV, mobile and tablet devices. A general overview of React Automation Studio and its features as well as the system architecture, implementation, community involvement and future plans for the system is presented. }},
+}
+```
+or: https://doi.org/10.18429/JACoW-ICALEPCS2023-FR2BCO01
+
+ and:
+
+ ```
+ @InProceedings{duckitt:cyclotrons2019-tha03,
+  author       = {W. Duckitt and J.K. Abraham},
+  title        = {{React Automation Studio: A New Face to Control Large  Scientific Equipment}},
+  booktitle    = {Proc. Cyclotrons'19},
+  pages        = {285--288},
+  paper        = {THA03},
+  language     = {english},
+  keywords     = {EPICS, controls, GUI, interface, cyclotron},
+  venue        = {Cape Town, South Africa},
+  series       = {International Conference on Cyclotrons and their Applications},
+  number       = {22},
+  publisher    = {JACoW Publishing, Geneva, Switzerland},
+  month        = {jun},
+  year         = {2020},
+  isbn         = {978-3-95450-205-9},
+  doi          = {10.18429/JACoW-Cyclotrons2019-THA03},
+  url          = {http://jacow.org/cyclotrons2019/papers/tha03.pdf},
+  note         = {https://doi.org/10.18429/JACoW-Cyclotrons2019-THA03},
+}
+ ```
+ or: https://doi.org/10.18429/JACoW-Cyclotrons2019-THA03
+
+
 # FAQ
 
 ### 1.   Which operating systems are supported?
@@ -517,6 +566,8 @@ Contact us at Github Discussions: https://github.com/React-Automation-Studio/Rea
 ### 2.  Are other systems such as  Windows or Mac OS supported?
   
   The docker containers for RAS run in network  mode host. This is done to enable EPICS to communicate seamlessly with any IOC's on the same subnet as the host. Other OSes such as Windows may not support the host mode and will run in the bridged mode. This may break the communication between the micro services. It is therefore recommended to run the RAS containers on a Linux VM that is minimally running Ubuntu Server. Please ensure the the VM network interface is assigned an IP on the same subnet as your EPICS network in order for communication with the IOC's to occur seamlessly.
+
+
 
 # Changelog
   V5.0.0 Friday 02 February 2024 Major Updates:

@@ -1,5 +1,7 @@
 Current Release: V5.0.0
 
+[Migrate from V4.0.3 to V5.0.0](docs/migrate-from-V4-to-V5.md)
+
 # Introduction
 
 React Automation Studio is a new software platform to enable the control of large scientific equipment through EPICS.
@@ -517,21 +519,36 @@ Contact us at Github Discussions: https://github.com/React-Automation-Studio/Rea
   The docker containers for RAS run in network  mode host. This is done to enable EPICS to communicate seamlessly with any IOC's on the same subnet as the host. Other OSes such as Windows may not support the host mode and will run in the bridged mode. This may break the communication between the micro services. It is therefore recommended to run the RAS containers on a Linux VM that is minimally running Ubuntu Server. Please ensure the the VM network interface is assigned an IP on the same subnet as your EPICS network in order for communication with the IOC's to occur seamlessly.
 
 # Changelog
- V5.0.0 Tuesday 30 October 2023 Major Updates:
+  V5.0.0 Friday 02 February 2024 Major Updates:
   <ul>
+    <li>Package updates to Backend modules</li>
+    <li>Updated to Epics 7 and Python 3.12.1</li>
     <li>Moved from Create-react-app to Vite</li>
     <li>Package updates to all Node modules</li>
     <li>Updated to the latest Node LTS</li>
     <li>MUI has been updated to the latest packages</li>
     
   </ul>
-  Minor Bug Fixes and Updates:
+  New Features:
   <ul>
     <li>
-      A few minor bug fixes to the pvServer
+      Docker multi-stage builds for speed improvements
+    </li>
+    <li>
+      Preview of an AreaDector Appliance user interface with included simulation
+    </li>
+    <li>
+      Named MongoDb volumes for easier management
     </li>
   </ul>
-
+  Breaking Changes:
+  <ul>
+    <li>
+      See the migration guide to migrate from V4.0.3 to V5.0.0
+    </li>
+    
+  </ul>
+[Migrate from V4.0.3 to V5.0.0](docs/migrate-from-V4-to-V5.md)
   <br />
 V4.0.3 Friday 20 October 2023 Minor Updates:
 <ul>

@@ -197,6 +197,7 @@ class DeprecatedEpicsPV extends React.Component {
       data: this.state.pvname,
       pvConnectionId: this.state.pvConnectionId,
       clientAuthorisation: jwt,
+      useBinaryValue:this.props.useBinaryValue
     });
   }
   handleInitialConnection() {
@@ -218,6 +219,7 @@ class DeprecatedEpicsPV extends React.Component {
         data: this.state.pvname.replace("pva://", ""),
         pvConnectionId: this.state.pvConnectionId,
         clientAuthorisation: jwt,
+        useBinaryValue:this.props.useBinaryValue
       },
       this.handleRequestPvInfoAck
     );

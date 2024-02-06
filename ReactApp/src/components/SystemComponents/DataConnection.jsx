@@ -63,11 +63,13 @@ class DataConnection extends React.Component {
               useStringValue={this.props.useStringValue}
               debug={this.props.debug}
               newValueTrigger={this.props.newValueTrigger}
+              useBinaryValue={false}
               />
             {this.props.usePvLabel===true&&<DeprecatedEpicsPV
               pv={pv.toString()+".DESC"}
               macros={this.props.macros}
               handleInputValue={this.props.handleInputValueLabel}
+              useBinaryValue={false}
             /> }
           </React.Fragment>
       }

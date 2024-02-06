@@ -318,7 +318,7 @@ const MainDashboard = (props) => {
               </Grid>
               <Grid item lg={12} sm={12} xs={12}>
                 <Typography className={classes.WhatsNew} component="div">
-                V5.0.0 Friday 02 February 2024 Major Updates:
+                  V5.0.0 Friday 02 February 2024 Major Updates:
                   <ul>
                     <li>Package updates to Backend modules</li>
                     <li>Updated to Epics 7 and Python 3.12.1</li>
@@ -326,29 +326,26 @@ const MainDashboard = (props) => {
                     <li>Package updates to all Node modules</li>
                     <li>Updated to the latest Node LTS</li>
                     <li>MUI has been updated to the latest packages</li>
-                    
                   </ul>
                   New Features:
                   <ul>
+                    <li>Docker multi-stage builds for speed improvements</li>
                     <li>
-                      Docker multi-stage builds for speed improvements
+                      Preview of an AreaDector Appliance user interface with
+                      included simulation
                     </li>
-                    <li>
-                      Preview of an AreaDector Appliance user interface with included simulation
-                    </li>
-                    <li>
-                      Named MongoDb volumes for easier management
-                    </li>
+                    <li>Named MongoDb volumes for easier management</li>
                   </ul>
                   Breaking Changes:
                   <ul>
                     <li>
-                     See the migration guide to migrate from V4.0.3 to V5.0.0
-                     <Link to="/MigrationGuide">Migration Guide</Link>
+                      See the migration guide to migrate from V4.0.3 to V5.0.0:{" "}
+                      <a href="https://github.com/React-Automation-Studio/React-Automation-Studio/blob/master/docs/migrate-from-V4-to-V5.md">
+                        Here
+                      </a>
+                      <br />
                     </li>
-                    
                   </ul>
-    
                   <br />
                   V4.0.3 Friday 20 October 2023 Minor Updates:
                   <ul>
@@ -362,8 +359,8 @@ const MainDashboard = (props) => {
                     <li>Fixed pvServer Flask, Werkzeug dependencies.</li>
                   </ul>
                   <br />
-                V4.0.2 Thursday 13 July 2023 Minor Updates:
-                  V4.0.3 Friday 20 October 2023 Minor Updates:
+                  V4.0.2 Thursday 13 July 2023 Minor Updates: V4.0.3 Friday 20
+                  October 2023 Minor Updates:
                   <ul>
                     <li>Package updates to all Node modules</li>
                     <li>Updated to the latest Node LTS</li>
@@ -836,7 +833,6 @@ const MainDashboard = (props) => {
                       Archiver Data Viewer Demo{" "}
                     </Button>
                   </Grid>
-                  
                 </Grid>
               </Grid>
             </Grid>
@@ -872,7 +868,6 @@ const MainDashboard = (props) => {
                   spacing={4}
                   alignItems="center"
                 >
-                 
                   <Grid item lg={12} sm={12} xs={12}>
                     <Button
                       fullWidth

@@ -545,13 +545,10 @@ Contact us at Github Discussions: https://github.com/React-Automation-Studio/Rea
   <ul>
     <li>
       See the migration guide to migrate from V4.0.3 to V5.0.0
-      
-      [Migrate from V4.0.3 to V5.0.0](docs/migrate-from-V4-to-V5.md)
-
     </li>
-    
   </ul>
 
+ [Migrate from V4.0.3 to V5.0.0](docs/migrate-from-V4-to-V5.md)
 
   <br />
 V4.0.3 Friday 20 October 2023 Minor Updates:

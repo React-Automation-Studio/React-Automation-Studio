@@ -13,7 +13,10 @@
 			// Add the IDs of extensions you want installed when the container is created.
 			"extensions": [
 				"ms-azuretools.vscode-docker"
-			]
+			],
+			"settings": {
+				"remote.autoForwardPorts": false
+			  }
 		}
 	},
 

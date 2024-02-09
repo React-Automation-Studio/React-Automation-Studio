@@ -1,0 +1,61 @@
+import {
+  Canvas,
+  Meta,
+  Story,
+  Controls,
+  Description,
+  Title,
+} from "@storybook/blocks";
+import ImportPath from "../../../.storybook/ImportPath";
+import * as ArrayContainer from "./ArrayContainer.stories";
+
+<Meta of={ArrayContainer} />
+
+<Title />
+<Description />
+
+<ImportPath libName={"src"} />
+
+In this example the TextOutput component displays the raw contents of a waveform PV.
+
+Reading a binary waveform of 10 elements.
+
+By default the ArrayContainer shows only 10 elements per time but this value can be changed.
+
+The ArrayContainer does not know how many items there are in the PV value. For this reason it expects a props with the array length. By default the maxItemsCount is 100
+
+# Usage
+
+## Example1
+
+<Story of={ArrayContainer.Example1} />
+
+## Example2
+
+By default this component shows only ten items per time. Users can choose how many items they want to see per time. Obviously this value can't be greater than maxItemsCount.
+
+When not all the items are visible the registersLabel props is useful to add a label to each element. This value overrides the value given to the `label` props of (in our case) `TextInput`.
+
+<Story of={ArrayContainer.Example2} />
+
+## Example3
+
+In some cases users want to show or consider only a subset of the array values. In this case we use `registers`. Items order in the `registers` prop does count!
+
+When specifying the registers values, the `maxItemsCount` is overridden with the length of the array given to `registers`; in these cases `maxItemsCount can be overridden`. Instead the visibleItemsCount can be specified. If not the component shows all the elements given into the array.
+
+<Story of={ArrayContainer.Example3} />
+
+## Example4
+
+Horizontal direction without and with minimum width for each item
+
+<Story of={ArrayContainer.Example4} />
+
+## Example5
+
+Add a label on the ArrayContainer component and add spacing between items
+
+<Story of={ArrayContainer.Example5} />
+
+<Controls />

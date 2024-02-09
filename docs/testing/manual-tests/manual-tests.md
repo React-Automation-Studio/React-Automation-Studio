@@ -74,7 +74,7 @@ Example .env:
 SERVER_PORT=5000
 SECURE=true
 HTTP_REDIRECT_TO_HTTPS=true
-REACT_APP_EnableLogin=true
+VITE_EnableLogin=true
 
 ```
 
@@ -95,7 +95,7 @@ Change the .env so that the website is served over port 443
 SERVER_PORT=443
 SECURE=true
 HTTP_REDIRECT_TO_HTTPS=true
-REACT_APP_EnableLogin=true
+VITE_EnableLogin=true
 
 ```
 -[ ] make sure the webapp is served over over https at the address: https://localhost

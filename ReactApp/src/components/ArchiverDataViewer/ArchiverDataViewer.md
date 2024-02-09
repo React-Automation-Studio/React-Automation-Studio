@@ -1,5 +1,6 @@
 Example trace prop:
-```js static
+
+```js
 
  traces={
             [
@@ -20,7 +21,8 @@ Example trace prop:
 Note: for plotly to display the traces correctly the yAxis:0 always needs to be assigned.
 
 Example yAxes prop:
-```js static
+
+```js 
 
  traces={
            yAxes={
@@ -42,8 +44,11 @@ Example yAxes prop:
 
 
 ```js
-import ToggleButton from '../../components/BaseComponents/ToggleButton.js';
-import ThumbWheel from '../../components/BaseComponents/ThumbWheel.js';
+
+import ToggleButton from '../../components/BaseComponents/ToggleButton';
+import ThumbWheel from '../../components/BaseComponents/ThumbWheel';
+import  ArchiverDataViewer  from 'src/components/ArchiverDataViewer/ArchiverDataViewer';
+
 <div>
     <ArchiverDataViewer
         debug={true}
@@ -99,6 +104,7 @@ import ThumbWheel from '../../components/BaseComponents/ThumbWheel.js';
         />
     </div>
 </div>
+
 ```
 
 

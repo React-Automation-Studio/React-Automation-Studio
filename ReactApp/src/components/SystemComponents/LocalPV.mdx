@@ -1,0 +1,27 @@
+import LocalPV from './LocalPV.md?raw';
+
+import {
+  Canvas,
+  Meta,
+  Story,
+  Controls,
+  Description,
+  Title,
+  Source,
+  Stories
+} from "@storybook/blocks";
+import { Markdown } from '@storybook/blocks';
+import * as EpicsPVStories from "./LocalPV.stories";
+import ImportPath from "../../../.storybook/ImportPath";
+
+# LocalPV
+<Meta  of={EpicsPVStories}/> 
+
+<Description />
+<ImportPath fullPath="import LocalPV from 'src/components/SystemComponents/LocalPV';"/>
+
+<Controls/>
+<Stories includePrimary={false}/>
+<Markdown>{LocalPV}</Markdown>
+
+{/* <Markdown>{widgetable}</Markdown> */} 

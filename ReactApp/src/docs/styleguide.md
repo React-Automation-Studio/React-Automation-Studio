@@ -1,1 +1,0 @@
-We encourage the use of the Material-UI Grid component when creating a layout for your web-based user interfaces. Grids provide uniform elements and spacing across platforms, environments and screen sizes.

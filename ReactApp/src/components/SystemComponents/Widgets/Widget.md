@@ -29,14 +29,7 @@ For Examples on how to use the widget see the simple example below or have a loo
 Simple example usage:
 
 ```js static
- import { withStyles } from "@mui/material/styles";
  import Widget from "path to Widget";
- const styles = (theme) => ({
-  root: {
-    display: "flex",
-    flexWrap: "wrap",
-  },
- })
 
   const ExampleComponent=(props)=>{
       const {value,initialized}=props;
@@ -66,6 +59,6 @@ Example.defaultProps = {
  
 };
 
-export default withStyles(styles, { withTheme: true })(Example)
+export default Example;
 
 ```

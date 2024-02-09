@@ -2,7 +2,7 @@
 
 TraditionalLayout with no moreVert drawer and custom items in side drawer
 ```js
-import Content from '../../../../docs/content/LayoutContent.js';
+import Content from '../../../../docs/content/LayoutContent';
 import TraditionalLayout from './TraditionalLayout'
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';

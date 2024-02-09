@@ -20,6 +20,8 @@ from flask_cors import CORS
 from flask_socketio import SocketIO, emit, join_room, leave_room, disconnect
 from urllib import parse, request as urlrequest
 from werkzeug.routing import BaseConverter
+import numpy as np
+
 
 sys.path.insert(0, "../")
 sys.path.insert(0, "userAuthentication/")
@@ -61,14 +63,14 @@ PV_SERVER_LOG_LEVEL = os.getenv("pvServerLogLevel", None)
 PV_SERVER_LOG_FILE = os.getenv("pvServerLogFile", None)
 PV_SERVER_LOG_FILE_SIZE = os.getenv("pvServerLogFileSize", None)
 PV_SERVER_LOG_FILE_BACKUP = os.getenv("pvServerLogFileBackup", None)
-REACT_ENABLE_LOGIN = os.getenv("REACT_APP_EnableLogin", None)
-REACT_ENABLE_LOGIN_AD = os.getenv("REACT_APP_EnableActiveDirectoryLogin", None)
-REACT_ENABLE_LOGIN_GOOGLE = os.getenv("REACT_APP_EnableGoogleLogin", None)
-REACT_DISABLE_STANDARD_LOGIN = os.getenv("REACT_APP_DisableStandardLogin", None)
+REACT_ENABLE_LOGIN = os.getenv("VITE_EnableLogin", None)
+REACT_ENABLE_LOGIN_AD = os.getenv("VITE_EnableActiveDirectoryLogin", None)
+REACT_ENABLE_LOGIN_GOOGLE = os.getenv("VITE_EnableGoogleLogin", None)
+REACT_DISABLE_STANDARD_LOGIN = os.getenv("VITE_DisableStandardLogin", None)
 
 log.info("")
 log.info("**************************************")
-log.info("React Automation Studio V4.0.3")
+log.info("React Automation Studio V5.0.0")
 log.info("")
 log.info("pvServer Environment Variables:")
 log.info("")
@@ -82,10 +84,10 @@ log.info(f"pvServerLogLevel: {PV_SERVER_LOG_LEVEL}")
 log.info(f"pvServerLogFile: {PV_SERVER_LOG_FILE}")
 log.info(f"pvServerLogFileSize: {PV_SERVER_LOG_FILE_SIZE}")
 log.info(f"pvServerLogFileBackup: {PV_SERVER_LOG_FILE_BACKUP}")
-log.info(f"REACT_APP_EnableLogin: {REACT_ENABLE_LOGIN}")
-log.info(f"REACT_APP_EnableActiveDirectoryLogin: {REACT_ENABLE_LOGIN_AD}")
-log.info(f"REACT_APP_EnableGoogleLogin: {REACT_ENABLE_LOGIN_GOOGLE}")
-log.info(f"REACT_APP_DisableStandardLogin: {REACT_DISABLE_STANDARD_LOGIN}")
+log.info(f"VITE_EnableLogin: {REACT_ENABLE_LOGIN}")
+log.info(f"VITE_EnableActiveDirectoryLogin: {REACT_ENABLE_LOGIN_AD}")
+log.info(f"VITE_EnableGoogleLogin: {REACT_ENABLE_LOGIN_GOOGLE}")
+log.info(f"VITE_DisableStandardLogin: {REACT_DISABLE_STANDARD_LOGIN}")
 
 
 async_mode = "gevent"
@@ -125,11 +127,11 @@ except:
 log.info(f"SECURE - {SECURE}")
 log.info("")
 
-REACT_APP_DisableLogin = not (REACT_ENABLE_LOGIN == "true")
-REACT_APP_EnableActiveDirectoryLogin = REACT_ENABLE_LOGIN_AD == "true"
-REACT_APP_EnableGoogleLogin = REACT_ENABLE_LOGIN_GOOGLE == "true"
-REACT_APP_DisableStandardLogin = REACT_DISABLE_STANDARD_LOGIN == "true"
-if REACT_APP_DisableLogin:
+VITE_DisableLogin = not (REACT_ENABLE_LOGIN == "true")
+VITE_EnableActiveDirectoryLogin = REACT_ENABLE_LOGIN_AD == "true"
+VITE_EnableGoogleLogin = REACT_ENABLE_LOGIN_GOOGLE == "true"
+VITE_DisableStandardLogin = REACT_DISABLE_STANDARD_LOGIN == "true"
+if VITE_DisableLogin:
     log.info("Authentication and Authorization is DISABLED")
 else:
     log.info("Authentication and Authorization is ENABLED")
@@ -210,8 +212,8 @@ def refresh():
 
 @app.route("/api/login/local", methods=["POST"])
 def login_local():
-    global REACT_APP_DisableStandardLogin
-    if not REACT_APP_DisableStandardLogin:
+    global VITE_DisableStandardLogin
+    if not VITE_DisableStandardLogin:
         user = request.json.get("user", None)
         userData = LocalAuthenticateUser(user)
         resp = create_login_response(userData)
@@ -224,8 +226,8 @@ def login_local():
 @app.route("/api/login/ldap", methods=["POST"])
 def login_ldap():
     log.debug("request ip: {}", request.remote_addr)
-    global REACT_APP_EnableActiveDirectoryLogin
-    if REACT_APP_EnableActiveDirectoryLogin:
+    global VITE_EnableActiveDirectoryLogin
+    if VITE_EnableActiveDirectoryLogin:
         user = request.json.get("user", None)
         LDAP_HOST = os.getenv("LDAP_HOST")
         LDAP_PORT = os.getenv("LDAP_PORT")
@@ -253,16 +255,16 @@ def login_ldap():
 
 @app.route("/api/login/google", methods=["POST"])
 def login_google():
-    global REACT_APP_EnableGoogleLogin
-    if REACT_APP_EnableGoogleLogin:
+    global VITE_EnableGoogleLogin
+    if VITE_EnableGoogleLogin:
         jwt = request.json.get("jwt", None)
-        REACT_APP_EnableGoogleLoginId = (
-            os.getenv("REACT_APP_EnableGoogleLoginId")
-            if os.getenv("REACT_APP_EnableGoogleLoginId")
+        VITE_EnableGoogleLoginId = (
+            os.getenv("VITE_EnableGoogleLoginId")
+            if os.getenv("VITE_EnableGoogleLoginId")
             else None
         )
-        if REACT_APP_EnableGoogleLoginId:
-            decoded = decodeTokenGoogle(jwt, REACT_APP_EnableGoogleLoginId)
+        if VITE_EnableGoogleLoginId:
+            decoded = decodeTokenGoogle(jwt, VITE_EnableGoogleLoginId)
             if decoded:
                 if decoded["email"] and (decoded["email_verified"] == True):
                     userData = ExternalAuthenticateUser({"username": decoded["email"]})
@@ -294,24 +296,36 @@ def check_pv_initialized_after_disconnect():
             else:
                 if clientPVlist[pvname]["initialized"] == False:
                     if clientPVlist[pvname]["isConnected"]:
-                        clientPVlist[pvname]["pv"].get(as_string=True)
-                        d = clientPVlist[pvname]["pv"].get_with_metadata(
-                            with_ctrlvars=True, use_monitor=True
-                        )
-                        if (clientPVlist[pvname]["pv"].value) != None:
-                            if d != None:
+                        if clientPVlist[pvname]["useBinaryValue"]:
+                            clientPVlist[pvname]["pv"].get(as_numpy=True)
+                            d = clientPVlist[pvname]["pv"].get_with_metadata(
+                                as_numpy=True, with_ctrlvars=True, use_monitor=True
+                            )
+                        else:
+                            clientPVlist[pvname]["pv"].get(as_string=True)
+                            d = clientPVlist[pvname]["pv"].get_with_metadata(
+                                with_ctrlvars=True, use_monitor=True
+                            )
+                        if (clientPVlist[pvname]["pv"].value) is not None:
+                            if d is not None:
                                 for keys in d:
                                     if str(d[keys]) == "nan":
                                         d[keys] = None
-                                if clientPVlist[pvname]["pv"].count > 1:
-                                    d["value"] = list(d["value"])
-                                if clientPVlist[pvname]["pv"].count == 0:
-                                    d["value"] = []
-                                if clientPVlist[pvname]["pv"].count == 1:
-                                    new_char_value = str(d["char_value"])
-                                    if len(new_char_value) == 0:
-                                        new_char_value = str(d["value"])
-                                    d["char_value"] = new_char_value
+                                if clientPVlist[pvname]["useBinaryValue"]:
+                                    if isinstance(d["value"], np.ndarray):
+                                        d["value"] = d[
+                                            "value"
+                                        ].tobytes()  # convert numpy array to binary
+                                else:
+                                    if clientPVlist[pvname]["pv"].count > 1:
+                                        d["value"] = list(d["value"])
+                                    if clientPVlist[pvname]["pv"].count == 0:
+                                        d["value"] = []
+                                    if clientPVlist[pvname]["pv"].count == 1:
+                                        new_char_value = str(d["char_value"])
+                                        if len(new_char_value) == 0:
+                                            new_char_value = str(d["value"])
+                                        d["char_value"] = new_char_value
                                 d["pvname"] = pvname
                                 d["newmetadata"] = "True"
                                 d["connected"] = "1"
@@ -339,7 +353,6 @@ def check_pv_initialized_after_disconnect():
                                         "***EPICS PV info initial request info error: "
                                     )
                                     log.error("PV name: {}", pvname)
-                                    log.error("PyEpics PV metadata: {}", d)
                                     log.error("Exception: {}", e)
                                     log.error(
                                         "A type error exists in metadata dictionary and"
@@ -355,6 +368,10 @@ def check_pv_initialized_after_disconnect():
                                         type(d["value"])
                                     ):
                                         log.info("type is epics.dbr.c_float_Array_0")
+                                    elif "epics.dbr.c_ubyte_Array_1" in str(
+                                        type(d["value"])
+                                    ):
+                                        log.info("type is epics.dbr.c_ubyte_Array_1")
                                     d = {}
                                     d["pvname"] = pvname
                                     d["connected"] = "0"
@@ -367,6 +384,10 @@ def check_pv_initialized_after_disconnect():
                                 except:
                                     log.exception("Unexpected error")
                                     raise
+                    else:
+                        if clientPVlist[pvname]["pv"].connect(timeout=0.002):
+                            clientPVlist[pvname]["isConnected"] = True
+
         time.sleep(0.1)
 
 
@@ -465,7 +486,28 @@ def on_change_value(
 ):
     global clientPVList
     if clientPVlist[pvname]["initialized"] == True:
-        if float(count) == 1:
+        if clientPVlist[pvname]["useBinaryValue"]:
+            if isinstance(value, np.ndarray):  # new check for numpy array
+                new_char_value = str(char_value)
+                if len(new_char_value) == 0:
+                    new_char_value = str(value)
+
+                socketio.emit(
+                    pvname,
+                    {
+                        "pvname": pvname,
+                        "newmetadata": "False",
+                        "value": value.tobytes(),
+                        "char_value": new_char_value,
+                        "count": count,
+                        "connected": "1",
+                        "severity": severity,
+                        "timestamp": timestamp,
+                    },
+                    room=str(pvname),
+                    namespace="/pvServer",
+                )
+        elif float(count) == 1:
             new_char_value = str(char_value)
             if len(new_char_value) == 0:
                 new_char_value = str(value)
@@ -532,9 +574,9 @@ def background_thread():
 
 @socketio.on("write_to_pv", namespace="/pvServer")
 def write_to_pv(message):
-    global clientPVlist, thread_lock2, REACT_APP_DisableLogin
+    global clientPVlist, thread_lock2, VITE_DisableLogin
     authenticated = False
-    if REACT_APP_DisableLogin:
+    if VITE_DisableLogin:
         accessControl = {
             "userAuthorised": True,
             "permissions": {"read": True, "write": True},
@@ -565,10 +607,10 @@ def write_to_pv(message):
 
 @socketio.on("remove_pv_connection", namespace="/pvServer")
 def remove_pv_connection(message):
-    global clientPVlist, REACT_APP_DisableLogin, myuid
+    global clientPVlist, VITE_DisableLogin, myuid
     pvname1 = str(message["pvname"])
     authenticated = False
-    if REACT_APP_DisableLogin:
+    if VITE_DisableLogin:
         authenticated = True
         accessControl = {
             "userAuthorised": True,
@@ -663,11 +705,12 @@ def remove_pv_connection(message):
 
 @socketio.on("request_pv_info", namespace="/pvServer")
 def request_pv_info(message):
-    global clientPVlist, REACT_APP_DisableLogin, myuid
+    global clientPVlist, VITE_DisableLogin, myuid
     pvname1 = str(message["data"])
+    useBinaryValue = message["useBinaryValue"]
     pvname1 = pvname1.replace("pva://", "")  # work around for old prefix
     authenticated = False
-    if REACT_APP_DisableLogin:
+    if VITE_DisableLogin:
         authenticated = True
         accessControl = {
             "userAuthorised": True,
@@ -685,11 +728,13 @@ def request_pv_info(message):
                     pvname1,
                     connection_timeout=0.002,
                     connection_callback=on_change_conn,
+                    auto_monitor=True,
                 )
                 pvlist = {}
                 pvlist["pv"] = pv
                 pvlist["isConnected"] = False
                 pvlist["initialized"] = False
+                pvlist["useBinaryValue"] = useBinaryValue
                 if "pvConnectionId" in message:
                     pvConnectionId = str(message["pvConnectionId"])
                 else:
@@ -919,11 +964,11 @@ def client_disconnect():
 
 @socketio.on("databaseRead", namespace="/pvServer")
 def db_read(message):
-    global clientPVlist, REACT_APP_DisableLogin
+    global clientPVlist, VITE_DisableLogin
     dbURL = str(message["dbURL"])
     log.debug("databaseRead: SSID: {} dbURL: {}", request.sid, dbURL)
     authenticated = False
-    if REACT_APP_DisableLogin:
+    if VITE_DisableLogin:
         authenticated = True
         accessControl = {
             "userAuthorised": True,
@@ -1006,11 +1051,11 @@ def db_read(message):
 
 @socketio.on("databaseBroadcastRead", namespace="/pvServer")
 def db_read_broadcast(message):
-    global clientPVlist, REACT_APP_DisableLogin
+    global clientPVlist, VITE_DisableLogin
     dbURL = str(message["dbURL"])
     log.debug("databaseRead: SSID: {} dbURL: {}", request.sid, dbURL)
     authenticated = False
-    if REACT_APP_DisableLogin:
+    if VITE_DisableLogin:
         authenticated = True
         accessControl = {
             "userAuthorised": True,
@@ -1102,10 +1147,10 @@ def db_read_broadcast(message):
 
 @socketio.on("remove_dbWatch", namespace="/pvServer")
 def db_remove_watch(message):
-    global clientPVlist, REACT_APP_DisableLogin, myuid, thread_lock
+    global clientPVlist, VITE_DisableLogin, myuid, thread_lock
     dbURL = str(message["dbURL"])
     authenticated = False
-    if REACT_APP_DisableLogin:
+    if VITE_DisableLogin:
         authenticated = True
         accessControl = {
             "userAuthorised": True,
@@ -1158,10 +1203,10 @@ def db_remove_watch(message):
 
 @socketio.on("databaseReadWatchAndBroadcast", namespace="/pvServer")
 def db_read_watch_broadcast(message):
-    global clientPVlist, REACT_APP_DisableLogin, clientDbWatchList, myDbWatchUid, thread_lock
+    global clientPVlist, VITE_DisableLogin, clientDbWatchList, myDbWatchUid, thread_lock
     dbURL = str(message["dbURL"])
     authenticated = False
-    if REACT_APP_DisableLogin:
+    if VITE_DisableLogin:
         authenticated = True
         accessControl = {
             "userAuthorised": True,
@@ -1339,10 +1384,10 @@ def db_read_watch_broadcast(message):
 
 @socketio.on("databaseUpdateOne", namespace="/pvServer")
 def db_update_one(message):
-    global clientPVlist, REACT_APP_DisableLogin
+    global clientPVlist, VITE_DisableLogin
     dbURL = str(message["dbURL"])
     authenticated = False
-    if REACT_APP_DisableLogin:
+    if VITE_DisableLogin:
         authenticated = True
         accessControl = {
             "userAuthorised": True,
@@ -1405,12 +1450,12 @@ def db_update_one(message):
 
 @socketio.on("databaseUpdateMany", namespace="/pvServer")
 def db_update_many(message):
-    global clientPVlist, REACT_APP_DisableLogin
+    global clientPVlist, VITE_DisableLogin
     dbURL = str(message["dbURL"])
     log.debug("databaseUpdate: SSID: {} dbURL: {}", request.sid, dbURL)
     log.debug("message: {}", str(message))
     authenticated = False
-    if REACT_APP_DisableLogin:
+    if VITE_DisableLogin:
         authenticated = True
         accessControl = {
             "userAuthorised": True,
@@ -1489,12 +1534,12 @@ def db_update_many(message):
 
 @socketio.on("databaseDeleteOne", namespace="/pvServer")
 def db_delete_one(message):
-    global clientPVlist, REACT_APP_DisableLogin
+    global clientPVlist, VITE_DisableLogin
     dbURL = str(message["dbURL"])
     log.debug("databaseUpdate: SSID: {} dbURL: {}", request.sid, dbURL)
     log.debug("message: {}", str(message))
     authenticated = False
-    if REACT_APP_DisableLogin:
+    if VITE_DisableLogin:
         authenticated = True
         accessControl = {
             "userAuthorised": True,
@@ -1554,12 +1599,12 @@ def db_delete_one(message):
 
 @socketio.on("databaseInsertOne", namespace="/pvServer")
 def db_insert_one(message):
-    global clientPVlist, REACT_APP_DisableLogin
+    global clientPVlist, VITE_DisableLogin
     log.debug("databaseInsertOne")
     dbURL = str(message["dbURL"])
     log.debug("databaseInsertOne: SSID: {} dbURL: {}", request.sid, dbURL)
     authenticated = False
-    if REACT_APP_DisableLogin:
+    if VITE_DisableLogin:
         authenticated = True
         accessControl = {
             "userAuthorised": True,
@@ -1619,11 +1664,11 @@ def db_insert_one(message):
 
 @socketio.on("archiverRead", namespace="/pvServer")
 def archiver_read(message):
-    global clientPVlist, REACT_APP_DisableLogin
+    global clientPVlist, VITE_DisableLogin
     archiverURL = str(message["archiverURL"])
     log.debug("databaseRead: SSID: {}", request.sid)
     authenticated = False
-    if REACT_APP_DisableLogin:
+    if VITE_DisableLogin:
         authenticated = True
         accessControl = {
             "userAuthorised": True,
@@ -1710,7 +1755,7 @@ def archiver_read(message):
 
 @socketio.on("UserDetailsWatch", namespace="/pvServer")
 def watch_user_details(message):
-    global clientPVlist, REACT_APP_DisableLogin, clientDbWatchList, myDbWatchUid, thread_lock
+    global clientPVlist, VITE_DisableLogin, clientDbWatchList, myDbWatchUid, thread_lock
     authorisation = AuthoriseUser(message["clientAuthorisation"])
     if authorisation["authorised"]:
         try:
@@ -1796,7 +1841,7 @@ def watch_user_details(message):
 
 @socketio.on("adminAllUsers", namespace="/pvServer")
 def admin_all_users(message):
-    global clientPVlist, REACT_APP_DisableLogin, clientDbWatchList, myDbWatchUid, thread_lock
+    global clientPVlist, VITE_DisableLogin, clientDbWatchList, myDbWatchUid, thread_lock
     isAdmin = checkIfAdmin(message["clientAuthorisation"])
     if isAdmin:
         try:
@@ -1882,7 +1927,7 @@ def admin_all_users(message):
 
 @socketio.on("adminWatchUAGs", namespace="/pvServer")
 def admin_watch_uags(message):
-    global clientPVlist, REACT_APP_DisableLogin, clientDbWatchList, myDbWatchUid, thread_lock
+    global clientPVlist, VITE_DisableLogin, clientDbWatchList, myDbWatchUid, thread_lock
     isAdmin = checkIfAdmin(message["clientAuthorisation"])
     if isAdmin:
         try:
@@ -1968,7 +2013,7 @@ def admin_watch_uags(message):
 
 @socketio.on("adminAddUser", namespace="/pvServer")
 def admin_add_user(message):
-    global clientPVlist, REACT_APP_DisableLogin, clientDbWatchList, myDbWatchUid
+    global clientPVlist, VITE_DisableLogin, clientDbWatchList, myDbWatchUid
     isAdmin = checkIfAdmin(message["clientAuthorisation"])
     if isAdmin:
         try:
@@ -2008,7 +2053,7 @@ def admin_add_user(message):
 
 @socketio.on("adminDeleteUser", namespace="/pvServer")
 def admin_delete_user(message):
-    global clientPVlist, REACT_APP_DisableLogin, clientDbWatchList, myDbWatchUid
+    global clientPVlist, VITE_DisableLogin, clientDbWatchList, myDbWatchUid
     isAdmin = checkIfAdmin(message["clientAuthorisation"])
     if isAdmin:
         try:
@@ -2032,7 +2077,7 @@ def admin_delete_user(message):
 
 @socketio.on("adminEnableUser", namespace="/pvServer")
 def admin_enable_user(message):
-    global clientPVlist, REACT_APP_DisableLogin, clientDbWatchList, myDbWatchUid
+    global clientPVlist, VITE_DisableLogin, clientDbWatchList, myDbWatchUid
     isAdmin = checkIfAdmin(message["clientAuthorisation"])
     if isAdmin:
         try:
@@ -2060,7 +2105,7 @@ def admin_enable_user(message):
 
 @socketio.on("adminModifyUser", namespace="/pvServer")
 def admin_modify_user(message):
-    global clientPVlist, REACT_APP_DisableLogin, clientDbWatchList, myDbWatchUid
+    global clientPVlist, VITE_DisableLogin, clientDbWatchList, myDbWatchUid
     isAdmin = checkIfAdmin(message["clientAuthorisation"])
     if isAdmin:
         try:
@@ -2110,7 +2155,7 @@ def admin_modify_user(message):
 
 @socketio.on("ModifyUser", namespace="/pvServer")
 def modify_user(message):
-    global clientPVlist, REACT_APP_DisableLogin, clientDbWatchList, myDbWatchUid
+    global clientPVlist, VITE_DisableLogin, clientDbWatchList, myDbWatchUid
     authorisation = AuthoriseUser(message["clientAuthorisation"])
     if authorisation["authorised"]:
         try:
@@ -2160,7 +2205,7 @@ def modify_user(message):
 
 @socketio.on("adminUpdateUAGs", namespace="/pvServer")
 def admin_update_uags(message):
-    global clientPVlist, REACT_APP_DisableLogin, clientDbWatchList, myDbWatchUid
+    global clientPVlist, VITE_DisableLogin, clientDbWatchList, myDbWatchUid
     isAdmin = checkIfAdmin(message["clientAuthorisation"])
     if isAdmin:
         try:
@@ -2187,8 +2232,8 @@ def admin_update_uags(message):
 
 @socketio.on("AuthoriseClient", namespace="/pvServer")
 def authorize_client(message):
-    global REACT_APP_DisableLogin
-    if not REACT_APP_DisableLogin:
+    global VITE_DisableLogin
+    if not VITE_DisableLogin:
         userData = AuthoriseUser(message)
         if userData["authorised"]:
             emit(
@@ -2220,21 +2265,21 @@ def authorize_client(message):
 
 
 if __name__ == "__main__":
-    REACT_APP_PyEpicsServerURL = os.getenv("pvServerURL")
+    VITE_PyEpicsServerURL = os.getenv("pvServerURL")
     pvServerPort = os.getenv("pvServerPort")
     if pvServerPort is None:
         pvServerPort = "5000"
-    REACT_APP_PyEpicsServerURL = (
-        REACT_APP_PyEpicsServerURL + ":" + pvServerPort + "/" + "pvServer"
+    VITE_PyEpicsServerURL = (
+        VITE_PyEpicsServerURL + ":" + pvServerPort + "/" + "pvServer"
     )
-    log.info(f"pvServer URL: {REACT_APP_PyEpicsServerURL}")
+    log.info(f"pvServer URL: {VITE_PyEpicsServerURL}")
     log.info("")
-    if not (REACT_APP_PyEpicsServerURL is None):
-        if "https" in REACT_APP_PyEpicsServerURL:
+    if not (VITE_PyEpicsServerURL is None):
+        if "https" in VITE_PyEpicsServerURL:
             socketio.run(
                 app,
                 host="0.0.0.0",
-                debug=True,
+                debug=False,
                 port=int(pvServerPort, 10),
                 keyfile="../certificates/server.key",
                 certfile="../certificates/server.cer",

@@ -1,0 +1,27 @@
+import widget from './widget.md?raw';
+import widgetable from '../../components/SystemComponents/Widgets/Widget.md?raw';
+import {
+  Canvas,
+  Meta,
+  Story,
+  Controls,
+  Description,
+  Title,
+} from "@storybook/blocks";
+import { Markdown } from '@storybook/blocks';
+import * as WidgetStories from "../../components/SystemComponents/Widgets/Widget.stories";
+import ImportPath from "../../../.storybook/ImportPath";
+
+# Widgets and PV components
+
+
+
+<Markdown>{widget}</Markdown>
+<Meta of={WidgetStories}  />
+# Widget
+
+<Description />
+<ImportPath libName="src"/>
+<Story of={WidgetStories.Primary} />
+<Controls/>
+<Markdown>{widgetable}</Markdown>

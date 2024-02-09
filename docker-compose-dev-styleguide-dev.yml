@@ -1,24 +1,30 @@
-version: '3.2'
 services:
+  epicsbase:
+    image: epicsbase
+    build:
+      context: ./
+      dockerfile: docker/epicsBase/Dockerfile
+  node_cache:
+    image: node_cache
+    build:
+      context: ./
+      dockerfile: docker/node_cache/Dockerfile
   frontendserverdev:
     env_file: .env
     build:
       context: ./     
       dockerfile: docker/frontendserverDev/Dockerfile
     volumes:
-      - ./certificates:/certificates/
-      - ./ReactApp/package.json:/frontendserverAppDev/package.json
-      - ./ReactApp/src:/frontendserverAppDev/src
-      - ./ReactApp/public:/frontendserverAppDev/public
+      - ./ReactApp/package.json:/ReactApp/package.json
+      - ./ReactApp/src:/ReactApp/src
+      - ./ReactApp/index.html:/ReactApp/index.html
+      - ./ReactApp/vite.config.js:/ReactApp/vite.config.js
+      - ./ReactApp/public:/ReactApp/public
     restart: always
-    # logging:
-    #   driver: "none"
-    #network_mode: host
     ports:
       - "3001:3000"
-    environment:
-      - FAST_REFRESH=false
-      - NODE_OPTIONS=--max_old_space_size=4096
+    depends_on:
+      - node_cache
   pvserver1:
     build:
       context: ./
@@ -43,11 +49,12 @@ services:
       - pvServerPort=9001
       - pvServerURL=http://127.0.0.1
     volumes:
-      - ./certificates:/certificates/
       - ./log/:/pvServer/log
       - ./build:/pvServer/build
+    depends_on:
+      - epicsbase
   nginx:
-    image: nginx:1.19.6
+    image: nginx:1.25.3
     restart: always
     network_mode: host
     depends_on:
@@ -72,16 +79,22 @@ services:
     network_mode: host
     env_file: .env
     environment:
+          - ALARM_DATABASE=localhost
+          - ALARM_DATABASE_REPLICA_SET_NAME=devrs
+          - LOADSAVE_DATABASE=localhost
+          - LOADSAVE_DATABASE_REPLICA_SET_NAME=devrs
+          - ADMIN_DATABASE=localhost
+          - ADMIN_DATABASE_REPLICA_SET_NAME=devrs
+          - WATCH_DEBUG_DATABASE=localhost
+          - WATCH_DEBUG_DATABASE_REPLICA_SET_NAME=devrs
+          - DEMO_ARCHIVER=http://localhost:17668
           - pvServerURL=http://127.0.0.1
           - pvServerPort=5001
-          - REACT_APP_EnableLogin=false
-          - DEMO_ARCHIVER=http://localhost:17668
-          - NODE_OPTIONS=--max_old_space_size=4096
-          
-          
-          - no_proxy
+          - VITE_EnableLogin=false
     volumes:
           - ./certificates:/certificates/
+    depends_on:
+      - epicsbase
   demoioc:
     build:
       context: ./
@@ -90,6 +103,8 @@ services:
     stdin_open: true
     restart: always
     network_mode: host
+    depends_on:
+      - epicsbase
 
   signalcli:
     build:
@@ -124,6 +139,7 @@ services:
     hostname: alarmhandlerserver
     restart: always
     depends_on:
+      - epicsbase
       - initializealarmhandlerdb
     network_mode: "host"
     stdin_open: true
@@ -132,8 +148,15 @@ services:
     volumes:
       - ./log/:/usr/src/app/log
 
+# As of RAS V5.0.0 MongoDB the mongodb version is now defined by the RAS_MONGODB_VERSION variable in the .env file
+  # This allows you customize the mongodb version, for example should you want to stay on an older version of mongodb
+
+  # In the volumes section, the mogodb volumes are now defined by the compose project name and mongodb version
+  # It allows for multiple RAS instances to be run on the same machine.
+  # In this case, make sure to set the COMPOSE_PROJECT_NAME variable in the .env file or make sure project folder names are unique between instances
+
   mongo1:
-    image: mongo:4.2.3-bionic
+    image: mongo:${RAS_MONGODB_VERSION-7.0.5}
     hostname: mongo1
     restart: always
     network_mode: "host"
@@ -149,7 +172,7 @@ services:
     command: "--bind_ip_all --port 27017 --replSet ${REPLICA_SET_NAME-devrs}"
 
   mongo2:
-    image: mongo:4.2.3-bionic
+    image: mongo:${RAS_MONGODB_VERSION-7.0.5}
     hostname: mongo2
     restart: always
     network_mode: "host"
@@ -165,7 +188,7 @@ services:
     command: "--bind_ip_all --port 27018 --replSet ${REPLICA_SET_NAME-devrs}"
 
   mongo3:
-    image: mongo:4.2.3-bionic
+    image: mongo:${RAS_MONGODB_VERSION-7.0.5}
     hostname: mongo3
     restart: always
     network_mode: "host"
@@ -210,22 +233,25 @@ services:
     stdin_open: true
     depends_on:
       - mongosetup
-  styleguideserverdev:
+
+  storybookserverdev:
     env_file: .env
     build:
       context: ./
      
-      dockerfile: docker/styleguideServerDev/Dockerfile
+      dockerfile: docker/storybookServerDev/Dockerfile
     volumes:
-      - ./certificates:/certificates/
-      - ./ReactApp/package.json:/frontendserverAppDev/package.json
-      - ./ReactApp/src:/frontendserverAppDev/src
-      - ./ReactApp/public:/frontendserverAppDev/public
-      - ./ReactApp/styleguide.config.js:/frontendserverAppDev/styleguide.config.js
+      - ./ReactApp/package.json:/ReactApp/package.json
+      - ./ReactApp/src:/ReactApp/src
+      - ./ReactApp/index.html:/ReactApp/index.html
+      - ./ReactApp/vite.config.js:/ReactApp/vite.config.js
+      - ./ReactApp/public:/ReactApp/public
+      - ./ReactApp/.storybook:/ReactApp/.storybook
     restart: always
-    #network_mode: host
     ports:
-      - "6061:6060"
+      - "6061:6006"
+    depends_on:
+      - node_cache
   initializeadmindb:
     env_file: .env
     environment:
@@ -241,12 +267,32 @@ services:
     stdin_open: true
     depends_on:
       - mongosetup
+  areadetectorsim:
+    image: prjemian/synapps
+    ports:
+      - "8005:8005/tcp" #areaDetector IOC is served on port 8005 so as not to conflict with other instances on the network, use the port number to access the IOC from other GUIS
+      - "8005:8005/udp"
+    environment:
+      - PREFIX="ras:adsim:" # OPI macro: P = ras:adsim: , R = cam1:
+      - EPICS_CA_SERVER_PORT=8005
+    command: bash -c "/root/bin/adsim.sh start && tail -f /dev/null"
 
+
+# As of RAS V5.0.0 MongoDB volumes are now defined by the compose project name and mongodb version
+# This allows you customize the mongodb version, for example should you want to stay on an older version of mongodb
+# It allows for multiple RAS instances to be run on the same machine.
+# In this case, make sure to set the COMPOSE_PROJECT_NAME variable in the .env file or make sure project folder names are unique between instances
 
 volumes:
   mongo-db-data1:
+    name: ${COMPOSE_PROJECT_NAME}-mongo-db-data1-mongo-${RAS_MONGODB_VERSION-7.0.5}
   mongo-db-configdb1:
+    name: ${COMPOSE_PROJECT_NAME}-mongo-db-configdb1-mongo-${RAS_MONGODB_VERSION-7.0.5}
   mongo-db-data2:
+    name: ${COMPOSE_PROJECT_NAME}-mongo-db-data2-mongo-${RAS_MONGODB_VERSION-7.0.5}
   mongo-db-configdb2:
+    name: ${COMPOSE_PROJECT_NAME}-mongo-db-configdb2-mongo-${RAS_MONGODB_VERSION-7.0.5}
   mongo-db-data3:
+    name: ${COMPOSE_PROJECT_NAME}-mongo-db-data3-mongo-${RAS_MONGODB_VERSION-7.0.5}
   mongo-db-configdb3:
+    name: ${COMPOSE_PROJECT_NAME}-mongo-db-configdb3-mongo-${RAS_MONGODB_VERSION-7.0.5}

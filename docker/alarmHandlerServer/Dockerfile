@@ -13,17 +13,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Set pyepics required environment variables
 ENV PYEPICS_LIBCA=/epics/base/lib/linux-x86_64/libca.so
 ENV EPICS_BASE=/epics/base/
-
-# # Download and make epics base
-# WORKDIR /epics
-
-# RUN wget https://epics-controls.org/download/base/base-7.0.7.tar.gz
-# RUN tar -xvf base-7.0.7.tar.gz
-# RUN ln -s /epics/base-7.0.7 /epics/base
-
-# WORKDIR /epics/base
-# RUN make
-
 RUN ln -s /epics/base/bin/linux-x86_64/caRepeater /bin/caRepeater
 
 # Move alarmIOC into place and make

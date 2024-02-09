@@ -42,17 +42,7 @@ const PlotData = (props) => {
           : theme.palette.reactVis.lineColors[newData.index],
       },
 
-      // name:
-      //   typeof props.legend !== "undefined"
-      //     ? props.legend[newData.index]
-      //       ? props.legend[newData.index]
-      //       : replaceMacros(props.pvs[newData.index], props.macros)
-      //     : replaceMacros(props.pvs[newData.index], props.macros),
-      // hovertemplate: props.yHoverFormat
-      //   ? "(%{y:" +
-      //     props.yHoverFormat +
-      //     "}) %{x}<extra>%{fullData.name}</extra>"
-      //   : "(%{y}) %{x}<extra>%{fullData.name}</extra>",
+      
     };
     return newPvs;
   };

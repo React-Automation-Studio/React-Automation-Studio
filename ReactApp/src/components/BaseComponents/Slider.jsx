@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 
 import { Typography } from "@mui/material";
 import PropTypes from "prop-types";
-import { throttle, debounce } from 'lodash'
+import { throttle, debounce } from "lodash";
 import Widget from "../SystemComponents/Widgets/Widget";
 import RCSlider from "rc-slider";
 import makeStyles from "@mui/styles/makeStyles";
@@ -401,7 +401,7 @@ function SliderComponent(props) {
 
   return (
     <div
-      style={{ height: props.height??"100%", width: "100%" }}
+      style={{ height: props.height ?? "100%", width: "100%" }}
       onPointerDownCapture={handleOnClickCapture}
     >
       <FormControlLabel
@@ -463,7 +463,7 @@ function SliderComponent(props) {
  * For the vertical slider, the parent container must have a fixed height.
  */
 const Slider = (props) => {
-  return <Widget  {...props} component={SliderComponent} name={"Slider"} />;
+  return <Widget {...props} component={SliderComponent} name={"Slider"} />;
 };
 
 /**
@@ -613,15 +613,14 @@ Slider.propTypes = {
    * Directive to use a vertical slider
    */
   vertical: PropTypes.bool,
- 
 };
 
 Slider.defaultProps = {
   step: 1,
   labelPlacement: "top",
   valuePlacement: "top",
-  height:"100%",
-  width:"100%",
+  height: "100%",
+  width: "100%",
   showValue: true,
   showTooltip: false,
   vertical: false,

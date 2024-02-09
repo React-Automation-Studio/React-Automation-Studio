@@ -693,7 +693,7 @@ def remove_pv_connection(message):
                 except:
                     pass
 
-            time.sleep(30)  # wait for 3 seconds before removing a watch
+            time.sleep(3)  # wait for 3 seconds before removing a watch
             with thread_lock:
                 removePvId()
 

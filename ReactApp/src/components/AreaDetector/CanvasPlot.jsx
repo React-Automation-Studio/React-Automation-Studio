@@ -33,12 +33,6 @@ const ImageCanvas = ({ data, width, height, colormapName }) => {
     const ctx = canvas.getContext("2d");
 
     const drawHeatmap = () => {
-   
-      // if (!Array.isArray(data) || !data.every(Array.isArray)) {
-      //   console.error("Data must be a 2D array.");
-      //   return;
-      // }
-
       for (let y = 0; y < data.length; y++) {
         for (let x = 0; x < data[0].length; x++) {
           const color = colors[data[y][x]];
@@ -75,22 +69,22 @@ const CanvasPlot = (props) => {
   
   const [data, setData] = useState(null);
   useEffect(() => {
-    let Z = [];
+    let z = [];
     if (initialized && value) {
       const array = new Uint8Array(value);
       const { rows } = props;
       const cols = array.length / rows;
 
-      // Initialize the 2D array Z
-      Z = new Array(rows);
+      // Initialize the 2D array z
+      z = new Array(rows);
 
-      // Populate Z with sub-arrays
+      // Populate z with sub-arrays
       for (let i = 0; i < rows; i++) {
-        Z[i] = new Uint8Array(array.buffer, i * cols, cols);
+        z[i] = new Uint8Array(array.buffer, i * cols, cols);
       }
     }
 
-    setData(Z);
+    setData(z);
   }, [initialized, value]);
   const theme = useTheme();
   const backgroundColor = props.backgroundColor

@@ -110,7 +110,7 @@ def propAreaAlarms(pvname, value):
         areaKey = getKeys(pvname)[0]
         globalEnable, areaEnable, subAreaEnable, pvEnable = getEnables(pvname)
 
-        if (subAreaEnable is not None):
+        if subAreaEnable is not None:
             enable = globalEnable and areaEnable and subAreaEnable and pvEnable
         else:
             enable = globalEnable and areaEnable and pvEnable

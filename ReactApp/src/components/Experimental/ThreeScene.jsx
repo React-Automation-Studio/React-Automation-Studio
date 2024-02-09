@@ -4,7 +4,7 @@ import { pink } from "@mui/material/colors";
 import { lightGreen } from "@mui/material/colors";
 import PV from "../SystemComponents/PV";
 
-function Box(props) {
+function Cube3d(props) {
   const [xRotationPv, setXRotaionPv] = useState({ initialized: false });
   const [yRotationPv, setYRotaionPv] = useState({ initialized: false });
   // This reference will give us direct access to the mesh
@@ -73,7 +73,7 @@ const ThreeScene = () => {
           intensity={Math.PI}
         />
         <pointLight position={[-10, -10, -10]} decay={0} intensity={Math.PI} />
-        <Box
+        <Cube3d
           position={[0, 0, 0]}
           pvs={["testIOC:Cube1:xRotation", "testIOC:Cube1:yRotation"]}
         />

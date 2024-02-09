@@ -302,9 +302,9 @@ def check_pv_initialized_after_disconnect():
                                 as_numpy=True, with_ctrlvars=True, use_monitor=True
                             )
                         else:
-                            clientPVlist[pvname]["pv"].get(as_string=True)
+                            clientPVlist[pvname]["pv"].get(as_string=True, as_numpy=False)
                             d = clientPVlist[pvname]["pv"].get_with_metadata(
-                                with_ctrlvars=True, use_monitor=True
+                                with_ctrlvars=True, use_monitor=True, as_numpy=False
                             )
                         if (clientPVlist[pvname]["pv"].value) is not None:
                             if d is not None:
@@ -507,6 +507,7 @@ def on_change_value(
                     room=str(pvname),
                     namespace="/pvServer",
                 )
+        
         elif float(count) == 1:
             new_char_value = str(char_value)
             if len(new_char_value) == 0:
@@ -530,6 +531,8 @@ def on_change_value(
             new_char_value = str(char_value)
             if len(new_char_value) == 0:
                 new_char_value = str(value)
+            if isinstance(value, np.ndarray):
+                value=value.tolist()
             d = {
                 "pvname": pvname,
                 "newmetadata": "False",

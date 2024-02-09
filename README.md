@@ -32,6 +32,15 @@ If you wish to create a standalone AlarmHandler project you should clone this pr
 
 https://github.com/React-Automation-Studio/React-Automation-Studio-Alarm-Handler-Standalone
 
+# Try it out
+
+<iframe src="https://codesandbox.io/p/github/React-Automation-Studio/React-Automation-Studio-Example-Project-1/sandboxdemo?embed=1&file=%2FREADME.md"
+     style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;"
+     title="React-Automation-Studio/React-Automation-Studio-Example-Project-1/sandboxdemo"
+     allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+     sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+   >
+</iframe>
 
 Each of the Docker containers are deployed as micro services and environment variables can be configured to deploy the system on different ports, or to enable user authentication and authorisation or to serve the application on a unique URL or on the localhost. Separate Docker commands exist to load the development and production version. These containerised environments allows for precise versioning of packages used and prevents deployment dependency issues.
 

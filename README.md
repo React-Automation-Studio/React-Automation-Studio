@@ -2,14 +2,13 @@ Current Release: V5.0.0
 
 # Introduction
 
-React Automation Studio is a new software platform to enable the control of large scientific equipment through EPICS.
+This is the codesanbox.io demo of React-Automation-Studio.
 
-The system has been containerized with Docker and version controlled as a mono-repository using Git.
+You can use it to evaluate the latest version without checking it out locally.
 
+It's a forked version of the master repo with the environment set up to run in codesandbox.io.
 
-This repository is for demostration puopses on codesandbox.io
-
- The master repository is available at:
+Once you are done playing, the master repository is available at:
 
 **Master repository:**
 

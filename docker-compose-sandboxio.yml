@@ -192,6 +192,8 @@ services:
     networks:
       - backend
     # network_mode: host
+    depends_on:
+      - epicsbase
 
   storybook:
     build:
@@ -205,22 +207,22 @@ services:
       - ./build/styleguide:/build/
     depends_on:
       - node_cache
-  stagingtestioc:
-    build:
-      context: ./
-      args: # Environment variables available at build-time
-        - http_proxy
-        - https_proxy
-        - no_proxy
-      dockerfile: docker/stagingioc/Dockerfile
-    tty: true
-    stdin_open: true
-    restart: always
-    #network_mode: host
-    depends_on:
-      - epicsbase
-    networks:
-      - backend
+  # stagingtestioc:
+  #   build:
+  #     context: ./
+  #     args: # Environment variables available at build-time
+  #       - http_proxy
+  #       - https_proxy
+  #       - no_proxy
+  #     dockerfile: docker/stagingioc/Dockerfile
+  #   tty: true
+  #   stdin_open: true
+  #   restart: always
+  #   #network_mode: host
+  #   depends_on:
+  #     - epicsbase
+  #   networks:
+  #     - backend
 
 
   # As of RAS V5.0.0 MongoDB the mongodb version is now defined by the RAS_MONGODB_VERSION variable in the .env file
@@ -368,7 +370,7 @@ services:
       - ADMIN_DATABASE_REPLICA_SET_NAME=devrs
     build:
       context: ./
-      dockerfile: ./submodules/React-Automation-Studio/docker/adminDbInit/Dockerfile
+      dockerfile: docker/adminDbInit/Dockerfile
     # network_mode: "host"
     tty: true
     stdin_open: true

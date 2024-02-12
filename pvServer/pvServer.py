@@ -320,7 +320,10 @@ def check_pv_initialized_after_disconnect():
                                         ].tobytes()  # convert numpy array to binary
                                 else:
                                     if clientPVlist[pvname]["pv"].count > 1:
-                                        d["value"] = list(d["value"])
+                                        if isinstance(d["value"], np.ndarray):
+                                            d["value"] = d["value"].tolist()
+                                        else:
+                                            d["value"] = list(d["value"])
                                     if clientPVlist[pvname]["pv"].count == 0:
                                         d["value"] = []
                                     if clientPVlist[pvname]["pv"].count == 1:

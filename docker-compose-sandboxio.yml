@@ -52,7 +52,7 @@ services:
       - pvServerLogFile=/pvServer/log/pvServerLogFile
       - pvServerPort=9001
       - pvServerURL=http://127.0.0.1
-      - EPICS_CA_ADDR_LIST=stagingdemoioc:8001 stagingtestioc:8002 alarmhandlerserver:8004 areadetectorsim:8005
+      - EPICS_CA_ADDR_LIST=stagingdemoioc:8001 alarmhandlerserver:8004 areadetectorsim:8005
     volumes:
       - ./certificates:/certificates/
       - ./users:/pvServer/userAuthentication/users
@@ -83,7 +83,7 @@ services:
       - pvServerLogFile=/pvServer/log/pvServerLogFile
       - pvServerPort=9002
       - pvServerURL=http://127.0.0.1
-      - EPICS_CA_ADDR_LIST=stagingdemoioc:8001 stagingtestioc:8002 alarmhandlerserver:8004 areadetectorsim:8005
+      - EPICS_CA_ADDR_LIST=stagingdemoioc:8001  alarmhandlerserver:8004 areadetectorsim:8005
     volumes:
       - ./certificates:/certificates/
       - ./users:/pvServer/userAuthentication/users
@@ -114,7 +114,7 @@ services:
       - pvServerLogFile=/pvServer/log/pvServerLogFile
       - pvServerPort=9003
       - pvServerURL=http://127.0.0.1
-      - EPICS_CA_ADDR_LIST=stagingdemoioc:8001 stagingtestioc:8002 alarmhandlerserver:8004 areadetectorsim:8005
+      - EPICS_CA_ADDR_LIST=stagingdemoioc:8001  alarmhandlerserver:8004 areadetectorsim:8005
     volumes:
       - ./certificates:/certificates/
       - ./users:/pvServer/userAuthentication/users
@@ -172,7 +172,7 @@ services:
       - pvServerURL=http://127.0.0.1
       - pvServerPort=5001
       - VITE_EnableLogin=false
-      - EPICS_CA_ADDR_LIST=stagingdemoioc:8001 stagingtestioc:8002 alarmhandlerserver:8004 areadetectorsim:8005
+      - EPICS_CA_ADDR_LIST=stagingdemoioc:8001  alarmhandlerserver:8004 areadetectorsim:8005
     volumes:
       - ./certificates:/certificates/
     depends_on:
@@ -360,7 +360,7 @@ services:
       - ALARM_DATABASE_REPLICA_SET_NAME=devrs
       - ADMIN_DATABASE=mongo1
       - ADMIN_DATABASE_REPLICA_SET_NAME=devrs
-      - EPICS_CA_ADDR_LIST=stagingdemoioc:8001 stagingtestioc:8002 alarmhandlerserver:8004 areadetectorsim:8005
+      - EPICS_CA_ADDR_LIST=stagingdemoioc:8001 alarmhandlerserver:8004 areadetectorsim:8005
     networks:
       - backend
   initializeadmindb:

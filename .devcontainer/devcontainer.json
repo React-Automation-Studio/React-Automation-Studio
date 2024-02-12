@@ -5,7 +5,6 @@
   //"dockerComposeFile": "../docker-compose-dev-sandboxio.yml",
   "dockerComposeFile": "../docker-compose-sandboxio.yml",
   "service": "terminal",
-
   "forwardPorts": [3000, 5000, 6060]
 
   // "appPorts":[3000,5000,6060,9001],

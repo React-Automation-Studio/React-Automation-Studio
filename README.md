@@ -34,7 +34,7 @@ https://github.com/React-Automation-Studio/React-Automation-Studio-Alarm-Handler
 
 # Try it out
 
-[![React Automation Studio CodeSandbox](./img/codesandbox.png)](https://codesandbox.io/p/github/React-Automation-Studio/React-Automation-Studio-Example-Project-1/sandboxdemo?layout=%257B%2522sidebarPanel%2522%253A%2522EXPLORER%2522%252C%2522rootPanelGroup%2522%253A%257B%2522direction%2522%253A%2522horizontal%2522%252C%2522contentType%2522%253A%2522UNKNOWN%2522%252C%2522type%2522%253A%2522PANEL_GROUP%2522%252C%2522id%2522%253A%2522ROOT_LAYOUT%2522%252C%2522panels%2522%253A%255B%257B%2522type%2522%253A%2522PANEL_GROUP%2522%252C%2522contentType%2522%253A%2522UNKNOWN%2522%252C%2522direction%2522%253A%2522vertical%2522%252C%2522id%2522%253A%2522clseasahs00062t6hvipaa5wj%2522%252C%2522sizes%2522%253A%255B85.625%252C14.375%255D%252C%2522panels%2522%253A%255B%257B%2522type%2522%253A%2522PANEL_GROUP%2522%252C%2522contentType%2522%253A%2522EDITOR%2522%252C%2522direction%2522%253A%2522horizontal%2522%252C%2522id%2522%253A%2522EDITOR%2522%252C%2522panels%2522%253A%255B%257B%2522type%2522%253A%2522PANEL%2522%252C%2522contentType%2522%253A%2522EDITOR%2522%252C%2522id%2522%253A%2522clseasahs00022t6hrys3whf2%2522%257D%255D%257D%252C%257B%2522type%2522%253A%2522PANEL_GROUP%2522%252C%2522contentType%2522%253A%2522SHELLS%2522%252C%2522direction%2522%253A%2522horizontal%2522%252C%2522id%2522%253A%2522SHELLS%2522%252C%2522panels%2522%253A%255B%257B%2522type%2522%253A%2522PANEL%2522%252C%2522contentType%2522%253A%2522SHELLS%2522%252C%2522id%2522%253A%2522clseasahs00042t6hhp9twu9p%2522%257D%255D%252C%2522sizes%2522%253A%255B100%255D%257D%255D%257D%252C%257B%2522type%2522%253A%2522PANEL_GROUP%2522%252C%2522contentType%2522%253A%2522DEVTOOLS%2522%252C%2522direction%2522%253A%2522vertical%2522%252C%2522id%2522%253A%2522DEVTOOLS%2522%252C%2522panels%2522%253A%255B%257B%2522type%2522%253A%2522PANEL%2522%252C%2522contentType%2522%253A%2522DEVTOOLS%2522%252C%2522id%2522%253A%2522clseasahs00052t6hqr3qw7b6%2522%257D%255D%252C%2522sizes%2522%253A%255B100%255D%257D%255D%252C%2522sizes%2522%253A%255B56.16129481239934%252C43.83870518760066%255D%257D%252C%2522tabbedPanels%2522%253A%257B%2522clseasahs00022t6hrys3whf2%2522%253A%257B%2522id%2522%253A%2522clseasahs00022t6hrys3whf2%2522%252C%2522tabs%2522%253A%255B%257B%2522type%2522%253A%2522DIFF%2522%252C%2522filepath%2522%253A%2522%252Fsubmodules%252FReact-Automation-Studio%2522%252C%2522base%2522%253A%2522HEAD%2522%252C%2522id%2522%253A%2522clselgm3705pm2t6h2e4ehu3t%2522%252C%2522mode%2522%253A%2522permanent%2522%252C%2522state%2522%253A%2522IDLE%2522%257D%252C%257B%2522type%2522%253A%2522DIFF%2522%252C%2522filepath%2522%253A%2522%252F.devcontainer%252Fdevcontainer.json%2522%252C%2522base%2522%253A%2522HEAD%2522%252C%2522id%2522%253A%2522clsen2t5y02ls2t6hzdb6wb17%2522%252C%2522mode%2522%253A%2522permanent%2522%252C%2522state%2522%253A%2522IDLE%2522%257D%255D%252C%2522activeTabId%2522%253A%2522clsen2t5y02ls2t6hzdb6wb17%2522%257D%252C%2522clseasahs00052t6hqr3qw7b6%2522%253A%257B%2522id%2522%253A%2522clseasahs00052t6hqr3qw7b6%2522%252C%2522tabs%2522%253A%255B%257B%2522type%2522%253A%2522VIRTUAL_MACHINE%2522%252C%2522id%2522%253A%2522clsema69u00xe2t6h9l3n72tt%2522%252C%2522mode%2522%253A%2522permanent%2522%257D%252C%257B%2522type%2522%253A%2522UNASSIGNED_PORT%2522%252C%2522port%2522%253A6060%252C%2522id%2522%253A%2522clsendv3603jk2t6hq0e9tb8h%2522%252C%2522mode%2522%253A%2522permanent%2522%252C%2522path%2522%253A%2522%252F%2522%257D%252C%257B%2522type%2522%253A%2522UNASSIGNED_PORT%2522%252C%2522port%2522%253A5000%252C%2522id%2522%253A%2522clsendv6603l62t6h6zo52jrh%2522%252C%2522mode%2522%253A%2522permanent%2522%252C%2522path%2522%253A%2522%252F%2522%257D%255D%252C%2522activeTabId%2522%253A%2522clsendv6603l62t6h6zo52jrh%2522%257D%252C%2522clseasahs00042t6hhp9twu9p%2522%253A%257B%2522id%2522%253A%2522clseasahs00042t6hhp9twu9p%2522%252C%2522activeTabId%2522%253A%2522clseb7ypp00kq2t6herwp3drl%2522%252C%2522tabs%2522%253A%255B%257B%2522id%2522%253A%2522clseasahs00032t6hvsc6h5yv%2522%252C%2522mode%2522%253A%2522permanent%2522%252C%2522type%2522%253A%2522TERMINAL%2522%252C%2522shellId%2522%253A%2522clsen812r021wdbeubshj2rlw%2522%257D%252C%257B%2522type%2522%253A%2522TASK_LOG%2522%252C%2522taskId%2522%253A%2522docker-compose-logs%2522%252C%2522id%2522%253A%2522clseb7ypp00kq2t6herwp3drl%2522%252C%2522mode%2522%253A%2522permanent%2522%257D%255D%257D%257D%252C%2522showDevtools%2522%253Atrue%252C%2522showShells%2522%253Atrue%252C%2522showSidebar%2522%253Atrue%252C%2522sidebarPanelSize%2522%253A15%257D)
+[![React Automation Studio CodeSandbox](./img/codesandbox.png)](https://codesandbox.io/p/github/React-Automation-Studio/codesandbox-demo/master?layout=%257B%2522sidebarPanel%2522%253A%2522EXPLORER%2522%252C%2522rootPanelGroup%2522%253A%257B%2522direction%2522%253A%2522horizontal%2522%252C%2522contentType%2522%253A%2522UNKNOWN%2522%252C%2522type%2522%253A%2522PANEL_GROUP%2522%252C%2522id%2522%253A%2522ROOT_LAYOUT%2522%252C%2522panels%2522%253A%255B%257B%2522type%2522%253A%2522PANEL_GROUP%2522%252C%2522contentType%2522%253A%2522UNKNOWN%2522%252C%2522direction%2522%253A%2522vertical%2522%252C%2522id%2522%253A%2522clsjc3h6i00062t6hkucmkjoc%2522%252C%2522sizes%2522%253A%255B100%252C0%255D%252C%2522panels%2522%253A%255B%257B%2522type%2522%253A%2522PANEL_GROUP%2522%252C%2522contentType%2522%253A%2522EDITOR%2522%252C%2522direction%2522%253A%2522horizontal%2522%252C%2522id%2522%253A%2522EDITOR%2522%252C%2522panels%2522%253A%255B%257B%2522type%2522%253A%2522PANEL%2522%252C%2522contentType%2522%253A%2522EDITOR%2522%252C%2522id%2522%253A%2522clsjc3h6i00022t6htsx97ov6%2522%257D%255D%257D%252C%257B%2522type%2522%253A%2522PANEL_GROUP%2522%252C%2522contentType%2522%253A%2522SHELLS%2522%252C%2522direction%2522%253A%2522horizontal%2522%252C%2522id%2522%253A%2522SHELLS%2522%252C%2522panels%2522%253A%255B%257B%2522type%2522%253A%2522PANEL%2522%252C%2522contentType%2522%253A%2522SHELLS%2522%252C%2522id%2522%253A%2522clsjc3h6i00042t6h63m0op21%2522%257D%255D%252C%2522sizes%2522%253A%255B100%255D%257D%255D%257D%252C%257B%2522type%2522%253A%2522PANEL_GROUP%2522%252C%2522contentType%2522%253A%2522DEVTOOLS%2522%252C%2522direction%2522%253A%2522vertical%2522%252C%2522id%2522%253A%2522DEVTOOLS%2522%252C%2522panels%2522%253A%255B%257B%2522type%2522%253A%2522PANEL%2522%252C%2522contentType%2522%253A%2522DEVTOOLS%2522%252C%2522id%2522%253A%2522clsjc3h6i00052t6hiy5y9svh%2522%257D%255D%252C%2522sizes%2522%253A%255B100%255D%257D%255D%252C%2522sizes%2522%253A%255B40%252C60%255D%257D%252C%2522tabbedPanels%2522%253A%257B%2522clsjc3h6i00022t6htsx97ov6%2522%253A%257B%2522id%2522%253A%2522clsjc3h6i00022t6htsx97ov6%2522%252C%2522tabs%2522%253A%255B%255D%257D%252C%2522clsjc3h6i00052t6hiy5y9svh%2522%253A%257B%2522id%2522%253A%2522clsjc3h6i00052t6hiy5y9svh%2522%252C%2522activeTabId%2522%253A%2522clsjcm1e900182t6h7vbrfhm1%2522%252C%2522tabs%2522%253A%255B%257B%2522type%2522%253A%2522UNASSIGNED_PORT%2522%252C%2522port%2522%253A5000%252C%2522id%2522%253A%2522clsjcm1e900182t6h7vbrfhm1%2522%252C%2522mode%2522%253A%2522permanent%2522%252C%2522path%2522%253A%2522%252F%2522%257D%252C%257B%2522type%2522%253A%2522UNASSIGNED_PORT%2522%252C%2522port%2522%253A6060%252C%2522id%2522%253A%2522clsjcm49k003r2t6hedl5khdu%2522%252C%2522mode%2522%253A%2522permanent%2522%252C%2522path%2522%253A%2522%252F%253Fpath%253D%252Fdocs%252Fdocumentation-introduction--docs%2522%257D%255D%257D%252C%2522clsjc3h6i00042t6h63m0op21%2522%253A%257B%2522id%2522%253A%2522clsjc3h6i00042t6h63m0op21%2522%252C%2522tabs%2522%253A%255B%255D%257D%257D%252C%2522showDevtools%2522%253Atrue%252C%2522showShells%2522%253Afalse%252C%2522showSidebar%2522%253Atrue%252C%2522sidebarPanelSize%2522%253A15%257D)
 
 Each of the Docker containers are deployed as micro services and environment variables can be configured to deploy the system on different ports, or to enable user authentication and authorisation or to serve the application on a unique URL or on the localhost. Separate Docker commands exist to load the development and production version. These containerised environments allows for precise versioning of packages used and prevents deployment dependency issues.
 
@@ -120,7 +120,7 @@ As of Release 3.0.0 the RAS AlarmHandler component is considered production read
 
 The alarm handler is seeded through JSON files that populate the MongoDB alarm handler database. This database is also used to persist all alarm events and activity logs.
 
-The alarm handler front end UI allows users to configure all aspects of the alarms and search through the entire alarm log. Alarm areas, subAreas and pvs can also be added/removed from the front end by alarmAdmin role users. 
+The alarm handler front end UI allows users to configure all aspects of the alarms and search through the entire alarm log. Alarm areas, subAreas and pvs can also be added/removed from the front end by alarmAdmin role users.
 
 A user notification platform has also been created for the alarm handler. This platform allows a user to target specific pvs to be notified about using javascript regular expressions. At present users can be notified via email and Signal messenger. In future we hope to expand this to SMS and WhatsApp.
 
@@ -136,7 +136,7 @@ The development and production versions of React Automation Studio have been con
 It is advised to only use the containerized version with a Linux environment. (See the FAQ section on other operating systems).
 
 
-Prerequisites: git, latest version of docker-ce and docker compose 
+Prerequisites: git, latest version of docker-ce and docker compose
 
 ( At the time of writing the system used Docker V25.0.2 and docker compose V2.24.5 )
 
@@ -161,7 +161,7 @@ git clone https://github.com/React-Automation-Studio/React-Automation-Studio.git
 ```
 or
 
-```bash 
+```bash
 git clone git@github.com:React-Automation-Studio/React-Automation-Studio.git
 ```
 
@@ -313,7 +313,7 @@ The built client will be then served  https://(hostname or ip):SERVER_PORT/, the
 
 ## 3.2 Enabling login and authentication
 
-After enabling HTTPS 
+After enabling HTTPS
 
 Set up the .env to enable login:
 ```bash
@@ -352,9 +352,9 @@ Set VITE_EnableGoogleLogin=true
 VITE_EnableGoogleLoginId= xxxxx
 ```
 Set VITE_EnableGoogleLoginId to your google client id for your domain
-at https://console.developers.google.com/apis/credentials/           
+at https://console.developers.google.com/apis/credentials/
 click create new credentials and the create a new oAuth id  for the web app
-It needs an https domain. 
+It needs an https domain.
 you can enter multiple domains:
 for example: https://mydomain
 https://mydomain:5000
@@ -387,20 +387,20 @@ The table display in the user interface allows one ot edit the access rights in 
 
 *Fig 3.3.1. The administrator access control page showing the default UAG*
 
-To enable write access for everyone one could check the write access check boxes. To disable read access and therefore prevent access by anyone by default one could deselect the read checkboxes. The username set in DEFAULT UAG is '*' and by setting any of the UAG usernames to '*' implies that all users will get the rules defined in the UAG. 
+To enable write access for everyone one could check the write access check boxes. To disable read access and therefore prevent access by anyone by default one could deselect the read checkboxes. The username set in DEFAULT UAG is '*' and by setting any of the UAG usernames to '*' implies that all users will get the rules defined in the UAG.
 In the pvServer, the read and write access of the rules in the UAG are applied if the username is defined in the UAG and the following match function is satisfied:<br/><br/>
    match=re.search(rule,pv)
    <br/>
    <br/>
    If the match is true, then the rule is applied.
    <br/>
-    
+
   <br/>
   In theory, all regular expression searches allowed by Python regex can be used although this has not been tested. More examples are available at:<br/>
   <br/>
 https://www.w3schools.com/python/python_regex.asp
 
-  
+
    <br/>
    <br/>
    In the two examples shown below in Fig 3.3.2 and 3.3.3, the ENGINEERS UAG, with roles as 'engineers' and user name user1 get read and write access to every pv, whilst the OPERATORS UAG, with roles as operators and username operator1 only gets read access for all pvs and write access for the two setpoint pvs.
@@ -409,7 +409,7 @@ https://www.w3schools.com/python/python_regex.asp
    <br/>
    <img src="./ReactApp/img/UAGengineers.png" alt="drawing" width="60%"/>
    <br/>
-  
+
    *Fig 3.3.2. An example UAG for Engineers*
   <br/>
    <br/>
@@ -430,7 +430,7 @@ https://www.w3schools.com/python/python_regex.asp
 By default, unless a user logs out the refresh token will keep as user logged in for 1 week. And whilst the user is logged in the access tokens and refresh tokens are refreshed once a minute.
 <br/>
 <br/>
-The token expiry is controlled by the following variables in the .env file. 
+The token expiry is controlled by the following variables in the .env file.
 
 <br/>
 <br/>
@@ -567,7 +567,7 @@ or: https://doi.org/10.18429/JACoW-ICALEPCS2023-FR2BCO01
   We currently only build and test on Ubuntu and Chrome. We unfortunately don't have the time to test on the other systems. In theory all up to date Linux systems should be supported.
 
 ### 2.  Are other systems such as  Windows or Mac OS supported?
-  
+
   The docker containers for RAS run in network  mode host. This is done to enable EPICS to communicate seamlessly with any IOC's on the same subnet as the host. Other OSes such as Windows may not support the host mode and will run in the bridged mode. This may break the communication between the micro services. It is therefore recommended to run the RAS containers on a Linux VM that is minimally running Ubuntu Server. Please ensure the the VM network interface is assigned an IP on the same subnet as your EPICS network in order for communication with the IOC's to occur seamlessly.
 
 
@@ -581,7 +581,7 @@ or: https://doi.org/10.18429/JACoW-ICALEPCS2023-FR2BCO01
     <li>Package updates to all Node modules</li>
     <li>Updated to the latest Node LTS</li>
     <li>MUI has been updated to the latest packages</li>
-    
+
   </ul>
   New Features:
   <ul>
@@ -628,7 +628,7 @@ V4.0.2 Thursday 13 July 2023 Minor Updates:
   <li>Package updates to all Node modules</li>
   <li>Updated to the latest Node LTS</li>
   <li>MUI has been updated to the latest packages</li>
-  
+
 </ul>
 Minor Bug Fixes and Updates:
 <ul>
@@ -651,12 +651,12 @@ V4.0.1 Friday 24 March 2023 Minor Updates:
 Minor Bug Fixes and Updates:
 <ul>
   <li>A few minor bug fixes to the slider and the context menu</li>
-  
+
 </ul>
 Minor Breaking Changes:
 <ul>
   <li>Previous version of google sign in is being deprecated (see https://developers.googleblog.com/2021/08/gsi-jsweb-deprecation.html )Solution is to replace "react-google-login" with @react-oauth/google</li>
-  
+
 </ul>
 <br />
 
@@ -759,14 +759,14 @@ Improvements and new features:
     </li>
     <li>Package updates</li>
     <li>Minor Bug Fixes</li>
-   
+
   </ul>
 Breaking changes:
 <ul>
     <li>Removal of the old file based administration</li>
     <li>Environment variable names have been simplified</li>
     <li>GraphY and GraphXY background now defaults to the theme.palette.background.default value</li>
-    
+
 </ul>
 
 

@@ -2,13 +2,21 @@ Current Release: V5.0.0
 
 # Introduction
 
-This is the codesanbox.io demo of React-Automation-Studio.
+This is the codespaces demo of React-Automation-Studio.
 
 You can use it to evaluate the latest version without checking it out locally.
 
-It's a forked version of the master repo with the environment set up to run in codesandbox.io.
+It's a forked version of the master repo with the environment set up to run in codespaces.
 
-Once you are done playing, the master repository is available at:
+It needs to minimum 16GB RAM on codepsaces to build.
+
+Once it is building you must click on the ports icon or the ports tab, where you can launch the webapp. 
+
+The app is serverd on port 5000 and the styleguide on port 6060.
+
+
+
+Once you are done playing, the master and boilerplate repositories are avalible at, which you can clone locally:
 
 **Master repository:**
 

@@ -32,7 +32,7 @@ If you wish to create a standalone AlarmHandler project you should clone this pr
 
 https://github.com/React-Automation-Studio/React-Automation-Studio-Alarm-Handler-Standalone
 
-** Or try it out on Codespaces (Experimental): **
+**Or try it out on Codespaces (Experimental):**
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/React-Automation-Studio/codesandbox-demo?quickstart=1)
 

@@ -12,7 +12,7 @@ It needs to minimum 16GB RAM on codepsaces to build.
 
 Once it is building you must click on the ports icon or the ports tab, where you can launch the webapp. 
 
-The app is serverd on port 5000 and the styleguide on port 6060.
+The app is served on port 5000 and the styleguide on port 6060.
 
 
 

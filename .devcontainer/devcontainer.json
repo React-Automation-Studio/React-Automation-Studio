@@ -7,8 +7,8 @@
   "service": "terminal",
   "forwardPorts": [5000, 6060],
   "hostRequirements": {
-    "cpus": 2,
-    "memory": "8gb"
+    "cpus": 4,
+    "memory": "16gb"
 
 
   },

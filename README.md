@@ -34,7 +34,7 @@ https://github.com/React-Automation-Studio/React-Automation-Studio-Alarm-Handler
 
 **Or try it out on Codespaces (Experimental):**
 
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/React-Automation-Studio/codesandbox-demo?quickstart=1)
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/React-Automation-Studio/codespaces-demo?quickstart=1)
 
 
 Each of the Docker containers are deployed as micro services and environment variables can be configured to deploy the system on different ports, or to enable user authentication and authorisation or to serve the application on a unique URL or on the localhost. Separate Docker commands exist to load the development and production version. These containerised environments allows for precise versioning of packages used and prevents deployment dependency issues.

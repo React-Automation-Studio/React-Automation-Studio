@@ -10,6 +10,8 @@ services:
       context: ./
       dockerfile: docker/epicsBase/Dockerfile
     command: sleep infinity
+    volumes:
+      - ./:/workspace/
     depends_on:
       - epicsbase
   node_cache:

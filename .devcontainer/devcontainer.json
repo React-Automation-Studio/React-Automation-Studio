@@ -5,14 +5,16 @@
   //"dockerComposeFile": "../docker-compose-dev-sandboxio.yml",
   "dockerComposeFile": "../docker-compose-sandboxio.yml",
   "service": "terminal",
-  "forwardPorts": [3000, 5000, 6060],
+  "forwardPorts": [5000, 6060],
   "hostRequirements": {
     "cpus": 2,
     "memory": "8gb"
 
 
-  }
-
+  },
+ 
+  "workspaceFolder": "/workspace",
+  "remoteUser": "root"
   // "appPorts":[3000,5000,6060,9001],
   // "portAttributes":{
   // 	"requireLocalPort":true,

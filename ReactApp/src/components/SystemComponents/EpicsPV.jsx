@@ -229,8 +229,7 @@ const EpicsPV = (props) => {
     }
   }, [pv, props.pvData]);
   if (props.debug) {
-    console.log(props);
-    console.log(pv);
+    console.log(`EpicsPV ${props.pv}:`, {props, pv});
   }
   return (
     <React.Fragment>

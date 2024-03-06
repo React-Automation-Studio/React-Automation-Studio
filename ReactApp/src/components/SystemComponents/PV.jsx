@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import EpicsPV from './EpicsPV'
 import LocalPV from './LocalPV'
 import PropTypes from "prop-types";
+
 
 /**
  * The PV component handles connections to EPICS process variables and local process vairable.
@@ -26,7 +27,7 @@ const PV = (props) => {
     readOnly: true,
     enum_strs: []
   })
-
+  
   const pvConnection = (pv, props) => {
     let pvname = pv.toString();
     if (props.macros) {
@@ -40,13 +41,9 @@ const PV = (props) => {
       :EpicsPV({ ...props, pv:pvname})
   }
 
-  const pvData = (name) => (pv) => {
-    setPvs(pvs => ({
-      ...pvs,
-      [name]: pv,
-    }))
-  }
-
+  const processPvDataData = useCallback((data) => {
+    setPvs((pvs) => ({...pvs, data}));
+  }, []);
   const dataPv = pvConnection(props.pv, {
     macros: props.macros,
     newValueTrigger: props.newValueTrigger,
@@ -56,29 +53,38 @@ const PV = (props) => {
     makeNewSocketIoConnection:props.makeNewSocketIoConnection,
     debug: props.debug,
     useBinaryValue:props.useBinaryValue,
-    pvData: pvData('data')
+    pvData: processPvDataData
   });
 
+  const processPvDataMax = useCallback((max) => {
+    setPvs((pvs) => ({...pvs, max}));
+  }, []);
   let maxPv = !props.useMetadata && props.usePvMinMax
     ? pvConnection(props.maxPv ? props.maxPv : props.pv + ".HOPR",
       {
         macros: props.macros,
         debug: props.debug,
         initialLocalVariableValue: props.initialLocalVariableValue,
-        pvData: pvData('max')
+        pvData: processPvDataMax
 
       }
     )
-    : undefined;
+    : undefined;    
+  const processPvDataMin = useCallback((min) => {
+    setPvs((pvs) => ({...pvs, min}));
+  }, []);
   let minPv = !props.useMetadata && props.usePvMinMax
     ? pvConnection(props.minPv ? props.minPv : props.pv + ".LOPR",
       {
         macros: props.macros,
         debug: props.debug,
         initialLocalVariableValue: props.initialLocalVariableValue,
-        pvData: pvData('min')
+        pvData: processPvDataMin
       }
     ) : undefined;
+  const processPvDataLabel = useCallback((min) => {
+    setPvs((pvs) => ({...pvs, min}));
+  }, []);
   let labelPv = props.usePvLabel
     ? pvConnection(props.labelPv ? props.labelPv : props.pv + ".DESC",
       {
@@ -86,9 +92,12 @@ const PV = (props) => {
         useStringValue: true,
         debug: props.debug,
         initialLocalVariableValue: props.initialLocalVariableValue,
-        pvData: pvData('label')
+        pvData: processPvDataLabel
       }
     ) : undefined;
+  const processPvDataUnits = useCallback((units) => {
+    setPvs((pvs) => ({...pvs, units}));
+  }, []);
   let unitsPv = !props.useMetadata && props.usePvUnits
     ? pvConnection(props.unitsPv ? props.unitsPv : props.pv + ".EGU",
       {
@@ -96,9 +105,12 @@ const PV = (props) => {
         useStringValue: true,
         debug: props.debug,
         initialLocalVariableValue: props.initialLocalVariableValue,
-        pvData: pvData('units')
+        pvData: processPvDataUnits
       }
     ) : undefined;
+  const processPvDataPrecision = useCallback((precision) => {
+    setPvs((pvs) => ({...pvs, precision}));
+  }, []);
   let precisionPv = !props.useMetadata && props.usePvPrecision
     ? pvConnection(props.precPv ? props.precPv : props.pv + ".PREC",
       {
@@ -106,17 +118,19 @@ const PV = (props) => {
         useStringValue: true,
         debug: props.debug,
         initialLocalVariableValue: props.initialLocalVariableValue,
-        pvData: pvData('precision')
+        pvData: processPvDataPrecision
       }
     ) : undefined;
+  const processPvDataAlarm = useCallback((alarm) => {
+    setPvs((pvs) => ({...pvs, alarm}));
+  }, []);
   let alarmPv = !props.useMetadata && props.alarmSensitive
     ? pvConnection(props.alarmPv ? props.alarmPv : props.pv + ".SEVR",
       {
         macros: props.macros,
-        //useStringValue:true,
         debug: props.debug,
         initialLocalVariableValue: props.initialLocalVariableValue,
-        pvData: pvData('alarm')
+        pvData: processPvDataAlarm
       }
     ) : undefined;
 

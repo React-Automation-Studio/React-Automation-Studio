@@ -54,7 +54,7 @@ export const useEpicsPV = (props) => {
   const [socket, setSocket] = useState(null);
   useEffect(() => {
     if (props.makeNewSocketIoConnection === true) {
-      let newSocket = io("/pvServer", {
+      let newSocket = io(context.pvServerUrl ?? '/pvServer', {
         transports: ["websocket"],
         forceNew: true,
       });
@@ -63,7 +63,7 @@ export const useEpicsPV = (props) => {
     } else {
       setSocket(context.socket);
     }
-  }, [props.makeNewSocketIoConnection, context.socket]);
+  }, [props.makeNewSocketIoConnection, context.socket, context.pvServerUrl]);
 
   const jwt = context.userTokens.accessToken;
   const jwtRef = useRef(jwt);
@@ -227,7 +227,6 @@ const EpicsPV = (props) => {
     if (props.pvData) {
       props.pvData(pv);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pv, props.pvData]);
   if (props.debug) {
     console.log(props);

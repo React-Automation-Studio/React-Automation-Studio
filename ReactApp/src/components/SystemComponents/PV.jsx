@@ -27,11 +27,11 @@ const PV = (props) => {
     readOnly: true,
     enum_strs: []
   })
-  
+
   const pvConnection = (pv, props) => {
     let pvname = pv.toString();
     if (props.macros) {
-      let macro;    
+      let macro;
       for (macro in props.macros) {
         pvname = pvname.replace(macro.toString(), props.macros[macro].toString());
       }
@@ -69,7 +69,7 @@ const PV = (props) => {
 
       }
     )
-    : undefined;    
+    : undefined;
   const processPvDataMin = useCallback((min) => {
     setPvs((pvs) => ({...pvs, min}));
   }, []);
@@ -191,11 +191,9 @@ const PV = (props) => {
   }, [contextPVs])
 
   if (props.debug) {
-    console.log(props)
-    console.log(props.name, " Debug:", "PV Render States: ", "pvs:", pvs)
-    console.log(props.name, " Debug:", "PV Render pv:", pv)
+    console.log(`PV ${props.pv}:`, {props, pv, pvs});
   }
-  
+
   return (
     <React.Fragment>
       {dataPv}
@@ -205,7 +203,7 @@ const PV = (props) => {
       {unitsPv}
       {precisionPv}
       {alarmPv}
-      {props.children?props.children(pv):null}    
+      {props.children?props.children(pv):null}
     </React.Fragment>
   )
 }
@@ -301,12 +299,12 @@ PV.propTypes = {
    */
   usePvLabel: PropTypes.bool,
   /**
-   * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver. 
-   * The pyEpics metadata is unfortunately static and the values used will be the intial values that pvserver receives when it connects the first time. 
+   * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver.
+   * The pyEpics metadata is unfortunately static and the values used will be the intial values that pvserver receives when it connects the first time.
    * This is sufficient in most cases except when the user wants to dynamically update the metaData.
-   * In this case a direct connection can be made to all the pv fields by setting useMetadata to false. 
+   * In this case a direct connection can be made to all the pv fields by setting useMetadata to false.
    * If any of the metadata pvs are defined i.e unitsPv then the PV makes a new data  connection to this alternate pv and will
-   * use the value provided by this pv as the units. 
+   * use the value provided by this pv as the units.
    * The same is the case for the precPV, labelPv, alarmPv, unitsPv and minPv.
    * By setting useMetadata to false also enables connection to other variables as defined by different protocols.
    */

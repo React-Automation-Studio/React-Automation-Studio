@@ -82,8 +82,8 @@ const PV = (props) => {
         pvData: processPvDataMin
       }
     ) : undefined;
-  const processPvDataLabel = useCallback((min) => {
-    setPvs((pvs) => ({...pvs, min}));
+  const processPvDataLabel = useCallback((label) => {
+    setPvs((pvs) => ({...pvs, label}));
   }, []);
   let labelPv = props.usePvLabel
     ? pvConnection(props.labelPv ? props.labelPv : props.pv + ".DESC",

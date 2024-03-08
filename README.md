@@ -1,6 +1,6 @@
-Current Release: V5.0.0
+Current Release: V5.0.1
 
-[Migrate from V4.0.3 to V5.0.0](docs/migrate-from-V4-to-V5.md)
+[Migrate from V4.0.3 to V5.0.X](docs/migrate-from-V4-to-V5.md)
 
 # Introduction
 
@@ -574,6 +574,15 @@ or: https://doi.org/10.18429/JACoW-ICALEPCS2023-FR2BCO01
 
 
 # Changelog
+  V5.0.1 Friday 08 March 2024 Minor Updates:
+  <ul>
+    <li>Package updates to Backend modules</li>
+    <li>Updated to Epics 7.0.8 and Python 3.12.1</li>
+    <li>Package updates to all Node modules</li>
+    <li>Updated to the latest Node LTS</li>
+    <li>Minor Bug fix to EPICS socketIO connections, PR#128</li>
+  </ul>
+  <br />
   V5.0.0 Friday 02 February 2024 Major Updates:
   <ul>
     <li>Package updates to Backend modules</li>

@@ -1,6 +1,6 @@
 {
   "name": "react-automation-studio",
-  "version": "5.0.1",
+  "version": "5.1.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -14,20 +14,20 @@
     "test-debug": "vitest --inspect-brk --no-file-parallelism"
   },
   "dependencies": {
-    "@date-io/date-fns": "2.17.0",
+    "@date-io/date-fns": "3.0.0",
     "@emotion/react": "11.11.4",
     "@emotion/styled": "11.11.5",
     "@mui/icons-material": "5.15.15",
     "@mui/material": "5.15.15",
     "@mui/styles": "5.15.15",
     "@mui/system": "5.15.15",
-    "@mui/x-date-pickers": "6.19.6",
+    "@mui/x-date-pickers": "7.2.0",
     "@react-oauth/google": "0.12.1",
     "@react-three/fiber": "8.16.2",
     "@types/three": "0.163.0",
     "axios": "1.6.8",
     "colormap": "2.3.2",
-    "date-fns": "2.30.0",
+    "date-fns": "3.6.0",
     "lodash": "4.17.21",
     "mathjs": "12.4.1",
     "mdi-material-ui": "7.8.0",

@@ -19,7 +19,7 @@ import { replaceMacros } from "../SystemComponents/Utils/macroReplacement";
 import makeStyles from "@mui/styles/makeStyles";
 import { useTheme } from "@mui/material/styles";
 
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
 

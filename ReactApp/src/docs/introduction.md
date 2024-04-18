@@ -27,7 +27,7 @@ Each of the Docker containers are deployed as micro services and environment var
 
 The microservices that form part of React Automation Studio are shown in Fig. 1 and an overview of the system components are give below:
 
-<img src="img/microServices.png"  width="75%">
+<img src="img/sysDiag.PNG"  width="75%">
 
 *Fig 1. The microservices that form part of React Automation Studio*
 
@@ -79,7 +79,7 @@ Apart form mobile UIs complex UIs suitable for desktop systems can also be creat
 
 *3. Styleguide*
 
-A lot of effort was put into the documentation and a style guide based on React Styleguidedist and is used as the help function and to document the use of all the components from the source files. The current style guide is also  interactive with a demo IOC. All the properties of each of the components are documented and examples of their usage are shown.
+A lot of effort was put into the documentation and a style guide based on React Storybook and is used as the help function and to document the use of all the components from the source files. The current style guide is also  interactive with a demo IOC. All the properties of each of the components are documented and examples of their usage are shown.
 
 *4. Access rights and Administration*
 

@@ -317,7 +317,17 @@ const MainDashboard = (props) => {
                 </Typography>
               </Grid>
               <Grid item lg={12} sm={12} xs={12}>
-              V5.0.1 Friday 08 March 2024 Minor Updates:
+                <Typography className={classes.WhatsNew} component="div">
+                  V5.1.0 Thursday 18 April 2024 Minor Updates:
+                  <ul>
+                    <li>Package updates to Backend modules</li>
+                    <li>Updated to Python 3.12.3</li>
+                    <li>Package updates to all Node modules</li>
+                    <li>Updated to the latest Node LTS 20.12.2 </li>
+                    <li>Updates to the documentation </li>
+                  </ul>
+                  <br />
+                  V5.0.1 Friday 08 March 2024 Minor Updates:
                   <ul>
                     <li>Package updates to Backend modules</li>
                     <li>Updated to Epics 7.0.8 and Python 3.12.1</li>
@@ -325,9 +335,7 @@ const MainDashboard = (props) => {
                     <li>Updated to the latest Node LTS</li>
                     <li>Minor Bug fix to EPICS socketIO connections, PR#128</li>
                   </ul>
-                 
                   <br />
-                <Typography className={classes.WhatsNew} component="div">
                   V5.0.0 Friday 02 February 2024 Major Updates:
                   <ul>
                     <li>Package updates to Backend modules</li>

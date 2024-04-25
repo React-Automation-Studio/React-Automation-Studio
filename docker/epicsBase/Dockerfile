@@ -1,5 +1,5 @@
 
-FROM python:3.12.2 as epicsbase
+FROM python:3.12.3 as epicsbase
 ENV EPICS_BASE=/epics/base/
 WORKDIR /epics
 

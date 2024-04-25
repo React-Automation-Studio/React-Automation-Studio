@@ -1,6 +1,6 @@
-Current Release: V5.0.1
+Current Release: V5.1.0
 
-[Migrate from V4.0.3 to V5.0.X](docs/migrate-from-V4-to-V5.md)
+[Migrate from V4.0.3 to V5.1.X](docs/migrate-from-V4-to-V5.md)
 
 # Introduction
 
@@ -41,7 +41,7 @@ Each of the Docker containers are deployed as micro services and environment var
 
 The microservices that form part of React Automation Studio are shown in Fig. 1 and an overview of the system components are give below:
 
-![picture](./ReactApp/img/microServices.png)
+![picture](./ReactApp/img/sysDiag.PNG)
 
 *Fig 1. The microservices that form part of React Automation Studio*
 
@@ -93,7 +93,7 @@ Apart form mobile UIs complex UIs suitable for desktop systems can also be creat
 
 *3. Styleguide*
 
-A lot of effort was put into the documentation and a style guide based on React Styleguidedist and is used as the help function and to document the use of all the components from the source files. The current style guide is also  interactive with a demo IOC. All the properties of each of the components are documented and examples of their usage are shown.
+A lot of effort was put into the documentation and a style guide based on React Storybook and is used as the help function and to document the use of all the components from the source files. The current style guide is also  interactive with a demo IOC. All the properties of each of the components are documented and examples of their usage are shown.
 
 *4. Access rights and Administration*
 
@@ -574,6 +574,16 @@ or: https://doi.org/10.18429/JACoW-ICALEPCS2023-FR2BCO01
 
 
 # Changelog
+  V5.1.0 Thursday 18 April 2024 Minor Updates:
+  <ul>
+    <li>Package updates to Backend modules</li>
+    <li>Updated to Python 3.12.3</li>
+    <li>Package updates to all Node modules</li>
+    <li>Updated to the latest Node LTS 20.12.2 </li>
+    <li>Updates to the documentation </li>
+  </ul>
+  </br>            
+
   V5.0.1 Friday 08 March 2024 Minor Updates:
   <ul>
     <li>Package updates to Backend modules</li>

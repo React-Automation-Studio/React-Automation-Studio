@@ -1,6 +1,5 @@
 import React from "react";
 import { Button, FormControlLabel } from "@mui/material";
-import PropTypes from "prop-types";
 import Widget from "../SystemComponents/Widgets/Widget";
 
 const ActionButtonComponent = (props) => {
@@ -48,6 +47,76 @@ const ActionButtonComponent = (props) => {
 };
 
 /**
+ * The props for the ActionButton component.
+ */
+interface ActionButtonProps {
+  /**
+   * Define the string on the button.
+   */
+  actionString?: string;
+  /**
+   * Define the value to write into the PV.
+   */
+  actionValue?: any;
+  /**
+   * Name of the process variable, e.g. '$(device):test$(id)'
+   */
+  pv?: string;
+  /**
+   * Array of the process variables, e.g. '$(device):test$(id)'
+   */
+  pvs?: string[];
+  /**
+   * Values of macros that will be substituted in the pv name, e.g. {{'$(device)':'testIOC','$(id)':'2'}}
+   */
+  macros?: Record<string, string>;
+  /**
+   * Directive to fill the label with the value contained in the EPICS pv's DESC field.
+   */
+  usePvLabel?: boolean;
+  /**
+   * Custom color to be used, must be derived from Material UI theme colors.
+   */
+  color?: string;
+  /**
+   * Custom label to be used, if `usePvLabel` is not defined.
+   */
+  label?: string;
+  /**
+   * Position of label.
+   */
+  labelPlacement?: "top" | "bottom" | "start" | "end";
+  /**
+   * If defined, then the string value of the EPICS enumerator type will be forced to be used, if not defined the enumerator index is used.
+   */
+  useStringValue?: boolean;
+  /**
+   * If defined, then the DataConnection debugging information will be displayed.
+   */
+  debug?: boolean;
+  /**
+   * Local variable initialization value.
+   */
+  initialLocalVariableValue?: string;
+  /**
+   * Any of the MUI Button Props can be applied by defining them as an object.
+   */
+  muiButtonProps?: Record<string, any>;
+  /**
+   * Tooltip Text.
+   */
+  tooltip?: string;
+  /**
+   * Directive to show the tooltip.
+   */
+  showTooltip?: boolean;
+  /**
+   * Any of the MUI Tooltip props can be applied by defining them as an object.
+   */
+  tooltipProps?: Record<string, any>;
+}
+
+/**
  * The ActionButton Component is a wrapper on the Material-UI Button component.
  * The ActionButton will output the `actionValue` to the process variable when pressed.
  * The ActionButton component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
@@ -57,7 +126,11 @@ const ActionButtonComponent = (props) => {
  * Material-UI Button API:
  * https://mui.com/api/button/
  * */
-const ActionButton = (props) => {
+const ActionButton = ({
+  showTooltip = false,
+  color = "primary",
+  ...props
+}: ActionButtonProps) => {
   return (
     <Widget
       {...props}
@@ -65,58 +138,6 @@ const ActionButton = (props) => {
       writeOutputValueToAllpvs={true}
     />
   );
-};
-
-ActionButton.propTypes = {
-  /** Define the string on the button.*/
-  actionString: PropTypes.string,
-  /**  Define the value to write into the PV.*/
-  actionValue: PropTypes.any,
-  /** Name of the process variable,  eg. '$(device):test$(id)'*/
-  pv: PropTypes.string,
-  /** Array of the process variables, eg. '$(device):test$(id)'*/
-  pvs: PropTypes.arrayOf(PropTypes.string),
-  /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
-  macros: PropTypes.object,
-  /** Directive to fill the label with the value contained in the  EPICS pv's DESC field. */
-  usePvLabel: PropTypes.bool,
-
-  /** Custom color to be used, must be derived from Material UI them color's*/
-  color: PropTypes.string,
-
-  /** Custom label to be used, if  `usePvLabel` is not defined. */
-  label: PropTypes.string,
-
-  /** Position of label*/
-  labelPlacement: PropTypes.oneOf(["top", "bottom", "start", "end"]),
-
-  /** If defined, then the string value of the EPICS enumerator type will be forced to be used, if not defined the the enumerator index is used */
-  useStringValue: PropTypes.bool,
-  /** If defined, then the DataConnection debugging information will be displayed*/
-  debug: PropTypes.bool,
-  /** local variable initialization value*/
-  initialLocalVariableValue: PropTypes.string,
-  /**
-   * Any of the MUI Button Props can applied by defining them as an object
-   */
-  muiButtonProps: PropTypes.object,
-  /**
-   * Tooltip Text
-   */
-  tooltip: PropTypes.string,
-  /**
-   * Directive to show the tooltip
-   */
-  showTooltip: PropTypes.bool,
-  /**
-   *  Any of the MUI Tooltip props can applied by defining them as an object
-   */
-  tooltipProps: PropTypes.object,
-};
-
-ActionButton.defaultProps = {
-  showTooltip: false,
-  color: "primary",
 };
 
 export default ActionButton;

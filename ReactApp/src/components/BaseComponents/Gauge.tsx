@@ -74,8 +74,7 @@ interface GaugeComponentProps {
   ringWidth: number;
   disabled: boolean;
 }
-function GaugeComponent({
-  ...props }: GaugeComponentProps) {
+function GaugeComponent({ ...props }: GaugeComponentProps) {
   const theme = useTheme();
   const gradientId = uuidv4();
   const units = props.units;
@@ -376,18 +375,26 @@ interface GaugeProps {
  * The Gauge is an React-Automation-studio component useful for displaying levels or progress.
  */
 const Gauge = ({
-  debug= false,
-  min= 0,
-  max= 100,
-  usePvPrecision= false,
-  labelPlacement= "top",
-  showTooltip= false,
-  ...props}: GaugeProps) => {
-  
-  return <Widget {...props} component={GaugeInternalComponent} />;
+  debug = false,
+  min = 0,
+  max = 100,
+  usePvPrecision = false,
+  labelPlacement = "top",
+  showTooltip = false,
+  ...props
+}: GaugeProps) => {
+  return (
+    <Widget
+      {...props}
+      component={GaugeInternalComponent}
+      debug={debug}
+      min={min}
+      max={max}
+      usePvPrecision={usePvPrecision}
+      labelPlacement={labelPlacement}
+      showTooltip={showTooltip}
+    />
+  );
 };
-
-
-
 
 export default Gauge;

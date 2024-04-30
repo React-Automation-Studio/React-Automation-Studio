@@ -209,6 +209,48 @@ export const useEpicsPV = (props) => {
 };
 
 /**
+ * Props interface for the EpicsPV component.
+ */
+interface EpicsPVProps {
+  /**
+   * If defined, then the DataConnection and
+   * the widget debugging information will be displayed.
+   */
+  debug?: boolean;
+  /**
+   * If defined, then the DataConnection  will be over a new socketIO  connection, otherwise the global socketIO connection
+   */
+  makeNewSocketIoConnection?: boolean;
+
+  /**
+   * when writing to the  pv's output value, increment newValueTrigger to tell the pv component emit the output value to the process variable.
+   */
+  newValueTrigger?: number;
+  /**
+   * the output value to the process variable. It is only emitted once the newValueTrigger is incremented.
+   */
+  outputValue?: any;
+
+  /** Name of the process variable,  eg. '$(device):test$(id)'*/
+
+  pv?: string;
+
+  /** A function that returns the pv object */
+
+  pvData?: () => void;
+
+  /**
+   * Directive to use PV's string values.
+   */
+  useStringValue?: boolean;
+  /**
+   * Directive to use numpy binary value of the PV value.
+   */
+  useBinaryValue?: boolean;
+}
+
+
+/**
  * The EpicsPV  component handles connections to EPICS process variables.
  * This is done by defining the pv name in the pv prop and using a prefix to define protocol ie "pva://" for EPICS .
  * The EpicsPV component also performs macro substitution on the pv prop using the macros prop.
@@ -221,19 +263,25 @@ export const useEpicsPV = (props) => {
  *
  *
  **/
-const EpicsPV = (props) => {
+const EpicsPV = (
+  {
+    debug= false,
+  makeNewSocketIoConnection= true,
+  useBinaryValue=false,
+    ...props}: EpicsPVProps
+  ) => {
   const pv = useEpicsPV(props);
   useEffect(() => {
     if (props.pvData) {
       props.pvData(pv);
     }
   }, [pv, props.pvData]);
-  if (props.debug) {
+  if (debug) {
     console.log(`EpicsPV ${props.pv}:`, {props, pv});
   }
   return (
     <React.Fragment>
-      {props.debug && (
+      {debug && (
         <Typography>
           {"PV name: " + pv.pvname}
           {"Value: " + pv.value}
@@ -242,53 +290,6 @@ const EpicsPV = (props) => {
     </React.Fragment>
   );
 };
-EpicsPV.propTypes = {
-  /**
-   * If defined, then the DataConnection and
-   * the widget debugging information will be displayed.
-   */
-  debug: PropTypes.bool,
-  /**
-   * If defined, then the DataConnection  will be over a new socketIO  connection, otherwise the global socketIO connection
-   */
-  makeNewSocketIoConnection: PropTypes.bool,
 
-  /**
-   * when writing to the  pv's output value, increment newValueTrigger to tell the pv component emit the output value to the process variable.
-   */
-  newValueTrigger: PropTypes.number,
-  /**
-   * the output value to the process variable. It is only emitted once the newValueTrigger is incremented.
-   */
-  outputValue: PropTypes.any,
-
-  /** Name of the process variable,  eg. '$(device):test$(id)'*/
-
-  pv: PropTypes.string,
-
-  /** A function that returns the pv object */
-
-  pvData: PropTypes.func,
-
-  /**
-   * Directive to use PV's string values.
-   */
-  useStringValue: PropTypes.bool,
-  /**
-   * Directive to use numpy binary value of the PV value.
-   */
-  useBinaryValue: PropTypes.bool,
-};
-
-/**
- * Default props.definition for all widgets linked to
- * PVs storing analog values.
- */
-// static defaultProps=WrappedComponent.defaultProps;
-EpicsPV.defaultProps = {
-  debug: false,
-  makeNewSocketIoConnection: true,
-  useBinaryValue:false
-};
 
 export default EpicsPV;

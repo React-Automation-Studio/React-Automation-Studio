@@ -245,7 +245,18 @@ const TextInput = ({
   showTooltip = false,
   ...props
 }: TextInputProps) => {
-  return <Widget {...props} component={TextInputComponent} pvs={undefined} />;
+  return (
+    <Widget
+      {...props}
+      component={TextInputComponent}
+      pvs={undefined}
+      debug={debug}
+      variant={variant}
+      margin={margin}
+      alarmSensitive={alarmSensitive}
+      showTooltip={showTooltip}
+    />
+  );
 };
 
 export default TextInput;

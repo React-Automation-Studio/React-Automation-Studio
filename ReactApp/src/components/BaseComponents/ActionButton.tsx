@@ -134,6 +134,8 @@ const ActionButton = ({
   return (
     <Widget
       {...props}
+      showTooltip={showTooltip}
+      color={color}
       component={ActionButtonComponent}
       writeOutputValueToAllpvs={true}
     />

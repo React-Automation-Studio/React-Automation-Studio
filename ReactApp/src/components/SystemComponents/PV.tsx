@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import EpicsPV from './EpicsPV'
 import LocalPV from './LocalPV'
-import PropTypes from "prop-types";
 
 
 /**
@@ -128,6 +127,11 @@ interface PVProps {
    * Directive to use numpy binary value of the PV value.
    */
   useBinaryValue?: boolean;
+  
+  /**
+   * A function that returns the PV object.
+   */
+  children?: (pv: any) => React.ReactNode;
 }
 
 /**

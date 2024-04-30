@@ -400,7 +400,7 @@ const Widget = (
   },[props])
 
   const wrapComponent = (CustomComponent, props) => {
-    return <CustomComponent {...props} />;
+    return <CustomComponent {...props}  />;
   }
 
   const hardDisabled = !initialized || readOnly||disabled;
@@ -539,6 +539,13 @@ const Widget = (
       handleBlur: () => setFocus(false),
       pvData: pv,
       pvsData: pvs,
+     
+      onColor:onColor,
+      offColor:offColor,
+      showTooltip:showTooltip,
+      useMetadata:useMetadata,
+      tooltip:tooltip,
+      writeOutputValueToAllpvs:writeOutputValueToAllpvs,
     })
 
   const divStyle = {

@@ -100,6 +100,9 @@ const CheckBox = ({
     <Widget
       {...props}
       component={CheckBoxComponent}
+      onColor={onColor}
+      debug={debug}
+      showTooltip={showTooltip}
       usePvMinMax={false}
       usePvPrecision={false}
       min={undefined}

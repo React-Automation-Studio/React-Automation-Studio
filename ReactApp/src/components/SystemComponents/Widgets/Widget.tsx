@@ -13,12 +13,202 @@ import {
   isInsideLimits
 } from "../Utils/widgetFunctions";
 
+
+interface WidgetProps {
+  /**
+   * If defined, then the DataConnection will be over a new socketIO connection, otherwise the global socketIO connection.
+   */
+  makeNewSocketIoConnection?: boolean;
+  /**
+   * Directive to use the alarm severity status to alter the fields background color.
+   */
+  alarmSensitive?: boolean;
+  /**
+   * Custom PV to define the alarm severity to be used, alarmSensitive must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
+   */
+  alarmPv?: string;
+  /**
+   * If defined, then the DataConnection and the widget debugging information will be displayed.
+   */
+  debug?: boolean;
+  /**
+   * Directive to the output value to all the pvs defined in the pvs array.
+   */
+  writeOutputValueToAllpvs?: boolean;
+  /**
+   * Local variable initialization value. When using loc:// type PVs.
+   */
+  initialLocalVariableValue?: string;
+  /**
+   * Custom label to be used, if usePvLabel is not defined.
+   */
+  label?: string;
+  /**
+   * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
+   */
+  labelPv?: string;
+  /**
+   * Values of macros that will be substituted in the pv name. eg. {{'$(device)':'testIOC','$(id)':'2'}}
+   */
+  macros?: object;
+  /**
+   * Custom maximum to be used, if usePvMinMax is not defined.
+   */
+  max?: number;
+  /**
+   * Custom PV to define the maximum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
+   */
+  maxPv?: string;
+  /**
+   * Custom minimum value to be used, if usePvMinMax is not defined.
+   */
+  min?: number;
+  /**
+   * Custom PV to define the minimum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
+   */
+  minPv?: string;
+  /**
+   * When writing to the pv's output value, increment newValueTrigger to tell the pv component emit the output value to the process variable.
+   */
+  prec?: number;
+  /**
+   * Custom PV to define the precision to be used, usePvPrecision must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
+   */
+  precPv?: string;
+  /**
+   * Custom units to be used, if usePvUnits is not defined.
+   */
+  units?: string;
+  /**
+   * Custom PV to define the units to be used, usePvUnits must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
+   */
+  unitsPv?: string;
+  /**
+   * Directive to fill the component's label with the value contained in the pv metadata's DESC field or the labelPv value.
+   * If not defined it uses the custom label as defined by the label prop.
+   */
+  usePvLabel?: boolean;
+  /**
+   * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver.
+   * The pyEpics metadata is unfortunately static and the values used will be the initial values that pvserver receives when it connects the first time.
+   * This is sufficient in most cases except when the user wants to dynamically update the metaData.
+   * In this case a direct connection can be made to all the pv fields by setting useMetadata to false.
+   * If any of the metadata pvs are defined i.e unitsPv then the PV makes a new data connection to this alternate pv and will
+   * use the value provided by this pv as the units.
+   * The same is the case for the precPV, labelPv, alarmPv, unitsPv, and minPv.
+   * By setting useMetadata to false also enables connection to other variables as defined by different protocols.
+   */
+  useMetadata?: boolean;
+  /**
+   * Directive to use the pv metadata's HOPR and LOPR fields or the minPv and maxPv values to limit the maximum and minimum values that can be contained in the value.
+   * If not defined it uses the custom min and max as defined by the min and max prop.
+   */
+  usePvMinMax?: boolean;
+  /**
+   * Directive to round the value using the precision field of the PV metadata or precPv.
+   * If not defined it uses the custom precision as defined by the prec prop.
+   */
+  usePvPrecision?: boolean;
+  /**
+   * Directive to use the units contained in the pv metdata's EGU field or unitsPv.
+   * If not defined it uses the custom units as defined by the units prop.
+   */
+  usePvUnits?: boolean;
+  /**
+   * Directive to use PV's string values.
+   */
+  useStringValue?: boolean;
+  /**
+   * If defined, then the string representation of the number can be formatted using the mathjs format function eg. numberFormat={{notation: 'engineering',precision: 3}}.
+   * See https://mathjs.org/docs/reference/functions/format.html for more examples.
+   */
+  numberFormat?: object;
+  /**
+   * Custom on color to be used, must be derived from Material UI theme color's.
+   */
+  onColor?: string;
+  /**
+   * Custom off color to be used, must be derived from Material UI theme color's.
+   */
+  offColor?: string;
+  /**
+   * Name of the process variable, eg. '$(device):test$(id)'.
+   */
+  pv?: string;
+  /**
+   * Array of the process variables, eg. '$(device):test$(id)'.
+   */
+  pvs?: string[];
+  /**
+   * Object with a string and the corresponding severity value.
+   * When PV value is equal to the string, set the corresponding severity in the widget's severity.
+   * Example: { stringMatch: '1', severity: 2 }.
+   */
+  stringSeverity?: object;
+  /**
+   * Directive to override alarm severity with the rules defined in the stringSeverity.
+   */
+  useStringSeverityMatch?: boolean;
+  /**
+   * Tooltip Text.
+   */
+  tooltip?: string;
+  /**
+   * Directive to show the tooltip.
+   */
+  showTooltip?: boolean;
+  /**
+   * Any of the MUI Tooltip props can be applied by defining them as an object.
+   */
+  tooltipProps?: object;
+
+  /**
+   * Indicates whether the widget is disabled.
+   */
+  disabled?: boolean;
+  /**
+   * read-only property.
+   * If defined, then the widget will be read-only.
+   * If not defined, then the widget will be read-only if the pv is read-only.
+   */
+  readOnly?: boolean;
+
+  /**
+   * Index of the value to be displayed.
+   */
+  index?: number;
+  /**
+   * Disable probe. If defined, then the probe will be disabled.
+   * If not defined, then the probe will be enabled.
+   * The probe is used to display the value of the widget in the probe component.
+   * The probe component is a floating window that displays the value of the widget.
+   */
+  disableProbe?: boolean;
+  /**
+   * Component to be rendered. 
+   * 
+   */
+  component?: React.ReactNode; 
+    
+}
+
 /**
  * The Widget component creates standard properties, state variables and callbacks to manage the behaviour of a component communicating with one or multiple PVs. It also provides the default RAS contextMenu to the child component.
  *
  * The label, min, max, units, pv and tooltip all accept macros that can be replaced by the values defined in the macros prop.
  */
-const Widget = (props) => {
+const Widget = (
+  {
+  disabled= false,
+  onColor= "primary",
+  offColor= "default",
+  showTooltip=false,
+  useMetadata= true,
+  tooltip="",
+  writeOutputValueToAllpvs=false,
+    ...props}: WidgetProps
+
+) => {
   const { disableProbe, index } = props;
   const theme = useTheme();
   const [value, setValue] = useState(0);
@@ -36,7 +226,7 @@ const Widget = (props) => {
   const [max, setMax] = useState(0);
   const [units, setUnits] = useState("");
   const [label, setLabel] = useState("");
-  const [tooltip] = useState(replaceMacros(props.tooltip));
+  const [passedTooltip] = useState(replaceMacros(tooltip));
   const [pv, setPv] = useState({
     value: 0,
     label: "",
@@ -214,7 +404,7 @@ const Widget = (props) => {
     return <CustomComponent {...props} />;
   }
 
-  const disabled = !initialized || readOnly||props.disabled;
+  const hardDisabled = !initialized || readOnly||disabled;
 
   const disconnectedIcon = () => {
     return (
@@ -261,7 +451,7 @@ const Widget = (props) => {
             usePvPrecision={props.usePvPrecision}
             prec={props.prec}
             precPv={props.precPv}
-            useMetadata={props.useMetadata}
+            useMetadata={useMetadata}
             macros={props.macros}
             newValueTrigger={newValueTrigger}
             outputValue={outputValue}
@@ -302,7 +492,7 @@ const Widget = (props) => {
     usePvPrecision={props.usePvPrecision}
     prec={props.prec}
     precPv={props.precPv}
-    useMetadata={props.useMetadata}
+    useMetadata={useMetadata}
     macros={props.macros}
     newValueTrigger={newValueTrigger}
     outputValue={outputValue}
@@ -313,7 +503,7 @@ const Widget = (props) => {
     name={props.name}
   />
 
-  const childPvs = getPvs(props.pvs, props, pvs, setPvs,props.writeOutputValueToAllpvs?newValueTrigger:undefined,props.writeOutputValueToAllpvs?outputValue:undefined)
+  const childPvs = getPvs(props.pvs, props, pvs, setPvs,writeOutputValueToAllpvs?newValueTrigger:undefined,writeOutputValueToAllpvs?outputValue:undefined)
 
   const handleValue = (newValue, setFunction) => {
     if (checkIndex(index, value)) {
@@ -337,7 +527,7 @@ const Widget = (props) => {
       label: label,
       formControlLabel:initialized?label :<span style={{fontSize:"inherit", whiteSpace: "nowrap"}}>{disconnectedIcon()}{" "+pv.pvName}</span>,
       units: units,
-      disabled: disabled,
+      disabled: hardDisabled,
       readOnly: readOnly,
       alarmSeverity: alarmSeverity,
       enumStrs: enumStrings,
@@ -364,10 +554,10 @@ const Widget = (props) => {
 
   return (
     <Tooltip
-      title={tooltip}
+      title={passedTooltip}
       disableFocusListener={true}
       disableTouchListener={true}
-      disableHoverListener={props.showTooltip===false}
+      disableHoverListener={showTooltip===false}
       {...props.tooltipProps}  
       key={`${props.usePvLabel},${props.pvs},${props.pv}${props.usePvMinMax}${props.usePvPrecision}${props.usePvUnits}${props.useStringValue}`}
       
@@ -386,181 +576,6 @@ const Widget = (props) => {
   )
 }
 
-/**
- * Props definition for all widgets linked to PVs storing
- * analog values.
- */
-Widget.propTypes = {
-  /**
-   * If defined, then the DataConnection  will be over a new socketIO  connection, otherwise the global socketIO connection
-   */
-  makeNewSocketIoConnection: PropTypes.bool,
-  /**
-   * Directive to use the  alarm severity status to alter the fields background color.
-   */
-  alarmSensitive: PropTypes.bool,
-  /**
-   * Custom PV to define the alarm severity to be used, alarmSensitive must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
-   */
-  alarmPv: PropTypes.string,
-  /**
-   * If defined, then the DataConnection and
-   * the widget debugging information will be displayed.
-   */
-  debug: PropTypes.bool,
-  /**
-   * Directive to the output value to all the pvs defined in the pvs array
-   */
-  writeOutputValueToAllpvs:PropTypes.bool,
-  /**
-   * Local variable initialization value.
-   * When using loc:// type PVs.
-   */
-  initialLocalVariableValue: PropTypes.string,
-  /**
-   * Custom label to be used, if  usePvLabel is not defined.
-   */
-  label: PropTypes.string,
-  /**
-  * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
-  */
-  labelPv: PropTypes.string,
-  /**
-   * Values of macros that will be substituted in the pv name.
-   * eg. {{'$(device)':'testIOC','$(id)':'2'}}
-   */
-  macros: PropTypes.object,
-  /**
-   * Custom maximum to be used, if usePvMinMax is not defined.
-   */
-  max: PropTypes.number,
-  /**
-   * Custom PV to define the maximum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
-   */
-  maxPv: PropTypes.string,
-  /**
-   * Custom minimum value to be used, if usePvMinMax is not defined.
-   */
-  min: PropTypes.number,
-  /**
-   * Custom PV to define the minimum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
-   */
-  minPv: PropTypes.string,
-  /**
-   * when writing to the  pv's output value, increment newValueTrigger to tell the pv component emit the output value to the process variable.
-   */
 
-  prec: PropTypes.number,
-  /**
-   * Custom PV to define the precision to be used, usePvPrecision must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
-   */
-  precPv: PropTypes.string,
-
-  /**
-   * Custom units to be used, if usePvUnits is not defined.
-   */
-  units: PropTypes.string,
-  /**
-   * Custom PV to define the units to be used, usePvUnits must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
-   */
-  unitsPv: PropTypes.string,
-  /**
-   * Directive to fill the component's label with
-   * the value contained in the  pv metadata's DESC field or the labelPv value.
-   * If not defined it uses the custom label as defined by the label prop.
-   */
-  usePvLabel: PropTypes.bool,
-  /**
-   * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver.
-   * The pyEpics metadata is unfortunately static and the values used will be the initial values that pvserver receives when it connects the first time.
-   * This is sufficient in most cases except when the user wants to dynamically update the metaData.
-   * In this case a direct connection can be made to all the pv fields by setting useMetadata to false.
-   * If any of the metadata pvs are defined i.e unitsPv then the PV makes a new data  connection to this alternate pv and will
-   * use the value provided by this pv as the units.
-   * The same is the case for the precPV, labelPv, alarmPv, unitsPv and minPv.
-   * By setting useMetadata to false also enables connection to other variables as defined by different protocols.
-   */
-  useMetadata: PropTypes.bool,
-  /**
-   * Directive to use the pv metadata's HOPR and LOPR fields or the minPv and maxPv values
-   * to limit the maximum and minimum values
-   * that can be contained in the value.
-   * If not defined it uses the custom min and max as defined by the min and max prop.
-   */
-  usePvMinMax: PropTypes.bool,
-  /**
-   * Directive to round the value using the precision field of the PV metadata or precPv.
-   * If not defined it uses the custom precision as defined by the prec prop.
-   */
-  usePvPrecision: PropTypes.bool,
-  /**
-   * Directive to use the units contained in the   pv metdata's EGU field or unitsPv.
-   *  If not defined it uses the custom units as defined by the units prop.
-   */
-
-  usePvUnits: PropTypes.bool,
-  /**
-   * Directive to use PV's string values.
-   */
-  useStringValue: PropTypes.bool,
-
-  /**
-   * If defined, then the string representation of the number can be formatted
-   * using the mathjs format function
-   * eg. numberFormat={{notation: 'engineering',precision: 3}}.
-   * See https://mathjs.org/docs/reference/functions/format.html for more examples
-   */
-  numberFormat: PropTypes.object,
-  /**
-   * Custom on color to be used, must be derived from Material UI theme color's.
-   */
-  onColor: PropTypes.string,
-  /**
-   * Custom off color to be used, must be derived from Material UI theme color's.
-   */
-  offColor: PropTypes.string,
-
-  /** Name of the process variable,  eg. '$(device):test$(id)'*/
-  pv: PropTypes.string,
-  /** Array of the process variables, eg. '$(device):test$(id)'*/
-  pvs: PropTypes.arrayOf(PropTypes.string),
-  /**
-   * Object with a string and the corresponding severity value.
-   * When PV value is equal to the string, set the corresponding severity
-   * in the widget's severity.
-   * Example: { stringMatch: '1', severity: 2 }.
-   */
-  stringSeverity: PropTypes.object,
-  /**
-   * Directive to override alarm severity with the rules defined in the stringSeverity
-   */
-  useStringSeverityMatch: PropTypes.bool,
-  /**
-   * Tooltip Text
-   */
-  tooltip:PropTypes.string,
-  /**
-   * Directive to show the tooltip
-   */
-  showTooltip:PropTypes.bool,
-  /**
-   *  Any of the MUI Tooltip props can applied by defining them as an object
-   */
-  tooltipProps:PropTypes.object,
-};
-
-/**
- * Default props.definition for all widgets linked to
- * PVs storing analog values.
- */
-Widget.defaultProps = {
-  disabled: false,
-  onColor: "primary",
-  offColor: "default",
-  showTooltip:false,
-  useMetadata: true,
-  tooltip:"",
-  writeOutputValueToAllpvs:false,
-};
 
 export default Widget

@@ -187,6 +187,14 @@ interface BitIndicatorsProps {
    * Additional props for the tooltip component.
    */
   tooltipProps?: object;
+  /**
+   * The color of the bits when on.
+   */
+  onColor?: string;
+  /**
+   * The color of the bits when off.
+   */
+  offColor?: string;
 }
 
 /**
@@ -208,16 +216,17 @@ const BitIndicators = ({
   usePvBitLabels = false,
   ...props
 }: BitIndicatorsProps) => {
+  
   return (
     <Widget
       {...props}
-      component={BitIndicatorsComponent}
       numberOfBits={numberOfBits}
       horizontal={horizontal}
       reverseBits={reverseBits}
       onColor={onColor}
       offColor={offColor}
       usePvBitLabels={usePvBitLabels}
+      component={BitIndicatorsComponent}
     />
   );
 };

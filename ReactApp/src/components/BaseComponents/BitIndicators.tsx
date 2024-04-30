@@ -186,6 +186,6 @@ const BitIndicators = ({
   return <Widget {...props} component={BitIndicatorsComponent} />;
 };
 
-BitIndicators.defaultProps = {};
+
 
 export default BitIndicators;

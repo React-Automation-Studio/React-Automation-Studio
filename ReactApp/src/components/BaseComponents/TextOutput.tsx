@@ -1,7 +1,6 @@
 import React from "react";
 import { alpha } from "@mui/material/styles";
 import { InputAdornment, TextField } from "@mui/material";
-import PropTypes from "prop-types";
 import Widget from "../SystemComponents/Widgets/Widget";
 import makeStyles from "@mui/styles/makeStyles";
 const useStyles = makeStyles((theme) => ({
@@ -212,6 +211,174 @@ function TextOutputComponent(props) {
 }
 
 /**
+ * Props for the TextOutput component.
+ */
+interface TextOutputProps {
+  /**
+   * Directive to use the alarm severity status to alter the field's background color.
+   */
+  alarmSensitive?: boolean;
+  /**
+   * Custom PV to define the alarm severity to be used. alarmSensitive must be set to `true` and useMetadata to `false`, e.g. '$(device):test$(id)'.
+   */
+  alarmPv?: string;
+  /**
+   * If defined, then the DataConnection and the widget debugging information will be displayed.
+   */
+  debug?: boolean;
+  /**
+   * Local variable initialization value. When using loc:// type PVs.
+   */
+  initialLocalVariableValue?: string;
+  /**
+   * Custom label to be used if usePvLabel is not defined.
+   */
+  label?: string;
+  /**
+   * Custom PV to define the units to be used. usePvLabel must be set to `true` and useMetadata to `false`, e.g. '$(device):test$(id)'.
+   */
+  labelPv?: string;
+  /**
+   * Values of macros that will be substituted in the PV name. e.g. {{'$(device)':'testIOC','$(id)':'2'}}
+   */
+  macros?: object;
+  /**
+   * Custom precision to round the value.
+   */
+  prec?: number;
+  /**
+   * Custom PV to define the precision to be used. usePvPrecision must be set to `true` and useMetadata to `false`, e.g. '$(device):test$(id)'.
+   */
+  precPv?: string;
+  /**
+   * Custom units to be used if usePvUnits is not defined.
+   */
+  units?: string;
+  /**
+   * Custom PV to define the units to be used. usePvUnits must be set to `true` and useMetadata to `false`, e.g. '$(device):test$(id)'.
+   */
+  unitsPv?: string;
+  /**
+   * Directive to fill the component's label with the value contained in the PV metadata's DESC field or the labelPv value.
+   * If not defined, it uses the custom label as defined by the label prop.
+   */
+  usePvLabel?: boolean;
+  /**
+   * When using EPICS, the RAS PV's metadata is conventionally derived from the pyEpics PV in the pvserver.
+   * The pyEpics metadata is unfortunately static, and the values used will be the initial values that pvserver receives when it connects the first time.
+   * This is sufficient in most cases except when the user wants to dynamically update the metaData.
+   * In this case, a direct connection can be made to all the pv fields by setting useMetadata to false.
+   * If any of the metadata PVs are defined, i.e. unitsPv, then the PV makes a new data connection to this alternate PV and will use the value provided by this PV as the units.
+   * The same is the case for the precPV, labelPv, alarmPv, unitsPv, and minPv.
+   * By setting useMetadata to false, it also enables connection to other variables as defined by different protocols.
+   */
+  useMetadata?: boolean;
+  /**
+   * Directive to round the value using the precision field of the PV metadata or precPv.
+   * If not defined, it uses the custom precision as defined by the prec prop.
+   */
+  usePvPrecision?: boolean;
+  /**
+   * Directive to use the units contained in the PV metadata's EGU field or unitsPv.
+   * If not defined, it uses the custom units as defined by the units prop.
+   */
+  usePvUnits?: boolean;
+  /**
+   * Directive to use PV's string values.
+   */
+  useStringValue?: boolean;
+  /**
+   * If defined, then the string representation of the number can be formatted using the mathjs format function.
+   * e.g. numberFormat={{notation: 'engineering', precision: 3}}.
+   * See https://mathjs.org/docs/reference/functions/format.html for more examples.
+   */
+  numberFormat?: object;
+  /**
+   * Name of the process variable, e.g. '$(device):test$(id)'.
+   */
+  pv?: string;
+  /**
+   * Object with a string and the corresponding severity value.
+   * When PV value is equal to the string, set the corresponding severity in the widget's severity.
+   * Example: { stringMatch: '1', severity: 2 }.
+   */
+  stringSeverity?: object;
+  /**
+   * Directive to override the alarm severity with the rules defined in the stringSeverity.
+   */
+  useStringSeverityMatch?: boolean;
+  /**
+   * Any of the MUI TextField Props can be applied by defining them as an object.
+   */
+  muiTextFieldProps?: object;
+  /**
+   * Tooltip Text.
+   */
+  tooltip?: string;
+  /**
+   * Directive to show the tooltip.
+   */
+  showTooltip?: boolean;
+  /**
+   * Any of the MUI Tooltip props can be applied by defining them as an object.
+   */
+  tooltipProps?: object;
+  /**
+   * If defined, then the timestamp of the PV will be displayed instead of its value.
+   */
+  displayTimeStamp?: boolean;
+  /**
+   * If defined, then the Metadata property of the pyEPICS PV will be displayed instead of its value as defined by the input string e.g. displayMetaData={'lower_disp_limit'}.
+   * Valid options are:
+   * - pvname
+   * - value
+   * - char_value
+   * - enum_strs
+   * - lower_disp_limit
+   * - upper_disp_limit
+   * - lower_warning_limit
+   * - upper_warning_limit
+   * - lower_ctrl_limit
+   * - upper_ctrl_limit
+   * - units
+   * - precision
+   * - severity
+   * - write_access
+   * - read_access
+   * - host
+   */
+  displayMetaData?:
+    | "pvname"
+    | "value"
+    | "char_value"
+    | "enum_strs"
+    | "lower_disp_limit"
+    | "upper_disp_limit"
+    | "lower_warning_limit"
+    | "upper_warning_limit"
+    | "lower_ctrl_limit"
+    | "upper_ctrl_limit"
+    | "units"
+    | "precision"
+    | "severity"
+    | "write_access"
+    | "read_access"
+    | "host";
+  /**
+   * MUI TextField variant.
+   */
+  variant?: "standard" | "filled" | "outlined";
+  /**
+   * MUI TextField margin.
+   * - none: No margin.
+   * - dense: Smaller margin.
+   * - normal: Default margin.
+   */
+
+  margin?: "none" | "dense" | "normal";
+}
+
+/**
  *  The TextOutput Component is a wrapper on the Material-UI contained TextField component in read-only mode.
  *  The TextField component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
  *  The margins and spacing must be controlled from the parent component.<br/><br/>
@@ -220,163 +387,15 @@ function TextOutputComponent(props) {
  *  Material-UI TextField API:
  *  https://mui.com/api/text-field
  */
-const TextOutput = (props) => {
+const TextOutput = ({
+  debug = false,
+  variant = "outlined",
+  margin = "none",
+  alarmSensitive = false,
+  showTooltip = false,
+  ...props
+}: TextOutputProps) => {
   return <Widget {...props} component={TextOutputComponent} pvs={undefined} />;
-};
-
-TextOutput.propTypes = {
-  /**
-   * Directive to use the  alarm severity status to alter the fields background color.
-   */
-  alarmSensitive: PropTypes.bool,
-  /**
-   * Custom PV to define the alarm severity to be used, alarmSensitive must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
-   */
-  alarmPv: PropTypes.string,
-  /**
-   * If defined, then the DataConnection and
-   * the widget debugging information will be displayed.
-   */
-  debug: PropTypes.bool,
-
-  /**
-   * Local variable initialization value.
-   * When using loc:// type PVs.
-   */
-  initialLocalVariableValue: PropTypes.string,
-  /**
-   * Custom label to be used, if  usePvLabel is not defined.
-   */
-  label: PropTypes.string,
-  /**
-   * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
-   */
-  labelPv: PropTypes.string,
-  /**
-   * Values of macros that will be substituted in the pv name.
-   * eg. {{'$(device)':'testIOC','$(id)':'2'}}
-   */
-  macros: PropTypes.object,
-
-  /**
-   * Custom precision to round the value.
-   */
-  prec: PropTypes.number,
-  /**
-   * Custom PV to define the precision to be used, usePvPrecision must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
-   */
-  precPv: PropTypes.string,
-
-  /**
-   * Custom units to be used, if usePvUnits is not defined.
-   */
-  units: PropTypes.string,
-  /**
-   * Custom PV to define the units to be used, usePvUnits must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
-   */
-  unitsPv: PropTypes.string,
-  /**
-   * Directive to fill the component's label with
-   * the value contained in the  pv metadata's DESC field or the labelPv value.
-   * If not defined it uses the custom label as defined by the label prop.
-   */
-  usePvLabel: PropTypes.bool,
-  /**
-   * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver.
-   * The pyEpics metadata is unfortunately static and the values used will be the initial values that pvserver receives when it connects the first time.
-   * This is sufficient in most cases except when the user wants to dynamically update the metaData.
-   * In this case a direct connection can be made to all the pv fields by setting useMetadata to false.
-   * If any of the metadata pvs are defined i.e unitsPv then the PV makes a new data  connection to this alternate pv and will
-   * use the value provided by this pv as the units.
-   * The same is the case for the precPV, labelPv, alarmPv, unitsPv and minPv.
-   * By setting useMetadata to false also enables connection to other variables as defined by different protocols.
-   */
-  useMetadata: PropTypes.bool,
-
-  /**
-   * Directive to round the value using the precision field of the PV metadata or precPv.
-   * If not defined it uses the custom precision as defined by the prec prop.
-   */
-  usePvPrecision: PropTypes.bool,
-  /**
-   * Directive to use the units contained in the   pv metdata's EGU field or unitsPv.
-   *  If not defined it uses the custom units as defined by the units prop.
-   */
-  usePvUnits: PropTypes.bool,
-  /**
-   * Directive to use PV's string values.
-   */
-  useStringValue: PropTypes.bool,
-
-  /**
-   * If defined, then the string representation of the number can be formatted
-   * using the mathjs format function
-   * eg. numberFormat={{notation: 'engineering',precision: 3}}.
-   * See https://mathjs.org/docs/reference/functions/format.html for more examples
-   */
-  numberFormat: PropTypes.object,
-
-  /** Name of the process variable,  eg. '$(device):test$(id)'*/
-  pv: PropTypes.string,
-
-  /**
-   * Object with a string and the corresponding severity value.
-   * When PV value is equal to the string, set the corresponding severity
-   * in the widget's severity.
-   * Example: { stringMatch: '1', severity: 2 }.
-   */
-  stringSeverity: PropTypes.object,
-  /**
-   * Directive to override the alarm severity with the rules defined in the stringSeverity
-   */
-  useStringSeverityMatch: PropTypes.bool,
-  /** Any of the MUI TextField Props can applied by defining them as an object
-   *
-   */
-  muiTextFieldProps: PropTypes.object,
-  /**
-   * Tooltip Text
-   */
-  tooltip: PropTypes.string,
-  /**
-   * Directive to show the tooltip
-   */
-  showTooltip: PropTypes.bool,
-  /**
-   *  Any of the MUI Tooltip props can applied by defining them as an object
-   */
-  tooltipProps: PropTypes.object,
-  /** If defined, then the timestamp of the PV will be displayed instead of its value*/
-  displayTimeStamp: PropTypes.bool,
-  /** If defined, then the Metadata property of the pyEPICS PV will be displayed instead of its value as defined by the input string eg. displayMetaData={'lower\_disp\_limit'}
-   * Valid options are
-   */
-  displayMetaData: PropTypes.oneOf([
-    "pvname",
-    "value",
-    "char_value",
-    "enum_strs",
-    "lower_disp_limit",
-    "upper_disp_limit",
-    "lower_warning_limit",
-    "upper_warning_limit",
-    "lower_ctrl_limit",
-    "upper_ctrl_limit",
-    "units",
-    "precision",
-    "severity",
-    "write_access",
-    "read_access",
-    "host",
-  ]),
-};
-
-TextOutput.defaultProps = {
-  debug: false,
-  variant: "outlined",
-  margin: "none",
-  alarmSensitive: false,
-  showTooltip: false,
 };
 
 export default TextOutput;

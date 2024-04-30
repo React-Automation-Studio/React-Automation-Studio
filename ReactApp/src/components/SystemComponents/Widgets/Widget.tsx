@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import PV from '../PV'
-import PropTypes from "prop-types";
 import { LanDisconnect } from "mdi-material-ui/";
 import { useTheme } from '@mui/material/styles';
 import Tooltip from '@mui/material/Tooltip';

@@ -3,8 +3,7 @@ import { DocsContext, Source } from "@storybook/addon-docs";
 
 export const ImportPath = (props): JSX.Element => {
   const context = useContext(DocsContext);
-  console.log(context);
-  console.log(context?.primaryStory.parameters.fileName);
+
   const arr = context?.primaryStory?.kind?.split("/");
 
   const componentName = arr[arr.length - 1];

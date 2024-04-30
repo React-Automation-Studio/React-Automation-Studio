@@ -395,7 +395,18 @@ const TextOutput = ({
   showTooltip = false,
   ...props
 }: TextOutputProps) => {
-  return <Widget {...props} component={TextOutputComponent} pvs={undefined} />;
+  return (
+    <Widget
+      {...props}
+      component={TextOutputComponent}
+      pvs={undefined}
+      debug={debug}
+      variant={variant}
+      margin={margin}
+      alarmSensitive={alarmSensitive}
+      showTooltip={showTooltip}
+    />
+  );
 };
 
 export default TextOutput;

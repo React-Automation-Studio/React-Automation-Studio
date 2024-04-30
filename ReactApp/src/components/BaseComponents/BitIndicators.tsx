@@ -1,6 +1,8 @@
 import React from "react";
+import withStyles from "@mui/styles/withStyles";
 import { Grid, FormControlLabel, SvgIcon, useTheme } from "@mui/material";
 import { Lens } from "@mui/icons-material";
+import PropTypes from "prop-types";
 import Widget from "../SystemComponents/Widgets/Widget";
 
 const BitIndicatorsComponent = (props) => {
@@ -120,48 +122,71 @@ const BitIndicatorsComponent = (props) => {
   );
 };
 
-/**
- * Props for the BitIndicators component.
- */
 interface BitIndicatorsProps {
-  /** Name of the process variable, e.g. '$(device):test$(id)' */
+  /**
+   * The PV name for the BitIndicators component.
+   */
   pv: string;
-  /** Values of macros that will be substituted in the pv name, e.g. {{'$(device)':'testIOC','$(id)':'2'}} */
+  /**
+   * Macros object for replacing macros in the PV name.
+   */
   macros?: object;
-  /** Local variable initialization value */
+  /**
+   * Initial local variable value.
+   */
   initialLocalVariableValue?: string;
-  /** If defined, then the Data initialized debugging information will be displayed */
+  /**
+   * Enable debug mode.
+   */
   debug?: boolean;
-  /** Label placement */
+  /**
+   * The placement of the labels for each bit.
+   */
   labelPlacement?: "start" | "top" | "bottom" | "end";
-  /** Custom label to be used, if `usePvLabel` is not defined. */
+  /**
+   * The label for the BitIndicators component.
+   */
   label?: string;
-  /** Array of custom bit labels. */
-  bitLabels?: string[];
-  /** If defined, the position of the bit labels relative to the widget. */
+  /**
+   * An array of labels for each bit.
+   */
+  bitLabels?: Array<string>;
+  /**
+   * The placement of the labels for each bit.
+   */
   bitLabelPlacement?: "start" | "end" | "top" | "bottom";
-  /** Number of bits to indicate. */
+  /**
+   * The number of bits to display.
+   */
   numberOfBits?: number;
-  /** Display bits horizontally. */
+  /**
+   * Display the bits horizontally.
+   */
   horizontal?: boolean;
-  /** Reverse bits order. */
+  /**
+   * Reverse the order of the bits.
+   */
   reverseBits?: boolean;
-  /** Any of the MUI Svg Icon can be applied by defining them as an object. */
+  /**
+   * Additional props for the MUI SvgIcon component.
+   */
   muiSvgIconProps?: object;
-  /** Directive to use the PV Bit Labels. */
+  /**
+   * Use PV bit labels instead of custom labels.
+   */
   usePvBitLabels?: boolean;
-  /** Tooltip Text */
+  /**
+   * The tooltip text for the BitIndicators component.
+   */
   tooltip?: string;
-  /** Directive to show the tooltip. */
+  /**
+   * Show the tooltip.
+   */
   showTooltip?: boolean;
-  /** Any of the MUI Tooltip props can be applied by defining them as an object. */
+  /**
+   * Additional props for the tooltip component.
+   */
   tooltipProps?: object;
-  /** Custom color to be used, must be derived from Material UI theme colors. */
-  onColor?: string;
-  /** Custom color to be used, must be derived from Material UI theme colors. */
-  offColor?: string;
-  
-
 }
 
 /**
@@ -183,9 +208,18 @@ const BitIndicators = ({
   usePvBitLabels = false,
   ...props
 }: BitIndicatorsProps) => {
-  return <Widget {...props} component={BitIndicatorsComponent} />;
+  return (
+    <Widget
+      {...props}
+      component={BitIndicatorsComponent}
+      numberOfBits={numberOfBits}
+      horizontal={horizontal}
+      reverseBits={reverseBits}
+      onColor={onColor}
+      offColor={offColor}
+      usePvBitLabels={usePvBitLabels}
+    />
+  );
 };
-
-
 
 export default BitIndicators;

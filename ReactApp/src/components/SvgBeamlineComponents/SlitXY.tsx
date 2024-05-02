@@ -1,7 +1,6 @@
 import React from "react";
 
 import Widget from "../SystemComponents/Widgets/Widget";
-import withStyles from "@mui/styles/withStyles";
 import {
   svgHeight,
   svgCenterY,
@@ -9,7 +8,6 @@ import {
   svgCenterX,
 } from "../SystemComponents/svgConstants";
 import { v4 as uuidv4 } from "uuid";
-import PropTypes from "prop-types";
 import { styled } from "@mui/material/styles";
 import { useTheme } from "@mui/system";
 const TextLabel = styled("text")(({ theme }) => ({
@@ -80,26 +78,26 @@ const SlitXYComponent = (props) => {
       props.usePvUnits === true
         ? xGapPv.units
         : props.unitsGapX
-        ? props.unitsGapX
-        : "";
+          ? props.unitsGapX
+          : "";
     unitsGapY =
       props.usePvUnits === true
         ? yGapPv.units
         : props.unitsGapY
-        ? props.unitsGapY
-        : "";
+          ? props.unitsGapY
+          : "";
     unitsOffsetX =
       props.usePvUnits === true
         ? xOffsetPv.units
         : props.unitsOffsetX
-        ? props.unitsOffsetX
-        : "";
+          ? props.unitsOffsetX
+          : "";
     unitsOffsetY =
       props.usePvUnits === true
         ? yOffsetPv.units
         : props.unitsOffsetY
-        ? props.unitsOffsetY
-        : "";
+          ? props.unitsOffsetY
+          : "";
     if (props.alarmSensitive !== "undefined") {
       if (props.alarmSensitive == true) {
         alarmSeverity =
@@ -109,11 +107,11 @@ const SlitXYComponent = (props) => {
           yOffsetPv.severity == 2
             ? 2
             : xGapPv.severity == 1 ||
-              yGapPv.severity == 1 ||
-              xOffsetPv.severity == 1 ||
-              yOffsetPv.severity == 1
-            ? 1
-            : 0;
+                yGapPv.severity == 1 ||
+                xOffsetPv.severity == 1 ||
+                yOffsetPv.severity == 1
+              ? 1
+              : 0;
         if (alarmSeverity == 2) {
           color = theme.palette.alarm.major.main;
         } else if (alarmSeverity == 1) {
@@ -310,7 +308,21 @@ const SlitXYComponent = (props) => {
  *
  *  The label, min, max, units, pv and tooltip all accept macros that can be replaced by the values defined in the macros prop.
  */
-const SlitXY = (props) => {
+const SlitXY = ({
+  debug = false,
+  showLabel = true,
+  showValue = true,
+  alarmSensitive = false,
+  showTooltip = false,
+  labelOffsetY = 0,
+  labelOffsetX = 0,
+  valueOffsetY = 0,
+  valueOffsetX = 0,
+  componentShadow = true,
+  textShadow = false,
+  componentGradient = true,
+  ...props
+}: SlitXYProps) => {
   return (
     <Widget
       svgWidget={true}
@@ -318,83 +330,95 @@ const SlitXY = (props) => {
       component={SlitXYComponent}
       pvs={[props.xGapPv, props.yGapPv, props.xOffsetPv, props.yOffsetPv]}
       label={props.label}
+      debug={debug}
+      showLabel={showLabel}
+      showValue={showValue}
+      alarmSensitive={alarmSensitive}
+      showTooltip={showTooltip}
+      labelOffsetY={labelOffsetY}
+      labelOffsetX={labelOffsetX}
+      valueOffsetY={valueOffsetY}
+      valueOffsetX={valueOffsetX}
+      componentShadow={componentShadow}
+      textShadow={textShadow}
+      componentGradient={componentGradient}
     />
   );
 };
 
-SlitXY.propTypes = {
+interface SlitXYProps {
   /**
    * Directive to use the  alarm severity status to alter the fields background color.
    */
-  alarmSensitive: PropTypes.bool,
+  alarmSensitive?: boolean;
   /**
    * Custom PV to define the alarm severity to be used, alarmSensitive must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
-  alarmPv: PropTypes.string,
+  alarmPv?: string;
   /**
    * If defined, then the DataConnection and
    * the widget debugging information will be displayed.
    */
-  debug: PropTypes.bool,
+  debug?: boolean;
 
   /**
    * Local variable initialization value.
    * When using loc:// type PVs.
    */
-  initialLocalVariableValue: PropTypes.string,
+  initialLocalVariableValue?: string;
   /**
    * Custom label to be used, if  usePvLabel is not defined.
    */
-  label: PropTypes.string,
+  label?: string;
   /**
    * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
-  labelPv: PropTypes.string,
+  labelPv?: string;
   /**
    * Values of macros that will be substituted in the pv name.
    * eg. {{'$(device)':'testIOC','$(id)':'2'}}
    */
-  macros: PropTypes.object,
+  macros?: object;
   /**
    * Custom maximum to be used, if usePvMinMax is not defined.
    */
-  max: PropTypes.number,
+  max?: number;
   /**
    * Custom PV to define the maximum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
-  maxGapPv: PropTypes.string,
+  maxGapPv?: string;
   /**
    * Custom minimum value to be used, if usePvMinMax is not defined.
    */
-  min: PropTypes.number,
+  min?: number;
   /**
    * Custom PV to define the minimum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
-  minPv: PropTypes.string,
+  minPv?: string;
 
   /**
    * Custom precision to round the value.
    */
-  prec: PropTypes.number,
+  prec?: number;
   /**
    * Custom PV to define the precision to be used, usePvPrecision must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
-  precPv: PropTypes.string,
+  precPv?: string;
 
   /**
    * Custom units to be used, if usePvUnits is not defined.
    */
-  units: PropTypes.string,
+  units?: string;
   /**
    * Custom PV to define the units to be used, usePvUnits must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
-  unitsPv: PropTypes.string,
+  unitsPv?: string;
   /**
    * Directive to fill the component's label with
    * the value contained in the  pv metadata's DESC field or the labelPv value.
    * If not defined it uses the custom label as defined by the label prop.
    */
-  usePvLabel: PropTypes.bool,
+  usePvLabel?: boolean;
   /**
    * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver.
    * The pyEpics metadata is unfortunately static and the values used will be the initial values that pvserver receives when it connects the first time.
@@ -405,28 +429,28 @@ SlitXY.propTypes = {
    * The same is the case for the precPV, labelPv, alarmPv, unitsPv and minPv.
    * By setting useMetadata to false also enables connection to other variables as defined by different protocols.
    */
-  useMetadata: PropTypes.bool,
+  useMetadata?: boolean;
   /**
    * Directive to use the pv metadata's HOPR and LOPR fields or the minPv and maxGapPv values
    * to limit the maximum and minimum values
    * that can be contained in the value.
    * If not defined it uses the custom min and max as defined by the min and max prop.
    */
-  usePvMinMax: PropTypes.bool,
+  usePvMinMax?: boolean;
   /**
    * Directive to round the value using the precision field of the PV metadata or precPv.
    * If not defined it uses the custom precision as defined by the prec prop.
    */
-  usePvPrecision: PropTypes.bool,
+  usePvPrecision?: boolean;
   /**
    * Directive to use the units contained in the   pv metdata's EGU field or unitsPv.
    *  If not defined it uses the custom units as defined by the units prop.
    */
-  usePvUnits: PropTypes.bool,
+  usePvUnits?: boolean;
   /**
    * Directive to use PV's string values.
    */
-  useStringValue: PropTypes.bool,
+  useStringValue?: boolean;
 
   /**
    * If defined, then the string representation of the number can be formatted
@@ -434,82 +458,67 @@ SlitXY.propTypes = {
    * eg. numberFormat={{notation: 'engineering',precision: 3}}.
    * See https://mathjs.org/docs/reference/functions/format.html for more examples
    */
-  numberFormat: PropTypes.object,
+  numberFormat?: object;
 
   /** Name of the pv process variable, eg. '$(device):test$(id)'*/
-  pv: PropTypes.string,
+  pv?: string;
 
   /**
    * Tooltip Text
    */
-  tooltip: PropTypes.string,
+  tooltip?: string;
   /**
    * Directive to show the tooltip
    */
-  showTooltip: PropTypes.bool,
+  showTooltip?: boolean;
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-  tooltipProps: PropTypes.object,
+  tooltipProps?: object;
   /**
    *  A System description object the passed to the callback function when the item is clicked on
    */
-  system: PropTypes.object,
+  system?: object;
   /**
    *  A callback function when the item is clicked on, returns the system object
    */
-  handleOnClick: PropTypes.func,
+  handleOnClick?: Function;
   /**
    * Y Offset for the label
    */
-  labelOffsetY: PropTypes.number,
+  labelOffsetY?: number;
   /**
    * X Offset for the label
    */
-  labelOffsetX: PropTypes.number,
+  labelOffsetX?: number;
   /**
    * Y Offset for the pv value
    */
-  valueOffsetY: PropTypes.number,
+  valueOffsetY?: number;
   /**
    * X Offset for the pv value
    */
-  valueOffsetX: PropTypes.number,
+  valueOffsetX?: number;
   /**
    * enable a shadow behind the text
    */
-  textShadow: PropTypes.bool,
+  textShadow?: boolean;
   /**
    * use a gradient fil on the component
    */
-  componentGradient: PropTypes.bool,
+  componentGradient?: boolean;
   /**
    * enable a shadow behind the component
    */
-  componentShadow: PropTypes.bool,
+  componentShadow?: boolean;
   /**
    * Direct to show the label
    */
-  showLabel: PropTypes.bool,
+  showLabel?: boolean;
   /**
    * Direct to show the value
    */
-  showValue: PropTypes.bool,
-};
-
-SlitXY.defaultProps = {
-  debug: false,
-  showLabel: true,
-  showValue: true,
-  alarmSensitive: false,
-  showTooltip: false,
-  labelOffsetY: 0,
-  labelOffsetX: 0,
-  valueOffsetY: 0,
-  valueOffsetX: 0,
-  componentShadow: true,
-  textShadow: false,
-  componentGradient: true,
-};
+  showValue?: boolean;
+}
 
 export default SlitXY;

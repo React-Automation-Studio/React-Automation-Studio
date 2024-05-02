@@ -162,7 +162,7 @@ export const useLocalPV = (props) => {
  *
  * A hook called `useLocalPV` is also exported which returns the pv object.
  */
-const LocalPV = (props) => {
+const LocalPV = ({ debug = false, ...props }: LocalPVProps) => {
   const pv = useLocalPV(props);
   useEffect(() => {
     if (props.pvData) {
@@ -173,7 +173,7 @@ const LocalPV = (props) => {
 
   return (
     <React.Fragment>
-      {props.debug && (
+      {debug && (
         <Typography>
           {"PV name: " + pv.pvname}
           {"Value: " + pv.value}
@@ -183,45 +183,37 @@ const LocalPV = (props) => {
   );
 };
 
-LocalPV.propTypes = {
+interface LocalPVProps {
   /**
    * If defined, then the DataConnection and
    * the widget debugging information will be displayed.
    */
-  debug: PropTypes.bool,
+  debug?: boolean;
 
   /**
    * Local variable initialization value.
    * When using loc:// type PVs.
    */
-  initialLocalVariableValue: PropTypes.string,
+  initialLocalVariableValue?: string;
   /**
    * when writing to the  pv's output value, increment newValueTrigger to tell the pv component emit the output value to the process variable.
    */
-  newValueTrigger: PropTypes.number,
+  newValueTrigger?: number;
   /**
    * the output value to the process variable. It is only emitted once the newValueTrigger is incremented.
    */
-  outputValue: PropTypes.any,
+  outputValue?: any;
 
   /** Name of the process variable,  eg. '$(device):test$(id)'*/
-  pv: PropTypes.string,
+  pv: string;
 
   /** A function that returns the pv object */
-  pvData: PropTypes.func,
+  pvData?: (pv: any) => void;
 
   /**
    * Directive to use PV's string values.
    */
-  useStringValue: PropTypes.bool,
-};
-
-/**
- * Default props.definition for all widgets linked to
- * PVs storing analog values.
- */
-LocalPV.defaultProps = {
-  debug: false,
-};
+  useStringValue?: boolean;
+}
 
 export default LocalPV;

@@ -1,11 +1,10 @@
 import React from "react";
 import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
-import PropTypes from "prop-types";
 import Widget from "../SystemComponents/Widgets/Widget";
 import { useTheme } from "@mui/material";
 
 const RadioButtonGroupComponent = (props) => {
-  const theme=useTheme();
+  const theme = useTheme();
   const handleChange = (event) => {
     let value = event.target.value;
     props.handleImmediateChange(value);
@@ -57,7 +56,12 @@ const RadioButtonGroupComponent = (props) => {
  * Material-UI List API:
  * https://mui.com/api/list
  */
-const RadioButtonGroup = (props) => {
+const RadioButtonGroup = ({
+  labelPlacement = "top",
+  bitLabelPlacement = "end",
+  showTooltip = false,
+  ...props
+}: RadioButtonGroupProps) => {
   return (
     <Widget
       {...props}
@@ -68,71 +72,64 @@ const RadioButtonGroup = (props) => {
       min={undefined}
       max={undefined}
       prec={undefined}
+      labelPlacement={labelPlacement}
+      bitLabelPlacement={bitLabelPlacement}
+      showTooltip={showTooltip}
     />
   );
 };
 
-/**
- * Specific props type and default values for this widgets.
- * They extends the ones provided for a generic widget.
- */
-RadioButtonGroup.propTypes = {
+interface RadioButtonGroupProps {
   /**
    * If defined, this array of strings overrides the default EPICS MBBI/O
    * pv strings and are displayed as the choices in the RadioButtonGroup component.
    */
-  custom_selection_strings: PropTypes.array,
+  custom_selection_strings?: string[];
 
   /** Name of the process variable,  eg. '$(device):test$(id)'*/
-  pv: PropTypes.string.isRequired,
+  pv: string;
   /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
-  macros: PropTypes.object,
+  macros?: Record<string, string>;
 
   /** Custom label to be used, if  `usePvLabel` is not defined. */
-  label: PropTypes.string,
+  label?: string;
   /** If defined, then the DataConnection debugging information will be displayed*/
-  debug: PropTypes.bool,
+  debug?: boolean;
   /** label placement*/
-  labelPlacement: PropTypes.oneOf(["start", "top", "bottom", "end"]),
+  labelPlacement?: "start" | "top" | "bottom" | "end";
 
   /** local variable initialization value*/
-  initialLocalVariableValue: PropTypes.string,
+  initialLocalVariableValue?: string;
   /**
    * Directive to fill the component's label with
    * the value contained in the  pv metadata's DESC field or the labelPv value.
    * If not defined it uses the custom label as defined by the label prop.
    */
-  usePvLabel: PropTypes.bool,
+  usePvLabel?: boolean;
   /**
    * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
-  labelPv: PropTypes.string,
+  labelPv?: string;
   /** Any of the MUI RadioGroup Props can applied by defining them as an object
    *
    */
-  muiRadioGroupProps: PropTypes.object,
+  muiRadioGroupProps?: Record<string, any>;
   /**
    * Tooltip Text
    */
-  tooltip: PropTypes.string,
+  tooltip?: string;
   /**
    * Directive to show the tooltip
    */
-  showTooltip: PropTypes.bool,
+  showTooltip?: boolean;
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-  tooltipProps: PropTypes.object,
+  tooltipProps?: Record<string, any>;
   /**
    * If defined, the position of the bit labels relative to the widget.
    */
-  bitLabelPlacement: PropTypes.oneOf(["start", "end", "top", "bottom"]),
-};
-
-RadioButtonGroup.defaultProps = {
-  labelPlacement: "top",
-  bitLabelPlacement: "end",
-  showTooltip: false,
-};
+  bitLabelPlacement?: "start" | "end" | "top" | "bottom";
+}
 
 export default RadioButtonGroup;

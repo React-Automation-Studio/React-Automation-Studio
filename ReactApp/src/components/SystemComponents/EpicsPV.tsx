@@ -54,7 +54,7 @@ export const useEpicsPV = (props) => {
   const [socket, setSocket] = useState(null);
   useEffect(() => {
     if (props.makeNewSocketIoConnection === true) {
-      let newSocket = io(context.pvServerUrl ?? '/pvServer', {
+      let newSocket = io(context.pvServerUrl ?? "/pvServer", {
         transports: ["websocket"],
         forceNew: true,
       });
@@ -141,7 +141,7 @@ export const useEpicsPV = (props) => {
       pvConnectionIdRef.current = uuidv4();
       socketRef.current.emit("request_pv_info", {
         data: pv.pvname,
-        useBinaryValue:props.useBinaryValue?true:false,
+        useBinaryValue: props.useBinaryValue ? true : false,
         pvConnectionId: pvConnectionIdRef.current,
         clientAuthorisation: jwtRef.current,
       });
@@ -177,7 +177,7 @@ export const useEpicsPV = (props) => {
       if (socket) {
         socketRef.current.emit("request_pv_info", {
           data: pv.pvname,
-          useBinaryValue:props.useBinaryValue?true:false,
+          useBinaryValue: props.useBinaryValue ? true : false,
           pvConnectionId: pvConnectionIdRef.current,
           clientAuthorisation: jwtRef.current,
         });
@@ -249,7 +249,6 @@ interface EpicsPVProps {
   useBinaryValue?: boolean;
 }
 
-
 /**
  * The EpicsPV  component handles connections to EPICS process variables.
  * This is done by defining the pv name in the pv prop and using a prefix to define protocol ie "pva://" for EPICS .
@@ -263,21 +262,25 @@ interface EpicsPVProps {
  *
  *
  **/
-const EpicsPV = (
-  {
-    debug= false,
-  makeNewSocketIoConnection= true,
-  useBinaryValue=false,
-    ...props}: EpicsPVProps
-  ) => {
-  const pv = useEpicsPV(props);
+const EpicsPV = ({
+  debug = false,
+  makeNewSocketIoConnection = true,
+  useBinaryValue = false,
+  ...props
+}: EpicsPVProps) => {
+  const pv = useEpicsPV({
+    debug: debug,
+    makeNewSocketIoConnection: makeNewSocketIoConnection,
+    useBinaryValue: useBinaryValue,
+    ...props,
+  });
   useEffect(() => {
     if (props.pvData) {
       props.pvData(pv);
     }
   }, [pv, props.pvData]);
   if (debug) {
-    console.log(`EpicsPV ${props.pv}:`, {props, pv});
+    console.log(`EpicsPV ${props.pv}:`, { props, pv });
   }
   return (
     <React.Fragment>
@@ -290,6 +293,5 @@ const EpicsPV = (
     </React.Fragment>
   );
 };
-
 
 export default EpicsPV;

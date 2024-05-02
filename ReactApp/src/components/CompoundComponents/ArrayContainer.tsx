@@ -1,5 +1,4 @@
 import React, { Children, cloneElement, useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import { FormControlLabel, useTheme } from "@mui/material";
 import widgetProps from "../SystemComponents/Utils/widgetProps";
 
@@ -24,19 +23,19 @@ import widgetProps from "../SystemComponents/Utils/widgetProps";
  * based on mbbo/mbbi PVs (i.e. RadioButtonGroup, SelectionInput,
  * SelectionList) and Graphs.
  */
-function ArrayContainer(props) {
-  const {
-    registers,
-    registersLabel,
-    label,
-    labelPlacement,
-    direction,
-    visibleItemsCount,
-    maxItemsCount,
-    itemMinWidth,
-    spacing,
-    showIndices,
-  } = props;
+function ArrayContainer({
+  direction = "vertical",
+  labelPlacement = "top",
+  itemMinWidth = 2,
+  spacing = 1,
+  showIndices = true,
+  registers,
+  registersLabel,
+  label,
+  visibleItemsCount,
+  maxItemsCount,
+  ...props
+}: ArrayContainerProps) {
   const theme = useTheme();
   const [startIdx, setStartIdx] = useState(0);
   const [items, setItems] = useState([]);
@@ -177,15 +176,15 @@ function ArrayContainer(props) {
   );
 }
 
-ArrayContainer.propTypes = {
+interface ArrayContainerProps {
   /**
-   * Custom label to be used, if  usePvLabel is not defined.
+   * Custom label to be used, if usePvLabel is not defined.
    */
-  label: PropTypes.string,
+  label?: string;
   /**
    * Label placement position
    */
-  labelPlacement: PropTypes.oneOf(["start", "top", "bottom", "end"]),
+  labelPlacement?: "start" | "top" | "bottom" | "end";
   /**
    * Users can choose how many items they want to show.
    * If not specified, the default value is 10.
@@ -195,21 +194,7 @@ ArrayContainer.propTypes = {
    * in any case, is equal to this number.
    * Must be a non negative integer.
    */
-  visibleItemsCount: (props, propName, componentName) => {
-    widgetProps.nonNegativeInteger(props, propName, componentName);
-    if (props[propName] > props.maxItemsCount) {
-      return new Error(
-        "Invalid prop `" +
-          propName +
-          "` supplied to" +
-          " `" +
-          componentName +
-          "`. Prop `" +
-          propName +
-          "` must be lower or equal than `maxItemsCount`. Validation failed."
-      );
-    }
-  },
+  visibleItemsCount?: number;
   /**
    * Max items in the array.
    * If not specified, the default value is 100.
@@ -219,58 +204,36 @@ ArrayContainer.propTypes = {
    * in any case, is equal to this number.
    * Must be a non negative integer and greater or equal than `visibleItemsCount`
    */
-  maxItemsCount: widgetProps.nonNegativeInteger,
+  maxItemsCount?: number;
   /**
    * When receiving a PV storing an array of values users can choose a subset of these value.
    * Registers accept the indexes of the registers to effectively show.
    * Order does count!
    */
-  registers: PropTypes.arrayOf(widgetProps.nonNegativeInteger),
+  registers?: number[];
   /**
    * When receiving a PV storing an array of values users can assign a label to each register
    * or a subset of them.
    */
-  registersLabel: PropTypes.arrayOf(PropTypes.string),
+  registersLabel?: string[];
   /**
    * Directive to use the array indices as the labels, unless the registersLabel prop is defined
    */
-  showIndices: PropTypes.bool,
+  showIndices?: boolean;
   /**
    * Directive to display array elements horizontally or vertically aligned.
    */
-  direction: PropTypes.oneOf(["vertical", "horizontal"]),
+  direction?: "vertical" | "horizontal";
   /**
    * Min space width, in percentage, an item can occupy.
    */
-
-  itemMinWidth: (props, propName, componentName) => {
-    if (!(props[propName] >= 0 && props[propName] <= 100)) {
-      return new Error(
-        "Invalid prop `" +
-          propName +
-          "` supplied to" +
-          " `" +
-          componentName +
-          "`. Prop `" +
-          propName +
-          "` must be a floating number between 0 and 100. Validation failed."
-      );
-    }
-  },
+  itemMinWidth?: number;
   /**
    * Spacing between items. Follows the same logic as grid container's spacing.
    * Must be a non negative integer.
    */
-  spacing: widgetProps.nonNegativeInteger,
-};
-
-ArrayContainer.defaultProps = {
-  direction: "vertical",
-  labelPlacement: "top",
-  itemMinWidth: 2,
-  spacing: 1,
-  showIndices: true,
-};
+  spacing?: number;
+}
 
 export default ArrayContainer;
 export { ArrayContainer };

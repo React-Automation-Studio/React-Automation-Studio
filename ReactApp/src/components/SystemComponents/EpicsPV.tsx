@@ -263,7 +263,7 @@ interface EpicsPVProps {
  **/
 const EpicsPV = ({
   debug = false,
-  makeNewSocketIoConnection = true,
+  makeNewSocketIoConnection = false,
   useBinaryValue = false,
   ...props
 }: EpicsPVProps) => {

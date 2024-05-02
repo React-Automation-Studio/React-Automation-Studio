@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { Button, FormControlLabel } from "@mui/material";
-import PropTypes from "prop-types";
-import Widget from "../SystemComponents/Widgets/Widget";
 import { useEpicsPV } from "../SystemComponents/EpicsPV";
 
 const MultiActionButtonComponent = (props) => {
@@ -272,62 +270,68 @@ const MultiActionButtonComponent = (props) => {
  * Material-UI Button API:
  * https://mui.com/api/button/
  * */
-const MultiActionButton = (props) => {
+const MultiActionButton = ({
+  showTooltip = false,
+  color = "primary",
+  ...props
+}: MultiActionButtonProps) => {
   return (
-    <MultiActionButtonComponent {...props} formControlLabel={props.label} />
+    <MultiActionButtonComponent
+      {...props}
+      formControlLabel={props.label}
+      showTooltip={showTooltip}
+      color={color}
+    />
   );
 };
 
-MultiActionButton.propTypes = {
+interface MultiActionButtonProps {
   /** Define the string on the button.*/
-  actionString: PropTypes.string,
+  actionString: string;
   /**  Define the value to write into the PV.*/
-  actionValues: PropTypes.any,
+  actionValues: any;
   /** Name of the process variable,  eg. '$(device):test$(id)'*/
-  pv: PropTypes.string,
+  pv: string;
   /** Array of the process variables, eg. '$(device):test$(id)'*/
-  pvs: PropTypes.arrayOf(PropTypes.string),
+  pvs: string[];
   /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
-  macros: PropTypes.object,
+  macros: object;
   /** Directive to fill the label with the value contained in the  EPICS pv's DESC field. */
-  usePvLabel: PropTypes.bool,
+  usePvLabel: boolean;
 
   /** Custom color to be used, must be derived from Material UI them color's*/
-  color: PropTypes.string,
+  color: string;
 
   /** Custom label to be used, if  `usePvLabel` is not defined. */
-  label: PropTypes.string,
+  label: string;
 
   /** Position of label*/
-  labelPlacement: PropTypes.oneOf(["top", "bottom", "start", "end"]),
+  labelPlacement: "top" | "bottom" | "start" | "end";
 
   /** If defined, then the string value of the EPICS enumerator type will be forced to be used, if not defined the the enumerator index is used */
-  useStringValue: PropTypes.bool,
+  useStringValue: boolean;
   /** If defined, then the DataConnection debugging information will be displayed*/
-  debug: PropTypes.bool,
+  debug: boolean;
   /** local variable initialization value*/
-  initialLocalVariableValue: PropTypes.string,
+  initialLocalVariableValue: string;
   /**
    * Any of the MUI Button Props can applied by defining them as an object
    */
-  muiButtonProps: PropTypes.object,
+  muiButtonProps: object;
   /**
    * Tooltip Text
    */
-  tooltip: PropTypes.string,
+  tooltip: string;
   /**
    * Directive to show the tooltip
    */
-  showTooltip: PropTypes.bool,
+  showTooltip: boolean;
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-  tooltipProps: PropTypes.object,
-};
+  tooltipProps: object;
+}
 
-MultiActionButton.defaultProps = {
-  showTooltip: false,
-  color: "primary",
-};
+MultiActionButton.defaultProps = {};
 
 export default MultiActionButton;

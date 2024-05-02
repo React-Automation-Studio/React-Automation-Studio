@@ -1,20 +1,18 @@
 import React from "react";
-import {
-  FormControlLabel,
-  List,
-  ListItem,
-  ListItemText,
-} from "@mui/material";
-import PropTypes from "prop-types";
+import { FormControlLabel, List, ListItem, ListItemText } from "@mui/material";
 import Widget from "../SystemComponents/Widgets/Widget";
 import makeStyles from "@mui/styles/makeStyles";
 
 const useStyles = makeStyles((theme) => {
   const borderColor =
-    theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.23)' : 'rgba(255, 255, 255, 0.23)'; //copied from material ui textfield 
+    theme.palette.mode === "light"
+      ? "rgba(0, 0, 0, 0.23)"
+      : "rgba(255, 255, 255, 0.23)"; //copied from material ui textfield
   const borderColorTop =
-    theme.palette.mode === 'light' ? 'rgba(0, 0, 0,0)' : 'rgba(255, 255, 255, 0)';
-  return ({
+    theme.palette.mode === "light"
+      ? "rgba(0, 0, 0,0)"
+      : "rgba(255, 255, 255, 0)";
+  return {
     root: {
       backgroundColor: theme.palette.background.paper,
       borderRadius: 4,
@@ -27,7 +25,6 @@ const useStyles = makeStyles((theme) => {
       marginBottom: "auto",
       marginLeft: "auto",
       marginRight: "auto",
-      
     },
     button: {
       textAlign: "center",
@@ -37,19 +34,18 @@ const useStyles = makeStyles((theme) => {
       marginTop: -1,
     },
     buttonLastHorizontal: {
-      borderRight: '1px solid '+ borderColor ,
-      borderTop: '1px solid '+ borderColor ,
-      borderBottom: '1px solid '+ borderColor ,
-      borderLeft: '1px solid '+ borderColorTop ,
+      borderRight: "1px solid " + borderColor,
+      borderTop: "1px solid " + borderColor,
+      borderBottom: "1px solid " + borderColor,
+      borderLeft: "1px solid " + borderColorTop,
       borderBottomRightRadius: 4,
       borderTopRightRadius: 4,
       textAlign: "center",
       marginLeft: -1,
-      '&:hover' : {
+      "&:hover": {
         borderStyle: "solid",
         borderColor: theme.palette.text.main,
         border: 1,
-      
       },
     },
     buttonFirstHorizontal: {
@@ -59,35 +55,35 @@ const useStyles = makeStyles((theme) => {
       borderBottomLeftRadius: 4,
       borderTopLeftRadius: 4,
       textAlign: "center",
-      '&:hover' : {
+      "&:hover": {
         borderStyle: "solid",
         borderColor: theme.palette.text.main,
         border: 1,
       },
     },
     buttonMiddleHorizontal: {
-      borderRight: '1px solid '+ borderColor ,
-      borderTop: '1px solid '+ borderColor ,
-      borderBottom: '1px solid '+ borderColor ,
-      borderLeft: '1px solid '+ borderColorTop ,
+      borderRight: "1px solid " + borderColor,
+      borderTop: "1px solid " + borderColor,
+      borderBottom: "1px solid " + borderColor,
+      borderLeft: "1px solid " + borderColorTop,
       marginLeft: -1,
       textAlign: "center",
-      '&:hover' : {
+      "&:hover": {
         borderStyle: "solid",
         borderColor: theme.palette.text.main,
         border: 1,
       },
     },
     buttonLastVertical: {
-      borderRight: '1px solid '+ borderColor ,
-      borderLeft: '1px solid '+ borderColor ,
-      borderBottom: '1px solid '+ borderColor ,
-      borderTop: '1px solid '+ borderColorTop ,
+      borderRight: "1px solid " + borderColor,
+      borderLeft: "1px solid " + borderColor,
+      borderBottom: "1px solid " + borderColor,
+      borderTop: "1px solid " + borderColorTop,
       borderBottomRightRadius: 4,
       borderBottomLeftRadius: 4,
       textAlign: "center",
       marginTop: -1,
-      '&:hover' : {
+      "&:hover": {
         borderStyle: "solid",
         borderColor: theme.palette.text.main,
         border: 1,
@@ -100,20 +96,20 @@ const useStyles = makeStyles((theme) => {
       borderTopRightRadius: 4,
       borderTopLeftRadius: 4,
       textAlign: "center",
-      '&:hover' : {
+      "&:hover": {
         borderStyle: "solid",
         borderColor: theme.palette.text.main,
         border: 1,
       },
     },
     buttonMiddleVertical: {
-      borderRight: '1px solid '+ borderColor ,
-      borderLeft: '1px solid '+ borderColor ,
-      borderBottom: '1px solid '+ borderColor ,
-      borderTop: '1px solid '+ borderColorTop ,
+      borderRight: "1px solid " + borderColor,
+      borderLeft: "1px solid " + borderColor,
+      borderBottom: "1px solid " + borderColor,
+      borderTop: "1px solid " + borderColorTop,
       marginTop: -1,
       textAlign: "center",
-      '&:hover' : {
+      "&:hover": {
         borderStyle: "solid",
         borderColor: theme.palette.text.main,
         border: 1,
@@ -122,7 +118,7 @@ const useStyles = makeStyles((theme) => {
     listVertical: {
       width: "100%",
       height: "100%",
-      padding: theme.spacing(1)
+      padding: theme.spacing(1),
     },
     listHorizontal: {
       display: "flex",
@@ -131,8 +127,7 @@ const useStyles = makeStyles((theme) => {
       height: "100%",
       padding: theme.spacing(1),
     },
-  }
-  )
+  };
 });
 
 /**
@@ -145,21 +140,20 @@ const useStyles = makeStyles((theme) => {
  * https://mui.com/api/list
  */
 const SelectionListComponent = (props) => {
-  const classes =useStyles();
+  const classes = useStyles();
   /**
    * Store the new item value in the correct PV's state.
    * @param {String} value
    */
   const handleListItemClick = (value) => {
     props.handleImmediateChange(value);
-  }
+  };
 
   /**
    * Create a list with the value in enumStrs.
    * @param {array} enumStrs
    */
   const getListItems = (enumStrs, value) => {
-  
     let listItems = enumStrs.map((item, idx) => {
       let className;
       if (props.horizontal) {
@@ -180,23 +174,23 @@ const SelectionListComponent = (props) => {
       return (
         <ListItem
           key={item.toString()}
-         
           className={className}
           value={item}
           button
           selected={value === item}
           onClick={props.disabled ? undefined : () => handleListItemClick(item)}
         >
-          
           <ListItemText primary={item} />
-          
         </ListItem>
       );
     });
     return listItems;
-  }
+  };
 
-  let itemList = getListItems(props.initialized ? props.enumStrs : ["N/A", "Disconnected"], props.initialized ? props.value : "Disconnected");
+  let itemList = getListItems(
+    props.initialized ? props.enumStrs : ["N/A", "Disconnected"],
+    props.initialized ? props.value : "Disconnected"
+  );
 
   return (
     <FormControlLabel
@@ -206,9 +200,7 @@ const SelectionListComponent = (props) => {
       control={
         <List
           className={
-            props.horizontal
-              ? classes.listHorizontal
-              : classes.listVertical
+            props.horizontal ? classes.listHorizontal : classes.listVertical
           }
           component="nav"
           variant="outlined"
@@ -221,59 +213,66 @@ const SelectionListComponent = (props) => {
       labelPlacement={props.labelPlacement}
     />
   );
-}
+};
 
-const SelectionList = (props) => {
+const SelectionList = ({
+  horizontal = false,
+  labelPlacement = "top",
+  showTooltip = false,
+  ...props
+}: SelectionListProps) => {
   return (
-    <Widget {...props} useStringValue={true} component={SelectionListComponent} usePvMinMax={false} usePvPrecision={false} min={undefined} max={undefined} prec={undefined} />
-  )
-}
+    <Widget
+      {...props}
+      useStringValue={true}
+      component={SelectionListComponent}
+      usePvMinMax={false}
+      usePvPrecision={false}
+      min={undefined}
+      max={undefined}
+      prec={undefined}
+      horizontal={horizontal}
+      labelPlacement={labelPlacement}
+      showTooltip={showTooltip}
+    />
+  );
+};
 
-/**
- * Specific props type and default values for this widgets.
- * They extends the ones provided for a generic widget.
- */
-SelectionList.propTypes = {
+interface SelectionListProps {
   /** Name of the process variable,  eg. '$(device):test$(id)'*/
-  pv: PropTypes.string.isRequired,
+  pv: string;
   /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
-  macros: PropTypes.object,
+  macros?: object;
 
   /**  Display list horizontally.*/
-  horizontal: PropTypes.bool,
+  horizontal?: boolean;
 
   /** If defined, this array of strings overrides the default EPICS MBBI/O pv strings and are displayed as the choices in the RadioButtonGroup component*/
-  custom_selection_strings: PropTypes.array,
+  custom_selection_strings?: string[];
   /** label placement*/
-  labelPlacement: PropTypes.oneOf(['start', 'top', 'bottom', 'end']),
+  labelPlacement?: "start" | "top" | "bottom" | "end";
   /**
    * Directive to fill the component's label with
    * the value contained in the  pv metadata's DESC field or the labelPv value.
    * If not defined it uses the custom label as defined by the label prop.
    */
-  usePvLabel: PropTypes.bool,
+  usePvLabel?: boolean;
   /**
    * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
-  labelPv: PropTypes.string,
+  labelPv?: string;
   /**
    * Tooltip Text
    */
-  tooltip:PropTypes.string,
+  tooltip?: string;
   /**
    * Directive to show the tooltip
    */
-  showTooltip:PropTypes.bool,
+  showTooltip?: boolean;
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-  tooltipProps:PropTypes.object,
-};
-
-SelectionList.defaultProps = {
-  horizontal: false,
-  labelPlacement: 'top',
-  showTooltip:false
-};
+  tooltipProps?: object;
+}
 
 export default SelectionList;

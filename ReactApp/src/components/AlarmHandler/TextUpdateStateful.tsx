@@ -213,6 +213,5 @@ interface TextUpdateStatefulProps {
   tooltipProps?: object;
 }
 
-TextUpdateStateful.defaultProps = {};
 
 export default withStyles(styles, { withTheme: true })(TextUpdateStateful);

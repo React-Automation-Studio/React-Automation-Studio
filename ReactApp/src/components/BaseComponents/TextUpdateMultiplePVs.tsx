@@ -2,7 +2,6 @@ import React from "react";
 
 import Widget from "../SystemComponents/Widgets/Widget";
 import { Typography } from "@mui/material";
-import PropTypes from "prop-types";
 import { create, all } from "mathjs";
 import { useTheme } from "@mui/material";
 import { grey } from "@mui/material/colors";
@@ -23,7 +22,8 @@ const TextUpdateMultiplePVsComponent = (props) => {
         if (props.alarmSensitive === true) {
           if (pvs[pv].severity === 1) {
             textFieldSx = {
-              borderColor: theme.palette.mode === "dark" ? grey[700] : grey[300],
+              borderColor:
+                theme.palette.mode === "dark" ? grey[700] : grey[300],
               borderRadius: 2,
               borderWidth: 1,
               borderStyle: "solid",
@@ -38,9 +38,10 @@ const TextUpdateMultiplePVsComponent = (props) => {
                 theme.palette.alarm.minor.dark +
                 " 100%)",
             };
-          }  else if (pvs[pv].severity === 2) {
+          } else if (pvs[pv].severity === 2) {
             textFieldSx = {
-              borderColor: theme.palette.mode === "dark" ? grey[700] : grey[300],
+              borderColor:
+                theme.palette.mode === "dark" ? grey[700] : grey[300],
               borderWidth: 1,
               borderStyle: "solid",
               borderRadius: 2,
@@ -99,21 +100,36 @@ const TextUpdateMultiplePVsComponent = (props) => {
  * The component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
  * The margins and spacing must be controlled from the parent component.<br/><br/>
  */
-const TextUpdateMultiplePVs = (props) => {
-  return <Widget {...props} component={TextUpdateMultiplePVsComponent} />;
+const TextUpdateMultiplePVs = ({
+  debug = false,
+  useMetadata = true,
+  alarmSensitive = false,
+  showTooltip = false,
+  ...props
+}: TextUpdateMultiplePVsProps) => {
+  return (
+    <Widget
+      {...props}
+      component={TextUpdateMultiplePVsComponent}
+      debug={debug}
+      useMetadata={useMetadata}
+      alarmSensitive={alarmSensitive}
+      showTooltip={showTooltip}
+    />
+  );
 };
 
-TextUpdateMultiplePVs.propTypes = {
+interface TextUpdateMultiplePVsProps {
   /**
    * Directive to use the  alarm severity status to alter the fields background color.
    */
-  alarmSensitive: PropTypes.bool,
+  alarmSensitive: boolean;
 
   /**
    * If defined, then the DataConnection and
    * the widget debugging information will be displayed.
    */
-  debug: PropTypes.bool,
+  debug: boolean;
 
   /**
    * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver.
@@ -125,17 +141,17 @@ TextUpdateMultiplePVs.propTypes = {
    * The same is the case for the precPV, labelPv, alarmPv, unitsPv and minPv.
    * By setting useMetadata to false also enables connection to other variables as defined by different protocols.
    */
-  useMetadata: PropTypes.bool,
+  useMetadata: boolean;
 
   /**
    * Directive to use the units contained in the   pv metdata's EGU field or unitsPv.
    *  If not defined it uses the custom units as defined by the units prop.
    */
-  usePvUnits: PropTypes.bool,
+  usePvUnits: boolean;
   /**
    * Directive to use PV's string values.
    */
-  useStringValue: PropTypes.bool,
+  useStringValue: boolean;
 
   /**
    * If defined, then the string representation of the number can be formatted
@@ -143,32 +159,25 @@ TextUpdateMultiplePVs.propTypes = {
    * eg. numberFormat={{notation: 'engineering',precision: 3}}.
    * See https://mathjs.org/docs/reference/functions/format.html for more examples
    */
-  numberFormat: PropTypes.object,
+  numberFormat?: object;
 
   /**
    * Tooltip Text
    */
-  tooltip: PropTypes.string,
+  tooltip?: string;
   /**
    * Directive to show the tooltip
    */
-  showTooltip: PropTypes.bool,
+  showTooltip: boolean;
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-  tooltipProps: PropTypes.object,
+  tooltipProps?: object;
 
   /**
    * Array of the process variable names
    */
-  pvs: PropTypes.arrayOf(PropTypes.string),
-};
-
-TextUpdateMultiplePVs.defaultProps = {
-  debug: false,
-  useMetadata: true,
-  alarmSensitive: false,
-  showTooltip: false,
-};
+  pvs: string[];
+}
 
 export default TextUpdateMultiplePVs;

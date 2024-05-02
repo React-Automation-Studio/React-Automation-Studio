@@ -274,15 +274,31 @@ const PlotData = (props) => {
 
 */
 
-const HarpGraphY = (props) => {
+const HarpGraphY = (
+  {
+    updateRate= 100,
+  makeNewSocketIoConnection= false,
+  debug= false,
+  showLegend= true,
+  yAxisTitle= "Y-axis",
+  xAxisTitle= "X-axis",
+  usePolling= false,
+  pollingRate= 100,
+ width= "100%",
+ height= "100%",
+  disableMobileStatic= false,
+    ...props
+  }: HarpGraphYProps
+  
+) => {
   const classes = useStyles();
   const theme = useTheme();
   const backgroundColor = props.backgroundColor
     ? props.backgroundColor
     : theme.palette.background.default;
   const paperRef = useRef(null);
-  const [width, setWidth] = useState(null);
-  const [height, setHeight] = useState(null);
+  const [widthComputed, setWidthComputed] = useState(null);
+  const [heightComputed, setHeightComputed] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
   const handleToggleContextMenu = (event) => {
     event.preventDefault();
@@ -297,30 +313,30 @@ const HarpGraphY = (props) => {
   useEffect(() => {
     const handleResize = () => {
       if (paperRef.current) {
-        setHeight(
-          props.height
-            ? props.height
+        setHeightComputed(
+          height
+            ? height
             : props.aspectRatio
-            ? paperRef.current.offsetWidth * props.aspectRatio
-            : paperRef.current.offsetHeight
+              ? paperRef.current.offsetWidth * props.aspectRatio
+              : paperRef.current.offsetHeight
         );
-        setWidth(paperRef.current.offsetWidth);
+        setWidthComputed(paperRef.current.offsetWidth);
       }
     };
     if (paperRef.current) {
-      setHeight(props.height ? props.height : paperRef.current.offsetWidth);
-      setWidth(paperRef.current.offsetWidth);
+      setHeightComputed(height ? height : paperRef.current.offsetWidth);
+      setWidthComputed(paperRef.current.offsetWidth);
     }
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, [paperRef, props.width, props.height, props.aspectRatio]);
+  }, [paperRef, width, height, props.aspectRatio]);
 
   const [domain, setDomain] = useState([0, 1]);
   useEffect(() => {
     if (props.yAxes !== undefined) {
       let numberOfyAxes = props.yAxes.length;
       let newYPositions = [];
-      let increment = 100 / width;
+      let increment = 100 / widthComputed;
       let newDomain = [increment * (numberOfyAxes - 1), 1];
       let index = 0;
       for (let i = numberOfyAxes - 1; i >= 0; i--) {
@@ -332,7 +348,7 @@ const HarpGraphY = (props) => {
       setDomain([0, 1]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [width]);
+  }, [widthComputed]);
   const yAxes = useCallback(() => {
     let yAxesInit = {};
 
@@ -352,7 +368,7 @@ const HarpGraphY = (props) => {
         typeof props.yMax !== "undefined" ? props.yMax : null,
       ],
       automargin: false,
-      
+
       ticksuffix: props.yUnits ? props.yUnits : "",
       nticks: props.yNoOfTicks ? props.yNoOfTicks : 0,
     };
@@ -368,7 +384,7 @@ const HarpGraphY = (props) => {
   ]);
   const [legend] = useState(() => {
     let legendInit =
-      props.showLegend === true
+      showLegend === true
         ? {
             legend: {
               orientation: "h",
@@ -382,7 +398,10 @@ const HarpGraphY = (props) => {
     return legendInit;
   });
 
-  const [layout, setLayout] = useState({plot_bgcolor: backgroundColor,paper_bgcolor: backgroundColor});
+  const [layout, setLayout] = useState({
+    plot_bgcolor: backgroundColor,
+    paper_bgcolor: backgroundColor,
+  });
 
   useEffect(() => {
     setLayout({
@@ -422,7 +441,7 @@ const HarpGraphY = (props) => {
       },
       paper_bgcolor: backgroundColor,
       ...legend,
-      showlegend: props.showLegend,
+      showlegend: showLegend,
       margin: {
         t: props.title ? 24 : 16,
         r: isMobileOnly ? 16 : 0,
@@ -430,40 +449,40 @@ const HarpGraphY = (props) => {
         b: 48,
       },
       annotations: [
-        props.yAxisTitle && {
+        yAxisTitle && {
           xref: "paper",
           yref: "paper",
           x: 0,
           xanchor: "left",
           y: 1,
           yanchor: "top",
-          text: props.yAxisTitle,
+          text: yAxisTitle,
           textangle: 270,
           showarrow: false,
         },
-        props.xAxisTitle && {
+        xAxisTitle && {
           xref: "paper",
           yref: "paper",
           x: 1,
           xanchor: "right",
           y: 0,
           yanchor: "bottom",
-          text: props.xAxisTitle,
+          text: xAxisTitle,
           showarrow: false,
         },
       ],
     });
   }, [
     theme,
-    props.showLegend,
-    props.xAxisTitle,
+    showLegend,
+    xAxisTitle,
     props.title,
     backgroundColor,
     classes,
     props.xMin,
     props.xTickLabels,
     props.xTickValues,
-    props.yAxisTitle,
+    yAxisTitle,
     yAxes,
     domain,
     legend,
@@ -472,20 +491,33 @@ const HarpGraphY = (props) => {
     props.xTickFormat,
     props.xUnits,
   ]);
- 
+
   return (
     <div
       ref={paperRef}
       className={classes.root}
       style={{
-        width: props.width ? props.width : width,
-        height: props.height ? props.height : height,
+        width: width ? width : widthComputed,
+        height: height ? height : heightComputed,
         backgroundColor: backgroundColor,
       }}
       onWheel={props.onWheel}
       onClick={props.onClick}
     >
-      <PlotData {...props} backgroundColor={backgroundColor}>
+      <PlotData 
+      {...props} 
+      backgroundColor={backgroundColor}
+      updateRate={updateRate}
+      makeNewSocketIoConnection={makeNewSocketIoConnection}
+      debug={debug}
+      showLegend={showLegend}
+      yAxisTitle={yAxisTitle}
+      xAxisTitle={xAxisTitle}
+      usePolling={usePolling}
+      pollingRate={pollingRate}
+      
+      
+      >
         {({ data, contextInfo }) => {
           return (
             <div
@@ -559,105 +591,93 @@ const HarpGraphY = (props) => {
     </div>
   );
 };
-HarpGraphY.propTypes = {
+interface HarpGraphYProps {
   /** Array of the process variables, eg. ['$(device):test$(id0)','$(device):test$(id1)']*/
-  pvs: PropTypes.array.isRequired,
+  pvs: string[];
   /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id0)':'1','$(id1)':'2'}}*/
-  macros: PropTypes.object,
+  macros?: Record<string, string>;
   /** Y axis title. */
-  yAxisTitle: PropTypes.string,
+  yAxisTitle?: string;
   /** X axis title. */
-  xAxisTitle: PropTypes.string,
+  xAxisTitle?: string;
 
   /**
    * Show the plotly mode bar: if true, display permanently, if false hide permanently, if undefined it will display on hover.
    */
-  displayModeBar: PropTypes.bool,
+  displayModeBar?: boolean;
   /** Custom y axis minimum to be used,if not defined the graph will auto-scale */
-  ymin: PropTypes.number,
+  ymin?: number;
   /** Custom y axis maximum to be used,if not defined the graph will auto-scale */
-  ymax: PropTypes.number,
+  ymax?: number;
 
   /** If defined, then the DataConnection debugging information will be displayed*/
-  debug: PropTypes.bool,
+  debug?: boolean;
   /** If defined, then a legend will be displayed,using the string items defined in the array*/
-  legend: PropTypes.array,
+  legend?: string[];
   /** If defined, then the default React-Vis line colors will be overridden using the string items defined in the array*/
-  lineColor: PropTypes.array,
+  lineColor?: string[];
   /** If defined then the length of the line graphs will grow up until the value defined*/
-  maxLength: PropTypes.number,
+  maxLength?: number;
 
   /** Directive to sample the PV value, on the client side at the polling rate*/
-  usePolling: PropTypes.bool,
+  usePolling?: boolean;
   /** Directive to scale the y-axis as a log base 10 value*/
-  yScaleLog10: PropTypes.bool,
+  yScaleLog10?: boolean;
   /**
    * The plotjs format overide for the tick format. This is derived from the <a href="https://github.com/d3/d3-format/blob/v2.0.0/README.md#format">d3 format specification</a>
    * Example: ".3e" : exponential notaion with 3 digits.
    *
    */
-  yTickFormat: PropTypes.string,
+  yTickFormat?: string;
   /**
    * Use this prop to make a seperate socket connection for the graph. It is experimental and can be possbily improve performace and for high data rate pv's and prevent slowing down the user interface
    */
-  makeNewSocketIoConnection: PropTypes.bool,
+  makeNewSocketIoConnection?: boolean;
   /** Polling interval in ms used in polling mode*/
 
-  pollingRate: PropTypes.number,
+  pollingRate?: number;
   // /** If defined then the graph will only update on a value change*/
 
   /** Directive to use PV timestamp on x-axis*/
-  useTimeStamp: PropTypes.bool,
+  useTimeStamp?: boolean;
   /** Graph update perdiod in ms, set this higher for larger number of data points */
-  updateRate: PropTypes.number,
+  updateRate?: number;
 
   /**
    * The plotjs format overide for the y value. This is derived from the <a href="https://github.com/d3/d3-format/blob/v2.0.0/README.md#format">d3 format specification</a>
    * Example: ".3e" : exponential notation with 3 digits.
    *
    */
-  yHoverFormat: PropTypes.string,
+  yHoverFormat?: string;
   /**
    * Directive to show the legend
    */
-  showLegend: PropTypes.bool,
+  showLegend?: boolean;
   /**
    * **Note**: the zoom feature is disabled on a mobile device. To enable set this prop to true.
    */
-  disableMobileStatic: PropTypes.bool,
+  disableMobileStatic?: boolean;
   /** If the height is undefined then the height will be set to parents height, but if the aspectRatio is defined the the height will be set to the width multplied by the aspect ratio*/
-  aspectRatio: PropTypes.number,
+  aspectRatio?: number;
   /**
    * The backgorund color defaults to ```theme.palette.background.default```
    * For a Paper or a Card component set it to ```theme.palette.background.paper```
    */
-  backgroundColor: PropTypes.string,
+  backgroundColor?: string;
   /**
    * Set the width.
    */
-  width: PropTypes.string,
+  width?: string;
   /**
    * Set the height.
    */
-  height: PropTypes.string,
+  height?: string;
   /** Custom y axis units to be used*/
-  yUnits: PropTypes.string,
+  yUnits?: string;
   /** Custom x axis units to be used*/
-  xUnits: PropTypes.string,
-};
+  xUnits?: string;
+}
 
-HarpGraphY.defaultProps = {
-  updateRate: 100,
-  makeNewSocketIoConnection: false,
-  debug: false,
-  showLegend: true,
-  yAxisTitle: "Y-axis",
-  xAxisTitle: "X-axis",
-  usePolling: false,
-  pollingRate: 100,
-  width: "100%",
-  height: "100%",
-  disableMobileStatic: false,
-};
+
 
 export default HarpGraphY;

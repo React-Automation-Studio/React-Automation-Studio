@@ -211,7 +211,15 @@ const ArchiverData = (props) => {
  * <br/>The ArchiveDataViewer will indicate if connection can't be established to the pv's archived data.
  * @param {*} props
  */
-const ArchiverDataViewer = (props) => {
+const ArchiverDataViewer = (
+{
+ 
+  
+  showLegend= false,
+  defaultButtonsExpanded= true,
+  ...props}: ArchiverDataViewerProps
+
+) => {
   const paperRef = useRef(null);
   const classes = useStyles();
   const theme = useTheme();
@@ -548,7 +556,7 @@ const ArchiverDataViewer = (props) => {
     };
   }
   let legend =
-    props.showLegend === true
+    showLegend === true
       ? {
           legend: isMobile
             ? {
@@ -582,18 +590,18 @@ const ArchiverDataViewer = (props) => {
     },
     paper_bgcolor: theme.palette.background.paper,
     ...legend,
-    showlegend: props.showLegend,
+    showlegend: showLegend,
   };
 
   return (
-    <div ref={paperRef} style={{ width: props.width }}>
+    <div ref={paperRef} style={{ width: props.width?props.width:"100%" }}>
       {pvConnections()}
 
       {props.showButtons && (
         <Accordion
           classes={{ root: classes.accordianRoot }}
           elevation={0}
-          defaultExpanded={props.defaultButtonsExpanded}
+          defaultExpanded={defaultButtonsExpanded}
           style={{ marginBottom: 0 }}
         >
           <AccordionSummary expandIcon={<ExpandMoreIcon />}></AccordionSummary>
@@ -802,7 +810,7 @@ const ArchiverDataViewer = (props) => {
         <div
           style={{
             width: width,
-            height: props.height,
+            height: props.height?props.height:"40vh",
             background: theme.palette.background.paper,
             paddingBottom: 8,
           }}
@@ -952,145 +960,119 @@ const ArchiverDataViewer = (props) => {
     </div>
   );
 };
-
-ArchiverDataViewer.propTypes = {
+interface ArchiverDataViewerProps {
   /**
    * 	Is name of the environment variable defined in your .env or docker-compose yaml file file and corresponds to hostname or ip of the archiver followed by `retrieval_url` port, eg DEMO_ARCHIVER
    * In the .env file it should be declared as `DEMO_ARCHIVER=http://localhost:17688`
    */
-  archiver: PropTypes.string,
+  archiver?: string;
   /**
    * The height of the graph
    */
-  height: PropTypes.string,
+  height?: string;
   /**
    * The width of the graph
    */
-  width: PropTypes.string,
+  width?: string;
   /**
    * Direct to show the legend
    */
-  showLegend: PropTypes.bool,
+  showLegend?: boolean;
   /**
    * An array of objects with shape that defines each trace
    */
-  traces: PropTypes.arrayOf(
-    PropTypes.shape({
-      /**
-       * The pv name
-       */
-      pv: PropTypes.string.isRequired,
-      /**
-       * The custom name of the trace
-       */
-      name: PropTypes.string,
-      /**
-       * The type of the trace i.e. `'scatter'`
-       */
-      type: PropTypes.string,
-      /**
-       * The mode of the trace i.e. `'lines'`
-       */
-      mode: PropTypes.string,
-      /**
-       * The custom color of the trace
-       */
-      color: PropTypes.color,
-      /**
-       * Corresponding yAxis index
-       */
-      yAxis: PropTypes.number,
-      /**
-       * The plotjs format overide for the y value. This is derived from the <a href="https://github.com/d3/d3-format/blob/v2.0.0/README.md#format">d3 format specification</a>
-       * Example: ".3e" : exponential notaion with 3 digits.
-       *
-       */
-      yHoverFormat: PropTypes.string,
-    })
-  ),
-
+  traces?: {
+    /**
+     * The pv name
+     */
+    pv: string;
+    /**
+     * The custom name of the trace
+     */
+    name?: string;
+    /**
+     * The type of the trace i.e. `'scatter'`
+     */
+    type?: string;
+    /**
+     * The mode of the trace i.e. `'lines'`
+     */
+    mode?: string;
+    /**
+     * The custom color of the trace
+     */
+    color?: string;
+    /**
+     * Corresponding yAxis index
+     */
+    yAxis?: number;
+    /**
+     * The plotjs format overide for the y value. This is derived from the <a href="https://github.com/d3/d3-format/blob/v2.0.0/README.md#format">d3 format specification</a>
+     * Example: ".3e" : exponential notaion with 3 digits.
+     *
+     */
+    yHoverFormat?: string;
+  }[];
   /**
    * An array of objects with shape that defines each Y Axis
    */
-  yAxes: PropTypes.arrayOf(
-    PropTypes.shape({
-      /**
-       * Axis title
-       */
-      title: PropTypes.string,
-      /**
-       * Axis color
-       */
-      color: PropTypes.string,
-      /**
-       * show or hide the grid
-       */
-      showgrid: PropTypes.bool,
-      /**
-       * The plotjs format overide for the tick format. This is derived from the <a href="https://github.com/d3/d3-format/blob/v2.0.0/README.md#format">d3 format specification</a>
-       * Example: ".3e" : exponential notaion with 3 digits.
-       *
-       */
-      tickFormat: PropTypes.string,
-      /**
-       * 'linear' or 'log' type
-       */
-      type: PropTypes.string,
-    })
-  ),
+  yAxes?: {
+    /**
+     * Axis title
+     */
+    title?: string;
+    /**
+     * Axis color
+     */
+    color?: string;
+    /**
+     * show or hide the grid
+     */
+    showgrid?: boolean;
+    /**
+     * The plotjs format overide for the tick format. This is derived from the <a href="https://github.com/d3/d3-format/blob/v2.0.0/README.md#format">d3 format specification</a>
+     * Example: ".3e" : exponential notaion with 3 digits.
+     *
+     */
+    tickFormat?: string;
+    /**
+     * 'linear' or 'log' type
+     */
+    type?: string;
+  }[];
   /**
    * Expand the buttons accordion
    */
-  defaultButtonsExpanded: PropTypes.bool,
+  defaultButtonsExpanded?: boolean;
   /**
    * Display mode bar, true= display permanently, false=permanently hidden, undefine= auto hide
    */
-  displayModeBar: PropTypes.bool,
+  displayModeBar?: boolean;
   /**
    * Show buttons accordion
    */
-  showButtons: PropTypes.bool,
+  showButtons?: boolean;
   /**
    * When enabled, new data will be polled at 1Hz up to 12 hours of data. The polling rate period then increase linearly as to not overload the archiver
    */
-  livePolling: PropTypes.bool,
+  livePolling?: boolean;
   /**
    * Polling Rate Period in ms, minimum=1000 ms. This value will also override the linear scaling of the polling period for data queries of larger than 12 hours worth of data.
    */
-  pollingRatePeriod: PropTypes.number,
+  pollingRatePeriod?: number;
   /**
    * Sets fromTimeOffset button
    */
-  fromTimeOffset: PropTypes.oneOf([
-    "30s",
-    "1m",
-    "5m",
-    "30m",
-    "1h",
-    "2h",
-    "12h",
-    "1d",
-    "2d",
-    "1w",
-  ]),
+  fromTimeOffset?: "30s" | "1m" | "5m" | "30m" | "1h" | "2h" | "12h" | "1d" | "2d" | "1w";
   /**
    * From  time, ISO date format: (YYYY-MM-DDTHH:MM:SSZ), will override the fromTimeOffset
    */
-  from: PropTypes.string,
+  from?: string;
   /**
    * To  time,  ISO date format: (YYYY-MM-DDTHH:MM:SSZ)
    */
-  to: PropTypes.string,
-};
+  to?: string;
+}
 
-/**
- * Default props.definition
- */
-ArchiverDataViewer.defaultProps = {
-  width: "100%",
-  height: "40vh",
-  showLegend: false,
-  defaultButtonsExpanded: true,
-};
 
 export default ArchiverDataViewer;

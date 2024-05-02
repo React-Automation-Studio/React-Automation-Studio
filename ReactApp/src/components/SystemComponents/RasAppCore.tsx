@@ -8,11 +8,46 @@ import ReactVisCssBaseline from './ReactVisCssBaseline';
 import AutomationStudioContext from './AutomationStudioContext';
 import { io } from 'socket.io-client';
 import RasCssBaseline from './RasCssBaseline';
-import PropTypes from 'prop-types';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import axios from 'axios';
+/**
+ * Props for the RasAppCore component.
+ */
+interface RasAppCoreProps {
+  /**
+   * The default theme for the component.
+   */
+  defaultTheme: string;
+  
+  /**
+   * An object containing different themes.
+   */
+  themes: { [key: string]: any };
+  
+  /**
+   * The timeout for the login process (optional).
+   */
+  loginTimeout?: number;
+  
+  /**
+   * The children components to be rendered.
+   */
+  children: React.ReactNode;
+}
 
-class RasAppCore extends Component {
+/**
+ * Represents the state of the RasAppCore component.
+ */
+interface RasAppCoreState {
+  theme: any;
+  system: any;
+  redirectToLoginPage: boolean;
+  Authenticated: boolean;
+  AuthenticationFailed: boolean;
+}
+
+class RasAppCore extends Component<RasAppCoreProps, RasAppCoreState> {
+
   constructor(props) {
     super(props);
 
@@ -308,7 +343,7 @@ class RasAppCore extends Component {
 
   componentDidMount() {
     window.addEventListener('storage', this.handleLocalStorageChange)
-    setTimeout(this.clearLoggingIn, this.props.loginTimeout)
+    setTimeout(this.clearLoggingIn, this.props.loginTimeout?this.props.loginTimeout:10000)
     this.getInitialRefreshToken();
     let socket = this.state.system.socket;
     socket.on('redirectToLogIn', this.handleRedirectToLogIn);
@@ -345,13 +380,7 @@ class RasAppCore extends Component {
   }
 }
 
-RasAppCore.propTypes = {
-  /** login Timeout */
-  loginTimeout: PropTypes.number,
-}
 
-RasAppCore.defaultProps = {
-  loginTimeout: 10000
-}
+
 
 export default RasAppCore

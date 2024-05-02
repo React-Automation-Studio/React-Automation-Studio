@@ -1,13 +1,9 @@
 import React, { useState } from "react";
-
-import PropTypes from "prop-types";
-
 import Layout from "../UI/Layout/ComposedLayouts/TraditionalLayout";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import { useTheme } from "@mui/system";
-import GraphHeatmap from "./GraphHeatmap";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -32,7 +28,7 @@ import PluginsMore from "./PluginsMore";
  * <br/><br/>
  */
 
-const AreaDetector = (props) => {
+const AreaDetector = ({ titleProps = {}, ...props }: AreaDetectorProps) => {
   const [tabVal, setTabVal] = useState(0);
   const [morePluginsR, setMorePluginsR] = useState(null);
   const muiTextFieldProps = { size: "small", variant: "standard" };
@@ -40,7 +36,7 @@ const AreaDetector = (props) => {
   const paperElevation = theme.palette.paperElevation;
   return (
     <Layout
-      {...props.titleProps}
+      {...titleProps}
       denseAppBar
       tabs={["Main", " Plugins Setup"]}
       tabValue={tabVal}
@@ -250,18 +246,14 @@ const AreaDetector = (props) => {
   );
 };
 
-AreaDetector.propTypes = {
+interface AreaDetectorProps {
   /** macros */
-  macros: PropTypes.string,
+  macros: object;
 
   /** Props passed to the underlying TraditionalLayout component and style the title displayed in the app bar.
    * See TraditionalLayout component for more information.
    */
-  titleProps: PropTypes.object,
-};
-
-AreaDetector.defaultProps = {
-  titleProps: {},
-};
+  titleProps: object;
+}
 
 export default React.memo(AreaDetector);

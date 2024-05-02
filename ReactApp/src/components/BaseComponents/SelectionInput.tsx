@@ -1,6 +1,5 @@
 import React from "react";
 import { InputAdornment, MenuItem, TextField, useTheme } from "@mui/material";
-import PropTypes from "prop-types";
 import Widget from "../SystemComponents/Widgets/Widget";
 
 const SelectionInputComponent = (props) => {
@@ -78,7 +77,11 @@ const SelectionInputComponent = (props) => {
  * Material-UI TextField API:
  * https://mui.com/api/text-field
  */
-const SelectionInput = (props) => {
+const SelectionInput = ({
+  showTooltip = false,
+  variant = "outlined",
+  ...props
+}: SelectionInputProps) => {
   return (
     <Widget
       {...props}
@@ -89,78 +92,69 @@ const SelectionInput = (props) => {
       min={undefined}
       max={undefined}
       prec={undefined}
+      showTooltip={showTooltip}
+      variant={variant}
     />
   );
 };
 
-SelectionInput.defaultProps = {
-  debug: false,
-  variant: "outlined",
-  margin: "none",
-};
-
-SelectionInput.propTypes = {
+interface SelectionInputProps {
   /** Name of the process variable,  eg. '$(device):test$(id)'*/
-  pv: PropTypes.string.isRequired,
+  pv: string;
   /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
-  macros: PropTypes.object,
+  macros?: object;
 
   /** If defined, this array of strings overrides the default EPICS MBBI/O pv strings and are displayed as the choices in the RadioButtonGroup component*/
-  custom_selection_strings: PropTypes.array,
+  custom_selection_strings?: string[];
 
   /** Material-UI TextField variant*/
-  variant: PropTypes.string,
+  variant?: string;
   /** Material-UI TextField margin*/
-  margin: PropTypes.string,
+  margin?: string;
 
   /**
    * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
-  labelPv: PropTypes.string,
+  labelPv?: string;
   /**
    * Directive to fill the component's label with
    * the value contained in the  pv metadata's DESC field or the labelPv value.
    * If not defined it uses the custom label as defined by the label prop.
    */
-  usePvLabel: PropTypes.bool,
+  usePvLabel?: boolean;
   /**
    * Tooltip Text
    */
-  tooltip: PropTypes.string,
+  tooltip?: string;
   /**
    * Directive to show the tooltip
    */
-  showTooltip: PropTypes.bool,
+  showTooltip?: boolean;
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-  tooltipProps: PropTypes.object,
+  tooltipProps?: object;
 
   /** Any of the MUI TextField Props can applied by defining them as an object
    *
    */
-  muiTextFieldProps: PropTypes.object,
+  muiTextFieldProps?: object;
 
   /**
    * Custom units to be used, if usePvUnits is not defined.
    */
-  units: PropTypes.string,
+  units?: string;
 
   /**
    * Custom PV to define the units to be used, usePvUnits must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
-  unitsPv: PropTypes.string,
+  unitsPv?: string;
 
   /**
    * Directive to use the units contained in the   pv metdata's EGU field or unitsPv.
    *  If not defined it uses the custom units as defined by the units prop.
    */
-  usePvUnits: PropTypes.bool,
-};
-
-SelectionInput.defaultProps = {
-  showTooltip: false,
-  variant: "outlined",
-};
+  usePvUnits?: boolean;
+}
 
 export default SelectionInput;

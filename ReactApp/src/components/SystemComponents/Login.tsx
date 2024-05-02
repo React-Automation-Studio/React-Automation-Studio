@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useContext, useRef } from "react";
 import AutomationStudioContext from "./AutomationStudioContext";
-import PropTypes from "prop-types";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import FormControl from "@mui/material/FormControl";
@@ -54,7 +53,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Header = (props) => {
+interface HeaderProps {
+  title1?: string;
+  title2?: string;
+  title3?: string;
+  image?: React.ReactNode;
+  logoIcon?: React.ReactNode;
+  signInText?: string;
+}
+const Header = (props: HeaderProps) => {
   const classes = useStyles();
   return (
     <React.Fragment>
@@ -85,8 +92,11 @@ const Header = (props) => {
     </React.Fragment>
   );
 };
-
-const Footer = (props) => {
+interface FooterProps {
+  footerString?: string;
+  version?: string;
+}
+const Footer = (props: FooterProps) => {
   return (
     <React.Fragment>
       {props.footerString && (
@@ -107,7 +117,17 @@ const Footer = (props) => {
  * The login component can be fully customized either by using the individual props or by overriding the header and footer portions using the customHeader or customFooter components.
  * The login component and pvServer support multiple login modes. See below to enable login, disable standard login, enable active directory and Google login
  */
-const Login = (props) => {
+const Login = ({
+  title1 = "React",
+  title2 = "Automation",
+  title3 = "Studio",
+  logoIcon = <LockOutlinedIcon />,
+  signInText = "Sign In",
+  standardLoginUsernameDisplayText = "Username",
+  activeDirectoryLoginUsernameDisplayText = "Email Address",
+  timeout = 15000,
+  ...props
+}: LoginProps) => {
   const classes = useStyles();
   const context = useContext(AutomationStudioContext);
   const loggedIn = context.userData.loggedIn;
@@ -130,11 +150,10 @@ const Login = (props) => {
   const location = useLocation();
 
   const responseGoogle = (response) => {
-   
     const token = response.credential;
     const options = {
       headers: { "Content-Type": "application/json" },
-      timeout: props.timeout,
+      timeout: timeout,
     };
     let body = JSON.stringify({ jwt: token });
     let endpoint = "/api/login/google";
@@ -184,7 +203,7 @@ const Login = (props) => {
     if (submit === true) {
       const options = {
         headers: { "Content-Type": "application/json" },
-        timeout: props.timeout,
+        timeout: timeout,
       };
       let body = JSON.stringify({
         user: { username: username, password: password },
@@ -193,8 +212,8 @@ const Login = (props) => {
         loginModes[loginTabValue] === "Standard Login"
           ? "/api/login/local"
           : loginModes[loginTabValue] === "Active Directory"
-          ? "/api/login/ldap"
-          : null;
+            ? "/api/login/ldap"
+            : null;
       if (endpoint) {
         axios
           .post(endpoint, body, options)
@@ -236,17 +255,17 @@ const Login = (props) => {
   useEffect(() => {
     if (loggedIn) {
       let { from } = location.state || { from: { pathname: "/" } };
-      navigate(from,{replace:true});
+      navigate(from, { replace: true });
     }
     // eslint-disable-next-line  react-hooks/exhaustive-deps
   }, [loggedIn]);
 
   let usernameText =
     loginModes[loginTabValue] === "Standard Login"
-      ? props.standardLoginUsernameDisplayText
+      ? standardLoginUsernameDisplayText
       : loginModes[loginTabValue] === "Active Directory"
-      ? props.activeDirectoryLoginUsernameDisplayText
-      : "";
+        ? activeDirectoryLoginUsernameDisplayText
+        : "";
 
   const adLoginMode = loginModes[loginTabValue] === "Active Directory";
 
@@ -296,7 +315,18 @@ const Login = (props) => {
 
       <Container maxWidth="sm" sx={{ paddingTop: 8 }}>
         <Paper className={classes.paper} sx={{ padding: 4 }}>
-          {props.customHeader ? props.customHeader : <Header {...props} />}
+          {props.customHeader ? (
+            props.customHeader
+          ) : (
+            <Header
+              {...props}
+              title1={title1}
+              title2={title2}
+              title3={title3}
+              logoIcon={logoIcon}
+              signInText={signInText}
+            />
+          )}
 
           {loginModes.length > 1 && (
             <AppBar position="static" color="inherit">
@@ -377,10 +407,9 @@ const Login = (props) => {
           {enableGoogleLogin && (
             <div style={{ paddingTop: 24 }}>
               <GoogleLogin
-                
                 onSuccess={responseGoogle}
                 onError={() => {
-                  console.log('Login Failed');
+                  console.log("Login Failed");
                 }}
               />
             </div>
@@ -393,48 +422,37 @@ const Login = (props) => {
   );
 };
 
-Login.propTypes = {
+interface LoginProps {
   /** Title text top row.*/
-  title1: PropTypes.string,
+  title1?: string;
   /** Title text middle row.*/
-  title2: PropTypes.string,
+  title2?: string;
   /** Title text bottom row.*/
-  title3: PropTypes.string,
+  title3?: string;
   /** An image than can be display*/
-  image: PropTypes.element,
+  image?: React.ReactNode;
 
   /** Login Icon. Must be of type @mui/icons-material/...*/
-  logoIcon: PropTypes.element,
+  logoIcon?: React.ReactNode;
 
   /** Sign in text.*/
-  signInText: PropTypes.string,
+  signInText?: string;
   /** Footer string.*/
-  footerString: PropTypes.string,
+  footerString?: string;
   /** custom AD footer.*/
-  adFooter: PropTypes.element,
+  adFooter?: React.ReactNode;
   /** Version.*/
-  version: PropTypes.string,
+  version?: string;
   /** Standard Login Username display string.*/
-  standardLoginUsernameDisplayText: PropTypes.string,
+  standardLoginUsernameDisplayText?: string;
   /** Active Directory Login Username display string.*/
-  activeDirectoryLoginUsernameDisplayText: PropTypes.string,
+  activeDirectoryLoginUsernameDisplayText?: string;
   /** Login timeout.*/
-  timeout: PropTypes.number,
+  timeout?: number;
   /** Custom Header Component overides all the components above the username Textfield*/
-  customHeader: PropTypes.element,
+  customHeader?: React.ReactNode;
   /** Custom Footer Component overides all the components below the sign in buttons*/
-  customFooter: PropTypes.element,
-};
-
-Login.defaultProps = {
-  title1: "React",
-  title2: "Automation",
-  title3: "Studio",
-  logoIcon: <LockOutlinedIcon />,
-  signInText: "Sign In",
-  standardLoginUsernameDisplayText: "Username",
-  activeDirectoryLoginUsernameDisplayText: "Email Address",
-  timeout: 15000,
-};
+  customFooter?: React.ReactNode;
+}
 
 export default Login;

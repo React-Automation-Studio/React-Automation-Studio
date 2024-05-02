@@ -1,13 +1,8 @@
-import React, { useEffect, useState, useRef, useReducer } from "react";
-import PropTypes from "prop-types";
+import React, { useEffect, useState, useRef  } from "react";
 import { useTheme } from "@mui/material/styles";
 import colormap from "colormap";
 import ContextMenu from "../SystemComponents/ContextMenu";
-import PV from "../SystemComponents/PV";
 import { useEpicsPV } from "../SystemComponents/EpicsPV";
-import Plot from "react-plotly.js";
-import { isMobileOnly } from "react-device-detect";
-import { replaceMacros } from "../SystemComponents/Utils/macroReplacement";
 import { Typography } from "@mui/material";
 
 const ImageCanvas = ({ data, width, height, colormapName }) => {
@@ -63,8 +58,15 @@ const ImageCanvas = ({ data, width, height, colormapName }) => {
  * **Note**: The update includes a small breaking change.
  * See the backgroundColor prop for the workaround.
  */
-const CanvasPlot = (props) => {
-  const pv = useEpicsPV(props);
+const CanvasPlot = ({
+  rows= 1024,
+  colormapName= "inferno",
+  makeNewSocketIoConnection= true,
+  useBinaryValue=true,
+  debug= false,
+  ...props
+}:CanvasPlotProps) => {
+  const pv = useEpicsPV({...props, useBinaryValue, debug, makeNewSocketIoConnection});
   const { initialized, value } = pv;
   
   const [data, setData] = useState(null);
@@ -72,7 +74,6 @@ const CanvasPlot = (props) => {
     let z = [];
     if (initialized && value) {
       const array = new Uint8Array(value);
-      const { rows } = props;
       const cols = array.length / rows;
 
       // Initialize the 2D array z
@@ -193,55 +194,56 @@ const CanvasPlot = (props) => {
           data={data}
           width={width}
           height={height}
-          colormapName={props.colormapName}
+          colormapName={colormapName}
         />
       </div>
     </div>
   );
 };
 
-CanvasPlot.propTypes = {
-  /**Name of the image process variables, eg. ['$(device):test$(id0)','$(device):test$(id1)']*/
-  pv: PropTypes.string.isRequired,
-  /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id0)':'1','$(id1)':'2'}}*/
-  macros: PropTypes.object,
+interface CanvasPlotProps {
+  /** Name of the image process variables, eg. ['$(device):test$(id0)','$(device):test$(id1)'] */
+  pv: string;
+  /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id0)':'1','$(id1)':'2'}} */
+  macros?: object;
 
   /**
-   * Use this prop to make a seperate socket connection for the graph. It is experimental and can be possbily improve performace and for high data rate pv's and prevent slowing down the user interface
+   * Use this prop to make a separate socket connection for the graph. It is experimental and can possibly improve performance and handle high data rate pv's without slowing down the user interface.
    */
-  makeNewSocketIoConnection: PropTypes.bool,
+  makeNewSocketIoConnection?: boolean;
 
-  /** If the height is undefined then the height will be set to parents height, but if the aspectRatio is defined the the height will be set to the width multplied by the aspect ratio*/
-  aspectRatio: PropTypes.number,
+  /** If the height is undefined then the height will be set to the parent's height, but if the aspectRatio is defined then the height will be set to the width multiplied by the aspect ratio. */
+  aspectRatio?: number;
   /**
-   * The backgorund color defaults to ```theme.palette.background.default```
-   * For a Paper or a Card component set it to ```theme.palette.background.paper```
+   * The background color defaults to ```theme.palette.background.default```.
+   * For a Paper or a Card component, set it to ```theme.palette.background.paper```.
    */
-  backgroundColor: PropTypes.string,
+  backgroundColor?: string;
   /**
    * Set the width.
    */
-  width: PropTypes.string,
+  width?: string;
   /**
    * Set the height.
    */
-  height: PropTypes.string,
+  height?: string;
 
-  /** number of elements in each row */
-  rows: PropTypes.number,
+  /** Number of elements in each row. */
+  rows?: number;
 
   /**
    * Set the colormapName.
    */
-  colormapName: PropTypes.string,
-};
+  colormapName?: string;
+  /**
+   * use Binary Value as appose to json parsed value.
+   */
+   useBinaryValue?: boolean;
+  /**
+   * debug flag
+   * */
 
-CanvasPlot.defaultProps = {
-  rows: 1024,
-  colormapName: "inferno",
-  makeNewSocketIoConnection: false,
-  useBinaryValue:true,
-  debug: false,
-};
+  debug?: boolean;
+}
 
 export default CanvasPlot;

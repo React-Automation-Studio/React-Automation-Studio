@@ -1,7 +1,5 @@
 import React, { useRef } from "react";
-
 import { Typography } from "@mui/material";
-import PropTypes from "prop-types";
 import { throttle, debounce } from "lodash";
 import Widget from "../SystemComponents/Widgets/Widget";
 import RCSlider from "rc-slider";
@@ -462,84 +460,111 @@ function SliderComponent(props) {
  * The margins and spacing must be controlled from the parent component.<br/><br/>
  * For the vertical slider, the parent container must have a fixed height.
  */
-const Slider = (props) => {
-  return <Widget {...props} component={SliderComponent} name={"Slider"} />;
+const Slider = ({
+  step = 1,
+  labelPlacement = "top",
+  valuePlacement = "top",
+  height = "100%",
+  width = "100%",
+  showValue = true,
+  showTooltip = false,
+  vertical = false,
+  ...props
+}: SliderProps) => {
+  return (
+    <Widget
+      {...props}
+      component={SliderComponent}
+      name={"Slider"}
+      step={step}
+      labelPlacement={labelPlacement}
+      valuePlacement={valuePlacement}
+      height={height}
+      width={width}
+      showValue={showValue}
+      showTooltip={showTooltip}
+      vertical={vertical}
+    />
+  );
 };
 
 /**
  * Specific props type and default values for this widgets.
  * They extends the ones provided for a generic widget.
  */
-Slider.propTypes = {
+interface SliderProps {
   /**
    * If defined, then the DataConnection and
    * the widget debugging information will be displayed.
    */
-  debug: PropTypes.bool,
-
+  debug?: boolean;
+  /**
+   * Width of the component.
+   */
+  width?: string;
   /**
    * Height of the component.
    */
-  height: PropTypes.string,
+  height?: string;
 
   /**
    * Local variable initialization value.
    * When using loc:// type PVs.
    */
-  initialLocalVariableValue: PropTypes.string,
+  initialLocalVariableValue?: string;
   /**
    * Custom label to be used, if  usePvLabel is not defined.
    */
-  label: PropTypes.string,
+  label?: string;
   /**
    * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
-  labelPv: PropTypes.string,
+  labelPv?: string;
   /**
    * Values of macros that will be substituted in the pv name.
    * eg. {{'$(device)':'testIOC','$(id)':'2'}}
    */
-  macros: PropTypes.object,
+  macros?: object;
   /**
    * Custom maximum to be used, if usePvMinMax is not defined.
    */
-  max: PropTypes.number,
+  max?: number;
   /**
    * Custom PV to define the maximum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
-  maxPv: PropTypes.string,
+  maxPv?: string;
   /**
    * Custom minimum value to be used, if usePvMinMax is not defined.
    */
-  min: PropTypes.number,
+  min?: number;
   /**
    * Custom PV to define the minimum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
-  minPv: PropTypes.string,
+  minPv?: string;
 
   /**
    * Custom precision to round the value.
    */
-  prec: PropTypes.number,
+  prec?: number;
   /**
    * Custom PV to define the precision to be used, usePvPrecision must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
-  precPv: PropTypes.string,
+  precPv?: string;
 
   /**
    * Custom units to be used, if usePvUnits is not defined.
    */
-  units: PropTypes.string,
+  units?: string;
   /**
    * Custom PV to define the units to be used, usePvUnits must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
-  unitsPv: PropTypes.string,
+  unitsPv?: string;
   /**
    * Directive to fill the component's label with
    * the value contained in the  pv metadata's DESC field or the labelPv value.
    * If not defined it uses the custom label as defined by the label prop.
    */
-  usePvLabel: PropTypes.bool,
+  usePvLabel?: boolean;
   /**
    * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver.
    * The pyEpics metadata is unfortunately static and the values used will be the initial values that pvserver receives when it connects the first time.
@@ -550,24 +575,24 @@ Slider.propTypes = {
    * The same is the case for the precPV, labelPv, alarmPv, unitsPv and minPv.
    * By setting useMetadata to false also enables connection to other variables as defined by different protocols.
    */
-  useMetadata: PropTypes.bool,
+  useMetadata?: boolean;
   /**
    * Directive to use the pv metadata's HOPR and LOPR fields or the minPv and maxPv values
    * to limit the maximum and minimum values
    * that can be contained in the value.
    * If not defined it uses the custom min nd max as defined by the min and max prop.
    */
-  usePvMinMax: PropTypes.bool,
+  usePvMinMax?: boolean;
   /**
    * Directive to round the value using the precision field of the PV metadata or precPv.
    * If not defined it uses the custom precision as defined by the prec prop.
    */
-  usePvPrecision: PropTypes.bool,
+  usePvPrecision?: boolean;
   /**
    * Directive to use the units contained in the   pv metadata's EGU field or unitsPv.
    *  If not defined it uses the custom units as defined by the units prop.
    */
-  usePvUnits: PropTypes.bool,
+  usePvUnits?: boolean;
 
   /**
    * If defined, then the string representation of the number can be formatted
@@ -575,55 +600,44 @@ Slider.propTypes = {
    * eg. numberFormat={{notation: 'engineering',precision: 3}}.
    * See https://mathjs.org/docs/reference/functions/format.html for more examples
    */
-  numberFormat: PropTypes.object,
+  numberFormat?: object;
 
   /** Name of the process variable,  eg. '$(device):test$(id)'*/
-  pv: PropTypes.string,
+  pv?: string;
 
   /**  Custom markers in format:
   {value1: label1,value2...:label2...}*/
-  marks: PropTypes.object,
+  marks?: object;
 
   /** The value will be increment or decremented
    * in the define step intervals
    */
-  step: PropTypes.number,
+  step?: number;
   /** label placement position*/
-  labelPlacement: PropTypes.oneOf(["start", "top", "bottom", "end"]),
+  labelPlacement?: "start" | "top" | "bottom" | "end";
   /** value placement position*/
-  valuePlacement: PropTypes.oneOf(["start", "top", "bottom", "end"]),
+  valuePlacement?: "start" | "top" | "bottom" | "end";
 
   /**
    * Directive to show the value
    */
-  showValue: PropTypes.bool,
+  showValue?: boolean;
   /**
    * Tooltip Text
    */
-  tooltip: PropTypes.string,
+  tooltip?: string;
   /**
    * Directive to show the tooltip
    */
-  showTooltip: PropTypes.bool,
+  showTooltip?: boolean;
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-  tooltipProps: PropTypes.object,
+  tooltipProps?: object;
   /**
    * Directive to use a vertical slider
    */
-  vertical: PropTypes.bool,
-};
-
-Slider.defaultProps = {
-  step: 1,
-  labelPlacement: "top",
-  valuePlacement: "top",
-  height: "100%",
-  width: "100%",
-  showValue: true,
-  showTooltip: false,
-  vertical: false,
-};
+  vertical?: boolean;
+}
 
 export default Slider;

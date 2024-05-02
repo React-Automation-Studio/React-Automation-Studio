@@ -2,7 +2,6 @@ import React from "react";
 import { FormControlLabel } from "@mui/material";
 import MuiSwitch from "@mui/material/Switch";
 import Widget from "../SystemComponents/Widgets/Widget";
-import PropTypes from "prop-types";
 
 /* eslint-disable eqeqeq */
 const SwitchInternalComponent = (props) => {
@@ -51,7 +50,12 @@ const SwitchInternalComponent = (props) => {
  * Material-UI Switch API:
  * https://mui.com/api/switch/
  */
-const Switch = (props) => {
+const Switch = ({
+  onColor = "primary",
+  debug = false,
+  showTooltip = false,
+  ...props
+}: SwitchProps) => {
   return (
     <Widget
       {...props}
@@ -61,60 +65,57 @@ const Switch = (props) => {
       min={undefined}
       max={undefined}
       prec={undefined}
+      onColor={onColor}
+      debug={debug}
+      showTooltip={showTooltip}
     />
   );
 };
 
-Switch.propTypes = {
+interface SwitchProps {
   /** Name of the process variable,  eg. '$(device):test$(id)'*/
-  pv: PropTypes.string.isRequired,
+  pv: string;
   /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
-  macros: PropTypes.object,
+  macros?: object;
 
   /** local variable initialization value*/
-  initialLocalVariableValue: PropTypes.string,
+  initialLocalVariableValue?: string;
   /** If defined, then the DataConnection debugging information will be displayed*/
-  debug: PropTypes.bool,
+  debug?: boolean;
   /** label placement*/
-  labelPlacement: PropTypes.oneOf(["start", "top", "bottom", "end"]),
+  labelPlacement?: "start" | "top" | "bottom" | "end";
   /** Custom label to be used, if  `usePvLabel` is not defined. */
-  label: PropTypes.string,
+  label?: string;
   /**
    * Custom on color to be used, must be derived from Material UI theme color's.
    */
-  onColor: PropTypes.string,
+  onColor?: string;
   /**
    * Directive to fill the component's label with
    * the value contained in the  pv metadata's DESC field or the labelPv value.
    * If not defined it uses the custom label as defined by the label prop.
    */
-  usePvLabel: PropTypes.bool,
+  usePvLabel?: boolean;
   /**
    * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
-  labelPv: PropTypes.string,
+  labelPv?: string;
   /** Any of the MUI Switch Props can applied by defining them as an object
    *
    */
-  muiSwitchProps: PropTypes.object,
+  muiSwitchProps?: object;
   /**
    * Tooltip Text
    */
-  tooltip: PropTypes.string,
+  tooltip?: string;
   /**
    * Directive to show the tooltip
    */
-  showTooltip: PropTypes.bool,
+  showTooltip?: boolean;
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-  tooltipProps: PropTypes.object,
-};
-
-Switch.defaultProps = {
-  onColor: "primary",
-  debug: false,
-  showTooltip: false,
-};
+  tooltipProps?: object;
+}
 
 export default Switch;

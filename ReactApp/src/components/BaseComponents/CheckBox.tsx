@@ -40,6 +40,33 @@ const CheckBoxComponent = (props) => {
   );
 };
 
+
+/**
+ * The CheckBox component is a wrapper on a Material-UI CheckBox component.
+ https://mui.com/api/checkbox/
+ */
+const CheckBox = ({
+  onColor = "primary",
+  debug = false,
+  showTooltip = false,
+  ...props
+}: CheckBoxProps) => {
+  return (
+    <Widget
+      {...props}
+      component={CheckBoxComponent}
+      onColor={onColor}
+      debug={debug}
+      showTooltip={showTooltip}
+      usePvMinMax={false}
+      usePvPrecision={false}
+      min={undefined}
+      max={undefined}
+      prec={undefined}
+    />
+  );
+};
+
 interface CheckBoxProps {
   /** Name of the process variable,  eg. '$(device):test$(id)'*/
   pv: string;
@@ -85,32 +112,5 @@ interface CheckBoxProps {
    */
   tooltipProps?: object;
 }
-
-/**
- * The CheckBox component is a wrapper on a Material-UI CheckBox component.
- https://mui.com/api/checkbox/
- */
-const CheckBox = ({
-  onColor = "primary",
-  debug = false,
-  showTooltip = false,
-  ...props
-}: CheckBoxProps) => {
-  return (
-    <Widget
-      {...props}
-      component={CheckBoxComponent}
-      onColor={onColor}
-      debug={debug}
-      showTooltip={showTooltip}
-      usePvMinMax={false}
-      usePvPrecision={false}
-      min={undefined}
-      max={undefined}
-      prec={undefined}
-    />
-  );
-};
-
 
 export default CheckBox;

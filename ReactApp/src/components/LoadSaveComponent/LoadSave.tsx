@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useReducer } from "react";
 import { replaceMacros } from "../SystemComponents/Utils/macroReplacement";
-import PropTypes from "prop-types";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -144,7 +143,7 @@ function compareValues(a, b, initialized) {
 * <br/><br/>
 */
 
-const LoadSave = (props) => {
+const LoadSave = ({ useLoadEnable = false, ...props }: LoadSaveProps) => {
   const theme = useTheme();
   const systemName = props.macros["$(systemName)"];
   const dbListQueryParameters = {
@@ -716,8 +715,8 @@ const LoadSave = (props) => {
                             {item.componentProps.usePvUnits === true
                               ? "[" + item.units + "]"
                               : typeof item.componentProps.units !== "undefined"
-                              ? "[" + item.componentProps.units + "]"
-                              : ""}
+                                ? "[" + item.componentProps.units + "]"
+                                : ""}
                           </TableCell>
                         ))}
                         <TableCell align="center">Date </TableCell>
@@ -763,10 +762,10 @@ const LoadSave = (props) => {
                               row.beam_setup.Status === "Working"
                                 ? classes.tableCellWorking
                                 : row.beam_setup.Status === "Pending"
-                                ? classes.tableCellPending
-                                : row.beam_setup.Status === "Obselete"
-                                ? classes.tableCellObselete
-                                : classes.tableCell
+                                  ? classes.tableCellPending
+                                  : row.beam_setup.Status === "Obselete"
+                                    ? classes.tableCellObselete
+                                    : classes.tableCell
                             }
                             component="th"
                             scope="row"
@@ -940,7 +939,7 @@ const LoadSave = (props) => {
                     </Button>
                   </Grid>
                   <Grid item xs={12} sm={6} md={6} lg={3}>
-                    {props.useLoadEnable === true && (
+                    {useLoadEnable === true && (
                       <PV pv={props.loadEnablePV} macros={props.macros}>
                         {({ initialized, value }) => (
                           <Button
@@ -965,7 +964,7 @@ const LoadSave = (props) => {
                         )}
                       </PV>
                     )}
-                    {props.useLoadEnable === false && (
+                    {useLoadEnable === false && (
                       <Button
                         variant="contained"
                         color="primary"
@@ -1052,7 +1051,7 @@ const LoadSave = (props) => {
               </TabPanel>
             </Paper>
           </Grid>
-          {props.useLoadEnable && (
+          {useLoadEnable && (
             <React.Fragment>
               {typeof props.loadEnablePV !== "undefined" &&
                 props.showLoadEnableButton === true && (
@@ -1080,34 +1079,30 @@ const LoadSave = (props) => {
   );
 };
 
-LoadSave.propTypes = {
+interface LoadSaveProps {
   /** if true, when the value of loadEnablePV does not equal 0, then the new values can **not** be loaded into the pv values*/
-  useLoadEnable: PropTypes.bool,
+  useLoadEnable: boolean;
   /** Is name of the environment variable defined in your .env or docker-compose yaml file file and corresponds to hostname or ip and port of the mongoDB replica set, eg. `LOADSAVE_DATABASE`
    *
    */
-  host: PropTypes.string,
+  host: string;
   /** The internal MongoDB database name
    *
    */
-  database: PropTypes.string,
+  database: string;
   /**
    * Values of macros that will be substituted.
    * eg. {{'$(device)':'testIOC','$(id)':'2'}}
    */
-  macros: PropTypes.object,
+  macros: object;
   /** Name of the load enable process variable, eg. '$(device):test$(id)'*/
-  loadEnablePV: PropTypes.string,
+  loadEnablePV: string;
   /**
    * Custom loadEnable button label to be used
    */
-  loadEnableLabel: PropTypes.string,
+  loadEnableLabel: string;
   /** if true, then the button to enable loading of new values will be shown*/
-  showLoadEnableButton: PropTypes.bool,
-};
-
-LoadSave.defaultProps = {
-  useLoadEnable: false,
-};
+  showLoadEnableButton: boolean;
+}
 
 export default LoadSave;

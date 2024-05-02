@@ -1,9 +1,6 @@
 import React, { useState, useContext } from "react";
 
-import PropTypes from "prop-types";
-
 import { useTheme } from "@mui/material/styles";
-import makeStyles from "@mui/styles/makeStyles";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
@@ -22,14 +19,29 @@ import AutomationStudioContext from "../../../SystemComponents/AutomationStudioC
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 
-
-
 /**
  * The TraditionalLayout Component is a wrapper on the Material-UI AppBar, BottomNavigation and Drawer components. The TraditionalLayout is intended to wrap content to provide a consistent look and feel across all interfaces.<br/><br/>
  * The TraditionalLayout component is implemented with an elevated appbar (content scrolls under appbar), fixed footer (footer fixed to bottom of window) and swipeable drawers (swipe from left/right on touch devices).<br/><br/>
  * When used outside of the styleguide the appbar and footer will span the entire window.<br/><br/>
  */
-const TraditionalLayout = (props) => {
+const TraditionalLayout = ({
+  title = null,
+  alignTitle = "left",
+  titleVariant = "h6",
+  titleTextStyle = {},
+  denseAppBar = false,
+  drawerItems = null,
+  moreVertDrawerItems = null,
+  hideMoreVertMenu = false,
+  hideToggleThemeListItem = false,
+  hideHomeDrawerButton = false,
+  hideDrawerAfterItemClick = false,
+  hideMoreVertDrawerAfterItemClick = false,
+  showFooter = false,
+  footerHeight = 30,
+  footerContents = null,
+  ...props
+}: TraditionalLayoutProps) => {
   const theme = useTheme();
 
   const themeType = theme.palette.mode;
@@ -49,7 +61,7 @@ const TraditionalLayout = (props) => {
         elevation={theme.palette.paperElevation}
       >
         <Toolbar
-          variant={props.denseAppBar ? "dense" : undefined}
+          variant={denseAppBar ? "dense" : undefined}
           style={{ display: "flex" }}
         >
           <IconButton
@@ -64,20 +76,20 @@ const TraditionalLayout = (props) => {
           <SideDrawer
             showDrawer={showDrawer}
             setShowDrawer={setShowDrawer}
-            hideDrawerAfterItemClick={props.hideDrawerAfterItemClick}
-            hideHomeDrawerButton={props.hideHomeDrawerButton}
-            drawerItems={props.drawerItems}
+            hideDrawerAfterItemClick={hideDrawerAfterItemClick}
+            hideHomeDrawerButton={hideHomeDrawerButton}
+            drawerItems={drawerItems}
           />
-          {props.title && (
+          {title && (
             <Typography
-              sx={ (theme) => ({
-                textAlign: props.alignTitle,
+              sx={(theme) => ({
+                textAlign: alignTitle,
                 flexGrow: 1,
-                ...props.titleTextStyle,
+                ...titleTextStyle,
               })}
-              variant={props.titleVariant}
+              variant={titleVariant}
             >
-              {props.title}
+              {title}
             </Typography>
           )}
           {props.tabs && (
@@ -93,7 +105,7 @@ const TraditionalLayout = (props) => {
               ))}
             </Tabs>
           )}
-          {!props.hideMoreVertMenu && (
+          {!hideMoreVertMenu && (
             <React.Fragment>
               <IconButton
                 sx={{
@@ -111,34 +123,34 @@ const TraditionalLayout = (props) => {
                 showMVDrawer={showMVDrawer}
                 setShowMVDrawer={setShowMVDrawer}
                 hideMoreVertDrawerAfterItemClick={
-                  props.hideMoreVertDrawerAfterItemClick
+                  hideMoreVertDrawerAfterItemClick
                 }
-                moreVertDrawerItems={props.moreVertDrawerItems}
-                hideToggleThemeListItem={props.hideToggleThemeListItem}
+                moreVertDrawerItems={moreVertDrawerItems}
+                hideToggleThemeListItem={hideToggleThemeListItem}
               />
             </React.Fragment>
           )}
         </Toolbar>
       </AppBar>
       {notInStyleGuide && (
-        <div style={{ marginBottom: props.denseAppBar ? "3em" : "4em" }} />
+        <div style={{ marginBottom: denseAppBar ? "3em" : "4em" }} />
       )}
       <React.Fragment>
         {/* ---Children--- */}
         {props.children}
         {/* ---Children--- */}
       </React.Fragment>
-      {props.showFooter && (
+      {showFooter && (
         <React.Fragment>
           <BottomNavigation
             sx={(theme) => ({
-                width: "100%",
-                position: "fixed",
-                bottom: 0,
-                height: props.footerHeight,
-                borderRadius: 0,
-                boxShadow: theme.shadows[24],
-              })}
+              width: "100%",
+              position: "fixed",
+              bottom: 0,
+              height: footerHeight,
+              borderRadius: 0,
+              boxShadow: theme.shadows[24],
+            })}
             component={Card}
             style={{
               position: notInStyleGuide ? undefined : "relative",
@@ -146,74 +158,56 @@ const TraditionalLayout = (props) => {
                 themeType === "dark" ? undefined : theme.palette.primary.main,
             }}
           >
-            {props.footerContents}
+            {footerContents}
           </BottomNavigation>
-          {notInStyleGuide && (
-            <div style={{ marginBottom: props.footerHeight }} />
-          )}
+          {notInStyleGuide && <div style={{ marginBottom: footerHeight }} />}
         </React.Fragment>
       )}
     </React.Fragment>
   );
 };
 
-TraditionalLayout.propTypes = {
+interface TraditionalLayoutProps {
   /** Title to be displayed in the app bar */
-  title: PropTypes.string,
+  title?: string;
   /** Alignment of the title in the app bar */
-  alignTitle: PropTypes.oneOf(["left", "center", "right"]),
+  alignTitle?: "left" | "center" | "right";
   /** Typography variant of the title text */
-  titleVariant: PropTypes.string,
+  titleVariant?: string;
   /** JSX style to override title text defaults */
-  titleTextStyle: PropTypes.object,
+  titleTextStyle?: object;
   /** Directive to use dense variant of the app bar */
-  denseAppBar: PropTypes.bool,
+  denseAppBar?: boolean;
   /** Items to be displayed in the side drawer (left side) */
-  drawerItems: PropTypes.element,
+  drawerItems?: React.ReactNode;
   /** Items to be displayed in the more vert side drawer (right side) */
-  moreVertDrawerItems: PropTypes.element,
+  moreVertDrawerItems?: React.ReactNode;
   /** Directive to hide the more vert side drawer icon and menu */
-  hideMoreVertMenu: PropTypes.bool,
+  hideMoreVertMenu?: boolean;
   /** Directive to hide the 'Toggle Theme' item in the more vert side drawer menu */
-  hideToggleThemeListItem: PropTypes.bool,
+  hideToggleThemeListItem?: boolean;
   /** Directive to hide the 'Home' item in the side drawer menu */
-  hideHomeDrawerButton: PropTypes.bool,
+  hideHomeDrawerButton?: boolean;
   /** Directive to hide side drawer once item on it has been clicked */
-  hideDrawerAfterItemClick: PropTypes.bool,
+  hideDrawerAfterItemClick?: boolean;
   /** Directive to hide more vert side drawer once item on it has been clicked */
-  hideMoreVertDrawerAfterItemClick: PropTypes.bool,
+  hideMoreVertDrawerAfterItemClick?: boolean;
   /** Directive to show Footer element */
-  showFooter: PropTypes.bool,
+  showFooter?: boolean;
   /** Height of the Footer element */
-  footerHeight: PropTypes.number,
+  footerHeight?: number;
   /** Items to be displayed in the Footer element */
-  footerContents: PropTypes.element,
+  footerContents?: React.ReactNode;
   /** MUI Tab labels to be displayed in the AppBar element */
-  tabs: PropTypes.arrayOf(PropTypes.string),
+  tabs?: string[];
   /** Tab index */
-  tabValue: PropTypes.number,
+  tabValue?: number;
   /** Callback for tab change */
-  handleTabChange: PropTypes.func,
+  handleTabChange?: (event: React.SyntheticEvent, newValue: number) => void;
   /** Tab props */
-  tabProps: PropTypes.object,
-};
-
-TraditionalLayout.defaultProps = {
-  title: null,
-  alignTitle: "left",
-  titleVariant: "h6",
-  titleTextStyle: {},
-  denseAppBar: false,
-  drawerItems: null,
-  moreVertDrawerItems: null,
-  hideMoreVertMenu: false,
-  hideToggleThemeListItem: false,
-  hideHomeDrawerButton: false,
-  hideDrawerAfterItemClick: false,
-  hideMoreVertDrawerAfterItemClick: false,
-  showFooter: false,
-  footerHeight: 30,
-  footerContents: null,
-};
+  tabProps?: object;
+  /** Children components */
+  children: React.ReactNode;
+}
 
 export default TraditionalLayout;

@@ -112,6 +112,5 @@ const CheckBox = ({
   );
 };
 
-CheckBox.defaultProps = {};
 
 export default CheckBox;

@@ -1,17 +1,16 @@
 import React, { useState } from "react";
 import { Button, FormControlLabel } from "@mui/material";
-import PropTypes from "prop-types";
 import { isMobile, isTablet } from "react-device-detect";
 import Widget from "../SystemComponents/Widgets/Widget";
 
 /* eslint-disable eqeqeq */
 const ToggleButtonComponent = (props) => {
-  const [clicked, setclicked] = useState(0);
+  const [clicked, setClicked] = useState(false);
   const turnOff = () => {
     if (props.debug) {
       console.log("turnoff");
     }
-    setclicked(false);
+    setClicked(false);
     props.handleImmediateChange(0);
   };
   const handleMouseUp = () => {
@@ -30,7 +29,7 @@ const ToggleButtonComponent = (props) => {
       console.log("mouseDown");
     }
 
-    setclicked(false);
+    setClicked(false);
     props.handleImmediateChange(1);
   };
   const handlePointerLeave = () => {
@@ -103,7 +102,15 @@ const ToggleButtonComponent = (props) => {
  * Material-UI Button API:
  * https://mui.com/api/button/
  */
-const ToggleButton = (props) => {
+const ToggleButton = (
+  {
+    debug= false,
+    labelPlacement= "top",
+    usePvLabel= false,
+    showTooltip= false,
+    ...props}: ToggleButtonProps
+
+) => {
   let momentary = props.momentary !== undefined ? props.momentary : false;
   let disableContextMenu;
 
@@ -126,6 +133,10 @@ const ToggleButton = (props) => {
       min={undefined}
       max={undefined}
       prec={undefined}
+      debug={debug}
+      labelPlacement={labelPlacement}
+      usePvLabel={usePvLabel}
+      showTooltip={showTooltip}
     />
   );
 };
@@ -135,79 +146,84 @@ const ToggleButton = (props) => {
  * Specific props type and default values for this widgets.
  * They extends the ones provided for a generic widget.
  */
-ToggleButton.propTypes = {
+interface ToggleButtonProps {
   /**
    * Custom on color to be used, must be derived from Material UI theme color.
    */
-  onColor: PropTypes.string,
+  onColor?: string;
   /**
    * Custom off color to be used, must be derived from Material UI theme color.
    */
-  offColor: PropTypes.string,
+  offColor?: string;
   /** If defined then component will act as momentary button*/
-  momentary: PropTypes.bool,
+  momentary?: boolean;
 
   /**
    * If defined, then the DataConnection and
    * the widget debugging information will be displayed.
    */
-  debug: PropTypes.bool,
+  debug?: boolean;
 
   /**
    * Local variable initialization value.
    * When using loc:// type PVs.
    */
-  initialLocalVariableValue: PropTypes.string,
+  initialLocalVariableValue?: string;
   /**
    * Custom label to be used, if  usePvLabel is not defined.
    */
-  label: PropTypes.string,
+  label?: string;
   /**
    * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
-  labelPv: PropTypes.string,
+  labelPv?: string;
   /**
    * Values of macros that will be substituted in the pv name.
    * eg. {{'$(device)':'testIOC','$(id)':'2'}}
    */
-  macros: PropTypes.object,
+  macros?: object;
 
   /**
    * Custom units to be used, if usePvUnits is not defined.
    */
-  units: PropTypes.string,
+  units?: string;
   /**
    * Custom PV to define the units to be used, usePvUnits must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
-  unitsPv: PropTypes.string,
+  unitsPv?: string;
   /**
    * Directive to fill the component's label with
    * the value contained in the  pv metadata's DESC field or the labelPv value.
    * If not defined it uses the custom label as defined by the label prop.
    */
-  usePvLabel: PropTypes.bool,
+  usePvLabel?: boolean;
 
   /** Name of the process variable,  eg. '$(device):test$(id)'*/
-  pv: PropTypes.string,
+  pv?: string;
   /** Any of the MUI Button Props can applied by defining them as an object
    *
    */
-  muiButtonProps: PropTypes.object,
+  muiButtonProps?: object;
   /**
    * Tooltip Text
    */
-  tooltip: PropTypes.string,
+  tooltip?: string;
   /**
    * Directive to show the tooltip
    */
-  showTooltip: PropTypes.bool,
-};
+  showTooltip?: boolean;
+  /**
+   *  Disable the context menu on right click
+   */
+  disableContextMenu?: boolean;
+  /**
+   * Custom label placement
+   */
+  labelPlacement?: "top" | "bottom" | "start" | "end";
+  
 
-ToggleButton.defaultProps = {
-  debug: false,
-  labelPlacement: "top",
-  usePvLabel: false,
-  showTooltip: false,
-};
+}
+
+
 
 export default ToggleButton;

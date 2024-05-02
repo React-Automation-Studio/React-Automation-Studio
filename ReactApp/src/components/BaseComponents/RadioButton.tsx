@@ -1,7 +1,6 @@
 import React from "react";
 import { Radio, FormControlLabel } from "@mui/material";
 import Widget from "../SystemComponents/Widgets/Widget";
-import PropTypes from "prop-types";
 
 /* eslint-disable eqeqeq */
 const RadioButtonComponent = (props) => {
@@ -44,7 +43,13 @@ const RadioButtonComponent = (props) => {
  * The RadioButton component is a wrapper on a Material-UI RadioButton component. <br/><br/>
  * https://mui.com/api/radio/
  */
-const RadioButton = (props) => {
+const RadioButton = (
+  {
+    onColor= "primary",
+    debug= false,
+    showTooltip= false,
+    ...props}: RadioButtonProps
+) => {
   return (
     <Widget
       {...props}
@@ -54,60 +59,58 @@ const RadioButton = (props) => {
       min={undefined}
       max={undefined}
       prec={undefined}
+      onColor={onColor}
+      debug={debug}
+      showTooltip={showTooltip}
     />
   );
 };
 
-RadioButton.propTypes = {
+interface RadioButtonProps {
   /** Name of the process variable,  eg. '$(device):test$(id)'*/
-  pv: PropTypes.string.isRequired,
+  pv: string;
   /** Values of macros that will be substituted in the pv name eg. {{'$(device)':'testIOC','$(id)':'2'}}*/
-  macros: PropTypes.object,
+  macros?: object;
 
   /** local variable initialization value*/
-  initialLocalVariableValue: PropTypes.string,
+  initialLocalVariableValue?: string;
   /** If defined, then the DataConnection debugging information will be displayed*/
-  debug: PropTypes.bool,
+  debug?: boolean;
   /** label placement*/
-  labelPlacement: PropTypes.oneOf(["start", "top", "bottom", "end"]),
+  labelPlacement?: "start" | "top" | "bottom" | "end";
   /** Custom label to be used, if  `usePvLabel` is not defined. */
-  label: PropTypes.string,
+  label?: string;
   /**
    * Custom on color to be used, must be derived from Material UI theme color's.
    */
-  onColor: PropTypes.string,
+  onColor?: string;
   /**
    * Directive to fill the component's label with
    * the value contained in the  pv metadata's DESC field or the labelPv value.
    * If not defined it uses the custom label as defined by the label prop.
    */
-  usePvLabel: PropTypes.bool,
+  usePvLabel?: boolean;
   /**
    * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
-  labelPv: PropTypes.string,
+  labelPv?: string;
   /** Any of the MUI Radio Props can applied by defining them as an object
    *
    */
-  muiRadioProps: PropTypes.object,
+  muiRadioProps?: object;
   /**
    * Tooltip Text
    */
-  tooltip: PropTypes.string,
+  tooltip?: string;
   /**
    * Directive to show the tooltip
    */
-  showTooltip: PropTypes.bool,
+  showTooltip?: boolean;
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-  tooltipProps: PropTypes.object,
-};
+  tooltipProps?: object;
+}
 
-RadioButton.defaultProps = {
-  onColor: "primary",
-  debug: false,
-  showTooltip: false,
-};
 
 export default RadioButton;

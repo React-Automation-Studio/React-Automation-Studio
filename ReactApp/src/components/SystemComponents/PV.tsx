@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react'
-import EpicsPV from './EpicsPV'
-import LocalPV from './LocalPV'
-
+import React, { useState, useEffect, useCallback } from "react";
+import EpicsPV from "./EpicsPV";
+import LocalPV from "./LocalPV";
 
 /**
  * Props definition for the PV component.
@@ -127,7 +126,7 @@ interface PVProps {
    * Directive to use numpy binary value of the PV value.
    */
   useBinaryValue?: boolean;
-  
+
   /**
    * A function that returns the PV object.
    */
@@ -141,14 +140,13 @@ interface PVProps {
  * The pv state can be raised as an object using the pvData callback or passed to child function component. All the data in this pv object is valid when pv.initialized===true
  */
 const PV = ({
-  debug= false,
-  useMetadata= true,
-  makeNewSocketIoConnection=false,
-  useBinaryValue=false,
+  debug = false,
+  useMetadata = true,
+  makeNewSocketIoConnection = false,
+  useBinaryValue = false,
   ...props
-}: PVProps
-) => {
-  const [pvs, setPvs] = useState(null)
+}: PVProps) => {
+  const [pvs, setPvs] = useState(null);
   const [pv, SetPv] = useState({
     value: 0,
     label: "",
@@ -162,24 +160,27 @@ const PV = ({
     max: 0,
     prec: 0,
     readOnly: true,
-    enum_strs: []
-  })
+    enum_strs: [],
+  });
 
   const pvConnection = (pv, props) => {
     let pvname = pv.toString();
     if (props.macros) {
       let macro;
       for (macro in props.macros) {
-        pvname = pvname.replace(macro.toString(), props.macros[macro].toString());
+        pvname = pvname.replace(
+          macro.toString(),
+          props.macros[macro].toString()
+        );
       }
     }
-    return pvname.includes('loc://')?
-      LocalPV({ ...props, pv:pvname })
-      :EpicsPV({ ...props, pv:pvname})
-  }
+    return pvname.includes("loc://")
+      ? LocalPV({ ...props, pv: pvname })
+      : EpicsPV({ ...props, pv: pvname });
+  };
 
   const processPvDataData = useCallback((data) => {
-    setPvs((pvs) => ({...pvs, data}));
+    setPvs((pvs) => ({ ...pvs, data }));
   }, []);
   const dataPv = pvConnection(props.pv, {
     macros: props.macros,
@@ -187,93 +188,90 @@ const PV = ({
     outputValue: props.outputValue,
     useStringValue: props.useStringValue,
     initialLocalVariableValue: props.initialLocalVariableValue,
-    makeNewSocketIoConnection:makeNewSocketIoConnection,
+    makeNewSocketIoConnection: makeNewSocketIoConnection,
     debug: debug,
-    useBinaryValue:useBinaryValue,
-    pvData: processPvDataData
+    useBinaryValue: useBinaryValue,
+    pvData: processPvDataData,
   });
 
   const processPvDataMax = useCallback((max) => {
-    setPvs((pvs) => ({...pvs, max}));
+    setPvs((pvs) => ({ ...pvs, max }));
   }, []);
-  let maxPv = !useMetadata && props.usePvMinMax
-    ? pvConnection(props.maxPv ? props.maxPv : props.pv + ".HOPR",
-      {
-        macros: props.macros,
-        debug: debug,
-        initialLocalVariableValue: props.initialLocalVariableValue,
-        pvData: processPvDataMax
-
-      }
-    )
-    : undefined;
+  let maxPv =
+    !useMetadata && props.usePvMinMax
+      ? pvConnection(props.maxPv ? props.maxPv : props.pv + ".HOPR", {
+          macros: props.macros,
+          debug: debug,
+          initialLocalVariableValue: props.initialLocalVariableValue,
+          pvData: processPvDataMax,
+        })
+      : undefined;
   const processPvDataMin = useCallback((min) => {
-    setPvs((pvs) => ({...pvs, min}));
+    setPvs((pvs) => ({ ...pvs, min }));
   }, []);
-  let minPv = !useMetadata && props.usePvMinMax
-    ? pvConnection(props.minPv ? props.minPv : props.pv + ".LOPR",
-      {
-        macros: props.macros,
-        debug: debug,
-        initialLocalVariableValue: props.initialLocalVariableValue,
-        pvData: processPvDataMin
-      }
-    ) : undefined;
+  let minPv =
+    !useMetadata && props.usePvMinMax
+      ? pvConnection(props.minPv ? props.minPv : props.pv + ".LOPR", {
+          macros: props.macros,
+          debug: debug,
+          initialLocalVariableValue: props.initialLocalVariableValue,
+          pvData: processPvDataMin,
+        })
+      : undefined;
   const processPvDataLabel = useCallback((label) => {
-    setPvs((pvs) => ({...pvs, label}));
+    setPvs((pvs) => ({ ...pvs, label }));
   }, []);
   let labelPv = props.usePvLabel
-    ? pvConnection(props.labelPv ? props.labelPv : props.pv + ".DESC",
-      {
+    ? pvConnection(props.labelPv ? props.labelPv : props.pv + ".DESC", {
         macros: props.macros,
         useStringValue: true,
         debug: debug,
         initialLocalVariableValue: props.initialLocalVariableValue,
-        pvData: processPvDataLabel
-      }
-    ) : undefined;
+        pvData: processPvDataLabel,
+      })
+    : undefined;
   const processPvDataUnits = useCallback((units) => {
-    setPvs((pvs) => ({...pvs, units}));
+    setPvs((pvs) => ({ ...pvs, units }));
   }, []);
-  let unitsPv = !useMetadata && props.usePvUnits
-    ? pvConnection(props.unitsPv ? props.unitsPv : props.pv + ".EGU",
-      {
-        macros: props.macros,
-        useStringValue: true,
-        debug: debug,
-        initialLocalVariableValue: props.initialLocalVariableValue,
-        pvData: processPvDataUnits
-      }
-    ) : undefined;
+  let unitsPv =
+    !useMetadata && props.usePvUnits
+      ? pvConnection(props.unitsPv ? props.unitsPv : props.pv + ".EGU", {
+          macros: props.macros,
+          useStringValue: true,
+          debug: debug,
+          initialLocalVariableValue: props.initialLocalVariableValue,
+          pvData: processPvDataUnits,
+        })
+      : undefined;
   const processPvDataPrecision = useCallback((precision) => {
-    setPvs((pvs) => ({...pvs, precision}));
+    setPvs((pvs) => ({ ...pvs, precision }));
   }, []);
-  let precisionPv = !useMetadata && props.usePvPrecision
-    ? pvConnection(props.precPv ? props.precPv : props.pv + ".PREC",
-      {
-        macros: props.macros,
-        useStringValue: true,
-        debug: debug,
-        initialLocalVariableValue: props.initialLocalVariableValue,
-        pvData: processPvDataPrecision
-      }
-    ) : undefined;
+  let precisionPv =
+    !useMetadata && props.usePvPrecision
+      ? pvConnection(props.precPv ? props.precPv : props.pv + ".PREC", {
+          macros: props.macros,
+          useStringValue: true,
+          debug: debug,
+          initialLocalVariableValue: props.initialLocalVariableValue,
+          pvData: processPvDataPrecision,
+        })
+      : undefined;
   const processPvDataAlarm = useCallback((alarm) => {
-    setPvs((pvs) => ({...pvs, alarm}));
+    setPvs((pvs) => ({ ...pvs, alarm }));
   }, []);
-  let alarmPv = !useMetadata && props.alarmSensitive
-    ? pvConnection(props.alarmPv ? props.alarmPv : props.pv + ".SEVR",
-      {
-        macros: props.macros,
-        debug: debug,
-        initialLocalVariableValue: props.initialLocalVariableValue,
-        pvData: processPvDataAlarm
-      }
-    ) : undefined;
+  let alarmPv =
+    !useMetadata && props.alarmSensitive
+      ? pvConnection(props.alarmPv ? props.alarmPv : props.pv + ".SEVR", {
+          macros: props.macros,
+          debug: debug,
+          initialLocalVariableValue: props.initialLocalVariableValue,
+          pvData: processPvDataAlarm,
+        })
+      : undefined;
 
   useEffect(() => {
     if (debug) {
-      console.log("use effect PV render")
+      console.log("use effect PV render");
     }
 
     let pv = {};
@@ -285,11 +283,47 @@ const PV = ({
       pv.timestamp = pvs.data ? pvs.data.timestamp : "";
       pv.metadata = pvs.data ? pvs.data.metadata : {};
       pv.enum_strs = pvs.data ? pvs.data.metadata.enum_strs : [];
-      pv.label = props.usePvLabel ? (pvs.label ? pvs.label.value : "") : props.label;
-      pv.max = props.usePvMinMax ? (useMetadata ? (pvs.data ? pvs.data.metadata.upper_disp_limit : "") : pvs.max ? pvs.max.value : "") : props.max;
-      pv.min = props.usePvMinMax ? (useMetadata ? (pvs.data ? pvs.data.metadata.lower_disp_limit : "") : pvs.min ? pvs.min.value : "") : props.min;
-      pv.prec = props.usePvPrecision ? (useMetadata ? (pvs.data ? pvs.data.metadata.precision : "") : pvs.precision ? pvs.precision.value : "") : props.prec;
-      pv.units = props.usePvUnits ? (useMetadata ? (pvs.data ? pvs.data.metadata.units : "") : pvs.units ? pvs.units.value : "") : props.units;
+      pv.label = props.usePvLabel
+        ? pvs.label
+          ? pvs.label.value
+          : ""
+        : props.label;
+      pv.max = props.usePvMinMax
+        ? useMetadata
+          ? pvs.data
+            ? pvs.data.metadata.upper_disp_limit
+            : ""
+          : pvs.max
+            ? pvs.max.value
+            : ""
+        : props.max;
+      pv.min = props.usePvMinMax
+        ? useMetadata
+          ? pvs.data
+            ? pvs.data.metadata.lower_disp_limit
+            : ""
+          : pvs.min
+            ? pvs.min.value
+            : ""
+        : props.min;
+      pv.prec = props.usePvPrecision
+        ? useMetadata
+          ? pvs.data
+            ? pvs.data.metadata.precision
+            : ""
+          : pvs.precision
+            ? pvs.precision.value
+            : ""
+        : props.prec;
+      pv.units = props.usePvUnits
+        ? useMetadata
+          ? pvs.data
+            ? pvs.data.metadata.units
+            : ""
+          : pvs.units
+            ? pvs.units.value
+            : ""
+        : props.units;
       let initialized = true;
       let pvArray = [];
       for (let index in pvKeys) {
@@ -301,34 +335,33 @@ const PV = ({
       pv.initialized = initialized;
       if (pv.initialized) {
         pv.readOnly = !pv.metadata.write_access;
-      }
-      else {
+      } else {
         pv.readOnly = true;
       }
       pv.PVs = pvArray;
       SetPv(pv);
     }
- // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pvs])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pvs]);
 
   useEffect(() => {
-    if (typeof props.pvData !=='undefined'){
-      props.pvData(pv)
+    if (typeof props.pvData !== "undefined") {
+      props.pvData(pv);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pv])
+  }, [pv]);
 
-  const contextPVs=pv.PVs;
+  const contextPVs = pv.PVs;
 
   useEffect(() => {
-    if (typeof props.contextInfo !=='undefined'){
-      props.contextInfo(contextPVs)
+    if (typeof props.contextInfo !== "undefined") {
+      props.contextInfo(contextPVs);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [contextPVs])
+  }, [contextPVs]);
 
   if (debug) {
-    console.log(`PV ${props.pv}:`, {props, pv, pvs});
+    console.log(`PV ${props.pv}:`, { props, pv, pvs });
   }
 
   return (
@@ -340,12 +373,9 @@ const PV = ({
       {unitsPv}
       {precisionPv}
       {alarmPv}
-      {props.children?props.children(pv):null}
+      {props.children ? props.children(pv) : null}
     </React.Fragment>
-  )
-}
+  );
+};
 
-
-
-
-export default PV
+export default PV;

@@ -332,6 +332,5 @@ interface MultiActionButtonProps {
   tooltipProps: object;
 }
 
-MultiActionButton.defaultProps = {};
 
 export default MultiActionButton;

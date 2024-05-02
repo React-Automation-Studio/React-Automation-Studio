@@ -5,7 +5,6 @@ import React, {
   useReducer,
   useCallback,
 } from "react";
-import PropTypes from "prop-types";
 import makeStyles from "@mui/styles/makeStyles";
 import { useTheme } from "@mui/material/styles";
 import ContextMenu from "../../../SystemComponents/ContextMenu";
@@ -274,23 +273,20 @@ const PlotData = (props) => {
 
 */
 
-const HarpGraphY = (
-  {
-    updateRate= 100,
-  makeNewSocketIoConnection= false,
-  debug= false,
-  showLegend= true,
-  yAxisTitle= "Y-axis",
-  xAxisTitle= "X-axis",
-  usePolling= false,
-  pollingRate= 100,
- width= "100%",
- height= "100%",
-  disableMobileStatic= false,
-    ...props
-  }: HarpGraphYProps
-  
-) => {
+const HarpGraphY = ({
+  updateRate = 100,
+  makeNewSocketIoConnection = false,
+  debug = false,
+  showLegend = true,
+  yAxisTitle = "Y-axis",
+  xAxisTitle = "X-axis",
+  usePolling = false,
+  pollingRate = 100,
+  width = "100%",
+  height = "100%",
+  disableMobileStatic = false,
+  ...props
+}: HarpGraphYProps) => {
   const classes = useStyles();
   const theme = useTheme();
   const backgroundColor = props.backgroundColor
@@ -504,19 +500,17 @@ const HarpGraphY = (
       onWheel={props.onWheel}
       onClick={props.onClick}
     >
-      <PlotData 
-      {...props} 
-      backgroundColor={backgroundColor}
-      updateRate={updateRate}
-      makeNewSocketIoConnection={makeNewSocketIoConnection}
-      debug={debug}
-      showLegend={showLegend}
-      yAxisTitle={yAxisTitle}
-      xAxisTitle={xAxisTitle}
-      usePolling={usePolling}
-      pollingRate={pollingRate}
-      
-      
+      <PlotData
+        {...props}
+        backgroundColor={backgroundColor}
+        updateRate={updateRate}
+        makeNewSocketIoConnection={makeNewSocketIoConnection}
+        debug={debug}
+        showLegend={showLegend}
+        yAxisTitle={yAxisTitle}
+        xAxisTitle={xAxisTitle}
+        usePolling={usePolling}
+        pollingRate={pollingRate}
       >
         {({ data, contextInfo }) => {
           return (
@@ -677,7 +671,5 @@ interface HarpGraphYProps {
   /** Custom x axis units to be used*/
   xUnits?: string;
 }
-
-
 
 export default HarpGraphY;

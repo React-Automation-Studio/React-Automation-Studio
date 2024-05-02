@@ -3,7 +3,6 @@ import { alpha } from "@mui/material/styles";
 import withStyles from "@mui/styles/withStyles";
 import Widget from "../SystemComponents/Widgets/Widget";
 import { Typography } from "@mui/material";
-import PropTypes from "prop-types";
 import { format, parseISO } from "date-fns";
 
 import { grey } from "@mui/material/colors";
@@ -89,67 +88,82 @@ const TextUpdateComponent = (props) => {
  * The component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
  * The margins and spacing must be controlled from the parent component.<br/><br/>
  */
-const TextUpdateDate = (props) => {
-  return <Widget {...props} component={TextUpdateComponent} />;
+const TextUpdateDate = ({
+  debug = false,
+  variant = "body2",
+  alarmSensitive = false,
+  showTooltip = false,
+  ...props
+}: TextUpdateDateProps) => {
+  return (
+    <Widget
+      {...props}
+      component={TextUpdateComponent}
+      debug={debug}
+      variant={variant}
+      alarmSensitive={alarmSensitive}
+      showTooltip={showTooltip}
+    />
+  );
 };
 
-TextUpdateDate.propTypes = {
+interface TextUpdateDateProps {
   /**
    * Directive to use the  alarm severity status to alter the fields background color.
    */
-  alarmSensitive: PropTypes.bool,
+  alarmSensitive?: boolean;
   /**
    * Custom PV to define the alarm severity to be used, alarmSensitive must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
-  alarmPv: PropTypes.string,
+  alarmPv?: string;
   /**
    * If defined, then the DataConnection and
    * the widget debugging information will be displayed.
    */
-  debug: PropTypes.bool,
+  debug?: boolean;
 
   /**
    * Local variable initialization value.
    * When using loc:// type PVs.
    */
-  initialLocalVariableValue: PropTypes.string,
+  initialLocalVariableValue?: string;
   /**
    * Custom label to be used, if  usePvLabel is not defined.
    */
-  label: PropTypes.string,
+  label?: string;
   /**
    * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
-  labelPv: PropTypes.string,
+  labelPv?: string;
   /**
    * Values of macros that will be substituted in the pv name.
    * eg. {{'$(device)':'testIOC','$(id)':'2'}}
    */
-  macros: PropTypes.object,
+  macros?: object;
 
   /**
    * Custom precision to round the value.
    */
-  prec: PropTypes.number,
+  prec?: number;
   /**
    * Custom PV to define the precision to be used, usePvPrecision must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
-  precPv: PropTypes.string,
+  precPv?: string;
 
   /**
    * Custom units to be used, if usePvUnits is not defined.
    */
-  units: PropTypes.string,
+  units?: string;
   /**
    * Custom PV to define the units to be used, usePvUnits must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
-  unitsPv: PropTypes.string,
+  unitsPv?: string;
   /**
    * Directive to fill the component's label with
    * the value contained in the  pv metadata's DESC field or the labelPv value.
    * If not defined it uses the custom label as defined by the label prop.
    */
-  usePvLabel: PropTypes.bool,
+  usePvLabel?: boolean;
   /**
    * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver.
    * The pyEpics metadata is unfortunately static and the values used will be the intial values that pvserver receives when it connects the first time.
@@ -160,62 +174,55 @@ TextUpdateDate.propTypes = {
    * The same is the case for the precPV, labelPv, alarmPv, unitsPv and minPv.
    * By setting useMetadata to false also enables connection to other variables as defined by different protocols.
    */
-  useMetadata: PropTypes.bool,
+  useMetadata?: boolean;
 
   /**
    * Directive to round the value using the precision field of the PV metadata or precPv.
    * If not defined it uses the custom precision as defined by the prec prop.
    */
-  usePvPrecision: PropTypes.bool,
+  usePvPrecision?: boolean;
   /**
    * Directive to use the units contained in the   pv metdata's EGU field or unitsPv.
    *  If not defined it uses the custom units as defined by the units prop.
    */
 
-  usePvUnits: PropTypes.bool,
+  usePvUnits?: boolean;
   /**
    * Directive to use PV's string values.
    */
-  useStringValue: PropTypes.bool,
+  useStringValue?: boolean;
 
   /** Name of the process variable,  eg. '$(device):test$(id)'*/
-  pv: PropTypes.string,
+  pv?: string;
   /** Array of the process variables, eg. '$(device):test$(id)'*/
-  pvs: PropTypes.arrayOf(PropTypes.string),
+  pvs?: string[];
   /**
    * Object with a string and the corresponding severity value.
    * When PV value is equal to the string, set the corresponding severity
    * in the widget's severity.
    * Example: { stringMatch: '1', severity: 2 }.
    */
-  stringSeverity: PropTypes.object,
+  stringSeverity?: object;
   /**
    * Directive to override alarm severity with the rules defined in the stringSeverity
    */
-  useStringSeverityMatch: PropTypes.bool,
+  useStringSeverityMatch?: boolean;
   /**
    * Material UI Typography variant.
    */
-  variant: PropTypes.string,
+  variant?: string;
   /**
    * Tooltip Text
    */
-  tooltip: PropTypes.string,
+  tooltip?: string;
   /**
    * Directive to show the tooltip
    */
-  showTooltip: PropTypes.bool,
+  showTooltip?: boolean;
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
-  tooltipProps: PropTypes.object,
-};
-
-TextUpdateDate.defaultProps = {
-  debug: false,
-  variant: "body2",
-  alarmSensitive: false,
-  showTooltip: false,
-};
+  tooltipProps?: object;
+}
 
 export default withStyles(styles, { withTheme: true })(TextUpdateDate);

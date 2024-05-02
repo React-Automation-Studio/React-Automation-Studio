@@ -1,18 +1,19 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import withStyles from '@mui/styles/withStyles';
+import React from "react";
+import withStyles from "@mui/styles/withStyles";
 
-import Grid from '@mui/material/Grid';
-import TextInput from '../../BaseComponents/TextInput';
-import TextOutput from '../../BaseComponents/TextOutput';
-import Slider from '../../BaseComponents/Slider';
-import SideBar from '../../SystemComponents/SideBar';
-import AppBar from '@mui/material/AppBar';
+import Grid from "@mui/material/Grid";
+import TextInput from "../../BaseComponents/TextInput";
+import TextOutput from "../../BaseComponents/TextOutput";
+import Slider from "../../BaseComponents/Slider";
+import SideBar from "../../SystemComponents/SideBar";
+import AppBar from "@mui/material/AppBar";
 
 // FIXME checkout https://mui.com/components/use-media-query/#migrating-from-withwidth
-const withWidth = () => (WrappedComponent) => (props) => <WrappedComponent {...props} width="xs" />;
+const withWidth = () => (WrappedComponent) => (props) => (
+  <WrappedComponent {...props} width="xs" />
+);
 
-const styles = theme => ({
+const styles = (theme) => ({
   body1: theme.typography.body1,
   root: {
     flexGrow: 1,
@@ -21,12 +22,11 @@ const styles = theme => ({
     overflowY: "hidden",
     marginTop: 40,
     marginBottom: 100,
-
   },
   paper: {
     padding: theme.spacing(1) * 0,
     margin: theme.spacing(1) * 0,
-    height: '100%',
+    height: "100%",
     color: theme.palette.text.secondary,
   },
   control: {
@@ -50,8 +50,8 @@ class ExperimentalMobileDemo1 extends React.Component {
   };
 
   handleStateChange(stateValue) {
-    this.setState({ stateValue })
-  };
+    this.setState({ stateValue });
+  }
 
   render() {
     const { width } = this.props;
@@ -59,22 +59,32 @@ class ExperimentalMobileDemo1 extends React.Component {
     const { classes } = this.props;
 
     let graphVH;
-    if (width == 'xs') {
-      graphVH = '25vh';
-    } else if (width == 'sm') {
-      graphVH = '30vh'
+    if (width == "xs") {
+      graphVH = "25vh";
+    } else if (width == "sm") {
+      graphVH = "30vh";
     } else {
-      graphVH = '30vh'
+      graphVH = "30vh";
     }
 
     return (
       <React.Fragment>
-        <AppBar style={{ position: 'fixed', bottom: 'auto', top: '0' }} color='inherit' >
-          <Grid container direction="row" item justifyContent="center" spacing={2} alignItems="center">
-            <Grid item xs={2}  >
+        <AppBar
+          style={{ position: "fixed", bottom: "auto", top: "0" }}
+          color="inherit"
+        >
+          <Grid
+            container
+            direction="row"
+            item
+            justifyContent="center"
+            spacing={2}
+            alignItems="center"
+          >
+            <Grid item xs={2}>
               <SideBar />
             </Grid>
-            <Grid item xs={10} >
+            <Grid item xs={10}>
               <div className={classes.body1}>Hooks debugging</div>
             </Grid>
           </Grid>
@@ -83,9 +93,9 @@ class ExperimentalMobileDemo1 extends React.Component {
         <Grid container className={classes.root} spacing={2}>
           <Grid item xs={6}>
             <TextInput
-              pv='$(device):amplitude'
-              macros={{ '$(device)': 'testIOC' }}
-              label={'edas'}
+              pv="$(device):amplitude"
+              macros={{ "$(device)": "testIOC" }}
+              label={"edas"}
               usePvUnits={true}
               usePvLabel={true}
               usePvMinMax={true}
@@ -96,20 +106,20 @@ class ExperimentalMobileDemo1 extends React.Component {
           </Grid>
           <Grid item xs={6}>
             <TextOutput
-              pv='$(device):amplitude'
-              macros={{ '$(device)': 'testIOC' }}
-              label={'edas'}
-              units={'h'}
+              pv="$(device):amplitude"
+              macros={{ "$(device)": "testIOC" }}
+              label={"edas"}
+              units={"h"}
               usePvMinMax={true}
               prec={1}
               alarmSensitive={true}
               useMetadata={true}
             />
           </Grid>
-          <Grid item xs={6}  >
+          <Grid item xs={6}>
             <Slider
-              pv='$(device):amplitude'
-              macros={{ '$(device)': 'testIOC' }}
+              pv="$(device):amplitude"
+              macros={{ "$(device)": "testIOC" }}
               usePvMinMax={true}
               units={"V"}
               min={0}
@@ -118,10 +128,10 @@ class ExperimentalMobileDemo1 extends React.Component {
               useMetadata={true}
             />
           </Grid>
-          <Grid item xs={6}  >
+          <Grid item xs={6}>
             <Slider
-              pv='$(device):amplitude'
-              macros={{ '$(device)': 'testIOC' }}
+              pv="$(device):amplitude"
+              macros={{ "$(device)": "testIOC" }}
               units={"V"}
               min={2000}
               max={5000}
@@ -135,8 +145,6 @@ class ExperimentalMobileDemo1 extends React.Component {
   }
 }
 
-ExperimentalMobileDemo1.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-export default withWidth()(withStyles(styles, { withTheme: true })(ExperimentalMobileDemo1));
+export default withWidth()(
+  withStyles(styles, { withTheme: true })(ExperimentalMobileDemo1)
+);

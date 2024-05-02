@@ -1,11 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
-
-import PropTypes from "prop-types";
-
 import { v4 as uuidv4 } from "uuid";
-
 import Widget from "../SystemComponents/Widgets/Widget";
-
 import { FormControlLabel, useTheme } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { create, all } from "mathjs";
@@ -73,7 +68,20 @@ function getTickValues(
 
   return ticks;
 }
-
+interface ProgressBarComponentProps {
+  width: number;
+  height: number;
+  units: string;
+  value: number;
+  min: number;
+  max: number;
+  lockAspectRatio: boolean;
+  aspectRatio: number;
+  color: string;
+  showValue: boolean;
+  showTicks: boolean;
+  disabled: boolean;
+}
 const ProgressBarComponent = (props) => {
   const theme = useTheme();
   const gradientId = uuidv4();
@@ -246,11 +254,6 @@ const ProgressBarComponent = (props) => {
   );
 };
 
-ProgressBarComponent.propTypes = {
-  height: PropTypes.number,
-  width: PropTypes.number,
-};
-
 const ProgressBarInternalComponent = (props) => {
   const theme = useTheme();
   const ref = useRef(null);
@@ -354,37 +357,36 @@ const ProgressBarInternalComponent = (props) => {
 /**
  * The Progress Bar is an React-Automation-studio component useful fo displaying levels or progress.
  */
-const ProgressBar = (
-  { debug= false,
-    alarmSensitive= false,
-    min= 0,
-    max= 100,
-    showValue= true,
-    showTicks= true,
-    aspectRatio= 1.75,
-    lockAspectRatio= true,
-    labelPlacement= "top",
-    showTooltip= false,
-    
-    ...props}: ProgressBarProps
-) => {
+const ProgressBar = ({
+  debug = false,
+  alarmSensitive = false,
+  min = 0,
+  max = 100,
+  showValue = true,
+  showTicks = true,
+  aspectRatio = 1.75,
+  lockAspectRatio = true,
+  labelPlacement = "top",
+  showTooltip = false,
+
+  ...props
+}: ProgressBarProps) => {
   return (
-  
-  <Widget 
-  {...props} 
-  component={ProgressBarInternalComponent} 
-  debug={debug}
-  alarmSensitive={alarmSensitive}
-  min={min}
-  max={max}
-  showValue={showValue}
-  showTicks={showTicks}
-  aspectRatio={aspectRatio}
-  lockAspectRatio={lockAspectRatio}
-  labelPlacement={labelPlacement}
-  showTooltip={showTooltip}
-  />
-)
+    <Widget
+      {...props}
+      component={ProgressBarInternalComponent}
+      debug={debug}
+      alarmSensitive={alarmSensitive}
+      min={min}
+      max={max}
+      showValue={showValue}
+      showTicks={showTicks}
+      aspectRatio={aspectRatio}
+      lockAspectRatio={lockAspectRatio}
+      labelPlacement={labelPlacement}
+      showTooltip={showTooltip}
+    />
+  );
 };
 
 interface ProgressBarProps {
@@ -478,7 +480,7 @@ interface ProgressBarProps {
   useMetadata?: boolean;
   /** Directive to control location of the label */
   labelPlacement?: "top" | "bottom" | "start" | "end";
-  
+
   /**
    * Directive to use the pv metadata's HOPR and LOPR fields or the minPv and maxPv values
    * to limit the maximum and minimum values
@@ -527,6 +529,5 @@ interface ProgressBarProps {
    */
   tooltipProps?: object;
 }
-
 
 export default ProgressBar;

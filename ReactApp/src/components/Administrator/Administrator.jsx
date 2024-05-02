@@ -24,7 +24,6 @@ const Administrator =(props)=>{
   );
 }
 
-Administrator.propTypes = {
-};
+
 
 export default Administrator;

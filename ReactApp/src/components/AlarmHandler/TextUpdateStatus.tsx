@@ -3,7 +3,6 @@ import { alpha } from "@mui/material/styles";
 import withStyles from "@mui/styles/withStyles";
 import Widget from "../SystemComponents/Widgets/Widget";
 import { Typography } from "@mui/material";
-import PropTypes from "prop-types";
 import { grey } from "@mui/material/colors";
 
 const styles = (theme) => ({

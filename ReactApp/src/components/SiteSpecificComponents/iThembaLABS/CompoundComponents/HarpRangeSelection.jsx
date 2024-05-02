@@ -1,41 +1,44 @@
-import React from 'react'
-import AutomationStudioContext from '../../../SystemComponents/AutomationStudioContext';
-import DataConnection from '../../../SystemComponents/DataConnection';
-import withStyles from '@mui/styles/withStyles';
+import React from "react";
+import AutomationStudioContext from "../../../SystemComponents/AutomationStudioContext";
+import DataConnection from "../../../SystemComponents/DataConnection";
+import withStyles from "@mui/styles/withStyles";
 
-import PropTypes from 'prop-types';
+import TextField from "@mui/material/TextField";
 
-import TextField from '@mui/material/TextField';
-
-import MenuItem from '@mui/material/MenuItem';
-
+import MenuItem from "@mui/material/MenuItem";
 
 /* eslint-disable eqeqeq */
-const styles = theme => ({
+const styles = (theme) => ({
   TextField: {
-    width: '100%',
-    marginLeft: 'auto',
-    marginRight: 'auto',
+    width: "100%",
+    marginLeft: "auto",
+    marginRight: "auto",
     paddingBottom: 0,
     marginTop: 0,
     fontWeight: 500,
-    borderRadius: 4
-  }
+    borderRadius: 4,
+  },
 });
 
 class HarpRangeSelection extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      'xrange': { 'inputValue': 1, 'initialized': false, 'pvname': "", 'severity': 0, metadata: {}, },
-      'yrange': { 'inputValue': 1, 'initialized': false, 'pvname': "", 'severity': 0 }
-    }
+      xrange: {
+        inputValue: 1,
+        initialized: false,
+        pvname: "",
+        severity: 0,
+        metadata: {},
+      },
+      yrange: { inputValue: 1, initialized: false, pvname: "", severity: 0 },
+    };
     this.handleInputValue = this.handleInputValue.bind(this);
     this.handleInputValueLabel = this.handleInputValueLabel.bind(this);
     this.handleMetadata = this.handleMetadata.bind(this);
   }
 
-  handleInputValue = name => (inputValue, pvname, initialized, severity) => {
+  handleInputValue = (name) => (inputValue, pvname, initialized, severity) => {
     let pv = this.state[name];
     pv.inputValue = inputValue;
     pv.pvname = pvname;
@@ -43,98 +46,95 @@ class HarpRangeSelection extends React.Component {
     pv.severity = severity;
 
     this.setState({ [name]: pv });
-  }
+  };
 
-  handleMetadata = name => (metadata) => {
+  handleMetadata = (name) => (metadata) => {
     let pv = this.state[name];
     pv.metadata = metadata;
     this.setState({ [name]: pv });
-  }
+  };
 
   handleInputValueLabel(inputValue) {
     this.setState({ label: inputValue });
   }
 
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
-  componentWillUnmount() {
-  }
+  componentWillUnmount() {}
 
-  handleOnFocus = event => {
+  handleOnFocus = (event) => {
     this.setState({ hasFocus: true });
-  }
+  };
 
-  catchReturn = stateVar => event => {
-    if (event.key === 'Enter') {
+  catchReturn = (stateVar) => (event) => {
+    if (event.key === "Enter") {
       this.setState({ outputValue: this.state.value });
     }
-  }
+  };
 
-  handleOnBlur = event => {
+  handleOnBlur = (event) => {
     this.setState({
       hasFocus: false,
-      value: this.state['inputValue'],
-      metadata: this.state['newMetadata']
+      value: this.state["inputValue"],
+      metadata: this.state["newMetadata"],
     });
-  }
+  };
 
-  handleChange = name => event => {
-    console.log(event.target.value)
-    let xRangePV = this.state['xrange'];
-    let yRangePV = this.state['yrange'];
+  handleChange = (name) => (event) => {
+    console.log(event.target.value);
+    let xRangePV = this.state["xrange"];
+    let yRangePV = this.state["yrange"];
     let value;
     switch (event.target.value) {
-      case ' 20 -  200 uA':
+      case " 20 -  200 uA":
         value = 1;
 
         break;
-      case '  2 -   20 uA':
+      case "  2 -   20 uA":
         value = 2;
         break;
-      case '200 - 2000 nA':
+      case "200 - 2000 nA":
         value = 3;
         break;
-      case ' 20 -  200 nA':
+      case " 20 -  200 nA":
         value = 4;
         break;
-      case '  2 -   20 nA':
+      case "  2 -   20 nA":
         value = 5;
         break;
-      case '200 - 2000 pA':
+      case "200 - 2000 pA":
         value = 6;
         break;
     }
 
-    console.log(value)
+    console.log(value);
     xRangePV.inputValue = value;
     yRangePV.inputValue = value;
     this.setState({
       xrange: xRangePV,
-      yrange: yRangePV
+      yrange: yRangePV,
     });
   };
 
   render() {
     let yrangePV;
     if (this.props.onlyX === true) {
-      yrangePV =  this.props.systemName + ':xrange';
-    }
-    else {
-      yrangePV =  this.props.systemName + ':yrange';
+      yrangePV = this.props.systemName + ":xrange";
+    } else {
+      yrangePV = this.props.systemName + ":yrange";
     }
 
     let xrangePV;
     if (this.props.onlyY === true) {
-      xrangePV =  this.props.systemName + ':yrange';
-    }
-    else {
-      xrangePV =  this.props.systemName + ':xrange';
+      xrangePV = this.props.systemName + ":yrange";
+    } else {
+      xrangePV = this.props.systemName + ":xrange";
     }
 
     const { classes } = this.props;
 
-    const initialized = this.state.xrange.initialized && this.state.yrange.initialized;
+    const initialized =
+      this.state.xrange.initialized && this.state.yrange.initialized;
 
     let value = this.state.xrange.inputValue;
     let enum_strings = {};
@@ -142,43 +142,42 @@ class HarpRangeSelection extends React.Component {
     if (initialized) {
       switch (parseInt(this.state.xrange.inputValue)) {
         case 1:
-          value = ' 20 -  200 uA';
+          value = " 20 -  200 uA";
           break;
         case 2:
-          value = '  2 -   20 uA';
+          value = "  2 -   20 uA";
           break;
         case 3:
-          value = '200 - 2000 nA';
+          value = "200 - 2000 nA";
           break;
         case 4:
-          value = ' 20 -  200 nA';
+          value = " 20 -  200 nA";
           break;
         case 5:
-          value = '  2 -   20 nA';
+          value = "  2 -   20 nA";
           break;
         case 6:
-          value = '200 - 2000 pA';
+          value = "200 - 2000 pA";
           break;
       }
     }
 
     enum_strings = [
-      ' 20 -  200 uA',
-      '  2 -   20 uA',
-      '200 - 2000 nA',
-      ' 20 -  200 nA',
-      '  2 -   20 nA',
-      '200 - 2000 pA',
+      " 20 -  200 uA",
+      "  2 -   20 uA",
+      "200 - 2000 nA",
+      " 20 -  200 nA",
+      "  2 -   20 nA",
+      "200 - 2000 pA",
     ];
 
     let write_access = false;
-    
+
     if (initialized) {
-      if (typeof this.state.xrange.metadata !== 'undefined') {
-        if (typeof this.state.xrange.metadata.write_access !== 'undefined') {
+      if (typeof this.state.xrange.metadata !== "undefined") {
+        if (typeof this.state.xrange.metadata.write_access !== "undefined") {
           write_access = this.state.xrange.metadata.write_access;
         }
-       
       }
     }
 
@@ -186,56 +185,55 @@ class HarpRangeSelection extends React.Component {
       <React.Fragment>
         <DataConnection
           pv={xrangePV}
-          handleInputValue={this.handleInputValue('xrange')}
-          handleMetadata={this.handleMetadata('xrange')}
-          outputValue={this.state['xrange'].inputValue}
+          handleInputValue={this.handleInputValue("xrange")}
+          handleMetadata={this.handleMetadata("xrange")}
+          outputValue={this.state["xrange"].inputValue}
         />
         <DataConnection
           pv={yrangePV}
-          handleInputValue={this.handleInputValue('yrange')}
-          handleMetadata={this.handleMetadata('yrange')}
-          outputValue={this.state['yrange'].inputValue}
+          handleInputValue={this.handleInputValue("yrange")}
+          handleMetadata={this.handleMetadata("yrange")}
+          outputValue={this.state["yrange"].inputValue}
         />
 
-        {initialized === true &&
+        {initialized === true && (
           <TextField
             disabled={write_access === false ? true : false}
-
             select
             className={classes.TextField}
             value={value}
-            onKeyPress={this.catchReturn('value')}
-            onFocus={event => this.handleOnFocus(event)}
-            onBlur={event => this.handleOnBlur(event)}
-            onChange={this.handleChange('value')}
+            onKeyPress={this.catchReturn("value")}
+            onFocus={(event) => this.handleOnFocus(event)}
+            onBlur={(event) => this.handleOnBlur(event)}
+            onChange={this.handleChange("value")}
             label={this.props.label}
             margin="normal"
             variant="outlined"
           >
-            {enum_strings.map((item, index) =>
-              <MenuItem key={item.toString()} value={item}> {item} </MenuItem>
-            )}
+            {enum_strings.map((item, index) => (
+              <MenuItem key={item.toString()} value={item}>
+                {" "}
+                {item}{" "}
+              </MenuItem>
+            ))}
           </TextField>
-        }
+        )}
 
-        {(initialized === false || initialized === 'undefined') &&
+        {(initialized === false || initialized === "undefined") && (
           <TextField
             value={""}
             label={"Connecting to:" + xrangePV}
             disabled={true}
             margin="normal"
             variant="outlined"
-          />}
+          />
+        )}
       </React.Fragment>
-    )
+    );
   }
 }
 
-HarpRangeSelection.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
 HarpRangeSelection.contextType = AutomationStudioContext;
-export default withStyles(styles)(HarpRangeSelection)
+export default withStyles(styles)(HarpRangeSelection);
 
-  /* eslint-disable eqeqeq */
+/* eslint-disable eqeqeq */

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import Widget from "../SystemComponents/Widgets/Widget";
-import withStyles from "@mui/styles/withStyles";
 import {
   svgHeight,
   svgCenterY,
@@ -9,7 +8,6 @@ import {
   svgCenterX,
 } from "../SystemComponents/svgConstants";
 import { v4 as uuidv4 } from "uuid";
-import PropTypes from "prop-types";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";

@@ -169,7 +169,7 @@ const TraditionalLayout = ({
 
 interface TraditionalLayoutProps {
   /** Title to be displayed in the app bar */
-  title?: string;
+  title?: string|null;
   /** Alignment of the title in the app bar */
   alignTitle?: "left" | "center" | "right";
   /** Typography variant of the title text */

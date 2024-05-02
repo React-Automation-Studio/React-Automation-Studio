@@ -1,6 +1,5 @@
 import React from "react";
 import { Typography, Paper, FormControlLabel } from "@mui/material";
-import PropTypes from "prop-types";
 import Widget from "../SystemComponents/Widgets/Widget";
 const normalizeColors = (theme, color) => {
   if (color === "primary") {

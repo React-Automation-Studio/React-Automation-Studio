@@ -252,6 +252,32 @@ const GaugeInternalComponent = (props) => {
 };
 
 /**
+ * The Gauge is an React-Automation-studio component useful for displaying levels or progress.
+ */
+const Gauge = ({
+  debug = false,
+  min = 0,
+  max = 100,
+  usePvPrecision = false,
+  labelPlacement = "top",
+  showTooltip = false,
+  ...props
+}: GaugeProps) => {
+  return (
+    <Widget
+      {...props}
+      component={GaugeInternalComponent}
+      debug={debug}
+      min={min}
+      max={max}
+      usePvPrecision={usePvPrecision}
+      labelPlacement={labelPlacement}
+      showTooltip={showTooltip}
+    />
+  );
+};
+
+/**
  * Props for the Gauge component.
  */
 interface GaugeProps {
@@ -370,31 +396,5 @@ interface GaugeProps {
    */
   labelPlacement?: "start" | "top" | "bottom" | "end";
 }
-
-/**
- * The Gauge is an React-Automation-studio component useful for displaying levels or progress.
- */
-const Gauge = ({
-  debug = false,
-  min = 0,
-  max = 100,
-  usePvPrecision = false,
-  labelPlacement = "top",
-  showTooltip = false,
-  ...props
-}: GaugeProps) => {
-  return (
-    <Widget
-      {...props}
-      component={GaugeInternalComponent}
-      debug={debug}
-      min={min}
-      max={max}
-      usePvPrecision={usePvPrecision}
-      labelPlacement={labelPlacement}
-      showTooltip={showTooltip}
-    />
-  );
-};
 
 export default Gauge;

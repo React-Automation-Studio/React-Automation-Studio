@@ -211,6 +211,36 @@ function TextOutputComponent(props) {
 }
 
 /**
+ *  The TextOutput Component is a wrapper on the Material-UI contained TextField component in read-only mode.
+ *  The TextField component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
+ *  The margins and spacing must be controlled from the parent component.<br/><br/>
+ *  Material-UI TextField Demos:
+ *  https://mui.com/demos/text-fields<br/><br/>
+ *  Material-UI TextField API:
+ *  https://mui.com/api/text-field
+ */
+const TextOutput = ({
+  debug = false,
+  variant = "outlined",
+  margin = "none",
+  alarmSensitive = false,
+  showTooltip = false,
+  ...props
+}: TextOutputProps) => {
+  return (
+    <Widget
+      {...props}
+      component={TextOutputComponent}
+      pvs={undefined}
+      debug={debug}
+      variant={variant}
+      margin={margin}
+      alarmSensitive={alarmSensitive}
+      showTooltip={showTooltip}
+    />
+  );
+};
+/**
  * Props for the TextOutput component.
  */
 interface TextOutputProps {
@@ -377,36 +407,5 @@ interface TextOutputProps {
 
   margin?: "none" | "dense" | "normal";
 }
-
-/**
- *  The TextOutput Component is a wrapper on the Material-UI contained TextField component in read-only mode.
- *  The TextField component is implemented with zero margins and enabled to grow to the width of its parent container.<br/><br/>
- *  The margins and spacing must be controlled from the parent component.<br/><br/>
- *  Material-UI TextField Demos:
- *  https://mui.com/demos/text-fields<br/><br/>
- *  Material-UI TextField API:
- *  https://mui.com/api/text-field
- */
-const TextOutput = ({
-  debug = false,
-  variant = "outlined",
-  margin = "none",
-  alarmSensitive = false,
-  showTooltip = false,
-  ...props
-}: TextOutputProps) => {
-  return (
-    <Widget
-      {...props}
-      component={TextOutputComponent}
-      pvs={undefined}
-      debug={debug}
-      variant={variant}
-      margin={margin}
-      alarmSensitive={alarmSensitive}
-      showTooltip={showTooltip}
-    />
-  );
-};
 
 export default TextOutput;

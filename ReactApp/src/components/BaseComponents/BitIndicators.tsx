@@ -122,6 +122,39 @@ const BitIndicatorsComponent = (props) => {
   );
 };
 
+/**
+ * The BitIndicators Component is a wrapper on multiple SvgIcon components.
+ * Each SvgIcon component indicates the value of each of the bits of the PV Value.
+ * <br/><br/>
+ * Material-UI SvgIcon Demos:
+ * https://mui.com/style/icons/<br/><br/>
+ * Material-UI SvgIcon API:
+ * https://mui.com/api/svg-icon/<br/><br/>
+ * A custom Icon can used by importing it in the parent and assigning it as a child <br/><br/>
+ */
+const BitIndicators = ({
+  numberOfBits = 8,
+  horizontal = false,
+  reverseBits = false,
+  onColor = "primary",
+  offColor = "default",
+  usePvBitLabels = false,
+  ...props
+}: BitIndicatorsProps) => {
+  return (
+    <Widget
+      {...props}
+      numberOfBits={numberOfBits}
+      horizontal={horizontal}
+      reverseBits={reverseBits}
+      onColor={onColor}
+      offColor={offColor}
+      usePvBitLabels={usePvBitLabels}
+      component={BitIndicatorsComponent}
+    />
+  );
+};
+
 interface BitIndicatorsProps {
   /**
    * The PV name for the BitIndicators component.
@@ -196,39 +229,5 @@ interface BitIndicatorsProps {
    */
   offColor?: string;
 }
-
-/**
- * The BitIndicators Component is a wrapper on multiple SvgIcon components.
- * Each SvgIcon component indicates the value of each of the bits of the PV Value.
- * <br/><br/>
- * Material-UI SvgIcon Demos:
- * https://mui.com/style/icons/<br/><br/>
- * Material-UI SvgIcon API:
- * https://mui.com/api/svg-icon/<br/><br/>
- * A custom Icon can used by importing it in the parent and assigning it as a child <br/><br/>
- */
-const BitIndicators = ({
-  numberOfBits = 8,
-  horizontal = false,
-  reverseBits = false,
-  onColor = "primary",
-  offColor = "default",
-  usePvBitLabels = false,
-  ...props
-}: BitIndicatorsProps) => {
-  
-  return (
-    <Widget
-      {...props}
-      numberOfBits={numberOfBits}
-      horizontal={horizontal}
-      reverseBits={reverseBits}
-      onColor={onColor}
-      offColor={offColor}
-      usePvBitLabels={usePvBitLabels}
-      component={BitIndicatorsComponent}
-    />
-  );
-};
 
 export default BitIndicators;

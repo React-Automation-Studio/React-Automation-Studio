@@ -1,10 +1,13 @@
-import React  from 'react'
+import React from "react";
 
 import Widget from "../SystemComponents/Widgets/Widget";
-import withStyles from '@mui/styles/withStyles';
-import  {svgHeight,svgCenterY,svgWidth,svgCenterX} from "../SystemComponents/svgConstants";
-import { v4 as uuidv4 } from 'uuid';
-import PropTypes from 'prop-types';
+import {
+  svgHeight,
+  svgCenterY,
+  svgWidth,
+  svgCenterX,
+} from "../SystemComponents/svgConstants";
+import { v4 as uuidv4 } from "uuid";
 import { styled } from "@mui/material/styles";
 import { useTheme } from "@mui/system";
 const TextLabel = styled("text")(({ theme }) => ({
@@ -14,9 +17,9 @@ const TextLabel = styled("text")(({ theme }) => ({
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */
 const SteererYMagnetComponent = (props) => {
-  const theme=useTheme();
-  const handleOnClick = device => event => {
-    if (typeof props.handleOnClick !== 'undefined') {
+  const theme = useTheme();
+  const handleOnClick = (device) => (event) => {
+    if (typeof props.handleOnClick !== "undefined") {
       props.handleOnClick(device);
     }
   };
@@ -29,64 +32,82 @@ const SteererYMagnetComponent = (props) => {
   let value;
   if (initialized) {
     value = props.value;
-  }
-  else {
+  } else {
     value = 0;
   }
 
-  let color = '';
+  let color = "";
   if (initialized) {
-    if (props.alarmSensitive !== 'undefined') {
+    if (props.alarmSensitive !== "undefined") {
       if (props.alarmSensitive == true) {
         if (alarmSeverity == 1) {
           color = theme.palette.alarm.minor.main;
-        }
-        else if (alarmSeverity == 2) {
+        } else if (alarmSeverity == 2) {
           color = theme.palette.alarm.major.main;
-        }
-        else {
+        } else {
           color = theme.palette.beamLineComponent.main;
         }
       }
     }
-  }
-  else {
-    color = 'grey';
+  } else {
+    color = "grey";
   }
 
   const componentId = uuidv4();
   return (
-    <svg
-      x={props.x}
-      y={props.y}
-
-      width={svgWidth}
-      height={svgHeight}
-    >
-      <g transform={'translate(' + svgCenterX + ',' + (svgCenterY) + ')'}
+    <svg x={props.x} y={props.y} width={svgWidth} height={svgHeight}>
+      <g
+        transform={"translate(" + svgCenterX + "," + svgCenterY + ")"}
         onClick={handleOnClick(props.system)}
       >
-        <linearGradient id={componentId + 'elipse-gradient'} gradientTransform="rotate(0)">
-          <stop offset="0%" stopOpacity="30" stopColor={'silver'} />
+        <linearGradient
+          id={componentId + "elipse-gradient"}
+          gradientTransform="rotate(0)"
+        >
+          <stop offset="0%" stopOpacity="30" stopColor={"silver"} />
           <stop offset="75%" stopColor={color} />
         </linearGradient>
         <defs>
-          <filter id={componentId + "elipseShadow"} x="0" y="0" width="600%" height="500%">
+          <filter
+            id={componentId + "elipseShadow"}
+            x="0"
+            y="0"
+            width="600%"
+            height="500%"
+          >
             <feOffset result="offOut" in="SourceGraphic" dx="2.5" dy="2.5" />
-            <feColorMatrix result="matrixOut" in="offOut" type="matrix"
-              values="0.2 0 0 0 0 0 0.2 0 0 0 0 0 0.2 0 0 0 0 0 1 0" />
-            <feGaussianBlur result="blurOut" in="matrixOut" stdDeviation="2.5" />
+            <feColorMatrix
+              result="matrixOut"
+              in="offOut"
+              type="matrix"
+              values="0.2 0 0 0 0 0 0.2 0 0 0 0 0 0.2 0 0 0 0 0 1 0"
+            />
+            <feGaussianBlur
+              result="blurOut"
+              in="matrixOut"
+              stdDeviation="2.5"
+            />
             <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
           </filter>
         </defs>
-        <g filter={props.componentShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
+        <g
+          filter={
+            props.componentShadow === true
+              ? "url(#" + componentId + "elipseShadow)"
+              : ""
+          }
         >
           <g>
-            <g transform="translate(-10,-1097)"
-              fill={props.componentGradient === true ? 'url(#' + componentId + 'elipse-gradient)' : color}
+            <g
+              transform="translate(-10,-1097)"
+              fill={
+                props.componentGradient === true
+                  ? "url(#" + componentId + "elipse-gradient)"
+                  : color
+              }
               style={{
-                'strokeWidth': '0.3',
-                'stroke': 'black'
+                strokeWidth: "0.3",
+                stroke: "black",
               }}
             >
               <path
@@ -95,7 +116,8 @@ const SteererYMagnetComponent = (props) => {
               />
               <path
                 d="m 3.7272638,1073.1029 12.6612032,10.3458 -3.429518,38.5135 -12.81960547,-10.3114 1.02612037,-9.0872 8.8924011,0.049 0.886777,-9.4836 -0.665083,-0.5665 -8.3258489,-0.049 z"
-                id="side" />
+                id="side"
+              />
 
               <path
                 d="m 6.7324518,1089.7546 3.3993112,2.7589 -3.5963727,0.049 0.2955922,-2.6111"
@@ -110,9 +132,10 @@ const SteererYMagnetComponent = (props) => {
                 id="top"
               />
             </g>
-            <g transform="translate(-10,-1097)"
-              fill={'#b87333'}
-              style={{ 'strokeWidth': '0.3', 'stroke': 'orange' }}
+            <g
+              transform="translate(-10,-1097)"
+              fill={"#b87333"}
+              style={{ strokeWidth: "0.3", stroke: "orange" }}
             >
               <path
                 d="m 6.7825803,1090.448 c 0.092819,-3.8381 0.5484134,-8.5093 1.2007186,-13.6321 v 0"
@@ -252,142 +275,190 @@ const SteererYMagnetComponent = (props) => {
         </g>
 
         <TextLabel
-          x={typeof props.valueOffsetX !== 'undefined' ? props.valueOffsetX : 0}
-          y={typeof props.valueOffsetY !== 'undefined' ? props.valueOffsetY + 57.5 : 57.5}
-          textAnchor='middle'
-          filter={props.textShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
+          x={typeof props.valueOffsetX !== "undefined" ? props.valueOffsetX : 0}
+          y={
+            typeof props.valueOffsetY !== "undefined"
+              ? props.valueOffsetY + 57.5
+              : 57.5
+          }
+          textAnchor="middle"
+          filter={
+            props.textShadow === true
+              ? "url(#" + componentId + "elipseShadow)"
+              : ""
+          }
         >
           {value + " " + props.units}
         </TextLabel>
         <TextLabel
-          x={typeof props.labelOffsetX !== 'undefined' ? props.labelOffsetX : 0}
-          y={typeof props.labelOffsetY !== 'undefined' ? props.labelOffsetY - 30 : -30}
-          textAnchor='middle'
-          filter={props.textShadow === true ? "url(#" + componentId + "elipseShadow)" : ""}
+          x={typeof props.labelOffsetX !== "undefined" ? props.labelOffsetX : 0}
+          y={
+            typeof props.labelOffsetY !== "undefined"
+              ? props.labelOffsetY - 30
+              : -30
+          }
+          textAnchor="middle"
+          filter={
+            props.textShadow === true
+              ? "url(#" + componentId + "elipseShadow)"
+              : ""
+          }
         >
           {props.label}
         </TextLabel>
       </g>
     </svg>
   );
-}
+};
 
 /**
  * SteererYMagnet Beam line component
  *
- * The label, min, max, units, pv and tooltip all accept macros that can be replaced by the values defined in the macros prop.  
+ * The label, min, max, units, pv and tooltip all accept macros that can be replaced by the values defined in the macros prop.
  */
-const SteererYMagnet = (props) => {
+const SteererYMagnet = ({
+  debug = false,
+  showLabel = true,
+  showValue = true,
+  alarmSensitive = false,
+  showTooltip = false,
+  labelOffsetY = 0,
+  labelOffsetX = 0,
+  valueOffsetY = 0,
+  valueOffsetX = 0,
+  componentShadow = true,
+  textShadow = false,
+  componentGradient = true,
+  ...props
+}: SteererYMagnetProps) => {
   return (
-    <Widget svgWidget={true}  {...props} component={SteererYMagnetComponent} pv={props.pv} label={props.label} />
-  )
-}
+    <Widget
+      svgWidget={true}
+      {...props}
+      component={SteererYMagnetComponent}
+      pv={props.pv}
+      label={props.label}
+      debug={debug}
+      showLabel={showLabel}
+      showValue={showValue}
+      alarmSensitive={alarmSensitive}
+      showTooltip={showTooltip}
+      labelOffsetY={labelOffsetY}
+      labelOffsetX={labelOffsetX}
+      valueOffsetY={valueOffsetY}
+      valueOffsetX={valueOffsetX}
+      componentShadow={componentShadow}
+      textShadow={textShadow}
+      componentGradient={componentGradient}
+    />
+  );
+};
 
-SteererYMagnet.propTypes = {
+interface SteererYMagnetProps {
   /**
    * Directive to use the  alarm severity status to alter the fields background color.
    */
-  alarmSensitive: PropTypes.bool,
+  alarmSensitive?: boolean;
   /**
    * Custom PV to define the alarm severity to be used, alarmSensitive must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
-  alarmPv: PropTypes.string,
+  alarmPv?: string;
   /**
    * If defined, then the DataConnection and
    * the widget debugging information will be displayed.
    */
-  debug: PropTypes.bool,
+  debug?: boolean;
 
   /**
    * Local variable initialization value.
    * When using loc:// type PVs.
    */
-  initialLocalVariableValue: PropTypes.string,
+  initialLocalVariableValue?: string;
   /**
    * Custom label to be used, if  usePvLabel is not defined.
    */
-  label: PropTypes.string,
+  label?: string;
   /**
-  * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
-  */
-  labelPv: PropTypes.string,
+   * Custom PV to define the units to be used, usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
+   */
+  labelPv?: string;
   /**
    * Values of macros that will be substituted in the pv name.
    * eg. {{'$(device)':'testIOC','$(id)':'2'}}
    */
-  macros: PropTypes.object,
+  macros?: object;
   /**
    * Custom maximum to be used, if usePvMinMax is not defined.
    */
-  max: PropTypes.number,
+  max?: number;
   /**
    * Custom PV to define the maximum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
-  maxPv: PropTypes.string,
+  maxPv?: string;
   /**
    * Custom minimum value to be used, if usePvMinMax is not defined.
    */
-  min: PropTypes.number,
+  min?: number;
   /**
    * Custom PV to define the minimum to be used, usePvMinMax must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
-  minPv: PropTypes.string,
+  minPv?: string;
 
   /**
    * Custom precision to round the value.
    */
-  prec: PropTypes.number,
+  prec?: number;
   /**
    * Custom PV to define the precision to be used, usePvPrecision must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
-  precPv: PropTypes.string,
+  precPv?: string;
 
   /**
    * Custom units to be used, if usePvUnits is not defined.
    */
-  units: PropTypes.string,
+  units?: string;
   /**
    * Custom PV to define the units to be used, usePvUnits must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
    */
-  unitsPv: PropTypes.string,
+  unitsPv?: string;
   /**
    * Directive to fill the component's label with
    * the value contained in the  pv metadata's DESC field or the labelPv value.
    * If not defined it uses the custom label as defined by the label prop.
    */
-  usePvLabel: PropTypes.bool,
+  usePvLabel?: boolean;
   /**
-   * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver. 
-   * The pyEpics metadata is unfortunately static and the values used will be the initial values that pvserver receives when it connects the first time. 
+   * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver.
+   * The pyEpics metadata is unfortunately static and the values used will be the initial values that pvserver receives when it connects the first time.
    * This is sufficient in most cases except when the user wants to dynamically update the metaData.
-   * In this case a direct connection can be made to all the pv fields by setting useMetadata to false. 
+   * In this case a direct connection can be made to all the pv fields by setting useMetadata to false.
    * If any of the metadata pvs are defined i.e unitsPv then the PV makes a new data  connection to this alternate pv and will
-   * use the value provided by this pv as the units. 
+   * use the value provided by this pv as the units.
    * The same is the case for the precPV, labelPv, alarmPv, unitsPv and minPv.
    * By setting useMetadata to false also enables connection to other variables as defined by different protocols.
    */
-  useMetadata: PropTypes.bool,
+  useMetadata?: boolean;
   /**
    * Directive to use the pv metadata's HOPR and LOPR fields or the minPv and maxPv values
    * to limit the maximum and minimum values
    * that can be contained in the value.
    * If not defined it uses the custom min and max as defined by the min and max prop.
    */
-  usePvMinMax: PropTypes.bool,
+  usePvMinMax?: boolean;
   /**
    * Directive to round the value using the precision field of the PV metadata or precPv.
    * If not defined it uses the custom precision as defined by the prec prop.
    */
-  usePvPrecision: PropTypes.bool,
+  usePvPrecision?: boolean;
   /**
    * Directive to use the units contained in the   pv metdata's EGU field or unitsPv.
    *  If not defined it uses the custom units as defined by the units prop.
    */
-  usePvUnits: PropTypes.bool,
+  usePvUnits?: boolean;
   /**
    * Directive to use PV's string values.
    */
-  useStringValue: PropTypes.bool,
+  useStringValue?: boolean;
 
   /**
    * If defined, then the string representation of the number can be formatted
@@ -395,85 +466,70 @@ SteererYMagnet.propTypes = {
    * eg. numberFormat={{notation: 'engineering',precision: 3}}.
    * See https://mathjs.org/docs/reference/functions/format.html for more examples
    */
-  numberFormat: PropTypes.object,
+  numberFormat?: object;
 
   /** Name of the pv process variable, eg. '$(device):test$(id)'*/
-  pv: PropTypes.string,
+  pv?: string;
 
   /**
-  * Tooltip Text
-  */
-  tooltip: PropTypes.string,
+   * Tooltip Text
+   */
+  tooltip?: string;
   /**
    * Directive to show the tooltip
    */
-  showTooltip: PropTypes.bool,
+  showTooltip?: boolean;
   /**
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
 
-  tooltipProps: PropTypes.object,
+  tooltipProps?: object;
   /**
    *  A System description object the passed to the callback function when the item is clicked on
    */
 
-  system: PropTypes.object,
+  system?: object;
   /**
    *  A callback function when the item is clicked on, returns the system object
    */
 
-  handleOnClick: PropTypes.func,
+  handleOnClick?: Function;
   /**
    * Y Offset for the label
    */
-  labelOffsetY: PropTypes.number,
+  labelOffsetY?: number;
   /**
    * X Offset for the label
    */
-  labelOffsetX: PropTypes.number,
+  labelOffsetX?: number;
   /**
-  * Y Offset for the pv value
-  */
-  valueOffsetY: PropTypes.number,
+   * Y Offset for the pv value
+   */
+  valueOffsetY?: number;
   /**
    * X Offset for the pv value
    */
-  valueOffsetX: PropTypes.number,
+  valueOffsetX?: number;
   /**
    * enable a shadow behind the text
    */
-  textShadow: PropTypes.bool,
+  textShadow?: boolean;
   /**
    * use a gradient fil on the component
    */
-  componentGradient: PropTypes.bool,
+  componentGradient?: boolean;
   /**
    * enable a shadow behind the component
    */
-  componentShadow: PropTypes.bool,
+  componentShadow?: boolean;
   /**
    * Direct to show the label
    */
-  showLabel: PropTypes.bool,
+  showLabel?: boolean;
   /**
    * Direct to show the value
    */
-  showValue: PropTypes.bool,
-};
-
-SteererYMagnet.defaultProps = {
-  debug: false,
-  showLabel:true,
-  showValue:true,
-  alarmSensitive: false,
-  showTooltip: false,
-  labelOffsetY: 0,
-  labelOffsetX: 0,
-  valueOffsetY: 0,
-  valueOffsetX: 0,
-  componentShadow: true,
-  textShadow: false,
-  componentGradient: true,
-};
+  showValue?: boolean;
+}
 
 export default SteererYMagnet;

@@ -580,7 +580,7 @@ interface WidgetProps {
    * Component to be rendered. 
    * 
    */
-  component?: React.ReactNode; 
+  component?: any;
     
 }
 

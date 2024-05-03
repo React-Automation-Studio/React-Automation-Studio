@@ -930,7 +930,7 @@ const ArchiverDataViewer = ({
           />
         </div>
       )}
-      {props.traces?.map(
+      {props.traces.map(
         (trace, index) =>
           width !== null &&
           height !== null && (
@@ -994,7 +994,7 @@ interface ArchiverDataViewerProps {
    *
    *  Example: ".3e" : exponential notaion with 3 digits.
    */
-  traces?: {
+  traces: {
     pv: string;
     name?: string;
     type?: string;
@@ -1066,6 +1066,35 @@ interface ArchiverDataViewerProps {
    * To  time,  ISO date format: (YYYY-MM-DDTHH:MM:SSZ)
    */
   to?: string;
+  /**
+   * Read only mode, when enabled the probe will be disabled
+   */
+  readOnly?: boolean;
+  /**
+   * Disable the context menu
+   * */
+  disableContextMenu?: boolean;
+  /**
+   * Title of the graph
+   * */
+  title?: string;
+  /**
+   * Macros to replace in the pv name
+   */
+  macros?: any;
+  /**
+   * Disable the probe
+   */
+  disableProbe?: boolean;
+  /**
+   * Y-axis title
+   * */
+  xAxisTitle?: string;
+  /**
+   * Y-axis title
+   *  */
+  yAxisTitle?: string;
+
 }
 
 export default ArchiverDataViewer;

@@ -210,15 +210,11 @@ const ArchiverData = (props) => {
  * <br/>The ArchiveDataViewer will indicate if connection can't be established to the pv's archived data.
  * @param {*} props
  */
-const ArchiverDataViewer = (
-{
- 
-  
-  showLegend= false,
-  defaultButtonsExpanded= true,
-  ...props}: ArchiverDataViewerProps
-
-) => {
+const ArchiverDataViewer = ({
+  showLegend = false,
+  defaultButtonsExpanded = true,
+  ...props
+}: ArchiverDataViewerProps) => {
   const paperRef = useRef(null);
   const classes = useStyles();
   const theme = useTheme();
@@ -593,7 +589,7 @@ const ArchiverDataViewer = (
   };
 
   return (
-    <div ref={paperRef} style={{ width: props.width?props.width:"100%" }}>
+    <div ref={paperRef} style={{ width: props.width ? props.width : "100%" }}>
       {pvConnections()}
 
       {props.showButtons && (
@@ -741,7 +737,7 @@ const ArchiverDataViewer = (
 
                       setFromButton("none");
                     }}
-                    slotProps={{ textField: { variant: 'standard' } }}
+                    slotProps={{ textField: { variant: "standard" } }}
                   />
                 </LocalizationProvider>
               </Grid>
@@ -764,7 +760,7 @@ const ArchiverDataViewer = (
                       setFromButton("none");
                       setLive(false);
                     }}
-                    slotProps={{ textField: { variant: 'standard' } }}
+                    slotProps={{ textField: { variant: "standard" } }}
                   />
                 </LocalizationProvider>
               </Grid>
@@ -809,7 +805,7 @@ const ArchiverDataViewer = (
         <div
           style={{
             width: width,
-            height: props.height?props.height:"40vh",
+            height: props.height ? props.height : "40vh",
             background: theme.palette.background.paper,
             paddingBottom: 8,
           }}
@@ -934,7 +930,7 @@ const ArchiverDataViewer = (
           />
         </div>
       )}
-      {props.traces.map(
+      {props.traces?.map(
         (trace, index) =>
           width !== null &&
           height !== null && (
@@ -979,15 +975,24 @@ interface ArchiverDataViewerProps {
   showLegend?: boolean;
   /**
    * An array of objects with shape that defines each trace:
-   * pv: The pv name, 
-   * name: The custom name of the trace, 
-   * type: The type of the trace i.e. `'scatter'`, 
-   * mode: The mode of the trace i.e. `'lines'`, 
-   * color: The custom color of the trace, 
-   * yAxis: Corresponding yAxis index, 
-   * yHoverFormat: The plotjs format overide for the y value. 
+   *
+   * pv: The pv variable name,
+   *
+   * name: The custom name of the trace,
+   *
+   * type: The type of the trace i.e. `'scatter'`,
+   *
+   * mode: The mode of the trace i.e. `'lines'`,
+   *
+   * color: The custom color of the trace,
+   *
+   * yAxis: Corresponding yAxis index,
+   *
+   * yHoverFormat: The plotjs format overide for the y value.
+   *
    * This is derived from the <a href="https://github.com/d3/d3-format/blob/v2.0.0/README.md#format">d3 format specification</a>
-     * Example: ".3e" : exponential notaion with 3 digits.
+   *
+   *  Example: ".3e" : exponential notaion with 3 digits.
    */
   traces?: {
     pv: string;
@@ -1000,10 +1005,17 @@ interface ArchiverDataViewerProps {
   }[];
   /**
    * An array of objects with shape that defines each Y Axes'
-   * Axis title, Axis color, shows or hides the grid, 
-   * overides the plotyjs format for the tick or sets 
-   * the type of the axis to 'linear' or 'log'
-   * 
+   *
+   * title: Axis title,
+   *
+   * color: Axis color,
+   *
+   * showgrid: shows or hides the grid,
+   *
+   * tickFormat: overides the plotyjs format for the tick
+   *
+   * type: sets the type of the axis to 'linear' or 'log'
+   *
    */
   yAxes?: {
     title?: string;
@@ -1035,7 +1047,17 @@ interface ArchiverDataViewerProps {
   /**
    * Sets fromTimeOffset button
    */
-  fromTimeOffset?: "30s" | "1m" | "5m" | "30m" | "1h" | "2h" | "12h" | "1d" | "2d" | "1w";
+  fromTimeOffset?:
+    | "30s"
+    | "1m"
+    | "5m"
+    | "30m"
+    | "1h"
+    | "2h"
+    | "12h"
+    | "1d"
+    | "2d"
+    | "1w";
   /**
    * From  time, ISO date format: (YYYY-MM-DDTHH:MM:SSZ), will override the fromTimeOffset
    */
@@ -1045,6 +1067,5 @@ interface ArchiverDataViewerProps {
    */
   to?: string;
 }
-
 
 export default ArchiverDataViewer;

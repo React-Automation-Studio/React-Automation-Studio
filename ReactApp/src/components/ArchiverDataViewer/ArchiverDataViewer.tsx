@@ -978,65 +978,38 @@ interface ArchiverDataViewerProps {
    */
   showLegend?: boolean;
   /**
-   * An array of objects with shape that defines each trace
+   * An array of objects with shape that defines each trace:
+   * pv: The pv name, 
+   * name: The custom name of the trace, 
+   * type: The type of the trace i.e. `'scatter'`, 
+   * mode: The mode of the trace i.e. `'lines'`, 
+   * color: The custom color of the trace, 
+   * yAxis: Corresponding yAxis index, 
+   * yHoverFormat: The plotjs format overide for the y value. 
+   * This is derived from the <a href="https://github.com/d3/d3-format/blob/v2.0.0/README.md#format">d3 format specification</a>
+     * Example: ".3e" : exponential notaion with 3 digits.
    */
   traces?: {
-    /**
-     * The pv name
-     */
     pv: string;
-    /**
-     * The custom name of the trace
-     */
     name?: string;
-    /**
-     * The type of the trace i.e. `'scatter'`
-     */
     type?: string;
-    /**
-     * The mode of the trace i.e. `'lines'`
-     */
     mode?: string;
-    /**
-     * The custom color of the trace
-     */
     color?: string;
-    /**
-     * Corresponding yAxis index
-     */
     yAxis?: number;
-    /**
-     * The plotjs format overide for the y value. This is derived from the <a href="https://github.com/d3/d3-format/blob/v2.0.0/README.md#format">d3 format specification</a>
-     * Example: ".3e" : exponential notaion with 3 digits.
-     *
-     */
     yHoverFormat?: string;
   }[];
   /**
-   * An array of objects with shape that defines each Y Axis
+   * An array of objects with shape that defines each Y Axes'
+   * Axis title, Axis color, shows or hides the grid, 
+   * overides the plotyjs format for the tick or sets 
+   * the type of the axis to 'linear' or 'log'
+   * 
    */
   yAxes?: {
-    /**
-     * Axis title
-     */
     title?: string;
-    /**
-     * Axis color
-     */
     color?: string;
-    /**
-     * show or hide the grid
-     */
     showgrid?: boolean;
-    /**
-     * The plotjs format overide for the tick format. This is derived from the <a href="https://github.com/d3/d3-format/blob/v2.0.0/README.md#format">d3 format specification</a>
-     * Example: ".3e" : exponential notaion with 3 digits.
-     *
-     */
     tickFormat?: string;
-    /**
-     * 'linear' or 'log' type
-     */
     type?: string;
   }[];
   /**

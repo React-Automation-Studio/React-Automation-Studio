@@ -2,9 +2,38 @@ import React, { useState, useContext, useEffect, useRef } from "react";
 import ReactAutomationStudioContext from "./AutomationStudioContext";
 import Typography from "@mui/material/Typography";
 import { io } from "socket.io-client";
+import { Socket } from "socket.io-client";
 import { v4 as uuidv4 } from "uuid";
+
+export type EpicsPVType = {
+  initialized: boolean;
+  pvname: string;
+  value: number | string;
+  severity: string | undefined;
+  timestamp: string | undefined;
+  metadata: {
+    initialized: boolean;
+    pvname: string;
+    value: string;
+    char_value: string;
+    alarmColor: string;
+    lower_disp_limit: string;
+    upper_disp_limit: string;
+    lower_warning_limit: string;
+    upper_warning_limit: string;
+    units: string;
+    precision: number;
+    enum_strs: string[];
+    write_access: boolean;
+  };
+};
+
+
+
 export const useEpicsPV = (props) => {
-  const [pv, setPv] = useState(() => {
+ 
+
+  const [pv, setPv] = useState<EpicsPVType>(() => {
     let pvname = props.pv;
     if (props.macros) {
       let macro;
@@ -41,6 +70,7 @@ export const useEpicsPV = (props) => {
         units: "",
         precision: 0,
         enum_strs: [],
+        write_access: false,  
       },
     };
 
@@ -49,8 +79,10 @@ export const useEpicsPV = (props) => {
   const pvName = pv.pvname;
 
   const [pvConnectionId] = useState(null);
+  
+
   const context = useContext(ReactAutomationStudioContext);
-  const [socket, setSocket] = useState(null);
+  const [socket, setSocket] = useState<any>(null);
   useEffect(() => {
     if (props.makeNewSocketIoConnection === true) {
       let newSocket = io(context.pvServerUrl ?? "/pvServer", {
@@ -78,7 +110,7 @@ export const useEpicsPV = (props) => {
   useEffect(() => {
     socketRef.current = socket;
   }, [socket]);
-  const pvConnectionIdRef = useRef(pvConnectionId);
+  const pvConnectionIdRef = useRef<any>(pvConnectionId);
 
   useEffect(() => {
     const updatePVData = (msg) => {
@@ -93,13 +125,14 @@ export const useEpicsPV = (props) => {
             timestamp: msg.timestamp,
           }));
         } else {
-          setPv((pv) => ({
+          setPv((pv:EpicsPVType) => ({
             ...pv,
             value: props.useStringValue === true ? msg.char_value : msg.value,
             severity: msg.severity,
             timestamp: msg.timestamp,
             initialized: true,
             metadata: {
+              initialized: true,
               pvname: msg.pvname,
               value: msg.value,
               char_value: msg.char_value,
@@ -282,7 +315,7 @@ interface EpicsPVProps {
 
   /** A function that returns the pv object */
 
-  pvData?: () => void;
+  pvData?: (pv: EpicsPVType) => void;
 
   /**
    * Directive to use PV's string values.

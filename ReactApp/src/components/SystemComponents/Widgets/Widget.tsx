@@ -1,38 +1,36 @@
-import React, { useState, useEffect } from 'react'
-import PV from '../PV'
+import React, { useState, useEffect } from "react";
+import PV from "../PV";
 import { LanDisconnect } from "mdi-material-ui/";
-import { useTheme } from '@mui/material/styles';
-import Tooltip from '@mui/material/Tooltip';
-import {replaceMacros,replaceArrayMacros} from '../Utils/macroReplacement';
+import { useTheme } from "@mui/material/styles";
+import Tooltip from "@mui/material/Tooltip";
+import { replaceMacros, replaceArrayMacros } from "../Utils/macroReplacement";
 import { useContextMenu } from "../Utils/widgetHooks";
-import { 
-  checkIndex, 
-  checkPrecision, 
-  formatValue, 
-  isInsideLimits
+import {
+  checkIndex,
+  checkPrecision,
+  formatValue,
+  isInsideLimits,
 } from "../Utils/widgetFunctions";
-
+import { PVType } from "../PV";
 
 /**
  * The Widget component creates standard properties, state variables and callbacks to manage the behaviour of a component communicating with one or multiple PVs. It also provides the default RAS contextMenu to the child component.
  *
  * The label, min, max, units, pv and tooltip all accept macros that can be replaced by the values defined in the macros prop.
  */
-const Widget = (
-  {
-  disabled= false,
-  onColor= "primary",
-  offColor= "default",
-  showTooltip=false,
-  useMetadata= true,
-  tooltip="",
-  writeOutputValueToAllpvs=false,
-    ...props}: WidgetProps
-
-) => {
+const Widget = ({
+  disabled = false,
+  onColor = "primary",
+  offColor = "default",
+  showTooltip = false,
+  useMetadata = true,
+  tooltip = "",
+  writeOutputValueToAllpvs = false,
+  ...props
+}: WidgetProps) => {
   const { disableProbe, index } = props;
   const theme = useTheme();
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState<any>(0);
   const [initialized, setInitalized] = useState(false);
   const [immediateValue, setImmediateValue] = useState(null);
   const [commitChange, setCommitChange] = useState(false);
@@ -40,97 +38,111 @@ const Widget = (
   const [outputValue, setOutputValue] = useState(null);
   const [focus, setFocus] = useState(false);
   const [readOnly, setReadOnly] = useState(true);
-  const [enumStrings, setEnumStrings] = useState([]);
-  const [alarmSeverity, setAlarmSeverity] = useState(0);
-  const [min, setMin] = useState(0);
-  const [prec, setPrec] = useState(0);
-  const [max, setMax] = useState(0);
+  const [enumStrings, setEnumStrings] = useState<string[]>([]);
+  const [alarmSeverity, setAlarmSeverity] = useState<
+    string | undefined | number
+  >(0);
+  const [min, setMin] = useState<number | undefined>(0);
+  const [prec, setPrec] = useState<number | undefined>(0);
+  const [max, setMax] = useState<number | undefined>(0);
   const [units, setUnits] = useState("");
   const [label, setLabel] = useState("");
   const [passedTooltip] = useState(replaceMacros(tooltip));
-  const [pv, setPv] = useState({
+  const [pv, setPv] = useState<PVType>({
     value: 0,
     label: "",
     pvName: "",
     initialized: false,
     PVs: [],
-    metadata: {},
-    timestamp:"",
+    metadata: {
+      initialized: false,
+      pvname: "",
+      value: "",
+      char_value: "",
+      alarmColor: "",
+      lower_disp_limit: "",
+      upper_disp_limit: "",
+      lower_warning_limit: "",
+      upper_warning_limit: "",
+      units: "",
+      precision: 0,
+      enum_strs: [],
+      write_access: false,
+    },
+    timestamp: "",
     readOnly: true,
-    severity: 0,
+    severity: "0",
     enum_strs: [],
     units: "",
+    max: 0,
+    min: 0,
+    prec: 0,
   });
-  const [pvs, setPvs] = useState([]);
+  const [pvs, setPvs] = useState<any>([]);
 
   const [contextMenu, handleToggleContextMenu] = useContextMenu(
-    [pv, ...pvs], 
-    readOnly, 
+    [pv, ...pvs],
+    readOnly,
     disableProbe
   );
- 
+
   useEffect(() => {
-    let ro=props.readOnly===true;
-    if (props.pv){
+    let ro = props.readOnly === true;
+    if (props.pv) {
       ro = ro || pv.readOnly;
     }
 
     if (props.pvs) {
       pvs.forEach((item) => {
         ro = ro || item.readOnly;
-      })
+      });
     }
 
-    setReadOnly(ro)
-     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pv, props.readOnly,pvs,])
+    setReadOnly(ro);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pv, props.readOnly, pvs]);
 
   useEffect(() => {
     if (props.usePvLabel) {
-      setLabel(pv.label)
+      setLabel(pv.label);
+    } else {
+      setLabel(replaceMacros(props.label, props.macros));
     }
-    else {
-      setLabel(replaceMacros(props.label,props.macros))
-    }
-     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.label, pv.label,props.macros])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.label, pv.label, props.macros]);
 
   useEffect(() => {
     if (props.usePvUnits) {
       if (pv.units) {
-        setUnits(pv.units)
+        setUnits(pv.units);
+      } else {
+        setUnits("");
       }
-      else {
-        setUnits("")
-      }
+    } else {
+      setUnits(replaceMacros(props.units, props.macros));
     }
-    else {
-      setUnits(replaceMacros(props.units,props.macros))
-    }
-     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.units, pv.units,props.macros])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.units, pv.units, props.macros]);
 
   useEffect(() => {
     if (props.usePvPrecision) {
-      setPrec(pv.prec)
+      setPrec(pv.prec);
+    } else {
+      setPrec(props.prec);
     }
-    else {
-      setPrec(props.prec)
-    }
-     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.prec, pv.prec, props.usePvPrecision])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.prec, pv.prec, props.usePvPrecision]);
 
   useEffect(() => {
     if (props.usePvMinMax) {
-      setMin(pv.min)
-      setMax(pv.max)
+      setMin(pv.min);
+      setMax(pv.max);
+    } else {
+      setMin(props.min);
+      setMax(props.max);
     }
-    else {
-      setMin(props.min,props.macros)
-      setMax(props.max,props.macros)
-    }
- // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.min, props.max, pv.min, pv.max])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.min, props.max, pv.min, pv.max]);
 
   useEffect(() => {
     if (!focus) {
@@ -143,26 +155,23 @@ const Widget = (
   }, [focus, pv.value, prec, props.numberFormat, props.debug]);
 
   useEffect(() => {
-    let newSeverity=pv.severity;
-    if (typeof props.useStringSeverityMatch !== 'undefined'){
-      if (props.useStringSeverityMatch===true){
-
-        if (typeof props.stringSeverity !== 'undefined'){
+    let newSeverity = pv.severity;
+    if (typeof props.useStringSeverityMatch !== "undefined") {
+      if (props.useStringSeverityMatch === true) {
+        if (typeof props.stringSeverity !== "undefined") {
           let string;
-          for (string in props.stringSeverity){
+          for (string in props.stringSeverity) {
             // eslint-disable-next-line eqeqeq
-            if (value==props.stringSeverity[string].stringMatch){
-              newSeverity=props.stringSeverity[string].severity;
+            if (value == props.stringSeverity[string].stringMatch) {
+              newSeverity = props.stringSeverity[string].severity;
               break;
             }
-
           }
-
         }
       }
     }
-    setAlarmSeverity(newSeverity)
-  }, [pv.severity,props.useStringSeverityMatch,props.stringSeverity,value])
+    setAlarmSeverity(newSeverity);
+  }, [pv.severity, props.useStringSeverityMatch, props.stringSeverity, value]);
 
   useEffect(() => {
     if (immediateValue !== null) {
@@ -185,47 +194,49 @@ const Widget = (
       setNewValueTrigger(newValueTrigger + 1);
       setCommitChange(false);
     }
-  }, [commitChange, min, max, prec, props.numberFormat, newValueTrigger, value]);
-    
+  }, [
+    commitChange,
+    min,
+    max,
+    prec,
+    props.numberFormat,
+    newValueTrigger,
+    value,
+  ]);
+
   useEffect(() => {
     if (props.custom_selection_strings) {
-      setEnumStrings(replaceArrayMacros(props.custom_selection_strings,props.macros))
+      setEnumStrings(
+        replaceArrayMacros(props.custom_selection_strings, props.macros)
+      );
+    } else {
+      setEnumStrings(pv.enum_strs);
     }
-    else {
-      setEnumStrings(pv.enum_strs)
-    }
-  }, [props.custom_selection_strings, pv.enum_strs,props.macros])
+  }, [props.custom_selection_strings, pv.enum_strs, props.macros]);
 
   useEffect(() => {
     let init =
-      (typeof props.pv !== 'undefined')
-      || (typeof props.pvs !== 'undefined')
+      typeof props.pv !== "undefined" || typeof props.pvs !== "undefined";
 
     if (props.pv) {
-      init = init&&pv.initialized;
+      init = init && pv.initialized;
     }
     if (props.pvs) {
       pvs.forEach((item) => {
         init = init && item.initialized;
-      })
+      });
     }
 
-    setInitalized(init)
+    setInitalized(init);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pv.initialized, pvs])
-
-  useEffect(()=>{
-    if (typeof props.usePrecision!=='undefined'){
-      console.warn("prop usePrecision is deprecated, use the usePvPrecision and prec props instead")
-    }
-  },[props])
+  }, [pv.initialized, pvs]);
 
   const wrapComponent = (CustomComponent, props) => {
-    return <CustomComponent {...props}  />;
-  }
+    return <CustomComponent {...props} />;
+  };
 
-  const hardDisabled = !initialized || readOnly||disabled;
+  const hardDisabled = !initialized || readOnly || disabled;
 
   const disconnectedIcon = () => {
     return (
@@ -237,19 +248,26 @@ const Widget = (
         }}
       />
     );
-  }
+  };
 
-  const getPvs = (pvArray, widgetProps, prevState, setState,newValueTrigger,outputValue) => {
+  const getPvs = (
+    pvArray,
+    widgetProps,
+    prevState,
+    setState,
+    newValueTrigger,
+    outputValue
+  ) => {
     let pvs = [];
-    if (typeof pvArray !== 'undefined') {
+    if (typeof pvArray !== "undefined") {
+      const pvs: React.ReactNode[] = [];
       pvArray.forEach((item, index) => {
         let pv;
         let props;
-        if (typeof item === Object) {
+        if (typeof item === "object") {
           pv = item.pv;
           props = item.props;
-        }
-        else {
+        } else {
           pv = item;
           props = widgetProps;
         }
@@ -279,55 +297,62 @@ const Widget = (
             useStringValue={props.useStringValue}
             initialLocalVariableValue={props.initialLocalVariableValue}
             debug={props.debug}
-            pvData={(data) => setState(prevState => {
-              let state = [...prevState]
-              state[index] = data;
-              return state
-
+            pvData={(data) =>
+              setState((prevState) => {
+                let state = [...prevState];
+                state[index] = data;
+                return state;
+              })
             }
-            )}
-            name={props.name}
-          />)
-      })
-      return pvs
+          />
+        );
+      });
+      return pvs;
+    } else {
+      return [];
     }
-    else {
-      return []
-    }
-  }
+  };
 
-  const childPv = typeof props.pv !== 'undefined' && <PV
-    pv={props.pv}
-    makeNewSocketIoConnection={props.makeNewSocketIoConnection}
-    maxPv={props.maxPv}
-    minPv={props.minPv}
-    min={props.min}
-    max={props.max}
-    usePvMinMax={props.usePvMinMax}
-    unitsPv={props.unitsPv}
-    usePvUnits={props.usePvUnits}
-    alarmPv={props.alarmPv}
-    labelPv={props.labelPv}
-    alarmSensitive={props.alarmSensitive}
-    usePvLabel={props.usePvLabel}
-    usePvPrecision={props.usePvPrecision}
-    prec={props.prec}
-    precPv={props.precPv}
-    useMetadata={useMetadata}
-    macros={props.macros}
-    newValueTrigger={newValueTrigger}
-    outputValue={outputValue}
-    useStringValue={props.useStringValue}
-    initialLocalVariableValue={props.initialLocalVariableValue}
-    debug={props.debug}
-    pvData={setPv}
-    name={props.name}
-  />
+  const childPv = typeof props.pv !== "undefined" && (
+    <PV
+      pv={props.pv}
+      makeNewSocketIoConnection={props.makeNewSocketIoConnection}
+      maxPv={props.maxPv}
+      minPv={props.minPv}
+      min={props.min}
+      max={props.max}
+      usePvMinMax={props.usePvMinMax}
+      unitsPv={props.unitsPv}
+      usePvUnits={props.usePvUnits}
+      alarmPv={props.alarmPv}
+      labelPv={props.labelPv}
+      alarmSensitive={props.alarmSensitive}
+      usePvLabel={props.usePvLabel}
+      usePvPrecision={props.usePvPrecision}
+      prec={props.prec}
+      precPv={props.precPv}
+      useMetadata={useMetadata}
+      macros={props.macros}
+      newValueTrigger={newValueTrigger}
+      outputValue={outputValue}
+      useStringValue={props.useStringValue}
+      initialLocalVariableValue={props.initialLocalVariableValue}
+      debug={props.debug}
+      pvData={setPv}
+    />
+  );
 
-  const childPvs = getPvs(props.pvs, props, pvs, setPvs,writeOutputValueToAllpvs?newValueTrigger:undefined,writeOutputValueToAllpvs?outputValue:undefined)
+  const childPvs = getPvs(
+    props.pvs,
+    props,
+    pvs,
+    setPvs,
+    writeOutputValueToAllpvs ? newValueTrigger : undefined,
+    writeOutputValueToAllpvs ? outputValue : undefined
+  );
 
   const handleValue = (newValue, setFunction) => {
-    if (checkIndex(index, value)) {
+    if (index !== undefined && Array.isArray(value)) {
       let newArrayValue = [...value];
       newArrayValue[index] = newValue;
       setFunction(newArrayValue);
@@ -336,17 +361,25 @@ const Widget = (
     }
   };
 
-  const child = props.component && wrapComponent(props.component,
-    {
+  const child =
+    props.component &&
+    wrapComponent(props.component, {
       ...props,
       initialized: initialized,
       pvName: pv.pvName,
-      value: checkIndex(index, value) ? value[index] : value,
+      value: index !== undefined && Array.isArray(value) ? value[index] : value,
       min: min,
       max: max,
-      prec:prec,
+      prec: prec,
       label: label,
-      formControlLabel:initialized?label :<span style={{fontSize:"inherit", whiteSpace: "nowrap"}}>{disconnectedIcon()}{" "+pv.pvName}</span>,
+      formControlLabel: initialized ? (
+        label
+      ) : (
+        <span style={{ fontSize: "inherit", whiteSpace: "nowrap" }}>
+          {disconnectedIcon()}
+          {" " + pv.pvName}
+        </span>
+      ),
       units: units,
       disabled: hardDisabled,
       readOnly: readOnly,
@@ -361,23 +394,23 @@ const Widget = (
       handleBlur: () => setFocus(false),
       pvData: pv,
       pvsData: pvs,
-     
-      onColor:onColor,
-      offColor:offColor,
-      showTooltip:showTooltip,
-      useMetadata:useMetadata,
-      tooltip:tooltip,
-      writeOutputValueToAllpvs:writeOutputValueToAllpvs,
-    })
+
+      onColor: onColor,
+      offColor: offColor,
+      showTooltip: showTooltip,
+      useMetadata: useMetadata,
+      tooltip: tooltip,
+      writeOutputValueToAllpvs: writeOutputValueToAllpvs,
+    });
 
   const divStyle = {
     width: "100%",
     height: "100%",
-  }
+  };
 
-  const Tag=props.svgWidget?"g":"div";
-  if(props.debug){
-    console.log("Widget PVs",props.pvs)
+  const Tag = props.svgWidget ? "g" : "div";
+  if (props.debug) {
+    console.log("Widget PVs", props.pvs);
   }
 
   return (
@@ -385,26 +418,24 @@ const Widget = (
       title={passedTooltip}
       disableFocusListener={true}
       disableTouchListener={true}
-      disableHoverListener={showTooltip===false}
-      {...props.tooltipProps}  
+      disableHoverListener={showTooltip === false}
+      {...props.tooltipProps}
       key={`${props.usePvLabel},${props.pvs},${props.pv}${props.usePvMinMax}${props.usePvPrecision}${props.usePvUnits}${props.useStringValue}`}
-      
-      >
-
-    <Tag
-      style={props.svgWidget?undefined:divStyle}
-      onContextMenu={ props.disableContextMenu ? undefined : handleToggleContextMenu}
     >
-      {child}
-      {childPv}
-      {childPvs}
-      {contextMenu}
-    </Tag>
-   </Tooltip>
-  )
-}
-
-
+      <Tag
+        style={props.svgWidget ? undefined : divStyle}
+        onContextMenu={
+          props.disableContextMenu ? undefined : handleToggleContextMenu
+        }
+      >
+        {child}
+        {childPv}
+        {childPvs}
+        {contextMenu}
+      </Tag>
+    </Tooltip>
+  );
+};
 
 interface WidgetProps {
   /**
@@ -577,11 +608,22 @@ interface WidgetProps {
    */
   disableProbe?: boolean;
   /**
-   * Component to be rendered. 
-   * 
+   * Component to be rendered.
+   *
    */
   component?: any;
-    
+  /**
+   * Custom selection strings to be used.
+   */
+  custom_selection_strings?: string[];
+  /**
+   * Directive to infer an SVG widget.
+   */
+  svgWidget?: boolean;
+  /**
+   * Directive to disable the context menu.
+   */ 
+  disableContextMenu?: boolean;
 }
 
-export default Widget
+export default Widget;

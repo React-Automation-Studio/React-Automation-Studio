@@ -1,6 +1,42 @@
 import React, { useState, useEffect, useCallback } from "react";
 import EpicsPV from "./EpicsPV";
 import LocalPV from "./LocalPV";
+import {EpicsPVType} from "./EpicsPV";
+
+/**
+ * Type definition for the PV object.
+ */
+export type PVType = {
+  initialized: boolean;
+  pvName: string;
+  value: number | string;
+  severity: string | undefined;
+  timestamp: string | undefined;
+  metadata: {
+    initialized: boolean;
+    pvname: string;
+    value: string;
+    char_value: string;
+    alarmColor: string;
+    lower_disp_limit: string;
+    upper_disp_limit: string;
+    lower_warning_limit: string;
+    upper_warning_limit: string;
+    units: string;
+    precision: number;
+    enum_strs: string[];
+    write_access: boolean;
+  };
+  label: string;
+  max: number;
+  min: number;
+  prec: number;
+  units: string;
+  readOnly: boolean;
+  PVs: any[];
+  enum_strs: string[];
+  
+};
 
 /**
  * Props definition for the PV component.
@@ -77,7 +113,8 @@ interface PVProps {
   /**
    * A function that returns the PV object.
    */
-  pvData?: () => void;
+  pvData?: (pv:PVType) => void;
+  
   /**
    * Custom units to be used if `usePvUnits` is not defined.
    */
@@ -131,6 +168,10 @@ interface PVProps {
    * A function that returns the PV object.
    */
   children?: (pv: any) => React.ReactNode;
+  /**
+   * A function that returns the contextInfo.
+   */
+  contextInfo?: (pv: any) => void;
 }
 
 /**
@@ -146,14 +187,32 @@ const PV = ({
   useBinaryValue = false,
   ...props
 }: PVProps) => {
-  const [pvs, setPvs] = useState(null);
-  const [pv, SetPv] = useState({
+
+  const [pvs, setPvs] = useState<{ data?: EpicsPVType | null; max?: any | null; min?: any | null; label?: any | null; units?: any | null; precision?: any | null; alarm?: any | null }|null>(
+   
+  null);
+  const [pv, SetPv] = useState<PVType>({
     value: 0,
     label: "",
     initialized: false,
     PVs: [],
-    metadata: {},
-    severity: 0,
+    pvName: "",
+    metadata: {
+      initialized: false,
+      pvname: "",
+      value: "",
+      char_value: "",
+      alarmColor: "",
+      lower_disp_limit: "",
+      upper_disp_limit: "",
+      lower_warning_limit: "",
+      upper_warning_limit: "",
+      units: "",
+      precision: 0,
+      enum_strs: [],
+      write_access: false,
+    },
+    severity: "0",
     timestamp: "",
     units: "",
     min: 0,
@@ -179,7 +238,7 @@ const PV = ({
       : EpicsPV({ ...props, pv: pvname });
   };
 
-  const processPvDataData = useCallback((data) => {
+  const processPvDataData = useCallback((data:EpicsPVType) => {
     setPvs((pvs) => ({ ...pvs, data }));
   }, []);
   const dataPv = pvConnection(props.pv, {
@@ -274,14 +333,56 @@ const PV = ({
       console.log("use effect PV render");
     }
 
-    let pv = {};
+    let pv: PVType = {
+      initialized: false,
+      pvName: "",
+      value: 0,
+      severity: "",
+      timestamp: "",
+      metadata: {
+        initialized: false,
+        pvname: "",
+        value: "",
+        char_value: "",
+        alarmColor: "",
+        lower_disp_limit: "",
+        upper_disp_limit: "",
+        lower_warning_limit: "",
+        upper_warning_limit: "",
+        units: "",
+        precision: 0,
+        enum_strs: [],
+        write_access: false,
+      },
+      label: "",
+      max: 0,
+      min: 0,
+      prec: 0,
+      units: "",
+      readOnly: true,
+      PVs: [],
+      enum_strs: [],
+    };
     if (pvs) {
-      let pvKeys = Object.keys(pvs);
       pv.value = pvs.data ? pvs.data.value : "";
       pv.pvName = pvs.data ? pvs.data.pvname : "";
       pv.severity = pvs.data ? pvs.data.severity : "";
       pv.timestamp = pvs.data ? pvs.data.timestamp : "";
-      pv.metadata = pvs.data ? pvs.data.metadata : {};
+      pv.metadata = pvs.data ? pvs.data.metadata : {
+        initialized: false,
+        pvname: "",
+        value: "",
+        char_value: "",
+        alarmColor: "",
+        lower_disp_limit: "",
+        upper_disp_limit: "",
+        lower_warning_limit: "",
+        upper_warning_limit: "",
+        units: "",
+        precision: 0,
+        enum_strs: [],
+        write_access: false,
+      };
       pv.enum_strs = pvs.data ? pvs.data.metadata.enum_strs : [];
       pv.label = props.usePvLabel
         ? pvs.label
@@ -325,7 +426,8 @@ const PV = ({
             : ""
         : props.units;
       let initialized = true;
-      let pvArray = [];
+      let pvArray: any[] = []; // Add type annotation for pvArray
+      let pvKeys: string[] = Object.keys(pvs); // Add type annotation for pvKeys
       for (let index in pvKeys) {
         initialized = initialized && pvs[pvKeys[index]].initialized;
         if (pvs[pvKeys[index]].pvname) {

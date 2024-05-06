@@ -28,9 +28,9 @@ export type PVType = {
     write_access: boolean;
   };
   label: string;
-  max: number;
-  min: number;
-  prec: number;
+  max?: number|undefined;
+  min?: number|undefined;
+  prec?: number|undefined;
   units: string;
   readOnly: boolean;
   PVs: any[];

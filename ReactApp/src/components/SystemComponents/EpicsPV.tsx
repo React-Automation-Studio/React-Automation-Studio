@@ -207,46 +207,6 @@ export const useEpicsPV = (props) => {
   return pv;
 };
 
-/**
- * Props interface for the EpicsPV component.
- */
-interface EpicsPVProps {
-  /**
-   * If defined, then the DataConnection and
-   * the widget debugging information will be displayed.
-   */
-  debug?: boolean;
-  /**
-   * If defined, then the DataConnection  will be over a new socketIO  connection, otherwise the global socketIO connection
-   */
-  makeNewSocketIoConnection?: boolean;
-
-  /**
-   * when writing to the  pv's output value, increment newValueTrigger to tell the pv component emit the output value to the process variable.
-   */
-  newValueTrigger?: number;
-  /**
-   * the output value to the process variable. It is only emitted once the newValueTrigger is incremented.
-   */
-  outputValue?: any;
-
-  /** Name of the process variable,  eg. '$(device):test$(id)'*/
-
-  pv?: string;
-
-  /** A function that returns the pv object */
-
-  pvData?: () => void;
-
-  /**
-   * Directive to use PV's string values.
-   */
-  useStringValue?: boolean;
-  /**
-   * Directive to use numpy binary value of the PV value.
-   */
-  useBinaryValue?: boolean;
-}
 
 /**
  * The EpicsPV  component handles connections to EPICS process variables.
@@ -292,5 +252,46 @@ const EpicsPV = ({
     </React.Fragment>
   );
 };
+
+/**
+ * Props interface for the EpicsPV component.
+ */
+interface EpicsPVProps {
+  /**
+   * If defined, then the DataConnection and
+   * the widget debugging information will be displayed.
+   */
+  debug?: boolean;
+  /**
+   * If defined, then the DataConnection  will be over a new socketIO  connection, otherwise the global socketIO connection
+   */
+  makeNewSocketIoConnection?: boolean;
+
+  /**
+   * when writing to the  pv's output value, increment newValueTrigger to tell the pv component emit the output value to the process variable.
+   */
+  newValueTrigger?: number;
+  /**
+   * the output value to the process variable. It is only emitted once the newValueTrigger is incremented.
+   */
+  outputValue?: any;
+
+  /** Name of the process variable,  eg. '$(device):test$(id)'*/
+
+  pv?: string;
+
+  /** A function that returns the pv object */
+
+  pvData?: () => void;
+
+  /**
+   * Directive to use PV's string values.
+   */
+  useStringValue?: boolean;
+  /**
+   * Directive to use numpy binary value of the PV value.
+   */
+  useBinaryValue?: boolean;
+}
 
 export default EpicsPV;

@@ -7,7 +7,7 @@ const useContextMenu = (pvs, readOnly, disableProbe) => {
   const [openContextMenu, setOpenContextMenu] = useState(false);
   const [contextPVs, setContextPVs] = useState([]);
 
-  let contextMenu;
+  let contextMenu: JSX.Element | any=[];
   if (openContextMenu) {
     contextMenu = (
       <ContextMenu
@@ -24,6 +24,7 @@ const useContextMenu = (pvs, readOnly, disableProbe) => {
         probeType={readOnly ? "readOnly" : undefined}
       />
     );
+   
   }
 
   const getContextPVs = (pvs) => {

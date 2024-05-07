@@ -188,26 +188,29 @@ const QuadrapoleMagnet = ({
   componentShadow = true,
   textShadow = false,
   componentGradient = true,
-  ...props
+  pv,
+  ...others
 }: QuadrapoleMagnetProps) => {
   return (
     <Widget
       svgWidget={true}
-      {...props}
+      {...others}
       component={QuadrapoleMagnetComponent}
-      pv={props.pv}
+      pv={pv}
       debug={debug}
-      showLabel={showLabel}
-      showValue={showValue}
       alarmSensitive={alarmSensitive}
       showTooltip={showTooltip}
-      labelOffsetY={labelOffsetY}
-      labelOffsetX={labelOffsetX}
-      valueOffsetY={valueOffsetY}
-      valueOffsetX={valueOffsetX}
-      componentShadow={componentShadow}
-      textShadow={textShadow}
-      componentGradient={componentGradient}
+      componentProps={{
+        showLabel,
+        showValue,
+        labelOffsetY,
+        labelOffsetX,
+        valueOffsetY,
+        valueOffsetX,
+        componentShadow,
+        textShadow,
+        componentGradient,
+      }}
     />
   );
 };

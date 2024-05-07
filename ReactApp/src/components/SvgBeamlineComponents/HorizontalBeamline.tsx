@@ -124,14 +124,14 @@ const HorizontalBeamlineComponent = (props) => {
  */
 const HorizontalBeamline = ({
   debug = false,
-  ...props
+  ...others
 }: HorizontalBeamlineProps) => {
   return (
     <Widget
       svgWidget={true}
-      {...props}
+      {...others}
       component={HorizontalBeamlineComponent}
-      disableContextMenu={props.pv ? props.disableContextMenu : true}
+      disableContextMenu={others.pv ? others.disableContextMenu : true}
       debug={debug}
     />
   );

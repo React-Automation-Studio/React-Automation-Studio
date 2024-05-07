@@ -251,34 +251,40 @@ const FC = ({
   componentShadow = true,
   textShadow = false,
   componentGradient = true,
-  ...props
+  label,
+  ...others
 }: FCProps) => {
-  let pvs = [];
-  if (typeof props.isMovingPv !== "undefined") {
-    pvs = [props.inLimitPv, props.outLimitPv, props.isMovingPv];
+  let pvs:any[] = [];
+  if (typeof others.isMovingPv !== "undefined") {
+    pvs = [others.inLimitPv, others.outLimitPv, others.isMovingPv];
   } else {
-    pvs = [props.inLimitPv, props.outLimitPv];
+    pvs = [others.inLimitPv, others.outLimitPv];
   }
 
   return (
     <Widget
       svgWidget={true}
-      {...props}
+      {...others}
       component={FCComponent}
       pvs={pvs}
-      label={props.label}
+      label={label}
       debug={debug}
-      showLabel={showLabel}
-      showValue={showValue}
       alarmSensitive={alarmSensitive}
       showTooltip={showTooltip}
-      labelOffsetY={labelOffsetY}
-      labelOffsetX={labelOffsetX}
-      valueOffsetY={valueOffsetY}
-      valueOffsetX={valueOffsetX}
-      componentShadow={componentShadow}
-      textShadow={textShadow}
-      componentGradient={componentGradient}
+      componentProps={
+        {
+          showLabel,
+          showValue,
+          labelOffsetY,
+          labelOffsetX,
+          valueOffsetY,
+          valueOffsetX,
+          componentShadow,
+          textShadow,
+          componentGradient,
+
+        }
+      }
     />
   );
 };

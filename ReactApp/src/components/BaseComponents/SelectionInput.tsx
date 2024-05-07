@@ -93,7 +93,9 @@ const SelectionInput = ({
       max={undefined}
       prec={undefined}
       showTooltip={showTooltip}
-      variant={variant}
+      componentProps={{
+        variant,
+      }}
     />
   );
 };

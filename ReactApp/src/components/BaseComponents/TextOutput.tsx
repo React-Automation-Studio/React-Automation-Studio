@@ -233,10 +233,12 @@ const TextOutput = ({
       component={TextOutputComponent}
       pvs={undefined}
       debug={debug}
-      variant={variant}
-      margin={margin}
       alarmSensitive={alarmSensitive}
       showTooltip={showTooltip}
+      componentProps={{
+        variant,
+        margin
+      }}
     />
   );
 };

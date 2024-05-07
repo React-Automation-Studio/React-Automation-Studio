@@ -1,4 +1,4 @@
-import React from "react";
+import React, {ReactElement} from "react";
 
 import Widget from "../SystemComponents/Widgets/Widget";
 import { Typography } from "@mui/material";
@@ -14,7 +14,7 @@ const TextUpdateMultiplePVsComponent = (props) => {
   const theme = useTheme();
   const content = (props) => {
     let pvs = props.pvsData;
-    let data = [];
+    let data:ReactElement[] = [];
     let pv;
     let textFieldSx;
     for (pv in pvs) {

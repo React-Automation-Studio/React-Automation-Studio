@@ -15,16 +15,16 @@ const ThumbWheelComponent = (props) => {
   let prec_integer = props.prec_integer;
   let prec_decimal = props.prec_decimal;
   let prec_decimal_div = prec_decimal > 0 ? prec_decimal : 0;
-  let num_array = [];
+  let num_array:number[] = [];
   if (props.custom_increments !== undefined) {
     num_array = props.custom_increments.sort((a, b) => a - b);
   } else {
     for (let i = 0; i < prec_integer; i++) {
       num_array.push(10 ** i);
     }
-    for (let i = 1; i <= prec_decimal; i++) {
-      let value = 10 ** -i;
-      value = value.toFixed(i);
+    for (let i:number = 1; i <= prec_decimal; i++) {
+      let value:number = 10 ** -i;
+      value = parseFloat(value.toFixed(i));
       num_array.unshift(value);
     }
   }
@@ -130,11 +130,13 @@ const ThumbWheel = ({
     <Widget
       {...props}
       component={ThumbWheelComponent}
-      prec_integer={prec_integer}
-      prec_decimal={prec_decimal}
       usePvMinMax={usePvMinMax}
       debug={debug}
       showTooltip={showTooltip}
+      componentProps={{
+        prec_integer: prec_integer,
+        prec_decimal: prec_decimal,
+      }}
     />
   );
 };

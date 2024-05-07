@@ -401,6 +401,7 @@ const Widget = ({
       useMetadata: useMetadata,
       tooltip: tooltip,
       writeOutputValueToAllpvs: writeOutputValueToAllpvs,
+      ...props.componentProps,
     });
 
   const divStyle = {
@@ -624,6 +625,16 @@ interface WidgetProps {
    * Directive to disable the context menu.
    */ 
   disableContextMenu?: boolean;
+  /**
+   * 
+   *  Label placement
+   */
+  labelPlacement?: "start" | "top" | "bottom" | "end";
+  /**
+   * Component specific props.
+   */
+  componentProps?: object;
+  
 }
 
 export default Widget;

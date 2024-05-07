@@ -85,11 +85,11 @@ function LightPanelComponent(props) {
               if (props.colors === undefined) return "";
               let value = props.value;
               if (
-                props.useStringValue &&
-                props.enumStrs !== undefined &&
-                props.enumStrs !== null
+                useStringValue &&
+                enumStrs !== undefined &&
+                enumStrs !== null
               ) {
-                value = props.enumStrs.indexOf(props.value);
+                value = enumStrs.indexOf(props.value);
               }
               if (props.colors[value] !== undefined) {
                 return normalizeColors(theme, props.colors[value]);
@@ -135,7 +135,7 @@ const LightPanel = ({
       debug={debug}
       showTooltip={showTooltip}
       useStringValue={useStringValue}
-      align={align}
+      componentProps={{ align: align }}
     />
   );
 };

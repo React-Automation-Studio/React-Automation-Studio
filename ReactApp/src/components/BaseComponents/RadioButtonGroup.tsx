@@ -73,8 +73,10 @@ const RadioButtonGroup = ({
       max={undefined}
       prec={undefined}
       labelPlacement={labelPlacement}
-      bitLabelPlacement={bitLabelPlacement}
       showTooltip={showTooltip}
+      componentProps={{
+        bitLabelPlacement
+      }}
     />
   );
 };
@@ -130,6 +132,11 @@ interface RadioButtonGroupProps {
    * If defined, the position of the bit labels relative to the widget.
    */
   bitLabelPlacement?: "start" | "end" | "top" | "bottom";
+  /**
+   * If defined, the color of the radio button.
+   */
+  onColor?: "primary" | "secondary" | "default" | "error" | "info" | "success" | "warning";
+  
 }
 
 export default RadioButtonGroup;

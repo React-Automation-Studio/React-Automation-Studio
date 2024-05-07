@@ -83,7 +83,7 @@ interface RadioButtonProps {
   /**
    * Custom on color to be used, must be derived from Material UI theme color's.
    */
-  onColor?: string;
+  onColor?: "primary" | "secondary" | "error" | "info" | "success" | "warning";
   /**
    * Directive to fill the component's label with
    * the value contained in the  pv metadata's DESC field or the labelPv value.

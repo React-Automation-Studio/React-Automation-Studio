@@ -475,15 +475,15 @@ const Slider = ({
     <Widget
       {...props}
       component={SliderComponent}
-      name={"Slider"}
-      step={step}
-      labelPlacement={labelPlacement}
-      valuePlacement={valuePlacement}
-      height={height}
-      width={width}
-      showValue={showValue}
       showTooltip={showTooltip}
-      vertical={vertical}
+      componentProps={{
+         step,
+         labelPlacement,
+         valuePlacement,
+         height,
+         width,
+         showValue,
+         vertical }}  
     />
   );
 };

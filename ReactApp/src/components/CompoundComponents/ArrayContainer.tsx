@@ -41,7 +41,7 @@ function ArrayContainer({
   const [items, setItems] = useState([]);
 
   let maxItems = 100;
-  let numVisibleItems = 10;
+  let numVisibleItems:number = 10;
   if (registers !== undefined && Array.isArray(registers)) {
     numVisibleItems = registers.length;
     maxItems = registers.length;
@@ -63,7 +63,7 @@ function ArrayContainer({
   }
 
   useEffect(() => {
-    let newItems = [];
+    let newItems:any = [];
     for (let i = 0; i < numVisibleItems; i++) {
       newItems.push({
         index: i,
@@ -75,7 +75,7 @@ function ArrayContainer({
   }, [numVisibleItems]);
 
   const updateItems = (newStartIdx) => {
-    let newItems = [...items];
+    let newItems:any = [...items];
     if (newStartIdx < startIdx) {
       let newItem = {
         index: newStartIdx,
@@ -132,22 +132,22 @@ function ArrayContainer({
           display: direction === "horizontal" ? "inline-block" : undefined,
           width:
             direction === "horizontal"
-              ? Math.max(
-                  parseFloat(100 / numVisibleItems).toFixed(2),
+              ? `${Math.max(
+                  parseFloat((100 / numVisibleItems).toFixed(2)),
                   itemMinWidth
-                ) + "%"
+                )} %`
               : undefined,
         }}
       >
-        {Children.map(props.children, (child) =>
+        {Children.map(props.children, (child:any) =>
           cloneElement(child, additionalProps)
         )}
       </div>
     );
   };
 
-  let visibleItems = [];
-  items.forEach((item) => {
+  let visibleItems:any[] = [];
+  items.forEach((item:any) => {
     if (item.index >= startIdx && item.index < startIdx + numVisibleItems) {
       visibleItems.push(item.component);
     }
@@ -233,6 +233,10 @@ interface ArrayContainerProps {
    * Must be a non negative integer.
    */
   spacing?: number;
+  /**
+   * The children of the ArrayContainer must be BaseComponents.
+   */
+  children: React.ReactNode;
 }
 
 export default ArrayContainer;

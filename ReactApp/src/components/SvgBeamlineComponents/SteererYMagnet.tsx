@@ -329,27 +329,29 @@ const SteererYMagnet = ({
   componentShadow = true,
   textShadow = false,
   componentGradient = true,
-  ...props
+  ...others
 }: SteererYMagnetProps) => {
   return (
     <Widget
       svgWidget={true}
-      {...props}
+      {...others}
       component={SteererYMagnetComponent}
-      pv={props.pv}
-      label={props.label}
+      pv={others.pv}
+      label={others.label}
       debug={debug}
-      showLabel={showLabel}
-      showValue={showValue}
       alarmSensitive={alarmSensitive}
       showTooltip={showTooltip}
-      labelOffsetY={labelOffsetY}
-      labelOffsetX={labelOffsetX}
-      valueOffsetY={valueOffsetY}
-      valueOffsetX={valueOffsetX}
-      componentShadow={componentShadow}
-      textShadow={textShadow}
-      componentGradient={componentGradient}
+      componentProps={{
+        showLabel,
+        showValue,
+        labelOffsetY,
+        labelOffsetX,
+        valueOffsetY,
+        valueOffsetX,
+        componentShadow,
+        textShadow,
+        componentGradient,
+      }}
     />
   );
 };

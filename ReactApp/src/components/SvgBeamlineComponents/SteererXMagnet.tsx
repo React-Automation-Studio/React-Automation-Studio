@@ -279,27 +279,32 @@ const SteererXMagnet = ({
   componentShadow = true,
   textShadow = false,
   componentGradient = true,
-  ...props
+  ...others
 }: SteererXMagnetProps) => {
   return (
     <Widget
       svgWidget={true}
-      {...props}
+      {...others}
       component={SteererXMagnetComponent}
-      pv={props.pv}
-      label={props.label}
+      pv={others.pv}
+      label={others.label}
       debug={debug}
       alarmSensitive={alarmSensitive}
       showTooltip={showTooltip}
-      showLabel={showLabel}
-      showValue={showValue}
-      labelOffsetY={labelOffsetY}
-      labelOffsetX={labelOffsetX}
-      valueOffsetY={valueOffsetY}
-      valueOffsetX={valueOffsetX}
-      componentShadow={componentShadow}
-      textShadow={textShadow}
-      componentGradient={componentGradient}
+      componentProps={
+        {
+          showLabel,
+          showValue,
+          labelOffsetY,
+          labelOffsetX,
+          valueOffsetY,
+          valueOffsetX,
+          componentShadow,
+          textShadow,
+          componentGradient,
+
+        }
+      }
     />
   );
 };

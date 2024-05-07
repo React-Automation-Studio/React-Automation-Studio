@@ -91,10 +91,13 @@ const TextUpdate = ({
       {...props}
       component={TextUpdateComponent}
       debug={debug}
-      align={align}
-      variant={variant}
       alarmSensitive={alarmSensitive}
       showTooltip={showTooltip}
+      componentProps={{
+        align: align,
+        variant: variant,
+      
+      }}
     />
   );
 };

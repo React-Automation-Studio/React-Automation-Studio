@@ -34,7 +34,7 @@ const TextInputComponent = (props) => {
   return (
     <TextField
       sx={(theme) => {
-        let alarmSxProp = {
+        let alarmSxProp: React.CSSProperties = {
           width: "100%",
           borderRadius: 1.5,
         };
@@ -113,10 +113,12 @@ const TextInput = ({
       component={TextInputComponent}
       pvs={undefined}
       debug={debug}
-      variant={variant}
-      margin={margin}
       alarmSensitive={alarmSensitive}
       showTooltip={showTooltip}
+      componentProps={{
+        variant,
+        margin
+      }}
     />
   );
 };

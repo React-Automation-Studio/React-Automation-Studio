@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, ReactElement } from "react";
 import { v4 as uuidv4 } from "uuid";
 import Widget from "../SystemComponents/Widgets/Widget";
 import { FormControlLabel, useTheme } from "@mui/material";
@@ -21,9 +21,9 @@ function getTickValues(
   y1,
   xOffset,
   radialTextOffset
-) {
+): ReactElement[] {
   const { classes } = props;
-  let ticks = [];
+  let ticks: ReactElement[] = [];
   let i = 0;
   for (i = 0; i < numberOfTicks; i++) {
     const rotation = (i * 180) / (numberOfTicks - 1);
@@ -72,10 +72,10 @@ interface GaugeComponentProps {
   units: string;
   value: number;
   ringWidth: number;
-  disabled: boolean;
+  disabled: boolean | undefined;
 }
 function GaugeComponent({ ...props }: GaugeComponentProps) {
-  const theme = useTheme();
+  const theme: any = useTheme();
   const gradientId = uuidv4();
   const units = props.units;
   const value = props.value;
@@ -186,9 +186,8 @@ function GaugeComponent({ ...props }: GaugeComponentProps) {
  * The Gauge Component is an Automation-studio component.
  */
 const GaugeInternalComponent = (props) => {
-  const theme = useTheme();
-  const ref = useRef(null);
-  const [width, setWidth] = useState(null);
+  const ref = useRef<any>(null);
+  const [width, setWidth] = useState<number>(0);
   useEffect(() => {
     const handleResize = () => {
       if (ref.current) {
@@ -236,7 +235,6 @@ const GaugeInternalComponent = (props) => {
       control={
         <div ref={ref} style={{ height: "100%", width: "100%" }}>
           <GaugeComponent
-            theme={theme}
             width={width}
             min={min}
             max={max}

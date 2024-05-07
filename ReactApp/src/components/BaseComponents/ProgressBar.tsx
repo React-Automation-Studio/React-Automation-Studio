@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef,ReactElement } from "react";
 import { v4 as uuidv4 } from "uuid";
 import Widget from "../SystemComponents/Widgets/Widget";
 import { FormControlLabel, useTheme } from "@mui/material";
@@ -27,9 +27,9 @@ function getTickValues(
   xOffset,
   yOffset,
   value
-) {
+):ReactElement[] {
   const { classes } = props;
-  let ticks = [];
+  let ticks:ReactElement[] = [];
   let i = 0;
   if (typeof props.disabled === "undefined") {
     if (props.showTicks === true) {
@@ -256,7 +256,7 @@ const ProgressBarComponent = (props) => {
 
 const ProgressBarInternalComponent = (props) => {
   const theme = useTheme();
-  const ref = useRef(null);
+  const ref = useRef<any>(null);
   const [width, setWidth] = useState(null);
   const [height, setHeight] = useState(null);
   useEffect(() => {
@@ -306,7 +306,7 @@ const ProgressBarInternalComponent = (props) => {
     min = 0;
     max = 1000;
   }
-  let color = theme.palette.primary.main;
+  let color: string = theme.palette.primary.main;
 
   if (typeof props.alarmSensitive !== "undefined") {
     if (props.alarmSensitive == true) {
@@ -379,12 +379,9 @@ const ProgressBar = ({
       alarmSensitive={alarmSensitive}
       min={min}
       max={max}
-      showValue={showValue}
-      showTicks={showTicks}
-      aspectRatio={aspectRatio}
-      lockAspectRatio={lockAspectRatio}
-      labelPlacement={labelPlacement}
       showTooltip={showTooltip}
+      componentProps={{showValue,showTicks,aspectRatio,lockAspectRatio,labelPlacement}}
+
     />
   );
 };

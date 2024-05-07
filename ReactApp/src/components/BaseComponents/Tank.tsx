@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef,ReactElement } from "react";
 import { v4 as uuidv4 } from "uuid";
 import Widget from "../SystemComponents/Widgets/Widget";
 import { FormControlLabel, useTheme } from "@mui/material";
@@ -29,10 +29,10 @@ function getTickValues(
   xOffset,
   yOffset,
   value
-) {
+):ReactElement[] {
   let units = props.units ? " " + props.units : "";
 
-  let ticks = [];
+  let ticks:ReactElement[] = [];
 
   let i = 0;
   if (props.initialized === true) {
@@ -73,13 +73,27 @@ function getTickValues(
 interface TankComponentProps {
   height: number;
   width: number;
+  aspectRatio: number;
+  lockAspectRatio: boolean;
+  showTicks: boolean;
+  showValue: boolean;
+  initialized: boolean;
+  value: number;
+  min: number;
+  max: number;
+  disabled: boolean;
+  alarmSensitive: boolean;
+  alarmSeverity: number;
+  formControlLabel: string;
+  labelPlacement: "start" | "top" | "bottom" | "end";
+  pvName: string;
 }
 
 const TankComponent = (props: TankComponentProps) => {
-  const ref = useRef(null);
+  const ref = useRef<any>(null);
   const theme = useTheme();
-  const [width, setWidth] = useState(null);
-  const [height, setHeight] = useState(null);
+  const [width, setWidth] = useState(0);
+  const [height, setHeight] = useState(0);
   useEffect(() => {
     const handleResize = () => {
       if (ref.current) {
@@ -151,7 +165,7 @@ const TankComponent = (props: TankComponentProps) => {
   }
 
   return (
-    <div ref={ref} styles={{ width: "100%", height: "100%" }}>
+    <div ref={ref} style={{ width: "100%", height: "100%" }}>
       <FormControlLabel
         key={props.pvName}
         sx={{
@@ -326,12 +340,15 @@ const Tank = ({
       min={min}
       max={max}
       usePvPrecision={usePvPrecision}
-      showValue={showValue}
-      aspectRatio={aspectRatio}
-      lockAspectRatio={lockAspectRatio}
-      showTicks={showTicks}
       labelPlacement={labelPlacement}
       showTooltip={showTooltip}
+      componentProps={{
+        showValue,
+        showTicks,
+        aspectRatio,
+        lockAspectRatio,
+      
+      }}
     />
   );
 };

@@ -57,11 +57,11 @@ const StyledIconButton = ({
   offColor = "default",
   debug = false,
   showTooltip = false,
-  ...props
+  ...others
 }: StyledIconButtonProps) => {
   return (
     <Widget
-      {...props}
+      {...others}
       component={StyledIconButtonComponent}
       usePvMinMax={false}
       usePvPrecision={false}

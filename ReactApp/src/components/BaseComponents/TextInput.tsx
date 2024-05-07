@@ -105,11 +105,11 @@ const TextInput = ({
   margin = "none",
   alarmSensitive = false,
   showTooltip = false,
-  ...props
+  ...others
 }: TextInputProps) => {
   return (
     <Widget
-      {...props}
+      {...others}
       component={TextInputComponent}
       pvs={undefined}
       debug={debug}

@@ -105,11 +105,11 @@ const TextUpdateMultiplePVs = ({
   useMetadata = true,
   alarmSensitive = false,
   showTooltip = false,
-  ...props
+  ...others
 }: TextUpdateMultiplePVsProps) => {
   return (
     <Widget
-      {...props}
+      {...others}
       component={TextUpdateMultiplePVsComponent}
       debug={debug}
       useMetadata={useMetadata}

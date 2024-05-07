@@ -108,24 +108,24 @@ const ToggleButton = (
     labelPlacement= "top",
     usePvLabel= false,
     showTooltip= false,
-    ...props}: ToggleButtonProps
+    ...others}: ToggleButtonProps
 
 ) => {
-  let momentary = props.momentary !== undefined ? props.momentary : false;
+  let momentary = others.momentary !== undefined ? others.momentary : false;
   let disableContextMenu;
 
   if (isMobile || isTablet) {
     if (momentary === true) {
       disableContextMenu = true;
     } else {
-      disableContextMenu = props.disableContextMenu;
+      disableContextMenu = others.disableContextMenu;
     }
   } else {
-    disableContextMenu = props.disableContextMenu;
+    disableContextMenu = others.disableContextMenu;
   }
   return (
     <Widget
-      {...props}
+      {...others}
       component={ToggleButtonComponent}
       disableContextMenu={disableContextMenu}
       usePvMinMax={false}

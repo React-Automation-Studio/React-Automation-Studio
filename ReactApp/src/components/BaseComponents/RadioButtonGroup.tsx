@@ -60,11 +60,11 @@ const RadioButtonGroup = ({
   labelPlacement = "top",
   bitLabelPlacement = "end",
   showTooltip = false,
-  ...props
+  ...others
 }: RadioButtonGroupProps) => {
   return (
     <Widget
-      {...props}
+      {...others}
       useStringValue={true}
       component={RadioButtonGroupComponent}
       usePvMinMax={false}

@@ -369,11 +369,11 @@ const ProgressBar = ({
   labelPlacement = "top",
   showTooltip = false,
 
-  ...props
+  ...others
 }: ProgressBarProps) => {
   return (
     <Widget
-      {...props}
+      {...others}
       component={ProgressBarInternalComponent}
       debug={debug}
       alarmSensitive={alarmSensitive}

@@ -218,11 +218,11 @@ const SelectionList = ({
   horizontal = false,
   labelPlacement = "top",
   showTooltip = false,
-  ...props
+  ...others
 }: SelectionListProps) => {
   return (
     <Widget
-      {...props}
+      {...others}
       useStringValue={true}
       component={SelectionListComponent}
       usePvMinMax={false}

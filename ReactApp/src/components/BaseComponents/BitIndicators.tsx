@@ -137,11 +137,11 @@ const BitIndicators = ({
   onColor = "primary",
   offColor = "default",
   usePvBitLabels = false,
-  ...props
+  ...others
 }: BitIndicatorsProps) => {
   return (
     <Widget
-      {...props}
+      {...others}
       onColor={onColor}
       offColor={offColor}
       component={BitIndicatorsComponent}

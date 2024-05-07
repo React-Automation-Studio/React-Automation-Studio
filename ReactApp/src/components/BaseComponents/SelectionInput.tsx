@@ -80,11 +80,11 @@ const SelectionInputComponent = (props) => {
 const SelectionInput = ({
   showTooltip = false,
   variant = "outlined",
-  ...props
+  ...others
 }: SelectionInputProps) => {
   return (
     <Widget
-      {...props}
+      {...others}
       useStringValue={true}
       component={SelectionInputComponent}
       usePvMinMax={false}

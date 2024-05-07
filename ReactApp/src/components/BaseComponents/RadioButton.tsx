@@ -48,11 +48,11 @@ const RadioButton = (
     onColor= "primary",
     debug= false,
     showTooltip= false,
-    ...props}: RadioButtonProps
+    ...others}: RadioButtonProps
 ) => {
   return (
     <Widget
-      {...props}
+      {...others}
       component={RadioButtonComponent}
       usePvMinMax={false}
       usePvPrecision={false}

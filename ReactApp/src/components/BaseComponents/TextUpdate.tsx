@@ -84,11 +84,11 @@ const TextUpdate = ({
   variant = "body2",
   alarmSensitive = false,
   showTooltip = false,
-  ...props
+  ...others
 }: TextUpdateProps) => {
   return (
     <Widget
-      {...props}
+      {...others}
       component={TextUpdateComponent}
       debug={debug}
       alarmSensitive={alarmSensitive}

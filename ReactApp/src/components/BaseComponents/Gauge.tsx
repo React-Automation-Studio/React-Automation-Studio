@@ -259,11 +259,11 @@ const Gauge = ({
   usePvPrecision = false,
   labelPlacement = "top",
   showTooltip = false,
-  ...props
+  ...others
 }: GaugeProps) => {
   return (
     <Widget
-      {...props}
+      {...others}
       component={GaugeInternalComponent}
       debug={debug}
       min={min}

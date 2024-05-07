@@ -49,11 +49,11 @@ const CheckBox = ({
   onColor = "primary",
   debug = false,
   showTooltip = false,
-  ...props
+  ...others
 }: CheckBoxProps) => {
   return (
     <Widget
-      {...props}
+      {...others}
       component={CheckBoxComponent}
       onColor={onColor}
       debug={debug}

@@ -329,11 +329,11 @@ const Tank = ({
   showTicks = false,
   labelPlacement = "top",
   showTooltip = false,
-  ...props
+  ...others
 }: TankProps) => {
   return (
     <Widget
-      {...props}
+      {...others}
       component={TankComponent}
       debug={debug}
       alarmSensitive={alarmSensitive}

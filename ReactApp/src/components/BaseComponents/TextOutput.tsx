@@ -225,11 +225,11 @@ const TextOutput = ({
   margin = "none",
   alarmSensitive = false,
   showTooltip = false,
-  ...props
+  ...others
 }: TextOutputProps) => {
   return (
     <Widget
-      {...props}
+      {...others}
       component={TextOutputComponent}
       pvs={undefined}
       debug={debug}

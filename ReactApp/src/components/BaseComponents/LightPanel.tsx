@@ -125,11 +125,11 @@ const LightPanel = ({
   showTooltip = false,
   useStringValue = true,
   align = "center",
-  ...props
+  ...others
 }: LightPanelProps) => {
   return (
     <Widget
-      {...props}
+      {...others}
       component={LightPanelComponent}
       readOnly
       debug={debug}

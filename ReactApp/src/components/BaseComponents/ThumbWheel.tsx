@@ -124,11 +124,11 @@ const ThumbWheel = ({
   usePvMinMax = false,
   debug = false,
   showTooltip = false,
-  ...props
+  ...others
 }: ThumbWheelProps) => {
   return (
     <Widget
-      {...props}
+      {...others}
       component={ThumbWheelComponent}
       usePvMinMax={usePvMinMax}
       debug={debug}

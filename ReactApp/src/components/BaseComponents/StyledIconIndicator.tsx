@@ -90,11 +90,11 @@ const StyledIconIndicator = ({
   offColor = "default",
   debug = false,
   showTooltip = false,
-  ...props
+  ...others
 }: StyledIconIndicatorProps) => {
   return (
     <Widget
-      {...props}
+      {...others}
       component={StyledIconIndicatorComponent}
       onColor={onColor}
       offColor={offColor}

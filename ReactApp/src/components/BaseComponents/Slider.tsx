@@ -469,11 +469,11 @@ const Slider = ({
   showValue = true,
   showTooltip = false,
   vertical = false,
-  ...props
+  ...others
 }: SliderProps) => {
   return (
     <Widget
-      {...props}
+      {...others}
       component={SliderComponent}
       showTooltip={showTooltip}
       componentProps={{

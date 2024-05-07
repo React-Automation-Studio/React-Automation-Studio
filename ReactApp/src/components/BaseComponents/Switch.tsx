@@ -54,11 +54,11 @@ const Switch = ({
   onColor = "primary",
   debug = false,
   showTooltip = false,
-  ...props
+  ...others
 }: SwitchProps) => {
   return (
     <Widget
-      {...props}
+      {...others}
       component={SwitchInternalComponent}
       usePvMinMax={false}
       usePvPrecision={false}

@@ -59,11 +59,11 @@ const ActionButtonComponent = (props) => {
 const ActionButton = ({
   showTooltip = false,
   color = "primary",
-  ...props
+  ...others
 }: ActionButtonProps) => {
   return (
     <Widget
-      {...props}
+      {...others}
       showTooltip={showTooltip}
       component={ActionButtonComponent}
       writeOutputValueToAllpvs={true}

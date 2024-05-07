@@ -128,7 +128,7 @@ const TextInput = ({
  */
 interface TextInputProps {
   /** Material-UI TextField variant */
-  variant?: string;
+  variant?: "standard" | "outlined" | "filled";
   /** Material-UI TextField margin */
   margin?: string;
   /**

@@ -31,9 +31,9 @@ const BitIndicatorsComponent = (props) => {
     }
   }
 
-  let bitArray = [];
-  let bitLabels = [];
-  let bitStyles = [];
+  let bitArray: number[] = [];
+  let bitLabels: string[] = [];
+  let bitStyles: React.CSSProperties[] = [];
 
   let bitLabelPos =
     props.bitLabelPlacement !== undefined
@@ -142,13 +142,10 @@ const BitIndicators = ({
   return (
     <Widget
       {...props}
-      numberOfBits={numberOfBits}
-      horizontal={horizontal}
-      reverseBits={reverseBits}
       onColor={onColor}
       offColor={offColor}
-      usePvBitLabels={usePvBitLabels}
       component={BitIndicatorsComponent}
+      componentProps={{ numberOfBits, horizontal, reverseBits, usePvBitLabels }}
     />
   );
 };
@@ -170,10 +167,7 @@ interface BitIndicatorsProps {
    * Enable debug mode.
    */
   debug?: boolean;
-  /**
-   * The placement of the labels for each bit.
-   */
-  labelPlacement?: "start" | "top" | "bottom" | "end";
+
   /**
    * The label for the BitIndicators component.
    */
@@ -226,6 +220,7 @@ interface BitIndicatorsProps {
    * The color of the bits when off.
    */
   offColor?: string;
+
 }
 
 export default BitIndicators;

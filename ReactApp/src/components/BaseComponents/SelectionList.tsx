@@ -1,5 +1,5 @@
 import React from "react";
-import { FormControlLabel, List, ListItem, ListItemText } from "@mui/material";
+import { FormControlLabel, List, ListItemButton, ListItemText } from "@mui/material";
 import Widget from "../SystemComponents/Widgets/Widget";
 import makeStyles from "@mui/styles/makeStyles";
 
@@ -172,16 +172,15 @@ const SelectionListComponent = (props) => {
               : classes.buttonMiddleVertical;
       }
       return (
-        <ListItem
+        <ListItemButton
           key={item.toString()}
           className={className}
           value={item}
-          button
           selected={value === item}
           onClick={props.disabled ? undefined : () => handleListItemClick(item)}
         >
           <ListItemText primary={item} />
-        </ListItem>
+        </ListItemButton>
       );
     });
     return listItems;
@@ -231,9 +230,11 @@ const SelectionList = ({
       min={undefined}
       max={undefined}
       prec={undefined}
-      horizontal={horizontal}
       labelPlacement={labelPlacement}
       showTooltip={showTooltip}
+      componentProps={{
+        horizontal,
+      }}
     />
   );
 };

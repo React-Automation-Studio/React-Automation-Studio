@@ -110,7 +110,7 @@ interface SelectionInputProps {
   custom_selection_strings?: string[];
 
   /** Material-UI TextField variant*/
-  variant?: string;
+  variant?: "standard" | "outlined" | "filled" 
   /** Material-UI TextField margin*/
   margin?: string;
 

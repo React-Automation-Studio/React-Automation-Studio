@@ -150,11 +150,11 @@ interface ToggleButtonProps {
   /**
    * Custom on color to be used, must be derived from Material UI theme color.
    */
-  onColor?: string;
+  onColor?: "primary" | "secondary" | "error" | "warning" | "info" | "success" | "inherit";
   /**
    * Custom off color to be used, must be derived from Material UI theme color.
    */
-  offColor?: string;
+  offColor?: "primary" | "secondary" | "error" | "warning" | "info" | "success" | "inherit";
   /** If defined then component will act as momentary button*/
   momentary?: boolean;
 

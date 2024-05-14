@@ -12,7 +12,7 @@ interface PlotDataProps {
   macros?: Record<string, string>;
   usePolling?: boolean;
   pollingRate?: number;
-  updateRate?: number;
+  updateRate: number;
   updateMode?: "updateOnXOrYChange" | "updateOnYChange" | "updateOnXChange";
   maxLength?: number;
   makeNewSocketIoConnection?: boolean;
@@ -186,9 +186,9 @@ const PlotData = (props: PlotDataProps) => {
 
     return pvs;
   };
-  const [contextInfo, updateContextInfo] = useReducer(contextInfoReducer, []);
-  const [delayedData, setDelayedData] = useState([]);
-  const [delayedContextInfo, setDelayedContextInfo] = useState([]);
+  const [contextInfo, updateContextInfo] = useReducer<any>(contextInfoReducer, []);
+  const [delayedData, setDelayedData] = useState<any>([]);
+  const [delayedContextInfo, setDelayedContextInfo] = useState<any>([]);
   const [trigger, setTrigger] = useState(0);
   const { updateRate } = props;
 
@@ -207,7 +207,7 @@ const PlotData = (props: PlotDataProps) => {
   }, [trigger2]);
 
   const pvConnections = () => {
-    let pvs = [];
+    let pvs:any[] = [];
     props.xPVs.forEach((item, index) => {
       pvs.push(
         <PV
@@ -278,7 +278,7 @@ const GraphXY = ({
   height,
   ...props
 }: GraphXYProps) => {
-  const theme = useTheme();
+  const theme = useTheme<any>();
   const backgroundColor = props.backgroundColor
     ? props.backgroundColor
     : theme.palette.background.default;
@@ -290,7 +290,7 @@ const GraphXY = ({
   }
 
   const createTraces = (data) => {
-    let traces = [];
+    let traces:any[] = [];
 
     data.forEach((item, index) => {
       const traceProps = {
@@ -319,9 +319,9 @@ const GraphXY = ({
     return traces;
   };
 
-  const paperRef = useRef(null);
-  const [widthComputed, setWidthComputed] = useState(null);
-  const [heightComputed, setHeightComputed] = useState(null);
+  const paperRef = useRef<any>(null);
+  const [widthComputed, setWidthComputed] = useState<any>(null);
+  const [heightComputed, setHeightComputed] = useState<any>(null);
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleToggleContextMenu = (event) => {
@@ -363,7 +363,7 @@ const GraphXY = ({
   useEffect(() => {
     if (props.yAxes !== undefined) {
       let numberOfyAxes = props.yAxes.length;
-      let newYPositions = [];
+      let newYPositions:any[] = [];
       let increment = 100 / widthComputed;
       let newDomain = [increment * (numberOfyAxes - 1), 1];
       let index = 0;
@@ -524,7 +524,6 @@ const GraphXY = ({
     >
       <PlotData
         {...props}
-        backgroundColor={backgroundColor}
         updateRate={updateRate}
         makeNewSocketIoConnection={makeNewSocketIoConnection}
         pollingRate={pollingRate}
@@ -657,7 +656,7 @@ interface GraphXYProps {
   /** Directive to use PV timestamp on x-axis*/
   useTimeStamp?: boolean;
   /** Graph update perdiod in ms, set this higher for larger number of data points */
-  updateRate?: number;
+  updateRate: number;
 
   /**
    * The plotjs format overide for the y value. This is derived from the <a href="https://github.com/d3/d3-format/blob/v2.0.0/README.md#format">d3 format specification</a>
@@ -692,6 +691,54 @@ interface GraphXYProps {
   disableMobileStatic?: boolean;
   /** Overide the plotly.js style*/
   plotlyStyle?: React.CSSProperties;
+  /**
+   * Directive to disable the context menu
+   * */
+  disableContextMenu?: boolean;
+  /**
+   * Directive to disable the probe
+   * */
+  disableProbe?: boolean;
+  /**
+   * Custom x axis minimum to be used,if not defined the graph will auto-scale
+   */
+  xMin?: number;
+  /**
+   * Custom x axis maximum to be used,if not defined the graph will auto-scale
+   */
+  xMax?: number;
+  /**
+   * The title of the graph
+   * */
+  title?: string;
+  /**
+   * 
+   */
+   /**
+   * The x-axis tick format
+   */
+   xTickFormat?: string;
+   /**
+    * The x-axis tick values
+    */
+   xTickValues?: number[];
+   /**
+    * The x-axis tick labels
+    */
+   xTickLabels?: string[];
+   /**
+    * The y-axis tick values
+    */
+   yTickValues?: number[];
+   /**
+    * The y-axis tick labels
+    */
+   yTickLabels?: string[];
+   /**
+    * yAxes: Array of y-axis properties, the implementation appears broken and will be fixed in a later release
+    */
+   yAxes?: any[];
+    
 }
 
 export default GraphXY;

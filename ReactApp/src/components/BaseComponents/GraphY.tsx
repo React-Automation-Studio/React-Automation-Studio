@@ -214,13 +214,13 @@ const GraphY = ({
   },
   ...props
 }: GraphYProps) => {
-  const theme = useTheme();
+  const theme = useTheme<any>();
   const backgroundColor = props.backgroundColor
     ? props.backgroundColor
     : theme.palette.background.default;
-  const paperRef = useRef(null);
-  const [widthComputed, setWidthComputed] = useState(null);
-  const [heightComputed, setHeightComputed] = useState(null);
+  const paperRef = useRef<any>(null);
+  const [widthComputed, setWidthComputed] = useState(0);
+  const [heightComputed, setHeightComputed] = useState(0);
   const [anchorEl, setAnchorEl] = useState(null);
   const handleToggleContextMenu = (event) => {
     event.preventDefault();
@@ -262,8 +262,8 @@ const GraphY = ({
 
   useEffect(() => {
     if (props.yAxes !== undefined) {
-      let numberOfyAxes = props.yAxes.length;
-      let newYPositions = [];
+      let numberOfyAxes:number = props.yAxes.length;
+      let newYPositions: number[] = [];
       let increment = 100 / widthComputed;
       let newDomain = [increment * (numberOfyAxes - 1), 1];
       let index = 0;
@@ -318,7 +318,7 @@ const GraphY = ({
     return legendInit;
   });
 
-  const [layout, setLayout] = useState({
+  const [layout, setLayout] = useState<any>({
     plot_bgcolor: backgroundColor,
     paper_bgcolor: backgroundColor,
   });
@@ -589,6 +589,63 @@ interface GraphYProps {
   xUnits?: string;
   /** Overide the plotly.js style*/
   plotlyStyle?: React.CSSProperties;
+  /**
+   * Directive to disable the probes on the graph
+   */
+  disableProbe?: boolean;
+  /**
+   * Directive to disable the context menu on the graph
+   */
+  disableContextMenu?: boolean;
+  /**
+   * Custom x axis minimum to be used,if not defined the graph will auto-scale
+   * 
+   * */
+  xMin?: number;
+  /**
+   * Custom x axis maximum to be used,if not defined the graph will auto-scale
+   * 
+   * */
+  xMax?: number;
+  /**
+   * The number of ticks on the x-axis
+   */
+  xNoOfTicks?: number;
+  /**
+   * The number of ticks on the y-axis
+   */
+  yNoOfTicks?: number;
+  /**
+   * Title of the graph
+   */
+  title?: string;
+  /**
+   * The x-axis tick format
+   */
+  xTickFormat?: string;
+  /**
+   * The x-axis tick values
+   */
+  xTickValues?: number[];
+  /**
+   * The x-axis tick labels
+   */
+  xTickLabels?: string[];
+  /**
+   * The y-axis tick values
+   */
+  yTickValues?: number[];
+  /**
+   * The y-axis tick labels
+   */
+  yTickLabels?: string[];
+  /**
+   * yAxes: Array of y-axis properties, the implementation appears broken and will be fixed in a later release
+   */
+  yAxes?: any[];
+  
+  
+  
 }
 
 export default GraphY;

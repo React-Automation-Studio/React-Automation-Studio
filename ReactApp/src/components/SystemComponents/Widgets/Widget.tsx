@@ -26,9 +26,9 @@ const Widget = ({
   useMetadata = true,
   tooltip = "",
   writeOutputValueToAllpvs = false,
-  ...props
+  ...others
 }: WidgetProps) => {
-  const { disableProbe, index } = props;
+  const { disableProbe, index } = others;
   const theme = useTheme();
   const [value, setValue] = useState<any>(0);
   const [initialized, setInitalized] = useState(false);
@@ -87,12 +87,12 @@ const Widget = ({
   );
 
   useEffect(() => {
-    let ro = props.readOnly === true;
-    if (props.pv) {
+    let ro = others.readOnly === true;
+    if (others.pv) {
       ro = ro || pv.readOnly;
     }
 
-    if (props.pvs) {
+    if (others.pvs) {
       pvs.forEach((item) => {
         ro = ro || item.readOnly;
       });
@@ -100,70 +100,70 @@ const Widget = ({
 
     setReadOnly(ro);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pv, props.readOnly, pvs]);
+  }, [pv, others.readOnly, pvs]);
 
   useEffect(() => {
-    if (props.usePvLabel) {
+    if (others.usePvLabel) {
       setLabel(pv.label);
     } else {
-      setLabel(replaceMacros(props.label, props.macros));
+      setLabel(replaceMacros(others.label, others.macros));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.label, pv.label, props.macros]);
+  }, [others.label, pv.label, others.macros]);
 
   useEffect(() => {
-    if (props.usePvUnits) {
+    if (others.usePvUnits) {
       if (pv.units) {
         setUnits(pv.units);
       } else {
         setUnits("");
       }
     } else {
-      setUnits(replaceMacros(props.units, props.macros));
+      setUnits(replaceMacros(others.units, others.macros));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.units, pv.units, props.macros]);
+  }, [others.units, pv.units, others.macros]);
 
   useEffect(() => {
-    if (props.usePvPrecision) {
+    if (others.usePvPrecision) {
       setPrec(pv.prec);
     } else {
-      setPrec(props.prec);
+      setPrec(others.prec);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.prec, pv.prec, props.usePvPrecision]);
+  }, [others.prec, pv.prec, others.usePvPrecision]);
 
   useEffect(() => {
-    if (props.usePvMinMax) {
+    if (others.usePvMinMax) {
       setMin(pv.min);
       setMax(pv.max);
     } else {
-      setMin(props.min);
-      setMax(props.max);
+      setMin(others.min);
+      setMax(others.max);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.min, props.max, pv.min, pv.max]);
+  }, [others.min, others.max, pv.min, pv.max]);
 
   useEffect(() => {
     if (!focus) {
       const tempValue = checkPrecision(pv.value, prec);
-      setValue(formatValue(tempValue, props.numberFormat));
-      if (props.debug) {
+      setValue(formatValue(tempValue, others.numberFormat));
+      if (others.debug) {
         console.log(tempValue);
       }
     }
-  }, [focus, pv.value, prec, props.numberFormat, props.debug]);
+  }, [focus, pv.value, prec, others.numberFormat, others.debug]);
 
   useEffect(() => {
     let newSeverity = pv.severity;
-    if (typeof props.useStringSeverityMatch !== "undefined") {
-      if (props.useStringSeverityMatch === true) {
-        if (typeof props.stringSeverity !== "undefined") {
+    if (typeof others.useStringSeverityMatch !== "undefined") {
+      if (others.useStringSeverityMatch === true) {
+        if (typeof others.stringSeverity !== "undefined") {
           let string;
-          for (string in props.stringSeverity) {
+          for (string in others.stringSeverity) {
             // eslint-disable-next-line eqeqeq
-            if (value == props.stringSeverity[string].stringMatch) {
-              newSeverity = props.stringSeverity[string].severity;
+            if (value == others.stringSeverity[string].stringMatch) {
+              newSeverity = others.stringSeverity[string].severity;
               break;
             }
           }
@@ -171,7 +171,7 @@ const Widget = ({
       }
     }
     setAlarmSeverity(newSeverity);
-  }, [pv.severity, props.useStringSeverityMatch, props.stringSeverity, value]);
+  }, [pv.severity, others.useStringSeverityMatch, others.stringSeverity, value]);
 
   useEffect(() => {
     if (immediateValue !== null) {
@@ -179,17 +179,17 @@ const Widget = ({
         isInsideLimits(immediateValue, min, max),
         prec
       );
-      setValue(formatValue(tempValue, props.numberFormat));
+      setValue(formatValue(tempValue, others.numberFormat));
       setOutputValue(tempValue);
       setNewValueTrigger(newValueTrigger + 1);
       setImmediateValue(null);
     }
-  }, [immediateValue, min, max, prec, props.numberFormat, newValueTrigger]);
+  }, [immediateValue, min, max, prec, others.numberFormat, newValueTrigger]);
 
   useEffect(() => {
     if (commitChange) {
       const tempValue = checkPrecision(isInsideLimits(value, min, max), prec);
-      setValue(formatValue(tempValue, props.numberFormat));
+      setValue(formatValue(tempValue, others.numberFormat));
       setOutputValue(tempValue);
       setNewValueTrigger(newValueTrigger + 1);
       setCommitChange(false);
@@ -199,29 +199,29 @@ const Widget = ({
     min,
     max,
     prec,
-    props.numberFormat,
+    others.numberFormat,
     newValueTrigger,
     value,
   ]);
 
   useEffect(() => {
-    if (props.custom_selection_strings) {
+    if (others.custom_selection_strings) {
       setEnumStrings(
-        replaceArrayMacros(props.custom_selection_strings, props.macros)
+        replaceArrayMacros(others.custom_selection_strings, others.macros)
       );
     } else {
       setEnumStrings(pv.enum_strs);
     }
-  }, [props.custom_selection_strings, pv.enum_strs, props.macros]);
+  }, [others.custom_selection_strings, pv.enum_strs, others.macros]);
 
   useEffect(() => {
     let init =
-      typeof props.pv !== "undefined" || typeof props.pvs !== "undefined";
+      typeof others.pv !== "undefined" || typeof others.pvs !== "undefined";
 
-    if (props.pv) {
+    if (others.pv) {
       init = init && pv.initialized;
     }
-    if (props.pvs) {
+    if (others.pvs) {
       pvs.forEach((item) => {
         init = init && item.initialized;
       });
@@ -313,38 +313,38 @@ const Widget = ({
     }
   };
 
-  const childPv = typeof props.pv !== "undefined" && (
+  const childPv = typeof others.pv !== "undefined" && (
     <PV
-      pv={props.pv}
-      makeNewSocketIoConnection={props.makeNewSocketIoConnection}
-      maxPv={props.maxPv}
-      minPv={props.minPv}
-      min={props.min}
-      max={props.max}
-      usePvMinMax={props.usePvMinMax}
-      unitsPv={props.unitsPv}
-      usePvUnits={props.usePvUnits}
-      alarmPv={props.alarmPv}
-      labelPv={props.labelPv}
-      alarmSensitive={props.alarmSensitive}
-      usePvLabel={props.usePvLabel}
-      usePvPrecision={props.usePvPrecision}
-      prec={props.prec}
-      precPv={props.precPv}
+      pv={others.pv}
+      makeNewSocketIoConnection={others.makeNewSocketIoConnection}
+      maxPv={others.maxPv}
+      minPv={others.minPv}
+      min={others.min}
+      max={others.max}
+      usePvMinMax={others.usePvMinMax}
+      unitsPv={others.unitsPv}
+      usePvUnits={others.usePvUnits}
+      alarmPv={others.alarmPv}
+      labelPv={others.labelPv}
+      alarmSensitive={others.alarmSensitive}
+      usePvLabel={others.usePvLabel}
+      usePvPrecision={others.usePvPrecision}
+      prec={others.prec}
+      precPv={others.precPv}
       useMetadata={useMetadata}
-      macros={props.macros}
+      macros={others.macros}
       newValueTrigger={newValueTrigger}
       outputValue={outputValue}
-      useStringValue={props.useStringValue}
-      initialLocalVariableValue={props.initialLocalVariableValue}
-      debug={props.debug}
+      useStringValue={others.useStringValue}
+      initialLocalVariableValue={others.initialLocalVariableValue}
+      debug={others.debug}
       pvData={setPv}
     />
   );
 
   const childPvs = getPvs(
-    props.pvs,
-    props,
+    others.pvs,
+    others,
     pvs,
     setPvs,
     writeOutputValueToAllpvs ? newValueTrigger : undefined,
@@ -362,9 +362,9 @@ const Widget = ({
   };
 
   const child =
-    props.component &&
-    wrapComponent(props.component, {
-      ...props,
+    others.component &&
+    wrapComponent(others.component, {
+      ...others,
       initialized: initialized,
       pvName: pv.pvName,
       value: index !== undefined && Array.isArray(value) ? value[index] : value,
@@ -401,7 +401,7 @@ const Widget = ({
       useMetadata: useMetadata,
       tooltip: tooltip,
       writeOutputValueToAllpvs: writeOutputValueToAllpvs,
-      ...props.componentProps,
+      ...others.componentProps,
     });
 
   const divStyle = {
@@ -409,9 +409,9 @@ const Widget = ({
     height: "100%",
   };
 
-  const Tag = props.svgWidget ? "g" : "div";
-  if (props.debug) {
-    console.log("Widget PVs", props.pvs);
+  const Tag = others.svgWidget ? "g" : "div";
+  if (others.debug) {
+    console.log("Widget PVs", others.pvs);
   }
 
   return (
@@ -420,13 +420,13 @@ const Widget = ({
       disableFocusListener={true}
       disableTouchListener={true}
       disableHoverListener={showTooltip === false}
-      {...props.tooltipProps}
-      key={`${props.usePvLabel},${props.pvs},${props.pv}${props.usePvMinMax}${props.usePvPrecision}${props.usePvUnits}${props.useStringValue}`}
+      {...others.tooltipProps}
+      key={`${others.usePvLabel},${others.pvs},${others.pv}${others.usePvMinMax}${others.usePvPrecision}${others.usePvUnits}${others.useStringValue}`}
     >
       <Tag
-        style={props.svgWidget ? undefined : divStyle}
+        style={others.svgWidget ? undefined : divStyle}
         onContextMenu={
-          props.disableContextMenu ? undefined : handleToggleContextMenu
+          others.disableContextMenu ? undefined : handleToggleContextMenu
         }
       >
         {child}
@@ -631,7 +631,10 @@ interface WidgetProps {
    */
   labelPlacement?: "start" | "top" | "bottom" | "end";
   /**
-   * Component specific props.
+   * Component specific props that are not part of the standard widget. 
+   * You can pass any prop that the component accepts, eg. componentProps={{variant: 'outlined'}}. 
+   * Be sure to check the component's documentation for the available props.
+   *  Do not use this prop to pass the standard widget props, use the standard props instead.
    */
   componentProps?: object;
   

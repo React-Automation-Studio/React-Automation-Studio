@@ -10,6 +10,7 @@ import { io } from 'socket.io-client';
 import RasCssBaseline from './RasCssBaseline';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import axios from 'axios';
+
 /**
  * Props for the RasAppCore component.
  */
@@ -50,6 +51,7 @@ class RasAppCore extends Component<RasAppCoreProps, RasAppCoreState> {
 
   constructor(props) {
     super(props);
+    console.warn("React 19.0.0 will deprecate the use of defaultProps, please use the default value in the function signature instead. This warning will be removed in the release 6.0.0 of RAS. https://react.dev/blog/2024/04/25/react-19-upgrade-guide  The proptypes package will also be removed in the release 6.0.0 of RAS.")
 
     let theme = null
     localStorage.removeItem('logoutFlag');

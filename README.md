@@ -1,6 +1,6 @@
-Current Release: V5.1.0
+Current Release: V5.2.0
 
-[Migrate from V4.0.3 to V5.1.X](docs/migrate-from-V4-to-V5.md)
+[Migrate from V4.0.3 to V5.2.X](docs/migrate-from-V4-to-V5.md)
 
 # Introduction
 
@@ -574,6 +574,35 @@ or: https://doi.org/10.18429/JACoW-ICALEPCS2023-FR2BCO01
 
 
 # Changelog
+
+  V5.2.0 Thursday 15 May 2024 
+  <br/>
+  Minor Updates:
+  <ul>
+    <li>Update to React 18.3.2</li>
+    <li>
+      Conversion of all base and system components to
+      Typescript, and function default parameters, due to React
+      deprecation of defaultProps
+    </li>
+    <li>Package updates to the frontend modules</li>
+    <li>Updated to the latest Node LTS 20.13.1 </li>
+    <li>Updates to the documentation </li>
+  </ul>
+  Deprecation warning:
+  <ul>
+    <li>
+      React 19.0.0 will deprecate the use of defaultProps,
+      please use the default value in the function signature
+      instead. See 
+      <a href="https://react.dev/blog/2024/04/25/react-19-upgrade-guide">
+        here
+      </a> 
+      for more information. The proptypes package will also be
+      removed in the release 6.0.0 of RAS.
+    </li>
+  </ul>
+  <br />
   V5.1.0 Thursday 18 April 2024 Minor Updates:
   <ul>
     <li>Package updates to Backend modules</li>

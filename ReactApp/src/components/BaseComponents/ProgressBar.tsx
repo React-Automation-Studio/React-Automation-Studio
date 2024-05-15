@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef,ReactElement } from "react";
+import React, { useEffect, useState, useRef, ReactElement } from "react";
 import { v4 as uuidv4 } from "uuid";
 import Widget from "../SystemComponents/Widgets/Widget";
 import { FormControlLabel, useTheme } from "@mui/material";
@@ -27,9 +27,9 @@ function getTickValues(
   xOffset,
   yOffset,
   value
-):ReactElement[] {
+): ReactElement[] {
   const { classes } = props;
-  let ticks:ReactElement[] = [];
+  let ticks: ReactElement[] = [];
   let i = 0;
   if (typeof props.disabled === "undefined") {
     if (props.showTicks === true) {
@@ -380,8 +380,13 @@ const ProgressBar = ({
       min={min}
       max={max}
       showTooltip={showTooltip}
-      componentProps={{showValue,showTicks,aspectRatio,lockAspectRatio,labelPlacement}}
-
+      componentProps={{
+        showValue,
+        showTicks,
+        aspectRatio,
+        lockAspectRatio,
+        labelPlacement,
+      }}
     />
   );
 };

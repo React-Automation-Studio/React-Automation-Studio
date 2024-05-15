@@ -67,7 +67,7 @@ const ActionButton = ({
       showTooltip={showTooltip}
       component={ActionButtonComponent}
       writeOutputValueToAllpvs={true}
-      componentProps={{ color: color}}
+      componentProps={{ color: color }}
     />
   );
 };
@@ -103,7 +103,15 @@ interface ActionButtonProps {
   /**
    * Custom color to be used, must be derived from Material UI theme colors.
    */
-  color?: "primary" | "secondary" | "error" | "info" | "success" | "warning" | "inherit" | "default";
+  color?:
+    | "primary"
+    | "secondary"
+    | "error"
+    | "info"
+    | "success"
+    | "warning"
+    | "inherit"
+    | "default";
   /**
    * Custom label to be used, if `usePvLabel` is not defined.
    */

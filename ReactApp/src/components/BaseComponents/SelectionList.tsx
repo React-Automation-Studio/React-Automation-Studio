@@ -8,7 +8,7 @@ const useStyles = makeStyles((theme) => {
     theme.palette.mode === "light"
       ? "rgba(0, 0, 0, 0.23)"
       : "rgba(255, 255, 255, 0.23)"; //copied from material ui textfield
-  const borderColorTop =
+  const customBorderColor =
     theme.palette.mode === "light"
       ? "rgba(0, 0, 0,0)"
       : "rgba(255, 255, 255, 0)";
@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => {
       borderRight: "1px solid " + borderColor,
       borderTop: "1px solid " + borderColor,
       borderBottom: "1px solid " + borderColor,
-      borderLeft: "1px solid " + borderColorTop,
+      borderLeft: "1px solid " + customBorderColor,
       borderBottomRightRadius: 4,
       borderTopRightRadius: 4,
       textAlign: "center",
@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme) => {
       borderRight: "1px solid " + borderColor,
       borderTop: "1px solid " + borderColor,
       borderBottom: "1px solid " + borderColor,
-      borderLeft: "1px solid " + borderColorTop,
+      borderLeft: "1px solid " + customBorderColor,
       marginLeft: -1,
       textAlign: "center",
       "&:hover": {
@@ -78,7 +78,7 @@ const useStyles = makeStyles((theme) => {
       borderRight: "1px solid " + borderColor,
       borderLeft: "1px solid " + borderColor,
       borderBottom: "1px solid " + borderColor,
-      borderTop: "1px solid " + borderColorTop,
+      borderTop: "1px solid " + customBorderColor,
       borderBottomRightRadius: 4,
       borderBottomLeftRadius: 4,
       textAlign: "center",
@@ -106,7 +106,7 @@ const useStyles = makeStyles((theme) => {
       borderRight: "1px solid " + borderColor,
       borderLeft: "1px solid " + borderColor,
       borderBottom: "1px solid " + borderColor,
-      borderTop: "1px solid " + borderColorTop,
+      borderTop: "1px solid " + customBorderColor,
       marginTop: -1,
       textAlign: "center",
       "&:hover": {

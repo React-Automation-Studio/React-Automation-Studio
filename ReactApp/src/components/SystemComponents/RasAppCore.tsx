@@ -345,7 +345,7 @@ class RasAppCore extends Component<RasAppCoreProps, RasAppCoreState> {
 
   componentDidMount() {
     window.addEventListener('storage', this.handleLocalStorageChange)
-    setTimeout(this.clearLoggingIn, this.props.loginTimeout?this.props.loginTimeout:10000)
+    setTimeout(this.clearLoggingIn, this.props.loginTimeout??10000)
     this.getInitialRefreshToken();
     let socket = this.state.system.socket;
     socket.on('redirectToLogIn', this.handleRedirectToLogIn);

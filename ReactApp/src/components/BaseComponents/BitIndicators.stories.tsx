@@ -77,5 +77,6 @@ export const CustomColors = {
     bitLabelPlacement: "end",
     onColor: "lime",
     offColor: "red",
+   
   },
 };

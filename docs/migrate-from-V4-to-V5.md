@@ -1,3 +1,19 @@
+# Migrate to V5.2.0
+
+No migration is needed for V5.2.0 from V5.1.0, but a bunch of console warnings from react 18.3.2 will eventually effect you.
+To this effect we have converted of all base and system components to Typescript, and function default parameters, due to React deprecation of defaultProps in 19.0.0. We have included a warning in this regard.
+
+In version 6.0.0, React 19.0.0 will deprecate the use of defaultProps,
+please use the default value in the function signature
+instead. See
+<a href="https://react.dev/blog/2024/04/25/react-19-upgrade-guide">
+here
+</a>
+for more information. The proptypes package will also be
+removed in the release 6.0.0 of RAS.
+
+# Migrate to V5.1.x
+
 In release V5.0.0 we have moved away from Create-React-App to Vite
 
 This was forced upon us as Create-React-App has been deprecated and we needed to move to a new build system.
@@ -23,71 +39,75 @@ And we have included a list of the main changes below:
 3. In your JSX files, if you have imports with a .js extension, you will need to remove the extension.
 4. We have kept all the ports the same as in V4. This means that you will not need to change the ports.
 5. Any imports that used './React-Automation-Studio/...' will need to be changed to 'React-Automation-Studio/...'.
+
 ## Updating the backend and frontend packages
 
 1. The pvServer uses EPICS 7.0.7 and Python 3.12.1, if you have any customizations to the pvServer, you will need to update the pvServer to use the latest version of EPICS and Python.
 2. The frontend uses the latest version of React and React-Router-Dom.
-    We were stuck on React-Router-Dom 5.3.3 and we have now moved to React-Router-Dom 6.21.3. You will need to update your code to use the latest versions of these packages.
-    
-    We followed the migration guide at https://reactrouter.com/docs/en/v6/getting-started/migrating.
-    This impacted us in the following ways. There was a clash in ReactApp/src/Routes.js name with the new React-Router-Dom 6.21.3. We had to rename the file to ReactApp/src/AppRoutes.jsx.
-    We needed to update the code in the file to use the new version of React-Router-Dom. This also impacted the ProtectedRoute component:
+   We were stuck on React-Router-Dom 5.3.3 and we have now moved to React-Router-Dom 6.21.3. You will need to update your code to use the latest versions of these packages.
 
-    Previously in the Routes.js we had:
+   We followed the migration guide at https://reactrouter.com/docs/en/v6/getting-started/migrating.
+   This impacted us in the following ways. There was a clash in ReactApp/src/Routes.js name with the new React-Router-Dom 6.21.3. We had to rename the file to ReactApp/src/AppRoutes.jsx.
+   We needed to update the code in the file to use the new version of React-Router-Dom. This also impacted the ProtectedRoute component:
 
-    ```jsx
-    <BrowserRouter>
-       <Switch>
-          <ProtectedRoute
-             path="/ArchiverDataViewerDemo"
-             component={ArchiverDataViewerDemo}
-          />
-          ... more routes
-       </Switch>
-    </BrowserRouter>
-    ```
+   Previously in the Routes.js we had:
 
-    Now in the AppRoutes.jsx we have:
+   ```jsx
+   <BrowserRouter>
+     <Switch>
+       <ProtectedRoute
+         path="/ArchiverDataViewerDemo"
+         component={ArchiverDataViewerDemo}
+       />
+       ... more routes
+     </Switch>
+   </BrowserRouter>
+   ```
 
-    ```jsx
-    <BrowserRouter>
-       <Routes>
-          <Route
-             path="/AlarmHandlerDemo"
-             element={
-                <ProtectedRoute>
-                   <AlarmHandlerDemo />
-                </ProtectedRoute>
-             }
-          />
-          ... more routes
-       </Routes>
-    </BrowserRouter>
-    ```
-    We also had to update the code in the ReactApp/src/components/SystemComponents/Login.Login.jsx to use the new version of React-Router-Dom. If you used a custom version then please update it to use the new version of React-Router-Dom.
+   Now in the AppRoutes.jsx we have:
+
+   ```jsx
+   <BrowserRouter>
+     <Routes>
+       <Route
+         path="/AlarmHandlerDemo"
+         element={
+           <ProtectedRoute>
+             <AlarmHandlerDemo />
+           </ProtectedRoute>
+         }
+       />
+       ... more routes
+     </Routes>
+   </BrowserRouter>
+   ```
+
+   We also had to update the code in the ReactApp/src/components/SystemComponents/Login.Login.jsx to use the new version of React-Router-Dom. If you used a custom version then please update it to use the new version of React-Router-Dom.
 
 ## Multistage builds
-    We have introduced multistage builds for the docker compose files. 
+
+    We have introduced multistage builds for the docker compose files.
     This means that you will need to update your docker-compose files to use the new multistage builds.
 
 ## MongoDB
-    We have updated the MongoDB to use the latest version of MongoDB. 
+
+    We have updated the MongoDB to use the latest version of MongoDB.
     We suggest you dump your previous version of the database and insert the documents into the latest version.
 
     We have also added a named volume for the MongoDB replica sets.
-    
+
     As of RAS V5.0.0 MongoDB volumes are now defined by the compose project name and MongoDB version
     This allows you to customize the MongoDB version, for example, if you want to stay on an older version of MongoDB
     It allows for multiple RAS instances to be run on the same machine.
-    In this case, make sure to set the COMPOSE_PROJECT_NAME variable in the .env file 
+    In this case, make sure to set the COMPOSE_PROJECT_NAME variable in the .env file
     or make sure project folder names are unique between instances
 
-    You can also stay on the previous version of MongoDB by setting the MONGO_VERSION 
-    variable in the .env file to the previous version of MongoDB. 
+    You can also stay on the previous version of MongoDB by setting the MONGO_VERSION
+    variable in the .env file to the previous version of MongoDB.
     You might also need to update the docker-compose files to use the previous version of MongoDB.
 
 ## Styleguide
-    We have moved from react-styleguidist to Storybook. If you have any customizations to the styleguide, 
-    you will need to update the styleguide to use Storybook. 
-    The Storybook configs are now located in the ReactApp/.storybook folder.
 
+    We have moved from react-styleguidist to Storybook. If you have any customizations to the styleguide,
+    you will need to update the styleguide to use Storybook.
+    The Storybook configs are now located in the ReactApp/.storybook folder.

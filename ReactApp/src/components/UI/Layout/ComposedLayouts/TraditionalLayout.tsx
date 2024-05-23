@@ -40,7 +40,7 @@ const TraditionalLayout = ({
   showFooter = false,
   footerHeight = 30,
   footerContents = null,
-  ...props
+  ...others
 }: TraditionalLayoutProps) => {
   const theme = useTheme();
 
@@ -92,15 +92,15 @@ const TraditionalLayout = ({
               {title}
             </Typography>
           )}
-          {props.tabs && (
+          {others.tabs && (
             <Tabs
               style={{ flexGrow: 1 }}
-              value={props.tabValue}
+              value={others.tabValue}
               textColor="inherit"
-              onChange={props.handleTabChange}
-              {...props.tabProps}
+              onChange={others.handleTabChange}
+              {...others.tabProps}
             >
-              {props.tabs.map((option, index) => (
+              {others.tabs.map((option, index) => (
                 <Tab key={index.toString()} label={option} />
               ))}
             </Tabs>
@@ -137,7 +137,7 @@ const TraditionalLayout = ({
       )}
       <React.Fragment>
         {/* ---Children--- */}
-        {props.children}
+        {others.children}
         {/* ---Children--- */}
       </React.Fragment>
       {showFooter && (

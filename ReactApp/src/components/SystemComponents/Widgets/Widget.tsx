@@ -401,7 +401,7 @@ const Widget = ({
       useMetadata: useMetadata,
       tooltip: tooltip,
       writeOutputValueToAllpvs: writeOutputValueToAllpvs,
-      ...others.componentProps,
+      ...(others.componentProps??{}),
     });
 
   const divStyle = {

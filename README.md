@@ -1,4 +1,4 @@
-Current Release: V5.2.0
+Current Release: V5.2.1
 
 [Migrate from V4.0.3 to V5.2.X](docs/migrate-from-V4-to-V5.md)
 

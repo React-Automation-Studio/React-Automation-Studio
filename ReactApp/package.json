@@ -8,7 +8,7 @@
     "build": "cross-env NODE_ENV=production NODE_OPTIONS=--max-old-space-size=4096 vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "storybook": "storybook dev -p 6006",
+    "storybook": "storybook dev -p 6006 --no-open",
     "build-storybook": "cross-env NODE_ENV=production NODE_OPTIONS=--max-old-space-size=4096 storybook build",
     "test": "vitest",
     "test-debug": "vitest --inspect-brk --no-file-parallelism"

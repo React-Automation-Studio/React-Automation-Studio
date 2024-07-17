@@ -324,7 +324,8 @@ const MainDashboard = (props) => {
                   <ul>
                     <li>Package updates to the frontend modules</li>
                     <li>Updated to the latest Node LTS 20.15.1 </li>
-                   
+                    <li>Updated to Python 3.12.4</li>
+                    <li>Minor Bug fix Toggle Button component</li>
                   </ul>
                   V5.2.0 Thursday 15 May 2024 
                   <br/>

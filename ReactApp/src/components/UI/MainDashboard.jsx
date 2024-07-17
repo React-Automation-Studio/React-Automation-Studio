@@ -318,11 +318,19 @@ const MainDashboard = (props) => {
               </Grid>
               <Grid item lg={12} sm={12} xs={12}>
                 <Typography className={classes.WhatsNew} component="div">
+                V5.2.1 Wednesday 17 July 2024 
+                  <br/>
+                  Minor Updates:
+                  <ul>
+                    <li>Package updates to the frontend modules</li>
+                    <li>Updated to the latest Node LTS 20.15.1 </li>
+                   
+                  </ul>
                   V5.2.0 Thursday 15 May 2024 
                   <br/>
                   Minor Updates:
                   <ul>
-                    <li>Update to React 18.3.2</li>
+                    <li>Update to React 18.3.1</li>
                     <li>
                       Conversion of all base and system components to
                       Typescript, and function default parameters, due to React

@@ -1,6 +1,6 @@
-# Migrate to V5.2.0
+# Migrate to V5.2.1
 
-No migration is needed for V5.2.0 from V5.1.0, but a bunch of console warnings from react 18.3.2 will eventually effect you.
+No migration is needed for V5.2.1 from V5.1.0, but a bunch of console warnings from react 18.3.2 will eventually effect you.
 To this effect we have converted of all base and system components to Typescript, and function default parameters, due to React deprecation of defaultProps in 19.0.0. We have included a warning in this regard.
 
 In version 6.0.0, React 19.0.0 will deprecate the use of defaultProps,

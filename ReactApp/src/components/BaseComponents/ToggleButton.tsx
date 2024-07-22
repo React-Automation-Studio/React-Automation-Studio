@@ -45,7 +45,7 @@ const ToggleButtonComponent = (props) => {
   let momentary = props.momentary !== undefined ? props.momentary : false;
   let text;
   if (props.initialized) {
-    text = props.enumStrs[value == 1 ? 1 : 0];
+    text = props.enumStrs?props.enumStrs[value == 1 ? 1 : 0]:value == 1 ? "ON" : "OFF";
   } else {
     text = "Disconnected";
   }
@@ -220,6 +220,10 @@ interface ToggleButtonProps {
    * Custom label placement
    */
   labelPlacement?: "top" | "bottom" | "start" | "end";
+  /**
+   * Custom Selection Strings, use this to define custom strings for the enum values.i.e.["off","on"] or ["closed","open"] or ["disabled","enabled"]
+   */
+  custom_selection_strings?: string[];
   
 
 }

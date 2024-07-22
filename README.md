@@ -1,4 +1,4 @@
-Current Release: V5.2.0
+Current Release: V5.2.1
 
 [Migrate from V4.0.3 to V5.2.X](docs/migrate-from-V4-to-V5.md)
 
@@ -574,12 +574,22 @@ or: https://doi.org/10.18429/JACoW-ICALEPCS2023-FR2BCO01
 
 
 # Changelog
+  V5.2.1 Wednesday 17 July 2024 
+  <br/>
+  Minor Updates:
+  <ul>
+    <li>Package updates to the frontend modules</li>
+    <li>Updated to the latest Node LTS 20.15.1 </li>
+    <li>Updated to Python 3.12.4</li>
+    <li>Package updates to the backend modules</li>
+    <li>Minor Bug fix Toggle Button component</li>
+  </ul>
 
   V5.2.0 Thursday 15 May 2024 
   <br/>
   Minor Updates:
   <ul>
-    <li>Update to React 18.3.2</li>
+    <li>Update to React 18.3.1</li>
     <li>
       Conversion of all base and system components to
       Typescript, and function default parameters, due to React

@@ -324,6 +324,7 @@ const MainDashboard = (props) => {
                   <ul>
                     <li>Updated to the MUI 6</li>
                     <li>Moved from npm to pnpm package manager </li>
+                    <li>Updated to MongoDB 8.0.3 </li>
                     </ul>
                   Minor Updates:
                   <ul>

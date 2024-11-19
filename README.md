@@ -1,5 +1,5 @@
-Current Release: V5.2.1
-
+Current Release: V6.0.0
+[migrate-from-V5.x.x-to-V6.0.0](docs/migrate-from-V5-to-V6.md)
 [Migrate from V4.0.3 to V5.2.X](docs/migrate-from-V4-to-V5.md)
 
 # Introduction

@@ -1,10 +1,13 @@
 # Migrate to V6.0.0
-Only a minor migration is needed for V6.0.0 from V5.2.1.
+
+
+Whilst RAS V6.0.0 does include breaking changes. Only a minor migration is needed on the frontend for V6.0.0 from V5.2.1.
 
 This is mainly brought about by MUI V6.0.0. The main component that effects us is the SideDrawer component, as the ListItems have been updated to use the ListItemButton component.
 Any further changes from MUI can be fix from upgrade to V6.0.0 help: https://mui.com/material-ui/migration/upgrade-to-v6/
 
-In version  RAS V7.0.0, React 19.0.0 will deprecate the use of defaultProps,
+
+Warning: React 19.0.0 will deprecate the use of defaultProps,
 please use the default value in the function signature
 instead. See
 <a href="https://react.dev/blog/2024/04/25/react-19-upgrade-guide">
@@ -19,19 +22,19 @@ removed in the release 7.0.0 of RAS.
 
 ## Updating the backend and frontend packages
 
-1. The pvServer uses EPICS 7.0.7 and Python 3.12.1, if you have any customizations to the pvServer, you will need to update the pvServer to use the latest version of EPICS and Python.
+1. The pvServer uses EPICS 7.0.8 and Python 3.12.7, if you have any customizations to the pvServer, you will need to update the pvServer to use the latest version of EPICS and Python.
 
+## Updating the frontend package manger
 
-   We also had to update the code in the ReactApp/src/components/SystemComponents/Login.Login.jsx to use the new version of React-Router-Dom. If you used a custom version then please update it to use the new version of React-Router-Dom.
-
+1. We have moved from npm to pnpm primarily for the speed offered by using the local cache during the coker build process. If you use the docker compose build system it will not effect you. 
 
 
 ## MongoDB
 
-    We have updated the MongoDB to use the latest version of MongoDB.
+    We have updated the MongoDB to use the latest version of MongoDB, V 8.0.3.
     We suggest you dump your previous version of the database and insert the documents into the latest version.
 
-    We have also added a named volume for the MongoDB replica sets.
+    You can use the previous named volume for the MongoDB replica sets i.e. 7.0.5.
 
     As of RAS V5.0.0 MongoDB volumes are now defined by the compose project name and MongoDB version
     This allows you to customize the MongoDB version, for example, if you want to stay on an older version of MongoDB

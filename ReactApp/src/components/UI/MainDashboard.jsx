@@ -318,6 +318,23 @@ const MainDashboard = (props) => {
               </Grid>
               <Grid item lg={12} sm={12} xs={12}>
                 <Typography className={classes.WhatsNew} component="div">
+                V6.0.0 Tuesday 19 November 2024 
+                  <br/>
+                  Major Updates:
+                  <ul>
+                    <li>Updated to the MUI 6</li>
+                    <li>Moved from npm to pnpm package manager </li>
+                    </ul>
+                  Minor Updates:
+                  <ul>
+                    <li>Package updates to the frontend modules</li>
+                    <li>Updated to the latest Node LTS 22.11.0 </li>
+                    <li>Updated to Python 3.12.7</li>
+                    <li>Updated to PyEpics 3.5.7</li>
+                    <li>Package updates to the backend modules</li>
+                  </ul>
+                  V5.2.0 Thursday 15 May 2024 
+                  <br/>
                 V5.2.1 Wednesday 17 July 2024 
                   <br/>
                   Minor Updates:

@@ -318,14 +318,15 @@ const MainDashboard = (props) => {
               </Grid>
               <Grid item lg={12} sm={12} xs={12}>
                 <Typography className={classes.WhatsNew} component="div">
-                V6.0.0 Tuesday 19 November 2024 
-                  <br/>
+                  V6.0.0 Tuesday 19 November 2024
+                  <br />
                   Major Updates:
                   <ul>
                     <li>Updated to the MUI 6</li>
                     <li>Moved from npm to pnpm package manager </li>
                     <li>Updated to MongoDB 8.0.3 </li>
-                    </ul>
+                    <li>Speed improvements to the Area Detector Aplliance</li>
+                  </ul>
                   Minor Updates:
                   <ul>
                     <li>Package updates to the frontend modules</li>
@@ -334,10 +335,10 @@ const MainDashboard = (props) => {
                     <li>Updated to PyEpics 3.5.7</li>
                     <li>Package updates to the backend modules</li>
                   </ul>
-                  V5.2.0 Thursday 15 May 2024 
-                  <br/>
-                V5.2.1 Wednesday 17 July 2024 
-                  <br/>
+                  V5.2.0 Thursday 15 May 2024
+                  <br />
+                  V5.2.1 Wednesday 17 July 2024
+                  <br />
                   Minor Updates:
                   <ul>
                     <li>Package updates to the frontend modules</li>
@@ -346,8 +347,8 @@ const MainDashboard = (props) => {
                     <li>Package updates to the backend modules</li>
                     <li>Minor Bug fix Toggle Button component</li>
                   </ul>
-                  V5.2.0 Thursday 15 May 2024 
-                  <br/>
+                  V5.2.0 Thursday 15 May 2024
+                  <br />
                   Minor Updates:
                   <ul>
                     <li>Update to React 18.3.1</li>

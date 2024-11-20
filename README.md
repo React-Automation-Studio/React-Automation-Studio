@@ -584,7 +584,7 @@ or: https://doi.org/10.18429/JACoW-ICALEPCS2023-FR2BCO01
     <li>Updated to the MUI 6</li>
     <li>Moved from npm to pnpm package manager </li>
     <li>Updated to MongoDB 8.0.3 </li>
-    <li>Speed improvements to the Area Detector Aplliance</li>
+    <li>Speed improvements to the Area Detector Appliance</li>
     </ul>
   Minor Updates:
   <ul>

@@ -577,7 +577,7 @@ or: https://doi.org/10.18429/JACoW-ICALEPCS2023-FR2BCO01
 
 # Changelog
   
-  V6.0.0 Tuesday 19 November 2024 
+  V6.0.0 Monday 25 November 2024 
   <br/>
   Major Updates:
   <ul>

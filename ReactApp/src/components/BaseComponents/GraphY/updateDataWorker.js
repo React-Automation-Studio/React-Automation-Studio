@@ -1,5 +1,6 @@
 // Worker script: updateDataWorker.js
 
+
 // Internal state to store plot data
 
 const data = [];
@@ -20,13 +21,23 @@ onmessage = function (e) {
   }
 
   // Update the Y values
-  const newY = data[index].y.concat(value).slice(-maxLength);
+  let newY =[];
+  let newX =[]; 
+  if (typeof maxLength !== "undefined") {
+    newY= data[index].y.concat(value).slice(-maxLength);
 
   // Update the X values
-  const newX = useTimeStamp
+   newX = useTimeStamp
     ? data[index].x.concat(value.map((_, i) => new Date((timestamp + i) * 1000))).slice(-maxLength)
     : Array.from(newY.keys());
-
+  }
+  else{
+    newY=value;
+    newX = useTimeStamp
+    ? new Date(timestamp * 1000)
+    : Array.from(newY.keys());
+    
+  }
   // Update internal state
   data[index] = { x: newX, y: newY };
 

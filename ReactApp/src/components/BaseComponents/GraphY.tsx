@@ -8,9 +8,43 @@ import { replaceMacros } from "../SystemComponents/Utils/macroReplacement";
 import { useUpdateDataWorker } from "./GraphY/UpdateDataWorker";
 const PlotData = (props) => {
   const theme = useTheme();
+  const contextInfoReducer = (oldPvs, newData) => {
+    let pvs = [...oldPvs];
+    pvs[newData.index] = newData.pvs[0];
+
+    return pvs;
+  };
+  const [contextInfo, updateContextInfo] = useReducer(contextInfoReducer, []);
+  const [delayedData, setDelayedData] = useState([]);
+  const [delayedContextInfo, setDelayedContextInfo] = useState([]);
+  const [trigger, setTrigger] = useState(0);
+  const { updateRate } = props;
+
+  const [trigger2, setTrigger2] = useState(0);
 
   // Replace the reducer with the worker hook
   const [data, processUpdate] = useUpdateDataWorker();
+
+  useEffect(() => {
+    const timeout = setTimeout(
+      () => setTrigger((prev) => prev + 1),
+      parseInt(updateRate)
+    );
+    setDelayedData(data);
+    return () => {
+      clearTimeout(timeout);
+    };
+    // eslint-disable-next-line  react-hooks/exhaustive-deps
+  }, [trigger, updateRate]);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => setTrigger2((prev) => prev + 1), 1000);
+    setDelayedContextInfo(contextInfo);
+    return () => {
+      clearTimeout(timeout);
+    };
+    // eslint-disable-next-line  react-hooks/exhaustive-deps
+  }, [trigger2]);
 
   const [polledData, setPolledData] = useState([]);
   const polledDataRef = useRef(polledData);
@@ -41,30 +75,35 @@ const PlotData = (props) => {
   }, [usePolling, pollingRate, processUpdate, props, theme]);
 
   const pvConnections = () => {
-    return props.pvs.map((item, index) => (
-    
-  processUpdate?     <PV
-        key={index.toString()}
-        pv={item}
-        macros={props.macros}
-        pvData={(pvData) =>
-          props.usePolling
-            ? setPolledData((prev) => {
-                const newPolledData = [...prev];
-                newPolledData[index] = pvData;
-                return newPolledData;
-              })
-            : processUpdate(index, pvData, props, theme)
-        }
-      />
-      :null
-    ));
+    return props.pvs.map((item, index) =>
+      processUpdate ? (
+        <PV
+          key={index.toString()}
+          pv={item}
+          macros={props.macros}
+          pvData={(pvData) =>
+            props.usePolling
+              ? setPolledData((prev) => {
+                  const newPolledData = [...prev];
+                  newPolledData[index] = pvData;
+                  return newPolledData;
+                })
+              : processUpdate(index, pvData, props, theme)
+          }
+          contextInfo={(pvs) => updateContextInfo({ index, pvs })}
+          makeNewSocketIoConnection={props.makeNewSocketIoConnection}
+        />
+      ) : null
+    );
   };
 
   return (
     <React.Fragment>
       {pvConnections()}
-      {props.children({ data })}
+      {props.children({
+        data: updateRate !== undefined ? delayedData : data,
+        contextInfo: delayedContextInfo,
+      })}
     </React.Fragment>
   );
 };
@@ -92,7 +131,7 @@ const GraphY = ({
     width: "100%",
     height: "100%",
   },
-  maxLength = 1000,
+  maxLength,
   ...props
 }: GraphYProps) => {
   const theme = useTheme<any>();
@@ -143,7 +182,7 @@ const GraphY = ({
 
   useEffect(() => {
     if (props.yAxes !== undefined) {
-      let numberOfyAxes:number = props.yAxes.length;
+      let numberOfyAxes: number = props.yAxes.length;
       let newYPositions: number[] = [];
       let increment = 100 / widthComputed;
       let newDomain = [increment * (numberOfyAxes - 1), 1];
@@ -288,7 +327,7 @@ const GraphY = ({
     props.xTickFormat,
     props.xUnits,
   ]);
-
+  console.log(openContextMenu);
   return (
     <div
       ref={paperRef}
@@ -481,12 +520,12 @@ interface GraphYProps {
   disableContextMenu?: boolean;
   /**
    * Custom x axis minimum to be used,if not defined the graph will auto-scale
-   * 
+   *
    * */
   xMin?: number;
   /**
    * Custom x axis maximum to be used,if not defined the graph will auto-scale
-   * 
+   *
    * */
   xMax?: number;
   /**
@@ -525,9 +564,6 @@ interface GraphYProps {
    * yAxes: Array of y-axis properties, the implementation appears broken and will be fixed in a later release
    */
   yAxes?: any[];
-  
-  
-  
 }
 
 export default GraphY;

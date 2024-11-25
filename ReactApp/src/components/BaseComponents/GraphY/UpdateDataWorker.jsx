@@ -30,12 +30,12 @@ export function useUpdateDataWorker() {
   // Function to send data to the worker
   const processUpdate = (index, pvData, props, theme) => {
     if (workerRef.current) {
-        const {useTimeStamp,legend,replaceMacros,yHoverFormat,lineColor,pvs,macros}=props;
-        const maxLength=props.maxLength || Infinity;
+        const {useTimeStamp,legend,yHoverFormat,lineColor,pvs,macros,maxLength}=props;
+        
         const themeColor=theme.palette.reactVis.lineColors[index];
         const name= legend?.[index] || replaceMacros(pvs[index], macros);
         workerRef.current.postMessage({index, pvData,maxLength,useTimeStamp,name,yHoverFormat,themeColor,lineColor, });
-        // workerRef.current.postMessage({ test: "test" });
+      
     }
   };
 

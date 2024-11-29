@@ -2,7 +2,9 @@
 
 onmessage = function (e) {
   const { data, colors } = e.data;
-
+  if (!data || !colors) return;
+  if (!Array.isArray(data))return;
+  if (data[0].length === 0) return;
   // Dimensions of the heatmap
   const width = data[0].length;
   const height = data.length;

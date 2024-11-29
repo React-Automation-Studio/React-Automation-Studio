@@ -6,7 +6,9 @@ export function useHeatmapWebWorker(data, colors) {
 
   useEffect(() => {
     // Initialize worker
-    workerRef.current = new Worker(new URL('./heatmapWorker.js', import.meta.url));
+    workerRef.current = new Worker(
+      new URL("./heatmapWorker.js", import.meta.url)
+    );
 
     // Listen for messages
     workerRef.current.onmessage = (e) => {

@@ -6,7 +6,9 @@ export function useDataTransformationWebWorker(value, rows, initialized) {
 
   useEffect(() => {
     // Initialize the worker
-    workerRef.current = new Worker(new URL('./dataTransformationWorker.js', import.meta.url));
+    workerRef.current = new Worker(
+      new URL("./dataTransformationWorker.js", import.meta.url)
+    );
 
     // Listen for messages from the worker
     workerRef.current.onmessage = (e) => {

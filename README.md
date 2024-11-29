@@ -1,4 +1,6 @@
-Current Release: V5.2.1
+Current Release: V6.0.0
+
+[Migrate from-V5.x.x to V6.0.0](docs/migrate-from-V5-to-V6.md)
 
 [Migrate from V4.0.3 to V5.2.X](docs/migrate-from-V4-to-V5.md)
 
@@ -574,6 +576,26 @@ or: https://doi.org/10.18429/JACoW-ICALEPCS2023-FR2BCO01
 
 
 # Changelog
+  
+  V6.0.0 Monday 25 November 2024 
+  <br/>
+  Major Updates:
+  <ul>
+    <li>Updated to the MUI 6</li>
+    <li>Moved from npm to pnpm package manager </li>
+    <li>Updated to MongoDB 8.0.3 </li>
+    <li>Speed improvements to the GraphY component</li>
+    <li>Speed improvements to the Area Detector Appliance</li>
+    </ul>
+  Minor Updates:
+  <ul>
+    <li>Package updates to the frontend modules</li>
+    <li>Updated to the latest Node LTS 22.11.0 </li>
+    <li>Updated to Python 3.12.7</li>
+    <li>Updated to PyEpics 3.5.7</li>
+    <li>Package updates to the backend modules</li>
+  </ul>
+
   V5.2.1 Wednesday 17 July 2024 
   <br/>
   Minor Updates:

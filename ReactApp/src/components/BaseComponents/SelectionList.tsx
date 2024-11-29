@@ -1,5 +1,11 @@
 import React from "react";
-import { FormControlLabel, List, ListItemButton, ListItemText } from "@mui/material";
+import {
+  FormControlLabel,
+  List,
+  ListItemButton,
+  ListItemText,
+  ListItem,
+} from "@mui/material";
 import Widget from "../SystemComponents/Widgets/Widget";
 import makeStyles from "@mui/styles/makeStyles";
 
@@ -172,15 +178,18 @@ const SelectionListComponent = (props) => {
               : classes.buttonMiddleVertical;
       }
       return (
-        <ListItemButton
-          key={item.toString()}
-          className={className}
-          value={item}
-          selected={value === item}
-          onClick={props.disabled ? undefined : () => handleListItemClick(item)}
-        >
-          <ListItemText primary={item} />
-        </ListItemButton>
+        <ListItem className={className} key={item.toString()} disablePadding>
+          <ListItemButton
+            sx={{ height: "100%" }}
+            value={item}
+            selected={value === item}
+            onClick={
+              props.disabled ? undefined : () => handleListItemClick(item)
+            }
+          >
+            <ListItemText primary={item} sx={{ textAlign: "center" }} />
+          </ListItemButton>
+        </ListItem>
       );
     });
     return listItems;

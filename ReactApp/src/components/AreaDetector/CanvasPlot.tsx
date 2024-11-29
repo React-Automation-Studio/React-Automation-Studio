@@ -4,11 +4,14 @@ import colormap from "colormap";
 import ContextMenu from "../SystemComponents/ContextMenu";
 import { useEpicsPV } from "../SystemComponents/EpicsPV";
 import { Typography } from "@mui/material";
-
+import { useHeatmapWebWorker } from "./HeatmapWebWorker";
+import { useDataTransformationWebWorker } from "./DataTransfromationWebworker";
 const ImageCanvas = ({ data, width, height, colormapName }) => {
   const [colors, setColors] = useState(null);
-  const theme = useTheme();
-  console.log(theme)
+  const imageData = useHeatmapWebWorker(data, colors); // Use the Web Worker for heatmap processing
+  const canvasRef = useRef(null);
+
+  // Generate colormap when colormapName changes
   useEffect(() => {
     setColors(
       colormap({
@@ -20,37 +23,23 @@ const ImageCanvas = ({ data, width, height, colormapName }) => {
     );
   }, [colormapName]);
 
-  const canvasRef = useRef(null);
-  const pixelSize = 1;
-
+  // Render the ImageData onto the canvas
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-
-    const drawHeatmap = () => {
-      for (let y = 0; y < data.length; y++) {
-        for (let x = 0; x < data[0].length; x++) {
-          const color = colors[data[y][x]];
-          ctx.fillStyle = color;
-          ctx.fillRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
-        }
-      }
-    };
-    if (colors) {
-      drawHeatmap();
+    if (imageData && canvasRef.current) {
+      const ctx = canvasRef.current.getContext("2d");
+      ctx.putImageData(imageData, 0, 0);
     }
-  }, [data, pixelSize, colors, width, height]);
+  }, [imageData]);
 
   return (
     <canvas
       ref={canvasRef}
       width={width}
       height={height}
-      style={{ border: `1px solid ${theme.palette.grey[500]}` }}
+      style={{ border: "1px solid gray" }}
     ></canvas>
   );
 };
-  
   
 
 /**
@@ -69,24 +58,7 @@ const CanvasPlot = ({
   const pv = useEpicsPV({...props, useBinaryValue, debug, makeNewSocketIoConnection});
   const { initialized, value } = pv;
   
-  const [data, setData] = useState(null);
-  useEffect(() => {
-    let z = [];
-    if (initialized && value) {
-      const array = new Uint8Array(value);
-      const cols = array.length / rows;
-
-      // Initialize the 2D array z
-      z = new Array(rows);
-
-      // Populate z with sub-arrays
-      for (let i = 0; i < rows; i++) {
-        z[i] = new Uint8Array(array.buffer, i * cols, cols);
-      }
-    }
-
-    setData(z);
-  }, [initialized, value]);
+  const data = useDataTransformationWebWorker(value, rows,initialized); // Transform PV data into 2D array
   const theme = useTheme();
   const backgroundColor = props.backgroundColor
     ? props.backgroundColor

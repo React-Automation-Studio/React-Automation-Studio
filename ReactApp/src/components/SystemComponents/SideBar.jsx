@@ -14,6 +14,7 @@ import Menu from "@mui/icons-material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { Link } from "react-router-dom";
 import AutomationStudioContext from "../SystemComponents/AutomationStudioContext";
+import ListItemButton from "@mui/material/ListItemButton";
 
 const styles = {
   list: {
@@ -56,27 +57,29 @@ class SideBar extends React.Component {
     const sideList = (
       <div className={classes.list}>
         <List>
-          <ListItem button key={"Home"} component={Link} to="/">
-            <ListItemIcon>
-              <Home />
-            </ListItemIcon>
-            <ListItemText primary={"Home"} />
+          <ListItem disablePadding>
+            <ListItemButton component={Link} to="/">
+              <ListItemIcon>
+                <Home />
+              </ListItemIcon>
+              <ListItemText primary={"Home"} />
+            </ListItemButton>
           </ListItem>
         </List>
         {import.meta.env.VITE_EnableLogin === "true" && (
           <React.Fragment>
             <Divider />
-            <ListItem
-              button
-              key={"Log Out"}
-              onClick={this.logout}
-              component={Link}
-              to="/Login"
-            >
-              <ListItemIcon>
-                <AccountCircle />
-              </ListItemIcon>
-              <ListItemText primary={"Log Out"} />
+            <ListItem disablePadding>
+              <ListItemButton
+                onClick={this.logout}
+                component={Link}
+                to="/Login"
+              >
+                <ListItemIcon>
+                  <AccountCircle />
+                </ListItemIcon>
+                <ListItemText primary={"Log Out"} />
+              </ListItemButton>
             </ListItem>
           </React.Fragment>
         )}

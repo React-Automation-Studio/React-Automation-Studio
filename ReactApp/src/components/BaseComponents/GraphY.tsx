@@ -5,124 +5,9 @@ import PV from "../SystemComponents/PV";
 import Plot from "react-plotly.js";
 import { isMobileOnly } from "react-device-detect";
 import { replaceMacros } from "../SystemComponents/Utils/macroReplacement";
-
+import { useUpdateDataWorker } from "./GraphY/UpdateDataWorker";
 const PlotData = (props) => {
   const theme = useTheme();
-  const updateDataReducer = (pvs, newData) => {
-    let newPvs = [...pvs];
-    let { initialized } = newData.pvData;
-    let value = initialized ? newData.pvData.value : [];
-    if (!Array.isArray(value)) {
-      value = [value];
-    }
-    let newX = [];
-    let newY = [];
-    let oldY;
-    let oldX;
-    if (initialized) {
-      if (newPvs[newData.index]) {
-        if (newPvs[newData.index].y) {
-          oldY = newPvs[newData.index].y;
-          if (newPvs[newData.index].x) {
-            oldX = newPvs[newData.index].x;
-          } else {
-            oldX = [];
-          }
-        } else {
-          oldY = [];
-          oldX = [];
-        }
-
-        if (typeof props.maxLength !== "undefined") {
-          newY = oldY.concat(value);
-          if (props.useTimeStamp) {
-            newX = oldX.concat(new Date(newData.pvData.timestamp * 1000));
-            if (newX.length > props.maxLength) {
-              newX.splice(0, newX.length - props.maxLength);
-            }
-          }
-          if (newY.length > props.maxLength) {
-            newY.splice(0, newY.length - props.maxLength);
-          }
-        } else {
-          newY = value;
-        }
-        if (props.useTimeStamp !== true) {
-          if (oldX.length !== newY.length) {
-            newX = Array.from(newY.keys());
-          } else {
-            newX = oldX;
-          }
-        }
-      } else {
-        newX = props.useTimeStamp
-          ? [new Date(newData.pvData.timestamp * 1000)]
-          : Array.from(value.keys());
-        newY = value;
-      }
-    }
-
-    newPvs[newData.index] = {
-      x: newX,
-      y: newY,
-      type: "scatter",
-      mode: "lines",
-      marker: {
-        color: props.lineColor
-          ? props.lineColor[newData.index]
-          : theme.palette.reactVis.lineColors[newData.index],
-      },
-
-      name:
-        typeof props.legend !== "undefined"
-          ? props.legend[newData.index]
-            ? props.legend[newData.index]
-            : replaceMacros(props.pvs[newData.index], props.macros)
-          : replaceMacros(props.pvs[newData.index], props.macros),
-      hovertemplate: props.yHoverFormat
-        ? "(%{y:" +
-          props.yHoverFormat +
-          "}) %{x}<extra>%{fullData.name}</extra>"
-        : "(%{y}) %{x}<extra>%{fullData.name}</extra>",
-    };
-    return newPvs;
-  };
-
-  const [data, updateData] = useReducer(updateDataReducer, []);
-  const updatePolledDataReducer = (oldPvs, newData) => {
-    let pvs = [...oldPvs];
-    pvs[newData.index] = newData.pvData;
-    return pvs;
-  };
-
-  const [polledData, updatePolledData] = useReducer(
-    updatePolledDataReducer,
-    []
-  );
-  const polledDataRef = useRef(polledData);
-  useEffect(() => {
-    polledDataRef.current = polledData;
-  }, [polledData]);
-  const { usePolling, pollingRate } = props;
-
-  useEffect(() => {
-    let timer;
-    const update = () => {
-      polledDataRef.current.forEach((item, index) => {
-        const timestamp = Date.now() / 1000;
-        updateData({ index, pvData: { ...item, timestamp: timestamp } });
-      });
-    };
-    if (usePolling) {
-      timer = setInterval(update, pollingRate);
-    }
-    return () => {
-      if (usePolling) {
-        clearInterval(timer);
-      }
-    };
-  }, [usePolling, pollingRate]);
-
   const contextInfoReducer = (oldPvs, newData) => {
     let pvs = [...oldPvs];
     pvs[newData.index] = newData.pvs[0];
@@ -134,6 +19,11 @@ const PlotData = (props) => {
   const [delayedContextInfo, setDelayedContextInfo] = useState([]);
   const [trigger, setTrigger] = useState(0);
   const { updateRate } = props;
+
+  const [trigger2, setTrigger2] = useState(0);
+
+  // Replace the reducer with the worker hook
+  const [data, processUpdate] = useUpdateDataWorker();
 
   useEffect(() => {
     const timeout = setTimeout(
@@ -147,13 +37,8 @@ const PlotData = (props) => {
     // eslint-disable-next-line  react-hooks/exhaustive-deps
   }, [trigger, updateRate]);
 
-  const [trigger2, setTrigger2] = useState(0);
-
   useEffect(() => {
-    const timeout = setTimeout(
-      () => setTrigger2((prev) => prev + 1),
-      parseInt(1000)
-    );
+    const timeout = setTimeout(() => setTrigger2((prev) => prev + 1), 1000);
     setDelayedContextInfo(contextInfo);
     return () => {
       clearTimeout(timeout);
@@ -161,30 +46,64 @@ const PlotData = (props) => {
     // eslint-disable-next-line  react-hooks/exhaustive-deps
   }, [trigger2]);
 
+  const [polledData, setPolledData] = useState([]);
+  const polledDataRef = useRef(polledData);
+
+  useEffect(() => {
+    polledDataRef.current = polledData;
+  }, [polledData]);
+
+  const { usePolling, pollingRate } = props;
+
+  // Polling effect
+  useEffect(() => {
+    let timer;
+    const update = () => {
+      polledDataRef.current.forEach((item, index) => {
+        const timestamp = Date.now() / 1000;
+        processUpdate(index, { ...item, timestamp }, props, theme);
+      });
+    };
+    if (usePolling) {
+      timer = setInterval(update, pollingRate);
+    }
+    return () => {
+      if (usePolling) {
+        clearInterval(timer);
+      }
+    };
+  }, [usePolling, pollingRate, processUpdate, props, theme]);
+
   const pvConnections = () => {
-    let pvs = [];
-    props.pvs.forEach((item, index) => {
-      pvs.push(
+    return props.pvs.map((item, index) =>
+      processUpdate ? (
         <PV
           key={index.toString()}
           pv={item}
           macros={props.macros}
           pvData={(pvData) =>
             props.usePolling
-              ? updatePolledData({ index, pvData })
-              : updateData({ index, pvData })
+              ? setPolledData((prev) => {
+                  const newPolledData = [...prev];
+                  newPolledData[index] = pvData;
+                  return newPolledData;
+                })
+              : processUpdate(index, pvData, props, theme)
           }
           contextInfo={(pvs) => updateContextInfo({ index, pvs })}
           makeNewSocketIoConnection={props.makeNewSocketIoConnection}
         />
-      );
-    });
-    return pvs;
+      ) : null
+    );
   };
+
   return (
     <React.Fragment>
       {pvConnections()}
-      {props.children({ data: delayedData, contextInfo: delayedContextInfo })}
+      {props.children({
+        data: updateRate !== undefined ? delayedData : data,
+        contextInfo: delayedContextInfo,
+      })}
     </React.Fragment>
   );
 };
@@ -212,6 +131,7 @@ const GraphY = ({
     width: "100%",
     height: "100%",
   },
+  maxLength,
   ...props
 }: GraphYProps) => {
   const theme = useTheme<any>();
@@ -262,7 +182,7 @@ const GraphY = ({
 
   useEffect(() => {
     if (props.yAxes !== undefined) {
-      let numberOfyAxes:number = props.yAxes.length;
+      let numberOfyAxes: number = props.yAxes.length;
       let newYPositions: number[] = [];
       let increment = 100 / widthComputed;
       let newDomain = [increment * (numberOfyAxes - 1), 1];
@@ -407,7 +327,6 @@ const GraphY = ({
     props.xTickFormat,
     props.xUnits,
   ]);
-
   return (
     <div
       ref={paperRef}
@@ -433,6 +352,7 @@ const GraphY = ({
         pollingRate={pollingRate}
         disableMobileStatic={disableMobileStatic}
         plotlyStyle={plotlyStyle}
+        maxLength={maxLength}
       >
         {({ data, contextInfo }) => {
           return (
@@ -599,12 +519,12 @@ interface GraphYProps {
   disableContextMenu?: boolean;
   /**
    * Custom x axis minimum to be used,if not defined the graph will auto-scale
-   * 
+   *
    * */
   xMin?: number;
   /**
    * Custom x axis maximum to be used,if not defined the graph will auto-scale
-   * 
+   *
    * */
   xMax?: number;
   /**
@@ -643,9 +563,6 @@ interface GraphYProps {
    * yAxes: Array of y-axis properties, the implementation appears broken and will be fixed in a later release
    */
   yAxes?: any[];
-  
-  
-  
 }
 
 export default GraphY;

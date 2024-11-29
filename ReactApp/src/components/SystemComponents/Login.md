@@ -4,7 +4,7 @@ To customize the footer text try the example below:
 ``` js
 <Login 
     footerString= "Login is now customizable"
-    version="V5.0.0"
+    version="V6.0.0"
     timeout={5000}/>
 ```
 Set the following in .env file to enable  Login and authentication

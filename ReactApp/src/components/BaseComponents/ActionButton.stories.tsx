@@ -3,15 +3,13 @@ import ActionButton from "./ActionButton"; // Import your ActionButton component
 import TextOutput from "./TextOutput"; // Import your TextOutput component
 import type { Meta, StoryObj } from "@storybook/react";
 
-export default {
+const meta: Meta<typeof ActionButton> = {
   component: ActionButton,
-  parameters: {},
-
+  //👇 Enables auto-generated documentation for the component story
   tags: ["autodocs"],
-
   argTypes: {},
-} as Meta;
-
+};
+export default meta;
 const Template: StoryObj = {
   render: ({ ...args }) => {
     return (

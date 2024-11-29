@@ -188,7 +188,4 @@ const AllUsers = (props) => {
   );
 }
 
-AllUsers.propTypes = {
-};
-
 export default AllUsers;

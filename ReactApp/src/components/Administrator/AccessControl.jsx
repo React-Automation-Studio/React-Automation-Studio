@@ -1452,6 +1452,5 @@ const AccessControl = (props) => {
   );
 };
 
-AccessControl.propTypes = {};
 
 export default AccessControl;

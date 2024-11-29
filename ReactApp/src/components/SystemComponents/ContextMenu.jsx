@@ -1,153 +1,187 @@
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */
-import React from 'react'
-import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
-import withStyles from '@mui/styles/withStyles';
-import PropTypes from 'prop-types';
-import ClickAwayListener from '@mui/material/ClickAwayListener';
-import Paper from '@mui/material/Paper';
-import Popover from '@mui/material/Popover';
-import MenuItem from '@mui/material/MenuItem';
-import MenuList from '@mui/material/MenuList';
-import Divider from '@mui/material/Divider';
-import {Link} from 'react-router-dom'
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ViewList from '@mui/icons-material/ViewList';
-import Typography from '@mui/material/Typography';
-import Lock from '@mui/icons-material/Lock';
-import { Coffee,LanConnect,LanDisconnect,ContentCopy } from 'mdi-material-ui/'
+import React from "react";
+import AutomationStudioContext from "../SystemComponents/AutomationStudioContext";
+import withStyles from "@mui/styles/withStyles";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
+import Paper from "@mui/material/Paper";
+import Popover from "@mui/material/Popover";
+import MenuItem from "@mui/material/MenuItem";
+import MenuList from "@mui/material/MenuList";
+import Divider from "@mui/material/Divider";
+import { Link } from "react-router-dom";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ViewList from "@mui/icons-material/ViewList";
+import Typography from "@mui/material/Typography";
+import Lock from "@mui/icons-material/Lock";
+import {
+  Coffee,
+  LanConnect,
+  LanDisconnect,
+  ContentCopy,
+} from "mdi-material-ui/";
 
-const styles = theme => ({
+const styles = (theme) => ({
   body1: theme.typography.body1,
   root: {
-    display: 'flex',
-    flexWrap: 'wrap',
+    display: "flex",
+    flexWrap: "wrap",
   },
 });
 
 class ContextMenu extends React.Component {
   constructor(props) {
     super(props);
-    this.state={
+    this.state = {
       openContextMenu: false,
-      menuSelectedIndex:0,
-    }
+      menuSelectedIndex: 0,
+    };
   }
 
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
-  componentWillUnmount() {
-  }
+  componentWillUnmount() {}
 
-  copyAllPvNamesClipboard = ()=> {
-    let pvnames="";
-    for(let pv in this.props.pvs){
-      pvnames+=this.props.pvs[pv].pvname.toString()+"\n";
+  copyAllPvNamesClipboard = () => {
+    let pvnames = "";
+    for (let pv in this.props.pvs) {
+      pvnames += this.props.pvs[pv].pvname.toString() + "\n";
     }
     navigator.clipboard.writeText(pvnames);
     this.props.handleClose();
-  }
+  };
 
-  copyPvNameClipboard = ()=> {
-    if (typeof navigator.clipboard !=='undefined' ){
-      navigator.clipboard.writeText(this.props.pvs[this.state.menuSelectedIndex].pvname);
+  copyPvNameClipboard = () => {
+    if (typeof navigator.clipboard !== "undefined") {
+      navigator.clipboard.writeText(
+        this.props.pvs[this.state.menuSelectedIndex].pvname
+      );
     }
     this.props.handleClose();
-  }
+  };
 
-  copyPvValueClipboard = ()=> {
-    if (typeof navigator.clipboard !=='undefined' ){
-      navigator.clipboard.writeText(this.props.pvs[this.state.menuSelectedIndex].value);
+  copyPvValueClipboard = () => {
+    if (typeof navigator.clipboard !== "undefined") {
+      navigator.clipboard.writeText(
+        this.props.pvs[this.state.menuSelectedIndex].value
+      );
     }
     this.props.handleClose();
-  }
+  };
 
-  handleMenuItemSelect=(event,index)=>{
-    console.log('handleMenuItemSelect',index,this.props.pvs[index]);
-    this.setState({menuSelectedIndex:index})
-  }
+  handleMenuItemSelect = (event, index) => {
+    console.log("handleMenuItemSelect", index, this.props.pvs[index]);
+    this.setState({ menuSelectedIndex: index });
+  };
 
   getListItems = (pvs) => {
-    let listItems=[];
+    let listItems = [];
 
-    let i=0;
-    for (i=0 ; i<(pvs.length);i++){
-      const index=i;
-      let icon='disconnected';
-      if (pvs[i].initialized===true){
-        if(pvs[i].metadata){
-          if (pvs[i].metadata.write_access===false){
-              icon='locked';
+    let i = 0;
+    for (i = 0; i < pvs.length; i++) {
+      const index = i;
+      let icon = "disconnected";
+      if (pvs[i].initialized === true) {
+        if (pvs[i].metadata) {
+          if (pvs[i].metadata.write_access === false) {
+            icon = "locked";
+          } else {
+            icon = "connected";
           }
-          else{
-            icon='connected';
-          }
+        } else {
+          icon = "connected";
         }
-        else{
-          icon='connected';
-        }
-      }
-      else{
-        icon='disconnected';
+      } else {
+        icon = "disconnected";
       }
 
-      if(i<(pvs.length-1)){
+      if (i < pvs.length - 1) {
         listItems.push(
-            <MenuItem key={pvs[i].pvname.toString()+i} onClick={(event)=>this.handleMenuItemSelect(event,index)} selected={index === this.state.menuSelectedIndex} >
-              <ListItemIcon>
-                <React.Fragment>
-                  {(icon=='connected')&&<LanConnect style={{color:this.props.theme.palette.primary.main}} />}
-                  {(icon=='disconnected')&&<LanDisconnect style={{color:this.props.theme.palette.error.main}} />}
-                  {(icon=='locked')&&<Lock style={{color:this.props.theme.palette.error.main}} />}
-                </React.Fragment>
-              </ListItemIcon>
-              <Typography variant="inherit">  {pvs[i].pvname}</Typography>
-              <Divider/>
-            </MenuItem>
-        )
-      }
-      else {
+          <MenuItem
+            key={pvs[i].pvname.toString() + i}
+            onClick={(event) => this.handleMenuItemSelect(event, index)}
+            selected={index === this.state.menuSelectedIndex}
+          >
+            <ListItemIcon>
+              <React.Fragment>
+                {icon == "connected" && (
+                  <LanConnect
+                    style={{ color: this.props.theme.palette.primary.main }}
+                  />
+                )}
+                {icon == "disconnected" && (
+                  <LanDisconnect
+                    style={{ color: this.props.theme.palette.error.main }}
+                  />
+                )}
+                {icon == "locked" && (
+                  <Lock
+                    style={{ color: this.props.theme.palette.error.main }}
+                  />
+                )}
+              </React.Fragment>
+            </ListItemIcon>
+            <Typography variant="inherit"> {pvs[i].pvname}</Typography>
+            <Divider />
+          </MenuItem>
+        );
+      } else {
         listItems.push(
-            <MenuItem key={pvs[i].pvname.toString()+i} onClick={(event)=>this.handleMenuItemSelect(event,index)} selected={index === this.state.menuSelectedIndex}>
-              <ListItemIcon>
-                <React.Fragment>
-                {(icon=='connected')&&<LanConnect style={{color:this.props.theme.palette.primary.main}} />}
-                {(icon=='disconnected')&&<LanDisconnect style={{color:this.props.theme.palette.error.main}} />}
-                {(icon=='locked')&&<Lock style={{color:this.props.theme.palette.error.main}} />}
-                </React.Fragment>
-                </ListItemIcon>
-              <Typography variant="inherit">  {pvs[i].pvname}</Typography>
-            </MenuItem>
-        )
+          <MenuItem
+            key={pvs[i].pvname.toString() + i}
+            onClick={(event) => this.handleMenuItemSelect(event, index)}
+            selected={index === this.state.menuSelectedIndex}
+          >
+            <ListItemIcon>
+              <React.Fragment>
+                {icon == "connected" && (
+                  <LanConnect
+                    style={{ color: this.props.theme.palette.primary.main }}
+                  />
+                )}
+                {icon == "disconnected" && (
+                  <LanDisconnect
+                    style={{ color: this.props.theme.palette.error.main }}
+                  />
+                )}
+                {icon == "locked" && (
+                  <Lock
+                    style={{ color: this.props.theme.palette.error.main }}
+                  />
+                )}
+              </React.Fragment>
+            </ListItemIcon>
+            <Typography variant="inherit"> {pvs[i].pvname}</Typography>
+          </MenuItem>
+        );
       }
     }
     return listItems;
-  }
+  };
 
   render() {
-    const  openContextMenu  = this.props.open;
+    const openContextMenu = this.props.open;
 
-    const pvs=this.props.pvs;
-    const enableProbe=typeof (this.props.disableProbe)!=='undefined'?false: this.context.enableProbe;
-    let icon='disconnected';
+    const pvs = this.props.pvs;
+    const enableProbe =
+      typeof this.props.disableProbe !== "undefined"
+        ? false
+        : this.context.enableProbe;
+    let icon = "disconnected";
 
-    if (pvs.length===1){
-      if (pvs[0].initialized===true){
-        if(pvs[0].metadata){
-        if (pvs[0].metadata.write_access===false){
-            icon='locked';
+    if (pvs.length === 1) {
+      if (pvs[0].initialized === true) {
+        if (pvs[0].metadata) {
+          if (pvs[0].metadata.write_access === false) {
+            icon = "locked";
+          } else {
+            icon = "connected";
+          }
+        } else {
+          icon = "connected";
         }
-        else{
-          icon='connected';
-        }
-      }
-      else{
-        icon='connected';
-      }
-      }
-      else{
-        icon='disconnected';
+      } else {
+        icon = "disconnected";
       }
     }
     return (
@@ -162,113 +196,165 @@ class ContextMenu extends React.Component {
         <Paper>
           <ClickAwayListener onClickAway={this.props.handleClose}>
             <div>
-              {pvs.length===1&&            <MenuList>
-                <MenuItem>
-                  <ListItemIcon>
-                    <React.Fragment>
-                    {(icon=='connected')&&<LanConnect style={{color:this.props.theme.palette.primary.main}} />}
-                    {(icon=='disconnected')&&<LanDisconnect style={{color:this.props.theme.palette.error.main}} />}
-                    {(icon=='locked')&&<Lock style={{color:this.props.theme.palette.error.main}} />}
-                    </React.Fragment>
-                  </ListItemIcon>
-                  <Typography variant="inherit">  {pvs[0].pvname}</Typography>
-                </MenuItem>
-                <Divider/>
-                {enableProbe&&<MenuItem
-                  onClick={this.props.handleClose}
-                  component={Link} to={{
-                      pathname: "/Probe",
-                    search:JSON.stringify({pvname:pvs[0].pvname,probeType:this.props.probeType}),
-                      state: ["sdas"],
-                      data:"hello2"
-                  }}
-                  target="_blank"
-                >
-                  <ListItemIcon>
-                    <Coffee />
-                  </ListItemIcon>
-                  <Typography variant="inherit">Probe</Typography>
-                </MenuItem>}
-
-                <Divider/>
-                {typeof navigator.clipboard !=='undefined'&&<MenuItem onClick={this.copyPvNameClipboard}>
-                  <ListItemIcon>
-                    <ContentCopy />
-                  </ListItemIcon>
-                  <Typography variant="inherit">Copy PV Name to Clipboard</Typography>
-                </MenuItem>}
-
-                {typeof navigator.clipboard !=='undefined'&&<MenuItem onClick={this.copyPvValueClipboard}>
-                  <ListItemIcon>
-                    <ContentCopy />
-                  </ListItemIcon>
-                  <Typography variant="inherit">Copy PV Value to Clipboard</Typography>
-                </MenuItem>}
-
-              </MenuList>}
-
-              {pvs.length>1&&
+              {pvs.length === 1 && (
                 <MenuList>
                   <MenuItem>
                     <ListItemIcon>
-                      <ViewList  />
+                      <React.Fragment>
+                        {icon == "connected" && (
+                          <LanConnect
+                            style={{
+                              color: this.props.theme.palette.primary.main,
+                            }}
+                          />
+                        )}
+                        {icon == "disconnected" && (
+                          <LanDisconnect
+                            style={{
+                              color: this.props.theme.palette.error.main,
+                            }}
+                          />
+                        )}
+                        {icon == "locked" && (
+                          <Lock
+                            style={{
+                              color: this.props.theme.palette.error.main,
+                            }}
+                          />
+                        )}
+                      </React.Fragment>
                     </ListItemIcon>
-                    <Typography variant="inherit">  {"Process Variables"}</Typography>
+                    <Typography variant="inherit"> {pvs[0].pvname}</Typography>
                   </MenuItem>
-                  <Divider/>
-                  {this.getListItems(pvs)              }
-                  <Divider/>
+                  <Divider />
+                  {enableProbe && (
+                    <MenuItem
+                      onClick={this.props.handleClose}
+                      component={Link}
+                      to={{
+                        pathname: "/Probe",
+                        search: JSON.stringify({
+                          pvname: pvs[0].pvname,
+                          probeType: this.props.probeType,
+                        }),
+                        state: ["sdas"],
+                        data: "hello2",
+                      }}
+                      target="_blank"
+                    >
+                      <ListItemIcon>
+                        <Coffee />
+                      </ListItemIcon>
+                      <Typography variant="inherit">Probe</Typography>
+                    </MenuItem>
+                  )}
 
-                  {enableProbe&&<MenuItem
-                    onClick={this.props.handleClose}
-                    component={Link} to={{
-                      pathname: "/Probe",
-                      search:JSON.stringify({pvname:pvs[this.state.menuSelectedIndex].pvname,
-                      probeType:this.props.probeType}),
-                      state: ["sdas"],
-                      data:"hello2"
-                    }}
-                    target="_blank"
-                  >
-                    <ListItemIcon>
-                      <Coffee />
-                    </ListItemIcon>
-                    <Typography variant="inherit">Probe Selected PV</Typography>
-                  </MenuItem>}
-                  <Divider/>
+                  <Divider />
+                  {typeof navigator.clipboard !== "undefined" && (
+                    <MenuItem onClick={this.copyPvNameClipboard}>
+                      <ListItemIcon>
+                        <ContentCopy />
+                      </ListItemIcon>
+                      <Typography variant="inherit">
+                        Copy PV Name to Clipboard
+                      </Typography>
+                    </MenuItem>
+                  )}
 
-                  {typeof navigator.clipboard !=='undefined'&&<MenuItem onClick={this.copyAllPvNamesClipboard}>
-                    <ListItemIcon>
-                      <ContentCopy />
-                    </ListItemIcon>
-                    <Typography variant="inherit">Copy All PV  Names to Clipboard</Typography>
-                  </MenuItem>}
+                  {typeof navigator.clipboard !== "undefined" && (
+                    <MenuItem onClick={this.copyPvValueClipboard}>
+                      <ListItemIcon>
+                        <ContentCopy />
+                      </ListItemIcon>
+                      <Typography variant="inherit">
+                        Copy PV Value to Clipboard
+                      </Typography>
+                    </MenuItem>
+                  )}
+                </MenuList>
+              )}
 
-                  {typeof navigator.clipboard !=='undefined'&&<MenuItem onClick={this.copyPvNameClipboard}>
+              {pvs.length > 1 && (
+                <MenuList>
+                  <MenuItem>
                     <ListItemIcon>
-                      <ContentCopy />
+                      <ViewList />
                     </ListItemIcon>
-                    <Typography variant="inherit">Copy Selected PV  Name to Clipboard</Typography>
-                  </MenuItem>}
+                    <Typography variant="inherit">
+                      {" "}
+                      {"Process Variables"}
+                    </Typography>
+                  </MenuItem>
+                  <Divider />
+                  {this.getListItems(pvs)}
+                  <Divider />
 
-                  {typeof navigator.clipboard !=='undefined'&&  <MenuItem onClick={this.copyPvValueClipboard}>
-                    <ListItemIcon>
-                      <ContentCopy />
-                    </ListItemIcon>
-                    <Typography variant="inherit">Copy Selected PV Value to Clipboard</Typography>
-                  </MenuItem>}
-                </MenuList>}
+                  {enableProbe && (
+                    <MenuItem
+                      onClick={this.props.handleClose}
+                      component={Link}
+                      to={{
+                        pathname: "/Probe",
+                        search: JSON.stringify({
+                          pvname: pvs[this.state.menuSelectedIndex].pvname,
+                          probeType: this.props.probeType,
+                        }),
+                        state: ["sdas"],
+                        data: "hello2",
+                      }}
+                      target="_blank"
+                    >
+                      <ListItemIcon>
+                        <Coffee />
+                      </ListItemIcon>
+                      <Typography variant="inherit">
+                        Probe Selected PV
+                      </Typography>
+                    </MenuItem>
+                  )}
+                  <Divider />
+
+                  {typeof navigator.clipboard !== "undefined" && (
+                    <MenuItem onClick={this.copyAllPvNamesClipboard}>
+                      <ListItemIcon>
+                        <ContentCopy />
+                      </ListItemIcon>
+                      <Typography variant="inherit">
+                        Copy All PV Names to Clipboard
+                      </Typography>
+                    </MenuItem>
+                  )}
+
+                  {typeof navigator.clipboard !== "undefined" && (
+                    <MenuItem onClick={this.copyPvNameClipboard}>
+                      <ListItemIcon>
+                        <ContentCopy />
+                      </ListItemIcon>
+                      <Typography variant="inherit">
+                        Copy Selected PV Name to Clipboard
+                      </Typography>
+                    </MenuItem>
+                  )}
+
+                  {typeof navigator.clipboard !== "undefined" && (
+                    <MenuItem onClick={this.copyPvValueClipboard}>
+                      <ListItemIcon>
+                        <ContentCopy />
+                      </ListItemIcon>
+                      <Typography variant="inherit">
+                        Copy Selected PV Value to Clipboard
+                      </Typography>
+                    </MenuItem>
+                  )}
+                </MenuList>
+              )}
             </div>
           </ClickAwayListener>
         </Paper>
       </Popover>
-    )
+    );
   }
 }
 
-ContextMenu.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-ContextMenu.contextType=AutomationStudioContext;
-export default withStyles(styles,{withTheme:true})(ContextMenu)
+ContextMenu.contextType = AutomationStudioContext;
+export default withStyles(styles, { withTheme: true })(ContextMenu);

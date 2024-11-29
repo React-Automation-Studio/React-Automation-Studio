@@ -21,10 +21,12 @@ const Info = (props) => {
   const theme = useTheme();
   const paperElevation = theme.palette.paperElevation;
   return (
+    <>
     <Typography>
-      This is the first preview of the AreaDetector component in React
+      This is the second preview of the AreaDetector component in React
       Automation Studio. It's still in development and is not considered
-      production ready. Its only been tested with the SimDetector IOC. Included
+      production ready. We have made speed improvements to display rate by offloading to webworkers.
+      Its only been tested with the SimDetector IOC. Included
       with RAS is a docker container with the SimDetector IOC and a test area
       detector.
       <br />
@@ -34,9 +36,10 @@ const Info = (props) => {
       <br />
       <br />
       {`For any other modes set the acquire period ${acquirePeriod} seconds in the Collect
-      accordian. Otherwise in its current version it will overload the client.`}
+      accordion.`}
       <br />
       <br />
+    </Typography>
       <Stack direction="row" spacing={2}>
         <MultiActionButton
           acquirePeriod={acquirePeriod}
@@ -187,7 +190,7 @@ const Info = (props) => {
           ySineOperation={"Add"}
         />
       </Stack>
-    </Typography>
+    </>
   );
 };
 export default Info;

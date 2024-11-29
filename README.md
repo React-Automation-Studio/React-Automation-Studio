@@ -1,4 +1,4 @@
-Current Release: V5.0.0
+Current Release: V6.0.0
 
 # Introduction
 
@@ -34,6 +34,10 @@ If you wish to create a standalone AlarmHandler project you should clone this pr
 **AlarmHandler Boiler plate repository:**
 
 https://github.com/React-Automation-Studio/React-Automation-Studio-Alarm-Handler-Standalone
+
+**Or try it out on Codespaces (Experimental):**
+
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/React-Automation-Studio/codespaces-demo?quickstart=1)
 
 
 
@@ -116,6 +120,84 @@ or: https://doi.org/10.18429/JACoW-ICALEPCS2023-FR2BCO01
 
 
 # Changelog
+  
+  V6.0.0 Monday 25 November 2024 
+  <br/>
+  Major Updates:
+  <ul>
+    <li>Updated to the MUI 6</li>
+    <li>Moved from npm to pnpm package manager </li>
+    <li>Updated to MongoDB 8.0.3 </li>
+    <li>Speed improvements to the GraphY component</li>
+    <li>Speed improvements to the Area Detector Appliance</li>
+    </ul>
+  Minor Updates:
+  <ul>
+    <li>Package updates to the frontend modules</li>
+    <li>Updated to the latest Node LTS 22.11.0 </li>
+    <li>Updated to Python 3.12.7</li>
+    <li>Updated to PyEpics 3.5.7</li>
+    <li>Package updates to the backend modules</li>
+  </ul>
+
+  V5.2.1 Wednesday 17 July 2024 
+  <br/>
+  Minor Updates:
+  <ul>
+    <li>Package updates to the frontend modules</li>
+    <li>Updated to the latest Node LTS 20.15.1 </li>
+    <li>Updated to Python 3.12.4</li>
+    <li>Package updates to the backend modules</li>
+    <li>Minor Bug fix Toggle Button component</li>
+  </ul>
+
+  V5.2.0 Thursday 15 May 2024 
+  <br/>
+  Minor Updates:
+  <ul>
+    <li>Update to React 18.3.1</li>
+    <li>
+      Conversion of all base and system components to
+      Typescript, and function default parameters, due to React
+      deprecation of defaultProps
+    </li>
+    <li>Package updates to the frontend modules</li>
+    <li>Updated to the latest Node LTS 20.13.1 </li>
+    <li>Updates to the documentation </li>
+  </ul>
+  Deprecation warning:
+  <ul>
+    <li>
+      React 19.0.0 will deprecate the use of defaultProps,
+      please use the default value in the function signature
+      instead. See 
+      <a href="https://react.dev/blog/2024/04/25/react-19-upgrade-guide">
+        here
+      </a> 
+      for more information. The proptypes package will also be
+      removed in the release 6.0.0 of RAS.
+    </li>
+  </ul>
+  <br />
+  V5.1.0 Thursday 18 April 2024 Minor Updates:
+  <ul>
+    <li>Package updates to Backend modules</li>
+    <li>Updated to Python 3.12.3</li>
+    <li>Package updates to all Node modules</li>
+    <li>Updated to the latest Node LTS 20.12.2 </li>
+    <li>Updates to the documentation </li>
+  </ul>
+  </br>            
+
+  V5.0.1 Friday 08 March 2024 Minor Updates:
+  <ul>
+    <li>Package updates to Backend modules</li>
+    <li>Updated to Epics 7.0.8 and Python 3.12.1</li>
+    <li>Package updates to all Node modules</li>
+    <li>Updated to the latest Node LTS</li>
+    <li>Minor Bug fix to EPICS socketIO connections, PR#128</li>
+  </ul>
+  <br />
   V5.0.0 Friday 02 February 2024 Major Updates:
   <ul>
     <li>Package updates to Backend modules</li>

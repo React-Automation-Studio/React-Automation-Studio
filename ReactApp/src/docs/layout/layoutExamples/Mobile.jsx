@@ -1,12 +1,7 @@
 import React from "react";
-import PropTypes from "prop-types";
-import withStyles from "@mui/styles/withStyles";
-
 import Grid from "@mui/material/Grid";
-
 import CheckCircle from "@mui/icons-material/CheckCircle";
 import Cancel from "@mui/icons-material/Cancel";
-
 import TextOutput from "../../../components/BaseComponents/TextOutput";
 import ToggleButton from "../../../components/BaseComponents/ToggleButton";
 import Gauge from "../../../components/BaseComponents/Gauge";

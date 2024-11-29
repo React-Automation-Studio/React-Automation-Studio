@@ -74,7 +74,7 @@ const AppRoutes = (props) => {
           <Route
             exact
             path="/Login"
-            element={<Login version="V5.0.0" timeout={5000} />}
+            element={<Login version="V6.0.0" timeout={5000} />}
           />
         )}
 

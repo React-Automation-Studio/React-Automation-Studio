@@ -14,7 +14,7 @@ import Typography from "@mui/material/Typography";
 import DateFnsUtils from "@date-io/date-fns";
 import { formatISO, parseISO, setSeconds, addHours } from "date-fns";
 
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
 import { TextField } from "@mui/material";

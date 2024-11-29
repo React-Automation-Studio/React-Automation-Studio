@@ -4,7 +4,6 @@ import AutomationStudioContext from "../../../SystemComponents/AutomationStudioC
 import DataConnection from "../../../SystemComponents/DataConnection";
 import withStyles from "@mui/styles/withStyles";
 
-import PropTypes from "prop-types";
 
 import HarpGraphY from "./HarpGraphY";
 
@@ -334,9 +333,6 @@ class HarpGraph extends React.Component {
   }
 }
 
-HarpGraph.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
 
 HarpGraph.contextType = AutomationStudioContext;
 export default withStyles(styles, { withTheme: true })(HarpGraph);

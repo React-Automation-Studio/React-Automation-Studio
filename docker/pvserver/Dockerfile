@@ -11,7 +11,7 @@ COPY ./pvServer/pyproject.toml .
 
 RUN pip install --upgrade pip && pip --no-cache-dir install poetry
 RUN poetry config virtualenvs.create false
-RUN poetry install --no-dev
+RUN poetry install --without dev
 
 WORKDIR /pvServer
 

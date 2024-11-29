@@ -327,7 +327,6 @@ const GraphY = ({
     props.xTickFormat,
     props.xUnits,
   ]);
-  console.log(openContextMenu);
   return (
     <div
       ref={paperRef}

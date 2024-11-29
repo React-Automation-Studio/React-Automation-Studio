@@ -36,7 +36,7 @@ const Info = (props) => {
       <br />
       <br />
       {`For any other modes set the acquire period ${acquirePeriod} seconds in the Collect
-      accordian.`}
+      accordion.`}
       <br />
       <br />
     </Typography>

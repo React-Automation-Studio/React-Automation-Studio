@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
   buttonRoot: {
     textTransform: "none",
   },
-  accordianRoot: {
+  accordionRoot: {
     "&:before": {
       background: "rgba(0,0,0,0)",
     },
@@ -594,7 +594,7 @@ const ArchiverDataViewer = ({
 
       {props.showButtons && (
         <Accordion
-          classes={{ root: classes.accordianRoot }}
+          classes={{ root: classes.accordionRoot }}
           elevation={0}
           defaultExpanded={defaultButtonsExpanded}
           style={{ marginBottom: 0 }}

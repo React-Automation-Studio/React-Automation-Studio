@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y  \
     lcov valgrind
 COPY ./pvServer/pyproject.toml .
 
-RUN pip install --upgrade pip && pip --no-cache-dir install poetry
+RUN pip install --upgrade pip && pip --no-cache-dir install poetry==1.8.5
 RUN poetry config virtualenvs.create false
 RUN poetry install --without dev
 

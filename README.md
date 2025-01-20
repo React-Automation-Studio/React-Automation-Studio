@@ -1,6 +1,6 @@
-Current Release: V6.0.0
+Current Release: V6.0.1
 
-[Migrate from-V5.x.x to V6.0.0](docs/migrate-from-V5-to-V6.md)
+[Migrate from-V5.x.x to V6.0.1](docs/migrate-from-V5-to-V6.md)
 
 [Migrate from V4.0.3 to V5.2.X](docs/migrate-from-V4-to-V5.md)
 
@@ -576,6 +576,13 @@ or: https://doi.org/10.18429/JACoW-ICALEPCS2023-FR2BCO01
 
 
 # Changelog
+ V6.0.1 Monday 20 January 2025
+  <br/>
+  Minor Updates:
+  <ul>
+    <li>Fix missing Poetry version at V1.8.5</li>
+  </ul>
+ 
   
   V6.0.0 Monday 25 November 2024 
   <br/>

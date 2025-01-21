@@ -322,7 +322,7 @@ const MainDashboard = (props) => {
                   <br />
                   Minor Updates:
                   <ul>
-                    <li>Fix missing Poetry version at V1.8.5</li>
+                    <li>Fix installation failure due to Poetry 2.x (quick fix)</li>
                   </ul>
                   V6.0.0 Monday 25 November 2024
                   <br />

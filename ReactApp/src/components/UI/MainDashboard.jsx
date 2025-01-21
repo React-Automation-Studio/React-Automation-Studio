@@ -318,6 +318,12 @@ const MainDashboard = (props) => {
               </Grid>
               <Grid item lg={12} sm={12} xs={12}>
                 <Typography className={classes.WhatsNew} component="div">
+                  V6.0.1 Monday 20 January 2025
+                  <br />
+                  Minor Updates:
+                  <ul>
+                    <li>Fix installation failure due to Poetry 2.x (quick fix)</li>
+                  </ul>
                   V6.0.0 Monday 25 November 2024
                   <br />
                   Major Updates:

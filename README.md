@@ -1,6 +1,6 @@
-Current Release: V6.0.0
+Current Release: V6.0.1
 
-# Introduction
+[Migrate from-V5.x.x to V6.x.x](docs/migrate-from-V5-to-V6.md)
 
 This is the codespaces demo of React-Automation-Studio.
 
@@ -120,6 +120,13 @@ or: https://doi.org/10.18429/JACoW-ICALEPCS2023-FR2BCO01
 
 
 # Changelog
+ V6.0.1 Monday 20 January 2025
+  <br/>
+  Minor Updates:
+  <ul>
+    <li>Fix installation failure due to Poetry 2.x (quick fix)</li>
+  </ul>
+ 
   
   V6.0.0 Monday 25 November 2024 
   <br/>

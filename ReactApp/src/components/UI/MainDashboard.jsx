@@ -91,8 +91,17 @@ const MainDashboard = (props) => {
         spacing={2}
         alignItems="stretch"
       >
-        <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem}>
-          <Paper className={classes.Paper} elevation={paperElevation}>
+        <Grid
+          item
+          lg={4}
+          sm={6}
+          xs={12}
+          className={classes.MainGridItem}
+        >
+          <Paper
+            className={classes.Paper}
+            elevation={paperElevation}
+          >
             <Grid
               container
               direction="row"
@@ -101,7 +110,12 @@ const MainDashboard = (props) => {
               spacing={4}
               alignItems="center"
             >
-              <Grid item lg={6} sm={12} xs={12}>
+              <Grid
+                item
+                lg={6}
+                sm={12}
+                xs={12}
+              >
                 <Grid
                   container
                   direction="row"
@@ -122,7 +136,12 @@ const MainDashboard = (props) => {
                       Mobile Demos
                     </Typography>
                   </Grid>
-                  <Grid item lg={12} sm={12} xs={12}>
+                  <Grid
+                    item
+                    lg={12}
+                    sm={12}
+                    xs={12}
+                  >
                     <Button
                       fullWidth
                       className={classes.button}
@@ -135,7 +154,12 @@ const MainDashboard = (props) => {
                       Mobile Demo 1{" "}
                     </Button>
                   </Grid>
-                  <Grid item lg={12} sm={12} xs={12}>
+                  <Grid
+                    item
+                    lg={12}
+                    sm={12}
+                    xs={12}
+                  >
                     <Button
                       fullWidth
                       className={classes.button}
@@ -148,7 +172,12 @@ const MainDashboard = (props) => {
                       Mobile Demo 2{" "}
                     </Button>
                   </Grid>
-                  <Grid item lg={12} sm={12} xs={12}>
+                  <Grid
+                    item
+                    lg={12}
+                    sm={12}
+                    xs={12}
+                  >
                     <Button
                       fullWidth
                       className={classes.button}
@@ -161,7 +190,12 @@ const MainDashboard = (props) => {
                       Epics Demos{" "}
                     </Button>
                   </Grid>
-                  <Grid item lg={12} sm={12} xs={12}>
+                  <Grid
+                    item
+                    lg={12}
+                    sm={12}
+                    xs={12}
+                  >
                     <Button
                       fullWidth
                       className={classes.button}
@@ -180,8 +214,17 @@ const MainDashboard = (props) => {
           </Paper>
         </Grid>
 
-        <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem}>
-          <Paper className={classes.Paper} elevation={paperElevation}>
+        <Grid
+          item
+          lg={4}
+          sm={6}
+          xs={12}
+          className={classes.MainGridItem}
+        >
+          <Paper
+            className={classes.Paper}
+            elevation={paperElevation}
+          >
             <Grid
               container
               direction="row"
@@ -190,7 +233,12 @@ const MainDashboard = (props) => {
               spacing={4}
               alignItems="center"
             >
-              <Grid item lg={6} sm={12} xs={12}>
+              <Grid
+                item
+                lg={6}
+                sm={12}
+                xs={12}
+              >
                 <Grid
                   container
                   direction="row"
@@ -211,7 +259,12 @@ const MainDashboard = (props) => {
                       Demos
                     </Typography>
                   </Grid>
-                  <Grid item lg={12} sm={12} xs={12}>
+                  <Grid
+                    item
+                    lg={12}
+                    sm={12}
+                    xs={12}
+                  >
                     <Button
                       fullWidth
                       className={classes.button}
@@ -224,7 +277,12 @@ const MainDashboard = (props) => {
                       Table Control Demo
                     </Button>
                   </Grid>
-                  <Grid item lg={12} sm={12} xs={12}>
+                  <Grid
+                    item
+                    lg={12}
+                    sm={12}
+                    xs={12}
+                  >
                     <Button
                       fullWidth
                       className={classes.button}
@@ -237,7 +295,12 @@ const MainDashboard = (props) => {
                       Beam Line Control Demo{" "}
                     </Button>
                   </Grid>
-                  <Grid item lg={12} sm={12} xs={12}>
+                  <Grid
+                    item
+                    lg={12}
+                    sm={12}
+                    xs={12}
+                  >
                     <Button
                       fullWidth
                       className={classes.button}
@@ -250,7 +313,12 @@ const MainDashboard = (props) => {
                       Mobile Demo 1{" "}
                     </Button>
                   </Grid>
-                  <Grid item lg={12} sm={12} xs={12}>
+                  <Grid
+                    item
+                    lg={12}
+                    sm={12}
+                    xs={12}
+                  >
                     <Button
                       fullWidth
                       className={classes.button}
@@ -263,7 +331,12 @@ const MainDashboard = (props) => {
                       Mobile Demo 2{" "}
                     </Button>
                   </Grid>
-                  <Grid item lg={12} sm={12} xs={12}>
+                  <Grid
+                    item
+                    lg={12}
+                    sm={12}
+                    xs={12}
+                  >
                     <Button
                       fullWidth
                       className={classes.button}
@@ -276,7 +349,12 @@ const MainDashboard = (props) => {
                       Epics Demos{" "}
                     </Button>
                   </Grid>
-                  <Grid item lg={12} sm={12} xs={12}>
+                  <Grid
+                    item
+                    lg={12}
+                    sm={12}
+                    xs={12}
+                  >
                     <Button
                       fullWidth
                       className={classes.button}
@@ -295,8 +373,17 @@ const MainDashboard = (props) => {
           </Paper>
         </Grid>
 
-        <Grid item lg={4} sm={6} xs={12} className={classes.MainGridItem}>
-          <Paper className={classes.Paper} elevation={paperElevation}>
+        <Grid
+          item
+          lg={4}
+          sm={6}
+          xs={12}
+          className={classes.MainGridItem}
+        >
+          <Paper
+            className={classes.Paper}
+            elevation={paperElevation}
+          >
             <Grid
               container
               direction="row"
@@ -316,13 +403,34 @@ const MainDashboard = (props) => {
                   <NewReleasesIcon className={classes.Icon} /> Whats New
                 </Typography>
               </Grid>
-              <Grid item lg={12} sm={12} xs={12}>
-                <Typography className={classes.WhatsNew} component="div">
+              <Grid
+                item
+                lg={12}
+                sm={12}
+                xs={12}
+              >
+                <Typography
+                  className={classes.WhatsNew}
+                  component="div"
+                >
+                  V6.1.0 Monday 17 February 2025
+                  <br />
+                  Minor Updates:
+                  <ul>
+                    <li>Updated to React 19 </li>
+                    <li>Updated to the latest Node LTS 22.14.0 </li>
+                    <li>Package updates to frontend modules</li>
+                    <li>Updated to MongoDB 8.0.4 </li>
+                    <li>Migrate to Poetry 2.0.1</li>
+                    <li>Package updates to the backend modules</li>
+                  </ul>
                   V6.0.1 Monday 20 January 2025
                   <br />
                   Minor Updates:
                   <ul>
-                    <li>Fix installation failure due to Poetry 2.x (quick fix)</li>
+                    <li>
+                      Fix installation failure due to Poetry 2.x (quick fix)
+                    </li>
                   </ul>
                   V6.0.0 Monday 25 November 2024
                   <br />
@@ -772,8 +880,17 @@ const MainDashboard = (props) => {
           </Paper>
         </Grid>
 
-        <Grid item lg={3} sm={6} xs={12} className={classes.MainGridItem}>
-          <Paper className={classes.Paper} elevation={paperElevation}>
+        <Grid
+          item
+          lg={3}
+          sm={6}
+          xs={12}
+          className={classes.MainGridItem}
+        >
+          <Paper
+            className={classes.Paper}
+            elevation={paperElevation}
+          >
             <Grid
               container
               direction="row"
@@ -793,7 +910,12 @@ const MainDashboard = (props) => {
                   <EditIcon className={classes.Icon} /> Staging
                 </Typography>
               </Grid>
-              <Grid item lg={6} sm={12} xs={12}>
+              <Grid
+                item
+                lg={6}
+                sm={12}
+                xs={12}
+              >
                 <Grid
                   container
                   direction="row"
@@ -802,7 +924,12 @@ const MainDashboard = (props) => {
                   spacing={4}
                   alignItems="center"
                 >
-                  <Grid item lg={12} sm={12} xs={12}>
+                  <Grid
+                    item
+                    lg={12}
+                    sm={12}
+                    xs={12}
+                  >
                     <Button
                       fullWidth
                       className={classes.button}
@@ -821,7 +948,13 @@ const MainDashboard = (props) => {
           </Paper>
         </Grid>
 
-        <Grid item lg={3} sm={6} xs={12} className={classes.MainGridItem}>
+        <Grid
+          item
+          lg={3}
+          sm={6}
+          xs={12}
+          className={classes.MainGridItem}
+        >
           <Paper
             className={classes.Paper}
             elevation={paperElevation}
@@ -835,13 +968,23 @@ const MainDashboard = (props) => {
               spacing={4}
               alignItems="center"
             >
-              <Grid item lg={12} sm={12} xs={12}>
+              <Grid
+                item
+                lg={12}
+                sm={12}
+                xs={12}
+              >
                 <Typography {...typographyProps}>
                   {" "}
                   <VisibilityIcon className={classes.Icon} /> Appliances
                 </Typography>
               </Grid>
-              <Grid item lg={6} sm={12} xs={12}>
+              <Grid
+                item
+                lg={6}
+                sm={12}
+                xs={12}
+              >
                 <Grid
                   container
                   direction="row"
@@ -850,7 +993,12 @@ const MainDashboard = (props) => {
                   spacing={4}
                   alignItems="center"
                 >
-                  <Grid item lg={12} sm={12} xs={12}>
+                  <Grid
+                    item
+                    lg={12}
+                    sm={12}
+                    xs={12}
+                  >
                     <Button
                       fullWidth
                       className={classes.button}
@@ -863,7 +1011,12 @@ const MainDashboard = (props) => {
                       Alarm Handler Demo{" "}
                     </Button>
                   </Grid>
-                  <Grid item lg={12} sm={12} xs={12}>
+                  <Grid
+                    item
+                    lg={12}
+                    sm={12}
+                    xs={12}
+                  >
                     <Button
                       fullWidth
                       className={classes.button}
@@ -876,7 +1029,12 @@ const MainDashboard = (props) => {
                       Vault Demo{" "}
                     </Button>
                   </Grid>
-                  <Grid item lg={12} sm={12} xs={12}>
+                  <Grid
+                    item
+                    lg={12}
+                    sm={12}
+                    xs={12}
+                  >
                     <Button
                       fullWidth
                       className={classes.button}
@@ -889,7 +1047,12 @@ const MainDashboard = (props) => {
                       LoadSave Example{" "}
                     </Button>
                   </Grid>
-                  <Grid item lg={12} sm={12} xs={12}>
+                  <Grid
+                    item
+                    lg={12}
+                    sm={12}
+                    xs={12}
+                  >
                     <Button
                       fullWidth
                       className={classes.button}
@@ -908,7 +1071,13 @@ const MainDashboard = (props) => {
           </Paper>
         </Grid>
 
-        <Grid item lg={3} sm={6} xs={12} className={classes.MainGridItem}>
+        <Grid
+          item
+          lg={3}
+          sm={6}
+          xs={12}
+          className={classes.MainGridItem}
+        >
           <Paper
             className={classes.Paper}
             elevation={paperElevation}
@@ -922,13 +1091,23 @@ const MainDashboard = (props) => {
               spacing={4}
               alignItems="center"
             >
-              <Grid item lg={12} sm={12} xs={12}>
+              <Grid
+                item
+                lg={12}
+                sm={12}
+                xs={12}
+              >
                 <Typography {...typographyProps}>
                   {" "}
                   <VisibilityIcon className={classes.Icon} /> Preview
                 </Typography>
               </Grid>
-              <Grid item lg={6} sm={12} xs={12}>
+              <Grid
+                item
+                lg={6}
+                sm={12}
+                xs={12}
+              >
                 <Grid
                   container
                   direction="row"
@@ -937,7 +1116,12 @@ const MainDashboard = (props) => {
                   spacing={4}
                   alignItems="center"
                 >
-                  <Grid item lg={12} sm={12} xs={12}>
+                  <Grid
+                    item
+                    lg={12}
+                    sm={12}
+                    xs={12}
+                  >
                     <Button
                       fullWidth
                       className={classes.button}
@@ -955,8 +1139,17 @@ const MainDashboard = (props) => {
             </Grid>
           </Paper>
         </Grid>
-        <Grid item lg={3} sm={6} xs={12} className={classes.MainGridItem}>
-          <Paper className={classes.Paper} elevation={paperElevation}>
+        <Grid
+          item
+          lg={3}
+          sm={6}
+          xs={12}
+          className={classes.MainGridItem}
+        >
+          <Paper
+            className={classes.Paper}
+            elevation={paperElevation}
+          >
             <Grid
               container
               direction="row"
@@ -976,7 +1169,12 @@ const MainDashboard = (props) => {
                   <HelpIcon className={classes.Icon} /> Help
                 </Typography>
               </Grid>
-              <Grid item lg={6} sm={12} xs={12}>
+              <Grid
+                item
+                lg={6}
+                sm={12}
+                xs={12}
+              >
                 <Button
                   fullWidth
                   className={classes.button}

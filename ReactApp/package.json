@@ -31,7 +31,7 @@
     "lodash": "4.17.21",
     "mathjs": "14.2.1",
     "mdi-material-ui": "7.9.3",
-    "plotly.js": "2.35.2",
+    "plotly.js": "3.0.0",
     "rc-slider": "11.1.8",
     "react": "19.0.0",
     "react-device-detect": "2.2.3",

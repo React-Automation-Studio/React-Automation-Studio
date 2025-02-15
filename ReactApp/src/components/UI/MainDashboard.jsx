@@ -423,6 +423,7 @@ const MainDashboard = (props) => {
                     <li>Updated to MongoDB 8.0.4 </li>
                     <li>Migrate to Poetry 2.0.1</li>
                     <li>Package updates to the backend modules</li>
+                    <li>Update to Nginx 1.27.4</li>
                   </ul>
                   V6.0.1 Monday 20 January 2025
                   <br />

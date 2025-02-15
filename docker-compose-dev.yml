@@ -12,7 +12,7 @@ services:
   frontendserverdev:
     env_file: .env
     build:
-      context: ./     
+      context: ./
       dockerfile: docker/frontendserverDev/Dockerfile
     volumes:
       - ./ReactApp/package.json:/ReactApp/package.json
@@ -63,7 +63,7 @@ services:
     entrypoint:
       - /custom/setupNginx.dev.sh
       - /docker-entrypoint.sh
-    command: ["nginx", "-g", "daemon off;"] 
+    command: ["nginx", "-g", "daemon off;"]
     volumes:
       - ./nginx/setupNginx.dev.sh:/custom/setupNginx.dev.sh
       - ./nginx/nginx.dev.conf:/custom/nginx.dev.conf
@@ -74,7 +74,7 @@ services:
   unsecurestylguidepvserver:
     build:
       context: ./
- 
+
       dockerfile: docker/pvserver/Dockerfile
     restart: always
     network_mode: host
@@ -100,7 +100,7 @@ services:
   demoioc:
     build:
       context: ./
-     
+
       dockerfile: docker/demoioc/Dockerfile
     tty: true
     stdin_open: true
@@ -111,7 +111,7 @@ services:
   storybook:
     build:
       context: ./
-      dockerfile: docker/storybook/Dockerfile    
+      dockerfile: docker/storybook/Dockerfile
     env_file: .env
     environment:
             - pvServerPort=5001
@@ -120,7 +120,7 @@ services:
       - ./build/styleguide:/build/
     depends_on:
       - node_cache
-  
+
 
 
   signalcli:
@@ -173,7 +173,7 @@ services:
   # In this case, make sure to set the COMPOSE_PROJECT_NAME variable in the .env file or make sure project folder names are unique between instances
 
   mongo1:
-    image: mongo:${RAS_MONGODB_VERSION-8.0.3}
+    image: mongo:${RAS_MONGODB_VERSION-8.0.4}
     hostname: mongo1
     restart: always
     network_mode: "host"
@@ -189,7 +189,7 @@ services:
     command: "--bind_ip_all --port 27017 --replSet ${REPLICA_SET_NAME-devrs}"
 
   mongo2:
-    image: mongo:${RAS_MONGODB_VERSION-8.0.3}
+    image: mongo:${RAS_MONGODB_VERSION-8.0.4}
     hostname: mongo2
     restart: always
     network_mode: "host"
@@ -205,7 +205,7 @@ services:
     command: "--bind_ip_all --port 27018 --replSet ${REPLICA_SET_NAME-devrs}"
 
   mongo3:
-    image: mongo:${RAS_MONGODB_VERSION-8.0.3}
+    image: mongo:${RAS_MONGODB_VERSION-8.0.4}
     hostname: mongo3
     restart: always
     network_mode: "host"
@@ -243,7 +243,7 @@ services:
     build:
       context: ./
 
-     
+
       dockerfile: docker/loadSaveDbInit/Dockerfile
     network_mode: "host"
     tty: true
@@ -258,7 +258,7 @@ services:
     build:
       context: ./
 
-     
+
       dockerfile: docker/adminDbInit/Dockerfile
     network_mode: "host"
     tty: true
@@ -282,14 +282,14 @@ services:
 
 volumes:
   mongo-db-data1:
-    name: ${COMPOSE_PROJECT_NAME}-mongo-db-data1-mongo-${RAS_MONGODB_VERSION-8.0.3}
+    name: ${COMPOSE_PROJECT_NAME}-mongo-db-data1-mongo-${RAS_MONGODB_VERSION-8.0.4}
   mongo-db-configdb1:
-    name: ${COMPOSE_PROJECT_NAME}-mongo-db-configdb1-mongo-${RAS_MONGODB_VERSION-8.0.3}
+    name: ${COMPOSE_PROJECT_NAME}-mongo-db-configdb1-mongo-${RAS_MONGODB_VERSION-8.0.4}
   mongo-db-data2:
-    name: ${COMPOSE_PROJECT_NAME}-mongo-db-data2-mongo-${RAS_MONGODB_VERSION-8.0.3}
+    name: ${COMPOSE_PROJECT_NAME}-mongo-db-data2-mongo-${RAS_MONGODB_VERSION-8.0.4}
   mongo-db-configdb2:
-    name: ${COMPOSE_PROJECT_NAME}-mongo-db-configdb2-mongo-${RAS_MONGODB_VERSION-8.0.3}
+    name: ${COMPOSE_PROJECT_NAME}-mongo-db-configdb2-mongo-${RAS_MONGODB_VERSION-8.0.4}
   mongo-db-data3:
-    name: ${COMPOSE_PROJECT_NAME}-mongo-db-data3-mongo-${RAS_MONGODB_VERSION-8.0.3}
+    name: ${COMPOSE_PROJECT_NAME}-mongo-db-data3-mongo-${RAS_MONGODB_VERSION-8.0.4}
   mongo-db-configdb3:
-    name: ${COMPOSE_PROJECT_NAME}-mongo-db-configdb3-mongo-${RAS_MONGODB_VERSION-8.0.3}
+    name: ${COMPOSE_PROJECT_NAME}-mongo-db-configdb3-mongo-${RAS_MONGODB_VERSION-8.0.4}

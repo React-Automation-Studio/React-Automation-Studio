@@ -1,4 +1,4 @@
-Current Release: V6.0.1
+Current Release: V6.1.0
 
 [Migrate from-V5.x.x to V6.x.x](docs/migrate-from-V5-to-V6.md)
 
@@ -576,15 +576,28 @@ or: https://doi.org/10.18429/JACoW-ICALEPCS2023-FR2BCO01
 
 
 # Changelog
+
+V6.1.0 Monday 17 February 2025
+  <br />
+  Minor Updates:
+  <ul>
+    <li>Updated to React 19 </li>
+    <li>Updated to the latest Node LTS 22.14.0 </li>
+    <li>Package updates to frontend modules</li>
+    <li>Updated to MongoDB 8.0.4 </li>
+    <li>Migrate to Poetry 2.0.1</li>
+    <li>Package updates to the backend modules</li>
+    <li>Update to Nginx 1.27.4</li>
+  </ul>
  V6.0.1 Monday 20 January 2025
   <br/>
   Minor Updates:
   <ul>
     <li>Fix installation failure due to Poetry 2.x (quick fix)</li>
   </ul>
- 
-  
-  V6.0.0 Monday 25 November 2024 
+
+
+  V6.0.0 Monday 25 November 2024
   <br/>
   Major Updates:
   <ul>
@@ -603,7 +616,7 @@ or: https://doi.org/10.18429/JACoW-ICALEPCS2023-FR2BCO01
     <li>Package updates to the backend modules</li>
   </ul>
 
-  V5.2.1 Wednesday 17 July 2024 
+  V5.2.1 Wednesday 17 July 2024
   <br/>
   Minor Updates:
   <ul>
@@ -614,7 +627,7 @@ or: https://doi.org/10.18429/JACoW-ICALEPCS2023-FR2BCO01
     <li>Minor Bug fix Toggle Button component</li>
   </ul>
 
-  V5.2.0 Thursday 15 May 2024 
+  V5.2.0 Thursday 15 May 2024
   <br/>
   Minor Updates:
   <ul>
@@ -633,10 +646,10 @@ or: https://doi.org/10.18429/JACoW-ICALEPCS2023-FR2BCO01
     <li>
       React 19.0.0 will deprecate the use of defaultProps,
       please use the default value in the function signature
-      instead. See 
+      instead. See
       <a href="https://react.dev/blog/2024/04/25/react-19-upgrade-guide">
         here
-      </a> 
+      </a>
       for more information. The proptypes package will also be
       removed in the release 6.0.0 of RAS.
     </li>
@@ -650,7 +663,7 @@ or: https://doi.org/10.18429/JACoW-ICALEPCS2023-FR2BCO01
     <li>Updated to the latest Node LTS 20.12.2 </li>
     <li>Updates to the documentation </li>
   </ul>
-  </br>            
+  </br>
 
   V5.0.1 Friday 08 March 2024 Minor Updates:
   <ul>

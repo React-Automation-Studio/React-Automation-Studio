@@ -184,9 +184,6 @@ services:
       - backend
 
   stagingdemoioc:
-
-
-  demoioc:
     build:
       context: ./
       dockerfile: docker/demoioc/Dockerfile

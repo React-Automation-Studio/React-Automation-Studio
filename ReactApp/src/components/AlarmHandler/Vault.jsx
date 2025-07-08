@@ -1,7 +1,6 @@
-import React, { useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 
 import { useTheme } from "@mui/material/styles";
-import makeStyles from "@mui/styles/makeStyles";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 
@@ -12,28 +11,27 @@ import PV from "../SystemComponents/PV";
 
 import Floor from "./SVG Components/Floor";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
+const Vault = () => {
+  const theme = useTheme();
+
+  const primary = theme.palette.primary.dark;
+
+  // Styles converted from makeStyles
+  const rootSx = {
     padding: theme.spacing(1),
     overflowX: "hidden",
     overflowY: "hidden",
     width: "100%",
     height: "100%",
-  },
-  paper: {
+  };
+
+  const paperSx = {
     padding: theme.spacing(1),
     height: "100%",
     width: "100%",
     overflowX: "default",
     overflowY: "default",
-  },
-}));
-
-const Vault = () => {
-  const classes = useStyles();
-  const theme = useTheme();
-
-  const primary = theme.palette.primary.dark;
+  };
 
   const [alarmDict, setAlarmDict] = useState({});
 
@@ -119,11 +117,11 @@ const Vault = () => {
         justifyContent="flex-start"
         alignItems="stretch"
         spacing={2}
-        className={classes.root}
+        sx={rootSx}
       >
         <Grid item xs={12} lg={6} style={{ textAlign: "center" }}>
           <Paper
-            className={classes.paper}
+            sx={paperSx}
             elevation={theme.palette.paperElevation}
           >
             <svg width="100%" height="100%" viewBox="0 0 1100 900">
@@ -134,7 +132,7 @@ const Vault = () => {
 
         <Grid item md={12} lg={6}>
           <Paper
-            className={classes.paper}
+            sx={paperSx}
             elevation={theme.palette.paperElevation}
           >
             <Grid
@@ -146,7 +144,7 @@ const Vault = () => {
             >
               <Grid item xs={12} md={6}>
                 <Paper
-                  className={classes.paper}
+                  sx={paperSx}
                   elevation={theme.palette.paperElevation}
                 >
                   <Grid
@@ -219,7 +217,7 @@ const Vault = () => {
               </Grid>
               <Grid item xs={12} md={6}>
                 <Paper
-                  className={classes.paper}
+                  sx={paperSx}
                   elevation={theme.palette.paperElevation}
                 >
                   <Grid
@@ -272,7 +270,7 @@ const Vault = () => {
               </Grid>
               <Grid item xs={12}>
                 <Paper
-                  className={classes.paper}
+                  sx={paperSx}
                   elevation={theme.palette.paperElevation}
                 >
                   <Grid

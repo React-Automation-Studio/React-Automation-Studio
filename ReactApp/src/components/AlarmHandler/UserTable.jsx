@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useTheme } from '@mui/material/styles';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/GridLegacy';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';

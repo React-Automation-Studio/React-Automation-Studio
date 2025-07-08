@@ -19,7 +19,7 @@ import PV from "../SystemComponents/PV";
 import { replaceMacros } from "../SystemComponents/Utils/macroReplacement";
 import { useTheme } from "@mui/material/styles";
 
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
 

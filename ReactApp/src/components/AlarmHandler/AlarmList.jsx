@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { alpha, useTheme } from '@mui/material/styles';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/GridLegacy';
 
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";

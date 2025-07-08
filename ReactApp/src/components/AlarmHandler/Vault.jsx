@@ -16,7 +16,7 @@ const Vault = () => {
 
   const primary = theme.palette.primary.dark;
 
-  // Styles converted from makeStyles
+ 
   const rootSx = {
     padding: theme.spacing(1),
     overflowX: "hidden",

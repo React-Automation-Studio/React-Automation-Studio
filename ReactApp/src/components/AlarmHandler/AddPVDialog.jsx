@@ -1,5 +1,4 @@
 import React from 'react';
-import makeStyles from '@mui/styles/makeStyles';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -15,35 +14,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import { Domain, Lan, LanConnect, LanDisconnect } from "mdi-material-ui/";
 
-// Styles
-const useStyles = makeStyles(theme => ({
-    boldText: {
-        fontWeight: 500,
-        textAlign: 'center',
-    },
-    centerInBlock: {
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: 'center'
-    },
-    connected: {
-        color: theme.palette.ok.main
-    },
-    disconnected: {
-        color: theme.palette.error.main
-    },
-    verticalMiddle: {
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-    }
-}))
-
-
 const AddPVDialog = (props) => {
-    const classes = useStyles()
-
     const lastIndex = props.newPVInfo.pvs?.length - 1
 
     const enableAddButton = props.newPVInfo.pvs?.reduce((acc, pv) => {
@@ -65,15 +36,15 @@ const AddPVDialog = (props) => {
                         justifyContent="flex-start"
                         alignItems="stretch"
                     >
-                        <Grid item xs={1} className={classes.centerInBlock}>
+                        <Grid item xs={1} sx={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: 'center' }}>
                             <Lan />
                         </Grid>
-                        <Grid item xs={1} className={classes.verticalMiddle} style={{ marginRight: '2rem' }}>
-                            <Typography className={classes.boldText} >
+                        <Grid item xs={1} sx={{ display: "flex", flexDirection: "column", justifyContent: "center" }} style={{ marginRight: '2rem' }}>
+                            <Typography sx={{ fontWeight: 500, textAlign: 'center' }} >
                                 PV
                                 </Typography>
                         </Grid>
-                        <Grid item xs={8} className={classes.verticalMiddle}>
+                        <Grid item xs={8} sx={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
                             <TextField
                                 type='text'
                                 value={props.newPVInfo.pvs[index].pvname}
@@ -84,8 +55,8 @@ const AddPVDialog = (props) => {
                                     endAdornment: (
                                         <InputAdornment position="end"  >
                                             {props.newPVInfo.pvs[index].connected
-                                                ? <LanConnect className={classes.connected} />
-                                                : <LanDisconnect className={classes.disconnected} />
+                                                ? <LanConnect sx={{ color: 'ok.main' }} />
+                                                : <LanDisconnect sx={{ color: 'error.main' }} />
                                             }
                                         </InputAdornment >
                                     )
@@ -143,15 +114,15 @@ const AddPVDialog = (props) => {
                             justifyContent="flex-start"
                             alignItems="stretch"
                         >
-                            <Grid item xs={1} className={classes.centerInBlock}>
+                            <Grid item xs={1} sx={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: 'center' }}>
                                 <Domain />
                             </Grid>
-                            <Grid item xs={1} className={classes.verticalMiddle} style={{ marginRight: '2rem' }}>
-                                <Typography className={classes.boldText} >
+                            <Grid item xs={1} sx={{ display: "flex", flexDirection: "column", justifyContent: "center" }} style={{ marginRight: '2rem' }}>
+                                <Typography sx={{ fontWeight: 500, textAlign: 'center' }} >
                                     AREA
                                 </Typography>
                             </Grid>
-                            <Grid item xs={8} className={classes.verticalMiddle}>
+                            <Grid item xs={8} sx={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
                                 <Typography>
                                     {`${props.newPVInfo["areaName"]}`}
                                 </Typography>

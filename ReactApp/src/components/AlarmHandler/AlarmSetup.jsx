@@ -8,7 +8,6 @@ import React, {
 } from "react";
 
 import { useTheme } from "@mui/material/styles";
-import makeStyles from "@mui/styles/makeStyles";
 import { alpha } from "@mui/material/styles";
 import AutomationStudioContext from "../SystemComponents/AutomationStudioContext";
 import Grid from "@mui/material/Grid";
@@ -70,93 +69,7 @@ import DeletePVDialog from "./DeletePVDialog";
 
 import { format, parseISO } from "date-fns";
 
-// Styles
-const useStyles = makeStyles((theme) => ({
-  root: {
-    padding: theme.spacing(1),
-    margin: 0,
-    width: "100%",
-  },
-  backdrop: {
-    zIndex: theme.zIndex.drawer + 1,
-    color: "#fff",
-  },
-  PaginationRoot: {
-    flexShrink: 0,
-    marginLeft: theme.spacing(2.5),
-  },
-  paper: {
-    padding: theme.spacing(2),
-    margin: 0,
-    height: "100%",
-    overflowX: "default",
-    overflowY: "default",
-  },
-  search: {
-    position: "relative",
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor:
-      theme.palette.mode === "dark"
-        ? alpha(theme.palette.common.white, 0.15)
-        : alpha(theme.palette.common.black, 0.15),
-    "&:hover": {
-      backgroundColor:
-        theme.palette.mode === "dark"
-          ? alpha(theme.palette.common.white, 0.25)
-          : alpha(theme.palette.common.black, 0.25),
-    },
-    marginLeft: 0,
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      marginLeft: theme.spacing(1),
-      width: "auto",
-    },
-  },
-  searchIcon: {
-    padding: theme.spacing(0, 2),
-    height: "100%",
-    position: "absolute",
-    pointerEvents: "none",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  inputRoot: {
-    color: "inherit",
-  },
-  inputInput: {
-    padding: theme.spacing(1, 1, 1, 0),
-    // // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      width: "20ch",
-      "&:focus": {
-        width: "30ch",
-      },
-    },
-  },
-  expansionPanelSummaryContent: {
-    paddingTop: 0,
-    paddingBottom: 0,
-    "&$expanded": {
-      margin: 0,
-    },
-  },
-  expanded: {},
-  nested: {
-    paddingLeft: theme.spacing(4),
-  },
-  verticalMiddle: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-  },
-}));
-
 const TablePaginationActions = (props) => {
-  const classes = useStyles();
   const theme = useTheme();
   const { count, page, rowsPerPage, onChangePage } = props;
 
@@ -189,7 +102,12 @@ const TablePaginationActions = (props) => {
   );
 
   return (
-    <div className={classes.PaginationRoot}>
+    <div 
+      style={{
+        flexShrink: 0,
+        marginLeft: theme.spacing(2.5),
+      }}
+    >
       <IconButton
         onClick={handleFirstPageButtonClick}
         disabled={page === 0}
@@ -235,7 +153,6 @@ const TablePaginationActions = (props) => {
 };
 
 const AlarmSetup = (props) => {
-  const classes = useStyles();
   const theme = useTheme();
 
   const context = useContext(AutomationStudioContext);
@@ -2590,7 +2507,10 @@ const AlarmSetup = (props) => {
       {alarmPVs}
       {addPVDialogPvs}
       <Backdrop
-        className={classes.backdrop}
+        sx={{
+          zIndex: theme.zIndex.drawer + 1,
+          color: "#fff",
+        }}
         open={backdropOpen}
         style={{
           display: "flex",
@@ -2689,12 +2609,22 @@ const AlarmSetup = (props) => {
           justifyContent="flex-start"
           alignItems="stretch"
           spacing={2}
-          className={classes.root}
+          sx={{
+            padding: theme.spacing(1),
+            margin: 0,
+            width: "100%",
+          }}
         >
           {displayAlarmList && !backdropOpen ? (
             <Grid item xs={2}>
               <Paper
-                className={classes.paper}
+                sx={{
+                  padding: theme.spacing(2),
+                  margin: 0,
+                  height: "100%",
+                  overflowX: "default",
+                  overflowY: "default",
+                }}
                 elevation={theme.palette.paperElevation}
               >
                 <Grid
@@ -2788,7 +2718,9 @@ const AlarmSetup = (props) => {
                           <List component="div" disablePadding>
                             <ListItem
                               button
-                              className={classes.nested}
+                              sx={{
+                                paddingLeft: theme.spacing(4),
+                              }}
                               onClick={handleAddNewArea}
                             >
                               <ListItemIcon>
@@ -2847,7 +2779,13 @@ const AlarmSetup = (props) => {
           ) : (
             <Grid item xs={2}>
               <Paper
-                className={classes.paper}
+                sx={{
+                  padding: theme.spacing(2),
+                  margin: 0,
+                  height: "100%",
+                  overflowX: "default",
+                  overflowY: "default",
+                }}
                 elevation={theme.palette.paperElevation}
               >
                 <div style={{ fontSize: 16, fontWeight: "bold" }}>
@@ -2871,15 +2809,26 @@ const AlarmSetup = (props) => {
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1bh-content"
                   id="panel1bh-header"
-                  classes={{
-                    content: classes.expansionPanelSummaryContent,
-                    expanded: classes.expanded,
+                  sx={{
+                    "& .MuiAccordionSummary-content": {
+                      paddingTop: 0,
+                      paddingBottom: 0,
+                      "&.Mui-expanded": {
+                        margin: 0,
+                      },
+                    },
                   }}
                 >
                   <div style={{ display: "flex", width: "100%" }}>
                     <div
-                      className={classes.verticalMiddle}
-                      style={{ fontSize: 16, fontWeight: "bold", flexGrow: 20 }}
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        fontSize: 16,
+                        fontWeight: "bold",
+                        flexGrow: 20,
+                      }}
                     >{`ALARM TABLE: ${areaSelectedName}`}</div>
                     {alarmTableExpand ? (
                       <TablePagination
@@ -2903,25 +2852,72 @@ const AlarmSetup = (props) => {
                       />
                     ) : null}
                     <div
-                      className={classes.verticalMiddle}
-                      style={{ fontSize: 16, fontWeight: "bold", flexGrow: 1 }}
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        fontSize: 16,
+                        fontWeight: "bold",
+                        flexGrow: 1,
+                      }}
                     >
                       {alarmTableExpand ? (
-                        <div className={classes.search}>
-                          <div className={classes.searchIcon}>
+                        <div 
+                          style={{
+                            position: "relative",
+                            borderRadius: theme.shape.borderRadius,
+                            backgroundColor:
+                              theme.palette.mode === "dark"
+                                ? alpha(theme.palette.common.white, 0.15)
+                                : alpha(theme.palette.common.black, 0.15),
+                            "&:hover": {
+                              backgroundColor:
+                                theme.palette.mode === "dark"
+                                  ? alpha(theme.palette.common.white, 0.25)
+                                  : alpha(theme.palette.common.black, 0.25),
+                            },
+                            marginLeft: 0,
+                            width: "100%",
+                            [theme.breakpoints.up("sm")]: {
+                              marginLeft: theme.spacing(1),
+                              width: "auto",
+                            },
+                          }}
+                        >
+                          <div 
+                            style={{
+                              padding: theme.spacing(0, 2),
+                              height: "100%",
+                              position: "absolute",
+                              pointerEvents: "none",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
+                          >
                             <SearchIcon />
                           </div>
                           <InputBase
                             placeholder="Search alarm table…"
-                            classes={{
-                              root: classes.inputRoot,
-                              input: classes.inputInput,
+                            sx={{
+                              color: "inherit",
+                              "& .MuiInputBase-input": {
+                                padding: theme.spacing(1, 1, 1, 0),
+                                paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+                                transition: theme.transitions.create("width"),
+                                width: "100%",
+                                [theme.breakpoints.up("sm")]: {
+                                  width: "20ch",
+                                  "&:focus": {
+                                    width: "30ch",
+                                  },
+                                },
+                              },
                             }}
                             inputProps={{ "aria-label": "search" }}
                             onClick={(event) => event.stopPropagation()}
                             onFocus={(event) => event.stopPropagation()}
                             onChange={(event) => handleSearchAlarmTable(event)}
-                            // onBlur={() => { setAlarmTableSearchStringStore(''); setAlarmTableSearchString('') }}
                             value={alarmTableSearchStringStore}
                           />
                         </div>
@@ -2981,15 +2977,26 @@ const AlarmSetup = (props) => {
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1bh-content"
                   id="panel1bh-header"
-                  classes={{
-                    content: classes.expansionPanelSummaryContent,
-                    expanded: classes.expanded,
+                  sx={{
+                    "& .MuiAccordionSummary-content": {
+                      paddingTop: 0,
+                      paddingBottom: 0,
+                      "&.Mui-expanded": {
+                        margin: 0,
+                      },
+                    },
                   }}
                 >
                   <div style={{ display: "flex", width: "100%" }}>
                     <div
-                      className={classes.verticalMiddle}
-                      style={{ fontSize: 16, fontWeight: "bold", flexGrow: 20 }}
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        fontSize: 16,
+                        fontWeight: "bold",
+                        flexGrow: 20,
+                      }}
                     >{`ALARM LOG: ${alarmLogSelectedName}`}</div>
                     {alarmLogExpand ? (
                       <TablePagination
@@ -3013,25 +3020,72 @@ const AlarmSetup = (props) => {
                       />
                     ) : null}
                     <div
-                      className={classes.verticalMiddle}
-                      style={{ fontSize: 16, fontWeight: "bold", flexGrow: 1 }}
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        fontSize: 16,
+                        fontWeight: "bold",
+                        flexGrow: 1,
+                      }}
                     >
                       {alarmLogExpand ? (
-                        <div className={classes.search}>
-                          <div className={classes.searchIcon}>
+                        <div 
+                          style={{
+                            position: "relative",
+                            borderRadius: theme.shape.borderRadius,
+                            backgroundColor:
+                              theme.palette.mode === "dark"
+                                ? alpha(theme.palette.common.white, 0.15)
+                                : alpha(theme.palette.common.black, 0.15),
+                            "&:hover": {
+                              backgroundColor:
+                                theme.palette.mode === "dark"
+                                  ? alpha(theme.palette.common.white, 0.25)
+                                  : alpha(theme.palette.common.black, 0.25),
+                            },
+                            marginLeft: 0,
+                            width: "100%",
+                            [theme.breakpoints.up("sm")]: {
+                              marginLeft: theme.spacing(1),
+                              width: "auto",
+                            },
+                          }}
+                        >
+                          <div 
+                            style={{
+                              padding: theme.spacing(0, 2),
+                              height: "100%",
+                              position: "absolute",
+                              pointerEvents: "none",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
+                          >
                             <SearchIcon />
                           </div>
                           <InputBase
                             placeholder="Search alarm log…"
-                            classes={{
-                              root: classes.inputRoot,
-                              input: classes.inputInput,
+                            sx={{
+                              color: "inherit",
+                              "& .MuiInputBase-input": {
+                                padding: theme.spacing(1, 1, 1, 0),
+                                paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+                                transition: theme.transitions.create("width"),
+                                width: "100%",
+                                [theme.breakpoints.up("sm")]: {
+                                  width: "20ch",
+                                  "&:focus": {
+                                    width: "30ch",
+                                  },
+                                },
+                              },
                             }}
                             inputProps={{ "aria-label": "search" }}
                             onClick={(event) => event.stopPropagation()}
                             onFocus={(event) => event.stopPropagation()}
                             onChange={(event) => handleSearchAlarmLog(event)}
-                            // onBlur={() => { setAlarmLogSearchStringStore(''); setAlarmLogSearchString('') }}
                             value={alarmLogSearchStringStore}
                           />
                         </div>
@@ -3058,7 +3112,13 @@ const AlarmSetup = (props) => {
           ) : (
             <Grid item xs={10}>
               <Paper
-                className={classes.paper}
+                sx={{
+                  padding: theme.spacing(2),
+                  margin: 0,
+                  height: "100%",
+                  overflowX: "default",
+                  overflowY: "default",
+                }}
                 elevation={theme.palette.paperElevation}
               >
                 <div style={{ fontSize: 16, fontWeight: "bold" }}>
@@ -3075,11 +3135,21 @@ const AlarmSetup = (props) => {
           justifyContent="flex-start"
           alignItems="stretch"
           spacing={2}
-          className={classes.root}
+          sx={{
+            padding: theme.spacing(1),
+            margin: 0,
+            width: "100%",
+          }}
         >
           <Grid item xs={12}>
             <Paper
-              className={classes.paper}
+              sx={{
+                padding: theme.spacing(2),
+                margin: 0,
+                height: "100%",
+                overflowX: "default",
+                overflowY: "default",
+              }}
               elevation={theme.palette.paperElevation}
             >
               <div

@@ -1,6 +1,4 @@
 import React, { useContext } from 'react';
-
-import makeStyles from '@mui/styles/makeStyles';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
@@ -13,15 +11,10 @@ import MenuItem from '@mui/material/MenuItem';
 import AutomationStudioContext from '../../../SystemComponents/AutomationStudioContext';
 import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
 import Button from '@mui/material/Button';
-const useStyles = makeStyles(theme => ({
-    drawerItems: {
-        minWidth: 250,
-    },
-}))
+
 
 const MoreVertDrawer = (props) => {
 
-    const classes = useStyles(props)
 
     const context = useContext(AutomationStudioContext)
     const isAdmin = context.userData.roles.includes("admin");
@@ -29,7 +22,7 @@ const MoreVertDrawer = (props) => {
     const { showMVDrawer, setShowMVDrawer } = props
 
     const moreVertDrawerItems = (
-        <div className={classes.drawerItems}>
+        <div style={{ minWidth: '250px' }} >
             <List onClick={props.hideMoreVertDrawerAfterItemClick ? () => setShowMVDrawer(false) : null}>
                 {props.moreVertDrawerItems &&
                     <React.Fragment>

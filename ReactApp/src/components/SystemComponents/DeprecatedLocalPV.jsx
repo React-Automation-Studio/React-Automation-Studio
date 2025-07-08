@@ -1,11 +1,6 @@
 import React from 'react'
 import AutomationStudioContext from './AutomationStudioContext';
-import withStyles from '@mui/styles/withStyles';
 import { v4 as uuidv4 } from 'uuid';
-
-const styles = theme => ({
-  body1: theme.typography.body1,
-});
 
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */
@@ -169,7 +164,6 @@ class DeprecatedLocalPV extends React.Component {
   }
 
   render() {
-    const {classes} =this.props;
     if (this.props.debug===true){
       console.log('state',this.state);
     }
@@ -180,7 +174,7 @@ class DeprecatedLocalPV extends React.Component {
     if (this.props.debug===true){
       if (initialized===true){
         return (
-          <div className={classes.body1}>
+          <div>
             <div>{"EPICS Debug Info:" }</div>
             <div>{"Python server variable: " +pvname }</div>
             <div>{"PV name: " +pvname.replace("pva://","") }</div>
@@ -201,4 +195,4 @@ class DeprecatedLocalPV extends React.Component {
 }
 
 DeprecatedLocalPV.contextType=AutomationStudioContext;
-export default withStyles(styles)(DeprecatedLocalPV)
+export default DeprecatedLocalPV;

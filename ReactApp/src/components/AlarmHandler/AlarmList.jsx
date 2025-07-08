@@ -25,18 +25,6 @@ import PlaylistAddOutlinedIcon from '@mui/icons-material/PlaylistAddOutlined';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-// Styles
-const useStyles = makeStyles(theme => ({
-    root: {
-        width: '100%',
-        overflowY: 'auto',
-        maxHeight: '90vh',
-    },
-    nested: {
-        paddingLeft: theme.spacing(4),
-    },
-}));
-
 const AlarmList = props => {
 
     const getListItemStyle = (area) => {

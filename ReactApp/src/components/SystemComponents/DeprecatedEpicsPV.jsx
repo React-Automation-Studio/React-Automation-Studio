@@ -1,11 +1,7 @@
 import React from "react";
 import AutomationStudioContext from "./AutomationStudioContext";
-import withStyles from "@mui/styles/withStyles";
 
 import { v4 as uuidv4 } from "uuid";
-const styles = (theme) => ({
-  body1: theme.typography.body1,
-});
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-useless-computed-key*/
@@ -334,7 +330,6 @@ class DeprecatedEpicsPV extends React.Component {
   }
 
   render() {
-    const { classes } = this.props;
     const value = this.state.internalValue;
     const pvname = this.state.pvname;
     const initialized = this.state.initialized;
@@ -378,7 +373,7 @@ class DeprecatedEpicsPV extends React.Component {
           ":" +
           ms;
         return (
-          <div className={classes.body1}>
+          <div>
             <div>{"EPICS Debug Info:"}</div>
             <div>{"Python server variable: " + pvname}</div>
             <div>{"PV name: " + pvname.replace("pva://", "")}</div>
@@ -404,4 +399,4 @@ class DeprecatedEpicsPV extends React.Component {
 }
 
 DeprecatedEpicsPV.contextType = AutomationStudioContext;
-export default withStyles(styles)(DeprecatedEpicsPV);
+export default DeprecatedEpicsPV;

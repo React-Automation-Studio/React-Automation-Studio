@@ -21,68 +21,8 @@ import PV from "../SystemComponents/PV";
 import useMongoDbWatch from "../SystemComponents/database/MongoDB/useMongoDbWatch";
 import useMongoDbUpdateOne from "../SystemComponents/database/MongoDB/useMongoDbUpdateOne";
 import useMongoDbInsertOne from "../SystemComponents/database/MongoDB/useMongoDbInsertOne";
-import makeStyles from "@mui/styles/makeStyles";
 import { orange, green, red } from "@mui/material/colors";
 import { useTheme } from "@mui/material/styles";
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: "100%",
-    marginTop: theme.spacing(1) * 0,
-    overflowX: "auto",
-  },
-  paper: {
-    width: "100%",
-  },
-  table: {
-    minWidth: 500,
-  },
-  tableCellDescription: {
-    width: "30%",
-  },
-  tableCellValues: {
-    width: "20%",
-  },
-  tableCellUnits: {
-    width: "10%",
-  },
-  tableWrapper: {
-    maxHeight: "70vh",
-    overflow: "auto",
-  },
-  workingButton: {
-    color: theme.palette.mode === "dark" ? "white" : "black",
-    backgroundColor: green[500],
-    "&:hover": {
-      backgroundColor: green[700],
-    },
-  },
-  pendingButton: {
-    color: theme.palette.mode === "dark" ? "white" : "black",
-    backgroundColor: orange[500],
-    "&:hover": {
-      backgroundColor: orange[700],
-    },
-  },
-  obseleteButton: {
-    color: theme.palette.mode === "dark" ? "white" : "black",
-    backgroundColor: red[500],
-    "&:hover": {
-      backgroundColor: red[700],
-    },
-  },
-  tableCellWorking: {
-    width: "20%",
-    backgroundColor: green[500],
-  },
-  tableCellPending: {
-    width: "20%",
-    backgroundColor: orange[500],
-  },
-  tableCellObselete: {
-    width: "20%",
-    backgroundColor: red[500],
-  },
-}));
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -617,8 +557,6 @@ const LoadSave = ({ useLoadEnable = false, ...props }: LoadSaveProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const classes = useStyles();
-
   let disableDeleteButton = true;
   let disableLoadButton = true;
   let disableSaveButton = !dbListWriteAccess;
@@ -693,11 +631,15 @@ const LoadSave = ({ useLoadEnable = false, ...props }: LoadSaveProps) => {
             <Paper>
               <Paper
                 elevation={theme.palette.paperElevation}
-                className={classes.root}
+                sx={{
+                  width: "100%",
+                  marginTop: 0,
+                  overflowX: "auto",
+                }}
               >
-                <div className={classes.tableWrapper}>
+                <div style={{ maxHeight: "70vh", overflow: "auto" }}>
                   <Table
-                    className={classes.table}
+                    sx={{ minWidth: 500 }}
                     stickyHeader
                     size="small"
                     aria-label="sticky table"
@@ -750,7 +692,6 @@ const LoadSave = ({ useLoadEnable = false, ...props }: LoadSaveProps) => {
                             </TableCell>
                           ))}
                           <TableCell
-                            className={classes.tableCell}
                             component="th"
                             scope="row"
                             align="center"
@@ -758,15 +699,17 @@ const LoadSave = ({ useLoadEnable = false, ...props }: LoadSaveProps) => {
                             {row.beam_setup.DateTime}
                           </TableCell>
                           <TableCell
-                            className={
-                              row.beam_setup.Status === "Working"
-                                ? classes.tableCellWorking
-                                : row.beam_setup.Status === "Pending"
-                                  ? classes.tableCellPending
-                                  : row.beam_setup.Status === "Obselete"
-                                    ? classes.tableCellObselete
-                                    : classes.tableCell
-                            }
+                            sx={{
+                              width: "20%",
+                              backgroundColor:
+                                row.beam_setup.Status === "Working"
+                                  ? green[500]
+                                  : row.beam_setup.Status === "Pending"
+                                    ? orange[500]
+                                    : row.beam_setup.Status === "Obselete"
+                                      ? red[500]
+                                      : undefined,
+                            }}
                             component="th"
                             scope="row"
                             align="center"
@@ -785,11 +728,15 @@ const LoadSave = ({ useLoadEnable = false, ...props }: LoadSaveProps) => {
             <Paper>
               <Paper
                 elevation={theme.palette.paperElevation}
-                className={classes.root}
+                sx={{
+                  width: "100%",
+                  marginTop: 0,
+                  overflowX: "auto",
+                }}
               >
-                <div className={classes.tableWrapper}>
+                <div style={{ maxHeight: "70vh", overflow: "auto" }}>
                   <Table
-                    className={classes.table}
+                    sx={{ minWidth: 500 }}
                     stickyHeader
                     size="small"
                     aria-label="sticky table"
@@ -807,14 +754,14 @@ const LoadSave = ({ useLoadEnable = false, ...props }: LoadSaveProps) => {
                       {dbDataAndLiveDataKeys.map((item, index) => (
                         <TableRow key={index.toString()} hover role="checkbox">
                           <TableCell
-                            className={classes.tableCellDescription}
+                            sx={{ width: "30%" }}
                             component="th"
                             scope="row"
                           >
                             {dbDataAndLiveData[item].label}
                           </TableCell>
                           <TableCell
-                            className={classes.tableCellValues}
+                            sx={{ width: "20%" }}
                             style={{
                               backgroundColor: compareValues(
                                 dbDataAndLiveData[item].dbValue,
@@ -829,7 +776,7 @@ const LoadSave = ({ useLoadEnable = false, ...props }: LoadSaveProps) => {
                             {dbDataAndLiveData[item].dbValue}
                           </TableCell>
                           <TableCell
-                            className={classes.tableCellValues}
+                            sx={{ width: "20%" }}
                             style={{
                               backgroundColor: compareValues(
                                 dbDataAndLiveData[item].newValue,
@@ -844,7 +791,7 @@ const LoadSave = ({ useLoadEnable = false, ...props }: LoadSaveProps) => {
                             {dbDataAndLiveData[item].newValue}
                           </TableCell>
                           <TableCell
-                            className={classes.tableCellValues}
+                            sx={{ width: "20%" }}
                             style={{
                               backgroundColor:
                                 compareValues(
@@ -873,7 +820,7 @@ const LoadSave = ({ useLoadEnable = false, ...props }: LoadSaveProps) => {
                             />
                           </TableCell>
                           <TableCell
-                            className={classes.tableCellUnits}
+                            sx={{ width: "10%" }}
                             style={{
                               backgroundColor:
                                 compareValues(
@@ -927,7 +874,6 @@ const LoadSave = ({ useLoadEnable = false, ...props }: LoadSaveProps) => {
                     <Button
                       variant="contained"
                       color="primary"
-                      className={classes.Button}
                       onClick={() =>
                         dispatchDbDataAndLiveData({
                           type: "loadSavedValueToNewValues",
@@ -945,7 +891,6 @@ const LoadSave = ({ useLoadEnable = false, ...props }: LoadSaveProps) => {
                           <Button
                             variant="contained"
                             color="primary"
-                            className={classes.Button}
                             onClick={() =>
                               dispatchDbDataAndLiveData({
                                 type: "writeNewValuesToPvValues",
@@ -968,7 +913,6 @@ const LoadSave = ({ useLoadEnable = false, ...props }: LoadSaveProps) => {
                       <Button
                         variant="contained"
                         color="primary"
-                        className={classes.Button}
                         onClick={() =>
                           dispatchDbDataAndLiveData({
                             type: "writeNewValuesToPvValues",
@@ -984,7 +928,6 @@ const LoadSave = ({ useLoadEnable = false, ...props }: LoadSaveProps) => {
                     <Button
                       variant="contained"
                       color="primary"
-                      className={classes.Button}
                       onClick={handleSavedValues}
                       disabled={disableSaveButton}
                     >
@@ -1005,7 +948,13 @@ const LoadSave = ({ useLoadEnable = false, ...props }: LoadSaveProps) => {
                   <Grid item xs={12} sm={6} md={6} lg={3}>
                     <Button
                       variant="contained"
-                      className={classes.workingButton}
+                      sx={{
+                        color: theme.palette.mode === "dark" ? "white" : "black",
+                        backgroundColor: green[500],
+                        "&:hover": {
+                          backgroundColor: green[700],
+                        },
+                      }}
                       onClick={handleOnClickWorking}
                       disabled={!dbListWriteAccess || disableButtons}
                     >
@@ -1015,7 +964,13 @@ const LoadSave = ({ useLoadEnable = false, ...props }: LoadSaveProps) => {
                   <Grid item xs={12} sm={6} md={6} lg={3}>
                     <Button
                       variant="contained"
-                      className={classes.pendingButton}
+                      sx={{
+                        color: theme.palette.mode === "dark" ? "white" : "black",
+                        backgroundColor: orange[500],
+                        "&:hover": {
+                          backgroundColor: orange[700],
+                        },
+                      }}
                       onClick={handleOnClickPending}
                       disabled={!dbListWriteAccess || disableButtons}
                     >
@@ -1025,7 +980,13 @@ const LoadSave = ({ useLoadEnable = false, ...props }: LoadSaveProps) => {
                   <Grid item xs={12} sm={6} md={6} lg={3}>
                     <Button
                       variant="contained"
-                      className={classes.obseleteButton}
+                      sx={{
+                        color: theme.palette.mode === "dark" ? "white" : "black",
+                        backgroundColor: red[500],
+                        "&:hover": {
+                          backgroundColor: red[700],
+                        },
+                      }}
                       onClick={handleOnClickObselete}
                       disabled={!dbListWriteAccess || disableButtons}
                     >
@@ -1036,7 +997,6 @@ const LoadSave = ({ useLoadEnable = false, ...props }: LoadSaveProps) => {
                     <Button
                       variant="contained"
                       color="secondary"
-                      className={classes.button}
                       onClick={handleOnClickDelete}
                       disabled={
                         disableDeleteButton ||

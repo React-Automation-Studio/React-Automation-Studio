@@ -6,135 +6,8 @@ import {
   ListItemText,
   ListItem,
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import Widget from "../SystemComponents/Widgets/Widget";
-import makeStyles from "@mui/styles/makeStyles";
-
-const useStyles = makeStyles((theme) => {
-  const borderColor =
-    theme.palette.mode === "light"
-      ? "rgba(0, 0, 0, 0.23)"
-      : "rgba(255, 255, 255, 0.23)"; //copied from material ui textfield
-  const customBorderColor =
-    theme.palette.mode === "light"
-      ? "rgba(0, 0, 0,0)"
-      : "rgba(255, 255, 255, 0)";
-  return {
-    root: {
-      backgroundColor: theme.palette.background.paper,
-      borderRadius: 4,
-      border: 1,
-    },
-    FormControl: {
-      width: "100%",
-      height: "100%",
-      marginTop: "auto",
-      marginBottom: "auto",
-      marginLeft: "auto",
-      marginRight: "auto",
-    },
-    button: {
-      textAlign: "center",
-      border: 1,
-      borderColor: borderColor,
-      borderStyle: "solid",
-      marginTop: -1,
-    },
-    buttonLastHorizontal: {
-      borderRight: "1px solid " + borderColor,
-      borderTop: "1px solid " + borderColor,
-      borderBottom: "1px solid " + borderColor,
-      borderLeft: "1px solid " + customBorderColor,
-      borderBottomRightRadius: 4,
-      borderTopRightRadius: 4,
-      textAlign: "center",
-      marginLeft: -1,
-      "&:hover": {
-        borderStyle: "solid",
-        borderColor: theme.palette.text.main,
-        border: 1,
-      },
-    },
-    buttonFirstHorizontal: {
-      borderStyle: "solid",
-      borderColor: borderColor,
-      border: 1,
-      borderBottomLeftRadius: 4,
-      borderTopLeftRadius: 4,
-      textAlign: "center",
-      "&:hover": {
-        borderStyle: "solid",
-        borderColor: theme.palette.text.main,
-        border: 1,
-      },
-    },
-    buttonMiddleHorizontal: {
-      borderRight: "1px solid " + borderColor,
-      borderTop: "1px solid " + borderColor,
-      borderBottom: "1px solid " + borderColor,
-      borderLeft: "1px solid " + customBorderColor,
-      marginLeft: -1,
-      textAlign: "center",
-      "&:hover": {
-        borderStyle: "solid",
-        borderColor: theme.palette.text.main,
-        border: 1,
-      },
-    },
-    buttonLastVertical: {
-      borderRight: "1px solid " + borderColor,
-      borderLeft: "1px solid " + borderColor,
-      borderBottom: "1px solid " + borderColor,
-      borderTop: "1px solid " + customBorderColor,
-      borderBottomRightRadius: 4,
-      borderBottomLeftRadius: 4,
-      textAlign: "center",
-      marginTop: -1,
-      "&:hover": {
-        borderStyle: "solid",
-        borderColor: theme.palette.text.main,
-        border: 1,
-      },
-    },
-    buttonFirstVertical: {
-      borderStyle: "solid",
-      borderColor: borderColor,
-      border: 1,
-      borderTopRightRadius: 4,
-      borderTopLeftRadius: 4,
-      textAlign: "center",
-      "&:hover": {
-        borderStyle: "solid",
-        borderColor: theme.palette.text.main,
-        border: 1,
-      },
-    },
-    buttonMiddleVertical: {
-      borderRight: "1px solid " + borderColor,
-      borderLeft: "1px solid " + borderColor,
-      borderBottom: "1px solid " + borderColor,
-      borderTop: "1px solid " + customBorderColor,
-      marginTop: -1,
-      textAlign: "center",
-      "&:hover": {
-        borderStyle: "solid",
-        borderColor: theme.palette.text.main,
-        border: 1,
-      },
-    },
-    listVertical: {
-      width: "100%",
-      height: "100%",
-      padding: theme.spacing(1),
-    },
-    listHorizontal: {
-      display: "flex",
-      flexDirection: "row",
-      width: "100%",
-      height: "100%",
-      padding: theme.spacing(1),
-    },
-  };
-});
 
 /**
  * The SelectionList Component is a wrapper on the Material-UI List component.
@@ -146,7 +19,132 @@ const useStyles = makeStyles((theme) => {
  * https://mui.com/api/list
  */
 const SelectionListComponent = (props) => {
-  const classes = useStyles();
+  const theme = useTheme();
+
+  // Create border colors based on theme
+  const borderColor =
+    theme.palette.mode === "light"
+      ? "rgba(0, 0, 0, 0.23)"
+      : "rgba(255, 255, 255, 0.23)"; //copied from material ui textfield
+  const customBorderColor =
+    theme.palette.mode === "light"
+      ? "rgba(0, 0, 0,0)"
+      : "rgba(255, 255, 255, 0)";
+
+  // Create sx objects for styling
+  const formControlSx = {
+    width: "100%",
+    height: "100%",
+    marginTop: "auto",
+    marginBottom: "auto",
+    marginLeft: "auto",
+    marginRight: "auto",
+  };
+
+  const buttonFirstHorizontalSx = {
+
+    borderRight: "1px solid " + borderColor,
+    borderTop: "1px solid " + borderColor,
+    borderBottom: "1px solid " + borderColor,
+    borderLeft: "1px solid " + borderColor,
+    borderBottomLeftRadius: 4,
+    borderTopLeftRadius: 4,
+    textAlign: "center",
+    "&:hover": {
+      borderStyle: "solid",
+      borderColor: theme.palette.text.primary,
+      border: 1,
+    },
+  };
+
+  const buttonLastHorizontalSx = {
+    borderRight: "1px solid " + borderColor,
+    borderTop: "1px solid " + borderColor,
+    borderBottom: "1px solid " + borderColor,
+    borderLeft: "1px solid " + customBorderColor,
+    borderBottomRightRadius: 4,
+    borderTopRightRadius: 4,
+    textAlign: "center",
+    marginLeft: -0.125,
+    "&:hover": {
+      borderStyle: "solid",
+      borderColor: theme.palette.text.primary,
+      border: 1,
+    },
+  };
+
+  const buttonMiddleHorizontalSx = {
+    borderRight: "1px solid " + borderColor,
+    borderTop: "1px solid " + borderColor,
+    borderBottom: "1px solid " + borderColor,
+    borderLeft: "1px solid " + customBorderColor,
+    marginLeft: -0.125,
+    textAlign: "center",
+    "&:hover": {
+      borderStyle: "solid",
+      borderColor: theme.palette.text.primary,
+      border: 1,
+    },
+  };
+
+  const buttonFirstVerticalSx = {
+    borderRight: "1px solid " + borderColor,
+    borderTop: "1px solid " + borderColor,
+    borderBottom: "1px solid " + borderColor,
+    borderLeft: "1px solid " + borderColor,
+    borderTopRightRadius: 4,
+    borderTopLeftRadius: 4,
+    textAlign: "center",
+    "&:hover": {
+      borderStyle: "solid",
+      borderColor: theme.palette.text.primary,
+      border: 1,
+    },
+  };
+
+  const buttonLastVerticalSx = {
+    borderRight: "1px solid " + borderColor,
+    borderLeft: "1px solid " + borderColor,
+    borderBottom: "1px solid " + borderColor,
+    borderTop: "1px solid " + customBorderColor,
+    borderBottomRightRadius: 4,
+    borderBottomLeftRadius: 4,
+    textAlign: "center",
+    marginTop: -0.125,
+    "&:hover": {
+      borderStyle: "solid",
+      borderColor: theme.palette.text.primary,
+      border: 1,
+    },
+  };
+
+  const buttonMiddleVerticalSx = {
+    borderRight: "1px solid " + borderColor,
+    borderLeft: "1px solid " + borderColor,
+    borderBottom: "1px solid " + borderColor,
+    borderTop: "1px solid " + customBorderColor,
+    marginTop: -0.125,
+    textAlign: "center",
+    "&:hover": {
+      borderStyle: "solid",
+      borderColor: theme.palette.text.primary,
+      border: 1,
+    },
+  };
+
+  const listVerticalSx = {
+    width: "100%",
+    height: "100%",
+    padding: theme.spacing(1),
+  };
+
+  const listHorizontalSx = {
+    display: "flex",
+    flexDirection: "row",
+    width: "100%",
+    height: "100%",
+    padding: theme.spacing(1),
+  };
   /**
    * Store the new item value in the correct PV's state.
    * @param {String} value
@@ -161,24 +159,24 @@ const SelectionListComponent = (props) => {
    */
   const getListItems = (enumStrs, value) => {
     let listItems = enumStrs.map((item, idx) => {
-      let className;
+      let itemSx;
       if (props.horizontal) {
-        className =
+        itemSx =
           idx === 0
-            ? classes.buttonFirstHorizontal
+            ? buttonFirstHorizontalSx
             : idx === enumStrs.length - 1
-              ? classes.buttonLastHorizontal
-              : classes.buttonMiddleHorizontal;
+              ? buttonLastHorizontalSx
+              : buttonMiddleHorizontalSx;
       } else {
-        className =
+        itemSx =
           idx === 0
-            ? classes.buttonFirstVertical
+            ? buttonFirstVerticalSx
             : idx === enumStrs.length - 1
-              ? classes.buttonLastVertical
-              : classes.buttonMiddleVertical;
+              ? buttonLastVerticalSx
+              : buttonMiddleVerticalSx;
       }
       return (
-        <ListItem className={className} key={item.toString()} disablePadding>
+        <ListItem sx={itemSx} key={item.toString()} disablePadding>
           <ListItemButton
             sx={{ height: "100%" }}
             value={item}
@@ -203,15 +201,14 @@ const SelectionListComponent = (props) => {
   return (
     <FormControlLabel
       key={props.pvName}
-      className={classes.FormControl}
+      sx={formControlSx}
       disabled={props.disabled}
       control={
         <List
-          className={
-            props.horizontal ? classes.listHorizontal : classes.listVertical
+          sx={
+            props.horizontal ? listHorizontalSx : listVerticalSx
           }
           component="nav"
-          variant="outlined"
           disablePadding={true}
         >
           {itemList}

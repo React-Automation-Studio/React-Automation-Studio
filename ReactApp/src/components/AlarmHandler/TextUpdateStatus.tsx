@@ -1,171 +1,119 @@
 import React from "react";
-import { alpha } from "@mui/material/styles";
-import withStyles from "@mui/styles/withStyles";
+import { alpha, useTheme } from "@mui/material/styles";
 import Widget from "../SystemComponents/Widgets/Widget";
 import { Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
 
-const styles = (theme) => ({
-  root: {
-    display: "flex",
-    flexWrap: "wrap",
-  },
-  TextFieldSeverity0: {
-    borderRadius: 2,
-    borderWidth: 1,
-    padding: 1,
-    borderStyle: "solid",
-    borderColor: "rgba(0,0,0,0)",
-  },
-  TextFieldSeverity1: {
-    borderColor: theme.palette.mode === "dark" ? grey[700] : grey[300],
-    borderRadius: 2,
-    borderWidth: 1,
-    borderStyle: "solid",
-    padding: 1,
-    background:
-      "linear-gradient(45deg," +
-      alpha(
-        theme.palette.alarm.minor.dark,
-        theme.palette.mode === "dark" ? 0.2 : 0.1
-      ) +
-      " 0%, " +
-      theme.palette.alarm.minor.dark +
-      " 100%)",
-  },
-  TextFieldSeverity2: {
-    borderColor: theme.palette.mode === "dark" ? grey[700] : grey[300],
-    borderWidth: 1,
-    borderStyle: "solid",
-    borderRadius: 2,
-    padding: 1,
-    background:
-      "linear-gradient(45deg," +
-      alpha(
-        theme.palette.alarm.major.dark,
-        theme.palette.mode === "dark" ? 0.2 : 0.1
-      ) +
-      " 0%, " +
-      theme.palette.alarm.major.dark +
-      " 100%)",
-  },
-  majorAlarm: (props) => ({
-    borderColor: theme.palette.mode === "dark" ? grey[700] : grey[300],
-    borderWidth: 1,
-    borderStyle: "solid",
-    background: props.fadeTU
-      ? "linear-gradient(45deg," +
-        alpha(
-          theme.palette.alarm.major.dark,
-          theme.palette.mode === "dark" ? 0.2 : 0.1
-        ) +
-        " 0%, " +
-        theme.palette.alarm.major.dark +
-        " 100%)"
-      : theme.palette.alarm.major.main,
-    borderRadius: 2,
-    padding: 1,
-    paddingRight: 5,
-    paddingLeft: 5,
-  }),
-  majorAlarmAcked: (props) => ({
-    borderColor: theme.palette.mode === "dark" ? grey[700] : grey[300],
-    borderWidth: 1,
-    borderStyle: "solid",
-    background: props.fadeTU
-      ? "linear-gradient(45deg," +
-        alpha(
-          theme.palette.alarm.majorAcked.dark,
-          theme.palette.mode === "dark" ? 0.2 : 0.1
-        ) +
-        " 0%, " +
-        theme.palette.alarm.majorAcked.dark +
-        " 100%)"
-      : theme.palette.alarm.majorAcked.main,
-    borderRadius: 2,
-    padding: 1,
-    paddingRight: 5,
-    paddingLeft: 5,
-  }),
-  minorAlarm: (props) => ({
-    borderColor: theme.palette.mode === "dark" ? grey[700] : grey[300],
-    borderWidth: 1,
-    borderStyle: "solid",
-    background: props.fadeTU
-      ? "linear-gradient(45deg," +
-        alpha(
-          theme.palette.alarm.minor.dark,
-          theme.palette.mode === "dark" ? 0.2 : 0.1
-        ) +
-        " 0%, " +
-        theme.palette.alarm.minor.dark +
-        " 100%)"
-      : theme.palette.alarm.minor.main,
-    borderRadius: 2,
-    padding: 1,
-    paddingRight: 5,
-    paddingLeft: 5,
-  }),
-  minorAlarmAcked: (props) => ({
-    borderColor: theme.palette.mode === "dark" ? grey[700] : grey[300],
-    borderWidth: 1,
-    borderStyle: "solid",
-    background: props.fadeTU
-      ? "linear-gradient(45deg," +
-        alpha(
-          theme.palette.alarm.minorAcked.dark,
-          theme.palette.mode === "dark" ? 0.2 : 0.1
-        ) +
-        " 0%, " +
-        theme.palette.alarm.minorAcked.dark +
-        " 100%)"
-      : theme.palette.alarm.minorAcked.main,
-    borderRadius: 2,
-    padding: 1,
-    paddingRight: 5,
-    paddingLeft: 5,
-  }),
-  noAlarm: {
-    borderRadius: 2,
-    padding: 1,
-    borderColor: grey[50],
-    background: "transparent",
-    paddingRight: 5,
-    paddingLeft: 5,
-  },
-});
-
 const TextUpdateComponent = (props) => {
-  const { classes } = props;
-  let textFieldClassName;
+  const theme = useTheme();
+  let textFieldSx;
   let label = props.label !== undefined ? props.label + ": " : "";
   let units = props.units !== undefined ? props.units + " " : "";
   let content;
   if (props.initialized) {
     if (props.alarmSensitive === true) {
       if (props.value === "NO_ALARM") {
-        textFieldClassName = classes.noAlarm;
+        textFieldSx = {
+          borderRadius: 2,
+          padding: 1,
+          borderColor: grey[50],
+          background: "transparent",
+          paddingRight: 5,
+          paddingLeft: 5,
+        };
       } else if (props.value === "MINOR_ACKED") {
-        textFieldClassName = classes.minorAlarmAcked;
+        textFieldSx = {
+          borderColor: theme.palette.mode === "dark" ? grey[700] : grey[300],
+          borderWidth: 1,
+          borderStyle: "solid",
+          background: props.fadeTU
+            ? "linear-gradient(45deg," +
+              alpha(
+                (theme.palette as any).alarm?.minorAcked?.dark || theme.palette.warning.dark,
+                theme.palette.mode === "dark" ? 0.2 : 0.1
+              ) +
+              " 0%, " +
+              ((theme.palette as any).alarm?.minorAcked?.dark || theme.palette.warning.dark) +
+              " 100%)"
+            : (theme.palette as any).alarm?.minorAcked?.main || theme.palette.warning.main,
+          borderRadius: 2,
+          padding: 1,
+          paddingRight: 5,
+          paddingLeft: 5,
+        };
       } else if (props.value === "MINOR_ALARM") {
-        textFieldClassName = classes.minorAlarm;
+        textFieldSx = {
+          borderColor: theme.palette.mode === "dark" ? grey[700] : grey[300],
+          borderWidth: 1,
+          borderStyle: "solid",
+          background: props.fadeTU
+            ? "linear-gradient(45deg," +
+              alpha(
+                (theme.palette as any).alarm?.minor?.dark || theme.palette.warning.dark,
+                theme.palette.mode === "dark" ? 0.2 : 0.1
+              ) +
+              " 0%, " +
+              ((theme.palette as any).alarm?.minor?.dark || theme.palette.warning.dark) +
+              " 100%)"
+            : (theme.palette as any).alarm?.minor?.main || theme.palette.warning.main,
+          borderRadius: 2,
+          padding: 1,
+          paddingRight: 5,
+          paddingLeft: 5,
+        };
       } else if (
         props.value === "MAJOR_ACKED" ||
         props.value === "INVALID_ACKED" ||
         props.value === "DISCONN_ACKED"
       ) {
-        textFieldClassName = classes.majorAlarmAcked;
+        textFieldSx = {
+          borderColor: theme.palette.mode === "dark" ? grey[700] : grey[300],
+          borderWidth: 1,
+          borderStyle: "solid",
+          background: props.fadeTU
+            ? "linear-gradient(45deg," +
+              alpha(
+                (theme.palette as any).alarm?.majorAcked?.dark || theme.palette.error.dark,
+                theme.palette.mode === "dark" ? 0.2 : 0.1
+              ) +
+              " 0%, " +
+              ((theme.palette as any).alarm?.majorAcked?.dark || theme.palette.error.dark) +
+              " 100%)"
+            : (theme.palette as any).alarm?.majorAcked?.main || theme.palette.error.main,
+          borderRadius: 2,
+          padding: 1,
+          paddingRight: 2,
+          paddingLeft: 2,
+        };
       } else if (
         props.value === "MAJOR_ALARM" ||
         props.value === "INVALID" ||
         props.value === "DISCONNECTED"
       ) {
-        textFieldClassName = classes.majorAlarm;
+        textFieldSx = {
+          borderColor: theme.palette.mode === "dark" ? grey[700] : grey[300],
+          borderWidth: 1,
+          borderStyle: "solid",
+          background: props.fadeTU
+            ? "linear-gradient(45deg," +
+              alpha(
+                (theme.palette as any).alarm?.major?.dark || theme.palette.error.dark,
+                theme.palette.mode === "dark" ? 0.2 : 0.1
+              ) +
+              " 0%, " +
+              ((theme.palette as any).alarm?.major?.dark || theme.palette.error.dark) +
+              " 100%)"
+            : (theme.palette as any).alarm?.major?.main || theme.palette.error.main,
+          borderRadius: 2,
+          padding: 1,
+          paddingRight: 5,
+          paddingLeft: 5,
+        };
       }
     }
 
     content = (
-      <Typography variant={props.variant} className={textFieldClassName}>
+      <Typography variant={props.variant} sx={textFieldSx}>
         {label + props.value + " " + units}
       </Typography>
     );
@@ -186,9 +134,11 @@ const TextUpdateStatus = ({
       {...props}
       component={TextUpdateComponent}
       debug={debug}
-      variant={variant}
       alarmSensitive={alarmSensitive}
       showTooltip={showTooltip}
+      componentProps={{
+        variant,
+      }}
     />
   );
 };
@@ -310,4 +260,4 @@ interface TextUpdateStatusProps {
   tooltipProps?: object;
 }
 
-export default withStyles(styles, { withTheme: true })(TextUpdateStatus);
+export default TextUpdateStatus;

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import withStyles from '@mui/styles/withStyles';
+import { useTheme, useMediaQuery } from '@mui/material/styles';
 
 import Grid from '@mui/material/Grid';
 
@@ -37,9 +37,6 @@ import TextField from '@mui/material/TextField';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
-// FIXME checkout https://mui.com/components/use-media-query/#migrating-from-withwidth
-const withWidth = () => (WrappedComponent) => (props) => <WrappedComponent {...props} width="xs" />;
-
 function TabContainer(props) {
   return (
     <Typography component="div" style={{ padding: 0, flexGrow: 1 }}>
@@ -48,26 +45,10 @@ function TabContainer(props) {
   );
 }
 
-const styles = theme => ({
-  body1: theme.typography.body1,
-  root: {
-    flexGrow: 1,
-    padding: theme.spacing(2),
-    overflowX: "hidden",
-    overflowY: "hidden",
-  },
-  paper: {
-    padding: theme.spacing(1) * 0,
-    margin: theme.spacing(1) * 0,
-    height: '100%',
-    color: theme.palette.text.secondary,
-  },
-  control: {
-    padding: theme.spacing(1) * 2,
-  },
-});
-
-const Example1 = (props) => {
+const ExperimentalMobileDemo1 = (props) => {
+  const theme = useTheme();
+  const isXs = useMediaQuery(theme.breakpoints.only('xs'));
+  const isSm = useMediaQuery(theme.breakpoints.only('sm'));
   const [showAdvancedSettings, setShowAdvancedSettings] = useState(0);
   const editorType = useLocalPV({ pv: 'loc://editorType', })
 
@@ -75,14 +56,11 @@ const Example1 = (props) => {
     setShowAdvancedSettings(value);
   };
 
-  const { width } = props;
-  const { classes } = props;
-
   let graphVH;
 
-  if (width === 'xs') {
+  if (isXs) {
     graphVH = '25vh';
-  } else if (width === 'sm') {
+  } else if (isSm) {
     graphVH = '30vh'
   } else {
     graphVH = '30vh'
@@ -179,7 +157,12 @@ const Example1 = (props) => {
     >
       <div style={{ paddingBottom: 48 }}>
         {showAdvancedSettings === 0 && <TabContainer key={'tabContainer0'}>
-          <Grid container className={classes.root}>
+          <Grid container sx={{
+            flexGrow: 1,
+            padding: theme.spacing(2),
+            overflowX: "hidden",
+            overflowY: "hidden",
+          }}>
             <Grid item xs={12}>
               <Grid
                 container
@@ -221,10 +204,10 @@ const Example1 = (props) => {
                 <Grid item xs={2} sm={4} lg={5} >
                   <Grid container direction="column" justifyContent="space-evenly" spacing={2} alignItems="stretch">
                     <Grid item>
-                      <StyledIconIndicator pv='$(device)' macros={{ '$(device)': 'testIOC:BO1' }} onColor={props.theme.palette.ok.main} offColor='default' label={'On'} labelPlacement={'end'} />
+                      <StyledIconIndicator pv='$(device)' macros={{ '$(device)': 'testIOC:BO1' }} onColor={theme.palette.ok.main} offColor='default' label={'On'} labelPlacement={'end'} />
                     </Grid>
                     <Grid item>
-                      <StyledIconIndicator pv='$(device)' macros={{ '$(device)': 'testIOC:BO1' }} onColor='default' offColor={props.theme.palette.error.main} label={'Off'} labelPlacement={'end'} />
+                      <StyledIconIndicator pv='$(device)' macros={{ '$(device)': 'testIOC:BO1' }} onColor='default' offColor={theme.palette.error.main} label={'Off'} labelPlacement={'end'} />
                     </Grid>
                   </Grid>
                 </Grid>
@@ -271,7 +254,12 @@ const Example1 = (props) => {
           </Grid>
         </TabContainer>}
         {showAdvancedSettings === 1 && <TabContainer key={'tabContainer1'}>
-          <Grid container className={classes.root}>
+          <Grid container sx={{
+            flexGrow: 1,
+            padding: theme.spacing(2),
+            overflowX: "hidden",
+            overflowY: "hidden",
+          }}>
             <Grid item xs={12}>
               <Grid container spacing={2} alignItems={'stretch'} direction={'column'} justifyContent={'flex-start'}>
 
@@ -294,7 +282,7 @@ const Example1 = (props) => {
         </TabContainer>}
       </div>
 
-      <AppBar className={classes.body1} style={{ position: 'fixed', bottom: 0, top: 'auto' }} color='inherit'>
+      <AppBar sx={theme.typography.body1} style={{ position: 'fixed', bottom: 0, top: 'auto' }} color='inherit'>
         <Tabs value={showAdvancedSettings} onChange={handleChange} variant="fullWidth" scrollButtons={false}>
           <Tab icon={<AccountCircle />} />
           <Tab icon={<Settings />} />
@@ -304,4 +292,4 @@ const Example1 = (props) => {
   );
 }
 
-export default withWidth()(withStyles(styles, { withTheme: true })(Example1));
+export default ExperimentalMobileDemo1;

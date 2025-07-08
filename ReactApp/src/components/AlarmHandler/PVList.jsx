@@ -1,7 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 
 import { useTheme } from '@mui/material/styles';
-import makeStyles from '@mui/styles/makeStyles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -10,17 +9,14 @@ import TableRow from '@mui/material/TableRow';
 import TableHead from '@mui/material/TableHead';
 import Paper from '@mui/material/Paper';
 
-const useStyles = makeStyles(theme => ({
-    styledTableHeadCell: {
-        backgroundColor: theme.palette.mode === 'dark' ? undefined : theme.palette.primary.light,
-        color: theme.palette.mode === 'dark' ? undefined : 'white',
-    }
-}))
-
 const PVList = (props) => {
 
-    const classes = useStyles()
     const theme = useTheme()
+
+    const styledTableHeadCellSx = {
+        backgroundColor: theme.palette.mode === 'dark' ? undefined : theme.palette.primary.light,
+        color: theme.palette.mode === 'dark' ? undefined : 'white',
+    };
 
     const myRef = useRef()
 
@@ -80,9 +76,9 @@ const PVList = (props) => {
                             event.stopPropagation()
                         }}
                     >
-                        <TableCell align="left" classes={{ stickyHeader: classes.styledTableHeadCell }}>PV Name</TableCell>
-                        <TableCell align="left" classes={{ stickyHeader: classes.styledTableHeadCell }}>PV Description</TableCell>
-                        <TableCell align="left" classes={{ stickyHeader: classes.styledTableHeadCell }}>IOC Server Hostname</TableCell>
+                        <TableCell align="left" sx={{ '&.MuiTableCell-stickyHeader': styledTableHeadCellSx }}>PV Name</TableCell>
+                        <TableCell align="left" sx={{ '&.MuiTableCell-stickyHeader': styledTableHeadCellSx }}>PV Description</TableCell>
+                        <TableCell align="left" sx={{ '&.MuiTableCell-stickyHeader': styledTableHeadCellSx }}>IOC Server Hostname</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>

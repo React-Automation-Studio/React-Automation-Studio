@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { useTheme } from '@mui/material/styles';
-import makeStyles from '@mui/styles/makeStyles';
 import Grid from '@mui/material/Grid';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -24,37 +23,8 @@ import EventIcon from '@mui/icons-material/Event';
 import EmailIcon from '@mui/icons-material/Email';
 import CallIcon from '@mui/icons-material/Call';
 
-const useStyles = makeStyles(theme => ({
-    chip: {
-        marginRight: '1em',
-        marginTop: '0.5em',
-        marginBottom: '0.5em'
-    },
-    chipOutlinedSecondary: {
-        borderWidth: '1.5px'
-    },
-    emailInputField: {
-        cursor: 'auto',
-        whiteSpace: 'nowrap',
-        textOverflow: 'ellipsis'
-    },
-    icon: {
-        color: theme.palette.secondary.main
-    },
-    styledTableHeadCell: {
-        backgroundColor: theme.palette.mode === 'dark' ? undefined : theme.palette.primary.light,
-        color: theme.palette.mode === 'dark' ? undefined : 'white',
-    },
-    verticalMiddle: {
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-    }
-}))
-
 const UserTable = (props) => {
 
-    const classes = useStyles()
     const theme = useTheme()
 
     const showAddHeader = Object.values(props.userEdit).reduce((acc, edit) => {
@@ -93,16 +63,34 @@ const UserTable = (props) => {
                             event.stopPropagation()
                         }}
                     >
-                        <TableCell align="left" classes={{ stickyHeader: classes.styledTableHeadCell }}>Name</TableCell>
-                        <TableCell align="left" classes={{ stickyHeader: classes.styledTableHeadCell }}>Contact</TableCell>
-                        <TableCell align="left" classes={{ stickyHeader: classes.styledTableHeadCell }}>
+                        <TableCell align="left" sx={{ 
+                            backgroundColor: theme.palette.mode === 'dark' ? undefined : theme.palette.primary.light,
+                            color: theme.palette.mode === 'dark' ? undefined : 'white',
+                        }}>Name</TableCell>
+                        <TableCell align="left" sx={{ 
+                            backgroundColor: theme.palette.mode === 'dark' ? undefined : theme.palette.primary.light,
+                            color: theme.palette.mode === 'dark' ? undefined : 'white',
+                        }}>Contact</TableCell>
+                        <TableCell align="left" sx={{ 
+                            backgroundColor: theme.palette.mode === 'dark' ? undefined : theme.palette.primary.light,
+                            color: theme.palette.mode === 'dark' ? undefined : 'white',
+                        }}>
                             <div style={{ display: 'flex', flexDirection: 'row' }}>
                                 <div >Notification Expressions</div>
                             </div>
                         </TableCell>
-                        {showAddHeader && <TableCell align="center" classes={{ stickyHeader: classes.styledTableHeadCell }}>Add</TableCell>}
-                        <TableCell align="center" classes={{ stickyHeader: classes.styledTableHeadCell }}>Actions</TableCell>
-                        <TableCell align="left" classes={{ stickyHeader: classes.styledTableHeadCell }}>Notification Schedule</TableCell>
+                        {showAddHeader && <TableCell align="center" sx={{ 
+                            backgroundColor: theme.palette.mode === 'dark' ? undefined : theme.palette.primary.light,
+                            color: theme.palette.mode === 'dark' ? undefined : 'white',
+                        }}>Add</TableCell>}
+                        <TableCell align="center" sx={{ 
+                            backgroundColor: theme.palette.mode === 'dark' ? undefined : theme.palette.primary.light,
+                            color: theme.palette.mode === 'dark' ? undefined : 'white',
+                        }}>Actions</TableCell>
+                        <TableCell align="left" sx={{ 
+                            backgroundColor: theme.palette.mode === 'dark' ? undefined : theme.palette.primary.light,
+                            color: theme.palette.mode === 'dark' ? undefined : 'white',
+                        }}>Notification Schedule</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -145,7 +133,11 @@ const UserTable = (props) => {
                                             justifyContent="center"
                                             alignItems="center"
                                         >
-                                            <Grid item xs={2} className={classes.verticalMiddle}>
+                                            <Grid item xs={2} sx={{ 
+                                                display: "flex",
+                                                flexDirection: "column",
+                                                justifyContent: "center",
+                                            }}>
                                                 <EmailIcon />
                                             </Grid>
                                             <Grid item xs={10}>
@@ -154,7 +146,13 @@ const UserTable = (props) => {
                                                     value={user.email}
                                                     onChange={(event) => props.updateUserEmail(event, user.name, user.username)}
                                                     InputProps={{
-                                                        classes: { input: classes.emailInputField },
+                                                        sx: { 
+                                                            '& .MuiInputBase-input': {
+                                                                cursor: 'auto',
+                                                                whiteSpace: 'nowrap',
+                                                                textOverflow: 'ellipsis'
+                                                            }
+                                                        },
                                                         readOnly: true,
                                                         disableUnderline: true
                                                     }}
@@ -162,7 +160,11 @@ const UserTable = (props) => {
                                                     label={props.emailError[`${user.username}-${user.name}`] ? "Invalid email" : undefined}
                                                 />
                                             </Grid>
-                                            <Grid item xs={2} className={classes.verticalMiddle}>
+                                            <Grid item xs={2} sx={{ 
+                                                display: "flex",
+                                                flexDirection: "column",
+                                                justifyContent: "center",
+                                            }}>
                                                 <CallIcon />
                                             </Grid>
                                             <Grid item xs={10}>
@@ -171,7 +173,13 @@ const UserTable = (props) => {
                                                     value={user.mobile}
                                                     onChange={(event) => props.updateUserMobile(event, user.name, user.username)}
                                                     InputProps={{
-                                                        classes: { input: classes.emailInputField },
+                                                        sx: { 
+                                                            '& .MuiInputBase-input': {
+                                                                cursor: 'auto',
+                                                                whiteSpace: 'nowrap',
+                                                                textOverflow: 'ellipsis'
+                                                            }
+                                                        },
                                                         readOnly: true,
                                                         disableUnderline: true
                                                     }}
@@ -187,12 +195,18 @@ const UserTable = (props) => {
                                             const filledChip = ((expression === fillChipName) && (index === fillChipIndex)) || (!showAddHeader && (user.name === props.filterUser.name && user.username === props.filterUser.username))
                                             return (
                                                 <Chip
-                                                    classes={{ outlinedSecondary: classes.chipOutlinedSecondary }}
+                                                    sx={{ 
+                                                        marginRight: '1em',
+                                                        marginTop: '0.5em',
+                                                        marginBottom: '0.5em',
+                                                        '&.MuiChip-outlinedSecondary': {
+                                                            borderWidth: '1.5px'
+                                                        }
+                                                    }}
                                                     key={`${index}-${expression}`}
                                                     label={expression}
                                                     variant={filledChip ? undefined : "outlined"}
                                                     color="secondary"
-                                                    className={classes.chip}
                                                     onClick={(event) => props.setFilterUserRegex(event, expression, index)}
                                                     onDelete={props.userEdit[`${user.username}-${user.name}`] ? (event) => { props.deleteChip(event, user.name, user.username, expression) } : undefined}
                                                 />
@@ -222,7 +236,7 @@ const UserTable = (props) => {
                                                                 endAdornment: (
                                                                     <InputAdornment position="end" onClick={(event) => props.addChip(event, user.name, user.username, props.addRegexVal[`${user.username}-${user.name}`])} >
                                                                         <Tooltip title="Add" placement="bottom">
-                                                                            <AddIcon style={{ cursor: 'pointer' }} className={classes.icon} />
+                                                                            <AddIcon style={{ cursor: 'pointer', color: theme.palette.secondary.main }} />
                                                                         </Tooltip>
                                                                     </InputAdornment >
                                                                 ),
@@ -245,7 +259,7 @@ const UserTable = (props) => {
                                                                 <IconButton
                                                                     onClick={(event) => { props.applyEdit(event, user.name, user.username) }}
                                                                     size="large">
-                                                                    <DoneIcon className={classes.icon} />
+                                                                    <DoneIcon sx={{ color: theme.palette.secondary.main }} />
                                                                 </IconButton>
                                                             </Tooltip>}
                                                         <Tooltip title="Cancel" placement="bottom">
@@ -253,7 +267,7 @@ const UserTable = (props) => {
                                                                 onClick={(event) => { props.cancelEdit(event, user.name, user.username) }}
                                                                 style={{ marginLeft: '1em' }}
                                                                 size="large">
-                                                                <ClearIcon className={classes.icon} />
+                                                                <ClearIcon sx={{ color: theme.palette.secondary.main }} />
                                                             </IconButton>
                                                         </Tooltip>
                                                     </React.Fragment>
@@ -261,7 +275,7 @@ const UserTable = (props) => {
                                                         <IconButton
                                                             onClick={(event) => { props.setUserEdit(event, user.name, user.username, true) }}
                                                             size="large">
-                                                            <EditIcon className={classes.icon} />
+                                                            <EditIcon sx={{ color: theme.palette.secondary.main }} />
                                                         </IconButton>
                                                     </Tooltip>
                                                 : null
@@ -288,8 +302,10 @@ const UserTable = (props) => {
                                                 }
                                             </div>
                                             <div
-                                                className={classes.verticalMiddle}
                                                 style={{
+                                                    display: "flex",
+                                                    flexDirection: "column",
+                                                    justifyContent: "center",
                                                     marginLeft: 'auto'
                                                 }}
                                             >
@@ -299,7 +315,7 @@ const UserTable = (props) => {
                                                             <IconButton
                                                                 onClick={(event) => { props.openDialog(event, user.name, user.username) }}
                                                                 size="large">
-                                                                <EventIcon className={classes.icon} />
+                                                                <EventIcon sx={{ color: theme.palette.secondary.main }} />
                                                             </IconButton>
                                                         </Tooltip>
                                                         : null

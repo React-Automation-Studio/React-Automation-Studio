@@ -1,5 +1,4 @@
 import React from 'react';
-import makeStyles from '@mui/styles/makeStyles';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -17,34 +16,7 @@ import IconButton from '@mui/material/IconButton';
 
 import { Domain } from "mdi-material-ui/";
 
-// Styles
-const useStyles = makeStyles(theme => ({
-    boldText: {
-        fontWeight: 500,
-        textAlign: 'center',
-    },
-    button: {
-        margin: theme.spacing(1),
-    },
-    centerInBlock: {
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: 'center'
-    },
-    horizontalRight: {
-        alignItems: "flex-end"
-    },
-    verticalMiddle: {
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-    }
-}))
-
-
 const AddAreaDialog = (props) => {
-    const classes = useStyles()
 
     const lastIndex = props.data?.roles?.length - 1
 
@@ -117,7 +89,7 @@ const AddAreaDialog = (props) => {
                         variant="contained"
                         color="secondary"
                         size="small"
-                        className={classes.button}
+                        sx={{ margin: 1 }}
                         startIcon={<SupervisedUserCircleIcon />}
                         onClick={handleAddRoles}
                     >
@@ -141,15 +113,15 @@ const AddAreaDialog = (props) => {
                     >
                         <Grid item xs={2} >
                         </Grid>
-                        <Grid item xs={1} className={classes.centerInBlock}>
+                        <Grid item xs={1} sx={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
                             <SupervisedUserCircleIcon />
                         </Grid>
-                        <Grid item xs={1} className={classes.verticalMiddle} style={{ marginRight: '1rem' }}>
-                            <Typography className={classes.boldText} >
+                        <Grid item xs={1} sx={{ display: "flex", flexDirection: "column", justifyContent: "center" }} style={{ marginRight: '1rem' }}>
+                            <Typography sx={{ fontWeight: 500, textAlign: "center" }} >
                                 Role
                             </Typography>
                         </Grid>
-                        <Grid item xs={4} className={classes.verticalMiddle}>
+                        <Grid item xs={4} sx={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
                             <TextField
                                 type='text'
                                 value={props.data.roles[index] || ''}
@@ -202,15 +174,15 @@ const AddAreaDialog = (props) => {
                             justifyContent="flex-start"
                             alignItems="stretch"
                         >
-                            <Grid item xs={1} className={classes.centerInBlock}>
+                            <Grid item xs={1} sx={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
                                 <Domain />
                             </Grid>
-                            <Grid item xs={3} className={classes.verticalMiddle} style={{ marginRight: '1rem' }}>
-                                <Typography className={classes.boldText} >
+                            <Grid item xs={3} sx={{ display: "flex", flexDirection: "column", justifyContent: "center" }} style={{ marginRight: '1rem' }}>
+                                <Typography sx={{ fontWeight: 500, textAlign: "center" }} >
                                     {`${props.data.edit ? '' : 'NEW '}AREA NAME`}
                                 </Typography>
                             </Grid>
-                            <Grid item xs={7} className={classes.verticalMiddle}>
+                            <Grid item xs={7} sx={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
                                 <TextField
                                     type='text'
                                     value={props.data.area || ''}

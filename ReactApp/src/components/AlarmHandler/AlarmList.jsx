@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { alpha } from '@mui/material/styles';
-import makeStyles from '@mui/styles/makeStyles';
+import { alpha, useTheme } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 
 import List from "@mui/material/List";
@@ -25,133 +24,146 @@ import PlaylistAddOutlinedIcon from '@mui/icons-material/PlaylistAddOutlined';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-// Styles
-const useStyles = makeStyles(theme => ({
-    root: {
+const AlarmList = props => {
+    const theme = useTheme();
+
+    const getAlarmStyles = (areaName, pvDict) => {
+        const pvValue = parseInt(pvDict[areaName]);
+        const isEnabled = props.areaEnabled[areaName] && props.enableAllAreas;
+
+        if (!isEnabled) {
+            return {
+                background: theme.palette.mode === 'dark' ? theme.palette.grey[500] : theme.palette.grey[400],
+                '&:hover': {
+                    background: theme.palette.mode === 'dark' ? theme.palette.grey[400] : theme.palette.grey[300]
+                },
+                "&.Mui-selected": {
+                    background: theme.palette.mode === 'dark' ? theme.palette.grey[400] : theme.palette.grey[200],
+                    borderStyle: "solid",
+                    borderWidth: "thin",
+                    borderColor: theme.palette.primary.main
+                }
+            };
+        }
+
+        if (pvValue === 8 || pvValue === 6 || pvValue === 4) {
+            return {
+                background: props.fadeList
+                    ? `linear-gradient(45deg, ${alpha(theme.palette.alarm.major.main, theme.palette.mode === 'dark' ? 0.2 : 0.1)} 0%, ${theme.palette.alarm.major.main} 100%)`
+                    : theme.palette.alarm.major.main,
+                '&:hover': {
+                    background: props.fadeList
+                        ? `linear-gradient(45deg, ${alpha(theme.palette.alarm.major.light, theme.palette.mode === 'dark' ? 0.2 : 0.1)} 0%, ${theme.palette.alarm.major.light} 100%)`
+                        : theme.palette.alarm.major.light,
+                },
+                "&.Mui-selected": {
+                    background: props.fadeList
+                        ? `linear-gradient(45deg, ${alpha(theme.palette.alarm.major.light, theme.palette.mode === 'dark' ? 0.2 : 0.1)} 0%, ${theme.palette.alarm.major.light} 100%)`
+                        : theme.palette.alarm.major.light,
+                    borderStyle: "solid",
+                    borderWidth: "thin",
+                    borderColor: theme.palette.primary.main,
+                    '&:hover': {
+                        background: props.fadeList
+                            ? `linear-gradient(45deg, ${alpha(theme.palette.alarm.major.dark, theme.palette.mode === 'dark' ? 0.2 : 0.1)} 0%, ${theme.palette.alarm.major.dark} 100%)`
+                            : theme.palette.alarm.major.dark,
+                    },
+                }
+            };
+        } else if (pvValue === 7 || pvValue === 5 || pvValue === 3) {
+            return {
+                background: props.fadeList
+                    ? `linear-gradient(45deg, ${alpha(theme.palette.alarm.majorAcked.main, theme.palette.mode === 'dark' ? 0.2 : 0.1)} 0%, ${theme.palette.alarm.majorAcked.main} 100%)`
+                    : theme.palette.alarm.majorAcked.main,
+                '&:hover': {
+                    background: props.fadeList
+                        ? `linear-gradient(45deg, ${alpha(theme.palette.alarm.majorAcked.light, theme.palette.mode === 'dark' ? 0.2 : 0.1)} 0%, ${theme.palette.alarm.majorAcked.light} 100%)`
+                        : theme.palette.alarm.majorAcked.light,
+                },
+                "&.Mui-selected": {
+                    background: props.fadeList
+                        ? `linear-gradient(45deg, ${alpha(theme.palette.alarm.majorAcked.light, theme.palette.mode === 'dark' ? 0.2 : 0.1)} 0%, ${theme.palette.alarm.majorAcked.light} 100%)`
+                        : theme.palette.alarm.majorAcked.light,
+                    borderStyle: "solid",
+                    borderWidth: "thin",
+                    borderColor: theme.palette.primary.main,
+                    '&:hover': {
+                        background: props.fadeList
+                            ? `linear-gradient(45deg, ${alpha(theme.palette.alarm.majorAcked.dark, theme.palette.mode === 'dark' ? 0.2 : 0.1)} 0%, ${theme.palette.alarm.majorAcked.dark} 100%)`
+                            : theme.palette.alarm.majorAcked.dark,
+                    },
+                }
+            };
+        } else if (pvValue === 2) {
+            return {
+                background: props.fadeList
+                    ? `linear-gradient(45deg, ${alpha(theme.palette.alarm.minor.main, theme.palette.mode === 'dark' ? 0.2 : 0.1)} 0%, ${theme.palette.alarm.minor.main} 100%)`
+                    : theme.palette.alarm.minor.main,
+                '&:hover': {
+                    background: props.fadeList
+                        ? `linear-gradient(45deg, ${alpha(theme.palette.alarm.minor.light, theme.palette.mode === 'dark' ? 0.2 : 0.1)} 0%, ${theme.palette.alarm.minor.light} 100%)`
+                        : theme.palette.alarm.minor.light,
+                },
+                "&.Mui-selected": {
+                    background: props.fadeList
+                        ? `linear-gradient(45deg, ${alpha(theme.palette.alarm.minor.light, theme.palette.mode === 'dark' ? 0.2 : 0.1)} 0%, ${theme.palette.alarm.minor.light} 100%)`
+                        : theme.palette.alarm.minor.light,
+                    borderStyle: "solid",
+                    borderWidth: "thin",
+                    borderColor: theme.palette.primary.main,
+                    '&:hover': {
+                        background: props.fadeList
+                            ? `linear-gradient(45deg, ${alpha(theme.palette.alarm.minor.dark, theme.palette.mode === 'dark' ? 0.2 : 0.1)} 0%, ${theme.palette.alarm.minor.dark} 100%)`
+                            : theme.palette.alarm.minor.dark,
+                    },
+                }
+            };
+        } else if (pvValue === 1) {
+            return {
+                background: props.fadeList
+                    ? `linear-gradient(45deg, ${alpha(theme.palette.alarm.minorAcked.main, theme.palette.mode === 'dark' ? 0.2 : 0.1)} 0%, ${theme.palette.alarm.minorAcked.main} 100%)`
+                    : theme.palette.alarm.minorAcked.main,
+                '&:hover': {
+                    background: props.fadeList
+                        ? `linear-gradient(45deg, ${alpha(theme.palette.alarm.minorAcked.light, theme.palette.mode === 'dark' ? 0.2 : 0.1)} 0%, ${theme.palette.alarm.minorAcked.light} 100%)`
+                        : theme.palette.alarm.minorAcked.light,
+                },
+                "&.Mui-selected": {
+                    background: props.fadeList
+                        ? `linear-gradient(45deg, ${alpha(theme.palette.alarm.minorAcked.light, theme.palette.mode === 'dark' ? 0.2 : 0.1)} 0%, ${theme.palette.alarm.minorAcked.light} 100%)`
+                        : theme.palette.alarm.minorAcked.light,
+                    borderStyle: "solid",
+                    borderWidth: "thin",
+                    borderColor: theme.palette.primary.main,
+                    '&:hover': {
+                        background: props.fadeList
+                            ? `linear-gradient(45deg, ${alpha(theme.palette.alarm.minorAcked.dark, theme.palette.mode === 'dark' ? 0.2 : 0.1)} 0%, ${theme.palette.alarm.minorAcked.dark} 100%)`
+                            : theme.palette.alarm.minorAcked.dark,
+                    },
+                }
+            };
+        } else {
+            return {
+                '&:hover': {
+                },
+                "&.Mui-selected": {
+                    borderStyle: "solid",
+                    borderWidth: "thin",
+                    borderColor: theme.palette.primary.main
+                }
+            };
+        }
+    };
+
+    const nestedStyles = {
+        paddingLeft: theme.spacing(4),
+    };
+
+    const rootStyles = {
         width: '100%',
         overflowY: 'auto',
         maxHeight: '90vh',
-    },
-    nested: {
-        paddingLeft: theme.spacing(4),
-    },
-    majorAlarm: props => ({
-        background: props.fadeList
-            ? 'linear-gradient(45deg,' + alpha(theme.palette.alarm.major.main, theme.palette.mode === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.major.main) + ' 100%)'
-            : theme.palette.alarm.major.main,
-        '&:hover': {
-            background: props.fadeList
-                ? 'linear-gradient(45deg,' + alpha(theme.palette.alarm.major.light, theme.palette.mode === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.major.light) + ' 100%)'
-                : theme.palette.alarm.major.light,
-        },
-        "&.Mui-selected": {
-            background: props.fadeList
-                ? 'linear-gradient(45deg,' + alpha(theme.palette.alarm.major.light, theme.palette.mode === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.major.light) + ' 100%)'
-                : theme.palette.alarm.major.light,
-            borderStyle: "solid",
-            borderWidth: "thin",
-            borderColor: theme.palette.primary.main,
-            '&:hover': {
-                background: props.fadeList
-                    ? 'linear-gradient(45deg,' + alpha(theme.palette.alarm.major.dark, theme.palette.mode === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.major.dark) + ' 100%)'
-                    : theme.palette.alarm.major.dark,
-            },
-        }
-    }),
-    majorAlarmAcked: props => ({
-        background: props.fadeList
-            ? 'linear-gradient(45deg,' + alpha(theme.palette.alarm.majorAcked.main, theme.palette.mode === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.majorAcked.main) + ' 100%)'
-            : theme.palette.alarm.majorAcked.main,
-        '&:hover': {
-            background: props.fadeList
-                ? 'linear-gradient(45deg,' + alpha(theme.palette.alarm.majorAcked.light, theme.palette.mode === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.majorAcked.light) + ' 100%)'
-                : theme.palette.alarm.majorAcked.light,
-        },
-        "&.Mui-selected": {
-            background: props.fadeList
-                ? 'linear-gradient(45deg,' + alpha(theme.palette.alarm.majorAcked.light, theme.palette.mode === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.majorAcked.light) + ' 100%)'
-                : theme.palette.alarm.majorAcked.light,
-            borderStyle: "solid",
-            borderWidth: "thin",
-            borderColor: theme.palette.primary.main,
-            '&:hover': {
-                background: props.fadeList
-                    ? 'linear-gradient(45deg,' + alpha(theme.palette.alarm.majorAcked.dark, theme.palette.mode === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.majorAcked.dark) + ' 100%)'
-                    : theme.palette.alarm.majorAcked.dark,
-            },
-        }
-    }),
-    minorAlarm: props => ({
-        background: props.fadeList
-            ? 'linear-gradient(45deg,' + alpha(theme.palette.alarm.minor.main, theme.palette.mode === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minor.main) + ' 100%)'
-            : theme.palette.alarm.minor.main,
-        '&:hover': {
-            background: props.fadeList
-                ? 'linear-gradient(45deg,' + alpha(theme.palette.alarm.minor.light, theme.palette.mode === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minor.light) + ' 100%)'
-                : theme.palette.alarm.minor.light,
-        },
-        "&.Mui-selected": {
-            background: props.fadeList
-                ? 'linear-gradient(45deg,' + alpha(theme.palette.alarm.minor.light, theme.palette.mode === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minor.light) + ' 100%)'
-                : theme.palette.alarm.minor.light,
-            borderStyle: "solid",
-            borderWidth: "thin",
-            borderColor: theme.palette.primary.main,
-            '&:hover': {
-                background: props.fadeList
-                    ? 'linear-gradient(45deg,' + alpha(theme.palette.alarm.minor.dark, theme.palette.mode === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minor.dark) + ' 100%)'
-                    : theme.palette.alarm.minor.dark,
-            },
-        }
-    }),
-    minorAlarmAcked: props => ({
-        background: props.fadeList
-            ? 'linear-gradient(45deg,' + alpha(theme.palette.alarm.minorAcked.main, theme.palette.mode === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minorAcked.main) + ' 100%)'
-            : theme.palette.alarm.minorAcked.main,
-        '&:hover': {
-            background: props.fadeList
-                ? 'linear-gradient(45deg,' + alpha(theme.palette.alarm.minorAcked.light, theme.palette.mode === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minorAcked.light) + ' 100%)'
-                : theme.palette.alarm.minorAcked.light,
-        },
-        "&.Mui-selected": {
-            background: props.fadeList
-                ? 'linear-gradient(45deg,' + alpha(theme.palette.alarm.minorAcked.light, theme.palette.mode === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minorAcked.light) + ' 100%)'
-                : theme.palette.alarm.minorAcked.light,
-            borderStyle: "solid",
-            borderWidth: "thin",
-            borderColor: theme.palette.primary.main,
-            '&:hover': {
-                background: props.fadeList
-                    ? 'linear-gradient(45deg,' + alpha(theme.palette.alarm.minorAcked.dark, theme.palette.mode === 'dark' ? 0.2 : 0.1) + ' 0%, ' + (theme.palette.alarm.minorAcked.dark) + ' 100%)'
-                    : theme.palette.alarm.minorAcked.dark,
-            },
-        }
-    }),
-    noAlarm: props => ({
-        '&:hover': {
-        },
-        "&.Mui-selected": {
-            borderStyle: "solid",
-            borderWidth: "thin",
-            borderColor: theme.palette.primary.main
-        }
-    }),
-    disabled: props => ({
-        background: theme.palette.mode === 'dark' ? theme.palette.grey[500] : theme.palette.grey[400],
-        '&:hover': {
-            background: theme.palette.mode === 'dark' ? theme.palette.grey[400] : theme.palette.grey[300]
-        },
-        "&.Mui-selected": {
-            background: theme.palette.mode === 'dark' ? theme.palette.grey[400] : theme.palette.grey[200],
-            borderStyle: "solid",
-            borderWidth: "thin",
-            borderColor: theme.palette.primary.main
-        }
-    })
-}));
-
-const AlarmList = props => {
-    const classes = useStyles(props);
+    };
 
     return (
         <React.Fragment>
@@ -166,7 +178,7 @@ const AlarmList = props => {
                         <List
                             component="nav"
                             aria-labelledby="nested-list-subheader"
-                            className={classes.root}
+                            sx={rootStyles}
                         >
                             {props.areaNames.map((area, areaIndex) => {
                                 return (
@@ -178,18 +190,7 @@ const AlarmList = props => {
                                             selected={props.areaSelectedIndex === `${area["area"]}`}
                                             onClick={event => props.listItemClick(event, `${area["area"]}`)}
                                             onContextMenu={event => props.listItemRightClick(event, `${area["area"]}`)}
-                                            classes={(props.areaEnabled[`${area["area"]}`] && props.enableAllAreas
-                                                ? parseInt(props.areaPVDict[`${area["area"]}`]) === 8 || parseInt(props.areaPVDict[`${area["area"]}`]) === 6 || parseInt(props.areaPVDict[`${area["area"]}`]) === 4
-                                                    ? { root: classes.majorAlarm }
-                                                    : parseInt(props.areaPVDict[`${area["area"]}`]) === 7 || parseInt(props.areaPVDict[`${area["area"]}`]) === 5 || parseInt(props.areaPVDict[`${area["area"]}`]) === 3
-                                                        ? { root: classes.majorAlarmAcked }
-                                                        : parseInt(props.areaPVDict[`${area["area"]}`]) === 2
-                                                            ? { root: classes.minorAlarm }
-                                                            : parseInt(props.areaPVDict[`${area["area"]}`]) === 1
-                                                                ? { root: classes.minorAlarmAcked }
-                                                                : { root: classes.noAlarm }    // noAlarm
-                                                : { root: classes.disabled }
-                                            )}
+                                            sx={getAlarmStyles(`${area["area"]}`, props.areaPVDict)}
                                         >
                                             <ListItemText primary={area["area"]} />
                                             {area["subAreas"] ?
@@ -246,7 +247,7 @@ const AlarmList = props => {
                                                         <List component="div" disablePadding >
                                                             <ListItem
                                                                 button
-                                                                className={classes.nested}
+                                                                sx={nestedStyles}
                                                                 onClick={event => props.addNewPV(event, `${area["area"]}`)}
                                                             >
                                                                 <ListItemIcon >
@@ -256,7 +257,7 @@ const AlarmList = props => {
                                                             </ListItem>
                                                             <ListItem
                                                                 button
-                                                                className={classes.nested}
+                                                                sx={nestedStyles}
                                                                 onClick={event => props.addNewSubArea(event, `${area["area"]}`)}
                                                             >
                                                                 <ListItemIcon >
@@ -266,7 +267,7 @@ const AlarmList = props => {
                                                             </ListItem>
                                                             <ListItem
                                                                 button
-                                                                className={classes.nested}
+                                                                sx={nestedStyles}
                                                                 onClick={event => props.editArea(event, `${area["area"]}`)}
                                                             >
                                                                 <ListItemIcon >
@@ -276,7 +277,7 @@ const AlarmList = props => {
                                                             </ListItem>
                                                             <ListItem
                                                                 button
-                                                                className={classes.nested}
+                                                                sx={nestedStyles}
                                                                 onClick={event => props.deleteArea(event, `${area["area"]}`)}
                                                             >
                                                                 <ListItemIcon >
@@ -300,22 +301,13 @@ const AlarmList = props => {
                                                                     <ListItem
                                                                         button
                                                                         divider
-                                                                        className={classes.nested}
+                                                                        sx={{
+                                                                            ...nestedStyles,
+                                                                            ...getAlarmStyles(`${area["area"]}=${subArea}`, props.areaPVDict)
+                                                                        }}
                                                                         selected={props.areaSelectedIndex === `${area["area"]}=${subArea}`}
                                                                         onClick={event => props.listItemClick(event, `${area["area"]}=${subArea}`)}
                                                                         onContextMenu={event => props.listItemRightClick(event, `${area["area"]}=${subArea}`)}
-                                                                        classes={(props.areaEnabled[`${area["area"]}=${subArea}`] && props.enableAllAreas
-                                                                            ? parseInt(props.areaPVDict[`${area["area"]}=${subArea}`]) === 8 || parseInt(props.areaPVDict[`${area["area"]}=${subArea}`]) === 6 || parseInt(props.areaPVDict[`${area["area"]}=${subArea}`]) === 4
-                                                                                ? { root: classes.majorAlarm }
-                                                                                : parseInt(props.areaPVDict[`${area["area"]}=${subArea}`]) === 7 || parseInt(props.areaPVDict[`${area["area"]}=${subArea}`]) === 5 || parseInt(props.areaPVDict[`${area["area"]}=${subArea}`]) === 3
-                                                                                    ? { root: classes.majorAlarmAcked }
-                                                                                    : parseInt(props.areaPVDict[`${area["area"]}=${subArea}`]) === 2
-                                                                                        ? { root: classes.minorAlarm }
-                                                                                        : parseInt(props.areaPVDict[`${area["area"]}=${subArea}`]) === 1
-                                                                                            ? { root: classes.minorAlarmAcked }
-                                                                                            : { root: classes.noAlarm }    // noAlarm
-                                                                            : { root: classes.disabled }
-                                                                        )}
                                                                     >
                                                                         <ListItemText primary={`- ${subArea}`} />
 
@@ -358,7 +350,7 @@ const AlarmList = props => {
                                                                                             <List component="div" disablePadding >
                                                                                                 <ListItem
                                                                                                     button
-                                                                                                    className={classes.nested}
+                                                                                                    sx={nestedStyles}
                                                                                                     onClick={event => props.addNewPV(event, `${area["area"]}=${subArea}`)}
                                                                                                 >
                                                                                                     <ListItemIcon >
@@ -368,7 +360,7 @@ const AlarmList = props => {
                                                                                                 </ListItem>
                                                                                                 <ListItem
                                                                                                     button
-                                                                                                    className={classes.nested}
+                                                                                                    sx={nestedStyles}
                                                                                                     onClick={event => props.editArea(event, `${area["area"]}=${subArea}`)}
                                                                                                 >
                                                                                                     <ListItemIcon >
@@ -378,7 +370,7 @@ const AlarmList = props => {
                                                                                                 </ListItem>
                                                                                                 <ListItem
                                                                                                     button
-                                                                                                    className={classes.nested}
+                                                                                                    sx={nestedStyles}
                                                                                                     onClick={event => props.deleteArea(event, `${area["area"]}=${subArea}`)}
                                                                                                 >
                                                                                                     <ListItemIcon >

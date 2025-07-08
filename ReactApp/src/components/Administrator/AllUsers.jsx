@@ -8,7 +8,6 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import makeStyles from '@mui/styles/makeStyles';
 import IconButton from '@mui/material/IconButton';
 import Checkbox from '@mui/material/Checkbox';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -27,22 +26,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    padding: theme.spacing(2)
-  },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-  },
-}));
-
-
 const AllUsers = (props) => {
-  const classes = useStyles();
   const allUsers = useAllUsers(
     {
       dbURL: 'mongodb://ADMIN_DATABASE:rasAdminDb:users:Parameters:""'
@@ -115,7 +99,7 @@ const AllUsers = (props) => {
         >
           <Grid item xs={12} sm={12} md={12} lg={12} >
             <Card style={{maxHeight:"85vh",overflowY:"scroll"}}>
-              <Table className={classes.table} stickyHeader size="small" aria-label="sticky table">
+              <Table stickyHeader size="small" aria-label="sticky table">
                 <TableHead>
                   <TableRow>
                     <TableCell colSpan={11} align="right"><AddUsers/></TableCell>

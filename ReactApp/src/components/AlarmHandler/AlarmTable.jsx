@@ -42,7 +42,6 @@ const AlarmTable = props => {
     const theme = useTheme()
     const myRef = useRef()
 
-    // Styles converted from makeStyles
     const nestedSx = {
         paddingLeft: theme.spacing(4),
     };
@@ -238,7 +237,7 @@ const AlarmTable = props => {
                                             onClick={() => {
                                                 props.alarmContextClose()
                                                 props.setAlarmAdminPVExpand(false)
-                                                window.open("/Probe?" + JSON.stringify({ pvname:  value["name"], probeType: 'readOnly' }),
+                                                window.open("/Probe?" + JSON.stringify({ pvname: value["name"], probeType: 'readOnly' }),
                                                     "_blank", "noreferrer")
                                             }}
                                         >
@@ -296,7 +295,7 @@ const AlarmTable = props => {
                                     {props.debug
                                         ? <TableCell>
                                             <TextInput
-                                                pv={ value["name"]}
+                                                pv={value["name"]}
                                                 usePvLabel={true}
                                                 usePvPrecision={true}
                                                 usePvUnits={true}
@@ -321,7 +320,7 @@ const AlarmTable = props => {
                                     </Tooltip>
                                     <TableCell align="center">
                                         <TextUpdateStateful
-                                            pv={ value["name"]}
+                                            pv={value["name"]}
                                             useStringValue={true}
                                             usePvUnits={true}
                                             disableContextMenu={true}

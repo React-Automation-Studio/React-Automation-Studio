@@ -1,4 +1,5 @@
-Current Release: V6.1.0
+Current Release: V7.0.0
+[Migrate from-V6.x.x to V7.x.x](docs/migrate-from-V6-to-V7.md)
 
 [Migrate from-V5.x.x to V6.x.x](docs/migrate-from-V5-to-V6.md)
 
@@ -563,19 +564,28 @@ or: https://doi.org/10.18429/JACoW-ICALEPCS2023-FR2BCO01
 
 # FAQ
 
-### 1.   Which operating systems are supported?
+### 1. Which operating systems are supported?
 
   The client is web based and can be accessed from any modern browser on any modern OS..
 
   We currently only build and test on Ubuntu and Chrome. We unfortunately don't have the time to test on the other systems. In theory all up to date Linux systems should be supported.
 
-### 2.  Are other systems such as  Windows or Mac OS supported?
+### 2.  Are other systems such as Windows or Mac OS supported?
 
   The docker containers for RAS run in network  mode host. This is done to enable EPICS to communicate seamlessly with any IOC's on the same subnet as the host. Other OSes such as Windows may not support the host mode and will run in the bridged mode. This may break the communication between the micro services. It is therefore recommended to run the RAS containers on a Linux VM that is minimally running Ubuntu Server. Please ensure the the VM network interface is assigned an IP on the same subnet as your EPICS network in order for communication with the IOC's to occur seamlessly.
 
 
 
 # Changelog
+  V7.0.0 Wednesday 9 July 2025
+  <br />
+  Major Updates:
+  <ul>
+    <li>Updated to Updated to MUI V7 </li>
+    <li>Updated to the latest Node LTS 22.17.0 </li>
+    <li>Package updates to frontend modules</li>
+    <li>Removed legacy MUI styling</li>
+  </ul>
 
 V6.1.0 Monday 17 February 2025
   <br />

@@ -416,6 +416,17 @@ const MainDashboard = (props) => {
                   }}
                   component="div"
                 >
+                  V7.0.0 Wednesday 9 July 2025
+                  <br />
+                  Major Updates:
+                  <ul>
+                    <li>Updated to Updated to MUI V7 </li>
+                    <li>Updated to the latest Node LTS 22.17.0 </li>
+                    <li>Package updates to frontend modules</li>
+                    <li>Removed legacy MUI styling</li>
+                  </ul>
+                
+
                   V6.1.0 Monday 17 February 2025
                   <br />
                   Minor Updates:

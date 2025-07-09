@@ -6,7 +6,6 @@ import TextOutput from '../../BaseComponents/TextOutput';
 import Slider from '../../BaseComponents/Slider';
 import Grid from '@mui/material/Grid';
 import ToggleButton from '../../BaseComponents/ToggleButton';
-import withStyles from '@mui/styles/withStyles';
 import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom'
 import ThumbWheel from '../../BaseComponents/ThumbWheel';

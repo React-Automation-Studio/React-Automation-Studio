@@ -7,21 +7,17 @@ import ToggleButton from '../../BaseComponents/ToggleButton';
 
 import Paper from '@mui/material/Paper';
 
-import withStyles from '@mui/styles/withStyles';
+import { useTheme } from '@mui/material/styles';
 
 import ThumbWheel from '../../BaseComponents/ThumbWheel';
 import Close from '@mui/icons-material/Close';
 import {replaceSystemMacros} from '../../SystemComponents/Utils/macroReplacement';
 
-const styles = theme => ({
-  body1: theme.typography.body1,
-});
-
 const EditorSlitXY = (props) => {
+  const theme = useTheme();
   const [system]=useState(replaceSystemMacros(props.system,props.system.macros))
-  const { classes } = props;
   return (
-    <div className={classes.body1} style={{ paddingRight: 12 }}>
+    <div style={{ ...theme.typography.body1, paddingRight: 12 }}>
       <Grid container
         style={{ paddingLeft: 12, paddingRight: 24, }}        
         spacing={2}
@@ -33,7 +29,7 @@ const EditorSlitXY = (props) => {
           <Close fontSize="small" onClick={props.handleCloseEditor} />
         </Grid>
       </Grid>
-      <Paper style={{ padding: 8 }} elevation={props.theme.palette.paperElevation}>
+      <Paper style={{ padding: 8 }} elevation={theme.palette.paperElevation}>
         <Grid container
           direction="row"
           justifyContent="flex-start"
@@ -94,7 +90,7 @@ const EditorSlitXY = (props) => {
           </Grid>
         </Grid>
       </Paper>
-      <Paper style={{ marginTop: 6, padding: 8 }} elevation={props.theme.palette.paperElevation} >
+      <Paper style={{ marginTop: 6, padding: 8 }} elevation={theme.palette.paperElevation} >
         <Grid container
           direction="row"
           justifyContent="flex-start"
@@ -146,9 +142,9 @@ const EditorSlitXY = (props) => {
           </Grid>
         </Grid>
       </Paper>
-      <div className={classes.body1} style={{ marginTop: 12 }}>
+      <div style={{ ...theme.typography.body1, marginTop: 12 }}>
         {system.displayName + ": Y"}
-        <Paper style={{ padding: 12 }} elevation={props.theme.palette.paperElevation}>
+        <Paper style={{ padding: 12 }} elevation={theme.palette.paperElevation}>
           <Grid container
             direction="row"
             justifyContent="flex-start"
@@ -203,7 +199,7 @@ const EditorSlitXY = (props) => {
             </Grid>
           </Grid>
         </Paper>
-        <Paper style={{ marginTop: 6, padding: 8 }} elevation={props.theme.palette.paperElevation} >
+        <Paper style={{ marginTop: 6, padding: 8 }} elevation={theme.palette.paperElevation} >
           <Grid container
             direction="row"
             justifyContent="flex-start"
@@ -260,4 +256,4 @@ const EditorSlitXY = (props) => {
   );
 }
 
-export default withStyles(styles, { withTheme: true })(EditorSlitXY)
+export default EditorSlitXY

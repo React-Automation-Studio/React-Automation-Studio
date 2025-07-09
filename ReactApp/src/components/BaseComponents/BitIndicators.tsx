@@ -1,5 +1,6 @@
 import React from "react";
-import { Grid, FormControlLabel, SvgIcon, useTheme } from "@mui/material";
+import { FormControlLabel, SvgIcon, useTheme } from "@mui/material";
+import Grid from '@mui/material/GridLegacy';
 import { Lens } from "@mui/icons-material";
 import Widget from "../SystemComponents/Widgets/Widget";
 

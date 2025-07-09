@@ -7,7 +7,7 @@ import TextInput from '../../BaseComponents/TextInput';
 import TextOutput from '../../BaseComponents/TextOutput';
 import Slider from '../../BaseComponents/Slider';
 
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/GridLegacy';
 
 import ToggleButton from '../../BaseComponents/ToggleButton';
 

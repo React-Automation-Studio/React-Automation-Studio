@@ -7,7 +7,7 @@ import SelectionInput from '../../BaseComponents/SelectionInput';
 import TextOutput from '../../BaseComponents/TextOutput';
 import Slider from '../../BaseComponents/Slider';
 import TextUpdate from '../../BaseComponents/TextUpdate';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/GridLegacy';
 import ToggleButton from '../../BaseComponents/ToggleButton';
 import { useTheme } from '@mui/material/styles';
 import ThumbWheel from '../../BaseComponents/ThumbWheel';

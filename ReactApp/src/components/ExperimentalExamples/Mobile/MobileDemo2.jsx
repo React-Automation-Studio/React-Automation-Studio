@@ -5,7 +5,7 @@ import TextOutput from "../../BaseComponents/TextOutput";
 import Slider from "../../BaseComponents/Slider";
 import GraphY from "../../BaseComponents/GraphY";
 
-import Grid from "@mui/material/Grid";
+import Grid from '@mui/material/GridLegacy';
 import Switch from "../../BaseComponents/Switch";
 import SelectionInput from "../../BaseComponents/SelectionInput";
 import SelectionList from "../../BaseComponents/SelectionList";

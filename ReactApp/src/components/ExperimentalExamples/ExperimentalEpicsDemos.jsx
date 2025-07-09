@@ -11,7 +11,7 @@ import EpicsMbboDebug from "../ExperimentalGroupedComponents/EpicsMbboDebug";
 import TextOutput from "../BaseComponents/TextOutput";
 import Slider from "../BaseComponents/Slider";
 import GraphY from "../BaseComponents/GraphY";
-import Grid from "@mui/material/Grid";
+import Grid from '@mui/material/GridLegacy';
 import Card from "@mui/material/Card";
 import SideBar from "../SystemComponents/SideBar";
 import MobileDemo2 from "./Mobile/MobileDemo2";

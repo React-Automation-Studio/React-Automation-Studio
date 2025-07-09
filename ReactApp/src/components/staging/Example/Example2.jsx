@@ -3,7 +3,7 @@ import TextInput from "../../../components/BaseComponents/TextInput";
 import TextOutput from "../../../components/BaseComponents/TextOutput";
 import Slider from "../../BaseComponents/Slider";
 import GraphY from "../../../components/BaseComponents/GraphY";
-import Grid from "@mui/material/Grid";
+import Grid from '@mui/material/GridLegacy';
 import SideBar from "../../../components/SystemComponents/SideBar";
 import { lime } from "@mui/material/colors";
 import {useTheme} from "@mui/material/styles";

@@ -4,7 +4,7 @@ import AutomationStudioContext from "../SystemComponents/AutomationStudioContext
 import TextInput from "../BaseComponents/TextInput";
 import TextOutput from "../BaseComponents/TextOutput";
 import Slider from "../BaseComponents/Slider";
-import Grid from "@mui/material/Grid";
+import Grid from '@mui/material/GridLegacy';
 import GraphY from "../BaseComponents/GraphY";
 import TextField from "@mui/material/TextField";
 import { useLocation } from "react-router-dom";

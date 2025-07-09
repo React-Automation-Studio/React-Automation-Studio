@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import useAllUsers from './adminDbHooks/useAllUsers'
 import useUAGs from './adminDbHooks/useUAGs'
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/GridLegacy';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';

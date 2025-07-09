@@ -9,7 +9,7 @@ import TextUpdate from "../BaseComponents/TextUpdate";
 import TextInput from "../BaseComponents/TextInput";
 import ToggleButton from "../BaseComponents/ToggleButton";
 import TextOutput from "../BaseComponents/TextOutput";
-import Grid from "@mui/material/Grid";
+import Grid from '@mui/material/GridLegacy';
 import Button from "@mui/material/Button";
 import AppBar from "@mui/material/AppBar";
 import Tabs from "@mui/material/Tabs";

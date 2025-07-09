@@ -7,7 +7,7 @@ By default the ArrayContainer shows only 10 elements per time but this value can
 The ArrayContainer does not know how many items there are in the PV value. For this reason it expects a props with the array length. By default the maxItemsCount is 100
 
 ```js
-import { Grid, Typography } from "@mui/material";
+import { GridLegacy as Grid, Typography } from "@mui/material";
 import TextInput from "../BaseComponents/TextInput";
 import TextOutput from "../BaseComponents/TextOutput";
 

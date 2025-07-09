@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 
 import { useTheme } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
-import Grid from "@mui/material/Grid";
+import Grid from '@mui/material/GridLegacy';
 
 import Layout from "../UI/Layout/ComposedLayouts/TraditionalLayout";
 import SelectionList from "../BaseComponents/SelectionList";

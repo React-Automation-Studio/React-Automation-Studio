@@ -5,7 +5,7 @@ import AutomationStudioContext from '../../SystemComponents/AutomationStudioCont
 import TextInput from '../../BaseComponents/TextInput';
 import TextOutput from '../../BaseComponents/TextOutput';
 import Slider from '../../BaseComponents/Slider';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/GridLegacy';
 import ToggleButton from '../../BaseComponents/ToggleButton';
 import { useTheme } from '@mui/material/styles';
 import Button from '@mui/material/Button';

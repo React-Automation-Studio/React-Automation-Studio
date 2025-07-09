@@ -1,6 +1,6 @@
 import { SliderRoot } from '@mui/material';
 import  Slider  from './Slider';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/GridLegacy';
 import type { Meta, StoryObj } from '@storybook/react';
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export

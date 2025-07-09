@@ -11,7 +11,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Divider from "@mui/material/Divider";
-import Grid from "@mui/material/Grid";
+import Grid from '@mui/material/GridLegacy';
 import Radio from "@mui/material/Radio";
 import Switch from "@mui/material/Switch";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";

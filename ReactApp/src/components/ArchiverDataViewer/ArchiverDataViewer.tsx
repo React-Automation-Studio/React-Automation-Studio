@@ -25,7 +25,7 @@ import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
 
 import Button from "@mui/material/Button";
 import Plot from "react-plotly.js";
-import Grid from "@mui/material/Grid";
+import Grid from '@mui/material/GridLegacy';
 import { isMobile } from "react-device-detect";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import TextField from "@mui/material/TextField";

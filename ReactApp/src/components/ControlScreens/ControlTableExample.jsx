@@ -5,7 +5,7 @@ import { useTheme } from "@mui/material/styles";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
-import Grid from "@mui/material/Grid";
+import Grid from '@mui/material/GridLegacy';
 import ControlRightEx1 from "../ControlScreens/GridComponents/ControlRightEx1";
 import ControlRightSteererXY from "../ControlScreens/GridComponents/ControlRightSteererXY";
 import ControlRightSlitXY from "../ControlScreens/GridComponents/ControlRightSlitXY";

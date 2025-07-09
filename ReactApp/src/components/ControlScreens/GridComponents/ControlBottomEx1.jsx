@@ -2,7 +2,7 @@
 import React from 'react'
 
 import AutomationStudioContext from '../../SystemComponents/AutomationStudioContext';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/GridLegacy';
 import ToggleButton from '../../BaseComponents/ToggleButton';
 console.warn("This example is deprecated and will be removed in a future release")
 

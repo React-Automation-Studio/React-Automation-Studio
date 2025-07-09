@@ -5,7 +5,7 @@ import BeamLineCanvas from './BeamLineCanvas';
 import HorizontalBeamline from './HorizontalBeamline';
 import EditorSlitXY from '../ControlScreens/Components/EditorSlitXY';
 import React,{useState} from 'react';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/GridLegacy';
 const [displayEditor,setDisplayEditor]=useState(false);
 
   <Grid container direction="row" justifyContent="flex-start" alignItems="flex-start" >

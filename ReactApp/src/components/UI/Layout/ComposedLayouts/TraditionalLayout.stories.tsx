@@ -2,7 +2,7 @@ import TraditionalLayout from "./TraditionalLayout";
 import Content from "../../../../docs/content/LayoutContent";
 import type { Meta, StoryObj } from "@storybook/react";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import Grid from "@mui/material/Grid";
+import Grid from '@mui/material/GridLegacy';
 import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";

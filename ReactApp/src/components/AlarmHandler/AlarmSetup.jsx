@@ -10,7 +10,7 @@ import React, {
 import { useTheme } from "@mui/material/styles";
 import { alpha } from "@mui/material/styles";
 import AutomationStudioContext from "../SystemComponents/AutomationStudioContext";
-import Grid from "@mui/material/Grid";
+import Grid from '@mui/material/GridLegacy';
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 

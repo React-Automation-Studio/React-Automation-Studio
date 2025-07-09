@@ -2,7 +2,7 @@ import React from "react";
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
-import Grid from "@mui/material/Grid";
+import Grid from '@mui/material/GridLegacy';
 import TextInput from "../../BaseComponents/TextInput";
 import TextOutput from "../../BaseComponents/TextOutput";
 import Slider from "../../BaseComponents/Slider";

@@ -4,7 +4,7 @@ import AutomationStudioContext from '../SystemComponents/AutomationStudioContext
 import TextInput from '../BaseComponents/TextInput';
 import TextOutput from '../BaseComponents/TextOutput';
 import TextUpdate from '../BaseComponents/TextUpdate';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/GridLegacy';
 
 
 class EpicsStringOutDebug extends React.Component {

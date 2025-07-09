@@ -5,7 +5,7 @@ import TextInput from '../BaseComponents/TextInput';
 import SelectionInput from '../BaseComponents/SelectionInput';
 import SelectionList from '../BaseComponents/SelectionList';
 import TextOutput from '../BaseComponents/TextOutput';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/GridLegacy';
 import RadioButtonGroup from '../BaseComponents/RadioButtonGroup';
 
 const EpicsMbboDebug = (props) => {

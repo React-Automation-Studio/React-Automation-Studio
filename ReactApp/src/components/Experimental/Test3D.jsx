@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useTheme } from "@mui/material/styles";
 import TextInput from "../BaseComponents/TextInput";
 import Slider from "../BaseComponents/Slider";
-import Grid from "@mui/material/Grid";
+import Grid from '@mui/material/GridLegacy';
 import ThreeScene from "../Experimental/ThreeScene";
 import Card from "@mui/material/Card";
 import TraditionalLayout from "../UI/Layout/ComposedLayouts/TraditionalLayout";

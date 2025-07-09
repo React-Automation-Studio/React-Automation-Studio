@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useTheme } from "@mui/material/styles";
 
 import Slider from "../BaseComponents/Slider";
-import Grid from "@mui/material/Grid";
+import Grid from '@mui/material/GridLegacy';
 
 import ControlRightEx1 from "../ControlScreens/GridComponents/ControlRightEx1";
 import ControlTopEx1 from "../ControlScreens/GridComponents/ControlTopEx1";

@@ -9,7 +9,7 @@ import React, {
 
 import { useTheme } from "@mui/material/styles";
 import { alpha } from "@mui/material/styles";
-import Grid from "@mui/material/Grid";
+import Grid from '@mui/material/GridLegacy';
 import Paper from "@mui/material/Paper";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";

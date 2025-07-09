@@ -4,7 +4,7 @@ import React, { useState, useContext } from 'react'
 import AutomationStudioContext from '../../SystemComponents/AutomationStudioContext';
 import TextInput from '../../BaseComponents/TextInput';
 import TextOutput from '../../BaseComponents/TextOutput';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/GridLegacy';
 import ToggleButton from '../../BaseComponents/ToggleButton';
 
 import Paper from '@mui/material/Paper';

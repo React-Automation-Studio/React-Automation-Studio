@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTheme, useMediaQuery } from '@mui/material/styles';
 
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/GridLegacy';
 
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';

@@ -11,7 +11,7 @@ import TextOutput from "../BaseComponents/TextOutput";
 import Slider from "../BaseComponents/Slider";
 import GraphY from "../BaseComponents/GraphY";
 import ArrayContainer from "../CompoundComponents/ArrayContainer";
-import Grid from "@mui/material/Grid";
+import Grid from '@mui/material/GridLegacy';
 
 import Card from "@mui/material/Card";
 

@@ -3,7 +3,7 @@ import BeamLineCanvas from "./BeamLineCanvas";
 import HorizontalBeamline from "./HorizontalBeamline";
 import EditorSinglePS from "../ControlScreens/Components/EditorSinglePS";
 import React, { useState } from "react";
-import Grid from "@mui/material/Grid";
+import Grid from '@mui/material/GridLegacy';
 import SteererYMagnet from "./SteererYMagnet";
 export default {
   component: SteererYMagnet,

@@ -14,12 +14,15 @@ import Card from '@mui/material/Card';
 
 import Button from '@mui/material/Button';
 import {Link} from 'react-router-dom'
+import { useLocation } from "react-router-dom";
 
 const SettingsSinglePS = (props) => {
   const context = useContext(AutomationStudioContext);
+  const location = useLocation();
   const theme = useTheme();
   
-  const system=JSON.parse(decodeURIComponent(props.location.search.substr(1))) ;
+  const system=JSON.parse(decodeURIComponent(location.search.substr(1))) ;
+  console.log("SettingsSinglePS system", system);
   return (
     <Grid container
       direction="row"

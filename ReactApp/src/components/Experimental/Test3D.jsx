@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import withStyles from "@mui/styles/withStyles";
+import { useTheme } from "@mui/material/styles";
 import TextInput from "../BaseComponents/TextInput";
 import Slider from "../BaseComponents/Slider";
 import Grid from "@mui/material/Grid";
@@ -7,18 +7,8 @@ import ThreeScene from "../Experimental/ThreeScene";
 import Card from "@mui/material/Card";
 import TraditionalLayout from "../UI/Layout/ComposedLayouts/TraditionalLayout";
 
-const styles = (theme) => ({
-  root: {
-    flexGrow: 1,
-    padding: theme.spacing(1) * 2,
-  },
-  paper: {
-    padding: theme.spacing(1) * 2,
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-  },
-});
 const Test3D = (props) => {
+  const theme = useTheme();
   const ref = useRef(null);
   const [width, setWidth] = useState(null);
   const [height, setHeight] = useState(null);
@@ -117,4 +107,4 @@ const Test3D = (props) => {
   );
 };
 
-export default withStyles(styles)(Test3D);
+export default Test3D;

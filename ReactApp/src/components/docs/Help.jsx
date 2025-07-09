@@ -1,5 +1,5 @@
-import React from "react";
-import withStyles from "@mui/styles/withStyles";
+import React, { useState } from "react";
+import { useTheme } from "@mui/material/styles";
 
 import Paper from "@mui/material/Paper";
 
@@ -17,28 +17,24 @@ function TabContainer(props) {
   );
 }
 
-const styles = (theme) => ({
-  root: {
-    flexGrow: 1,
-    width: "100%",
-    backgroundColor: theme.palette.background.paper,
-  },
-});
+const Help = () => {
+  const theme = useTheme();
+  const [value, setValue] = useState(0);
 
-class Help extends React.Component {
-  state = {
-    value: 0,
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
   };
 
-  handleChange = (event, value) => {
-    this.setState({ value });
-  };
-
-  render() {
-    return (
-      <React.Fragment>
-        <SideBar />
-        <Paper>
+  return (
+    <React.Fragment>
+      <SideBar />
+      <Paper
+        sx={{
+          flexGrow: 1,
+          width: "100%",
+          backgroundColor: theme.palette.background.paper,
+        }}
+      >
           <Container maxWidth="md">
             <h1>React Automation Studio Help</h1>
             <p style={{ textAlign: "justify" }}>
@@ -99,7 +95,6 @@ class Help extends React.Component {
         </Paper>
       </React.Fragment>
     );
-  }
-}
+  };
 
-export default withStyles(styles)(Help);
+export default Help;

@@ -1,5 +1,5 @@
 import React from "react";
-import withStyles from "@mui/styles/withStyles";
+import { useTheme } from "@mui/material/styles";
 
 import TextInput from "../../BaseComponents/TextInput";
 import TextOutput from "../../BaseComponents/TextOutput";
@@ -23,74 +23,63 @@ import ProgressBar from "../../BaseComponents/ProgressBar";
 import StyledIconIndicator from "../../BaseComponents/StyledIconIndicator";
 
 import TraditionalLayout from "../../UI/Layout/ComposedLayouts/TraditionalLayout";
-const styles = (theme) => ({
-  root: {
-    flexGrow: 1,
-    padding: 16,
-  },
-  paper: {
-    padding: theme.spacing(1) * 2,
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-  },
-});
 
-class MobileDemo2 extends React.Component {
-  render() {
-    const { classes } = this.props;
-    return (
-      <div style={{ overflowX: "hidden" }}>
-        {typeof this.props.nosidebar === "undefined" && (
-          <TraditionalLayout
-            title="Mobile Demo 2"
-            denseAppBar
-            alignTitle="center"
-          ></TraditionalLayout>
-        )}
-        <div style={{ padding: 16 }}>
-          <div>
-            <Grid container spacing={2}>
-              <Grid item xs={12} lg={6}>
-                <div style={{ height: "25vh" }}>
-                  <GraphY
-                    pvs={["testIOC:test4", "testIOC:test5"]}
-                    legend={["Sine Wave ", "Amplitude"]}
-                  />
-                </div>
-              </Grid>
-              <Grid item xs={12} lg={6}>
-                <div style={{ height: "25vh" }}>
-                  <GraphY
-                    pvs={["testIOC:amplitude"]}
-                    legend={["Instantaneous Amplitude"]}
-                    maxLength={1000}
-                    lineColor={[
-                      this.props.theme.palette.reactVis.lineColors[1],
-                    ]}
-                  />
-                </div>
-              </Grid>
-              <Grid item xs={12} lg={12}>
-                <Slider
-                  pv="$(device):amplitude"
-                  macros={{ "$(device)": "testIOC" }}
-                  usePvMinMax={true}
-                  min={1000}
-                  max={500}
-                  usePvLabel={true}
+const MobileDemo2 = (props) => {
+  const theme = useTheme();
+  
+  return (
+    <div style={{ overflowX: "hidden" }}>
+      {typeof props.nosidebar === "undefined" && (
+        <TraditionalLayout
+          title="Mobile Demo 2"
+          denseAppBar
+          alignTitle="center"
+        ></TraditionalLayout>
+      )}
+      <div style={{ padding: 16 }}>
+        <div>
+          <Grid container spacing={2}>
+            <Grid item xs={12} lg={6}>
+              <div style={{ height: "25vh" }}>
+                <GraphY
+                  pvs={["testIOC:test4", "testIOC:test5"]}
+                  legend={["Sine Wave ", "Amplitude"]}
                 />
-              </Grid>
+              </div>
             </Grid>
-          </div>
+            <Grid item xs={12} lg={6}>
+              <div style={{ height: "25vh" }}>
+                <GraphY
+                  pvs={["testIOC:amplitude"]}
+                  legend={["Instantaneous Amplitude"]}
+                  maxLength={1000}
+                  lineColor={[
+                    theme.palette.reactVis.lineColors[1],
+                  ]}
+                />
+              </div>
+            </Grid>
+            <Grid item xs={12} lg={12}>
+              <Slider
+                pv="$(device):amplitude"
+                macros={{ "$(device)": "testIOC" }}
+                usePvMinMax={true}
+                min={1000}
+                max={500}
+                usePvLabel={true}
+              />
+            </Grid>
+          </Grid>
         </div>
-        <div className={classes.root}>
-          <Grid
-            container
-            spacing={2}
-            direction="row"
-            justifyContent="flex-start"
-            alignItems="center"
-          >
+      </div>
+      <div style={{ flexGrow: 1, padding: 16 }}>
+        <Grid
+          container
+          spacing={2}
+          direction="row"
+          justifyContent="flex-start"
+          alignItems="center"
+        >
             <Grid item xs={12} lg={2}>
               <TextInput
                 pv="$(device):amplitude"
@@ -218,8 +207,8 @@ class MobileDemo2 extends React.Component {
               <StyledIconIndicator
                 pv="$(device)"
                 macros={{ "$(device)": "testIOC:BO1" }}
-                onColor={this.props.theme.palette.ok.main}
-                offColor={this.props.theme.palette.error.main}
+                onColor={theme.palette.ok.main}
+                offColor={theme.palette.error.main}
                 usePvLabel={true}
                 labelPlacement={"end"}
               />
@@ -301,7 +290,6 @@ class MobileDemo2 extends React.Component {
         </div>
       </div>
     );
-  }
-}
+};
 
-export default withStyles(styles, { withTheme: true })(MobileDemo2);
+export default MobileDemo2;

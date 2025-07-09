@@ -1,138 +1,118 @@
-import React from 'react'
+import React, { useState, useContext } from 'react'
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 import DataConnection from '../SystemComponents/DataConnection';
-import withStyles from '@mui/styles/withStyles';
+import { useTheme } from '@mui/material/styles';
 import ContextMenu from '../SystemComponents/ContextMenu';
 
 /* eslint-disable eqeqeq */
-const styles = theme => ({
-  textQuadrapoleLabel: {
-    fill: theme.palette.text.primary
-  },
-  textQuadrapoleValue: {
-    fill: theme.palette.text.primary
-  }
-});
 
-class QuadrapoleMagnet extends React.Component {
-  constructor(props) {
-    super(props);
+const QuadrapoleMagnet = (props) => {
+  const context = useContext(AutomationStudioContext);
+  const theme = useTheme();
 
-    let pvname;
-    if (typeof this.props.macros !== 'undefined') {
-      let macro;
-      pvname = this.props.pv;
-      for (macro in this.props.macros) {
-        pvname = pvname.replace(macro.toString(), this.props.macros[macro].toString());
-      }
+  let pvname;
+  if (typeof props.macros !== 'undefined') {
+    let macro;
+    pvname = props.pv;
+    for (macro in props.macros) {
+      pvname = pvname.replace(macro.toString(), props.macros[macro].toString());
     }
-    else {
-      pvname = this.props.pv;
-    }
-
-    this.state = {
-      'value': "",
-      'inputValue': "",
-      'outputValue': "",
-      'hasFocus': false,
-      'label': "Undefined",
-      'pvname': pvname,
-      'initialized': false,
-      'metadata': {},
-      'severity': '',
-      openContextMenu: false,
-      'open': false, x0: 0, y0: 0
-    }
-    this.handleOnClick = this.handleOnClick.bind(this);
-    this.handleInputValue = this.handleInputValue.bind(this);
-    this.handleInputValueLabel = this.handleInputValueLabel.bind(this);
-    this.handleMetadata = this.handleMetadata.bind(this);
+  }
+  else {
+    pvname = props.pv;
   }
 
-  componentDidMount() {
-  }
+  const [state, setState] = useState({
+    'value': "",
+    'inputValue': "",
+    'outputValue': "",
+    'hasFocus': false,
+    'label': "Undefined",
+    'pvname': pvname,
+    'initialized': false,
+    'metadata': {},
+    'severity': '',
+    openContextMenu: false,
+    'open': false, x0: 0, y0: 0
+  });
 
-  componentWillUnmount() {
-  }
-
-  handleContextMenuClose = (event) => {
-    this.setState({ openContextMenu: false });
+  const handleOnClick = () => {
+    props.handleOnClick(props.macros['$(device)']);
   };
 
-  handleToggleContextMenu = (event) => {
-    event.persist()
-    this.setState(state => ({ openContextMenu: !state.openContextMenu, x0: event.pageX, y0: event.pageY }));
-    event.preventDefault();
-  }
-
-  handleMetadata(metadata) {
-    this.setState({ metadata: metadata });
-  }
-
-  handleInputValue(inputValue, pvname, initialized, severity) {
-    this.setState({
+  const handleInputValue = (inputValue, pvname, initialized, severity) => {
+    setState(prev => ({
+      ...prev,
       value: inputValue,
       pvname: pvname,
       initialized: initialized,
       severity: severity
-    });
-  }
-
-  handleInputValueLabel(inputValue) {
-    this.setState({ label: inputValue });
-  }
-
-  handleOnClick = () => {
-    this.props.handleOnClick(this.props.macros['$(device)']);
+    }));
   };
 
-  render() {
-    const { classes } = this.props;
-    const pv = this.props.pv;
-    const macros = this.props.macros;
-    const usePvLabel = this.props.usePvLabel;
+  const handleInputValueLabel = (inputValue) => {
+    setState(prev => ({ ...prev, label: inputValue }));
+  };
 
-    const usePrecision = this.props.prec;
-    const useStringValue = this.props.useStringValue;
-    const severity = this.state.severity;
+  const handleMetadata = (metadata) => {
+    setState(prev => ({ ...prev, metadata: metadata }));
+  };
 
-    const initialized = this.state.initialized;
-    let value = this.state.value;
-    if (initialized) {
-      if (typeof this.props.usePrecision !== 'undefined') {
-        if (this.props.usePrecision == true) {
-          if (typeof this.props.prec !== 'undefined') {
-            value = parseFloat(value).toFixed(this.props.prec);
-          }
-          else
-            value = parseFloat(value).toFixed(parseInt(this.state.metadata.precision));
+  const handleContextMenuClose = (event) => {
+    setState(prev => ({ ...prev, openContextMenu: false }));
+  };
+
+  const handleToggleContextMenu = (event) => {
+    event.persist()
+    setState(prev => ({ ...prev, openContextMenu: !prev.openContextMenu, x0: event.pageX, y0: event.pageY }));
+    event.preventDefault();
+  };
+
+  const pv = props.pv;
+  const macros = props.macros;
+  const usePvLabel = props.usePvLabel;
+
+  const usePrecision = props.prec;
+  const useStringValue = props.useStringValue;
+  const severity = state.severity;
+
+  const initialized = state.initialized;
+  let value = state.value;
+  if (initialized) {
+    if (typeof props.usePrecision !== 'undefined') {
+      if (props.usePrecision == true) {
+        if (typeof props.prec !== 'undefined') {
+          value = parseFloat(value).toFixed(props.prec);
         }
+        else
+          value = parseFloat(value).toFixed(parseInt(state.metadata.precision));
       }
     }
+  }
 
-    let color = '';
-    if (typeof this.props.alarmSensitive !== 'undefined') {
-      if (this.props.alarmSensitive == true) {
-        if (severity == 1) {
-          color = '#FF8E53';
-        }
-        else if (severity == 2) {
-          color = '#E20101';
-        }
-        else color = '#133C99';
+  let color = '';
+  if (typeof props.alarmSensitive !== 'undefined') {
+    if (props.alarmSensitive == true) {
+      if (severity == 1) {
+        color = '#FF8E53';
       }
+      else if (severity == 2) {
+        color = '#E20101';
+      }
+      else color = '#133C99';
     }
+  }
 
-    return (
-      <g onContextMenu={this.handleToggleContextMenu}>
+  return (
+      <g onContextMenu={handleToggleContextMenu}>
         <ContextMenu
-          disableProbe={this.props.disableProbe}
-          open={this.state.openContextMenu}
+          disableProbe={props.disableProbe}
+          open={state.openContextMenu}
           anchorReference="anchorPosition"
-          anchorPosition={{ top: +this.state.y0, left: +this.state.x0 }}
+          anchorPosition={{ top: +state.y0, left: +state.x0 }}
           probeType={'simple'}
-          pvs={[{ pvname: this.state.pvname, initialized: initialized }]}
-          handleClose={this.handleContextMenuClose}
+          pvs={[{ pvname: state.pvname, initialized: initialized }]}
+          handleClose={handleContextMenuClose}
 
           transformOrigin={{
             vertical: 'top',
@@ -144,26 +124,26 @@ class QuadrapoleMagnet extends React.Component {
           macros={macros}
           usePvLabel={usePvLabel}
           usePrecision={usePrecision}
-          handleInputValue={this.handleInputValue}
-          handleMetadata={this.handleMetadata}
-          outputValue={this.state.outputValue}
+          handleInputValue={handleInputValue}
+          handleMetadata={handleMetadata}
+          outputValue={state.outputValue}
           useStringValue={useStringValue}
         />
 
         {usePvLabel === true && <DataConnection
           pv={pv.toString() + ".DESC"}
           macros={macros}
-          handleInputValue={this.handleInputValueLabel}
+          handleInputValue={handleInputValueLabel}
         />}
 
         {initialized === true &&
-          <g onClick={this.handleOnClick} >
-            <linearGradient id={this.state.pvname + 'elipse-gradient'} gradientTransform="rotate(0)">
+          <g onClick={handleOnClick} >
+            <linearGradient id={state.pvname + 'elipse-gradient'} gradientTransform="rotate(0)">
               <stop offset="0%" stopOpacity="0.5" stopColor='silver' />
               <stop offset="65%" stopColor={color} />
             </linearGradient>
             <defs>
-              <filter id={this.state.pvname + "elipseShadow"} x="0" y="0" width="600%" height="500%">
+              <filter id={state.pvname + "elipseShadow"} x="0" y="0" width="600%" height="500%">
                 <feOffset result="offOut" in="SourceGraphic" dx="2.5" dy="2.5" />
                 <feColorMatrix result="matrixOut" in="offOut" type="matrix"
                   values="0.2 0 0 0 0 0 0.2 0 0 0 0 0 0.2 0 0 0 0 0 1 0" />
@@ -172,38 +152,38 @@ class QuadrapoleMagnet extends React.Component {
               </filter>
             </defs>
             <ellipse
-              fill={this.props.componentGradient === true ? 'url(#' + this.state.pvname + 'elipse-gradient)' : color}
-              cx={this.props.cx + 15}
-              cy={this.props.cy}
+              fill={props.componentGradient === true ? 'url(#' + state.pvname + 'elipse-gradient)' : color}
+              cx={props.cx + 15}
+              cy={props.cy}
               rx="10"
               ry="30"
-              filter={this.props.componentShadow === true ? "url(#" + this.state.pvname + "elipseShadow)" : ""}
+              filter={props.componentShadow === true ? "url(#" + state.pvname + "elipseShadow)" : ""}
             />
             <ellipse
-              fill={this.props.componentGradient === true ? 'url(#' + this.state.pvname + 'elipse-gradient)' : color}
-              cx={this.props.cx}
-              cy={this.props.cy}
+              fill={props.componentGradient === true ? 'url(#' + state.pvname + 'elipse-gradient)' : color}
+              cx={props.cx}
+              cy={props.cy}
               rx="10"
               ry="30"
-              filter={this.props.componentShadow === true ? "url(#" + this.state.pvname + "elipseShadow)" : ""}
+              filter={props.componentShadow === true ? "url(#" + state.pvname + "elipseShadow)" : ""}
             />
 
-            <text className={classes.textQuadrapoleValue}
-              x={this.props.cx + 7.5}
-              y={this.props.cy + 57.5}
+            <text style={{ fill: theme.palette.text.primary }}
+              x={props.cx + 7.5}
+              y={props.cy + 57.5}
               textAnchor='middle'
-              filter={this.props.textShadow === true ? "url(#" + this.state.pvname + "elipseShadow)" : ""}
+              filter={props.textShadow === true ? "url(#" + state.pvname + "elipseShadow)" : ""}
             >
-              {this.props.usePvUnits === true ? value + " " + this.state.metadata.units : value + " " + this.props.units}
+              {props.usePvUnits === true ? value + " " + state.metadata.units : value + " " + props.units}
 
             </text>
-            <text className={classes.textQuadrapoleLabel}
-              x={this.props.cx + 7.5}
-              y={this.props.cy - 40}
+            <text style={{ fill: theme.palette.text.primary }}
+              x={props.cx + 7.5}
+              y={props.cy - 40}
               textAnchor='middle'
-              filter={this.props.textShadow === true ? "url(#" + this.state.pvname + "elipseShadow)" : ""}
+              filter={props.textShadow === true ? "url(#" + state.pvname + "elipseShadow)" : ""}
             >
-              {usePvLabel === true ? this.state.label : this.props.label}
+              {usePvLabel === true ? state.label : props.label}
             </text>
           </g>
         }
@@ -213,12 +193,12 @@ class QuadrapoleMagnet extends React.Component {
               <stop offset="0%" stopOpacity="0" />
               <stop offset="75%" stopColor={'grey'} />
             </linearGradient>
-            <linearGradient id={this.state.pvname + 'elipse-gradient'} gradientTransform="rotate(0)">
+            <linearGradient id={state.pvname + 'elipse-gradient'} gradientTransform="rotate(0)">
               <stop offset="0%" stopOpacity="0" />
               <stop offset="65%" stopColor={'silver'} />
             </linearGradient>
             <defs>
-              <filter id={this.state.pvname + "elipseShadow"} x="0" y="0" width="600%" height="500%">
+              <filter id={state.pvname + "elipseShadow"} x="0" y="0" width="600%" height="500%">
                 <feOffset result="offOut" in="SourceGraphic" dx="7.5" dy="7.5" />
                 <feColorMatrix result="matrixOut" in="offOut" type="matrix"
                   values="0.2 0 0 0 0 0 0.2 0 0 0 0 0 0.2 0 0 0 0 0 1 0" />
@@ -228,30 +208,28 @@ class QuadrapoleMagnet extends React.Component {
             </defs>
 
             <ellipse
-              fill={'url(#' + this.state.pvname + 'elipse-gradient)'}
+              fill={'url(#' + state.pvname + 'elipse-gradient)'}
 
-              cx={this.props.cx}
-              cy={this.props.cy}
+              cx={props.cx}
+              cy={props.cy}
               rx="10"
               ry="30"
-              filter={"url(#" + this.state.pvname + "elipseShadow)"}
+              filter={"url(#" + state.pvname + "elipseShadow)"}
             />
             <ellipse
-              fill={'url(#' + this.state.pvname + 'elipse-gradient)'}
+              fill={'url(#' + state.pvname + 'elipse-gradient)'}
 
-              cx={this.props.cx + 15}
-              cy={this.props.cy}
+              cx={props.cx + 15}
+              cy={props.cy}
               rx="10"
               ry="30"
-              filter={"url(#" + this.state.pvname + "elipseShadow)"}
+              filter={"url(#" + state.pvname + "elipseShadow)"}
             />
 
           </g>
         }
       </g>
     );
-  }
-}
+};
 
-QuadrapoleMagnet.contextType = AutomationStudioContext;
-export default withStyles(styles)(QuadrapoleMagnet)
+export default QuadrapoleMagnet;

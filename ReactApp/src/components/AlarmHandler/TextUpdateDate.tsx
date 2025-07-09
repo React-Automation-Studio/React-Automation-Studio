@@ -1,70 +1,59 @@
 import React from "react";
-import { alpha } from "@mui/material/styles";
-import withStyles from "@mui/styles/withStyles";
+import { alpha, useTheme } from "@mui/material/styles";
 import Widget from "../SystemComponents/Widgets/Widget";
 import { Typography } from "@mui/material";
 import { format, parseISO } from "date-fns";
 
 import { grey } from "@mui/material/colors";
 
-const styles = (theme) => ({
-  root: {
-    display: "flex",
-    flexWrap: "wrap",
-  },
-  TextFieldSeverity0: {
-    borderRadius: 2,
-    borderWidth: 1,
-    padding: 1,
-    borderStyle: "solid",
-    borderColor: "rgba(0,0,0,0)",
-  },
-  TextFieldSeverity1: {
-    borderColor: theme.palette.mode === "dark" ? grey[700] : grey[300],
-    borderRadius: 2,
-    borderWidth: 1,
-    borderStyle: "solid",
-    padding: 1,
-    background:
-      "linear-gradient(45deg," +
-      alpha(
-        theme.palette.alarm.minor.dark,
-        theme.palette.mode === "dark" ? 0.2 : 0.1
-      ) +
-      " 0%, " +
-      theme.palette.alarm.minor.dark +
-      " 100%)",
-  },
-  TextFieldSeverity2: {
-    borderColor: theme.palette.mode === "dark" ? grey[700] : grey[300],
-    borderWidth: 1,
-    borderStyle: "solid",
-    borderRadius: 2,
-    padding: 1,
-    background:
-      "linear-gradient(45deg," +
-      alpha(
-        theme.palette.alarm.major.dark,
-        theme.palette.mode === "dark" ? 0.2 : 0.1
-      ) +
-      " 0%, " +
-      theme.palette.alarm.major.dark +
-      " 100%)",
-  },
-});
-
 const TextUpdateComponent = (props) => {
-  const { classes } = props;
-  let textFieldClassName;
+  const theme = useTheme();
+  let textFieldSx;
   let content;
   if (props.initialized) {
     if (props.alarmSensitive === true) {
       if (props.alarmSeverity === 1) {
-        textFieldClassName = classes.TextFieldSeverity1;
+        textFieldSx = {
+          borderColor: theme.palette.mode === "dark" ? grey[700] : grey[300],
+          borderRadius: 2,
+          borderWidth: 1,
+          borderStyle: "solid",
+          padding: 1,
+          background:
+            "linear-gradient(45deg," +
+            alpha(
+              (theme.palette as any).alarm?.minor?.dark || theme.palette.warning.dark,
+              theme.palette.mode === "dark" ? 0.2 : 0.1
+            ) +
+            " 0%, " +
+            ((theme.palette as any).alarm?.minor?.dark || theme.palette.warning.dark) +
+            " 100%)",
+        };
       } else if (props.alarmSeverity === 2) {
-        textFieldClassName = classes.TextFieldSeverity2;
+        textFieldSx = {
+          borderColor: theme.palette.mode === "dark" ? grey[700] : grey[300],
+          borderWidth: 1,
+          borderStyle: "solid",
+          borderRadius: 2,
+          padding: 1,
+          background:
+            "linear-gradient(45deg," +
+            alpha(
+              (theme.palette as any).alarm?.major?.dark || theme.palette.error.dark,
+              theme.palette.mode === "dark" ? 0.2 : 0.1
+            ) +
+            " 0%, " +
+            ((theme.palette as any).alarm?.major?.dark || theme.palette.error.dark) +
+            " 100%)",
+        };
       } else {
-        textFieldClassName = classes.TextFieldSeverity0;
+        textFieldSx = {
+          borderRadius: 2,
+          borderWidth: 1,
+          padding: 1,
+          borderStyle: "solid",
+          borderColor: "rgba(0,0,0,0)",
+        };
       }
     }
 
@@ -73,7 +62,7 @@ const TextUpdateComponent = (props) => {
         ? format(parseISO(props.value), props.dateFormat)
         : null;
     content = (
-      <Typography variant={props.variant} className={textFieldClassName}>
+      <Typography variant={props.variant} sx={textFieldSx}>
         {dateString}
       </Typography>
     );
@@ -100,9 +89,11 @@ const TextUpdateDate = ({
       {...props}
       component={TextUpdateComponent}
       debug={debug}
-      variant={variant}
       alarmSensitive={alarmSensitive}
       showTooltip={showTooltip}
+      componentProps={{
+        variant,
+      }}
     />
   );
 };
@@ -225,4 +216,4 @@ interface TextUpdateDateProps {
   tooltipProps?: object;
 }
 
-export default withStyles(styles, { withTheme: true })(TextUpdateDate);
+export default TextUpdateDate;

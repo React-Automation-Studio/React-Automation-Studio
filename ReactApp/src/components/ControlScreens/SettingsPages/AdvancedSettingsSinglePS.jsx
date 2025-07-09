@@ -11,15 +11,13 @@ import ToggleButton from '../../BaseComponents/ToggleButton';
 import ThumbWheel from '../../BaseComponents/ThumbWheel';
 
 
-import withStyles from '@mui/styles/withStyles';
+import { useTheme } from '@mui/material/styles';
 
 import Slider from '../../BaseComponents/Slider';
 import Paper from '@mui/material/Paper';
-const styles = theme => ({
-  body1: theme.typography.body1,
-});
 
 const AdvancedSettingsSinglePS=(props)=>{
+  const theme = useTheme();
   const system = JSON.parse(decodeURIComponent(props.location.search.substr(1)));
   return (
     <Grid container
@@ -34,7 +32,7 @@ const AdvancedSettingsSinglePS=(props)=>{
           <Grid item xs={1}>
           </Grid>
         </Grid>
-        <Paper style={{ padding: 12 }} elevation={props.theme.palette.paperElevation} >
+        <Paper style={{ padding: 12 }} elevation={theme.palette.paperElevation} >
           <Grid container
             direction="row"
             justifyContent="flex-start"
@@ -76,4 +74,4 @@ const AdvancedSettingsSinglePS=(props)=>{
   );
 }
 
-export default withStyles(styles, { withTheme: true })(AdvancedSettingsSinglePS)
+export default AdvancedSettingsSinglePS;

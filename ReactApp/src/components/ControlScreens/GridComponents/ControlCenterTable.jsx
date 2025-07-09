@@ -1,6 +1,6 @@
 //This example is deprecated and will be removed in a future release
-import React from "react";
-import withStyles from "@mui/styles/withStyles";
+import React, { useState, useCallback } from "react";
+import { useTheme } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -11,31 +11,10 @@ import DataConnection from "../../SystemComponents/DataConnection";
 import TextUpdate from "../../BaseComponents/TextUpdate";
 import { Typography } from "@mui/material";
 
-/* eslint-disable eqeqeq */
-/* eslint-disable no-unused-vars */
-const styles = (theme) => ({
-  root: {
-    width: "100%",
-    marginTop: theme.spacing(1) * 0,
-    marginBottom: theme.spacing(4),
-    overflowX: "auto",
-  },
-  table: {
-    padding: 1,
-    minWidth: 700,
-  },
-  tableHead: {
-    backgroundColor:
-      theme.palette.mode == "light" ? theme.palette.primary.light : undefined,
-  },
-  tableCell: {
-    width: "20%",
-  },
-});
-
-class ControlCenterTable extends React.Component {
-  constructor(props) {
-    super(props);
+const ControlCenterTable = (props) => {
+  const theme = useTheme();
+  
+  const initializeRowPVs = () => {
     let sys;
     let rowPVs = [];
     let id = 0;
@@ -45,7 +24,6 @@ class ControlCenterTable extends React.Component {
     for (sys in systems) {
       let displayName = systems[sys].displayName;
       let rowProps = systems[sys].props;
-      //console.log(rowProps)
       let setpointPV = {
         initialized: false,
         pvname: "",
@@ -114,35 +92,35 @@ class ControlCenterTable extends React.Component {
       });
       id++;
     }
-    this.state = { rowPVs: rowPVs };
-
-    this.SystemsDataConnections = this.SystemsDataConnections.bind(this);
-    this.handleInputValue = this.handleInputValue.bind(this);
-    this.handleMetadata = this.handleMetadata.bind(this);
-    this.handleOnClick = this.handleOnClick.bind(this);
-  }
-
-  handleInputValue =
-    (id, name) => (inputValue, pvname, initialized, severity) => {
-      let rowPVs = this.state.rowPVs;
-      rowPVs[id][name].value = inputValue;
-      rowPVs[id][name].initialized = initialized;
-      rowPVs[id][name].severity = severity;
-      this.setState({ rowPVs: rowPVs });
-    };
-
-  handleMetadata = (id, name) => (metadata) => {
-    let rowPVs = this.state.rowPVs;
-    rowPVs[id][name].metadata = metadata;
-    this.setState({ rowPVs: rowPVs });
+    return rowPVs;
   };
 
-  handleOnClick = (id) => () => {
-    this.props.handleOnSystemClick(this.props.systems[id]);
-  };
-  SystemsDataConnections = () => {
+  const [rowPVs, setRowPVs] = useState(initializeRowPVs());
+
+  const handleInputValue = useCallback((id, name) => (inputValue, pvname, initialized, severity) => {
+    setRowPVs(prevRowPVs => {
+      const newRowPVs = [...prevRowPVs];
+      newRowPVs[id][name].value = inputValue;
+      newRowPVs[id][name].initialized = initialized;
+      newRowPVs[id][name].severity = severity;
+      return newRowPVs;
+    });
+  }, []);
+
+  const handleMetadata = useCallback((id, name) => (metadata) => {
+    setRowPVs(prevRowPVs => {
+      const newRowPVs = [...prevRowPVs];
+      newRowPVs[id][name].metadata = metadata;
+      return newRowPVs;
+    });
+  }, []);
+
+  const handleOnClick = useCallback((id) => () => {
+    props.handleOnSystemClick(props.systems[id]);
+  }, [props]);
+
+  const SystemsDataConnections = () => {
     let DataConnections = [];
-    let rowPVs = this.state.rowPVs;
     let id = 0;
     let row;
     let useStatus;
@@ -161,8 +139,8 @@ class ControlCenterTable extends React.Component {
         <DataConnection
           key={id.toString() + rowPVs[row].setpointPV.pvname}
           pv={rowPVs[row].setpointPV.pvname}
-          handleInputValue={this.handleInputValue(id, "setpointPV")}
-          handleMetadata={this.handleMetadata(id, "setpointPV")}
+          handleInputValue={handleInputValue(id, "setpointPV")}
+          handleMetadata={handleMetadata(id, "setpointPV")}
         />
       );
 
@@ -170,8 +148,8 @@ class ControlCenterTable extends React.Component {
         <DataConnection
           key={id.toString() + rowPVs[row].readbackPV.pvname}
           pv={rowPVs[row].readbackPV.pvname}
-          handleInputValue={this.handleInputValue(id, "readbackPV")}
-          handleMetadata={this.handleMetadata(id, "readbackPV")}
+          handleInputValue={handleInputValue(id, "readbackPV")}
+          handleMetadata={handleMetadata(id, "readbackPV")}
         />
       );
 
@@ -180,8 +158,8 @@ class ControlCenterTable extends React.Component {
           <DataConnection
             key={id.toString() + rowPVs[row].statusPV.pvname}
             pv={rowPVs[row].statusPV.pvname}
-            handleInputValue={this.handleInputValue(id, "statusPV")}
-            handleMetadata={this.handleMetadata(id, "statusPV")}
+            handleInputValue={handleInputValue(id, "statusPV")}
+            handleMetadata={handleMetadata(id, "statusPV")}
             useStringValue={true}
           />
         );
@@ -192,127 +170,137 @@ class ControlCenterTable extends React.Component {
     return DataConnections;
   };
 
-  render() {
-    const { classes } = this.props;
-
-    const rowPVs = this.state.rowPVs;
-
-    return (
-      <React.Fragment>
-        {this.SystemsDataConnections()}
-        <Paper
-          className={classes.root}
-          elevation={this.props.theme.palette.paperElevation}
+  return (
+    <React.Fragment>
+      {SystemsDataConnections()}
+      <Paper
+        sx={{
+          width: "100%",
+          marginTop: theme.spacing(1) * 0,
+          marginBottom: theme.spacing(4),
+          overflowX: "auto",
+        }}
+        elevation={theme.palette.paperElevation}
+      >
+        <Table 
+          sx={{
+            padding: 1,
+            minWidth: 700,
+          }}
+          size={"small"}
         >
-          <Table className={classes.table} size={"small"}>
-            <TableHead className={classes.tableHead}>
-              <TableRow>
-                <TableCell>Device Description</TableCell>
-                <TableCell align="center">Setpoint</TableCell>
-                <TableCell align="center">Readback</TableCell>
-                <TableCell align="center">Saved Value</TableCell>
-                <TableCell align="center">Status</TableCell>
+          <TableHead 
+            sx={{
+              backgroundColor:
+                theme.palette.mode === "light" ? theme.palette.primary.light : undefined,
+            }}
+          >
+            <TableRow>
+              <TableCell>Device Description</TableCell>
+              <TableCell align="center">Setpoint</TableCell>
+              <TableCell align="center">Readback</TableCell>
+              <TableCell align="center">Saved Value</TableCell>
+              <TableCell align="center">Status</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rowPVs.map((row) => (
+              <TableRow key={row.id} onClick={handleOnClick(row.id)}>
+                <TableCell
+                  sx={{ width: "20%" }}
+                  align="left"
+                  component="th"
+                  scope="row"
+                >
+                  <Typography variant={"body2"}>{row.displayName}</Typography>
+                </TableCell>
+                <TableCell sx={{ width: "20%" }} align="center">
+                  <TextUpdate
+                    pv={row.setpointPV.pvname}
+                    usePrecision={
+                      typeof row.rowProps === "undefined"
+                        ? undefined
+                        : typeof row.rowProps.usePrecision === "undefined"
+                          ? undefined
+                          : row.rowProps.usePrecision
+                    }
+                    prec={
+                      typeof row.rowProps === "undefined"
+                        ? undefined
+                        : typeof row.rowProps.prec === "undefined"
+                          ? undefined
+                          : row.rowProps.prec
+                    }
+                    usePvUnits={
+                      typeof row.rowProps === "undefined"
+                        ? undefined
+                        : typeof row.rowProps.usePvUnits === "undefined"
+                          ? undefined
+                          : row.rowProps.usePvUnits
+                    }
+                    units={
+                      typeof row.rowProps === "undefined"
+                        ? undefined
+                        : typeof row.rowProps.units === "undefined"
+                          ? "undefined"
+                          : row.rowProps.units
+                    }
+                    alarmSensitive={true}
+                  />
+                </TableCell>
+                <TableCell sx={{ width: "20%" }} align="center">
+                  <TextUpdate
+                    pv={row.readbackPV.pvname}
+                    usePrecision={
+                      typeof row.rowProps === "undefined"
+                        ? undefined
+                        : typeof row.rowProps.usePrecision === "undefined"
+                          ? undefined
+                          : row.rowProps.usePrecision
+                    }
+                    prec={
+                      typeof row.rowProps === "undefined"
+                        ? undefined
+                        : typeof row.rowProps.prec === "undefined"
+                          ? undefined
+                          : row.rowProps.prec
+                    }
+                    usePvUnits={
+                      typeof row.rowProps === "undefined"
+                        ? undefined
+                        : typeof row.rowProps.usePvUnits === "undefined"
+                          ? undefined
+                          : row.rowProps.usePvUnits
+                    }
+                    units={
+                      typeof row.rowProps === "undefined"
+                        ? undefined
+                        : typeof row.rowProps.units === "undefined"
+                          ? "undefined"
+                          : row.rowProps.units
+                    }
+                    alarmSensitive={true}
+                  />
+                </TableCell>
+                <TableCell sx={{ width: "20%" }} align="center">
+                  {"N/A"}
+                </TableCell>
+                <TableCell sx={{ width: "20%" }} align="center">
+                  {typeof row.rowProps === "undefined"
+                    ? undefined
+                    : typeof row.rowProps.useStatus === "undefined"
+                      ? "-"
+                      : row.rowProps.useStatus === true
+                        ? row.statusPV.value
+                        : "-"}
+                </TableCell>
               </TableRow>
-            </TableHead>
-            <TableBody>
-              {rowPVs.map((row) => (
-                <TableRow key={row.id} onClick={this.handleOnClick(row.id)}>
-                  <TableCell
-                    className={classes.tableCell}
-                    align="left"
-                    component="th"
-                    scope="row"
-                  >
-                    <Typography variant={"body2"}>{row.displayName}</Typography>
-                  </TableCell>
-                  <TableCell className={classes.tableCell} align="center">
-                    <TextUpdate
-                      pv={row.setpointPV.pvname}
-                      usePrecision={
-                        typeof row.rowProps === "undefined"
-                          ? undefined
-                          : typeof row.rowProps.usePrecision === "undefined"
-                            ? undefined
-                            : row.rowProps.usePrecision
-                      }
-                      prec={
-                        typeof row.rowProps === "undefined"
-                          ? undefined
-                          : typeof row.rowProps.prec === "undefined"
-                            ? undefined
-                            : row.rowProps.prec
-                      }
-                      usePvUnits={
-                        typeof row.rowProps === "undefined"
-                          ? undefined
-                          : typeof row.rowProps.usePvUnits === "undefined"
-                            ? undefined
-                            : row.rowProps.usePvUnits
-                      }
-                      units={
-                        typeof row.rowProps === "undefined"
-                          ? undefined
-                          : typeof row.rowProps.units === "undefined"
-                            ? "undefined"
-                            : row.rowProps.units
-                      }
-                      alarmSensitive={true}
-                    />
-                  </TableCell>
-                  <TableCell className={classes.tableCell} align="center">
-                    <TextUpdate
-                      pv={row.readbackPV.pvname}
-                      usePrecision={
-                        typeof row.rowProps === "undefined"
-                          ? undefined
-                          : typeof row.rowProps.usePrecision === "undefined"
-                            ? undefined
-                            : row.rowProps.usePrecision
-                      }
-                      prec={
-                        typeof row.rowProps === "undefined"
-                          ? undefined
-                          : typeof row.rowProps.prec === "undefined"
-                            ? undefined
-                            : row.rowProps.prec
-                      }
-                      usePvUnits={
-                        typeof row.rowProps === "undefined"
-                          ? undefined
-                          : typeof row.rowProps.usePvUnits === "undefined"
-                            ? undefined
-                            : row.rowProps.usePvUnits
-                      }
-                      units={
-                        typeof row.rowProps === "undefined"
-                          ? undefined
-                          : typeof row.rowProps.units === "undefined"
-                            ? "undefined"
-                            : row.rowProps.units
-                      }
-                      alarmSensitive={true}
-                    />
-                  </TableCell>
-                  <TableCell className={classes.tableCell} align="center">
-                    {"N/A"}
-                  </TableCell>
-                  <TableCell className={classes.tableCell} align="center">
-                    {typeof row.rowProps === "undefined"
-                      ? undefined
-                      : typeof row.rowProps.useStatus === "undefined"
-                        ? "-"
-                        : row.rowProps.useStatus === true
-                          ? row.statusPV.value
-                          : "-"}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Paper>
-      </React.Fragment>
-    );
-  }
-}
+            ))}
+          </TableBody>
+        </Table>
+      </Paper>
+    </React.Fragment>
+  );
+};
 
-export default withStyles(styles, { withTheme: true })(ControlCenterTable);
+export default ControlCenterTable;

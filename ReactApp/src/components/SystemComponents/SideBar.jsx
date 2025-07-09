@@ -1,5 +1,4 @@
 import React from "react";
-import withStyles from "@mui/styles/withStyles";
 import Drawer from "@mui/material/Drawer";
 import Button from "@mui/material/Button";
 import List from "@mui/material/List";
@@ -15,15 +14,6 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import { Link } from "react-router-dom";
 import AutomationStudioContext from "../SystemComponents/AutomationStudioContext";
 import ListItemButton from "@mui/material/ListItemButton";
-
-const styles = {
-  list: {
-    width: 250,
-  },
-  fullList: {
-    width: "auto",
-  },
-};
 
 class SideBar extends React.Component {
   constructor(props) {
@@ -52,10 +42,8 @@ class SideBar extends React.Component {
   }
 
   render() {
-    const { classes } = this.props;
-
     const sideList = (
-      <div className={classes.list}>
+      <div style={{ width: 250 }}>
         <List>
           <ListItem disablePadding>
             <ListItemButton component={Link} to="/">
@@ -87,7 +75,7 @@ class SideBar extends React.Component {
     );
 
     const fullList = (
-      <div className={classes.fullList}>
+      <div style={{ width: "auto" }}>
         <List>
           {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
             <ListItem button key={text}>
@@ -179,4 +167,4 @@ class SideBar extends React.Component {
 
 SideBar.contextType = AutomationStudioContext;
 
-export default withStyles(styles)(SideBar);
+export default SideBar;

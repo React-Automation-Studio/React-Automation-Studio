@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import withStyles from "@mui/styles/withStyles";
+import { useTheme } from "@mui/material/styles";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
@@ -13,29 +13,6 @@ import AppBar from "@mui/material/AppBar";
 import ControlTable from "./Components/ControlTable";
 import TraditionalLayout from "../UI/Layout/ComposedLayouts/TraditionalLayout";
 
-/* eslint-disable eqeqeq */
-/* eslint-disable no-unused-vars */
-const VerticalTabs = withStyles((theme) => ({
-  flexContainer: {
-    flexDirection: "column",
-  },
-  indicator: {
-    display: "none",
-  },
-}))(Tabs);
-
-const styles = (theme) => ({
-  root: {
-    flexGrow: 1,
-    padding: theme.spacing(1) * 2,
-  },
-  paper: {
-    padding: theme.spacing(1) * 2,
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-  },
-});
-
 function TabContainer(props) {
   return (
     <Typography component="div" style={{ padding: 8 * 0, ...props.style }}>
@@ -45,6 +22,7 @@ function TabContainer(props) {
 }
 
 const BeamlineControlSystem = (props) => {
+  const theme = useTheme();
   const [sideTabValue, setSideTabValue] = useState(0);
   const [editorType, setEditorType] = useState("");
   const [displayEditor, setDisplayEditor] = useState(false);
@@ -613,45 +591,50 @@ const BeamlineControlSystem = (props) => {
                 >
                   <Grid item sm={2}>
                     <AppBar position="static" color="inherit">
-                      <VerticalTabs
+                      <Tabs
                         value={sideTabValue}
                         onChange={handleSideTabChange}
                         indicatorColor="primary"
                         textColor="primary"
+                        sx={{
+                          '& .MuiTabs-flexContainer': {
+                            flexDirection: 'column',
+                          },
+                          '& .MuiTabs-indicator': {
+                            display: 'none',
+                          },
+                        }}
                       >
-                        <Tab label="All" /> {/* side Tab 0*/}
-                        <Tab label="Power Supplies" /> {/* side Tab 1*/}
-                        <Tab label="Slits" /> {/* side Tab 2*/}
-                      </VerticalTabs>
+                        <Tab label="All" />
+                        <Tab label="Power Supplies" />
+                        <Tab label="Slits" />
+                      </Tabs>
                     </AppBar>
                   </Grid>
                   <Grid item sm={10}>
                     {sideTabValue === 0 && (
                       <TabContainer>
-                        {" "}
                         <ControlTable
                           style={{ overflowY: "scroll", maxHeight: "85vh" }}
                           handleOnSystemClick={handleOnSystemClick}
                           systems={allSystems}
-                        />{" "}
+                        />
                       </TabContainer>
                     )}
                     {sideTabValue === 1 && (
                       <TabContainer>
-                        {" "}
                         <ControlTable
                           handleOnSystemClick={handleOnSystemClick}
                           systems={systems["BeamLine"]["PowerSupplies"]}
-                        />{" "}
+                        />
                       </TabContainer>
                     )}
                     {sideTabValue === 2 && (
                       <TabContainer>
-                        {" "}
                         <ControlTable
                           handleOnSystemClick={handleOnSystemClick}
                           systems={systems["BeamLine"]["Slits"]}
-                        />{" "}
+                        />
                       </TabContainer>
                     )}
                   </Grid>
@@ -685,7 +668,7 @@ const BeamlineControlSystem = (props) => {
         </Grid>
         <AppBar
           style={{ position: "fixed", bottom: 0, top: "auto", height: 40 }}
-          color={props.theme.palette.mode === "dark" ? "inherit" : "primary"}
+          color={theme.palette.mode === "dark" ? "inherit" : "primary"}
         >
           {footerContents}
         </AppBar>
@@ -694,4 +677,4 @@ const BeamlineControlSystem = (props) => {
   );
 };
 
-export default withStyles(styles, { withTheme: true })(BeamlineControlSystem);
+export default BeamlineControlSystem;

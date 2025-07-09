@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import withStyles from '@mui/styles/withStyles';
+import { useTheme } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -12,28 +12,8 @@ import TextUpdate from '../../BaseComponents/TextUpdate';
 import { Typography } from '@mui/material';
 import { replaceSystemMacros } from '../../SystemComponents/Utils/macroReplacement';
 
-const styles = theme => ({
-  root: {
-    width: '100%',
-    marginTop: theme.spacing(1) * 0,
-    marginBottom: theme.spacing(4),
-    overflowX: 'auto',
-  },
-  table: {
-    padding:0,
-    minWidth: 700,
-  },
-  tableHead: {
-    // eslint-disable-next-line eqeqeq 
-    backgroundColor: theme.palette.mode == 'light' ? theme.palette.primary.light : undefined,
-  },
-  tableCell: {
-    width: "20%"
-  }
-});
-
-
 const ControlTable = (props) => {
+  const theme = useTheme();
   const { systems } = props;
   const [rowPvs, setRowPvs] = useState([]);
 
@@ -76,12 +56,30 @@ const ControlTable = (props) => {
     props.handleOnSystemClick(rowPvs[id].system);
   }
 
-  const { classes } = props;
-
   return (
-    <Paper className={classes.root} elevation={props.theme.palette.paperElevation} style={props.style}>
-      <Table className={classes.table} size={'small'} stickyHeader={true} >
-        <TableHead className={classes.tableHead} >
+    <Paper 
+      sx={{
+        width: '100%',
+        marginTop: theme.spacing(1) * 0,
+        marginBottom: theme.spacing(4),
+        overflowX: 'auto',
+      }}
+      elevation={theme.palette.paperElevation} 
+      style={props.style}
+    >
+      <Table 
+        sx={{
+          padding: 0,
+          minWidth: 700,
+        }}
+        size={'small'} 
+        stickyHeader={true}
+      >
+        <TableHead 
+          sx={{
+            backgroundColor: theme.palette.mode === 'light' ? theme.palette.primary.light : undefined,
+          }}
+        >
           <TableRow>
             <TableCell>Device Description</TableCell>
             <TableCell align="center">Setpoint</TableCell>
@@ -93,10 +91,10 @@ const ControlTable = (props) => {
         <TableBody>
           {rowPvs.map((row,index) => (
             <TableRow key={index.toString()} onClick={handleOnClick(row.id)} >
-              <TableCell className={classes.tableCell} align="left" component="th" scope="row" >
+              <TableCell sx={{ width: "20%" }} align="left" component="th" scope="row" >
                 <Typography variant={'body2'}>{row.displayName}</Typography>
               </TableCell>
-              <TableCell className={classes.tableCell} align="center">
+              <TableCell sx={{ width: "20%" }} align="center">
                 <TextUpdate
                   pv={row.setpointPv}
                   usePrecision={(typeof row.rowProps) === 'undefined' ? undefined : (typeof row.rowProps.usePrecision) === 'undefined' ? undefined : row.rowProps.usePrecision}
@@ -106,7 +104,7 @@ const ControlTable = (props) => {
                   alarmSensitive={true}
                 />
               </TableCell>
-              <TableCell className={classes.tableCell} align="center">
+              <TableCell sx={{ width: "20%" }} align="center">
                 <TextUpdate
                   pv={row.readbackPv}
                   usePrecision={(typeof row.rowProps) === 'undefined' ? undefined : (typeof row.rowProps.usePrecision) === 'undefined' ? undefined : row.rowProps.usePrecision}
@@ -116,8 +114,8 @@ const ControlTable = (props) => {
                   alarmSensitive={true}
                 />
               </TableCell>
-              <TableCell className={classes.tableCell} align="center">{"N/A"}</TableCell>
-              <TableCell className={classes.tableCell} align="center">
+              <TableCell sx={{ width: "20%" }} align="center">{"N/A"}</TableCell>
+              <TableCell sx={{ width: "20%" }} align="center">
                 {(typeof row.rowProps) === 'undefined' ? undefined : (typeof row.rowProps.useStatus) === 'undefined' ? '-' : row.rowProps.useStatus === true ?
                   <TextUpdate
                     pv={row.statusTextPv}
@@ -133,4 +131,4 @@ const ControlTable = (props) => {
   );
 }
 
-export default withStyles(styles, { withTheme: true })(ControlTable);
+export default ControlTable;

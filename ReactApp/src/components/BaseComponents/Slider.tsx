@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useCallback, useRef } from "react";
 import { Typography, GlobalStyles } from "@mui/material";
 import { throttle, debounce } from "lodash";
 import { useTheme } from "@mui/material/styles";
@@ -7,7 +7,13 @@ import RCSlider from "rc-slider";
 import { FormControlLabel } from "@mui/material";
 
 // Create global styles function
-const createGlobalStyles = (theme) => {
+
+
+function SliderComponent(props) {
+  const theme = useTheme();
+
+  const globalStyles = useCallback(() => {
+  
   const backgroundColor =
     theme.palette.mode === "light"
       ? "rgba(0, 0, 0, 0.23)"
@@ -162,7 +168,7 @@ const createGlobalStyles = (theme) => {
       left: 2,
       marginBottom: -4,
     },
-    ".rc-slider-vertical .rc-slider-dot:first-child": {
+    ".rc-slider-vertical .rc-slider-dot:first-of-type": {
       marginBottom: -4,
     },
     ".rc-slider-vertical .rc-slider-dot:last-child": {
@@ -262,10 +268,9 @@ const createGlobalStyles = (theme) => {
       borderTopColor: "#6c6c6c",
     },
   };
-};
 
-function SliderComponent(props) {
-  const theme = useTheme();
+
+  }, [theme]); 
 
   // Create sx objects for styling
   const horizontalSliderSx = {
@@ -323,7 +328,7 @@ function SliderComponent(props) {
   };
 
   // Global styles for rc-slider
-  const globalStyles = createGlobalStyles(theme);
+ 
   const emitChangeThrottled = useRef(
     throttle((value) => emitChange(value), 10)
   ).current;

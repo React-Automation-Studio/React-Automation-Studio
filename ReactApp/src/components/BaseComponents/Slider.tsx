@@ -422,8 +422,9 @@ function SliderComponent(props) {
     <>
      
       <div
-        style={{ height: props.height ?? "100%", width: "100%" }}
+        style={{ height: props.height ?? "100%", width: "100%",userSelect: 'none' }}
         onPointerDownCapture={handleOnClickCapture}
+       
       >
         <FormControlLabel
           key={props.pvName + props.initialized}

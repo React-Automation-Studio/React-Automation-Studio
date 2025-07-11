@@ -14,6 +14,8 @@ import RasCssBaseline from "./RasCssBaseline";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import axios from "axios";
 
+import { SliderGlobalStyles } from "../BaseComponents/Slider";
+
 /**
  * Props for the RasAppCore component.
  */
@@ -388,6 +390,7 @@ class RasAppCore extends Component<RasAppCoreProps, RasAppCoreState> {
               <CssBaseline />
               <ReactVisCssBaseline />
               <RasCssBaseline />
+              <SliderGlobalStyles />
               {this.props.children}
             </ThemeProvider>
           </StyledEngineProvider>

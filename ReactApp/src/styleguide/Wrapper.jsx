@@ -13,7 +13,7 @@ import AutomationStudioContext from "../components/SystemComponents/AutomationSt
 import { io } from "socket.io-client";
 import lightTheme from "../components/UI/Themes/lightTheme";
 import ReactVisCssBaseline from "../components/SystemComponents/ReactVisCssBaseline";
-
+import { SliderGlobalStyles } from "../components/BaseComponents/Slider";
 if (typeof window.socket === "undefined") {
   window.socket = io("/pvServer", {
     transports: ["websocket"],
@@ -105,6 +105,7 @@ class Wrapper extends Component {
             <ThemeProvider theme={this.state.theme}>
               <CssBaseline>
                 <ReactVisCssBaseline>{this.props.children}</ReactVisCssBaseline>
+                <SliderGlobalStyles />
               </CssBaseline>
             </ThemeProvider>
           </StyledEngineProvider>

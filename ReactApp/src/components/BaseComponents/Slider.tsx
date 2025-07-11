@@ -8,9 +8,8 @@ import { FormControlLabel } from "@mui/material";
 
 // Create global styles function
 
-
-function SliderComponent(props) {
-  const theme = useTheme();
+export const SliderGlobalStyles = ()=>{  
+   const theme = useTheme();
 
   const globalStyles = useCallback(() => {
   
@@ -271,7 +270,17 @@ function SliderComponent(props) {
 
 
   }, [theme]); 
+  return(
+   <GlobalStyles styles={globalStyles} />
+  )
 
+
+}
+
+
+function SliderComponent(props) {
+  const theme = useTheme();
+ 
   // Create sx objects for styling
   const horizontalSliderSx = {
     width: "100%",
@@ -411,7 +420,7 @@ function SliderComponent(props) {
 
   return (
     <>
-      <GlobalStyles styles={globalStyles} />
+     
       <div
         style={{ height: props.height ?? "100%", width: "100%" }}
         onPointerDownCapture={handleOnClickCapture}

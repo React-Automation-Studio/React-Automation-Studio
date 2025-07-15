@@ -1,5 +1,7 @@
 FROM python:3.8.7
-
+RUN echo "deb http://archive.debian.org/debian buster main contrib non-free\n\
+    deb http://archive.debian.org/debian-security buster/updates main contrib non-free \n\
+" > /etc/apt/sources.list
 # Create signal-cli user
 ENV HOME /srv/signal
 

@@ -59,7 +59,6 @@ import SteererXYMagnet from './SteererXYMagnet';
 		usePvUnits={true}
 		usePvLabel={false}
 		alarmSensitive={true}
-		label='BM1'
 		componentShadow={true}
 		textShadow={false}
 		componentGradient={true}

@@ -163,7 +163,7 @@ const EnableDialog = (props) => {
                 disablePast
                 autoOk={false}
                 // Backwards compatible
-                disabled={!props.data.bridge ?? true}
+                disabled={!props.data.bridge}
                 slotProps={{ textField: { variant: 'standard' } }}
               />
             </LocalizationProvider>

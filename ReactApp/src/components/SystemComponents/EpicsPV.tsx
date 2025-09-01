@@ -2,9 +2,8 @@ import React, { useState, useContext, useEffect, useRef } from "react";
 import ReactAutomationStudioContext from "./AutomationStudioContext";
 import Typography from "@mui/material/Typography";
 import { io } from "socket.io-client";
-import { Socket } from "socket.io-client";
 import { v4 as uuidv4 } from "uuid";
-
+import { throttle } from "lodash";
 export type EpicsPVType = {
   initialized: boolean;
   pvname: string;
@@ -76,6 +75,11 @@ export const useEpicsPV = (props) => {
 
     return pv;
   });
+
+   const setPvThrottled = useRef(
+    throttle((value) => setPv(value), 20)
+  ).current;
+
   const pvName = pv.pvname;
 
   const [pvConnectionId] = useState(null);
@@ -115,10 +119,10 @@ export const useEpicsPV = (props) => {
   useEffect(() => {
     const updatePVData = (msg) => {
       if (msg.connected === "0") {
-        setPv((pv) => ({ ...pv, initialized: false }));
+        setPvThrottled((pv) => ({ ...pv, initialized: false }));
       } else {
         if (msg.newmetadata === "False") {
-          setPv((pv) => ({
+          setPvThrottled((pv) => ({
             ...pv,
             value: props.useStringValue === true ? msg.char_value : msg.value,
             severity: msg.severity,
@@ -197,7 +201,7 @@ export const useEpicsPV = (props) => {
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pvName, socket]);
+  }, [pvName, socket,setPvThrottled]);
 
   useEffect(() => {
     const reconnect = () => {

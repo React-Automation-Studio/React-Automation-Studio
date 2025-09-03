@@ -4,10 +4,7 @@ import { GlobalStyles } from '@mui/material';
 
 const RasCssBaseline = (props) => {
   const { children = null } = props;
-
-  return (
-    <React.Fragment>
-      <GlobalStyles
+ const inputGlobalStyles=<GlobalStyles
        styles={(theme) => ({
           '::-webkit-scrollbar': {
             width: '0.2em',
@@ -23,6 +20,9 @@ const RasCssBaseline = (props) => {
           }
         })}
       />
+  return (
+    <React.Fragment>
+      {inputGlobalStyles}
       {children}
     </React.Fragment>
   );

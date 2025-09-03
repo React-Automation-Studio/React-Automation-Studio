@@ -3,13 +3,12 @@ import { useTheme } from '@mui/material/styles';
 import { GlobalStyles } from '@mui/material';
 
 const RasCssBaseline = (props) => {
-  const theme = useTheme();
   const { children = null } = props;
 
   return (
     <React.Fragment>
       <GlobalStyles
-        styles={{
+       styles={(theme) => ({
           '::-webkit-scrollbar': {
             width: '0.2em',
             height: '0.2em',
@@ -22,7 +21,7 @@ const RasCssBaseline = (props) => {
             backgroundColor: theme.palette.mode === 'light' ? 'rgba(0,0,0,.15)' : 'rgba(255,255,255,.1)',
             outline: '1px solid slategrey'
           }
-        }}
+        })}
       />
       {children}
     </React.Fragment>

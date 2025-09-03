@@ -5,6 +5,7 @@ import Grid from '@mui/material/GridLegacy';
 
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import Collapse from '@mui/material/Collapse';
 import ExpandLess from '@mui/icons-material/ExpandLess';
@@ -156,14 +157,9 @@ const AlarmList = props => {
     };
 
     const nestedStyles = {
-        paddingLeft: theme.spacing(4),
+        pl: 4,
     };
 
-    const rootStyles = {
-        width: '100%',
-        overflowY: 'auto',
-        maxHeight: '90vh',
-    };
 
     return (
         <React.Fragment>
@@ -178,7 +174,11 @@ const AlarmList = props => {
                         <List
                             component="nav"
                             aria-labelledby="nested-list-subheader"
-                            sx={rootStyles}
+                            sx={{
+                                width: '100%',
+                                overflowY: 'auto',
+                                maxHeight: '90vh',
+                            }}
                         >
                             {props.areaNames.map((area, areaIndex) => {
                                 return (
@@ -186,16 +186,19 @@ const AlarmList = props => {
                                     }>
                                         <ListItem
                                             divider
-                                            button
-                                            selected={props.areaSelectedIndex === `${area["area"]}`}
-                                            onClick={event => props.listItemClick(event, `${area["area"]}`)}
-                                            onContextMenu={event => props.listItemRightClick(event, `${area["area"]}`)}
-                                            sx={getAlarmStyles(`${area["area"]}`, props.areaPVDict)}
+                                            disablePadding
                                         >
-                                            <ListItemText primary={area["area"]} />
-                                            {area["subAreas"] ?
-                                                props.areaSubAreaOpen[`${area["area"]}`] ? <ExpandLess /> : <ExpandMore />
-                                                : null}
+                                            <ListItemButton
+                                                selected={props.areaSelectedIndex === `${area["area"]}`}
+                                                onClick={event => props.listItemClick(event, `${area["area"]}`)}
+                                                onContextMenu={event => props.listItemRightClick(event, `${area["area"]}`)}
+                                                sx={getAlarmStyles(`${area["area"]}`, props.areaPVDict)}
+                                            >
+                                                <ListItemText primary={area["area"]} />
+                                                {area["subAreas"] ?
+                                                    props.areaSubAreaOpen[`${area["area"]}`] ? <ExpandLess /> : <ExpandMore />
+                                                    : null}
+                                            </ListItemButton>
 
                                         </ListItem>
                                         {
@@ -246,44 +249,57 @@ const AlarmList = props => {
                                                     <Collapse in={props.alarmAdminListExpand} timeout="auto" unmountOnExit>
                                                         <List component="div" disablePadding >
                                                             <ListItem
-                                                                button
-                                                                sx={nestedStyles}
-                                                                onClick={event => props.addNewPV(event, `${area["area"]}`)}
+                                                                disablePadding
                                                             >
-                                                                <ListItemIcon >
-                                                                    <AddIcon fontSize="small" />
-                                                                </ListItemIcon>
-                                                                <ListItemText primary="Add new pv" />
+                                                                <ListItemButton
+                                                                    sx={nestedStyles}
+                                                                    onClick={event => props.addNewPV(event, `${area["area"]}`)}
+                                                                >
+                                                                    <ListItemIcon >
+                                                                        <AddIcon fontSize="small" />
+                                                                    </ListItemIcon>
+                                                                    <ListItemText primary="Add new pv" />
+                                                                </ListItemButton>
                                                             </ListItem>
                                                             <ListItem
-                                                                button
-                                                                sx={nestedStyles}
-                                                                onClick={event => props.addNewSubArea(event, `${area["area"]}`)}
+                                                                disablePadding
                                                             >
-                                                                <ListItemIcon >
-                                                                    <PlaylistAddOutlinedIcon fontSize="small" />
-                                                                </ListItemIcon>
-                                                                <ListItemText primary="Add new subArea" />
+                                                                <ListItemButton
+                                                                    sx={nestedStyles}
+                                                                    onClick={event => props.addNewSubArea(event, `${area["area"]}`)}
+                                                                >
+                                                                    <ListItemIcon >
+                                                                        <PlaylistAddOutlinedIcon fontSize="small" />
+                                                                    </ListItemIcon>
+                                                                    <ListItemText primary="Add new subArea" />
+                                                                </ListItemButton>
+                                                            </ListItem>
+
+                                                            <ListItem
+                                                                disablePadding
+                                                            >
+                                                                <ListItemButton
+                                                                    sx={nestedStyles}
+                                                                    onClick={event => props.editArea(event, `${area["area"]}`)}
+                                                                >
+                                                                    <ListItemIcon >
+                                                                        <EditIcon fontSize="small" />
+                                                                    </ListItemIcon>
+                                                                    <ListItemText primary="Edit area" />
+                                                                </ListItemButton>
                                                             </ListItem>
                                                             <ListItem
-                                                                button
-                                                                sx={nestedStyles}
-                                                                onClick={event => props.editArea(event, `${area["area"]}`)}
+                                                                disablePadding
                                                             >
-                                                                <ListItemIcon >
-                                                                    <EditIcon fontSize="small" />
-                                                                </ListItemIcon>
-                                                                <ListItemText primary="Edit area" />
-                                                            </ListItem>
-                                                            <ListItem
-                                                                button
-                                                                sx={nestedStyles}
-                                                                onClick={event => props.deleteArea(event, `${area["area"]}`)}
-                                                            >
-                                                                <ListItemIcon >
-                                                                    <DeleteIcon fontSize="small" />
-                                                                </ListItemIcon>
-                                                                <ListItemText primary="Delete area" />
+                                                                <ListItemButton
+                                                                    sx={nestedStyles}
+                                                                    onClick={event => props.deleteArea(event, `${area["area"]}`)}
+                                                                >
+                                                                    <ListItemIcon >
+                                                                        <DeleteIcon fontSize="small" />
+                                                                    </ListItemIcon>
+                                                                    <ListItemText primary="Delete area" />
+                                                                </ListItemButton>
                                                             </ListItem>
                                                         </List>
                                                     </Collapse>
@@ -299,18 +315,22 @@ const AlarmList = props => {
                                                             return (
                                                                 <React.Fragment key={`${area["area"]}=${subAreaIndex}=${subArea}`}>
                                                                     <ListItem
-                                                                        button
-                                                                        divider
-                                                                        sx={{
-                                                                            ...nestedStyles,
-                                                                            ...getAlarmStyles(`${area["area"]}=${subArea}`, props.areaPVDict)
-                                                                        }}
-                                                                        selected={props.areaSelectedIndex === `${area["area"]}=${subArea}`}
-                                                                        onClick={event => props.listItemClick(event, `${area["area"]}=${subArea}`)}
-                                                                        onContextMenu={event => props.listItemRightClick(event, `${area["area"]}=${subArea}`)}
-                                                                    >
-                                                                        <ListItemText primary={`- ${subArea}`} />
+                                                                        disablePadding
 
+
+                                                                        divider
+                                                                    >
+                                                                        <ListItemButton
+                                                                            sx={{
+                                                                                ...nestedStyles,
+                                                                                ...getAlarmStyles(`${area["area"]}=${subArea}`, props.areaPVDict)
+                                                                            }}
+                                                                            selected={props.areaSelectedIndex === `${area["area"]}=${subArea}`}
+                                                                            onClick={event => props.listItemClick(event, `${area["area"]}=${subArea}`)}
+                                                                            onContextMenu={event => props.listItemRightClick(event, `${area["area"]}=${subArea}`)}
+                                                                        >
+                                                                            <ListItemText primary={`- ${subArea}`} />
+                                                                        </ListItemButton>
                                                                     </ListItem>
                                                                     {props.isAlarmUser && <Menu
                                                                         keepMounted
@@ -349,34 +369,41 @@ const AlarmList = props => {
                                                                                         <Collapse in={props.alarmAdminListExpand} timeout="auto" unmountOnExit>
                                                                                             <List component="div" disablePadding >
                                                                                                 <ListItem
-                                                                                                    button
-                                                                                                    sx={nestedStyles}
-                                                                                                    onClick={event => props.addNewPV(event, `${area["area"]}=${subArea}`)}
+                                                                                                    disablePadding
                                                                                                 >
-                                                                                                    <ListItemIcon >
-                                                                                                        <AddIcon fontSize="small" />
-                                                                                                    </ListItemIcon>
-                                                                                                    <ListItemText primary="Add new pv" />
+                                                                                                    <ListItemButton
+                                                                                                        sx={nestedStyles}
+                                                                                                        onClick={event => props.addNewPV(event, `${area["area"]}=${subArea}`)}
+                                                                                                    >
+                                                                                                        <ListItemIcon >
+                                                                                                            <AddIcon fontSize="small" />
+                                                                                                        </ListItemIcon>
+                                                                                                        <ListItemText primary="Add new pv" />
+                                                                                                    </ListItemButton>
                                                                                                 </ListItem>
-                                                                                                <ListItem
-                                                                                                    button
-                                                                                                    sx={nestedStyles}
-                                                                                                    onClick={event => props.editArea(event, `${area["area"]}=${subArea}`)}
+                                                                                                <ListItem disablePadding
                                                                                                 >
-                                                                                                    <ListItemIcon >
-                                                                                                        <EditIcon fontSize="small" />
-                                                                                                    </ListItemIcon>
-                                                                                                    <ListItemText primary="Edit subArea" />
+                                                                                                    <ListItemButton
+                                                                                                        sx={nestedStyles}
+                                                                                                        onClick={event => props.editArea(event, `${area["area"]}=${subArea}`)}
+                                                                                                    >
+                                                                                                        <ListItemIcon >
+                                                                                                            <EditIcon fontSize="small" />
+                                                                                                        </ListItemIcon>
+                                                                                                        <ListItemText primary="Edit subArea" />
+                                                                                                    </ListItemButton>
                                                                                                 </ListItem>
-                                                                                                <ListItem
-                                                                                                    button
-                                                                                                    sx={nestedStyles}
-                                                                                                    onClick={event => props.deleteArea(event, `${area["area"]}=${subArea}`)}
+                                                                                                <ListItem disablePadding
                                                                                                 >
-                                                                                                    <ListItemIcon >
-                                                                                                        <DeleteIcon fontSize="small" />
-                                                                                                    </ListItemIcon>
-                                                                                                    <ListItemText primary="Delete subArea" />
+                                                                                                    <ListItemButton
+                                                                                                        sx={nestedStyles}
+                                                                                                        onClick={event => props.deleteArea(event, `${area["area"]}=${subArea}`)}
+                                                                                                    >
+                                                                                                        <ListItemIcon >
+                                                                                                            <DeleteIcon fontSize="small" />
+                                                                                                        </ListItemIcon>
+                                                                                                        <ListItemText primary="Delete subArea" />
+                                                                                                    </ListItemButton>
                                                                                                 </ListItem>
                                                                                             </List>
                                                                                         </Collapse>

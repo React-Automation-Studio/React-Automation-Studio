@@ -116,7 +116,7 @@ const AddAreaDialog = (props) => {
                         <Grid item xs={1} sx={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
                             <SupervisedUserCircleIcon />
                         </Grid>
-                        <Grid item xs={1} sx={{ display: "flex", flexDirection: "column", justifyContent: "center" }} style={{ marginRight: '1rem' }}>
+                        <Grid item xs={1} sx={{ display: "flex", flexDirection: "column", justifyContent: "center", marginRight: 2 }}>
                             <Typography sx={{ fontWeight: 500, textAlign: "center" }} >
                                 Role
                             </Typography>
@@ -134,13 +134,13 @@ const AddAreaDialog = (props) => {
                             <Tooltip title="Remove role" placement="bottom">
                                 <IconButton
                                     onClick={() => removeRole(index)}
-                                    style={{ marginLeft: '0.5em' }}
+                                    sx={{ marginLeft: '0.5em' }}
                                     size="large">
                                     <RemoveCircleIcon color="primary" />
                                 </IconButton>
                             </Tooltip>
                             {lastIndex === index && <Tooltip title="Add another role" placement="bottom">
-                                <IconButton onClick={addRole} style={{ marginLeft: '0.5em' }} size="large">
+                                <IconButton onClick={addRole} sx={{ marginLeft: '0.5em' }} size="large">
                                     <AddCircleIcon color="secondary" />
                                 </IconButton>
                             </Tooltip>}

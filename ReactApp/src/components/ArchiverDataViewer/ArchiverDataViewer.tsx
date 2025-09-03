@@ -579,7 +579,7 @@ const ArchiverDataViewer = ({
 
         {props.showButtons && (
           <Accordion
-            // sx={accordionRootSx}
+          
             elevation={0}
             defaultExpanded={defaultButtonsExpanded}
             style={{ marginBottom: 0 }}
@@ -605,7 +605,7 @@ const ArchiverDataViewer = ({
                       <Button
 
                         variant={"outlined"}
-                        color={fromButton === "30s" ? "secondary" : "primary"} //was default
+                        color={fromButton === "30s" ? "secondary" : "primary"} 
                         onClick={handleOnClick30s}
                       >
                         30s

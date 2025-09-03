@@ -217,68 +217,20 @@ const ControlCenterTable = (props) => {
                 <TableCell sx={{ width: "20%" }} align="center">
                   <TextUpdate
                     pv={row.setpointPV.pvname}
-                    usePrecision={
-                      typeof row.rowProps === "undefined"
-                        ? undefined
-                        : typeof row.rowProps.usePrecision === "undefined"
-                          ? undefined
-                          : row.rowProps.usePrecision
-                    }
-                    prec={
-                      typeof row.rowProps === "undefined"
-                        ? undefined
-                        : typeof row.rowProps.prec === "undefined"
-                          ? undefined
-                          : row.rowProps.prec
-                    }
-                    usePvUnits={
-                      typeof row.rowProps === "undefined"
-                        ? undefined
-                        : typeof row.rowProps.usePvUnits === "undefined"
-                          ? undefined
-                          : row.rowProps.usePvUnits
-                    }
-                    units={
-                      typeof row.rowProps === "undefined"
-                        ? undefined
-                        : typeof row.rowProps.units === "undefined"
-                          ? "undefined"
-                          : row.rowProps.units
-                    }
+                    usePrecision={row.rowProps?.usePrecision}
+                    prec={row.rowProps?.prec}
+                    usePvUnits={row.rowProps?.usePvUnits}
+                    units={row.rowProps?.units}
                     alarmSensitive={true}
                   />
                 </TableCell>
                 <TableCell sx={{ width: "20%" }} align="center">
                   <TextUpdate
                     pv={row.readbackPV.pvname}
-                    usePrecision={
-                      typeof row.rowProps === "undefined"
-                        ? undefined
-                        : typeof row.rowProps.usePrecision === "undefined"
-                          ? undefined
-                          : row.rowProps.usePrecision
-                    }
-                    prec={
-                      typeof row.rowProps === "undefined"
-                        ? undefined
-                        : typeof row.rowProps.prec === "undefined"
-                          ? undefined
-                          : row.rowProps.prec
-                    }
-                    usePvUnits={
-                      typeof row.rowProps === "undefined"
-                        ? undefined
-                        : typeof row.rowProps.usePvUnits === "undefined"
-                          ? undefined
-                          : row.rowProps.usePvUnits
-                    }
-                    units={
-                      typeof row.rowProps === "undefined"
-                        ? undefined
-                        : typeof row.rowProps.units === "undefined"
-                          ? "undefined"
-                          : row.rowProps.units
-                    }
+                    usePrecision={row.rowProps?.usePrecision}
+                    prec={row.rowProps?.prec}
+                    usePvUnits={row.rowProps?.usePvUnits}
+                    units={row.rowProps?.units}
                     alarmSensitive={true}
                   />
                 </TableCell>
@@ -286,13 +238,7 @@ const ControlCenterTable = (props) => {
                   {"N/A"}
                 </TableCell>
                 <TableCell sx={{ width: "20%" }} align="center">
-                  {typeof row.rowProps === "undefined"
-                    ? undefined
-                    : typeof row.rowProps.useStatus === "undefined"
-                      ? "-"
-                      : row.rowProps.useStatus === true
-                        ? row.statusPV.value
-                        : "-"}
+                  {row.rowProps?.useStatus === true ? row.statusPV.value : "-"}
                 </TableCell>
               </TableRow>
             ))}

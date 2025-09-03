@@ -74,7 +74,7 @@ const LivePVVal = (props) => {
         }
     }
 
-    const disconnectedStyle = {
+    const disconnectedSx = {
         background: 'transparent',
         borderRadius: 2,
         padding: 1,
@@ -87,7 +87,7 @@ const LivePVVal = (props) => {
 
     const content = displayValue !== ""
         ? <Typography sx={getAlarmStyle()}>{`${displayValue} ${units}`}</Typography>
-        : <Typography sx={disconnectedStyle}>-</Typography>
+        : <Typography sx={disconnectedSx}>-</Typography>
 
     return (
         <React.Fragment>

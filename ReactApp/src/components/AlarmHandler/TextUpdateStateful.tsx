@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useTheme } from "@mui/material/styles";
 import Widget from "../SystemComponents/Widgets/Widget";
 import { Typography } from "@mui/material";
@@ -17,51 +17,53 @@ const TextUpdateComponent = (props) => {
     }
   }, [initialized, value, units]);
 
-  let dispSx = {};
-  if (!initialized) {
-    dispSx = {
-      background: "transparent",
-      borderRadius: 2,
-      padding: 1,
-      borderStyle: "solid",
-      borderWidth: "thin",
-      borderColor:
-        theme.palette.mode === "dark"
-          ? theme.palette.grey[500]
-          : theme.palette.grey[400],
-      color:
-        theme.palette.mode === "dark"
-          ? theme.palette.grey[500]
-          : theme.palette.grey[400],
-    };
-  } else if (alarmSeverity === 1) {
-    dispSx = {
-      background: "transparent",
-      borderRadius: 2,
-      padding: 1,
-      borderStyle: "solid",
-      borderWidth: "thin",
-      borderColor: (theme.palette as any).alarm?.minor?.main || theme.palette.warning.main,
-    };
-  } else if (alarmSeverity === 2) {
-    dispSx = {
-      background: "transparent",
-      borderRadius: 2,
-      padding: 1,
-      borderStyle: "solid",
-      borderWidth: "thin",
-      borderColor: (theme.palette as any).alarm?.major?.main || theme.palette.error.main,
-    };
-  } else {
-    dispSx = {
-      background: "transparent",
-      borderRadius: 2,
-      padding: 1,
-      borderStyle: "solid",
-      borderWidth: "thin",
-      borderColor: "rgba(0,0,0,0)",
-    };
-  }
+  const dispSx = useMemo(() => {
+    if (!initialized) {
+      return {
+        background: "transparent",
+        borderRadius: 2,
+        padding: 1,
+        borderStyle: "solid",
+        borderWidth: "thin",
+        borderColor:
+          theme.palette.mode === "dark"
+            ? theme.palette.grey[500]
+            : theme.palette.grey[400],
+        color:
+          theme.palette.mode === "dark"
+            ? theme.palette.grey[500]
+            : theme.palette.grey[400],
+      };
+    } else if (alarmSeverity === 1) {
+      return {
+        background: "transparent",
+        borderRadius: 2,
+        padding: 1,
+        borderStyle: "solid",
+        borderWidth: "thin",
+        borderColor: (theme.palette as any).alarm?.minor?.main || theme.palette.warning.main,
+      };
+    } else if (alarmSeverity === 2) {
+      return {
+        background: "transparent",
+        borderRadius: 2,
+        padding: 1,
+        borderStyle: "solid",
+        borderWidth: "thin",
+        borderColor: (theme.palette as any).alarm?.major?.main || theme.palette.error.main,
+      };
+    } else {
+      return {
+        background: "transparent",
+        borderRadius: 2,
+        padding: 1,
+        borderStyle: "solid",
+        borderWidth: "thin",
+        borderColor: "rgba(0,0,0,0)",
+      };
+    }
+  }, [initialized, alarmSeverity, theme, theme.palette.mode]);
+
 
   const content =
     displayValue !== "" ? (

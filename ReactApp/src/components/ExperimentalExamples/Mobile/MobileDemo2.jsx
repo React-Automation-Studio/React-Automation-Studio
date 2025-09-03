@@ -68,7 +68,7 @@ const MobileDemo2 = (props) => {
         </div>
         <div style={{
           flexGrow: 1,
-          padding: theme.spacing(1) * 2,
+          padding: theme.spacing(2),
         }}>
           <Grid
             container

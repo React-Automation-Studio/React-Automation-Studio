@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext,useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 import TextInput from '../BaseComponents/TextInput';
@@ -20,9 +20,8 @@ const SettingsSinglePS = (props) => {
   const context = useContext(AutomationStudioContext);
   const location = useLocation();
   const theme = useTheme();
-  
-  const system=JSON.parse(decodeURIComponent(location.search.substr(1))) ;
-  console.log("SettingsSinglePS system", system);
+
+  const [system] = useState(JSON.parse(decodeURIComponent(location.search.substr(1))) );
   return (
     <Grid container
       direction="row"

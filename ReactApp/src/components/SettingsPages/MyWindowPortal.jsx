@@ -5,9 +5,12 @@ const MyWindowPortal = (props) => {
   const containerElRef = useRef(null);
   const externalWindowRef = useRef(null);
 
-  if (!containerElRef.current) {
-    containerElRef.current = document.createElement('div');
-  }
+    useEffect(() => {
+      if (!containerElRef.current) {
+        containerElRef.current = document.createElement('div');
+      }
+    }, []);
+    
 
   useEffect(() => {
     externalWindowRef.current = window.open('', '', 'width=600,height=400,left=200,top=200');

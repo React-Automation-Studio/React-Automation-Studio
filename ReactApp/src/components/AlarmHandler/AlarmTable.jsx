@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect,useMemo } from 'react';
 
 // import { Link } from 'react-router-dom'
 
@@ -37,30 +37,30 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { Coffee, ContentCopy } from 'mdi-material-ui/'
 
 import Tooltip from '@mui/material/Tooltip';
+import { ListItemButton } from '@mui/material';
 
 const AlarmTable = props => {
     const theme = useTheme()
     const myRef = useRef()
-
-    const nestedSx = {
+    const nestedSx = useMemo(() => ({
         paddingLeft: theme.spacing(4),
-    };
+    }), [theme]);
 
-    const rootSx = {
+    const rootSx = useMemo(() => ({
         width: '100%',
         overflowY: 'auto',
-    };
+    }), []);
 
-    const textFieldSeverityDisabledSx = {
+    const textFieldSeverityDisabledSx = useMemo(() => ({
         borderRadius: 2,
         padding: 1,
         backgroundColor: theme.palette.mode === 'dark' ? theme.palette.grey[500] : theme.palette.grey[400]
-    };
+    }), [theme]);
 
-    const styledTableHeadCellSx = {
+    const styledTableHeadCellSx = useMemo(() => ({
         backgroundColor: theme.palette.mode === 'dark' ? undefined : theme.palette.primary.light,
         color: theme.palette.mode === 'dark' ? undefined : 'white',
-    };
+    }), [theme]);
 
     useEffect(() => {
         myRef.current.scrollTo(0, 0)
@@ -74,7 +74,7 @@ const AlarmTable = props => {
     let currTopArea = ""
     let newTopArea = false
 
-    const textFieldDisableClasses = {
+    const textFieldDisabledSx  = {
         noAlarm: textFieldSeverityDisabledSx,
         minorAlarmAcked: textFieldSeverityDisabledSx,
         minorAlarm: textFieldSeverityDisabledSx,
@@ -274,20 +274,23 @@ const AlarmTable = props => {
                                         <Collapse in={props.alarmAdminPVExpand} timeout="auto" unmountOnExit>
                                             <List component="div" disablePadding >
                                                 <ListItem
-                                                    button
-                                                    sx={nestedSx}
-                                                    onClick={(event) => {
-                                                        event.preventDefault()
-                                                        event.stopPropagation()
-                                                        props.setAlarmAdminPVExpand(false)
-                                                        props.alarmContextClose()
-                                                        props.deletePV(event, areaAlarmName, value["name"])
-                                                    }}
+                                                    disablePadding
                                                 >
-                                                    <ListItemIcon >
-                                                        <DeleteIcon fontSize="small" />
-                                                    </ListItemIcon>
-                                                    <ListItemText primary="Delete pv" />
+                                                    <ListItemButton
+                                                        sx={nestedSx}
+                                                        onClick={(event) => {
+                                                            event.preventDefault()
+                                                            event.stopPropagation()
+                                                            props.setAlarmAdminPVExpand(false)
+                                                            props.alarmContextClose()
+                                                            props.deletePV(event, areaAlarmName, value["name"])
+                                                        }}
+                                                    >
+                                                        <ListItemIcon >
+                                                            <DeleteIcon fontSize="small" />
+                                                        </ListItemIcon>
+                                                        <ListItemText primary="Delete pv" />
+                                                    </ListItemButton>
                                                 </ListItem>
                                             </List>
                                         </Collapse>
@@ -335,7 +338,7 @@ const AlarmTable = props => {
                                             classes={
                                                 props.enableAllAreas && props.areaEnabled[areaName] && value["enable"]
                                                     ? undefined
-                                                    : textFieldDisableClasses
+                                                    : textFieldDisabledSx 
                                             }
                                             fadeTU={props.fadeTU}
                                         />

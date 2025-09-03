@@ -39,7 +39,7 @@ const AddPVDialog = (props) => {
                         <Grid item xs={1} sx={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: 'center' }}>
                             <Lan />
                         </Grid>
-                        <Grid item xs={1} sx={{ display: "flex", flexDirection: "column", justifyContent: "center" }} style={{ marginRight: '2rem' }}>
+                        <Grid item xs={1} sx={{ display: "flex", flexDirection: "column", justifyContent: "center", marginRight: 4 }}>
                             <Typography sx={{ fontWeight: 500, textAlign: 'center' }} >
                                 PV
                                 </Typography>
@@ -68,7 +68,7 @@ const AddPVDialog = (props) => {
                                 <Tooltip title="Remove PV" placement="bottom">
                                     <IconButton
                                         onClick={() => props.popNewPVInfo(index)}
-                                        style={{ marginLeft: '0.5em' }}
+                                        sx={{ marginLeft: 1 }}
                                         size="large">
                                         <RemoveCircleIcon color="primary" />
                                     </IconButton>
@@ -78,7 +78,7 @@ const AddPVDialog = (props) => {
                                 <Tooltip title="Add another PV" placement="bottom">
                                     <IconButton
                                         onClick={props.appendNewPVInfo}
-                                        style={{ marginLeft: lastIndex === 0 && '0.5em' }}
+                                        sx={{ marginLeft: lastIndex === 0 && 1 }}
                                         size="large">
                                         <AddCircleIcon color="secondary" />
                                     </IconButton>
@@ -117,7 +117,7 @@ const AddPVDialog = (props) => {
                             <Grid item xs={1} sx={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: 'center' }}>
                                 <Domain />
                             </Grid>
-                            <Grid item xs={1} sx={{ display: "flex", flexDirection: "column", justifyContent: "center" }} style={{ marginRight: '2rem' }}>
+                            <Grid item xs={1} sx={{ display: "flex", flexDirection: "column", justifyContent: "center", mr: 4 }}>
                                 <Typography sx={{ fontWeight: 500, textAlign: 'center' }} >
                                     AREA
                                 </Typography>
@@ -141,7 +141,7 @@ const AddPVDialog = (props) => {
                     </Grid>
                 </Grid>
             </DialogContent>
-            <DialogActions style={{ marginTop: '2rem' }}>
+            <DialogActions sx={{ mt: 4 }}>
                 <Button onClick={props.handleClose} color="primary">
                     Cancel
                 </Button>

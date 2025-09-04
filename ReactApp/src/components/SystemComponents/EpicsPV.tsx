@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useRef } from "react";
+import React, { useState, useContext, useEffect, useRef,useCallback } from "react";
 import ReactAutomationStudioContext from "./AutomationStudioContext";
 import Typography from "@mui/material/Typography";
 import { io } from "socket.io-client";
@@ -76,9 +76,9 @@ export const useEpicsPV = (props) => {
     return pv;
   });
 
-   const setPvThrottled = useRef(
-    throttle((value) => setPv(value), 20)
-  ).current;
+   const setPvThrottled = useCallback(
+    throttle(value => setPv(value), 20)
+  , [])  ;
 
   const pvName = pv.pvname;
 

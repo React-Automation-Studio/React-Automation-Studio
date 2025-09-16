@@ -577,12 +577,12 @@ or: https://doi.org/10.18429/JACoW-ICALEPCS2023-FR2BCO01
 
 
 # Changelog
-  V7.0.0 Wednesday 9 July 2025
+ V7.0.0 Tuesday 16 September 2025
   <br />
   Major Updates:
   <ul>
     <li>Updated to Updated to MUI V7 </li>
-    <li>Updated to the latest Node LTS 22.17.0 </li>
+    <li>Updated to the latest Node LTS 22.19.0 </li>
     <li>Package updates to frontend modules</li>
     <li>Removed legacy MUI styling</li>
   </ul>

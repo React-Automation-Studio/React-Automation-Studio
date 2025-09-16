@@ -28,7 +28,7 @@ const AddAreaDialog = (props) => {
         const { value } = event.target
         props.setAddAreaDialogData(prevState => ({
             ...prevState,
-            area: value.replaceAll(" ","")
+            area: value.replaceAll(" ", "")
         }))
     }
 

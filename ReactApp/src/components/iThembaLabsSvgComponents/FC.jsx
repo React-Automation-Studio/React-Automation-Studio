@@ -20,6 +20,9 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */
 const FC = (props) => {
+  console.warn(
+      "This component is deprecated and will be removed in RAS in V8.0.0."
+    );
   const context = useContext(AutomationStudioContext);
   const theme = useTheme();
 

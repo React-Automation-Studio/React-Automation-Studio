@@ -1,6 +1,4 @@
-import React from 'react'
 
-import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 import TextInput from '../BaseComponents/TextInput';
 import SelectionInput from '../BaseComponents/SelectionInput';
 import SelectionList from '../BaseComponents/SelectionList';
@@ -58,5 +56,5 @@ const EpicsMbboDebug = (props) => {
   );
 }
 
-EpicsMbboDebug.contextType = AutomationStudioContext;
+
 export default EpicsMbboDebug

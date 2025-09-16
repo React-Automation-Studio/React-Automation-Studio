@@ -33,7 +33,9 @@ const QuadrapoleMagnet = (props) => {
     'metadata': {},
     'severity': '',
     openContextMenu: false,
-    'open': false, x0: 0, y0: 0
+    'open': false,
+    x0: 0,
+    y0: 0
   });
 
   const handleOnClick = () => {
@@ -104,132 +106,132 @@ const QuadrapoleMagnet = (props) => {
   }
 
   return (
-      <g onContextMenu={handleToggleContextMenu}>
-        <ContextMenu
-          disableProbe={props.disableProbe}
-          open={state.openContextMenu}
-          anchorReference="anchorPosition"
-          anchorPosition={{ top: +state.y0, left: +state.x0 }}
-          probeType={'simple'}
-          pvs={[{ pvname: state.pvname, initialized: initialized }]}
-          handleClose={handleContextMenuClose}
+    <g onContextMenu={handleToggleContextMenu}>
+      <ContextMenu
+        disableProbe={props.disableProbe}
+        open={state.openContextMenu}
+        anchorReference="anchorPosition"
+        anchorPosition={{ top: +state.y0, left: +state.x0 }}
+        probeType={'simple'}
+        pvs={[{ pvname: state.pvname, initialized: initialized }]}
+        handleClose={handleContextMenuClose}
 
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'left',
-          }}
-        />
-        <DataConnection
-          pv={pv}
-          macros={macros}
-          usePvLabel={usePvLabel}
-          usePrecision={usePrecision}
-          handleInputValue={handleInputValue}
-          handleMetadata={handleMetadata}
-          outputValue={state.outputValue}
-          useStringValue={useStringValue}
-        />
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+      />
+      <DataConnection
+        pv={pv}
+        macros={macros}
+        usePvLabel={usePvLabel}
+        usePrecision={usePrecision}
+        handleInputValue={handleInputValue}
+        handleMetadata={handleMetadata}
+        outputValue={state.outputValue}
+        useStringValue={useStringValue}
+      />
 
-        {usePvLabel === true && <DataConnection
-          pv={pv.toString() + ".DESC"}
-          macros={macros}
-          handleInputValue={handleInputValueLabel}
-        />}
+      {usePvLabel === true && <DataConnection
+        pv={pv.toString() + ".DESC"}
+        macros={macros}
+        handleInputValue={handleInputValueLabel}
+      />}
 
-        {initialized === true &&
-          <g onClick={handleOnClick} >
-            <linearGradient id={state.pvname + 'elipse-gradient'} gradientTransform="rotate(0)">
-              <stop offset="0%" stopOpacity="0.5" stopColor='silver' />
-              <stop offset="65%" stopColor={color} />
-            </linearGradient>
-            <defs>
-              <filter id={state.pvname + "elipseShadow"} x="0" y="0" width="600%" height="500%">
-                <feOffset result="offOut" in="SourceGraphic" dx="2.5" dy="2.5" />
-                <feColorMatrix result="matrixOut" in="offOut" type="matrix"
-                  values="0.2 0 0 0 0 0 0.2 0 0 0 0 0 0.2 0 0 0 0 0 1 0" />
-                <feGaussianBlur result="blurOut" in="matrixOut" stdDeviation="2.5" />
-                <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
-              </filter>
-            </defs>
-            <ellipse
-              fill={props.componentGradient === true ? 'url(#' + state.pvname + 'elipse-gradient)' : color}
-              cx={props.cx + 15}
-              cy={props.cy}
-              rx="10"
-              ry="30"
-              filter={props.componentShadow === true ? "url(#" + state.pvname + "elipseShadow)" : ""}
-            />
-            <ellipse
-              fill={props.componentGradient === true ? 'url(#' + state.pvname + 'elipse-gradient)' : color}
-              cx={props.cx}
-              cy={props.cy}
-              rx="10"
-              ry="30"
-              filter={props.componentShadow === true ? "url(#" + state.pvname + "elipseShadow)" : ""}
-            />
+      {initialized === true &&
+        <g onClick={handleOnClick} >
+          <linearGradient id={state.pvname + 'elipse-gradient'} gradientTransform="rotate(0)">
+            <stop offset="0%" stopOpacity="0.5" stopColor='silver' />
+            <stop offset="65%" stopColor={color} />
+          </linearGradient>
+          <defs>
+            <filter id={state.pvname + "elipseShadow"} x="0" y="0" width="600%" height="500%">
+              <feOffset result="offOut" in="SourceGraphic" dx="2.5" dy="2.5" />
+              <feColorMatrix result="matrixOut" in="offOut" type="matrix"
+                values="0.2 0 0 0 0 0 0.2 0 0 0 0 0 0.2 0 0 0 0 0 1 0" />
+              <feGaussianBlur result="blurOut" in="matrixOut" stdDeviation="2.5" />
+              <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+            </filter>
+          </defs>
+          <ellipse
+            fill={props.componentGradient === true ? 'url(#' + state.pvname + 'elipse-gradient)' : color}
+            cx={props.cx + 15}
+            cy={props.cy}
+            rx="10"
+            ry="30"
+            filter={props.componentShadow === true ? "url(#" + state.pvname + "elipseShadow)" : ""}
+          />
+          <ellipse
+            fill={props.componentGradient === true ? 'url(#' + state.pvname + 'elipse-gradient)' : color}
+            cx={props.cx}
+            cy={props.cy}
+            rx="10"
+            ry="30"
+            filter={props.componentShadow === true ? "url(#" + state.pvname + "elipseShadow)" : ""}
+          />
 
-            <text style={{ fill: theme.palette.text.primary }}
-              x={props.cx + 7.5}
-              y={props.cy + 57.5}
-              textAnchor='middle'
-              filter={props.textShadow === true ? "url(#" + state.pvname + "elipseShadow)" : ""}
-            >
-              {props.usePvUnits === true ? value + " " + state.metadata.units : value + " " + props.units}
+          <text style={{ fill: theme.palette.text.primary }}
+            x={props.cx + 7.5}
+            y={props.cy + 57.5}
+            textAnchor='middle'
+            filter={props.textShadow === true ? "url(#" + state.pvname + "elipseShadow)" : ""}
+          >
+            {props.usePvUnits === true ? value + " " + state.metadata.units : value + " " + props.units}
 
-            </text>
-            <text style={{ fill: theme.palette.text.primary }}
-              x={props.cx + 7.5}
-              y={props.cy - 40}
-              textAnchor='middle'
-              filter={props.textShadow === true ? "url(#" + state.pvname + "elipseShadow)" : ""}
-            >
-              {usePvLabel === true ? state.label : props.label}
-            </text>
-          </g>
-        }
-        {(initialized === false || initialized === 'undefined') &&
-          <g  >
-            <linearGradient id="elipse-gradient">
-              <stop offset="0%" stopOpacity="0" />
-              <stop offset="75%" stopColor={'grey'} />
-            </linearGradient>
-            <linearGradient id={state.pvname + 'elipse-gradient'} gradientTransform="rotate(0)">
-              <stop offset="0%" stopOpacity="0" />
-              <stop offset="65%" stopColor={'silver'} />
-            </linearGradient>
-            <defs>
-              <filter id={state.pvname + "elipseShadow"} x="0" y="0" width="600%" height="500%">
-                <feOffset result="offOut" in="SourceGraphic" dx="7.5" dy="7.5" />
-                <feColorMatrix result="matrixOut" in="offOut" type="matrix"
-                  values="0.2 0 0 0 0 0 0.2 0 0 0 0 0 0.2 0 0 0 0 0 1 0" />
-                <feGaussianBlur result="blurOut" in="matrixOut" stdDeviation="5" />
-                <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
-              </filter>
-            </defs>
+          </text>
+          <text style={{ fill: theme.palette.text.primary }}
+            x={props.cx + 7.5}
+            y={props.cy - 40}
+            textAnchor='middle'
+            filter={props.textShadow === true ? "url(#" + state.pvname + "elipseShadow)" : ""}
+          >
+            {usePvLabel === true ? state.label : props.label}
+          </text>
+        </g>
+      }
+      {(initialized === false || initialized === 'undefined') &&
+        <g  >
+          <linearGradient id="elipse-gradient">
+            <stop offset="0%" stopOpacity="0" />
+            <stop offset="75%" stopColor={'grey'} />
+          </linearGradient>
+          <linearGradient id={state.pvname + 'elipse-gradient'} gradientTransform="rotate(0)">
+            <stop offset="0%" stopOpacity="0" />
+            <stop offset="65%" stopColor={'silver'} />
+          </linearGradient>
+          <defs>
+            <filter id={state.pvname + "elipseShadow"} x="0" y="0" width="600%" height="500%">
+              <feOffset result="offOut" in="SourceGraphic" dx="7.5" dy="7.5" />
+              <feColorMatrix result="matrixOut" in="offOut" type="matrix"
+                values="0.2 0 0 0 0 0 0.2 0 0 0 0 0 0.2 0 0 0 0 0 1 0" />
+              <feGaussianBlur result="blurOut" in="matrixOut" stdDeviation="5" />
+              <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+            </filter>
+          </defs>
 
-            <ellipse
-              fill={'url(#' + state.pvname + 'elipse-gradient)'}
+          <ellipse
+            fill={'url(#' + state.pvname + 'elipse-gradient)'}
 
-              cx={props.cx}
-              cy={props.cy}
-              rx="10"
-              ry="30"
-              filter={"url(#" + state.pvname + "elipseShadow)"}
-            />
-            <ellipse
-              fill={'url(#' + state.pvname + 'elipse-gradient)'}
+            cx={props.cx}
+            cy={props.cy}
+            rx="10"
+            ry="30"
+            filter={"url(#" + state.pvname + "elipseShadow)"}
+          />
+          <ellipse
+            fill={'url(#' + state.pvname + 'elipse-gradient)'}
 
-              cx={props.cx + 15}
-              cy={props.cy}
-              rx="10"
-              ry="30"
-              filter={"url(#" + state.pvname + "elipseShadow)"}
-            />
+            cx={props.cx + 15}
+            cy={props.cy}
+            rx="10"
+            ry="30"
+            filter={"url(#" + state.pvname + "elipseShadow)"}
+          />
 
-          </g>
-        }
-      </g>
-    );
+        </g>
+      }
+    </g>
+  );
 };
 
 export default QuadrapoleMagnet;

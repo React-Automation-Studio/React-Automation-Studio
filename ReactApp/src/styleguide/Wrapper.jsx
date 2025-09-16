@@ -104,8 +104,8 @@ class Wrapper extends Component {
           <StyledEngineProvider injectFirst>
             <ThemeProvider theme={this.state.theme}>
               <CssBaseline>
-                <ReactVisCssBaseline>{this.props.children}</ReactVisCssBaseline>
                 <SliderGlobalStyles />
+                <ReactVisCssBaseline>{this.props.children}</ReactVisCssBaseline>
               </CssBaseline>
             </ThemeProvider>
           </StyledEngineProvider>

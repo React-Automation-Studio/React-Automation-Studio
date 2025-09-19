@@ -176,7 +176,7 @@ const ControlCenterTable = (props) => {
       <Paper
         sx={{
           width: "100%",
-          marginTop: theme.spacing(1) * 0,
+          marginTop: 0,
           marginBottom: theme.spacing(4),
           overflowX: "auto",
         }}

@@ -177,7 +177,7 @@ const AddAreaDialog = (props) => {
                             <Grid item xs={1} sx={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
                                 <Domain />
                             </Grid>
-                            <Grid item xs={3} sx={{ display: "flex", flexDirection: "column", justifyContent: "center" }} style={{ marginRight: '1rem' }}>
+                            <Grid item xs={3} sx={{ display: "flex", flexDirection: "column", justifyContent: "center",mr:2 }} >
                                 <Typography sx={{ fontWeight: 500, textAlign: "center" }} >
                                     {`${props.data.edit ? '' : 'NEW '}AREA NAME`}
                                 </Typography>

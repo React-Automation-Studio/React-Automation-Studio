@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 import DataConnection from '../SystemComponents/DataConnection';
 import { useTheme } from '@mui/material/styles';
@@ -6,9 +6,11 @@ import ContextMenu from '../SystemComponents/ContextMenu';
 
 /* eslint-disable eqeqeq */
 const BendingMagnet = (props) => {
+  useEffect(() => {
    console.warn(
       "This component is deprecated and will be removed in RAS in V8.0.0."
     );
+  }, []);
   const context = useContext(AutomationStudioContext);
   const theme = useTheme();
 

@@ -7,9 +7,11 @@ import ContextMenu from '../SystemComponents/ContextMenu';
 /* eslint-disable eqeqeq */
 
 const QuadrapoleMagnet = (props) => {
-  console.warn(
-      "This component is deprecated and will be removed in RAS in V8.0.0."
-    );
+  useEffect(() => {
+     console.warn(
+        "This component is deprecated and will be removed in RAS in V8.0.0."
+      );
+    }, []);
   const context = useContext(AutomationStudioContext);
   const theme = useTheme();
 

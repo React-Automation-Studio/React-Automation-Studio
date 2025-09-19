@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { AppBar, Divider, Grid, Tab, Tabs, Typography } from "@mui/material";
+import { AppBar, Divider, GridLegacy as Grid, Tab, Tabs, Typography } from "@mui/material";
 import {
   Gauge,
   GraphY,

@@ -1,11 +1,11 @@
 import React from "react";
-import withStyles from "@mui/styles/withStyles";
+import { useTheme } from '@mui/material/styles';
 import TextInput from "../../BaseComponents/TextInput";
 import TextOutput from "../../BaseComponents/TextOutput";
 import Slider from "../../BaseComponents/Slider";
 import GraphY from "../../BaseComponents/GraphY";
 
-import Grid from "@mui/material/Grid";
+import Grid from '@mui/material/GridLegacy';
 import Switch from "../../BaseComponents/Switch";
 import SelectionInput from "../../BaseComponents/SelectionInput";
 import SelectionList from "../../BaseComponents/SelectionList";
@@ -22,39 +22,27 @@ import StyledIconIndicator from "../../BaseComponents/StyledIconIndicator";
 import SideBar from "../../SystemComponents/SideBar";
 import { lime } from "@mui/material/colors";
 
-const styles = (theme) => ({
-  root: {
-    flexGrow: 1,
-    padding: theme.spacing(1) * 2,
-  },
-  paper: {
-    padding: theme.spacing(1) * 2,
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-  },
-});
-
-class MobileDemo2 extends React.Component {
-  render() {
-    const { classes } = this.props;
-    return (
-      <div style={{ overflowX: "hidden" }}>
-        {typeof this.props.nosidebar === "undefined" && <SideBar />}
-        <div style={{ padding: 24 }}>
-          <div>
-            <Grid container spacing={2}>
-              <Grid item xs={12} lg={6}>
-                <div style={{ height: "25vh" }}>
-                  <GraphY
-                    pvs={["testIOC:test4", "testIOC:test5"]}
-                    legend={["Sine Wave ", "Amplitude"]}
-                    lineColor={[
-                      this.props.theme.palette.secondary.main,
-                      lime["400"],
-                    ]}
-                  />
-                </div>
-              </Grid>
+const MobileDemo2 = (props) => {
+  const theme = useTheme();
+  
+  return (
+    <div style={{ overflowX: "hidden" }}>
+      {typeof props.nosidebar === "undefined" && <SideBar />}
+      <div style={{ padding: 24 }}>
+        <div>
+          <Grid container spacing={2}>
+            <Grid item xs={12} lg={6}>
+              <div style={{ height: "25vh" }}>
+                <GraphY
+                  pvs={["testIOC:test4", "testIOC:test5"]}
+                  legend={["Sine Wave ", "Amplitude"]}
+                  lineColor={[
+                    theme.palette.secondary.main,
+                    lime["400"],
+                  ]}
+                />
+              </div>
+            </Grid>
               <Grid item xs={12} lg={6}>
                 <div style={{ height: "25vh" }}>
                   <GraphY
@@ -78,7 +66,10 @@ class MobileDemo2 extends React.Component {
             </Grid>
           </div>
         </div>
-        <div className={classes.root}>
+        <div style={{
+          flexGrow: 1,
+          padding: theme.spacing(2),
+        }}>
           <Grid
             container
             spacing={2}
@@ -291,6 +282,5 @@ class MobileDemo2 extends React.Component {
       </div>
     );
   }
-}
 
-export default withStyles(styles, { withTheme: true })(MobileDemo2);
+export default MobileDemo2;

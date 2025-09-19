@@ -5,28 +5,24 @@ import TextInput from '../../BaseComponents/TextInput';
 import TextOutput from '../../BaseComponents/TextOutput';
 import Slider from '../../BaseComponents/Slider';
 
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/GridLegacy';
 
 import ToggleButton from '../../BaseComponents/ToggleButton';
 
 import Paper from '@mui/material/Paper';
 
-import withStyles from '@mui/styles/withStyles';
+import { useTheme } from '@mui/material/styles';
 
 import ThumbWheel from '../../BaseComponents/ThumbWheel';
 import Close from '@mui/icons-material/Close';
 
 import {replaceSystemMacros} from '../../SystemComponents/Utils/macroReplacement';
 
-const styles = theme => ({
-  body1: theme.typography.body1,
-});
-
 const EditorSteererXY = (props) => {
+  const theme = useTheme();
   const [system] = useState(replaceSystemMacros(props.system, props.system.macros))
-  const { classes } = props;
   return (
-    <div className={classes.body1} style={{ paddingRight: 12 }}>
+    <div style={{ ...theme.typography.body1, paddingRight: 12 }}>
       <Grid style={{ paddingLeft: 12, paddingRight: 24, }} container spacing={2}>
         <Grid item xs={11}>
           {system.displayName + ": X-Steerer"}
@@ -35,7 +31,7 @@ const EditorSteererXY = (props) => {
           <Close fontSize="small" onClick={props.handleCloseEditor} />
         </Grid>
       </Grid>
-      <Paper style={{ padding: 12 }} elevation={props.theme.palette.paperElevation}>
+      <Paper style={{ padding: 12 }} elevation={theme.palette.paperElevation}>
         <Grid container
           direction="row"
           justifyContent="flex-start"
@@ -104,9 +100,9 @@ const EditorSteererXY = (props) => {
           </Grid>
         </Grid>
       </Paper>
-      <div className={classes.body1} style={{ marginTop: 12 }}>
+      <div style={{ ...theme.typography.body1, marginTop: 12 }}>
         {system.displayName + ": Y-Steerer"}
-        <Paper style={{ padding: 12 }} elevation={props.theme.palette.paperElevation} >
+        <Paper style={{ padding: 12 }} elevation={theme.palette.paperElevation} >
           <Grid container
             direction="row"
             justifyContent="flex-start"
@@ -180,4 +176,4 @@ const EditorSteererXY = (props) => {
   );
 }
 
-export default withStyles(styles, { withTheme: true })(EditorSteererXY)
+export default EditorSteererXY

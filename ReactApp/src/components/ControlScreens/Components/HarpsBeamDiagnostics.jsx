@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import Grid from "@mui/material/Grid";
+import Grid from '@mui/material/GridLegacy';
 import HarpRangeSelection from "../../SiteSpecificComponents/iThembaLABS/CompoundComponents/HarpRangeSelection";
 
 import ActionButton from "../../BaseComponents/ActionButton";

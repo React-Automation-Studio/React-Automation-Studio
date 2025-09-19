@@ -1,8 +1,7 @@
 import React from 'react';
+import { useTheme } from '@mui/material/styles';
 
-import withStyles from '@mui/styles/withStyles';
-
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/GridLegacy';
 
 import Typography from '@mui/material/Typography';
 
@@ -12,56 +11,43 @@ import Slider from '../../BaseComponents/Slider';
 
 import Card from '@mui/material/Card';
 
+const DynamicPvFieldExample = (props) => {
+  const theme = useTheme();
+  const [state, setState] = React.useState({
+    value: 0,
+    stateValue: 0,
+    showAdvancedSettings: 0,
+  });
 
-const styles = theme => ({
-  body1: theme.typography.body1,
-  root: {
-    flexGrow: 1,
-    padding: theme.spacing(1),
-    overflowX: "hidden",
-    overflowY: "hidden",
-    marginTop: 40,
-    marginBottom: 100,
-  },
-  paper: {
-    padding: theme.spacing(1) * 0,
-    margin: theme.spacing(1) * 0,
-    height: '100%',
-    color: theme.palette.text.secondary,
-  },
-  control: {
-    padding: theme.spacing(1) * 2,
-  },
-});
-
-class DynamicPvFieldExample extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: 0,
-      stateValue: 0,
-      showAdvancedSettings: 0,
-    };
-    this.handleStateChange = this.handleStateChange.bind(this);
-  }
-
-  handleChange = (event, value) => {
-    this.setState({ value });
+  const handleStateChange = (stateValue) => {
+    setState(prevState => ({ ...prevState, stateValue }));
   };
 
-  handleStateChange(stateValue) {
-    this.setState({ stateValue })
+  const handleChange = (event, value) => {
+    setState(prevState => ({ ...prevState, value }));
   };
 
-  render() {
-    const { classes } = this.props;
-    return (
-      <React.Fragment>
-        <Grid container className={classes.root} spacing={2}>
-          <Grid item xs={6}>
-            <Typography style={{ paddingBottom: 0 }}> Example with prop useMetadata=true</Typography>
-            <Card>
-              <Grid container className={classes.root} spacing={2}>
+  return (
+    <React.Fragment>
+      <Grid container sx={{
+        flexGrow: 1,
+        padding: theme.spacing(1),
+        overflowX: "hidden",
+        overflowY: "hidden",
+        marginTop: 40,
+        marginBottom: 100,
+      }} spacing={2}>
+        <Grid item xs={6}>
+          <Typography style={{ paddingBottom: 0 }}> Example with prop useMetadata=true</Typography>
+          <Card>
+            <Grid container sx={{
+              flexGrow: 1,
+              padding: theme.spacing(1),
+              overflowX: "hidden",
+              overflowY: "hidden",
+              marginTop: 40,
+              marginBottom: 100,
+            }} spacing={2}>
                 <Grid item xs={12}>
                   <TextInput
                     pv='$(device):dynamicPvFields'
@@ -95,7 +81,14 @@ class DynamicPvFieldExample extends React.Component {
           <Grid item xs={6}>
             <Typography style={{ paddingBottom: 0 }}> Dynamic example with prop useMetadata=false</Typography>
             <Card>
-              <Grid container className={classes.root} spacing={2}>
+              <Grid container sx={{
+                flexGrow: 1,
+                padding: theme.spacing(1),
+                overflowX: "hidden",
+                overflowY: "hidden",
+                marginTop: 40,
+                marginBottom: 100,
+              }} spacing={2}>
                 <Grid item xs={12}>
                   <TextInput
                     pv='$(device):dynamicPvFields'
@@ -174,6 +167,5 @@ class DynamicPvFieldExample extends React.Component {
       </React.Fragment>
     );
   }
-}
 
-export default withStyles(styles, { withTheme: true })(DynamicPvFieldExample);
+export default DynamicPvFieldExample;

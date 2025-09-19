@@ -1,4 +1,4 @@
-import { Grid, Typography } from "@mui/material";
+import { GridLegacy as Grid, Typography } from "@mui/material";
 import TextInput from "../BaseComponents/TextInput";
 import TextOutput from "../BaseComponents/TextOutput";
 import ArrayContainer from "./ArrayContainer";

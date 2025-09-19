@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import TextField from '@mui/material/TextField';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/GridLegacy';
 import { useTheme } from '@mui/material/styles';
 import TraditionalLayout from '../../UI/Layout/ComposedLayouts/TraditionalLayout';
 import AutomationStudioContext from '../../SystemComponents/AutomationStudioContext';

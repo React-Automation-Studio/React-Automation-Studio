@@ -8,7 +8,7 @@ import {
   Primary,
   Controls,
   Stories,
-} from "@storybook/blocks";
+} from "@storybook/addon-docs/blocks";
 import ImportPath from "./ImportPath";
 const preview: Preview = {
   decorators: [

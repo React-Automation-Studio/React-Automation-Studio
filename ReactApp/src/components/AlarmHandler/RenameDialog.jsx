@@ -1,45 +1,14 @@
 import React from 'react';
-import makeStyles from '@mui/styles/makeStyles';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/GridLegacy';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-// Styles
-const useStyles = makeStyles(theme => ({
-    boldText: {
-        fontWeight: 500,
-        textAlign: 'center',
-    },
-    centerInBlock: {
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: 'center'
-    },
-    connected: {
-        color: theme.palette.ok.main
-    },
-    disconnected: {
-        color: theme.palette.error.main
-    },
-    horizontalRight: {
-        alignItems: "flex-end"
-    },
-    verticalMiddle: {
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-    }
-}))
-
-
 const RenameDialog = (props) => {
-    const classes = useStyles()
 
     const title = props.data?.index
         ? props.data.index.includes("=")
@@ -78,12 +47,24 @@ const RenameDialog = (props) => {
                             justifyContent="flex-start"
                             alignItems="stretch"
                         >
-                            <Grid item xs={3} className={[classes.verticalMiddle, classes.horizontalRight].join(' ')}>
-                                <Typography className={classes.boldText} >
+                            <Grid item xs={3} sx={{
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "center",
+                                alignItems: "flex-end"
+                            }}>
+                                <Typography sx={{
+                                    fontWeight: 500,
+                                    textAlign: 'center',
+                                }}>
                                     CURRENT NAME:
                                 </Typography>
                             </Grid>
-                            <Grid item xs={8} className={classes.verticalMiddle} style={{ marginLeft: '1em' }}>
+                            <Grid item xs={8} sx={{
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "center",
+                            }} style={{ marginLeft: '1em' }}>
                                 <Typography>
                                     {props.data.currentName}
                                 </Typography>
@@ -97,12 +78,24 @@ const RenameDialog = (props) => {
                             justifyContent="flex-start"
                             alignItems="stretch"
                         >
-                            <Grid item xs={3} className={[classes.verticalMiddle, classes.horizontalRight].join(' ')}>
-                                <Typography className={classes.boldText} >
+                            <Grid item xs={3} sx={{
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "center",
+                                alignItems: "flex-end"
+                            }}>
+                                <Typography sx={{
+                                    fontWeight: 500,
+                                    textAlign: 'center',
+                                }}>
                                     NEW NAME:
                                 </Typography>
                             </Grid>
-                            <Grid item xs={8} className={classes.verticalMiddle} style={{ marginLeft: '1em' }}>
+                            <Grid item xs={8} sx={{
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "center",
+                            }} style={{ marginLeft: '1em' }}>
                                 <TextField
                                     type='text'
                                     value={props.data.newName}

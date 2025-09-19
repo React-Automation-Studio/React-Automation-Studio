@@ -7,7 +7,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import { useNavigate, useLocation } from "react-router-dom";
-import makeStyles from "@mui/styles/makeStyles";
+import { useTheme } from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -30,29 +30,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(1) * 8,
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    padding: `calc(${theme.spacing(1) * 2}px ${
-      theme.spacing(1) * 3
-    }px ${theme.spacing(1)} * 3)`,
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.error.main,
-  },
-  form: {
-    width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    marginTop: theme.spacing(1) * 3,
-  },
-}));
-
 interface HeaderProps {
   title1?: string;
   title2?: string;
@@ -62,7 +39,7 @@ interface HeaderProps {
   signInText?: string;
 }
 const Header = (props: HeaderProps) => {
-  const classes = useStyles();
+  const theme = useTheme();
   return (
     <React.Fragment>
       {props.title1 && (
@@ -82,7 +59,14 @@ const Header = (props: HeaderProps) => {
       )}
       {props.image}
       {props.logoIcon && (
-        <Avatar className={classes.avatar}>{props.logoIcon}</Avatar>
+        <Avatar
+          sx={{
+            margin: theme.spacing(1),
+            backgroundColor: theme.palette.error.main,
+          }}
+        >
+          {props.logoIcon}
+        </Avatar>
       )}
       {props.signInText && (
         <Typography component="h1" variant="h5" style={{ paddingBottom: 16 }}>
@@ -128,7 +112,7 @@ const Login = ({
   timeout = 15000,
   ...props
 }: LoginProps) => {
-  const classes = useStyles();
+  const theme = useTheme();
   const context = useContext(AutomationStudioContext);
   const loggedIn = context.userData.loggedIn;
   const [username, setUsername] = useState("");
@@ -314,7 +298,15 @@ const Login = ({
       </Dialog>
 
       <Container maxWidth="sm" sx={{ paddingTop: 8 }}>
-        <Paper className={classes.paper} sx={{ padding: 4 }}>
+        <Paper
+          sx={{
+            marginTop: theme.spacing(8),
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            padding: 4,
+          }}
+        >
           {props.customHeader ? (
             props.customHeader
           ) : (
@@ -348,7 +340,12 @@ const Login = ({
             </AppBar>
           )}
           {(enableStandardLogin || enableActiveDirectoryLogin) && (
-            <form className={classes.form}>
+            <form
+              style={{
+                width: "100%", // Fix IE 11 issue.
+                marginTop: theme.spacing(1),
+              }}
+            >
               <FormControl margin="normal" required fullWidth>
                 <TextField
                   label={usernameText}
@@ -397,7 +394,9 @@ const Login = ({
                 fullWidth
                 variant="contained"
                 color="primary"
-                className={classes.submit}
+                sx={{
+                  marginTop: theme.spacing(3),
+                }}
                 onClick={() => setSubmit(true)}
               >
                 Sign in

@@ -1,6 +1,6 @@
 import React from "react";
 
-import makeStyles from "@mui/styles/makeStyles";
+import { useTheme } from '@mui/material/styles';
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
@@ -11,7 +11,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Divider from "@mui/material/Divider";
-import Grid from "@mui/material/Grid";
+import Grid from '@mui/material/GridLegacy';
 import Radio from "@mui/material/Radio";
 import Switch from "@mui/material/Switch";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
@@ -32,56 +32,14 @@ import {
   endOfDay,
 } from "date-fns";
 
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { TextField } from "@mui/material";
-const useStyles = makeStyles((theme) => ({
-  root: {
-    padding: theme.spacing(1),
-    paddingTop: theme.spacing(2),
-    width: "100%",
-    margin: 0,
-  },
-  centerInBlock: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  chip: {
-    marginRight: "1em",
-    marginTop: "0.5em",
-    marginBottom: "0.5em",
-  },
-  chipOutlinedSecondary: {
-    borderWidth: "1.5px",
-  },
-  horizontalCenter: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "center",
-  },
-  selectedAvatar: {
-    color: theme.palette.getContrastText(theme.palette.secondary.main),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  smallAvatar: {
-    width: theme.spacing(4),
-    height: theme.spacing(4),
-    marginLeft: "0.4em",
-    marginRight: "0.4em",
-  },
-  verticalCenter: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-  },
-}));
 
 const ScheduleDialog = (props) => {
-  const classes = useStyles(props);
+  const theme = useTheme();
 
   const { global } = props.dialogUserObject;
 
@@ -825,7 +783,11 @@ const ScheduleDialog = (props) => {
       onBackdropClick={props.closeDialog}
       onClose={props.closeDialog}
     >
-      <DialogTitle className={classes.horizontalCenter}>
+      <DialogTitle sx={{ 
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "center",
+      }}>
         {global
           ? `${props.dialogUserObject.name}'s notification schedule (Global)`
           : `${props.dialogUserObject.name}'s notification schedule (${
@@ -834,7 +796,11 @@ const ScheduleDialog = (props) => {
             })`}
       </DialogTitle>
       <DialogContent>
-        <DialogContentText className={classes.horizontalCenter}>
+        <DialogContentText sx={{ 
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+        }}>
           {props.userScheduleString({ isGlobal: global, ...displayUserObject })}
         </DialogContentText>
         <Grid
@@ -857,19 +823,34 @@ const ScheduleDialog = (props) => {
               justifyContent="center"
               alignItems="stretch"
             >
-              <Grid item className={classes.centerInBlock}>
+              <Grid item sx={{ 
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+              }}>
                 <span style={{ fontSize: "1.1rem", fontWeight: 500 }}>
                   Unique schedule
                 </span>
               </Grid>
-              <Grid item className={classes.centerInBlock}>
+              <Grid item sx={{ 
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+              }}>
                 <Switch
                   checked={global}
                   onChange={handleNotifyGlobal}
                   disabled={props.dialogUserObject.notifyPVs.length === 0}
                 />
               </Grid>
-              <Grid item className={classes.centerInBlock}>
+              <Grid item sx={{ 
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+              }}>
                 <span style={{ fontSize: "1.1rem", fontWeight: 500 }}>
                   Global schedule
                 </span>
@@ -887,7 +868,14 @@ const ScheduleDialog = (props) => {
             {props.dialogUserObject.notifyPVs.map((area, index) => {
               return (
                 <Chip
-                  classes={{ outlinedSecondary: classes.chipOutlinedSecondary }}
+                  sx={{ 
+                    marginRight: "1em",
+                    marginTop: "0.5em",
+                    marginBottom: "0.5em",
+                    '&.MuiChip-outlinedSecondary': {
+                      borderWidth: "1.5px",
+                    }
+                  }}
                   key={`${index}-${area.regEx}`}
                   label={area.regEx}
                   variant={
@@ -896,7 +884,6 @@ const ScheduleDialog = (props) => {
                       : "outlined"
                   }
                   color="secondary"
-                  className={classes.chip}
                   onClick={() => props.setDialogUserNotifyIndex(index)}
                   disabled={global}
                 />
@@ -917,10 +904,19 @@ const ScheduleDialog = (props) => {
               justifyContent="flex-start"
               alignItems="stretch"
             >
-              <Grid item xs={2} className={classes.centerInBlock}>
+              <Grid item xs={2} sx={{ 
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+              }}>
                 <NotificationsActiveIcon />
               </Grid>
-              <Grid item xs={2} className={classes.verticalCenter}>
+              <Grid item xs={2} sx={{ 
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}>
                 <span style={{ fontSize: "1rem" }}>Notify</span>
               </Grid>
               <Grid item xs={8}>
@@ -956,7 +952,11 @@ const ScheduleDialog = (props) => {
                   justifyContent="center"
                   alignItems="stretch"
                 >
-                  <Grid item className={classes.verticalCenter}>
+                  <Grid item sx={{ 
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}>
                     <span style={{ fontSize: "1rem", marginRight: "auto" }}>
                       MINOR
                     </span>
@@ -978,7 +978,11 @@ const ScheduleDialog = (props) => {
                   justifyContent="center"
                   alignItems="stretch"
                 >
-                  <Grid item className={classes.verticalCenter}>
+                  <Grid item sx={{ 
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}>
                     <span style={{ fontSize: "1rem" }}>MAJOR</span>
                   </Grid>
                   <Grid item>
@@ -998,7 +1002,11 @@ const ScheduleDialog = (props) => {
                   justifyContent="center"
                   alignItems="stretch"
                 >
-                  <Grid item className={classes.verticalCenter}>
+                  <Grid item sx={{ 
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}>
                     <span style={{ fontSize: "1rem" }}>INVALID</span>
                   </Grid>
                   <Grid item>
@@ -1020,7 +1028,11 @@ const ScheduleDialog = (props) => {
                   justifyContent="center"
                   alignItems="stretch"
                 >
-                  <Grid item className={classes.verticalCenter}>
+                  <Grid item sx={{ 
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}>
                     <span style={{ fontSize: "1rem" }}>DISCONN</span>
                   </Grid>
                   <Grid item>
@@ -1058,10 +1070,19 @@ const ScheduleDialog = (props) => {
                   justifyContent="center"
                   alignItems="stretch"
                 >
-                  <Grid item xs={3} className={classes.centerInBlock}>
+                  <Grid item xs={3} sx={{ 
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}>
                     <EmailOutlinedIcon />
                   </Grid>
-                  <Grid item xs={4} className={classes.verticalCenter}>
+                  <Grid item xs={4} sx={{ 
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}>
                     <span style={{ fontSize: "1rem" }}>Email</span>
                   </Grid>
                   <Grid item xs={3}>
@@ -1080,10 +1101,19 @@ const ScheduleDialog = (props) => {
                   justifyContent="center"
                   alignItems="stretch"
                 >
-                  <Grid item xs={3} className={classes.centerInBlock}>
+                  <Grid item xs={3} sx={{ 
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}>
                     <WhatsAppIcon />
                   </Grid>
-                  <Grid item xs={4} className={classes.verticalCenter}>
+                  <Grid item xs={4} sx={{ 
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}>
                     <span style={{ fontSize: "1rem" }}>WhatsApp</span>
                   </Grid>
                   <Grid item xs={3}>
@@ -1102,10 +1132,19 @@ const ScheduleDialog = (props) => {
                   justifyContent="center"
                   alignItems="stretch"
                 >
-                  <Grid item xs={3} className={classes.centerInBlock}>
+                  <Grid item xs={3} sx={{ 
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}>
                     <SmsOutlinedIcon />
                   </Grid>
-                  <Grid item xs={4} className={classes.verticalCenter}>
+                  <Grid item xs={4} sx={{ 
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}>
                     <span style={{ fontSize: "1rem" }}>SMS</span>
                   </Grid>
                   <Grid item xs={3}>
@@ -1124,10 +1163,19 @@ const ScheduleDialog = (props) => {
                   justifyContent="center"
                   alignItems="stretch"
                 >
-                  <Grid item xs={3} className={classes.centerInBlock}>
+                  <Grid item xs={3} sx={{ 
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}>
                     <SignalIcon />
                   </Grid>
-                  <Grid item xs={4} className={classes.verticalCenter}>
+                  <Grid item xs={4} sx={{ 
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}>
                     <span style={{ fontSize: "1rem" }}>Signal</span>
                   </Grid>
                   <Grid item xs={3}>
@@ -1156,10 +1204,19 @@ const ScheduleDialog = (props) => {
               justifyContent="flex-start"
               alignItems="stretch"
             >
-              <Grid item xs={2} className={classes.centerInBlock}>
+              <Grid item xs={2} sx={{ 
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+              }}>
                 <ScheduleIcon />
               </Grid>
-              <Grid item xs={2} className={classes.verticalCenter}>
+              <Grid item xs={2} sx={{ 
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}>
                 <span style={{ fontSize: "1rem" }}>All-day</span>
               </Grid>
               <Grid item xs={2}>
@@ -1178,7 +1235,11 @@ const ScheduleDialog = (props) => {
                     justifyContent="flex-start"
                     alignItems="stretch"
                   >
-                    <Grid item xs={3} className={classes.verticalCenter}>
+                    <Grid item xs={3} sx={{ 
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}>
                       From
                     </Grid>
                     <Grid item xs={9}>
@@ -1206,7 +1267,11 @@ const ScheduleDialog = (props) => {
                     justifyContent="flex-start"
                     alignItems="stretch"
                   >
-                    <Grid item xs={3} className={classes.verticalCenter}>
+                    <Grid item xs={3} sx={{ 
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}>
                       To
                     </Grid>
                     <Grid item xs={9}>
@@ -1241,17 +1306,30 @@ const ScheduleDialog = (props) => {
               justifyContent="flex-start"
               alignItems="stretch"
             >
-              <Grid item xs={2} className={classes.centerInBlock}>
+              <Grid item xs={2} sx={{ 
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+              }}>
                 <Radio
                   checked={displayUserObject.weekly}
                   onChange={handleWeekly}
                   disabled={!displayUserObject.notify}
                 />
               </Grid>
-              <Grid item xs={2} className={classes.verticalCenter}>
+              <Grid item xs={2} sx={{ 
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}>
                 <span style={{ fontSize: "1rem" }}>Weekly</span>
               </Grid>
-              <Grid item xs={8} className={classes.verticalCenter}>
+              <Grid item xs={8} sx={{ 
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}>
                 <Grid
                   container
                   direction="row"
@@ -1261,21 +1339,24 @@ const ScheduleDialog = (props) => {
                   <Grid item>
                     <Avatar
                       onClick={() => handleDay("Monday")}
-                      style={{
+                      sx={{
+                        width: theme.spacing(4),
+                        height: theme.spacing(4),
                         marginLeft: "1em",
+                        marginRight: "0.4em",
                         cursor:
                           displayUserObject.weekly && displayUserObject.notify
                             ? "pointer"
                             : null,
-                      }}
-                      className={[
-                        classes.smallAvatar,
-                        displayUserObject.notify &&
+                        ...(displayUserObject.notify &&
                         displayUserObject.weekly &&
                         displayUserObject.days.Monday
-                          ? classes.selectedAvatar
-                          : null,
-                      ].join(" ")}
+                          ? {
+                              color: theme.palette.getContrastText(theme.palette.secondary.main),
+                              backgroundColor: theme.palette.secondary.main,
+                            }
+                          : {}),
+                      }}
                     >
                       M
                     </Avatar>
@@ -1283,20 +1364,24 @@ const ScheduleDialog = (props) => {
                   <Grid item>
                     <Avatar
                       onClick={() => handleDay("Tuesday")}
-                      style={{
+                      sx={{
+                        width: theme.spacing(4),
+                        height: theme.spacing(4),
+                        marginLeft: "0.4em",
+                        marginRight: "0.4em",
                         cursor:
                           displayUserObject.weekly && displayUserObject.notify
                             ? "pointer"
                             : null,
-                      }}
-                      className={[
-                        classes.smallAvatar,
-                        displayUserObject.notify &&
+                        ...(displayUserObject.notify &&
                         displayUserObject.weekly &&
                         displayUserObject.days.Tuesday
-                          ? classes.selectedAvatar
-                          : null,
-                      ].join(" ")}
+                          ? {
+                              color: theme.palette.getContrastText(theme.palette.secondary.main),
+                              backgroundColor: theme.palette.secondary.main,
+                            }
+                          : {}),
+                      }}
                     >
                       T
                     </Avatar>
@@ -1304,20 +1389,24 @@ const ScheduleDialog = (props) => {
                   <Grid item>
                     <Avatar
                       onClick={() => handleDay("Wednesday")}
-                      style={{
+                      sx={{
+                        width: theme.spacing(4),
+                        height: theme.spacing(4),
+                        marginLeft: "0.4em",
+                        marginRight: "0.4em",
                         cursor:
                           displayUserObject.weekly && displayUserObject.notify
                             ? "pointer"
                             : null,
-                      }}
-                      className={[
-                        classes.smallAvatar,
-                        displayUserObject.notify &&
+                        ...(displayUserObject.notify &&
                         displayUserObject.weekly &&
                         displayUserObject.days.Wednesday
-                          ? classes.selectedAvatar
-                          : null,
-                      ].join(" ")}
+                          ? {
+                              color: theme.palette.getContrastText(theme.palette.secondary.main),
+                              backgroundColor: theme.palette.secondary.main,
+                            }
+                          : {}),
+                      }}
                     >
                       W
                     </Avatar>
@@ -1325,20 +1414,24 @@ const ScheduleDialog = (props) => {
                   <Grid item>
                     <Avatar
                       onClick={() => handleDay("Thursday")}
-                      style={{
+                      sx={{
+                        width: theme.spacing(4),
+                        height: theme.spacing(4),
+                        marginLeft: "0.4em",
+                        marginRight: "0.4em",
                         cursor:
                           displayUserObject.weekly && displayUserObject.notify
                             ? "pointer"
                             : null,
-                      }}
-                      className={[
-                        classes.smallAvatar,
-                        displayUserObject.notify &&
+                        ...(displayUserObject.notify &&
                         displayUserObject.weekly &&
                         displayUserObject.days.Thursday
-                          ? classes.selectedAvatar
-                          : null,
-                      ].join(" ")}
+                          ? {
+                              color: theme.palette.getContrastText(theme.palette.secondary.main),
+                              backgroundColor: theme.palette.secondary.main,
+                            }
+                          : {}),
+                      }}
                     >
                       T
                     </Avatar>
@@ -1346,20 +1439,24 @@ const ScheduleDialog = (props) => {
                   <Grid item>
                     <Avatar
                       onClick={() => handleDay("Friday")}
-                      style={{
+                      sx={{
+                        width: theme.spacing(4),
+                        height: theme.spacing(4),
+                        marginLeft: "0.4em",
+                        marginRight: "0.4em",
                         cursor:
                           displayUserObject.weekly && displayUserObject.notify
                             ? "pointer"
                             : null,
-                      }}
-                      className={[
-                        classes.smallAvatar,
-                        displayUserObject.notify &&
+                        ...(displayUserObject.notify &&
                         displayUserObject.weekly &&
                         displayUserObject.days.Friday
-                          ? classes.selectedAvatar
-                          : null,
-                      ].join(" ")}
+                          ? {
+                              color: theme.palette.getContrastText(theme.palette.secondary.main),
+                              backgroundColor: theme.palette.secondary.main,
+                            }
+                          : {}),
+                      }}
                     >
                       F
                     </Avatar>
@@ -1367,20 +1464,24 @@ const ScheduleDialog = (props) => {
                   <Grid item>
                     <Avatar
                       onClick={() => handleDay("Saturday")}
-                      style={{
+                      sx={{
+                        width: theme.spacing(4),
+                        height: theme.spacing(4),
+                        marginLeft: "0.4em",
+                        marginRight: "0.4em",
                         cursor:
                           displayUserObject.weekly && displayUserObject.notify
                             ? "pointer"
                             : null,
-                      }}
-                      className={[
-                        classes.smallAvatar,
-                        displayUserObject.notify &&
+                        ...(displayUserObject.notify &&
                         displayUserObject.weekly &&
                         displayUserObject.days.Saturday
-                          ? classes.selectedAvatar
-                          : null,
-                      ].join(" ")}
+                          ? {
+                              color: theme.palette.getContrastText(theme.palette.secondary.main),
+                              backgroundColor: theme.palette.secondary.main,
+                            }
+                          : {}),
+                      }}
                     >
                       S
                     </Avatar>
@@ -1388,20 +1489,24 @@ const ScheduleDialog = (props) => {
                   <Grid item>
                     <Avatar
                       onClick={() => handleDay("Sunday")}
-                      style={{
+                      sx={{
+                        width: theme.spacing(4),
+                        height: theme.spacing(4),
+                        marginLeft: "0.4em",
+                        marginRight: "0.4em",
                         cursor:
                           displayUserObject.weekly && displayUserObject.notify
                             ? "pointer"
                             : null,
-                      }}
-                      className={[
-                        classes.smallAvatar,
-                        displayUserObject.notify &&
+                        ...(displayUserObject.notify &&
                         displayUserObject.weekly &&
                         displayUserObject.days.Sunday
-                          ? classes.selectedAvatar
-                          : null,
-                      ].join(" ")}
+                          ? {
+                              color: theme.palette.getContrastText(theme.palette.secondary.main),
+                              backgroundColor: theme.palette.secondary.main,
+                            }
+                          : {}),
+                      }}
                     >
                       S
                     </Avatar>
@@ -1425,14 +1530,23 @@ const ScheduleDialog = (props) => {
               justifyContent="flex-start"
               alignItems="stretch"
             >
-              <Grid item xs={2} className={classes.centerInBlock}>
+              <Grid item xs={2} sx={{ 
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+              }}>
                 <Radio
                   checked={displayUserObject.dateRange}
                   onChange={handleDateRange}
                   disabled={!displayUserObject.notify}
                 />
               </Grid>
-              <Grid item xs={2} className={classes.verticalCenter}>
+              <Grid item xs={2} sx={{ 
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}>
                 <span style={{ fontSize: "1rem" }}>Date range</span>
               </Grid>
               <Grid item xs={8}>
@@ -1446,7 +1560,11 @@ const ScheduleDialog = (props) => {
                     item
                     xs={2}
                     style={{ marginLeft: "1.5em" }}
-                    className={classes.verticalCenter}
+                    sx={{ 
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
                   >
                     From
                   </Grid>
@@ -1469,7 +1587,11 @@ const ScheduleDialog = (props) => {
                     item
                     xs={2}
                     style={{ marginLeft: "1.5em" }}
-                    className={classes.verticalCenter}
+                    sx={{ 
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
                   >
                     To
                   </Grid>

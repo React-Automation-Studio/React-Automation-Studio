@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import withStyles from "@mui/styles/withStyles";
+import { useTheme } from "@mui/material/styles";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
-import Grid from "@mui/material/Grid";
+import Grid from '@mui/material/GridLegacy';
 import ToggleButton from "../BaseComponents/ToggleButton";
 import EditorSinglePS from "./Components/EditorSinglePS";
 import EditorSlitXY from "./Components/EditorSlitXY";
@@ -25,28 +25,19 @@ import PV from "../SystemComponents/PV";
 
 import HarpsBeamDiagnostics from "./Components/HarpsBeamDiagnostics";
 
-/* eslint-disable eqeqeq */
-/* eslint-disable no-unused-vars */
-const VerticalTabs = withStyles((theme) => ({
-  flexContainer: {
-    flexDirection: "column",
-  },
-  indicator: {
-    display: "none",
-  },
-}))(Tabs);
-
-const styles = (theme) => ({
-  root: {
-    flexGrow: 1,
-    padding: theme.spacing(1) * 2,
-  },
-  paper: {
-    padding: theme.spacing(1) * 2,
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-  },
-});
+const VerticalTabs = (props) => (
+  <Tabs
+    {...props}
+    sx={{
+      '& .MuiTabs-flexContainer': {
+        flexDirection: 'column',
+      },
+      '& .MuiTabs-indicator': {
+        display: 'none',
+      },
+    }}
+  />
+);
 
 function TabContainer(props) {
   return (
@@ -57,6 +48,7 @@ function TabContainer(props) {
 }
 
 const BeamlineControlSystem = (props) => {
+  const theme = useTheme();
   const [tabValue, setTabValue] = useState(0);
   const [sideTabValue, setSideTabValue] = useState(0);
   const [editorType, setEditorType] = useState("");
@@ -1012,7 +1004,7 @@ const BeamlineControlSystem = (props) => {
         </Grid>
         <AppBar
           style={{ position: "fixed", bottom: 0, top: "auto", height: 40 }}
-          color={props.theme.palette.mode === "dark" ? "inherit" : "primary"}
+          color={theme.palette.mode === "dark" ? "inherit" : "primary"}
         >
           {footerContents}
         </AppBar>
@@ -1021,4 +1013,4 @@ const BeamlineControlSystem = (props) => {
   );
 };
 
-export default withStyles(styles, { withTheme: true })(BeamlineControlSystem);
+export default BeamlineControlSystem;

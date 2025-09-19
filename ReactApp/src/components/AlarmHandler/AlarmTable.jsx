@@ -1,9 +1,8 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect,useMemo } from 'react';
 
 // import { Link } from 'react-router-dom'
 
 import { useTheme } from '@mui/material/styles';
-import makeStyles from '@mui/styles/makeStyles';
 import TextInput from '../BaseComponents/TextInput';
 import TextUpdateStatus from './TextUpdateStatus';
 import TextUpdateStateful from './TextUpdateStateful';
@@ -38,32 +37,30 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { Coffee, ContentCopy } from 'mdi-material-ui/'
 
 import Tooltip from '@mui/material/Tooltip';
+import { ListItemButton } from '@mui/material';
 
-// Styles
-const useStyles = makeStyles(theme => ({
-    nested: {
+const AlarmTable = props => {
+    const theme = useTheme()
+    const myRef = useRef()
+    const nestedSx = useMemo(() => ({
         paddingLeft: theme.spacing(4),
-    },
-    root: {
+    }), [theme]);
+
+    const rootSx = useMemo(() => ({
         width: '100%',
         overflowY: 'auto',
-    },
-    TextFieldSeverityDisabled: {
+    }), []);
+
+    const textFieldSeverityDisabledSx = useMemo(() => ({
         borderRadius: 2,
         padding: 1,
         backgroundColor: theme.palette.mode === 'dark' ? theme.palette.grey[500] : theme.palette.grey[400]
-    },
-    styledTableHeadCell: {
+    }), [theme]);
+
+    const styledTableHeadCellSx = useMemo(() => ({
         backgroundColor: theme.palette.mode === 'dark' ? undefined : theme.palette.primary.light,
         color: theme.palette.mode === 'dark' ? undefined : 'white',
-    }
-
-}));
-
-const AlarmTable = props => {
-    const classes = useStyles()
-    const theme = useTheme()
-    const myRef = useRef()
+    }), [theme]);
 
     useEffect(() => {
         myRef.current.scrollTo(0, 0)
@@ -77,12 +74,12 @@ const AlarmTable = props => {
     let currTopArea = ""
     let newTopArea = false
 
-    const textFieldDisableClasses = {
-        noAlarm: classes.TextFieldSeverityDisabled,
-        minorAlarmAcked: classes.TextFieldSeverityDisabled,
-        minorAlarm: classes.TextFieldSeverityDisabled,
-        majorAlarmAcked: classes.TextFieldSeverityDisabled,
-        majorAlarm: classes.TextFieldSeverityDisabled,
+    const textFieldDisabledSx  = {
+        noAlarm: textFieldSeverityDisabledSx,
+        minorAlarmAcked: textFieldSeverityDisabledSx,
+        minorAlarm: textFieldSeverityDisabledSx,
+        majorAlarmAcked: textFieldSeverityDisabledSx,
+        majorAlarm: textFieldSeverityDisabledSx,
     }
 
     return (
@@ -96,17 +93,17 @@ const AlarmTable = props => {
                         }}
                     >
                         {props.debug
-                            ? <TableCell align="left" classes={{ stickyHeader: classes.styledTableHeadCell }}>TEST ALM</TableCell>
+                            ? <TableCell align="left" sx={{ '&.MuiTableCell-stickyHeader': styledTableHeadCellSx }}>TEST ALM</TableCell>
                             : null}
-                        <TableCell align="left" classes={{ stickyHeader: classes.styledTableHeadCell }}>PV NAME</TableCell>
-                        <TableCell align="center" classes={{ stickyHeader: classes.styledTableHeadCell }}>PV VALUE</TableCell>
-                        <TableCell align="center" classes={{ stickyHeader: classes.styledTableHeadCell }}>ALM STATUS</TableCell>
-                        <TableCell align="center" classes={{ stickyHeader: classes.styledTableHeadCell }}>LAST ALM VAL</TableCell>
-                        <TableCell align="center" classes={{ stickyHeader: classes.styledTableHeadCell }}>LAST ALM TIME</TableCell>
-                        <TableCell align="center" classes={{ stickyHeader: classes.styledTableHeadCell }}>LAST ALM ACK TIME</TableCell>
-                        <TableCell align="center" classes={{ stickyHeader: classes.styledTableHeadCell }}>ENBL</TableCell>
-                        <TableCell align="center" classes={{ stickyHeader: classes.styledTableHeadCell }}>LAT</TableCell>
-                        <TableCell align="center" classes={{ stickyHeader: classes.styledTableHeadCell }}>NTFY</TableCell>
+                        <TableCell align="left" sx={{ '&.MuiTableCell-stickyHeader': styledTableHeadCellSx }}>PV NAME</TableCell>
+                        <TableCell align="center" sx={{ '&.MuiTableCell-stickyHeader': styledTableHeadCellSx }}>PV VALUE</TableCell>
+                        <TableCell align="center" sx={{ '&.MuiTableCell-stickyHeader': styledTableHeadCellSx }}>ALM STATUS</TableCell>
+                        <TableCell align="center" sx={{ '&.MuiTableCell-stickyHeader': styledTableHeadCellSx }}>LAST ALM VAL</TableCell>
+                        <TableCell align="center" sx={{ '&.MuiTableCell-stickyHeader': styledTableHeadCellSx }}>LAST ALM TIME</TableCell>
+                        <TableCell align="center" sx={{ '&.MuiTableCell-stickyHeader': styledTableHeadCellSx }}>LAST ALM ACK TIME</TableCell>
+                        <TableCell align="center" sx={{ '&.MuiTableCell-stickyHeader': styledTableHeadCellSx }}>ENBL</TableCell>
+                        <TableCell align="center" sx={{ '&.MuiTableCell-stickyHeader': styledTableHeadCellSx }}>LAT</TableCell>
+                        <TableCell align="center" sx={{ '&.MuiTableCell-stickyHeader': styledTableHeadCellSx }}>NTFY</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -240,7 +237,7 @@ const AlarmTable = props => {
                                             onClick={() => {
                                                 props.alarmContextClose()
                                                 props.setAlarmAdminPVExpand(false)
-                                                window.open("/Probe?" + JSON.stringify({ pvname:  value["name"], probeType: 'readOnly' }),
+                                                window.open("/Probe?" + JSON.stringify({ pvname: value["name"], probeType: 'readOnly' }),
                                                     "_blank", "noreferrer")
                                             }}
                                         >
@@ -277,20 +274,23 @@ const AlarmTable = props => {
                                         <Collapse in={props.alarmAdminPVExpand} timeout="auto" unmountOnExit>
                                             <List component="div" disablePadding >
                                                 <ListItem
-                                                    button
-                                                    className={classes.nested}
-                                                    onClick={(event) => {
-                                                        event.preventDefault()
-                                                        event.stopPropagation()
-                                                        props.setAlarmAdminPVExpand(false)
-                                                        props.alarmContextClose()
-                                                        props.deletePV(event, areaAlarmName, value["name"])
-                                                    }}
+                                                    disablePadding
                                                 >
-                                                    <ListItemIcon >
-                                                        <DeleteIcon fontSize="small" />
-                                                    </ListItemIcon>
-                                                    <ListItemText primary="Delete pv" />
+                                                    <ListItemButton
+                                                        sx={nestedSx}
+                                                        onClick={(event) => {
+                                                            event.preventDefault()
+                                                            event.stopPropagation()
+                                                            props.setAlarmAdminPVExpand(false)
+                                                            props.alarmContextClose()
+                                                            props.deletePV(event, areaAlarmName, value["name"])
+                                                        }}
+                                                    >
+                                                        <ListItemIcon >
+                                                            <DeleteIcon fontSize="small" />
+                                                        </ListItemIcon>
+                                                        <ListItemText primary="Delete pv" />
+                                                    </ListItemButton>
                                                 </ListItem>
                                             </List>
                                         </Collapse>
@@ -298,7 +298,7 @@ const AlarmTable = props => {
                                     {props.debug
                                         ? <TableCell>
                                             <TextInput
-                                                pv={ value["name"]}
+                                                pv={value["name"]}
                                                 usePvLabel={true}
                                                 usePvPrecision={true}
                                                 usePvUnits={true}
@@ -323,7 +323,7 @@ const AlarmTable = props => {
                                     </Tooltip>
                                     <TableCell align="center">
                                         <TextUpdateStateful
-                                            pv={ value["name"]}
+                                            pv={value["name"]}
                                             useStringValue={true}
                                             usePvUnits={true}
                                             disableContextMenu={true}
@@ -338,7 +338,7 @@ const AlarmTable = props => {
                                             classes={
                                                 props.enableAllAreas && props.areaEnabled[areaName] && value["enable"]
                                                     ? undefined
-                                                    : textFieldDisableClasses
+                                                    : textFieldDisabledSx 
                                             }
                                             fadeTU={props.fadeTU}
                                         />

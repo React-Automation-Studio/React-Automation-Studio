@@ -7,6 +7,10 @@ import DeprecatedEpicsPV from './DeprecatedEpicsPV';
 class DataConnection extends React.Component {
   constructor(props) {
     super(props);
+    
+       console.warn(
+          "This component is deprecated and will be removed in RAS in V8.0.0."
+        );
 
     let pvname;
     if (typeof this.props.macros !== 'undefined'){

@@ -1,14 +1,13 @@
 import React, { useCallback, useEffect, useState } from "react";
 
 import useUAGs from "./adminDbHooks/useUAGs";
-import Grid from "@mui/material/Grid";
+import Grid from '@mui/material/GridLegacy';
 import Card from "@mui/material/Card";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import makeStyles from "@mui/styles/makeStyles";
 import IconButton from "@mui/material/IconButton";
 import Checkbox from "@mui/material/Checkbox";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -35,18 +34,6 @@ import { ArrowUp, ArrowDown } from "mdi-material-ui/";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    padding: theme.spacing(2),
-  },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-  },
-}));
 
 const UagRename = (props) => {
   const [show, setShow] = useState(false);
@@ -204,8 +191,6 @@ const AccessControl = (props) => {
       return false;
     }
   }, []);
-
-  const classes = useStyles();
 
   const {
     userGroups,
@@ -417,7 +402,6 @@ const AccessControl = (props) => {
                 >
                   <Grid item lg={12}>
                     <Table
-                      className={classes.table}
                       stickyHeader
                       size="small"
                       aria-label="sticky table"
@@ -441,7 +425,6 @@ const AccessControl = (props) => {
                   </Grid>
                   <Grid item lg={12}>
                     <Table
-                      className={classes.table}
                       stickyHeader
                       size="small"
                       aria-label="sticky table"
@@ -481,7 +464,6 @@ const AccessControl = (props) => {
                   </Grid>
                   <Grid item lg={12}>
                     <Table
-                      className={classes.table}
                       stickyHeader
                       size="small"
                       aria-label="sticky table"
@@ -536,7 +518,6 @@ const AccessControl = (props) => {
                   </Grid>
                   <Grid item lg={12}>
                     <Table
-                      className={classes.table}
                       stickyHeader
                       size="small"
                       aria-label="sticky table"
@@ -694,7 +675,6 @@ const AccessControl = (props) => {
             <br />
           </Typography>
           <Table
-            className={classes.table}
             stickyHeader
             size="small"
             aria-label="sticky table"
@@ -1022,7 +1002,6 @@ const AccessControl = (props) => {
                     >
                       <Grid item lg={12}>
                         <Table
-                          className={classes.table}
                           stickyHeader
                           size="small"
                           aria-label="sticky table"
@@ -1106,7 +1085,6 @@ const AccessControl = (props) => {
                       </Grid>
                       <Grid item lg={12}>
                         <Table
-                          className={classes.table}
                           stickyHeader
                           size="small"
                           aria-label="sticky table"
@@ -1210,7 +1188,6 @@ const AccessControl = (props) => {
                       </Grid>
                       <Grid item lg={12}>
                         <Table
-                          className={classes.table}
                           stickyHeader
                           size="small"
                           aria-label="sticky table"
@@ -1351,7 +1328,6 @@ const AccessControl = (props) => {
                       </Grid>
                       <Grid item lg={12}>
                         <Table
-                          className={classes.table}
                           stickyHeader
                           size="small"
                           aria-label="sticky table"

@@ -1,12 +1,11 @@
 import React from 'react';
 import { useTheme } from '@mui/material/styles';
-import makeStyles from '@mui/styles/makeStyles';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/GridLegacy';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
@@ -20,26 +19,8 @@ import IconButton from '@mui/material/IconButton';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
-// Styles
-const useStyles = makeStyles(theme => ({
-    styledTableHeadCell: {
-        backgroundColor: theme.palette.mode === 'dark' ? undefined : theme.palette.primary.light,
-        color: theme.palette.mode === 'dark' ? undefined : 'white',
-    },
-    centerInBlock: {
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: 'center'
-    },
-    margin: {
-        margin: theme.spacing(1),
-    },
-}))
-
 const EditUsersDialog = (props) => {
 
-    const classes = useStyles()
     const theme = useTheme()
 
     return (
@@ -65,7 +46,12 @@ const EditUsersDialog = (props) => {
                                 justifyContent="center"
                                 alignItems="stretch"
                             >
-                                <Grid item className={classes.centerInBlock}>
+                                <Grid item sx={{
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    justifyContent: "center",
+                                    alignItems: 'center'
+                                }}>
                                     <Typography variant='button'>RAS Users (All)</Typography>
                                 </Grid>
                                 <Grid item>
@@ -74,8 +60,20 @@ const EditUsersDialog = (props) => {
                                             <TableHead>
                                                 <TableRow
                                                 >
-                                                    <TableCell align="left" classes={{ stickyHeader: classes.styledTableHeadCell }}>Name</TableCell>
-                                                    <TableCell align="left" classes={{ stickyHeader: classes.styledTableHeadCell }}>Username</TableCell>
+                                                    <TableCell 
+                                                        align="left" 
+                                                        sx={{ 
+                                                            backgroundColor: theme.palette.mode === 'dark' ? undefined : theme.palette.primary.light,
+                                                            color: theme.palette.mode === 'dark' ? undefined : 'white',
+                                                        }}
+                                                    >Name</TableCell>
+                                                    <TableCell 
+                                                        align="left" 
+                                                        sx={{ 
+                                                            backgroundColor: theme.palette.mode === 'dark' ? undefined : theme.palette.primary.light,
+                                                            color: theme.palette.mode === 'dark' ? undefined : 'white',
+                                                        }}
+                                                    >Username</TableCell>
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
@@ -122,21 +120,35 @@ const EditUsersDialog = (props) => {
                             justifyContent="center"
                             alignItems="stretch"
                         >
-                            <Grid item className={classes.centerInBlock}>
+                            <Grid item sx={{
+                                display: "flex",
+                                flexDirection: "row",
+                                justifyContent: "center",
+                                alignItems: 'center'
+                            }}>
                                 <IconButton
                                     color="secondary"
                                     disabled={props.forwardBDisabled}
-                                    className={classes.margin}
+                                    sx={{
+                                        margin: theme.spacing(1),
+                                    }}
                                     onClick={() => props.pushToAlarmUsers()}
                                     size="large">
                                     <ArrowForwardIcon fontSize="large" />
                                 </IconButton>
                             </Grid>
-                            <Grid item className={classes.centerInBlock}>
+                            <Grid item sx={{
+                                display: "flex",
+                                flexDirection: "row",
+                                justifyContent: "center",
+                                alignItems: 'center'
+                            }}>
                                 <IconButton
                                     color="secondary"
                                     disabled={props.backwardBDisabled}
-                                    className={classes.margin}
+                                    sx={{
+                                        margin: theme.spacing(1),
+                                    }}
                                     onClick={() => props.pushToRASUsers()}
                                     size="large">
                                     <ArrowBackIcon fontSize="large" />
@@ -152,7 +164,12 @@ const EditUsersDialog = (props) => {
                                 justifyContent="center"
                                 alignItems="stretch"
                             >
-                                <Grid item className={classes.centerInBlock}>
+                                <Grid item sx={{
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    justifyContent: "center",
+                                    alignItems: 'center'
+                                }}>
                                     <Typography variant='button'>Alarm Users</Typography>
                                 </Grid>
                                 <Grid item>
@@ -161,8 +178,20 @@ const EditUsersDialog = (props) => {
                                             <TableHead>
                                                 <TableRow
                                                 >
-                                                    <TableCell align="left" classes={{ stickyHeader: classes.styledTableHeadCell }}>Name</TableCell>
-                                                    <TableCell align="left" classes={{ stickyHeader: classes.styledTableHeadCell }}>Username</TableCell>
+                                                    <TableCell 
+                                                        align="left" 
+                                                        sx={{ 
+                                                            backgroundColor: theme.palette.mode === 'dark' ? undefined : theme.palette.primary.light,
+                                                            color: theme.palette.mode === 'dark' ? undefined : 'white',
+                                                        }}
+                                                    >Name</TableCell>
+                                                    <TableCell 
+                                                        align="left" 
+                                                        sx={{ 
+                                                            backgroundColor: theme.palette.mode === 'dark' ? undefined : theme.palette.primary.light,
+                                                            color: theme.palette.mode === 'dark' ? undefined : 'white',
+                                                        }}
+                                                    >Username</TableCell>
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>

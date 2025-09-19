@@ -5,7 +5,7 @@ TraditionalLayout with styled app bar, footer and custom footerContent.
 import Content from '../../../../docs/content/LayoutContent';
 import TraditionalLayout from './TraditionalLayout'
 import AccountCircle from '@mui/icons-material/AccountCircle'
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/GridLegacy';
 
 const username = 'Guest'
 

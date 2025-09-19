@@ -1,111 +1,68 @@
 import React from "react";
-import { alpha } from "@mui/material/styles";
+import { alpha, useTheme } from "@mui/material/styles";
 import { InputAdornment, TextField } from "@mui/material";
 import Widget from "../SystemComponents/Widgets/Widget";
-import makeStyles from "@mui/styles/makeStyles";
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-    flexWrap: "wrap",
-  },
-  margin: {
-    margin: theme.spacing(1),
-  },
-  input: {
+
+function TextOutputComponent(props) {
+  const theme = useTheme();
+
+  // Create sx objects for styling
+  const inputSx = {
     color:
       theme.palette.mode === "dark"
         ? theme.palette.grey[400]
         : theme.palette.grey[700],
-  },
-  cssLabel: {
-    "&$cssFocused": {
+  };
+
+  const cssLabelSx = {
+    "&.Mui-focused": {
       color: theme.palette.grey[500],
     },
-  },
-  cssFocused: {},
-  cssOutlinedInput: {
-    "&$cssFocused $notchedOutline": {
+  };
+
+  const cssOutlinedInputSx = {
+    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
       borderColor: theme.palette.grey[500],
     },
-  },
-  notchedOutline: {},
-  bootstrapRoot: {
-    "label + &": {
-      marginTop: theme.spacing(1) * 3,
-    },
-  },
-  bootstrapInput: {
-    borderRadius: 4,
-    position: "relative",
-    backgroundColor: theme.palette.common.white,
-    border: "1px solid #ced4da",
-    fontSize: 16,
-    width: "auto",
-    padding: "10px 12px",
-    transition: theme.transitions.create(["border-color", "box-shadow"]),
-    // Use the system font instead of the default Roboto font.
-    fontFamily: [
-      "-apple-system",
-      "BlinkMacSystemFont",
-      '"Segoe UI"',
-      "Roboto",
-      '"Helvetica Neue"',
-      "Arial",
-      "sans-serif",
-      '"Apple Color Emoji"',
-      '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"',
-    ].join(","),
-    "&:focus": {
-      borderRadius: 4,
-      borderColor: "#80bdff",
-      boxShadow: "0 0 0 0.2rem rgba(0,123,255,.25)",
-    },
-  },
-  bootstrapFormLabel: {
-    fontSize: 18,
-  },
-  TextFieldSeverity0: {
+  };
+
+  const textFieldSeverity0Sx = {
     width: "100%",
-    borderRadius: 4,
-  },
-  TextFieldSeverity1: {
+    borderRadius: 1,
+  };
+
+  const textFieldSeverity1Sx = {
     width: "100%",
-    borderRadius: 4,
+    borderRadius: 1,
     background:
       "linear-gradient(45deg," +
       alpha(
-        theme.palette.alarm.minor.dark,
+        (theme.palette as any).alarm?.minor?.dark || theme.palette.warning.main,
         theme.palette.mode === "dark" ? 0.1 : 0.1
       ) +
       " 0%, " +
-      theme.palette.alarm.minor.dark +
+      ((theme.palette as any).alarm?.minor?.dark || theme.palette.warning.main) +
       " 100%)",
-  },
-  TextFieldSeverity2: {
+  };
+
+  const textFieldSeverity2Sx = {
     width: "100%",
-    borderRadius: 4,
+    borderRadius: 1,
     background:
       "linear-gradient(45deg," +
       alpha(
-        theme.palette.alarm.major.dark,
+        (theme.palette as any).alarm?.major?.dark || theme.palette.error.main,
         theme.palette.mode === "dark" ? 0.2 : 0.1
       ) +
       " 0%, " +
-      theme.palette.alarm.major.dark +
+      ((theme.palette as any).alarm?.major?.dark || theme.palette.error.main) +
       " 100%)",
-  },
-}));
-
-function TextOutputComponent(props) {
-  const classes = useStyles();
+  };
 
   let inputProps = {
-    classes: {
-      root: classes.cssOutlinedInput,
-      focused: classes.cssFocused,
-      input: classes.input,
-      notchedOutline: classes.notchedOutline,
+    sx: {
+      ...cssOutlinedInputSx,
+      ...inputSx,
     },
     endAdornment: (
       <InputAdornment position="end">
@@ -114,22 +71,20 @@ function TextOutputComponent(props) {
     ),
     readOnly: true,
   };
+
   let inputLabelProps = {
-    classes: {
-      root: classes.cssLabel,
-      focused: classes.cssFocused,
-    },
+    sx: cssLabelSx,
   };
 
-  let textFieldClassName;
+  let textFieldSx;
   if (typeof props.alarmSensitive !== "undefined") {
     if (props.alarmSensitive === true) {
       if (props.alarmSeverity === 1) {
-        textFieldClassName = classes.TextFieldSeverity1;
+        textFieldSx = textFieldSeverity1Sx;
       } else if (props.alarmSeverity === 2) {
-        textFieldClassName = classes.TextFieldSeverity2;
+        textFieldSx = textFieldSeverity2Sx;
       } else {
-        textFieldClassName = classes.TextFieldSeverity0;
+        textFieldSx = textFieldSeverity0Sx;
       }
     }
   }
@@ -193,7 +148,7 @@ function TextOutputComponent(props) {
 
   return (
     <TextField
-      className={textFieldClassName}
+      sx={textFieldSx}
       key={props.pvName}
       aria-haspopup="true"
       label={!props.initialized ? props.disconnectedIcon : props.label}
@@ -380,22 +335,22 @@ interface TextOutputProps {
    * - host
    */
   displayMetaData?:
-    | "pvname"
-    | "value"
-    | "char_value"
-    | "enum_strs"
-    | "lower_disp_limit"
-    | "upper_disp_limit"
-    | "lower_warning_limit"
-    | "upper_warning_limit"
-    | "lower_ctrl_limit"
-    | "upper_ctrl_limit"
-    | "units"
-    | "precision"
-    | "severity"
-    | "write_access"
-    | "read_access"
-    | "host";
+  | "pvname"
+  | "value"
+  | "char_value"
+  | "enum_strs"
+  | "lower_disp_limit"
+  | "upper_disp_limit"
+  | "lower_warning_limit"
+  | "upper_warning_limit"
+  | "lower_ctrl_limit"
+  | "upper_ctrl_limit"
+  | "units"
+  | "precision"
+  | "severity"
+  | "write_access"
+  | "read_access"
+  | "host";
   /**
    * MUI TextField variant.
    */

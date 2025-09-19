@@ -7,7 +7,7 @@ import TextInput from '../../BaseComponents/TextInput';
 import SelectionInput from '../../BaseComponents/SelectionInput';
 
 import TextUpdate from '../../BaseComponents/TextUpdate';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/GridLegacy';
 
 import ToggleButton from '../../BaseComponents/ToggleButton';
 import ActionButton from '../../BaseComponents/ActionButton';

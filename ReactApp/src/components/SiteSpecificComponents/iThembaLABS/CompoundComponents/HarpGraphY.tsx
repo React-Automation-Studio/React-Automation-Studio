@@ -5,24 +5,12 @@ import React, {
   useReducer,
   useCallback,
 } from "react";
-import makeStyles from "@mui/styles/makeStyles";
 import { useTheme } from "@mui/material/styles";
 import ContextMenu from "../../../SystemComponents/ContextMenu";
 import PV from "../../../SystemComponents/PV";
 import Plot from "react-plotly.js";
 import { isMobileOnly } from "react-device-detect";
 import { replaceMacros } from "../../../SystemComponents/Utils/macroReplacement";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    paddingRight: 8,
-    paddingLeft: 8,
-    paddingTop: 8,
-  },
-  title: {
-    margin: 8,
-  },
-}));
 
 const wireSpacing = [
   -42, -39, -36, -33, -30, -27, -24, -22, -20, -18, -16, -14, -12, -10, -9, -8,
@@ -159,8 +147,8 @@ const PlotData = (props) => {
           : replaceMacros(props.pvs[newData.index], props.macros),
       hovertemplate: props.yHoverFormat
         ? "(%{y:" +
-          props.yHoverFormat +
-          "}) %{x}<extra>%{fullData.name}</extra>"
+        props.yHoverFormat +
+        "}) %{x}<extra>%{fullData.name}</extra>"
         : "(%{y}) %{x}<extra>%{fullData.name}</extra>",
     };
     return newPvs;
@@ -287,7 +275,6 @@ const HarpGraphY = ({
   disableMobileStatic = false,
   ...props
 }: HarpGraphYProps) => {
-  const classes = useStyles();
   const theme = useTheme();
   const backgroundColor = props.backgroundColor
     ? props.backgroundColor
@@ -382,14 +369,14 @@ const HarpGraphY = ({
     let legendInit =
       showLegend === true
         ? {
-            legend: {
-              orientation: "h",
-              x: 1,
-              xanchor: "right",
-              y: 0.975,
-              bgcolor: "00000000",
-            },
-          }
+          legend: {
+            orientation: "h",
+            x: 1,
+            xanchor: "right",
+            y: 0.975,
+            bgcolor: "00000000",
+          },
+        }
         : {};
     return legendInit;
   });
@@ -474,7 +461,6 @@ const HarpGraphY = ({
     xAxisTitle,
     props.title,
     backgroundColor,
-    classes,
     props.xMin,
     props.xTickLabels,
     props.xTickValues,
@@ -491,8 +477,10 @@ const HarpGraphY = ({
   return (
     <div
       ref={paperRef}
-      className={classes.root}
       style={{
+        paddingRight: 8,
+        paddingLeft: 8,
+        paddingTop: 8,
         width: width ? width : widthComputed,
         height: height ? height : heightComputed,
         backgroundColor: backgroundColor,
@@ -549,24 +537,24 @@ const HarpGraphY = ({
                 config={
                   typeof props.displayModeBar !== "undefined"
                     ? {
-                        displaylogo: false,
-                        scrollZoom: false,
-                        doubleclick: false,
-                        displayModeBar: props.displayModeBar,
-                        staticPlot: true,
-                        toImageButtonOptions: {
-                          format: "svg",
-                        },
-                      }
+                      displaylogo: false,
+                      scrollZoom: false,
+                      doubleclick: false,
+                      displayModeBar: props.displayModeBar,
+                      staticPlot: true,
+                      toImageButtonOptions: {
+                        format: "svg",
+                      },
+                    }
                     : {
-                        displaylogo: false,
-                        scrollZoom: false,
+                      displaylogo: false,
+                      scrollZoom: false,
 
-                        staticPlot: true,
-                        toImageButtonOptions: {
-                          format: "svg",
-                        },
-                      }
+                      staticPlot: true,
+                      toImageButtonOptions: {
+                        format: "svg",
+                      },
+                    }
                 }
                 useResizeHandler={true}
                 style={{

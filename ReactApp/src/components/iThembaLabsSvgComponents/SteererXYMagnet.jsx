@@ -1,197 +1,177 @@
-import React from 'react'
+import React, { useState, useContext } from 'react';
+import { useTheme } from '@mui/material/styles';
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 import DataConnection from '../SystemComponents/DataConnection';
-import withStyles from '@mui/styles/withStyles';
 import ContextMenu from '../SystemComponents/ContextMenu';
-
-const styles = theme => ({
-  textSteererXYMagnetLabel: {
-    fill:theme.palette.text.primary
-  },
-  textSteererXYMagnetValue: {
-    fill:theme.palette.text.primary
-  },
-  textSteererXYMagnetDisconneted: {
-    fill:'dimgrey'
-  },
-});
 
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */
-class SteererXYMagnet extends React.Component {
-  constructor(props) {
-    super(props);
-    let pvs={};
+const SteererXYMagnet = (props) => {
+  useEffect(() => {
+     console.warn(
+        "This component is deprecated and will be removed in RAS in V8.0.0."
+      );
+    }, []);
+  const context = useContext(AutomationStudioContext);
+  const theme = useTheme();
 
-    pvs['xReadback']={initialized: false, pvname:props.system.devices.xDevice.deviceName+":"+props.system.devices.xDevice.readback,value:"",char_value:"",metadata:{}};
-    pvs['yReadback']={initialized: false, pvname:props.system.devices.yDevice.deviceName+":"+props.system.devices.yDevice.readback,value:"",char_value:"",metadata:{}};
-    let contextPVs=[];
-    for (let item in pvs){
-      contextPVs.push(pvs[item]);
-    }
-    this.state={
-      pvs:pvs,contextPVs:contextPVs,  openContextMenu: false,
-      'open':false,x0:0,y0:0
-    }
-    this.handleOnClick= this.handleOnClick.bind(this);
-    this.handleInputValue= this.handleInputValue.bind(this);
-
-    this.handleMetadata= this.handleMetadata.bind(this);
+  let initialPvs={};
+  initialPvs['xReadback']={initialized: false, pvname:props.system.devices.xDevice.deviceName+":"+props.system.devices.xDevice.readback,value:"",char_value:"",metadata:{}};
+  initialPvs['yReadback']={initialized: false, pvname:props.system.devices.yDevice.deviceName+":"+props.system.devices.yDevice.readback,value:"",char_value:"",metadata:{}};
+  let contextPVs=[];
+  for (let item in initialPvs){
+    contextPVs.push(initialPvs[item]);
   }
+  
+  const [state, setState] = useState({
+    pvs:initialPvs,contextPVs:contextPVs,  openContextMenu: false,
+    'open':false,x0:0,y0:0
+  });
 
-  componentDidMount() {
-  }
-
-  componentWillUnmount() {
-  }
-
-  handleContextMenuClose = (event) => {
-    this.setState({ openContextMenu: false });
+  const handleContextMenuClose = (event) => {
+    setState(prev => ({ ...prev, openContextMenu: false }));
   };
 
-  handleToggleContextMenu = (event) => {
+  const handleToggleContextMenu = (event) => {
     console.log(event.type)
     event.persist()
-    this.setState(state => ({ openContextMenu: !state.openContextMenu,x0:event.pageX,y0:event.pageY }));
-
+    setState(prev => ({ ...prev, openContextMenu: !prev.openContextMenu,x0:event.pageX,y0:event.pageY }));
     event.preventDefault();
-  }
+  };
 
-  handleMetadata= readback => (metadata) => {
-    let pvs=this.state.pvs;
+  const handleMetadata = readback => (metadata) => {
+    let pvs=state.pvs;
     pvs[readback].metadata=metadata;
-    this.setState({pvs	 :pvs});
-  }
+    setState(prev => ({ ...prev, pvs:pvs }));
+  };
 
-  handleInputValue= readback => (inputValue,pvname,initialized,severity)=>{
-    let pvs=this.state.pvs;
+  const handleInputValue = readback => (inputValue,pvname,initialized,severity)=>{
+    let pvs=state.pvs;
     pvs[readback].value=inputValue;
     pvs[readback].initialized=initialized;
     pvs[readback].severity=severity;
-
-    this.setState({pvs:pvs});
-  }
-
-  handleOnClick = system => event => {
-    this.props.handleOnClick(system);
+    setState(prev => ({ ...prev, pvs:pvs }));
   };
 
-  render() {
-    const {classes}= this.props;
-    const pvs=this.state.pvs;
-    const usePrecision= this.props.prec;
+  const handleOnClick = system => event => {
+    props.handleOnClick(system);
+  };
 
-    let xUnits="";
-    let yUnits="";
-    const initialized=pvs.xReadback.initialized&&pvs.yReadback.initialized;
-    let xReadbackValue=pvs.xReadback.value;
-    let yReadbackValue=pvs.yReadback.value;
-    let severity=0;
-    if(initialized){
-      if(this.props.usePvUnits===true){
-        xUnits=pvs.xReadback.metadata.units;
-        yUnits=pvs.yReadback.metadata.units;
-      }
-      else {
-        xUnits=this.props.xUnits;
-        yUnits=this.props.yUnits;
-      }
+  const pvs=state.pvs;
 
-      if (typeof this.props.usePrecision !== 'undefined'){
-        if (this.props.usePrecision==true){
-          if (typeof this.props.prec !== 'undefined'){
-            xReadbackValue=parseFloat(xReadbackValue).toFixed(this.props.prec);
-            yReadbackValue=parseFloat(yReadbackValue).toFixed(this.props.prec);
-          }
-          else{
-            xReadbackValue=parseFloat(xReadbackValue).toFixed(parseInt(pvs.xReadback.metadata.precision));
-            yReadbackValue=parseFloat(yReadbackValue).toFixed(parseInt(pvs.yReadback.metadata.precision));
-          }
-        }
-      }
+  const usePrecision= props.prec;
 
-      if((pvs.xReadback.severity==2)||(pvs.yReadback.severity==2)){
-        severity=2;
-      }
-      else   if((pvs.xReadback.severity==1)||(pvs.yReadback.severity==1)){
-        severity=1;
-      }
+  let xUnits="";
+  let yUnits="";
+  const initialized=pvs.xReadback.initialized&&pvs.yReadback.initialized;
+  let xReadbackValue=pvs.xReadback.value;
+  let yReadbackValue=pvs.yReadback.value;
+  let severity=0;
+  if(initialized){
+    if(props.usePvUnits===true){
+      xUnits=pvs.xReadback.metadata.units;
+      yUnits=pvs.yReadback.metadata.units;
+    }
+    else {
+      xUnits=props.xUnits;
+      yUnits=props.yUnits;
     }
 
-    let color_side='';
-    let color_face='';
-    let color_top='';
-    if (typeof this.props.alarmSensitive !== 'undefined'){
-      if (this.props.alarmSensitive==true){
-        if (severity==1){
-          color_side='#FF8E53';
-          color_face='#FF8E43';
-          color_top='#FF8E63';
-        }
-        else if(severity==2){
-          color_side='#E20101';
-          color_face='#E20901';
-          color_top='#E20111';
+    if (typeof props.usePrecision !== 'undefined'){
+      if (props.usePrecision==true){
+        if (typeof props.prec !== 'undefined'){
+          xReadbackValue=parseFloat(xReadbackValue).toFixed(props.prec);
+          yReadbackValue=parseFloat(yReadbackValue).toFixed(props.prec);
         }
         else{
-          color_side='#133CA9';
-          color_face='#133C99';
-          color_top='#133CA3';
+          xReadbackValue=parseFloat(xReadbackValue).toFixed(parseInt(pvs.xReadback.metadata.precision));
+          yReadbackValue=parseFloat(yReadbackValue).toFixed(parseInt(pvs.yReadback.metadata.precision));
         }
       }
     }
 
-    return (
-      <g   onContextMenu={this.handleToggleContextMenu}>
-        <ContextMenu
-          disableProbe={this.props.disableProbe}
-          open={this.state.openContextMenu}
-          anchorReference="anchorPosition"
-          anchorPosition={{ top: +this.state.y0, left: +this.state.x0 }}
-          probeType={'simple'}
-          pvs={this.state.contextPVs}
-          handleClose={this.handleContextMenuClose}
+    if((pvs.xReadback.severity==2)||(pvs.yReadback.severity==2)){
+      severity=2;
+    }
+    else   if((pvs.xReadback.severity==1)||(pvs.yReadback.severity==1)){
+      severity=1;
+    }
+  }
 
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'left',
-          }}
-        />
-        <DataConnection
-          pv={this.state.pvs['xReadback'].pvname}
-          usePrecision={usePrecision}
-          handleInputValue={this.handleInputValue('xReadback')}
-          handleMetadata={this.handleMetadata('xReadback')}
-        />
-        <DataConnection
-          pv={this.state.pvs['yReadback'].pvname}
-          usePrecision={usePrecision}
-          handleInputValue={this.handleInputValue('yReadback')}
-          handleMetadata={this.handleMetadata('yReadback')}
-        />
-        {initialized===true &&
-          <g transform={'translate('+this.props.cx+','+this.props.cy+')'} onClick={this.handleOnClick(this.props.system)}>
-            <linearGradient id={this.props.system.systemName+'elipse-gradient'} gradientTransform="rotate(0)">
-              <stop offset="0%" stopOpacity="30" stopColor={'silver'} />
-              <stop offset="75%" stopColor={color_side} />
-            </linearGradient>
-            <defs>
-              <filter id={this.props.system.systemName+"elipseShadow"} x="0" y="0" width="600%" height="500%">
-                <feOffset result="offOut" in="SourceGraphic" dx="2.5" dy="2.5" />
-                <feColorMatrix result="matrixOut" in="offOut" type="matrix"
-                values="0.2 0 0 0 0 0 0.2 0 0 0 0 0 0.2 0 0 0 0 0 1 0" />
-                <feGaussianBlur result="blurOut" in="matrixOut" stdDeviation="2.5" />
-                <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
-              </filter>
-            </defs>
-            <g filter={this.props.componentShadow===true?"url(#"+this.props.system.systemName+"elipseShadow)":"" }
-            >
-              <g>
-                <g transform="translate(-10,-1097)"
-                  fill={this.props.componentGradient===true?'url(#'+this.props.system.systemName+'elipse-gradient)':color_side}
-                  style={{'strokeWidth':'0.3',
-                  'stroke':'black'}}
-                >
+  let color_side='';
+  let color_face='';
+  let color_top='';
+  if (typeof props.alarmSensitive !== 'undefined'){
+    if (props.alarmSensitive==true){
+      if (severity==1){
+        color_side='#FF8E53';
+        color_face='#FF8E43';
+        color_top='#FF8E63';
+      }
+      else if(severity==2){
+        color_side='#E20101';
+        color_face='#E20901';
+        color_top='#E20111';
+      }
+      else{
+        color_side='#133CA9';
+        color_face='#133C99';
+        color_top='#133CA3';
+      }
+    }
+  }
+
+  return (
+    <g   onContextMenu={handleToggleContextMenu}>
+      <ContextMenu
+        disableProbe={props.disableProbe}
+        open={state.openContextMenu}
+        anchorReference="anchorPosition"
+        anchorPosition={{ top: +state.y0, left: +state.x0 }}
+        probeType={'simple'}
+        pvs={state.contextPVs}
+        handleClose={handleContextMenuClose}
+
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+      />
+      <DataConnection
+        pv={state.pvs['xReadback'].pvname}
+        usePrecision={usePrecision}
+        handleInputValue={handleInputValue('xReadback')}
+        handleMetadata={handleMetadata('xReadback')}
+      />
+      <DataConnection
+        pv={state.pvs['yReadback'].pvname}
+        usePrecision={usePrecision}
+        handleInputValue={handleInputValue('yReadback')}
+        handleMetadata={handleMetadata('yReadback')}
+      />
+      {initialized===true &&
+        <g transform={'translate('+props.cx+','+props.cy+')'} onClick={handleOnClick(props.system)}>
+          <linearGradient id={props.system.systemName+'elipse-gradient'} gradientTransform="rotate(0)">
+            <stop offset="0%" stopOpacity="30" stopColor={'silver'} />
+            <stop offset="75%" stopColor={color_side} />
+          </linearGradient>
+          <defs>
+            <filter id={props.system.systemName+"elipseShadow"} x="0" y="0" width="600%" height="500%">
+              <feOffset result="offOut" in="SourceGraphic" dx="2.5" dy="2.5" />
+              <feColorMatrix result="matrixOut" in="offOut" type="matrix"
+              values="0.2 0 0 0 0 0 0.2 0 0 0 0 0 0.2 0 0 0 0 0 1 0" />
+              <feGaussianBlur result="blurOut" in="matrixOut" stdDeviation="2.5" />
+              <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+            </filter>
+          </defs>
+          <g filter={props.componentShadow===true?"url(#"+props.system.systemName+"elipseShadow)":"" }
+          >
+            <g>
+              <g transform="translate(-10,-1097)"
+                fill={props.componentGradient===true?'url(#'+props.system.systemName+'elipse-gradient)':color_side}
+                style={{'strokeWidth':'0.3',
+                'stroke':'black'}}
+              >
                   <path
                     d="m 6.4368595,1102.6622 3.5963725,0.049 -0.2955921,2.6603 z"
                     id="innerbottom"
@@ -439,40 +419,40 @@ class SteererXYMagnet extends React.Component {
               </g>
             </g>
 
-            <text className={classes.textSteererXYMagnetValue}
-              x={typeof this.props.valueOffsetX!=='undefined'?this.props.valueOffsetX:0}
-              y={typeof this.props.valueOffsetY!=='undefined'?this.props.valueOffsetY+41.5:41.5}
+            <text style={{ fill: theme.palette.text.primary }}
+              x={typeof props.valueOffsetX!=='undefined'?props.valueOffsetX:0}
+              y={typeof props.valueOffsetY!=='undefined'?props.valueOffsetY+41.5:41.5}
               textAnchor='middle'
-              filter={this.props.textShadow===true?"url(#"+this.props.system.systemName+"elipseShadow)":"" }
+              filter={props.textShadow===true?"url(#"+props.system.systemName+"elipseShadow)":"" }
             >
-              {this.props.usePvUnits===true?'X: '+ xReadbackValue+" "+pvs.xReadback.metadata.units:'X: '+ xReadbackValue+" "+this.props.xUnits}
+              {props.usePvUnits===true?'X: '+ xReadbackValue+" "+pvs.xReadback.metadata.units:'X: '+ xReadbackValue+" "+props.xUnits}
             </text>
-            <text className={classes.textSteererXYMagnetValue}
-              x={typeof this.props.valueOffsetX!=='undefined'?this.props.valueOffsetX:0}
-              y={typeof this.props.valueOffsetY!=='undefined'?this.props.valueOffsetY+57.5:57.5}
+            <text style={{ fill: theme.palette.text.primary }}
+              x={typeof props.valueOffsetX!=='undefined'?props.valueOffsetX:0}
+              y={typeof props.valueOffsetY!=='undefined'?props.valueOffsetY+57.5:57.5}
               textAnchor='middle'
-              filter={this.props.textShadow===true?"url(#"+this.props.system.systemName+"elipseShadow)":"" }
+              filter={props.textShadow===true?"url(#"+props.system.systemName+"elipseShadow)":"" }
             >
-              {this.props.usePvUnits===true?'Y: '+ yReadbackValue+" "+pvs.yReadback.metadata.units:'Y: '+ yReadbackValue+" "+this.props.yUnits}
+              {props.usePvUnits===true?'Y: '+ yReadbackValue+" "+pvs.yReadback.metadata.units:'Y: '+ yReadbackValue+" "+props.yUnits}
             </text>
-            <text className={classes.textSteererXYMagnetLabel}
-              x={typeof this.props.labelOffsetX!=='undefined'?this.props.labelOffsetX:0}
-              y={typeof this.props.labelOffsetY!=='undefined'?this.props.labelOffsetY-40:-40}
+            <text style={{ fill: theme.palette.text.primary }}
+              x={typeof props.labelOffsetX!=='undefined'?props.labelOffsetX:0}
+              y={typeof props.labelOffsetY!=='undefined'?props.labelOffsetY-40:-40}
               textAnchor='middle'
-              filter={this.props.textShadow===true?"url(#"+this.props.system.systemName+"elipseShadow)":"" }
+              filter={props.textShadow===true?"url(#"+props.system.systemName+"elipseShadow)":"" }
             >
-              {this.props.system.displayName}
+              {props.system.displayName}
             </text>
           </g>
         }
         {(initialized===false||initialized==='undefined') &&
-          <g transform={'translate('+this.props.cx+','+this.props.cy+')'}>
-            <linearGradient id={this.props.system.systemName+'elipse-gradient'} gradientTransform="rotate(0)">
+          <g transform={'translate('+props.cx+','+props.cy+')'}>
+            <linearGradient id={props.system.systemName+'elipse-gradient'} gradientTransform="rotate(0)">
               <stop offset="0%" stopOpacity="30" stopColor={'silver'} />
               <stop offset="75%" stopColor={'grey'} />
             </linearGradient>
             <defs>
-              <filter id={this.props.system.systemName+"elipseShadow"} x="0" y="0" width="600%" height="500%">
+              <filter id={props.system.systemName+"elipseShadow"} x="0" y="0" width="600%" height="500%">
                 <feOffset result="offOut" in="SourceGraphic" dx="2.5" dy="2.5" />
                 <feColorMatrix result="matrixOut" in="offOut" type="matrix"
                 values="0.2 0 0 0 0 0 0.2 0 0 0 0 0 0.2 0 0 0 0 0 1 0" />
@@ -480,11 +460,11 @@ class SteererXYMagnet extends React.Component {
                 <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
               </filter>
             </defs>
-            <g filter={this.props.componentShadow===true?"url(#"+this.props.system.systemName+"elipseShadow)":"" }
+            <g filter={props.componentShadow===true?"url(#"+props.system.systemName+"elipseShadow)":"" }
             >
               <g>
                 <g transform="translate(-10,-1097)"
-                  fill={this.props.componentGradient===true?'url(#'+this.props.system.systemName+'elipse-gradient)':'grey'}
+                  fill={props.componentGradient===true?'url(#'+props.system.systemName+'elipse-gradient)':'grey'}
                   style={{'strokeWidth':'0.3',
                   'stroke':'black'}}
                 >
@@ -674,7 +654,7 @@ class SteererXYMagnet extends React.Component {
                   <path
                     d="m 8.4481214,1118.5965 c 0.092826,-3.8382 0.5483889,-8.5093 1.2007186,-13.6322 v 0"
                     id="path9504-7-91-7-36"
-                  />usePvLabel===true? this.state.label:this.props.label
+                  />
 
                   <path
                     d="m 9.7854148,1104.3331 c -0.2708485,0.1 -0.5541262,0.2192 -0.8499483,0.3628 v 0"
@@ -734,20 +714,18 @@ class SteererXYMagnet extends React.Component {
                 </g>
               </g>
             </g>
-            <text className={classes.textSteererXYMagnetDisconneted}
-              x={typeof this.props.labelOffsetX!=='undefined'?this.props.labelOffsetX:0}
-              y={typeof this.props.labelOffsetY!=='undefined'?this.props.labelOffsetY-40:-40}
+            <text style={{ fill: 'dimgrey' }}
+              x={typeof props.labelOffsetX!=='undefined'?props.labelOffsetX:0}
+              y={typeof props.labelOffsetY!=='undefined'?props.labelOffsetY-40:-40}
               textAnchor='middle'
-              filter={this.props.textShadow===true?"url(#"+this.props.system.systemName+"elipseShadow)":"" }
+              filter={props.textShadow===true?"url(#"+props.system.systemName+"elipseShadow)":"" }
             >
-              {this.props.system.displayName}
+              {props.system.displayName}
             </text>
           </g>
         }
       </g>
     );
-  }
-}
+  };
 
-SteererXYMagnet.contextType=AutomationStudioContext;
-export default withStyles(styles)(SteererXYMagnet)
+export default SteererXYMagnet;

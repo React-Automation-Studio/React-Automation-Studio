@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useContext } from 'react'
 import AutomationStudioContext from '../SystemComponents/AutomationStudioContext';
 import DataConnection from '../SystemComponents/DataConnection';
 import Button from '@mui/material/Button';
@@ -10,221 +10,219 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import Tooltip from '@mui/material/Tooltip';
 import ContextMenu from '../SystemComponents/ContextMenu';
-
-import withStyles from '@mui/styles/withStyles';
+import { useTheme } from '@mui/material/styles';
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const styles = theme => ({
-  textFC: {
-    fill:theme.palette.text.primary
-  },
-
-  textFCOff: {
-    fill:'grey'
-  },
-  contextMenu:{
-    position:'relative'
-  }
-});
-
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */
-class FC extends React.Component {
-  constructor(props) {
-    super(props);
+const FC = (props) => {
+  useEffect(() => {
+     console.warn(
+        "This component is deprecated and will be removed in RAS in V8.0.0."
+      );
+    }, []);
+  const context = useContext(AutomationStudioContext);
+  const theme = useTheme();
 
-    const safetyOkPV=this.props.systemName+':get-status.B1';
-    const safetyAlarmPV=this.props.systemName+':get-status.B0';
-    const airPressurePV=this.props.systemName+':get-status.B2';
-    const HvPV=this.props.systemName+':get-status.B3';
-    const opActInPV=this.props.systemName+':get-status.B4';
-    const movingPV=this.props.systemName+':get-status.B5';
-    const inPV=this.props.systemName+':get-status.B6';
-    const outPV=this.props.systemName+':get-status.B7';
-    const statusPV=this.props.systemName+':get-statusText';
-    const commandPV=this.props.systemName+':put-outIn';
-    let pvs={};
+  const safetyOkPV = props.systemName + ':get-status.B1';
+  const safetyAlarmPV = props.systemName + ':get-status.B0';
+  const airPressurePV = props.systemName + ':get-status.B2';
+  const HvPV = props.systemName + ':get-status.B3';
+  const opActInPV = props.systemName + ':get-status.B4';
+  const movingPV = props.systemName + ':get-status.B5';
+  const inPV = props.systemName + ':get-status.B6';
+  const outPV = props.systemName + ':get-status.B7';
+  const statusPV = props.systemName + ':get-statusText';
+  const commandPV = props.systemName + ':put-outIn';
+  let initialPvs = {};
 
-    pvs['safetyOkPV']={initialized: false,pvname:safetyOkPV,value:"",char_value:""}
-    pvs['safetyAlarmPV']={initialized: false,pvname:safetyAlarmPV,value:"",char_value:""}
-    pvs['airPressurePV']={initialized: false,pvname:airPressurePV,value:"",char_value:""}
-    pvs['opActInPV']={initialized: false,pvname:opActInPV,value:"",char_value:""}
-    pvs['HvPV']={initialized: false,pvname:HvPV,value:"",char_value:""}
-    pvs['movingPV']={initialized: false,pvname:movingPV,value:"",char_value:""}
-    pvs['inPV']={initialized: false,pvname:inPV,value:"",char_value:""}
-    pvs['outPV']={initialized: false,pvname:outPV,value:"",char_value:""}
+  initialPvs['safetyOkPV'] = { initialized: false, pvname: safetyOkPV, value: "", char_value: "" }
+  initialPvs['safetyAlarmPV'] = { initialized: false, pvname: safetyAlarmPV, value: "", char_value: "" }
+  initialPvs['airPressurePV'] = { initialized: false, pvname: airPressurePV, value: "", char_value: "" }
+  initialPvs['opActInPV'] = { initialized: false, pvname: opActInPV, value: "", char_value: "" }
+  initialPvs['HvPV'] = { initialized: false, pvname: HvPV, value: "", char_value: "" }
+  initialPvs['movingPV'] = { initialized: false, pvname: movingPV, value: "", char_value: "" }
+  initialPvs['inPV'] = { initialized: false, pvname: inPV, value: "", char_value: "" }
+  initialPvs['outPV'] = { initialized: false, pvname: outPV, value: "", char_value: "" }
 
-    pvs['statusPV']={initialized: false,pvname:statusPV,value:"",char_value:""}
-    pvs['commandPV']={initialized: false,pvname:commandPV,value:"",char_value:""}
-    let contextPVs=[];
-    for (let item in pvs){
-      contextPVs.push(pvs[item]);
-    }
-    this.state={pvs,
-      newCommandTrigger:0,contextPVs:contextPVs,openContextMenu: false,
-      'open':false,x0:0,y0:0
-    }
-    this.handleOnClick= this.handleOnClick.bind(this);
-    this.handleInputValue= this.handleInputValue.bind(this);
-    this.handleInputValueLabel= this.handleInputValueLabel.bind(this);
-    this.handleMetadata= this.handleMetadata.bind(this);
+  initialPvs['statusPV'] = { initialized: false, pvname: statusPV, value: "", char_value: "" }
+  initialPvs['commandPV'] = { initialized: false, pvname: commandPV, value: "", char_value: "" }
+  let contextPVs = [];
+  for (let item in initialPvs) {
+    contextPVs.push(initialPvs[item]);
   }
 
-  componentDidMount() {
-  }
+  const [state, setState] = useState({
+    pvs: initialPvs,
+    newCommandTrigger: 0,
+    contextPVs: contextPVs,
+    openContextMenu: false,
+    'open': false,
+    x0: 0,
+    y0: 0
+  });
 
-  componentWillUnmount() {
-  }
+  const handleMetadata = (name) => (metadata) => {
+    setState(prev => {
+      let pvs = { ...prev.pvs };
+      pvs[name].metadata = metadata;
+      return { ...prev, pvs: pvs };
+    });
+  };
 
-  componentDidUpdate(prevProps,prevState) {
-  }
+  const handleInputValue = (name) => (inputValue, pvname, initialized, severity) => {
+    setState(prev => {
+      let pvs = { ...prev.pvs };
+      pvs[name].value = inputValue;
+      pvs[name].initialized = initialized;
+      pvs[name].severity = severity;
+      pvs[name].pvname = pvname;
+      return { ...prev, pvs: pvs };
+    });
+  };
 
-  handleMetadata=name=>(metadata)=>{
-    let pvs=this.state.pvs;
-    pvs[name].metadata=metadata;
-    this.setState({pvs	 :pvs});
-  }
+  const handleInputValueLabel = (inputValue) => {
+    setState(prev => ({ ...prev, label: inputValue }));
+  };
 
-  handleInputValue = name=> (inputValue,pvname,initialized,severity)=>{
-    let pvs=this.state.pvs;
-
-    pvs[name].value=inputValue;
-    pvs[name].initialized=initialized;
-    pvs[name].severity=severity;
-    pvs[name].pvname=pvname;
-
-    this.setState({pvs:pvs});
-  }
-
-  handleInputValueLabel(inputValue){
-    this.setState({label:inputValue});
-  }
-
-  handleOnClick =device=> (event) => {
-    console.log("In FC: clicked "+device.toString());
-    let pvs=this.state.pvs;
-    if ((pvs['inPV'].value==1)){
-      const status= pvs['statusPV'].value;
-      if(status==='In') {
-        pvs['commandPV'].value=0;
-        this.setState({pvs:pvs,newCommandTrigger:this.state.newCommandTrigger+1,});
+  const handleOnClick = (device) => (event) => {
+    console.log("In FC: clicked " + device.toString());
+    let pvs = state.pvs;
+    if ((pvs['inPV'].value == 1)) {
+      const status = pvs['statusPV'].value;
+      if (status === 'In') {
+        setState(prev => {
+          let newPvs = { ...prev.pvs };
+          newPvs['commandPV'].value = 0;
+          return {
+            ...prev,
+            pvs: newPvs,
+            newCommandTrigger: prev.newCommandTrigger + 1,
+          };
+        });
       }
-      else{
-        this.setState({
-          open:true});
+      else {
+        setState(prev => ({ ...prev, open: true }));
       }
     }
     else {
-      pvs['commandPV'].value=1;
-      this.setState({pvs:pvs,newCommandTrigger:this.state.newCommandTrigger+1,});
+      setState(prev => {
+        let newPvs = { ...prev.pvs };
+        newPvs['commandPV'].value = 1;
+        return {
+          ...prev,
+          pvs: newPvs,
+          newCommandTrigger: prev.newCommandTrigger + 1,
+        };
+      });
     }
   };
 
-  handleYes = () => {
-    let pvs=this.state.pvs;
-    pvs['commandPV'].value=1;
-
-    this.setState({ pvs:pvs,newCommandTrigger:this.state.newCommandTrigger+1,
-      open:false});
+  const handleYes = () => {
+    setState(prev => {
+      let pvs = { ...prev.pvs };
+      pvs['commandPV'].value = 1;
+      return {
+        ...prev,
+        pvs: pvs,
+        newCommandTrigger: prev.newCommandTrigger + 1,
+        open: false
+      };
+    });
   };
 
-  handleOk = () => {
-    this.setState({
-      open:false});
+  const handleOk = () => {
+    setState(prev => ({ ...prev, open: false }));
   };
 
-  handleNo = () => {
-    this.setState({
-      open:false});
+  const handleNo = () => {
+    setState(prev => ({ ...prev, open: false }));
   };
 
-  handleContextMenuClose = event => {
-    this.setState({ openContextMenu: false });
+  const handleContextMenuClose = (event) => {
+    setState(prev => ({ ...prev, openContextMenu: false }));
   };
 
-  handleToggleContextMenu = (event) => {
+  const handleToggleContextMenu = (event) => {
     event.persist()
-    this.setState(state => ({ openContextMenu: !state.openContextMenu,x0:event.pageX,y0:event.pageY }));
+    setState(prev => ({ ...prev, openContextMenu: !prev.openContextMenu, x0: event.pageX, y0: event.pageY }));
     event.preventDefault();
-  }
-  
-  render() {
-    const pvs=this.state.pvs;
-    const {classes}= this.props;
+  };
 
-    const severity=this.state.severity;
+  const pvs = state.pvs;
+  const severity = state.severity;
 
-    const initialized=((pvs['commandPV'].initialized)&&(pvs['statusPV'].initialized)&&(pvs['safetyAlarmPV'].initialized)&&(pvs['safetyOkPV'].initialized)&&(pvs['airPressurePV'].initialized)&&(pvs['opActInPV'].initialized)&&pvs['movingPV'].initialized&&(pvs['HvPV'].initialized)&&(pvs['inPV'].initialized)&&(pvs['outPV'].initialized));
+  const initialized = ((pvs['commandPV'].initialized) && (pvs['statusPV'].initialized) && (pvs['safetyAlarmPV'].initialized) && (pvs['safetyOkPV'].initialized) && (pvs['airPressurePV'].initialized) && (pvs['opActInPV'].initialized) && pvs['movingPV'].initialized && (pvs['HvPV'].initialized) && (pvs['inPV'].initialized) && (pvs['outPV'].initialized));
 
-    let background_color='';
-    if (typeof this.props.alarmSensitive !== 'undefined'){
-      if (this.props.alarmSensitive==true){
-        if (severity==1){
-          background_color='linear-gradient(45deg, #FFFFFF 1%, #FF8E53 99%)';
-        }
-        else if(severity==2){
-          background_color='linear-gradient(45deg, #FFFFFF 1%, #E20101 99%)';
-        }
-        else background_color='white';
+  let background_color = '';
+  if (typeof props.alarmSensitive !== 'undefined') {
+    if (props.alarmSensitive == true) {
+      if (severity == 1) {
+        background_color = 'linear-gradient(45deg, #FFFFFF 1%, #FF8E53 99%)';
       }
+      else if (severity == 2) {
+        background_color = 'linear-gradient(45deg, #FFFFFF 1%, #E20101 99%)';
+      }
+      else background_color = 'white';
     }
+  }
 
-    let yoffset=0;
-    let fcFault=false;
-    let fcFaultString=""
-    let alarmColor='#133C99';
+  let yoffset = 0;
+  let fcFault = false;
+  let fcFaultString = ""
+  let alarmColor = '#133C99';
 
-    if (pvs['inPV'].value==1){
-      yoffset=0;
-    }
+  if (pvs['inPV'].value == 1) {
+    yoffset = 0;
+  }
 
-    if (pvs['outPV'].value==1){
-      yoffset=-30;
-    }
+  if (pvs['outPV'].value == 1) {
+    yoffset = -30;
+  }
 
-    if (pvs['movingPV'].value==1){
-      alarmColor='#f9e500';
-    }
+  if (pvs['movingPV'].value == 1) {
+    alarmColor = '#f9e500';
+  }
 
-    if (pvs['airPressurePV'].value==1){
-      alarmColor='#FF8E53';
-      fcFault=true;
-      fcFaultString+=" [Air pressure]"
-    }
-    if (pvs['HvPV'].value==1){
-      alarmColor='#FF8E53';
-      fcFault=true;
-      fcFaultString+=" [HV Bias]"
-    }
+  if (pvs['airPressurePV'].value == 1) {
+    alarmColor = '#FF8E53';
+    fcFault = true;
+    fcFaultString += " [Air pressure]"
+  }
+  if (pvs['HvPV'].value == 1) {
+    alarmColor = '#FF8E53';
+    fcFault = true;
+    fcFaultString += " [HV Bias]"
+  }
 
-    if (pvs['safetyAlarmPV'].value==1){
-      alarmColor='#E20101';
-      fcFault=true;
-      fcFaultString+=" [Safety Alarm]"
-    }
-    if (pvs['safetyOkPV'].value==1){
-      alarmColor='#E20101';
-      fcFault=true;
-      fcFaultString+=" [Safety Ok]"
-    }
-    if(fcFaultString.length>0){
-      fcFaultString="Faults: " + fcFaultString;
-    }
+  if (pvs['safetyAlarmPV'].value == 1) {
+    alarmColor = '#E20101';
+    fcFault = true;
+    fcFaultString += " [Safety Alarm]"
+  }
+  if (pvs['safetyOkPV'].value == 1) {
+    alarmColor = '#E20101';
+    fcFault = true;
+    fcFaultString += " [Safety Ok]"
+  }
+  if (fcFaultString.length > 0) {
+    fcFaultString = "Faults: " + fcFaultString;
+  }
 
-    return (
+  return (
       <g>
         <ContextMenu
-          disableProbe={this.props.disableProbe}
-          open={this.state.openContextMenu}
+          disableProbe={props.disableProbe}
+          open={state.openContextMenu}
           anchorReference="anchorPosition"
-          anchorPosition={{ top: +this.state.y0, left: +this.state.x0 }}
+          anchorPosition={{ top: +state.y0, left: +state.x0 }}
           probeType={'simple'}
-          pvs={this.state.contextPVs}
-          handleClose={this.handleContextMenuClose}
+          pvs={state.contextPVs}
+          handleClose={handleContextMenuClose}
 
           transformOrigin={{
             vertical: 'top',
@@ -232,55 +230,55 @@ class FC extends React.Component {
           }}
         />
         <Dialog
-          open={this.state.open}
+          open={state.open}
           TransitionComponent={Transition}
           keepMounted
-          onClose={this.handleClose}
-          aria-labelledby={"alert-dialog-slide-title"+this.props.systemName}
-          aria-describedby={"alert-dialog-slide-description"+this.props.systemName}
+          onClose={handleClose}
+          aria-labelledby={"alert-dialog-slide-title"+props.systemName}
+          aria-describedby={"alert-dialog-slide-description"+props.systemName}
         >
-          <DialogTitle id={"alert-dialog-slide-title"+this.props.systemName}>
+          <DialogTitle id={"alert-dialog-slide-title"+props.systemName}>
             "Error!"
           </DialogTitle>
           <DialogContent>
-            <DialogContentText id={"alert-dialog-slide-description"+this.props.systemName}>
-              Faraday cup {this.props.systemName} is interlocked! {fcFaultString}
+            <DialogContentText id={"alert-dialog-slide-description"+props.systemName}>
+              Faraday cup {props.systemName} is interlocked! {fcFaultString}
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleOk} color="primary">
+            <Button onClick={handleOk} color="primary">
               Ok
             </Button>
           </DialogActions>
         </Dialog>
 
         <Tooltip disableHoverListener={!fcFault} title={fcFaultString}>
-          <g  onClick={this.handleOnClick(this.props.systemName)}  onContextMenu={this.handleToggleContextMenu}>
+          <g  onClick={handleOnClick(props.systemName)}  onContextMenu={handleToggleContextMenu}>
             <DataConnection
-              pv={this.state.pvs['commandPV'].pvname}
-              newValueTrigger={this.state.newCommandTrigger}
-              handleInputValue={this.handleInputValue('commandPV')}
-              handleMetadata={this.handleMetadata('commandPV')}
-              outputValue=  {this.state.pvs['commandPV'].value}
+              pv={state.pvs['commandPV'].pvname}
+              newValueTrigger={state.newCommandTrigger}
+              handleInputValue={handleInputValue('commandPV')}
+              handleMetadata={handleMetadata('commandPV')}
+              outputValue=  {state.pvs['commandPV'].value}
             />
-            <DataConnection pv={this.state.pvs['statusPV'].pvname} handleInputValue={this.handleInputValue('statusPV')} handleMetadata={this.handleMetadata('statusPV')} />
-            <DataConnection pv={this.state.pvs['safetyOkPV'].pvname} handleInputValue={this.handleInputValue('safetyOkPV')} handleMetadata={this.handleMetadata('safetyOkPV')}/>
-            <DataConnection pv={this.state.pvs['safetyAlarmPV'].pvname} handleInputValue={this.handleInputValue('safetyAlarmPV')} handleMetadata={this.handleMetadata('safetyAlarmPV')}/>
-            <DataConnection pv={this.state.pvs['airPressurePV'].pvname} handleInputValue={this.handleInputValue('airPressurePV')} handleMetadata={this.handleMetadata('airPressurePV')}/>
-            <DataConnection pv={this.state.pvs['opActInPV'].pvname} handleInputValue={this.handleInputValue('opActInPV')} handleMetadata={this.handleMetadata('opActInPV')}/>
-            <DataConnection pv={this.state.pvs['HvPV'].pvname} handleInputValue={this.handleInputValue('HvPV')} handleMetadata={this.handleMetadata('HvPV')}/>
-            <DataConnection pv={this.state.pvs['movingPV'].pvname} handleInputValue={this.handleInputValue('movingPV')} useStringValue={false} handleMetadata={this.handleMetadata('movingPV')}/>
-            <DataConnection pv={this.state.pvs['inPV'].pvname} handleInputValue={this.handleInputValue('inPV')} handleMetadata={this.handleMetadata('inPV')} />
-            <DataConnection pv={this.state.pvs['outPV'].pvname} handleInputValue={this.handleInputValue('outPV')} handleMetadata={this.handleMetadata('outPV')} />
+            <DataConnection pv={state.pvs['statusPV'].pvname} handleInputValue={handleInputValue('statusPV')} handleMetadata={handleMetadata('statusPV')} />
+            <DataConnection pv={state.pvs['safetyOkPV'].pvname} handleInputValue={handleInputValue('safetyOkPV')} handleMetadata={handleMetadata('safetyOkPV')}/>
+            <DataConnection pv={state.pvs['safetyAlarmPV'].pvname} handleInputValue={handleInputValue('safetyAlarmPV')} handleMetadata={handleMetadata('safetyAlarmPV')}/>
+            <DataConnection pv={state.pvs['airPressurePV'].pvname} handleInputValue={handleInputValue('airPressurePV')} handleMetadata={handleMetadata('airPressurePV')}/>
+            <DataConnection pv={state.pvs['opActInPV'].pvname} handleInputValue={handleInputValue('opActInPV')} handleMetadata={handleMetadata('opActInPV')}/>
+            <DataConnection pv={state.pvs['HvPV'].pvname} handleInputValue={handleInputValue('HvPV')} handleMetadata={handleMetadata('HvPV')}/>
+            <DataConnection pv={state.pvs['movingPV'].pvname} handleInputValue={handleInputValue('movingPV')} useStringValue={false} handleMetadata={handleMetadata('movingPV')}/>
+            <DataConnection pv={state.pvs['inPV'].pvname} handleInputValue={handleInputValue('inPV')} handleMetadata={handleMetadata('inPV')} />
+            <DataConnection pv={state.pvs['outPV'].pvname} handleInputValue={handleInputValue('outPV')} handleMetadata={handleMetadata('outPV')} />
 
             {initialized===true &&
               <g>
-                <linearGradient id={this.props.systemName+'FC-gradient'} gradientTransform="rotate(0)">
+                <linearGradient id={props.systemName+'FC-gradient'} gradientTransform="rotate(0)">
                   <stop offset="0%" stopColor={'silver'} />
                   <stop offset="65%" stopColor={alarmColor} />
                 </linearGradient>
                 <defs>
-                  <filter id={this.props.systemName+"FCShadow"} x="0" y="0" width="600%" height="500%">
+                  <filter id={props.systemName+"FCShadow"} x="0" y="0" width="600%" height="500%">
                     <feOffset result="offOut" in="SourceGraphic" dx="2.5" dy="2.5" />
                     <feColorMatrix result="matrixOut" in="offOut" type="matrix"
                     values="0.2 0 0 0 0 0 0.2 0 0 0 0 0 0.2 0 0 0 0 0 1 0" />
@@ -290,9 +288,9 @@ class FC extends React.Component {
                 </defs>
 
                 <g
-                  fill={this.props.componentGradient===true?'url(#'+this.props.systemName+'FC-gradient)':alarmColor}
-                  filter={this.props.componentShadow===true?"url(#"+this.props.systemName+"FCShadow)":"" }
-                  transform={'translate('+this.props.cx+','+this.props.cy+')'}
+                  fill={props.componentGradient===true?'url(#'+props.systemName+'FC-gradient)':alarmColor}
+                  filter={props.componentShadow===true?"url(#"+props.systemName+"FCShadow)":"" }
+                  transform={'translate('+props.cx+','+props.cy+')'}
                 >
                   {yoffset!==0&&  <g transform={'translate(0,-1140)'}>
                     <path
@@ -319,14 +317,14 @@ class FC extends React.Component {
                   </g>
                   }
                 </g>
-                <text className={classes.textFC}
-                  x={typeof this.props.labelOffsetX!=='undefined'?this.props.labelOffsetX+this.props.cx+12:this.props.cx+12}
-                  y={typeof this.props.labelOffsetY!=='undefined'?this.props.labelOffsetY+this.props.cy+yoffset-40:+this.props.cy+yoffset-40}
+                <text style={{ fill: theme.palette.text.primary }}
+                  x={typeof props.labelOffsetX!=='undefined'?props.labelOffsetX+props.cx+12:props.cx+12}
+                  y={typeof props.labelOffsetY!=='undefined'?props.labelOffsetY+props.cy+yoffset-40:+props.cy+yoffset-40}
                   textAnchor='middle'
-                  filter={this.props.textShadow===true?"url(#"+this.state.pvname+"FCShadow)":""
+                  filter={props.textShadow===true?"url(#"+state.pvname+"FCShadow)":""
                   }
                 >
-                  {this.props.label}
+                  {props.label}
                 </text>
               </g>
             }
@@ -336,12 +334,12 @@ class FC extends React.Component {
                   <stop offset="0%" stopOpacity="0" />
                   <stop offset="75%" stopColor={'grey'} />
                 </linearGradient>
-                <linearGradient id={this.props.systemName+'FC-gradient'} gradientTransform="rotate(0)">
+                <linearGradient id={props.systemName+'FC-gradient'} gradientTransform="rotate(0)">
                   <stop offset="0%" stopColor='silver' />
                   <stop offset="65%" stopColor={'grey'} />
                 </linearGradient>
                 <defs>
-                  <filter id={this.props.systemName+"FCShadow"} x="0" y="0" width="600%" height="500%">
+                  <filter id={props.systemName+"FCShadow"} x="0" y="0" width="600%" height="500%">
                     <feOffset result="offOut" in="SourceGraphic" dx="7.5" dy="7.5" />
                     <feColorMatrix result="matrixOut" in="offOut" type="matrix"
                     values="0.2 0 0 0 0 0 0.2 0 0 0 0 0 0.2 0 0 0 0 0 1 0" />
@@ -351,9 +349,9 @@ class FC extends React.Component {
                 </defs>
 
                 <g
-                  fill={this.props.componentGradient===true?'url(#'+this.props.systemName+'FC-gradient)':'grey'}
-                  filter={this.props.componentShadow===true?"url(#"+this.props.systemName+"FCShadow)":"" }
-                  transform={'translate('+this.props.cx+','+this.props.cy+')'}
+                  fill={props.componentGradient===true?'url(#'+props.systemName+'FC-gradient)':'grey'}
+                  filter={props.componentShadow===true?"url(#"+props.systemName+"FCShadow)":"" }
+                  transform={'translate('+props.cx+','+props.cy+')'}
                 >
                   <g transform={'translate(0,-1102.5)'}>
                     <path
@@ -368,14 +366,14 @@ class FC extends React.Component {
                     />
                   </g>
                 </g>
-                <text className={classes.textFCOff}
-                  x={typeof this.props.labelOffsetX!=='undefined'?this.props.labelOffsetX+this.props.cx+12:this.props.cx+12}
-                  y={typeof this.props.labelOffsetY!=='undefined'?this.props.labelOffsetY+this.props.cy+yoffset-40:+this.props.cy+yoffset-40}
+                <text style={{ fill: 'grey' }}
+                  x={typeof props.labelOffsetX!=='undefined'?props.labelOffsetX+props.cx+12:props.cx+12}
+                  y={typeof props.labelOffsetY!=='undefined'?props.labelOffsetY+props.cy+yoffset-40:+props.cy+yoffset-40}
                   textAnchor='middle'
-                  filter={this.props.textShadow===true?"url(#"+this.state.pvname+"FCShadow)":""
+                  filter={props.textShadow===true?"url(#"+state.pvname+"FCShadow)":""
                   }
                 >
-                  {this.props.label}
+                  {props.label}
                 </text>
               </g>
             }
@@ -383,8 +381,6 @@ class FC extends React.Component {
         </Tooltip>
       </g>
     );
-  }
-}
+};
 
-FC.contextType=AutomationStudioContext;
-export default withStyles(styles)( FC)
+export default FC;

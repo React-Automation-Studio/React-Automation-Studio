@@ -8,10 +8,9 @@ import React, {
 } from "react";
 
 import { useTheme } from "@mui/material/styles";
-import makeStyles from "@mui/styles/makeStyles";
 import { alpha } from "@mui/material/styles";
 import AutomationStudioContext from "../SystemComponents/AutomationStudioContext";
-import Grid from "@mui/material/Grid";
+import Grid from '@mui/material/GridLegacy';
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 
@@ -36,7 +35,7 @@ import Collapse from "@mui/material/Collapse";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import SearchIcon from "@mui/icons-material/Search";
-import IconButton from "@mui/material/IconButton";
+import IconButton from '@mui/material/IconButton';
 
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -69,127 +68,47 @@ import DeleteAreaDialog from "./DeleteAreaDialog";
 import DeletePVDialog from "./DeletePVDialog";
 
 import { format, parseISO } from "date-fns";
-
-// Styles
-const useStyles = makeStyles((theme) => ({
-  root: {
-    padding: theme.spacing(1),
-    margin: 0,
-    width: "100%",
-  },
-  backdrop: {
-    zIndex: theme.zIndex.drawer + 1,
-    color: "#fff",
-  },
-  PaginationRoot: {
-    flexShrink: 0,
-    marginLeft: theme.spacing(2.5),
-  },
-  paper: {
-    padding: theme.spacing(2),
-    margin: 0,
-    height: "100%",
-    overflowX: "default",
-    overflowY: "default",
-  },
-  search: {
-    position: "relative",
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor:
-      theme.palette.mode === "dark"
-        ? alpha(theme.palette.common.white, 0.15)
-        : alpha(theme.palette.common.black, 0.15),
-    "&:hover": {
-      backgroundColor:
-        theme.palette.mode === "dark"
-          ? alpha(theme.palette.common.white, 0.25)
-          : alpha(theme.palette.common.black, 0.25),
-    },
-    marginLeft: 0,
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      marginLeft: theme.spacing(1),
-      width: "auto",
-    },
-  },
-  searchIcon: {
-    padding: theme.spacing(0, 2),
-    height: "100%",
-    position: "absolute",
-    pointerEvents: "none",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  inputRoot: {
-    color: "inherit",
-  },
-  inputInput: {
-    padding: theme.spacing(1, 1, 1, 0),
-    // // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      width: "20ch",
-      "&:focus": {
-        width: "30ch",
-      },
-    },
-  },
-  expansionPanelSummaryContent: {
-    paddingTop: 0,
-    paddingBottom: 0,
-    "&$expanded": {
-      margin: 0,
-    },
-  },
-  expanded: {},
-  nested: {
-    paddingLeft: theme.spacing(4),
-  },
-  verticalMiddle: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-  },
-}));
-
+import { ListItemButton } from "@mui/material";
+import Box from "@mui/material/Box";
 const TablePaginationActions = (props) => {
-  const classes = useStyles();
   const theme = useTheme();
-  const { count, page, rowsPerPage, onChangePage } = props;
-
+  const { count, page, rowsPerPage, onPageChange } = props;
   const handleFirstPageButtonClick = useCallback(
     (event) => {
-      onChangePage(event, 0);
+      onPageChange(event, 0);
     },
-    [onChangePage]
+    [onPageChange]
   );
 
   const handleBackButtonClick = useCallback(
     (event) => {
-      onChangePage(event, page - 1);
+      onPageChange(event, page - 1);
     },
-    [onChangePage, page]
+    [onPageChange, page]
   );
 
   const handleNextButtonClick = useCallback(
     (event) => {
-      onChangePage(event, page + 1);
+      onPageChange(event, page + 1);
     },
-    [onChangePage, page]
+    [onPageChange, page]
   );
 
   const handleLastPageButtonClick = useCallback(
     (event) => {
-      onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+      onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
     },
-    [count, onChangePage, rowsPerPage]
+    [count, onPageChange, rowsPerPage]
   );
 
   return (
-    <div className={classes.PaginationRoot}>
+    <Box
+    sx={
+     {
+        flexShrink: 0,
+        marginLeft: 2.5,
+      }}
+    >
       <IconButton
         onClick={handleFirstPageButtonClick}
         disabled={page === 0}
@@ -230,12 +149,11 @@ const TablePaginationActions = (props) => {
       >
         {theme.direction === "rtl" ? <FirstPageIcon /> : <LastPageIcon />}
       </IconButton>
-    </div>
+    </Box>
   );
 };
 
 const AlarmSetup = (props) => {
-  const classes = useStyles();
   const theme = useTheme();
 
   const context = useContext(AutomationStudioContext);
@@ -466,25 +384,21 @@ const AlarmSetup = (props) => {
   });
 
   const dbHistoryData = useMongoDbWatch({
-    dbURL: `mongodb://ALARM_DATABASE:${
-      props.dbName
-    }:history:Parameters:${JSON.stringify(historyDataParams)}`,
+    dbURL: `mongodb://ALARM_DATABASE:${props.dbName
+      }:history:Parameters:${JSON.stringify(historyDataParams)}`,
   }).data;
   const totalDocs =
     useMongoDbWatch({
-      dbURL: `mongodb://ALARM_DATABASE:${
-        props.dbName
-      }:history:Parameters:${JSON.stringify(totalDocsParams)}`,
+      dbURL: `mongodb://ALARM_DATABASE:${props.dbName
+        }:history:Parameters:${JSON.stringify(totalDocsParams)}`,
     }).data ?? 0;
   const prevPageDocId = useMongoDbWatch({
-    dbURL: `mongodb://ALARM_DATABASE:${
-      props.dbName
-    }:history:Parameters:${JSON.stringify(prevPageDocIdParams)}`,
+    dbURL: `mongodb://ALARM_DATABASE:${props.dbName
+      }:history:Parameters:${JSON.stringify(prevPageDocIdParams)}`,
   }).data?.[0]?._id.$oid;
   const lastPageDocId = useMongoDbWatch({
-    dbURL: `mongodb://ALARM_DATABASE:${
-      props.dbName
-    }:history:Parameters:${JSON.stringify(lastPageDocIdParams)}`,
+    dbURL: `mongodb://ALARM_DATABASE:${props.dbName
+      }:history:Parameters:${JSON.stringify(lastPageDocIdParams)}`,
   }).data?.[0]?._id.$oid;
 
   const dbUpdateOne = useMongoDbUpdateOne({});
@@ -527,7 +441,7 @@ const AlarmSetup = (props) => {
           localLastSubAreaKey[dbPVDataRaw[index]["area"]] = parseInt(
             Object.keys(subArea.slice(-1)[0])[0].replace("subArea", "")
           );
-        } catch (err) {}
+        } catch (err) { }
         return null;
       });
       // Sort subAreas
@@ -535,11 +449,11 @@ const AlarmSetup = (props) => {
         subArea.sort((a, b) => {
           const aKey = Object.keys(a)[0];
           const bKey = Object.keys(b)[0];
-          return a[aKey].name > b[bKey].name
+          return (a[aKey].name > b[bKey].name)
             ? 1
-            : b[bKey].name > a[aKey].name
-            ? -1
-            : 0;
+            : (b[bKey].name > a[aKey].name)
+              ? -1
+              : 0;
         });
         return null;
       });
@@ -614,7 +528,7 @@ const AlarmSetup = (props) => {
                   : roles.some((r) => area[areaKey].roles.includes(r))
                 : true;
 
-              const textEval=`${area["area"]}=${area[areaKey]['name']}`  
+              const textEval = `${area["area"]}=${area[areaKey]['name']}`
               localAreaRoles[textEval] =
                 subAreaHasRoles ? area[areaKey].roles : [];
               if (subAreaMatchesRole) {
@@ -796,19 +710,19 @@ const AlarmSetup = (props) => {
       skip: rowsPerPage,
       ...(currentPageDocId
         ? {
-            query: {
-              _id: { $gte: currentPageDocId },
-              id: historyQuery.id,
-              entry: historyQuery.entry,
-            },
-          }
+          query: {
+            _id: { $gte: currentPageDocId },
+            id: historyQuery.id,
+            entry: historyQuery.entry,
+          },
+        }
         : {
-            query: {
-              _id: undefined,
-              id: historyQuery.id,
-              entry: historyQuery.entry,
-            },
-          }),
+          query: {
+            _id: undefined,
+            id: historyQuery.id,
+            entry: historyQuery.entry,
+          },
+        }),
     }));
   }, [currentPageDocId, rowsPerPage, historyQuery]);
 
@@ -1182,9 +1096,8 @@ const AlarmSetup = (props) => {
   const handleTableItemRightClick = useCallback(
     (event, index, entryIndex) => {
       event.preventDefault();
-      const alarmName = `${index.replace(/=pv\d+/g, "")}*${
-        filteredAreaAlarms[entryIndex][1]["name"]
-      }`;
+      const alarmName = `${index.replace(/=pv\d+/g, "")}*${filteredAreaAlarms[entryIndex][1]["name"]
+        }`;
       const areaAlarmNameArray = index.split("=");
       let areaName = null;
       if (areaAlarmNameArray.length > 2) {
@@ -2333,7 +2246,9 @@ const AlarmSetup = (props) => {
   }, [loadAlarmList]);
 
   const handleChangePage = useCallback(
+    
     (event, newPage) => {
+      console.log(newPage);
       if (newPage === 0) {
         // first page
         setCurrentPageDocId(undefined);
@@ -2399,9 +2314,9 @@ const AlarmSetup = (props) => {
     const slicedAreaAlarms =
       rowsPerPageAT > 0
         ? searchedAreaAlarms.slice(
-            pageAT * rowsPerPageAT,
-            pageAT * rowsPerPageAT + rowsPerPageAT
-          )
+          pageAT * rowsPerPageAT,
+          pageAT * rowsPerPageAT + rowsPerPageAT
+        )
         : searchedAreaAlarms;
 
     setFilteredAreaAlarms(slicedAreaAlarms);
@@ -2590,7 +2505,10 @@ const AlarmSetup = (props) => {
       {alarmPVs}
       {addPVDialogPvs}
       <Backdrop
-        className={classes.backdrop}
+        sx={{
+          zIndex: theme.zIndex.drawer + 1,
+          color: "#fff",
+        }}
         open={backdropOpen}
         style={{
           display: "flex",
@@ -2689,12 +2607,22 @@ const AlarmSetup = (props) => {
           justifyContent="flex-start"
           alignItems="stretch"
           spacing={2}
-          className={classes.root}
+          sx={{
+            padding: theme.spacing(1),
+            margin: 0,
+            width: "100%",
+          }}
         >
           {displayAlarmList && !backdropOpen ? (
             <Grid item xs={2}>
               <Paper
-                className={classes.paper}
+                sx={{
+                  padding: theme.spacing(2),
+                  margin: 0,
+                  height: "100%",
+                  overflowX: "default",
+                  overflowY: "default",
+                }}
                 elevation={theme.palette.paperElevation}
               >
                 <Grid
@@ -2787,14 +2715,19 @@ const AlarmSetup = (props) => {
                         >
                           <List component="div" disablePadding>
                             <ListItem
-                              button
-                              className={classes.nested}
-                              onClick={handleAddNewArea}
+                              disablePadding
                             >
-                              <ListItemIcon>
-                                <AddIcon fontSize="small" />
-                              </ListItemIcon>
-                              <ListItemText primary="Add new area" />
+                              <ListItemButton
+                                sx={{
+                                  paddingLeft: theme.spacing(4),
+                                }}
+                                onClick={handleAddNewArea}
+                              >
+                                <ListItemIcon>
+                                  <AddIcon fontSize="small" />
+                                </ListItemIcon>
+                                <ListItemText primary="Add new area" />
+                              </ListItemButton>
                             </ListItem>
                           </List>
                         </Collapse>
@@ -2847,7 +2780,13 @@ const AlarmSetup = (props) => {
           ) : (
             <Grid item xs={2}>
               <Paper
-                className={classes.paper}
+                sx={{
+                  padding: theme.spacing(2),
+                  margin: 0,
+                  height: "100%",
+                  overflowX: "default",
+                  overflowY: "default",
+                }}
                 elevation={theme.palette.paperElevation}
               >
                 <div style={{ fontSize: 16, fontWeight: "bold" }}>
@@ -2871,19 +2810,30 @@ const AlarmSetup = (props) => {
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1bh-content"
                   id="panel1bh-header"
-                  classes={{
-                    content: classes.expansionPanelSummaryContent,
-                    expanded: classes.expanded,
+                  sx={{
+                    "& .MuiAccordionSummary-content": {
+                      paddingTop: 0,
+                      paddingBottom: 0,
+                      "&.Mui-expanded": {
+                        margin: 0,
+                      },
+                    },
                   }}
                 >
                   <div style={{ display: "flex", width: "100%" }}>
                     <div
-                      className={classes.verticalMiddle}
-                      style={{ fontSize: 16, fontWeight: "bold", flexGrow: 20 }}
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        fontSize: 16,
+                        fontWeight: "bold",
+                        flexGrow: 20,
+                      }}
                     >{`ALARM TABLE: ${areaSelectedName}`}</div>
                     {alarmTableExpand ? (
                       <TablePagination
-                        component="div"
+                     
                         onClick={(event) => {
                           event.preventDefault();
                           event.stopPropagation();
@@ -2893,107 +2843,166 @@ const AlarmSetup = (props) => {
                         count={preSliceAreaAlarms.length}
                         rowsPerPage={rowsPerPageAT}
                         page={pageAT}
-                        SelectProps={{
+                        slotProps={{
+                          select: {
                           inputProps: { "aria-label": "rows per page" },
                           native: true,
+                          },
                         }}
                         onPageChange={handleChangePageAT}
                         onRowsPerPageChange={handleChangeRowsPerPageAT}
                         ActionsComponent={TablePaginationActions}
-                      />
-                    ) : null}
-                    <div
-                      className={classes.verticalMiddle}
-                      style={{ fontSize: 16, fontWeight: "bold", flexGrow: 1 }}
-                    >
-                      {alarmTableExpand ? (
-                        <div className={classes.search}>
-                          <div className={classes.searchIcon}>
-                            <SearchIcon />
+                        />
+                      ) : null}
+                      <div
+                        style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        fontSize: 16,
+                        fontWeight: "bold",
+                        flexGrow: 1,
+                        }}
+                      >
+                        {alarmTableExpand ? (
+                        <div
+                          style={{
+                          position: "relative",
+                          borderRadius: theme.shape.borderRadius,
+                          backgroundColor:
+                            theme.palette.mode === "dark"
+                            ? alpha(theme.palette.common.white, 0.15)
+                            : alpha(theme.palette.common.black, 0.15),
+                          "&:hover": {
+                            backgroundColor:
+                            theme.palette.mode === "dark"
+                              ? alpha(theme.palette.common.white, 0.25)
+                              : alpha(theme.palette.common.black, 0.25),
+                          },
+                          marginLeft: 0,
+                          width: "100%",
+                          [theme.breakpoints.up("sm")]: {
+                            marginLeft: theme.spacing(1),
+                            width: "auto",
+                          },
+                          }}
+                        >
+                          <div
+                          style={{
+                            padding: theme.spacing(0, 2),
+                            height: "100%",
+                            position: "absolute",
+                            pointerEvents: "none",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                          }}
+                          >
+                          <SearchIcon />
                           </div>
                           <InputBase
-                            placeholder="Search alarm table…"
-                            classes={{
-                              root: classes.inputRoot,
-                              input: classes.inputInput,
-                            }}
-                            inputProps={{ "aria-label": "search" }}
-                            onClick={(event) => event.stopPropagation()}
-                            onFocus={(event) => event.stopPropagation()}
-                            onChange={(event) => handleSearchAlarmTable(event)}
-                            // onBlur={() => { setAlarmTableSearchStringStore(''); setAlarmTableSearchString('') }}
-                            value={alarmTableSearchStringStore}
+                          placeholder="Search alarm table…"
+                          sx={{
+                            color: "inherit",
+                            "& .MuiInputBase-input": {
+                            padding: theme.spacing(1, 1, 1, 0),
+                            paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+                            transition: theme.transitions.create("width"),
+                            width: "100%",
+                            [theme.breakpoints.up("sm")]: {
+                              width: "20ch",
+                              "&:focus": {
+                              width: "30ch",
+                              },
+                            },
+                            },
+                          }}
+                          inputProps={{ "aria-label": "search" }}
+                          onClick={(event) => event.stopPropagation()}
+                          onFocus={(event) => event.stopPropagation()}
+                          onChange={(event) => handleSearchAlarmTable(event)}
+                          value={alarmTableSearchStringStore}
                           />
                         </div>
-                      ) : (
+                        ) : (
                         "[click to show]"
+                        )}
+                      </div>
+                      </div>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      {areaNames ? (
+                      <AlarmTable
+                        alarmIOCPVPrefix={alarmIOCPVPrefix}
+                        enableAllAreas={enableAllAreas}
+                        debug={alarmDebug}
+                        alarmPVDict={alarmPVDict}
+                        alarmRowSelected={alarmRowSelected}
+                        alarmContextOpen={alarmContextOpen}
+                        areaSelectedIndex={areaSelectedIndex}
+                        areaAlarms={filteredAreaAlarms}
+                        contextMouseX={contextMouseX}
+                        contextMouseY={contextMouseY}
+                        areaEnabled={areaEnabled}
+                        height={alarmTableHeight}
+                        alarmTableSearchString={alarmTableSearchString}
+                        isAlarmUser={isAlarmUser}
+                        isAlarmAdmin={isAlarmAdmin}
+                        alarmAdminPVExpand={alarmAdminPVExpand}
+                        alarmAcknowledge={handleAlarmAcknowledge}
+                        alarmContextClose={handleAlarmContextClose}
+                        itemChecked={handleTableItemCheck}
+                        enableChecked={handleTableEnableCheck}
+                        tableItemRightClick={handleTableItemRightClick}
+                        tableRowClick={handleTableRowClick}
+                        setAlarmAdminPVExpand={setAlarmAdminPVExpand}
+                        deletePV={handleDeletePV}
+                        fadeTU={fadeTU}
+                        page={pageAT}
+                        rowsPerPage={rowsPerPageAT}
+                      />
+                      ) : (
+                      "No data from database"
                       )}
-                    </div>
-                  </div>
-                </AccordionSummary>
-                <AccordionDetails>
-                  {areaNames ? (
-                    <AlarmTable
-                      alarmIOCPVPrefix={alarmIOCPVPrefix}
-                      enableAllAreas={enableAllAreas}
-                      debug={alarmDebug}
-                      alarmPVDict={alarmPVDict}
-                      alarmRowSelected={alarmRowSelected}
-                      alarmContextOpen={alarmContextOpen}
-                      areaSelectedIndex={areaSelectedIndex}
-                      areaAlarms={filteredAreaAlarms}
-                      contextMouseX={contextMouseX}
-                      contextMouseY={contextMouseY}
-                      areaEnabled={areaEnabled}
-                      height={alarmTableHeight}
-                      alarmTableSearchString={alarmTableSearchString}
-                      isAlarmUser={isAlarmUser}
-                      isAlarmAdmin={isAlarmAdmin}
-                      alarmAdminPVExpand={alarmAdminPVExpand}
-                      alarmAcknowledge={handleAlarmAcknowledge}
-                      alarmContextClose={handleAlarmContextClose}
-                      itemChecked={handleTableItemCheck}
-                      enableChecked={handleTableEnableCheck}
-                      tableItemRightClick={handleTableItemRightClick}
-                      tableRowClick={handleTableRowClick}
-                      setAlarmAdminPVExpand={setAlarmAdminPVExpand}
-                      deletePV={handleDeletePV}
-                      fadeTU={fadeTU}
-                      page={pageAT}
-                      rowsPerPage={rowsPerPageAT}
-                    />
-                  ) : (
-                    "No data from database"
-                  )}
-                </AccordionDetails>
-              </Accordion>
+                    </AccordionDetails>
+                    </Accordion>
 
-              <Accordion
-                elevation={theme.palette.paperElevation}
-                expanded={alarmLogExpand}
-                onClick={(event) => handleExpandPanel(event, "alarmLog")}
-                TransitionProps={{
-                  onEntered: () => handleExpansionComplete("alarmLog", true),
-                  onExited: () => handleExpansionComplete("alarmLog", false),
-                }}
-              >
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel1bh-content"
-                  id="panel1bh-header"
-                  classes={{
-                    content: classes.expansionPanelSummaryContent,
-                    expanded: classes.expanded,
-                  }}
-                >
-                  <div style={{ display: "flex", width: "100%" }}>
-                    <div
-                      className={classes.verticalMiddle}
-                      style={{ fontSize: 16, fontWeight: "bold", flexGrow: 20 }}
-                    >{`ALARM LOG: ${alarmLogSelectedName}`}</div>
-                    {alarmLogExpand ? (
-                      <TablePagination
-                        component="div"
+                    <Accordion
+                    elevation={theme.palette.paperElevation}
+                    expanded={alarmLogExpand}
+                    onClick={(event) => handleExpandPanel(event, "alarmLog")}
+                    TransitionProps={{
+                      onEntered: () => handleExpansionComplete("alarmLog", true),
+                      onExited: () => handleExpansionComplete("alarmLog", false),
+                    }}
+                    >
+                    <AccordionSummary
+                      expandIcon={<ExpandMoreIcon />}
+                      aria-controls="panel1bh-content"
+                      id="panel1bh-header"
+                      sx={{
+                      "& .MuiAccordionSummary-content": {
+                        paddingTop: 0,
+                        paddingBottom: 0,
+                        "&.Mui-expanded": {
+                        margin: 0,
+                        },
+                      },
+                      }}
+                    >
+                      <div style={{ display: "flex", width: "100%" }}>
+                      <div
+                        style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        fontSize: 16,
+                        fontWeight: "bold",
+                        flexGrow: 20,
+                        }}
+                      >{`ALARM LOG: ${alarmLogSelectedName}`}</div>
+                      {alarmLogExpand ? (
+                        <TablePagination
                         onClick={(event) => {
                           event.preventDefault();
                           event.stopPropagation();
@@ -3013,25 +3022,72 @@ const AlarmSetup = (props) => {
                       />
                     ) : null}
                     <div
-                      className={classes.verticalMiddle}
-                      style={{ fontSize: 16, fontWeight: "bold", flexGrow: 1 }}
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        fontSize: 16,
+                        fontWeight: "bold",
+                        flexGrow: 1,
+                      }}
                     >
                       {alarmLogExpand ? (
-                        <div className={classes.search}>
-                          <div className={classes.searchIcon}>
+                        <div
+                          style={{
+                            position: "relative",
+                            borderRadius: theme.shape.borderRadius,
+                            backgroundColor:
+                              theme.palette.mode === "dark"
+                                ? alpha(theme.palette.common.white, 0.15)
+                                : alpha(theme.palette.common.black, 0.15),
+                            "&:hover": {
+                              backgroundColor:
+                                theme.palette.mode === "dark"
+                                  ? alpha(theme.palette.common.white, 0.25)
+                                  : alpha(theme.palette.common.black, 0.25),
+                            },
+                            marginLeft: 0,
+                            width: "100%",
+                            [theme.breakpoints.up("sm")]: {
+                              marginLeft: theme.spacing(1),
+                              width: "auto",
+                            },
+                          }}
+                        >
+                          <div
+                            style={{
+                              padding: theme.spacing(0, 2),
+                              height: "100%",
+                              position: "absolute",
+                              pointerEvents: "none",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
+                          >
                             <SearchIcon />
                           </div>
                           <InputBase
                             placeholder="Search alarm log…"
-                            classes={{
-                              root: classes.inputRoot,
-                              input: classes.inputInput,
+                            sx={{
+                              color: "inherit",
+                              "& .MuiInputBase-input": {
+                                padding: theme.spacing(1, 1, 1, 0),
+                                paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+                                transition: theme.transitions.create("width"),
+                                width: "100%",
+                                [theme.breakpoints.up("sm")]: {
+                                  width: "20ch",
+                                  "&:focus": {
+                                    width: "30ch",
+                                  },
+                                },
+                              },
                             }}
                             inputProps={{ "aria-label": "search" }}
                             onClick={(event) => event.stopPropagation()}
                             onFocus={(event) => event.stopPropagation()}
                             onChange={(event) => handleSearchAlarmLog(event)}
-                            // onBlur={() => { setAlarmLogSearchStringStore(''); setAlarmLogSearchString('') }}
                             value={alarmLogSearchStringStore}
                           />
                         </div>
@@ -3058,7 +3114,13 @@ const AlarmSetup = (props) => {
           ) : (
             <Grid item xs={10}>
               <Paper
-                className={classes.paper}
+                sx={{
+                  padding: theme.spacing(2),
+                  margin: 0,
+                  height: "100%",
+                  overflowX: "default",
+                  overflowY: "default",
+                }}
                 elevation={theme.palette.paperElevation}
               >
                 <div style={{ fontSize: 16, fontWeight: "bold" }}>
@@ -3075,11 +3137,21 @@ const AlarmSetup = (props) => {
           justifyContent="flex-start"
           alignItems="stretch"
           spacing={2}
-          className={classes.root}
+          sx={{
+            padding: theme.spacing(1),
+            margin: 0,
+            width: "100%",
+          }}
         >
           <Grid item xs={12}>
             <Paper
-              className={classes.paper}
+              sx={{
+                padding: theme.spacing(2),
+                margin: 0,
+                height: "100%",
+                overflowX: "default",
+                overflowY: "default",
+              }}
               elevation={theme.palette.paperElevation}
             >
               <div

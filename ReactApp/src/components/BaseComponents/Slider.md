@@ -25,7 +25,7 @@ Slider EPICS variable example with extra marks :
 ```
 Slider EPICS variable example with label and values at the top:
 ```js
-  import Grid from '@mui/material/Grid';
+  import Grid from '@mui/material/GridLegacy';
 
  
   <Grid
@@ -57,7 +57,7 @@ Slider EPICS variable example with label and values at the top:
 ```
 Slider EPICS variable example with label at the top  and values at the bottom:
 ```js
-  import Grid from '@mui/material/Grid';
+  import Grid from '@mui/material/GridLegacy';
 
  
   <Grid
@@ -88,7 +88,7 @@ Slider EPICS variable example with label at the top  and values at the bottom:
 ```
 Slider EPICS variable example with custom label and values at the top:
 ```js
-  import Grid from '@mui/material/Grid';
+  import Grid from '@mui/material/GridLegacy';
 
  
   <Grid

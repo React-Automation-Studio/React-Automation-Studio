@@ -1,6 +1,5 @@
 import React from 'react';
 import { useTheme } from '@mui/material/styles';
-import makeStyles from '@mui/styles/makeStyles';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -20,14 +19,6 @@ import Paper from '@mui/material/Paper';
 import EditIcon from '@mui/icons-material/Edit';
 import EventIcon from '@mui/icons-material/Event';
 
-// Styles
-const useStyles = makeStyles(theme => ({
-    styledTableHeadCell: {
-        backgroundColor: theme.palette.mode === 'dark' ? undefined : theme.palette.primary.light,
-        color: theme.palette.mode === 'dark' ? undefined : 'white',
-    }
-}))
-
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -37,7 +28,6 @@ const styleguideURL = window.location.protocol + "//" + window.location.hostname
 
 const HelpDialog = (props) => {
 
-    const classes = useStyles()
     const theme = useTheme()
 
     return (
@@ -73,8 +63,20 @@ const HelpDialog = (props) => {
                     <Table stickyHeader size="small">
                         <TableHead>
                             <TableRow                       >
-                                <TableCell align="center" classes={{ stickyHeader: classes.styledTableHeadCell }}>Expression</TableCell>
-                                <TableCell align="left" classes={{ stickyHeader: classes.styledTableHeadCell }}>Description</TableCell>
+                                <TableCell 
+                                    align="center" 
+                                    sx={{ 
+                                        backgroundColor: theme.palette.mode === 'dark' ? undefined : theme.palette.primary.light,
+                                        color: theme.palette.mode === 'dark' ? undefined : 'white',
+                                    }}
+                                >Expression</TableCell>
+                                <TableCell 
+                                    align="left" 
+                                    sx={{ 
+                                        backgroundColor: theme.palette.mode === 'dark' ? undefined : theme.palette.primary.light,
+                                        color: theme.palette.mode === 'dark' ? undefined : 'white',
+                                    }}
+                                >Description</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>

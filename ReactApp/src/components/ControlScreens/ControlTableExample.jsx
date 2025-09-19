@@ -1,11 +1,11 @@
 //This example is deprecated and will be removed in a future release
-import React from "react";
+import React, { useState } from "react";
 
-import withStyles from "@mui/styles/withStyles";
+import { useTheme } from "@mui/material/styles";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
-import Grid from "@mui/material/Grid";
+import Grid from '@mui/material/GridLegacy';
 import ControlRightEx1 from "../ControlScreens/GridComponents/ControlRightEx1";
 import ControlRightSteererXY from "../ControlScreens/GridComponents/ControlRightSteererXY";
 import ControlRightSlitXY from "../ControlScreens/GridComponents/ControlRightSlitXY";
@@ -14,10 +14,22 @@ import ControlCenterTable from "../ControlScreens/GridComponents/ControlCenterTa
 import AppBar from "@mui/material/AppBar";
 import TraditionalLayout from "../UI/Layout/ComposedLayouts/TraditionalLayout";
 
-/* eslint-disable eqeqeq */
-/* eslint-disable no-unused-vars */
 console.warn(
   "This example is deprecated and will be removed in a future release"
+);
+
+const VerticalTabs = (props) => (
+  <Tabs
+    {...props}
+    sx={{
+      '& .MuiTabs-flexContainer': {
+        flexDirection: 'column',
+      },
+      '& .MuiTabs-indicator': {
+        display: 'none',
+      },
+    }}
+  />
 );
 const systems = {
   BeamLine: {
@@ -458,27 +470,6 @@ const systems = {
   },
 };
 
-const styles = (theme) => ({
-  root: {
-    flexGrow: 1,
-    padding: theme.spacing(2),
-  },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-  },
-});
-
-const VerticalTabs = withStyles((theme) => ({
-  flexContainer: {
-    flexDirection: "column",
-  },
-  indicator: {
-    display: "none",
-  },
-}))(Tabs);
-
 function TabContainer(props) {
   return (
     <Typography component="div" style={{ padding: 8 * 0 }}>
@@ -487,167 +478,155 @@ function TabContainer(props) {
   );
 }
 
-class ControlTableExample extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      editorType: "PS",
-      displayEditor: false,
-      editorMacros: { "$(device)": "" },
-      editorSystem: {},
-      topTabValue: 0,
-      sideTabValue: 0,
-    };
-    this.handlePsOnClick = this.handlePsOnClick.bind(this);
-    this.handleOnSystemClick = this.handleOnSystemClick.bind(this);
-  }
+const ControlTableExample = (props) => {
+  const theme = useTheme();
+  const [editorType, setEditorType] = useState("PS");
+  const [displayEditor, setDisplayEditor] = useState(false);
+  const [editorMacros, setEditorMacros] = useState({ "$(device)": "" });
+  const [editorSystem, setEditorSystem] = useState({});
+  const [topTabValue, setTopTabValue] = useState(0);
+  const [sideTabValue, setSideTabValue] = useState(0);
 
-  handlePsOnClick(name) {
-    this.setState({
-      editorType: "PS",
-      displayEditor: true,
-      editorMacros: { "$(device)": name },
-    });
-  }
-  handleOnSystemClick = (system) => {
-    this.setState({
-      editorType: system.editorType,
-      displayEditor: true,
-      editorSystem: system,
-      editorMacros: { "$(device)": "" },
-    });
+  const handlePsOnClick = (name) => {
+    setEditorType("PS");
+    setDisplayEditor(true);
+    setEditorMacros({ "$(device)": name });
   };
 
-  handleSideTabChange = (event, value) => {
-    this.setState({ sideTabValue: value, displayEditor: false });
+  const handleOnSystemClick = (system) => {
+    setEditorType(system.editorType);
+    setDisplayEditor(true);
+    setEditorSystem(system);
+    setEditorMacros({ "$(device)": "" });
   };
 
-  handleCloseEditor = () => {
-    this.setState({
-      displayEditor: false,
-    });
+  const handleSideTabChange = (event, value) => {
+    setSideTabValue(value);
+    setDisplayEditor(false);
   };
 
-  render() {
-    const { classes } = this.props;
+  const handleCloseEditor = () => {
+    setDisplayEditor(false);
+  };
 
-    const sideTabValue = this.state.sideTabValue;
-    return (
-      <TraditionalLayout title="Control Table Example" denseAppBar>
-        <Grid
-          container
-          direction="row"
-          justifyContent="flex-start"
-          alignItems="flex-start"
-          spacing={2}
-          className={classes.root}
-        >
-          <Grid item xs={12} sm={2} md={2} lg={2}>
-            <AppBar position="static" color="inherit">
-              <VerticalTabs
-                value={sideTabValue}
-                onChange={this.handleSideTabChange}
-                indicatorColor="primary"
-                textColor="primary"
-              >
-                <Tab label="Power Supplies" /> {/* side Tab 0*/}
-                <Tab label="Slits" /> {/* side Tab 1*/}
-              </VerticalTabs>
-            </AppBar>
-          </Grid>
-          <Grid item xs={12} sm={6} md={6} lg={7} style={{ paddingRight: 16 }}>
-            {sideTabValue == 0 && (
-              <TabContainer>
-                {" "}
-                <ControlCenterTable
-                  handleOnSystemClick={this.handleOnSystemClick}
-                  systems={systems["BeamLine"]["PowerSupplies"]}
-                />{" "}
-              </TabContainer>
-            )}
-            {sideTabValue == 1 && (
-              <TabContainer>
-                {" "}
-                <ControlCenterTable
-                  handleOnSystemClick={this.handleOnSystemClick}
-                  systems={systems["BeamLine"]["Slits"]}
-                />{" "}
-              </TabContainer>
-            )}
-          </Grid>
-          <Grid item xs={12} sm={4} md={4} lg={3}>
-            {this.state.displayEditor === true &&
-              this.state.editorMacros["$(device)"] === "testIOC:PS1" && (
-                <ControlRightEx1
-                  macros={this.state.editorMacros}
-                  handleCloseEditor={this.handleCloseEditor}
-                />
-              )}
-            {this.state.displayEditor === true &&
-              this.state.editorMacros["$(device)"] === "testIOC:PS2" && (
-                <ControlRightEx1
-                  macros={this.state.editorMacros}
-                  handleCloseEditor={this.handleCloseEditor}
-                />
-              )}
-            {this.state.displayEditor === true &&
-              this.state.editorMacros["$(device)"] === "testIOC:PS3" && (
-                <ControlRightEx1
-                  macros={this.state.editorMacros}
-                  handleCloseEditor={this.handleCloseEditor}
-                />
-              )}
-            {this.state.displayEditor === true &&
-              this.state.editorMacros["$(device)"] === "testIOC:PS4" && (
-                <ControlRightEx1
-                  macros={this.state.editorMacros}
-                  handleCloseEditor={this.handleCloseEditor}
-                />
-              )}
-            {this.state.displayEditor === true &&
-              this.state.editorMacros["$(device)"] === "testIOC:STR1:X" && (
-                <ControlRightEx1
-                  macros={this.state.editorMacros}
-                  handleCloseEditor={this.handleCloseEditor}
-                />
-              )}
-            {this.state.displayEditor === true &&
-              this.state.editorType === "oldPS" && (
-                <ControlRightEx1
-                  key={"editor-key" + this.state.editorSystem.systemName}
-                  macros={{ "$(device)": this.state.editorSystem.systemName }}
-                  handleCloseEditor={this.handleCloseEditor}
-                />
-              )}
-            {this.state.displayEditor === true &&
-              this.state.editorType === "steererXY" && (
-                <ControlRightSteererXY
-                  key={"editor-key" + this.state.editorSystem.systemName}
-                  system={this.state.editorSystem}
-                  handleCloseEditor={this.handleCloseEditor}
-                />
-              )}
-            {this.state.displayEditor === true &&
-              this.state.editorType === "singlePS" && (
-                <ControlRightSinglePS
-                  key={"editor-key" + this.state.editorSystem.systemName}
-                  system={this.state.editorSystem}
-                  handleCloseEditor={this.handleCloseEditor}
-                />
-              )}
-            {this.state.displayEditor === true &&
-              this.state.editorType === "slitxy" && (
-                <ControlRightSlitXY
-                  key={"editor-key" + this.state.editorSystem.systemName}
-                  system={this.state.editorSystem}
-                  handleCloseEditor={this.handleCloseEditor}
-                />
-              )}
-          </Grid>
+  return (
+    <TraditionalLayout title="Control Table Example" denseAppBar>
+      <Grid
+        container
+        direction="row"
+        justifyContent="flex-start"
+        alignItems="flex-start"
+        spacing={2}
+        sx={{
+          flexGrow: 1,
+          padding: theme.spacing(2),
+        }}
+      >
+        <Grid item xs={12} sm={2} md={2} lg={2}>
+          <AppBar position="static" color="inherit">
+            <VerticalTabs
+              value={sideTabValue}
+              onChange={handleSideTabChange}
+              indicatorColor="primary"
+              textColor="primary"
+            >
+              <Tab label="Power Supplies" />
+              <Tab label="Slits" />
+            </VerticalTabs>
+          </AppBar>
         </Grid>
-      </TraditionalLayout>
-    );
-  }
-}
+        <Grid item xs={12} sm={6} md={6} lg={7} style={{ paddingRight: 16 }}>
+          {sideTabValue == 0 && (
+            <TabContainer>
+              {" "}
+              <ControlCenterTable
+                handleOnSystemClick={handleOnSystemClick}
+                systems={systems["BeamLine"]["PowerSupplies"]}
+              />{" "}
+            </TabContainer>
+          )}
+          {sideTabValue == 1 && (
+            <TabContainer>
+              {" "}
+              <ControlCenterTable
+                handleOnSystemClick={handleOnSystemClick}
+                systems={systems["BeamLine"]["Slits"]}
+              />{" "}
+            </TabContainer>
+          )}
+        </Grid>
+        <Grid item xs={12} sm={4} md={4} lg={3}>
+          {displayEditor === true &&
+            editorMacros["$(device)"] === "testIOC:PS1" && (
+              <ControlRightEx1
+                macros={editorMacros}
+                handleCloseEditor={handleCloseEditor}
+              />
+            )}
+          {displayEditor === true &&
+            editorMacros["$(device)"] === "testIOC:PS2" && (
+              <ControlRightEx1
+                macros={editorMacros}
+                handleCloseEditor={handleCloseEditor}
+              />
+            )}
+          {displayEditor === true &&
+            editorMacros["$(device)"] === "testIOC:PS3" && (
+              <ControlRightEx1
+                macros={editorMacros}
+                handleCloseEditor={handleCloseEditor}
+              />
+            )}
+          {displayEditor === true &&
+            editorMacros["$(device)"] === "testIOC:PS4" && (
+              <ControlRightEx1
+                macros={editorMacros}
+                handleCloseEditor={handleCloseEditor}
+              />
+            )}
+          {displayEditor === true &&
+            editorMacros["$(device)"] === "testIOC:STR1:X" && (
+              <ControlRightEx1
+                macros={editorMacros}
+                handleCloseEditor={handleCloseEditor}
+              />
+            )}
+          {displayEditor === true &&
+            editorType === "oldPS" && (
+              <ControlRightEx1
+                key={"editor-key" + editorSystem.systemName}
+                macros={{ "$(device)": editorSystem.systemName }}
+                handleCloseEditor={handleCloseEditor}
+              />
+            )}
+          {displayEditor === true &&
+            editorType === "steererXY" && (
+              <ControlRightSteererXY
+                key={"editor-key" + editorSystem.systemName}
+                system={editorSystem}
+                handleCloseEditor={handleCloseEditor}
+              />
+            )}
+          {displayEditor === true &&
+            editorType === "singlePS" && (
+              <ControlRightSinglePS
+                key={"editor-key" + editorSystem.systemName}
+                system={editorSystem}
+                handleCloseEditor={handleCloseEditor}
+              />
+            )}
+          {displayEditor === true &&
+            editorType === "slitxy" && (
+              <ControlRightSlitXY
+                key={"editor-key" + editorSystem.systemName}
+                system={editorSystem}
+                handleCloseEditor={handleCloseEditor}
+              />
+            )}
+        </Grid>
+      </Grid>
+    </TraditionalLayout>
+  );
+};
 
-export default withStyles(styles)(ControlTableExample);
+export default ControlTableExample;

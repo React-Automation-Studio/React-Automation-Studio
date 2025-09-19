@@ -1,11 +1,10 @@
 import React from "react";
-import makeStyles from "@mui/styles/makeStyles";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import Grid from "@mui/material/Grid";
+import Grid from '@mui/material/GridLegacy';
 import Radio from "@mui/material/Radio";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Divider from "@mui/material/Divider";
@@ -14,38 +13,13 @@ import Typography from "@mui/material/Typography";
 import DateFnsUtils from "@date-io/date-fns";
 import { formatISO, parseISO, setSeconds, addHours } from "date-fns";
 
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
 import { TextField } from "@mui/material";
-// Styles
-const useStyles = makeStyles((theme) => ({
-  boldText: {
-    fontWeight: 500,
-    textAlign: "center",
-  },
-  centerInBlock: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  horizontalCenter: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "center",
-  },
-  verticalMiddle: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-  },
-}));
 
 const EnableDialog = (props) => {
-  const classes = useStyles();
 
-  // Backwards compatible
   const dateTime =
     props.data.bridge ?? false
       ? parseISO(props.data.bridgeTime)
@@ -92,7 +66,11 @@ const EnableDialog = (props) => {
       maxWidth={"xs"}
     >
       <DialogTitle
-        className={classes.horizontalCenter}
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+        }}
       >{`${props.data.name}`}</DialogTitle>
       <DialogContent>
         <Grid
@@ -102,12 +80,16 @@ const EnableDialog = (props) => {
           alignItems="stretch"
           spacing={2}
         >
-          <Grid item xs={6} className={classes.centerInBlock}>
+          <Grid item xs={6} sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+          }}>
             <FormControlLabel
               control={
                 <Radio
                   color="secondary"
-                  // Backwards compatible
                   checked={props.data.enable && !(props.data.bridge ?? false)}
                   onChange={handleEnable}
                 />
@@ -115,12 +97,16 @@ const EnableDialog = (props) => {
               label="ENABLE"
             />
           </Grid>
-          <Grid item xs={6} className={classes.centerInBlock}>
+          <Grid item xs={6} sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+          }}>
             <FormControlLabel
               control={
                 <Radio
                   color="secondary"
-                  // Backwards compatible
                   checked={!props.data.enable && !(props.data.bridge ?? false)}
                   onChange={handleDisable}
                 />
@@ -135,7 +121,12 @@ const EnableDialog = (props) => {
           >
             <Divider variant="middle" />
           </Grid>
-          <Grid item xs={12} className={classes.centerInBlock}>
+          <Grid item xs={12} sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+          }}>
             <FormControlLabel
               control={
                 <Radio

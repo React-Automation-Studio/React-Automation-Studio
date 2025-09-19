@@ -14,6 +14,8 @@ import RasCssBaseline from "./RasCssBaseline";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import axios from "axios";
 
+import { SliderGlobalStyles } from "../BaseComponents/Slider";
+
 /**
  * Props for the RasAppCore component.
  */
@@ -53,10 +55,6 @@ interface RasAppCoreState {
 class RasAppCore extends Component<RasAppCoreProps, RasAppCoreState> {
   constructor(props) {
     super(props);
-    console.warn(
-      "React 19.0.0 will deprecate the use of defaultProps, please use the default value in the function signature instead. This warning will be removed when RAS adopts React 19. https://react.dev/blog/2024/04/25/react-19-upgrade-guide  The proptypes package will also be removed when RAS adopts React 19."
-    );
-
     let theme = null;
     localStorage.removeItem("logoutFlag");
     let storedThemeStyle = localStorage.getItem("themeStyle");
@@ -388,6 +386,7 @@ class RasAppCore extends Component<RasAppCoreProps, RasAppCoreState> {
               <CssBaseline />
               <ReactVisCssBaseline />
               <RasCssBaseline />
+              <SliderGlobalStyles />
               {this.props.children}
             </ThemeProvider>
           </StyledEngineProvider>

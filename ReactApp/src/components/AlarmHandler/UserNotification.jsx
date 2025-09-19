@@ -8,9 +8,8 @@ import React, {
 } from "react";
 
 import { useTheme } from "@mui/material/styles";
-import makeStyles from "@mui/styles/makeStyles";
 import { alpha } from "@mui/material/styles";
-import Grid from "@mui/material/Grid";
+import Grid from '@mui/material/GridLegacy';
 import Paper from "@mui/material/Paper";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -36,87 +35,7 @@ import useMongoDbUpdateOne from "../SystemComponents/database/MongoDB/useMongoDb
 import { AccountCog } from "mdi-material-ui/";
 import { format, parseISO } from "date-fns";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    padding: theme.spacing(1),
-    width: "100%",
-    margin: 0,
-  },
-  button: {
-    margin: theme.spacing(1),
-  },
-  expansionPanelSummaryContent: {
-    paddingTop: 0,
-    paddingBottom: 0,
-    "&$expanded": {
-      margin: 0,
-    },
-  },
-  expanded: {},
-  paper: {
-    padding: theme.spacing(2),
-    margin: 0,
-    height: "100%",
-    overflowX: "default",
-    overflowY: "default",
-  },
-  search: {
-    position: "relative",
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor:
-      theme.palette.mode === "dark"
-        ? alpha(theme.palette.common.white, 0.15)
-        : alpha(theme.palette.common.black, 0.15),
-    "&:hover": {
-      backgroundColor:
-        theme.palette.mode === "dark"
-          ? alpha(theme.palette.common.white, 0.25)
-          : alpha(theme.palette.common.black, 0.25),
-    },
-    marginLeft: 0,
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      marginLeft: theme.spacing(1),
-      width: "auto",
-    },
-  },
-  searchIcon: {
-    padding: theme.spacing(0, 2),
-    height: "100%",
-    position: "absolute",
-    pointerEvents: "none",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  inputRoot: {
-    color: "inherit",
-  },
-  inputInput: {
-    padding: theme.spacing(1, 1, 1, 0),
-    // // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      width: "20ch",
-      "&:focus": {
-        width: "30ch",
-      },
-    },
-  },
-  verticalMiddle: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-  },
-  tooltipWidth: {
-    maxWidth: 200,
-  },
-}));
-
 const UserNotification = (props) => {
-  const classes = useStyles();
   const theme = useTheme();
 
   const context = useContext(AutomationStudioContext);
@@ -1225,7 +1144,11 @@ const UserNotification = (props) => {
           direction="column"
           justifyContent="flex-start"
           alignItems="stretch"
-          className={classes.root}
+          sx={{
+            padding: theme.spacing(1),
+            width: "100%",
+            margin: 0,
+          }}
           spacing={2}
         >
           <Grid item xs={12}>
@@ -1242,14 +1165,23 @@ const UserNotification = (props) => {
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1bh-content"
                 id="panel1bh-header"
-                classes={{
-                  content: classes.expansionPanelSummaryContent,
-                  expanded: classes.expanded,
+                sx={{
+                  '& .MuiAccordionSummary-content': {
+                    paddingTop: 0,
+                    paddingBottom: 0,
+                    '&.Mui-expanded': {
+                      margin: 0,
+                    },
+                  },
                 }}
               >
                 <div style={{ display: "flex", width: "100%" }}>
                   <div
-                    className={classes.verticalMiddle}
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                    }}
                     style={{ fontSize: 16, fontWeight: "bold", flexGrow: 20 }}
                   >
                     Alarm Handler Users
@@ -1258,7 +1190,11 @@ const UserNotification = (props) => {
                     <Tooltip
                       title={isAlarmAdmin ? "Edit users" : warnAdminMessageEdit}
                       placement="bottom"
-                      classes={{ tooltip: classes.tooltipWidth }}
+                      slotProps={{
+                        tooltip: {
+                          sx: { maxWidth: 200 }
+                        }
+                      }}
                     >
                       <div
                         onClick={(event) => {
@@ -1266,13 +1202,17 @@ const UserNotification = (props) => {
                           event.stopPropagation();
                           isAlarmAdmin && setEditUsersDialogOpen(true);
                         }}
-                        className={classes.verticalMiddle}
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "center",
+                        }}
                       >
                         <Button
                           variant="contained"
                           color="secondary"
                           size="medium"
-                          className={classes.button}
+                          sx={{ margin: theme.spacing(1) }}
                           startIcon={<AccountCog />}
                           style={{ marginRight: 20 }}
                           disabled={!isAlarmAdmin}
@@ -1286,7 +1226,11 @@ const UserNotification = (props) => {
                     <Tooltip
                       title={"Help"}
                       placement="bottom"
-                      classes={{ tooltip: classes.tooltipWidth }}
+                      slotProps={{
+                        tooltip: {
+                          sx: { maxWidth: 200 }
+                        }
+                      }}
                     >
                       <div
                         onClick={(event) => {
@@ -1294,13 +1238,17 @@ const UserNotification = (props) => {
                           event.stopPropagation();
                           setHelpDialogOpen(true);
                         }}
-                        className={classes.verticalMiddle}
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "center",
+                        }}
                       >
                         <IconButton
                           size="small"
                           aria-label="close"
                           color="secondary"
-                          className={classes.button}
+                          sx={{ margin: theme.spacing(1) }}
                           style={{ marginRight: 20 }}
                         >
                           <HelpIcon fontSize="large" />
@@ -1309,19 +1257,61 @@ const UserNotification = (props) => {
                     </Tooltip>
                   ) : null}
                   <div
-                    className={classes.verticalMiddle}
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                    }}
                     style={{ fontSize: 16, fontWeight: "bold", flexGrow: 1 }}
                   >
                     {userTableExpand ? (
-                      <div className={classes.search}>
-                        <div className={classes.searchIcon}>
+                      <div sx={{
+                        position: "relative",
+                        borderRadius: theme.shape.borderRadius,
+                        backgroundColor:
+                          theme.palette.mode === "dark"
+                            ? alpha(theme.palette.common.white, 0.15)
+                            : alpha(theme.palette.common.black, 0.15),
+                        "&:hover": {
+                          backgroundColor:
+                            theme.palette.mode === "dark"
+                              ? alpha(theme.palette.common.white, 0.25)
+                              : alpha(theme.palette.common.black, 0.25),
+                        },
+                        marginLeft: 0,
+                        width: "100%",
+                        [theme.breakpoints.up("sm")]: {
+                          marginLeft: theme.spacing(1),
+                          width: "auto",
+                        },
+                      }}>
+                        <div sx={{
+                          padding: theme.spacing(0, 2),
+                          height: "100%",
+                          position: "absolute",
+                          pointerEvents: "none",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}>
                           <SearchIcon />
                         </div>
                         <InputBase
                           placeholder="Search user table…"
-                          classes={{
-                            root: classes.inputRoot,
-                            input: classes.inputInput,
+                          sx={{
+                            color: "inherit",
+                            '& .MuiInputBase-input': {
+                              padding: theme.spacing(1, 1, 1, 0),
+                              paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+                              transition: theme.transitions.create("width"),
+                              width: "100%",
+                              [theme.breakpoints.up("sm")]: {
+                                width: "20ch",
+                                "&:focus": {
+                                  width: "30ch",
+                                },
+                              },
+                            },
                           }}
                           inputProps={{ "aria-label": "search" }}
                           onClick={(event) => event.stopPropagation()}
@@ -1379,9 +1369,14 @@ const UserNotification = (props) => {
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1bh-content"
                 id="panel1bh-header"
-                classes={{
-                  content: classes.expansionPanelSummaryContent,
-                  expanded: classes.expanded,
+                sx={{
+                  '& .MuiAccordionSummary-content': {
+                    paddingTop: 0,
+                    paddingBottom: 0,
+                    '&.Mui-expanded': {
+                      margin: 0,
+                    },
+                  },
                 }}
               >
                 <div style={{ display: "flex", width: "100%" }}>
@@ -1414,11 +1409,21 @@ const UserNotification = (props) => {
           justifyContent="flex-start"
           alignItems="stretch"
           spacing={2}
-          className={classes.root}
+          sx={{
+            padding: theme.spacing(1),
+            width: "100%",
+            margin: 0,
+          }}
         >
           <Grid item xs={12}>
             <Paper
-              className={classes.paper}
+              sx={{
+                padding: theme.spacing(2),
+                margin: 0,
+                height: "100%",
+                overflowX: "default",
+                overflowY: "default",
+              }}
               elevation={theme.palette.paperElevation}
             >
               <div

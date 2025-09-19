@@ -1,7 +1,6 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
-import Grid from "@mui/material/Grid";
+import Grid from '@mui/material/GridLegacy';
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import TraditionalLayout from "./Layout/ComposedLayouts/TraditionalLayout";
@@ -11,57 +10,9 @@ import NewReleasesIcon from "@mui/icons-material/NewReleases";
 import HelpIcon from "@mui/icons-material/Help";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
-import makeStyles from "@mui/styles/makeStyles";
 import { useTheme } from "@mui/material/styles";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    backgroundColor: theme.palette.background.default,
-  },
-  center: {
-    margin: "auto",
-    width: "15%",
-    height: "50%",
-  },
-  Paper: {
-    padding: theme.spacing(4),
-    height: "100%",
-  },
-  MainGrid: {
-    paddingTop: theme.spacing(4),
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
-    paddingBottom: theme.spacing(2),
-  },
-  MainGridItem: {
-    paddingTop: theme.spacing(1),
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
-    paddingBottom: theme.spacing(2),
-    marginBottom: theme.spacing(2),
-  },
-  WhatsNew: {
-    maxHeight: "35vh",
-    "overflow-y": "scroll",
-    paddingRight: 8,
-  },
-  Icon: {
-    marginRight: theme.spacing(1),
-    fontSize: "inherit",
-  },
-  Button: {
-    width: "100%",
-    height: "100%",
-    marginTop: "auto",
-    marginBottom: "auto",
-    marginLeft: "auto",
-    marginRight: "auto",
-  },
-}));
-
 const MainDashboard = (props) => {
-  const classes = useStyles();
   const theme = useTheme();
   const paperElevation = theme.palette.paperElevation;
   const buttonVariant = "contained";
@@ -74,6 +25,28 @@ const MainDashboard = (props) => {
     variant: "h5",
   };
 
+  const buttonSx = {
+    width: "100%",
+    height: "100%",
+    marginTop: "auto",
+    marginBottom: "auto",
+    marginLeft: "auto",
+    marginRight: "auto",
+  };
+
+  const mainGridItemSx = {
+    paddingTop: theme.spacing(1),
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
+    marginBottom: theme.spacing(2),
+  };
+
+  const paperSx = {
+    padding: theme.spacing(4),
+    height: "100%",
+  };
+
   const styleguideURL =
     window.location.protocol + "//" + window.location.hostname + ":6060/";
   return (
@@ -83,7 +56,13 @@ const MainDashboard = (props) => {
       alignTitle="center"
     >
       <Grid
-        className={classes.MainGrid}
+        sx={{
+          paddingTop: theme.spacing(2),
+          paddingLeft: theme.spacing(2),
+          paddingRight: theme.spacing(2),
+          paddingBottom: theme.spacing(2),
+          marginBottom: theme.spacing(2),
+        }}
         container
         direction="row"
         item
@@ -96,10 +75,19 @@ const MainDashboard = (props) => {
           lg={4}
           sm={6}
           xs={12}
-          className={classes.MainGridItem}
+          sx={{
+            paddingTop: theme.spacing(1),
+            paddingLeft: theme.spacing(2),
+            paddingRight: theme.spacing(2),
+            paddingBottom: theme.spacing(2),
+            marginBottom: theme.spacing(2),
+          }}
         >
           <Paper
-            className={classes.Paper}
+            sx={{
+              padding: theme.spacing(4),
+              height: "100%",
+            }}
             elevation={paperElevation}
           >
             <Grid
@@ -132,7 +120,12 @@ const MainDashboard = (props) => {
                     style={{ textAlign: "center" }}
                   >
                     <Typography {...typographyProps}>
-                      <PhoneAndroidIcon className={classes.Icon} />
+                      <PhoneAndroidIcon
+                        sx={{
+                          marginRight: theme.spacing(1),
+                          fontSize: "inherit",
+                        }}
+                      />
                       Mobile Demos
                     </Typography>
                   </Grid>
@@ -144,7 +137,7 @@ const MainDashboard = (props) => {
                   >
                     <Button
                       fullWidth
-                      className={classes.button}
+                      sx={buttonSx}
                       component={Link}
                       to="/MobileDemo1"
                       color="primary"
@@ -162,7 +155,7 @@ const MainDashboard = (props) => {
                   >
                     <Button
                       fullWidth
-                      className={classes.button}
+                      sx={buttonSx}
                       component={Link}
                       to="/MobileDemo2"
                       color="primary"
@@ -180,7 +173,7 @@ const MainDashboard = (props) => {
                   >
                     <Button
                       fullWidth
-                      className={classes.button}
+                      sx={buttonSx}
                       component={Link}
                       to="/EpicsDemos"
                       color="primary"
@@ -198,7 +191,7 @@ const MainDashboard = (props) => {
                   >
                     <Button
                       fullWidth
-                      className={classes.button}
+                      sx={buttonSx}
                       component={Link}
                       to="/Test3D"
                       color="primary"
@@ -219,10 +212,10 @@ const MainDashboard = (props) => {
           lg={4}
           sm={6}
           xs={12}
-          className={classes.MainGridItem}
+          sx={mainGridItemSx}
         >
           <Paper
-            className={classes.Paper}
+            sx={paperSx}
             elevation={paperElevation}
           >
             <Grid
@@ -255,7 +248,10 @@ const MainDashboard = (props) => {
                     style={{ textAlign: "center" }}
                   >
                     <Typography {...typographyProps}>
-                      <DesktopWindowsIcon className={classes.Icon} /> Desktop
+                      <DesktopWindowsIcon sx={{
+                        marginRight: theme.spacing(1),
+                        fontSize: "inherit",
+                      }} /> Desktop
                       Demos
                     </Typography>
                   </Grid>
@@ -267,7 +263,7 @@ const MainDashboard = (props) => {
                   >
                     <Button
                       fullWidth
-                      className={classes.button}
+                      sx={buttonSx}
                       component={Link}
                       to="/TableControlSystem"
                       color="primary"
@@ -285,7 +281,7 @@ const MainDashboard = (props) => {
                   >
                     <Button
                       fullWidth
-                      className={classes.button}
+                      sx={buttonSx}
                       component={Link}
                       to="/BeamlineControlSystem"
                       color="primary"
@@ -303,7 +299,7 @@ const MainDashboard = (props) => {
                   >
                     <Button
                       fullWidth
-                      className={classes.button}
+                      sx={buttonSx}
                       component={Link}
                       to="/MobileDemo1"
                       color="primary"
@@ -321,7 +317,7 @@ const MainDashboard = (props) => {
                   >
                     <Button
                       fullWidth
-                      className={classes.button}
+                      sx={buttonSx}
                       component={Link}
                       to="/MobileDemo2"
                       color="primary"
@@ -339,7 +335,7 @@ const MainDashboard = (props) => {
                   >
                     <Button
                       fullWidth
-                      className={classes.button}
+                      sx={buttonSx}
                       component={Link}
                       to="/EpicsDemos"
                       color="primary"
@@ -357,7 +353,7 @@ const MainDashboard = (props) => {
                   >
                     <Button
                       fullWidth
-                      className={classes.button}
+                      sx={buttonSx}
                       component={Link}
                       to="/Test3D"
                       color="primary"
@@ -378,10 +374,10 @@ const MainDashboard = (props) => {
           lg={4}
           sm={6}
           xs={12}
-          className={classes.MainGridItem}
+          sx={mainGridItemSx}
         >
           <Paper
-            className={classes.Paper}
+            sx={paperSx}
             elevation={paperElevation}
           >
             <Grid
@@ -400,7 +396,10 @@ const MainDashboard = (props) => {
                 style={{ textAlign: "center" }}
               >
                 <Typography {...typographyProps}>
-                  <NewReleasesIcon className={classes.Icon} /> Whats New
+                  <NewReleasesIcon sx={{
+                    marginRight: theme.spacing(1),
+                    fontSize: "inherit",
+                  }} /> Whats New
                 </Typography>
               </Grid>
               <Grid
@@ -410,9 +409,24 @@ const MainDashboard = (props) => {
                 xs={12}
               >
                 <Typography
-                  className={classes.WhatsNew}
+                  sx={{
+                    maxHeight: "35vh",
+                    overflowY: "scroll",
+                    paddingRight: 1,
+                  }}
                   component="div"
                 >
+                  V7.0.0 Tuesday 16 September 2025
+                  <br />
+                  Major Updates:
+                  <ul>
+                    <li>Updated to Updated to MUI V7 </li>
+                    <li>Updated to the latest Node LTS 22.19.0 </li>
+                    <li>Package updates to frontend modules</li>
+                    <li>Removed legacy MUI styling</li>
+                  </ul>
+                
+
                   V6.1.0 Monday 17 February 2025
                   <br />
                   Minor Updates:
@@ -886,10 +900,10 @@ const MainDashboard = (props) => {
           lg={3}
           sm={6}
           xs={12}
-          className={classes.MainGridItem}
+          sx={mainGridItemSx}
         >
           <Paper
-            className={classes.Paper}
+            sx={paperSx}
             elevation={paperElevation}
           >
             <Grid
@@ -908,7 +922,10 @@ const MainDashboard = (props) => {
                 style={{ textAlign: "center" }}
               >
                 <Typography {...typographyProps}>
-                  <EditIcon className={classes.Icon} /> Staging
+                  <EditIcon sx={{
+                    marginRight: theme.spacing(1),
+                    fontSize: "inherit",
+                  }} /> Staging
                 </Typography>
               </Grid>
               <Grid
@@ -933,7 +950,7 @@ const MainDashboard = (props) => {
                   >
                     <Button
                       fullWidth
-                      className={classes.button}
+                      sx={buttonSx}
                       component={Link}
                       to="/Staging"
                       color="primary"
@@ -954,10 +971,10 @@ const MainDashboard = (props) => {
           lg={3}
           sm={6}
           xs={12}
-          className={classes.MainGridItem}
+          sx={mainGridItemSx}
         >
           <Paper
-            className={classes.Paper}
+            sx={paperSx}
             elevation={paperElevation}
             style={{ textAlign: "center" }}
           >
@@ -977,7 +994,10 @@ const MainDashboard = (props) => {
               >
                 <Typography {...typographyProps}>
                   {" "}
-                  <VisibilityIcon className={classes.Icon} /> Appliances
+                  <VisibilityIcon sx={{
+                    marginRight: theme.spacing(1),
+                    fontSize: "inherit",
+                  }} /> Appliances
                 </Typography>
               </Grid>
               <Grid
@@ -1002,7 +1022,7 @@ const MainDashboard = (props) => {
                   >
                     <Button
                       fullWidth
-                      className={classes.button}
+                      sx={buttonSx}
                       component={Link}
                       to="/AlarmHandlerDemo"
                       color="primary"
@@ -1020,7 +1040,7 @@ const MainDashboard = (props) => {
                   >
                     <Button
                       fullWidth
-                      className={classes.button}
+                      sx={buttonSx}
                       component={Link}
                       to="/VaultDemo"
                       color="primary"
@@ -1038,7 +1058,7 @@ const MainDashboard = (props) => {
                   >
                     <Button
                       fullWidth
-                      className={classes.button}
+                      sx={buttonSx}
                       component={Link}
                       to="/LoadSaveExample"
                       color="primary"
@@ -1056,7 +1076,7 @@ const MainDashboard = (props) => {
                   >
                     <Button
                       fullWidth
-                      className={classes.button}
+                      sx={buttonSx}
                       component={Link}
                       to="/ArchiverDataViewerDemo"
                       color="primary"
@@ -1077,10 +1097,10 @@ const MainDashboard = (props) => {
           lg={3}
           sm={6}
           xs={12}
-          className={classes.MainGridItem}
+          sx={mainGridItemSx}
         >
           <Paper
-            className={classes.Paper}
+            sx={paperSx}
             elevation={paperElevation}
             style={{ textAlign: "center" }}
           >
@@ -1100,7 +1120,10 @@ const MainDashboard = (props) => {
               >
                 <Typography {...typographyProps}>
                   {" "}
-                  <VisibilityIcon className={classes.Icon} /> Preview
+                  <VisibilityIcon sx={{
+                    marginRight: theme.spacing(1),
+                    fontSize: "inherit",
+                  }} /> Preview
                 </Typography>
               </Grid>
               <Grid
@@ -1125,7 +1148,7 @@ const MainDashboard = (props) => {
                   >
                     <Button
                       fullWidth
-                      className={classes.button}
+                      sx={buttonSx}
                       component={Link}
                       to="/AreaDetectorSimExample"
                       color="primary"
@@ -1145,10 +1168,10 @@ const MainDashboard = (props) => {
           lg={3}
           sm={6}
           xs={12}
-          className={classes.MainGridItem}
+          sx={mainGridItemSx}
         >
           <Paper
-            className={classes.Paper}
+            sx={paperSx}
             elevation={paperElevation}
           >
             <Grid
@@ -1167,7 +1190,10 @@ const MainDashboard = (props) => {
                 style={{ textAlign: "center" }}
               >
                 <Typography {...typographyProps}>
-                  <HelpIcon className={classes.Icon} /> Help
+                  <HelpIcon sx={{
+                    marginRight: theme.spacing(1),
+                    fontSize: "inherit",
+                  }} /> Help
                 </Typography>
               </Grid>
               <Grid
@@ -1178,7 +1204,7 @@ const MainDashboard = (props) => {
               >
                 <Button
                   fullWidth
-                  className={classes.button}
+                  sx={buttonSx}
                   target="_blank"
                   href={styleguideURL}
                   variant={buttonVariant}

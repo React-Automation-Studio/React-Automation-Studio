@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Layout from "../UI/Layout/ComposedLayouts/TraditionalLayout";
 import Typography from "@mui/material/Typography";
-import Grid from "@mui/material/Grid";
+import Grid from '@mui/material/GridLegacy';
 import Box from "@mui/material/Box";
 import { useTheme } from "@mui/system";
 import Accordion from "@mui/material/Accordion";

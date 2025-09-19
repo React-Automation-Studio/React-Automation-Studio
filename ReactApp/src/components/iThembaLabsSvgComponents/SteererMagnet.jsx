@@ -23,6 +23,9 @@ class SteererMagnet extends React.Component {
   }
 
   componentDidMount() {
+    console.warn(
+      "This component is deprecated and will be removed in RAS in V8.0.0."
+    );
   }
 
   componentWillUnmount() {

@@ -1,53 +1,10 @@
-import React, { useEffect, useState } from "react";
-import withStyles from "@mui/styles/withStyles";
+import React, { useEffect, useState, useMemo } from "react";
+import { useTheme } from "@mui/material/styles";
 import Widget from "../SystemComponents/Widgets/Widget";
 import { Typography } from "@mui/material";
 
-const styles = (theme) => ({
-  disconAlarmWarn: {
-    background: "transparent",
-    borderRadius: 2,
-    padding: 1,
-    borderStyle: "solid",
-    borderWidth: "thin",
-    borderColor:
-      theme.palette.mode === "dark"
-        ? theme.palette.grey[500]
-        : theme.palette.grey[400],
-    color:
-      theme.palette.mode === "dark"
-        ? theme.palette.grey[500]
-        : theme.palette.grey[400],
-  },
-  majorAlarmWarn: {
-    background: "transparent",
-    borderRadius: 2,
-    padding: 1,
-    borderStyle: "solid",
-    borderWidth: "thin",
-    borderColor: theme.palette.alarm.major.main,
-  },
-  minorAlarmWarn: {
-    background: "transparent",
-    borderRadius: 2,
-    padding: 1,
-    borderStyle: "solid",
-    borderWidth: "thin",
-    borderColor: theme.palette.alarm.minor.main,
-  },
-  noAlarm: {
-    background: "transparent",
-    borderRadius: 2,
-    padding: 1,
-    borderStyle: "solid",
-    borderWidth: "thin",
-    borderColor: "rgba(0,0,0,0)",
-  },
-});
-
 const TextUpdateComponent = (props) => {
-  const { classes } = props;
-
+  const theme = useTheme();
   const [displayValue, setDisplayValue] = useState("");
 
   const { initialized, value, units, alarmSeverity } = props;
@@ -60,22 +17,73 @@ const TextUpdateComponent = (props) => {
     }
   }, [initialized, value, units]);
 
-  let dispClassName = null;
-  if (!initialized) {
-    dispClassName = classes.disconAlarmWarn;
-  } else if (alarmSeverity === 1) {
-    dispClassName = classes.minorAlarmWarn;
-  } else if (alarmSeverity === 2) {
-    dispClassName = classes.majorAlarmWarn;
-  } else {
-    dispClassName = classes.noAlarm;
-  }
+  const dispSx = useMemo(() => {
+    if (!initialized) {
+      return {
+        background: "transparent",
+        borderRadius: 2,
+        padding: 1,
+        borderStyle: "solid",
+        borderWidth: "thin",
+        borderColor:
+          theme.palette.mode === "dark"
+            ? theme.palette.grey[500]
+            : theme.palette.grey[400],
+        color:
+          theme.palette.mode === "dark"
+            ? theme.palette.grey[500]
+            : theme.palette.grey[400],
+      };
+    } else if (alarmSeverity === 1) {
+      return {
+        background: "transparent",
+        borderRadius: 2,
+        padding: 1,
+        borderStyle: "solid",
+        borderWidth: "thin",
+        borderColor: (theme.palette as any).alarm?.minor?.main || theme.palette.warning.main,
+      };
+    } else if (alarmSeverity === 2) {
+      return {
+        background: "transparent",
+        borderRadius: 2,
+        padding: 1,
+        borderStyle: "solid",
+        borderWidth: "thin",
+        borderColor: (theme.palette as any).alarm?.major?.main || theme.palette.error.main,
+      };
+    } else {
+      return {
+        background: "transparent",
+        borderRadius: 2,
+        padding: 1,
+        borderStyle: "solid",
+        borderWidth: "thin",
+        borderColor: "rgba(0,0,0,0)",
+      };
+    }
+  }, [initialized, alarmSeverity, theme, theme.palette.mode]);
+
 
   const content =
     displayValue !== "" ? (
-      <Typography className={dispClassName}>{displayValue}</Typography>
+      <Typography sx={dispSx}>{displayValue}</Typography>
     ) : (
-      <Typography className={classes.disconAlarmWarn}>-</Typography>
+      <Typography sx={{
+        background: "transparent",
+        borderRadius: 2,
+        padding: 1,
+        borderStyle: "solid",
+        borderWidth: "thin",
+        borderColor:
+          theme.palette.mode === "dark"
+            ? theme.palette.grey[500]
+            : theme.palette.grey[400],
+        color:
+          theme.palette.mode === "dark"
+            ? theme.palette.grey[500]
+            : theme.palette.grey[400],
+      }}>-</Typography>
     );
 
   return content;
@@ -93,9 +101,11 @@ const TextUpdateStateful = ({
       {...props}
       component={TextUpdateComponent}
       debug={debug}
-      variant={variant}
       alarmSensitive={alarmSensitive}
       showTooltip={showTooltip}
+      componentProps={{
+        variant,
+      }}
     />
   );
 };
@@ -213,4 +223,4 @@ interface TextUpdateStatefulProps {
 }
 
 
-export default withStyles(styles, { withTheme: true })(TextUpdateStateful);
+export default TextUpdateStateful;

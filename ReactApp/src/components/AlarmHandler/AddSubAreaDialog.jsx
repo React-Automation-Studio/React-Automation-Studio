@@ -1,11 +1,10 @@
 import React from 'react';
-import makeStyles from '@mui/styles/makeStyles';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/GridLegacy';
 import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
@@ -16,34 +15,7 @@ import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 
 import { Domain } from "mdi-material-ui/";
 
-// Styles
-const useStyles = makeStyles(theme => ({
-    boldText: {
-        fontWeight: 500,
-        textAlign: 'center',
-    },
-    button: {
-        margin: theme.spacing(1),
-    },
-    centerInBlock: {
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: 'center'
-    },
-    horizontalRight: {
-        alignItems: "flex-end"
-    },
-    verticalMiddle: {
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-    }
-}))
-
-
 const AddSubAreaDialog = (props) => {
-    const classes = useStyles()
 
     const lastIndex = props.data?.roles?.length - 1
 
@@ -111,12 +83,12 @@ const AddSubAreaDialog = (props) => {
             >
                 <Grid item xs={4}>
                 </Grid>
-                <Grid item xs={4} className={classes.centerInBlock}>
+                <Grid item xs={4} sx={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: 'center' }}>
                     <Button
                         variant="contained"
                         color="secondary"
                         size="small"
-                        className={classes.button}
+                        sx={{ m: 1 }}
                         startIcon={<SupervisedUserCircleIcon />}
                         onClick={handleAddRoles}
                     >
@@ -141,15 +113,15 @@ const AddSubAreaDialog = (props) => {
                     >
                         <Grid item xs={2} >
                         </Grid>
-                        <Grid item xs={1} className={classes.centerInBlock}>
+                        <Grid item xs={1} sx={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: 'center' }}>
                             <SupervisedUserCircleIcon />
                         </Grid>
-                        <Grid item xs={1} className={classes.verticalMiddle} style={{ marginRight: '2rem' }}>
-                            <Typography className={classes.boldText} >
+                        <Grid item xs={1} sx={{ display: "flex", flexDirection: "column", justifyContent: "center", mr: 4 }}>
+                            <Typography sx={{ fontWeight: 500, textAlign: 'center' }} >
                                 Role
                             </Typography>
                         </Grid>
-                        <Grid item xs={4} className={classes.verticalMiddle}>
+                        <Grid item xs={4} sx={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
                             <TextField
                                 type='text'
                                 value={props.data.roles[index] || ''}
@@ -162,13 +134,13 @@ const AddSubAreaDialog = (props) => {
                             <Tooltip title="Remove role" placement="bottom">
                                 <IconButton
                                     onClick={() => removeRole(index)}
-                                    style={{ marginLeft: '0.5em' }}
+                                    sx={{ ml: 1 }}
                                     size="large">
                                     <RemoveCircleIcon color="primary" />
                                 </IconButton>
                             </Tooltip>
                             {lastIndex === index && <Tooltip title="Add another role" placement="bottom">
-                                <IconButton onClick={addRole} style={{ marginLeft: '0.5em' }} size="large">
+                                <IconButton onClick={addRole} sx={{ ml: 1 }} size="large">
                                     <AddCircleIcon color="secondary" />
                                 </IconButton>
                             </Tooltip>}
@@ -193,7 +165,7 @@ const AddSubAreaDialog = (props) => {
                     justifyContent="flex-start"
                     alignItems="stretch"
                     spacing={2}
-                    style={{ marginTop: '0.5rem' }}
+                    sx={{ mt: 1 }}
                 >
                     <Grid item xs={12}>
                         <Grid
@@ -202,16 +174,16 @@ const AddSubAreaDialog = (props) => {
                             justifyContent="flex-start"
                             alignItems="stretch"
                         >
-                            <Grid item xs={1} className={classes.centerInBlock}>
+                            <Grid item xs={1} sx={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: 'center' }}>
                                 <Domain />
                             </Grid>
-                            <Grid item xs={3} className={[classes.verticalMiddle, classes.horizontalRight].join(' ')} style={{ marginRight: '2rem' }}>
-                                <Typography className={classes.boldText} >
+                            <Grid item xs={3} sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "flex-end", mr: 4 }}>
+                                <Typography sx={{ fontWeight: 500, textAlign: 'center' }} >
                                     TOP AREA NAME
                                 </Typography>
                             </Grid>
-                            <Grid item xs={7} className={classes.verticalMiddle}>
-                                <Typography style={{ textAlign: 'left' }}>
+                            <Grid item xs={7} sx={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                                <Typography sx={{ textAlign: 'left' }}>
                                     {props.data.areaIndex}
                                 </Typography>
                             </Grid>
@@ -224,12 +196,12 @@ const AddSubAreaDialog = (props) => {
                             justifyContent="flex-start"
                             alignItems="stretch"
                         >
-                            <Grid item xs={4} className={[classes.verticalMiddle, classes.horizontalRight].join(' ')} style={{ marginRight: '2rem' }}>
-                                <Typography className={classes.boldText} >
+                            <Grid item xs={4} sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "flex-end", mr: 4 }}>
+                                <Typography sx={{ fontWeight: 500, textAlign: 'center' }} >
                                     {`${!props.data.edit ? 'NEW ' : ''}SUBAREA NAME`}
                                 </Typography>
                             </Grid>
-                            <Grid item xs={7} className={classes.verticalMiddle}>
+                            <Grid item xs={7} sx={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
                                 <TextField
                                     type='text'
                                     value={props.data.subArea || ''}
@@ -252,7 +224,7 @@ const AddSubAreaDialog = (props) => {
                     </Grid>
                 </Grid >
             </DialogContent >
-            <DialogActions style={{ marginTop: '2rem' }}>
+            <DialogActions sx={{ mt: 4 }}>
                 <Button onClick={props.handleClose} color="primary">
                     Cancel
                 </Button>

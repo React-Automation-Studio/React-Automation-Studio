@@ -4,6 +4,7 @@ import ContextMenu from "../SystemComponents/ContextMenu";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
+import { GlobalStyles } from "@mui/material";
 import DateFnsUtils from "@date-io/date-fns";
 import formatISO from "date-fns/formatISO";
 import {
@@ -16,48 +17,21 @@ import {
 } from "date-fns";
 import PV from "../SystemComponents/PV";
 import { replaceMacros } from "../SystemComponents/Utils/macroReplacement";
-import makeStyles from "@mui/styles/makeStyles";
 import { useTheme } from "@mui/material/styles";
 
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
 
 import Button from "@mui/material/Button";
 import Plot from "react-plotly.js";
-import Grid from "@mui/material/Grid";
+import Grid from '@mui/material/GridLegacy';
 import { isMobile } from "react-device-detect";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import Typography from "@mui/material/Typography";
 import { LanDisconnect } from "mdi-material-ui/";
-
-const useStyles = makeStyles((theme) => ({
-  container: {
-    display: "flex",
-    flexWrap: "wrap",
-  },
-  textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: 200,
-  },
-  buttonRoot: {
-    textTransform: "none",
-  },
-  accordionRoot: {
-    "&:before": {
-      background: "rgba(0,0,0,0)",
-    },
-  },
-  "@global": {
-    ".js-plotly-plot .plotly .modebar": {
-      // left: '50%',
-      transform: "translateX(-50%)",
-    },
-  },
-}));
 
 const useArchiverDataHook = (props) => {
   const context = useContext(AutomationStudioContext);
@@ -216,8 +190,11 @@ const ArchiverDataViewer = ({
   ...props
 }: ArchiverDataViewerProps) => {
   const paperRef = useRef(null);
-  const classes = useStyles();
   const theme = useTheme();
+
+
+
+
   const [pvsArchData, setPvsArchData] = useState([]);
   const [pvs, setPvs] = useState([]);
   const pvConnections = () => {
@@ -489,14 +466,14 @@ const ArchiverDataViewer = ({
               props.yAxes.length > 1
                 ? theme.palette.reactVis.lineColors[index]
                 : theme.palette.reactVis[".rv-xy-plot__axis__tick__line"]
-                    .stroke,
+                  .stroke,
           },
           tickfont: {
             color:
               props.yAxes.length > 1
                 ? theme.palette.reactVis.lineColors[index]
                 : theme.palette.reactVis[".rv-xy-plot__axis__tick__line"]
-                    .stroke,
+                  .stroke,
           },
           gridcolor:
             theme.palette.reactVis[".rv-xy-plot__grid-lines__line"].stroke,
@@ -553,14 +530,14 @@ const ArchiverDataViewer = ({
   let legend =
     showLegend === true
       ? {
-          legend: isMobile
-            ? {
-                orientation: "h",
-                x: 0,
-                y: 1.1,
-              }
-            : undefined,
-        }
+        legend: isMobile
+          ? {
+            orientation: "h",
+            x: 0,
+            y: 1.1,
+          }
+          : undefined,
+      }
       : {};
   let layout = {
     title: props.title,
@@ -589,240 +566,248 @@ const ArchiverDataViewer = ({
   };
 
   return (
-    <div ref={paperRef} style={{ width: props.width ? props.width : "100%" }}>
-      {pvConnections()}
+    <>
+      <GlobalStyles
+        styles={{
+          ".js-plotly-plot .plotly .modebar": {
+            transform: "translateX(-50%)",
+          },
+        }}
+      />
+      <div ref={paperRef} style={{ width: props.width ? props.width : "100%" }}>
+        {pvConnections()}
 
-      {props.showButtons && (
-        <Accordion
-          classes={{ root: classes.accordionRoot }}
-          elevation={0}
-          defaultExpanded={defaultButtonsExpanded}
-          style={{ marginBottom: 0 }}
-        >
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}></AccordionSummary>
-          <AccordionDetails>
-            <Grid
-              container
-              spacing={2}
-              alignItems={"center"}
-              direction={"row"}
-              justifyContent={"center"}
-            >
-              <Grid item xl={6} lg={"auto"} md={12} sm={12} xs={12}>
-                <Grid
-                  container
-                  spacing={2}
-                  alignItems={"center"}
-                  direction={"row"}
-                  justifyContent={"center"}
-                >
-                  <Grid item xs={2} sm={"auto"} md={1} lg={"auto"}>
-                    <Button
-                      classes={{ root: classes.buttonRoot }}
-                      variant={"outlined"}
-                      color={fromButton === "30s" ? "secondary" : "primary"} //was default
-                      onClick={handleOnClick30s}
-                    >
-                      30s
-                    </Button>
-                  </Grid>
-                  <Grid item xs={2} sm={"auto"} md={1} lg={"auto"}>
-                    <Button
-                      classes={{ root: classes.buttonRoot }}
-                      onClick={handleOnClick1m}
-                      variant={"outlined"}
-                      color={fromButton === "1m" ? "secondary" : "primary"} //was default
-                    >
-                      1m
-                    </Button>
-                  </Grid>
-                  <Grid item xs={2} sm={"auto"} md={1} lg={"auto"}>
-                    <Button
-                      classes={{ root: classes.buttonRoot }}
-                      onClick={handleOnClick5m}
-                      variant={"outlined"}
-                      color={fromButton === "5m" ? "secondary" : "primary"} //was default
-                    >
-                      5m
-                    </Button>
-                  </Grid>
-                  <Grid item xs={2} sm={"auto"} md={1} lg={"auto"}>
-                    <Button
-                      classes={{ root: classes.buttonRoot }}
-                      onClick={handleOnClick30m}
-                      variant={"outlined"}
-                      color={fromButton === "30m" ? "secondary" : "primary"} //was default
-                    >
-                      30m
-                    </Button>
-                  </Grid>
-                  <Grid item xs={2} sm={"auto"} md={1} lg={"auto"}>
-                    <Button
-                      classes={{ root: classes.buttonRoot }}
-                      onClick={handleOnClick1h}
-                      variant={"outlined"}
-                      color={fromButton === "1h" ? "secondary" : "primary"} //was default
-                    >
-                      1h
-                    </Button>
-                  </Grid>
-                  <Grid item xs={2} sm={"auto"} md={1} lg={"auto"}>
-                    <Button
-                      classes={{ root: classes.buttonRoot }}
-                      onClick={handleOnClick2h}
-                      variant={"outlined"}
-                      color={fromButton === "2h" ? "secondary" : "primary"} //was default
-                    >
-                      2h
-                    </Button>
-                  </Grid>
-                  <Grid item xs={2} sm={"auto"} md={1} lg={"auto"}>
-                    <Button
-                      classes={{ root: classes.buttonRoot }}
-                      onClick={handleOnClick12h}
-                      variant={"outlined"}
-                      color={fromButton === "12h" ? "secondary" : "primary"} //was default
-                    >
-                      12h
-                    </Button>
-                  </Grid>
-                  <Grid item xs={2} sm={"auto"} md={1} lg={"auto"}>
-                    <Button
-                      classes={{ root: classes.buttonRoot }}
-                      onClick={handleOnClick1d}
-                      variant={"outlined"}
-                      color={fromButton === "1d" ? "secondary" : "primary"} //was default
-                    >
-                      1d
-                    </Button>
-                  </Grid>
-                  <Grid item xs={2} sm={"auto"} md={1} lg={"auto"}>
-                    <Button
-                      classes={{ root: classes.buttonRoot }}
-                      onClick={handleOnClick2d}
-                      variant={"outlined"}
-                      color={fromButton === "2d" ? "secondary" : "primary"} //was default
-                    >
-                      2d
-                    </Button>
-                  </Grid>
-                  <Grid item xs={2} sm={"auto"} md={1} lg={"auto"}>
-                    <Button
-                      classes={{ root: classes.buttonRoot }}
-                      onClick={handleOnClick1w}
-                      variant={"outlined"}
-                      color={fromButton === "1w" ? "secondary" : "primary"} //was default
-                    >
-                      1w
-                    </Button>
+        {props.showButtons && (
+          <Accordion
+          
+            elevation={0}
+            defaultExpanded={defaultButtonsExpanded}
+            style={{ marginBottom: 0 }}
+          >
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}></AccordionSummary>
+            <AccordionDetails>
+              <Grid
+                container
+                spacing={2}
+                alignItems={"center"}
+                direction={"row"}
+                justifyContent={"center"}
+              >
+                <Grid item xl={6} lg={"auto"} md={12} sm={12} xs={12}>
+                  <Grid
+                    container
+                    spacing={2}
+                    alignItems={"center"}
+                    direction={"row"}
+                    justifyContent={"center"}
+                  >
+                    <Grid item xs={2} sm={"auto"} md={1} lg={"auto"}>
+                      <Button
+
+                        variant={"outlined"}
+                        color={fromButton === "30s" ? "secondary" : "primary"} 
+                        onClick={handleOnClick30s}
+                      >
+                        30s
+                      </Button>
+                    </Grid>
+                    <Grid item xs={2} sm={"auto"} md={1} lg={"auto"}>
+                      <Button
+
+                        onClick={handleOnClick1m}
+                        variant={"outlined"}
+                        color={fromButton === "1m" ? "secondary" : "primary"} //was default
+                      >
+                        1m
+                      </Button>
+                    </Grid>
+                    <Grid item xs={2} sm={"auto"} md={1} lg={"auto"}>
+                      <Button
+
+                        onClick={handleOnClick5m}
+                        variant={"outlined"}
+                        color={fromButton === "5m" ? "secondary" : "primary"} //was default
+                      >
+                        5m
+                      </Button>
+                    </Grid>
+                    <Grid item xs={2} sm={"auto"} md={1} lg={"auto"}>
+                      <Button
+
+                        onClick={handleOnClick30m}
+                        variant={"outlined"}
+                        color={fromButton === "30m" ? "secondary" : "primary"} //was default
+                      >
+                        30m
+                      </Button>
+                    </Grid>
+                    <Grid item xs={2} sm={"auto"} md={1} lg={"auto"}>
+                      <Button
+
+                        onClick={handleOnClick1h}
+                        variant={"outlined"}
+                        color={fromButton === "1h" ? "secondary" : "primary"} //was default
+                      >
+                        1h
+                      </Button>
+                    </Grid>
+                    <Grid item xs={2} sm={"auto"} md={1} lg={"auto"}>
+                      <Button
+
+                        onClick={handleOnClick2h}
+                        variant={"outlined"}
+                        color={fromButton === "2h" ? "secondary" : "primary"} //was default
+                      >
+                        2h
+                      </Button>
+                    </Grid>
+                    <Grid item xs={2} sm={"auto"} md={1} lg={"auto"}>
+                      <Button
+
+                        onClick={handleOnClick12h}
+                        variant={"outlined"}
+                        color={fromButton === "12h" ? "secondary" : "primary"} //was default
+                      >
+                        12h
+                      </Button>
+                    </Grid>
+                    <Grid item xs={2} sm={"auto"} md={1} lg={"auto"}>
+                      <Button
+
+                        onClick={handleOnClick1d}
+                        variant={"outlined"}
+                        color={fromButton === "1d" ? "secondary" : "primary"} //was default
+                      >
+                        1d
+                      </Button>
+                    </Grid>
+                    <Grid item xs={2} sm={"auto"} md={1} lg={"auto"}>
+                      <Button
+
+                        onClick={handleOnClick2d}
+                        variant={"outlined"}
+                        color={fromButton === "2d" ? "secondary" : "primary"} //was default
+                      >
+                        2d
+                      </Button>
+                    </Grid>
+                    <Grid item xs={2} sm={"auto"} md={1} lg={"auto"}>
+                      <Button
+
+                        onClick={handleOnClick1w}
+                        variant={"outlined"}
+                        color={fromButton === "1w" ? "secondary" : "primary"} //was default
+                      >
+                        1w
+                      </Button>
+                    </Grid>
                   </Grid>
                 </Grid>
-              </Grid>
-              <Grid
-                item
-                xl={2}
-                lg={"auto"}
-                md={4}
-                sm={6}
-                xs={6}
-                style={{ textAlign: "center" }}
-              >
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <MobileDateTimePicker
-                    label="From:"
-                    value={selectedFromDate}
-                    maxDateTime={selectedToDate}
-                    onChange={(newDate) => {
-                      setSelectedFromDate(newDate);
-
-                      setFromButton("none");
-                    }}
-                    slotProps={{ textField: { variant: "standard" } }}
-                  />
-                </LocalizationProvider>
-              </Grid>
-              <Grid
-                item
-                xl={2}
-                lg={"auto"}
-                md={4}
-                sm={6}
-                xs={6}
-                style={{ textAlign: "center" }}
-              >
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <MobileDateTimePicker
-                    label="To:"
-                    value={selectedToDate}
-                    minDateTime={selectedFromDate}
-                    onChange={(newDate) => {
-                      setSelectedToDate(newDate);
-                      setFromButton("none");
-                      setLive(false);
-                    }}
-                    slotProps={{ textField: { variant: "standard" } }}
-                  />
-                </LocalizationProvider>
-              </Grid>
-              <Grid item xl={3} lg={"auto"} md={4} sm={6} xs={12}>
                 <Grid
-                  container
-                  spacing={2}
-                  alignItems={"center"}
-                  direction={"row"}
-                  justifyContent={"center"}
+                  item
+                  xl={2}
+                  lg={"auto"}
+                  md={4}
+                  sm={6}
+                  xs={6}
+                  style={{ textAlign: "center" }}
                 >
-                  <Grid item xs={4} md={4}>
-                    <Button
-                      classes={{ root: classes.buttonRoot }}
-                      variant={"contained"}
-                      color={live ? "primary" : "default"}
-                      onClick={() => setLive(live === true ? false : true)}
-                    >
-                      Live
-                    </Button>
-                  </Grid>
-                  <Grid item xs={8} md={8}>
-                    <TextField
-                      label="Refresh Rate"
-                      variant="outlined"
-                      value={parseInt(livePollingRatePeriod) / 1000}
-                      InputProps={{
-                        readOnly: true,
-                        endAdornment: (
-                          <InputAdornment position="end">sec</InputAdornment>
-                        ),
+                  <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <MobileDateTimePicker
+                      label="From:"
+                      value={selectedFromDate}
+                      maxDateTime={selectedToDate}
+                      onChange={(newDate) => {
+                        setSelectedFromDate(newDate);
+
+                        setFromButton("none");
                       }}
+                      slotProps={{ textField: { variant: "standard" } }}
                     />
+                  </LocalizationProvider>
+                </Grid>
+                <Grid
+                  item
+                  xl={2}
+                  lg={"auto"}
+                  md={4}
+                  sm={6}
+                  xs={6}
+                  style={{ textAlign: "center" }}
+                >
+                  <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <MobileDateTimePicker
+                      label="To:"
+                      value={selectedToDate}
+                      minDateTime={selectedFromDate}
+                      onChange={(newDate) => {
+                        setSelectedToDate(newDate);
+                        setFromButton("none");
+                        setLive(false);
+                      }}
+                      slotProps={{ textField: { variant: "standard" } }}
+                    />
+                  </LocalizationProvider>
+                </Grid>
+                <Grid item xl={3} lg={"auto"} md={4} sm={6} xs={12}>
+                  <Grid
+                    container
+                    spacing={2}
+                    alignItems={"center"}
+                    direction={"row"}
+                    justifyContent={"center"}
+                  >
+                    <Grid item xs={4} md={4}>
+                      <Button
+
+                        variant={"contained"}
+                        color={live ? "primary" : "default"}
+                        onClick={() => setLive(live === true ? false : true)}
+                      >
+                        Live
+                      </Button>
+                    </Grid>
+                    <Grid item xs={8} md={8}>
+                      <TextField
+                        label="Refresh Rate"
+                        variant="outlined"
+                        value={parseInt(livePollingRatePeriod) / 1000}
+                        InputProps={{
+                          readOnly: true,
+                          endAdornment: (
+                            <InputAdornment position="end">sec</InputAdornment>
+                          ),
+                        }}
+                      />
+                    </Grid>
                   </Grid>
                 </Grid>
               </Grid>
-            </Grid>
-          </AccordionDetails>
-        </Accordion>
-      )}
-      {width !== null && height !== null && (
-        <div
-          style={{
-            width: width,
-            height: props.height ? props.height : "40vh",
-            background: theme.palette.background.paper,
-            paddingBottom: 8,
-          }}
-          onContextMenu={
-            props.disableContextMenu ? undefined : handleToggleContextMenu
-          }
-          onPointerDownCapture={(event) => {
-            if (event.button !== 0) {
-              event.preventDefault();
-              return;
+            </AccordionDetails>
+          </Accordion>
+        )}
+        {width !== null && height !== null && (
+          <div
+            style={{
+              width: width,
+              height: props.height ? props.height : "40vh",
+              background: theme.palette.background.paper,
+              paddingBottom: 8,
+            }}
+            onContextMenu={
+              props.disableContextMenu ? undefined : handleToggleContextMenu
             }
-          }}
-        >
-          <Plot
-            config={
-              props.displayModeBar
-                ? {
+            onPointerDownCapture={(event) => {
+              if (event.button !== 0) {
+                event.preventDefault();
+                return;
+              }
+            }}
+          >
+            <Plot
+              config={
+                props.displayModeBar
+                  ? {
                     displaylogo: false,
                     scrollZoom: false,
                     doubleclick: false,
@@ -831,128 +816,129 @@ const ArchiverDataViewer = ({
                       format: "svg",
                     },
                   }
-                : {
+                  : {
                     displaylogo: false,
                     scrollZoom: false,
                     toImageButtonOptions: {
                       format: "svg",
                     },
                   }
-            }
-            useResizeHandler={true}
-            style={{
-              position: "relative",
-              display: "inline-block",
-              width: "100%",
-              height: "100%",
-              paddingBottom: 8,
-            }}
-            data={pvsArchData.map((pvData, index) => {
-              if (index === 0) {
-                return {
-                  x: pvData.x,
-                  y: pvData.y,
-                  name: props.traces[index].name
-                    ? props.traces[index].name
-                    : replaceMacros(
+              }
+              useResizeHandler={true}
+              style={{
+                position: "relative",
+                display: "inline-block",
+                width: "100%",
+                height: "100%",
+                paddingBottom: 8,
+              }}
+              data={pvsArchData.map((pvData, index) => {
+                if (index === 0) {
+                  return {
+                    x: pvData.x,
+                    y: pvData.y,
+                    name: props.traces[index].name
+                      ? props.traces[index].name
+                      : replaceMacros(
                         props.traces[index].pv,
                         props.macros
                       ).replace("pva://", ""),
-                  type: props.traces[index].type
-                    ? props.traces[index].type
-                    : "scatter",
-                  mode: props.traces[index].mode
-                    ? props.traces[index].mode
-                    : "lines",
-                  marker: {
-                    color: props.traces[index].color
-                      ? props.traces[index].color
-                      : theme.palette.reactVis.lineColors[index],
-                  },
-                  hovertemplate: props.traces[index].yHoverFormat
-                    ? "(%{y:" +
+                    type: props.traces[index].type
+                      ? props.traces[index].type
+                      : "scatter",
+                    mode: props.traces[index].mode
+                      ? props.traces[index].mode
+                      : "lines",
+                    marker: {
+                      color: props.traces[index].color
+                        ? props.traces[index].color
+                        : theme.palette.reactVis.lineColors[index],
+                    },
+                    hovertemplate: props.traces[index].yHoverFormat
+                      ? "(%{y:" +
                       props.traces[index].yHoverFormat +
                       "}) %{x}<extra>%{fullData.name}</extra>"
-                    : "(%{y}) %{x}<extra>%{fullData.name}</extra>",
-                };
-              } else {
-                return {
-                  x: pvData.x,
-                  y: pvData.y,
-                  name: props.traces[index].name
-                    ? props.traces[index].name
-                    : replaceMacros(
+                      : "(%{y}) %{x}<extra>%{fullData.name}</extra>",
+                  };
+                } else {
+                  return {
+                    x: pvData.x,
+                    y: pvData.y,
+                    name: props.traces[index].name
+                      ? props.traces[index].name
+                      : replaceMacros(
                         props.traces[index].pv,
                         props.macros
                       ).replace("pva://", ""),
-                  type: props.traces[index].type
-                    ? props.traces[index].type
-                    : "scatter",
-                  mode: props.traces[index].mode
-                    ? props.traces[index].mode
-                    : "lines",
-                  marker: {
-                    color: props.traces[index].color
-                      ? props.traces[index].color
-                      : theme.palette.reactVis.lineColors[index],
-                  },
-                  yaxis:
-                    typeof props.traces[index].yAxis !== "undefined"
-                      ? parseInt(props.traces[index].yAxis) === 0
-                        ? undefined
-                        : "y" + (parseInt(props.traces[index].yAxis) + 1)
-                      : "yaxis",
-                  hovertemplate: props.traces[index].yHoverFormat
-                    ? "(%{y:" +
+                    type: props.traces[index].type
+                      ? props.traces[index].type
+                      : "scatter",
+                    mode: props.traces[index].mode
+                      ? props.traces[index].mode
+                      : "lines",
+                    marker: {
+                      color: props.traces[index].color
+                        ? props.traces[index].color
+                        : theme.palette.reactVis.lineColors[index],
+                    },
+                    yaxis:
+                      typeof props.traces[index].yAxis !== "undefined"
+                        ? parseInt(props.traces[index].yAxis) === 0
+                          ? undefined
+                          : "y" + (parseInt(props.traces[index].yAxis) + 1)
+                        : "yaxis",
+                    hovertemplate: props.traces[index].yHoverFormat
+                      ? "(%{y:" +
                       props.traces[index].yHoverFormat +
                       "}) %{x}<extra>%{fullData.name}</extra>"
-                    : "(%{y}) %{x}<extra>%{fullData.name}</extra>",
-                };
-              }
-            })}
-            layout={{ ...layout }}
-          />
-          <ContextMenu
-            disableProbe={props.disableProbe}
-            open={openContextMenu}
-            pvs={pvs}
-            handleClose={handleContextMenuClose}
-            anchorEl={anchorEl}
-            anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "center",
-            }}
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "center",
-            }}
-            probeType={props.readOnly ? "readOnly" : undefined}
-          />
-        </div>
-      )}
-      {props.traces.map(
-        (trace, index) =>
-          width !== null &&
-          height !== null && (
-            <ArchiverData
-              key={index.toString()}
-              maxNumberOfSamples={width * 10}
-              archiver={props.archiver}
-              pv={replaceMacros(trace.pv, props.macros)}
-              from={selectedFromDate}
-              to={selectedToDate}
-              parameters={"&donotchunk"}
-              archData={(data) =>
-                setPvsArchData((prevData) => {
-                  let pvData = [...prevData];
-                  pvData[index] = data;
-                  return pvData;
-                })
-              }
+                      : "(%{y}) %{x}<extra>%{fullData.name}</extra>",
+                  };
+                }
+              })}
+              layout={{ ...layout }}
             />
-          )
-      )}
-    </div>
+            <ContextMenu
+              disableProbe={props.disableProbe}
+              open={openContextMenu}
+              pvs={pvs}
+              handleClose={handleContextMenuClose}
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "center",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "center",
+              }}
+              probeType={props.readOnly ? "readOnly" : undefined}
+            />
+          </div>
+        )}
+        {props.traces.map(
+          (trace, index) =>
+            width !== null &&
+            height !== null && (
+              <ArchiverData
+                key={index.toString()}
+                maxNumberOfSamples={width * 10}
+                archiver={props.archiver}
+                pv={replaceMacros(trace.pv, props.macros)}
+                from={selectedFromDate}
+                to={selectedToDate}
+                parameters={"&donotchunk"}
+                archData={(data) =>
+                  setPvsArchData((prevData) => {
+                    let pvData = [...prevData];
+                    pvData[index] = data;
+                    return pvData;
+                  })
+                }
+              />
+            )
+        )}
+      </div>
+    </>
   );
 };
 interface ArchiverDataViewerProps {
@@ -1048,16 +1034,16 @@ interface ArchiverDataViewerProps {
    * Sets fromTimeOffset button
    */
   fromTimeOffset?:
-    | "30s"
-    | "1m"
-    | "5m"
-    | "30m"
-    | "1h"
-    | "2h"
-    | "12h"
-    | "1d"
-    | "2d"
-    | "1w";
+  | "30s"
+  | "1m"
+  | "5m"
+  | "30m"
+  | "1h"
+  | "2h"
+  | "12h"
+  | "1d"
+  | "2d"
+  | "1w";
   /**
    * From  time, ISO date format: (YYYY-MM-DDTHH:MM:SSZ), will override the fromTimeOffset
    */

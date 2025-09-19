@@ -1,96 +1,73 @@
 import React from "react";
-import withStyles from "@mui/styles/withStyles";
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
-import Grid from "@mui/material/Grid";
+import Grid from '@mui/material/GridLegacy';
 import TextInput from "../../BaseComponents/TextInput";
 import TextOutput from "../../BaseComponents/TextOutput";
 import Slider from "../../BaseComponents/Slider";
 import SideBar from "../../SystemComponents/SideBar";
 import AppBar from "@mui/material/AppBar";
 
-// FIXME checkout https://mui.com/components/use-media-query/#migrating-from-withwidth
-const withWidth = () => (WrappedComponent) => (props) => (
-  <WrappedComponent {...props} width="xs" />
-);
+const ExperimentalMobileDemo1 = (props) => {
+  const theme = useTheme();
+  const isXs = useMediaQuery(theme.breakpoints.only('xs'));
+  const isSm = useMediaQuery(theme.breakpoints.only('sm'));
+  
+  const [state, setState] = React.useState({
+    value: 0,
+    stateValue: 0,
+    showAdvancedSettings: 0,
+  });
 
-const styles = (theme) => ({
-  body1: theme.typography.body1,
-  root: {
-    flexGrow: 1,
-    padding: theme.spacing(1),
-    overflowX: "hidden",
-    overflowY: "hidden",
-    marginTop: 40,
-    marginBottom: 100,
-  },
-  paper: {
-    padding: theme.spacing(1) * 0,
-    margin: theme.spacing(1) * 0,
-    height: "100%",
-    color: theme.palette.text.secondary,
-  },
-  control: {
-    padding: theme.spacing(1) * 2,
-  },
-});
-
-class ExperimentalMobileDemo1 extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: 0,
-      stateValue: 0,
-      showAdvancedSettings: 0,
-    };
-    this.handleStateChange = this.handleStateChange.bind(this);
-  }
-
-  handleChange = (event, value) => {
-    this.setState({ value });
+  const handleChange = (event, value) => {
+    setState(prevState => ({ ...prevState, value }));
   };
 
-  handleStateChange(stateValue) {
-    this.setState({ stateValue });
+  const handleStateChange = (stateValue) => {
+    setState(prevState => ({ ...prevState, stateValue }));
+  };
+
+  let graphVH;
+  if (isXs) {
+    graphVH = "25vh";
+  } else if (isSm) {
+    graphVH = "30vh";
+  } else {
+    graphVH = "30vh";
   }
 
-  render() {
-    const { width } = this.props;
-
-    const { classes } = this.props;
-
-    let graphVH;
-    if (width == "xs") {
-      graphVH = "25vh";
-    } else if (width == "sm") {
-      graphVH = "30vh";
-    } else {
-      graphVH = "30vh";
-    }
-
-    return (
-      <React.Fragment>
-        <AppBar
-          style={{ position: "fixed", bottom: "auto", top: "0" }}
-          color="inherit"
+  return (
+    <React.Fragment>
+      <AppBar
+        style={{ position: "fixed", bottom: "auto", top: "0" }}
+        color="inherit"
+      >
+        <Grid
+          container
+          direction="row"
+          item
+          justifyContent="center"
+          spacing={2}
+          alignItems="center"
         >
-          <Grid
-            container
-            direction="row"
-            item
-            justifyContent="center"
-            spacing={2}
-            alignItems="center"
-          >
-            <Grid item xs={2}>
-              <SideBar />
-            </Grid>
-            <Grid item xs={10}>
-              <div className={classes.body1}>Hooks debugging</div>
-            </Grid>
+          <Grid item xs={2}>
+            <SideBar />
           </Grid>
-        </AppBar>
+          <Grid item xs={10}>
+            <div style={theme.typography.body1}>Hooks debugging</div>
+          </Grid>
+        </Grid>
+      </AppBar>
 
-        <Grid container className={classes.root} spacing={2}>
+      <Grid container sx={{
+        flexGrow: 1,
+        padding: theme.spacing(1),
+        overflowX: "hidden",
+        overflowY: "hidden",
+        marginTop: 40,
+        marginBottom: 100,
+      }} spacing={2}>
           <Grid item xs={6}>
             <TextInput
               pv="$(device):amplitude"
@@ -139,12 +116,9 @@ class ExperimentalMobileDemo1 extends React.Component {
               useMetadata={true}
             />
           </Grid>
-        </Grid>
-      </React.Fragment>
-    );
-  }
+      </Grid>
+    </React.Fragment>
+  );
 }
 
-export default withWidth()(
-  withStyles(styles, { withTheme: true })(ExperimentalMobileDemo1)
-);
+export default ExperimentalMobileDemo1;

@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 
 import { Logout } from "mdi-material-ui/";
 
-import makeStyles from "@mui/styles/makeStyles";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
@@ -13,17 +12,9 @@ import ListItemText from "@mui/material/ListItemText";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import Home from "@mui/icons-material/Home";
 import ListItemButton from "@mui/material/ListItemButton";
-
 import AutomationStudioContext from "../../../SystemComponents/AutomationStudioContext";
 
-const useStyles = makeStyles((theme) => ({
-  drawerItems: {
-    minWidth: 250,
-  },
-}));
-
 const SideDrawer = (props) => {
-  const classes = useStyles(props);
 
   const context = useContext(AutomationStudioContext);
   const notInStyleGuide = context.styleGuideRedirect;
@@ -39,7 +30,7 @@ const SideDrawer = (props) => {
   };
 
   const drawerItems = (
-    <div className={classes.drawerItems}>
+    <div style={{ minWidth: "250px" }} >
       <List
         onClick={
           props.hideDrawerAfterItemClick ? () => setShowDrawer(false) : null

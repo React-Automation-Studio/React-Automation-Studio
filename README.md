@@ -1,4 +1,5 @@
 Current Release: V7.0.0
+
 [Migrate from-V6.x.x to V7.x.x](docs/migrate-from-V6-to-V7.md)
 
 [Migrate from-V5.x.x to V6.x.x](docs/migrate-from-V5-to-V6.md)

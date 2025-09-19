@@ -449,9 +449,9 @@ const AlarmSetup = (props) => {
         subArea.sort((a, b) => {
           const aKey = Object.keys(a)[0];
           const bKey = Object.keys(b)[0];
-          return a[aKey].name > b[bKey].name
+          return (a[aKey].name > b[bKey].name)
             ? 1
-            : b[bKey].name > a[aKey].name
+            : (b[bKey].name > a[aKey].name)
               ? -1
               : 0;
         });

@@ -151,7 +151,7 @@ function TextOutputComponent(props) {
       sx={textFieldSx}
       key={props.pvName}
       aria-haspopup="true"
-      label={!props.initialized ? props.disconnectedIcon : props.label}
+      label={props.editMode ? props.label : !props.initialized ? props.disconnectedIcon : props.label}
       fullWidth={true}
       onFocus={props.handleFocus}
       onBlur={props.handleBlur}
@@ -201,6 +201,11 @@ const TextOutput = ({
  * Props for the TextOutput component.
  */
 interface TextOutputProps {
+  /**
+ * If true, the TextInput will be in edit mode.
+ */
+  editMode?: boolean;
+
   /**
    * Directive to use the alarm severity status to alter the field's background color.
    */

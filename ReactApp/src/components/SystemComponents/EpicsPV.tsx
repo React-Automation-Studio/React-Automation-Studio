@@ -6,6 +6,7 @@ import { Socket } from "socket.io-client";
 import { v4 as uuidv4 } from "uuid";
 
 export type EpicsPVType = {
+  editMode?: boolean;
   initialized: boolean;
   pvname: string;
   value: number | string;
@@ -31,7 +32,7 @@ export type EpicsPVType = {
 
 
 export const useEpicsPV = (props) => {
- 
+  const { editMode = false } = props;
 
   const [pv, setPv] = useState<EpicsPVType>(() => {
     let pvname = props.pv;
@@ -54,7 +55,7 @@ export const useEpicsPV = (props) => {
     let pv = {
       initialized: false,
       pvname: pvname,
-      value: 0,
+      value: undefined,
       severity: undefined,
       timestamp: undefined,
       metadata: {
@@ -70,7 +71,7 @@ export const useEpicsPV = (props) => {
         units: "",
         precision: 0,
         enum_strs: [],
-        write_access: false,  
+        write_access: false,
       },
     };
 
@@ -79,22 +80,24 @@ export const useEpicsPV = (props) => {
   const pvName = pv.pvname;
 
   const [pvConnectionId] = useState(null);
-  
+
 
   const context = useContext(ReactAutomationStudioContext);
   const [socket, setSocket] = useState<any>(null);
   useEffect(() => {
-    if (props.makeNewSocketIoConnection === true) {
-      let newSocket = io(context.pvServerUrl ?? "/pvServer", {
-        transports: ["websocket"],
-        forceNew: true,
-      });
-      console.log("make new socket");
-      setSocket(newSocket);
-    } else {
-      setSocket(context.socket);
+    if (!editMode) {
+      if (props.makeNewSocketIoConnection === true) {
+        let newSocket = io(context.pvServerUrl ?? "/pvServer", {
+          transports: ["websocket"],
+          forceNew: true,
+        });
+        console.log("make new socket");
+        setSocket(newSocket);
+      } else {
+        setSocket(context.socket);
+      }
     }
-  }, [props.makeNewSocketIoConnection, context.socket, context.pvServerUrl]);
+  }, [props.makeNewSocketIoConnection, context.socket, context.pvServerUrl, editMode]);
 
   const jwt = context.userTokens.accessToken;
   const jwtRef = useRef(jwt);
@@ -125,7 +128,7 @@ export const useEpicsPV = (props) => {
             timestamp: msg.timestamp,
           }));
         } else {
-          setPv((pv:EpicsPVType) => ({
+          setPv((pv: EpicsPVType) => ({
             ...pv,
             value: props.useStringValue === true ? msg.char_value : msg.value,
             severity: msg.severity,
@@ -169,7 +172,9 @@ export const useEpicsPV = (props) => {
       setPv((pv) => ({ ...pv, initialized: false }));
     };
 
-    if (socket) {
+
+    if (!editMode && socket) {
+
       pvConnectionIdRef.current = uuidv4();
       socketRef.current.emit("request_pv_info", {
         data: pv.pvname,
@@ -183,7 +188,7 @@ export const useEpicsPV = (props) => {
     }
 
     return () => {
-      if (socket) {
+      if (!editMode && socket) {
         if (pvConnectionIdRef.current !== null) {
           socketRef.current.emit("remove_pv_connection", {
             pvname: pv.pvname,
@@ -197,7 +202,7 @@ export const useEpicsPV = (props) => {
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pvName, socket]);
+  }, [pvName, socket, editMode]);
 
   useEffect(() => {
     const reconnect = () => {
@@ -215,19 +220,19 @@ export const useEpicsPV = (props) => {
         });
       }
     };
-    if (socket) {
+    if (!editMode && socket) {
       socketRef.current.on("connect", reconnect);
     }
 
     return () => {
-      if (socket) {
+      if (!editMode &&  socket) {
         socketRef.current.removeListener("connect", reconnect);
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pvName, socket]);
+  }, [pvName, socket, editMode]);
   useEffect(() => {
-    if (props.newValueTrigger > 0) {
+    if (!editMode && props.newValueTrigger > 0) {
       socketRef.current.emit("write_to_pv", {
         pvname: pv.pvname,
         data: props.outputValue,
@@ -235,7 +240,7 @@ export const useEpicsPV = (props) => {
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.newValueTrigger]);
+  }, [props.newValueTrigger,editMode]);
 
   return pv;
 };
@@ -258,9 +263,11 @@ const EpicsPV = ({
   debug = false,
   makeNewSocketIoConnection = false,
   useBinaryValue = false,
+  editMode = false,
   ...props
 }: EpicsPVProps) => {
   const pv = useEpicsPV({
+    editMode: editMode,
     debug: debug,
     makeNewSocketIoConnection: makeNewSocketIoConnection,
     useBinaryValue: useBinaryValue,
@@ -295,6 +302,8 @@ interface EpicsPVProps {
    * the widget debugging information will be displayed.
    */
   debug?: boolean;
+  /** PV is in edit mode */
+  editMode?: boolean;
   /**
    * If defined, then the DataConnection  will be over a new socketIO  connection, otherwise the global socketIO connection
    */

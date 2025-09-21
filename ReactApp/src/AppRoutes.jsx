@@ -4,6 +4,7 @@ import { Route, BrowserRouter, Routes } from "react-router-dom";
 // demos
 import EpicsDemos from "./components/Examples/EpicsDemos";
 import MobileDemo1 from "./components/Examples/Mobile/MobileDemo1";
+import EditableMobileDemo1 from "./components/ExperimentalExamples/Mobile/EditableMobileDemo1";
 import MobileDemo2 from "./components/Examples/Mobile/MobileDemo2";
 import BeamlineControlSystem from "./components/ControlScreens/BeamlineControlSystem";
 import TableControlSystem from "./components/ControlScreens/TableControlSystem";
@@ -102,6 +103,14 @@ const AppRoutes = (props) => {
           element={
             <ProtectedRoute>
               <MobileDemo1 />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/EditableMobileDemo1"
+          element={
+            <ProtectedRoute>
+              <EditableMobileDemo1 />
             </ProtectedRoute>
           }
         />

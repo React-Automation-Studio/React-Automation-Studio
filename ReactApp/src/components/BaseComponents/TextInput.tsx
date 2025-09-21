@@ -79,7 +79,7 @@ const TextInputComponent = (props) => {
       onFocus={props.handleFocus}
       onBlur={props.handleBlur}
       onChange={handleChange}
-      label={!props.initialized ? props.disconnectedIcon : props.label}
+      label={props.editMode ? props.label : !props.initialized ? props.disconnectedIcon : props.label}
       fullWidth={true}
       margin={props.margin}
       variant={props.variant}
@@ -143,6 +143,12 @@ interface TextInputProps {
    * If defined, then the DataConnection and the widget debugging information will be displayed.
    */
   debug?: boolean;
+
+  /**
+   * If true, the TextInput will be in edit mode.
+   */
+  editMode?: boolean;
+
   /**
    * Local variable initialization value. When using loc:// type PVs.
    */

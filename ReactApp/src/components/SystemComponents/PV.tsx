@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import EpicsPV from "./EpicsPV";
 import LocalPV from "./LocalPV";
-import {EpicsPVType} from "./EpicsPV";
+import { EpicsPVType } from "./EpicsPV";
 
 /**
  * Type definition for the PV object.
@@ -9,7 +9,7 @@ import {EpicsPVType} from "./EpicsPV";
 export type PVType = {
   initialized: boolean;
   pvName: string;
-  value: number | string;
+  value: number | string | undefined;
   severity: string | undefined;
   timestamp: string | undefined;
   metadata: {
@@ -28,14 +28,14 @@ export type PVType = {
     write_access: boolean;
   };
   label: string;
-  max?: number|undefined;
-  min?: number|undefined;
-  prec?: number|undefined;
+  max?: number | undefined;
+  min?: number | undefined;
+  prec?: number | undefined;
   units: string;
   readOnly: boolean;
   PVs: any[];
   enum_strs: string[];
-  
+
 };
 
 /**
@@ -113,8 +113,8 @@ interface PVProps {
   /**
    * A function that returns the PV object.
    */
-  pvData?: (pv:PVType) => void;
-  
+  pvData?: (pv: PVType) => void;
+
   /**
    * Custom units to be used if `usePvUnits` is not defined.
    */
@@ -172,6 +172,8 @@ interface PVProps {
    * A function that returns the contextInfo.
    */
   contextInfo?: (pv: any) => void;
+  /** If true, the PV is in edit mode */
+  editMode?: boolean;
 }
 
 /**
@@ -181,6 +183,7 @@ interface PVProps {
  * The pv state can be raised as an object using the pvData callback or passed to child function component. All the data in this pv object is valid when pv.initialized===true
  */
 const PV = ({
+  editMode = false,
   debug = false,
   useMetadata = true,
   makeNewSocketIoConnection = false,
@@ -188,9 +191,9 @@ const PV = ({
   ...props
 }: PVProps) => {
 
-  const [pvs, setPvs] = useState<{ data?: EpicsPVType | null; max?: any | null; min?: any | null; label?: any | null; units?: any | null; precision?: any | null; alarm?: any | null }|null>(
-   
-  null);
+  const [pvs, setPvs] = useState<{ data?: EpicsPVType | null; max?: any | null; min?: any | null; label?: any | null; units?: any | null; precision?: any | null; alarm?: any | null } | null>(
+
+    null);
   const [pv, SetPv] = useState<PVType>({
     value: 0,
     label: "",
@@ -238,10 +241,11 @@ const PV = ({
       : EpicsPV({ ...props, pv: pvname });
   };
 
-  const processPvDataData = useCallback((data:EpicsPVType) => {
+  const processPvDataData = useCallback((data: EpicsPVType) => {
     setPvs((pvs) => ({ ...pvs, data }));
   }, []);
   const dataPv = pvConnection(props.pv, {
+    editMode: editMode,
     macros: props.macros,
     newValueTrigger: props.newValueTrigger,
     outputValue: props.outputValue,
@@ -259,11 +263,12 @@ const PV = ({
   let maxPv =
     !useMetadata && props.usePvMinMax
       ? pvConnection(props.maxPv ? props.maxPv : props.pv + ".HOPR", {
-          macros: props.macros,
-          debug: debug,
-          initialLocalVariableValue: props.initialLocalVariableValue,
-          pvData: processPvDataMax,
-        })
+        editMode: editMode,
+        macros: props.macros,
+        debug: debug,
+        initialLocalVariableValue: props.initialLocalVariableValue,
+        pvData: processPvDataMax,
+      })
       : undefined;
   const processPvDataMin = useCallback((min) => {
     setPvs((pvs) => ({ ...pvs, min }));
@@ -271,23 +276,25 @@ const PV = ({
   let minPv =
     !useMetadata && props.usePvMinMax
       ? pvConnection(props.minPv ? props.minPv : props.pv + ".LOPR", {
-          macros: props.macros,
-          debug: debug,
-          initialLocalVariableValue: props.initialLocalVariableValue,
-          pvData: processPvDataMin,
-        })
+
+        macros: props.macros,
+        debug: debug,
+        initialLocalVariableValue: props.initialLocalVariableValue,
+        pvData: processPvDataMin,
+      })
       : undefined;
   const processPvDataLabel = useCallback((label) => {
     setPvs((pvs) => ({ ...pvs, label }));
   }, []);
   let labelPv = props.usePvLabel
     ? pvConnection(props.labelPv ? props.labelPv : props.pv + ".DESC", {
-        macros: props.macros,
-        useStringValue: true,
-        debug: debug,
-        initialLocalVariableValue: props.initialLocalVariableValue,
-        pvData: processPvDataLabel,
-      })
+      editMode: editMode,
+      macros: props.macros,
+      useStringValue: true,
+      debug: debug,
+      initialLocalVariableValue: props.initialLocalVariableValue,
+      pvData: processPvDataLabel,
+    })
     : undefined;
   const processPvDataUnits = useCallback((units) => {
     setPvs((pvs) => ({ ...pvs, units }));
@@ -295,12 +302,13 @@ const PV = ({
   let unitsPv =
     !useMetadata && props.usePvUnits
       ? pvConnection(props.unitsPv ? props.unitsPv : props.pv + ".EGU", {
-          macros: props.macros,
-          useStringValue: true,
-          debug: debug,
-          initialLocalVariableValue: props.initialLocalVariableValue,
-          pvData: processPvDataUnits,
-        })
+        editMode: editMode,
+        macros: props.macros,
+        useStringValue: true,
+        debug: debug,
+        initialLocalVariableValue: props.initialLocalVariableValue,
+        pvData: processPvDataUnits,
+      })
       : undefined;
   const processPvDataPrecision = useCallback((precision) => {
     setPvs((pvs) => ({ ...pvs, precision }));
@@ -308,12 +316,13 @@ const PV = ({
   let precisionPv =
     !useMetadata && props.usePvPrecision
       ? pvConnection(props.precPv ? props.precPv : props.pv + ".PREC", {
-          macros: props.macros,
-          useStringValue: true,
-          debug: debug,
-          initialLocalVariableValue: props.initialLocalVariableValue,
-          pvData: processPvDataPrecision,
-        })
+        editMode: editMode,
+        macros: props.macros,
+        useStringValue: true,
+        debug: debug,
+        initialLocalVariableValue: props.initialLocalVariableValue,
+        pvData: processPvDataPrecision,
+      })
       : undefined;
   const processPvDataAlarm = useCallback((alarm) => {
     setPvs((pvs) => ({ ...pvs, alarm }));
@@ -321,11 +330,12 @@ const PV = ({
   let alarmPv =
     !useMetadata && props.alarmSensitive
       ? pvConnection(props.alarmPv ? props.alarmPv : props.pv + ".SEVR", {
-          macros: props.macros,
-          debug: debug,
-          initialLocalVariableValue: props.initialLocalVariableValue,
-          pvData: processPvDataAlarm,
-        })
+        editMode: editMode,
+        macros: props.macros,
+        debug: debug,
+        initialLocalVariableValue: props.initialLocalVariableValue,
+        pvData: processPvDataAlarm,
+      })
       : undefined;
 
   useEffect(() => {
@@ -336,7 +346,7 @@ const PV = ({
     let pv: PVType = {
       initialized: false,
       pvName: "",
-      value: 0,
+      value: undefined,
       severity: "",
       timestamp: "",
       metadata: {

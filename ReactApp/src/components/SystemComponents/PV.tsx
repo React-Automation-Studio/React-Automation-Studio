@@ -346,7 +346,7 @@ const PV = ({
     let pv: PVType = {
       initialized: false,
       pvName: "",
-      value: 0,
+      value: undefined,
       severity: "",
       timestamp: "",
       metadata: {

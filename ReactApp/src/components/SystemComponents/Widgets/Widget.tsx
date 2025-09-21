@@ -50,7 +50,7 @@ const Widget = ({
   const [label, setLabel] = useState("");
   const [passedTooltip] = useState(replaceMacros(tooltip));
   const [pv, setPv] = useState<PVType>({
-    value: 0,
+    value: undefined,
     label: "",
     pvName: "",
     initialized: false,

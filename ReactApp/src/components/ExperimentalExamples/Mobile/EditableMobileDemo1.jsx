@@ -112,7 +112,7 @@ const MobileDemo1 = (props) => {
                     >
                       <Grid item xs={6}>
                         <TextInput
-                          pv={editMode?"enter PV name":"$(device):amplitude"}
+                          pv={"$(device):amplitude"}
                           macros={{ "$(device)": "testIOC" }}
                           usePvLabel={true}
                           prec={3}
@@ -122,7 +122,7 @@ const MobileDemo1 = (props) => {
                       </Grid>
                       <Grid item xs={6}>
                         <TextOutput
-                          pv={editMode?"enter PV name":"$(device):test3"}
+                          pv={"$(device):test3"}
                           macros={{ "$(device)": "testIOC" }}
                           usePvLabel={true}
                           prec={3}
@@ -135,7 +135,7 @@ const MobileDemo1 = (props) => {
 
                   <Grid item xs={6} sm={4} lg={3}>
                     <Gauge
-                      pv={editMode?"enter PV name":"$(device):amplitude"}
+                      pv={"$(device):amplitude"}
                       macros={{ "$(device)": "testIOC" }}
                       prec={3}
                       usePvMinMax={true}
@@ -153,7 +153,7 @@ const MobileDemo1 = (props) => {
                     >
                       <Grid item>
                         <StyledIconIndicator
-                          pv={editMode?"enter PV name":"$(device)"}
+                          pv={"$(device)"}
                           macros={{ "$(device)": "testIOC:BO1" }}
                           onColor={theme.palette.ok.main}
                           offColor="default"
@@ -164,7 +164,7 @@ const MobileDemo1 = (props) => {
                       </Grid>
                       <Grid item>
                         <StyledIconIndicator
-                          pv={editMode?"enter PV name":"$(device)"}
+                          pv={"$(device)"}
                           macros={{ "$(device)": "testIOC:BO1" }}
                           onColor="default"
                           offColor={theme.palette.error.main}
@@ -177,7 +177,7 @@ const MobileDemo1 = (props) => {
                   </Grid>
                   <Grid item xs={4} sm={4} lg={4}>
                     <ToggleButton
-                      pv={editMode?"enter PV name":"$(device)"}
+                      pv={"$(device)"}
                       macros={{ "$(device)": "testIOC:BO1" }}
                       custom_selection_strings={["OFF", "ON"]}
                        editMode={editMode}
@@ -188,7 +188,7 @@ const MobileDemo1 = (props) => {
                     <SelectionList
                       debug={false}
                       horizontal={true}
-                      pv={editMode?"enter PV name":"loc://editorType"}
+                      pv={"loc://editorType"}
                       useStringValue={true}
                       custom_selection_strings={["ThumbWheel", "Slider"]}
                       initialLocalVariableValue="ThumbWheel"
@@ -208,7 +208,7 @@ const MobileDemo1 = (props) => {
                             style={{ textAlign: "center", marginTop: "16px" }}
                           >
                             <ThumbWheel
-                              pv={editMode?"enter PV name":"$(device)"}
+                              pv={"$(device)"}
                               macros={{ "$(device)": "testIOC:amplitude" }}
                               prec_integer={3}
                               prec_decimal={1}
@@ -229,7 +229,7 @@ const MobileDemo1 = (props) => {
                         >
                           <Grid item xs={12}>
                             <Slider
-                              pv={editMode?"enter PV name":"$(device):amplitude"}
+                              pv={"$(device):amplitude"}
                               macros={{ "$(device)": "testIOC" }}
                               usePvMinMax={true}
                                editMode={editMode}
@@ -266,7 +266,7 @@ const MobileDemo1 = (props) => {
                     >
                       <Grid item xs={12} lg={4}>
                         <TextInput
-                          pv={editMode?"enter PV name":"$(device):frequency"}
+                          pv={"$(device):frequency"}
                           macros={{ "$(device)": "testIOC" }}
                           usePvUnits={true}
                           prec={1}
@@ -276,7 +276,7 @@ const MobileDemo1 = (props) => {
                       </Grid>
                       <Grid item xs={12} lg={4}>
                         <TextInput
-                          pv={editMode?"enter PV name":"$(device):amplitude"}
+                          pv={"$(device):amplitude"}
                           macros={{ "$(device)": "testIOC" }}
                           usePvUnits={true}
                           usePvLabel={true}

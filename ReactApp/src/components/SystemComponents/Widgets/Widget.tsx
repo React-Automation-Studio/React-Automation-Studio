@@ -19,6 +19,7 @@ import { PVType } from "../PV";
  * The label, min, max, units, pv and tooltip all accept macros that can be replaced by the values defined in the macros prop.
  */
 const Widget = ({
+  editMode = false,
   disabled = false,
   onColor = "primary",
   offColor = "default",
@@ -49,7 +50,7 @@ const Widget = ({
   const [label, setLabel] = useState("");
   const [passedTooltip] = useState(replaceMacros(tooltip));
   const [pv, setPv] = useState<PVType>({
-    value: 0,
+    value: undefined,
     label: "",
     pvName: "",
     initialized: false,
@@ -316,6 +317,7 @@ const Widget = ({
   const childPv = typeof others.pv !== "undefined" && (
     <PV
       pv={others.pv}
+      editMode={editMode} 
       makeNewSocketIoConnection={others.makeNewSocketIoConnection}
       maxPv={others.maxPv}
       minPv={others.minPv}
@@ -372,14 +374,17 @@ const Widget = ({
       max: max,
       prec: prec,
       label: label,
-      formControlLabel: initialized ? (
-        label
-      ) : (
-        <span style={{ fontSize: "inherit", whiteSpace: "nowrap" }}>
-          {disconnectedIcon()}
-          {" " + pv.pvName}
-        </span>
-      ),
+      editMode: editMode,
+      formControlLabel: editMode ?
+        label : (
+          initialized ? (
+            label
+          ) : (
+            <span style={{ fontSize: "inherit", whiteSpace: "nowrap" }}>
+              {disconnectedIcon()}
+              {" " + pv.pvName}
+            </span>
+          )),
       units: units,
       disabled: hardDisabled,
       readOnly: readOnly,
@@ -401,7 +406,7 @@ const Widget = ({
       useMetadata: useMetadata,
       tooltip: tooltip,
       writeOutputValueToAllpvs: writeOutputValueToAllpvs,
-      ...(others.componentProps??{}),
+      ...(others.componentProps ?? {}),
     });
 
   const divStyle = {
@@ -455,6 +460,11 @@ interface WidgetProps {
    * If defined, then the DataConnection and the widget debugging information will be displayed.
    */
   debug?: boolean;
+  /**
+   * If defined, then the widget will be in edit mode.
+   * If not defined, then the widget will be in view mode.
+   */
+  editMode?: boolean;
   /**
    * Directive to the output value to all the pvs defined in the pvs array.
    */
@@ -623,7 +633,7 @@ interface WidgetProps {
   svgWidget?: boolean;
   /**
    * Directive to disable the context menu.
-   */ 
+   */
   disableContextMenu?: boolean;
   /**
    * 
@@ -637,7 +647,7 @@ interface WidgetProps {
    *  Do not use this prop to pass the standard widget props, use the standard props instead.
    */
   componentProps?: object;
-  
+
 }
 
 export default Widget;

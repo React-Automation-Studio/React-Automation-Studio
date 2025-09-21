@@ -249,6 +249,7 @@ const GraphY = ({
         text: props.title,
       },
       plot_bgcolor: backgroundColor,
+      autosize: true,
       xaxis: {
         domain: domain,
         gridcolor:

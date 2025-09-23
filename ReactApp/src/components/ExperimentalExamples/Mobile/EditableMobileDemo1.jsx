@@ -112,6 +112,7 @@ const MobileDemo1 = (props) => {
                     >
                       <Grid item xs={6}>
                         <TextInput
+                          key={editMode.toString()}
                           pv={"$(device):amplitude"}
                           macros={{ "$(device)": "testIOC" }}
                           usePvLabel={true}
@@ -122,6 +123,7 @@ const MobileDemo1 = (props) => {
                       </Grid>
                       <Grid item xs={6}>
                         <TextOutput
+                          key={editMode.toString()} 
                           pv={"$(device):test3"}
                           macros={{ "$(device)": "testIOC" }}
                           usePvLabel={true}
@@ -135,6 +137,7 @@ const MobileDemo1 = (props) => {
 
                   <Grid item xs={6} sm={4} lg={3}>
                     <Gauge
+                      key={editMode.toString()}
                       pv={"$(device):amplitude"}
                       macros={{ "$(device)": "testIOC" }}
                       prec={3}
@@ -153,6 +156,7 @@ const MobileDemo1 = (props) => {
                     >
                       <Grid item>
                         <StyledIconIndicator
+                          key={editMode.toString()}
                           pv={"$(device)"}
                           macros={{ "$(device)": "testIOC:BO1" }}
                           onColor={theme.palette.ok.main}
@@ -170,22 +174,24 @@ const MobileDemo1 = (props) => {
                           offColor={theme.palette.error.main}
                           label={"Off"}
                           labelPlacement={"end"}
-                           editMode={editMode}
+                          editMode={editMode}
                         />
                       </Grid>
                     </Grid>
                   </Grid>
                   <Grid item xs={4} sm={4} lg={4}>
                     <ToggleButton
+                      key={editMode.toString()}
                       pv={"$(device)"}
                       macros={{ "$(device)": "testIOC:BO1" }}
                       custom_selection_strings={["OFF", "ON"]}
-                       editMode={editMode}
+                      editMode={editMode}
                     />
                   </Grid>
 
                   <Grid item xs={12} sm={12} md={12} lg={12}>
                     <SelectionList
+                      key={editMode.toString()}
                       debug={false}
                       horizontal={true}
                       pv={"loc://editorType"}
@@ -208,6 +214,7 @@ const MobileDemo1 = (props) => {
                             style={{ textAlign: "center", marginTop: "16px" }}
                           >
                             <ThumbWheel
+                              key={editMode.toString()}
                               pv={"$(device)"}
                               macros={{ "$(device)": "testIOC:amplitude" }}
                               prec_integer={3}
@@ -229,6 +236,7 @@ const MobileDemo1 = (props) => {
                         >
                           <Grid item xs={12}>
                             <Slider
+                              key={editMode.toString()}
                               pv={"$(device):amplitude"}
                               macros={{ "$(device)": "testIOC" }}
                               usePvMinMax={true}
@@ -266,16 +274,18 @@ const MobileDemo1 = (props) => {
                     >
                       <Grid item xs={12} lg={4}>
                         <TextInput
+                          key={editMode.toString()}
                           pv={"$(device):frequency"}
                           macros={{ "$(device)": "testIOC" }}
                           usePvUnits={true}
                           prec={1}
                           usePvLabel={true}
-                           editMode={editMode}
+                          editMode={editMode}
                         />
                       </Grid>
                       <Grid item xs={12} lg={4}>
                         <TextInput
+                          key={editMode.toString()}
                           pv={"$(device):amplitude"}
                           macros={{ "$(device)": "testIOC" }}
                           usePvUnits={true}

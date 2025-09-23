@@ -276,7 +276,7 @@ const PV = ({
   let minPv =
     !useMetadata && props.usePvMinMax
       ? pvConnection(props.minPv ? props.minPv : props.pv + ".LOPR", {
-
+        editMode: editMode,
         macros: props.macros,
         debug: debug,
         initialLocalVariableValue: props.initialLocalVariableValue,

@@ -94,6 +94,7 @@ const MobileDemo1 = (props) => {
                 >
                   <Grid item xs={12}>
                     <GraphY
+                      key={editMode.toString()}
                       height={graphVH}
                       width="100%"
                       pvs={["testIOC:test4", "testIOC:test5"]}
@@ -168,6 +169,7 @@ const MobileDemo1 = (props) => {
                       </Grid>
                       <Grid item>
                         <StyledIconIndicator
+                          key={editMode.toString()}
                           pv={"$(device)"}
                           macros={{ "$(device)": "testIOC:BO1" }}
                           onColor="default"

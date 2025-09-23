@@ -7,6 +7,7 @@ import { isMobileOnly } from "react-device-detect";
 import { replaceMacros } from "../SystemComponents/Utils/macroReplacement";
 import { useUpdateDataWorker } from "./GraphY/UpdateDataWorker";
 const PlotData = (props) => {
+  const { editMode } = props;
   const theme = useTheme();
   const contextInfoReducer = (oldPvs, newData) => {
     let pvs = [...oldPvs];
@@ -78,6 +79,7 @@ const PlotData = (props) => {
     return props.pvs.map((item, index) =>
       processUpdate ? (
         <PV
+          editMode={editMode}
           key={index.toString()}
           pv={item}
           macros={props.macros}
@@ -114,6 +116,7 @@ const PlotData = (props) => {
  * See the backgroundColor prop for the workaround.
  */
 const GraphY = ({
+  editMode = false,
   updateRate = 100,
   makeNewSocketIoConnection = false,
   debug = false,
@@ -341,7 +344,9 @@ const GraphY = ({
       }}
     >
       <PlotData
+
         {...props}
+        editMode={editMode}
         backgroundColor={backgroundColor}
         updateRate={updateRate}
         makeNewSocketIoConnection={makeNewSocketIoConnection}
@@ -564,6 +569,10 @@ interface GraphYProps {
    * yAxes: Array of y-axis properties, the implementation appears broken and will be fixed in a later release
    */
   yAxes?: any[];
+  /**
+   * set the widget to in editMode
+   */
+  editMode?: boolean;
 }
 
 export default GraphY;

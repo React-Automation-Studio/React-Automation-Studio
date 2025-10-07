@@ -221,6 +221,10 @@ interface BitIndicatorsProps {
    * The color of the bits when off.
    */
   offColor?: string;
+  /**
+   * If true, the BitIndicators will be in edit mode.
+   */
+  editMode?: boolean;
 
 }
 

@@ -570,7 +570,7 @@ interface GraphYProps {
    */
   yAxes?: any[];
   /**
-   * set the widget to in editMode
+   * If true, the GraphY will be in edit mode.
    */
   editMode?: boolean;
 }

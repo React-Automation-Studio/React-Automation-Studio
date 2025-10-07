@@ -136,7 +136,10 @@ interface RadioButtonGroupProps {
    * If defined, the color of the radio button.
    */
   onColor?: "primary" | "secondary" | "default" | "error" | "info" | "success" | "warning";
-  
+  /**
+   * If true, the RadioButtonGroup will be in edit mode.
+   */
+  editMode?: boolean;
 }
 
 export default RadioButtonGroup;

@@ -257,6 +257,10 @@ interface ThumbWheelProps {
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
   tooltipProps?: object;
+  /**
+   * If true, the ThumbWheel will be in edit mode.
+   */
+  editMode?: boolean;
 }
 
 export default ThumbWheel;

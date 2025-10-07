@@ -157,6 +157,10 @@ interface SelectionInputProps {
    *  If not defined it uses the custom units as defined by the units prop.
    */
   usePvUnits?: boolean;
+  /**
+   * If true, the SelectionInput will be in edit mode.
+   */
+  editMode?: boolean;
 }
 
 export default SelectionInput;

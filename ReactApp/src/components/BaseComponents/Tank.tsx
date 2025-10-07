@@ -488,6 +488,10 @@ interface TankProps {
   tooltipProps?: object;
   /** label placement*/
   labelPlacement?: "start" | "top" | "bottom" | "end";
+  /**
+   * If true, the Tank will be in edit mode.
+   */
+  editMode?: boolean;
 }
 
 export default Tank;

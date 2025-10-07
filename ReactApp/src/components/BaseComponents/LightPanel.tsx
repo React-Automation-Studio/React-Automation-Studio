@@ -225,6 +225,10 @@ interface LightPanelProps {
    * Material UI Typography variant. Used to change the style of the value string inside the LightPanel.
    */
   variant?: string;
+  /**
+   * If true, the LightPanel will be in edit mode.
+   */
+  editMode?: boolean;
 }
 
 export default LightPanel;

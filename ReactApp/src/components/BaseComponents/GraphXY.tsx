@@ -738,6 +738,10 @@ interface GraphXYProps {
     * yAxes: Array of y-axis properties, the implementation appears broken and will be fixed in a later release
     */
    yAxes?: any[];
+  /**
+   * If true, the GraphXY will be in edit mode.
+   */
+  editMode?: boolean;
     
 }
 

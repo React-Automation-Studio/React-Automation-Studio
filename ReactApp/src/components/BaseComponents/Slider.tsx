@@ -525,6 +525,10 @@ interface SliderProps {
    */
   debug?: boolean;
   /**
+   * If true, the Slider will be in edit mode.
+   */
+  editMode?: boolean;
+  /**
    * Width of the component.
    */
   width?: string;

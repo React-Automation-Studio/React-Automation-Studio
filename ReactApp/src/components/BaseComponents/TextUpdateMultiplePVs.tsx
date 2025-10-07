@@ -178,6 +178,10 @@ interface TextUpdateMultiplePVsProps {
    * Array of the process variable names
    */
   pvs: string[];
+  /**
+   * If true, the TextUpdateMultiplePVs will be in edit mode.
+   */
+  editMode?: boolean;
 }
 
 export default TextUpdateMultiplePVs;

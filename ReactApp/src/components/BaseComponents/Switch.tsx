@@ -116,6 +116,10 @@ interface SwitchProps {
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
   tooltipProps?: object;
+  /**
+   * If true, the Switch will be in edit mode.
+   */
+  editMode?: boolean;
 }
 
 export default Switch;

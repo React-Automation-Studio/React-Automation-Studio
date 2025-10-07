@@ -148,5 +148,9 @@ interface ActionButtonProps {
    * Any of the MUI Tooltip props can be applied by defining them as an object.
    */
   tooltipProps?: Record<string, any>;
+  /**
+   * If true, the ActionButton will be in edit mode.
+   */
+  editMode?: boolean;
 }
 export default ActionButton;

@@ -111,6 +111,10 @@ interface CheckBoxProps {
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
   tooltipProps?: object;
+  /**
+   * If true, the CheckBox will be in edit mode.
+   */
+  editMode?: boolean;
 }
 
 export default CheckBox;

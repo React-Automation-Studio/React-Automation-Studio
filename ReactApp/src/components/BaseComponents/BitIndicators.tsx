@@ -107,7 +107,7 @@ const BitIndicatorsComponent = (props) => {
       direction={props.horizontal ? "row" : "column"}
     >
       <Grid key={props.label} item xs={12}>
-        {props.initialized ? (
+        {props.initialized || props.editMode ? (
           props.label
         ) : (
           <span>

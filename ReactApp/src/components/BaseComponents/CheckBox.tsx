@@ -23,6 +23,7 @@ const CheckBoxComponent = (props) => {
         marginBottom: "auto",
         marginLeft: "auto",
         marginRight: "auto",
+        pointerEvents: props.editMode ? "none" : "auto"
       }}
       disabled={props.disabled}
       label={props.formControlLabel}

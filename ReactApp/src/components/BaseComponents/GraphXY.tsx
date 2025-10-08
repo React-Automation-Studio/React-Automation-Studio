@@ -576,7 +576,7 @@ const GraphXY = ({
                         displaylogo: false,
                         scrollZoom: false,
                         displayModeBar: props.displayModeBar,
-                        staticPlot: isMobileOnly ? true : false,
+                        staticPlot: isMobileOnly || props.editMode ? true : false,
                         toImageButtonOptions: {
                           format: "svg",
                         },
@@ -585,7 +585,7 @@ const GraphXY = ({
                         displaylogo: false,
                         scrollZoom: false,
                         staticPlot:
-                          isMobileOnly && disableMobileStatic === false
+                          (isMobileOnly && disableMobileStatic === false) || props.editMode
                             ? true
                             : false,
                         toImageButtonOptions: {

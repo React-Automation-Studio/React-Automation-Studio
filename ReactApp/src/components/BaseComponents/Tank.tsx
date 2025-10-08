@@ -71,6 +71,7 @@ function getTickValues(
 }
 
 interface TankComponentProps {
+  editMode: boolean;
   height: number;
   width: number;
   aspectRatio: number;
@@ -317,11 +318,11 @@ const TankComponent = (props: TankComponentProps) => {
  * The Tank Component is an React-Automation-studio component useful fo displaying levels.
  */
 const Tank = ({
+  editMode = false,
   debug = false,
   alarmSensitive = false,
   min = 0,
   max = 100,
-
   usePvPrecision = false,
   showValue = false,
   aspectRatio = 1,

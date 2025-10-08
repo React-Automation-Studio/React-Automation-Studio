@@ -194,8 +194,8 @@ const SelectionListComponent = (props) => {
   };
 
   let itemList = getListItems(
-    props.initialized ? props.enumStrs : ["N/A", "Disconnected"],
-    props.initialized ? props.value : "Disconnected"
+    props.initialized || props.editMode ? props.enumStrs : ["N/A", "Disconnected"],
+    props.initialized || props.editMode ? props.value : "Disconnected"
   );
 
   return (

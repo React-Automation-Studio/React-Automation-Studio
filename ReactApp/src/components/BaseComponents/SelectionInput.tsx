@@ -57,7 +57,7 @@ const SelectionInputComponent = (props) => {
       onFocus={props.onUpdateWidgetFocus}
       onBlur={props.onUpdateWidgetBlur}
       onChange={handleChange}
-      label={props.initialized ? props.label : props.disconnectedIcon}
+      label={props.initialized || props.editMode ? props.label : props.disconnectedIcon}
       margin={props.margin}
       variant={props.variant}
       InputProps={inputProps}

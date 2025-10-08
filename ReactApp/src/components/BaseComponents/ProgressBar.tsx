@@ -302,7 +302,7 @@ const ProgressBarInternalComponent = (props) => {
     max = props.max;
   } else {
     units = "";
-    value = 500;
+    value = props.editMode? 0 : 500;
     min = 0;
     max = 1000;
   }
@@ -347,7 +347,7 @@ const ProgressBarInternalComponent = (props) => {
             color={color}
             showValue={props.showValue}
             showTicks={props.showTicks}
-            disabled={props.initialized === true ? undefined : true}
+            disabled={props.initialized === true || props.editMode ? undefined : true}
           />
         </div>
       }

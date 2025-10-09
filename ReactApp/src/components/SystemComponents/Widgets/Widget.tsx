@@ -387,7 +387,7 @@ const Widget = ({
           )),
       units: units,
       disabled: hardDisabled,
-      readOnly: readOnly,
+      readOnly: !editMode ? readOnly : true,
       alarmSeverity: alarmSeverity,
       enumStrs: enumStrings,
       disconnectedIcon: disconnectedIcon(),

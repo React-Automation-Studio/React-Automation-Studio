@@ -422,7 +422,7 @@ function SliderComponent(props) {
     <>
      
       <div
-        style={{ height: props.height ?? "100%", width: "100%",userSelect: 'none' }}
+        style={{ height: props.height ?? "100%", width: "100%", userSelect: 'none', pointerEvents: props.editMode ? "none" : "auto" }}
         onPointerDownCapture={handleOnClickCapture}
        
       >
@@ -524,6 +524,10 @@ interface SliderProps {
    * the widget debugging information will be displayed.
    */
   debug?: boolean;
+  /**
+   * If true, the Slider will be in edit mode.
+   */
+  editMode?: boolean;
   /**
    * Width of the component.
    */

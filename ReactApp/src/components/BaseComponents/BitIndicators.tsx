@@ -107,7 +107,7 @@ const BitIndicatorsComponent = (props) => {
       direction={props.horizontal ? "row" : "column"}
     >
       <Grid key={props.label} item xs={12}>
-        {props.initialized ? (
+        {props.initialized || props.editMode ? (
           props.label
         ) : (
           <span>
@@ -221,6 +221,10 @@ interface BitIndicatorsProps {
    * The color of the bits when off.
    */
   offColor?: string;
+  /**
+   * If true, the BitIndicators will be in edit mode.
+   */
+  editMode?: boolean;
 
 }
 

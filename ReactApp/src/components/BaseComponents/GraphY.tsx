@@ -133,6 +133,7 @@ const GraphY = ({
     display: "inline-block",
     width: "100%",
     height: "100%",
+    pointerEvents: editMode ? "none" : "auto"
   },
   maxLength,
   ...props
@@ -401,7 +402,7 @@ const GraphY = ({
                         scrollZoom: false,
                         doubleclick: false,
                         displayModeBar: props.displayModeBar,
-                        staticPlot: isMobileOnly ? true : false,
+                        staticPlot: isMobileOnly || editMode ? true : false,
                         toImageButtonOptions: {
                           format: "svg",
                         },
@@ -411,7 +412,7 @@ const GraphY = ({
                         scrollZoom: false,
 
                         staticPlot:
-                          isMobileOnly && disableMobileStatic === false
+                          (isMobileOnly && disableMobileStatic === false) || editMode
                             ? true
                             : false,
                         toImageButtonOptions: {
@@ -570,7 +571,7 @@ interface GraphYProps {
    */
   yAxes?: any[];
   /**
-   * set the widget to in editMode
+   * If true, the GraphY will be in edit mode.
    */
   editMode?: boolean;
 }

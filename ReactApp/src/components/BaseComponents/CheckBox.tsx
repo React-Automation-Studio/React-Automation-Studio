@@ -23,6 +23,7 @@ const CheckBoxComponent = (props) => {
         marginBottom: "auto",
         marginLeft: "auto",
         marginRight: "auto",
+        pointerEvents: props.editMode ? "none" : "auto"
       }}
       disabled={props.disabled}
       label={props.formControlLabel}
@@ -111,6 +112,10 @@ interface CheckBoxProps {
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
   tooltipProps?: object;
+  /**
+   * If true, the CheckBox will be in edit mode.
+   */
+  editMode?: boolean;
 }
 
 export default CheckBox;

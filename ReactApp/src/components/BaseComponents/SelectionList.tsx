@@ -194,8 +194,8 @@ const SelectionListComponent = (props) => {
   };
 
   let itemList = getListItems(
-    props.initialized ? props.enumStrs : ["N/A", "Disconnected"],
-    props.initialized ? props.value : "Disconnected"
+    props.initialized || props.editMode ? props.enumStrs : ["N/A", "Disconnected"],
+    props.initialized || props.editMode ? props.value : "Disconnected"
   );
 
   return (
@@ -280,6 +280,10 @@ interface SelectionListProps {
    *  Any of the MUI Tooltip props can applied by defining them as an object
    */
   tooltipProps?: object;
+  /**
+   * If true, the SelectionList will be in edit mode.
+   */
+  editMode?: boolean;
 }
 
 export default SelectionList;

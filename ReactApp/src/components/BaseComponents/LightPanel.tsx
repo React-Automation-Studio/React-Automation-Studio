@@ -47,8 +47,8 @@ function LightPanelComponent(props) {
       }
     }
   }
-  /* Print disconnected if PV not initialized */
-  if (!initialized) {
+  /* Print disconnected if PV not initialized and not in edit mode */
+  if (!initialized && !props.editMode) {
     val = "DISCONNECTED";
   }
   return (
@@ -65,7 +65,7 @@ function LightPanelComponent(props) {
         marginLeft: "auto",
         marginRight: "auto",
       }}
-      disabled={!initialized}
+      disabled={!props.editMode || !initialized}
       control={
         <Paper
           variant="outlined"
@@ -225,6 +225,10 @@ interface LightPanelProps {
    * Material UI Typography variant. Used to change the style of the value string inside the LightPanel.
    */
   variant?: string;
+  /**
+   * If true, the LightPanel will be in edit mode.
+   */
+  editMode?: boolean;
 }
 
 export default LightPanel;

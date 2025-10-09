@@ -44,7 +44,7 @@ const ToggleButtonComponent = (props) => {
   const { value } = props;
   let momentary = props.momentary !== undefined ? props.momentary : false;
   let text;
-  if (props.initialized) {
+  if (props.initialized || props.editMode) {
     text = props.enumStrs?props.enumStrs[value == 1 ? 1 : 0]:value == 1 ? "ON" : "OFF";
   } else {
     text = "Disconnected";
@@ -224,7 +224,10 @@ interface ToggleButtonProps {
    * Custom Selection Strings, use this to define custom strings for the enum values.i.e.["off","on"] or ["closed","open"] or ["disabled","enabled"]
    */
   custom_selection_strings?: string[];
-  
+  /**
+   * If true, the ToggleButton will be in edit mode.
+   */
+  editMode?: boolean;
 
 }
 

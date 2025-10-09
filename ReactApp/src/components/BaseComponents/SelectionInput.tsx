@@ -57,7 +57,7 @@ const SelectionInputComponent = (props) => {
       onFocus={props.onUpdateWidgetFocus}
       onBlur={props.onUpdateWidgetBlur}
       onChange={handleChange}
-      label={props.initialized ? props.label : props.disconnectedIcon}
+      label={props.initialized || props.editMode ? props.label : props.disconnectedIcon}
       margin={props.margin}
       variant={props.variant}
       InputProps={inputProps}
@@ -157,6 +157,10 @@ interface SelectionInputProps {
    *  If not defined it uses the custom units as defined by the units prop.
    */
   usePvUnits?: boolean;
+  /**
+   * If true, the SelectionInput will be in edit mode.
+   */
+  editMode?: boolean;
 }
 
 export default SelectionInput;

@@ -288,6 +288,10 @@ interface GaugeProps {
    */
   debug?: boolean;
   /**
+   * If true, the Gauge will be in edit mode.
+   */
+  editMode?: boolean;
+  /**
    * Local variable initialization value. When using loc:// type PVs.
    */
   initialLocalVariableValue?: string;

@@ -237,7 +237,7 @@ const Widget = ({
     return <CustomComponent {...props} />;
   };
 
-  const hardDisabled = !initialized || readOnly || disabled;
+  const hardDisabled = editMode ? false : !initialized || readOnly || disabled;
 
   const disconnectedIcon = () => {
     return (

@@ -1,4 +1,4 @@
-FROM node:24.13.1 AS node_cache
+FROM node:24.15.0 AS node_cache
 ADD ./ReactApp/package.json /ReactApp/package.json
 WORKDIR /ReactApp
 ENV PATH /ReactApp/node_modules/.bin:$PATH

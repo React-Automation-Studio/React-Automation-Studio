@@ -1,0 +1,35 @@
+# Test stack: extends the dev styleguide stack with a test-runner container
+# that drives @storybook/test-runner against the live Storybook + pvServer +
+# demoIOC.
+#
+# Run with `docker compose run`, NOT `docker compose up --abort-on-container-exit`:
+# the dev stack contains build-only services (e.g. epicsbase) that exit 0 after
+# providing their image layer, which would trigger an early shutdown.
+#
+# Usage:
+#   docker compose -f docker-compose-test.yml run --build --rm test-runner
+#   docker compose -f docker-compose-test.yml down       # clean up afterwards
+#
+# `run` brings up depends_on services, runs the test-runner in the foreground,
+# and returns the test-runner's exit code (0 = pass, non-zero = fail).
+include:
+  - docker-compose-dev-styleguide-dev.yml
+
+services:
+  test-runner:
+    build:
+      context: ./
+      dockerfile: docker/testRunner/Dockerfile
+      additional_contexts:
+        node_cache: "service:node_cache"
+    depends_on:
+      - storybookserverdev
+      - pvserver1
+      - demoioc
+    volumes:
+      - ./test-results:/ReactApp/test-results
+    command: >
+      sh -c "
+        pnpm exec wait-on -t 180000 http-get://storybookserverdev:6006 &&
+        pnpm test-storybook --url http://storybookserverdev:6006 --maxWorkers=1
+      "

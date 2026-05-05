@@ -4,11 +4,8 @@ FROM ${BASE_IMAGE} AS epicsbase
 
 RUN apt-get update && apt-get install -y wget autoconf libtool check patch build-essential libreadline-dev re2c libxml2-dev tmux software-properties-common curl
 
-# Download the latest installer
-ADD https://astral.sh/uv/install.sh /uv-installer.sh
-
-# Run the installer then remove it
-RUN sh /uv-installer.sh && rm /uv-installer.sh
+# Download and run the latest UV installer
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 RUN install -Dm755 /root/.local/bin/uv /usr/local/bin/uv
 # Ensure the installed binary is on the `PATH`
 ENV PATH="/usr/local/bin/uv:$PATH"

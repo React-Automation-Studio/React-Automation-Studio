@@ -22,14 +22,47 @@ services:
       dockerfile: docker/testRunner/Dockerfile
       additional_contexts:
         node_cache: "service:node_cache"
+    # Use host networking so the test browser hits Storybook through the same
+    # nginx entry-point a real user would (`http://localhost:6060`). Matches
+    # the pattern used by pvserver1, mongo, alarmhandlerserver, etc.
+    network_mode: host
+    # Mirrors every runtime service in docker-compose-dev-styleguide-dev.yml so
+    # the full backend (Mongo replica set + DB seeders + alarm handler +
+    # signalcli + areadetectorsim + nginx etc.) is up before tests run. Build-
+    # only services (epicsbase, node_cache) are pulled in transitively.
     depends_on:
-      - storybookserverdev
+      - frontendserverdev
       - pvserver1
+      - nginx
+      - unsecurestylguidepvserver
       - demoioc
+      - signalcli
+      - initializealarmhandlerdb
+      - alarmhandlerserver
+      - mongo1
+      - mongo2
+      - mongo3
+      - mongosetup
+      - initializeloadsavedb
+      - storybookserverdev
+      - initializeadmindb
+      - areadetectorsim
     volumes:
       - ./test-results:/ReactApp/test-results
+      # test-storybook reads .storybook/main.js to learn the framework + addons
+      # and walks `stories:` patterns against ./src to enumerate which stories
+      # to run. Mount both read-only so the runner sees the same source the
+      # live Storybook is serving.
+      - ./ReactApp/.storybook:/ReactApp/.storybook:ro
+      - ./ReactApp/src:/ReactApp/src:ro
+    # Hit storybook directly via the host port mapping (6061 -> storybook 6006).
+    # network_mode: host above means localhost:6061 reaches that mapping.
+    # We deliberately bypass nginx (https) for tests because @storybook/test-runner's
+    # custom Jest environment creates the Playwright browser context outside the
+    # standard jest-playwright config path, so ignoreHTTPSErrors / cert overrides
+    # are awkward to apply. HTTP-direct keeps the test stack simple.
     command: >
       sh -c "
-        pnpm exec wait-on -t 180000 http-get://storybookserverdev:6006 &&
-        pnpm test-storybook --url http://storybookserverdev:6006 --maxWorkers=1
+        pnpm exec wait-on -t 300000 http-get://localhost:6061 &&
+        pnpm test-storybook --url http://localhost:6061 --maxWorkers=1 --verbose
       "

@@ -42,22 +42,35 @@ export const IocRoundtripTest = {
     usePvMinMax: true,
     alarmSensitive: true,
   },
-  parameters: { docs: { disable: true } },
-  tags: ['!autodocs'],
+  // !dev hides the story from the Storybook sidebar (so users browsing the
+  //   styleguide don't see the value flicker through 42 -> 5000),
+  // !autodocs skips its inclusion in the auto-generated docs page,
+  // 'roundtrip-test' lets us isolate this story during debugging via:
+  //   pnpm test-storybook --includeTags roundtrip-test
+  // The implicit 'test' tag is still present, so test-runner picks it up.
+  tags: ['!dev', '!autodocs', 'roundtrip-test'],
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const input = await waitFor(() => canvas.getByRole('textbox'), { timeout: 15000 });
-    await waitFor(() => expect(input).not.toBeDisabled(), { timeout: 15000 });
 
+    const input = await canvas.findByRole('textbox', {}, { timeout: 5000 });
+  
+    // Initial PV value (testIOC:test2 has VAL=5000 in the demo IOC db) — also
+    // doubles as the "PV is connected" gate, since the value stays as the PV
+    // name string until connection completes.
+    await waitFor(
+      () => expect(parseFloat(input.value)).toBe(5000),
+      { timeout: 5000 },
+    );
+
+    // Write 42, Enter triggers handleCommitChange -> pvServer write -> IOC.
     await userEvent.clear(input);
     await userEvent.type(input, '42{Enter}');
-
     await waitFor(
       () => expect(parseFloat(input.value)).toBe(42),
       { timeout: 5000 },
     );
 
-    // Reset to a known value so subsequent runs/users see a sane state
+    // Reset to the original value so subsequent test runs / users see a sane state.
     await userEvent.clear(input);
     await userEvent.type(input, '5000{Enter}');
     await waitFor(

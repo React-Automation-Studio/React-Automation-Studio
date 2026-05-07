@@ -55,14 +55,20 @@ services:
       # live Storybook is serving.
       - ./ReactApp/.storybook:/ReactApp/.storybook:ro
       - ./ReactApp/src:/ReactApp/src:ro
-    # Hit storybook directly via the host port mapping (6061 -> storybook 6006).
-    # network_mode: host above means localhost:6061 reaches that mapping.
-    # We deliberately bypass nginx (https) for tests because @storybook/test-runner's
-    # custom Jest environment creates the Playwright browser context outside the
-    # standard jest-playwright config path, so ignoreHTTPSErrors / cert overrides
-    # are awkward to apply. HTTP-direct keeps the test stack simple.
+      # Auto-discovered by test-runner; extends jest config to bump testTimeout
+      # to 60s and pass ignoreHTTPSErrors through to the Playwright browser
+      # context so the self-signed nginx cert is accepted.
+      - ./ReactApp/test-runner-jest.config.cjs:/ReactApp/test-runner-jest.config.cjs:ro
+    # Run through nginx at https://localhost:6060 (same path real users hit).
+    # nginx proxies /socket.io and /api to the unsecure styleguide pvServer, so
+    # the PV roundtrip works end-to-end. The self-signed cert is accepted via
+    # NODE_TLS_REJECT_UNAUTHORIZED=0 (Node-side fetch) plus contextOptions
+    # ignoreHTTPSErrors (Playwright/Chromium) configured in
+    # ReactApp/test-runner-jest.config.cjs.
+    environment:
+      - NODE_TLS_REJECT_UNAUTHORIZED=0
     command: >
       sh -c "
-        pnpm exec wait-on -t 300000 http-get://localhost:6061 &&
-        pnpm test-storybook --url http://localhost:6061 --maxWorkers=1 --verbose
+        pnpm exec wait-on -t 300000 https-get://localhost:6060 &&
+        pnpm test-storybook --url https://localhost:6060 --maxWorkers=1 --verbose
       "

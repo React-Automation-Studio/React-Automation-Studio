@@ -3,7 +3,7 @@ import LoadSaveExample from "./LoadSaveExample";
 export default {
   component: LoadSaveExample,
   parameters: {},
-  tags: ["autodocs"],
+  tags: ["!dev", "!autodocs"],
   argTypes: {},
 };
 

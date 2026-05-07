@@ -3,7 +3,7 @@ import ArchiverDataViewerDemo from "./ArchiverDataViewerDemo";
 export default {
   component: ArchiverDataViewerDemo,
   parameters: {},
-  tags: ["autodocs"],
+  tags: ["!dev", "!autodocs"],
   argTypes: {},
 };
 

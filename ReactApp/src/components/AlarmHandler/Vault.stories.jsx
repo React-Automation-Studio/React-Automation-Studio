@@ -3,7 +3,7 @@ import Vault from "./Vault";
 export default {
   component: Vault,
   parameters: {},
-  tags: ["autodocs"],
+  tags: ["!dev", "!autodocs"],
   argTypes: {},
 };
 

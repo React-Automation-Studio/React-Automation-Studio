@@ -3,7 +3,7 @@ import Staging from "./Staging";
 export default {
   component: Staging,
   parameters: {},
-  tags: ["autodocs"],
+  tags: ["!dev", "!autodocs"],
   argTypes: {},
 };
 

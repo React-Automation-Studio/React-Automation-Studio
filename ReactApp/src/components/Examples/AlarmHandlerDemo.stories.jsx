@@ -3,7 +3,7 @@ import AlarmHandlerDemo from "./AlarmHandlerDemo";
 export default {
   component: AlarmHandlerDemo,
   parameters: {},
-  tags: ["autodocs"],
+  tags: ["!dev", "!autodocs"],
   argTypes: {},
 };
 

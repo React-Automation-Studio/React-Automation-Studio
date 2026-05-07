@@ -3,7 +3,7 @@ import MainDashboard from "./MainDashboard";
 export default {
   component: MainDashboard,
   parameters: {},
-  tags: ["autodocs"],
+  tags: ["!dev", "!autodocs"],
   argTypes: {},
 };
 

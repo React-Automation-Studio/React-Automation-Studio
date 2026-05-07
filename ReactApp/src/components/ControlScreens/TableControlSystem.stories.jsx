@@ -3,7 +3,7 @@ import TableControlSystem from "./TableControlSystem";
 export default {
   component: TableControlSystem,
   parameters: {},
-  tags: ["autodocs"],
+  tags: ["!dev", "!autodocs"],
   argTypes: {},
 };
 

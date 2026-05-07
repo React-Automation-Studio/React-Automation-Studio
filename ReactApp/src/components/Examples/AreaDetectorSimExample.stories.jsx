@@ -3,7 +3,7 @@ import AreaDetectorSimExample from "./AreaDetectorSimExample";
 export default {
   component: AreaDetectorSimExample,
   parameters: {},
-  tags: ["autodocs"],
+  tags: ["!dev", "!autodocs"],
   argTypes: {},
 };
 

@@ -73,3 +73,11 @@ export const CustomLabel = {
   }
 };
 
+// TODO: Slider IocRoundtripTest deferred. RAS Slider is built on rc-slider
+// which is hostile to @storybook/test-runner: its drag is initialised in an
+// onMouseDown closure that listens via document.addEventListener for
+// mousemove/mouseup, and synthetic events from headless Chromium don't reach
+// those listeners (tried fireEvent + native dispatchEvent + keyDown). Revisit
+// when rc-slider exposes a keyboard path or this is switched to MUI Slider
+// (which has a hidden <input type="range"> we can drive via fireEvent.change).
+

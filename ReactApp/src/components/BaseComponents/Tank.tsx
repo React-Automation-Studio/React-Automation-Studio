@@ -180,7 +180,14 @@ const TankComponent = (props: TankComponentProps) => {
         label={props.formControlLabel}
         labelPlacement={props.labelPlacement}
         control={
-          <svg width={width} height={height}>
+          <svg
+            width={width}
+            height={height}
+            role="meter"
+            aria-valuenow={initialized ? props.value : undefined}
+            aria-valuemin={initialized ? props.min : undefined}
+            aria-valuemax={initialized ? props.max : undefined}
+          >
             <linearGradient id={gradientId + "baseleft1"}>
               <stop
                 offset="0%"

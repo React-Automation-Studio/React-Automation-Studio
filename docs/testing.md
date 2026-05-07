@@ -105,18 +105,55 @@ component) or **[D]** (Display, read component). Those play functions run
 | Component | Stories | Notes |
 |-----------|---------|-------|
 | AlarmHandler | Primary | smoke covers full alarm-handler page mount |
+| Vault | Primary | alarm vault page (linked from dashboard `/VaultDemo`) |
 
 ### `components/ArchiverDataViewer/`
 
 | Component | Stories | Notes |
 |-----------|---------|-------|
 | ArchiverDataViewer | Overview | requires a configured archiver — smoke only |
+| ArchiverDataViewerDemo | Primary | demo wiring (linked from dashboard `/ArchiverDataViewerDemo`) |
 
 ### `components/LoadSaveComponent/`
 
 | Component | Stories | Notes |
 |-----------|---------|-------|
 | LoadSave | Overview | smoke covers full load/save page mount |
+
+### `components/ControlScreens/`
+
+| Component | Stories | Notes |
+|-----------|---------|-------|
+| BeamlineControlSystem | Primary | full-page beamline control demo (dashboard `/BeamlineControlSystem`) |
+| TableControlSystem | Primary | full-page table-style control demo (dashboard `/TableControlSystem`) |
+
+### `components/Examples/`
+
+| Component | Stories | Notes |
+|-----------|---------|-------|
+| AlarmHandlerDemo | Primary | dashboard `/AlarmHandlerDemo` |
+| AreaDetectorSimExample | Primary | dashboard `/AreaDetectorSimExample` |
+| EpicsDemos | Primary | dashboard `/EpicsDemos` |
+| Mobile/MobileDemo1 | Primary | dashboard `/MobileDemo1` |
+| Mobile/MobileDemo2 | Primary | dashboard `/MobileDemo2` |
+
+### `components/ExperimentalExamples/`
+
+| Component | Stories | Notes |
+|-----------|---------|-------|
+| LoadSaveExample | Primary | dashboard `/LoadSaveExample` |
+
+### `components/Experimental/`
+
+| Component | Stories | Notes |
+|-----------|---------|-------|
+| Test3D | Primary | three.js 3D demo (dashboard `/Test3D`) |
+
+### `components/staging/`
+
+| Component | Stories | Notes |
+|-----------|---------|-------|
+| Staging | Primary | dashboard `/Staging` |
 
 ### `components/SvgBeamlineComponents/`
 
@@ -143,11 +180,12 @@ story.
 |-----------|---------|-------|
 | SvgComponent | Overview | preview / experimental |
 
-### `components/UI/Layout/ComposedLayouts/`
+### `components/UI/`
 
 | Component | Stories | Notes |
 |-----------|---------|-------|
-| TraditionalLayout | Overview, Example1, Example2, Example3 | layout demo |
+| MainDashboard | Primary | the entry page itself — every dashboard link target also has its own smoke story below |
+| Layout/ComposedLayouts/TraditionalLayout | Overview, Example1, Example2, Example3 | layout demo |
 
 ### `docs/layout/layoutExamples/`
 
@@ -159,12 +197,12 @@ story.
 
 | Coverage type | Count | Where |
 |---|---|---|
-| Smoke (all stories that aren't tagged `!test`) | ~99 stories across 45 story files | every component / page with `.stories.*` |
+| Smoke (all stories that aren't tagged `!test`) | 112 stories across 58 story files | every component / page with `.stories.*` |
 | Roundtrip play function | 8 | TextInput, ActionButton, ToggleButton, Switch, CheckBox, RadioButtonGroup, SelectionInput, SelectionList |
 | Display play function | 6 | TextOutput, TextUpdate, LightPanel, ProgressBar, Tank, Gauge |
 | Deferred | 1 | Slider — rc-slider hostile to test-runner |
 | Skipped from test-runner | 1 | Login — needs `<GoogleOAuthProvider>` context |
-| Smoke-only (no play function yet) | 30 | balance — most are display-only or page-level |
+| Smoke-only (no play function yet) | 43 | balance — display-only widgets, page-level demos, beamline SVGs |
 
 ## Adding a new test
 

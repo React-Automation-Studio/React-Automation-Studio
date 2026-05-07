@@ -19,6 +19,7 @@
 
 # IDE
 /.vscode
+/.claude
 
 # production
 

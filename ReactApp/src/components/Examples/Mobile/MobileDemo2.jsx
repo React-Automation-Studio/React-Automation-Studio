@@ -43,23 +43,38 @@ const mbboMacros = { "$(device)": "testIOC:mbboTest1" };
 
 const TrendsSection = () => {
   const theme = useTheme();
+  const graphBg = theme.palette.background.paper;
   return (
     <Grid container spacing={2}>
       <Grid size={{ xs: 12, lg: 6 }}>
-        <Box sx={{ height: { xs: "20vh", lg: "22vh" } }}>
+        <Box
+          sx={{
+            height: { xs: "20vh", lg: "22vh" },
+            borderRadius: 1.5,
+            overflow: "hidden",
+          }}
+        >
           <GraphY
             pvs={["testIOC:test4", "testIOC:test5"]}
             legend={["Sine Wave", "Amplitude"]}
+            backgroundColor={graphBg}
           />
         </Box>
       </Grid>
       <Grid size={{ xs: 12, lg: 6 }}>
-        <Box sx={{ height: { xs: "20vh", lg: "22vh" } }}>
+        <Box
+          sx={{
+            height: { xs: "20vh", lg: "22vh" },
+            borderRadius: 1.5,
+            overflow: "hidden",
+          }}
+        >
           <GraphY
             pvs={["testIOC:amplitude"]}
             legend={["Instantaneous Amplitude"]}
             maxLength={1000}
             lineColor={[theme.palette.reactVis.lineColors[1]]}
+            backgroundColor={graphBg}
           />
         </Box>
       </Grid>

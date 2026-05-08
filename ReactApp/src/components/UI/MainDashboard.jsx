@@ -2,9 +2,7 @@ import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
 import { alpha, useTheme } from "@mui/material/styles";
 import DesktopWindowsIcon from "@mui/icons-material/DesktopWindows";
 import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
@@ -27,86 +25,8 @@ import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import TraditionalLayout from "./Layout/ComposedLayouts/TraditionalLayout";
+import SectionCard from "./SectionCard";
 import Changelog from "./Changelog";
-
-const DashboardCard = ({
-  icon: Icon,
-  title,
-  elevation,
-  scrollable = false,
-  children,
-}) => {
-  const theme = useTheme();
-  const hoverShadow = theme.shadows[Math.min((elevation ?? 1) + 2, 24)];
-  return (
-    <Paper
-      elevation={elevation}
-      sx={{
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        p: { xs: 2.5, sm: 3 },
-        gap: 2.5,
-        borderRadius: 2,
-        transition: theme.transitions.create("box-shadow", {
-          duration: theme.transitions.duration.shortest,
-        }),
-        "&:hover": { boxShadow: hoverShadow },
-      }}
-    >
-      <Stack
-        direction="row"
-        spacing={1.5}
-        alignItems="center"
-        justifyContent="center"
-      >
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: 40,
-            height: 40,
-            borderRadius: "50%",
-            color: "primary.main",
-            bgcolor: alpha(theme.palette.primary.main, 0.12),
-          }}
-        >
-          <Icon />
-        </Box>
-        <Typography
-          variant="h6"
-          component="div"
-          sx={{ fontWeight: 600, letterSpacing: 0.3 }}
-        >
-          {title}
-        </Typography>
-      </Stack>
-      <Box
-        sx={{
-          flex: 1,
-          minHeight: 0,
-          ...(scrollable && {
-            maxHeight: "42vh",
-            overflowY: "auto",
-            pr: 1,
-            mr: -1,
-            "&::-webkit-scrollbar": { width: 6 },
-            "&::-webkit-scrollbar-thumb": {
-              bgcolor: alpha(theme.palette.text.primary, 0.2),
-              borderRadius: 3,
-            },
-            "&::-webkit-scrollbar-thumb:hover": {
-              bgcolor: alpha(theme.palette.text.primary, 0.35),
-            },
-          }),
-        }}
-      >
-        {children}
-      </Box>
-    </Paper>
-  );
-};
 
 const NavButton = ({ link }) => {
   const theme = useTheme();
@@ -261,74 +181,74 @@ const MainDashboard = () => {
       >
         <Grid container spacing={3} alignItems="stretch">
           <Grid size={{ xs: 12, sm: 6, lg: 4 }}>
-            <DashboardCard
+            <SectionCard
               icon={PhoneAndroidIcon}
               title="Mobile Demos"
               elevation={elevation}
             >
               <NavButtonStack links={mobileDemoLinks} />
-            </DashboardCard>
+            </SectionCard>
           </Grid>
 
           <Grid size={{ xs: 12, sm: 6, lg: 4 }}>
-            <DashboardCard
+            <SectionCard
               icon={DesktopWindowsIcon}
               title="Desktop Demos"
               elevation={elevation}
             >
               <NavButtonStack links={desktopDemoLinks} />
-            </DashboardCard>
+            </SectionCard>
           </Grid>
 
           <Grid size={{ xs: 12, sm: 12, lg: 4 }}>
-            <DashboardCard
+            <SectionCard
               icon={NewReleasesIcon}
               title="What's New"
               elevation={elevation}
               scrollable
             >
               <Changelog />
-            </DashboardCard>
+            </SectionCard>
           </Grid>
 
           <Grid size={{ xs: 12, sm: 6, lg: 3 }}>
-            <DashboardCard
+            <SectionCard
               icon={EditIcon}
               title="Staging"
               elevation={elevation}
             >
               <NavButtonStack links={stagingLinks} />
-            </DashboardCard>
+            </SectionCard>
           </Grid>
 
           <Grid size={{ xs: 12, sm: 6, lg: 3 }}>
-            <DashboardCard
+            <SectionCard
               icon={VisibilityIcon}
               title="Appliances"
               elevation={elevation}
             >
               <NavButtonStack links={applianceLinks} />
-            </DashboardCard>
+            </SectionCard>
           </Grid>
 
           <Grid size={{ xs: 12, sm: 6, lg: 3 }}>
-            <DashboardCard
+            <SectionCard
               icon={VisibilityIcon}
               title="Preview"
               elevation={elevation}
             >
               <NavButtonStack links={previewLinks} />
-            </DashboardCard>
+            </SectionCard>
           </Grid>
 
           <Grid size={{ xs: 12, sm: 6, lg: 3 }}>
-            <DashboardCard
+            <SectionCard
               icon={HelpIcon}
               title="Help"
               elevation={elevation}
             >
               <NavButtonStack links={helpLinks} />
-            </DashboardCard>
+            </SectionCard>
           </Grid>
         </Grid>
       </Box>

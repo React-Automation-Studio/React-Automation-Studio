@@ -416,10 +416,19 @@ const MainDashboard = (props) => {
                   }}
                   component="div"
                 >
+                   V8.0.1 Tuesday 5 May 2026
+                  <br />
+                  Minor Updates:
+                  <ul>
+                    <li>Updated to the latest Node LTS 24.15.0</li>
+                    <li>Updated to pnpm 10.33.3</li>
+                    <li>Package updates to frontend modules</li>
+                    <li>Switched UV install in epicsBase Dockerfile from ADD to RUN curl to improve build cache stability</li>
+                  </ul>
                    V8.0.0 Wednesday 18 February 2026
                   <br />
                   Major Updates:
-                  <ul>     
+                  <ul>
                     <li>Updated to the latest Node LTS 24.13.1 </li>
                     <li>Switched to UV Python package management</li>
                     <li>Updated to Python 3.13.11</li>

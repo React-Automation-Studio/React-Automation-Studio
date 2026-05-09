@@ -1,6 +1,6 @@
 [project]
 name = "mongoSetup"
-version = "8.0.0"
+version = "8.0.1"
 dependencies = [
 "pymongo==4.16.0"
 ]

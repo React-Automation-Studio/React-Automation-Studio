@@ -1,4 +1,4 @@
-Current Release: V8.0.0
+Current Release: V8.0.1
 
 **Migration Guides:**
 - [Migrate from V7.x.x to V8.x.x](docs/migrate-from-V7-to-V8.md)
@@ -661,6 +661,16 @@ or: https://doi.org/10.18429/JACoW-ICALEPCS2023-FR2BCO01
 
 
 # Changelog
+
+ V8.0.1 Tuesday 5 May 2026
+  <br />
+  Minor Updates:
+  <ul>
+    <li>Updated to the latest Node LTS 24.15.0</li>
+    <li>Updated to pnpm 10.33.3</li>
+    <li>Package updates to frontend modules</li>
+    <li>Switched UV install in epicsBase Dockerfile from ADD to RUN curl to improve build cache stability</li>
+  </ul>
 
  V8.0.0 Wednesday 18 February 2026
   <br />

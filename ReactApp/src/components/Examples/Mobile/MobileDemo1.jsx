@@ -38,11 +38,11 @@ const MainView = () => {
 
   return (
     <SectionCard elevation={elevation}>
-      <Stack spacing={3}>
+      <Stack spacing={2}>
         <SubSection title="Trend">
           <Box
             sx={{
-              height: "24vh",
+              height: "30vh",
               borderRadius: 1.5,
               overflow: "hidden",
             }}
@@ -57,7 +57,17 @@ const MainView = () => {
 
         <SubSection title="Readouts">
           <Grid container spacing={2} alignItems="center">
-            <Grid size={{ xs: 12, sm: 4 }}>
+            <Grid size={{ xs: 12, sm: 4, md: 3 }}>
+              <Box sx={{ maxWidth: 340, mx: "auto" }}>
+                <Gauge
+                  pv="$(device):amplitude"
+                  macros={deviceMacros}
+                  prec={3}
+                  usePvMinMax
+                />
+              </Box>
+            </Grid>
+            <Grid size={{ xs: 12, sm: 4, md: 2 }}>
               <Stack spacing={2}>
                 <TextInput
                   pv="$(device):amplitude"
@@ -75,82 +85,71 @@ const MainView = () => {
                 />
               </Stack>
             </Grid>
-            <Grid size={{ xs: 12, sm: 4 }}>
-              <Box sx={{ maxWidth: 220, mx: "auto" }}>
-                <Gauge
-                  pv="$(device):amplitude"
-                  macros={deviceMacros}
-                  prec={3}
-                  usePvMinMax
+            <Grid size={{ xs: 6, sm: 2, md: 2 }}>
+              <Stack spacing={1}>
+                <StyledIconIndicator
+                  pv="$(device)"
+                  macros={bo1Macros}
+                  onColor={theme.palette.ok.main}
+                  offColor="default"
+                  label="On"
+                  labelPlacement="end"
                 />
-              </Box>
-            </Grid>
-            <Grid size={{ xs: 12, sm: 4 }}>
-              <Stack
-                spacing={2}
-                sx={{ height: "100%", justifyContent: "center" }}
-              >
-                <Stack spacing={1}>
-                  <StyledIconIndicator
-                    pv="$(device)"
-                    macros={bo1Macros}
-                    onColor={theme.palette.ok.main}
-                    offColor="default"
-                    label="On"
-                    labelPlacement="end"
-                  />
-                  <StyledIconIndicator
-                    pv="$(device)"
-                    macros={bo1Macros}
-                    onColor="default"
-                    offColor={theme.palette.error.main}
-                    label="Off"
-                    labelPlacement="end"
-                  />
-                </Stack>
-                <Box sx={{ display: "flex", justifyContent: "center" }}>
-                  <ToggleButton
-                    pv="$(device)"
-                    macros={bo1Macros}
-                    custom_selection_strings={["OFF", "ON"]}
-                  />
-                </Box>
+                <StyledIconIndicator
+                  pv="$(device)"
+                  macros={bo1Macros}
+                  onColor="default"
+                  offColor={theme.palette.error.main}
+                  label="Off"
+                  labelPlacement="end"
+                />
               </Stack>
+            </Grid>
+            <Grid
+              size={{ xs: 6, sm: 2, md: "grow" }}
+              sx={{ alignSelf: "stretch", display: "flex" }}
+            >
+              <ToggleButton
+                pv="$(device)"
+                macros={bo1Macros}
+                custom_selection_strings={["OFF", "ON"]}
+              />
             </Grid>
           </Grid>
         </SubSection>
 
         <SubSection title="Editor">
-          <Stack spacing={2}>
-            <SelectionList
-              horizontal
-              pv="loc://editorType"
-              useStringValue
-              custom_selection_strings={["ThumbWheel", "Slider"]}
-              initialLocalVariableValue="ThumbWheel"
-            />
-            {editorType.value === "ThumbWheel" && (
-              <Box
-                sx={{ display: "flex", justifyContent: "center", pt: 1 }}
-              >
-                <ThumbWheel
-                  pv="$(device)"
-                  macros={amplitudeMacros}
-                  prec_integer={3}
-                  prec_decimal={1}
-                />
-              </Box>
-            )}
-            {editorType.value === "Slider" && (
-              <Box sx={{ pt: 1 }}>
-                <Slider
-                  pv="$(device):amplitude"
-                  macros={deviceMacros}
-                  usePvMinMax
-                />
-              </Box>
-            )}
-          </Stack>
+          <Grid container spacing={2} alignItems="center">
+            <Grid size={{ xs: 12, sm: 3, md: 2 }}>
+              <SelectionList
+                pv="loc://editorType"
+                useStringValue
+                custom_selection_strings={["ThumbWheel", "Slider"]}
+                initialLocalVariableValue="ThumbWheel"
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 9, md: 10 }}>
+              {editorType.value === "ThumbWheel" && (
+                <Box sx={{ textAlign: "center" }}>
+                  <ThumbWheel
+                    pv="$(device)"
+                    macros={amplitudeMacros}
+                    prec_integer={3}
+                    prec_decimal={1}
+                  />
+                </Box>
+              )}
+              {editorType.value === "Slider" && (
+                <Box>
+                  <Slider
+                    pv="$(device):amplitude"
+                    macros={deviceMacros}
+                    usePvMinMax
+                  />
+                </Box>
+              )}
+            </Grid>
+          </Grid>
         </SubSection>
       </Stack>
     </SectionCard>
@@ -200,7 +199,7 @@ const MobileDemo1 = () => {
       denseAppBar
       alignTitle="center"
     >
-      <Box sx={{ p: 2, pb: 9, overflowX: "hidden" }}>
+      <Box sx={{ p: 2, pb: 7, overflowX: "hidden" }}>
         {tabIndex === 0 && <MainView />}
         {tabIndex === 1 && <SettingsView />}
       </Box>
@@ -218,10 +217,17 @@ const MobileDemo1 = () => {
           scrollButtons={false}
           textColor="primary"
           indicatorColor="primary"
+          sx={{ minHeight: 44, "& .MuiTab-root": { minHeight: 44, py: 0.5 } }}
         >
-          <Tab icon={<AccountCircleIcon />} label="Main" aria-label="Main" />
+          <Tab
+            icon={<AccountCircleIcon />}
+            iconPosition="start"
+            label="Main"
+            aria-label="Main"
+          />
           <Tab
             icon={<SettingsOutlinedIcon />}
+            iconPosition="start"
             label="Settings"
             aria-label="Settings"
           />

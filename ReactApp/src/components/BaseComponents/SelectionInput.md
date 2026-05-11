@@ -1,65 +1,44 @@
+# SelectionInput
 
+Dropdown (`<TextField select>`) that lists the enum strings of an MBBI
+/ MBBO PV and writes the selected string back. Built on MUI
+`<TextField>`.
 
-SelectionInput example connection to a SoftChannel EPICS MBBO pv with EPICS pv strings for choice:
+## When to use
 
-```js
-{/*The TextOutput code is included for demonstration purposes only*/}  
-{/*Only the the JSX code between the hashes  is required to instantiate the SelectionInput */}  
-  import TextOutput from './TextOutput';
-  <div style={{textAlign:'center'}}>
-  <div style={{marginBottom:8}}>
-    <TextOutput
-    pv='$(device):mbboTest$(id)'
-    macros={{'$(device)':'testIOC','$(id)':'1'}}
-    usePvLabel={true}
-    useStringValue={true}/>
-  </div>
+- Multi-state PVs (modes, ranges, gain settings) where a dropdown is
+  the most compact representation.
+- Cases where the choices come from PV metadata directly (no
+  hand-maintained list needed).
 
-  {/*###############*/}  
+For radio buttons in a row/column, prefer `RadioButtonGroup`. For a
+list panel, prefer `SelectionList`.
 
-  <SelectionInput  
-  pv='$(device):mbboTest$(id)' 
-  macros={{'$(device)':'testIOC','$(id)':'1'}} 
-  horizontal={true}  
-  usePvLabel={true}
-  
-  />
+## Common patterns
 
-  {/*###############*/}
+Basic usage — choices come from the PV's enum strings:
 
-</div>
+```jsx
+<SelectionInput pv="testIOC:mbboTest1" usePvLabel />
 ```
 
-SelectionInput example connection to a SoftChannel EPICS MBBO pv with custom strings for choice:
+Custom subset of strings (only the listed values are offered):
 
-```js
-{/*The TextOutput code is included for demonstration purposes only*/}  
-{/*Only the the JSX code between the hashes  is required to instantiate the SelectionInput */}  
-  import TextOutput from './TextOutput';
-  <div style={{textAlign:'center'}}>
-  <div style={{marginBottom:8}}>
-    <TextOutput
-    pv='$(device):mbboTest$(id)'
-    macros={{'$(device)':'testIOC','$(id)':'1'}}
-    label={'Custom Label'}
-    useStringValue={true}
-    usePvLabel={true} />
-  </div>
-
-  {/*###############*/}  
-
-
-  <SelectionInput  
-   pv='$(device):mbboTest$(id)'
-   macros={{'$(device)':'testIOC','$(id)':'1'}}
-   usePvLabel={true}
-   labelPlacement='bottom'
-   custom_selection_strings={['text 1','text 3']} 
-
- 
-   />
- 
-  {/*###############*/}
-
-</div>
+```jsx
+<SelectionInput
+  pv="testIOC:mbboTest1"
+  usePvLabel
+  custom_selection_strings={["text 1", "text 3"]}
+/>
 ```
+
+`filled` variant:
+
+```jsx
+<SelectionInput pv="testIOC:mbboTest1" usePvLabel variant="filled" />
+```
+
+## See also
+
+- `RadioButtonGroup` — same choice as visible radio buttons.
+- `SelectionList` — same choice as a clickable list.

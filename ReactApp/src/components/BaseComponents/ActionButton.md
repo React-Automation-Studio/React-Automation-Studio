@@ -1,78 +1,60 @@
+# ActionButton
 
-  ActionButton EPICS BO example:
+Write-only command button. Clicking writes a fixed `actionValue` to
+the bound PV (or to every PV in `pvs`). Wraps MUI `<Button>`.
 
-```js
-{/*The TextOuput code is included for demonstration purposes only*/}  
-{/*Only the the JSX code between the hashes  is required to instantiate the ActionButton */}  
-  import TextOutput from './TextOutput';
-  <div>
-  <div style={{marginBottom:8}}>
-    <TextOutput  pv='testIOC:BO1'   label='Value of testIOC:BO1'/>
-  </div>
+## When to use
 
+- One-shot commands (start, stop, reset, save) where the button
+  has no two-state read-back semantics.
+- Multi-PV actions where the same value should be written to several
+  PVs at once.
 
-  <ActionButton
-    pv='testIOC:BO1'
-    label={"testIOC:BO1"}
-    labelPlacement={"top"}
-    actionValue={"1"}
-    actionString={"write 1 to testIOC:BO1"}
-    tooltip={
-      'Click button to write action value'
-    }
-    showTooltip={true}
-    tooltipProps={{placement:'top'}}
-  />
+For a two-state toggle, prefer `ToggleButton`. For boolean controls
+that track PV state, prefer `CheckBox` or `Switch`.
 
-  <ActionButton
-    pv='testIOC:BO1'
-    label={"testIOC:BO1"}
-    labelPlacement={"top"}
-    actionValue={"0"}
-    actionString={"write 0 to testIOC:BO1"}
-    tooltip={
-      'Click button to write action value'
-    }
-    showTooltip={true}
-    tooltipProps={{placement:'bottom'}}
-  />
-  </div>
+## Common patterns
+
+Single-PV action button:
+
+```jsx
+<ActionButton
+  pv="testIOC:BO1"
+  label="testIOC:BO1"
+  labelPlacement="top"
+  actionValue="1"
+  actionString="write 1 to testIOC:BO1"
+  tooltip="Click button to write action value"
+  showTooltip
+/>
 ```
 
-ActionButton to multi variable example:
-```js
-{/*The TextOuput code is included for demonstration purposes only*/}  
-{/*Only the the JSX code between the hashes  is required to instantiate the ActionButton */}  
-  import TextOutput from './TextOutput';
-  import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-    import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
-  <div>
-  <div style={{marginBottom:8}}>
-    <TextOutput  pv='testIOC:BO1'   label='Value of testIOC:BO1 '/>
-  </div>
-  <div style={{marginBottom:8}}>
-    <TextOutput  pv='testIOC:BO2'   label='Value of testIOC:BO2 '/>
-  </div>
+Multi-PV write — same value written to every PV in `pvs`:
 
-{/*###############*/}  
-<ActionButton
-  pvs={['testIOC:BO1','testIOC:BO2']}
-  label={"write '1' to multiple PVS "}
-  labelPlacement={"top"}
-  actionValue={"1"}
-  actionString={"write '1' "}
-  muiButtonProps={{startIcon:<CloudUploadIcon />}}
-/>
+```jsx
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
 <ActionButton
-  pvs={['testIOC:BO1','testIOC:BO2']}
-  label={"write '0' to multiple PVS "}
-  labelPlacement={"top"}
-  actionValue={"0"}
-  actionString={"write '0' "}
-  muiButtonProps={{endIcon:<CloudDownloadIcon />}}
+  pvs={["testIOC:BO1", "testIOC:BO2"]}
+  label="write '1' to multiple PVs"
+  actionValue="1"
+  actionString="write '1'"
+  muiButtonProps={{ startIcon: <CloudUploadIcon /> }}
 />
-{/*###############*/}
-</div>
 ```
 
+Custom palette colour:
+
+```jsx
+<ActionButton
+  pv="testIOC:BO1"
+  label="Reset"
+  actionValue="1"
+  color="error"
+/>
+```
+
+## See also
+
+- `ToggleButton` — two-state toggle / momentary button.
+- `CheckBox`, `Switch` — state-tracking boolean controls.

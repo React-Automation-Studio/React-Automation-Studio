@@ -1,52 +1,43 @@
+# SelectionList
 
+Clickable list of choices bound to an MBBI / MBBO PV. Each item is a
+list row; clicking writes that string back to the PV.
 
-SelectionList example connection to a SoftChannel EPICS MBBO pv with horizontal orientation and EPICS pv strings for choice:
+## When to use
 
-```js
-{/*The TextOutput code is included for demonstration purposes only*/}  
-{/*Only the the JSX code between the hashes  is required to instantiate the SelectionList */}  
-  import TextOutput from './TextOutput';
-  <div style={{textAlign:'center'}}>
-  <div style={{marginBottom:8}}>
-    <TextOutput
-    pv='$(device):mbboTest$(id)'
-    macros={{'$(device)':'testIOC','$(id)':'1'}}
-    usePvLabel={true}
-    useStringValue={true}/>
-  </div>
+- Multi-state PVs where the full list of choices should be visible at
+  once (no expanding dropdown).
+- Sidebars / navigation-style choices where the list itself is part of
+  the layout.
 
-  {/*###############*/}  
+For a compact dropdown, prefer `SelectionInput`. For a button-bar
+layout, prefer `RadioButtonGroup`.
 
-  <SelectionList  pv='$(device):mbboTest$(id)'       macros={{'$(device)':'testIOC','$(id)':'1'}}
-  horizontal={true}  
-  usePvLabel={true}/>
+## Common patterns
 
-  {/*###############*/}
+Vertical list with PV-driven label and choices:
 
-</div>
+```jsx
+<SelectionList pv="testIOC:mbboTest1" usePvLabel />
 ```
 
-SelectionList example connection to a SoftChannel EPICS MBBO pv with vertical orientation and custom strings for choice:
+Horizontal layout:
 
-```js
-{/*The TextOutput code is included for demonstration purposes only*/}  
-{/*Only the the JSX code between the hashes  is required to instantiate the SelectionList */}  
-  import TextOutput from './TextOutput';
-  <div style={{textAlign:'center'}}>
-  <div style={{marginBottom:8}}>
-    <TextOutput
-    pv='$(device):mbboTest$(id)'
-    macros={{'$(device)':'testIOC','$(id)':'1'}}
-    label={'Custom Label'}
-    useStringValue={true}
-    usePvLabel={true}/>
-  </div>
-
-  {/*###############*/}  
-
-  <SelectionList  pv='$(device):mbboTest$(id)' macros={{'$(device)':'testIOC','$(id)':'1'}}    usePvLabel={true} labelPlacement='bottom' custom_selection_strings={['text 1','text 3']}/>
-
-  {/*###############*/}
-
-</div>
+```jsx
+<SelectionList pv="testIOC:mbboTest1" usePvLabel horizontal />
 ```
+
+Custom subset of strings — only the listed values are offered:
+
+```jsx
+<SelectionList
+  pv="testIOC:mbboTest1"
+  usePvLabel
+  custom_selection_strings={["text 1", "text 3"]}
+/>
+```
+
+## See also
+
+- `SelectionInput` — same choice as a dropdown.
+- `RadioButtonGroup` — same choice as radio buttons.

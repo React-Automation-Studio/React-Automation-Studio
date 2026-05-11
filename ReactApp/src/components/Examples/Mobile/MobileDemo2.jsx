@@ -263,83 +263,71 @@ const NumericSection = () => {
 const BinarySection = () => {
   const theme = useTheme();
   return (
-    <Stack spacing={3}>
-      <SubSection title="I/O fields">
-        <Grid container spacing={2} alignItems="center">
-          <Grid size={{ xs: 12, sm: 6 }}>
-            <SelectionInput pv="$(device)" macros={bo1Macros} usePvLabel />
-          </Grid>
-          <Grid size={{ xs: 12, sm: 6 }}>
-            <TextOutput pv="$(device)" macros={bo1Macros} usePvLabel />
-          </Grid>
-        </Grid>
-      </SubSection>
+    <Grid container spacing={2} alignItems="center">
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <SelectionInput pv="$(device)" macros={bo1Macros} usePvLabel />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <TextOutput pv="$(device)" macros={bo1Macros} usePvLabel />
+      </Grid>
 
-      <SubSection title="Toggle controls & indicator">
-        <Grid container spacing={2} alignItems="center">
-          <Grid size={{ xs: 6, sm: 3 }}>
-            <Switch pv="$(device)" macros={bo1Macros} usePvLabel />
-          </Grid>
-          <Grid size={{ xs: 6, sm: 3 }}>
-            <CheckBox pv="$(device)" macros={bo1Macros} usePvLabel />
-          </Grid>
-          <Grid size={{ xs: 6, sm: 3 }}>
-            <RadioButton pv="$(device)" macros={bo1Macros} usePvLabel />
-          </Grid>
-          <Grid size={{ xs: 6, sm: 3 }}>
-            <StyledIconIndicator
-              pv="$(device)"
-              macros={bo1Macros}
-              onColor={theme.palette.ok.main}
-              offColor={theme.palette.error.main}
-              usePvLabel
-              labelPlacement="end"
-            />
-          </Grid>
-        </Grid>
-      </SubSection>
+      <Grid size={{ xs: 6, sm: 3 }}>
+        <Switch pv="$(device)" macros={bo1Macros} usePvLabel />
+      </Grid>
+      <Grid size={{ xs: 6, sm: 3 }}>
+        <CheckBox pv="$(device)" macros={bo1Macros} usePvLabel />
+      </Grid>
+      <Grid size={{ xs: 6, sm: 3 }}>
+        <RadioButton pv="$(device)" macros={bo1Macros} usePvLabel />
+      </Grid>
+      <Grid size={{ xs: 6, sm: 3 }}>
+        <StyledIconIndicator
+          pv="$(device)"
+          macros={bo1Macros}
+          onColor={theme.palette.ok.main}
+          offColor={theme.palette.error.main}
+          usePvLabel
+          labelPlacement="end"
+        />
+      </Grid>
 
-      <SubSection title="Buttons">
-        <Grid container spacing={2} alignItems="center">
-          <Grid size={{ xs: 6, sm: 3 }}>
-            <ToggleButton
-              pv="$(device)"
-              macros={bo1Macros}
-              usePvLabel
-              labelPlacement="top"
-            />
-          </Grid>
-          <Grid size={{ xs: 6, sm: 3 }}>
-            <ToggleButton
-              pv="$(device)"
-              macros={bo1Macros}
-              label="Custom Label"
-              labelPlacement="top"
-            />
-          </Grid>
-          <Grid size={{ xs: 6, sm: 3 }}>
-            <ActionButton
-              pv="$(device)"
-              macros={bo1Macros}
-              label="Action Button 1"
-              labelPlacement="top"
-              actionValue="1"
-              actionString="Switch On"
-            />
-          </Grid>
-          <Grid size={{ xs: 6, sm: 3 }}>
-            <ActionButton
-              pv="$(device)"
-              macros={bo1Macros}
-              label="Action Button 2"
-              labelPlacement="top"
-              actionValue="0"
-              actionString="Switch Off"
-            />
-          </Grid>
-        </Grid>
-      </SubSection>
-    </Stack>
+      <Grid size={{ xs: 6, sm: 3 }}>
+        <ToggleButton
+          pv="$(device)"
+          macros={bo1Macros}
+          usePvLabel
+          labelPlacement="top"
+        />
+      </Grid>
+      <Grid size={{ xs: 6, sm: 3 }}>
+        <ToggleButton
+          pv="$(device)"
+          macros={bo1Macros}
+          label="Custom Label"
+          labelPlacement="top"
+        />
+      </Grid>
+      <Grid size={{ xs: 6, sm: 3 }}>
+        <ActionButton
+          pv="$(device)"
+          macros={bo1Macros}
+          label="Action Button 1"
+          labelPlacement="top"
+          actionValue="1"
+          actionString="Switch On"
+        />
+      </Grid>
+      <Grid size={{ xs: 6, sm: 3 }}>
+        <ActionButton
+          pv="$(device)"
+          macros={bo1Macros}
+          label="Action Button 2"
+          labelPlacement="top"
+          actionValue="0"
+          actionString="Switch Off"
+        />
+      </Grid>
+    </Grid>
   );
 };
 
@@ -390,7 +378,7 @@ const sections = [
   {
     id: "binary",
     icon: ToggleOnIcon,
-    label: "Binary Output",
+    label: "Binary I/O",
     subtitle: "Switch, toggle, action and indicator widgets bound to a binary PV",
     Component: BinarySection,
   },
@@ -511,13 +499,10 @@ const MobileDemo2 = (props) => {
               {active.bare ? (
                 <ActiveComponent />
               ) : (
-                <SectionCard
-                  icon={active.icon}
-                  title={active.label}
-                  subtitle={active.subtitle}
-                  elevation={elevation}
-                >
-                  <ActiveComponent />
+                <SectionCard elevation={elevation}>
+                  <SubSection icon={active.icon} title={active.label}>
+                    <ActiveComponent />
+                  </SubSection>
                 </SectionCard>
               )}
             </Box>

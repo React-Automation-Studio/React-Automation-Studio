@@ -61,28 +61,28 @@ component) or **[D]** (Display, read component). Those play functions run
 | Component | Stories | Notes |
 |-----------|---------|-------|
 | ActionButton | Overview, Write1, Write0, WriteMultiple, **IocRoundtripTest [R]** | click → BO1 |
-| BitIndicators | Overview, CustomIcon, CustomColors | needs `data-pv-value` to be testable |
-| CheckBox | Primary, **IocRoundtripTest [R]** | toggle → BO1 |
-| Gauge | Overview, **IocPvDisplayTest [D]** | `role="meter"` + `aria-valuenow` |
-| GraphXY | Overview | plot — separate testing strategy out of scope here |
-| GraphY | Overview, AlternateColors, OneHundredThousandDataPoints, OneMillionDataPoints | plot — separate testing strategy out of scope here |
-| LightPanel | Overview, MultiBinary, **IocPvDisplayTest [D]** | findByText (`Off`/`On` ZNAM/ONAM) |
-| ProgressBar | Primary, NoTicks, **IocPvDisplayTest [D]** | `role="progressbar"` + `aria-valuenow` |
-| RadioButton | Primary | single radio; group is covered |
-| RadioButtonGroup | Primary, CustomSelectionStrings, **IocRoundtripTest [R]** | findByLabelText (anchored) |
-| SelectionInput | Example, ExampleCustomSelection, **IocRoundtripTest [R]** | combobox — option lookup via `body` scope (portal) |
+| BitIndicators | Overview, Horizontal, CustomIcon, CustomColors, SixteenBits | needs `data-pv-value` to be testable |
+| CheckBox | Primary, CustomColor, **IocRoundtripTest [R]** | toggle → BO1 |
+| Gauge | Overview, AlarmAware, CustomRange, ThickRing, LabelBottom, **IocPvDisplayTest [D]** | `role="meter"` + `aria-valuenow` |
+| GraphXY | Overview, CustomLegend, Polling | plot — separate testing strategy out of scope here |
+| GraphY | Overview, AlternateColors, LogScale, PinnedRange, OneHundredThousandDataPoints, OneMillionDataPoints | plot — separate testing strategy out of scope here |
+| LightPanel | Overview, MultiBinary, AnalogCustomStrings, **IocPvDisplayTest [D]** | findByText (`Off`/`On` ZNAM/ONAM) |
+| ProgressBar | Primary, NoTicks, Stretched, CustomRange, **IocPvDisplayTest [D]** | `role="progressbar"` + `aria-valuenow` |
+| RadioButton | Primary, CustomColor | single radio; group is covered |
+| RadioButtonGroup | Primary, CustomSelectionStrings, Horizontal, **IocRoundtripTest [R]** | findByLabelText (anchored) |
+| SelectionInput | Example, ExampleCustomSelection, Filled, **IocRoundtripTest [R]** | combobox — option lookup via `body` scope (portal) |
 | SelectionList | Horizontal, Vertical, VerticalCustomSelection, **IocRoundtripTest [R]** | findByText → `closest('[role="button"]')` |
-| Slider | Primary, ExtraMarks, Vertical, CustomLabel | roundtrip *(deferred)* — rc-slider's drag handler is unreachable from headless Chromium; revisit on MUI Slider migration |
+| Slider | Primary, ExtraMarks, Vertical, CustomLabel, ValueBelow | roundtrip *(deferred)* — rc-slider's drag handler is unreachable from headless Chromium; revisit on MUI Slider migration |
 | StyledIconButton | Overview, CustomColors, CustomIcon | similar pattern to ActionButton; not yet covered |
-| StyledIconIndicator | Overview, CustomColors, CustomIcon | binary visual; needs `data-pv-value` |
-| Switch | Overview, **IocRoundtripTest [R]** | `role="switch"` (MUI 7) |
-| Tank | Overview, WithTicks, **IocPvDisplayTest [D]** | `role="meter"` + `aria-valuenow` |
-| TextInput | Primary, **IocRoundtripTest [R]**, EpicsAIOverides, EpicsMBBOStringValue, EpicsMBBONumericalValue, NumberFormatExample | pilot — also serves as the universal "seed" for sibling-tests |
-| TextOutput | Primary, EpicsAIOverides, EpicsMBBOStringValue, EpicsMBBONumericalValue, NumberFormatExample, **IocPvDisplayTest [D]** | findByLabelText (`seed` vs `readback`) |
-| TextUpdate | Primary, PvLabel, NumberFormat, **IocPvDisplayTest [D]** | findByText |
-| TextUpdateMultiplePVs | Primary | display variant; not yet covered |
-| ThumbWheel | Overview, Primary | per-digit buttons render only icons (no text/aria-label) — needs component change |
-| ToggleButton | Primary, Momentary, **IocRoundtripTest [R]** | click → BO1 |
+| StyledIconIndicator | Overview, CustomColors, CustomIcon, LabelEnd | binary visual; needs `data-pv-value` |
+| Switch | Overview, CustomColor, **IocRoundtripTest [R]** | `role="switch"` (MUI 7) |
+| Tank | Overview, WithTicks, WideShort, Stretched, **IocPvDisplayTest [D]** | `role="meter"` + `aria-valuenow` |
+| TextInput | Primary, Overrides, MbboStringValue, MbboNumericalValue, NumberFormat, **IocRoundtripTest [R]** | pilot — also serves as the universal "seed" for sibling-tests |
+| TextOutput | Primary, Overrides, MbboStringValue, MbboNumericalValue, NumberFormat, Timestamp, Metadata, **IocPvDisplayTest [D]** | findByLabelText (`seed` vs `readback`) |
+| TextUpdate | Primary, PvLabel, AlarmAware, NumberFormat, LargeVariant, **IocPvDisplayTest [D]** | findByText |
+| TextUpdateMultiplePVs | Primary, AlarmAware, NumberFormat | display variant; not yet covered |
+| ThumbWheel | Overview, CustomIncrements | per-digit buttons render only icons (no text/aria-label) — needs component change |
+| ToggleButton | Primary, Momentary, WithIcon, TrafficLight, **IocRoundtripTest [R]** | click → BO1 |
 
 ### `components/CompoundComponents/`
 
@@ -197,12 +197,12 @@ story.
 
 | Coverage type | Count | Where |
 |---|---|---|
-| Smoke (all stories that aren't tagged `!test`) | 112 stories across 58 story files | every component / page with `.stories.*` |
+| Smoke (all stories that aren't tagged `!test`) | 142 stories across 58 story files | every component / page with `.stories.*` |
 | Roundtrip play function | 8 | TextInput, ActionButton, ToggleButton, Switch, CheckBox, RadioButtonGroup, SelectionInput, SelectionList |
 | Display play function | 6 | TextOutput, TextUpdate, LightPanel, ProgressBar, Tank, Gauge |
 | Deferred | 1 | Slider — rc-slider hostile to test-runner |
 | Skipped from test-runner | 1 | Login — needs `<GoogleOAuthProvider>` context |
-| Smoke-only (no play function yet) | 43 | balance — display-only widgets, page-level demos, beamline SVGs |
+| Smoke-only (no play function yet) | 73 | balance — display-only widgets, page-level demos, beamline SVGs, plus the new BaseComponents docs-uplift stories (CustomColor / CustomRange / Stretched / etc.) |
 
 ## Adding a new test
 

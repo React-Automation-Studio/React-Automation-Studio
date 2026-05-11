@@ -1,6 +1,6 @@
 [project]
 name = "alarmHandlerDbInit"
-version = "8.0.1"
+version = "8.1.0"
 dependencies = [
 "pymongo==4.16.0"
 ]

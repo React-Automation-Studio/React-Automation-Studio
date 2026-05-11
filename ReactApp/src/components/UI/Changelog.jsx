@@ -60,6 +60,40 @@ const ChangelogEntry = ({ version, date, children }) => {
 
 const Changelog = () => (
   <>
+    <ChangelogEntry version="V8.1.0" date="Monday 11 May 2026">
+      Minor Updates:
+      <ul>
+        <li>
+          Redesigned dashboard with a new "What's New" changelog panel
+        </li>
+        <li>MobileDemo1 / MobileDemo2 page redesigns</li>
+        <li>
+          New Test3D experimental 3D demo with drag-to-rotate that writes back
+          to the rotation PVs
+        </li>
+        <li>Atom One Dark theme; softer Light theme AppBar</li>
+        <li>
+          Gauge restyled — rounded arc edges, alarm-aware accent colour, curved
+          tick labels, and a softer needle
+        </li>
+        <li>Rounded outer corners on ProgressBar and Tank</li>
+        <li>
+          ARIA value semantics on ProgressBar, Tank, and Gauge for
+          accessibility and automated testing
+        </li>
+        <li>
+          BaseComponents storybook docs uplift — grouped argTypes, per-story
+          descriptions, expanded prose, and new story variants across all 24
+          components
+        </li>
+        <li>
+          New storybook-driven integration test suite (Playwright via
+          test-runner) with PV roundtrip + display assertions across the
+          BaseComponents and smoke coverage for every page
+        </li>
+      </ul>
+    </ChangelogEntry>
+
     <ChangelogEntry version="V8.0.1" date="Tuesday 5 May 2026">
       Minor Updates:
       <ul>

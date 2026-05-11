@@ -332,37 +332,28 @@ const BinarySection = () => {
 };
 
 const MbboSection = () => (
-  <Stack spacing={3}>
-    <SubSection title="I/O fields">
-      <Grid container spacing={2} alignItems="center">
-        <Grid size={{ xs: 12, sm: 6 }}>
-          <SelectionInput pv="$(device)" macros={mbboMacros} usePvLabel />
-        </Grid>
-        <Grid size={{ xs: 12, sm: 6 }}>
-          <TextOutput pv="$(device)" macros={mbboMacros} usePvLabel />
-        </Grid>
-      </Grid>
-    </SubSection>
-
-    <SubSection title="Group selectors">
-      <Grid container spacing={2} alignItems="flex-start">
-        <Grid size={{ xs: 12, md: 4 }}>
-          <RadioButtonGroup pv="$(device)" macros={mbboMacros} usePvLabel />
-        </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
-          <SelectionList pv="$(device)" macros={mbboMacros} usePvLabel />
-        </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
-          <SelectionList
-            pv="$(device)"
-            macros={mbboMacros}
-            usePvLabel
-            horizontal
-          />
-        </Grid>
-      </Grid>
-    </SubSection>
-  </Stack>
+  <Grid container spacing={2} alignItems="flex-start">
+    <Grid size={{ xs: 12, sm: 6 }}>
+      <SelectionInput pv="$(device)" macros={mbboMacros} usePvLabel />
+    </Grid>
+    <Grid size={{ xs: 12, sm: 6 }}>
+      <TextOutput pv="$(device)" macros={mbboMacros} usePvLabel />
+    </Grid>
+    <Grid size={{ xs: 12, md: 4 }}>
+      <RadioButtonGroup pv="$(device)" macros={mbboMacros} usePvLabel />
+    </Grid>
+    <Grid size={{ xs: 12, md: 4 }}>
+      <SelectionList pv="$(device)" macros={mbboMacros} usePvLabel />
+    </Grid>
+    <Grid size={{ xs: 12, md: 4 }}>
+      <SelectionList
+        pv="$(device)"
+        macros={mbboMacros}
+        usePvLabel
+        horizontal
+      />
+    </Grid>
+  </Grid>
 );
 
 const sections = [

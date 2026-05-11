@@ -1,34 +1,43 @@
+# Switch
 
+Slider-style two-state toggle bound to a binary PV. Wraps MUI
+`<Switch>` with PV plumbing — toggles between 0 and 1 on click.
 
-Switch example connection to a SoftChannel EPICS AI pv with use of EPICS label and a custom label position:
+## When to use
 
-```js
-{/*The TextOutput code is included for demonstration purposes only*/}  
-{/*Only the the JSX code between the hashes  is required to instantiate the Switch */}  
-  import TextOutput from './TextOutput';
-  <React.Fragment>
-  <div style={{marginBottom:8}}>
-    <TextOutput
-      pv='$(device):BO$(id)'
-      macros={{'$(device)':'testIOC','$(id)':'1'}}
-      usePvLabel={true}
-      usePvPrecision={true}
-      usePvUnits={true}
-      usePvMinMax={true}
-      alarmSensitive={false}
-      />
-  </div>
+- Boolean controls where the slider metaphor (on/off, enabled/disabled)
+  is more natural than a tick mark.
+- Settings panels and operator screens with a row of on/off controls.
 
+For a tick-mark toggle, prefer `CheckBox`. For a read-only indicator,
+prefer `LightPanel` or `StyledIconIndicator`.
 
-{/*###############*/}  
+## Common patterns
 
-  <Switch
-    pv='$(device):BO$(id)'
-    macros={{'$(device)':'testIOC','$(id)':'1'}}
-    usePvLabel={true}
-    labelPlacement='end'
-    />
+Basic usage with PV-driven label:
 
-{/*###############*/}  
-  </React.Fragment>
+```jsx
+<Switch pv="testIOC:BO1" usePvLabel labelPlacement="end" />
 ```
+
+Custom on-state colour:
+
+```jsx
+<Switch pv="testIOC:BO1" label="Enable" onColor="success" />
+```
+
+Pair with a `TextOutput` to show the PV's live string value (e.g.
+`On` / `Off`):
+
+```jsx
+<>
+  <TextOutput pv="testIOC:BO1" usePvLabel useStringValue />
+  <Switch pv="testIOC:BO1" usePvLabel labelPlacement="end" />
+</>
+```
+
+## See also
+
+- `CheckBox` — tick-mark two-state toggle.
+- `LightPanel`, `StyledIconIndicator` — read-only boolean indicators.
+- `ToggleButton` — multi-state choice button bar.

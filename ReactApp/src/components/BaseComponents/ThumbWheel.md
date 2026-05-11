@@ -1,48 +1,54 @@
+# ThumbWheel
 
+Digit-by-digit incremental numeric input. Each "wheel" represents a
+single decimal place with up/down arrows that increment or decrement
+that digit. Useful when an operator needs to dial a precise value
+without typing.
 
-ThumbWheel example connection to a SoftChannel EPICS AI pv with custom precision:
+## When to use
 
-```js
-{/*The TextOuput code is included for demonstration purposes only*/}  
-{/*Only the the JSX code between the hashes  is required to instantiate the ThumbWheel */}  
-  import TextOutput from './TextOutput';
-  <React.Fragment>
-  <div style={{marginBottom:8}}>
-    <TextOutput
-      pv='$(device):test$(id)'
-      macros={{'$(device)':'testIOC','$(id)':'2'}}
-      usePvLabel={true}
-      
-      usePvUnits={true}
-      usePvMinMax={true}
-      alarmSensitive={true}
-      prec={3}
-      />
-  </div>
+- Precision operator setpoints (motor positions, voltage references)
+  where a fixed step at a known decimal place is more reliable than
+  free-form typing.
+- Touchscreen-friendly numeric input — no keyboard required.
 
+For a free-form numeric input, prefer `TextInput`. For a draggable
+bounded setpoint, prefer `Slider`.
 
-{/*###############*/}  
+## Common patterns
 
-  <ThumbWheel
-    pv='$(device):test$(id)'
-    macros={{'$(device)':'testIOC','$(id)':'2'}}
-    prec_integer={4}
-    prec_decimal={3}
-    prec={3}
-    usePvMinMax={true}
-    />
+Standard layout — 4 integer digits and 3 decimal digits:
 
-{/*###############*/}  
-  </React.Fragment>
+```jsx
+<ThumbWheel
+  pv="testIOC:test2"
+  prec_integer={4}
+  prec_decimal={3}
+  usePvMinMax
+/>
 ```
-custom increments example
-```js
- <ThumbWheel
-    pv='$(device):test$(id)'
-    macros={{'$(device)':'testIOC','$(id)':'2'}}
-    
-    prec={1}
-    usePvMinMax={true}
-    custom_increments={[500,50,5,0.5]}
-    />
+
+Custom increments — fixed step sizes (e.g. 500 / 50 / 5 / 0.5):
+
+```jsx
+<ThumbWheel
+  pv="testIOC:test2"
+  prec={1}
+  usePvMinMax
+  custom_increments={[500, 50, 5, 0.5]}
+/>
 ```
+
+Pair with a `TextOutput` to display the value alongside:
+
+```jsx
+<>
+  <TextOutput pv="testIOC:test2" usePvLabel usePvUnits prec={3} />
+  <ThumbWheel pv="testIOC:test2" prec_integer={4} prec_decimal={3} usePvMinMax />
+</>
+```
+
+## See also
+
+- `TextInput` — free-form numeric input.
+- `Slider` — draggable bounded input.

@@ -1,75 +1,155 @@
-import { SliderRoot } from '@mui/material';
-import  Slider  from './Slider';
-import Grid from '@mui/material/GridLegacy';
-import type { Meta, StoryObj } from '@storybook/react';
+import Slider from "./Slider";
 
-// More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  
   component: Slider,
   parameters: {
-   
+    docs: {
+      description: {
+        component:
+          "Bounded numeric setpoint with a draggable thumb. Built on MUI `<Slider>`. Supports horizontal or vertical orientation, custom step, custom marks, and flexible label/value placement.",
+      },
+    },
   },
-  // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/react/writing-docs/autodocs
-  tags: ['autodocs'],
-  // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
+  tags: ["autodocs"],
   argTypes: {
-  
+    pv: { table: { category: "PV binding" } },
+    macros: { table: { category: "PV binding" } },
+    useMetadata: { table: { category: "PV binding" } },
+    initialLocalVariableValue: { table: { category: "PV binding" } },
+    label: { table: { category: "Label" } },
+    labelPv: { table: { category: "Label" } },
+    usePvLabel: { table: { category: "Label" } },
+    labelPlacement: { table: { category: "Label" } },
+    min: { table: { category: "Range" } },
+    max: { table: { category: "Range" } },
+    minPv: { table: { category: "Range" } },
+    maxPv: { table: { category: "Range" } },
+    usePvMinMax: { table: { category: "Range" } },
+    step: { table: { category: "Range" } },
+    marks: { table: { category: "Range" } },
+    units: { table: { category: "Formatting" } },
+    unitsPv: { table: { category: "Formatting" } },
+    usePvUnits: { table: { category: "Formatting" } },
+    prec: { table: { category: "Formatting" } },
+    precPv: { table: { category: "Formatting" } },
+    usePvPrecision: { table: { category: "Formatting" } },
+    numberFormat: { table: { category: "Formatting" } },
+    vertical: { table: { category: "Appearance" } },
+    showValue: { table: { category: "Appearance" } },
+    valuePlacement: { table: { category: "Appearance" } },
+    width: { table: { category: "Appearance" } },
+    height: { table: { category: "Appearance" } },
+    tooltip: { table: { category: "Tooltip" } },
+    showTooltip: { table: { category: "Tooltip" } },
+    tooltipProps: { table: { category: "Tooltip" } },
+    debug: { table: { category: "Diagnostics" } },
   },
 };
 
-// More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args
 export const Primary = {
   args: {
-    pv:'testIOC:test2',
-    showValue:true,
-    usePvMinMax:true,
-    usePvLabel:true,
-    step:1,
-    usePvUnits:true
-  }
+    pv: "testIOC:test2",
+    showValue: true,
+    usePvMinMax: true,
+    usePvLabel: true,
+    step: 1,
+    usePvUnits: true,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Horizontal slider bound to a PV with label, range and units from PV metadata.",
+      },
+    },
+  },
 };
 
 export const ExtraMarks = {
   args: {
-    pv:'testIOC:test2',
-    marks:{0:0,2500:2500,5000:5000,7500:7500,10000:10000},
-    showValue:true,
-    usePvMinMax:true,
-    usePvLabel:true,
-    step:1,
-    usePvUnits:true
-  }
+    pv: "testIOC:test2",
+    marks: { 0: 0, 2500: 2500, 5000: 5000, 7500: 7500, 10000: 10000 },
+    showValue: true,
+    usePvMinMax: true,
+    usePvLabel: true,
+    step: 1,
+    usePvUnits: true,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Slider with custom mark labels at the given values.",
+      },
+    },
+  },
 };
 
 export const Vertical = {
   args: {
-    vertical:true,
-    pv:'testIOC:test2',
-    showValue:true,
-    maxPv:'testIOC:test2.HOPR',
-    minPv:'testIOC:test2.LOPR',
-    usePvMinMax:true,
-    usePvLabel:true,
-    step:1,
-    usePvUnits:true,
-    height:'60vh',
-  }
+    vertical: true,
+    pv: "testIOC:test2",
+    showValue: true,
+    maxPv: "testIOC:test2.HOPR",
+    minPv: "testIOC:test2.LOPR",
+    usePvMinMax: true,
+    usePvLabel: true,
+    step: 1,
+    usePvUnits: true,
+    height: "60vh",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Vertical slider — the parent container must have a fixed height (here 60vh).",
+      },
+    },
+  },
 };
 
 export const CustomLabel = {
   args: {
-    vertical:true,
-    pv:'testIOC:test2',
-    showValue:true,
-    maxPv:'testIOC:test2.HOPR',
-    minPv:'testIOC:test2.LOPR',
-    usePvMinMax:true,
-    usePvLabel:false,
-    label:'A',
-    step:1,
-    usePvUnits:true,
-    height:'60vh',
-  }
+    vertical: true,
+    pv: "testIOC:test2",
+    showValue: true,
+    maxPv: "testIOC:test2.HOPR",
+    minPv: "testIOC:test2.LOPR",
+    usePvMinMax: true,
+    usePvLabel: false,
+    label: "A",
+    step: 1,
+    usePvUnits: true,
+    height: "60vh",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Vertical slider with a custom short label overriding the PV's DESC.",
+      },
+    },
+  },
 };
 
+export const ValueBelow = {
+  args: {
+    vertical: true,
+    pv: "testIOC:test2",
+    showValue: true,
+    usePvMinMax: true,
+    usePvLabel: true,
+    step: 1,
+    usePvUnits: true,
+    height: "60vh",
+    valuePlacement: "bottom",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Value rendered below the thumb via `valuePlacement='bottom'`.",
+      },
+    },
+  },
+};

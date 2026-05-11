@@ -1,129 +1,72 @@
+# Slider
 
-Slider EPICS variable example:
-```js
+Bounded numeric setpoint with a draggable thumb. Supports horizontal
+or vertical orientation, custom step size, custom marks, and flexible
+placement of label and value text. Built on MUI `<Slider>`.
 
+## When to use
 
+- Bounded operator setpoints where the user benefits from visual
+  positioning (amplitude, gain, position).
+- Cases where typing the exact number isn't required — drag-to-set is
+  faster.
 
-  <Slider  pv='testIOC:amplitude'  showValue={true} usePvMinMax={true} usePvLabel={true} step={1} usePvUnits={true}/>
+For a free-form numeric input, prefer `TextInput`. For a step-wise
+digit-by-digit input, prefer `ThumbWheel`.
 
+## Common patterns
 
+Horizontal slider with PV-driven label, range, units, and step:
 
-
+```jsx
+<Slider
+  pv="testIOC:amplitude"
+  showValue
+  usePvLabel
+  usePvMinMax
+  usePvUnits
+  step={1}
+/>
 ```
 
+Add custom mark labels at specific values:
 
-Slider EPICS variable example with extra marks :
-```js
-
-
-
-  <Slider  pv='testIOC:amplitude' marks={{0:0,2500:2500,5000:5000,7500:7500,10000:10000}}  usePvLabel={true} usePvMinMax={true} step={1} usePvUnits={true}/>
-
-
-
-
+```jsx
+<Slider
+  pv="testIOC:amplitude"
+  usePvLabel
+  usePvMinMax
+  marks={{ 0: 0, 2500: 2500, 5000: 5000, 7500: 7500, 10000: 10000 }}
+/>
 ```
-Slider EPICS variable example with label and values at the top:
-```js
-  import Grid from '@mui/material/GridLegacy';
 
- 
-  <Grid
-    container
-    direction="row"
-    justifyContent="space-between"
-    alignItems="stretch"
-    style={{height:300}}
-  >
-  <Grid item xs={3}>
-    <Slider vertical={true} pv='testIOC:amplitude'   usePvLabel={true}    usePvMinMax={true} step={1} usePvUnits={true}/>
-  </Grid>
-  <Grid item xs={3}>
-    <Slider vertical={true} pv='testIOC:amplitude'   usePvLabel={true}    usePvMinMax={true} step={1} usePvUnits={true} />
-  </Grid>
-  <Grid item xs={3}>
-    <Slider vertical={true} pv='testIOC:amplitude'   usePvLabel={true}    usePvMinMax={true} step={1} usePvUnits={true} />
-  </Grid>
-  <Grid item xs={3}>
-    <Slider vertical={true} pv='testIOC:amplitude'   usePvLabel={true}    usePvMinMax={true} step={1} usePvUnits={true} />
-  </Grid>
+Vertical slider (parent container must have a fixed height):
 
-
-
-  </Grid>
- 
-
-
+```jsx
+<div style={{ height: 300 }}>
+  <Slider
+    vertical
+    pv="testIOC:amplitude"
+    usePvLabel
+    usePvMinMax
+    usePvUnits
+  />
+</div>
 ```
-Slider EPICS variable example with label at the top  and values at the bottom:
-```js
-  import Grid from '@mui/material/GridLegacy';
 
- 
-  <Grid
-    container
-    direction="row"
-    justifyContent="space-between"
-    alignItems="stretch"
-    style={{height:300}}
-  >
-  <Grid item xs={3}>
-    <Slider vertical={true} pv='testIOC:amplitude'   usePvLabel={true}    usePvMinMax={true} step={1} usePvUnits={true} valuePlacement={'bottom'}/>
-  </Grid>
- <Grid item xs={3}>
-    <Slider vertical={true} pv='testIOC:amplitude'   usePvLabel={true}    usePvMinMax={true} step={1} usePvUnits={true} valuePlacement={'bottom'}/>
-  </Grid>
-  <Grid item xs={3}>
-    <Slider vertical={true} pv='testIOC:amplitude'   usePvLabel={true}    usePvMinMax={true} step={1} usePvUnits={true} valuePlacement={'bottom'}/>
-  </Grid>
-  <Grid item xs={3}>
-    <Slider vertical={true} pv='testIOC:amplitude'   usePvLabel={true}    usePvMinMax={true} step={1} usePvUnits={true} valuePlacement={'bottom'}/>
-  </Grid>
+Value below the thumb instead of above:
 
-
-  </Grid>
- 
-
-
+```jsx
+<Slider
+  vertical
+  pv="testIOC:amplitude"
+  usePvLabel
+  usePvMinMax
+  valuePlacement="bottom"
+/>
 ```
-Slider EPICS variable example with custom label and values at the top:
-```js
-  import Grid from '@mui/material/GridLegacy';
 
- 
-  <Grid
-    container
-    direction="row"
-    justifyContent="space-around"
-    alignItems="stretch"
-    style={{height:300}}
-  >
-  <Grid item xs={2}>
-    <Slider vertical={true} pv='testIOC:amplitude'  label={'A'}    usePvMinMax={true} step={1} usePvUnits={true}/>
-  </Grid>
-  <Grid item xs={2}>
-    <Slider vertical={true} pv='testIOC:amplitude'   label={'B'}    usePvMinMax={true} step={1} usePvUnits={true} />
-  </Grid>
-  <Grid item xs={2}>
-    <Slider vertical={true} pv='testIOC:amplitude'  label={'C'}    usePvMinMax={true} step={1} usePvUnits={true} />
-  </Grid>
-  <Grid item xs={2}>
-    <Slider vertical={true} pv='testIOC:amplitude'   label={'D'}    usePvMinMax={true} step={1} usePvUnits={true} />
-  </Grid>
-  <Grid item xs={2}>
-    <Slider vertical={true} pv='testIOC:amplitude'   label={'E'}    usePvMinMax={true} step={1} usePvUnits={true} />
-  </Grid>
-  <Grid item xs={2}>
-    <Slider vertical={true} pv='testIOC:amplitude'   label={'F'}    usePvMinMax={true} step={1} usePvUnits={true} />
-  </Grid>
+## See also
 
-  
-  
-  
-
-
-  </Grid>
- 
-
-
-```
+- `TextInput` — free-form numeric input.
+- `ThumbWheel` — digit-by-digit incremental input.

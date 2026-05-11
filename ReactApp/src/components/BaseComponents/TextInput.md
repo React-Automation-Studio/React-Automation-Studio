@@ -1,85 +1,74 @@
+# TextInput
 
-TextInput example connection to an SoftChannel EPICS AI pv:
+Outlined writable text field for setting a PV's value. Built on MUI
+`<TextField>`, so it inherits the `outlined` / `filled` / `standard`
+variants and supports the full TextField prop surface via
+`muiTextFieldProps`.
 
-```js
-    <TextInput  
-       pv='$(device):test$(id)'
-       macros={{'$(device)':'testIOC','$(id)':'2'}}
-       usePvLabel={true}
-       usePvPrecision={true}
-       usePvUnits={true}
-       usePvMinMax={true}
-       alarmSensitive={true}
-    />
-```
-TextInput example connection to a SoftChannel EPICS AI pv with example overrides of EPICS fields:
+## When to use
 
-```js
-    <TextInput  
-       pv='$(device):test$(id)'
-       macros={{'$(device)':'testIOC','$(id)':'2'}}
-       label={'Custom Label'}
-       usePvPrecision={true}
-       prec={5}
-       units={"🍕"}
-       max={5500}
-       min={4500}
-       alarmSensitive={true}
-    />
-```
+- Operator setpoints (write-side of a control loop).
+- Any field where the user must type a value back to a PV.
 
-TextInput example connection to an SoftChannel EPICS MBBO pv using the string value:
+For a read-only equivalent, use `TextOutput`. For numeric setpoints
+where the value is constrained to a range, prefer `Slider` or
+`ThumbWheel`.
 
-```js
-    <TextInput  
-       pv='$(device):mbboTest$(id)'
-       macros={{'$(device)':'testIOC','$(id)':'1'}}
-       usePvLabel={true}
-       useStringValue={true}
-       usePvUnits={true}
+## Common patterns
 
-    />
+Basic usage with PV-driven label, precision, units, range and alarm
+sensitivity:
 
-
-```
-TextInput example connection to an SoftChannel EPICS MBBO pv using the numerical value:
-
-```js
-    <TextInput  
-       pv='$(device):mbboTest$(id)'
-       macros={{'$(device)':'testIOC','$(id)':'1'}}
-       usePvLabel={true}
-       usePvUnits={true}
-
-    />
-
-
+```jsx
+<TextInput
+  pv="testIOC:test2"
+  usePvLabel
+  usePvPrecision
+  usePvUnits
+  usePvMinMax
+  alarmSensitive
+/>
 ```
 
-TextInput example :
+Override metadata with custom label, precision, units, and range:
 
-```js
-    <TextInput  
-       pv='$(device):test$(id)'
-       macros={{'$(device)':'testIOC','$(id)':'2'}}
-       alarmSensitive={true}
-       usePvPrecision={true}
-       prec={3}
-       usePvUnits={true}
-    />
+```jsx
+<TextInput
+  pv="testIOC:test2"
+  label="Custom Label"
+  usePvPrecision
+  prec={5}
+  units="🍕"
+  min={4500}
+  max={5500}
+  alarmSensitive
+/>
 ```
 
-TextInput number format example :
+MBBO input as enum string (e.g. type "On" / "Off"):
 
-```js
-    <TextInput  
-       pv='$(device):test$(id)'
-       macros={{'$(device)':'testIOC','$(id)':'2'}}
-       alarmSensitive={true}
-       usePvPrecision={true}
-       prec={3}
-       usePvUnits={true}
-       numberFormat={{notation: 'engineering',precision: 5}}
-    />
+```jsx
+<TextInput
+  pv="testIOC:mbboTest1"
+  usePvLabel
+  useStringValue
+  usePvUnits
+/>
 ```
 
+Engineering / scientific number format via mathjs:
+
+```jsx
+<TextInput
+  pv="testIOC:test2"
+  usePvPrecision
+  prec={3}
+  usePvUnits
+  numberFormat={{ notation: "engineering", precision: 5 }}
+/>
+```
+
+## See also
+
+- `TextOutput` — read-only equivalent.
+- `Slider`, `ThumbWheel` — bounded numeric input.

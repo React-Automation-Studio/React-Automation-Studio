@@ -114,7 +114,14 @@ const ProgressBarComponent = (props) => {
 
   const color = props.color;
   return (
-    <svg width={width} height={height}>
+    <svg
+      width={width}
+      height={height}
+      role="progressbar"
+      aria-valuenow={props.initialized ? props.value : undefined}
+      aria-valuemin={props.initialized ? props.min : undefined}
+      aria-valuemax={props.initialized ? props.max : undefined}
+    >
       <linearGradient
         id={gradientId + "baseBottom1"}
         gradientTransform="rotate(90)"

@@ -3,6 +3,7 @@ import Switch from "./Switch";
 import RadioButtonGroup from "./RadioButtonGroup";
 import TextInput from "./TextInput";
 import type { Meta, StoryObj } from "@storybook/react";
+import { within, userEvent, expect, waitFor } from "storybook/test";
 
 const meta = {
   component: LightPanel,
@@ -145,5 +146,50 @@ export const AnalogCustomStrings: Story = {
           "Analog PV mapped to custom display strings. Set the value to 0 or 1 to see `FOO` / `BAR` appear with the matching colour.",
       },
     },
+  },
+};
+
+// Integration test: LightPanel renders the PV's enum string ("Off"/"On" for
+// testIOC:BO1). Sibling TextInput seeds 0 and 1 numerically, and the
+// LightPanel's text content must reflect "Off" then "On" — proves it's
+// genuinely subscribed to the PV's enum string broadcasts.
+export const IocPvDisplayTest: StoryObj = {
+  tags: ["!dev", "!autodocs", "roundtrip-test"],
+  render: () => (
+    <div>
+      <div style={{ marginBottom: 8 }}>
+        <TextInput pv="testIOC:BO1" label="seed" />
+      </div>
+      <LightPanel pv="testIOC:BO1" useStringValue={true} />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    const seed = await canvas.findByLabelText(/^seed$/i, undefined, {
+      timeout: 5000,
+    });
+
+    await waitFor(
+      () => expect(Number.isFinite(parseFloat(seed.value))).toBe(true),
+      { timeout: 10000 }
+    );
+
+    // Seed 0 -> LightPanel text "Off" (ZNAM of testIOC:BO1).
+    await userEvent.clear(seed);
+    await userEvent.type(seed, "0{Enter}");
+    await waitFor(() => expect(parseFloat(seed.value)).toBe(0), { timeout: 5000 });
+    await canvas.findByText(/^Off$/i, undefined, { timeout: 5000 });
+
+    // Seed 1 -> LightPanel text "On" (ONAM).
+    await userEvent.clear(seed);
+    await userEvent.type(seed, "1{Enter}");
+    await waitFor(() => expect(parseFloat(seed.value)).toBe(1), { timeout: 5000 });
+    await canvas.findByText(/^On$/i, undefined, { timeout: 5000 });
+
+    // Reset to 0.
+    await userEvent.clear(seed);
+    await userEvent.type(seed, "0{Enter}");
+    await waitFor(() => expect(parseFloat(seed.value)).toBe(0), { timeout: 5000 });
   },
 };

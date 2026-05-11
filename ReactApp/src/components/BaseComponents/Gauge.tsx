@@ -74,6 +74,7 @@ interface GaugeComponentProps {
   disabled: boolean | undefined;
   alarmSensitive?: boolean;
   alarmSeverity?: number;
+  initialized?: boolean;
 }
 function GaugeComponent({ ...props }: GaugeComponentProps) {
   const theme: any = useTheme();
@@ -108,7 +109,14 @@ function GaugeComponent({ ...props }: GaugeComponentProps) {
   const valueOffsetY = 18;
   const needleRotation = (180 * (value - min)) / (max - min);
   return (
-    <svg width={props.width} height={xOffset + props.width / 2}>
+    <svg
+      width={props.width}
+      height={xOffset + props.width / 2}
+      role="meter"
+      aria-valuenow={props.initialized ? value : undefined}
+      aria-valuemin={props.initialized ? min : undefined}
+      aria-valuemax={props.initialized ? max : undefined}
+    >
       {
         <TextTicks x={(x0 + x1) / 2} y={y1 + valueOffsetY} textAnchor="middle">
           {typeof props.disabled === "undefined"
@@ -267,6 +275,7 @@ const GaugeInternalComponent = (props) => {
             value={value}
             ringWidth={props.ringWidth}
             disabled={props.initialized === true ? undefined : true}
+            initialized={props.initialized}
             alarmSensitive={props.alarmSensitive}
             alarmSeverity={props.alarmSeverity}
           />

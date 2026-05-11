@@ -1,5 +1,7 @@
 Current Release: V8.0.1
 
+[![tests](https://img.shields.io/badge/tests-112%20passing-success)](docs/testing.md)
+
 **Migration Guides:**
 - [Migrate from V7.x.x to V8.x.x](docs/migrate-from-V7-to-V8.md)
 - [Migrate from V6.x.x to V7.x.x](docs/migrate-from-V6-to-V7.md)

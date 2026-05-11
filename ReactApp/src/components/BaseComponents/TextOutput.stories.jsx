@@ -1,4 +1,6 @@
 import TextOutput from "./TextOutput";
+import TextInput from "./TextInput";
+import { within, userEvent, expect, waitFor } from "storybook/test";
 
 export default {
   component: TextOutput,
@@ -167,5 +169,51 @@ export const Metadata = {
           "Displays a single PV metadata field via `displayMetaData='precision'`. Other valid options include `units`, `severity`, `host`, `upper_disp_limit`, etc.",
       },
     },
+  },
+};
+
+// Integration test for output (read-only) components: write a value to the PV
+// via a sibling TextInput and verify the TextOutput displays the same value.
+// Both render as MUI TextField (role=textbox), so we disambiguate via label.
+export const IocPvDisplayTest = {
+  tags: ["!dev", "!autodocs", "roundtrip-test"],
+  render: () => (
+    <div>
+      <div style={{ marginBottom: 8 }}>
+        <TextInput pv="testIOC:test2" label="seed" />
+      </div>
+      <TextOutput pv="testIOC:test2" label="readback" />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    const seed = await canvas.findByLabelText(/^seed$/i, undefined, {
+      timeout: 5000,
+    });
+    const readback = await canvas.findByLabelText(/^readback$/i, undefined, {
+      timeout: 5000,
+    });
+
+    // Wait for PV to connect — both fields show the PV name string while
+    // disconnected, then flip to the numeric value.
+    await waitFor(
+      () => expect(Number.isFinite(parseFloat(seed.value))).toBe(true),
+      { timeout: 10000 }
+    );
+
+    // Seed the PV to a known value and verify the readback (TextOutput) reads
+    // it back, proving it's actually wired to the same PV broadcast.
+    await userEvent.clear(seed);
+    await userEvent.type(seed, "5005{Enter}");
+    await waitFor(() => expect(parseFloat(seed.value)).toBe(5005), { timeout: 5000 });
+    await waitFor(() => expect(parseFloat(readback.value)).toBe(5005), { timeout: 5000 });
+
+    // Write a different value and re-verify so we know readback is genuinely
+    // following PV updates (not just stuck at the first value it saw).
+    await userEvent.clear(seed);
+    await userEvent.type(seed, "5000{Enter}");
+    await waitFor(() => expect(parseFloat(seed.value)).toBe(5000), { timeout: 5000 });
+    await waitFor(() => expect(parseFloat(readback.value)).toBe(5000), { timeout: 5000 });
   },
 };

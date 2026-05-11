@@ -190,51 +190,65 @@ const ProgressBarComponent = (props) => {
         />
       </linearGradient>
 
-      <rect
-        x={xOffset}
-        y={y0}
-        width={x2}
-        height={y1 - y0}
-        style={{
-          opacity: 1,
-          strokeWidth: "0",
-          fill: "url(#" + gradientId + "baseTop1)",
-        }}
-      />
-      <rect
-        x={xOffset}
-        y={y1 - 1}
-        width={x2}
-        height={y2 - y1}
-        style={{
-          opacity: 1,
-          strokeWidth: "0",
-          fill: "url(#" + gradientId + "baseBottom1)",
-        }}
-      />
+      <defs>
+        <clipPath id={gradientId + "clip"}>
+          <rect
+            x={xOffset}
+            y={y0}
+            width={x2}
+            height={y2 - y0}
+            rx={2}
+            ry={2}
+          />
+        </clipPath>
+      </defs>
+      <g clipPath={`url(#${gradientId}clip)`}>
+        <rect
+          x={xOffset}
+          y={y0}
+          width={x2}
+          height={y1 - y0}
+          style={{
+            opacity: 1,
+            strokeWidth: "0",
+            fill: "url(#" + gradientId + "baseTop1)",
+          }}
+        />
+        <rect
+          x={xOffset}
+          y={y1 - 1}
+          width={x2}
+          height={y2 - y1}
+          style={{
+            opacity: 1,
+            strokeWidth: "0",
+            fill: "url(#" + gradientId + "baseBottom1)",
+          }}
+        />
 
-      <rect
-        x={xOffset}
-        y={y0}
-        width={level}
-        height={y1 - y0}
-        style={{
-          opacity: 1,
-          strokeWidth: "0",
-          fill: "url(#" + gradientId + "top1)",
-        }}
-      />
-      <rect
-        x={xOffset}
-        y={y1 - 1}
-        width={level}
-        height={y2 - y1}
-        style={{
-          opacity: 1,
-          strokeWidth: "0",
-          fill: "url(#" + gradientId + "bottom1)",
-        }}
-      />
+        <rect
+          x={xOffset}
+          y={y0}
+          width={level}
+          height={y1 - y0}
+          style={{
+            opacity: 1,
+            strokeWidth: "0",
+            fill: "url(#" + gradientId + "top1)",
+          }}
+        />
+        <rect
+          x={xOffset}
+          y={y1 - 1}
+          width={level}
+          height={y2 - y1}
+          style={{
+            opacity: 1,
+            strokeWidth: "0",
+            fill: "url(#" + gradientId + "bottom1)",
+          }}
+        />
+      </g>
 
       {getTickValues(
         props,

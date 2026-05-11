@@ -11,6 +11,7 @@ import {
   lightGreen,
   cyan,
   deepOrange,
+  deepPurple,
   orange,
   amber,
   lime,
@@ -20,17 +21,16 @@ import { alpha } from "@mui/material/styles";
 
 const defaultPalette = () => {
   const mode = "dark";
-  const primary = { main: lightBlue[200] };
-  const secondary = { main: pink[200] };
+  const primary = { main: "#82C3F8" };
+  const secondary = { main: "#C678DD" };
   const defaultColor = { main: grey[600] };
-  const ok = { main: lime["400"] };
+  const ok = { main: "#98C379" };
   const error = pink;
   const major = red;
   const minor = deepOrange;
   const background = {
-    default: "#121212",
-
-    paper: "#1d1d1d",
+    default: "#21252B",
+    paper: "#282C34",
   };
   const alarm = {
     major: {
@@ -60,7 +60,7 @@ const defaultPalette = () => {
   const svgComponentSecondary = { main: pink["500"] };
   const contrastThreshold = 3;
   const tonalOffset = 0.2;
-  const paperElevation = 1;
+  const paperElevation = 2;
   const reactVis = {
     ".rv-xy-plot__axis__tick__line": { stroke: grey[500] },
     ".rv-xy-plot__axis__tick__text": { fill: grey[500], fontSize: "11px" },
@@ -76,7 +76,7 @@ const defaultPalette = () => {
       strokeWidth: "2px",
       stroke: grey[500],
     },
-    lineColors: [pink[500], lime[400], "#9c27b0", "#3f51b5", "#e91e63"],
+    lineColors: ["#82C3F8", "#98C379", "#E5C07B", "#C678DD", "#E06C75"],
   };
   return {
     mode: mode,

@@ -1,61 +1,44 @@
+# StyledIconButton
 
-StyledIconButton example connection to a SoftChannel EPICS AI pv with example of usePvLabel
+Two-state icon button bound to a binary PV. Clicking toggles the PV
+between 0 and 1; the icon picks up `onColor` when the PV is 1 and
+`offColor` when it is 0. Pass any MUI SvgIcon as a child.
 
-```js
-{/*The TextOutput code is included for demonstration purposes only*/}  
-{/*Only the the JSX code between the hashes  is required to instantiate the StyledIconButton */}  
-  import TextOutput from './TextOutput';
-  import Face from '@mui/icons-material/Face';
-  <div style={{textAlign:'center'}}>
-  <div style={{marginBottom:8}}>
-    <TextOutput   
-     pv='$(device):BO$(id)'
-     macros={{'$(device)':'testIOC','$(id)':'1'}} 
-     usePvLabel={true} 
-     usePvPrecision={true} />
-  </div>
-  {/*###############*/}  
+## When to use
 
-  <StyledIconButton    
-    pv='$(device):BO$(id)'
-    macros={{'$(device)':'testIOC','$(id)':'1'}} 
-    usePvLabel={true}>
-    <Face/>
-  </StyledIconButton>
+- Compact icon-only toggles where space is at a premium (toolbars,
+  status rows).
+- Cases where an icon is the natural representation of the on/off
+  state (e.g. lock/unlock, mute/unmute).
 
-  {/*###############*/}
+For a labelled button, prefer `ToggleButton`. For a read-only icon
+indicator, prefer `StyledIconIndicator`.
 
-  </div>
+## Common patterns
+
+Default colours with a custom child icon:
+
+```jsx
+import Face from "@mui/icons-material/Face";
+
+<StyledIconButton pv="testIOC:BO1" usePvLabel>
+  <Face />
+</StyledIconButton>
 ```
-StyledIconButton example connection to a SoftChannel EPICS AI pv with example of usePvLabel and overide of label placement:
 
-```js
-{/*The TextOutput code is included for demonstration purposes only*/}  
-{/*Only the the JSX code between the hashes  is required to instantiate the StyledIconButton */}  
-  import TextOutput from './TextOutput';
-  <div style={{textAlign:'center'}}>
-  <div style={{marginBottom:8}}>
-    <TextOutput
-      pv='$(device):BO$(id)'
-      macros={{'$(device)':'testIOC','$(id)':'1'}} 
-      usePvLabel={true}
-      usePvPrecision={true}
-      usePvUnits={true}
-      usePvMinMax={true}
-      alarmSensitive={false}
-      />
-  </div>
-  {/*###############*/}  
+Custom off colour and end-placed label:
 
-  <StyledIconButton  
-    pv='$(device):BO$(id)'
-    macros={{'$(device)':'testIOC','$(id)':'1'}} 
-    usePvLabel={true} 
-    labelPlacement='end' 
-    offColor="secondary"
-    />
-
-  {/*###############*/}
-
-  </div>
+```jsx
+<StyledIconButton
+  pv="testIOC:BO1"
+  usePvLabel
+  labelPlacement="end"
+  offColor="secondary"
+/>
 ```
+
+## See also
+
+- `StyledIconIndicator` — read-only icon indicator.
+- `ToggleButton` — labelled two-state button.
+- `CheckBox`, `Switch` — alternative two-state controls.

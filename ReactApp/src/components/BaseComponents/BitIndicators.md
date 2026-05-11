@@ -1,145 +1,81 @@
-BitIndicators EPICS variable example:
+# BitIndicators
 
-```js
-{/*The TextInput code is included for demonstration purposes only*/}  
-{/*Only the the JSX code between the hashes  is required to instantiate the BitIndicators */}  
-  import TextInput from './TextInput';
-  <div style={{textAlign:'center'}}>
-  <TextInput
-  pv='$(device):mbboTest1' macros={{'$(device)':'testIOC','$(id)':'2'}}
-  label={"Byte Value"}
-  labelPlacement={"top"}
-  
-  />
-  <br/><br/>
-  {/*###############*/}  
+Renders the individual bits of an integer PV as a row or column of
+SVG icons that light up when the corresponding bit is set. Useful for
+status-byte / interlock-pattern displays.
 
-  <BitIndicators pv='$(device):mbboTest1' macros={{'$(device)':'testIOC','$(id)':'2'}}label='My Label' labelPlacement='top' bitLabelPlacement='end' usePvBitLabels={true} numberOfBits={5}/>
+## When to use
 
-  {/*###############*/}
+- Decoding a multi-bit status word (e.g. an interlock byte, a fault
+  word, an `mbbi` raw value) into per-bit visual indicators.
+- Operator screens that need to surface "which bit is on" at a glance.
 
-  </div>
+## Common patterns
+
+Standard 8-bit indicator with PV-driven bit labels:
+
+```jsx
+<BitIndicators
+  pv="testIOC:mbboTest1"
+  label="Status"
+  labelPlacement="top"
+  bitLabelPlacement="end"
+  usePvBitLabels
+  numberOfBits={5}
+/>
 ```
 
+Custom on/off colours and horizontal layout:
 
-```js
-{/*The TextInput code is included for demonstration purposes only*/}  
-{/*Only the the JSX code between the hashes  is required to instantiate the BitIndicators */}  
-  import TextInput from './TextInput';
-  <div style={{textAlign:'center'}}>
-  <TextInput
-  pv='$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}}
-  label={"Byte Value"}
-  labelPlacement={"top"}
-  
-  />
-  <br/><br/>
-  {/*###############*/}  
-
-  <BitIndicators pv='$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}}label='My Label' labelPlacement='top' bitLabelPlacement='end'  />
-
-  {/*###############*/}
-
-  </div>
+```jsx
+<BitIndicators
+  pv="testIOC:test2"
+  horizontal
+  label="Status byte"
+  bitLabelPlacement="end"
+  onColor="yellow"
+  offColor="cyan"
+/>
 ```
 
-BitIndicators with custom icon EPICS variable example:
+Custom icon (any MUI SvgIcon) used for the bits — pass as a child:
 
-```js
-{/*The TextInput code is included for demonstration purposes only*/}  
-{/*Only the the JSX code between the hashes  is required to instantiate the BitIndicators */}  
-  import TextInput from './TextInput';
-  import Face from '@mui/icons-material/Face';
-  <div style={{textAlign:'center'}}>
-  <TextInput
-  pv='$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}}
-  label={"Byte Value"}
-  labelPlacement={"top"}
-  
-  />
-  <br/><br/>
-  {/*###############*/}  
+```jsx
+import Face from "@mui/icons-material/Face";
 
-  <BitIndicators  pv='$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}} label='My Label' labelPlacement='top' bitLabelPlacement='end' onColor='lime' offColor='red'>
-  <Face/>
-  </BitIndicators>
-
-  {/*###############*/}
-
-  </div>
+<BitIndicators
+  pv="testIOC:test2"
+  label="My Label"
+  bitLabelPlacement="end"
+  onColor="lime"
+  offColor="red"
+>
+  <Face />
+</BitIndicators>
 ```
 
-BitIndicators example connection to a SoftChannel EPICS AI pv with example overrides of colors and label placement:
+Two stacked 16-bit panels for the low / high words of a 32-bit value:
 
-```js
-{/*The TextInput code is included for demonstration purposes only*/}  
-{/*Only the the JSX code between the hashes  is required to instantiate the BitIndicators */}  
-  import TextInput from './TextInput';
-  <div style={{textAlign:'center'}}>
-  <TextInput
-  pv='$(device):test$(id)'
-  macros={{'$(device)':'testIOC','$(id)':'2'}}
-  label={"Byte Value"}
-  labelPlacement={"top"}
-  
-  />
-  <br/><br/>
-  {/*###############*/}  
-
+```jsx
+<>
   <BitIndicators
-    horizontal={true}
-    pv='$(device):test$(id)'
-    macros={{'$(device)':'testIOC','$(id)':'2'}}
-    label='My Label'
-    bitLabelPlacement='end'
-    onColor='yellow'
-    offColor='cyan'
-    
-    />
-  {/*###############*/}
-
-  </div>
-```
-
-```js
-{/*The TextInput code is included for demonstration purposes only*/}  
-{/*Only the the JSX code between the hashes  is required to instantiate the BitIndicators */}  
-  import TextInput from './TextInput';
-  <div style={{textAlign:'center'}}>
-  <TextInput
-  pv='$(device):test$(id)' macros={{'$(device)':'testIOC','$(id)':'2'}}
-  label={"Byte Value"}
-  labelPlacement={"top"}
-  
+    pv="testIOC:test2"
+    label="Byte 1"
+    numberOfBits={16}
+    onColor="lime"
+    offColor="red"
   />
-  <br/><br/>
-  {/*###############*/}  
-  <div style={{float: 'left'}}>
-  <BitIndicators 
-    pv='$(device):test$(id)'
-    macros={{'$(device)':'testIOC','$(id)':'2'}}
-    label='Byte 1' 
-    labelPlacement='top' 
-    bitLabels={[]}
-    bitLabelPlacement='end' 
-    onColor='lime' 
-    offColor='red'
+  <BitIndicators
+    pv="testIOC:test2"
+    label="Byte 2"
     numberOfBits={16}
-    />
-    </div>
-    <div style={{float: 'left',paddingLeft:8}}>
-    <BitIndicators 
-    pv='$(device):test$(id)'
-    macros={{'$(device)':'testIOC','$(id)':'2'}}
-    label='Byte 2' 
-    labelPlacement='top' 
-    bitLabelPlacement='end' 
-    onColor='lime' 
-    offColor='red'
-    numberOfBits={16}
-    />
-  </div>
-  {/*###############*/}
-
-  </div>
+    onColor="lime"
+    offColor="red"
+  />
+</>
 ```
+
+## See also
+
+- `LightPanel` — single-bit indicator with a coloured panel.
+- `StyledIconIndicator` — single-bit indicator with a custom icon.

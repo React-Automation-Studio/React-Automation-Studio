@@ -111,50 +111,62 @@ const GaugesPanel = () => (
 );
 
 const BargraphsPanel = () => (
-  <Grid container spacing={2} alignItems="center" justifyContent="center">
-    <Grid size={{ xs: 6, sm: 3 }}>
-      <ProgressBar
-        pv="$(device):test3"
-        macros={deviceMacros}
-        units="V"
-        usePvLabel
-        prec={0}
-        min={-10000}
-        max={10000}
-      />
-    </Grid>
-    <Grid size={{ xs: 6, sm: 3 }}>
-      <ProgressBar
-        pv="$(device):amplitude"
-        macros={deviceMacros}
-        usePvLabel
-        prec={0}
-        usePvMinMax
-        alarmSensitive
-      />
-    </Grid>
-    <Grid size={{ xs: 6, sm: 3 }}>
-      <Tank
-        pv="$(device):test3"
-        macros={deviceMacros}
-        units="V"
-        usePvLabel
-        prec={0}
-        min={-10000}
-        max={10000}
-      />
-    </Grid>
-    <Grid size={{ xs: 6, sm: 3 }}>
-      <Tank
-        pv="$(device):amplitude"
-        macros={deviceMacros}
-        usePvLabel
-        prec={0}
-        usePvMinMax
-        alarmSensitive
-      />
-    </Grid>
-  </Grid>
+  <Stack spacing={2}>
+    <Stack direction="row" spacing={2}>
+      <Box sx={{ flex: 1, minWidth: 0 }}>
+        <ProgressBar
+          pv="$(device):test3"
+          macros={deviceMacros}
+          units="V"
+          usePvLabel
+          prec={0}
+          min={-10000}
+          max={10000}
+          lockAspectRatio={false}
+          height={70}
+        />
+      </Box>
+      <Box sx={{ flex: 1, minWidth: 0 }}>
+        <ProgressBar
+          pv="$(device):amplitude"
+          macros={deviceMacros}
+          usePvLabel
+          prec={0}
+          usePvMinMax
+          alarmSensitive
+          lockAspectRatio={false}
+          height={70}
+        />
+      </Box>
+    </Stack>
+    <Stack direction="row" spacing={2} justifyContent="center">
+      <Box sx={{ maxWidth: 280, width: "100%" }}>
+        <Tank
+          pv="$(device):test3"
+          macros={deviceMacros}
+          units="V"
+          usePvLabel
+          prec={0}
+          min={-10000}
+          max={10000}
+          lockAspectRatio={false}
+          height={120}
+        />
+      </Box>
+      <Box sx={{ maxWidth: 280, width: "100%" }}>
+        <Tank
+          pv="$(device):amplitude"
+          macros={deviceMacros}
+          usePvLabel
+          prec={0}
+          usePvMinMax
+          alarmSensitive
+          lockAspectRatio={false}
+          height={120}
+        />
+      </Box>
+    </Stack>
+  </Stack>
 );
 
 const DisplaysTabs = () => {
@@ -169,8 +181,6 @@ const DisplaysTabs = () => {
         sx={{
           minHeight: 36,
           mb: 2,
-          borderBottom: 1,
-          borderColor: "divider",
           "& .MuiTab-root": {
             minHeight: 36,
             textTransform: "none",
@@ -195,14 +205,9 @@ const NumericSection = () => {
   return (
     <Grid container spacing={3} alignItems="stretch">
       <Grid size={{ xs: 12, md: 6 }}>
-        <SectionCard
-          icon={TuneIcon}
-          title="Controls"
-          subtitle="Set-point and text-based numeric inputs"
-          elevation={elevation}
-        >
-          <Stack spacing={3}>
-            <SubSection title="Set-point">
+        <SectionCard elevation={elevation}>
+          <SubSection icon={TuneIcon} title="Controls">
+            <Stack spacing={2}>
               <Slider
                 pv="$(device):amplitude"
                 macros={deviceMacros}
@@ -211,9 +216,6 @@ const NumericSection = () => {
                 max={500}
                 usePvLabel
               />
-            </SubSection>
-
-            <SubSection title="Text I/O">
               <Grid container spacing={2} alignItems="center">
                 <Grid size={{ xs: 12, sm: 6 }}>
                   <TextInput
@@ -233,7 +235,7 @@ const NumericSection = () => {
                     alarmSensitive
                   />
                 </Grid>
-                <Grid size={12}>
+                <Grid size={12} sx={{ textAlign: "center" }}>
                   <ThumbWheel
                     pv="$(device)"
                     macros={{ "$(device)": "testIOC:amplitude" }}
@@ -242,19 +244,16 @@ const NumericSection = () => {
                   />
                 </Grid>
               </Grid>
-            </SubSection>
-          </Stack>
+            </Stack>
+          </SubSection>
         </SectionCard>
       </Grid>
 
       <Grid size={{ xs: 12, md: 6 }}>
-        <SectionCard
-          icon={SpeedIcon}
-          title="Displays"
-          subtitle="Switch between analog gauges and bargraphs"
-          elevation={elevation}
-        >
-          <DisplaysTabs />
+        <SectionCard elevation={elevation}>
+          <SubSection icon={SpeedIcon} title="Displays">
+            <DisplaysTabs />
+          </SubSection>
         </SectionCard>
       </Grid>
     </Grid>
@@ -491,13 +490,10 @@ const MobileDemo2 = (props) => {
         gap: 3,
       }}
     >
-      <SectionCard
-        icon={ShowChartIcon}
-        title="Live Trends"
-        subtitle="Real-time PV plots, always visible"
-        elevation={elevation}
-      >
-        <TrendsSection />
+      <SectionCard elevation={elevation}>
+        <SubSection icon={ShowChartIcon} title="Live Trends">
+          <TrendsSection />
+        </SubSection>
       </SectionCard>
 
       <Box

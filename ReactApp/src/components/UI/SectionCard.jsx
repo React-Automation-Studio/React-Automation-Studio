@@ -109,9 +109,21 @@ const SectionCard = ({
   );
 };
 
-export const SubSection = ({ title, children }) => (
+export const SubSection = ({ icon: Icon, title, children }) => (
   <Box>
     <Stack direction="row" alignItems="center" spacing={1.25} sx={{ mb: 1.5 }}>
+      {Icon && (
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            color: "primary.main",
+            "& svg": { fontSize: "1.1rem" },
+          }}
+        >
+          <Icon />
+        </Box>
+      )}
       <Typography
         variant="overline"
         color="primary"

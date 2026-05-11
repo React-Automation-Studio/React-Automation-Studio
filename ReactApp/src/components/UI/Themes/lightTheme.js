@@ -22,7 +22,7 @@ import defaultTheme from "./defaultTheme";
 
 const lightPalette = () => {
   const type = "light";
-  const primary = indigo;
+  const primary = { ...indigo, main: indigo[400] };
   const secondary = { main: pink[500] };
   const defaultColor = { main: grey[300] };
   const error = pink;

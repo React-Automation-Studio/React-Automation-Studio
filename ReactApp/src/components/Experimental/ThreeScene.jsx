@@ -1,14 +1,23 @@
 import React, { useRef, useState } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useTheme } from "@mui/material/styles";
 import PV from "../SystemComponents/PV";
 
+const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+const DRAG_SENSITIVITY = 0.01; // rad per pixel
+
 function Cube3d({ position, faceColors, hoverColor, pvs, macros }) {
-  const [xRotationPv, setXRotaionPv] = useState({ initialized: false });
-  const [yRotationPv, setYRotaionPv] = useState({ initialized: false });
+  const [xRotationPv, setXRotationPv] = useState({ initialized: false });
+  const [yRotationPv, setYRotationPv] = useState({ initialized: false });
+  const [outputX, setOutputX] = useState(0);
+  const [outputY, setOutputY] = useState(0);
+  const [triggerX, setTriggerX] = useState(0);
+  const [triggerY, setTriggerY] = useState(0);
   const meshRef = useRef();
+  const dragRef = useRef(null);
   const [hovered, setHover] = useState(false);
-  const [active, setActive] = useState(false);
+  const { gl } = useThree();
+
   useFrame(() => {
     if (!meshRef.current) return;
     const xRaw = Number(xRotationPv.value);
@@ -18,30 +27,73 @@ function Cube3d({ position, faceColors, hoverColor, pvs, macros }) {
     meshRef.current.rotation.x = x + 0.35;
     meshRef.current.rotation.y = y + 0.55;
   });
-  const pvConnections = () =>
-    pvs.map((item, index) => (
-      <PV
-        key={index.toString()}
-        pv={item}
-        macros={macros}
-        pvData={(pvData) => {
-          if (index === 0) setXRotaionPv(pvData);
-          else if (index === 1) setYRotaionPv(pvData);
-        }}
-      />
-    ));
+
+  const handlePointerDown = (e) => {
+    e.stopPropagation();
+    const baseX = Number.isFinite(Number(xRotationPv.value))
+      ? Number(xRotationPv.value)
+      : 0;
+    const baseY = Number.isFinite(Number(yRotationPv.value))
+      ? Number(yRotationPv.value)
+      : 0;
+    dragRef.current = { startX: e.clientX, startY: e.clientY, baseX, baseY };
+    if (gl?.domElement) gl.domElement.style.cursor = "grabbing";
+
+    const onMove = (ev) => {
+      const d = dragRef.current;
+      if (!d) return;
+      const dx = ev.clientX - d.startX;
+      const dy = ev.clientY - d.startY;
+      setOutputX(clamp(d.baseX + dy * DRAG_SENSITIVITY, -Math.PI, Math.PI));
+      setOutputY(clamp(d.baseY + dx * DRAG_SENSITIVITY, -Math.PI, Math.PI));
+      setTriggerX((t) => t + 1);
+      setTriggerY((t) => t + 1);
+    };
+    const onUp = () => {
+      dragRef.current = null;
+      if (gl?.domElement) gl.domElement.style.cursor = "grab";
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+      window.removeEventListener("pointercancel", onUp);
+    };
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+    window.addEventListener("pointercancel", onUp);
+  };
+
+  const handlePointerOver = () => {
+    setHover(true);
+    if (gl?.domElement && !dragRef.current) gl.domElement.style.cursor = "grab";
+  };
+  const handlePointerOut = () => {
+    setHover(false);
+    if (gl?.domElement && !dragRef.current) gl.domElement.style.cursor = "";
+  };
+
   const faceColor = hovered ? hoverColor : undefined;
   return (
     <React.Fragment>
-      {pvConnections()}
+      <PV
+        pv={pvs[0]}
+        macros={macros}
+        pvData={setXRotationPv}
+        outputValue={outputX}
+        newValueTrigger={triggerX}
+      />
+      <PV
+        pv={pvs[1]}
+        macros={macros}
+        pvData={setYRotationPv}
+        outputValue={outputY}
+        newValueTrigger={triggerY}
+      />
       <mesh
         position={position}
         ref={meshRef}
-        scale={active ? 1.4 : 1}
         castShadow
-        onClick={() => setActive(!active)}
-        onPointerOver={() => setHover(true)}
-        onPointerOut={() => setHover(false)}
+        onPointerOver={handlePointerOver}
+        onPointerOut={handlePointerOut}
+        onPointerDown={handlePointerDown}
       >
         <boxGeometry args={[2, 2, 2]} />
         {faceColors.map((c, i) => (

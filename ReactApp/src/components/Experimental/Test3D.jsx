@@ -2,7 +2,9 @@ import React from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
+import OpenWithIcon from "@mui/icons-material/OpenWith";
 import ViewInArOutlinedIcon from "@mui/icons-material/ViewInArOutlined";
 
 import TextInput from "../BaseComponents/TextInput";
@@ -23,12 +25,34 @@ const Test3D = (props) => {
             <Stack spacing={2}>
               <Box
                 sx={{
+                  position: "relative",
                   borderRadius: 1.5,
                   overflow: "hidden",
                   bgcolor: "background.default",
                 }}
               >
                 <ThreeScene />
+                <Stack
+                  direction="row"
+                  spacing={0.75}
+                  alignItems="center"
+                  sx={{
+                    position: "absolute",
+                    bottom: 8,
+                    left: 12,
+                    px: 1,
+                    py: 0.5,
+                    borderRadius: 1,
+                    bgcolor: "rgba(0,0,0,0.45)",
+                    color: "rgba(255,255,255,0.85)",
+                    pointerEvents: "none",
+                  }}
+                >
+                  <OpenWithIcon sx={{ fontSize: "1rem" }} />
+                  <Typography variant="caption" sx={{ lineHeight: 1 }}>
+                    Click and drag the cube to rotate
+                  </Typography>
+                </Stack>
               </Box>
 
               <Grid container spacing={2} alignItems="center">

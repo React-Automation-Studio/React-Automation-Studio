@@ -521,15 +521,6 @@ interface ProgressBarProps {
    * See https://mathjs.org/docs/reference/functions/format.html for more examples
    */
   numberFormat?: object;
-  /**
-   * Custom on color to be used, must be derived from Material UI theme color's.
-   */
-  onColor?: string;
-  /**
-   * Custom off color to be used, must be derived from Material UI theme color's.
-   */
-  offColor?: string;
-
   /** Name of the process variable,  eg. '$(device):test$(id)'*/
   pv?: string;
   /**

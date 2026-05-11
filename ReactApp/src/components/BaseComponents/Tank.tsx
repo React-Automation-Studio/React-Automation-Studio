@@ -246,50 +246,64 @@ const TankComponent = (props: TankComponentProps) => {
               />
             </linearGradient>
             <g>
-              <rect
-                x={x1 - 1}
-                y={y0}
-                width={x2 - x1}
-                height={y2 - y0}
-                style={{
-                  opacity: 1,
-                  strokeWidth: "0",
-                  fill: "url(#" + gradientId + "baseright1)",
-                }}
-              />
-              <rect
-                x={x0}
-                y={y0}
-                width={x2 - x1}
-                height={y2 - y0}
-                style={{
-                  opacity: 1,
-                  strokeWidth: "0",
-                  fill: "url(#" + gradientId + "baseleft1)",
-                }}
-              />
-              <rect
-                x={x0}
-                y={y2 - level}
-                width={x1 - x0}
-                height={level}
-                style={{
-                  opacity: 1,
-                  strokeWidth: "0",
-                  fill: "url(#" + gradientId + "left1)",
-                }}
-              />
-              <rect
-                x={x1 - 1}
-                y={y2 - level}
-                width={x2 - x1}
-                height={level}
-                style={{
-                  opacity: 1,
-                  strokeWidth: "0",
-                  fill: "url(#" + gradientId + "right1)",
-                }}
-              />
+              <defs>
+                <clipPath id={gradientId + "clip"}>
+                  <rect
+                    x={x0}
+                    y={y0}
+                    width={x2 - x0}
+                    height={y2 - y0}
+                    rx={2}
+                    ry={2}
+                  />
+                </clipPath>
+              </defs>
+              <g clipPath={`url(#${gradientId}clip)`}>
+                <rect
+                  x={x1 - 1}
+                  y={y0}
+                  width={x2 - x1}
+                  height={y2 - y0}
+                  style={{
+                    opacity: 1,
+                    strokeWidth: "0",
+                    fill: "url(#" + gradientId + "baseright1)",
+                  }}
+                />
+                <rect
+                  x={x0}
+                  y={y0}
+                  width={x2 - x1}
+                  height={y2 - y0}
+                  style={{
+                    opacity: 1,
+                    strokeWidth: "0",
+                    fill: "url(#" + gradientId + "baseleft1)",
+                  }}
+                />
+                <rect
+                  x={x0}
+                  y={y2 - level}
+                  width={x1 - x0}
+                  height={level}
+                  style={{
+                    opacity: 1,
+                    strokeWidth: "0",
+                    fill: "url(#" + gradientId + "left1)",
+                  }}
+                />
+                <rect
+                  x={x1 - 1}
+                  y={y2 - level}
+                  width={x2 - x1}
+                  height={level}
+                  style={{
+                    opacity: 1,
+                    strokeWidth: "0",
+                    fill: "url(#" + gradientId + "right1)",
+                  }}
+                />
+              </g>
               {getTickValues(
                 props,
                 min,

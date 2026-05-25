@@ -114,7 +114,14 @@ const ProgressBarComponent = (props) => {
 
   const color = props.color;
   return (
-    <svg width={width} height={height}>
+    <svg
+      width={width}
+      height={height}
+      role="progressbar"
+      aria-valuenow={props.initialized ? props.value : undefined}
+      aria-valuemin={props.initialized ? props.min : undefined}
+      aria-valuemax={props.initialized ? props.max : undefined}
+    >
       <linearGradient
         id={gradientId + "baseBottom1"}
         gradientTransform="rotate(90)"
@@ -190,51 +197,65 @@ const ProgressBarComponent = (props) => {
         />
       </linearGradient>
 
-      <rect
-        x={xOffset}
-        y={y0}
-        width={x2}
-        height={y1 - y0}
-        style={{
-          opacity: 1,
-          strokeWidth: "0",
-          fill: "url(#" + gradientId + "baseTop1)",
-        }}
-      />
-      <rect
-        x={xOffset}
-        y={y1 - 1}
-        width={x2}
-        height={y2 - y1}
-        style={{
-          opacity: 1,
-          strokeWidth: "0",
-          fill: "url(#" + gradientId + "baseBottom1)",
-        }}
-      />
+      <defs>
+        <clipPath id={gradientId + "clip"}>
+          <rect
+            x={xOffset}
+            y={y0}
+            width={x2}
+            height={y2 - y0}
+            rx={2}
+            ry={2}
+          />
+        </clipPath>
+      </defs>
+      <g clipPath={`url(#${gradientId}clip)`}>
+        <rect
+          x={xOffset}
+          y={y0}
+          width={x2}
+          height={y1 - y0}
+          style={{
+            opacity: 1,
+            strokeWidth: "0",
+            fill: "url(#" + gradientId + "baseTop1)",
+          }}
+        />
+        <rect
+          x={xOffset}
+          y={y1 - 1}
+          width={x2}
+          height={y2 - y1}
+          style={{
+            opacity: 1,
+            strokeWidth: "0",
+            fill: "url(#" + gradientId + "baseBottom1)",
+          }}
+        />
 
-      <rect
-        x={xOffset}
-        y={y0}
-        width={level}
-        height={y1 - y0}
-        style={{
-          opacity: 1,
-          strokeWidth: "0",
-          fill: "url(#" + gradientId + "top1)",
-        }}
-      />
-      <rect
-        x={xOffset}
-        y={y1 - 1}
-        width={level}
-        height={y2 - y1}
-        style={{
-          opacity: 1,
-          strokeWidth: "0",
-          fill: "url(#" + gradientId + "bottom1)",
-        }}
-      />
+        <rect
+          x={xOffset}
+          y={y0}
+          width={level}
+          height={y1 - y0}
+          style={{
+            opacity: 1,
+            strokeWidth: "0",
+            fill: "url(#" + gradientId + "top1)",
+          }}
+        />
+        <rect
+          x={xOffset}
+          y={y1 - 1}
+          width={level}
+          height={y2 - y1}
+          style={{
+            opacity: 1,
+            strokeWidth: "0",
+            fill: "url(#" + gradientId + "bottom1)",
+          }}
+        />
+      </g>
 
       {getTickValues(
         props,
@@ -507,15 +528,6 @@ interface ProgressBarProps {
    * See https://mathjs.org/docs/reference/functions/format.html for more examples
    */
   numberFormat?: object;
-  /**
-   * Custom on color to be used, must be derived from Material UI theme color's.
-   */
-  onColor?: string;
-  /**
-   * Custom off color to be used, must be derived from Material UI theme color's.
-   */
-  offColor?: string;
-
   /** Name of the process variable,  eg. '$(device):test$(id)'*/
   pv?: string;
   /**

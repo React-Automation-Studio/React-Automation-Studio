@@ -14,9 +14,12 @@
 
 # testing
 /coverage
+/test-results
+/playwright-report
 
 # IDE
 /.vscode
+/.claude
 
 # production
 

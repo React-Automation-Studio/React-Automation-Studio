@@ -1,6 +1,6 @@
 [project]
 name = "pvserver"
-version = "8.0.1"
+version = "8.1.0"
 description = "RAS Python backend. It mainly manages connections with PVs, through a websocket connection, authentication, authorization, plus other optional functionalities."
 authors = [{ name = "React Automation Studio Team https://github.com/React-Automation-Studio/React-Automation-Studio/discussions" }]
 requires-python = "==3.13.11"

@@ -1,4 +1,6 @@
-Current Release: V8.0.1
+Current Release: V8.1.0
+
+[![tests](https://img.shields.io/badge/tests-142%20passing-success)](docs/testing.md)
 
 **Migration Guides:**
 - [Migrate from V7.x.x to V8.x.x](docs/migrate-from-V7-to-V8.md)
@@ -661,6 +663,21 @@ or: https://doi.org/10.18429/JACoW-ICALEPCS2023-FR2BCO01
 
 
 # Changelog
+
+ V8.1.0 Monday 11 May 2026
+  <br />
+  Minor Updates:
+  <ul>
+    <li>Redesigned dashboard with a new "What's New" changelog panel</li>
+    <li>MobileDemo1 / MobileDemo2 page redesigns</li>
+    <li>New Test3D experimental 3D demo with drag-to-rotate that writes back to the rotation PVs</li>
+    <li>Atom One Dark theme; softer Light theme AppBar</li>
+    <li>Gauge restyled — rounded arc edges, alarm-aware accent colour, curved tick labels, and a softer needle</li>
+    <li>Rounded outer corners on ProgressBar and Tank</li>
+    <li>ARIA value semantics on ProgressBar, Tank, and Gauge for accessibility and automated testing</li>
+    <li>BaseComponents storybook docs uplift — grouped argTypes, per-story descriptions, expanded prose, and new story variants across all 24 components</li>
+    <li>New storybook-driven integration test suite (Playwright via test-runner) with PV roundtrip + display assertions across the BaseComponents and smoke coverage for every page</li>
+  </ul>
 
  V8.0.1 Tuesday 5 May 2026
   <br />

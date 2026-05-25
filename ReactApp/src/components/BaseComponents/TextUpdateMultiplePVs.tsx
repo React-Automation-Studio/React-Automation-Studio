@@ -121,16 +121,40 @@ const TextUpdateMultiplePVs = ({
 
 interface TextUpdateMultiplePVsProps {
   /**
-   * Directive to use the  alarm severity status to alter the fields background color.
+   * Array of the process variable names.
    */
-  alarmSensitive: boolean;
-
+  pvs: string[];
+  /**
+   * Values of macros that will be substituted in the pv names.
+   * eg. {'$(device)':'testIOC','$(id)':'2'}
+   */
+  macros?: Record<string, string>;
+  /**
+   * Directive to use the alarm severity status to alter the field's background color.
+   */
+  alarmSensitive?: boolean;
+  /**
+   * Custom PV to define the alarm severity to be used. alarmSensitive must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
+   */
+  alarmPv?: string;
   /**
    * If defined, then the DataConnection and
    * the widget debugging information will be displayed.
    */
-  debug: boolean;
-
+  debug?: boolean;
+  /**
+   * Custom label to be used, if usePvLabel is not defined.
+   */
+  label?: string;
+  /**
+   * Custom PV to define the label to be used. usePvLabel must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
+   */
+  labelPv?: string;
+  /**
+   * Directive to fill the component's label with the value contained in the PV metadata's DESC field or the labelPv value.
+   * If not defined, it uses the custom label as defined by the label prop.
+   */
+  usePvLabel?: boolean;
   /**
    * When using EPICS, the RAS pv's metadata is conventionally derived from the pyEpics PV in the pvserver.
    * The pyEpics metadata is unfortunately static and the values used will be the initial values that pvserver receives when it connects the first time.
@@ -141,18 +165,16 @@ interface TextUpdateMultiplePVsProps {
    * The same is the case for the precPV, labelPv, alarmPv, unitsPv and minPv.
    * By setting useMetadata to false also enables connection to other variables as defined by different protocols.
    */
-  useMetadata: boolean;
-
+  useMetadata?: boolean;
   /**
-   * Directive to use the units contained in the   pv metdata's EGU field or unitsPv.
-   *  If not defined it uses the custom units as defined by the units prop.
+   * Directive to use the units contained in the pv metadata's EGU field or unitsPv.
+   * If not defined, it uses the custom units as defined by the units prop.
    */
-  usePvUnits: boolean;
+  usePvUnits?: boolean;
   /**
    * Directive to use PV's string values.
    */
-  useStringValue: boolean;
-
+  useStringValue?: boolean;
   /**
    * If defined, then the string representation of the number can be formatted
    * using the mathjs format function
@@ -160,7 +182,6 @@ interface TextUpdateMultiplePVsProps {
    * See https://mathjs.org/docs/reference/functions/format.html for more examples
    */
   numberFormat?: object;
-
   /**
    * Tooltip Text
    */
@@ -168,16 +189,11 @@ interface TextUpdateMultiplePVsProps {
   /**
    * Directive to show the tooltip
    */
-  showTooltip: boolean;
+  showTooltip?: boolean;
   /**
-   *  Any of the MUI Tooltip props can applied by defining them as an object
+   * Any of the MUI Tooltip props can be applied by defining them as an object.
    */
   tooltipProps?: object;
-
-  /**
-   * Array of the process variable names
-   */
-  pvs: string[];
 }
 
 export default TextUpdateMultiplePVs;

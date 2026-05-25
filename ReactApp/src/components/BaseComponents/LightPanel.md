@@ -1,97 +1,64 @@
-LightPanel example:
+# LightPanel
 
-```js
-import Switch from "./Switch";
-<React.Fragment>
-  <div style={{ marginBottom: 8 }}>
-    <Switch
-      pv="$(device):BO$(id)"
-      macros={{ "$(device)": "testIOC", "$(id)": "1" }}
-      usePvLabel
-      labelPlacement="end"
-    />
-  </div>
+Read-only coloured panel that displays a PV's value as a status light.
+Supports binary, multi-state (MBBI/MBBO) and analog PVs — each PV
+value maps to a colour and an optional display string.
 
-  {/*###############*/}
+## When to use
 
-  <LightPanel
-    pv="$(device):BO$(id)"
-    macros={{ "$(device)": "testIOC", "$(id)": "1" }}
-    colors={{ 0: "red", 1: "lime" }}
-    usePvLabel
-    labelPlacement="top"
-  />
+- Status lights, fault lamps, and operator overview panels.
+- Multi-state status displays (running / fault / standby / off).
 
-  {/*###############*/}
-</React.Fragment>;
+For a per-bit decoder of an integer status word, use `BitIndicators`.
+For an icon-based indicator, use `StyledIconIndicator`.
+
+## Common patterns
+
+Binary on/off indicator:
+
+```jsx
+<LightPanel
+  pv="testIOC:BO1"
+  colors={{ 0: "red", 1: "lime" }}
+  usePvLabel
+  labelPlacement="top"
+/>
 ```
 
-It can be used also with multi-binary records:
+Multi-state indicator with a colour per state and larger text:
 
-```js
-import RadioButtonGroup from "./RadioButtonGroup";
-<React.Fragment>
-  <div style={{ marginBottom: 8 }}>
-    <RadioButtonGroup
-      pv="$(device):mbboTest$(id)"
-      macros={{ "$(device)": "testIOC", "$(id)": "1" }}
-      horizontal={true}
-      usePvLabel={true}
-    />
-  </div>
-
-  {/*###############*/}
-
-  <LightPanel
-    pv="$(device):mbboTest$(id)"
-    macros={{ "$(device)": "testIOC", "$(id)": "1" }}
-    colors={{
-      0: "red",
-      1: "lime",
-      2: "deepskyblue",
-      3: "orange",
-      4: "deeppink",
-    }}
-    usePvLabel
-    labelPlacement="top"
-    variant="h4"
-  />
-
-  {/*###############*/}
-</React.Fragment>;
+```jsx
+<LightPanel
+  pv="testIOC:mbboTest1"
+  colors={{
+    0: "red",
+    1: "lime",
+    2: "deepskyblue",
+    3: "orange",
+    4: "deeppink",
+  }}
+  usePvLabel
+  labelPlacement="top"
+  variant="h4"
+/>
 ```
 
-And with analog records, defining the `customValueStrings`. Try setting values 0 or 1:
+Analog PV mapped to custom display strings — pass `useStringValue=false`
+and supply `customValueStrings` (the integer PV value becomes the
+array index):
 
-```js
-import TextInput from "./TextInput";
-<React.Fragment>
-  <div style={{ marginBottom: 8 }}>
-    <TextInput
-      pv="$(device):test$(id)"
-      macros={{ "$(device)": "testIOC", "$(id)": "2" }}
-      usePvLabel={true}
-      usePvPrecision={true}
-      usePvUnits={true}
-      usePvMinMax={true}
-      alarmSensitive={false}
-    />
-  </div>
-
-  {/*###############*/}
-
-  <LightPanel
-    pv="$(device):test$(id)"
-    macros={{ "$(device)": "testIOC", "$(id)": "2" }}
-    colors={{
-      0: "red",
-      1: "lime",
-    }}
-    usePvLabel
-    labelPlacement="top"
-    customValueStrings={["FOO", "BAR"]}
-  />
-
-  {/*###############*/}
-</React.Fragment>;
+```jsx
+<LightPanel
+  pv="testIOC:test2"
+  colors={{ 0: "red", 1: "lime" }}
+  usePvLabel
+  labelPlacement="top"
+  useStringValue={false}
+  customValueStrings={["FOO", "BAR"]}
+/>
 ```
+
+## See also
+
+- `BitIndicators` — per-bit decoder for an integer status word.
+- `StyledIconIndicator` — icon-based status indicator.

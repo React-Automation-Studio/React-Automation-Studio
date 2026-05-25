@@ -1,0 +1,74 @@
+# Test stack: extends the dev styleguide stack with a test-runner container
+# that drives @storybook/test-runner against the live Storybook + pvServer +
+# demoIOC.
+#
+# Run with `docker compose run`, NOT `docker compose up --abort-on-container-exit`:
+# the dev stack contains build-only services (e.g. epicsbase) that exit 0 after
+# providing their image layer, which would trigger an early shutdown.
+#
+# Usage:
+#   docker compose -f docker-compose-test.yml run --build --rm test-runner
+#   docker compose -f docker-compose-test.yml down       # clean up afterwards
+#
+# `run` brings up depends_on services, runs the test-runner in the foreground,
+# and returns the test-runner's exit code (0 = pass, non-zero = fail).
+include:
+  - docker-compose-dev-styleguide-dev.yml
+
+services:
+  test-runner:
+    build:
+      context: ./
+      dockerfile: docker/testRunner/Dockerfile
+      additional_contexts:
+        node_cache: "service:node_cache"
+    # Use host networking so the test browser hits Storybook through the same
+    # nginx entry-point a real user would (`http://localhost:6060`). Matches
+    # the pattern used by pvserver1, mongo, alarmhandlerserver, etc.
+    network_mode: host
+    # Mirrors every runtime service in docker-compose-dev-styleguide-dev.yml so
+    # the full backend (Mongo replica set + DB seeders + alarm handler +
+    # signalcli + areadetectorsim + nginx etc.) is up before tests run. Build-
+    # only services (epicsbase, node_cache) are pulled in transitively.
+    depends_on:
+      - frontendserverdev
+      - pvserver1
+      - nginx
+      - unsecurestylguidepvserver
+      - demoioc
+      - signalcli
+      - initializealarmhandlerdb
+      - alarmhandlerserver
+      - mongo1
+      - mongo2
+      - mongo3
+      - mongosetup
+      - initializeloadsavedb
+      - storybookserverdev
+      - initializeadmindb
+      - areadetectorsim
+    volumes:
+      - ./test-results:/ReactApp/test-results
+      # test-storybook reads .storybook/main.js to learn the framework + addons
+      # and walks `stories:` patterns against ./src to enumerate which stories
+      # to run. Mount both read-only so the runner sees the same source the
+      # live Storybook is serving.
+      - ./ReactApp/.storybook:/ReactApp/.storybook:ro
+      - ./ReactApp/src:/ReactApp/src:ro
+      # Auto-discovered by test-runner; extends jest config to bump testTimeout
+      # to 60s and pass ignoreHTTPSErrors through to the Playwright browser
+      # context so the self-signed nginx cert is accepted.
+      - ./ReactApp/test-runner-jest.config.cjs:/ReactApp/test-runner-jest.config.cjs:ro
+    # Run through nginx at https://localhost:6060 (same path real users hit).
+    # nginx proxies /socket.io and /api to the unsecure styleguide pvServer, so
+    # the PV roundtrip works end-to-end. The self-signed cert is accepted via
+    # NODE_TLS_REJECT_UNAUTHORIZED=0 (Node-side fetch) plus contextOptions
+    # ignoreHTTPSErrors (Playwright/Chromium) configured in
+    # ReactApp/test-runner-jest.config.cjs.
+    environment:
+      - NODE_TLS_REJECT_UNAUTHORIZED=0
+    command: >
+      sh -c "
+        pnpm exec wait-on -t 300000 https-get://localhost:6060 &&
+        pnpm test-storybook --url https://localhost:6060 --maxWorkers=1 --verbose
+      "

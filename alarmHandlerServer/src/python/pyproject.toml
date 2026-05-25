@@ -1,6 +1,6 @@
 [project]
 name = "alarmHandlerServer"
-version = "8.0.1"
+version = "8.1.0"
 dependencies = [
     "imgkit==1.2.3",
     "js-regex==1.0.1",

@@ -12,45 +12,42 @@ const TextTicks = styled("text")(({ theme }) => ({
 }));
 
 function getTickValues(
-  props,
   min,
   max,
   numberOfTicks,
-  x0,
-  x1,
-  y1,
-  xOffset,
-  radialTextOffset
+  pathId,
+  cx,
+  cy,
+  anchorX
 ): ReactElement[] {
-  const { classes } = props;
   let ticks: ReactElement[] = [];
-  let i = 0;
-  for (i = 0; i < numberOfTicks; i++) {
-    const rotation = (i * 180) / (numberOfTicks - 1);
+  for (let i = 0; i < numberOfTicks; i++) {
     const value = (i * (max - min)) / (numberOfTicks - 1) + min;
-    ticks.push(
-      <g
-        key={i}
-        transform={"rotate(" + rotation + " " + (x0 + x1) / 2 + " " + y1 + ")"}
-      >
-        <TextTicks
-          x={xOffset - radialTextOffset}
-          y={y1}
-          textAnchor="middle"
-          transform={
-            "rotate(" +
-            270 +
-            "," +
-            (xOffset - radialTextOffset) +
-            "," +
-            y1 +
-            ")"
-          }
-        >
-          {parseFloat(value).toFixed(0)}
+    const label = parseFloat(value).toFixed(0);
+    if (i === 0 || i === numberOfTicks - 1) {
+      const rotation = (i * 180) / (numberOfTicks - 1);
+      ticks.push(
+        <g key={i} transform={`rotate(${rotation} ${cx} ${cy})`}>
+          <TextTicks
+            x={anchorX}
+            y={cy}
+            textAnchor="middle"
+            transform={`rotate(270, ${anchorX}, ${cy})`}
+          >
+            {label}
+          </TextTicks>
+        </g>
+      );
+    } else {
+      const startOffset = `${(i * 100) / (numberOfTicks - 1)}%`;
+      ticks.push(
+        <TextTicks key={i} textAnchor="middle">
+          <textPath href={`#${pathId}`} startOffset={startOffset}>
+            {label}
+          </textPath>
         </TextTicks>
-      </g>
-    );
+      );
+    }
   }
   return ticks;
 }
@@ -65,6 +62,8 @@ interface GaugeComponentProps {
    * @param value - The current value of the gauge.
    * @param ringWidth - The width of the gauge ring.
    * @param disabled - Specifies whether the gauge is disabled or not.
+   * @param alarmSensitive - Whether the gauge colour reflects the PV alarm severity.
+   * @param alarmSeverity - The current alarm severity (1 = minor, 2 = major).
    */
   width: number;
   min: number;
@@ -73,14 +72,27 @@ interface GaugeComponentProps {
   value: number;
   ringWidth: number;
   disabled: boolean | undefined;
+  alarmSensitive?: boolean;
+  alarmSeverity?: number;
+  initialized?: boolean;
 }
 function GaugeComponent({ ...props }: GaugeComponentProps) {
   const theme: any = useTheme();
   const gradientId = uuidv4();
+  const tickPathId = `${gradientId}-tickpath`;
   const units = props.units;
   const value = props.value;
   const min = props.min;
   const max = props.max;
+
+  let accentColor = theme.palette.primary.main;
+  if (typeof props.disabled === "undefined" && props.alarmSensitive === true) {
+    if (props.alarmSeverity === 1) {
+      accentColor = theme.palette.alarm.minor.dark;
+    } else if (props.alarmSeverity === 2) {
+      accentColor = theme.palette.alarm.major.dark;
+    }
+  }
 
   const ringWidth =
     typeof props.ringWidth !== "undefined"
@@ -97,7 +109,14 @@ function GaugeComponent({ ...props }: GaugeComponentProps) {
   const valueOffsetY = 18;
   const needleRotation = (180 * (value - min)) / (max - min);
   return (
-    <svg width={props.width} height={xOffset + props.width / 2}>
+    <svg
+      width={props.width}
+      height={xOffset + props.width / 2}
+      role="meter"
+      aria-valuenow={props.initialized ? value : undefined}
+      aria-valuemin={props.initialized ? min : undefined}
+      aria-valuemax={props.initialized ? max : undefined}
+    >
       {
         <TextTicks x={(x0 + x1) / 2} y={y1 + valueOffsetY} textAnchor="middle">
           {typeof props.disabled === "undefined"
@@ -109,9 +128,7 @@ function GaugeComponent({ ...props }: GaugeComponentProps) {
         <stop
           offset="0%"
           stopColor={
-            typeof props.disabled === "undefined"
-              ? theme.palette.primary.main
-              : "default"
+            typeof props.disabled === "undefined" ? accentColor : "default"
           }
         />
         <stop
@@ -123,34 +140,31 @@ function GaugeComponent({ ...props }: GaugeComponentProps) {
           }
         />
       </linearGradient>
-      <path
-        style={{
-          opacity: 1,
-          fill: "none",
-          fillOpacity: 1,
-          stroke: "url(#" + gradientId + ")",
-          strokeWidth: ringWidth,
-          strokeMiterlimit: 4,
-          strokeDasharray: "none",
-          strokeOpacity: 1,
-        }}
-        d={
-          "M " +
-          x0 +
-          " " +
-          y0 +
-          " A " +
-          radius +
-          " " +
-          radius +
-          " 0 0 1 " +
-          x1 +
-          " " +
-          y1
-        }
-      />
+      {(() => {
+        const cx = (x0 + x1) / 2;
+        const cy = y1;
+        const Router = radius + ringWidth / 2;
+        const Rinner = radius - ringWidth / 2;
+        const cr = 2;
+        const d = [
+          `M ${cx - Router + cr} ${cy}`,
+          `A ${cr} ${cr} 0 0 1 ${cx - Router} ${cy - cr}`,
+          `A ${Router} ${Router} 0 0 1 ${cx + Router} ${cy - cr}`,
+          `A ${cr} ${cr} 0 0 1 ${cx + Router - cr} ${cy}`,
+          `L ${cx + Rinner + cr} ${cy}`,
+          `A ${cr} ${cr} 0 0 1 ${cx + Rinner} ${cy - cr}`,
+          `A ${Rinner} ${Rinner} 0 0 0 ${cx - Rinner} ${cy - cr}`,
+          `A ${cr} ${cr} 0 0 1 ${cx - Rinner - cr} ${cy}`,
+          "Z",
+        ].join(" ");
+        return <path d={d} fill={`url(#${gradientId})`} />;
+      })()}
       <path
         fill={theme.palette.svgComponentSecondary.main}
+        stroke={theme.palette.svgComponentSecondary.main}
+        strokeWidth={2}
+        strokeLinejoin="round"
+        strokeLinecap="round"
         transform={
           "rotate(" + needleRotation + " " + (x0 + x1) / 2 + " " + y1 + ")"
         }
@@ -177,7 +191,26 @@ function GaugeComponent({ ...props }: GaugeComponentProps) {
           (y0 - 1)
         }
       />
-      {getTickValues(props, min, max, 6, x0, x1, y1, xOffset, radialTextOffset)}
+      {(() => {
+        const cx = (x0 + x1) / 2;
+        const cy = y1;
+        const tickPathRadius = radius + ringWidth / 2 + radialTextOffset;
+        const d = `M ${cx - tickPathRadius} ${cy} A ${tickPathRadius} ${tickPathRadius} 0 0 1 ${cx + tickPathRadius} ${cy}`;
+        return (
+          <defs>
+            <path id={tickPathId} d={d} fill="none" />
+          </defs>
+        );
+      })()}
+      {getTickValues(
+        min,
+        max,
+        6,
+        tickPathId,
+        (x0 + x1) / 2,
+        y1,
+        xOffset - radialTextOffset
+      )}
     </svg>
   );
 }
@@ -242,6 +275,9 @@ const GaugeInternalComponent = (props) => {
             value={value}
             ringWidth={props.ringWidth}
             disabled={props.initialized === true ? undefined : true}
+            initialized={props.initialized}
+            alarmSensitive={props.alarmSensitive}
+            alarmSeverity={props.alarmSeverity}
           />
         </div>
       }
@@ -254,6 +290,7 @@ const GaugeInternalComponent = (props) => {
  */
 const Gauge = ({
   debug = false,
+  alarmSensitive = false,
   min = 0,
   max = 100,
   usePvPrecision = false,
@@ -266,6 +303,7 @@ const Gauge = ({
       {...others}
       component={GaugeInternalComponent}
       debug={debug}
+      alarmSensitive={alarmSensitive}
       min={min}
       max={max}
       usePvPrecision={usePvPrecision}
@@ -283,6 +321,14 @@ interface GaugeProps {
    * Custom gauge ring width to be used.
    */
   ringWidth?: number;
+  /**
+   * Directive to use the alarm severity status to alter the gauge accent colour.
+   */
+  alarmSensitive?: boolean;
+  /**
+   * Custom PV to define the alarm severity to be used, alarmSensitive must be set to `true` and useMetadata to `false`, eg. '$(device):test$(id)'.
+   */
+  alarmPv?: string;
   /**
    * If defined, then the DataConnection and the widget debugging information will be displayed.
    */

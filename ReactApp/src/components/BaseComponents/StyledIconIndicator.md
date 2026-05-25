@@ -1,134 +1,61 @@
+# StyledIconIndicator
 
-StyledIconIndicator with custom icon EPICS variable example:
+Read-only icon indicator bound to a binary PV. The icon takes
+`onColor` when the PV is 1 and `offColor` when it is 0. Pass any MUI
+SvgIcon as a child to replace the default circle indicator.
 
+## When to use
 
-```js
-{/*The ToggleButton code is included for demonstration purposes only*/}  
-{/*Only the the JSX code between the hashes  is required to instantiate the StyledIconIndicator */}  
-  import ToggleButton from './ToggleButton';
-  import Face from '@mui/icons-material/Face';
-  <div style={{textAlign:'center'}}>
-  <ToggleButton
-  pv='$(device):BO$(id)'
-    macros={{'$(device)':'testIOC','$(id)':'1'}}
-  label={"write '1' or '0'"}
-  labelPlacement={"top"}
-  custom_selection_strings={["OFF","ON"]}
-  />
-  <br/><br/>
-  {/*###############*/}  
+- Compact status indicators where an icon conveys meaning better than
+  a coloured dot (e.g. lock/unlock, link/no-link, beam on/off).
+- Toolbars and status rows that need to surface a boolean state at a
+  glance.
 
-  <StyledIconIndicator  pv='$(device):BO$(id)'
-    macros={{'$(device)':'testIOC','$(id)':'1'}} label='Test Label'>
-  <Face/>
-  </StyledIconIndicator>
+For a writable icon, prefer `StyledIconButton`. For a coloured text
+panel, prefer `LightPanel`.
 
-  {/*###############*/}
+## Common patterns
 
-  </div>
+Default indicator — uses a circle icon:
+
+```jsx
+<StyledIconIndicator
+  pv="testIOC:BO1"
+  label="Test Label"
+  onColor="lime"
+  offColor="red"
+/>
 ```
 
-StyledIconIndicator EPICS variable example:
+Custom icon — pass as a child:
 
-```js
-{/*The ToggleButton code is included for demonstration purposes only*/}  
-{/*Only the the JSX code between the hashes  is required to instantiate the StyledIconIndicator */}  
-  import ToggleButton from './ToggleButton';
-  <div style={{textAlign:'center'}}>
-  <ToggleButton
-  pv='$(device):BO$(id)'
-    macros={{'$(device)':'testIOC','$(id)':'1'}}
-  label={"write '1' or '0'"}
-  labelPlacement={"top"}
-  custom_selection_strings={["OFF","ON"]}
-  />
-  <br/><br/>
-  {/*###############*/}  
+```jsx
+import Face from "@mui/icons-material/Face";
 
-  <StyledIconIndicator pv='$(device):BO$(id)'
-    macros={{'$(device)':'testIOC','$(id)':'1'}} label='Test Label' onColor='lime' offColor='red'/>
-
-  {/*###############*/}
-
-  </div>
+<StyledIconIndicator
+  pv="testIOC:BO1"
+  label="Test Label"
+  onColor="lime"
+  offColor="red"
+>
+  <Face />
+</StyledIconIndicator>
 ```
 
-StyledIconIndicator with custom icon EPICS variable example:
+Label to the right of the icon:
 
-
-```js
-{/*The ToggleButton code is included for demonstration purposes only*/}  
-{/*Only the the JSX code between the hashes  is required to instantiate the StyledIconIndicator */}  
-  import ToggleButton from './ToggleButton';
-  import Face from '@mui/icons-material/Face';
-  <div style={{textAlign:'center'}}>
-  <ToggleButton
-  pv='$(device):BO$(id)'
-    macros={{'$(device)':'testIOC','$(id)':'1'}}
-  label={"write '1' or '0'"}
-  labelPlacement={"top"}
-  custom_selection_strings={["OFF","ON"]}
-  />
-  <br/><br/>
-  {/*###############*/}  
-
-  <StyledIconIndicator  pv='$(device):BO$(id)'
-    macros={{'$(device)':'testIOC','$(id)':'1'}} label='Test Label' offColor='secondary'>
-  <Face/>
-  </StyledIconIndicator>
-
-  {/*###############*/}
-
-  </div>
+```jsx
+<StyledIconIndicator
+  pv="testIOC:BO1"
+  label="My Label"
+  labelPlacement="end"
+  onColor="yellow"
+  offColor="cyan"
+/>
 ```
 
-```js
-{/*The ToggleButton code is included for demonstration purposes only*/}  
-{/*Only the the JSX code between the hashes  is required to instantiate the StyledIconIndicator */}  
-  import ToggleButton from './ToggleButton';
-  import Face from '@mui/icons-material/Face';
-  <div style={{textAlign:'center'}}>
-  <ToggleButton
-  pv='$(device):BO$(id)'
-    macros={{'$(device)':'testIOC','$(id)':'1'}}
-  label={"write '1' or '0'"}
-  labelPlacement={"top"}
-  custom_selection_strings={["OFF","ON"]}
-  />
-  <br/><br/>
-  {/*###############*/}  
+## See also
 
-  <StyledIconIndicator  pv='$(device):BO$(id)'
-    macros={{'$(device)':'testIOC','$(id)':'1'}} label='Test Label' onColor='lime' offColor='red'>
-  <Face/>
-  </StyledIconIndicator>
-
-  {/*###############*/}
-
-  </div>
-```
-
-StyledIconIndicator example connection to a SoftChannel EPICS AI pv with example overrides of colors and label placement:
-
-```js
-{/*The ToggleButton code is included for demonstration purposes only*/}  
-{/*Only the the JSX code between the hashes  is required to instantiate the StyledIconIndicator */}  
-  import ToggleButton from './ToggleButton';
-  <div style={{textAlign:'center'}}>
-  <ToggleButton
-   pv='$(device):BO$(id)'
-  macros={{'$(device)':'testIOC','$(id)':'1'}}
-  label={"write '1' or '0'"}
-  labelPlacement={"top"}
-  custom_selection_strings={["OFF","ON"]}
-  />
-  <br/><br/>
-  {/*###############*/}  
-
-  <StyledIconIndicator  pv='$(device):BO$(id)'
-    macros={{'$(device)':'testIOC','$(id)':'1'}} label='My Label' labelPlacement='end' onColor='yellow' offColor='cyan'/>
-
-  {/*###############*/}
-
-  </div>
-```
+- `StyledIconButton` — writable two-state icon button.
+- `LightPanel` — coloured status panel.
+- `BitIndicators` — per-bit decoder for an integer status word.
